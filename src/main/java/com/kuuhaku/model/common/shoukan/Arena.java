@@ -22,7 +22,6 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.games.Shoukan;
 import com.kuuhaku.games.engine.Renderer;
-import com.kuuhaku.interfaces.annotations.ExecTime;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.BondedLinkedList;
 import com.kuuhaku.model.enums.I18N;
@@ -46,10 +45,11 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 public class Arena implements Renderer {
+	private final Field DEFAULT = DAO.find(Field.class, "DEFAULT");
 	private final Point MARGIN = new Point(25, 25);
 	public final Dimension SIZE = new Dimension(
 			(225 + MARGIN.x * 2) * 5 /* slots */ + (225 + MARGIN.x * 2) * 4 /* side stacks */,
-			(350 + MARGIN.y) * 4 /* slots */ + MARGIN.y * 10
+			(350 + MARGIN.y) * 4 /* slots */ + MARGIN.y * 10 - 1
 	);
 	private final Point CENTER = new Point(SIZE.width / 2, SIZE.height / 2);
 	private final Dimension BAR_SIZE = new Dimension(SIZE.width / 2, 100);
@@ -71,8 +71,8 @@ public class Arena implements Renderer {
 
 	private final Shoukan game;
 	private final Map<Side, List<SlotColumn>> slots;
-	private final List<Drawable> banned = new BondedLinkedList<>(Drawable::reset);
-	private final Field field = DAO.find(Field.class, "DEFAULT");
+	private final List<Drawable<?>> banned = new BondedLinkedList<>(Drawable::reset);
+	private Field field = null;
 
 	public Arena(Shoukan game) {
 		this.game = game;
@@ -94,6 +94,22 @@ public class Arena implements Renderer {
 		return slots.get(side);
 	}
 
+	public boolean isFieldEmpty(Side side) {
+		return slots.get(side).stream().allMatch(sc -> sc.getTop() == null);
+	}
+
+	public List<Drawable<?>> getBanned() {
+		return banned;
+	}
+
+	public Field getField() {
+		return Utils.getOr(field, DEFAULT);
+	}
+
+	public void setField(Field field) {
+		this.field = field;
+	}
+
 	@Override
 	public BufferedImage render(I18N locale) {
 		Hand top = game.getHands().get(Side.TOP);
@@ -105,8 +121,8 @@ public class Arena implements Renderer {
 
 		Graph.applyTransformed(g2d, drawBar(top));
 
-		Graph.applyTransformed(g2d, 0, BAR_SIZE.height, g1 -> {
-			g1.drawImage(field.renderBackground(), 0, 0, null);
+		Graph.applyTransformed(g2d, 0, BAR_SIZE.height + 1, g1 -> {
+			g1.drawImage(getField().renderBackground(), 0, 0, null);
 
 			for (Side side : Side.values()) {
 				int xOffset = CENTER.x - ((225 + MARGIN.x) * 5 - MARGIN.x) / 2;
@@ -159,13 +175,13 @@ public class Arena implements Renderer {
 					);
 				}
 				if (!banned.isEmpty()) {
-					Drawable d = banned.get(0);
+					Drawable<?> d = banned.get(0);
 					g2.drawImage(d.render(locale, d.getHand().getUserDeck()),
 							0, CENTER.y - 350 / 2, null
 					);
 				}
 				if (!bottom.getGraveyard().isEmpty()) {
-					Drawable d = bottom.getGraveyard().get(0);
+					Drawable<?> d = bottom.getGraveyard().get(0);
 					g2.drawImage(d.render(locale, bottom.getUserDeck()),
 							0, CENTER.y - 350 / 2 + (350 + MARGIN.y), null
 					);
@@ -174,14 +190,16 @@ public class Arena implements Renderer {
 
 			Graph.applyTransformed(g1, SIZE.width - 225 - MARGIN.x, 0, g2 -> {
 				if (!top.getGraveyard().isEmpty()) {
-					Drawable d = top.getGraveyard().get(0);
+					Drawable<?> d = top.getGraveyard().get(0);
 					g2.drawImage(d.render(locale, top.getUserDeck()),
 							0, CENTER.y - 350 / 2 - (350 + MARGIN.y), null
 					);
 				}
-				g2.drawImage(field.render(locale, Utils.getOr(() -> field.getHand().getUserDeck(), Deck.INSTANCE)),
-						0, CENTER.y - 350 / 2, null
-				);
+				if (!getField().getId().equals("DEFAULT")) {
+					g2.drawImage(getField().render(locale, Utils.getOr(() -> getField().getHand().getUserDeck(), Deck.INSTANCE)),
+							0, CENTER.y - 350 / 2, null
+					);
+				}
 				if (!bottom.getDeck().isEmpty()) {
 					Deck d = bottom.getUserDeck();
 					g2.drawImage(d.getFrame().getBack(d),
@@ -238,7 +256,7 @@ public class Arena implements Renderer {
 				g1.setColor(Color.DARK_GRAY);
 				g1.fill(bar);
 
-				double fac = hand.getHpPrcnt();
+				double fac = hand.getHPPrcnt();
 				if (fac >= 2 / 3d) {
 					g1.setColor(new Color(69, 173, 28));
 				} else if (fac >= 1 / 3d) {
@@ -271,11 +289,11 @@ public class Arena implements Renderer {
 				g1.setStroke(new BasicStroke(14));
 				for (int i = 0; i < 33; i++) {
 					g1.setColor(Color.CYAN);
-					if (hand.getMp() > 66 + i) {
+					if (hand.getMP() > 66 + i) {
 						g1.setColor(manaOver2);
-					} else if (hand.getMp() > 33 + i) {
+					} else if (hand.getMP() > 33 + i) {
 						g1.setColor(manaOver1);
-					} else if (hand.getMp() <= i) {
+					} else if (hand.getMP() <= i) {
 						g1.setColor(Color.DARK_GRAY);
 					}
 
@@ -386,12 +404,12 @@ public class Arena implements Renderer {
 	private void drawValues(Graphics2D g2d, Hand hand, int x, int y, int spacing) {
 		g2d.setColor(Color.CYAN);
 		g2d.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 2));
-		String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMp()), 2, "0");
+		String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMP()), 2, "0");
 		Graph.drawOutlinedString(g2d, mpText, x, y, 6, Color.BLACK);
 
 		g2d.setColor(Color.WHITE);
 		g2d.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 4));
-		String hpText = "HP: " + StringUtils.leftPad(String.valueOf(hand.getHp()), 4, "0") + " / " + StringUtils.leftPad(String.valueOf(hand.getBase().hp()), 4, "0");
+		String hpText = "HP: " + StringUtils.leftPad(String.valueOf(hand.getHP()), 4, "0") + " / " + StringUtils.leftPad(String.valueOf(hand.getBase().hp()), 4, "0");
 		Graph.drawOutlinedString(g2d, hpText, x, y + spacing, 6, new Color(0, 0, 0, 200));
 
 		if (hand.getRegen() != 0) {
@@ -414,7 +432,7 @@ public class Arena implements Renderer {
 
 		g2d.setColor(Color.WHITE);
 		g2d.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 4));
-		String hpText = "HP: " + StringUtils.leftPad(String.valueOf(hand.getHp()), 4, "0") + " / " + StringUtils.leftPad(String.valueOf(hand.getBase().hp()), 4, "0");
+		String hpText = "HP: " + StringUtils.leftPad(String.valueOf(hand.getHP()), 4, "0") + " / " + StringUtils.leftPad(String.valueOf(hand.getBase().hp()), 4, "0");
 
 		int offset = g2d.getFontMetrics().stringWidth(hpText);
 		Graph.drawOutlinedString(g2d, hpText, x - offset, y, 6, new Color(0, 0, 0, 200));
@@ -434,7 +452,7 @@ public class Arena implements Renderer {
 
 		g2d.setColor(Color.CYAN);
 		g2d.setFont(new Font("Arial", Font.BOLD, BAR_SIZE.height / 2));
-		String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMp()), 2, "0");
+		String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMP()), 2, "0");
 
 		offset = g2d.getFontMetrics().stringWidth(mpText);
 		Graph.drawOutlinedString(g2d, mpText, x - offset, y + spacing, 6, Color.BLACK);

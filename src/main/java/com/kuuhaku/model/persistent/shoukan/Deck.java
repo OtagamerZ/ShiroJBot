@@ -125,7 +125,7 @@ public class Deck extends DAO {
 		return evogear;
 	}
 
-	public List<Field> getField() {
+	public List<Field> getFields() {
 		return field;
 	}
 

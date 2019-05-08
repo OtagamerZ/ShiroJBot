@@ -25,6 +25,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.InvalidSignatureException;
 import com.kuuhaku.model.common.AutoEmbedBuilder;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.common.PatternCache;
 import com.kuuhaku.model.common.SimpleMessageListener;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.*;
@@ -225,7 +226,7 @@ public class GuildListener extends ListenerAdapter {
 			processCommand(data, ed, content);
 		}
 
-		if (data.message().getContentRaw().matches("<@!?" + Main.getApp().getId() + ">")) {
+		if (PatternCache.matches(data.message().getContentRaw(), "<@!?" + Main.getApp().getId() + ">")) {
 			data.channel().sendMessage(locale.get("str/mentioned",
 					data.user().getAsMention(),
 					config.getPrefix()

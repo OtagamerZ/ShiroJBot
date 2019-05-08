@@ -38,21 +38,21 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 public class CardExtra {
-	private Set<AttrMod> mana = new HashSet<>();
-	private Set<AttrMod> blood = new HashSet<>();
+	private final Set<AttrMod> mana = new HashSet<>();
+	private final Set<AttrMod> blood = new HashSet<>();
 
-	private Set<AttrMod> atk = new HashSet<>();
-	private Set<AttrMod> def = new HashSet<>();
+	private final Set<AttrMod> atk = new HashSet<>();
+	private final Set<AttrMod> def = new HashSet<>();
 
-	private Set<AttrMod> dodge = new HashSet<>();
-	private Set<AttrMod> block = new HashSet<>();
+	private final Set<AttrMod> dodge = new HashSet<>();
+	private final Set<AttrMod> block = new HashSet<>();
 
-	private Set<AttrMod> power = new HashSet<>();
+	private final Set<AttrMod> power = new HashSet<>();
 
-	private EnumSet<Flag> flags = EnumSet.noneOf(Flag.class);
-	private EnumSet<Flag> permFlags = EnumSet.noneOf(Flag.class);
+	private final EnumSet<Flag> flags = EnumSet.noneOf(Flag.class);
+	private final EnumSet<Flag> permFlags = EnumSet.noneOf(Flag.class);
 
-	private JSONObject data = new JSONObject();
+	private final JSONObject data = new JSONObject();
 
 	private Race race = null;
 	private Card vanity = null;
@@ -65,13 +65,13 @@ public class CardExtra {
 		return (int) sum(mana);
 	}
 
-	public void setMana(Drawable source, int mana) {
+	public void setMana(Drawable<?> source, int mana) {
 		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), mana);
 		this.mana.remove(mod);
 		this.mana.add(mod);
 	}
 
-	public void setMana(Drawable source, int mana, int expiration) {
+	public void setMana(Drawable<?> source, int mana, int expiration) {
 		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), mana, expiration);
 		this.mana.remove(mod);
 		this.mana.add(mod);
@@ -81,13 +81,13 @@ public class CardExtra {
 		return (int) sum(blood);
 	}
 
-	public void setBlood(Drawable source, int blood) {
+	public void setBlood(Drawable<?> source, int blood) {
 		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), blood);
 		this.blood.remove(mod);
 		this.blood.add(mod);
 	}
 
-	public void setBlood(Drawable source, int blood, int expiration) {
+	public void setBlood(Drawable<?> source, int blood, int expiration) {
 		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), blood, expiration);
 		this.blood.remove(mod);
 		this.blood.add(mod);
@@ -97,13 +97,13 @@ public class CardExtra {
 		return (int) sum(atk);
 	}
 
-	public void setAtk(Drawable source, int atk) {
+	public void setAtk(Drawable<?> source, int atk) {
 		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), atk);
 		this.atk.remove(mod);
 		this.atk.add(mod);
 	}
 
-	public void setAtk(Drawable source, int atk, int expiration) {
+	public void setAtk(Drawable<?> source, int atk, int expiration) {
 		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), atk, expiration);
 		this.atk.remove(mod);
 		this.atk.add(mod);
@@ -113,13 +113,13 @@ public class CardExtra {
 		return (int) sum(def);
 	}
 
-	public void setDef(Drawable source, int def) {
+	public void setDef(Drawable<?> source, int def) {
 		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), def);
 		this.def.remove(mod);
 		this.def.add(mod);
 	}
 
-	public void setDef(Drawable source, int def, int expiration) {
+	public void setDef(Drawable<?> source, int def, int expiration) {
 		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), def, expiration);
 		this.def.remove(mod);
 		this.def.add(mod);
@@ -129,13 +129,13 @@ public class CardExtra {
 		return (int) sum(dodge);
 	}
 
-	public void setDodge(Drawable source, int dodge) {
+	public void setDodge(Drawable<?> source, int dodge) {
 		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), dodge);
 		this.dodge.remove(mod);
 		this.dodge.add(mod);
 	}
 
-	public void setDodge(Drawable source, int dodge, int expiration) {
+	public void setDodge(Drawable<?> source, int dodge, int expiration) {
 		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), dodge, expiration);
 		this.dodge.remove(mod);
 		this.dodge.add(mod);
@@ -145,13 +145,13 @@ public class CardExtra {
 		return (int) sum(block);
 	}
 
-	public void setBlock(Drawable source, int block) {
+	public void setBlock(Drawable<?> source, int block) {
 		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), block);
 		this.block.remove(mod);
 		this.block.add(mod);
 	}
 
-	public void setBlock(Drawable source, int block, int expiration) {
+	public void setBlock(Drawable<?> source, int block, int expiration) {
 		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), block, expiration);
 		this.block.remove(mod);
 		this.block.add(mod);
@@ -161,13 +161,13 @@ public class CardExtra {
 		return sum(power);
 	}
 
-	public void setPower(Drawable source, int power) {
+	public void setPower(Drawable<?> source, int power) {
 		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), power);
 		this.power.remove(mod);
 		this.power.add(mod);
 	}
 
-	public void setPower(Drawable source, int power, int expiration) {
+	public void setPower(Drawable<?> source, int power, int expiration) {
 		AttrMod mod = new AttrMod(source, source.getSlot().getIndex(), power, expiration);
 		this.power.remove(mod);
 		this.power.add(mod);

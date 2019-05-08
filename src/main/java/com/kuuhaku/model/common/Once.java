@@ -16,17 +16,27 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.records.shoukan;
+package com.kuuhaku.model.common;
 
-import com.kuuhaku.interfaces.shoukan.Drawable;
-import com.kuuhaku.model.enums.shoukan.Trigger;
+import java.util.function.Consumer;
 
-public record Source(Drawable<?> card, int index, Trigger trigger) {
-	public Source(Drawable<?> card) {
-		this(card, card.getSlot().getIndex(), null);
+public class Once<T> implements Consumer<T> {
+	private final Consumer<T> action;
+	private boolean executed;
+
+	private Once(Consumer<T> action) {
+		this.action = action;
 	}
 
-	public Source(Drawable<?> card, Trigger trigger) {
-		this(card, card.getSlot().getIndex(), trigger);
+	public static <T> Once<T> exec(Consumer<T> action) {
+		return new Once<>(action);
+	}
+
+	@Override
+	public void accept(T t) {
+		if (!executed) {
+			action.accept(t);
+			executed = true;
+		}
 	}
 }

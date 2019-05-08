@@ -57,6 +57,18 @@ public class JSONArray extends ArrayList<Object> {
 		return Utils.getOr(get(index), or);
 	}
 
+	public <T> T get(Class<T> klass, int index) {
+		try {
+			return klass.cast(get(index));
+		} catch (NullPointerException | ClassCastException e) {
+			return null;
+		}
+	}
+
+	public <T> T get(Class<T> klass, int index, T or) {
+		return Utils.getOr(get(index), or);
+	}
+
 	public <E extends Enum<E>> E getEnum(Class<E> clazz, int index) {
 		if (!clazz.isEnum()) return null;
 		return Arrays.stream(clazz.getEnumConstants())
@@ -78,6 +90,8 @@ public class JSONArray extends ArrayList<Object> {
 			return (boolean) get(index);
 		} catch (IndexOutOfBoundsException e) {
 			return false;
+		} catch (ClassCastException e) {
+			return get(index) != null;
 		}
 	}
 

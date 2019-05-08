@@ -45,7 +45,7 @@ public enum Rarity {
 
 	Rarity() {
 		this.index = -1;
-		this.color = 0x0;
+		this.color = 0;
 		this.emote = "";
 	}
 

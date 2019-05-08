@@ -48,7 +48,9 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "evogear")
-public class Evogear extends DAO implements Drawable, EffectHolder {
+public class Evogear extends DAO implements Drawable<Evogear>, EffectHolder {
+	public transient final long SERIAL = Constants.DEFAULT_RNG.nextLong();
+
 	@Id
 	@Column(name = "card_id", nullable = false)
 	private String id;
@@ -69,12 +71,13 @@ public class Evogear extends DAO implements Drawable, EffectHolder {
 	private transient Pair<Integer, BufferedImage> cache = null;
 	private transient CardExtra stats = new CardExtra();
 	private transient Hand hand = null;
-	private transient boolean solid = false;
-	private transient byte state = 0x0;
+	private transient byte state = 0x2;
 	/*
 	0x0F
-	   └ 0001
-	       └ flipped
+	   └ 0111
+	      ││└ solid
+	      │└─ available
+	      └── flipped
 	 */
 
 	@Override
@@ -97,6 +100,9 @@ public class Evogear extends DAO implements Drawable, EffectHolder {
 
 	public java.util.List<String> getTags() {
 		List<String> out = new ArrayList<>();
+		if (hasEffect()) {
+			out.add("tag/effect");
+		}
 		for (Object tag : base.getTags()) {
 			out.add("tag/" + tag);
 		}
@@ -151,22 +157,40 @@ public class Evogear extends DAO implements Drawable, EffectHolder {
 
 	@Override
 	public boolean isSolid() {
-		return solid;
+		return Bit.on(state, 0);
 	}
 
 	@Override
 	public void setSolid(boolean solid) {
-		this.solid = solid;
+		state = (byte) Bit.set(state, 0, solid);
 	}
 
 	@Override
-	public boolean isFlipped() {
+	public boolean isAvailable() {
 		return Bit.on(state, 1);
 	}
 
 	@Override
+	public void setAvailable(boolean available) {
+		state = (byte) Bit.set(state, 1, available);
+	}
+
+	@Override
+	public boolean isFlipped() {
+		return Bit.on(state, 2);
+	}
+
+	@Override
 	public void setFlipped(boolean flipped) {
-		state = (byte) Bit.set(state, 1, flipped);
+		state = (byte) Bit.set(state, 2, flipped);
+	}
+
+	public String getEffect() {
+		return Utils.getOr(stats.getEffect(), base.getEffect());
+	}
+
+	public boolean hasEffect() {
+		return !getEffect().isEmpty();
 	}
 
 	@Override
@@ -190,7 +214,9 @@ public class Evogear extends DAO implements Drawable, EffectHolder {
 
 	@Override
 	public void reset() {
+		cache = null;
 		stats = new CardExtra();
+		state = 0x2;
 	}
 
 	@Override
@@ -214,15 +240,15 @@ public class Evogear extends DAO implements Drawable, EffectHolder {
 
 			g2d.setFont(new Font("Arial", Font.BOLD, 20));
 			g2d.setColor(deck.getFrame().getPrimaryColor());
-			Graph.drawOutlinedString(g2d, StringUtils.abbreviate(card.getName(), Drawable.MAX_NAME_LENGTH), 10, 30, 2, deck.getFrame().getBackgroundColor());
+			Graph.drawOutlinedString(g2d, StringUtils.abbreviate(card.getName(), MAX_NAME_LENGTH), 10, 30, 2, deck.getFrame().getBackgroundColor());
 
 			g2d.setColor(deck.getFrame().getSecondaryColor());
 			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 12));
-			g2d.drawString(getTags().stream().map(locale::get).toList().toString(), 7, 275);
+			g2d.drawString(getTags().stream().map(locale::get).map(String::toUpperCase).toList().toString(), 7, 275);
 
 			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 10));
 			Graph.drawMultilineString(g2d,
-					StringUtils.abbreviate(desc, Drawable.MAX_DESC_LENGTH), 7, 285, 211,
+					StringUtils.abbreviate(desc, MAX_DESC_LENGTH), 7, 285, 211,
 					s -> {
 						String str = Utils.extract(s, "\\{(\\d+)}", 1);
 
@@ -272,5 +298,10 @@ public class Evogear extends DAO implements Drawable, EffectHolder {
 	@Override
 	public int hashCode() {
 		return Objects.hash(id, card);
+	}
+
+	@Override
+	public Evogear clone() throws CloneNotSupportedException {
+		return (Evogear) super.clone();
 	}
 }
