@@ -6,6 +6,7 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import javax.security.auth.login.LoginException;
+import java.lang.management.ManagementFactory;
 import java.time.format.DateTimeFormatter;
 
 public class Main extends ListenerAdapter {
@@ -42,7 +43,7 @@ public class Main extends ListenerAdapter {
                     sendMessage(message.getMessage().getCreationTime().minusHours(3).format(DateTimeFormatter.ofPattern("dd/MM/yyyy (HH:mm)")) + " | " + message.getAuthor().getName() + "#" + message.getAuthor().getDiscriminator() + "(" +
                             message.getGuild().getName() + ")" + " enviou um bug: `" + String.join(" ", message.getMessage().getContentRaw().split(prefix + "bug ")).trim() + "`").queue());
         } else if (cmd[0].equals(prefix + "uptime")) {
-            message.getChannel().sendMessage("Hummm...acho que estou acordada a ");
+            message.getChannel().sendMessage("Hummm...se não me engano...acho que estou acordada a " + (ManagementFactory.getRuntimeMXBean().getUptime() / 1000) + " segundos.").queue();
         }
     }
 }
