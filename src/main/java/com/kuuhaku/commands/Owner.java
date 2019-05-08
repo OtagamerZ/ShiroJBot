@@ -1,3 +1,5 @@
+package com.kuuhaku.commands;
+
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.TextChannel;
@@ -5,8 +7,8 @@ import net.dv8tion.jda.core.entities.TextChannel;
 import java.util.ArrayList;
 import java.util.List;
 
-class Owner {
-    static String getServers(JDA bot) {
+public class Owner {
+    public static String getServers(JDA bot) {
         ArrayList<String> names = new ArrayList<>();
         ArrayList<String> ids = new ArrayList<>();
         ArrayList<String> guilds = new ArrayList<>();
@@ -44,7 +46,7 @@ class Owner {
         }
     }
 
-    static void broadcast(JDA bot, String message, TextChannel homeLog) {
+    public static void broadcast(JDA bot, String message, TextChannel homeLog) {
         List<Guild> guilds = bot.getGuilds();
         List<String> status = getGuilds(bot);
 
