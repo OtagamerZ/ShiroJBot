@@ -15,4 +15,5 @@ repositories {
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compile 'net.dv8tion:JDA:3.8.3_462'
+    compile group: 'javax.persistence', name: 'persistence-api', version: '1.0'
 }
