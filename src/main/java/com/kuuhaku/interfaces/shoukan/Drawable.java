@@ -23,13 +23,15 @@ import com.kuuhaku.model.common.shoukan.SlotColumn;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.utils.Graph;
 import com.kuuhaku.utils.IO;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.function.Consumer;
 
-public interface Drawable {
+public interface Drawable<T extends Drawable<T>> extends Cloneable {
 	int MAX_NAME_LENGTH = 16;
 	int MAX_DESC_LENGTH = 215;
 
@@ -83,6 +85,10 @@ public interface Drawable {
 	boolean isSolid();
 
 	void setSolid(boolean solid);
+
+	boolean isAvailable();
+
+	void setAvailable(boolean available);
 
 	default boolean isFlipped() {
 		return false;
@@ -182,5 +188,25 @@ public interface Drawable {
 			g2d.setColor(Color.ORANGE);
 			Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 4 + (icon.getHeight() + m.getHeight()) / 2, 2, Color.BLACK);
 		}
+	}
+
+	T clone() throws CloneNotSupportedException;
+
+	@SuppressWarnings("unchecked")
+	default T copy() {
+		try {
+			T clone = clone();
+			clone.reset();
+
+			return clone;
+		} catch (CloneNotSupportedException e) {
+			return (T) this;
+		}
+	}
+
+	default T withCopy(Consumer<T> act) {
+		T t = copy();
+		act.accept(t);
+		return t;
 	}
 }

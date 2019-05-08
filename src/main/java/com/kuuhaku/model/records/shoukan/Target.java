@@ -21,12 +21,12 @@ package com.kuuhaku.model.records.shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 
-public record Target(Drawable card, int index, Trigger trigger) {
-	public Target(Drawable card) {
+public record Target(Drawable<?> card, int index, Trigger trigger) {
+	public Target(Drawable<?> card) {
 		this(card, card.getSlot().getIndex(), null);
 	}
 
-	public Target(Drawable card, Trigger trigger) {
+	public Target(Drawable<?> card, Trigger trigger) {
 		this(card, card.getSlot().getIndex(), trigger);
 	}
 }

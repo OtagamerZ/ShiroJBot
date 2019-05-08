@@ -18,28 +18,37 @@
 
 package com.kuuhaku.games.engine;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.listeners.GuildListener;
 import com.kuuhaku.model.common.GameChannel;
+import com.kuuhaku.model.common.PatternCache;
 import com.kuuhaku.model.common.SimpleMessageListener;
+import com.kuuhaku.utils.Utils;
+import com.kuuhaku.utils.json.JSONObject;
+import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+import java.util.regex.Pattern;
 
-public abstract class GameInstance {
+public abstract class GameInstance<T extends Enum<T>> {
 	private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
 
 	private CompletableFuture<Void> exec;
 	private DelayedAction timeout;
 	private GameChannel channel;
 	private int turn = 1;
+	private T phase;
 
 	public final CompletableFuture<Void> start(Guild guild, TextChannel... channels) {
 		return exec = CompletableFuture.runAsync(() -> {
@@ -52,7 +61,11 @@ public abstract class GameInstance {
 				@Override
 				public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
 					if (checkChannel(event.getChannel()) && validate(event.getMessage())) {
-						runtime(event.getMessage().getContentRaw());
+						try {
+							runtime(event.getMessage().getContentRaw());
+						} catch (InvocationTargetException | IllegalAccessException e) {
+							Constants.LOGGER.error(e, e);
+						}
 					}
 				}
 			};
@@ -67,7 +80,7 @@ public abstract class GameInstance {
 
 	protected abstract void begin();
 
-	protected abstract void runtime(String value);
+	protected abstract void runtime(String value) throws InvocationTargetException, IllegalAccessException;
 
 	protected abstract boolean validate(Message message);
 
@@ -96,6 +109,34 @@ public abstract class GameInstance {
 		if (timeout != null) {
 			timeout.restart();
 		}
+	}
+
+	public T getPhase() {
+		return phase;
+	}
+
+	public void setPhase(T phase) {
+		this.phase = phase;
+	}
+
+	protected Pair<Method, JSONObject> toAction(String args) {
+		Method[] meths = getClass().getDeclaredMethods();
+		for (Method meth : meths) {
+			PlayerAction pa = meth.getAnnotation(PlayerAction.class);
+			if (pa != null) {
+				PhaseConstraint pc = meth.getAnnotation(PhaseConstraint.class);
+				if (pc != null && (phase == null || !pc.value().equals(phase.name()))) {
+					continue;
+				}
+
+				Pattern pat = PatternCache.compile(pa.value());
+				if (Utils.regex(args, pat).matches()) {
+					return new Pair<>(meth, Utils.extractNamedGroups(args, pat));
+				}
+			}
+		}
+
+		return null;
 	}
 
 	public final void close(int code) {

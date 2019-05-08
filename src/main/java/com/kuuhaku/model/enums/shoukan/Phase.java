@@ -16,17 +16,8 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.records.shoukan;
+package com.kuuhaku.model.enums.shoukan;
 
-import com.kuuhaku.interfaces.shoukan.Drawable;
-import com.kuuhaku.model.enums.shoukan.Trigger;
-
-public record Source(Drawable<?> card, int index, Trigger trigger) {
-	public Source(Drawable<?> card) {
-		this(card, card.getSlot().getIndex(), null);
-	}
-
-	public Source(Drawable<?> card, Trigger trigger) {
-		this(card, card.getSlot().getIndex(), trigger);
-	}
+public enum Phase {
+	PLAN, COMBAT
 }

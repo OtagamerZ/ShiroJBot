@@ -34,12 +34,12 @@ public abstract class SignatureParser {
 			int i = 0;
 			for (String arg : args) {
 				i++;
-				Map<String, String> groups = Utils.extractNamedGroups(arg, ARGUMENT_PATTERN);
-				String name = groups.get("name");
+				JSONObject groups = Utils.extractNamedGroups(arg, ARGUMENT_PATTERN);
+				String name = groups.getString("name");
 				boolean required = groups.containsKey("required");
 				String wrap = required ? "[%s]" : "%s";
 
-				Signature.Type type = Signature.Type.valueOf(groups.get("type").toUpperCase(Locale.ROOT));
+				Signature.Type type = Signature.Type.valueOf(groups.getString("type").toUpperCase(Locale.ROOT));
 
 				if (type == Signature.Type.TEXT) {
 					if (str.isBlank() && required) {
@@ -56,7 +56,7 @@ public abstract class SignatureParser {
 						str = str.replaceFirst(type.getRegex(), "").trim();
 					}
 				} else {
-					List<String> opts = Arrays.stream(groups.getOrDefault("options", "").split(","))
+					List<String> opts = Arrays.stream(groups.getString("options", "").split(","))
 							.filter(s -> !s.isBlank())
 							.map(String::toLowerCase)
 							.toList();
@@ -112,8 +112,8 @@ public abstract class SignatureParser {
 
 			supplied.add("%1$s%2$s");
 			for (String arg : args) {
-				Map<String, String> groups = Utils.extractNamedGroups(arg, ARGUMENT_PATTERN);
-				String name = groups.get("name");
+				JSONObject groups = Utils.extractNamedGroups(arg, ARGUMENT_PATTERN);
+				String name = groups.getString("name");
 				boolean required = groups.containsKey("required");
 				String wrap = required ? "[%s]" : "%s";
 

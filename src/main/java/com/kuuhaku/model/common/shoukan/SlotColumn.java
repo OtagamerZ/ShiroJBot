@@ -30,7 +30,7 @@ public class SlotColumn {
 
 	private Senshi top = null;
 	private Senshi bottom = null;
-	private byte state = 0x0;
+	private byte state = 0;
 	/*
 	0xF F
       │ └ 0001
@@ -60,7 +60,14 @@ public class SlotColumn {
 	}
 
 	public void setTop(Senshi top) {
+		if (this.top != null) {
+			this.top.setSlot(null);
+		}
+
 		this.top = top;
+		if (this.top != null) {
+			this.top.setSlot(this);
+		}
 	}
 
 	public Senshi getBottom() {
@@ -68,7 +75,14 @@ public class SlotColumn {
 	}
 
 	public void setBottom(Senshi bottom) {
+		if (this.bottom != null) {
+			this.bottom.setSlot(null);
+		}
+
 		this.bottom = bottom;
+		if (this.bottom != null) {
+			this.bottom.setSlot(this);
+		}
 	}
 
 	public boolean hasBottom() {

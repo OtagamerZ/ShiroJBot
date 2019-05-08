@@ -28,7 +28,9 @@ public abstract class Bit {
 		if (!Utils.between(index, 0, Integer.SIZE)) return bits;
 
 		int mask = ((1 << size) - 1) << index;
-		return (bits & ~mask) | (value & mask) << index;
+		if (value > mask) value -= mask;
+
+		return (bits & ~mask) | value << index;
 	}
 
 	public static boolean on(int bits, int index) {

@@ -29,12 +29,15 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.listeners.GuildListener;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.common.PatternCache;
 import com.kuuhaku.model.common.SimpleMessageListener;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.persistent.user.StashedCard;
+import com.kuuhaku.utils.json.JSONArray;
+import com.kuuhaku.utils.json.JSONObject;
 import de.androidpit.colorthief.ColorThief;
 import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -67,6 +70,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.CRC32;
@@ -207,7 +211,7 @@ public abstract class Utils {
 	}
 
 	public static Matcher regex(String text, @Language("RegExp") String regex) {
-		return Pattern.compile(regex).matcher(text);
+		return PatternCache.compile(regex).matcher(text);
 	}
 
 	public static Matcher regex(String text, Pattern pattern) {
@@ -215,7 +219,7 @@ public abstract class Utils {
 	}
 
 	public static String extract(String text, @Language("RegExp") String regex) {
-		Matcher m = Pattern.compile(regex).matcher(text);
+		Matcher m = regex(text, regex);
 		if (m.find()) return m.group();
 		else return null;
 	}
@@ -227,7 +231,7 @@ public abstract class Utils {
 	}
 
 	public static String extract(String text, @Language("RegExp") String regex, int group) {
-		Matcher m = Pattern.compile(regex).matcher(text);
+		Matcher m = regex(text, regex);
 		if (m.find()) return m.group(group);
 		else return null;
 	}
@@ -239,7 +243,7 @@ public abstract class Utils {
 	}
 
 	public static String extract(String text, @Language("RegExp") String regex, String group) {
-		Matcher m = Pattern.compile(regex).matcher(text);
+		Matcher m = regex(text, regex);
 		if (m.find()) return m.group(group);
 		else return null;
 	}
@@ -250,62 +254,70 @@ public abstract class Utils {
 		else return null;
 	}
 
-	public static List<String> extractGroups(String text, @Language("RegExp") String regex) {
-		List<String> out = new ArrayList<>();
-		Matcher m = Pattern.compile(regex).matcher(text);
+	public static JSONArray extractGroups(String text, @Language("RegExp") String regex) {
+		JSONArray out = new JSONArray();
+		Matcher m = regex(text, regex);
 
 		while (m.find()) {
 			for (int i = 0; i < m.groupCount(); i++) {
-				out.add(m.group(i + 1));
+				String val = m.group(i + 1);
+				if (val != null) {
+					out.add(val);
+				}
 			}
 		}
 
-		return out.stream().filter(Objects::nonNull).toList();
+		return out;
 	}
 
-	public static List<String> extractGroups(String text, Pattern pattern) {
-		List<String> out = new ArrayList<>();
+	public static JSONArray extractGroups(String text, Pattern pattern) {
+		JSONArray out = new JSONArray();
 		Matcher m = pattern.matcher(text);
 
 		while (m.find()) {
 			for (int i = 0; i < m.groupCount(); i++) {
-				out.add(m.group(i + 1));
+				String val = m.group(i + 1);
+				if (val != null) {
+					out.add(val);
+				}
 			}
 		}
 
-		return out.stream().filter(Objects::nonNull).toList();
+		return out;
 	}
 
-	public static Map<String, String> extractNamedGroups(String text, @Language("RegExp") String regex) {
-		List<String> names = extractGroups(regex, "\\(\\?<([a-zA-Z][A-z\\d]*)>");
-		Map<String, String> out = new HashMap<>();
-		Matcher m = Pattern.compile(regex).matcher(text);
+	public static JSONObject extractNamedGroups(String text, @Language("RegExp") String regex) {
+		JSONArray names = extractGroups(regex, "\\(\\?<([a-zA-Z][A-z\\d]*)>");
+		JSONObject out = new JSONObject();
+		Matcher m = regex(text, regex);
 
 		while (m.find()) {
-			for (String name : names) {
-				out.putIfAbsent(name, m.group(name));
+			for (Object name : names) {
+				String val = m.group((String) name);
+				if (val != null) {
+					out.putIfAbsent((String) name, val);
+				}
 			}
 		}
 
-		return out.entrySet().parallelStream()
-				.filter(e -> e.getValue() != null)
-				.collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
+		return out;
 	}
 
-	public static Map<String, String> extractNamedGroups(String text, Pattern pattern) {
-		List<String> names = extractGroups(pattern.toString(), "\\(\\?<([a-zA-Z][A-z\\d]*)>");
-		Map<String, String> out = new HashMap<>();
+	public static JSONObject extractNamedGroups(String text, Pattern pattern) {
+		JSONArray names = extractGroups(pattern.toString(), "\\(\\?<([a-zA-Z][A-z\\d]*)>");
+		JSONObject out = new JSONObject();
 		Matcher m = pattern.matcher(text);
 
 		while (m.find()) {
-			for (String name : names) {
-				out.putIfAbsent(name, m.group(name));
+			for (Object name : names) {
+				String val = m.group((String) name);
+				if (val != null) {
+					out.putIfAbsent((String) name, val);
+				}
 			}
 		}
 
-		return out.entrySet().parallelStream()
-				.filter(e -> e.getValue() != null)
-				.collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
+		return out;
 	}
 
 	public static String underline(String text) {
@@ -908,5 +920,25 @@ public abstract class Utils {
 		if (n.doubleValue() > 0) return "+" + n;
 
 		return String.valueOf(n);
+	}
+
+	public static Collector<?, ?, ?> toShuffledList() {
+		return Collectors.collectingAndThen(
+				Collectors.toList(),
+				l -> {
+					Collections.shuffle(l);
+					return l;
+				}
+		);
+	}
+
+	public static <T> Collector<T, ?, List<T>> toShuffledList(Random rng) {
+		return Collectors.collectingAndThen(
+				Collectors.toList(),
+				l -> {
+					Collections.shuffle(l, rng);
+					return l;
+				}
+		);
 	}
 }
