@@ -57,6 +57,18 @@ public class JSONObject extends HashMap<String, Object> {
 		return Utils.getOr(get(key), or);
 	}
 
+	public <T> T get(Class<T> klass, String key) {
+		try {
+			return klass.cast(get(key));
+		} catch (NullPointerException | ClassCastException e) {
+			return null;
+		}
+	}
+
+	public <T> T get(Class<T> klass, String key, T or) {
+		return Utils.getOr(get(klass, key), or);
+	}
+
 	public <E extends Enum<E>> E getEnum(Class<E> clazz, String key) {
 		if (!clazz.isEnum()) return null;
 		return Arrays.stream(clazz.getEnumConstants())
@@ -78,6 +90,8 @@ public class JSONObject extends HashMap<String, Object> {
 			return (boolean) get(key);
 		} catch (NullPointerException e) {
 			return false;
+		} catch (ClassCastException e) {
+			return get(key) != null;
 		}
 	}
 

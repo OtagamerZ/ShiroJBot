@@ -16,17 +16,15 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.records.shoukan;
+package com.kuuhaku.games.engine;
 
-import com.kuuhaku.interfaces.shoukan.Drawable;
-import com.kuuhaku.model.enums.shoukan.Trigger;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public record Source(Drawable<?> card, int index, Trigger trigger) {
-	public Source(Drawable<?> card) {
-		this(card, card.getSlot().getIndex(), null);
-	}
-
-	public Source(Drawable<?> card, Trigger trigger) {
-		this(card, card.getSlot().getIndex(), trigger);
-	}
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface PhaseConstraint {
+    String value();
 }

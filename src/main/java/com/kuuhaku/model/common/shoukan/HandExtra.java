@@ -26,20 +26,20 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 public class HandExtra {
-	private Set<ValueMod> healing = new HashSet<>();
-	private Set<ValueMod> damage = new HashSet<>();
+	private final Set<ValueMod> healing = new HashSet<>();
+	private final Set<ValueMod> damage = new HashSet<>();
 
 	public int getHealing() {
 		return 1 + sum(healing);
 	}
 
-	public void setHealing(Drawable source, int healing) {
+	public void setHealing(Drawable<?> source, int healing) {
 		ValueMod mod = new ValueMod(source, healing);
 		this.healing.remove(mod);
 		this.healing.add(mod);
 	}
 
-	public void setHealing(Drawable source, int healing, int expiration) {
+	public void setHealing(Drawable<?> source, int healing, int expiration) {
 		ValueMod mod = new ValueMod(source, healing, expiration);
 		this.healing.remove(mod);
 		this.healing.add(mod);
@@ -49,13 +49,13 @@ public class HandExtra {
 		return 1 + sum(damage);
 	}
 
-	public void setDamage(Drawable source, int damage) {
+	public void setDamage(Drawable<?> source, int damage) {
 		ValueMod mod = new ValueMod(source, damage);
 		this.damage.remove(mod);
 		this.damage.add(mod);
 	}
 
-	public void setDamage(Drawable source, int damage, int expiration) {
+	public void setDamage(Drawable<?> source, int damage, int expiration) {
 		ValueMod mod = new ValueMod(source, damage, expiration);
 		this.damage.remove(mod);
 		this.damage.add(mod);

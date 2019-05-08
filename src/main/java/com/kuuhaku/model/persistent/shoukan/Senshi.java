@@ -32,6 +32,7 @@ import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.utils.Bit;
 import com.kuuhaku.utils.Graph;
+import com.kuuhaku.utils.IO;
 import com.kuuhaku.utils.Utils;
 import groovy.lang.GroovyShell;
 import kotlin.Pair;
@@ -42,13 +43,16 @@ import org.hibernate.annotations.FetchMode;
 import javax.persistence.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.RescaleOp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "senshi")
-public class Senshi extends DAO implements Drawable, EffectHolder {
+public class Senshi extends DAO implements Drawable<Senshi>, EffectHolder {
+	public transient final long SERIAL = Constants.DEFAULT_RNG.nextLong();
+
 	@Id
 	@Column(name = "card_id", nullable = false)
 	private String id;
@@ -71,13 +75,14 @@ public class Senshi extends DAO implements Drawable, EffectHolder {
 	private transient CardExtra stats = new CardExtra();
 	private transient SlotColumn slot = null;
 	private transient Hand hand = null;
-	private transient boolean solid = false;
-	private transient int state = 0x0;
+	private transient int state = 0x2;
 	/*
 	0x00 00 FFF F
-	        │││ └ 0011
-	        │││     │└ defending
-	        │││     └─ flipped
+	        │││ └ 1111
+	        │││   │││└ solid
+	        │││   ││└─ available
+	        │││   │└── defending
+	        │││   └─── flipped
 	        ││└─ (0 - 15) stunned
 	        │└── (0 - 15) sleeping
 	        └─── (0 - 15) stasis
@@ -113,6 +118,9 @@ public class Senshi extends DAO implements Drawable, EffectHolder {
 	public List<String> getTags() {
 		List<String> out = new ArrayList<>();
 		out.add("race/" + race.name());
+		if (hasEffect()) {
+			out.add("tag/effect");
+		}
 		for (Object tag : base.getTags()) {
 			out.add("tag/" + tag);
 		}
@@ -181,30 +189,44 @@ public class Senshi extends DAO implements Drawable, EffectHolder {
 
 	@Override
 	public boolean isSolid() {
-		return solid;
+		return Bit.on(state, 0);
 	}
 
 	@Override
 	public void setSolid(boolean solid) {
-		this.solid = solid;
-	}
-
-	public boolean isDefending() {
-		return Bit.on(state, 0);
-	}
-
-	public void setDefending(boolean defending) {
-		state = Bit.set(state, 0, defending);
+		state = Bit.set(state, 0, solid);
 	}
 
 	@Override
-	public boolean isFlipped() {
+	public boolean isAvailable() {
 		return Bit.on(state, 1);
 	}
 
 	@Override
+	public void setAvailable(boolean available) {
+		state = Bit.set(state, 1, available);
+	}
+
+	public boolean isDefending() {
+		return isFlipped() || Bit.on(state, 2);
+	}
+
+	public void setDefending(boolean defending) {
+		state = Bit.set(state, 2, defending);
+	}
+
+	@Override
+	public boolean isFlipped() {
+		return Bit.on(state, 3);
+	}
+
+	@Override
 	public void setFlipped(boolean flipped) {
-		state = Bit.set(state, 1, flipped);
+		if (isFlipped() && !flipped) {
+			setDefending(true);
+		}
+
+		state = Bit.set(state, 3, flipped);
 	}
 
 	public boolean isStunned() {
@@ -249,9 +271,21 @@ public class Senshi extends DAO implements Drawable, EffectHolder {
 		state = Bit.set(state, 3, Math.max(0, curr - time), 4);
 	}
 
+	public boolean isSupporting() {
+		return slot != null && slot.hasBottom() && slot.getBottom().SERIAL == SERIAL;
+	}
+
+	public String getEffect() {
+		return Utils.getOr(stats.getEffect(), base.getEffect());
+	}
+
+	public boolean hasEffect() {
+		return !getEffect().isEmpty();
+	}
+
 	@Override
 	public boolean execute(EffectParameters ep) {
-		String effect = Utils.getOr(stats.getEffect(), base.getEffect());
+		String effect = getEffect();
 		if (effect.isBlank() || !effect.contains(ep.trigger().name()) || base.isLocked()) return false;
 
 		//Hand other = ep.getHands().get(ep.getOtherSide());
@@ -279,8 +313,11 @@ public class Senshi extends DAO implements Drawable, EffectHolder {
 
 	@Override
 	public void reset() {
+		cache = null;
+		equipments = new ArrayList<>();
 		stats = new CardExtra();
 		slot = null;
+		state = 0x2;
 	}
 
 	@Override
@@ -305,25 +342,28 @@ public class Senshi extends DAO implements Drawable, EffectHolder {
 
 			g2d.setFont(new Font("Arial", Font.BOLD, 20));
 			g2d.setColor(deck.getFrame().getPrimaryColor());
-			Graph.drawOutlinedString(g2d, StringUtils.abbreviate(card.getName(), Drawable.MAX_NAME_LENGTH), 38, 30, 2, deck.getFrame().getBackgroundColor());
+			Graph.drawOutlinedString(g2d, StringUtils.abbreviate(card.getName(), MAX_NAME_LENGTH), 38, 30, 2, deck.getFrame().getBackgroundColor());
 
 			g2d.setColor(deck.getFrame().getSecondaryColor());
 			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 12));
-			g2d.drawString(getTags().stream().map(locale::get).toList().toString(), 7, 275);
+			g2d.drawString(getTags().stream().map(locale::get).map(String::toUpperCase).toList().toString(), 7, 275);
 
-			g2d.setFont(Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 10));
+			Font normal = Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 10);
+			Font dynamic = Fonts.HAMMERSMITH_ONE.deriveFont(Font.PLAIN, 8);
 			Graph.drawMultilineString(g2d,
-					StringUtils.abbreviate(desc, Drawable.MAX_DESC_LENGTH), 7, 285, 211,
+					StringUtils.abbreviate(desc, MAX_DESC_LENGTH), 7, 285, 211,
 					s -> {
 						String str = Utils.extract(s, "\\{(\\d+)}", 1);
 
 						if (str != null) {
 							double val = Double.parseDouble(str);
 
+							g2d.setFont(dynamic);
 							g2d.setColor(Color.ORANGE);
 							return "\u200B" + s.replaceFirst("\\{\\d+}", Utils.roundToString(val * (1 + stats.getPower()), 2));
 						}
 
+						g2d.setFont(normal);
 						g2d.setColor(deck.getFrame().getSecondaryColor());
 						return s;
 					},
@@ -337,7 +377,18 @@ public class Senshi extends DAO implements Drawable, EffectHolder {
 			);
 
 			drawCosts(g2d);
-			drawAttributes(g2d, !desc.isEmpty());
+			if (!isSupporting()) {
+				drawAttributes(g2d, !desc.isEmpty());
+			}
+
+			if (!isAvailable()) {
+				RescaleOp op = new RescaleOp(0.5f, 0, null);
+				op.filter(out, out);
+			}
+
+			if (isDefending()) {
+				g2d.drawImage(IO.getResourceAsImage("shoukan/states/defense.png"), 0, 0, null);
+			}
 
 			g2d.dispose();
 
@@ -349,7 +400,7 @@ public class Senshi extends DAO implements Drawable, EffectHolder {
 
 	@Override
 	public int renderHashCode(I18N locale) {
-		return Objects.hash(stats, state, hand, locale);
+		return Objects.hash(stats, state, hand, locale, isSupporting());
 	}
 
 	@Override
@@ -363,5 +414,10 @@ public class Senshi extends DAO implements Drawable, EffectHolder {
 	@Override
 	public int hashCode() {
 		return Objects.hash(id, card, race);
+	}
+
+	@Override
+	public Senshi clone() throws CloneNotSupportedException {
+		return (Senshi) super.clone();
 	}
 }

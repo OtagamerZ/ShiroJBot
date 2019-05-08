@@ -22,12 +22,12 @@ import com.kuuhaku.interfaces.shoukan.Drawable;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public record ValueMod(Drawable source, double value, AtomicInteger expiration) {
-	public ValueMod(Drawable source, double value, int expiration) {
+public record ValueMod(Drawable<?> source, double value, AtomicInteger expiration) {
+	public ValueMod(Drawable<?> source, double value, int expiration) {
 		this(source, value, new AtomicInteger(expiration));
 	}
 
-	public ValueMod(Drawable source, double value) {
+	public ValueMod(Drawable<?> source, double value) {
 		this(source, value, null);
 	}
 }

@@ -16,17 +16,22 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.records.shoukan;
+package com.kuuhaku.model.common;
 
-import com.kuuhaku.interfaces.shoukan.Drawable;
-import com.kuuhaku.model.enums.shoukan.Trigger;
+import net.jodah.expiringmap.ExpiringMap;
+import org.intellij.lang.annotations.Language;
 
-public record Source(Drawable<?> card, int index, Trigger trigger) {
-	public Source(Drawable<?> card) {
-		this(card, card.getSlot().getIndex(), null);
-	}
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
-	public Source(Drawable<?> card, Trigger trigger) {
-		this(card, card.getSlot().getIndex(), trigger);
-	}
+public class PatternCache {
+    private static final ExpiringMap<String, Pattern> cache = ExpiringMap.builder().expiration(1, TimeUnit.HOURS).build();
+
+    public static Pattern compile(@Language("RegExp") String regex) {
+        return cache.computeIfAbsent(regex, k -> Pattern.compile(regex));
+    }
+
+    public static boolean matches(String in, @Language("RegExp") String regex) {
+        return compile(regex).matcher(in).matches();
+    }
 }

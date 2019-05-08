@@ -27,6 +27,7 @@ import com.kuuhaku.model.enums.shoukan.FieldType;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.shiro.Card;
+import com.kuuhaku.utils.Bit;
 import com.kuuhaku.utils.Graph;
 import com.kuuhaku.utils.IO;
 import com.kuuhaku.utils.Utils;
@@ -45,7 +46,9 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "field")
-public class Field extends DAO implements Drawable {
+public class Field extends DAO implements Drawable<Field> {
+	public transient final long SERIAL = Constants.DEFAULT_RNG.nextLong();
+
 	@Id
 	@Column(name = "card_id", nullable = false)
 	private String id;
@@ -66,7 +69,13 @@ public class Field extends DAO implements Drawable {
 
 	private transient Pair<Integer, BufferedImage> cache = null;
 	private transient Hand hand = null;
-	private transient boolean solid = false;
+	private transient byte state = 0x2;
+	/*
+	0x0F
+	   └ 0011
+	       │└ solid
+	       └─ available
+	 */
 
 	@Override
 	public String getId() {
@@ -90,17 +99,28 @@ public class Field extends DAO implements Drawable {
 
 	@Override
 	public boolean isSolid() {
-		return solid;
+		return Bit.on(state, 0);
 	}
 
 	@Override
 	public void setSolid(boolean solid) {
-		this.solid = solid;
+		state = (byte) Bit.set(state, 0, solid);
+	}
+
+	@Override
+	public boolean isAvailable() {
+		return Bit.on(state, 1);
+	}
+
+	@Override
+	public void setAvailable(boolean available) {
+		state = (byte) Bit.set(state, 1, available);
 	}
 
 	@Override
 	public void reset() {
-
+		cache = null;
+		state = 0x2;
 	}
 
 	@Override
@@ -120,7 +140,7 @@ public class Field extends DAO implements Drawable {
 
 			g2d.setFont(new Font("Arial", Font.BOLD, 20));
 			g2d.setColor(deck.getFrame().getPrimaryColor());
-			Graph.drawOutlinedString(g2d, StringUtils.abbreviate(card.getName(), Drawable.MAX_NAME_LENGTH), 10, 30, 2, deck.getFrame().getBackgroundColor());
+			Graph.drawOutlinedString(g2d, StringUtils.abbreviate(card.getName(), MAX_NAME_LENGTH), 10, 30, 2, deck.getFrame().getBackgroundColor());
 
 			if (type != FieldType.NONE) {
 				BufferedImage icon = IO.getResourceAsImage("shoukan/icons/" + type.name().toLowerCase(Locale.ROOT) + ".png");
@@ -187,5 +207,10 @@ public class Field extends DAO implements Drawable {
 	@Override
 	public int hashCode() {
 		return Objects.hash(id, card, modifiers);
+	}
+
+	@Override
+	public Field clone() throws CloneNotSupportedException {
+		return (Field) super.clone();
 	}
 }
