@@ -18,6 +18,7 @@ import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
@@ -153,92 +154,95 @@ public class Main extends ListenerAdapter implements JobListener, Job {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent message) {
-        if (message.getAuthor().isBot() || !message.isFromType(ChannelType.TEXT)) return;
+        try {
+            if (message.getAuthor().isBot() || !message.isFromType(ChannelType.TEXT)) return;
 
-        if (message.getMessage().getContentRaw().equals("!init") && gc.get(message.getGuild().getId()) == null) {
-            guildConfig gct = new guildConfig();
-            gct.setGuildId(message.getGuild().getId());
-            gc.put(message.getGuild().getId(), gct);
-            for (int i = 0; i < message.getGuild().getTextChannels().size(); i++) {
-                if (message.getGuild().getTextChannels().get(i).canTalk()) {
-                    message.getGuild().getTextChannels().get(i).sendMessage("Seu servidor está prontinho, estarei a partir de agora ouvindo seus comandos!").queue();
-                    break;
-                }
-            }
-        } else if (message.getMessage().getContentRaw().equals("!init") && gc.get(message.getGuild().getId()) != null) {
-            message.getChannel().sendMessage("As configurações deste servidor ja foram inicializadas!").queue();
-        }
-        if (gc.get(message.getGuild().getId()) != null) {
-            if (!message.getMessage().getContentRaw().startsWith(gc.get(message.getGuild().getId()).getPrefix()))
-                return;
-
-            System.out.println("Comando recebido de " + message.getAuthor().getName() + "#" + message.getAuthor().getDiscriminator() + " | " + message.getMessage().getContentDisplay());
-
-            String[] cmd = message.getMessage().getContentRaw().split(" ");
-
-            //GERAL--------------------------------------------------------------------------------->
-
-            if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "ping")) {
-                message.getChannel().sendMessage("Pong! :ping_pong: " + bot.getPing() + " ms").queue();
-            } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "bug")) {
-                owner.openPrivateChannel().queue(channel -> channel.sendMessage(Embeds.bugReport(message, gc.get(message.getGuild().getId()).getPrefix())).queue());
-            } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "uptime")) {
-                message.getChannel().sendMessage("Hummm...acho que estou acordada a ").queue();
-            } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "ajuda")) {
-                Misc.help(message, gc.get(message.getGuild().getId()).getPrefix(), owner);
-            } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "prefixo")) {
-                message.getChannel().sendMessage("Estou atualmente respondendo comandos que começam com __**" + gc.get(message.getGuild().getId()).getPrefix() + "**__").queue();
-            } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "imagem")) {
-                Misc.image(cmd, message);
-            } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "pergunta")) {
-                message.getChannel().sendMessage(Misc.yesNo()).queue();
-            } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "escolha")) {
-                try {
-                    message.getChannel().sendMessage("Eu escolho essa opção: " + Misc.choose(cmd[1].split(";"))).queue();
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    message.getChannel().sendMessage("Você não me deu opções, bobo!").queue();
-                }
-            }
-
-            //DONO--------------------------------------------------------------------------------->
-
-            if (message.getAuthor() == owner) {
-                if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "kill")) {
-                    message.getChannel().sendMessage("Sayonara, Nii-chan!").queue();
-                    bot.shutdown();
-                } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "servers")) {
-                    message.getChannel().sendMessage("Servidores que participo:\n" + Owner.getServers(bot)).queue();
-                } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "map")) {
-                    Owner.getMap(message, gc);
-                } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "broadcast")) {
-                    Owner.broadcast(bot, String.join("", message.getMessage().getContentRaw().split(gc.get(message.getGuild().getId()).getPrefix() + "broadcast")), message.getTextChannel());
-                } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "listPerms")) {
-                    try {
-                        message.getChannel().sendMessage(Owner.listPerms(bot.getGuildById(cmd[1]))).queue();
-                    } catch (ArrayIndexOutOfBoundsException e) {
-                        message.getChannel().sendMessage("Você esqueceu de me dizer o ID do servidor, Nii-chan!").queue();
-                    }
-                } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "leave")) {
-                    try {
-                        message.getChannel().sendMessage("Ok, já saí daquele servidor, Nii-chan!").queue();
-                        Owner.leave(bot.getGuildById(cmd[1]));
-                    } catch (ArrayIndexOutOfBoundsException e) {
-                        message.getChannel().sendMessage("Você esqueceu de me dizer o ID do servidor, Nii-chan!").queue();
+            if (message.getMessage().getContentRaw().equals("!init") && gc.get(message.getGuild().getId()) == null) {
+                guildConfig gct = new guildConfig();
+                gct.setGuildId(message.getGuild().getId());
+                gc.put(message.getGuild().getId(), gct);
+                for (int i = 0; i < message.getGuild().getTextChannels().size(); i++) {
+                    if (message.getGuild().getTextChannels().get(i).canTalk()) {
+                        message.getGuild().getTextChannels().get(i).sendMessage("Seu servidor está prontinho, estarei a partir de agora ouvindo seus comandos!").queue();
+                        break;
                     }
                 }
+            } else if (message.getMessage().getContentRaw().equals("!init") && gc.get(message.getGuild().getId()) != null) {
+                message.getChannel().sendMessage("As configurações deste servidor ja foram inicializadas!").queue();
             }
+            if (gc.get(message.getGuild().getId()) != null) {
+                if (!message.getMessage().getContentRaw().startsWith(gc.get(message.getGuild().getId()).getPrefix()))
+                    return;
 
-            //ADMIN--------------------------------------------------------------------------------->
+                System.out.println("Comando recebido de " + message.getAuthor().getName() + "#" + message.getAuthor().getDiscriminator() + " | " + message.getMessage().getContentDisplay());
 
-            if (message.getMember().hasPermission(Permission.MANAGE_SERVER)) {
-                if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "definir")) {
-                    Admin.config(cmd, message, gc.get(message.getGuild().getId()));
-                } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "configs")) {
-                    message.getChannel().sendMessage(Embeds.configsEmbed(gc.get(message.getGuild().getId()), message)).queue();
+                String[] cmd = message.getMessage().getContentRaw().split(" ");
+
+                //GERAL--------------------------------------------------------------------------------->
+
+                if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "ping")) {
+                    message.getChannel().sendMessage("Pong! :ping_pong: " + bot.getPing() + " ms").queue();
+                } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "bug")) {
+                    owner.openPrivateChannel().queue(channel -> channel.sendMessage(Embeds.bugReport(message, gc.get(message.getGuild().getId()).getPrefix())).queue());
+                } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "uptime")) {
+                    message.getChannel().sendMessage("Hummm...acho que estou acordada a ").queue();
+                } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "ajuda")) {
+                    Misc.help(message, gc.get(message.getGuild().getId()).getPrefix(), owner);
+                } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "prefixo")) {
+                    message.getChannel().sendMessage("Estou atualmente respondendo comandos que começam com __**" + gc.get(message.getGuild().getId()).getPrefix() + "**__").queue();
+                } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "imagem")) {
+                    Misc.image(cmd, message);
+                } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "pergunta")) {
+                    message.getChannel().sendMessage(Misc.yesNo()).queue();
+                } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "escolha")) {
+                    try {
+                        message.getChannel().sendMessage("Eu escolho essa opção: " + Misc.choose(cmd[1].split(";"))).queue();
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        message.getChannel().sendMessage("Você não me deu opções, bobo!").queue();
+                    }
                 }
+
+                //DONO--------------------------------------------------------------------------------->
+
+                if (message.getAuthor() == owner) {
+                    if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "kill")) {
+                        message.getChannel().sendMessage("Sayonara, Nii-chan!").queue();
+                        bot.shutdown();
+                    } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "servers")) {
+                        message.getChannel().sendMessage("Servidores que participo:\n" + Owner.getServers(bot)).queue();
+                    } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "map")) {
+                        Owner.getMap(message, gc);
+                    } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "broadcast")) {
+                        Owner.broadcast(bot, String.join("", message.getMessage().getContentRaw().split(gc.get(message.getGuild().getId()).getPrefix() + "broadcast")), message.getTextChannel());
+                    } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "listPerms")) {
+                        try {
+                            message.getChannel().sendMessage(Owner.listPerms(bot.getGuildById(cmd[1]))).queue();
+                        } catch (ArrayIndexOutOfBoundsException e) {
+                            message.getChannel().sendMessage("Você esqueceu de me dizer o ID do servidor, Nii-chan!").queue();
+                        }
+                    } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "leave")) {
+                        try {
+                            message.getChannel().sendMessage("Ok, já saí daquele servidor, Nii-chan!").queue();
+                            Owner.leave(bot.getGuildById(cmd[1]));
+                        } catch (ArrayIndexOutOfBoundsException e) {
+                            message.getChannel().sendMessage("Você esqueceu de me dizer o ID do servidor, Nii-chan!").queue();
+                        }
+                    }
+                }
+
+                //ADMIN--------------------------------------------------------------------------------->
+
+                if (message.getMember().hasPermission(Permission.MANAGE_SERVER)) {
+                    if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "definir")) {
+                        Admin.config(cmd, message, gc.get(message.getGuild().getId()));
+                    } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "configs")) {
+                        message.getChannel().sendMessage(Embeds.configsEmbed(gc.get(message.getGuild().getId()), message)).queue();
+                    }
+                }
+            } else if (message.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_WRITE)) {
+                message.getChannel().sendMessage("Por favor, digite __**!init**__ para inicializar as configurações da Shiro em seu servidor!").queue();
             }
-        } else if (message.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_WRITE)) {
-            message.getChannel().sendMessage("Por favor, digite __**!init**__ para inicializar as configurações da Shiro em seu servidor!").queue();
+        } catch (NullPointerException | InsufficientPermissionException ignored) {
         }
     }
 }
