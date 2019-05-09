@@ -31,6 +31,17 @@ dependencies {
     compile group: 'org.quartz-scheduler', name: 'quartz', version: '2.3.1'
 }
 
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "com.github.jengelman.gradle.plugins:shadow:4.0.3"
+    }
+}
+
 apply plugin: "com.github.johnrengelman.shadow"
 
 shadowJar {
