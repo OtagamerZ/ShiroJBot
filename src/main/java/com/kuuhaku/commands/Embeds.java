@@ -103,14 +103,14 @@ public class Embeds {
         return eb.build();
     }
 
-    public static MessageEmbed configsEmbed(guildConfig gc) {
+    public static MessageEmbed configsEmbed(guildConfig gc, MessageReceivedEvent message) {
         EmbedBuilder eb = new EmbedBuilder();
 
         eb.setColor(Color.MAGENTA);
         eb.setAuthor("Eis as configura\u00e7\u00f5es deste servidor");
-        eb.addField("Prefixo:", gc.getPrefix(), false);
-        eb.addField("Canal de boas-vindas:", gc.getCanalbv().getAsMention(), true);
-        eb.addField("Canal de avisos:", gc.getCanalav().getAsMention(), true);
+        eb.setDescription("Prefixo: __**" + gc.getPrefix() + "**__");
+        eb.addField("Canal de boas-vindas:", gc.getCanalbv() != null ? message.getGuild().getTextChannelById(gc.getCanalbv()).getAsMention() : "n\u00e3o definido", true);
+        eb.addField("Canal de avisos:", gc.getCanalav() != null ? message.getGuild().getTextChannelById(gc.getCanalav()).getAsMention() : "n\u00e3o definido", true);
         eb.addField("Mensagem de boas-vindas:", gc.getMsgBoasVindas(null), false);
         eb.addField("Mensagem de adeus:", gc.getMsgAdeus(null), false);
 
