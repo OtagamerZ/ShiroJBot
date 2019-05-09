@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id "com.github.johnrengelman.shadow" version "4.0.2"
 }
 
 mainClassName = "&lt;group&gt;.&lt;artifact&gt;.Bot" // IMPORTANT
@@ -17,6 +18,12 @@ repositories {
 task stage(dependsOn: ['build', 'clean'])
 build.mustRunAfter clean
 
+task copyToLib(type: Copy) {
+    into "$buildDir/libs"
+    from(configurations.compile)
+}
+stage.dependsOn(copyToLib)
+
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compile 'net.dv8tion:JDA:3.8.3_462'
@@ -24,6 +31,15 @@ dependencies {
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.16'
     compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
     compile group: 'org.quartz-scheduler', name: 'quartz', version: '2.3.1'
+}
+
+apply plugin: "com.github.johnrengelman.shadow"
+
+shadowJar {
+    //noinspection GroovyAssignabilityCheck
+    manifest {
+        attributes 'Main-Class': 'Main'
+    }
 }
 
 compileJava.options.encoding = 'UTF-8'
