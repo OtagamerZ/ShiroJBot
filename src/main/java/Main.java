@@ -151,7 +151,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                 if (message.getGuild().getTextChannels().get(i).canTalk()) {
                     message.getGuild().getTextChannels().get(i).sendMessage("Seu servidor está prontinho, estarei a partir de agora ouvindo seus comandos!").queue();
                     break;
-                }
+                }yago
             }
         } else if (message.getMessage().getContentRaw().equals("!init") && gc.get(message.getGuild().getId()) != null) {
             message.getChannel().sendMessage("As configurações deste servidor ja foram inicializadas!").queue();
@@ -212,7 +212,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     message.getChannel().sendMessage(Embeds.configsEmbed(gc.get(message.getGuild().getId()), message)).queue();
                 }
             }
-        } else {
+        } else if (message.getGuild().getMemberById(bot.getId()).hasPermission(Permission.MESSAGE_WRITE)) {
             message.getChannel().sendMessage("Por favor, digite __**!init**__ para inicializar as configurações da Shiro em seu servidor!").queue();
         }
     }
