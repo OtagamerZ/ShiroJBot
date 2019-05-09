@@ -28,7 +28,7 @@ public class Owner {
         if (guilds.isEmpty()) {
             return "Nenhum servidor encontrado";
         } else {
-            return String.join("\n", "```", guilds.toString().replace("[", "").replace("]", ""), "```");
+            return guilds.toString().replace("[", "```").replace("]", "```").replace(", ", "\n");
         }
     }
 

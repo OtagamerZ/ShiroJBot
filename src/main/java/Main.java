@@ -109,15 +109,21 @@ public class Main extends ListenerAdapter implements JobListener, Job {
 
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent user) {
-        if (gc.get(user.getGuild().getId()).getCanalbv() != null) {
-            user.getGuild().getTextChannelById(gc.get(user.getGuild().getId()).getCanalbv()).sendMessage(gc.get(user.getGuild().getId()).getMsgBoasVindas(user)).queue();
+        try {
+            if (gc.get(user.getGuild().getId()).getCanalbv() != null) {
+                user.getGuild().getTextChannelById(gc.get(user.getGuild().getId()).getCanalbv()).sendMessage(gc.get(user.getGuild().getId()).getMsgBoasVindas(user)).queue();
+            }
+        } catch (Exception ignored) {
         }
     }
 
     @Override
     public void onGuildMemberLeave(GuildMemberLeaveEvent user) {
-        if (gc.get(user.getGuild().getId()).getCanalbv() != null) {
-            user.getGuild().getTextChannelById(gc.get(user.getGuild().getId()).getCanalbv()).sendMessage(gc.get(user.getGuild().getId()).getMsgAdeus(user)).queue();
+        try {
+            if (gc.get(user.getGuild().getId()).getCanalbv() != null) {
+                user.getGuild().getTextChannelById(gc.get(user.getGuild().getId()).getCanalbv()).sendMessage(gc.get(user.getGuild().getId()).getMsgAdeus(user)).queue();
+            }
+        } catch (Exception ignored) {
         }
     }
 
