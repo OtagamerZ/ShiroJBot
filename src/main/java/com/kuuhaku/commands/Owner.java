@@ -1,11 +1,14 @@
 package com.kuuhaku.commands;
 
+import com.kuuhaku.model.guildConfig;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Owner {
     public static String getServers(JDA bot) {
@@ -27,6 +30,13 @@ public class Owner {
         } else {
             return String.join("\n", "```", guilds.toString().replace("[", "").replace("]", ""), "```");
         }
+    }
+
+    public static void getMap(MessageReceivedEvent message, Map<String, guildConfig> gc) {
+        final ArrayList<String> map = new ArrayList<>();
+        gc.values().forEach(g -> map.add(g.getGuildId() + " | " + g.getPrefix() + " | " + g.getCanalbv() + " | " + g.getCanalav() + " | " + g.getMsgBoasVindas(null) + " | " + g.getMsgAdeus(null) + "\n"));
+
+        message.getChannel().sendMessage("```" + map + "```").queue();
     }
 
     private static ArrayList<String> getGuilds(JDA bot) throws NullPointerException {
@@ -53,11 +63,11 @@ public class Owner {
         for (int z = 0; z < guilds.size(); z++) {
             try {
                 if (!guilds.get(z).getTextChannelsByName("avisos-shiro", true).isEmpty()) {
-                    guilds.get(z).getTextChannelsByName("avisos-shiro", true).get(0).sendMessage("Transmiss\u00e3o:```" + message + "```").queue();
+                    guilds.get(z).getTextChannelsByName("avisos-shiro", true).get(0).sendMessage("Transmissão:```" + message + "```").queue();
                 } else {
-                    for (int i = 0; i < guilds.get(z).getChannels().size(); i++) {
+                    for (int i = 0; i < guilds.get(z).getTextChannels().size(); i++) {
                         if (guilds.get(z).getTextChannels().get(i).canTalk()) {
-                            guilds.get(z).getTextChannels().get(i).sendMessage("Canal `avisos-shiro` n\u00e3o encontrado, enviando transmiss\u00e3o para primeiro canal dispon\u00eDvel:```" + message + "```").queue();
+                            guilds.get(z).getTextChannels().get(i).sendMessage("Canal `avisos-shiro` não foi encontrado, enviando transmissão para primeiro canal disponível:```" + message + "```").queue();
                             break;
                         }
                     }
@@ -70,7 +80,7 @@ public class Owner {
                 status.set(z, status.get(z) + "FALHA\n");
             } finally {
                 assert status != null;
-                homeLog.sendMessage("Resultado da transmiss\u00e3o:```" + String.join("", status).replace("[", "").replace("]", "\n") + "```").queue();
+                homeLog.sendMessage("Resultado da transmissão:```" + String.join("", status).replace("[", "").replace("]", "\n") + "```").queue();
             }
         }
     }

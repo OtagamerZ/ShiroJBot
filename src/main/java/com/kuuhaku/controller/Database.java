@@ -6,13 +6,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Database {
     private static EntityManagerFactory emf;
 
 
-    public static EntityManager getEntityManager() {
+    private static EntityManager getEntityManager() {
         if (emf == null) emf = Persistence.createEntityManagerFactory("shiro");
 
         emf.getCache().evictAll();
@@ -20,39 +21,33 @@ public class Database {
         return emf.createEntityManager();
     }
 
-    public static void initDatabase() {
-        guildConfig gc = new guildConfig();
-
+    public static void sendAllConfigs(Collection<guildConfig> gc) {
         EntityManager em = getEntityManager();
+        Query q = em.createQuery("DELETE FROM guildConfig");
+
         em.getTransaction().begin();
-        em.persist(gc);
+        q.executeUpdate();
+        em.getTransaction().commit();
+        System.out.println("Dados resetados com sucesso!");
+
+        em.getTransaction().begin();
+        gc.forEach(em::persist);
         em.getTransaction().commit();
         em.close();
-        System.out.println("Banco de dados inicializado com sucesso!");
-    }
-
-    public static void sendConfig(guildConfig gc) {
-        try {
-            EntityManager em = getEntityManager();
-            em.getTransaction().begin();
-            em.persist(gc);
-            em.getTransaction().commit();
-            em.close();
-            System.out.println("Entidade inserida com sucesso!");
-        } catch (Exception e) {
-            System.out.println("Erro ao inserir: " + e);
-        }
+        System.out.println("Dados salvos com sucesso!");
     }
 
     @SuppressWarnings("unchecked")
-    public static List<guildConfig> listConfig() {
+    public static Map<String, guildConfig> getConfigs() {
+        List<guildConfig> lgc;
+
         try {
             EntityManager em = getEntityManager();
-            Query q = em.createQuery("SELECT c FROM `LnVsGtoAwc`.`guildConfig` c", guildConfig.class);
-            List<guildConfig> lgc = q.getResultList();
+            Query q = em.createQuery("SELECT c FROM guildConfig c", guildConfig.class);
+            lgc = q.getResultList();
             em.close();
 
-            return lgc;
+            return lgc.stream().collect(Collectors.toMap(guildConfig::getGuildId, g -> g));
         } catch (Exception e) {
             System.out.println("Erro ao recuperar configurações: " + e);
             return null;
