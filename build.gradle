@@ -4,6 +4,10 @@ plugins {
     id "com.github.johnrengelman.shadow" version "4.0.2"
 }
 
+application {
+    mainClassName = 'Main'
+}
+
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
