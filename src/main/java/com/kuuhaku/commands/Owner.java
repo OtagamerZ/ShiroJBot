@@ -84,4 +84,12 @@ public class Owner {
             }
         }
     }
+
+    public static String listPerms(Guild guild) {
+        return guild.getName() + " | " + guild.getSelfMember().getPermissions().toString().replace("[", "```").replace("]", "```").replace(", ", "\n");
+    }
+
+    public static void leave(Guild guild) {
+        guild.leave().complete();
+    }
 }
