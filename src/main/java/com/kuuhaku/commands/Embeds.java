@@ -30,7 +30,14 @@ public class Embeds {
         EmbedBuilder eb = new EmbedBuilder();
 
         eb.setColor(Color.MAGENTA);
-        eb.addField("Administrativo", "```...```", false);
+        eb.addField("Administrativo", "```" +
+                prefix + "definir prefixo [prefixo] - Define o prefixo para o servidor.\n" +
+                prefix + "definir canalbv [canal] - Define o canal de boas-vindas para o servidor.\n" +
+                prefix + "definir canalav [canal] - Define o canal de avisos para o servidor.\n" +
+                prefix + "definir msgbv [\"mensagem\"] - Define a mensagem de boas-vindas para o servidor.\n" +
+                prefix + "definir msgadeus [\"mensagem\"] - Define a mensagem de adeus para o servidor.\n" +
+                prefix + "configs - Mostra as configurações do servidor.\n" +
+                "```", false);
         eb.addField("Utilitários", "```\n" +
                 prefix + "ajuda - Mostra essa mensagem no seu canal privado.\n" +
                 prefix + "bug [mensagem] - Envia um bug para meu Nii-chan corrigir.\n" +
