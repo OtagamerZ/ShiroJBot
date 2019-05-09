@@ -1,0 +1,1 @@
+worker: java -jar build/libs/shiro-j-bot-1.0-SNAPSHOT-all.jar
