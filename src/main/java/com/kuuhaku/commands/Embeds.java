@@ -21,7 +21,7 @@ public class Embeds {
         eb.setAuthor("Novo bug enviado de " + message.getGuild().getName());
         eb.addField("Enviado de:", message.getAuthor().getAsMention(), true);
         eb.addField("Data:", message.getMessage().getCreationTime().minusHours(3).format(DateTimeFormatter.ofPattern("dd/MM/yyyy (HH:mm)")), true);
-        eb.addField("Relat\u00f3rio do bug:", String.join(" ", message.getMessage().getContentRaw().split(prefix + "bug ")), false);
+        eb.addField("Relatório do bug:", String.join(" ", message.getMessage().getContentRaw().split(prefix + "bug ")), false);
 
         return eb.build();
     }
@@ -31,7 +31,7 @@ public class Embeds {
 
         eb.setColor(Color.MAGENTA);
         eb.addField("Administrativo", "```...```", false);
-        eb.addField("Utilit\u00e0rios", "```\n" +
+        eb.addField("Utilitários", "```\n" +
                 prefix + "ajuda - Mostra essa mensagem no seu canal privado.\n" +
                 prefix + "bug [mensagem] - Envia um bug para meu Nii-chan corrigir.\n" +
                 prefix + "ping - Confere se estou online e funcionando direitinho.\n" +
@@ -63,7 +63,7 @@ public class Embeds {
 
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(Color.MAGENTA);
-        eb.setAuthor("Aqui est\u00e1!", "https://safebooru.org//images/" + jo.getString("directory") + "/" + jo.getString("image"));
+        eb.setAuthor("Aqui está!", "https://safebooru.org//images/" + jo.getString("directory") + "/" + jo.getString("image"));
         eb.addField("Largura:", Integer.toString(jo.getInt("width")), true);
         eb.addField("Altura:", Integer.toString(jo.getInt("height")), true);
         eb.addField("Tags:", "`" + String.join("` `", jo.getString("tags").split(" ")) + "`", false);
@@ -94,7 +94,7 @@ public class Embeds {
 
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(Color.MAGENTA);
-        eb.setAuthor("Aqui est\u00e1!", "https://safebooru.org//images/" + jo.getString("directory") + "/" + jo.getString("image"));
+        eb.setAuthor("Aqui está!", "https://safebooru.org//images/" + jo.getString("directory") + "/" + jo.getString("image"));
         eb.addField("Largura:", Integer.toString(jo.getInt("width")), true);
         eb.addField("Altura:", Integer.toString(jo.getInt("height")), true);
         eb.addField("Tags:", "`" + String.join("` `", jo.getString("tags").split(" ")) + "`", false);
@@ -107,10 +107,10 @@ public class Embeds {
         EmbedBuilder eb = new EmbedBuilder();
 
         eb.setColor(Color.MAGENTA);
-        eb.setAuthor("Eis as configura\u00e7\u00f5es deste servidor");
+        eb.setAuthor("Eis as configurações deste servidor");
         eb.setDescription("Prefixo: __**" + gc.getPrefix() + "**__");
-        eb.addField("Canal de boas-vindas:", gc.getCanalbv() != null ? message.getGuild().getTextChannelById(gc.getCanalbv()).getAsMention() : "n\u00e3o definido", true);
-        eb.addField("Canal de avisos:", gc.getCanalav() != null ? message.getGuild().getTextChannelById(gc.getCanalav()).getAsMention() : "n\u00e3o definido", true);
+        eb.addField("Canal de boas-vindas:", gc.getCanalbv() != null ? message.getGuild().getTextChannelById(gc.getCanalbv()).getAsMention() : "não definido", true);
+        eb.addField("Canal de avisos:", gc.getCanalav() != null ? message.getGuild().getTextChannelById(gc.getCanalav()).getAsMention() : "não definido", true);
         eb.addField("Mensagem de boas-vindas:", gc.getMsgBoasVindas(null), false);
         eb.addField("Mensagem de adeus:", gc.getMsgAdeus(null), false);
 
