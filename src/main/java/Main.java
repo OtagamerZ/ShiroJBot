@@ -205,7 +205,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                 //DONO--------------------------------------------------------------------------------->
 
                 if (message.getAuthor() == owner) {
-                    if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "kill")) {
+                    if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "restart")) {
                         message.getChannel().sendMessage("Sayonara, Nii-chan!").queue();
                         bot.shutdown();
                     } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "servers")) {
