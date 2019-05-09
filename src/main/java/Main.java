@@ -239,7 +239,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         message.getChannel().sendMessage(Embeds.configsEmbed(gc.get(message.getGuild().getId()), message)).queue();
                     }
                 }
-            } else if (message.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_WRITE)) {
+            } else {
                 message.getChannel().sendMessage("Por favor, digite __**!init**__ para inicializar as configurações da Shiro em seu servidor!").queue();
             }
         } catch (NullPointerException | InsufficientPermissionException ignored) {
