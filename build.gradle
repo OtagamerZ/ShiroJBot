@@ -1,8 +1,10 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
-group 'com.shirojbot.ncheater'
+mainClassName = "&lt;group&gt;.&lt;artifact&gt;.Bot" // IMPORTANT
+
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
@@ -17,5 +19,8 @@ dependencies {
     compile 'net.dv8tion:JDA:3.8.3_462'
     compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.2.Final'
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.16'
-
+    compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
+    compile group: 'org.quartz-scheduler', name: 'quartz', version: '2.3.1'
 }
+
+compileJava.options.encoding = 'UTF-8'
