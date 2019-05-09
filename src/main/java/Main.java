@@ -14,6 +14,7 @@ import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.events.ReconnectedEvent;
 import net.dv8tion.jda.core.events.ShutdownEvent;
+import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -99,6 +100,11 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         bot = event.getJDA();
         owner = bot.getUserById("350836145921327115");
         homeLog = bot.getGuildById("421495229594730496").getTextChannelById("573861751884349479");
+    }
+
+    @Override
+    public void onGuildLeave(GuildLeaveEvent guild) {
+        gc.remove(guild.getGuild().getId());
     }
 
     @Override
@@ -200,6 +206,19 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     Owner.getMap(message, gc);
                 } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "broadcast")) {
                     Owner.broadcast(bot, String.join("", message.getMessage().getContentRaw().split(gc.get(message.getGuild().getId()).getPrefix() + "broadcast")), message.getTextChannel());
+                } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "listPerms")) {
+                    try {
+                        message.getChannel().sendMessage(Owner.listPerms(bot.getGuildById(cmd[1]))).queue();
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        message.getChannel().sendMessage("Você esqueceu de me dizer o ID do servidor, Nii-chan!").queue();
+                    }
+                } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "leave")) {
+                    try {
+                        message.getChannel().sendMessage("Ok, já saí daquele servidor, Nii-chan!").queue();
+                        Owner.leave(bot.getGuildById(cmd[1]));
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        message.getChannel().sendMessage("Você esqueceu de me dizer o ID do servidor, Nii-chan!").queue();
+                    }
                 }
             }
 
@@ -212,7 +231,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     message.getChannel().sendMessage(Embeds.configsEmbed(gc.get(message.getGuild().getId()), message)).queue();
                 }
             }
-        } else if (message.getGuild().getMemberById(bot.getId()).hasPermission(Permission.MESSAGE_WRITE)) {
+        } else if (message.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_WRITE)) {
             message.getChannel().sendMessage("Por favor, digite __**!init**__ para inicializar as configurações da Shiro em seu servidor!").queue();
         }
     }
