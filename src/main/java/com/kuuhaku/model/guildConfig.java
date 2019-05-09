@@ -4,26 +4,19 @@ import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
 public class guildConfig {
     @Id
-    @GeneratedValue
-    private int id;
     private String guildID;
     private String prefix = "!";
     private String msgBoasVindas = "Seja bem-vindo(a) %user%!";
     private String msgAdeus = "Ahh...%user% deixou este servidor!";
     private String canalbv = null, canalav = null;
 
-    public int getId() {
-        return id;
-    }
+    public guildConfig(){
 
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getGuildId() {
