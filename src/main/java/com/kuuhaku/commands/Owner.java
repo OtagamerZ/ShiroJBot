@@ -36,7 +36,7 @@ public class Owner {
         final ArrayList<String> map = new ArrayList<>();
         gc.values().forEach(g -> map.add(g.getGuildId() + " | " + g.getPrefix() + " | " + g.getCanalbv() + " | " + g.getCanalav() + " | " + g.getMsgBoasVindas(null) + " | " + g.getMsgAdeus(null) + "\n"));
 
-        message.getChannel().sendMessage("```" + map + "```").queue();
+        message.getChannel().sendMessage(map.toString().replace("[", "```").replace("]", "```").replace(", ", "\n")).queue();
     }
 
     private static ArrayList<String> getGuilds(JDA bot) throws NullPointerException {
