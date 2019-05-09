@@ -33,7 +33,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
 
     private static void initBot() throws LoginException {
         JDABuilder jda = new JDABuilder(AccountType.BOT);
-        String token = "NTcyNzg0MzA1MTM5NDgyNjg2.XNINxw.QngMw67gNsAJFtclOhb73PSAb1I";
+        String token = System.getenv("BOT_TOKEN");
         jda.setToken(token);
         jda.addEventListener(new Main());
         jda.build();
