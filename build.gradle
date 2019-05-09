@@ -4,8 +4,6 @@ plugins {
     id "com.github.johnrengelman.shadow" version "4.0.2"
 }
 
-mainClassName = "&lt;group&gt;.&lt;artifact&gt;.Bot" // IMPORTANT
-
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
