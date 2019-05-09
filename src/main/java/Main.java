@@ -151,7 +151,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                 if (message.getGuild().getTextChannels().get(i).canTalk()) {
                     message.getGuild().getTextChannels().get(i).sendMessage("Seu servidor está prontinho, estarei a partir de agora ouvindo seus comandos!").queue();
                     break;
-                }yago
+                }
             }
         } else if (message.getMessage().getContentRaw().equals("!init") && gc.get(message.getGuild().getId()) != null) {
             message.getChannel().sendMessage("As configurações deste servidor ja foram inicializadas!").queue();
