@@ -213,7 +213,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                 }
             }
         } else {
-            message.getChannel().sendMessage("Por favor, digite !init para inicializar as configurações da Shiro em seu servidor!").queue();
+            message.getChannel().sendMessage("Por favor, digite __**!init**__ para inicializar as configurações da Shiro em seu servidor!").queue();
         }
     }
 }
