@@ -9,16 +9,16 @@ public class Admin {
             switch (cmd[1]) {
                 case "canalbv":
                     try {
-                        gc.setCanalbv(message.getMessage().getMentionedChannels().get(0));
-                        message.getChannel().sendMessage("Canal de boas-vindas trocado para " + gc.getCanalbv().getAsMention()).queue();
+                        gc.setCanalbv(message.getMessage().getMentionedChannels().get(0).getId());
+                        message.getChannel().sendMessage("Canal de boas-vindas trocado para " + message.getGuild().getTextChannelById(gc.getCanalbv()).getAsMention()).queue();
                     } catch (ArrayIndexOutOfBoundsException e) {
                         message.getChannel().sendMessage("E qual canal devo usar para mensagens de boas-vindas? N\u00falo n\u00e3o \u00e9 um canal v\u00e1lido!").queue();
                     }
                     break;
                 case "canalav":
                     try {
-                        gc.setCanalav(message.getMessage().getMentionedChannels().get(0));
-                        message.getChannel().sendMessage("Canal de avisos trocado para " + gc.getCanalav().getAsMention()).queue();
+                        gc.setCanalav(message.getMessage().getMentionedChannels().get(0).getId());
+                        message.getChannel().sendMessage("Canal de avisos trocado para " + message.getGuild().getTextChannelById(gc.getCanalav()).getAsMention()).queue();
                     } catch (ArrayIndexOutOfBoundsException e) {
                         message.getChannel().sendMessage("E qual canal devo usar para mensagens de aviso? N\u00falo n\u00e3o \u00e9 um canal v\u00e1lido!").queue();
                     }
