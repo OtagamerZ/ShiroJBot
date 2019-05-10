@@ -185,7 +185,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                 } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "bug")) {
                     owner.openPrivateChannel().queue(channel -> channel.sendMessage(Embeds.bugReport(message, gc.get(message.getGuild().getId()).getPrefix())).queue());
                 } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "uptime")) {
-                    message.getChannel().sendMessage("Hummm...acho que estou acordada a " + Misc.uptime()).queue();
+                    message.getChannel().sendMessage("Hummm...acho que estou acordada a " + Misc.uptime() + " segundos!").queue();
                 } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "ajuda")) {
                     Misc.help(message, gc.get(message.getGuild().getId()).getPrefix(), owner);
                 } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "prefixo")) {
