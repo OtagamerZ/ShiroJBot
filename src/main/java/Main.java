@@ -9,7 +9,6 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.ChannelType;
-import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.ReadyEvent;
@@ -38,7 +37,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
 
     private static void initBot() throws LoginException {
         JDABuilder jda = new JDABuilder(AccountType.BOT);
-        String token = System.getenv("BOT_TOKEN");
+        String token = "NTcyNzg0MzA1MTM5NDgyNjg2.XNWhCA.x4reG5IvhXOBJY8AMO7s1EGOrkc";
         jda.setToken(token);
         jda.addEventListener(new Main());
         jda.build();
