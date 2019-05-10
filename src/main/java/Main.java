@@ -32,6 +32,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     private static User owner;
     private static TextChannel homeLog;
     private static Map<String, guildConfig> gc;
+    private static JobDetail backup;
+    private static Scheduler sched;
 
     private static void initBot() throws LoginException {
         JDABuilder jda = new JDABuilder(AccountType.BOT);
@@ -41,13 +43,19 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         jda.build();
         gc = Database.getConfigs();
         try {
-            JobDetail backup = JobBuilder.newJob(Main.class).withIdentity("backup", "1").build();
+            if (backup == null) {
+                backup = JobBuilder.newJob(Main.class).withIdentity("backup", "1").build();
+            }
             Trigger cron = TriggerBuilder.newTrigger().withIdentity("manha", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0 12am,3am,6am,9am,12pm,3pm,6pm,9pm * * ?")).build();
             SchedulerFactory sf = new StdSchedulerFactory();
-            Scheduler sched = sf.getScheduler();
-            sched.scheduleJob(backup, cron);
-            sched.start();
-            System.out.println("Cronograma inicializado com sucesso!");
+            try {
+                sched = sf.getScheduler();
+                sched.scheduleJob(backup, cron);
+            } catch (Exception ignore){
+            } finally {
+                sched.start();
+                System.out.println("Cronograma inicializado com sucesso!");
+            }
         } catch (SchedulerException e) {
             System.out.println("Erro ao inicializar cronograma: " + e);
         }
@@ -135,6 +143,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
             Database.sendAllConfigs(gc.values());
             System.out.println("Guardar configurações no banco de dados...PRONTO!");
             System.out.println("Desligando instância...");
+            sched.shutdown();
             System.exit(0);
         } catch (Exception e) {
             System.out.println("Guardar configurações no banco de dados...ERRO!");
