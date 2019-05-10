@@ -56,14 +56,14 @@ public class Owner {
         }
     }
 
-    public static void broadcast(JDA bot, String message, TextChannel homeLog) {
+    public static void broadcast(Map<String, guildConfig> gc, JDA bot, String message, TextChannel homeLog) {
         List<Guild> guilds = bot.getGuilds();
         List<String> status = getGuilds(bot);
 
         for (int z = 0; z < guilds.size(); z++) {
             try {
-                if (!guilds.get(z).getTextChannelsByName("avisos-shiro", true).isEmpty()) {
-                    guilds.get(z).getTextChannelsByName("avisos-shiro", true).get(0).sendMessage("Transmissão:```" + message + "```").queue();
+                if (guilds.get(z).getTextChannelById(gc.get(guilds.get(z).getId()).getCanalav()) != null) {
+                    guilds.get(z).getTextChannelById(gc.get(guilds.get(z).getId()).getCanalav()).sendMessage("Transmissão:```" + message + "```").queue();
                 } else {
                     for (int i = 0; i < guilds.get(z).getTextChannels().size(); i++) {
                         if (guilds.get(z).getTextChannels().get(i).canTalk()) {
