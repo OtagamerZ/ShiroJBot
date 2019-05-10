@@ -54,7 +54,8 @@ public class Embeds {
                 String.join("+", tag) + "&pid=" + index);
         HttpURLConnection con = (HttpURLConnection) link.openConnection();
         con.setRequestMethod("GET");
-        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+        con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+        con.addRequestProperty("Accept", "application/json");
         System.out.println("Requisição 'GET' para o URL: " + link);
         System.out.println("Resposta: " + con.getResponseCode());
         BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -65,6 +66,7 @@ public class Embeds {
             resposta.append(input);
         }
         br.close();
+        con.disconnect();
 
         System.out.println(resposta.toString());
         JSONObject jo = new JSONObject(resposta.toString().replace("[", "").replace("]", ""));
@@ -123,5 +125,68 @@ public class Embeds {
         eb.addField("Mensagem de adeus:", gc.getMsgAdeus(null), false);
 
         return eb.build();
+    }
+
+    public static MessageEmbed animeEmbed(String name) throws IOException {
+        String query = "{\n" +
+                "  Media(search: " + name + ", type: ANIME) {\n" +
+                "    title {\n" +
+                "      romaji\n" +
+                "      english\n" +
+                "    }\n" +
+                "    status\n" +
+                "    startDate {\n" +
+                "      year\n" +
+                "      month\n" +
+                "      day\n" +
+                "    }\n" +
+                "    endDate {\n" +
+                "      year\n" +
+                "      month\n" +
+                "      day\n" +
+                "    }\n" +
+                "    duration\n" +
+                "    coverImage {\n" +
+                "      large\n" +
+                "      color\n" +
+                "    }\n" +
+                "    genres\n" +
+                "    averageScore\n" +
+                "    popularity\n" +
+                "    staff {\n" +
+                "      edges {\n" +
+                "        role\n" +
+                "        node {\n" +
+                "          name {\n" +
+                "            first\n" +
+                "            last\n" +
+                "          }\n" +
+                "        }\n" +
+                "      }\n" +
+                "    }\n" +
+                "    studios(isMain: true) {\n" +
+                "      edges {\n" +
+                "        node {\n" +
+                "          name\n" +
+                "        }\n" +
+                "      }\n" +
+                "    }\n" +
+                "    nextAiringEpisode {\n" +
+                "      episode\n" +
+                "      airingAt\n" +
+                "    }\n" +
+                "    trailer {\n" +
+                "      site\n" +
+                "    }\n" +
+                "    description\n" +
+                "  }\n" +
+                "}\n";
+        query = query.replace("\n", " ").replace("  ", " ");
+        System.out.println(Anime.getData(query));
+        JSONObject data = new JSONObject(Anime.getData(query));
+
+        EmbedBuilder eb = new EmbedBuilder();
+
+        eb.setColor(data.getString("coverImage"))
     }
 }

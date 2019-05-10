@@ -33,6 +33,8 @@ dependencies {
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.16'
     compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
     compile group: 'org.quartz-scheduler', name: 'quartz', version: '2.3.1'
+    compile group: 'commons-io', name: 'commons-io', version: '2.6'
+    implementation 'com.graphql-java:graphql-java:2019-05-08T02-56-27-cca4316'
 }
 
 apply plugin: "com.github.johnrengelman.shadow"
