@@ -9,6 +9,7 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.ChannelType;
+import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.ReadyEvent;
@@ -76,6 +77,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         try {
             Database.sendAllConfigs(gc.values());
             System.out.println("Guardar configurações no banco de dados...PRONTO!");
+            bot.getPresence().setGame(Owner.getRandomGame(bot));
         } catch (Exception e) {
             System.out.println("Guardar configurações no banco de dados...ERRO!\nErro: " + e);
         }
@@ -109,6 +111,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         bot = event.getJDA();
         owner = bot.getUserById("350836145921327115");
         homeLog = bot.getGuildById("421495229594730496").getTextChannelById("573861751884349479");
+        bot.getPresence().setGame(Owner.getRandomGame(bot));
     }
 
     @Override
