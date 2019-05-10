@@ -42,7 +42,8 @@ public class Embeds {
                 prefix + "ajuda - Mostra essa mensagem no seu canal privado.\n\n" +
                 prefix + "bug [mensagem] - Envia um bug para meu Nii-chan corrigir.\n\n" +
                 prefix + "ping - Confere se estou online e funcionando direitinho.\n\n" +
-                prefix + "uptime - Descobre a quanto tempo estou acordada.\n" +
+                prefix + "uptime - Descobre a quanto tempo estou acordada.\n\n" +
+                prefix + "imagem [tags] [página] - Busca uma imagem no Safebooru, as tags não podem conter espaços (substitua-os por _).\n" +
                 "```", false);
 
         return eb.build();
