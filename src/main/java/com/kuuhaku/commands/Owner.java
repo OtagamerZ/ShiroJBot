@@ -2,6 +2,7 @@ package com.kuuhaku.commands;
 
 import com.kuuhaku.model.guildConfig;
 import net.dv8tion.jda.core.JDA;
+import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -91,5 +92,17 @@ public class Owner {
 
     public static void leave(Guild guild) {
         guild.leave().complete();
+    }
+
+    public static Game getRandomGame(JDA bot) {
+        ArrayList<Game> games = new ArrayList<>();
+
+        games.add(Game.playing("Digite !ajuda para ver meus comandos!"));
+        games.add(Game.streaming("Na conta do meu Nii-chan sem ele saber!", "https://twitch.tv/kuuhaku_otgmz"));
+        games.add(Game.playing("Nico nico nii!!"));
+        games.add(Game.listening(bot.getGuilds().size() + " servidores, e isso ainda é só o começo!"));
+        games.add(Game.watching("No Game No Life pela 13ª vez, e ainda não enjoei de ver como eu atuo bem!"));
+
+        return games.get((int) (Math.random() * games.size()));
     }
 }
