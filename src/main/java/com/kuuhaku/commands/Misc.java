@@ -5,6 +5,8 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 
 public class Misc {
     public static void help(MessageReceivedEvent message, String prefix, User owner) {
@@ -45,5 +47,10 @@ public class Misc {
         } catch (IOException e) {
             message.getChannel().sendMessage("Eita, n\u00e3o encontrei nenhuma imagem :expressionless:!").queue();
         }
+    }
+
+    public static String uptime() {
+        RuntimeMXBean rb = ManagementFactory.getRuntimeMXBean();
+        return Integer.toString((int) rb.getUptime() / 1000);
     }
 }
