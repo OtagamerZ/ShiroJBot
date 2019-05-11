@@ -67,7 +67,7 @@ public class Owner {
                 guilds.get(z).getTextChannelById(gc.get(guilds.get(z).getId()).getCanalav()).sendMessage("Transmissão:```" + message + "```").queue();
                 assert status != null;
                 status.set(z, status.get(z) + "SUCESSO\n");
-            } catch (PermissionException e) {
+            } catch (Exception e) {
                 System.out.println("Erro: " + e);
                 assert status != null;
                 status.set(z, status.get(z) + "FALHA\n");
