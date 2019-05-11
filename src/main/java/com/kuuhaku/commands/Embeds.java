@@ -1,5 +1,6 @@
 package com.kuuhaku.commands;
 
+import com.kuuhaku.controller.Tradutor;
 import com.kuuhaku.model.guildConfig;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
@@ -178,7 +179,6 @@ public class Embeds {
                 "}\n" +
                 "}\n";
         query = query.replace("\n", " ");
-        System.out.println(com.kuuhaku.controller.Anime.getData(query));
         JSONObject data = new JSONObject(com.kuuhaku.controller.Anime.getData(query));
         Anime anime = new Anime(data);
         EmbedBuilder eb = new EmbedBuilder();
@@ -186,7 +186,7 @@ public class Embeds {
         eb.setColor(anime.getcColor());
         eb.setAuthor("Bem, aqui está um novo anime para você assistir!\n");
         eb.setTitle(anime.gettRomaji() + (!anime.gettRomaji().equals(anime.gettEnglish()) ? " (" + anime.gettEnglish() + ")" : ""));
-        eb.setDescription(anime.getDescription());
+        eb.setDescription(Tradutor.translate("en", "pt", anime.getDescription()));
         eb.setImage(anime.getcImage());
         eb.addField("Autor:", anime.getCreator(), true);
         eb.addField("Estúdio:", anime.getStudio(), true);
@@ -197,6 +197,7 @@ public class Embeds {
         eb.addField("Nota:", Float.toString(anime.getScore() / 10), true);
         eb.addField("Popularidade:", Integer.toString(anime.getPopularity()), true);
         eb.addField("Gêneros:", anime.getGenres(), false);
+        eb.setFooter("Descrição traduzida por [Yandex](http://translate.yandex.com/).", "https://tech.yandex.com/favicon.ico");
 
         return eb.build();
     }

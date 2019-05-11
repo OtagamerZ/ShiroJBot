@@ -42,7 +42,7 @@ public class Anime {
             }
         }
         assert eCreator != null;
-        creator = eCreator.getString("last") + " " + eCreator.getString("first");
+        creator = eCreator.getString("first") + " " + eCreator.getString("last");
 
         JSONObject studios = media.getJSONObject("studios");
         JSONArray sedges = studios.getJSONArray("edges");
@@ -58,7 +58,7 @@ public class Anime {
             naeEpisode = null;
         }
 
-        status = media.getString("status");
+        status = media.getString("status").equals("FINISHED") ? "Completo" : "Transmitindo";
         duration = Integer.toString(media.getInt("duration"));
         genres = media.getJSONArray("genres").toList();
         score = media.getInt("averageScore");
