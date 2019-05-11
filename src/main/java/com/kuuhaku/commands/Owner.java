@@ -64,16 +64,7 @@ public class Owner {
 
         for (int z = 0; z < guilds.size(); z++) {
             try {
-                if (guilds.get(z).getTextChannelById(gc.get(guilds.get(z).getId()).getCanalav()) != null) {
-                    guilds.get(z).getTextChannelById(gc.get(guilds.get(z).getId()).getCanalav()).sendMessage("Transmissão:```" + message + "```").queue();
-                } else {
-                    for (int i = 0; i < guilds.get(z).getTextChannels().size(); i++) {
-                        if (guilds.get(z).getTextChannels().get(i).canTalk()) {
-                            guilds.get(z).getTextChannels().get(i).sendMessage("Canal `avisos-shiro` não foi encontrado, enviando transmissão para primeiro canal disponível:```" + message + "```").queue();
-                            break;
-                        }
-                    }
-                }
+                guilds.get(z).getTextChannelById(gc.get(guilds.get(z).getId()).getCanalav()).sendMessage("Transmissão:```" + message + "```").queue();
                 assert status != null;
                 status.set(z, status.get(z) + "SUCESSO\n");
             } catch (PermissionException e) {
