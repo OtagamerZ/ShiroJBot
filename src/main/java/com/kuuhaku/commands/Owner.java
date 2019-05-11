@@ -6,6 +6,7 @@ import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.exceptions.PermissionException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,15 +76,14 @@ public class Owner {
                 }
                 assert status != null;
                 status.set(z, status.get(z) + "SUCESSO\n");
-            } catch (Exception e) {
+            } catch (PermissionException e) {
                 System.out.println("Erro: " + e);
                 assert status != null;
                 status.set(z, status.get(z) + "FALHA\n");
-            } finally {
-                assert status != null;
-                homeLog.sendMessage("Resultado da transmissão:```" + String.join("", status).replace("[", "").replace("]", "\n") + "```").queue();
             }
         }
+        assert status != null;
+        homeLog.sendMessage("Resultado da transmissão:```" + String.join("", status).replace("[", "").replace("]", "\n") + "```").queue();
     }
 
     public static String listPerms(Guild guild) {
