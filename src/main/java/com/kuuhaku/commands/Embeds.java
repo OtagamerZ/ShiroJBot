@@ -5,6 +5,7 @@ import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.json.JSONObject;
+import com.kuuhaku.model.Anime;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -107,7 +108,7 @@ public class Embeds {
         eb.setAuthor("Aqui está!", "https://safebooru.org//images/" + jo.getString("directory") + "/" + jo.getString("image"));
         eb.addField("Largura:", Integer.toString(jo.getInt("width")), true);
         eb.addField("Altura:", Integer.toString(jo.getInt("height")), true);
-        eb.addField("Tags:", "`" + String.join("` `", jo.getString("tags").split(" ")) + "`", false);
+        eb.addField("Tags:", "`" + String.join("` `", jo.getString("tags").split(" ")) + "`", true);
         eb.setImage("https://safebooru.org//images/" + jo.getString("directory") + "/" + jo.getString("image"));
 
         return eb.build();
@@ -129,64 +130,74 @@ public class Embeds {
 
     public static MessageEmbed animeEmbed(String name) throws IOException {
         String query = "{\n" +
-                "  Media(search: " + name + ", type: ANIME) {\n" +
-                "    title {\n" +
-                "      romaji\n" +
-                "      english\n" +
-                "    }\n" +
-                "    status\n" +
-                "    startDate {\n" +
-                "      year\n" +
-                "      month\n" +
-                "      day\n" +
-                "    }\n" +
-                "    endDate {\n" +
-                "      year\n" +
-                "      month\n" +
-                "      day\n" +
-                "    }\n" +
-                "    duration\n" +
-                "    coverImage {\n" +
-                "      large\n" +
-                "      color\n" +
-                "    }\n" +
-                "    genres\n" +
-                "    averageScore\n" +
-                "    popularity\n" +
-                "    staff {\n" +
-                "      edges {\n" +
-                "        role\n" +
-                "        node {\n" +
-                "          name {\n" +
-                "            first\n" +
-                "            last\n" +
-                "          }\n" +
-                "        }\n" +
-                "      }\n" +
-                "    }\n" +
-                "    studios(isMain: true) {\n" +
-                "      edges {\n" +
-                "        node {\n" +
-                "          name\n" +
-                "        }\n" +
-                "      }\n" +
-                "    }\n" +
-                "    nextAiringEpisode {\n" +
-                "      episode\n" +
-                "      airingAt\n" +
-                "    }\n" +
-                "    trailer {\n" +
-                "      site\n" +
-                "    }\n" +
-                "    description\n" +
-                "  }\n" +
+                "Media(search: \\\"" + name + "\\\", type: ANIME) {\n" +
+                "title {\n" +
+                "romaji\n" +
+                "english\n" +
+                "}\n" +
+                "status\n" +
+                "startDate {\n" +
+                "year\n" +
+                "month\n" +
+                "day\n" +
+                "}\n" +
+                "duration\n" +
+                "coverImage {\n" +
+                "extraLarge\n" +
+                "color\n" +
+                "}\n" +
+                "genres\n" +
+                "averageScore\n" +
+                "popularity\n" +
+                "staff {\n" +
+                "edges {\n" +
+                "role\n" +
+                "node {\n" +
+                "name {\n" +
+                "first\n" +
+                "last\n" +
+                "}\n" +
+                "}\n" +
+                "}\n" +
+                "}\n" +
+                "studios(isMain: true) {\n" +
+                "edges {\n" +
+                "node {\n" +
+                "name\n" +
+                "}\n" +
+                "}\n" +
+                "}\n" +
+                "nextAiringEpisode {\n" +
+                "episode\n" +
+                "airingAt\n" +
+                "}\n" +
+                "trailer {\n" +
+                "site\n" +
+                "}\n" +
+                "description\n" +
+                "}\n" +
                 "}\n";
-        query = query.replace("\n", " ").replace("  ", " ");
-        System.out.println(Anime.getData(query));
-        JSONObject data = new JSONObject(Anime.getData(query));
-
+        query = query.replace("\n", " ");
+        System.out.println(com.kuuhaku.controller.Anime.getData(query));
+        JSONObject data = new JSONObject(com.kuuhaku.controller.Anime.getData(query));
+        Anime anime = new Anime(data);
         EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setColor(data.getString("coverImage"))
+        eb.setColor(anime.getcColor());
+        eb.setAuthor("Bem, aqui está um novo anime para você assistir!\n");
+        eb.setTitle(anime.gettRomaji() + (!anime.gettRomaji().equals(anime.gettEnglish()) ? " (" + anime.gettEnglish() + ")" : ""));
+        eb.setDescription(anime.getDescription());
+        eb.setImage(anime.getcImage());
+        eb.addField("Autor:", anime.getCreator(), true);
+        eb.addField("Estúdio:", anime.getStudio(), true);
+        eb.addField("Ano:", anime.getsDate(), true);
+        eb.addField("Estado:", anime.getStatus(), true);
+        eb.addField("Episódios:", anime.getDuration(), true);
+        if (anime.getNaeAiringAt() != null) eb.addField("Próximo episódio:", anime.getNaeEpisode() + " -> " + anime.getNaeAiringAt(), true);
+        eb.addField("Nota:", Float.toString(anime.getScore() / 10), true);
+        eb.addField("Popularidade:", Integer.toString(anime.getPopularity()), true);
+        eb.addField("Gêneros:", anime.getGenres(), false);
+
+        return eb.build();
     }
 }
