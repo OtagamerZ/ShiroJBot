@@ -24,6 +24,7 @@ import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
 import javax.security.auth.login.LoginException;
+import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.Map;
 
@@ -51,7 +52,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
             try {
                 sched = sf.getScheduler();
                 sched.scheduleJob(backup, cron);
-            } catch (Exception ignore){
+            } catch (Exception ignore) {
             } finally {
                 sched.start();
                 System.out.println("Cronograma inicializado com sucesso!");
@@ -210,6 +211,13 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         message.getChannel().sendMessage("Eu escolho essa opção: " + Misc.choose(cmd[1].split(";"))).queue();
                     } catch (ArrayIndexOutOfBoundsException e) {
                         message.getChannel().sendMessage("Você não me deu opções, bobo!").queue();
+                    }
+                } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "anime")) {
+                    try {
+                        message.getChannel().sendMessage(Embeds.animeEmbed(message.getMessage().getContentRaw().replace(gc.get(message.getGuild().getId()).getPrefix() + "anime ", ""))).queue();
+                    } catch (IOException e) {
+                        message.getChannel().sendMessage("Humm...não achei nenhum anime com esse nome, talvez você tenha escrito errado?").queue();
+                        e.printStackTrace();
                     }
                 }
 
