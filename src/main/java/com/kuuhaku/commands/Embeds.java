@@ -45,7 +45,12 @@ public class Embeds {
                 prefix + "bug [mensagem] - Envia um bug para meu Nii-chan corrigir.\n\n" +
                 prefix + "ping - Confere se estou online e funcionando direitinho.\n\n" +
                 prefix + "uptime - Descobre a quanto tempo estou acordada.\n\n" +
-                prefix + "imagem [tags] [página] - Busca uma imagem no Safebooru, as tags não podem conter espaços (substitua-os por _).\n" +
+                prefix + "imagem [tags] [página] - Busca uma imagem no Safebooru, as tags não podem conter espaços (substitua-os por _).\n\n" +
+                prefix + "anime [nome] - Pesquisa informações sobre um anime.\n" +
+                "```", false);
+        eb.addField("Diversão", "```\n\n" +
+                prefix + "pergunta [pergunta] - Me pergunte algo, mas só vou responder com sim ou não!.\n\n" +
+                prefix + "escolha [opção1;opção2;opção3;...] - Quer que eu escolha entre essas opções? Facil!.\n" +
                 "```", false);
 
         return eb.build();
