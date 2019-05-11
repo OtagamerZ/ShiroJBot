@@ -30,7 +30,7 @@ public class Anime {
         tEnglish = title.getString("english");
 
         JSONObject date = media.getJSONObject("startDate");
-        sDate = date.getInt("year");
+        sDate = Integer.toString(date.getInt("year"));
 
         JSONObject staff = media.getJSONObject("staff");
         JSONArray edges = staff.getJSONArray("edges");
