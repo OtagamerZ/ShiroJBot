@@ -232,7 +232,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "map")) {
                         Owner.getMap(message, gc);
                     } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "broadcast")) {
-                        Owner.broadcast(gc, bot, String.join("", message.getMessage().getContentRaw().replace(gc.get(message.getGuild().getId()).getPrefix() + "broadcast ", "")), message.getTextChannel());
+                        Owner.broadcast(gc, bot, message.getMessage().getContentRaw().replace(gc.get(message.getGuild().getId()).getPrefix() + "broadcast ", ""), message.getTextChannel());
                     } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "listPerms")) {
                         try {
                             message.getChannel().sendMessage(Owner.listPerms(bot.getGuildById(cmd[1]))).queue();
@@ -261,7 +261,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
             } else {
                 message.getChannel().sendMessage("Por favor, digite __**!init**__ para inicializar as configurações da Shiro em seu servidor!").queue();
             }
-        } catch (NullPointerException | InsufficientPermissionException ignored) {
+        } catch (NullPointerException | InsufficientPermissionException e) {
+            e.printStackTrace();
         }
     }
 }
