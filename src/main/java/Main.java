@@ -38,7 +38,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
 
     private static void initBot() throws LoginException {
         JDABuilder jda = new JDABuilder(AccountType.BOT);
-        String token = "NTcyNzg0MzA1MTM5NDgyNjg2.XNWhCA.x4reG5IvhXOBJY8AMO7s1EGOrkc";
+        String token = System.getenv("BOT_TOKEN");
         jda.setToken(token);
         jda.addEventListener(new Main());
         jda.build();
@@ -216,7 +216,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     try {
                         message.getChannel().sendMessage(Embeds.animeEmbed(message.getMessage().getContentRaw().replace(gc.get(message.getGuild().getId()).getPrefix() + "anime ", ""))).queue();
                     } catch (IOException e) {
-                        message.getChannel().sendMessage("Humm...não achei nenhum anime com esse nome, talvez você tenha escrito errado?").queue();
+                        message.getChannel().sendMessage("Humm...não achei nenhum anime com esse nome, talvez você tenha escrito algo errado?").queue();
                         e.printStackTrace();
                     }
                 }
