@@ -37,7 +37,13 @@ public class Anime {
         JSONArray edges = staff.getJSONArray("edges");
         JSONObject eCreator = null;
         for (int i = 0; i < edges.length(); i++) {
-            if (edges.getJSONObject(i).getString("role").toLowerCase().contains("creator")) {
+            if (edges.getJSONObject(i).getString("role").toLowerCase().contains("original")) {
+                eCreator = edges.getJSONObject(i).getJSONObject("node").getJSONObject("name");
+                break;
+            } else if (edges.getJSONObject(i).getString("role").toLowerCase().contains("creator")) {
+                eCreator = edges.getJSONObject(i).getJSONObject("node").getJSONObject("name");
+                break;
+            } else if (edges.getJSONObject(i).getString("role").toLowerCase().contains("story")) {
                 eCreator = edges.getJSONObject(i).getJSONObject("node").getJSONObject("name");
                 break;
             }
