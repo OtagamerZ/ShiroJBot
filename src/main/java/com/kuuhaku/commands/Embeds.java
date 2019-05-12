@@ -188,6 +188,7 @@ public class Embeds {
         query = query.replace("\n", " ");
         JSONObject data = new JSONObject(com.kuuhaku.controller.Anime.getData(query));
         Anime anime = new Anime(data);
+	if (anime.getGenres().toLowerCase().contains("hentai")) return "Humm safadinho, não vou buscar dados sobre um Hentai né!";
         EmbedBuilder eb = new EmbedBuilder();
 
         eb.setColor(anime.getcColor());
