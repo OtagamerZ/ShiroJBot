@@ -192,7 +192,7 @@ public class Embeds {
         eb.addField("Nota:", Float.toString(anime.getScore() / 10), true);
         eb.addField("Popularidade:", Integer.toString(anime.getPopularity()), true);
         eb.addField("Gêneros:", anime.getGenres(), false);
-        eb.setFooter("Descrição traduzida por Yandex | http://translate.yandex.com.", "https://tech.yandex.com/favicon_en.ico");
+        eb.setFooter("Descrição traduzida por Yandex | http://translate.yandex.com.", "https://cdn6.aptoide.com/imgs/6/3/5/635bc7fad9a6329e0efbe9502f472dc5_icon.png");
 
         return eb.build();
     }
