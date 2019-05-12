@@ -33,24 +33,6 @@ public class Anime {
         JSONObject date = media.getJSONObject("startDate");
         sDate = Integer.toString(date.getInt("year"));
 
-        JSONObject staff = media.getJSONObject("staff");
-        JSONArray edges = staff.getJSONArray("edges");
-        JSONObject eCreator = null;
-        for (int i = 0; i < edges.length(); i++) {
-            if (edges.getJSONObject(i).getString("role").toLowerCase().contains("original")) {
-                eCreator = edges.getJSONObject(i).getJSONObject("node").getJSONObject("name");
-                break;
-            } else if (edges.getJSONObject(i).getString("role").toLowerCase().contains("creator")) {
-                eCreator = edges.getJSONObject(i).getJSONObject("node").getJSONObject("name");
-                break;
-            } else if (edges.getJSONObject(i).getString("role").toLowerCase().contains("story")) {
-                eCreator = edges.getJSONObject(i).getJSONObject("node").getJSONObject("name");
-                break;
-            }
-        }
-        assert eCreator != null;
-        creator = eCreator.getString("first") + " " + eCreator.getString("last");
-
         JSONObject studios = media.getJSONObject("studios");
         JSONArray sedges = studios.getJSONArray("edges");
         studio = sedges.getJSONObject(0).getJSONObject("node").getString("name");
