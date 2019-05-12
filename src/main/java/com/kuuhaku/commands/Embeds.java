@@ -164,6 +164,17 @@ public class Embeds {
                 "}\n" +
                 "}\n" +
                 "}\n" +
+                "staff {\n" +
+                "edges {\n" +
+                "role\n" +
+                "node {\n" +
+                "name {\n" +
+                "first\n" +
+                "last\n" +
+                "}\n" +
+                "}\n" +
+                "}\n" +
+                "}" +
                 "nextAiringEpisode {\n" +
                 "episode\n" +
                 "airingAt\n" +
@@ -185,6 +196,7 @@ public class Embeds {
         eb.setDescription(Tradutor.translate("en", "pt", anime.getDescription()));
         eb.setImage(anime.getcImage());
         eb.addField("Estúdio:", anime.getStudio(), true);
+        eb.addField("Criado por:", anime.getCreator(), true);
         eb.addField("Ano:", anime.getsDate(), true);
         eb.addField("Estado:", anime.getStatus(), true);
         eb.addField("Episódios:", anime.getDuration(), true);
