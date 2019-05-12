@@ -23,7 +23,8 @@ public class Anime {
         JSONObject cover = media.getJSONObject("coverImage");
         System.out.println(cover);
         cColor = Color.decode(cover.getString("color"));
-        cImage = cover.keys().next();
+        cImage = cover.getString("large");
+        System.out.println(cImage);
 
         JSONObject title = media.getJSONObject("title");
         tRomaji = title.getString("romaji");
