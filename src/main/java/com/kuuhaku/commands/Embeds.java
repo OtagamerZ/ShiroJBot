@@ -136,7 +136,7 @@ public class Embeds {
 
     public static MessageEmbed animeEmbed(String name) throws IOException {
         String query = "{\n" +
-                "Media(search: \"" + name + "\", type: ANIME) {\n" +
+                "Media(search: \\\"" + name + "\\\", type: ANIME) {\n" +
                 "title {\n" +
                 "romaji\n" +
                 "english\n" +
@@ -157,17 +157,6 @@ public class Embeds {
                 "genres\n" +
                 "averageScore\n" +
                 "popularity\n" +
-                "staff {\n" +
-                "edges {\n" +
-                "role\n" +
-                "node {\n" +
-                "name {\n" +
-                "first\n" +
-                "last\n" +
-                "}\n" +
-                "}\n" +
-                "}\n" +
-                "}\n" +
                 "studios(isMain: true) {\n" +
                 "edges {\n" +
                 "node {\n" +
@@ -178,6 +167,9 @@ public class Embeds {
                 "nextAiringEpisode {\n" +
                 "episode\n" +
                 "airingAt\n" +
+                "}\n" +
+                "trailer {\n" +
+                "site\n" +
                 "}\n" +
                 "description\n" +
                 "}\n" +
@@ -193,7 +185,6 @@ public class Embeds {
         eb.setDescription(Tradutor.translate("en", "pt", anime.getDescription()));
         eb.setImage(anime.getcImage());
         eb.addField("Estúdio:", anime.getStudio(), true);
-        eb.addField("Criado por:", anime.getCreator(), true);
         eb.addField("Ano:", anime.getsDate(), true);
         eb.addField("Estado:", anime.getStatus(), true);
         eb.addField("Episódios:", anime.getDuration(), true);
