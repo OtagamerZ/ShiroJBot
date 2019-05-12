@@ -168,7 +168,6 @@ public class Embeds {
                 "episode\n" +
                 "airingAt\n" +
                 "}\n" +
-                "trailer {\n" +
                 "site\n" +
                 "}\n" +
                 "description\n" +
