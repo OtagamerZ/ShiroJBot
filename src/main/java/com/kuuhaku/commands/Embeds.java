@@ -149,7 +149,9 @@ public class Embeds {
                 "}\n" +
                 "duration\n" +
                 "coverImage {\n" +
+                "extraLarge\n" +
                 "large\n" +
+                "medium\n" +
                 "color\n" +
                 "}\n" +
                 "genres\n" +
