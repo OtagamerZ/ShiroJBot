@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 public class Anime {
     public static String getData(String query) throws IOException {
         String json = "{\"query\":\"query" + query + "\"}";
+        System.out.println(json);
         URL url = new URL("https://graphql.anilist.co");
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setConnectTimeout(5000);
