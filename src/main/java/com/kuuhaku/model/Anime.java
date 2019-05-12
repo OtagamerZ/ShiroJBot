@@ -21,10 +21,8 @@ public class Anime {
         JSONObject media = dData.getJSONObject("Media");
 
         JSONObject cover = media.getJSONObject("coverImage");
-        System.out.println(cover);
         cColor = Color.decode(cover.getString("color"));
         cImage = cover.getString("large");
-        System.out.println(cImage);
 
         JSONObject title = media.getJSONObject("title");
         tRomaji = title.getString("romaji");
@@ -33,9 +31,35 @@ public class Anime {
         JSONObject date = media.getJSONObject("startDate");
         sDate = Integer.toString(date.getInt("year"));
 
-        JSONObject studios = media.getJSONObject("studios");
-        JSONArray sedges = studios.getJSONArray("edges");
-        studio = sedges.getJSONObject(0).getJSONObject("node").getString("name");
+        try {
+            JSONObject staff = media.getJSONObject("staff");
+            JSONArray edges = staff.getJSONArray("edges");
+            JSONObject eCreator = null;
+            for (int i = 0; i < edges.length(); i++) {
+                if (edges.getJSONObject(i).getString("role").toLowerCase().contains("original")) {
+                    eCreator = edges.getJSONObject(i).getJSONObject("node").getJSONObject("name");
+                    break;
+                } else if (edges.getJSONObject(i).getString("role").toLowerCase().contains("creator")) {
+                    eCreator = edges.getJSONObject(i).getJSONObject("node").getJSONObject("name");
+                    break;
+                } else if (edges.getJSONObject(i).getString("role").toLowerCase().contains("story")) {
+                    eCreator = edges.getJSONObject(i).getJSONObject("node").getJSONObject("name");
+                    break;
+                }
+            }
+            assert eCreator != null;
+            creator = eCreator.getString("first") + " " + eCreator.getString("last");
+        } catch (Exception e) {
+            creator = "Não informado";
+        }
+
+        try {
+            JSONObject studios = media.getJSONObject("studios");
+            JSONArray sedges = studios.getJSONArray("edges");
+            studio = sedges.getJSONObject(0).getJSONObject("node").getString("name");
+        } catch (Exception e) {
+            studio = "Não informado";
+        }
 
         try {
             JSONObject nae = media.getJSONObject("nextAiringEpisode");
