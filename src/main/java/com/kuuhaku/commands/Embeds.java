@@ -164,6 +164,17 @@ public class Embeds {
                 "}\n" +
                 "}\n" +
                 "}\n" +
+                "staff {\n" +
+                "edges {\n" +
+                "role\n" +
+                "node {\n" +
+                "name {\n" +
+                "first\n" +
+                "last\n" +
+                "}\n" +
+                "}\n" +
+                "}\n" +
+                "}" +
                 "nextAiringEpisode {\n" +
                 "episode\n" +
                 "airingAt\n" +
