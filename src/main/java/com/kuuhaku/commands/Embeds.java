@@ -136,51 +136,51 @@ public class Embeds {
 
     public static MessageEmbed animeEmbed(String name) throws IOException {
         String query = "{\n" +
-                "  Media(search: \"" + name + "\", type: ANIME) {\n" +
-                "    title {\n" +
-                "      romaji\n" +
-                "      english\n" +
-                "    }\n" +
-                "    status\n" +
-                "    startDate {\n" +
-                "      year\n" +
-                "      month\n" +
-                "      day\n" +
-                "    }\n" +
-                "    duration\n" +
-                "    coverImage {\n" +
-                "      extraLarge\n" +
-                "      large\n" +
-                "      medium\n" +
-                "      color\n" +
-                "    }\n" +
-                "    genres\n" +
-                "    averageScore\n" +
-                "    popularity\n" +
-                "    staff {\n" +
-                "      edges {\n" +
-                "        role\n" +
-                "        node {\n" +
-                "          name {\n" +
-                "            first\n" +
-                "            last\n" +
-                "          }\n" +
-                "        }\n" +
-                "      }\n" +
-                "    }\n" +
-                "    studios(isMain: true) {\n" +
-                "      edges {\n" +
-                "        node {\n" +
-                "          name\n" +
-                "        }\n" +
-                "      }\n" +
-                "    }\n" +
-                "    nextAiringEpisode {\n" +
-                "      episode\n" +
-                "      airingAt\n" +
-                "    }\n" +
-                "    description\n" +
-                "  }\n" +
+                "Media(search: \"" + name + "\", type: ANIME) {\n" +
+                "title {\n" +
+                "romaji\n" +
+                "english\n" +
+                "}\n" +
+                "status\n" +
+                "startDate {\n" +
+                "year\n" +
+                "month\n" +
+                "day\n" +
+                "}\n" +
+                "duration\n" +
+                "coverImage {\n" +
+                "extraLarge\n" +
+                "large\n" +
+                "medium\n" +
+                "color\n" +
+                "}\n" +
+                "genres\n" +
+                "averageScore\n" +
+                "popularity\n" +
+                "staff {\n" +
+                "edges {\n" +
+                "role\n" +
+                "node {\n" +
+                "name {\n" +
+                "first\n" +
+                "last\n" +
+                "}\n" +
+                "}\n" +
+                "}\n" +
+                "}\n" +
+                "studios(isMain: true) {\n" +
+                "edges {\n" +
+                "node {\n" +
+                "name\n" +
+                "}\n" +
+                "}\n" +
+                "}\n" +
+                "nextAiringEpisode {\n" +
+                "episode\n" +
+                "airingAt\n" +
+                "}\n" +
+                "description\n" +
+                "}\n" +
                 "}\n";
         query = query.replace("\n", " ");
         JSONObject data = new JSONObject(com.kuuhaku.controller.Anime.getData(query));
