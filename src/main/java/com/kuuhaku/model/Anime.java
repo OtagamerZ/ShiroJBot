@@ -21,12 +21,20 @@ public class Anime {
         JSONObject media = dData.getJSONObject("Media");
 
         JSONObject cover = media.getJSONObject("coverImage");
-        cColor = Color.decode(cover.getString("color"));
+        try {
+            cColor = Color.decode(cover.getString("color"));
+        } catch (Exception e) {
+            cColor = Color.magenta;
+        }
         cImage = cover.getString("large");
 
         JSONObject title = media.getJSONObject("title");
         tRomaji = title.getString("romaji");
-        tEnglish = title.getString("english");
+        try {
+            tEnglish = title.getString("english");
+        } catch (Exception e) {
+            tEnglish = tRomaji;
+        }
 
         JSONObject date = media.getJSONObject("startDate");
         sDate = Integer.toString(date.getInt("year"));
