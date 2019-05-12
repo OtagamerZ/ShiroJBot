@@ -157,17 +157,6 @@ public class Embeds {
                 "genres\n" +
                 "averageScore\n" +
                 "popularity\n" +
-                "staff {\n" +
-                "edges {\n" +
-                "role\n" +
-                "node {\n" +
-                "name {\n" +
-                "first\n" +
-                "last\n" +
-                "}\n" +
-                "}\n" +
-                "}\n" +
-                "}\n" +
                 "studios(isMain: true) {\n" +
                 "edges {\n" +
                 "node {\n" +
@@ -195,7 +184,6 @@ public class Embeds {
         eb.setTitle(anime.gettRomaji() + (!anime.gettRomaji().equals(anime.gettEnglish()) ? " (" + anime.gettEnglish() + ")" : ""));
         eb.setDescription(Tradutor.translate("en", "pt", anime.getDescription()));
         eb.setImage(anime.getcImage());
-        eb.addField("Autor:", anime.getCreator(), true);
         eb.addField("Estúdio:", anime.getStudio(), true);
         eb.addField("Ano:", anime.getsDate(), true);
         eb.addField("Estado:", anime.getStatus(), true);
