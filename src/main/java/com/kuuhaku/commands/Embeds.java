@@ -2,10 +2,11 @@ package com.kuuhaku.commands;
 
 import com.kuuhaku.controller.Tradutor;
 import com.kuuhaku.model.Anime;
+import com.kuuhaku.model.Badges;
+import com.kuuhaku.model.Member;
 import com.kuuhaku.model.guildConfig;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
-import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.json.JSONObject;
 
@@ -121,7 +122,7 @@ public class Embeds {
         return eb.build();
     }
 
-    public static MessageEmbed configsEmbed(guildConfig gc, MessageReceivedEvent message) {
+    public static void configsEmbed(MessageReceivedEvent message, guildConfig gc) {
         EmbedBuilder eb = new EmbedBuilder();
 
         eb.setColor(Color.MAGENTA);
@@ -131,13 +132,14 @@ public class Embeds {
         eb.addField("Canal de avisos:", gc.getCanalav() != null ? message.getGuild().getTextChannelById(gc.getCanalav()).getAsMention() : "não definido", true);
         eb.addField("Mensagem de boas-vindas:", gc.getMsgBoasVindas(null), false);
         eb.addField("Mensagem de adeus:", gc.getMsgAdeus(null), false);
+        eb.addField("Cargo de punição:", gc.getCargowarn(), false);
 
-        return eb.build();
+        message.getChannel().sendMessage(eb.build()).queue();
     }
 
-    public static MessageEmbed animeEmbed(String name, TextChannel ch) throws IOException {
+    public static void animeEmbed(MessageReceivedEvent message, String cmd) throws IOException {
         String query = "{\n" +
-                "Media(search: \\\"" + name + "\\\", type: ANIME) {\n" +
+                "Media(search: \\\"" + message.getMessage().getContentRaw().replace(cmd, "").trim() + "\\\", type: ANIME) {\n" +
                 "title {\n" +
                 "romaji\n" +
                 "english\n" +
@@ -189,13 +191,11 @@ public class Embeds {
         query = query.replace("\n", " ");
         JSONObject data = new JSONObject(com.kuuhaku.controller.Anime.getData(query));
         Anime anime = new Anime(data);
-	
+
         EmbedBuilder eb = new EmbedBuilder();
-	if (anime.getGenres().toLowerCase().contains("hentai") && !ch.isNSFW()) {
-		eb.setColor(Color.red);
-		eb.setTitle("Humm safadinho, não vou buscar dados sobre um Hentai né!");
-		return eb.build();
-	} 
+        if (anime.getGenres().toLowerCase().contains("hentai") && !message.getTextChannel().isNSFW()) {
+            message.getChannel().sendMessage("Humm safadinho, não vou buscar dados sobre um Hentai né!").queue();
+        }
 
         eb.setColor(anime.getcColor());
         eb.setAuthor("Bem, aqui está um novo anime para você assistir!\n");
@@ -207,12 +207,30 @@ public class Embeds {
         eb.addField("Ano:", anime.getsDate(), true);
         eb.addField("Estado:", anime.getStatus(), true);
         eb.addField("Episódios:", anime.getDuration(), true);
-        if (anime.getNaeAiringAt() != null) eb.addField("Próximo episódio:", anime.getNaeEpisode() + " -> " + anime.getNaeAiringAt(), true);
+        if (anime.getNaeAiringAt() != null)
+            eb.addField("Próximo episódio:", anime.getNaeEpisode() + " -> " + anime.getNaeAiringAt(), true);
         eb.addField("Nota:", Float.toString(anime.getScore() / 10), true);
         eb.addField("Popularidade:", Integer.toString(anime.getPopularity()), true);
         eb.addField("Gêneros:", anime.getGenres(), false);
         eb.setFooter("Descrição traduzida por Yandex | http://translate.yandex.com.", "https://cdn6.aptoide.com/imgs/6/3/5/635bc7fad9a6329e0efbe9502f472dc5_icon.png");
 
-        return eb.build();
+        try {
+            message.getChannel().sendMessage(eb.build()).queue();
+        } catch (Exception e) {
+            message.getChannel().sendMessage("Humm...não achei nenhum anime com esse nome, talvez você tenha escrito algo errado?").queue();
+            e.printStackTrace();
+        }
+    }
+
+    public static void levelEmbed(MessageReceivedEvent message, Member m) {
+        EmbedBuilder eb = new EmbedBuilder();
+
+        eb.setTitle("Perfil de " + message.getGuild().getMemberById(m.getId()).getEffectiveName());
+        eb.setThumbnail(message.getGuild().getMemberById(m.getId()).getUser().getAvatarUrl());
+        eb.addField("Level: " + m.getLevel(), "Xp: " + m.getXp() + " | " + (m.getLevel() * 100), true);
+        eb.addField("Alertas:", Integer.toString(m.getWarns().length), true);
+        eb.addField("Badges:", Badges.getBadges(m.getBadges()), false);
+
+        message.getChannel().sendMessage(eb.build()).queue();
     }
 }
