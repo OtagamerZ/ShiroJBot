@@ -187,7 +187,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
             } else if (message.getMessage().getContentRaw().equals("!init") && gcMap.get(message.getGuild().getId()) != null) {
                 message.getChannel().sendMessage("As configurações deste servidor ja foram inicializadas!").queue();
             }
-            if (gcMap.get(message.getGuild().getId()) != null && message.getTextChannel().canTalk()) {
+            if (gcMap.get(message.getGuild().getId()) != null && message.getTextChannel().canTalk() && message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
 
                 System.out.println("Comando recebido de " + message.getAuthor().getName() + "#" + message.getAuthor().getDiscriminator() + " | " + message.getMessage().getContentDisplay());
 
