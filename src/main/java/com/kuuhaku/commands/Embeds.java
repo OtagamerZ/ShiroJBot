@@ -40,7 +40,9 @@ public class Embeds {
                 prefix + "definir canalav [canal] - Define o canal de avisos para o servidor.\n\n" +
                 prefix + "definir msgbv [\"mensagem\"] - Define a mensagem de boas-vindas para o servidor.\n\n" +
                 prefix + "definir msgadeus [\"mensagem\"] - Define a mensagem de adeus para o servidor.\n\n" +
-                prefix + "configs - Mostra as configurações do servidor.\n" +
+                prefix + "configs - Mostra as configurações do servidor.\n\n" +
+                prefix + "dar [membro] [Nº] - Marca a conquista como completa para o usuário.\n\n" +
+                prefix + "tirar [membro] [Nº] - Marca a conquista como incompleta para o usuário.\n" +
                 "```", false);
         eb.addField("Utilitários", "```\n\n" +
                 prefix + "ajuda - Mostra essa mensagem no seu canal privado.\n\n" +
@@ -49,6 +51,7 @@ public class Embeds {
                 prefix + "uptime - Descobre a quanto tempo estou acordada.\n\n" +
                 prefix + "imagem [tags] [página] - Busca uma imagem no Safebooru, as tags não podem conter espaços (substitua-os por _).\n\n" +
                 prefix + "anime [nome] - Pesquisa informações sobre um anime.\n" +
+                prefix + "xp - Mostra dados sobre o seu perfil.\n" +
                 "```", false);
         eb.addField("Diversão", "```\n\n" +
                 prefix + "pergunta [pergunta] - Me pergunte algo, mas só vou responder com sim ou não!.\n\n" +
@@ -229,7 +232,7 @@ public class Embeds {
         eb.setThumbnail(message.getGuild().getMemberById(m.getId()).getUser().getAvatarUrl());
         eb.addField("Level: " + m.getLevel(), "Xp: " + m.getXp() + " | " + (m.getLevel() * 100), true);
         eb.addField("Alertas:", Integer.toString(m.getWarns().length), true);
-        eb.addField("Badges:", Badges.getBadges(m.getBadges()), false);
+        eb.addField("Conquistas:", Badges.getBadges(m.getBadges()), false);
 
         message.getChannel().sendMessage(eb.build()).queue();
     }
