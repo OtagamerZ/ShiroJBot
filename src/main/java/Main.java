@@ -3,7 +3,11 @@ import com.kuuhaku.commands.Embeds;
 import com.kuuhaku.commands.Misc;
 import com.kuuhaku.commands.Owner;
 import com.kuuhaku.controller.Database;
+import com.kuuhaku.model.Member;
 import com.kuuhaku.model.guildConfig;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
+import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
+import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -24,6 +28,7 @@ import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
 import javax.security.auth.login.LoginException;
+import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.Map;
 
@@ -31,9 +36,11 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     private static JDA bot;
     private static User owner;
     private static TextChannel homeLog;
-    private static Map<String, guildConfig> gc;
+    private static Map<String, guildConfig> gcMap;
+    private static Map<String, Member> memberMap;
     private static JobDetail backup;
     private static Scheduler sched;
+    private static final AudioPlayerManager apm = new DefaultAudioPlayerManager();
 
     private static void initBot() throws LoginException {
         JDABuilder jda = new JDABuilder(AccountType.BOT);
@@ -41,12 +48,13 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         jda.setToken(token);
         jda.addEventListener(new Main());
         jda.build();
-        gc = Database.getConfigs();
+        gcMap = Database.getConfigs();
+        AudioSourceManagers.registerRemoteSources(apm);
         try {
             if (backup == null) {
                 backup = JobBuilder.newJob(Main.class).withIdentity("backup", "1").build();
             }
-            Trigger cron = TriggerBuilder.newTrigger().withIdentity("manha", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0 12am,3am,6am,9am,12pm,3pm,6pm,9pm * * ?")).build();
+            Trigger cron = TriggerBuilder.newTrigger().withIdentity("manha", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0 0/1 1/1 * ? *")).build();
             SchedulerFactory sf = new StdSchedulerFactory();
             try {
                 sched = sf.getScheduler();
@@ -59,7 +67,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         } catch (SchedulerException e) {
             System.out.println("Erro ao inicializar cronograma: " + e);
         }
-
     }
 
     public static void main(String[] args) {
@@ -74,10 +81,11 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     @Override
     public void execute(JobExecutionContext context) {
         try {
-            Database.sendAllConfigs(gc.values());
+            Database.sendAllConfigs(gcMap.values());
             System.out.println("Guardar configurações no banco de dados...PRONTO!");
             bot.getPresence().setGame(Owner.getRandomGame(bot));
         } catch (Exception e) {
+            execute(context);
             System.out.println("Guardar configurações no banco de dados...ERRO!\nErro: " + e);
         }
     }
@@ -115,14 +123,14 @@ public class Main extends ListenerAdapter implements JobListener, Job {
 
     @Override
     public void onGuildLeave(GuildLeaveEvent guild) {
-        gc.remove(guild.getGuild().getId());
+        gcMap.remove(guild.getGuild().getId());
     }
 
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent user) {
         try {
-            if (gc.get(user.getGuild().getId()).getCanalbv() != null) {
-                user.getGuild().getTextChannelById(gc.get(user.getGuild().getId()).getCanalbv()).sendMessage(gc.get(user.getGuild().getId()).getMsgBoasVindas(user)).queue();
+            if (gcMap.get(user.getGuild().getId()).getCanalbv() != null) {
+                user.getGuild().getTextChannelById(gcMap.get(user.getGuild().getId()).getCanalbv()).sendMessage(gcMap.get(user.getGuild().getId()).getMsgBoasVindas(user)).queue();
             }
         } catch (Exception ignored) {
         }
@@ -131,8 +139,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     @Override
     public void onGuildMemberLeave(GuildMemberLeaveEvent user) {
         try {
-            if (gc.get(user.getGuild().getId()).getCanalbv() != null) {
-                user.getGuild().getTextChannelById(gc.get(user.getGuild().getId()).getCanalbv()).sendMessage(gc.get(user.getGuild().getId()).getMsgAdeus(user)).queue();
+            if (gcMap.get(user.getGuild().getId()).getCanalbv() != null) {
+                user.getGuild().getTextChannelById(gcMap.get(user.getGuild().getId()).getCanalbv()).sendMessage(gcMap.get(user.getGuild().getId()).getMsgAdeus(user)).queue();
             }
         } catch (Exception ignored) {
         }
@@ -142,7 +150,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     public void onShutdown(ShutdownEvent event) {
         System.out.println("Iniciando sequencia de encerramento...");
         try {
-            Database.sendAllConfigs(gc.values());
+            Database.sendAllConfigs(gcMap.values());
             System.out.println("Guardar configurações no banco de dados...PRONTO!");
             System.out.println("Desligando instância...");
             sched.shutdown();
@@ -168,22 +176,32 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         try {
             if (message.getAuthor().isBot() || !message.isFromType(ChannelType.TEXT)) return;
 
-            if (message.getMessage().getContentRaw().equals("!init") && gc.get(message.getGuild().getId()) == null) {
+            if (message.getMessage().getContentRaw().equals("!init") && gcMap.get(message.getGuild().getId()) == null) {
                 guildConfig gct = new guildConfig();
                 gct.setGuildId(message.getGuild().getId());
-                gc.put(message.getGuild().getId(), gct);
+                gcMap.put(message.getGuild().getId(), gct);
                 for (int i = 0; i < message.getGuild().getTextChannels().size(); i++) {
                     if (message.getGuild().getTextChannels().get(i).canTalk()) {
                         message.getGuild().getTextChannels().get(i).sendMessage("Seu servidor está prontinho, estarei a partir de agora ouvindo seus comandos!").queue();
                         break;
                     }
                 }
-            } else if (message.getMessage().getContentRaw().equals("!init") && gc.get(message.getGuild().getId()) != null) {
+            } else if (message.getMessage().getContentRaw().equals("!init") && gcMap.get(message.getGuild().getId()) != null) {
                 message.getChannel().sendMessage("As configurações deste servidor ja foram inicializadas!").queue();
             }
-            if (gc.get(message.getGuild().getId()) != null) {
-                if (!message.getMessage().getContentRaw().startsWith(gc.get(message.getGuild().getId()).getPrefix()))
-                    return;
+            if (gcMap.get(message.getGuild().getId()) != null) {
+                if (!memberMap.containsKey(message.getAuthor().getId())) {
+                    Member m = new Member(message.getAuthor().getId());
+                    memberMap.put(m.getId(), m);
+                }
+
+                if (!message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
+                    if (!message.getMember().getRoles().contains(message.getGuild().getRoleById(gcMap.get(message.getGuild().getId()).getCargowarn()))) {
+                        if (memberMap.get(message.getAuthor().getId()).addXp()) {
+                            message.getChannel().sendMessage("Wow, " + message.getAuthor().getAsMention() + " subiu para o level " + memberMap.get(message.getAuthor().getId()).getLevel() + ". GGWP!").queue();
+                        }
+                    }
+                }
 
                 System.out.println("Comando recebido de " + message.getAuthor().getName() + "#" + message.getAuthor().getDiscriminator() + " | " + message.getMessage().getContentDisplay());
 
@@ -191,70 +209,58 @@ public class Main extends ListenerAdapter implements JobListener, Job {
 
                 //GERAL--------------------------------------------------------------------------------->
 
-                if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "ping")) {
+                if (hasPrefix(message, "ping")) {
                     message.getChannel().sendMessage("Pong! :ping_pong: " + bot.getPing() + " ms").queue();
-                } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "bug")) {
-                    owner.openPrivateChannel().queue(channel -> channel.sendMessage(Embeds.bugReport(message, gc.get(message.getGuild().getId()).getPrefix())).queue());
-                } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "uptime")) {
-                    message.getChannel().sendMessage("Hummm...acho que estou acordada a " + Misc.uptime() + " segundos!").queue();
-                } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "ajuda")) {
-                    Misc.help(message, gc.get(message.getGuild().getId()).getPrefix(), owner);
-                } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "prefixo")) {
-                    message.getChannel().sendMessage("Estou atualmente respondendo comandos que começam com __**" + gc.get(message.getGuild().getId()).getPrefix() + "**__").queue();
-                } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "imagem")) {
-                    Misc.image(cmd, message);
-                } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "pergunta")) {
-                    message.getChannel().sendMessage(Misc.yesNo()).queue();
-                } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "escolha")) {
+                } else if (hasPrefix(message, "bug")) {
+                    owner.openPrivateChannel().queue(channel -> channel.sendMessage(Embeds.bugReport(message, gcMap.get(message.getGuild().getId()).getPrefix())).queue());
+                } else if (hasPrefix(message, "uptime")) {
+                    Misc.uptime(message);
+                } else if (hasPrefix(message, "ajuda")) {
+                    Misc.help(message, gcMap.get(message.getGuild().getId()).getPrefix(), owner);
+                } else if (hasPrefix(message, "prefixo")) {
+                    message.getChannel().sendMessage("Estou atualmente respondendo comandos que começam com __**" + gcMap.get(message.getGuild().getId()).getPrefix() + "**__").queue();
+                } else if (hasPrefix(message, "imagem")) {
+                    Misc.image(message, cmd);
+                } else if (hasPrefix(message, "pergunta")) {
+                    Misc.yesNo(message);
+                } else if (hasPrefix(message, "escolha")) {
+                    Misc.choose(message, cmd[0]);
+                } else if (hasPrefix(message, "anime")) {
                     try {
-                        message.getChannel().sendMessage("Eu escolho essa opção: " + Misc.choose(cmd[1].split(";"))).queue();
-                    } catch (ArrayIndexOutOfBoundsException e) {
-                        message.getChannel().sendMessage("Você não me deu opções, bobo!").queue();
-                    }
-                } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "anime")) {
-                    try {
-                        message.getChannel().sendMessage(Embeds.animeEmbed(message.getMessage().getContentRaw().replace(gc.get(message.getGuild().getId()).getPrefix() + "anime ", ""), message.getTextChannel())).queue();
-                    } catch (Exception e) {
-                        message.getChannel().sendMessage("Humm...não achei nenhum anime com esse nome, talvez você tenha escrito algo errado?").queue();
+                        Embeds.animeEmbed(message, cmd[0]);
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
+                } else if (hasPrefix(message, "xp")) {
+                    Embeds.levelEmbed(message, memberMap.get(message.getAuthor().getId()));
                 }
 
                 //DONO--------------------------------------------------------------------------------->
 
                 if (message.getAuthor() == owner) {
-                    if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "restart")) {
+                    if (hasPrefix(message, "restart")) {
                         message.getChannel().sendMessage("Sayonara, Nii-chan!").queue();
                         bot.shutdown();
-                    } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "servers")) {
-                        message.getChannel().sendMessage("Servidores que participo:\n" + Owner.getServers(bot)).queue();
-                    } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "map")) {
-                        Owner.getMap(message, gc);
-                    } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "broadcast")) {
-                        Owner.broadcast(gc, bot, message.getMessage().getContentRaw().replace(gc.get(message.getGuild().getId()).getPrefix() + "broadcast ", ""), message.getTextChannel());
-                    } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "listPerms")) {
-                        try {
-                            message.getChannel().sendMessage(Owner.listPerms(bot.getGuildById(cmd[1]))).queue();
-                        } catch (ArrayIndexOutOfBoundsException e) {
-                            message.getChannel().sendMessage("Você esqueceu de me dizer o ID do servidor, Nii-chan!").queue();
-                        }
-                    } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "leave")) {
-                        try {
-                            message.getChannel().sendMessage("Ok, já saí daquele servidor, Nii-chan!").queue();
-                            Owner.leave(bot.getGuildById(cmd[1]));
-                        } catch (ArrayIndexOutOfBoundsException e) {
-                            message.getChannel().sendMessage("Você esqueceu de me dizer o ID do servidor, Nii-chan!").queue();
-                        }
+                    } else if (hasPrefix(message, "servers")) {
+                        Owner.getServers(bot, message);
+                    } else if (hasPrefix(message, "map")) {
+                        Owner.getMap(message, gcMap);
+                    } else if (hasPrefix(message, "broadcast")) {
+                        Owner.broadcast(gcMap, bot, message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix() + "broadcast ", ""), message.getTextChannel());
+                    } else if (hasPrefix(message, "perms")) {
+                        Owner.listPerms(bot, message);
+                    } else if (hasPrefix(message, "leave")) {
+                        Owner.leave(bot, message);
                     }
                 }
 
                 //ADMIN--------------------------------------------------------------------------------->
 
                 if (message.getMember().hasPermission(Permission.MANAGE_SERVER)) {
-                    if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "definir")) {
-                        Admin.config(cmd, message, gc.get(message.getGuild().getId()));
-                    } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "configs")) {
-                        message.getChannel().sendMessage(Embeds.configsEmbed(gc.get(message.getGuild().getId()), message)).queue();
+                    if (hasPrefix(message, "definir")) {
+                        Admin.config(cmd, message, gcMap.get(message.getGuild().getId()));
+                    } else if (hasPrefix(message, "configs")) {
+                        Embeds.configsEmbed(message, gcMap.get(message.getGuild().getId()));
                     }
                 }
             } else {
@@ -262,5 +268,9 @@ public class Main extends ListenerAdapter implements JobListener, Job {
             }
         } catch (NullPointerException | InsufficientPermissionException ignore) {
         }
+    }
+
+    private static boolean hasPrefix(MessageReceivedEvent message, String cmd) {
+        return message.getMessage().getContentRaw().split(" ")[0].equalsIgnoreCase(gcMap.get(message.getGuild().getId()).getPrefix() + cmd);
     }
 }

@@ -6,14 +6,13 @@ import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.exceptions.PermissionException;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class Owner {
-    public static String getServers(JDA bot) {
+    public static void getServers(JDA bot, MessageReceivedEvent message) {
         ArrayList<String> names = new ArrayList<>();
         ArrayList<String> ids = new ArrayList<>();
         ArrayList<String> guilds = new ArrayList<>();
@@ -28,9 +27,9 @@ public class Owner {
         }
 
         if (guilds.isEmpty()) {
-            return "Nenhum servidor encontrado";
+            message.getChannel().sendMessage("Nenhum servidor encontrado").queue();
         } else {
-            return guilds.toString().replace("[", "```").replace("]", "```").replace(", ", "\n");
+            message.getChannel().sendMessage("Servidores que participo:\n" + guilds.toString().replace("[", "```").replace("]", "```").replace(", ", "\n")).queue();
         }
     }
 
@@ -77,12 +76,23 @@ public class Owner {
         homeLog.sendMessage("Resultado da transmissão:```" + String.join("", status).replace("[", "").replace("]", "\n") + "```").queue();
     }
 
-    public static String listPerms(Guild guild) {
-        return guild.getName() + " | " + guild.getSelfMember().getPermissions().toString().replace("[", "```").replace("]", "```").replace(", ", "\n");
+    public static void listPerms(JDA bot, MessageReceivedEvent message) {
+        try {
+            Guild guild = bot.getGuildById(message.getMessage().getContentRaw().split(" ")[1]);
+            message.getChannel().sendMessage(guild.getName() + " | " + guild.getSelfMember().getPermissions().toString().replace("[", "```").replace("]", "```").replace(", ", "\n")).queue();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            message.getChannel().sendMessage("Você esqueceu de me dizer o ID do servidor, Nii-chan!").queue();
+        }
     }
 
-    public static void leave(Guild guild) {
-        guild.leave().complete();
+    public static void leave(JDA bot, MessageReceivedEvent message) {
+        try {
+            Guild guild = bot.getGuildById(message.getMessage().getContentRaw().split(" ")[1]);
+            guild.leave().queue();
+            message.getChannel().sendMessage("Ok, já saí daquele servidor, Nii-chan!").queue();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            message.getChannel().sendMessage("Você esqueceu de me dizer o ID do servidor, Nii-chan!").queue();
+        }
     }
 
     public static Game getRandomGame(JDA bot) {
