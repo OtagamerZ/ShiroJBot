@@ -11,10 +11,6 @@ public class Member {
     private String[] warns = {};
     private boolean[] badges = {false, false, false, false, false, false, false, false, false, false, false, false};
 
-    public Member(String id) {
-        this.id = id;
-    }
-
     public boolean addXp() {
         xp += 15;
         if (xp == level * 100) {
@@ -59,5 +55,9 @@ public class Member {
 
     public void setBadges(boolean[] badges) {
         this.badges = badges;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
