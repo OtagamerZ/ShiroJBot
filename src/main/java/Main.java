@@ -213,7 +213,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     }
                 } else if (cmd[0].equals(gc.get(message.getGuild().getId()).getPrefix() + "anime")) {
                     try {
-                        message.getChannel().sendMessage(Embeds.animeEmbed(message.getMessage().getContentRaw().replace(gc.get(message.getGuild().getId()).getPrefix() + "anime ", ""))).queue();
+                        message.getChannel().sendMessage(Embeds.animeEmbed(message.getMessage().getContentRaw().replace(gc.get(message.getGuild().getId()).getPrefix() + "anime ", ""), message.getTextChannel())).queue();
                     } catch (Exception e) {
                         message.getChannel().sendMessage("Humm...não achei nenhum anime com esse nome, talvez você tenha escrito algo errado?").queue();
                         e.printStackTrace();
