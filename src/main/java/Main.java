@@ -3,7 +3,6 @@ import com.kuuhaku.commands.Embeds;
 import com.kuuhaku.commands.Misc;
 import com.kuuhaku.commands.Owner;
 import com.kuuhaku.controller.Database;
-import com.kuuhaku.model.Member;
 import com.kuuhaku.model.guildConfig;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
@@ -37,7 +36,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     private static User owner;
     private static TextChannel homeLog;
     private static Map<String, guildConfig> gcMap;
-    private static Map<String, Member> memberMap;
     private static JobDetail backup;
     private static Scheduler sched;
     private static final AudioPlayerManager apm = new DefaultAudioPlayerManager();
@@ -49,7 +47,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         jda.addEventListener(new Main());
         jda.build();
         gcMap = Database.getGuildConfigs();
-        memberMap = Database.getMembersData();
         AudioSourceManagers.registerRemoteSources(apm);
         try {
             if (backup == null) {
@@ -83,7 +80,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     public void execute(JobExecutionContext context) {
         try {
             Database.sendAllGuildConfigs(gcMap.values());
-            Database.sendAllMembersData(memberMap.values());
             System.out.println("Guardar configurações no banco de dados...PRONTO!");
             bot.getPresence().setGame(Owner.getRandomGame(bot));
         } catch (Exception e) {
@@ -221,8 +217,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                } else if (hasPrefix(message, "xp")) {
-                    Embeds.levelEmbed(message, memberMap.get(message.getAuthor().getId()));
                 }
 
                 //DONO--------------------------------------------------------------------------------->
@@ -251,18 +245,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         Admin.config(cmd, message, gcMap.get(message.getGuild().getId()));
                     } else if (hasPrefix(message, "configs")) {
                         Embeds.configsEmbed(message, gcMap.get(message.getGuild().getId()));
-                    }
-                }
-
-                if (memberMap.get(message.getAuthor().getId()) == null) {
-                    Member m = new Member();
-                    m.setId(message.getAuthor().getId());
-                    memberMap.put(message.getAuthor().getId(), m);
-                } else if (!message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
-                    if (!message.getMember().getRoles().contains(message.getGuild().getRoleById(gcMap.get(message.getGuild().getId()).getCargowarn()))) {
-                        if (memberMap.get(message.getAuthor().getId()).addXp()) {
-                            message.getChannel().sendMessage("Wow, " + message.getAuthor().getAsMention() + " subiu para o level " + memberMap.get(message.getAuthor().getId()).getLevel() + ". GGWP!").queue();
-                        }
                     }
                 }
             } else if (message.getTextChannel().canTalk()) {
