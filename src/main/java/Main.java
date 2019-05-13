@@ -30,14 +30,15 @@ import org.quartz.impl.StdSchedulerFactory;
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
 import java.time.OffsetDateTime;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Main extends ListenerAdapter implements JobListener, Job {
     private static JDA bot;
     private static User owner;
     private static TextChannel homeLog;
-    private static Map<String, guildConfig> gcMap;
-    private static Map<String, Member> memberMap;
+    private static Map<String, guildConfig> gcMap = new HashMap<>();
+    private static Map<String, Member> memberMap = new HashMap<>();
     private static JobDetail backup;
     private static Scheduler sched;
     private static final AudioPlayerManager apm = new DefaultAudioPlayerManager();
@@ -191,10 +192,10 @@ public class Main extends ListenerAdapter implements JobListener, Job {
             } else if (message.getMessage().getContentRaw().equals("!init") && gcMap.get(message.getGuild().getId()) != null) {
                 message.getChannel().sendMessage("As configurações deste servidor ja foram inicializadas!").queue();
             }
-            if (gcMap.get(message.getGuild().getId()) != null && message.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_WRITE)) {
+            if (gcMap.get(message.getGuild().getId()) != null && message.getTextChannel().canTalk()) {
                 if (memberMap == null || !memberMap.containsKey(message.getAuthor().getId())) {
-                    Member m = new Member(message.getAuthor().getId());
-                    memberMap.put(m.getId(), m);
+                    assert memberMap != null;
+                    memberMap.put(message.getAuthor().getId(), new Member(message.getAuthor().getId()));
                 }
 
                 if (!message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
@@ -265,7 +266,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         Embeds.configsEmbed(message, gcMap.get(message.getGuild().getId()));
                     }
                 }
-            } else if (message.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_WRITE)) {
+            } else if (message.getTextChannel().canTalk()) {
                 message.getChannel().sendMessage("Por favor, digite __**!init**__ para inicializar as configurações da Shiro em seu servidor!").queue();
             }
         } catch (NullPointerException | InsufficientPermissionException e) {
