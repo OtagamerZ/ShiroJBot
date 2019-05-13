@@ -3,10 +3,8 @@ import com.kuuhaku.commands.Embeds;
 import com.kuuhaku.commands.Misc;
 import com.kuuhaku.commands.Owner;
 import com.kuuhaku.controller.Database;
+import com.kuuhaku.model.Member;
 import com.kuuhaku.model.guildConfig;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -29,16 +27,17 @@ import org.quartz.impl.StdSchedulerFactory;
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
 import java.time.OffsetDateTime;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Main extends ListenerAdapter implements JobListener, Job {
     private static JDA bot;
     private static User owner;
     private static TextChannel homeLog;
-    private static Map<String, guildConfig> gcMap;
+    private static Map<String, guildConfig> gcMap = new HashMap<>();
+    private static Map<String, Member> memberMap = new HashMap<>();
     private static JobDetail backup;
     private static Scheduler sched;
-    private static final AudioPlayerManager apm = new DefaultAudioPlayerManager();
 
     private static void initBot() throws LoginException {
         JDABuilder jda = new JDABuilder(AccountType.BOT);
@@ -47,7 +46,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         jda.addEventListener(new Main());
         jda.build();
         gcMap = Database.getGuildConfigs();
-        AudioSourceManagers.registerRemoteSources(apm);
         try {
             if (backup == null) {
                 backup = JobBuilder.newJob(Main.class).withIdentity("backup", "1").build();
@@ -188,7 +186,12 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                 message.getChannel().sendMessage("As configurações deste servidor ja foram inicializadas!").queue();
             }
             if (gcMap.get(message.getGuild().getId()) != null && message.getTextChannel().canTalk()) {
+                if (memberMap.get(message.getAuthor().getId()) != null)
+                    memberMap.get(message.getAuthor().getId()).addXp();
                 if (message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
+
+                    if (memberMap.get(message.getAuthor().getId()) == null)
+                        memberMap.put(message.getAuthor().getId(), new Member(message.getAuthor().getId()));
 
                     System.out.println("Comando recebido de " + message.getAuthor().getName() + "#" + message.getAuthor().getDiscriminator() + " | " + message.getMessage().getContentDisplay());
 
@@ -218,6 +221,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+                    } else if (hasPrefix(message, "xp")) {
+                        Embeds.levelEmbed(message, memberMap.get(message.getAuthor().getId()));
                     }
 
                     //DONO--------------------------------------------------------------------------------->
@@ -246,6 +251,20 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             Admin.config(cmd, message, gcMap.get(message.getGuild().getId()));
                         } else if (hasPrefix(message, "configs")) {
                             Embeds.configsEmbed(message, gcMap.get(message.getGuild().getId()));
+                        } else if (hasPrefix(message, "dar")) {
+                            try {
+                                memberMap.get(message.getMessage().getMentionedUsers().get(0).getId()).giveBadge(cmd[2]);
+                                message.getChannel().sendMessage("Parabéns, " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " completou a conquista Nº " + cmd[2]).queue();
+                            } catch (Exception e) {
+                                message.getChannel().sendMessage("Ué, não estou conseguindo marcar a conquista como completa. Tenha certeza de digitar o comando neste formato: " + gcMap.get(message.getGuild().getId()).getPrefix() + "dar [MEMBRO] [Nº]").queue();
+                            }
+                        } else if (hasPrefix(message, "tirar")) {
+                            try {
+                                memberMap.get(message.getMessage().getMentionedUsers().get(0).getId()).removeBadge(cmd[2]);
+                                message.getChannel().sendMessage("Meeee, " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " teve a conquista Nº " + cmd[2] + " retirada de sua posse!").queue();
+                            } catch (Exception e) {
+                                message.getChannel().sendMessage("Ué, não estou conseguindo marcar a conquista como incompleta. Tenha certeza de digitar o comando neste formato: " + gcMap.get(message.getGuild().getId()).getPrefix() + "tirar [MEMBRO] [Nº]").queue();
+                            }
                         }
                     }
                 }
