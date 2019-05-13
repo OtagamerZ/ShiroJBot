@@ -11,13 +11,13 @@ public class Member {
     private String[] warns = {};
     private boolean[] badges = {false, false, false, false, false, false, false, false, false, false, false, false};
 
-    public Member() {
-
+    public Member(String id) {
+        setId(id);
     }
 
     public boolean addXp() {
         xp += 15;
-        if (xp == level * 100) {
+        if (xp >= level * 100) {
             level++;
             return true;
         }
@@ -27,6 +27,18 @@ public class Member {
     public void resetXp() {
         level = 1;
         xp = 0;
+    }
+
+    public void giveBadge(String index) {
+        if (Integer.parseInt(index) >= 0 && Integer.parseInt(index) < badges.length) {
+            this.badges[Integer.parseInt(index)] = true;
+        }
+    }
+
+    public void removeBadge(String index) {
+        if (Integer.parseInt(index) >= 0 && Integer.parseInt(index) < badges.length) {
+            this.badges[Integer.parseInt(index)] = false;
+        }
     }
 
     public String getId() {
@@ -61,7 +73,7 @@ public class Member {
         this.badges = badges;
     }
 
-    public void setId(String id) {
+    private void setId(String id) {
         this.id = id;
     }
 }
