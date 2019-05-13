@@ -193,7 +193,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                 message.getChannel().sendMessage("As configurações deste servidor ja foram inicializadas!").queue();
             }
             if (gcMap.get(message.getGuild().getId()) != null && message.getTextChannel().canTalk()) {
-                if (!memberMap.containsKey(message.getAuthor().getId())) {
+                if (memberMap.get(message.getAuthor().getId()) == null) {
                     Member m = new Member();
                     m.setId(message.getAuthor().getId());
                     memberMap.put(message.getAuthor().getId(), m);
