@@ -13,7 +13,7 @@ public class guildConfig {
     private String prefix = "!";
     private String msgBoasVindas = "Seja bem-vindo(a) %user%!";
     private String msgAdeus = "Ahh...%user% deixou este servidor!";
-    private String canalbv = null, canalav = null;
+    private String canalbv = null, canalav = null, canalmsc = null, cargowarn = null;
 
     public guildConfig(){
 
@@ -65,5 +65,21 @@ public class guildConfig {
 
     public void setCanalav(String canalav) {
         this.canalav = canalav;
+    }
+
+    public String getCanalmsc() {
+        return canalmsc;
+    }
+
+    public void setCanalmsc(String canalmsc) {
+        this.canalmsc = canalmsc;
+    }
+
+    public String getCargowarn() {
+        return cargowarn;
+    }
+
+    public void setCargowarn(String cargowarn) {
+        this.cargowarn = cargowarn;
     }
 }

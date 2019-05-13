@@ -17,17 +17,20 @@ public class Misc {
         });
     }
 
-    public static String yesNo() {
+    public static void yesNo(MessageReceivedEvent message) {
         String[] responses = {"Sim", "N\u00e3o", "Nunca", "Sempre", "Talvez", "N\u00e3o sei", "Acho que sim", "Acho que n\u00e3o"};
-
-        return responses[(int) (Math.random() * 9)];
+        message.getChannel().sendMessage(responses[(int) (Math.random() * 9)]).queue();
     }
 
-    public static String choose(String[] options) {
-        return options[(int) (Math.random() * options.length)];
+    public static void choose(MessageReceivedEvent message, String cmd) {
+        try {
+            message.getChannel().sendMessage("Eu escolho essa opção: " + message.getMessage().getContentRaw().replace(cmd, "").split(";")[(int) (Math.random() * message.getMessage().getContentRaw().split(";").length)].trim()).queue();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            message.getChannel().sendMessage("Você não me deu opções, bobo!").queue();
+        }
     }
 
-    public static void image(String[] cmd, MessageReceivedEvent message) {
+    public static void image(MessageReceivedEvent message, String[] cmd) {
         try {
             if (cmd.length >= 3) {
                 try {
@@ -49,8 +52,8 @@ public class Misc {
         }
     }
 
-    public static String uptime() {
+    public static void uptime(MessageReceivedEvent message) {
         RuntimeMXBean rb = ManagementFactory.getRuntimeMXBean();
-        return Integer.toString((int) rb.getUptime() / 1000);
+        message.getChannel().sendMessage("Hummm...acho que estou acordada a " + (int) rb.getUptime() / 1000 + " segundos!").queue();
     }
 }
