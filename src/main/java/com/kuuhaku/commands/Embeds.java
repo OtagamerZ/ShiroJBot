@@ -1,12 +1,13 @@
 package com.kuuhaku.commands;
 
 import com.kuuhaku.controller.Tradutor;
+import com.kuuhaku.model.Anime;
 import com.kuuhaku.model.guildConfig;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
+import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.json.JSONObject;
-import com.kuuhaku.model.Anime;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -134,7 +135,7 @@ public class Embeds {
         return eb.build();
     }
 
-    public static MessageEmbed animeEmbed(String name) throws IOException {
+    public static MessageEmbed animeEmbed(String name, TextChannel ch) throws IOException {
         String query = "{\n" +
                 "Media(search: \\\"" + name + "\\\", type: ANIME) {\n" +
                 "title {\n" +
@@ -190,7 +191,7 @@ public class Embeds {
         Anime anime = new Anime(data);
 	
         EmbedBuilder eb = new EmbedBuilder();
-	if (anime.getGenres().toLowerCase().contains("hentai")) {
+	if (anime.getGenres().toLowerCase().contains("hentai") && !ch.isNSFW()) {
 		eb.setColor(Color.red);
 		eb.setTitle("Humm safadinho, não vou buscar dados sobre um Hentai né!");
 		return eb.build();
