@@ -11,6 +11,10 @@ public class Member {
     private String[] warns = {};
     private boolean[] badges = {false, false, false, false, false, false, false, false, false, false, false, false};
 
+    public Member() {
+
+    }
+
     public boolean addXp() {
         xp += 15;
         if (xp == level * 100) {

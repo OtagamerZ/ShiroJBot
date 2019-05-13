@@ -15,7 +15,7 @@ public class guildConfig {
     private String msgAdeus = "Ahh...%user% deixou este servidor!";
     private String canalbv = null, canalav = null, canalmsc = null, cargowarn = null;
 
-    public guildConfig(){
+    public guildConfig() {
 
     }
 
@@ -23,7 +23,9 @@ public class guildConfig {
         return guildID;
     }
 
-    public void setGuildId(String id) { this.guildID = id; }
+    public void setGuildId(String id) {
+        this.guildID = id;
+    }
 
     public String getPrefix() {
         return prefix;
