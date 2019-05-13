@@ -269,7 +269,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                 message.getChannel().sendMessage("Por favor, digite __**!init**__ para inicializar as configurações da Shiro em seu servidor!").queue();
             }
         } catch (NullPointerException | InsufficientPermissionException e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 
