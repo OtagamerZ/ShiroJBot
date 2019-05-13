@@ -187,64 +187,66 @@ public class Main extends ListenerAdapter implements JobListener, Job {
             } else if (message.getMessage().getContentRaw().equals("!init") && gcMap.get(message.getGuild().getId()) != null) {
                 message.getChannel().sendMessage("As configurações deste servidor ja foram inicializadas!").queue();
             }
-            if (gcMap.get(message.getGuild().getId()) != null && message.getTextChannel().canTalk() && message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
+            if (gcMap.get(message.getGuild().getId()) != null && message.getTextChannel().canTalk()) {
+                if (message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
 
-                System.out.println("Comando recebido de " + message.getAuthor().getName() + "#" + message.getAuthor().getDiscriminator() + " | " + message.getMessage().getContentDisplay());
+                    System.out.println("Comando recebido de " + message.getAuthor().getName() + "#" + message.getAuthor().getDiscriminator() + " | " + message.getMessage().getContentDisplay());
 
-                String[] cmd = message.getMessage().getContentRaw().split(" ");
+                    String[] cmd = message.getMessage().getContentRaw().split(" ");
 
-                //GERAL--------------------------------------------------------------------------------->
+                    //GERAL--------------------------------------------------------------------------------->
 
-                if (hasPrefix(message, "ping")) {
-                    message.getChannel().sendMessage("Pong! :ping_pong: " + bot.getPing() + " ms").queue();
-                } else if (hasPrefix(message, "bug")) {
-                    owner.openPrivateChannel().queue(channel -> channel.sendMessage(Embeds.bugReport(message, gcMap.get(message.getGuild().getId()).getPrefix())).queue());
-                } else if (hasPrefix(message, "uptime")) {
-                    Misc.uptime(message);
-                } else if (hasPrefix(message, "ajuda")) {
-                    Misc.help(message, gcMap.get(message.getGuild().getId()).getPrefix(), owner);
-                } else if (hasPrefix(message, "prefixo")) {
-                    message.getChannel().sendMessage("Estou atualmente respondendo comandos que começam com __**" + gcMap.get(message.getGuild().getId()).getPrefix() + "**__").queue();
-                } else if (hasPrefix(message, "imagem")) {
-                    Misc.image(message, cmd);
-                } else if (hasPrefix(message, "pergunta")) {
-                    Misc.yesNo(message);
-                } else if (hasPrefix(message, "escolha")) {
-                    Misc.choose(message, cmd[0]);
-                } else if (hasPrefix(message, "anime")) {
-                    try {
-                        Embeds.animeEmbed(message, cmd[0]);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if (hasPrefix(message, "ping")) {
+                        message.getChannel().sendMessage("Pong! :ping_pong: " + bot.getPing() + " ms").queue();
+                    } else if (hasPrefix(message, "bug")) {
+                        owner.openPrivateChannel().queue(channel -> channel.sendMessage(Embeds.bugReport(message, gcMap.get(message.getGuild().getId()).getPrefix())).queue());
+                    } else if (hasPrefix(message, "uptime")) {
+                        Misc.uptime(message);
+                    } else if (hasPrefix(message, "ajuda")) {
+                        Misc.help(message, gcMap.get(message.getGuild().getId()).getPrefix(), owner);
+                    } else if (hasPrefix(message, "prefixo")) {
+                        message.getChannel().sendMessage("Estou atualmente respondendo comandos que começam com __**" + gcMap.get(message.getGuild().getId()).getPrefix() + "**__").queue();
+                    } else if (hasPrefix(message, "imagem")) {
+                        Misc.image(message, cmd);
+                    } else if (hasPrefix(message, "pergunta")) {
+                        Misc.yesNo(message);
+                    } else if (hasPrefix(message, "escolha")) {
+                        Misc.choose(message, cmd[0]);
+                    } else if (hasPrefix(message, "anime")) {
+                        try {
+                            Embeds.animeEmbed(message, cmd[0]);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
 
-                //DONO--------------------------------------------------------------------------------->
+                    //DONO--------------------------------------------------------------------------------->
 
-                if (message.getAuthor() == owner) {
-                    if (hasPrefix(message, "restart")) {
-                        message.getChannel().sendMessage("Sayonara, Nii-chan!").queue();
-                        bot.shutdown();
-                    } else if (hasPrefix(message, "servers")) {
-                        Owner.getServers(bot, message);
-                    } else if (hasPrefix(message, "map")) {
-                        Owner.getMap(message, gcMap);
-                    } else if (hasPrefix(message, "broadcast")) {
-                        Owner.broadcast(gcMap, bot, message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix() + "broadcast ", ""), message.getTextChannel());
-                    } else if (hasPrefix(message, "perms")) {
-                        Owner.listPerms(bot, message);
-                    } else if (hasPrefix(message, "leave")) {
-                        Owner.leave(bot, message);
+                    if (message.getAuthor() == owner) {
+                        if (hasPrefix(message, "restart")) {
+                            message.getChannel().sendMessage("Sayonara, Nii-chan!").queue();
+                            bot.shutdown();
+                        } else if (hasPrefix(message, "servers")) {
+                            Owner.getServers(bot, message);
+                        } else if (hasPrefix(message, "map")) {
+                            Owner.getMap(message, gcMap);
+                        } else if (hasPrefix(message, "broadcast")) {
+                            Owner.broadcast(gcMap, bot, message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix() + "broadcast ", ""), message.getTextChannel());
+                        } else if (hasPrefix(message, "perms")) {
+                            Owner.listPerms(bot, message);
+                        } else if (hasPrefix(message, "leave")) {
+                            Owner.leave(bot, message);
+                        }
                     }
-                }
 
-                //ADMIN--------------------------------------------------------------------------------->
+                    //ADMIN--------------------------------------------------------------------------------->
 
-                if (message.getMember().hasPermission(Permission.MANAGE_SERVER)) {
-                    if (hasPrefix(message, "definir")) {
-                        Admin.config(cmd, message, gcMap.get(message.getGuild().getId()));
-                    } else if (hasPrefix(message, "configs")) {
-                        Embeds.configsEmbed(message, gcMap.get(message.getGuild().getId()));
+                    if (message.getMember().hasPermission(Permission.MANAGE_SERVER)) {
+                        if (hasPrefix(message, "definir")) {
+                            Admin.config(cmd, message, gcMap.get(message.getGuild().getId()));
+                        } else if (hasPrefix(message, "configs")) {
+                            Embeds.configsEmbed(message, gcMap.get(message.getGuild().getId()));
+                        }
                     }
                 }
             } else if (message.getTextChannel().canTalk()) {
