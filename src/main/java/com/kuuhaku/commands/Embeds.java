@@ -128,11 +128,11 @@ public class Embeds {
         eb.setColor(Color.MAGENTA);
         eb.setAuthor("Eis as configurações deste servidor");
         eb.setDescription("Prefixo: __**" + gc.getPrefix() + "**__");
-        eb.addField("Canal de boas-vindas:", gc.getCanalbv() != null ? message.getGuild().getTextChannelById(gc.getCanalbv()).getAsMention() : "não definido", true);
-        eb.addField("Canal de avisos:", gc.getCanalav() != null ? message.getGuild().getTextChannelById(gc.getCanalav()).getAsMention() : "não definido", true);
+        eb.addField("Canal de boas-vindas:", gc.getCanalbv() != null ? message.getGuild().getTextChannelById(gc.getCanalbv()).getAsMention() : "Não definido", true);
+        eb.addField("Canal de avisos:", gc.getCanalav() != null ? message.getGuild().getTextChannelById(gc.getCanalav()).getAsMention() : "Não definido", true);
         eb.addField("Mensagem de boas-vindas:", gc.getMsgBoasVindas(null), false);
         eb.addField("Mensagem de adeus:", gc.getMsgAdeus(null), false);
-        eb.addField("Cargo de punição:", gc.getCargowarn(), false);
+        eb.addField("Cargo de punição:", gc.getCargowarn() != null ? message.getGuild().getRoleById(gc.getCargowarn()).getAsMention() : "Não definido", false);
 
         message.getChannel().sendMessage(eb.build()).queue();
     }
