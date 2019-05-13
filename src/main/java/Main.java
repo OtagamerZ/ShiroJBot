@@ -48,7 +48,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         jda.setToken(token);
         jda.addEventListener(new Main());
         jda.build();
-        gcMap = Database.getConfigs();
+        gcMap = Database.getGuildConfigs();
+        memberMap = Database.getMembersData();
         AudioSourceManagers.registerRemoteSources(apm);
         try {
             if (backup == null) {
@@ -81,7 +82,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     @Override
     public void execute(JobExecutionContext context) {
         try {
-            Database.sendAllConfigs(gcMap.values());
+            Database.sendAllGuildConfigs(gcMap.values());
+            Database.sendAllMembersData(memberMap.values());
             System.out.println("Guardar configurações no banco de dados...PRONTO!");
             bot.getPresence().setGame(Owner.getRandomGame(bot));
         } catch (Exception e) {
@@ -150,7 +152,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     public void onShutdown(ShutdownEvent event) {
         System.out.println("Iniciando sequencia de encerramento...");
         try {
-            Database.sendAllConfigs(gcMap.values());
+            Database.sendAllGuildConfigs(gcMap.values());
             System.out.println("Guardar configurações no banco de dados...PRONTO!");
             System.out.println("Desligando instância...");
             sched.shutdown();
@@ -189,8 +191,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
             } else if (message.getMessage().getContentRaw().equals("!init") && gcMap.get(message.getGuild().getId()) != null) {
                 message.getChannel().sendMessage("As configurações deste servidor ja foram inicializadas!").queue();
             }
-            if (gcMap.get(message.getGuild().getId()) != null) {
-                if (!memberMap.containsKey(message.getAuthor().getId())) {
+            if (gcMap.get(message.getGuild().getId()) != null && message.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_WRITE)) {
+                if (memberMap == null || !memberMap.containsKey(message.getAuthor().getId())) {
                     Member m = new Member(message.getAuthor().getId());
                     memberMap.put(m.getId(), m);
                 }
@@ -263,7 +265,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         Embeds.configsEmbed(message, gcMap.get(message.getGuild().getId()));
                     }
                 }
-            } else {
+            } else if (message.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_WRITE)) {
                 message.getChannel().sendMessage("Por favor, digite __**!init**__ para inicializar as configurações da Shiro em seu servidor!").queue();
             }
         } catch (NullPointerException | InsufficientPermissionException e) {
