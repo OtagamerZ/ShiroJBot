@@ -30,15 +30,14 @@ import org.quartz.impl.StdSchedulerFactory;
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
 import java.time.OffsetDateTime;
-import java.util.HashMap;
 import java.util.Map;
 
 public class Main extends ListenerAdapter implements JobListener, Job {
     private static JDA bot;
     private static User owner;
     private static TextChannel homeLog;
-    private static Map<String, guildConfig> gcMap = new HashMap<>();
-    private static Map<String, Member> memberMap = new HashMap<>();
+    private static Map<String, guildConfig> gcMap;
+    private static Map<String, Member> memberMap;
     private static JobDetail backup;
     private static Scheduler sched;
     private static final AudioPlayerManager apm = new DefaultAudioPlayerManager();
@@ -193,19 +192,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                 message.getChannel().sendMessage("As configurações deste servidor ja foram inicializadas!").queue();
             }
             if (gcMap.get(message.getGuild().getId()) != null && message.getTextChannel().canTalk()) {
-                if (memberMap.get(message.getAuthor().getId()) == null) {
-                    Member m = new Member();
-                    m.setId(message.getAuthor().getId());
-                    memberMap.put(message.getAuthor().getId(), m);
-                }
-
-                if (!message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
-                    if (!message.getMember().getRoles().contains(message.getGuild().getRoleById(gcMap.get(message.getGuild().getId()).getCargowarn()))) {
-                        if (memberMap.get(message.getAuthor().getId()).addXp()) {
-                            message.getChannel().sendMessage("Wow, " + message.getAuthor().getAsMention() + " subiu para o level " + memberMap.get(message.getAuthor().getId()).getLevel() + ". GGWP!").queue();
-                        }
-                    }
-                }
 
                 System.out.println("Comando recebido de " + message.getAuthor().getName() + "#" + message.getAuthor().getDiscriminator() + " | " + message.getMessage().getContentDisplay());
 
@@ -265,6 +251,18 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         Admin.config(cmd, message, gcMap.get(message.getGuild().getId()));
                     } else if (hasPrefix(message, "configs")) {
                         Embeds.configsEmbed(message, gcMap.get(message.getGuild().getId()));
+                    }
+                }
+
+                if (memberMap.get(message.getAuthor().getId()) == null) {
+                    Member m = new Member();
+                    m.setId(message.getAuthor().getId());
+                    memberMap.put(message.getAuthor().getId(), m);
+                } else if (!message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
+                    if (!message.getMember().getRoles().contains(message.getGuild().getRoleById(gcMap.get(message.getGuild().getId()).getCargowarn()))) {
+                        if (memberMap.get(message.getAuthor().getId()).addXp()) {
+                            message.getChannel().sendMessage("Wow, " + message.getAuthor().getAsMention() + " subiu para o level " + memberMap.get(message.getAuthor().getId()).getLevel() + ". GGWP!").queue();
+                        }
                     }
                 }
             } else if (message.getTextChannel().canTalk()) {
