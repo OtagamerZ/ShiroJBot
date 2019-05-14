@@ -9,7 +9,7 @@ public class Member {
     private String id;
     private int level = 1, xp = 0;
     private String[] warns = {};
-    private boolean[] badges = {false, false, false, false, false, false, false, false, false, false, false, false};
+    private boolean[] badges = {false, false, false, false, false, false, false, false, false, false, false, false, false};
 
     public Member(String id) {
         setId(id);
