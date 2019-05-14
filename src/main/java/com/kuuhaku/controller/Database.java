@@ -1,5 +1,6 @@
 package com.kuuhaku.controller;
 
+import com.kuuhaku.model.Member;
 import com.kuuhaku.model.guildConfig;
 
 import javax.persistence.EntityManager;
@@ -52,6 +53,39 @@ public class Database {
             return lgc.stream().collect(Collectors.toMap(guildConfig::getGuildId, g -> g));
         } catch (Exception e) {
             System.out.println("Erro ao recuperar configurações: " + e);
+            return null;
+        }
+    }
+
+    public static void sendAllMembersData(Collection<Member> gc) {
+        EntityManager em = getEntityManager();
+        Query q = em.createQuery("DELETE FROM Member");
+
+        em.getTransaction().begin();
+        q.executeUpdate();
+        em.getTransaction().commit();
+        System.out.println("Membros resetados com sucesso!");
+
+        em.getTransaction().begin();
+        gc.forEach(em::persist);
+        em.getTransaction().commit();
+        em.close();
+        System.out.println("Membros salvos com sucesso!");
+    }
+
+    @SuppressWarnings("unchecked")
+    public static Map<String, Member> getMembersData() {
+        List<Member> lgc;
+
+        try {
+            EntityManager em = getEntityManager();
+            Query q = em.createQuery("SELECT c FROM Member c", guildConfig.class);
+            lgc = q.getResultList();
+            em.close();
+
+            return lgc.stream().collect(Collectors.toMap(Member::getId, m -> m));
+        } catch (Exception e) {
+            System.out.println("Erro ao recuperar membros: " + e);
             return null;
         }
     }
