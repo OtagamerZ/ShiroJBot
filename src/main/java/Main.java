@@ -46,6 +46,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         jda.addEventListener(new Main());
         jda.build();
         gcMap = Database.getGuildConfigs();
+        memberMap = Database.getMembersData();
         try {
             if (backup == null) {
                 backup = JobBuilder.newJob(Main.class).withIdentity("backup", "1").build();
@@ -78,6 +79,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     public void execute(JobExecutionContext context) {
         try {
             Database.sendAllGuildConfigs(gcMap.values());
+            Database.sendAllMembersData(memberMap.values());
             System.out.println("Guardar configurações no banco de dados...PRONTO!");
             bot.getPresence().setGame(Owner.getRandomGame(bot));
         } catch (Exception e) {
@@ -223,6 +225,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         }
                     } else if (hasPrefix(message, "xp")) {
                         Embeds.levelEmbed(message, memberMap.get(message.getAuthor().getId()));
+                    } else if (hasPrefix(message, "conquista")) {
+                        Misc.badges(message);
                     }
 
                     //DONO--------------------------------------------------------------------------------->
@@ -245,7 +249,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     }
 
                     //ADMIN--------------------------------------------------------------------------------->
-
                     if (message.getMember().hasPermission(Permission.MANAGE_SERVER)) {
                         if (hasPrefix(message, "definir")) {
                             Admin.config(cmd, message, gcMap.get(message.getGuild().getId()));
