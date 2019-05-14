@@ -229,8 +229,8 @@ public class Embeds {
     public static void levelEmbed(MessageReceivedEvent message, Member m) {
         EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setTitle("Perfil de " + message.getGuild().getMemberById(m.getId()).getEffectiveName());
-        eb.setThumbnail(message.getGuild().getMemberById(m.getId()).getUser().getAvatarUrl());
+        eb.setTitle("Perfil de " + message.getGuild().getMemberById(m.getId().replace(message.getGuild().getId(), "")).getEffectiveName());
+        eb.setThumbnail(message.getGuild().getMemberById(m.getId().replace(message.getGuild().getId(), "")).getUser().getAvatarUrl());
         eb.addField("Level: " + m.getLevel(), "Xp: " + m.getXp() + " | " + (m.getLevel() * 100), true);
         eb.addField("Alertas:", Integer.toString(m.getWarns().length), true);
         eb.addField("Conquistas:", Badges.getBadges(m.getBadges()), false);
