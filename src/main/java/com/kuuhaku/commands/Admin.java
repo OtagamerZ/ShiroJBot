@@ -1,7 +1,10 @@
 package com.kuuhaku.commands;
 
+import com.kuuhaku.model.Member;
 import com.kuuhaku.model.guildConfig;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+
+import java.util.Map;
 
 public class Admin {
     public static void config(String[] cmd, MessageReceivedEvent message, guildConfig gc) {
@@ -62,5 +65,15 @@ public class Admin {
         } catch (ArrayIndexOutOfBoundsException e) {
             message.getChannel().sendMessage("Você precisa me dizer o quê devo definir").queue();
         }
+    }
+
+    public static void addWarn(MessageReceivedEvent message, String reason, Map<String, Member> m) {
+        m.get(message.getMessage().getMentionedUsers().get(0).getId() + message.getGuild().getId()).addWarn(reason);
+        message.getChannel().sendMessage("O usuário " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " teve um alerta registrado pelo seguinte motivo: `" + reason + "`").queue();
+    }
+
+    public static void takeWarn(MessageReceivedEvent message, Map<String, Member> m) {
+        m.get(message.getMessage().getMentionedUsers().get(0).getId() + message.getGuild().getId()).removeWarn(Integer.parseInt(message.getMessage().getContentRaw().split(" ")[2]));
+        message.getChannel().sendMessage("Foi retirado o alerta " + message.getMessage().getContentRaw().split(" ")[2] + " um alerta do usuário " + message.getMessage().getMentionedUsers().get(0).getAsMention()).queue();
     }
 }

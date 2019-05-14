@@ -41,8 +41,8 @@ public class Embeds {
                 prefix + "definir msgbv [\"mensagem\"] - Define a mensagem de boas-vindas para o servidor.\n\n" +
                 prefix + "definir msgadeus [\"mensagem\"] - Define a mensagem de adeus para o servidor.\n\n" +
                 prefix + "configs - Mostra as configurações do servidor.\n\n" +
-                prefix + "dar [membro] [Nº] - Marca a conquista como completa para o usuário.\n\n" +
-                prefix + "tirar [membro] [Nº] - Marca a conquista como incompleta para o usuário.\n" +
+                prefix + "alertar [membro] [razão] - Registra um alerta no perfil do membro especificado.\n\n" +
+                prefix + "perdoar [membro] [Nº] - Perdoa um alerta do membro.\n" +
                 "```", false);
         eb.addField("Utilitários", "```\n\n" +
                 prefix + "ajuda - Mostra essa mensagem no seu canal privado.\n\n" +
@@ -232,7 +232,7 @@ public class Embeds {
         eb.setTitle("Perfil de " + message.getGuild().getMemberById(m.getId().replace(message.getGuild().getId(), "")).getEffectiveName());
         eb.setThumbnail(message.getGuild().getMemberById(m.getId().replace(message.getGuild().getId(), "")).getUser().getAvatarUrl());
         eb.addField("Level: " + m.getLevel(), "Xp: " + m.getXp() + " | " + (m.getLevel() * 100), true);
-        eb.addField("Alertas:", Integer.toString(m.getWarns().length), true);
+        eb.addField("Alertas:", Integer.toString(m.getWarns().length - 1), true);
         eb.addField("Conquistas:", Badges.getBadges(m.getBadges()), false);
 
         message.getChannel().sendMessage(eb.build()).queue();
