@@ -35,6 +35,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     private static User owner;
     private static TextChannel homeLog;
     private static Map<String, guildConfig> gcMap = new HashMap<>();
+    private static Map<String, Member> memberMap = new HashMap<>();
     private static JobDetail backup;
     private static Scheduler sched;
 
@@ -45,6 +46,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         jda.addEventListener(new Main());
         jda.build();
         gcMap = Database.getGuildConfigs();
+        if (Database.getMembersData() != null) memberMap = Database.getMembersData();
         try {
             if (backup == null) {
                 backup = JobBuilder.newJob(Main.class).withIdentity("backup", "1").build();
@@ -77,6 +79,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     public void execute(JobExecutionContext context) {
         try {
             Database.sendAllGuildConfigs(gcMap.values());
+            Database.sendAllMembersData(memberMap.values());
             System.out.println("Guardar configurações no banco de dados...PRONTO!");
             bot.getPresence().setGame(Owner.getRandomGame(bot));
         } catch (Exception e) {
@@ -185,25 +188,17 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                 message.getChannel().sendMessage("As configurações deste servidor ja foram inicializadas!").queue();
             }
             if (gcMap.get(message.getGuild().getId()) != null && message.getTextChannel().canTalk()) {
-                try {
-                    if (gcMap.get(message.getGuild().getId()).getMembers().get(message.getAuthor().getId()) != null && !message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
-                        boolean lvlUp;
-                        lvlUp = gcMap.get(message.getGuild().getId()).getMembers().get(message.getAuthor().getId()).addXp();
-                        if (lvlUp) {
-                            message.getChannel().sendMessage(message.getAuthor().getAsMention() + " subiu para o level " + gcMap.get(message.getGuild().getId()).getMembers().get(message.getAuthor().getId()).getLevel() + ". GGWP!!").queue();
-                        }
+                if (memberMap.get(message.getAuthor().getId() + message.getGuild().getId()) != null && !message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
+                    boolean lvlUp;
+                    lvlUp = memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).addXp();
+                    if (lvlUp) {
+                        message.getChannel().sendMessage(message.getAuthor().getAsMention() + " subiu para o level " + memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).getLevel() + ". GGWP!!").queue();
                     }
-                } catch (IOException | ClassNotFoundException e) {
-                    e.printStackTrace();
                 }
                 if (message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
 
-                    try {
-                        if (gcMap.get(message.getGuild().getId()).getMembers().get(message.getAuthor().getId()) == null)
-                            gcMap.get(message.getGuild().getId()).getMembers().put(message.getAuthor().getId(), new Member(message.getAuthor().getId()));
-                    } catch (IOException | ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
+                    if (memberMap.get(message.getAuthor().getId() + message.getGuild().getId()) == null)
+                        memberMap.put(message.getAuthor().getId(), new Member(message.getAuthor().getId() + message.getGuild().getId()));
 
                     System.out.println("Comando recebido de " + message.getAuthor().getName() + "#" + message.getAuthor().getDiscriminator() + " | " + message.getGuild().getName() + " -> " + message.getMessage().getContentDisplay());
 
@@ -234,11 +229,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             e.printStackTrace();
                         }
                     } else if (hasPrefix(message, "xp")) {
-                        try {
-                            Embeds.levelEmbed(message, gcMap.get(message.getGuild().getId()).getMembers().get(message.getAuthor().getId()));
-                        } catch (IOException | ClassNotFoundException e) {
-                            e.printStackTrace();
-                        }
+                        Embeds.levelEmbed(message, memberMap.get(message.getAuthor().getId() + message.getGuild().getId()));
                     } else if (hasPrefix(message, "conquista")) {
                         Misc.badges(message);
                     }
@@ -254,11 +245,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         } else if (hasPrefix(message, "gmap")) {
                             Owner.getGuildMap(message, gcMap);
                         } else if (hasPrefix(message, "mmap")) {
-                            try {
-                                Owner.getMemberMap(message, gcMap.get(message.getGuild().getId()).getMembers());
-                            } catch (IOException | ClassNotFoundException e) {
-                                e.printStackTrace();
-                            }
+                            Owner.getMemberMap(message, memberMap);
                         } else if (hasPrefix(message, "broadcast")) {
                             Owner.broadcast(gcMap, bot, message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix() + "broadcast ", ""), message.getTextChannel());
                         } else if (hasPrefix(message, "perms")) {
@@ -267,14 +254,14 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             Owner.leave(bot, message);
                         } else if (hasPrefix(message, "dar")) {
                             try {
-                                gcMap.get(message.getGuild().getId()).getMembers().get(message.getMessage().getMentionedUsers().get(0).getId()).giveBadge(cmd[2]);
+                                memberMap.get(message.getMessage().getMentionedUsers().get(0).getId()).giveBadge(cmd[2]);
                                 message.getChannel().sendMessage("Parabéns, " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " completou a conquista Nº " + cmd[2]).queue();
                             } catch (Exception e) {
                                 message.getChannel().sendMessage("Ué, não estou conseguindo marcar a conquista como completa. Tenha certeza de digitar o comando neste formato: " + gcMap.get(message.getGuild().getId()).getPrefix() + "dar [MEMBRO] [Nº]").queue();
                             }
                         } else if (hasPrefix(message, "tirar")) {
                             try {
-                                gcMap.get(message.getGuild().getId()).getMembers().get(message.getMessage().getMentionedUsers().get(0).getId()).removeBadge(cmd[2]);
+                                memberMap.get(message.getMessage().getMentionedUsers().get(0).getId()).removeBadge(cmd[2]);
                                 message.getChannel().sendMessage("Meeee, " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " teve a conquista Nº " + cmd[2] + " retirada de sua posse!").queue();
                             } catch (Exception e) {
                                 message.getChannel().sendMessage("Ué, não estou conseguindo marcar a conquista como incompleta. Tenha certeza de digitar o comando neste formato: " + gcMap.get(message.getGuild().getId()).getPrefix() + "tirar [MEMBRO] [Nº]").queue();
@@ -290,11 +277,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             Embeds.configsEmbed(message, gcMap.get(message.getGuild().getId()));
                         } else if (hasPrefix(message, "punir")) {
                             if (message.getMessage().getMentionedUsers() != null) {
-                                try {
-                                    gcMap.get(message.getGuild().getId()).getMembers().get(message.getMessage().getMentionedUsers().get(0).getId()).resetXp();
-                                } catch (IOException | ClassNotFoundException e) {
-                                    e.printStackTrace();
-                                }
+                                memberMap.get(message.getMessage().getMentionedUsers().get(0).getId()).resetXp();
                                 message.getChannel().sendMessage(message.getMessage().getMentionedUsers().get(0).getAsMention() + " teve seus XP e leveis resetados!").queue();
                             } else {
                                 message.getChannel().sendMessage("Você precisa me dizer de quem devo resetar o XP.").queue();
