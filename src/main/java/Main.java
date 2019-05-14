@@ -188,8 +188,13 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                 message.getChannel().sendMessage("As configurações deste servidor ja foram inicializadas!").queue();
             }
             if (gcMap.get(message.getGuild().getId()) != null && message.getTextChannel().canTalk()) {
-                if (memberMap.get(message.getAuthor().getId()) != null && !message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix()))
-                    memberMap.get(message.getAuthor().getId()).addXp();
+                if (memberMap.get(message.getAuthor().getId()) != null && !message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
+                    boolean lvlUp;
+                    lvlUp = memberMap.get(message.getAuthor().getId()).addXp();
+                    if (lvlUp) {
+                        message.getChannel().sendMessage(message.getAuthor().getAsMention() + " subiu para o level " + memberMap.get(message.getAuthor().getId()).getLevel() + ". GGWP!!").queue();
+                    }
+                }
                 if (message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
 
                     if (memberMap.get(message.getAuthor().getId()) == null)
