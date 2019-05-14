@@ -79,7 +79,7 @@ public class Database {
 
         try {
             EntityManager em = getEntityManager();
-            Query q = em.createQuery("SELECT c FROM Member c", guildConfig.class);
+            Query q = em.createQuery("SELECT c FROM Member c", Member.class);
             lgc = q.getResultList();
             em.close();
 
