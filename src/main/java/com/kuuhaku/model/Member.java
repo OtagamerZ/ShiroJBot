@@ -53,7 +53,7 @@ public class Member {
     public void addWarn(String reason) {
         List<String> ph = new ArrayList<>(Arrays.asList(getWarns()));
         ph.add(reason);
-        badges = ph.toString();
+        warns = ph.toString();
     }
 
     public void removeWarn(int index) {
