@@ -46,7 +46,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         jda.addEventListener(new Main());
         jda.build();
         gcMap = Database.getGuildConfigs();
-        memberMap = Database.getMembersData();
+        if(Database.getMembersData() != null) memberMap = Database.getMembersData();
         try {
             if (backup == null) {
                 backup = JobBuilder.newJob(Main.class).withIdentity("backup", "1").build();
