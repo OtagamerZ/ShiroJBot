@@ -51,13 +51,13 @@ public class Member {
     }
 
     public void addWarn(String reason) {
-        List<String> ph = Arrays.asList(getWarns());
+        List<String> ph = new ArrayList<>(Arrays.asList(getWarns()));
         ph.add(reason);
-        warns = ph.toString();
+        badges = ph.toString();
     }
 
     public void removeWarn(int index) {
-        List<String> ph = Arrays.asList(getWarns());
+        List<String> ph = new ArrayList<>(Arrays.asList(getWarns()));
         ph.remove(index);
         warns = ph.toString();
     }
