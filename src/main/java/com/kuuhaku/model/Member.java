@@ -1,8 +1,12 @@
 package com.kuuhaku.model;
 
+import jdk.internal.jline.internal.Nullable;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @Entity
 public class Member {
@@ -31,19 +35,33 @@ public class Member {
     }
 
     public void giveBadge(String index) {
-        if (Integer.parseInt(index) >= 0 && Integer.parseInt(index) < getBadges().length) {
-            boolean [] ph = getBadges();
-            ph[Integer.parseInt(index)] = true;
-            setBadges(ph);
+        List<Boolean> ph = new ArrayList<>();
+        for (int i = 0; i < getBadges().length; i++) {
+            ph.add(getBadges()[i]);
         }
+        ph.set(Integer.parseInt(index), true);
+        badges = ph.toString();
     }
 
     public void removeBadge(String index) {
-        if (Integer.parseInt(index) >= 0 && Integer.parseInt(index) < getBadges().length) {
-            boolean [] ph = getBadges();
-            ph[Integer.parseInt(index)] = false;
-            setBadges(ph);
+        List<Boolean> ph = new ArrayList<>();
+        for (int i = 0; i < getBadges().length; i++) {
+            ph.add(getBadges()[i]);
         }
+        ph.set(Integer.parseInt(index), false);
+        badges = ph.toString();
+    }
+
+    public void addWarn(@Nullable String reason) {
+        List<String> ph = Arrays.asList(getWarns());
+        ph.add(reason);
+        warns = ph.toString();
+    }
+
+    public void removeWarn(int index) {
+        List<String> ph = Arrays.asList(getWarns());
+        ph.remove(index);
+        warns = ph.toString();
     }
 
     public String getId() {
@@ -62,21 +80,13 @@ public class Member {
         return warns.replace("[", "").replace("]", "").split(",");
     }
 
-    public void setWarns(String[] warns) {
-        this.warns = Arrays.toString(warns);
-    }
-
     public boolean[] getBadges() {
         String[] t = badges.replace("[", "").replace("]", "").split(",");
         boolean[] tb = new boolean[t.length];
         for (int i = 0; i < t.length; i++) {
-            tb[i] = Boolean.parseBoolean(t[0]);
+            tb[i] = Boolean.parseBoolean(t[i]);
         }
         return tb;
-    }
-
-    private void setBadges(boolean[] badges) {
-        this.badges = Arrays.toString(badges);
     }
 
     private void setId(String id) {
