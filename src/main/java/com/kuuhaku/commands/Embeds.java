@@ -51,7 +51,8 @@ public class Embeds {
                 prefix + "uptime - Descobre a quanto tempo estou acordada.\n\n" +
                 prefix + "imagem [tags] [página] - Busca uma imagem no Safebooru, as tags não podem conter espaços (substitua-os por _).\n\n" +
                 prefix + "anime [nome] - Pesquisa informações sobre um anime.\n" +
-                prefix + "xp - Mostra dados sobre o seu perfil.\n" +
+                prefix + "xp - Mostra dados sobre o seu perfil.\n\n" +
+                prefix + "conquista [Nº] - Mostra dados sobre uma conquista.\n" +
                 "```", false);
         eb.addField("Diversão", "```\n\n" +
                 prefix + "pergunta [pergunta] - Me pergunte algo, mas só vou responder com sim ou não!.\n\n" +

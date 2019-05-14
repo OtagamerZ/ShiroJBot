@@ -1,5 +1,6 @@
 package com.kuuhaku.commands;
 
+import com.kuuhaku.model.Badges;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.json.JSONException;
@@ -55,5 +56,13 @@ public class Misc {
     public static void uptime(MessageReceivedEvent message) {
         RuntimeMXBean rb = ManagementFactory.getRuntimeMXBean();
         message.getChannel().sendMessage("Hummm...acho que estou acordada a " + (int) rb.getUptime() / 1000 + " segundos!").queue();
+    }
+
+    public static void badges(MessageReceivedEvent message) {
+        try {
+            message.getChannel().sendMessage(Badges.getBadgeDesc(message.getMessage().getContentRaw().split(" ")[1])).queue();
+        } catch (Exception e) {
+            message.getChannel().sendMessage("Digite um Nº de uma conquista válido.").queue();
+        }
     }
 }
