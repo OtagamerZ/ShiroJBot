@@ -2,16 +2,15 @@ package com.kuuhaku.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.io.Serializable;
 import java.util.Arrays;
 
 @Entity
-public class Member implements Serializable {
+public class Member {
     @Id
     private String id;
     private int level = 1, xp = 0;
     private String warns = "";
-    private boolean[] badges = {false,false,false,false,false,false,false,false,false,false,false,false,false};
+    private String badges = "[false,false,false,false,false,false,false,false,false,false,false,false,false]";
 
     public Member(String id) {
         setId(id);
@@ -68,11 +67,16 @@ public class Member implements Serializable {
     }
 
     public boolean[] getBadges() {
-        return badges;
+        String[] t = badges.replace("[", "").replace("]", "").split(",");
+        boolean[] tb = new boolean[t.length];
+        for (int i = 0; i < t.length; i++) {
+            tb[i] = Boolean.parseBoolean(t[0]);
+        }
+        return tb;
     }
 
     private void setBadges(boolean[] badges) {
-        this.badges = badges;
+        this.badges = Arrays.toString(badges);
     }
 
     private void setId(String id) {
