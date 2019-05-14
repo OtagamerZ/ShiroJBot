@@ -14,8 +14,8 @@ public class Member {
     private String warns = "";
     private String badges = "[false,false,false,false,false,false,false,false,false,false,false,false,false]";
 
-    public Member(String id) {
-        setId(id);
+    public Member() {
+
     }
 
     public boolean addXp() {
@@ -87,7 +87,7 @@ public class Member {
         return tb;
     }
 
-    private void setId(String id) {
+    public void setId(String id) {
         this.id = id;
     }
 }
