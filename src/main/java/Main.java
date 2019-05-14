@@ -46,7 +46,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         jda.addEventListener(new Main());
         jda.build();
         gcMap = Database.getGuildConfigs();
-        if(Database.getMembersData() != null) memberMap = Database.getMembersData();
+        if (Database.getMembersData() != null) memberMap = Database.getMembersData();
         try {
             if (backup == null) {
                 backup = JobBuilder.newJob(Main.class).withIdentity("backup", "1").build();
@@ -188,7 +188,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                 message.getChannel().sendMessage("As configurações deste servidor ja foram inicializadas!").queue();
             }
             if (gcMap.get(message.getGuild().getId()) != null && message.getTextChannel().canTalk()) {
-                if (memberMap.get(message.getAuthor().getId()) != null)
+                if (memberMap.get(message.getAuthor().getId()) != null && !message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix()))
                     memberMap.get(message.getAuthor().getId()).addXp();
                 if (message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
 
@@ -237,8 +237,10 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             bot.shutdown();
                         } else if (hasPrefix(message, "servers")) {
                             Owner.getServers(bot, message);
-                        } else if (hasPrefix(message, "map")) {
-                            Owner.getMap(message, gcMap);
+                        } else if (hasPrefix(message, "gmap")) {
+                            Owner.getGuildMap(message, gcMap);
+                        } else if (hasPrefix(message, "mmap")) {
+                            Owner.getMemberMap(message, memberMap);
                         } else if (hasPrefix(message, "broadcast")) {
                             Owner.broadcast(gcMap, bot, message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix() + "broadcast ", ""), message.getTextChannel());
                         } else if (hasPrefix(message, "perms")) {
