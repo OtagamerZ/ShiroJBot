@@ -5,6 +5,8 @@ import net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.io.*;
+import java.util.Map;
 
 @Entity
 public class guildConfig {
@@ -14,6 +16,7 @@ public class guildConfig {
     private String msgBoasVindas = "Seja bem-vindo(a) %user%!";
     private String msgAdeus = "Ahh...%user% deixou este servidor!";
     private String canalbv = null, canalav = null, canalmsc = null, cargowarn = null;
+    private byte[] members;
 
     public guildConfig() {
 
@@ -83,5 +86,27 @@ public class guildConfig {
 
     public void setCargowarn(String cargowarn) {
         this.cargowarn = cargowarn;
+    }
+
+    @SuppressWarnings("unchecked")
+    public Map<String, Member> getMembers() throws IOException, ClassNotFoundException {
+        ByteArrayInputStream bais = new ByteArrayInputStream(members);
+        Map<String, Member> map = null;
+
+        try (ObjectInputStream ois = new ObjectInputStream(bais)) {
+            map = (Map<String, Member>) ois.readObject();
+            return map;
+        } finally {
+            setMembers(map);
+        }
+    }
+
+    private void setMembers(Map<String, Member> members) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        try (ObjectOutputStream oos = new ObjectOutputStream(baos)) {
+            oos.writeObject(members);
+            this.members = baos.toByteArray();
+        }
     }
 }
