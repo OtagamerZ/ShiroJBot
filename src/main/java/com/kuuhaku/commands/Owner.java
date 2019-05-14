@@ -1,5 +1,6 @@
 package com.kuuhaku.commands;
 
+import com.kuuhaku.model.Member;
 import com.kuuhaku.model.guildConfig;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Game;
@@ -8,6 +9,7 @@ import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -33,9 +35,16 @@ public class Owner {
         }
     }
 
-    public static void getMap(MessageReceivedEvent message, Map<String, guildConfig> gc) {
+    public static void getGuildMap(MessageReceivedEvent message, Map<String, guildConfig> gc) {
         final ArrayList<String> map = new ArrayList<>();
         gc.values().forEach(g -> map.add(g.getGuildId() + " | " + g.getPrefix() + " | " + g.getCanalbv() + " | " + g.getCanalav() + " | " + g.getMsgBoasVindas(null) + " | " + g.getMsgAdeus(null) + "\n"));
+
+        message.getChannel().sendMessage(map.toString().replace("[", "```").replace("]", "```").replace(", ", "\n")).queue();
+    }
+
+    public static void getMemberMap(MessageReceivedEvent message, Map<String, Member> mm) {
+        final ArrayList<String> map = new ArrayList<>();
+        mm.values().forEach(g -> map.add(g.getId() + " | " + g.getLevel() + " | " + g.getXp() + " | " + Arrays.toString(g.getBadges()) + " | " + Arrays.toString(g.getWarns()) + "\n"));
 
         message.getChannel().sendMessage(map.toString().replace("[", "```").replace("]", "```").replace(", ", "\n")).queue();
     }
