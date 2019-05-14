@@ -12,6 +12,7 @@
 
         <!-- entidade mapeada -->
         <class>com.kuuhaku.model.guildConfig</class>
+        <class>com.kuuhaku.model.Member</class>
 
         <properties>
             <!-- dados da conexao -->
@@ -21,7 +22,7 @@
             <property name="javax.persistence.jdbc.password" value="v3Giqpmz2T"/>
 
             <!--  propriedades do hibernate -->
-            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
 

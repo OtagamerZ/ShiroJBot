@@ -1,5 +1,6 @@
 package com.kuuhaku.model;
 
+import jdk.internal.jline.internal.Nullable;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent;
 
@@ -35,7 +36,7 @@ public class guildConfig {
         this.prefix = prefix;
     }
 
-    public String getMsgBoasVindas(GuildMemberJoinEvent newUser) {
+    public String getMsgBoasVindas(@Nullable GuildMemberJoinEvent newUser) {
         return newUser != null ? msgBoasVindas.replace("%user%", newUser.getMember().getAsMention()) : msgBoasVindas;
     }
 
@@ -44,7 +45,7 @@ public class guildConfig {
     }
 
 
-    public String getMsgAdeus(GuildMemberLeaveEvent oldUser) {
+    public String getMsgAdeus(@Nullable GuildMemberLeaveEvent oldUser) {
         return oldUser != null ? msgAdeus.replace("%user%", oldUser.getMember().getAsMention()) : msgAdeus;
     }
 
