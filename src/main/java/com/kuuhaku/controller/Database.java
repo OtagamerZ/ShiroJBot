@@ -81,6 +81,7 @@ public class Database {
             EntityManager em = getEntityManager();
             Query q = em.createQuery("SELECT c FROM Member c", Member.class);
             lgc = q.getResultList();
+            System.out.println(lgc);
             em.close();
 
             return lgc.stream().collect(Collectors.toMap(Member::getId, m -> m));
