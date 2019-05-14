@@ -149,6 +149,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         System.out.println("Iniciando sequencia de encerramento...");
         try {
             Database.sendAllGuildConfigs(gcMap.values());
+            Database.sendAllMembersData(memberMap.values());
             System.out.println("Guardar configurações no banco de dados...PRONTO!");
             System.out.println("Desligando instância...");
             sched.shutdown();
@@ -197,8 +198,11 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                 }
                 if (message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
 
-                    if (memberMap.get(message.getAuthor().getId() + message.getGuild().getId()) == null)
-                        memberMap.put(message.getAuthor().getId() + message.getGuild().getId(), new Member(message.getAuthor().getId() + message.getGuild().getId()));
+                    if (memberMap.get(message.getAuthor().getId() + message.getGuild().getId()) == null) {
+                        Member m = new Member();
+                        m.setId(message.getAuthor().getId() + message.getGuild().getId());
+                        memberMap.put(message.getAuthor().getId() + message.getGuild().getId(), m);
+                    }
 
                     System.out.println("Comando recebido de " + message.getAuthor().getName() + "#" + message.getAuthor().getDiscriminator() + " | " + message.getGuild().getName() + " -> " + message.getMessage().getContentDisplay());
 
