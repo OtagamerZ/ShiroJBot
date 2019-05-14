@@ -91,13 +91,9 @@ public class guildConfig {
     @SuppressWarnings("unchecked")
     public Map<String, Member> getMembers() throws IOException, ClassNotFoundException {
         ByteArrayInputStream bais = new ByteArrayInputStream(members);
-        Map<String, Member> map = null;
 
         try (ObjectInputStream ois = new ObjectInputStream(bais)) {
-            map = (Map<String, Member>) ois.readObject();
-            return map;
-        } finally {
-            setMembers(map);
+            return (Map<String, Member>) ois.readObject();
         }
     }
 
