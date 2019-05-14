@@ -41,12 +41,14 @@ public class Main extends ListenerAdapter implements JobListener, Job {
 
     private static void initBot() throws LoginException {
         JDABuilder jda = new JDABuilder(AccountType.BOT);
-        String token = System.getenv("BOT_TOKEN");
+        String token = "NTcyNzg0MzA1MTM5NDgyNjg2.XNrItA.tj_H3I_J3HGYjQOmy_PUdGpKCxg";
         jda.setToken(token);
         jda.addEventListener(new Main());
         jda.build();
-        gcMap = Database.getGuildConfigs();
+        if (Database.getGuildConfigs() != null) gcMap = Database.getGuildConfigs();
+        else Database.sendAllGuildConfigs(gcMap.values());
         if (Database.getMembersData() != null) memberMap = Database.getMembersData();
+        else Database.sendAllMembersData(memberMap.values());
         try {
             if (backup == null) {
                 backup = JobBuilder.newJob(Main.class).withIdentity("backup", "1").build();
