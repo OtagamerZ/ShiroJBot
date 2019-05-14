@@ -192,7 +192,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     boolean lvlUp;
                     lvlUp = memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).addXp();
                     if (lvlUp) {
-                        message.getChannel().sendMessage(message.getAuthor().getAsMention() + " subiu para o level " + memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).getLevel() + ". GGWP!!").queue();
+                        message.getChannel().sendMessage(message.getAuthor().getAsMention() + " subiu para o level " + memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).getLevel() + ". GGWP!! :tada:").queue();
                     }
                 }
                 if (message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
