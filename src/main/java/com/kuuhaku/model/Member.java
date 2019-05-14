@@ -1,7 +1,5 @@
 package com.kuuhaku.model;
 
-import jdk.internal.jline.internal.Nullable;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.ArrayList;
@@ -52,7 +50,7 @@ public class Member {
         badges = ph.toString();
     }
 
-    public void addWarn(@Nullable String reason) {
+    public void addWarn(String reason) {
         List<String> ph = Arrays.asList(getWarns());
         ph.add(reason);
         warns = ph.toString();
