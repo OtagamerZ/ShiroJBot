@@ -6,19 +6,19 @@ import net.dv8tion.jda.core.entities.MessageEmbed;
 public class Badges {
     public static String getBadges(boolean[] conquistas) {
         String conq = "";
-        conq += "0 - Moderador! " + (conquistas[0] ? "[:white_check_mark: ]\n\n" : "[:x:]\n\n");
-        conq += "1 - Desafiando quem? " + (conquistas[1] ? "[:white_check_mark:]\n\n" : "[:x:]\n\n");
-        conq += "2 - Isso é lootável? " + (conquistas[2] ? "[:white_check_mark:]\n\n" : "[:x:]\n\n");
-        conq += "3 - Humpf, achei fácil! " + (conquistas[3] ? "[:white_check_mark:]\n\n" : "[:x:]\n\n");
-        conq += "4 - Temos um Sherok Homer aqui! " + (conquistas[4] ? "[:white_check_mark:]\n\n" : "[:x:]\n\n");
-        conq += "5 - Salvo....por pouco! " + (conquistas[5] ? "[:white_check_mark:]\n\n" : "[:x:]\n\n");
-        conq += "6 - Ummm, então é isso, né? " + (conquistas[6] ? "[:white_check_mark:]\n\n" : "[:x:]\n\n");
-        conq += "7 - Treinador iniciante. " + (conquistas[7] ? "[:white_check_mark:]\n\n" : "[:x:]\n\n");
-        conq += "8 - Mestre treinador. " + (conquistas[8] ? "[:white_check_mark:]\n\n" : "[:x:]\n\n");
-        conq += "9 - Amante de nekos. " + (conquistas[9] ? "[:white_check_mark:]\n\n" : "[:x:]\n\n");
-        conq += "10 - Escudeiro nota 10! " + (conquistas[10] ? "[:white_check_mark:]\n\n" : "[:x:]\n\n");
-        conq += "11 - Recrutador de elite! " + (conquistas[11] ? "[:white_check_mark:]\n\n" : "[:x:]\n\n");
-        conq += "12 - Viajante das estrelas! " + (conquistas[12] ? "[:white_check_mark:]\n\n" : "[:x:]\n\n");
+        conq += (conquistas[0] ? "[:white_check_mark:]\n\n" : "[:x:]\n\n") + " 0 - Moderador! ";
+        conq += (conquistas[1] ? "[:white_check_mark:]\n\n" : "[:x:]\n\n") + " 1 - Desafiando quem? ";
+        conq += (conquistas[2] ? "[:white_check_mark:]\n\n" : "[:x:]\n\n") + " 2 - Isso é lootável? ";
+        conq += (conquistas[3] ? "[:white_check_mark:]\n\n" : "[:x:]\n\n") + " 3 - Humpf, achei fácil! ";
+        conq += (conquistas[4] ? "[:white_check_mark:]\n\n" : "[:x:]\n\n") + " 4 - Temos um Sherok Homer aqui! ";
+        conq += (conquistas[5] ? "[:white_check_mark:]\n\n" : "[:x:]\n\n") + " 5 - Salvo....por pouco! ";
+        conq += (conquistas[6] ? "[:white_check_mark:]\n\n" : "[:x:]\n\n") + " 6 - Ummm, então é isso, né? ";
+        conq += (conquistas[7] ? "[:white_check_mark:]\n\n" : "[:x:]\n\n") + " 7 - Treinador iniciante. ";
+        conq += (conquistas[8] ? "[:white_check_mark:]\n\n" : "[:x:]\n\n") + " 8 - Mestre treinador. ";
+        conq += (conquistas[9] ? "[:white_check_mark:]\n\n" : "[:x:]\n\n") + " 9 - Amante de nekos. ";
+        conq += (conquistas[10] ? "[:white_check_mark:]\n\n" : "[:x:]\n\n") + " 10 - Escudeiro nota 10! ";
+        conq += (conquistas[11] ? "[:white_check_mark:]\n\n" : "[:x:]\n\n") + " 11 - Recrutador de elite! ";
+        conq += (conquistas[12] ? "[:white_check_mark:]\n\n" : "[:x:]\n\n") + " 12 - Viajante das estrelas! ";
 
         return conq;
     }
