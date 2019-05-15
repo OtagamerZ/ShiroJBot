@@ -152,19 +152,19 @@ public class Reactions {
         URL url = new URL("");
         switch ((int) (Math.random() * 5)) {
             case 0:
-                url = new URL("blob:https://imgur.com/0a3716eb-8461-4391-930f-becedd9eb422");
+                url = new URL("https://i.imgur.com/OUVVkmW.gif");
                 break;
             case 1:
-                url = new URL("blob:https://imgur.com/40630e5c-edd6-40d5-a42c-0bfc8b4db352");
+                url = new URL("https://i.imgur.com/NbzUx0P.gif");
                 break;
             case 2:
-                url = new URL("blob:https://imgur.com/88c6909c-c7a2-4557-a85b-6e29dd8cdcb9");
+                url = new URL("https://i.imgur.com/BpFbc2t.gif");
                 break;
             case 3:
-                url = new URL("blob:https://imgur.com/9da7a121-47d8-4566-b200-44418a88d2db");
+                url = new URL("https://i.imgur.com/c0Uhdb0.gif");
                 break;
             case 4:
-                url = new URL("blob:https://imgur.com/f33a1753-392b-45f4-a149-080bfbc7411c");
+                url = new URL("https://i.imgur.com/VH8m3sk.gif");
                 break;
         }
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
