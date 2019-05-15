@@ -38,7 +38,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     private static Map<String, Member> memberMap = new HashMap<>();
     private static JobDetail backup;
     private static Scheduler sched;
-    private static boolean ready = false;
 
     private static void initBot() throws LoginException {
         JDABuilder jda = new JDABuilder(AccountType.BOT);
@@ -118,7 +117,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         owner = bot.getUserById("350836145921327115");
         homeLog = bot.getGuildById("421495229594730496").getTextChannelById("573861751884349479");
         bot.getPresence().setGame(Owner.getRandomGame(bot));
-        ready = true;
     }
 
     @Override
@@ -174,161 +172,158 @@ public class Main extends ListenerAdapter implements JobListener, Job {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent message) {
-        if (ready) {
-            try {
-                if (message.getAuthor().isBot() || !message.isFromType(ChannelType.TEXT)) return;
+        try {
+            if (message.getAuthor().isBot() || !message.isFromType(ChannelType.TEXT)) return;
 
-                if (message.getMessage().getContentRaw().equals("!init") && gcMap.get(message.getGuild().getId()) == null) {
-                    guildConfig gct = new guildConfig();
-                    gct.setGuildId(message.getGuild().getId());
-                    gcMap.put(message.getGuild().getId(), gct);
-                    for (int i = 0; i < message.getGuild().getTextChannels().size(); i++) {
-                        if (message.getGuild().getTextChannels().get(i).canTalk()) {
-                            message.getGuild().getTextChannels().get(i).sendMessage("Seu servidor está prontinho, estarei a partir de agora ouvindo seus comandos!").queue();
-                            break;
-                        }
+            if (message.getMessage().getContentRaw().equals("!init") && gcMap.get(message.getGuild().getId()) == null) {
+                guildConfig gct = new guildConfig();
+                gct.setGuildId(message.getGuild().getId());
+                gcMap.put(message.getGuild().getId(), gct);
+                for (int i = 0; i < message.getGuild().getTextChannels().size(); i++) {
+                    if (message.getGuild().getTextChannels().get(i).canTalk()) {
+                        message.getGuild().getTextChannels().get(i).sendMessage("Seu servidor está prontinho, estarei a partir de agora ouvindo seus comandos!").queue();
+                        break;
                     }
-                } else if (message.getMessage().getContentRaw().equals("!init") && gcMap.get(message.getGuild().getId()) != null) {
-                    message.getChannel().sendMessage("As configurações deste servidor ja foram inicializadas!").queue();
                 }
-                if (gcMap.get(message.getGuild().getId()) != null && message.getTextChannel().canTalk()) {
-                    if (memberMap.get(message.getAuthor().getId() + message.getGuild().getId()) != null && !message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
-                        boolean lvlUp;
-                        lvlUp = memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).addXp();
-                        if (lvlUp) {
-                            message.getChannel().sendMessage(message.getAuthor().getAsMention() + " subiu para o level " + memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).getLevel() + ". GGWP!! :tada:").queue();
-                        }
+            } else if (message.getMessage().getContentRaw().equals("!init") && gcMap.get(message.getGuild().getId()) != null) {
+                message.getChannel().sendMessage("As configurações deste servidor ja foram inicializadas!").queue();
+            }
+            if (gcMap.get(message.getGuild().getId()) != null && message.getTextChannel().canTalk()) {
+                if (memberMap.get(message.getAuthor().getId() + message.getGuild().getId()) != null && !message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
+                    boolean lvlUp;
+                    lvlUp = memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).addXp();
+                    if (lvlUp) {
+                        message.getChannel().sendMessage(message.getAuthor().getAsMention() + " subiu para o level " + memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).getLevel() + ". GGWP!! :tada:").queue();
                     }
-                    if (message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
+                }
+                if (message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
 
-                        if (memberMap.get(message.getAuthor().getId() + message.getGuild().getId()) == null) {
-                            Member m = new Member();
-                            m.setId(message.getAuthor().getId() + message.getGuild().getId());
-                            memberMap.put(message.getAuthor().getId() + message.getGuild().getId(), m);
+                    if (memberMap.get(message.getAuthor().getId() + message.getGuild().getId()) == null) {
+                        Member m = new Member();
+                        m.setId(message.getAuthor().getId() + message.getGuild().getId());
+                        memberMap.put(message.getAuthor().getId() + message.getGuild().getId(), m);
+                    }
+
+                    System.out.println("Comando recebido de " + message.getAuthor().getName() + "#" + message.getAuthor().getDiscriminator() + " | " + message.getGuild().getName() + " -> " + message.getMessage().getContentDisplay());
+
+                    String[] cmd = message.getMessage().getContentRaw().split(" ");
+
+                    //GERAL--------------------------------------------------------------------------------->
+
+                    if (hasPrefix(message, "ping")) {
+                        message.getChannel().sendMessage("Pong! :ping_pong: " + bot.getPing() + " ms").queue();
+                    } else if (hasPrefix(message, "bug")) {
+                        owner.openPrivateChannel().queue(channel -> channel.sendMessage(Embeds.bugReport(message, gcMap.get(message.getGuild().getId()).getPrefix())).queue());
+                    } else if (hasPrefix(message, "uptime")) {
+                        Misc.uptime(message);
+                    } else if (hasPrefix(message, "ajuda")) {
+                        Misc.help(message, gcMap.get(message.getGuild().getId()).getPrefix(), owner);
+                    } else if (hasPrefix(message, "prefixo")) {
+                        message.getChannel().sendMessage("Estou atualmente respondendo comandos que começam com __**" + gcMap.get(message.getGuild().getId()).getPrefix() + "**__").queue();
+                    } else if (hasPrefix(message, "imagem")) {
+                        Misc.image(message, cmd);
+                    } else if (hasPrefix(message, "pergunta")) {
+                        Misc.yesNo(message);
+                    } else if (hasPrefix(message, "escolha")) {
+                        Misc.choose(message, cmd[0]);
+                    } else if (hasPrefix(message, "anime")) {
+                        try {
+                            Embeds.animeEmbed(message, cmd[0]);
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-
-                        System.out.println("Comando recebido de " + message.getAuthor().getName() + "#" + message.getAuthor().getDiscriminator() + " | " + message.getGuild().getName() + " -> " + message.getMessage().getContentDisplay());
-
-                        String[] cmd = message.getMessage().getContentRaw().split(" ");
-
-                        //GERAL--------------------------------------------------------------------------------->
-
-                        if (hasPrefix(message, "ping")) {
-                            message.getChannel().sendMessage("Pong! :ping_pong: " + bot.getPing() + " ms").queue();
-                        } else if (hasPrefix(message, "bug")) {
-                            owner.openPrivateChannel().queue(channel -> channel.sendMessage(Embeds.bugReport(message, gcMap.get(message.getGuild().getId()).getPrefix())).queue());
-                        } else if (hasPrefix(message, "uptime")) {
-                            Misc.uptime(message);
-                        } else if (hasPrefix(message, "ajuda")) {
-                            Misc.help(message, gcMap.get(message.getGuild().getId()).getPrefix(), owner);
-                        } else if (hasPrefix(message, "prefixo")) {
-                            message.getChannel().sendMessage("Estou atualmente respondendo comandos que começam com __**" + gcMap.get(message.getGuild().getId()).getPrefix() + "**__").queue();
-                        } else if (hasPrefix(message, "imagem")) {
-                            Misc.image(message, cmd);
-                        } else if (hasPrefix(message, "pergunta")) {
-                            Misc.yesNo(message);
-                        } else if (hasPrefix(message, "escolha")) {
-                            Misc.choose(message, cmd[0]);
-                        } else if (hasPrefix(message, "anime")) {
+                    } else if (hasPrefix(message, "xp")) {
+                        try {
+                            Embeds.levelEmbed(message, memberMap.get(message.getAuthor().getId() + message.getGuild().getId()), gcMap.get(message.getGuild().getId()).getPrefix());
+                        } catch (IOException e) {
+                            System.out.println(e.toString());
+                        }
+                    } else if (hasPrefix(message, "conquista")) {
+                        if (message.getGuild().getId().equals("421495229594730496")) {
+                            Misc.badges(message);
+                        } else {
+                            message.getChannel().sendMessage("Você está no servidor errado, este comando é exclusivo do servidor OtagamerZ!").queue();
+                        }
+                    } else if (hasPrefix(message, "conquistas")) {
+                        if (message.getGuild().getId().equals("421495229594730496")) {
                             try {
-                                Embeds.animeEmbed(message, cmd[0]);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        } else if (hasPrefix(message, "xp")) {
-                            try {
-                                Embeds.levelEmbed(message, memberMap.get(message.getAuthor().getId() + message.getGuild().getId()), gcMap.get(message.getGuild().getId()).getPrefix());
+                                Embeds.myBadgesEmbed(message, memberMap.get(message.getAuthor().getId() + message.getGuild().getId()));
                             } catch (IOException e) {
                                 System.out.println(e.toString());
                             }
-                        } else if (hasPrefix(message, "conquista")) {
-                            if (message.getGuild().getId().equals("421495229594730496")) {
-                                Misc.badges(message);
-                            } else {
-                                message.getChannel().sendMessage("Você está no servidor errado, este comando é exclusivo do servidor OtagamerZ!").queue();
-                            }
-                        } else if (hasPrefix(message, "conquistas")) {
-                            if (message.getGuild().getId().equals("421495229594730496")) {
-                                try {
-                                    Embeds.myBadgesEmbed(message, memberMap.get(message.getAuthor().getId() + message.getGuild().getId()));
-                                } catch (IOException e) {
-                                    System.out.println(e.toString());
-                                }
-                            } else {
-                                message.getChannel().sendMessage("Você está no servidor errado, este comando é exclusivo do servidor OtagamerZ!").queue();
-                            }
+                        } else {
+                            message.getChannel().sendMessage("Você está no servidor errado, este comando é exclusivo do servidor OtagamerZ!").queue();
                         }
+                    }
 
-                        //DONO--------------------------------------------------------------------------------->
+                    //DONO--------------------------------------------------------------------------------->
 
-                        if (hasPrefix(message, "restart") && message.getAuthor() == owner) {
+                    if (message.getAuthor() == owner) {
+                        if (hasPrefix(message, "restart")) {
                             message.getChannel().sendMessage("Sayonara, Nii-chan!").queue();
                             bot.shutdown();
-                        } else if (hasPrefix(message, "servers") && message.getAuthor() == owner) {
+                        } else if (hasPrefix(message, "servers")) {
                             Owner.getServers(bot, message);
-                        } else if (hasPrefix(message, "gmap") && message.getAuthor() == owner) {
+                        } else if (hasPrefix(message, "gmap")) {
                             Owner.getGuildMap(message, gcMap);
-                        } else if (hasPrefix(message, "mmap") && message.getAuthor() == owner) {
+                        } else if (hasPrefix(message, "mmap")) {
                             Owner.getMemberMap(message, memberMap);
-                        } else if (hasPrefix(message, "broadcast") && message.getAuthor() == owner) {
+                        } else if (hasPrefix(message, "broadcast")) {
                             Owner.broadcast(gcMap, bot, message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix() + "broadcast ", ""), message.getTextChannel());
-                        } else if (hasPrefix(message, "perms") && message.getAuthor() == owner) {
+                        } else if (hasPrefix(message, "perms")) {
                             Owner.listPerms(bot, message);
-                        } else if (hasPrefix(message, "leave") && message.getAuthor() == owner) {
+                        } else if (hasPrefix(message, "leave")) {
                             Owner.leave(bot, message);
-                        } else if (hasPrefix(message, "dar") && message.getAuthor() == owner) {
+                        } else if (hasPrefix(message, "dar")) {
                             try {
                                 memberMap.get(message.getMessage().getMentionedUsers().get(0).getId() + message.getGuild().getId()).giveBadge(cmd[2]);
                                 message.getChannel().sendMessage("Parabéns, " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " completou a conquista Nº " + cmd[2]).queue();
                             } catch (Exception e) {
                                 message.getChannel().sendMessage("Ué, não estou conseguindo marcar a conquista como completa. Tenha certeza de digitar o comando neste formato: " + gcMap.get(message.getGuild().getId()).getPrefix() + "dar [MEMBRO] [Nº]").queue();
                             }
-                        } else if (hasPrefix(message, "tirar") && message.getAuthor() == owner) {
+                        } else if (hasPrefix(message, "tirar")) {
                             try {
                                 memberMap.get(message.getMessage().getMentionedUsers().get(0).getId() + message.getGuild().getId()).removeBadge(cmd[2]);
                                 message.getChannel().sendMessage("Meeee, " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " teve a conquista Nº " + cmd[2] + " retirada de sua posse!").queue();
                             } catch (Exception e) {
                                 message.getChannel().sendMessage("Ué, não estou conseguindo marcar a conquista como incompleta. Tenha certeza de digitar o comando neste formato: " + gcMap.get(message.getGuild().getId()).getPrefix() + "tirar [MEMBRO] [Nº]").queue();
                             }
-                        } else {
-                            message.getChannel().sendMessage("Somente meu Nii-san pode utilizar este comando!").queue();
                         }
+                    }
 
-                        //ADMIN--------------------------------------------------------------------------------->
-                        if (hasPrefix(message, "definir") && message.getMember().hasPermission(Permission.MANAGE_SERVER)) {
+                    //ADMIN--------------------------------------------------------------------------------->
+                    if (message.getMember().hasPermission(Permission.MANAGE_SERVER)) {
+                        if (hasPrefix(message, "definir")) {
                             Admin.config(cmd, message, gcMap.get(message.getGuild().getId()));
-                        } else if (hasPrefix(message, "configs") && message.getMember().hasPermission(Permission.MANAGE_SERVER)) {
+                        } else if (hasPrefix(message, "configs")) {
                             Embeds.configsEmbed(message, gcMap.get(message.getGuild().getId()));
-                        } else if (hasPrefix(message, "punir") && message.getMember().hasPermission(Permission.MANAGE_SERVER)) {
+                        } else if (hasPrefix(message, "punir")) {
                             if (message.getMessage().getMentionedUsers() != null) {
                                 memberMap.get(message.getMessage().getMentionedUsers().get(0).getId() + message.getGuild().getId()).resetXp();
                                 message.getChannel().sendMessage(message.getMessage().getMentionedUsers().get(0).getAsMention() + " teve seus XP e leveis resetados!").queue();
                             } else {
                                 message.getChannel().sendMessage("Você precisa me dizer de quem devo resetar o XP.").queue();
                             }
-                        } else if (hasPrefix(message, "alertar") && message.getMember().hasPermission(Permission.MANAGE_SERVER)) {
+                        } else if (hasPrefix(message, "alertar")) {
                             if (message.getMessage().getMentionedUsers() != null && cmd.length >= 3) {
                                 Admin.addWarn(message, message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix(), ""), memberMap);
                             } else {
                                 message.getChannel().sendMessage("Você precisa mencionar um usuário e dizer o motivo do alerta.").queue();
                             }
-                        } else if (hasPrefix(message, "perdoar") && message.getMember().hasPermission(Permission.MANAGE_SERVER)) {
+                        } else if (hasPrefix(message, "perdoar")) {
                             if (message.getMessage().getMentionedUsers() != null && cmd.length >= 3) {
                                 Admin.takeWarn(message, memberMap);
                             } else {
                                 message.getChannel().sendMessage("Você precisa mencionar um usuário e dizer o Nº do alerta a ser removido.").queue();
                             }
-                        } else {
-                            message.getChannel().sendMessage("Você não tem permissões para utilizar este comando!").queue();
                         }
                     }
-                } else if (message.getTextChannel().canTalk()) {
-                    message.getChannel().sendMessage("Por favor, digite __**!init**__ para inicializar as configurações da Shiro em seu servidor!").queue();
                 }
-            } catch (NullPointerException |
-                    InsufficientPermissionException e) {
-                e.printStackTrace();
+            } else if (message.getTextChannel().canTalk()) {
+                message.getChannel().sendMessage("Por favor, digite __**!init**__ para inicializar as configurações da Shiro em seu servidor!").queue();
             }
+        } catch (NullPointerException | InsufficientPermissionException e) {
+            e.printStackTrace();
         }
     }
 
