@@ -1,8 +1,5 @@
 package com.kuuhaku.model;
 
-import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
-import net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -13,7 +10,9 @@ public class guildConfig {
     private String prefix = "!";
     private String msgBoasVindas = "Seja bem-vindo(a) %user%!";
     private String msgAdeus = "Ahh...%user% deixou este servidor!";
-    private String canalbv = null, canalav = null, canalmsc = null, cargowarn = null;
+    private String canalbv = null;
+    private String canalav = null;
+    private String cargowarn = null;
 
     public guildConfig() {
 
@@ -35,8 +34,8 @@ public class guildConfig {
         this.prefix = prefix;
     }
 
-    public String getMsgBoasVindas(GuildMemberJoinEvent newUser) {
-        return newUser != null ? msgBoasVindas.replace("%user%", newUser.getMember().getAsMention()) : msgBoasVindas;
+    public String getMsgBoasVindas() {
+        return msgBoasVindas;
     }
 
     public void setMsgBoasVindas(String msgBoasVindas) {
@@ -44,8 +43,8 @@ public class guildConfig {
     }
 
 
-    public String getMsgAdeus(GuildMemberLeaveEvent oldUser) {
-        return oldUser != null ? msgAdeus.replace("%user%", oldUser.getMember().getAsMention()) : msgAdeus;
+    public String getMsgAdeus() {
+        return msgAdeus;
     }
 
     public void setMsgAdeus(String msgAdeus) {
@@ -67,14 +66,6 @@ public class guildConfig {
 
     public void setCanalav(String canalav) {
         this.canalav = canalav;
-    }
-
-    public String getCanalmsc() {
-        return canalmsc;
-    }
-
-    public void setCanalmsc(String canalmsc) {
-        this.canalmsc = canalmsc;
     }
 
     public String getCargowarn() {
