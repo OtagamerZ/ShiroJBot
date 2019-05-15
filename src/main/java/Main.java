@@ -258,66 +258,62 @@ public class Main extends ListenerAdapter implements JobListener, Job {
 
                     //DONO--------------------------------------------------------------------------------->
 
-                    if (message.getAuthor() == owner) {
-                        if (hasPrefix(message, "restart")) {
-                            message.getChannel().sendMessage("Sayonara, Nii-chan!").queue();
-                            bot.shutdown();
-                        } else if (hasPrefix(message, "servers")) {
-                            Owner.getServers(bot, message);
-                        } else if (hasPrefix(message, "gmap")) {
-                            Owner.getGuildMap(message, gcMap);
-                        } else if (hasPrefix(message, "mmap")) {
-                            Owner.getMemberMap(message, memberMap);
-                        } else if (hasPrefix(message, "broadcast")) {
-                            Owner.broadcast(gcMap, bot, message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix() + "broadcast ", ""), message.getTextChannel());
-                        } else if (hasPrefix(message, "perms")) {
-                            Owner.listPerms(bot, message);
-                        } else if (hasPrefix(message, "leave")) {
-                            Owner.leave(bot, message);
-                        } else if (hasPrefix(message, "dar")) {
-                            try {
-                                memberMap.get(message.getMessage().getMentionedUsers().get(0).getId() + message.getGuild().getId()).giveBadge(cmd[2]);
-                                message.getChannel().sendMessage("Parabéns, " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " completou a conquista Nº " + cmd[2]).queue();
-                            } catch (Exception e) {
-                                message.getChannel().sendMessage("Ué, não estou conseguindo marcar a conquista como completa. Tenha certeza de digitar o comando neste formato: " + gcMap.get(message.getGuild().getId()).getPrefix() + "dar [MEMBRO] [Nº]").queue();
-                            }
-                        } else if (hasPrefix(message, "tirar")) {
-                            try {
-                                memberMap.get(message.getMessage().getMentionedUsers().get(0).getId() + message.getGuild().getId()).removeBadge(cmd[2]);
-                                message.getChannel().sendMessage("Meeee, " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " teve a conquista Nº " + cmd[2] + " retirada de sua posse!").queue();
-                            } catch (Exception e) {
-                                message.getChannel().sendMessage("Ué, não estou conseguindo marcar a conquista como incompleta. Tenha certeza de digitar o comando neste formato: " + gcMap.get(message.getGuild().getId()).getPrefix() + "tirar [MEMBRO] [Nº]").queue();
-                            }
+                    if (hasPrefix(message, "restart") && message.getAuthor() == owner) {
+                        message.getChannel().sendMessage("Sayonara, Nii-chan!").queue();
+                        bot.shutdown();
+                    } else if (hasPrefix(message, "servers") && message.getAuthor() == owner) {
+                        Owner.getServers(bot, message);
+                    } else if (hasPrefix(message, "gmap") && message.getAuthor() == owner) {
+                        Owner.getGuildMap(message, gcMap);
+                    } else if (hasPrefix(message, "mmap") && message.getAuthor() == owner) {
+                        Owner.getMemberMap(message, memberMap);
+                    } else if (hasPrefix(message, "broadcast") && message.getAuthor() == owner) {
+                        Owner.broadcast(gcMap, bot, message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix() + "broadcast ", ""), message.getTextChannel());
+                    } else if (hasPrefix(message, "perms") && message.getAuthor() == owner) {
+                        Owner.listPerms(bot, message);
+                    } else if (hasPrefix(message, "leave") && message.getAuthor() == owner) {
+                        Owner.leave(bot, message);
+                    } else if (hasPrefix(message, "dar") && message.getAuthor() == owner) {
+                        try {
+                            memberMap.get(message.getMessage().getMentionedUsers().get(0).getId() + message.getGuild().getId()).giveBadge(cmd[2]);
+                            message.getChannel().sendMessage("Parabéns, " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " completou a conquista Nº " + cmd[2]).queue();
+                        } catch (Exception e) {
+                            message.getChannel().sendMessage("Ué, não estou conseguindo marcar a conquista como completa. Tenha certeza de digitar o comando neste formato: " + gcMap.get(message.getGuild().getId()).getPrefix() + "dar [MEMBRO] [Nº]").queue();
+                        }
+                    } else if (hasPrefix(message, "tirar") && message.getAuthor() == owner) {
+                        try {
+                            memberMap.get(message.getMessage().getMentionedUsers().get(0).getId() + message.getGuild().getId()).removeBadge(cmd[2]);
+                            message.getChannel().sendMessage("Meeee, " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " teve a conquista Nº " + cmd[2] + " retirada de sua posse!").queue();
+                        } catch (Exception e) {
+                            message.getChannel().sendMessage("Ué, não estou conseguindo marcar a conquista como incompleta. Tenha certeza de digitar o comando neste formato: " + gcMap.get(message.getGuild().getId()).getPrefix() + "tirar [MEMBRO] [Nº]").queue();
                         }
                     } else {
                         message.getChannel().sendMessage("Somente meu Nii-san pode utilizar este comando!").queue();
                     }
 
                     //ADMIN--------------------------------------------------------------------------------->
-                    if (message.getMember().hasPermission(Permission.MANAGE_SERVER)) {
-                        if (hasPrefix(message, "definir")) {
-                            Admin.config(cmd, message, gcMap.get(message.getGuild().getId()));
-                        } else if (hasPrefix(message, "configs")) {
-                            Embeds.configsEmbed(message, gcMap.get(message.getGuild().getId()));
-                        } else if (hasPrefix(message, "punir")) {
-                            if (message.getMessage().getMentionedUsers() != null) {
-                                memberMap.get(message.getMessage().getMentionedUsers().get(0).getId() + message.getGuild().getId()).resetXp();
-                                message.getChannel().sendMessage(message.getMessage().getMentionedUsers().get(0).getAsMention() + " teve seus XP e leveis resetados!").queue();
-                            } else {
-                                message.getChannel().sendMessage("Você precisa me dizer de quem devo resetar o XP.").queue();
-                            }
-                        } else if (hasPrefix(message, "alertar")) {
-                            if (message.getMessage().getMentionedUsers() != null && cmd.length >= 3) {
-                                Admin.addWarn(message, message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix(), ""), memberMap);
-                            } else {
-                                message.getChannel().sendMessage("Você precisa mencionar um usuário e dizer o motivo do alerta.").queue();
-                            }
-                        } else if (hasPrefix(message, "perdoar")) {
-                            if (message.getMessage().getMentionedUsers() != null && cmd.length >= 3) {
-                                Admin.takeWarn(message, memberMap);
-                            } else {
-                                message.getChannel().sendMessage("Você precisa mencionar um usuário e dizer o Nº do alerta a ser removido.").queue();
-                            }
+                    if (hasPrefix(message, "definir") && message.getMember().hasPermission(Permission.MANAGE_SERVER)) {
+                        Admin.config(cmd, message, gcMap.get(message.getGuild().getId()));
+                    } else if (hasPrefix(message, "configs") && message.getMember().hasPermission(Permission.MANAGE_SERVER)) {
+                        Embeds.configsEmbed(message, gcMap.get(message.getGuild().getId()));
+                    } else if (hasPrefix(message, "punir") && message.getMember().hasPermission(Permission.MANAGE_SERVER)) {
+                        if (message.getMessage().getMentionedUsers() != null) {
+                            memberMap.get(message.getMessage().getMentionedUsers().get(0).getId() + message.getGuild().getId()).resetXp();
+                            message.getChannel().sendMessage(message.getMessage().getMentionedUsers().get(0).getAsMention() + " teve seus XP e leveis resetados!").queue();
+                        } else {
+                            message.getChannel().sendMessage("Você precisa me dizer de quem devo resetar o XP.").queue();
+                        }
+                    } else if (hasPrefix(message, "alertar") && message.getMember().hasPermission(Permission.MANAGE_SERVER)) {
+                        if (message.getMessage().getMentionedUsers() != null && cmd.length >= 3) {
+                            Admin.addWarn(message, message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix(), ""), memberMap);
+                        } else {
+                            message.getChannel().sendMessage("Você precisa mencionar um usuário e dizer o motivo do alerta.").queue();
+                        }
+                    } else if (hasPrefix(message, "perdoar") && message.getMember().hasPermission(Permission.MANAGE_SERVER)) {
+                        if (message.getMessage().getMentionedUsers() != null && cmd.length >= 3) {
+                            Admin.takeWarn(message, memberMap);
+                        } else {
+                            message.getChannel().sendMessage("Você precisa mencionar um usuário e dizer o Nº do alerta a ser removido.").queue();
                         }
                     } else {
                         message.getChannel().sendMessage("Você não tem permissões para utilizar este comando!").queue();
@@ -326,9 +322,11 @@ public class Main extends ListenerAdapter implements JobListener, Job {
             } else if (message.getTextChannel().canTalk()) {
                 message.getChannel().sendMessage("Por favor, digite __**!init**__ para inicializar as configurações da Shiro em seu servidor!").queue();
             }
-        } catch (NullPointerException | InsufficientPermissionException e) {
+        } catch (NullPointerException |
+                InsufficientPermissionException e) {
             e.printStackTrace();
         }
+
     }
 
     private static boolean hasPrefix(MessageReceivedEvent message, String cmd) {
