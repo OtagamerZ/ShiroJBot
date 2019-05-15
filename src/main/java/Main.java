@@ -82,7 +82,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
             System.out.println("Guardar configurações no banco de dados...PRONTO!");
             bot.getPresence().setGame(Owner.getRandomGame(bot));
         } catch (Exception e) {
-            execute(context);
             System.out.println("Guardar configurações no banco de dados...ERRO!\nErro: " + e);
         }
     }
