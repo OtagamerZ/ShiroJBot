@@ -108,7 +108,7 @@ public class Reactions {
     }
 
     public static void facedesk(MessageReceivedEvent message) {
-        File file = new File(s + "./src/main/resources/ReactionFiles/facedesk/" + (int) (Math.random() * 5 + 1) + ".gif");
+        File file = new File(ClassLoader.getSystemResource("ReactionFiles/facedesk/" + (int) (Math.random() * 5 + 1) + ".gif").getFile());
         String msg = "";
         switch ((int) (Math.random() * 3)) {
             case 0:
