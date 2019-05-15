@@ -37,34 +37,34 @@ public class Embeds {
         EmbedBuilder eb = new EmbedBuilder();
 
         eb.setColor(Color.MAGENTA);
-        eb.addField("Administrativo", "```" +
-                prefix + "definir prefixo [prefixo] - Define o prefixo para o servidor.\n\n" +
-                prefix + "definir canalbv [canal] - Define o canal de boas-vindas para o servidor.\n\n" +
-                prefix + "definir canalav [canal] - Define o canal de avisos para o servidor.\n\n" +
-                prefix + "definir msgbv [\"mensagem\"] - Define a mensagem de boas-vindas para o servidor.\n\n" +
-                prefix + "definir msgadeus [\"mensagem\"] - Define a mensagem de adeus para o servidor.\n\n" +
-                prefix + "configs - Mostra as configurações do servidor.\n\n" +
-                prefix + "alertar [membro] [razão] - Registra um alerta no perfil do membro especificado.\n\n" +
-                prefix + "perdoar [membro] [Nº] - Perdoa um alerta do membro.\n" +
-                "```", false);
-        eb.addField("Utilitários", "```\n\n" +
-                prefix + "ajuda - Mostra essa mensagem no seu canal privado.\n\n" +
-                prefix + "bug [mensagem] - Envia um bug para meu Nii-chan corrigir.\n\n" +
-                prefix + "ping - Confere se estou online e funcionando direitinho.\n\n" +
-                prefix + "uptime - Descobre a quanto tempo estou acordada.\n\n" +
-                prefix + "imagem [tags] [página] - Busca uma imagem no Safebooru, as tags não podem conter espaços (substitua-os por _).\n\n" +
-                prefix + "anime [nome] - Pesquisa informações sobre um anime.\n" +
-                prefix + "xp - Mostra dados sobre o seu perfil.\n\n" +
-                prefix + "conquista [Nº] - Mostra dados sobre uma conquista.\n" +
-                "```", false);
-        eb.addField("Diversão", "```\n\n" +
-                prefix + "pergunta [pergunta] - Me pergunte algo, mas só vou responder com sim ou não!\n\n" +
-                prefix + "escolha [opção1;opção2;opção3;...] - Quer que eu escolha entre essas opções? Facil!\n" +
-                "```", false);
-        eb.addField("OtagamerZ", "```\n\n" +
-                prefix + "conquistas - Mosta as conquistas que você completou.\n\n" +
-                prefix + "conquista [Nº] - Mostra informações detalhadas de uma conquista.\n" +
-                "```", false);
+        eb.addField("Administrativo", "" +
+                prefix + "`definir prefixo [prefixo]` - Define o prefixo para o servidor.\n\n" +
+                prefix + "`definir canalbv [canal]` - Define o canal de boas-vindas para o servidor.\n\n" +
+                prefix + "`definir canalav [canal]` - Define o canal de avisos para o servidor.\n\n" +
+                prefix + "`definir msgbv [\"mensagem\"]` - Define a mensagem de boas-vindas para o servidor.\n\n" +
+                prefix + "`definir msgadeus [\"mensagem\"]` - Define a mensagem de adeus para o servidor.\n\n" +
+                prefix + "`configs` - Mostra as configurações do servidor.\n\n" +
+                prefix + "`alertar [membro] [razão]` - Registra um alerta no perfil do membro especificado.\n\n" +
+                prefix + "`perdoar [membro] [Nº]` - Perdoa um alerta do membro.\n" +
+                "", false);
+        eb.addField("Utilitários", "\n\n" +
+                prefix + "`ajuda` - Mostra essa mensagem no seu canal privado.\n\n" +
+                prefix + "`bug [mensagem]` - Envia um bug para meu Nii-chan corrigir.\n\n" +
+                prefix + "`ping` - Confere se estou online e funcionando direitinho.\n\n" +
+                prefix + "`uptime` - Descobre a quanto tempo estou acordada.\n\n" +
+                prefix + "`imagem [tags] [página]` - Busca uma imagem no Safebooru, as tags não podem conter espaços (substitua-os por _).\n\n" +
+                prefix + "`anime [nome]` - Pesquisa informações sobre um anime.\n" +
+                prefix + "`xp` - Mostra dados sobre o seu perfil.\n\n" +
+                prefix + "`conquista [Nº]` - Mostra dados sobre uma conquista.\n" +
+                "", false);
+        eb.addField("Diversão", "\n\n" +
+                prefix + "pergunta [pergunta]` - Me pergunte algo, mas só vou responder com sim ou não!\n\n" +
+                prefix + "escolha [opção1;opção2;opção3;...]` - Quer que eu escolha entre essas opções? Facil!\n" +
+                "", false);
+        eb.addField("OtagamerZ", "\n\n" +
+                prefix + "conquistas` - Mosta as conquistas que você completou.\n\n" +
+                prefix + "conquista [Nº]` - Mostra informações detalhadas de uma conquista.\n" +
+                "", false);
 
         return eb.build();
     }
