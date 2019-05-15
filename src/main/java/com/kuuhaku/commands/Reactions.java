@@ -8,7 +8,7 @@ import java.io.File;
 
 public class Reactions {
     public static void hug(JDA bot, MessageReceivedEvent message) {
-        File file = new File("src/main/java/com/kuuhaku/ReactionFiles/hug/" + (int) (Math.random() * 5 + 1) + ".gif");
+        File file = new File("ReactionFiles/hug/" + (int) (Math.random() * 5 + 1) + ".gif");
         String msg = "";
         switch ((int) (Math.random() * 3)) {
             case 0:
@@ -57,7 +57,7 @@ public class Reactions {
     }
 
     public static void cuddle(JDA bot, MessageReceivedEvent message) {
-        File file = new File("src/main/java/com/kuuhaku/ReactionFiles/cuddle/" + (int) (Math.random() * 5 + 1) + ".gif");
+        File file = new File("ReactionFiles/cuddle/" + (int) (Math.random() * 5 + 1) + ".gif");
         String msg = "";
         switch ((int) (Math.random() * 3)) {
             case 0:
@@ -106,7 +106,7 @@ public class Reactions {
     }
 
     public static void facedesk(MessageReceivedEvent message) {
-        File file = new File("src/main/java/com/kuuhaku/ReactionFiles/facedesk/" + (int) (Math.random() * 5 + 1) + ".gif");
+        File file = new File("ReactionFiles/facedesk/" + (int) (Math.random() * 5 + 1) + ".gif");
         String msg = "";
         switch ((int) (Math.random() * 3)) {
             case 0:
@@ -124,7 +124,7 @@ public class Reactions {
     }
 
     public static void nope(MessageReceivedEvent message) {
-        File file = new File("src/main/java/com/kuuhaku/ReactionFiles/nope/" + (int) (Math.random() * 5 + 1) + ".gif");
+        File file = new File("ReactionFiles/nope/" + (int) (Math.random() * 5 + 1) + ".gif");
         String msg = "";
         switch ((int) (Math.random() * 3)) {
             case 0:
@@ -142,7 +142,7 @@ public class Reactions {
     }
 
     private static void nope(MessageReceivedEvent message, User author) {
-        File file = new File("src/main/java/com/kuuhaku/ReactionFiles/nope/" + (int) (Math.random() * 5 + 1) + ".gif");
+        File file = new File("ReactionFiles/nope/" + (int) (Math.random() * 5 + 1) + ".gif");
         String msg = "";
         switch ((int) (Math.random() * 3)) {
             case 0:
@@ -160,7 +160,7 @@ public class Reactions {
     }
 
     public static void run(MessageReceivedEvent message) {
-        File file = new File("src/main/java/com/kuuhaku/ReactionFiles/run/" + (int) (Math.random() * 5 + 1) + ".gif");
+        File file = new File("ReactionFiles/run/" + (int) (Math.random() * 5 + 1) + ".gif");
         String msg = "";
         switch ((int) (Math.random() * 3)) {
             case 0:
@@ -178,7 +178,7 @@ public class Reactions {
     }
 
     public static void slap(JDA bot, MessageReceivedEvent message) {
-        File file = new File("src/main/java/com/kuuhaku/ReactionFiles/slap/" + (int) (Math.random() * 5 + 1) + ".gif");
+        File file = new File("ReactionFiles/slap/" + (int) (Math.random() * 5 + 1) + ".gif");
         String msg = "";
         switch ((int) (Math.random() * 3)) {
             case 0:
@@ -217,7 +217,7 @@ public class Reactions {
     }
 
     public static void smash(JDA bot, MessageReceivedEvent message) {
-        File file = new File("src/main/java/com/kuuhaku/ReactionFiles/smash/" + (int) (Math.random() * 5 + 1) + ".gif");
+        File file = new File("ReactionFiles/smash/" + (int) (Math.random() * 5 + 1) + ".gif");
         String msg = "";
         switch ((int) (Math.random() * 3)) {
             case 0:
@@ -256,7 +256,7 @@ public class Reactions {
     }
 
     public static void stare(JDA bot, MessageReceivedEvent message) {
-        File file = new File("src/main/java/com/kuuhaku/ReactionFiles/stare/" + (int) (Math.random() * 5 + 1) + ".gif");
+        File file = new File("ReactionFiles/stare/" + (int) (Math.random() * 5 + 1) + ".gif");
         String msg = "";
         switch ((int) (Math.random() * 3)) {
             case 0:
