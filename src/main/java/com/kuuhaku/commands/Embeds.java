@@ -289,7 +289,7 @@ public class Embeds {
         EmbedBuilder eb = new EmbedBuilder();
 
         eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
-        eb.setDescription(msg.replace("%user%", event.getUser().getAsMention()).replace("%guild%", event.getGuild().getName()));
+        eb.setDescription(msg.replace("%user%", event.getUser().getAsMention()).replace("%guild%", event.getGuild().getName()).replace("%user-id%", event.getUser().getId()));
         eb.setThumbnail(event.getUser().getAvatarUrl());
         eb.setFooter("Servidor gerenciado por " + event.getGuild().getOwner().getEffectiveName(), event.getGuild().getOwner().getUser().getAvatarUrl());
         switch ((int) (Math.random() * 5)) {
@@ -325,7 +325,7 @@ public class Embeds {
 
         eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
         eb.setThumbnail(event.getUser().getAvatarUrl());
-        eb.setDescription(msg.replace("%user%", event.getUser().getName()).replace("%guild%", event.getGuild().getName()));
+        eb.setDescription(msg.replace("%user%", event.getUser().getName()).replace("%guild%", event.getGuild().getName()).replace("%user-id%", event.getUser().getId()));
         eb.setFooter("Servidor gerenciado por " + event.getGuild().getOwner().getEffectiveName(), event.getGuild().getOwner().getUser().getAvatarUrl());
         switch (rmsg) {
             case 0:
