@@ -10,4 +10,14 @@ public class ReactionsList {
                 "https://i.imgur.com/uvIA7L8.gif"
         };
     }
+
+    public static String[] cuddle() {
+        return new String[]{
+                "https://i.imgur.com/PcZqK9n.gif",
+                "https://i.imgur.com/VFLdqYA.gif",
+                "https://i.imgur.com/ADNi6x4.gif",
+                "https://i.imgur.com/aplG0T4.gif",
+                "https://i.imgur.com/H3J2Y4c.gif"
+        };
+    }
 }
