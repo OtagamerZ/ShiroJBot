@@ -1,5 +1,6 @@
 package com.kuuhaku.commands;
 
+import com.kuuhaku.model.ReactionsList;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -11,24 +12,7 @@ import java.util.Objects;
 
 public class Reactions {
     public static void hug(JDA bot, MessageReceivedEvent message) throws IOException {
-        URL url = null;
-        switch ((int) (Math.random() * 5)) {
-            case 0:
-                url = new URL("https://i.imgur.com/TCuWtPE.gif");
-                break;
-            case 1:
-                url = new URL("https://i.imgur.com/yglgi2M.gif");
-                break;
-            case 2:
-                url = new URL("https://i.imgur.com/QMoYvzS.gif");
-                break;
-            case 3:
-                url = new URL("https://i.imgur.com/yO3F2kB.gif");
-                break;
-            case 4:
-                url = new URL("https://i.imgur.com/uvIA7L8.gif");
-                break;
-        }
+        URL url = new URL(ReactionsList.hug()[(int) (Math.random() * ReactionsList.hug().length)]);
         HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
