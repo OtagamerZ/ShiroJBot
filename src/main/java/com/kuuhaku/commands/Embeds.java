@@ -37,7 +37,7 @@ public class Embeds {
         EmbedBuilder eb = new EmbedBuilder();
 
         eb.setColor(Color.MAGENTA);
-        eb.addField("Administrativo", "" +
+        eb.addField(":closed_lock_with_key: Administrativo", "" +
                 prefix + "`definir prefixo [prefixo]` - Define o prefixo para o servidor.\n\n" +
                 prefix + "`definir canalbv [canal]` - Define o canal de boas-vindas para o servidor.\n\n" +
                 prefix + "`definir canalav [canal]` - Define o canal de avisos para o servidor.\n\n" +
@@ -47,7 +47,7 @@ public class Embeds {
                 prefix + "`alertar [membro] [razão]` - Registra um alerta no perfil do membro especificado.\n\n" +
                 prefix + "`perdoar [membro] [Nº]` - Perdoa um alerta do membro.\n" +
                 "", false);
-        eb.addField("Utilitários", "\n\n" +
+        eb.addField("\n:speech_balloon: Utilitários", "\n\n" +
                 prefix + "`ajuda` - Mostra essa mensagem no seu canal privado.\n\n" +
                 prefix + "`bug [mensagem]` - Envia um bug para meu Nii-chan corrigir.\n\n" +
                 prefix + "`ping` - Confere se estou online e funcionando direitinho.\n\n" +
@@ -61,7 +61,7 @@ public class Embeds {
                 prefix + "pergunta [pergunta]` - Me pergunte algo, mas só vou responder com sim ou não!\n\n" +
                 prefix + "escolha [opção1;opção2;opção3;...]` - Quer que eu escolha entre essas opções? Facil!\n" +
                 "", false);
-        eb.addField("OtagamerZ", "\n\n" +
+        eb.addField("\n:gem: OtagamerZ", "\n\n" +
                 prefix + "conquistas` - Mosta as conquistas que você completou.\n\n" +
                 prefix + "conquista [Nº]` - Mostra informações detalhadas de uma conquista.\n" +
                 "", false);
