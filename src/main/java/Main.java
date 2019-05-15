@@ -1,7 +1,4 @@
-import com.kuuhaku.commands.Admin;
-import com.kuuhaku.commands.Embeds;
-import com.kuuhaku.commands.Misc;
-import com.kuuhaku.commands.Owner;
+import com.kuuhaku.commands.*;
 import com.kuuhaku.controller.Database;
 import com.kuuhaku.model.Member;
 import com.kuuhaku.model.guildConfig;
@@ -71,6 +68,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         try {
             initBot();
             System.out.println("Estou pronta!");
+            ready = true;
         } catch (Exception e) {
             System.out.println("Erro ao inicializar bot: " + e);
         }
@@ -118,7 +116,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         owner = bot.getUserById("350836145921327115");
         homeLog = bot.getGuildById("421495229594730496").getTextChannelById("573861751884349479");
         bot.getPresence().setGame(Owner.getRandomGame(bot));
-        ready = true;
     }
 
     @Override
@@ -141,7 +138,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         try {
             if (gcMap.get(user.getGuild().getId()).getCanalbv() != null) {
                 Embeds.byeEmbed(user, gcMap.get(user.getGuild().getId()).getMsgAdeus(), user.getGuild().getTextChannelById(gcMap.get(user.getGuild().getId()).getCanalbv()));
-                if (memberMap.get(user.getUser().getId() + user.getGuild().getId()) != null) memberMap.remove(user.getUser().getId() + user.getGuild().getId());
+                if (memberMap.get(user.getUser().getId() + user.getGuild().getId()) != null)
+                    memberMap.remove(user.getUser().getId() + user.getGuild().getId());
             }
         } catch (Exception ignored) {
         }
@@ -175,7 +173,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent message) {
-        if(ready) {
+        if (ready) {
             try {
                 if (message.getAuthor().isBot() || !message.isFromType(ChannelType.TEXT)) return;
 
@@ -246,7 +244,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             if (message.getGuild().getId().equals("421495229594730496")) {
                                 Misc.badges(message);
                             } else {
-                                message.getChannel().sendMessage("Você está no servidor errado, este comando é exclusivo do servidor OtagamerZ!").queue();
+                                message.getChannel().sendMessage(":x: Você está no servidor errado, este comando é exclusivo do servidor OtagamerZ!").queue();
                             }
                         } else if (hasPrefix(message, "conquistas")) {
                             if (message.getGuild().getId().equals("421495229594730496")) {
@@ -256,7 +254,43 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                     System.out.println(e.toString());
                                 }
                             } else {
-                                message.getChannel().sendMessage("Você está no servidor errado, este comando é exclusivo do servidor OtagamerZ!").queue();
+                                message.getChannel().sendMessage(":x: Você está no servidor errado, este comando é exclusivo do servidor OtagamerZ!").queue();
+                            }
+                        } else if (hasPrefix(message, "abraçar")) {
+                            if (message.getMessage().getMentionedUsers().size() != 0) {
+                                Reactions.hug(bot, message);
+                            } else {
+                                message.getChannel().sendMessage(":x: Você precisa mencionar um usuário!").queue();
+                            }
+                        } else if (hasPrefix(message, "meee")) {
+                            Reactions.facedesk(message);
+                        } else if (hasPrefix(message, "vemca")) {
+                            if (message.getMessage().getMentionedUsers().size() != 0) {
+                                Reactions.cuddle(bot, message);
+                            } else {
+                                message.getChannel().sendMessage(":x: Você precisa mencionar um usuário!").queue();
+                            }
+                        } else if (hasPrefix(message, "sqn")) {
+                            Reactions.nope(message);
+                        } else if (hasPrefix(message, "corre")) {
+                            Reactions.run(message);
+                        } else if (hasPrefix(message, "tapa")) {
+                            if (message.getMessage().getMentionedUsers().size() != 0) {
+                                Reactions.slap(bot, message);
+                            } else {
+                                message.getChannel().sendMessage(":x: Você precisa mencionar um usuário!").queue();
+                            }
+                        } else if (hasPrefix(message, "chega")) {
+                            if (message.getMessage().getMentionedUsers().size() != 0) {
+                                Reactions.smash(bot, message);
+                            } else {
+                                message.getChannel().sendMessage(":x: Você precisa mencionar um usuário!").queue();
+                            }
+                        } else if (hasPrefix(message, "encarar")) {
+                            if (message.getMessage().getMentionedUsers().size() != 0) {
+                                Reactions.stare(bot, message);
+                            } else {
+                                message.getChannel().sendMessage(":x: Você precisa mencionar um usuário!").queue();
                             }
                         }
 
@@ -283,14 +317,14 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                     memberMap.get(message.getMessage().getMentionedUsers().get(0).getId() + message.getGuild().getId()).giveBadge(cmd[2]);
                                     message.getChannel().sendMessage("Parabéns, " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " completou a conquista Nº " + cmd[2]).queue();
                                 } catch (Exception e) {
-                                    message.getChannel().sendMessage("Ué, não estou conseguindo marcar a conquista como completa. Tenha certeza de digitar o comando neste formato: " + gcMap.get(message.getGuild().getId()).getPrefix() + "dar [MEMBRO] [Nº]").queue();
+                                    message.getChannel().sendMessage(":x: Ué, não estou conseguindo marcar a conquista como completa. Tenha certeza de digitar o comando neste formato: " + gcMap.get(message.getGuild().getId()).getPrefix() + "dar [MEMBRO] [Nº]").queue();
                                 }
                             } else if (hasPrefix(message, "tirar")) {
                                 try {
                                     memberMap.get(message.getMessage().getMentionedUsers().get(0).getId() + message.getGuild().getId()).removeBadge(cmd[2]);
                                     message.getChannel().sendMessage("Meeee, " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " teve a conquista Nº " + cmd[2] + " retirada de sua posse!").queue();
                                 } catch (Exception e) {
-                                    message.getChannel().sendMessage("Ué, não estou conseguindo marcar a conquista como incompleta. Tenha certeza de digitar o comando neste formato: " + gcMap.get(message.getGuild().getId()).getPrefix() + "tirar [MEMBRO] [Nº]").queue();
+                                    message.getChannel().sendMessage(":x: Ué, não estou conseguindo marcar a conquista como incompleta. Tenha certeza de digitar o comando neste formato: " + gcMap.get(message.getGuild().getId()).getPrefix() + "tirar [MEMBRO] [Nº]").queue();
                                 }
                             }
                         }
@@ -306,19 +340,19 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                     memberMap.get(message.getMessage().getMentionedUsers().get(0).getId() + message.getGuild().getId()).resetXp();
                                     message.getChannel().sendMessage(message.getMessage().getMentionedUsers().get(0).getAsMention() + " teve seus XP e leveis resetados!").queue();
                                 } else {
-                                    message.getChannel().sendMessage("Você precisa me dizer de quem devo resetar o XP.").queue();
+                                    message.getChannel().sendMessage(":x: Você precisa me dizer de quem devo resetar o XP.").queue();
                                 }
                             } else if (hasPrefix(message, "alertar")) {
                                 if (message.getMessage().getMentionedUsers() != null && cmd.length >= 3) {
                                     Admin.addWarn(message, message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix(), ""), memberMap);
                                 } else {
-                                    message.getChannel().sendMessage("Você precisa mencionar um usuário e dizer o motivo do alerta.").queue();
+                                    message.getChannel().sendMessage(":x: Você precisa mencionar um usuário e dizer o motivo do alerta.").queue();
                                 }
                             } else if (hasPrefix(message, "perdoar")) {
                                 if (message.getMessage().getMentionedUsers() != null && cmd.length >= 3) {
                                     Admin.takeWarn(message, memberMap);
                                 } else {
-                                    message.getChannel().sendMessage("Você precisa mencionar um usuário e dizer o Nº do alerta a ser removido.").queue();
+                                    message.getChannel().sendMessage(":x: Você precisa mencionar um usuário e dizer o Nº do alerta a ser removido.").queue();
                                 }
                             }
                         }

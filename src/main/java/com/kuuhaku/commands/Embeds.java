@@ -36,40 +36,42 @@ public class Embeds {
         return eb.build();
     }
 
-    static MessageEmbed helpEmbed(String prefix) {
-        EmbedBuilder eb = new EmbedBuilder();
+    static String helpEmbed(String prefix) {
+        return ":closed_lock_with_key: **Administrativo**```" +
+                prefix + "definir prefixo [prefixo] - Define o prefixo para o servidor.\n\n" +
+                prefix + "definir canalbv [canal] - Define o canal de boas-vindas para o servidor.\n\n" +
+                prefix + "definir canalav [canal] - Define o canal de avisos para o servidor.\n\n" +
+                prefix + "definir msgbv [\"mensagem\"] - Define a mensagem de boas-vindas para o servidor.\n\n" +
+                prefix + "definir msgadeus [\"mensagem\"] - Define a mensagem de adeus para o servidor.\n\n" +
+                prefix + "configs - Mostra as configurações do servidor.\n\n" +
+                prefix + "alertar [membro] [razão] - Registra um alerta no perfil do membro especificado.\n\n" +
+                prefix + "perdoar [membro] [Nº] - Perdoa um alerta do membro.```\n" +
 
-        eb.setColor(Color.MAGENTA);
-        eb.addField(":closed_lock_with_key: Administrativo", "" +
-                prefix + "`definir prefixo [prefixo]` - Define o prefixo para o servidor.\n\n" +
-                prefix + "`definir canalbv [canal]` - Define o canal de boas-vindas para o servidor.\n\n" +
-                prefix + "`definir canalav [canal]` - Define o canal de avisos para o servidor.\n\n" +
-                prefix + "`definir msgbv [\"mensagem\"]` - Define a mensagem de boas-vindas para o servidor.\n\n" +
-                prefix + "`definir msgadeus [\"mensagem\"]` - Define a mensagem de adeus para o servidor.\n\n" +
-                prefix + "`configs` - Mostra as configurações do servidor.\n\n" +
-                prefix + "`alertar [membro] [razão]` - Registra um alerta no perfil do membro especificado.\n\n" +
-                prefix + "`perdoar [membro] [Nº]` - Perdoa um alerta do membro.\n" +
-                "", false);
-        eb.addField("\n:speech_balloon: Utilitários", "\n\n" +
-                prefix + "`ajuda` - Mostra essa mensagem no seu canal privado.\n\n" +
-                prefix + "`bug [mensagem]` - Envia um bug para meu Nii-chan corrigir.\n\n" +
-                prefix + "`ping` - Confere se estou online e funcionando direitinho.\n\n" +
-                prefix + "`uptime` - Descobre a quanto tempo estou acordada.\n\n" +
-                prefix + "`imagem [tags] [página]` - Busca uma imagem no Safebooru, as tags não podem conter espaços (substitua-os por _).\n\n" +
-                prefix + "`anime [nome]` - Pesquisa informações sobre um anime.\n" +
-                prefix + "`xp` - Mostra dados sobre o seu perfil.\n\n" +
-                prefix + "`conquista [Nº]` - Mostra dados sobre uma conquista.\n" +
-                "", false);
-        eb.addField("Diversão", "\n\n" +
-                prefix + "pergunta [pergunta]` - Me pergunte algo, mas só vou responder com sim ou não!\n\n" +
-                prefix + "escolha [opção1;opção2;opção3;...]` - Quer que eu escolha entre essas opções? Facil!\n" +
-                "", false);
-        eb.addField("\n:gem: OtagamerZ", "\n\n" +
-                prefix + "conquistas` - Mosta as conquistas que você completou.\n\n" +
-                prefix + "conquista [Nº]` - Mostra informações detalhadas de uma conquista.\n" +
-                "", false);
+                ":speech_balloon: **Utilitário**\n```" +
+                prefix + "ajuda - Mostra essa mensagem no seu canal privado.\n\n" +
+                prefix + "bug [mensagem] - Envia um bug para meu Nii-chan corrigir.\n\n" +
+                prefix + "ping - Confere se estou online e funcionando direitinho.\n\n" +
+                prefix + "uptime - Descobre a quanto tempo estou acordada.\n\n" +
+                prefix + "imagem [tags] [página] - Busca uma imagem no Safebooru, as tags não podem conter espaços (substitua-os por _).\n\n" +
+                prefix + "anime [nome] - Pesquisa informações sobre um anime.\n\n" +
+                prefix + "xp - Mostra dados sobre o seu perfil.```\n" +
 
-        return eb.build();
+                ":juggling: **Diversão**\n```" +
+                prefix + "pergunta [pergunta] - Me pergunte algo, mas só vou responder com sim ou não!\n\n" +
+                prefix + "escolha [opção1;opção2;opção3;...] - Quer que eu escolha entre essas opções? Facil!\n\n" +
+                prefix + "vemca [membro] - Dá um abraço exagerado em alguém.\n\n" +
+                prefix + "meee - Bate a cara.\n\n" +
+                prefix + "abraçar [membro] - Dá um abraço em alguém.\n\n" +
+                prefix + "sqn - Esquiva de uma tentativa.\n\n" +
+                prefix + "corre - Sai correndo.\n\n" +
+                prefix + "tapa [membro] - Dá um tapa em alguém.\n\n" +
+                prefix + "vemca [membro] - Dá um abraço exagerado em alguém.\n\n" +
+                prefix + "chega [membro] - Retalha alguém.\n\n" +
+                prefix + "encara [membro] - Encara alguém.```\n" +
+
+                ":gem: **OtagamerZ**\n```" +
+                prefix + "conquistas - Mosta as conquistas que você completou.\n\n" +
+                prefix + "conquista [Nº] - Mostra informações detalhadas de uma conquista.```";
     }
 
     static MessageEmbed imageEmbed(String[] tag, String index) throws IOException {
@@ -254,8 +256,10 @@ public class Embeds {
         eb.setThumbnail(message.getGuild().getMemberById(m.getId().replace(message.getGuild().getId(), "")).getUser().getAvatarUrl());
         eb.addField(":tada: Level: " + m.getLevel(), "Xp: " + m.getXp() + " | " + ((int) Math.pow(m.getLevel(), 2) * 100), true);
         eb.addField(":warning: Alertas:", Integer.toString(m.getWarns().length - 1), true);
-        if (m.getId().contains("421495229594730496"))
-            eb.addField(":beginner: Conquistas:", "**" + conqs + "** (__" + prefix + "conquistas__ para ver suas conquistas completas)", true);
+        if (m.getId().contains("421495229594730496")) {
+            eb.addField(":beginner: Conquistas:", "**" + conqs + "**", true);
+            eb.setFooter("Digite " + prefix + "conquistas para ver as conquistas que você completou.", "https://discordapp.com/assets/a3fc335f559f462df3e5d6cdbb9178e8.svg");
+        }
 
         message.getChannel().sendMessage(eb.build()).queue();
     }
@@ -282,15 +286,13 @@ public class Embeds {
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
         BufferedImage image = ImageIO.read(con.getInputStream());
 
-        int rmsg = (int) (Math.random() * 5);
-
         EmbedBuilder eb = new EmbedBuilder();
 
         eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
         eb.setDescription(msg.replace("%user%", event.getUser().getAsMention()));
         eb.setThumbnail(event.getUser().getAvatarUrl());
         eb.setFooter("Servidor gerenciado por " + event.getGuild().getOwner().getEffectiveName(), event.getGuild().getOwner().getUser().getAvatarUrl());
-        switch(rmsg) {
+        switch ((int) (Math.random() * 5)) {
             case 0:
                 eb.setTitle("Opa, parece que temos um novo membro?");
                 break;
@@ -325,7 +327,7 @@ public class Embeds {
         eb.setThumbnail(event.getUser().getAvatarUrl());
         eb.setDescription(msg.replace("%user%", event.getUser().getName()));
         eb.setFooter("Servidor gerenciado por " + event.getGuild().getOwner().getEffectiveName(), event.getGuild().getOwner().getUser().getAvatarUrl());
-        switch(rmsg) {
+        switch (rmsg) {
             case 0:
                 eb.setTitle("Nãããoo...um membro deixou este servidor!");
                 break;
