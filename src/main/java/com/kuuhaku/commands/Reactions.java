@@ -9,7 +9,7 @@ import java.net.URISyntaxException;
 
 public class Reactions {
     public static void hug(JDA bot, MessageReceivedEvent message) throws URISyntaxException {
-        File file = new File(ClassLoader.getSystemResource("ReactionFiles/hug/" + (int) (Math.random() * 5 + 1) + ".gif").toURI());
+        File file = new File(Reactions.class.getResource("ReactionFiles/hug/" + (int) (Math.random() * 5 + 1) + ".gif").toURI());
         String msg = "";
         switch ((int) (Math.random() * 3)) {
             case 0:
@@ -58,7 +58,7 @@ public class Reactions {
     }
 
     public static void cuddle(JDA bot, MessageReceivedEvent message) throws URISyntaxException {
-        File file = new File(ClassLoader.getSystemResource("ReactionFiles/cuddle/" + (int) (Math.random() * 5 + 1) + ".gif").toURI());
+        File file = new File(Reactions.class.getResource("ReactionFiles/cuddle/" + (int) (Math.random() * 5 + 1) + ".gif").toURI());
         String msg = "";
         switch ((int) (Math.random() * 3)) {
             case 0:
@@ -107,7 +107,7 @@ public class Reactions {
     }
 
     public static void facedesk(MessageReceivedEvent message) throws URISyntaxException {
-        File file = new File(ClassLoader.getSystemResource("ReactionFiles/facedesk/" + (int) (Math.random() * 5 + 1) + ".gif").toURI());
+        File file = new File(Reactions.class.getResource("ReactionFiles/facedesk/" + (int) (Math.random() * 5 + 1) + ".gif").toURI());
         String msg = "";
         switch ((int) (Math.random() * 3)) {
             case 0:
@@ -125,7 +125,7 @@ public class Reactions {
     }
 
     public static void nope(MessageReceivedEvent message) throws URISyntaxException {
-        File file = new File(ClassLoader.getSystemResource("ReactionFiles/nope/" + (int) (Math.random() * 5 + 1) + ".gif").toURI());
+        File file = new File(Reactions.class.getResource("ReactionFiles/nope/" + (int) (Math.random() * 5 + 1) + ".gif").toURI());
         String msg = "";
         switch ((int) (Math.random() * 3)) {
             case 0:
@@ -143,7 +143,7 @@ public class Reactions {
     }
 
     private static void nope(MessageReceivedEvent message, User author) throws URISyntaxException {
-        File file = new File(ClassLoader.getSystemResource("ReactionFiles/nope/" + (int) (Math.random() * 5 + 1) + ".gif").toURI());
+        File file = new File(Reactions.class.getResource("ReactionFiles/nope/" + (int) (Math.random() * 5 + 1) + ".gif").toURI());
         String msg = "";
         switch ((int) (Math.random() * 3)) {
             case 0:
@@ -161,7 +161,7 @@ public class Reactions {
     }
 
     public static void run(MessageReceivedEvent message) throws URISyntaxException {
-        File file = new File(ClassLoader.getSystemResource("ReactionFiles/run/" + (int) (Math.random() * 5 + 1) + ".gif").toURI());
+        File file = new File(Reactions.class.getResource("ReactionFiles/run/" + (int) (Math.random() * 5 + 1) + ".gif").toURI());
         String msg = "";
         switch ((int) (Math.random() * 3)) {
             case 0:
@@ -179,7 +179,7 @@ public class Reactions {
     }
 
     public static void slap(JDA bot, MessageReceivedEvent message) throws URISyntaxException {
-        File file = new File(ClassLoader.getSystemResource("ReactionFiles/slap/" + (int) (Math.random() * 5 + 1) + ".gif").toURI());
+        File file = new File(Reactions.class.getResource("ReactionFiles/slap/" + (int) (Math.random() * 5 + 1) + ".gif").toURI());
         String msg = "";
         switch ((int) (Math.random() * 3)) {
             case 0:
@@ -218,7 +218,7 @@ public class Reactions {
     }
 
     public static void smash(JDA bot, MessageReceivedEvent message) throws URISyntaxException {
-        File file = new File(ClassLoader.getSystemResource("ReactionFiles/smash/" + (int) (Math.random() * 5 + 1) + ".gif").toURI());
+        File file = new File(Reactions.class.getResource("ReactionFiles/smash/" + (int) (Math.random() * 5 + 1) + ".gif").toURI());
         String msg = "";
         switch ((int) (Math.random() * 3)) {
             case 0:
@@ -257,7 +257,7 @@ public class Reactions {
     }
 
     public static void stare(JDA bot, MessageReceivedEvent message) throws URISyntaxException {
-        File file = new File(ClassLoader.getSystemResource("ReactionFiles/stare/" + (int) (Math.random() * 5 + 1) + ".gif").toURI());
+        File file = new File(Reactions.class.getResource("ReactionFiles/stare/" + (int) (Math.random() * 5 + 1) + ".gif").toURI());
         String msg = "";
         switch ((int) (Math.random() * 3)) {
             case 0:
