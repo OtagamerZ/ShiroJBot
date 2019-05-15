@@ -23,6 +23,7 @@ import org.quartz.impl.StdSchedulerFactory;
 
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -360,7 +361,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                 } else if (message.getTextChannel().canTalk()) {
                     message.getChannel().sendMessage("Por favor, digite __**!init**__ para inicializar as configurações da Shiro em seu servidor!").queue();
                 }
-            } catch (NullPointerException | InsufficientPermissionException e) {
+            } catch (NullPointerException | InsufficientPermissionException | URISyntaxException e) {
                 e.printStackTrace();
             }
         }
