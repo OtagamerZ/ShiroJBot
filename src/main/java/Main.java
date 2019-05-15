@@ -51,7 +51,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
             if (backup == null) {
                 backup = JobBuilder.newJob(Main.class).withIdentity("backup", "1").build();
             }
-            Trigger cron = TriggerBuilder.newTrigger().withIdentity("manha", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0 0/1 1/1 * ? *")).build();
+            Trigger cron = TriggerBuilder.newTrigger().withIdentity("backup", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0 0/1 1/1 * ? *")).build();
             SchedulerFactory sf = new StdSchedulerFactory();
             try {
                 sched = sf.getScheduler();
@@ -233,9 +233,27 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             e.printStackTrace();
                         }
                     } else if (hasPrefix(message, "xp")) {
-                        Embeds.levelEmbed(message, memberMap.get(message.getAuthor().getId() + message.getGuild().getId()));
+                        try {
+                            Embeds.levelEmbed(message, memberMap.get(message.getAuthor().getId() + message.getGuild().getId()), gcMap.get(message.getGuild().getId()).getPrefix());
+                        } catch (IOException e) {
+                            System.out.println(e.toString());
+                        }
                     } else if (hasPrefix(message, "conquista")) {
-                        Misc.badges(message);
+                        if (message.getGuild().getId().equals("421495229594730496")) {
+                            Misc.badges(message);
+                        } else {
+                            message.getChannel().sendMessage("Você está no servidor errado, este comando é exclusivo do servidor OtagamerZ!").queue();
+                        }
+                    } else if (hasPrefix(message, "conquistas")) {
+                        if (message.getGuild().getId().equals("421495229594730496")) {
+                            try {
+                                Embeds.myBadgesEmbed(message, memberMap.get(message.getAuthor().getId() + message.getGuild().getId()));
+                            } catch (IOException e) {
+                                System.out.println(e.toString());
+                            }
+                        } else {
+                            message.getChannel().sendMessage("Você está no servidor errado, este comando é exclusivo do servidor OtagamerZ!").queue();
+                        }
                     }
 
                     //DONO--------------------------------------------------------------------------------->
