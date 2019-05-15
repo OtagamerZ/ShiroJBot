@@ -20,7 +20,7 @@ public class Member {
 
     public boolean addXp() {
         xp += 15;
-        if (xp >= level * (100 * level)) {
+        if (xp >= (int) Math.pow(level, 2) * 100) {
             level++;
             return true;
         }
