@@ -8,6 +8,7 @@ import java.io.File;
 import java.net.URISyntaxException;
 
 public class Reactions {
+    private static final String s = System.getProperty("user.dir");
     public static void hug(JDA bot, MessageReceivedEvent message) throws URISyntaxException {
         File file = new File(Reactions.class.getResource("ReactionFiles/hug/" + (int) (Math.random() * 5 + 1) + ".gif").toURI());
         String msg = "";
@@ -106,8 +107,8 @@ public class Reactions {
         }
     }
 
-    public static void facedesk(MessageReceivedEvent message) throws URISyntaxException {
-        File file = new File(Reactions.class.getResource("ReactionFiles/facedesk/" + (int) (Math.random() * 5 + 1) + ".gif").toURI());
+    public static void facedesk(MessageReceivedEvent message) {
+        File file = new File(s + "./src/main/resources/ReactionFiles/facedesk/" + (int) (Math.random() * 5 + 1) + ".gif");
         String msg = "";
         switch ((int) (Math.random() * 3)) {
             case 0:
