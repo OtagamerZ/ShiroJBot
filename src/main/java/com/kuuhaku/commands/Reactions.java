@@ -6,6 +6,7 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.io.File;
 import java.net.URISyntaxException;
+import java.util.Objects;
 
 public class Reactions {
     private static final String s = System.getProperty("user.dir");
@@ -108,7 +109,7 @@ public class Reactions {
     }
 
     public static void facedesk(MessageReceivedEvent message) {
-        File file = new File(ClassLoader.getSystemResource("ReactionFiles/facedesk/" + (int) (Math.random() * 5 + 1) + ".gif").getFile());
+        File file = new File(Objects.requireNonNull(ClassLoader.getSystemClassLoader().getResource("ReactionFiles/facedesk/" + (int) (Math.random() * 5 + 1) + ".gif")).getFile());
         String msg = "";
         switch ((int) (Math.random() * 3)) {
             case 0:
