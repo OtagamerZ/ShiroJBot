@@ -4,14 +4,34 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
-import java.io.File;
-import java.net.URISyntaxException;
-import java.util.Objects;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class Reactions {
     private static final String s = System.getProperty("user.dir");
-    public static void hug(JDA bot, MessageReceivedEvent message) throws URISyntaxException {
-        File file = new File(Reactions.class.getResource("ReactionFiles/hug/" + (int) (Math.random() * 5 + 1) + ".gif").toURI());
+    public static void hug(JDA bot, MessageReceivedEvent message) throws IOException {
+        URL url = new URL("");
+        switch ((int) (Math.random() * 5)) {
+            case 0:
+                url = new URL("blob:https://imgur.com/0a3716eb-8461-4391-930f-becedd9eb422");
+                break;
+            case 1:
+                url = new URL("blob:https://imgur.com/40630e5c-edd6-40d5-a42c-0bfc8b4db352");
+                break;
+            case 2:
+                url = new URL("blob:https://imgur.com/88c6909c-c7a2-4557-a85b-6e29dd8cdcb9");
+                break;
+            case 3:
+                url = new URL("blob:https://imgur.com/9da7a121-47d8-4566-b200-44418a88d2db");
+                break;
+            case 4:
+                url = new URL("blob:https://imgur.com/f33a1753-392b-45f4-a149-080bfbc7411c");
+                break;
+        }
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+
         String msg = "";
         switch ((int) (Math.random() * 3)) {
             case 0:
@@ -38,7 +58,7 @@ public class Reactions {
                         msg = ("Ni..Ni..Nii-chan no baka!");
                         break;
                 }
-                message.getChannel().sendMessage(msg).addFile(file).queue();
+                message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "hug").queue();
             } else {
                 switch ((int) (Math.random() * 3)) {
                     case 0:
@@ -51,16 +71,36 @@ public class Reactions {
                         msg = ("Paraaa, to ocupada jogando agora!");
                         break;
                 }
-                message.getChannel().sendMessage(msg).addFile(file).queue();
+                message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "hug").queue();
             }
         } else {
             msg = (message.getAuthor().getAsMention() + " abraçou " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " - " + msg);
-            message.getChannel().sendMessage(msg).addFile(file).queue();
+            message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "hug").queue();
         }
     }
 
-    public static void cuddle(JDA bot, MessageReceivedEvent message) throws URISyntaxException {
-        File file = new File(Reactions.class.getResource("ReactionFiles/cuddle/" + (int) (Math.random() * 5 + 1) + ".gif").toURI());
+    public static void cuddle(JDA bot, MessageReceivedEvent message) throws IOException {
+        URL url = new URL("");
+        switch ((int) (Math.random() * 5)) {
+            case 0:
+                url = new URL("blob:https://imgur.com/0a3716eb-8461-4391-930f-becedd9eb422");
+                break;
+            case 1:
+                url = new URL("blob:https://imgur.com/40630e5c-edd6-40d5-a42c-0bfc8b4db352");
+                break;
+            case 2:
+                url = new URL("blob:https://imgur.com/88c6909c-c7a2-4557-a85b-6e29dd8cdcb9");
+                break;
+            case 3:
+                url = new URL("blob:https://imgur.com/9da7a121-47d8-4566-b200-44418a88d2db");
+                break;
+            case 4:
+                url = new URL("blob:https://imgur.com/f33a1753-392b-45f4-a149-080bfbc7411c");
+                break;
+        }
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+
         String msg = "";
         switch ((int) (Math.random() * 3)) {
             case 0:
@@ -87,7 +127,7 @@ public class Reactions {
                         msg = ("Ni..Ni..Nii-chan no baka!");
                         break;
                 }
-                message.getChannel().sendMessage(msg).addFile(file).queue();
+                message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "cuddle").queue();
             } else {
                 switch ((int) (Math.random() * 3)) {
                     case 0:
@@ -100,16 +140,36 @@ public class Reactions {
                         msg = ("Paraaa, to ocupada jogando agora!");
                         break;
                 }
-                message.getChannel().sendMessage(msg).addFile(file).queue();
+                message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "cuddle").queue();
             }
         } else {
             msg = (message.getAuthor().getAsMention() + " deu um abraço kawaii em " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " - " + msg);
-            message.getChannel().sendMessage(msg).addFile(file).queue();
+            message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "cuddle").queue();
         }
     }
 
-    public static void facedesk(MessageReceivedEvent message) {
-        File file = new File(Objects.requireNonNull(ClassLoader.getSystemClassLoader().getResource("ReactionFiles/facedesk/" + (int) (Math.random() * 5 + 1) + ".gif")).getFile());
+    public static void facedesk(MessageReceivedEvent message) throws IOException {
+        URL url = new URL("");
+        switch ((int) (Math.random() * 5)) {
+            case 0:
+                url = new URL("blob:https://imgur.com/0a3716eb-8461-4391-930f-becedd9eb422");
+                break;
+            case 1:
+                url = new URL("blob:https://imgur.com/40630e5c-edd6-40d5-a42c-0bfc8b4db352");
+                break;
+            case 2:
+                url = new URL("blob:https://imgur.com/88c6909c-c7a2-4557-a85b-6e29dd8cdcb9");
+                break;
+            case 3:
+                url = new URL("blob:https://imgur.com/9da7a121-47d8-4566-b200-44418a88d2db");
+                break;
+            case 4:
+                url = new URL("blob:https://imgur.com/f33a1753-392b-45f4-a149-080bfbc7411c");
+                break;
+        }
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+
         String msg = "";
         switch ((int) (Math.random() * 3)) {
             case 0:
@@ -123,11 +183,31 @@ public class Reactions {
                 break;
         }
         msg = (message.getAuthor().getAsMention() + " bateu a cara - " + msg);
-        message.getChannel().sendMessage(msg).addFile(file).queue();
+        message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "facedesk").queue();
     }
 
-    public static void nope(MessageReceivedEvent message) throws URISyntaxException {
-        File file = new File(Reactions.class.getResource("ReactionFiles/nope/" + (int) (Math.random() * 5 + 1) + ".gif").toURI());
+    public static void nope(MessageReceivedEvent message) throws IOException {
+        URL url = new URL("");
+        switch ((int) (Math.random() * 5)) {
+            case 0:
+                url = new URL("blob:https://imgur.com/0a3716eb-8461-4391-930f-becedd9eb422");
+                break;
+            case 1:
+                url = new URL("blob:https://imgur.com/40630e5c-edd6-40d5-a42c-0bfc8b4db352");
+                break;
+            case 2:
+                url = new URL("blob:https://imgur.com/88c6909c-c7a2-4557-a85b-6e29dd8cdcb9");
+                break;
+            case 3:
+                url = new URL("blob:https://imgur.com/9da7a121-47d8-4566-b200-44418a88d2db");
+                break;
+            case 4:
+                url = new URL("blob:https://imgur.com/f33a1753-392b-45f4-a149-080bfbc7411c");
+                break;
+        }
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+
         String msg = "";
         switch ((int) (Math.random() * 3)) {
             case 0:
@@ -141,11 +221,31 @@ public class Reactions {
                 break;
         }
         msg = (message.getAuthor().getAsMention() + " esquivou-se - " + msg);
-        message.getChannel().sendMessage(msg).addFile(file).queue();
+        message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "nope").queue();
     }
 
-    private static void nope(MessageReceivedEvent message, User author) throws URISyntaxException {
-        File file = new File(Reactions.class.getResource("ReactionFiles/nope/" + (int) (Math.random() * 5 + 1) + ".gif").toURI());
+    private static void nope(MessageReceivedEvent message, User author) throws IOException {
+        URL url = new URL("");
+        switch ((int) (Math.random() * 5)) {
+            case 0:
+                url = new URL("blob:https://imgur.com/0a3716eb-8461-4391-930f-becedd9eb422");
+                break;
+            case 1:
+                url = new URL("blob:https://imgur.com/40630e5c-edd6-40d5-a42c-0bfc8b4db352");
+                break;
+            case 2:
+                url = new URL("blob:https://imgur.com/88c6909c-c7a2-4557-a85b-6e29dd8cdcb9");
+                break;
+            case 3:
+                url = new URL("blob:https://imgur.com/9da7a121-47d8-4566-b200-44418a88d2db");
+                break;
+            case 4:
+                url = new URL("blob:https://imgur.com/f33a1753-392b-45f4-a149-080bfbc7411c");
+                break;
+        }
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+
         String msg = "";
         switch ((int) (Math.random() * 3)) {
             case 0:
@@ -159,11 +259,31 @@ public class Reactions {
                 break;
         }
         msg = (author.getAsMention() + " esquivou-se - " + msg);
-        message.getChannel().sendMessage(msg).addFile(file).queue();
+        message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "nope").queue();
     }
 
-    public static void run(MessageReceivedEvent message) throws URISyntaxException {
-        File file = new File(Reactions.class.getResource("ReactionFiles/run/" + (int) (Math.random() * 5 + 1) + ".gif").toURI());
+    public static void run(MessageReceivedEvent message) throws IOException {
+        URL url = new URL("");
+        switch ((int) (Math.random() * 5)) {
+            case 0:
+                url = new URL("blob:https://imgur.com/0a3716eb-8461-4391-930f-becedd9eb422");
+                break;
+            case 1:
+                url = new URL("blob:https://imgur.com/40630e5c-edd6-40d5-a42c-0bfc8b4db352");
+                break;
+            case 2:
+                url = new URL("blob:https://imgur.com/88c6909c-c7a2-4557-a85b-6e29dd8cdcb9");
+                break;
+            case 3:
+                url = new URL("blob:https://imgur.com/9da7a121-47d8-4566-b200-44418a88d2db");
+                break;
+            case 4:
+                url = new URL("blob:https://imgur.com/f33a1753-392b-45f4-a149-080bfbc7411c");
+                break;
+        }
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+
         String msg = "";
         switch ((int) (Math.random() * 3)) {
             case 0:
@@ -177,11 +297,31 @@ public class Reactions {
                 break;
         }
         msg = (message.getAuthor().getAsMention() + " saiu correndo - " + msg);
-        message.getChannel().sendMessage(msg).addFile(file).queue();
+        message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "run").queue();
     }
 
-    public static void slap(JDA bot, MessageReceivedEvent message) throws URISyntaxException {
-        File file = new File(Reactions.class.getResource("ReactionFiles/slap/" + (int) (Math.random() * 5 + 1) + ".gif").toURI());
+    public static void slap(JDA bot, MessageReceivedEvent message) throws IOException {
+        URL url = new URL("");
+        switch ((int) (Math.random() * 5)) {
+            case 0:
+                url = new URL("blob:https://imgur.com/0a3716eb-8461-4391-930f-becedd9eb422");
+                break;
+            case 1:
+                url = new URL("blob:https://imgur.com/40630e5c-edd6-40d5-a42c-0bfc8b4db352");
+                break;
+            case 2:
+                url = new URL("blob:https://imgur.com/88c6909c-c7a2-4557-a85b-6e29dd8cdcb9");
+                break;
+            case 3:
+                url = new URL("blob:https://imgur.com/9da7a121-47d8-4566-b200-44418a88d2db");
+                break;
+            case 4:
+                url = new URL("blob:https://imgur.com/f33a1753-392b-45f4-a149-080bfbc7411c");
+                break;
+        }
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+
         String msg = "";
         switch ((int) (Math.random() * 3)) {
             case 0:
@@ -208,19 +348,39 @@ public class Reactions {
                         msg = ("EU TO JOGANDO!");
                         break;
                 }
-                message.getChannel().sendMessage(msg).addFile(file).queue();
+                message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "slap").queue();
             } else {
-                message.getChannel().sendMessage(msg).addFile(file).queue();
+                message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "slap").queue();
                 nope(message, bot.getSelfUser());
             }
         } else {
             msg = (message.getAuthor().getAsMention() + " deu um tapa em " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " - " + msg);
-            message.getChannel().sendMessage(msg).addFile(file).queue();
+            message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "slap").queue();
         }
     }
 
-    public static void smash(JDA bot, MessageReceivedEvent message) throws URISyntaxException {
-        File file = new File(Reactions.class.getResource("ReactionFiles/smash/" + (int) (Math.random() * 5 + 1) + ".gif").toURI());
+    public static void smash(JDA bot, MessageReceivedEvent message) throws IOException {
+        URL url = new URL("");
+        switch ((int) (Math.random() * 5)) {
+            case 0:
+                url = new URL("blob:https://imgur.com/0a3716eb-8461-4391-930f-becedd9eb422");
+                break;
+            case 1:
+                url = new URL("blob:https://imgur.com/40630e5c-edd6-40d5-a42c-0bfc8b4db352");
+                break;
+            case 2:
+                url = new URL("blob:https://imgur.com/88c6909c-c7a2-4557-a85b-6e29dd8cdcb9");
+                break;
+            case 3:
+                url = new URL("blob:https://imgur.com/9da7a121-47d8-4566-b200-44418a88d2db");
+                break;
+            case 4:
+                url = new URL("blob:https://imgur.com/f33a1753-392b-45f4-a149-080bfbc7411c");
+                break;
+        }
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+
         String msg = "";
         switch ((int) (Math.random() * 3)) {
             case 0:
@@ -247,19 +407,39 @@ public class Reactions {
                         msg = ("Calma, eu só caí uns elozinhos com a sua conta!");
                         break;
                 }
-                message.getChannel().sendMessage(msg).addFile(file).queue();
+                message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "smash").queue();
             } else {
-                message.getChannel().sendMessage(msg).addFile(file).queue();
+                message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "smash").queue();
                 nope(message, bot.getSelfUser());
             }
         } else {
             msg = (message.getAuthor().getAsMention() + " destruiu " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " - " + msg);
-            message.getChannel().sendMessage(msg).addFile(file).queue();
+            message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "smash").queue();
         }
     }
 
-    public static void stare(JDA bot, MessageReceivedEvent message) throws URISyntaxException {
-        File file = new File(Reactions.class.getResource("ReactionFiles/stare/" + (int) (Math.random() * 5 + 1) + ".gif").toURI());
+    public static void stare(JDA bot, MessageReceivedEvent message) throws IOException {
+        URL url = new URL("");
+        switch ((int) (Math.random() * 5)) {
+            case 0:
+                url = new URL("blob:https://imgur.com/0a3716eb-8461-4391-930f-becedd9eb422");
+                break;
+            case 1:
+                url = new URL("blob:https://imgur.com/40630e5c-edd6-40d5-a42c-0bfc8b4db352");
+                break;
+            case 2:
+                url = new URL("blob:https://imgur.com/88c6909c-c7a2-4557-a85b-6e29dd8cdcb9");
+                break;
+            case 3:
+                url = new URL("blob:https://imgur.com/9da7a121-47d8-4566-b200-44418a88d2db");
+                break;
+            case 4:
+                url = new URL("blob:https://imgur.com/f33a1753-392b-45f4-a149-080bfbc7411c");
+                break;
+        }
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+
         String msg = "";
         switch ((int) (Math.random() * 3)) {
             case 0:
@@ -285,10 +465,10 @@ public class Reactions {
                     msg = ("Nani?");
                     break;
             }
-            message.getChannel().sendMessage(msg).addFile(file).queue();
+            message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "stare").queue();
         } else {
             msg = (message.getAuthor().getAsMention() + " encarou " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " - " + msg);
-            message.getChannel().sendMessage(msg).addFile(file).queue();
+            message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "stare").queue();
         }
     }
 }
