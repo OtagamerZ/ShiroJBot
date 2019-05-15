@@ -141,7 +141,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         try {
             if (gcMap.get(user.getGuild().getId()).getCanalbv() != null) {
                 Embeds.byeEmbed(user, gcMap.get(user.getGuild().getId()).getMsgAdeus(), user.getGuild().getTextChannelById(gcMap.get(user.getGuild().getId()).getCanalbv()));
-                memberMap.remove(user.getUser().getId() + user.getGuild().getId());
+                if (memberMap.get(user.getUser().getId() + user.getGuild().getId()) != null) memberMap.remove(user.getUser().getId() + user.getGuild().getId());
             }
         } catch (Exception ignored) {
         }
