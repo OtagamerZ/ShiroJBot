@@ -58,7 +58,7 @@ public class Reactions {
                         msg = ("Ni..Ni..Nii-chan no baka!");
                         break;
                 }
-                message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "hug").queue();
+                message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "hug.gif").queue();
             } else {
                 switch ((int) (Math.random() * 3)) {
                     case 0:
@@ -71,11 +71,11 @@ public class Reactions {
                         msg = ("Paraaa, to ocupada jogando agora!");
                         break;
                 }
-                message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "hug").queue();
+                message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "hug.gif").queue();
             }
         } else {
             msg = (message.getAuthor().getAsMention() + " abraçou " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " - " + msg);
-            message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "hug").queue();
+            message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "hug.gif").queue();
         }
     }
 
@@ -127,7 +127,7 @@ public class Reactions {
                         msg = ("Ni..Ni..Nii-chan no baka!");
                         break;
                 }
-                message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "cuddle").queue();
+                message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "cuddle.gif").queue();
             } else {
                 switch ((int) (Math.random() * 3)) {
                     case 0:
@@ -140,11 +140,11 @@ public class Reactions {
                         msg = ("Paraaa, to ocupada jogando agora!");
                         break;
                 }
-                message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "cuddle").queue();
+                message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "cuddle.gif").queue();
             }
         } else {
             msg = (message.getAuthor().getAsMention() + " deu um abraço kawaii em " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " - " + msg);
-            message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "cuddle").queue();
+            message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "cuddle.gif").queue();
         }
     }
 
@@ -221,7 +221,7 @@ public class Reactions {
                 break;
         }
         msg = (message.getAuthor().getAsMention() + " esquivou-se - " + msg);
-        message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "nope").queue();
+        message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "nope.gif").queue();
     }
 
     private static void nope(MessageReceivedEvent message, User author) throws IOException {
@@ -259,7 +259,7 @@ public class Reactions {
                 break;
         }
         msg = (author.getAsMention() + " esquivou-se - " + msg);
-        message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "nope").queue();
+        message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "nope.gif").queue();
     }
 
     public static void run(MessageReceivedEvent message) throws IOException {
@@ -297,7 +297,7 @@ public class Reactions {
                 break;
         }
         msg = (message.getAuthor().getAsMention() + " saiu correndo - " + msg);
-        message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "run").queue();
+        message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "run.gif").queue();
     }
 
     public static void slap(JDA bot, MessageReceivedEvent message) throws IOException {
@@ -348,14 +348,14 @@ public class Reactions {
                         msg = ("EU TO JOGANDO!");
                         break;
                 }
-                message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "slap").queue();
+                message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "slap.gif").queue();
             } else {
-                message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "slap").queue();
+                message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "slap.gif").queue();
                 nope(message, bot.getSelfUser());
             }
         } else {
             msg = (message.getAuthor().getAsMention() + " deu um tapa em " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " - " + msg);
-            message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "slap").queue();
+            message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "slap.gif").queue();
         }
     }
 
@@ -407,14 +407,14 @@ public class Reactions {
                         msg = ("Calma, eu só caí uns elozinhos com a sua conta!");
                         break;
                 }
-                message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "smash").queue();
+                message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "smash.gif").queue();
             } else {
-                message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "smash").queue();
+                message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "smash.gif").queue();
                 nope(message, bot.getSelfUser());
             }
         } else {
             msg = (message.getAuthor().getAsMention() + " destruiu " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " - " + msg);
-            message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "smash").queue();
+            message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "smash.gif").queue();
         }
     }
 
@@ -465,10 +465,10 @@ public class Reactions {
                     msg = ("Nani?");
                     break;
             }
-            message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "stare").queue();
+            message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "stare.gif").queue();
         } else {
             msg = (message.getAuthor().getAsMention() + " encarou " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " - " + msg);
-            message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "stare").queue();
+            message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "stare.gif").queue();
         }
     }
 }
