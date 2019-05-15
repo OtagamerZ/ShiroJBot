@@ -249,7 +249,7 @@ public class Embeds {
         eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
         eb.setTitle(":pencil: Perfil de " + message.getGuild().getMemberById(m.getId().replace(message.getGuild().getId(), "")).getEffectiveName() + " | " + message.getGuild().getName());
         eb.setThumbnail(message.getGuild().getMemberById(m.getId().replace(message.getGuild().getId(), "")).getUser().getAvatarUrl());
-        eb.addField(":tada: Level: " + m.getLevel(), "Xp: " + m.getXp() + " | " + (m.getLevel() * (100 * m.getLevel())), true);
+        eb.addField(":tada: Level: " + m.getLevel(), "Xp: " + m.getXp() + " | " + ((int) Math.pow(m.getLevel(), 2) * 100), true);
         eb.addField(":warning: Alertas:", Integer.toString(m.getWarns().length - 1), true);
         if (m.getId().contains("421495229594730496"))
             eb.addField(":beginner: Conquistas:", "**" + conqs + "** (__"+prefix+"conquistas__ para ver suas conquistas completas)", true);
