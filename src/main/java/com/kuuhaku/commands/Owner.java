@@ -39,14 +39,14 @@ public class Owner {
         final ArrayList<String> map = new ArrayList<>();
         gc.values().forEach(g -> map.add("```" + g.getGuildId() + " | " + g.getPrefix() + " | " + g.getCanalbv() + " | " + g.getCanalav() + " | " + g.getMsgBoasVindas() + " | " + g.getMsgAdeus() + "```\n"));
 
-        message.getChannel().sendMessage(map.toString().replace("[", "").replace("]", "").replace(",", "\n")).queue();
+        message.getChannel().sendMessage(map.toString().replace("[", "").replace("]", "").replace(",", "")).queue();
     }
 
     public static void getMemberMap(MessageReceivedEvent message, Map<String, Member> mm) {
         final ArrayList<String> map = new ArrayList<>();
-        mm.values().forEach(g -> map.add("```" + g.getId() + " | " + g.getLevel() + " | " + g.getXp() + " | " + Arrays.toString(g.getBadges()) + " | " + Arrays.toString(g.getWarns()) + "```\n"));
+        mm.values().forEach(g -> map.add("```" + g.getId() + " | " + g.getLevel() + " | " + g.getXp() + " | " + Arrays.toString(g.getBadges()).replace(",", "-").replace("false", "0").replace("true", "1") + " | " + Arrays.toString(g.getWarns()).replace(",", "-") + "```\n"));
 
-        message.getChannel().sendMessage(map.toString().replace("[", "").replace("]", "")).queue();
+        message.getChannel().sendMessage(map.toString().replace("[", "").replace("]", "").replace(",", "")).queue();
     }
 
     private static ArrayList<String> getGuilds(JDA bot) throws NullPointerException {
