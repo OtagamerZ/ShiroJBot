@@ -5,12 +5,15 @@ import com.kuuhaku.model.Anime;
 import com.kuuhaku.model.Badges;
 import com.kuuhaku.model.Member;
 import com.kuuhaku.model.guildConfig;
+import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.json.JSONObject;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -55,8 +58,12 @@ public class Embeds {
                 prefix + "conquista [Nº] - Mostra dados sobre uma conquista.\n" +
                 "```", false);
         eb.addField("Diversão", "```\n\n" +
-                prefix + "pergunta [pergunta] - Me pergunte algo, mas só vou responder com sim ou não!.\n\n" +
-                prefix + "escolha [opção1;opção2;opção3;...] - Quer que eu escolha entre essas opções? Facil!.\n" +
+                prefix + "pergunta [pergunta] - Me pergunte algo, mas só vou responder com sim ou não!\n\n" +
+                prefix + "escolha [opção1;opção2;opção3;...] - Quer que eu escolha entre essas opções? Facil!\n" +
+                "```", false);
+        eb.addField("OtagamerZ", "```\n\n" +
+                prefix + "conquistas - Mosta as conquistas que você completou.\n\n" +
+                prefix + "conquista [Nº] - Mostra informações detalhadas de uma conquista.\n" +
                 "```", false);
 
         return eb.build();
@@ -226,14 +233,42 @@ public class Embeds {
         }
     }
 
-    public static void levelEmbed(MessageReceivedEvent message, Member m) {
+    public static void levelEmbed(MessageReceivedEvent message, Member m, String prefix) throws IOException {
+        int conqs = 0;
+        for (int i = 0; i < m.getBadges().length; i++) {
+            if (m.getBadges()[i]) conqs++;
+        }
+        URL url = new URL(message.getAuthor().getAvatarUrl());
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+        BufferedImage image = ImageIO.read(con.getInputStream());
+
         EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setTitle("Perfil de " + message.getGuild().getMemberById(m.getId().replace(message.getGuild().getId(), "")).getEffectiveName());
+        assert image != null;
+        eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
+        eb.setTitle(":pencil: Perfil de " + message.getGuild().getMemberById(m.getId().replace(message.getGuild().getId(), "")).getEffectiveName() + " | " + message.getGuild().getName());
         eb.setThumbnail(message.getGuild().getMemberById(m.getId().replace(message.getGuild().getId(), "")).getUser().getAvatarUrl());
-        eb.addField("Level: " + m.getLevel(), "Xp: " + m.getXp() + " | " + (m.getLevel() * 100), true);
-        eb.addField("Alertas:", Integer.toString(m.getWarns().length - 1), true);
-        eb.addField("Conquistas:", Badges.getBadges(m.getBadges()), false);
+        eb.addField(":tada: Level: " + m.getLevel(), "Xp: " + m.getXp() + " | " + (m.getLevel() * 100), true);
+        eb.addField(":warning: Alertas:", Integer.toString(m.getWarns().length - 1), true);
+        if (m.getId().contains("421495229594730496"))
+            eb.addField(":beginner: Conquistas:", "**" + conqs + "** (__"+prefix+"conquistas__ para ver suas conquistas completas)", true);
+
+        message.getChannel().sendMessage(eb.build()).queue();
+    }
+
+    public static void myBadgesEmbed(MessageReceivedEvent message, Member m) throws IOException {
+        URL url = new URL(message.getAuthor().getAvatarUrl());
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+        BufferedImage image = ImageIO.read(con.getInputStream());
+
+        EmbedBuilder eb = new EmbedBuilder();
+
+        eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
+        eb.setTitle(":beginner: Conquistas de " + message.getMember().getEffectiveName());
+        eb.setThumbnail(message.getGuild().getMemberById(m.getId().replace(message.getGuild().getId(), "")).getUser().getAvatarUrl());
+        eb.addField("", Badges.getBadges(m.getBadges()), false);
 
         message.getChannel().sendMessage(eb.build()).queue();
     }
