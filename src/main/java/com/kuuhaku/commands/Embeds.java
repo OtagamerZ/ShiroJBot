@@ -289,7 +289,7 @@ public class Embeds {
         eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
         eb.setDescription(msg.replace("%user%", event.getUser().getAsMention()));
         eb.setThumbnail(event.getUser().getAvatarUrl());
-        eb.setFooter("Servidor gerenciado por " + event.getGuild().getOwner().getAsMention(), event.getGuild().getOwner().getUser().getAvatarUrl());
+        eb.setFooter("Servidor gerenciado por " + event.getGuild().getOwner().getEffectiveName(), event.getGuild().getOwner().getUser().getAvatarUrl());
         switch(rmsg) {
             case 0:
                 eb.setTitle("Opa, parece que temos um novo membro?");
@@ -324,7 +324,7 @@ public class Embeds {
         eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
         eb.setThumbnail(event.getUser().getAvatarUrl());
         eb.setDescription(msg.replace("%user%", event.getUser().getAsMention()));
-        eb.setFooter("Servidor gerenciado por " + event.getGuild().getOwner().getAsMention(), event.getGuild().getOwner().getUser().getAvatarUrl());
+        eb.setFooter("Servidor gerenciado por " + event.getGuild().getOwner().getEffectiveName(), event.getGuild().getOwner().getUser().getAvatarUrl());
         switch(rmsg) {
             case 0:
                 eb.setTitle("Nãããoo...um membro deixou este servidor!");
