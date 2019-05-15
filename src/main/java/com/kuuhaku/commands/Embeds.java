@@ -8,6 +8,9 @@ import com.kuuhaku.model.guildConfig;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
+import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
+import net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.json.JSONObject;
 
@@ -141,8 +144,8 @@ public class Embeds {
         eb.setDescription("Prefixo: __**" + gc.getPrefix() + "**__");
         eb.addField("Canal de boas-vindas:", gc.getCanalbv() != null ? message.getGuild().getTextChannelById(gc.getCanalbv()).getAsMention() : "Não definido", true);
         eb.addField("Canal de avisos:", gc.getCanalav() != null ? message.getGuild().getTextChannelById(gc.getCanalav()).getAsMention() : "Não definido", true);
-        eb.addField("Mensagem de boas-vindas:", gc.getMsgBoasVindas(null), false);
-        eb.addField("Mensagem de adeus:", gc.getMsgAdeus(null), false);
+        eb.addField("Mensagem de boas-vindas:", gc.getMsgBoasVindas(), false);
+        eb.addField("Mensagem de adeus:", gc.getMsgAdeus(), false);
         eb.addField("Cargo de punição:", gc.getCargowarn() != null ? message.getGuild().getRoleById(gc.getCargowarn()).getAsMention() : "Não definido", false);
 
         message.getChannel().sendMessage(eb.build()).queue();
@@ -252,7 +255,7 @@ public class Embeds {
         eb.addField(":tada: Level: " + m.getLevel(), "Xp: " + m.getXp() + " | " + ((int) Math.pow(m.getLevel(), 2) * 100), true);
         eb.addField(":warning: Alertas:", Integer.toString(m.getWarns().length - 1), true);
         if (m.getId().contains("421495229594730496"))
-            eb.addField(":beginner: Conquistas:", "**" + conqs + "** (__"+prefix+"conquistas__ para ver suas conquistas completas)", true);
+            eb.addField(":beginner: Conquistas:", "**" + conqs + "** (__" + prefix + "conquistas__ para ver suas conquistas completas)", true);
 
         message.getChannel().sendMessage(eb.build()).queue();
     }
@@ -271,5 +274,75 @@ public class Embeds {
         eb.addField("", Badges.getBadges(m.getBadges()), false);
 
         message.getChannel().sendMessage(eb.build()).queue();
+    }
+
+    public static void welcomeEmbed(GuildMemberJoinEvent event, String msg, TextChannel canalbv) throws IOException {
+        URL url = new URL(event.getUser().getAvatarUrl());
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+        BufferedImage image = ImageIO.read(con.getInputStream());
+
+        int rmsg = (int) (Math.random() * 5);
+
+        EmbedBuilder eb = new EmbedBuilder();
+
+        eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
+        eb.setDescription(msg.replace("%user%", event.getUser().getAsMention()));
+        eb.setThumbnail(event.getUser().getAvatarUrl());
+        eb.setFooter("Servidor gerenciado por " + event.getGuild().getOwner().getAsMention(), event.getGuild().getOwner().getUser().getAvatarUrl());
+        switch(rmsg) {
+            case 0:
+                eb.setTitle("Opa, parece que temos um novo membro?");
+                break;
+            case 1:
+                eb.setTitle("Mais um membro para nosso lindo servidor!");
+                break;
+            case 2:
+                eb.setTitle("Um novo jogador entrou na partida, pressione start 2P!");
+                break;
+            case 3:
+                eb.setTitle("Agora podemos iniciar a teamfight, um novo membro veio nos ajudar!");
+                break;
+            case 4:
+                eb.setTitle("Bem-vindo ao nosso servidor, puxe uma cadeira e fique à vontade!");
+                break;
+        }
+
+        canalbv.sendMessage(eb.build()).queue();
+    }
+
+    public static void byeEmbed(GuildMemberLeaveEvent event, String msg, TextChannel canalbv) throws IOException {
+        URL url = new URL(event.getUser().getAvatarUrl());
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+        BufferedImage image = ImageIO.read(con.getInputStream());
+
+        int rmsg = (int) (Math.random() * 5);
+
+        EmbedBuilder eb = new EmbedBuilder();
+
+        eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
+        eb.setThumbnail(event.getUser().getAvatarUrl());
+        eb.setDescription(msg.replace("%user%", event.getUser().getAsMention()));
+        eb.setFooter("Servidor gerenciado por " + event.getGuild().getOwner().getAsMention(), event.getGuild().getOwner().getUser().getAvatarUrl());
+        switch(rmsg) {
+            case 0:
+                eb.setTitle("Nãããoo...um membro deixou este servidor!");
+                break;
+            case 1:
+                eb.setTitle("O quê? Temos um membro a menos neste servidor!");
+                break;
+            case 2:
+                eb.setTitle("Alguém saiu do servidor, deve ter acabado a pilha, só pode!");
+                break;
+            case 3:
+                eb.setTitle("Bem, alguém não está mais neste servidor, que pena!");
+                break;
+            case 4:
+                eb.setTitle("Saíram do servidor bem no meio de uma teamfight, da pra acreditar?");
+                break;
+        }
+
+        canalbv.sendMessage(eb.build()).queue();
     }
 }

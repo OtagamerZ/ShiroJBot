@@ -37,7 +37,7 @@ public class Owner {
 
     public static void getGuildMap(MessageReceivedEvent message, Map<String, guildConfig> gc) {
         final ArrayList<String> map = new ArrayList<>();
-        gc.values().forEach(g -> map.add("```" + g.getGuildId() + " | " + g.getPrefix() + " | " + g.getCanalbv() + " | " + g.getCanalav() + " | " + g.getMsgBoasVindas(null) + " | " + g.getMsgAdeus(null) + "```\n"));
+        gc.values().forEach(g -> map.add("```" + g.getGuildId() + " | " + g.getPrefix() + " | " + g.getCanalbv() + " | " + g.getCanalav() + " | " + g.getMsgBoasVindas() + " | " + g.getMsgAdeus() + "```\n"));
 
         message.getChannel().sendMessage(map.toString().replace("[", "").replace("]", "").replace(",", "\n")).queue();
     }
