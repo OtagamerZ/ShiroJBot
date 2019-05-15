@@ -130,7 +130,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     public void onGuildMemberJoin(GuildMemberJoinEvent user) {
         try {
             if (gcMap.get(user.getGuild().getId()).getCanalbv() != null) {
-                user.getGuild().getTextChannelById(gcMap.get(user.getGuild().getId()).getCanalbv()).sendMessage(gcMap.get(user.getGuild().getId()).getMsgBoasVindas(user)).queue();
+                Embeds.welcomeEmbed(user, gcMap.get(user.getGuild().getId()).getMsgBoasVindas(), user.getGuild().getTextChannelById(gcMap.get(user.getGuild().getId()).getCanalbv()));
             }
         } catch (Exception ignored) {
         }
@@ -140,7 +140,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     public void onGuildMemberLeave(GuildMemberLeaveEvent user) {
         try {
             if (gcMap.get(user.getGuild().getId()).getCanalbv() != null) {
-                user.getGuild().getTextChannelById(gcMap.get(user.getGuild().getId()).getCanalbv()).sendMessage(gcMap.get(user.getGuild().getId()).getMsgAdeus(user)).queue();
+                Embeds.byeEmbed(user, gcMap.get(user.getGuild().getId()).getMsgAdeus(), user.getGuild().getTextChannelById(gcMap.get(user.getGuild().getId()).getCanalbv()));
             }
         } catch (Exception ignored) {
         }

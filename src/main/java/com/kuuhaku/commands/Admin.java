@@ -38,7 +38,7 @@ public class Admin {
                     try {
                         if (cmd[2].contains("\"")) {
                             gc.setMsgBoasVindas(String.join("", message.getMessage().getContentRaw().split(gc.getPrefix() + "definir msgbv")));
-                            message.getChannel().sendMessage("Agora irei dizer __**" + gc.getMsgBoasVindas(null) + "**__ para usuários que entrarem no servidor!").queue();
+                            message.getChannel().sendMessage("Agora irei dizer __**" + gc.getMsgBoasVindas() + "**__ para usuários que entrarem no servidor!").queue();
                         } else {
                             message.getChannel().sendMessage("A mensagem deve estar entre aspas (\")").queue();
                         }
@@ -50,7 +50,7 @@ public class Admin {
                     try {
                         if (cmd[2].contains("\"")) {
                             gc.setMsgAdeus(String.join("", message.getMessage().getContentRaw().split(gc.getPrefix() + "definir msgadeus")));
-                            message.getChannel().sendMessage("Agora irei dizer __**" + gc.getMsgAdeus(null) + "**__ para membros que deixarem o servidor!").queue();
+                            message.getChannel().sendMessage("Agora irei dizer __**" + gc.getMsgAdeus() + "**__ para membros que deixarem o servidor!").queue();
                         } else {
                             message.getChannel().sendMessage("A mensagem deve estar entre aspas (\")").queue();
                         }
