@@ -323,7 +323,7 @@ public class Embeds {
 
         eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
         eb.setThumbnail(event.getUser().getAvatarUrl());
-        eb.setDescription(msg.replace("%user%", event.getUser().getAsMention()));
+        eb.setDescription(msg.replace("%user%", event.getUser().getName()));
         eb.setFooter("Servidor gerenciado por " + event.getGuild().getOwner().getEffectiveName(), event.getGuild().getOwner().getUser().getAvatarUrl());
         switch(rmsg) {
             case 0:
