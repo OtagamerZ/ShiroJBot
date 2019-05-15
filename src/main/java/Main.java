@@ -289,6 +289,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                 message.getChannel().sendMessage("Ué, não estou conseguindo marcar a conquista como incompleta. Tenha certeza de digitar o comando neste formato: " + gcMap.get(message.getGuild().getId()).getPrefix() + "tirar [MEMBRO] [Nº]").queue();
                             }
                         }
+                    } else {
+                        message.getChannel().sendMessage("Somente meu Nii-san pode utilizar este comando!").queue();
                     }
 
                     //ADMIN--------------------------------------------------------------------------------->
@@ -317,6 +319,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                 message.getChannel().sendMessage("Você precisa mencionar um usuário e dizer o Nº do alerta a ser removido.").queue();
                             }
                         }
+                    } else {
+                        message.getChannel().sendMessage("Você não tem permissões para utilizar este comando!").queue();
                     }
                 }
             } else if (message.getTextChannel().canTalk()) {
