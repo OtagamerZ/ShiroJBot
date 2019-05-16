@@ -153,13 +153,13 @@ public class Main extends ListenerAdapter implements JobListener, Job {
             msg.setContent(ment.get(1).getAsMention());
             try {
                 if (message.getContentRaw().contains("!1")) {
-                    Reactions.hug(bot, msg.build(), true, user);
+                    Reactions.hug(bot, msg.build(), user, true, user);
                 } else if (message.getContentRaw().contains("!2")) {
-                    Reactions.slap(bot, msg.build(), true, user);
+                    Reactions.slap(bot, msg.build(), user, true, user);
                 } else if (message.getContentRaw().contains("!3")) {
-                    Reactions.smash(bot, msg.build(), true, user);
+                    Reactions.smash(bot, msg.build(), user, true, user);
                 } else if (message.getContentRaw().contains("!4")) {
-                    Reactions.stare(bot, msg.build(), true, user);
+                    Reactions.stare(bot, msg.build(), user, true, user);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -288,7 +288,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             }
                         } else if (hasPrefix(message, "vemca")) {
                             if (message.getMessage().getMentionedUsers().size() != 0) {
-                                Reactions.hug(bot, message.getMessage(), false, message.getAuthor());
+                                Reactions.hug(bot, message.getMessage(), message.getMessage().getMentionedUsers().get(0), false, message.getAuthor());
                             } else {
                                 message.getChannel().sendMessage(":x: Você precisa mencionar um usuário!").queue();
                             }
@@ -300,19 +300,19 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             Reactions.run(message.getMessage());
                         } else if (hasPrefix(message, "tapa")) {
                             if (message.getMessage().getMentionedUsers().size() != 0) {
-                                Reactions.slap(bot, message.getMessage(), false, message.getAuthor());
+                                Reactions.slap(bot, message.getMessage(), message.getMessage().getMentionedUsers().get(0), false, message.getAuthor());
                             } else {
                                 message.getChannel().sendMessage(":x: Você precisa mencionar um usuário!").queue();
                             }
                         } else if (hasPrefix(message, "chega")) {
                             if (message.getMessage().getMentionedUsers().size() != 0) {
-                                Reactions.smash(bot, message.getMessage(), false, message.getAuthor());
+                                Reactions.smash(bot, message.getMessage(), message.getMessage().getMentionedUsers().get(0), false, message.getAuthor());
                             } else {
                                 message.getChannel().sendMessage(":x: Você precisa mencionar um usuário!").queue();
                             }
                         } else if (hasPrefix(message, "encarar")) {
                             if (message.getMessage().getMentionedUsers().size() != 0) {
-                                Reactions.stare(bot, message.getMessage(), false, message.getAuthor());
+                                Reactions.stare(bot, message.getMessage(), message.getMessage().getMentionedUsers().get(0), false, message.getAuthor());
                             } else {
                                 message.getChannel().sendMessage(":x: Você precisa mencionar um usuário!").queue();
                             }
