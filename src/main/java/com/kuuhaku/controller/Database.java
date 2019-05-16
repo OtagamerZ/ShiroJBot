@@ -28,7 +28,7 @@ public class Database {
         EntityManager em = getEntityManager();
 
         em.getTransaction().begin();
-        gc.forEach(em::persist);
+        gc.forEach(em::merge);
         em.getTransaction().commit();
         em.close();
         System.out.println("Dados salvos com sucesso!");
