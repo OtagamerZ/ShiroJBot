@@ -160,7 +160,7 @@ public class Embeds {
         eb.addField("Mensagem de adeus:", gc.getMsgAdeus(), true);
         eb.addField("Notificações de level up:", gc.getLvlNotif() ? "Ativadas" : "Desativadas", true);
         eb.addField("Cargo de punição:", gc.getCargowarn() != null ? message.getGuild().getRoleById(gc.getCargowarn()).getAsMention() : "Não definido", true);
-        eb.addField("Recompensas de level:", gc.getCargoslvl().size() != 0 ? roles.toString().replace(",", "\n") : "Não definidos", true);
+        eb.addField("Recompensas de level:", gc.getCargoslvl().size() != 0 ? roles.toString().replace(",", "\n").replace("{", "").replace("}", "").replace("=", " = ") : "Não definidos", true);
 
         message.getChannel().sendMessage(eb.build()).queue();
     }
