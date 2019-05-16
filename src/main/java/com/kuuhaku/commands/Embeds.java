@@ -43,6 +43,8 @@ public class Embeds {
                 prefix + "definir canalav [canal] - Define o canal de avisos para o servidor.\n\n" +
                 prefix + "definir msgbv [\"mensagem\"] - Define a mensagem de boas-vindas para o servidor.\n\n" +
                 prefix + "definir msgadeus [\"mensagem\"] - Define a mensagem de adeus para o servidor.\n\n" +
+                prefix + "definir cargolvl [level] [cargo] - Define um novo cargo como recompensa para o level especificado.\n\n" +
+                prefix + "remover cargolvl [level] - Remove a recompensa do level especificado.\n\n" +
                 prefix + "configs - Mostra as configurações do servidor.\n\n" +
                 prefix + "alertar [membro] [razão] - Registra um alerta no perfil do membro especificado.\n\n" +
                 prefix + "perdoar [membro] [Nº] - Perdoa um alerta do membro.```\n" +
@@ -54,6 +56,7 @@ public class Embeds {
                 prefix + "uptime - Descobre a quanto tempo estou acordada.\n\n" +
                 prefix + "imagem [tags] [página] - Busca uma imagem no Safebooru, as tags não podem conter espaços (substitua-os por _).\n\n" +
                 prefix + "anime [nome] - Pesquisa informações sobre um anime.\n\n" +
+                prefix + "embed [título;descrição;imagem] - Cria um novo embed com os dados passados.\n\n" +
                 prefix + "xp - Mostra dados sobre o seu perfil.```\n" +
 
                 ":juggling: **Diversão**\n```" +
