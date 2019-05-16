@@ -63,7 +63,7 @@ public class Reactions {
                 msg = (mbr.getAsMention() + " abraçou " + target.getAsMention() + " - " + msg);
             else
                 msg = (target.getAsMention() + " abraçou e volta " + mbr.getAsMention() + " - " + msg);
-            channel.sendMessage(msg).addFile(con.getInputStream(), "hug.gif").queue(m -> m.addReaction("U+21AA").complete());
+            channel.sendMessage(msg).addFile(con.getInputStream(), "hug.gif").queue(m -> m.addReaction("U+21AA").queue());
         }
     }
 
