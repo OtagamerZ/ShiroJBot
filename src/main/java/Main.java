@@ -148,7 +148,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         User user = event.getUser();
         Message message = event.getChannel().getMessageById(event.getMessageId()).complete();
         List<User> ment = message.getMentionedUsers();
-        if (ment.get(1) == event.getUser()) {
+        if (ment.get(1) == event.getUser() && event.getReactionEmote().getName().equals("U+21AA")) {
             MessageBuilder msg = new MessageBuilder();
             msg.setContent(ment.get(1).getAsMention());
             try {
