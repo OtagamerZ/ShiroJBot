@@ -3,6 +3,7 @@ package com.kuuhaku.commands;
 import com.kuuhaku.model.Member;
 import com.kuuhaku.model.guildConfig;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import org.json.JSONObject;
 
 import java.util.Map;
 
@@ -51,6 +52,20 @@ public class Admin {
                         if (cmd[2].contains("\"")) {
                             gc.setMsgAdeus(message.getMessage().getContentRaw().replace(gc.getPrefix() + "definir msgadeus ", "").replace("\"", ""));
                             message.getChannel().sendMessage("Agora irei dizer __**" + gc.getMsgAdeus() + "**__ para membros que deixarem o servidor!").queue();
+                        } else {
+                            message.getChannel().sendMessage("A mensagem deve estar entre aspas (\")").queue();
+                        }
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        message.getChannel().sendMessage("Você não me disse que mensagem devo dizer quando alguém sair!").queue();
+                    }
+                    break;
+                case "cargolvl":
+                    try {
+                        int lvl = Integer.parseInt(cmd[2]);
+                        if (message.getMessage().getMentionedRoles().size() != 0) {
+                            JSONObject cargos = gc.getCargoslvl();
+                            cargos.append(cmd[2], message.getMessage().getMentionedRoles().get(0).getId());
+                            gc.setCargoslvl(cargos);
                         } else {
                             message.getChannel().sendMessage("A mensagem deve estar entre aspas (\")").queue();
                         }

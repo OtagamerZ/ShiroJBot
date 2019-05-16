@@ -347,4 +347,26 @@ public class Embeds {
 
         canalbv.sendMessage(eb.build()).queue();
     }
+
+    public static void makeEmbed(MessageReceivedEvent message, String msg) throws IOException {
+        String[] args = msg.split(";");
+        URL url = new URL(args[2]);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+        BufferedImage image = ImageIO.read(con.getInputStream());
+
+        EmbedBuilder eb = new EmbedBuilder();
+
+        try {
+            eb.setTitle(args[0]);
+            eb.setDescription(args[1]);
+            eb.setThumbnail(args[2]);
+            eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
+
+            message.getChannel().sendMessage(eb.build()).queue();
+        } catch (Exception e){
+            message.getChannel().sendMessage("Opa, algo deu errado, tenha certeza de ter escrito neste formato:\n" +
+                    "**Título;Descrição;Link da foto**").queue();
+        }
+    }
 }
