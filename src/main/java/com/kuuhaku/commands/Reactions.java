@@ -59,7 +59,7 @@ public class Reactions {
             }
         } else {
             if (!answer)
-                msg = ("!1" + mbr.getAsMention() + " abraçou " + message.getMentionedUsers().get(0).getAsMention() + " - " + msg);
+                msg = ("!1 " + mbr.getAsMention() + " abraçou " + message.getMentionedUsers().get(0).getAsMention() + " - " + msg);
             else
                 msg = (message.getMentionedUsers().get(0).getAsMention() + " abraçou e volta " + mbr.getAsMention() + " - " + msg);
             message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "hug.gif").queue();
@@ -104,7 +104,7 @@ public class Reactions {
             }
         } else {
             if (!answer)
-                msg = ("!2" + mbr.getAsMention() + " deu um tapa em " + message.getMentionedUsers().get(0).getAsMention() + " - " + msg);
+                msg = ("!2 " + mbr.getAsMention() + " deu um tapa em " + message.getMentionedUsers().get(0).getAsMention() + " - " + msg);
             else
                 msg = (message.getMentionedUsers().get(0).getAsMention() + " respondeu o tapa de " + mbr.getAsMention() + " - " + msg);
             message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "slap.gif").queue();
@@ -149,7 +149,7 @@ public class Reactions {
             }
         } else {
             if (!answer)
-                msg = ("!3" + mbr.getAsMention() + " destruiu " + message.getMentionedUsers().get(0).getAsMention() + " - " + msg);
+                msg = ("!3 " + mbr.getAsMention() + " destruiu " + message.getMentionedUsers().get(0).getAsMention() + " - " + msg);
             else
                 msg = ("Porém, " + message.getMentionedUsers().get(0).getAsMention() + " se levantou e destrui " + mbr.getAsMention() + " de volta - " + msg);
             message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "smash.gif").queue();
@@ -189,7 +189,7 @@ public class Reactions {
             message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "stare.gif").queue();
         } else {
             if (!answer)
-                msg = ("!4" + mbr.getAsMention() + " encarou " + message.getMentionedUsers().get(0).getAsMention() + " - " + msg);
+                msg = ("!4 " + mbr.getAsMention() + " encarou " + message.getMentionedUsers().get(0).getAsMention() + " - " + msg);
             else
                 msg = (message.getMentionedUsers().get(0).getAsMention() + " também encarou " + mbr.getAsMention() + " - " + msg);
             message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "stare.gif").queue();
