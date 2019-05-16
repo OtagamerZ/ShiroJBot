@@ -152,13 +152,13 @@ public class Main extends ListenerAdapter implements JobListener, Job {
             MessageBuilder msg = new MessageBuilder();
             msg.setContent(ment.get(1).getAsMention());
             try {
-                if (message.getContentRaw().contains("!1")) {
+                if (message.getContentRaw().contains("abraçou")) {
                     Reactions.hug(bot, msg.build(), user, message.getTextChannel(), true, user);
-                } else if (message.getContentRaw().contains("!2")) {
+                } else if (message.getContentRaw().contains("deu um tapa em")) {
                     Reactions.slap(bot, msg.build(), user, message.getTextChannel(), true, user);
-                } else if (message.getContentRaw().contains("!3")) {
+                } else if (message.getContentRaw().contains("destruiu")) {
                     Reactions.smash(bot, msg.build(), user, message.getTextChannel(), true, user);
-                } else if (message.getContentRaw().contains("!4")) {
+                } else if (message.getContentRaw().contains("encarou")) {
                     Reactions.stare(bot, user, message.getTextChannel(), true, user);
                 }
             } catch (Exception e) {
