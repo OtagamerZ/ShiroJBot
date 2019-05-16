@@ -3,6 +3,7 @@ package com.kuuhaku.commands;
 import com.kuuhaku.model.ReactionsList;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
 
 import java.io.IOException;
@@ -11,7 +12,7 @@ import java.net.URL;
 import java.util.Objects;
 
 public class Reactions {
-    public static void hug(JDA bot, Message message, User target, boolean answer, User mbr) throws IOException {
+    public static void hug(JDA bot, Message message, User target, TextChannel channel, boolean answer, User mbr) throws IOException {
         URL url = new URL(ReactionsList.hug()[(int) (Math.random() * ReactionsList.hug().length)]);
         HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
@@ -42,7 +43,7 @@ public class Reactions {
                         msg = ("Ni..Ni..Nii-chan no baka!");
                         break;
                 }
-                message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "hug.gif").queue();
+                channel.sendMessage(msg).addFile(con.getInputStream(), "hug.gif").queue();
             } else {
                 switch ((int) (Math.random() * 3)) {
                     case 0:
@@ -55,18 +56,18 @@ public class Reactions {
                         msg = ("Paraaa, to ocupada jogando agora!");
                         break;
                 }
-                message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "hug.gif").queue();
+                channel.sendMessage(msg).addFile(con.getInputStream(), "hug.gif").queue();
             }
         } else {
             if (!answer)
                 msg = ("!1 " + mbr.getAsMention() + " abraçou " + target.getAsMention() + " - " + msg);
             else
                 msg = (target.getAsMention() + " abraçou e volta " + mbr.getAsMention() + " - " + msg);
-            message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "hug.gif").queue();
+            channel.sendMessage(msg).addFile(con.getInputStream(), "hug.gif").queue();
         }
     }
 
-    public static void slap(JDA bot, Message message, User target, boolean answer, User mbr) throws IOException {
+    public static void slap(JDA bot, Message message, User target, TextChannel channel, boolean answer, User mbr) throws IOException {
         URL url = new URL(ReactionsList.slap()[(int) (Math.random() * ReactionsList.slap().length)]);
         HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
@@ -97,9 +98,9 @@ public class Reactions {
                         msg = ("EU TO JOGANDO!");
                         break;
                 }
-                message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "slap.gif").queue();
+                channel.sendMessage(msg).addFile(con.getInputStream(), "slap.gif").queue();
             } else {
-                message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "slap.gif").queue();
+                channel.sendMessage(msg).addFile(con.getInputStream(), "slap.gif").queue();
                 nope(message, bot.getSelfUser());
             }
         } else {
@@ -107,11 +108,11 @@ public class Reactions {
                 msg = ("!2 " + mbr.getAsMention() + " deu um tapa em " + target.getAsMention() + " - " + msg);
             else
                 msg = (target.getAsMention() + " respondeu o tapa de " + mbr.getAsMention() + " - " + msg);
-            message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "slap.gif").queue();
+            channel.sendMessage(msg).addFile(con.getInputStream(), "slap.gif").queue();
         }
     }
 
-    public static void smash(JDA bot, Message message, User target, boolean answer, User mbr) throws IOException {
+    public static void smash(JDA bot, Message message, User target, TextChannel channel, boolean answer, User mbr) throws IOException {
         URL url = new URL(ReactionsList.smash()[(int) (Math.random() * ReactionsList.smash().length)]);
         HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
@@ -142,9 +143,9 @@ public class Reactions {
                         msg = ("Calma, eu só caí uns elozinhos com a sua conta!");
                         break;
                 }
-                message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "smash.gif").queue();
+                channel.sendMessage(msg).addFile(con.getInputStream(), "smash.gif").queue();
             } else {
-                message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "smash.gif").queue();
+                channel.sendMessage(msg).addFile(con.getInputStream(), "smash.gif").queue();
                 nope(message, bot.getSelfUser());
             }
         } else {
@@ -152,11 +153,11 @@ public class Reactions {
                 msg = ("!3 " + mbr.getAsMention() + " destruiu " + target.getAsMention() + " - " + msg);
             else
                 msg = ("Porém, " + target.getAsMention() + " se levantou e destrui " + mbr.getAsMention() + " de volta - " + msg);
-            message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "smash.gif").queue();
+            channel.sendMessage(msg).addFile(con.getInputStream(), "smash.gif").queue();
         }
     }
 
-    public static void stare(JDA bot, Message message, User target, boolean answer, User mbr) throws IOException {
+    public static void stare(JDA bot, User target, TextChannel channel, boolean answer, User mbr) throws IOException {
         URL url = new URL(ReactionsList.stare()[(int) (Math.random() * ReactionsList.stare().length)]);
         HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
@@ -186,13 +187,13 @@ public class Reactions {
                     msg = ("Nani?");
                     break;
             }
-            message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "stare.gif").queue();
+            channel.sendMessage(msg).addFile(con.getInputStream(), "stare.gif").queue();
         } else {
             if (!answer)
                 msg = ("!4 " + mbr.getAsMention() + " encarou " + target.getAsMention() + " - " + msg);
             else
                 msg = (target.getAsMention() + " também encarou " + mbr.getAsMention() + " - " + msg);
-            message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "stare.gif").queue();
+            channel.sendMessage(msg).addFile(con.getInputStream(), "stare.gif").queue();
         }
     }
 
