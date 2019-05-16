@@ -23,6 +23,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Embeds {
     public static MessageEmbed bugReport(MessageReceivedEvent message, String prefix) {
@@ -145,6 +147,9 @@ public class Embeds {
     }
 
     public static void configsEmbed(MessageReceivedEvent message, guildConfig gc) {
+        Map<String, String> cargos = new HashMap<>();
+        if (gc.getCargoslvl() != null) gc.getCargoslvl().forEach((k,v) -> cargos.put(k, message.getGuild().getRoleById((String) v).getAsMention()));
+
         EmbedBuilder eb = new EmbedBuilder();
 
         eb.setColor(Color.MAGENTA);
@@ -154,8 +159,9 @@ public class Embeds {
         eb.addField("Canal de avisos:", gc.getCanalav() != null ? message.getGuild().getTextChannelById(gc.getCanalav()).getAsMention() : "Não definido", true);
         eb.addField("Mensagem de boas-vindas:", gc.getMsgBoasVindas(), false);
         eb.addField("Mensagem de adeus:", gc.getMsgAdeus(), false);
+        eb.addField("Notificações de level up:", gc.getLvlNotif() ? "Ativadas" : "Desativadas", false);
         eb.addField("Cargo de punição:", gc.getCargowarn() != null ? message.getGuild().getRoleById(gc.getCargowarn()).getAsMention() : "Não definido", false);
-        eb.addField("Recompensas de level:", gc.getCargoslvl() != null ? gc.getCargoslvl().toString().replace(",", "\n") : "Não definidos", false);
+        eb.addField("Recompensas de level:", cargos.size() != 0 ? cargos.toString() : "Não definidos", false);
 
         message.getChannel().sendMessage(eb.build()).queue();
     }
