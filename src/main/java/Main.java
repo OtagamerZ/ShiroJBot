@@ -367,7 +367,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                     message.getChannel().sendMessage(":x: Você precisa mencionar um usuário e dizer o Nº do alerta a ser removido.").queue();
                                 }
                             } else if (hasPrefix(message, "rcargolvl")) {
-                                if (cmd[1] != null) {
+                                if (cmd.length != 1) {
                                     Map<String, Object> cargos = gcMap.get(message.getGuild().getId()).getCargoslvl();
                                     cargos.remove(cmd[1]);
                                     gcMap.get(message.getGuild().getId()).setCargoslvl((JSONObject) cargos);

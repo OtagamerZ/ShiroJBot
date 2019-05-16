@@ -152,11 +152,11 @@ public class Embeds {
         eb.setDescription("Prefixo: __**" + gc.getPrefix() + "**__");
         eb.addField("Canal de boas-vindas:", gc.getCanalbv() != null ? message.getGuild().getTextChannelById(gc.getCanalbv()).getAsMention() : "Não definido", true);
         eb.addField("Canal de avisos:", gc.getCanalav() != null ? message.getGuild().getTextChannelById(gc.getCanalav()).getAsMention() : "Não definido", true);
-        eb.addField("Mensagem de boas-vindas:", gc.getMsgBoasVindas(), false);
-        eb.addField("Mensagem de adeus:", gc.getMsgAdeus(), false);
-        eb.addField("Notificações de level up:", gc.getLvlNotif() ? "Ativadas" : "Desativadas", false);
-        eb.addField("Cargo de punição:", gc.getCargowarn() != null ? message.getGuild().getRoleById(gc.getCargowarn()).getAsMention() : "Não definido", false);
-        eb.addField("Recompensas de level:", gc.getCargoslvl().size() != 0 ? gc.getCargoslvl().toString() : "Não definidos", false);
+        eb.addField("Mensagem de boas-vindas:", gc.getMsgBoasVindas(), true);
+        eb.addField("Mensagem de adeus:", gc.getMsgAdeus(), true);
+        eb.addField("Notificações de level up:", gc.getLvlNotif() ? "Ativadas" : "Desativadas", true);
+        eb.addField("Cargo de punição:", gc.getCargowarn() != null ? message.getGuild().getRoleById(gc.getCargowarn()).getAsMention() : "Não definido", true);
+        eb.addField("Recompensas de level:", gc.getCargoslvl().size() != 0 ? gc.getCargoslvl().toString() : "Não definidos", true);
 
         message.getChannel().sendMessage(eb.build()).queue();
     }
