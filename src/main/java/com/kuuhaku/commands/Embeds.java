@@ -23,6 +23,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Embeds {
     public static MessageEmbed bugReport(MessageReceivedEvent message, String prefix) {
@@ -146,6 +148,8 @@ public class Embeds {
 
     public static void configsEmbed(MessageReceivedEvent message, guildConfig gc) {
         EmbedBuilder eb = new EmbedBuilder();
+        Map<String, String> roles = new HashMap<>();
+        gc.getCargoslvl().forEach((k, v) -> roles.put(k, message.getGuild().getRoleById(v.toString()).getName()));
 
         eb.setColor(Color.MAGENTA);
         eb.setAuthor("Eis as configurações deste servidor");
@@ -156,7 +160,7 @@ public class Embeds {
         eb.addField("Mensagem de adeus:", gc.getMsgAdeus(), true);
         eb.addField("Notificações de level up:", gc.getLvlNotif() ? "Ativadas" : "Desativadas", true);
         eb.addField("Cargo de punição:", gc.getCargowarn() != null ? message.getGuild().getRoleById(gc.getCargowarn()).getAsMention() : "Não definido", true);
-        eb.addField("Recompensas de level:", gc.getCargoslvl().size() != 0 ? gc.getCargoslvl().toString() : "Não definidos", true);
+        eb.addField("Recompensas de level:", gc.getCargoslvl().size() != 0 ? roles.toString().replace(",", "\n") : "Não definidos", true);
 
         message.getChannel().sendMessage(eb.build()).queue();
     }
