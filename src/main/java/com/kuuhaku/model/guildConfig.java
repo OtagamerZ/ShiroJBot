@@ -4,6 +4,7 @@ import org.json.JSONObject;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.Map;
 
 @Entity
 public class guildConfig {
@@ -80,9 +81,7 @@ public class guildConfig {
         this.cargowarn = cargowarn;
     }
 
-    public JSONObject getCargoslvl() {
-        return new JSONObject(cargoslvl);
-    }
+    public Map<String, Object> getCargoslvl() { return new JSONObject(cargoslvl).toMap(); }
 
     public void setCargoslvl(JSONObject cargoslvl) {
         this.cargoslvl = cargoslvl.toString();
