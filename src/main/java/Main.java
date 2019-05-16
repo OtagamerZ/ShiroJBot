@@ -21,9 +21,7 @@ import org.quartz.impl.StdSchedulerFactory;
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
 import java.time.OffsetDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Main extends ListenerAdapter implements JobListener, Job {
     private static JDA bot;
@@ -125,6 +123,10 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         try {
             if (gcMap.get(user.getGuild().getId()).getCanalbv() != null) {
                 Embeds.welcomeEmbed(user, gcMap.get(user.getGuild().getId()).getMsgBoasVindas(), user.getGuild().getTextChannelById(gcMap.get(user.getGuild().getId()).getCanalbv()));
+                Map<String, Object> roles = gcMap.get(user.getGuild().getId()).getCargoNew();
+                List<Role> list = new ArrayList<>();
+                roles.values().forEach(r -> list.add(user.getGuild().getRoleById(r.toString())));
+                if (gcMap.get(user.getGuild().getId()).getCargoNew().size() > 0) user.getGuild().getController().addRolesToMember(user.getMember(), list).queue();
             }
         } catch (Exception ignored) {
         }
