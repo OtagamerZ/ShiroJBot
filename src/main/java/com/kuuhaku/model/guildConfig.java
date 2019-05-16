@@ -16,6 +16,7 @@ public class guildConfig {
     private String canalav = null;
     private String cargowarn = null;
     private String cargoslvl = "{}";
+    private String lvlNotif = "true";
 
     public guildConfig() {
 
@@ -85,5 +86,13 @@ public class guildConfig {
 
     public void setCargoslvl(JSONObject cargoslvl) {
         this.cargoslvl = cargoslvl.toString();
+    }
+
+    public boolean getLvlNotif() {
+        return Boolean.parseBoolean(lvlNotif);
+    }
+
+    public void setLvlNotif(boolean lvlNotif) {
+        this.lvlNotif = Boolean.toString(lvlNotif);
     }
 }
