@@ -149,7 +149,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         Message message = event.getChannel().getMessageById(event.getMessageId()).complete();
         List<User> ment = message.getMentionedUsers();
         if (ment.size() > 0) {
-            if (ment.get(1) == event.getUser() && event.getReactionEmote().getName().equals("U+21AA")) {
+            if (ment.get(1) == event.getUser() && event.getReactionEmote().getName().equals("\u21aa")) {
                 MessageBuilder msg = new MessageBuilder();
                 msg.setContent(ment.get(1).getAsMention());
                 try {
@@ -203,7 +203,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     if (message.getMessage().getContentRaw().contains("abraçou") ||
                             message.getMessage().getContentRaw().contains("deu um tapa em") ||
                             message.getMessage().getContentRaw().contains("destruiu") ||
-                            message.getMessage().getContentRaw().contains("encarou")) message.getMessage().addReaction("U+21AA").queue();
+                            message.getMessage().getContentRaw().contains("encarou")) message.getMessage().addReaction("\u21aa").queue();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
