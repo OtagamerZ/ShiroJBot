@@ -18,6 +18,7 @@ import net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import org.json.JSONObject;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
@@ -361,6 +362,14 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                     Admin.takeWarn(message, memberMap);
                                 } else {
                                     message.getChannel().sendMessage(":x: Você precisa mencionar um usuário e dizer o Nº do alerta a ser removido.").queue();
+                                }
+                            } else if (hasPrefix(message, "remover cargolvl")) {
+                                try {
+                                    String lvl = Integer.toString(Integer.parseInt(message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix() + "remover cargolvl", "").trim()));
+                                    JSONObject cargos = gcMap.get(message.getGuild().getId()).getCargoslvl();
+                                    gcMap.get(message.getGuild().getId()).setCargoslvl((JSONObject) cargos.remove(lvl));
+                                } catch (Exception e) {
+                                    message.getChannel().sendMessage("Opa, algo deu errado, lembre-se de especificar apenas o level.").queue();
                                 }
                             }
                         }
