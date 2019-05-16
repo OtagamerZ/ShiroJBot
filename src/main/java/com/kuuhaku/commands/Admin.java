@@ -63,9 +63,9 @@ public class Admin {
                     try {
                         int lvl = Integer.parseInt(cmd[2]);
                         if (message.getMessage().getMentionedRoles().size() != 0) {
-                            JSONObject cargos = gc.getCargoslvl();
+                            Map<String, Object> cargos = gc.getCargoslvl();
                             cargos.put(cmd[2], message.getMessage().getMentionedRoles().get(0).getId());
-                            gc.setCargoslvl(cargos);
+                            gc.setCargoslvl(new JSONObject(cargos));
                         } else {
                             message.getChannel().sendMessage("A mensagem deve estar entre aspas (\")").queue();
                         }
