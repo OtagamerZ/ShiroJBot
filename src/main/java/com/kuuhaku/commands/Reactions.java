@@ -60,7 +60,7 @@ public class Reactions {
             }
         } else {
             if (!answer)
-                msg = ("!1 " + mbr.getAsMention() + " abraçou " + target.getAsMention() + " - " + msg);
+                msg = (mbr.getAsMention() + " abraçou " + target.getAsMention() + " - " + msg);
             else
                 msg = (target.getAsMention() + " abraçou e volta " + mbr.getAsMention() + " - " + msg);
             channel.sendMessage(msg).addFile(con.getInputStream(), "hug.gif").queue();
@@ -105,7 +105,7 @@ public class Reactions {
             }
         } else {
             if (!answer)
-                msg = ("!2 " + mbr.getAsMention() + " deu um tapa em " + target.getAsMention() + " - " + msg);
+                msg = (mbr.getAsMention() + " deu um tapa em " + target.getAsMention() + " - " + msg);
             else
                 msg = (target.getAsMention() + " respondeu o tapa de " + mbr.getAsMention() + " - " + msg);
             channel.sendMessage(msg).addFile(con.getInputStream(), "slap.gif").queue();
@@ -150,7 +150,7 @@ public class Reactions {
             }
         } else {
             if (!answer)
-                msg = ("!3 " + mbr.getAsMention() + " destruiu " + target.getAsMention() + " - " + msg);
+                msg = (mbr.getAsMention() + " destruiu " + target.getAsMention() + " - " + msg);
             else
                 msg = ("Porém, " + target.getAsMention() + " se levantou e destrui " + mbr.getAsMention() + " de volta - " + msg);
             channel.sendMessage(msg).addFile(con.getInputStream(), "smash.gif").queue();
@@ -190,7 +190,7 @@ public class Reactions {
             channel.sendMessage(msg).addFile(con.getInputStream(), "stare.gif").queue();
         } else {
             if (!answer)
-                msg = ("!4 " + mbr.getAsMention() + " encarou " + target.getAsMention() + " - " + msg);
+                msg = (mbr.getAsMention() + " encarou " + target.getAsMention() + " - " + msg);
             else
                 msg = (target.getAsMention() + " também encarou " + mbr.getAsMention() + " - " + msg);
             channel.sendMessage(msg).addFile(con.getInputStream(), "stare.gif").queue();
