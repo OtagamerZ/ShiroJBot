@@ -342,7 +342,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         }
 
                         //ADMIN--------------------------------------------------------------------------------->
-                        if (message.getMember().hasPermission(Permission.MANAGE_SERVER)) {
+                        if (message.getMember().hasPermission(Permission.MANAGE_CHANNEL)) {
                             if (hasPrefix(message, "definir")) {
                                 Admin.config(cmd, message, gcMap.get(message.getGuild().getId()));
                             } else if (hasPrefix(message, "configs")) {
