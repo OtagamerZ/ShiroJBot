@@ -26,12 +26,6 @@ public class Database {
 
     public static void sendAllGuildConfigs(Collection<guildConfig> gc) {
         EntityManager em = getEntityManager();
-        Query q = em.createQuery("DELETE FROM guildConfig");
-
-        em.getTransaction().begin();
-        q.executeUpdate();
-        em.getTransaction().commit();
-        System.out.println("Dados resetados com sucesso!");
 
         em.getTransaction().begin();
         gc.forEach(em::persist);
