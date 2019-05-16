@@ -128,7 +128,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                 roles.values().forEach(r -> list.add(user.getGuild().getRoleById(r.toString())));
                 if (gcMap.get(user.getGuild().getId()).getCargoNew().size() > 0) user.getGuild().getController().addRolesToMember(user.getMember(), list).queue();
             }
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
