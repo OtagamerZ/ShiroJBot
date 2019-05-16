@@ -144,13 +144,13 @@ public class Main extends ListenerAdapter implements JobListener, Job {
 
     @Override
     public void onMessageReactionAdd(MessageReactionAddEvent event) {
-        System.out.println("Nova reação na mensagem " + event.getMessageId() + " por " + event.getUser().getName() + " | " + event.getGuild().getName());
         User user = event.getUser();
         Message message = event.getChannel().getMessageById(event.getMessageId()).complete();
         List<User> ment = message.getMentionedUsers();
         if (ment.size() > 0) {
             User target = ment.get(0);
             if (ment.get(1) == user && event.getReactionEmote().getName().equals("\u21aa")) {
+                System.out.println("Nova reação na mensagem " + event.getMessageId() + " por " + event.getUser().getName() + " | " + event.getGuild().getName());
                 MessageBuilder msg = new MessageBuilder();
                 msg.setContent(ment.get(1).getAsMention());
                 try {
