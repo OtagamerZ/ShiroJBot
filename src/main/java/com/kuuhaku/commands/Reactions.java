@@ -11,7 +11,7 @@ import java.net.URL;
 import java.util.Objects;
 
 public class Reactions {
-    public static void hug(JDA bot, Message message, boolean answer, User mbr) throws IOException {
+    public static void hug(JDA bot, Message message, User target, boolean answer, User mbr) throws IOException {
         URL url = new URL(ReactionsList.hug()[(int) (Math.random() * ReactionsList.hug().length)]);
         HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
@@ -29,7 +29,7 @@ public class Reactions {
                 break;
         }
 
-        if (message.getMentionedUsers().get(0) == bot.getSelfUser()) {
+        if (target == bot.getSelfUser()) {
             if (message.getAuthor().getId().equals("350836145921327115")) {
                 switch ((int) (Math.random() * 3)) {
                     case 0:
@@ -59,14 +59,14 @@ public class Reactions {
             }
         } else {
             if (!answer)
-                msg = ("!1 " + mbr.getAsMention() + " abraçou " + message.getMentionedUsers().get(0).getAsMention() + " - " + msg);
+                msg = ("!1 " + mbr.getAsMention() + " abraçou " + target.getAsMention() + " - " + msg);
             else
-                msg = (message.getMentionedUsers().get(0).getAsMention() + " abraçou e volta " + mbr.getAsMention() + " - " + msg);
+                msg = (target.getAsMention() + " abraçou e volta " + mbr.getAsMention() + " - " + msg);
             message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "hug.gif").queue();
         }
     }
 
-    public static void slap(JDA bot, Message message, boolean answer, User mbr) throws IOException {
+    public static void slap(JDA bot, Message message, User target, boolean answer, User mbr) throws IOException {
         URL url = new URL(ReactionsList.slap()[(int) (Math.random() * ReactionsList.slap().length)]);
         HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
@@ -84,7 +84,7 @@ public class Reactions {
                 break;
         }
 
-        if (message.getMentionedUsers().get(0) == bot.getSelfUser()) {
+        if (target == bot.getSelfUser()) {
             if (message.getAuthor().getId().equals("350836145921327115")) {
                 switch ((int) (Math.random() * 3)) {
                     case 0:
@@ -104,14 +104,14 @@ public class Reactions {
             }
         } else {
             if (!answer)
-                msg = ("!2 " + mbr.getAsMention() + " deu um tapa em " + message.getMentionedUsers().get(0).getAsMention() + " - " + msg);
+                msg = ("!2 " + mbr.getAsMention() + " deu um tapa em " + target.getAsMention() + " - " + msg);
             else
-                msg = (message.getMentionedUsers().get(0).getAsMention() + " respondeu o tapa de " + mbr.getAsMention() + " - " + msg);
+                msg = (target.getAsMention() + " respondeu o tapa de " + mbr.getAsMention() + " - " + msg);
             message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "slap.gif").queue();
         }
     }
 
-    public static void smash(JDA bot, Message message, boolean answer, User mbr) throws IOException {
+    public static void smash(JDA bot, Message message, User target, boolean answer, User mbr) throws IOException {
         URL url = new URL(ReactionsList.smash()[(int) (Math.random() * ReactionsList.smash().length)]);
         HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
@@ -129,7 +129,7 @@ public class Reactions {
                 break;
         }
 
-        if (message.getMentionedUsers().get(0) == bot.getSelfUser()) {
+        if (target == bot.getSelfUser()) {
             if (message.getAuthor().getId().equals("350836145921327115")) {
                 switch ((int) (Math.random() * 3)) {
                     case 0:
@@ -149,14 +149,14 @@ public class Reactions {
             }
         } else {
             if (!answer)
-                msg = ("!3 " + mbr.getAsMention() + " destruiu " + message.getMentionedUsers().get(0).getAsMention() + " - " + msg);
+                msg = ("!3 " + mbr.getAsMention() + " destruiu " + target.getAsMention() + " - " + msg);
             else
-                msg = ("Porém, " + message.getMentionedUsers().get(0).getAsMention() + " se levantou e destrui " + mbr.getAsMention() + " de volta - " + msg);
+                msg = ("Porém, " + target.getAsMention() + " se levantou e destrui " + mbr.getAsMention() + " de volta - " + msg);
             message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "smash.gif").queue();
         }
     }
 
-    public static void stare(JDA bot, Message message, boolean answer, User mbr) throws IOException {
+    public static void stare(JDA bot, Message message, User target, boolean answer, User mbr) throws IOException {
         URL url = new URL(ReactionsList.stare()[(int) (Math.random() * ReactionsList.stare().length)]);
         HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
@@ -174,7 +174,7 @@ public class Reactions {
                 break;
         }
 
-        if (message.getMentionedUsers().get(0) == bot.getSelfUser()) {
+        if (target == bot.getSelfUser()) {
             switch ((int) (Math.random() * 3)) {
                 case 0:
                     msg = ("Que foi?");
@@ -189,9 +189,9 @@ public class Reactions {
             message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "stare.gif").queue();
         } else {
             if (!answer)
-                msg = ("!4 " + mbr.getAsMention() + " encarou " + message.getMentionedUsers().get(0).getAsMention() + " - " + msg);
+                msg = ("!4 " + mbr.getAsMention() + " encarou " + target.getAsMention() + " - " + msg);
             else
-                msg = (message.getMentionedUsers().get(0).getAsMention() + " também encarou " + mbr.getAsMention() + " - " + msg);
+                msg = (target.getAsMention() + " também encarou " + mbr.getAsMention() + " - " + msg);
             message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "stare.gif").queue();
         }
     }
