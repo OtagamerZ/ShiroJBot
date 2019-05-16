@@ -297,71 +297,75 @@ public class Embeds {
     }
 
     public static void welcomeEmbed(GuildMemberJoinEvent event, String msg, TextChannel canalbv) throws IOException {
-        URL url = new URL(event.getUser().getAvatarUrl());
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestProperty("User-Agent", "Mozilla/5.0");
-        BufferedImage image = ImageIO.read(con.getInputStream());
+        if (!msg.equals("")) {
+            URL url = new URL(event.getUser().getAvatarUrl());
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestProperty("User-Agent", "Mozilla/5.0");
+            BufferedImage image = ImageIO.read(con.getInputStream());
 
-        EmbedBuilder eb = new EmbedBuilder();
+            EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
-        eb.setDescription(msg.replace("%user%", event.getUser().getAsMention()).replace("%guild%", event.getGuild().getName()).replace("%user-id%", event.getUser().getId()));
-        eb.setThumbnail(event.getUser().getAvatarUrl());
-        eb.setFooter("Servidor gerenciado por " + event.getGuild().getOwner().getEffectiveName(), event.getGuild().getOwner().getUser().getAvatarUrl());
-        switch ((int) (Math.random() * 5)) {
-            case 0:
-                eb.setTitle("Opa, parece que temos um novo membro?");
-                break;
-            case 1:
-                eb.setTitle("Mais um membro para nosso lindo servidor!");
-                break;
-            case 2:
-                eb.setTitle("Um novo jogador entrou na partida, pressione start 2P!");
-                break;
-            case 3:
-                eb.setTitle("Agora podemos iniciar a teamfight, um novo membro veio nos ajudar!");
-                break;
-            case 4:
-                eb.setTitle("Bem-vindo ao nosso servidor, puxe uma cadeira e fique à vontade!");
-                break;
+            eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
+            eb.setDescription(msg.replace("%user%", event.getUser().getAsMention()).replace("%guild%", event.getGuild().getName()).replace("%user-id%", event.getUser().getId()));
+            eb.setThumbnail(event.getUser().getAvatarUrl());
+            eb.setFooter("Servidor gerenciado por " + event.getGuild().getOwner().getEffectiveName(), event.getGuild().getOwner().getUser().getAvatarUrl());
+            switch ((int) (Math.random() * 5)) {
+                case 0:
+                    eb.setTitle("Opa, parece que temos um novo membro?");
+                    break;
+                case 1:
+                    eb.setTitle("Mais um membro para nosso lindo servidor!");
+                    break;
+                case 2:
+                    eb.setTitle("Um novo jogador entrou na partida, pressione start 2P!");
+                    break;
+                case 3:
+                    eb.setTitle("Agora podemos iniciar a teamfight, um novo membro veio nos ajudar!");
+                    break;
+                case 4:
+                    eb.setTitle("Bem-vindo ao nosso servidor, puxe uma cadeira e fique à vontade!");
+                    break;
+            }
+
+            canalbv.sendMessage(eb.build()).queue();
         }
-
-        canalbv.sendMessage(eb.build()).queue();
     }
 
     public static void byeEmbed(GuildMemberLeaveEvent event, String msg, TextChannel canalbv) throws IOException {
-        URL url = new URL(event.getUser().getAvatarUrl());
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestProperty("User-Agent", "Mozilla/5.0");
-        BufferedImage image = ImageIO.read(con.getInputStream());
+        if (!msg.equals("")) {
+            URL url = new URL(event.getUser().getAvatarUrl());
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestProperty("User-Agent", "Mozilla/5.0");
+            BufferedImage image = ImageIO.read(con.getInputStream());
 
-        int rmsg = (int) (Math.random() * 5);
+            int rmsg = (int) (Math.random() * 5);
 
-        EmbedBuilder eb = new EmbedBuilder();
+            EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
-        eb.setThumbnail(event.getUser().getAvatarUrl());
-        eb.setDescription(msg.replace("%user%", event.getUser().getName()).replace("%guild%", event.getGuild().getName()).replace("%user-id%", event.getUser().getId()));
-        eb.setFooter("Servidor gerenciado por " + event.getGuild().getOwner().getEffectiveName(), event.getGuild().getOwner().getUser().getAvatarUrl());
-        switch (rmsg) {
-            case 0:
-                eb.setTitle("Nãããoo...um membro deixou este servidor!");
-                break;
-            case 1:
-                eb.setTitle("O quê? Temos um membro a menos neste servidor!");
-                break;
-            case 2:
-                eb.setTitle("Alguém saiu do servidor, deve ter acabado a pilha, só pode!");
-                break;
-            case 3:
-                eb.setTitle("Bem, alguém não está mais neste servidor, que pena!");
-                break;
-            case 4:
-                eb.setTitle("Saíram do servidor bem no meio de uma teamfight, da pra acreditar?");
-                break;
+            eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
+            eb.setThumbnail(event.getUser().getAvatarUrl());
+            eb.setDescription(msg.replace("%user%", event.getUser().getName()).replace("%guild%", event.getGuild().getName()).replace("%user-id%", event.getUser().getId()));
+            eb.setFooter("Servidor gerenciado por " + event.getGuild().getOwner().getEffectiveName(), event.getGuild().getOwner().getUser().getAvatarUrl());
+            switch (rmsg) {
+                case 0:
+                    eb.setTitle("Nãããoo...um membro deixou este servidor!");
+                    break;
+                case 1:
+                    eb.setTitle("O quê? Temos um membro a menos neste servidor!");
+                    break;
+                case 2:
+                    eb.setTitle("Alguém saiu do servidor, deve ter acabado a pilha, só pode!");
+                    break;
+                case 3:
+                    eb.setTitle("Bem, alguém não está mais neste servidor, que pena!");
+                    break;
+                case 4:
+                    eb.setTitle("Saíram do servidor bem no meio de uma teamfight, da pra acreditar?");
+                    break;
+            }
+
+            canalbv.sendMessage(eb.build()).queue();
         }
-
-        canalbv.sendMessage(eb.build()).queue();
     }
 
     public static void makeEmbed(MessageReceivedEvent message, String msg) throws IOException {
@@ -380,7 +384,7 @@ public class Embeds {
             eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
 
             message.getChannel().sendMessage(eb.build()).queue();
-        } catch (Exception e){
+        } catch (Exception e) {
             message.getChannel().sendMessage("Opa, algo deu errado, tenha certeza de ter escrito neste formato:\n" +
                     "**Título;Descrição;Link da foto**").queue();
         }
