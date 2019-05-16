@@ -187,11 +187,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         } catch (Exception e) {
             System.out.println("Guardar configurações no banco de dados...ERRO!");
             System.out.println("Erro: " + e);
-            try {
-                initBot();
-            } catch (LoginException le) {
-                System.out.println("Erro ao inicializar bot: " + le);
-            }
         }
     }
 
