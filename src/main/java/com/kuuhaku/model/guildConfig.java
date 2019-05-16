@@ -15,7 +15,7 @@ public class guildConfig {
     private String canalbv = null;
     private String canalav = null;
     private String cargowarn = null;
-    private String cargoslvl = "";
+    private String cargoslvl = "{}";
 
     public guildConfig() {
 
