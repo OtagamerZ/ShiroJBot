@@ -149,18 +149,19 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         Message message = event.getChannel().getMessageById(event.getMessageId()).complete();
         List<User> ment = message.getMentionedUsers();
         if (ment.size() > 0) {
-            if (ment.get(1) == event.getUser() && event.getReactionEmote().getName().equals("\u21aa")) {
+            User target = ment.get(0);
+            if (ment.get(1) == user && event.getReactionEmote().getName().equals("\u21aa")) {
                 MessageBuilder msg = new MessageBuilder();
                 msg.setContent(ment.get(1).getAsMention());
                 try {
                     if (message.getContentRaw().contains("abraçou")) {
-                        Reactions.hug(bot, msg.build(), user, message.getTextChannel(), true, user);
+                        Reactions.hug(bot, msg.build(), user, message.getTextChannel(), true, target);
                     } else if (message.getContentRaw().contains("deu um tapa em")) {
-                        Reactions.slap(bot, msg.build(), user, message.getTextChannel(), true, user);
+                        Reactions.slap(bot, msg.build(), user, message.getTextChannel(), true, target);
                     } else if (message.getContentRaw().contains("destruiu")) {
-                        Reactions.smash(bot, msg.build(), user, message.getTextChannel(), true, user);
+                        Reactions.smash(bot, msg.build(), user, message.getTextChannel(), true, target);
                     } else if (message.getContentRaw().contains("encarou")) {
-                        Reactions.stare(bot, user, message.getTextChannel(), true, user);
+                        Reactions.stare(bot, user, message.getTextChannel(), true, target);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
