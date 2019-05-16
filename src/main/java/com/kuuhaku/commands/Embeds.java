@@ -297,7 +297,7 @@ public class Embeds {
     }
 
     public static void welcomeEmbed(GuildMemberJoinEvent event, String msg, TextChannel canalbv) throws IOException {
-        URL url = new URL(event.getMember().getUser().getAvatarUrl());
+        URL url = new URL(event.getUser().getAvatarUrl());
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
         BufferedImage image = ImageIO.read(con.getInputStream());
@@ -330,7 +330,7 @@ public class Embeds {
     }
 
     public static void byeEmbed(GuildMemberLeaveEvent event, String msg, TextChannel canalbv) throws IOException {
-        URL url = new URL(event.getMember().getUser().getAvatarUrl());
+        URL url = new URL(event.getUser().getAvatarUrl());
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
         BufferedImage image = ImageIO.read(con.getInputStream());
