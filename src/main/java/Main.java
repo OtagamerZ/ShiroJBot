@@ -195,12 +195,12 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         boolean lvlUp;
                         lvlUp = memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).addXp();
                         if (lvlUp) {
-                            message.getChannel().sendMessage(message.getAuthor().getAsMention() + " subiu para o level " + memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).getLevel() + ". GGWP!! :tada:").queue();
+                            if (gcMap.get(message.getGuild().getId()).getLvlNotif()) message.getChannel().sendMessage(message.getAuthor().getAsMention() + " subiu para o level " + memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).getLevel() + ". GGWP!! :tada:").queue();
                             if (gcMap.get(message.getGuild().getId()).getCargoslvl().has(Integer.toString(memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).getLevel()))) {
                                 Member member = memberMap.get(message.getAuthor().getId() + message.getGuild().getId());
                                 String roleID = gcMap.get(message.getGuild().getId()).getCargoslvl().getString(Integer.toString(member.getLevel()));
 
-                                message.getGuild().getMemberById(message.getAuthor().getId()).getRoles().add(message.getGuild().getRoleById(roleID));
+                                message.getGuild().getController().addRolesToMember(message.getMember(), message.getGuild().getRoleById(roleID)).queue();
                             }
                         }
                     }
@@ -367,12 +367,19 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                     message.getChannel().sendMessage(":x: Você precisa mencionar um usuário e dizer o Nº do alerta a ser removido.").queue();
                                 }
                             } else if (hasPrefix(message, "remover cargolvl")) {
-                                try {
-                                    String lvl = Integer.toString(Integer.parseInt(message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix() + "remover cargolvl", "").trim()));
-                                    JSONObject cargos = gcMap.get(message.getGuild().getId()).getCargoslvl();
-                                    gcMap.get(message.getGuild().getId()).setCargoslvl((JSONObject) cargos.remove(lvl));
-                                } catch (Exception e) {
+                                if (!message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix() + "remover cargolvl", "").trim().equals("")) {
+                                    Object cargos = gcMap.get(message.getGuild().getId()).getCargoslvl().remove(message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix() + "remover cargolvl", "").trim());
+                                    gcMap.get(message.getGuild().getId()).setCargoslvl((JSONObject) cargos);
+                                } else {
                                     message.getChannel().sendMessage("Opa, algo deu errado, lembre-se de especificar apenas o level.").queue();
+                                }
+                            } else if (hasPrefix(message, "lvlnotif")) {
+                                if (gcMap.get(message.getGuild().getId()).getLvlNotif()) {
+                                    message.getChannel().sendMessage("Não irei mais avisar quando um membro passar de nível!").queue();
+                                    gcMap.get(message.getGuild().getId()).setLvlNotif(false);
+                                } else {
+                                    message.getChannel().sendMessage("Agora irei avisar quando um membro passar de nível!").queue();
+                                    gcMap.get(message.getGuild().getId()).setLvlNotif(true);
                                 }
                             }
                         }
