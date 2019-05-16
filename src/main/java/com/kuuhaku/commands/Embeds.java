@@ -152,7 +152,7 @@ public class Embeds {
         eb.addField("Mensagem de boas-vindas:", gc.getMsgBoasVindas(), false);
         eb.addField("Mensagem de adeus:", gc.getMsgAdeus(), false);
         eb.addField("Cargo de punição:", gc.getCargowarn() != null ? message.getGuild().getRoleById(gc.getCargowarn()).getAsMention() : "Não definido", false);
-        eb.addField("Recompensas de level:", !gc.getCargoslvl().toString().equals("{}") ? gc.getCargoslvl().toString() : "Não definidos", false);
+        eb.addField("Recompensas de level:", gc.getCargoslvl().toString().replace(",", "\n"), false);
 
         message.getChannel().sendMessage(eb.build()).queue();
     }
