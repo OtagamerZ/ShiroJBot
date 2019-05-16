@@ -62,7 +62,7 @@ public class Reactions {
             if (!answer)
                 msg = (mbr.getAsMention() + " abraçou " + target.getAsMention() + " - " + msg);
             else
-                msg = (target.getAsMention() + " abraçou e volta " + mbr.getAsMention() + " - " + msg);
+                msg = (target.getAsMention() + " retribuiu o abraço " + mbr.getAsMention() + " - " + msg);
             channel.sendMessage(msg).addFile(con.getInputStream(), "hug.gif").queue();
         }
     }
@@ -152,7 +152,7 @@ public class Reactions {
             if (!answer)
                 msg = (mbr.getAsMention() + " destruiu " + target.getAsMention() + " - " + msg);
             else
-                msg = ("Porém, " + target.getAsMention() + " se levantou e destrui " + mbr.getAsMention() + " de volta - " + msg);
+                msg = ("Porém, " + target.getAsMention() + " se levantou e atacou " + mbr.getAsMention() + " de volta - " + msg);
             channel.sendMessage(msg).addFile(con.getInputStream(), "smash.gif").queue();
         }
     }
@@ -192,7 +192,7 @@ public class Reactions {
             if (!answer)
                 msg = (mbr.getAsMention() + " encarou " + target.getAsMention() + " - " + msg);
             else
-                msg = (target.getAsMention() + " também encarou " + mbr.getAsMention() + " - " + msg);
+                msg = (target.getAsMention() + " também está encarando " + mbr.getAsMention() + " - " + msg);
             channel.sendMessage(msg).addFile(con.getInputStream(), "stare.gif").queue();
         }
     }
