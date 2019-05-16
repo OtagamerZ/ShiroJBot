@@ -47,6 +47,7 @@ public class Embeds {
                 prefix + "remover cargolvl [level] - Remove a recompensa do level especificado.\n\n" +
                 prefix + "configs - Mostra as configurações do servidor.\n\n" +
                 prefix + "alertar [membro] [razão] - Registra um alerta no perfil do membro especificado.\n\n" +
+                prefix + "punir [membro] - Reseta o XP de um membro.\n\n" +
                 prefix + "perdoar [membro] [Nº] - Perdoa um alerta do membro.```\n" +
 
                 ":speech_balloon: **Utilitário**\n```" +
