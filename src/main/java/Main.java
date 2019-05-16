@@ -195,6 +195,9 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         lvlUp = memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).addXp();
                         if (lvlUp) {
                             message.getChannel().sendMessage(message.getAuthor().getAsMention() + " subiu para o level " + memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).getLevel() + ". GGWP!! :tada:").queue();
+                            if (gcMap.get(message.getGuild().getId()).getCargoslvl().has(Integer.toString(memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).getLevel())))
+                                message.getGuild().getMemberById(memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).getId())
+                                        .getRoles().add(message.getGuild().getRoleById(gcMap.get(message.getGuild().getId()).getCargoslvl().getString(Integer.toString(memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).getLevel()))));
                         }
                     }
                     if (message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
@@ -291,6 +294,12 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             } else {
                                 message.getChannel().sendMessage(":x: Você precisa mencionar um usuário!").queue();
                             }
+                        } else if (hasPrefix(message, "embed")) {
+                            try {
+                                Embeds.makeEmbed(message, message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix() + "embed ", ""));
+                            } catch (Exception e) {
+                                message.getChannel().sendMessage("Ops, me parece que o link imagem não está correto, veja bem se incluiu tudo!").queue();
+                            }
                         }
 
                         //DONO--------------------------------------------------------------------------------->
@@ -366,6 +375,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     }
 
     private static boolean hasPrefix(MessageReceivedEvent message, String cmd) {
-        return message.getMessage().getContentRaw().split(" ")[0].equalsIgnoreCase(gcMap.get(message.getGuild().getId()).getPrefix() + cmd);
+        return message.getMessage().getMentionedUsers().contains(bot.getSelfUser()) || message.getMessage().getContentRaw().split(" ")[0].equalsIgnoreCase(gcMap.get(message.getGuild().getId()).getPrefix() + cmd);
     }
 }

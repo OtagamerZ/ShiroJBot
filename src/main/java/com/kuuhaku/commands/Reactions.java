@@ -116,24 +116,7 @@ public class Reactions {
     }
 
     public static void facedesk(MessageReceivedEvent message) throws IOException {
-        URL url = null;
-        switch ((int) (Math.random() * 5)) {
-            case 0:
-                url = new URL("https://i.imgur.com/OUVVkmW.gif");
-                break;
-            case 1:
-                url = new URL("https://i.imgur.com/NbzUx0P.gif");
-                break;
-            case 2:
-                url = new URL("https://i.imgur.com/BpFbc2t.gif");
-                break;
-            case 3:
-                url = new URL("https://i.imgur.com/c0Uhdb0.gif");
-                break;
-            case 4:
-                url = new URL("https://i.imgur.com/VH8m3sk.gif");
-                break;
-        }
+        URL url = new URL(ReactionsList.facedesk()[(int) (Math.random() * ReactionsList.facedesk().length)]);
         HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
@@ -154,24 +137,7 @@ public class Reactions {
     }
 
     public static void nope(MessageReceivedEvent message) throws IOException {
-        URL url = null;
-        switch ((int) (Math.random() * 5)) {
-            case 0:
-                url = new URL("https://i.imgur.com/IYv6ORf.gif");
-                break;
-            case 1:
-                url = new URL("https://i.imgur.com/4xudE2I.gif");
-                break;
-            case 2:
-                url = new URL("https://i.imgur.com/nn28XM1.gif");
-                break;
-            case 3:
-                url = new URL("https://i.imgur.com/V5nQbaO.gif");
-                break;
-            case 4:
-                url = new URL("https://i.imgur.com/b3RFHNc.gif");
-                break;
-        }
+        URL url = new URL(ReactionsList.nope()[(int) (Math.random() * ReactionsList.nope().length)]);
         HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
@@ -192,24 +158,7 @@ public class Reactions {
     }
 
     private static void nope(MessageReceivedEvent message, User author) throws IOException {
-        URL url = null;
-        switch ((int) (Math.random() * 5)) {
-            case 0:
-                url = new URL("https://i.imgur.com/IYv6ORf.gif");
-                break;
-            case 1:
-                url = new URL("https://i.imgur.com/4xudE2I.gif");
-                break;
-            case 2:
-                url = new URL("https://i.imgur.com/nn28XM1.gif");
-                break;
-            case 3:
-                url = new URL("https://i.imgur.com/V5nQbaO.gif");
-                break;
-            case 4:
-                url = new URL("https://i.imgur.com/b3RFHNc.gif");
-                break;
-        }
+        URL url = new URL(ReactionsList.nope()[(int) (Math.random() * ReactionsList.nope().length)]);
         HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
@@ -230,24 +179,7 @@ public class Reactions {
     }
 
     public static void run(MessageReceivedEvent message) throws IOException {
-        URL url = null;
-        switch ((int) (Math.random() * 5)) {
-            case 0:
-                url = new URL("https://i.imgur.com/vQKRD1d.gif");
-                break;
-            case 1:
-                url = new URL("https://i.imgur.com/XK227Hh.gif");
-                break;
-            case 2:
-                url = new URL("https://i.imgur.com/vTTXRvW.gif");
-                break;
-            case 3:
-                url = new URL("https://i.imgur.com/zkYMd3S.gif");
-                break;
-            case 4:
-                url = new URL("https://i.imgur.com/2CKZoDs.gif");
-                break;
-        }
+        URL url = new URL(ReactionsList.run()[(int) (Math.random() * ReactionsList.run().length)]);
         HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
@@ -268,24 +200,7 @@ public class Reactions {
     }
 
     public static void slap(JDA bot, MessageReceivedEvent message) throws IOException {
-        URL url = null;
-        switch ((int) (Math.random() * 5)) {
-            case 0:
-                url = new URL("https://i.imgur.com/23dwi5X.gif");
-                break;
-            case 1:
-                url = new URL("https://i.imgur.com/ok1eDJv.gif");
-                break;
-            case 2:
-                url = new URL("https://i.imgur.com/jiYtyNm.gif");
-                break;
-            case 3:
-                url = new URL("https://i.imgur.com/HJ9k2iv.gif");
-                break;
-            case 4:
-                url = new URL("https://i.imgur.com/EWXeWvd.gif");
-                break;
-        }
+        URL url = new URL(ReactionsList.slap()[(int) (Math.random() * ReactionsList.slap().length)]);
         HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
@@ -309,7 +224,7 @@ public class Reactions {
                         msg = ("Nii-chan no BAKA!");
                         break;
                     case 1:
-                        msg = ("Eu te avisei!");
+                        msg = ("Ai, vai mesmo bater na sua Nee-chan?");
                         break;
                     case 2:
                         msg = ("EU TO JOGANDO!");
@@ -327,24 +242,7 @@ public class Reactions {
     }
 
     public static void smash(JDA bot, MessageReceivedEvent message) throws IOException {
-        URL url = null;
-        switch ((int) (Math.random() * 5)) {
-            case 0:
-                url = new URL("https://i.imgur.com/YUOuDTN.gif");
-                break;
-            case 1:
-                url = new URL("https://i.imgur.com/StRBnfJ.gif");
-                break;
-            case 2:
-                url = new URL("https://i.imgur.com/U7svTKQ.gif");
-                break;
-            case 3:
-                url = new URL("https://i.imgur.com/BqSqhJ8.gif");
-                break;
-            case 4:
-                url = new URL("https://i.imgur.com/tVebG8q.gif");
-                break;
-        }
+        URL url = new URL(ReactionsList.smash()[(int) (Math.random() * ReactionsList.smash().length)]);
         HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
@@ -386,24 +284,7 @@ public class Reactions {
     }
 
     public static void stare(JDA bot, MessageReceivedEvent message) throws IOException {
-        URL url = null;
-        switch ((int) (Math.random() * 5)) {
-            case 0:
-                url = new URL("https://i.imgur.com/P0D8qvo.gif");
-                break;
-            case 1:
-                url = new URL("https://i.imgur.com/dExTK6D.gif");
-                break;
-            case 2:
-                url = new URL("https://i.imgur.com/CSJxTiA.gif");
-                break;
-            case 3:
-                url = new URL("https://i.imgur.com/mQKyrId.gif");
-                break;
-            case 4:
-                url = new URL("https://i.imgur.com/wdsZ4zo.gif");
-                break;
-        }
+        URL url = new URL(ReactionsList.stare()[(int) (Math.random() * ReactionsList.stare().length)]);
         HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
