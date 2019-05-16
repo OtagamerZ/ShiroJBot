@@ -389,7 +389,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                     Map<String, Object> cargos = gcMap.get(message.getGuild().getId()).getCargoslvl();
                                     cargos.remove(cmd[1]);
                                     gcMap.get(message.getGuild().getId()).setCargoslvl(new JSONObject(cargos));
-                                    message.getChannel().sendMessage("Opa, algo deu errado, lembre-se de especificar apenas o level.").queue();
+                                    message.getChannel().sendMessage("Retirada a recompensa de cargo do level " + cmd[1] + " com sucesso!").queue();
                                 } else {
                                     message.getChannel().sendMessage("Opa, algo deu errado, lembre-se de especificar apenas o level.").queue();
                                 }
