@@ -1,5 +1,7 @@
 package com.kuuhaku.model;
 
+import org.json.JSONObject;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -13,6 +15,7 @@ public class guildConfig {
     private String canalbv = null;
     private String canalav = null;
     private String cargowarn = null;
+    private String cargoslvl = "";
 
     public guildConfig() {
 
@@ -74,5 +77,13 @@ public class guildConfig {
 
     public void setCargowarn(String cargowarn) {
         this.cargowarn = cargowarn;
+    }
+
+    public JSONObject getCargoslvl() {
+        return new JSONObject(cargoslvl);
+    }
+
+    public void setCargoslvl(JSONObject cargoslvl) {
+        this.cargoslvl = cargoslvl.toString();
     }
 }
