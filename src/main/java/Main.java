@@ -3,10 +3,7 @@ import com.kuuhaku.controller.Database;
 import com.kuuhaku.model.Member;
 import com.kuuhaku.model.guildConfig;
 import net.dv8tion.jda.core.*;
-import net.dv8tion.jda.core.entities.ChannelType;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.events.ReconnectedEvent;
 import net.dv8tion.jda.core.events.ShutdownEvent;
@@ -147,26 +144,25 @@ public class Main extends ListenerAdapter implements JobListener, Job {
 
     @Override
     public void onMessageReactionAdd(MessageReactionAddEvent event) {
-        if (event.getUser() == bot.getSelfUser()) {
-            User user = event.getUser();
-            Message message = event.getChannel().getMessageById(event.getMessageId()).complete();
-            List<User> ment = message.getMentionedUsers();
-            if (ment.get(1) == event.getUser()) {
-                MessageBuilder msg = new MessageBuilder();
-                msg.setContent(ment.get(1).getAsMention());
-                try {
-                    if (message.getContentRaw().contains("!1")) {
-                        Reactions.hug(bot, msg.build(), true, user);
-                    } else if (message.getContentRaw().contains("!2")) {
-                        Reactions.slap(bot, msg.build(), true, user);
-                    } else if (message.getContentRaw().contains("!3")) {
-                        Reactions.smash(bot, msg.build(), true, user);
-                    } else if (message.getContentRaw().contains("!4")) {
-                        Reactions.stare(bot, msg.build(), true, user);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+        System.out.println("Nova reação na mensagem " + event.getMessageId() + " por " + event.getUser().getName() + " | " + event.getGuild().getName());
+        User user = event.getUser();
+        Message message = event.getChannel().getMessageById(event.getMessageId()).complete();
+        List<User> ment = message.getMentionedUsers();
+        if (ment.get(1) == event.getUser()) {
+            MessageBuilder msg = new MessageBuilder();
+            msg.setContent(ment.get(1).getAsMention());
+            try {
+                if (message.getContentRaw().contains("!1")) {
+                    Reactions.hug(bot, msg.build(), true, user);
+                } else if (message.getContentRaw().contains("!2")) {
+                    Reactions.slap(bot, msg.build(), true, user);
+                } else if (message.getContentRaw().contains("!3")) {
+                    Reactions.smash(bot, msg.build(), true, user);
+                } else if (message.getContentRaw().contains("!4")) {
+                    Reactions.stare(bot, msg.build(), true, user);
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
@@ -228,6 +224,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                 String roleID = (String) gcMap.get(message.getGuild().getId()).getCargoslvl().get(Integer.toString(member.getLevel()));
 
                                 message.getGuild().getController().addRolesToMember(message.getMember(), message.getGuild().getRoleById(roleID)).queue();
+                                message.getChannel().sendMessage(message.getAuthor().getAsMention() + " ganhou o cargo " + message.getGuild().getRoleById(roleID).getAsMention() + ". Parabéns!").queue();
                             }
                         }
                     }
