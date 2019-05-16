@@ -126,7 +126,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                 Map<String, Object> roles = gcMap.get(user.getGuild().getId()).getCargoNew();
                 List<Role> list = new ArrayList<>();
                 roles.values().forEach(r -> list.add(user.getGuild().getRoleById(r.toString())));
-                if (gcMap.get(user.getGuild().getId()).getCargoNew().size() > 0) user.getGuild().getController().addRolesToMember(user.getMember(), list).queue();
+                if (gcMap.get(user.getGuild().getId()).getCargoNew().size() > 0)
+                    user.getGuild().getController().addRolesToMember(user.getMember(), list).queue();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -207,7 +208,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     if (message.getMessage().getContentRaw().contains("abraçou") ||
                             message.getMessage().getContentRaw().contains("deu um tapa em") ||
                             message.getMessage().getContentRaw().contains("destruiu") ||
-                            message.getMessage().getContentRaw().contains("encarou")) message.getMessage().addReaction("\u21aa").queue();
+                            message.getMessage().getContentRaw().contains("encarou"))
+                        message.getMessage().addReaction("\u21aa").queue();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -268,6 +270,12 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             Misc.help(message, gcMap.get(message.getGuild().getId()).getPrefix(), owner);
                         } else if (hasPrefix(message, "prefixo")) {
                             message.getChannel().sendMessage("Estou atualmente respondendo comandos que começam com __**" + gcMap.get(message.getGuild().getId()).getPrefix() + "**__").queue();
+                        } else if (hasPrefix(message, "avatar")) {
+                            if (message.getMessage().getMentionedUsers().size() > 0) {
+                                message.getChannel().sendMessage("Avatar de " + message.getMessage().getMentionedUsers().get(0).getAsMention() + ":\n" + message.getMessage().getMentionedUsers().get(0).getAvatarUrl()).queue();
+                            } else {
+                                message.getChannel().sendMessage("Você precisa mencionar alguém!").queue();
+                            }
                         } else if (hasPrefix(message, "imagem")) {
                             Misc.image(message, cmd);
                         } else if (hasPrefix(message, "pergunta")) {
