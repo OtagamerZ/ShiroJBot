@@ -67,10 +67,24 @@ public class Admin {
                             cargos.put(cmd[2], message.getMessage().getMentionedRoles().get(0).getId());
                             gc.setCargoslvl(new JSONObject(cargos));
                         } else {
-                            message.getChannel().sendMessage("A mensagem deve estar entre aspas (\")").queue();
+                            message.getChannel().sendMessage("Por favor, mencione um cargo né!").queue();
                         }
                     } catch (ArrayIndexOutOfBoundsException e) {
-                        message.getChannel().sendMessage("Você não me disse que mensagem devo dizer quando alguém sair!").queue();
+                        message.getChannel().sendMessage("Erro ao adicionar cargo.").queue();
+                    }
+                    break;
+                case "cargonovo":
+                    try {
+                        int lvl = Integer.parseInt(cmd[2]);
+                        if (message.getMessage().getMentionedRoles().size() != 0) {
+                            Map<String, Object> cargos = gc.getCargoNew();
+                            cargos.put(cmd[2], message.getMessage().getMentionedRoles().get(0).getId());
+                            gc.setCargoNew(new JSONObject(cargos));
+                        } else {
+                            message.getChannel().sendMessage("Por favor, mencione um cargo né!").queue();
+                        }
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        message.getChannel().sendMessage("Erro ao adicionar cargo.").queue();
                     }
                     break;
                 default:

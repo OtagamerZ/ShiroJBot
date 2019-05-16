@@ -151,6 +151,9 @@ public class Embeds {
         Map<String, String> roles = new HashMap<>();
         gc.getCargoslvl().forEach((k, v) -> roles.put(k, message.getGuild().getRoleById(v.toString()).getName()));
 
+        Map<String, String> nc = new HashMap<>();
+        gc.getCargoNew().forEach((k, v) -> nc.put(k, message.getGuild().getRoleById(v.toString()).getName()));
+
         eb.setColor(Color.MAGENTA);
         eb.setAuthor("Eis as configurações deste servidor");
         eb.setDescription("Prefixo: __**" + gc.getPrefix() + "**__");
@@ -161,6 +164,7 @@ public class Embeds {
         eb.addField("Notificações de level up:", gc.getLvlNotif() ? "Ativadas" : "Desativadas", true);
         eb.addField("Cargo de punição:", gc.getCargowarn() != null ? message.getGuild().getRoleById(gc.getCargowarn()).getAsMention() : "Não definido", true);
         eb.addField("Recompensas de level:", gc.getCargoslvl().size() != 0 ? roles.toString().replace(",", "\n").replace("{", "").replace("}", "").replace("=", " = ") : "Não definidos", true);
+        eb.addField("Recompensas de level:", gc.getCargoNew().size() != 0 ? nc.toString().replace(",", "\n").replace("{", "").replace("}", "").replace("=", " = ") : "Não definidos", true);
 
         message.getChannel().sendMessage(eb.build()).queue();
     }

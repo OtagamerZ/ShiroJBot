@@ -18,6 +18,7 @@ public class guildConfig {
     private String cargowarn = null;
     private String cargoslvl = "{}";
     private String lvlNotif = "true";
+    private String cargoNew = "{}";
 
     public guildConfig() {
 
@@ -93,5 +94,13 @@ public class guildConfig {
 
     public void setLvlNotif(boolean lvlNotif) {
         this.lvlNotif = Boolean.toString(lvlNotif);
+    }
+
+    public Map<String, Object> getCargoNew() {
+        return new JSONObject(cargoNew).toMap();
+    }
+
+    public void setCargoNew(JSONObject cargoNew) {
+        this.cargoNew = cargoNew.toString();
     }
 }
