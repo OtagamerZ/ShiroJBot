@@ -2,11 +2,9 @@ import com.kuuhaku.commands.*;
 import com.kuuhaku.controller.Database;
 import com.kuuhaku.model.Member;
 import com.kuuhaku.model.guildConfig;
-import net.dv8tion.jda.core.AccountType;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.Permission;
+import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.ChannelType;
+import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.ReadyEvent;
@@ -16,6 +14,7 @@ import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import org.json.JSONObject;
@@ -26,6 +25,7 @@ import javax.security.auth.login.LoginException;
 import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Main extends ListenerAdapter implements JobListener, Job {
@@ -146,6 +146,32 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     }
 
     @Override
+    public void onMessageReactionAdd(MessageReactionAddEvent event) {
+        if (event.getUser() == bot.getSelfUser()) {
+            User user = event.getUser();
+            Message message = event.getChannel().getMessageById(event.getMessageId()).complete();
+            List<User> ment = message.getMentionedUsers();
+            if (ment.get(1) == event.getUser()) {
+                MessageBuilder msg = new MessageBuilder();
+                msg.setContent(ment.get(1).getAsMention());
+                try {
+                    if (message.getContentRaw().contains("!1")) {
+                        Reactions.hug(bot, msg.build(), true, user);
+                    } else if (message.getContentRaw().contains("!2")) {
+                        Reactions.slap(bot, msg.build(), true, user);
+                    } else if (message.getContentRaw().contains("!3")) {
+                        Reactions.smash(bot, msg.build(), true, user);
+                    } else if (message.getContentRaw().contains("!4")) {
+                        Reactions.stare(bot, msg.build(), true, user);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    @Override
     public void onShutdown(ShutdownEvent event) {
         System.out.println("Iniciando sequencia de encerramento...");
         try {
@@ -195,7 +221,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         boolean lvlUp;
                         lvlUp = memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).addXp();
                         if (lvlUp) {
-                            if (gcMap.get(message.getGuild().getId()).getLvlNotif()) message.getChannel().sendMessage(message.getAuthor().getAsMention() + " subiu para o level " + memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).getLevel() + ". GGWP!! :tada:").queue();
+                            if (gcMap.get(message.getGuild().getId()).getLvlNotif())
+                                message.getChannel().sendMessage(message.getAuthor().getAsMention() + " subiu para o level " + memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).getLevel() + ". GGWP!! :tada:").queue();
                             if (gcMap.get(message.getGuild().getId()).getCargoslvl().containsKey(Integer.toString(memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).getLevel()))) {
                                 Member member = memberMap.get(message.getAuthor().getId() + message.getGuild().getId());
                                 String roleID = (String) gcMap.get(message.getGuild().getId()).getCargoslvl().get(Integer.toString(member.getLevel()));
@@ -262,39 +289,33 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             } else {
                                 message.getChannel().sendMessage(":x: Você está no servidor errado, este comando é exclusivo do servidor OtagamerZ!").queue();
                             }
-                        } else if (hasPrefix(message, "abraçar")) {
+                        } else if (hasPrefix(message, "vemca")) {
                             if (message.getMessage().getMentionedUsers().size() != 0) {
-                                Reactions.hug(bot, message);
+                                Reactions.hug(bot, message.getMessage(), false, message.getAuthor());
                             } else {
                                 message.getChannel().sendMessage(":x: Você precisa mencionar um usuário!").queue();
                             }
                         } else if (hasPrefix(message, "meee")) {
-                            Reactions.facedesk(message);
-                        } else if (hasPrefix(message, "vemca")) {
-                            if (message.getMessage().getMentionedUsers().size() != 0) {
-                                Reactions.cuddle(bot, message);
-                            } else {
-                                message.getChannel().sendMessage(":x: Você precisa mencionar um usuário!").queue();
-                            }
+                            Reactions.facedesk(message.getMessage());
                         } else if (hasPrefix(message, "sqn")) {
-                            Reactions.nope(message);
+                            Reactions.nope(message.getMessage());
                         } else if (hasPrefix(message, "corre")) {
-                            Reactions.run(message);
+                            Reactions.run(message.getMessage());
                         } else if (hasPrefix(message, "tapa")) {
                             if (message.getMessage().getMentionedUsers().size() != 0) {
-                                Reactions.slap(bot, message);
+                                Reactions.slap(bot, message.getMessage(), false, message.getAuthor());
                             } else {
                                 message.getChannel().sendMessage(":x: Você precisa mencionar um usuário!").queue();
                             }
                         } else if (hasPrefix(message, "chega")) {
                             if (message.getMessage().getMentionedUsers().size() != 0) {
-                                Reactions.smash(bot, message);
+                                Reactions.smash(bot, message.getMessage(), false, message.getAuthor());
                             } else {
                                 message.getChannel().sendMessage(":x: Você precisa mencionar um usuário!").queue();
                             }
                         } else if (hasPrefix(message, "encarar")) {
                             if (message.getMessage().getMentionedUsers().size() != 0) {
-                                Reactions.stare(bot, message);
+                                Reactions.stare(bot, message.getMessage(), false, message.getAuthor());
                             } else {
                                 message.getChannel().sendMessage(":x: Você precisa mencionar um usuário!").queue();
                             }
@@ -367,7 +388,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                     message.getChannel().sendMessage(":x: Você precisa mencionar um usuário e dizer o Nº do alerta a ser removido.").queue();
                                 }
                             } else if (hasPrefix(message, "rcargolvl")) {
-                                if (cmd.length != 1) {
+                                if (cmd.length == 2) {
                                     Map<String, Object> cargos = gcMap.get(message.getGuild().getId()).getCargoslvl();
                                     cargos.remove(cmd[1]);
                                     gcMap.get(message.getGuild().getId()).setCargoslvl(new JSONObject(cargos));
