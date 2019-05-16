@@ -148,7 +148,7 @@ public class Embeds {
 
     public static void configsEmbed(MessageReceivedEvent message, guildConfig gc) {
         Map<String, String> cargos = new HashMap<>();
-        if (gc.getCargoslvl() != null) gc.getCargoslvl().forEach((k,v) -> cargos.put(k, message.getGuild().getRoleById((String) v).getAsMention()));
+        if (gc.getCargoslvl().size() != 0) gc.getCargoslvl().forEach((k,v) -> cargos.put(k, message.getGuild().getRoleById((String) v).getAsMention()));
 
         EmbedBuilder eb = new EmbedBuilder();
 
