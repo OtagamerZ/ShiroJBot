@@ -1,10 +1,7 @@
 package com.kuuhaku.commands;
 
 import com.kuuhaku.controller.Tradutor;
-import com.kuuhaku.model.Anime;
-import com.kuuhaku.model.Badges;
-import com.kuuhaku.model.Member;
-import com.kuuhaku.model.guildConfig;
+import com.kuuhaku.model.*;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
@@ -24,6 +21,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Embeds {
@@ -314,9 +312,9 @@ public class Embeds {
 
             eb.setAuthor(event.getUser().getAsTag(), event.getUser().getAvatarUrl(), event.getUser().getAvatarUrl());
             eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
-            eb.setDescription(msg.replace("%user%", event.getUser().getAsMention()).replace("%guild%", event.getGuild().getName()));
+            eb.setDescription(msg.replace("%user%", event.getMember().getUser().getAsMention()).replace("%guild%", event.getGuild().getName()));
             eb.setThumbnail(event.getUser().getAvatarUrl());
-            eb.setFooter("ID do usuário: "+event.getUser().getId(), event.getGuild().getIconUrl());
+            eb.setFooter("ID do usuário: " + event.getUser().getId(), event.getGuild().getIconUrl());
             switch ((int) (Math.random() * 5)) {
                 case 0:
                     eb.setTitle("Opa, parece que temos um novo membro?");
@@ -354,7 +352,7 @@ public class Embeds {
             eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
             eb.setThumbnail(event.getUser().getAvatarUrl());
             eb.setDescription(msg.replace("%user%", event.getUser().getName()).replace("%guild%", event.getGuild().getName()));
-            eb.setFooter("ID do usuário: "+event.getUser().getId()+"\n\nServidor gerenciado por " + event.getGuild().getOwner().getEffectiveName(), event.getGuild().getOwner().getUser().getAvatarUrl());
+            eb.setFooter("ID do usuário: " + event.getUser().getId() + "\n\nServidor gerenciado por " + event.getGuild().getOwner().getEffectiveName(), event.getGuild().getOwner().getUser().getAvatarUrl());
             switch (rmsg) {
                 case 0:
                     eb.setTitle("Nãããoo...um membro deixou este servidor!");
@@ -397,5 +395,31 @@ public class Embeds {
             message.getChannel().sendMessage("Opa, algo deu errado, tenha certeza de ter escrito neste formato:\n" +
                     "**Título;Descrição;Link da foto**").queue();
         }
+    }
+
+    public static void answerList(MessageReceivedEvent message, List<CustomAnswers> ca) throws IOException {
+        int index;
+        try {
+            index = Integer.parseInt(message.getMessage().getContentRaw().split(" ")[1]);
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException(e.toString());
+        }
+        URL url = new URL(message.getGuild().getIconUrl());
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+        BufferedImage image = ImageIO.read(con.getInputStream());
+
+        StringBuilder answers = new StringBuilder();
+        for (int i = (5 - 5 * index); i < 5 * index && i < ca.size(); i++) {
+            answers.append(ca.get(i).getId()).append(" | ").append("[").append(ca.get(i).getTrigger()).append("]: ").append(ca.get(i).getAnswer()).append("\n");
+        }
+
+        EmbedBuilder eb = new EmbedBuilder();
+
+        eb.setTitle("Respostas para " + message.getGuild().getName());
+        eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
+        eb.addField("ID | [Mensagem]: Resposta", answers.toString(), false);
+
+        message.getChannel().sendMessage(eb.build()).queue();
     }
 }

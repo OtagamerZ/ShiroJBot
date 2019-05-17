@@ -23,6 +23,7 @@ import javax.security.auth.login.LoginException;
 import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main extends ListenerAdapter implements JobListener, Job {
     private static JDA bot;
@@ -44,6 +45,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         gcMap = Database.getGuildConfigs();
         memberMap = Database.getMembersData();
         customAnswersList = Database.getCustomAnswers();
+        if (customAnswersList == null) customAnswersList = new ArrayList<>();
         try {
             if (backup == null) {
                 backup = JobBuilder.newJob(Main.class).withIdentity("backup", "1").build();
@@ -155,7 +157,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
 
     @Override
     public void onMessageReactionAdd(MessageReactionAddEvent event) {
-        if (event.getUser().isBot()) return;
         User user = event.getUser();
         Message message = event.getChannel().getMessageById(event.getMessageId()).complete();
         List<User> ment = message.getMentionedUsers();
@@ -223,7 +224,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     public void onMessageReceived(MessageReceivedEvent message) {
         if (ready) {
             try {
-                if (message.getChannel().getId().equals(gcMap.get(message.getGuild().getId()).getCanalsug())) {
+                if (message.getChannel().getId().equals(gcMap.get(message.getGuild().getId()).getCanalsug()) && !message.getMessage().getAuthor().isBot()) {
                     message.getMessage().addReaction("\ud83d\udc4d").queue();
                     message.getMessage().addReaction("\ud83d\udc4e").queue();
                 }
@@ -258,6 +259,19 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     message.getChannel().sendMessage("As configurações deste servidor ja foram inicializadas!").queue();
                 }
                 if (gcMap.get(message.getGuild().getId()) != null && message.getTextChannel().canTalk()) {
+                    if (gcMap.get(message.getGuild().getId()).isAnyPlace()) {
+                        try {
+                            List<CustomAnswers> ca = customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId()) && message.getMessage().getContentRaw().contains(a.getTrigger())).collect(Collectors.toList());
+                            message.getChannel().sendMessage(ca.get(new Random().nextInt(ca.size())).getAnswer()).queue();
+                        } catch (Exception ignore) {
+                        }
+                    } else {
+                        try {
+                            List<CustomAnswers> ca = customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId()) && message.getMessage().getContentRaw().equalsIgnoreCase(a.getTrigger())).collect(Collectors.toList());
+                            message.getChannel().sendMessage(ca.get(new Random().nextInt(ca.size())).getAnswer()).queue();
+                        } catch (Exception ignore) {
+                        }
+                    }
                     if (memberMap.get(message.getAuthor().getId() + message.getGuild().getId()) != null && !message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
                         boolean lvlUp;
                         lvlUp = memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).addXp();
@@ -399,6 +413,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                 Owner.getGuildMap(message, gcMap);
                             } else if (hasPrefix(message, "mmap")) {
                                 Owner.getMemberMap(message, memberMap);
+                            } else if (hasPrefix(message, "amap")) {
+                                Owner.getAnswersMap(message, customAnswersList);
                             } else if (hasPrefix(message, "broadcast")) {
                                 Owner.broadcast(gcMap, bot, message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix() + "broadcast ", ""), message.getTextChannel());
                             } else if (hasPrefix(message, "perms")) {
@@ -472,11 +488,34 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                     ca.setGuildID(message.getGuild().getId());
                                     ca.setTrigger(com.split(";")[0]);
                                     ca.setAnswer(com.split(";")[1]);
-                                    message.getChannel().sendMessage("Quando alguém falar `" + com.split(";")[0] + "` irei responder `" + com.split(";")[0] + "`.").queue();
+                                    message.getChannel().sendMessage("Quando alguém falar `" + com.split(";")[0] + "` irei responder `" + com.split(";")[1] + "`.").queue();
                                     customAnswersList.add(ca);
                                 } else {
                                     message.getChannel().sendMessage("Você não me passou argumentos suficientes!").queue();
                                 }
+                            } else if (hasPrefix(message, "nãofale")) {
+                                if (cmd.length > 1) {
+                                    try {
+                                        if (customAnswersList.stream().anyMatch(a -> a.getGuildID().equals(message.getGuild().getId()) && a.getId() == Integer.parseInt(cmd[1]))) {
+                                            String answer = customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId()) && a.getId() == Integer.parseInt(cmd[1])).collect(Collectors.toList()).get(0).getAnswer();
+                                            String trigger = customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId()) && a.getId() == Integer.parseInt(cmd[1])).collect(Collectors.toList()).get(0).getTrigger();
+                                            message.getChannel().sendMessage("Não irei mais responder `" + answer + "` quando alguém dizer `" + trigger + "`.").queue();
+                                            customAnswersList.remove(Integer.parseInt(cmd[1]));
+                                        }
+                                    } catch (NumberFormatException e) {
+                                        message.getChannel().sendMessage("Você não me passou um ID válido!").queue();
+                                    }
+                                } else {
+                                    message.getChannel().sendMessage("Você precisa me passar um ID para que eu possa excluir uma resposta!").queue();
+                                }
+                            } else if (hasPrefix(message, "falealista")) {
+                                if (cmd.length > 1)
+                                    Embeds.answerList(message, customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId())).collect(Collectors.toList()));
+                                else
+                                    message.getChannel().sendMessage("Você precisa me dizer uma página (serão mostradas 5 respostas por página)!").queue();
+                            } else if (hasPrefix(message, "faleseachar")) {
+                                gcMap.get(message.getGuild().getId()).setAnyPlace(!gcMap.get(message.getGuild().getId()).isAnyPlace());
+                                message.getChannel().sendMessage(gcMap.get(message.getGuild().getId()).isAnyPlace() ? "Irei responder sempre que eu achar as palavras-chave, mesmo dentro de uma frase" : "Só irei responder se a mensagem for EXATAMENTE a palavra-chave!").queue();
                             }
                         }
                     }
