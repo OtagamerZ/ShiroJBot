@@ -2,8 +2,8 @@ package com.kuuhaku.model;
 
 import org.json.JSONObject;
 
-import javax.persistence.*;
-import java.util.HashMap;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.Map;
 
 @Entity
@@ -20,6 +20,7 @@ public class guildConfig {
     private String cargoslvl = "{}";
     private String lvlNotif = "true";
     private String cargoNew = "{}";
+    private boolean anyPlace = false;
 
     public guildConfig() {
 
@@ -111,5 +112,13 @@ public class guildConfig {
 
     public void setCanalsug(String canalsug) {
         this.canalsug = canalsug;
+    }
+
+    public boolean isAnyPlace() {
+        return anyPlace;
+    }
+
+    public void setAnyPlace(boolean anyPlace) {
+        this.anyPlace = anyPlace;
     }
 }

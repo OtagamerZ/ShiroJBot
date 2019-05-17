@@ -1,5 +1,6 @@
 package com.kuuhaku.commands;
 
+import com.kuuhaku.model.CustomAnswers;
 import com.kuuhaku.model.Member;
 import com.kuuhaku.model.guildConfig;
 import net.dv8tion.jda.core.JDA;
@@ -45,6 +46,13 @@ public class Owner {
     public static void getMemberMap(MessageReceivedEvent message, Map<String, Member> mm) {
         final ArrayList<String> map = new ArrayList<>();
         mm.values().forEach(g -> map.add("```" + g.getId() + " | " + g.getLevel() + " | " + g.getXp() + " | " + Arrays.toString(g.getBadges()).replace(",", "-").replace("false", "0").replace("true", "1") + " | " + Arrays.toString(g.getWarns()).replace(",", "-") + "```\n"));
+
+        message.getChannel().sendMessage(map.toString().replace("[", "").replace("]", "").replace(",", "")).queue();
+    }
+
+    public static void getAnswersMap(MessageReceivedEvent message, List<CustomAnswers> ca) {
+        final ArrayList<String> map = new ArrayList<>();
+        ca.forEach(a -> map.add("```" + a.getId() + " | " + a.getGuildID() + " | (" + a.getTrigger() + ") > " + a.getAnswer() + "```\n"));
 
         message.getChannel().sendMessage(map.toString().replace("[", "").replace("]", "").replace(",", "")).queue();
     }
