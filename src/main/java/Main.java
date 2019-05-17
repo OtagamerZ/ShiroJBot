@@ -78,7 +78,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
             System.out.println("Guardar configurações no banco de dados...PRONTO!");
             bot.getPresence().setGame(Owner.getRandomGame(bot));
             gcMap.forEach((k, v) -> {
-                if (v.getCanalav() != null && bot.getGuildById(v.getGuildId()).getTextChannelById(v.getCanalav()).canTalk()) bot.getGuildById(v.getGuildId()).getTextChannelById(v.getCanalav()).sendMessage(("Opa, está gostando de me utilizar em seu servidor? Caso sim, se puder votar me ajudaria **MUITO** a me tornar cada vez mais popular e ser chamada para mais servidores!\n https://discordbots.org/bot/572413282653306901")).queue();
+                if (v.getCanalav() != null && bot.getGuildById(v.getGuildId()).getTextChannelById(v.getCanalav()).canTalk())
+                    bot.getGuildById(v.getGuildId()).getTextChannelById(v.getCanalav()).sendMessage(("Opa, está gostando de me utilizar em seu servidor? Caso sim, se puder votar me ajudaria **MUITO** a me tornar cada vez mais popular e ser chamada para mais servidores!\n https://discordbots.org/bot/572413282653306901")).queue();
             });
         } catch (Exception e) {
             System.out.println("Guardar configurações no banco de dados...ERRO!\nErro: " + e);
@@ -368,8 +369,10 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             } catch (Exception e) {
                                 message.getChannel().sendMessage("Ops, me parece que o link imagem não está correto, veja bem se incluiu tudo!").queue();
                             }
-                        } else if (message.getMessage().getMentionedUsers().contains(bot.getSelfUser())) {
-                            message.getChannel().sendMessage("Estou atualmente respondendo comandos que começam com `" + gcMap.get(message.getGuild().getId()).getPrefix() + "`. Use `" + gcMap.get(message.getGuild().getId()).getPrefix() + "ajuda` para ver todos os meus comandos!").queue();
+                        } else if (message.getMessage().getMentionedUsers().size() > 0) {
+                            if (message.getMessage().getMentionedUsers().get(0) == bot.getSelfUser()) {
+                                message.getChannel().sendMessage("Estou atualmente respondendo comandos que começam com `" + gcMap.get(message.getGuild().getId()).getPrefix() + "`. Use `" + gcMap.get(message.getGuild().getId()).getPrefix() + "ajuda` para ver todos os meus comandos!").queue();
+                            }
                         }
 
                         //DONO--------------------------------------------------------------------------------->
