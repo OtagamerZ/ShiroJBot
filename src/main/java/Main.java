@@ -190,6 +190,15 @@ public class Main extends ListenerAdapter implements JobListener, Job {
             sched.shutdown();
             System.exit(0);
         } catch (Exception e) {
+            JDABuilder jda = new JDABuilder(AccountType.BOT);
+            String token = System.getenv("BOT_TOKEN");
+            jda.setToken(token);
+            jda.addEventListener(new Main());
+            try {
+                jda.build();
+            } catch (LoginException ex) {
+                ex.printStackTrace();
+            }
             System.out.println("Guardar configurações no banco de dados...ERRO!");
             System.out.println("Erro: " + e);
         }
