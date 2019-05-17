@@ -78,10 +78,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
             System.out.println("Guardar configurações no banco de dados...PRONTO!");
             bot.getPresence().setGame(Owner.getRandomGame(bot));
             gcMap.forEach((k, v) -> {
-                try {
-                    bot.getGuildById(v.getGuildId()).getTextChannelById(v.getCanalav()).sendMessage(("Opa, está gostando de me utilizar em seu servidor? Caso sim, se puder votar me ajudaria **MUITO** a me tornar cada vez mais popular e ser chamada para mais servidores!\n https://discordbots.org/bot/572413282653306901")).queue();
-                } catch (Exception ignore) {
-                }
+                if (v.getCanalav() != null && bot.getGuildById(v.getGuildId()).getTextChannelById(v.getCanalav()).canTalk()) bot.getGuildById(v.getGuildId()).getTextChannelById(v.getCanalav()).sendMessage(("Opa, está gostando de me utilizar em seu servidor? Caso sim, se puder votar me ajudaria **MUITO** a me tornar cada vez mais popular e ser chamada para mais servidores!\n https://discordbots.org/bot/572413282653306901")).queue();
             });
         } catch (Exception e) {
             System.out.println("Guardar configurações no banco de dados...ERRO!\nErro: " + e);
@@ -157,7 +154,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         User user = event.getUser();
         Message message = event.getChannel().getMessageById(event.getMessageId()).complete();
         List<User> ment = message.getMentionedUsers();
-        if (ment.size() > 0) {
+        if (ment.size() > 1) {
             User target = ment.get(0);
             if (ment.get(1) == user && event.getReactionEmote().getName().equals("\u21aa")) {
                 System.out.println("Nova reação na mensagem " + event.getMessageId() + " por " + event.getUser().getName() + " | " + event.getGuild().getName());
@@ -170,6 +167,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         Reactions.slap(bot, msg.build(), user, message.getTextChannel(), true, target);
                     } else if (message.getContentRaw().contains("destruiu")) {
                         Reactions.smash(bot, msg.build(), user, message.getTextChannel(), true, target);
+                    } else if (message.getContentRaw().contains("beijou")) {
+                        Reactions.kiss(bot, msg.build(), user, message.getTextChannel(), true, target);
                     } else if (message.getContentRaw().contains("encarou")) {
                         Reactions.stare(bot, user, message.getTextChannel(), true, target);
                     }
@@ -209,6 +208,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     if (message.getMessage().getContentRaw().contains("abraçou") ||
                             message.getMessage().getContentRaw().contains("deu um tapa em") ||
                             message.getMessage().getContentRaw().contains("destruiu") ||
+                            message.getMessage().getContentRaw().contains("beijou") ||
                             message.getMessage().getContentRaw().contains("encarou"))
                         message.getMessage().addReaction("\u21aa").queue();
                 } catch (Exception e) {
@@ -323,6 +323,12 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             Reactions.nope(message.getMessage());
                         } else if (hasPrefix(message, "corre")) {
                             Reactions.run(message.getMessage());
+                        } else if (hasPrefix(message, "baka")) {
+                            Reactions.blush(message.getMessage());
+                        } else if (hasPrefix(message, "kkk")) {
+                            Reactions.laugh(message.getMessage());
+                        } else if (hasPrefix(message, "triste")) {
+                            Reactions.sad(message.getMessage());
                         } else if (hasPrefix(message, "tapa")) {
                             if (message.getMessage().getMentionedUsers().size() != 0) {
                                 Reactions.slap(bot, message.getMessage(), message.getMessage().getMentionedUsers().get(0), message.getTextChannel(), false, message.getAuthor());
@@ -338,6 +344,12 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         } else if (hasPrefix(message, "encarar")) {
                             if (message.getMessage().getMentionedUsers().size() != 0) {
                                 Reactions.stare(bot, message.getMessage().getMentionedUsers().get(0), message.getTextChannel(), false, message.getAuthor());
+                            } else {
+                                message.getChannel().sendMessage(":x: Você precisa mencionar um usuário!").queue();
+                            }
+                        } else if (hasPrefix(message, "beijar")) {
+                            if (message.getMessage().getMentionedUsers().size() != 0) {
+                                Reactions.kiss(bot, message.getMessage(), message.getMessage().getMentionedUsers().get(0), message.getTextChannel(), false, message.getAuthor());
                             } else {
                                 message.getChannel().sendMessage(":x: Você precisa mencionar um usuário!").queue();
                             }
