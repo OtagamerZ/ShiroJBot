@@ -274,6 +274,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         } else if (hasPrefix(message, "avatar")) {
                             if (message.getMessage().getMentionedUsers().size() > 0) {
                                 message.getChannel().sendMessage("Avatar de " + message.getMessage().getMentionedUsers().get(0).getAsMention() + ":\n" + message.getMessage().getMentionedUsers().get(0).getAvatarUrl()).queue();
+                            } else if (message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix() + "avatar", "").trim().equals("guild")) {
+                                message.getChannel().sendMessage("Avatar do server:\n" + message.getMessage().getGuild().getIconUrl()).queue();
                             } else {
                                 message.getChannel().sendMessage("Você precisa mencionar alguém!").queue();
                             }
