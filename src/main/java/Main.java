@@ -216,11 +216,12 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     @Override
     public void onMessageReceived(MessageReceivedEvent message) {
         if (ready) {
-            if (gcMap.get(message.getGuild().getId()).getCanalsug() != null) {
+            try {
                 if (message.getChannel().getId().equals(gcMap.get(message.getGuild().getId()).getCanalsug())) {
                     message.getMessage().addReaction("\ud83d\udc4d").queue();
                     message.getMessage().addReaction("\ud83d\udc4e").queue();
                 }
+            } catch (NullPointerException ignore) {
             }
             if (message.getAuthor() == bot.getSelfUser()) {
                 try {
