@@ -278,8 +278,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             Misc.uptime(message);
                         } else if (hasPrefix(message, "ajuda")) {
                             Misc.help(message, gcMap.get(message.getGuild().getId()).getPrefix(), owner);
-                        } else if (hasPrefix(message, "prefixo") || (message.getMessage().getMentionedUsers().get(0) == bot.getSelfUser() && message.getMessage().getContentDisplay().startsWith("@"))) {
-                            message.getChannel().sendMessage("Estou atualmente respondendo comandos que começam com `" + gcMap.get(message.getGuild().getId()).getPrefix() + "`. Use `" + gcMap.get(message.getGuild().getId()).getPrefix() + "ajuda` para ver todos os meus comandos!").queue();
                         } else if (hasPrefix(message, "avatar")) {
                             if (message.getMessage().getMentionedUsers().size() > 0) {
                                 message.getChannel().sendMessage("Avatar de " + message.getMessage().getMentionedUsers().get(0).getAsMention() + ":\n" + message.getMessage().getMentionedUsers().get(0).getAvatarUrl()).queue();
@@ -370,6 +368,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             } catch (Exception e) {
                                 message.getChannel().sendMessage("Ops, me parece que o link imagem não está correto, veja bem se incluiu tudo!").queue();
                             }
+                        } else if (message.getMessage().isMentioned(bot.getSelfUser())) {
+                            message.getChannel().sendMessage("Estou atualmente respondendo comandos que começam com `" + gcMap.get(message.getGuild().getId()).getPrefix() + "`. Use `" + gcMap.get(message.getGuild().getId()).getPrefix() + "ajuda` para ver todos os meus comandos!").queue();
                         }
 
                         //DONO--------------------------------------------------------------------------------->
