@@ -15,6 +15,7 @@ public class guildConfig {
     private String msgAdeus = "Ahh...%user% deixou este servidor!";
     private String canalbv = null;
     private String canalav = null;
+    private String canalsug = null;
     private String cargowarn = null;
     private String cargoslvl = "{}";
     private String lvlNotif = "true";
@@ -102,5 +103,13 @@ public class guildConfig {
 
     public void setCargoNew(JSONObject cargoNew) {
         this.cargoNew = cargoNew.toString();
+    }
+
+    public String getCanalsug() {
+        return canalsug;
+    }
+
+    public void setCanalsug(String canalsug) {
+        this.canalsug = canalsug;
     }
 }
