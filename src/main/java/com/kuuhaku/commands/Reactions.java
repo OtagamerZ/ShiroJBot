@@ -10,15 +10,16 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Objects;
+import java.util.Random;
 
 public class Reactions {
     public static void hug(JDA bot, Message message, User target, TextChannel channel, boolean answer, User mbr) throws IOException {
-        URL url = new URL(ReactionsList.hug()[(int) (Math.random() * ReactionsList.hug().length)]);
+        URL url = new URL(ReactionsList.hug()[new Random().nextInt(ReactionsList.hug().length)]);
         HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
         String msg = "";
-        switch ((int) (Math.random() * 3)) {
+        switch (new Random().nextInt(3)) {
             case 0:
                 msg = "Awnn, que abraço fofo! :blush:";
                 break;
@@ -32,7 +33,7 @@ public class Reactions {
 
         if (target == bot.getSelfUser()) {
             if (message.getAuthor().getId().equals("350836145921327115")) {
-                switch ((int) (Math.random() * 3)) {
+                switch (new Random().nextInt(3)) {
                     case 0:
                         msg = ("Arigatou, Nii-chan!");
                         break;
@@ -45,7 +46,7 @@ public class Reactions {
                 }
                 channel.sendMessage(msg).addFile(con.getInputStream(), "hug.gif").queue();
             } else {
-                switch ((int) (Math.random() * 3)) {
+                switch (new Random().nextInt(3)) {
                     case 0:
                         msg = ("Moshi moshi, FBI-sama!");
                         break;
@@ -68,12 +69,12 @@ public class Reactions {
     }
 
     public static void slap(JDA bot, Message message, User target, TextChannel channel, boolean answer, User mbr) throws IOException {
-        URL url = new URL(ReactionsList.slap()[(int) (Math.random() * ReactionsList.slap().length)]);
+        URL url = new URL(ReactionsList.slap()[new Random().nextInt(ReactionsList.slap().length)]);
         HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
         String msg = "";
-        switch ((int) (Math.random() * 3)) {
+        switch (new Random().nextInt(3)) {
             case 0:
                 msg = "Kono BAKAAAA!!";
                 break;
@@ -87,7 +88,7 @@ public class Reactions {
 
         if (target == bot.getSelfUser()) {
             if (message.getAuthor().getId().equals("350836145921327115")) {
-                switch ((int) (Math.random() * 3)) {
+                switch (new Random().nextInt(3)) {
                     case 0:
                         msg = ("Nii-chan no BAKA!");
                         break;
@@ -113,12 +114,12 @@ public class Reactions {
     }
 
     public static void smash(JDA bot, Message message, User target, TextChannel channel, boolean answer, User mbr) throws IOException {
-        URL url = new URL(ReactionsList.smash()[(int) (Math.random() * ReactionsList.smash().length)]);
+        URL url = new URL(ReactionsList.smash()[new Random().nextInt(ReactionsList.smash().length)]);
         HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
         String msg = "";
-        switch ((int) (Math.random() * 3)) {
+        switch (new Random().nextInt(3)) {
             case 0:
                 msg = "Omae wa mou...SHINDEIRU!!";
                 break;
@@ -132,7 +133,7 @@ public class Reactions {
 
         if (target == bot.getSelfUser()) {
             if (message.getAuthor().getId().equals("350836145921327115")) {
-                switch ((int) (Math.random() * 3)) {
+                switch (new Random().nextInt(3)) {
                     case 0:
                         msg = ("O que eu fiz??");
                         break;
@@ -158,7 +159,7 @@ public class Reactions {
     }
 
     public static void kiss(JDA bot, Message message, User target, TextChannel channel, boolean answer, User mbr) throws IOException {
-        URL url = new URL(ReactionsList.kiss()[(int) (Math.random() * ReactionsList.kiss().length)]);
+        URL url = new URL(ReactionsList.kiss()[new Random().nextInt(ReactionsList.kiss().length)]);
         HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
@@ -166,7 +167,7 @@ public class Reactions {
 
         if (target == bot.getSelfUser()) {
             if (message.getAuthor().getId().equals("350836145921327115")) {
-                switch ((int) (Math.random() * 3)) {
+                switch (new Random().nextInt(3)) {
                     case 0:
                         msg = ("E-Ei!");
                         break;
@@ -192,12 +193,12 @@ public class Reactions {
     }
 
     public static void stare(JDA bot, User target, TextChannel channel, boolean answer, User mbr) throws IOException {
-        URL url = new URL(ReactionsList.stare()[(int) (Math.random() * ReactionsList.stare().length)]);
+        URL url = new URL(ReactionsList.stare()[new Random().nextInt(ReactionsList.stare().length)]);
         HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
         String msg = "";
-        switch ((int) (Math.random() * 3)) {
+        switch (new Random().nextInt(3)) {
             case 0:
                 msg = "Shiii~~";
                 break;
@@ -210,7 +211,7 @@ public class Reactions {
         }
 
         if (target == bot.getSelfUser()) {
-            switch ((int) (Math.random() * 3)) {
+            switch (new Random().nextInt(3)) {
                 case 0:
                     msg = ("Que foi?");
                     break;
@@ -233,12 +234,12 @@ public class Reactions {
 
     public static void facedesk(Message message) throws IOException {
         User mbr = message.getAuthor();
-        URL url = new URL(ReactionsList.facedesk()[(int) (Math.random() * ReactionsList.facedesk().length)]);
+        URL url = new URL(ReactionsList.facedesk()[new Random().nextInt(ReactionsList.facedesk().length)]);
         HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
         String msg = "";
-        switch ((int) (Math.random() * 3)) {
+        switch (new Random().nextInt(3)) {
             case 0:
                 msg = "Eita, calmaaa!";
                 break;
@@ -255,12 +256,12 @@ public class Reactions {
 
     public static void nope(Message message) throws IOException {
         User mbr = message.getAuthor();
-        URL url = new URL(ReactionsList.nope()[(int) (Math.random() * ReactionsList.nope().length)]);
+        URL url = new URL(ReactionsList.nope()[new Random().nextInt(ReactionsList.nope().length)]);
         HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
         String msg = "";
-        switch ((int) (Math.random() * 3)) {
+        switch (new Random().nextInt(3)) {
             case 0:
                 msg = "Não tão rápido!";
                 break;
@@ -276,12 +277,12 @@ public class Reactions {
     }
 
     private static void nope(Message message, User author) throws IOException {
-        URL url = new URL(ReactionsList.nope()[(int) (Math.random() * ReactionsList.nope().length)]);
+        URL url = new URL(ReactionsList.nope()[new Random().nextInt(ReactionsList.nope().length)]);
         HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
         String msg = "";
-        switch ((int) (Math.random() * 3)) {
+        switch (new Random().nextInt(3)) {
             case 0:
                 msg = "Não tão rápido!";
                 break;
@@ -298,12 +299,12 @@ public class Reactions {
 
     public static void run(Message message) throws IOException {
         User mbr = message.getAuthor();
-        URL url = new URL(ReactionsList.run()[(int) (Math.random() * ReactionsList.run().length)]);
+        URL url = new URL(ReactionsList.run()[new Random().nextInt(ReactionsList.run().length)]);
         HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
         String msg = "";
-        switch ((int) (Math.random() * 3)) {
+        switch (new Random().nextInt(3)) {
             case 0:
                 msg = "Corre maluco!";
                 break;
@@ -320,12 +321,12 @@ public class Reactions {
 
     public static void blush(Message message) throws IOException {
         User mbr = message.getAuthor();
-        URL url = new URL(ReactionsList.blush()[(int) (Math.random() * ReactionsList.blush().length)]);
+        URL url = new URL(ReactionsList.blush()[new Random().nextInt(ReactionsList.blush().length)]);
         HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
         String msg = "";
-        switch ((int) (Math.random() * 3)) {
+        switch (new Random().nextInt(3)) {
             case 0:
                 msg = "B-Baka!";
                 break;
@@ -342,12 +343,12 @@ public class Reactions {
 
     public static void laugh(Message message) throws IOException {
         User mbr = message.getAuthor();
-        URL url = new URL(ReactionsList.laugh()[(int) (Math.random() * ReactionsList.laugh().length)]);
+        URL url = new URL(ReactionsList.laugh()[new Random().nextInt(ReactionsList.laugh().length)]);
         HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
         String msg = "";
-        switch ((int) (Math.random() * 3)) {
+        switch (new Random().nextInt(3)) {
             case 0:
                 msg = "Muahahahahaha!";
                 break;
@@ -364,12 +365,12 @@ public class Reactions {
 
     public static void sad(Message message) throws IOException {
         User mbr = message.getAuthor();
-        URL url = new URL(ReactionsList.sad()[(int) (Math.random() * ReactionsList.sad().length)]);
+        URL url = new URL(ReactionsList.sad()[new Random().nextInt(ReactionsList.sad().length)]);
         HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
         String msg = "";
-        switch ((int) (Math.random() * 3)) {
+        switch (new Random().nextInt(3)) {
             case 0:
                 msg = "Eu...eu...";
                 break;
