@@ -155,6 +155,9 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         User user = event.getUser();
         Message message = event.getChannel().getMessageById(event.getMessageId()).complete();
         List<User> ment = message.getMentionedUsers();
+        if (Collections.frequency(message.getReactions(), "\ud83d\udc4d") >= 5) {
+            message.pin().queue();
+        }
         if (ment.size() > 1) {
             User target = ment.get(0);
             if (ment.get(1) == user && event.getReactionEmote().getName().equals("\u21aa")) {
