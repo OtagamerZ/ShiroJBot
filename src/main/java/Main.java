@@ -278,8 +278,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             Misc.uptime(message);
                         } else if (hasPrefix(message, "ajuda")) {
                             Misc.help(message, gcMap.get(message.getGuild().getId()).getPrefix(), owner);
-                        } else if (hasPrefix(message, "prefixo")) {
-                            message.getChannel().sendMessage("Estou atualmente respondendo comandos que começam com __**" + gcMap.get(message.getGuild().getId()).getPrefix() + "**__").queue();
+                        } else if (hasPrefix(message, "prefixo") || message.getMessage().getContentRaw().equalsIgnoreCase(bot.getSelfUser().getAsMention())) {
+                            message.getChannel().sendMessage("Estou atualmente respondendo comandos que começam com `" + gcMap.get(message.getGuild().getId()).getPrefix() + "`. Use `" + gcMap.get(message.getGuild().getId()).getPrefix() + "ajuda` para ver todos os meus comandos!").queue();
                         } else if (hasPrefix(message, "avatar")) {
                             if (message.getMessage().getMentionedUsers().size() > 0) {
                                 message.getChannel().sendMessage("Avatar de " + message.getMessage().getMentionedUsers().get(0).getAsMention() + ":\n" + message.getMessage().getMentionedUsers().get(0).getAvatarUrl()).queue();
@@ -462,6 +462,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     }
 
     private static boolean hasPrefix(MessageReceivedEvent message, String cmd) {
-        return message.getMessage().getContentRaw().split(" ")[0].equalsIgnoreCase(bot.getSelfUser().getAsMention() + cmd) || message.getMessage().getContentRaw().split(" ")[0].equalsIgnoreCase(gcMap.get(message.getGuild().getId()).getPrefix() + cmd);
+        return message.getMessage().getContentRaw().split(" ")[0].equalsIgnoreCase(gcMap.get(message.getGuild().getId()).getPrefix() + cmd);
     }
 }
