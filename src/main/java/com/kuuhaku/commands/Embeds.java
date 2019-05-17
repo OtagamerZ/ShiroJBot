@@ -70,12 +70,17 @@ public class Embeds {
                 prefix + "vemca [membro] - Dá um abraço exagerado em alguém.\n\n" +
                 prefix + "meee - Bate a cara.\n\n" +
                 prefix + "abraçar [membro] - Dá um abraço em alguém.\n\n" +
-                prefix + "sqn - Esquiva de uma tentativa.\n\n" +
-                prefix + "corre - Sai correndo.\n\n" +
+                prefix + "beijar [membro] - Beija alguém.\n\n" +
                 prefix + "tapa [membro] - Dá um tapa em alguém.\n\n" +
                 prefix + "vemca [membro] - Dá um abraço exagerado em alguém.\n\n" +
                 prefix + "chega [membro] - Retalha alguém.\n\n" +
-                prefix + "encara [membro] - Encara alguém.```\n" +
+                prefix + "encara [membro] - Encara alguém.\n\n" +
+                prefix + "sqn - Esquiva de uma tentativa.\n\n" +
+                prefix + "kkk - Ri.\n\n" +
+                prefix + "baka - Se envergonha.\n\n" +
+                prefix + "triste - Chora.\n\n" +
+                prefix + "corre - Sai correndo.```\n" +
+
 
                 ":gem: **OtagamerZ**\n```" +
                 prefix + "conquistas - Mosta as conquistas que você completou.\n\n" +
