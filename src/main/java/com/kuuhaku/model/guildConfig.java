@@ -2,8 +2,8 @@ package com.kuuhaku.model;
 
 import org.json.JSONObject;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.HashMap;
 import java.util.Map;
 
 @Entity

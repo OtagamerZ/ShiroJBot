@@ -1,5 +1,6 @@
 import com.kuuhaku.commands.*;
 import com.kuuhaku.controller.Database;
+import com.kuuhaku.model.CustomAnswers;
 import com.kuuhaku.model.Member;
 import com.kuuhaku.model.guildConfig;
 import net.dv8tion.jda.core.*;
@@ -32,6 +33,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     private static JobDetail backup;
     private static Scheduler sched;
     private static boolean ready = false;
+    private static List<CustomAnswers> customAnswersList;
 
     private static void initBot() throws LoginException {
         JDABuilder jda = new JDABuilder(AccountType.BOT);
@@ -41,6 +43,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         jda.build();
         gcMap = Database.getGuildConfigs();
         memberMap = Database.getMembersData();
+        customAnswersList = Database.getCustomAnswers();
         try {
             if (backup == null) {
                 backup = JobBuilder.newJob(Main.class).withIdentity("backup", "1").build();
@@ -152,11 +155,14 @@ public class Main extends ListenerAdapter implements JobListener, Job {
 
     @Override
     public void onMessageReactionAdd(MessageReactionAddEvent event) {
+        if (event.getUser().isBot()) return;
         User user = event.getUser();
         Message message = event.getChannel().getMessageById(event.getMessageId()).complete();
         List<User> ment = message.getMentionedUsers();
         if (event.getReactionEmote().getName().equals("\ud83d\udc4d")) {
             if (message.getReactions().get(0).getCount() >= 5) message.pin().queue();
+        } else if (event.getReactionEmote().getName().equals("\ud83d\udc4e")) {
+            if (message.getReactions().get(0).getCount() >= 5) message.delete().queue();
         }
         if (ment.size() > 1) {
             User target = ment.get(0);
@@ -457,6 +463,19 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                 } else {
                                     message.getChannel().sendMessage("Agora irei avisar quando um membro passar de nível!").queue();
                                     gcMap.get(message.getGuild().getId()).setLvlNotif(true);
+                                }
+                            } else if (hasPrefix(message, "fale")) {
+                                if (message.getMessage().getContentRaw().contains(";") && cmd.length > 1) {
+                                    CustomAnswers ca = new CustomAnswers();
+                                    String com = message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix() + "fale", "").trim();
+
+                                    ca.setGuildID(message.getGuild().getId());
+                                    ca.setTrigger(com.split(";")[0]);
+                                    ca.setAnswer(com.split(";")[1]);
+                                    message.getChannel().sendMessage("Quando alguém falar `" + com.split(";")[0] + "` irei responder `" + com.split(";")[0] + "`.").queue();
+                                    customAnswersList.add(ca);
+                                } else {
+                                    message.getChannel().sendMessage("Você não me passou argumentos suficientes!").queue();
                                 }
                             }
                         }
