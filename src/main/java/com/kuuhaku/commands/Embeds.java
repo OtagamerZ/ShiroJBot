@@ -43,6 +43,7 @@ public class Embeds {
                 prefix + "definir prefixo [prefixo] - Define o prefixo para o servidor.\n\n" +
                 prefix + "definir canalbv [canal] - Define o canal de boas-vindas para o servidor.\n\n" +
                 prefix + "definir canalav [canal] - Define o canal de avisos para o servidor.\n\n" +
+                prefix + "definir canalsug [canal] - Define o canal de sugestões para o servidor.\n\n" +
                 prefix + "definir msgbv [\"mensagem\"] - Define a mensagem de boas-vindas para o servidor.\n\n" +
                 prefix + "definir msgadeus [\"mensagem\"] - Define a mensagem de adeus para o servidor.\n\n" +
                 prefix + "definir cargolvl [level] [cargo] - Define um novo cargo como recompensa para o level especificado.\n\n" +
