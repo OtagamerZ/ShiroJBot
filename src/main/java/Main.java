@@ -45,7 +45,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
             if (backup == null) {
                 backup = JobBuilder.newJob(Main.class).withIdentity("backup", "1").build();
             }
-            Trigger cron = TriggerBuilder.newTrigger().withIdentity("backup", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0 0/1 1/1 * ? *")).build();
+            Trigger cron = TriggerBuilder.newTrigger().withIdentity("backup", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0 0/3 ? * * *")).build();
             SchedulerFactory sf = new StdSchedulerFactory();
             try {
                 sched = sf.getScheduler();
