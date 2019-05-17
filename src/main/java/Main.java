@@ -77,6 +77,12 @@ public class Main extends ListenerAdapter implements JobListener, Job {
             Database.sendAllMembersData(memberMap.values());
             System.out.println("Guardar configurações no banco de dados...PRONTO!");
             bot.getPresence().setGame(Owner.getRandomGame(bot));
+            gcMap.forEach((k, v) -> {
+                try {
+                    bot.getGuildById(v.getGuildId()).getTextChannelById(v.getCanalav()).sendMessage(("Opa, está gostando de me utilizar em seu servidor? Caso sim, se puder votar me ajudaria **MUITO** a me tornar cada vez mais popular e ser chamada para mais servidores!\n https://discordbots.org/bot/572413282653306901")).queue();
+                } catch (Exception ignore) {
+                }
+            });
         } catch (Exception e) {
             System.out.println("Guardar configurações no banco de dados...ERRO!\nErro: " + e);
         }
