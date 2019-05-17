@@ -312,7 +312,7 @@ public class Embeds {
 
             EmbedBuilder eb = new EmbedBuilder();
 
-            eb.setAuthor(event.getUser().getAsTag(), "", event.getUser().getAvatarUrl());
+            eb.setAuthor(event.getUser().getAsTag(), event.getUser().getAvatarUrl(), event.getUser().getAvatarUrl());
             eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
             eb.setDescription(msg.replace("%user%", event.getUser().getAsMention()).replace("%guild%", event.getGuild().getName()));
             eb.setThumbnail(event.getUser().getAvatarUrl());
@@ -350,7 +350,7 @@ public class Embeds {
 
             EmbedBuilder eb = new EmbedBuilder();
 
-            eb.setAuthor(event.getUser().getAsTag(), "", event.getUser().getAvatarUrl());
+            eb.setAuthor(event.getUser().getAsTag(), event.getUser().getAvatarUrl(), event.getUser().getAvatarUrl());
             eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
             eb.setThumbnail(event.getUser().getAvatarUrl());
             eb.setDescription(msg.replace("%user%", event.getUser().getName()).replace("%guild%", event.getGuild().getName()));
