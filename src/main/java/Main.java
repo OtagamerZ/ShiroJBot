@@ -462,6 +462,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     }
 
     private static boolean hasPrefix(MessageReceivedEvent message, String cmd) {
-        return message.getMessage().getMentionedUsers().contains(bot.getSelfUser()) || message.getMessage().getContentRaw().split(" ")[0].equalsIgnoreCase(gcMap.get(message.getGuild().getId()).getPrefix() + cmd);
+        return message.getMessage().getContentRaw().split(" ")[0].equalsIgnoreCase(bot.getSelfUser().getAsMention() + cmd) || message.getMessage().getContentRaw().split(" ")[0].equalsIgnoreCase(gcMap.get(message.getGuild().getId()).getPrefix() + cmd);
     }
 }
