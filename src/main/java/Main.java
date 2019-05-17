@@ -215,7 +215,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         if (ready) {
             if (message.getChannel().getId().equals(gcMap.get(message.getGuild().getId()).getCanalsug())) {
                 message.getMessage().addReaction("\ud83d\udc4d").queue();
-                message.getMessage().addReaction("\ud83d\udc4d").queue();
+                message.getMessage().addReaction("\ud83d\udc4e").queue();
             }
             if (message.getAuthor() == bot.getSelfUser()) {
                 try {
