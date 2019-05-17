@@ -1,5 +1,6 @@
 package com.kuuhaku.controller;
 
+import com.kuuhaku.model.CustomAnswers;
 import com.kuuhaku.model.Member;
 import com.kuuhaku.model.guildConfig;
 
@@ -53,15 +54,9 @@ public class Database {
 
     public static void sendAllMembersData(Collection<Member> gc) {
         EntityManager em = getEntityManager();
-        Query q = em.createQuery("DELETE FROM Member");
 
         em.getTransaction().begin();
-        q.executeUpdate();
-        em.getTransaction().commit();
-        System.out.println("Membros resetados com sucesso!");
-
-        em.getTransaction().begin();
-        gc.forEach(em::persist);
+        gc.forEach(em::merge);
         em.getTransaction().commit();
         em.close();
         System.out.println("Membros salvos com sucesso!");
@@ -81,6 +76,34 @@ public class Database {
             return lgc.stream().collect(Collectors.toMap(Member::getId, m -> m));
         } catch (Exception e) {
             System.out.println("Erro ao recuperar membros: " + e);
+            return null;
+        }
+    }
+
+    public static void sendAllCustomAnswers(Collection<CustomAnswers> ca) {
+        EntityManager em = getEntityManager();
+
+        em.getTransaction().begin();
+        ca.forEach(em::merge);
+        em.getTransaction().commit();
+        em.close();
+        System.out.println("Respostas salvas com sucesso!");
+    }
+
+    @SuppressWarnings("unchecked")
+    public static List<CustomAnswers> getCustomAnswers() {
+        List<CustomAnswers> ca;
+
+        try {
+            EntityManager em = getEntityManager();
+            Query q = em.createQuery("SELECT c FROM CustomAnswers c", CustomAnswers.class);
+            ca = q.getResultList();
+            System.out.println(ca);
+            em.close();
+
+            return ca;
+        } catch (Exception e) {
+            System.out.println("Erro ao recuperar respostas: " + e);
             return null;
         }
     }

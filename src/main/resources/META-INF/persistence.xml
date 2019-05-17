@@ -13,6 +13,7 @@
         <!-- entidade mapeada -->
         <class>com.kuuhaku.model.guildConfig</class>
         <class>com.kuuhaku.model.Member</class>
+        <class>com.kuuhaku.model.CustomAnswers</class>
 
         <properties>
             <!-- dados da conexao -->
