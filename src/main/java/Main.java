@@ -369,8 +369,10 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             } catch (Exception e) {
                                 message.getChannel().sendMessage("Ops, me parece que o link imagem não está correto, veja bem se incluiu tudo!").queue();
                             }
-                        } else if (message.getMessage().getContentRaw().equals(bot.getSelfUser().getAsMention())) {
-                            message.getChannel().sendMessage("Estou atualmente respondendo comandos que começam com `" + gcMap.get(message.getGuild().getId()).getPrefix() + "`. Use `" + gcMap.get(message.getGuild().getId()).getPrefix() + "ajuda` para ver todos os meus comandos!").queue();
+                        } else if (message.getMessage().getMentionedUsers().size() > 0) {
+                            if (message.getMessage().getMentionedUsers().get(0).getId().equals(bot.getSelfUser().getId())) {
+                                message.getChannel().sendMessage("Estou atualmente respondendo comandos que começam com `" + gcMap.get(message.getGuild().getId()).getPrefix() + "`. Use `" + gcMap.get(message.getGuild().getId()).getPrefix() + "ajuda` para ver todos os meus comandos!").queue();
+                            }
                         }
 
                         //DONO--------------------------------------------------------------------------------->
