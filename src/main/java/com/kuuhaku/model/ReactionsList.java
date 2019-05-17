@@ -75,4 +75,44 @@ public class ReactionsList {
                 "https://i.imgur.com/wdsZ4zo.gif"
         };
     }
+
+    public static String[] blush() {
+        return new String[]{
+                "https://i.imgur.com/yn1VENn.gif",
+                "https://i.imgur.com/t4umCPE.gif",
+                "https://i.imgur.com/VZS4mDp.gif",
+                "https://i.imgur.com/RbCKfZU.gif",
+                "https://i.imgur.com/Z2QESj3.gif"
+        };
+    }
+
+    public static String[] laugh() {
+        return new String[]{
+                "https://i.imgur.com/3bqto1r.gif",
+                "https://i.imgur.com/dXacIRI.gif",
+                "https://i.imgur.com/ZYeHDkn.gif",
+                "https://i.imgur.com/4X2Tgll.gif",
+                "https://i.imgur.com/OgEjgu0.gif"
+        };
+    }
+
+    public static String[] sad() {
+        return new String[]{
+                "https://i.imgur.com/4Hytd5x.gif",
+                "https://i.imgur.com/kzNZ3Bp.gif",
+                "https://i.imgur.com/viUAETo.gif",
+                "https://i.imgur.com/s3F40sO.gif",
+                "https://i.imgur.com/CU32GXP.gif"
+        };
+    }
+
+    public static String[] kiss() {
+        return new String[]{
+                "https://i.imgur.com/OBgRCZu.gif",
+                "https://i.imgur.com/LjTdPcd.gif",
+                "https://i.imgur.com/95c9raG.gif",
+                "https://i.imgur.com/vIApR3I.gif",
+                "https://i.imgur.com/P0bl9pT.gif"
+        };
+    }
 }

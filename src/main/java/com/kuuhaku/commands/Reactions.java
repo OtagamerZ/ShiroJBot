@@ -37,10 +37,10 @@ public class Reactions {
                         msg = ("Arigatou, Nii-chan!");
                         break;
                     case 1:
-                        msg = ("N..n..não precisava, Nii-chan!");
+                        msg = ("N-N-Não precisava, Nii-chan!");
                         break;
                     case 2:
-                        msg = ("Ni..Ni..Nii-chan no baka!");
+                        msg = ("N-N-Nii-chan no baka!");
                         break;
                 }
                 channel.sendMessage(msg).addFile(con.getInputStream(), "hug.gif").queue();
@@ -50,7 +50,7 @@ public class Reactions {
                         msg = ("Moshi moshi, FBI-sama!");
                         break;
                     case 1:
-                        msg = ("B..b..baka!");
+                        msg = ("B-B-Baka!");
                         break;
                     case 2:
                         msg = ("Paraaa, to ocupada jogando agora!");
@@ -154,6 +154,40 @@ public class Reactions {
             else
                 msg = ("Porém, " + target.getAsMention() + " se levantou e atacou " + mbr.getAsMention() + " de volta - " + msg);
             channel.sendMessage(msg).addFile(con.getInputStream(), "smash.gif").queue();
+        }
+    }
+
+    public static void kiss(JDA bot, Message message, User target, TextChannel channel, boolean answer, User mbr) throws IOException {
+        URL url = new URL(ReactionsList.kiss()[(int) (Math.random() * ReactionsList.kiss().length)]);
+        HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+
+        String msg = "";
+
+        if (target == bot.getSelfUser()) {
+            if (message.getAuthor().getId().equals("350836145921327115")) {
+                switch ((int) (Math.random() * 3)) {
+                    case 0:
+                        msg = ("E-Ei!");
+                        break;
+                    case 1:
+                        msg = ("N-Nii-chan?!");
+                        break;
+                    case 2:
+                        msg = ("P-Pera!");
+                        break;
+                }
+                channel.sendMessage(msg).addFile(con.getInputStream(), "kiss.gif").queue();
+            } else {
+                channel.sendMessage(msg).addFile(con.getInputStream(), "kiss.gif").queue();
+                nope(message, bot.getSelfUser());
+            }
+        } else {
+            if (!answer)
+                msg = (mbr.getAsMention() + " beijou " + target.getAsMention() + " - " + msg);
+            else
+                msg = (target.getAsMention() + " também deu um beijo em " + mbr.getAsMention() + " - " + msg);
+            channel.sendMessage(msg).addFile(con.getInputStream(), "kiss.gif").queue();
         }
     }
 
@@ -282,5 +316,71 @@ public class Reactions {
         }
         msg = (mbr.getAsMention() + " saiu correndo - " + msg);
         message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "run.gif").queue();
+    }
+
+    public static void blush(Message message) throws IOException {
+        User mbr = message.getAuthor();
+        URL url = new URL(ReactionsList.blush()[(int) (Math.random() * ReactionsList.blush().length)]);
+        HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+
+        String msg = "";
+        switch ((int) (Math.random() * 3)) {
+            case 0:
+                msg = "B-Baka!";
+                break;
+            case 1:
+                msg = "N-Não é como se eu gostasse disso nem nada do tipo!";
+                break;
+            case 2:
+                msg = "NA-";
+                break;
+        }
+        msg = (mbr.getAsMention() + " está com vergonha - " + msg);
+        message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "blush.gif").queue();
+    }
+
+    public static void laugh(Message message) throws IOException {
+        User mbr = message.getAuthor();
+        URL url = new URL(ReactionsList.laugh()[(int) (Math.random() * ReactionsList.laugh().length)]);
+        HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+
+        String msg = "";
+        switch ((int) (Math.random() * 3)) {
+            case 0:
+                msg = "Muahahahahaha!";
+                break;
+            case 1:
+                msg = "Kkkkkkkk!";
+                break;
+            case 2:
+                msg = "Rsrsrsrsrs!";
+                break;
+        }
+        msg = (mbr.getAsMention() + " está rindo - " + msg);
+        message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "laugh.gif").queue();
+    }
+
+    public static void sad(Message message) throws IOException {
+        User mbr = message.getAuthor();
+        URL url = new URL(ReactionsList.sad()[(int) (Math.random() * ReactionsList.sad().length)]);
+        HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+
+        String msg = "";
+        switch ((int) (Math.random() * 3)) {
+            case 0:
+                msg = "Eu...eu...";
+                break;
+            case 1:
+                msg = "Snif...";
+                break;
+            case 2:
+                msg = "Faça isso parar!";
+                break;
+        }
+        msg = (mbr.getAsMention() + " está chorando - " + msg);
+        message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "sad.gif").queue();
     }
 }
