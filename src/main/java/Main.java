@@ -196,6 +196,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         try {
             Database.sendAllGuildConfigs(gcMap.values());
             Database.sendAllMembersData(memberMap.values());
+            Database.sendAllCustomAnswers(customAnswersList);
             System.out.println("Guardar configurações no banco de dados...PRONTO!");
             System.out.println("Desligando instância...");
             sched.shutdown();
