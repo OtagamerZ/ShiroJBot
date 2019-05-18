@@ -8,7 +8,7 @@ public class CustomAnswers {
     @Id
     private Long id = System.currentTimeMillis();
     private String guildID;
-    private String trigger;
+    private String gatilho;
     private String answer;
 
     public CustomAnswers() {
@@ -19,12 +19,12 @@ public class CustomAnswers {
         this.guildID = guildID;
     }
 
-    public String getTrigger() {
-        return trigger;
+    public String getGatilho() {
+        return gatilho;
     }
 
-    public void setTrigger(String trigger) {
-        this.trigger = trigger;
+    public void setGatilho(String gatilho) {
+        this.gatilho = gatilho;
     }
 
     public String getAnswer() {
