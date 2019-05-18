@@ -262,7 +262,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                 if (gcMap.get(message.getGuild().getId()) != null && message.getTextChannel().canTalk()) {
                     if (gcMap.get(message.getGuild().getId()).isAnyPlace()) {
                         try {
-                            List<CustomAnswers> ca = customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId()) && message.getMessage().getContentRaw().contains(a.getTrigger())).collect(Collectors.toList());
+                            List<CustomAnswers> ca = customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId()) && message.getMessage().getContentRaw().toLowerCase().contains(a.getTrigger().toLowerCase())).collect(Collectors.toList());
                             message.getChannel().sendMessage(ca.get(new Random().nextInt(ca.size())).getAnswer()).queue();
                         } catch (Exception ignore) {
                         }
