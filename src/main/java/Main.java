@@ -263,13 +263,13 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                 if (gcMap.get(message.getGuild().getId()) != null && message.getTextChannel().canTalk()) {
                     if (gcMap.get(message.getGuild().getId()).isAnyPlace()) {
                         try {
-                            List<CustomAnswers> ca = customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId()) && StringUtils.containsIgnoreCase(message.getMessage().getContentRaw(), a.getTrigger())).collect(Collectors.toList());
+                            List<CustomAnswers> ca = customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId()) && StringUtils.containsIgnoreCase(message.getMessage().getContentRaw(), a.getGatilho())).collect(Collectors.toList());
                             message.getChannel().sendMessage(ca.get(new Random().nextInt(ca.size())).getAnswer()).queue();
                         } catch (Exception ignore) {
                         }
                     } else {
                         try {
-                            List<CustomAnswers> ca = customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId()) && message.getMessage().getContentRaw().equalsIgnoreCase(a.getTrigger())).collect(Collectors.toList());
+                            List<CustomAnswers> ca = customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId()) && message.getMessage().getContentRaw().equalsIgnoreCase(a.getGatilho())).collect(Collectors.toList());
                             message.getChannel().sendMessage(ca.get(new Random().nextInt(ca.size())).getAnswer()).queue();
                         } catch (Exception ignore) {
                         }
@@ -498,7 +498,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                     String com = message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix() + "fale", "").trim();
 
                                     ca.setGuildID(message.getGuild().getId());
-                                    ca.setTrigger(com.split(";")[0]);
+                                    ca.setGatilho(com.split(";")[0]);
                                     ca.setAnswer(com.split(";")[1]);
                                     message.getChannel().sendMessage("Quando alguém falar `" + com.split(";")[0] + "` irei responder `" + com.split(";")[1] + "`.").queue();
                                     customAnswersList.add(ca);
@@ -510,7 +510,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                     try {
                                         if (customAnswersList.stream().anyMatch(a -> a.getGuildID().equals(message.getGuild().getId()) && a.getId() == Long.parseLong(cmd[1]))) {
                                             String answer = customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId()) && a.getId() == Long.parseLong(cmd[1])).collect(Collectors.toList()).get(0).getAnswer();
-                                            String trigger = customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId()) && a.getId() == Long.parseLong(cmd[1])).collect(Collectors.toList()).get(0).getTrigger();
+                                            String trigger = customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId()) && a.getId() == Long.parseLong(cmd[1])).collect(Collectors.toList()).get(0).getGatilho();
                                             message.getChannel().sendMessage("Não irei mais responder `" + answer + "` quando alguém dizer `" + trigger + "`.").queue();
                                             customAnswersList.removeIf(a -> a.getId() == Long.parseLong(cmd[1]));
                                         }
