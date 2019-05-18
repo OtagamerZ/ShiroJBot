@@ -317,7 +317,7 @@ public class Embeds {
 
             eb.setAuthor(event.getUser().getAsTag(), event.getUser().getAvatarUrl(), event.getUser().getAvatarUrl());
             eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
-            eb.setDescription(msg.replace("%user%", event.getMember().getUser().getAsMention()).replace("%guild%", event.getGuild().getName()));
+            eb.setDescription(msg.replace("%user%", event.getUser().getName()).replace("%guild%", event.getGuild().getName()));
             eb.setThumbnail(event.getUser().getAvatarUrl());
             eb.setFooter("ID do usuário: " + event.getUser().getId(), event.getGuild().getIconUrl());
             switch ((int) (Math.random() * 5)) {
@@ -338,7 +338,7 @@ public class Embeds {
                     break;
             }
 
-            canalbv.sendMessage(eb.build()).queue();
+            canalbv.sendMessage(event.getUser().getAsMention()).embed(eb.build()).queue();
         }
     }
 
