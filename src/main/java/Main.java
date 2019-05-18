@@ -15,6 +15,7 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
@@ -262,7 +263,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                 if (gcMap.get(message.getGuild().getId()) != null && message.getTextChannel().canTalk()) {
                     if (gcMap.get(message.getGuild().getId()).isAnyPlace()) {
                         try {
-                            List<CustomAnswers> ca = customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId()) && message.getMessage().getContentRaw().toLowerCase().contains(a.getTrigger().toLowerCase())).collect(Collectors.toList());
+                            List<CustomAnswers> ca = customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId()) && StringUtils.containsIgnoreCase(message.getMessage().getContentRaw(), a.getTrigger())).collect(Collectors.toList());
                             message.getChannel().sendMessage(ca.get(new Random().nextInt(ca.size())).getAnswer()).queue();
                         } catch (Exception ignore) {
                         }
