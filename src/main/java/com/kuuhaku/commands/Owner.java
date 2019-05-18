@@ -52,7 +52,7 @@ public class Owner {
 
     public static void getAnswersMap(MessageReceivedEvent message, List<CustomAnswers> ca) {
         final ArrayList<String> map = new ArrayList<>();
-        ca.forEach(a -> map.add("```" + a.getId() + " | " + a.getGuildID() + " | (" + a.getTrigger() + ") > " + a.getAnswer() + "```\n"));
+        ca.forEach(a -> map.add("```" + a.getId() + " | " + a.getGuildID() + " | (" + a.getGatilho() + ") > " + a.getAnswer() + "```\n"));
 
         message.getChannel().sendMessage(map.toString().replace("[", "").replace("]", "").replace(",", "")).queue();
     }

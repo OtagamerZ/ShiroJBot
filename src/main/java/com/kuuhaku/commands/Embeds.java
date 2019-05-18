@@ -416,7 +416,7 @@ public class Embeds {
 
         StringBuilder answers = new StringBuilder();
         for (int i = (5 - 5 * index); i < 5 * index && i < ca.size(); i++) {
-            answers.append(ca.get(i).getId()).append(" | ").append("[").append(ca.get(i).getTrigger()).append("]: ").append(ca.get(i).getAnswer()).append("\n");
+            answers.append(ca.get(i).getId()).append(" | ").append("[").append(ca.get(i).getGatilho()).append("]: ").append(ca.get(i).getAnswer()).append("\n");
         }
 
         EmbedBuilder eb = new EmbedBuilder();
