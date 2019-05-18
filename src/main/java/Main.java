@@ -480,7 +480,17 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                     message.getChannel().sendMessage("Agora irei avisar quando um membro passar de nível!").queue();
                                     gcMap.get(message.getGuild().getId()).setLvlNotif(true);
                                 }
-                            } else if (hasPrefix(message, "fale")) {
+                            } else if (hasPrefix(message, "faleseachar")) {
+                                gcMap.get(message.getGuild().getId()).setAnyPlace(!gcMap.get(message.getGuild().getId()).isAnyPlace());
+                                message.getChannel().sendMessage(gcMap.get(message.getGuild().getId()).isAnyPlace() ? "Irei responder sempre que eu achar as palavras-chave, mesmo dentro de uma frase" : "Só irei responder se a mensagem for EXATAMENTE a palavra-chave!").queue();
+                            } else if (hasPrefix(message, "ouçatodos")) {
+                                gcMap.get(message.getGuild().getId()).setAnyTell(!gcMap.get(message.getGuild().getId()).isAnyTell());
+                                message.getChannel().sendMessage(gcMap.get(message.getGuild().getId()).isAnyTell() ? "Irei ouvir novas respostas da comunidade agora!" : "Só irei ouvir novas respostas de um moderador!").queue();
+                            }
+                        }
+
+                        if (message.getMember().hasPermission(Permission.MANAGE_CHANNEL) || gcMap.get(message.getGuild().getId()).isAnyTell()) {
+                            if (hasPrefix(message, "fale")) {
                                 if (message.getMessage().getContentRaw().contains(";") && cmd.length > 1) {
                                     CustomAnswers ca = new CustomAnswers();
                                     String com = message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix() + "fale", "").trim();
@@ -513,9 +523,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                     Embeds.answerList(message, customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId())).collect(Collectors.toList()));
                                 else
                                     message.getChannel().sendMessage("Você precisa me dizer uma página (serão mostradas 5 respostas por página)!").queue();
-                            } else if (hasPrefix(message, "faleseachar")) {
-                                gcMap.get(message.getGuild().getId()).setAnyPlace(!gcMap.get(message.getGuild().getId()).isAnyPlace());
-                                message.getChannel().sendMessage(gcMap.get(message.getGuild().getId()).isAnyPlace() ? "Irei responder sempre que eu achar as palavras-chave, mesmo dentro de uma frase" : "Só irei responder se a mensagem for EXATAMENTE a palavra-chave!").queue();
                             }
                         }
                     }

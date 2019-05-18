@@ -49,7 +49,12 @@ public class Embeds {
                 prefix + "configs - Mostra as configurações do servidor.\n\n" +
                 prefix + "alertar [membro] [razão] - Registra um alerta no perfil do membro especificado.\n\n" +
                 prefix + "punir [membro] - Reseta o XP de um membro.\n\n" +
-                prefix + "perdoar [membro] [Nº] - Perdoa um alerta do membro.```\n" +
+                prefix + "perdoar [membro] [Nº] - Perdoa um alerta do membro.```\n\n" +
+                prefix + "fale [palavra-chave;resposta] - Configura uma nova resposta pra mim!\n\n" +
+                prefix + "nãofale [ID] - Remove uma de minhas respostas.\n\n" +
+                prefix + "falealista [página] - Vê minhas respostas.\n\n" +
+                prefix + "faleseachar - Muda entre procurar a palavra-chave dentro de uma frase ou não.\n\n" +
+                prefix + "ouçatodos - Muda entre permitir novas respostas da comunidade ou não.\n" +
 
                 ":speech_balloon: **Utilitário**\n```" +
                 prefix + "ajuda - Mostra essa mensagem no seu canal privado.\n\n" +

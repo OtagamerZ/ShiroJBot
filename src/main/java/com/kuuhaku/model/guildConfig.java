@@ -21,6 +21,7 @@ public class guildConfig {
     private String lvlNotif = "true";
     private String cargoNew = "{}";
     private boolean anyPlace = false;
+    private boolean anyTell = false;
 
     public guildConfig() {
 
@@ -120,5 +121,13 @@ public class guildConfig {
 
     public void setAnyPlace(boolean anyPlace) {
         this.anyPlace = anyPlace;
+    }
+
+    public boolean isAnyTell() {
+        return anyTell;
+    }
+
+    public void setAnyTell(boolean anyTell) {
+        this.anyTell = anyTell;
     }
 }
