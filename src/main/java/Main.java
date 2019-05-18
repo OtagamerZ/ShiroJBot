@@ -508,11 +508,11 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             } else if (hasPrefix(message, "nãofale")) {
                                 if (cmd.length > 1) {
                                     try {
-                                        if (customAnswersList.stream().anyMatch(a -> a.getGuildID().equals(message.getGuild().getId()) && a.getId() == Integer.parseInt(cmd[1]))) {
-                                            String answer = customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId()) && a.getId() == Integer.parseInt(cmd[1])).collect(Collectors.toList()).get(0).getAnswer();
-                                            String trigger = customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId()) && a.getId() == Integer.parseInt(cmd[1])).collect(Collectors.toList()).get(0).getTrigger();
+                                        if (customAnswersList.stream().anyMatch(a -> a.getGuildID().equals(message.getGuild().getId()) && a.getId() == Long.parseLong(cmd[1]))) {
+                                            String answer = customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId()) && a.getId() == Long.parseLong(cmd[1])).collect(Collectors.toList()).get(0).getAnswer();
+                                            String trigger = customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId()) && a.getId() == Long.parseLong(cmd[1])).collect(Collectors.toList()).get(0).getTrigger();
                                             message.getChannel().sendMessage("Não irei mais responder `" + answer + "` quando alguém dizer `" + trigger + "`.").queue();
-                                            customAnswersList.remove(Integer.parseInt(cmd[1]));
+                                            customAnswersList.removeIf(a -> a.getId() == Long.parseLong(cmd[1]));
                                         }
                                     } catch (NumberFormatException e) {
                                         message.getChannel().sendMessage("Você não me passou um ID válido!").queue();
