@@ -266,14 +266,14 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         try {
                             List<CustomAnswers> ca = customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId()) && StringUtils.containsIgnoreCase(message.getMessage().getContentRaw(), a.getGatilho())).collect(Collectors.toList());
                             int index = new Random().nextInt(ca.size());
-                            message.getChannel().sendTyping().queue(m -> message.getChannel().sendMessage(ca.get(index).getAnswer()).queueAfter(ca.get(index).getAnswer().length() * 10, TimeUnit.MILLISECONDS));
+                            message.getChannel().sendTyping().queue(m -> message.getChannel().sendMessage(ca.get(index).getAnswer()).queueAfter(ca.get(index).getAnswer().length() * 50, TimeUnit.MILLISECONDS));
                         } catch (Exception ignore) {
                         }
                     } else {
                         try {
                             List<CustomAnswers> ca = customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId()) && message.getMessage().getContentRaw().equalsIgnoreCase(a.getGatilho())).collect(Collectors.toList());
                             int index = new Random().nextInt(ca.size());
-                            message.getChannel().sendTyping().queue(m -> message.getChannel().sendMessage(ca.get(index).getAnswer()).queueAfter(ca.get(index).getAnswer().length() * 10, TimeUnit.MILLISECONDS));
+                            message.getChannel().sendTyping().queue(m -> message.getChannel().sendMessage(ca.get(index).getAnswer()).queueAfter(ca.get(index).getAnswer().length() * 50, TimeUnit.MILLISECONDS));
                         } catch (Exception ignore) {
                         }
                     }
