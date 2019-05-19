@@ -24,6 +24,7 @@ import javax.security.auth.login.LoginException;
 import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class Main extends ListenerAdapter implements JobListener, Job {
@@ -264,13 +265,15 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     if (gcMap.get(message.getGuild().getId()).isAnyPlace()) {
                         try {
                             List<CustomAnswers> ca = customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId()) && StringUtils.containsIgnoreCase(message.getMessage().getContentRaw(), a.getGatilho())).collect(Collectors.toList());
-                            message.getChannel().sendMessage(ca.get(new Random().nextInt(ca.size())).getAnswer()).queue();
+                            int index = new Random().nextInt(ca.size());
+                            message.getChannel().sendTyping().queue(m -> message.getChannel().sendMessage(ca.get(index).getAnswer()).queueAfter(ca.get(index).getAnswer().length() * 10, TimeUnit.MILLISECONDS));
                         } catch (Exception ignore) {
                         }
                     } else {
                         try {
                             List<CustomAnswers> ca = customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId()) && message.getMessage().getContentRaw().equalsIgnoreCase(a.getGatilho())).collect(Collectors.toList());
-                            message.getChannel().sendMessage(ca.get(new Random().nextInt(ca.size())).getAnswer()).queue();
+                            int index = new Random().nextInt(ca.size());
+                            message.getChannel().sendTyping().queue(m -> message.getChannel().sendMessage(ca.get(index).getAnswer()).queueAfter(ca.get(index).getAnswer().length() * 10, TimeUnit.MILLISECONDS));
                         } catch (Exception ignore) {
                         }
                     }
