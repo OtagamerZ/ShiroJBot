@@ -17,7 +17,7 @@
 
         <properties>
             <!-- dados da conexao -->
-            <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
             <property name="javax.persistence.jdbc.url"
                       value="jdbc:mysql://remotemysql.com:3306/LnVsGtoAwc?autoReconnect=true&amp;useUnicode=yes&amp;characterEncoding=UTF-8&amp;interactiveClient=true"/>
 
