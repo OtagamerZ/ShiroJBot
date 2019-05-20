@@ -149,4 +149,14 @@ public class Database {
             return null;
         }
     }
+
+    public static void sendBeyblade(Beyblade bb) {
+        EntityManager em = getEntityManager();
+
+        em.getTransaction().begin();
+        em.persist(bb);
+        em.getTransaction().commit();
+        em.close();
+        System.out.println("Beyblade salva com sucesso!");
+    }
 }
