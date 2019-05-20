@@ -14,6 +14,7 @@ public class guildConfig {
     private String msgBoasVindas = "Seja bem-vindo(a) %user%!";
     private String msgAdeus = "Ahh...%user% deixou este servidor!";
     private String canalbv = null;
+    private String canaladeus = null;
     private String canalav = null;
     private String canalsug = null;
     private String cargowarn = null;
@@ -129,5 +130,13 @@ public class guildConfig {
 
     public void setAnyTell(boolean anyTell) {
         this.anyTell = anyTell;
+    }
+
+    public String getCanaladeus() {
+        return canaladeus;
+    }
+
+    public void setCanaladeus(String canaladeus) {
+        this.canaladeus = canaladeus;
     }
 }

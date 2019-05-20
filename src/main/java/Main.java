@@ -150,8 +150,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     @Override
     public void onGuildMemberLeave(GuildMemberLeaveEvent user) {
         try {
-            if (gcMap.get(user.getGuild().getId()).getCanalbv() != null) {
-                Embeds.byeEmbed(user, gcMap.get(user.getGuild().getId()).getMsgAdeus(), user.getGuild().getTextChannelById(gcMap.get(user.getGuild().getId()).getCanalbv()));
+            if (gcMap.get(user.getGuild().getId()).getCanaladeus() != null) {
+                Embeds.byeEmbed(user, gcMap.get(user.getGuild().getId()).getMsgAdeus(), user.getGuild().getTextChannelById(gcMap.get(user.getGuild().getId()).getCanaladeus()));
                 if (memberMap.get(user.getUser().getId() + user.getGuild().getId()) != null)
                     memberMap.remove(user.getUser().getId() + user.getGuild().getId());
             }
