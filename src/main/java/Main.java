@@ -362,8 +362,9 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                     } catch (IOException e) {
                                         message.getChannel().sendMessage("Opa, deu erro aqui, veja se asa siglas dos idiomas estão corretas!").queue();
                                     }
+                                } else {
+                                    message.getChannel().sendMessage("Você precisa especificar de qual pra qual idioma devo traduzir (`de`>`para`)").queue();
                                 }
-                                message.getChannel().sendMessage("Você precisa especificar de qual pra qual idioma devo traduzir (`de`>`para`)").queue();
                             } else {
                                 message.getChannel().sendMessage("Você não me disse praticamente nada!").queue();
                             }
