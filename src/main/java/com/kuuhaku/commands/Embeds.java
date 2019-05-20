@@ -168,6 +168,7 @@ public class Embeds {
         eb.setAuthor("Eis as configurações deste servidor");
         eb.setDescription("Prefixo: __**" + gc.getPrefix() + "**__");
         eb.addField("Canal de boas-vindas:", gc.getCanalbv() != null ? message.getGuild().getTextChannelById(gc.getCanalbv()).getAsMention() : "Não definido", true);
+        eb.addField("Canal de adeus:", gc.getCanaladeus() != null ? message.getGuild().getTextChannelById(gc.getCanaladeus()).getAsMention() : "Não definido", true);
         eb.addField("Canal de avisos:", gc.getCanalav() != null ? message.getGuild().getTextChannelById(gc.getCanalav()).getAsMention() : "Não definido", true);
         eb.addField("Canal de sugestões:", gc.getCanalsug() != null ? message.getGuild().getTextChannelById(gc.getCanalsug()).getAsMention() : "Não definido", true);
         eb.addField("Mensagem de boas-vindas:", gc.getMsgBoasVindas(), true);
