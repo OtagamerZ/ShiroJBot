@@ -32,7 +32,7 @@ public class Tradutor {
     public static String translate(String from, String to, String text) throws IOException {
         String token = System.getenv("YANDEX_TOKEN");
         URL link = new URL("https://translate.yandex.net/api/v1.5/tr.json/translate?key=" + token +
-                "&text=" + URLEncoder.encode(text, StandardCharsets.UTF_8) + "&lang=" + from + "-" + to);
+                "&text=" + URLEncoder.encode(text, StandardCharsets.UTF_8.toString()) + "&lang=" + from + "-" + to);
         HttpURLConnection con = (HttpURLConnection) link.openConnection();
         con.setRequestMethod("GET");
         con.setRequestProperty("Accept", "application/json");
