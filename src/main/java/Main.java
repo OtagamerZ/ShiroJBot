@@ -587,6 +587,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             if (Database.getBeyblade(message.getAuthor().getId()) == null) {
                                 if (cmd.length > 1) {
                                     Beyblade bb = new Beyblade();
+                                    bb.setId(message.getAuthor().getId());
                                     bb.setName(message.getMessage().getContentRaw().replace(cmd[0], "").trim());
                                     Database.sendBeyblade(bb);
                                 } else {
