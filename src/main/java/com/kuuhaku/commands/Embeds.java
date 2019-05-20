@@ -81,6 +81,7 @@ public class Embeds {
                 prefix + "encara [membro] - Encara alguém.\n\n" +
                 prefix + "sqn - Esquiva de uma tentativa.\n\n" +
                 prefix + "kkk - Ri.\n\n" +
+                prefix + "dançar - Dança.\n\n" +
                 prefix + "baka - Se envergonha.\n\n" +
                 prefix + "triste - Chora.\n\n" +
                 prefix + "corre - Sai correndo.```\n" +

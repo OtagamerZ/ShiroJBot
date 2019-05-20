@@ -384,4 +384,30 @@ public class Reactions {
         msg = (mbr.getAsMention() + " está chorando - " + msg);
         message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "sad.gif").queue();
     }
+
+    public static void dance(Message message, boolean answer) throws IOException {
+        User mbr = message.getAuthor();
+        URL url = new URL(ReactionsList.dance()[new Random().nextInt(ReactionsList.dance().length)]);
+        HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+
+        String msg = "";
+        switch (new Random().nextInt(3)) {
+            case 0:
+                msg = "Se liga nos movimentos!";
+                break;
+            case 1:
+                msg = "*Step it up baby!*";
+                break;
+            case 2:
+                msg = "Bora dançar!";
+                break;
+        }
+        if (!answer)
+            msg = (mbr.getAsMention() + " está dançando " + mbr.getAsMention() + " - " + msg);
+        else
+            msg = (mbr.getAsMention() + " juntou-se à dança - " + msg);
+        message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "dance.gif").queue();
+
+    }
 }
