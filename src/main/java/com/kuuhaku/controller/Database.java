@@ -138,8 +138,8 @@ public class Database {
 
         try {
             EntityManager em = getEntityManager();
-            Query q = em.createQuery("SELECT c FROM Beyblade WHERE id = :id c", Beyblade.class);
-            q.setParameter(":id", id);
+            Query q = em.createQuery("SELECT c FROM Beyblade WHERE id = ? c", Beyblade.class);
+            q.setParameter(0, id);
             bb = (Beyblade) q.getSingleResult();
             em.close();
 
