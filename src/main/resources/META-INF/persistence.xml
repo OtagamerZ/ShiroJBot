@@ -33,6 +33,7 @@
         <class>com.kuuhaku.model.guildConfig</class>
         <class>com.kuuhaku.model.Member</class>
         <class>com.kuuhaku.model.CustomAnswers</class>
+        <class>com.kuuhaku.model.Beyblade</class>
 
         <properties>
             <!-- dados da conexao -->

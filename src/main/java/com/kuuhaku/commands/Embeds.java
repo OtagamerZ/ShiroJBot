@@ -23,6 +23,7 @@ import com.kuuhaku.controller.Tradutor;
 import com.kuuhaku.model.*;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
@@ -446,6 +447,21 @@ public class Embeds {
         eb.setTitle("Respostas para " + message.getGuild().getName());
         eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
         eb.addField("ID | [Mensagem]: Resposta", answers.toString(), false);
+
+        message.getChannel().sendMessage(eb.build()).queue();
+    }
+
+    public static void beybladeEmbed(MessageReceivedEvent message, Beyblade bb) {
+        EmbedBuilder eb = new EmbedBuilder();
+
+        eb.setAuthor("Beyblade de " + message.getAuthor().getName(), message.getAuthor().getAvatarUrl());
+        eb.setTitle(bb.getName());
+        eb.setColor(Color.decode(bb.getDefs().getString("color")));
+        eb.setThumbnail("https://www.beybladetr.com/img/BeybladeLogolar/BeyIcon.png");
+        eb.addField("Velocidade:", Double.toString(bb.getDefs().getDouble("speed")), true);
+        eb.addField("Força:", Double.toString(bb.getDefs().getDouble("strength")), true);
+        eb.addField("Estabilidade:", Double.toString(bb.getDefs().getDouble("stability")), true);
+        eb.addField("V/D:", bb.getDefs().getInt("wins") + "/" + bb.getDefs().getInt("loses"), false);
 
         message.getChannel().sendMessage(eb.build()).queue();
     }
