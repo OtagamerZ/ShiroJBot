@@ -56,6 +56,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     private static Scheduler sched;
     private static boolean ready = false;
     private static List<CustomAnswers> customAnswersList;
+    private static Map<User, User> duels = new HashMap<>();
 
     private static void initBot() throws LoginException {
         JDABuilder jda = new JDABuilder(AccountType.BOT);
@@ -319,7 +320,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         }
                     }
                     if (message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
-
+                        //COMANDOS--------------------------------------------------------------------------------->
                         if (memberMap.get(message.getAuthor().getId() + message.getGuild().getId()) == null) {
                             Member m = new Member();
                             m.setId(message.getAuthor().getId() + message.getGuild().getId());
@@ -600,10 +601,10 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             Beyblade bb = Database.getBeyblade(message.getAuthor().getId());
                             if (bb == null) message.getChannel().sendMessage("Você não possui uma beyblade!").queue();
                             else {
-                                if (cmd[1].contains("#") && cmd[1].length() == 4) {
+                                if (cmd[1].contains("#") && cmd[1].length() == 7) {
                                     bb.setName(cmd[1]);
                                 } else {
-                                    message.getChannel().sendMessage("A cor precisa estar neste formato: `#RGB`").queue();
+                                    message.getChannel().sendMessage("A cor precisa estar neste formato: `#RRGGBB`").queue();
                                 }
                             }
                         }

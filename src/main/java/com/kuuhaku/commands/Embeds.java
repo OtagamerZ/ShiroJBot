@@ -23,7 +23,6 @@ import com.kuuhaku.controller.Tradutor;
 import com.kuuhaku.model.*;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
@@ -461,7 +460,7 @@ public class Embeds {
         eb.addField("Velocidade:", Double.toString(bb.getDefs().getDouble("speed")), true);
         eb.addField("Força:", Double.toString(bb.getDefs().getDouble("strength")), true);
         eb.addField("Estabilidade:", Double.toString(bb.getDefs().getDouble("stability")), true);
-        eb.addField("V/D:", bb.getDefs().getInt("wins") + "/" + bb.getDefs().getInt("loses"), false);
+        eb.addField("V/D:", bb.getDefs().getInt("wins") + "/" + bb.getDefs().getInt("loses"), true);
 
         message.getChannel().sendMessage(eb.build()).queue();
     }
