@@ -30,7 +30,7 @@ public class Beyblade {
     @Id
     private String id;
     private String name = "";
-    private String defs = "{\"speed\": 1, \"strength\": 1, \"stability\": 1, \"color\": \"#fff\", \"wins\": 0, \"loses\": 0}";
+    private String defs = "{\"speed\": 1, \"strength\": 1, \"stability\": 1, \"life\": 100, \"color\": \"#ffffff\", \"wins\": 0, \"loses\": 0}";
 
     public String getId() {
         return id;
@@ -59,6 +59,12 @@ public class Beyblade {
     public void setStability(Double stb) {
         JSONObject defs = new JSONObject(this.defs);
         defs.put("stability", stb);
+        this.defs = defs.toString();
+    }
+
+    public void setLife(int life) {
+        JSONObject defs = new JSONObject(this.defs);
+        defs.put("life", life);
         this.defs = defs.toString();
     }
 
