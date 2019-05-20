@@ -1,3 +1,22 @@
+/*
+ * Copyright (C) 2019 Yago Garcia Sanches Gimenez / KuuHaKu
+ *
+ * This file is part of Shiro J Bot.
+ *
+ *     Shiro J Bot is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     Shiro J Bot is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with Shiro J Bot.  If not, see https://www.gnu.org/licenses/
+ */
+
 package com.kuuhaku.controller;
 
 import org.json.JSONObject;
@@ -13,7 +32,7 @@ public class Tradutor {
     public static String translate(String from, String to, String text) throws IOException {
         String token = System.getenv("YANDEX_TOKEN");
         URL link = new URL("https://translate.yandex.net/api/v1.5/tr.json/translate?key=" + token +
-                "&text=" + URLEncoder.encode(text, "UTF-8") + "&lang=" + from + "-" + to);
+                "&text=" + URLEncoder.encode(text, StandardCharsets.UTF_8) + "&lang=" + from + "-" + to);
         HttpURLConnection con = (HttpURLConnection) link.openConnection();
         con.setRequestMethod("GET");
         con.setRequestProperty("Accept", "application/json");
