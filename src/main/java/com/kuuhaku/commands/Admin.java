@@ -16,7 +16,7 @@ public class Admin {
                         gc.setCanalbv(message.getMessage().getMentionedChannels().get(0).getId());
                         message.getChannel().sendMessage("Canal de boas-vindas trocado para " + message.getGuild().getTextChannelById(gc.getCanalbv()).getAsMention()).queue();
                     } catch (ArrayIndexOutOfBoundsException e) {
-                        message.getChannel().sendMessage("E qual canal devo usar para mensagens de boas-vindas? Núlo não é um canal válido!").queue();
+                        message.getChannel().sendMessage("E qual canal devo usar para mensagens de boas-vindas? Nulo não é um canal válido!").queue();
                     }
                     break;
                 case "canalav":
@@ -24,7 +24,15 @@ public class Admin {
                         gc.setCanalav(message.getMessage().getMentionedChannels().get(0).getId());
                         message.getChannel().sendMessage("Canal de avisos trocado para " + message.getGuild().getTextChannelById(gc.getCanalav()).getAsMention()).queue();
                     } catch (ArrayIndexOutOfBoundsException e) {
-                        message.getChannel().sendMessage("E qual canal devo usar para mensagens de aviso? Núlo não é um canal válido!").queue();
+                        message.getChannel().sendMessage("E qual canal devo usar para mensagens de aviso? Nulo não é um canal válido!").queue();
+                    }
+                    break;
+                case "canaladeus":
+                    try {
+                        gc.setCanaladeus(message.getMessage().getMentionedChannels().get(0).getId());
+                        message.getChannel().sendMessage("Canal de adeus trocado para " + message.getGuild().getTextChannelById(gc.getCanaladeus()).getAsMention()).queue();
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        message.getChannel().sendMessage("E qual canal devo usar para mensagens de adeus? Nulo não é um canal válido!").queue();
                     }
                     break;
                 case "canalsug":
@@ -32,7 +40,7 @@ public class Admin {
                         gc.setCanalsug(message.getMessage().getMentionedChannels().get(0).getId());
                         message.getChannel().sendMessage("Canal de sugestões trocado para " + message.getGuild().getTextChannelById(gc.getCanalsug()).getAsMention()).queue();
                     } catch (ArrayIndexOutOfBoundsException e) {
-                        message.getChannel().sendMessage("E qual canal devo ficar de olho para sugestões? Núlo não é um canal válido!").queue();
+                        message.getChannel().sendMessage("E qual canal devo ficar de olho para sugestões? Nulo não é um canal válido!").queue();
                     }
                     break;
                 case "prefixo":
