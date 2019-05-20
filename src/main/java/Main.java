@@ -159,7 +159,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                 if (gcMap.get(user.getGuild().getId()).getCargoNew().size() > 0)
                     user.getGuild().getController().addRolesToMember(user.getMember(), list).queue();
             }
-        } catch (NullPointerException ignore){
+        } catch (NullPointerException ignore) {
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -173,7 +173,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                 if (memberMap.get(user.getUser().getId() + user.getGuild().getId()) != null)
                     memberMap.remove(user.getUser().getId() + user.getGuild().getId());
             }
-        } catch (NullPointerException ignore){
+        } catch (NullPointerException ignore) {
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -364,9 +364,10 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                     }
                                 }
                                 message.getChannel().sendMessage("Você precisa especificar de qual pra qual idioma devo traduzir (`de`>`para`)").queue();
+                            } else {
+                                message.getChannel().sendMessage("Você não me disse praticamente nada!").queue();
                             }
-                            message.getChannel().sendMessage("Você não me disse praticamente nada!").queue();
-                        }else if (hasPrefix(message, "escolha")) {
+                        } else if (hasPrefix(message, "escolha")) {
                             Misc.choose(message, cmd[0]);
                         } else if (hasPrefix(message, "anime")) {
                             try {
