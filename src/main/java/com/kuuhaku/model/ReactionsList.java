@@ -115,4 +115,14 @@ public class ReactionsList {
                 "https://i.imgur.com/P0bl9pT.gif"
         };
     }
+
+    public static String[] dance() {
+        return new String[]{
+                "https://i.kym-cdn.com/photos/images/original/001/129/902/3a2.gif",
+                "https://d2w9rnfcy7mm78.cloudfront.net/2145256/original_cd9c01187cead45cd791beafa78f7e08.gif",
+                "https://media.giphy.com/media/euMGM3uD3NHva/giphy.gif",
+                "https://66.media.tumblr.com/9bc3b579d14b65d45c16f7f48ab08f15/tumblr_orprpaDbI21qzxv73o1_400.gif",
+                "https://media1.tenor.com/images/56350dfdcd3a5fa4fd66e9e87f9574bb/tenor.gif"
+        };
+    }
 }

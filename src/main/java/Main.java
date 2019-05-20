@@ -15,6 +15,7 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.quartz.*;
@@ -140,6 +141,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                 if (gcMap.get(user.getGuild().getId()).getCargoNew().size() > 0)
                     user.getGuild().getController().addRolesToMember(user.getMember(), list).queue();
             }
+        } catch (NullPointerException ignore){
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -153,7 +155,9 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                 if (memberMap.get(user.getUser().getId() + user.getGuild().getId()) != null)
                     memberMap.remove(user.getUser().getId() + user.getGuild().getId());
             }
-        } catch (Exception ignored) {
+        } catch (NullPointerException ignore){
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -227,7 +231,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     public void onMessageReceived(MessageReceivedEvent message) {
         if (ready) {
             try {
-                if (message.getChannel().getId().equals(gcMap.get(message.getGuild().getId()).getCanalsug()) && !message.getMessage().getAuthor().isBot()) {
+                if (message.getChannel().getId().equals(gcMap.get(message.getGuild().getId()).getCanalsug()) && !message.getMessage().getAuthor().isBot() && !message.getMember().hasPermission(Permission.MANAGE_CHANNEL)) {
                     message.getMessage().addReaction("\ud83d\udc4d").queue();
                     message.getMessage().addReaction("\ud83d\udc4e").queue();
                 }
@@ -239,6 +243,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             message.getMessage().getContentRaw().contains("deu um tapa em") ||
                             message.getMessage().getContentRaw().contains("destruiu") ||
                             message.getMessage().getContentRaw().contains("beijou") ||
+                            message.getMessage().getContentRaw().contains("dançando") ||
+                            message.getMessage().getContentRaw().contains("dança") ||
                             message.getMessage().getContentRaw().contains("encarou"))
                         message.getMessage().addReaction("\u21aa").queue();
                 } catch (Exception e) {
@@ -364,6 +370,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             }
                         } else if (hasPrefix(message, "meee")) {
                             Reactions.facedesk(message.getMessage());
+                        } else if (hasPrefix(message, "dançar")) {
+                            Reactions.dance(message.getMessage(), false);
                         } else if (hasPrefix(message, "sqn")) {
                             Reactions.nope(message.getMessage());
                         } else if (hasPrefix(message, "corre")) {
