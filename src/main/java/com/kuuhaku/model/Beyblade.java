@@ -21,9 +21,13 @@ package com.kuuhaku.model;
 
 import org.json.JSONObject;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.awt.*;
 
+@Entity
 public class Beyblade {
+    @Id
     private String id;
     private String name = "";
     private String defs = "{\"speed\": 1, \"strength\": 1, \"stability\": 1, \"color\": \"#fff\", \"wins\": 0, \"loses\": 0}";
