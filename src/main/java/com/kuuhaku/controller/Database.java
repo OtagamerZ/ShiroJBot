@@ -19,6 +19,7 @@
 
 package com.kuuhaku.controller;
 
+import com.kuuhaku.model.Beyblade;
 import com.kuuhaku.model.CustomAnswers;
 import com.kuuhaku.model.Member;
 import com.kuuhaku.model.guildConfig;
@@ -128,6 +129,23 @@ public class Database {
             return ca;
         } catch (Exception e) {
             System.out.println("Erro ao recuperar respostas: " + e);
+            return null;
+        }
+    }
+
+    public static Beyblade getBeyblade(String id) {
+        Beyblade bb;
+
+        try {
+            EntityManager em = getEntityManager();
+            Query q = em.createQuery("SELECT c FROM Beyblade WHERE id = :id c", Beyblade.class);
+            q.setParameter(":id", id);
+            bb = (Beyblade) q.getSingleResult();
+            em.close();
+
+            return bb;
+        } catch (Exception e) {
+            System.out.println("Erro ao recuperar beyblade: " + e);
             return null;
         }
     }

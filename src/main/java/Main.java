@@ -18,6 +18,7 @@
 import com.kuuhaku.commands.*;
 import com.kuuhaku.controller.Database;
 import com.kuuhaku.controller.Tradutor;
+import com.kuuhaku.model.Beyblade;
 import com.kuuhaku.model.CustomAnswers;
 import com.kuuhaku.model.Member;
 import com.kuuhaku.model.guildConfig;
@@ -360,7 +361,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                     try {
                                         message.getChannel().sendMessage(Tradutor.translate(from, to, message.getMessage().getContentRaw().replace(cmd[0], "").replace(cmd[1], ""))).queue();
                                     } catch (IOException e) {
-                                        message.getChannel().sendMessage("Opa, deu erro aqui, veja se asa siglas dos idiomas estão corretas!").queue();
+                                        message.getChannel().sendMessage("Opa, deu erro aqui, veja se as siglas dos idiomas estão corretas!").queue();
                                     }
                                 } else {
                                     message.getChannel().sendMessage("Você precisa especificar de qual pra qual idioma devo traduzir (`de`>`para`)").queue();
@@ -538,6 +539,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             }
                         }
 
+                        //CHATBOT--------------------------------------------------------------------------------->
                         if (message.getMember().hasPermission(Permission.MANAGE_CHANNEL) || gcMap.get(message.getGuild().getId()).isAnyTell()) {
                             if (hasPrefix(message, "fale")) {
                                 if (message.getMessage().getContentRaw().contains(";") && cmd.length > 1) {
@@ -572,6 +574,34 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                     Embeds.answerList(message, customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId())).collect(Collectors.toList()));
                                 else
                                     message.getChannel().sendMessage("Você precisa me dizer uma página (serão mostradas 5 respostas por página)!").queue();
+                            }
+                        }
+
+                        //BEYBLADE--------------------------------------------------------------------------------->
+                        if (hasPrefix(message, "binfo")) {
+                            Beyblade bb = Database.getBeyblade(message.getAuthor().getId());
+                            if (bb == null) message.getChannel().sendMessage("Você não possui uma beyblade!").queue();
+                            else {
+                                Embeds.beybladeEmbed(message, bb);
+                            }
+                        } else if (hasPrefix(message, "bcomeçar")) {
+                            if (Database.getBeyblade(message.getAuthor().getId()) == null) {
+                                if (cmd.length > 1) {
+                                    Beyblade bb = new Beyblade();
+                                    bb.setName(cmd[1]);
+                                }
+                            } else {
+                                message.getChannel().sendMessage("Você já possui uma beyblade!").queue();
+                            }
+                        } else if (hasPrefix(message, "bcor")) {
+                            Beyblade bb = Database.getBeyblade(message.getAuthor().getId());
+                            if (bb == null) message.getChannel().sendMessage("Você não possui uma beyblade!").queue();
+                            else {
+                                if (cmd[1].contains("#") && cmd[1].length() == 4) {
+                                    bb.setName(cmd[1]);
+                                } else {
+                                    message.getChannel().sendMessage("A cor precisa estar neste formato: `#RGB`").queue();
+                                }
                             }
                         }
                     }
