@@ -9,6 +9,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -18,7 +19,11 @@ public class Database {
 
 
     private static EntityManager getEntityManager() {
-        if (emf == null) emf = Persistence.createEntityManagerFactory("shiro");
+        Map<String, String> props = new HashMap<>();
+        props.put("javax.persistence.jdbc.user", System.getenv("DB_LOGIN"));
+        props.put("javax.persistence.jdbc.password", System.getenv("DB_PASS"));
+
+        if (emf == null) emf = Persistence.createEntityManagerFactory("shiro", props);
 
         emf.getCache().evictAll();
 
