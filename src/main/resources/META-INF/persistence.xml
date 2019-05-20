@@ -18,12 +18,22 @@
         <properties>
             <!-- dados da conexao -->
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://remotemysql.com:3306/LnVsGtoAwc?autoReconnect=true&amp;useUnicode=yes&amp;characterEncoding=UTF-8&amp;interactiveClient=true"/>
+            <property name="javax.persistence.jdbc.url"
+                      value="jdbc:mysql://remotemysql.com:3306/LnVsGtoAwc?autoReconnect=true&amp;useUnicode=yes&amp;characterEncoding=UTF-8&amp;interactiveClient=true"/>
 
             <!--  propriedades do hibernate -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
+
+            <!--  propriedade do C3P0 -->
+            <property name="hibernate.c3p0.min_size" value="1"/>
+            <property name="hibernate.c3p0.max_size" value="3"/>
+            <property name="hibernate.c3p0.timeout" value="300"/>
+            <property name="hibernate.c3p0.max_statements" value="50"/>
+            <property name="hibernate.c3p0.idle_test_period" value="3000"/>
+            <property name="hibernate.c3p0.preferredTestQuery" value="SELECT 1"/>
+            <property name="hibernate.c3p0.testConnectionOnCheckout" value="true"/>
 
             <!--  atualiza o banco, gera as tabelas se for preciso -->
             <property name="hibernate.hbm2ddl.auto" value="update"/>
