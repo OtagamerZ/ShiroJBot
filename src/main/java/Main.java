@@ -188,6 +188,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         Reactions.kiss(bot, msg.build(), user, message.getTextChannel(), true, target);
                     } else if (message.getContentRaw().contains("encarou")) {
                         Reactions.stare(bot, user, message.getTextChannel(), true, target);
+                    } else if (message.getContentRaw().contains("dançando") || message.getContentRaw().contains("dança")) {
+                        Reactions.dance(message, true);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
