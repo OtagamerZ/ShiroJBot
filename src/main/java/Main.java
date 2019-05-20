@@ -17,6 +17,7 @@
 
 import com.kuuhaku.commands.*;
 import com.kuuhaku.controller.Database;
+import com.kuuhaku.controller.Tradutor;
 import com.kuuhaku.model.CustomAnswers;
 import com.kuuhaku.model.Member;
 import com.kuuhaku.model.guildConfig;
@@ -351,7 +352,21 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             Misc.image(message, cmd);
                         } else if (hasPrefix(message, "pergunta")) {
                             Misc.yesNo(message);
-                        } else if (hasPrefix(message, "escolha")) {
+                        } else if (hasPrefix(message, "traduza")) {
+                            if (cmd.length > 2) {
+                                if (cmd[1].contains(">")) {
+                                    String from = cmd[1].split(">")[0];
+                                    String to = cmd[1].split(">")[1];
+                                    try {
+                                        message.getChannel().sendMessage(Tradutor.translate(from, to, message.getMessage().getContentRaw().replace(cmd[0], "").replace(cmd[1], ""))).queue();
+                                    } catch (IOException e) {
+                                        message.getChannel().sendMessage("Opa, deu erro aqui, veja se asa siglas dos idiomas estão corretas!").queue();
+                                    }
+                                }
+                                message.getChannel().sendMessage("Você precisa especificar de qual pra qual idioma devo traduzir (`de`>`para`)").queue();
+                            }
+                            message.getChannel().sendMessage("Você não me disse praticamente nada!").queue();
+                        }else if (hasPrefix(message, "escolha")) {
                             Misc.choose(message, cmd[0]);
                         } else if (hasPrefix(message, "anime")) {
                             try {

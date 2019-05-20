@@ -83,7 +83,8 @@ public class Embeds {
                 prefix + "imagem [tags] [página] - Busca uma imagem no Safebooru, as tags não podem conter espaços (substitua-os por _).\n\n" +
                 prefix + "anime [nome] - Pesquisa informações sobre um anime.\n\n" +
                 prefix + "embed [título;descrição;imagem] - Cria um novo embed com os dados passados.\n\n" +
-                prefix + "xp - Mostra dados sobre o seu perfil.```\n";
+                prefix + "xp - Mostra dados sobre o seu perfil.```\n\n" +
+                prefix + "traduza [de>para] [texto] - Tentarei traduzir este texto para o idioma especificado.```\n";
     }
 
     static String helpEmbed2(String prefix) {
