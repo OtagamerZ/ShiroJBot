@@ -19,8 +19,6 @@
             <!-- dados da conexao -->
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://remotemysql.com:3306/LnVsGtoAwc?autoReconnect=true&amp;useUnicode=yes&amp;characterEncoding=UTF-8&amp;interactiveClient=true"/>
-            <property name="javax.persistence.jdbc.user" value="LnVsGtoAwc"/>
-            <property name="javax.persistence.jdbc.password" value="v3Giqpmz2T"/>
 
             <!--  propriedades do hibernate -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
