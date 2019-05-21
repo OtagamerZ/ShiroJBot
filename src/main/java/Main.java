@@ -312,24 +312,24 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                 }
                 if (duel.getB2().getLife() <= 0) {
                     message.getChannel().sendMessage(duel.getP1().getAsMention() + " triunfou sobre " + duel.getP2().getAsMention() + ". Temos um vencedor!").queue();
-                    Beyblade bl = Database.getBeyblade(duel.getP1().getId());
-                    assert bl != null;
-                    bl.addLoses();
-                    Database.sendBeyblade(bl);
-
-                    Beyblade bb = Database.getBeyblade(duel.getP2().getId());
-                    assert bb != null;
-                    bb.addWins();
-                    Database.sendBeyblade(bb);
-                    accDuels.removeIf(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor());
-                } else if (duel.getB1().getLife() <= 0) {
-                    message.getChannel().sendMessage(duel.getP2().getAsMention() + " triunfou sobre " + duel.getP1().getAsMention() + ". Temos um vencedor!").queue();
                     Beyblade bl = Database.getBeyblade(duel.getP2().getId());
                     assert bl != null;
                     bl.addLoses();
                     Database.sendBeyblade(bl);
 
                     Beyblade bb = Database.getBeyblade(duel.getP1().getId());
+                    assert bb != null;
+                    bb.addWins();
+                    Database.sendBeyblade(bb);
+                    accDuels.removeIf(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor());
+                } else if (duel.getB1().getLife() <= 0) {
+                    message.getChannel().sendMessage(duel.getP2().getAsMention() + " triunfou sobre " + duel.getP1().getAsMention() + ". Temos um vencedor!").queue();
+                    Beyblade bl = Database.getBeyblade(duel.getP1().getId());
+                    assert bl != null;
+                    bl.addLoses();
+                    Database.sendBeyblade(bl);
+
+                    Beyblade bb = Database.getBeyblade(duel.getP2().getId());
                     assert bb != null;
                     bb.addWins();
                     Database.sendBeyblade(bb);
