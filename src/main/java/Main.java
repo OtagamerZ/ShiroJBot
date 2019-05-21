@@ -18,10 +18,8 @@
 import com.kuuhaku.commands.*;
 import com.kuuhaku.controller.Database;
 import com.kuuhaku.controller.Tradutor;
-import com.kuuhaku.model.Beyblade;
-import com.kuuhaku.model.CustomAnswers;
+import com.kuuhaku.model.*;
 import com.kuuhaku.model.Member;
-import com.kuuhaku.model.guildConfig;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.ReadyEvent;
@@ -40,9 +38,11 @@ import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
 import javax.security.auth.login.LoginException;
+import java.awt.*;
 import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -56,7 +56,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     private static Scheduler sched;
     private static boolean ready = false;
     private static List<CustomAnswers> customAnswersList;
-    private static Map<User, User> duels = new HashMap<>();
+    private static Map<Long, DuelData> duels = new HashMap<>();
+    private static List<DuelData> accDuels = new ArrayList<>();
 
     private static void initBot() throws LoginException {
         JDABuilder jda = new JDABuilder(AccountType.BOT);
@@ -185,6 +186,10 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         User user = event.getUser();
         Message message = event.getChannel().getMessageById(event.getMessageId()).complete();
         List<User> ment = message.getMentionedUsers();
+        if (duels.containsKey(event.getMessageIdLong())) {
+            accDuels.add(duels.get(event.getMessageIdLong()));
+            duels.remove(event.getMessageIdLong());
+        }
         if (event.getReactionEmote().getName().equals("\ud83d\udc4d")) {
             if (message.getReactions().get(0).getCount() >= 5) message.pin().queue();
         } else if (event.getReactionEmote().getName().equals("\ud83d\udc4e")) {
@@ -251,26 +256,85 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     @Override
     public void onMessageReceived(MessageReceivedEvent message) {
         if (ready) {
+            if (accDuels.stream().anyMatch(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor())) {
+                @SuppressWarnings("OptionalGetWithoutIsPresent") DuelData duel = accDuels.stream().filter(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor()).findFirst().get();
+                int[] nums = new int[2];
+                boolean[] act = new boolean[2];
+
+                if (Integer.parseInt(message.getMessage().getContentRaw()) >= 0 && Integer.parseInt(message.getMessage().getContentRaw()) <= 10) {
+                    if (message.getAuthor() == duel.getP1()) {
+                        if (act[0]) {
+                            nums[0] = Integer.parseInt(message.getMessage().getContentRaw());
+                            act[0] = true;
+                        } else {
+                            message.getChannel().sendMessage("Espere encerrar o turno!").queue();
+                        }
+                    } else {
+                        if (act[1]) {
+                            nums[1] = Integer.parseInt(message.getMessage().getContentRaw());
+                            act[1] = true;
+                        } else {
+                            message.getChannel().sendMessage("Espere encerrar o turno!").queue();
+                        }
+                    }
+                    message.getMessage().delete().queue();
+
+                    //noinspection ConstantConditions
+                    if (nums[0] == 10 && nums[1] == 0) {
+                        duel.getB2().setLife(duel.getB2().getDefs().getInt("life") - (duel.getB1().getDefs().getInt("strength") * duel.getB1().getDefs().getInt("speed") / (duel.getB1().getDefs().getInt("strength") + duel.getB2().getDefs().getInt("stability")) * 200));
+                    } else if (nums[0] == 0 && nums[1] == 10) {
+                        duel.getB1().setLife(duel.getB1().getDefs().getInt("life") - (duel.getB2().getDefs().getInt("strength") * duel.getB2().getDefs().getInt("speed") / (duel.getB2().getDefs().getInt("strength") + duel.getB1().getDefs().getInt("stability")) * 200));
+                    } else if (nums[0] > nums[1]) {
+                        duel.getB2().setLife(duel.getB2().getDefs().getInt("life") - (duel.getB1().getDefs().getInt("strength") * duel.getB1().getDefs().getInt("speed") / (duel.getB1().getDefs().getInt("strength") + duel.getB2().getDefs().getInt("stability")) * 100));
+                    } else if (nums[0] < nums[1]) {
+                        duel.getB1().setLife(duel.getB1().getDefs().getInt("life") - (duel.getB2().getDefs().getInt("strength") * duel.getB2().getDefs().getInt("speed") / (duel.getB2().getDefs().getInt("strength") + duel.getB1().getDefs().getInt("stability")) * 100));
+                    } else {
+                        duel.getB2().setLife(duel.getB2().getDefs().getInt("life") - (duel.getB1().getDefs().getInt("strength") * duel.getB1().getDefs().getInt("speed") / (duel.getB1().getDefs().getInt("strength") + duel.getB2().getDefs().getInt("stability")) * 50));
+                        duel.getB1().setLife(duel.getB1().getDefs().getInt("life") - (duel.getB2().getDefs().getInt("strength") * duel.getB2().getDefs().getInt("speed") / (duel.getB2().getDefs().getInt("strength") + duel.getB1().getDefs().getInt("stability")) * 50));
+                    }
+
+                    if (duel.getB2().getDefs().getInt("life") <= 0) {
+                        EmbedBuilder eb = new EmbedBuilder();
+
+                        eb.setTitle("E temos um vencedor!");
+                        eb.setColor(Color.decode(duel.getB1().getDefs().getString("color")));
+                        eb.setThumbnail(duel.getP1().getAvatarUrl());
+                        eb.setDescription(duel.getP1().getName() + " triunfou sobre " + duel.getP2().getName());
+                        message.getChannel().sendMessage(eb.build()).queue();
+                        accDuels.remove(duel);
+                        return;
+                    } else if (duel.getB1().getDefs().getInt("life") <= 0) {
+                        EmbedBuilder eb = new EmbedBuilder();
+
+                        eb.setTitle("E temos um vencedor!");
+                        eb.setColor(Color.decode(duel.getB2().getDefs().getString("color")));
+                        eb.setThumbnail(duel.getP2().getAvatarUrl());
+                        eb.setDescription(duel.getP2().getName() + " triunfou sobre " + duel.getP1().getName());
+                        message.getChannel().sendMessage(eb.build()).queue();
+                        accDuels.remove(duel);
+                        return;
+                    }
+                    EmbedBuilder b = new EmbedBuilder();
+
+                    b.setTitle(duel.getP1().getName() + " VS " + duel.getP2().getName());
+                    b.addField(duel.getB1().getName(), "Vida: "+duel.getB1().getDefs().getInt("life"), true);
+                    b.addField(duel.getB2().getName(), "Vida: "+duel.getB2().getDefs().getInt("life"), true);
+                } else if (message.getMessage().getContentRaw().equals("desistir")) {
+                    if (message.getAuthor() == duel.getP1()) {
+                        message.getChannel().sendMessage(duel.getP1().getAsMention() + " desistiu. O vencedor é " + duel.getP2().getAsMention() + "!!").queue();
+                    } else {
+                        message.getChannel().sendMessage(duel.getP2().getAsMention() + " desistiu. O vencedor é " + duel.getP1().getAsMention() + "!!").queue();
+                    }
+                } else {
+                    message.getChannel().sendMessage("Você está no meio de um duelo, " + message.getAuthor().getAsMention() + ". Volte para a arena!").queue();
+                }
+            }
             try {
                 if (message.getChannel().getId().equals(gcMap.get(message.getGuild().getId()).getCanalsug()) && !message.getMessage().getAuthor().isBot() && !message.getMember().hasPermission(Permission.MANAGE_CHANNEL)) {
                     message.getMessage().addReaction("\ud83d\udc4d").queue();
                     message.getMessage().addReaction("\ud83d\udc4e").queue();
                 }
             } catch (NullPointerException ignore) {
-            }
-            if (message.getAuthor() == bot.getSelfUser()) {
-                try {
-                    if (message.getMessage().getContentRaw().contains("abraçou") ||
-                            message.getMessage().getContentRaw().contains("deu um tapa em") ||
-                            message.getMessage().getContentRaw().contains("destruiu") ||
-                            message.getMessage().getContentRaw().contains("beijou") ||
-                            message.getMessage().getContentRaw().contains("dançando") ||
-                            message.getMessage().getContentRaw().contains("dança") ||
-                            message.getMessage().getContentRaw().contains("encarou"))
-                        message.getMessage().addReaction("\u21aa").queue();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
             try {
                 if (message.getAuthor().isBot() || !message.isFromType(ChannelType.TEXT)) return;
@@ -320,7 +384,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         }
                     }
                     if (message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
-                        //COMANDOS--------------------------------------------------------------------------------->
+                        //COMMANDS--------------------------------------------------------------------------------->
                         if (memberMap.get(message.getAuthor().getId() + message.getGuild().getId()) == null) {
                             Member m = new Member();
                             m.setId(message.getAuthor().getId() + message.getGuild().getId());
@@ -606,6 +670,15 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                 } else {
                                     message.getChannel().sendMessage("A cor precisa estar neste formato: `#RRGGBB`").queue();
                                 }
+                            }
+                        } else if (hasPrefix(message, "bduelar")) {
+                            if (message.getMessage().getMentionedUsers().size() > 0) {
+                                message.getChannel().sendMessage(message.getMessage().getMentionedMembers().get(0).getAsMention() + ", você foi desafiado a um duelo de beyblades por " + message.getAuthor().getAsMention() + ". Se deseja aceitar, clique no botão abaixo:").queue(m -> {
+                                            m.addReaction("\u21aa").queue();
+                                            DuelData dd = new DuelData(message.getAuthor(), message.getMessage().getMentionedUsers().get(0));
+                                            duels.put(m.getIdLong(), dd);
+                                        }
+                                );
                             }
                         }
                     }

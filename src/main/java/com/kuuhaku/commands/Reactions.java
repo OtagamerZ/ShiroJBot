@@ -83,7 +83,7 @@ public class Reactions {
                 msg = (mbr.getAsMention() + " abraçou " + target.getAsMention() + " - " + msg);
             else
                 msg = (target.getAsMention() + " retribuiu o abraço " + mbr.getAsMention() + " - " + msg);
-            channel.sendMessage(msg).addFile(con.getInputStream(), "hug.gif").queue();
+            channel.sendMessage(msg).addFile(con.getInputStream(), "hug.gif").queue(m -> m.addReaction("\u21aa").queue());
         }
     }
 
@@ -128,7 +128,7 @@ public class Reactions {
                 msg = (mbr.getAsMention() + " deu um tapa em " + target.getAsMention() + " - " + msg);
             else
                 msg = (target.getAsMention() + " respondeu o tapa de " + mbr.getAsMention() + " - " + msg);
-            channel.sendMessage(msg).addFile(con.getInputStream(), "slap.gif").queue();
+            channel.sendMessage(msg).addFile(con.getInputStream(), "slap.gif").queue(m -> m.addReaction("\u21aa").queue());
         }
     }
 
@@ -173,7 +173,7 @@ public class Reactions {
                 msg = (mbr.getAsMention() + " destruiu " + target.getAsMention() + " - " + msg);
             else
                 msg = ("Porém, " + target.getAsMention() + " se levantou e atacou " + mbr.getAsMention() + " de volta - " + msg);
-            channel.sendMessage(msg).addFile(con.getInputStream(), "smash.gif").queue();
+            channel.sendMessage(msg).addFile(con.getInputStream(), "smash.gif").queue(m -> m.addReaction("\u21aa").queue());
         }
     }
 
@@ -207,7 +207,7 @@ public class Reactions {
                 msg = (mbr.getAsMention() + " beijou " + target.getAsMention() + " - " + msg);
             else
                 msg = (target.getAsMention() + " também deu um beijo em " + mbr.getAsMention() + " - " + msg);
-            channel.sendMessage(msg).addFile(con.getInputStream(), "kiss.gif").queue();
+            channel.sendMessage(msg).addFile(con.getInputStream(), "kiss.gif").queue(m -> m.addReaction("\u21aa").queue());
         }
     }
 
@@ -247,7 +247,7 @@ public class Reactions {
                 msg = (mbr.getAsMention() + " encarou " + target.getAsMention() + " - " + msg);
             else
                 msg = (target.getAsMention() + " também está encarando " + mbr.getAsMention() + " - " + msg);
-            channel.sendMessage(msg).addFile(con.getInputStream(), "stare.gif").queue();
+            channel.sendMessage(msg).addFile(con.getInputStream(), "stare.gif").queue(m -> m.addReaction("\u21aa").queue());
         }
     }
 
@@ -426,7 +426,7 @@ public class Reactions {
             msg = (mbr.getAsMention() + " está dançando " + mbr.getAsMention() + " - " + msg);
         else
             msg = (mbr.getAsMention() + " juntou-se à dança - " + msg);
-        message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "dance.gif").queue();
+        message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "dance.gif").queue(m -> m.addReaction("\u21aa").queue());
 
     }
 }
