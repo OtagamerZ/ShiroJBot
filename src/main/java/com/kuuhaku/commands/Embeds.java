@@ -499,6 +499,7 @@ public class Embeds {
         eb.setColor(Color.decode(champ.getColor()));
         for (int i = 0; i < rank.size() && i < 10; i++) {
             sb.append(i + 2).append(" - ").append(rank.get(i).getName()).append(" (").append(bot.getUserById(rank.get(i).getId()).getName()).append(") | ").append(rank.get(i).getWins()).append("/").append(rank.get(i).getLoses()).append("\n");
+            System.out.println(rank.get(i).getKDA());
         }
         eb.addField("1 - " + champ.getName() + " (" + bot.getUserById(champ.getId()).getName() + ") | " + champ.getWins() + "/" + champ.getLoses(), sb.toString(), false);
 
