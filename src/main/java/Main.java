@@ -188,7 +188,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         if (duels.containsKey(event.getMessageIdLong())) {
             accDuels.add(duels.get(event.getMessageIdLong()));
             duels.remove(event.getMessageIdLong());
-            event.getChannel().sendMessage("O duelo começou!\nUsem `atacar` para atacar, `defender` para defender ou `especial` para tentar a sorte e causar 2x o dano.").queue();
+            event.getChannel().sendMessage("O duelo começou!\nUsem `atacar` para atacar, `defender` para defender ou `especial` para tentar a sorte e causar 2x o dano.\n\n**O desafiante começa primeiro!**").queue();
         }
         if (event.getReactionEmote().getName().equals("\ud83d\udc4d")) {
             if (message.getReactions().get(0).getCount() >= 5) message.pin().queue();
@@ -293,7 +293,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         duel.setD1(false);
                         if (chance > 70) {
                             duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getStrength() * duel.getB1().getSpeed() / (duel.getB1().getStrength() + duel.getB2().getStability()) * (new Random().nextInt(Math.round(100 / (duel.isD2() ? duel.getB2().getStability() : 1)))) * 2));
-                            message.getChannel().sendMessage("Em uma manobra espetacular, " + duel.getB1().getName() + " acerta um golpe especial e causa o dobro do dano comum!!").queue();
+                            message.getChannel().sendMessage("Em uma manobra espetacular, " + duel.getB1().getName() + " acerta um golpe especial e causa o dobro do dano comum!! (" + chance + ")").queue();
                         } else
                             message.getChannel().sendMessage("Você errou o especial e perdeu o turno! (" + chance + " < 70)").queue();
                     } else if (!player1Turn && message.getAuthor() == duel.getP2()) {
@@ -302,7 +302,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         duel.setD2(false);
                         if (chance > 70) {
                             duel.getB1().setLife(duel.getB1().getLife() - Math.round(duel.getB2().getStrength() * duel.getB2().getSpeed() / (duel.getB2().getStrength() + duel.getB1().getStability()) * (new Random().nextInt(Math.round(100 / (duel.isD1() ? duel.getB1().getStability() : 1)))) * 2));
-                            message.getChannel().sendMessage("Em uma manobra espetacular, " + duel.getB2().getName() + " acerta um golpe especial e causa o dobro do dano comum!!").queue();
+                            message.getChannel().sendMessage("Em uma manobra espetacular, " + duel.getB2().getName() + " acerta um golpe especial e causa o dobro do dano comum!! (" + chance + ")").queue();
                         } else
                             message.getChannel().sendMessage("Você errou o especial e perdeu o turno! (" + chance + " < 70)").queue();
                     }
@@ -334,7 +334,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     }
                 }
                 if (duel.getB2().getLife() <= 0) {
-                    message.getChannel().sendMessage(duel.getP1().getAsMention() + " triunfou sobre " + duel.getP2().getAsMention() + ". Temos um vencedor!").queue();
+                    int pointWin = new Random().nextInt(Math.round(duel.getB2().getStrength() + duel.getB2().getSpeed() + duel.getB2().getStability() + Math.round(duel.getB2().getWins() / duel.getB2().getLoses())));
+                    message.getChannel().sendMessage(duel.getP1().getAsMention() + " triunfou sobre " + duel.getP2().getAsMention() + ". Temos um vencedor!\n\n" + duel.getP1().getAsMention() + " ganhou **" + pointWin + "** pontos de combate!").queue();
                     Beyblade bl = Database.getBeyblade(duel.getP2().getId());
                     assert bl != null;
                     bl.addLoses();
@@ -343,10 +344,12 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     Beyblade bb = Database.getBeyblade(duel.getP1().getId());
                     assert bb != null;
                     bb.addWins();
+                    bb.addPoints(pointWin);
                     Database.sendBeyblade(bb);
                     accDuels.removeIf(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor());
                 } else if (duel.getB1().getLife() <= 0) {
-                    message.getChannel().sendMessage(duel.getP2().getAsMention() + " triunfou sobre " + duel.getP1().getAsMention() + ". Temos um vencedor!").queue();
+                    int pointWin = new Random().nextInt(Math.round(duel.getB1().getStrength() + duel.getB1().getSpeed() + duel.getB1().getStability() + Math.round(duel.getB1().getWins() / duel.getB1().getLoses())));
+                    message.getChannel().sendMessage(duel.getP2().getAsMention() + " triunfou sobre " + duel.getP1().getAsMention() + ". Temos um vencedor!\n\n" + duel.getP2().getAsMention() + " ganhou **" + pointWin + "** pontos de combate!").queue();
                     Beyblade bl = Database.getBeyblade(duel.getP1().getId());
                     assert bl != null;
                     bl.addLoses();
@@ -355,9 +358,10 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     Beyblade bb = Database.getBeyblade(duel.getP2().getId());
                     assert bb != null;
                     bb.addWins();
+                    bb.addPoints(pointWin);
                     Database.sendBeyblade(bb);
                     accDuels.removeIf(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor());
-                } else if (message.getMessage().getContentRaw().equals("atacar") || message.getMessage().getContentRaw().equals("especial")) {
+                } else if (message.getMessage().getContentRaw().equals("atacar") || message.getMessage().getContentRaw().equals("especial") || message.getMessage().getContentRaw().equals("defender")) {
                     EmbedBuilder eb = new EmbedBuilder();
                     eb.setTitle("Vez de " + (player1Turn ? duel.getB1().getName() : duel.getB2().getName()));
                     eb.setDescription(duel.getB1().getName() + " *VS* " + duel.getB2().getName());
