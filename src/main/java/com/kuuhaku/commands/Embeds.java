@@ -19,10 +19,12 @@
 
 package com.kuuhaku.commands;
 
+import com.kuuhaku.controller.Database;
 import com.kuuhaku.controller.Tradutor;
 import com.kuuhaku.model.*;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
@@ -39,6 +41,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -472,6 +475,25 @@ public class Embeds {
         eb.addField("Estabilidade:", Float.toString(bb.getStability()), true);
         eb.addField("Vitórias/Derrotas:", bb.getWins() + "/" + bb.getLoses(), true);
         eb.addField("Pontos de combate:", bb.getPoints() + " pontos", true);
+
+        message.getChannel().sendMessage(eb.build()).queue();
+    }
+
+    public static void bRankEmbed(JDA bot, MessageReceivedEvent message) {
+        List<Beyblade> rank = Database.getBeybladeList();
+        assert rank != null;
+        rank.sort((Comparator.comparingInt(o -> o.getWins() / o.getLoses())));
+        Beyblade champ = rank.get(0);
+        rank.remove(0);
+        EmbedBuilder eb = new EmbedBuilder();
+
+        eb.setTitle("TOP 10 Beyblades");
+        eb.setThumbnail("https://www.pngkey.com/png/full/21-217733_free-png-trophy-png-images-transparent-winner-trophy.png");
+        eb.setColor(Color.decode(rank.get(0).getColor()));
+        eb.addField("1 - " + champ.getName() + " (" + bot.getUserById(champ.getId()).getName() + ")", "", false);
+        for (int i = 0; i < rank.size() && i < 10; i++) {
+            eb.addField("", (i + 1) + " - " + rank.get(i).getName() + " (" + bot.getUserById(rank.get(i).getId()).getName() + ")", false);
+        }
 
         message.getChannel().sendMessage(eb.build()).queue();
     }
