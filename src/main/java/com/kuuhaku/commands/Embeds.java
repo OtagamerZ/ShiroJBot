@@ -48,7 +48,7 @@ public class Embeds {
         EmbedBuilder eb = new EmbedBuilder();
 
         eb.setAuthor("Novo bug enviado de " + message.getGuild().getName());
-        eb.addField("Enviado de:", message.getAuthor().getAsMention(), true);
+        eb.addField("Enviado de:", message.getAuthor().getAsTag(), true);
         eb.addField("Data:", message.getMessage().getCreationTime().minusHours(3).format(DateTimeFormatter.ofPattern("dd/MM/yyyy (HH:mm)")), true);
         eb.addField("Relatório do bug:", String.join(" ", message.getMessage().getContentRaw().split(prefix + "bug ")), false);
 
@@ -97,6 +97,7 @@ public class Embeds {
                 prefix + "beijar [membro] - Beija alguém.\n\n" +
                 prefix + "tapa [membro] - Dá um tapa em alguém.\n\n" +
                 prefix + "vemca [membro] - Dá um abraço exagerado em alguém.\n\n" +
+                prefix + "cafunhe [membro] - Dá um cafuné em alguém.\n\n" +
                 prefix + "chega [membro] - Retalha alguém.\n\n" +
                 prefix + "encara [membro] - Encara alguém.\n\n" +
                 prefix + "sqn - Esquiva de uma tentativa.\n\n" +
