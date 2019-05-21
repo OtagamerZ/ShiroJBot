@@ -111,6 +111,8 @@ public class Database {
         em.getTransaction().begin();
         ca.forEach(em::merge);
         em.getTransaction().commit();
+        Query q = em.createQuery("DELETE c FROM CustomAnswers c WHERE markDel == \"DELETAR\"", CustomAnswers.class);
+        System.out.println("Número de entradas removidas: " + q.executeUpdate());
         em.close();
         System.out.println("Respostas salvas com sucesso!");
     }
