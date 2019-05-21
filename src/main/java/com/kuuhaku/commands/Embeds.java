@@ -491,11 +491,10 @@ public class Embeds {
         eb.setTitle("TOP 10 Beyblades");
         eb.setThumbnail("https://www.pngkey.com/png/full/21-217733_free-png-trophy-png-images-transparent-winner-trophy.png");
         eb.setColor(Color.decode(champ.getColor()));
-        eb.setDescription("**1 - " + champ.getName() + " (" + bot.getUserById(champ.getId()).getName() + ")** | " +champ.getWins()+ "/" +champ.getLoses());
         for (int i = 0; i < rank.size() && i < 10; i++) {
-            sb.append(i + 1).append(" - ").append(rank.get(i).getName()).append(" (").append(bot.getUserById(rank.get(i).getId()).getName()).append(") | ").append(rank.get(i).getWins()).append("/").append(rank.get(i).getLoses()).append("\n");
+            sb.append(i + 2).append(" - ").append(rank.get(i).getName()).append(" (").append(bot.getUserById(rank.get(i).getId()).getName()).append(") | ").append(rank.get(i).getWins()).append("/").append(rank.get(i).getLoses()).append("\n");
         }
-        eb.addField("", sb.toString(), false);
+        eb.addField("1 - " + champ.getName() + " (" + bot.getUserById(champ.getId()).getName() + ") | " +champ.getWins()+ "/" +champ.getLoses(), sb.toString(), false);
 
         message.getChannel().sendMessage(eb.build()).queue();
     }
