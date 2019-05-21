@@ -330,6 +330,12 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     assert bb != null;
                     bb.addWins();
                     Database.sendBeyblade(bb);
+                } else {
+                    EmbedBuilder eb = new EmbedBuilder();
+                    eb.setTitle(duel.getB1().getName() + " *VS* " + duel.getB2().getName());
+                    eb.addField(duel.getB1().getName(), "Vida: " + duel.getB1().getLife(), true);
+                    eb.addField(duel.getB2().getName(), "Vida: " + duel.getB2().getLife(), true);
+                    message.getChannel().sendMessage(eb.build()).queue();
                 }
             }
             try {
