@@ -101,6 +101,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         try {
             Database.sendAllGuildConfigs(gcMap.values());
             Database.sendAllMembersData(memberMap.values());
+            Database.sendAllCustomAnswers(customAnswersList);
             System.out.println("Guardar configurações no banco de dados...PRONTO!");
             bot.getPresence().setGame(Owner.getRandomGame(bot));
             gcMap.forEach((k, v) -> {
@@ -659,7 +660,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                             String answer = customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId()) && a.getId() == Long.parseLong(cmd[1])).collect(Collectors.toList()).get(0).getAnswer();
                                             String trigger = customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId()) && a.getId() == Long.parseLong(cmd[1])).collect(Collectors.toList()).get(0).getGatilho();
                                             message.getChannel().sendMessage("Não irei mais responder `" + answer + "` quando alguém dizer `" + trigger + "`.").queue();
-                                            customAnswersList.removeIf(a -> a.getId() == Long.parseLong(cmd[1]));
+                                            customAnswersList.stream().filter(a -> a.getId() == Long.parseLong(cmd[1])).findFirst().ifPresent(CustomAnswers::setMarkDel);
                                         }
                                     } catch (NumberFormatException e) {
                                         message.getChannel().sendMessage("Você não me passou um ID válido!").queue();
