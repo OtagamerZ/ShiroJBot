@@ -495,8 +495,25 @@ public class Embeds {
         for (int i = 0; i < rank.size() && i < 10; i++) {
             sb.append(i + 2).append(" - ").append(rank.get(i).getName()).append(" (").append(bot.getUserById(rank.get(i).getId()).getName()).append(") | ").append(rank.get(i).getWins()).append("/").append(rank.get(i).getLoses()).append("\n");
         }
-        eb.addField("1 - " + champ.getName() + " (" + bot.getUserById(champ.getId()).getName() + ") | " +champ.getWins()+ "/" +champ.getLoses(), sb.toString(), false);
+        eb.addField("1 - " + champ.getName() + " (" + bot.getUserById(champ.getId()).getName() + ") | " + champ.getWins() + "/" + champ.getLoses(), sb.toString(), false);
 
         message.getChannel().sendMessage(eb.build()).queue();
+    }
+
+    public static void shopEmbed(MessageReceivedEvent message, Beyblade bb, String prefixo) {
+        EmbedBuilder eb = new EmbedBuilder();
+
+        eb.setAuthor("Saldo de " + message.getAuthor().getName() + ": " + bb.getPoints() + " pontos de combate", message.getAuthor().getAvatarUrl());
+        eb.setColor(Color.decode(bb.getColor()));
+        eb.setTitle("Loja de melhorias");
+        eb.setThumbnail("http://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/1024/Experience-Points-XP-icon.png");
+        eb.setDescription("Olá, meu nome é Orish, sou técnica em melhorias de Beyblades.\n\n" +
+                "Estou vendo que você tem um modelo e tanto aqui ein? Enfim, fique à vontade para escolher um atributo " +
+                "para melhorar, lembre-se que cada vez que você melhorar algo o valor das outras peças também irão aumentar um pouco " +
+                "devido a incompatibilidade com peças mais baratas!");
+        eb.addField("Melhorar força (Aumenta o dano):", Math.round(15 * bb.getStrength() + bb.getStrength() + bb.getSpeed() + bb.getStability()) + " pontos de combate\nDiga **" + prefixo + "melhorar força** para comprar", false);
+        eb.addField("Melhorar velocidade (Aumenta a chance de acerto do especial):", Math.round(15 * bb.getSpeed() + bb.getStrength() + bb.getSpeed() + bb.getStability()) + " pontos de combate\nDiga **" + prefixo + "melhorar velocidade** para comprar", false);
+        eb.addField("Melhorar estabilidade (Aumenta a defesa):", Math.round(15 * bb.getStability() + bb.getStrength() + bb.getSpeed() + bb.getStability()) + " pontos de combate\nDiga **" + prefixo + "melhorar estabilidade** para comprar", false);
+        eb.addField("Melhorar vida (Aumenta a vida):", Math.round(bb.getLife() / 2) + " pontos de combate\nDiga **" + prefixo + "melhorar vida** para comprar", false);
     }
 }
