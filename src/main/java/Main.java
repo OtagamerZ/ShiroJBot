@@ -258,19 +258,18 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         if (ready) {
             if (accDuels.stream().anyMatch(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor())) {
                 @SuppressWarnings("OptionalGetWithoutIsPresent") DuelData duel = accDuels.stream().filter(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor()).findFirst().get();
-                boolean player1Turn = true;
-
+                boolean player1Turn = duel.isP1turn();
 
                 if (message.getMessage().getContentRaw().equalsIgnoreCase("atacar")) {
                     if (player1Turn && message.getAuthor() == duel.getP1()) {
-                        player1Turn = false;
+                        duel.setP1turn(false);
                         duel.setD1(false);
                         int damage = Math.round(duel.getB1().getStrength() * duel.getB1().getSpeed() / (duel.getB1().getStrength() + duel.getB2().getStability()) * (new Random().nextInt(Math.round(100 / (duel.isD2() ? duel.getB2().getStability() : 1)))));
                         duel.getB2().setLife(duel.getB2().getLife() - damage);
                         System.out.println(damage + " -> " + duel.getB2().getLife());
                         message.getChannel().sendMessage(duel.getB1().getName() + " ataca, agora é a vez de " + duel.getB2().getName()).queue();
                     } else if (!player1Turn && message.getAuthor() == duel.getP2()) {
-                        player1Turn = true;
+                        duel.setP1turn(true);
                         duel.setD2(false);
                         int damage = Math.round(duel.getB2().getStrength() * duel.getB2().getSpeed() / (duel.getB2().getStrength() + duel.getB1().getStability()) * (new Random().nextInt(Math.round(100 / (duel.isD1() ? duel.getB1().getStability() : 1)))));
                         duel.getB1().setLife(duel.getB1().getLife() - damage);
@@ -279,14 +278,17 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     }
                 } else if (message.getMessage().getContentRaw().equalsIgnoreCase("defender")) {
                     if (player1Turn && message.getAuthor() == duel.getP1()) {
+                        duel.setP1turn(false);
                         duel.setD1(true);
-                        message.getChannel().sendMessage(duel.getB1().getName() + " assumiu uma postura defensiva!").queue();
+                        message.getChannel().sendMessage(duel.getB1().getName() + " assumiu uma postura defensiva, é sua vez " + duel.getB2().getName()).queue();
                     } else if (!player1Turn && message.getAuthor() == duel.getP2()) {
+                        duel.setP1turn(true);
                         duel.setD2(true);
-                        message.getChannel().sendMessage(duel.getB2().getName() + " assumiu uma postura defensiva!").queue();
+                        message.getChannel().sendMessage(duel.getB2().getName() + " assumiu uma postura defensiva, é sua vez " + duel.getB1().getName()).queue();
                     }
                 } else if (message.getMessage().getContentRaw().equalsIgnoreCase("especial")) {
                     if (player1Turn && message.getAuthor() == duel.getP1()) {
+                        duel.setP1turn(false);
                         int chance = new Random().nextInt(100);
                         duel.setD1(false);
                         if (chance > 70) {
@@ -295,6 +297,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         } else
                             message.getChannel().sendMessage("Você errou o especial e perdeu o turno! (" + chance + " < 70)").queue();
                     } else if (!player1Turn && message.getAuthor() == duel.getP2()) {
+                        duel.setP1turn(true);
                         int chance = new Random().nextInt(100);
                         duel.setD2(false);
                         if (chance > 70) {
@@ -361,6 +364,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     eb.addField(duel.getB1().getName(), "Vida: " + duel.getB1().getLife(), true);
                     eb.addField(duel.getB2().getName(), "Vida: " + duel.getB2().getLife(), true);
                     message.getChannel().sendMessage(eb.build()).queue();
+                    accDuels.stream().filter(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor()).findFirst().ifPresent(m -> m = duel);
                 }
             }
             try {
