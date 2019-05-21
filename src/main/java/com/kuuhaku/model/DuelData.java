@@ -24,7 +24,7 @@ public class DuelData {
     private User p1, p2;
     private Beyblade b1, b2;
     transient private boolean d1, d2;
-    transient private boolean p1turn = false;
+    transient private boolean p1turn = true;
 
     public DuelData(User p1, User p2) {
         this.p1 = p1;

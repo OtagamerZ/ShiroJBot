@@ -29,7 +29,7 @@ public class Beyblade {
     private String name = "";
     private String color = "#ffffff";
     private float speed = 1.5f, strength = 1, stability = 1;
-    private int life = 100, wins = 0, loses = 0;
+    private int life = 100, wins = 0, loses = 0, points = 0;
 
     public String getId() {
         return id;
@@ -101,5 +101,17 @@ public class Beyblade {
 
     public void addLoses() {
         loses += 1;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void addPoints(int points) {
+        this.points += points;
+    }
+
+    public void takePoints(int points) {
+        this.points -= points;
     }
 }
