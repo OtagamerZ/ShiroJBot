@@ -32,6 +32,7 @@ public class Misc {
     public static void help(MessageReceivedEvent message, String prefix, User owner) {
         message.getAuthor().openPrivateChannel().queue(channel -> channel.sendMessage("__**Precisa de ajuda? Aqui estou eu!**__\n\n" + Embeds.helpEmbed(prefix)).queue());
         message.getAuthor().openPrivateChannel().queue(channel -> channel.sendMessage(Embeds.helpEmbed2(prefix)).queue());
+        message.getAuthor().openPrivateChannel().queue(channel -> channel.sendMessage(Embeds.helpEmbed3(prefix)).queue());
         message.getAuthor().openPrivateChannel().queue(channel -> channel.sendMessage("Precisa de mais ajuda? Fale com meu Nii-chan " + owner.getAsMention() + " ou venha para nosso servidor de suporte: https://discord.gg/HpuF3Vr").queue());
     }
 
