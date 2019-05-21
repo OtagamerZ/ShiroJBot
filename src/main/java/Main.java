@@ -252,9 +252,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     @Override
     public void onMessageReceived(MessageReceivedEvent message) {
         if (ready) {
-            if (new Random().nextInt(100) > 80) {
-                message.getChannel().sendMessage("Opa, está gostando de me utilizar em seu servidor? Caso sim, se puder votar me ajudaria **MUITO** a me tornar cada vez mais popular e ser chamada para mais servidores!\n https://discordbots.org/bot/572413282653306901").queue();
-            }
             if (accDuels.stream().anyMatch(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor())) {
                 @SuppressWarnings("OptionalGetWithoutIsPresent") DuelData duel = accDuels.stream().filter(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor()).findFirst().get();
                 boolean player1Turn = duel.isP1turn();
@@ -430,6 +427,9 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     }
                     if (message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
                         //COMMANDS--------------------------------------------------------------------------------->
+                        if (new Random().nextInt(100) > 80) {
+                            message.getChannel().sendMessage("Opa, está gostando de me utilizar em seu servidor? Caso sim, se puder votar me ajudaria **MUITO** a me tornar cada vez mais popular e ser chamada para mais servidores!\n https://discordbots.org/bot/572413282653306901").queue();
+                        }
                         if (memberMap.get(message.getAuthor().getId() + message.getGuild().getId()) == null) {
                             Member m = new Member();
                             m.setId(message.getAuthor().getId() + message.getGuild().getId());
