@@ -455,12 +455,12 @@ public class Embeds {
 
         eb.setAuthor("Beyblade de " + message.getAuthor().getName(), message.getAuthor().getAvatarUrl());
         eb.setTitle(bb.getName());
-        eb.setColor(Color.decode(bb.getDefs().getString("color")));
+        eb.setColor(Color.decode(bb.getColor()));
         eb.setThumbnail("https://www.beybladetr.com/img/BeybladeLogolar/BeyIcon.png");
-        eb.addField("Velocidade:", Double.toString(bb.getDefs().getDouble("speed")), true);
-        eb.addField("Força:", Double.toString(bb.getDefs().getDouble("strength")), true);
-        eb.addField("Estabilidade:", Double.toString(bb.getDefs().getDouble("stability")), true);
-        eb.addField("V/D:", bb.getDefs().getInt("wins") + "/" + bb.getDefs().getInt("loses"), true);
+        eb.addField("Velocidade:", Float.toString(bb.getSpeed()), true);
+        eb.addField("Força:", Float.toString(bb.getStrength()), true);
+        eb.addField("Estabilidade:", Float.toString(bb.getStability()), true);
+        eb.addField("V/D:", bb.getWins() + "/" + bb.getLoses(), true);
 
         message.getChannel().sendMessage(eb.build()).queue();
     }
