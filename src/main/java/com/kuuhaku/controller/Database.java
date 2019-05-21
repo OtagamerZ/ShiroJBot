@@ -152,6 +152,23 @@ public class Database {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    public static List<Beyblade> getBeybladeList() {
+        List<Beyblade> bb;
+
+        try {
+            EntityManager em = getEntityManager();
+            Query q = em.createQuery("SELECT c FROM Beyblade c", Beyblade.class);
+            bb = (List<Beyblade>) q.getResultList();
+            em.close();
+
+            return bb;
+        } catch (Exception e) {
+            System.out.println("Erro ao recuperar beyblades: " + e);
+            return null;
+        }
+    }
+
     public static void sendBeyblade(Beyblade bb) {
         EntityManager em = getEntityManager();
 
