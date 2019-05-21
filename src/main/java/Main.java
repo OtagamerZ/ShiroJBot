@@ -188,7 +188,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         if (duels.containsKey(event.getMessageIdLong())) {
             accDuels.add(duels.get(event.getMessageIdLong()));
             duels.remove(event.getMessageIdLong());
-            event.getChannel().sendMessage("O duelo começou!\nUsem `atacar` para atacar ou `especial` para tentar a sorte e causar 2x o dano.").queue();
+            event.getChannel().sendMessage("O duelo começou!\nUsem `atacar` para atacar, `defender` para defender ou `especial` para tentar a sorte e causar 2x o dano.").queue();
         }
         if (event.getReactionEmote().getName().equals("\ud83d\udc4d")) {
             if (message.getReactions().get(0).getCount() >= 5) message.pin().queue();
@@ -364,7 +364,10 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     eb.addField(duel.getB1().getName(), "Vida: " + duel.getB1().getLife(), true);
                     eb.addField(duel.getB2().getName(), "Vida: " + duel.getB2().getLife(), true);
                     message.getChannel().sendMessage(eb.build()).queue();
-                    accDuels.stream().filter(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor()).findFirst().ifPresent(m -> m = duel);
+                    accDuels.stream().filter(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor()).findFirst().ifPresent(m -> {
+                        m.getB1().setLife(duel.getB1().getLife());
+                        m.getB2().setLife(duel.getB2().getLife());
+                    });
                 }
             }
             try {
