@@ -264,21 +264,25 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                 try {
                     if (Integer.parseInt(message.getMessage().getContentRaw()) >= 0 && Integer.parseInt(message.getMessage().getContentRaw()) <= 10) {
                         if (message.getAuthor() == duel.getP1()) {
-                            if (act[0]) {
+                            if (!act[0]) {
                                 nums[0] = Integer.parseInt(message.getMessage().getContentRaw());
                                 act[0] = true;
+                                message.getMessage().delete().queue();
+
                             } else {
+                                message.getMessage().delete().queue();
                                 message.getChannel().sendMessage("Espere encerrar o turno!").queue();
                             }
                         } else {
-                            if (act[1]) {
+                            if (!act[1]) {
                                 nums[1] = Integer.parseInt(message.getMessage().getContentRaw());
                                 act[1] = true;
+                                message.getMessage().delete().queue();
                             } else {
+                                message.getMessage().delete().queue();
                                 message.getChannel().sendMessage("Espere encerrar o turno!").queue();
                             }
                         }
-                        message.getMessage().delete().queue();
 
                         if (act[0] && act[1]) {
                             act[0] = false;
@@ -674,7 +678,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             if (bb == null) message.getChannel().sendMessage("Você não possui uma beyblade!").queue();
                             else if (cmd.length > 1) {
                                 if (cmd[1].contains("#") && cmd[1].length() == 7) {
-                                    bb.setName(cmd[1]);
+                                    bb.setColor(cmd[1]);
+                                    message.getChannel().sendMessage("Cor setada com sucesso!").queue();
                                 } else {
                                     message.getChannel().sendMessage("A cor precisa estar neste formato: `#RRGGBB`").queue();
                                 }
