@@ -41,10 +41,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class Embeds {
     public static MessageEmbed bugReport(MessageReceivedEvent message, String prefix) {
@@ -490,6 +488,7 @@ public class Embeds {
         List<Beyblade> rank = Database.getBeybladeList();
         assert rank != null;
         rank.sort(Comparator.comparing(Beyblade -> Beyblade.getWins() / (Beyblade.getLoses() == 0 ? 1 : Beyblade.getLoses())));
+        Collections.reverse(rank);
         Beyblade champ = rank.get(0);
         rank.remove(0);
         EmbedBuilder eb = new EmbedBuilder();
