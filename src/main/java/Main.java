@@ -261,72 +261,79 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                 int[] nums = new int[2];
                 boolean[] act = new boolean[2];
 
-                if (Integer.parseInt(message.getMessage().getContentRaw()) >= 0 && Integer.parseInt(message.getMessage().getContentRaw()) <= 10) {
-                    if (message.getAuthor() == duel.getP1()) {
-                        if (act[0]) {
-                            nums[0] = Integer.parseInt(message.getMessage().getContentRaw());
-                            act[0] = true;
+                try {
+                    if (Integer.parseInt(message.getMessage().getContentRaw()) >= 0 && Integer.parseInt(message.getMessage().getContentRaw()) <= 10) {
+                        if (message.getAuthor() == duel.getP1()) {
+                            if (act[0]) {
+                                nums[0] = Integer.parseInt(message.getMessage().getContentRaw());
+                                act[0] = true;
+                            } else {
+                                message.getChannel().sendMessage("Espere encerrar o turno!").queue();
+                            }
                         } else {
-                            message.getChannel().sendMessage("Espere encerrar o turno!").queue();
+                            if (act[1]) {
+                                nums[1] = Integer.parseInt(message.getMessage().getContentRaw());
+                                act[1] = true;
+                            } else {
+                                message.getChannel().sendMessage("Espere encerrar o turno!").queue();
+                            }
+                        }
+                        message.getMessage().delete().queue();
+
+                        if (act[0] && act[1]) {
+                            act[0] = false;
+                            act[1] = false;
+                            if (nums[0] == 10 && nums[1] == 0) {
+                                duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getStrength() * duel.getB1().getSpeed() / (duel.getB1().getStrength() + duel.getB2().getStability()) * 200));
+                            } else if (nums[0] == 0 && nums[1] == 10) {
+                                duel.getB1().setLife(duel.getB1().getLife() - Math.round(duel.getB2().getStrength() * duel.getB2().getSpeed() / (duel.getB2().getStrength() + duel.getB1().getStability()) * 200));
+                            } else if (nums[0] > nums[1]) {
+                                duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getStrength() * duel.getB1().getSpeed() / (duel.getB1().getStrength() + duel.getB2().getStability()) * 100));
+                            } else if (nums[0] < nums[1]) {
+                                duel.getB1().setLife(duel.getB1().getLife() - Math.round(duel.getB2().getStrength() * duel.getB2().getSpeed() / (duel.getB2().getStrength() + duel.getB1().getStability()) * 100));
+                            } else {
+                                duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getStrength() * duel.getB1().getSpeed() / (duel.getB1().getStrength() + duel.getB2().getStability()) * 50));
+                                duel.getB1().setLife(duel.getB1().getLife() - Math.round(duel.getB2().getStrength() * duel.getB2().getSpeed() / (duel.getB2().getStrength() + duel.getB1().getStability()) * 50));
+                            }
+
+                            if (duel.getB2().getLife() <= 0) {
+                                EmbedBuilder eb = new EmbedBuilder();
+
+                                eb.setTitle("E temos um vencedor!");
+                                eb.setColor(Color.decode(duel.getB1().getColor()));
+                                eb.setThumbnail(duel.getP1().getAvatarUrl());
+                                eb.setDescription(duel.getP1().getName() + " triunfou sobre " + duel.getP2().getName());
+                                message.getChannel().sendMessage(eb.build()).queue();
+                                accDuels.remove(duel);
+                                return;
+                            } else if (duel.getB1().getLife() <= 0) {
+                                EmbedBuilder eb = new EmbedBuilder();
+
+                                eb.setTitle("E temos um vencedor!");
+                                eb.setColor(Color.decode(duel.getB2().getColor()));
+                                eb.setThumbnail(duel.getP2().getAvatarUrl());
+                                eb.setDescription(duel.getP2().getName() + " triunfou sobre " + duel.getP1().getName());
+                                message.getChannel().sendMessage(eb.build()).queue();
+                                accDuels.remove(duel);
+                                return;
+                            }
+                            EmbedBuilder b = new EmbedBuilder();
+
+                            b.setTitle(duel.getP1().getName() + " VS " + duel.getP2().getName());
+                            b.addField(duel.getB1().getName(), "Vida: " + duel.getB1().getLife(), true);
+                            b.addField(duel.getB2().getName(), "Vida: " + duel.getB2().getLife(), true);
+                        }
+                    }
+                } catch (NumberFormatException ignore) {
+                    if (message.getMessage().getContentRaw().equals("desistir")) {
+                        if (message.getAuthor() == duel.getP1()) {
+                            message.getChannel().sendMessage(duel.getP1().getAsMention() + " desistiu. O vencedor é " + duel.getP2().getAsMention() + "!!").queue();
+                        } else {
+                            message.getChannel().sendMessage(duel.getP2().getAsMention() + " desistiu. O vencedor é " + duel.getP1().getAsMention() + "!!").queue();
                         }
                     } else {
-                        if (act[1]) {
-                            nums[1] = Integer.parseInt(message.getMessage().getContentRaw());
-                            act[1] = true;
-                        } else {
-                            message.getChannel().sendMessage("Espere encerrar o turno!").queue();
-                        }
+                        message.getChannel().sendMessage("Você está no meio de um duelo, " + message.getAuthor().getAsMention() + ". Volte para a arena!").queue();
                     }
-                    message.getMessage().delete().queue();
-
-                    //noinspection ConstantConditions
-                    if (nums[0] == 10 && nums[1] == 0) {
-                        duel.getB2().setLife(duel.getB2().getDefs().getInt("life") - (duel.getB1().getDefs().getInt("strength") * duel.getB1().getDefs().getInt("speed") / (duel.getB1().getDefs().getInt("strength") + duel.getB2().getDefs().getInt("stability")) * 200));
-                    } else if (nums[0] == 0 && nums[1] == 10) {
-                        duel.getB1().setLife(duel.getB1().getDefs().getInt("life") - (duel.getB2().getDefs().getInt("strength") * duel.getB2().getDefs().getInt("speed") / (duel.getB2().getDefs().getInt("strength") + duel.getB1().getDefs().getInt("stability")) * 200));
-                    } else if (nums[0] > nums[1]) {
-                        duel.getB2().setLife(duel.getB2().getDefs().getInt("life") - (duel.getB1().getDefs().getInt("strength") * duel.getB1().getDefs().getInt("speed") / (duel.getB1().getDefs().getInt("strength") + duel.getB2().getDefs().getInt("stability")) * 100));
-                    } else if (nums[0] < nums[1]) {
-                        duel.getB1().setLife(duel.getB1().getDefs().getInt("life") - (duel.getB2().getDefs().getInt("strength") * duel.getB2().getDefs().getInt("speed") / (duel.getB2().getDefs().getInt("strength") + duel.getB1().getDefs().getInt("stability")) * 100));
-                    } else {
-                        duel.getB2().setLife(duel.getB2().getDefs().getInt("life") - (duel.getB1().getDefs().getInt("strength") * duel.getB1().getDefs().getInt("speed") / (duel.getB1().getDefs().getInt("strength") + duel.getB2().getDefs().getInt("stability")) * 50));
-                        duel.getB1().setLife(duel.getB1().getDefs().getInt("life") - (duel.getB2().getDefs().getInt("strength") * duel.getB2().getDefs().getInt("speed") / (duel.getB2().getDefs().getInt("strength") + duel.getB1().getDefs().getInt("stability")) * 50));
-                    }
-
-                    if (duel.getB2().getDefs().getInt("life") <= 0) {
-                        EmbedBuilder eb = new EmbedBuilder();
-
-                        eb.setTitle("E temos um vencedor!");
-                        eb.setColor(Color.decode(duel.getB1().getDefs().getString("color")));
-                        eb.setThumbnail(duel.getP1().getAvatarUrl());
-                        eb.setDescription(duel.getP1().getName() + " triunfou sobre " + duel.getP2().getName());
-                        message.getChannel().sendMessage(eb.build()).queue();
-                        accDuels.remove(duel);
-                        return;
-                    } else if (duel.getB1().getDefs().getInt("life") <= 0) {
-                        EmbedBuilder eb = new EmbedBuilder();
-
-                        eb.setTitle("E temos um vencedor!");
-                        eb.setColor(Color.decode(duel.getB2().getDefs().getString("color")));
-                        eb.setThumbnail(duel.getP2().getAvatarUrl());
-                        eb.setDescription(duel.getP2().getName() + " triunfou sobre " + duel.getP1().getName());
-                        message.getChannel().sendMessage(eb.build()).queue();
-                        accDuels.remove(duel);
-                        return;
-                    }
-                    EmbedBuilder b = new EmbedBuilder();
-
-                    b.setTitle(duel.getP1().getName() + " VS " + duel.getP2().getName());
-                    b.addField(duel.getB1().getName(), "Vida: "+duel.getB1().getDefs().getInt("life"), true);
-                    b.addField(duel.getB2().getName(), "Vida: "+duel.getB2().getDefs().getInt("life"), true);
-                } else if (message.getMessage().getContentRaw().equals("desistir")) {
-                    if (message.getAuthor() == duel.getP1()) {
-                        message.getChannel().sendMessage(duel.getP1().getAsMention() + " desistiu. O vencedor é " + duel.getP2().getAsMention() + "!!").queue();
-                    } else {
-                        message.getChannel().sendMessage(duel.getP2().getAsMention() + " desistiu. O vencedor é " + duel.getP1().getAsMention() + "!!").queue();
-                    }
-                } else {
-                    message.getChannel().sendMessage("Você está no meio de um duelo, " + message.getAuthor().getAsMention() + ". Volte para a arena!").queue();
                 }
             }
             try {
@@ -655,6 +662,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                     bb.setId(message.getAuthor().getId());
                                     bb.setName(message.getMessage().getContentRaw().replace(cmd[0], "").trim());
                                     Database.sendBeyblade(bb);
+                                    message.getChannel().sendMessage("Parabéns, você acabou de obter sua mais nova Beyblade!").queue();
                                 } else {
                                     message.getChannel().sendMessage("Você precisa dar um nome a sua beyblade!").queue();
                                 }
@@ -664,12 +672,14 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         } else if (hasPrefix(message, "bcor")) {
                             Beyblade bb = Database.getBeyblade(message.getAuthor().getId());
                             if (bb == null) message.getChannel().sendMessage("Você não possui uma beyblade!").queue();
-                            else {
+                            else if (cmd.length > 1) {
                                 if (cmd[1].contains("#") && cmd[1].length() == 7) {
                                     bb.setName(cmd[1]);
                                 } else {
                                     message.getChannel().sendMessage("A cor precisa estar neste formato: `#RRGGBB`").queue();
                                 }
+                            } else {
+                                message.getChannel().sendMessage("Você precisa especificar uma cor!").queue();
                             }
                         } else if (hasPrefix(message, "bduelar")) {
                             if (message.getMessage().getMentionedUsers().size() > 0) {
@@ -679,6 +689,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                             duels.put(m.getIdLong(), dd);
                                         }
                                 );
+                                message.getChannel().sendMessage("Digitem valores de 0 a 10, o jogador que digitar o maior valor atacará o outro.\nMas cuidado, o valor 0 causa o dobro de dano no valor 10!").queue();
                             }
                         }
                     }
