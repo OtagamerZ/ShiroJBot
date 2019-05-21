@@ -18,8 +18,8 @@
 import com.kuuhaku.commands.*;
 import com.kuuhaku.controller.Database;
 import com.kuuhaku.controller.Tradutor;
-import com.kuuhaku.model.*;
 import com.kuuhaku.model.Member;
+import com.kuuhaku.model.*;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.ReadyEvent;
@@ -38,11 +38,9 @@ import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
 import javax.security.auth.login.LoginException;
-import java.awt.*;
 import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.*;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -189,6 +187,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         if (duels.containsKey(event.getMessageIdLong())) {
             accDuels.add(duels.get(event.getMessageIdLong()));
             duels.remove(event.getMessageIdLong());
+            event.getChannel().sendMessage("O duelo começou!\nUsem `atacar` para atacar ou `especial` para tentar a sorte e causar 2x o dano.").queue();
         }
         if (event.getReactionEmote().getName().equals("\ud83d\udc4d")) {
             if (message.getReactions().get(0).getCount() >= 5) message.pin().queue();
@@ -258,86 +257,79 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         if (ready) {
             if (accDuels.stream().anyMatch(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor())) {
                 @SuppressWarnings("OptionalGetWithoutIsPresent") DuelData duel = accDuels.stream().filter(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor()).findFirst().get();
-                int[] nums = new int[2];
-                boolean[] act = new boolean[2];
+                User turn = duel.getP1();
 
-                try {
-                    if (Integer.parseInt(message.getMessage().getContentRaw()) >= 0 && Integer.parseInt(message.getMessage().getContentRaw()) <= 10) {
-                        if (message.getAuthor() == duel.getP1()) {
-                            if (!act[0]) {
-                                nums[0] = Integer.parseInt(message.getMessage().getContentRaw());
-                                act[0] = true;
-                                message.getMessage().delete().queue();
-
-                            } else {
-                                message.getMessage().delete().queue();
-                                message.getChannel().sendMessage("Espere encerrar o turno!").queue();
-                            }
-                        } else {
-                            if (!act[1]) {
-                                nums[1] = Integer.parseInt(message.getMessage().getContentRaw());
-                                act[1] = true;
-                                message.getMessage().delete().queue();
-                            } else {
-                                message.getMessage().delete().queue();
-                                message.getChannel().sendMessage("Espere encerrar o turno!").queue();
-                            }
-                        }
-
-                        if (act[0] && act[1]) {
-                            act[0] = false;
-                            act[1] = false;
-                            if (nums[0] == 10 && nums[1] == 0) {
-                                duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getStrength() * duel.getB1().getSpeed() / (duel.getB1().getStrength() + duel.getB2().getStability()) * 200));
-                            } else if (nums[0] == 0 && nums[1] == 10) {
-                                duel.getB1().setLife(duel.getB1().getLife() - Math.round(duel.getB2().getStrength() * duel.getB2().getSpeed() / (duel.getB2().getStrength() + duel.getB1().getStability()) * 200));
-                            } else if (nums[0] > nums[1]) {
-                                duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getStrength() * duel.getB1().getSpeed() / (duel.getB1().getStrength() + duel.getB2().getStability()) * 100));
-                            } else if (nums[0] < nums[1]) {
-                                duel.getB1().setLife(duel.getB1().getLife() - Math.round(duel.getB2().getStrength() * duel.getB2().getSpeed() / (duel.getB2().getStrength() + duel.getB1().getStability()) * 100));
-                            } else {
-                                duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getStrength() * duel.getB1().getSpeed() / (duel.getB1().getStrength() + duel.getB2().getStability()) * 50));
-                                duel.getB1().setLife(duel.getB1().getLife() - Math.round(duel.getB2().getStrength() * duel.getB2().getSpeed() / (duel.getB2().getStrength() + duel.getB1().getStability()) * 50));
-                            }
-
-                            if (duel.getB2().getLife() <= 0) {
-                                EmbedBuilder eb = new EmbedBuilder();
-
-                                eb.setTitle("E temos um vencedor!");
-                                eb.setColor(Color.decode(duel.getB1().getColor()));
-                                eb.setThumbnail(duel.getP1().getAvatarUrl());
-                                eb.setDescription(duel.getP1().getName() + " triunfou sobre " + duel.getP2().getName());
-                                message.getChannel().sendMessage(eb.build()).queue();
-                                accDuels.remove(duel);
-                                return;
-                            } else if (duel.getB1().getLife() <= 0) {
-                                EmbedBuilder eb = new EmbedBuilder();
-
-                                eb.setTitle("E temos um vencedor!");
-                                eb.setColor(Color.decode(duel.getB2().getColor()));
-                                eb.setThumbnail(duel.getP2().getAvatarUrl());
-                                eb.setDescription(duel.getP2().getName() + " triunfou sobre " + duel.getP1().getName());
-                                message.getChannel().sendMessage(eb.build()).queue();
-                                accDuels.remove(duel);
-                                return;
-                            }
-                            EmbedBuilder b = new EmbedBuilder();
-
-                            b.setTitle(duel.getP1().getName() + " VS " + duel.getP2().getName());
-                            b.addField(duel.getB1().getName(), "Vida: " + duel.getB1().getLife(), true);
-                            b.addField(duel.getB2().getName(), "Vida: " + duel.getB2().getLife(), true);
-                        }
+                if (turn == message.getAuthor()) {
+                    if (message.getMessage().getContentRaw().equals("atacar")) {
+                        turn = duel.getP2();
+                        duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getStrength() * duel.getB1().getSpeed() / (duel.getB1().getStrength() + duel.getB2().getStability()) * (new Random().nextInt(100))));
+                        message.getChannel().sendMessage(duel.getB1().getName() + " ataca, agora é a vez de " + duel.getB2().getName()).queue();
+                    } else if (message.getMessage().getContentRaw().equals("especial")) {
+                        if (new Random().nextInt(100) > 70) {
+                            duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getStrength() * duel.getB1().getSpeed() / (duel.getB1().getStrength() + duel.getB2().getStability()) * (new Random().nextInt(100)) * 2));
+                            message.getChannel().sendMessage("Em uma manobra espetacular, " + duel.getB1().getName() + " acerta um golpe especial e causa o dobro do dano comum!!").queue();
+                        } else message.getChannel().sendMessage("Você errou o especial e perdeu o turno!").queue();
                     }
-                } catch (NumberFormatException ignore) {
-                    if (message.getMessage().getContentRaw().equals("desistir")) {
-                        if (message.getAuthor() == duel.getP1()) {
-                            message.getChannel().sendMessage(duel.getP1().getAsMention() + " desistiu. O vencedor é " + duel.getP2().getAsMention() + "!!").queue();
-                        } else {
-                            message.getChannel().sendMessage(duel.getP2().getAsMention() + " desistiu. O vencedor é " + duel.getP1().getAsMention() + "!!").queue();
-                        }
+                } else if (turn == message.getAuthor()) {
+                    if (message.getMessage().getContentRaw().equals("atacar")) {
+                        turn = duel.getP2();
+                        duel.getB1().setLife(duel.getB1().getLife() - Math.round(duel.getB2().getStrength() * duel.getB2().getSpeed() / (duel.getB2().getStrength() + duel.getB1().getStability()) * (new Random().nextInt(100))));
+                        message.getChannel().sendMessage(duel.getB2().getName() + " ataca, agora é a vez de " + duel.getB1().getName()).queue();
+                    } else if (message.getMessage().getContentRaw().equals("especial")) {
+                        if (new Random().nextInt(100) > 70) {
+                            duel.getB1().setLife(duel.getB1().getLife() - Math.round(duel.getB2().getStrength() * duel.getB2().getSpeed() / (duel.getB2().getStrength() + duel.getB1().getStability()) * (new Random().nextInt(100)) * 2));
+                            message.getChannel().sendMessage("Em uma manobra espetacular, " + duel.getB2().getName() + " acerta um golpe especial e causa o dobro do dano comum!!").queue();
+                        } else message.getChannel().sendMessage("Você errou o especial e perdeu o turno!").queue();
+                    }
+                }
+
+                if (message.getMessage().getContentRaw().equals("desistir")) {
+                    if (message.getAuthor() == duel.getP1()) {
+                        message.getChannel().sendMessage(duel.getP1().getAsMention() + " desistiu. A vitória é de " + duel.getP2().getAsMention() + "!").queue();
+                        Beyblade bl = Database.getBeyblade(duel.getP1().getId());
+                        assert bl != null;
+                        bl.addLoses();
+                        Database.sendBeyblade(bl);
+
+                        Beyblade bb = Database.getBeyblade(duel.getP2().getId());
+                        assert bb != null;
+                        bb.addWins();
+                        Database.sendBeyblade(bb);
                     } else {
-                        message.getChannel().sendMessage("Você está no meio de um duelo, " + message.getAuthor().getAsMention() + ". Volte para a arena!").queue();
+                        message.getChannel().sendMessage(duel.getP2().getAsMention() + " desistiu. A vitória é de " + duel.getP1().getAsMention() + "!").queue();
+                        Beyblade bl = Database.getBeyblade(duel.getP2().getId());
+                        assert bl != null;
+                        bl.addLoses();
+                        Database.sendBeyblade(bl);
+
+                        Beyblade bb = Database.getBeyblade(duel.getP1().getId());
+                        assert bb != null;
+                        bb.addWins();
+                        Database.sendBeyblade(bb);
                     }
+                }
+                if (duel.getB2().getLife() <= 0) {
+                    message.getChannel().sendMessage(duel.getP1().getAsMention() + " triunfou sobre " + duel.getP2().getAsMention() + ". Temos um vencedor!").queue();
+                    Beyblade bl = Database.getBeyblade(duel.getP1().getId());
+                    assert bl != null;
+                    bl.addLoses();
+                    Database.sendBeyblade(bl);
+
+                    Beyblade bb = Database.getBeyblade(duel.getP2().getId());
+                    assert bb != null;
+                    bb.addWins();
+                    Database.sendBeyblade(bb);
+                } else if (duel.getB1().getLife() <= 0) {
+                    message.getChannel().sendMessage(duel.getP2().getAsMention() + " triunfou sobre " + duel.getP1().getAsMention() + ". Temos um vencedor!").queue();
+                    Beyblade bl = Database.getBeyblade(duel.getP2().getId());
+                    assert bl != null;
+                    bl.addLoses();
+                    Database.sendBeyblade(bl);
+
+                    Beyblade bb = Database.getBeyblade(duel.getP1().getId());
+                    assert bb != null;
+                    bb.addWins();
+                    Database.sendBeyblade(bb);
                 }
             }
             try {
@@ -679,6 +671,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             else if (cmd.length > 1) {
                                 if (cmd[1].contains("#") && cmd[1].length() == 7) {
                                     bb.setColor(cmd[1]);
+                                    Database.sendBeyblade(bb);
                                     message.getChannel().sendMessage("Cor setada com sucesso!").queue();
                                 } else {
                                     message.getChannel().sendMessage("A cor precisa estar neste formato: `#RRGGBB`").queue();
@@ -694,7 +687,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                             duels.put(m.getIdLong(), dd);
                                         }
                                 );
-                                message.getChannel().sendMessage("Digitem valores de 0 a 10, o jogador que digitar o maior valor atacará o outro.\nMas cuidado, o valor 0 causa o dobro de dano no valor 10!").queue();
                             }
                         }
                     }
