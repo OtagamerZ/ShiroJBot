@@ -64,6 +64,7 @@ public class Embeds {
                 prefix + "definir canalbv [canal] - Define o canal de boas-vindas para o servidor.\n\n" +
                 prefix + "definir canalav [canal] - Define o canal de avisos para o servidor.\n\n" +
                 prefix + "definir canalsug [canal] - Define o canal de sugestões para o servidor.\n\n" +
+                prefix + "definir canallvl [canal] - Define o canal de notificações de level up para o servidor.\n\n" +
                 prefix + "definir msgbv [\"mensagem\"] - Define a mensagem de boas-vindas para o servidor.\n\n" +
                 prefix + "definir msgadeus [\"mensagem\"] - Define a mensagem de adeus para o servidor.\n\n" +
                 prefix + "definir cargolvl [level] [cargo] - Define um novo cargo como recompensa para o level especificado.\n\n" +
@@ -115,6 +116,8 @@ public class Embeds {
                 prefix + "binfo - Vê os dados sobre sua Beyblade.\n\n" +
                 prefix + "brank - Vê as TOP 10 Beyblades.\n\n" +
                 prefix + "bcor [#rrggbb] - Muda a cor de sua Beyblade, a cor deve estar em hexadecimal.\n\n" +
+                prefix + "bshop - Mostra o menu do shop de melhorias.\n\n" +
+                prefix + "bmelhorar [atributo] - Compra uma melhoria para o atributo especificado.\n\n" +
                 prefix + "bduelar [membro] - Inicia um duelo com alguém.\n\n" +
                 "atacar - Enquanto em um duelo, use para atacar.\n\n" +
                 "defender - Enquanto em um duelo, use para defender o próximo ataque.\n\n" +
@@ -204,6 +207,7 @@ public class Embeds {
         eb.addField("Canal de adeus:", gc.getCanaladeus() != null ? message.getGuild().getTextChannelById(gc.getCanaladeus()).getAsMention() : "Não definido", true);
         eb.addField("Canal de avisos:", gc.getCanalav() != null ? message.getGuild().getTextChannelById(gc.getCanalav()).getAsMention() : "Não definido", true);
         eb.addField("Canal de sugestões:", gc.getCanalsug() != null ? message.getGuild().getTextChannelById(gc.getCanalsug()).getAsMention() : "Não definido", true);
+        eb.addField("Canal de level up:", gc.getCanallvl() != null ? message.getGuild().getTextChannelById(gc.getCanallvl()).getAsMention() : "Não definido", true);
         eb.addField("Mensagem de boas-vindas:", gc.getMsgBoasVindas(), true);
         eb.addField("Mensagem de adeus:", gc.getMsgAdeus(), true);
         eb.addField("Notificações de level up:", gc.getLvlNotif() ? "Ativadas" : "Desativadas", true);
@@ -515,5 +519,7 @@ public class Embeds {
         eb.addField("Melhorar velocidade (Aumenta a chance de acerto do especial):", Math.round(15 * bb.getSpeed() + bb.getStrength() + bb.getSpeed() + bb.getStability()) + " pontos de combate\nDiga **" + prefixo + "melhorar velocidade** para comprar", false);
         eb.addField("Melhorar estabilidade (Aumenta a defesa):", Math.round(15 * bb.getStability() + bb.getStrength() + bb.getSpeed() + bb.getStability()) + " pontos de combate\nDiga **" + prefixo + "melhorar estabilidade** para comprar", false);
         eb.addField("Melhorar vida (Aumenta a vida):", Math.round(bb.getLife() / 2) + " pontos de combate\nDiga **" + prefixo + "melhorar vida** para comprar", false);
+
+        message.getChannel().sendMessage(eb.build()).queue();
     }
 }

@@ -299,20 +299,33 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         boolean lvlUp;
                         lvlUp = memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).addXp();
                         if (lvlUp) {
-                            if (gcMap.get(message.getGuild().getId()).getLvlNotif())
-                                message.getChannel().sendMessage(message.getAuthor().getAsMention() + " subiu para o level " + memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).getLevel() + ". GGWP!! :tada:").queue();
-                            if (gcMap.get(message.getGuild().getId()).getCargoslvl().containsKey(Integer.toString(memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).getLevel()))) {
-                                Member member = memberMap.get(message.getAuthor().getId() + message.getGuild().getId());
-                                String roleID = (String) gcMap.get(message.getGuild().getId()).getCargoslvl().get(Integer.toString(member.getLevel()));
+                            TextChannel tc = message.getGuild().getTextChannelById(gcMap.get(message.getGuild().getId()).getCanallvl());
+                            if (tc == null) {
+                                if (gcMap.get(message.getGuild().getId()).getLvlNotif())
+                                    message.getChannel().sendMessage(message.getAuthor().getAsMention() + " subiu para o level " + memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).getLevel() + ". GGWP!! :tada:").queue();
+                                if (gcMap.get(message.getGuild().getId()).getCargoslvl().containsKey(Integer.toString(memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).getLevel()))) {
+                                    Member member = memberMap.get(message.getAuthor().getId() + message.getGuild().getId());
+                                    String roleID = (String) gcMap.get(message.getGuild().getId()).getCargoslvl().get(Integer.toString(member.getLevel()));
 
-                                message.getGuild().getController().addRolesToMember(message.getMember(), message.getGuild().getRoleById(roleID)).queue();
-                                message.getChannel().sendMessage(message.getAuthor().getAsMention() + " ganhou o cargo " + message.getGuild().getRoleById(roleID).getAsMention() + ". Parabéns!").queue();
+                                    message.getGuild().getController().addRolesToMember(message.getMember(), message.getGuild().getRoleById(roleID)).queue();
+                                    message.getChannel().sendMessage(message.getAuthor().getAsMention() + " ganhou o cargo " + message.getGuild().getRoleById(roleID).getAsMention() + ". Parabéns!").queue();
+                                }
+                            } else {
+                                if (gcMap.get(message.getGuild().getId()).getLvlNotif())
+                                    tc.sendMessage(message.getAuthor().getAsMention() + " subiu para o level " + memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).getLevel() + ". GGWP!! :tada:").queue();
+                                if (gcMap.get(message.getGuild().getId()).getCargoslvl().containsKey(Integer.toString(memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).getLevel()))) {
+                                    Member member = memberMap.get(message.getAuthor().getId() + message.getGuild().getId());
+                                    String roleID = (String) gcMap.get(message.getGuild().getId()).getCargoslvl().get(Integer.toString(member.getLevel()));
+
+                                    message.getGuild().getController().addRolesToMember(message.getMember(), message.getGuild().getRoleById(roleID)).queue();
+                                    tc.sendMessage(message.getAuthor().getAsMention() + " ganhou o cargo " + message.getGuild().getRoleById(roleID).getAsMention() + ". Parabéns!").queue();
+                                }
                             }
                         }
                     }
                     if (message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
                         //COMMANDS--------------------------------------------------------------------------------->
-                        if (new Random().nextInt(100) > 80) {
+                        if (new Random().nextInt(1000) > 900) {
                             message.getChannel().sendMessage("Opa, está gostando de me utilizar em seu servidor? Caso sim, se puder votar me ajudaria **MUITO** a me tornar cada vez mais popular e ser chamada para mais servidores!\n https://discordbots.org/bot/572413282653306901").queue();
                         }
                         if (memberMap.get(message.getAuthor().getId() + message.getGuild().getId()) == null) {
@@ -594,7 +607,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             Arena.duel(message, duels);
                         } else if (hasPrefix(message, "brank")) {
                             Embeds.bRankEmbed(bot, message);
-                        } else if (hasPrefix(message, "melhorar")) {
+                        } else if (hasPrefix(message, "bmelhorar")) {
                             if (cmd.length > 1) {
                                 Arena.upgrade(message, cmd);
                             }
