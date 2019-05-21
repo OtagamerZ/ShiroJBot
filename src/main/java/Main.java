@@ -295,6 +295,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         assert bb != null;
                         bb.addWins();
                         Database.sendBeyblade(bb);
+                        accDuels.removeIf(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor());
                     } else {
                         message.getChannel().sendMessage(duel.getP2().getAsMention() + " desistiu. A vitória é de " + duel.getP1().getAsMention() + "!").queue();
                         Beyblade bl = Database.getBeyblade(duel.getP2().getId());
@@ -306,6 +307,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         assert bb != null;
                         bb.addWins();
                         Database.sendBeyblade(bb);
+                        accDuels.removeIf(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor());
                     }
                 }
                 if (duel.getB2().getLife() <= 0) {
@@ -319,6 +321,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     assert bb != null;
                     bb.addWins();
                     Database.sendBeyblade(bb);
+                    accDuels.removeIf(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor());
                 } else if (duel.getB1().getLife() <= 0) {
                     message.getChannel().sendMessage(duel.getP2().getAsMention() + " triunfou sobre " + duel.getP1().getAsMention() + ". Temos um vencedor!").queue();
                     Beyblade bl = Database.getBeyblade(duel.getP2().getId());
@@ -330,9 +333,11 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     assert bb != null;
                     bb.addWins();
                     Database.sendBeyblade(bb);
-                } else {
+                    accDuels.removeIf(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor());
+                } else if (message.getMessage().getContentRaw().equals("atacar") || message.getMessage().getContentRaw().equals("especial")) {
                     EmbedBuilder eb = new EmbedBuilder();
-                    eb.setTitle(duel.getB1().getName() + " *VS* " + duel.getB2().getName());
+                    eb.setTitle("Vez de " + (turn == duel.getP1() ? duel.getB1().getName() : duel.getB2().getName()));
+                    eb.setDescription(duel.getB1().getName() + " *VS* " + duel.getB2().getName());
                     eb.addField(duel.getB1().getName(), "Vida: " + duel.getB1().getLife(), true);
                     eb.addField(duel.getB2().getName(), "Vida: " + duel.getB2().getLife(), true);
                     message.getChannel().sendMessage(eb.build()).queue();
