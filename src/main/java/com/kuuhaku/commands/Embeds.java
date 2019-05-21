@@ -483,7 +483,7 @@ public class Embeds {
     public static void bRankEmbed(JDA bot, MessageReceivedEvent message) {
         List<Beyblade> rank = Database.getBeybladeList();
         assert rank != null;
-        rank.sort((Comparator.comparingInt(o -> o.getWins() / (o.getLoses() == 0 ? 1 : o.getLoses()))));
+        rank.sort(Comparator.comparing(Beyblade -> Beyblade.getWins() / (Beyblade.getLoses() == 0 ? 1 : Beyblade.getLoses())));
         Beyblade champ = rank.get(0);
         rank.remove(0);
         EmbedBuilder eb = new EmbedBuilder();
