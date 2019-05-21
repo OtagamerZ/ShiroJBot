@@ -154,7 +154,7 @@ public class Database {
         EntityManager em = getEntityManager();
 
         em.getTransaction().begin();
-        em.persist(bb);
+        em.merge(bb);
         em.getTransaction().commit();
         em.close();
         System.out.println("Beyblade salva com sucesso!");
