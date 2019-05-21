@@ -107,10 +107,9 @@ public class Database {
 
     public static void sendAllCustomAnswers(Collection<CustomAnswers> ca) {
         EntityManager em = getEntityManager();
-        List<CustomAnswers> caf = ca.stream().filter(a -> !a.getMarkDel().equals("DELETAR")).collect(Collectors.toList());
 
         em.getTransaction().begin();
-        caf.forEach(em::merge);
+        ca.forEach(em::merge);
         em.getTransaction().commit();
         em.close();
         System.out.println("Respostas salvas com sucesso!");
