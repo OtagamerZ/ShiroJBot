@@ -28,7 +28,7 @@ public class Beyblade {
     private String id;
     private String name = "";
     private String color = "#ffffff";
-    private float speed = 1, strength = 1, stability = 1;
+    private float speed = 1.5f, strength = 1, stability = 1;
     private int life = 100, wins = 0, loses = 0;
 
     public String getId() {
