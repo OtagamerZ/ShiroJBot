@@ -118,4 +118,8 @@ public class Beyblade {
     public void takePoints(int points) {
         this.points -= points;
     }
+
+    public float getKDA() {
+        return wins / (loses == 0 ? 1 : loses);
+    }
 }
