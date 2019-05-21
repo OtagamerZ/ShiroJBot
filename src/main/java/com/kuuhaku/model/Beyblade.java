@@ -28,7 +28,7 @@ public class Beyblade {
     private String id;
     private String name = "";
     private String color = "#ffffff";
-    private float speed = 1.5f, strength = 1, stability = 1;
+    private float speed = 1.0f, strength = 1.0f, stability = 1.5f;
     private int life = 100, wins = 0, loses = 0, points = 0;
 
     public String getId() {
@@ -59,24 +59,24 @@ public class Beyblade {
         return speed;
     }
 
-    public void setSpeed(float speed) {
-        this.speed = speed;
+    public void addSpeed() {
+        this.speed += 0.5f;
     }
 
     public float getStrength() {
         return strength;
     }
 
-    public void setStrength(float strength) {
-        this.strength = strength;
+    public void addStrength() {
+        this.strength += 0.5f;
     }
 
     public float getStability() {
         return stability;
     }
 
-    public void setStability(float stability) {
-        this.stability = stability;
+    public void addStability() {
+        this.stability += 0.5f;
     }
 
     public int getLife() {
@@ -85,6 +85,10 @@ public class Beyblade {
 
     public void setLife(int life) {
         this.life = life;
+    }
+
+    public void addLife() {
+        this.life += 50;
     }
 
     public int getWins() {
