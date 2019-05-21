@@ -36,6 +36,7 @@ public class guildConfig {
     private String canaladeus = null;
     private String canalav = null;
     private String canalsug = null;
+    private String canallvl = null;
     private String cargowarn = null;
     private String cargoslvl = "{}";
     private String lvlNotif = "true";
@@ -71,7 +72,6 @@ public class guildConfig {
         this.msgBoasVindas = msgBoasVindas;
     }
 
-
     public String getMsgAdeus() {
         return msgAdeus;
     }
@@ -79,7 +79,6 @@ public class guildConfig {
     public void setMsgAdeus(String msgAdeus) {
         this.msgAdeus = msgAdeus;
     }
-
 
     public String getCanalbv() {
         return canalbv;
@@ -105,7 +104,9 @@ public class guildConfig {
         this.cargowarn = cargowarn;
     }
 
-    public Map<String, Object> getCargoslvl() { return new JSONObject(cargoslvl).toMap(); }
+    public Map<String, Object> getCargoslvl() {
+        return new JSONObject(cargoslvl).toMap();
+    }
 
     public void setCargoslvl(JSONObject cargoslvl) {
         this.cargoslvl = cargoslvl.toString();
@@ -157,5 +158,13 @@ public class guildConfig {
 
     public void setCanaladeus(String canaladeus) {
         this.canaladeus = canaladeus;
+    }
+
+    public String getCanallvl() {
+        return canallvl;
+    }
+
+    public void setCanallvl(String canallvl) {
+        this.canallvl = canallvl;
     }
 }
