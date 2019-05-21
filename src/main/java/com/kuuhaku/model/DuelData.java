@@ -23,6 +23,7 @@ import net.dv8tion.jda.core.entities.User;
 public class DuelData {
     private User p1, p2;
     private Beyblade b1, b2;
+    transient private boolean d1, d2;
 
     public DuelData(User p1, User p2) {
         this.p1 = p1;
@@ -61,5 +62,21 @@ public class DuelData {
 
     public void setB2(Beyblade b2) {
         this.b2 = b2;
+    }
+
+    public boolean isD1() {
+        return d1;
+    }
+
+    public void setD1(boolean d1) {
+        this.d1 = d1;
+    }
+
+    public boolean isD2() {
+        return d2;
+    }
+
+    public void setD2(boolean d2) {
+        this.d2 = d2;
     }
 }

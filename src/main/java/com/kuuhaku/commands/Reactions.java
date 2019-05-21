@@ -87,7 +87,7 @@ public class Reactions {
         }
     }
 
-    public static void pat(JDA bot, Message message, User target, TextChannel channel, boolean answer, User mbr) throws IOException {
+    public static void pat(User target, TextChannel channel, boolean answer, User mbr) throws IOException {
         URL url = new URL(ReactionsList.pat()[new Random().nextInt(ReactionsList.pat().length)]);
         HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
