@@ -36,32 +36,16 @@ public class DuelData {
         return p1;
     }
 
-    public void setP1(User p1) {
-        this.p1 = p1;
-    }
-
     public User getP2() {
         return p2;
-    }
-
-    public void setP2(User p2) {
-        this.p2 = p2;
     }
 
     public Beyblade getB1() {
         return b1;
     }
 
-    public void setB1(Beyblade b1) {
-        this.b1 = b1;
-    }
-
     public Beyblade getB2() {
         return b2;
-    }
-
-    public void setB2(Beyblade b2) {
-        this.b2 = b2;
     }
 
     public boolean isD1() {
