@@ -291,20 +291,20 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         duel.setP1turn(false);
                         int chance = new Random().nextInt(100);
                         duel.setD1(false);
-                        if (chance > 70) {
+                        if (chance > (71 - Math.round(duel.getB1().getSpeed()))) {
                             duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getStrength() * duel.getB1().getSpeed() / (duel.getB1().getStrength() + duel.getB2().getStability()) * (new Random().nextInt(Math.round(100 / (duel.isD2() ? duel.getB2().getStability() : 1)))) * 2));
                             message.getChannel().sendMessage("Em uma manobra espetacular, " + duel.getB1().getName() + " acerta um golpe especial e causa o dobro do dano comum!! (" + chance + ")").queue();
                         } else
-                            message.getChannel().sendMessage("Você errou o especial e perdeu o turno! (" + chance + " < 70)").queue();
+                            message.getChannel().sendMessage("Você errou o especial e perdeu o turno! (" + chance + " < " + (71 - Math.round(duel.getB1().getSpeed())) + ")").queue();
                     } else if (!player1Turn && message.getAuthor() == duel.getP2()) {
                         duel.setP1turn(true);
                         int chance = new Random().nextInt(100);
                         duel.setD2(false);
-                        if (chance > 70) {
+                        if (chance > (71 - Math.round(duel.getB2().getSpeed()))) {
                             duel.getB1().setLife(duel.getB1().getLife() - Math.round(duel.getB2().getStrength() * duel.getB2().getSpeed() / (duel.getB2().getStrength() + duel.getB1().getStability()) * (new Random().nextInt(Math.round(100 / (duel.isD1() ? duel.getB1().getStability() : 1)))) * 2));
                             message.getChannel().sendMessage("Em uma manobra espetacular, " + duel.getB2().getName() + " acerta um golpe especial e causa o dobro do dano comum!! (" + chance + ")").queue();
                         } else
-                            message.getChannel().sendMessage("Você errou o especial e perdeu o turno! (" + chance + " < 70)").queue();
+                            message.getChannel().sendMessage("Você errou o especial e perdeu o turno! (" + chance + " < " + (71 - Math.round(duel.getB1().getSpeed())) + ")").queue();
                     }
                 } else if (message.getMessage().getContentRaw().equalsIgnoreCase("desistir")) {
                     if (message.getAuthor() == duel.getP1()) {
