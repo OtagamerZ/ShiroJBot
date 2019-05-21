@@ -491,7 +491,7 @@ public class Embeds {
         eb.setTitle("TOP 10 Beyblades");
         eb.setThumbnail("https://www.pngkey.com/png/full/21-217733_free-png-trophy-png-images-transparent-winner-trophy.png");
         eb.setColor(Color.decode(rank.get(0).getColor()));
-        eb.addField("1 - " + champ.getName() + " (" + bot.getUserById(champ.getId()).getName() + ")", "", false);
+        eb.setDescription("**1 - " + champ.getName() + " (" + bot.getUserById(champ.getId()).getName() + ")**");
         for (int i = 0; i < rank.size() && i < 10; i++) {
             sb.append(i + 1).append(" - ").append(rank.get(i).getName()).append(" (").append(bot.getUserById(rank.get(i).getId()).getName()).append(")\n");
         }
