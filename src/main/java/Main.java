@@ -258,18 +258,31 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         if (ready) {
             if (accDuels.stream().anyMatch(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor())) {
                 @SuppressWarnings("OptionalGetWithoutIsPresent") DuelData duel = accDuels.stream().filter(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor()).findFirst().get();
-                User turn = duel.getP1();
+                boolean player1Turn = true;
 
-                if (turn == message.getAuthor() && turn == duel.getP1()) {
-                    if (message.getMessage().getContentRaw().equalsIgnoreCase("atacar")) {
-                        turn = duel.getP2();
+
+                if (message.getMessage().getContentRaw().equalsIgnoreCase("atacar")) {
+                    if (player1Turn && message.getAuthor() == duel.getP1()) {
+                        player1Turn = false;
                         duel.setD1(false);
                         duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getStrength() * duel.getB1().getSpeed() / (duel.getB1().getStrength() + duel.getB2().getStability()) * (new Random().nextInt(Math.round(100 / (duel.isD2() ? duel.getB2().getStability() : 1))))));
                         message.getChannel().sendMessage(duel.getB1().getName() + " ataca, agora é a vez de " + duel.getB2().getName()).queue();
-                    } else if (message.getMessage().getContentRaw().equalsIgnoreCase("defender")) {
+                    } else if (!player1Turn && message.getAuthor() == duel.getP2()) {
+                        player1Turn = true;
+                        duel.setD2(false);
+                        duel.getB1().setLife(duel.getB1().getLife() - Math.round(duel.getB2().getStrength() * duel.getB2().getSpeed() / (duel.getB2().getStrength() + duel.getB1().getStability()) * (new Random().nextInt(Math.round(100 / (duel.isD1() ? duel.getB1().getStability() : 1))))));
+                        message.getChannel().sendMessage(duel.getB2().getName() + " ataca, agora é a vez de " + duel.getB1().getName()).queue();
+                    }
+                } else if (message.getMessage().getContentRaw().equalsIgnoreCase("defender")) {
+                    if (player1Turn && message.getAuthor() == duel.getP1()) {
                         duel.setD1(true);
                         message.getChannel().sendMessage(duel.getB1().getName() + " assumiu uma postura defensiva!").queue();
-                    } else if (message.getMessage().getContentRaw().equalsIgnoreCase("especial")) {
+                    } else if (!player1Turn && message.getAuthor() == duel.getP2()) {
+                        duel.setD2(true);
+                        message.getChannel().sendMessage(duel.getB2().getName() + " assumiu uma postura defensiva!").queue();
+                    }
+                } else if (message.getMessage().getContentRaw().equalsIgnoreCase("especial")) {
+                    if (player1Turn && message.getAuthor() == duel.getP1()) {
                         int chance = new Random().nextInt(100);
                         duel.setD1(false);
                         if (chance > 70) {
@@ -277,17 +290,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             message.getChannel().sendMessage("Em uma manobra espetacular, " + duel.getB1().getName() + " acerta um golpe especial e causa o dobro do dano comum!!").queue();
                         } else
                             message.getChannel().sendMessage("Você errou o especial e perdeu o turno! (" + chance + " < 70)").queue();
-                    }
-                } else if (turn == message.getAuthor() && turn == duel.getP2()) {
-                    if (message.getMessage().getContentRaw().equalsIgnoreCase("atacar")) {
-                        turn = duel.getP1();
-                        duel.setD2(false);
-                        duel.getB1().setLife(duel.getB1().getLife() - Math.round(duel.getB2().getStrength() * duel.getB2().getSpeed() / (duel.getB2().getStrength() + duel.getB1().getStability()) * (new Random().nextInt(Math.round(100 / (duel.isD1() ? duel.getB1().getStability() : 1))))));
-                        message.getChannel().sendMessage(duel.getB2().getName() + " ataca, agora é a vez de " + duel.getB1().getName()).queue();
-                    } else if (message.getMessage().getContentRaw().equalsIgnoreCase("defender")) {
-                        duel.setD2(true);
-                        message.getChannel().sendMessage(duel.getB2().getName() + " assumiu uma postura defensiva!").queue();
-                    } else if (message.getMessage().getContentRaw().equalsIgnoreCase("especial")) {
+                    } else if (!player1Turn && message.getAuthor() == duel.getP2()) {
                         int chance = new Random().nextInt(100);
                         duel.setD2(false);
                         if (chance > 70) {
@@ -296,9 +299,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         } else
                             message.getChannel().sendMessage("Você errou o especial e perdeu o turno! (" + chance + " < 70)").queue();
                     }
-                }
-
-                if (message.getMessage().getContentRaw().equalsIgnoreCase("desistir")) {
+                } else if (message.getMessage().getContentRaw().equalsIgnoreCase("desistir")) {
                     if (message.getAuthor() == duel.getP1()) {
                         message.getChannel().sendMessage(duel.getP1().getAsMention() + " desistiu. A vitória é de " + duel.getP2().getAsMention() + "!").queue();
                         Beyblade bl = Database.getBeyblade(duel.getP1().getId());
@@ -351,7 +352,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     accDuels.removeIf(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor());
                 } else if (message.getMessage().getContentRaw().equals("atacar") || message.getMessage().getContentRaw().equals("especial")) {
                     EmbedBuilder eb = new EmbedBuilder();
-                    eb.setTitle("Vez de " + (turn == duel.getP1() ? duel.getB1().getName() : duel.getB2().getName()));
+                    eb.setTitle("Vez de " + (player1Turn ? duel.getB1().getName() : duel.getB2().getName()));
                     eb.setDescription(duel.getB1().getName() + " *VS* " + duel.getB2().getName());
                     eb.addField(duel.getB1().getName(), "Vida: " + duel.getB1().getLife(), true);
                     eb.addField(duel.getB2().getName(), "Vida: " + duel.getB2().getLife(), true);
@@ -363,7 +364,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     message.getMessage().addReaction("\ud83d\udc4d").queue();
                     message.getMessage().addReaction("\ud83d\udc4e").queue();
                 }
-            } catch (NullPointerException ignore) {
+            } catch (
+                    NullPointerException ignore) {
             }
             try {
                 if (message.getAuthor().isBot() || !message.isFromType(ChannelType.TEXT)) return;
@@ -725,10 +727,12 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                 } else if (message.getTextChannel().canTalk()) {
                     message.getChannel().sendMessage("Por favor, digite __**!init**__ para inicializar as configurações da Shiro em seu servidor!").queue();
                 }
-            } catch (NullPointerException | InsufficientPermissionException | IOException e) {
+            } catch (NullPointerException | InsufficientPermissionException |
+                    IOException e) {
                 e.printStackTrace();
             }
         }
+
     }
 
     private static boolean hasPrefix(MessageReceivedEvent message, String cmd) {
