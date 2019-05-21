@@ -259,23 +259,23 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                 @SuppressWarnings("OptionalGetWithoutIsPresent") DuelData duel = accDuels.stream().filter(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor()).findFirst().get();
                 User turn = duel.getP1();
 
-                if (turn == message.getAuthor()) {
-                    if (message.getMessage().getContentRaw().equals("atacar")) {
+                if (turn == message.getAuthor() && turn == duel.getP1()) {
+                    if (message.getMessage().getContentRaw().equalsIgnoreCase("atacar")) {
                         turn = duel.getP2();
                         duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getStrength() * duel.getB1().getSpeed() / (duel.getB1().getStrength() + duel.getB2().getStability()) * (new Random().nextInt(100))));
                         message.getChannel().sendMessage(duel.getB1().getName() + " ataca, agora é a vez de " + duel.getB2().getName()).queue();
-                    } else if (message.getMessage().getContentRaw().equals("especial")) {
+                    } else if (message.getMessage().getContentRaw().equalsIgnoreCase("especial")) {
                         if (new Random().nextInt(100) > 70) {
                             duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getStrength() * duel.getB1().getSpeed() / (duel.getB1().getStrength() + duel.getB2().getStability()) * (new Random().nextInt(100)) * 2));
                             message.getChannel().sendMessage("Em uma manobra espetacular, " + duel.getB1().getName() + " acerta um golpe especial e causa o dobro do dano comum!!").queue();
                         } else message.getChannel().sendMessage("Você errou o especial e perdeu o turno!").queue();
                     }
-                } else if (turn == message.getAuthor()) {
-                    if (message.getMessage().getContentRaw().equals("atacar")) {
-                        turn = duel.getP2();
+                } else if (turn == message.getAuthor() && turn == duel.getP2()) {
+                    if (message.getMessage().getContentRaw().equalsIgnoreCase("atacar")) {
+                        turn = duel.getP1();
                         duel.getB1().setLife(duel.getB1().getLife() - Math.round(duel.getB2().getStrength() * duel.getB2().getSpeed() / (duel.getB2().getStrength() + duel.getB1().getStability()) * (new Random().nextInt(100))));
                         message.getChannel().sendMessage(duel.getB2().getName() + " ataca, agora é a vez de " + duel.getB1().getName()).queue();
-                    } else if (message.getMessage().getContentRaw().equals("especial")) {
+                    } else if (message.getMessage().getContentRaw().equalsIgnoreCase("especial")) {
                         if (new Random().nextInt(100) > 70) {
                             duel.getB1().setLife(duel.getB1().getLife() - Math.round(duel.getB2().getStrength() * duel.getB2().getSpeed() / (duel.getB2().getStrength() + duel.getB1().getStability()) * (new Random().nextInt(100)) * 2));
                             message.getChannel().sendMessage("Em uma manobra espetacular, " + duel.getB2().getName() + " acerta um golpe especial e causa o dobro do dano comum!!").queue();
@@ -283,7 +283,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     }
                 }
 
-                if (message.getMessage().getContentRaw().equals("desistir")) {
+                if (message.getMessage().getContentRaw().equalsIgnoreCase("desistir")) {
                     if (message.getAuthor() == duel.getP1()) {
                         message.getChannel().sendMessage(duel.getP1().getAsMention() + " desistiu. A vitória é de " + duel.getP2().getAsMention() + "!").queue();
                         Beyblade bl = Database.getBeyblade(duel.getP1().getId());
