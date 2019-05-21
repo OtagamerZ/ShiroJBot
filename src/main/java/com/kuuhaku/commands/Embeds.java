@@ -77,9 +77,11 @@ public class Embeds {
                 prefix + "nãofale [ID] - Remove uma de minhas respostas.\n\n" +
                 prefix + "falealista [página] - Vê minhas respostas.\n\n" +
                 prefix + "faleseachar - Muda entre procurar a palavra-chave dentro de uma frase ou não.\n\n" +
-                prefix + "ouçatodos - Muda entre permitir novas respostas da comunidade ou não.```\n" +
+                prefix + "ouçatodos - Muda entre permitir novas respostas da comunidade ou não.```\n";
+    }
 
-                ":speech_balloon: **Utilitário**\n```" +
+    static String helpEmbed2(String prefix) {
+        return  ":speech_balloon: **Utilitário**\n```" +
                 prefix + "ajuda - Mostra essa mensagem no seu canal privado.\n\n" +
                 prefix + "bug [mensagem] - Envia um bug para meu Nii-chan corrigir.\n\n" +
                 prefix + "ping - Confere se estou online e funcionando direitinho.\n\n" +
@@ -88,11 +90,9 @@ public class Embeds {
                 prefix + "anime [nome] - Pesquisa informações sobre um anime.\n\n" +
                 prefix + "embed [título;descrição;imagem] - Cria um novo embed com os dados passados.\n\n" +
                 prefix + "xp - Mostra dados sobre o seu perfil.```\n\n" +
-                prefix + "traduza [de>para] [texto] - Tentarei traduzir este texto para o idioma especificado.```\n";
-    }
+                prefix + "traduza [de>para] [texto] - Tentarei traduzir este texto para o idioma especificado.```\n" +
 
-    static String helpEmbed2(String prefix) {
-        return ":juggling: **Diversão**\n```" +
+                ":juggling: **Diversão**\n```" +
                 prefix + "pergunta [pergunta] - Me pergunte algo, mas só vou responder com sim ou não!\n\n" +
                 prefix + "escolha [opção1;opção2;opção3;...] - Quer que eu escolha entre essas opções? Facil!\n\n" +
                 prefix + "vemca [membro] - Dá um abraço exagerado em alguém.\n\n" +
@@ -109,9 +109,11 @@ public class Embeds {
                 prefix + "dançar - Dança.\n\n" +
                 prefix + "baka - Se envergonha.\n\n" +
                 prefix + "triste - Chora.\n\n" +
-                prefix + "corre - Sai correndo.```\n" +
+                prefix + "corre - Sai correndo.```\n";
+    }
 
-                ":crossed_swords: **Beyblade**\n```" +
+    static String helpEmbed3(String prefix) {
+        return ":crossed_swords: **Beyblade**\n```" +
                 prefix + "bcomeçar [nome] - Obtém sua primeira Beyblade.\n\n" +
                 prefix + "binfo - Vê os dados sobre sua Beyblade.\n\n" +
                 prefix + "brank - Vê as TOP 10 Beyblades.\n\n" +
