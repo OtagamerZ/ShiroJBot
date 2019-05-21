@@ -474,7 +474,7 @@ public class Embeds {
         eb.addField("Força:", Float.toString(bb.getStrength()), true);
         eb.addField("Estabilidade:", Float.toString(bb.getStability()), true);
         eb.addField("Vitórias/Derrotas:", bb.getWins() + "/" + bb.getLoses(), true);
-        eb.addField("Pontos de combate:", bb.getPoints() + " pontos", true);
+        eb.addField(":diamond_shape_with_a_dot_inside: Pontos de combate:", bb.getPoints() + " pontos", true);
 
         message.getChannel().sendMessage(eb.build()).queue();
     }
@@ -488,7 +488,7 @@ public class Embeds {
         EmbedBuilder eb = new EmbedBuilder();
         StringBuilder sb = new StringBuilder();
 
-        eb.setTitle("TOP 10 Beyblades");
+        eb.setTitle(":bar_chart: TOP 10 Beyblades");
         eb.setThumbnail("https://www.pngkey.com/png/full/21-217733_free-png-trophy-png-images-transparent-winner-trophy.png");
         eb.setColor(Color.decode(champ.getColor()));
         for (int i = 0; i < rank.size() && i < 10; i++) {
