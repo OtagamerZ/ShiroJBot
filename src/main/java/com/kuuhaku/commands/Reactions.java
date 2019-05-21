@@ -87,6 +87,18 @@ public class Reactions {
         }
     }
 
+    public static void pat(JDA bot, Message message, User target, TextChannel channel, boolean answer, User mbr) throws IOException {
+        URL url = new URL(ReactionsList.pat()[new Random().nextInt(ReactionsList.pat().length)]);
+        HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+        String msg;
+        if (!answer)
+            msg = (mbr.getAsMention() + " fez cafuné em " + target.getAsMention());
+        else
+            msg = (target.getAsMention() + " também fez cafuné em " + mbr.getAsMention());
+        channel.sendMessage(msg).addFile(con.getInputStream(), "pat.gif").queue(m -> m.addReaction("\u21aa").queue());
+    }
+
     public static void slap(JDA bot, Message message, User target, TextChannel channel, boolean answer, User mbr) throws IOException {
         URL url = new URL(ReactionsList.slap()[new Random().nextInt(ReactionsList.slap().length)]);
         HttpURLConnection con = (HttpURLConnection) Objects.requireNonNull(url).openConnection();
