@@ -741,6 +741,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                     message.getChannel().sendMessage("Este usuário ainda não possui uma beyblade.").queue();
                                 }
                             }
+                        } else if (hasPrefix(message, "brank")) {
+                            Embeds.bRankEmbed(bot, message);
                         }
                     }
                 } else if (message.getTextChannel().canTalk()) {
