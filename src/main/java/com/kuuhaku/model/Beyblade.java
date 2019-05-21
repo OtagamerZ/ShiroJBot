@@ -19,18 +19,17 @@
 
 package com.kuuhaku.model;
 
-import org.json.JSONObject;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.awt.*;
 
 @Entity
 public class Beyblade {
     @Id
     private String id;
     private String name = "";
-    private String defs = "{\"speed\": 1, \"strength\": 1, \"stability\": 1, \"life\": 100, \"color\": \"#ffffff\", \"wins\": 0, \"loses\": 0}";
+    private String color = "#ffffff";
+    private float speed = 1, strength = 1, stability = 1;
+    private int life = 100, wins = 0, loses = 0;
 
     public String getId() {
         return id;
@@ -40,59 +39,67 @@ public class Beyblade {
         this.id = id;
     }
 
-    public JSONObject getDefs() {
-        return new JSONObject(defs);
-    }
-
-    public void setSpeed(Double speed) {
-        JSONObject defs = new JSONObject(this.defs);
-        defs.put("speed", speed);
-        this.defs = defs.toString();
-    }
-
-    public void setStrength(Double str) {
-        JSONObject defs = new JSONObject(this.defs);
-        defs.put("strength", str);
-        this.defs = defs.toString();
-    }
-
-    public void setStability(Double stb) {
-        JSONObject defs = new JSONObject(this.defs);
-        defs.put("stability", stb);
-        this.defs = defs.toString();
-    }
-
-    public void setLife(int life) {
-        JSONObject defs = new JSONObject(this.defs);
-        defs.put("life", life);
-        this.defs = defs.toString();
-    }
-
-    public void addWin() {
-        JSONObject defs = new JSONObject(this.defs);
-        int wins = defs.getInt("wins");
-        defs.put("wins", wins + 1);
-        this.defs = defs.toString();
-    }
-
-    public void addLose() {
-        JSONObject defs = new JSONObject(this.defs);
-        int loses = defs.getInt("loses");
-        defs.put("loses", loses + 1);
-        this.defs = defs.toString();
-    }
-
-    public void setColor(Color clr) {
-        JSONObject defs = new JSONObject(this.defs);
-        defs.put("color", clr.toString());
-        this.defs = defs.toString();
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public float getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(float speed) {
+        this.speed = speed;
+    }
+
+    public float getStrength() {
+        return strength;
+    }
+
+    public void setStrength(float strength) {
+        this.strength = strength;
+    }
+
+    public float getStability() {
+        return stability;
+    }
+
+    public void setStability(float stability) {
+        this.stability = stability;
+    }
+
+    public int getLife() {
+        return life;
+    }
+
+    public void setLife(int life) {
+        this.life = life;
+    }
+
+    public int getWins() {
+        return wins;
+    }
+
+    public void addWins() {
+        wins += 1;
+    }
+
+    public int getLoses() {
+        return loses;
+    }
+
+    public void addLoses() {
+        loses += 1;
     }
 }
