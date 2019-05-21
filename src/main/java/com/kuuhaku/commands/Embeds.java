@@ -426,7 +426,7 @@ public class Embeds {
     }
 
     public static void answerList(MessageReceivedEvent message, List<CustomAnswers> ca) throws IOException {
-        ca.removeIf(m -> m.getMarkDel().equals("DELETAR"));
+        ca.removeIf(m -> m.getMarkDel() != null && m.getMarkDel().equals("DELETAR"));
         int index;
         try {
             index = Integer.parseInt(message.getMessage().getContentRaw().split(" ")[1]);
