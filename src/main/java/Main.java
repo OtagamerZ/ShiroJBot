@@ -265,12 +265,16 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     if (player1Turn && message.getAuthor() == duel.getP1()) {
                         player1Turn = false;
                         duel.setD1(false);
-                        duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getStrength() * duel.getB1().getSpeed() / (duel.getB1().getStrength() + duel.getB2().getStability()) * (new Random().nextInt(Math.round(100 / (duel.isD2() ? duel.getB2().getStability() : 1))))));
+                        int damage = Math.round(duel.getB1().getStrength() * duel.getB1().getSpeed() / (duel.getB1().getStrength() + duel.getB2().getStability()) * (new Random().nextInt(Math.round(100 / (duel.isD2() ? duel.getB2().getStability() : 1)))));
+                        duel.getB2().setLife(duel.getB2().getLife() - damage);
+                        System.out.println(damage + " -> " + duel.getB2().getLife());
                         message.getChannel().sendMessage(duel.getB1().getName() + " ataca, agora é a vez de " + duel.getB2().getName()).queue();
                     } else if (!player1Turn && message.getAuthor() == duel.getP2()) {
                         player1Turn = true;
                         duel.setD2(false);
-                        duel.getB1().setLife(duel.getB1().getLife() - Math.round(duel.getB2().getStrength() * duel.getB2().getSpeed() / (duel.getB2().getStrength() + duel.getB1().getStability()) * (new Random().nextInt(Math.round(100 / (duel.isD1() ? duel.getB1().getStability() : 1))))));
+                        int damage = Math.round(duel.getB2().getStrength() * duel.getB2().getSpeed() / (duel.getB2().getStrength() + duel.getB1().getStability()) * (new Random().nextInt(Math.round(100 / (duel.isD1() ? duel.getB1().getStability() : 1)))));
+                        duel.getB1().setLife(duel.getB1().getLife() - damage);
+                        System.out.println(damage + " -> " + duel.getB1().getLife());
                         message.getChannel().sendMessage(duel.getB2().getName() + " ataca, agora é a vez de " + duel.getB1().getName()).queue();
                     }
                 } else if (message.getMessage().getContentRaw().equalsIgnoreCase("defender")) {
@@ -715,12 +719,16 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             }
                         } else if (hasPrefix(message, "bduelar")) {
                             if (message.getMessage().getMentionedUsers().size() > 0) {
-                                message.getChannel().sendMessage(message.getMessage().getMentionedMembers().get(0).getAsMention() + ", você foi desafiado a um duelo de beyblades por " + message.getAuthor().getAsMention() + ". Se deseja aceitar, clique no botão abaixo:").queue(m -> {
-                                            m.addReaction("\u21aa").queue();
-                                            DuelData dd = new DuelData(message.getAuthor(), message.getMessage().getMentionedUsers().get(0));
-                                            duels.put(m.getIdLong(), dd);
-                                        }
-                                );
+                                if (Database.getBeyblade(message.getMessage().getMentionedUsers().get(0).getId()) != null) {
+                                    message.getChannel().sendMessage(message.getMessage().getMentionedMembers().get(0).getAsMention() + ", você foi desafiado a um duelo de beyblades por " + message.getAuthor().getAsMention() + ". Se deseja aceitar, clique no botão abaixo:").queue(m -> {
+                                                m.addReaction("\u21aa").queue();
+                                                DuelData dd = new DuelData(message.getAuthor(), message.getMessage().getMentionedUsers().get(0));
+                                                duels.put(m.getIdLong(), dd);
+                                            }
+                                    );
+                                } else {
+                                    message.getChannel().sendMessage("Este usuário ainda não possui uma beyblade.").queue();
+                                }
                             }
                         }
                     }
