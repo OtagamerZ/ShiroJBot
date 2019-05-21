@@ -113,11 +113,12 @@ public class Embeds {
                 ":crossed_swords: **Beyblade**\n```" +
                 prefix + "bcomeçar [nome] - Obtém sua primeira Beyblade.\n\n" +
                 prefix + "binfo - Vê os dados sobre sua Beyblade.\n\n" +
+                prefix + "brank - Vê as TOP 10 Beyblades.\n\n" +
                 prefix + "bcor [#rrggbb] - Muda a cor de sua Beyblade, a cor deve estar em hexadecimal.\n\n" +
                 prefix + "bduelar [membro] - Inicia um duelo com alguém.\n\n" +
                 "atacar - Enquanto em um duelo, use para atacar.\n\n" +
                 "defender - Enquanto em um duelo, use para defender o próximo ataque.\n\n" +
-                "especial - Enquanto em um duelo, use para tentar utilizar um ataque que causa 2x o dano (chance de 30%).```\n" +
+                "especial - Enquanto em um duelo, use para tentar utilizar um ataque que causa 2x o dano (chance depende da velocidade).```\n" +
 
                 ":gem: **OtagamerZ**\n```" +
                 prefix + "conquistas - Mosta as conquistas que você completou.\n\n" +
