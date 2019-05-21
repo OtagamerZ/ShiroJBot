@@ -37,7 +37,7 @@ public class Misc {
     }
 
     public static void yesNo(MessageReceivedEvent message) {
-        String[] responses = {"Sim", "N\u00e3o", "Nunca", "Sempre", "Talvez", "N\u00e3o sei", "Acho que sim", "Acho que n\u00e3o"};
+        String[] responses = {"Sim", "Não", "Nunca", "Sempre", "Talvez", "Não sei", "Acho que sim", "Acho que não"};
         message.getChannel().sendMessage(responses[(int) (Math.random() * 9)]).queue();
     }
 
@@ -55,19 +55,19 @@ public class Misc {
                 try {
                     message.getChannel().sendMessage(Embeds.imageEmbed(cmd[1].split(";"), cmd[2])).queue();
                 } catch (JSONException e) {
-                    message.getChannel().sendMessage("Eita, n\u00e3o encontrei nenhuma imagem com essas tags :expressionless:!").queue();
+                    message.getChannel().sendMessage("Eita, não encontrei nenhuma imagem com essas tags :expressionless:!").queue();
                 }
             } else if (cmd.length == 2) {
                 try {
                     message.getChannel().sendMessage(Embeds.imageEmbed(cmd[1].split(";"))).queue();
                 } catch (JSONException e) {
-                    message.getChannel().sendMessage("Eita, n\u00e3o encontrei nenhuma imagem, tente usar tags mais populares ou especificar um n\u00famero de p\u00e1gina!").queue();
+                    message.getChannel().sendMessage("Eita, não encontrei nenhuma imagem, tente usar tags mais populares ou especificar um número de página!").queue();
                 }
             } else {
-                message.getChannel().sendMessage("Voc\u00ea n\u00e3o me disse que tipo de imagem devo procurar.").queue();
+                message.getChannel().sendMessage("Você não me disse que tipo de imagem devo procurar.").queue();
             }
         } catch (IOException e) {
-            message.getChannel().sendMessage("Eita, n\u00e3o encontrei nenhuma imagem :expressionless:!").queue();
+            message.getChannel().sendMessage("Eita, não encontrei nenhuma imagem :expressionless:!").queue();
         }
     }
 
