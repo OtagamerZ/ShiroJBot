@@ -486,14 +486,16 @@ public class Embeds {
         Beyblade champ = rank.get(0);
         rank.remove(0);
         EmbedBuilder eb = new EmbedBuilder();
+        StringBuilder sb = new StringBuilder();
 
         eb.setTitle("TOP 10 Beyblades");
         eb.setThumbnail("https://www.pngkey.com/png/full/21-217733_free-png-trophy-png-images-transparent-winner-trophy.png");
         eb.setColor(Color.decode(rank.get(0).getColor()));
         eb.addField("1 - " + champ.getName() + " (" + bot.getUserById(champ.getId()).getName() + ")", "", false);
         for (int i = 0; i < rank.size() && i < 10; i++) {
-            eb.addField("", (i + 1) + " - " + rank.get(i).getName() + " (" + bot.getUserById(rank.get(i).getId()).getName() + ")", false);
+            sb.append(i + 1).append(" - ").append(rank.get(i).getName()).append(" (").append(bot.getUserById(rank.get(i).getId()).getName()).append(")\n");
         }
+        eb.addField("", sb.toString(), false);
 
         message.getChannel().sendMessage(eb.build()).queue();
     }
