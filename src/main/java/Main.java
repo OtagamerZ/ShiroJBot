@@ -104,10 +104,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
             Database.sendAllCustomAnswers(customAnswersList);
             System.out.println("Guardar configurações no banco de dados...PRONTO!");
             bot.getPresence().setGame(Owner.getRandomGame(bot));
-            gcMap.forEach((k, v) -> {
-                if (v.getCanalav() != null && bot.getGuildById(v.getGuildId()).getTextChannelById(v.getCanalav()).canTalk())
-                    bot.getGuildById(v.getGuildId()).getTextChannelById(v.getCanalav()).sendMessage(("Opa, está gostando de me utilizar em seu servidor? Caso sim, se puder votar me ajudaria **MUITO** a me tornar cada vez mais popular e ser chamada para mais servidores!\n https://discordbots.org/bot/572413282653306901")).queue();
-            });
         } catch (Exception e) {
             System.out.println("Guardar configurações no banco de dados...ERRO!\nErro: " + e);
         }
@@ -256,6 +252,9 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     @Override
     public void onMessageReceived(MessageReceivedEvent message) {
         if (ready) {
+            if (new Random().nextInt(100) > 80) {
+                message.getChannel().sendMessage("Opa, está gostando de me utilizar em seu servidor? Caso sim, se puder votar me ajudaria **MUITO** a me tornar cada vez mais popular e ser chamada para mais servidores!\n https://discordbots.org/bot/572413282653306901").queue();
+            }
             if (accDuels.stream().anyMatch(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor())) {
                 @SuppressWarnings("OptionalGetWithoutIsPresent") DuelData duel = accDuels.stream().filter(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor()).findFirst().get();
                 boolean player1Turn = duel.isP1turn();
