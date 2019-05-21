@@ -62,6 +62,14 @@ public class Admin {
                         message.getChannel().sendMessage("E qual canal devo ficar de olho para sugestões? Nulo não é um canal válido!").queue();
                     }
                     break;
+                case "canallvl":
+                    try {
+                        gc.setCanallvl(message.getMessage().getMentionedChannels().get(0).getId());
+                        message.getChannel().sendMessage("Canal de notificações de level trocado para " + message.getGuild().getTextChannelById(gc.getCanallvl()).getAsMention()).queue();
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        message.getChannel().sendMessage("E qual canal devo avisar sobre level ups? Nulo não é um canal válido!").queue();
+                    }
+                    break;
                 case "prefixo":
                     try {
                         gc.setPrefix(cmd[2]);
