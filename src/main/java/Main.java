@@ -644,6 +644,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                         "\nPara escolher dragão, digite `" + gcMap.get(message.getGuild().getId()).getPrefix() + "balinhamento dragão`" +
                                         "\nPara escolher urso, digite `" + gcMap.get(message.getGuild().getId()).getPrefix() + "balinhamento urso`").queue();
                             }
+                        } else if (hasPrefix(message, "bespecial")) {
+                            Embeds.specialEmbed(message, Objects.requireNonNull(Database.getBeyblade(message.getAuthor().getId())));
                         }
                     }
                 } else if (message.getTextChannel().canTalk()) {
