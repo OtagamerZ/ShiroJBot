@@ -37,16 +37,16 @@ public class Arena {
                 Database.sendBeyblade(bb);
                 message.getChannel().sendMessage("Parabéns, você acabou de obter sua mais nova Beyblade!").queue();
             } else {
-                message.getChannel().sendMessage("Você precisa dar um nome a sua beyblade!").queue();
+                message.getChannel().sendMessage("Você precisa dar um nome a sua Beyblade!").queue();
             }
         } else {
-            message.getChannel().sendMessage("Você já possui uma beyblade!").queue();
+            message.getChannel().sendMessage("Você já possui uma Beyblade!").queue();
         }
     }
 
     public static void setCor(MessageReceivedEvent message, String[] cmd) {
         Beyblade bb = Database.getBeyblade(message.getAuthor().getId());
-        if (bb == null) message.getChannel().sendMessage("Você não possui uma beyblade!").queue();
+        if (bb == null) message.getChannel().sendMessage("Você não possui uma Beyblade!").queue();
         else if (cmd.length > 1) {
             if (cmd[1].contains("#") && cmd[1].length() == 7) {
                 bb.setColor(cmd[1]);
@@ -62,7 +62,7 @@ public class Arena {
 
     public static void setName(MessageReceivedEvent message, String[] cmd) {
         Beyblade bb = Database.getBeyblade(message.getAuthor().getId());
-        if (bb == null) message.getChannel().sendMessage("Você não possui uma beyblade!").queue();
+        if (bb == null) message.getChannel().sendMessage("Você não possui uma Beyblade!").queue();
         else if (bb.getPoints() < 50)
             message.getChannel().sendMessage("Você não possui pontos de combate suficiente!").queue();
         else if (cmd.length > 1) {
@@ -94,7 +94,7 @@ public class Arena {
                 message.getChannel().sendMessage("Você não possui pontos de combate suficiente!").queue();
             }
         } else {
-            message.getChannel().sendMessage("Você não possui uma beyblade!").queue();
+            message.getChannel().sendMessage("Você não possui uma Beyblade!").queue();
         }
     }
 
@@ -102,7 +102,7 @@ public class Arena {
         Beyblade bb = Database.getBeyblade(message.getAuthor().getId());
         switch (cmd[1]) {
             case "nome":
-                if (bb == null) message.getChannel().sendMessage("Você não possui uma beyblade!").queue();
+                if (bb == null) message.getChannel().sendMessage("Você não possui uma Beyblade!").queue();
                 else if (bb.getPoints() < 50)
                     message.getChannel().sendMessage("Você não possui pontos de combate suficiente!").queue();
                 else if (cmd.length > 2) {
@@ -112,7 +112,7 @@ public class Arena {
                 }
                 break;
             case "força":
-                if (bb == null) message.getChannel().sendMessage("Você não possui uma beyblade!").queue();
+                if (bb == null) message.getChannel().sendMessage("Você não possui uma Beyblade!").queue();
                 else if (bb.getPoints() < Math.round(15 * bb.getStrength() + bb.getStrength() + bb.getSpeed() + bb.getStability()))
                     message.getChannel().sendMessage("Você não possui pontos de combate suficiente!").queue();
                 else {
@@ -122,7 +122,7 @@ public class Arena {
                 }
                 break;
             case "velocidade":
-                if (bb == null) message.getChannel().sendMessage("Você não possui uma beyblade!").queue();
+                if (bb == null) message.getChannel().sendMessage("Você não possui uma Beyblade!").queue();
                 else if (bb.getPoints() < Math.round(15 * bb.getSpeed() + bb.getStrength() + bb.getSpeed() + bb.getStability()))
                     message.getChannel().sendMessage("Você não possui pontos de combate suficiente!").queue();
                 else {
@@ -132,7 +132,7 @@ public class Arena {
                 }
                 break;
             case "estabilidade":
-                if (bb == null) message.getChannel().sendMessage("Você não possui uma beyblade!").queue();
+                if (bb == null) message.getChannel().sendMessage("Você não possui uma Beyblade!").queue();
                 else if (bb.getPoints() < Math.round(15 * bb.getStability() + bb.getStrength() + bb.getSpeed() + bb.getStability()))
                     message.getChannel().sendMessage("Você não possui pontos de combate suficiente!").queue();
                 else {
@@ -142,7 +142,7 @@ public class Arena {
                 }
                 break;
             case "vida":
-                if (bb == null) message.getChannel().sendMessage("Você não possui uma beyblade!").queue();
+                if (bb == null) message.getChannel().sendMessage("Você não possui uma Beyblade!").queue();
                 else if (bb.getPoints() < Math.round(bb.getLife() / 2))
                     message.getChannel().sendMessage("Você não possui pontos de combate suficiente!").queue();
                 else {
@@ -166,7 +166,7 @@ public class Arena {
                         }
                 );
             } else {
-                message.getChannel().sendMessage("Este usuário ainda não possui uma beyblade.").queue();
+                message.getChannel().sendMessage("Este usuário ainda não possui uma Beyblade.").queue();
             }
         }
     }
@@ -179,14 +179,16 @@ public class Arena {
             if (player1Turn && message.getAuthor() == duel.getP1()) {
                 duel.setP1turn(false);
                 duel.setD1(false);
-                int damage = Math.round(duel.getB1().getStrength() * duel.getB1().getSpeed() / (duel.getB1().getStrength() + duel.getB2().getStability()) * (new Random().nextInt(Math.round(100 / (duel.isD2() ? duel.getB2().getStability() : 1)))));
+                duel.getB2().getS().setBear(false);
+                int damage = Math.round(duel.getB1().getStrength() * duel.getB1().getSpeed() / (duel.getB2().getStability()) * getDefFac(duel.isD2(), duel.getB2()));
                 duel.getB2().setLife(duel.getB2().getLife() - damage);
                 System.out.println(damage + " -> " + duel.getB2().getLife());
                 message.getChannel().sendMessage(duel.getB1().getName() + " ataca, agora é a vez de " + duel.getB2().getName()).queue();
             } else if (!player1Turn && message.getAuthor() == duel.getP2()) {
                 duel.setP1turn(true);
                 duel.setD2(false);
-                int damage = Math.round(duel.getB2().getStrength() * duel.getB2().getSpeed() / (duel.getB2().getStrength() + duel.getB1().getStability()) * (new Random().nextInt(Math.round(100 / (duel.isD1() ? duel.getB1().getStability() : 1)))));
+                duel.getB1().getS().setBear(false);
+                int damage = Math.round(duel.getB2().getStrength() * duel.getB2().getSpeed() / (duel.getB1().getStability()) * getDefFac(duel.isD1(), duel.getB1()));
                 duel.getB1().setLife(duel.getB1().getLife() - damage);
                 System.out.println(damage + " -> " + duel.getB1().getLife());
                 message.getChannel().sendMessage(duel.getB2().getName() + " ataca, agora é a vez de " + duel.getB1().getName()).queue();
@@ -195,36 +197,145 @@ public class Arena {
             if (player1Turn && message.getAuthor() == duel.getP1()) {
                 duel.setP1turn(false);
                 duel.setD1(true);
-                message.getChannel().sendMessage(duel.getB1().getName() + " assumiu uma postura defensiva, é sua vez " + duel.getB2().getName()).queue();
+                message.getChannel().sendMessage(duel.getB1().getName() + " assumiu uma postura defensiva, é a vez de " + duel.getB2().getName()).queue();
             } else if (!player1Turn && message.getAuthor() == duel.getP2()) {
                 duel.setP1turn(true);
                 duel.setD2(true);
-                message.getChannel().sendMessage(duel.getB2().getName() + " assumiu uma postura defensiva, é sua vez " + duel.getB1().getName()).queue();
+                message.getChannel().sendMessage(duel.getB2().getName() + " assumiu uma postura defensiva, é a vez de " + duel.getB1().getName()).queue();
             }
         } else if (message.getMessage().getContentRaw().equalsIgnoreCase("especial")) {
-            if (player1Turn && message.getAuthor() == duel.getP1()) {
-                duel.setP1turn(false);
-                int chance = new Random().nextInt(100);
-                duel.setD1(false);
-                switch (duel.getB1().getSpecial()) {
-                    case 11:
-                        if (chance > duel.getB1().getS().getDiff() - duel.getB1().getSpeed()) {
-                            duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getStrength() * duel.getB1().getSpeed() / (duel.getB2().getStability() * getDefFac(duel.isD2(), duel.getB2()))));
-                            message.getChannel().sendMessage("O-O que?? " + duel.getB1().getName() + " desapareceu? Ah, lá está ela, com um movimento digno dos tigres ela executa o golpe especial " + duel.getB1().getS().getName() + "! (" + chance + ")").queue();
-                        } else {
-                            message.getChannel().sendMessage("Quase! " + duel.getB1().getName() + " tenta executar um golpe especial mas falha! (" + chance + " < " + (duel.getB1().getS().getDiff() - duel.getB1().getSpeed()) + ")").queue();
+            if (duel.getB1().getS() != null) {
+                if (!duel.isS1()) {
+                    if (player1Turn && message.getAuthor() == duel.getP1()) {
+                        duel.setP1turn(false);
+                        int chance = new Random().nextInt(100);
+                        duel.setD1(false);
+                        switch (duel.getB1().getSpecial()) {
+                            case 11:
+                                if (chance > duel.getB1().getS().getDiff() - duel.getB1().getSpeed()) {
+                                    duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getStrength() * duel.getB1().getSpeed() / (duel.getB2().getStability() * getDefFac(duel.isD2(), duel.getB2()))));
+                                    message.getChannel().sendMessage("O-O que?? " + duel.getB1().getName() + " desapareceu? Ah, lá está ela, com um movimento digno dos tigres ela executa o golpe especial " + duel.getB1().getS().getName() + "! (" + chance + " > " + duel.getB1().getS().getDiff() + ")").queue();
+                                    duel.setS1(true);
+                                    duel.getB2().getS().setBear(false);
+                                } else {
+                                    message.getChannel().sendMessage("Quase! " + duel.getB1().getName() + " tenta executar um golpe especial mas falha! (" + chance + " < " + (duel.getB1().getS().getDiff() - duel.getB1().getSpeed()) + ")").queue();
+                                }
+                                break;
+                            case 12:
+                                if (chance > duel.getB1().getS().getDiff() - duel.getB1().getSpeed()) {
+                                    duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getSpeed() * 2 / (duel.getB2().getStability() * getDefFac(duel.isD2(), duel.getB2()))));
+                                    message.getChannel().sendMessage("Isso foi incrível!! " + duel.getB1().getName() + " executou com perfeição em " + duel.getB1().getS().getName() + " um dos golpes mais difíceis já conhecidos! (" + chance + " > " + duel.getB1().getS().getDiff() + ")").queue();
+                                    duel.setP1turn(true);
+                                    message.getChannel().sendMessage(duel.getB2().getName() + " está atordoada, será que teremos uma reviravolta aqui?").queue();
+                                    duel.setS1(true);
+                                    duel.getB2().getS().setBear(false);
+                                } else {
+                                    message.getChannel().sendMessage("Quase! " + duel.getB1().getName() + " tenta executar um golpe especial mas falha! (" + chance + " < " + (duel.getB1().getS().getDiff() - duel.getB1().getSpeed()) + ")").queue();
+                                }
+                                break;
+                            case 21:
+                                if (chance > duel.getB1().getS().getDiff() - duel.getB1().getSpeed()) {
+                                    duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getStrength() * duel.getB2().getStability() / (duel.getB2().getStability() * getDefFac(duel.isD2(), duel.getB2()))));
+                                    message.getChannel().sendMessage("O que foi isso!? " + duel.getB1().getName() + " lançou " + duel.getB1().getS().getName() + " ao ar, depois o lançou utilizando sua própria defesa! (" + chance + " > " + duel.getB1().getS().getDiff() + ")").queue();
+                                    duel.setS1(true);
+                                    duel.getB2().getS().setBear(false);
+                                } else {
+                                    message.getChannel().sendMessage("Quase! " + duel.getB1().getName() + " tenta executar um golpe especial mas falha! (" + chance + " < " + (duel.getB1().getS().getDiff() - duel.getB1().getSpeed()) + ")").queue();
+                                }
+                                break;
+                            case 22:
+                                if (chance > duel.getB1().getS().getDiff() - duel.getB1().getSpeed()) {
+                                    duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getStrength() * duel.getB1().getStrength() / (duel.getB2().getStability() * getDefFac(duel.isD2(), duel.getB2())) * 3));
+                                    message.getChannel().sendMessage("Não é possível!! Eu jamais acreditaria se alguém me dissesse que era possível executar este golpe, mas " + duel.getB1().getName() + " provou que é possivel!!! " + duel.getB1().getS().getName() + " mal consegue se manter em pé! (" + chance + " > " + duel.getB1().getS().getDiff() + ")").queue();
+                                    duel.setS1(true);
+                                    duel.getB2().getS().setBear(false);
+                                } else {
+                                    message.getChannel().sendMessage("Quase! " + duel.getB1().getName() + " tenta executar um golpe especial mas falha! (" + chance + " < " + (duel.getB1().getS().getDiff() - duel.getB1().getSpeed()) + ")").queue();
+                                }
+                                break;
+                            case 31:
+                                if (chance > duel.getB1().getS().getDiff() - duel.getB1().getSpeed()) {
+                                    duel.getB1().getS().setBear(true);
+                                    duel.setD1(true);
+                                    message.getChannel().sendMessage("Mais alguém está sentindo isso? " + duel.getB1().getName() + " acaba de executar a assinatura dos ursos!! Essa aura poderá virar o fluxo da partida! (" + chance + " > " + duel.getB1().getS().getDiff() + ")").queue();
+                                    duel.setS1(true);
+                                } else {
+                                    message.getChannel().sendMessage("Quase! " + duel.getB1().getName() + " tenta executar um golpe especial mas falha! (" + chance + " < " + (duel.getB1().getS().getDiff() - duel.getB1().getSpeed()) + ")").queue();
+                                }
+                                break;
                         }
-                        break;
+                    } else {
+                        message.getChannel().sendMessage("O poder mágico de " + duel.getB1().getName() + " já está no limite, não me parece que conseguirá realizar mais um golpe especial!").queue();
+                    }
+                } else {
+                    message.getChannel().sendMessage(duel.getB1().getName() + " ainda não possui um alinhamento!").queue();
                 }
             } else if (!player1Turn && message.getAuthor() == duel.getP2()) {
-                duel.setP1turn(true);
-                int chance = new Random().nextInt(100);
-                duel.setD2(false);
-                if (chance > (71 - Math.round(duel.getB2().getSpeed()))) {
-                    duel.getB1().setLife(duel.getB1().getLife() - Math.round(duel.getB2().getStrength() * duel.getB2().getSpeed() / (duel.getB2().getStrength() + duel.getB1().getStability()) * (new Random().nextInt(Math.round(100 / (duel.isD1() ? duel.getB1().getStability() : 1)))) * 2));
-                    message.getChannel().sendMessage("Em uma manobra espetacular, " + duel.getB2().getName() + " acerta um golpe especial e causa o dobro do dano comum!! (" + chance + ")").queue();
-                } else
-                    message.getChannel().sendMessage("Você errou o especial e perdeu o turno! (" + chance + " < " + (71 - Math.round(duel.getB1().getSpeed())) + ")").queue();
+                if (duel.getB2().getS() != null) {
+                    if (!duel.isS2()) {
+                        duel.setP1turn(true);
+                        int chance = new Random().nextInt(100);
+                        duel.setD2(false);
+                        switch (duel.getB2().getSpecial()) {
+                            case 11:
+                                if (chance > duel.getB2().getS().getDiff() - duel.getB2().getSpeed()) {
+                                    duel.getB1().setLife(duel.getB1().getLife() - Math.round(duel.getB2().getStrength() * duel.getB2().getSpeed() / (duel.getB1().getStability() * getDefFac(duel.isD2(), duel.getB1()))));
+                                    message.getChannel().sendMessage("O-O que?? " + duel.getB2().getName() + " desapareceu? Ah, lá está ele, com um movimento digno dos tigres ele executa o golpe especial " + duel.getB2().getS().getName() + "! (" + chance + " > " + duel.getB2().getS().getDiff() + ")").queue();
+                                    duel.setS2(true);
+                                    duel.getB1().getS().setBear(false);
+                                } else {
+                                    message.getChannel().sendMessage("Quase! " + duel.getB2().getName() + " tenta executar um golpe especial mas falha! (" + chance + " < " + (duel.getB2().getS().getDiff() - duel.getB2().getSpeed()) + ")").queue();
+                                }
+                                break;
+                            case 12:
+                                if (chance > duel.getB2().getS().getDiff() - duel.getB2().getSpeed()) {
+                                    duel.getB1().setLife(duel.getB1().getLife() - Math.round(duel.getB2().getSpeed() * 2 / (duel.getB1().getStability() * getDefFac(duel.isD2(), duel.getB1()))));
+                                    message.getChannel().sendMessage("Isso foi incrível!! " + duel.getB2().getName() + " executou com perfeição em " + duel.getB2().getS().getName() + " um dos golpes mais difíceis já conhecidos! (" + chance + " > " + duel.getB2().getS().getDiff() + ")").queue();
+                                    duel.setP1turn(false);
+                                    message.getChannel().sendMessage(duel.getB1().getName() + " está atordoada, será que teremos uma reviravolta aqui?").queue();
+                                    duel.setS2(true);
+                                    duel.getB1().getS().setBear(false);
+                                } else {
+                                    message.getChannel().sendMessage("Quase! " + duel.getB2().getName() + " tenta executar um golpe especial mas falha! (" + chance + " < " + (duel.getB2().getS().getDiff() - duel.getB2().getSpeed()) + ")").queue();
+                                }
+                                break;
+                            case 21:
+                                if (chance > duel.getB2().getS().getDiff() - duel.getB2().getSpeed()) {
+                                    duel.getB1().setLife(duel.getB1().getLife() - Math.round(duel.getB2().getStrength() * duel.getB1().getStability() / (duel.getB1().getStability() * getDefFac(duel.isD2(), duel.getB1()))));
+                                    message.getChannel().sendMessage("O que foi isso!? " + duel.getB2().getName() + " lançou " + duel.getB2().getS().getName() + " ao ar, depois o lançou utilizando sua própria defesa! (" + chance + " > " + duel.getB2().getS().getDiff() + ")").queue();
+                                    duel.setS2(true);
+                                    duel.getB1().getS().setBear(false);
+                                } else {
+                                    message.getChannel().sendMessage("Quase! " + duel.getB2().getName() + " tenta executar um golpe especial mas falha! (" + chance + " < " + (duel.getB2().getS().getDiff() - duel.getB2().getSpeed()) + ")").queue();
+                                }
+                                break;
+                            case 22:
+                                if (chance > duel.getB2().getS().getDiff() - duel.getB2().getSpeed()) {
+                                    duel.getB1().setLife(duel.getB1().getLife() - Math.round(duel.getB2().getStrength() * duel.getB2().getStrength() / (duel.getB1().getStability() * getDefFac(duel.isD2(), duel.getB1())) * 3));
+                                    message.getChannel().sendMessage("Não é possível!! Eu jamais acreditaria se alguém me dissesse que era possível executar este golpe, mas " + duel.getB2().getName() + " provou que é possivel!!! " + duel.getB2().getS().getName() + " mal consegue se manter em pé! (" + chance + " > " + duel.getB2().getS().getDiff() + ")").queue();
+                                    duel.setS2(true);
+                                    duel.getB1().getS().setBear(false);
+                                } else {
+                                    message.getChannel().sendMessage("Quase! " + duel.getB2().getName() + " tenta executar um golpe especial mas falha! (" + chance + " < " + (duel.getB2().getS().getDiff() - duel.getB2().getSpeed()) + ")").queue();
+                                }
+                                break;
+                            case 31:
+                                if (chance > duel.getB2().getS().getDiff() - duel.getB2().getSpeed()) {
+                                    duel.getB2().getS().setBear(true);
+                                    duel.setD2(true);
+                                    message.getChannel().sendMessage("Mais alguém está sentindo isso? " + duel.getB2().getName() + " acaba de executar a assinatura dos ursos!! Essa aura poderá virar o fluxo da partida! (" + chance + " > " + duel.getB2().getS().getDiff() + ")").queue();
+                                    duel.setS2(true);
+                                } else {
+                                    message.getChannel().sendMessage("Quase! " + duel.getB2().getName() + " tenta executar um golpe especial mas falha! (" + chance + " < " + (duel.getB2().getS().getDiff() - duel.getB2().getSpeed()) + ")").queue();
+                                }
+                                break;
+                        }
+                    } else {
+                        message.getChannel().sendMessage("O poder mágico de " + duel.getB2().getName() + " já está no limite, não me parece que conseguirá realizar mais um golpe especial!").queue();
+                    }
+                } else {
+                    message.getChannel().sendMessage(duel.getB1().getName() + " ainda não possui um alinhamento!").queue();
+                }
             }
         } else if (message.getMessage().getContentRaw().equalsIgnoreCase("desistir")) {
             if (message.getAuthor() == duel.getP1()) {
@@ -255,7 +366,7 @@ public class Arena {
         }
         if (duel.getB2().getLife() <= 0) {
             int pointWin = new Random().nextInt(Math.round(duel.getB2().getStrength() + duel.getB2().getSpeed() + duel.getB2().getStability() + (float) duel.getB1().getWins() / (duel.getB1().getLoses() == 0 ? 1 : duel.getB1().getLoses())));
-            message.getChannel().sendMessage(duel.getP1().getAsMention() + " triunfou sobre " + duel.getP2().getAsMention() + ". Temos um vencedor!\n\n" + duel.getP1().getAsMention() + " ganhou **" + pointWin + "** pontos de combate!").queue();
+            message.getChannel().sendMessage(duel.getP1().getAsMention() + " triunfou sobre " + duel.getP2().getAsMention() + ". Temos um vencedor!\n\n" + duel.getB1().getName() + " ganhou **" + pointWin + "** pontos de combate!").queue();
             Beyblade bl = Database.getBeyblade(duel.getP2().getId());
             assert bl != null;
             bl.addLoses();
@@ -269,7 +380,7 @@ public class Arena {
             accDuels.removeIf(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor());
         } else if (duel.getB1().getLife() <= 0) {
             int pointWin = new Random().nextInt(Math.round(duel.getB1().getStrength() + duel.getB1().getSpeed() + duel.getB1().getStability() + (float) duel.getB1().getWins() / (duel.getB1().getLoses() == 0 ? 1 : duel.getB1().getLoses())));
-            message.getChannel().sendMessage(duel.getP2().getAsMention() + " triunfou sobre " + duel.getP1().getAsMention() + ". Temos um vencedor!\n\n" + duel.getP2().getAsMention() + " ganhou **" + pointWin + "** pontos de combate!").queue();
+            message.getChannel().sendMessage(duel.getP2().getAsMention() + " triunfou sobre " + duel.getP1().getAsMention() + ". Temos um vencedor!\n\n" + duel.getB2().getName() + " ganhou **" + pointWin + "** pontos de combate!").queue();
             Beyblade bl = Database.getBeyblade(duel.getP1().getId());
             assert bl != null;
             bl.addLoses();
