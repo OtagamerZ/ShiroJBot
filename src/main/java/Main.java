@@ -181,7 +181,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         if (duels.containsKey(event.getMessageIdLong())) {
             accDuels.add(duels.get(event.getMessageIdLong()));
             duels.remove(event.getMessageIdLong());
-            event.getChannel().sendMessage("O duelo começou!\nUsem `atacar` para atacar, `defender` para defender ou `especial` para tentar a sorte e causar 2x o dano.\n\n**O desafiante começa primeiro!**").queue();
+            event.getChannel().sendMessage("O duelo começou!\nUsem `atacar` para atacar, `defender` para defender ou `especial` para tentar utilizar seu poder especial de alinhamento.\n\n**O desafiante começa primeiro!**").queue();
         }
         if (event.getReactionEmote().getName().equals("\ud83d\udc4d")) {
             if (message.getReactions().get(0).getCount() >= 5) message.pin().queue();
