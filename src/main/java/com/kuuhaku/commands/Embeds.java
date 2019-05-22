@@ -41,8 +41,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 public class Embeds {
     public static MessageEmbed bugReport(MessageReceivedEvent message, String prefix) {
@@ -312,15 +312,17 @@ public class Embeds {
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
         BufferedImage image = ImageIO.read(con.getInputStream());
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         EmbedBuilder eb = new EmbedBuilder();
 
         assert image != null;
         eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
-        eb.setTitle(":pencil: Perfil de " + message.getGuild().getMemberById(m.getId().replace(message.getGuild().getId(), "")).getEffectiveName() + " | " + message.getGuild().getName());
-        eb.setThumbnail(message.getGuild().getMemberById(m.getId().replace(message.getGuild().getId(), "")).getUser().getAvatarUrl());
+        eb.setTitle(":pencil: Perfil de " + message.getMember().getEffectiveName() + " | " + message.getGuild().getName());
+        eb.setThumbnail(message.getAuthor().getAvatarUrl());
         eb.addField(":tada: Level: " + m.getLevel(), "Xp: " + m.getXp() + " | " + ((int) Math.pow(m.getLevel(), 2) * 100), true);
         eb.addField(":warning: Alertas:", Integer.toString(m.getWarns().length - 1), true);
+        eb.addField(":calendar_spiral: Membro desde:", df.format(message.getMember().getJoinDate()), true);
         if (m.getId().contains("421495229594730496")) {
             eb.addField(":beginner: Conquistas:", "**" + conqs + "**", true);
             eb.setFooter("Digite " + prefix + "conquistas para ver as conquistas que você completou.", "https://discordapp.com/assets/a3fc335f559f462df3e5d6cdbb9178e8.svg");
