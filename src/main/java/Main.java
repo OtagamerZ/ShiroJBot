@@ -32,7 +32,6 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
@@ -53,7 +52,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     private static JobDetail backup;
     private static Scheduler sched;
     private static boolean ready = false;
-    private static List<CustomAnswers> customAnswersList;
     private static Map<Long, DuelData> duels = new HashMap<>();
     private static List<DuelData> accDuels = new ArrayList<>();
     private static Map<String, Tags> tagsMap = new HashMap<>();
@@ -66,9 +64,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         jda.build();
         gcMap = Database.getGuildConfigs();
         memberMap = Database.getMembersData();
-        customAnswersList = Database.getCustomAnswers();
         tagsMap = Database.getTags();
-        if (customAnswersList == null) customAnswersList = new ArrayList<>();
         try {
             if (backup == null) {
                 backup = JobBuilder.newJob(Main.class).withIdentity("backup", "1").build();
@@ -103,7 +99,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         try {
             Database.sendAllGuildConfigs(gcMap.values());
             Database.sendAllMembersData(memberMap.values());
-            Database.sendAllCustomAnswers(customAnswersList);
             System.out.println("Guardar configurações no banco de dados...PRONTO!");
             bot.getPresence().setGame(Owner.getRandomGame(bot));
         } catch (Exception e) {
@@ -226,7 +221,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         try {
             Database.sendAllGuildConfigs(gcMap.values());
             Database.sendAllMembersData(memberMap.values());
-            Database.sendAllCustomAnswers(customAnswersList);
             System.out.println("Guardar configurações no banco de dados...PRONTO!");
             System.out.println("Desligando instância...");
             sched.shutdown();
@@ -282,21 +276,16 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     message.getChannel().sendMessage("As configurações deste servidor ja foram inicializadas!").queue();
                 }
                 if (gcMap.get(message.getGuild().getId()) != null && message.getTextChannel().canTalk()) {
-                    if (gcMap.get(message.getGuild().getId()).isAnyPlace()) {
                         try {
-                            List<CustomAnswers> ca = customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId()) && StringUtils.containsIgnoreCase(message.getMessage().getContentRaw(), a.getGatilho())).collect(Collectors.toList());
-                            int index = new Random().nextInt(ca.size());
-                            message.getChannel().sendTyping().queue(m -> message.getChannel().sendMessage(ca.get(index).getAnswer()).queueAfter(ca.get(index).getAnswer().length() * 25, TimeUnit.MILLISECONDS));
+                            List<CustomAnswers> ca = Database.getCustomAnswer(message.getMessage().getContentRaw());
+                            if (ca != null) {
+                                ca = ca.stream().filter(c -> c.getGuildID().equals(message.getGuild().getId())).collect(Collectors.toList());
+                                int index = new Random().nextInt(ca.size());
+                                List<CustomAnswers> finalCa = ca;
+                                message.getChannel().sendTyping().queue(m -> message.getChannel().sendMessage(finalCa.get(index).getAnswer()).queueAfter(finalCa.get(index).getAnswer().length() * 25, TimeUnit.MILLISECONDS));
+                            }
                         } catch (Exception ignore) {
                         }
-                    } else {
-                        try {
-                            List<CustomAnswers> ca = customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId()) && message.getMessage().getContentRaw().equalsIgnoreCase(a.getGatilho())).collect(Collectors.toList());
-                            int index = new Random().nextInt(ca.size());
-                            message.getChannel().sendTyping().queue(m -> message.getChannel().sendMessage(ca.get(index).getAnswer()).queueAfter(ca.get(index).getAnswer().length() * 25, TimeUnit.MILLISECONDS));
-                        } catch (Exception ignore) {
-                        }
-                    }
                     if (memberMap.get(message.getAuthor().getId() + message.getGuild().getId()) != null && !message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
                         boolean lvlUp;
                         lvlUp = memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).addXp();
@@ -574,9 +563,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                     message.getChannel().sendMessage("Agora irei avisar quando um membro passar de nível!").queue();
                                     gcMap.get(message.getGuild().getId()).setLvlNotif(true);
                                 }
-                            } else if (hasPrefix(message, "faleseachar")) {
-                                gcMap.get(message.getGuild().getId()).setAnyPlace(!gcMap.get(message.getGuild().getId()).isAnyPlace());
-                                message.getChannel().sendMessage(gcMap.get(message.getGuild().getId()).isAnyPlace() ? "Irei responder sempre que eu achar as palavras-chave, mesmo dentro de uma frase" : "Só irei responder se a mensagem for EXATAMENTE a palavra-chave!").queue();
                             } else if (hasPrefix(message, "ouçatodos")) {
                                 gcMap.get(message.getGuild().getId()).setAnyTell(!gcMap.get(message.getGuild().getId()).isAnyTell());
                                 message.getChannel().sendMessage(gcMap.get(message.getGuild().getId()).isAnyTell() ? "Irei ouvir novas respostas da comunidade agora!" : "Só irei ouvir novas respostas de um moderador!").queue();
@@ -594,18 +580,17 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                     ca.setGatilho(com.split(";")[0]);
                                     ca.setAnswer(com.split(";")[1]);
                                     message.getChannel().sendMessage("Quando alguém falar `" + com.split(";")[0] + "` irei responder `" + com.split(";")[1] + "`.").queue();
-                                    customAnswersList.add(ca);
+                                    Database.sendCustomAnswer(ca);
                                 } else {
                                     message.getChannel().sendMessage("Você não me passou argumentos suficientes!").queue();
                                 }
                             } else if (hasPrefix(message, "nãofale")) {
                                 if (cmd.length > 1) {
                                     try {
-                                        if (customAnswersList.stream().anyMatch(a -> a.getGuildID().equals(message.getGuild().getId()) && a.getId() == Long.parseLong(cmd[1]))) {
-                                            String answer = customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId()) && a.getId() == Long.parseLong(cmd[1])).collect(Collectors.toList()).get(0).getAnswer();
-                                            String trigger = customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId()) && a.getId() == Long.parseLong(cmd[1])).collect(Collectors.toList()).get(0).getGatilho();
-                                            message.getChannel().sendMessage("Não irei mais responder `" + answer + "` quando alguém dizer `" + trigger + "`.").queue();
-                                            customAnswersList.stream().filter(a -> a.getId() == Long.parseLong(cmd[1])).findFirst().ifPresent(CustomAnswers::setMarkDel);
+                                        if (Database.getCustomAnswerById(cmd[1]) != null) {
+                                            Database.deleteCustomAnswer(Database.getCustomAnswerById(cmd[1]));
+                                        } else {
+                                            message.getChannel().sendMessage("Esta resposta não existe!").queue();
                                         }
                                     } catch (NumberFormatException e) {
                                         message.getChannel().sendMessage("Você não me passou um ID válido!").queue();
@@ -615,7 +600,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                 }
                             } else if (hasPrefix(message, "falealista")) {
                                 if (cmd.length > 1)
-                                    Embeds.answerList(message, customAnswersList.stream().filter(a -> a.getGuildID().equals(message.getGuild().getId())).collect(Collectors.toList()));
+                                    Embeds.answerList(message, Objects.requireNonNull(Database.getAllCustomAnswers()).stream().filter(a -> a.getGuildID().equals(message.getGuild().getId())).collect(Collectors.toList()));
                                 else
                                     message.getChannel().sendMessage("Você precisa me dizer uma página (serão mostradas 5 respostas por página)!").queue();
                             }
