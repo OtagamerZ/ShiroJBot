@@ -37,7 +37,6 @@ import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
 import javax.security.auth.login.LoginException;
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.*;
@@ -176,6 +175,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
 
     @Override
     public void onMessageReactionAdd(MessageReactionAddEvent event) {
+        if (event.getUser().isBot()) return;
         User user = event.getUser();
         Message message = event.getChannel().getMessageById(event.getMessageId()).complete();
         List<User> ment = message.getMentionedUsers();
