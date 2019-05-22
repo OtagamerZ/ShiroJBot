@@ -19,7 +19,6 @@
 
 package com.kuuhaku.model;
 
-import netscape.javascript.JSObject;
 import org.json.JSONObject;
 
 import javax.persistence.Entity;
