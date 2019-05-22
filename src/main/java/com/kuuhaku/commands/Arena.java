@@ -197,7 +197,7 @@ public class Arena {
                 duel.setP1turn(false);
                 duel.setD1(false);
                 if (duel.getB2().getS() != null) duel.getB2().getS().setBear(false);
-                int damage = Math.round(duel.getB1().getStrength() * duel.getB1().getSpeed() / (duel.getB2().getStability() * getDefFac(duel.isD2(), duel.getB2())) * 50);
+                int damage = Math.round(duel.getB1().getStrength() * duel.getB1().getSpeed() / (duel.getB2().getStability() * getDefFac(duel.isD2(), duel.getB2())) * new Random().nextFloat() * 100);
                 duel.getB2().setLife(duel.getB2().getLife() - damage);
                 System.out.println(damage + " -> " + duel.getB2().getLife());
                 message.getChannel().sendMessage(duel.getB1().getName() + " ataca, agora é a vez de " + duel.getB2().getName()).queue();
@@ -205,7 +205,7 @@ public class Arena {
                 duel.setP1turn(true);
                 duel.setD2(false);
                 if (duel.getB1().getS() != null) duel.getB1().getS().setBear(false);
-                int damage = Math.round(duel.getB2().getStrength() * duel.getB2().getSpeed() / (duel.getB1().getStability() * getDefFac(duel.isD1(), duel.getB1())) * 50);
+                int damage = Math.round(duel.getB2().getStrength() * duel.getB2().getSpeed() / (duel.getB1().getStability() * getDefFac(duel.isD1(), duel.getB1())) * new Random().nextFloat() * 100);
                 duel.getB1().setLife(duel.getB1().getLife() - damage);
                 System.out.println(damage + " -> " + duel.getB1().getLife());
                 message.getChannel().sendMessage(duel.getB2().getName() + " ataca, agora é a vez de " + duel.getB1().getName()).queue();
@@ -230,7 +230,7 @@ public class Arena {
                         switch (duel.getB1().getSpecial()) {
                             case 11:
                                 if (chance > duel.getB1().getS().getDiff() - duel.getB1().getSpeed()) {
-                                    duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getStrength() * duel.getB1().getSpeed() / (duel.getB2().getStability() * getDefFac(duel.isD2(), duel.getB2())) * 50));
+                                    duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getStrength() * duel.getB1().getSpeed() / (duel.getB2().getStability() * getDefFac(duel.isD2(), duel.getB2())) * new Random().nextFloat() * 100));
                                     message.getChannel().sendMessage("O-O que?? " + duel.getB1().getName() + " desapareceu? Ah, lá está ela, com um movimento digno dos tigres ela executa o golpe especial " + duel.getB1().getS().getName() + "! (" + chance + " > " + duel.getB1().getS().getDiff() + ")").queue();
                                     duel.setS1(true);
                                     if (duel.getB2().getS() != null) duel.getB2().getS().setBear(false);
@@ -240,7 +240,7 @@ public class Arena {
                                 break;
                             case 12:
                                 if (chance > duel.getB1().getS().getDiff() - duel.getB1().getSpeed()) {
-                                    duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getSpeed() * 2 / (duel.getB2().getStability() * getDefFac(duel.isD2(), duel.getB2())) * 50));
+                                    duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getSpeed() * 2 / (duel.getB2().getStability() * getDefFac(duel.isD2(), duel.getB2())) * new Random().nextFloat() * 100));
                                     message.getChannel().sendMessage("Isso foi incrível!! " + duel.getB1().getName() + " executou com perfeição em " + duel.getB1().getS().getName() + " um dos golpes mais difíceis já conhecidos! (" + chance + " > " + duel.getB1().getS().getDiff() + ")").queue();
                                     duel.setP1turn(true);
                                     message.getChannel().sendMessage(duel.getB2().getName() + " está atordoada, será que teremos uma reviravolta aqui?").queue();
@@ -252,7 +252,7 @@ public class Arena {
                                 break;
                             case 21:
                                 if (chance > duel.getB1().getS().getDiff() - duel.getB1().getSpeed()) {
-                                    duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getStrength() * duel.getB2().getStability() / (duel.getB2().getStability() * getDefFac(duel.isD2(), duel.getB2())) * 50));
+                                    duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getStrength() * duel.getB2().getStability() / (duel.getB2().getStability() * getDefFac(duel.isD2(), duel.getB2())) * new Random().nextFloat() * 100));
                                     message.getChannel().sendMessage("O que foi isso!? " + duel.getB1().getName() + " lançou " + duel.getB1().getS().getName() + " ao ar, depois o lançou utilizando sua própria defesa! (" + chance + " > " + duel.getB1().getS().getDiff() + ")").queue();
                                     duel.setS1(true);
                                     if (duel.getB2().getS() != null) duel.getB2().getS().setBear(false);
@@ -262,7 +262,7 @@ public class Arena {
                                 break;
                             case 22:
                                 if (chance > duel.getB1().getS().getDiff() - duel.getB1().getSpeed()) {
-                                    duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getStrength() * duel.getB1().getStrength() / (duel.getB2().getStability() * getDefFac(duel.isD2(), duel.getB2())) * 150));
+                                    duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getStrength() * duel.getB1().getStrength() / (duel.getB2().getStability() * getDefFac(duel.isD2(), duel.getB2())) * new Random().nextFloat() * 300));
                                     message.getChannel().sendMessage("Não é possível!! Eu jamais acreditaria se alguém me dissesse que era possível executar este golpe, mas " + duel.getB1().getName() + " provou que é possivel!!! " + duel.getB1().getS().getName() + " mal consegue se manter em pé! (" + chance + " > " + duel.getB1().getS().getDiff() + ")").queue();
                                     duel.setS1(true);
                                     if (duel.getB2().getS() != null) duel.getB2().getS().setBear(false);
@@ -296,7 +296,7 @@ public class Arena {
                         switch (duel.getB2().getSpecial()) {
                             case 11:
                                 if (chance > duel.getB2().getS().getDiff() - duel.getB2().getSpeed()) {
-                                    duel.getB1().setLife(duel.getB1().getLife() - Math.round(duel.getB2().getStrength() * duel.getB2().getSpeed() / (duel.getB1().getStability() * getDefFac(duel.isD1(), duel.getB1())) * 50));
+                                    duel.getB1().setLife(duel.getB1().getLife() - Math.round(duel.getB2().getStrength() * duel.getB2().getSpeed() / (duel.getB1().getStability() * getDefFac(duel.isD1(), duel.getB1())) * new Random().nextFloat() * 100));
                                     message.getChannel().sendMessage("O-O que?? " + duel.getB2().getName() + " desapareceu? Ah, lá está ele, com um movimento digno dos tigres ele executa o golpe especial " + duel.getB2().getS().getName() + "! (" + chance + " > " + duel.getB2().getS().getDiff() + ")").queue();
                                     duel.setS2(true);
                                     if (duel.getB1().getS() != null) duel.getB1().getS().setBear(false);
@@ -306,7 +306,7 @@ public class Arena {
                                 break;
                             case 12:
                                 if (chance > duel.getB2().getS().getDiff() - duel.getB2().getSpeed()) {
-                                    duel.getB1().setLife(duel.getB1().getLife() - Math.round(duel.getB2().getSpeed() * 2 / (duel.getB1().getStability() * getDefFac(duel.isD1(), duel.getB1())) * 50));
+                                    duel.getB1().setLife(duel.getB1().getLife() - Math.round(duel.getB2().getSpeed() * 2 / (duel.getB1().getStability() * getDefFac(duel.isD1(), duel.getB1())) * new Random().nextFloat() * 100));
                                     message.getChannel().sendMessage("Isso foi incrível!! " + duel.getB2().getName() + " executou com perfeição em " + duel.getB2().getS().getName() + " um dos golpes mais difíceis já conhecidos! (" + chance + " > " + duel.getB2().getS().getDiff() + ")").queue();
                                     duel.setP1turn(false);
                                     message.getChannel().sendMessage(duel.getB1().getName() + " está atordoada, será que teremos uma reviravolta aqui?").queue();
@@ -318,7 +318,7 @@ public class Arena {
                                 break;
                             case 21:
                                 if (chance > duel.getB2().getS().getDiff() - duel.getB2().getSpeed()) {
-                                    duel.getB1().setLife(duel.getB1().getLife() - Math.round(duel.getB2().getStrength() * duel.getB1().getStability() / (duel.getB1().getStability() * getDefFac(duel.isD1(), duel.getB1())) * 50));
+                                    duel.getB1().setLife(duel.getB1().getLife() - Math.round(duel.getB2().getStrength() * duel.getB1().getStability() / (duel.getB1().getStability() * getDefFac(duel.isD1(), duel.getB1())) * new Random().nextFloat() * 100));
                                     message.getChannel().sendMessage("O que foi isso!? " + duel.getB2().getName() + " lançou " + duel.getB2().getS().getName() + " ao ar, depois o lançou utilizando sua própria defesa! (" + chance + " > " + duel.getB2().getS().getDiff() + ")").queue();
                                     duel.setS2(true);
                                     if (duel.getB1().getS() != null) duel.getB1().getS().setBear(false);
@@ -328,7 +328,7 @@ public class Arena {
                                 break;
                             case 22:
                                 if (chance > duel.getB2().getS().getDiff() - duel.getB2().getSpeed()) {
-                                    duel.getB1().setLife(duel.getB1().getLife() - Math.round(duel.getB2().getStrength() * duel.getB2().getStrength() / (duel.getB1().getStability() * getDefFac(duel.isD1(), duel.getB1())) * 150));
+                                    duel.getB1().setLife(duel.getB1().getLife() - Math.round(duel.getB2().getStrength() * duel.getB2().getStrength() / (duel.getB1().getStability() * getDefFac(duel.isD1(), duel.getB1())) * new Random().nextFloat() * 300));
                                     message.getChannel().sendMessage("Não é possível!! Eu jamais acreditaria se alguém me dissesse que era possível executar este golpe, mas " + duel.getB2().getName() + " provou que é possivel!!! " + duel.getB2().getS().getName() + " mal consegue se manter em pé! (" + chance + " > " + duel.getB2().getS().getDiff() + ")").queue();
                                     duel.setS2(true);
                                     if (duel.getB1().getS() != null) duel.getB1().getS().setBear(false);
