@@ -218,7 +218,7 @@ public class Arena {
             }
         }
         if (duel.getB2().getLife() <= 0) {
-            int pointWin = new Random().nextInt(Math.round(duel.getB2().getStrength() + duel.getB2().getSpeed() + duel.getB2().getStability() + Math.round(duel.getB2().getWins() / duel.getB2().getLoses())));
+            int pointWin = new Random().nextInt(Math.round(duel.getB2().getStrength() + duel.getB2().getSpeed() + duel.getB2().getStability() + (float) duel.getB1().getWins() / (duel.getB1().getLoses() == 0 ? 1 : duel.getB1().getLoses())));
             message.getChannel().sendMessage(duel.getP1().getAsMention() + " triunfou sobre " + duel.getP2().getAsMention() + ". Temos um vencedor!\n\n" + duel.getP1().getAsMention() + " ganhou **" + pointWin + "** pontos de combate!").queue();
             Beyblade bl = Database.getBeyblade(duel.getP2().getId());
             assert bl != null;
@@ -232,7 +232,7 @@ public class Arena {
             Database.sendBeyblade(bb);
             accDuels.removeIf(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor());
         } else if (duel.getB1().getLife() <= 0) {
-            int pointWin = new Random().nextInt(Math.round(duel.getB1().getStrength() + duel.getB1().getSpeed() + duel.getB1().getStability() + Math.round(duel.getB1().getWins() / duel.getB1().getLoses())));
+            int pointWin = new Random().nextInt(Math.round(duel.getB1().getStrength() + duel.getB1().getSpeed() + duel.getB1().getStability() + (float) duel.getB1().getWins() / (duel.getB1().getLoses() == 0 ? 1 : duel.getB1().getLoses())));
             message.getChannel().sendMessage(duel.getP2().getAsMention() + " triunfou sobre " + duel.getP1().getAsMention() + ". Temos um vencedor!\n\n" + duel.getP2().getAsMention() + " ganhou **" + pointWin + "** pontos de combate!").queue();
             Beyblade bl = Database.getBeyblade(duel.getP1().getId());
             assert bl != null;
