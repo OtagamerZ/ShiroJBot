@@ -37,6 +37,7 @@ import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
 import javax.security.auth.login.LoginException;
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.*;
@@ -493,9 +494,11 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                 if (message.getMessage().getMentionedUsers() != null) {
                                     if (tagsMap.containsKey(message.getMessage().getMentionedUsers().get(0).getId())) {
                                         tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setStaff();
+                                        Database.sendAllTags(tagsMap.values());
                                     } else {
                                         tagsMap.put(message.getMessage().getMentionedUsers().get(0).getId(), new Tags());
                                         tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setStaff();
+                                        Database.sendAllTags(tagsMap.values());
                                     }
                                 } else {
                                     message.getChannel().sendMessage("Nii-chan bobo, você precisa mencionar um usuário!").queue();
@@ -504,9 +507,11 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                 if (message.getMessage().getMentionedUsers() != null) {
                                     if (tagsMap.containsKey(message.getMessage().getMentionedUsers().get(0).getId())) {
                                         tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setPartner();
+                                        Database.sendAllTags(tagsMap.values());
                                     } else {
                                         tagsMap.put(message.getMessage().getMentionedUsers().get(0).getId(), new Tags());
                                         tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setPartner();
+                                        Database.sendAllTags(tagsMap.values());
                                     }
                                 } else {
                                     message.getChannel().sendMessage("Nii-chan bobo, você precisa mencionar um usuário!").queue();
@@ -515,9 +520,11 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                 if (message.getMessage().getMentionedUsers() != null) {
                                     if (tagsMap.containsKey(message.getMessage().getMentionedUsers().get(0).getId())) {
                                         tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setToxic();
+                                        Database.sendAllTags(tagsMap.values());
                                     } else {
                                         tagsMap.put(message.getMessage().getMentionedUsers().get(0).getId(), new Tags());
                                         tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setToxic();
+                                        Database.sendAllTags(tagsMap.values());
                                     }
                                 } else {
                                     message.getChannel().sendMessage("Nii-chan bobo, você precisa mencionar um usuário!").queue();
