@@ -25,7 +25,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
-import javax.swing.text.html.HTML;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
