@@ -19,8 +19,6 @@
 
 package com.kuuhaku.model;
 
-import java.util.Random;
-
 public class Special {
     private String name, type, description;
     private int diff, move;
@@ -73,41 +71,6 @@ public class Special {
 
     public void setDelayed() {
         this.delayed = true;
-    }
-}
-
-class Result extends Special {
-    private boolean miss;
-    private int damage;
-    private float fac;
-    private Random chance = new Random();
-    public Result calcResult(Special s, Beyblade bb, Beyblade op) {
-
-        if (chance.nextInt(100) > s.getDiff() - bb.getSpeed()) {
-            switch (s.getType()) {
-                case "VORTEX":
-
-                    break;
-                case "TITAN":
-
-                    break;
-                case "MOUNTAIN":
-                    switch (s.getMove()) {
-                        case 1:
-                            fac = bb.getStability() / 10.0f;
-
-                            break;
-                        case 2:
-
-                            break;
-                    }
-                    break;
-            }
-        } else {
-            miss = true;
-            return this;
-        }
-        return null;
     }
 }
 
