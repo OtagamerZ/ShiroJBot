@@ -84,10 +84,13 @@ public class Arena {
                 switch (cmd[1]) {
                     case "tigre":
                         bb.setSpecial(10 + new Random().nextInt(2));
+                        bb.takePoints((bb.getS() == null ? 150 : 300));
                     case "dragão":
                         bb.setSpecial(20 + new Random().nextInt(2));
+                        bb.takePoints((bb.getS() == null ? 150 : 300));
                     case "urso":
                         bb.setSpecial(30 + new Random().nextInt(2));
+                        bb.takePoints((bb.getS() == null ? 150 : 300));
                 }
                 message.getChannel().sendMessage("Seu alinhamento foi trocado para **" + bb.getS().getType() + "**, e o especial concedido a você foi: " + bb.getS().getName()).queue();
             } else {
