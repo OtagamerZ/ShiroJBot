@@ -496,6 +496,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                         tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setStaff();
                                         Database.sendAllTags(tagsMap.values());
                                     } else {
+                                        tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setId(message.getMessage().getMentionedUsers().get(0).getId());
                                         tagsMap.put(message.getMessage().getMentionedUsers().get(0).getId(), new Tags());
                                         tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setStaff();
                                         Database.sendAllTags(tagsMap.values());
@@ -509,6 +510,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                         tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setPartner();
                                         Database.sendAllTags(tagsMap.values());
                                     } else {
+                                        tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setId(message.getMessage().getMentionedUsers().get(0).getId());
                                         tagsMap.put(message.getMessage().getMentionedUsers().get(0).getId(), new Tags());
                                         tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setPartner();
                                         Database.sendAllTags(tagsMap.values());
@@ -522,6 +524,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                         tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setToxic();
                                         Database.sendAllTags(tagsMap.values());
                                     } else {
+                                        tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setId(message.getMessage().getMentionedUsers().get(0).getId());
                                         tagsMap.put(message.getMessage().getMentionedUsers().get(0).getId(), new Tags());
                                         tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setToxic();
                                         Database.sendAllTags(tagsMap.values());
