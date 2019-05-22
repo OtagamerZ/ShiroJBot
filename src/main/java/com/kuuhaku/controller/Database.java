@@ -177,6 +177,7 @@ public class Database {
             bb = (Beyblade) q.getSingleResult();
             em.close();
 
+            bb.setS(Special.getSpecial(bb.getSpecial()));
             return bb;
         } catch (Exception e) {
             System.out.println("Erro ao recuperar beyblade: " + e);
