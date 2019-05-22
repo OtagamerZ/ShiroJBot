@@ -78,6 +78,26 @@ public class Arena {
         }
     }
 
+    public static void chooseHouse(MessageReceivedEvent message, String[] cmd, Beyblade bb) {
+        if (bb != null) {
+            if (bb.getPoints() < (bb.getS() == null ? 150 : 300)) {
+                switch (cmd[1]) {
+                    case "tigre":
+                        bb.setSpecial(10 + new Random().nextInt(2));
+                    case "dragão":
+                        bb.setSpecial(20 + new Random().nextInt(2));
+                    case "urso":
+                        bb.setSpecial(30 + new Random().nextInt(2));
+                }
+                message.getChannel().sendMessage("Seu alinhamento foi trocado para **" + bb.getS().getType() + "**, e o especial concedido a você foi: " + bb.getS().getName()).queue();
+            } else {
+                message.getChannel().sendMessage("Você não possui pontos de combate suficiente!").queue();
+            }
+        } else {
+            message.getChannel().sendMessage("Você não possui uma beyblade!").queue();
+        }
+    }
+
     public static void upgrade(MessageReceivedEvent message, String[] cmd) {
         Beyblade bb = Database.getBeyblade(message.getAuthor().getId());
         switch (cmd[1]) {
@@ -131,7 +151,8 @@ public class Arena {
                     message.getChannel().sendMessage("Vida aumentada com sucesso!").queue();
                 }
                 break;
-                default: message.getChannel().sendMessage("O atributo especificado não é válido!").queue();
+            default:
+                message.getChannel().sendMessage("O atributo especificado não é válido!").queue();
         }
     }
 
