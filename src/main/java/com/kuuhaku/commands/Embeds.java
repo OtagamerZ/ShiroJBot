@@ -74,7 +74,6 @@ public class Embeds {
                 prefix + "fale [palavra-chave;resposta] - Configura uma nova resposta pra mim!\n\n" +
                 prefix + "nãofale [ID] - Remove uma de minhas respostas.\n\n" +
                 prefix + "falealista [página] - Vê minhas respostas.\n\n" +
-                prefix + "faleseachar - Muda entre procurar a palavra-chave dentro de uma frase ou não.\n\n" +
                 prefix + "ouçatodos - Muda entre permitir novas respostas da comunidade ou não.```\n";
     }
 
