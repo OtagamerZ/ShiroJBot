@@ -30,7 +30,8 @@ public class Beyblade {
     private String color = "#ffffff";
     private float speed = 1.0f, strength = 1.0f, stability = 1.5f;
     private int life = 100, wins = 0, loses = 0, points = 0;
-    private String special = "";
+    private int special;
+    transient private Special s;
 
     public String getId() {
         return id;
@@ -124,11 +125,19 @@ public class Beyblade {
         return (float) wins / (loses == 0 ? 1 : loses);
     }
 
-    public String[] getSpecial() {
-        return special.split(",");
+    public Special getS() {
+        return s;
     }
 
-    public void setSpecial(String[] s) {
-        this.special = String.join(",", s);
+    public void setS(Special s) {
+        this.s = s;
+    }
+
+    public int getSpecial() {
+        return special;
+    }
+
+    public void setSpecial(int special) {
+        this.special = special;
     }
 }
