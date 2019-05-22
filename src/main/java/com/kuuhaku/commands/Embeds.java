@@ -519,7 +519,7 @@ public class Embeds {
     public static void shopEmbed(MessageReceivedEvent message, Beyblade bb, String prefixo) {
         EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setAuthor("Saldo de " + message.getAuthor().getName() + ": " + bb.getPoints() + " pontos de combate", "https://i.imgur.com/H1KqxRc.png");
+        eb.setAuthor("Saldo de " + message.getAuthor().getName() + ": " + bb.getPoints() + " pontos de combate", null, "https://i.imgur.com/H1KqxRc.png");
         eb.setColor(Color.decode(bb.getColor()));
         eb.setTitle("Loja de melhorias");
         eb.setThumbnail("https://i.pinimg.com/originals/d3/34/db/d334db51554b3c78fbb65d6cf5e0dcef.png");
