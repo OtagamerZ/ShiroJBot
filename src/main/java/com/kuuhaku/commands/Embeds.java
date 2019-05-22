@@ -122,7 +122,7 @@ public class Embeds {
                 prefix + "bduelar [membro] - Inicia um duelo com alguém.\n\n" +
                 "(Em duelo) atacar - Enquanto em um duelo, use para atacar.\n\n" +
                 "(Em duelo) defender - Enquanto em um duelo, use para defender o próximo ataque.\n\n" +
-                "(Em duelo) especial - Enquanto em um duelo, use para tentar utilizar um ataque que causa 2x o dano (chance depende da velocidade).```\n" +
+                "(Em duelo) especial - Enquanto em um duelo, use para tentar utilizar seu poder especial de alinhamento (chance depende da velocidade e da dificuldade do poder).```\n" +
 
                 ":gem: **OtagamerZ**\n```" +
                 prefix + "conquistas - Mosta as conquistas que você completou.\n\n" +
