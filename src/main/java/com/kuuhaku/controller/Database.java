@@ -103,18 +103,57 @@ public class Database {
         }
     }
 
-    public static void sendAllCustomAnswers(Collection<CustomAnswers> ca) {
+    public static void sendCustomAnswer(CustomAnswers ca) {
         EntityManager em = getEntityManager();
 
         em.getTransaction().begin();
-        ca.forEach(em::merge);
+        em.merge(ca);
         em.getTransaction().commit();
         em.close();
-        System.out.println("Respostas salvas com sucesso!");
+        System.out.println("Resposta salva com sucesso!");
     }
 
     @SuppressWarnings("unchecked")
-    public static List<CustomAnswers> getCustomAnswers() {
+    public static List<CustomAnswers> getCustomAnswer(String t) {
+        List<CustomAnswers> ca;
+
+        try {
+            EntityManager em = getEntityManager();
+            Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE gatilho LIKE ?1", CustomAnswers.class);
+            q.setParameter(1, t);
+            ca = q.getResultList();
+            System.out.println(ca);
+            em.close();
+
+            return ca;
+        } catch (Exception e) {
+            System.out.println("Erro ao recuperar resposta: " + e);
+            return null;
+        }
+    }
+
+    public static CustomAnswers getCustomAnswerById(String t) {
+        CustomAnswers ca;
+        EntityManager em = getEntityManager();
+        Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE guildID LIKE ?1", CustomAnswers.class);
+        q.setParameter(1, t);
+        ca = (CustomAnswers) q.getSingleResult();
+        System.out.println(ca);
+        em.close();
+
+        return ca;
+    }
+
+    public static void deleteCustomAnswer(CustomAnswers ca) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        em.remove(ca);
+        em.getTransaction().commit();
+        em.close();
+    }
+
+    @SuppressWarnings("unchecked")
+    public static List<CustomAnswers> getAllCustomAnswers() {
         List<CustomAnswers> ca;
 
         try {
