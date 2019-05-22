@@ -82,6 +82,7 @@ class Result extends Special {
     private float fac;
     private Random chance = new Random();
     public Result calcResult(Special s, Beyblade bb, Beyblade op) {
+
         if (chance.nextInt(100) > s.getDiff() - bb.getSpeed()) {
             switch (s.getType()) {
                 case "VORTEX":

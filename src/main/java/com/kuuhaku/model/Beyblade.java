@@ -19,11 +19,8 @@
 
 package com.kuuhaku.model;
 
-import org.json.JSONObject;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.util.Map;
 
 @Entity
 public class Beyblade {
@@ -33,7 +30,7 @@ public class Beyblade {
     private String color = "#ffffff";
     private float speed = 1.0f, strength = 1.0f, stability = 1.5f;
     private int life = 100, wins = 0, loses = 0, points = 0;
-    private String special = "{}";
+    private String special = "";
 
     public String getId() {
         return id;
@@ -127,11 +124,11 @@ public class Beyblade {
         return (float) wins / (loses == 0 ? 1 : loses);
     }
 
-    public Map<String, Object> getSpecial() {
-        return new JSONObject(special).toMap();
+    public String[] getSpecial() {
+        return special.split(",");
     }
 
-    public void setSpecial(Map<String, Integer> s) {
-        this.special = s.toString();
+    public void setSpecial(String[] s) {
+        this.special = String.join(",", s);
     }
 }
