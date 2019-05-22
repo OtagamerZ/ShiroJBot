@@ -206,11 +206,16 @@ public class Arena {
                 duel.setP1turn(false);
                 int chance = new Random().nextInt(100);
                 duel.setD1(false);
-                if (chance > (71 - Math.round(duel.getB1().getSpeed()))) {
-                    duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getStrength() * duel.getB1().getSpeed() / (duel.getB1().getStrength() + duel.getB2().getStability()) * (new Random().nextInt(Math.round(100 / (duel.isD2() ? duel.getB2().getStability() : 1)))) * 2));
-                    message.getChannel().sendMessage("Em uma manobra espetacular, " + duel.getB1().getName() + " acerta um golpe especial e causa o dobro do dano comum!! (" + chance + ")").queue();
-                } else
-                    message.getChannel().sendMessage("Você errou o especial e perdeu o turno! (" + chance + " < " + (71 - Math.round(duel.getB1().getSpeed())) + ")").queue();
+                switch (duel.getB1().getSpecial()) {
+                    case 11:
+                        if (chance > duel.getB1().getS().getDiff() - duel.getB1().getSpeed()) {
+                            duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getStrength() * duel.getB1().getSpeed() / (duel.getB2().getStability() * getDefFac(duel.isD2(), duel.getB2()))));
+                            message.getChannel().sendMessage("O-O que?? " + duel.getB1().getName() + " desapareceu? Ah, lá está ela, com um movimento digno dos tigres ela executa o golpe especial " + duel.getB1().getS().getName() + "! (" + chance + ")").queue();
+                        } else {
+                            message.getChannel().sendMessage("Quase! " + duel.getB1().getName() + " tenta executar um golpe especial mas falha! (" + chance + " < " + (duel.getB1().getS().getDiff() - duel.getB1().getSpeed()) + ")").queue();
+                        }
+                        break;
+                }
             } else if (!player1Turn && message.getAuthor() == duel.getP2()) {
                 duel.setP1turn(true);
                 int chance = new Random().nextInt(100);
@@ -287,6 +292,22 @@ public class Arena {
                 m.getB1().setLife(duel.getB1().getLife());
                 m.getB2().setLife(duel.getB2().getLife());
             });
+        }
+    }
+
+    private static float getDefFac(boolean defending, Beyblade b) {
+        if (defending) {
+            if (b.getS() == null) {
+                return b.getStability();
+            } else {
+                if (b.getS().isBear()) {
+                    return 2.0f + (b.getStability() / 2);
+                } else {
+                    return b.getStability();
+                }
+            }
+        } else {
+            return 1.0f;
         }
     }
 }
