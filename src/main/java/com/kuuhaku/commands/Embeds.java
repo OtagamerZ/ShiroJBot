@@ -483,7 +483,10 @@ public class Embeds {
         eb.setAuthor("Beyblade de " + message.getAuthor().getName(), message.getAuthor().getAvatarUrl());
         eb.setTitle(bb.getName());
         eb.setColor(Color.decode(bb.getColor()));
-        eb.setThumbnail("https://www.beybladetr.com/img/BeybladeLogolar/BeyIcon.png");
+        if (bb.getS() == null) eb.setThumbnail("https://www.beybladetr.com/img/BeybladeLogolar/BeyIcon.png");
+        else if (bb.getS().getType().equals("TIGER")) eb.setThumbnail("https://i.imgur.com/fLZPBP8.png");
+        else if (bb.getS().getType().equals("DRAGON")) eb.setThumbnail("https://i.imgur.com/g2L0cfy.png");
+        else if (bb.getS().getType().equals("BEAR")) eb.setThumbnail("https://i.imgur.com/MG789l8.png");
         eb.addField("Velocidade:", Float.toString(bb.getSpeed()), true);
         eb.addField("Força:", Float.toString(bb.getStrength()), true);
         eb.addField("Estabilidade:", Float.toString(bb.getStability()), true);

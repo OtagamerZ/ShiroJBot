@@ -90,7 +90,7 @@ class SpeedType extends Special {
         SpeedType s = new SpeedType();
         s.setName("Tigres gêmeos: Relâmpago dourado");
         s.setDescription("Acelera a Beyblade a velocidades extremas, criando uma ilusão dela e avançando em direção ao oponente, causando um alto dano baseado em sua velocidade.");
-        s.setType("VORTEX");
+        s.setType("TIGER");
         s.setDiff(55);
         s.setMove(1);
 
@@ -101,7 +101,7 @@ class SpeedType extends Special {
         SpeedType s = new SpeedType();
         s.setName("Tigres gêmeos: Açoite do tigre");
         s.setDescription("Move sua Beyblade em direção ao oponente, mas muda de rota repentinamente, fazendo com que uma onda de choque acerte o inimigo, possivelmente atordoando-o.");
-        s.setType("VORTEX");
+        s.setType("TIGER");
         s.setDiff(70);
         s.setMove(2);
 
@@ -114,7 +114,7 @@ class PowerType extends Special {
         PowerType s = new PowerType();
         s.setName("Dragão rúnico: Impacto meteoro");
         s.setDescription("Arremessa o oponente para o alto, e utilizando sua própria defesa, impacta-o no chão causando um grande dano.");
-        s.setType("TITAN");
+        s.setType("DRAGON");
         s.setDiff(75);
         s.setMove(1);
 
@@ -125,7 +125,7 @@ class PowerType extends Special {
         PowerType s = new PowerType();
         s.setName("Dragão rúnico: Avanço escaldante");
         s.setDescription("Concentra o poder do dragão na borda de sua Beyblade, fazendo com que seu próximo ataque cause 3x mais dano.");
-        s.setType("TITAN");
+        s.setType("DRAGON");
         s.setDiff(85);
         s.setMove(2);
 
@@ -138,7 +138,7 @@ class DefenseType extends Special {
         DefenseType s = new DefenseType();
         s.setName("Urso guardião: Aura desarmante");
         s.setDescription("Gera uma aura em torno de sua Beyblade, fazendo com que o próximo ataque de seu oponente cause metade do dano.");
-        s.setType("MOUNTAIN");
+        s.setType("BEAR");
         s.setDiff(50);
         s.setMove(1);
         s.setDelayed();
@@ -150,7 +150,7 @@ class DefenseType extends Special {
         DefenseType s = new DefenseType();
         s.setName("Urso guardião: Armadura de espinhos");
         s.setDescription("Cria espinhos de aço em sua Beyblade, refletindo uma porcentagem do dano baseada em sua defesa.");
-        s.setType("MOUNTAIN");
+        s.setType("BEAR");
         s.setDiff(0);
         s.setMove(2);
         s.setDelayed();
