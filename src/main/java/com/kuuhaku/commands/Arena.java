@@ -262,7 +262,7 @@ public class Arena {
                                 break;
                             case 22:
                                 if (chance > duel.getB1().getS().getDiff() - duel.getB1().getSpeed()) {
-                                    duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getStrength() * duel.getB1().getStrength() / (duel.getB2().getStability() * getDefFac(duel.isD2(), duel.getB2())) * 300));
+                                    duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getStrength() * duel.getB1().getStrength() / (duel.getB2().getStability() * getDefFac(duel.isD2(), duel.getB2())) * 150));
                                     message.getChannel().sendMessage("Não é possível!! Eu jamais acreditaria se alguém me dissesse que era possível executar este golpe, mas " + duel.getB1().getName() + " provou que é possivel!!! " + duel.getB1().getS().getName() + " mal consegue se manter em pé! (" + chance + " > " + duel.getB1().getS().getDiff() + ")").queue();
                                     duel.setS1(true);
                                     if (duel.getB2().getS() != null) duel.getB2().getS().setBear(false);
@@ -328,7 +328,7 @@ public class Arena {
                                 break;
                             case 22:
                                 if (chance > duel.getB2().getS().getDiff() - duel.getB2().getSpeed()) {
-                                    duel.getB1().setLife(duel.getB1().getLife() - Math.round(duel.getB2().getStrength() * duel.getB2().getStrength() / (duel.getB1().getStability() * getDefFac(duel.isD1(), duel.getB1())) * 300));
+                                    duel.getB1().setLife(duel.getB1().getLife() - Math.round(duel.getB2().getStrength() * duel.getB2().getStrength() / (duel.getB1().getStability() * getDefFac(duel.isD1(), duel.getB1())) * 150));
                                     message.getChannel().sendMessage("Não é possível!! Eu jamais acreditaria se alguém me dissesse que era possível executar este golpe, mas " + duel.getB2().getName() + " provou que é possivel!!! " + duel.getB2().getS().getName() + " mal consegue se manter em pé! (" + chance + " > " + duel.getB2().getS().getDiff() + ")").queue();
                                     duel.setS2(true);
                                     if (duel.getB1().getS() != null) duel.getB1().getS().setBear(false);
