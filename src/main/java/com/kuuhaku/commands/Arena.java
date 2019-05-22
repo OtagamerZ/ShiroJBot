@@ -162,9 +162,10 @@ public class Arena {
     public static void duel(MessageReceivedEvent message, Map<Long, DuelData> duels) {
         if (message.getMessage().getMentionedUsers().size() > 0) {
             if (Database.getBeyblade(message.getMessage().getMentionedUsers().get(0).getId()) != null) {
-                message.getChannel().sendMessage(message.getMessage().getMentionedMembers().get(0).getAsMention() + ", você foi desafiado a um duelo de beyblades por " + message.getAuthor().getAsMention() + ". Se deseja aceitar, clique no botão abaixo:").queue(m -> {
+                DuelData dd = new DuelData(message.getAuthor(), message.getMessage().getMentionedUsers().get(0));
+                if (duels.containsValue(dd)) message.getChannel().sendMessage("Você já possui um duelo pendente!").queue();
+                else message.getChannel().sendMessage(message.getMessage().getMentionedMembers().get(0).getAsMention() + ", você foi desafiado a um duelo de beyblades por " + message.getAuthor().getAsMention() + ". Se deseja aceitar, clique no botão abaixo:").queue(m -> {
                             m.addReaction("\u21aa").queue();
-                            DuelData dd = new DuelData(message.getAuthor(), message.getMessage().getMentionedUsers().get(0));
                             duels.put(m.getIdLong(), dd);
                         }
                 );
