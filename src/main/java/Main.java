@@ -290,7 +290,11 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         boolean lvlUp;
                         lvlUp = memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).addXp();
                         if (lvlUp) {
-                            TextChannel tc = message.getGuild().getTextChannelById(gcMap.get(message.getGuild().getId()).getCanallvl());
+                            TextChannel tc = null;
+                            try {
+                                tc = message.getGuild().getTextChannelById(gcMap.get(message.getGuild().getId()).getCanallvl());
+                            } catch (IllegalArgumentException ignore){
+                            }
                             if (tc == null) {
                                 if (gcMap.get(message.getGuild().getId()).getLvlNotif())
                                     message.getChannel().sendMessage(message.getAuthor().getAsMention() + " subiu para o level " + memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).getLevel() + ". GGWP!! :tada:").queue();
