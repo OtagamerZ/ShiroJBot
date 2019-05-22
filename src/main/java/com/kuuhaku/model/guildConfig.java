@@ -41,7 +41,6 @@ public class guildConfig {
     private String cargoslvl = "{}";
     private String lvlNotif = "true";
     private String cargoNew = "{}";
-    private boolean anyPlace = false;
     private boolean anyTell = false;
 
     public guildConfig() {
@@ -134,14 +133,6 @@ public class guildConfig {
 
     public void setCanalsug(String canalsug) {
         this.canalsug = canalsug;
-    }
-
-    public boolean isAnyPlace() {
-        return anyPlace;
-    }
-
-    public void setAnyPlace(boolean anyPlace) {
-        this.anyPlace = anyPlace;
     }
 
     public boolean isAnyTell() {
