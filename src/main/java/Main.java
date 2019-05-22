@@ -276,16 +276,16 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     message.getChannel().sendMessage("As configurações deste servidor ja foram inicializadas!").queue();
                 }
                 if (gcMap.get(message.getGuild().getId()) != null && message.getTextChannel().canTalk()) {
-                        try {
-                            List<CustomAnswers> ca = Database.getCustomAnswer(message.getMessage().getContentRaw());
-                            if (ca != null) {
-                                ca = ca.stream().filter(c -> c.getGuildID().equals(message.getGuild().getId())).collect(Collectors.toList());
-                                int index = new Random().nextInt(ca.size());
-                                List<CustomAnswers> finalCa = ca;
-                                message.getChannel().sendTyping().queue(m -> message.getChannel().sendMessage(finalCa.get(index).getAnswer()).queueAfter(finalCa.get(index).getAnswer().length() * 25, TimeUnit.MILLISECONDS));
-                            }
-                        } catch (Exception ignore) {
+                    try {
+                        List<CustomAnswers> ca = Database.getCustomAnswer(message.getMessage().getContentRaw());
+                        if (ca != null) {
+                            ca = ca.stream().filter(c -> c.getGuildID().equals(message.getGuild().getId())).collect(Collectors.toList());
+                            int index = new Random().nextInt(ca.size());
+                            List<CustomAnswers> finalCa = ca;
+                            message.getChannel().sendTyping().queue(m -> message.getChannel().sendMessage(finalCa.get(index).getAnswer()).queueAfter(finalCa.get(index).getAnswer().length() * 25, TimeUnit.MILLISECONDS));
                         }
+                    } catch (Exception ignore) {
+                    }
                     if (memberMap.get(message.getAuthor().getId() + message.getGuild().getId()) != null && !message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
                         boolean lvlUp;
                         lvlUp = memberMap.get(message.getAuthor().getId() + message.getGuild().getId()).addXp();
@@ -293,7 +293,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             TextChannel tc = null;
                             try {
                                 tc = message.getGuild().getTextChannelById(gcMap.get(message.getGuild().getId()).getCanallvl());
-                            } catch (IllegalArgumentException ignore){
+                            } catch (IllegalArgumentException ignore) {
                             }
                             if (tc == null) {
                                 if (gcMap.get(message.getGuild().getId()).getLvlNotif())
@@ -633,6 +633,17 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             }
                         } else if (hasPrefix(message, "bshop")) {
                             Embeds.shopEmbed(message, Objects.requireNonNull(Database.getBeyblade(message.getAuthor().getId())), gcMap.get(message.getGuild().getId()).getPrefix());
+                        } else if (hasPrefix(message, "balinhamento")) {
+                            if (cmd.length > 1) {
+                                Arena.chooseHouse(message, cmd, Database.getBeyblade(message.getAuthor().getId()));
+                            } else {
+                                message.getChannel().sendMessage("Alinhamento é o que define seu estilo de combate:\nTigres são focados em uma velocidades extrema.\nDragões são focados em um poder incomparável.\nUrsos são focados em uma defesa impenetrável.\n\n" +
+                                        "Cada alinhamento possui especiais diferentes, que poderão virar um duelo, a primeira vez que você escolher um alinhamento custará 150 pontos de combate. " +
+                                        "Após, qualquer troca de alinhamento custará 300 pontos de combate.\n\n" +
+                                        "Para escolher tigre, digite " + gcMap.get(message.getGuild().getId()).getPrefix() + "balinhamento tigre" +
+                                        "Para escolher dragão, digite " + gcMap.get(message.getGuild().getId()).getPrefix() + "balinhamento dragão" +
+                                        "Para escolher urso, digite " + gcMap.get(message.getGuild().getId()).getPrefix() + "balinhamento urso").queue();
+                            }
                         }
                     }
                 } else if (message.getTextChannel().canTalk()) {
