@@ -117,6 +117,8 @@ public class Embeds {
                 prefix + "bcor [#rrggbb] - Muda a cor de sua Beyblade, a cor deve estar em hexadecimal.\n\n" +
                 prefix + "bshop - Mostra o menu do shop de melhorias.\n\n" +
                 prefix + "bmelhorar [atributo] - Compra uma melhoria para o atributo especificado.\n\n" +
+                prefix + "balinhamento - Vê os alinhamentos disponíveis para compra.\n\n" +
+                prefix + "bespecial - Mostra informações sobre seu poder especial, caso possua um alinhamento.\n\n" +
                 prefix + "bduelar [membro] - Inicia um duelo com alguém.\n\n" +
                 "(Em duelo) atacar - Enquanto em um duelo, use para atacar.\n\n" +
                 "(Em duelo) defender - Enquanto em um duelo, use para defender o próximo ataque.\n\n" +
