@@ -487,6 +487,7 @@ public class Embeds {
         eb.addField("Velocidade:", Float.toString(bb.getSpeed()), true);
         eb.addField("Força:", Float.toString(bb.getStrength()), true);
         eb.addField("Estabilidade:", Float.toString(bb.getStability()), true);
+        eb.addField("Especial:", bb.getS() != null ? bb.getS().getName() : "Não obtido", true);
         eb.addField("Vitórias/Derrotas:", bb.getWins() + "/" + bb.getLoses(), true);
         eb.addField(":diamond_shape_with_a_dot_inside: Pontos de combate:", bb.getPoints() + " pontos", true);
 
