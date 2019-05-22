@@ -137,7 +137,6 @@ public class Database {
         Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE guildID LIKE ?1", CustomAnswers.class);
         q.setParameter(1, t);
         ca = (CustomAnswers) q.getSingleResult();
-        System.out.println(ca);
         em.close();
 
         return ca;
@@ -159,7 +158,6 @@ public class Database {
             EntityManager em = getEntityManager();
             Query q = em.createQuery("SELECT c FROM CustomAnswers c", CustomAnswers.class);
             ca = q.getResultList();
-            System.out.println(ca);
             em.close();
 
             return ca;
