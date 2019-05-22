@@ -81,6 +81,16 @@ public class Arena {
     public static void upgrade(MessageReceivedEvent message, String[] cmd) {
         Beyblade bb = Database.getBeyblade(message.getAuthor().getId());
         switch (cmd[1]) {
+            case "nome":
+                if (bb == null) message.getChannel().sendMessage("Você não possui uma beyblade!").queue();
+                else if (bb.getPoints() < 50)
+                    message.getChannel().sendMessage("Você não possui pontos de combate suficiente!").queue();
+                else if (cmd.length > 2) {
+                    bb.takePoints(50);
+                    bb.setName(message.getMessage().getContentRaw().replace(cmd[0] + cmd[1], "").trim());
+                    message.getChannel().sendMessage("Nome trocado com sucesso!").queue();
+                }
+                break;
             case "força":
                 if (bb == null) message.getChannel().sendMessage("Você não possui uma beyblade!").queue();
                 else if (bb.getPoints() < Math.round(15 * bb.getStrength() + bb.getStrength() + bb.getSpeed() + bb.getStability()))

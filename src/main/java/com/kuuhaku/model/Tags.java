@@ -20,36 +20,57 @@ package com.kuuhaku.model;
 import org.json.JSONObject;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.Map;
 
 @Entity
 public class Tags {
-    private final String Owner = "350836145921327115";
-    private String Partners = "{}";
-    private String Toxic = "{}";
-    private String Helpers = "{}";
+    @Id
+    private String id;
+    private boolean Staff;
+    private boolean Partner;
+    private boolean Helper;
+    private boolean Toxic;
 
-    public Map<String, Object> getPartners() {
-        return new JSONObject(Partners).toMap();
+    public String getId() {
+        return id;
     }
 
-    public void setPartners(Map<String, String> partners) {
-        Partners = partners.toString();
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public Map<String, Object> getToxic() {
-        return new JSONObject(Toxic).toMap();
+    public boolean isStaff() {
+        return Staff;
     }
 
-    public void setToxic(Map<String, String> toxic) {
-        Toxic = toxic.toString();
+    public void setStaff() {
+        Staff = true;
     }
 
-    public Map<String, Object> getHelpers() {
-        return new JSONObject(Helpers).toMap();
+    public boolean isPartner() {
+        return Partner;
     }
 
-    public void setHelpers(Map<String, String> helpers) {
-        Helpers = helpers.toString();
+    public void setPartner() {
+        Partner = true;
+    }
+
+    public boolean isHelper() {
+        return Helper;
+    }
+
+    public void setHelper() {
+        Helper = true;
+    }
+
+    public boolean isToxic() {
+        return Toxic;
+    }
+
+    public void setToxic() {
+        Toxic = true;
     }
 }
