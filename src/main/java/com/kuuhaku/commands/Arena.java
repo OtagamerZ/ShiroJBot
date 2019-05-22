@@ -396,11 +396,9 @@ public class Arena {
             bb.addPoints(pointWin);
             Database.sendBeyblade(bb);
             accDuels.removeIf(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor());
-        }
-
-        if (message.getMessage().getContentRaw().equals("atacar") || (message.getMessage().getContentRaw().equals("especial") && player1Turn ? (duel.getB1().getS() != null && !duel.isS1()) : (duel.getB2().getS() != null && !duel.isS2())) || message.getMessage().getContentRaw().equals("defender")) {
+        } else if (message.getMessage().getContentRaw().equals("atacar") || message.getMessage().getContentRaw().equals("especial") || message.getMessage().getContentRaw().equals("defender")) {
             EmbedBuilder eb = new EmbedBuilder();
-            eb.setTitle("Vez de " + (!player1Turn ? duel.getB1().getName() : duel.getB2().getName()));
+            eb.setTitle("Dados do duelo:");
             eb.setDescription(duel.getB1().getName() + " *VS* " + duel.getB2().getName());
             eb.addField(duel.getB1().getName(), "Vida: " + duel.getB1().getLife(), true);
             eb.addField(duel.getB2().getName(), "Vida: " + duel.getB2().getLife(), true);
