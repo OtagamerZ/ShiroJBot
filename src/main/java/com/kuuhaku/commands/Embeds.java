@@ -79,7 +79,7 @@ public class Embeds {
     }
 
     static String helpEmbed2(String prefix) {
-        return  ":speech_balloon: **Utilitário**\n```" +
+        return ":speech_balloon: **Utilitário**\n```" +
                 prefix + "ajuda - Mostra essa mensagem no seu canal privado.\n\n" +
                 prefix + "bug [mensagem] - Envia um bug para meu Nii-chan corrigir.\n\n" +
                 prefix + "ping - Confere se estou online e funcionando direitinho.\n\n" +
@@ -303,7 +303,7 @@ public class Embeds {
         }
     }
 
-    public static void levelEmbed(MessageReceivedEvent message, Member m, String prefix) throws IOException {
+    public static void levelEmbed(MessageReceivedEvent message, Member m, String prefix, Map<String, Tags> tags) throws IOException {
         int conqs = 0;
         for (int i = 0; i < m.getBadges().length; i++) {
             if (m.getBadges()[i]) conqs++;
@@ -319,6 +319,14 @@ public class Embeds {
         assert image != null;
         eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
         eb.setTitle(":pencil: Perfil de " + message.getMember().getEffectiveName() + " | " + message.getGuild().getName());
+        if (tags.containsKey(message.getAuthor().getId())) {
+            eb.setDescription(
+                    (tags.get(message.getAuthor().getId()).isStaff() ? ":beginner: Staff\n" : "") +
+                            (tags.get(message.getAuthor().getId()).isPartner() ? ":gem: Parceiro\n" : "") +
+                            (tags.get(message.getAuthor().getId()).isHelper() ? ":wrench: Parceiro\n" : "") +
+                            (tags.get(message.getAuthor().getId()).isToxic() ? ":radioactive: Tóxico\n" : "")
+            );
+        }
         eb.setThumbnail(message.getAuthor().getAvatarUrl());
         eb.addField(":tada: Level: " + m.getLevel(), "Xp: " + m.getXp() + " | " + ((int) Math.pow(m.getLevel(), 2) * 100), true);
         eb.addField(":warning: Alertas:", Integer.toString(m.getWarns().length - 1), true);
@@ -511,18 +519,19 @@ public class Embeds {
     public static void shopEmbed(MessageReceivedEvent message, Beyblade bb, String prefixo) {
         EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setAuthor("Saldo de " + message.getAuthor().getName() + ": " + bb.getPoints() + " pontos de combate", message.getAuthor().getAvatarUrl());
+        eb.setAuthor("Saldo de " + message.getAuthor().getName() + ": :diamond_shape_with_a_dot_inside: " + bb.getPoints() + " pontos de combate", message.getAuthor().getAvatarUrl());
         eb.setColor(Color.decode(bb.getColor()));
         eb.setTitle("Loja de melhorias");
-        eb.setThumbnail("http://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/1024/Experience-Points-XP-icon.png");
-        eb.setDescription("Olá, meu nome é Orish, sou técnica em melhorias de Beyblades.\n\n" +
+        eb.setThumbnail("https://i.pinimg.com/originals/d3/34/db/d334db51554b3c78fbb65d6cf5e0dcef.png");
+        eb.setDescription("Olá, meu nome é Orisha, sou técnica em Beyblades.\n\n" +
                 "Estou vendo que você tem um modelo e tanto aqui ein? Enfim, fique à vontade para escolher um atributo " +
-                "para melhorar, lembre-se que cada vez que você melhorar algo o valor das outras peças também irão aumentar um pouco " +
+                "para melhorar, note que cada vez que você melhorar algo o valor das outras peças também irão aumentar um pouco " +
                 "devido a incompatibilidade com peças mais baratas!");
-        eb.addField("Melhorar força (Aumenta o dano):", Math.round(15 * bb.getStrength() + bb.getStrength() + bb.getSpeed() + bb.getStability()) + " pontos de combate\nDiga **" + prefixo + "melhorar força** para comprar", false);
-        eb.addField("Melhorar velocidade (Aumenta a chance de acerto do especial):", Math.round(15 * bb.getSpeed() + bb.getStrength() + bb.getSpeed() + bb.getStability()) + " pontos de combate\nDiga **" + prefixo + "melhorar velocidade** para comprar", false);
-        eb.addField("Melhorar estabilidade (Aumenta a defesa):", Math.round(15 * bb.getStability() + bb.getStrength() + bb.getSpeed() + bb.getStability()) + " pontos de combate\nDiga **" + prefixo + "melhorar estabilidade** para comprar", false);
-        eb.addField("Melhorar vida (Aumenta a vida):", Math.round(bb.getLife() / 2) + " pontos de combate\nDiga **" + prefixo + "melhorar vida** para comprar", false);
+        eb.addField(":new: Melhorar nome (Muda o nome):", "50 pontos de combate\nDiga **" + prefixo + "melhorar nome** para comprar", false);
+        eb.addField(":fist: Melhorar força (Aumenta o dano):", Math.round(15 * bb.getStrength() + bb.getStrength() + bb.getSpeed() + bb.getStability()) + " pontos de combate\nDiga **" + prefixo + "melhorar força** para comprar", false);
+        eb.addField(":cyclone: Melhorar velocidade (Aumenta a chance de acerto do especial):", Math.round(15 * bb.getSpeed() + bb.getStrength() + bb.getSpeed() + bb.getStability()) + " pontos de combate\nDiga **" + prefixo + "melhorar velocidade** para comprar", false);
+        eb.addField(":shield: Melhorar estabilidade (Aumenta a defesa):", Math.round(15 * bb.getStability() + bb.getStrength() + bb.getSpeed() + bb.getStability()) + " pontos de combate\nDiga **" + prefixo + "melhorar estabilidade** para comprar", false);
+        eb.addField(":heart: Melhorar vida (Aumenta a vida):", Math.round(bb.getLife() / 2) + " pontos de combate\nDiga **" + prefixo + "melhorar vida** para comprar", false);
 
         message.getChannel().sendMessage(eb.build()).queue();
     }

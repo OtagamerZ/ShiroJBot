@@ -19,15 +19,13 @@
 
 package com.kuuhaku.controller;
 
-import com.kuuhaku.model.Beyblade;
-import com.kuuhaku.model.CustomAnswers;
-import com.kuuhaku.model.Member;
-import com.kuuhaku.model.guildConfig;
+import com.kuuhaku.model.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.swing.text.html.HTML;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -175,5 +173,33 @@ public class Database {
         em.getTransaction().commit();
         em.close();
         System.out.println("Beyblade salva com sucesso!");
+    }
+
+    @SuppressWarnings("unchecked")
+    public static Map<String, Tags> getTags() {
+        List<Tags> t;
+
+        try {
+            EntityManager em = getEntityManager();
+            Query q = em.createQuery("SELECT t FROM Tags t", Tags.class);
+            t = q.getResultList();
+            System.out.println(t);
+            em.close();
+
+            return t.stream().collect(Collectors.toMap(Tags::getId, v -> v));
+        } catch (Exception e) {
+            System.out.println("Erro ao recuperar tags: " + e);
+            return null;
+        }
+    }
+
+    public static void sendAllTags(Collection<Tags> t) {
+        EntityManager em = getEntityManager();
+
+        em.getTransaction().begin();
+        t.forEach(em::merge);
+        em.getTransaction().commit();
+        em.close();
+        System.out.println("Tags salvas com sucesso!");
     }
 }

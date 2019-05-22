@@ -56,6 +56,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     private static List<CustomAnswers> customAnswersList;
     private static Map<Long, DuelData> duels = new HashMap<>();
     private static List<DuelData> accDuels = new ArrayList<>();
+    private static Map<String, Tags> tagsMap = new HashMap<>();
 
     private static void initBot() throws LoginException {
         JDABuilder jda = new JDABuilder(AccountType.BOT);
@@ -66,6 +67,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         gcMap = Database.getGuildConfigs();
         memberMap = Database.getMembersData();
         customAnswersList = Database.getCustomAnswers();
+        tagsMap = Database.getTags();
         if (customAnswersList == null) customAnswersList = new ArrayList<>();
         try {
             if (backup == null) {
@@ -325,7 +327,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     }
                     if (message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
                         //COMMANDS--------------------------------------------------------------------------------->
-                        if (new Random().nextInt(1000) > 900) {
+                        if (new Random().nextInt(1000) > 950) {
                             message.getChannel().sendMessage("Opa, está gostando de me utilizar em seu servidor? Caso sim, se puder votar me ajudaria **MUITO** a me tornar cada vez mais popular e ser chamada para mais servidores!\n https://discordbots.org/bot/572413282653306901").queue();
                         }
                         if (memberMap.get(message.getAuthor().getId() + message.getGuild().getId()) == null) {
@@ -386,7 +388,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             }
                         } else if (hasPrefix(message, "xp")) {
                             try {
-                                Embeds.levelEmbed(message, memberMap.get(message.getAuthor().getId() + message.getGuild().getId()), gcMap.get(message.getGuild().getId()).getPrefix());
+                                Embeds.levelEmbed(message, memberMap.get(message.getAuthor().getId() + message.getGuild().getId()), gcMap.get(message.getGuild().getId()).getPrefix(), tagsMap);
                             } catch (IOException e) {
                                 System.out.println(e.toString());
                             }
@@ -474,10 +476,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                 Owner.getServers(bot, message);
                             } else if (hasPrefix(message, "gmap")) {
                                 Owner.getGuildMap(message, gcMap);
-                            } else if (hasPrefix(message, "mmap")) {
-                                Owner.getMemberMap(message, memberMap);
-                            } else if (hasPrefix(message, "amap")) {
-                                Owner.getAnswersMap(message, customAnswersList);
                             } else if (hasPrefix(message, "broadcast")) {
                                 Owner.broadcast(gcMap, bot, message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix() + "broadcast ", ""), message.getTextChannel());
                             } else if (hasPrefix(message, "perms")) {
@@ -497,6 +495,39 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                     message.getChannel().sendMessage("Meeee, " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " teve a conquista Nº " + cmd[2] + " retirada de sua posse!").queue();
                                 } catch (Exception e) {
                                     message.getChannel().sendMessage(":x: Ué, não estou conseguindo marcar a conquista como incompleta. Tenha certeza de digitar o comando neste formato: " + gcMap.get(message.getGuild().getId()).getPrefix() + "tirar [MEMBRO] [Nº]").queue();
+                                }
+                            } else if (hasPrefix(message, "giveStaff")) {
+                                if (message.getMessage().getMentionedUsers() != null) {
+                                    if (tagsMap.containsKey(message.getMessage().getMentionedUsers().get(0).getId())) {
+                                        tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setStaff();
+                                    } else {
+                                        tagsMap.put(message.getMessage().getMentionedUsers().get(0).getId(), new Tags());
+                                        tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setStaff();
+                                    }
+                                } else {
+                                    message.getChannel().sendMessage("Nii-chan bobo, você precisa mencionar um usuário!").queue();
+                                }
+                            } else if (hasPrefix(message, "givePartner")) {
+                                if (message.getMessage().getMentionedUsers() != null) {
+                                    if (tagsMap.containsKey(message.getMessage().getMentionedUsers().get(0).getId())) {
+                                        tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setPartner();
+                                    } else {
+                                        tagsMap.put(message.getMessage().getMentionedUsers().get(0).getId(), new Tags());
+                                        tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setPartner();
+                                    }
+                                } else {
+                                    message.getChannel().sendMessage("Nii-chan bobo, você precisa mencionar um usuário!").queue();
+                                }
+                            } else if (hasPrefix(message, "giveToxic")) {
+                                if (message.getMessage().getMentionedUsers() != null) {
+                                    if (tagsMap.containsKey(message.getMessage().getMentionedUsers().get(0).getId())) {
+                                        tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setToxic();
+                                    } else {
+                                        tagsMap.put(message.getMessage().getMentionedUsers().get(0).getId(), new Tags());
+                                        tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setToxic();
+                                    }
+                                } else {
+                                    message.getChannel().sendMessage("Nii-chan bobo, você precisa mencionar um usuário!").queue();
                                 }
                             }
                         }
