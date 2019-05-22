@@ -118,9 +118,9 @@ public class Embeds {
                 prefix + "bshop - Mostra o menu do shop de melhorias.\n\n" +
                 prefix + "bmelhorar [atributo] - Compra uma melhoria para o atributo especificado.\n\n" +
                 prefix + "bduelar [membro] - Inicia um duelo com alguém.\n\n" +
-                "atacar - Enquanto em um duelo, use para atacar.\n\n" +
-                "defender - Enquanto em um duelo, use para defender o próximo ataque.\n\n" +
-                "especial - Enquanto em um duelo, use para tentar utilizar um ataque que causa 2x o dano (chance depende da velocidade).```\n" +
+                "(Em duelo) atacar - Enquanto em um duelo, use para atacar.\n\n" +
+                "(Em duelo) defender - Enquanto em um duelo, use para defender o próximo ataque.\n\n" +
+                "(Em duelo) especial - Enquanto em um duelo, use para tentar utilizar um ataque que causa 2x o dano (chance depende da velocidade).```\n" +
 
                 ":gem: **OtagamerZ**\n```" +
                 prefix + "conquistas - Mosta as conquistas que você completou.\n\n" +
@@ -490,7 +490,7 @@ public class Embeds {
         eb.addField("Velocidade:", Float.toString(bb.getSpeed()), true);
         eb.addField("Força:", Float.toString(bb.getStrength()), true);
         eb.addField("Estabilidade:", Float.toString(bb.getStability()), true);
-        eb.addField("Especial:", bb.getS() != null ? bb.getS().getName() : "Não obtido", true);
+        eb.addField("Especial:", bb.getS() != null ? "(" + bb.getSpecial() + ")" + bb.getS().getName() : "Não obtido", true);
         eb.addField("Vitórias/Derrotas:", bb.getWins() + "/" + bb.getLoses(), true);
         eb.addField(":diamond_shape_with_a_dot_inside: Pontos de combate:", bb.getPoints() + " pontos", true);
 
@@ -536,5 +536,31 @@ public class Embeds {
         eb.addField(":heart: Melhorar vida (Aumenta a vida):", Math.round(bb.getLife() / 2) + " pontos de combate\nDiga **" + prefixo + "melhorar vida** para comprar", false);
 
         message.getChannel().sendMessage(eb.build()).queue();
+    }
+
+    public static void specialEmbed(MessageReceivedEvent message, Beyblade bb) {
+        if (bb.getS() != null) {
+            EmbedBuilder eb = new EmbedBuilder();
+
+            eb.setAuthor("Alinhamento de " + bb.getName() + ":");
+            switch (bb.getS().getType()) {
+                case "TIGER":
+                    eb.setThumbnail("https://i.imgur.com/fLZPBP8.png");
+                    break;
+                case "DRAGON":
+                    eb.setThumbnail("https://i.imgur.com/g2L0cfy.png");
+                    break;
+                case "BEAR":
+                    eb.setThumbnail("https://i.imgur.com/MG789l8.png");
+                    break;
+            }
+            eb.setColor(Color.decode(bb.getColor()));
+            eb.addField(bb.getS().getName(), bb.getS().getDescription(), false);
+            eb.addField("Dificuldade:", Integer.toString(bb.getS().getDiff()), true);
+
+            message.getChannel().sendMessage(eb.build()).queue();
+        } else {
+            message.getChannel().sendMessage("Esta Beyblade ainda não possui um alinhamento!").queue();
+        }
     }
 }

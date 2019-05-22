@@ -90,7 +90,7 @@ class SpeedType extends Special {
     static Special TwinTigerTigerWhip() {
         SpeedType s = new SpeedType();
         s.setName("Tigres gêmeos: Açoite do tigre");
-        s.setDescription("Move sua Beyblade em direção ao oponente, mas muda de rota repentinamente, fazendo com que uma onda de choque acerte o inimigo, possivelmente atordoando-o.");
+        s.setDescription("Move sua Beyblade em direção ao oponente, mas muda de rota repentinamente, fazendo com que uma onda de choque acerte o inimigo, atordoando-o.");
         s.setType("TIGER");
         s.setDiff(70);
 

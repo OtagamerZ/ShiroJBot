@@ -122,7 +122,7 @@ public class Beyblade {
     }
 
     public float getKDA() {
-        return (float) wins / (loses == 0 ? 1 : loses);
+        return (float) wins / (loses == 0 ? -1 : loses);
     }
 
     public Special getS() {
