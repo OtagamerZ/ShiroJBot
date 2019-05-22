@@ -637,7 +637,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             if (cmd.length > 1) {
                                 Arena.chooseHouse(message, cmd, Database.getBeyblade(message.getAuthor().getId()));
                             } else {
-                                message.getChannel().sendMessage("Alinhamento é o que define seu estilo de combate:\n- Tigres são focados em uma velocidades extrema.\n- Dragões são focados em um poder incomparável.\n- Ursos são focados em uma defesa impenetrável.\n\n" +
+                                message.getChannel().sendMessage("__**Alinhamento é o que define seu estilo de combate:**__\n- Tigres são focados em uma **velocidade** extrema.\n- Dragões são focados em um **poder** incomparável.\n- Ursos são focados em uma **defesa** impenetrável.\n\n" +
                                         "Cada alinhamento possui especiais diferentes, que poderão virar um duelo, a **primeira vez** que você escolher um alinhamento custará **150 pontos de combate**. " +
                                         "Após, **qualquer troca de alinhamento custará 300 pontos de combate**.\n" +
                                         "\nPara escolher tigre, digite `" + gcMap.get(message.getGuild().getId()).getPrefix() + "balinhamento tigre`" +

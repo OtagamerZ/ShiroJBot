@@ -21,14 +21,14 @@ package com.kuuhaku.model;
 
 public class Special {
     private String name, type, description;
-    private int diff, move;
-    private boolean delayed;
+    private int diff;
+    private boolean bear = false;
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    void setName(String name) {
         this.name = name;
     }
 
@@ -36,7 +36,7 @@ public class Special {
         return type;
     }
 
-    public void setType(String type) {
+    void setType(String type) {
         this.type = type;
     }
 
@@ -44,7 +44,7 @@ public class Special {
         return description;
     }
 
-    public void setDescription(String description) {
+    void setDescription(String description) {
         this.description = description;
     }
 
@@ -52,24 +52,8 @@ public class Special {
         return diff;
     }
 
-    public void setDiff(int diff) {
+    void setDiff(int diff) {
         this.diff = diff;
-    }
-
-    public int getMove() {
-        return move;
-    }
-
-    public void setMove(int move) {
-        this.move = move;
-    }
-
-    public boolean isDelayed() {
-        return delayed;
-    }
-
-    public void setDelayed() {
-        this.delayed = true;
     }
 
     public static Special getSpecial(int s) {
@@ -79,9 +63,16 @@ public class Special {
             case 21: return PowerType.RunicDragonMeteorImpact();
             case 22: return PowerType.RunicDragonScorchingCharge();
             case 31: return DefenseType.GuardianBearDisarmingAura();
-            case 32: return DefenseType.GuardianBearSpikeArmor();
             default: return null;
         }
+    }
+
+    public boolean isBear() {
+        return bear;
+    }
+
+    public void setBear(boolean bear) {
+        this.bear = bear;
     }
 }
 
@@ -92,7 +83,6 @@ class SpeedType extends Special {
         s.setDescription("Acelera a Beyblade a velocidades extremas, criando uma ilusão dela e avançando em direção ao oponente, causando um alto dano baseado em sua velocidade.");
         s.setType("TIGER");
         s.setDiff(55);
-        s.setMove(1);
 
         return s;
     }
@@ -103,7 +93,6 @@ class SpeedType extends Special {
         s.setDescription("Move sua Beyblade em direção ao oponente, mas muda de rota repentinamente, fazendo com que uma onda de choque acerte o inimigo, possivelmente atordoando-o.");
         s.setType("TIGER");
         s.setDiff(70);
-        s.setMove(2);
 
         return s;
     }
@@ -116,7 +105,6 @@ class PowerType extends Special {
         s.setDescription("Arremessa o oponente para o alto, e utilizando sua própria defesa, impacta-o no chão causando um grande dano.");
         s.setType("DRAGON");
         s.setDiff(75);
-        s.setMove(1);
 
         return s;
     }
@@ -127,7 +115,6 @@ class PowerType extends Special {
         s.setDescription("Concentra o poder do dragão na borda de sua Beyblade, fazendo com que seu próximo ataque cause 3x mais dano.");
         s.setType("DRAGON");
         s.setDiff(85);
-        s.setMove(2);
 
         return s;
     }
@@ -137,23 +124,10 @@ class DefenseType extends Special {
     static Special GuardianBearDisarmingAura() {
         DefenseType s = new DefenseType();
         s.setName("Urso guardião: Aura desarmante");
-        s.setDescription("Gera uma aura em torno de sua Beyblade, fazendo com que o próximo ataque de seu oponente cause metade do dano.");
+        s.setDescription("Gera uma aura em torno de sua Beyblade, fazendo com que o próximo ataque de seu oponente cause metade do dano, sendo também influenciado por sua estabilidade.");
         s.setType("BEAR");
         s.setDiff(50);
-        s.setMove(1);
-        s.setDelayed();
-
-        return s;
-    }
-
-    static Special GuardianBearSpikeArmor() {
-        DefenseType s = new DefenseType();
-        s.setName("Urso guardião: Armadura de espinhos");
-        s.setDescription("Cria espinhos de aço em sua Beyblade, refletindo uma porcentagem do dano baseada em sua defesa.");
-        s.setType("BEAR");
-        s.setDiff(0);
-        s.setMove(2);
-        s.setDelayed();
+        s.setBear(true);
 
         return s;
     }
