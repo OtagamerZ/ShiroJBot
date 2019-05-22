@@ -92,7 +92,6 @@ public class Database {
             EntityManager em = getEntityManager();
             Query q = em.createQuery("SELECT c FROM Member c", Member.class);
             lgc = q.getResultList();
-            System.out.println(lgc);
             em.close();
 
             return lgc.stream().collect(Collectors.toMap(Member::getId, m -> m));
@@ -121,7 +120,6 @@ public class Database {
             Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE gatilho LIKE ?1", CustomAnswers.class);
             q.setParameter(1, t);
             ca = q.getResultList();
-            System.out.println(ca);
             em.close();
 
             return ca;
@@ -220,7 +218,6 @@ public class Database {
             EntityManager em = getEntityManager();
             Query q = em.createQuery("SELECT t FROM Tags t", Tags.class);
             t = q.getResultList();
-            System.out.println(t);
             em.close();
 
             return t.stream().collect(Collectors.toMap(Tags::getId, v -> v));
