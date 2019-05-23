@@ -79,11 +79,13 @@ public class Reactions {
                 channel.sendMessage(msg).addFile(con.getInputStream(), "hug.gif").queue();
             }
         } else {
-            if (!answer)
+            if (!answer) {
                 msg = (mbr.getAsMention() + " abraçou " + target.getAsMention() + " - " + msg);
-            else
+                channel.sendMessage(msg).addFile(con.getInputStream(), "hug.gif").queue(m -> m.addReaction("\u21aa").queue());
+            } else {
                 msg = (target.getAsMention() + " retribuiu o abraço " + mbr.getAsMention() + " - " + msg);
-            channel.sendMessage(msg).addFile(con.getInputStream(), "hug.gif").queue(m -> m.addReaction("\u21aa").queue());
+                channel.sendMessage(msg).addFile(con.getInputStream(), "hug.gif").queue();
+            }
         }
     }
 
@@ -96,7 +98,7 @@ public class Reactions {
             msg = (mbr.getAsMention() + " fez cafuné em " + target.getAsMention());
         else
             msg = (target.getAsMention() + " também fez cafuné em " + mbr.getAsMention());
-        channel.sendMessage(msg).addFile(con.getInputStream(), "pat.gif").queue(m -> m.addReaction("\u21aa").queue());
+        channel.sendMessage(msg).addFile(con.getInputStream(), "pat.gif").queue();
     }
 
     public static void slap(JDA bot, Message message, User target, TextChannel channel, boolean answer, User mbr) throws IOException {
@@ -136,11 +138,13 @@ public class Reactions {
                 nope(message, bot.getSelfUser());
             }
         } else {
-            if (!answer)
+            if (!answer) {
                 msg = (mbr.getAsMention() + " deu um tapa em " + target.getAsMention() + " - " + msg);
-            else
+                channel.sendMessage(msg).addFile(con.getInputStream(), "slap.gif").queue(m -> m.addReaction("\u21aa").queue());
+            } else {
                 msg = (target.getAsMention() + " respondeu o tapa de " + mbr.getAsMention() + " - " + msg);
-            channel.sendMessage(msg).addFile(con.getInputStream(), "slap.gif").queue(m -> m.addReaction("\u21aa").queue());
+                channel.sendMessage(msg).addFile(con.getInputStream(), "slap.gif").queue();
+            }
         }
     }
 
@@ -181,11 +185,13 @@ public class Reactions {
                 nope(message, bot.getSelfUser());
             }
         } else {
-            if (!answer)
+            if (!answer) {
                 msg = (mbr.getAsMention() + " destruiu " + target.getAsMention() + " - " + msg);
-            else
+                channel.sendMessage(msg).addFile(con.getInputStream(), "smash.gif").queue(m -> m.addReaction("\u21aa").queue());
+            } else {
                 msg = ("Porém, " + target.getAsMention() + " se levantou e atacou " + mbr.getAsMention() + " de volta - " + msg);
-            channel.sendMessage(msg).addFile(con.getInputStream(), "smash.gif").queue(m -> m.addReaction("\u21aa").queue());
+                channel.sendMessage(msg).addFile(con.getInputStream(), "smash.gif").queue();
+            }
         }
     }
 
@@ -215,11 +221,13 @@ public class Reactions {
                 nope(message, bot.getSelfUser());
             }
         } else {
-            if (!answer)
+            if (!answer) {
                 msg = (mbr.getAsMention() + " beijou " + target.getAsMention() + " - " + msg);
-            else
+                channel.sendMessage(msg).addFile(con.getInputStream(), "kiss.gif").queue(m -> m.addReaction("\u21aa").queue());
+            } else {
                 msg = (target.getAsMention() + " também deu um beijo em " + mbr.getAsMention() + " - " + msg);
-            channel.sendMessage(msg).addFile(con.getInputStream(), "kiss.gif").queue(m -> m.addReaction("\u21aa").queue());
+                channel.sendMessage(msg).addFile(con.getInputStream(), "kiss.gif").queue();
+            }
         }
     }
 
@@ -255,11 +263,13 @@ public class Reactions {
             }
             channel.sendMessage(msg).addFile(con.getInputStream(), "stare.gif").queue();
         } else {
-            if (!answer)
+            if (!answer) {
                 msg = (mbr.getAsMention() + " encarou " + target.getAsMention() + " - " + msg);
-            else
+                channel.sendMessage(msg).addFile(con.getInputStream(), "stare.gif").queue(m -> m.addReaction("\u21aa").queue());
+            } else {
                 msg = (target.getAsMention() + " também está encarando " + mbr.getAsMention() + " - " + msg);
-            channel.sendMessage(msg).addFile(con.getInputStream(), "stare.gif").queue(m -> m.addReaction("\u21aa").queue());
+                channel.sendMessage(msg).addFile(con.getInputStream(), "stare.gif").queue();
+            }
         }
     }
 
