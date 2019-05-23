@@ -103,9 +103,9 @@ public class Profile {
         g2d.drawImage(toxic, null, 216, 42);
 
         g2d.setColor(Color.YELLOW);
-        g2d.setFont(new Font("LilyUPC", Font.PLAIN, 40));
+        g2d.setFont(new Font("LilyUPC", Font.PLAIN, 30));
         g2d.drawString("Tags ", 135 - g2d.getFontMetrics().stringWidth("Tags:"), 55);
-        g2d.setFont(new Font("LilyUPC", Font.PLAIN, 40));
+        g2d.setFont(new Font("LilyUPC", Font.PLAIN, 30));
         g2d.drawString("Level: " + m.getLevel() + " (" + m.getXp() * (int) Math.pow(m.getLevel(), 2) + "%)", 264, 246);
         g2d.drawString("Perfil de " + u.getEffectiveName(), 10, 33);
 
