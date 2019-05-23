@@ -20,13 +20,17 @@
 package com.kuuhaku.commands;
 
 import com.kuuhaku.model.Badges;
+import com.kuuhaku.model.Member;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.json.JSONException;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
+import java.net.URL;
 
 public class Misc {
     public static void help(MessageReceivedEvent message, String prefix, User owner) {
@@ -81,6 +85,21 @@ public class Misc {
             message.getChannel().sendMessage(Badges.getBadgeDesc(message.getMessage().getContentRaw().split(" ")[1])).queue();
         } catch (Exception e) {
             message.getChannel().sendMessage("Digite um Nº de uma conquista válido.").queue();
+        }
+    }
+
+    public static void setBg(MessageReceivedEvent message, String[] cmd, Member m) {
+        if (cmd.length == 2) {
+            try {
+                BufferedImage bi = ImageIO.read(new URL(cmd[1]));
+                if (bi.getWidth() == 512 && bi.getHeight() == 256) {
+                    m.setBg(cmd[1]);
+                } else {
+                    message.getChannel().sendMessage("Esta imagem está em um tamanho incorreto, tenha certeza que ela seja 512x256!").queue();
+                }
+            } catch (Exception e) {
+                message.getChannel().sendMessage("O link desta imagem não me parece válido, veja bem se digitou tudo corretamente!").queue();
+            }
         }
     }
 }

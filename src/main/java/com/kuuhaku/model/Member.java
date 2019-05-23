@@ -31,8 +31,8 @@ public class Member {
     private String id;
     private int level = 1, xp = 0;
     private String warns = "";
+    private String bg = "";
     private String badges = "[false,false,false,false,false,false,false,false,false,false,false,false,false]";
-    transient private boolean inGame = false;
 
     public Member() {
 
@@ -111,11 +111,11 @@ public class Member {
         this.id = id;
     }
 
-    public boolean isInGame() {
-        return inGame;
+    String getBg() {
+        return bg;
     }
 
-    public void setInGame() {
-        this.inGame = !inGame;
+    public void setBg(String bg) {
+        this.bg = bg;
     }
 }
