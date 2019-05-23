@@ -23,6 +23,7 @@ import com.kuuhaku.controller.Database;
 import com.kuuhaku.controller.Tradutor;
 import com.kuuhaku.model.*;
 import de.androidpit.colorthief.ColorThief;
+import net.coobird.thumbnailator.Thumbnails;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.MessageEmbed;
@@ -39,6 +40,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -304,40 +306,8 @@ public class Embeds {
         }
     }
 
-    public static void levelEmbed(MessageReceivedEvent message, Member m, String prefix, Map<String, Tags> tags) throws IOException {
-        int conqs = 0;
-        for (int i = 0; i < m.getBadges().length; i++) {
-            if (m.getBadges()[i]) conqs++;
-        }
-        URL url = new URL(message.getAuthor().getAvatarUrl());
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestProperty("User-Agent", "Mozilla/5.0");
-        BufferedImage image = ImageIO.read(con.getInputStream());
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-        EmbedBuilder eb = new EmbedBuilder();
-
-        assert image != null;
-        eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
-        eb.setTitle(":pencil: Perfil de " + message.getMember().getEffectiveName() + " | " + message.getGuild().getName());
-        if (tags.containsKey(message.getAuthor().getId())) {
-            eb.setDescription(
-                    (tags.get(message.getAuthor().getId()).isStaff() ? ":beginner: Staff\n" : "") +
-                            (tags.get(message.getAuthor().getId()).isPartner() ? ":gem: Parceiro\n" : "") +
-                            (tags.get(message.getAuthor().getId()).isHelper() ? ":wrench: Parceiro\n" : "") +
-                            (tags.get(message.getAuthor().getId()).isToxic() ? ":radioactive: Tóxico\n" : "")
-            );
-        }
-        eb.setThumbnail(message.getAuthor().getAvatarUrl());
-        eb.addField(":tada: Level: " + m.getLevel(), "Xp: " + m.getXp() + " | " + ((int) Math.pow(m.getLevel(), 2) * 100), true);
-        eb.addField(":warning: Alertas:", Integer.toString(m.getWarns().length - 1), true);
-        eb.addField(":calendar_spiral: Membro desde:", df.format(message.getMember().getJoinDate()), true);
-        if (m.getId().contains("421495229594730496")) {
-            eb.addField(":beginner: Conquistas:", "**" + conqs + "**", true);
-            eb.setFooter("Digite " + prefix + "conquistas para ver as conquistas que você completou.", "https://discordapp.com/assets/a3fc335f559f462df3e5d6cdbb9178e8.svg");
-        }
-
-        message.getChannel().sendMessage(eb.build()).queue();
+    public static void levelEmbed(MessageReceivedEvent message, Member m, Map<String, Tags> tags) throws IOException {
+        message.getChannel().sendMessage(message.getAuthor().getAsMention()).addFile(Profile.makeProfile(m, message.getMember(), tags), "profile.jpg").queue();
     }
 
     public static void myBadgesEmbed(MessageReceivedEvent message, Member m) throws IOException {

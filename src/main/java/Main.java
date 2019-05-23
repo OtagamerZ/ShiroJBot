@@ -380,12 +380,14 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                        } else if (hasPrefix(message, "xp")) {
+                        } else if (hasPrefix(message, "perfil")) {
                             try {
-                                Embeds.levelEmbed(message, memberMap.get(message.getAuthor().getId() + message.getGuild().getId()), gcMap.get(message.getGuild().getId()).getPrefix(), tagsMap);
+                                Embeds.levelEmbed(message, memberMap.get(message.getAuthor().getId() + message.getGuild().getId()), tagsMap);
                             } catch (IOException e) {
                                 System.out.println(e.toString());
                             }
+                        } else if (hasPrefix(message, "fundo")) {
+                            Misc.setBg(message, cmd, memberMap.get(message.getAuthor().getId() + message.getGuild().getId()));
                         } else if (hasPrefix(message, "conquista")) {
                             if (message.getGuild().getId().equals("421495229594730496")) {
                                 Misc.badges(message);
