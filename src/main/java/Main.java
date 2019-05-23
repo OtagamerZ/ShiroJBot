@@ -53,7 +53,9 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     private static Scheduler sched;
     private static boolean ready = false;
     private static Map<Long, DuelData> duels = new HashMap<>();
+    private static Map<Long, DuelData> trains = new HashMap<>();
     private static List<DuelData> accDuels = new ArrayList<>();
+    private static List<DuelData> accTrains = new ArrayList<>();
     private static Map<String, Tags> tagsMap = new HashMap<>();
 
     private static void initBot() throws LoginException {
@@ -251,6 +253,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         if (ready) {
             if (accDuels.stream().anyMatch(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor())) {
                 Arena.battle(accDuels, message);
+            } else if (accTrains.stream().anyMatch(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor())) {
+                Arena.battle(accTrains, message);
             }
             try {
                 if (message.getChannel().getId().equals(gcMap.get(message.getGuild().getId()).getCanalsug()) && !message.getMessage().getAuthor().isBot() && !message.getMember().hasPermission(Permission.MANAGE_CHANNEL)) {
@@ -635,6 +639,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             Arena.setName(message, cmd);
                         } else if (hasPrefix(message, "bduelar")) {
                             Arena.duel(message, duels);
+                        } else if (hasPrefix(message, "btreinar")) {
+                            Arena.duel(message, trains);
                         } else if (hasPrefix(message, "brank")) {
                             Embeds.bRankEmbed(bot, message);
                         } else if (hasPrefix(message, "bmelhorar")) {
