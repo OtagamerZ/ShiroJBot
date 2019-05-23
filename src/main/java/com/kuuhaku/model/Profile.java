@@ -95,7 +95,7 @@ public class Profile {
         g2d.setColor(Color.BLUE);
 
         g2d.drawImage(defBg, null, 0, 0);
-        g2d.fillRect(263, 213, Math.round(m.getXp() * 239 / (int) Math.pow(m.getLevel(), 2)), 5);
+        //g2d.fillRect(263, 213, Math.round(m.getXp() * 239 / (int) Math.pow(m.getLevel(), 2)), 5);
         g2d.drawImage(avatar, null, 11, 67);
         g2d.drawImage(card, null, 0, 0);
         g2d.drawImage(dev, null, 160, 42);
@@ -103,10 +103,10 @@ public class Profile {
         g2d.drawImage(toxic, null, 216, 42);
 
         g2d.setColor(Color.YELLOW);
+        g2d.setFont(new Font("LilyUPC", Font.PLAIN, 20));
+        g2d.drawString("Tags ", 135 - g2d.getFontMetrics().stringWidth("Tags:"), 60);
         g2d.setFont(new Font("LilyUPC", Font.PLAIN, 30));
-        g2d.drawString("Tags ", 135 - g2d.getFontMetrics().stringWidth("Tags:"), 55);
-        g2d.setFont(new Font("LilyUPC", Font.PLAIN, 30));
-        g2d.drawString("Level: " + m.getLevel() + " (" + m.getXp() * (int) Math.pow(m.getLevel(), 2) + "%)", 264, 246);
+        g2d.drawString("Level: " + m.getLevel(), 264, 246);
         g2d.drawString("Perfil de " + u.getEffectiveName(), 10, 33);
 
         g2d.dispose();
