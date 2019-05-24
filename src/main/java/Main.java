@@ -610,6 +610,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                     try {
                                         if (Database.getCustomAnswerById(Long.valueOf(cmd[1])) != null) {
                                             CustomAnswers ca = Database.getCustomAnswerById(Long.valueOf(cmd[1]));
+                                            message.getChannel().sendMessage("Não irei mais responder `" + ca.getAnswer() + "` quando alguém disser `" + ca.getGatilho() + "`.").queue();
                                             Database.deleteCustomAnswer(ca);
                                         } else {
                                             message.getChannel().sendMessage("Esta resposta não existe!").queue();
