@@ -23,7 +23,6 @@ import com.kuuhaku.controller.Database;
 import com.kuuhaku.controller.Tradutor;
 import com.kuuhaku.model.*;
 import de.androidpit.colorthief.ColorThief;
-import net.coobird.thumbnailator.Thumbnails;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.MessageEmbed;
@@ -40,7 +39,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -218,7 +216,7 @@ public class Embeds {
         eb.addField("Recompensas de level:", gc.getCargoslvl().size() != 0 ? roles.toString().replace(",", "\n").replace("{", "").replace("}", "").replace("=", " = ") : "Não definidos", true);
         eb.addField("Cargos para novos membros:", gc.getCargoNew().size() != 0 ? nc.values().toString().replace(",", "\n").replace("{", "").replace("}", "").replace("=", " = ") : "Não definidos", true);
 
-        message.getChannel().sendMessage(eb.build()).queue();
+        message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(eb.build()).queue());
     }
 
     public static void animeEmbed(MessageReceivedEvent message, String cmd) throws IOException {
@@ -278,7 +276,7 @@ public class Embeds {
 
         EmbedBuilder eb = new EmbedBuilder();
         if (anime.getGenres().toLowerCase().contains("hentai") && !message.getTextChannel().isNSFW()) {
-            message.getChannel().sendMessage("Humm safadinho, não vou buscar dados sobre um Hentai né!").queue();
+            message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Humm safadinho, não vou buscar dados sobre um Hentai né!").queue());
         }
 
         eb.setColor(anime.getcColor());
@@ -299,15 +297,21 @@ public class Embeds {
         eb.setFooter("Descrição traduzida por Yandex | http://translate.yandex.com.", "https://cdn6.aptoide.com/imgs/6/3/5/635bc7fad9a6329e0efbe9502f472dc5_icon.png");
 
         try {
-            message.getChannel().sendMessage(eb.build()).queue();
+            message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(eb.build()).queue());
         } catch (Exception e) {
-            message.getChannel().sendMessage("Humm...não achei nenhum anime com esse nome, talvez você tenha escrito algo errado?").queue();
+            message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Humm...não achei nenhum anime com esse nome, talvez você tenha escrito algo errado?").queue());
             e.printStackTrace();
         }
     }
 
-    public static void levelEmbed(MessageReceivedEvent message, Member m, Map<String, Tags> tags) throws IOException {
-        message.getChannel().sendMessage(message.getAuthor().getAsMention()).addFile(Profile.makeProfile(m, message.getMember(), tags), "profile.jpg").queue();
+    public static void levelEmbed(MessageReceivedEvent message, Member m, Map<String, Tags> tags) {
+        message.getChannel().sendTyping().queue(tm -> {
+            try {
+                message.getChannel().sendMessage(message.getAuthor().getAsMention()).addFile(Profile.makeProfile(m, message.getMember(), tags), "profile.jpg").queue();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public static void myBadgesEmbed(MessageReceivedEvent message, Member m) throws IOException {
@@ -323,7 +327,7 @@ public class Embeds {
         eb.setThumbnail(message.getGuild().getMemberById(m.getId().replace(message.getGuild().getId(), "")).getUser().getAvatarUrl());
         eb.addField("", Badges.getBadges(m.getBadges()), false);
 
-        message.getChannel().sendMessage(eb.build()).queue();
+        message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(eb.build()).queue());
     }
 
     public static void welcomeEmbed(GuildMemberJoinEvent event, String msg, TextChannel canalbv) throws IOException {
@@ -415,15 +419,14 @@ public class Embeds {
             eb.setThumbnail(args[2]);
             eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
 
-            message.getChannel().sendMessage(eb.build()).queue();
+            message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(eb.build()).queue());
         } catch (Exception e) {
-            message.getChannel().sendMessage("Opa, algo deu errado, tenha certeza de ter escrito neste formato:\n" +
-                    "**Título;Descrição;Link da foto**").queue();
+            message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Opa, algo deu errado, tenha certeza de ter escrito neste formato:\n" +
+                    "**Título;Descrição;Link da foto**").queue());
         }
     }
 
     public static void answerList(MessageReceivedEvent message, List<CustomAnswers> ca) throws IOException {
-        ca.removeIf(m -> m.getMarkDel() != null && m.getMarkDel().equals("DELETAR"));
         int index;
         try {
             index = Integer.parseInt(message.getMessage().getContentRaw().split(" ")[1]);
@@ -446,7 +449,7 @@ public class Embeds {
         eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
         eb.addField("ID | [Mensagem]: Resposta", answers.toString(), false);
 
-        message.getChannel().sendMessage(eb.build()).queue();
+        message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(eb.build()).queue());
     }
 
     public static void beybladeEmbed(MessageReceivedEvent message, Beyblade bb) {
@@ -466,7 +469,7 @@ public class Embeds {
         eb.addField("Vitórias/Derrotas:", bb.getWins() + "/" + bb.getLoses(), true);
         eb.addField(":diamond_shape_with_a_dot_inside: Pontos de combate:", bb.getPoints() + " pontos", true);
 
-        message.getChannel().sendMessage(eb.build()).queue();
+        message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(eb.build()).queue());
     }
 
     public static void bRankEmbed(JDA bot, MessageReceivedEvent message) {
@@ -487,7 +490,7 @@ public class Embeds {
         }
         eb.addField("1 - " + champ.getName() + " (" + bot.getUserById(champ.getId()).getName() + ") | " + champ.getWins() + "/" + champ.getLoses(), sb.toString(), false);
 
-        message.getChannel().sendMessage(eb.build()).queue();
+        message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(eb.build()).queue());
     }
 
     public static void shopEmbed(MessageReceivedEvent message, Beyblade bb, String prefixo) {
@@ -507,7 +510,7 @@ public class Embeds {
         eb.addField(":shield: Melhorar estabilidade (Aumenta a defesa):", Math.round(15 * bb.getStability() + bb.getStrength() + bb.getSpeed() + bb.getStability()) + " pontos de combate\nDiga **" + prefixo + "melhorar estabilidade** para comprar", false);
         eb.addField(":heart: Melhorar vida (Aumenta a vida):", Math.round(bb.getLife() / 2) + " pontos de combate\nDiga **" + prefixo + "melhorar vida** para comprar", false);
 
-        message.getChannel().sendMessage(eb.build()).queue();
+        message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(eb.build()).queue());
     }
 
     public static void specialEmbed(MessageReceivedEvent message, Beyblade bb) {
@@ -530,9 +533,9 @@ public class Embeds {
             eb.addField(bb.getS().getName(), bb.getS().getDescription(), false);
             eb.addField("Dificuldade:", Integer.toString(bb.getS().getDiff()), true);
 
-            message.getChannel().sendMessage(eb.build()).queue();
+            message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(eb.build()).queue());
         } else {
-            message.getChannel().sendMessage("Esta Beyblade ainda não possui um alinhamento!").queue();
+            message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Esta Beyblade ainda não possui um alinhamento!").queue());
         }
     }
 }

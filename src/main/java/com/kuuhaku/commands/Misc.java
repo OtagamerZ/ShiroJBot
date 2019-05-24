@@ -43,49 +43,63 @@ public class Misc {
 
     public static void yesNo(MessageReceivedEvent message) {
         String[] responses = {"Sim", "Não", "Nunca", "Sempre", "Talvez", "Não sei", "Acho que sim", "Acho que não"};
-        message.getChannel().sendMessage(responses[(int) (Math.random() * 9)]).queue();
+        message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(responses[(int) (Math.random() * 9)]).queue());
     }
 
     public static void choose(MessageReceivedEvent message, String cmd) {
         try {
-            message.getChannel().sendMessage("Eu escolho essa opção: " + message.getMessage().getContentRaw().replace(cmd, "").split(";")[(int) (Math.random() * message.getMessage().getContentRaw().split(";").length)].trim()).queue();
+            message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Eu escolho essa opção: " + message.getMessage().getContentRaw().replace(cmd, "").split(";")[(int) (Math.random() * message.getMessage().getContentRaw().split(";").length)].trim()).queue());
         } catch (ArrayIndexOutOfBoundsException e) {
-            message.getChannel().sendMessage("Você não me deu opções, bobo!").queue();
+            message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Você não me deu opções, bobo!").queue());
         }
     }
 
     public static void image(MessageReceivedEvent message, String[] cmd) {
-        try {
-            if (cmd.length >= 3) {
-                try {
-                    message.getChannel().sendMessage(Embeds.imageEmbed(cmd[1].split(";"), cmd[2])).queue();
-                } catch (JSONException e) {
-                    message.getChannel().sendMessage("Eita, não encontrei nenhuma imagem com essas tags :expressionless:!").queue();
-                }
-            } else if (cmd.length == 2) {
-                try {
-                    message.getChannel().sendMessage(Embeds.imageEmbed(cmd[1].split(";"))).queue();
-                } catch (JSONException e) {
-                    message.getChannel().sendMessage("Eita, não encontrei nenhuma imagem, tente usar tags mais populares ou especificar um número de página!").queue();
-                }
-            } else {
-                message.getChannel().sendMessage("Você não me disse que tipo de imagem devo procurar.").queue();
+        if (cmd.length >= 3) {
+            try {
+                message.getChannel().sendTyping().queue(tm -> {
+                    try {
+                        message.getChannel().sendMessage(Embeds.imageEmbed(cmd[1].split(";"), cmd[2])).queue();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+            } catch (JSONException e) {
+                message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Eita, não encontrei nenhuma imagem com essas tags :expressionless:!").queue());
             }
-        } catch (IOException e) {
-            message.getChannel().sendMessage("Eita, não encontrei nenhuma imagem :expressionless:!").queue();
+        } else if (cmd.length == 2) {
+            try {
+                message.getChannel().sendTyping().queue(tm -> {
+                    try {
+                        message.getChannel().sendMessage(Embeds.imageEmbed(cmd[1].split(";"))).queue();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+            } catch (JSONException e) {
+                message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Eita, não encontrei nenhuma imagem, tente usar tags mais populares ou especificar um número de página!").queue());
+            }
+        } else {
+            message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Você não me disse que tipo de imagem devo procurar.").queue());
         }
     }
 
     public static void uptime(MessageReceivedEvent message) {
         RuntimeMXBean rb = ManagementFactory.getRuntimeMXBean();
-        message.getChannel().sendMessage("Hummm...acho que estou acordada a " + (int) rb.getUptime() / 1000 + " segundos!").queue();
+        message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Hummm...acho que estou acordada a " + (int) rb.getUptime() / 1000 + " segundos!").queue());
     }
 
     public static void badges(MessageReceivedEvent message) {
         try {
-            message.getChannel().sendMessage(Badges.getBadgeDesc(message.getMessage().getContentRaw().split(" ")[1])).queue();
+            message.getChannel().sendTyping().queue(tm -> {
+                try {
+                    message.getChannel().sendMessage(Badges.getBadgeDesc(message.getMessage().getContentRaw().split(" ")[1])).queue();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
         } catch (Exception e) {
-            message.getChannel().sendMessage("Digite um Nº de uma conquista válido.").queue();
+            message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Digite um Nº de uma conquista válido.").queue());
         }
     }
 
@@ -96,10 +110,10 @@ public class Misc {
                 if (bi.getWidth() == 512 && bi.getHeight() == 256) {
                     m.setBg(cmd[1]);
                 } else {
-                    message.getChannel().sendMessage("Esta imagem está em um tamanho incorreto, tenha certeza que ela seja 512x256!").queue();
+                    message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Esta imagem está em um tamanho incorreto, tenha certeza que ela seja 512x256!").queue());
                 }
             } catch (Exception e) {
-                message.getChannel().sendMessage("O link desta imagem não me parece válido, veja bem se digitou tudo corretamente!").queue();
+                message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("O link desta imagem não me parece válido, veja bem se digitou tudo corretamente!").queue());
             }
         }
     }

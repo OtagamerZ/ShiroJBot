@@ -17,13 +17,8 @@
 
 package com.kuuhaku.model;
 
-import org.json.JSONObject;
-
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Map;
 
 @Entity
 public class Tags {
@@ -31,7 +26,6 @@ public class Tags {
     private String id;
     private boolean Staff;
     private boolean Partner;
-    private boolean Helper;
     private boolean Toxic;
 
     public String getId() {
@@ -42,7 +36,7 @@ public class Tags {
         this.id = id;
     }
 
-    public boolean isStaff() {
+    boolean isStaff() {
         return Staff;
     }
 
@@ -50,7 +44,7 @@ public class Tags {
         Staff = true;
     }
 
-    public boolean isPartner() {
+    boolean isPartner() {
         return Partner;
     }
 
@@ -58,15 +52,7 @@ public class Tags {
         Partner = true;
     }
 
-    public boolean isHelper() {
-        return Helper;
-    }
-
-    public void setHelper() {
-        Helper = true;
-    }
-
-    public boolean isToxic() {
+    boolean isToxic() {
         return Toxic;
     }
 

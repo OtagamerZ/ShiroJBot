@@ -43,6 +43,7 @@ import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Main extends ListenerAdapter implements JobListener, Job {
@@ -287,7 +288,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             ca = ca.stream().filter(c -> c.getGuildID().equals(message.getGuild().getId())).collect(Collectors.toList());
                             int index = new Random().nextInt(ca.size());
                             List<CustomAnswers> finalCa = ca;
-                            message.getChannel().sendTyping().queue(m -> message.getChannel().sendMessage(finalCa.get(index).getAnswer()).queueAfter(finalCa.get(index).getAnswer().length() * 25, TimeUnit.MILLISECONDS));
+                            message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(finalCa.get(index).getAnswer()).queueAfter(finalCa.get(index).getAnswer().length() * 25, TimeUnit.MILLISECONDS));
                         }
                     } catch (Exception ignore) {
                     }
@@ -303,17 +304,19 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                 }
                                 if (tc == null) {
                                     if (gcMap.get(message.getGuild().getId()).getLvlNotif())
-                                        message.getChannel().sendMessage(message.getAuthor().getAsMention() + " subiu para o level " + Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()).getLevel() + ". GGWP!! :tada:").queue();
+                                        message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(message.getAuthor().getAsMention() + " subiu para o level " + Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()).getLevel() + ". GGWP!! :tada:").queue());
                                     if (gcMap.get(message.getGuild().getId()).getCargoslvl().containsKey(Integer.toString(Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()).getLevel()))) {
                                         Member member = Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId());
                                         String roleID = (String) gcMap.get(message.getGuild().getId()).getCargoslvl().get(Integer.toString(member.getLevel()));
 
                                         message.getGuild().getController().addRolesToMember(message.getMember(), message.getGuild().getRoleById(roleID)).queue();
-                                        message.getChannel().sendMessage(message.getAuthor().getAsMention() + " ganhou o cargo " + message.getGuild().getRoleById(roleID).getAsMention() + ". Parabéns!").queue();
+                                        message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(message.getAuthor().getAsMention() + " ganhou o cargo " + message.getGuild().getRoleById(roleID).getAsMention() + ". Parabéns!").queue());
                                     }
                                 } else {
-                                    if (gcMap.get(message.getGuild().getId()).getLvlNotif())
-                                        tc.sendMessage(message.getAuthor().getAsMention() + " subiu para o level " + Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()).getLevel() + ". GGWP!! :tada:").queue();
+                                    if (gcMap.get(message.getGuild().getId()).getLvlNotif()) {
+                                        TextChannel finalTc = tc;
+                                        tc.sendTyping().queue(tm -> finalTc.sendMessage(message.getAuthor().getAsMention() + " subiu para o level " + Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()).getLevel() + ". GGWP!! :tada:").queue());
+                                    }
                                     if (gcMap.get(message.getGuild().getId()).getCargoslvl().containsKey(Integer.toString(Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()).getLevel()))) {
                                         Member member = Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId());
                                         String roleID = (String) gcMap.get(message.getGuild().getId()).getCargoslvl().get(Integer.toString(member.getLevel()));
@@ -333,7 +336,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     if (message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
                         //COMMANDS--------------------------------------------------------------------------------->
                         if (new Random().nextInt(1000) > 950) {
-                            message.getChannel().sendMessage("Opa, está gostando de me utilizar em seu servidor? Caso sim, se puder votar me ajudaria **MUITO** a me tornar cada vez mais popular e ser chamada para mais servidores!\n https://discordbots.org/bot/572413282653306901").queue();
+                            message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Opa, está gostando de me utilizar em seu servidor? Caso sim, se puder votar me ajudaria **MUITO** a me tornar cada vez mais popular e ser chamada para mais servidores!\n https://discordbots.org/bot/572413282653306901").queue());
                         }
                         if (Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()) == null) {
                             Member m = new Member();
@@ -348,7 +351,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         //GERAL--------------------------------------------------------------------------------->
 
                         if (hasPrefix(message, "ping")) {
-                            message.getChannel().sendMessage("Pong! :ping_pong: " + bot.getPing() + " ms").queue();
+                            message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Pong! :ping_pong: " + bot.getPing() + " ms").queue());
                         } else if (hasPrefix(message, "bug")) {
                             Misc.sendPM(owner, Embeds.bugReport(message, gcMap.get(message.getGuild().getId()).getPrefix()));
                         } else if (hasPrefix(message, "uptime")) {
@@ -357,11 +360,11 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             Misc.help(message, gcMap.get(message.getGuild().getId()).getPrefix(), owner);
                         } else if (hasPrefix(message, "avatar")) {
                             if (message.getMessage().getMentionedUsers().size() > 0) {
-                                message.getChannel().sendMessage("Avatar de " + message.getMessage().getMentionedUsers().get(0).getAsMention() + ":\n" + message.getMessage().getMentionedUsers().get(0).getAvatarUrl()).queue();
+                                message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Avatar de " + message.getMessage().getMentionedUsers().get(0).getAsMention() + ":\n" + message.getMessage().getMentionedUsers().get(0).getAvatarUrl()).queue());
                             } else if (message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix() + "avatar", "").trim().equals("guild")) {
-                                message.getChannel().sendMessage("Avatar do server:\n" + message.getMessage().getGuild().getIconUrl()).queue();
+                                message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Avatar do server:\n" + message.getMessage().getGuild().getIconUrl()).queue());
                             } else {
-                                message.getChannel().sendMessage("Você precisa mencionar alguém!").queue();
+                                message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Você precisa mencionar alguém!").queue());
                             }
                         } else if (hasPrefix(message, "imagem")) {
                             Misc.image(message, cmd);
@@ -372,16 +375,18 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                 if (cmd[1].contains(">")) {
                                     String from = cmd[1].split(">")[0];
                                     String to = cmd[1].split(">")[1];
-                                    try {
-                                        message.getChannel().sendMessage(Tradutor.translate(from, to, message.getMessage().getContentRaw().replace(cmd[0], "").replace(cmd[1], ""))).queue();
-                                    } catch (IOException e) {
-                                        message.getChannel().sendMessage("Opa, deu erro aqui, veja se as siglas dos idiomas estão corretas!").queue();
-                                    }
+                                    message.getChannel().sendTyping().queue(tm -> {
+                                        try {
+                                            message.getChannel().sendMessage(Tradutor.translate(from, to, message.getMessage().getContentRaw().replace(cmd[0], "").replace(cmd[1], ""))).queue();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                    });
                                 } else {
-                                    message.getChannel().sendMessage("Você precisa especificar de qual pra qual idioma devo traduzir (`de`>`para`)").queue();
+                                    message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Você precisa especificar de qual pra qual idioma devo traduzir (`de`>`para`)").queue());
                                 }
                             } else {
-                                message.getChannel().sendMessage("Você não me disse praticamente nada!").queue();
+                                message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Você não me disse praticamente nada!").queue());
                             }
                         } else if (hasPrefix(message, "escolha")) {
                             Misc.choose(message, cmd[0]);
@@ -392,84 +397,86 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                 e.printStackTrace();
                             }
                         } else if (hasPrefix(message, "perfil")) {
-                            try {
-                                Embeds.levelEmbed(message, Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()), tagsMap);
-                            } catch (IOException e) {
-                                System.out.println(e.toString());
-                            }
+                            Embeds.levelEmbed(message, Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()), tagsMap);
                         } else if (hasPrefix(message, "fundo")) {
                             Misc.setBg(message, cmd, Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()));
-                        } else if (hasPrefix(message, "conquista")) {
-                            if (message.getGuild().getId().equals("421495229594730496")) {
-                                Misc.badges(message);
-                            } else {
-                                message.getChannel().sendMessage(":x: Você está no servidor errado, este comando é exclusivo do servidor OtagamerZ!").queue();
-                            }
-                        } else if (hasPrefix(message, "conquistas")) {
-                            if (message.getGuild().getId().equals("421495229594730496")) {
-                                try {
-                                    Embeds.myBadgesEmbed(message, Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()));
-                                } catch (IOException e) {
-                                    System.out.println(e.toString());
+                        } else {
+                            final Consumer<Void> otgmzCmd = tm -> message.getChannel().sendMessage(":x: Você está no servidor errado, este comando é exclusivo do servidor OtagamerZ!").queue();
+                            if (hasPrefix(message, "conquista")) {
+                                if (message.getGuild().getId().equals("421495229594730496")) {
+                                    Misc.badges(message);
+                                } else {
+                                    message.getChannel().sendTyping().queue(otgmzCmd);
+                                }
+                            } else if (hasPrefix(message, "conquistas")) {
+                                if (message.getGuild().getId().equals("421495229594730496")) {
+                                    try {
+                                        Embeds.myBadgesEmbed(message, Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()));
+                                    } catch (IOException e) {
+                                        System.out.println(e.toString());
+                                    }
+                                } else {
+                                    message.getChannel().sendTyping().queue(otgmzCmd);
                                 }
                             } else {
-                                message.getChannel().sendMessage(":x: Você está no servidor errado, este comando é exclusivo do servidor OtagamerZ!").queue();
-                            }
-                        } else if (hasPrefix(message, "vemca")) {
-                            if (message.getMessage().getMentionedUsers().size() != 0) {
-                                Reactions.hug(bot, message.getMessage(), message.getMessage().getMentionedUsers().get(0), message.getTextChannel(), false, message.getAuthor());
-                            } else {
-                                message.getChannel().sendMessage(":x: Você precisa mencionar um usuário!").queue();
-                            }
-                        } else if (hasPrefix(message, "meee")) {
-                            Reactions.facedesk(message.getMessage());
-                        } else if (hasPrefix(message, "dançar")) {
-                            Reactions.dance(message.getMessage(), false);
-                        } else if (hasPrefix(message, "sqn")) {
-                            Reactions.nope(message.getMessage());
-                        } else if (hasPrefix(message, "corre")) {
-                            Reactions.run(message.getMessage());
-                        } else if (hasPrefix(message, "baka")) {
-                            Reactions.blush(message.getMessage());
-                        } else if (hasPrefix(message, "kkk")) {
-                            Reactions.laugh(message.getMessage());
-                        } else if (hasPrefix(message, "triste")) {
-                            Reactions.sad(message.getMessage());
-                        } else if (hasPrefix(message, "tapa")) {
-                            if (message.getMessage().getMentionedUsers().size() != 0) {
-                                Reactions.slap(bot, message.getMessage(), message.getMessage().getMentionedUsers().get(0), message.getTextChannel(), false, message.getAuthor());
-                            } else {
-                                message.getChannel().sendMessage(":x: Você precisa mencionar um usuário!").queue();
-                            }
-                        } else if (hasPrefix(message, "cafunhe")) {
-                            if (message.getMessage().getMentionedUsers().size() != 0) {
-                                Reactions.pat(message.getMessage().getMentionedUsers().get(0), message.getTextChannel(), false, message.getAuthor());
-                            } else {
-                                message.getChannel().sendMessage(":x: Você precisa mencionar um usuário!").queue();
-                            }
-                        } else if (hasPrefix(message, "chega")) {
-                            if (message.getMessage().getMentionedUsers().size() != 0) {
-                                Reactions.smash(bot, message.getMessage(), message.getMessage().getMentionedUsers().get(0), message.getTextChannel(), false, message.getAuthor());
-                            } else {
-                                message.getChannel().sendMessage(":x: Você precisa mencionar um usuário!").queue();
-                            }
-                        } else if (hasPrefix(message, "encarar")) {
-                            if (message.getMessage().getMentionedUsers().size() != 0) {
-                                Reactions.stare(bot, message.getMessage().getMentionedUsers().get(0), message.getTextChannel(), false, message.getAuthor());
-                            } else {
-                                message.getChannel().sendMessage(":x: Você precisa mencionar um usuário!").queue();
-                            }
-                        } else if (hasPrefix(message, "beijar")) {
-                            if (message.getMessage().getMentionedUsers().size() != 0) {
-                                Reactions.kiss(bot, message.getMessage(), message.getMessage().getMentionedUsers().get(0), message.getTextChannel(), false, message.getAuthor());
-                            } else {
-                                message.getChannel().sendMessage(":x: Você precisa mencionar um usuário!").queue();
-                            }
-                        } else if (hasPrefix(message, "embed")) {
-                            try {
-                                Embeds.makeEmbed(message, message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix() + "embed ", ""));
-                            } catch (Exception e) {
-                                message.getChannel().sendMessage("Ops, me parece que o link imagem não está correto, veja bem se incluiu tudo!").queue();
+                                final Consumer<Void> noUser = tm -> message.getChannel().sendMessage(":x: Você precisa mencionar um usuário!").queue();
+                                if (hasPrefix(message, "vemca")) {
+                                    if (message.getMessage().getMentionedUsers().size() != 0) {
+                                        Reactions.hug(bot, message.getMessage(), message.getMessage().getMentionedUsers().get(0), message.getTextChannel(), false, message.getAuthor());
+                                    } else {
+                                        message.getChannel().sendTyping().queue(noUser);
+                                    }
+                                } else if (hasPrefix(message, "meee")) {
+                                    Reactions.facedesk(message.getMessage());
+                                } else if (hasPrefix(message, "dançar")) {
+                                    Reactions.dance(message.getMessage(), false);
+                                } else if (hasPrefix(message, "sqn")) {
+                                    Reactions.nope(message.getMessage());
+                                } else if (hasPrefix(message, "corre")) {
+                                    Reactions.run(message.getMessage());
+                                } else if (hasPrefix(message, "baka")) {
+                                    Reactions.blush(message.getMessage());
+                                } else if (hasPrefix(message, "kkk")) {
+                                    Reactions.laugh(message.getMessage());
+                                } else if (hasPrefix(message, "triste")) {
+                                    Reactions.sad(message.getMessage());
+                                } else if (hasPrefix(message, "tapa")) {
+                                    if (message.getMessage().getMentionedUsers().size() != 0) {
+                                        Reactions.slap(bot, message.getMessage(), message.getMessage().getMentionedUsers().get(0), message.getTextChannel(), false, message.getAuthor());
+                                    } else {
+                                        message.getChannel().sendTyping().queue(noUser);
+                                    }
+                                } else if (hasPrefix(message, "cafunhe")) {
+                                    if (message.getMessage().getMentionedUsers().size() != 0) {
+                                        Reactions.pat(message.getMessage().getMentionedUsers().get(0), message.getTextChannel(), false, message.getAuthor());
+                                    } else {
+                                        message.getChannel().sendTyping().queue(noUser);
+                                    }
+                                } else if (hasPrefix(message, "chega")) {
+                                    if (message.getMessage().getMentionedUsers().size() != 0) {
+                                        Reactions.smash(bot, message.getMessage(), message.getMessage().getMentionedUsers().get(0), message.getTextChannel(), false, message.getAuthor());
+                                    } else {
+                                        message.getChannel().sendTyping().queue(noUser);
+                                    }
+                                } else if (hasPrefix(message, "encarar")) {
+                                    if (message.getMessage().getMentionedUsers().size() != 0) {
+                                        Reactions.stare(bot, message.getMessage().getMentionedUsers().get(0), message.getTextChannel(), false, message.getAuthor());
+                                    } else {
+                                        message.getChannel().sendTyping().queue(noUser);
+                                    }
+                                } else if (hasPrefix(message, "beijar")) {
+                                    if (message.getMessage().getMentionedUsers().size() != 0) {
+                                        Reactions.kiss(bot, message.getMessage(), message.getMessage().getMentionedUsers().get(0), message.getTextChannel(), false, message.getAuthor());
+                                    } else {
+                                        message.getChannel().sendTyping().queue(noUser);
+                                    }
+                                } else if (hasPrefix(message, "embed")) {
+                                    try {
+                                        Embeds.makeEmbed(message, message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix() + "embed ", ""));
+                                    } catch (Exception e) {
+                                        message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Ops, me parece que o link imagem não está correto, veja bem se incluiu tudo!").queue());
+                                    }
+                                }
                             }
                         }
 
@@ -477,7 +484,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
 
                         if (message.getAuthor() == owner) {
                             if (hasPrefix(message, "restart")) {
-                                message.getChannel().sendMessage("Sayonara, Nii-chan!").queue();
+                                message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Sayonara, Nii-chan!").queue());
                                 bot.shutdown();
                             } else if (hasPrefix(message, "servers")) {
                                 Owner.getServers(bot, message);
@@ -492,58 +499,61 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             } else if (hasPrefix(message, "dar")) {
                                 try {
                                     Database.getMemberById(message.getMessage().getMentionedUsers().get(0).getId() + message.getGuild().getId()).giveBadge(cmd[2]);
-                                    message.getChannel().sendMessage("Parabéns, " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " completou a conquista Nº " + cmd[2]).queue();
+                                    message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Parabéns, " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " completou a conquista Nº " + cmd[2]).queue());
                                 } catch (Exception e) {
-                                    message.getChannel().sendMessage(":x: Ué, não estou conseguindo marcar a conquista como completa. Tenha certeza de digitar o comando neste formato: " + gcMap.get(message.getGuild().getId()).getPrefix() + "dar [MEMBRO] [Nº]").queue();
+                                    message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(":x: Ué, não estou conseguindo marcar a conquista como completa. Tenha certeza de digitar o comando neste formato: " + gcMap.get(message.getGuild().getId()).getPrefix() + "dar [MEMBRO] [Nº]").queue());
                                 }
                             } else if (hasPrefix(message, "tirar")) {
                                 try {
                                     Database.getMemberById(message.getMessage().getMentionedUsers().get(0).getId() + message.getGuild().getId()).removeBadge(cmd[2]);
-                                    message.getChannel().sendMessage("Meeee, " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " teve a conquista Nº " + cmd[2] + " retirada de sua posse!").queue();
+                                    message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Meeee, " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " teve a conquista Nº " + cmd[2] + " retirada de sua posse!").queue());
                                 } catch (Exception e) {
-                                    message.getChannel().sendMessage(":x: Ué, não estou conseguindo marcar a conquista como incompleta. Tenha certeza de digitar o comando neste formato: " + gcMap.get(message.getGuild().getId()).getPrefix() + "tirar [MEMBRO] [Nº]").queue();
+                                    message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(":x: Ué, não estou conseguindo marcar a conquista como incompleta. Tenha certeza de digitar o comando neste formato: " + gcMap.get(message.getGuild().getId()).getPrefix() + "tirar [MEMBRO] [Nº]").queue());
                                 }
-                            } else if (hasPrefix(message, "giveStaff")) {
-                                if (message.getMessage().getMentionedUsers() != null) {
-                                    if (tagsMap.containsKey(message.getMessage().getMentionedUsers().get(0).getId())) {
-                                        tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setStaff();
-                                        Database.sendAllTags(tagsMap.values());
+                            } else {
+                                final Consumer<Void> bakaNiiChan = tm -> message.getChannel().sendMessage("Nii-chan bobo, você precisa mencionar um usuário!").queue();
+                                if (hasPrefix(message, "giveStaff")) {
+                                    if (message.getMessage().getMentionedUsers() != null) {
+                                        if (tagsMap.containsKey(message.getMessage().getMentionedUsers().get(0).getId())) {
+                                            tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setStaff();
+                                            Database.sendAllTags(tagsMap.values());
+                                        } else {
+                                            tagsMap.put(message.getMessage().getMentionedUsers().get(0).getId(), new Tags());
+                                            tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setId(message.getMessage().getMentionedUsers().get(0).getId());
+                                            tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setStaff();
+                                            Database.sendAllTags(tagsMap.values());
+                                        }
                                     } else {
-                                        tagsMap.put(message.getMessage().getMentionedUsers().get(0).getId(), new Tags());
-                                        tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setId(message.getMessage().getMentionedUsers().get(0).getId());
-                                        tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setStaff();
-                                        Database.sendAllTags(tagsMap.values());
+                                        message.getChannel().sendTyping().queue(bakaNiiChan);
                                     }
-                                } else {
-                                    message.getChannel().sendMessage("Nii-chan bobo, você precisa mencionar um usuário!").queue();
-                                }
-                            } else if (hasPrefix(message, "givePartner")) {
-                                if (message.getMessage().getMentionedUsers() != null) {
-                                    if (tagsMap.containsKey(message.getMessage().getMentionedUsers().get(0).getId())) {
-                                        tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setPartner();
-                                        Database.sendAllTags(tagsMap.values());
+                                } else if (hasPrefix(message, "givePartner")) {
+                                    if (message.getMessage().getMentionedUsers() != null) {
+                                        if (tagsMap.containsKey(message.getMessage().getMentionedUsers().get(0).getId())) {
+                                            tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setPartner();
+                                            Database.sendAllTags(tagsMap.values());
+                                        } else {
+                                            tagsMap.put(message.getMessage().getMentionedUsers().get(0).getId(), new Tags());
+                                            tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setId(message.getMessage().getMentionedUsers().get(0).getId());
+                                            tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setPartner();
+                                            Database.sendAllTags(tagsMap.values());
+                                        }
                                     } else {
-                                        tagsMap.put(message.getMessage().getMentionedUsers().get(0).getId(), new Tags());
-                                        tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setId(message.getMessage().getMentionedUsers().get(0).getId());
-                                        tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setPartner();
-                                        Database.sendAllTags(tagsMap.values());
+                                        message.getChannel().sendTyping().queue(bakaNiiChan);
                                     }
-                                } else {
-                                    message.getChannel().sendMessage("Nii-chan bobo, você precisa mencionar um usuário!").queue();
-                                }
-                            } else if (hasPrefix(message, "giveToxic")) {
-                                if (message.getMessage().getMentionedUsers() != null) {
-                                    if (tagsMap.containsKey(message.getMessage().getMentionedUsers().get(0).getId())) {
-                                        tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setToxic();
-                                        Database.sendAllTags(tagsMap.values());
+                                } else if (hasPrefix(message, "giveToxic")) {
+                                    if (message.getMessage().getMentionedUsers() != null) {
+                                        if (tagsMap.containsKey(message.getMessage().getMentionedUsers().get(0).getId())) {
+                                            tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setToxic();
+                                            Database.sendAllTags(tagsMap.values());
+                                        } else {
+                                            tagsMap.put(message.getMessage().getMentionedUsers().get(0).getId(), new Tags());
+                                            tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setId(message.getMessage().getMentionedUsers().get(0).getId());
+                                            tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setToxic();
+                                            Database.sendAllTags(tagsMap.values());
+                                        }
                                     } else {
-                                        tagsMap.put(message.getMessage().getMentionedUsers().get(0).getId(), new Tags());
-                                        tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setId(message.getMessage().getMentionedUsers().get(0).getId());
-                                        tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setToxic();
-                                        Database.sendAllTags(tagsMap.values());
+                                        message.getChannel().sendTyping().queue(bakaNiiChan);
                                     }
-                                } else {
-                                    message.getChannel().sendMessage("Nii-chan bobo, você precisa mencionar um usuário!").queue();
                                 }
                             }
                         }
@@ -559,42 +569,42 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                     Member m = Database.getMemberById(message.getMessage().getMentionedUsers().get(0).getId() + message.getGuild().getId());
                                     m.resetXp();
                                     Database.sendMember(m);
-                                    message.getChannel().sendMessage(message.getMessage().getMentionedUsers().get(0).getAsMention() + " teve seus XP e leveis resetados!").queue();
+                                    message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(message.getMessage().getMentionedUsers().get(0).getAsMention() + " teve seus XP e leveis resetados!").queue());
                                 } else {
-                                    message.getChannel().sendMessage(":x: Você precisa me dizer de quem devo resetar o XP.").queue();
+                                    message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(":x: Você precisa me dizer de quem devo resetar o XP.").queue());
                                 }
                             } else if (hasPrefix(message, "alertar")) {
                                 if (message.getMessage().getMentionedUsers() != null && cmd.length >= 3) {
                                     Admin.addWarn(message, message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix(), ""));
                                 } else {
-                                    message.getChannel().sendMessage(":x: Você precisa mencionar um usuário e dizer o motivo do alerta.").queue();
+                                    message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(":x: Você precisa mencionar um usuário e dizer o motivo do alerta.").queue());
                                 }
                             } else if (hasPrefix(message, "perdoar")) {
                                 if (message.getMessage().getMentionedUsers() != null && cmd.length >= 3) {
                                     Admin.takeWarn(message);
                                 } else {
-                                    message.getChannel().sendMessage(":x: Você precisa mencionar um usuário e dizer o Nº do alerta a ser removido.").queue();
+                                    message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(":x: Você precisa mencionar um usuário e dizer o Nº do alerta a ser removido.").queue());
                                 }
                             } else if (hasPrefix(message, "rcargolvl")) {
                                 if (cmd.length == 2) {
                                     Map<String, Object> cargos = gcMap.get(message.getGuild().getId()).getCargoslvl();
                                     cargos.remove(cmd[1]);
                                     gcMap.get(message.getGuild().getId()).setCargoslvl(new JSONObject(cargos));
-                                    message.getChannel().sendMessage("Retirada a recompensa de cargo do level " + cmd[1] + " com sucesso!").queue();
+                                    message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Retirada a recompensa de cargo do level " + cmd[1] + " com sucesso!").queue());
                                 } else {
-                                    message.getChannel().sendMessage("Opa, algo deu errado, lembre-se de especificar apenas o level.").queue();
+                                    message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Opa, algo deu errado, lembre-se de especificar apenas o level.").queue());
                                 }
                             } else if (hasPrefix(message, "lvlnotif")) {
                                 if (gcMap.get(message.getGuild().getId()).getLvlNotif()) {
-                                    message.getChannel().sendMessage("Não irei mais avisar quando um membro passar de nível!").queue();
+                                    message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Não irei mais avisar quando um membro passar de nível!").queue());
                                     gcMap.get(message.getGuild().getId()).setLvlNotif(false);
                                 } else {
-                                    message.getChannel().sendMessage("Agora irei avisar quando um membro passar de nível!").queue();
+                                    message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Agora irei avisar quando um membro passar de nível!").queue());
                                     gcMap.get(message.getGuild().getId()).setLvlNotif(true);
                                 }
                             } else if (hasPrefix(message, "ouçatodos")) {
                                 gcMap.get(message.getGuild().getId()).setAnyTell(!gcMap.get(message.getGuild().getId()).isAnyTell());
-                                message.getChannel().sendMessage(gcMap.get(message.getGuild().getId()).isAnyTell() ? "Irei ouvir novas respostas da comunidade agora!" : "Só irei ouvir novas respostas de um moderador!").queue();
+                                message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(gcMap.get(message.getGuild().getId()).isAnyTell() ? "Irei ouvir novas respostas da comunidade agora!" : "Só irei ouvir novas respostas de um moderador!").queue());
                             }
                         }
 
@@ -608,39 +618,39 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                     ca.setGuildID(message.getGuild().getId());
                                     ca.setGatilho(com.split(";")[0]);
                                     ca.setAnswer(com.split(";")[1]);
-                                    message.getChannel().sendMessage("Quando alguém falar `" + com.split(";")[0] + "` irei responder `" + com.split(";")[1] + "`.").queue();
+                                    message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Quando alguém falar `" + com.split(";")[0] + "` irei responder `" + com.split(";")[1] + "`.").queue());
                                     Database.sendCustomAnswer(ca);
                                 } else {
-                                    message.getChannel().sendMessage("Você não me passou argumentos suficientes!").queue();
+                                    message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Você não me passou argumentos suficientes!").queue());
                                 }
                             } else if (hasPrefix(message, "nãofale")) {
                                 if (cmd.length > 1) {
                                     try {
                                         if (Database.getCustomAnswerById(Long.valueOf(cmd[1])) != null) {
                                             CustomAnswers ca = Database.getCustomAnswerById(Long.valueOf(cmd[1]));
-                                            message.getChannel().sendMessage("Não irei mais responder `" + ca.getAnswer() + "` quando alguém disser `" + ca.getGatilho() + "`.").queue();
+                                            message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Não irei mais responder `" + ca.getAnswer() + "` quando alguém disser `" + ca.getGatilho() + "`.").queue());
                                             Database.deleteCustomAnswer(ca);
                                         } else {
-                                            message.getChannel().sendMessage("Esta resposta não existe!").queue();
+                                            message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Esta resposta não existe!").queue());
                                         }
                                     } catch (NumberFormatException e) {
-                                        message.getChannel().sendMessage("Você não me passou um ID válido!").queue();
+                                        message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Você não me passou um ID válido!").queue());
                                     }
                                 } else {
-                                    message.getChannel().sendMessage("Você precisa me passar um ID para que eu possa excluir uma resposta!").queue();
+                                    message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Você precisa me passar um ID para que eu possa excluir uma resposta!").queue());
                                 }
                             } else if (hasPrefix(message, "falealista")) {
                                 if (cmd.length > 1)
                                     Embeds.answerList(message, Objects.requireNonNull(Database.getAllCustomAnswers()).stream().filter(a -> a.getGuildID().equals(message.getGuild().getId())).collect(Collectors.toList()));
                                 else
-                                    message.getChannel().sendMessage("Você precisa me dizer uma página (serão mostradas 5 respostas por página)!").queue();
+                                    message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Você precisa me dizer uma página (serão mostradas 5 respostas por página)!").queue());
                             }
                         }
 
                         //BEYBLADE--------------------------------------------------------------------------------->
                         if (hasPrefix(message, "binfo")) {
                             Beyblade bb = Database.getBeyblade(message.getAuthor().getId());
-                            if (bb == null) message.getChannel().sendMessage("Você não possui uma beyblade!").queue();
+                            if (bb == null) message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Você não possui uma beyblade!").queue());
                             else {
                                 Embeds.beybladeEmbed(message, bb);
                             }
@@ -664,12 +674,12 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             if (cmd.length > 1) {
                                 Arena.chooseHouse(message, cmd, Database.getBeyblade(message.getAuthor().getId()));
                             } else {
-                                message.getChannel().sendMessage("__**Alinhamento é o que define seu estilo de combate:**__\n- Tigres são focados em uma **velocidade** extrema.\n- Dragões são focados em um **poder** incomparável.\n- Ursos são focados em uma **defesa** impenetrável.\n\n" +
+                                message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("__**Alinhamento é o que define seu estilo de combate:**__\n- Tigres são focados em uma **velocidade** extrema.\n- Dragões são focados em um **poder** incomparável.\n- Ursos são focados em uma **defesa** impenetrável.\n\n" +
                                         "Cada alinhamento possui especiais diferentes, que poderão virar um duelo, a **primeira vez** que você escolher um alinhamento custará **150 pontos de combate**. " +
                                         "Após, **qualquer troca de alinhamento custará 300 pontos de combate**.\n" +
                                         "\nPara escolher tigre, digite `" + gcMap.get(message.getGuild().getId()).getPrefix() + "balinhamento tigre`" +
                                         "\nPara escolher dragão, digite `" + gcMap.get(message.getGuild().getId()).getPrefix() + "balinhamento dragão`" +
-                                        "\nPara escolher urso, digite `" + gcMap.get(message.getGuild().getId()).getPrefix() + "balinhamento urso`").queue();
+                                        "\nPara escolher urso, digite `" + gcMap.get(message.getGuild().getId()).getPrefix() + "balinhamento urso`").queue());
                             }
                         } else if (hasPrefix(message, "bespecial")) {
                             Embeds.specialEmbed(message, Objects.requireNonNull(Database.getBeyblade(message.getAuthor().getId())));
