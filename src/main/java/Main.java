@@ -572,15 +572,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                     }
                                 } else if (hasPrefix(message, "test")) {
                                     try {
-                                        GraphicsEnvironment ge = GraphicsEnvironment
-                                                .getLocalGraphicsEnvironment();
-
-                                        Font[] allFonts = ge.getAllFonts();
-
-                                        for (Font font : allFonts) {
-                                            System.out.println(font.getFontName(Locale.US));
-                                        }
-                                        new ProfileTest().makeProfile(message.getMember());
+                                        message.getChannel().sendFile(new ProfileTest().makeProfile(message.getMember()), "test.jpg").queue();
                                     } catch (FontFormatException e) {
                                         e.printStackTrace();
                                     }
