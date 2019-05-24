@@ -101,6 +101,35 @@ public class Database {
         }
     }
 
+    public static Member getMemberById(String t) {
+        Member m;
+        EntityManager em = getEntityManager();
+        Query q = em.createQuery("SELECT c FROM Member c WHERE id LIKE ?1", Member.class);
+        q.setParameter(1, t);
+        m = (Member) q.getSingleResult();
+        em.close();
+
+        return m;
+    }
+
+    public static void sendMember(Member m) {
+        EntityManager em = getEntityManager();
+
+        em.getTransaction().begin();
+        em.merge(m);
+        em.getTransaction().commit();
+        em.close();
+        System.out.println("Membro salvo com sucesso!");
+    }
+
+    public static void deleteMember(Member m) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        em.remove(m);
+        em.getTransaction().commit();
+        em.close();
+    }
+
     public static void sendCustomAnswer(CustomAnswers ca) {
         EntityManager em = getEntityManager();
 

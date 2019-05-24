@@ -19,6 +19,7 @@
 
 package com.kuuhaku.commands;
 
+import com.kuuhaku.controller.Database;
 import com.kuuhaku.model.Member;
 import com.kuuhaku.model.guildConfig;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -139,13 +140,16 @@ public class Admin {
         }
     }
 
-    public static void addWarn(MessageReceivedEvent message, String reason, Map<String, Member> m) {
-        m.get(message.getMessage().getMentionedUsers().get(0).getId() + message.getGuild().getId()).addWarn(reason);
+    public static void addWarn(MessageReceivedEvent message, String reason) {
+        Member m = Database.getMemberById(message.getMessage().getMentionedUsers().get(0).getId() + message.getGuild().getId());
+        m.addWarn(reason);
         message.getChannel().sendMessage("O usuário " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " teve um alerta registrado pelo seguinte motivo: `" + reason + "`").queue();
     }
 
-    public static void takeWarn(MessageReceivedEvent message, Map<String, Member> m) {
-        m.get(message.getMessage().getMentionedUsers().get(0).getId() + message.getGuild().getId()).removeWarn(Integer.parseInt(message.getMessage().getContentRaw().split(" ")[2]));
+    public static void takeWarn(MessageReceivedEvent message) {
+        Member m = Database.getMemberById(message.getMessage().getMentionedUsers().get(0).getId() + message.getGuild().getId());
+        m.removeWarn(Integer.parseInt(message.getMessage().getContentRaw().split(" ")[2]));
+        Database.sendMember(m);
         message.getChannel().sendMessage("Foi retirado o alerta " + message.getMessage().getContentRaw().split(" ")[2] + " um alerta do usuário " + message.getMessage().getMentionedUsers().get(0).getAsMention()).queue();
     }
 }
