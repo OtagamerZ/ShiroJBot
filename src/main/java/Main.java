@@ -39,9 +39,11 @@ import org.quartz.impl.StdSchedulerFactory;
 
 import javax.persistence.NoResultException;
 import javax.security.auth.login.LoginException;
+import java.awt.*;
 import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -553,6 +555,12 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                         }
                                     } else {
                                         message.getChannel().sendTyping().queue(bakaNiiChan);
+                                    }
+                                } else if (hasPrefix(message, "test")) {
+                                    try {
+                                        new ProfileTest().makeProfile(message.getMember());
+                                    } catch (FontFormatException e) {
+                                        e.printStackTrace();
                                     }
                                 }
                             }
