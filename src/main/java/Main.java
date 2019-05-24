@@ -606,8 +606,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             } else if (hasPrefix(message, "nãofale")) {
                                 if (cmd.length > 1) {
                                     try {
-                                        if (Database.getCustomAnswerById(cmd[1]) != null) {
-                                            Database.deleteCustomAnswer(Database.getCustomAnswerById(cmd[1]));
+                                        if (Database.getCustomAnswerById(Long.valueOf(cmd[1])) != null) {
+                                            Database.deleteCustomAnswer(Database.getCustomAnswerById(Long.valueOf(cmd[1])));
                                         } else {
                                             message.getChannel().sendMessage("Esta resposta não existe!").queue();
                                         }
