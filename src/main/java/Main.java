@@ -162,8 +162,10 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         try {
             if (gcMap.get(user.getGuild().getId()).getCanaladeus() != null) {
                 Embeds.byeEmbed(user, gcMap.get(user.getGuild().getId()).getMsgAdeus(), user.getGuild().getTextChannelById(gcMap.get(user.getGuild().getId()).getCanaladeus()));
-                if (Database.getMemberById(user.getUser().getId() + user.getGuild().getId()) != null)
-                    Database.deleteMember(Database.getMemberById(user.getUser().getId() + user.getGuild().getId()));
+                if (Database.getMemberById(user.getUser().getId() + user.getGuild().getId()) != null) {
+                    Member m = Database.getMemberById(user.getUser().getId() + user.getGuild().getId());
+                    Database.deleteMember(m);
+                }
             }
         } catch (NullPointerException ignore) {
         } catch (Exception e) {
@@ -607,7 +609,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                 if (cmd.length > 1) {
                                     try {
                                         if (Database.getCustomAnswerById(Long.valueOf(cmd[1])) != null) {
-                                            Database.deleteCustomAnswer(Database.getCustomAnswerById(Long.valueOf(cmd[1])));
+                                            CustomAnswers ca = Database.getCustomAnswerById(Long.valueOf(cmd[1]));
+                                            Database.deleteCustomAnswer(ca);
                                         } else {
                                             message.getChannel().sendMessage("Esta resposta não existe!").queue();
                                         }
