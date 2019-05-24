@@ -556,7 +556,9 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                 Embeds.configsEmbed(message, gcMap.get(message.getGuild().getId()));
                             } else if (hasPrefix(message, "punir")) {
                                 if (message.getMessage().getMentionedUsers() != null) {
-                                    Database.getMemberById(message.getMessage().getMentionedUsers().get(0).getId() + message.getGuild().getId()).resetXp();
+                                    Member m = Database.getMemberById(message.getMessage().getMentionedUsers().get(0).getId() + message.getGuild().getId());
+                                    m.resetXp();
+                                    Database.sendMember(m);
                                     message.getChannel().sendMessage(message.getMessage().getMentionedUsers().get(0).getAsMention() + " teve seus XP e leveis resetados!").queue();
                                 } else {
                                     message.getChannel().sendMessage(":x: Você precisa me dizer de quem devo resetar o XP.").queue();
