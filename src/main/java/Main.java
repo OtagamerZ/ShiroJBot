@@ -288,8 +288,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     }
                     try {
                         if (Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()) != null && !message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
-                            boolean lvlUp;
-                            lvlUp = Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()).addXp();
+                            boolean lvlUp = Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()).addXp();
+                            Database.sendMember(Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()));
                             if (lvlUp) {
                                 TextChannel tc = null;
                                 try {
