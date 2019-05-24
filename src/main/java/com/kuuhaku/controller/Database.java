@@ -74,33 +74,6 @@ public class Database {
         }
     }
 
-    public static void sendAllMembersData(Collection<Member> gc) {
-        EntityManager em = getEntityManager();
-
-        em.getTransaction().begin();
-        gc.forEach(em::merge);
-        em.getTransaction().commit();
-        em.close();
-        System.out.println("Membros salvos com sucesso!");
-    }
-
-    @SuppressWarnings("unchecked")
-    public static Map<String, Member> getMembersData() {
-        List<Member> lgc;
-
-        try {
-            EntityManager em = getEntityManager();
-            Query q = em.createQuery("SELECT c FROM Member c", Member.class);
-            lgc = q.getResultList();
-            em.close();
-
-            return lgc.stream().collect(Collectors.toMap(Member::getId, m -> m));
-        } catch (Exception e) {
-            System.out.println("Erro ao recuperar membros: " + e);
-            return null;
-        }
-    }
-
     public static Member getMemberById(String t) {
         Member m;
         EntityManager em = getEntityManager();
@@ -125,7 +98,7 @@ public class Database {
     public static void deleteMember(Member m) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
-        em.remove(m);
+        em.remove(em.getReference(m.getClass(), m.getId()));
         em.getTransaction().commit();
         em.close();
     }
@@ -172,7 +145,7 @@ public class Database {
     public static void deleteCustomAnswer(CustomAnswers ca) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
-        em.remove(ca);
+        em.remove(em.getReference(ca.getClass(), ca.getId()));
         em.getTransaction().commit();
         em.close();
     }
