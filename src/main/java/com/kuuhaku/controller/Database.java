@@ -54,7 +54,7 @@ public class Database {
         gc.forEach(em::merge);
         em.getTransaction().commit();
         em.close();
-    }
+        }
 
     @SuppressWarnings("unchecked")
     public static Map<String, guildConfig> getGuildConfigs() {
