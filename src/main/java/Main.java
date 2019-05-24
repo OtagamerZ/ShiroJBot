@@ -284,38 +284,40 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         }
                     } catch (Exception ignore) {
                     }
-                    if (Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()) != null && !message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
-                        boolean lvlUp;
-                        lvlUp = Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()).addXp();
-                        if (lvlUp) {
-                            TextChannel tc = null;
-                            try {
-                                tc = message.getGuild().getTextChannelById(gcMap.get(message.getGuild().getId()).getCanallvl());
-                            } catch (IllegalArgumentException ignore) {
-                            }
-                            if (tc == null) {
-                                if (gcMap.get(message.getGuild().getId()).getLvlNotif())
-                                    message.getChannel().sendMessage(message.getAuthor().getAsMention() + " subiu para o level " + Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()).getLevel() + ". GGWP!! :tada:").queue();
-                                if (gcMap.get(message.getGuild().getId()).getCargoslvl().containsKey(Integer.toString(Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()).getLevel()))) {
-                                    Member member = Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId());
-                                    String roleID = (String) gcMap.get(message.getGuild().getId()).getCargoslvl().get(Integer.toString(member.getLevel()));
-
-                                    message.getGuild().getController().addRolesToMember(message.getMember(), message.getGuild().getRoleById(roleID)).queue();
-                                    message.getChannel().sendMessage(message.getAuthor().getAsMention() + " ganhou o cargo " + message.getGuild().getRoleById(roleID).getAsMention() + ". Parabéns!").queue();
+                    try {
+                        if (Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()) != null && !message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
+                            boolean lvlUp;
+                            lvlUp = Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()).addXp();
+                            if (lvlUp) {
+                                TextChannel tc = null;
+                                try {
+                                    tc = message.getGuild().getTextChannelById(gcMap.get(message.getGuild().getId()).getCanallvl());
+                                } catch (IllegalArgumentException ignore) {
                                 }
-                            } else {
-                                if (gcMap.get(message.getGuild().getId()).getLvlNotif())
-                                    tc.sendMessage(message.getAuthor().getAsMention() + " subiu para o level " + Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()).getLevel() + ". GGWP!! :tada:").queue();
-                                if (gcMap.get(message.getGuild().getId()).getCargoslvl().containsKey(Integer.toString(Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()).getLevel()))) {
-                                    Member member = Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId());
-                                    String roleID = (String) gcMap.get(message.getGuild().getId()).getCargoslvl().get(Integer.toString(member.getLevel()));
+                                if (tc == null) {
+                                    if (gcMap.get(message.getGuild().getId()).getLvlNotif())
+                                        message.getChannel().sendMessage(message.getAuthor().getAsMention() + " subiu para o level " + Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()).getLevel() + ". GGWP!! :tada:").queue();
+                                    if (gcMap.get(message.getGuild().getId()).getCargoslvl().containsKey(Integer.toString(Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()).getLevel()))) {
+                                        Member member = Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId());
+                                        String roleID = (String) gcMap.get(message.getGuild().getId()).getCargoslvl().get(Integer.toString(member.getLevel()));
 
-                                    message.getGuild().getController().addRolesToMember(message.getMember(), message.getGuild().getRoleById(roleID)).queue();
-                                    tc.sendMessage(message.getAuthor().getAsMention() + " ganhou o cargo " + message.getGuild().getRoleById(roleID).getAsMention() + ". Parabéns!").queue();
+                                        message.getGuild().getController().addRolesToMember(message.getMember(), message.getGuild().getRoleById(roleID)).queue();
+                                        message.getChannel().sendMessage(message.getAuthor().getAsMention() + " ganhou o cargo " + message.getGuild().getRoleById(roleID).getAsMention() + ". Parabéns!").queue();
+                                    }
+                                } else {
+                                    if (gcMap.get(message.getGuild().getId()).getLvlNotif())
+                                        tc.sendMessage(message.getAuthor().getAsMention() + " subiu para o level " + Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()).getLevel() + ". GGWP!! :tada:").queue();
+                                    if (gcMap.get(message.getGuild().getId()).getCargoslvl().containsKey(Integer.toString(Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()).getLevel()))) {
+                                        Member member = Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId());
+                                        String roleID = (String) gcMap.get(message.getGuild().getId()).getCargoslvl().get(Integer.toString(member.getLevel()));
+
+                                        message.getGuild().getController().addRolesToMember(message.getMember(), message.getGuild().getRoleById(roleID)).queue();
+                                        tc.sendMessage(message.getAuthor().getAsMention() + " ganhou o cargo " + message.getGuild().getRoleById(roleID).getAsMention() + ". Parabéns!").queue();
+                                    }
                                 }
                             }
                         }
-                    } else {
+                    } catch (NoResultException e) {
                         Member m = new Member();
                         m.setId(message.getAuthor().getId() + message.getGuild().getId());
                         Database.sendMember(m);
@@ -667,7 +669,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
             } catch (NullPointerException | InsufficientPermissionException |
                     IOException e) {
                 e.printStackTrace();
-            } catch (NoResultException ignore){
             }
         }
     }
