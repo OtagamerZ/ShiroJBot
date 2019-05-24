@@ -315,6 +315,10 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                 }
                             }
                         }
+                    } else {
+                        Member m = new Member();
+                        m.setId(message.getAuthor().getId() + message.getGuild().getId());
+                        Database.sendMember(m);
                     }
                     if (message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
                         //COMMANDS--------------------------------------------------------------------------------->
