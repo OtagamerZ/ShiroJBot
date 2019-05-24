@@ -87,7 +87,7 @@ public class Database {
 
     public static void sendMember(Member m) {
         EntityManager em = getEntityManager();
-
+        
         em.getTransaction().begin();
         em.merge(m);
         em.getTransaction().commit();
