@@ -21,6 +21,7 @@ package com.kuuhaku.commands;
 
 import com.kuuhaku.model.Badges;
 import com.kuuhaku.model.Member;
+import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.json.JSONException;
@@ -34,10 +35,10 @@ import java.net.URL;
 
 public class Misc {
     public static void help(MessageReceivedEvent message, String prefix, User owner) {
-        message.getAuthor().openPrivateChannel().queue(channel -> channel.sendMessage("__**Precisa de ajuda? Aqui estou eu!**__\n\n" + Embeds.helpEmbed(prefix)).queue());
-        message.getAuthor().openPrivateChannel().queue(channel -> channel.sendMessage(Embeds.helpEmbed2(prefix)).queue());
-        message.getAuthor().openPrivateChannel().queue(channel -> channel.sendMessage(Embeds.helpEmbed3(prefix)).queue());
-        message.getAuthor().openPrivateChannel().queue(channel -> channel.sendMessage("Precisa de mais ajuda? Fale com meu Nii-chan " + owner.getAsMention() + " ou venha para nosso servidor de suporte: https://discord.gg/HpuF3Vr").queue());
+        sendPM(message.getAuthor(), "__**Precisa de ajuda? Aqui estou eu!**__\n\n" + Embeds.helpEmbed(prefix));
+        sendPM(message.getAuthor(), Embeds.helpEmbed2(prefix));
+        sendPM(message.getAuthor(), Embeds.helpEmbed3(prefix));
+        sendPM(message.getAuthor(), "Precisa de mais ajuda? Fale com meu Nii-chan " + owner.getAsMention() + " ou venha para nosso servidor de suporte: https://discord.gg/HpuF3Vr");
     }
 
     public static void yesNo(MessageReceivedEvent message) {
@@ -101,5 +102,13 @@ public class Misc {
                 message.getChannel().sendMessage("O link desta imagem não me parece válido, veja bem se digitou tudo corretamente!").queue();
             }
         }
+    }
+
+    public static void sendPM(User user, String message) {
+        user.openPrivateChannel().queue( (channel) -> channel.sendMessage(message).queue() );
+    }
+
+    public static void sendPM(User user, MessageEmbed embed) {
+        user.openPrivateChannel().queue( (channel) -> channel.sendMessage(embed).queue() );
     }
 }
