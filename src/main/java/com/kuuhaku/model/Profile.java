@@ -95,7 +95,7 @@ public class Profile {
         g2d.setColor(Color.BLUE);
 
         g2d.drawImage(defBg, null, 0, 0);
-        //g2d.fillRect(263, 213, Math.round(m.getXp() * 239 / (int) Math.pow(m.getLevel(), 2)), 5);
+        g2d.fillRect(262, 213, Math.round(m.getXp() * 239 / (int) Math.pow(m.getLevel(), 2)) / 100, 5);
         g2d.drawImage(avatar, null, 11, 67);
         g2d.drawImage(card, null, 0, 0);
         g2d.drawImage(dev, null, 160, 42);
