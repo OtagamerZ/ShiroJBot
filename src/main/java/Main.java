@@ -25,6 +25,7 @@ import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.events.ReconnectedEvent;
 import net.dv8tion.jda.core.events.ShutdownEvent;
+import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent;
@@ -133,6 +134,23 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         owner = bot.getUserById("350836145921327115");
         homeLog = bot.getGuildById("421495229594730496").getTextChannelById("573861751884349479");
         bot.getPresence().setGame(Owner.getRandomGame(bot));
+    }
+
+    @Override
+    public void onGuildJoin(GuildJoinEvent event) {
+        guildConfig gct = new guildConfig();
+        gct.setGuildId(event.getGuild().getId());
+        gcMap.put(event.getGuild().getId(), gct);
+        try {
+            Misc.sendPM(event.getGuild().getOwner().getUser(), "Obrigada por me adicionar ao seu servidor!");
+        } catch (Exception err) {
+            TextChannel dch = event.getGuild().getDefaultChannel();
+            if (dch != null) {
+                if (dch.canTalk()) {
+                    dch.sendMessage("Obrigada por me adicionar ao seu servidor!").queue();
+                }
+            }
+        }
     }
 
     @Override
@@ -262,19 +280,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
             try {
                 if (message.getAuthor().isBot() || !message.isFromType(ChannelType.TEXT)) return;
 
-                if (message.getMessage().getContentRaw().equals("!init") && gcMap.get(message.getGuild().getId()) == null) {
-                    guildConfig gct = new guildConfig();
-                    gct.setGuildId(message.getGuild().getId());
-                    gcMap.put(message.getGuild().getId(), gct);
-                    for (int i = 0; i < message.getGuild().getTextChannels().size(); i++) {
-                        if (message.getGuild().getTextChannels().get(i).canTalk()) {
-                            message.getGuild().getTextChannels().get(i).sendMessage("Seu servidor está prontinho, estarei a partir de agora ouvindo seus comandos!").queue();
-                            break;
-                        }
-                    }
-                } else if (message.getMessage().getContentRaw().equals("!init") && gcMap.get(message.getGuild().getId()) != null) {
-                    message.getChannel().sendMessage("As configurações deste servidor ja foram inicializadas!").queue();
-                }
                 if (gcMap.get(message.getGuild().getId()) != null && message.getTextChannel().canTalk()) {
                     try {
                         List<CustomAnswers> ca = Database.getCustomAnswer(message.getMessage().getContentRaw());
@@ -288,8 +293,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     }
                     try {
                         if (Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()) != null && !message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
-                            boolean lvlUp = Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()).addXp();
-                            Database.sendMember(Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()));
+                            Member m = Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId());
+                            boolean lvlUp = m.addXp();
                             if (lvlUp) {
                                 TextChannel tc = null;
                                 try {
@@ -318,6 +323,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                     }
                                 }
                             }
+                            Database.sendMember(m);
                         }
                     } catch (NoResultException e) {
                         Member m = new Member();
@@ -344,7 +350,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         if (hasPrefix(message, "ping")) {
                             message.getChannel().sendMessage("Pong! :ping_pong: " + bot.getPing() + " ms").queue();
                         } else if (hasPrefix(message, "bug")) {
-                            owner.openPrivateChannel().queue(channel -> channel.sendMessage(Embeds.bugReport(message, gcMap.get(message.getGuild().getId()).getPrefix())).queue());
+                            Misc.sendPM(owner, Embeds.bugReport(message, gcMap.get(message.getGuild().getId()).getPrefix()));
                         } else if (hasPrefix(message, "uptime")) {
                             Misc.uptime(message);
                         } else if (hasPrefix(message, "ajuda")) {
@@ -667,8 +673,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                             Embeds.specialEmbed(message, Objects.requireNonNull(Database.getBeyblade(message.getAuthor().getId())));
                         }
                     }
-                } else if (message.getTextChannel().canTalk()) {
-                    message.getChannel().sendMessage("Por favor, digite __**!init**__ para inicializar as configurações da Shiro em seu servidor!").queue();
                 }
             } catch (NullPointerException | InsufficientPermissionException |
                     IOException e) {
