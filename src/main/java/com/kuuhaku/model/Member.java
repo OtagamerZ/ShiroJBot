@@ -90,11 +90,11 @@ public class Member {
         return level;
     }
 
-    public int getXp() {
+    int getXp() {
         return xp;
     }
 
-    public String[] getWarns() {
+    private String[] getWarns() {
         return warns.replace("[", "").replace("]", "").split(",");
     }
 
