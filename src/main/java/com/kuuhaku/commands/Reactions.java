@@ -292,7 +292,14 @@ public class Reactions {
                 break;
         }
         msg = (mbr.getAsMention() + " bateu a cara - " + msg);
-        message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "facedesk.gif").queue();
+        String finalMsg = msg;
+        message.getChannel().sendTyping().queue(tm -> {
+            try {
+                message.getChannel().sendMessage(finalMsg).addFile(con.getInputStream(), "facedesk.gif").queue();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public static void nope(Message message) throws IOException {
@@ -314,7 +321,14 @@ public class Reactions {
                 break;
         }
         msg = (mbr.getAsMention() + " esquivou-se - " + msg);
-        message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "nope.gif").queue();
+        String finalMsg = msg;
+        message.getChannel().sendTyping().queue(tm -> {
+            try {
+                message.getChannel().sendMessage(finalMsg).addFile(con.getInputStream(), "nope.gif").queue();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private static void nope(Message message, User author) throws IOException {
@@ -335,7 +349,14 @@ public class Reactions {
                 break;
         }
         msg = (author.getAsMention() + " esquivou-se - " + msg);
-        message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "nope.gif").queue();
+        String finalMsg = msg;
+        message.getChannel().sendTyping().queue(tm -> {
+            try {
+                message.getChannel().sendMessage(finalMsg).addFile(con.getInputStream(), "nope.gif").queue();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public static void run(Message message) throws IOException {
@@ -357,7 +378,14 @@ public class Reactions {
                 break;
         }
         msg = (mbr.getAsMention() + " saiu correndo - " + msg);
-        message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "run.gif").queue();
+        String finalMsg = msg;
+        message.getChannel().sendTyping().queue(tm -> {
+            try {
+                message.getChannel().sendMessage(finalMsg).addFile(con.getInputStream(), "run.gif").queue();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public static void blush(Message message) throws IOException {
@@ -379,7 +407,14 @@ public class Reactions {
                 break;
         }
         msg = (mbr.getAsMention() + " está com vergonha - " + msg);
-        message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "blush.gif").queue();
+        String finalMsg = msg;
+        message.getChannel().sendTyping().queue(tm -> {
+            try {
+                message.getChannel().sendMessage(finalMsg).addFile(con.getInputStream(), "blush.gif").queue();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public static void laugh(Message message) throws IOException {
@@ -401,7 +436,14 @@ public class Reactions {
                 break;
         }
         msg = (mbr.getAsMention() + " está rindo - " + msg);
-        message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "laugh.gif").queue();
+        String finalMsg = msg;
+        message.getChannel().sendTyping().queue(tm -> {
+            try {
+                message.getChannel().sendMessage(finalMsg).addFile(con.getInputStream(), "laugh.gif").queue();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public static void sad(Message message) throws IOException {
@@ -423,7 +465,14 @@ public class Reactions {
                 break;
         }
         msg = (mbr.getAsMention() + " está chorando - " + msg);
-        message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "sad.gif").queue();
+        String finalMsg = msg;
+        message.getChannel().sendTyping().queue(tm -> {
+            try {
+                message.getChannel().sendMessage(finalMsg).addFile(con.getInputStream(), "sad.gif").queue();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public static void dance(Message message, boolean answer) throws IOException {
@@ -448,7 +497,14 @@ public class Reactions {
             msg = (mbr.getAsMention() + " está dançando " + mbr.getAsMention() + " - " + msg);
         else
             msg = (mbr.getAsMention() + " juntou-se à dança - " + msg);
-        message.getChannel().sendMessage(msg).addFile(con.getInputStream(), "dance.gif").queue(m -> m.addReaction("\u21aa").queue());
+        String finalMsg = msg;
+        message.getChannel().sendTyping().queue(tm -> {
+            try {
+                message.getChannel().sendMessage(finalMsg).addFile(con.getInputStream(), "dance.gif").queue(m -> m.addReaction("\u21aa").queue());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
     }
 }

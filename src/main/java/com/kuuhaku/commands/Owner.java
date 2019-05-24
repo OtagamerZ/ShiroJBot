@@ -19,8 +19,6 @@
 
 package com.kuuhaku.commands;
 
-import com.kuuhaku.model.CustomAnswers;
-import com.kuuhaku.model.Member;
 import com.kuuhaku.model.guildConfig;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Game;
@@ -29,7 +27,6 @@ import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -49,9 +46,9 @@ public class Owner {
         }
 
         if (guilds.isEmpty()) {
-            message.getChannel().sendMessage("Nenhum servidor encontrado").queue();
+            message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Nenhum servidor encontrado").queue());
         } else {
-            message.getChannel().sendMessage("Servidores que participo:\n" + guilds.toString().replace("[", "```").replace("]", "```").replace(", ", "\n")).queue();
+            message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Servidores que participo:\n" + guilds.toString().replace("[", "```").replace("]", "```").replace(", ", "\n")).queue());
         }
     }
 
@@ -59,21 +56,7 @@ public class Owner {
         final ArrayList<String> map = new ArrayList<>();
         gc.values().forEach(g -> map.add("```" + g.getGuildId() + " | " + g.getPrefix() + " | " + g.getCanalbv() + " | " + g.getCanalav() + " | " + g.getMsgBoasVindas() + " | " + g.getMsgAdeus() + "```\n"));
 
-        message.getChannel().sendMessage(map.toString().replace("[", "").replace("]", "").replace(",", "")).queue();
-    }
-
-    public static void getMemberMap(MessageReceivedEvent message, Map<String, Member> mm) {
-        final ArrayList<String> map = new ArrayList<>();
-        mm.values().forEach(g -> map.add("```" + g.getId() + " | " + g.getLevel() + " | " + g.getXp() + " | " + Arrays.toString(g.getBadges()).replace(",", "-").replace("false", "0").replace("true", "1") + " | " + Arrays.toString(g.getWarns()).replace(",", "-") + "```\n"));
-
-        message.getChannel().sendMessage(map.toString().replace("[", "").replace("]", "").replace(",", "")).queue();
-    }
-
-    public static void getAnswersMap(MessageReceivedEvent message, List<CustomAnswers> ca) {
-        final ArrayList<String> map = new ArrayList<>();
-        ca.forEach(a -> map.add("```" + a.getId() + " | " + a.getGuildID() + " | (" + a.getGatilho() + ") > " + a.getAnswer() + "```\n"));
-
-        message.getChannel().sendMessage(map.toString().replace("[", "").replace("]", "").replace(",", "")).queue();
+        message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(map.toString().replace("[", "").replace("]", "").replace(",", "")).queue());
     }
 
     private static ArrayList<String> getGuilds(JDA bot) throws NullPointerException {
@@ -115,9 +98,9 @@ public class Owner {
     public static void listPerms(JDA bot, MessageReceivedEvent message) {
         try {
             Guild guild = bot.getGuildById(message.getMessage().getContentRaw().split(" ")[1]);
-            message.getChannel().sendMessage(guild.getName() + " | " + guild.getSelfMember().getPermissions().toString().replace("[", "```").replace("]", "```").replace(", ", "\n")).queue();
+            message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(guild.getName() + " | " + guild.getSelfMember().getPermissions().toString().replace("[", "```").replace("]", "```").replace(", ", "\n")).queue());
         } catch (ArrayIndexOutOfBoundsException e) {
-            message.getChannel().sendMessage("Você esqueceu de me dizer o ID do servidor, Nii-chan!").queue();
+            message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Você esqueceu de me dizer o ID do servidor, Nii-chan!").queue());
         }
     }
 
@@ -125,9 +108,9 @@ public class Owner {
         try {
             Guild guild = bot.getGuildById(message.getMessage().getContentRaw().split(" ")[1]);
             guild.leave().queue();
-            message.getChannel().sendMessage("Ok, já saí daquele servidor, Nii-chan!").queue();
+            message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Ok, já saí daquele servidor, Nii-chan!").queue());
         } catch (ArrayIndexOutOfBoundsException e) {
-            message.getChannel().sendMessage("Você esqueceu de me dizer o ID do servidor, Nii-chan!").queue();
+            message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Você esqueceu de me dizer o ID do servidor, Nii-chan!").queue());
         }
     }
 
