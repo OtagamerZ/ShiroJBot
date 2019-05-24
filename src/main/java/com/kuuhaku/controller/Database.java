@@ -54,7 +54,6 @@ public class Database {
         gc.forEach(em::merge);
         em.getTransaction().commit();
         em.close();
-        System.out.println("Dados salvos com sucesso!");
     }
 
     @SuppressWarnings("unchecked")
@@ -92,7 +91,6 @@ public class Database {
         em.merge(m);
         em.getTransaction().commit();
         em.close();
-        System.out.println("Membro salvo com sucesso!");
     }
 
     public static void deleteMember(Member m) {
@@ -110,7 +108,6 @@ public class Database {
         em.merge(ca);
         em.getTransaction().commit();
         em.close();
-        System.out.println("Resposta salva com sucesso!");
     }
 
     @SuppressWarnings("unchecked")
@@ -209,7 +206,6 @@ public class Database {
         em.merge(bb);
         em.getTransaction().commit();
         em.close();
-        System.out.println("Beyblade salva com sucesso!");
     }
 
     @SuppressWarnings("unchecked")
@@ -236,6 +232,5 @@ public class Database {
         t.forEach(em::merge);
         em.getTransaction().commit();
         em.close();
-        System.out.println("Tags salvas com sucesso!");
     }
 }
