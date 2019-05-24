@@ -143,6 +143,7 @@ public class Admin {
     public static void addWarn(MessageReceivedEvent message, String reason) {
         Member m = Database.getMemberById(message.getMessage().getMentionedUsers().get(0).getId() + message.getGuild().getId());
         m.addWarn(reason);
+        Database.sendMember(m);
         message.getChannel().sendMessage("O usuário " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " teve um alerta registrado pelo seguinte motivo: `" + reason + "`").queue();
     }
 
