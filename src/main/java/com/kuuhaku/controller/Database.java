@@ -25,7 +25,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,30 +46,31 @@ public class Database {
         return emf.createEntityManager();
     }
 
-    public static void sendAllGuildConfigs(Collection<guildConfig> gc) {
+    public static void sendGuildConfig(guildConfig g) {
         EntityManager em = getEntityManager();
-
         em.getTransaction().begin();
-        gc.forEach(em::merge);
+        em.merge(g);
         em.getTransaction().commit();
         em.close();
-        }
+    }
 
-    @SuppressWarnings("unchecked")
-    public static Map<String, guildConfig> getGuildConfigs() {
-        List<guildConfig> lgc;
+    public static void deleteGuild(guildConfig g) {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        em.remove(em.getReference(g.getClass(), g.getGuildId()));
+        em.getTransaction().commit();
+        em.close();
+    }
 
-        try {
-            EntityManager em = getEntityManager();
-            Query q = em.createQuery("SELECT c FROM guildConfig c", guildConfig.class);
-            lgc = q.getResultList();
-            em.close();
+    public static guildConfig getGuildConfigById(String t) {
+        guildConfig g;
+        EntityManager em = getEntityManager();
+        Query q = em.createQuery("SELECT c FROM guildConfig c WHERE guildID LIKE ?1", guildConfig.class);
+        q.setParameter(1, t);
+        g = (guildConfig) q.getSingleResult();
+        em.close();
 
-            return lgc.stream().collect(Collectors.toMap(guildConfig::getGuildId, g -> g));
-        } catch (Exception e) {
-            System.out.println("Erro ao recuperar configurações: " + e);
-            return null;
-        }
+        return g;
     }
 
     public static Member getMemberById(String t) {
@@ -86,7 +86,6 @@ public class Database {
 
     public static void sendMember(Member m) {
         EntityManager em = getEntityManager();
-        
         em.getTransaction().begin();
         em.merge(m);
         em.getTransaction().commit();
@@ -225,11 +224,11 @@ public class Database {
         }
     }
 
-    public static void sendAllTags(Collection<Tags> t) {
+    public static void sendTag(Tags t) {
         EntityManager em = getEntityManager();
 
         em.getTransaction().begin();
-        t.forEach(em::merge);
+        em.merge(t);
         em.getTransaction().commit();
         em.close();
     }

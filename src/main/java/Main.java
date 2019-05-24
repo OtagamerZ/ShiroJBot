@@ -52,13 +52,11 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     private static JDA bot;
     private static User owner;
     private static TextChannel homeLog;
-    private static Map<String, guildConfig> gcMap = new HashMap<>();
     private static JobDetail backup;
     private static Scheduler sched;
     private static boolean ready = false;
     private static Map<Long, DuelData> duels = new HashMap<>();
     private static List<DuelData> accDuels = new ArrayList<>();
-    private static Map<String, Tags> tagsMap = new HashMap<>();
 
     private static void initBot() throws LoginException {
         JDABuilder jda = new JDABuilder(AccountType.BOT);
@@ -66,8 +64,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         jda.setToken(token);
         jda.addEventListener(new Main());
         jda.build();
-        gcMap = Database.getGuildConfigs();
-        tagsMap = Database.getTags();
         try {
             if (backup == null) {
                 backup = JobBuilder.newJob(Main.class).withIdentity("backup", "1").build();
@@ -99,13 +95,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
 
     @Override
     public void execute(JobExecutionContext context) {
-        try {
-            Database.sendAllGuildConfigs(gcMap.values());
-            System.out.println("Guardar configurações no banco de dados...PRONTO!");
-            bot.getPresence().setGame(Owner.getRandomGame(bot));
-        } catch (Exception e) {
-            System.out.println("Guardar configurações no banco de dados...ERRO!\nErro: " + e);
-        }
+        bot.getPresence().setGame(Owner.getRandomGame(bot));
     }
 
     @Override
@@ -141,9 +131,9 @@ public class Main extends ListenerAdapter implements JobListener, Job {
 
     @Override
     public void onGuildJoin(GuildJoinEvent event) {
-        guildConfig gct = new guildConfig();
-        gct.setGuildId(event.getGuild().getId());
-        gcMap.put(event.getGuild().getId(), gct);
+        guildConfig gc = new guildConfig();
+        gc.setGuildId(event.getGuild().getId());
+        Database.sendGuildConfig(gc);
         try {
             Misc.sendPM(event.getGuild().getOwner().getUser(), "Obrigada por me adicionar ao seu servidor!");
         } catch (Exception err) {
@@ -158,18 +148,19 @@ public class Main extends ListenerAdapter implements JobListener, Job {
 
     @Override
     public void onGuildLeave(GuildLeaveEvent guild) {
-        gcMap.remove(guild.getGuild().getId());
+        Database.deleteGuild(Database.getGuildConfigById(guild.getGuild().getId()));
     }
 
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent user) {
+        guildConfig gc = Database.getGuildConfigById(user.getGuild().getId());
         try {
-            if (gcMap.get(user.getGuild().getId()).getCanalbv() != null) {
-                Embeds.welcomeEmbed(user, gcMap.get(user.getGuild().getId()).getMsgBoasVindas(), user.getGuild().getTextChannelById(gcMap.get(user.getGuild().getId()).getCanalbv()));
-                Map<String, Object> roles = gcMap.get(user.getGuild().getId()).getCargoNew();
+            if (gc.getCanalbv() != null) {
+                Embeds.welcomeEmbed(user, gc.getMsgBoasVindas(), user.getGuild().getTextChannelById(gc.getCanalbv()));
+                Map<String, Object> roles = gc.getCargoNew();
                 List<Role> list = new ArrayList<>();
                 roles.values().forEach(r -> list.add(user.getGuild().getRoleById(r.toString())));
-                if (gcMap.get(user.getGuild().getId()).getCargoNew().size() > 0)
+                if (gc.getCargoNew().size() > 0)
                     user.getGuild().getController().addRolesToMember(user.getMember(), list).queue();
             }
         } catch (NullPointerException ignore) {
@@ -180,9 +171,10 @@ public class Main extends ListenerAdapter implements JobListener, Job {
 
     @Override
     public void onGuildMemberLeave(GuildMemberLeaveEvent user) {
+        guildConfig gc = Database.getGuildConfigById(user.getGuild().getId());
         try {
-            if (gcMap.get(user.getGuild().getId()).getCanaladeus() != null) {
-                Embeds.byeEmbed(user, gcMap.get(user.getGuild().getId()).getMsgAdeus(), user.getGuild().getTextChannelById(gcMap.get(user.getGuild().getId()).getCanaladeus()));
+            if (gc.getCanaladeus() != null) {
+                Embeds.byeEmbed(user, gc.getMsgAdeus(), user.getGuild().getTextChannelById(gc.getCanaladeus()));
                 if (Database.getMemberById(user.getUser().getId() + user.getGuild().getId()) != null) {
                     Member m = Database.getMemberById(user.getUser().getId() + user.getGuild().getId());
                     Database.deleteMember(m);
@@ -241,7 +233,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     public void onShutdown(ShutdownEvent event) {
         System.out.println("Iniciando sequencia de encerramento...");
         try {
-            Database.sendAllGuildConfigs(gcMap.values());
             System.out.println("Guardar configurações no banco de dados...PRONTO!");
             System.out.println("Desligando instância...");
             sched.shutdown();
@@ -268,12 +259,13 @@ public class Main extends ListenerAdapter implements JobListener, Job {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent message) {
+        guildConfig gc = Database.getGuildConfigById(message.getGuild().getId());
         if (ready) {
             if (accDuels.stream().anyMatch(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor())) {
                 Arena.battle(accDuels, message);
             }
             try {
-                if (message.getChannel().getId().equals(gcMap.get(message.getGuild().getId()).getCanalsug()) && !message.getMessage().getAuthor().isBot() && !message.getMember().hasPermission(Permission.MANAGE_CHANNEL)) {
+                if (message.getChannel().getId().equals(gc.getCanalsug()) && !message.getMessage().getAuthor().isBot() && !message.getMember().hasPermission(Permission.MANAGE_CHANNEL)) {
                     message.getMessage().addReaction("\ud83d\udc4d").queue();
                     message.getMessage().addReaction("\ud83d\udc4e").queue();
                 }
@@ -283,7 +275,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
             try {
                 if (message.getAuthor().isBot() || !message.isFromType(ChannelType.TEXT)) return;
 
-                if (gcMap.get(message.getGuild().getId()) != null && message.getTextChannel().canTalk()) {
+                if (gc != null && message.getTextChannel().canTalk()) {
                     try {
                         List<CustomAnswers> ca = Database.getCustomAnswer(message.getMessage().getContentRaw());
                         if (ca != null) {
@@ -295,33 +287,33 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                     } catch (Exception ignore) {
                     }
                     try {
-                        if (Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()) != null && !message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
+                        if (Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()) != null && !message.getMessage().getContentRaw().startsWith(gc.getPrefix())) {
                             Member m = Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId());
                             boolean lvlUp = m.addXp();
                             if (lvlUp) {
                                 TextChannel tc = null;
                                 try {
-                                    tc = message.getGuild().getTextChannelById(gcMap.get(message.getGuild().getId()).getCanallvl());
+                                    tc = message.getGuild().getTextChannelById(gc.getCanallvl());
                                 } catch (IllegalArgumentException ignore) {
                                 }
                                 if (tc == null) {
-                                    if (gcMap.get(message.getGuild().getId()).getLvlNotif())
+                                    if (gc.getLvlNotif())
                                         message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(message.getAuthor().getAsMention() + " subiu para o level " + Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()).getLevel() + ". GGWP!! :tada:").queue());
-                                    if (gcMap.get(message.getGuild().getId()).getCargoslvl().containsKey(Integer.toString(Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()).getLevel()))) {
+                                    if (gc.getCargoslvl().containsKey(Integer.toString(Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()).getLevel()))) {
                                         Member member = Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId());
-                                        String roleID = (String) gcMap.get(message.getGuild().getId()).getCargoslvl().get(Integer.toString(member.getLevel()));
+                                        String roleID = (String) gc.getCargoslvl().get(Integer.toString(member.getLevel()));
 
                                         message.getGuild().getController().addRolesToMember(message.getMember(), message.getGuild().getRoleById(roleID)).queue();
                                         message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(message.getAuthor().getAsMention() + " ganhou o cargo " + message.getGuild().getRoleById(roleID).getAsMention() + ". Parabéns!").queue());
                                     }
                                 } else {
-                                    if (gcMap.get(message.getGuild().getId()).getLvlNotif()) {
+                                    if (gc.getLvlNotif()) {
                                         TextChannel finalTc = tc;
                                         tc.sendTyping().queue(tm -> finalTc.sendMessage(message.getAuthor().getAsMention() + " subiu para o level " + Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()).getLevel() + ". GGWP!! :tada:").queue());
                                     }
-                                    if (gcMap.get(message.getGuild().getId()).getCargoslvl().containsKey(Integer.toString(Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()).getLevel()))) {
+                                    if (gc.getCargoslvl().containsKey(Integer.toString(Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()).getLevel()))) {
                                         Member member = Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId());
-                                        String roleID = (String) gcMap.get(message.getGuild().getId()).getCargoslvl().get(Integer.toString(member.getLevel()));
+                                        String roleID = (String) gc.getCargoslvl().get(Integer.toString(member.getLevel()));
 
                                         message.getGuild().getController().addRolesToMember(message.getMember(), message.getGuild().getRoleById(roleID)).queue();
                                         tc.sendMessage(message.getAuthor().getAsMention() + " ganhou o cargo " + message.getGuild().getRoleById(roleID).getAsMention() + ". Parabéns!").queue();
@@ -335,7 +327,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         m.setId(message.getAuthor().getId() + message.getGuild().getId());
                         Database.sendMember(m);
                     }
-                    if (message.getMessage().getContentRaw().startsWith(gcMap.get(message.getGuild().getId()).getPrefix())) {
+                    if (message.getMessage().getContentRaw().startsWith(gc.getPrefix())) {
                         //COMMANDS--------------------------------------------------------------------------------->
                         if (new Random().nextInt(1000) > 950) {
                             message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Opa, está gostando de me utilizar em seu servidor? Caso sim, se puder votar me ajudaria **MUITO** a me tornar cada vez mais popular e ser chamada para mais servidores!\n https://discordbots.org/bot/572413282653306901").queue());
@@ -355,15 +347,15 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         if (hasPrefix(message, "ping")) {
                             message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Pong! :ping_pong: " + bot.getPing() + " ms").queue());
                         } else if (hasPrefix(message, "bug")) {
-                            Misc.sendPM(owner, Embeds.bugReport(message, gcMap.get(message.getGuild().getId()).getPrefix()));
+                            Misc.sendPM(owner, Embeds.bugReport(message, gc.getPrefix()));
                         } else if (hasPrefix(message, "uptime")) {
                             Misc.uptime(message);
                         } else if (hasPrefix(message, "ajuda")) {
-                            Misc.help(message, gcMap.get(message.getGuild().getId()).getPrefix(), owner);
+                            Misc.help(message, gc.getPrefix(), owner);
                         } else if (hasPrefix(message, "avatar")) {
                             if (message.getMessage().getMentionedUsers().size() > 0) {
                                 message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Avatar de " + message.getMessage().getMentionedUsers().get(0).getAsMention() + ":\n" + message.getMessage().getMentionedUsers().get(0).getAvatarUrl()).queue());
-                            } else if (message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix() + "avatar", "").trim().equals("guild")) {
+                            } else if (message.getMessage().getContentRaw().replace(gc.getPrefix() + "avatar", "").trim().equals("guild")) {
                                 message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Avatar do server:\n" + message.getMessage().getGuild().getIconUrl()).queue());
                             } else {
                                 message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Você precisa mencionar alguém!").queue());
@@ -399,7 +391,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                 e.printStackTrace();
                             }
                         } else if (hasPrefix(message, "perfil")) {
-                            Embeds.levelEmbed(message, Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()), tagsMap);
+                            Embeds.levelEmbed(message, Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()), Database.getTags());
                         } else if (hasPrefix(message, "fundo")) {
                             Misc.setBg(message, cmd, Database.getMemberById(message.getAuthor().getId() + message.getGuild().getId()));
                         } else {
@@ -474,7 +466,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                     }
                                 } else if (hasPrefix(message, "embed")) {
                                     try {
-                                        Embeds.makeEmbed(message, message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix() + "embed ", ""));
+                                        Embeds.makeEmbed(message, message.getMessage().getContentRaw().replace(gc.getPrefix() + "embed ", ""));
                                     } catch (Exception e) {
                                         message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Ops, me parece que o link imagem não está correto, veja bem se incluiu tudo!").queue());
                                     }
@@ -490,10 +482,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                 bot.shutdown();
                             } else if (hasPrefix(message, "servers")) {
                                 Owner.getServers(bot, message);
-                            } else if (hasPrefix(message, "gmap")) {
-                                Owner.getGuildMap(message, gcMap);
-                            } else if (hasPrefix(message, "broadcast")) {
-                                Owner.broadcast(gcMap, bot, message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix() + "broadcast ", ""), message.getTextChannel());
                             } else if (hasPrefix(message, "perms")) {
                                 Owner.listPerms(bot, message);
                             } else if (hasPrefix(message, "leave")) {
@@ -503,55 +491,58 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                     Database.getMemberById(message.getMessage().getMentionedUsers().get(0).getId() + message.getGuild().getId()).giveBadge(cmd[2]);
                                     message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Parabéns, " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " completou a conquista Nº " + cmd[2]).queue());
                                 } catch (Exception e) {
-                                    message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(":x: Ué, não estou conseguindo marcar a conquista como completa. Tenha certeza de digitar o comando neste formato: " + gcMap.get(message.getGuild().getId()).getPrefix() + "dar [MEMBRO] [Nº]").queue());
+                                    message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(":x: Ué, não estou conseguindo marcar a conquista como completa. Tenha certeza de digitar o comando neste formato: " + gc.getPrefix() + "dar [MEMBRO] [Nº]").queue());
                                 }
                             } else if (hasPrefix(message, "tirar")) {
                                 try {
                                     Database.getMemberById(message.getMessage().getMentionedUsers().get(0).getId() + message.getGuild().getId()).removeBadge(cmd[2]);
                                     message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Meeee, " + message.getMessage().getMentionedUsers().get(0).getAsMention() + " teve a conquista Nº " + cmd[2] + " retirada de sua posse!").queue());
                                 } catch (Exception e) {
-                                    message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(":x: Ué, não estou conseguindo marcar a conquista como incompleta. Tenha certeza de digitar o comando neste formato: " + gcMap.get(message.getGuild().getId()).getPrefix() + "tirar [MEMBRO] [Nº]").queue());
+                                    message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(":x: Ué, não estou conseguindo marcar a conquista como incompleta. Tenha certeza de digitar o comando neste formato: " + gc.getPrefix() + "tirar [MEMBRO] [Nº]").queue());
                                 }
                             } else {
                                 final Consumer<Void> bakaNiiChan = tm -> message.getChannel().sendMessage("Nii-chan bobo, você precisa mencionar um usuário!").queue();
                                 if (hasPrefix(message, "giveStaff")) {
                                     if (message.getMessage().getMentionedUsers() != null) {
-                                        if (tagsMap.containsKey(message.getMessage().getMentionedUsers().get(0).getId())) {
-                                            tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setStaff();
-                                            Database.sendAllTags(tagsMap.values());
+                                        Tags t = Objects.requireNonNull(Database.getTags()).getOrDefault(message.getMessage().getMentionedUsers().get(0).getId(), null);
+                                        if (t != null) {
+                                            t.setStaff();
+                                            Database.sendTag(t);
                                         } else {
-                                            tagsMap.put(message.getMessage().getMentionedUsers().get(0).getId(), new Tags());
-                                            tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setId(message.getMessage().getMentionedUsers().get(0).getId());
-                                            tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setStaff();
-                                            Database.sendAllTags(tagsMap.values());
+                                            t = new Tags();
+                                            t.setId(message.getMessage().getMentionedUsers().get(0).getId());
+                                            t.setStaff();
+                                            Database.sendTag(t);
                                         }
                                     } else {
                                         message.getChannel().sendTyping().queue(bakaNiiChan);
                                     }
                                 } else if (hasPrefix(message, "givePartner")) {
                                     if (message.getMessage().getMentionedUsers() != null) {
-                                        if (tagsMap.containsKey(message.getMessage().getMentionedUsers().get(0).getId())) {
-                                            tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setPartner();
-                                            Database.sendAllTags(tagsMap.values());
+                                        Tags t = Objects.requireNonNull(Database.getTags()).getOrDefault(message.getMessage().getMentionedUsers().get(0).getId(), null);
+                                        if (t != null) {
+                                            t.setPartner();
+                                            Database.sendTag(t);
                                         } else {
-                                            tagsMap.put(message.getMessage().getMentionedUsers().get(0).getId(), new Tags());
-                                            tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setId(message.getMessage().getMentionedUsers().get(0).getId());
-                                            tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setPartner();
-                                            Database.sendAllTags(tagsMap.values());
+                                            t = new Tags();
+                                            t.setId(message.getMessage().getMentionedUsers().get(0).getId());
+                                            t.setPartner();
+                                            Database.sendTag(t);
                                         }
                                     } else {
                                         message.getChannel().sendTyping().queue(bakaNiiChan);
                                     }
                                 } else if (hasPrefix(message, "giveToxic")) {
                                     if (message.getMessage().getMentionedUsers() != null) {
-                                        if (tagsMap.containsKey(message.getMessage().getMentionedUsers().get(0).getId())) {
-                                            tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setToxic();
-                                            Database.sendAllTags(tagsMap.values());
+                                        Tags t = Objects.requireNonNull(Database.getTags()).getOrDefault(message.getMessage().getMentionedUsers().get(0).getId(), null);
+                                        if (t != null) {
+                                            t.setToxic();
+                                            Database.sendTag(t);
                                         } else {
-                                            tagsMap.put(message.getMessage().getMentionedUsers().get(0).getId(), new Tags());
-                                            tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setId(message.getMessage().getMentionedUsers().get(0).getId());
-                                            tagsMap.get(message.getMessage().getMentionedUsers().get(0).getId()).setToxic();
-                                            Database.sendAllTags(tagsMap.values());
+                                            t = new Tags();
+                                            t.setId(message.getMessage().getMentionedUsers().get(0).getId());
+                                            t.setToxic();
+                                            Database.sendTag(t);
                                         }
                                     } else {
                                         message.getChannel().sendTyping().queue(bakaNiiChan);
@@ -569,9 +560,9 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         //ADMIN--------------------------------------------------------------------------------->
                         if (message.getMember().hasPermission(Permission.MANAGE_CHANNEL)) {
                             if (hasPrefix(message, "definir")) {
-                                Admin.config(cmd, message, gcMap.get(message.getGuild().getId()));
+                                Admin.config(cmd, message, gc);
                             } else if (hasPrefix(message, "configs")) {
-                                Embeds.configsEmbed(message, gcMap.get(message.getGuild().getId()));
+                                Embeds.configsEmbed(message, gc);
                             } else if (hasPrefix(message, "punir")) {
                                 if (message.getMessage().getMentionedUsers() != null) {
                                     Member m = Database.getMemberById(message.getMessage().getMentionedUsers().get(0).getId() + message.getGuild().getId());
@@ -583,7 +574,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                 }
                             } else if (hasPrefix(message, "alertar")) {
                                 if (message.getMessage().getMentionedUsers() != null && cmd.length >= 3) {
-                                    Admin.addWarn(message, message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix(), ""));
+                                    Admin.addWarn(message, message.getMessage().getContentRaw().replace(gc.getPrefix(), ""));
                                 } else {
                                     message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(":x: Você precisa mencionar um usuário e dizer o motivo do alerta.").queue());
                                 }
@@ -595,33 +586,33 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                 }
                             } else if (hasPrefix(message, "rcargolvl")) {
                                 if (cmd.length == 2) {
-                                    Map<String, Object> cargos = gcMap.get(message.getGuild().getId()).getCargoslvl();
+                                    Map<String, Object> cargos = gc.getCargoslvl();
                                     cargos.remove(cmd[1]);
-                                    gcMap.get(message.getGuild().getId()).setCargoslvl(new JSONObject(cargos));
+                                    gc.setCargoslvl(new JSONObject(cargos));
                                     message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Retirada a recompensa de cargo do level " + cmd[1] + " com sucesso!").queue());
                                 } else {
                                     message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Opa, algo deu errado, lembre-se de especificar apenas o level.").queue());
                                 }
                             } else if (hasPrefix(message, "lvlnotif")) {
-                                if (gcMap.get(message.getGuild().getId()).getLvlNotif()) {
+                                if (gc.getLvlNotif()) {
                                     message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Não irei mais avisar quando um membro passar de nível!").queue());
-                                    gcMap.get(message.getGuild().getId()).setLvlNotif(false);
+                                    gc.setLvlNotif(false);
                                 } else {
                                     message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Agora irei avisar quando um membro passar de nível!").queue());
-                                    gcMap.get(message.getGuild().getId()).setLvlNotif(true);
+                                    gc.setLvlNotif(true);
                                 }
                             } else if (hasPrefix(message, "ouçatodos")) {
-                                gcMap.get(message.getGuild().getId()).setAnyTell(!gcMap.get(message.getGuild().getId()).isAnyTell());
-                                message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(gcMap.get(message.getGuild().getId()).isAnyTell() ? "Irei ouvir novas respostas da comunidade agora!" : "Só irei ouvir novas respostas de um moderador!").queue());
+                                gc.setAnyTell(!gc.isAnyTell());
+                                message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(gc.isAnyTell() ? "Irei ouvir novas respostas da comunidade agora!" : "Só irei ouvir novas respostas de um moderador!").queue());
                             }
                         }
 
                         //CHATBOT--------------------------------------------------------------------------------->
-                        if (message.getMember().hasPermission(Permission.MANAGE_CHANNEL) || gcMap.get(message.getGuild().getId()).isAnyTell()) {
+                        if (message.getMember().hasPermission(Permission.MANAGE_CHANNEL) || gc.isAnyTell()) {
                             if (hasPrefix(message, "fale")) {
                                 if (message.getMessage().getContentRaw().contains(";") && cmd.length > 1) {
                                     CustomAnswers ca = new CustomAnswers();
-                                    String com = message.getMessage().getContentRaw().replace(gcMap.get(message.getGuild().getId()).getPrefix() + "fale", "").trim();
+                                    String com = message.getMessage().getContentRaw().replace(gc.getPrefix() + "fale", "").trim();
 
                                     ca.setGuildID(message.getGuild().getId());
                                     ca.setGatilho(com.split(";")[0]);
@@ -658,7 +649,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                         //BEYBLADE--------------------------------------------------------------------------------->
                         if (hasPrefix(message, "binfo")) {
                             Beyblade bb = Database.getBeyblade(message.getAuthor().getId());
-                            if (bb == null) message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Você não possui uma beyblade!").queue());
+                            if (bb == null)
+                                message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Você não possui uma beyblade!").queue());
                             else {
                                 Embeds.beybladeEmbed(message, bb);
                             }
@@ -677,7 +669,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                 Arena.upgrade(message, cmd);
                             }
                         } else if (hasPrefix(message, "bshop")) {
-                            Embeds.shopEmbed(message, Objects.requireNonNull(Database.getBeyblade(message.getAuthor().getId())), gcMap.get(message.getGuild().getId()).getPrefix());
+                            Embeds.shopEmbed(message, Objects.requireNonNull(Database.getBeyblade(message.getAuthor().getId())), gc.getPrefix());
                         } else if (hasPrefix(message, "balinhamento")) {
                             if (cmd.length > 1) {
                                 Arena.chooseHouse(message, cmd, Database.getBeyblade(message.getAuthor().getId()));
@@ -685,9 +677,9 @@ public class Main extends ListenerAdapter implements JobListener, Job {
                                 message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("__**Alinhamento é o que define seu estilo de combate:**__\n- Tigres são focados em uma **velocidade** extrema.\n- Dragões são focados em um **poder** incomparável.\n- Ursos são focados em uma **defesa** impenetrável.\n\n" +
                                         "Cada alinhamento possui especiais diferentes, que poderão virar um duelo, a **primeira vez** que você escolher um alinhamento custará **150 pontos de combate**. " +
                                         "Após, **qualquer troca de alinhamento custará 300 pontos de combate**.\n" +
-                                        "\nPara escolher tigre, digite `" + gcMap.get(message.getGuild().getId()).getPrefix() + "balinhamento tigre`" +
-                                        "\nPara escolher dragão, digite `" + gcMap.get(message.getGuild().getId()).getPrefix() + "balinhamento dragão`" +
-                                        "\nPara escolher urso, digite `" + gcMap.get(message.getGuild().getId()).getPrefix() + "balinhamento urso`").queue());
+                                        "\nPara escolher tigre, digite `" + gc.getPrefix() + "balinhamento tigre`" +
+                                        "\nPara escolher dragão, digite `" + gc.getPrefix() + "balinhamento dragão`" +
+                                        "\nPara escolher urso, digite `" + gc.getPrefix() + "balinhamento urso`").queue());
                             }
                         } else if (hasPrefix(message, "bespecial")) {
                             Embeds.specialEmbed(message, Objects.requireNonNull(Database.getBeyblade(message.getAuthor().getId())));
@@ -702,6 +694,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
     }
 
     private static boolean hasPrefix(MessageReceivedEvent message, String cmd) {
-        return message.getMessage().getContentRaw().split(" ")[0].equalsIgnoreCase(gcMap.get(message.getGuild().getId()).getPrefix() + cmd);
+        guildConfig gc = Database.getGuildConfigById(message.getGuild().getId());
+        return message.getMessage().getContentRaw().split(" ")[0].equalsIgnoreCase(gc.getPrefix() + cmd);
     }
 }
