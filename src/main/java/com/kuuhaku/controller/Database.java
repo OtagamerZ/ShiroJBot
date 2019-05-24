@@ -158,10 +158,10 @@ public class Database {
         }
     }
 
-    public static CustomAnswers getCustomAnswerById(String t) {
+    public static CustomAnswers getCustomAnswerById(Long t) {
         CustomAnswers ca;
         EntityManager em = getEntityManager();
-        Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE guildID LIKE ?1", CustomAnswers.class);
+        Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE id = ?1", CustomAnswers.class);
         q.setParameter(1, t);
         ca = (CustomAnswers) q.getSingleResult();
         em.close();
