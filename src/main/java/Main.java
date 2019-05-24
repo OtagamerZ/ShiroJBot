@@ -36,6 +36,7 @@ import org.json.JSONObject;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
+import javax.persistence.NoResultException;
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
 import java.time.OffsetDateTime;
@@ -662,6 +663,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
             } catch (NullPointerException | InsufficientPermissionException |
                     IOException e) {
                 e.printStackTrace();
+            } catch (NoResultException ignore){
             }
         }
     }
