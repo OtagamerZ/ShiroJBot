@@ -34,7 +34,6 @@ public class Helper {
 	public static boolean hasPermission(Member member, PrivilegeLevel privilegeLevel) {
 		if(getPrivilegeLevel(member) == PrivilegeLevel.USER && privilegeLevel != PrivilegeLevel.USER) { return false; }
 		if(getPrivilegeLevel(member) == PrivilegeLevel.STAFF && privilegeLevel == PrivilegeLevel.OWNER) { return false; }
-		
 		return true;
 	}
 	
@@ -119,7 +118,7 @@ public class Helper {
 		return sb.toString();
 	}
 
-	public static void sendPM(User user, String message) throws Exception {
+	public static void sendPM(User user, String message) {
 		user.openPrivateChannel().queue( (channel) -> channel.sendMessage(message).queue() );
 	}
 

@@ -18,7 +18,8 @@ public class SQLite {
         if(!DBfile.exists()) { System.out.println("❌ | O ficheiro usado como base de dados não foi encontrado. Entre no servidor discord oficial da Shiro para obter ajuda.");}
 
         String url = "jdbc:sqlite:" + DBfile.getPath();
-        con = DriverManager.getConnection(url);
+//        con = DriverManager.getConnection(url);
+        con = DriverManager.getConnection("jdbc:sqlite:" + DBfile.getPath());
         statement = con.createStatement();
         System.out.println("✅ | Ligação à base de dados estabelecida.");
     }
