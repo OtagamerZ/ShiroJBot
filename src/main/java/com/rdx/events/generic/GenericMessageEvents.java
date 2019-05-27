@@ -1,0 +1,87 @@
+package com.rdx.events.generic;
+
+import com.rdx.Main;
+import com.rdx.utils.Helper;
+import com.rdx.utils.SQLite;
+import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import com.rdx.command.Command;
+
+import java.sql.SQLException;
+
+public class GenericMessageEvents extends ListenerAdapter{
+
+	@Override
+	public void onMessageReceived(MessageReceivedEvent event) {
+		User author = event.getAuthor();
+		Member member = event.getMember();
+		Message message = event.getMessage();
+		MessageChannel channel = message.getChannel();
+		Guild guild = message.getGuild();
+		String rawMessage = message.getContentRaw();
+
+		String prefix = "";
+		try {
+			prefix = SQLite.getGuildPrefix(guild.getId());
+		} catch (SQLException err) { err.printStackTrace(); }
+
+		if(Main.getInfo().getSelfUser().getIdLong() == author.getIdLong()) return;
+		if(author.isBot()) return;
+
+		/*
+		if(event.getPrivateChannel()!=null) {
+			try {
+				Helper.sendPM(author, Helper.formatMessage(Messages.PM_CHANNEL, "help", author));
+			} catch (Exception e) {
+				DiscordHelper.sendAutoDeleteMessage(channel, YuiHelper.formatMessage(Messages.PM_CHANNEL, "help", author));
+			}
+			return;
+		}
+		*/
+
+		/*
+		if(message.getInvites().size()>0 && Helper.getPrivilegeLevel(member) == PrivilegeLevel.USER) {
+            message.delete().queue();
+            try {
+				Helper.sendPM(author, Messages.INVITE_SENT);
+            } catch (Exception e) {
+				Helper.sendPM(author, ":x: | ");
+            }
+            return;
+        }
+		*/
+
+		if(message.getContentRaw().equals(Main.getInfo().getSelfUser().getAsMention())) {
+            channel.sendMessage("Para obter ajuda sobre como me utilizar faça `" + prefix + "ajuda`.").queue();
+            return;
+		}
+
+		String rawMsgNoPrefix = rawMessage.substring(prefix.length()).trim();
+		String commandName = rawMsgNoPrefix.split(" ")[0].trim();
+		boolean hasArgs = (rawMsgNoPrefix.split(" ").length > 1);
+		String[] args = new String[] {};
+		if(hasArgs) { args = rawMsgNoPrefix.substring(commandName.length()).trim().split(" "); }
+		
+		boolean found = false;
+		for(Command command : Main.getCommandManager().getCommands()) {
+			if(command.getName().equalsIgnoreCase(commandName)) { found = true; }
+			for(String alias : command.getAliases()) { if(alias.equalsIgnoreCase(commandName)) { found = true; } }
+			if(!command.getCategory().isEnabled()) { found = false; }
+			
+			if(found){
+				if(!Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
+						channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
+				}
+				command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
+				break;
+			}
+		}
+
+		if(!found) {
+			if(message.getMentionedUsers().contains(Main.getInfo().getSelfUser())) {
+				channel.sendMessage("Para obter ajuda sobre como me utilizar faça `" + prefix + "ajuda`.").queue();
+			}
+		}
+	}
+}
