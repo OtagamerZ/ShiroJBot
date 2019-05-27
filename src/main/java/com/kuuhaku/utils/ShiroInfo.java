@@ -29,7 +29,7 @@ public class ShiroInfo {
 
 		nomeDB = "shiro.sqlite";
 		
-		developers = new ArrayList<String>();
+		developers = new ArrayList<>();
 		developers.add("321665807988031495"); //Reydux
 	}
 	
@@ -45,13 +45,9 @@ public class ShiroInfo {
 		return token;
 	}
 
-	public String getDefaultPrefix() {
-		return default_prefix;
-	}
+	public String getDefaultPrefix() { return default_prefix; }
 
-	public String getDBFileName() {
-		return nomeDB;
-	}
+	public String getDBFileName() { return nomeDB; }
 
 	public ArrayList<String> getDevelopers() { return developers; }
 	
