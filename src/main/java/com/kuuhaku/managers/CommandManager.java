@@ -1,9 +1,9 @@
 package com.kuuhaku.managers;
 
 import com.kuuhaku.command.Command;
-//import com.kuuhaku.command.commands.owner.*;
+import com.kuuhaku.command.commands.owner.*;
 //import com.kuuhaku.command.commands.moderation.*;
-//import com.kuuhaku.command.commands.information.*;
+import com.kuuhaku.command.commands.information.*;
 //import com.kuuhaku.command.commands.misc.*;
 //import com.kuuhaku.command.commands.fun.*;
 
@@ -19,13 +19,13 @@ public class CommandManager {
 		//EXEMPLO: commands.add(new KillCommand());
 
         //OWNER
-//        commands.add(new KillCommand());
-//        commands.add(new LeaveCommand());
+        commands.add(new KillCommand());
+        commands.add(new LeaveCommand());
 
         //MODERATION
 
         //INFORMATION
-//        commands.add(new ComandosCommand());
+        commands.add(new ComandosCommand());
 
         //MISC
 //        commands.add(new AvatarCommand());
