@@ -11,8 +11,9 @@ public class SQLite {
     private static Connection con;
     private static Statement statement;
 
-    public static void connect() throws SQLException {
+    public static void connect() throws SQLException, ClassNotFoundException {
         con = null;
+        Class.forName("org.sqlite.JDBC");
 
         File DBfile = new File(Main.getInfo().getDBFileName());
         if(!DBfile.exists()) { System.out.println("❌ | O ficheiro usado como base de dados não foi encontrado. Entre no servidor discord oficial da Shiro para obter ajuda.");}
@@ -31,18 +32,9 @@ public class SQLite {
         }
     }
 
-    /*public static ResultSet onQuery(String query) throws SQLException {
-        Boolean rs;
-        rs = statement.executeQuery(query);
-
-        return rs;
-    }*/
-
     public static String getGuildPrefix(String id) throws SQLException {
         String query = "SELECT * FROM guilds WHERE guild_id = '" + id + "';";
         String prefix;
-        //ResultSet rs = statement.executeQuery(query);
-        //return rs.getString("prefix");
         ResultSet rs = statement.executeQuery(query);
         prefix = rs.getString("prefix");
 
