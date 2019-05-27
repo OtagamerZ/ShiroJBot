@@ -85,7 +85,7 @@ public class Main extends ListenerAdapter implements JobListener, Job {
         }
         try {
             List<CustomAnswers> ca = Database.getAllCustomAnswers();
-            db = new Jedis("localhost");
+            db = new Jedis("localhost", 80);
             System.out.println("Conectado ao servidor - " + db.ping());
             if (ca != null) {
                 ca.forEach(c -> db.sadd(c.getGuildID(), "{\"id\":\"" + c.getId() + "\", \"trigger\":\"" + c.getGatilho() + "\", \"answer\":\"" + c.getAnswer() + "\"}"));
