@@ -20,7 +20,7 @@ public class ShiroInfo {
 	public ShiroInfo() {
 		token = "NTgwNDQ3NDcxODkzNzQxNTc1.XOQ2cw.c_oRM9-gkILY4_kpcWCj0aIEmyQ";
 		
-		apiVersion = "3.8.3";
+		apiVersion = "3.8.3_463";
 		
 		name = "Shiro";
 		version = "1.0";
