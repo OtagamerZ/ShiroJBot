@@ -15,8 +15,6 @@
  *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.commands;
-
 import com.kuuhaku.controller.Database;
 import com.kuuhaku.model.Beyblade;
 import com.kuuhaku.model.DuelData;
