@@ -18,9 +18,9 @@ public class LeaveCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 
 		try {
-			Guild g = api.getGuildById(rawCmd.split(" ")[1]);
-			g.leave().queue();
-			channel.sendMessage("Ok, já saí daquele servidor, Nii-chan!").queue();
+			Guild guildToLeave = api.getGuildById(rawCmd.split(" ")[1]);
+			guildToLeave.leave().queue();
+			channel.sendMessage("Ok, acabei de sair desse servidor, Nii-chan!").queue();
 		} catch (ArrayIndexOutOfBoundsException e) {
 			channel.sendMessage("Você esqueceu de me dizer o ID do servidor, Nii-chan!").queue();
 		}
