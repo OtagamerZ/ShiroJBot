@@ -4,8 +4,8 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.owner.*;
 //import com.kuuhaku.command.commands.moderation.*;
 import com.kuuhaku.command.commands.information.*;
-//import com.kuuhaku.command.commands.misc.*;
-//import com.kuuhaku.command.commands.fun.*;
+import com.kuuhaku.command.commands.misc.*;
+import com.kuuhaku.command.commands.fun.*;
 
 import java.util.ArrayList;
 
@@ -28,14 +28,14 @@ public class CommandManager {
         commands.add(new ComandosCommand());
 
         //MISC
-//        commands.add(new AvatarCommand());
-//        commands.add(new PingCommand());
-//        commands.add(new UptimeCommand());
+        commands.add(new AvatarCommand());
+        commands.add(new PingCommand());
+        commands.add(new UptimeCommand());
 
         //FUN
-//        commands.add(new AbracarCommand());
-//        commands.add(new BeijarCommand());
-//		commands.add(new OhNoCommand());
+        commands.add(new AbracarCommand());
+        commands.add(new BeijarCommand());
+		commands.add(new OhNoCommand());
 	}
 	
 	public ArrayList<Command> getCommands() {
