@@ -17,7 +17,7 @@ import java.util.Objects;
 public class ProfileTest {
     public InputStream makeProfile(Member u) throws IOException, FontFormatException {
         com.kuuhaku.model.Member m = Database.getMemberById(u.getUser().getId() + u.getGuild().getId());
-        final Font font = Font.createFont(Font.TRUETYPE_FONT, this.getClass().getResourceAsStream("com/kuuhaku/model/font/friz-quadrata-bold-bt.ttf"));
+        final Font font = Font.createFont(Font.TRUETYPE_FONT, this.getClass().getResourceAsStream("font/friz-quadrata-bold-bt.ttf"));
 
         BufferedImage profile = new BufferedImage(1055, 719, BufferedImage.TYPE_INT_RGB);
 

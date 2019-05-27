@@ -36,7 +36,6 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import org.json.JSONObject;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
-import redis.clients.jedis.Jedis;
 
 import javax.persistence.NoResultException;
 import javax.security.auth.login.LoginException;
@@ -52,7 +51,6 @@ import java.util.stream.Collectors;
 public class Main extends ListenerAdapter implements JobListener, Job {
     private static JDA bot;
     private static User owner;
-    private static Jedis db;
     private static TextChannel homeLog;
     private static JobDetail backup;
     private static Scheduler sched;
@@ -82,16 +80,6 @@ public class Main extends ListenerAdapter implements JobListener, Job {
             }
         } catch (SchedulerException e) {
             System.out.println("Erro ao inicializar cronograma: " + e);
-        }
-        try {
-            List<CustomAnswers> ca = Database.getAllCustomAnswers();
-            db = new Jedis("localhost", 80);
-            System.out.println("Conectado ao servidor - " + db.ping());
-            if (ca != null) {
-                ca.forEach(c -> db.sadd(c.getGuildID(), "{\"id\":\"" + c.getId() + "\", \"trigger\":\"" + c.getGatilho() + "\", \"answer\":\"" + c.getAnswer() + "\"}"));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -310,12 +298,8 @@ public class Main extends ListenerAdapter implements JobListener, Job {
 
                 if (gc != null && message.getTextChannel().canTalk()) {
                     try {
-                        Set<String> ca = db.smembers(message.getGuild().getId());
-                        List<JSONObject> caList = new ArrayList<>();
-                        ca.forEach(c -> caList.add(new JSONObject(c)));
-                        caList.removeIf(c -> !c.getString("trigger").equalsIgnoreCase(message.getMessage().getContentRaw()));
-                        String answer = caList.get(new Random().nextInt(caList.size())).getString("answer");
-                        message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(answer).queueAfter(answer.length() * 25, TimeUnit.MILLISECONDS));
+                        //TODO Resposta customizada
+                        //message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(answer).queueAfter(answer.length() * 25, TimeUnit.MILLISECONDS));
                     } catch (Exception ignore) {
                     }
                     try {
