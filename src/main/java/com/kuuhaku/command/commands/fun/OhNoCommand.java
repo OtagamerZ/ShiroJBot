@@ -12,7 +12,7 @@ import java.io.IOException;
 public class OhNoCommand extends Command {
 	
 	public OhNoCommand() {
-		super("ohno", "<msg>", "Gera um meme no formato \"ohno\"", Category.FUN);
+		super("ohno", "<mensagem>", "Gera um meme no formato \"ohno\"", Category.FUN);
 	}
 
 	@Override
