@@ -61,6 +61,7 @@ public class SQLite {
     }
 
     private static EntityManager getEntityManager() {
+        if (emf == null) connect();
         return emf.createEntityManager();
     }
 
