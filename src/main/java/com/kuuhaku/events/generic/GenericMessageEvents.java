@@ -20,7 +20,7 @@ package com.kuuhaku.events.generic;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.SQLite;
+import com.kuuhaku.controller.SQLite;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
