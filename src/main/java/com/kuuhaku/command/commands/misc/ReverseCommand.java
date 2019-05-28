@@ -16,11 +16,7 @@ public class ReverseCommand extends Command {
 		
 		if(args.length < 1) { channel.sendMessage(":x: | Você precisa de indicar o texto que deseja inverter.").queue(); return; }
 		
-        String txt = "";
-
-        for(String arg : args) {
-        	txt += arg + " ";
-        }
+        String txt = String.join(" ", args);
         
         txt = new StringBuilder(txt.trim()).reverse().toString();
         channel.sendMessage(txt).queue();
