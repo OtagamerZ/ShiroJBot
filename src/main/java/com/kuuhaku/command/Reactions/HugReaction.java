@@ -79,10 +79,10 @@ public class HugReaction extends Reaction {
                     if (!isAnswer()) Helper.sendReaction(channel, author.getAsMention() + " abraçou " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), false);
                     else Helper.sendReaction(channel,  message.getMentionedUsers().get(0).getAsMention() + " devolveu o abraço de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), true);
                 } else {
-                    Helper.typeMessage(channel, ":x: Você só pode abraçar uma pessoa por vez, vai com calma!");
+                    Helper.typeMessage(channel, ":x: | Você só pode abraçar uma pessoa por vez, vai com calma!");
                 }
             } else {
-                Helper.typeMessage(channel, ":x: Epa, você precisa mencionar alguém para abraçar!");
+                Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para abraçar!");
             }
         } catch (IOException e) {
             e.printStackTrace();
