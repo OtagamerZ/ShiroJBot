@@ -32,77 +32,59 @@
  *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model;
+package com.kuuhaku.command.Reactions;
 
+import com.kuuhaku.command.Category;
+import com.kuuhaku.command.Command;
 import net.dv8tion.jda.core.entities.User;
 
-public class DuelData {
-    private User p1, p2;
-    private Beyblade b1, b2;
-    transient private boolean d1, d2;
-    transient private boolean s1, s2;
-    transient private boolean p1turn = true;
+public abstract class Reaction extends Command{
+    private User user;
+    private User target;
+    private String[] reaction;
+    private String[] selfTarget;
 
-    public DuelData(User p1, User p2) {
-        this.p1 = p1;
-        this.p2 = p2;
-        //this.b1 = Database.getBeyblade(p1.getId());
-        //this.b2 = Database.getBeyblade(p2.getId());
+    Reaction(String name, String[] aliases, String description, Category category) {
+        super(name, aliases, description, category);
     }
 
-    public User getP1() {
-        return p1;
+    public User getUser() {
+        return user;
     }
 
-    public User getP2() {
-        return p2;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public Beyblade getB1() {
-        return b1;
+    public User getTarget() {
+        return target;
     }
 
-    public Beyblade getB2() {
-        return b2;
+    public void setTarget(User target) {
+        this.target = target;
     }
 
-    public boolean isD1() {
-        return d1;
+    public String[] getReaction() {
+        return reaction;
     }
 
-    public void setD1(boolean d1) {
-        this.d1 = d1;
+    public int getReactionLength() {
+        return reaction.length;
     }
 
-    public boolean isD2() {
-        return d2;
+    public void setReaction(String[] reaction) {
+        this.reaction = reaction;
     }
 
-    public void setD2(boolean d2) {
-        this.d2 = d2;
+    public String[] getSelfTarget() {
+        return selfTarget;
     }
 
-    public boolean isP1turn() {
-        return p1turn;
+    public int getSelfTargetLength() {
+        return selfTarget.length;
     }
 
-    public void setP1turn(boolean p1turn) {
-        this.p1turn = p1turn;
-    }
-
-    public boolean isS1() {
-        return s1;
-    }
-
-    public void setS1(boolean s1) {
-        this.s1 = s1;
-    }
-
-    public boolean isS2() {
-        return s2;
-    }
-
-    public void setS2(boolean s2) {
-        this.s2 = s2;
+    public void setSelfTarget(String[] selfTarget) {
+        this.selfTarget = selfTarget;
     }
 }

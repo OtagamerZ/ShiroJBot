@@ -1,3 +1,20 @@
+/*
+ * This file is part of Shiro J Bot.
+ *
+ *     Shiro J Bot is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     Shiro J Bot is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
+ */
+
 package com.kuuhaku.utils;
 
 import net.dv8tion.jda.core.JDA;
@@ -18,12 +35,12 @@ public class ShiroInfo {
 	private long startTime;
 
 	public ShiroInfo() {
-		token = "NTgwNDQ3NDcxODkzNzQxNTc1.XOQ2cw.c_oRM9-gkILY4_kpcWCj0aIEmyQ";
+		token = "NTcyNzg0MzA1MTM5NDgyNjg2.XOxx0A.gvatPLOCKLTYVsXXsid1V_mW0H8";
 		
 		apiVersion = "3.8.3";
 		
 		name = "Shiro";
-		version = "1.0";
+		version = "2.0";
 		
 		default_prefix = "s!";
 
@@ -32,6 +49,8 @@ public class ShiroInfo {
 		developers = new ArrayList<String>();
 		developers.add("321665807988031495"); //Reydux
 	}
+
+	public JDA getAPI() {return api;}
 	
 	public void setAPI(JDA api) {
 		this.api = api;

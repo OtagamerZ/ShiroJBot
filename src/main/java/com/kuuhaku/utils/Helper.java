@@ -1,3 +1,20 @@
+/*
+ * This file is part of Shiro J Bot.
+ *
+ *     Shiro J Bot is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     Shiro J Bot is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
+ */
+
 package com.kuuhaku.utils;
 
 import net.dv8tion.jda.core.Permission;
@@ -129,7 +146,7 @@ public class Helper {
 
 	public static void purge(MessageChannel channel, int num) {
 		MessageHistory history = new MessageHistory(channel);
-		history.retrievePast(num).queue((retrievedMessages) -> channel.purgeMessages(retrievedMessages));
+		history.retrievePast(num).queue(channel::purgeMessages);
 	}
 
 	public static String getCustomEmoteMention(Guild guild, String name) {
@@ -147,5 +164,13 @@ public class Helper {
 		}
 		return null;
 	}
-	
+
+	public static void typeMessage(MessageChannel channel, String message) {
+		channel.sendTyping().queue(tm -> channel.sendMessage(message).queueAfter(message.length() * 25 > 10000 ? 10000 : message.length(), TimeUnit.MILLISECONDS));
+	}
+
+	public static void sendReaction(MessageChannel channel, String message, boolean reacted) {
+		if (reacted) channel.sendTyping().queue(tm -> channel.sendMessage(message).queue(m -> m.addReaction("\u21bb").queue()));
+		else channel.sendTyping().queue(tm -> channel.sendMessage(message).queue());
+	}
 }

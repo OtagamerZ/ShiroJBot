@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright (C) 2019 Yago Garcia Sanches Gimenez / KuuHaKu
-  ~
   ~ This file is part of Shiro J Bot.
   ~
   ~     Shiro J Bot is free software: you can redistribute it and/or modify
@@ -15,7 +13,7 @@
   ~     GNU General Public License for more details.
   ~
   ~     You should have received a copy of the GNU General Public License
-  ~     along with Shiro J Bot.  If not, see https://www.gnu.org/licenses/
+  ~     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
   -->
 
 <persistence xmlns="http://java.sun.com/xml/ns/persistence"
@@ -24,7 +22,7 @@
      http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
              version="2.0">
 
-    <persistence-unit name="shiro">
+    <persistence-unit name="shiro_remote">
 
         <!-- provedor/implementacao do JPA -->
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
@@ -44,6 +42,41 @@
 
             <!--  propriedades do hibernate -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
+            <property name="hibernate.format_sql" value="true"/>
+
+            <!--  propriedade do C3P0 -->
+            <property name="hibernate.c3p0.min_size" value="1"/>
+            <property name="hibernate.c3p0.max_size" value="3"/>
+            <property name="hibernate.c3p0.timeout" value="300"/>
+            <property name="hibernate.c3p0.max_statements" value="50"/>
+            <property name="hibernate.c3p0.idle_test_period" value="3000"/>
+            <property name="hibernate.c3p0.preferredTestQuery" value="SELECT 1"/>
+            <property name="hibernate.c3p0.testConnectionOnCheckout" value="true"/>
+
+            <!--  atualiza o banco, gera as tabelas se for preciso -->
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+
+        </properties>
+    </persistence-unit>
+
+    <persistence-unit name="shiro_local">
+
+        <!-- provedor/implementacao do JPA -->
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <!-- entidade mapeada -->
+        <class>com.kuuhaku.model.guildConfig</class>
+        <class>com.kuuhaku.model.Member</class>
+        <class>com.kuuhaku.model.CustomAnswers</class>
+        <class>com.kuuhaku.model.Beyblade</class>
+        <class>com.kuuhaku.model.Tags</class>
+
+        <properties>
+            <!-- dados da conexao -->
+            <property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC"/>
+
+            <!--  propriedades do hibernate -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.SQLiteDialect"/>
             <property name="hibernate.format_sql" value="true"/>
 
             <!--  propriedade do C3P0 -->

@@ -1,21 +1,24 @@
+/*
+ * This file is part of Shiro J Bot.
+ *
+ *     Shiro J Bot is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     Shiro J Bot is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
+ */
+
 package com.kuuhaku.model;
 
-import com.kuuhaku.controller.Database;
-import net.dv8tion.jda.core.entities.Member;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Objects;
-
 public class ProfileTest {
-    public InputStream makeProfile(Member u) throws IOException, FontFormatException {
+    /*public InputStream makeProfile(Member u) throws IOException, FontFormatException {
         com.kuuhaku.model.Member m = Database.getMemberById(u.getUser().getId() + u.getGuild().getId());
         final Font font = Font.createFont(Font.TRUETYPE_FONT, this.getClass().getResourceAsStream("font/friz-quadrata-bold-bt.ttf"));
 
@@ -125,5 +128,5 @@ public class ProfileTest {
                 g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
         int start = width / 2 - stringLen / 2;
         g2d.drawString(s, start + XPos, YPos);
-    }
+    }*/
 }

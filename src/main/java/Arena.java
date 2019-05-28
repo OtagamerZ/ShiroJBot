@@ -15,19 +15,25 @@
  *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import com.kuuhaku.controller.Database;
-import com.kuuhaku.model.Beyblade;
-import com.kuuhaku.model.DuelData;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.function.Consumer;
+/*
+ * This file is part of Shiro J Bot.
+ *
+ *     Shiro J Bot is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     Shiro J Bot is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
+ */
 
 public class Arena {
-    public static void start(MessageReceivedEvent message, String[] cmd) {
+    /*public static void start(MessageReceivedEvent message, String[] cmd) {
         if (Database.getBeyblade(message.getAuthor().getId()) == null) {
             if (cmd.length > 1) {
                 Beyblade bb = new Beyblade();
@@ -427,5 +433,5 @@ public class Arena {
         } else {
             return 1.0f;
         }
-    }
+    }*/
 }
