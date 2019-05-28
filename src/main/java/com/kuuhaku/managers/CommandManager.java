@@ -22,6 +22,7 @@ import com.kuuhaku.command.Reactions.HugReaction;
 import com.kuuhaku.command.commands.fun.OhNoCommand;
 import com.kuuhaku.command.commands.fun.PPTCommand;
 import com.kuuhaku.command.commands.information.ComandosCommand;
+import com.kuuhaku.command.commands.information.ProfileCommand;
 import com.kuuhaku.command.commands.misc.*;
 import com.kuuhaku.command.commands.owner.KillCommand;
 import com.kuuhaku.command.commands.owner.LeaveCommand;
@@ -47,6 +48,7 @@ public class CommandManager {
 
             //INFORMATION
             add(new ComandosCommand());
+            add(new ProfileCommand());
 
             //MISC
             add(new AsciiCommand());

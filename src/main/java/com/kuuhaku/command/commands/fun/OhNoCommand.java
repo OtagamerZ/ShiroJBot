@@ -20,23 +20,15 @@ public class OhNoCommand extends Command {
 		
 		if(args.length < 1) { channel.sendMessage(":x: | Você tem que escrever a mensagem que deseja que apareca na imagem.").queue(); return; }
 		
-		StringBuilder sb = new StringBuilder();
-		for(int i = 0; i<args.length; i++) {
-			sb.append(args[i]).append(" ");
-		}
-		String str = sb.toString().trim();
+		String sb = String.join(" ", args);
+		String str = sb.trim();
 		File f;
 		try {
 			f = Helper.createOhNoImage(str);
 			channel.sendFile(f).complete();
 		} catch (IOException e) {
 			channel.sendMessage(":x: | Ocorreu um erro ao gerar a mensagem!").queue();
-			return;
 		}
-		
-		try {
-			f.delete();
-		} catch(Exception err) { err.printStackTrace(); }
 	}
 
 }
