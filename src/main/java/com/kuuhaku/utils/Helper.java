@@ -37,7 +37,7 @@ public class Helper {
 	
 	public static final String VOID = "\u200B";
 	
-	public static PrivilegeLevel getPrivilegeLevel(Member member) {
+	private static PrivilegeLevel getPrivilegeLevel(Member member) {
 		if (Main.getInfo().getDevelopers().contains(member.getUser().getId())) {
 			return PrivilegeLevel.OWNER;
 		} else if(member.hasPermission(Permission.MESSAGE_MANAGE)) {
@@ -104,8 +104,7 @@ public class Helper {
         text = sb.toString().trim();
         int lineN = 1;
         for(String line : text.split("\n")) {
-        	if(lineN>4)
-        		break;
+        	if(lineN>4) break;
         	w.drawString(line, 344+3, (int) (22+(rect.getHeight()*lineN)));
         	lineN++;
         }

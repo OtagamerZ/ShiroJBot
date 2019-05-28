@@ -55,9 +55,7 @@ public class GenericMessageEvents extends ListenerAdapter {
 			}
 			return;
 		}
-		*/
 
-		/*
 		if(message.getInvites().size()>0 && Helper.getPrivilegeLevel(member) == PrivilegeLevel.USER) {
             message.delete().queue();
             try {
@@ -113,8 +111,14 @@ public class GenericMessageEvents extends ListenerAdapter {
         }
 
         if (!found) {
-            if (message.getMentionedUsers().contains(Main.getInfo().getSelfUser())) {
-                channel.sendMessage("Para obter ajuda sobre como me utilizar faça `" + prefix + "ajuda`.").queue();
+            try {
+                com.kuuhaku.model.Member m = SQLite.getMemberById(member.getUser().getId() + member.getGuild().getId());
+                boolean lvlUp = m.addXp();
+                if (lvlUp) {
+                    channel.sendMessage(member.getEffectiveName() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
+                }
+            } catch (NoResultException e) {
+                SQLite.addMemberToDB(member);
             }
         }
     }

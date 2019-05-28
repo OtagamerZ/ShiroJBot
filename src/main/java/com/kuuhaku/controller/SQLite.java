@@ -22,6 +22,7 @@ import com.kuuhaku.model.CustomAnswers;
 import com.kuuhaku.model.Member;
 import com.kuuhaku.model.guildConfig;
 import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.User;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.persistence.EntityManager;
@@ -72,19 +73,6 @@ public class SQLite {
         }
     }
 
-    public static guildConfig getGuildById(String id) {
-        EntityManager em = getEntityManager();
-        guildConfig gc;
-
-        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
-        q.setParameter(1, id);
-        gc = (guildConfig) q.getSingleResult();
-
-        em.close();
-
-        return gc;
-    }
-
     public static String getGuildPrefix(String id) {
         EntityManager em = getEntityManager();
 
@@ -97,6 +85,19 @@ public class SQLite {
         em.close();
 
         return prefix;
+    }
+
+    public static guildConfig getGuildById(String id) {
+        EntityManager em = getEntityManager();
+        guildConfig gc;
+
+        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+        q.setParameter(1, id);
+        gc = (guildConfig) q.getSingleResult();
+
+        em.close();
+
+        return gc;
     }
 
     public static void addGuildToDB(Guild guild) {
@@ -157,6 +158,42 @@ public class SQLite {
 
         em.getTransaction().begin();
         em.remove(em.getReference(ca.getClass(), ca.getGuildID()));
+        em.getTransaction().commit();
+
+        em.close();
+    }
+
+    public static Member getMemberById(String id) {
+        EntityManager em = getEntityManager();
+        Member m;
+
+        Query q = em.createQuery("SELECT m FROM Member m WHERE id = ?1", Member.class);
+        q.setParameter(1, id);
+        m = (Member) q.getSingleResult();
+
+        em.close();
+
+        return m;
+    }
+
+    public static void addMemberToDB(net.dv8tion.jda.core.entities.Member u) {
+        EntityManager em = getEntityManager();
+
+        Member m = new Member();
+        m.setId(u.getUser().getId() + u.getGuild().getId());
+
+        em.getTransaction().begin();
+        em.merge(m);
+        em.getTransaction().commit();
+
+        em.close();
+    }
+
+    public static void removeMemberFromDB(Member m) {
+        EntityManager em = getEntityManager();
+
+        em.getTransaction().begin();
+        em.remove(em.getReference(m.getClass(), m.getId()));
         em.getTransaction().commit();
 
         em.close();
