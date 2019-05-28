@@ -46,8 +46,10 @@ public class ShiroInfo {
 
 		nomeDB = "shiro.sqlite";
 		
-		developers = new ArrayList<>();
-		developers.add("321665807988031495"); //Reydux
+		developers = new ArrayList<String>(){{
+			add("350836145921327115"); //KuuHaKu
+			add("321665807988031495"); //Reydux
+		}};
 	}
 
 	public JDA getAPI() {return api;}
@@ -68,7 +70,7 @@ public class ShiroInfo {
 
 	public String getDBFileName() { return nomeDB; }
 
-	public ArrayList<String> getDevelopers() { return developers; }
+	ArrayList<String> getDevelopers() { return developers; }
 	
 	public String getName() {
 		return name;

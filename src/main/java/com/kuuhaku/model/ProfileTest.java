@@ -18,6 +18,8 @@
 package com.kuuhaku.model;
 
 import com.kuuhaku.controller.SQLite;
+import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.PrivilegeLevel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -53,9 +55,20 @@ public class ProfileTest {
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
         final BufferedImage banner = ImageIO.read(con.getInputStream());
 
-        con = (HttpURLConnection) new URL("https://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Default_Trim.png").openConnection();
-        con.setRequestProperty("User-Agent", "Mozilla/5.0");
-        final BufferedImage bannerBorder = resize(ImageIO.read(con.getInputStream()), 216, 108);
+        BufferedImage bannerBorder = null;
+        if (Helper.hasPermission(u, PrivilegeLevel.OWNER)) {
+            con = (HttpURLConnection) new URL("https://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Challenger_Trim.png").openConnection();
+            con.setRequestProperty("User-Agent", "Mozilla/5.0");
+            bannerBorder = resize(ImageIO.read(con.getInputStream()), 216, 108);
+        } else if (Helper.hasPermission(u, PrivilegeLevel.STAFF)) {
+            con = (HttpURLConnection) new URL("https://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Diamond_Trim.png").openConnection();
+            con.setRequestProperty("User-Agent", "Mozilla/5.0");
+            bannerBorder = resize(ImageIO.read(con.getInputStream()), 216, 108);
+        } else if (Helper.hasPermission(u, PrivilegeLevel.USER)) {
+            con = (HttpURLConnection) new URL("https://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Silver_Trim.png").openConnection();
+            con.setRequestProperty("User-Agent", "Mozilla/5.0");
+            bannerBorder = resize(ImageIO.read(con.getInputStream()), 216, 108);
+        }
 
         con = (HttpURLConnection) new URL("https://i.imgur.com/rxZ5qAL.png").openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
