@@ -1,26 +1,61 @@
+/*
+ * This file is part of Shiro J Bot.
+ *
+ *     Shiro J Bot is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     Shiro J Bot is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
+ */
+
 package com.kuuhaku.utils;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.model.guildConfig;
 import net.dv8tion.jda.core.entities.Guild;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
 import java.io.File;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SQLite {
 
     private static Connection con;
-    private static Statement statement;
+    private static EntityManagerFactory emf;
 
-    public static void connect() throws SQLException {
+    public static void connect() {
         con = null;
 
         File DBfile = new File(Main.getInfo().getDBFileName());
-        if(!DBfile.exists()) { System.out.println("❌ | O ficheiro usado como base de dados não foi encontrado. Entre no servidor discord oficial da Shiro para obter ajuda.");}
+        if (!DBfile.exists()) {
+            System.out.println("❌ | O ficheiro usado como base de dados não foi encontrado. Entre no servidor discord oficial da Shiro para obter ajuda.");
+        }
 
-        String url = "jdbc:sqlite:" + DBfile.getPath();
-        con = DriverManager.getConnection(url);
-        statement = con.createStatement();
+        Map<String, String> props = new HashMap<>();
+        props.put("javax.persistence.jdbc.url", "jdbc:sqlite:" + DBfile.getPath());
+
+        if (emf == null) emf = Persistence.createEntityManagerFactory("shiro_local", props);
+
+        emf.getCache().evictAll();
+
         System.out.println("✅ | Ligação à base de dados estabelecida.");
+    }
+
+    private static EntityManager getEntityManager() {
+        return emf.createEntityManager();
     }
 
     public static void disconnect() throws SQLException {
@@ -30,55 +65,55 @@ public class SQLite {
         }
     }
 
-    /*public static ResultSet onQuery(String query) throws SQLException {
-        Boolean rs;
-        rs = statement.executeQuery(query);
+    public static guildConfig getGuildById(String id) {
+        EntityManager em = getEntityManager();
+        guildConfig gc;
 
-        return rs;
-    }*/
+        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+        q.setParameter(1, id);
+        gc = (guildConfig) q.getSingleResult();
 
-    public static String getGuildPrefix(String id) throws SQLException {
-        String query = "SELECT * FROM guilds WHERE guild_id = '" + id + "';";
-        String prefix;
-        //ResultSet rs = statement.executeQuery(query);
-        //return rs.getString("prefix");
-        ResultSet rs = statement.executeQuery(query);
-        prefix = rs.getString("prefix");
+        em.close();
 
-        if(prefix == null) {
-            prefix = "s!";
-        } else {
-            prefix = rs.getString("prefix");
-        }
+        return gc;
+    }
+
+    public static String getGuildPrefix(String id) {
+        EntityManager em = getEntityManager();
+
+        Query q = em.createQuery("SELECT c FROM guildConfig c WHERE guild_id = ?1", guildConfig.class);
+        q.setParameter(1, id);
+        guildConfig gc = (guildConfig) q.getSingleResult();
+        String prefix = gc.getPrefix();
+
+        if (prefix == null) prefix = "s!";
+        em.close();
+
         return prefix;
     }
 
-    public static void addGuildToDB(Guild guild) throws SQLException {
-        String guild_name = guild.getName();
-        String guild_id = guild.getId();
-        String guild_owner = guild.getOwner().getUser().getAsTag();
-        String guild_ownerID = guild.getOwnerId();
+    public static void addGuildToDB(Guild guild) {
+        EntityManager em = getEntityManager();
 
-        String query = "INSERT INTO guilds(guild_name, guild_id, guild_owner, guild_ownerID, prefix) VALUES(?, ?, ?, ?, ?);";
+        guildConfig gc = new guildConfig();
+        gc.setName(guild.getName());
+        gc.setGuildId(guild.getId());
+        gc.setOwner(guild.getOwner().getUser().getAsTag());
 
-        PreparedStatement pstmt = con.prepareStatement(query);
-        pstmt.setString(1, guild_name);
-        pstmt.setString(2, guild_id);
-        pstmt.setString(3, guild_owner);
-        pstmt.setString(4, guild_ownerID);
-        pstmt.setString(5, Main.getInfo().getDefaultPrefix());
+        em.getTransaction().begin();
+        em.merge(gc);
+        em.getTransaction().commit();
 
-        pstmt.executeUpdate();
+        em.close();
     }
 
-    public static void removeGuildFromDB(Guild guild) throws SQLException {
-        String guild_id = guild.getId();
+    public static void removeGuildFromDB(guildConfig gc) {
+        EntityManager em = getEntityManager();
 
-        String query = "DELETE FROM guilds WHERE guild_id = ?;";
+        em.getTransaction().begin();
+        em.remove(em.getReference(gc.getClass(), gc.getGuildId()));
+        em.getTransaction().commit();
 
-        PreparedStatement pstmt = con.prepareStatement(query);
-        pstmt.setString(1, guild_id);
-
-        pstmt.executeUpdate();
+        em.close();
     }
 }

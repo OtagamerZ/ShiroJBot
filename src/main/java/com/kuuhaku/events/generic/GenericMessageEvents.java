@@ -1,33 +1,46 @@
+/*
+ * This file is part of Shiro J Bot.
+ *
+ *     Shiro J Bot is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     Shiro J Bot is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
+ */
+
 package com.kuuhaku.events.generic;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.SQLite;
-import com.kuuhaku.command.Command;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
-import java.sql.SQLException;
-
 public class GenericMessageEvents extends ListenerAdapter {
 
-	@Override
-	public void onMessageReceived(MessageReceivedEvent event) {
-		User author = event.getAuthor();
-		Member member = event.getMember();
-		Message message = event.getMessage();
-		MessageChannel channel = message.getChannel();
-		Guild guild = message.getGuild();
-		String rawMessage = message.getContentRaw();
+    @Override
+    public void onMessageReceived(MessageReceivedEvent event) {
+        User author = event.getAuthor();
+        Member member = event.getMember();
+        Message message = event.getMessage();
+        MessageChannel channel = message.getChannel();
+        Guild guild = message.getGuild();
+        String rawMessage = message.getContentRaw();
 
-		String prefix = "";
-		try {
-			prefix = SQLite.getGuildPrefix(guild.getId());
-		} catch (SQLException err) { err.printStackTrace(); }
+        String prefix;
+        prefix = SQLite.getGuildPrefix(guild.getId());
 
-		if(Main.getInfo().getSelfUser().getIdLong() == author.getIdLong()) return;
-		if(author.isBot()) return;
+        if (Main.getInfo().getSelfUser().getIdLong() == author.getIdLong()) return;
+        if (author.isBot()) return;
 
 		/*
 		if(event.getPrivateChannel()!=null) {
@@ -52,36 +65,46 @@ public class GenericMessageEvents extends ListenerAdapter {
         }
 		*/
 
-		if(message.getContentRaw().equals(Main.getInfo().getSelfUser().getAsMention())) {
+        if (message.getContentRaw().equals(Main.getInfo().getSelfUser().getAsMention())) {
             channel.sendMessage("Para obter ajuda sobre como me utilizar faça `" + prefix + "ajuda`.").queue();
             return;
-		}
+        }
 
-		String rawMsgNoPrefix = rawMessage.substring(prefix.length()).trim();
-		String commandName = rawMsgNoPrefix.split(" ")[0].trim();
-		boolean hasArgs = (rawMsgNoPrefix.split(" ").length > 1);
-		String[] args = new String[] {};
-		if(hasArgs) { args = rawMsgNoPrefix.substring(commandName.length()).trim().split(" "); }
-		
-		boolean found = false;
-		for(Command command : Main.getCommandManager().getCommands()) {
-			if(command.getName().equalsIgnoreCase(commandName)) { found = true; }
-			for(String alias : command.getAliases()) { if(alias.equalsIgnoreCase(commandName)) { found = true; } }
-			if(!command.getCategory().isEnabled()) { found = false; }
-			
-			if(found){
-				if(!Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
-						channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
-				}
-				command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
-				break;
-			}
-		}
+        String rawMsgNoPrefix = rawMessage.substring(prefix.length()).trim();
+        String commandName = rawMsgNoPrefix.split(" ")[0].trim();
+        boolean hasArgs = (rawMsgNoPrefix.split(" ").length > 1);
+        String[] args = new String[]{};
+        if (hasArgs) {
+            args = rawMsgNoPrefix.substring(commandName.length()).trim().split(" ");
+        }
 
-		if(!found) {
-			if(message.getMentionedUsers().contains(Main.getInfo().getSelfUser())) {
-				channel.sendMessage("Para obter ajuda sobre como me utilizar faça `" + prefix + "ajuda`.").queue();
-			}
-		}
-	}
+        boolean found = false;
+        for (Command command : Main.getCommandManager().getCommands()) {
+            if (command.getName().equalsIgnoreCase(commandName)) {
+                found = true;
+            }
+            for (String alias : command.getAliases()) {
+                if (alias.equalsIgnoreCase(commandName)) {
+                    found = true;
+                }
+            }
+            if (!command.getCategory().isEnabled()) {
+                found = false;
+            }
+
+            if (found) {
+                if (!Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
+                    channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
+                }
+                command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
+                break;
+            }
+        }
+
+        if (!found) {
+            if (message.getMentionedUsers().contains(Main.getInfo().getSelfUser())) {
+                channel.sendMessage("Para obter ajuda sobre como me utilizar faça `" + prefix + "ajuda`.").queue();
+            }
+        }
+    }
 }
