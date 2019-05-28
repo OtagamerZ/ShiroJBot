@@ -30,6 +30,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
 import java.time.Instant;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class Helper {
@@ -63,7 +64,7 @@ public class Helper {
 	}
 	
 	public static File createOhNoImage(String text) throws IOException {
-		BufferedImage image = ImageIO.read(Main.class.getResourceAsStream("ohno.png"));
+		BufferedImage image = ImageIO.read(Objects.requireNonNull(Main.class.getClassLoader().getResourceAsStream("ohno.png")));
         
         BufferedImage resultImg = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
