@@ -17,6 +17,7 @@
 
 package com.kuuhaku;
 
+import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.events.generic.GenericMessageEvents;
 import com.kuuhaku.events.guild.GuildEvents;
@@ -61,6 +62,7 @@ public class Main implements JobListener {
         info.setStartTime(Instant.now().getEpochSecond());
 
         SQLite.connect();
+        //MySQL.dumpData(null, null, null);
         finishStartUp();
     }
 

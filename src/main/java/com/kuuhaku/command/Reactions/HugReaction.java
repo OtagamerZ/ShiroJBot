@@ -56,10 +56,6 @@ public class HugReaction extends Reaction {
         return answer;
     }
 
-    public static void setAnswer(boolean answer) {
-        HugReaction.answer = answer;
-    }
-
     @Override
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
         try {
