@@ -27,7 +27,7 @@ public class UptimeCommand extends Command {
 
 		String uptime = dias + " dias " + horas + " horas " + minutos + " mins " + segundos + " segundos...";
 
-		channel.sendMessage("Hummm... acho que estou acordada à uns " + uptime).queue();
+		channel.sendMessage("Hummm... acho que estou acordada a  " + uptime).queue();
 		//channel.sendMessage("Hummm... acho que estou acordada a " + (int) rb.getUptime() / 1000 + " segundos!").queue();
 	}
 
