@@ -47,8 +47,7 @@ public class Helper {
 	
 	public static boolean hasPermission(Member member, PrivilegeLevel privilegeLevel) {
 		if(getPrivilegeLevel(member) == PrivilegeLevel.USER && privilegeLevel != PrivilegeLevel.USER) { return false; }
-		if(getPrivilegeLevel(member) == PrivilegeLevel.STAFF && privilegeLevel == PrivilegeLevel.OWNER) { return false; }
-		return true;
+		return getPrivilegeLevel(member) != PrivilegeLevel.STAFF || privilegeLevel != PrivilegeLevel.OWNER;
 	}
 	
 	/*public static String formatMessage(String message, String commandName, User user) {
@@ -91,7 +90,7 @@ public class Helper {
         		if(str.length()>21) {
         			String newStr = str;
         			do {
-        				sb.append(newStr.substring(0,20)).append("\n");
+        				sb.append(newStr, 0, 20).append("\n");
         				newStr = newStr.substring(21);
         			}while(newStr.length()>21);
         			count=0;
