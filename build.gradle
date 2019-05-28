@@ -1,3 +1,20 @@
+/*
+ * This file is part of Shiro J Bot.
+ *
+ *     Shiro J Bot is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     Shiro J Bot is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
+ */
+
 plugins {
     id 'java'
     id 'application'
@@ -31,6 +48,7 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compile 'net.dv8tion:JDA:3.8.3_462'
     compile 'com.github.SvenWoltmann:color-thief-java:master-SNAPSHOT'
+    compile 'com.github.gwenn:sqlite-dialect:master-SNAPSHOT'
     compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.2.Final'
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.16'
     compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
@@ -40,6 +58,7 @@ dependencies {
     compile group: 'com.mchange', name: 'c3p0', version: '0.9.5.2'
     compile group: 'org.hibernate', name: 'hibernate-c3p0', version: '5.4.2.Final'
     compile group: 'net.coobird', name: 'thumbnailator', version: '0.4.8'
+    compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.27.2.1'
     implementation 'com.graphql-java:graphql-java:2019-05-08T02-56-27-cca4316'
 }
 
