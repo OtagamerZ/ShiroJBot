@@ -19,15 +19,17 @@ package com.kuuhaku.managers;
 
 import com.kuuhaku.command.Command;
 import com.kuuhaku.command.Reactions.HugReaction;
+import com.kuuhaku.command.commands.fun.OhNoCommand;
+import com.kuuhaku.command.commands.fun.PPTCommand;
+import com.kuuhaku.command.commands.information.ComandosCommand;
+import com.kuuhaku.command.commands.misc.*;
+import com.kuuhaku.command.commands.owner.KillCommand;
+import com.kuuhaku.command.commands.owner.LeaveCommand;
 
 import java.util.ArrayList;
 import java.util.List;
 
-//import com.kuuhaku.command.commands.owner.*;
 //import com.kuuhaku.command.commands.moderation.*;
-//import com.kuuhaku.command.commands.information.*;
-//import com.kuuhaku.command.commands.misc.*;
-//import com.kuuhaku.command.commands.fun.*;
 
 public class CommandManager {
 
@@ -41,21 +43,26 @@ public class CommandManager {
         //EXEMPLO: commands.add(new KillCommand());
 
         //OWNER
-//        commands.add(new KillCommand());
-//        commands.add(new LeaveCommand());
+        commands.add(new KillCommand());
+        commands.add(new LeaveCommand());
 
         //MODERATION
 
         //INFORMATION
-//        commands.add(new ComandosCommand());
+        commands.add(new ComandosCommand());
 
         //MISC
-//        commands.add(new AvatarCommand());
-//        commands.add(new PingCommand());
-//        commands.add(new UptimeCommand());
+        commands.add(new AsciiCommand());
+        commands.add(new AvatarCommand());
+        commands.add(new FlipCoinCommand());
+        commands.add(new PingCommand());
+        commands.add(new ReverseCommand());
+        commands.add(new SayCommand());
+        commands.add(new UptimeCommand());
 
         //FUN
-//		commands.add(new OhNoCommand());
+        commands.add(new OhNoCommand());
+        commands.add(new PPTCommand());
     }
 
     public List<Command> getCommands() {
