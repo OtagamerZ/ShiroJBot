@@ -38,6 +38,8 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import net.dv8tion.jda.core.entities.User;
 
+import java.util.Random;
+
 public abstract class Reaction extends Command{
     private User user;
     private User target;
@@ -69,7 +71,7 @@ public abstract class Reaction extends Command{
     }
 
     public int getReactionLength() {
-        return reaction.length;
+        return new Random().nextInt(reaction.length);
     }
 
     public void setReaction(String[] reaction) {
