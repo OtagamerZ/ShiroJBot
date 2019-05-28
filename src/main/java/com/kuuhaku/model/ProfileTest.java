@@ -53,6 +53,10 @@ public class ProfileTest {
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
         final BufferedImage banner = ImageIO.read(con.getInputStream());
 
+        con = (HttpURLConnection) new URL("https://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Default_Trim.png").openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+        final BufferedImage bannerBorder = resize(ImageIO.read(con.getInputStream()), 216, 108);
+
         con = (HttpURLConnection) new URL("https://i.imgur.com/rxZ5qAL.png").openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
         final BufferedImage header = ImageIO.read(con.getInputStream());
@@ -75,6 +79,7 @@ public class ProfileTest {
         g2d.drawImage(vignette, null, 0, 0);
         g2d.drawImage(avatar, null, 93, 283);
         g2d.drawImage(banner, null, 45, 0);
+        g2d.drawImage(bannerBorder, null, 45, 498);
         g2d.drawImage(header, null, 0, 0);
         GradientPaint levelPaint = new GradientPaint(104, 210, Color.decode("#0e628d"), 241, 210, Color.decode("#0cadae"));
 
