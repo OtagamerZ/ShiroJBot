@@ -15,12 +15,8 @@ public class SayCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		
 		if(args.length == 0) { channel.sendMessage(":x: | Você precisa definir uma mensagem.").queue(); return; }
-		
-        String mensagem = new String();
 
-        for (int i = 0; i < args.length; i++) {
-			mensagem += args[i] + " ";
-        }
+        String mensagem = String.join(" ", args);
 
 		mensagem = mensagem.trim();
         

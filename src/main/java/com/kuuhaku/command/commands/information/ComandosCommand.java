@@ -22,7 +22,7 @@ public class ComandosCommand extends Command {
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setColor(Color.PINK);
 			eb.setFooter(Main.getInfo().getFullName(), null);
-			eb.setThumbnail(Main.getInfo().getSelfUser().getAvatarUrl());
+			eb.setThumbnail("https://www.kuleuven.be/studentenvoorzieningen/kot-leuven/icoontjes/question-mark-on-a-circular-black-background.png/image");
 
 			if(args.length == 0) {
 
@@ -41,11 +41,11 @@ public class ComandosCommand extends Command {
 						continue;
 					}
 
-					String cmds = "";
+					StringBuilder cmds = new StringBuilder();
 
-					for(Command cmd : cat.getCmds()) { cmds += "`" + cmd.getName() + "` "; }
+					for(Command cmd : cat.getCmds()) { cmds.append("`").append(cmd.getName()).append("` "); }
 
-					eb.addField(cat.getName(), cat.getDescription() + "\n" + cmds.trim(), false);
+					eb.addField(cat.getName(), cat.getDescription() + "\n" + cmds.toString().trim(), false);
 				}
 
 				eb.addField(Helper.VOID, "Para informações sobre um comando em especifico digite `" + prefix + "cmds [comando]`.", false);
@@ -77,12 +77,12 @@ public class ComandosCommand extends Command {
 
 			eb.setTitle(cmd.getName() + (cmd.getUsage()!=null ? " " + cmd.getUsage() : ""));
 
-			String aliases = "**Aliases**: ";
+			StringBuilder aliases = new StringBuilder("**Aliases**: ");
 
-			for(String al : cmd.getAliases()) { aliases += "`"+al+"` "; }
+			for(String al : cmd.getAliases()) { aliases.append("`").append(al).append("` "); }
 
 			eb.setDescription(cmd.getDescription() + "\n"
-					+ (cmd.getAliases().length!=0 ? aliases.trim() + "\n" : "")
+					+ (cmd.getAliases().length!=0 ? aliases.toString().trim() + "\n" : "")
 					+ "**Categoria**: " + cmd.getCategory().getName()
 					+ "\n");
 
