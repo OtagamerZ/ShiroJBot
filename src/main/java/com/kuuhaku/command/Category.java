@@ -39,7 +39,7 @@ public enum Category {
 		this.description = description;
 		this.privilegeLevel = privilegeLevel;
 		
-		cmds = new ArrayList<Command>();
+		cmds = new ArrayList<>();
 	}
 	
 	public String getName() {

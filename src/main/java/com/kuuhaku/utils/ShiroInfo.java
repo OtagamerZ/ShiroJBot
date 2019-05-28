@@ -37,7 +37,7 @@ public class ShiroInfo {
 	public ShiroInfo() {
 		token = "NTcyNzg0MzA1MTM5NDgyNjg2.XOxx0A.gvatPLOCKLTYVsXXsid1V_mW0H8";
 		
-		apiVersion = "3.8.3";
+		apiVersion = "3.8.3_463";
 		
 		name = "Shiro";
 		version = "2.0";
@@ -46,7 +46,7 @@ public class ShiroInfo {
 
 		nomeDB = "shiro.sqlite";
 		
-		developers = new ArrayList<String>();
+		developers = new ArrayList<>();
 		developers.add("321665807988031495"); //Reydux
 	}
 
@@ -64,13 +64,9 @@ public class ShiroInfo {
 		return token;
 	}
 
-	public String getDefaultPrefix() {
-		return default_prefix;
-	}
+	public String getDefaultPrefix() { return default_prefix; }
 
-	public String getDBFileName() {
-		return nomeDB;
-	}
+	public String getDBFileName() { return nomeDB; }
 
 	public ArrayList<String> getDevelopers() { return developers; }
 	
