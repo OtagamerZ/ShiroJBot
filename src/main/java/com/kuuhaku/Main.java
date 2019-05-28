@@ -21,7 +21,7 @@ import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.events.generic.GenericMessageEvents;
 import com.kuuhaku.events.guild.GuildEvents;
 import com.kuuhaku.managers.CommandManager;
-import com.kuuhaku.utils.SQLite;
+import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
@@ -31,6 +31,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.JobListener;
 
+import javax.persistence.NoResultException;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -65,6 +66,14 @@ public class Main implements JobListener {
 
     private static void finishStartUp() {
         api.getPresence().setGame(getRandomGame());
+        Main.getInfo().getAPI().getGuilds().forEach(g -> {
+            try {
+                SQLite.getGuildById(g.getId());
+            } catch (NoResultException e) {
+                SQLite.addGuildToDB(g);
+                System.out.println("Guild adicionada ao banco: " + g.getName());
+            }
+        });
     }
 
     public static Game getRandomGame() {

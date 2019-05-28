@@ -31,14 +31,14 @@ import java.util.List;
 
 public class CommandManager {
 
-	private List<Command> commands;
-	
-	public CommandManager() {
-		commands = new ArrayList<Command>(){{
-			add(new HugReaction(false));
-		}};
+    private List<Command> commands;
 
-		//EXEMPLO: commands.add(new KillCommand());
+    public CommandManager() {
+        commands = new ArrayList<Command>() {{
+            add(new HugReaction(false));
+        }};
+
+        //EXEMPLO: commands.add(new KillCommand());
 
         //OWNER
 //        commands.add(new KillCommand());
@@ -55,13 +55,10 @@ public class CommandManager {
 //        commands.add(new UptimeCommand());
 
         //FUN
-//        commands.add(new AbracarCommand());
-//        commands.add(new BeijarCommand());
 //		commands.add(new OhNoCommand());
-	}
-	
-	public List<Command> getCommands() {
-		return commands;
-	}
-	
+    }
+
+    public List<Command> getCommands() {
+        return commands;
+    }
 }

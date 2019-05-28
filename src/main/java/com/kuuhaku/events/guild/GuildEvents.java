@@ -18,7 +18,7 @@
 package com.kuuhaku.events.guild;
 
 import com.kuuhaku.model.guildConfig;
-import com.kuuhaku.utils.SQLite;
+import com.kuuhaku.controller.SQLite;
 import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;

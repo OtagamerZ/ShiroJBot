@@ -25,10 +25,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
@@ -168,8 +165,8 @@ public class Helper {
 		channel.sendTyping().queue(tm -> channel.sendMessage(message).queueAfter(message.length() * 25 > 10000 ? 10000 : message.length(), TimeUnit.MILLISECONDS));
 	}
 
-	public static void sendReaction(MessageChannel channel, String message, boolean reacted) {
-		if (reacted) channel.sendTyping().queue(tm -> channel.sendMessage(message).queue(m -> m.addReaction("\u21bb").queue()));
-		else channel.sendTyping().queue(tm -> channel.sendMessage(message).queue());
+	public static void sendReaction(MessageChannel channel, String message, InputStream is, boolean reacted) {
+		if (reacted) channel.sendMessage(message).addFile(is, "reaction.gif").queue(m -> m.addReaction("\u21aa").queue());
+		else channel.sendMessage(message).addFile(is, "reaction.gif").queue();
 	}
 }

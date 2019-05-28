@@ -21,7 +21,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Reactions.HugReaction;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.SQLite;
+import com.kuuhaku.controller.SQLite;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.TextChannel;
@@ -41,12 +41,6 @@ public class JDAEvents extends ListenerAdapter {
         } catch (Exception e) {
             System.out.println("Erro ao inicializar bot: " + e);
         }
-        Main.getInfo().getAPI().getGuilds().forEach(g -> {
-            if (SQLite.getGuildById(g.getId()) == null) {
-                SQLite.addGuildToDB(g);
-                System.out.println("Guild adicionada ao banco: " + g.getName());
-            }
-        });
     }
 
     @Override
