@@ -1,6 +1,4 @@
 /*
- * Copyright (C) 2019 Yago Garcia Sanches Gimenez / KuuHaKu
- *
  * This file is part of Shiro J Bot.
  *
  *     Shiro J Bot is free software: you can redistribute it and/or modify
@@ -14,7 +12,7 @@
  *     GNU General Public License for more details.
  *
  *     You should have received a copy of the GNU General Public License
- *     along with Shiro J Bot.  If not, see https://www.gnu.org/licenses/
+ *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
 package com.kuuhaku.model;
@@ -29,6 +27,8 @@ import java.util.Map;
 public class guildConfig {
     @Id
     private String guildID;
+    private String name;
+    private String owner;
     private String prefix = "!";
     private String msgBoasVindas = "Seja bem-vindo(a) %user%!";
     private String msgAdeus = "Ahh...%user% deixou este servidor!";
@@ -157,5 +157,21 @@ public class guildConfig {
 
     public void setCanallvl(String canallvl) {
         this.canallvl = canallvl;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 }

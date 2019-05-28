@@ -32,77 +32,16 @@
  *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model;
+package com.kuuhaku.events;
 
-import net.dv8tion.jda.core.entities.User;
+import com.kuuhaku.Main;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 
-public class DuelData {
-    private User p1, p2;
-    private Beyblade b1, b2;
-    transient private boolean d1, d2;
-    transient private boolean s1, s2;
-    transient private boolean p1turn = true;
-
-    public DuelData(User p1, User p2) {
-        this.p1 = p1;
-        this.p2 = p2;
-        //this.b1 = Database.getBeyblade(p1.getId());
-        //this.b2 = Database.getBeyblade(p2.getId());
-    }
-
-    public User getP1() {
-        return p1;
-    }
-
-    public User getP2() {
-        return p2;
-    }
-
-    public Beyblade getB1() {
-        return b1;
-    }
-
-    public Beyblade getB2() {
-        return b2;
-    }
-
-    public boolean isD1() {
-        return d1;
-    }
-
-    public void setD1(boolean d1) {
-        this.d1 = d1;
-    }
-
-    public boolean isD2() {
-        return d2;
-    }
-
-    public void setD2(boolean d2) {
-        this.d2 = d2;
-    }
-
-    public boolean isP1turn() {
-        return p1turn;
-    }
-
-    public void setP1turn(boolean p1turn) {
-        this.p1turn = p1turn;
-    }
-
-    public boolean isS1() {
-        return s1;
-    }
-
-    public void setS1(boolean s1) {
-        this.s1 = s1;
-    }
-
-    public boolean isS2() {
-        return s2;
-    }
-
-    public void setS2(boolean s2) {
-        this.s2 = s2;
+public class ScheduledEvents implements Job {
+    @Override
+    public void execute(JobExecutionContext context) throws JobExecutionException {
+        Main.getInfo().getAPI().getPresence().setGame(Main.getRandomGame());
     }
 }

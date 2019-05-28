@@ -1,6 +1,4 @@
 /*
- * Copyright (C) 2019 Yago Garcia Sanches Gimenez / KuuHaKu
- *
  * This file is part of Shiro J Bot.
  *
  *     Shiro J Bot is free software: you can redistribute it and/or modify
@@ -14,14 +12,16 @@
  *     GNU General Public License for more details.
  *
  *     You should have received a copy of the GNU General Public License
- *     along with Shiro J Bot.  If not, see https://www.gnu.org/licenses/
+ *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
 package com.kuuhaku.model;
 
+import java.util.Random;
+
 public class ReactionsList {
-    public static String[] hug() {
-        return new String[]{
+    public static String hug() {
+        String[] url = new String[]{
                 "https://i.imgur.com/TCuWtPE.gif",
                 "https://i.imgur.com/yglgi2M.gif",
                 "https://i.imgur.com/QMoYvzS.gif",
@@ -63,30 +63,33 @@ public class ReactionsList {
                 "http://i.imgur.com/gmiJEbu.gif",
                 "http://multiversosnerd.com.br/wp-content/uploads/2016/10/Imagem-03.gif"
         };
+        return url[new Random().nextInt(url.length)];
     }
 
-    public static String[] facedesk() {
-        return new String[]{
+    public static String facedesk() {
+        String[] url = new String[]{
                 "https://i.imgur.com/OUVVkmW.gif",
                 "https://i.imgur.com/NbzUx0P.gif",
                 "https://i.imgur.com/BpFbc2t.gif",
                 "https://i.imgur.com/c0Uhdb0.gif",
                 "https://i.imgur.com/VH8m3sk.gif"
         };
+        return url[new Random().nextInt(url.length)];
     }
 
-    public static String[] nope() {
-        return new String[]{
+    public static String nope() {
+        String[] url = new String[]{
                 "https://i.imgur.com/IYv6ORf.gif",
                 "https://i.imgur.com/4xudE2I.gif",
                 "https://i.imgur.com/nn28XM1.gif",
                 "https://i.imgur.com/V5nQbaO.gif",
                 "https://i.imgur.com/b3RFHNc.gif"
         };
+        return url[new Random().nextInt(url.length)];
     }
 
-    public static String[] run() {
-        return new String[]{
+    public static String run() {
+        String[] url = new String[]{
                 "https://i.imgur.com/vQKRD1d.gif",
                 "https://i.imgur.com/XK227Hh.gif",
                 "https://i.imgur.com/vTTXRvW.gif",
@@ -98,10 +101,11 @@ public class ReactionsList {
                 "https://images-ext-1.discordapp.net/external/C90ZDXJXGLb0EHx-mYYqdgfcdGz1akb6M8tGlgeLDf0/%3Fitemid%3D7329025/https/media1.tenor.com/images/464a5161456508260bc73bc9550a1ff4/tenor.gif",
                 "https://thumbs.gfycat.com/AffectionateSmallIrishterrier-small.gif"
         };
+        return url[new Random().nextInt(url.length)];
     }
 
-    public static String[] slap() {
-        return new String[]{
+    public static String slap() {
+        String[] url = new String[]{
                 "https://i.imgur.com/23dwi5X.gif",
                 "https://i.imgur.com/ok1eDJv.gif",
                 "https://i.imgur.com/jiYtyNm.gif",
@@ -111,20 +115,22 @@ public class ReactionsList {
                 "https://images-ext-2.discordapp.net/external/1g7tzE67sq_3vK8uFX82wrxfwhql_xxK3JW-P7hEjVk/https/www.intoxianime.com/wp-content/uploads/2017/04/tumblr_ooub8fIHkT1qz64n4o2_400.gif",
                 "https://images-ext-2.discordapp.net/external/9pc6lXAB7i0u2gIOQcaXmny6-kbjwpCHOjspCa3z_LE/https/utinuti.files.wordpress.com/2012/03/tumblr_lv8r0lagid1qgcvsy.gif"
         };
+        return url[new Random().nextInt(url.length)];
     }
 
-    public static String[] smash() {
-        return new String[]{
+    public static String smash() {
+        String[] url = new String[]{
                 "https://i.imgur.com/YUOuDTN.gif",
                 "https://i.imgur.com/StRBnfJ.gif",
                 "https://i.imgur.com/U7svTKQ.gif",
                 "https://i.imgur.com/BqSqhJ8.gif",
                 "https://i.imgur.com/tVebG8q.gif"
         };
+        return url[new Random().nextInt(url.length)];
     }
 
-    public static String[] stare() {
-        return new String[]{
+    public static String stare() {
+        String[] url = new String[]{
                 "https://i.imgur.com/P0D8qvo.gif",
                 "https://i.imgur.com/dExTK6D.gif",
                 "https://i.imgur.com/CSJxTiA.gif",
@@ -134,10 +140,11 @@ public class ReactionsList {
                 "https://media.giphy.com/media/mpcFKjluEmlk4/giphy.gif",
                 "https://media.giphy.com/media/FWQh683IrEJ2w/giphy.gif"
         };
+        return url[new Random().nextInt(url.length)];
     }
 
-    public static String[] blush() {
-        return new String[]{
+    public static String blush() {
+        String[] url = new String[]{
                 "https://i.imgur.com/yn1VENn.gif",
                 "https://i.imgur.com/t4umCPE.gif",
                 "https://i.imgur.com/VZS4mDp.gif",
@@ -148,10 +155,11 @@ public class ReactionsList {
                 "https://images-ext-1.discordapp.net/external/KNzk979Y7Fkwt7BcZD4DHoN1-2zXXShtIFv_zRbnfYQ/http/33.media.tumblr.com/tumblr_lyf8lxrT691qzk4cro1_500.gif",
                 "https://images-ext-1.discordapp.net/external/ldVmliyto3Ngk5nhK8t269HfGiWG-GmflBDvG-ijGRg/https/33.media.tumblr.com/46287071b5bbefd755d4aa3f34edd6c5/tumblr_nxzm5rrCxr1ujgw5yo1_500.gif"
         };
+        return url[new Random().nextInt(url.length)];
     }
 
-    public static String[] laugh() {
-        return new String[]{
+    public static String laugh() {
+        String[] url = new String[]{
                 "https://i.imgur.com/3bqto1r.gif",
                 "https://i.imgur.com/dXacIRI.gif",
                 "https://i.imgur.com/ZYeHDkn.gif",
@@ -163,10 +171,11 @@ public class ReactionsList {
                 "https://images-ext-2.discordapp.net/external/2SAwPfE7qTIMzs0aQ2YO429kOqOJzCWRoFJFhjqVhmU/http/2.bp.blogspot.com/-_Zm_DXIT-xU/UUkZwgZIYNI/AAAAAAAAAgA/h7fRL5eYmKM/s1600/tumblr_mi6b5p7DiN1ql495mo1_500_large.gif",
                 "https://thumbs.gfycat.com/IncompleteBrownHypsilophodon-max-1mb.gif"
         };
+        return url[new Random().nextInt(url.length)];
     }
 
-    public static String[] sad() {
-        return new String[]{
+    public static String sad() {
+        String[] url = new String[]{
                 "https://i.imgur.com/4Hytd5x.gif",
                 "https://i.imgur.com/kzNZ3Bp.gif",
                 "https://i.imgur.com/viUAETo.gif",
@@ -181,10 +190,11 @@ public class ReactionsList {
                 "https://images-ext-1.discordapp.net/external/sAKYLuZJ_PG6hUQeQK_CC1EjSqIykOLp3_24TuPV2Kg/https/i.pinimg.com/originals/e6/b3/e1/e6b3e1834fcb7fc86207efe41c7457df.gif",
                 "https://images-ext-1.discordapp.net/external/iEhLp9oRVMi2fhOwR4jM6E-Hqkqn0dFEYd6_LKjL4Fc/https/i.pinimg.com/originals/c9/68/fe/c968fe1f0c6682400c901306e8763bb7.gif"
         };
+        return url[new Random().nextInt(url.length)];
     }
 
-    public static String[] kiss() {
-        return new String[]{
+    public static String kiss() {
+        String[] url = new String[]{
                 "https://i.imgur.com/OBgRCZu.gif",
                 "https://i.imgur.com/LjTdPcd.gif",
                 "https://i.imgur.com/95c9raG.gif",
@@ -198,10 +208,11 @@ public class ReactionsList {
                 "https://images-ext-1.discordapp.net/external/uuLj_PvI9X1ZRzbHkJ_XmUiW1MKWEXyLNTtxzEYTDiY/https/pa1.narvii.com/6226/f1e4e5d1a26c35a2754cbdde0f11c23c5ec51060_hq.gif",
                 "https://images-ext-2.discordapp.net/external/akLSWq1xvSBkH-Yne6qivo1iE_XNQdR9R33BjsFaVj4/https/uploads.spiritfanfiction.com/fanfics/capitulos/201606/fanfiction-originais-ela-que-me-mudou-5729406-060620161504.gif"
         };
+        return url[new Random().nextInt(url.length)];
     }
 
-    public static String[] dance() {
-        return new String[]{
+    public static String dance() {
+        String[] url = new String[]{
                 "https://i.kym-cdn.com/photos/images/original/001/129/902/3a2.gif",
                 "https://d2w9rnfcy7mm78.cloudfront.net/2145256/original_cd9c01187cead45cd791beafa78f7e08.gif",
                 "https://media.giphy.com/media/euMGM3uD3NHva/giphy.gif",
@@ -216,10 +227,11 @@ public class ReactionsList {
                 "https://images-ext-1.discordapp.net/external/lTIoZz3QUvlOiiSEigNAfXLgWcakVc2OrcRX-TxUbLU/https/images.uncyc.org/pt/8/81/Akatsuki28.gif",
                 "https://images-ext-1.discordapp.net/external/fSyZNQicFOo0fktTvzLgODcj1Xg9KuW9j3fp3A9PoBM/https/i.pinimg.com/originals/e5/38/9a/e5389a88f74c6c727c4273309ca932db.gif"
         };
+        return url[new Random().nextInt(url.length)];
     }
 
-    public static String[] pat() {
-        return new String[]{
+    public static String pat() {
+        String[] url = new String[]{
                 "https://i.imgur.com/aplG0T4.gif",
                 "https://media0.giphy.com/media/AOmJwSo5gikAE/giphy.gif",
                 "https://gifimage.net/wp-content/uploads/2017/07/head-pat-gif-15.gif",
@@ -228,10 +240,11 @@ public class ReactionsList {
                 "https://images-ext-2.discordapp.net/external/WTfgqqUN_qfq6aFSGxv0sUr5hmKrP-AFl2ZwI6yVLpU/https/pa1.narvii.com/6200/33889bd8c5e3b9dde6b4c43de225fea521ce511a_hq.gif",
                 "https://images-ext-2.discordapp.net/external/0kMp89MC22KXc6vhH4ckq-y6kBHAI4mRfbMi5mfvWWE/https/media.tenor.com/images/ad8357e58d35c1d63b570ab7e587f212/tenor.gif"
         };
+        return url[new Random().nextInt(url.length)];
     }
 
-    public static String[] bite() {
-        return new String[]{
+    public static String bite() {
+        String[] url = new String[]{
                 "https://thumbs.gfycat.com/ConsiderateFrighteningAzurevasesponge-size_restricted.gif",
                 "https://i.pinimg.com/originals/99/69/1e/99691e08eecade2f575b272eda7c2d2a.gif",
                 "https://images-ext-1.discordapp.net/external/-N8kY9KRZHf2lAnXX1Ux3ObNmP3IvpcFAupRlz4SL04/https/i.pinimg.com/originals/25/2d/72/252d72cfae7f6336185410bb81ae8248.gif",
@@ -239,5 +252,6 @@ public class ReactionsList {
                 "https://images-ext-1.discordapp.net/external/ypr7byUbHyKYm5nsV1y4hnPUu_xaoWVOtctxWs_-2Ps/http/pa1.narvii.com/5922/1e52bb4412287e69fb9ac2a8b35970730bc2a0a1_00.gif"
 
         };
+        return url[new Random().nextInt(url.length)];
     }
 }
