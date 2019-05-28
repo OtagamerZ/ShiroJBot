@@ -15,7 +15,7 @@
  *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.utils;
+package com.kuuhaku.controller;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.model.guildConfig;
@@ -41,7 +41,7 @@ public class SQLite {
 
         File DBfile = new File(Main.getInfo().getDBFileName());
         if (!DBfile.exists()) {
-            System.out.println("❌ | O ficheiro usado como base de dados não foi encontrado. Entre no servidor discord oficial da Shiro para obter ajuda.");
+            System.out.println("O ficheiro usado como base de dados não foi encontrado. Entre no servidor discord oficial da Shiro para obter ajuda.");
         }
 
         Map<String, String> props = new HashMap<>();
@@ -51,7 +51,7 @@ public class SQLite {
 
         emf.getCache().evictAll();
 
-        System.out.println("✅ | Ligação à base de dados estabelecida.");
+        System.out.println("Ligação à base de dados estabelecida.");
     }
 
     private static EntityManager getEntityManager() {
@@ -61,7 +61,7 @@ public class SQLite {
     public static void disconnect() throws SQLException {
         if (con != null) {
             con.close();
-            System.out.println("✅ | Ligação à base de dados desfeita.");
+            System.out.println("Ligação à base de dados desfeita.");
         }
     }
 
@@ -81,7 +81,7 @@ public class SQLite {
     public static String getGuildPrefix(String id) {
         EntityManager em = getEntityManager();
 
-        Query q = em.createQuery("SELECT c FROM guildConfig c WHERE guild_id = ?1", guildConfig.class);
+        Query q = em.createQuery("SELECT c FROM guildConfig c WHERE guildID = ?1", guildConfig.class);
         q.setParameter(1, id);
         guildConfig gc = (guildConfig) q.getSingleResult();
         String prefix = gc.getPrefix();

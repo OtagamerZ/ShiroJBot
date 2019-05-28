@@ -80,8 +80,8 @@ public class HugReaction extends Reaction {
                             "Moshi moshi, FBI-sama?"
                     });
 
-                    if (isAnswer()) Helper.sendReaction(channel, author.getAsMention() + " abraçou " + message.getMentionedUsers().get(0) + " - " + this.getReaction()[this.getReactionLength()], false);
-                    else Helper.sendReaction(channel,  message.getMentionedUsers().get(0) + " devolveu o abraço " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], true);
+                    if (!isAnswer()) Helper.sendReaction(channel, author.getAsMention() + " abraçou " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), false);
+                    else Helper.sendReaction(channel,  message.getMentionedUsers().get(0).getAsMention() + " devolveu o abraço de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), true);
                 } else {
                     Helper.typeMessage(channel, ":x: Você só pode abraçar uma pessoa por vez, vai com calma!");
                 }
