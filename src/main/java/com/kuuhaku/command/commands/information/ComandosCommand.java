@@ -22,7 +22,7 @@ public class ComandosCommand extends Command {
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setColor(Color.PINK);
 			eb.setFooter(Main.getInfo().getFullName(), null);
-			eb.setThumbnail("https://www.kuleuven.be/studentenvoorzieningen/kot-leuven/icoontjes/question-mark-on-a-circular-black-background.png/image");
+			eb.setThumbnail("https://www.kuleuven.be/studentenvoorzieningen/kot-leuven/icoontjes/question-mark-on-a-circular-black-background.png");
 
 			if(args.length == 0) {
 
