@@ -14,7 +14,7 @@ public class ReverseCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		
-		if(args.length < 1) { channel.sendMessage(":x: | Voc� precisa de indicar o texto que deseja inverter.").queue(); return; }
+		if(args.length < 1) { channel.sendMessage(":x: | Você precisa de indicar o texto que deseja inverter.").queue(); return; }
 		
         String txt = "";
 
