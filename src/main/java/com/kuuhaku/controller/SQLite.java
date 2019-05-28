@@ -18,17 +18,23 @@
 package com.kuuhaku.controller;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.model.CustomAnswers;
+import com.kuuhaku.model.Member;
 import com.kuuhaku.model.guildConfig;
 import net.dv8tion.jda.core.entities.Guild;
 
+import javax.net.ssl.HttpsURLConnection;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
-import java.io.File;
+import java.io.*;
+import java.net.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SQLite {
@@ -112,6 +118,44 @@ public class SQLite {
 
         em.getTransaction().begin();
         em.remove(em.getReference(gc.getClass(), gc.getGuildId()));
+        em.getTransaction().commit();
+
+        em.close();
+    }
+
+    public static CustomAnswers getCAByTrigger(String trigger) {
+        EntityManager em = getEntityManager();
+        CustomAnswers ca;
+
+        Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE gatilho LIKE ?1", CustomAnswers.class);
+        q.setParameter(1, trigger);
+        ca = (CustomAnswers) q.getSingleResult();
+
+        em.close();
+
+        return ca;
+    }
+
+    public static void addCAtoDB(Guild g, String trigger, String answer) {
+        EntityManager em = getEntityManager();
+
+        CustomAnswers ca = new CustomAnswers();
+        ca.setGuildID(g.getId());
+        ca.setGatilho(trigger);
+        ca.setAnswer(answer);
+
+        em.getTransaction().begin();
+        em.merge(ca);
+        em.getTransaction().commit();
+
+        em.close();
+    }
+
+    public static void removeCAFromDB(CustomAnswers ca) {
+        EntityManager em = getEntityManager();
+
+        em.getTransaction().begin();
+        em.remove(em.getReference(ca.getClass(), ca.getGuildID()));
         em.getTransaction().commit();
 
         em.close();

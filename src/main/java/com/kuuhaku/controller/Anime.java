@@ -33,7 +33,7 @@ public class Anime {
         con.setConnectTimeout(5000);
         con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
         con.addRequestProperty("Accept", "application/json");
-        con.addRequestProperty("User-Agent", "OtagamerZ");
+        con.addRequestProperty("User-Agent", "Mozilla/5.0");
         con.setDoOutput(true);
         con.setDoInput(true);
         con.setRequestMethod("POST");

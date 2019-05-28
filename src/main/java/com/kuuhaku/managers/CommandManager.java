@@ -37,32 +37,31 @@ public class CommandManager {
 
     public CommandManager() {
         commands = new ArrayList<Command>() {{
+            //EXEMPLO: commands.add(new KillCommand());
+
+            //OWNER
+            add(new KillCommand());
+            add(new LeaveCommand());
+
+            //MODERATION
+
+            //INFORMATION
+            add(new ComandosCommand());
+
+            //MISC
+            add(new AsciiCommand());
+            add(new AvatarCommand());
+            add(new FlipCoinCommand());
+            add(new PingCommand());
+            add(new ReverseCommand());
+            add(new SayCommand());
+            add(new UptimeCommand());
+
+            //FUN
+            add(new OhNoCommand());
+            add(new PPTCommand());
             add(new HugReaction(false));
         }};
-
-        //EXEMPLO: commands.add(new KillCommand());
-
-        //OWNER
-        commands.add(new KillCommand());
-        commands.add(new LeaveCommand());
-
-        //MODERATION
-
-        //INFORMATION
-        commands.add(new ComandosCommand());
-
-        //MISC
-        commands.add(new AsciiCommand());
-        commands.add(new AvatarCommand());
-        commands.add(new FlipCoinCommand());
-        commands.add(new PingCommand());
-        commands.add(new ReverseCommand());
-        commands.add(new SayCommand());
-        commands.add(new UptimeCommand());
-
-        //FUN
-        commands.add(new OhNoCommand());
-        commands.add(new PPTCommand());
     }
 
     public List<Command> getCommands() {

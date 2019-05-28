@@ -19,11 +19,15 @@ package com.kuuhaku.events.generic;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.model.CustomAnswers;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.controller.SQLite;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+
+import javax.persistence.NoResultException;
+import java.io.IOException;
 
 public class GenericMessageEvents extends ListenerAdapter {
 
@@ -66,12 +70,19 @@ public class GenericMessageEvents extends ListenerAdapter {
 		*/
 
         if (message.getContentRaw().equals(Main.getInfo().getSelfUser().getAsMention())) {
-            channel.sendMessage("Para obter ajuda sobre como me utilizar faça `" + prefix + "ajuda`.").queue();
+            channel.sendMessage("Para obter ajuda sobre como me utilizar use `" + prefix + "ajuda`.").queue();
             return;
         }
 
         String rawMsgNoPrefix = rawMessage.substring(prefix.length()).trim();
         String commandName = rawMsgNoPrefix.split(" ")[0].trim();
+
+        try {
+            CustomAnswers ca = SQLite.getCAByTrigger(rawMsgNoPrefix);
+            channel.sendMessage(ca.getAnswer()).queue();
+        } catch (NoResultException ignore) {
+        }
+
         boolean hasArgs = (rawMsgNoPrefix.split(" ").length > 1);
         String[] args = new String[]{};
         if (hasArgs) {
