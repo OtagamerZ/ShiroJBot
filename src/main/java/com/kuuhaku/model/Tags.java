@@ -41,7 +41,6 @@ import javax.persistence.Id;
 public class Tags {
     @Id
     private String id;
-    private boolean Staff;
     private boolean Partner;
     private boolean Toxic;
 
@@ -53,27 +52,19 @@ public class Tags {
         this.id = id;
     }
 
-    boolean isStaff() {
-        return Staff;
-    }
-
-    public void setStaff() {
-        Staff = true;
-    }
-
     boolean isPartner() {
         return Partner;
     }
 
-    public void setPartner() {
-        Partner = true;
+    public void setPartner(boolean isPartner) {
+        Partner = isPartner;
     }
 
     boolean isToxic() {
         return Toxic;
     }
 
-    public void setToxic() {
-        Toxic = true;
+    public void setToxic(boolean isToxic) {
+        Toxic = isToxic;
     }
 }

@@ -14,7 +14,7 @@ import java.util.Random;
 public class AvatarCommand extends Command {
 
 	public AvatarCommand() {
-		super("avatar", "[@utilizador]", "Dá-lhe o seu avatar ou então o avatar da pessoa mencionada.", Category.MISC);
+		super("avatar", "<@usuário>", "Dá-lhe o seu avatar ou então o avatar da pessoa mencionada.", Category.MISC);
 	}
 
 	@Override
