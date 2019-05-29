@@ -43,16 +43,18 @@ public class BackgroundCommand extends Command {
         }
 
         try {
-            HttpURLConnection con = (HttpURLConnection) new URL(args[1]).openConnection();
+            HttpURLConnection con = (HttpURLConnection) new URL(args[0]).openConnection();
+            con.setRequestProperty("User-Agent", "Mozilla/5.0");
             BufferedImage bi = ImageIO.read(con.getInputStream());
             con.disconnect();
             bi.flush();
 
             com.kuuhaku.model.Member m = SQLite.getMemberById(author.getId() + guild.getId());
-            m.setBg(args[1]);
+            m.setBg(args[0]);
             SQLite.saveMemberToDB(m);
+            channel.sendMessage("Imagem de fundo trocada com sucesso!").queue();
         } catch (IOException e) {
-            e.printStackTrace();
+            channel.sendMessage(":x: | O link da imagem não me parece correto.").queue();
         }
     }
 }
