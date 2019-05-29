@@ -24,81 +24,97 @@ import java.util.ArrayList;
 
 public class ShiroInfo {
 
-	private String token;
-	private String apiVersion;
-	private String name;
-	private String version;
-	private String default_prefix;
-	private String nomeDB;
-	private JDA api;
-	private ArrayList<String> developers;
-	private long startTime;
+    private String token;
+    private String apiVersion;
+    private String name;
+    private String version;
+    private String default_prefix;
+    private String nomeDB;
+    private JDA api;
+    private ArrayList<String> developers;
+    private String niichan;
+    private long startTime;
 
-	public ShiroInfo() {
-		token = "NTcyNzg0MzA1MTM5NDgyNjg2.XOxx0A.gvatPLOCKLTYVsXXsid1V_mW0H8";
-		
-		apiVersion = "3.8.3_463";
-		
-		name = "Shiro";
-		version = "2.0";
-		
-		default_prefix = "s!";
+    public ShiroInfo() {
+        token = "NTcyNzg0MzA1MTM5NDgyNjg2.XOxx0A.gvatPLOCKLTYVsXXsid1V_mW0H8";
 
-		nomeDB = "shiro.sqlite";
-		
-		developers = new ArrayList<String>(){{
-			add("350836145921327115"); //KuuHaKu
-			add("321665807988031495"); //Reydux
-		}};
-	}
+        apiVersion = "3.8.3_463";
 
-	public JDA getAPI() {return api;}
-	
-	public void setAPI(JDA api) {
-		this.api = api;
-	}
-	
-	public String getApiVersion() {
-		return apiVersion;
-	}
+        name = "Shiro";
+        version = "2.0";
 
-	public String getToken() {
-		return token;
-	}
+        default_prefix = "s!";
 
-	public String getDefaultPrefix() { return default_prefix; }
+        nomeDB = "shiro.sqlite";
 
-	public String getDBFileName() { return nomeDB; }
+        developers = new ArrayList<String>() {{
+            add("321665807988031495"); //Reydux
+        }};
 
-	ArrayList<String> getDevelopers() { return developers; }
-	
-	public String getName() {
-		return name;
-	}
-	
-	public String getVersion() {
-		return version;
-	}
-	
-	public String getFullName() {
-		return name + " v" + version;
-	}
-	
-	public SelfUser getSelfUser() { return api.getSelfUser(); }
-	
-	public long getPing() {
-		return api.getPing();
-	}
-	
-	public long getStartTime() {
-		return startTime;
-	}
+        niichan = "350836145921327115"; //KuuHaKu
+    }
 
-	public void setStartTime(long startTime) {
-		this.startTime = startTime;
-	}
-	
-	public User getUserById(String userId) {
-		return api.getUserById(userId);
-	}
+    public JDA getAPI() {
+        return api;
+    }
+
+    public void setAPI(JDA api) {
+        this.api = api;
+    }
+
+    public String getApiVersion() {
+        return apiVersion;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public String getDefaultPrefix() {
+        return default_prefix;
+    }
+
+    public String getDBFileName() {
+        return nomeDB;
+    }
+
+    ArrayList<String> getDevelopers() {
+        return developers;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public String getFullName() {
+        return name + " v" + version;
+    }
+
+    public SelfUser getSelfUser() {
+        return api.getSelfUser();
+    }
+
+    public long getPing() {
+        return api.getPing();
+    }
+
+    public long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
+    }
+
+    public User getUserById(String userId) {
+        return api.getUserById(userId);
+    }
+
+    public String getNiiChan() {
+        return niichan;
+    }
 }
