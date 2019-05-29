@@ -20,22 +20,18 @@ package com.kuuhaku.controller;
 import com.kuuhaku.Main;
 import com.kuuhaku.model.CustomAnswers;
 import com.kuuhaku.model.Member;
+import com.kuuhaku.model.Tags;
 import com.kuuhaku.model.guildConfig;
 import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.User;
 
-import javax.net.ssl.HttpsURLConnection;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
-import java.io.*;
-import java.net.*;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 public class SQLite {
@@ -194,6 +190,84 @@ public class SQLite {
 
         em.getTransaction().begin();
         em.remove(em.getReference(m.getClass(), m.getId()));
+        em.getTransaction().commit();
+
+        em.close();
+    }
+
+    public static Tags getTagById(String id) {
+        EntityManager em = getEntityManager();
+        Tags m;
+
+        Query q = em.createQuery("SELECT t FROM Tags t WHERE id = ?1", Tags.class);
+        q.setParameter(1, id);
+        m = (Tags) q.getSingleResult();
+
+        em.close();
+
+        return m;
+    }
+
+    public static void addUserTagsToDB(net.dv8tion.jda.core.entities.Member u) {
+        EntityManager em = getEntityManager();
+
+        Tags t = new Tags();
+        t.setId(u.getUser().getId());
+
+        em.getTransaction().begin();
+        em.merge(t);
+        em.getTransaction().commit();
+
+        em.close();
+    }
+
+    public static void giveTagToxic(net.dv8tion.jda.core.entities.Member u) {
+        EntityManager em = getEntityManager();
+
+        Tags t = getTagById(u.getUser().getId());
+        t.setToxic(true);
+
+        em.getTransaction().begin();
+        em.merge(t);
+        em.getTransaction().commit();
+
+        em.close();
+    }
+
+    public static void removeTagToxic(net.dv8tion.jda.core.entities.Member u) {
+        EntityManager em = getEntityManager();
+
+        Tags t = getTagById(u.getUser().getId());
+        t.setToxic(false);
+
+        em.getTransaction().begin();
+        em.merge(t);
+        em.getTransaction().commit();
+
+        em.close();
+    }
+
+    public static void giveTagPartner(net.dv8tion.jda.core.entities.Member u) {
+        EntityManager em = getEntityManager();
+
+        Tags t = getTagById(u.getUser().getId());
+        t.setPartner(true);
+
+        em.getTransaction().begin();
+        em.merge(t);
+        em.getTransaction().commit();
+
+        em.close();
+    }
+
+    public static void removeTagPartner(net.dv8tion.jda.core.entities.Member u) {
+        EntityManager em = getEntityManager();
+
+        Tags t = getTagById(u.getUser().getId());
+        t.setPartner(false);
+
+        em.getTransaction().begin();
+        em.merge(t);
         em.getTransaction().commit();
 
         em.close();

@@ -48,7 +48,7 @@ public class HugReaction extends Reaction {
     private static boolean answer = false;
 
     public HugReaction(boolean isAnswer) {
-        super("abraçar", new String[]{"abracar", "hug", "vemca"}, "Abraça alguém.", Category.FUN);
+        super("abraçar", new String[]{"abracar", "hug", "vemca"},  "Abraça alguém.", Category.FUN);
         answer = isAnswer;
     }
 
