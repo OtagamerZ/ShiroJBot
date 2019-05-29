@@ -26,6 +26,7 @@ import com.kuuhaku.command.commands.information.ProfileCommand;
 import com.kuuhaku.command.commands.misc.*;
 import com.kuuhaku.command.commands.owner.KillCommand;
 import com.kuuhaku.command.commands.owner.LeaveCommand;
+import com.kuuhaku.command.commands.owner.ToxicTagCommand;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,7 @@ public class CommandManager {
             //OWNER
             add(new KillCommand());
             add(new LeaveCommand());
+            add(new ToxicTagCommand());
 
             //MODERATION
 

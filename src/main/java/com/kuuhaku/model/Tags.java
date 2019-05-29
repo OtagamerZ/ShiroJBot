@@ -52,7 +52,7 @@ public class Tags {
         this.id = id;
     }
 
-    boolean isPartner() {
+    public boolean isPartner() {
         return Partner;
     }
 
@@ -60,7 +60,7 @@ public class Tags {
         Partner = isPartner;
     }
 
-    boolean isToxic() {
+    public boolean isToxic() {
         return Toxic;
     }
 
