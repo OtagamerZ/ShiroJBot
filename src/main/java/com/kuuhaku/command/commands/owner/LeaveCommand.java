@@ -16,7 +16,6 @@ public class LeaveCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-
 		try {
 			Guild guildToLeave = api.getGuildById(rawCmd.split(" ")[1]);
 			guildToLeave.leave().queue();
