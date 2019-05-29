@@ -18,10 +18,10 @@ public class MySQL {
 
     private static EntityManager getEntityManager() {
         Map<String, String> props = new HashMap<>();
-        props.put("javax.persistence.jdbc.user", "epiz_23971060");
-        props.put("javax.persistence.jdbc.password", "Yago1234!!khk");
+        props.put("javax.persistence.jdbc.user", "OH-34179");
+        props.put("javax.persistence.jdbc.password", "OP-31814");
 
-        if (emf == null) emf = Persistence.createEntityManagerFactory("shiro_remote", props);
+        if (emf == null) emf = Persistence.createEntityManagerFactory("shiro", props);
 
         emf.getCache().evictAll();
 
@@ -30,5 +30,11 @@ public class MySQL {
 
     public static void dumpData(List<CustomAnswers> ca, List<Member> m, List<guildConfig> gc) {
         EntityManager em = getEntityManager();
+
+        em.getTransaction().begin();
+        ca.forEach(em::merge);
+        m.forEach(em::merge);
+        gc.forEach(em::merge);
+        em.getTransaction().commit();
     }
 }

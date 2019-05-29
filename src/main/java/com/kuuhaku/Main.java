@@ -62,7 +62,6 @@ public class Main implements JobListener {
         info.setStartTime(Instant.now().getEpochSecond());
 
         SQLite.connect();
-        //MySQL.dumpData(null, null, null);
         finishStartUp();
     }
 
@@ -100,6 +99,7 @@ public class Main implements JobListener {
 
     public static void shutdown() throws SQLException {
         SQLite.disconnect();
+        MySQL.dumpData(SQLite.getCADump(), SQLite.getMemberDump(), SQLite.getGuildDump());
         api.shutdown();
         System.out.println("Fui desligada.");
     }

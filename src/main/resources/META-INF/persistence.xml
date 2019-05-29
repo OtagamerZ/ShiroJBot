@@ -22,7 +22,7 @@
      http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
              version="2.0">
 
-    <persistence-unit name="shiro_remote">
+    <persistence-unit name="shiro">
 
         <!-- provedor/implementacao do JPA -->
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
@@ -38,7 +38,7 @@
             <!-- dados da conexao -->
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
             <property name="javax.persistence.jdbc.url"
-                      value="jdbc:mysql://sql305.epizy.com:3306/epiz_23971060_shiro?autoReconnect=true&amp;useUnicode=yes&amp;characterEncoding=UTF-8&amp;interactiveClient=true"/>
+                      value="jdbc:mysql://213.32.14.106:3306/OH-34179?serverTimezone=EST5EDT&amp;autoReconnect=true&amp;useUnicode=yes&amp;characterEncoding=UTF-8&amp;interactiveClient=true"/>
 
             <!--  propriedades do hibernate -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>

@@ -21,6 +21,7 @@ public class ProfileCommand extends Command {
                 try {
                     channel.sendFile(new Profile().makeProfile(member), "perfil.jpg").queue(f -> m.editMessage(":video_game: Perfil de " + author.getAsMention()).queue());
                 } catch (IOException | FontFormatException e) {
+                    m.editMessage(":x: | Epa, teve um errinho aqui enquanto eu gerava o perfil, meus criadores já foram notificados!").queue();
                     e.printStackTrace();
                 }
             });
