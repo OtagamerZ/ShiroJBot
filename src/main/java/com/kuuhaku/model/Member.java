@@ -29,7 +29,7 @@ public class Member {
     private String id;
     private int level = 1, xp = 0;
     private String warns = "";
-    private String bg = "";
+    private String bg = "http://i0.wp.com/cakeisnotalie.net/wp-content/uploads/2014/10/PoroSnow.jpg";
     private String badges = "[false,false,false,false,false,false,false,false,false,false,false,false,false]";
 
     public Member() {
@@ -96,7 +96,7 @@ public class Member {
         return warns.replace("[", "").replace("]", "").split(",");
     }
 
-    public boolean[] getBadges() {
+    private boolean[] getBadges() {
         String[] t = badges.replace("[", "").replace("]", "").split(",");
         boolean[] tb = new boolean[t.length];
         for (int i = 0; i < t.length; i++) {

@@ -19,15 +19,14 @@ package com.kuuhaku.events.generic;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.CustomAnswers;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.controller.SQLite;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import javax.persistence.NoResultException;
-import java.io.IOException;
 
 public class GenericMessageEvents extends ListenerAdapter {
 
@@ -117,6 +116,7 @@ public class GenericMessageEvents extends ListenerAdapter {
                 if (lvlUp) {
                     channel.sendMessage(member.getEffectiveName() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
                 }
+                SQLite.saveMemberToDB(m);
             } catch (NoResultException e) {
                 SQLite.addMemberToDB(member);
             }

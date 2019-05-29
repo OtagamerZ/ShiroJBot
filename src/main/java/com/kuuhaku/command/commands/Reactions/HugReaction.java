@@ -32,7 +32,7 @@
  *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.Reactions;
+package com.kuuhaku.command.commands.Reactions;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.model.ReactionsList;

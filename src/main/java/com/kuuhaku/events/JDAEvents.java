@@ -18,12 +18,10 @@
 package com.kuuhaku.events;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.command.Reactions.HugReaction;
+import com.kuuhaku.command.commands.Reactions.HugReaction;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.controller.SQLite;
-import net.dv8tion.jda.client.events.relationship.FriendRequestReceivedEvent;
-import net.dv8tion.jda.client.events.relationship.FriendRequestSentEvent;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.TextChannel;
