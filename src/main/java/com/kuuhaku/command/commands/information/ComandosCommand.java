@@ -89,5 +89,4 @@ public class ComandosCommand extends Command {
 			channel.sendMessage(eb.build()).queue();
 		
 	}
-
 }
