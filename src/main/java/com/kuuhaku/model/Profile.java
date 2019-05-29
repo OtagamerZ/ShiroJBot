@@ -41,7 +41,7 @@ public class Profile {
 
         BufferedImage profile = new BufferedImage(1055, 719, BufferedImage.TYPE_INT_RGB);
 
-        HttpURLConnection con = (HttpURLConnection) new URL("http://i0.wp.com/cakeisnotalie.net/wp-content/uploads/2014/10/PoroSnow.jpg").openConnection();
+        HttpURLConnection con = (HttpURLConnection) new URL(m.getBg()).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
         final BufferedImage bg = resize(ImageIO.read(con.getInputStream()), 1055, 719);
 
