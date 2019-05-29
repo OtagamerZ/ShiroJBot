@@ -23,10 +23,11 @@ import java.util.ArrayList;
 
 public enum Category {
 	OWNER("Owner", "Comandos dedicados ao dono do bot.", PrivilegeLevel.OWNER),
+	MODERACAO("Moderação", "Comandos dedicados à staff do servidor.", PrivilegeLevel.STAFF),
 	FUN("Diversão", "Comandos para diversão.", PrivilegeLevel.USER),
 	MISC("Diversos", "Comandos diversos.", PrivilegeLevel.USER),
 	INFO("Informação", "Comandos de informação", PrivilegeLevel.USER),
-	MODERACAO("Moderação", "Comandos dedicados à staff do servidor.", PrivilegeLevel.STAFF),
+	BEYBLADE("Beyblade", "Comandos de Beyblade.", PrivilegeLevel.USER)
 	;
 	
 	private String name;
@@ -66,7 +67,7 @@ public enum Category {
 	}
 	
 	public boolean isEnabled() {
-		return enabled;
+		return !enabled;
 	}
 	
 	public void disable() {

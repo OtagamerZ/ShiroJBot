@@ -18,10 +18,7 @@
 package com.kuuhaku.controller;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.model.CustomAnswers;
-import com.kuuhaku.model.Member;
-import com.kuuhaku.model.Tags;
-import com.kuuhaku.model.guildConfig;
+import com.kuuhaku.model.*;
 import net.dv8tion.jda.core.entities.Guild;
 
 import javax.persistence.EntityManager;
@@ -67,6 +64,22 @@ public class SQLite {
         if (con != null) {
             con.close();
             System.out.println("Ligação à base de dados desfeita.");
+        }
+    }
+
+    public static boolean restoreData(DataDump data) {
+        EntityManager em = getEntityManager();
+
+        try {
+            em.getTransaction().begin();
+            data.getCaDump().forEach(em::merge);
+            data.getmDump().forEach(em::merge);
+            data.getGcDump().forEach(em::merge);
+            em.getTransaction().commit();
+
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 
