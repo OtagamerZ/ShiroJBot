@@ -185,6 +185,16 @@ public class SQLite {
         em.close();
     }
 
+    public static void saveMemberToDB(Member m) {
+        EntityManager em = getEntityManager();
+
+        em.getTransaction().begin();
+        em.merge(m);
+        em.getTransaction().commit();
+
+        em.close();
+    }
+
     public static void removeMemberFromDB(Member m) {
         EntityManager em = getEntityManager();
 

@@ -32,7 +32,7 @@
  *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.Reactions;
+package com.kuuhaku.command.commands.Reactions;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
@@ -66,15 +66,15 @@ public abstract class Reaction extends Command{
         this.target = target;
     }
 
-    public String[] getReaction() {
+    String[] getReaction() {
         return reaction;
     }
 
-    public int getReactionLength() {
+    int getReactionLength() {
         return new Random().nextInt(reaction.length);
     }
 
-    public void setReaction(String[] reaction) {
+    void setReaction(String[] reaction) {
         this.reaction = reaction;
     }
 
@@ -86,7 +86,7 @@ public abstract class Reaction extends Command{
         return selfTarget.length;
     }
 
-    public void setSelfTarget(String[] selfTarget) {
+    void setSelfTarget(String[] selfTarget) {
         this.selfTarget = selfTarget;
     }
 }

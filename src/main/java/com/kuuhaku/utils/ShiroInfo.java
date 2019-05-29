@@ -49,6 +49,7 @@ public class ShiroInfo {
 
         developers = new ArrayList<String>() {{
             add("321665807988031495"); //Reydux
+            add("350836145921327115"); //KuuHaKu
         }};
 
         niichan = "350836145921327115"; //KuuHaKu
@@ -78,7 +79,7 @@ public class ShiroInfo {
         return nomeDB;
     }
 
-    ArrayList<String> getDevelopers() {
+    public ArrayList<String> getDevelopers() {
         return developers;
     }
 
@@ -114,7 +115,7 @@ public class ShiroInfo {
         return api.getUserById(userId);
     }
 
-    public String getNiiChan() {
+    String getNiiChan() {
         return niichan;
     }
 }
