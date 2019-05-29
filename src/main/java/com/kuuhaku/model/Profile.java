@@ -39,11 +39,18 @@ public class Profile {
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("font/friz-quadrata-bold-bt.ttf"))));
 
+        try {
+            SQLite.getTagById(u.getUser().getId());
+        } catch (NoResultException e) {
+            SQLite.addUserTagsToDB(u);
+        }
+
         BufferedImage profile = new BufferedImage(1055, 719, BufferedImage.TYPE_INT_RGB);
 
         HttpURLConnection con = (HttpURLConnection) new URL(m.getBg()).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
-        final BufferedImage bg = resize(ImageIO.read(con.getInputStream()), 1055, 719);
+        BufferedImage bg = scaleImage(ImageIO.read(con.getInputStream()));
+        System.out.println(bg.getWidth() + "x" + bg.getHeight());
 
         con = (HttpURLConnection) new URL("http://i.imgur.com/gRzI7PH.png").openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
@@ -53,7 +60,7 @@ public class Profile {
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
         final BufferedImage avatar = resize(ImageIO.read(con.getInputStream()), 120, 120);
 
-        con = (HttpURLConnection) new URL("http://i.imgur.com/373xhkZ.png").openConnection();
+        con = (HttpURLConnection) new URL(SQLite.getTagById(u.getUser().getId()).isPartner() ? "http://i.imgur.com/rbNA1Mi.png" : "http://i.imgur.com/373xhkZ.png").openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
         final BufferedImage banner = ImageIO.read(con.getInputStream());
 
@@ -99,10 +106,10 @@ public class Profile {
 
         Graphics2D g2d = profile.createGraphics();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.drawImage(bg, null, 0, 0);
+        g2d.drawImage(bg, null, 0 - (bg.getWidth() - 1055) / 2, 0);
         g2d.drawImage(vignette, null, 0, 0);
         g2d.drawImage(avatar, null, 93, 283);
-        g2d.drawImage(banner, null, 45, 0);
+        g2d.drawImage(banner, null, SQLite.getTagById(u.getUser().getId()).isPartner() ? 1 : 45, 0);
         g2d.drawImage(bannerBorder, null, 45, 498);
         g2d.drawImage(header, null, 0, 0);
 
@@ -122,22 +129,12 @@ public class Profile {
 
         String tempName = u.getEffectiveName();
         g2d.setFont(new Font("FrizQuadrata BT", Font.PLAIN, 30));
-        if ((int) g2d.getFontMetrics().getStringBounds(tempName, g2d).getWidth() >= 213) tempName = tempName.substring(0, 6).concat("...");
+        if ((int) g2d.getFontMetrics().getStringBounds(tempName, g2d).getWidth() >= 213)
+            tempName = tempName.substring(0, 6).concat("...");
         printCenteredString(tempName, 213, 47, 166, g2d);
 
-        try {SQLite.getTagById(u.getUser().getId());} catch (NoResultException e) {
-            SQLite.addUserTagsToDB(u);
-        }
-
-        if (SQLite.getTagById(u.getUser().getId()).isPartner()) {
-            con = (HttpURLConnection) new URL("http://i.imgur.com/HMm7gHp.png").openConnection();
-            con.setRequestProperty("User-Agent", "Mozilla/5.0");
-            final BufferedImage partner = resize(ImageIO.read(con.getInputStream()), 95, 124);
-            g2d.drawImage(partner, null, 901, 966);
-        }
-
         if (SQLite.getTagById(u.getUser().getId()).isToxic()) {
-            con = (HttpURLConnection) new URL("https://i.imgur.com/6xyiFFg.png").openConnection();
+            con = (HttpURLConnection) new URL("http://i.imgur.com/0wCblVy.png").openConnection();
             con.setRequestProperty("User-Agent", "Mozilla/5.0");
             final BufferedImage toxic = ImageIO.read(con.getInputStream());
             g2d.drawImage(toxic, null, 0, 0);
@@ -151,13 +148,13 @@ public class Profile {
 
     private static String getLevel(int lvl) {
         if (lvl < 10) {
-            return "http://www.sclance.com/pngs/metal-border-png/metal_border_png_864177.png?width=217&height=217";
+            return "https://i.imgur.com/Noji8Tc.png";
         } else if (lvl < 20) {
-            return "http://vignette.wikia.nocookie.net/leagueoflegends/images/4/40/Level_30_Summoner_Icon_Border.png";
+            return "https://i.imgur.com/zfFBzI5.png";
         } else if (lvl < 30) {
-            return "http://vignette.wikia.nocookie.net/leagueoflegends/images/c/c0/Level_50_Summoner_Icon_Border.png";
+            return "https://i.imgur.com/bSldQTJ.png";
         } else {
-            return "http://vignette.wikia.nocookie.net/leagueoflegends/images/d/d7/Level_75_Summoner_Icon_Border.png";
+            return "https://i.imgur.com/C56zq8q.png";
         }
     }
 
@@ -170,6 +167,31 @@ public class Profile {
         g2d.dispose();
 
         return dimg;
+    }
+
+    private static BufferedImage scaleImage(BufferedImage image) {
+        int newWidth = 1055;
+        int newHeight = 719;
+
+        // Make sure the aspect ratio is maintained, so the image is not distorted
+        double thumbRatio = (double) newWidth / (double) newHeight;
+        int imageWidth = image.getWidth(null);
+        int imageHeight = image.getHeight(null);
+        double aspectRatio = (double) imageWidth / (double) imageHeight;
+
+        if (thumbRatio > aspectRatio) {
+            newHeight = (int) (newWidth / aspectRatio);
+        } else {
+            newWidth = (int) (newHeight * aspectRatio);
+        }
+
+        // Draw the scaled image
+        BufferedImage newImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
+        Graphics2D graphics2D = newImage.createGraphics();
+        graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        graphics2D.drawImage(image, 0, 0, newWidth, newHeight, null);
+
+        return newImage;
     }
 
     private static void printCenteredString(String s, int width, int XPos, int YPos, Graphics2D g2d) {

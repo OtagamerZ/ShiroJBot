@@ -55,7 +55,7 @@ dependencies {
     compile group: 'org.quartz-scheduler', name: 'quartz', version: '2.3.1'
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
-    compile group: 'com.mchange', name: 'c3p0', version: '0.9.5.2'
+    compile group: 'com.mchange', name: 'c3p0', version: '0.9.5.4'
     compile group: 'org.hibernate', name: 'hibernate-c3p0', version: '5.4.2.Final'
     compile group: 'net.coobird', name: 'thumbnailator', version: '0.4.8'
     compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.27.2.1'
