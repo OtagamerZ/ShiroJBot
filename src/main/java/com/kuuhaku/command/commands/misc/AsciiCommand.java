@@ -18,10 +18,10 @@ public class AsciiCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		
 		if(args.length == 0 || args.toString().startsWith(" ") || args.toString().contains("   ")) {
-			channel.sendMessage(":x: | Voc� necessita de fornecer um texto para converter em ascii..").queue();
+			channel.sendMessage(":x: | Você necessita de fornecer um texto para converter em ascii..").queue();
 		}
 		
-        String query = new String();
+        String query = "";
         for(String arg : args) {
             query += arg + "+ ";
             query = query.substring(0, query.length()-1);
