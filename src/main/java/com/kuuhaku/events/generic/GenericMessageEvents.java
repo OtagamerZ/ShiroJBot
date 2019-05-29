@@ -96,7 +96,7 @@ public class GenericMessageEvents extends ListenerAdapter {
                     found = true;
                 }
             }
-            if (!command.getCategory().isEnabled()) {
+            if (command.getCategory().isEnabled()) {
                 found = false;
             }
 

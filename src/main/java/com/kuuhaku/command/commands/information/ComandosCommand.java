@@ -34,7 +34,7 @@ public class ComandosCommand extends Command {
 						+ "\n" + Helper.VOID);
 
 				for(Category cat : Category.values()) {
-					if(!cat.isEnabled())
+					if(cat.isEnabled())
 						continue;
 					if(cat.getCmds().size()==0) {
 						eb.addField(cat.getName(), cat.getDescription() + "\n*Ainda não existem comandos nesta categoria.*", false);

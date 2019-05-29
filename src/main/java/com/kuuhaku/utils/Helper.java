@@ -17,9 +17,10 @@
 
 package com.kuuhaku.utils;
 
+import com.kuuhaku.Main;
+import com.kuuhaku.model.Beyblade;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
-import com.kuuhaku.Main;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -172,5 +173,35 @@ public class Helper {
         if (reacted)
             channel.sendMessage(message).addFile(is, "reaction.gif").queue(m -> m.addReaction("\u21aa").queue());
         else channel.sendMessage(message).addFile(is, "reaction.gif").queue();
+    }
+
+    public static void cls() {
+        try {
+            final String os = System.getProperty("os.name");
+
+            if (os.contains("Windows")) {
+                Runtime.getRuntime().exec("cls");
+            } else {
+                Runtime.getRuntime().exec("clear");
+            }
+        } catch (final Exception e) {
+            System.out.println("Erro ao limpar o console.");
+        }
+    }
+
+    public static float getDefFac(boolean defending, Beyblade b) {
+        if (defending) {
+            if (b.getS() == null) {
+                return b.getStability();
+            } else {
+                if (b.getS().isBear()) {
+                    return 2.0f + (b.getStability() / 2);
+                } else {
+                    return b.getStability();
+                }
+            }
+        } else {
+            return 1.0f;
+        }
     }
 }
