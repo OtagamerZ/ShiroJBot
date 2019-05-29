@@ -12,7 +12,7 @@
  *     GNU General Public License for more details.
  *
  *     You should have received a copy of the GNU General Public License
- *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
+ *     along with Shiro J Bot.  If not, see <http://www.gnu.org/licenses/>
  */
 
 package com.kuuhaku.model;
@@ -32,10 +32,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Objects;
 
-public class ProfileTest {
+public class Profile {
     public InputStream makeProfile(net.dv8tion.jda.core.entities.Member u) throws IOException, FontFormatException {
         Member m = SQLite.getMemberById(u.getUser().getId() + u.getGuild().getId());
-        final Font font = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("font/friz-quadrata-bold-bt.ttf")));
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("font/friz-quadrata-bold-bt.ttf"))));
 
         BufferedImage profile = new BufferedImage(1055, 719, BufferedImage.TYPE_INT_RGB);
 
@@ -43,7 +44,7 @@ public class ProfileTest {
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
         final BufferedImage bg = resize(ImageIO.read(con.getInputStream()), 1055, 719);
 
-        con = (HttpURLConnection) new URL("https://i.imgur.com/gRzI7PH.png").openConnection();
+        con = (HttpURLConnection) new URL("http://i.imgur.com/gRzI7PH.png").openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
         final BufferedImage vignette = ImageIO.read(con.getInputStream());
 
@@ -51,34 +52,43 @@ public class ProfileTest {
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
         final BufferedImage avatar = resize(ImageIO.read(con.getInputStream()), 120, 120);
 
-        con = (HttpURLConnection) new URL("https://i.imgur.com/373xhkZ.png").openConnection();
+        con = (HttpURLConnection) new URL("http://i.imgur.com/373xhkZ.png").openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
         final BufferedImage banner = ImageIO.read(con.getInputStream());
 
-        BufferedImage bannerBorder = null;
-        if (Helper.hasPermission(u, PrivilegeLevel.OWNER)) {
-            con = (HttpURLConnection) new URL("https://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Challenger_Trim.png").openConnection();
-            con.setRequestProperty("User-Agent", "Mozilla/5.0");
-            bannerBorder = resize(ImageIO.read(con.getInputStream()), 216, 108);
+        if (Helper.hasPermission(u, PrivilegeLevel.NIICHAN)) {
+            con = (HttpURLConnection) new URL("http://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Challenger_Trim.png").openConnection();
+        } else if (Helper.hasPermission(u, PrivilegeLevel.OWNER)) {
+            con = (HttpURLConnection) new URL("http://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Grandmaster_Trim.png").openConnection();
         } else if (Helper.hasPermission(u, PrivilegeLevel.STAFF)) {
-            con = (HttpURLConnection) new URL("https://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Diamond_Trim.png").openConnection();
-            con.setRequestProperty("User-Agent", "Mozilla/5.0");
-            bannerBorder = resize(ImageIO.read(con.getInputStream()), 216, 108);
+            con = (HttpURLConnection) new URL("http://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Master_Trim.png").openConnection();
+        } else if (m.getLevel() >= 30) {
+            con = (HttpURLConnection) new URL("http://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Diamond_Trim.png").openConnection();
+        } else if (m.getLevel() >= 25) {
+            con = (HttpURLConnection) new URL("http://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Platinum_Trim.png").openConnection();
+        } else if (m.getLevel() >= 20) {
+            con = (HttpURLConnection) new URL("http://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Gold_Trim.png").openConnection();
+        } else if (m.getLevel() >= 15) {
+            con = (HttpURLConnection) new URL("http://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Silver_Trim.png").openConnection();
+        } else if (m.getLevel() >= 10) {
+            con = (HttpURLConnection) new URL("http://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Bronze_Trim.png").openConnection();
+        } else if (m.getLevel() >= 5) {
+            con = (HttpURLConnection) new URL("http://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Iron_Trim.png").openConnection();
         } else if (Helper.hasPermission(u, PrivilegeLevel.USER)) {
-            con = (HttpURLConnection) new URL("https://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Silver_Trim.png").openConnection();
-            con.setRequestProperty("User-Agent", "Mozilla/5.0");
-            bannerBorder = resize(ImageIO.read(con.getInputStream()), 216, 108);
+            con = (HttpURLConnection) new URL("http://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Default_Trim.png").openConnection();
         }
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+        BufferedImage bannerBorder = resize(ImageIO.read(con.getInputStream()), 216, 108);
 
-        con = (HttpURLConnection) new URL("https://i.imgur.com/rxZ5qAL.png").openConnection();
+        con = (HttpURLConnection) new URL("http://i.imgur.com/rxZ5qAL.png").openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
         final BufferedImage header = ImageIO.read(con.getInputStream());
 
-        con = (HttpURLConnection) new URL("https://i.imgur.com/FhOanld.png").openConnection();
+        con = (HttpURLConnection) new URL("http://i.imgur.com/FhOanld.png").openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
         final BufferedImage level = ImageIO.read(con.getInputStream());
 
-        con = (HttpURLConnection) new URL("https://i.imgur.com/tcauuXO.png").openConnection();
+        con = (HttpURLConnection) new URL("http://i.imgur.com/tcauuXO.png").openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
         final BufferedImage search = ImageIO.read(con.getInputStream());
 
@@ -94,41 +104,39 @@ public class ProfileTest {
         g2d.drawImage(banner, null, 45, 0);
         g2d.drawImage(bannerBorder, null, 45, 498);
         g2d.drawImage(header, null, 0, 0);
-        GradientPaint levelPaint = new GradientPaint(104, 210, Color.decode("#0e628d"), 241, 210, Color.decode("#0cadae"));
 
+        GradientPaint levelPaint = new GradientPaint(104, 210, Color.decode("#0e628d"), 241, 210, Color.decode("#0cadae"));
         g2d.setPaint(levelPaint);
         g2d.fillRect(104, 210, Math.round(m.getXp() * 137 / (int) Math.pow(m.getLevel(), 2)) / 100, 7);
 
         g2d.drawImage(level, null, 53, 197);
 
         g2d.setColor(Color.WHITE);
-        g2d.setFont(new Font(font.getName(), Font.PLAIN, 12));
-        printCenteredString(Integer.toString(m.getLevel()), 27, 71, 217, g2d);
+        g2d.setFont(new Font("FrizQuadrata BT", Font.PLAIN, 12));
+        printCenteredString(Integer.toString(m.getLevel()), 26, 71, 218, g2d);
 
         g2d.drawImage(search, null, 786, 95);
         g2d.drawImage(lvlBorder, null, 44, 234);
-        printCenteredString(Integer.toString(m.getLevel()), 31, 138, 411, g2d);
+        printCenteredString(Integer.toString(m.getLevel()), 32, 138, 412, g2d);
 
-        /*if (Objects.requireNonNull(SQLite.getTags()).get(u.getUser().getId()).isStaff()) {
-            con = (HttpURLConnection) new URL("https://i.imgur.com/YByt8rb.png").openConnection();
-            con.setRequestProperty("User-Agent", "Mozilla/5.0");
-            final BufferedImage admin = resize(ImageIO.read(con.getInputStream()), 116, 132);
-            g2d.drawImage(admin, null, 601, 547);
-        }
+        String tempName = u.getEffectiveName();
+        g2d.setFont(new Font("FrizQuadrata BT", Font.PLAIN, 30));
+        if ((int) g2d.getFontMetrics().getStringBounds(tempName, g2d).getWidth() >= 213) tempName = tempName.substring(0, 6).concat("...");
+        printCenteredString(tempName, 213, 47, 166, g2d);
 
-        if (SQLite.getTags().get(u.getUser().getId()).isToxic()) {
-            con = (HttpURLConnection) new URL("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/c9b92027-9722-4fe8-98fa-c288aeead3d9/d64d9s8-6e1d37c9-5253-4b5a-9a80-be52c3b3b81a.png/v1/fill/w_774,h_1033,strp/warning__toxic_teemo_shrooms__by_luciedesigns_d64d9s8-pre.png").openConnection();
-            con.setRequestProperty("User-Agent", "Mozilla/5.0");
-            final BufferedImage honor = resize(ImageIO.read(con.getInputStream()), 101, 135);
-            g2d.drawImage(honor, null, 748, 564);
-        }
-
-        if (SQLite.getTags().get(u.getUser().getId()).isPartner()) {
-            con = (HttpURLConnection) new URL("https://i.imgur.com/HMm7gHp.png").openConnection();
+        if (SQLite.getTagById(u.getUser().getId()).isPartner()) {
+            con = (HttpURLConnection) new URL("http://i.imgur.com/HMm7gHp.png").openConnection();
             con.setRequestProperty("User-Agent", "Mozilla/5.0");
             final BufferedImage partner = resize(ImageIO.read(con.getInputStream()), 95, 124);
             g2d.drawImage(partner, null, 901, 966);
-        }*/
+        }
+
+        if (SQLite.getTagById(u.getUser().getId()).isToxic()) {
+            con = (HttpURLConnection) new URL("https://i.imgur.com/6xyiFFg.png").openConnection();
+            con.setRequestProperty("User-Agent", "Mozilla/5.0");
+            final BufferedImage toxic = ImageIO.read(con.getInputStream());
+            g2d.drawImage(toxic, null, 0, 0);
+        }
 
         g2d.dispose();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -137,14 +145,14 @@ public class ProfileTest {
     }
 
     private static String getLevel(int lvl) {
-        if (lvl < 30) {
+        if (lvl < 10) {
             return "http://www.sclance.com/pngs/metal-border-png/metal_border_png_864177.png?width=217&height=217";
-        } else if (lvl < 50) {
-            return "https://vignette.wikia.nocookie.net/leagueoflegends/images/4/40/Level_30_Summoner_Icon_Border.png";
-        } else if (lvl < 75) {
-            return "https://vignette.wikia.nocookie.net/leagueoflegends/images/c/c0/Level_50_Summoner_Icon_Border.png";
+        } else if (lvl < 20) {
+            return "http://vignette.wikia.nocookie.net/leagueoflegends/images/4/40/Level_30_Summoner_Icon_Border.png";
+        } else if (lvl < 30) {
+            return "http://vignette.wikia.nocookie.net/leagueoflegends/images/c/c0/Level_50_Summoner_Icon_Border.png";
         } else {
-            return "https://vignette.wikia.nocookie.net/leagueoflegends/images/d/d7/Level_75_Summoner_Icon_Border.png";
+            return "http://vignette.wikia.nocookie.net/leagueoflegends/images/d/d7/Level_75_Summoner_Icon_Border.png";
         }
     }
 
@@ -160,8 +168,7 @@ public class ProfileTest {
     }
 
     private static void printCenteredString(String s, int width, int XPos, int YPos, Graphics2D g2d) {
-        int stringLen = (int)
-                g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
+        int stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
         int start = width / 2 - stringLen / 2;
         g2d.drawString(s, start + XPos, YPos);
     }
