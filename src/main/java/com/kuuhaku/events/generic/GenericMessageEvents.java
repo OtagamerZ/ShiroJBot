@@ -71,13 +71,14 @@ public class GenericMessageEvents extends ListenerAdapter {
             return;
         }
 
-        String rawMsgNoPrefix = rawMessage.substring(prefix.length()).trim();
+        String rawMsgNoPrefix = rawMessage.replace(prefix, "");
         String commandName = rawMsgNoPrefix.split(" ")[0].trim();
 
         try {
-            CustomAnswers ca = SQLite.getCAByTrigger(rawMsgNoPrefix);
-            channel.sendMessage(ca.getAnswer()).queue();
-        } catch (NoResultException ignore) {
+            CustomAnswers ca = SQLite.getCAByTrigger(rawMessage);
+            Helper.typeMessage(channel, ca.getAnswer());
+        } catch (NoResultException e) {
+            System.out.println(e.toString() + "\n" + rawMessage);
         }
 
         boolean hasArgs = (rawMsgNoPrefix.split(" ").length > 1);
