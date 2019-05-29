@@ -18,21 +18,13 @@
 package com.kuuhaku.managers;
 
 import com.kuuhaku.command.Command;
-import com.kuuhaku.command.commands.Reactions.HugReaction;
-import com.kuuhaku.command.commands.beyblade.ColorCommand;
-import com.kuuhaku.command.commands.beyblade.DuelCommand;
-import com.kuuhaku.command.commands.beyblade.StartCommand;
+import com.kuuhaku.command.Reactions.HugReaction;
 import com.kuuhaku.command.commands.fun.OhNoCommand;
 import com.kuuhaku.command.commands.fun.PPTCommand;
-import com.kuuhaku.command.commands.information.BackgroundCommand;
 import com.kuuhaku.command.commands.information.ComandosCommand;
-import com.kuuhaku.command.commands.information.ProfileCommand;
-import com.kuuhaku.command.commands.information.ReportBugCommand;
 import com.kuuhaku.command.commands.misc.*;
 import com.kuuhaku.command.commands.owner.KillCommand;
 import com.kuuhaku.command.commands.owner.LeaveCommand;
-import com.kuuhaku.command.commands.owner.PartnerTagCommand;
-import com.kuuhaku.command.commands.owner.ToxicTagCommand;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,21 +37,17 @@ public class CommandManager {
 
     public CommandManager() {
         commands = new ArrayList<Command>() {{
-            //EXEMPLO: commands.add(new KillCommand());
+            add(new HugReaction(false));
 
             //OWNER
             add(new KillCommand());
             add(new LeaveCommand());
-            add(new ToxicTagCommand());
-            add(new PartnerTagCommand());
-
-            //MODERATION
 
             //INFORMATION
             add(new ComandosCommand());
-            add(new ProfileCommand());
-            add(new ReportBugCommand());
-            add(new BackgroundCommand());
+
+            //MODERATION
+
 
             //MISC
             add(new AsciiCommand());
@@ -73,12 +61,6 @@ public class CommandManager {
             //FUN
             add(new OhNoCommand());
             add(new PPTCommand());
-            add(new HugReaction(false));
-
-            //BEYBLADE
-            add(new StartCommand());
-            add(new ColorCommand());
-            add(new DuelCommand());
         }};
     }
 
