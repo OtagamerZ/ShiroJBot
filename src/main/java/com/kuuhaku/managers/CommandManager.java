@@ -21,6 +21,7 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.Reactions.HugReaction;
 import com.kuuhaku.command.commands.beyblade.ColorCommand;
 import com.kuuhaku.command.commands.beyblade.DuelCommand;
+import com.kuuhaku.command.commands.beyblade.ShopCommand;
 import com.kuuhaku.command.commands.beyblade.StartCommand;
 import com.kuuhaku.command.commands.fun.OhNoCommand;
 import com.kuuhaku.command.commands.fun.PPTCommand;
@@ -79,6 +80,7 @@ public class CommandManager {
             add(new StartCommand());
             add(new ColorCommand());
             add(new DuelCommand());
+            add(new ShopCommand());
         }};
     }
 
