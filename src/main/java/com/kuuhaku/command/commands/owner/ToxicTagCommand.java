@@ -20,6 +20,7 @@ package com.kuuhaku.command.commands.owner;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.SQLite;
+import com.kuuhaku.model.Tags;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 
@@ -28,7 +29,7 @@ import javax.persistence.NoResultException;
 public class ToxicTagCommand extends Command {
 
     public ToxicTagCommand() {
-        super("givetoxic", new String[] {"etoxico", "tagtoxico", "reportayasuo"}, "<@usuário>", "Sai do servidor cujo o ID foi dado.", Category.OWNER);
+        super("switchtoxic", new String[]{"mudatoxico", "tagtoxico", "reportayasuo"}, "<@usuário>", "Define um usuário como tóxico ou não.", Category.OWNER);
     }
 
     @Override
@@ -36,10 +37,24 @@ public class ToxicTagCommand extends Command {
         if (message.getMentionedUsers().size() > 0) {
             if (message.getMentionedUsers().size() == 1) {
                 try {
-                    SQLite.giveTagToxic(message.getMentionedMembers().get(0));
+                    Tags t = SQLite.getTagById(message.getMentionedMembers().get(0).getUser().getId());
+                    if (t.isToxic()) {
+                        SQLite.removeTagToxic(message.getMentionedMembers().get(0));
+                        channel.sendMessage(message.getMentionedMembers().get(0).getAsMention() + " não é mais tóxico, que bom!").queue();
+                    } else {
+                        SQLite.giveTagToxic(message.getMentionedMembers().get(0));
+                        channel.sendMessage(message.getMentionedMembers().get(0).getAsMention() + " agora é tóxico, reporta ele!").queue();
+                    }
                 } catch (NoResultException e) {
                     SQLite.addUserTagsToDB(message.getMentionedMembers().get(0));
-                    SQLite.giveTagToxic(message.getMentionedMembers().get(0));
+                    Tags t = SQLite.getTagById(message.getMentionedMembers().get(0).getUser().getId());
+                    if (t.isToxic()) {
+                        SQLite.removeTagToxic(message.getMentionedMembers().get(0));
+                        channel.sendMessage(message.getMentionedMembers().get(0).getAsMention() + " não é mais tóxico, que bom!").queue();
+                    } else {
+                        SQLite.giveTagToxic(message.getMentionedMembers().get(0));
+                        channel.sendMessage(message.getMentionedMembers().get(0).getAsMention() + " agora é tóxico, reporta ele!").queue();
+                    }
                 }
             } else {
                 channel.sendMessage(":x: | Nii-chan, você mencionou usuários demais!").queue();
