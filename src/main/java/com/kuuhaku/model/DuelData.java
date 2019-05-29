@@ -34,6 +34,7 @@
 
 package com.kuuhaku.model;
 
+import com.kuuhaku.controller.MySQL;
 import net.dv8tion.jda.core.entities.User;
 
 public class DuelData {
@@ -46,8 +47,8 @@ public class DuelData {
     public DuelData(User p1, User p2) {
         this.p1 = p1;
         this.p2 = p2;
-        //this.b1 = Database.getBeyblade(p1.getId());
-        //this.b2 = Database.getBeyblade(p2.getId());
+        this.b1 = MySQL.getBeybladeById(p1.getId());
+        this.b2 = MySQL.getBeybladeById(p2.getId());
     }
 
     public User getP1() {
