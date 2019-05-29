@@ -166,8 +166,21 @@ public class SQLite {
         EntityManager em = getEntityManager();
         CustomAnswers ca;
 
-        Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE gatilho LIKE ?1", CustomAnswers.class);
-        q.setParameter(1, trigger);
+        Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE LOWER(gatilho) LIKE ?1", CustomAnswers.class);
+        q.setParameter(1, trigger.toLowerCase());
+        ca = (CustomAnswers) q.getSingleResult();
+
+        em.close();
+
+        return ca;
+    }
+
+    public static CustomAnswers getCAByID(Long id) {
+        EntityManager em = getEntityManager();
+        CustomAnswers ca;
+
+        Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE id = ?1", CustomAnswers.class);
+        q.setParameter(1, id);
         ca = (CustomAnswers) q.getSingleResult();
 
         em.close();
