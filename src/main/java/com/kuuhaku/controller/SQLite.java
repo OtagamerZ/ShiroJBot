@@ -32,6 +32,7 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SQLite {
@@ -69,10 +70,37 @@ public class SQLite {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    public static List<CustomAnswers> getCADump() {
+        EntityManager em = getEntityManager();
+
+        Query q = em.createQuery("SELECT c FROM CustomAnswers c", CustomAnswers.class);
+
+        return q.getResultList();
+    }
+
+    @SuppressWarnings("unchecked")
+    public static List<Member> getMemberDump() {
+        EntityManager em = getEntityManager();
+
+        Query q = em.createQuery("SELECT m FROM Member m", Member.class);
+
+        return q.getResultList();
+    }
+
+    @SuppressWarnings("unchecked")
+    public static List<guildConfig> getGuildDump() {
+        EntityManager em = getEntityManager();
+
+        Query q = em.createQuery("SELECT g FROM guildConfig g", guildConfig.class);
+
+        return q.getResultList();
+    }
+
     public static String getGuildPrefix(String id) {
         EntityManager em = getEntityManager();
 
-        Query q = em.createQuery("SELECT c FROM guildConfig c WHERE guildID = ?1", guildConfig.class);
+        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
         q.setParameter(1, id);
         guildConfig gc = (guildConfig) q.getSingleResult();
         String prefix = gc.getPrefix();
