@@ -50,10 +50,7 @@ public class Helper {
     }
 
     public static boolean hasPermission(Member member, PrivilegeLevel privilegeLevel) {
-        if (getPrivilegeLevel(member) == PrivilegeLevel.USER && privilegeLevel != PrivilegeLevel.USER) {
-            return false;
-        }
-        return getPrivilegeLevel(member) != PrivilegeLevel.STAFF || privilegeLevel != PrivilegeLevel.OWNER;
+        return getPrivilegeLevel(member) != PrivilegeLevel.USER || privilegeLevel == PrivilegeLevel.USER;
     }
 	
 	/*public static String formatMessage(String message, String commandName, User user) {
