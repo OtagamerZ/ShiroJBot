@@ -23,6 +23,8 @@ import com.kuuhaku.events.generic.GenericMessageEvents;
 import com.kuuhaku.events.guild.GuildEvents;
 import com.kuuhaku.managers.CommandManager;
 import com.kuuhaku.controller.SQLite;
+import com.kuuhaku.model.DataDump;
+import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
@@ -38,6 +40,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Logger;
 
 
 public class Main implements JobListener {
@@ -62,6 +65,8 @@ public class Main implements JobListener {
         info.setStartTime(Instant.now().getEpochSecond());
 
         SQLite.connect();
+        if (SQLite.restoreData(MySQL.getData())) System.out.println("Dados recuperados com sucesso!");
+        else System.out.println("Erro ao recuperar dados.");
         finishStartUp();
     }
 
@@ -75,6 +80,8 @@ public class Main implements JobListener {
                 System.out.println("Guild adicionada ao banco: " + g.getName());
             }
         });
+        Helper.cls();
+        System.out.println("Estou pronta!");
     }
 
     public static Game getRandomGame() {
@@ -99,7 +106,7 @@ public class Main implements JobListener {
 
     public static void shutdown() throws SQLException {
         SQLite.disconnect();
-        MySQL.dumpData(SQLite.getCADump(), SQLite.getMemberDump(), SQLite.getGuildDump());
+        MySQL.dumpData(new DataDump(SQLite.getCADump(), SQLite.getMemberDump(), SQLite.getGuildDump()));
         api.shutdown();
         System.out.println("Fui desligada.");
     }
