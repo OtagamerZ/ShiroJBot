@@ -22,6 +22,7 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.PrivilegeLevel;
 
 import javax.imageio.ImageIO;
+import javax.persistence.NoResultException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -123,6 +124,10 @@ public class Profile {
         g2d.setFont(new Font("FrizQuadrata BT", Font.PLAIN, 30));
         if ((int) g2d.getFontMetrics().getStringBounds(tempName, g2d).getWidth() >= 213) tempName = tempName.substring(0, 6).concat("...");
         printCenteredString(tempName, 213, 47, 166, g2d);
+
+        try {SQLite.getTagById(u.getUser().getId());} catch (NoResultException e) {
+            SQLite.addUserTagsToDB(u);
+        }
 
         if (SQLite.getTagById(u.getUser().getId()).isPartner()) {
             con = (HttpURLConnection) new URL("http://i.imgur.com/HMm7gHp.png").openConnection();
