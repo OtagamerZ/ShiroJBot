@@ -26,7 +26,6 @@ import javax.persistence.*;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.SQLOutput;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -473,6 +472,41 @@ public class SQLite {
         EntityManager em = getEntityManager();
 
         gc.setMsgAdeus(newMsgAdeus);
+
+        em.getTransaction().begin();
+        em.merge(gc);
+        em.getTransaction().commit();
+
+        em.close();
+    }
+
+    public static String getGuildCanalSUG(String id, Boolean isForEC) {
+        EntityManager em = getEntityManager();
+
+        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+        q.setParameter(1, id);
+        guildConfig gc = (guildConfig) q.getSingleResult();
+        em.close();
+
+        String canalSUG = gc.getCanalSUG();
+        if (canalSUG == null) canalSUG = "Não definido.";
+
+        if(isForEC) {
+            String forEC;
+            if(!canalSUG.equals("Não definido.")) {
+                forEC = "<#" + canalSUG + ">";
+                return forEC;
+            } else {
+                return canalSUG;
+            }
+        } else {
+            return canalSUG;
+        }
+    }
+    public static void updateGuildCanalSUG(String canalID, guildConfig gc) {
+        EntityManager em = getEntityManager();
+
+        gc.setCanalSUG(canalID);
 
         em.getTransaction().begin();
         em.merge(gc);
