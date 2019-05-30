@@ -4,32 +4,63 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.guildConfig;
+import com.kuuhaku.utils.Helper;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
+
+import java.io.IOException;
 
 public class SettingsCommand extends Command {
 
 	public SettingsCommand() {
-		super("settings", new String[] {"defenições", "defeniçoes", "defenicões", "parametros", "parâmetros"}, "<parâmetro> <novo valor do parâmetro>", "Muda as configurações da Shiro no seu servidor.", Category.MODERACAO);
+		super("settings", new String[] {"setting", "definições", "definiçoes", "definicões", "parametros", "parâmetros"}, "<parâmetro> <novo valor do parâmetro>", "Muda as configurações da Shiro no seu servidor.", Category.MODERACAO);
 	}
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 
-		switch(args[0].toLowerCase()) {
-			case "prefix":
-				String newPrefix = args[1].trim();
-				System.out.println(newPrefix);
-				if(newPrefix.length() > 5) { channel.sendMessage(":x: | O prefixo `" + newPrefix + "` contem mais de 5 carateres, não pode.").queue(); return; }
+		guildConfig gc = SQLite.getGuildById(guild.getId());
 
-				guildConfig gc = SQLite.getGuildById(guild.getId());
-				SQLite.updateGuildPrefix(newPrefix, gc);
-				break;
-			default:
-				//channel.sendMessage("").queue();
+		if(args.length == 0) {
+			EmbedBuilder eb = new EmbedBuilder();
+
+			try {
+				eb.setColor(Helper.colorThief(guild.getIconUrl()));
+			} catch (IOException err) {
+				channel.sendMessage(":x: | Ocorreu um erro durante o processo, os meus developers já foram notificados.").queue();
+				err.printStackTrace();
 				return;
+			}
+			eb.setTitle("Configurações do servidor");
+			eb.addField("Prefixo", "`" + prefix + "`", true);
+//				eb.addField("Enviado em:", df.format(message.getCreationTime()), true);
+//				eb.addField("Relatório:", "```" + mensagem + "```", false);
+
+			channel.sendMessage(eb.build()).queue();
+			return;
 		}
 
-	}
+		switch(args[0].toLowerCase()) {
+			case "prefix":
 
+				if(args.length < 2) { channel.sendMessage("O prefixo atual deste servidor é `" + prefix + "`.").queue(); return; }
+
+				String newPrefix = args[1].trim();
+				if(newPrefix.length() > 5) { channel.sendMessage(":x: | O prefixo `" + newPrefix + "` contem mais de 5 carateres, não pode.").queue(); return; }
+
+				SQLite.updateGuildPrefix(newPrefix, gc);
+				channel.sendMessage("✅ | O prefixo deste servidor foi trocado para `" + newPrefix + "` com sucesso.").queue();
+				break;
+			default:
+				EmbedBuilder eb = new EmbedBuilder();
+
+				eb.setTitle("Configurações do servidor");
+				eb.addField("Prefixo", "`" + prefix + "`", true);
+//				eb.addField("Enviado em:", df.format(message.getCreationTime()), true);
+//				eb.addField("Relatório:", "```" + mensagem + "```", false);
+
+				channel.sendMessage(eb.build()).queue();
+		}
+	}
 }
