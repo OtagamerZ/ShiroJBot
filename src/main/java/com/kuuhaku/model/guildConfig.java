@@ -30,7 +30,7 @@ public class guildConfig {
     private String name;
     private String owner;
     private String prefix = "!";
-    private String msgBoasVindas = "Seja bem-vindo(a) %user%!";
+    private String msgBoasVindas = "Seja bem-vindo(a) ao %guild%, %user%!";
     private String msgAdeus = "Ahh...%user% deixou este servidor!";
     private String canalbv = null;
     private String canaladeus = null;
