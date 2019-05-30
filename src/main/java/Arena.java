@@ -88,13 +88,13 @@ public class Arena {
             if (bb.getPoints() < (bb.getS() == null ? 150 : 300)) {
                 switch (cmd[1]) {
                     case "tigre":
-                        bb.setSpecial(10 + new Random().nextInt(2));
+                        bb.setSpecial(10 + Helper.rng(2));
                         bb.takePoints((bb.getS() == null ? 150 : 300));
                     case "dragão":
-                        bb.setSpecial(20 + new Random().nextInt(2));
+                        bb.setSpecial(20 + Helper.rng(2));
                         bb.takePoints((bb.getS() == null ? 150 : 300));
                     case "urso":
-                        bb.setSpecial(30 + new Random().nextInt(2));
+                        bb.setSpecial(30 + Helper.rng(2));
                         bb.takePoints((bb.getS() == null ? 150 : 300));
                 }
                 message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Seu alinhamento foi trocado para **" + bb.getS().getType() + "**, e o especial concedido a você foi: " + bb.getS().getName()).queue());
@@ -220,7 +220,7 @@ public class Arena {
                 if (!duel.isS1()) {
                     if (player1Turn && message.getAuthor() == duel.getP1()) {
                         duel.setP1turn(false);
-                        int chance = new Random().nextInt(100);
+                        int chance = Helper.rng(100);
                         duel.setD1(false);
                         final Consumer<Void> Miss = tm -> message.getChannel().sendMessage("Quase! " + duel.getB1().getName() + " tenta executar um golpe especial mas falha! (" + chance + " < " + (duel.getB1().getS().getDiff() - duel.getB1().getSpeed()) + ")").queue();
                         switch (duel.getB1().getSpecial()) {
@@ -287,7 +287,7 @@ public class Arena {
                 if (duel.getB2().getS() != null) {
                     if (!duel.isS2()) {
                         duel.setP1turn(true);
-                        int chance = new Random().nextInt(100);
+                        int chance = Helper.rng(100);
                         duel.setD2(false);
                         final Consumer<Void> Miss = tm -> message.getChannel().sendMessage("Quase! " + duel.getB2().getName() + " tenta executar um golpe especial mas falha! (" + chance + " < " + (duel.getB2().getS().getDiff() - duel.getB2().getSpeed()) + ")").queue();
                         switch (duel.getB2().getSpecial()) {
@@ -379,7 +379,7 @@ public class Arena {
             }
         }
         if (duel.getB2().getLife() <= 0) {
-            int pointWin = new Random().nextInt(Math.round(duel.getB2().getStrength() + duel.getB2().getSpeed() + duel.getB2().getStability() + (float) duel.getB1().getWins() / (duel.getB1().getLoses() == 0 ? 1 : duel.getB1().getLoses())));
+            int pointWin = Helper.rng(Math.round(duel.getB2().getStrength() + duel.getB2().getSpeed() + duel.getB2().getStability() + (float) duel.getB1().getWins() / (duel.getB1().getLoses() == 0 ? 1 : duel.getB1().getLoses())));
             message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(duel.getP1().getAsMention() + " triunfou sobre " + duel.getP2().getAsMention() + ". Temos um vencedor!\n\n" + duel.getB1().getName() + " ganhou **" + pointWin + "** pontos de combate!").queue());
             Beyblade bl = Database.getBeyblade(duel.getP2().getId());
             assert bl != null;
@@ -393,7 +393,7 @@ public class Arena {
             Database.sendBeyblade(bb);
             accDuels.removeIf(d -> d.getP1() == message.getAuthor() || d.getP2() == message.getAuthor());
         } else if (duel.getB1().getLife() <= 0) {
-            int pointWin = new Random().nextInt(Math.round(duel.getB1().getStrength() + duel.getB1().getSpeed() + duel.getB1().getStability() + (float) duel.getB1().getWins() / (duel.getB1().getLoses() == 0 ? 1 : duel.getB1().getLoses())));
+            int pointWin = Helper.rng(Math.round(duel.getB1().getStrength() + duel.getB1().getSpeed() + duel.getB1().getStability() + (float) duel.getB1().getWins() / (duel.getB1().getLoses() == 0 ? 1 : duel.getB1().getLoses())));
             message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(duel.getP2().getAsMention() + " triunfou sobre " + duel.getP1().getAsMention() + ". Temos um vencedor!\n\n" + duel.getB2().getName() + " ganhou **" + pointWin + "** pontos de combate!").queue());
             Beyblade bl = Database.getBeyblade(duel.getP1().getId());
             assert bl != null;
