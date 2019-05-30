@@ -33,6 +33,7 @@
         <class>com.kuuhaku.model.CustomAnswers</class>
         <class>com.kuuhaku.model.Beyblade</class>
         <class>com.kuuhaku.model.Tags</class>
+        <class>java.lang.String</class>
 
         <properties>
             <!-- dados da conexao -->
