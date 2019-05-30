@@ -77,11 +77,11 @@ public class guildConfig {
         this.msgAdeus = msgAdeus;
     }
 
-    public String getCanalbv() {
+    public String getCanalBV() {
         return canalbv;
     }
 
-    public void setCanalbv(String canalbv) {
+    public void setCanalBV(String canalbv) {
         this.canalbv = canalbv;
     }
 
@@ -141,11 +141,11 @@ public class guildConfig {
         this.anyTell = anyTell;
     }
 
-    public String getCanaladeus() {
+    public String getCanalAdeus() {
         return canaladeus;
     }
 
-    public void setCanaladeus(String canaladeus) {
+    public void setCanalAdeus(String canaladeus) {
         this.canaladeus = canaladeus;
     }
 
