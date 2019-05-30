@@ -23,21 +23,14 @@ public class SettingsCommand extends Command {
 		guildConfig gc = SQLite.getGuildById(guild.getId());
 
 		if(args.length == 0) {
-			EmbedBuilder eb = new EmbedBuilder();
-
 			try {
-				eb.setColor(Helper.colorThief(guild.getIconUrl()));
+				Helper.embedConfig(message);
 			} catch (IOException err) {
 				channel.sendMessage(":x: | Ocorreu um erro durante o processo, os meus developers já foram notificados.").queue();
 				err.printStackTrace();
 				return;
 			}
-			eb.setTitle("Configurações do servidor");
-			eb.addField("Prefixo", "`" + prefix + "`", true);
-//				eb.addField("Enviado em:", df.format(message.getCreationTime()), true);
-//				eb.addField("Relatório:", "```" + mensagem + "```", false);
 
-			channel.sendMessage(eb.build()).queue();
 			return;
 		}
 
@@ -53,14 +46,13 @@ public class SettingsCommand extends Command {
 				channel.sendMessage("✅ | O prefixo deste servidor foi trocado para `" + newPrefix + "` com sucesso.").queue();
 				break;
 			default:
-				EmbedBuilder eb = new EmbedBuilder();
-
-				eb.setTitle("Configurações do servidor");
-				eb.addField("Prefixo", "`" + prefix + "`", true);
-//				eb.addField("Enviado em:", df.format(message.getCreationTime()), true);
-//				eb.addField("Relatório:", "```" + mensagem + "```", false);
-
-				channel.sendMessage(eb.build()).queue();
+				try {
+					Helper.embedConfig(message);
+				} catch (IOException err) {
+					channel.sendMessage(":x: | Ocorreu um erro durante o processo, os meus developers já foram notificados.").queue();
+					err.printStackTrace();
+					return;
+				}
 		}
 	}
 }
