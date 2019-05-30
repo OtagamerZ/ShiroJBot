@@ -19,6 +19,7 @@ package com.kuuhaku.utils;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.model.Beyblade;
+import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
 
@@ -29,6 +30,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.Instant;
 import java.util.Objects;
@@ -205,5 +207,13 @@ public class Helper {
 
     public static int rng(int maxValue) {
         return Math.abs(new Random().nextInt(maxValue));
+    }
+
+    public static Color colorThief(String url) throws IOException {
+        HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
+        con.setRequestProperty("User-Client", "Mozilla/5.0");
+        BufferedImage icon = ImageIO.read(con.getInputStream());
+
+        return new Color(ColorThief.getColor(icon)[0], ColorThief.getColor(icon)[1], ColorThief.getColor(icon)[2]);
     }
 }

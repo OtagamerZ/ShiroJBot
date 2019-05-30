@@ -26,6 +26,7 @@ import javax.persistence.*;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.SQLOutput;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -106,20 +107,6 @@ public class SQLite {
         Query q = em.createQuery("SELECT g FROM guildConfig g", guildConfig.class);
 
         return q.getResultList();
-    }
-
-    public static String getGuildPrefix(String id) {
-        EntityManager em = getEntityManager();
-
-        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
-        q.setParameter(1, id);
-        guildConfig gc = (guildConfig) q.getSingleResult();
-        String prefix = gc.getPrefix();
-
-        if (prefix == null) prefix = "s!";
-        em.close();
-
-        return prefix;
     }
 
     public static guildConfig getGuildById(String id) {
@@ -336,6 +323,19 @@ public class SQLite {
         em.close();
     }
 
+    public static String getGuildPrefix(String id) {
+        EntityManager em = getEntityManager();
+
+        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+        q.setParameter(1, id);
+        guildConfig gc = (guildConfig) q.getSingleResult();
+        String prefix = gc.getPrefix();
+
+        if (prefix == null) prefix = "s!";
+        em.close();
+
+        return prefix;
+    }
     public static void updateGuildPrefix(String prefix, guildConfig gc) {
         EntityManager em = getEntityManager();
 
@@ -344,8 +344,58 @@ public class SQLite {
         em.getTransaction().begin();
         em.merge(gc);
         em.getTransaction().commit();
-        System.out.println("prefixo mudado com sucesso maybe");
 
         em.close();
     }
+
+    public static String getGuildCanalBV(String id) {
+        EntityManager em = getEntityManager();
+
+        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+        q.setParameter(1, id);
+        guildConfig gc = (guildConfig) q.getSingleResult();
+        String canalBV = gc.getCanalBV();
+
+        if (canalBV == null) canalBV = "Não definido.";
+        em.close();
+
+        return canalBV;
+    }
+    public static void updateGuildCanalBV(String canalID, guildConfig gc) {
+        EntityManager em = getEntityManager();
+
+        gc.setCanalBV(canalID);
+
+        em.getTransaction().begin();
+        em.merge(gc);
+        em.getTransaction().commit();
+
+        em.close();
+    }
+
+    public static String getGuildCanalAdeus(String id) {
+        EntityManager em = getEntityManager();
+
+        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+        q.setParameter(1, id);
+        guildConfig gc = (guildConfig) q.getSingleResult();
+        String canalAdeus = gc.getCanalAdeus();
+
+        if (canalAdeus == null) canalAdeus = "Não definido.";
+        em.close();
+
+        return canalAdeus;
+    }
+    public static void updateGuildCanalAdeus(String canalID, guildConfig gc) {
+        EntityManager em = getEntityManager();
+
+        gc.setCanalAdeus(canalID);
+
+        em.getTransaction().begin();
+        em.merge(gc);
+        em.getTransaction().commit();
+
+        em.close();
+    }
+
 }
