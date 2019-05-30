@@ -85,19 +85,19 @@ public class guildConfig {
         this.canalbv = canalbv;
     }
 
-    public String getCanalav() {
+    public String getCanalAV() {
         return canalav;
     }
 
-    public void setCanalav(String canalav) {
+    public void setCanalAV(String canalav) {
         this.canalav = canalav;
     }
 
-    public String getCargowarn() {
+    public String getCargoWarn() {
         return cargowarn;
     }
 
-    public void setCargowarn(String cargowarn) {
+    public void setCargoWarn(String cargowarn) {
         this.cargowarn = cargowarn;
     }
 
@@ -125,11 +125,11 @@ public class guildConfig {
         this.cargoNew = cargoNew.toString();
     }
 
-    public String getCanalsug() {
+    public String getCanalSUG() {
         return canalsug;
     }
 
-    public void setCanalsug(String canalsug) {
+    public void setCanalSUG(String canalsug) {
         this.canalsug = canalsug;
     }
 
