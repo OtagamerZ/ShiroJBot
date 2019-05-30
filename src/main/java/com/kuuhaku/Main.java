@@ -84,7 +84,7 @@ public class Main implements JobListener {
 
     public static Game getRandomGame() {
         List<Game> games = new ArrayList<Game>() {{
-            add(Game.playing("Digite !ajuda para ver meus comandos!"));
+            add(Game.playing("Digite " + info.getDefaultPrefix() + "ajuda para ver meus comandos!"));
             add(Game.streaming("Na conta do meu Nii-chan sem ele saber!", "https://twitch.tv/kuuhaku_otgmz"));
             add(Game.playing("Nico nico nii!!"));
             add(Game.listening(api.getGuilds().size() + " servidores, e isso ainda é só o começo!"));
