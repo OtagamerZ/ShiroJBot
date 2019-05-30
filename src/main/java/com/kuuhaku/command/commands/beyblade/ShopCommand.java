@@ -105,4 +105,8 @@ public class ShopCommand extends Command {
             channel.sendMessage(eb.build()).queue();
         }
     }
+
+    private static void changeName() {
+
+    }
 }

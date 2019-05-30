@@ -32,6 +32,7 @@ import java.math.RoundingMode;
 import java.net.URL;
 import java.time.Instant;
 import java.util.Objects;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class Helper {
@@ -50,10 +51,7 @@ public class Helper {
     }
 
     public static boolean hasPermission(Member member, PrivilegeLevel privilegeLevel) {
-        if (getPrivilegeLevel(member) == PrivilegeLevel.USER && privilegeLevel != PrivilegeLevel.USER) {
-            return false;
-        }
-        return getPrivilegeLevel(member) != PrivilegeLevel.STAFF || privilegeLevel != PrivilegeLevel.OWNER;
+        return getPrivilegeLevel(member) != PrivilegeLevel.USER || privilegeLevel == PrivilegeLevel.USER;
     }
 	
 	/*public static String formatMessage(String message, String commandName, User user) {
@@ -203,5 +201,9 @@ public class Helper {
         } else {
             return 1.0f;
         }
+    }
+
+    public static int rng(int maxValue) {
+        return Math.abs(new Random().nextInt(maxValue));
     }
 }

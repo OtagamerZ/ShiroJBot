@@ -18,11 +18,11 @@
 package com.kuuhaku;
 
 import com.kuuhaku.controller.MySQL;
+import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.events.generic.GenericMessageEvents;
 import com.kuuhaku.events.guild.GuildEvents;
 import com.kuuhaku.managers.CommandManager;
-import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.DataDump;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
@@ -39,8 +39,6 @@ import java.sql.SQLException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.logging.Logger;
 
 
 public class Main implements JobListener {
@@ -93,7 +91,7 @@ public class Main implements JobListener {
             add(Game.watching("No Game No Life pela 13ª vez, e ainda não enjoei de ver como eu atuo bem!"));
         }};
 
-        return games.get(new Random().nextInt(games.size()));
+        return games.get(Helper.rng(games.size()));
     }
 
     public static ShiroInfo getInfo() {

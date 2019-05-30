@@ -55,6 +55,7 @@ public class CommandManager {
             add(new PartnerTagCommand());
 
             //MODERATION
+            add(new RemoveAnswerCommand());
 
             //INFORMATION
             add(new ComandosCommand());
@@ -70,6 +71,7 @@ public class CommandManager {
             add(new ReverseCommand());
             add(new SayCommand());
             add(new UptimeCommand());
+            add(new CustomAnswerCommand());
 
             //FUN
             add(new OhNoCommand());

@@ -27,6 +27,7 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import javax.persistence.NoResultException;
+import java.util.Objects;
 
 public class GenericMessageEvents extends ListenerAdapter {
 
@@ -71,13 +72,13 @@ public class GenericMessageEvents extends ListenerAdapter {
             return;
         }
 
-        String rawMsgNoPrefix = rawMessage.substring(prefix.length()).trim();
+        String rawMsgNoPrefix = rawMessage.replace(prefix, "");
         String commandName = rawMsgNoPrefix.split(" ")[0].trim();
 
         try {
-            CustomAnswers ca = SQLite.getCAByTrigger(rawMsgNoPrefix);
-            channel.sendMessage(ca.getAnswer()).queue();
-        } catch (NoResultException ignore) {
+            CustomAnswers ca = SQLite.getCAByTrigger(rawMessage);
+            Helper.typeMessage(channel, Objects.requireNonNull(ca).getAnswer());
+        } catch (NoResultException | NullPointerException ignore) {
         }
 
         boolean hasArgs = (rawMsgNoPrefix.split(" ").length > 1);
