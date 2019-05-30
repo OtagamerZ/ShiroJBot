@@ -335,4 +335,17 @@ public class SQLite {
 
         em.close();
     }
+
+    public static void updateGuildPrefix(String prefix, guildConfig gc) {
+        EntityManager em = getEntityManager();
+
+        gc.setPrefix(prefix);
+
+        em.getTransaction().begin();
+        em.merge(gc);
+        em.getTransaction().commit();
+        System.out.println("prefixo mudado com sucesso maybe");
+
+        em.close();
+    }
 }
