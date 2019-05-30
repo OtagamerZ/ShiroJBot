@@ -19,12 +19,10 @@ package com.kuuhaku.controller;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.model.*;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.core.entities.Guild;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.Query;
+import javax.persistence.*;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -162,12 +160,26 @@ public class SQLite {
         em.close();
     }
 
+    @SuppressWarnings("unchecked")
     public static CustomAnswers getCAByTrigger(String trigger) {
+        EntityManager em = getEntityManager();
+        List<CustomAnswers> ca;
+
+        Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE LOWER(gatilho) LIKE ?1", CustomAnswers.class);
+        q.setParameter(1, trigger.toLowerCase());
+        ca = (List<CustomAnswers>) q.getResultList();
+
+        em.close();
+
+        return ca.size() > 0 ? ca.get(Helper.rng(ca.size())) : null;
+    }
+
+    public static CustomAnswers getCAByID(Long id) {
         EntityManager em = getEntityManager();
         CustomAnswers ca;
 
-        Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE gatilho LIKE ?1", CustomAnswers.class);
-        q.setParameter(1, trigger);
+        Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE id = ?1", CustomAnswers.class);
+        q.setParameter(1, id);
         ca = (CustomAnswers) q.getSingleResult();
 
         em.close();

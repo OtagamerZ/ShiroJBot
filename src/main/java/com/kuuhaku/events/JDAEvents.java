@@ -113,7 +113,7 @@ public class JDAEvents extends ListenerAdapter {
                 if (!duel.isS1()) {
                     if (player1Turn && event.getMessage().getAuthor() == duel.getP1()) {
                         duel.setP1turn(false);
-                        int chance = new Random().nextInt(100);
+                        int chance = Helper.rng(100);
                         duel.setD1(false);
                         final Consumer<Void> Miss = tm -> event.getMessage().getChannel().sendMessage("Quase! " + duel.getB1().getName() + " tenta executar um golpe especial mas falha! (" + chance + " < " + (duel.getB1().getS().getDiff() - duel.getB1().getSpeed()) + ")").queue();
                         switch (duel.getB1().getSpecial()) {
@@ -180,7 +180,7 @@ public class JDAEvents extends ListenerAdapter {
                 if (duel.getB2().getS() != null) {
                     if (!duel.isS2()) {
                         duel.setP1turn(true);
-                        int chance = new Random().nextInt(100);
+                        int chance = Helper.rng(100);
                         duel.setD2(false);
                         final Consumer<Void> Miss = tm -> event.getMessage().getChannel().sendMessage("Quase! " + duel.getB2().getName() + " tenta executar um golpe especial mas falha! (" + chance + " < " + (duel.getB2().getS().getDiff() - duel.getB2().getSpeed()) + ")").queue();
                         switch (duel.getB2().getSpecial()) {
@@ -272,7 +272,7 @@ public class JDAEvents extends ListenerAdapter {
             }
         }
         if (duel.getB2().getLife() <= 0) {
-            int pointWin = new Random().nextInt(Math.round(duel.getB2().getStrength() + duel.getB2().getSpeed() + duel.getB2().getStability() + (float) duel.getB1().getWins() / (duel.getB1().getLoses() == 0 ? 1 : duel.getB1().getLoses())));
+            int pointWin = Helper.rng(Math.round(duel.getB2().getStrength() + duel.getB2().getSpeed() + duel.getB2().getStability() + (float) duel.getB1().getWins() / (duel.getB1().getLoses() == 0 ? 1 : duel.getB1().getLoses())));
             event.getMessage().getChannel().sendTyping().queue(tm -> event.getMessage().getChannel().sendMessage(duel.getP1().getAsMention() + " triunfou sobre " + duel.getP2().getAsMention() + ". Temos um vencedor!\n\n" + duel.getB1().getName() + " ganhou **" + pointWin + "** pontos de combate!").queue());
             Beyblade bl = MySQL.getBeybladeById(duel.getP2().getId());
             assert bl != null;
@@ -286,7 +286,7 @@ public class JDAEvents extends ListenerAdapter {
             MySQL.sendBeybladeToDB(bb);
             dd.removeIf(d -> d.getP1() == event.getMessage().getAuthor() || d.getP2() == event.getMessage().getAuthor());
         } else if (duel.getB1().getLife() <= 0) {
-            int pointWin = new Random().nextInt(Math.round(duel.getB1().getStrength() + duel.getB1().getSpeed() + duel.getB1().getStability() + (float) duel.getB1().getWins() / (duel.getB1().getLoses() == 0 ? 1 : duel.getB1().getLoses())));
+            int pointWin = Helper.rng(Math.round(duel.getB1().getStrength() + duel.getB1().getSpeed() + duel.getB1().getStability() + (float) duel.getB1().getWins() / (duel.getB1().getLoses() == 0 ? 1 : duel.getB1().getLoses())));
             event.getMessage().getChannel().sendTyping().queue(tm -> event.getMessage().getChannel().sendMessage(duel.getP2().getAsMention() + " triunfou sobre " + duel.getP1().getAsMention() + ". Temos um vencedor!\n\n" + duel.getB2().getName() + " ganhou **" + pointWin + "** pontos de combate!").queue());
             Beyblade bl = MySQL.getBeybladeById(duel.getP1().getId());
             assert bl != null;
