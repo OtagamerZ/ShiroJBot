@@ -13,7 +13,7 @@ import java.awt.*;
 public class ComandosCommand extends Command {
 
 	public ComandosCommand() {
-		super("comandos", new String[] {"cmds", "cmd", "comando"}, "Fornece uma lista de todos os comandos disponiveis no bot.", Category.INFO);
+		super("comandos", new String[] {"cmds", "cmd", "comando", "ajuda"}, "Fornece uma lista de todos os comandos disponiveis no bot.", Category.INFO);
 	}
 
 	@Override

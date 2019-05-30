@@ -56,7 +56,6 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.Beyblade;
-import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
@@ -77,36 +76,119 @@ public class ShopCommand extends Command {
             return;
         }
 
-        Beyblade bb = Objects.requireNonNull(MySQL.getBeybladeById(author.getId()));
-        String prefixo = SQLite.getGuildPrefix(guild.getId());
+        channel.sendMessage(":hourglass: Analizando...").queue(m -> {
+            Beyblade bb = Objects.requireNonNull(MySQL.getBeybladeById(author.getId()));
+            String prefixo = SQLite.getGuildPrefix(guild.getId());
 
-        EmbedBuilder eb = new EmbedBuilder();
-        eb.setColor(Color.PINK);
-        eb.setAuthor("Saldo de " + message.getAuthor().getName() + ": " + Objects.requireNonNull(MySQL.getBeybladeById(author.getId())).getPoints() + " pontos de combate", null, "https://i.imgur.com/H1KqxRc.png");
-        eb.setThumbnail("https://i.pinimg.com/originals/d3/34/db/d334db51554b3c78fbb65d6cf5e0dcef.png");
+            EmbedBuilder eb = new EmbedBuilder();
+            eb.setColor(Color.decode(bb.getColor()));
+            eb.setAuthor("Saldo de " + message.getAuthor().getName() + ": " + Objects.requireNonNull(MySQL.getBeybladeById(author.getId())).getPoints() + " pontos de combate", null, "https://i.imgur.com/H1KqxRc.png");
+            eb.setThumbnail("https://i.pinimg.com/originals/d3/34/db/d334db51554b3c78fbb65d6cf5e0dcef.png");
 
-        if (args.length == 0) {
+            if (args.length == 0) {
 
-            eb.setTitle("**Loja**");
+                eb.setTitle("**Loja**");
 
-            eb.setDescription("Olá, meu nome é Orisha, sou técnica em Beyblades.\n\n" +
-                    "Estou vendo que você tem um modelo e tanto aqui ein? Enfim, fique à vontade para escolher um atributo " +
-                    "para melhorar, note que cada vez que você melhorar algo o valor das outras peças também irão aumentar um pouco " +
-                    "devido a incompatibilidade com peças mais baratas!");
+                eb.setDescription("Olá, meu nome é Orisha, sou técnica em Beyblades.\n\n" +
+                        "Estou vendo que você tem um modelo e tanto aqui ein? Enfim, fique à vontade para escolher um atributo " +
+                        "para melhorar, note que cada vez que você melhorar algo o valor das outras peças também irão aumentar um pouco " +
+                        "devido a incompatibilidade com peças mais baratas!");
 
-            eb.addField(":new: Melhorar nome (Muda o nome):", "50 pontos de combate\nDiga **" + prefixo + "bshop nome** para comprar", false);
-            eb.addField(":fist: Melhorar força (Aumenta o dano):", Math.round(15 * bb.getStrength() + bb.getStrength() + bb.getSpeed() + bb.getStability()) + " pontos de combate\nDiga **" + prefixo + "bshop força** para comprar", false);
-            eb.addField(":cyclone: Melhorar velocidade (Aumenta a chance de acerto do especial):", Math.round(15 * bb.getSpeed() + bb.getStrength() + bb.getSpeed() + bb.getStability()) + " pontos de combate\nDiga **" + prefixo + "bshop velocidade** para comprar", false);
-            eb.addField(":shield: Melhorar estabilidade (Aumenta a defesa):", Math.round(15 * bb.getStability() + bb.getStrength() + bb.getSpeed() + bb.getStability()) + " pontos de combate\nDiga **" + prefixo + "bshop estabilidade** para comprar", false);
-            eb.addField(":heart: Melhorar vida (Aumenta a vida):", Math.round(bb.getLife() / 2) + " pontos de combate\nDiga **" + prefixo + "bshop vida** para comprar", false);
+                eb.addField(":new: Melhorar nome (Muda o nome):", "50 pontos de combate\nDiga **" + prefixo + "bshop nome** para comprar", false);
+                eb.addField(":punch: Melhorar força (Aumenta o dano):", Math.round(15 * bb.getStrength() + bb.getStrength() + bb.getSpeed() + bb.getStability()) + " pontos de combate\nDiga **" + prefixo + "bshop força** para comprar", false);
+                eb.addField(":cyclone: Melhorar velocidade (Aumenta a chance de acerto do especial):", Math.round(15 * bb.getSpeed() + bb.getStrength() + bb.getSpeed() + bb.getStability()) + " pontos de combate\nDiga **" + prefixo + "bshop velocidade** para comprar", false);
+                eb.addField(":shield: Melhorar estabilidade (Aumenta a defesa):", Math.round(15 * bb.getStability() + bb.getStrength() + bb.getSpeed() + bb.getStability()) + " pontos de combate\nDiga **" + prefixo + "bshop estabilidade** para comprar", false);
+                eb.addField(":heart: Melhorar vida (Aumenta a vida):", Math.round(bb.getLife() / 2) + " pontos de combate\nDiga **" + prefixo + "bshop vida** para comprar", false);
 
-            eb.addField(Helper.VOID, "Para informações sobre um comando em especifico digite `" + prefix + "cmds [comando]`.", false);
+                m.editMessage(":white_check_mark: Pronto!").embed(eb.build()).queue();
+                return;
+            }
 
-            channel.sendMessage(eb.build()).queue();
-        }
+            switch (args[0]) {
+                case "nome":
+                    if (args.length < 2) {
+                        channel.sendMessage(":x: | Você precisa especificar um nome.").queue();
+                        return;
+                    }
+                    changeName(args[1], channel, bb);
+                case "força":
+                    upgradeStrength(channel, bb);
+                    break;
+                case "velocidade":
+                    upgradeSpeed(channel, bb);
+                    break;
+                case "estabilidade":
+                    upgradeStability(channel, bb);
+                    break;
+                case "vida":
+                    upgradeLife(channel, bb);
+                    break;
+                default:
+                    channel.sendMessage(":x: | Atributo inválido.").queue();
+            }
+        });
     }
 
-    private static void changeName() {
+    private static void changeName(String arg, MessageChannel channel, Beyblade bb) {
+        if (bb.getPoints() < 50) {
+            channel.sendMessage(":x: | Você não possui pontos de combate suficientes.").queue();
+            return;
+        } else if (arg.length() > 16) {
+            channel.sendMessage(":x: | Você escolheu um nome muito longo.").queue();
+            return;
+        }
 
+        bb.takePoints(50);
+        bb.setName(arg);
+        MySQL.sendBeybladeToDB(bb);
+        channel.sendMessage("Nome trocado com sucesso!").queue();
+    }
+
+    private static void upgradeStrength(MessageChannel channel, Beyblade bb) {
+        if (bb.getPoints() < Math.round(15 * bb.getStrength() + bb.getStrength() + bb.getSpeed() + bb.getStability())) {
+            channel.sendMessage(":x: | Você não possui pontos de combate suficientes.").queue();
+            return;
+        }
+
+        bb.takePoints(Math.round(15 * bb.getStrength() + bb.getStrength() + bb.getSpeed() + bb.getStability()));
+        bb.addStrength();
+        MySQL.sendBeybladeToDB(bb);
+        channel.sendMessage("Força melhorada com sucesso!").queue();
+    }
+
+    private static void upgradeSpeed(MessageChannel channel, Beyblade bb) {
+        if (bb.getPoints() < Math.round(15 * bb.getSpeed() + bb.getStrength() + bb.getSpeed() + bb.getStability())) {
+            channel.sendMessage(":x: | Você não possui pontos de combate suficientes.").queue();
+            return;
+        }
+
+        bb.takePoints(Math.round(15 * bb.getSpeed() + bb.getStrength() + bb.getSpeed() + bb.getStability()));
+        bb.addSpeed();
+        MySQL.sendBeybladeToDB(bb);
+        channel.sendMessage("Velocidade melhorada com sucesso!").queue();
+    }
+
+    private static void upgradeStability(MessageChannel channel, Beyblade bb) {
+        if (bb.getPoints() < Math.round(15 * bb.getStability() + bb.getStrength() + bb.getSpeed() + bb.getStability())) {
+            channel.sendMessage(":x: | Você não possui pontos de combate suficientes.").queue();
+            return;
+        }
+
+        bb.takePoints(Math.round(15 * bb.getStability() + bb.getStrength() + bb.getSpeed() + bb.getStability()));
+        bb.addStability();
+        MySQL.sendBeybladeToDB(bb);
+        channel.sendMessage("Estabilidade melhorada com sucesso!").queue();
+    }
+
+    private static void upgradeLife(MessageChannel channel, Beyblade bb) {
+        if (bb.getPoints() < Math.round(bb.getLife() / 2)) {
+            channel.sendMessage(":x: | Você não possui pontos de combate suficientes.").queue();
+            return;
+        }
+
+        bb.takePoints(Math.round(bb.getLife() / 2));
+        bb.addLife();
+        MySQL.sendBeybladeToDB(bb);
+        channel.sendMessage("Vida melhorada com sucesso!").queue();
     }
 }
