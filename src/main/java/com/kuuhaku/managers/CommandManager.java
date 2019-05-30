@@ -84,6 +84,7 @@ public class CommandManager {
             add(new DuelCommand());
             add(new ShopCommand());
             add(new AlignmentCommand());
+            add(new InfoCommand());
         }};
     }
 
