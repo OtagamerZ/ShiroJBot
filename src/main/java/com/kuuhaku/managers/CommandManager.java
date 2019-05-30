@@ -72,6 +72,8 @@ public class CommandManager {
             add(new SayCommand());
             add(new UptimeCommand());
             add(new CustomAnswerCommand());
+            add(new AnimeCommand());
+            add(new ImageCommand());
 
             //FUN
             add(new OhNoCommand());
