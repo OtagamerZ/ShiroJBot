@@ -85,6 +85,7 @@ public class CommandManager {
             add(new ShopCommand());
             add(new AlignmentCommand());
             add(new InfoCommand());
+            add(new RankCommand());
         }};
     }
 

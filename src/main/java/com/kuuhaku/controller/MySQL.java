@@ -4,6 +4,7 @@ import com.kuuhaku.model.*;
 
 import javax.persistence.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MySQL {
@@ -62,6 +63,19 @@ public class MySQL {
             bb = (Beyblade) b.getSingleResult();
 
             return bb;
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static List<Beyblade> getBeybladeList() {
+        EntityManager em = getEntityManager();
+
+        try {
+            Query b = em.createQuery("SELECT b FROM Beyblade b", Beyblade.class);
+
+            return (List<Beyblade>) b.getResultList();
         } catch (NoResultException e) {
             return null;
         }
