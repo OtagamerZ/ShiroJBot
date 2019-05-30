@@ -46,7 +46,7 @@ public class MySQL {
     public static void sendBeybladeToDB(Beyblade bb) {
         EntityManager em = getEntityManager();
 
-        em.getTransaction().commit();
+        em.getTransaction().begin();
         em.merge(bb);
         em.getTransaction().commit();
     }
