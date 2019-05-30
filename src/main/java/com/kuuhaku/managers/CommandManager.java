@@ -19,10 +19,7 @@ package com.kuuhaku.managers;
 
 import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.Reactions.HugReaction;
-import com.kuuhaku.command.commands.beyblade.ColorCommand;
-import com.kuuhaku.command.commands.beyblade.DuelCommand;
-import com.kuuhaku.command.commands.beyblade.ShopCommand;
-import com.kuuhaku.command.commands.beyblade.StartCommand;
+import com.kuuhaku.command.commands.beyblade.*;
 import com.kuuhaku.command.commands.fun.OhNoCommand;
 import com.kuuhaku.command.commands.fun.PPTCommand;
 import com.kuuhaku.command.commands.information.BackgroundCommand;
@@ -86,6 +83,7 @@ public class CommandManager {
             add(new ColorCommand());
             add(new DuelCommand());
             add(new ShopCommand());
+            add(new AlignmentCommand());
         }};
     }
 

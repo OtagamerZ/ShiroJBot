@@ -30,10 +30,12 @@ public class StartCommand extends Command {
             return;
         }
 
-        Beyblade bb = new Beyblade();
-        bb.setId(author.getId());
-        bb.setName(txt);
-        MySQL.sendBeybladeToDB(bb);
-        System.out.println("Você pegou sua Beyblade, dêem as boas vindas para " + bb.getName() + "!");
+        channel.sendMessage(":hourglass: Gerando dados...").queue(m -> {
+            Beyblade bb = new Beyblade();
+            bb.setId(author.getId());
+            bb.setName(txt);
+            MySQL.sendBeybladeToDB(bb);
+            m.editMessage("Você pegou sua Beyblade, dêem as boas vindas para " + bb.getName() + "!").queue();
+        });
     }
 }
