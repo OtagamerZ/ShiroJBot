@@ -100,7 +100,8 @@ public class ShopCommand extends Command {
                 eb.addField(":shield: Melhorar estabilidade (Aumenta a defesa):", Math.round(15 * bb.getStability() + bb.getStrength() + bb.getSpeed() + bb.getStability()) + " pontos de combate\nDiga **" + prefixo + "bshop estabilidade** para comprar", false);
                 eb.addField(":heart: Melhorar vida (Aumenta a vida):", Math.round(bb.getLife() / 2) + " pontos de combate\nDiga **" + prefixo + "bshop vida** para comprar", false);
 
-                m.editMessage(":white_check_mark: Pronto!").embed(eb.build()).queue();
+                m.delete().queue();
+                channel.sendMessage(eb.build()).queue();
                 return;
             }
 
