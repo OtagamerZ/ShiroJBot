@@ -32,6 +32,7 @@ import java.math.RoundingMode;
 import java.net.URL;
 import java.time.Instant;
 import java.util.Objects;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class Helper {
@@ -200,5 +201,9 @@ public class Helper {
         } else {
             return 1.0f;
         }
+    }
+
+    public static int rng(int maxValue) {
+        return Math.abs(new Random().nextInt(maxValue));
     }
 }
