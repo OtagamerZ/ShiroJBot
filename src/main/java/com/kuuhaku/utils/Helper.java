@@ -460,20 +460,4 @@ public class Helper {
             });
         }
     }
-
-    public static void embedConfig(Message message) throws IOException {
-        EmbedBuilder eb = new EmbedBuilder();
-
-        eb.setColor(Helper.colorThief(message.getGuild().getIconUrl()));
-        eb.setTitle("⚙ | Configurações do servidor");
-        eb.addField("\uD83D\uDDDD » Prefixo", SQLite.getGuildPrefix(message.getGuild().getId()) + "`", true);
-        eb.addBlankField(true);
-        eb.addBlankField(true);
-        eb.addField("\uD83D\uDCD6 » Canal Boas-vindas", SQLite.getGuildCanalBV(message.getGuild().getId(), true), true);
-        eb.addField("\uD83D\uDCDD » Mensagem de Boas-vindas", SQLite.getGuildMsgBV(message.getGuild().getId(), true), true);
-        eb.addField("\uD83D\uDCD6 » Canal Adeus", SQLite.getGuildCanalAdeus(message.getGuild().getId(), true), true);
-        eb.addField("\uD83D\uDCDD » Mensagem de Adeus", SQLite.getGuildMsgAdeus(message.getGuild().getId(), true), true);
-
-        message.getTextChannel().sendMessage(eb.build()).queue();
-    }
 }

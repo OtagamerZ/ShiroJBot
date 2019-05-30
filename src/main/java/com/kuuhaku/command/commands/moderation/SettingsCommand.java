@@ -4,8 +4,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.guildConfig;
-import com.kuuhaku.utils.Helper;
-import net.dv8tion.jda.core.EmbedBuilder;
+import com.kuuhaku.utils.Settings;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 
@@ -24,7 +23,7 @@ public class SettingsCommand extends Command {
 
 		if(args.length == 0) {
 			try {
-				Helper.embedConfig(message);
+				Settings.embedConfig(message);
 			} catch (IOException err) {
 				channel.sendMessage(":x: | Ocorreu um erro durante o processo, os meus developers já foram notificados.").queue();
 				err.printStackTrace();
@@ -36,22 +35,23 @@ public class SettingsCommand extends Command {
 
 		switch(args[0].toLowerCase()) {
 			case "prefix":
-
-				if(args.length < 2) { channel.sendMessage("O prefixo atual deste servidor é `" + prefix + "`.").queue(); return; }
-
-				String newPrefix = args[1].trim();
-				if(newPrefix.length() > 5) { channel.sendMessage(":x: | O prefixo `" + newPrefix + "` contem mais de 5 carateres, não pode.").queue(); return; }
-
-				SQLite.updateGuildPrefix(newPrefix, gc);
-				channel.sendMessage("✅ | O prefixo deste servidor foi trocado para `" + newPrefix + "` com sucesso.").queue();
+			case "prefixo":
+				Settings.updatePrefix(args, message, gc);
+				break;
+			case "cbv":
+			case "canalbv":
+				Settings.updateCanalBV(args, message, gc);
+				break;
+			case "cadeus":
+			case "canaladeus":
+				Settings.updateCanalAdeus(args, message, gc);
 				break;
 			default:
 				try {
-					Helper.embedConfig(message);
+					Settings.embedConfig(message);
 				} catch (IOException err) {
 					channel.sendMessage(":x: | Ocorreu um erro durante o processo, os meus developers já foram notificados.").queue();
 					err.printStackTrace();
-					return;
 				}
 		}
 	}
