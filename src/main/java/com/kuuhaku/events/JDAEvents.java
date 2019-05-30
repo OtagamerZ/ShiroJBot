@@ -22,6 +22,8 @@ import com.kuuhaku.command.commands.Reactions.HugReaction;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
+import de.androidpit.colorthief.ColorThief;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.TextChannel;
@@ -29,8 +31,16 @@ import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.events.ShutdownEvent;
 import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
+import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
+import net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class JDAEvents extends ListenerAdapter {
     @Override
@@ -93,4 +103,90 @@ public class JDAEvents extends ListenerAdapter {
 	public void onDisconnect(DisconnectEvent event) {
 		com.kuuhaku.MainANT.getInfo().getLogChannel().sendMessage(DiscordHelper.getCustomEmoteMention(com.kuuhaku.MainANT.getInfo().getGuild(), "kms") + " | Fui paraliz-... " + DiscordHelper.getCustomEmoteMention(com.kuuhaku.MainANT.getInfo().getGuild(), "yeetus")).queue();
 	}*/
+
+    @Override
+    public void onGuildMemberJoin(GuildMemberJoinEvent event) {
+        try {
+            guildConfig gc = SQLite.getGuildById(event.getGuild().getId());
+
+            if (!gc.getMsgBoasVindas().equals("")) {
+                URL url = new URL(event.getUser().getAvatarUrl());
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setRequestProperty("User-Agent", "Mozilla/5.0");
+                BufferedImage image = ImageIO.read(con.getInputStream());
+
+                EmbedBuilder eb = new EmbedBuilder();
+
+                eb.setAuthor(event.getUser().getAsTag(), event.getUser().getAvatarUrl(), event.getUser().getAvatarUrl());
+                eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
+                eb.setDescription(gc.getMsgBoasVindas().replace("%user%", event.getUser().getName()).replace("%guild%", event.getGuild().getName()));
+                eb.setThumbnail(event.getUser().getAvatarUrl());
+                eb.setFooter("ID do usuário: " + event.getUser().getId(), event.getGuild().getIconUrl());
+                switch ((int) (Math.random() * 5)) {
+                    case 0:
+                        eb.setTitle("Opa, parece que temos um novo membro?");
+                        break;
+                    case 1:
+                        eb.setTitle("Mais um membro para nosso lindo servidor!");
+                        break;
+                    case 2:
+                        eb.setTitle("Um novo jogador entrou na partida, pressione start 2P!");
+                        break;
+                    case 3:
+                        eb.setTitle("Agora podemos iniciar a teamfight, um novo membro veio nos ajudar!");
+                        break;
+                    case 4:
+                        eb.setTitle("Bem-vindo ao nosso servidor, puxe uma cadeira e fique à vontade!");
+                        break;
+                }
+
+                Main.getInfo().getAPI().getGuildById(event.getGuild().getId()).getTextChannelById(gc.getCanalBV()).sendMessage(event.getUser().getAsMention()).embed(eb.build()).queue();
+            }
+        } catch (Exception ignore) {
+        }
+    }
+
+    @Override
+    public void onGuildMemberLeave(GuildMemberLeaveEvent event) {
+        try {
+            guildConfig gc = SQLite.getGuildById(event.getGuild().getId());
+
+            if (!gc.getMsgAdeus().equals("")) {
+                URL url = new URL(event.getUser().getAvatarUrl());
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setRequestProperty("User-Agent", "Mozilla/5.0");
+                BufferedImage image = ImageIO.read(con.getInputStream());
+
+                int rmsg = (int) (Math.random() * 5);
+
+                EmbedBuilder eb = new EmbedBuilder();
+
+                eb.setAuthor(event.getUser().getAsTag(), event.getUser().getAvatarUrl(), event.getUser().getAvatarUrl());
+                eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
+                eb.setThumbnail(event.getUser().getAvatarUrl());
+                eb.setDescription(gc.getMsgAdeus().replace("%user%", event.getUser().getName()).replace("%guild%", event.getGuild().getName()));
+                eb.setFooter("ID do usuário: " + event.getUser().getId() + "\n\nServidor gerenciado por " + event.getGuild().getOwner().getEffectiveName(), event.getGuild().getOwner().getUser().getAvatarUrl());
+                switch (rmsg) {
+                    case 0:
+                        eb.setTitle("Nãããoo...um membro deixou este servidor!");
+                        break;
+                    case 1:
+                        eb.setTitle("O quê? Temos um membro a menos neste servidor!");
+                        break;
+                    case 2:
+                        eb.setTitle("Alguém saiu do servidor, deve ter acabado a pilha, só pode!");
+                        break;
+                    case 3:
+                        eb.setTitle("Bem, alguém não está mais neste servidor, que pena!");
+                        break;
+                    case 4:
+                        eb.setTitle("Saíram do servidor bem no meio de uma teamfight, da pra acreditar?");
+                        break;
+                }
+
+                Main.getInfo().getAPI().getGuildById(event.getGuild().getId()).getTextChannelById(gc.getCanalAdeus()).sendMessage(eb.build()).queue();
+            }
+        } catch (Exception ignore) {
+        }
+    }
 }
