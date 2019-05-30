@@ -15,7 +15,7 @@
  *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.misc;
+package com.kuuhaku.command.commands.moderation;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
