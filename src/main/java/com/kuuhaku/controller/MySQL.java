@@ -3,10 +3,7 @@ package com.kuuhaku.controller;
 import com.kuuhaku.model.*;
 
 import javax.persistence.*;
-import javax.xml.crypto.Data;
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class MySQL {
@@ -29,9 +26,9 @@ public class MySQL {
         EntityManager em = getEntityManager();
 
         em.getTransaction().begin();
-        em.merge(data.getCaDump());
-        em.merge(data.getmDump());
-        em.merge(data.getGcDump());
+        data.getCaDump().forEach(em::merge);
+        data.getmDump().forEach(em::merge);
+        data.getGcDump().forEach(em::merge);
         em.getTransaction().commit();
     }
 
