@@ -28,9 +28,11 @@ public class ColorCommand extends Command {
             return;
         }
 
-        Beyblade bb = MySQL.getBeybladeById(author.getId());
-        Objects.requireNonNull(bb).setColor(args[0]);
-        MySQL.sendBeybladeToDB(bb);
-        System.out.println("Cor trocada com sucesso!");
+        channel.sendMessage(":hourglass: Analizando...").queue(m -> {
+            Beyblade bb = MySQL.getBeybladeById(author.getId());
+            Objects.requireNonNull(bb).setColor(args[0]);
+            MySQL.sendBeybladeToDB(bb);
+            m.editMessage("Cor trocada com sucesso!").queue();
+        });
     }
 }
