@@ -22,6 +22,7 @@ import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.events.generic.GenericMessageEvents;
 import com.kuuhaku.events.guild.GuildEvents;
+import com.kuuhaku.events.guild.GuildUpdateEvents;
 import com.kuuhaku.managers.CommandManager;
 import com.kuuhaku.model.DataDump;
 import com.kuuhaku.utils.Helper;
@@ -59,6 +60,7 @@ public class Main implements JobListener {
         api.addEventListener(new JDAEvents());
         api.addEventListener(new GuildEvents());
         api.addEventListener(new GenericMessageEvents());
+        api.addEventListener(new GuildUpdateEvents());
 
         info.setStartTime(Instant.now().getEpochSecond());
 

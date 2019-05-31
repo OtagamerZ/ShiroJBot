@@ -50,7 +50,7 @@ public class SQLite {
 
         emf.getCache().evictAll();
 
-        System.out.println("Ligação à base de dados estabelecida.");
+        System.out.println("✅ | Ligação à base de dados estabelecida.");
     }
 
     private static EntityManager getEntityManager() {
@@ -512,31 +512,6 @@ public class SQLite {
         em.close();
     }
 
-    public static String getGuildCanalLvlUp(String id) {
-        EntityManager em = getEntityManager();
-
-        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
-        q.setParameter(1, id);
-        guildConfig gc = (guildConfig) q.getSingleResult();
-        em.close();
-
-        String canalLvlUp = gc.getCanalLvl();
-        if (canalLvlUp == null) canalLvlUp = "Não definido.";
-
-        return canalLvlUp;
-    }
-    public static void updateGuildCanalLvlUp(String newCanalID, guildConfig gc) {
-        EntityManager em = getEntityManager();
-
-        gc.setCanalAV(newCanalID);
-
-        em.getTransaction().begin();
-        em.merge(gc);
-        em.getTransaction().commit();
-
-        em.close();
-    }
-
     public static String getGuildCargoWarn(String id) {
         EntityManager em = getEntityManager();
 
@@ -562,4 +537,105 @@ public class SQLite {
         em.close();
     }
 
+    /*
+    public static Map<String, Object> getGuildCargoNew(String id) {
+        EntityManager em = getEntityManager();
+
+        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+        q.setParameter(1, id);
+        guildConfig gc = (guildConfig) q.getSingleResult();
+        em.close();
+
+        return gc.getCargoNew();
+    }
+    public static void updateGuildCargoNew(JSONObject newCargoID, guildConfig gc, String addOrRemove) {
+        EntityManager em = getEntityManager();
+
+        if(addOrRemove.equals("add")) {
+            gc.setCargoNew(newCargoID);
+        } else {
+            Map<String, Object> hm = newCargoID.toMap();
+            gc.getCargoNew();
+        }
+
+        em.getTransaction().begin();
+        em.merge(gc);
+        em.getTransaction().commit();
+
+        em.close();
+    }
+    */
+
+    public static String getGuildCanalLvlUp(String id) {
+        EntityManager em = getEntityManager();
+
+        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+        q.setParameter(1, id);
+        guildConfig gc = (guildConfig) q.getSingleResult();
+        em.close();
+
+        String canalLvlUp = gc.getCanalLvl();
+        if (canalLvlUp == null) canalLvlUp = "Não definido.";
+
+        return canalLvlUp;
+    }
+    public static void updateGuildCanalLvlUp(String newCanalID, guildConfig gc) {
+        EntityManager em = getEntityManager();
+
+        gc.setCanalLvl(newCanalID);
+
+        em.getTransaction().begin();
+        em.merge(gc);
+        em.getTransaction().commit();
+
+        em.close();
+    }
+
+    public static Boolean getGuildLvlUpNotif(String id) {
+        EntityManager em = getEntityManager();
+
+        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+        q.setParameter(1, id);
+        guildConfig gc = (guildConfig) q.getSingleResult();
+        em.close();
+
+        return gc.getLvlNotif();
+    }
+    public static void updateGuildLvlUpNotif(Boolean LvlUpNotif, guildConfig gc) {
+        EntityManager em = getEntityManager();
+
+        gc.setLvlNotif(LvlUpNotif);
+
+        em.getTransaction().begin();
+        em.merge(gc);
+        em.getTransaction().commit();
+        em.close();
+    }
+
+    /*
+    public static String getGuildCargosLvl(String id) {
+        EntityManager em = getEntityManager();
+
+        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+        q.setParameter(1, id);
+        guildConfig gc = (guildConfig) q.getSingleResult();
+        em.close();
+
+        String cargoWarnID = gc.getCargoWarn();
+        if (cargoWarnID == null) cargoWarnID = "Não definido.";
+
+        return cargoWarnID;
+    }
+    public static void updateGuildCargosLvl(String newCargoID, guildConfig gc) {
+        EntityManager em = getEntityManager();
+
+        gc.setCargoWarn(newCargoID);
+
+        em.getTransaction().begin();
+        em.merge(gc);
+        em.getTransaction().commit();
+
+        em.close();
+    }
+    */
 }
