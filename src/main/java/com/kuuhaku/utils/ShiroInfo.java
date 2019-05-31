@@ -37,7 +37,7 @@ public class ShiroInfo {
     private long startTime;
 
     public ShiroInfo() {
-        token = "NTcyNzg0MzA1MTM5NDgyNjg2.XOxx0A.gvatPLOCKLTYVsXXsid1V_mW0H8";
+        token = System.getenv("BOT_TOKEN");
 
         apiVersion = "3.8.3_463";
 
