@@ -22,6 +22,7 @@ import com.kuuhaku.utils.PrivilegeLevel;
 import java.util.ArrayList;
 
 public enum Category {
+	NIICHAN("Nii-chan", "Comandos dedicados apenas à Sora.", PrivilegeLevel.NIICHAN),
 	OWNER("Owner", "Comandos dedicados ao dono do bot.", PrivilegeLevel.OWNER),
 	MODERACAO("Moderação", "Comandos dedicados à staff do servidor.", PrivilegeLevel.STAFF),
 	FUN("Diversão", "Comandos para diversão.", PrivilegeLevel.USER),
