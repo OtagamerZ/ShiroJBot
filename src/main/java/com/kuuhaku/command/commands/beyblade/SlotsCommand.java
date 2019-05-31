@@ -61,7 +61,7 @@ public class SlotsCommand extends Command {
             int rosette = Collections.frequency(result, ":rosette:");
             int diamond = Collections.frequency(result, ":diamond_shape_with_a_dot_inside:");
 
-            channel.sendMessage("Aposta de " + author.getAsMention() + ": :diamond_shape_with_a_dot_inside: " + aposta[0] + " pontos.\n\n").queue(m -> {
+            channel.sendMessage("Aposta de " + author.getAsMention() + ": :diamond_shape_with_a_dot_inside: " + aposta[0] + " pontos.").queue(m -> {
                 switch (cheese) {
                     case 3:
                         aposta[0] += Math.round((float) aposta[0] * 0.8f);
@@ -123,7 +123,7 @@ public class SlotsCommand extends Command {
                 bb.addPoints(pointWin);
                 MySQL.sendBeybladeToDB(bb);
 
-                m.editMessage(m.getContentRaw() + "| " + res + "|\n\nVocê ganhou " + pointWin + " pontos!").queueAfter(2, TimeUnit.SECONDS);
+                m.editMessage(m.getContentRaw() + "\n\n| " + res + "|\n\nVocê ganhou " + pointWin + " pontos!").queueAfter(2, TimeUnit.SECONDS);
             });
         } catch (NumberFormatException e) {
             channel.sendMessage(":x: | Valor de aposta inválido, por favor utilize apenas números inteiros.").queue();
