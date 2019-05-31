@@ -44,10 +44,6 @@ public class CommandManager {
         commands = new ArrayList<Command>() {{
             //EXEMPLO: commands.add(new KillCommand());
 
-            //NIICHAN
-            add(new NiiModeCommand());
-            add(new NiiChatCommand());
-
             //OWNER
             add(new KillCommand());
             add(new LeaveCommand());

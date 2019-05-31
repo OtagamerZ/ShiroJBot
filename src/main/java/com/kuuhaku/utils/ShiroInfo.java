@@ -33,8 +33,6 @@ public class ShiroInfo {
     private JDA api;
     private ArrayList<String> developers;
     private String niichan;
-    private boolean niimode;
-    private boolean niichat;
     private long startTime;
     private boolean ready = false;
 
@@ -122,27 +120,11 @@ public class ShiroInfo {
         return niichan;
     }
 
-    public boolean isNiimode() {
-        return niimode;
-    }
-
-    public void switchNiimode() {
-        niimode = !niimode;
-    }
-
     public boolean isReady() {
         return ready;
     }
 
     public void setReady(boolean ready) {
         this.ready = ready;
-    }
-
-    public boolean isNiichat() {
-        return niichat;
-    }
-
-    public void switchNiichat() {
-        niichat = !niichat;
     }
 }
