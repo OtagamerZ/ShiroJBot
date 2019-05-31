@@ -31,6 +31,9 @@ public class Settings {
         String canalAvisos = SQLite.getGuildCanalAvisos(message.getGuild().getId());
         if(!canalAvisos.equals("Não definido.")) canalAvisos = "<#" + canalAvisos + ">";
 
+        String canalLvlUpNotif = SQLite.getGuildCanalLvlUp(message.getGuild().getId());
+        if(!canalLvlUpNotif.equals("Não definido.")) canalLvlUpNotif = "<#" + canalLvlUpNotif + ">";
+
         String cargoWarnID = SQLite.getGuildCargoWarn(message.getGuild().getId());
         //String cargoNewID = SQLite.getGuildCargoNew(message.getGuild().getId());
 
@@ -56,6 +59,8 @@ public class Settings {
         //else { eb.addField("\uD83D\uDCD1 » Cargos automáticos", cargoNewID, true); }
 
         eb.addBlankField(true); eb.addBlankField(true);
+
+        eb.addField("\uD83D\uDCD6 » Canal de notificação de level up", canalLvlUpNotif, true);
 
         eb.setFooter("Para obter ajuda sobre como configurar o seu servidor, faça: " + SQLite.getGuildPrefix(message.getGuild().getId()) +  "settings ajuda", null);
 
