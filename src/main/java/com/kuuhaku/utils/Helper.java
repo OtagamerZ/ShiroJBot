@@ -19,7 +19,6 @@ package com.kuuhaku.utils;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.MySQL;
-import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.Beyblade;
 import com.kuuhaku.model.DuelData;
 import de.androidpit.colorthief.ColorThief;
@@ -63,10 +62,6 @@ public class Helper {
     public static boolean hasPermission(Member member, PrivilegeLevel privilegeLevel) {
         return getPrivilegeLevel(member) != PrivilegeLevel.USER || privilegeLevel == PrivilegeLevel.USER;
     }
-	
-	/*public static String formatMessage(String message, String commandName, User user) {
-		return message.replaceAll("%CMD_NAME%", RegexUtils.escapeString(commandName)).replaceAll("%USER_NAME%", "<@" + user.getId() + ">");
-	}*/
 
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
