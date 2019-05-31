@@ -61,69 +61,69 @@ public class SlotsCommand extends Command {
             int rosette = Collections.frequency(result, ":rosette:");
             int diamond = Collections.frequency(result, ":diamond_shape_with_a_dot_inside:");
 
-            channel.sendMessage("Aposta de " + author.getAsMention() + ": :diamond_shape_with_a_dot_inside: " + aposta[0] + " pontos.\n\n|").queue(m -> {
+            channel.sendMessage("Aposta de " + author.getAsMention() + ": :diamond_shape_with_a_dot_inside: " + aposta[0] + " pontos.\n\n").queue(m -> {
                 switch (cheese) {
                     case 3:
-                        aposta[0] = Math.round((float) aposta[0] * 0.8f);
+                        aposta[0] += Math.round((float) aposta[0] * 0.8f);
                         break;
                     case 4:
-                        aposta[0] = Math.round((float) aposta[0] * 0.6f);
+                        aposta[0] += Math.round((float) aposta[0] * 0.6f);
                         break;
                     case 5:
-                        aposta[0] = Math.round((float) aposta[0] * 0.4f);
+                        aposta[0] += Math.round((float) aposta[0] * 0.4f);
                         break;
                 }
                 switch (lantern) {
                     case 3:
-                        aposta[0] = Math.round((float) aposta[0] * 1.3f);
+                        aposta[0] += Math.round((float) aposta[0] * 1.3f);
                         break;
                     case 4:
-                        aposta[0] = Math.round((float) aposta[0] * 1.6f);
+                        aposta[0] += Math.round((float) aposta[0] * 1.6f);
                         break;
                     case 5:
-                        aposta[0] = Math.round((float) aposta[0] * 1.9f);
+                        aposta[0] += Math.round((float) aposta[0] * 1.9f);
                         break;
                 }
                 switch (money) {
                     case 3:
-                        aposta[0] = Math.round((float) aposta[0] * 1.4f);
+                        aposta[0] += Math.round((float) aposta[0] * 1.4f);
                         break;
                     case 4:
-                        aposta[0] = Math.round((float) aposta[0] * 1.8f);
+                        aposta[0] += Math.round((float) aposta[0] * 1.8f);
                         break;
                     case 5:
-                        aposta[0] = Math.round((float) aposta[0] * 2.2f);
+                        aposta[0] += Math.round((float) aposta[0] * 2.2f);
                         break;
                 }
                 switch (rosette) {
                     case 3:
-                        aposta[0] = Math.round((float) aposta[0] * 1.5f);
+                        aposta[0] += Math.round((float) aposta[0] * 1.5f);
                         break;
                     case 4:
-                        aposta[0] = Math.round((float) aposta[0] * 2.0f);
+                        aposta[0] += Math.round((float) aposta[0] * 2.0f);
                         break;
                     case 5:
-                        aposta[0] = Math.round((float) aposta[0] * 2.5f);
+                        aposta[0] += Math.round((float) aposta[0] * 2.5f);
                         break;
                 }
                 switch (diamond) {
                     case 3:
-                        aposta[0] = aposta[0] * 2;
+                        aposta[0] += aposta[0] * 2;
                         break;
                     case 4:
-                        aposta[0] = aposta[0] * 3;
+                        aposta[0] += aposta[0] * 3;
                         break;
                     case 5:
-                        aposta[0] = aposta[0] * 4;
+                        aposta[0] += aposta[0] * 4;
                         break;
                 }
 
+                String res = String.join(" | ", result.toArray(new String[0]));
                 int pointWin = aposta[0] - Integer.parseInt(args[0]);
                 bb.addPoints(pointWin);
                 MySQL.sendBeybladeToDB(bb);
 
-                result.forEach(r -> m.editMessage(m.getContentRaw() + " " + r + " |").queueAfter(2, TimeUnit.SECONDS));
-                m.editMessage(m.getContentRaw() + "\n\nVocê ganhou " + pointWin + " pontos!").queue();
+                m.editMessage(m.getContentRaw() + "| " + res + "|\n\nVocê ganhou " + pointWin + " pontos!").queueAfter(2, TimeUnit.SECONDS);
             });
         } catch (NumberFormatException e) {
             channel.sendMessage(":x: | Valor de aposta inválido, por favor utilize apenas números inteiros.").queue();
