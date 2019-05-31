@@ -43,6 +43,7 @@ public class guildConfig {
     private String lvlNotif = "true";
     private String cargoNew = "{}";
     private boolean anyTell = false;
+    private boolean markForDelete;
 
     public guildConfig() {
     }
@@ -173,5 +174,13 @@ public class guildConfig {
 
     public void setAnyTell(boolean anyTell) {
         this.anyTell = anyTell;
+    }
+
+    public boolean isMarkForDelete() {
+        return markForDelete;
+    }
+
+    public void setMarkForDelete(boolean markForDelete) {
+        this.markForDelete = markForDelete;
     }
 }

@@ -31,6 +31,7 @@ public class Member {
     private String warns = "";
     private String bg = "http://i0.wp.com/cakeisnotalie.net/wp-content/uploads/2014/10/PoroSnow.jpg";
     private String badges = "[false,false,false,false,false,false,false,false,false,false,false,false,false]";
+    private boolean markForDelete;
 
     public Member() {
 
@@ -115,5 +116,13 @@ public class Member {
 
     public void setBg(String bg) {
         this.bg = bg;
+    }
+
+    public boolean isMarkForDelete() {
+        return markForDelete;
+    }
+
+    public void setMarkForDelete(boolean markForDelete) {
+        this.markForDelete = markForDelete;
     }
 }
