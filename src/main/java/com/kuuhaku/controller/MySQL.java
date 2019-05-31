@@ -13,8 +13,8 @@ public class MySQL {
 
     private static EntityManager getEntityManager() {
         Map<String, String> props = new HashMap<>();
-        props.put("javax.persistence.jdbc.user", "OH-34179");
-        props.put("javax.persistence.jdbc.password", "OP-31814");
+        props.put("javax.persistence.jdbc.user", System.getenv("DB_LOGIN"));
+        props.put("javax.persistence.jdbc.password", System.getenv("DB_PASS"));
 
         if (emf == null) emf = Persistence.createEntityManagerFactory("shiro", props);
 
