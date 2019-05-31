@@ -29,10 +29,7 @@ import com.kuuhaku.command.commands.information.ReportBugCommand;
 import com.kuuhaku.command.commands.misc.*;
 import com.kuuhaku.command.commands.moderation.RemoveAnswerCommand;
 import com.kuuhaku.command.commands.moderation.SettingsCommand;
-import com.kuuhaku.command.commands.owner.KillCommand;
-import com.kuuhaku.command.commands.owner.LeaveCommand;
-import com.kuuhaku.command.commands.owner.PartnerTagCommand;
-import com.kuuhaku.command.commands.owner.ToxicTagCommand;
+import com.kuuhaku.command.commands.owner.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +43,9 @@ public class CommandManager {
     public CommandManager() {
         commands = new ArrayList<Command>() {{
             //EXEMPLO: commands.add(new KillCommand());
+
+            //NIICHAN
+            add(new NiiModeCommand());
 
             //OWNER
             add(new KillCommand());
