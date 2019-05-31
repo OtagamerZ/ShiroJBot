@@ -56,6 +56,7 @@ public class Main implements JobListener {
         JDA api = new JDABuilder(AccountType.BOT).setToken(info.getToken()).build().awaitReady();
         info.setAPI(api);
         Main.api = api;
+        api.getPresence().setGame(Game.playing("Iniciando..."));
 
         api.addEventListener(new JDAEvents());
         api.addEventListener(new GuildEvents());
