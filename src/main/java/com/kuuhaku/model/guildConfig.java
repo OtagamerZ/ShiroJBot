@@ -17,6 +17,7 @@
 
 package com.kuuhaku.model;
 
+import com.kuuhaku.Main;
 import org.json.JSONObject;
 
 import javax.persistence.Entity;
@@ -29,7 +30,7 @@ public class guildConfig {
     private String guildID;
     private String name;
     private String owner;
-    private String prefix = "!";
+    private String prefix = Main.getInfo().getDefaultPrefix();
     private String msgBoasVindas = "Seja bem-vindo(a) ao %guild%, %user%!";
     private String msgAdeus = "Ahh...%user% deixou este servidor!";
     private String canalbv = null;
@@ -43,124 +44,11 @@ public class guildConfig {
     private String cargoNew = "{}";
     private boolean anyTell = false;
 
-    public guildConfig() {
-
-    }
-
-    public String getGuildId() {
-        return guildID;
-    }
-
-    public void setGuildId(String id) {
-        this.guildID = id;
-    }
-
-    public String getPrefix() { return prefix; }
-
-    public void setPrefix(String prefix) {
-        this.prefix = prefix;
-    }
-
-    public String getMsgBoasVindas() {
-        return msgBoasVindas;
-    }
-
-    public void setMsgBoasVindas(String msgBoasVindas) {
-        this.msgBoasVindas = msgBoasVindas;
-    }
-
-    public String getMsgAdeus() {
-        return msgAdeus;
-    }
-
-    public void setMsgAdeus(String msgAdeus) {
-        this.msgAdeus = msgAdeus;
-    }
-
-    public String getCanalBV() {
-        return canalbv;
-    }
-
-    public void setCanalBV(String canalbv) {
-        this.canalbv = canalbv;
-    }
-
-    public String getCanalAV() {
-        return canalav;
-    }
-
-    public void setCanalAV(String canalav) {
-        this.canalav = canalav;
-    }
-
-    public String getCargoWarn() {
-        return cargowarn;
-    }
-
-    public void setCargoWarn(String cargowarn) {
-        this.cargowarn = cargowarn;
-    }
-
-    public Map<String, Object> getCargoslvl() {
-        return new JSONObject(cargoslvl).toMap();
-    }
-
-    public void setCargoslvl(JSONObject cargoslvl) {
-        this.cargoslvl = cargoslvl.toString();
-    }
-
-    public boolean getLvlNotif() {
-        return Boolean.parseBoolean(lvlNotif);
-    }
-
-    public void setLvlNotif(boolean lvlNotif) {
-        this.lvlNotif = Boolean.toString(lvlNotif);
-    }
-
-    public Map<String, Object> getCargoNew() {
-        return new JSONObject(cargoNew).toMap();
-    }
-
-    public void setCargoNew(JSONObject cargoNew) {
-        this.cargoNew = cargoNew.toString();
-    }
-
-    public String getCanalSUG() {
-        return canalsug;
-    }
-
-    public void setCanalSUG(String canalsug) {
-        this.canalsug = canalsug;
-    }
-
-    public boolean isAnyTell() {
-        return anyTell;
-    }
-
-    public void setAnyTell(boolean anyTell) {
-        this.anyTell = anyTell;
-    }
-
-    public String getCanalAdeus() {
-        return canaladeus;
-    }
-
-    public void setCanalAdeus(String canaladeus) {
-        this.canaladeus = canaladeus;
-    }
-
-    public String getCanallvl() {
-        return canallvl;
-    }
-
-    public void setCanallvl(String canallvl) {
-        this.canallvl = canallvl;
-    }
+    public guildConfig() { }
 
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -168,8 +56,98 @@ public class guildConfig {
     public String getOwner() {
         return owner;
     }
-
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public String getGuildId() {
+        return guildID;
+    }
+    public void setGuildId(String id) {
+        this.guildID = id;
+    }
+
+    public String getPrefix() { return prefix; }
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+
+    public String getCanalBV() {
+        return canalbv;
+    }
+    public void setCanalBV(String canalbv) {
+        this.canalbv = canalbv;
+    }
+    public String getMsgBoasVindas() {
+        return msgBoasVindas;
+    }
+    public void setMsgBoasVindas(String msgBoasVindas) {
+        this.msgBoasVindas = msgBoasVindas;
+    }
+
+    public String getCanalAdeus() {
+        return canaladeus;
+    }
+    public void setCanalAdeus(String canaladeus) {
+        this.canaladeus = canaladeus;
+    }
+    public String getMsgAdeus() {
+        return msgAdeus;
+    }
+    public void setMsgAdeus(String msgAdeus) {
+        this.msgAdeus = msgAdeus;
+    }
+
+    public String getCanalAV() {
+        return canalav;
+    }
+    public void setCanalAV(String canalav) {
+        this.canalav = canalav;
+    }
+
+    public String getCargoWarn() {
+        return cargowarn;
+    }
+    public void setCargoWarn(String cargowarn) {
+        this.cargowarn = cargowarn;
+    }
+
+    public String getCanalSUG() {
+        return canalsug;
+    }
+    public void setCanalSUG(String canalsug) {
+        this.canalsug = canalsug;
+    }
+
+    public String getCanalLvl() {
+        return canallvl;
+    }
+    public void setCanalLvl(String canallvl) {
+        this.canallvl = canallvl;
+    }
+    public Map<String, Object> getCargoslvl() {
+        return new JSONObject(cargoslvl).toMap();
+    }
+    public void setCargosLvl(JSONObject cargoslvl) {
+        this.cargoslvl = cargoslvl.toString();
+    }
+    public boolean getLvlNotif() {
+        return Boolean.parseBoolean(lvlNotif);
+    }
+    public void setLvlNotif(boolean lvlNotif) {
+        this.lvlNotif = Boolean.toString(lvlNotif);
+    }
+    public Map<String, Object> getCargoNew() {
+        return new JSONObject(cargoNew).toMap();
+    }
+    public void setCargoNew(JSONObject cargoNew) {
+        this.cargoNew = cargoNew.toString();
+    }
+
+    public boolean isAnyTell() {
+        return anyTell;
+    }
+    public void setAnyTell(boolean anyTell) {
+        this.anyTell = anyTell;
     }
 }
