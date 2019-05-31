@@ -19,6 +19,7 @@ package com.kuuhaku.utils;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.MySQL;
+import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.model.Beyblade;
 import com.kuuhaku.model.DuelData;
 import de.androidpit.colorthief.ColorThief;
@@ -45,8 +46,6 @@ import java.util.function.Consumer;
 public class Helper {
 
     public static final String VOID = "\u200B";
-    public static List<DuelData> dd = new ArrayList<>();
-    public static Map<String, DuelData> duels = new HashMap<>();
 
     private static PrivilegeLevel getPrivilegeLevel(Member member) {
         if (Main.getInfo().getNiiChan().contains(member.getUser().getId())) {
@@ -217,10 +216,10 @@ public class Helper {
     }
 
     public static void battle(MessageReceivedEvent event) {
-        if (dd.stream().noneMatch(d -> d.getP1() == event.getAuthor() || d.getP2() == event.getAuthor())) {
+        if (JDAEvents.dd.stream().noneMatch(d -> d.getP1() == event.getAuthor() || d.getP2() == event.getAuthor())) {
             return;
         }
-        @SuppressWarnings("OptionalGetWithoutIsPresent") DuelData duel = dd.stream().filter(d -> d.getP1() == event.getAuthor() || d.getP2() == event.getAuthor()).findFirst().get();
+        @SuppressWarnings("OptionalGetWithoutIsPresent") DuelData duel = JDAEvents.dd.stream().filter(d -> d.getP1() == event.getAuthor() || d.getP2() == event.getAuthor()).findFirst().get();
         boolean player1Turn = duel.isP1turn();
         EmbedBuilder eb = new EmbedBuilder();
 
@@ -400,7 +399,7 @@ public class Helper {
                 assert bb != null;
                 bb.addWins();
                 MySQL.sendBeybladeToDB(bb);
-                dd.removeIf(d -> d.getP1() == event.getMessage().getAuthor() || d.getP2() == event.getMessage().getAuthor());
+                JDAEvents.dd.removeIf(d -> d.getP1() == event.getMessage().getAuthor() || d.getP2() == event.getMessage().getAuthor());
             } else {
                 event.getMessage().getChannel().sendTyping().queue(tm -> event.getMessage().getChannel().sendMessage(duel.getP2().getAsMention() + " desistiu. A vitória é de " + duel.getP1().getAsMention() + "!").queue());
                 Beyblade bl = MySQL.getBeybladeById(duel.getP2().getId());
@@ -412,7 +411,7 @@ public class Helper {
                 assert bb != null;
                 bb.addWins();
                 MySQL.sendBeybladeToDB(bb);
-                dd.removeIf(d -> d.getP1() == event.getMessage().getAuthor() || d.getP2() == event.getMessage().getAuthor());
+                JDAEvents.dd.removeIf(d -> d.getP1() == event.getMessage().getAuthor() || d.getP2() == event.getMessage().getAuthor());
             }
         }
         if (duel.getB2().getLife() <= 0) {
@@ -428,7 +427,7 @@ public class Helper {
             bb.addWins();
             bb.addPoints(pointWin == 0 ? 1 : pointWin);
             MySQL.sendBeybladeToDB(bb);
-            dd.removeIf(d -> d.getP1() == event.getMessage().getAuthor() || d.getP2() == event.getMessage().getAuthor());
+            JDAEvents.dd.removeIf(d -> d.getP1() == event.getMessage().getAuthor() || d.getP2() == event.getMessage().getAuthor());
         } else if (duel.getB1().getLife() <= 0) {
             int pointWin = Helper.rng(Math.round(duel.getB1().getStrength() + duel.getB1().getSpeed() + duel.getB1().getStability() + (float) duel.getB1().getWins() / (duel.getB1().getLoses() == 0 ? 1 : duel.getB1().getLoses())));
             event.getMessage().getChannel().sendTyping().queue(tm -> event.getMessage().getChannel().sendMessage(duel.getP2().getAsMention() + " triunfou sobre " + duel.getP1().getAsMention() + ". Temos um vencedor!\n\n" + duel.getB2().getName() + " ganhou **" + pointWin + "** pontos de combate!").queue());
@@ -442,14 +441,14 @@ public class Helper {
             bb.addWins();
             bb.addPoints(pointWin == 0 ? 1 : pointWin);
             MySQL.sendBeybladeToDB(bb);
-            dd.removeIf(d -> d.getP1() == event.getMessage().getAuthor() || d.getP2() == event.getMessage().getAuthor());
+            JDAEvents.dd.removeIf(d -> d.getP1() == event.getMessage().getAuthor() || d.getP2() == event.getMessage().getAuthor());
         } else if (event.getMessage().getContentRaw().equalsIgnoreCase("atacar") || event.getMessage().getContentRaw().equalsIgnoreCase("especial") || event.getMessage().getContentRaw().equalsIgnoreCase("defender")) {
             eb.setTitle("Dados do duelo:");
             eb.setDescription(duel.getB1().getName() + " *VS* " + duel.getB2().getName());
             eb.addField(duel.getB1().getName(), "Vida: " + duel.getB1().getLife(), true);
             eb.addField(duel.getB2().getName(), "Vida: " + duel.getB2().getLife(), true);
             event.getMessage().getChannel().sendTyping().queue(tm -> event.getMessage().getChannel().sendMessage(eb.build()).queue());
-            dd.stream().filter(d -> d.getP1() == event.getMessage().getAuthor() || d.getP2() == event.getMessage().getAuthor()).findFirst().ifPresent(m -> {
+            JDAEvents.dd.stream().filter(d -> d.getP1() == event.getMessage().getAuthor() || d.getP2() == event.getMessage().getAuthor()).findFirst().ifPresent(m -> {
                 m.getB1().setLife(duel.getB1().getLife());
                 m.getB2().setLife(duel.getB2().getLife());
             });
