@@ -51,7 +51,7 @@ public class GenericMessageEvents extends ListenerAdapter {
             if (Main.getInfo().isNiimode() && author == Main.getInfo().getUserByID(Main.getInfo().getNiiChan())) {
                 try {
                     message.delete().queue();
-                    channel.sendMessage(rawMessage).queue();
+                    channel.sendMessage(rawMessage.startsWith(";") ? rawMessage.substring(1) : rawMessage).queue();
                 } catch (InsufficientPermissionException ignore) {
                 }
             }
@@ -145,7 +145,7 @@ public class GenericMessageEvents extends ListenerAdapter {
                 } catch (InsufficientPermissionException ignore){
                 }
 
-                if (Main.getInfo().isNiichat() && (author == Main.getInfo().getUserByID(Main.getInfo().getNiiChan()) || author == Main.getInfo().getAPI().getSelfUser())) {
+                if (rawMessage.startsWith(";") && Main.getInfo().isNiichat() && (author == Main.getInfo().getUserByID(Main.getInfo().getNiiChan()) || author == Main.getInfo().getAPI().getSelfUser())) {
                     Main.getInfo().switchNiimode();
                 }
             }
