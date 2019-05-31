@@ -35,13 +35,17 @@
 package com.kuuhaku.events;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.MySQL;
+import com.kuuhaku.controller.SQLite;
+import com.kuuhaku.model.DataDump;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 public class ScheduledEvents implements Job {
     @Override
-    public void execute(JobExecutionContext context) throws JobExecutionException {
+    public void execute(JobExecutionContext context) {
         Main.getInfo().getAPI().getPresence().setGame(Main.getRandomGame());
+        MySQL.dumpData(new DataDump(SQLite.getCADump(), SQLite.getMemberDump(), SQLite.getGuildDump()));
     }
 }
