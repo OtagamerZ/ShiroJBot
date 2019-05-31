@@ -29,15 +29,13 @@ import java.time.format.DateTimeFormatter;
 public class ReportBugCommand extends Command {
 
     public ReportBugCommand() {
-        super("bug", new String[]{"sendbug", "feedback"}, "<mensagem>", "Envia um relatório de bug para os devs.", Category.MISC);
+        super("bug", new String[]{"sendbug", "feedback"}, "<mensagem>", "Envia um relatório de bug para os devs.", Category.INFO);
     }
 
     @Override
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-        if (args.length == 0) {
-            channel.sendMessage(":x: | Você precisa definir uma mensagem.").queue();
-            return;
-        }
+
+        if (args.length == 0) { channel.sendMessage(":x: | Você precisa definir uma mensagem.").queue(); return; }
 
         String mensagem = String.join(" ", args).trim();
         DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy - hh:mm");
@@ -45,10 +43,11 @@ public class ReportBugCommand extends Command {
         EmbedBuilder eb = new EmbedBuilder();
 
         eb.setTitle("Relatório de bug");
-        eb.addField("Enviador por:", author.getAsTag() + " (" + guild.getName() + "| " + channel.getName() + ")", true);
+        eb.addField("Enviador por:", author.getAsTag() + " (" + guild.getName() + " | " + channel.getName() + ")", true);
         eb.addField("Enviado em:", df.format(message.getCreationTime()), true);
         eb.addField("Relatório:", "```" + mensagem + "```", false);
 
         Main.getInfo().getDevelopers().forEach(dev -> Main.getInfo().getAPI().getUserById(dev).openPrivateChannel().queue(m -> m.sendMessage(eb.build()).queue()));
+        channel.sendMessage("✅ | Bug reportado com sucesso.").queue();
     }
 }
