@@ -61,7 +61,7 @@ public class Helper {
     }
 
     public static boolean hasPermission(Member member, PrivilegeLevel privilegeLevel) {
-        if (getPrivilegeLevel(member) != PrivilegeLevel.NIICHAN && privilegeLevel == PrivilegeLevel.NIICHAN) {
+        if ((getPrivilegeLevel(member) != PrivilegeLevel.NIICHAN || member.getUser() != Main.getInfo().getAPI().getSelfUser()) && privilegeLevel == PrivilegeLevel.NIICHAN) {
             return false;
         } else if (getPrivilegeLevel(member) != PrivilegeLevel.STAFF && privilegeLevel == PrivilegeLevel.STAFF) {
             return false;
