@@ -25,19 +25,22 @@ public class DuelCommand extends Command {
             channel.sendMessage(":x: | Este usuário não possui uma Beyblade.").queue();
         }
 
-        if (message.getMentionedUsers().size() > 0) {
-            if (MySQL.getBeybladeById(message.getMentionedUsers().get(0).getId()) != null) {
-                DuelData dd = new DuelData(message.getAuthor(), message.getMentionedUsers().get(0));
-                if (JDAEvents.duels.containsValue(dd))
-                    message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Você já possui um duelo pendente!").queue());
-                else message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(message.getMentionedMembers().get(0).getAsMention() + ", você foi desafiado a um duelo de Beyblades por " + message.getAuthor().getAsMention() + ". Se deseja aceitar, clique no botão abaixo:").queue(m -> {
-                            m.addReaction("\u2694").queue();
-                    JDAEvents.duels.put(m.getId(), dd);
-                        }
-                ));
-            } else {
-                message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Este usuário ainda não possui uma Beyblade.").queue());
+        channel.sendMessage(":hourglass: Coletando dados...").queue(m -> {
+            if (message.getMentionedUsers().size() > 0) {
+                if (MySQL.getBeybladeById(message.getMentionedUsers().get(0).getId()) != null) {
+                    DuelData dd = new DuelData(message.getAuthor(), message.getMentionedUsers().get(0));
+                    if (JDAEvents.duels.containsValue(dd))
+                        m.editMessage("Você já possui um duelo pendente!").queue();
+                    else
+                        m.editMessage(message.getMentionedMembers().get(0).getAsMention() + ", você foi desafiado a um duelo de Beyblades por " + message.getAuthor().getAsMention() + ". Se deseja aceitar, clique no botão abaixo:").queue(ms -> {
+                                    ms.addReaction("\u2694").queue();
+                                    JDAEvents.duels.put(ms.getId(), dd);
+                                }
+                        );
+                } else {
+                    m.editMessage("Este usuário ainda não possui uma Beyblade.").queue();
+                }
             }
-        }
+        });
     }
 }
