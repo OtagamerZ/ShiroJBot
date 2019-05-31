@@ -1,6 +1,4 @@
 /*
- * Copyright (C) 2019 Yago Garcia Sanches Gimenez / KuuHaKu
- *
  * This file is part of Shiro J Bot.
  *
  *     Shiro J Bot is free software: you can redistribute it and/or modify
@@ -14,7 +12,7 @@
  *     GNU General Public License for more details.
  *
  *     You should have received a copy of the GNU General Public License
- *     along with Shiro J Bot.  If not, see https://www.gnu.org/licenses/
+ *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
 package com.kuuhaku.controller;
@@ -35,7 +33,7 @@ public class Anime {
         con.setConnectTimeout(5000);
         con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
         con.addRequestProperty("Accept", "application/json");
-        con.addRequestProperty("User-Agent", "OtagamerZ");
+        con.addRequestProperty("User-Agent", "Mozilla/5.0");
         con.setDoOutput(true);
         con.setDoInput(true);
         con.setRequestMethod("POST");
