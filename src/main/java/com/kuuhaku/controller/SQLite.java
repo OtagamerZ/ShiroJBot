@@ -129,7 +129,6 @@ public class SQLite {
         guildConfig gc = new guildConfig();
         gc.setName(guild.getName());
         gc.setGuildId(guild.getId());
-        gc.setOwner(guild.getOwner().getUser().getAsTag());
 
         em.getTransaction().begin();
         em.merge(gc);
@@ -328,18 +327,6 @@ public class SQLite {
         EntityManager em = getEntityManager();
 
         gc.setName(newName);
-
-        em.getTransaction().begin();
-        em.merge(gc);
-        em.getTransaction().commit();
-
-        em.close();
-    }
-
-    public static void updateGuildOwner(String newOwner, guildConfig gc) {
-        EntityManager em = getEntityManager();
-
-        gc.setOwner(newOwner);
 
         em.getTransaction().begin();
         em.merge(gc);

@@ -19,7 +19,6 @@ package com.kuuhaku.events.guild;
 
 import com.kuuhaku.controller.SQLite;
 import net.dv8tion.jda.core.events.guild.update.GuildUpdateNameEvent;
-import net.dv8tion.jda.core.events.guild.update.GuildUpdateOwnerEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 public class GuildUpdateEvents extends ListenerAdapter {
@@ -27,10 +26,5 @@ public class GuildUpdateEvents extends ListenerAdapter {
     @Override
     public void onGuildUpdateName(GuildUpdateNameEvent event) {
         SQLite.updateGuildName(event.getNewName(), SQLite.getGuildById(event.getGuild().getId()));
-    }
-
-    @Override
-    public void onGuildUpdateOwner(GuildUpdateOwnerEvent event) {
-        SQLite.updateGuildOwner(event.getNewOwner().toString(), SQLite.getGuildById(event.getGuild().getId()));
     }
 }
