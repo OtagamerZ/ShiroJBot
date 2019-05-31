@@ -14,9 +14,7 @@ public class NiiChatCommand extends Command {
 
     @Override
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-        if (Main.getInfo().isNiimode()) {
-            Main.getInfo().switchNiichat();
-            channel.sendMessage("Modo chat " + (Main.getInfo().isNiichat() ? "ligado!" : "desligado!")).queue();
-        }
+        Main.getInfo().switchNiichat();
+        channel.sendMessage("Modo chat " + (Main.getInfo().isNiichat() ? "ligado!" : "desligado!")).queue();
     }
 }
