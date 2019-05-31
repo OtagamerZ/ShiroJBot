@@ -64,8 +64,10 @@ public class SettingsCommand extends Command {
 			case "cargoaviso":
 				Settings.updateCargoWarn(args, message, gc);
 				break;
-//			case "":
-//			case "":
+			case "ln":
+			case "levelnotif":
+				Settings.updateLevelNotif(args, message, gc);
+				break;
 			default:
 				try {
 					Settings.embedConfig(message);
