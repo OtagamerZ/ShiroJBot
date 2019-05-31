@@ -6,8 +6,6 @@ import com.kuuhaku.command.Command;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 
-import java.sql.SQLException;
-
 public class NiiModeCommand extends Command {
 
     public NiiModeCommand() {
