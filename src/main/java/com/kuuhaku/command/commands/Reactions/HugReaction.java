@@ -58,34 +58,28 @@ public class HugReaction extends Reaction {
 
     @Override
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+
+        if (message.getMentionedUsers().size() == 0) { Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para abraçar!"); return; }
+        if (message.getMentionedUsers().size() > 1) { Helper.typeMessage(channel, ":x: | Você só pode abraçar uma pessoa por vez, vai com calma!"); return;  }
+
         try {
-            if (message.getMentionedUsers().size() > 0) {
-                if (message.getMentionedUsers().size() == 1) {
-                    HttpURLConnection con = (HttpURLConnection) new URL(ReactionsList.hug()).openConnection();
-                    con.setRequestProperty("User-Agent", "Mozilla/5.0");
+            HttpURLConnection con = (HttpURLConnection) new URL(ReactionsList.hug()).openConnection();
+            con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
-                    this.setReaction(new String[]{
-                            "Awnn...ai qualquer um shippa!",
-                            "Ai sim ein, vai pra cima garoto(a)!",
-                            "Já é o primeiro passo!"
-                    });
+            this.setReaction(new String[]{
+                "Awnn...ai qualquer um shippa!",
+                "Ai sim ein, vai pra cima garoto(a)!",
+                "Já é o primeiro passo!"
+            });
 
-                    this.setSelfTarget(new String[]{
-                            "Ow ow ow, sem pegação!",
-                            "Meu Nii-chan vai ficar bravo com isso!",
-                            "Moshi moshi, FBI-sama?"
-                    });
+            this.setSelfTarget(new String[]{
+                "Ow ow ow, sem pegação!",
+                "Meu Nii-chan vai ficar bravo com isso!",
+                "Moshi moshi, FBI-sama?"
+            });
 
-                    if (!isAnswer()) Helper.sendReaction(channel, author.getAsMention() + " abraçou " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), false);
-                    else Helper.sendReaction(channel,  message.getMentionedUsers().get(0).getAsMention() + " devolveu o abraço de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), true);
-                } else {
-                    Helper.typeMessage(channel, ":x: | Você só pode abraçar uma pessoa por vez, vai com calma!");
-                }
-            } else {
-                Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para abraçar!");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            if (!isAnswer()) Helper.sendReaction(channel, author.getAsMention() + " abraçou " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), false);
+            else Helper.sendReaction(channel,  message.getMentionedUsers().get(0).getAsMention() + " devolveu o abraço de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), true);
+        } catch (IOException e) { e.printStackTrace();  }
     }
 }

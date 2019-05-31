@@ -45,8 +45,7 @@ public class GenericMessageEvents extends ListenerAdapter {
             String prefix = "";
             try {
                 prefix = SQLite.getGuildPrefix(guild.getId());
-            } catch (NoResultException ignore) {
-            }
+            } catch (NoResultException ignore) { }
 
             if (rawMessage.startsWith(";") && author.getId().equals(Main.getInfo().getNiiChan())) {
                 try {
