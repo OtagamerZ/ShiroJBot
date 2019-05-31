@@ -38,8 +38,10 @@ import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.*;
+import java.util.Objects;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
@@ -59,7 +61,11 @@ public class Helper {
     }
 
     public static boolean hasPermission(Member member, PrivilegeLevel privilegeLevel) {
-        return getPrivilegeLevel(member) != PrivilegeLevel.USER || privilegeLevel == PrivilegeLevel.USER;
+        if (getPrivilegeLevel(member) != PrivilegeLevel.NIICHAN && privilegeLevel == PrivilegeLevel.NIICHAN) {
+            return false;
+        } else if (getPrivilegeLevel(member) != PrivilegeLevel.STAFF && privilegeLevel == PrivilegeLevel.STAFF) {
+            return false;
+        } else return getPrivilegeLevel(member) != PrivilegeLevel.USER || privilegeLevel == PrivilegeLevel.USER;
     }
 
     public static double round(double value, int places) {
@@ -209,7 +215,7 @@ public class Helper {
 
     public static Color colorThief(String url) throws IOException {
         HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
-        con.setRequestProperty("User-Client", "Mozilla/5.0");
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
         BufferedImage icon = ImageIO.read(con.getInputStream());
 
         return new Color(ColorThief.getColor(icon)[0], ColorThief.getColor(icon)[1], ColorThief.getColor(icon)[2]);
