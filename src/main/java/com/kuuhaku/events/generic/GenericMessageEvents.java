@@ -125,6 +125,7 @@ public class GenericMessageEvents extends ListenerAdapter {
                 if (found) {
                     if (!Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
                         channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
+                        break;
                     }
                     command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
                     break;
