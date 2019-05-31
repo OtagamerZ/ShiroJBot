@@ -1,0 +1,36 @@
+/*
+ * This file is part of Shiro J Bot.
+ *
+ *     Shiro J Bot is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     Shiro J Bot is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
+ */
+
+package com.kuuhaku.events.guild;
+
+import com.kuuhaku.controller.SQLite;
+import net.dv8tion.jda.core.events.guild.update.GuildUpdateNameEvent;
+import net.dv8tion.jda.core.events.guild.update.GuildUpdateOwnerEvent;
+import net.dv8tion.jda.core.hooks.ListenerAdapter;
+
+public class GuildUpdateEvents extends ListenerAdapter {
+
+    @Override
+    public void onGuildUpdateName(GuildUpdateNameEvent event) {
+        SQLite.updateGuildName(event.getNewName(), SQLite.getGuildById(event.getGuild().getId()));
+    }
+
+    @Override
+    public void onGuildUpdateOwner(GuildUpdateOwnerEvent event) {
+        SQLite.updateGuildOwner(event.getNewOwner().toString(), SQLite.getGuildById(event.getGuild().getId()));
+    }
+}

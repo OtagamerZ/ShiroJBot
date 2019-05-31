@@ -1,6 +1,4 @@
 /*
- * Copyright (C) 2019 Yago Garcia Sanches Gimenez / KuuHaKu
- *
  * This file is part of Shiro J Bot.
  *
  *     Shiro J Bot is free software: you can redistribute it and/or modify
@@ -14,11 +12,12 @@
  *     GNU General Public License for more details.
  *
  *     You should have received a copy of the GNU General Public License
- *     along with Shiro J Bot.  If not, see https://www.gnu.org/licenses/
+ *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
 package com.kuuhaku.model;
 
+import com.kuuhaku.Main;
 import org.json.JSONObject;
 
 import javax.persistence.Entity;
@@ -29,8 +28,10 @@ import java.util.Map;
 public class guildConfig {
     @Id
     private String guildID;
-    private String prefix = "!";
-    private String msgBoasVindas = "Seja bem-vindo(a) %user%!";
+    private String name;
+    private String owner;
+    private String prefix = Main.getInfo().getDefaultPrefix();
+    private String msgBoasVindas = "Seja bem-vindo(a) ao %guild%, %user%!";
     private String msgAdeus = "Ahh...%user% deixou este servidor!";
     private String canalbv = null;
     private String canaladeus = null;
@@ -42,9 +43,25 @@ public class guildConfig {
     private String lvlNotif = "true";
     private String cargoNew = "{}";
     private boolean anyTell = false;
+    private boolean markForDelete;
 
     public guildConfig() {
+    }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     public String getGuildId() {
@@ -63,12 +80,28 @@ public class guildConfig {
         this.prefix = prefix;
     }
 
+    public String getCanalBV() {
+        return canalbv;
+    }
+
+    public void setCanalBV(String canalbv) {
+        this.canalbv = canalbv;
+    }
+
     public String getMsgBoasVindas() {
         return msgBoasVindas;
     }
 
     public void setMsgBoasVindas(String msgBoasVindas) {
         this.msgBoasVindas = msgBoasVindas;
+    }
+
+    public String getCanalAdeus() {
+        return canaladeus;
+    }
+
+    public void setCanalAdeus(String canaladeus) {
+        this.canaladeus = canaladeus;
     }
 
     public String getMsgAdeus() {
@@ -79,35 +112,43 @@ public class guildConfig {
         this.msgAdeus = msgAdeus;
     }
 
-    public String getCanalbv() {
-        return canalbv;
-    }
-
-    public void setCanalbv(String canalbv) {
-        this.canalbv = canalbv;
-    }
-
-    public String getCanalav() {
+    public String getCanalAV() {
         return canalav;
     }
 
-    public void setCanalav(String canalav) {
+    public void setCanalAV(String canalav) {
         this.canalav = canalav;
     }
 
-    public String getCargowarn() {
+    public String getCargoWarn() {
         return cargowarn;
     }
 
-    public void setCargowarn(String cargowarn) {
+    public void setCargoWarn(String cargowarn) {
         this.cargowarn = cargowarn;
+    }
+
+    public String getCanalSUG() {
+        return canalsug;
+    }
+
+    public void setCanalSUG(String canalsug) {
+        this.canalsug = canalsug;
+    }
+
+    public String getCanalLvl() {
+        return canallvl;
+    }
+
+    public void setCanalLvl(String canallvl) {
+        this.canallvl = canallvl;
     }
 
     public Map<String, Object> getCargoslvl() {
         return new JSONObject(cargoslvl).toMap();
     }
 
-    public void setCargoslvl(JSONObject cargoslvl) {
+    public void setCargosLvl(JSONObject cargoslvl) {
         this.cargoslvl = cargoslvl.toString();
     }
 
@@ -127,14 +168,6 @@ public class guildConfig {
         this.cargoNew = cargoNew.toString();
     }
 
-    public String getCanalsug() {
-        return canalsug;
-    }
-
-    public void setCanalsug(String canalsug) {
-        this.canalsug = canalsug;
-    }
-
     public boolean isAnyTell() {
         return anyTell;
     }
@@ -143,19 +176,11 @@ public class guildConfig {
         this.anyTell = anyTell;
     }
 
-    public String getCanaladeus() {
-        return canaladeus;
+    public boolean isMarkForDelete() {
+        return markForDelete;
     }
 
-    public void setCanaladeus(String canaladeus) {
-        this.canaladeus = canaladeus;
-    }
-
-    public String getCanallvl() {
-        return canallvl;
-    }
-
-    public void setCanallvl(String canallvl) {
-        this.canallvl = canallvl;
+    public void setMarkForDelete(boolean markForDelete) {
+        this.markForDelete = markForDelete;
     }
 }
