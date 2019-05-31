@@ -83,7 +83,7 @@ public class GenericMessageEvents extends ListenerAdapter {
 
         try {
             CustomAnswers ca = SQLite.getCAByTrigger(rawMessage);
-            Helper.typeMessage(channel, Objects.requireNonNull(ca).getAnswer());
+            if (!Objects.requireNonNull(ca).isMarkForDelete()) Helper.typeMessage(channel, Objects.requireNonNull(ca).getAnswer());
         } catch (NoResultException | NullPointerException ignore) {
         }
 

@@ -21,6 +21,8 @@ import com.kuuhaku.Main;
 import com.kuuhaku.model.*;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.Role;
+import org.json.JSONObject;
 
 import javax.persistence.*;
 import java.io.File;
@@ -135,11 +137,14 @@ public class SQLite {
 
         em.close();
     }
+
     public static void removeGuildFromDB(guildConfig gc) {
         EntityManager em = getEntityManager();
 
+        gc.setMarkForDelete(true);
+
         em.getTransaction().begin();
-        em.remove(em.getReference(gc.getClass(), gc.getGuildId()));
+        em.merge(gc);
         em.getTransaction().commit();
 
         em.close();
@@ -188,8 +193,10 @@ public class SQLite {
     public static void removeCAFromDB(CustomAnswers ca) {
         EntityManager em = getEntityManager();
 
+        ca.setMarkForDelete(true);
+
         em.getTransaction().begin();
-        em.remove(em.getReference(ca.getClass(), ca.getGuildID()));
+        em.merge(ca);
         em.getTransaction().commit();
 
         em.close();
@@ -231,8 +238,10 @@ public class SQLite {
     public static void removeMemberFromDB(Member m) {
         EntityManager em = getEntityManager();
 
+        m.setMarkForDelete(true);
+
         em.getTransaction().begin();
-        em.remove(em.getReference(m.getClass(), m.getId()));
+        em.merge(m);
         em.getTransaction().commit();
 
         em.close();
@@ -525,6 +534,7 @@ public class SQLite {
 
         return cargoWarnID;
     }
+
     public static void updateGuildCargoWarn(String newCargoID, guildConfig gc) {
         EntityManager em = getEntityManager();
 
@@ -537,7 +547,6 @@ public class SQLite {
         em.close();
     }
 
-    /*
     public static Map<String, Object> getGuildCargoNew(String id) {
         EntityManager em = getEntityManager();
 
@@ -548,15 +557,13 @@ public class SQLite {
 
         return gc.getCargoNew();
     }
-    public static void updateGuildCargoNew(JSONObject newCargoID, guildConfig gc, String addOrRemove) {
+
+    public static void updateGuildCargoNew(Role r, guildConfig gc) {
         EntityManager em = getEntityManager();
 
-        if(addOrRemove.equals("add")) {
-            gc.setCargoNew(newCargoID);
-        } else {
-            Map<String, Object> hm = newCargoID.toMap();
-            gc.getCargoNew();
-        }
+        Map<String, Object> cn = gc.getCargoNew();
+        cn.put(r.getName(), r.getId());
+        gc.setCargoNew(new JSONObject(cn));
 
         em.getTransaction().begin();
         em.merge(gc);
@@ -564,7 +571,6 @@ public class SQLite {
 
         em.close();
     }
-    */
 
     public static String getGuildCanalLvlUp(String id) {
         EntityManager em = getEntityManager();
@@ -612,8 +618,7 @@ public class SQLite {
         em.close();
     }
 
-    /*
-    public static String getGuildCargosLvl(String id) {
+    public static Map<String, Object> getGuildCargosLvl(String id) {
         EntityManager em = getEntityManager();
 
         Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
@@ -621,15 +626,14 @@ public class SQLite {
         guildConfig gc = (guildConfig) q.getSingleResult();
         em.close();
 
-        String cargoWarnID = gc.getCargoWarn();
-        if (cargoWarnID == null) cargoWarnID = "Não definido.";
-
-        return cargoWarnID;
+        return gc.getCargoslvl();
     }
-    public static void updateGuildCargosLvl(String newCargoID, guildConfig gc) {
+    public static void updateGuildCargosLvl(String lvl, Role r, guildConfig gc) {
         EntityManager em = getEntityManager();
 
-        gc.setCargoWarn(newCargoID);
+        Map<String, Object> cn = gc.getCargoslvl();
+        cn.put(lvl, r.getId());
+        gc.setCargosLvl(new JSONObject(cn));
 
         em.getTransaction().begin();
         em.merge(gc);
@@ -637,5 +641,4 @@ public class SQLite {
 
         em.close();
     }
-    */
 }

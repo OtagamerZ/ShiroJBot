@@ -29,6 +29,7 @@ public class CustomAnswers {
     private String guildID;
     private String gatilho;
     private String answer;
+    private boolean markForDelete;
 
     public CustomAnswers() {
 
@@ -60,5 +61,13 @@ public class CustomAnswers {
 
     public String getGuildID() {
         return guildID;
+    }
+
+    public boolean isMarkForDelete() {
+        return markForDelete;
+    }
+
+    public void setMarkForDelete(boolean markForDelete) {
+        this.markForDelete = markForDelete;
     }
 }
