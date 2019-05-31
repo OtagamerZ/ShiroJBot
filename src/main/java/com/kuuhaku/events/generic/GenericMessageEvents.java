@@ -34,27 +34,31 @@ public class GenericMessageEvents extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        User author = event.getAuthor();
-        Member member = event.getMember();
-        Message message = event.getMessage();
-        MessageChannel channel = message.getChannel();
-        Guild guild = message.getGuild();
-        String rawMessage = message.getContentRaw();
+        if (Main.getInfo().isReady()) {
+            User author = event.getAuthor();
+            Member member = event.getMember();
+            Message message = event.getMessage();
+            MessageChannel channel = message.getChannel();
+            Guild guild = message.getGuild();
+            String rawMessage = message.getContentRaw();
 
-        String prefix;
-        prefix = SQLite.getGuildPrefix(guild.getId());
-
-        if (Main.getInfo().isNiimode() && author == Main.getInfo().getUserByID(Main.getInfo().getNiiChan())) {
+            String prefix = "";
             try {
-                message.delete().queue();
-                channel.sendMessage(rawMessage).queue();
-            } catch (InsufficientPermissionException ignore) {
+                prefix = SQLite.getGuildPrefix(guild.getId());
+            } catch (NoResultException ignore) {
             }
-        }
 
-        if (Main.getInfo().getSelfUser().getId().equals(author.getId()) && !Main.getInfo().isNiimode()) return;
-        else if (Main.getInfo().getNiiChan().equals(author.getId()) && Main.getInfo().isNiimode()) return;
-        if (author.isBot() && !Main.getInfo().getSelfUser().getId().equals(author.getId())) return;
+            if (Main.getInfo().isNiimode() && author == Main.getInfo().getUserByID(Main.getInfo().getNiiChan())) {
+                try {
+                    message.delete().queue();
+                    channel.sendMessage(rawMessage).queue();
+                } catch (InsufficientPermissionException ignore) {
+                }
+            }
+
+            if (Main.getInfo().getSelfUser().getId().equals(author.getId()) && !Main.getInfo().isNiimode()) return;
+            else if (Main.getInfo().getNiiChan().equals(author.getId()) && Main.getInfo().isNiimode()) return;
+            if (author.isBot() && !Main.getInfo().getSelfUser().getId().equals(author.getId())) return;
 
 		/*
 		if(event.getPrivateChannel()!=null) {
@@ -77,65 +81,67 @@ public class GenericMessageEvents extends ListenerAdapter {
         }
 		*/
 
-        Helper.battle(event);
+            Helper.battle(event);
 
-        if (message.getContentRaw().equals(Main.getInfo().getSelfUser().getAsMention())) {
-            channel.sendMessage("Para obter ajuda sobre como me utilizar use `" + prefix + "ajuda`.").queue();
-            return;
-        }
-
-        String rawMsgNoPrefix = rawMessage;
-        String commandName = "";
-        if (rawMessage.contains(prefix)) {
-            rawMsgNoPrefix = rawMessage.substring(prefix.length()).trim();
-            commandName = rawMsgNoPrefix.split(" ")[0].trim();
-        }
-
-        try {
-            CustomAnswers ca = SQLite.getCAByTrigger(rawMessage);
-            if (!Objects.requireNonNull(ca).isMarkForDelete()) Helper.typeMessage(channel, Objects.requireNonNull(ca).getAnswer());
-        } catch (NoResultException | NullPointerException ignore) {
-        }
-
-        boolean hasArgs = (rawMsgNoPrefix.split(" ").length > 1);
-        String[] args = new String[]{};
-        if (hasArgs) {
-            args = rawMsgNoPrefix.substring(commandName.length()).trim().split(" ");
-        }
-
-        boolean found = false;
-        for (Command command : Main.getCommandManager().getCommands()) {
-            if (command.getName().equalsIgnoreCase(commandName)) {
-                found = true;
+            if (message.getContentRaw().equals(Main.getInfo().getSelfUser().getAsMention())) {
+                channel.sendMessage("Para obter ajuda sobre como me utilizar use `" + prefix + "ajuda`.").queue();
+                return;
             }
-            for (String alias : command.getAliases()) {
-                if (alias.equalsIgnoreCase(commandName)) {
+
+            String rawMsgNoPrefix = rawMessage;
+            String commandName = "";
+            if (rawMessage.contains(prefix)) {
+                rawMsgNoPrefix = rawMessage.substring(prefix.length()).trim();
+                commandName = rawMsgNoPrefix.split(" ")[0].trim();
+            }
+
+            try {
+                CustomAnswers ca = SQLite.getCAByTrigger(rawMessage);
+                if (!Objects.requireNonNull(ca).isMarkForDelete())
+                    Helper.typeMessage(channel, Objects.requireNonNull(ca).getAnswer());
+            } catch (NoResultException | NullPointerException ignore) {
+            }
+
+            boolean hasArgs = (rawMsgNoPrefix.split(" ").length > 1);
+            String[] args = new String[]{};
+            if (hasArgs) {
+                args = rawMsgNoPrefix.substring(commandName.length()).trim().split(" ");
+            }
+
+            boolean found = false;
+            for (Command command : Main.getCommandManager().getCommands()) {
+                if (command.getName().equalsIgnoreCase(commandName)) {
                     found = true;
                 }
-            }
-            if (command.getCategory().isEnabled()) {
-                found = false;
+                for (String alias : command.getAliases()) {
+                    if (alias.equalsIgnoreCase(commandName)) {
+                        found = true;
+                    }
+                }
+                if (command.getCategory().isEnabled()) {
+                    found = false;
+                }
+
+                if (found) {
+                    if (!Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
+                        channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
+                    }
+                    command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
+                    break;
+                }
             }
 
-            if (found) {
-                if (!Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
-                    channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
+            if (!found) {
+                try {
+                    com.kuuhaku.model.Member m = SQLite.getMemberById(member.getUser().getId() + member.getGuild().getId());
+                    boolean lvlUp = m.addXp();
+                    if (lvlUp) {
+                        channel.sendMessage(member.getEffectiveName() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
+                    }
+                    SQLite.saveMemberToDB(m);
+                } catch (NoResultException e) {
+                    SQLite.addMemberToDB(member);
                 }
-                command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
-                break;
-            }
-        }
-
-        if (!found) {
-            try {
-                com.kuuhaku.model.Member m = SQLite.getMemberById(member.getUser().getId() + member.getGuild().getId());
-                boolean lvlUp = m.addXp();
-                if (lvlUp) {
-                    channel.sendMessage(member.getEffectiveName() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
-                }
-                SQLite.saveMemberToDB(m);
-            } catch (NoResultException e) {
-                SQLite.addMemberToDB(member);
             }
         }
     }
