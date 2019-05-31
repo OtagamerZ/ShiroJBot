@@ -33,6 +33,7 @@ public class ShiroInfo {
     private JDA api;
     private ArrayList<String> developers;
     private String niichan;
+    private boolean niimode;
     private long startTime;
 
     public ShiroInfo() {
@@ -113,9 +114,17 @@ public class ShiroInfo {
 
     public User getUserByID(String userID) { return api.getUserById(userID); }
 
-    public Role getRoleByID(String roleID) { return api.getRoleById(roleID); }
+    Role getRoleByID(String roleID) { return api.getRoleById(roleID); }
 
     public String getNiiChan() {
         return niichan;
+    }
+
+    public boolean isNiimode() {
+        return niimode;
+    }
+
+    public void switchNiimode() {
+        niimode = !niimode;
     }
 }
