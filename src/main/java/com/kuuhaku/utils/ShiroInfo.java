@@ -115,7 +115,7 @@ public class ShiroInfo {
 
     public Role getRoleByID(String roleID) { return api.getRoleById(roleID); }
 
-    String getNiiChan() {
+    public String getNiiChan() {
         return niichan;
     }
 }
