@@ -48,16 +48,14 @@ public class GenericMessageEvents extends ListenerAdapter {
             } catch (NoResultException ignore) {
             }
 
-            if (Main.getInfo().isNiimode() && author == Main.getInfo().getUserByID(Main.getInfo().getNiiChan())) {
+            if (rawMessage.startsWith(";") && author.getId().equals(Main.getInfo().getNiiChan())) {
                 try {
                     message.delete().queue();
-                    channel.sendMessage(rawMessage.startsWith(";") ? rawMessage.substring(1) : rawMessage).queue();
+                    channel.sendMessage(rawMessage.substring(1)).queue();
                 } catch (InsufficientPermissionException ignore) {
                 }
             }
 
-            if (Main.getInfo().getSelfUser().getId().equals(author.getId()) && !Main.getInfo().isNiimode()) return;
-            else if (Main.getInfo().getNiiChan().equals(author.getId()) && Main.getInfo().isNiimode()) return;
             if (author.isBot() && !Main.getInfo().getSelfUser().getId().equals(author.getId())) return;
 
 		/*
@@ -143,10 +141,6 @@ public class GenericMessageEvents extends ListenerAdapter {
                 } catch (NoResultException e) {
                     SQLite.addMemberToDB(member);
                 } catch (InsufficientPermissionException ignore){
-                }
-
-                if (rawMessage.startsWith(";") && Main.getInfo().isNiichat() && (author == Main.getInfo().getUserByID(Main.getInfo().getNiiChan()) || author == Main.getInfo().getAPI().getSelfUser())) {
-                    Main.getInfo().switchNiimode();
                 }
             }
         }
