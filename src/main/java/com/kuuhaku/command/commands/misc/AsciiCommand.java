@@ -8,6 +8,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import java.io.IOException;
+
 public class AsciiCommand extends Command {
 	
 	public AsciiCommand() {
@@ -17,9 +19,7 @@ public class AsciiCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		
-		if(args.length == 0 || args.toString().startsWith(" ") || args.toString().contains("   ")) {
-			channel.sendMessage(":x: | Você necessita de fornecer um texto para converter em ascii..").queue();
-		}
+		if(args.length == 0) { channel.sendMessage(":x: | Você necessita de fornecer um texto para converter em ascii..").queue(); return; }
 		
         String query = "";
         for(String arg : args) {
@@ -32,7 +32,7 @@ public class AsciiCommand extends Command {
         try {
             Response response = caller.newCall(request).execute();
             channel.sendMessage(":warning: | O texto ascii pode parecer deformado devido ao tamanho do seu ecrã!\n```\n" + response.body().string() + "\n```").queue();
-        } catch (Exception e) {
+        } catch (IOException e) {
         	channel.sendMessage(":x: | Ocorreu um erro ao contactar a API.").queue();
         }
     }
