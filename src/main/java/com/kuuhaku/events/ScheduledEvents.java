@@ -40,7 +40,6 @@ import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.DataDump;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 
 public class ScheduledEvents implements Job {
     @Override

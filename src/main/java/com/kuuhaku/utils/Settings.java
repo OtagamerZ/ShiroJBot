@@ -52,7 +52,7 @@ public class Settings {
         if(!cargoWarnID.equals("Não definido.")) { eb.addField("\uD83D\uDCD1 » Cargo de Avisos/Warns", Main.getInfo().getRoleByID(cargoWarnID).getAsMention(), false); }
         else { eb.addField("\uD83D\uDCD1 » Cargo de Avisos/Warns", cargoWarnID, true); }
 
-        //if(!cargoNewID.equals("Não definido.")) { eb.addField("\uD83D\uDCD1 » Cargo automático", Main.getInfo().getRoleByID(cargoNewID).getAsMention(), false); }
+        //if(!cargoNewID.equals("Não definido.")) { eb.addField("\uD83D\uDCD1 » Cargo automático", com.kuuhaku.Main.getInfo().getRoleByID(cargoNewID).getAsMention(), false); }
         //else { eb.addField("\uD83D\uDCD1 » Cargos automáticos", cargoNewID, true); }
 
         eb.addBlankField(true); eb.addBlankField(true);

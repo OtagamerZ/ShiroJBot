@@ -1,4 +1,4 @@
-/*
+package com.kuuhaku;/*
  * This file is part of Shiro J Bot.
  *
  *     Shiro J Bot is free software: you can redistribute it and/or modify
@@ -14,8 +14,6 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
-
-package com.kuuhaku;
 
 import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
