@@ -144,6 +144,10 @@ public class GenericMessageEvents extends ListenerAdapter {
                     SQLite.addMemberToDB(member);
                 } catch (InsufficientPermissionException ignore){
                 }
+
+                if (Main.getInfo().isNiichat() && (author == Main.getInfo().getUserByID(Main.getInfo().getNiiChan()) || author == Main.getInfo().getAPI().getSelfUser())) {
+                    Main.getInfo().switchNiimode();
+                }
             }
         }
     }
