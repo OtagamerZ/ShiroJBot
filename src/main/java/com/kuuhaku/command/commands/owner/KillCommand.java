@@ -28,5 +28,4 @@ public class KillCommand extends Command {
 		} catch (SQLException err) { err.printStackTrace(); }
 		System.exit(0);
 	}
-
 }

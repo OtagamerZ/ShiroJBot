@@ -24,6 +24,7 @@ import com.kuuhaku.model.CustomAnswers;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import javax.persistence.NoResultException;
@@ -43,8 +44,17 @@ public class GenericMessageEvents extends ListenerAdapter {
         String prefix;
         prefix = SQLite.getGuildPrefix(guild.getId());
 
-        if (Main.getInfo().getSelfUser().getIdLong() == author.getIdLong()) return;
-        if (author.isBot()) return;
+        if (Main.getInfo().isNiimode() && author == Main.getInfo().getUserByID(Main.getInfo().getNiiChan())) {
+            try {
+                message.delete().queue();
+                channel.sendMessage(rawMessage).queue();
+            } catch (InsufficientPermissionException ignore) {
+            }
+        }
+
+        if (Main.getInfo().getSelfUser().getId().equals(author.getId()) && !Main.getInfo().isNiimode()) return;
+        else if (Main.getInfo().getNiiChan().equals(author.getId()) && Main.getInfo().isNiimode()) return;
+        if (author.isBot() && !Main.getInfo().getSelfUser().getId().equals(author.getId())) return;
 
 		/*
 		if(event.getPrivateChannel()!=null) {
