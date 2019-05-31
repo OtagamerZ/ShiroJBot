@@ -217,4 +217,27 @@ public class Settings {
         message.getTextChannel().sendMessage("✅ | O cargo de warns do servidor foi trocado para " + newRoleWarns.getAsMention() + " com sucesso.").queue();
     }
     */
+
+    public static void updateLevelNotif(String[] args, Message message, guildConfig gc) {
+        Boolean LevelUpNotif = SQLite.getGuildLvlUpNotif(message.getGuild().getId());
+
+        if(args.length < 2) {
+            if(LevelUpNotif) {
+                message.getTextChannel().sendMessage("As mensagens quando alguém sobe de nível estão ativas.").queue();
+            } else {
+                message.getTextChannel().sendMessage("As mensagens quando alguém sobe de nível não estão ativas.").queue();
+            }
+            return;
+        }
+        if(message.getMentionedChannels().size() > 1) { message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 canal.").queue(); return; }
+        if(args[1].equals("ativar") || args[1].equals("sim")) {
+            SQLite.updateGuildLvlUpNotif(true, gc);
+            message.getTextChannel().sendMessage("✅ | As mensagens quando alguém sobe de nível foram ativadas com sucesso.").queue();
+        } else if(args[1].equals("desativar") || args[1].equals("nao") || args[1].equals("não")) {
+            SQLite.updateGuildLvlUpNotif(false, gc);
+            message.getTextChannel().sendMessage("✅ | As mensagens quando alguém sobe de nível foram desativadas com sucesso.").queue();
+        } else {
+            message.getTextChannel().sendMessage(":x: | \"" + args[1] + "\" não é uma opção válida, por favor escolha \"ativar\" ou então \"desativar\".").queue();
+        }
+    }
 }
