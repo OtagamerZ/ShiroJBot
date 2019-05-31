@@ -207,7 +207,6 @@ public class SQLite {
 
         return m;
     }
-
     public static void addMemberToDB(net.dv8tion.jda.core.entities.Member u) {
         EntityManager em = getEntityManager();
 
@@ -220,7 +219,6 @@ public class SQLite {
 
         em.close();
     }
-
     public static void saveMemberToDB(Member m) {
         EntityManager em = getEntityManager();
 
@@ -230,7 +228,6 @@ public class SQLite {
 
         em.close();
     }
-
     public static void removeMemberFromDB(Member m) {
         EntityManager em = getEntityManager();
 
@@ -253,7 +250,6 @@ public class SQLite {
 
         return m;
     }
-
     public static void addUserTagsToDB(net.dv8tion.jda.core.entities.Member u) {
         EntityManager em = getEntityManager();
 
@@ -317,6 +313,32 @@ public class SQLite {
         em.close();
     }
 
+
+    // --- guildConfig -- \\
+    public static void updateGuildName(String newName, guildConfig gc) {
+        EntityManager em = getEntityManager();
+
+        gc.setName(newName);
+
+        em.getTransaction().begin();
+        em.merge(gc);
+        em.getTransaction().commit();
+
+        em.close();
+    }
+
+    public static void updateGuildOwner(String newOwner, guildConfig gc) {
+        EntityManager em = getEntityManager();
+
+        gc.setOwner(newOwner);
+
+        em.getTransaction().begin();
+        em.merge(gc);
+        em.getTransaction().commit();
+
+        em.close();
+    }
+
     public static String getGuildPrefix(String id) {
         EntityManager em = getEntityManager();
 
@@ -330,10 +352,10 @@ public class SQLite {
 
         return prefix;
     }
-    public static void updateGuildPrefix(String prefix, guildConfig gc) {
+    public static void updateGuildPrefix(String newPrefix, guildConfig gc) {
         EntityManager em = getEntityManager();
 
-        gc.setPrefix(prefix);
+        gc.setPrefix(newPrefix);
 
         em.getTransaction().begin();
         em.merge(gc);
@@ -342,7 +364,7 @@ public class SQLite {
         em.close();
     }
 
-    public static String getGuildCanalBV(String id, Boolean isForEC) {
+    public static String getGuildCanalBV(String id) {
         EntityManager em = getEntityManager();
 
         Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
@@ -353,22 +375,12 @@ public class SQLite {
         String canalBV = gc.getCanalBV();
         if (canalBV == null) canalBV = "Não definido.";
 
-        if(isForEC) {
-            String forEC;
-            if(!canalBV.equals("Não definido.")) {
-                forEC = "<#" + canalBV + ">";
-                return forEC;
-            } else {
-                return canalBV;
-            }
-        } else {
-            return canalBV;
-        }
+        return canalBV;
     }
-    public static void updateGuildCanalBV(String canalID, guildConfig gc) {
+    public static void updateGuildCanalBV(String newCanalID, guildConfig gc) {
         EntityManager em = getEntityManager();
 
-        gc.setCanalBV(canalID);
+        gc.setCanalBV(newCanalID);
 
         em.getTransaction().begin();
         em.merge(gc);
@@ -376,7 +388,7 @@ public class SQLite {
 
         em.close();
     }
-    public static String getGuildMsgBV(String id, Boolean isForEC) {
+    public static String getGuildMsgBV(String id) {
         EntityManager em = getEntityManager();
 
         Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
@@ -387,17 +399,7 @@ public class SQLite {
         String msgBV = gc.getMsgBoasVindas();
         if (msgBV == null) msgBV = "Não definido.";
 
-        if(isForEC) {
-            String forEC;
-            if(!msgBV.equals("Não definido.")) {
-                forEC = "`" + msgBV + "`";
-                return forEC;
-            } else {
-                return msgBV;
-            }
-        } else {
-            return msgBV;
-        }
+        return msgBV;
     }
     public static void updateGuildMsgBV(String newMsgBV, guildConfig gc) {
         EntityManager em = getEntityManager();
@@ -411,7 +413,7 @@ public class SQLite {
         em.close();
     }
 
-    public static String getGuildCanalAdeus(String id, Boolean isForEC) {
+    public static String getGuildCanalAdeus(String id) {
         EntityManager em = getEntityManager();
 
         Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
@@ -422,22 +424,12 @@ public class SQLite {
         String canalAdeus = gc.getCanalAdeus();
         if (canalAdeus == null) canalAdeus = "Não definido.";
 
-        if(isForEC) {
-            String forEC;
-            if(!canalAdeus.equals("Não definido.")) {
-                forEC = "<#" + canalAdeus + ">";
-                return forEC;
-            } else {
-                return canalAdeus;
-            }
-        } else {
-            return canalAdeus;
-        }
+        return canalAdeus;
     }
-    public static void updateGuildCanalAdeus(String canalID, guildConfig gc) {
+    public static void updateGuildCanalAdeus(String newCanalID, guildConfig gc) {
         EntityManager em = getEntityManager();
 
-        gc.setCanalAdeus(canalID);
+        gc.setCanalAdeus(newCanalID);
 
         em.getTransaction().begin();
         em.merge(gc);
@@ -445,7 +437,7 @@ public class SQLite {
 
         em.close();
     }
-    public static String getGuildMsgAdeus(String id, Boolean isForEC) {
+    public static String getGuildMsgAdeus(String id) {
         EntityManager em = getEntityManager();
 
         Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
@@ -456,17 +448,7 @@ public class SQLite {
         String msgAdeus = gc.getMsgAdeus();
         if (msgAdeus == null) msgAdeus = "Não definido.";
 
-        if(isForEC) {
-            String forEC;
-            if(!msgAdeus.equals("Não definido.")) {
-                forEC = "`" + msgAdeus + "`";
-                return forEC;
-            } else {
-                return msgAdeus;
-            }
-        } else {
-            return msgAdeus;
-        }
+        return msgAdeus;
     }
     public static void updateGuildMsgAdeus(String newMsgAdeus, guildConfig gc) {
         EntityManager em = getEntityManager();
@@ -480,7 +462,7 @@ public class SQLite {
         em.close();
     }
 
-    public static String getGuildCanalSUG(String id, Boolean isForEC) {
+    public static String getGuildCanalSUG(String id) {
         EntityManager em = getEntityManager();
 
         Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
@@ -491,22 +473,87 @@ public class SQLite {
         String canalSUG = gc.getCanalSUG();
         if (canalSUG == null) canalSUG = "Não definido.";
 
-        if(isForEC) {
-            String forEC;
-            if(!canalSUG.equals("Não definido.")) {
-                forEC = "<#" + canalSUG + ">";
-                return forEC;
-            } else {
-                return canalSUG;
-            }
-        } else {
-            return canalSUG;
-        }
+        return canalSUG;
     }
-    public static void updateGuildCanalSUG(String canalID, guildConfig gc) {
+    public static void updateGuildCanalSUG(String newCanalID, guildConfig gc) {
         EntityManager em = getEntityManager();
 
-        gc.setCanalSUG(canalID);
+        gc.setCanalSUG(newCanalID);
+
+        em.getTransaction().begin();
+        em.merge(gc);
+        em.getTransaction().commit();
+
+        em.close();
+    }
+
+    public static String getGuildCanalAvisos(String id) {
+        EntityManager em = getEntityManager();
+
+        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+        q.setParameter(1, id);
+        guildConfig gc = (guildConfig) q.getSingleResult();
+        em.close();
+
+        String canalAvisos = gc.getCanalAV();
+        if (canalAvisos == null) canalAvisos = "Não definido.";
+
+        return canalAvisos;
+    }
+    public static void updateGuildCanalAvisos(String newCanalID, guildConfig gc) {
+        EntityManager em = getEntityManager();
+
+        gc.setCanalAV(newCanalID);
+
+        em.getTransaction().begin();
+        em.merge(gc);
+        em.getTransaction().commit();
+
+        em.close();
+    }
+
+    public static String getGuildCanalLvlUp(String id) {
+        EntityManager em = getEntityManager();
+
+        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+        q.setParameter(1, id);
+        guildConfig gc = (guildConfig) q.getSingleResult();
+        em.close();
+
+        String canalLvlUp = gc.getCanalLvl();
+        if (canalLvlUp == null) canalLvlUp = "Não definido.";
+
+        return canalLvlUp;
+    }
+    public static void updateGuildCanalLvlUp(String newCanalID, guildConfig gc) {
+        EntityManager em = getEntityManager();
+
+        gc.setCanalAV(newCanalID);
+
+        em.getTransaction().begin();
+        em.merge(gc);
+        em.getTransaction().commit();
+
+        em.close();
+    }
+
+    public static String getGuildCargoWarn(String id) {
+        EntityManager em = getEntityManager();
+
+        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+        q.setParameter(1, id);
+        guildConfig gc = (guildConfig) q.getSingleResult();
+        em.close();
+
+        String cargoWarnID = gc.getCargoWarn();
+        if (cargoWarnID == null) cargoWarnID = "Não definido.";
+
+        return cargoWarnID;
+    }
+    public static void updateGuildCargoWarn(String newCargoID, guildConfig gc) {
+        EntityManager em = getEntityManager();
+
+        gc.setCargoWarn(newCargoID);
 
         em.getTransaction().begin();
         em.merge(gc);

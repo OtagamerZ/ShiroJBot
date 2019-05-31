@@ -111,9 +111,9 @@ public class ShiroInfo {
         this.startTime = startTime;
     }
 
-    public User getUserById(String userId) {
-        return api.getUserById(userId);
-    }
+    public User getUserByID(String userID) { return api.getUserById(userID); }
+
+    public Role getRoleByID(String roleID) { return api.getRoleById(roleID); }
 
     String getNiiChan() {
         return niichan;
