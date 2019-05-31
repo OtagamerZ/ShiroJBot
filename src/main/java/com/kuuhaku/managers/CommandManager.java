@@ -88,6 +88,7 @@ public class CommandManager {
             add(new AlignmentCommand());
             add(new InfoCommand());
             add(new RankCommand());
+            add(new SlotsCommand());
         }};
     }
 
