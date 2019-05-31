@@ -67,6 +67,8 @@ public class GenericMessageEvents extends ListenerAdapter {
         }
 		*/
 
+        Helper.battle(event);
+
         if (message.getContentRaw().equals(Main.getInfo().getSelfUser().getAsMention())) {
             channel.sendMessage("Para obter ajuda sobre como me utilizar use `" + prefix + "ajuda`.").queue();
             return;
