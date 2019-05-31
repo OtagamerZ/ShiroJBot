@@ -20,6 +20,7 @@ package com.kuuhaku;
 import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.events.JDAEvents;
+import com.kuuhaku.events.ScheduledEvents;
 import com.kuuhaku.events.generic.GenericMessageEvents;
 import com.kuuhaku.events.guild.GuildEvents;
 import com.kuuhaku.events.guild.GuildUpdateEvents;
@@ -31,9 +32,8 @@ import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Game;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.quartz.JobListener;
+import org.quartz.*;
+import org.quartz.impl.StdSchedulerFactory;
 
 import javax.persistence.NoResultException;
 import java.sql.SQLException;
@@ -47,6 +47,8 @@ public class Main implements JobListener {
     private static ShiroInfo info;
     private static CommandManager cmdManager;
     private static JDA api;
+    private static JobDetail backup;
+    private static Scheduler sched;
 
     public static void main(String[] args) throws Exception {
         info = new ShiroInfo();
@@ -67,6 +69,25 @@ public class Main implements JobListener {
         SQLite.connect();
         if (SQLite.restoreData(MySQL.getData())) System.out.println("Dados recuperados com sucesso!");
         else System.out.println("Erro ao recuperar dados.");
+
+        try {
+            if (backup == null) {
+                backup = JobBuilder.newJob(ScheduledEvents.class).withIdentity("backup", "1").build();
+            }
+            Trigger cron = TriggerBuilder.newTrigger().withIdentity("backup", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0 0/1 ? * * *")).build();
+            SchedulerFactory sf = new StdSchedulerFactory();
+            try {
+                sched = sf.getScheduler();
+                sched.scheduleJob(backup, cron);
+            } catch (Exception ignore) {
+            } finally {
+                sched.start();
+                System.out.println("Cronograma inicializado com sucesso!");
+            }
+        } catch (SchedulerException e) {
+            System.out.println("Erro ao inicializar cronograma: " + e);
+        }
+
         finishStartUp();
     }
 
@@ -105,8 +126,8 @@ public class Main implements JobListener {
     }
 
     public static void shutdown() throws SQLException {
-        SQLite.disconnect();
         MySQL.dumpData(new DataDump(SQLite.getCADump(), SQLite.getMemberDump(), SQLite.getGuildDump()));
+        SQLite.disconnect();
         api.shutdown();
         System.out.println("Fui desligada.");
     }
