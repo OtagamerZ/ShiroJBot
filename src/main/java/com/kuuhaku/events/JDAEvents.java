@@ -20,6 +20,7 @@ package com.kuuhaku.events;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.commands.Reactions.HugReaction;
 import com.kuuhaku.controller.SQLite;
+import com.kuuhaku.model.DuelData;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
 import de.androidpit.colorthief.ColorThief;
@@ -41,8 +42,15 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class JDAEvents extends ListenerAdapter {
+    public static List<DuelData> dd = new ArrayList<>();
+    public static Map<String, DuelData> duels = new HashMap<>();
+
     @Override
     public void onReady(ReadyEvent event) {
         try {
@@ -63,9 +71,9 @@ public class JDAEvents extends ListenerAdapter {
                 new HugReaction(true).execute(author, null, null, null, message, channel, null, null, null);
             }
 
-            if (Helper.duels.containsKey(event.getMessageId()) && event.getUser() == Helper.duels.get((event.getMessageId())).getP2()) {
-                Helper.dd.add(Helper.duels.get(event.getMessageId()));
-                Helper.duels.remove(event.getMessageId());
+            if (duels.containsKey(event.getMessageId()) && event.getUser() == duels.get((event.getMessageId())).getP2()) {
+                dd.add(duels.get(event.getMessageId()));
+                duels.remove(event.getMessageId());
                 event.getChannel().sendMessage("O duelo começou!\nUsem `atacar` para atacar, `defender` para defender ou `especial` para tentar utilizar seu poder especial de alinhamento.\n\n**O desafiante começa primeiro!**").queue();
             }
         }

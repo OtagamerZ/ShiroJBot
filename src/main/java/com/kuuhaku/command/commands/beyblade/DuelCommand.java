@@ -3,8 +3,8 @@ package com.kuuhaku.command.commands.beyblade;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.MySQL;
+import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.model.DuelData;
-import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 
@@ -28,11 +28,11 @@ public class DuelCommand extends Command {
         if (message.getMentionedUsers().size() > 0) {
             if (MySQL.getBeybladeById(message.getMentionedUsers().get(0).getId()) != null) {
                 DuelData dd = new DuelData(message.getAuthor(), message.getMentionedUsers().get(0));
-                if (Helper.duels.containsValue(dd))
+                if (JDAEvents.duels.containsValue(dd))
                     message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Você já possui um duelo pendente!").queue());
                 else message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(message.getMentionedMembers().get(0).getAsMention() + ", você foi desafiado a um duelo de Beyblades por " + message.getAuthor().getAsMention() + ". Se deseja aceitar, clique no botão abaixo:").queue(m -> {
                             m.addReaction("\u2694").queue();
-                    Helper.duels.put(m.getId(), dd);
+                    JDAEvents.duels.put(m.getId(), dd);
                         }
                 ));
             } else {
