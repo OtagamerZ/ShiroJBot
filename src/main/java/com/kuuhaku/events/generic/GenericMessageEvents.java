@@ -141,6 +141,7 @@ public class GenericMessageEvents extends ListenerAdapter {
                     SQLite.saveMemberToDB(m);
                 } catch (NoResultException e) {
                     SQLite.addMemberToDB(member);
+                } catch (InsufficientPermissionException ignore){
                 }
             }
         }
