@@ -34,6 +34,7 @@ public class ShiroInfo {
     private ArrayList<String> developers;
     private String niichan;
     private boolean niimode;
+    private boolean niichat;
     private long startTime;
     private boolean ready = false;
 
@@ -135,5 +136,13 @@ public class ShiroInfo {
 
     public void setReady(boolean ready) {
         this.ready = ready;
+    }
+
+    public boolean isNiichat() {
+        return niichat;
+    }
+
+    public void switchNiichat() {
+        niichat = !niichat;
     }
 }
