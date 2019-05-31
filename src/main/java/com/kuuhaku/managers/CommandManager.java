@@ -46,6 +46,7 @@ public class CommandManager {
 
             //NIICHAN
             add(new NiiModeCommand());
+            add(new NiiChatCommand());
 
             //OWNER
             add(new KillCommand());
