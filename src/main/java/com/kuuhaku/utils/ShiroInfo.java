@@ -35,6 +35,7 @@ public class ShiroInfo {
     private String niichan;
     private boolean niimode;
     private long startTime;
+    private boolean ready = false;
 
     public ShiroInfo() {
         token = System.getenv("BOT_TOKEN");
@@ -126,5 +127,13 @@ public class ShiroInfo {
 
     public void switchNiimode() {
         niimode = !niimode;
+    }
+
+    public boolean isReady() {
+        return ready;
+    }
+
+    public void setReady(boolean ready) {
+        this.ready = ready;
     }
 }

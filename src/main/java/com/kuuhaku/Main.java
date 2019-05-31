@@ -101,6 +101,7 @@ public class Main implements JobListener {
         });
         Helper.cls();
         System.out.println("Estou pronta!");
+        getInfo().setReady(true);
     }
 
     public static Game getRandomGame() {
