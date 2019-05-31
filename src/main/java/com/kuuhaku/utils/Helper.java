@@ -455,4 +455,15 @@ public class Helper {
             });
         }
     }
+
+    public static List<String> getGamble() {
+        String[] icon = {":cheese:", ":izakaya_lantern:", ":moneybag:", ":diamond_shape_with_a_dot_inside:", ":rosette:"};
+        List<String> result = new ArrayList<>();
+        result.add(icon[rng(icon.length - 1)]);
+        result.add(icon[rng(icon.length - 1)]);
+        result.add(icon[rng(icon.length - 1)]);
+        result.add(icon[rng(icon.length - 1)]);
+        result.add(icon[rng(icon.length - 1)]);
+        return result;
+    }
 }
