@@ -1,6 +1,4 @@
 /*
- * Copyright (C) 2019 Yago Garcia Sanches Gimenez / KuuHaKu
- *
  * This file is part of Shiro J Bot.
  *
  *     Shiro J Bot is free software: you can redistribute it and/or modify
@@ -14,7 +12,7 @@
  *     GNU General Public License for more details.
  *
  *     You should have received a copy of the GNU General Public License
- *     along with Shiro J Bot.  If not, see https://www.gnu.org/licenses/
+ *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
 package com.kuuhaku.model;
@@ -31,8 +29,9 @@ public class Member {
     private String id;
     private int level = 1, xp = 0;
     private String warns = "";
-    private String bg = "";
+    private String bg = "http://i0.wp.com/cakeisnotalie.net/wp-content/uploads/2014/10/PoroSnow.jpg";
     private String badges = "[false,false,false,false,false,false,false,false,false,false,false,false,false]";
+    private boolean markForDelete;
 
     public Member() {
 
@@ -98,7 +97,7 @@ public class Member {
         return warns.replace("[", "").replace("]", "").split(",");
     }
 
-    public boolean[] getBadges() {
+    private boolean[] getBadges() {
         String[] t = badges.replace("[", "").replace("]", "").split(",");
         boolean[] tb = new boolean[t.length];
         for (int i = 0; i < t.length; i++) {
@@ -117,5 +116,13 @@ public class Member {
 
     public void setBg(String bg) {
         this.bg = bg;
+    }
+
+    public boolean isMarkForDelete() {
+        return markForDelete;
+    }
+
+    public void setMarkForDelete(boolean markForDelete) {
+        this.markForDelete = markForDelete;
     }
 }

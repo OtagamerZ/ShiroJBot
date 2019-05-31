@@ -1,6 +1,4 @@
 /*
- * Copyright (C) 2019 Yago Garcia Sanches Gimenez / KuuHaKu
- *
  * This file is part of Shiro J Bot.
  *
  *     Shiro J Bot is free software: you can redistribute it and/or modify
@@ -14,10 +12,12 @@
  *     GNU General Public License for more details.
  *
  *     You should have received a copy of the GNU General Public License
- *     along with Shiro J Bot.  If not, see https://www.gnu.org/licenses/
+ *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
 package com.kuuhaku.model;
+
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -29,6 +29,7 @@ public class CustomAnswers {
     private String guildID;
     private String gatilho;
     private String answer;
+    private boolean markForDelete;
 
     public CustomAnswers() {
 
@@ -60,5 +61,13 @@ public class CustomAnswers {
 
     public String getGuildID() {
         return guildID;
+    }
+
+    public boolean isMarkForDelete() {
+        return markForDelete;
+    }
+
+    public void setMarkForDelete(boolean markForDelete) {
+        this.markForDelete = markForDelete;
     }
 }
