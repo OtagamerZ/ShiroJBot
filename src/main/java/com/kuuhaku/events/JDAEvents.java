@@ -63,7 +63,7 @@ public class JDAEvents extends ListenerAdapter {
     @Override
     public void onMessageReactionAdd(MessageReactionAddEvent event) {
         Message message = event.getChannel().getMessageById(event.getMessageId()).complete();
-        if (message.getAuthor() == Main.getInfo().getSelfUser()) {
+        if (message.getAuthor() == Main.getInfo().getSelfUser() && event.getUser() != Main.getInfo().getAPI().getSelfUser()) {
             if (message.getContentRaw().contains("abraçou")) {
                 User author = message.getMentionedUsers().get(0);
                 MessageChannel channel = message.getChannel();
