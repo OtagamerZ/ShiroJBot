@@ -15,7 +15,7 @@
  *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.owner;
+package com.kuuhaku.command.commands.dev;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
@@ -29,7 +29,7 @@ import javax.persistence.NoResultException;
 public class ToxicTagCommand extends Command {
 
     public ToxicTagCommand() {
-        super("switchtoxic", new String[]{"mudatoxico", "tagtoxico", "reportayasuo"}, "<@usuário>", "Define um usuário como tóxico ou não.", Category.OWNER);
+        super("switchtoxic", new String[]{"mudatoxico", "tagtoxico", "reportayasuo"}, "<@usuário>", "Define um usuário como tóxico ou não.", Category.DEVS);
     }
 
     @Override
