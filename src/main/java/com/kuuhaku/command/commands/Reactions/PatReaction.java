@@ -44,34 +44,30 @@ public class PatReaction extends Reaction {
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
         try {
             if (message.getMentionedUsers().size() > 0) {
-                if (message.getMentionedUsers().size() == 1) {
-                    HttpURLConnection con = (HttpURLConnection) new URL(ReactionsList.pat()).openConnection();
-                    con.setRequestProperty("User-Agent", "Mozilla/5.0");
+                HttpURLConnection con = (HttpURLConnection) new URL(ReactionsList.pat()).openConnection();
+                con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
-                    this.setReaction(new String[]{
-                            "Fuu~~",
-                            "Parece até um gato!",
-                            "Quem não gosta de um cafuné?"
-                    });
+                this.setReaction(new String[]{
+                        "Fuu~~",
+                        "Parece até um gato!",
+                        "Quem não gosta de um cafuné?"
+                });
 
-                    this.setSelfTarget(new String[]{
-                            "Não, desgrudaa!",
-                            "Não sou um gato!",
-                            "Nem tenta!"
-                    });
+                this.setSelfTarget(new String[]{
+                        "Não, desgrudaa!",
+                        "Não sou um gato!",
+                        "Nem tenta!"
+                });
 
-                    if (message.getMentionedUsers().get(0) == Main.getInfo().getAPI().getSelfUser()) {
-                        Helper.sendReaction(channel, author.getAsMention() + " tentou fazer cafuné na " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget()[this.getSelfTargetLength()], con.getInputStream(), false);
-                        return;
-                    }
-
-                    if (!isAnswer())
-                        Helper.sendReaction(channel, author.getAsMention() + " fez cafuné em " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), true);
-                    else
-                        Helper.sendReaction(channel, message.getMentionedUsers().get(0).getAsMention() + " fez outro cafuné em " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), false);
-                } else {
-                    Helper.typeMessage(channel, ":x: | Você só pode fazer cafuné em uma pessoa por vez, vai com calma!");
+                if (message.getMentionedUsers().get(0) == Main.getInfo().getAPI().getSelfUser()) {
+                    Helper.sendReaction(channel, author.getAsMention() + " tentou fazer cafuné na " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget()[this.getSelfTargetLength()], con.getInputStream(), false);
+                    return;
                 }
+
+                if (!isAnswer())
+                    Helper.sendReaction(channel, author.getAsMention() + " fez cafuné em " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), true);
+                else
+                    Helper.sendReaction(channel, message.getMentionedUsers().get(0).getAsMention() + " fez outro cafuné em " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), false);
             } else {
                 Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para fazer cafuné!");
             }
