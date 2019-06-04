@@ -89,7 +89,7 @@ public class SQLite {
 
         Query q = em.createQuery("SELECT c FROM CustomAnswers c", CustomAnswers.class);
 
-        return q.getResultList();
+        return (List<CustomAnswers>) q.getResultList();
     }
 
     @SuppressWarnings("unchecked")
@@ -98,7 +98,7 @@ public class SQLite {
 
         Query q = em.createQuery("SELECT m FROM Member m", Member.class);
 
-        return q.getResultList();
+        return (List<Member>) q.getResultList();
     }
 
     @SuppressWarnings("unchecked")
@@ -107,7 +107,7 @@ public class SQLite {
 
         Query q = em.createQuery("SELECT g FROM guildConfig g", guildConfig.class);
 
-        return q.getResultList();
+        return (List<guildConfig>) q.getResultList();
     }
 
     public static guildConfig getGuildById(String id) {
