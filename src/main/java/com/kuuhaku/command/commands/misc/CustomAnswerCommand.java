@@ -31,7 +31,10 @@ public class CustomAnswerCommand extends Command {
                 StringBuilder sb = new StringBuilder();
                 List<CustomAnswers> ca = SQLite.getCADump();
                 for (int i = -10 + (10 * page); i < ca.size() && i < (10 * page) && i > -10 + (10 * page); i++) {
-                    ca.forEach(a -> sb.append("`(").append(a.getId()).append(") ").append(a.getGatilho()).append("` **->** `").append(a.getAnswer()).append("`\n"));
+                    ca.forEach(a -> {
+                        if (a.getGuildID().equals(guild.getId()))
+                            sb.append("`(").append(a.getId()).append(") ").append(a.getGatilho()).append("` **->** `").append(a.getAnswer()).append("`\n");
+                    });
                 }
 
                 channel.sendMessage("__**Respostas deste servidor:**__\n\n" + (sb.toString().isEmpty() ? "`Nenhuma`" : sb.toString())).queue();
