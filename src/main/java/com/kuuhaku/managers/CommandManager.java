@@ -27,6 +27,7 @@ import com.kuuhaku.command.commands.information.ComandosCommand;
 import com.kuuhaku.command.commands.information.ProfileCommand;
 import com.kuuhaku.command.commands.information.ReportBugCommand;
 import com.kuuhaku.command.commands.misc.*;
+import com.kuuhaku.command.commands.moderation.AllowCommunityCommand;
 import com.kuuhaku.command.commands.moderation.RemoveAnswerCommand;
 import com.kuuhaku.command.commands.moderation.SettingsCommand;
 import com.kuuhaku.command.commands.dev.*;
@@ -53,6 +54,7 @@ public class CommandManager {
             //MODERATION
             add(new RemoveAnswerCommand());
             add(new SettingsCommand());
+            add(new AllowCommunityCommand());
 
             //INFORMATION
             add(new ComandosCommand());
