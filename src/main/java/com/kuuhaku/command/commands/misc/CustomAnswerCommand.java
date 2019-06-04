@@ -16,7 +16,7 @@ public class CustomAnswerCommand extends Command {
 
     @Override
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-        if (!Helper.hasPermission(member, PrivilegeLevel.STAFF) && !SQLite.getGuildById(guild.getId()).isAnyTell()) {
+        if (!Helper.hasPermission(member, PrivilegeLevel.MOD) && !SQLite.getGuildById(guild.getId()).isAnyTell()) {
             channel.sendMessage(":x: | Este servidor não está configurado para permitir respostas customizadas da comunidade.").queue();
             return;
         } else if (args.length == 0) {

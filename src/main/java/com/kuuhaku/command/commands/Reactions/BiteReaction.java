@@ -28,11 +28,11 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class HugReaction extends Reaction {
+public class BiteReaction extends Reaction {
     private static boolean answer = false;
 
-    public HugReaction(boolean isAnswer) {
-        super("abraçar", new String[]{"abracar", "hug", "vemca"}, "Abraça alguém.", Category.FUN);
+    public BiteReaction(boolean isAnswer) {
+        super("morder", new String[]{"moider", "bite", "moide"}, "Morde alguém.", Category.FUN);
         answer = isAnswer;
     }
 
@@ -45,34 +45,35 @@ public class HugReaction extends Reaction {
         try {
             if (message.getMentionedUsers().size() > 0) {
                 if (message.getMentionedUsers().size() == 1) {
-                    HttpURLConnection con = (HttpURLConnection) new URL(ReactionsList.hug()).openConnection();
+                    HttpURLConnection con = (HttpURLConnection) new URL(ReactionsList.bite()).openConnection();
                     con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
                     this.setReaction(new String[]{
-                            "Awnn...ai qualquer um shippa!",
-                            "Ai sim ein, vai pra cima garoto(a)!",
+                            "Snack!",
+                            "~~moide!",
+                            "Munch!"
                     });
 
                     this.setSelfTarget(new String[]{
-                            "Ow ow ow, sem pegação!",
-                            "Meu Nii-chan vai ficar bravo com isso!",
-                            "Moshi moshi, FBI-sama?"
+                            "Não, não, NÃO!",
+                            "Complicado ein!",
+                            "Não sou biscoito pra morder!"
                     });
 
                     if (message.getMentionedUsers().get(0) == Main.getInfo().getAPI().getSelfUser()) {
-                        Helper.sendReaction(channel, author.getAsMention() + " tentou abraçar a " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget()[this.getSelfTargetLength()], con.getInputStream(), false);
+                        Helper.sendReaction(channel, author.getAsMention() + " tentou morder a " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget()[this.getSelfTargetLength()], con.getInputStream(), false);
                         return;
                     }
 
                     if (!isAnswer())
-                        Helper.sendReaction(channel, author.getAsMention() + " abraçou " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), true);
+                        Helper.sendReaction(channel, author.getAsMention() + " mordeu " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), true);
                     else
-                        Helper.sendReaction(channel, message.getMentionedUsers().get(0).getAsMention() + " devolveu o abraço de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), false);
+                        Helper.sendReaction(channel, message.getMentionedUsers().get(0).getAsMention() + " devolveu a mordida de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), false);
                 } else {
-                    Helper.typeMessage(channel, ":x: | Você só pode abraçar uma pessoa por vez, vai com calma!");
+                    Helper.typeMessage(channel, ":x: | Você só pode morder uma pessoa por vez, vai com calma!");
                 }
             } else {
-                Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para abraçar!");
+                Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para morder!");
             }
         } catch (IOException e) {
             e.printStackTrace();

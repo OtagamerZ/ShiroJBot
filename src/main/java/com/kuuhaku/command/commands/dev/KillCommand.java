@@ -1,4 +1,4 @@
-package com.kuuhaku.command.commands.owner;
+package com.kuuhaku.command.commands.dev;
 
 import com.kuuhaku.Main;
 import net.dv8tion.jda.core.entities.*;
@@ -11,7 +11,7 @@ import java.sql.SQLException;
 public class KillCommand extends Command {
 	
 	public KillCommand() {
-		super("kill", new String[] {"shutdown"}, "Mata a Shiro!", Category.OWNER);
+		super("kill", new String[]{"shutdown"}, "Mata a Shiro!", Category.DEVS);
 	}
 
 	@Override

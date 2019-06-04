@@ -28,11 +28,11 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class HugReaction extends Reaction {
+public class PunchReaction extends Reaction {
     private static boolean answer = false;
 
-    public HugReaction(boolean isAnswer) {
-        super("abraçar", new String[]{"abracar", "hug", "vemca"}, "Abraça alguém.", Category.FUN);
+    public PunchReaction(boolean isAnswer) {
+        super("socar", new String[]{"chega", "tomaessa", "punch"}, "Soca alguém.", Category.FUN);
         answer = isAnswer;
     }
 
@@ -45,34 +45,35 @@ public class HugReaction extends Reaction {
         try {
             if (message.getMentionedUsers().size() > 0) {
                 if (message.getMentionedUsers().size() == 1) {
-                    HttpURLConnection con = (HttpURLConnection) new URL(ReactionsList.hug()).openConnection();
+                    HttpURLConnection con = (HttpURLConnection) new URL(ReactionsList.smash()).openConnection();
                     con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
                     this.setReaction(new String[]{
-                            "Awnn...ai qualquer um shippa!",
-                            "Ai sim ein, vai pra cima garoto(a)!",
+                            "Conheça a dor!",
+                            "Pow!",
+                            "Detroit...SMASH!"
                     });
 
                     this.setSelfTarget(new String[]{
-                            "Ow ow ow, sem pegação!",
-                            "Meu Nii-chan vai ficar bravo com isso!",
-                            "Moshi moshi, FBI-sama?"
+                            "Errou!",
+                            "Ha, hoje não!",
+                            "Tio tá ai?"
                     });
 
                     if (message.getMentionedUsers().get(0) == Main.getInfo().getAPI().getSelfUser()) {
-                        Helper.sendReaction(channel, author.getAsMention() + " tentou abraçar a " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget()[this.getSelfTargetLength()], con.getInputStream(), false);
+                        Helper.sendReaction(channel, author.getAsMention() + " tentou socar a " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget()[this.getSelfTargetLength()], con.getInputStream(), false);
                         return;
                     }
 
                     if (!isAnswer())
-                        Helper.sendReaction(channel, author.getAsMention() + " abraçou " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), true);
+                        Helper.sendReaction(channel, author.getAsMention() + " socou " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), true);
                     else
-                        Helper.sendReaction(channel, message.getMentionedUsers().get(0).getAsMention() + " devolveu o abraço de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), false);
+                        Helper.sendReaction(channel, message.getMentionedUsers().get(0).getAsMention() + " devolveu o soco de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), false);
                 } else {
-                    Helper.typeMessage(channel, ":x: | Você só pode abraçar uma pessoa por vez, vai com calma!");
+                    Helper.typeMessage(channel, ":x: | Você só pode socar uma pessoa por vez, vai com calma!");
                 }
             } else {
-                Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para abraçar!");
+                Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para socar!");
             }
         } catch (IOException e) {
             e.printStackTrace();

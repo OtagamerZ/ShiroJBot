@@ -18,7 +18,7 @@
 package com.kuuhaku.managers;
 
 import com.kuuhaku.command.Command;
-import com.kuuhaku.command.commands.Reactions.HugReaction;
+import com.kuuhaku.command.commands.Reactions.*;
 import com.kuuhaku.command.commands.beyblade.*;
 import com.kuuhaku.command.commands.fun.OhNoCommand;
 import com.kuuhaku.command.commands.fun.PPTCommand;
@@ -29,7 +29,7 @@ import com.kuuhaku.command.commands.information.ReportBugCommand;
 import com.kuuhaku.command.commands.misc.*;
 import com.kuuhaku.command.commands.moderation.RemoveAnswerCommand;
 import com.kuuhaku.command.commands.moderation.SettingsCommand;
-import com.kuuhaku.command.commands.owner.*;
+import com.kuuhaku.command.commands.dev.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +44,7 @@ public class CommandManager {
         commands = new ArrayList<Command>() {{
             //EXEMPLO: commands.add(new KillCommand());
 
-            //OWNER
+            //DEVS
             add(new KillCommand());
             add(new LeaveCommand());
             add(new ToxicTagCommand());
@@ -75,7 +75,22 @@ public class CommandManager {
             //FUN
             add(new OhNoCommand());
             add(new PPTCommand());
+            //RECIPROCOS
             add(new HugReaction(false));
+            add(new KissReaction(false));
+            add(new PatReaction(false));
+            add(new StareReaction(false));
+            add(new SlapReaction(false));
+            add(new PunchReaction(false));
+            add(new BiteReaction(false));
+            //NÃO RECIPROCOS
+            add(new BlushReaction());
+            add(new CryReaction());
+            add(new DanceReaction());
+            add(new FacedeskReaction());
+            add(new LaughReaction());
+            add(new NopeReaction());
+            add(new RunReaction());
 
             //BEYBLADE
             add(new StartCommand());
