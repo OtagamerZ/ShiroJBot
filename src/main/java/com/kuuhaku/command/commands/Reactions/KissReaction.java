@@ -44,34 +44,30 @@ public class KissReaction extends Reaction {
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
         try {
             if (message.getMentionedUsers().size() > 0) {
-                if (message.getMentionedUsers().size() == 1) {
-                    HttpURLConnection con = (HttpURLConnection) new URL(ReactionsList.kiss()).openConnection();
-                    con.setRequestProperty("User-Agent", "Mozilla/5.0");
+                HttpURLConnection con = (HttpURLConnection) new URL(ReactionsList.kiss()).openConnection();
+                con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
-                    this.setReaction(new String[]{
-                            "Ow wow, vai com calma pessoal!",
-                            "Eu...vou deixar vocês sozinhos!",
-                            "Um romance melhor que Crepúsculo!"
-                    });
+                this.setReaction(new String[]{
+                        "Ow wow, vai com calma pessoal!",
+                        "Eu...vou deixar vocês sozinhos!",
+                        "Um romance melhor que Crepúsculo!"
+                });
 
-                    this.setSelfTarget(new String[]{
-                            "Eu não, sai, xispa!",
-                            "Saaaai, não to afim de você!",
-                            "Temos um lolicon-sama aqui!"
-                    });
+                this.setSelfTarget(new String[]{
+                        "Eu não, sai, xispa!",
+                        "Saaaai, não to afim de você!",
+                        "Temos um lolicon-sama aqui!"
+                });
 
-                    if (message.getMentionedUsers().get(0) == Main.getInfo().getAPI().getSelfUser()) {
-                        Helper.sendReaction(channel, author.getAsMention() + " tentou beijar a " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget()[this.getSelfTargetLength()], con.getInputStream(), false);
-                        return;
-                    }
-
-                    if (!isAnswer())
-                        Helper.sendReaction(channel, author.getAsMention() + " beijou " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), true);
-                    else
-                        Helper.sendReaction(channel, message.getMentionedUsers().get(0).getAsMention() + " devolveu o beijo de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), false);
-                } else {
-                    Helper.typeMessage(channel, ":x: | Você só pode beijar uma pessoa por vez, vai com calma!");
+                if (message.getMentionedUsers().get(0) == Main.getInfo().getAPI().getSelfUser()) {
+                    Helper.sendReaction(channel, author.getAsMention() + " tentou beijar a " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget()[this.getSelfTargetLength()], con.getInputStream(), false);
+                    return;
                 }
+
+                if (!isAnswer())
+                    Helper.sendReaction(channel, author.getAsMention() + " beijou " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), true);
+                else
+                    Helper.sendReaction(channel, message.getMentionedUsers().get(0).getAsMention() + " devolveu o beijo de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), false);
             } else {
                 Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para beijar!");
             }
