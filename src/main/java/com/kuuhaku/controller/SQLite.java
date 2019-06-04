@@ -629,4 +629,19 @@ public class SQLite {
 
         em.close();
     }
+
+    public static void switchGuildAnyTell(String id) {
+        EntityManager em = getEntityManager();
+
+        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+        q.setParameter(1, id);
+        guildConfig gc = (guildConfig) q.getSingleResult();
+
+        gc.setAnyTell(!gc.isAnyTell());
+
+        em.getTransaction().begin();
+        em.merge(gc);
+        em.getTransaction().commit();
+        em.close();
+    }
 }
