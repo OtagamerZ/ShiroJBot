@@ -1,9 +1,8 @@
-package com.kuuhaku.command.commands.owner;
+package com.kuuhaku.command.commands.dev;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 
@@ -13,7 +12,7 @@ import java.util.List;
 public class LeaveCommand extends Command {
 
 	public LeaveCommand() {
-		super("leave", new String[]{"sair"}, "<ID do servidor>", "Sai do servidor cujo o ID foi dado.", Category.OWNER);
+        super("leave", new String[]{"sair"}, "<ID do servidor>", "Sai do servidor cujo o ID foi dado.", Category.DEVS);
 	}
 
 	@Override
