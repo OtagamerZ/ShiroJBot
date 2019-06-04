@@ -150,12 +150,13 @@ public class SQLite {
     }
 
     @SuppressWarnings("unchecked")
-    public static CustomAnswers getCAByTrigger(String trigger) {
+    public static CustomAnswers getCAByTrigger(String trigger, String guild) {
         EntityManager em = getEntityManager();
         List<CustomAnswers> ca;
 
-        Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE LOWER(gatilho) LIKE ?1", CustomAnswers.class);
+        Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE LOWER(gatilho) LIKE ?1 AND guildID = ?2", CustomAnswers.class);
         q.setParameter(1, trigger.toLowerCase());
+        q.setParameter(2, guild);
         ca = (List<CustomAnswers>) q.getResultList();
 
         em.close();
