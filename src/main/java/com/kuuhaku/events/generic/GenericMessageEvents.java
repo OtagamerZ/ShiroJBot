@@ -96,7 +96,7 @@ public class GenericMessageEvents extends ListenerAdapter {
             }
 
             try {
-                CustomAnswers ca = SQLite.getCAByTrigger(rawMessage);
+                CustomAnswers ca = SQLite.getCAByTrigger(rawMessage, guild.getId());
                 if (!Objects.requireNonNull(ca).isMarkForDelete())
                     Helper.typeMessage(channel, Objects.requireNonNull(ca).getAnswer());
             } catch (NoResultException | NullPointerException ignore) {
