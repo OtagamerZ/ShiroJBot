@@ -44,34 +44,30 @@ public class PunchReaction extends Reaction {
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
         try {
             if (message.getMentionedUsers().size() > 0) {
-                if (message.getMentionedUsers().size() == 1) {
-                    HttpURLConnection con = (HttpURLConnection) new URL(ReactionsList.smash()).openConnection();
-                    con.setRequestProperty("User-Agent", "Mozilla/5.0");
+                HttpURLConnection con = (HttpURLConnection) new URL(ReactionsList.smash()).openConnection();
+                con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
-                    this.setReaction(new String[]{
-                            "Conheça a dor!",
-                            "Pow!",
-                            "Detroit...SMASH!"
-                    });
+                this.setReaction(new String[]{
+                        "Conheça a dor!",
+                        "Pow!",
+                        "Detroit...SMASH!"
+                });
 
-                    this.setSelfTarget(new String[]{
-                            "Errou!",
-                            "Ha, hoje não!",
-                            "Tio tá ai?"
-                    });
+                this.setSelfTarget(new String[]{
+                        "Errou!",
+                        "Ha, hoje não!",
+                        "Tio tá ai?"
+                });
 
-                    if (message.getMentionedUsers().get(0) == Main.getInfo().getAPI().getSelfUser()) {
-                        Helper.sendReaction(channel, author.getAsMention() + " tentou socar a " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget()[this.getSelfTargetLength()], con.getInputStream(), false);
-                        return;
-                    }
-
-                    if (!isAnswer())
-                        Helper.sendReaction(channel, author.getAsMention() + " socou " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), true);
-                    else
-                        Helper.sendReaction(channel, message.getMentionedUsers().get(0).getAsMention() + " devolveu o soco de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), false);
-                } else {
-                    Helper.typeMessage(channel, ":x: | Você só pode socar uma pessoa por vez, vai com calma!");
+                if (message.getMentionedUsers().get(0) == Main.getInfo().getAPI().getSelfUser()) {
+                    Helper.sendReaction(channel, author.getAsMention() + " tentou socar a " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget()[this.getSelfTargetLength()], con.getInputStream(), false);
+                    return;
                 }
+
+                if (!isAnswer())
+                    Helper.sendReaction(channel, author.getAsMention() + " socou " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), true);
+                else
+                    Helper.sendReaction(channel, message.getMentionedUsers().get(0).getAsMention() + " devolveu o soco de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), false);
             } else {
                 Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para socar!");
             }
