@@ -22,109 +22,126 @@ import net.dv8tion.jda.core.entities.*;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("localvariable")
 public class ShiroInfo {
 
-    private String token;
-    private String apiVersion;
-    private String name;
-    private String version;
-    private String default_prefix;
-    private String nomeDB;
-    private JDA api;
-    private ArrayList<String> developers;
-    private String niichan;
-    private long startTime;
-    private boolean ready = false;
+	//TODO Alternador do modo desenvolvimento (true quando utilizar em IDEs, false quando for dar push para o master)
+	private static final boolean DEV = true;
 
-    public ShiroInfo() {
-        token = System.getenv("BOT_TOKEN");
+	//CONSTANTS
+	private static final String BotToken = DEV ? "NTcyNzg0MzA1MTM5NDgyNjg2.XPZgPA.qCnxnU1bvukDLcZZKT_LhQWgKNY" : System.getenv("BOT_TOKEN");
+	private static final String AnilistToken = DEV ? "client_credentials&Client_id=2107&Client_secret=4xJiVDdfa61xu1SOfSspNcPHfqoAh3PzpubDBrtH" : System.getenv("ANILIST_TOKEN");
+	private static final String YandexToken = DEV ? "trnsl.1.1.20190604T123034Z.fbf5dbf78b4e7a52.5b560d01ee0357074266d549f24361d956761a56" : System.getenv("YANDEX_TOKEN");
+	private static final String apiVersion = "3.8.3_463";
+	private static final String name = "Shiro";
+	private static final String version = "2.0";
+	private static final String default_prefix = DEV ? "dev!" : "s!";
+	private static final String nomeDB = "shiro.sqlite";
+	private static final String niichan = "350836145921327115"; //KuuHaKu
+	private static final ArrayList<String> developers = new ArrayList<String>() {{
+		add("321665807988031495"); //Reydux
+		add("350836145921327115"); //KuuHaKu
+	}};
 
-        apiVersion = "3.8.3_463";
+	private JDA api;
+	private long startTime;
+	private boolean ready = false;
 
-        name = "Shiro";
-        version = "2.0";
+	public ShiroInfo() {
 
-        default_prefix = "s!";
+	}
 
-        nomeDB = "shiro.sqlite";
+	//CONSTANTS
+	public boolean isDev() {
+		return DEV;
+	}
 
-        developers = new ArrayList<String>() {{
-            add("321665807988031495"); //Reydux
-            add("350836145921327115"); //KuuHaKu
-        }};
+	public String getBotToken() {
+		return BotToken;
+	}
 
-        niichan = "350836145921327115"; //KuuHaKu
-    }
+	public String getYandexToken() {
+		return YandexToken;
+	}
 
-    public JDA getAPI() {
-        return api;
-    }
+	public String getAnilistToken() {
+		return AnilistToken;
+	}
 
-    public void setAPI(JDA api) {
-        this.api = api;
-    }
+	public String getApiVersion() {
+		return apiVersion;
+	}
 
-    public String getApiVersion() {
-        return apiVersion;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getToken() {
-        return token;
-    }
+	public String getFullName() {
+		return name + " v" + version;
+	}
 
-    public String getDefaultPrefix() {
-        return default_prefix;
-    }
+	public String getVersion() {
+		return version;
+	}
 
-    public String getDBFileName() {
-        return nomeDB;
-    }
+	public String getDefaultPrefix() {
+		return default_prefix;
+	}
 
-    public ArrayList<String> getDevelopers() {
-        return developers;
-    }
+	public String getDBFileName() {
+		return nomeDB;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getNiiChan() {
+		return niichan;
+	}
 
-    public String getVersion() {
-        return version;
-    }
+	public ArrayList<String> getDevelopers() {
+		return developers;
+	}
 
-    public String getFullName() {
-        return name + " v" + version;
-    }
 
-    public SelfUser getSelfUser() {
-        return api.getSelfUser();
-    }
+	public JDA getAPI() {
+		return api;
+	}
 
-    public long getPing() {
-        return api.getPing();
-    }
+	public void setAPI(JDA api) {
+		this.api = api;
+	}
 
-    public long getStartTime() {
-        return startTime;
-    }
+	public SelfUser getSelfUser() {
+		return api.getSelfUser();
+	}
 
-    public void setStartTime(long startTime) {
-        this.startTime = startTime;
-    }
+	public long getPing() {
+		return api.getPing();
+	}
 
-    public User getUserByID(String userID) { return api.getUserById(userID); }
+	public long getStartTime() {
+		return startTime;
+	}
 
-    Role getRoleByID(String roleID) { return api.getRoleById(roleID); }
+	public void setStartTime(long startTime) {
+		this.startTime = startTime;
+	}
 
-    public String getNiiChan() {
-        return niichan;
-    }
+	public boolean isReady() {
+		return ready;
+	}
 
-    public boolean isReady() {
-        return ready;
-    }
+	public void setReady(boolean ready) {
+		this.ready = ready;
+	}
 
-    public void setReady(boolean ready) {
-        this.ready = ready;
-    }
+	public User getUserByID(String userID) {
+		return api.getUserById(userID);
+	}
+
+	public Role getRoleByID(String roleID) {
+		return api.getRoleById(roleID);
+	}
+
+	public Guild getGuildByID(String guildID) {
+		return api.getGuildById(guildID);
+	}
 }

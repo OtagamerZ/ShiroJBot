@@ -18,5 +18,16 @@
 package com.kuuhaku.utils;
 
 public enum PrivilegeLevel {
-	USER, STAFF, OWNER, NIICHAN
+
+	USER(0), STAFF(1), OWNER(2), NIICHAN(3);
+
+	private Integer authority;
+
+	PrivilegeLevel(int authority) {
+		this.authority = authority;
+	}
+
+	public boolean hasAuthority(PrivilegeLevel outro) {
+		return this.authority > outro.authority;
+	}
 }
