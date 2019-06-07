@@ -26,7 +26,7 @@ import java.util.ArrayList;
 public class ShiroInfo {
 
 	//TODO Alternador do modo desenvolvimento (true quando utilizar em IDEs, false quando for dar push para o master)
-    private static final boolean DEV = true;
+    private static final boolean DEV = false;
 
 	//CONSTANTS
 	private static final String BotToken = DEV ? "NTcyNzg0MzA1MTM5NDgyNjg2.XPZgPA.qCnxnU1bvukDLcZZKT_LhQWgKNY" : System.getenv("BOT_TOKEN");
