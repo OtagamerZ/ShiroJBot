@@ -90,7 +90,7 @@ public class GenericMessageEvents extends ListenerAdapter {
 
             String rawMsgNoPrefix = rawMessage;
             String commandName = "";
-            if (rawMessage.contains(prefix)) {
+            if (rawMessage.toLowerCase().contains(prefix)) {
                 rawMsgNoPrefix = rawMessage.substring(prefix.length()).trim();
                 commandName = rawMsgNoPrefix.split(" ")[0].trim();
             }
