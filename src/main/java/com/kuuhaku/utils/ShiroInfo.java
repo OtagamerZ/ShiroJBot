@@ -40,7 +40,6 @@ public class ShiroInfo {
 	private static final String niichan = "350836145921327115"; //KuuHaKu
 	private static final ArrayList<String> developers = new ArrayList<String>() {{
 		add("321665807988031495"); //Reydux
-		add("350836145921327115"); //KuuHaKu
 	}};
 
 	private JDA api;
@@ -100,7 +99,7 @@ public class ShiroInfo {
 		return developers;
 	}
 
-
+	//VARIABLES
 	public JDA getAPI() {
 		return api;
 	}
