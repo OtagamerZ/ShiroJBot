@@ -55,10 +55,6 @@ public class guildConfig {
         this.name = name;
     }
 
-    public String getGuildId() {
-        return guildID;
-    }
-
     public void setGuildId(String id) {
         this.guildID = id;
     }
