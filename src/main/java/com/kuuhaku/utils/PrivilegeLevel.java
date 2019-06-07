@@ -28,6 +28,6 @@ public enum PrivilegeLevel {
 	}
 
 	public boolean hasAuthority(PrivilegeLevel outro) {
-		return this.authority > outro.authority;
+		return this.authority >= outro.authority;
 	}
 }
