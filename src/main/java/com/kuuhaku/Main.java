@@ -53,7 +53,7 @@ public class Main implements JobListener {
 
         cmdManager = new CommandManager();
 
-        JDA api = new JDABuilder(AccountType.BOT).setToken(info.getToken()).build().awaitReady();
+        JDA api = new JDABuilder(AccountType.BOT).setToken(info.getBotToken()).build().awaitReady();
         info.setAPI(api);
         Main.api = api;
         api.getPresence().setGame(Game.playing("Iniciando..."));

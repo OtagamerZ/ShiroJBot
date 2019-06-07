@@ -18,7 +18,7 @@
 package com.kuuhaku.events;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.command.commands.Reactions.HugReaction;
+import com.kuuhaku.command.commands.Reactions.*;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.DuelData;
 import com.kuuhaku.model.guildConfig;
@@ -63,12 +63,42 @@ public class JDAEvents extends ListenerAdapter {
     @Override
     public void onMessageReactionAdd(MessageReactionAddEvent event) {
         Message message = event.getChannel().getMessageById(event.getMessageId()).complete();
-        if (message.getAuthor() == Main.getInfo().getSelfUser()) {
+        if (message.getAuthor() == Main.getInfo().getSelfUser() && event.getUser() != Main.getInfo().getAPI().getSelfUser()) {
             if (message.getContentRaw().contains("abraçou")) {
                 User author = message.getMentionedUsers().get(0);
                 MessageChannel channel = message.getChannel();
 
                 new HugReaction(true).execute(author, null, null, null, message, channel, null, null, null);
+            } else if (message.getContentRaw().contains("beijou")) {
+                User author = message.getMentionedUsers().get(0);
+                MessageChannel channel = message.getChannel();
+
+                new KissReaction(true).execute(author, null, null, null, message, channel, null, null, null);
+            } else if (message.getContentRaw().contains("fez cafuné em")) {
+                User author = message.getMentionedUsers().get(0);
+                MessageChannel channel = message.getChannel();
+
+                new PatReaction(true).execute(author, null, null, null, message, channel, null, null, null);
+            } else if (message.getContentRaw().contains("encarou")) {
+                User author = message.getMentionedUsers().get(0);
+                MessageChannel channel = message.getChannel();
+
+                new StareReaction(true).execute(author, null, null, null, message, channel, null, null, null);
+            } else if (message.getContentRaw().contains("deu um tapa em")) {
+                User author = message.getMentionedUsers().get(0);
+                MessageChannel channel = message.getChannel();
+
+                new SlapReaction(true).execute(author, null, null, null, message, channel, null, null, null);
+            } else if (message.getContentRaw().contains("socou")) {
+                User author = message.getMentionedUsers().get(0);
+                MessageChannel channel = message.getChannel();
+
+                new PunchReaction(true).execute(author, null, null, null, message, channel, null, null, null);
+            } else if (message.getContentRaw().contains("mordeu")) {
+                User author = message.getMentionedUsers().get(0);
+                MessageChannel channel = message.getChannel();
+
+                new BiteReaction(true).execute(author, null, null, null, message, channel, null, null, null);
             }
 
             if (duels.containsKey(event.getMessageId()) && event.getUser() == duels.get((event.getMessageId())).getP2()) {

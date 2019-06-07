@@ -53,19 +53,15 @@ public class Helper {
         if (Main.getInfo().getNiiChan().contains(member.getUser().getId())) {
             return PrivilegeLevel.NIICHAN;
         } else if (Main.getInfo().getDevelopers().contains(member.getUser().getId())) {
-            return PrivilegeLevel.OWNER;
+            return PrivilegeLevel.DEV;
         } else if (member.hasPermission(Permission.MESSAGE_MANAGE)) {
-            return PrivilegeLevel.STAFF;
+            return PrivilegeLevel.MOD;
         }
         return PrivilegeLevel.USER;
     }
 
     public static boolean hasPermission(Member member, PrivilegeLevel privilegeLevel) {
-        if ((getPrivilegeLevel(member) != PrivilegeLevel.NIICHAN && member.getUser() != Main.getInfo().getAPI().getSelfUser()) && privilegeLevel == PrivilegeLevel.NIICHAN) {
-            return false;
-        } else if (getPrivilegeLevel(member) != PrivilegeLevel.STAFF && privilegeLevel == PrivilegeLevel.STAFF) {
-            return false;
-        } else return getPrivilegeLevel(member) != PrivilegeLevel.USER || privilegeLevel == PrivilegeLevel.USER;
+        return getPrivilegeLevel(member).hasAuthority(privilegeLevel);
     }
 
     public static double round(double value, int places) {

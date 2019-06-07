@@ -17,6 +17,7 @@
 
 package com.kuuhaku.controller;
 
+import com.kuuhaku.Main;
 import org.json.JSONObject;
 
 import java.io.*;
@@ -28,7 +29,7 @@ import java.nio.charset.StandardCharsets;
 public class Tradutor {
 
     public static String translate(String from, String to, String text) throws IOException {
-        String token = System.getenv("YANDEX_TOKEN");
+        String token = Main.getInfo().getYandexToken();
         URL link = new URL("https://translate.yandex.net/api/v1.5/tr.json/translate?key=" + token +
                 "&text=" + URLEncoder.encode(text, StandardCharsets.UTF_8.toString()) + "&lang=" + from + "-" + to);
         HttpURLConnection con = (HttpURLConnection) link.openConnection();
