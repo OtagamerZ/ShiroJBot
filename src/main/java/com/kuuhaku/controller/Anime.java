@@ -17,6 +17,7 @@
 
 package com.kuuhaku.controller;
 
+import com.kuuhaku.Main;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
@@ -43,7 +44,7 @@ public class Anime {
         oStream.close();
 
         OutputStreamWriter osw = new OutputStreamWriter(con.getOutputStream());
-        osw.write("client_credentials&Client_id=1987&Client_secret=oRIwidZip6e1mVHNFu5IA3gvfBwfCGdTxyC0tTGb");
+        osw.write(Main.getInfo().getAnilistToken());
         osw.flush();
 
         InputStream iStream = new BufferedInputStream(con.getInputStream());

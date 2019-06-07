@@ -66,9 +66,9 @@ public class Profile {
 
         if (Helper.hasPermission(u, PrivilegeLevel.NIICHAN)) {
             con = (HttpURLConnection) new URL("http://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Challenger_Trim.png").openConnection();
-        } else if (Helper.hasPermission(u, PrivilegeLevel.OWNER)) {
+        } else if (Helper.hasPermission(u, PrivilegeLevel.DEV)) {
             con = (HttpURLConnection) new URL("http://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Grandmaster_Trim.png").openConnection();
-        } else if (Helper.hasPermission(u, PrivilegeLevel.STAFF)) {
+        } else if (Helper.hasPermission(u, PrivilegeLevel.MOD)) {
             con = (HttpURLConnection) new URL("http://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Master_Trim.png").openConnection();
         } else if (m.getLevel() >= 30) {
             con = (HttpURLConnection) new URL("http://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Diamond_Trim.png").openConnection();

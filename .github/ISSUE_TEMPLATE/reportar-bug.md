@@ -1,9 +1,9 @@
 ---
-name: Bug report
+name: Reportar bug
 about: Mande-nos um relatório de um bug para nos ajudar a melhorar a Shiro!
 title: "[BUG]"
 labels: bug
-assignees: Ncheater
+assignees: Ncheater, Reydux
 
 ---
 
