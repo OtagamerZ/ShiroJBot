@@ -15,7 +15,7 @@
  *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.owner;
+package com.kuuhaku.command.commands.dev;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
@@ -29,7 +29,7 @@ import javax.persistence.NoResultException;
 public class PartnerTagCommand extends Command {
 
     public PartnerTagCommand() {
-        super("switchpartner", new String[]{"mudaparceiro", "tagparceiro", "éparça"}, "<@usuário>", "Define um usuário como parceiro ou não.", Category.OWNER);
+        super("switchpartner", new String[]{"mudaparceiro", "tagparceiro", "éparça"}, "<@usuário>", "Define um usuário como parceiro ou não.", Category.DEVS);
     }
 
     @Override

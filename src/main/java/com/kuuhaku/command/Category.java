@@ -22,8 +22,8 @@ import com.kuuhaku.utils.PrivilegeLevel;
 import java.util.ArrayList;
 
 public enum Category {
-	OWNER("Owner", "Comandos dedicados ao dono do bot.", PrivilegeLevel.OWNER),
-	MODERACAO("Moderação", "Comandos dedicados à staff do servidor.", PrivilegeLevel.STAFF),
+    DEVS("Dev", "Comandos dedicados aos devs do bot.", PrivilegeLevel.DEV),
+    MODERACAO("Moderação", "Comandos dedicados à staff do servidor.", PrivilegeLevel.MOD),
 	FUN("Diversão", "Comandos para diversão.", PrivilegeLevel.USER),
 	MISC("Diversos", "Comandos diversos.", PrivilegeLevel.USER),
 	INFO("Informação", "Comandos de informação", PrivilegeLevel.USER),
