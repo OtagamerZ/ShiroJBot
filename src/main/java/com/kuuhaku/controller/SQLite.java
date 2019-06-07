@@ -88,8 +88,10 @@ public class SQLite {
         EntityManager em = getEntityManager();
 
         Query q = em.createQuery("SELECT c FROM CustomAnswers c", CustomAnswers.class);
+        List<CustomAnswers> ca = q.getResultList();
+        ca.removeIf(CustomAnswers::isMarkForDelete);
 
-        return (List<CustomAnswers>) q.getResultList();
+        return ca;
     }
 
     @SuppressWarnings("unchecked")
@@ -98,7 +100,7 @@ public class SQLite {
 
         Query q = em.createQuery("SELECT m FROM Member m", Member.class);
 
-        return (List<Member>) q.getResultList();
+        return q.getResultList();
     }
 
     @SuppressWarnings("unchecked")
@@ -107,7 +109,7 @@ public class SQLite {
 
         Query q = em.createQuery("SELECT g FROM guildConfig g", guildConfig.class);
 
-        return (List<guildConfig>) q.getResultList();
+        return q.getResultList();
     }
 
     public static guildConfig getGuildById(String id) {
