@@ -32,11 +32,11 @@ public class CustomAnswerCommand extends Command {
 				List<CustomAnswers> ca = SQLite.getCADump();
 				List<String> answers = new ArrayList<>();
 				ca.removeIf(a -> !a.getGuildID().equals(guild.getId()));
-				for (int i = -10 + (10 * page); i < ca.size() && i <= (10 * page); i++) {
-					answers.add("`(" + ca.get(i).getId() + ")` " + ca.get(i).getGatilho() + " **->** " + ca.get(i).getAnswer() + "");
+				for (int i = -10 + (10 * page); i < ca.size() && i < (10 * page); i++) {
+					answers.add("```cpp\n(" + ca.get(i).getId() + ")\n# Gatilho: <" + ca.get(i).getGatilho() + ">\n# Resposta: <" + ca.get(i).getAnswer() + ">```");
 				}
 
-				channel.sendMessage("__**Respostas deste servidor:**__\n\n" + (answers.size() == 0 ? "`Nenhuma`" : answers.toString().replace("[", "").replace("]", "").replace(", ", "\n"))).queue();
+				channel.sendMessage("__**Respostas deste servidor:**__\n\n" + (answers.size() == 0 ? "`Nenhuma`" : answers.toString().replace("[", "").replace("]", "").replace(", ", ""))).queue();
 				return;
 			} catch (NumberFormatException e) {
 				channel.sendMessage(":x: | Número inválido.").queue();
