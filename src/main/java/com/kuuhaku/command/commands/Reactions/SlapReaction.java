@@ -28,11 +28,11 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class HugReaction extends Reaction {
+public class SlapReaction extends Reaction {
     private static boolean answer = false;
 
-    public HugReaction(boolean isAnswer) {
-        super("abraçar", new String[]{"abracar", "hug", "vemca"}, "Abraça alguém.", Category.FUN);
+    public SlapReaction(boolean isAnswer) {
+        super("estapear", new String[]{"tapa", "slap", "baka"}, "Dá um tapa em alguém.", Category.FUN);
         answer = isAnswer;
     }
 
@@ -44,31 +44,31 @@ public class HugReaction extends Reaction {
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
         try {
             if (message.getMentionedUsers().size() > 0) {
-                HttpURLConnection con = (HttpURLConnection) new URL(ReactionsList.hug()).openConnection();
+                HttpURLConnection con = (HttpURLConnection) new URL(ReactionsList.slap()).openConnection();
                 con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
                 this.setReaction(new String[]{
-                        "Awnn...ai qualquer um shippa!",
-                        "Ai sim ein, vai pra cima garoto(a)!",
+                        "Kono BAKA!",
+                        "Eu faria o mesmo!",
+                        "Bem que mereceu!"
                 });
 
                 this.setSelfTarget(new String[]{
-                        "Ow ow ow, sem pegação!",
-                        "Meu Nii-chan vai ficar bravo com isso!",
-                        "Moshi moshi, FBI-sama?"
+                        "Fui treinada por meu Nii-chan, POR MEU NII-CHAN!",
+                        "Você não pode acertar quem você não vê!",
+                        "O que você achou que ia acontecer?!"
                 });
 
                 if (message.getMentionedUsers().get(0) == Main.getInfo().getAPI().getSelfUser()) {
-                    Helper.sendReaction(channel, author.getAsMention() + " tentou abraçar a " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget()[this.getSelfTargetLength()], con.getInputStream(), false);
+                    Helper.sendReaction(channel, author.getAsMention() + " errou o tapa na " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget()[this.getSelfTargetLength()], con.getInputStream(), false);
                     return;
                 }
-
                 if (!isAnswer())
-                    Helper.sendReaction(channel, author.getAsMention() + " abraçou " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), true);
+                    Helper.sendReaction(channel, author.getAsMention() + " deu um tapa em " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), true);
                 else
-                    Helper.sendReaction(channel, message.getMentionedUsers().get(0).getAsMention() + " devolveu o abraço de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), false);
+                    Helper.sendReaction(channel, message.getMentionedUsers().get(0).getAsMention() + " devolveu o tapa de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), false);
             } else {
-                Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para abraçar!");
+                Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para dar um tapa!");
             }
         } catch (IOException e) {
             e.printStackTrace();

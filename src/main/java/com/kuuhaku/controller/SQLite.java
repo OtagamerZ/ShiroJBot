@@ -52,7 +52,7 @@ public class SQLite {
 
         emf.getCache().evictAll();
 
-        System.out.println("✅ | Ligação à base de dados estabelecida.");
+        System.out.println("✅ | Ligação à base de dados SQLite estabelecida.");
     }
 
     private static EntityManager getEntityManager() {
@@ -88,8 +88,10 @@ public class SQLite {
         EntityManager em = getEntityManager();
 
         Query q = em.createQuery("SELECT c FROM CustomAnswers c", CustomAnswers.class);
+        List<CustomAnswers> ca = q.getResultList();
+        ca.removeIf(CustomAnswers::isMarkForDelete);
 
-        return q.getResultList();
+        return ca;
     }
 
     @SuppressWarnings("unchecked")
@@ -150,12 +152,13 @@ public class SQLite {
     }
 
     @SuppressWarnings("unchecked")
-    public static CustomAnswers getCAByTrigger(String trigger) {
+    public static CustomAnswers getCAByTrigger(String trigger, String guild) {
         EntityManager em = getEntityManager();
         List<CustomAnswers> ca;
 
-        Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE LOWER(gatilho) LIKE ?1", CustomAnswers.class);
+        Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE LOWER(gatilho) LIKE ?1 AND guildID = ?2", CustomAnswers.class);
         q.setParameter(1, trigger.toLowerCase());
+        q.setParameter(2, guild);
         ca = (List<CustomAnswers>) q.getResultList();
 
         em.close();
@@ -626,6 +629,21 @@ public class SQLite {
         em.merge(gc);
         em.getTransaction().commit();
 
+        em.close();
+    }
+
+    public static void switchGuildAnyTell(String id) {
+        EntityManager em = getEntityManager();
+
+        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+        q.setParameter(1, id);
+        guildConfig gc = (guildConfig) q.getSingleResult();
+
+        gc.setAnyTell(!gc.isAnyTell());
+
+        em.getTransaction().begin();
+        em.merge(gc);
+        em.getTransaction().commit();
         em.close();
     }
 }
