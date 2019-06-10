@@ -63,7 +63,7 @@ public class CustomAnswerCommand extends Command {
 
 			EmbedBuilder eb = new EmbedBuilder();
 
-			eb.setTitle(":speech_balloon: Resposta " + c.getId());
+			eb.setTitle(":speech_balloon: Resposta Nº " + c.getId());
 			eb.addField(":arrow_right: " + c.getGatilho(), ":arrow_left: " + c.getAnswer(), false);
 			eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
 

@@ -35,17 +35,13 @@ import com.kuuhaku.command.commands.dev.*;
 import java.util.ArrayList;
 import java.util.List;
 
-//import com.kuuhaku.command.commands.moderation.*;
-
 public class CommandManager {
 
     private List<Command> commands;
 
     public CommandManager() {
         commands = new ArrayList<Command>() {{
-            //EXEMPLO: commands.add(new KillCommand());
-
-            //DEVS
+            //DEV
             add(new KillCommand());
             add(new LeaveCommand());
             add(new ToxicTagCommand());
@@ -103,6 +99,7 @@ public class CommandManager {
             add(new InfoCommand());
             add(new RankCommand());
             add(new SlotsCommand());
+            add(new RedeemCommand());
         }};
     }
 
