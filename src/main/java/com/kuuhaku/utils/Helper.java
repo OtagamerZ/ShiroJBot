@@ -447,9 +447,9 @@ public class Helper {
 		} else if (event.getMessage().getContentRaw().equalsIgnoreCase("atacar") || event.getMessage().getContentRaw().equalsIgnoreCase("especial") || event.getMessage().getContentRaw().equalsIgnoreCase("defender")) {
 			eb.setTitle("Dados do duelo:");
 			eb.setColor(Color.decode(player1Turn ? duel.getB1().getColor() : duel.getB2().getColor()));
-			eb.setDescription(duel.getB1().getName() + " :vs: " + duel.getB2().getName());
-			eb.addField(duel.getB1().getName(), "Vida: " + duel.getB1().getLife() + "\n\nForça: " + duel.getB1().getStrength() + "\nVelocidade: " + duel.getB1().getSpeed() + "\nEstabilidade: " + duel.getB1().getStability()+ "\nTipo: " + (duel.getB1().getS() == null ? "Não possui" : duel.getB1().getS().getType()), true);
-			eb.addField(duel.getB2().getName(), "Vida: " + duel.getB2().getLife() + "\n\nForça: " + duel.getB2().getStrength() + "\nVelocidade: " + duel.getB2().getSpeed() + "\nEstabilidade: " + duel.getB2().getStability()+ "\nTipo: " + (duel.getB2().getS() == null ? "Não possui" : duel.getB2().getS().getType()), true);
+			eb.setDescription("**" + duel.getB1().getName() + "** :vs: **" + duel.getB2().getName() + "**");
+			eb.addField(duel.getB1().getName(), "Vida: " + duel.getB1().getLife() + "\n\nForça: " + duel.getB1().getStrength() + "\nVelocidade: " + duel.getB1().getSpeed() + "\nEstabilidade: " + duel.getB1().getStability() + "\nTipo: " + (duel.getB1().getS() == null ? "Não possui" : duel.getB1().getS().getType()), true);
+			eb.addField(duel.getB2().getName(), "Vida: " + duel.getB2().getLife() + "\n\nForça: " + duel.getB2().getStrength() + "\nVelocidade: " + duel.getB2().getSpeed() + "\nEstabilidade: " + duel.getB2().getStability() + "\nTipo: " + (duel.getB2().getS() == null ? "Não possui" : duel.getB2().getS().getType()), true);
 			event.getMessage().getChannel().sendTyping().queue(tm -> event.getMessage().getChannel().sendMessage(eb.build()).queue());
 			JDAEvents.dd.stream().filter(d -> d.getP1() == event.getMessage().getAuthor() || d.getP2() == event.getMessage().getAuthor()).findFirst().ifPresent(m -> {
 				m.getB1().setLife(duel.getB1().getLife());
