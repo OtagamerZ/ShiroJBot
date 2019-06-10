@@ -469,7 +469,7 @@ public class Helper {
 	}
 
 	public static void spawnAd(MessageChannel channel) {
-		if (Helper.rng(1000) > 950) {
+		if (Helper.rng(1000) > 990) {
 			channel.sendMessage("Opa, está gostando de me utilizar em seu servidor? Caso sim, se puder votar me ajudaria **MUITO** a me tornar cada vez mais popular e ser chamada para mais servidores!\nhttps://discordbots.org/bot/572413282653306901").queue();
 		}
 	}
