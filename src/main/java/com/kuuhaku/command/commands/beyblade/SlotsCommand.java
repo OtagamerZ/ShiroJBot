@@ -120,10 +120,16 @@ public class SlotsCommand extends Command {
 
                 String res = String.join(" | ", result.toArray(new String[0]));
                 int pointWin = aposta[0] - Integer.parseInt(args[0]);
+                boolean poorMan = false;
                 bb.addPoints(pointWin);
                 MySQL.sendBeybladeToDB(bb);
 
-                m.editMessage(m.getContentRaw() + "\n\n| " + res + "|\n\nVocê ganhou " + pointWin + " pontos!").queueAfter(2, TimeUnit.SECONDS);
+                if (aposta[0] > 15 && pointWin == 0) {
+                    pointWin = (Math.round((float) aposta[0] / 5.0f));
+                    poorMan = true;
+                }
+
+                m.editMessage(m.getContentRaw() + "\n\n| " + res + "|\n\nVocê ganhou " + (poorMan ? pointWin + " pontos! (seguro de pontos)" : pointWin + " pontos!")).queueAfter(2, TimeUnit.SECONDS);
             });
         } catch (NumberFormatException e) {
             channel.sendMessage(":x: | Valor de aposta inválido, por favor utilize apenas números inteiros.").queue();
