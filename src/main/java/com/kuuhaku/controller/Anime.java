@@ -28,7 +28,6 @@ import java.nio.charset.StandardCharsets;
 public class Anime {
     public static String getData(String query) throws IOException {
         String json = "{\"query\":\"query" + query + "\"}";
-        System.out.println(json);
         URL url = new URL("https://graphql.anilist.co");
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setConnectTimeout(5000);
@@ -53,5 +52,15 @@ public class Anime {
 
         con.disconnect();
         return data;
+    }
+
+    public static String getLink(String name) throws IOException {
+        URL url = new URL("https://www.dreamanimes.com.br/anime-info/"+name.replace(" ", "-"));
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.addRequestProperty("User-Agent", "Mozilla/5.0");
+        con.setRequestMethod("HEAD");
+        con.getInputStream();
+
+        return con.getURL().toString();
     }
 }
