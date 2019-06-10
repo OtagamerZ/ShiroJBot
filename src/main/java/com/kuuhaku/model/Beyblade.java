@@ -19,6 +19,10 @@ package com.kuuhaku.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 @Entity
 public class Beyblade {
@@ -29,6 +33,7 @@ public class Beyblade {
     private float speed = 1.0f, strength = 1.0f, stability = 1.5f;
     private int life = 100, wins = 0, loses = 0, points = 0;
     private int special;
+    private String voteTime;
     transient private Special s;
 
     public String getId() {
@@ -137,5 +142,25 @@ public class Beyblade {
 
     public void setSpecial(int special) {
         this.special = special;
+    }
+
+    public boolean hasVoted() {
+    	try {
+			return System.currentTimeMillis() - Long.parseLong(voteTime) < 43200000;
+		} catch (Exception e) {
+    		return false;
+		}
+    }
+
+    public String getVoteTime() {
+    	long time = 43200000 - (System.currentTimeMillis() - Long.parseLong(voteTime));
+		long hours = TimeUnit.MILLISECONDS.toHours(time);
+		long minutes = TimeUnit.MILLISECONDS.toMinutes(time) - (TimeUnit.MILLISECONDS.toHours(time)* 60);
+
+		return hours + " horas e " + minutes + " minutos!";
+	}
+
+    public void setVoteTime(Long voteTime) {
+        this.voteTime = voteTime.toString();
     }
 }
