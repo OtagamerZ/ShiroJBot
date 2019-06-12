@@ -30,6 +30,7 @@ import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Game;
+import org.discordbots.api.client.DiscordBotListAPI;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
