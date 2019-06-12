@@ -19,6 +19,7 @@ package com.kuuhaku.utils;
 
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.*;
+import org.discordbots.api.client.DiscordBotListAPI;
 
 import java.util.ArrayList;
 
@@ -41,6 +42,7 @@ public class ShiroInfo {
 	private static final ArrayList<String> developers = new ArrayList<String>() {{
 		add("321665807988031495"); //Reydux
 	}};
+	private static final DiscordBotListAPI dbl = new DiscordBotListAPI.Builder().token(System.getenv("DBL_TOKEN")).botId("572413282653306901").build();
 
 	private JDA api;
 	private long startTime;
@@ -97,6 +99,10 @@ public class ShiroInfo {
 
 	public ArrayList<String> getDevelopers() {
 		return developers;
+	}
+
+	public DiscordBotListAPI getDBL() {
+		return dbl;
 	}
 
 	//VARIABLES
