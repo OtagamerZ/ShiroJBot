@@ -43,6 +43,12 @@ public class GenericMessageEvents extends ListenerAdapter {
             String rawMessage = message.getContentRaw();
 
             String prefix = "";
+            if (!Main.getInfo().isDev()) {
+                try {
+                    prefix = SQLite.getGuildPrefix(guild.getId());
+                } catch (NoResultException ignore) {
+                }
+            } else prefix = Main.getInfo().getDefaultPrefix();
             try {
                 prefix = SQLite.getGuildPrefix(guild.getId());
             } catch (NoResultException | NullPointerException ignore) { }
@@ -80,21 +86,21 @@ public class GenericMessageEvents extends ListenerAdapter {
 
             Helper.battle(event);
 
-            if (message.getContentRaw().equals(Main.getInfo().getSelfUser().getAsMention())) {
+            if (message.getContentDisplay().equals(Main.getInfo().getSelfUser().getAsMention())) {
                 channel.sendMessage("Para obter ajuda sobre como me utilizar use `" + prefix + "ajuda`.").queue();
                 return;
             }
 
             String rawMsgNoPrefix = rawMessage;
             String commandName = "";
-            if (rawMessage.contains(prefix)) {
+            if (rawMessage.toLowerCase().contains(prefix)) {
                 rawMsgNoPrefix = rawMessage.substring(prefix.length()).trim();
                 commandName = rawMsgNoPrefix.split(" ")[0].trim();
             }
 
             try {
-                CustomAnswers ca = SQLite.getCAByTrigger(rawMessage);
-                if (!Objects.requireNonNull(ca).isMarkForDelete())
+                CustomAnswers ca = SQLite.getCAByTrigger(rawMessage, guild.getId());
+                if (!Objects.requireNonNull(ca).isMarkForDelete() && author != Main.getInfo().getSelfUser())
                     Helper.typeMessage(channel, Objects.requireNonNull(ca).getAnswer());
             } catch (NoResultException | NullPointerException ignore) {
             }

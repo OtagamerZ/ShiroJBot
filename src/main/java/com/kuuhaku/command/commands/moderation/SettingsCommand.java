@@ -42,9 +42,19 @@ public class SettingsCommand extends Command {
             case "canalbv":
                 Settings.updateCanalBV(args, message, gc);
                 break;
+            case "mensagembemvindo":
+            case "mensagembv":
+            case "msgbv":
+                Settings.updateMsgBV(args, message, gc);
+                break;
             case "cadeus":
             case "canaladeus":
                 Settings.updateCanalAdeus(args, message, gc);
+                break;
+            case "mensagemadeus":
+            case "mensagema":
+            case "msgadeus":
+                Settings.updateMsgAdeus(args, message, gc);
                 break;
             case "csug":
             case "canalsug":
@@ -67,6 +77,11 @@ public class SettingsCommand extends Command {
             case "ln":
             case "levelnotif":
                 Settings.updateLevelNotif(args, message, gc);
+                break;
+            case "canallevelup":
+            case "canallvlup":
+            case "clvlup":
+                Settings.updateCanalLevelUp(args, message, gc);
                 break;
             default:
                 try {
