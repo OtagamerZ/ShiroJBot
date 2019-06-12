@@ -16,11 +16,12 @@ public class MySQL {
         props.put("javax.persistence.jdbc.user", System.getenv("DB_LOGIN"));
         props.put("javax.persistence.jdbc.password", System.getenv("DB_PASS"));
 
-        if (emf == null) emf = Persistence.createEntityManagerFactory("shiro_remote", props);
+        if (emf == null) {
+            emf = Persistence.createEntityManagerFactory("shiro_remote", props);
+            System.out.println("✅ | Ligação à base de dados MySQL estabelecida.");
+        }
 
         emf.getCache().evictAll();
-
-        System.out.println("✅ | Ligação à base de dados MySQL estabelecida.");
 
         return emf.createEntityManager();
     }
