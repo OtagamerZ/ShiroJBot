@@ -37,6 +37,7 @@ public class guildConfig {
     private String canalav = null;
     private String canalsug = null;
     private String canallvl = null;
+    private String canalrelay = null;
     private String cargowarn = null;
     private String cargoslvl = "{}";
     private String lvlNotif = "true";
@@ -169,5 +170,21 @@ public class guildConfig {
 
     public void setMarkForDelete(boolean markForDelete) {
         this.markForDelete = markForDelete;
+    }
+
+    public String getCanalrelay() {
+        return canalrelay;
+    }
+
+    public void setCanalrelay(String canalrelay) {
+        this.canalrelay = canalrelay;
+    }
+
+    public String getGuildID() {
+        return guildID;
+    }
+
+    public void setGuildID(String guildID) {
+        this.guildID = guildID;
     }
 }
