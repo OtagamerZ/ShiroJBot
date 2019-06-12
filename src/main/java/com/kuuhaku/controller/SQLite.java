@@ -55,7 +55,7 @@ public class SQLite {
         System.out.println("✅ | Ligação à base de dados SQLite estabelecida.");
     }
 
-    private static EntityManager getEntityManager() {
+    static EntityManager getEntityManager() {
         if (emf == null) connect();
         return emf.createEntityManager();
     }
