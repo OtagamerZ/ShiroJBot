@@ -145,7 +145,7 @@ public class GenericMessageEvents extends ListenerAdapter {
 					}
 					SQLite.saveMemberToDB(m);
 
-					if (!SQLite.getGuildCanalRelay(guild.getId()).equals("Não definido.")) {
+					if (!SQLite.getGuildById(guild.getId()).getCanalRelay().equals("Não definido.") && SQLite.getGuildById(guild.getId()).getCanalRelay() != null) {
 						String[] msg = message.getContentRaw().split(" ");
 						for (int i = 0; i < msg.length; i++) {
 							if (msg[i].contains("http")) msg[i] = "`LINK BLOQUEADO`";
