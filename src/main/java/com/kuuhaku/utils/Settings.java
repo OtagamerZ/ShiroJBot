@@ -119,7 +119,7 @@ public class Settings {
             return;
         }
 
-        String newMsgBv = Arrays.toString(args).trim().replace(args[0], "").replace(args[1], "");
+        String newMsgBv = String.join(" ", args).replace(args[0], "").replace(args[1], "").trim();
 
         SQLite.updateGuildMsgBV(newMsgBv, gc);
         message.getTextChannel().sendMessage("✅ | A mensagem de boas-vindas do servidor foi trocado para " + newMsgBv + " com sucesso.").queue();
@@ -161,7 +161,7 @@ public class Settings {
             return;
         }
 
-        String newMsgAdeus = Arrays.toString(args).trim().replace(args[0], "").replace(args[1], "");
+        String newMsgAdeus = String.join(" ", args).replace(args[0], "").replace(args[1], "").trim();
 
         SQLite.updateGuildMsgAdeus(newMsgAdeus, gc);
         message.getTextChannel().sendMessage("✅ | A mensagem de boas-vindas do servidor foi trocado para " + newMsgAdeus + " com sucesso.").queue();
