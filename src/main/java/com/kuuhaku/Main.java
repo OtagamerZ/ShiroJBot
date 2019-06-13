@@ -140,10 +140,6 @@ public class Main implements JobListener {
         return relay;
     }
 
-    public static void setRelay(Relay relay) {
-        Main.relay = relay;
-    }
-
     @Override
     public String getName() {
         return null;
