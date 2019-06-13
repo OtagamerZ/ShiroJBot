@@ -31,7 +31,6 @@ public class Relay extends SQLite {
 		gc.removeIf(g -> g.getCanalRelay() == null);
 
 		if (gc.size() != relays.size()) {
-			relays.clear();
 			gc.forEach(g -> relays.put(g.getGuildID(), g.getCanalRelay()));
 		}
 
@@ -45,8 +44,11 @@ public class Relay extends SQLite {
 		}
 
 		relays.forEach((k, r) -> {
-			if (!s.getId().equals(k) && m.getUser() != Main.getInfo().getSelfUser())
-				Main.getInfo().getAPI().getGuildById(k).getTextChannelById(r).sendMessage(eb.build()).queue();
+			try {
+				if (!s.getId().equals(k) && m.getUser() != Main.getInfo().getSelfUser())
+					Main.getInfo().getAPI().getGuildById(k).getTextChannelById(r).sendMessage(eb.build()).queue();
+			} catch (Exception ignore){
+			}
 		});
 	}
 
