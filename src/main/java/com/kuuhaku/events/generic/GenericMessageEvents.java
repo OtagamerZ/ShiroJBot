@@ -136,7 +136,7 @@ public class GenericMessageEvents extends ListenerAdapter {
 				}
 			}
 
-			if (!found && message.getAuthor() != Main.getInfo().getSelfUser()) {
+			if (!found && !message.getAuthor().isBot()) {
 				try {
 					com.kuuhaku.model.Member m = SQLite.getMemberById(member.getUser().getId() + member.getGuild().getId());
 					boolean lvlUp = m.addXp();
