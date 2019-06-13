@@ -30,9 +30,7 @@ public class Relay extends SQLite {
 		List<guildConfig> gc = q.getResultList();
 		gc.removeIf(g -> g.getCanalRelay() == null);
 
-		if (gc.size() != relays.size()) {
-			gc.forEach(g -> relays.put(g.getGuildID(), g.getCanalRelay()));
-		}
+		gc.forEach(g -> relays.put(g.getGuildID(), g.getCanalRelay()));
 
 		eb = new EmbedBuilder();
 		eb.setAuthor("(" + s.getName() + ") " + m.getEffectiveName() + " disse:", m.getUser().getAvatarUrl(), m.getUser().getAvatarUrl());
@@ -47,7 +45,7 @@ public class Relay extends SQLite {
 			try {
 				if (!s.getId().equals(k) && m.getUser() != Main.getInfo().getSelfUser())
 					Main.getInfo().getAPI().getGuildById(k).getTextChannelById(r).sendMessage(eb.build()).queue();
-			} catch (Exception ignore){
+			} catch (Exception ignore) {
 			}
 		});
 	}
