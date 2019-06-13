@@ -3,6 +3,7 @@ package com.kuuhaku.controller;
 import com.kuuhaku.model.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,6 +82,28 @@ public class MySQL {
             return (List<Beyblade>) b.getResultList();
         } catch (NoResultException e) {
             return null;
+        }
+    }
+
+    public static void permaBlock(PermaBlock p) {
+        EntityManager em = getEntityManager();
+
+        em.getTransaction().begin();
+        em.merge(p);
+        em.getTransaction().commit();
+
+        em.close();
+    }
+
+    @SuppressWarnings("unchecked")
+    public static List<String> blockedList() {
+        EntityManager em = getEntityManager();
+
+        try {
+            Query q = em.createQuery("SELECT p.id FROM PermaBlock p", String.class);
+            return q.getResultList();
+        } catch (NoResultException e) {
+            return new ArrayList<>();
         }
     }
 }
