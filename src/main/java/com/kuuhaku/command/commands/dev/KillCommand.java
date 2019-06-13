@@ -25,7 +25,10 @@ public class KillCommand extends Command {
 
 		try {
 			Main.shutdown();
-		} catch (SQLException err) { err.printStackTrace(); }
+		} catch (SQLException err) {
+			err.printStackTrace();
+			channel.sendMessage("Erro ao desligar: " + err.toString()).queue();
+		}
 		System.exit(0);
 	}
 }
