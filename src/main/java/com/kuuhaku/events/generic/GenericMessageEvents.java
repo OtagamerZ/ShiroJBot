@@ -148,7 +148,7 @@ public class GenericMessageEvents extends ListenerAdapter {
 					if (channel.getId().equals(SQLite.getGuildCanalRelay(guild.getId()))) {
 						String[] msg = message.getContentRaw().split(" ");
 						for (int i = 0; i < msg.length; i++) {
-							if (msg[i].contains("http")) msg[i] = "`LINK BLOQUEADO`";
+							if (Helper.findURL(msg[i])) msg[i] = "`LINK BLOQUEADO`";
 						}
 						Main.getRelay().relayMessage(String.join(" ", msg), member, guild);
 					}

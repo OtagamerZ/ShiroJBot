@@ -44,6 +44,8 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Helper {
 
@@ -138,6 +140,16 @@ public class Helper {
 		rdr.close();
 
 		return sb.toString();
+	}
+
+	public static boolean findURL(String text) {
+		final Pattern urlPattern = Pattern.compile(
+				"(?:^|[\\W])((ht|f)tp(s?)://|www\\.)"
+						+ "(([\\w\\-]+\\.)+?([\\w\\-.~]+/?)*"
+						+ "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]*$~@!:/{};']*)",
+				Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+		final Matcher msg = urlPattern.matcher(text);
+		return msg.matches();
 	}
 
 	public static void sendPM(User user, String message) {
