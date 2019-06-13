@@ -34,616 +34,662 @@ import java.util.Map;
 
 public class SQLite {
 
-    private static Connection con;
-    private static EntityManagerFactory emf;
+	private static Connection con;
+	private static EntityManagerFactory emf;
 
-    public static void connect() {
-        con = null;
+	public static void connect() {
+		con = null;
 
-        File DBfile = new File(Main.getInfo().getDBFileName());
-        if (!DBfile.exists()) {
-            System.out.println("O ficheiro usado como base de dados não foi encontrado. Entre no servidor discord oficial da Shiro para obter ajuda.");
-        }
+		File DBfile = new File(Main.getInfo().getDBFileName());
+		if (!DBfile.exists()) {
+			System.out.println("O ficheiro usado como base de dados não foi encontrado. Entre no servidor discord oficial da Shiro para obter ajuda.");
+		}
 
-        Map<String, String> props = new HashMap<>();
-        props.put("javax.persistence.jdbc.url", "jdbc:sqlite:" + DBfile.getPath());
+		Map<String, String> props = new HashMap<>();
+		props.put("javax.persistence.jdbc.url", "jdbc:sqlite:" + DBfile.getPath());
 
-        if (emf == null) emf = Persistence.createEntityManagerFactory("shiro_local", props);
+		if (emf == null) emf = Persistence.createEntityManagerFactory("shiro_local", props);
 
-        emf.getCache().evictAll();
+		emf.getCache().evictAll();
 
-        System.out.println("✅ | Ligação à base de dados SQLite estabelecida.");
-    }
+		System.out.println("✅ | Ligação à base de dados SQLite estabelecida.");
+	}
 
-    static EntityManager getEntityManager() {
-        if (emf == null) connect();
-        return emf.createEntityManager();
-    }
+	static EntityManager getEntityManager() {
+		if (emf == null) connect();
+		return emf.createEntityManager();
+	}
 
-    public static void disconnect() throws SQLException {
-        if (con != null) {
-            con.close();
-            System.out.println("Ligação à base de dados desfeita.");
-        }
-    }
+	public static void disconnect() throws SQLException {
+		if (con != null) {
+			con.close();
+			System.out.println("Ligação à base de dados desfeita.");
+		}
+	}
 
-    public static boolean restoreData(DataDump data) {
-        EntityManager em = getEntityManager();
+	public static boolean restoreData(DataDump data) {
+		EntityManager em = getEntityManager();
 
-        try {
-            em.getTransaction().begin();
-            data.getCaDump().forEach(em::merge);
-            data.getmDump().forEach(em::merge);
-            data.getGcDump().forEach(em::merge);
-            em.getTransaction().commit();
+		try {
+			em.getTransaction().begin();
+			data.getCaDump().forEach(em::merge);
+			data.getmDump().forEach(em::merge);
+			data.getGcDump().forEach(em::merge);
+			em.getTransaction().commit();
 
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
 
-    @SuppressWarnings("unchecked")
-    public static List<CustomAnswers> getCADump() {
-        EntityManager em = getEntityManager();
+	@SuppressWarnings("unchecked")
+	public static List<CustomAnswers> getCADump() {
+		EntityManager em = getEntityManager();
 
-        Query q = em.createQuery("SELECT c FROM CustomAnswers c", CustomAnswers.class);
-        List<CustomAnswers> ca = q.getResultList();
-        ca.removeIf(CustomAnswers::isMarkForDelete);
+		Query q = em.createQuery("SELECT c FROM CustomAnswers c", CustomAnswers.class);
+		List<CustomAnswers> ca = q.getResultList();
+		ca.removeIf(CustomAnswers::isMarkForDelete);
 
-        return ca;
-    }
+		return ca;
+	}
 
-    @SuppressWarnings("unchecked")
-    public static List<Member> getMemberDump() {
-        EntityManager em = getEntityManager();
+	@SuppressWarnings("unchecked")
+	public static List<Member> getMemberDump() {
+		EntityManager em = getEntityManager();
 
-        Query q = em.createQuery("SELECT m FROM Member m", Member.class);
+		Query q = em.createQuery("SELECT m FROM Member m", Member.class);
 
-        return q.getResultList();
-    }
+		return q.getResultList();
+	}
 
-    @SuppressWarnings("unchecked")
-    public static List<guildConfig> getGuildDump() {
-        EntityManager em = getEntityManager();
+	@SuppressWarnings("unchecked")
+	public static List<guildConfig> getGuildDump() {
+		EntityManager em = getEntityManager();
 
-        Query q = em.createQuery("SELECT g FROM guildConfig g", guildConfig.class);
+		Query q = em.createQuery("SELECT g FROM guildConfig g", guildConfig.class);
 
-        return q.getResultList();
-    }
+		return q.getResultList();
+	}
 
-    public static guildConfig getGuildById(String id) {
-        EntityManager em = getEntityManager();
-        guildConfig gc;
+	public static guildConfig getGuildById(String id) {
+		EntityManager em = getEntityManager();
+		guildConfig gc;
 
-        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
-        q.setParameter(1, id);
-        gc = (guildConfig) q.getSingleResult();
+		Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+		q.setParameter(1, id);
+		gc = (guildConfig) q.getSingleResult();
 
-        em.close();
+		em.close();
 
-        return gc;
-    }
+		return gc;
+	}
 
-    public static void addGuildToDB(Guild guild) {
-        EntityManager em = getEntityManager();
+	public static void addGuildToDB(Guild guild) {
+		EntityManager em = getEntityManager();
 
-        guildConfig gc = new guildConfig();
-        gc.setName(guild.getName());
-        gc.setGuildId(guild.getId());
+		guildConfig gc = new guildConfig();
+		gc.setName(guild.getName());
+		gc.setGuildId(guild.getId());
 
-        em.getTransaction().begin();
-        em.merge(gc);
-        em.getTransaction().commit();
+		em.getTransaction().begin();
+		em.merge(gc);
+		em.getTransaction().commit();
 
-        em.close();
-    }
+		em.close();
+	}
 
-    public static void removeGuildFromDB(guildConfig gc) {
-        EntityManager em = getEntityManager();
+	public static void removeGuildFromDB(guildConfig gc) {
+		EntityManager em = getEntityManager();
 
-        gc.setMarkForDelete(true);
+		gc.setMarkForDelete(true);
 
-        em.getTransaction().begin();
-        em.merge(gc);
-        em.getTransaction().commit();
+		em.getTransaction().begin();
+		em.merge(gc);
+		em.getTransaction().commit();
 
-        em.close();
-    }
+		em.close();
+	}
 
-    @SuppressWarnings("unchecked")
-    public static CustomAnswers getCAByTrigger(String trigger, String guild) {
-        EntityManager em = getEntityManager();
-        List<CustomAnswers> ca;
+	@SuppressWarnings("unchecked")
+	public static CustomAnswers getCAByTrigger(String trigger, String guild) {
+		EntityManager em = getEntityManager();
+		List<CustomAnswers> ca;
 
-        Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE LOWER(gatilho) LIKE ?1 AND guildID = ?2", CustomAnswers.class);
-        q.setParameter(1, trigger.toLowerCase());
-        q.setParameter(2, guild);
-        ca = (List<CustomAnswers>) q.getResultList();
+		Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE LOWER(gatilho) LIKE ?1 AND guildID = ?2", CustomAnswers.class);
+		q.setParameter(1, trigger.toLowerCase());
+		q.setParameter(2, guild);
+		ca = (List<CustomAnswers>) q.getResultList();
 
-        em.close();
+		em.close();
 
-        return ca.size() > 0 ? ca.get(Helper.rng(ca.size())) : null;
-    }
-    public static CustomAnswers getCAByID(Long id) {
-        EntityManager em = getEntityManager();
-        CustomAnswers ca;
+		return ca.size() > 0 ? ca.get(Helper.rng(ca.size())) : null;
+	}
 
-        Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE id = ?1", CustomAnswers.class);
-        q.setParameter(1, id);
-        ca = (CustomAnswers) q.getSingleResult();
+	public static CustomAnswers getCAByID(Long id) {
+		EntityManager em = getEntityManager();
+		CustomAnswers ca;
 
-        em.close();
+		Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE id = ?1", CustomAnswers.class);
+		q.setParameter(1, id);
+		ca = (CustomAnswers) q.getSingleResult();
 
-        return ca;
-    }
+		em.close();
 
-    public static void addCAtoDB(Guild g, String trigger, String answer) {
-        EntityManager em = getEntityManager();
+		return ca;
+	}
 
-        CustomAnswers ca = new CustomAnswers();
-        ca.setGuildID(g.getId());
-        ca.setGatilho(trigger);
-        ca.setAnswer(answer);
+	public static void addCAtoDB(Guild g, String trigger, String answer) {
+		EntityManager em = getEntityManager();
 
-        em.getTransaction().begin();
-        em.merge(ca);
-        em.getTransaction().commit();
+		CustomAnswers ca = new CustomAnswers();
+		ca.setGuildID(g.getId());
+		ca.setGatilho(trigger);
+		ca.setAnswer(answer);
 
-        em.close();
-    }
-    public static void removeCAFromDB(CustomAnswers ca) {
-        EntityManager em = getEntityManager();
+		em.getTransaction().begin();
+		em.merge(ca);
+		em.getTransaction().commit();
 
-        ca.setMarkForDelete(true);
+		em.close();
+	}
 
-        em.getTransaction().begin();
-        em.merge(ca);
-        em.getTransaction().commit();
+	public static void removeCAFromDB(CustomAnswers ca) {
+		EntityManager em = getEntityManager();
 
-        em.close();
-    }
+		ca.setMarkForDelete(true);
 
-    public static Member getMemberById(String id) {
-        EntityManager em = getEntityManager();
-        Member m;
+		em.getTransaction().begin();
+		em.merge(ca);
+		em.getTransaction().commit();
 
-        Query q = em.createQuery("SELECT m FROM Member m WHERE id = ?1", Member.class);
-        q.setParameter(1, id);
-        m = (Member) q.getSingleResult();
+		em.close();
+	}
 
-        em.close();
+	public static Member getMemberById(String id) {
+		EntityManager em = getEntityManager();
+		Member m;
 
-        return m;
-    }
-    public static void addMemberToDB(net.dv8tion.jda.core.entities.Member u) {
-        EntityManager em = getEntityManager();
+		Query q = em.createQuery("SELECT m FROM Member m WHERE id = ?1", Member.class);
+		q.setParameter(1, id);
+		m = (Member) q.getSingleResult();
 
-        Member m = new Member();
-        m.setId(u.getUser().getId() + u.getGuild().getId());
+		em.close();
 
-        em.getTransaction().begin();
-        em.merge(m);
-        em.getTransaction().commit();
+		return m;
+	}
 
-        em.close();
-    }
-    public static void saveMemberToDB(Member m) {
-        EntityManager em = getEntityManager();
+	public static void addMemberToDB(net.dv8tion.jda.core.entities.Member u) {
+		EntityManager em = getEntityManager();
 
-        em.getTransaction().begin();
-        em.merge(m);
-        em.getTransaction().commit();
+		Member m = new Member();
+		m.setId(u.getUser().getId() + u.getGuild().getId());
 
-        em.close();
-    }
-    public static void removeMemberFromDB(Member m) {
-        EntityManager em = getEntityManager();
+		em.getTransaction().begin();
+		em.merge(m);
+		em.getTransaction().commit();
 
-        m.setMarkForDelete(true);
+		em.close();
+	}
 
-        em.getTransaction().begin();
-        em.merge(m);
-        em.getTransaction().commit();
+	public static void saveMemberToDB(Member m) {
+		EntityManager em = getEntityManager();
 
-        em.close();
-    }
+		em.getTransaction().begin();
+		em.merge(m);
+		em.getTransaction().commit();
 
-    public static Tags getTagById(String id) {
-        EntityManager em = getEntityManager();
-        Tags m;
+		em.close();
+	}
 
-        Query q = em.createQuery("SELECT t FROM Tags t WHERE id = ?1", Tags.class);
-        q.setParameter(1, id);
-        m = (Tags) q.getSingleResult();
+	public static void removeMemberFromDB(Member m) {
+		EntityManager em = getEntityManager();
 
-        em.close();
+		m.setMarkForDelete(true);
 
-        return m;
-    }
-    public static void addUserTagsToDB(net.dv8tion.jda.core.entities.Member u) {
-        EntityManager em = getEntityManager();
+		em.getTransaction().begin();
+		em.merge(m);
+		em.getTransaction().commit();
 
-        Tags t = new Tags();
-        t.setId(u.getUser().getId());
+		em.close();
+	}
 
-        em.getTransaction().begin();
-        em.merge(t);
-        em.getTransaction().commit();
+	public static Tags getTagById(String id) {
+		EntityManager em = getEntityManager();
+		Tags m;
 
-        em.close();
-    }
+		Query q = em.createQuery("SELECT t FROM Tags t WHERE id = ?1", Tags.class);
+		q.setParameter(1, id);
+		m = (Tags) q.getSingleResult();
 
-    public static void giveTagToxic(net.dv8tion.jda.core.entities.Member u) {
-        EntityManager em = getEntityManager();
+		em.close();
 
-        Tags t = getTagById(u.getUser().getId());
-        t.setToxic(true);
+		return m;
+	}
 
-        em.getTransaction().begin();
-        em.merge(t);
-        em.getTransaction().commit();
+	public static void addUserTagsToDB(net.dv8tion.jda.core.entities.Member u) {
+		EntityManager em = getEntityManager();
 
-        em.close();
-    }
-    public static void removeTagToxic(net.dv8tion.jda.core.entities.Member u) {
-        EntityManager em = getEntityManager();
+		Tags t = new Tags();
+		t.setId(u.getUser().getId());
 
-        Tags t = getTagById(u.getUser().getId());
-        t.setToxic(false);
+		em.getTransaction().begin();
+		em.merge(t);
+		em.getTransaction().commit();
 
-        em.getTransaction().begin();
-        em.merge(t);
-        em.getTransaction().commit();
+		em.close();
+	}
 
-        em.close();
-    }
+	public static void giveTagToxic(net.dv8tion.jda.core.entities.Member u) {
+		EntityManager em = getEntityManager();
 
-    public static void giveTagPartner(net.dv8tion.jda.core.entities.Member u) {
-        EntityManager em = getEntityManager();
+		Tags t = getTagById(u.getUser().getId());
+		t.setToxic(true);
 
-        Tags t = getTagById(u.getUser().getId());
-        t.setPartner(true);
+		em.getTransaction().begin();
+		em.merge(t);
+		em.getTransaction().commit();
 
-        em.getTransaction().begin();
-        em.merge(t);
-        em.getTransaction().commit();
+		em.close();
+	}
 
-        em.close();
-    }
-    public static void removeTagPartner(net.dv8tion.jda.core.entities.Member u) {
-        EntityManager em = getEntityManager();
+	public static void removeTagToxic(net.dv8tion.jda.core.entities.Member u) {
+		EntityManager em = getEntityManager();
 
-        Tags t = getTagById(u.getUser().getId());
-        t.setPartner(false);
+		Tags t = getTagById(u.getUser().getId());
+		t.setToxic(false);
 
-        em.getTransaction().begin();
-        em.merge(t);
-        em.getTransaction().commit();
+		em.getTransaction().begin();
+		em.merge(t);
+		em.getTransaction().commit();
 
-        em.close();
-    }
+		em.close();
+	}
 
+	public static void giveTagPartner(net.dv8tion.jda.core.entities.Member u) {
+		EntityManager em = getEntityManager();
 
-    // --- guildConfig -- \\
-    public static void updateGuildName(String newName, guildConfig gc) {
-        EntityManager em = getEntityManager();
+		Tags t = getTagById(u.getUser().getId());
+		t.setPartner(true);
 
-        gc.setName(newName);
+		em.getTransaction().begin();
+		em.merge(t);
+		em.getTransaction().commit();
 
-        em.getTransaction().begin();
-        em.merge(gc);
-        em.getTransaction().commit();
+		em.close();
+	}
 
-        em.close();
-    }
+	public static void removeTagPartner(net.dv8tion.jda.core.entities.Member u) {
+		EntityManager em = getEntityManager();
 
-    public static String getGuildPrefix(String id) {
-        EntityManager em = getEntityManager();
+		Tags t = getTagById(u.getUser().getId());
+		t.setPartner(false);
 
-        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
-        q.setParameter(1, id);
-        guildConfig gc = (guildConfig) q.getSingleResult();
-        String prefix = gc.getPrefix();
+		em.getTransaction().begin();
+		em.merge(t);
+		em.getTransaction().commit();
 
-        if (prefix == null) prefix = "s!";
-        em.close();
+		em.close();
+	}
 
-        return prefix;
-    }
-    public static void updateGuildPrefix(String newPrefix, guildConfig gc) {
-        EntityManager em = getEntityManager();
 
-        gc.setPrefix(newPrefix);
+	// --- guildConfig -- \\
+	public static void updateGuildName(String newName, guildConfig gc) {
+		EntityManager em = getEntityManager();
 
-        em.getTransaction().begin();
-        em.merge(gc);
-        em.getTransaction().commit();
+		gc.setName(newName);
 
-        em.close();
-    }
+		em.getTransaction().begin();
+		em.merge(gc);
+		em.getTransaction().commit();
 
-    public static String getGuildCanalBV(String id) {
-        EntityManager em = getEntityManager();
+		em.close();
+	}
 
-        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
-        q.setParameter(1, id);
-        guildConfig gc = (guildConfig) q.getSingleResult();
-        em.close();
+	public static String getGuildPrefix(String id) {
+		EntityManager em = getEntityManager();
 
-        String canalBV = gc.getCanalBV();
-        if (canalBV == null) canalBV = "Não definido.";
+		Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+		q.setParameter(1, id);
+		guildConfig gc = (guildConfig) q.getSingleResult();
+		String prefix = gc.getPrefix();
 
-        return canalBV;
-    }
-    public static void updateGuildCanalBV(String newCanalID, guildConfig gc) {
-        EntityManager em = getEntityManager();
+		if (prefix == null) prefix = "s!";
+		em.close();
 
-        gc.setCanalBV(newCanalID);
+		return prefix;
+	}
 
-        em.getTransaction().begin();
-        em.merge(gc);
-        em.getTransaction().commit();
+	public static void updateGuildPrefix(String newPrefix, guildConfig gc) {
+		EntityManager em = getEntityManager();
 
-        em.close();
-    }
-    public static String getGuildMsgBV(String id) {
-        EntityManager em = getEntityManager();
+		gc.setPrefix(newPrefix);
 
-        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
-        q.setParameter(1, id);
-        guildConfig gc = (guildConfig) q.getSingleResult();
-        em.close();
+		em.getTransaction().begin();
+		em.merge(gc);
+		em.getTransaction().commit();
 
-        String msgBV = gc.getMsgBoasVindas();
-        if (msgBV == null) msgBV = "Não definido.";
+		em.close();
+	}
 
-        return msgBV;
-    }
-    public static void updateGuildMsgBV(String newMsgBV, guildConfig gc) {
-        EntityManager em = getEntityManager();
+	public static String getGuildCanalBV(String id) {
+		EntityManager em = getEntityManager();
 
-        gc.setMsgBoasVindas(newMsgBV);
+		Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+		q.setParameter(1, id);
+		guildConfig gc = (guildConfig) q.getSingleResult();
+		em.close();
 
-        em.getTransaction().begin();
-        em.merge(gc);
-        em.getTransaction().commit();
+		String canalBV = gc.getCanalBV();
+		if (canalBV == null) canalBV = "Não definido.";
 
-        em.close();
-    }
+		return canalBV;
+	}
 
-    public static String getGuildCanalAdeus(String id) {
-        EntityManager em = getEntityManager();
+	public static void updateGuildCanalBV(String newCanalID, guildConfig gc) {
+		EntityManager em = getEntityManager();
 
-        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
-        q.setParameter(1, id);
-        guildConfig gc = (guildConfig) q.getSingleResult();
-        em.close();
+		gc.setCanalBV(newCanalID);
 
-        String canalAdeus = gc.getCanalAdeus();
-        if (canalAdeus == null) canalAdeus = "Não definido.";
+		em.getTransaction().begin();
+		em.merge(gc);
+		em.getTransaction().commit();
 
-        return canalAdeus;
-    }
-    public static void updateGuildCanalAdeus(String newCanalID, guildConfig gc) {
-        EntityManager em = getEntityManager();
+		em.close();
+	}
 
-        gc.setCanalAdeus(newCanalID);
+	public static String getGuildMsgBV(String id) {
+		EntityManager em = getEntityManager();
 
-        em.getTransaction().begin();
-        em.merge(gc);
-        em.getTransaction().commit();
+		Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+		q.setParameter(1, id);
+		guildConfig gc = (guildConfig) q.getSingleResult();
+		em.close();
 
-        em.close();
-    }
-    public static String getGuildMsgAdeus(String id) {
-        EntityManager em = getEntityManager();
+		String msgBV = gc.getMsgBoasVindas();
+		if (msgBV == null) msgBV = "Não definido.";
 
-        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
-        q.setParameter(1, id);
-        guildConfig gc = (guildConfig) q.getSingleResult();
-        em.close();
+		return msgBV;
+	}
 
-        String msgAdeus = gc.getMsgAdeus();
-        if (msgAdeus == null) msgAdeus = "Não definido.";
+	public static void updateGuildMsgBV(String newMsgBV, guildConfig gc) {
+		EntityManager em = getEntityManager();
 
-        return msgAdeus;
-    }
-    public static void updateGuildMsgAdeus(String newMsgAdeus, guildConfig gc) {
-        EntityManager em = getEntityManager();
+		gc.setMsgBoasVindas(newMsgBV);
 
-        gc.setMsgAdeus(newMsgAdeus);
+		em.getTransaction().begin();
+		em.merge(gc);
+		em.getTransaction().commit();
 
-        em.getTransaction().begin();
-        em.merge(gc);
-        em.getTransaction().commit();
+		em.close();
+	}
 
-        em.close();
-    }
+	public static String getGuildCanalAdeus(String id) {
+		EntityManager em = getEntityManager();
 
-    public static String getGuildCanalSUG(String id) {
-        EntityManager em = getEntityManager();
+		Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+		q.setParameter(1, id);
+		guildConfig gc = (guildConfig) q.getSingleResult();
+		em.close();
 
-        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
-        q.setParameter(1, id);
-        guildConfig gc = (guildConfig) q.getSingleResult();
-        em.close();
+		String canalAdeus = gc.getCanalAdeus();
+		if (canalAdeus == null) canalAdeus = "Não definido.";
 
-        String canalSUG = gc.getCanalSUG();
-        if (canalSUG == null) canalSUG = "Não definido.";
+		return canalAdeus;
+	}
 
-        return canalSUG;
-    }
-    public static void updateGuildCanalSUG(String newCanalID, guildConfig gc) {
-        EntityManager em = getEntityManager();
+	public static void updateGuildCanalAdeus(String newCanalID, guildConfig gc) {
+		EntityManager em = getEntityManager();
 
-        gc.setCanalSUG(newCanalID);
+		gc.setCanalAdeus(newCanalID);
 
-        em.getTransaction().begin();
-        em.merge(gc);
-        em.getTransaction().commit();
+		em.getTransaction().begin();
+		em.merge(gc);
+		em.getTransaction().commit();
 
-        em.close();
-    }
+		em.close();
+	}
 
-    public static String getGuildCanalAvisos(String id) {
-        EntityManager em = getEntityManager();
+	public static String getGuildMsgAdeus(String id) {
+		EntityManager em = getEntityManager();
 
-        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
-        q.setParameter(1, id);
-        guildConfig gc = (guildConfig) q.getSingleResult();
-        em.close();
+		Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+		q.setParameter(1, id);
+		guildConfig gc = (guildConfig) q.getSingleResult();
+		em.close();
 
-        String canalAvisos = gc.getCanalAV();
-        if (canalAvisos == null) canalAvisos = "Não definido.";
+		String msgAdeus = gc.getMsgAdeus();
+		if (msgAdeus == null) msgAdeus = "Não definido.";
 
-        return canalAvisos;
-    }
-    public static void updateGuildCanalAvisos(String newCanalID, guildConfig gc) {
-        EntityManager em = getEntityManager();
+		return msgAdeus;
+	}
 
-        gc.setCanalAV(newCanalID);
+	public static void updateGuildMsgAdeus(String newMsgAdeus, guildConfig gc) {
+		EntityManager em = getEntityManager();
 
-        em.getTransaction().begin();
-        em.merge(gc);
-        em.getTransaction().commit();
+		gc.setMsgAdeus(newMsgAdeus);
 
-        em.close();
-    }
+		em.getTransaction().begin();
+		em.merge(gc);
+		em.getTransaction().commit();
 
-    public static String getGuildCargoWarn(String id) {
-        EntityManager em = getEntityManager();
+		em.close();
+	}
 
-        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
-        q.setParameter(1, id);
-        guildConfig gc = (guildConfig) q.getSingleResult();
-        em.close();
+	public static String getGuildCanalSUG(String id) {
+		EntityManager em = getEntityManager();
 
-        String cargoWarnID = gc.getCargoWarn();
-        if (cargoWarnID == null) cargoWarnID = "Não definido.";
+		Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+		q.setParameter(1, id);
+		guildConfig gc = (guildConfig) q.getSingleResult();
+		em.close();
 
-        return cargoWarnID;
-    }
+		String canalSUG = gc.getCanalSUG();
+		if (canalSUG == null) canalSUG = "Não definido.";
 
-    public static void updateGuildCargoWarn(String newCargoID, guildConfig gc) {
-        EntityManager em = getEntityManager();
+		return canalSUG;
+	}
 
-        gc.setCargoWarn(newCargoID);
+	public static void updateGuildCanalSUG(String newCanalID, guildConfig gc) {
+		EntityManager em = getEntityManager();
 
-        em.getTransaction().begin();
-        em.merge(gc);
-        em.getTransaction().commit();
+		gc.setCanalSUG(newCanalID);
 
-        em.close();
-    }
+		em.getTransaction().begin();
+		em.merge(gc);
+		em.getTransaction().commit();
 
-    public static Map<String, Object> getGuildCargoNew(String id) {
-        EntityManager em = getEntityManager();
+		em.close();
+	}
 
-        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
-        q.setParameter(1, id);
-        guildConfig gc = (guildConfig) q.getSingleResult();
-        em.close();
+	public static String getGuildCanalAvisos(String id) {
+		EntityManager em = getEntityManager();
 
-        return gc.getCargoNew();
-    }
+		Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+		q.setParameter(1, id);
+		guildConfig gc = (guildConfig) q.getSingleResult();
+		em.close();
 
-    public static void updateGuildCargoNew(Role r, guildConfig gc) {
-        EntityManager em = getEntityManager();
+		String canalAvisos = gc.getCanalAV();
+		if (canalAvisos == null) canalAvisos = "Não definido.";
 
-        Map<String, Object> cn = gc.getCargoNew();
-        cn.put(r.getName(), r.getId());
-        gc.setCargoNew(new JSONObject(cn));
+		return canalAvisos;
+	}
 
-        em.getTransaction().begin();
-        em.merge(gc);
-        em.getTransaction().commit();
+	public static void updateGuildCanalAvisos(String newCanalID, guildConfig gc) {
+		EntityManager em = getEntityManager();
 
-        em.close();
-    }
+		gc.setCanalAV(newCanalID);
 
-    public static String getGuildCanalLvlUp(String id) {
-        EntityManager em = getEntityManager();
+		em.getTransaction().begin();
+		em.merge(gc);
+		em.getTransaction().commit();
 
-        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
-        q.setParameter(1, id);
-        guildConfig gc = (guildConfig) q.getSingleResult();
-        em.close();
+		em.close();
+	}
 
-        String canalLvlUp = gc.getCanalLvl();
-        if (canalLvlUp == null) canalLvlUp = "Não definido.";
+	public static String getGuildCargoWarn(String id) {
+		EntityManager em = getEntityManager();
 
-        return canalLvlUp;
-    }
-    public static void updateGuildCanalLvlUp(String newCanalID, guildConfig gc) {
-        EntityManager em = getEntityManager();
+		Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+		q.setParameter(1, id);
+		guildConfig gc = (guildConfig) q.getSingleResult();
+		em.close();
 
-        gc.setCanalLvl(newCanalID);
+		String cargoWarnID = gc.getCargoWarn();
+		if (cargoWarnID == null) cargoWarnID = "Não definido.";
 
-        em.getTransaction().begin();
-        em.merge(gc);
-        em.getTransaction().commit();
+		return cargoWarnID;
+	}
 
-        em.close();
-    }
+	public static void updateGuildCargoWarn(String newCargoID, guildConfig gc) {
+		EntityManager em = getEntityManager();
 
-    public static Boolean getGuildLvlUpNotif(String id) {
-        EntityManager em = getEntityManager();
+		gc.setCargoWarn(newCargoID);
 
-        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
-        q.setParameter(1, id);
-        guildConfig gc = (guildConfig) q.getSingleResult();
-        em.close();
+		em.getTransaction().begin();
+		em.merge(gc);
+		em.getTransaction().commit();
 
-        return gc.getLvlNotif();
-    }
-    public static void updateGuildLvlUpNotif(Boolean LvlUpNotif, guildConfig gc) {
-        EntityManager em = getEntityManager();
+		em.close();
+	}
 
-        gc.setLvlNotif(LvlUpNotif);
+	public static Map<String, Object> getGuildCargoNew(String id) {
+		EntityManager em = getEntityManager();
 
-        em.getTransaction().begin();
-        em.merge(gc);
-        em.getTransaction().commit();
-        em.close();
-    }
+		Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+		q.setParameter(1, id);
+		guildConfig gc = (guildConfig) q.getSingleResult();
+		em.close();
 
-    public static Map<String, Object> getGuildCargosLvl(String id) {
-        EntityManager em = getEntityManager();
+		return gc.getCargoNew();
+	}
 
-        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
-        q.setParameter(1, id);
-        guildConfig gc = (guildConfig) q.getSingleResult();
-        em.close();
+	public static void updateGuildCargoNew(Role r, guildConfig gc) {
+		EntityManager em = getEntityManager();
 
-        return gc.getCargoslvl();
-    }
-    public static void updateGuildCargosLvl(String lvl, Role r, guildConfig gc) {
-        EntityManager em = getEntityManager();
+		Map<String, Object> cn = gc.getCargoNew();
+		cn.put(r.getName(), r.getId());
+		gc.setCargoNew(new JSONObject(cn));
 
-        Map<String, Object> cn = gc.getCargoslvl();
-        cn.put(lvl, r.getId());
-        gc.setCargosLvl(new JSONObject(cn));
+		em.getTransaction().begin();
+		em.merge(gc);
+		em.getTransaction().commit();
 
-        em.getTransaction().begin();
-        em.merge(gc);
-        em.getTransaction().commit();
+		em.close();
+	}
 
-        em.close();
-    }
+	public static String getGuildCanalLvlUp(String id) {
+		EntityManager em = getEntityManager();
 
-    public static void switchGuildAnyTell(String id) {
-        EntityManager em = getEntityManager();
+		Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+		q.setParameter(1, id);
+		guildConfig gc = (guildConfig) q.getSingleResult();
+		em.close();
 
-        Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
-        q.setParameter(1, id);
-        guildConfig gc = (guildConfig) q.getSingleResult();
+		String canalLvlUp = gc.getCanalLvl();
+		if (canalLvlUp == null) canalLvlUp = "Não definido.";
 
-        gc.setAnyTell(!gc.isAnyTell());
+		return canalLvlUp;
+	}
 
-        em.getTransaction().begin();
-        em.merge(gc);
-        em.getTransaction().commit();
-        em.close();
-    }
+	public static void updateGuildCanalLvlUp(String newCanalID, guildConfig gc) {
+		EntityManager em = getEntityManager();
+
+		gc.setCanalLvl(newCanalID);
+
+		em.getTransaction().begin();
+		em.merge(gc);
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
+	public static Boolean getGuildLvlUpNotif(String id) {
+		EntityManager em = getEntityManager();
+
+		Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+		q.setParameter(1, id);
+		guildConfig gc = (guildConfig) q.getSingleResult();
+		em.close();
+
+		return gc.getLvlNotif();
+	}
+
+	public static void updateGuildLvlUpNotif(Boolean LvlUpNotif, guildConfig gc) {
+		EntityManager em = getEntityManager();
+
+		gc.setLvlNotif(LvlUpNotif);
+
+		em.getTransaction().begin();
+		em.merge(gc);
+		em.getTransaction().commit();
+		em.close();
+	}
+
+	public static Map<String, Object> getGuildCargosLvl(String id) {
+		EntityManager em = getEntityManager();
+
+		Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+		q.setParameter(1, id);
+		guildConfig gc = (guildConfig) q.getSingleResult();
+		em.close();
+
+		return gc.getCargoslvl();
+	}
+
+	public static void updateGuildCargosLvl(String lvl, Role r, guildConfig gc) {
+		EntityManager em = getEntityManager();
+
+		Map<String, Object> cn = gc.getCargoslvl();
+		cn.put(lvl, r.getId());
+		gc.setCargosLvl(new JSONObject(cn));
+
+		em.getTransaction().begin();
+		em.merge(gc);
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
+	public static void switchGuildAnyTell(String id) {
+		EntityManager em = getEntityManager();
+
+		Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+		q.setParameter(1, id);
+		guildConfig gc = (guildConfig) q.getSingleResult();
+
+		gc.setAnyTell(!gc.isAnyTell());
+
+		em.getTransaction().begin();
+		em.merge(gc);
+		em.getTransaction().commit();
+		em.close();
+	}
+
+	public static String getGuildCanalRelay(String id) {
+		EntityManager em = getEntityManager();
+
+		Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+		q.setParameter(1, id);
+		guildConfig gc = (guildConfig) q.getSingleResult();
+		em.close();
+
+		String canalRelay = gc.getCanalRelay();
+		if (canalRelay == null) canalRelay = "Não definido.";
+
+		return canalRelay;
+	}
+
+	public static void updateGuildCanalRelay(String newCanalID, guildConfig gc) {
+		EntityManager em = getEntityManager();
+
+		gc.setCanalRelay(newCanalID);
+
+		em.getTransaction().begin();
+		em.merge(gc);
+		em.getTransaction().commit();
+
+		em.close();
+	}
 }

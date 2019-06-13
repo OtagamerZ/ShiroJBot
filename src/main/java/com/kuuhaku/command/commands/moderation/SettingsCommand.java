@@ -83,6 +83,11 @@ public class SettingsCommand extends Command {
             case "clvlup":
                 Settings.updateCanalLevelUp(args, message, gc);
                 break;
+            case "canalrelay":
+            case "canalrly":
+            case "crelay":
+                Settings.updateCanalRelay(args, message, gc);
+                break;
             default:
                 try {
                     Settings.embedConfig(message);

@@ -172,11 +172,11 @@ public class guildConfig {
         this.markForDelete = markForDelete;
     }
 
-    public String getCanalrelay() {
+    public String getCanalRelay() {
         return canalrelay;
     }
 
-    public void setCanalrelay(String canalrelay) {
+    public void setCanalRelay(String canalrelay) {
         this.canalrelay = canalrelay;
     }
 

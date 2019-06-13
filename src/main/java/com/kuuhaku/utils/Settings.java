@@ -9,6 +9,7 @@ import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.TextChannel;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class Settings {
 
@@ -34,6 +35,9 @@ public class Settings {
         String canalLvlUpNotif = SQLite.getGuildCanalLvlUp(message.getGuild().getId());
         if(!canalLvlUpNotif.equals("Não definido.")) canalLvlUpNotif = "<#" + canalLvlUpNotif + ">";
 
+        String canalRelay = SQLite.getGuildCanalRelay(message.getGuild().getId());
+        if(!canalRelay.equals("Não definido.")) canalRelay = "<#" + canalRelay + ">";
+
         String cargoWarnID = SQLite.getGuildCargoWarn(message.getGuild().getId());
         //String cargoNewID = SQLite.getGuildCargoNew(message.getGuild().getId());
 
@@ -51,6 +55,7 @@ public class Settings {
         eb.addBlankField(true); eb.addBlankField(true);
         eb.addField("\uD83D\uDCD6 » Canal de Sugestões", canalSUG, true);
         eb.addField("\uD83D\uDCD6 » Canal de Avisos/Logs", canalAvisos, true);
+        eb.addField("\uD83D\uDCD6 » Canal Relay", canalRelay, true);
 
         if(!cargoWarnID.equals("Não definido.")) { eb.addField("\uD83D\uDCD1 » Cargo de Avisos/Warns", Main.getInfo().getRoleByID(cargoWarnID).getAsMention(), false); }
         else { eb.addField("\uD83D\uDCD1 » Cargo de Avisos/Warns", cargoWarnID, true); }
@@ -114,7 +119,7 @@ public class Settings {
             return;
         }
 
-        String newMsgBv = args.toString().trim().replace(args[0], "").replace(args[1], "");
+        String newMsgBv = Arrays.toString(args).trim().replace(args[0], "").replace(args[1], "");
 
         SQLite.updateGuildMsgBV(newMsgBv, gc);
         message.getTextChannel().sendMessage("✅ | A mensagem de boas-vindas do servidor foi trocado para " + newMsgBv + " com sucesso.").queue();
@@ -156,7 +161,7 @@ public class Settings {
             return;
         }
 
-        String newMsgAdeus = args.toString().trim().replace(args[0], "").replace(args[1], "");
+        String newMsgAdeus = Arrays.toString(args).trim().replace(args[0], "").replace(args[1], "");
 
         SQLite.updateGuildMsgAdeus(newMsgAdeus, gc);
         message.getTextChannel().sendMessage("✅ | A mensagem de boas-vindas do servidor foi trocado para " + newMsgAdeus + " com sucesso.").queue();
@@ -305,5 +310,29 @@ public class Settings {
 
         SQLite.updateGuildCanalLvlUp(newCanalLvlUp.getId(), gc);
         message.getTextChannel().sendMessage("✅ | O canal de level up do servidor foi trocado para " + newCanalLvlUp.getAsMention() + " com sucesso.").queue();
+    }
+
+    public static void updateCanalRelay(String[] args, Message message, guildConfig gc) {
+        String antigoCanalRelayID = SQLite.getGuildCanalRelay(message.getGuild().getId());
+
+        if(args.length < 2) {
+            if(antigoCanalRelayID.equals("Não definido.")) {
+                message.getTextChannel().sendMessage("O canal relay atual do servidor ainda não foi definido.").queue();
+            } else {
+                message.getTextChannel().sendMessage("O canal relay atual do servidor é <#" + antigoCanalRelayID + ">.").queue();
+            }
+            return;
+        }
+        if(message.getMentionedChannels().size() > 1) { message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 canal.").queue(); return; }
+        if(args[1].equals("reset") || args[1].equals("resetar")) {
+            SQLite.updateGuildCanalRelay(null, gc);
+            message.getTextChannel().sendMessage("✅ | O canal relay do servidor foi resetado com sucesso.").queue();
+            return;
+        }
+
+        TextChannel newCanalRelay = message.getMentionedChannels().get(0);
+
+        SQLite.updateGuildCanalRelay(newCanalRelay.getId(), gc);
+        message.getTextChannel().sendMessage("✅ | O canal relay do servidor foi trocado para " + newCanalRelay.getAsMention() + " com sucesso.").queue();
     }
 }

@@ -16,6 +16,7 @@ package com.kuuhaku;/*
  */
 
 import com.kuuhaku.controller.MySQL;
+import com.kuuhaku.controller.Relay;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.events.ScheduledEvents;
@@ -44,6 +45,7 @@ import java.util.List;
 public class Main implements JobListener {
 
     private static ShiroInfo info;
+    private static Relay relay;
     private static CommandManager cmdManager;
     private static JDA api;
     private static JobDetail backup;
@@ -51,6 +53,7 @@ public class Main implements JobListener {
 
     public static void main(String[] args) throws Exception {
         info = new ShiroInfo();
+        relay = new Relay();
 
         cmdManager = new CommandManager();
 
@@ -131,6 +134,14 @@ public class Main implements JobListener {
         SQLite.disconnect();
         api.shutdown();
         System.out.println("Fui desligada.");
+    }
+
+    public static Relay getRelay() {
+        return relay;
+    }
+
+    public static void setRelay(Relay relay) {
+        Main.relay = relay;
     }
 
     @Override

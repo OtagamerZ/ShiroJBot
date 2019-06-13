@@ -22,10 +22,7 @@ import com.kuuhaku.command.commands.Reactions.*;
 import com.kuuhaku.command.commands.beyblade.*;
 import com.kuuhaku.command.commands.fun.OhNoCommand;
 import com.kuuhaku.command.commands.fun.PPTCommand;
-import com.kuuhaku.command.commands.information.BackgroundCommand;
-import com.kuuhaku.command.commands.information.ComandosCommand;
-import com.kuuhaku.command.commands.information.ProfileCommand;
-import com.kuuhaku.command.commands.information.ReportBugCommand;
+import com.kuuhaku.command.commands.information.*;
 import com.kuuhaku.command.commands.misc.*;
 import com.kuuhaku.command.commands.moderation.AllowCommunityCommand;
 import com.kuuhaku.command.commands.moderation.RemoveAnswerCommand;
@@ -57,6 +54,7 @@ public class CommandManager {
             add(new ProfileCommand());
             add(new ReportBugCommand());
             add(new BackgroundCommand());
+            add(new RelayCommand());
 
             //MISC
             add(new AsciiCommand());
