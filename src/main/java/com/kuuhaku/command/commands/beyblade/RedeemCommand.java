@@ -39,7 +39,7 @@ public class RedeemCommand extends Command {
 							MySQL.sendBeybladeToDB(b);
 
 						} else {
-							m.editMessage("Você ainda não votou! Vote para receber :diamond_shape_with_a_dot_inside: **50 pontos de combate** (Votos valem o dobro em finais de semana!).\n(Obs: Caso ja tenha votado, aguarde mais alguns minutos e tente novamente usar este comando)").queue();
+							m.editMessage("Você ainda não votou! Vote para receber :diamond_shape_with_a_dot_inside: **50 pontos de combate** (Votos valem o dobro em finais de semana!).\nhttps://discordbots.org/bot/572413282653306901\n(Obs: Caso ja tenha votado, aguarde mais alguns minutos e tente novamente usar este comando)").queue();
 						}
 					});
 				} else {
@@ -51,7 +51,7 @@ public class RedeemCommand extends Command {
 							MySQL.sendBeybladeToDB(b);
 
 						} else {
-							m.editMessage("Você ainda não votou! Vote para receber :diamond_shape_with_a_dot_inside: **25 pontos de combate**.\n(Obs: Caso ja tenha votado, aguarde mais alguns minutos e tente novamente usar este comando)").queue();
+							m.editMessage("Você ainda não votou! Vote para receber :diamond_shape_with_a_dot_inside: **25 pontos de combate**.\nhttps://discordbots.org/bot/572413282653306901\n(Obs: Caso ja tenha votado, aguarde mais alguns minutos e tente novamente usar este comando)").queue();
 						}
 					});
 				}
