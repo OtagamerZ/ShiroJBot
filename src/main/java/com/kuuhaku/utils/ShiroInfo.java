@@ -18,11 +18,13 @@
 package com.kuuhaku.utils;
 
 import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.Role;
+import net.dv8tion.jda.core.entities.SelfUser;
+import net.dv8tion.jda.core.entities.User;
 import org.discordbots.api.client.DiscordBotListAPI;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @SuppressWarnings("localvariable")
 public class ShiroInfo {
@@ -31,9 +33,9 @@ public class ShiroInfo {
     private static final boolean DEV = false;
 
 	//CONSTANTS
-	private static final String BotToken = DEV ? "NTcyNzg0MzA1MTM5NDgyNjg2.XPZgPA.qCnxnU1bvukDLcZZKT_LhQWgKNY" : System.getenv("BOT_TOKEN");
-	private static final String AnilistToken = DEV ? "client_credentials&Client_id=2107&Client_secret=4xJiVDdfa61xu1SOfSspNcPHfqoAh3PzpubDBrtH" : System.getenv("ANILIST_TOKEN");
-	private static final String YandexToken = DEV ? "trnsl.1.1.20190604T123034Z.fbf5dbf78b4e7a52.5b560d01ee0357074266d549f24361d956761a56" : System.getenv("YANDEX_TOKEN");
+    private static final String BotToken = System.getenv("BOT_TOKEN");
+    private static final String AnilistToken = System.getenv("ANILIST_TOKEN");
+    private static final String YandexToken = System.getenv("YANDEX_TOKEN");
 	private static final String apiVersion = "3.8.3_463";
 	private static final String name = "Shiro";
 	private static final String version = "2.0";
