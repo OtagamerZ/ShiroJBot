@@ -22,6 +22,7 @@ import net.dv8tion.jda.core.entities.*;
 import org.discordbots.api.client.DiscordBotListAPI;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("localvariable")
 public class ShiroInfo {
