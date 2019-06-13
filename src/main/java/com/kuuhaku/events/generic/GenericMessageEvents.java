@@ -21,6 +21,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.CustomAnswers;
+import com.kuuhaku.model.RelayBlockList;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -136,7 +137,7 @@ public class GenericMessageEvents extends ListenerAdapter {
 				}
 			}
 
-			if (!found && !message.getAuthor().isBot()) {
+			if (!found && !author.isBot()) {
 				try {
 					com.kuuhaku.model.Member m = SQLite.getMemberById(member.getUser().getId() + member.getGuild().getId());
 					boolean lvlUp = m.addXp();
@@ -145,7 +146,7 @@ public class GenericMessageEvents extends ListenerAdapter {
 					}
 					SQLite.saveMemberToDB(m);
 
-					if (channel.getId().equals(SQLite.getGuildCanalRelay(guild.getId()))) {
+					if (channel.getId().equals(SQLite.getGuildCanalRelay(guild.getId())) && !RelayBlockList.check(author.getId())) {
 						String[] msg = message.getContentRaw().split(" ");
 						for (int i = 0; i < msg.length; i++) {
 							if (Helper.findURL(msg[i])) msg[i] = "`LINK BLOQUEADO`";

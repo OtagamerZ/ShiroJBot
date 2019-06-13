@@ -44,6 +44,7 @@ public class CommandManager {
             add(new ToxicTagCommand());
             add(new PartnerTagCommand());
             add(new RelaysCommand());
+            add(new BlockCommand());
 
             //MODERATION
             add(new RemoveAnswerCommand());
