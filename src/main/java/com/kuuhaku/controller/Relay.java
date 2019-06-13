@@ -30,6 +30,7 @@ public class Relay extends SQLite {
 		gc.removeIf(g -> g.getCanalRelay() == null);
 
 		if (gc.size() != relays.size()) {
+			relays.clear();
 			gc.forEach(g -> relays.put(g.getGuildID(), g.getCanalRelay()));
 		}
 
