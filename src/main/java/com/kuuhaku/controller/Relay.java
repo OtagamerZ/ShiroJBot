@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,5 +59,12 @@ public class Relay extends SQLite {
 		eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
 
 		return eb.build();
+	}
+
+	public List<String> getRelayArray() {
+		List<String> ids = new ArrayList<>();
+		relays.forEach((k, v) -> ids.add(k));
+
+		return ids;
 	}
 }

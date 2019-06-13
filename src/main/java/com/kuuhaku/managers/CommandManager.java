@@ -43,6 +43,7 @@ public class CommandManager {
             add(new LeaveCommand());
             add(new ToxicTagCommand());
             add(new PartnerTagCommand());
+            add(new RelaysCommand());
 
             //MODERATION
             add(new RemoveAnswerCommand());
