@@ -8,7 +8,11 @@ public class PermaBlock {
 	@Id
 	private String id;
 
-	PermaBlock(String id) {
+	public PermaBlock() {
+
+	}
+
+	public void block(String id) {
 		this.id = id;
 	}
 }
