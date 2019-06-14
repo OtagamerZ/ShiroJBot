@@ -27,11 +27,12 @@ public class Relay extends SQLite {
 		updateRelays();
 
 		eb = new EmbedBuilder();
+		eb.setDescription(msg + "\n\n ");
 		eb.setAuthor("(" + s.getName() + ") " + m.getEffectiveName(), s.getIconUrl(), s.getIconUrl());
 		eb.setThumbnail(m.getUser().getAvatarUrl());
 		eb.setFooter(m.getUser().getId(), "http://icons.iconarchive.com/icons/killaaaron/adobe-cc-circles/1024/Adobe-Id-icon.png");
 		try {
-			eb.setColor(Helper.colorThief(m.getUser().getAvatarUrl()));
+			eb.setColor(Helper.colorThief(s.getIconUrl()));
 		} catch (IOException e) {
 			eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
 		}
@@ -44,7 +45,7 @@ public class Relay extends SQLite {
 			badges.append("<:Editor:589120809428058123> ");
 
 		try {
-			if (SQLite.getTagById(m.getUser().getId()).isPartner())
+			if (MySQL.getTagById(m.getUser().getId()).isPartner())
 				badges.append("<:Partner:589103374033485833> ");
 		} catch (NoResultException ignore) {
 		}
@@ -65,7 +66,7 @@ public class Relay extends SQLite {
 		}
 
 		try {
-			if (SQLite.getTagById(m.getUser().getId()).isToxic())
+			if (MySQL.getTagById(m.getUser().getId()).isToxic())
 				badges.append("<:Toxic:589103372926451713> ");
 		} catch (NoResultException ignore) {
 		}
@@ -74,7 +75,7 @@ public class Relay extends SQLite {
 
 		relays.forEach((k, r) -> {
 			if (!s.getId().equals(k) && m.getUser() != Main.getInfo().getSelfUser())
-				Main.getInfo().getAPI().getGuildById(k).getTextChannelById(r).sendMessage(msg).embed(eb.build()).queue();
+				Main.getInfo().getAPI().getGuildById(k).getTextChannelById(r).sendMessage(eb.build()).queue();
 		});
 	}
 

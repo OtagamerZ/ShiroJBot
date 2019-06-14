@@ -19,7 +19,7 @@ package com.kuuhaku.command.commands.dev;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.SQLite;
+import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.model.Tags;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
@@ -37,22 +37,22 @@ public class PartnerTagCommand extends Command {
         if (message.getMentionedUsers().size() > 0) {
             if (message.getMentionedUsers().size() == 1) {
                 try {
-                    Tags t = SQLite.getTagById(message.getMentionedMembers().get(0).getUser().getId());
+                    Tags t = MySQL.getTagById(message.getMentionedMembers().get(0).getUser().getId());
                     if (t.isPartner()) {
-                        SQLite.removeTagPartner(message.getMentionedMembers().get(0));
+                        MySQL.removeTagPartner(message.getMentionedMembers().get(0));
                         channel.sendMessage(message.getMentionedMembers().get(0).getAsMention() + " não é mais parceiro, foi bom enquanto durou!").queue();
                     } else {
-                        SQLite.giveTagPartner(message.getMentionedMembers().get(0));
+                        MySQL.giveTagPartner(message.getMentionedMembers().get(0));
                         channel.sendMessage(message.getMentionedMembers().get(0).getAsMention() + " agora é um parceiro, que iniciem os negócios!").queue();
                     }
                 } catch (NoResultException e) {
-                    SQLite.addUserTagsToDB(message.getMentionedMembers().get(0));
-                    Tags t = SQLite.getTagById(message.getMentionedMembers().get(0).getUser().getId());
+                    MySQL.addUserTagsToDB(message.getMentionedMembers().get(0));
+                    Tags t = MySQL.getTagById(message.getMentionedMembers().get(0).getUser().getId());
                     if (t.isPartner()) {
-                        SQLite.removeTagPartner(message.getMentionedMembers().get(0));
+                        MySQL.removeTagPartner(message.getMentionedMembers().get(0));
                         channel.sendMessage(message.getMentionedMembers().get(0).getAsMention() + " não é mais parceiro, foi bom enquanto durou!").queue();
                     } else {
-                        SQLite.giveTagPartner(message.getMentionedMembers().get(0));
+                        MySQL.giveTagPartner(message.getMentionedMembers().get(0));
                         channel.sendMessage(message.getMentionedMembers().get(0).getAsMention() + " agora é um parceiro, que iniciem os negócios!").queue();
                     }
                 }
