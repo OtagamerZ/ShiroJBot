@@ -17,6 +17,7 @@
 
 package com.kuuhaku.model;
 
+import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.PrivilegeLevel;
@@ -40,9 +41,9 @@ public class Profile {
         ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("font/friz-quadrata-bold-bt.ttf"))));
 
         try {
-            SQLite.getTagById(u.getUser().getId());
+            MySQL.getTagById(u.getUser().getId());
         } catch (NoResultException e) {
-            SQLite.addUserTagsToDB(u);
+            MySQL.addUserTagsToDB(u);
         }
 
         BufferedImage profile = new BufferedImage(1055, 719, BufferedImage.TYPE_INT_RGB);
@@ -60,7 +61,7 @@ public class Profile {
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
         final BufferedImage avatar = resize(ImageIO.read(con.getInputStream()), 120, 120);
 
-        con = (HttpURLConnection) new URL(SQLite.getTagById(u.getUser().getId()).isPartner() ? "http://i.imgur.com/rbNA1Mi.png" : "http://i.imgur.com/373xhkZ.png").openConnection();
+        con = (HttpURLConnection) new URL(MySQL.getTagById(u.getUser().getId()).isPartner() ? "http://i.imgur.com/rbNA1Mi.png" : "http://i.imgur.com/373xhkZ.png").openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
         final BufferedImage banner = ImageIO.read(con.getInputStream());
 
@@ -109,7 +110,7 @@ public class Profile {
         g2d.drawImage(bg, null, 0 - (bg.getWidth() - 1055) / 2, 0);
         g2d.drawImage(vignette, null, 0, 0);
         g2d.drawImage(avatar, null, 93, 283);
-        g2d.drawImage(banner, null, SQLite.getTagById(u.getUser().getId()).isPartner() ? 1 : 45, 0);
+        g2d.drawImage(banner, null, MySQL.getTagById(u.getUser().getId()).isPartner() ? 1 : 45, 0);
         g2d.drawImage(bannerBorder, null, 45, 498);
         g2d.drawImage(header, null, 0, 0);
 
@@ -133,7 +134,7 @@ public class Profile {
             tempName = tempName.substring(0, 6).concat("...");
         printCenteredString(tempName, 213, 47, 166, g2d);
 
-        if (SQLite.getTagById(u.getUser().getId()).isToxic()) {
+        if (MySQL.getTagById(u.getUser().getId()).isToxic()) {
             con = (HttpURLConnection) new URL("http://i.imgur.com/0wCblVy.png").openConnection();
             con.setRequestProperty("User-Agent", "Mozilla/5.0");
             final BufferedImage toxic = ImageIO.read(con.getInputStream());

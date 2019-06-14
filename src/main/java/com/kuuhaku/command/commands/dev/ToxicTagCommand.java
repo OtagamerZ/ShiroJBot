@@ -19,7 +19,7 @@ package com.kuuhaku.command.commands.dev;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.SQLite;
+import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.model.Tags;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
@@ -37,22 +37,22 @@ public class ToxicTagCommand extends Command {
         if (message.getMentionedUsers().size() > 0) {
             if (message.getMentionedUsers().size() == 1) {
                 try {
-                    Tags t = SQLite.getTagById(message.getMentionedMembers().get(0).getUser().getId());
+                    Tags t = MySQL.getTagById(message.getMentionedMembers().get(0).getUser().getId());
                     if (t.isToxic()) {
-                        SQLite.removeTagToxic(message.getMentionedMembers().get(0));
+                        MySQL.removeTagToxic(message.getMentionedMembers().get(0));
                         channel.sendMessage(message.getMentionedMembers().get(0).getAsMention() + " não é mais tóxico, que bom!").queue();
                     } else {
-                        SQLite.giveTagToxic(message.getMentionedMembers().get(0));
+                        MySQL.giveTagToxic(message.getMentionedMembers().get(0));
                         channel.sendMessage(message.getMentionedMembers().get(0).getAsMention() + " agora é tóxico, reporta ele!").queue();
                     }
                 } catch (NoResultException e) {
-                    SQLite.addUserTagsToDB(message.getMentionedMembers().get(0));
-                    Tags t = SQLite.getTagById(message.getMentionedMembers().get(0).getUser().getId());
+                    MySQL.addUserTagsToDB(message.getMentionedMembers().get(0));
+                    Tags t = MySQL.getTagById(message.getMentionedMembers().get(0).getUser().getId());
                     if (t.isToxic()) {
-                        SQLite.removeTagToxic(message.getMentionedMembers().get(0));
+                        MySQL.removeTagToxic(message.getMentionedMembers().get(0));
                         channel.sendMessage(message.getMentionedMembers().get(0).getAsMention() + " não é mais tóxico, que bom!").queue();
                     } else {
-                        SQLite.giveTagToxic(message.getMentionedMembers().get(0));
+                        MySQL.giveTagToxic(message.getMentionedMembers().get(0));
                         channel.sendMessage(message.getMentionedMembers().get(0).getAsMention() + " agora é tóxico, reporta ele!").queue();
                     }
                 }
