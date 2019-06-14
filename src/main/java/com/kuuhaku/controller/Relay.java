@@ -27,9 +27,10 @@ public class Relay extends SQLite {
 		updateRelays();
 
 		eb = new EmbedBuilder();
-		eb.setDescription(msg + "\n");
+		eb.setDescription(msg + "\n ");
 		eb.setAuthor("(" + s.getName() + ") " + m.getEffectiveName() + " disse:", s.getIconUrl(), s.getIconUrl());
-		eb.setFooter("ID: " + m.getUser().getId(), m.getUser().getAvatarUrl());
+		eb.setThumbnail(m.getUser().getAvatarUrl());
+		eb.setFooter(m.getUser().getId(), "http://icons.iconarchive.com/icons/killaaaron/adobe-cc-circles/1024/Adobe-Id-icon.png");
 		try {
 			eb.setColor(Helper.colorThief(m.getUser().getAvatarUrl()));
 		} catch (IOException e) {
