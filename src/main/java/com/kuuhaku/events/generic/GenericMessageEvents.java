@@ -47,7 +47,7 @@ public class GenericMessageEvents extends ListenerAdapter {
 			if (!Main.getInfo().isDev()) {
 				try {
 					prefix = SQLite.getGuildPrefix(guild.getId());
-				} catch (NoResultException ignore) {
+				} catch (NoResultException | NullPointerException ignore) {
 				}
 			} else prefix = Main.getInfo().getDefaultPrefix();
 
@@ -147,7 +147,7 @@ public class GenericMessageEvents extends ListenerAdapter {
 					if (channel.getId().equals(SQLite.getGuildCanalRelay(guild.getId()))) {
 						if (RelayBlockList.check(author.getId())) {
 							message.delete().queue();
-							author.openPrivateChannel().queue(c -> c.sendMessage("Sua mensagem no chat global foi bloqueada").queue());
+							author.openPrivateChannel().queue(c -> c.sendMessage(":x: | Você não pode mandar mensagens no chat global (bloqueado).").queue());
 							return;
 						}
 						String[] msg = message.getContentRaw().split(" ");
