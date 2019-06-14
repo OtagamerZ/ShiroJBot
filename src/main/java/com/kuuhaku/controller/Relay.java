@@ -22,7 +22,7 @@ public class Relay extends SQLite {
 	private EmbedBuilder eb;
 
 	@SuppressWarnings("unchecked")
-	public void relayMessage(String msg, Member m, Guild s) {
+	public void relayMessage(String msg, Member m, Guild s) throws Exception {
 		EntityManager em = getEntityManager();
 
 		Query q = em.createQuery("SELECT g FROM guildConfig g", guildConfig.class);
@@ -42,11 +42,8 @@ public class Relay extends SQLite {
 		}
 
 		relays.forEach((k, r) -> {
-			try {
-				if (!s.getId().equals(k) && m.getUser() != Main.getInfo().getSelfUser())
-					Main.getInfo().getAPI().getGuildById(k).getTextChannelById(r).sendMessage(eb.build()).queue();
-			} catch (Exception ignore) {
-			}
+			if (!s.getId().equals(k) && m.getUser() != Main.getInfo().getSelfUser())
+				Main.getInfo().getAPI().getGuildById(k).getTextChannelById(r).sendMessage(eb.build()).queue();
 		});
 	}
 
