@@ -30,12 +30,12 @@ import java.util.ArrayList;
 public class ShiroInfo {
 
 	//TODO Alternador do modo desenvolvimento (true quando utilizar em IDEs, false quando for dar push para o master)
-    private static final boolean DEV = false;
+	private static final boolean DEV = false;
 
 	//CONSTANTS
-    private static final String BotToken = System.getenv("BOT_TOKEN");
-    private static final String AnilistToken = System.getenv("ANILIST_TOKEN");
-    private static final String YandexToken = System.getenv("YANDEX_TOKEN");
+	private static final String BotToken = System.getenv("BOT_TOKEN");
+	private static final String AnilistToken = System.getenv("ANILIST_TOKEN");
+	private static final String YandexToken = System.getenv("YANDEX_TOKEN");
 	private static final String apiVersion = "3.8.3_463";
 	private static final String name = "Shiro";
 	private static final String version = "2.0";
@@ -44,6 +44,9 @@ public class ShiroInfo {
 	private static final String niichan = "350836145921327115"; //KuuHaKu
 	private static final ArrayList<String> developers = new ArrayList<String>() {{
 		add("321665807988031495"); //Reydux
+	}};
+	private static final ArrayList<String> editors = new ArrayList<String>() {{
+
 	}};
 	private static final DiscordBotListAPI dbl = new DiscordBotListAPI.Builder().token(System.getenv("DBL_TOKEN")).botId("572413282653306901").build();
 
@@ -104,6 +107,10 @@ public class ShiroInfo {
 		return developers;
 	}
 
+	public ArrayList<String> getEditors() {
+		return editors;
+	}
+
 	public DiscordBotListAPI getDBL() {
 		return dbl;
 	}
@@ -145,7 +152,7 @@ public class ShiroInfo {
 		return api.getUserById(userID);
 	}
 
-	public Role getRoleByID(String roleID) {
+	Role getRoleByID(String roleID) {
 		return api.getRoleById(roleID);
 	}
 

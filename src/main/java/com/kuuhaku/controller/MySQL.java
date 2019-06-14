@@ -3,10 +3,7 @@ package com.kuuhaku.controller;
 import com.kuuhaku.model.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MySQL {
 
@@ -83,6 +80,14 @@ public class MySQL {
         } catch (NoResultException e) {
             return null;
         }
+    }
+
+    static Beyblade getChampionBeyblade() {
+        List<Beyblade> rank = MySQL.getBeybladeList();
+        assert rank != null;
+        rank.sort(Comparator.comparing(Beyblade::getKDA));
+        Collections.reverse(rank);
+        return rank.get(0);
     }
 
     public static void permaBlock(PermaBlock p) {
