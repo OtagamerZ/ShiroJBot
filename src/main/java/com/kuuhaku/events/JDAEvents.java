@@ -111,8 +111,6 @@ public class JDAEvents extends ListenerAdapter {
 
     @Override
     public void onGuildJoin(GuildJoinEvent event) {
-        guildConfig gc = new guildConfig();
-        gc.setGuildId(event.getGuild().getId());
         SQLite.addGuildToDB(event.getGuild());
         try {
             Helper.sendPM(event.getGuild().getOwner().getUser(), "Obrigada por me adicionar ao seu servidor!");
