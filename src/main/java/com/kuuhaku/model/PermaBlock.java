@@ -8,10 +8,6 @@ public class PermaBlock {
 	@Id
 	private String id;
 
-	PermaBlock() {
-
-	}
-
 	void block(String id) {
 		this.id = id;
 	}
