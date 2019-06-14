@@ -27,9 +27,9 @@ public class Relay extends SQLite {
 		updateRelays();
 
 		eb = new EmbedBuilder();
-		eb.setDescription(msg);
+		eb.setDescription(msg + "\n");
 		eb.setAuthor("(" + s.getName() + ") " + m.getEffectiveName() + " disse:", s.getIconUrl(), s.getIconUrl());
-		eb.setFooter(m.getUser().getId(), m.getUser().getAvatarUrl());
+		eb.setFooter("ID: " + m.getUser().getId(), m.getUser().getAvatarUrl());
 		try {
 			eb.setColor(Helper.colorThief(m.getUser().getAvatarUrl()));
 		} catch (IOException e) {
@@ -46,27 +46,31 @@ public class Relay extends SQLite {
 		try {
 			if (SQLite.getTagById(m.getUser().getId()).isPartner())
 				badges.append("<:Partner:589103374033485833> ");
-		} catch (NoResultException ignore) { }
+		} catch (NoResultException ignore) {
+		}
 
 		if (m.hasPermission(Permission.MANAGE_CHANNEL))
 			badges.append("<:Moderator:589121447314587744> ");
 
 		try {
 			if (MySQL.getChampionBeyblade().getId().equals(m.getUser().getId()))
-			badges.append("<:Champion:589120809616932864> ");
-		} catch (NoResultException ignore) { }
+				badges.append("<:Champion:589120809616932864> ");
+		} catch (NoResultException ignore) {
+		}
 
 		try {
-		if (SQLite.getMemberById(m.getUser().getId()).getLevel() >= 20)
-			badges.append("<:Veteran:589121447151271976> ");
-		} catch (NoResultException ignore) { }
+			if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 20)
+				badges.append("<:Veteran:589121447151271976> ");
+		} catch (NoResultException ignore) {
+		}
 
 		try {
-		if (SQLite.getTagById(m.getUser().getId()).isToxic())
-			badges.append("<:Toxic:589103372926451713> ");
-		} catch (NoResultException ignore) { }
+			if (SQLite.getTagById(m.getUser().getId()).isToxic())
+				badges.append("<:Toxic:589103372926451713> ");
+		} catch (NoResultException ignore) {
+		}
 
-		eb.setTitle("" + badges.toString());
+		eb.addField("Emblemas:", badges.toString(), false);
 
 		relays.forEach((k, r) -> {
 			if (!s.getId().equals(k) && m.getUser() != Main.getInfo().getSelfUser())
