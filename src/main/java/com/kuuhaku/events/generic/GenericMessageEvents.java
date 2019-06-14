@@ -146,7 +146,11 @@ public class GenericMessageEvents extends ListenerAdapter {
 					}
 					SQLite.saveMemberToDB(m);
 
-					if (channel.getId().equals(SQLite.getGuildCanalRelay(guild.getId())) && !RelayBlockList.check(author.getId())) {
+					if (channel.getId().equals(SQLite.getGuildCanalRelay(guild.getId()))) {
+					if (RelayBlockList.check(author.getId())) {
+						message.delete().queue();
+						author.openPrivateChannel().queue(c -> c.sendMessage("Sua mensagem no chat global foi bloqueada").queue());
+					}
 						String[] msg = message.getContentRaw().split(" ");
 						for (int i = 0; i < msg.length; i++) {
 							if (Helper.findURL(msg[i])) msg[i] = "`LINK BLOQUEADO`";
