@@ -1,13 +1,10 @@
 package com.kuuhaku.command.commands.dev;
 
-import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.model.RelayBlockList;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
-
-import java.sql.SQLException;
 
 public class BlockCommand extends Command {
 
@@ -29,7 +26,7 @@ public class BlockCommand extends Command {
 			return;
 		}
 
-		RelayBlockList.blockID(args[0], String.join(" ", args).replace(args[0], "").trim());
+		RelayBlockList.blockID(args[0], String.join(" ", args).replace(args[1], "").trim());
 		channel.sendMessage("Usuário bloqueado do chat global.").queue();
 	}
 }
