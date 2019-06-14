@@ -29,8 +29,6 @@ import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import javax.persistence.NoResultException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 public class GenericMessageEvents extends ListenerAdapter {
@@ -147,11 +145,11 @@ public class GenericMessageEvents extends ListenerAdapter {
 					SQLite.saveMemberToDB(m);
 
 					if (channel.getId().equals(SQLite.getGuildCanalRelay(guild.getId()))) {
-					if (RelayBlockList.check(author.getId())) {
-						message.delete().queue();
-						author.openPrivateChannel().queue(c -> c.sendMessage("Sua mensagem no chat global foi bloqueada").queue());
-						return;
-					}
+						if (RelayBlockList.check(author.getId())) {
+							message.delete().queue();
+							author.openPrivateChannel().queue(c -> c.sendMessage("Sua mensagem no chat global foi bloqueada").queue());
+							return;
+						}
 						String[] msg = message.getContentRaw().split(" ");
 						for (int i = 0; i < msg.length; i++) {
 							if (Helper.findURL(msg[i])) msg[i] = "`LINK BLOQUEADO`";
