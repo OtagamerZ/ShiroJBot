@@ -4,6 +4,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.MessageEmbed;
@@ -26,6 +27,7 @@ public class Relay extends SQLite {
 
 		eb = new EmbedBuilder();
 		eb.setDescription(msg);
+		eb.setAuthor("(" + s.getName() + ") " + m.getEffectiveName() + " disse:", s.getIconUrl(), s.getIconUrl());
 		eb.setFooter(m.getUser().getId(), m.getUser().getAvatarUrl());
 		try {
 			eb.setColor(Helper.colorThief(m.getUser().getAvatarUrl()));
@@ -33,13 +35,23 @@ public class Relay extends SQLite {
 			eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
 		}
 
+		StringBuilder badges = new StringBuilder();
 		if (m.getUser().getId().equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(m.getUser().getId()))
-			eb.setAuthor("(" + s.getName() + ") <:Dev:589103373354270760>" + m.getEffectiveName() + " disse:", s.getIconUrl(), s.getIconUrl());
-		else if (SQLite.getTagById(m.getUser().getId()).isPartner())
-			eb.setAuthor("(" + s.getName() + ") <:Partner:589103374033485833>" + m.getEffectiveName() + " disse:", s.getIconUrl(), s.getIconUrl());
-		else if (SQLite.getTagById(m.getUser().getId()).isToxic())
-			eb.setAuthor("(" + s.getName() + ") <:Toxic:589103372926451713>" + m.getEffectiveName() + " disse:", s.getIconUrl(), s.getIconUrl());
-		else eb.setAuthor("(" + s.getName() + ") " + m.getEffectiveName() + " disse:", s.getIconUrl(), s.getIconUrl());
+			badges.append("<:Dev:589103373354270760> ");
+		if (Main.getInfo().getEditors().contains(m.getUser().getId()))
+			badges.append("<:Editor:589120809428058123> ");
+		if (SQLite.getTagById(m.getUser().getId()).isPartner())
+			badges.append("<:Partner:589103374033485833> ");
+		if (m.hasPermission(Permission.MANAGE_CHANNEL))
+			badges.append("<:Moderator:589121447314587744> ");
+		if (MySQL.getChampionBeyblade().getId().equals(m.getUser().getId()))
+			badges.append("<:Champion:589120809616932864> ");
+		if (SQLite.getMemberById(m.getUser().getId()).getLevel() >= 20)
+			badges.append("<:Veteran:589121447151271976> ");
+		if (SQLite.getTagById(m.getUser().getId()).isToxic())
+			badges.append("<:Toxic:589103372926451713> ");
+
+		eb.setTitle("" + badges.toString());
 
 		relays.forEach((k, r) -> {
 			if (!s.getId().equals(k) && m.getUser() != Main.getInfo().getSelfUser())
