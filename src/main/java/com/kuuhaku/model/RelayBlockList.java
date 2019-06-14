@@ -23,6 +23,7 @@ public class RelayBlockList {
 
 	public static void permaBlockID(String id) {
 		EmbedBuilder eb = new EmbedBuilder();
+		blockedIDs.add(id);
 
 		PermaBlock pb = new PermaBlock();
 		pb.block(id);
