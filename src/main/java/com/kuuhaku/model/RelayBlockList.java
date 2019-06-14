@@ -23,7 +23,10 @@ public class RelayBlockList {
 
 	public static void permaBlockID(String id) {
 		EmbedBuilder eb = new EmbedBuilder();
-		MySQL.permaBlock(new PermaBlock(id));
+
+		PermaBlock pb = new PermaBlock();
+		pb.block(id);
+		MySQL.permaBlock(pb);
 
 		eb.setTitle("Você foi bloqueado permanentemente de utilizar o chat global");
 		eb.setDescription("Este bloqueio **NÃO** será removido em momento algum, por melhor que seja a explicação para isto ter ocorrido!");
