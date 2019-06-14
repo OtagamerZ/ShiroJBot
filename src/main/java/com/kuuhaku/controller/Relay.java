@@ -27,8 +27,7 @@ public class Relay extends SQLite {
 		updateRelays();
 
 		eb = new EmbedBuilder();
-		eb.setDescription(msg + "\n ");
-		eb.setAuthor("(" + s.getName() + ") " + m.getEffectiveName() + " disse:", s.getIconUrl(), s.getIconUrl());
+		eb.setAuthor("(" + s.getName() + ") " + m.getEffectiveName(), s.getIconUrl(), s.getIconUrl());
 		eb.setThumbnail(m.getUser().getAvatarUrl());
 		eb.setFooter(m.getUser().getId(), "http://icons.iconarchive.com/icons/killaaaron/adobe-cc-circles/1024/Adobe-Id-icon.png");
 		try {
@@ -75,7 +74,7 @@ public class Relay extends SQLite {
 
 		relays.forEach((k, r) -> {
 			if (!s.getId().equals(k) && m.getUser() != Main.getInfo().getSelfUser())
-				Main.getInfo().getAPI().getGuildById(k).getTextChannelById(r).sendMessage(eb.build()).queue();
+				Main.getInfo().getAPI().getGuildById(k).getTextChannelById(r).sendMessage(msg).embed(eb.build()).queue();
 		});
 	}
 

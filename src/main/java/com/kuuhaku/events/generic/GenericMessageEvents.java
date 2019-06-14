@@ -155,7 +155,8 @@ public class GenericMessageEvents extends ListenerAdapter {
 							if (Helper.findURL(msg[i])) msg[i] = "`LINK BLOQUEADO`";
 						}
 						try {
-							Main.getRelay().relayMessage(String.join(" ", msg), member, guild);
+							if (String.join(" ", msg).length() < 2048) Main.getRelay().relayMessage(String.join(" ", msg), member, guild);
+							else channel.sendMessage(":x: | Mensagem muito longa! (Max. 2048 letras)").queue();
 						} catch (Exception e) {
 							channel.sendMessage(e.toString()).queue();
 						}
