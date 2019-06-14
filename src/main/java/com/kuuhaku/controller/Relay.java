@@ -21,16 +21,8 @@ public class Relay extends SQLite {
 	private Map<String, String> relays = new HashMap<>();
 	private EmbedBuilder eb;
 
-	@SuppressWarnings("unchecked")
 	public void relayMessage(String msg, Member m, Guild s) throws Exception {
-		EntityManager em = getEntityManager();
-
-		Query q = em.createQuery("SELECT g FROM guildConfig g", guildConfig.class);
-
-		List<guildConfig> gc = q.getResultList();
-		gc.removeIf(g -> g.getCanalRelay() == null);
-
-		gc.forEach(g -> relays.put(g.getGuildID(), g.getCanalRelay()));
+		updateRelays();
 
 		eb = new EmbedBuilder();
 		eb.setAuthor("(" + s.getName() + ") " + m.getEffectiveName() + " disse:", m.getUser().getAvatarUrl(), m.getUser().getAvatarUrl());
@@ -48,6 +40,7 @@ public class Relay extends SQLite {
 	}
 
 	public MessageEmbed getRelayInfo(guildConfig gc) {
+		updateRelays();
 		EmbedBuilder eb = new EmbedBuilder();
 
 		eb.setTitle(":globe_with_meridians: Dados do relay");
@@ -59,9 +52,22 @@ public class Relay extends SQLite {
 	}
 
 	public List<String> getRelayArray() {
+		updateRelays();
 		List<String> ids = new ArrayList<>();
 		relays.forEach((k, v) -> ids.add(k));
 
 		return ids;
+	}
+
+	@SuppressWarnings("unchecked")
+	private void updateRelays() {
+		EntityManager em = getEntityManager();
+
+		Query q = em.createQuery("SELECT g FROM guildConfig g", guildConfig.class);
+
+		List<guildConfig> gc = q.getResultList();
+		gc.removeIf(g -> g.getCanalRelay() == null);
+
+		gc.forEach(g -> relays.put(g.getGuildID(), g.getCanalRelay()));
 	}
 }
