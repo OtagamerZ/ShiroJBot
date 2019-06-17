@@ -63,7 +63,7 @@ public class Main implements JobListener {
 		Main.api = api;
 		Main.jbr = jbr;
 		api.getPresence().setGame(Game.playing("Iniciando..."));
-		jbr.getPresence().setGame(Game.listening("as mensagens de " + relay.getRelayArray().size() + " servidores!"));
+		jbr.getPresence().setGame(Game.listening("as mensagens de " + relay.getRelayMap().size() + " servidores!"));
 
 		api.addEventListener(new JDAEvents());
 		api.addEventListener(new GuildEvents());

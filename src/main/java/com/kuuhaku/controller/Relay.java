@@ -16,7 +16,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.awt.*;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,13 +89,14 @@ public class Relay extends SQLite {
 					Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(eb.build()).queue();
 				} catch (NullPointerException e) {
 					SQLite.getGuildById(k).setCanalRelay(null);
-				} catch (InsufficientPermissionException ex){
-					s.getOwner().getUser().openPrivateChannel().queue(c -> c.sendMessage(":x: | Me faltam permissões para enviar mensagens globais ao seu servidor. Eu preciso destas permissões:" +
-							"```Ler/Enviar mensagens\n" +
-							"Inserir links\n" +
-							"Anexar arquivos\n" +
-							"Ver histórico de mensagens\n" +
-							"Usar emojis externos```").queue());
+				} catch (InsufficientPermissionException ex) {
+					s.getOwner().getUser().openPrivateChannel().queue(c -> c.sendMessage(":x: | Me faltam permissões para enviar mensagens globais no servidor " + s.getName() + ".\n\nPermissões que eu possuo:```" +
+							(s.getSelfMember().hasPermission(Permission.MESSAGE_WRITE) ? "✅" : "❌") + " Ler/Enviar mensagens\n" +
+							(s.getSelfMember().hasPermission(Permission.MESSAGE_EMBED_LINKS) ? "✅" : "❌") + " Inserir links\n" +
+							(s.getSelfMember().hasPermission(Permission.MESSAGE_ATTACH_FILES) ? "✅" : "❌") + " Anexar arquivos\n" +
+							(s.getSelfMember().hasPermission(Permission.MESSAGE_HISTORY) ? "✅" : "❌") + " Ver histórico de mensagens\n" +
+							(s.getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI) ? "✅" : "❌") + " Usar emojis externos" +
+					"```").queue());
 				}
 		});
 	}
@@ -113,13 +113,11 @@ public class Relay extends SQLite {
 		return eb.build();
 	}
 
-	public List<String> getRelayArray() {
+	public Map<String, String> getRelayMap() {
 		updateRelays();
 		checkSize();
-		List<String> ids = new ArrayList<>();
-		relays.forEach((k, v) -> ids.add(k));
 
-		return ids;
+		return relays;
 	}
 
 	@SuppressWarnings("unchecked")
