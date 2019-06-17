@@ -45,6 +45,9 @@ public class ScheduledEvents implements Job {
     @Override
     public void execute(JobExecutionContext context) {
         Main.getInfo().getAPI().getPresence().setGame(Main.getRandomGame());
-        MySQL.dumpData(new DataDump(SQLite.getCADump(), SQLite.getMemberDump(), SQLite.getGuildDump()));
+        MySQL.dumpData(new DataDump(SQLite.getCADump(), SQLite.getGuildDump()));
+        System.out.println("Respostas/Guilds salvos com sucesso!");
+        MySQL.dumpData(new DataDump(SQLite.getMemberDump()));
+        System.out.println("Membros salvos com sucesso!");
     }
 }
