@@ -1,5 +1,6 @@
 package com.kuuhaku.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DataDump {
@@ -9,8 +10,20 @@ public class DataDump {
 
     public DataDump(List<CustomAnswers> caDump, List<Member> mDump, List<guildConfig> gcDump) {
         this.caDump = caDump;
-        this.mDump = mDump;
         this.gcDump = gcDump;
+        this.mDump = mDump;
+    }
+
+    public DataDump(List<CustomAnswers> caDump, List<guildConfig> gcDump) {
+        this.caDump = caDump;
+        this.gcDump = gcDump;
+        this.mDump = new ArrayList<>();
+    }
+
+    public DataDump(List<Member> mDump) {
+        this.caDump = new ArrayList<>();
+        this.gcDump = new ArrayList<>();
+        this.mDump = mDump;
     }
 
     public List<CustomAnswers> getCaDump() {
