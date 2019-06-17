@@ -23,6 +23,7 @@ public class AnimeCommand extends Command {
             try {
                 String query = "{\n" +
                         "Media(search: \\\"" + String.join(" ", args) + "\\\", type: ANIME) {\n" +
+                        "idMal\n" +
                         "title {\n" +
                         "romaji\n" +
                         "english\n" +
