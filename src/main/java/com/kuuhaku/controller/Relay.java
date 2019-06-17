@@ -23,7 +23,7 @@ public class Relay extends SQLite {
 	private Map<String, String> relays = new HashMap<>();
 	private EmbedBuilder eb;
 
-	public void relayMessage(String msg, Member m, Guild s) throws Exception {
+	public void relayMessage(String msg, Member m, Guild s) {
 		updateRelays();
 
 		eb = new EmbedBuilder();
@@ -75,7 +75,11 @@ public class Relay extends SQLite {
 
 		relays.forEach((k, r) -> {
 			if (!s.getId().equals(k) && m.getUser() != Main.getJibril().getSelfUser())
-				Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(eb.build()).queue();
+				try {
+					Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(eb.build()).queue();
+				} catch (NullPointerException e) {
+					SQLite.getGuildById(k).setCanalRelay(null);
+				}
 		});
 	}
 

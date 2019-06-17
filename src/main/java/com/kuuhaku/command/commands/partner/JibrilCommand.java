@@ -21,7 +21,7 @@ public class JibrilCommand extends Command {
 			return;
 		}
 
-		author.openPrivateChannel().queue(c -> c.sendMessage("Olá, obrigado por apoiar meu desenvolvimento!\nPara chamar a Jibril para seu servidor, utilize este link: " + System.getenv("JIBRIL_LINK")).queue());
+		author.openPrivateChannel().queue(c -> c.sendMessage("Olá, obrigado por apoiar meu desenvolvimento!\n\nPara chamar a Jibril para seu servidor, utilize este link:\n" + System.getenv("JIBRIL_LINK")).queue());
 	}
 
 }
