@@ -74,8 +74,8 @@ public class Relay extends SQLite {
 		eb.addField("Emblemas:", badges.toString(), false);
 
 		relays.forEach((k, r) -> {
-			if (!s.getId().equals(k) && m.getUser() != Main.getInfo().getSelfUser())
-				Main.getInfo().getAPI().getGuildById(k).getTextChannelById(r).sendMessage(eb.build()).queue();
+			if (!s.getId().equals(k) && m.getUser() != Main.getJibril().getSelfUser())
+				Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(eb.build()).queue();
 		});
 	}
 
