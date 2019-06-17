@@ -9,6 +9,7 @@ import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 
+import javax.persistence.NoResultException;
 import java.awt.*;
 
 public class JibrilCommand extends Command {
@@ -19,7 +20,12 @@ public class JibrilCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-		if (!MySQL.getTagById(author.getId()).isPartner() && !Helper.hasPermission(member, PrivilegeLevel.DEV)) {
+		try {
+			if (!MySQL.getTagById(author.getId()).isPartner() && !Helper.hasPermission(member, PrivilegeLevel.DEV)) {
+				channel.sendMessage(":x: | Este comando é exlusivo para parceiros!").queue();
+				return;
+			}
+		} catch (NoResultException e) {
 			channel.sendMessage(":x: | Este comando é exlusivo para parceiros!").queue();
 			return;
 		}

@@ -18,27 +18,29 @@
 package com.kuuhaku.controller;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.model.*;
+import com.kuuhaku.model.CustomAnswers;
+import com.kuuhaku.model.DataDump;
+import com.kuuhaku.model.Member;
+import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Role;
 import org.json.JSONObject;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
 import java.io.File;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class SQLite {
 
-	private static Connection con;
 	private static EntityManagerFactory emf;
 
 	public static void connect() {
-		con = null;
 
 		File DBfile = new File(Main.getInfo().getDBFileName());
 		if (!DBfile.exists()) {
@@ -51,8 +53,6 @@ public class SQLite {
 		if (emf == null) emf = Persistence.createEntityManagerFactory("shiro_local", props);
 
 		emf.getCache().evictAll();
-
-		System.out.println("✅ | Ligação à base de dados SQLite estabelecida.");
 	}
 
 	static EntityManager getEntityManager() {
@@ -60,9 +60,9 @@ public class SQLite {
 		return emf.createEntityManager();
 	}
 
-	public static void disconnect() throws SQLException {
-		if (con != null) {
-			con.close();
+	public static void disconnect() {
+		if (emf != null) {
+			emf.close();
 			System.out.println("Ligação à base de dados desfeita.");
 		}
 	}
