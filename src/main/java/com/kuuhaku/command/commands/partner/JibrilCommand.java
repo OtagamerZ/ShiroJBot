@@ -5,8 +5,11 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.PrivilegeLevel;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
+
+import java.awt.*;
 
 public class JibrilCommand extends Command {
 
@@ -21,7 +24,14 @@ public class JibrilCommand extends Command {
 			return;
 		}
 
-		author.openPrivateChannel().queue(c -> c.sendMessage("Olá, obrigado por apoiar meu desenvolvimento!\n\nPara chamar a Jibril para seu servidor, utilize este link:\n" + System.getenv("JIBRIL_LINK")).queue());
+		EmbedBuilder eb = new EmbedBuilder();
+
+		eb.setThumbnail("https://www.pacific.edu/Images/library/Renovation%20Renderings/LogoMakr_2mPTly.png");
+		eb.setTitle("Olá, obrigado por apoiar meu desenvolvimento!");
+		eb.setDescription("Para chamar a Jibril para seu servidor, utilize este link:\n"+System.getenv("JIBRIL_LINK"));
+		eb.setColor(Color.green);
+
+		channel.sendMessage(eb.build()).queue();
 	}
 
 }
