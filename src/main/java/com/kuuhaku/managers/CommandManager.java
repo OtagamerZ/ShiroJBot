@@ -28,6 +28,7 @@ import com.kuuhaku.command.commands.moderation.AllowCommunityCommand;
 import com.kuuhaku.command.commands.moderation.RemoveAnswerCommand;
 import com.kuuhaku.command.commands.moderation.SettingsCommand;
 import com.kuuhaku.command.commands.dev.*;
+import com.kuuhaku.command.commands.partner.JibrilCommand;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,9 @@ public class CommandManager {
             add(new PartnerTagCommand());
             add(new RelaysCommand());
             add(new BlockCommand());
+
+            //PARTNER
+            add(new JibrilCommand());
 
             //MODERATION
             add(new RemoveAnswerCommand());
