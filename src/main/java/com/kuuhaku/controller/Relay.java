@@ -5,6 +5,7 @@ import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
+import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.MessageEmbed;
@@ -21,10 +22,19 @@ import java.util.Map;
 
 public class Relay extends SQLite {
 	private Map<String, String> relays = new HashMap<>();
+	private int relaySize;
 	private EmbedBuilder eb;
+
+	private void checkSize() {
+		if (relays.size() != relaySize) {
+			relaySize = relays.size();
+			Main.getJibril().getPresence().setGame(Game.listening("as mensagens de " + relaySize + " servidores!"));
+		}
+	}
 
 	public void relayMessage(String msg, Member m, Guild s) {
 		updateRelays();
+		checkSize();
 
 		eb = new EmbedBuilder();
 		eb.setDescription(msg + "\n\n ");
@@ -85,6 +95,7 @@ public class Relay extends SQLite {
 
 	public MessageEmbed getRelayInfo(guildConfig gc) {
 		updateRelays();
+		checkSize();
 		EmbedBuilder eb = new EmbedBuilder();
 
 		eb.setTitle(":globe_with_meridians: Dados do relay");
@@ -96,6 +107,7 @@ public class Relay extends SQLite {
 
 	public List<String> getRelayArray() {
 		updateRelays();
+		checkSize();
 		List<String> ids = new ArrayList<>();
 		relays.forEach((k, v) -> ids.add(k));
 

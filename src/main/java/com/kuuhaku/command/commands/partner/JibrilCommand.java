@@ -31,7 +31,7 @@ public class JibrilCommand extends Command {
 		eb.setDescription("Para chamar a Jibril para seu servidor, utilize este link:\n"+System.getenv("JIBRIL_LINK"));
 		eb.setColor(Color.green);
 
-		channel.sendMessage(eb.build()).queue();
+		author.openPrivateChannel().queue(c -> c.sendMessage(eb.build()).queue());
 	}
 
 }
