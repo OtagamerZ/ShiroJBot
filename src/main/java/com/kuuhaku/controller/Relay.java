@@ -127,7 +127,7 @@ public class Relay extends SQLite {
 		Query q = em.createQuery("SELECT g FROM guildConfig g", guildConfig.class);
 
 		List<guildConfig> gc = q.getResultList();
-		gc.removeIf(g -> g.getCanalRelay() == null);
+		gc.removeIf(g -> g.getCanalRelay() == null || Main.getJibril().getGuildById(g.getGuildID()) == null);
 
 		gc.forEach(g -> relays.put(g.getGuildID(), g.getCanalRelay()));
 	}
