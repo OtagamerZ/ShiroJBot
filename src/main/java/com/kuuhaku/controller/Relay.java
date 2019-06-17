@@ -84,7 +84,7 @@ public class Relay extends SQLite {
 		eb.addField("Emblemas:", badges.toString(), false);
 
 		relays.forEach((k, r) -> {
-			if (!s.getId().equals(k) && m.getUser() != Main.getJibril().getSelfUser())
+			if (!s.getId().equals(k))
 				try {
 					Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(eb.build()).queue();
 				} catch (NullPointerException e) {
@@ -97,6 +97,7 @@ public class Relay extends SQLite {
 							(s.getSelfMember().hasPermission(Permission.MESSAGE_HISTORY) ? "✅" : "❌") + " Ver histórico de mensagens\n" +
 							(s.getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI) ? "✅" : "❌") + " Usar emojis externos" +
 					"```").queue());
+					System.out.println(ex.toString());
 				}
 		});
 	}
@@ -127,7 +128,7 @@ public class Relay extends SQLite {
 		Query q = em.createQuery("SELECT g FROM guildConfig g", guildConfig.class);
 
 		List<guildConfig> gc = q.getResultList();
-		gc.removeIf(g -> g.getCanalRelay() == null || Main.getJibril().getGuildById(g.getGuildID()) == null);
+		gc.removeIf(g -> g.getCanalRelay() == null);
 
 		gc.forEach(g -> relays.put(g.getGuildID(), g.getCanalRelay()));
 	}
