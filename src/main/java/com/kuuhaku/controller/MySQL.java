@@ -45,6 +45,15 @@ public class MySQL {
         return new DataDump(ca.getResultList(), m.getResultList(), gc.getResultList());
     }
 
+    @SuppressWarnings("unchecked")
+    public static List<Member> getMembers() {
+        EntityManager em = getEntityManager();
+
+        Query q = em.createQuery("SELECT m FROM Member m", Member.class);
+
+        return q.getResultList();
+    }
+
     public static void sendBeybladeToDB(Beyblade bb) {
         EntityManager em = getEntityManager();
 
