@@ -134,6 +134,9 @@ public class Main implements JobListener {
 
 	public static void shutdown() throws SQLException {
 		MySQL.dumpData(new DataDump(SQLite.getCADump(), SQLite.getGuildDump()));
+		System.out.println("Respostas/Guilds salvos com sucesso!");
+		MySQL.dumpData(new DataDump(SQLite.getMemberDump()));
+		System.out.println("Membros salvos com sucesso!");
 		SQLite.disconnect();
 		api.shutdown();
 		System.out.println("Fui desligada.");
