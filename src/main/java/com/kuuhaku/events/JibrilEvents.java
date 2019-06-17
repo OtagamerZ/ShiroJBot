@@ -8,20 +8,32 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 public class JibrilEvents extends ListenerAdapter {
+	private Thread relayThread;
+
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-		boolean done = false;
+		if (relayThread == null) {
+			relayThread = new Thread() {
+				boolean done = false;
 
-		if (event.getChannel().getId().equals(SQLite.getGuildCanalRelay(event.getGuild().getId())) && !event.getAuthor().isBot()) {
-			while (!done) {
-				done = doRelay(event);
-				try {
-					this.wait(100);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+				@Override
+				public void run() {
+					if (event.getChannel().getId().equals(SQLite.getGuildCanalRelay(event.getGuild().getId())) && !event.getAuthor().isBot()) {
+						while (!done) {
+							done = doRelay(event);
+							try {
+								Thread.sleep(100);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+						}
+						interrupt();
+					}
 				}
-			}
+			};
 		}
+
+		relayThread.start();
 	}
 
 	private boolean doRelay(GuildMessageReceivedEvent event) {
