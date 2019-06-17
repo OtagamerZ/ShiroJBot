@@ -91,11 +91,11 @@ public class Relay extends SQLite {
 				} catch (NullPointerException e) {
 					SQLite.getGuildById(k).setCanalRelay(null);
 				} catch (InsufficientPermissionException ex){
-					s.getOwner().getUser().openPrivateChannel().queue(c -> c.sendMessage(":x: | Me faltam permissões para enviar mensagens globais ao seu servidor. Eu precis destas permissões:" +
-							"```Ler/Enviar mensagens" +
-							"Inserir links" +
-							"Anexar arquivos" +
-							"Ver histórico de mensagens" +
+					s.getOwner().getUser().openPrivateChannel().queue(c -> c.sendMessage(":x: | Me faltam permissões para enviar mensagens globais ao seu servidor. Eu preciso destas permissões:" +
+							"```Ler/Enviar mensagens\n" +
+							"Inserir links\n" +
+							"Anexar arquivos\n" +
+							"Ver histórico de mensagens\n" +
 							"Usar emojis externos```").queue());
 				}
 		});
