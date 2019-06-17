@@ -27,6 +27,7 @@ import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -233,7 +234,7 @@ public class Helper {
 		return new Color(ColorThief.getColor(icon)[0], ColorThief.getColor(icon)[1], ColorThief.getColor(icon)[2]);
 	}
 
-	public static void battle(MessageReceivedEvent event) {
+	public static void battle(GuildMessageReceivedEvent event) {
 		if (JDAEvents.dd.stream().noneMatch(d -> d.getP1() == event.getAuthor() || d.getP2() == event.getAuthor())) {
 			return;
 		}
@@ -251,7 +252,8 @@ public class Helper {
 					duel.getB2().setLife(duel.getB2().getLife() - damage);
 					System.out.println(damage + " -> " + duel.getB2().getLife());
 					event.getMessage().getChannel().sendMessage(duel.getB1().getName() + " ataca, agora é a vez de " + duel.getB2().getName()).queue();
-				} else event.getMessage().getChannel().sendMessage(duel.getB1().getName() + " erra o ataque, agora é a vez de " + duel.getB2().getName()).queue();
+				} else
+					event.getMessage().getChannel().sendMessage(duel.getB1().getName() + " erra o ataque, agora é a vez de " + duel.getB2().getName()).queue();
 			} else if (!player1Turn && event.getMessage().getAuthor() == duel.getP2()) {
 				if (hit(duel.getB2().getSpeed(), duel.getB1().getStability())) {
 					duel.setP1turn(true);
@@ -261,7 +263,8 @@ public class Helper {
 					duel.getB1().setLife(duel.getB1().getLife() - damage);
 					System.out.println(damage + " -> " + duel.getB1().getLife());
 					event.getMessage().getChannel().sendMessage(duel.getB2().getName() + " ataca, agora é a vez de " + duel.getB1().getName()).queue();
-				} else event.getMessage().getChannel().sendMessage(duel.getB2().getName() + " erra o ataque, agora é a vez de " + duel.getB1().getName()).queue();
+				} else
+					event.getMessage().getChannel().sendMessage(duel.getB2().getName() + " erra o ataque, agora é a vez de " + duel.getB1().getName()).queue();
 			}
 		} else if (event.getMessage().getContentRaw().equalsIgnoreCase("defender")) {
 			if (player1Turn && event.getMessage().getAuthor() == duel.getP1()) {
