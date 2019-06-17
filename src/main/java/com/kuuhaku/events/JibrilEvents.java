@@ -33,7 +33,8 @@ public class JibrilEvents extends ListenerAdapter {
 			};
 		}
 
-		relayThread.start();
+		if (relayThread.isAlive()) relayThread.run();
+		else relayThread.start();
 	}
 
 	private boolean doRelay(GuildMessageReceivedEvent event) {
