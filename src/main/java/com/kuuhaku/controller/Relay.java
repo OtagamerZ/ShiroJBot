@@ -9,6 +9,7 @@ import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.MessageEmbed;
+import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -89,6 +90,13 @@ public class Relay extends SQLite {
 					Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(eb.build()).queue();
 				} catch (NullPointerException e) {
 					SQLite.getGuildById(k).setCanalRelay(null);
+				} catch (InsufficientPermissionException ex){
+					s.getOwner().getUser().openPrivateChannel().queue(c -> c.sendMessage(":x: | Me faltam permissões para enviar mensagens globais ao seu servidor. Eu precis destas permissões:" +
+							"```Ler/Enviar mensagens" +
+							"Inserir links" +
+							"Anexar arquivos" +
+							"Ver histórico de mensagens" +
+							"Usar emojis externos```").queue());
 				}
 		});
 	}

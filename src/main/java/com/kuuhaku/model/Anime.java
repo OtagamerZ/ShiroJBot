@@ -27,6 +27,7 @@ import java.util.List;
 
 @SuppressWarnings("deprecation")
 public class Anime {
+    private int idMal;
     private String tRomaji, tEnglish, status, sDate, duration, cImage, creator, studio, naeEpisode, naeAiringAt, description;
     private List<Object> genres;
     private Color cColor;
@@ -96,12 +97,17 @@ public class Anime {
             naeEpisode = null;
         }
 
+        idMal = media.getInt("idMal");
         status = media.getString("status").equals("FINISHED") ? "Completo" : "Transmitindo";
         duration = Integer.toString(media.getInt("duration"));
         genres = media.getJSONArray("genres").toList();
         score = media.getInt("averageScore");
         popularity = media.getInt("popularity");
         description = media.getString("description");
+    }
+
+    public int getIdMal() {
+        return idMal;
     }
 
     public String gettRomaji() {
