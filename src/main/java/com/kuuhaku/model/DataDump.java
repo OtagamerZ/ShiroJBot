@@ -1,5 +1,7 @@
 package com.kuuhaku.model;
 
+import com.kuuhaku.controller.MySQL;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +25,10 @@ public class DataDump {
     public DataDump(List<Member> mDump) {
         this.caDump = new ArrayList<>();
         this.gcDump = new ArrayList<>();
+
+        List<Member> oldMembers = MySQL.getMembers();
+        mDump.removeAll(oldMembers);
+
         this.mDump = mDump;
     }
 
