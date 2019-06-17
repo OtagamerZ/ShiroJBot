@@ -7,15 +7,12 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 public class JibrilEvents extends ListenerAdapter {
-	private ExecutorService ex = Executors.newSingleThreadExecutor();
+	Thread relayThread;
 
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-		ex.execute(() -> {
+		Runnable relay = () -> {
 			boolean done = false;
 			if (event.getChannel().getId().equals(SQLite.getGuildCanalRelay(event.getGuild().getId())) && !event.getAuthor().isBot()) {
 				while (!done) {
@@ -27,7 +24,11 @@ public class JibrilEvents extends ListenerAdapter {
 					}
 				}
 			}
-		});
+		};
+
+		if (relayThread == null) relayThread = new Thread(relay);
+		else if (!relayThread.isAlive()) relayThread.start();
+		else relayThread.run();
 	}
 
 	private boolean doRelay(GuildMessageReceivedEvent event) {
