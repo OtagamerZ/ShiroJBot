@@ -6,8 +6,6 @@ import com.kuuhaku.command.Command;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 
-import java.sql.SQLException;
-
 public class RelaysCommand extends Command {
 
 	public RelaysCommand() {
@@ -16,6 +14,6 @@ public class RelaysCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-		channel.sendMessage(Main.getRelay().getRelayArray().toString()).queue();
+		channel.sendMessage(Main.getRelay().getRelayMap().toString()).queue();
 	}
 }
