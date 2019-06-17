@@ -20,12 +20,9 @@ public class JibrilEvents extends ListenerAdapter {
 			for (int i = 0; i < msg.length; i++) {
 				if (Helper.findURL(msg[i])) msg[i] = "`LINK BLOQUEADO`";
 			}
-			try {
-				if (String.join(" ", msg).length() < 2048) Main.getRelay().relayMessage(String.join(" ", msg), event.getMember(), event.getGuild());
-				else event.getChannel().sendMessage(":x: | Mensagem muito longa! (Max. 2048 letras)").queue();
-			} catch (Exception e) {
-				event.getChannel().sendMessage(e.toString()).queue();
-			}
+			if (String.join(" ", msg).length() < 2048)
+				Main.getRelay().relayMessage(String.join(" ", msg), event.getMember(), event.getGuild());
+			else event.getChannel().sendMessage(":x: | Mensagem muito longa! (Max. 2048 letras)").queue();
 		}
 	}
 }
