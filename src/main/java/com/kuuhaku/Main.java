@@ -133,7 +133,7 @@ public class Main implements JobListener {
 	}
 
 	public static void shutdown() throws SQLException {
-		MySQL.dumpData(new DataDump(SQLite.getCADump(), SQLite.getMemberDump(), SQLite.getGuildDump()));
+		MySQL.dumpData(new DataDump(SQLite.getCADump(), SQLite.getGuildDump()));
 		SQLite.disconnect();
 		api.shutdown();
 		System.out.println("Fui desligada.");
