@@ -32,6 +32,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,9 +49,11 @@ public class SQLite {
 			System.exit(1);
 		}
 
+		File db = new File(Objects.requireNonNull(SQLite.class.getClassLoader().getResource(Main.getInfo().getDBFileName())).getPath());
+
 		Map<String, String> props = new HashMap<>();
-		Helper.log(SQLite.class, LogLevel.INFO, "Diretório do SQLite: " + Objects.requireNonNull(SQLite.class.getClassLoader().getResource(Main.getInfo().getDBFileName())).getFile());
-		props.put("javax.persistence.jdbc.url", "jdbc:sqlite:" + Objects.requireNonNull(SQLite.class.getClassLoader().getResource(Main.getInfo().getDBFileName())).getFile());
+		Helper.log(SQLite.class, LogLevel.INFO, "Diretório do SQLite: " + Objects.requireNonNull(SQLite.class.getClassLoader().getResource(Main.getInfo().getDBFileName())).getPath());
+		props.put("javax.persistence.jdbc.url", "jdbc:sqlite:" + db.getPath());
 
 		if (emf == null) emf = Persistence.createEntityManagerFactory("shiro_local", props);
 
