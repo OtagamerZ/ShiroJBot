@@ -6,15 +6,15 @@
 			<PatternLayout pattern="%style{%d{dd MMM yyyy HH:mm:ss}{GMT-3}}{magenta} %style{PID %pid}{bright, blue} %style{[%tn]}{reverse} %highlight{%-5level%logger{36}.%M():%L}{FATAL=red blink bright, ERROR=red, WARN=yellow bold, INFO=green, DEBUG=green bold, TRACE=cyan} - %style{%msg%n}{black}" disableAnsi="false"/>
 		</Console>
 
-		<File name="Log" fileName="./src/main/resources/logs/stacktrace.log">
+		<File name="Log" fileName="logs/stacktrace.log">
 			<PatternLayout pattern="%d{dd MMM yyyy HH:mm:ss}{GMT-3} PID %pid [%tn] %-5level%logger{36}.%M():%L - %msg%n}"/>
 		</File>
 
-		<File name="ErrorLog" fileName="./src/main/resources/logs/error.log">
+		<File name="ErrorLog" fileName="logs/error.log">
 			<PatternLayout pattern="%d{dd MMM yyyy HH:mm:ss}{GMT-3} PID %pid [%tn] %-5level%logger{36}.%M():%L - %msg%n}"/>
 		</File>
 
-		<File name="CrashLog" fileName="./src/main/resources/logs/crash.log">
+		<File name="CrashLog" fileName="logs/crash.log">
 			<PatternLayout pattern="%d{dd MMM yyyy HH:mm:ss}{GMT-3} PID %pid [%tn] %-5level%logger{36}.%M():%L - %msg%n}"/>
 		</File>
 	</Appenders>

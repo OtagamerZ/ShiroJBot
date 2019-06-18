@@ -60,7 +60,7 @@ public class Main implements JobListener {
 	private static Scheduler sched;
 
 	public static void main(String[] args) throws Exception {
-		if (Main.class.getClassLoader().getResource("logs") != null) {
+		if (new File("logs").exists()) {
 			File logs = new File(Objects.requireNonNull(Main.class.getClassLoader().getResource("logs")).getPath());
 			Files.walkFileTree(logs.toPath(), new SimpleFileVisitor<Path>(){
 				@Override
