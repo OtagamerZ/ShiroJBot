@@ -45,7 +45,8 @@ public class SQLite {
 
 		File DBfile = new File(Main.getInfo().getDBFileName());
 		if (!DBfile.exists()) {
-			System.out.println("A base de dados não foi encontrada. Entre no servidor discord oficial da Shiro para obter ajuda.");
+			Helper.log(SQLite.class, LogLevel.FATAL, "A base de dados não foi encontrada. Entre no servidor discord oficial da Shiro para obter ajuda.");
+			System.exit(1);
 		}
 
 		Map<String, String> props = new HashMap<>();
