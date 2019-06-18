@@ -18,6 +18,8 @@
 package com.kuuhaku.controller;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.LogLevel;
 import org.json.JSONObject;
 
 import java.io.*;
@@ -36,8 +38,8 @@ public class Tradutor {
         con.setRequestMethod("GET");
         con.setRequestProperty("Accept", "application/json");
         con.addRequestProperty("Accept-Charset", "UTF-8");
-        System.out.println("Requisição 'GET' para o URL: " + link);
-        System.out.println("Resposta: " + con.getResponseCode());
+        Helper.log(Tradutor.class, LogLevel.DEBUG, "Requisição 'GET' para o URL: " + link);
+        Helper.log(Tradutor.class, LogLevel.DEBUG, "Resposta: " + con.getResponseCode());
 
         BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
 
@@ -49,7 +51,7 @@ public class Tradutor {
         br.close();
         con.disconnect();
 
-        System.out.println(resposta.toString());
+        Helper.log(Tradutor.class, LogLevel.DEBUG, resposta.toString());
         JSONObject json = new JSONObject(resposta.toString());
         return json.get("text").toString().replace("[", "").replace("]", "").replace("<br>", "\n").replace("\\n", "").replace("\"", "");
     }

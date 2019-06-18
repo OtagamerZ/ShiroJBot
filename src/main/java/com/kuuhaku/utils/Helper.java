@@ -26,8 +26,9 @@ import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -188,20 +189,6 @@ public class Helper {
 		else channel.sendMessage(message).addFile(is, "reaction.gif").queue();
 	}
 
-	public static void cls() {
-		try {
-			final String os = System.getProperty("os.name");
-
-			if (os.contains("Windows")) {
-				Runtime.getRuntime().exec("cls");
-			} else {
-				Runtime.getRuntime().exec("clear");
-			}
-		} catch (final Exception e) {
-			System.out.println("Erro ao limpar o console.");
-		}
-	}
-
 	private static float getDefFac(boolean defending, Beyblade b) {
 		if (defending) {
 			if (b.getS() == null) {
@@ -250,7 +237,7 @@ public class Helper {
 					if (duel.getB2().getS() != null) duel.getB2().getS().setBear(false);
 					int damage = Math.round(duel.getB1().getStrength() * duel.getB1().getSpeed() / (duel.getB2().getStability() * Helper.getDefFac(duel.isD2(), duel.getB2())) * (float) Math.random() * 50);
 					duel.getB2().setLife(duel.getB2().getLife() - damage);
-					System.out.println(damage + " -> " + duel.getB2().getLife());
+					Helper.log(Helper.class, LogLevel.DEBUG, damage + " -> " + duel.getB2().getLife());
 					event.getMessage().getChannel().sendMessage(duel.getB1().getName() + " ataca, agora é a vez de " + duel.getB2().getName()).queue();
 				} else
 					event.getMessage().getChannel().sendMessage(duel.getB1().getName() + " erra o ataque, agora é a vez de " + duel.getB2().getName()).queue();
@@ -261,7 +248,7 @@ public class Helper {
 					if (duel.getB1().getS() != null) duel.getB1().getS().setBear(false);
 					int damage = Math.round(duel.getB2().getStrength() * duel.getB2().getSpeed() / (duel.getB1().getStability() * Helper.getDefFac(duel.isD1(), duel.getB1())) * (float) Math.random() * 50);
 					duel.getB1().setLife(duel.getB1().getLife() - damage);
-					System.out.println(damage + " -> " + duel.getB1().getLife());
+					Helper.log(Helper.class, LogLevel.DEBUG, damage + " -> " + duel.getB1().getLife());
 					event.getMessage().getChannel().sendMessage(duel.getB2().getName() + " ataca, agora é a vez de " + duel.getB1().getName()).queue();
 				} else
 					event.getMessage().getChannel().sendMessage(duel.getB2().getName() + " erra o ataque, agora é a vez de " + duel.getB1().getName()).queue();
@@ -495,6 +482,28 @@ public class Helper {
 	public static void spawnAd(MessageChannel channel) {
 		if (Helper.rng(1000) > 990) {
 			channel.sendMessage("Opa, está gostando de me utilizar em seu servidor? Caso sim, se puder votar me ajudaria **MUITO** a me tornar cada vez mais popular e ser chamada para mais servidores!\nhttps://discordbots.org/bot/572413282653306901").queue();
+		}
+	}
+
+	public static void log(Class source, LogLevel level, String msg) {
+		final Logger logger = LogManager.getLogger(source.getName());
+
+		switch (level) {
+			case DEBUG:
+				logger.debug(msg);
+				break;
+			case INFO:
+				logger.info(msg);
+				break;
+			case WARN:
+				logger.warn(msg);
+				break;
+			case ERROR:
+				logger.error(msg);
+				break;
+			case FATAL:
+				logger.fatal(msg);
+				break;
 		}
 	}
 }
