@@ -32,17 +32,12 @@ import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Game;
+import org.apache.commons.io.FileUtils;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
 import javax.persistence.NoResultException;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,14 +57,7 @@ public class Main implements JobListener {
 	public static void main(String[] args) throws Exception {
 		if (Main.class.getClassLoader().getResource("logs") != null) {
 			File logs = new File(Objects.requireNonNull(Main.class.getClassLoader().getResource("logs")).getPath());
-			Files.walkFileTree(logs.toPath(), new SimpleFileVisitor<Path>(){
-				@Override
-				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-					Files.delete(file);
-					Helper.log(Main.class, LogLevel.INFO, "Log " + file.getFileName() + " reiniciado com sucesso!");
-					return FileVisitResult.CONTINUE;
-				}
-			});
+			FileUtils.deleteDirectory(logs);
 		}
 		info = new ShiroInfo();
 		relay = new Relay();
