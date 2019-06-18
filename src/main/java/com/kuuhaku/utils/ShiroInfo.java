@@ -40,7 +40,7 @@ public class ShiroInfo {
 	private static final String name = "Shiro";
 	private static final String version = "2.0";
 	private static final String default_prefix = DEV ? "dev!" : "s!";
-	private static final String nomeDB = "shiro.sqlite";
+	private static final String nomeDB = "com/kuuhaku/shiro.sqlite";
 	private static final String niichan = "350836145921327115"; //KuuHaKu
 	private static final ArrayList<String> developers = new ArrayList<String>() {{
 		add("321665807988031495"); //Reydux
