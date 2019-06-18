@@ -20,6 +20,7 @@ package com.kuuhaku.model;
 import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.LogLevel;
 import com.kuuhaku.utils.PrivilegeLevel;
 
 import javax.imageio.ImageIO;
@@ -51,7 +52,7 @@ public class Profile {
         HttpURLConnection con = (HttpURLConnection) new URL(m.getBg()).openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
         BufferedImage bg = scaleImage(ImageIO.read(con.getInputStream()));
-        System.out.println(bg.getWidth() + "x" + bg.getHeight());
+        Helper.log(this.getClass(), LogLevel.DEBUG, bg.getWidth() + "x" + bg.getHeight());
 
         con = (HttpURLConnection) new URL("http://i.imgur.com/gRzI7PH.png").openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");

@@ -23,6 +23,7 @@ import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.DuelData;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.LogLevel;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Message;
@@ -54,9 +55,9 @@ public class JDAEvents extends ListenerAdapter {
     @Override
     public void onReady(ReadyEvent event) {
         try {
-            System.out.println("Estou pronta!");
+            Helper.log(this.getClass(), LogLevel.INFO, "Estou pronta!");
         } catch (Exception e) {
-            System.out.println("Erro ao inicializar bot: " + e);
+            Helper.log(this.getClass(), LogLevel.ERROR, "Erro ao inicializar bot: " + e);
         }
     }
 
@@ -132,7 +133,6 @@ public class JDAEvents extends ListenerAdapter {
     @Override
     public void onShutdown(ShutdownEvent event) {
         //com.kuuhaku.MainANT.getInfo().getLogChannel().sendMessage(DiscordHelper.getCustomEmoteMention(com.kuuhaku.MainANT.getInfo().getGuild(), "choro") + " | Nunca vos esquecerei... Faleci! " + DiscordHelper.getCustomEmoteMention(com.kuuhaku.MainANT.getInfo().getGuild(), "bruh")).queue();
-        System.out.println();
     }
 	
 	/*@Override

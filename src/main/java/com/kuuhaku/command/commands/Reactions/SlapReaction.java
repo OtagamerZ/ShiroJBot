@@ -21,6 +21,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.model.ReactionsList;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 
@@ -71,7 +72,7 @@ public class SlapReaction extends Reaction {
                 Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para dar um tapa!");
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Helper.log(this.getClass(), LogLevel.ERROR, e.toString());
         }
     }
 }

@@ -3,6 +3,7 @@ package com.kuuhaku.controller;
 import com.kuuhaku.Main;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Game;
@@ -97,7 +98,7 @@ public class Relay extends SQLite {
 							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_HISTORY) ? "✅" : "❌") + " Ver histórico de mensagens\n" +
 							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI) ? "✅" : "❌") + " Usar emojis externos" +
 							"```").queue());
-					System.out.println(ex.toString() + "\n" + k);
+					Helper.log(this.getClass(), LogLevel.ERROR, ex.toString() + "\n" + k);
 				}
 		});
 	}

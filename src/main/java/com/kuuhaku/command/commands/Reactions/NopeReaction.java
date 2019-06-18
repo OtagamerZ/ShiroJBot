@@ -20,6 +20,7 @@ package com.kuuhaku.command.commands.Reactions;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.model.ReactionsList;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 
@@ -46,7 +47,7 @@ public class NopeReaction extends Reaction {
 
             Helper.sendReaction(channel, author.getAsMention() + " esquivou! - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), false);
         } catch (IOException e) {
-            e.printStackTrace();
+            Helper.log(this.getClass(), LogLevel.ERROR, e.toString());
         }
     }
 }

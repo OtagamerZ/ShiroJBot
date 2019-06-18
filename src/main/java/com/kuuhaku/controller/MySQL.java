@@ -1,6 +1,8 @@
 package com.kuuhaku.controller;
 
 import com.kuuhaku.model.*;
+import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.LogLevel;
 
 import javax.persistence.*;
 import java.util.*;
@@ -16,7 +18,7 @@ public class MySQL {
 
         if (emf == null) {
             emf = Persistence.createEntityManagerFactory("shiro_remote", props);
-            System.out.println("✅ | Ligação à base de dados MySQL estabelecida.");
+            Helper.log(MySQL.class, LogLevel.INFO, "✅ | Ligação à base de dados MySQL estabelecida.");
         }
 
         emf.getCache().evictAll();

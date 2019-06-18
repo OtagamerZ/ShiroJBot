@@ -4,6 +4,8 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.Tradutor;
 import com.kuuhaku.model.Anime;
+import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
@@ -103,7 +105,7 @@ public class AnimeCommand extends Command {
                 channel.sendMessage(eb.build()).queue();
             } catch (IOException e) {
                 m.editMessage(":x: | Humm...não achei nenhum anime com esse nome, talvez você tenha escrito algo errado?").queue();
-                e.printStackTrace();
+                Helper.log(this.getClass(), LogLevel.ERROR, e.toString());
             }
         });
     }

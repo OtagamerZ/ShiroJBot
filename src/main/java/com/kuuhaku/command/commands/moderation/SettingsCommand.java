@@ -18,7 +18,6 @@ public class SettingsCommand extends Command {
 
     @Override
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-
         guildConfig gc = SQLite.getGuildById(guild.getId());
 
         if (args.length == 0) {
@@ -33,9 +32,15 @@ public class SettingsCommand extends Command {
             return;
         }
 
+        final String msg = String.join(" ", args).replace(args[0], "").replace(args[1], "").trim();
+
         switch (args[0].toLowerCase()) {
             case "prefix":
             case "prefixo":
+                if (msg.length() > 5) {
+                    channel.sendMessage(":x: | Prefixo muito longo (Max. 5)").queue();
+                    return;
+                }
                 Settings.updatePrefix(args, message, gc);
                 break;
             case "cbv":
@@ -45,6 +50,10 @@ public class SettingsCommand extends Command {
             case "mensagembemvindo":
             case "mensagembv":
             case "msgbv":
+                if (msg.length() > 2000) {
+                    channel.sendMessage(":x: | Mensagem muito longo (Max. 2000)").queue();
+                    return;
+                }
                 Settings.updateMsgBV(args, message, gc);
                 break;
             case "cadeus":
@@ -54,6 +63,10 @@ public class SettingsCommand extends Command {
             case "mensagemadeus":
             case "mensagema":
             case "msgadeus":
+                if (msg.length() > 2000) {
+                    channel.sendMessage(":x: | Mensagem muito longo (Max. 2000)").queue();
+                    return;
+                }
                 Settings.updateMsgAdeus(args, message, gc);
                 break;
             case "csug":

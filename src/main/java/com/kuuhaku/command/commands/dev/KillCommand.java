@@ -1,12 +1,10 @@
 package com.kuuhaku.command.commands.dev;
 
 import com.kuuhaku.Main;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.Event;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-
-import java.sql.SQLException;
+import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.events.Event;
 
 public class KillCommand extends Command {
 	
@@ -23,12 +21,7 @@ public class KillCommand extends Command {
 			channel.sendMessage("Iniciando o protocolo de encerramento...").queue();
 		}
 
-		try {
-			Main.shutdown();
-		} catch (SQLException err) {
-			err.printStackTrace();
-			channel.sendMessage("Erro ao desligar: " + err.toString()).queue();
-		}
+		Main.shutdown();
 		System.exit(0);
 	}
 }
