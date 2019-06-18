@@ -36,7 +36,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class SQLite {
 
@@ -44,16 +43,13 @@ public class SQLite {
 
 	public static void connect() {
 
-		if (SQLite.class.getClassLoader().getResource(Main.getInfo().getDBFileName()) == null) {
-			Helper.log(SQLite.class, LogLevel.FATAL, "A base de dados SQLite não foi encontrada. Entre no servidor discord oficial da Shiro para obter ajuda.");
-			System.exit(1);
+		File DBfile = new File(Main.getInfo().getDBFileName());
+		if (!DBfile.exists()) {
+			System.out.println("A base de dados não foi encontrada. Entre no servidor discord oficial da Shiro para obter ajuda.");
 		}
 
-		File db = new File(Objects.requireNonNull(SQLite.class.getClassLoader().getResource(Main.getInfo().getDBFileName())).getPath());
-
 		Map<String, String> props = new HashMap<>();
-		Helper.log(SQLite.class, LogLevel.INFO, "Diretório do SQLite: " + Objects.requireNonNull(SQLite.class.getClassLoader().getResource(Main.getInfo().getDBFileName())).getPath());
-		props.put("javax.persistence.jdbc.url", "jdbc:sqlite:" + db.getPath());
+		props.put("javax.persistence.jdbc.url", "jdbc:sqlite:" + DBfile.getPath());
 
 		if (emf == null) emf = Persistence.createEntityManagerFactory("shiro_local", props);
 
