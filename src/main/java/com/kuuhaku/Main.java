@@ -92,6 +92,7 @@ public class Main implements JobListener {
 		info.setStartTime(Instant.now().getEpochSecond());
 
 		SQLite.connect();
+		Helper.log(MySQL.class, LogLevel.INFO, "✅ | Ligação à base de dados SQLite estabelecida.");
 		if (SQLite.restoreData(MySQL.getData()))
 			Helper.log(Main.class, LogLevel.INFO, "Dados recuperados com sucesso!");
 		else Helper.log(Main.class, LogLevel.ERROR, "Erro ao recuperar dados.");

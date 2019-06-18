@@ -54,7 +54,6 @@ public class SQLite {
 		if (emf == null) emf = Persistence.createEntityManagerFactory("shiro_local", props);
 
 		emf.getCache().evictAll();
-		Helper.log(MySQL.class, LogLevel.INFO, "✅ | Ligação à base de dados SQLite estabelecida.");
 	}
 
 	static EntityManager getEntityManager() {
