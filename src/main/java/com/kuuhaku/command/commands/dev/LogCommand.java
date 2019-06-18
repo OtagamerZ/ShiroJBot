@@ -15,6 +15,6 @@ public class LogCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-		channel.sendMessage("Aqui está!").addFile(Objects.requireNonNull(LogCommand.class.getClassLoader().getResourceAsStream("logs/stacktrace.log")), "trace.log").queue();
+		channel.sendMessage("Aqui está!").addFile(Objects.requireNonNull(LogCommand.class.getClassLoader().getResourceAsStream("logs/stacktrace.log")), "stacktrace.log").queue();
 	}
 }
