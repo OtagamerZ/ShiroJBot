@@ -49,8 +49,8 @@ public class SQLite {
 		}
 
 		Map<String, String> props = new HashMap<>();
-		Helper.log(SQLite.class, LogLevel.INFO, "Diretório do SQLite: " + Objects.requireNonNull(SQLite.class.getClassLoader().getResource(Main.getInfo().getDBFileName())).getPath());
-		props.put("javax.persistence.jdbc.url", "jdbc:sqlite:" + Objects.requireNonNull(SQLite.class.getClassLoader().getResource(Main.getInfo().getDBFileName())).getPath());
+		Helper.log(SQLite.class, LogLevel.INFO, "Diretório do SQLite: " + Objects.requireNonNull(SQLite.class.getClassLoader().getResource(Main.getInfo().getDBFileName())).getFile());
+		props.put("javax.persistence.jdbc.url", "jdbc:sqlite:" + Objects.requireNonNull(SQLite.class.getClassLoader().getResource(Main.getInfo().getDBFileName())).getFile());
 
 		if (emf == null) emf = Persistence.createEntityManagerFactory("shiro_local", props);
 
