@@ -3,6 +3,7 @@ package com.kuuhaku.command.commands.misc;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
@@ -37,8 +38,8 @@ public class ImageCommand extends Command {
                 HttpURLConnection con = (HttpURLConnection) link.openConnection();
                 con.setRequestMethod("GET");
                 con.setRequestProperty("User-Agent", "Mozilla/5.0");
-                System.out.println("Requisição 'GET' para o URL: " + link);
-                System.out.println("Resposta: " + con.getResponseCode());
+                Helper.log(this.getClass(), LogLevel.DEBUG, "Requisição 'GET' para o URL: " + link);
+                Helper.log(this.getClass(), LogLevel.DEBUG, "Resposta: " + con.getResponseCode());
                 BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
 
                 String input;
@@ -48,7 +49,7 @@ public class ImageCommand extends Command {
                 }
                 br.close();
 
-                System.out.println(resposta.toString());
+                Helper.log(this.getClass(), LogLevel.DEBUG, resposta.toString());
                 JSONObject jo = new JSONObject(resposta.toString().replace("[", "").replace("]", ""));
                 String url = "https://safebooru.org//images/" + jo.getString("directory") + "/" + jo.getString("image");
 
@@ -64,7 +65,7 @@ public class ImageCommand extends Command {
                 channel.sendMessage(eb.build()).queue();
             } catch (IOException | JSONException e) {
                 m.editMessage(":x: | Humm...não achei nenhum anime com esse nome, talvez você tenha escrito algo errado?").queue();
-                e.printStackTrace();
+                Helper.log(this.getClass(), LogLevel.ERROR, e.toString());
             }
         });
     }

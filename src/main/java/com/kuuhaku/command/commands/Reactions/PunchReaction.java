@@ -21,6 +21,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.model.ReactionsList;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 
@@ -72,7 +73,7 @@ public class PunchReaction extends Reaction {
                 Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para socar!");
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Helper.log(this.getClass(), LogLevel.ERROR, e.toString());
         }
     }
 }

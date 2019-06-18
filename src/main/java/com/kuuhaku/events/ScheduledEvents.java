@@ -38,6 +38,8 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.DataDump;
+import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.LogLevel;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 
@@ -46,8 +48,8 @@ public class ScheduledEvents implements Job {
     public void execute(JobExecutionContext context) {
         Main.getInfo().getAPI().getPresence().setGame(Main.getRandomGame());
         MySQL.dumpData(new DataDump(SQLite.getCADump(), SQLite.getGuildDump()));
-        System.out.println("Respostas/Guilds salvos com sucesso!");
+        Helper.log(this.getClass(), LogLevel.INFO, "Respostas/Guilds salvos com sucesso!");
         MySQL.dumpData(new DataDump(SQLite.getMemberDump()));
-        System.out.println("Membros salvos com sucesso!");
+        Helper.log(this.getClass(), LogLevel.INFO, "Membros salvos com sucesso!");
     }
 }
