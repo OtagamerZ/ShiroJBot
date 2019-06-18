@@ -26,6 +26,7 @@ import com.kuuhaku.events.guild.GuildUpdateEvents;
 import com.kuuhaku.managers.CommandManager;
 import com.kuuhaku.model.DataDump;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.LogLevel;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
@@ -35,10 +36,17 @@ import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
 import javax.persistence.NoResultException;
-import java.sql.SQLException;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class Main implements JobListener {
@@ -52,6 +60,17 @@ public class Main implements JobListener {
 	private static Scheduler sched;
 
 	public static void main(String[] args) throws Exception {
+		if (Main.class.getClassLoader().getResource("logs") != null) {
+			File logs = new File(Objects.requireNonNull(Main.class.getClassLoader().getResource("logs")).getPath());
+			Files.walkFileTree(logs.toPath(), new SimpleFileVisitor<Path>(){
+				@Override
+				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+					Files.delete(file);
+					Helper.log(Main.class, LogLevel.INFO, "Log " + file.getFileName() + " reiniciado com sucesso!");
+					return FileVisitResult.CONTINUE;
+				}
+			});
+		}
 		info = new ShiroInfo();
 		relay = new Relay();
 
@@ -73,8 +92,9 @@ public class Main implements JobListener {
 		info.setStartTime(Instant.now().getEpochSecond());
 
 		SQLite.connect();
-		if (SQLite.restoreData(MySQL.getData())) System.out.println("Dados recuperados com sucesso!");
-		else System.out.println("Erro ao recuperar dados.");
+		if (SQLite.restoreData(MySQL.getData()))
+			Helper.log(Main.class, LogLevel.INFO, "Dados recuperados com sucesso!");
+		else Helper.log(Main.class, LogLevel.ERROR, "Erro ao recuperar dados.");
 
 		try {
 			if (backup == null) {
@@ -88,10 +108,10 @@ public class Main implements JobListener {
 			} catch (Exception ignore) {
 			} finally {
 				sched.start();
-				System.out.println("Cronograma inicializado com sucesso!");
+				Helper.log(Main.class, LogLevel.INFO, "Cronograma inicializado com sucesso!");
 			}
 		} catch (SchedulerException e) {
-			System.out.println("Erro ao inicializar cronograma: " + e);
+			Helper.log(Main.class, LogLevel.ERROR, "Erro ao inicializar cronograma: " + e);
 		}
 
 		finishStartUp();
@@ -104,11 +124,10 @@ public class Main implements JobListener {
 				SQLite.getGuildById(g.getId());
 			} catch (NoResultException e) {
 				SQLite.addGuildToDB(g);
-				System.out.println("Guild adicionada ao banco: " + g.getName());
+				Helper.log(Main.class, LogLevel.INFO, "Guild adicionada ao banco: " + g.getName());
 			}
 		});
-		Helper.cls();
-		System.out.println("Estou pronta!");
+		Helper.log(Main.class, LogLevel.INFO, "Estou pronta!");
 		getInfo().setReady(true);
 	}
 
@@ -132,14 +151,14 @@ public class Main implements JobListener {
 		return cmdManager;
 	}
 
-	public static void shutdown() throws SQLException {
+	public static void shutdown() {
 		MySQL.dumpData(new DataDump(SQLite.getCADump(), SQLite.getGuildDump()));
-		System.out.println("Respostas/Guilds salvos com sucesso!");
+		Helper.log(Main.class, LogLevel.INFO, "Respostas/Guilds salvos com sucesso!");
 		MySQL.dumpData(new DataDump(SQLite.getMemberDump()));
-		System.out.println("Membros salvos com sucesso!");
+		Helper.log(Main.class, LogLevel.INFO, "Membros salvos com sucesso!");
 		SQLite.disconnect();
 		api.shutdown();
-		System.out.println("Fui desligada.");
+		Helper.log(Main.class, LogLevel.INFO, "Fui desligada.");
 	}
 
 	public static Relay getRelay() {
@@ -167,6 +186,6 @@ public class Main implements JobListener {
 
 	@Override
 	public void jobWasExecuted(JobExecutionContext context, JobExecutionException jobException) {
-		System.out.println("Programação executada em " + context.getFireTime() + ".\nPróxima execução em " + context.getNextFireTime());
+		Helper.log(this.getClass(), LogLevel.INFO, "Programação executada em " + context.getFireTime() + ".\nPróxima execução em " + context.getNextFireTime());
 	}
 }

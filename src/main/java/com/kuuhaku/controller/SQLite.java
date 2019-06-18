@@ -23,6 +23,7 @@ import com.kuuhaku.model.DataDump;
 import com.kuuhaku.model.Member;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Role;
 import org.json.JSONObject;
@@ -31,10 +32,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class SQLite {
 
@@ -42,17 +43,18 @@ public class SQLite {
 
 	public static void connect() {
 
-		File DBfile = new File(Main.getInfo().getDBFileName());
-		if (!DBfile.exists()) {
-			System.out.println("O ficheiro usado como base de dados não foi encontrado. Entre no servidor discord oficial da Shiro para obter ajuda.");
+		if (SQLite.class.getClassLoader().getResource(Main.getInfo().getDBFileName()) == null) {
+			Helper.log(SQLite.class, LogLevel.FATAL, "A base de dados SQLite não foi encontrada. Entre no servidor discord oficial da Shiro para obter ajuda.");
+			System.exit(1);
 		}
 
 		Map<String, String> props = new HashMap<>();
-		props.put("javax.persistence.jdbc.url", "jdbc:sqlite:" + DBfile.getPath());
+		props.put("javax.persistence.jdbc.url", "jdbc:sqlite:" + Objects.requireNonNull(SQLite.class.getClassLoader().getResource(Main.getInfo().getDBFileName())).getPath());
 
 		if (emf == null) emf = Persistence.createEntityManagerFactory("shiro_local", props);
 
 		emf.getCache().evictAll();
+		Helper.log(MySQL.class, LogLevel.INFO, "✅ | Ligação à base de dados SQLite estabelecida.");
 	}
 
 	static EntityManager getEntityManager() {
@@ -63,7 +65,7 @@ public class SQLite {
 	public static void disconnect() {
 		if (emf != null) {
 			emf.close();
-			System.out.println("Ligação à base de dados desfeita.");
+			Helper.log(SQLite.class, LogLevel.INFO, "Ligação à base de dados desfeita.");
 		}
 	}
 

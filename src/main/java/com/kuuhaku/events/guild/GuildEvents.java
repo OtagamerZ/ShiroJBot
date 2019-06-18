@@ -23,6 +23,7 @@ import com.kuuhaku.model.CustomAnswers;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
@@ -38,7 +39,7 @@ public class GuildEvents extends ListenerAdapter {
     @Override//removeGuildFromDB
     public void onGuildJoin(GuildJoinEvent event) {
         SQLite.addGuildToDB(event.getGuild());
-        System.out.println("Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".");
+        Helper.log(this.getClass(), LogLevel.INFO, "Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".");
     }
 
     @Override
@@ -46,7 +47,7 @@ public class GuildEvents extends ListenerAdapter {
         guildConfig gc = new guildConfig();
         gc.setGuildId(event.getGuild().getId());
         SQLite.removeGuildFromDB(gc);
-        System.out.println("Acabei de sair do servidor \"" + event.getGuild().getName() + "\".");
+        Helper.log(this.getClass(), LogLevel.INFO, "Acabei de sair do servidor \"" + event.getGuild().getName() + "\".");
     }
 
     @Override

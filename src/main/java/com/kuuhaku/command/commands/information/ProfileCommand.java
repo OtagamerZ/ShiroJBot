@@ -3,6 +3,8 @@ package com.kuuhaku.command.commands.information;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.model.Profile;
+import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 
@@ -22,7 +24,7 @@ public class ProfileCommand extends Command {
                 channel.sendFile(new Profile().makeProfile(member), "perfil.jpg").queue(f -> m.editMessage(":video_game: Perfil de " + author.getAsMention()).queue());
             } catch (IOException | FontFormatException e) {
                 m.editMessage(":x: | Epa, teve um errinho aqui enquanto eu gerava o perfil, meus criadores já foram notificados!").queue();
-                e.printStackTrace();
+                Helper.log(this.getClass(), LogLevel.ERROR, e.toString());
             }
         });
     }

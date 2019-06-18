@@ -46,6 +46,7 @@ public class CommandManager {
             add(new PartnerTagCommand());
             add(new RelaysCommand());
             add(new BlockCommand());
+            add(new LogCommand());
 
             //PARTNER
             add(new JibrilCommand());
