@@ -116,6 +116,7 @@ public class Main implements JobListener {
 				Helper.log(Main.class, LogLevel.INFO, "Guild adicionada ao banco: " + g.getName());
 			}
 		});
+		Helper.log(Main.class, LogLevel.INFO, "%n<----------END OF BOOT---------->%n");
 		Helper.log(Main.class, LogLevel.INFO, "Estou pronta!");
 		getInfo().setReady(true);
 	}
