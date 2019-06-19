@@ -61,7 +61,7 @@ public class Main implements JobListener {
 
 	public static void main(String[] args) throws Exception {
 		if (new File("logs").exists()) {
-			File logs = new File(Objects.requireNonNull(Main.class.getClassLoader().getResource("logs")).getPath());
+			File logs = new File("logs");
 			Files.walkFileTree(logs.toPath(), new SimpleFileVisitor<Path>(){
 				@Override
 				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
