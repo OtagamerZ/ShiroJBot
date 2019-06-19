@@ -27,6 +27,7 @@ import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -490,19 +491,19 @@ public class Helper {
 
 		switch (level) {
 			case DEBUG:
-				logger.debug(msg);
+				logger.printf(Level.DEBUG, msg);
 				break;
 			case INFO:
-				logger.info(msg);
+				logger.printf(Level.INFO, msg);
 				break;
 			case WARN:
-				logger.warn(msg);
+				logger.printf(Level.WARN, msg);
 				break;
 			case ERROR:
-				logger.error(msg);
+				logger.printf(Level.ERROR, msg);
 				break;
 			case FATAL:
-				logger.fatal(msg);
+				logger.printf(Level.FATAL, msg);
 				break;
 		}
 	}
