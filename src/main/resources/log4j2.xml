@@ -4,23 +4,26 @@
 	<Appenders>
 		<Console name="Console" target="SYSTEM_OUT" follow="true">
 			<PatternLayout
-					pattern="%style{%d{dd MMM yyyy HH:mm:ss}{GMT-3}}{magenta} %style{PID %pid}{bright, blue} %style{[%tn]}{reverse} %highlight{%-5level%logger{36}.%M():%L}{FATAL=red blink bright, ERROR=red, WARN=yellow bold, INFO=green, DEBUG=green bold, TRACE=cyan} - %style{%msg}{white}%n"
+					pattern="%style{%d{dd MMM yyyy HH:mm:ss}{GMT-3}}{magenta} %style{PID %pid}{bright, blue} %style{[%tn]}{reverse} %highlight{%-5level%logger{36}.%M():%L}{FATAL=red blink bright, ERROR=red, WARN=yellow bold, INFO=green, DEBUG=green bold, TRACE=cyan} - %style{%msg}{white}%n%n"
 					disableAnsi="false"/>
 		</Console>
 
 		<File name="Log" fileName="logs/stacktrace.log">
-			<PatternLayout pattern="%d{dd MMM yyyy HH:mm:ss}{GMT-3} PID %pid [%tn] %-5level%logger{36}.%M():%L - %msg%n"
-						   disableAnsi="false"/>
+			<PatternLayout
+					pattern="%d{dd MMM yyyy HH:mm:ss}{GMT-3} PID %pid [%tn] %-5level%logger{36}.%M():%L - %msg%n%n"
+					disableAnsi="false"/>
 		</File>
 
 		<File name="ErrorLog" fileName="logs/error.log">
-			<PatternLayout pattern="%d{dd MMM yyyy HH:mm:ss}{GMT-3} PID %pid [%tn] %-5level%logger{36}.%M():%L - %msg%n"
-						   disableAnsi="false"/>
+			<PatternLayout
+					pattern="%d{dd MMM yyyy HH:mm:ss}{GMT-3} PID %pid [%tn] %-5level%logger{36}.%M():%L - %msg%n%n"
+					disableAnsi="false"/>
 		</File>
 
 		<File name="CrashLog" fileName="logs/crash.log">
-			<PatternLayout pattern="%d{dd MMM yyyy HH:mm:ss}{GMT-3} PID %pid [%tn] %-5level%logger{36}.%M():%L - %msg%n"
-						   disableAnsi="false"/>
+			<PatternLayout
+					pattern="%d{dd MMM yyyy HH:mm:ss}{GMT-3} PID %pid [%tn] %-5level%logger{36}.%M():%L - %msg%n%n"
+					disableAnsi="false"/>
 		</File>
 	</Appenders>
 
@@ -35,4 +38,9 @@
 		</root>
 	</Loggers>
 
+	<DefaultRolloverStrategy>
+		<Delete basePath="logs/" maxDepth="1">
+			<IfFileName glob="*.log"/>
+		</Delete>
+	</DefaultRolloverStrategy>
 </Configuration>
