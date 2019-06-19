@@ -491,19 +491,19 @@ public class Helper {
 
 		switch (level) {
 			case DEBUG:
-				logger.printf(Level.DEBUG, msg + "%n");
+				logger.printf(Level.DEBUG, msg + System.lineSeparator());
 				break;
 			case INFO:
-				logger.printf(Level.INFO, msg + "%n");
+				logger.printf(Level.INFO, msg + System.lineSeparator());
 				break;
 			case WARN:
-				logger.printf(Level.WARN, msg + "%n");
+				logger.printf(Level.WARN, msg + System.lineSeparator());
 				break;
 			case ERROR:
-				logger.printf(Level.ERROR, msg + "%n");
+				logger.printf(Level.ERROR, msg + System.lineSeparator());
 				break;
 			case FATAL:
-				logger.printf(Level.FATAL, msg + "%n");
+				logger.printf(Level.FATAL, msg + System.lineSeparator());
 				break;
 		}
 	}
