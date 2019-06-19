@@ -38,8 +38,6 @@ public class Tradutor {
         con.setRequestMethod("GET");
         con.setRequestProperty("Accept", "application/json");
         con.addRequestProperty("Accept-Charset", "UTF-8");
-        Helper.log(Tradutor.class, LogLevel.DEBUG, "Requisição 'GET' para o URL: " + link);
-        Helper.log(Tradutor.class, LogLevel.DEBUG, "Resposta: " + con.getResponseCode());
 
         BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
 
