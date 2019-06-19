@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="trace">
+<Configuration status="warn">
 
 	<Appenders>
 		<Console name="Console" target="SYSTEM_OUT" follow="true">
@@ -9,17 +9,17 @@
 		</Console>
 
 		<File name="Log" fileName="logs/stacktrace.log">
-			<PatternLayout pattern="%d{dd MMM yyyy HH:mm:ss}{GMT-3} PID %pid [%tn] %-5level%logger{36}.%M():%L - %msg"
+			<PatternLayout pattern="%d{dd MMM yyyy HH:mm:ss}{GMT-3} PID %pid [%tn] %-5level%logger{36}.%M():%L - %msg%n"
 						   disableAnsi="false"/>
 		</File>
 
 		<File name="ErrorLog" fileName="logs/error.log">
-			<PatternLayout pattern="%d{dd MMM yyyy HH:mm:ss}{GMT-3} PID %pid [%tn] %-5level%logger{36}.%M():%L - %msg"
+			<PatternLayout pattern="%d{dd MMM yyyy HH:mm:ss}{GMT-3} PID %pid [%tn] %-5level%logger{36}.%M():%L - %msg%n"
 						   disableAnsi="false"/>
 		</File>
 
 		<File name="CrashLog" fileName="logs/crash.log">
-			<PatternLayout pattern="%d{dd MMM yyyy HH:mm:ss}{GMT-3} PID %pid [%tn] %-5level%logger{36}.%M():%L - %msg"
+			<PatternLayout pattern="%d{dd MMM yyyy HH:mm:ss}{GMT-3} PID %pid [%tn] %-5level%logger{36}.%M():%L - %msg%n"
 						   disableAnsi="false"/>
 		</File>
 	</Appenders>
