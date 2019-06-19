@@ -4,7 +4,7 @@
 	<Appenders>
 		<Console name="Console" target="SYSTEM_OUT" follow="true">
 			<PatternLayout
-					pattern="%style{%d{dd MMM yyyy HH:mm:ss}{GMT-3}}{magenta} %style{PID %pid}{bright, blue} %style{[%tn]}{reverse} %highlight{%-5level%logger{36}.%M():%L}{FATAL=red blink bright, ERROR=red, WARN=yellow bold, INFO=green, DEBUG=green bold, TRACE=cyan} - %style{%msg}{white}"
+					pattern="%style{%d{dd MMM yyyy HH:mm:ss}{GMT-3}}{magenta} %style{PID %pid}{bright, blue} %style{[%tn]}{reverse} %highlight{%-5level%logger{36}.%M():%L}{FATAL=red blink bright, ERROR=red, WARN=yellow bold, INFO=green, DEBUG=green bold, TRACE=cyan} - %style{%msg}{white}%n"
 					disableAnsi="false"/>
 		</Console>
 
