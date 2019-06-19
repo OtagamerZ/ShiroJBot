@@ -8,23 +8,41 @@
 					disableAnsi="false"/>
 		</Console>
 
-		<File name="Log" fileName="logs/stacktrace.log">
+		<RollingFile name="Log" fileName="logs/stacktrace.log">
 			<PatternLayout
 					pattern="%d{dd MMM yyyy HH:mm:ss}{GMT-3} PID %pid [%tn] %-5level%logger{36}.%M():%L - %msg%n%n"
 					disableAnsi="false"/>
-		</File>
+			<CronTriggeringPolicy schedule="0 0 0 * * ?"/>
+			<DefaultRolloverStrategy>
+				<Delete basePath="logs/" maxDepth="1">
+					<IfFileName glob="*.log"/>
+				</Delete>
+			</DefaultRolloverStrategy>
+		</RollingFile>
 
-		<File name="ErrorLog" fileName="logs/error.log">
+		<RollingFile name="ErrorLog" fileName="logs/error.log">
 			<PatternLayout
 					pattern="%d{dd MMM yyyy HH:mm:ss}{GMT-3} PID %pid [%tn] %-5level%logger{36}.%M():%L - %msg%n%n"
 					disableAnsi="false"/>
-		</File>
+			<CronTriggeringPolicy schedule="0 0 0 * * ?"/>
+			<DefaultRolloverStrategy>
+				<Delete basePath="logs/" maxDepth="1">
+					<IfFileName glob="*.log"/>
+				</Delete>
+			</DefaultRolloverStrategy>
+		</RollingFile>
 
-		<File name="CrashLog" fileName="logs/crash.log">
+		<RollingFile name="CrashLog" fileName="logs/crash.log">
 			<PatternLayout
 					pattern="%d{dd MMM yyyy HH:mm:ss}{GMT-3} PID %pid [%tn] %-5level%logger{36}.%M():%L - %msg%n%n"
 					disableAnsi="false"/>
-		</File>
+			<CronTriggeringPolicy schedule="0 0 0 * * ?"/>
+			<DefaultRolloverStrategy>
+				<Delete basePath="logs/" maxDepth="1">
+					<IfFileName glob="*.log"/>
+				</Delete>
+			</DefaultRolloverStrategy>
+		</RollingFile>
 	</Appenders>
 
 	<Loggers>
@@ -37,10 +55,4 @@
 			<AppenderRef ref="CrashLog" level="fatal"/>
 		</root>
 	</Loggers>
-
-	<DefaultRolloverStrategy>
-		<Delete basePath="logs/" maxDepth="1">
-			<IfFileName glob="*.log"/>
-		</Delete>
-	</DefaultRolloverStrategy>
 </Configuration>
