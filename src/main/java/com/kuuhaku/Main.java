@@ -60,17 +60,6 @@ public class Main implements JobListener {
 	private static Scheduler sched;
 
 	public static void main(String[] args) throws Exception {
-		if (new File("logs").exists()) {
-			File logs = new File("logs");
-			Files.walkFileTree(logs.toPath(), new SimpleFileVisitor<Path>(){
-				@Override
-				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-					Files.delete(file);
-					Helper.log(Main.class, LogLevel.INFO, "Log " + file.getFileName() + " reiniciado com sucesso!");
-					return FileVisitResult.CONTINUE;
-				}
-			});
-		}
 		info = new ShiroInfo();
 		relay = new Relay();
 
