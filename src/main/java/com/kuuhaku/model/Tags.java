@@ -41,9 +41,9 @@ import javax.persistence.Id;
 public class Tags {
     @Id
     private String id;
-    private boolean Partner;
-    private boolean Toxic;
-    private boolean Verified;
+    private boolean Partner = false;
+    private boolean Toxic = false;
+    private boolean Verified = false;
 
     public String getId() {
         return id;
