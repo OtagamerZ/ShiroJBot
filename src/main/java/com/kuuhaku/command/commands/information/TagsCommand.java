@@ -31,7 +31,7 @@ import javax.persistence.NoResultException;
 
 public class TagsCommand extends Command {
 
-    public TagsCommand(String name, String description, Category category) {
+    public TagsCommand() {
         super("tags", new String[]{"emblemas", "insignias"}, "Mostra os emblemas disponíveis.", Category.PARTNER);
     }
 
