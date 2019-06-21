@@ -212,4 +212,30 @@ public class MySQL {
 
         em.close();
     }
+
+    public static void giveTagVerified(net.dv8tion.jda.core.entities.Member u) {
+        EntityManager em = getEntityManager();
+
+        Tags t = getTagById(u.getUser().getId());
+        t.setVerified(true);
+
+        em.getTransaction().begin();
+        em.merge(t);
+        em.getTransaction().commit();
+
+        em.close();
+    }
+
+    public static void removeTagVerified(net.dv8tion.jda.core.entities.Member u) {
+        EntityManager em = getEntityManager();
+
+        Tags t = getTagById(u.getUser().getId());
+        t.setVerified(false);
+
+        em.getTransaction().begin();
+        em.merge(t);
+        em.getTransaction().commit();
+
+        em.close();
+    }
 }
