@@ -36,7 +36,9 @@ public class JibrilEvents extends ListenerAdapter {
                         } catch (Exception e) {
                             Main.getRelay().relayMessage(String.join(" ", msg), event.getMember(), event.getGuild(), null);
                         }
+                        return;
                     }
+                    Main.getRelay().relayMessage(String.join(" ", msg), event.getMember(), event.getGuild(), null);
                 } catch (NoResultException e) {
                     Main.getRelay().relayMessage(String.join(" ", msg), event.getMember(), event.getGuild(), null);
                 }
