@@ -105,7 +105,7 @@ public class MySQL {
         }
     }
 
-    static Beyblade getChampionBeyblade() {
+    public static Beyblade getChampionBeyblade() {
         List<Beyblade> rank = MySQL.getBeybladeList();
         assert rank != null;
         rank.sort(Comparator.comparing(Beyblade::getKDA));
