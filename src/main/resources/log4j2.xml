@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="warn">
 
-	<Appenders>
-		<Console name="Console" target="SYSTEM_OUT" follow="true">
-			<PatternLayout
-					pattern="%style{%d{dd MMM yyyy HH:mm:ss}{GMT-3}}{magenta} %style{PID %pid}{bright, blue} %style{[%tn]}{reverse} %highlight{%-5level %logger{36}.%M():%L}{FATAL=red blink bright, ERROR=red, WARN=yellow bold, INFO=green, DEBUG=green bold, TRACE=cyan} - %style{%msg}{white}%n%n"
-					disableAnsi="false"/>
-		</Console>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout
+                    pattern="%style{%d{dd MMM yyyy HH:mm:ss}{GMT-3}}{magenta} %style{PID %pid}{bright, blue} %style{[%tn]}{reverse} %highlight{%-5level %logger{36}.%M():%L}{FATAL=red blink bright, ERROR=red, WARN=yellow bold, INFO=green, DEBUG=green bold, TRACE=cyan} - %style{%msg}{white}%n%n"
+                    disableAnsi="false"/>
+        </Console>
 
-		<File name="Log" fileName="logs/stacktrace.log" append="false">
-			<PatternLayout
-          pattern="%d{dd MMM yyyy HH:mm:ss}{GMT-3} PID %pid [%tn] %-5level %logger{36}.%M():%L - %msg\r\n\r\n"
-          disableAnsi="false"/>
-		</File>
+        <File name="Log" fileName="logs/stacktrace.log" append="false">
+            <PatternLayout
+                    pattern="%d{dd MMM yyyy HH:mm:ss}{GMT-3} PID %pid [%tn] %-5level %logger{36}.%M():%L - %msg\r\n\r\n"
+                    disableAnsi="false"/>
+        </File>
 
-		<File name="ErrorLog" fileName="logs/error.log" append="false">
-			<PatternLayout
-          pattern="%d{dd MMM yyyy HH:mm:ss}{GMT-3} PID %pid [%tn] %-5level %logger{36}.%M():%L - %msg\r\n\r\n"
-          disableAnsi="false"/>
-		</File>
+        <File name="ErrorLog" fileName="logs/error.log" append="false">
+            <PatternLayout
+                    pattern="%d{dd MMM yyyy HH:mm:ss}{GMT-3} PID %pid [%tn] %-5level %logger{36}.%M():%L - %msg\r\n\r\n"
+                    disableAnsi="false"/>
+        </File>
 
-		<File name="CrashLog" fileName="logs/crash.log" append="false">
-			<PatternLayout
-          pattern="%d{dd MMM yyyy HH:mm:ss}{GMT-3} PID %pid [%tn] %-5level %logger{36}.%M():%L - %msg\r\n\r\n"
-          disableAnsi="false"/>
-		</File>
-	</Appenders>
+        <File name="CrashLog" fileName="logs/crash.log" append="false">
+            <PatternLayout
+                    pattern="%d{dd MMM yyyy HH:mm:ss}{GMT-3} PID %pid [%tn] %-5level %logger{36}.%M():%L - %msg\r\n\r\n"
+                    disableAnsi="false"/>
+        </File>
+    </Appenders>
 
-	<Loggers>
-		<root level="debug">
-			<AppenderRef ref="Console" level="info"/>
-			<AppenderRef ref="Log" level="info"/>
+    <Loggers>
+        <root level="debug">
+            <AppenderRef ref="Console" level="info"/>
+            <AppenderRef ref="Log" level="info"/>
 
-			<AppenderRef ref="ErrorLog" level="error"/>
+            <AppenderRef ref="ErrorLog" level="error"/>
 
-			<AppenderRef ref="CrashLog" level="fatal"/>
-		</root>
-	</Loggers>
+            <AppenderRef ref="CrashLog" level="fatal"/>
+        </root>
+    </Loggers>
 </Configuration>
