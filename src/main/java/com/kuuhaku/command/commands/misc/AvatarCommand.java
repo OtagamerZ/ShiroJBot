@@ -2,13 +2,13 @@ package com.kuuhaku.command.commands.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 
-import java.util.Random;
-
-
+import java.awt.*;
+import java.io.IOException;
 
 
 public class AvatarCommand extends Command {
@@ -23,29 +23,47 @@ public class AvatarCommand extends Command {
 		if (message.getMentionedUsers().size() > 1) { channel.sendMessage(":x: | Você só pode mencionar 1 utilizador de cada vez.").queue(); return; }
 
 		EmbedBuilder eb = new EmbedBuilder();
-		eb.setColor((new Random()).nextInt(6331903));
+        eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
 
 
 		if (message.getMentionedUsers().size() == 0) {
 			if(args.length > 0){
 				if(args[0].trim().equalsIgnoreCase("guild")) {
-					if(guild.getIconUrl() == null) { channel.sendMessage(":x: | O servidor não possui icon.").queue(); return; }
+                    if (guild.getIconUrl() == null) {
+                        channel.sendMessage(":x: | O servidor não possui icon.").queue();
+                        return;
+                    }
 					eb.setTitle("Icon do servidor");
 					eb.setImage(guild.getIconUrl());
+                    try {
+                        eb.setColor(Helper.colorThief(guild.getIconUrl()));
+                    } catch (IOException ignore) {
+                    }
 				}
 			} else {
-				if (author.getAvatarUrl() == null) { channel.sendMessage(":x: | Você não possui avatar").queue(); return; }
+                if (author.getAvatarUrl() == null) {
+                    channel.sendMessage(":x: | Você não possui avatar").queue();
+                    return;
+                }
 				eb.setTitle("Seu avatar");
-				eb.setImage(author.getAvatarUrl() + "?size=2048");
+                eb.setImage(author.getAvatarUrl());
+                try {
+                    eb.setColor(Helper.colorThief(author.getAvatarUrl()));
+                } catch (IOException ignore) {
+                }
 			}
 		} else if (message.getMentionedUsers().size() == 1) {
 			if(message.getMentionedUsers().get(0).getAvatarUrl() == null) { channel.sendMessage(":x: | O utilizador `" + message.getMentionedUsers().get(0).getAsTag() + "` não possui avatar.").queue(); return;}
 			if(author.getId().equals(message.getMentionedUsers().get(0).getId())) {
 				eb.setTitle("Seu avatar");
-				eb.setImage(author.getAvatarUrl() + "?size=2048");
+                eb.setImage(author.getAvatarUrl());
 			} else {
 				eb.setTitle("Avatar de: " + message.getMentionedUsers().get(0).getAsTag());
-				eb.setImage(message.getMentionedUsers().get(0).getAvatarUrl() + "?size=2048");
+                eb.setImage(message.getMentionedUsers().get(0).getAvatarUrl());
+                try {
+                    eb.setColor(Helper.colorThief(message.getMentionedUsers().get(0).getAvatarUrl()));
+                } catch (IOException ignore) {
+                }
 			}
 		}
 		channel.sendMessage(eb.build()).queue();
