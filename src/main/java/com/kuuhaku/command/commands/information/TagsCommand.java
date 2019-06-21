@@ -17,22 +17,22 @@
 
 package com.kuuhaku.command.commands.information;
 
-import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.MySQL;
-import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.PrivilegeLevel;
+import com.kuuhaku.utils.TagIcons;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 
 import javax.persistence.NoResultException;
 
-public class RelayCommand extends Command {
+public class TagsCommand extends Command {
 
-    public RelayCommand() {
-        super("relay", new String[]{"relinfo", "relcon"}, "Mostra dados sobre a conexão relay.", Category.PARTNER);
+    public TagsCommand(String name, String description, Category category) {
+        super("tags", new String[]{"emblemas", "insignias"}, "Mostra os emblemas disponíveis.", Category.PARTNER);
     }
 
     @Override
@@ -47,6 +47,18 @@ public class RelayCommand extends Command {
             return;
         }
 
-        channel.sendMessage(Main.getRelay().getRelayInfo(SQLite.getGuildById(guild.getId()))).queue();
+        EmbedBuilder eb = new EmbedBuilder();
+
+        eb.setTitle(":label: Emblemas do chat global");
+        eb.addField(TagIcons.getTag(TagIcons.DEV) + " Desenvolvedor", "Desenvolvedores da Shiro/Jibril", false);
+        eb.addField(TagIcons.getTag(TagIcons.EDITOR) + " Redator", "Redatores da Shiro/Jibril", false);
+        eb.addField(TagIcons.getTag(TagIcons.PARTNER) + " Parceiro", "Parceiros de desenvolvimento da Shiro/Jibril", false);
+        eb.addField(TagIcons.getTag(TagIcons.MODERATOR) + " Moderador", "Equipe administrativa do servidor de onde a mensagem foi enviada", false);
+        eb.addField(TagIcons.getTag(TagIcons.CHAMPION) + " Campeão", "Usuário que está no ranking Nº 1 das Beyblades", false);
+        eb.addField(TagIcons.getTag(TagIcons.VETERAN) + " Veterano", "Membro com nível maior ou igual a 20", false);
+        eb.addField(TagIcons.getTag(TagIcons.VERIFIED) + " Verificado", "Usuário com conduta e identidade verificada", false);
+        eb.addField(TagIcons.getTag(TagIcons.TOXIC) + " Tóxico", "Usuário com péssima conduta", false);
+
+        channel.sendMessage(eb.build()).queue();
     }
 }
