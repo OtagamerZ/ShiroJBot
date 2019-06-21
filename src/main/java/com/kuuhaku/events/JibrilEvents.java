@@ -7,6 +7,8 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
+import javax.persistence.NoResultException;
+
 public class JibrilEvents extends ListenerAdapter {
 
     @Override
@@ -19,19 +21,25 @@ public class JibrilEvents extends ListenerAdapter {
             }
             String[] msg = event.getMessage().getContentRaw().split(" ");
             for (int i = 0; i < msg.length; i++) {
-                if (Helper.findURL(msg[i]) && !MySQL.getTagById(event.getAuthor().getId()).isVerified())
-                    msg[i] = "`LINK BLOQUEADO`";
+                try {
+                    if (Helper.findURL(msg[i]) && !MySQL.getTagById(event.getAuthor().getId()).isVerified())
+                        msg[i] = "`LINK BLOQUEADO`";
+                } catch (NoResultException e) {
+                    if (Helper.findURL(msg[i])) msg[i] = "`LINK BLOQUEADO`";
+                }
             }
             if (String.join(" ", msg).length() < 2048) {
-                if (MySQL.getTagById(event.getAuthor().getId()).isVerified() && event.getMessage().getAttachments().size() > 0) {
-                    try {
-                        Main.getRelay().relayMessage(String.join(" ", msg), event.getMember(), event.getGuild(), event.getMessage().getAttachments().get(0).getUrl());
-                    } catch (Exception e) {
-                        Main.getRelay().relayMessage(String.join(" ", msg), event.getMember(), event.getGuild(), null);
+                try {
+                    if (MySQL.getTagById(event.getAuthor().getId()).isVerified() && event.getMessage().getAttachments().size() > 0) {
+                        try {
+                            Main.getRelay().relayMessage(String.join(" ", msg), event.getMember(), event.getGuild(), event.getMessage().getAttachments().get(0).getUrl());
+                        } catch (Exception e) {
+                            Main.getRelay().relayMessage(String.join(" ", msg), event.getMember(), event.getGuild(), null);
+                        }
                     }
-                    return;
+                } catch (NoResultException e) {
+                    Main.getRelay().relayMessage(String.join(" ", msg), event.getMember(), event.getGuild(), null);
                 }
-                Main.getRelay().relayMessage(String.join(" ", msg), event.getMember(), event.getGuild(), null);
             } else event.getChannel().sendMessage(":x: | Mensagem muito longa! (Max. 2048 letras)").queue();
         }
     }
