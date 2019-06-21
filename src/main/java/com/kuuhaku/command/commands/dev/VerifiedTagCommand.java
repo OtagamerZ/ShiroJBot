@@ -26,10 +26,10 @@ import net.dv8tion.jda.core.events.Event;
 
 import javax.persistence.NoResultException;
 
-public class ToxicTagCommand extends Command {
+public class VerifiedTagCommand extends Command {
 
-    public ToxicTagCommand() {
-        super("switchtoxic", new String[]{"mudatoxico", "tagtoxico", "reportayasuo"}, "<@usuário>", "Define um usuário como tóxico ou não.", Category.DEVS);
+    public VerifiedTagCommand() {
+        super("switchverified", new String[]{"mudaverificado", "tagverificado", "verificado"}, "<@usuário>", "Define um usuário como verificado ou não.", Category.DEVS);
     }
 
     @Override
@@ -38,24 +38,24 @@ public class ToxicTagCommand extends Command {
             if (message.getMentionedUsers().size() == 1) {
                 try {
                     Tags t = MySQL.getTagById(message.getMentionedMembers().get(0).getUser().getId());
-                    if (t.isToxic()) {
-                        MySQL.removeTagToxic(message.getMentionedMembers().get(0));
-                        channel.sendMessage(message.getMentionedMembers().get(0).getAsMention() + " não é mais tóxico, que bom!").queue();
-                    } else {
-                        MySQL.giveTagToxic(message.getMentionedMembers().get(0));
+                    if (t.isPartner()) {
                         MySQL.removeTagVerified(message.getMentionedMembers().get(0));
-                        channel.sendMessage(message.getMentionedMembers().get(0).getAsMention() + " agora é tóxico, reporta ele!").queue();
+                        channel.sendMessage(message.getMentionedMembers().get(0).getAsMention() + " não é mais verificado, perdeu a confiança!").queue();
+                    } else {
+                        MySQL.giveTagVerified(message.getMentionedMembers().get(0));
+                        MySQL.removeTagToxic(message.getMentionedMembers().get(0));
+                        channel.sendMessage(message.getMentionedMembers().get(0).getAsMention() + " agora é um verificado, agora te considero alguém confiável!").queue();
                     }
                 } catch (NoResultException e) {
                     MySQL.addUserTagsToDB(message.getMentionedMembers().get(0));
                     Tags t = MySQL.getTagById(message.getMentionedMembers().get(0).getUser().getId());
-                    if (t.isToxic()) {
-                        MySQL.removeTagToxic(message.getMentionedMembers().get(0));
-                        channel.sendMessage(message.getMentionedMembers().get(0).getAsMention() + " não é mais tóxico, que bom!").queue();
-                    } else {
-                        MySQL.giveTagToxic(message.getMentionedMembers().get(0));
+                    if (t.isPartner()) {
                         MySQL.removeTagVerified(message.getMentionedMembers().get(0));
-                        channel.sendMessage(message.getMentionedMembers().get(0).getAsMention() + " agora é tóxico, reporta ele!").queue();
+                        channel.sendMessage(message.getMentionedMembers().get(0).getAsMention() + " não é mais verificado, perdeu a confiança!").queue();
+                    } else {
+                        MySQL.giveTagVerified(message.getMentionedMembers().get(0));
+                        MySQL.removeTagToxic(message.getMentionedMembers().get(0));
+                        channel.sendMessage(message.getMentionedMembers().get(0).getAsMention() + " agora é um verificado, agora te considero alguém confiável!").queue();
                     }
                 }
             } else {
