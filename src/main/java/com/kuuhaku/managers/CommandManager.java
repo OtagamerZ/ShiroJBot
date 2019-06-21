@@ -63,6 +63,7 @@ public class CommandManager {
             add(new ReportBugCommand());
             add(new BackgroundCommand());
             add(new RelayCommand());
+            add(new TagsCommand());
 
             //MISC
             add(new AsciiCommand());
