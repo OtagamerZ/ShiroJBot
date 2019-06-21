@@ -4,6 +4,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
+import com.kuuhaku.utils.TagIcons;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Game;
@@ -33,7 +34,7 @@ public class Relay extends SQLite {
 		}
 	}
 
-	public void relayMessage(String msg, Member m, Guild s) {
+	public void relayMessage(String msg, Member m, Guild s, String imgURL) {
 		updateRelays();
 		checkSize();
 
@@ -41,6 +42,7 @@ public class Relay extends SQLite {
 		eb.setDescription(msg + "\n\n ");
 		eb.setAuthor("(" + s.getName() + ") " + m.getEffectiveName(), s.getIconUrl(), s.getIconUrl());
 		eb.setThumbnail(m.getUser().getAvatarUrl());
+		if (imgURL != null) eb.setImage(imgURL);
 		eb.setFooter(m.getUser().getId(), "http://icons.iconarchive.com/icons/killaaaron/adobe-cc-circles/1024/Adobe-Id-icon.png");
 		try {
 			eb.setColor(Helper.colorThief(s.getIconUrl()));
@@ -50,35 +52,41 @@ public class Relay extends SQLite {
 
 		StringBuilder badges = new StringBuilder();
 		if (m.getUser().getId().equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(m.getUser().getId()))
-			badges.append("<:Dev:589103373354270760> ");
+			badges.append(TagIcons.getTag(TagIcons.DEV));
 
 		if (Main.getInfo().getEditors().contains(m.getUser().getId()))
-			badges.append("<:Editor:589120809428058123> ");
+			badges.append(TagIcons.getTag(TagIcons.EDITOR));
 
 		try {
 			if (MySQL.getTagById(m.getUser().getId()).isPartner())
-				badges.append("<:Partner:589103374033485833> ");
+				badges.append(TagIcons.getTag(TagIcons.PARTNER));
 		} catch (NoResultException ignore) {
 		}
 
 		if (m.hasPermission(Permission.MANAGE_CHANNEL))
-			badges.append("<:Moderator:589121447314587744> ");
+			badges.append(TagIcons.getTag(TagIcons.MODERATOR));
 
 		try {
 			if (MySQL.getChampionBeyblade().getId().equals(m.getUser().getId()))
-				badges.append("<:Champion:589120809616932864> ");
+				badges.append(TagIcons.getTag(TagIcons.CHAMPION));
 		} catch (NoResultException ignore) {
 		}
 
 		try {
 			if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 20)
-				badges.append("<:Veteran:589121447151271976> ");
+				badges.append(TagIcons.getTag(TagIcons.VETERAN));
+		} catch (NoResultException ignore) {
+		}
+
+		try {
+			if (MySQL.getTagById(m.getUser().getId()).isVerified())
+				badges.append(TagIcons.getTag(TagIcons.VERIFIED));
 		} catch (NoResultException ignore) {
 		}
 
 		try {
 			if (MySQL.getTagById(m.getUser().getId()).isToxic())
-				badges.append("<:Toxic:589103372926451713> ");
+				badges.append(TagIcons.getTag(TagIcons.TOXIC));
 		} catch (NoResultException ignore) {
 		}
 
