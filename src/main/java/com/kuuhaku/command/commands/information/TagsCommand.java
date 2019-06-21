@@ -19,15 +19,10 @@ package com.kuuhaku.command.commands.information;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.MySQL;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.PrivilegeLevel;
 import com.kuuhaku.utils.TagIcons;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
-
-import javax.persistence.NoResultException;
 
 public class TagsCommand extends Command {
 
@@ -37,16 +32,6 @@ public class TagsCommand extends Command {
 
     @Override
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-        try {
-            if (!MySQL.getTagById(author.getId()).isPartner() && !Helper.hasPermission(member, PrivilegeLevel.DEV)) {
-                channel.sendMessage(":x: | Este comando é exlusivo para parceiros!").queue();
-                return;
-            }
-        } catch (NoResultException e) {
-            channel.sendMessage(":x: | Este comando é exlusivo para parceiros!").queue();
-            return;
-        }
-
         EmbedBuilder eb = new EmbedBuilder();
 
         eb.setTitle(":label: Emblemas do chat global");
