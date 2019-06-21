@@ -43,6 +43,7 @@ public class Tags {
     private String id;
     private boolean Partner;
     private boolean Toxic;
+    private boolean Verified;
 
     public String getId() {
         return id;
@@ -66,5 +67,13 @@ public class Tags {
 
     public void setToxic(boolean isToxic) {
         Toxic = isToxic;
+    }
+
+    public boolean isVerified() {
+        return Verified;
+    }
+
+    public void setVerified(boolean verified) {
+        Verified = verified;
     }
 }
