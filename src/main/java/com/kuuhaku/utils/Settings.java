@@ -9,7 +9,6 @@ import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.TextChannel;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 public class Settings {
 
@@ -57,18 +56,18 @@ public class Settings {
         eb.addField("\uD83D\uDCD6 » Canal de Avisos/Logs", canalAvisos, true);
         eb.addField("\uD83D\uDCD6 » Canal Relay", canalRelay, true);
 
-        if(!cargoWarnID.equals("Não definido.")) { eb.addField("\uD83D\uDCD1 » Cargo de Avisos/Warns", Main.getInfo().getRoleByID(cargoWarnID).getAsMention(), false); }
+        if (!cargoWarnID.equals("Não definido.")) {
+            eb.addField("\uD83D\uDCD1 » Cargo de Avisos/Warns", Main.getInfo().getRoleByID(cargoWarnID).getAsMention(), true);
+        }
         else { eb.addField("\uD83D\uDCD1 » Cargo de Avisos/Warns", cargoWarnID, true); }
 
         //if(!cargoNewID.equals("Não definido.")) { eb.addField("\uD83D\uDCD1 » Cargo automático", com.kuuhaku.Main.getInfo().getRoleByID(cargoNewID).getAsMention(), false); }
         //else { eb.addField("\uD83D\uDCD1 » Cargos automáticos", cargoNewID, true); }
 
-        eb.addBlankField(true); eb.addBlankField(true);
-
         eb.addField("\uD83D\uDCD6 » Canal de notificação de level up", canalLvlUpNotif, true);
 
 
-        eb.setFooter("Para obter ajuda sobre como configurar o seu servidor, faça: " + SQLite.getGuildPrefix(message.getGuild().getId()) +  "settings ajuda", null);
+        eb.setFooter("Para obter ajuda sobre como configurar o seu servidor, use " + SQLite.getGuildPrefix(message.getGuild().getId()) + "settings ajuda", null);
 
         message.getTextChannel().sendMessage(eb.build()).queue();
     }
@@ -88,9 +87,9 @@ public class Settings {
 
         if(args.length < 2) {
             if(antigoCanalBVID.equals("Não definido.")) {
-                message.getTextChannel().sendMessage("O canal de adeus atual do servidor ainda não foi definido.").queue();
+                message.getTextChannel().sendMessage("O canal de boas-vindas atual do servidor ainda não foi definido.").queue();
             } else {
-                message.getTextChannel().sendMessage("O canal de adeus atual do servidor é <#" + antigoCanalBVID + ">.").queue();
+                message.getTextChannel().sendMessage("O canal de boas-vindas atual do servidor é <#" + antigoCanalBVID + ">.").queue();
             }
             return;
         }
