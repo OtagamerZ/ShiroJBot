@@ -491,19 +491,19 @@ public class Helper {
 
 		switch (level) {
 			case DEBUG:
-				logger.debug(msg);
+				logger.debug(msg.trim());
 				break;
 			case INFO:
-				logger.info(msg);
+				logger.info(msg.trim());
 				break;
 			case WARN:
-				logger.warn(msg);
+				logger.warn(msg.trim());
 				break;
 			case ERROR:
-				logger.error(msg);
+				logger.error(msg.trim());
 				break;
 			case FATAL:
-				logger.fatal(msg);
+				logger.fatal(msg.trim());
 				break;
 		}
 	}
