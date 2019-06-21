@@ -44,6 +44,7 @@ public class CommandManager {
             add(new LeaveCommand());
             add(new ToxicTagCommand());
             add(new PartnerTagCommand());
+            add(new VerifiedTagCommand());
             add(new RelaysCommand());
             add(new BlockCommand());
             add(new LogCommand());
