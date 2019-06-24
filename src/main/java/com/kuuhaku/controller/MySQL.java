@@ -3,7 +3,6 @@ package com.kuuhaku.controller;
 import com.kuuhaku.model.*;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
-import net.dv8tion.jda.core.entities.User;
 
 import javax.persistence.*;
 import java.util.*;
