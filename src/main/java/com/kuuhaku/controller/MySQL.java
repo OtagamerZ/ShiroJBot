@@ -3,6 +3,7 @@ package com.kuuhaku.controller;
 import com.kuuhaku.model.*;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
+import net.dv8tion.jda.core.entities.User;
 
 import javax.persistence.*;
 import java.util.*;
@@ -148,11 +149,11 @@ public class MySQL {
         return m;
     }
 
-    public static void addUserTagsToDB(net.dv8tion.jda.core.entities.Member u) {
+    public static void addUserTagsToDB(String id) {
         EntityManager em = getEntityManager();
 
         Tags t = new Tags();
-        t.setId(u.getUser().getId());
+        t.setId(id);
 
         em.getTransaction().begin();
         em.merge(t);
@@ -161,10 +162,10 @@ public class MySQL {
         em.close();
     }
 
-    public static void giveTagToxic(net.dv8tion.jda.core.entities.Member u) {
+    public static void giveTagToxic(String id) {
         EntityManager em = getEntityManager();
 
-        Tags t = getTagById(u.getUser().getId());
+        Tags t = getTagById(id);
         t.setToxic(true);
 
         em.getTransaction().begin();
@@ -174,10 +175,10 @@ public class MySQL {
         em.close();
     }
 
-    public static void removeTagToxic(net.dv8tion.jda.core.entities.Member u) {
+    public static void removeTagToxic(String id) {
         EntityManager em = getEntityManager();
 
-        Tags t = getTagById(u.getUser().getId());
+        Tags t = getTagById(id);
         t.setToxic(false);
 
         em.getTransaction().begin();
@@ -187,10 +188,10 @@ public class MySQL {
         em.close();
     }
 
-    public static void giveTagPartner(net.dv8tion.jda.core.entities.Member u) {
+    public static void giveTagPartner(String id) {
         EntityManager em = getEntityManager();
 
-        Tags t = getTagById(u.getUser().getId());
+        Tags t = getTagById(id);
         t.setPartner(true);
 
         em.getTransaction().begin();
@@ -200,10 +201,10 @@ public class MySQL {
         em.close();
     }
 
-    public static void removeTagPartner(net.dv8tion.jda.core.entities.Member u) {
+    public static void removeTagPartner(String id) {
         EntityManager em = getEntityManager();
 
-        Tags t = getTagById(u.getUser().getId());
+        Tags t = getTagById(id);
         t.setPartner(false);
 
         em.getTransaction().begin();
@@ -213,10 +214,10 @@ public class MySQL {
         em.close();
     }
 
-    public static void giveTagVerified(net.dv8tion.jda.core.entities.Member u) {
+    public static void giveTagVerified(String id) {
         EntityManager em = getEntityManager();
 
-        Tags t = getTagById(u.getUser().getId());
+        Tags t = getTagById(id);
         t.setVerified(true);
 
         em.getTransaction().begin();
@@ -226,10 +227,10 @@ public class MySQL {
         em.close();
     }
 
-    public static void removeTagVerified(net.dv8tion.jda.core.entities.Member u) {
+    public static void removeTagVerified(String id) {
         EntityManager em = getEntityManager();
 
-        Tags t = getTagById(u.getUser().getId());
+        Tags t = getTagById(id);
         t.setVerified(false);
 
         em.getTransaction().begin();
