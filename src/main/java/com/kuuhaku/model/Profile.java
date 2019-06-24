@@ -44,7 +44,7 @@ public class Profile {
         try {
             MySQL.getTagById(u.getUser().getId());
         } catch (NoResultException e) {
-            MySQL.addUserTagsToDB(u);
+            MySQL.addUserTagsToDB(u.getUser().getId());
         }
 
         BufferedImage profile = new BufferedImage(1055, 719, BufferedImage.TYPE_INT_RGB);
