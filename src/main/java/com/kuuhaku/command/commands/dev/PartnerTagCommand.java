@@ -17,6 +17,7 @@
 
 package com.kuuhaku.command.commands.dev;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.MySQL;
@@ -37,30 +38,55 @@ public class PartnerTagCommand extends Command {
         if (message.getMentionedUsers().size() > 0) {
             if (message.getMentionedUsers().size() == 1) {
                 try {
-                    Tags t = MySQL.getTagById(message.getMentionedMembers().get(0).getUser().getId());
+                    Tags t = MySQL.getTagById(message.getMentionedUsers().get(0).getId());
                     if (t.isPartner()) {
-                        MySQL.removeTagPartner(message.getMentionedMembers().get(0));
-                        channel.sendMessage(message.getMentionedMembers().get(0).getAsMention() + " não é mais parceiro, foi bom enquanto durou!").queue();
+                        MySQL.removeTagPartner(message.getMentionedUsers().get(0).getId());
+                        channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " não é mais parceiro, foi bom enquanto durou!").queue();
                     } else {
-                        MySQL.giveTagPartner(message.getMentionedMembers().get(0));
-                        channel.sendMessage(message.getMentionedMembers().get(0).getAsMention() + " agora é um parceiro, que iniciem os negócios!").queue();
+                        MySQL.giveTagPartner(message.getMentionedUsers().get(0).getId());
+                        channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " agora é um parceiro, que iniciem os negócios!").queue();
                     }
                 } catch (NoResultException e) {
-                    MySQL.addUserTagsToDB(message.getMentionedMembers().get(0));
-                    Tags t = MySQL.getTagById(message.getMentionedMembers().get(0).getUser().getId());
+                    MySQL.addUserTagsToDB(message.getMentionedUsers().get(0).getId());
+                    Tags t = MySQL.getTagById(message.getMentionedUsers().get(0).getId());
                     if (t.isPartner()) {
-                        MySQL.removeTagPartner(message.getMentionedMembers().get(0));
-                        channel.sendMessage(message.getMentionedMembers().get(0).getAsMention() + " não é mais parceiro, foi bom enquanto durou!").queue();
+                        MySQL.removeTagPartner(message.getMentionedUsers().get(0).getId());
+                        channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " não é mais parceiro, foi bom enquanto durou!").queue();
                     } else {
-                        MySQL.giveTagPartner(message.getMentionedMembers().get(0));
-                        channel.sendMessage(message.getMentionedMembers().get(0).getAsMention() + " agora é um parceiro, que iniciem os negócios!").queue();
+                        MySQL.giveTagPartner(message.getMentionedUsers().get(0).getId());
+                        channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " agora é um parceiro, que iniciem os negócios!").queue();
                     }
                 }
             } else {
                 channel.sendMessage(":x: | Nii-chan, você mencionou usuários demais!").queue();
             }
         } else {
-            channel.sendMessage(":x: | Nii-chan bobo, você precisa mencionar um usuário!").queue();
+            try {
+                if (Main.getInfo().getUserByID(args[0]) != null) {
+                    try {
+                        Tags t = MySQL.getTagById(args[0]);
+                        if (t.isPartner()) {
+                            MySQL.removeTagPartner(args[0]);
+                            channel.sendMessage("<@" + args[0] + "> não é mais parceiro, foi bom enquanto durou!").queue();
+                        } else {
+                            MySQL.giveTagPartner(args[0]);
+                            channel.sendMessage("<@" + args[0] + "> agora é um parceiro, que iniciem os negócios!").queue();
+                        }
+                    } catch (NoResultException e) {
+                        MySQL.addUserTagsToDB(args[0]);
+                        Tags t = MySQL.getTagById(args[0]);
+                        if (t.isPartner()) {
+                            MySQL.removeTagPartner(args[0]);
+                            channel.sendMessage("<@" + args[0] + "> não é mais parceiro, foi bom enquanto durou!").queue();
+                        } else {
+                            MySQL.giveTagPartner(args[0]);
+                            channel.sendMessage("<@" + args[0] + "> agora é um parceiro, que iniciem os negócios!").queue();
+                        }
+                    }
+                }
+            } catch (ArrayIndexOutOfBoundsException e) {
+                channel.sendMessage(":x: | Nii-chan bobo, você precisa mencionar um usuário!").queue();
+            }
         }
     }
 }
