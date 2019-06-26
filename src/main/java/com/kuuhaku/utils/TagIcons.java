@@ -41,26 +41,4 @@ public enum TagIcons {
         }
         return null;
     }
-
-    public static String getLiteTag(TagIcons t) {
-        switch (t) {
-            case DEV:
-                return ":wrench: ";
-            case EDITOR:
-                return ":pencil2: ";
-            case PARTNER:
-                return "<:gem: ";
-            case MODERATOR:
-                return ":hammer: ";
-            case CHAMPION:
-                return ":trophy: ";
-            case VETERAN:
-                return ":star2: ";
-            case VERIFIED:
-                return ":white_check_mark: ";
-            case TOXIC:
-                return ":biohazard: ";
-        }
-        return null;
-    }
 }
