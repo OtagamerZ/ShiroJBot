@@ -65,6 +65,7 @@ public class CommandManager {
             add(new RelayCommand());
             add(new TagsCommand());
             add(new MyTagsCommand());
+            add(new BotInfoCommand());
 
             //MISC
             add(new AsciiCommand());
