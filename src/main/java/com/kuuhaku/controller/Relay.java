@@ -50,41 +50,41 @@ public class Relay extends SQLite {
 
 		StringBuilder badges = new StringBuilder();
 		if (m.getUser().getId().equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(m.getUser().getId()))
-			badges.append(TagIcons.getTag(TagIcons.DEV));
+			badges.append(TagIcons.getLiteTag(TagIcons.DEV));
 
 		if (Main.getInfo().getEditors().contains(m.getUser().getId()))
-			badges.append(TagIcons.getTag(TagIcons.EDITOR));
+			badges.append(TagIcons.getLiteTag(TagIcons.EDITOR));
 
 		try {
 			if (MySQL.getTagById(m.getUser().getId()).isPartner())
-				badges.append(TagIcons.getTag(TagIcons.PARTNER));
+				badges.append(TagIcons.getLiteTag(TagIcons.PARTNER));
 		} catch (NoResultException ignore) {
 		}
 
 		if (m.hasPermission(Permission.MANAGE_CHANNEL))
-			badges.append(TagIcons.getTag(TagIcons.MODERATOR));
+			badges.append(TagIcons.getLiteTag(TagIcons.MODERATOR));
 
 		try {
 			if (MySQL.getChampionBeyblade().getId().equals(m.getUser().getId()))
-				badges.append(TagIcons.getTag(TagIcons.CHAMPION));
+				badges.append(TagIcons.getLiteTag(TagIcons.CHAMPION));
 		} catch (NoResultException ignore) {
 		}
 
 		try {
 			if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 20)
-				badges.append(TagIcons.getTag(TagIcons.VETERAN));
+				badges.append(TagIcons.getLiteTag(TagIcons.VETERAN));
 		} catch (NoResultException ignore) {
 		}
 
 		try {
 			if (MySQL.getTagById(m.getUser().getId()).isVerified())
-				badges.append(TagIcons.getTag(TagIcons.VERIFIED));
+				badges.append(TagIcons.getLiteTag(TagIcons.VERIFIED));
 		} catch (NoResultException ignore) {
 		}
 
 		try {
 			if (MySQL.getTagById(m.getUser().getId()).isToxic())
-				badges.append(TagIcons.getTag(TagIcons.TOXIC));
+				badges.append(TagIcons.getLiteTag(TagIcons.TOXIC));
 		} catch (NoResultException ignore) {
 		}
 
@@ -121,8 +121,12 @@ public class Relay extends SQLite {
 		wmb.addEmbeds(eb.build());
 
 		cluster.setDefaultDaemon(true);
-		cluster.broadcast(wmb.build());
+		try {
+			Thread.sleep(500);
+			cluster.broadcast(wmb.build());
+		} catch (InterruptedException ignore) {}
 		Helper.log(this.getClass(), LogLevel.INFO, cluster.getWebhooks().toString());
+		cluster.close();
 	}
 
 	public MessageEmbed getRelayInfo(guildConfig gc) {
