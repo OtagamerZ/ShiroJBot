@@ -39,7 +39,7 @@ public class VerifiedTagCommand extends Command {
 			if (message.getMentionedUsers().size() == 1) {
 				try {
 					Tags t = MySQL.getTagById(message.getMentionedUsers().get(0).getId());
-					if (t.isPartner()) {
+                    if (t.isVerified()) {
 						MySQL.removeTagVerified(message.getMentionedUsers().get(0).getId());
 						channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " não é mais verificado, perdeu a confiança!").queue();
 					} else {
@@ -50,7 +50,7 @@ public class VerifiedTagCommand extends Command {
 				} catch (NoResultException e) {
 					MySQL.addUserTagsToDB(message.getMentionedUsers().get(0).getId());
 					Tags t = MySQL.getTagById(message.getMentionedUsers().get(0).getId());
-					if (t.isPartner()) {
+                    if (t.isVerified()) {
 						MySQL.removeTagVerified(message.getMentionedUsers().get(0).getId());
 						channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " não é mais verificado, perdeu a confiança!").queue();
 					} else {
@@ -67,7 +67,7 @@ public class VerifiedTagCommand extends Command {
 				if (Main.getInfo().getUserByID(args[0]) != null) {
 					try {
 						Tags t = MySQL.getTagById(args[0]);
-						if (t.isPartner()) {
+                        if (t.isVerified()) {
 							MySQL.removeTagVerified(args[0]);
 							channel.sendMessage("<@" + args[0] + "> não é mais verificado, perdeu a confiança!").queue();
 						} else {
@@ -78,7 +78,7 @@ public class VerifiedTagCommand extends Command {
 					} catch (NoResultException e) {
 						MySQL.addUserTagsToDB(args[0]);
 						Tags t = MySQL.getTagById(args[0]);
-						if (t.isPartner()) {
+                        if (t.isVerified()) {
 							MySQL.removeTagVerified(args[0]);
 							channel.sendMessage("<@" + args[0] + "> não é mais verificado, perdeu a confiança!").queue();
 						} else {
