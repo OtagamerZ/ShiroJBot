@@ -517,7 +517,7 @@ public class Helper {
 	public static Webhook getOrCreateWebhook(TextChannel chn) {
 		try {
 			final Webhook[] webhook = {null};
-			chn.getWebhooks().queue(whs -> whs.stream().filter(w -> w.getName().equals("Jibril")).findFirst().ifPresent(webhook1 -> webhook[0] = webhook1));
+			chn.getWebhooks().queue(whs -> whs.stream().filter(w -> Objects.requireNonNull(w.getOwner()).getUser() == Main.getJibril().getSelfUser()).findFirst().ifPresent(webhook1 -> webhook[0] = webhook1));
 			if (webhook[0] == null) return chn.createWebhook("Jibril").complete();
 			else return webhook[0];
 		} catch (InsufficientPermissionException e) {
