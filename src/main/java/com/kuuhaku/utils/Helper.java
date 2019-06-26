@@ -27,7 +27,7 @@ import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
-import org.apache.logging.log4j.Level;
+import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -506,5 +506,23 @@ public class Helper {
 				logger.fatal(msg.trim());
 				break;
 		}
+	}
+
+	public static InputStream getImage(String url) throws IOException {
+		HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
+		con.addRequestProperty("User-Agent", "Mozilla/5.0");
+		return con.getInputStream();
+	}
+
+	public static Webhook getOrCreateWebhook(TextChannel chn) {
+		try {
+			final Webhook[] webhook = {null};
+			chn.getWebhooks().queue(whs -> whs.stream().filter(w -> w.getName().equals("Jibril")).findFirst().ifPresent(webhook1 -> webhook[0] = webhook1));
+			if (webhook[0] == null) return chn.createWebhook("Jibril").complete();
+			else return webhook[0];
+		} catch (InsufficientPermissionException e) {
+			sendPM(chn.getGuild().getOwner().getUser(), ":x: | A Jibril não possui permissão para criar um webhook em seu servidor");
+		}
+		return null;
 	}
 }
