@@ -7,10 +7,12 @@ import com.kuuhaku.utils.LogLevel;
 import com.kuuhaku.utils.TagIcons;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.entities.Game;
+import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.webhook.WebhookCluster;
-import net.dv8tion.jda.webhook.WebhookMessageBuilder;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -39,7 +41,9 @@ public class Relay extends SQLite {
 		checkSize();
 
 		eb = new EmbedBuilder();
-		eb.setAuthor(s.getName(), s.getIconUrl(), s.getIconUrl());
+		eb.setDescription(msg + "\n\n ");
+		eb.setAuthor("(" + s.getName() + ") " + m.getEffectiveName(), s.getIconUrl(), s.getIconUrl());
+		eb.setThumbnail(m.getUser().getAvatarUrl());
 		if (imgURL != null) eb.setImage(imgURL);
 		eb.setFooter(m.getUser().getId(), "http://icons.iconarchive.com/icons/killaaaron/adobe-cc-circles/1024/Adobe-Id-icon.png");
 		try {
@@ -50,55 +54,50 @@ public class Relay extends SQLite {
 
 		StringBuilder badges = new StringBuilder();
 		if (m.getUser().getId().equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(m.getUser().getId()))
-			badges.append(TagIcons.getLiteTag(TagIcons.DEV));
+			badges.append(TagIcons.getTag(TagIcons.DEV));
 
 		if (Main.getInfo().getEditors().contains(m.getUser().getId()))
-			badges.append(TagIcons.getLiteTag(TagIcons.EDITOR));
+			badges.append(TagIcons.getTag(TagIcons.EDITOR));
 
 		try {
 			if (MySQL.getTagById(m.getUser().getId()).isPartner())
-				badges.append(TagIcons.getLiteTag(TagIcons.PARTNER));
+				badges.append(TagIcons.getTag(TagIcons.PARTNER));
 		} catch (NoResultException ignore) {
 		}
 
 		if (m.hasPermission(Permission.MANAGE_CHANNEL))
-			badges.append(TagIcons.getLiteTag(TagIcons.MODERATOR));
+			badges.append(TagIcons.getTag(TagIcons.MODERATOR));
 
 		try {
 			if (MySQL.getChampionBeyblade().getId().equals(m.getUser().getId()))
-				badges.append(TagIcons.getLiteTag(TagIcons.CHAMPION));
+				badges.append(TagIcons.getTag(TagIcons.CHAMPION));
 		} catch (NoResultException ignore) {
 		}
 
 		try {
 			if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 20)
-				badges.append(TagIcons.getLiteTag(TagIcons.VETERAN));
+				badges.append(TagIcons.getTag(TagIcons.VETERAN));
 		} catch (NoResultException ignore) {
 		}
 
 		try {
 			if (MySQL.getTagById(m.getUser().getId()).isVerified())
-				badges.append(TagIcons.getLiteTag(TagIcons.VERIFIED));
+				badges.append(TagIcons.getTag(TagIcons.VERIFIED));
 		} catch (NoResultException ignore) {
 		}
 
 		try {
 			if (MySQL.getTagById(m.getUser().getId()).isToxic())
-				badges.append(TagIcons.getLiteTag(TagIcons.TOXIC));
+				badges.append(TagIcons.getTag(TagIcons.TOXIC));
 		} catch (NoResultException ignore) {
 		}
 
 		eb.addField("Emblemas:", badges.toString(), false);
 
-		if (imgURL != null || Helper.findURL(msg))
-			Main.getInfo().getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> c.sendMessage(eb.build()).queue()));
-
 		relays.forEach((k, r) -> {
 			if (!s.getId().equals(k))
 				try {
-					Webhook w = Helper.getOrCreateWebhook(Main.getJibril().getGuildById(k).getTextChannelById(r));
-					if (w == null) return;
-					cluster.addWebhooks(w.newClient().build());
+					Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(eb.build()).queue();
 				} catch (NullPointerException e) {
 					SQLite.getGuildById(k).setCanalRelay(null);
 				} catch (InsufficientPermissionException ex) {
@@ -107,26 +106,11 @@ public class Relay extends SQLite {
 							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_EMBED_LINKS) ? "✅" : "❌") + " Inserir links\n" +
 							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_ATTACH_FILES) ? "✅" : "❌") + " Anexar arquivos\n" +
 							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_HISTORY) ? "✅" : "❌") + " Ver histórico de mensagens\n" +
-							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI) ? "✅" : "❌") + " Usar emojis externos\n" +
-							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MANAGE_WEBHOOKS) ? "✅" : "❌") + " Criar Webhooks" +
+							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI) ? "✅" : "❌") + " Usar emojis externos" +
 							"```").queue());
 					Helper.log(this.getClass(), LogLevel.ERROR, ex.toString() + "\n" + k);
 				}
 		});
-
-		WebhookMessageBuilder wmb = new WebhookMessageBuilder();
-		wmb.setUsername(m.getEffectiveName());
-		wmb.setAvatarUrl(m.getUser().getAvatarUrl());
-		wmb.setContent(msg + "\n\n ");
-		wmb.addEmbeds(eb.build());
-
-		cluster.setDefaultDaemon(true);
-		try {
-			Thread.sleep(500);
-			cluster.broadcast(wmb.build());
-		} catch (InterruptedException ignore) {}
-		Helper.log(this.getClass(), LogLevel.INFO, cluster.getWebhooks().toString());
-		cluster.close();
 	}
 
 	public MessageEmbed getRelayInfo(guildConfig gc) {
