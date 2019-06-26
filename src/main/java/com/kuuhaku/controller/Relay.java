@@ -7,11 +7,11 @@ import com.kuuhaku.utils.LogLevel;
 import com.kuuhaku.utils.TagIcons;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Game;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.MessageEmbed;
+import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
+import net.dv8tion.jda.webhook.WebhookClient;
+import net.dv8tion.jda.webhook.WebhookClientBuilder;
+import net.dv8tion.jda.webhook.WebhookCluster;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -26,6 +26,7 @@ public class Relay extends SQLite {
 	private Map<String, String> relays = new HashMap<>();
 	private int relaySize;
 	private EmbedBuilder eb;
+	private WebhookCluster cluster = new WebhookCluster();
 
 	private void checkSize() {
 		if (relays.size() != relaySize) {
@@ -92,10 +93,21 @@ public class Relay extends SQLite {
 
 		eb.addField("Emblemas:", badges.toString(), false);
 
+		if (imgURL != null || Helper.findURL(msg))
+			Main.getInfo().getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> c.sendMessage(eb.build()).queue()));
+
 		relays.forEach((k, r) -> {
 			if (!s.getId().equals(k))
 				try {
-					Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(eb.build()).queue();
+					Webhook w = Helper.getOrCreateWebhook(Main.getJibril().getGuildById(k).getTextChannelById(r));
+					if (w == null) return;
+					try {
+						w.getManager().setName("(" + s.getName() + ") " + m.getEffectiveName()).setAvatar(Icon.from(Helper.getImage(m.getUser().getAvatarUrl()))).queue();
+					} catch (IOException e) {
+						Helper.log(this.getClass(), LogLevel.ERROR, e.toString());
+					}
+					WebhookClientBuilder wc = w.newClient().setDaemon(true);
+					cluster.addWebhooks(wc.build());
 				} catch (NullPointerException e) {
 					SQLite.getGuildById(k).setCanalRelay(null);
 				} catch (InsufficientPermissionException ex) {
@@ -104,11 +116,15 @@ public class Relay extends SQLite {
 							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_EMBED_LINKS) ? "✅" : "❌") + " Inserir links\n" +
 							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_ATTACH_FILES) ? "✅" : "❌") + " Anexar arquivos\n" +
 							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_HISTORY) ? "✅" : "❌") + " Ver histórico de mensagens\n" +
-							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI) ? "✅" : "❌") + " Usar emojis externos" +
+							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI) ? "✅" : "❌") + " Usar emojis externos\n" +
+							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MANAGE_WEBHOOKS) ? "✅" : "❌") + " Criar Webhooks" +
 							"```").queue());
 					Helper.log(this.getClass(), LogLevel.ERROR, ex.toString() + "\n" + k);
 				}
 		});
+
+		cluster.broadcast(eb.build());
+		cluster.getWebhooks().forEach(WebhookClient::close);
 	}
 
 	public MessageEmbed getRelayInfo(guildConfig gc) {
