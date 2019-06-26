@@ -123,6 +123,7 @@ public class Relay extends SQLite {
 
 		cluster.setDefaultDaemon(true);
 		cluster.broadcast(wmb.build());
+		Helper.log(this.getClass(), LogLevel.INFO, cluster.getWebhooks().toString());
 	}
 
 	public MessageEmbed getRelayInfo(guildConfig gc) {
