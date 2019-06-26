@@ -42,7 +42,7 @@ public class BotInfoCommand extends Command {
         eb.addField(":tools: Desenvolvido por:", sb.toString(), true);
         eb.addField(":earth_americas: Servidores:", Main.getInfo().getAPI().getGuilds().size() + " servidores", true);
         eb.addField(":speech_balloon: Usuários:", Main.getInfo().getAPI().getUsers().size() + " usuários", true);
-        eb.addField(":incoming_envelope: Link de convite:", "https://discordbots.org/bot/572413282653306901", true);
+        eb.addField(":envelope: Link de convite:", "https://discordbots.org/bot/572413282653306901", true);
 
         channel.sendMessage(eb.build()).queue();
     }
