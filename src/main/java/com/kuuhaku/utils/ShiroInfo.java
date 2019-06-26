@@ -43,6 +43,7 @@ public class ShiroInfo {
 	private static final String nomeDB = "shiro.sqlite";
 	private static final String niichan = "350836145921327115"; //KuuHaKu
 	private static final ArrayList<String> developers = new ArrayList<String>() {{
+		add("350836145921327115"); //KuuHaKu
 		add("321665807988031495"); //Reydux
 	}};
 	private static final ArrayList<String> editors = new ArrayList<String>() {{
