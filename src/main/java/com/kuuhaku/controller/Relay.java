@@ -39,9 +39,7 @@ public class Relay extends SQLite {
 		checkSize();
 
 		eb = new EmbedBuilder();
-		eb.setDescription(msg + "\n\n ");
-		eb.setAuthor("(" + s.getName() + ") " + m.getEffectiveName(), s.getIconUrl(), s.getIconUrl());
-		eb.setThumbnail(m.getUser().getAvatarUrl());
+		eb.setThumbnail(s.getIconUrl());
 		if (imgURL != null) eb.setImage(imgURL);
 		eb.setFooter(m.getUser().getId(), "http://icons.iconarchive.com/icons/killaaaron/adobe-cc-circles/1024/Adobe-Id-icon.png");
 		try {
@@ -119,6 +117,7 @@ public class Relay extends SQLite {
 		WebhookMessageBuilder wmb = new WebhookMessageBuilder();
 		wmb.setUsername("(" + s.getName() + ") " + m.getEffectiveName());
 		wmb.setAvatarUrl(m.getUser().getAvatarUrl());
+		wmb.setContent(msg + "\n\n ");
 		wmb.addEmbeds(eb.build());
 
 		cluster.setDefaultDaemon(true);
