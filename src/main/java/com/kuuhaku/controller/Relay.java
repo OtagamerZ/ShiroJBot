@@ -9,9 +9,8 @@ import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
-import net.dv8tion.jda.webhook.WebhookClient;
-import net.dv8tion.jda.webhook.WebhookClientBuilder;
 import net.dv8tion.jda.webhook.WebhookCluster;
+import net.dv8tion.jda.webhook.WebhookMessageBuilder;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -101,13 +100,7 @@ public class Relay extends SQLite {
 				try {
 					Webhook w = Helper.getOrCreateWebhook(Main.getJibril().getGuildById(k).getTextChannelById(r));
 					if (w == null) return;
-					try {
-						w.getManager().setName("(" + s.getName() + ") " + m.getEffectiveName()).setAvatar(Icon.from(Helper.getImage(m.getUser().getAvatarUrl()))).queue();
-					} catch (IOException e) {
-						Helper.log(this.getClass(), LogLevel.ERROR, e.toString());
-					}
-					WebhookClientBuilder wc = w.newClient().setDaemon(true);
-					cluster.addWebhooks(wc.build());
+					cluster.addWebhooks(w.newClient().build());
 				} catch (NullPointerException e) {
 					SQLite.getGuildById(k).setCanalRelay(null);
 				} catch (InsufficientPermissionException ex) {
@@ -123,8 +116,13 @@ public class Relay extends SQLite {
 				}
 		});
 
-		cluster.broadcast(eb.build());
-		cluster.getWebhooks().forEach(WebhookClient::close);
+		WebhookMessageBuilder wmb = new WebhookMessageBuilder();
+		wmb.setUsername("(" + s.getName() + ") " + m.getEffectiveName());
+		wmb.setAvatarUrl(m.getUser().getAvatarUrl());
+		wmb.addEmbeds(eb.build());
+
+		cluster.setDefaultDaemon(true);
+		cluster.broadcast(wmb.build());
 	}
 
 	public MessageEmbed getRelayInfo(guildConfig gc) {
