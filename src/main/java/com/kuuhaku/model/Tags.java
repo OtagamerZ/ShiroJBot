@@ -34,6 +34,7 @@
 
 package com.kuuhaku.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -41,8 +42,11 @@ import javax.persistence.Id;
 public class Tags {
     @Id
     private String id;
+    @Column(columnDefinition = "boolean default false")
     private boolean Partner = false;
+    @Column(columnDefinition = "boolean default false")
     private boolean Toxic = false;
+    @Column(columnDefinition = "boolean default false")
     private boolean Verified = false;
 
     public String getId() {
