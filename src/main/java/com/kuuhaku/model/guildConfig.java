@@ -20,6 +20,7 @@ package com.kuuhaku.model;
 import com.kuuhaku.Main;
 import org.json.JSONObject;
 
+import javax.annotation.Nullable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Map;
@@ -43,6 +44,7 @@ public class guildConfig {
     private String lvlNotif = "true";
     private String cargoNew = "{}";
     private boolean anyTell = false;
+    @Nullable
     private boolean aiMode = false;
     private boolean markForDelete;
 
