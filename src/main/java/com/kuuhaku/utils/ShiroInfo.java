@@ -38,6 +38,7 @@ public class ShiroInfo {
 	private static final String BotToken = System.getenv("BOT_TOKEN");
 	private static final String AnilistToken = System.getenv("ANILIST_TOKEN");
 	private static final String YandexToken = System.getenv("YANDEX_TOKEN");
+	private static final String infoInstance = System.getenv("WORKSPACE_ID");
 	private static final String apiVersion = "3.8.3_463";
 	private static final String name = "Shiro";
 	private static final String version = "2.0";
@@ -58,11 +59,9 @@ public class ShiroInfo {
 	private JDA api;
 	private long startTime;
 	private boolean ready = false;
-	private String infoInstance;
 
 	public ShiroInfo() {
 		ai.setEndPoint("https://gateway.watsonplatform.net/assistant/api");
-		infoInstance = String.valueOf(System.currentTimeMillis());
 	}
 
 	//CONSTANTS
