@@ -166,7 +166,9 @@ public class GuildEvents extends ListenerAdapter {
                         MessageResponse answer = Main.getInfo().getAi().message(opts).execute().getResult();
 
                         channel.sendMessage(answer.toString()).queue();
-                    } catch (ServiceResponseException ignore) {}
+                    } catch (ServiceResponseException e) {
+                        Helper.log(this.getClass(), LogLevel.WARN, e.toString());
+                    }
                 }
                 try {
                     com.kuuhaku.model.Member m = SQLite.getMemberById(member.getUser().getId() + member.getGuild().getId());
