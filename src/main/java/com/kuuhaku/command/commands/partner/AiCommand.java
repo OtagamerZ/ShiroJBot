@@ -33,10 +33,10 @@ public class AiCommand extends Command {
 		guildConfig gc = SQLite.getGuildById(guild.getId());
 
 		if (gc.isAiMode()) {
-			gc.setAiMode(false);
+			SQLite.updateGuildIaMode(false, gc);
 			channel.sendMessage("Modo IA desligado").queue();
 		} else {
-			gc.setAiMode(true);
+			SQLite.updateGuildIaMode(true, gc);
 			channel.sendMessage("Modo IA habilitado, para iniciar uma conversa com a Shiro digite `Quero falar com a Shiro`").queue();
 		}
 	}
