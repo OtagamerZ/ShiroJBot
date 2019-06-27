@@ -54,7 +54,7 @@ public class ShiroInfo {
 	}};
 	private static final DiscordBotListAPI dbl = new DiscordBotListAPI.Builder().token(System.getenv("DBL_TOKEN")).botId("572413282653306901").build();
 	private static final IamOptions options = new IamOptions.Builder().apiKey(System.getenv("AI_TOKEN")).build();
-	private static final Assistant ai = new Assistant("Development", options);
+	private static final Assistant ai = new Assistant("2019-06-27", options);
 
 	private JDA api;
 	private long startTime;
