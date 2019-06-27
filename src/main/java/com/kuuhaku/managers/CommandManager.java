@@ -28,6 +28,7 @@ import com.kuuhaku.command.commands.moderation.AllowCommunityCommand;
 import com.kuuhaku.command.commands.moderation.RemoveAnswerCommand;
 import com.kuuhaku.command.commands.moderation.SettingsCommand;
 import com.kuuhaku.command.commands.dev.*;
+import com.kuuhaku.command.commands.partner.AiCommand;
 import com.kuuhaku.command.commands.partner.JibrilCommand;
 
 import java.util.ArrayList;
@@ -51,6 +52,7 @@ public class CommandManager {
 
             //PARTNER
             add(new JibrilCommand());
+            add(new AiCommand());
 
             //MODERATION
             add(new RemoveAnswerCommand());
