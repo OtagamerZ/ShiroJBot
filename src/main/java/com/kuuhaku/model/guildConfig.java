@@ -39,6 +39,7 @@ public class guildConfig {
     private String canalsug = null;
     private String canallvl = null;
     private String canalrelay = null;
+    private String canalai = null;
     private String cargowarn = null;
     private String cargoslvl = "{}";
     private String lvlNotif = "true";
@@ -197,5 +198,13 @@ public class guildConfig {
 
     public void setAiMode(boolean aiMode) {
         this.aiMode = aiMode;
+    }
+
+    public String getCanalai() {
+        return canalai;
+    }
+
+    public void setCanalAi(String canalai) {
+        this.canalai = canalai;
     }
 }

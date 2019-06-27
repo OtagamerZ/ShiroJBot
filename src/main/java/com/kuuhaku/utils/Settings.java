@@ -1,6 +1,7 @@
 package com.kuuhaku.utils;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.guildConfig;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -37,6 +38,9 @@ public class Settings {
         String canalRelay = SQLite.getGuildCanalRelay(message.getGuild().getId());
         if(!canalRelay.equals("Não definido.")) canalRelay = "<#" + canalRelay + ">";
 
+        String canalIA = SQLite.getGuildCanalIA(message.getGuild().getId());
+        if(!canalIA.equals("Não definido.")) canalIA = "<#" + canalIA + ">";
+
         String cargoWarnID = SQLite.getGuildCargoWarn(message.getGuild().getId());
         //String cargoNewID = SQLite.getGuildCargoNew(message.getGuild().getId());
 
@@ -54,7 +58,10 @@ public class Settings {
         eb.addBlankField(true); eb.addBlankField(true);
         eb.addField("\uD83D\uDCD6 » Canal de Sugestões", canalSUG, true);
         eb.addField("\uD83D\uDCD6 » Canal de Avisos/Logs", canalAvisos, true);
-        eb.addField("\uD83D\uDCD6 » Canal Relay", canalRelay, true);
+        if (MySQL.getTagById(message.getGuild().getOwner().getUser().getId()).isPartner()) {
+            eb.addField("\uD83D\uDCD6 » Canal Relay", canalRelay, true);
+            eb.addField("\uD83D\uDCD6 » Canal IA", canalIA, true);
+        }
 
         if (!cargoWarnID.equals("Não definido.")) {
             eb.addField("\uD83D\uDCD1 » Cargo de Avisos/Warns", Main.getInfo().getRoleByID(cargoWarnID).getAsMention(), true);
@@ -333,5 +340,29 @@ public class Settings {
 
         SQLite.updateGuildCanalRelay(newCanalRelay.getId(), gc);
         message.getTextChannel().sendMessage("✅ | O canal relay do servidor foi trocado para " + newCanalRelay.getAsMention() + " com sucesso.").queue();
+    }
+
+    public static void updateCanalIA(String[] args, Message message, guildConfig gc) {
+        String antigoCanalIAID = SQLite.getGuildCanalIA(message.getGuild().getId());
+
+        if(args.length < 2) {
+            if(antigoCanalIAID.equals("Não definido.")) {
+                message.getTextChannel().sendMessage("O canal IA atual do servidor ainda não foi definido.").queue();
+            } else {
+                message.getTextChannel().sendMessage("O canal IA atual do servidor é <#" + antigoCanalIAID + ">.").queue();
+            }
+            return;
+        }
+        if(message.getMentionedChannels().size() > 1) { message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 canal.").queue(); return; }
+        if(args[1].equals("reset") || args[1].equals("resetar")) {
+            SQLite.updateGuildCanalIA(null, gc);
+            message.getTextChannel().sendMessage("✅ | O canal IA do servidor foi resetado com sucesso.").queue();
+            return;
+        }
+
+        TextChannel newCanalIA = message.getMentionedChannels().get(0);
+
+        SQLite.updateGuildCanalIA(newCanalIA.getId(), gc);
+        message.getTextChannel().sendMessage("✅ | O canal IA do servidor foi trocado para " + newCanalIA.getAsMention() + " com sucesso.").queue();
     }
 }
