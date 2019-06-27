@@ -159,17 +159,18 @@ public class GuildEvents extends ListenerAdapter {
             }
 
             if (!found && !author.isBot()) {
-                if (SQLite.getGuildIaMode(guild.getId())) {
+                if (SQLite.getGuildIaMode(guild.getId()) && channel.getId().equals(SQLite.getGuildCanalIA(guild.getId()))) {
                     try {
                         MessageInput msg = new MessageInput();
                         msg.setText(message.getContentRaw());
 
-                        MessageOptions opts = new MessageOptions.Builder(Main.getInfo().getInfoInstance()).input(msg).build();
+                        MessageOptions opts = new MessageOptions.Builder(Main.getInfo().getInfoInstance()).context(Main.getInfo().getContext()).input(msg).build();
                         MessageResponse answer = Main.getInfo().getAi().message(opts).execute().getResult();
+                        Main.getInfo().updateContext(answer);
 
                         List<DialogRuntimeResponseGeneric> responseGeneric = answer.getOutput().getGeneric();
                         if(responseGeneric.size() > 0) {
-                            channel.sendMessage(responseGeneric.get(0).getText()).queue();
+                            Helper.typeMessage(channel, responseGeneric.get(0).getText());
                         }
                     } catch (ServiceResponseException e) {
                         Helper.log(this.getClass(), LogLevel.WARN, e.toString());

@@ -19,6 +19,8 @@ package com.kuuhaku.utils;
 
 import com.ibm.cloud.sdk.core.service.security.IamOptions;
 import com.ibm.watson.assistant.v1.Assistant;
+import com.ibm.watson.assistant.v1.model.Context;
+import com.ibm.watson.assistant.v1.model.MessageResponse;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Role;
@@ -59,6 +61,7 @@ public class ShiroInfo {
 	private JDA api;
 	private long startTime;
 	private boolean ready = false;
+	private Context context = new Context();
 
 	public ShiroInfo() {
 		ai.setEndPoint("https://gateway.watsonplatform.net/assistant/api");
@@ -172,5 +175,13 @@ public class ShiroInfo {
 
 	public Guild getGuildByID(String guildID) {
 		return api.getGuildById(guildID);
+	}
+
+	public Context getContext() {
+		return context;
+	}
+
+	public void updateContext(MessageResponse response) {
+		context = response.getContext();
 	}
 }
