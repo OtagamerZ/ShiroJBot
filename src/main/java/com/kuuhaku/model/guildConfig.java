@@ -43,6 +43,7 @@ public class guildConfig {
     private String lvlNotif = "true";
     private String cargoNew = "{}";
     private boolean anyTell = false;
+    private boolean aiMode = false;
     private boolean markForDelete;
 
     public guildConfig() {
@@ -186,5 +187,13 @@ public class guildConfig {
 
     public void setGuildID(String guildID) {
         this.guildID = guildID;
+    }
+
+    public boolean isAiMode() {
+        return aiMode;
+    }
+
+    public void setAiMode(boolean aiMode) {
+        this.aiMode = aiMode;
     }
 }
