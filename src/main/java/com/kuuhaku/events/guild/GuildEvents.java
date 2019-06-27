@@ -18,6 +18,7 @@
 package com.kuuhaku.events.guild;
 
 import com.ibm.cloud.sdk.core.service.exception.ServiceResponseException;
+import com.ibm.watson.assistant.v1.model.DialogRuntimeResponseGeneric;
 import com.ibm.watson.assistant.v1.model.MessageInput;
 import com.ibm.watson.assistant.v1.model.MessageOptions;
 import com.ibm.watson.assistant.v1.model.MessageResponse;
@@ -36,6 +37,7 @@ import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import javax.persistence.NoResultException;
+import java.util.List;
 import java.util.Objects;
 
 public class GuildEvents extends ListenerAdapter {
@@ -165,7 +167,10 @@ public class GuildEvents extends ListenerAdapter {
                         MessageOptions opts = new MessageOptions.Builder(Main.getInfo().getInfoInstance()).input(msg).build();
                         MessageResponse answer = Main.getInfo().getAi().message(opts).execute().getResult();
 
-                        channel.sendMessage(answer.toString()).queue();
+                        List<DialogRuntimeResponseGeneric> responseGeneric = answer.getOutput().getGeneric();
+                        if(responseGeneric.size() > 0) {
+                            channel.sendMessage(responseGeneric.get(0).getText()).queue();
+                        }
                     } catch (ServiceResponseException e) {
                         Helper.log(this.getClass(), LogLevel.WARN, e.toString());
                     }
