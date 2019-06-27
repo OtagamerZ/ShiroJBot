@@ -17,11 +17,15 @@
 
 package com.kuuhaku.events.guild;
 
+import com.ibm.cloud.sdk.core.service.exception.ServiceResponseException;
+import com.ibm.watson.assistant.v1.model.MessageInput;
+import com.ibm.watson.assistant.v1.model.MessageOptions;
+import com.ibm.watson.assistant.v1.model.MessageResponse;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.CustomAnswers;
 import com.kuuhaku.model.guildConfig;
-import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.entities.*;
@@ -153,6 +157,17 @@ public class GuildEvents extends ListenerAdapter {
             }
 
             if (!found && !author.isBot()) {
+                if (SQLite.getGuildIaMode(guild.getId())) {
+                    try {
+                        MessageInput msg = new MessageInput();
+                        msg.setText(message.getContentRaw());
+
+                        MessageOptions opts = new MessageOptions.Builder(Main.getInfo().getInfoInstance()).input(msg).build();
+                        MessageResponse answer = Main.getInfo().getAi().message(opts).execute().getResult();
+
+                        channel.sendMessage(answer.toString()).queue();
+                    } catch (ServiceResponseException ignore) {}
+                }
                 try {
                     com.kuuhaku.model.Member m = SQLite.getMemberById(member.getUser().getId() + member.getGuild().getId());
                     boolean lvlUp = m.addXp();

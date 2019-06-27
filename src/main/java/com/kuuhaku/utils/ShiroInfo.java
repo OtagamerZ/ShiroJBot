@@ -17,6 +17,8 @@
 
 package com.kuuhaku.utils;
 
+import com.ibm.cloud.sdk.core.service.security.IamOptions;
+import com.ibm.watson.assistant.v1.Assistant;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Role;
@@ -50,13 +52,17 @@ public class ShiroInfo {
 
 	}};
 	private static final DiscordBotListAPI dbl = new DiscordBotListAPI.Builder().token(System.getenv("DBL_TOKEN")).botId("572413282653306901").build();
+	private static final IamOptions options = new IamOptions.Builder().apiKey(System.getenv("AI_TOKEN")).build();
+	private static final Assistant ai = new Assistant("Development", options);
 
 	private JDA api;
 	private long startTime;
 	private boolean ready = false;
+	private String infoInstance;
 
 	public ShiroInfo() {
-
+		ai.setEndPoint("https://gateway.watsonplatform.net/assistant/api");
+		infoInstance = String.valueOf(System.currentTimeMillis());
 	}
 
 	//CONSTANTS
@@ -74,6 +80,10 @@ public class ShiroInfo {
 
 	public String getAnilistToken() {
 		return AnilistToken;
+	}
+
+	public String getInfoInstance() {
+		return infoInstance;
 	}
 
 	public String getApiVersion() {
@@ -114,6 +124,10 @@ public class ShiroInfo {
 
 	public DiscordBotListAPI getDBL() {
 		return dbl;
+	}
+
+	public Assistant getAi() {
+		return ai;
 	}
 
 	//VARIABLES
