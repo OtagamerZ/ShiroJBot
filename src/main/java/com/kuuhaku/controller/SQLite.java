@@ -616,6 +616,32 @@ public class SQLite {
 		em.close();
 	}
 
+	public static String getGuildCanalIA(String id) {
+		EntityManager em = getEntityManager();
+
+		Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+		q.setParameter(1, id);
+		guildConfig gc = (guildConfig) q.getSingleResult();
+		em.close();
+
+		String canalIA = gc.getCanalai();
+		if (canalIA == null) canalIA = "Não definido.";
+
+		return canalIA;
+	}
+
+	public static void updateGuildCanalIA(String newCanalID, guildConfig gc) {
+		EntityManager em = getEntityManager();
+
+		gc.setCanalAi(newCanalID);
+
+		em.getTransaction().begin();
+		em.merge(gc);
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
 	public static boolean getGuildIaMode(String id) {
 		EntityManager em = getEntityManager();
 
