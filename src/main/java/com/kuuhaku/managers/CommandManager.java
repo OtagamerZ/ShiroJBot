@@ -63,6 +63,7 @@ public class CommandManager {
             add(new ComandosCommand());
             add(new ProfileCommand());
             add(new ReportBugCommand());
+            add(new ReportUserCommand());
             add(new BackgroundCommand());
             add(new RelayCommand());
             add(new TagsCommand());
