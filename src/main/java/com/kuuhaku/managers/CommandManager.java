@@ -24,9 +24,7 @@ import com.kuuhaku.command.commands.fun.OhNoCommand;
 import com.kuuhaku.command.commands.fun.PPTCommand;
 import com.kuuhaku.command.commands.information.*;
 import com.kuuhaku.command.commands.misc.*;
-import com.kuuhaku.command.commands.moderation.AllowCommunityCommand;
-import com.kuuhaku.command.commands.moderation.RemoveAnswerCommand;
-import com.kuuhaku.command.commands.moderation.SettingsCommand;
+import com.kuuhaku.command.commands.moderation.*;
 import com.kuuhaku.command.commands.dev.*;
 import com.kuuhaku.command.commands.partner.AiCommand;
 import com.kuuhaku.command.commands.partner.JibrilCommand;
@@ -58,6 +56,8 @@ public class CommandManager {
             add(new RemoveAnswerCommand());
             add(new SettingsCommand());
             add(new AllowCommunityCommand());
+            add(new KickMemberCommand());
+            add(new BanMemberCommand());
 
             //INFORMATION
             add(new ComandosCommand());
