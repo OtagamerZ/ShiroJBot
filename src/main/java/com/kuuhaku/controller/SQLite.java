@@ -33,10 +33,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SQLite {
 
@@ -674,7 +671,10 @@ public class SQLite {
 		guildConfig gc = (guildConfig) q.getSingleResult();
 		em.close();
 
-		return Arrays.asList(gc.getNoLinkChannels());
+		List<String> list = new ArrayList<>();
+		Collections.addAll(list, gc.getNoLinkChannels());
+
+		return list;
 	}
 
 	public static void updateGuildNoLinkChannels(guildConfig gc) {
