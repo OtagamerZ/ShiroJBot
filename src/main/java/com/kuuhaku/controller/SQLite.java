@@ -672,7 +672,7 @@ public class SQLite {
 		em.close();
 
 		List<String> list = new ArrayList<>();
-		Collections.addAll(list, gc.getNoLinkChannels());
+		Collections.addAll(list, (gc.getNoLinkChannels() == null ? new String[]{} : gc.getNoLinkChannels()));
 
 		return list;
 	}
