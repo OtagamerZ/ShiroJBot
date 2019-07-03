@@ -214,7 +214,11 @@ public class guildConfig {
     }
 
     public String[] getNoLinkChannels() {
-        return noLinkChannels.replace("[", "").replace("]", "").split(",");
+        try {
+            return noLinkChannels.replace("[", "").replace("]", "").split(",");
+        } catch (NullPointerException e) {
+            return new String[]{};
+        }
     }
 
     public void addNoLinkChannel(TextChannel ch) {
