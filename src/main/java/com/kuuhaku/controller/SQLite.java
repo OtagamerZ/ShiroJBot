@@ -671,10 +671,14 @@ public class SQLite {
 		guildConfig gc = (guildConfig) q.getSingleResult();
 		em.close();
 
-		List<String> list = new ArrayList<>();
-		Collections.addAll(list, (gc.getNoLinkChannels() == null ? new String[]{} : gc.getNoLinkChannels()));
+		try {
+			List<String> list = new ArrayList<>();
+			Collections.addAll(list, gc.getNoLinkChannels());
 
-		return list;
+			return list;
+		} catch (NullPointerException e) {
+			return new ArrayList<>();
+		}
 	}
 
 	public static void updateGuildNoLinkChannels(guildConfig gc) {
