@@ -33,6 +33,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -657,6 +658,27 @@ public class SQLite {
 		EntityManager em = getEntityManager();
 
 		gc.setAiMode(aiMode);
+
+		em.getTransaction().begin();
+		em.merge(gc);
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
+	public static List<String> getGuildNoLinkChannels(String id) {
+		EntityManager em = getEntityManager();
+
+		Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+		q.setParameter(1, id);
+		guildConfig gc = (guildConfig) q.getSingleResult();
+		em.close();
+
+		return Arrays.asList(gc.getNoLinkChannels());
+	}
+
+	public static void updateGuildNoLinkChannels(guildConfig gc) {
+		EntityManager em = getEntityManager();
 
 		em.getTransaction().begin();
 		em.merge(gc);
