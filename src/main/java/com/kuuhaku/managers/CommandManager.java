@@ -58,6 +58,7 @@ public class CommandManager {
             add(new AllowCommunityCommand());
             add(new KickMemberCommand());
             add(new BanMemberCommand());
+            add(new NoLinkCommand());
 
             //INFORMATION
             add(new ComandosCommand());

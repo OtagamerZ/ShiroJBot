@@ -147,9 +147,9 @@ public class Helper {
 
 	public static boolean findURL(String text) {
 		final Pattern urlPattern = Pattern.compile(
-				"(?:^|[\\W])((ht|f)tp(s?)://|www\\.)"
+				".*?(?:^|[\\W])((ht|f)tp(s?)://|www\\.)"
 						+ "(([\\w\\-]+\\.)+?([\\w\\-.~]+/?)*"
-						+ "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]*$~@!:/{};']*)",
+						+ "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]*$~@!:/{};']*?)",
 				Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
 		final Matcher msg = urlPattern.matcher(text);
 		return msg.matches();
