@@ -18,11 +18,15 @@
 package com.kuuhaku.model;
 
 import com.kuuhaku.Main;
+import net.dv8tion.jda.core.entities.TextChannel;
 import org.json.JSONObject;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -47,6 +51,7 @@ public class guildConfig {
     private boolean anyTell = false;
     @Column(columnDefinition = "boolean default false")
     private boolean aiMode = false;
+    private String noLinkChannels = "";
     private boolean markForDelete;
 
     public guildConfig() {
@@ -206,5 +211,21 @@ public class guildConfig {
 
     public void setCanalAi(String canalai) {
         this.canalai = canalai;
+    }
+
+    public String[] getNoLinkChannels() {
+        return noLinkChannels.replace("[", "").replace("]", "").split(",");
+    }
+
+    public void addNoLinkChannel(TextChannel ch) {
+        List<String> ph = new ArrayList<>(Arrays.asList(getNoLinkChannels()));
+        ph.add(ch.getId());
+        noLinkChannels = ph.toString();
+    }
+
+    public void removeNoLinkChannel(TextChannel ch) {
+        List<String> ph = new ArrayList<>(Arrays.asList(getNoLinkChannels()));
+        ph.remove(ch.getId());
+        noLinkChannels = ph.toString();
     }
 }

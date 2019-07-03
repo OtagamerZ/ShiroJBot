@@ -159,6 +159,9 @@ public class GuildEvents extends ListenerAdapter {
             }
 
             if (!found && !author.isBot()) {
+                if (SQLite.getGuildNoLinkChannels(guild.getId()).contains(channel.getId()) && Helper.findURL(message.getContentRaw())) {
+                    message.delete().reason("Mensagem possui um URL").queue(m -> channel.sendMessage(member.getAsMention() + ", é proibido postar links neste canal!").queue());
+                }
                 if (SQLite.getGuildIaMode(guild.getId()) && channel.getId().equals(SQLite.getGuildCanalIA(guild.getId()))) {
                     try {
                         MessageInput msg = new MessageInput();
