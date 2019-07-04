@@ -40,11 +40,11 @@ import java.util.List;
 import java.util.Objects;
 
 public class Profile {
-	public static Font NGNL_FONT;
+	public static Font FONT;
 
 	static {
 		try {
-			NGNL_FONT = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(Profile.class.getClassLoader().getResourceAsStream("font/no_game_no_life.ttf")));
+			FONT = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(Profile.class.getClassLoader().getResourceAsStream("font/Doreking.ttf")));
 		} catch (FontFormatException | IOException e) {
 			e.printStackTrace();
 		}
@@ -96,23 +96,24 @@ public class Profile {
 		}
 		drawBadges(m, g, g2d);
 
-		int luma = 255 - ((int) Math.round(0.2126 * main.getRed() + 0.7152 * main.getGreen() + 0.0722 * main.getBlue()));
-		g2d.setColor(new Color(luma, luma, luma));
-		g2d.setFont(new Font(NGNL_FONT.getName(), Font.PLAIN, 50));
+		int luma = ((int) Math.round(0.2126 * main.getRed() + 0.7152 * main.getGreen() + 0.0722 * main.getBlue()));
+		if (luma >= 128) g2d.setColor(Color.BLACK);
+		else g2d.setColor(Color.WHITE);
+		g2d.setFont(new Font(FONT.getName(), Font.PLAIN, 50));
 		printCenteredString("LEVEL", 196, 52, 440, g2d);
 		String name = m.getEffectiveName();
 		if ((int) g2d.getFontMetrics().getStringBounds(m.getEffectiveName(), g2d).getWidth() >= 678)
 			name = m.getEffectiveName().substring(0, 21).concat("...");
 		g2d.drawString(name, 270, 337);
 
-		g2d.setFont(new Font(NGNL_FONT.getName(), Font.BOLD, 120));
+		g2d.setFont(new Font(FONT.getName(), Font.BOLD, 120));
 		printCenteredString(String.valueOf(SQLite.getMemberById(m.getUser().getId() + g.getId()).getLevel()), 196, 52, 515, g2d);
 
-		g2d.setFont(new Font(NGNL_FONT.getName(), Font.PLAIN, 25));
+		g2d.setFont(new Font(FONT.getName(), Font.PLAIN, 25));
 		printCenteredString(SQLite.getMemberById(m.getUser().getId() + g.getId()).getXp() + "/" + ((int) Math.pow(SQLite.getMemberById(m.getUser().getId() + g.getId()).getLevel(), 2) * 100), 196, 52, 538, g2d);
 
 
-		g2d.setFont(new Font(NGNL_FONT.getName(), Font.PLAIN, 40));
+		g2d.setFont(new Font(FONT.getName(), Font.PLAIN, 40));
 		printCenteredString("Emblemas", 182, 266, 580, g2d);
 		printCenteredString("Biografia", 460, 466, 580, g2d);
 
