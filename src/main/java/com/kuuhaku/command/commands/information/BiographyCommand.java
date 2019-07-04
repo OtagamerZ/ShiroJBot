@@ -36,7 +36,9 @@ public class BiographyCommand extends Command {
             return;
         }
 
-        SQLite.updateMemberBiography(SQLite.getMemberById(author.getId() + guild.getId()).setBio(String.join(" ", args)));
+        com.kuuhaku.model.Member m = SQLite.getMemberById(author.getId() + guild.getId());
+        m.setBio(String.join(" ", args));
+        SQLite.updateMemberBiography(m);
         channel.sendMessage("Biografia definida com sucesso!").queue();
     }
 }
