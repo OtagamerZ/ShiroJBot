@@ -686,4 +686,14 @@ public class SQLite {
 
 		em.close();
 	}
+	
+	public static void updateMemberBiography(Member m) {
+		EntityManager em = getEntityManager();
+
+		em.getTransaction().begin();
+		em.merge(m);
+		em.getTransaction().commit();
+
+		em.close();
+	}
 }
