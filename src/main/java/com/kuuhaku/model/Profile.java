@@ -76,9 +76,9 @@ public class Profile {
 
 		g2d.setColor(new Color(0, 255, 0));
 		g2d.setClip(new Rectangle2D.Float(0, 100, w, 250));
-		g2d.fillArc(40, 190, avatar.getWidth() + 20, avatar.getHeight() + 20, 210, -240);
+		g2d.fillArc(40, 190, avatar.getWidth() + 20, avatar.getHeight() + 20, 210, SQLite.getMemberById(m.getUser().getId() + g.getId()).getXp() * ((int) Math.pow(SQLite.getMemberById(m.getUser().getId() + g.getId()).getLevel(), 2) * 100) / -240);
 
-		g2d.setColor(new Color(100, 100, 100));
+		g2d.setColor(main);
 		g2d.setClip(null);
 		g2d.fillRect(52, 350, 196, 200);
 
@@ -106,10 +106,10 @@ public class Profile {
 		g2d.drawString(name, 270, 337);
 
 		g2d.setFont(new Font(NGNL_FONT.getName(), Font.BOLD, 120));
-		printCenteredString("10", 196, 52, 515, g2d);
+		printCenteredString(String.valueOf(SQLite.getMemberById(m.getUser().getId() + g.getId()).getLevel()), 196, 52, 515, g2d);
 
 		g2d.setFont(new Font(NGNL_FONT.getName(), Font.PLAIN, 25));
-		printCenteredString("1000 / 1000", 196, 52, 538, g2d);
+		printCenteredString(SQLite.getMemberById(m.getUser().getId() + g.getId()).getXp() + "/" + ((int) Math.pow(SQLite.getMemberById(m.getUser().getId() + g.getId()).getLevel(), 2) * 100), 196, 52, 538, g2d);
 
 
 		g2d.setFont(new Font(NGNL_FONT.getName(), Font.PLAIN, 40));
