@@ -103,7 +103,7 @@ public class Settings {
         if(message.getMentionedChannels().size() > 1) { message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 canal.").queue(); return; }
         if(args[1].equals("reset") || args[1].equals("resetar")) {
             SQLite.updateGuildCanalBV(null, gc);
-            message.getTextChannel().sendMessage("✅ | O canal de adeus do servidor foi resetado com sucesso.").queue();
+            message.getTextChannel().sendMessage("✅ | O canal de boas-vindas do servidor foi resetado com sucesso.").queue();
             return;
         }
 
@@ -158,19 +158,19 @@ public class Settings {
         String antigaMsgAdeus = SQLite.getGuildMsgAdeus(message.getGuild().getId());
 
         if(args.length < 2) {
-            message.getTextChannel().sendMessage("A mensagem de boas-vindas atual do servidor é `" + antigaMsgAdeus + "`.").queue();
+            message.getTextChannel().sendMessage("A mensagem de adeus atual do servidor é `" + antigaMsgAdeus + "`.").queue();
             return;
         }
         if(args[1].equals("reset") || args[1].equals("resetar")) {
-            SQLite.updateGuildMsgAdeus("Seja bem-vindo(a) ao %guild%, %user%!", gc);
-            message.getTextChannel().sendMessage("✅ | A mensagem de boas-vindas do servidor foi resetado com sucesso.").queue();
+            SQLite.updateGuildMsgAdeus("Ahhh...%user% saiu do servidor!", gc);
+            message.getTextChannel().sendMessage("✅ | A mensagem de adeus do servidor foi resetada com sucesso.").queue();
             return;
         }
 
         String newMsgAdeus = String.join(" ", args).replace(args[0], "").replace(args[1], "").trim();
 
         SQLite.updateGuildMsgAdeus(newMsgAdeus, gc);
-        message.getTextChannel().sendMessage("✅ | A mensagem de boas-vindas do servidor foi trocado para " + newMsgAdeus + " com sucesso.").queue();
+        message.getTextChannel().sendMessage("✅ | A mensagem de adeus do servidor foi trocada para " + newMsgAdeus + " com sucesso.").queue();
     }
 
     public static void updateCanalSUG(String[] args, Message message, guildConfig gc) {
