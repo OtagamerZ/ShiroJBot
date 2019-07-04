@@ -8,7 +8,6 @@ import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 
-import java.awt.*;
 import java.io.IOException;
 
 public class ProfileCommand extends Command {
@@ -21,8 +20,8 @@ public class ProfileCommand extends Command {
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
         channel.sendMessage(":hourglass_flowing_sand: Gerando perfil...").queue(m -> {
             try {
-                channel.sendFile(new Profile().makeProfile(member), "perfil.jpg").queue(f -> m.editMessage(":video_game: Perfil de " + author.getAsMention()).queue());
-            } catch (IOException | FontFormatException e) {
+                channel.sendFile(Profile.makeProfile(message.getTextChannel(), member, guild).toByteArray(), "perfil.jpg").queue(f -> m.editMessage(":video_game: Perfil de " + author.getAsMention()).queue());
+            } catch (IOException e) {
                 m.editMessage(":x: | Epa, teve um errinho aqui enquanto eu gerava o perfil, meus criadores já foram notificados!").queue();
                 Helper.log(this.getClass(), LogLevel.ERROR, e.toString());
             }
