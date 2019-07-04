@@ -104,7 +104,7 @@ public class Profile {
 		String name = m.getEffectiveName();
 		if ((int) g2d.getFontMetrics().getStringBounds(m.getEffectiveName(), g2d).getWidth() >= 678)
 			name = m.getEffectiveName().substring(0, 21).concat("...");
-		g2d.drawString(name, 270, 332);
+		g2d.drawString(name, 270, 342);
 
 		g2d.setFont(new Font(FONT.getName(), Font.BOLD, 85));
 		printCenteredString(String.valueOf(SQLite.getMemberById(m.getUser().getId() + g.getId()).getLevel()), 196, 52, 515, g2d);
