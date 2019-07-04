@@ -76,7 +76,7 @@ public class Profile {
 
 		g2d.setColor(new Color(0, 255, 0));
 		g2d.setClip(new Rectangle2D.Float(0, 100, w, 250));
-		g2d.fillArc(40, 190, avatar.getWidth() + 20, avatar.getHeight() + 20, 210, - 240 * (SQLite.getMemberById(m.getUser().getId() + g.getId()).getXp() / ((int) Math.pow(SQLite.getMemberById(m.getUser().getId() + g.getId()).getLevel(), 2) * 100)));
+		g2d.fillArc(40, 190, avatar.getWidth() + 20, avatar.getHeight() + 20, 210, -240 * (SQLite.getMemberById(m.getUser().getId() + g.getId()).getXp() / ((int) Math.pow(SQLite.getMemberById(m.getUser().getId() + g.getId()).getLevel(), 2) * 100)));
 
 		g2d.setColor(main);
 		g2d.setClip(null);
