@@ -121,6 +121,7 @@ public class Profile {
 		drawStringMultiLine(g2d, s, 440, 474, 403);
 
 		g2d.setClip(new Ellipse2D.Float(50, 200, avatar.getWidth(), avatar.getHeight()));
+		g2d.fillOval(50, 200, avatar.getWidth(), avatar.getHeight());
 		g2d.drawImage(avatar, null, 50, 200);
 
 		g2d.dispose();
