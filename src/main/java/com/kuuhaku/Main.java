@@ -75,7 +75,7 @@ public class Main implements JobListener {
 		info.setStartTime(Instant.now().getEpochSecond());
 
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		ge.registerFont(Profile.NGNL_FONT);
+		ge.registerFont(Profile.FONT);
 
 		SQLite.connect();
 		if (SQLite.restoreData(MySQL.getData()))
