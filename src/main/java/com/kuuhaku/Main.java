@@ -25,6 +25,7 @@ import com.kuuhaku.events.guild.GuildEvents;
 import com.kuuhaku.events.guild.GuildUpdateEvents;
 import com.kuuhaku.managers.CommandManager;
 import com.kuuhaku.model.DataDump;
+import com.kuuhaku.model.Profile;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
 import com.kuuhaku.utils.ShiroInfo;
@@ -36,17 +37,10 @@ import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
 import javax.persistence.NoResultException;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
+import java.awt.*;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 
 public class Main implements JobListener {
@@ -79,6 +73,9 @@ public class Main implements JobListener {
 		jbr.addEventListener(new JibrilEvents());
 
 		info.setStartTime(Instant.now().getEpochSecond());
+
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		ge.registerFont(Profile.NGNL_FONT);
 
 		SQLite.connect();
 		if (SQLite.restoreData(MySQL.getData()))
