@@ -106,7 +106,7 @@ public class Profile {
 			name = m.getEffectiveName().substring(0, 21).concat("...");
 		g2d.drawString(name, 270, 337);
 
-		g2d.setFont(new Font(FONT.getName(), Font.BOLD, 100));
+		g2d.setFont(new Font(FONT.getName(), Font.BOLD, 85));
 		printCenteredString(String.valueOf(SQLite.getMemberById(m.getUser().getId() + g.getId()).getLevel()), 196, 52, 515, g2d);
 
 		g2d.setFont(new Font(FONT.getName(), Font.PLAIN, 25));
