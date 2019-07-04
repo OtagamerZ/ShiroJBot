@@ -17,188 +17,218 @@
 
 package com.kuuhaku.model;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
-import com.kuuhaku.utils.PrivilegeLevel;
+import net.dv8tion.jda.core.Permission;
+import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.TextChannel;
 
 import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Profile {
-    public InputStream makeProfile(net.dv8tion.jda.core.entities.Member u) throws IOException, FontFormatException {
-        Member m = SQLite.getMemberById(u.getUser().getId() + u.getGuild().getId());
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("font/friz-quadrata-bold-bt.ttf"))));
+	public static Font NGNL_FONT;
 
-        try {
-            MySQL.getTagById(u.getUser().getId());
-        } catch (NoResultException e) {
-            MySQL.addUserTagsToDB(u.getUser().getId());
-        }
+	static {
+		try {
+			NGNL_FONT = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(Profile.class.getClassLoader().getResourceAsStream("font/no_game_no_life.ttf")));
+		} catch (FontFormatException | IOException e) {
+			e.printStackTrace();
+		}
+	}
 
-        BufferedImage profile = new BufferedImage(1055, 719, BufferedImage.TYPE_INT_RGB);
+	public static ByteArrayOutputStream makeProfile(TextChannel t, net.dv8tion.jda.core.entities.Member m, Guild g) throws IOException {
+		int w = 944;
+		int h = 600;
 
-        HttpURLConnection con = (HttpURLConnection) new URL(m.getBg()).openConnection();
-        con.setRequestProperty("User-Agent", "Mozilla/5.0");
-        BufferedImage bg = scaleImage(ImageIO.read(con.getInputStream()));
-        Helper.log(this.getClass(), LogLevel.DEBUG, bg.getWidth() + "x" + bg.getHeight());
+		HttpURLConnection con = (HttpURLConnection) new URL(m.getUser().getAvatarUrl()).openConnection();
+		con.setRequestProperty("User-Agent", "Mozilla/5.0");
+		BufferedImage avatar = scaleImage(ImageIO.read(con.getInputStream()), 200, 200);
 
-        con = (HttpURLConnection) new URL("http://i.imgur.com/gRzI7PH.png").openConnection();
-        con.setRequestProperty("User-Agent", "Mozilla/5.0");
-        final BufferedImage vignette = ImageIO.read(con.getInputStream());
+		BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+		Graphics2D g2d = bi.createGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        con = (HttpURLConnection) new URL(u.getUser().getAvatarUrl()).openConnection();
-        con.setRequestProperty("User-Agent", "Mozilla/5.0");
-        final BufferedImage avatar = resize(ImageIO.read(con.getInputStream()), 120, 120);
+		con = (HttpURLConnection) new URL(SQLite.getMemberById(m.getUser().getId() + g.getId()).getBg()).openConnection();
+		con.setRequestProperty("User-Agent", "Mozilla/5.0");
+		g2d.drawImage(scaleImage(ImageIO.read(con.getInputStream()), bi.getWidth(), bi.getHeight()), null, 0, 0);
 
-        con = (HttpURLConnection) new URL(MySQL.getTagById(u.getUser().getId()).isPartner() ? "http://i.imgur.com/rbNA1Mi.png" : "http://i.imgur.com/373xhkZ.png").openConnection();
-        con.setRequestProperty("User-Agent", "Mozilla/5.0");
-        final BufferedImage banner = ImageIO.read(con.getInputStream());
+		Color main = Helper.reverseColor(Helper.colorThief(SQLite.getMemberById(m.getUser().getId() + g.getId()).getBg()));
 
-        if (Helper.hasPermission(u, PrivilegeLevel.NIICHAN)) {
-            con = (HttpURLConnection) new URL("http://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Challenger_Trim.png").openConnection();
-        } else if (Helper.hasPermission(u, PrivilegeLevel.DEV)) {
-            con = (HttpURLConnection) new URL("http://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Grandmaster_Trim.png").openConnection();
-        } else if (Helper.hasPermission(u, PrivilegeLevel.MOD)) {
-            con = (HttpURLConnection) new URL("http://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Master_Trim.png").openConnection();
-        } else if (m.getLevel() >= 30) {
-            con = (HttpURLConnection) new URL("http://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Diamond_Trim.png").openConnection();
-        } else if (m.getLevel() >= 25) {
-            con = (HttpURLConnection) new URL("http://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Platinum_Trim.png").openConnection();
-        } else if (m.getLevel() >= 20) {
-            con = (HttpURLConnection) new URL("http://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Gold_Trim.png").openConnection();
-        } else if (m.getLevel() >= 15) {
-            con = (HttpURLConnection) new URL("http://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Silver_Trim.png").openConnection();
-        } else if (m.getLevel() >= 10) {
-            con = (HttpURLConnection) new URL("http://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Bronze_Trim.png").openConnection();
-        } else if (m.getLevel() >= 5) {
-            con = (HttpURLConnection) new URL("http://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Iron_Trim.png").openConnection();
-        } else if (Helper.hasPermission(u, PrivilegeLevel.USER)) {
-            con = (HttpURLConnection) new URL("http://img.rankedboost.com/wp-content/uploads/2016/06/Season_2019_-_Default_Trim.png").openConnection();
-        }
-        con.setRequestProperty("User-Agent", "Mozilla/5.0");
-        BufferedImage bannerBorder = resize(ImageIO.read(con.getInputStream()), 216, 108);
 
-        con = (HttpURLConnection) new URL("http://i.imgur.com/rxZ5qAL.png").openConnection();
-        con.setRequestProperty("User-Agent", "Mozilla/5.0");
-        final BufferedImage header = ImageIO.read(con.getInputStream());
+		g2d.setColor(new Color(main.getRed(), main.getGreen(), main.getBlue(), 100));
+		g2d.fillRect(0, 300, w, 300);
+		g2d.fillRect(0, 350, w, 250);
 
-        con = (HttpURLConnection) new URL("http://i.imgur.com/FhOanld.png").openConnection();
-        con.setRequestProperty("User-Agent", "Mozilla/5.0");
-        final BufferedImage level = ImageIO.read(con.getInputStream());
+		g2d.setColor(new Color(0, 255, 0));
+		g2d.setClip(new Rectangle2D.Float(0, 100, w, 250));
+		g2d.fillArc(40, 190, avatar.getWidth() + 20, avatar.getHeight() + 20, 210, -240);
 
-        con = (HttpURLConnection) new URL("http://i.imgur.com/tcauuXO.png").openConnection();
-        con.setRequestProperty("User-Agent", "Mozilla/5.0");
-        final BufferedImage search = ImageIO.read(con.getInputStream());
+		g2d.setColor(new Color(100, 100, 100));
+		g2d.setClip(null);
+		g2d.fillRect(52, 350, 196, 200);
 
-        con = (HttpURLConnection) new URL(getLevel(m.getLevel())).openConnection();
-        con.setRequestProperty("User-Agent", "Mozilla/5.0");
-        final BufferedImage lvlBorder = resize(ImageIO.read(con.getInputStream()), 217, 217);
+		g2d.setColor(new Color(100, 100, 100, 100));
+		g2d.fillRect(268, 370, 177, 177);
+		g2d.fillRect(466, 370, 455, 177);
 
-        Graphics2D g2d = profile.createGraphics();
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.drawImage(bg, null, 0 - (bg.getWidth() - 1055) / 2, 0);
-        g2d.drawImage(vignette, null, 0, 0);
-        g2d.drawImage(avatar, null, 93, 283);
-        g2d.drawImage(banner, null, MySQL.getTagById(u.getUser().getId()).isPartner() ? 1 : 45, 0);
-        g2d.drawImage(bannerBorder, null, 45, 498);
-        g2d.drawImage(header, null, 0, 0);
+		g2d.setColor(new Color(100, 100, 100));
+		g2d.setStroke(new BasicStroke(5));
+		g2d.drawRect(268, 370, 177, 177);
+		g2d.drawRect(466, 370, 455, 177);
+		for (int i = 1; i < 3; i++) {
+			g2d.drawLine(268 + (177 / 3 * i), 370, 268 + (177 / 3 * i), 547);
+			g2d.drawLine(268, 370 + (177 / 3 * i), 445, 370 + (177 / 3 * i));
+		}
+		drawBadges(m, g, g2d);
 
-        GradientPaint levelPaint = new GradientPaint(104, 210, Color.decode("#0e628d"), 241, 210, Color.decode("#0cadae"));
-        g2d.setPaint(levelPaint);
-        g2d.fillRect(104, 210, Math.round(m.getXp() * 137 / (int) Math.pow(m.getLevel(), 2)) / 100, 7);
+		int luma = 255 - ((int) Math.round(0.2126 * main.getRed() + 0.7152 * main.getGreen() + 0.0722 * main.getBlue()));
+		g2d.setColor(new Color(luma, luma, luma));
+		g2d.setFont(new Font(NGNL_FONT.getName(), Font.PLAIN, 50));
+		printCenteredString("LEVEL", 196, 52, 440, g2d);
+		String name = m.getEffectiveName();
+		if ((int) g2d.getFontMetrics().getStringBounds(m.getEffectiveName(), g2d).getWidth() >= 678)
+			name = m.getEffectiveName().substring(0, 21).concat("...");
+		g2d.drawString(name, 270, 337);
 
-        g2d.drawImage(level, null, 53, 197);
+		g2d.setFont(new Font(NGNL_FONT.getName(), Font.BOLD, 120));
+		printCenteredString("10", 196, 52, 515, g2d);
 
-        g2d.setColor(Color.WHITE);
-        g2d.setFont(new Font("FrizQuadrata BT", Font.PLAIN, 12));
-        printCenteredString(Integer.toString(m.getLevel()), 26, 71, 218, g2d);
+		g2d.setFont(new Font(NGNL_FONT.getName(), Font.PLAIN, 25));
+		printCenteredString("1000 / 1000", 196, 52, 538, g2d);
 
-        g2d.drawImage(search, null, 786, 95);
-        g2d.drawImage(lvlBorder, null, 44, 234);
-        printCenteredString(Integer.toString(m.getLevel()), 32, 138, 412, g2d);
 
-        String tempName = u.getEffectiveName();
-        g2d.setFont(new Font("FrizQuadrata BT", Font.PLAIN, 30));
-        if ((int) g2d.getFontMetrics().getStringBounds(tempName, g2d).getWidth() >= 213)
-            tempName = tempName.substring(0, 6).concat("...");
-        printCenteredString(tempName, 213, 47, 166, g2d);
+		g2d.setFont(new Font(NGNL_FONT.getName(), Font.PLAIN, 40));
+		printCenteredString("Emblemas", 182, 266, 580, g2d);
+		printCenteredString("Biografia", 460, 466, 580, g2d);
 
-        if (MySQL.getTagById(u.getUser().getId()).isToxic()) {
-            con = (HttpURLConnection) new URL("http://i.imgur.com/0wCblVy.png").openConnection();
-            con.setRequestProperty("User-Agent", "Mozilla/5.0");
-            final BufferedImage toxic = ImageIO.read(con.getInputStream());
-            g2d.drawImage(toxic, null, 0, 0);
-        }
+		g2d.setFont(new Font("Verdana", Font.PLAIN, 25));
+		String s = SQLite.getMemberById(m.getUser().getId() + g.getId()).getBio();
+		drawStringMultiLine(g2d, s, 440, 474, 403);
 
-        g2d.dispose();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(profile, "jpg", baos);
-        return new ByteArrayInputStream(baos.toByteArray());
-    }
+		g2d.setClip(new Ellipse2D.Float(50, 200, avatar.getWidth(), avatar.getHeight()));
+		g2d.drawImage(avatar, null, 50, 200);
 
-    private static String getLevel(int lvl) {
-        if (lvl < 10) {
-            return "https://i.imgur.com/Noji8Tc.png";
-        } else if (lvl < 20) {
-            return "https://i.imgur.com/zfFBzI5.png";
-        } else if (lvl < 30) {
-            return "https://i.imgur.com/bSldQTJ.png";
-        } else {
-            return "https://i.imgur.com/C56zq8q.png";
-        }
-    }
+		g2d.dispose();
 
-    private static BufferedImage resize(BufferedImage img, int newW, int newH) {
-        Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
-        BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ImageIO.write(bi, "png", baos);
 
-        Graphics2D g2d = dimg.createGraphics();
-        g2d.drawImage(tmp, 0, 0, null);
-        g2d.dispose();
+		return baos;
+	}
 
-        return dimg;
-    }
+	private static void drawBadges(net.dv8tion.jda.core.entities.Member m, Guild s, Graphics2D g2d) throws IOException {
+		java.util.List<BufferedImage> badges = new ArrayList<BufferedImage>() {{
+			if (m.getUser().getId().equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(m.getUser().getId()))
+				add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/dev.png"))));
+			if (Main.getInfo().getEditors().contains(m.getUser().getId()))
+				add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/writer.png"))));
+			try {
+				if (MySQL.getTagById(m.getUser().getId()).isPartner())
+					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/partner.png"))));
+			} catch (NoResultException ignore) {
+			}
+			if (m.hasPermission(Permission.MANAGE_CHANNEL))
+				add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/mod.png"))));
+			try {
+				if (MySQL.getChampionBeyblade().getId().equals(m.getUser().getId()))
+					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/champ.png"))));
+			} catch (NoResultException ignore) {
+			}
+			try {
+				if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 20)
+					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/veteran.png"))));
+			} catch (NoResultException ignore) {
+			}
+			try {
+				if (MySQL.getTagById(m.getUser().getId()).isVerified())
+					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/verified.png"))));
+			} catch (NoResultException ignore) {
+			}
+			try {
+				if (MySQL.getTagById(m.getUser().getId()).isToxic())
+					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/toxic.png"))));
+			} catch (NoResultException ignore) {
+			}
+		}};
 
-    private static BufferedImage scaleImage(BufferedImage image) {
-        int newWidth = 1055;
-        int newHeight = 719;
+		List<int[]> coords = new ArrayList<int[]>() {{
+			for (int y = 0; y < 3; y++) {
+				for (int x = 0; x < 3; x++) {
+					add(new int[]{276 + (59 * x), 378 + (59 * y)});
+				}
+			}
+		}};
 
-        // Make sure the aspect ratio is maintained, so the image is not distorted
-        double thumbRatio = (double) newWidth / (double) newHeight;
-        int imageWidth = image.getWidth(null);
-        int imageHeight = image.getHeight(null);
-        double aspectRatio = (double) imageWidth / (double) imageHeight;
+		for (int i = 0; i < badges.size(); i++) {
+			g2d.drawImage(scaleImage(badges.get(i), 44, 44), null, coords.get(i)[0], coords.get(i)[1]);
+		}
+	}
 
-        if (thumbRatio > aspectRatio) {
-            newHeight = (int) (newWidth / aspectRatio);
-        } else {
-            newWidth = (int) (newHeight * aspectRatio);
-        }
+	private static BufferedImage scaleImage(BufferedImage image, int w, int h) {
 
-        // Draw the scaled image
-        BufferedImage newImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
-        Graphics2D graphics2D = newImage.createGraphics();
-        graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        graphics2D.drawImage(image, 0, 0, newWidth, newHeight, null);
+		// Make sure the aspect ratio is maintained, so the image is not distorted
+		double thumbRatio = (double) w / (double) h;
+		int imageWidth = image.getWidth(null);
+		int imageHeight = image.getHeight(null);
+		double aspectRatio = (double) imageWidth / (double) imageHeight;
 
-        return newImage;
-    }
+		if (thumbRatio > aspectRatio) {
+			h = (int) (w / aspectRatio);
+		} else {
+			w = (int) (h * aspectRatio);
+		}
 
-    private static void printCenteredString(String s, int width, int XPos, int YPos, Graphics2D g2d) {
-        int stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
-        int start = width / 2 - stringLen / 2;
-        g2d.drawString(s, start + XPos, YPos);
-    }
+		// Draw the scaled image
+		BufferedImage newImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D graphics2D = newImage.createGraphics();
+		graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		graphics2D.drawImage(image, 0, 0, w, h, null);
+
+		return newImage;
+	}
+
+	private static void printCenteredString(String s, int width, int XPos, int YPos, Graphics2D g2d) {
+		int stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
+		int start = width / 2 - stringLen / 2;
+		g2d.drawString(s, start + XPos, YPos);
+	}
+
+	private static void drawStringMultiLine(Graphics2D g, String text, int lineWidth, int x, int y) {
+		FontMetrics m = g.getFontMetrics();
+		if (m.stringWidth(text) < lineWidth) {
+			g.drawString(text, x, y);
+		} else {
+			String[] words = text.split(" ");
+			StringBuilder currentLine = new StringBuilder(words[0]);
+			for (int i = 1; i < words.length; i++) {
+				if (m.stringWidth(currentLine + words[i]) < lineWidth) {
+					currentLine.append(" ").append(words[i]);
+				} else {
+					String s = currentLine.toString();
+					if (g.getFontMetrics().getStringBounds(s, g).getWidth() > 440) s = s.substring(0, 26) + "[...]";
+					g.drawString(s, x, y);
+					y += m.getHeight();
+					currentLine = new StringBuilder(words[i]);
+				}
+			}
+			if (currentLine.toString().trim().length() > 0) {
+				g.drawString(currentLine.toString(), x, y);
+			}
+		}
+	}
 }
