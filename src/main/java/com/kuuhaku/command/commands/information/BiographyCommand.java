@@ -36,7 +36,7 @@ public class BiographyCommand extends Command {
             return;
         }
 
-        SQLite.getMemberById(author.getId() + guild.getId()).setBio(String.join(" ", args));
+        SQLite.updateMemberBiography(SQLite.getMemberById(author.getId() + guild.getId()).setBio(String.join(" ", args)));
         channel.sendMessage("Biografia definida com sucesso!").queue();
     }
 }
