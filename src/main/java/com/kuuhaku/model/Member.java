@@ -17,6 +17,7 @@
 
 package com.kuuhaku.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class Member {
 	private int level = 1, xp = 0;
 	private String warns = "";
 	private String bg = "https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg";
+	@Column(columnDefinition = "TEXT default \"\"")
 	private String bio = "";
 	private boolean markForDelete;
 
@@ -99,7 +101,7 @@ public class Member {
 		this.markForDelete = markForDelete;
 	}
 
-	public String getBio() {
+	String getBio() {
 		return bio;
 	}
 
