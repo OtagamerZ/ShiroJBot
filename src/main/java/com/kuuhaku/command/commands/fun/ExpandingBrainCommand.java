@@ -37,11 +37,11 @@ public class ExpandingBrainCommand extends Command {
 			Graphics2D g2d = bi.createGraphics();
 
 			g2d.setColor(Color.BLACK);
-			g2d.setFont(new Font("Impact", Font.BOLD, 25));
-			Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[0], 400, 20, 20);
-			Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[1], 400, 20, 320);
-			Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[2], 400, 20, 630);
-			Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[3], 400, 20, 910);
+			g2d.setFont(new Font("Impact", Font.BOLD, 40));
+			Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[0], 400, 20, 40);
+			Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[1], 400, 20, 340);
+			Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[2], 400, 20, 650);
+			Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[3], 400, 20, 930);
 
 			g2d.dispose();
 
