@@ -43,7 +43,7 @@ public class ComandosCommand extends Command {
 
 					StringBuilder cmds = new StringBuilder();
 
-					for(Command cmd : cat.getCmds()) { cmds.append("`").append(cmd.getName()).append("` "); }
+					for(Command cmd : cat.getCmds()) { cmds.append("`").append(cmd.getName()).append("`  "); }
 
 					eb.addField(cat.getName(), cat.getDescription() + "\n" + cmds.toString().trim(), false);
 				}
