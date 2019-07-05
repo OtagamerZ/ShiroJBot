@@ -18,7 +18,7 @@ import java.util.Objects;
 public class ExpandingBrainCommand extends Command {
 
 	public ExpandingBrainCommand() {
-		super("menteexpandida", new String[]{"eb", "expandingbrain", "brain"}, "<opção 1>;<opção 2>;<opção 3>;<opção 4>", "Gera um meme no formato \"Dois botões\"", Category.FUN);
+		super("menteexpandida", new String[]{"eb", "expandingbrain", "brain"}, "<opção 1>;<opção 2>;<opção 3>;<opção 4>", "Gera um meme no formato \"Mente Expandida\"", Category.FUN);
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class ExpandingBrainCommand extends Command {
 		}
 
 		try {
-			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("Two-Buttons.jpg")));
+			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("Expanding-Brain.png")));
 			Graphics2D g2d = bi.createGraphics();
 
 			g2d.setColor(Color.BLACK);
