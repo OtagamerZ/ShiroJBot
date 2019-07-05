@@ -72,7 +72,7 @@ public class Member {
 		return level;
 	}
 
-	int getXp() {
+	public int getXp() {
 		return xp;
 	}
 

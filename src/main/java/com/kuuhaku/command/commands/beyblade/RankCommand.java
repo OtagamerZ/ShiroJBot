@@ -41,7 +41,7 @@ public class RankCommand extends Command {
             eb.addField("1 - " + champ.getName() + " (" + Main.getInfo().getAPI().getUserById(champ.getId()).getName() + ") | " + champ.getWins() + "/" + champ.getLoses(), sb.toString(), false);
 
             m.delete().queue();
-            message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage(eb.build()).queue());
+            channel.sendMessage(eb.build()).queue();
         });
     }
 }
