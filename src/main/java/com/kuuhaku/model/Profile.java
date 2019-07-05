@@ -23,23 +23,19 @@ import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.TextChannel;
 
 import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -54,7 +50,7 @@ public class Profile {
 		}
 	}
 
-	public static ByteArrayOutputStream makeProfile(TextChannel t, net.dv8tion.jda.core.entities.Member m, Guild g) throws IOException {
+	public static ByteArrayOutputStream makeProfile(net.dv8tion.jda.core.entities.Member m, Guild g) throws IOException {
 		int w = 944;
 		int h = 600;
 
@@ -161,7 +157,7 @@ public class Profile {
 		BufferedImage bi = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 
-		g2d.setClip(new RoundRectangle2D.Float(0, 0, bi.getWidth(), bi.getHeight(), 10, 10));
+		g2d.setClip(new RoundRectangle2D.Float(0, 0, bi.getWidth(), bi.getHeight(), 30, 30));
 		g2d.drawImage(image, null, 0, 0);
 		g2d.dispose();
 
