@@ -31,6 +31,7 @@ import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.ByteArrayOutputStream;
@@ -148,6 +149,7 @@ public class Profile {
 		g2d.fillOval(50, 200, avatar.getWidth(), avatar.getHeight());
 		g2d.drawImage(avatar, null, 50, 200);
 
+		g2d.clip(new RoundRectangle2D.Float(0, 0, bi.getWidth(), bi.getHeight(), 10, 10));
 		g2d.dispose();
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
