@@ -15,10 +15,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Objects;
 
-public class SadButTrueCommand extends Command {
+public class HardDecisionCommand extends Command {
 
-	public SadButTrueCommand() {
-		super("tmv", new String[]{"tristemasverdade", "sadbuttrue", "sbt"}, "<verdade>", "Gera um meme no formato \"Triste mas verdade\"", Category.FUN);
+	public HardDecisionCommand() {
+		super("tb", new String[]{"doisbotoes", "twobuttons", "buttons"}, "<opção 1>;<opção 2>", "Gera um meme no formato \"Dois botões\"", Category.FUN);
 	}
 
 	@Override
@@ -27,18 +27,23 @@ public class SadButTrueCommand extends Command {
 		if (args.length < 1) {
 			channel.sendMessage(":x: | Você tem que escrever a mensagem que deseja que apareca no meme.").queue();
 			return;
+		} else if (args[0].split(";").length < 2) {
+			channel.sendMessage(":x: | Você precisa escrever duas opções para o meme (separados por ponto-e-vírgula).").queue();
+			return;
 		}
 
 		try {
-			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("sadbuttrue.png")));
+			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("Two-Buttons.jpg")));
 			Graphics2D g2d = bi.createGraphics();
 
 			g2d.setColor(Color.BLACK);
 			g2d.setFont(new Font("Impact", Font.BOLD, 20));
 			if (g2d.getFontMetrics().getStringBounds(String.join(" ", args), g2d).getWidth() > 270) {
-				Profile.drawStringMultiLine(g2d, String.join(" ", args), 263, 75, 554);
+				Profile.drawStringMultiLine(g2d, args[0].split(";")[0], 215, 47, 80);
+				Profile.drawStringMultiLine(g2d, args[0].split(";")[1], 215, 247, 47);
 			} else {
-				Profile.printCenteredString(String.join(" ", args), 270, 63, 554, g2d);
+				Profile.printCenteredString(args[0].split(";")[0], 215, 47, 135, g2d);
+				Profile.printCenteredString(args[0].split(";")[1], 215, 247, 100, g2d);
 			}
 
 			g2d.dispose();
