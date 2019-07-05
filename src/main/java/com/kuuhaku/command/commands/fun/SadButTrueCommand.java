@@ -3,6 +3,8 @@ package com.kuuhaku.command.commands.fun;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.model.Profile;
+import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 
@@ -40,7 +42,7 @@ public class SadButTrueCommand extends Command {
 
 			channel.sendMessage("Aqui está seu meme " + author.getAsMention() + "!").addFile(baos.toByteArray(), "tmv.jpg").queue();
 		} catch (IOException e) {
-			e.printStackTrace();
+			Helper.log(this.getClass(), LogLevel.ERROR, e.toString());
 		}
 	}
 
