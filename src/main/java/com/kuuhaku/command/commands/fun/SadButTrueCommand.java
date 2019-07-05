@@ -33,8 +33,9 @@ public class SadButTrueCommand extends Command {
 			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("sadbuttrue.png")));
 			Graphics2D g2d = bi.createGraphics();
 
-			g2d.setFont(new Font("Impact", Font.BOLD, 20));
-			Profile.drawStringMultiLine(g2d, String.join(" ", args), 267, 66, 530);
+			g2d.setColor(Color.BLACK);
+			g2d.setFont(new Font("Impact", Font.BOLD, 30));
+			Profile.printCenteredString(String.join(" ", args), 267, 66, 554, g2d);
 			g2d.dispose();
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
