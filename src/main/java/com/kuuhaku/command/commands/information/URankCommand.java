@@ -72,7 +72,7 @@ public class URankCommand extends Command {
 			for (int i = 1; i < mbs.size() && i < 10; i++) {
 				sb.append(i + 1).append(" - (").append(Main.getInfo().getGuildByID(mbs.get(i).getId().substring(18)).getName()).append(") ").append(Main.getInfo().getGuildByID(mbs.get(i).getId().substring(18)).getMemberById(mbs.get(i).getMid()).getEffectiveName()).append(" - Lvl ").append(mbs.get(i).getLevel()).append(" (").append(mbs.get(i).getXp()).append(" xp)").append("\n");
 			}
-			eb.addField("1 - (" + Main.getInfo().getGuildByID(mbs.get(0).getId().substring(18)).getName() + ") " + Main.getInfo().getGuildByID(mbs.get(0).getId().substring(18)).getMemberById(mbs.get(0).getMid()).getEffectiveName() + " - " + mbs.get(0).getLevel() + " (" + mbs.get(0).getXp() + ")", sb.toString(), false);
+			eb.addField("1 - (" + Main.getInfo().getGuildByID(mbs.get(0).getId().substring(18)).getName() + ") " + Main.getInfo().getGuildByID(mbs.get(0).getId().substring(18)).getMemberById(mbs.get(0).getMid()).getEffectiveName() + " - Lvl" + mbs.get(0).getLevel() + " (" + mbs.get(0).getXp() + " xp)", sb.toString(), false);
 
 			m.delete().queue();
 			channel.sendMessage(eb.build()).queue();
