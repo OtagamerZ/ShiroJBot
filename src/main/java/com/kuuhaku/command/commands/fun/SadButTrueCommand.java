@@ -34,27 +34,13 @@ public class SadButTrueCommand extends Command {
 			Graphics2D g2d = bi.createGraphics();
 
 			g2d.setColor(Color.BLACK);
-			g2d.setFont(new Font("Impact", Font.BOLD, 30));
-
-			if (g2d.getFontMetrics().getStringBounds(String.join(" ", args), g2d).getWidth() > 267) {
-				if (g2d.getFontMetrics().getStringBounds(String.join(" ", args), g2d).getWidth() > 267) {
-					g2d.setFont(new Font("Impact", Font.BOLD, 25));
-					if (g2d.getFontMetrics().getStringBounds(String.join(" ", args), g2d).getWidth() > 267) {
-						g2d.setFont(new Font("Impact", Font.BOLD, 20));
-						if (g2d.getFontMetrics().getStringBounds(String.join(" ", args), g2d).getWidth() > 267) {
-							g2d.setFont(new Font("Impact", Font.BOLD, 15));
-							if (g2d.getFontMetrics().getStringBounds(String.join(" ", args), g2d).getWidth() > 267) {
-								channel.sendMessage(":x: | Mensagem muito longa.").queue();
-								return;
-							}
-						}
-					}
-				}
-				channel.sendMessage(":x: | Mensagem muito longa.").queue();
-				return;
+			g2d.setFont(new Font("Impact", Font.BOLD, 20));
+			if (g2d.getFontMetrics().getStringBounds(String.join(" ", args), g2d).getWidth() > 270) {
+				Profile.drawStringMultiLine(g2d, String.join(" ", args), 263, 70, 554);
+			} else {
+				Profile.printCenteredString(String.join(" ", args), 270, 63, 554, g2d);
 			}
 
-			Profile.printCenteredString(String.join(" ", args), 267, 66, 554, g2d);
 			g2d.dispose();
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
