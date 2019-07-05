@@ -136,9 +136,11 @@ public class Profile {
 		g2d.setFont(new Font(FONT.getName(), Font.PLAIN, 40));
 		printCenteredString("Emblemas", 182, 266, 590, g2d);
 		printCenteredString("Biografia", 460, 466, 590, g2d);
-		printCenteredString("Rank: #" + pos + "/#" + posG, 196, 52, 590, g2d);
 
-		g2d.setFont(new Font("Arial", Font.BOLD, 25));
+		g2d.setFont(new Font(FONT.getName(), Font.PLAIN, 20));
+		printCenteredString("Rank: #" + pos + "/#" + posG, 196, 52, 580, g2d);
+
+		g2d.setFont(new Font("DejaVu Sans", Font.BOLD, 25));
 		System.out.println(Arrays.toString(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames()));
 		String s = SQLite.getMemberById(m.getUser().getId() + g.getId()).getBio();
 		drawStringMultiLine(g2d, s, 440, 474, 403);
@@ -203,7 +205,7 @@ public class Profile {
 		}
 	}
 
-	public static BufferedImage scaleImage(BufferedImage image, int w, int h) {
+	private static BufferedImage scaleImage(BufferedImage image, int w, int h) {
 
 		// Make sure the aspect ratio is maintained, so the image is not distorted
 		double thumbRatio = (double) w / (double) h;
@@ -226,13 +228,13 @@ public class Profile {
 		return newImage;
 	}
 
-	public static void printCenteredString(String s, int width, int XPos, int YPos, Graphics2D g2d) {
+	private static void printCenteredString(String s, int width, int XPos, int YPos, Graphics2D g2d) {
 		int stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
 		int start = width / 2 - stringLen / 2;
 		g2d.drawString(s, start + XPos, YPos);
 	}
 
-	public static void drawStringMultiLine(Graphics2D g, String text, int lineWidth, int x, int y) {
+	private static void drawStringMultiLine(Graphics2D g, String text, int lineWidth, int x, int y) {
 		FontMetrics m = g.getFontMetrics();
 		if (m.stringWidth(text) < lineWidth) {
 			g.drawString(text, x, y);
