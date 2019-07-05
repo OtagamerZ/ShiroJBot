@@ -263,32 +263,4 @@ public class Profile {
 			}
 		}
 	}
-
-	public static void drawCenteredStringMultiLine(Graphics2D g, String text, int lineWidth, int lineHeight, int x, int y) {
-		int stringLen = (int) g.getFontMetrics().getStringBounds(text, g).getWidth();
-		int stringHei = (int) g.getFontMetrics().getStringBounds(text, g).getHeight();
-		int start = lineWidth / 2 - stringLen / 2;
-
-		FontMetrics m = g.getFontMetrics();
-		if (m.stringWidth(text) < lineWidth) {
-			g.drawString(text, x, y);
-		} else {
-			String[] words = text.split(" ");
-			StringBuilder currentLine = new StringBuilder(words[0]);
-			for (int i = 1; i < words.length; i++) {
-				if (m.stringWidth(currentLine + words[i]) < lineWidth) {
-					currentLine.append(" ").append(words[i]);
-				} else {
-					String s = currentLine.toString();
-					g.drawString(s, x, y);
-					y += m.getHeight();
-					currentLine = new StringBuilder(words[i]);
-				}
-			}
-			if (currentLine.toString().trim().length() > 0) {
-				int middle = lineHeight / 2 - stringHei / 2;
-				g.drawString(currentLine.toString(), start + x, middle + y);
-			}
-		}
-	}
 }
