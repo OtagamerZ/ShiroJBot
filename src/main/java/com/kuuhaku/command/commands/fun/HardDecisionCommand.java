@@ -18,7 +18,7 @@ import java.util.Objects;
 public class HardDecisionCommand extends Command {
 
 	public HardDecisionCommand() {
-		super("tb", new String[]{"doisbotoes", "twobuttons", "buttons"}, "<opção 1>;<opção 2>", "Gera um meme no formato \"Dois botões\"", Category.FUN);
+		super("doisbotoes", new String[]{"tb", "twobuttons", "buttons"}, "<opção 1>;<opção 2>", "Gera um meme no formato \"Dois botões\"", Category.FUN);
 	}
 
 	@Override

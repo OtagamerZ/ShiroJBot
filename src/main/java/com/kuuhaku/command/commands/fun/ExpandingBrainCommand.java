@@ -18,7 +18,7 @@ import java.util.Objects;
 public class ExpandingBrainCommand extends Command {
 
 	public ExpandingBrainCommand() {
-		super("eb", new String[]{"menteexpandida", "expandingbrain", "brain"}, "<opção 1>;<opção 2>;<opção 3>;<opção 4>", "Gera um meme no formato \"Dois botões\"", Category.FUN);
+		super("menteexpandida", new String[]{"eb", "expandingbrain", "brain"}, "<opção 1>;<opção 2>;<opção 3>;<opção 4>", "Gera um meme no formato \"Dois botões\"", Category.FUN);
 	}
 
 	@Override
