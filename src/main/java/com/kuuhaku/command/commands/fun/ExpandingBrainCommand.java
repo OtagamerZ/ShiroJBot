@@ -38,10 +38,10 @@ public class ExpandingBrainCommand extends Command {
 
 			g2d.setColor(Color.BLACK);
 			g2d.setFont(new Font("Impact", Font.BOLD, 40));
-			Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[0], 400, 20, 40);
-			Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[1], 400, 20, 340);
-			Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[2], 400, 20, 650);
-			Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[3], 400, 20, 930);
+			Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[0], 390, 20, 40);
+			Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[1], 390, 20, 340);
+			Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[2], 390, 20, 650);
+			Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[3], 390, 20, 930);
 
 			g2d.dispose();
 
