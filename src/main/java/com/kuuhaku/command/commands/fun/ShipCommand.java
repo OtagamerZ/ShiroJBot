@@ -51,7 +51,7 @@ public class ShipCommand extends Command {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ImageIO.write(Profile.clipRoundEdges(bi), "png", baos);
 
-			eb.setTitle(":heartpulse: Nível de love entre " + message.getMentionedUsers().get(0).getAsMention() + " e " + message.getMentionedUsers().get(0).getAsMention() + ":");
+			eb.setTitle(":heartpulse: Nível de love entre " + message.getMentionedUsers().get(0).getName() + " e " + message.getMentionedUsers().get(0).getName() + ":");
 			switch (Math.round(love)) {
 				case 0:
 				case 1:
@@ -72,9 +72,10 @@ public class ShipCommand extends Command {
 				case 10:
 					eb.setDescription("Impossível casal mais perfeito que esse, tem que casar JÁ!!\n`"+ doneMeter +"`");
 					break;
+				default: eb.setDescription("Pode ate dar certo esse canal, mas vai precisar insistir!\n`"+ doneMeter +"`");
 			}
 
-			channel.sendMessage(eb.build()).addFile(baos.toByteArray(), "ship.jpg").queue();
+			channel.sendFile(baos.toByteArray(), "ship.jpg").embed(eb.build()).queue();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
