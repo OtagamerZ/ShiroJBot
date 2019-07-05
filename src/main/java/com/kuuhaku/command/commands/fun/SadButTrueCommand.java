@@ -27,9 +27,6 @@ public class SadButTrueCommand extends Command {
 		if (args.length < 1) {
 			channel.sendMessage(":x: | Você tem que escrever a mensagem que deseja que apareca no meme.").queue();
 			return;
-		} else if (String.join(" ", args).length() > 12) {
-			channel.sendMessage(":x: | Mensagem muito longa (Max. 12 caractéres).").queue();
-			return;
 		}
 
 		try {
@@ -37,7 +34,26 @@ public class SadButTrueCommand extends Command {
 			Graphics2D g2d = bi.createGraphics();
 
 			g2d.setColor(Color.BLACK);
-			g2d.setFont(new Font("Impact", Font.BOLD, 20));
+			g2d.setFont(new Font("Impact", Font.BOLD, 30));
+
+			if (g2d.getFontMetrics().getStringBounds(String.join(" ", args), g2d).getWidth() > 267) {
+				if (g2d.getFontMetrics().getStringBounds(String.join(" ", args), g2d).getWidth() > 267) {
+					g2d.setFont(new Font("Impact", Font.BOLD, 25));
+					if (g2d.getFontMetrics().getStringBounds(String.join(" ", args), g2d).getWidth() > 267) {
+						g2d.setFont(new Font("Impact", Font.BOLD, 20));
+						if (g2d.getFontMetrics().getStringBounds(String.join(" ", args), g2d).getWidth() > 267) {
+							g2d.setFont(new Font("Impact", Font.BOLD, 15));
+							if (g2d.getFontMetrics().getStringBounds(String.join(" ", args), g2d).getWidth() > 267) {
+								channel.sendMessage(":x: | Mensagem muito longa.").queue();
+								return;
+							}
+						}
+					}
+				}
+				channel.sendMessage(":x: | Mensagem muito longa.").queue();
+				return;
+			}
+
 			Profile.printCenteredString(String.join(" ", args), 267, 66, 554, g2d);
 			g2d.dispose();
 
