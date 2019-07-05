@@ -254,6 +254,21 @@ public class SQLite {
 		em.close();
 	}
 
+	@SuppressWarnings("unchecked")
+	public static List<Member> getMemberRank(String gid, boolean global) {
+		EntityManager em = getEntityManager();
+
+		Query q;
+
+		if (global) q = em.createQuery("SELECT m FROM Member m ORDER BY m.level DESC", Member.class);
+		else q = em.createQuery("SELECT m FROM Member m WHERE id LIKE ?1 ORDER BY m.level DESC", Member.class);
+		q.setParameter(1, "%" + gid);
+
+		em.close();
+
+		return (List<Member>) q.getResultList();
+	}
+
 	// --- guildConfig -- \\
 	public static void updateGuildName(String newName, guildConfig gc) {
 		EntityManager em = getEntityManager();
