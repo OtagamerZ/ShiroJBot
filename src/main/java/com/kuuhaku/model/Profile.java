@@ -149,13 +149,23 @@ public class Profile {
 		g2d.fillOval(50, 200, avatar.getWidth(), avatar.getHeight());
 		g2d.drawImage(avatar, null, 50, 200);
 
-		g2d.clip(new RoundRectangle2D.Float(0, 0, bi.getWidth(), bi.getHeight(), 10, 10));
 		g2d.dispose();
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		ImageIO.write(bi, "png", baos);
+		ImageIO.write(clipRoundEdges(bi), "png", baos);
 
 		return baos;
+	}
+
+	private static BufferedImage clipRoundEdges(BufferedImage image) {
+		BufferedImage bi = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = bi.createGraphics();
+
+		g2d.setClip(new RoundRectangle2D.Float(0, 0, bi.getWidth(), bi.getHeight(), 10, 10));
+		g2d.drawImage(image, null, 0, 0);
+		g2d.dispose();
+
+		return bi;
 	}
 
 	private static void drawBadges(net.dv8tion.jda.core.entities.Member m, Guild s, Graphics2D g2d) throws IOException {
