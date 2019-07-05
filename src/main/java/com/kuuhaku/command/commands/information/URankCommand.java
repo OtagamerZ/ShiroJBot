@@ -66,13 +66,13 @@ public class URankCommand extends Command {
 			HttpURLConnection con = (HttpURLConnection) new URL(Main.getInfo().getUserByID(mbs.get(0).getMid()).getAvatarUrl()).openConnection();
 			con.setRequestProperty("User-Agent", "Mozilla/5.0");
 			BufferedImage avatar = Profile.scaleImage(ImageIO.read(con.getInputStream()), 500, 150);
-			g2d.drawImage(avatar.getSubimage(0, avatar.getHeight() / 4, avatar.getWidth(), avatar.getHeight() / 150), null, 0, 0);
+			g2d.drawImage(avatar.getSubimage(0, avatar.getHeight() / 4, avatar.getWidth(), 150), null, 0, 0);
 
 			for (int i = 1; i < mbs.size(); i++) {
 				con = (HttpURLConnection) new URL(Main.getInfo().getUserByID(mbs.get(i).getMid()).getAvatarUrl()).openConnection();
 				con.setRequestProperty("User-Agent", "Mozilla/5.0");
 				avatar = Profile.scaleImage(ImageIO.read(con.getInputStream()), 500, 75);
-				g2d.drawImage(avatar.getSubimage(0, avatar.getHeight() / 4, avatar.getWidth(), avatar.getHeight() / 75), null, 0, 150 + 75 * (i - 1));
+				g2d.drawImage(avatar.getSubimage(0, avatar.getHeight() / 4, avatar.getWidth(),  75), null, 0, 150 + 75 * (i - 1));
 				g2d.fillRect(150 + 75 * i, 0, 500, 600);
 			}
 
