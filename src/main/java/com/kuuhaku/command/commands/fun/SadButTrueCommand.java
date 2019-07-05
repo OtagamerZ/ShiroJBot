@@ -13,6 +13,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class SadButTrueCommand extends Command {
@@ -42,7 +43,7 @@ public class SadButTrueCommand extends Command {
 
 			channel.sendMessage("Aqui está seu meme " + author.getAsMention() + "!").addFile(baos.toByteArray(), "tmv.jpg").queue();
 		} catch (IOException e) {
-			Helper.log(this.getClass(), LogLevel.ERROR, e.toString());
+			Helper.log(this.getClass(), LogLevel.ERROR, Arrays.toString(e.getStackTrace()));
 		}
 	}
 
