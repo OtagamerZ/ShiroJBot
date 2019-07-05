@@ -90,6 +90,7 @@ public class CommandManager {
             add(new ExpandingBrainCommand());
             add(new OhNoCommand());
             add(new PPTCommand());
+            add(new ShipCommand());
             //REAÇÕES
             //RECIPROCOS
             add(new HugReaction(false));
