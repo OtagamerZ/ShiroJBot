@@ -18,7 +18,7 @@ public class OhNoCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		
-		if(args.length < 1) { channel.sendMessage(":x: | Você tem que escrever a mensagem que deseja que apareca na imagem.").queue(); return; }
+		if(args.length < 1) { channel.sendMessage(":x: | Você tem que escrever a mensagem que deseja que apareca no meme.").queue(); return; }
 		
 		String sb = String.join(" ", args);
 		String str = sb.trim();
