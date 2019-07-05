@@ -18,7 +18,7 @@ import java.util.Objects;
 public class SadButTrueCommand extends Command {
 
 	public SadButTrueCommand() {
-		super("tmv", new String[]{"tristemasverdade", "sadbuttrue", "sbt"}, "<verdade>", "Gera um meme no formato \"Triste mas verdade\"", Category.FUN);
+		super("tristemasverdade", new String[]{"tmv", "sadbuttrue", "sbt"}, "<verdade>", "Gera um meme no formato \"Triste mas verdade\"", Category.FUN);
 	}
 
 	@Override
