@@ -27,6 +27,7 @@ import java.util.List;
 public class Member {
 	@Id
 	private String id;
+	private String mid;
 	private int level = 1, xp = 0;
 	private String warns = "";
 	private String bg = "https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg";
@@ -105,5 +106,13 @@ public class Member {
 
 	public void setBio(String bio) {
 		this.bio = bio;
+	}
+
+	public String getMid() {
+		return mid;
+	}
+
+	public void setMid(String mid) {
+		this.mid = mid;
 	}
 }
