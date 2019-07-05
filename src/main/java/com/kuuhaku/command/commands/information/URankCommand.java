@@ -62,8 +62,8 @@ public class URankCommand extends Command {
 			EmbedBuilder eb = new EmbedBuilder();
 			StringBuilder sb = new StringBuilder();
 
-			eb.setTitle(":bar_chart: TOP 10 Usuários (" + (args[0].equalsIgnoreCase("global") ? "GLOBAL" : "SERVER") + ")");
-			eb.setThumbnail(args[0].equalsIgnoreCase("global") ? "https://www.pngkey.com/png/full/21-217733_free-png-trophy-png-images-transparent-winner-trophy.png" : guild.getIconUrl());
+			eb.setTitle(":bar_chart: TOP 10 Usuários (" + (args.length > 0 && args[0].equalsIgnoreCase("global") ? "GLOBAL" : "SERVER") + ")");
+			eb.setThumbnail(args.length > 0 && args[0].equalsIgnoreCase("global") ? "https://www.pngkey.com/png/full/21-217733_free-png-trophy-png-images-transparent-winner-trophy.png" : guild.getIconUrl());
 			try {
 				eb.setColor(Helper.colorThief(Main.getInfo().getUserByID(mbs.get(0).getMid()).getAvatarUrl()));
 			} catch (IOException e) {
