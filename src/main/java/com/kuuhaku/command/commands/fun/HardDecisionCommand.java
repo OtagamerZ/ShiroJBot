@@ -27,7 +27,7 @@ public class HardDecisionCommand extends Command {
 		if (args.length < 1) {
 			channel.sendMessage(":x: | Você tem que escrever a mensagem que deseja que apareca no meme.").queue();
 			return;
-		} else if (args[0].split(";").length < 2) {
+		} else if (String.join(" ", args).split(";").length < 2) {
 			channel.sendMessage(":x: | Você precisa escrever duas opções para o meme (separados por ponto-e-vírgula).").queue();
 			return;
 		}
@@ -39,11 +39,11 @@ public class HardDecisionCommand extends Command {
 			g2d.setColor(Color.BLACK);
 			g2d.setFont(new Font("Impact", Font.BOLD, 20));
 			if (g2d.getFontMetrics().getStringBounds(String.join(" ", args), g2d).getWidth() > 270) {
-				Profile.drawStringMultiLine(g2d, args[0].split(";")[0], 215, 47, 80);
-				Profile.drawStringMultiLine(g2d, args[0].split(";")[1], 215, 247, 47);
+				Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[0], 215, 47, 80);
+				Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[1], 215, 247, 47);
 			} else {
-				Profile.printCenteredString(args[0].split(";")[0], 215, 47, 135, g2d);
-				Profile.printCenteredString(args[0].split(";")[1], 215, 247, 100, g2d);
+				Profile.printCenteredString(String.join(" ", args).split(";")[0], 215, 47, 135, g2d);
+				Profile.printCenteredString(String.join(" ", args).split(";")[1], 215, 247, 100, g2d);
 			}
 
 			g2d.dispose();
