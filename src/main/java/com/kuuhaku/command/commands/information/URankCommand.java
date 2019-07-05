@@ -46,9 +46,11 @@ public class URankCommand extends Command {
 		List<com.kuuhaku.model.Member> mbs;
 
 		if (args.length == 0) {
-			mbs = SQLite.getMemberRank(guild.getId(), false).subList(0, 6);
+			mbs = SQLite.getMemberRank(guild.getId(), false);
+			if (mbs.size() > 7) mbs.subList(7, mbs.size()).clear();
 		} else if (args[0].equalsIgnoreCase("global")) {
-			mbs = SQLite.getMemberRank(guild.getId(), true).subList(0, 6);
+			mbs = SQLite.getMemberRank(guild.getId(), true);
+			if (mbs.size() > 7) mbs.subList(7, mbs.size()).clear();
 		} else {
 			channel.sendMessage(":x: | O único parâmetro permitido após o comando é `global`.").queue();
 			return;
