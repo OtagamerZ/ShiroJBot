@@ -22,6 +22,7 @@ import com.kuuhaku.command.commands.Reactions.*;
 import com.kuuhaku.command.commands.beyblade.*;
 import com.kuuhaku.command.commands.fun.OhNoCommand;
 import com.kuuhaku.command.commands.fun.PPTCommand;
+import com.kuuhaku.command.commands.fun.SadButTrueCommand;
 import com.kuuhaku.command.commands.information.*;
 import com.kuuhaku.command.commands.misc.*;
 import com.kuuhaku.command.commands.moderation.*;
@@ -86,6 +87,8 @@ public class CommandManager {
             add(new ImageCommand());
 
             //FUN
+            add(new SadButTrueCommand());
+            //REAÇÕES
             add(new OhNoCommand());
             add(new PPTCommand());
             //RECIPROCOS
