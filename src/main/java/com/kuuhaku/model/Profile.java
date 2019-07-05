@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -82,7 +83,7 @@ public class Profile {
 		g2d.setClip(null);
 		g2d.fillRect(52, 350, 196, 200);
 
-		g2d.setColor(new Color(100, 100, 100, 125));
+		g2d.setColor(new Color(100, 100, 100, 150));
 		g2d.fillRect(268, 370, 177, 177);
 		g2d.fillRect(466, 370, 455, 177);
 
@@ -112,12 +113,31 @@ public class Profile {
 		g2d.setFont(new Font(FONT.getName(), Font.PLAIN, 25));
 		printCenteredString(SQLite.getMemberById(m.getUser().getId() + g.getId()).getXp() + "/" + ((int) Math.pow(SQLite.getMemberById(m.getUser().getId() + g.getId()).getLevel(), 2) * 100), 196, 52, 538, g2d);
 
+		List<Member> mbs = SQLite.getMemberRank(g.getId(), false);
+		int pos = 0;
+		for (int i = 0; i < mbs.size(); i++) {
+			if (mbs.get(i).getId().equals(m.getUser().getId() + g.getId())) {
+				pos = i + 1;
+				break;
+			}
+		}
+
+		mbs = SQLite.getMemberRank(g.getId(), true);
+		int posG = 0;
+		for (int i = 0; i < mbs.size(); i++) {
+			if (mbs.get(i).getId().equals(m.getUser().getId() + g.getId())) {
+				posG = i + 1;
+				break;
+			}
+		}
 
 		g2d.setFont(new Font(FONT.getName(), Font.PLAIN, 40));
 		printCenteredString("Emblemas", 182, 266, 590, g2d);
 		printCenteredString("Biografia", 460, 466, 590, g2d);
+		printCenteredString("Rank: #" + pos + "/#" + posG, 196, 52, 590, g2d);
 
-		g2d.setFont(new Font("Arial Black", Font.PLAIN, 25));
+		g2d.setFont(new Font("Arial", Font.BOLD, 25));
+		System.out.println(Arrays.toString(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames()));
 		String s = SQLite.getMemberById(m.getUser().getId() + g.getId()).getBio();
 		drawStringMultiLine(g2d, s, 440, 474, 403);
 
@@ -128,7 +148,7 @@ public class Profile {
 		g2d.dispose();
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		ImageIO.write(bi, "gif", baos);
+		ImageIO.write(bi, "png", baos);
 
 		return baos;
 	}
@@ -181,7 +201,7 @@ public class Profile {
 		}
 	}
 
-	private static BufferedImage scaleImage(BufferedImage image, int w, int h) {
+	public static BufferedImage scaleImage(BufferedImage image, int w, int h) {
 
 		// Make sure the aspect ratio is maintained, so the image is not distorted
 		double thumbRatio = (double) w / (double) h;
@@ -204,13 +224,13 @@ public class Profile {
 		return newImage;
 	}
 
-	private static void printCenteredString(String s, int width, int XPos, int YPos, Graphics2D g2d) {
+	public static void printCenteredString(String s, int width, int XPos, int YPos, Graphics2D g2d) {
 		int stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
 		int start = width / 2 - stringLen / 2;
 		g2d.drawString(s, start + XPos, YPos);
 	}
 
-	private static void drawStringMultiLine(Graphics2D g, String text, int lineWidth, int x, int y) {
+	public static void drawStringMultiLine(Graphics2D g, String text, int lineWidth, int x, int y) {
 		FontMetrics m = g.getFontMetrics();
 		if (m.stringWidth(text) < lineWidth) {
 			g.drawString(text, x, y);
