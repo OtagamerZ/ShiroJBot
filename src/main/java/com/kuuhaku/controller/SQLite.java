@@ -266,9 +266,11 @@ public class SQLite {
 			q.setParameter(1, "%" + gid);
 		}
 
+		List<Member> mbs = (List<Member>) q.getResultList();
+
 		em.close();
 
-		return (List<Member>) q.getResultList();
+		return mbs;
 	}
 
 	// --- guildConfig -- \\
