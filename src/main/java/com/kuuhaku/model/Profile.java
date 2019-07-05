@@ -137,8 +137,8 @@ public class Profile {
 		printCenteredString("Emblemas", 182, 266, 590, g2d);
 		printCenteredString("Biografia", 460, 466, 590, g2d);
 
-		g2d.setFont(new Font(FONT.getName(), Font.PLAIN, 20));
-		printCenteredString("Rank: #" + pos + "/#" + posG, 196, 52, 580, g2d);
+		g2d.setFont(new Font(FONT.getName(), Font.PLAIN, 30));
+		printCenteredString("Rank: #" + pos + "/#" + posG, 196, 52, 585, g2d);
 
 		g2d.setFont(new Font("DejaVu Sans", Font.BOLD, 25));
 		String s = SQLite.getMemberById(m.getUser().getId() + g.getId()).getBio();
