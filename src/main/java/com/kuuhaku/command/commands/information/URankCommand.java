@@ -22,6 +22,8 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.Profile;
+import com.kuuhaku.utils.Helper;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 
@@ -38,7 +40,7 @@ import java.util.List;
 public class URankCommand extends Command {
 
 	public URankCommand() {
-		super("rank", new String[]{"ranking", "top7"}, "<global>", "Mostra o ranking de usuários do servidor ou global.", Category.MISC);
+		super("rank", new String[]{"ranking", "top10"}, "<global>", "Mostra o ranking de usuários do servidor ou global.", Category.MISC);
 	}
 
 	@Override
@@ -56,32 +58,24 @@ public class URankCommand extends Command {
 			return;
 		}
 
-		try {
-			BufferedImage img = new BufferedImage(500, 600, BufferedImage.TYPE_INT_RGB);
-			Graphics2D g2d = img.createGraphics();
-			g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g2d.setColor(Color.BLACK);
+		channel.sendMessage(":hourglass: Buscando dados...").queue(m -> {
+			EmbedBuilder eb = new EmbedBuilder();
+			StringBuilder sb = new StringBuilder();
 
-			HttpURLConnection con = (HttpURLConnection) new URL(Main.getInfo().getUserByID(mbs.get(0).getMid()).getAvatarUrl()).openConnection();
-			con.setRequestProperty("User-Agent", "Mozilla/5.0");
-			BufferedImage avatar = Profile.scaleImage(ImageIO.read(con.getInputStream()), 500, 150);
-			g2d.drawImage(avatar.getSubimage(0, avatar.getHeight() / 4, avatar.getWidth(), 150), null, 0, 0);
-
-			for (int i = 1; i < mbs.size(); i++) {
-				con = (HttpURLConnection) new URL(Main.getInfo().getUserByID(mbs.get(i).getMid()).getAvatarUrl()).openConnection();
-				con.setRequestProperty("User-Agent", "Mozilla/5.0");
-				avatar = Profile.scaleImage(ImageIO.read(con.getInputStream()), 500, 75);
-				g2d.drawImage(avatar.getSubimage(0, avatar.getHeight() / 4, avatar.getWidth(),  75), null, 0, 150 + 75 * (i - 1));
-				g2d.fillRect(150 + 75 * i, 0, 500, 600);
+			eb.setTitle(":bar_chart: TOP 10 Usuários (" + (args[0].equalsIgnoreCase("global") ? "GLOBAL" : "SERVER") + ")");
+			eb.setThumbnail(args[0].equalsIgnoreCase("global") ? "https://www.pngkey.com/png/full/21-217733_free-png-trophy-png-images-transparent-winner-trophy.png" : guild.getIconUrl());
+			try {
+				eb.setColor(Helper.colorThief(Main.getInfo().getUserByID(mbs.get(0).getMid()).getAvatarUrl()));
+			} catch (IOException e) {
+				eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
 			}
+			for (int i = 1; i < mbs.size() && i < 10; i++) {
+				sb.append(i + 1).append(" - ").append(Main.getInfo().getGuildByID(mbs.get(i).getId().substring(18)).getMemberById(mbs.get(i).getMid()).getEffectiveName()).append(" - ").append(mbs.get(i).getLevel()).append(" (").append(mbs.get(0).getXp()).append(")").append("\n");
+			}
+			eb.addField("1 - " + Main.getInfo().getGuildByID(mbs.get(0).getId().substring(18)).getMemberById(mbs.get(0).getMid()).getEffectiveName() + " - " + mbs.get(0).getLevel() + " (" + mbs.get(0).getXp() + ")", sb.toString(), false);
 
-			g2d.dispose();
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write(img, "png", baos);
-
-			channel.sendFile(baos.toByteArray(), "rank.png").queue();
-		} catch (IOException ignore) {
-		}
+			m.delete().queue();
+			channel.sendMessage(eb.build()).queue();
+		});
 	}
 }
