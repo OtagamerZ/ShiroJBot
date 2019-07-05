@@ -39,8 +39,8 @@ public class HardDecisionCommand extends Command {
 			g2d.setColor(Color.BLACK);
 			g2d.setFont(new Font("Impact", Font.BOLD, 20));
 			if (g2d.getFontMetrics().getStringBounds(String.join(" ", args), g2d).getWidth() > 270) {
-				Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[0], 215, 47, 135);
-				Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[1], 215, 247, 100);
+				Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[0], 215, 55, 135);
+				Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[1], 215, 255, 100);
 			} else {
 				Profile.printCenteredString(String.join(" ", args).split(";")[0], 215, 47, 135, g2d);
 				Profile.printCenteredString(String.join(" ", args).split(";")[1], 215, 247, 100, g2d);
