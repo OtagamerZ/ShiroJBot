@@ -34,8 +34,8 @@ public class SadButTrueCommand extends Command {
 			Graphics2D g2d = bi.createGraphics();
 
 			g2d.setColor(Color.BLACK);
-			g2d.setFont(new Font("Impact", Font.BOLD, 30));
-			Profile.drawCenteredStringMultiLine(g2d, String.join(" ", args), 267, 70, 66, 525);
+			g2d.setFont(new Font("Impact", Font.BOLD, 20));
+			Profile.printCenteredString(String.join(" ", args), 267, 66, 554, g2d);
 			g2d.dispose();
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
