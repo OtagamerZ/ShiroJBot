@@ -36,6 +36,11 @@ public class BiographyCommand extends Command {
             return;
         }
 
+        for (String s : args) if (s.length() > 29) {
+            channel.sendMessage(":x: | A biografia possui uma ou mais falavras MUITO grandes (limite de 29 caractéres por palavra).").queue();
+            return;
+        }
+
         com.kuuhaku.model.Member m = SQLite.getMemberById(author.getId() + guild.getId());
         m.setBio(String.join(" ", args));
         SQLite.updateMemberBiography(m);

@@ -117,7 +117,7 @@ public class Profile {
 		printCenteredString("Emblemas", 182, 266, 590, g2d);
 		printCenteredString("Biografia", 460, 466, 590, g2d);
 
-		g2d.setFont(new Font("Verdana", Font.PLAIN, 25));
+		g2d.setFont(new Font("Arial Black", Font.PLAIN, 25));
 		String s = SQLite.getMemberById(m.getUser().getId() + g.getId()).getBio();
 		drawStringMultiLine(g2d, s, 440, 474, 403);
 
@@ -128,7 +128,7 @@ public class Profile {
 		g2d.dispose();
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		ImageIO.write(bi, "png", baos);
+		ImageIO.write(bi, "gif", baos);
 
 		return baos;
 	}
@@ -222,7 +222,6 @@ public class Profile {
 					currentLine.append(" ").append(words[i]);
 				} else {
 					String s = currentLine.toString();
-					if (g.getFontMetrics().getStringBounds(s, g).getWidth() > 440) s = s.substring(0, 26) + "[...]";
 					g.drawString(s, x, y);
 					y += m.getHeight();
 					currentLine = new StringBuilder(words[i]);
