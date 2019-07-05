@@ -57,17 +57,23 @@ public class URankCommand extends Command {
 		}
 
 		try {
-			BufferedImage img = new BufferedImage(500, 600, BufferedImage.TYPE_INT_ARGB);
+			BufferedImage img = new BufferedImage(500, 600, BufferedImage.TYPE_INT_RGB);
 			Graphics2D g2d = img.createGraphics();
+			g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g2d.setColor(Color.BLACK);
 
 			HttpURLConnection con = (HttpURLConnection) new URL(Main.getInfo().getUserByID(mbs.get(0).getMid()).getAvatarUrl()).openConnection();
 			con.setRequestProperty("User-Agent", "Mozilla/5.0");
-			g2d.drawImage(Profile.scaleImage(ImageIO.read(con.getInputStream()), 500, 150), null, 0, 0);
+			BufferedImage avatar = ImageIO.read(con.getInputStream());
+			g2d.drawImage(Profile.scaleImage(avatar.getSubimage(0, avatar.getHeight() / 4, avatar.getWidth(), avatar.getHeight() / 150), 500, 150), null, 0, 0);
 
 			for (int i = 1; i < mbs.size(); i++) {
 				con = (HttpURLConnection) new URL(Main.getInfo().getUserByID(mbs.get(i).getMid()).getAvatarUrl()).openConnection();
 				con.setRequestProperty("User-Agent", "Mozilla/5.0");
-				g2d.drawImage(Profile.scaleImage(ImageIO.read(con.getInputStream()), 500, 75), null, 0, 150 + 75 * (i - 1));
+				avatar = ImageIO.read(con.getInputStream());
+				g2d.drawImage(Profile.scaleImage(avatar.getSubimage(0, avatar.getHeight() / 4, avatar.getWidth(), avatar.getHeight() / 75), 500, 75), null, 0, 150 + 75 * (i - 1));
+				g2d.fillRect(150 + 75 * i, 0, 500, 600);
 			}
 
 			g2d.dispose();
