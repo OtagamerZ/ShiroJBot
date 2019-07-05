@@ -20,6 +20,7 @@ package com.kuuhaku.managers;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.Reactions.*;
 import com.kuuhaku.command.commands.beyblade.*;
+import com.kuuhaku.command.commands.fun.HardDecisionCommand;
 import com.kuuhaku.command.commands.fun.OhNoCommand;
 import com.kuuhaku.command.commands.fun.PPTCommand;
 import com.kuuhaku.command.commands.fun.SadButTrueCommand;
@@ -88,9 +89,10 @@ public class CommandManager {
 
             //FUN
             add(new SadButTrueCommand());
-            //REAÇÕES
+            add(new HardDecisionCommand());
             add(new OhNoCommand());
             add(new PPTCommand());
+            //REAÇÕES
             //RECIPROCOS
             add(new HugReaction(false));
             add(new KissReaction(false));
