@@ -181,6 +181,7 @@ public class GuildEvents extends ListenerAdapter {
                 }
                 try {
                     com.kuuhaku.model.Member m = SQLite.getMemberById(member.getUser().getId() + member.getGuild().getId());
+                    if (m.getMid() == null) SQLite.saveMemberMid(m, author);
                     boolean lvlUp = m.addXp();
                     if (lvlUp && SQLite.getGuildById(guild.getId()).getLvlNotif()) {
                         channel.sendMessage(member.getEffectiveName() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
