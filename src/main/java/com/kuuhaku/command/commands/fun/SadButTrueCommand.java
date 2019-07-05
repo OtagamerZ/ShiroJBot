@@ -28,7 +28,7 @@ public class SadButTrueCommand extends Command {
 		}
 
 		try {
-			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResource("sadbuttrue.png")));
+			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("sadbuttrue.png")));
 			Graphics2D g2d = bi.createGraphics();
 
 			g2d.setFont(new Font("Impact", Font.BOLD, 20));
