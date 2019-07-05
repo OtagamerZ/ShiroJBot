@@ -71,6 +71,7 @@ public class CommandManager {
             add(new TagsCommand());
             add(new MyTagsCommand());
             add(new BotInfoCommand());
+            add(new URankCommand());
 
             //MISC
             add(new AsciiCommand());
