@@ -141,7 +141,6 @@ public class Profile {
 		printCenteredString("Rank: #" + pos + "/#" + posG, 196, 52, 580, g2d);
 
 		g2d.setFont(new Font("DejaVu Sans", Font.BOLD, 25));
-		System.out.println(Arrays.toString(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames()));
 		String s = SQLite.getMemberById(m.getUser().getId() + g.getId()).getBio();
 		drawStringMultiLine(g2d, s, 440, 474, 403);
 
