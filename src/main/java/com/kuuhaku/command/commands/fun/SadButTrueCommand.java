@@ -27,6 +27,9 @@ public class SadButTrueCommand extends Command {
 		if (args.length < 1) {
 			channel.sendMessage(":x: | Você tem que escrever a mensagem que deseja que apareca no meme.").queue();
 			return;
+		} else if (String.join(" ", args).length() > 12) {
+			channel.sendMessage(":x: | Mensagem muito longa (Max. 12 caractéres).").queue();
+			return;
 		}
 
 		try {
