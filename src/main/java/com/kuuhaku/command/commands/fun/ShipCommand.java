@@ -35,7 +35,7 @@ public class ShipCommand extends Command {
 			String doneMeter;
 			BufferedImage bi = new BufferedImage(256, 128, BufferedImage.TYPE_INT_RGB);
 			Graphics2D g2d = bi.createGraphics();
-			float love = 100 * new Random(Long.parseLong(message.getMentionedUsers().get(0).getId() + message.getMentionedUsers().get(0).getId())).nextFloat();
+			float love = 100 * new Random(Long.parseLong(message.getMentionedUsers().get(0).getId()) + Long.parseLong(message.getMentionedUsers().get(0).getId())).nextFloat();
 
 			for (int i = 0; i < Math.round(love / 10); i++) {
 				meter[i] = "|";
