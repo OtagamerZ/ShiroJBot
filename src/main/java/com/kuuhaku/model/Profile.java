@@ -235,13 +235,13 @@ public class Profile {
 		return newImage;
 	}
 
-	private static void printCenteredString(String s, int width, int XPos, int YPos, Graphics2D g2d) {
+	public static void printCenteredString(String s, int width, int XPos, int YPos, Graphics2D g2d) {
 		int stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
 		int start = width / 2 - stringLen / 2;
 		g2d.drawString(s, start + XPos, YPos);
 	}
 
-	private static void drawStringMultiLine(Graphics2D g, String text, int lineWidth, int x, int y) {
+	public static void drawStringMultiLine(Graphics2D g, String text, int lineWidth, int x, int y) {
 		FontMetrics m = g.getFontMetrics();
 		if (m.stringWidth(text) < lineWidth) {
 			g.drawString(text, x, y);
