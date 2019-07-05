@@ -26,6 +26,7 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Role;
+import net.dv8tion.jda.core.entities.User;
 import org.json.JSONObject;
 
 import javax.persistence.EntityManager;
@@ -224,6 +225,7 @@ public class SQLite {
 
 		Member m = new Member();
 		m.setId(u.getUser().getId() + u.getGuild().getId());
+		m.setMid(u.getUser().getId());
 
 		em.getTransaction().begin();
 		em.merge(m);
@@ -234,6 +236,18 @@ public class SQLite {
 
 	public static void saveMemberToDB(Member m) {
 		EntityManager em = getEntityManager();
+
+		em.getTransaction().begin();
+		em.merge(m);
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
+	public static void saveMemberMid(Member m, User u) {
+		EntityManager em = getEntityManager();
+
+		m.setMid(u.getId());
 
 		em.getTransaction().begin();
 		em.merge(m);
