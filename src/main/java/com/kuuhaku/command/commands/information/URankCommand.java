@@ -58,7 +58,7 @@ public class URankCommand extends Command {
 			BufferedImage img = new BufferedImage(500, 600, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g2d = img.createGraphics();
 
-			HttpURLConnection con = (HttpURLConnection) new URL(Main.getInfo().getUserByID(mbs.get(0).getId().substring(mbs.get(0).getId().length())).getAvatarUrl()).openConnection();
+			HttpURLConnection con = (HttpURLConnection) new URL(Main.getInfo().getUserByID(mbs.get(0).getId().substring(mbs.get(0).getId().length() / 2 - 1)).getAvatarUrl()).openConnection();
 			con.setRequestProperty("User-Agent", "Mozilla/5.0");
 			g2d.drawImage(Profile.scaleImage(ImageIO.read(con.getInputStream()), 500, 150), null, 0, 0);
 
