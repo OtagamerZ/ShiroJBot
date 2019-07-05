@@ -153,7 +153,7 @@ public class Profile {
 		return baos;
 	}
 
-	private static BufferedImage clipRoundEdges(BufferedImage image) {
+	public static BufferedImage clipRoundEdges(BufferedImage image) {
 		BufferedImage bi = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 

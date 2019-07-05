@@ -73,10 +73,10 @@ public class PPTCommand extends Command {
 		
 		switch(win) {
 			case 0:
-				channel.sendMessage("Perdeste! Eu escolhi " + pcChoice).queue();
+				channel.sendMessage("Perdeu! Eu escolhi " + pcChoice).queue();
 				break;
 			case 1:
-				channel.sendMessage("Ganhaste! Eu escolhi " + pcChoice).queue();
+				channel.sendMessage("Ganhou! Eu escolhi " + pcChoice).queue();
 				break;
 			case 2:
 				channel.sendMessage("Empate! Eu escolhi " + pcChoice).queue();
