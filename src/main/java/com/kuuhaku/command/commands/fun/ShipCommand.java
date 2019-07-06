@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
@@ -47,8 +47,8 @@ public class ShipCommand extends Command {
 
             g2d.dispose();
 
-            File f = new File("ship.png");
-            ImageIO.write(clipRoundEdges(bi), "png", f);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(clipRoundEdges(bi), "png", baos);
 
             String n1 = message.getMentionedUsers().get(0).getName();
             String n2 = message.getMentionedUsers().get(1).getName();
@@ -64,7 +64,7 @@ public class ShipCommand extends Command {
             else
                 sb.append("\n\nImpossível casal mais perfeito que esse, tem que casar JÁ!!\n` ").append(Helper.round(love, 1)).append("% ").append(doneMeter).append("`");
 
-            channel.sendMessage(sb.toString()).queue();
+            channel.sendMessage(sb.toString()).addFile(baos.toByteArray(), "ship.png").queue();
         } catch (IOException e) {
             e.printStackTrace();
         }
