@@ -58,7 +58,7 @@ public class ShipCommand extends Command {
             if (love <= 30)
                 sb.append("\n\nBem, esse casal jamais daria certo, hora de passar pra frente!\n` ").append(Helper.round(love, 1)).append("% ").append(doneMeter).append("`");
             else if (love <= 50)
-                sb.append("\n\nPode ate dar certo esse canal, mas vai precisar insistir!\n` ").append(Helper.round(love, 1)).append("% ").append(doneMeter).append("`");
+                sb.append("\n\nPode ate dar certo esse casal, mas vai precisar insistir!\n` ").append(Helper.round(love, 1)).append("% ").append(doneMeter).append("`");
             else if (love <= 70)
                 sb.append("\n\nOpa, ou eles já se conhecem, ou o destino sorriu pra eles!\n` ").append(Helper.round(love, 1)).append("% ").append(doneMeter).append("`");
             else
