@@ -70,6 +70,7 @@ public class ShipCommand extends Command {
     private static BufferedImage clipRoundEdges(BufferedImage image) {
         BufferedImage bi = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = bi.createGraphics();
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         g2d.setClip(new RoundRectangle2D.Float(0, 0, bi.getWidth(), bi.getHeight(), 20, 20));
         g2d.drawImage(image, null, 0, 0);
