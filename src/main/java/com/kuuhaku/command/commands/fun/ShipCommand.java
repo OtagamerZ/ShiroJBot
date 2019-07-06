@@ -61,7 +61,7 @@ public class ShipCommand extends Command {
             else
                 eb.setDescription("Impossível casal mais perfeito que esse, tem que casar JÁ!!\n` " + Helper.round(love, 1) + "% " + doneMeter + "`");
 
-            eb.setImage("attachment://ship.png");
+            eb.setImage(f.getAbsolutePath());
 
             channel.sendMessage(eb.build()).queue();
         } catch (IOException e) {
