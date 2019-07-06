@@ -11,7 +11,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
@@ -33,7 +33,7 @@ public class ShipCommand extends Command {
             EmbedBuilder eb = new EmbedBuilder();
             String[] meter = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
             String doneMeter;
-            BufferedImage bi = new BufferedImage(256, 128, BufferedImage.TYPE_INT_RGB);
+            BufferedImage bi = new BufferedImage(257, 128, BufferedImage.TYPE_INT_RGB);
             Graphics2D g2d = bi.createGraphics();
             float love = 100 * new Random(message.getMentionedUsers().get(0).getIdLong() + message.getMentionedUsers().get(1).getIdLong()).nextFloat();
 
@@ -44,12 +44,12 @@ public class ShipCommand extends Command {
             doneMeter = Arrays.toString(meter).replace(",", "").replace(" ", "");
 
             g2d.drawImage(ImageIO.read(Helper.getImage(message.getMentionedUsers().get(0).getAvatarUrl())), null, 0, 0);
-            g2d.drawImage(ImageIO.read(Helper.getImage(message.getMentionedUsers().get(1).getAvatarUrl())), null, 128, 0);
+            g2d.drawImage(ImageIO.read(Helper.getImage(message.getMentionedUsers().get(1).getAvatarUrl())), null, 129, 0);
 
             g2d.dispose();
 
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(clipRoundEdges(bi), "png", baos);
+            File f = new File("ship.png");
+            ImageIO.write(clipRoundEdges(bi), "png", f);
 
             eb.setTitle(":heartpulse: Nível de love entre " + message.getMentionedUsers().get(0).getName() + " e " + message.getMentionedUsers().get(0).getName() + ":");
             if (love <= 30)
@@ -61,7 +61,9 @@ public class ShipCommand extends Command {
             else
                 eb.setDescription("Impossível casal mais perfeito que esse, tem que casar JÁ!!\n` " + Helper.round(love, 1) + "% " + doneMeter + "`");
 
-            channel.sendFile(baos.toByteArray(), "ship.jpg").embed(eb.build()).queue();
+            eb.setImage("ship.png");
+
+            channel.sendMessage(eb.build()).queue();
         } catch (IOException e) {
             e.printStackTrace();
         }
