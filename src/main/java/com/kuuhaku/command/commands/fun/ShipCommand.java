@@ -3,7 +3,6 @@ package com.kuuhaku.command.commands.fun;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
-import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 
@@ -30,7 +29,7 @@ public class ShipCommand extends Command {
         }
 
         try {
-            EmbedBuilder eb = new EmbedBuilder();
+            StringBuilder sb = new StringBuilder();
             String[] meter = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
             String doneMeter;
             BufferedImage bi = new BufferedImage(257, 128, BufferedImage.TYPE_INT_RGB);
@@ -51,19 +50,21 @@ public class ShipCommand extends Command {
             File f = new File("ship.png");
             ImageIO.write(clipRoundEdges(bi), "png", f);
 
-            eb.setTitle(":heartpulse: Nível de love entre " + message.getMentionedUsers().get(0).getName() + " e " + message.getMentionedUsers().get(0).getName() + ":");
+            String n1 = message.getMentionedUsers().get(0).getName();
+            String n2 = message.getMentionedUsers().get(1).getName();
+
+            sb.append(":heartpulse: *Nível de love entre ").append(message.getMentionedUsers().get(0).getName()).append(" e ").append(message.getMentionedUsers().get(0).getName()).append(":*");
+            sb.append("\n`").append(n1, 0, n1.length() / 2).append(n2.substring(n2.length() / 2)).append("`");
             if (love <= 30)
-                eb.setDescription("Bem, esse casal jamais daria certo, hora de passar pra frente!\n` " + Helper.round(love, 1) + "% " + doneMeter + "`");
+                sb.append("\n\nBem, esse casal jamais daria certo, hora de passar pra frente!\n` ").append(Helper.round(love, 1)).append("% ").append(doneMeter).append("`");
             else if (love <= 50)
-                eb.setDescription("Pode ate dar certo esse canal, mas vai precisar insistir!\n` " + Helper.round(love, 1) + "% " + doneMeter + "`");
+                sb.append("\n\nPode ate dar certo esse canal, mas vai precisar insistir!\n` ").append(Helper.round(love, 1)).append("% ").append(doneMeter).append("`");
             else if (love <= 70)
-                eb.setDescription("Opa, ou eles já se conhecem, ou o destino sorriu pra eles!\n` " + Helper.round(love, 1) + "% " + doneMeter + "`");
+                sb.append("\n\nOpa, ou eles já se conhecem, ou o destino sorriu pra eles!\n` ").append(Helper.round(love, 1)).append("% ").append(doneMeter).append("`");
             else
-                eb.setDescription("Impossível casal mais perfeito que esse, tem que casar JÁ!!\n` " + Helper.round(love, 1) + "% " + doneMeter + "`");
+                sb.append("\n\nImpossível casal mais perfeito que esse, tem que casar JÁ!!\n` ").append(Helper.round(love, 1)).append("% ").append(doneMeter).append("`");
 
-            eb.setImage(f.getAbsolutePath());
-
-            channel.sendMessage(eb.build()).queue();
+            channel.sendMessage(sb.toString()).queue();
         } catch (IOException e) {
             e.printStackTrace();
         }
