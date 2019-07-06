@@ -35,7 +35,7 @@ public class ShipCommand extends Command {
 			String doneMeter;
 			BufferedImage bi = new BufferedImage(256, 128, BufferedImage.TYPE_INT_RGB);
 			Graphics2D g2d = bi.createGraphics();
-			float love = 100 * new Random(Long.parseLong(message.getMentionedUsers().get(0).getId()) + Long.parseLong(message.getMentionedUsers().get(0).getId())).nextFloat();
+            float love = 100 * new Random(message.getMentionedUsers().get(0).getIdLong() + message.getMentionedUsers().get(1).getIdLong()).nextFloat();
 
 			for (int i = 0; i < Math.round(love / 10); i++) {
 				meter[i] = "|";
@@ -44,7 +44,7 @@ public class ShipCommand extends Command {
 			doneMeter = Arrays.toString(meter).replace(",", "").replace(" ", "");
 
 			g2d.drawImage(ImageIO.read(Helper.getImage(message.getMentionedUsers().get(0).getAvatarUrl())), null, 0, 0);
-			g2d.drawImage(ImageIO.read(Helper.getImage(message.getMentionedUsers().get(1).getAvatarUrl())), null, 129, 0);
+            g2d.drawImage(ImageIO.read(Helper.getImage(message.getMentionedUsers().get(1).getAvatarUrl())), null, 128, 0);
 
 			g2d.dispose();
 
@@ -72,8 +72,6 @@ public class ShipCommand extends Command {
 				case 10:
                     eb.setDescription("Impossível casal mais perfeito que esse, tem que casar JÁ!!\n` " + Helper.round(love, 1) + "% " + doneMeter + "`");
 					break;
-                default:
-                    eb.setDescription("Pode ate dar certo esse canal, mas vai precisar insistir!\n` " + Helper.round(love, 1) + "% " + doneMeter + "`");
 			}
 
 			channel.sendFile(baos.toByteArray(), "ship.jpg").embed(eb.build()).queue();
