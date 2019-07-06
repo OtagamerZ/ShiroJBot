@@ -2,7 +2,6 @@ package com.kuuhaku.command.commands.fun;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.model.Profile;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
@@ -10,6 +9,7 @@ import net.dv8tion.jda.core.events.Event;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -49,30 +49,31 @@ public class ShipCommand extends Command {
 			g2d.dispose();
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write(Profile.clipRoundEdges(bi), "png", baos);
+            ImageIO.write(clipRoundEdges(bi), "png", baos);
 
 			eb.setTitle(":heartpulse: Nível de love entre " + message.getMentionedUsers().get(0).getName() + " e " + message.getMentionedUsers().get(0).getName() + ":");
 			switch (Math.round(love)) {
 				case 0:
 				case 1:
-					eb.setDescription("Bem, esse casal jamais daria certo, hora de passar pra frente!\n`"+ doneMeter +"`");
+                    eb.setDescription("Bem, esse casal jamais daria certo, hora de passar pra frente!\n` " + Helper.round(love, 1) + "% " + doneMeter + "`");
 					break;
 				case 2:
 				case 3:
 				case 4:
-					eb.setDescription("Pode ate dar certo esse canal, mas vai precisar insistir!\n`"+ doneMeter +"`");
+                    eb.setDescription("Pode ate dar certo esse canal, mas vai precisar insistir!\n` " + Helper.round(love, 1) + "% " + doneMeter + "`");
 					break;
 				case 5:
 				case 6:
 				case 7:
-					eb.setDescription("Opa, ou eles já se conhecem, ou o destino sorriu pra eles!\n`"+ doneMeter +"`");
+                    eb.setDescription("Opa, ou eles já se conhecem, ou o destino sorriu pra eles!\n` " + Helper.round(love, 1) + "% " + doneMeter + "`");
 					break;
 				case 8:
 				case 9:
 				case 10:
-					eb.setDescription("Impossível casal mais perfeito que esse, tem que casar JÁ!!\n`"+ doneMeter +"`");
+                    eb.setDescription("Impossível casal mais perfeito que esse, tem que casar JÁ!!\n` " + Helper.round(love, 1) + "% " + doneMeter + "`");
 					break;
-				default: eb.setDescription("Pode ate dar certo esse canal, mas vai precisar insistir!\n`"+ doneMeter +"`");
+                default:
+                    eb.setDescription("Pode ate dar certo esse canal, mas vai precisar insistir!\n` " + Helper.round(love, 1) + "% " + doneMeter + "`");
 			}
 
 			channel.sendFile(baos.toByteArray(), "ship.jpg").embed(eb.build()).queue();
@@ -81,4 +82,14 @@ public class ShipCommand extends Command {
 		}
 	}
 
+    private static BufferedImage clipRoundEdges(BufferedImage image) {
+        BufferedImage bi = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = bi.createGraphics();
+
+        g2d.setClip(new RoundRectangle2D.Float(0, 0, bi.getWidth(), bi.getHeight(), 40, 40));
+        g2d.drawImage(image, null, 0, 0);
+        g2d.dispose();
+
+        return bi;
+    }
 }
