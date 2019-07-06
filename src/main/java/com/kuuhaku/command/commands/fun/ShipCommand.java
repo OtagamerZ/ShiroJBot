@@ -31,14 +31,14 @@ public class ShipCommand extends Command {
 
         try {
             EmbedBuilder eb = new EmbedBuilder();
-            String[] meter = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
+            String[] meter = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
             String doneMeter;
             BufferedImage bi = new BufferedImage(256, 128, BufferedImage.TYPE_INT_RGB);
             Graphics2D g2d = bi.createGraphics();
             float love = 100 * new Random(message.getMentionedUsers().get(0).getIdLong() + message.getMentionedUsers().get(1).getIdLong()).nextFloat();
 
-            for (int i = 0; i < Math.round(love / 10); i++) {
-                meter[i] = "|";
+            for (int i = 0; i < Math.round(love / 5); i++) {
+                meter[i] = "▉";
             }
 
             doneMeter = Arrays.toString(meter).replace(",", "").replace(" ", "");
@@ -71,7 +71,7 @@ public class ShipCommand extends Command {
         BufferedImage bi = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = bi.createGraphics();
 
-        g2d.setClip(new RoundRectangle2D.Float(0, 0, bi.getWidth(), bi.getHeight(), 40, 40));
+        g2d.setClip(new RoundRectangle2D.Float(0, 0, bi.getWidth(), bi.getHeight(), 20, 20));
         g2d.drawImage(image, null, 0, 0);
         g2d.dispose();
 
