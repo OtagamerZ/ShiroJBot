@@ -21,8 +21,13 @@ public class DuelCommand extends Command {
             return;
         } else if (message.getMentionedUsers().size() == 0) {
             channel.sendMessage(":x: | Você precisa mencionar um usuário.").queue();
+            return;
         } else if (MySQL.getBeybladeById(message.getMentionedUsers().get(0).getId()) == null) {
             channel.sendMessage(":x: | Este usuário não possui uma Beyblade.").queue();
+            return;
+        } else if (message.getMentionedUsers().get(0) == author) {
+            channel.sendMessage(":x: | Você não pode duelar contra você mesmo.").queue();
+            return;
         }
 
         channel.sendMessage(":hourglass: Coletando dados...").queue(m -> {
