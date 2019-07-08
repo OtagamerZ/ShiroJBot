@@ -47,10 +47,13 @@ public class SlotsCommand extends Command {
         }
 
         Beyblade bb = Objects.requireNonNull(MySQL.getBeybladeById(author.getId()));
-        final int[] aposta = {Integer.parseInt(args[0])};
         try {
+            final int[] aposta = {Integer.parseInt(args[0])};
             if (aposta[0] > bb.getPoints()) {
                 channel.sendMessage(":x: | Você não possui pontos de combate suficientes.").queue();
+                return;
+            } else if (aposta < 5) {
+                channel.sendMessage(":x: | Aposta muito baixa, o valor mínimo é 5.").queue();
                 return;
             }
             bb.takePoints(aposta[0]);
