@@ -53,7 +53,7 @@ public class SlotsCommand extends Command {
                 channel.sendMessage(":x: | Você não possui pontos de combate suficientes.").queue();
                 return;
             } else if (aposta[0] < 5) {
-                channel.sendMessage(":x: | Aposta muito baixa, o valor mínimo é 5.").queue();
+                channel.sendMessage(":x: | Aposta muito baixa, o valor mínimo são 5 pontos de combate.").queue();
                 return;
             }
             bb.takePoints(aposta[0]);
