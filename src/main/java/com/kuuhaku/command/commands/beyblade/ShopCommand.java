@@ -112,6 +112,7 @@ public class ShopCommand extends Command {
                         return;
                     }
                     changeName(args[1], channel, bb);
+                    break;
                 case "força":
                     upgradeStrength(channel, bb);
                     break;
