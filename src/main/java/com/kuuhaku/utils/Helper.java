@@ -240,8 +240,10 @@ public class Helper {
 					duel.getB2().setLife(duel.getB2().getLife() - damage);
 					Helper.log(Helper.class, LogLevel.DEBUG, damage + " -> " + duel.getB2().getLife());
 					event.getMessage().getChannel().sendMessage(duel.getB1().getName() + " ataca, agora é a vez de " + duel.getB2().getName()).queue();
-				} else
+				} else {
+					duel.setP1turn(false);
 					event.getMessage().getChannel().sendMessage(duel.getB1().getName() + " erra o ataque, agora é a vez de " + duel.getB2().getName()).queue();
+				}
 			} else if (!player1Turn && event.getMessage().getAuthor() == duel.getP2()) {
 				if (hit(duel.getB2().getSpeed(), duel.getB1().getStability())) {
 					duel.setP1turn(true);
@@ -251,8 +253,10 @@ public class Helper {
 					duel.getB1().setLife(duel.getB1().getLife() - damage);
 					Helper.log(Helper.class, LogLevel.DEBUG, damage + " -> " + duel.getB1().getLife());
 					event.getMessage().getChannel().sendMessage(duel.getB2().getName() + " ataca, agora é a vez de " + duel.getB1().getName()).queue();
-				} else
+				} else {
+					duel.setP1turn(true);
 					event.getMessage().getChannel().sendMessage(duel.getB2().getName() + " erra o ataque, agora é a vez de " + duel.getB1().getName()).queue();
+				}
 			}
 		} else if (event.getMessage().getContentRaw().equalsIgnoreCase("defender")) {
 			if (player1Turn && event.getMessage().getAuthor() == duel.getP1()) {
