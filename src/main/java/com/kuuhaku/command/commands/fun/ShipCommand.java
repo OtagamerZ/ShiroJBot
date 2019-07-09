@@ -3,6 +3,8 @@ package com.kuuhaku.command.commands.fun;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
+import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 
@@ -64,7 +66,16 @@ public class ShipCommand extends Command {
             else
                 sb.append("\n\nImpossível casal mais perfeito que esse, tem que casar JÁ!!\n` ").append(Helper.round(love, 1)).append("% ").append(doneMeter).append("`");
 
-            channel.sendMessage(sb.toString()).addFile(baos.toByteArray(), "ship.png").queue();
+            EmbedBuilder eb = new EmbedBuilder();
+            eb.setImage("attachment://ship.png");
+            eb.setDescription(sb.toString());
+            eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
+
+            MessageBuilder mb = new MessageBuilder();
+            mb.append(sb.toString());
+            mb.setEmbed(eb.build());
+
+            channel.sendFile(baos.toByteArray(), "ship.png", mb.build()).queue();
         } catch (IOException e) {
             e.printStackTrace();
         }
