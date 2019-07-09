@@ -56,15 +56,15 @@ public class ShipCommand extends Command {
             String n2 = message.getMentionedUsers().get(1).getName();
 
             sb.append(":heartpulse: ***Nível de love entre ").append(message.getMentionedUsers().get(0).getName()).append(" e ").append(message.getMentionedUsers().get(1).getName()).append(":***");
-            sb.append("\n\nNome de casal: `").append(n1, 0, n1.length() / 2).append(n2.substring(n2.length() / 2)).append("`");
+            sb.append("\n\nNome de casal: `").append(n1, 0, n1.length() / 2 + (n1.length() % 2)).append(n2.substring(n2.length() / 2 + (n1.length() % 2))).append("`");
             if (love <= 30)
-                sb.append("\n\nBem, esse casal jamais daria certo, hora de passar pra frente!\n").append(Helper.round(love, 1)).append("% `").append(doneMeter).append("`");
+                sb.append("\n\nBem, esse casal jamais daria certo, hora de passar pra frente!\n**").append(Helper.round(love, 1)).append("%** `").append(doneMeter).append("`");
             else if (love <= 50)
-                sb.append("\n\nPode ate dar certo esse casal, mas vai precisar insistir!\n").append(Helper.round(love, 1)).append("% `").append(doneMeter).append("`");
+                sb.append("\n\nPode ate dar certo esse casal, mas vai precisar insistir!\n**").append(Helper.round(love, 1)).append("%** `").append(doneMeter).append("`");
             else if (love <= 70)
-                sb.append("\n\nOpa, ou eles já se conhecem, ou o destino sorriu pra eles!\n").append(Helper.round(love, 1)).append("% `").append(doneMeter).append("`");
+                sb.append("\n\nOpa, ou eles já se conhecem, ou o destino sorriu pra eles!\n**").append(Helper.round(love, 1)).append("%** `").append(doneMeter).append("`");
             else
-                sb.append("\n\nImpossível casal mais perfeito que esse, tem que casar JÁ!!\n").append(Helper.round(love, 1)).append("% `").append(doneMeter).append("`");
+                sb.append("\n\nImpossível casal mais perfeito que esse, tem que casar JÁ!!\n**").append(Helper.round(love, 1)).append("%** `").append(doneMeter).append("`");
 
             EmbedBuilder eb = new EmbedBuilder();
             eb.setImage("attachment://ship.png");
