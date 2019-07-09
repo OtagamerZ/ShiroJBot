@@ -12,7 +12,6 @@ import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
-import net.dv8tion.jda.webhook.WebhookCluster;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -27,7 +26,6 @@ public class Relay extends SQLite {
 	private Map<String, String> relays = new HashMap<>();
 	private int relaySize;
 	private EmbedBuilder eb;
-	private WebhookCluster cluster = new WebhookCluster();
 
 	private void checkSize() {
 		if (relays.size() != relaySize) {
