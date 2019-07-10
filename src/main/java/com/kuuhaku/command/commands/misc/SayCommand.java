@@ -16,7 +16,7 @@ public class SayCommand extends Command {
 		
 		if(args.length == 0) { channel.sendMessage(":x: | Você precisa definir uma mensagem.").queue(); return; }
         
-		channel.sendMessage(rawCmd.replace(prefix, "").trim()).queue();
+		channel.sendMessage(String.join(" ", args)).queue();
 	}
 
 }
