@@ -133,7 +133,7 @@ public class Helper {
 
 	public static void sendReaction(MessageChannel channel, String message, InputStream is, boolean reacted) {
 		try {
-			BufferedImage bi = (BufferedImage) ImageIO.read(is).getScaledInstance(400, 224, Image.SCALE_DEFAULT);
+			BufferedImage bi = toBufferedImage(ImageIO.read(is).getScaledInstance(400, 224, Image.SCALE_DEFAULT));
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ImageIO.write(bi, "gif", baos);
 			if (reacted)
@@ -486,9 +486,26 @@ public class Helper {
 
 	public static Color reverseColor(Color c) {
 		float[] hsv = new float[3];
-		Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), hsv );
+		Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), hsv);
 		hsv[2] = (hsv[2] + 180) % 360;
 
-		return Color.getHSBColor( hsv[ 0 ], hsv[ 1 ], hsv[ 2 ] );
+		return Color.getHSBColor(hsv[0], hsv[1], hsv[2]);
+	}
+
+	public static BufferedImage toBufferedImage(Image img) {
+		if (img instanceof BufferedImage) {
+			return (BufferedImage) img;
+		}
+
+		// Create a buffered image with transparency
+		BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+		// Draw the image on to the buffered image
+		Graphics2D bGr = bimage.createGraphics();
+		bGr.drawImage(img, 0, 0, null);
+		bGr.dispose();
+
+		// Return the buffered image
+		return bimage;
 	}
 }
