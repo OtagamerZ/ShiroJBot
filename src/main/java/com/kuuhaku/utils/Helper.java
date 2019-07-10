@@ -137,7 +137,7 @@ public class Helper {
 		try {
 			HttpURLConnection con = (HttpURLConnection) new URL(imageURL).openConnection();
 			con.setRequestProperty("User-Agent", "Mozilla/5.0");
-			if (ImageIO.read(con.getInputStream()).getWidth() >= 500) {
+			if (ImageIO.read(con.getInputStream()).getWidth() >= 400) {
 				EmbedBuilder eb = new EmbedBuilder();
 				eb.setImage(imageURL);
 				if (reacted)
