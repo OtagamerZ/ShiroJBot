@@ -27,8 +27,6 @@ import net.dv8tion.jda.core.events.Event;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 public class ValidateGIFCommand extends Command {
 
@@ -44,10 +42,7 @@ public class ValidateGIFCommand extends Command {
 		}
 
 		try {
-			HttpURLConnection con = (HttpURLConnection) new URL(args[0]).openConnection();
-			con.setRequestProperty("User-Agent", "Mozilla/5.0");
-			BufferedImage bi = ImageIO.read(con.getInputStream());
-			con.disconnect();
+			BufferedImage bi = ImageIO.read(Helper.getImage(args[0]));
 
 			String w;
 			if (bi.getWidth() >= 500) w = "EXCELENTE";
@@ -66,7 +61,7 @@ public class ValidateGIFCommand extends Command {
 		} catch (IOException e) {
 			channel.sendMessage(":x: | O link da imagem não me parece correto.").queue();
 		} catch (NullPointerException npe) {
-			Helper.log(this.getClass(), LogLevel.ERROR, npe.toString());
+			Helper.log(this.getClass(), LogLevel.ERROR, String.valueOf(npe.getStackTrace()[0]));
 		}
 	}
 }
