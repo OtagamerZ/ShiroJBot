@@ -100,7 +100,15 @@ public class Helper {
 						+ "(([\\w\\-]+\\.)+?([\\w\\-.~]+/?)*"
 						+ "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]*$~@!:/{};']*?)",
 				Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
-		final Matcher msg = urlPattern.matcher(text);
+		text = text.replace("1", "i").replace("!", "i");
+		text = text.replace("3", "e");
+		text = text.replace("4", "a");
+		text = text.replace("5", "s");
+		text = text.replace("7", "t");
+		text = text.replace("0", "o");
+		text = text.replace(" ", "");
+
+		final Matcher msg = urlPattern.matcher(text.toLowerCase());
 		return msg.matches();
 	}
 
@@ -135,9 +143,7 @@ public class Helper {
 
 	public static void sendReaction(String imageURL, MessageChannel channel, String message, boolean reacted) {
 		try {
-			HttpURLConnection con = (HttpURLConnection) new URL(imageURL).openConnection();
-			con.setRequestProperty("User-Agent", "Mozilla/5.0");
-			if (ImageIO.read(con.getInputStream()).getWidth() >= 400) {
+			if (ImageIO.read(getImage(imageURL)).getWidth() >= 400) {
 				EmbedBuilder eb = new EmbedBuilder();
 				eb.setImage(imageURL);
 				if (reacted)
