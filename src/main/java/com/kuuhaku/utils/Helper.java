@@ -36,6 +36,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -134,9 +135,9 @@ public class Helper {
 
 	public static void sendReaction(MessageChannel channel, String message, InputStream is, boolean reacted) {
 		try {
-			BufferedImage bi = Profile.scaleImage(ImageIO.read(is), 400, 224);
+			Image i = ImageIO.read(is).getScaledInstance(400, 224, Image.SCALE_DEFAULT);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write(bi, "gif", baos);
+			ImageIO.write((RenderedImage) i, "gif", baos);
 			if (reacted)
 				channel.sendMessage(message).addFile(baos.toByteArray(), "reaction.gif").queue(m -> m.addReaction("\u21aa").queue());
 			else channel.sendMessage(message).addFile(baos.toByteArray(), "reaction.gif").queue();
