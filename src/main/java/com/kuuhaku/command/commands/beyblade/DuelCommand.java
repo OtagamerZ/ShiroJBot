@@ -25,12 +25,12 @@ public class DuelCommand extends Command {
         } else if (MySQL.getBeybladeById(message.getMentionedUsers().get(0).getId()) == null) {
             channel.sendMessage(":x: | Este usuário não possui uma Beyblade.").queue();
             return;
-        } else if (message.getMentionedUsers().get(0) == author) {
+        } else if (message.getMentionedUsers().get(0) == author && !author.getId().equals("282546525836541963")) {
             channel.sendMessage(":x: | Você não pode duelar contra você mesmo.").queue();
             return;
         }
 
-        channel.sendMessage(":hourglass: Coletando dados...").queue(m -> {
+        channel.sendMessage("<a:Loading:598500653215645697> Coletando dados...").queue(m -> {
             if (message.getMentionedUsers().size() > 0) {
                 if (MySQL.getBeybladeById(message.getMentionedUsers().get(0).getId()) != null) {
                     DuelData dd = new DuelData(message.getAuthor(), message.getMentionedUsers().get(0));

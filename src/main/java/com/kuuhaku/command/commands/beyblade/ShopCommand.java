@@ -76,7 +76,7 @@ public class ShopCommand extends Command {
             return;
         }
 
-        channel.sendMessage(":hourglass: Analizando...").queue(m -> {
+        channel.sendMessage("<a:Loading:598500653215645697> Analizando...").queue(m -> {
             Beyblade bb = Objects.requireNonNull(MySQL.getBeybladeById(author.getId()));
             String prefixo = SQLite.getGuildPrefix(guild.getId());
 
