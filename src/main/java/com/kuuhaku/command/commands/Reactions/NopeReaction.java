@@ -20,34 +20,22 @@ package com.kuuhaku.command.commands.Reactions;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.model.ReactionsList;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 public class NopeReaction extends Reaction {
-    public NopeReaction() {
-        super("nope", new String[]{"sqn", "hojenão", "esquiva"}, "Evita a tentativa de alguém.", Category.FUN);
-    }
+	public NopeReaction() {
+		super("nope", new String[]{"sqn", "hojenão", "esquiva"}, "Evita a tentativa de alguém.", Category.FUN);
+	}
 
-    @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-        try {
-            HttpURLConnection con = (HttpURLConnection) new URL(ReactionsList.nope()).openConnection();
-            con.setRequestProperty("User-Agent", "Mozilla/5.0");
+	@Override
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+		this.setReaction(new String[]{
+				"Hoje não!",
+				"Fluido como a água!",
+				"Ha ah, errou!"
+		});
 
-            this.setReaction(new String[]{
-                    "Hoje não!",
-                    "Fluido como a água!",
-                    "Ha ah, errou!"
-            });
-
-            Helper.sendReaction(channel, author.getAsMention() + " esquivou! - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), false);
-        } catch (IOException e) {
-            Helper.log(this.getClass(), LogLevel.ERROR, e.toString());
-        }
-    }
+		Helper.sendReaction(ReactionsList.nope(), channel, author.getAsMention() + " esquivou! - " + this.getReaction()[this.getReactionLength()], false);
+	}
 }

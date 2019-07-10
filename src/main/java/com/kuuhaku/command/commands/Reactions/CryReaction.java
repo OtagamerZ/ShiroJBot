@@ -20,13 +20,8 @@ package com.kuuhaku.command.commands.Reactions;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.model.ReactionsList;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
-
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 public class CryReaction extends Reaction {
     public CryReaction() {
@@ -35,19 +30,12 @@ public class CryReaction extends Reaction {
 
     @Override
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-        try {
-            HttpURLConnection con = (HttpURLConnection) new URL(ReactionsList.sad()).openConnection();
-            con.setRequestProperty("User-Agent", "Mozilla/5.0");
-
             this.setReaction(new String[]{
                     "Faça isso parar!",
                     "Sadboy feels.",
                     "Me deixa sozinho(a)."
             });
 
-            Helper.sendReaction(channel, author.getAsMention() + " está chorando! - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), false);
-        } catch (IOException e) {
-            Helper.log(this.getClass(), LogLevel.ERROR, e.toString());
-        }
+            Helper.sendReaction(ReactionsList.sad(), channel, author.getAsMention() + " está chorando! - " + this.getReaction()[this.getReactionLength()], false);
     }
 }

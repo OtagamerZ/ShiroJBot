@@ -20,34 +20,22 @@ package com.kuuhaku.command.commands.Reactions;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.model.ReactionsList;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 public class BlushReaction extends Reaction {
-    public BlushReaction() {
-        super("vergonha", new String[]{"n-nani", "blush", "pft"}, "Se envergonha.", Category.FUN);
-    }
+	public BlushReaction() {
+		super("vergonha", new String[]{"n-nani", "blush", "pft"}, "Se envergonha.", Category.FUN);
+	}
 
-    @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-        try {
-            HttpURLConnection con = (HttpURLConnection) new URL(ReactionsList.blush()).openConnection();
-            con.setRequestProperty("User-Agent", "Mozilla/5.0");
+	@Override
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+		this.setReaction(new String[]{
+				"Pft!",
+				"Ahhh que vergonha!",
+				"N-N-Nani?!"
+		});
 
-            this.setReaction(new String[]{
-                    "Pft!",
-                    "Ahhh que vergonha!",
-                    "N-N-Nani?!"
-            });
-
-            Helper.sendReaction(channel, author.getAsMention() + " está envergonhado(a)! - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), false);
-        } catch (IOException e) {
-            Helper.log(this.getClass(), LogLevel.ERROR, e.toString());
-        }
-    }
+		Helper.sendReaction(ReactionsList.blush(), channel, author.getAsMention() + " está envergonhado(a)! - " + this.getReaction()[this.getReactionLength()], false);
+	}
 }
