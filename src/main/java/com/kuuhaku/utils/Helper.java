@@ -22,7 +22,6 @@ import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.model.Beyblade;
 import com.kuuhaku.model.DuelData;
-import com.kuuhaku.model.Profile;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
@@ -36,7 +35,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -135,14 +133,13 @@ public class Helper {
 
 	public static void sendReaction(MessageChannel channel, String message, InputStream is, boolean reacted) {
 		try {
-			Image i = ImageIO.read(is).getScaledInstance(400, 224, Image.SCALE_DEFAULT);
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write((RenderedImage) i, "gif", baos);
-			if (reacted)
-				channel.sendMessage(message).addFile(baos.toByteArray(), "reaction.gif").queue(m -> m.addReaction("\u21aa").queue());
-			else channel.sendMessage(message).addFile(baos.toByteArray(), "reaction.gif").queue();
-		} catch (IOException e) {
-			log(Helper.class, LogLevel.ERROR, "Erro ao recuperar imagem ");
+			if (ImageIO.read(is).getWidth() >= 500) {
+				if (reacted)
+					channel.sendMessage(message).addFile(is, "reaction.gif").queue(m -> m.addReaction("\u21aa").queue());
+				else channel.sendMessage(message).addFile(is, "reaction.gif").queue();
+			}
+		} catch (Exception e) {
+			log(Helper.class, LogLevel.ERROR, "Erro ao carregar a imagem: " + e);
 		}
 	}
 
@@ -488,9 +485,9 @@ public class Helper {
 
 	public static Color reverseColor(Color c) {
 		float[] hsv = new float[3];
-		Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), hsv );
+		Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), hsv);
 		hsv[2] = (hsv[2] + 180) % 360;
 
-		return Color.getHSBColor( hsv[ 0 ], hsv[ 1 ], hsv[ 2 ] );
+		return Color.getHSBColor(hsv[0], hsv[1], hsv[2]);
 	}
 }
