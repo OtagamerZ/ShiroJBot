@@ -31,7 +31,7 @@ public class ImageCommand extends Command {
 
         String[] tag = String.join(" ", args).split(";");
 
-        channel.sendMessage(":hourglass_flowing_sand: Buscando imagem...").queue(m -> {
+        channel.sendMessage("<a:Loading:598500653215645697> Buscando imagem...").queue(m -> {
             try {
                 URL link = new URL("https://safebooru.org/index.php?page=dapi&s=post&q=index&json=1&limit=1&rating=safe&tags=" +
                         String.join("+", tag).replace(" ", "_"));

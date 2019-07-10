@@ -18,7 +18,7 @@ public class ProfileCommand extends Command {
 
     @Override
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-        channel.sendMessage(":hourglass_flowing_sand: Gerando perfil...").queue(m -> {
+        channel.sendMessage("<a:Loading:598500653215645697> Gerando perfil...").queue(m -> {
             try {
                 channel.sendMessage(":video_game: Perfil de " + author.getAsMention()).addFile(Profile.makeProfile(member, guild).toByteArray(), "perfil.png").queue(s -> m.delete().queue());
             } catch (IOException e) {
