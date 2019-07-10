@@ -30,7 +30,7 @@ public class StartCommand extends Command {
             return;
         }
 
-        channel.sendMessage(":hourglass: Gerando dados...").queue(m -> {
+        channel.sendMessage("<a:Loading:598500653215645697> Gerando dados...").queue(m -> {
             Beyblade bb = new Beyblade();
             bb.setId(author.getId());
             bb.setName(txt);

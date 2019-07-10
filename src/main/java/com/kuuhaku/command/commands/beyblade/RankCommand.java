@@ -22,7 +22,7 @@ public class RankCommand extends Command {
 
     @Override
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-        channel.sendMessage(":hourglass: Buscando dados...").queue(m -> {
+        channel.sendMessage("<a:Loading:598500653215645697> Buscando dados...").queue(m -> {
             List<Beyblade> rank = MySQL.getBeybladeList();
             assert rank != null;
             rank.sort(Comparator.comparing(Beyblade::getKDA));

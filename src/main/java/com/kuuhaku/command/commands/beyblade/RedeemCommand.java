@@ -16,7 +16,7 @@ public class RedeemCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-		channel.sendMessage(":hourglass: Buscando dados...").queue(m -> {
+		channel.sendMessage("<a:Loading:598500653215645697> Buscando dados...").queue(m -> {
 			Beyblade b = MySQL.getBeybladeById(author.getId());
 
 			if (b == null) {
