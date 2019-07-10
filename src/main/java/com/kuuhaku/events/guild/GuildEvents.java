@@ -122,7 +122,7 @@ public class GuildEvents extends ListenerAdapter {
             try {
                 CustomAnswers ca = SQLite.getCAByTrigger(rawMessage, guild.getId());
                 if (!Objects.requireNonNull(ca).isMarkForDelete() && author != Main.getInfo().getSelfUser())
-                    Helper.typeMessage(channel, Objects.requireNonNull(ca).getAnswer());
+                    Helper.typeMessage(channel, Objects.requireNonNull(ca).getAnswer().replace("%user%", author.getAsMention()).replace("%guild%", guild.getName()));
             } catch (NoResultException | NullPointerException ignore) {
             }
 
