@@ -20,7 +20,6 @@ package com.kuuhaku.command.commands.information;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 
@@ -61,7 +60,7 @@ public class ValidateGIFCommand extends Command {
 		} catch (IOException e) {
 			channel.sendMessage(":x: | O link da imagem não me parece correto.").queue();
 		} catch (NullPointerException npe) {
-			Helper.log(this.getClass(), LogLevel.ERROR, String.valueOf(npe.getStackTrace()[0]));
+			channel.sendMessage(":x: | Houve um erro ao recuperar dados da imagem (O site Tenor costuma retornar este erro).").queue();
 		}
 	}
 }
