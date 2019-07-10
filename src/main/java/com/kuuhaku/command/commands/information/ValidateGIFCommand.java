@@ -19,6 +19,8 @@ package com.kuuhaku.command.commands.information;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 
@@ -46,7 +48,6 @@ public class ValidateGIFCommand extends Command {
 			con.setRequestProperty("User-Agent", "Mozilla/5.0");
 			BufferedImage bi = ImageIO.read(con.getInputStream());
 			con.disconnect();
-			bi.flush();
 
 			String w;
 			if (bi.getWidth() >= 500) w = "EXCELENTE";
@@ -62,8 +63,10 @@ public class ValidateGIFCommand extends Command {
 			String s = "Propoções: " + bi.getWidth() + "x" + bi.getHeight() + "\nEssa GIF possui uma qualidade `" + w + "`x`" + h + "`!";
 
 			channel.sendMessage(s).queue();
-		} catch (IOException | NullPointerException e) {
+		} catch (IOException e) {
 			channel.sendMessage(":x: | O link da imagem não me parece correto.").queue();
+		} catch (NullPointerException npe) {
+			Helper.log(this.getClass(), LogLevel.ERROR, npe.toString());
 		}
 	}
 }
