@@ -51,7 +51,7 @@ public class URankCommand extends Command {
 			return;
 		}
 
-		channel.sendMessage(":hourglass: Buscando dados...").queue(m -> {
+		channel.sendMessage("<a:Loading:598500653215645697> Buscando dados...").queue(m -> {
 			EmbedBuilder eb = new EmbedBuilder();
 			StringBuilder sb = new StringBuilder();
 

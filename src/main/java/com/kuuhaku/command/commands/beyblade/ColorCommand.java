@@ -28,7 +28,7 @@ public class ColorCommand extends Command {
             return;
         }
 
-        channel.sendMessage(":hourglass: Analizando...").queue(m -> {
+        channel.sendMessage("<a:Loading:598500653215645697> Analizando...").queue(m -> {
             Beyblade bb = MySQL.getBeybladeById(author.getId());
             Objects.requireNonNull(bb).setColor(args[0]);
             MySQL.sendBeybladeToDB(bb);
