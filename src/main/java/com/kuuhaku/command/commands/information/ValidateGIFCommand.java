@@ -62,7 +62,7 @@ public class ValidateGIFCommand extends Command {
 			String s = "Propoções: " + bi.getWidth() + "x" + bi.getHeight() + "\nEssa GIF possui uma qualidade `" + w + "`x`" + h + "`!";
 
 			channel.sendMessage(s).queue();
-		} catch (IOException e) {
+		} catch (IOException | NullPointerException e) {
 			channel.sendMessage(":x: | O link da imagem não me parece correto.").queue();
 		}
 	}
