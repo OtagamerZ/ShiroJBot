@@ -148,8 +148,10 @@ public class Helper {
 				eb.setImage(imageURL);
 				if (reacted)
 					channel.sendMessage(message + "\n:warning: | GIF com proporções irregulares, os desenvolvedores já foram informados.").embed(eb.build()).queue(m -> m.addReaction("\u21aa").queue());
-				else channel.sendMessage(message + "\n:warning: | GIF com proporções irregulares, os desenvolvedores já foram informados.").embed(eb.build()).queue();
+				else
+					channel.sendMessage(message + "\n:warning: | GIF com proporções irregulares, os desenvolvedores já foram informados.").embed(eb.build()).queue();
 				log(ReactionsList.class, LogLevel.WARN, "GIF irregular: " + imageURL);
+				Main.getInfo().getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> c.sendMessage("GIF irregular: " + imageURL).queue()));
 			}
 		} catch (Exception e) {
 			log(Helper.class, LogLevel.ERROR, "Erro ao carregar a imagem: " + e);
