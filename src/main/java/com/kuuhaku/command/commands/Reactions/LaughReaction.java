@@ -20,34 +20,22 @@ package com.kuuhaku.command.commands.Reactions;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.model.ReactionsList;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 public class LaughReaction extends Reaction {
-    public LaughReaction() {
-        super("rir", new String[]{"kkk", "laugh", "aiai"}, "Ri.", Category.FUN);
-    }
+	public LaughReaction() {
+		super("rir", new String[]{"kkk", "laugh", "aiai"}, "Ri.", Category.FUN);
+	}
 
-    @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-        try {
-            HttpURLConnection con = (HttpURLConnection) new URL(ReactionsList.laugh()).openConnection();
-            con.setRequestProperty("User-Agent", "Mozilla/5.0");
+	@Override
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+		this.setReaction(new String[]{
+				"Kkkkkkkk!",
+				"Rsrsrsrs!",
+				"Asdjasdnlad."
+		});
 
-            this.setReaction(new String[]{
-                    "Kkkkkkkk!",
-                    "Rsrsrsrs!",
-                    "Asdjasdnlad."
-            });
-
-            Helper.sendReaction(channel, author.getAsMention() + " está rindo! - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), false);
-        } catch (IOException e) {
-            Helper.log(this.getClass(), LogLevel.ERROR, e.toString());
-        }
-    }
+		Helper.sendReaction(ReactionsList.laugh(), channel, author.getAsMention() + " está rindo! - " + this.getReaction()[this.getReactionLength()], false);
+	}
 }
