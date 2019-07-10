@@ -38,7 +38,6 @@ public class AlignmentCommand extends Command {
 		channel.sendMessage("<a:Loading:598500653215645697> Analizando...").queue(m -> {
 			Beyblade bb = Objects.requireNonNull(MySQL.getBeybladeById(author.getId()));
 
-			System.out.println(bb.getPoints());
 			if (bb.getPoints() >= (bb.getS() == null ? 150 : 300)) {
 				switch (args[1]) {
 					case "tigre":
