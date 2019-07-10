@@ -19,7 +19,6 @@ package com.kuuhaku.command.commands.information;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.SQLite;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 
@@ -49,12 +48,18 @@ public class ValidateGIFCommand extends Command {
 			con.disconnect();
 			bi.flush();
 
-			String q;
-			if (bi.getHeight() >= 280 && bi.getWidth() >= 500) q = "EXCELENTE";
-			else if (bi.getHeight() >= 230 && bi.getWidth() >= 400) q = "BOA";
-			else if (bi.getHeight() >= 180 && bi.getWidth() >= 300) q = "RUIM";
-			else q = "HORRÍVEL";
-			String s = "Propoções: " + bi.getWidth() + "x" + bi.getHeight() + "\nEssa GIF possui uma qualidade **" + q + "**!";
+			String w;
+			if (bi.getWidth() >= 500) w = "EXCELENTE";
+			else if (bi.getWidth() >= 400) w = "BOA";
+			else if (bi.getWidth() >= 300) w = "RUIM";
+			else w = "HORRÍVEL";
+
+			String h;
+			if (bi.getHeight() >= 220) h = "EXCELENTE";
+			else if (bi.getHeight() >= 200) h = "BOA";
+			else if (bi.getHeight() >= 180) h = "RUIM";
+			else h = "HORRÍVEL";
+			String s = "Propoções: " + bi.getWidth() + "x" + bi.getHeight() + "\nEssa GIF possui uma qualidade `" + w + "`x`" + h + "`!";
 
 			channel.sendMessage(s).queue();
 		} catch (IOException e) {
