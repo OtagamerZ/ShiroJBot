@@ -22,6 +22,7 @@ import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.model.Beyblade;
 import com.kuuhaku.model.DuelData;
+import com.kuuhaku.model.ReactionsList;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
@@ -142,7 +143,14 @@ public class Helper {
 				if (reacted)
 					channel.sendMessage(message).embed(eb.build()).queue(m -> m.addReaction("\u21aa").queue());
 				else channel.sendMessage(message).embed(eb.build()).queue();
-			} else System.out.println("GIF irregular: " + imageURL);
+			} else {
+				EmbedBuilder eb = new EmbedBuilder();
+				eb.setImage(imageURL);
+				if (reacted)
+					channel.sendMessage(message + "\n:warning: | GIF com proporções irregulares, os desenvolvedores já foram informados.").embed(eb.build()).queue(m -> m.addReaction("\u21aa").queue());
+				else channel.sendMessage(message + "\n:warning: | GIF com proporções irregulares, os desenvolvedores já foram informados.").embed(eb.build()).queue();
+				log(ReactionsList.class, LogLevel.WARN, "GIF irregular: " + imageURL);
+			}
 		} catch (Exception e) {
 			log(Helper.class, LogLevel.ERROR, "Erro ao carregar a imagem: " + e);
 		}
