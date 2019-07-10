@@ -77,59 +77,6 @@ public class Helper {
 		return bd.doubleValue();
 	}
 
-	public static File createOhNoImage(String text) throws IOException {
-		BufferedImage image = ImageIO.read(Objects.requireNonNull(Main.class.getClassLoader().getResourceAsStream("ohno.png")));
-
-		BufferedImage resultImg = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
-
-		Graphics2D w = (Graphics2D) resultImg.getGraphics();
-		w.drawImage(image, 0, 0, null);
-		AlphaComposite alphaChannel = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f);
-		w.setComposite(alphaChannel);
-		w.setColor(Color.BLACK);
-		w.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 23));
-
-		FontMetrics fontMetrics = w.getFontMetrics();
-		Rectangle2D rect = fontMetrics.getStringBounds(text, w);
-        
-        /*int centerX = (image.getWidth() - (int) rect.getWidth()) / 2;
-        int centerY = image.getHeight() / 2;*/
-
-		//21 - 123456789012345678901
-		StringBuilder sb = new StringBuilder();
-		int count = 0;
-		for (String str : text.split(" ")) {
-			if (count + str.length() > 21) {
-				sb.append("\n");
-				count = 0;
-				if (str.length() > 21) {
-					String newStr = str;
-					do {
-						sb.append(newStr, 0, 20).append("\n");
-						newStr = newStr.substring(21);
-					} while (newStr.length() > 21);
-					count = 0;
-					continue;
-				}
-			}
-			sb.append(str).append(" ");
-			count += str.length() + 1;
-		}
-		text = sb.toString().trim();
-		int lineN = 1;
-		for (String line : text.split("\n")) {
-			if (lineN > 4) break;
-			w.drawString(line, 344 + 3, (int) (22 + (rect.getHeight() * lineN)));
-			lineN++;
-		}
-
-		File result = new File(System.getProperty("user.dir") + "\\ohno-" + Instant.now().toEpochMilli() + ".png");
-		ImageIO.write(resultImg, "png", result);
-		w.dispose();
-
-		return result;
-	}
-
 	public static String downloadWebPage(String webpage) throws Exception {
 		URL url = new URL(webpage);
 		BufferedReader rdr = new BufferedReader(new InputStreamReader(url.openStream()));

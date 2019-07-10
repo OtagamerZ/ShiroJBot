@@ -21,7 +21,7 @@ public class AnimeCommand extends Command {
 
     @Override
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-        channel.sendMessage(":hourglass_flowing_sand: Buscando anime...").queue(m -> {
+        channel.sendMessage("<a:Loading:598500653215645697> Buscando anime...").queue(m -> {
             try {
                 String query = "{\n" +
                         "Media(search: \\\"" + String.join(" ", args) + "\\\", type: ANIME) {\n" +
