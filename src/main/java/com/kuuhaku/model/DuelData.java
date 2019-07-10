@@ -42,6 +42,7 @@ public class DuelData {
     private Beyblade b1, b2;
     transient private boolean d1, d2;
     transient private boolean s1, s2;
+    transient private int m1, m2;
     transient private boolean p1turn = true;
 
     public DuelData(User p1, User p2) {
@@ -105,5 +106,29 @@ public class DuelData {
 
     public void setS2(boolean s2) {
         this.s2 = s2;
+    }
+
+    public int getM1() {
+        return m1;
+    }
+
+    public void addM1() {
+        m1++;
+    }
+
+    public void clearM1() {
+        m1 = 1;
+    }
+
+    public int getM2() {
+        return m2;
+    }
+
+    public void addM2() {
+        m2++;
+    }
+
+    public void clearM2() {
+        m2 = 1;
     }
 }

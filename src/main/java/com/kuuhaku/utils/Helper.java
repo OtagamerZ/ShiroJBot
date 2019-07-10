@@ -180,8 +180,8 @@ public class Helper {
 		}
 	}
 
-	private static boolean hit(float speed, float stability) {
-		return (new Random().nextFloat() * 100) > ((speed * 100) / (stability * 2));
+	private static boolean hit(float speed, float stability, int modifier) {
+		return (new Random().nextFloat() * 100) > ((speed * 100) / (stability * 2)) / modifier;
 	}
 
 	public static int rng(int maxValue) {
@@ -206,7 +206,7 @@ public class Helper {
 
 		if (event.getMessage().getContentRaw().equalsIgnoreCase("atacar")) {
 			if (player1Turn && event.getMessage().getAuthor() == duel.getP1()) {
-				if (hit(duel.getB1().getSpeed(), duel.getB2().getStability())) {
+				if (hit(duel.getB1().getSpeed(), duel.getB2().getStability(), duel.getM2())) {
 					duel.setP1turn(false);
 					duel.setD1(false);
 					if (duel.getB2().getS() != null) duel.getB2().getS().setBear(false);
@@ -214,12 +214,14 @@ public class Helper {
 					duel.getB2().setLife(duel.getB2().getLife() - damage);
 					Helper.log(Helper.class, LogLevel.DEBUG, damage + " -> " + duel.getB2().getLife());
 					event.getMessage().getChannel().sendMessage(duel.getB1().getName() + " ataca, agora é a vez de " + duel.getB2().getName()).queue();
+					duel.clearM2();
 				} else {
 					duel.setP1turn(false);
-					event.getMessage().getChannel().sendMessage(duel.getB1().getName() + " erra o ataque, agora é a vez de " + duel.getB2().getName()).queue();
+					duel.addM2();
+					event.getMessage().getChannel().sendMessage(duel.getB1().getName() + " erra o ataque (" + Helper.round((duel.getB1().getSpeed() * 100) / (duel.getB2().getStability() * 2) / duel.getM2(), 1) + "% de chance), agora é a vez de " + duel.getB2().getName()).queue();
 				}
 			} else if (!player1Turn && event.getMessage().getAuthor() == duel.getP2()) {
-				if (hit(duel.getB2().getSpeed(), duel.getB1().getStability())) {
+				if (hit(duel.getB2().getSpeed(), duel.getB1().getStability(), duel.getM1())) {
 					duel.setP1turn(true);
 					duel.setD2(false);
 					if (duel.getB1().getS() != null) duel.getB1().getS().setBear(false);
@@ -227,9 +229,11 @@ public class Helper {
 					duel.getB1().setLife(duel.getB1().getLife() - damage);
 					Helper.log(Helper.class, LogLevel.DEBUG, damage + " -> " + duel.getB1().getLife());
 					event.getMessage().getChannel().sendMessage(duel.getB2().getName() + " ataca, agora é a vez de " + duel.getB1().getName()).queue();
+					duel.clearM1();
 				} else {
 					duel.setP1turn(true);
-					event.getMessage().getChannel().sendMessage(duel.getB2().getName() + " erra o ataque, agora é a vez de " + duel.getB1().getName()).queue();
+					duel.addM1();
+					event.getMessage().getChannel().sendMessage(duel.getB2().getName() + " erra o ataque (" + Helper.round((duel.getB2().getSpeed() * 100) / (duel.getB1().getStability() * 2) / duel.getM1(), 1) + "), agora é a vez de " + duel.getB1().getName()).queue();
 				}
 			}
 		} else if (event.getMessage().getContentRaw().equalsIgnoreCase("defender")) {
@@ -434,8 +438,15 @@ public class Helper {
 			MySQL.sendBeybladeToDB(bb);
 			JDAEvents.dd.removeIf(d -> d.getP1() == event.getMessage().getAuthor() || d.getP2() == event.getMessage().getAuthor());
 		} else if (event.getMessage().getContentRaw().equalsIgnoreCase("atacar") || event.getMessage().getContentRaw().equalsIgnoreCase("especial") || event.getMessage().getContentRaw().equalsIgnoreCase("defender")) {
+			if (event.getMessage().getAuthor() == duel.getP1() && !player1Turn) {
+				event.getMessage().getChannel().sendMessage("Ainda não é seu turno " + event.getMessage().getAuthor().getAsMention() + ", por favor aguarde seu oponente agir.").queue();
+				return;
+			} else if (event.getMessage().getAuthor() == duel.getP2() && player1Turn) {
+				event.getMessage().getChannel().sendMessage("Ainda não é seu turno " + event.getMessage().getAuthor().getAsMention() + ", por favor aguarde seu oponente agir.").queue();
+				return;
+			}
 			eb.setTitle("Dados do duelo:");
-			eb.setColor(Color.decode(player1Turn ? duel.getB1().getColor() : duel.getB2().getColor()));
+			eb.setColor(Color.decode(!player1Turn ? duel.getB1().getColor() : duel.getB2().getColor()));
 			eb.setDescription("**" + duel.getB1().getName() + "** :vs: **" + duel.getB2().getName() + "**");
 			eb.addField(duel.getB1().getName(), "Vida: " + duel.getB1().getLife() + "\n\nForça: " + duel.getB1().getStrength() + "\nVelocidade: " + duel.getB1().getSpeed() + "\nEstabilidade: " + duel.getB1().getStability() + "\nTipo: " + (duel.getB1().getS() == null ? "Não possui" : duel.getB1().getS().getType()), true);
 			eb.addField(duel.getB2().getName(), "Vida: " + duel.getB2().getLife() + "\n\nForça: " + duel.getB2().getStrength() + "\nVelocidade: " + duel.getB2().getSpeed() + "\nEstabilidade: " + duel.getB2().getStability() + "\nTipo: " + (duel.getB2().getS() == null ? "Não possui" : duel.getB2().getS().getType()), true);
