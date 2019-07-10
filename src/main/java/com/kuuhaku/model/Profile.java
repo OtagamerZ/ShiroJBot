@@ -212,7 +212,7 @@ public class Profile {
 		}
 	}
 
-	private static BufferedImage scaleImage(BufferedImage image, int w, int h) {
+	public static BufferedImage scaleImage(BufferedImage image, int w, int h) {
 
 		// Make sure the aspect ratio is maintained, so the image is not distorted
 		double thumbRatio = (double) w / (double) h;
