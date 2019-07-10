@@ -83,6 +83,7 @@ public class CommandManager {
             add(new CustomAnswerCommand());
             add(new AnimeCommand());
             add(new ImageCommand());
+            add(new ValidateGIFCommand());
 
             //FUN
             add(new SadButTrueCommand());
