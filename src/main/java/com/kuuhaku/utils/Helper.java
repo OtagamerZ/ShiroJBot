@@ -132,9 +132,16 @@ public class Helper {
 	}
 
 	public static void sendReaction(MessageChannel channel, String message, InputStream is, boolean reacted) {
-		if (reacted)
-			channel.sendMessage(message).addFile(is, "reaction.gif").queue(m -> m.addReaction("\u21aa").queue());
-		else channel.sendMessage(message).addFile(is, "reaction.gif").queue();
+		try {
+			BufferedImage bi = (BufferedImage) ImageIO.read(is).getScaledInstance(400, 224, Image.SCALE_DEFAULT);
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ImageIO.write(bi, "gif", baos);
+			if (reacted)
+				channel.sendMessage(message).addFile(baos.toByteArray(), "reaction.gif").queue(m -> m.addReaction("\u21aa").queue());
+			else channel.sendMessage(message).addFile(baos.toByteArray(), "reaction.gif").queue();
+		} catch (IOException e) {
+			log(Helper.class, LogLevel.ERROR, "Erro ao recuperar imagem ");
+		}
 	}
 
 	private static float getDefFac(boolean defending, Beyblade b) {
