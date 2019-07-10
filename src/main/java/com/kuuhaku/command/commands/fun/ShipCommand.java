@@ -52,11 +52,11 @@ public class ShipCommand extends Command {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(clipRoundEdges(bi), "png", baos);
 
-            String n1 = message.getMentionedUsers().get(0).getName();
-            String n2 = message.getMentionedUsers().get(1).getName();
+            String n1 = message.getMentionedMembers().get(0).getEffectiveName();
+            String n2 = message.getMentionedMembers().get(1).getEffectiveName();
 
             sb.append(":heartpulse: ***Nível de love entre ").append(message.getMentionedUsers().get(0).getName()).append(" e ").append(message.getMentionedUsers().get(1).getName()).append(":***");
-            sb.append("\n\nNome de casal: `").append(n1, 0, n1.length() / 2 + (n1.length() % 2)).append(n2.substring(n2.length() / 2 + (n1.length() % 2))).append("`");
+            sb.append("\n\nNome de casal: `").append(n1, 0, n1.length() / 2 + (n1.length() % 2)).append(n2.substring(n2.length() / 2 - (n1.length() % 2))).append("`");
             if (love <= 30)
                 sb.append("\n\nBem, esse casal jamais daria certo, hora de passar pra frente!\n**").append(Helper.round(love, 1)).append("%** `").append(doneMeter).append("`");
             else if (love <= 50)

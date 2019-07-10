@@ -88,7 +88,6 @@ public class CommandManager {
             add(new SadButTrueCommand());
             add(new HardDecisionCommand());
             add(new ExpandingBrainCommand());
-            add(new OhNoCommand());
             add(new PPTCommand());
             add(new ShipCommand());
             //REAÇÕES
