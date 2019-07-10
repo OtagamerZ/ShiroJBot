@@ -33,14 +33,15 @@ import org.apache.logging.log4j.Logger;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -131,13 +132,17 @@ public class Helper {
 		channel.sendTyping().queue(tm -> channel.sendMessage(message).queueAfter(message.length() * 25 > 10000 ? 10000 : message.length(), TimeUnit.MILLISECONDS));
 	}
 
-	public static void sendReaction(MessageChannel channel, String message, InputStream is, boolean reacted) {
+	public static void sendReaction(String imageURL, MessageChannel channel, String message, boolean reacted) {
 		try {
-			if (ImageIO.read(is).getWidth() >= 500) {
+			HttpURLConnection con = (HttpURLConnection) new URL(imageURL).openConnection();
+			con.setRequestProperty("User-Agent", "Mozilla/5.0");
+			if (ImageIO.read(con.getInputStream()).getWidth() >= 500) {
+				EmbedBuilder eb = new EmbedBuilder();
+				eb.setImage(imageURL);
 				if (reacted)
-					channel.sendMessage(message).addFile(is, "reaction.gif").queue(m -> m.addReaction("\u21aa").queue());
-				else channel.sendMessage(message).addFile(is, "reaction.gif").queue();
-			}
+					channel.sendMessage(message).embed(eb.build()).queue(m -> m.addReaction("\u21aa").queue());
+				else channel.sendMessage(message).embed(eb.build()).queue();
+			} else System.out.println("GIF irregular: " + imageURL);
 		} catch (Exception e) {
 			log(Helper.class, LogLevel.ERROR, "Erro ao carregar a imagem: " + e);
 		}

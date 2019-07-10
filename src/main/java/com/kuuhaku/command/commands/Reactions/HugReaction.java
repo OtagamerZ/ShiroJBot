@@ -21,58 +21,46 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.model.ReactionsList;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 public class HugReaction extends Reaction {
-    private static boolean answer = false;
+	private static boolean answer = false;
 
-    public HugReaction(boolean isAnswer) {
-        super("abraçar", new String[]{"abracar", "hug", "vemca"}, "Abraça alguém.", Category.FUN);
-        answer = isAnswer;
-    }
+	public HugReaction(boolean isAnswer) {
+		super("abraçar", new String[]{"abracar", "hug", "vemca"}, "Abraça alguém.", Category.FUN);
+		answer = isAnswer;
+	}
 
-    private static boolean isAnswer() {
-        return answer;
-    }
+	private static boolean isAnswer() {
+		return answer;
+	}
 
-    @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-        try {
-            if (message.getMentionedUsers().size() > 0) {
-                HttpURLConnection con = (HttpURLConnection) new URL(ReactionsList.hug()).openConnection();
-                con.setRequestProperty("User-Agent", "Mozilla/5.0");
+	@Override
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+		if (message.getMentionedUsers().size() > 0) {
+			this.setReaction(new String[]{
+					"Awnn...ai qualquer um shippa!",
+					"Ai sim ein, vai pra cima garoto(a)!",
+			});
 
-                this.setReaction(new String[]{
-                        "Awnn...ai qualquer um shippa!",
-                        "Ai sim ein, vai pra cima garoto(a)!",
-                });
+			this.setSelfTarget(new String[]{
+					"Ow ow ow, sem pegação!",
+					"Meu Nii-chan vai ficar bravo com isso!",
+					"Moshi moshi, FBI-sama?"
+			});
 
-                this.setSelfTarget(new String[]{
-                        "Ow ow ow, sem pegação!",
-                        "Meu Nii-chan vai ficar bravo com isso!",
-                        "Moshi moshi, FBI-sama?"
-                });
+			if (message.getMentionedUsers().get(0) == Main.getInfo().getAPI().getSelfUser()) {
+				Helper.sendReaction(ReactionsList.hug(), channel, author.getAsMention() + " tentou abraçar a " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget()[this.getSelfTargetLength()], false);
+				return;
+			}
 
-                if (message.getMentionedUsers().get(0) == Main.getInfo().getAPI().getSelfUser()) {
-                    Helper.sendReaction(channel, author.getAsMention() + " tentou abraçar a " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget()[this.getSelfTargetLength()], con.getInputStream(), false);
-                    return;
-                }
-
-                if (!isAnswer())
-                    Helper.sendReaction(channel, author.getAsMention() + " abraçou " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), true);
-                else
-                    Helper.sendReaction(channel, message.getMentionedUsers().get(0).getAsMention() + " devolveu o abraço de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], con.getInputStream(), false);
-            } else {
-                Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para abraçar!");
-            }
-        } catch (IOException e) {
-            Helper.log(this.getClass(), LogLevel.ERROR, e.toString());
-        }
-    }
+			if (!isAnswer())
+				Helper.sendReaction(ReactionsList.hug(), channel, author.getAsMention() + " abraçou " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], true);
+			else
+				Helper.sendReaction(ReactionsList.hug(), channel, message.getMentionedUsers().get(0).getAsMention() + " devolveu o abraço de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], false);
+		} else {
+			Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para abraçar!");
+		}
+	}
 }
