@@ -18,7 +18,7 @@ import java.util.List;
 public class EmoteListCommand extends Command {
 
 	public EmoteListCommand() {
-		super("fale", "<gatilho>;<resposta>", "Configura uma resposta para o gatilho (frase) especificado.", Category.MISC);
+		super("emotes", "<pagina/nome>", "Mostra a list de emotes disponíveis para uso através da Shiro/Jibril.", Category.MISC);
 	}
 
 	@Override
