@@ -704,10 +704,7 @@ public class SQLite {
 		guildConfig gc = (guildConfig) q.getSingleResult();
 		em.close();
 
-		List<String> list = new ArrayList<>();
-		Collections.addAll(list, gc.getNoLinkChannels());
-
-		return list;
+		return gc.getNoLinkChannels();
 	}
 
 	public static void updateGuildNoLinkChannels(guildConfig gc) {
