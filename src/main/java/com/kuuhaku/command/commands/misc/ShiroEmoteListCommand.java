@@ -40,6 +40,7 @@ public class ShiroEmoteListCommand extends Command {
 				Main.getInfo().getAPI().getEmotes().forEach(e -> f.add(new MessageEmbed.Field("Emote " + e.getAsMention(), "Menção: " + e.getAsMention().replace("<", "`{").replace(">", "}`").replace(":", "&"), false)));
 				List<MessageEmbed.Field> subF = f.subList(-10 + (10 * page), 10 * page > f.size() ? f.size() - 1 : 10 * page);
 				subF.forEach(eb::addField);
+				eb.setAuthor("Para usar estes emotes, utilize o comando `" + SQLite.getGuildPrefix(guild.getId()) + "say MENÇÃO`");
 				eb.setFooter("Página " + page + ". Mostrando " + (-10 + 10 * page) + " - " + (10 * page > f.size() ? f.size() - 1 : 10 * page) + " resultados.", null);
 
 				channel.sendMessage(eb.build()).queue();
