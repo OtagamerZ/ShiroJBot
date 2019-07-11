@@ -37,14 +37,14 @@ public class EmoteListCommand extends Command {
 				eb.setTitle("<a:SmugDance:598842924725305344> Emotes disponíveis:");
 				eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
 
-				Main.getInfo().getAPI().getEmotes().forEach(e -> f.add(new MessageEmbed.Field("Emote " + e.getAsMention(), "Menção: \\" + e.getAsMention(), false)));
+				Main.getInfo().getAPI().getEmotes().forEach(e -> f.add(new MessageEmbed.Field("Emote " + e.getAsMention(), "Menção: " + e.getAsMention().replace("<", "{").replace(">", "}"), false)));
 				List<MessageEmbed.Field> subF = f.subList(-10 + (10 * page), 10 * page > f.size() ? f.size() - 1 : 10 * page);
 				subF.forEach(eb::addField);
 				eb.setFooter("Página " + page + ". Mostrando " + (-10 + 10 * page) + " - " + (10 * page > f.size() ? f.size() - 1 : 10 * page) + " resultados.", null);
 
 				channel.sendMessage(eb.build()).queue();
-			} catch (IndexOutOfBoundsException ex) {
-				channel.sendMessage(":x: | Página inválida, no total existem `" + Main.getInfo().getAPI().getEmotes().size() + "` páginas de emotes.").queue();
+			} catch (IndexOutOfBoundsException | IllegalArgumentException ex) {
+				channel.sendMessage(":x: | Página inválida, no total existem `" + Main.getInfo().getAPI().getEmotes().size() / 10 + "` páginas de emotes.").queue();
 			}
 		}
 	}
