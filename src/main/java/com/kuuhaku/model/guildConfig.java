@@ -215,7 +215,9 @@ public class guildConfig {
 
     public ArrayList<String> getNoLinkChannels() {
         try {
-            return new ArrayList<>(Arrays.asList(noLinkChannels.replace("[", "").replace("]", "").split(",")));
+            ArrayList<String> l = new ArrayList<>(Arrays.asList(noLinkChannels.replace("[", "").replace("]", "").split(",")));
+            l.removeIf(String::isEmpty);
+            return l;
         } catch (NullPointerException e) {
             return new ArrayList<>();
         }
