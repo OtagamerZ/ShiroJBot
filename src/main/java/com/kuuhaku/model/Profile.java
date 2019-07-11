@@ -203,7 +203,7 @@ public class Profile {
 					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/married.png"))));
 				}
 				g2d.setFont(new Font(FONT.getName(), Font.PLAIN, 30));
-				g2d.drawString("Casado(a) com: " + Main.getInfo().getUserByID(SQLite.getMemberById(m.getUser().getId() + s.getId()).getWaifu()), 272, 298);
+				g2d.drawString("Casado(a) com: " + Main.getInfo().getUserByID(SQLite.getMemberById(m.getUser().getId() + s.getId()).getWaifu()).getName(), 272, 298);
 			} catch (NoResultException ignore) {
 			}
 		}};
