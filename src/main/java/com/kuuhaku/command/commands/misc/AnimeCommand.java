@@ -21,7 +21,7 @@ public class AnimeCommand extends Command {
 
     @Override
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-        if (args.length == 0) {
+        if (args.length < 1) {
             channel.sendMessage(":x: | Você precisa digitar um nome para pesquisar.").queue();
             return;
         }
