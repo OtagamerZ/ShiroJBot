@@ -45,6 +45,7 @@ public class GuildEvents extends ListenerAdapter {
     @Override//removeGuildFromDB
     public void onGuildJoin(GuildJoinEvent event) {
         SQLite.addGuildToDB(event.getGuild());
+        Main.getInfo().getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> c.sendMessage("Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".").queue()));
         Helper.log(this.getClass(), LogLevel.INFO, "Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".");
     }
 
@@ -53,6 +54,7 @@ public class GuildEvents extends ListenerAdapter {
         guildConfig gc = new guildConfig();
         gc.setGuildId(event.getGuild().getId());
         SQLite.removeGuildFromDB(gc);
+        Main.getInfo().getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> c.sendMessage("Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".").queue()));
         Helper.log(this.getClass(), LogLevel.INFO, "Acabei de sair do servidor \"" + event.getGuild().getName() + "\".");
     }
 
