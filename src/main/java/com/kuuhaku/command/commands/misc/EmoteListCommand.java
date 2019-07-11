@@ -43,7 +43,7 @@ public class EmoteListCommand extends Command {
 
 				channel.sendMessage(eb.build()).queue();
 			} catch (ArrayIndexOutOfBoundsException ex) {
-				channel.sendMessage(":x: | Você precisa definir uma página.").queue();
+				channel.sendMessage(":x: | Página inválida, no total existem `" + Main.getInfo().getAPI().getEmotes().size() + "` páginas de emotes.").queue();
 			}
 		}
 	}
