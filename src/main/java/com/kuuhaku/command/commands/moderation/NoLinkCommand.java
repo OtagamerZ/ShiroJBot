@@ -34,11 +34,13 @@ public class NoLinkCommand extends Command {
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
         guildConfig gc = SQLite.getGuildById(guild.getId());
 
-        if (SQLite.getGuildNoLinkChannels(gc.getGuildID()).contains(message.getTextChannel().getId())) gc.removeNoLinkChannel(message.getTextChannel());
+        if (SQLite.getGuildNoLinkChannels(gc.getGuildID()).contains(channel.getId())) gc.removeNoLinkChannel(message.getTextChannel());
         else gc.addNoLinkChannel(message.getTextChannel());
 
         SQLite.updateGuildNoLinkChannels(gc);
+        System.out.println(gc.getNoLinkChannels().toString());
 
         channel.sendMessage("Agora os links neste canal estão " + (SQLite.getGuildNoLinkChannels(gc.getGuildID()).contains(channel.getId()) ? "**bloqueados**" : "**liberados**")).queue();
+        System.out.println(SQLite.getGuildNoLinkChannels(gc.getGuildID()).toString());
     }
 }
