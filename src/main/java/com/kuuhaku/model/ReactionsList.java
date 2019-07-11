@@ -71,7 +71,6 @@ public class ReactionsList {
                 "https://i.imgur.com/OUVVkmW.gif",
                 "https://i.imgur.com/NbzUx0P.gif",
                 "https://i.imgur.com/BpFbc2t.gif",
-                "https://i.imgur.com/c0Uhdb0.gif",
                 "https://i.imgur.com/VH8m3sk.gif"
         };
         return url[Helper.rng(url.length)];
