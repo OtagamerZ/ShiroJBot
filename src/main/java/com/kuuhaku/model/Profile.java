@@ -137,6 +137,7 @@ public class Profile {
 		g2d.setFont(new Font(FONT.getName(), Font.PLAIN, 30));
 		printCenteredString("Rank: #" + pos + "/#" + posG, 196, 52, 585, g2d);
 
+
 		g2d.setFont(new Font("DejaVu Sans", Font.BOLD, 25));
 		String s = SQLite.getMemberById(m.getUser().getId() + g.getId()).getBio();
 		drawStringMultiLine(g2d, s, 440, 474, 403);
@@ -195,6 +196,14 @@ public class Profile {
 			try {
 				if (MySQL.getTagById(m.getUser().getId()).isToxic())
 					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/toxic.png"))));
+			} catch (NoResultException ignore) {
+			}
+			try {
+				if (!SQLite.getMemberById(m.getUser().getId() + s.getId()).getWaifu().isEmpty()) {
+					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/married.png"))));
+				}
+				g2d.setFont(new Font(FONT.getName(), Font.PLAIN, 30));
+				g2d.drawString("Casado(a) com: " + Main.getInfo().getUserByID(SQLite.getMemberById(m.getUser().getId() + s.getId()).getWaifu()), 272, 298);
 			} catch (NoResultException ignore) {
 			}
 		}};
