@@ -94,7 +94,6 @@ public class Profile {
 			g2d.drawLine(268 + (177 / 3 * i), 370, 268 + (177 / 3 * i), 547);
 			g2d.drawLine(268, 370 + (177 / 3 * i), 445, 370 + (177 / 3 * i));
 		}
-		drawBadges(m, g, g2d);
 
 		int luma = ((int) Math.round(0.2126 * main.getRed() + 0.7152 * main.getGreen() + 0.0722 * main.getBlue()));
 		if (luma >= 128) g2d.setColor(Color.BLACK);
@@ -141,6 +140,8 @@ public class Profile {
 		g2d.setFont(new Font("DejaVu Sans", Font.BOLD, 25));
 		String s = SQLite.getMemberById(m.getUser().getId() + g.getId()).getBio();
 		drawStringMultiLine(g2d, s, 440, 474, 403);
+
+		drawBadges(m, g, g2d);
 
 		g2d.setClip(new Ellipse2D.Float(50, 200, avatar.getWidth(), avatar.getHeight()));
 		g2d.fillOval(50, 200, avatar.getWidth(), avatar.getHeight());
@@ -202,7 +203,7 @@ public class Profile {
 				if (!SQLite.getMemberById(m.getUser().getId() + s.getId()).getWaifu().isEmpty()) {
 					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/married.png"))));
 					g2d.setFont(new Font(FONT.getName(), Font.PLAIN, 30));
-					g2d.drawString("Casado(a) com: " + Main.getInfo().getUserByID(SQLite.getMemberById(m.getUser().getId() + s.getId()).getWaifu()).getName(), 272, 298);
+					g2d.drawString("Casado(a) com: " + Main.getInfo().getUserByID(SQLite.getMemberById(m.getUser().getId() + s.getId()).getWaifu()).getName(), 270, 298);
 				}
 			} catch (NoResultException ignore) {
 			}
