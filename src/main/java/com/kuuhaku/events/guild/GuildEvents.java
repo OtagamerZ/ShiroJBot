@@ -167,8 +167,8 @@ public class GuildEvents extends ListenerAdapter {
 					switch (message.getContentRaw().toLowerCase()) {
 						case "sim":
 							channel.sendMessage("Eu os declaro husbando e waifu, pode trancar ela no porão agora!").queue();
-							SQLite.saveMemberWaifu(SQLite.getMemberById(hw[0][0].getId()), hw[0][1]);
-							SQLite.saveMemberWaifu(SQLite.getMemberById(hw[0][1].getId()), hw[0][0]);
+							SQLite.saveMemberWaifu(SQLite.getMemberById(hw[0][0].getId() + guild.getId()), hw[0][1]);
+							SQLite.saveMemberWaifu(SQLite.getMemberById(hw[0][1].getId() + guild.getId()), hw[0][0]);
 							Helper.queue.removeIf(u -> u[0].getId().equals(author.getId()) || u[1].getId().equals(author.getId()));
 							break;
 						case "não":
