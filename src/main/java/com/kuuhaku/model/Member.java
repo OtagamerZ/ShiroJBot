@@ -123,6 +123,7 @@ public class Member {
 	}
 
 	public String getWaifu() {
+		if (waifu == null) waifu = "";
 		return waifu;
 	}
 
