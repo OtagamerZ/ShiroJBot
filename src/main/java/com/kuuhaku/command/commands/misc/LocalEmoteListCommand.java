@@ -14,10 +14,10 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JibrilEmoteListCommand extends Command {
+public class LocalEmoteListCommand extends Command {
 
-	public JibrilEmoteListCommand() {
-		super("jemotes", "<pagina/nome>", "Mostra a lista de emotes disponíveis para uso através da Jibril.", Category.PARTNER);
+	public LocalEmoteListCommand() {
+		super("emotes", "Mostra a lista de emotes disponíveis no servidor em que o comando foi executado.", Category.MISC);
 	}
 
 	@Override
@@ -32,18 +32,18 @@ public class JibrilEmoteListCommand extends Command {
 				int page = Integer.parseInt(args[0]);
 				EmbedBuilder eb = new EmbedBuilder();
 
-				eb.setTitle("<a:SmugDance:598842924725305344> Emotes disponíveis para a Jibril:");
+				eb.setTitle("<a:SmugDance:598842924725305344> Emotes disponíveis neste servidor:");
 				eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
 
-				Main.getJibril().getEmotes().forEach(e -> f.add(new MessageEmbed.Field("Emote " + e.getAsMention(), "Menção: " + e.getAsMention().replace("<", "`{").replace(">", "}`").replace(":", "&"), false)));
+				guild.getEmotes().forEach(e -> f.add(new MessageEmbed.Field("Emote " + e.getAsMention(), "Menção: " + e.getAsMention().replace("<", "`{").replace(">", "}`").replace(":", "&"), false)));
 				List<MessageEmbed.Field> subF = f.subList(-10 + (10 * page), 10 * page > f.size() ? f.size() - 1 : 10 * page);
 				subF.forEach(eb::addField);
-				eb.setAuthor("Para usar estes emotes, basta digitá-los no canal global, eles serão convertidos automaticamente");
+				eb.setAuthor("Para usar estes emotes, utilize o comando `" + SQLite.getGuildPrefix(guild.getId()) + "say MENÇÃO`");
 				eb.setFooter("Página " + page + ". Mostrando " + (-10 + 10 * page) + " - " + (10 * page > f.size() ? f.size() - 1 : 10 * page) + " resultados.", null);
 
 				channel.sendMessage(eb.build()).queue();
 			} catch (IndexOutOfBoundsException | IllegalArgumentException ex) {
-				channel.sendMessage(":x: | Página inválida, no total existem `" + Main.getJibril().getEmotes().size() / 10 + "` páginas de emotes.").queue();
+				channel.sendMessage(":x: | Página inválida, no total existem `" + guild.getEmotes().size() / 10 + "` páginas de emotes.").queue();
 			}
 		}
 	}
