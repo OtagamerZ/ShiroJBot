@@ -84,6 +84,7 @@ public class CommandManager {
             add(new AnimeCommand());
             add(new ImageCommand());
             add(new ValidateGIFCommand());
+            add(new EmoteListCommand());
 
             //FUN
             add(new SadButTrueCommand());
