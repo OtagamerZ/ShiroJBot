@@ -29,7 +29,7 @@ public class EmoteListCommand extends Command {
 
 		} else {
 			try {
-				int page = Integer.parseInt(args[1]);
+				int page = Integer.parseInt(args[0]);
 				List<CustomAnswers> ca = SQLite.getCADump();
 				EmbedBuilder eb = new EmbedBuilder();
 				ca.removeIf(a -> !a.getGuildID().equals(guild.getId()));
