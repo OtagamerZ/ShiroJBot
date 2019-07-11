@@ -11,6 +11,7 @@ import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 
 import javax.imageio.ImageIO;
+import javax.persistence.NoResultException;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
@@ -28,16 +29,19 @@ public class MarryCommand extends Command {
 
     @Override
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-        if (message.getMentionedUsers().size() < 1) {
-            channel.sendMessage(":x: | Você precisa mencionar um usuário!").queue();
-            return;
-        } else if (SQLite.getMemberById(author.getId()).getWaifu() != null || SQLite.getMemberById(message.getMentionedUsers().get(0).getId()).getWaifu() != null) {
-            channel.sendMessage(":x: | Essa pessoa já está casada, hora de passar pra frente!").queue();
-            return;
-        }
+        try {
+            if (message.getMentionedUsers().size() < 1) {
+                channel.sendMessage(":x: | Você precisa mencionar um usuário!").queue();
+                return;
+            } else if (SQLite.getMemberById(author.getId() + guild.getId()).getWaifu() != null || SQLite.getMemberById(message.getMentionedUsers().get(0).getId() + guild.getId()).getWaifu() != null) {
+                channel.sendMessage(":x: | Essa pessoa já está casada, hora de passar pra frente!").queue();
+                return;
+            }
 
-        channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + ", deseja casar-se com " + author.getAsMention() + ", por toda eternidade ou até que meu Nii-chan crie um comando de divórcio?" +
-                "\nDigite `SIM` para aceitar ou `NÃO` para negar.").queue();
-        Helper.queue.add(new User[]{author, message.getMentionedUsers().get(0)});
+            channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + ", deseja casar-se com " + author.getAsMention() + ", por toda eternidade ou até que meu Nii-chan crie um comando de divórcio?" +
+                    "\nDigite `SIM` para aceitar ou `NÃO` para negar.").queue();
+            Helper.queue.add(new User[]{author, message.getMentionedUsers().get(0)});
+        } catch (NoResultException ignore) {
+        }
     }
 }
