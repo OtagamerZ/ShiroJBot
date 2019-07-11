@@ -38,7 +38,7 @@ public class JibrilEmoteListCommand extends Command {
 				eb.setTitle("<a:SmugDance:598842924725305344> Emotes disponíveis para a Jibril:");
 				eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
 
-				Main.getJibril().getEmotes().stream().filter(e -> StringUtils.containsIgnoreCase(e.getName(), args[0])).collect(Collectors.toList()).forEach(e -> f.add(new MessageEmbed.Field("Emote " + e.getAsMention(), "Menção: " + e.getAsMention().replace("<", "`{").replace(">", "}`").replace(":", "&"), false)));
+				Main.getJibril().getEmotes().stream().filter(e -> StringUtils.containsIgnoreCase(e.getAsMention(), args[0])).collect(Collectors.toList()).forEach(e -> f.add(new MessageEmbed.Field("Emote " + e.getAsMention(), "Menção: " + e.getAsMention().replace("<", "`{").replace(">", "}`").replace(":", "&"), false)));
 				List<MessageEmbed.Field> subF = f.subList(-10 + (10 * page), 10 * page > f.size() ? f.size() - 1 : 10 * page);
 				subF.forEach(eb::addField);
 				eb.setAuthor("Para usar estes emotes, basta digitá-los no canal global, eles serão convertidos automaticamente");
