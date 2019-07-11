@@ -19,7 +19,7 @@ import java.util.List;
 public class ShiroEmoteListCommand extends Command {
 
 	public ShiroEmoteListCommand() {
-		super("semotes", "<pagina/nome>", "Mostra a list de emotes disponíveis para uso através da Shiro.", Category.MISC);
+		super("semotes", "<pagina/nome>", "Mostra a lista de emotes disponíveis para uso através da Shiro.", Category.MISC);
 	}
 
 	@Override
