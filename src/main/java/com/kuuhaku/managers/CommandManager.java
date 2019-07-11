@@ -84,7 +84,8 @@ public class CommandManager {
             add(new AnimeCommand());
             add(new ImageCommand());
             add(new ValidateGIFCommand());
-            add(new EmoteListCommand());
+            add(new ShiroEmoteListCommand());
+            add(new JibrilEmoteListCommand());
 
             //FUN
             add(new SadButTrueCommand());
