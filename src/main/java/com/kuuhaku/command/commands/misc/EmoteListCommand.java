@@ -13,6 +13,7 @@ import net.dv8tion.jda.core.events.Event;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EmoteListCommand extends Command {
@@ -29,16 +30,16 @@ public class EmoteListCommand extends Command {
 
 		} else {
 			try {
+				List<MessageEmbed.Field> f = new ArrayList<>();
 				int page = Integer.parseInt(args[0]);
-				List<CustomAnswers> ca = SQLite.getCADump();
 				EmbedBuilder eb = new EmbedBuilder();
-				ca.removeIf(a -> !a.getGuildID().equals(guild.getId()));
 
 				eb.setTitle("<a:SmugDance:598842924725305344> Emotes disponíveis:");
 				eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
-				for (int i = -10 + (10 * page); i < ca.size() && i < (10 * page); i++) {
-					Emote e = Main.getInfo().getAPI().getEmotes().get(i);
-					eb.addField("Emote " + e.getAsMention(), "Menção: \\" + e.getAsMention(), false);
+
+				Main.getInfo().getAPI().getEmotes().forEach(e -> f.add(new MessageEmbed.Field("Emote " + e.getAsMention(), "Menção: \\" + e.getAsMention(), false)));
+				for (int i = -10 + (10 * page); i < f.size() && i < (10 * page); i++) {
+					eb.addField(f.get(i));
 				}
 				eb.setFooter("Página " + page + ". Mostrando " + (-10 + 10 * page) + " - " + (page * 10) + " resultados.", null);
 
