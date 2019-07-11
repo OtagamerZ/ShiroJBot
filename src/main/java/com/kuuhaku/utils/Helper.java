@@ -527,6 +527,7 @@ public class Helper {
 		String[] chkdSrc = new String[source.length];
 		for (int i = 0; i < source.length; i++) {
 			if (source[i].startsWith("{") && source[i].endsWith("}")) chkdSrc[i] = source[i].replace("{", "<").replace("}", ">").replace("&", ":");
+			else chkdSrc[i] = source[i];
 		}
 		return String.join(" ", chkdSrc).trim();
 	}
