@@ -38,8 +38,10 @@ import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import javax.persistence.NoResultException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class GuildEvents extends ListenerAdapter {
 
@@ -109,6 +111,18 @@ public class GuildEvents extends ListenerAdapter {
 		*/
 
 			Helper.battle(event);
+
+			if (SQLite.getGuildNoSpamChannels(guild.getId()).contains(channel.getId())) {
+				if (SQLite.getGuildById(guild.getId()).isHardAntispam()) {
+					List<Message> msgs = new ArrayList<>();
+					channel.getHistory().retrievePast(15).queue(h -> msgs.addAll(h.stream().filter(m -> m.getAuthor() == author).collect(Collectors.toList())));
+
+					if (msgs.size() > 5) {
+						int freq = msgs.stream().mapToInt(m -> m.getCreationTime().getSecond()).sum() / msgs.size();
+						System.out.println("Frequência: " + freq + "msgs/s");
+					}
+				}
+			}
 
 			if (message.getContentDisplay().equals(Main.getInfo().getSelfUser().getAsMention())) {
 				channel.sendMessage("Para obter ajuda sobre como me utilizar use `" + prefix + "ajuda`.").queue();
