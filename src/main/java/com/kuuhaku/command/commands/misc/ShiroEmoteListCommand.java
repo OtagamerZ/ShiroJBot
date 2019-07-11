@@ -16,10 +16,10 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EmoteListCommand extends Command {
+public class ShiroEmoteListCommand extends Command {
 
-	public EmoteListCommand() {
-		super("emotes", "<pagina/nome>", "Mostra a list de emotes disponíveis para uso através da Shiro/Jibril.", Category.MISC);
+	public ShiroEmoteListCommand() {
+		super("jemotes", "<pagina/nome>", "Mostra a list de emotes disponíveis para uso através da Shiro.", Category.MISC);
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class EmoteListCommand extends Command {
 				int page = Integer.parseInt(args[0]);
 				EmbedBuilder eb = new EmbedBuilder();
 
-				eb.setTitle("<a:SmugDance:598842924725305344> Emotes disponíveis:");
+				eb.setTitle("<a:SmugDance:598842924725305344> Emotes disponíveis para a Shiro:");
 				eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
 
 				Main.getInfo().getAPI().getEmotes().forEach(e -> f.add(new MessageEmbed.Field("Emote " + e.getAsMention(), "Menção: " + e.getAsMention().replace("<", "`{").replace(">", "}`"), false)));
