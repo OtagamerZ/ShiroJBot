@@ -522,4 +522,12 @@ public class Helper {
 
 		return Color.getHSBColor(hsv[0], hsv[1], hsv[2]);
 	}
+
+	public static String makeEmoteFromMention(String[] source) {
+		String[] chkdSrc = new String[source.length];
+		for (int i = 0; i < source.length; i++) {
+			if (source[i].startsWith("{") && source[i].endsWith("}")) chkdSrc[i] = source[i].replace("{", "<").replace("}", ">");
+		}
+		return String.join(" ", chkdSrc).trim();
+	}
 }
