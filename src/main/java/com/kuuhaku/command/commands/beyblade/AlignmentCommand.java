@@ -39,7 +39,7 @@ public class AlignmentCommand extends Command {
 			Beyblade bb = Objects.requireNonNull(MySQL.getBeybladeById(author.getId()));
 
 			if (bb.getPoints() >= (bb.getS() == null ? 150 : 300)) {
-				switch (args[1]) {
+                switch (args[0]) {
 					case "tigre":
 						bb.setSpecial(10 + Helper.rng(2));
 						bb.takePoints((bb.getS() == null ? 150 : 300));
