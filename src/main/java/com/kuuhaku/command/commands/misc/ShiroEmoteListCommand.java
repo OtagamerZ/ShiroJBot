@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ShiroEmoteListCommand extends Command {
 
@@ -39,7 +40,7 @@ public class ShiroEmoteListCommand extends Command {
 				eb.setTitle("<a:SmugDance:598842924725305344> Emotes disponíveis para a Shiro:");
 				eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
 
-				Main.getInfo().getAPI().getEmotesByName(args[0], true).forEach(e -> f.add(new MessageEmbed.Field("Emote " + e.getAsMention(), "Menção: " + e.getAsMention().replace("<", "`{").replace(">", "}`").replace(":", "&"), false)));
+				Main.getInfo().getAPI().getEmotes().stream().filter(e -> StringUtils.containsIgnoreCase(e.getName(), args[0])).collect(Collectors.toList()).forEach(e -> f.add(new MessageEmbed.Field("Emote " + e.getAsMention(), "Menção: " + e.getAsMention().replace("<", "`{").replace(">", "}`").replace(":", "&"), false)));
 				List<MessageEmbed.Field> subF = f.subList(-10 + (10 * page), 10 * page > f.size() ? f.size() - 1 : 10 * page);
 				subF.forEach(eb::addField);
 				eb.setAuthor("Para usar estes emotes, utilize o comando \"" + SQLite.getGuildPrefix(guild.getId()) + "say MENÇÃO\"");
@@ -47,7 +48,7 @@ public class ShiroEmoteListCommand extends Command {
 
 				channel.sendMessage(eb.build()).queue();
 			} catch (IndexOutOfBoundsException | IllegalArgumentException ex) {
-				channel.sendMessage(":x: | Página inválida, no total existem `" + Main.getInfo().getAPI().getEmotesByName(args[0], true).size() / 10 + "` páginas de emotes.").queue();
+				channel.sendMessage(":x: | Página inválida, no total existem `" + (int) Main.getInfo().getAPI().getEmotes().stream().filter(e -> StringUtils.containsIgnoreCase(e.getName(), args[0])).count() / 10 + "` páginas de emotes.").queue();
 			}
 		} else {
 			try {
