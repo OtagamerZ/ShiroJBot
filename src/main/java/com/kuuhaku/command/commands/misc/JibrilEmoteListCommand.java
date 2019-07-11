@@ -39,10 +39,10 @@ public class JibrilEmoteListCommand extends Command {
 				eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
 
 				Main.getJibril().getEmotes().stream().filter(e -> StringUtils.containsIgnoreCase(e.getAsMention(), args[0])).collect(Collectors.toList()).forEach(e -> f.add(new MessageEmbed.Field("Emote " + e.getAsMention(), "Menção: " + e.getAsMention().replace("<", "`{").replace(">", "}`").replace(":", "&"), false)));
-				List<MessageEmbed.Field> subF = f.subList(-10 + (10 * page), 10 * page > f.size() ? f.size() - 1 : 10 * page);
+				List<MessageEmbed.Field> subF = f.subList(-10 + (10 * page), 10 * page > f.size() ? f.size() : 10 * page);
 				subF.forEach(eb::addField);
 				eb.setAuthor("Para usar estes emotes, basta digitá-los no canal global, eles serão convertidos automaticamente");
-				eb.setFooter("Página " + page + ". Mostrando " + (-10 + 10 * page) + " - " + (10 * page > f.size() ? f.size() - 1 : 10 * page) + 1 + " resultados.", null);
+				eb.setFooter("Página " + page + ". Mostrando " + (-10 + 10 * page) + " - " + (10 * page > f.size() ? f.size() : 10 * page) + 1 + " resultados.", null);
 
 				channel.sendMessage(eb.build()).queue();
 			} catch (IndexOutOfBoundsException | IllegalArgumentException ex) {
@@ -58,10 +58,10 @@ public class JibrilEmoteListCommand extends Command {
 				eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
 
 				Main.getJibril().getEmotes().forEach(e -> f.add(new MessageEmbed.Field("Emote " + e.getAsMention(), "Menção: " + e.getAsMention().replace("<", "`{").replace(">", "}`").replace(":", "&"), false)));
-				List<MessageEmbed.Field> subF = f.subList(-10 + (10 * page), 10 * page > f.size() ? f.size() - 1 : 10 * page);
+				List<MessageEmbed.Field> subF = f.subList(-10 + (10 * page), 10 * page > f.size() ? f.size() : 10 * page);
 				subF.forEach(eb::addField);
 				eb.setAuthor("Para usar estes emotes, basta digitá-los no canal global, eles serão convertidos automaticamente");
-				eb.setFooter("Página " + page + ". Mostrando " + (-10 + 10 * page) + " - " + (10 * page > f.size() ? f.size() - 1 : 10 * page) + " resultados.", null);
+				eb.setFooter("Página " + page + ". Mostrando " + (-10 + 10 * page) + " - " + (10 * page > f.size() ? f.size() : 10 * page) + " resultados.", null);
 
 				channel.sendMessage(eb.build()).queue();
 			} catch (IndexOutOfBoundsException | IllegalArgumentException ex) {
