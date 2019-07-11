@@ -256,6 +256,18 @@ public class SQLite {
 		em.close();
 	}
 
+	public static void saveMemberWaifu(Member m, User u) {
+		EntityManager em = getEntityManager();
+
+		m.setWaifu(u);
+
+		em.getTransaction().begin();
+		em.merge(m);
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
 	public static void removeMemberFromDB(Member m) {
 		EntityManager em = getEntityManager();
 

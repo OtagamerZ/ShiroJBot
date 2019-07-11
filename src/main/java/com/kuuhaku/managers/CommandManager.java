@@ -94,6 +94,7 @@ public class CommandManager {
             add(new ExpandingBrainCommand());
             add(new PPTCommand());
             add(new ShipCommand());
+            add(new MarryCommand());
             //REAÇÕES
             //RECIPROCOS
             add(new HugReaction(false));

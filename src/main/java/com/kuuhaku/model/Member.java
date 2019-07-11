@@ -17,6 +17,9 @@
 
 package com.kuuhaku.model;
 
+import com.kuuhaku.Main;
+import net.dv8tion.jda.core.entities.User;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.ArrayList;
@@ -32,6 +35,7 @@ public class Member {
 	private String warns = "";
 	private String bg = "https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg";
 	private String bio = "";
+	private String waifu = "";
 	private boolean markForDelete;
 
 	public Member() {
@@ -114,5 +118,13 @@ public class Member {
 
 	public void setMid(String mid) {
 		this.mid = mid;
+	}
+
+	public User getWaifu() {
+		return Main.getInfo().getUserByID(waifu);
+	}
+
+	public void setWaifu(User waifu) {
+		this.waifu = waifu.getId();
 	}
 }
