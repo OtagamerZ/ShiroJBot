@@ -24,6 +24,7 @@ import com.ibm.watson.assistant.v1.model.MessageOptions;
 import com.ibm.watson.assistant.v1.model.MessageResponse;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.CustomAnswers;
 import com.kuuhaku.model.guildConfig;
@@ -161,13 +162,15 @@ public class GuildEvents extends ListenerAdapter {
 			}
 
 			if (!found && !author.isBot()) {
-				if (Helper.queue.stream().anyMatch(u -> u[0].getId().equals(author.getId()) || u[1].getId().equals(author.getId()))) {
+				if (Helper.queue.stream().anyMatch(u -> u[1].getId().equals(author.getId()))) {
 					final User[][] hw = {new User[2]};
-					Helper.queue.stream().filter(u -> u[0].getId().equals(author.getId()) || u[1].getId().equals(author.getId())).findFirst().ifPresent(users -> hw[0] = users);
+					Helper.queue.stream().filter(u -> u[1].getId().equals(author.getId())).findFirst().ifPresent(users -> hw[0] = users);
 					switch (message.getContentRaw().toLowerCase()) {
 						case "sim":
 							channel.sendMessage("Eu os declaro husbando e waifu, pode trancar ela no porão agora!").queue();
+							MySQL.saveMemberWaifu(SQLite.getMemberById(hw[0][0].getId() + guild.getId()), hw[0][1]);
 							SQLite.saveMemberWaifu(SQLite.getMemberById(hw[0][0].getId() + guild.getId()), hw[0][1]);
+							MySQL.saveMemberWaifu(SQLite.getMemberById(hw[0][1].getId() + guild.getId()), hw[0][0]);
 							SQLite.saveMemberWaifu(SQLite.getMemberById(hw[0][1].getId() + guild.getId()), hw[0][0]);
 							Helper.queue.removeIf(u -> u[0].getId().equals(author.getId()) || u[1].getId().equals(author.getId()));
 							break;
