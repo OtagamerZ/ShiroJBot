@@ -33,7 +33,7 @@ public class MarryCommand extends Command {
             if (message.getMentionedUsers().size() < 1) {
                 channel.sendMessage(":x: | Você precisa mencionar um usuário!").queue();
                 return;
-            } else if (SQLite.getMemberById(author.getId() + guild.getId()).getWaifu() != null || SQLite.getMemberById(message.getMentionedUsers().get(0).getId() + guild.getId()).getWaifu() != null) {
+            } else if (SQLite.getMemberById(author.getId() + guild.getId()).getWaifu().isEmpty() || SQLite.getMemberById(message.getMentionedUsers().get(0).getId() + guild.getId()).getWaifu().isEmpty()) {
                 channel.sendMessage(":x: | Essa pessoa já está casada, hora de passar pra frente!").queue();
                 return;
             }
@@ -41,7 +41,7 @@ public class MarryCommand extends Command {
             channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + ", deseja casar-se com " + author.getAsMention() + ", por toda eternidade ou até que meu Nii-chan crie um comando de divórcio?" +
                     "\nDigite `SIM` para aceitar ou `NÃO` para negar.").queue();
             Helper.queue.add(new User[]{author, message.getMentionedUsers().get(0)});
-        } catch (NoResultException ignore) {
+        } catch (NoResultException | NullPointerException ignore) {
         }
     }
 }

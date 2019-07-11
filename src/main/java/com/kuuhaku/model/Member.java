@@ -122,8 +122,8 @@ public class Member {
 		this.mid = mid;
 	}
 
-	public User getWaifu() {
-		return Main.getInfo().getUserByID(waifu);
+	public String getWaifu() {
+		return waifu;
 	}
 
 	public void setWaifu(User waifu) {
