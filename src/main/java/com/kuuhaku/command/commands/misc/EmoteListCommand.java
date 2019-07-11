@@ -38,8 +38,9 @@ public class EmoteListCommand extends Command {
 				eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
 				for (int i = -10 + (10 * page); i < ca.size() && i < (10 * page); i++) {
 					Emote e = Main.getInfo().getAPI().getEmotes().get(i);
-					eb.addField("Emote " + e.toString(), e.getAsMention() + " " + e.getAsMention() + " " + e.getAsMention(), false);
+					eb.addField("Emote " + e.getAsMention(), e.getAsMention() + " " + e.getAsMention() + " " + e.getAsMention(), false);
 				}
+				eb.setFooter("Página " + page + ". Mostrando " + (-10 + 10 * page) + " - " + (page * 10) + " resultados.", null);
 
 				channel.sendMessage(eb.build()).queue();
 			} catch (ArrayIndexOutOfBoundsException ex) {
