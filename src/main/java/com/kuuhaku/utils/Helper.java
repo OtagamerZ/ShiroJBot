@@ -55,6 +55,7 @@ import java.util.regex.Pattern;
 public class Helper {
 
 	public static final String VOID = "\u200B";
+	public static List<User[]> queue = new ArrayList<>();
 
 	private static PrivilegeLevel getPrivilegeLevel(Member member) {
 		if (Main.getInfo().getNiiChan().contains(member.getUser().getId())) {

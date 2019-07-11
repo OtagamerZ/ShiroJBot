@@ -51,5 +51,6 @@ public class ScheduledEvents implements Job {
         Helper.log(this.getClass(), LogLevel.INFO, "Respostas/Guilds salvos com sucesso!");
         MySQL.dumpData(new DataDump(SQLite.getMemberDump()));
         Helper.log(this.getClass(), LogLevel.INFO, "Membros salvos com sucesso!");
+
     }
 }
