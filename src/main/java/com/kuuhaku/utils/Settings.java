@@ -110,7 +110,7 @@ public class Settings {
         TextChannel newCanalBV = message.getMentionedChannels().get(0);
 
         SQLite.updateGuildCanalBV(newCanalBV.getId(), gc);
-        message.getTextChannel().sendMessage("✅ | O canal de adeus do servidor foi trocado para " + newCanalBV.getAsMention() + " com sucesso.").queue();
+        message.getTextChannel().sendMessage("✅ | O canal de boas-vindas do servidor foi trocado para " + newCanalBV.getAsMention() + " com sucesso.").queue();
     }
     public static void updateMsgBV(String[] args, Message message, guildConfig gc) {
         String antigaMsgBV = SQLite.getGuildMsgBV(message.getGuild().getId());
