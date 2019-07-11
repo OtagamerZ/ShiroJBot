@@ -58,6 +58,7 @@ public class CommandManager {
             add(new KickMemberCommand());
             add(new BanMemberCommand());
             add(new NoLinkCommand());
+            add(new AntispamCommand());
 
             //INFORMATION
             add(new ComandosCommand());
