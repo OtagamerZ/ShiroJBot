@@ -43,7 +43,7 @@ public class EmoteListCommand extends Command {
 				eb.setFooter("Página " + page + ". Mostrando " + (-10 + 10 * page) + " - " + (10 * page > f.size() ? f.size() - 1 : 10 * page) + " resultados.", null);
 
 				channel.sendMessage(eb.build()).queue();
-			} catch (ArrayIndexOutOfBoundsException ex) {
+			} catch (IndexOutOfBoundsException ex) {
 				channel.sendMessage(":x: | Página inválida, no total existem `" + Main.getInfo().getAPI().getEmotes().size() + "` páginas de emotes.").queue();
 			}
 		}
