@@ -24,21 +24,36 @@ import com.kuuhaku.model.guildConfig;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 
-public class NoLinkCommand extends Command {
+public class AntispamCommand extends Command {
 
-    public NoLinkCommand() {
-        super("semlink", new String[]{"nolink", "blocklink"}, "Bloqueia ou permite links postados no canal onde este comando foi digitado.", Category.MODERACAO);
+    public AntispamCommand() {
+        super("semspam", new String[]{"nospam", "antispam"}, "<soft/hard>", "Bloqueia ou permite spam no canal onde este comando foi digitado.", Category.MODERACAO);
     }
 
     @Override
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
         guildConfig gc = SQLite.getGuildById(guild.getId());
 
-        if (SQLite.getGuildNoLinkChannels(gc.getGuildID()).contains(channel.getId())) gc.removeNoLinkChannel(message.getTextChannel());
-        else gc.addNoLinkChannel(message.getTextChannel());
+        if (args.length > 0 && (args[0].equalsIgnoreCase("soft") || args[0].equalsIgnoreCase("hard"))) {
+            switch (args[0].toLowerCase()) {
+                case "soft":
+                    gc.setHardAntispam(false);
+                    SQLite.updateGuildChannels(gc);
+                    return;
+                case "hard":
+                    gc.setHardAntispam(true);
+                    SQLite.updateGuildChannels(gc);
+                    return;
+                default: channel.sendMessage(":x: | Tipo incorreto, os tipos são `soft` ou `hard`").queue();
+            }
+            return;
+        }
+
+        if (SQLite.getGuildNoSpamChannels(gc.getGuildID()).contains(channel.getId())) gc.removeNoSpamChannel(message.getTextChannel());
+        else gc.addNoSpamChannel(message.getTextChannel());
 
         SQLite.updateGuildChannels(gc);
 
-        channel.sendMessage("Agora os links neste canal estão " + (SQLite.getGuildNoLinkChannels(gc.getGuildID()).contains(channel.getId()) ? "**bloqueados**" : "**liberados**")).queue();
+        channel.sendMessage("Agora spam neste canal está " + (SQLite.getGuildNoLinkChannels(gc.getGuildID()).contains(channel.getId()) ? "**bloqueado**" : "**liberado**")).queue();
     }
 }
