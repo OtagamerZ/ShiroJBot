@@ -213,22 +213,22 @@ public class guildConfig {
         this.canalai = canalai;
     }
 
-    public String[] getNoLinkChannels() {
+    public ArrayList<String> getNoLinkChannels() {
         try {
-            return noLinkChannels.replace("[", "").replace("]", "").split(",");
+            return new ArrayList<>(Arrays.asList(noLinkChannels.replace("[", "").replace("]", "").split(",")));
         } catch (NullPointerException e) {
-            return new String[]{};
+            return new ArrayList<>();
         }
     }
 
     public void addNoLinkChannel(TextChannel ch) {
-        List<String> ph = new ArrayList<>(Arrays.asList(getNoLinkChannels()));
+        List<String> ph = new ArrayList<>(getNoLinkChannels());
         ph.add(ch.getId());
         noLinkChannels = ph.toString();
     }
 
     public void removeNoLinkChannel(TextChannel ch) {
-        List<String> ph = new ArrayList<>(Arrays.asList(getNoLinkChannels()));
+        List<String> ph = new ArrayList<>(getNoLinkChannels());
         ph.remove(ch.getId());
         noLinkChannels = ph.toString();
     }
