@@ -17,6 +17,7 @@ public class SayCommand extends Command {
 		
 		if(args.length == 0) { channel.sendMessage(":x: | Você precisa definir uma mensagem.").queue(); return; }
 
+		message.delete().queue();
 		channel.sendMessage(Helper.makeEmoteFromMention(args)).queue();
 	}
 
