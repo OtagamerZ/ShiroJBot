@@ -98,9 +98,6 @@ public class Profile {
 			g2d.drawLine(268, 370 + (177 / 3 * i), 445, 370 + (177 / 3 * i));
 		}
 
-		int luma = ((int) Math.round(0.2126 * main.getRed() + 0.7152 * main.getGreen() + 0.0722 * main.getBlue()));
-		if (luma >= 128) g2d.setColor(Color.BLACK);
-		else g2d.setColor(Color.WHITE);
 		g2d.setFont(new Font(FONT.getName(), Font.PLAIN, 50));
 		printCenteredString("LEVEL", 196, 52, 440, g2d);
 		String name = m.getEffectiveName();
@@ -258,13 +255,13 @@ public class Profile {
 		AffineTransform transform = g2d.getTransform();
 		transform.translate(x, y);
 		g2d.transform(transform);
-		g2d.setColor(Color.white);
+		g2d.setColor(Color.black);
 		FontRenderContext frc = g2d.getFontRenderContext();
 		TextLayout tl = new TextLayout(s, g2d.getFont(), frc);
 		Shape shape = tl.getOutline(null);
-		g2d.setStroke(new BasicStroke(5));
+		g2d.setStroke(new BasicStroke(4));
 		g2d.draw(shape);
-		g2d.setColor(Color.black);
+		g2d.setColor(Color.white);
 		g2d.fill(shape);
 		transform.translate(-x, -y);
 		g2d.setTransform(transform);
