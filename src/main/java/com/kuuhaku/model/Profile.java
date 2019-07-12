@@ -258,13 +258,13 @@ public class Profile {
 		AffineTransform transform = g2d.getTransform();
 		transform.translate(x, y);
 		g2d.transform(transform);
-		g2d.setColor(Color.black);
+		g2d.setColor(Color.white);
 		FontRenderContext frc = g2d.getFontRenderContext();
 		TextLayout tl = new TextLayout(s, g2d.getFont(), frc);
 		Shape shape = tl.getOutline(null);
 		g2d.setStroke(new BasicStroke(5));
 		g2d.draw(shape);
-		g2d.setColor(Color.white);
+		g2d.setColor(Color.black);
 		g2d.fill(shape);
 		transform.translate(-x, -y);
 		g2d.setTransform(transform);
@@ -273,7 +273,7 @@ public class Profile {
 	public static void drawStringMultiLine(Graphics2D g, String text, int lineWidth, int x, int y) {
 		FontMetrics m = g.getFontMetrics();
 		if (m.stringWidth(text) < lineWidth) {
-			g.drawString(text, x, y);
+			drawOutlinedText(text, x, y, g);
 		} else {
 			String[] words = text.split(" ");
 			StringBuilder currentLine = new StringBuilder(words[0]);
@@ -282,7 +282,7 @@ public class Profile {
 					currentLine.append(" ").append(words[i]);
 				} else {
 					String s = currentLine.toString();
-					g.drawString(s, x, y);
+					drawOutlinedText(s, x, y, g);
 					y += m.getHeight();
 					currentLine = new StringBuilder(words[i]);
 				}
