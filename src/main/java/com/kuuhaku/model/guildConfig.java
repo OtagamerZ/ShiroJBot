@@ -53,6 +53,7 @@ public class guildConfig {
     private boolean aiMode = false;
     private String noLinkChannels = "";
     private String noSpamChannels = "";
+    @Column(columnDefinition = "boolean default false")
     private boolean hardAntispam;
     private boolean markForDelete;
 
@@ -239,7 +240,7 @@ public class guildConfig {
 
     public ArrayList<String> getNoSpamChannels() {
         try {
-            ArrayList<String> l = new ArrayList<>(Arrays.asList(noLinkChannels.replace("[", "").replace("]", "").split(",")));
+            ArrayList<String> l = new ArrayList<>(Arrays.asList(noSpamChannels.replace("[", "").replace("]", "").split(",")));
             l.removeIf(String::isEmpty);
             return l;
         } catch (NullPointerException e) {
@@ -248,15 +249,15 @@ public class guildConfig {
     }
 
     public void addNoSpamChannel(TextChannel ch) {
-        List<String> ph = new ArrayList<>(getNoLinkChannels());
+        List<String> ph = new ArrayList<>(getNoSpamChannels());
         ph.add(ch.getId());
-        noLinkChannels = ph.toString();
+        noSpamChannels = ph.toString();
     }
 
     public void removeNoSpamChannel(TextChannel ch) {
-        List<String> ph = new ArrayList<>(getNoLinkChannels());
+        List<String> ph = new ArrayList<>(getNoSpamChannels());
         ph.remove(ch.getId());
-        noLinkChannels = ph.toString();
+        noSpamChannels = ph.toString();
     }
 
     public boolean isHardAntispam() {
