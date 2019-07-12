@@ -114,13 +114,11 @@ public class GuildEvents extends ListenerAdapter {
 
 			if (SQLite.getGuildNoSpamChannels(guild.getId()).contains(channel.getId())) {
 				if (SQLite.getGuildById(guild.getId()).isHardAntispam()) {
-					List<Message> msgs = new ArrayList<>();
-					channel.getHistory().retrievePast(15).queue(h -> msgs.addAll(h.stream().filter(m -> m.getAuthor() == author).collect(Collectors.toList())));
-
-					if (msgs.size() > 5) {
-						int freq = msgs.stream().mapToInt(m -> m.getCreationTime().getSecond()).sum() / msgs.size();
-						System.out.println("Frequência: " + freq + "msgs/s");
-					}
+					channel.getHistory().retrievePast(10).queue(messages -> {
+						List<Long> milis = new ArrayList<>();
+						messages.forEach(m -> milis.add(m.getCreationTime().toEpochSecond()));
+						System.out.println(milis.stream().mapToLong(Long::longValue).sum() / milis.size());
+					});
 				}
 			}
 
