@@ -117,7 +117,7 @@ public class GuildEvents extends ListenerAdapter {
 					channel.getHistory().retrievePast(10).queue(messages -> {
 						List<Long> milis = new ArrayList<>();
 						messages.forEach(m -> milis.add(m.getCreationTime().toEpochSecond()));
-						System.out.println(milis.stream().mapToLong(Long::longValue).sum() / milis.size());
+						System.out.println(System.currentTimeMillis() - (milis.stream().mapToLong(Long::longValue).sum() / milis.size()));
 					});
 				}
 			}
