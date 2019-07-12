@@ -30,12 +30,14 @@ import com.kuuhaku.model.CustomAnswers;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
+import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.NoResultException;
 import java.time.OffsetDateTime;
@@ -121,7 +123,16 @@ public class GuildEvents extends ListenerAdapter {
 					channel.getHistory().retrievePast(20).queue(h -> {
 						h.removeIf(m -> ChronoUnit.MILLIS.between(m.getCreationTime().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author);
 
-						if (h.size() >= 5) {
+						if (h.size() >= SQLite.getGuildById(guild.getId()).getNoSpamAmount()) {
+							h.forEach(m -> channel.deleteMessageById(m.getId()).queue());
+							channel.sendMessage(":warning: | Opa, sem spam meu amigo!").queue();
+						}
+					});
+				} else {
+					channel.getHistory().retrievePast(20).queue(h -> {
+						h.removeIf(m -> ChronoUnit.MILLIS.between(m.getCreationTime().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author && StringUtils.containsIgnoreCase(m.getContentRaw(), message.getContentRaw()));
+
+						if (h.size() >= SQLite.getGuildById(guild.getId()).getNoSpamAmount()) {
 							h.forEach(m -> channel.deleteMessageById(m.getId()).queue());
 							channel.sendMessage(":warning: | Opa, sem spam meu amigo!").queue();
 						}

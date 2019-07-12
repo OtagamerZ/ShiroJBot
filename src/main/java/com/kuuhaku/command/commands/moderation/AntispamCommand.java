@@ -23,38 +23,58 @@ import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.guildConfig;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
+import org.apache.commons.lang3.StringUtils;
 
 public class AntispamCommand extends Command {
 
-    public AntispamCommand() {
-        super("semspam", new String[]{"nospam", "antispam"}, "<soft/hard>", "Bloqueia ou permite spam no canal onde este comando foi digitado.", Category.MODERACAO);
-    }
+	public AntispamCommand() {
+		super("semspam", new String[]{"nospam", "antispam"}, "<qtd/soft/hard>", "Bloqueia X mensagens de spam no canal onde este comando foi digitado. O modo **SOFT** bloqueia apenas mensagens repetidas, enquato o **HARD** bloqueia mensagens frequentes independente do conteúdo", Category.MODERACAO);
+	}
 
-    @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-        guildConfig gc = SQLite.getGuildById(guild.getId());
+	@Override
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+		guildConfig gc = SQLite.getGuildById(guild.getId());
 
-        if (args.length > 0 && (args[0].equalsIgnoreCase("soft") || args[0].equalsIgnoreCase("hard"))) {
-            switch (args[0].toLowerCase()) {
-                case "soft":
-                    gc.setHardAntispam(false);
-                    SQLite.updateGuildChannels(gc);
-                    channel.sendMessage("Modo de anti-spam trocado para **SOFT**").queue();
-                    return;
-                case "hard":
-                    gc.setHardAntispam(true);
-                    SQLite.updateGuildChannels(gc);
-                    channel.sendMessage("Modo de anti-spam trocado para **HARD**").queue();
-                    return;
-            }
-            return;
-        }
+		if (args.length > 0 && (args[0].equalsIgnoreCase("soft") || args[0].equalsIgnoreCase("hard"))) {
+			switch (args[0].toLowerCase()) {
+				case "soft":
+					if (!SQLite.getGuildById(guild.getId()).isHardAntispam()) {
+						channel.sendMessage("O modo **SOFT** já está ligado").queue();
+						return;
+					}
+					gc.setHardAntispam(false);
+					SQLite.updateGuildChannels(gc);
+					channel.sendMessage("Modo de anti-spam trocado para **SOFT**").queue();
+					return;
+				case "hard":
+					if (SQLite.getGuildById(guild.getId()).isHardAntispam()) {
+						channel.sendMessage("O modo **HARD** já está ligado").queue();
+						return;
+					}
+					gc.setHardAntispam(true);
+					SQLite.updateGuildChannels(gc);
+					channel.sendMessage("Modo de anti-spam trocado para **HARD**").queue();
+					return;
+			}
+			return;
+		}
 
-        if (SQLite.getGuildNoSpamChannels(gc.getGuildID()).contains(channel.getId())) gc.removeNoSpamChannel(message.getTextChannel());
-        else gc.addNoSpamChannel(message.getTextChannel());
+		for (String s : args) {
+			if (StringUtils.isNumeric(s)) {
+				if (Integer.parseInt(s) < 5) {
+					channel.sendMessage(":x: | Quantidade de mensagens muito baixa, escolha um valor acima de 5").queue();
+					return;
+				}
+				gc.setNoSpamAmount(Integer.parseInt(s));
+			}
+		}
 
-        SQLite.updateGuildChannels(gc);
+		if (SQLite.getGuildNoSpamChannels(gc.getGuildID()).contains(channel.getId()))
+			gc.removeNoSpamChannel(message.getTextChannel());
+		else gc.addNoSpamChannel(message.getTextChannel());
 
-        channel.sendMessage("Agora spam neste canal está " + (SQLite.getGuildNoSpamChannels(gc.getGuildID()).contains(channel.getId()) ? "**bloqueado**" : "**liberado**")).queue();
-    }
+		SQLite.updateGuildChannels(gc);
+
+		channel.sendMessage("Agora " + gc.getNoSpamAmount() + " mensagens de spam neste canal estão " + (SQLite.getGuildNoSpamChannels(gc.getGuildID()).contains(channel.getId()) ? "**bloqueadas**" : "**liberadas**")).queue();
+	}
 }
