@@ -38,7 +38,11 @@ import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import javax.persistence.NoResultException;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -114,10 +118,13 @@ public class GuildEvents extends ListenerAdapter {
 
 			if (SQLite.getGuildNoSpamChannels(guild.getId()).contains(channel.getId())) {
 				if (SQLite.getGuildById(guild.getId()).isHardAntispam()) {
-					channel.getHistory().retrievePast(10).queue(messages -> {
-						List<Long> milis = new ArrayList<>();
-						messages.forEach(m -> milis.add(m.getCreationTime().toEpochSecond()));
-						System.out.println(System.currentTimeMillis() - (milis.stream().mapToLong(Long::longValue).sum() / milis.size()));
+					channel.getHistory().retrievePast(20).queue(h -> {
+						h.removeIf(m -> ChronoUnit.MILLIS.between(m.getCreationTime().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author);
+
+						if (h.size() >= 5) {
+							h.forEach(m -> channel.deleteMessageById(m.getId()).queue());
+							channel.sendMessage(":warning: | Opa, sem spam meu amigo!").queue();
+						}
 					});
 				}
 			}
