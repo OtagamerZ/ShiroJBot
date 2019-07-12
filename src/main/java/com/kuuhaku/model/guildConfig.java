@@ -53,6 +53,8 @@ public class guildConfig {
     private boolean aiMode = false;
     private String noLinkChannels = "";
     private String noSpamChannels = "";
+    @Column(columnDefinition = "int default 5")
+    private int noSpamAmount = 5;
     @Column(columnDefinition = "boolean default false")
     private boolean hardAntispam;
     private boolean markForDelete;
@@ -266,5 +268,13 @@ public class guildConfig {
 
     public void setHardAntispam(boolean hardAntispam) {
         this.hardAntispam = hardAntispam;
+    }
+
+    public int getNoSpamAmount() {
+        return noSpamAmount;
+    }
+
+    public void setNoSpamAmount(int noSpamAmount) {
+        this.noSpamAmount = noSpamAmount;
     }
 }
