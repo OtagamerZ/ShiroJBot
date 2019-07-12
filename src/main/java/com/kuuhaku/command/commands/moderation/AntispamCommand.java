@@ -75,6 +75,9 @@ public class AntispamCommand extends Command {
 
 		SQLite.updateGuildChannels(gc);
 
-		channel.sendMessage("Agora " + gc.getNoSpamAmount() + " mensagens de spam neste canal estão " + (SQLite.getGuildNoSpamChannels(gc.getGuildID()).contains(channel.getId()) ? "**bloqueadas**" : "**liberadas**")).queue();
+		if (SQLite.getGuildNoSpamChannels(gc.getGuildID()).contains(channel.getId()))
+			channel.sendMessage("Modo antispam neste canal está desligado").queue();
+		else
+			channel.sendMessage("Modo antispam neste canal está ligado (" + gc.getNoSpamAmount() + " mensagens)").queue();
 	}
 }
