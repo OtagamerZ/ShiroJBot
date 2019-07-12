@@ -255,19 +255,19 @@ public class Profile {
 	}
 
 	private static void drawOutlinedText(String s, int x, int y, Graphics2D g2d) {
-		Graphics2D g = g2d;
-		AffineTransform transform = g.getTransform();
+		AffineTransform transform = g2d.getTransform();
 		transform.translate(x, y);
-		g.transform(transform);
-		g.setColor(Color.black);
-		FontRenderContext frc = g.getFontRenderContext();
-		TextLayout tl = new TextLayout(s, g.getFont(), frc);
+		g2d.transform(transform);
+		g2d.setColor(Color.black);
+		FontRenderContext frc = g2d.getFontRenderContext();
+		TextLayout tl = new TextLayout(s, g2d.getFont(), frc);
 		Shape shape = tl.getOutline(null);
-		g.setStroke(new BasicStroke(5));
-		g.draw(shape);
-		g.setColor(Color.white);
-		g.fill(shape);
-		g.dispose();
+		g2d.setStroke(new BasicStroke(5));
+		g2d.draw(shape);
+		g2d.setColor(Color.white);
+		g2d.fill(shape);
+		transform.translate(-x, -y);
+		g2d.setTransform(transform);
 	}
 
 	public static void drawStringMultiLine(Graphics2D g, String text, int lineWidth, int x, int y) {
