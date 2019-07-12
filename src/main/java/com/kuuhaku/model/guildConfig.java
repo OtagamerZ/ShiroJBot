@@ -218,7 +218,7 @@ public class guildConfig {
 
     public ArrayList<String> getNoLinkChannels() {
         try {
-            ArrayList<String> l = new ArrayList<>(Arrays.asList(noLinkChannels.replace("[", "").replace("]", "").split(",")));
+            ArrayList<String> l = new ArrayList<>(Arrays.asList(noLinkChannels.replace("[", "").replace("]", "").replace(" ", "").replace("\n", "").split(",")));
             l.removeIf(String::isEmpty);
             return l;
         } catch (NullPointerException e) {
@@ -240,7 +240,7 @@ public class guildConfig {
 
     public ArrayList<String> getNoSpamChannels() {
         try {
-            ArrayList<String> l = new ArrayList<>(Arrays.asList(noSpamChannels.replace("[", "").replace("]", "").split(",")));
+            ArrayList<String> l = new ArrayList<>(Arrays.asList(noSpamChannels.replace("[", "").replace("]", "").replace(" ", "").replace("\n", "").split(",")));
             l.removeIf(String::isEmpty);
             return l;
         } catch (NullPointerException e) {
