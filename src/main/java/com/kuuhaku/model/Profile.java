@@ -139,7 +139,7 @@ public class Profile {
 
 		g2d.setFont(new Font("DejaVu Sans", Font.BOLD, 25));
 		String s = SQLite.getMemberById(m.getUser().getId() + g.getId()).getBio();
-		drawStringMultiLine(g2d, s, 440, 474, 403);
+		drawStringMultiLine(g2d, s.isEmpty() ? "Sem biografia" : s, 440, 474, 403);
 
 		drawBadges(m, g, g2d);
 
