@@ -262,10 +262,12 @@ public class Profile {
 		FontRenderContext frc = g2d.getFontRenderContext();
 		TextLayout tl = new TextLayout(s, g2d.getFont(), frc);
 		Shape shape = tl.getOutline(null);
-		g2d.setStroke(new BasicStroke(2));
+		g2d.setStroke(new BasicStroke(5));
 		g2d.draw(shape);
 		g2d.setColor(Color.white);
 		g2d.fill(shape);
+		g2d.setTransform(null);
+		g2d.setStroke(null);
 	}
 
 	public static void drawStringMultiLine(Graphics2D g, String text, int lineWidth, int x, int y) {
