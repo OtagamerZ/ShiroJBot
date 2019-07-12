@@ -52,6 +52,7 @@ public class AntispamCommand extends Command {
         if (SQLite.getGuildNoSpamChannels(gc.getGuildID()).contains(channel.getId())) gc.removeNoSpamChannel(message.getTextChannel());
         else gc.addNoSpamChannel(message.getTextChannel());
 
+        System.out.println(gc.getNoSpamChannels().toString());
         SQLite.updateGuildChannels(gc);
 
         channel.sendMessage("Agora spam neste canal está " + (SQLite.getGuildNoLinkChannels(gc.getGuildID()).contains(channel.getId()) ? "**bloqueado**" : "**liberado**")).queue();
