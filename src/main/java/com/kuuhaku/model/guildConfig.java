@@ -234,7 +234,7 @@ public class guildConfig {
 
     public void removeNoLinkChannel(TextChannel ch) {
         List<String> ph = new ArrayList<>(getNoLinkChannels());
-        ph.remove(ch.getId());
+        ph.removeIf(s -> s.equals(ch.getId()));
         noLinkChannels = ph.toString();
     }
 
@@ -256,7 +256,7 @@ public class guildConfig {
 
     public void removeNoSpamChannel(TextChannel ch) {
         List<String> ph = new ArrayList<>(getNoSpamChannels());
-        ph.remove(ch.getId());
+        ph.removeIf(s -> s.equals(ch.getId()));
         noSpamChannels = ph.toString();
     }
 
