@@ -27,6 +27,9 @@ import net.dv8tion.jda.core.entities.Guild;
 import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
 import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.font.TextLayout;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
@@ -103,7 +106,7 @@ public class Profile {
 		String name = m.getEffectiveName();
 		if ((int) g2d.getFontMetrics().getStringBounds(m.getEffectiveName(), g2d).getWidth() >= 678)
 			name = m.getEffectiveName().substring(0, 21).concat("...");
-		g2d.drawString(name, 270, 342);
+		drawOutlinedText(name, 270, 342, g2d);
 
 		g2d.setFont(new Font(FONT.getName(), Font.BOLD, 85));
 		printCenteredString(String.valueOf(SQLite.getMemberById(m.getUser().getId() + g.getId()).getLevel()), 196, 52, 515, g2d);
@@ -203,7 +206,7 @@ public class Profile {
 				if (!SQLite.getMemberById(m.getUser().getId() + s.getId()).getWaifu().isEmpty()) {
 					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/married.png"))));
 					g2d.setFont(new Font(FONT.getName(), Font.PLAIN, 30));
-					g2d.drawString("Casado(a) com: " + Main.getInfo().getUserByID(SQLite.getMemberById(m.getUser().getId() + s.getId()).getWaifu()).getName(), 270, 298);
+					drawOutlinedText("Casado(a) com: " + Main.getInfo().getUserByID(SQLite.getMemberById(m.getUser().getId() + s.getId()).getWaifu()).getName(), 270, 298, g2d);
 				}
 			} catch (NoResultException ignore) {
 			}
@@ -222,7 +225,7 @@ public class Profile {
 		}
 	}
 
-	public static BufferedImage scaleImage(BufferedImage image, int w, int h) {
+	private static BufferedImage scaleImage(BufferedImage image, int w, int h) {
 
 		// Make sure the aspect ratio is maintained, so the image is not distorted
 		double thumbRatio = (double) w / (double) h;
@@ -248,7 +251,21 @@ public class Profile {
 	public static void printCenteredString(String s, int width, int XPos, int YPos, Graphics2D g2d) {
 		int stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
 		int start = width / 2 - stringLen / 2;
-		g2d.drawString(s, start + XPos, YPos);
+		drawOutlinedText(s, start + XPos, YPos, g2d);
+	}
+
+	private static void drawOutlinedText(String s, int x, int y, Graphics2D g2d) {
+		AffineTransform transform = g2d.getTransform();
+		transform.translate(x, y);
+		g2d.transform(transform);
+		g2d.setColor(Color.black);
+		FontRenderContext frc = g2d.getFontRenderContext();
+		TextLayout tl = new TextLayout(s, g2d.getFont(), frc);
+		Shape shape = tl.getOutline(null);
+		g2d.setStroke(new BasicStroke(2));
+		g2d.draw(shape);
+		g2d.setColor(Color.white);
+		g2d.fill(shape);
 	}
 
 	public static void drawStringMultiLine(Graphics2D g, String text, int lineWidth, int x, int y) {
@@ -269,7 +286,7 @@ public class Profile {
 				}
 			}
 			if (currentLine.toString().trim().length() > 0) {
-				g.drawString(currentLine.toString(), x, y);
+				drawOutlinedText(currentLine.toString(), x, y, g);
 			}
 		}
 	}
