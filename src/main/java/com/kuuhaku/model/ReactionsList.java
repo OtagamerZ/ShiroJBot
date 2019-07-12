@@ -63,7 +63,7 @@ public class ReactionsList {
                 "http://i.imgur.com/gmiJEbu.gif",
                 "http://multiversosnerd.com.br/wp-content/uploads/2016/10/Imagem-03.gif"
         };
-        return url[Helper.rng(url.length)];
+        return url[Helper.rng(url.length - 1)];
     }
 
     public static String facedesk() {
@@ -73,7 +73,7 @@ public class ReactionsList {
                 "https://i.imgur.com/BpFbc2t.gif",
                 "https://i.imgur.com/VH8m3sk.gif"
         };
-        return url[Helper.rng(url.length)];
+        return url[Helper.rng(url.length - 1)];
     }
 
     public static String nope() {
@@ -84,7 +84,7 @@ public class ReactionsList {
                 "https://i.imgur.com/V5nQbaO.gif",
                 "https://i.imgur.com/b3RFHNc.gif"
         };
-        return url[Helper.rng(url.length)];
+        return url[Helper.rng(url.length - 1)];
     }
 
     public static String run() {
@@ -100,7 +100,7 @@ public class ReactionsList {
                 "https://images-ext-1.discordapp.net/external/C90ZDXJXGLb0EHx-mYYqdgfcdGz1akb6M8tGlgeLDf0/%3Fitemid%3D7329025/https/media1.tenor.com/images/464a5161456508260bc73bc9550a1ff4/tenor.gif",
                 "https://thumbs.gfycat.com/AffectionateSmallIrishterrier-small.gif"
         };
-        return url[Helper.rng(url.length)];
+        return url[Helper.rng(url.length - 1)];
     }
 
     public static String slap() {
@@ -114,7 +114,7 @@ public class ReactionsList {
                 "https://images-ext-2.discordapp.net/external/1g7tzE67sq_3vK8uFX82wrxfwhql_xxK3JW-P7hEjVk/https/www.intoxianime.com/wp-content/uploads/2017/04/tumblr_ooub8fIHkT1qz64n4o2_400.gif",
                 "https://images-ext-2.discordapp.net/external/9pc6lXAB7i0u2gIOQcaXmny6-kbjwpCHOjspCa3z_LE/https/utinuti.files.wordpress.com/2012/03/tumblr_lv8r0lagid1qgcvsy.gif"
         };
-        return url[Helper.rng(url.length)];
+        return url[Helper.rng(url.length - 1)];
     }
 
     public static String smash() {
@@ -125,7 +125,7 @@ public class ReactionsList {
                 "https://i.imgur.com/BqSqhJ8.gif",
                 "https://i.imgur.com/tVebG8q.gif"
         };
-        return url[Helper.rng(url.length)];
+        return url[Helper.rng(url.length - 1)];
     }
 
     public static String stare() {
@@ -139,7 +139,7 @@ public class ReactionsList {
                 "https://media.giphy.com/media/mpcFKjluEmlk4/giphy.gif",
                 "https://media.giphy.com/media/FWQh683IrEJ2w/giphy.gif"
         };
-        return url[Helper.rng(url.length)];
+        return url[Helper.rng(url.length - 1)];
     }
 
     public static String blush() {
@@ -154,7 +154,7 @@ public class ReactionsList {
                 "https://images-ext-1.discordapp.net/external/KNzk979Y7Fkwt7BcZD4DHoN1-2zXXShtIFv_zRbnfYQ/http/33.media.tumblr.com/tumblr_lyf8lxrT691qzk4cro1_500.gif",
                 "https://images-ext-1.discordapp.net/external/ldVmliyto3Ngk5nhK8t269HfGiWG-GmflBDvG-ijGRg/https/33.media.tumblr.com/46287071b5bbefd755d4aa3f34edd6c5/tumblr_nxzm5rrCxr1ujgw5yo1_500.gif"
         };
-        return url[Helper.rng(url.length)];
+        return url[Helper.rng(url.length - 1)];
     }
 
     public static String laugh() {
@@ -170,7 +170,7 @@ public class ReactionsList {
                 "https://images-ext-2.discordapp.net/external/2SAwPfE7qTIMzs0aQ2YO429kOqOJzCWRoFJFhjqVhmU/http/2.bp.blogspot.com/-_Zm_DXIT-xU/UUkZwgZIYNI/AAAAAAAAAgA/h7fRL5eYmKM/s1600/tumblr_mi6b5p7DiN1ql495mo1_500_large.gif",
                 "https://thumbs.gfycat.com/IncompleteBrownHypsilophodon-max-1mb.gif"
         };
-        return url[Helper.rng(url.length)];
+        return url[Helper.rng(url.length - 1)];
     }
 
     public static String sad() {
@@ -189,7 +189,7 @@ public class ReactionsList {
                 "https://images-ext-1.discordapp.net/external/sAKYLuZJ_PG6hUQeQK_CC1EjSqIykOLp3_24TuPV2Kg/https/i.pinimg.com/originals/e6/b3/e1/e6b3e1834fcb7fc86207efe41c7457df.gif",
                 "https://images-ext-1.discordapp.net/external/iEhLp9oRVMi2fhOwR4jM6E-Hqkqn0dFEYd6_LKjL4Fc/https/i.pinimg.com/originals/c9/68/fe/c968fe1f0c6682400c901306e8763bb7.gif"
         };
-        return url[Helper.rng(url.length)];
+        return url[Helper.rng(url.length - 1)];
     }
 
     public static String kiss() {
@@ -207,7 +207,7 @@ public class ReactionsList {
                 "https://images-ext-1.discordapp.net/external/uuLj_PvI9X1ZRzbHkJ_XmUiW1MKWEXyLNTtxzEYTDiY/https/pa1.narvii.com/6226/f1e4e5d1a26c35a2754cbdde0f11c23c5ec51060_hq.gif",
                 "https://images-ext-2.discordapp.net/external/akLSWq1xvSBkH-Yne6qivo1iE_XNQdR9R33BjsFaVj4/https/uploads.spiritfanfiction.com/fanfics/capitulos/201606/fanfiction-originais-ela-que-me-mudou-5729406-060620161504.gif"
         };
-        return url[Helper.rng(url.length)];
+        return url[Helper.rng(url.length - 1)];
     }
 
     public static String dance() {
@@ -226,7 +226,7 @@ public class ReactionsList {
                 "https://images-ext-1.discordapp.net/external/lTIoZz3QUvlOiiSEigNAfXLgWcakVc2OrcRX-TxUbLU/https/images.uncyc.org/pt/8/81/Akatsuki28.gif",
                 "https://images-ext-1.discordapp.net/external/fSyZNQicFOo0fktTvzLgODcj1Xg9KuW9j3fp3A9PoBM/https/i.pinimg.com/originals/e5/38/9a/e5389a88f74c6c727c4273309ca932db.gif"
         };
-        return url[Helper.rng(url.length)];
+        return url[Helper.rng(url.length - 1)];
     }
 
     public static String pat() {
@@ -239,7 +239,7 @@ public class ReactionsList {
                 "https://images-ext-2.discordapp.net/external/WTfgqqUN_qfq6aFSGxv0sUr5hmKrP-AFl2ZwI6yVLpU/https/pa1.narvii.com/6200/33889bd8c5e3b9dde6b4c43de225fea521ce511a_hq.gif",
                 "https://images-ext-2.discordapp.net/external/0kMp89MC22KXc6vhH4ckq-y6kBHAI4mRfbMi5mfvWWE/https/media.tenor.com/images/ad8357e58d35c1d63b570ab7e587f212/tenor.gif"
         };
-        return url[Helper.rng(url.length)];
+        return url[Helper.rng(url.length - 1)];
     }
 
     public static String bite() {
@@ -251,6 +251,6 @@ public class ReactionsList {
                 "https://images-ext-1.discordapp.net/external/ypr7byUbHyKYm5nsV1y4hnPUu_xaoWVOtctxWs_-2Ps/http/pa1.narvii.com/5922/1e52bb4412287e69fb9ac2a8b35970730bc2a0a1_00.gif"
 
         };
-        return url[Helper.rng(url.length)];
+        return url[Helper.rng(url.length - 1)];
     }
 }
