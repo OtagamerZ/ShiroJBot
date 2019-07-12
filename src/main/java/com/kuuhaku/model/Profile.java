@@ -266,8 +266,8 @@ public class Profile {
 		g2d.draw(shape);
 		g2d.setColor(Color.white);
 		g2d.fill(shape);
-		g2d.setTransform(null);
-		g2d.setStroke(null);
+		transform.translate(0, 0);
+		g2d.setTransform(transform);
 	}
 
 	public static void drawStringMultiLine(Graphics2D g, String text, int lineWidth, int x, int y) {
