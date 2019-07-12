@@ -33,6 +33,9 @@ public class MarryCommand extends Command {
 			if (message.getMentionedUsers().size() < 1) {
 				channel.sendMessage(":x: | Você precisa mencionar um usuário!").queue();
 				return;
+			} else if (message.getMentionedUsers().get(0) == author) {
+				channel.sendMessage(":x: | Por mais que eu respeite seu lado otaku, você não pode se casar com sí mesmo!").queue();
+				return;
 			} else if (!SQLite.getMemberById(author.getId() + guild.getId()).getWaifu().isEmpty() || !SQLite.getMemberById(message.getMentionedUsers().get(0).getId() + guild.getId()).getWaifu().isEmpty()) {
 				channel.sendMessage(":x: | Essa pessoa já está casada, hora de passar pra frente!").queue();
 				return;
