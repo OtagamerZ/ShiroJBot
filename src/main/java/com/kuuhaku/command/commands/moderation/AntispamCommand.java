@@ -39,12 +39,13 @@ public class AntispamCommand extends Command {
                 case "soft":
                     gc.setHardAntispam(false);
                     SQLite.updateGuildChannels(gc);
+                    channel.sendMessage("Modo de anti-spam trocado para **SOFT**").queue();
                     return;
                 case "hard":
                     gc.setHardAntispam(true);
                     SQLite.updateGuildChannels(gc);
+                    channel.sendMessage("Modo de anti-spam trocado para **HARD**").queue();
                     return;
-                default: channel.sendMessage(":x: | Tipo incorreto, os tipos são `soft` ou `hard`").queue();
             }
             return;
         }
@@ -52,9 +53,8 @@ public class AntispamCommand extends Command {
         if (SQLite.getGuildNoSpamChannels(gc.getGuildID()).contains(channel.getId())) gc.removeNoSpamChannel(message.getTextChannel());
         else gc.addNoSpamChannel(message.getTextChannel());
 
-        System.out.println(gc.getNoSpamChannels().toString());
         SQLite.updateGuildChannels(gc);
 
-        channel.sendMessage("Agora spam neste canal está " + (SQLite.getGuildNoLinkChannels(gc.getGuildID()).contains(channel.getId()) ? "**bloqueado**" : "**liberado**")).queue();
+        channel.sendMessage("Agora spam neste canal está " + (SQLite.getGuildNoSpamChannels(gc.getGuildID()).contains(channel.getId()) ? "**bloqueado**" : "**liberado**")).queue();
     }
 }
