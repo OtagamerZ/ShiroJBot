@@ -130,7 +130,6 @@ public class ReactionsList {
 
     public static String stare() {
         String[] url = new String[]{
-                "https://i.imgur.com/P0D8qvo.gif",
                 "https://i.imgur.com/dExTK6D.gif",
                 "https://i.imgur.com/CSJxTiA.gif",
                 "https://i.imgur.com/mQKyrId.gif",
