@@ -52,6 +52,11 @@ public class guildConfig {
     @Column(columnDefinition = "boolean default false")
     private boolean aiMode = false;
     private String noLinkChannels = "";
+    private String noSpamChannels = "";
+    @Column(columnDefinition = "int default 5")
+    private int noSpamAmount = 5;
+    @Column(columnDefinition = "boolean default false")
+    private boolean hardAntispam;
     private boolean markForDelete;
 
     public guildConfig() {
@@ -213,23 +218,63 @@ public class guildConfig {
         this.canalai = canalai;
     }
 
-    public String[] getNoLinkChannels() {
+    public ArrayList<String> getNoLinkChannels() {
         try {
-            return noLinkChannels.replace("[", "").replace("]", "").split(",");
+            ArrayList<String> l = new ArrayList<>(Arrays.asList(noLinkChannels.replace("[", "").replace("]", "").replace(" ", "").replace("\n", "").split(",")));
+            l.removeIf(String::isEmpty);
+            return l;
         } catch (NullPointerException e) {
-            return new String[]{};
+            return new ArrayList<>();
         }
     }
 
     public void addNoLinkChannel(TextChannel ch) {
-        List<String> ph = new ArrayList<>(Arrays.asList(getNoLinkChannels()));
+        List<String> ph = new ArrayList<>(getNoLinkChannels());
         ph.add(ch.getId());
         noLinkChannels = ph.toString();
     }
 
     public void removeNoLinkChannel(TextChannel ch) {
-        List<String> ph = new ArrayList<>(Arrays.asList(getNoLinkChannels()));
-        ph.remove(ch.getId());
+        List<String> ph = new ArrayList<>(getNoLinkChannels());
+        ph.removeIf(s -> s.equals(ch.getId()));
         noLinkChannels = ph.toString();
+    }
+
+    public ArrayList<String> getNoSpamChannels() {
+        try {
+            ArrayList<String> l = new ArrayList<>(Arrays.asList(noSpamChannels.replace("[", "").replace("]", "").replace(" ", "").replace("\n", "").split(",")));
+            l.removeIf(String::isEmpty);
+            return l;
+        } catch (NullPointerException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    public void addNoSpamChannel(TextChannel ch) {
+        List<String> ph = new ArrayList<>(getNoSpamChannels());
+        ph.add(ch.getId());
+        noSpamChannels = ph.toString();
+    }
+
+    public void removeNoSpamChannel(TextChannel ch) {
+        List<String> ph = new ArrayList<>(getNoSpamChannels());
+        ph.removeIf(s -> s.equals(ch.getId()));
+        noSpamChannels = ph.toString();
+    }
+
+    public boolean isHardAntispam() {
+        return hardAntispam;
+    }
+
+    public void setHardAntispam(boolean hardAntispam) {
+        this.hardAntispam = hardAntispam;
+    }
+
+    public int getNoSpamAmount() {
+        return noSpamAmount;
+    }
+
+    public void setNoSpamAmount(int noSpamAmount) {
+        this.noSpamAmount = noSpamAmount;
     }
 }

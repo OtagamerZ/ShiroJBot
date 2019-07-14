@@ -24,6 +24,7 @@ import com.kuuhaku.model.Member;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
+import com.kuuhaku.utils.SpamLevel;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.User;
@@ -256,6 +257,18 @@ public class SQLite {
 		em.close();
 	}
 
+	public static void saveMemberWaifu(Member m, User u) {
+		EntityManager em = getEntityManager();
+
+		m.setWaifu(u);
+
+		em.getTransaction().begin();
+		em.merge(m);
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
 	public static void removeMemberFromDB(Member m) {
 		EntityManager em = getEntityManager();
 
@@ -274,7 +287,8 @@ public class SQLite {
 
 		Query q;
 
-		if (global) q = em.createQuery("SELECT m FROM Member m WHERE m.mid IS NOT NULL ORDER BY m.level DESC", Member.class);
+		if (global)
+			q = em.createQuery("SELECT m FROM Member m WHERE m.mid IS NOT NULL ORDER BY m.level DESC", Member.class);
 		else {
 			q = em.createQuery("SELECT m FROM Member m WHERE id LIKE ?1 AND m.mid IS NOT NULL ORDER BY m.level DESC", Member.class);
 			q.setParameter(1, "%" + gid);
@@ -704,13 +718,21 @@ public class SQLite {
 		guildConfig gc = (guildConfig) q.getSingleResult();
 		em.close();
 
-		List<String> list = new ArrayList<>();
-		Collections.addAll(list, gc.getNoLinkChannels());
-
-		return list;
+		return gc.getNoLinkChannels();
 	}
 
-	public static void updateGuildNoLinkChannels(guildConfig gc) {
+	public static List<String> getGuildNoSpamChannels(String id) {
+		EntityManager em = getEntityManager();
+
+		Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+		q.setParameter(1, id);
+		guildConfig gc = (guildConfig) q.getSingleResult();
+		em.close();
+
+		return gc.getNoSpamChannels();
+	}
+
+	public static void updateGuildChannels(guildConfig gc) {
 		EntityManager em = getEntityManager();
 
 		em.getTransaction().begin();
@@ -719,7 +741,7 @@ public class SQLite {
 
 		em.close();
 	}
-	
+
 	public static void updateMemberBiography(Member m) {
 		EntityManager em = getEntityManager();
 
