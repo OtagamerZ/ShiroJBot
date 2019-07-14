@@ -3,6 +3,7 @@ package com.kuuhaku.controller;
 import com.kuuhaku.model.*;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
+import net.dv8tion.jda.core.entities.User;
 
 import javax.persistence.*;
 import java.util.*;
@@ -234,6 +235,18 @@ public class MySQL {
 
         em.getTransaction().begin();
         em.merge(t);
+        em.getTransaction().commit();
+
+        em.close();
+    }
+
+    public static void saveMemberWaifu(Member m, User u) {
+        EntityManager em = getEntityManager();
+
+        m.setWaifu(u);
+
+        em.getTransaction().begin();
+        em.merge(m);
         em.getTransaction().commit();
 
         em.close();

@@ -18,7 +18,7 @@
 package com.kuuhaku.utils;
 
 public enum TagIcons {
-    DEV, EDITOR, PARTNER, MODERATOR, CHAMPION, VETERAN, VERIFIED, TOXIC;
+    DEV, EDITOR, PARTNER, MODERATOR, CHAMPION, VETERAN, VERIFIED, TOXIC, MARRIED;
 
     public static String getTag(TagIcons t) {
         switch (t) {
@@ -38,6 +38,8 @@ public enum TagIcons {
                 return "<:Verified:591425071772467211> ";
             case TOXIC:
                 return "<:Toxic:589103372926451713> ";
+            case MARRIED:
+                return "<:Married:598908829769400320>";
         }
         return null;
     }
