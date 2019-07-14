@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
 
 public class ImageCommand extends Command {
 
@@ -53,6 +54,11 @@ public class ImageCommand extends Command {
                 JSONObject jo = new JSONObject(resposta.toString().replace("[", "").replace("]", ""));
                 String url = "https://safebooru.org//images/" + jo.getString("directory") + "/" + jo.getString("image");
 
+                if (Arrays.asList(jo.getString("tags").split(" ")).contains("hentai")) {
+                    m.editMessage("Humm safadinho, eu não posso postar sobre Hentais neste canal!").queue();
+                    return;
+                }
+
                 EmbedBuilder eb = new EmbedBuilder();
                 eb.setColor(Helper.colorThief(url));
                 eb.setAuthor("Aqui está!", "https://safebooru.org//images/" + jo.getString("directory") + "/" + jo.getString("image"));
@@ -64,7 +70,7 @@ public class ImageCommand extends Command {
                 m.delete().queue();
                 channel.sendMessage(eb.build()).queue();
             } catch (IOException | JSONException e) {
-                m.editMessage(":x: | Humm...não achei nenhum anime com esse nome, talvez você tenha escrito algo errado?").queue();
+                m.editMessage(":x: | Humm...não achei nenhuma imagem com essas tags, talvez você tenha escrito algo errado?").queue();
                 Helper.log(this.getClass(), LogLevel.ERROR, e.toString());
             }
         });
