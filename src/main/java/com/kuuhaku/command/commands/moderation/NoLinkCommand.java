@@ -27,7 +27,7 @@ import net.dv8tion.jda.core.events.Event;
 public class NoLinkCommand extends Command {
 
     public NoLinkCommand() {
-        super("semlink", "Bloqueia ou permite links postados no canal onde este comando foi digitado.", Category.MODERACAO);
+        super("semlink", new String[]{"nolink", "blocklink"}, "Bloqueia ou permite links postados no canal onde este comando foi digitado.", Category.MODERACAO);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class NoLinkCommand extends Command {
         if (SQLite.getGuildNoLinkChannels(gc.getGuildID()).contains(channel.getId())) gc.removeNoLinkChannel(message.getTextChannel());
         else gc.addNoLinkChannel(message.getTextChannel());
 
-        SQLite.updateGuildNoLinkChannels(gc);
+        SQLite.updateGuildChannels(gc);
 
         channel.sendMessage("Agora os links neste canal estão " + (SQLite.getGuildNoLinkChannels(gc.getGuildID()).contains(channel.getId()) ? "**bloqueados**" : "**liberados**")).queue();
     }
