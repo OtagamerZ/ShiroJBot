@@ -55,6 +55,7 @@ import java.util.regex.Pattern;
 public class Helper {
 
 	public static final String VOID = "\u200B";
+	public static List<User[]> queue = new ArrayList<>();
 
 	private static PrivilegeLevel getPrivilegeLevel(Member member) {
 		if (Main.getInfo().getNiiChan().contains(member.getUser().getId())) {
@@ -521,5 +522,14 @@ public class Helper {
 		hsv[2] = (hsv[2] + 180) % 360;
 
 		return Color.getHSBColor(hsv[0], hsv[1], hsv[2]);
+	}
+
+	public static String makeEmoteFromMention(String[] source) {
+		String[] chkdSrc = new String[source.length];
+		for (int i = 0; i < source.length; i++) {
+			if (source[i].startsWith("{") && source[i].endsWith("}")) chkdSrc[i] = source[i].replace("{", "<").replace("}", ">").replace("&", ":");
+			else chkdSrc[i] = source[i];
+		}
+		return String.join(" ", chkdSrc).trim();
 	}
 }

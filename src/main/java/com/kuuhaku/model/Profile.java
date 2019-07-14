@@ -27,6 +27,9 @@ import net.dv8tion.jda.core.entities.Guild;
 import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
 import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.font.TextLayout;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
@@ -94,17 +97,13 @@ public class Profile {
 			g2d.drawLine(268 + (177 / 3 * i), 370, 268 + (177 / 3 * i), 547);
 			g2d.drawLine(268, 370 + (177 / 3 * i), 445, 370 + (177 / 3 * i));
 		}
-		drawBadges(m, g, g2d);
 
-		int luma = ((int) Math.round(0.2126 * main.getRed() + 0.7152 * main.getGreen() + 0.0722 * main.getBlue()));
-		if (luma >= 128) g2d.setColor(Color.BLACK);
-		else g2d.setColor(Color.WHITE);
 		g2d.setFont(new Font(FONT.getName(), Font.PLAIN, 50));
 		printCenteredString("LEVEL", 196, 52, 440, g2d);
 		String name = m.getEffectiveName();
 		if ((int) g2d.getFontMetrics().getStringBounds(m.getEffectiveName(), g2d).getWidth() >= 678)
 			name = m.getEffectiveName().substring(0, 21).concat("...");
-		g2d.drawString(name, 270, 342);
+		drawOutlinedText(name, 270, 342, g2d);
 
 		g2d.setFont(new Font(FONT.getName(), Font.BOLD, 85));
 		printCenteredString(String.valueOf(SQLite.getMemberById(m.getUser().getId() + g.getId()).getLevel()), 196, 52, 515, g2d);
@@ -137,9 +136,12 @@ public class Profile {
 		g2d.setFont(new Font(FONT.getName(), Font.PLAIN, 30));
 		printCenteredString("Rank: #" + pos + "/#" + posG, 196, 52, 585, g2d);
 
+
 		g2d.setFont(new Font("DejaVu Sans", Font.BOLD, 25));
 		String s = SQLite.getMemberById(m.getUser().getId() + g.getId()).getBio();
-		drawStringMultiLine(g2d, s, 440, 474, 403);
+		drawStringMultiLine(g2d, s.isEmpty() ? "Sem biografia" : s, 440, 474, 403);
+
+		drawBadges(m, g, g2d);
 
 		g2d.setClip(new Ellipse2D.Float(50, 200, avatar.getWidth(), avatar.getHeight()));
 		g2d.fillOval(50, 200, avatar.getWidth(), avatar.getHeight());
@@ -197,6 +199,14 @@ public class Profile {
 					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/toxic.png"))));
 			} catch (NoResultException ignore) {
 			}
+			try {
+				if (!SQLite.getMemberById(m.getUser().getId() + s.getId()).getWaifu().isEmpty()) {
+					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/married.png"))));
+					g2d.setFont(new Font(FONT.getName(), Font.PLAIN, 30));
+					drawOutlinedText("Casado(a) com: " + Main.getInfo().getUserByID(SQLite.getMemberById(m.getUser().getId() + s.getId()).getWaifu()).getName(), 270, 298, g2d);
+				}
+			} catch (NoResultException ignore) {
+			}
 		}};
 
 		List<int[]> coords = new ArrayList<int[]>() {{
@@ -212,7 +222,7 @@ public class Profile {
 		}
 	}
 
-	public static BufferedImage scaleImage(BufferedImage image, int w, int h) {
+	private static BufferedImage scaleImage(BufferedImage image, int w, int h) {
 
 		// Make sure the aspect ratio is maintained, so the image is not distorted
 		double thumbRatio = (double) w / (double) h;
@@ -238,13 +248,29 @@ public class Profile {
 	public static void printCenteredString(String s, int width, int XPos, int YPos, Graphics2D g2d) {
 		int stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
 		int start = width / 2 - stringLen / 2;
-		g2d.drawString(s, start + XPos, YPos);
+		drawOutlinedText(s, start + XPos, YPos, g2d);
+	}
+
+	private static void drawOutlinedText(String s, int x, int y, Graphics2D g2d) {
+		AffineTransform transform = g2d.getTransform();
+		transform.translate(x, y);
+		g2d.transform(transform);
+		g2d.setColor(Color.black);
+		FontRenderContext frc = g2d.getFontRenderContext();
+		TextLayout tl = new TextLayout(s, g2d.getFont(), frc);
+		Shape shape = tl.getOutline(null);
+		g2d.setStroke(new BasicStroke(4));
+		g2d.draw(shape);
+		g2d.setColor(Color.white);
+		g2d.fill(shape);
+		transform.translate(-x, -y);
+		g2d.setTransform(transform);
 	}
 
 	public static void drawStringMultiLine(Graphics2D g, String text, int lineWidth, int x, int y) {
 		FontMetrics m = g.getFontMetrics();
 		if (m.stringWidth(text) < lineWidth) {
-			g.drawString(text, x, y);
+			drawOutlinedText(text, x, y, g);
 		} else {
 			String[] words = text.split(" ");
 			StringBuilder currentLine = new StringBuilder(words[0]);
@@ -253,13 +279,13 @@ public class Profile {
 					currentLine.append(" ").append(words[i]);
 				} else {
 					String s = currentLine.toString();
-					g.drawString(s, x, y);
+					drawOutlinedText(s, x, y, g);
 					y += m.getHeight();
 					currentLine = new StringBuilder(words[i]);
 				}
 			}
 			if (currentLine.toString().trim().length() > 0) {
-				g.drawString(currentLine.toString(), x, y);
+				drawOutlinedText(currentLine.toString(), x, y, g);
 			}
 		}
 	}

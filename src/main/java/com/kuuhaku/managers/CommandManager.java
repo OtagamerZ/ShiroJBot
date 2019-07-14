@@ -58,6 +58,7 @@ public class CommandManager {
             add(new KickMemberCommand());
             add(new BanMemberCommand());
             add(new NoLinkCommand());
+            add(new AntispamCommand());
 
             //INFORMATION
             add(new ComandosCommand());
@@ -84,6 +85,9 @@ public class CommandManager {
             add(new AnimeCommand());
             add(new ImageCommand());
             add(new ValidateGIFCommand());
+            add(new LocalEmoteListCommand());
+            add(new ShiroEmoteListCommand());
+            add(new JibrilEmoteListCommand());
 
             //FUN
             add(new SadButTrueCommand());
@@ -91,6 +95,7 @@ public class CommandManager {
             add(new ExpandingBrainCommand());
             add(new PPTCommand());
             add(new ShipCommand());
+            add(new MarryCommand());
             //REAÇÕES
             //RECIPROCOS
             add(new HugReaction(false));

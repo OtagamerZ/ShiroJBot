@@ -39,7 +39,7 @@ public class Relay extends SQLite {
 		checkSize();
 
 		eb = new EmbedBuilder();
-		eb.setDescription(msg + "\n\n ");
+		eb.setDescription(Helper.makeEmoteFromMention(msg.split(" ")) + "\n\n ");
 		eb.setAuthor("(" + s.getName() + ") " + m.getEffectiveName(), s.getIconUrl(), s.getIconUrl());
 		eb.setThumbnail(m.getUser().getAvatarUrl());
 		if (imgURL != null) eb.setImage(imgURL);
