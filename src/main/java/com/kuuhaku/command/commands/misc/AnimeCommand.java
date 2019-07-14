@@ -84,7 +84,8 @@ public class AnimeCommand extends Command {
 
                 EmbedBuilder eb = new EmbedBuilder();
                 if (anime.getGenres().toLowerCase().contains("hentai") && !message.getTextChannel().isNSFW()) {
-                    message.getChannel().sendTyping().queue(tm -> message.getChannel().sendMessage("Humm safadinho, eu não posso postar sobre Hentais neste canal!").queue());
+                    m.editMessage("Humm safadinho, eu não posso postar sobre Hentais neste canal!").queue();
+                    return;
                 }
 
                 eb.setColor(anime.getcColor());
