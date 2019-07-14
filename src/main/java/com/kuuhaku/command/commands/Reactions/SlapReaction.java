@@ -58,7 +58,7 @@ public class SlapReaction extends Reaction {
 			if (!isAnswer())
 				Helper.sendReaction(ReactionsList.slap(), channel, author.getAsMention() + " deu um tapa em " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], true);
 			else
-				Helper.sendReaction(ReactionsList.slap(), channel, message.getMentionedUsers().get(0).getAsMention() + " devolveu o tapa de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], false);
+				Helper.sendReaction(ReactionsList.slap(), channel, message.getMentionedUsers().get(1).getAsMention() + " devolveu o tapa de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], false);
 		} else {
 			Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para dar um tapa!");
 		}

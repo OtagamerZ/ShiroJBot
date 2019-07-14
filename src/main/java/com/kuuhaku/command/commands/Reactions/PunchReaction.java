@@ -59,7 +59,7 @@ public class PunchReaction extends Reaction {
 			if (!isAnswer())
 				Helper.sendReaction(ReactionsList.smash(), channel, author.getAsMention() + " socou " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], true);
 			else
-				Helper.sendReaction(ReactionsList.smash(), channel, message.getMentionedUsers().get(0).getAsMention() + " devolveu o soco de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], false);
+				Helper.sendReaction(ReactionsList.smash(), channel, message.getMentionedUsers().get(1).getAsMention() + " devolveu o soco de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], false);
 		} else {
 			Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para socar!");
 		}

@@ -58,7 +58,7 @@ public class HugReaction extends Reaction {
 			if (!isAnswer())
 				Helper.sendReaction(ReactionsList.hug(), channel, author.getAsMention() + " abraçou " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], true);
 			else
-				Helper.sendReaction(ReactionsList.hug(), channel, message.getMentionedUsers().get(0).getAsMention() + " devolveu o abraço de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], false);
+				Helper.sendReaction(ReactionsList.hug(), channel, message.getMentionedUsers().get(1).getAsMention() + " devolveu o abraço de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], false);
 		} else {
 			Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para abraçar!");
 		}

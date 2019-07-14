@@ -59,7 +59,7 @@ public class StareReaction extends Reaction {
 			if (!isAnswer())
 				Helper.sendReaction(ReactionsList.stare(), channel, author.getAsMention() + " encarou " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], true);
 			else
-				Helper.sendReaction(ReactionsList.stare(), channel, message.getMentionedUsers().get(0).getAsMention() + " também está encarando " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], false);
+				Helper.sendReaction(ReactionsList.stare(), channel, message.getMentionedUsers().get(1).getAsMention() + " também está encarando " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], false);
 		} else {
 			Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para encarar!");
 		}
