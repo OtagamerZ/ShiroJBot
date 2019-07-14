@@ -59,7 +59,7 @@ public class KissReaction extends Reaction {
 			if (!isAnswer())
 				Helper.sendReaction(ReactionsList.kiss(), channel, author.getAsMention() + " beijou " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], true);
 			else
-				Helper.sendReaction(ReactionsList.kiss(), channel, message.getMentionedUsers().get(0).getAsMention() + " devolveu o beijo de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], false);
+				Helper.sendReaction(ReactionsList.kiss(), channel, message.getMentionedUsers().get(1).getAsMention() + " devolveu o beijo de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], false);
 		} else {
 			Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para beijar!");
 		}
