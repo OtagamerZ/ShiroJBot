@@ -69,8 +69,8 @@ public class PollCommand extends Command {
 				m.addReaction("\uD83D\uDC4D").queue();
 				m.addReaction("\uD83D\uDC4E").queue();
 				final Runnable awaitPollEnd = () -> {
-					int pos = Collections.frequency(m.getReactions().stream().map(r -> r.getReactionEmote().getEmote().toString()).collect(Collectors.toList()), "\uD83D\uDC4D") - 1;
-					int neg = Collections.frequency(m.getReactions().stream().map(r -> r.getReactionEmote().getEmote().toString()).collect(Collectors.toList()), "\uD83D\uDC4E") - 1;
+					int pos = Collections.frequency(m.getReactions().stream().map(r -> r.getReactionEmote().getEmote()).collect(Collectors.toList()), "\uD83D\uDC4D") - 1;
+					int neg = Collections.frequency(m.getReactions().stream().map(r -> r.getReactionEmote().getEmote()).collect(Collectors.toList()), "\uD83D\uDC4E") - 1;
 					boolean NOVOTE = false;
 
 					if (pos == 0 && neg == 0) {
@@ -97,8 +97,8 @@ public class PollCommand extends Command {
 					m.addReaction("\uD83D\uDC4D").queue();
 					m.addReaction("\uD83D\uDC4E").queue();
 					final Runnable awaitPollEnd = () -> {
-						int pos = Collections.frequency(m.getReactions().stream().map(r -> r.getReactionEmote().getEmote().toString()).collect(Collectors.toList()), "\uD83D\uDC4D") - 1;
-						int neg = Collections.frequency(m.getReactions().stream().map(r -> r.getReactionEmote().getEmote().toString()).collect(Collectors.toList()), "\uD83D\uDC4E") - 1;
+						int pos = Collections.frequency(m.getReactions().stream().map(r -> r.getReactionEmote().getEmote()).collect(Collectors.toList()), "\uD83D\uDC4D") - 1;
+						int neg = Collections.frequency(m.getReactions().stream().map(r -> r.getReactionEmote().getEmote()).collect(Collectors.toList()), "\uD83D\uDC4E") - 1;
 						boolean NOVOTE = false;
 
 						if (pos == 0 && neg == 0) {
@@ -124,8 +124,8 @@ public class PollCommand extends Command {
 					m.addReaction("\uD83D\uDC4D").queue();
 					m.addReaction("\uD83D\uDC4E").queue();
 					final Runnable awaitPollEnd = () -> {
-						int pos = Collections.frequency(m.getReactions().stream().map(r -> r.getReactionEmote().getEmote().toString()).collect(Collectors.toList()), "\uD83D\uDC4D") - 1;
-						int neg = Collections.frequency(m.getReactions().stream().map(r -> r.getReactionEmote().getEmote().toString()).collect(Collectors.toList()), "\uD83D\uDC4E") - 1;
+						int pos = Collections.frequency(m.getReactions().stream().map(r -> r.getReactionEmote().getEmote()).collect(Collectors.toList()), "\uD83D\uDC4D") - 1;
+						int neg = Collections.frequency(m.getReactions().stream().map(r -> r.getReactionEmote().getEmote()).collect(Collectors.toList()), "\uD83D\uDC4E") - 1;
 						boolean NOVOTE = false;
 
 						if (pos == 0 && neg == 0) {
