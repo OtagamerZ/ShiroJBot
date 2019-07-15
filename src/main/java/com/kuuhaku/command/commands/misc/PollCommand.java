@@ -69,21 +69,26 @@ public class PollCommand extends Command {
 			channel.sendMessage(eb.build()).queue(m -> {
 				m.addReaction("\uD83D\uDC4D").queue();
 				m.addReaction("\uD83D\uDC4E").queue();
+				String msgID = m.getId();
 				final Runnable awaitPollEnd = () -> {
-					int pos = (int) m.getReactions().stream().filter(r -> r.getReactionEmote().getName().equals("\uD83D\uDC4D")).count() - 1;
-					int neg = (int) m.getReactions().stream().filter(r -> r.getReactionEmote().getName().equals("\uD83D\uDC4E")).count() - 1;
+					final int[] pos = {0};
+					final int[] neg = {0};
+					channel.getMessageById(msgID).queue(msg -> {
+						pos[0] = (int) msg.getReactions().stream().filter(r -> r.getReactionEmote().getName().equals("\uD83D\uDC4D")).count() - 1;
+						neg[0] = (int) msg.getReactions().stream().filter(r -> r.getReactionEmote().getName().equals("\uD83D\uDC4E")).count() - 1;
+					});
 					boolean NOVOTE = false;
 
-					if (pos == 0 && neg == 0) {
-						pos = 1;
-						neg = 1;
+					if (pos[0] == 0 && neg[0] == 0) {
+						pos[0] = 1;
+						neg[0] = 1;
 						NOVOTE = true;
 					}
 
 					eb.setAuthor("A enquete feita por " + member.getEffectiveName() + " foi encerrada!");
-					eb.setTitle("Enquete: ("+ (NOVOTE ? "nenhum voto" : (pos + neg) + " votos") +")");
-					eb.addField("Aprovação: ", Helper.round((((float) pos * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
-					eb.addField("Reprovação: ", Helper.round((((float) neg * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
+					eb.setTitle("Enquete: ("+ (NOVOTE ? "nenhum voto" : (pos[0] + neg[0]) + " votos") +")");
+					eb.addField("Aprovação: ", Helper.round((((float) pos[0] * 100f) / ((float) pos[0] + (float) neg[0])), 1) + "%", true);
+					eb.addField("Reprovação: ", Helper.round((((float) neg[0] * 100f) / ((float) pos[0] + (float) neg[0])), 1) + "%", true);
 
 					m.editMessage(eb.build()).submit();
 					author.openPrivateChannel().queue(c -> c.sendMessage(eb.setAuthor("Sua enquete foi encerrada!").build()).submit());
