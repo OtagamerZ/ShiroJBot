@@ -23,7 +23,6 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
@@ -76,14 +75,8 @@ public class PollCommand extends Command {
 					Main.getInfo().getScheduler().schedule(() -> showResult(m, member, eb), gc.getPollTime(), TimeUnit.SECONDS);
 				});
 			} catch (Exception e) {
-				Helper.log(this.getClass(), LogLevel.ERROR, e.getStackTrace()[0].toString());
-				SQLite.updateGuildCanalSUG(null, gc);
-				channel.sendMessage(eb.build()).queue(m -> {
-					m.addReaction("\uD83D\uDC4D").queue();
-					m.addReaction("\uD83D\uDC4E").queue();
-					Main.getInfo().getPolls().put(m.getId(), new Integer[]{0, 0});
-					Main.getInfo().getScheduler().schedule(() -> showResult(m, member, eb), gc.getPollTime(), TimeUnit.SECONDS);
-				});
+				channel.sendMessage(":x: | Não possuo permissões suficientes para mandar embeds no canal " + guild.getTextChannelById(gc.getCanalSUG()).getAsMention() + ".").queue();
+				return;
 			}
 		}
 
