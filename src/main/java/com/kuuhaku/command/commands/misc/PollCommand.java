@@ -93,6 +93,7 @@ public class PollCommand extends Command {
 
 	private static void showResult(MessageChannel chn, String ID, Member member, EmbedBuilder eb) {
 		chn.getMessageById(ID).queue(msg -> {
+			System.out.println(Main.getInfo().getPolls().toString());
 			int pos = Main.getInfo().getPolls().get(ID)[0];
 			int neg = Main.getInfo().getPolls().get(ID)[1];
 			Main.getInfo().getPolls().remove(msg.getId());
