@@ -21,11 +21,15 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Relay extends SQLite {
 	private Map<String, String> relays = new HashMap<>();
 	private int relaySize;
 	private EmbedBuilder eb;
+	private final ScheduledExecutorService ses = Executors.newScheduledThreadPool(1);
 
 	private void checkSize() {
 		if (relays.size() != relaySize) {
@@ -35,80 +39,82 @@ public class Relay extends SQLite {
 	}
 
 	public void relayMessage(String msg, Member m, Guild s, String imgURL) {
-		updateRelays();
-		checkSize();
+		ses.schedule(() -> {
+			updateRelays();
+			checkSize();
 
-		eb = new EmbedBuilder();
-		eb.setDescription(Helper.makeEmoteFromMention(msg.split(" ")) + "\n\n ");
-		eb.setAuthor("(" + s.getName() + ") " + m.getEffectiveName(), s.getIconUrl(), s.getIconUrl());
-		eb.setThumbnail(m.getUser().getAvatarUrl());
-		if (imgURL != null) eb.setImage(imgURL);
-		eb.setFooter(m.getUser().getId(), "http://icons.iconarchive.com/icons/killaaaron/adobe-cc-circles/1024/Adobe-Id-icon.png");
-		try {
-			eb.setColor(Helper.colorThief(s.getIconUrl()));
-		} catch (IOException e) {
-			eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
-		}
+			eb = new EmbedBuilder();
+			eb.setDescription(Helper.makeEmoteFromMention(msg.split(" ")) + "\n\n ");
+			eb.setAuthor("(" + s.getName() + ") " + m.getEffectiveName(), s.getIconUrl(), s.getIconUrl());
+			eb.setThumbnail(m.getUser().getAvatarUrl());
+			if (imgURL != null) eb.setImage(imgURL);
+			eb.setFooter(m.getUser().getId(), "http://icons.iconarchive.com/icons/killaaaron/adobe-cc-circles/1024/Adobe-Id-icon.png");
+			try {
+				eb.setColor(Helper.colorThief(s.getIconUrl()));
+			} catch (IOException e) {
+				eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
+			}
 
-		StringBuilder badges = new StringBuilder();
-		if (m.getUser().getId().equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(m.getUser().getId()))
-			badges.append(TagIcons.getTag(TagIcons.DEV));
+			StringBuilder badges = new StringBuilder();
+			if (m.getUser().getId().equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(m.getUser().getId()))
+				badges.append(TagIcons.getTag(TagIcons.DEV));
 
-		if (Main.getInfo().getEditors().contains(m.getUser().getId()))
-			badges.append(TagIcons.getTag(TagIcons.EDITOR));
+			if (Main.getInfo().getEditors().contains(m.getUser().getId()))
+				badges.append(TagIcons.getTag(TagIcons.EDITOR));
 
-		try {
-			if (MySQL.getTagById(m.getUser().getId()).isPartner())
-				badges.append(TagIcons.getTag(TagIcons.PARTNER));
-		} catch (NoResultException ignore) {
-		}
+			try {
+				if (MySQL.getTagById(m.getUser().getId()).isPartner())
+					badges.append(TagIcons.getTag(TagIcons.PARTNER));
+			} catch (NoResultException ignore) {
+			}
 
-		if (m.hasPermission(Permission.MANAGE_CHANNEL))
-			badges.append(TagIcons.getTag(TagIcons.MODERATOR));
+			if (m.hasPermission(Permission.MANAGE_CHANNEL))
+				badges.append(TagIcons.getTag(TagIcons.MODERATOR));
 
-		try {
-			if (MySQL.getChampionBeyblade().getId().equals(m.getUser().getId()))
-				badges.append(TagIcons.getTag(TagIcons.CHAMPION));
-		} catch (NoResultException ignore) {
-		}
+			try {
+				if (MySQL.getChampionBeyblade().getId().equals(m.getUser().getId()))
+					badges.append(TagIcons.getTag(TagIcons.CHAMPION));
+			} catch (NoResultException ignore) {
+			}
 
-		try {
-			if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 20)
-				badges.append(TagIcons.getTag(TagIcons.VETERAN));
-		} catch (NoResultException ignore) {
-		}
+			try {
+				if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 20)
+					badges.append(TagIcons.getTag(TagIcons.VETERAN));
+			} catch (NoResultException ignore) {
+			}
 
-		try {
-			if (MySQL.getTagById(m.getUser().getId()).isVerified())
-				badges.append(TagIcons.getTag(TagIcons.VERIFIED));
-		} catch (NoResultException ignore) {
-		}
+			try {
+				if (MySQL.getTagById(m.getUser().getId()).isVerified())
+					badges.append(TagIcons.getTag(TagIcons.VERIFIED));
+			} catch (NoResultException ignore) {
+			}
 
-		try {
-			if (MySQL.getTagById(m.getUser().getId()).isToxic())
-				badges.append(TagIcons.getTag(TagIcons.TOXIC));
-		} catch (NoResultException ignore) {
-		}
+			try {
+				if (MySQL.getTagById(m.getUser().getId()).isToxic())
+					badges.append(TagIcons.getTag(TagIcons.TOXIC));
+			} catch (NoResultException ignore) {
+			}
 
-		eb.addField("Emblemas:", badges.toString(), false);
+			eb.addField("Emblemas:", badges.toString(), false);
 
-		relays.forEach((k, r) -> {
-			if (!s.getId().equals(k))
-				try {
-					Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(eb.build()).queue();
-				} catch (NullPointerException e) {
-					SQLite.getGuildById(k).setCanalRelay(null);
-				} catch (InsufficientPermissionException ex) {
-					Main.getJibril().getGuildById(k).getOwner().getUser().openPrivateChannel().queue(c -> c.sendMessage(":x: | Me faltam permissões para enviar mensagens globais no servidor " + s.getName() + ".\n\nPermissões que eu possuo:```" +
-							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_WRITE) ? "✅" : "❌") + " Ler/Enviar mensagens\n" +
-							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_EMBED_LINKS) ? "✅" : "❌") + " Inserir links\n" +
-							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_ATTACH_FILES) ? "✅" : "❌") + " Anexar arquivos\n" +
-							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_HISTORY) ? "✅" : "❌") + " Ver histórico de mensagens\n" +
-							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI) ? "✅" : "❌") + " Usar emojis externos" +
-							"```").queue());
-					Helper.log(this.getClass(), LogLevel.ERROR, ex.toString() + "\n" + k);
-				}
-		});
+			relays.forEach((k, r) -> {
+				if (!s.getId().equals(k))
+					try {
+						Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(eb.build()).queue();
+					} catch (NullPointerException e) {
+						SQLite.getGuildById(k).setCanalRelay(null);
+					} catch (InsufficientPermissionException ex) {
+						Main.getJibril().getGuildById(k).getOwner().getUser().openPrivateChannel().queue(c -> c.sendMessage(":x: | Me faltam permissões para enviar mensagens globais no servidor " + s.getName() + ".\n\nPermissões que eu possuo:```" +
+								(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_WRITE) ? "✅" : "❌") + " Ler/Enviar mensagens\n" +
+								(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_EMBED_LINKS) ? "✅" : "❌") + " Inserir links\n" +
+								(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_ATTACH_FILES) ? "✅" : "❌") + " Anexar arquivos\n" +
+								(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_HISTORY) ? "✅" : "❌") + " Ver histórico de mensagens\n" +
+								(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI) ? "✅" : "❌") + " Usar emojis externos" +
+								"```").queue());
+						Helper.log(this.getClass(), LogLevel.ERROR, ex.toString() + "\n" + k);
+					}
+			});
+		}, 1, TimeUnit.SECONDS);
 	}
 
 	public MessageEmbed getRelayInfo(guildConfig gc) {
