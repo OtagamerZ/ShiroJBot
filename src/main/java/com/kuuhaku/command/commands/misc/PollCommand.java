@@ -17,6 +17,7 @@
 
 package com.kuuhaku.command.commands.misc;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.SQLite;
@@ -78,7 +79,7 @@ public class PollCommand extends Command {
 							"Repovação: " + Helper.round((((float) neg * 100f) / (float) pos + (float) neg) * 100f, 1) + "" +
 							"```").queue());
 				};
-				Helper.scheduler.schedule(awaitPollEnd, gc.getPollTime(), TimeUnit.SECONDS);
+				Main.getInfo().getScheduler().schedule(awaitPollEnd, gc.getPollTime(), TimeUnit.SECONDS);
 			});
 		} else {
 			try {
@@ -100,7 +101,7 @@ public class PollCommand extends Command {
 								"Repovação: " + Helper.round((((float) neg * 100f) / (float) pos + (float) neg) * 100f, 1) + "" +
 								"```").queue());
 					};
-					Helper.scheduler.schedule(awaitPollEnd, gc.getPollTime(), TimeUnit.SECONDS);
+					Main.getInfo().getScheduler().schedule(awaitPollEnd, gc.getPollTime(), TimeUnit.SECONDS);
 				});
 			} catch (Exception e) {
 				SQLite.updateGuildCanalSUG("", gc);
@@ -121,7 +122,7 @@ public class PollCommand extends Command {
 								"Repovação: " + Helper.round((((float) neg * 100f) / (float) pos + (float) neg) * 100f, 1) + "" +
 								"```").queue());
 					};
-					Helper.scheduler.schedule(awaitPollEnd, gc.getPollTime(), TimeUnit.SECONDS);
+					Main.getInfo().getScheduler().schedule(awaitPollEnd, gc.getPollTime(), TimeUnit.SECONDS);
 				});
 			}
 		}
