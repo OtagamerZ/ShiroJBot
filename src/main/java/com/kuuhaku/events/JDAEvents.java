@@ -67,12 +67,9 @@ public class JDAEvents extends ListenerAdapter {
 		if (event.getMember().getUser().isBot()) return;
 		Message message = event.getChannel().getMessageById(event.getMessageId()).complete();
 		if (Main.getInfo().getPolls().containsKey(message.getId())) {
-			Integer[] votes = Main.getInfo().getPolls().get(message.getId());
 
-			if (event.getReactionEmote().getName().equals("\uD83D\uDC4D")) votes[0] = votes[0]--;
-			else if (event.getReactionEmote().getName().equals("\uD83D\uDC4E")) votes[1] = votes[1]--;
-
-			Main.getInfo().getPolls().put(message.getId(), votes);
+			if (event.getReactionEmote().getName().equals("\uD83D\uDC4D")) Main.getInfo().getPolls().get(message.getId())[0]--;
+			else if (event.getReactionEmote().getName().equals("\uD83D\uDC4E")) Main.getInfo().getPolls().get(message.getId())[1]--;
 		}
 	}
 
@@ -81,12 +78,9 @@ public class JDAEvents extends ListenerAdapter {
 		if (event.getMember().getUser().isBot()) return;
 		Message message = event.getChannel().getMessageById(event.getMessageId()).complete();
 		if (Main.getInfo().getPolls().containsKey(message.getId())) {
-			Integer[] votes = Main.getInfo().getPolls().get(message.getId());
 
-			if (event.getReactionEmote().getName().equals("\uD83D\uDC4D")) votes[0] = votes[0]++;
-			else if (event.getReactionEmote().getName().equals("\uD83D\uDC4E")) votes[1] = votes[1]++;
-
-			Main.getInfo().getPolls().put(message.getId(), votes);
+			if (event.getReactionEmote().getName().equals("\uD83D\uDC4D")) Main.getInfo().getPolls().get(message.getId())[0]++;
+			else if (event.getReactionEmote().getName().equals("\uD83D\uDC4E")) Main.getInfo().getPolls().get(message.getId())[1]++;
 		}
 		if (message.getAuthor() == Main.getInfo().getSelfUser() && event.getUser() != Main.getInfo().getSelfUser() && message.getMentionedUsers().size() > 0 && event.getUser() == message.getMentionedUsers().get(1)) {
 			if (message.getContentRaw().contains("abraçou")) {
