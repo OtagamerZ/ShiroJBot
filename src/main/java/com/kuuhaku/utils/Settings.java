@@ -32,9 +32,6 @@ public class Settings {
 
 		int pollTime = SQLite.getGuildPollTime(message.getGuild().getId());
 
-		String canalAvisos = SQLite.getGuildCanalAvisos(message.getGuild().getId());
-		if (!canalAvisos.equals("Não definido.")) canalAvisos = "<#" + canalAvisos + ">";
-
 		String canalLvlUpNotif = SQLite.getGuildCanalLvlUp(message.getGuild().getId());
 		if (!canalLvlUpNotif.equals("Não definido.")) canalLvlUpNotif = "<#" + canalLvlUpNotif + ">";
 
@@ -45,6 +42,7 @@ public class Settings {
 		if (!canalIA.equals("Não definido.")) canalIA = "<#" + canalIA + ">";
 
 		String cargoWarnID = SQLite.getGuildCargoWarn(message.getGuild().getId());
+		int warnTime = SQLite.getGuildWarnTime(message.getGuild().getId());
 		//String cargoNewID = SQLite.getGuildCargoNew(message.getGuild().getId());
 
 		EmbedBuilder eb = new EmbedBuilder();
@@ -62,17 +60,18 @@ public class Settings {
 		eb.addBlankField(true);
 		eb.addField("\uD83D\uDCD6 » Canal de Sugestões", canalSUG, true);
 		eb.addField("\u23F2 » Tempo de enquetes", String.valueOf(pollTime), true);
-		eb.addField("\uD83D\uDCD6 » Canal de Avisos/Logs", canalAvisos, true);
 		if (MySQL.getTagById(message.getGuild().getOwner().getUser().getId()).isPartner()) {
 			eb.addField("\uD83D\uDCD6 » Canal Relay", canalRelay, true);
 			eb.addField("\uD83D\uDCD6 » Canal IA", canalIA, true);
 		}
 
 		if (!cargoWarnID.equals("Não definido.")) {
-			eb.addField("\uD83D\uDCD1 » Cargo de Avisos/Warns", Main.getInfo().getRoleByID(cargoWarnID).getAsMention(), true);
+			eb.addField("\uD83D\uDCD1 » Cargo de punição", Main.getInfo().getRoleByID(cargoWarnID).getAsMention(), true);
 		} else {
-			eb.addField("\uD83D\uDCD1 » Cargo de Avisos/Warns", cargoWarnID, true);
+			eb.addField("\uD83D\uDCD1 » Cargo de punição", cargoWarnID, true);
 		}
+
+		eb.addField("\u23F2 » Tempo de punição", String.valueOf(warnTime), true);
 
 		//if(!cargoNewID.equals("Não definido.")) { eb.addField("\uD83D\uDCD1 » Cargo automático", com.kuuhaku.Main.getInfo().getRoleByID(cargoNewID).getAsMention(), false); }
 		//else { eb.addField("\uD83D\uDCD1 » Cargos automáticos", cargoNewID, true); }
@@ -236,32 +235,6 @@ public class Settings {
 		message.getTextChannel().sendMessage("✅ | O tempo de enquetes do servidor foi trocado para " + newPollTime + " segundos com sucesso.").queue();
 	}
 
-	public static void updateCanalAvisos(String[] args, Message message, guildConfig gc) {
-		String antigoCanalAvisosID = SQLite.getGuildCanalAvisos(message.getGuild().getId());
-
-		if (args.length < 2) {
-			if (antigoCanalAvisosID.equals("Não definido.")) {
-				message.getTextChannel().sendMessage("O canal de avisos/logs atual do servidor ainda não foi definido.").queue();
-			} else {
-				message.getTextChannel().sendMessage("O canal de avisos/logs atual do servidor é <#" + antigoCanalAvisosID + ">.").queue();
-			}
-			return;
-		}
-		if (message.getMentionedChannels().size() > 1) {
-			message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 canal.").queue();
-			return;
-		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
-			SQLite.updateGuildCanalAvisos(null, gc);
-			message.getTextChannel().sendMessage("✅ | O canal de avisos/logs do servidor foi resetado com sucesso.").queue();
-			return;
-		}
-
-		TextChannel newCanalAvisos = message.getMentionedChannels().get(0);
-
-		SQLite.updateGuildCanalAvisos(newCanalAvisos.getId(), gc);
-		message.getTextChannel().sendMessage("✅ | O canal de avisos/logs do servidor foi trocado para " + newCanalAvisos.getAsMention() + " com sucesso.").queue();
-	}
-
 	public static void updateCargoWarn(String[] args, Message message, guildConfig gc) {
 		String antigoCargoWarn = SQLite.getGuildCargoWarn(message.getGuild().getId());
 
@@ -341,7 +314,7 @@ public class Settings {
 	}
 
 	public static void updateCanalLevelUp(String[] args, Message message, guildConfig gc) {
-		String antigoCanalLvlUpID = SQLite.getGuildCanalAvisos(message.getGuild().getId());
+		String antigoCanalLvlUpID = SQLite.getGuildCanalLvlUp(message.getGuild().getId());
 
 		if (args.length < 2) {
 			if (antigoCanalLvlUpID.equals("Não definido.")) {

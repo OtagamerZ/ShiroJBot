@@ -493,7 +493,7 @@ public class SQLite {
 		em.close();
 	}
 
-	public static String getGuildCanalAvisos(String id) {
+	public static int getGuildWarnTime(String id) {
 		EntityManager em = getEntityManager();
 
 		Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
@@ -501,16 +501,13 @@ public class SQLite {
 		guildConfig gc = (guildConfig) q.getSingleResult();
 		em.close();
 
-		String canalAvisos = gc.getCanalAV();
-		if (canalAvisos == null) canalAvisos = "Não definido.";
-
-		return canalAvisos;
+		return gc.getWarnTime();
 	}
 
-	public static void updateGuildCanalAvisos(String newCanalID, guildConfig gc) {
+	public static void updateGuildWarnTime(int warnTime, guildConfig gc) {
 		EntityManager em = getEntityManager();
 
-		gc.setCanalAV(newCanalID);
+		gc.setWarnTime(warnTime);
 
 		em.getTransaction().begin();
 		em.merge(gc);

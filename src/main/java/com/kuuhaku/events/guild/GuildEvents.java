@@ -47,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class GuildEvents extends ListenerAdapter {
@@ -126,6 +127,13 @@ public class GuildEvents extends ListenerAdapter {
 						if (h.size() >= SQLite.getGuildById(guild.getId()).getNoSpamAmount()) {
 							h.forEach(m -> channel.deleteMessageById(m.getId()).queue());
 							channel.sendMessage(":warning: | Opa, sem spam meu amigo!").queue();
+							try {
+								member.getRoles().add(guild.getRoleById(SQLite.getGuildCargoWarn(guild.getId())));
+								Main.getInfo().getScheduler().schedule(() -> {
+									member.getRoles().remove(guild.getRoleById(SQLite.getGuildCargoWarn(guild.getId())));
+								}, SQLite.getGuildWarnTime(guild.getId()), TimeUnit.SECONDS);
+							} catch (Exception ignore) {
+							}
 						}
 					});
 				} else {
@@ -135,6 +143,13 @@ public class GuildEvents extends ListenerAdapter {
 						if (h.size() >= SQLite.getGuildById(guild.getId()).getNoSpamAmount()) {
 							h.forEach(m -> channel.deleteMessageById(m.getId()).queue());
 							channel.sendMessage(":warning: | Opa, sem spam meu amigo!").queue();
+							try {
+								member.getRoles().add(guild.getRoleById(SQLite.getGuildCargoWarn(guild.getId())));
+								Main.getInfo().getScheduler().schedule(() -> {
+									member.getRoles().remove(guild.getRoleById(SQLite.getGuildCargoWarn(guild.getId())));
+								}, SQLite.getGuildWarnTime(guild.getId()), TimeUnit.SECONDS);
+							} catch (Exception ignore) {
+							}
 						}
 					});
 				}
