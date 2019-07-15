@@ -69,8 +69,7 @@ public class PollCommand extends Command {
 					int pos = Collections.frequency(m.getReactions(), "\uD83D\uDC4D");
 					int neg = Collections.frequency(m.getReactions(), "\uD83D\uDC4E");
 
-					m.clearReactions().queue();
-					channel.sendMessage("A enquete feita por " + author.getAsMention() + " foi encerrada!\n\nResultado:\n```" +
+					m.editMessage("A enquete feita por " + author.getAsMention() + " foi encerrada!\n\nResultado:\n```" +
 							"Aprovação: " + Helper.round((((float) pos * 100f) / (float) pos + (float) neg) * 100f, 1) + "" +
 							"Repovação: " + Helper.round((((float) neg * 100f) / (float) pos + (float) neg) * 100f, 1) + "" +
 							"```").queue();
@@ -78,6 +77,7 @@ public class PollCommand extends Command {
 							"Aprovação: " + Helper.round((((float) pos * 100f) / (float) pos + (float) neg) * 100f, 1) + "" +
 							"Repovação: " + Helper.round((((float) neg * 100f) / (float) pos + (float) neg) * 100f, 1) + "" +
 							"```").queue());
+					m.clearReactions().queue();
 				};
 				Main.getInfo().getScheduler().schedule(awaitPollEnd, gc.getPollTime(), TimeUnit.SECONDS);
 			});
@@ -88,11 +88,10 @@ public class PollCommand extends Command {
 					m.addReaction("\uD83D\uDC4D").queue();
 					m.addReaction("\uD83D\uDC4E").queue();
 					final Runnable awaitPollEnd = () -> {
-						int pos = Collections.frequency(m.getReactions(), "\uD83D\uDC4D");
-						int neg = Collections.frequency(m.getReactions(), "\uD83D\uDC4E");
+						int pos = Collections.frequency(m.getReactions(), "\uD83D\uDC4D") - 1;
+						int neg = Collections.frequency(m.getReactions(), "\uD83D\uDC4E") - 1;
 
-						m.clearReactions().queue();
-						guild.getTextChannelById(gc.getCanalSUG()).sendMessage("A enquete feita por " + author.getAsMention() + " foi encerrada!\n\nResultado:\n```" +
+						m.editMessage("A enquete feita por " + author.getAsMention() + " foi encerrada!\n\nResultado:\n```" +
 								"Aprovação: " + Helper.round((((float) pos * 100f) / (float) pos + (float) neg) * 100f, 1) + "" +
 								"Repovação: " + Helper.round((((float) neg * 100f) / (float) pos + (float) neg) * 100f, 1) + "" +
 								"```").queue();
@@ -100,6 +99,7 @@ public class PollCommand extends Command {
 								"Aprovação: " + Helper.round((((float) pos * 100f) / (float) pos + (float) neg) * 100f, 1) + "" +
 								"Repovação: " + Helper.round((((float) neg * 100f) / (float) pos + (float) neg) * 100f, 1) + "" +
 								"```").queue());
+						m.clearReactions().queue();
 					};
 					Main.getInfo().getScheduler().schedule(awaitPollEnd, gc.getPollTime(), TimeUnit.SECONDS);
 				});
@@ -112,8 +112,7 @@ public class PollCommand extends Command {
 						int pos = Collections.frequency(m.getReactions(), "\uD83D\uDC4D");
 						int neg = Collections.frequency(m.getReactions(), "\uD83D\uDC4E");
 
-						m.clearReactions().queue();
-						channel.sendMessage("A enquete feita por " + author.getAsMention() + " foi encerrada!\n\nResultado:\n```" +
+						m.editMessage("A enquete feita por " + author.getAsMention() + " foi encerrada!\n\nResultado:\n```" +
 								"Aprovação: " + Helper.round((((float) pos * 100f) / (float) pos + (float) neg) * 100f, 1) + "" +
 								"Repovação: " + Helper.round((((float) neg * 100f) / (float) pos + (float) neg) * 100f, 1) + "" +
 								"```").queue();
@@ -121,6 +120,7 @@ public class PollCommand extends Command {
 								"Aprovação: " + Helper.round((((float) pos * 100f) / (float) pos + (float) neg) * 100f, 1) + "" +
 								"Repovação: " + Helper.round((((float) neg * 100f) / (float) pos + (float) neg) * 100f, 1) + "" +
 								"```").queue());
+						m.clearReactions().queue();
 					};
 					Main.getInfo().getScheduler().schedule(awaitPollEnd, gc.getPollTime(), TimeUnit.SECONDS);
 				});
