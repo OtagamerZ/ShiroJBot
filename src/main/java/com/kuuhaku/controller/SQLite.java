@@ -470,6 +470,29 @@ public class SQLite {
 		em.close();
 	}
 
+	public static int getGuildPollTime(String id) {
+		EntityManager em = getEntityManager();
+
+		Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+		q.setParameter(1, id);
+		guildConfig gc = (guildConfig) q.getSingleResult();
+		em.close();
+
+		return gc.getPollTime();
+	}
+
+	public static void updateGuildPollTime(int pollTime, guildConfig gc) {
+		EntityManager em = getEntityManager();
+
+		gc.setPollTime(pollTime);
+
+		em.getTransaction().begin();
+		em.merge(gc);
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
 	public static String getGuildCanalAvisos(String id) {
 		EntityManager em = getEntityManager();
 

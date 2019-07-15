@@ -69,6 +69,10 @@ public class SettingsCommand extends Command {
                 }
                 Settings.updateMsgAdeus(args, message, gc);
                 break;
+            case "tpoll":
+            case "tempopoll":
+                Settings.updatePollTime(args, message, gc);
+                break;
             case "csug":
             case "canalsug":
                 Settings.updateCanalSUG(args, message, gc);

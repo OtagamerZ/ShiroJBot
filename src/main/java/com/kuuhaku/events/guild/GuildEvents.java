@@ -166,6 +166,9 @@ public class GuildEvents extends ListenerAdapter {
 			}
 
 			boolean found = false;
+			if (!guild.getSelfMember().hasPermission(Permission.MESSAGE_WRITE)) {
+				return;
+			}
 			for (Command command : Main.getCommandManager().getCommands()) {
 				if (command.getName().equalsIgnoreCase(commandName)) {
 					found = true;
