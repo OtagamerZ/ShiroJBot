@@ -32,6 +32,8 @@ import java.util.concurrent.TimeUnit;
 
 public class PollCommand extends Command {
 
+	private static String msgID = "";
+
 	public PollCommand() {
 		super("enquete", new String[]{"poll"}, "<pergunta>", "Inicia uma enquete no canal atual ou no configurado pelos moderadores", Category.MISC);
 	}
@@ -57,40 +59,38 @@ public class PollCommand extends Command {
 		eb.setDescription(String.join(" ", args));
 		eb.setFooter("Clique nas reações abaixo para votar", null);
 		eb.setColor(Color.decode("#2195f2"));
-		final String[] msgID = {""};
 
 		if (gc.getCanalSUG() == null || gc.getCanalSUG().isEmpty()) {
 			SQLite.updateGuildCanalSUG("", gc);
 			channel.sendMessage(eb.build()).queue(m -> {
 				m.addReaction("\uD83D\uDC4D").queue();
 				m.addReaction("\uD83D\uDC4E").queue();
-				msgID[0] = m.getId();
+				msgID = m.getId();
 			});
-			showResult(msgID[0], channel, member, eb, gc.getPollTime());
+			showResult(channel, member, eb, gc.getPollTime());
 		} else {
 			try {
 				guild.getTextChannelById(gc.getCanalSUG()).sendMessage(eb.build()).queue(m -> {
 					m.addReaction("\uD83D\uDC4D").queue();
 					m.addReaction("\uD83D\uDC4E").queue();
-					msgID[0] = m.getId();
+					msgID = m.getId();
 				});
-				showResult(msgID[0], guild.getTextChannelById(gc.getCanalSUG()), member, eb, gc.getPollTime());
+				showResult(guild.getTextChannelById(gc.getCanalSUG()), member, eb, gc.getPollTime());
 			} catch (Exception e) {
 				SQLite.updateGuildCanalSUG("", gc);
 				channel.sendMessage(eb.build()).queue(m -> {
 					m.addReaction("\uD83D\uDC4D").queue();
 					m.addReaction("\uD83D\uDC4E").queue();
-					msgID[0] = m.getId();
-
+					msgID = m.getId();
 				});
-				showResult(msgID[0], channel, member, eb, gc.getPollTime());
+				showResult(channel, member, eb, gc.getPollTime());
 			}
 		}
 
 		channel.sendMessage("Enquete criada com sucesso, ela encerrará automaticamente em " + gc.getPollTime() + " segundos.").queue();
 	}
 
-	private static void showResult(String msgID, MessageChannel chn, Member member, EmbedBuilder eb, int pollTime) {
+	private static void showResult(MessageChannel chn, Member member, EmbedBuilder eb, int pollTime) {
 		Main.getInfo().getScheduler().schedule(() -> {
 			Message msg = chn.getMessageById(msgID).complete();
 			int pos = (int) msg.getReactions().stream().filter(r -> r.getReactionEmote().getName().equals("\uD83D\uDC4D")).count() - 1;
