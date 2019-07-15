@@ -33,6 +33,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class PollCommand extends Command {
 
@@ -68,16 +69,18 @@ public class PollCommand extends Command {
 				m.addReaction("\uD83D\uDC4D").queue();
 				m.addReaction("\uD83D\uDC4E").queue();
 				final Runnable awaitPollEnd = () -> {
-					int pos = Collections.frequency(m.getReactions(), "\uD83D\uDC4D") - 1;
-					int neg = Collections.frequency(m.getReactions(), "\uD83D\uDC4E") - 1;
+					int pos = Collections.frequency(m.getReactions().stream().map(r -> r.getReactionEmote().getEmote().toString()).collect(Collectors.toList()), "\uD83D\uDC4D") - 1;
+					int neg = Collections.frequency(m.getReactions().stream().map(r -> r.getReactionEmote().getEmote().toString()).collect(Collectors.toList()), "\uD83D\uDC4E") - 1;
+					boolean NOVOTE = false;
 
 					if (pos == 0 && neg == 0) {
 						pos = 1;
 						neg = 1;
+						NOVOTE = true;
 					}
 
 					eb.setAuthor("A enquete feita por " + member.getEffectiveName() + " foi encerrada!");
-					eb.setTitle("Enquete:");
+					eb.setTitle("Enquete: ("+ (NOVOTE ? "nenhum voto" : (pos + neg) + " votos") +")");
 					eb.addField("Aprovação: ", Helper.round((((float) pos * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
 					eb.addField("Reprovação: ", Helper.round((((float) neg * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
 
@@ -94,16 +97,18 @@ public class PollCommand extends Command {
 					m.addReaction("\uD83D\uDC4D").queue();
 					m.addReaction("\uD83D\uDC4E").queue();
 					final Runnable awaitPollEnd = () -> {
-						int pos = Collections.frequency(m.getReactions(), "\uD83D\uDC4D") - 1;
-						int neg = Collections.frequency(m.getReactions(), "\uD83D\uDC4E") - 1;
+						int pos = Collections.frequency(m.getReactions().stream().map(r -> r.getReactionEmote().getEmote().toString()).collect(Collectors.toList()), "\uD83D\uDC4D") - 1;
+						int neg = Collections.frequency(m.getReactions().stream().map(r -> r.getReactionEmote().getEmote().toString()).collect(Collectors.toList()), "\uD83D\uDC4E") - 1;
+						boolean NOVOTE = false;
 
 						if (pos == 0 && neg == 0) {
 							pos = 1;
 							neg = 1;
+							NOVOTE = true;
 						}
 
 						eb.setAuthor("A enquete feita por " + member.getEffectiveName() + " foi encerrada!");
-						eb.setTitle("Enquete:");
+						eb.setTitle("Enquete: ("+ (NOVOTE ? "nenhum voto" : (pos + neg) + " votos") +")");
 						eb.addField("Aprovação: ", Helper.round((((float) pos * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
 						eb.addField("Reprovação: ", Helper.round((((float) neg * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
 
@@ -119,16 +124,18 @@ public class PollCommand extends Command {
 					m.addReaction("\uD83D\uDC4D").queue();
 					m.addReaction("\uD83D\uDC4E").queue();
 					final Runnable awaitPollEnd = () -> {
-						int pos = Collections.frequency(m.getReactions(), "\uD83D\uDC4D") - 1;
-						int neg = Collections.frequency(m.getReactions(), "\uD83D\uDC4E") - 1;
+						int pos = Collections.frequency(m.getReactions().stream().map(r -> r.getReactionEmote().getEmote().toString()).collect(Collectors.toList()), "\uD83D\uDC4D") - 1;
+						int neg = Collections.frequency(m.getReactions().stream().map(r -> r.getReactionEmote().getEmote().toString()).collect(Collectors.toList()), "\uD83D\uDC4E") - 1;
+						boolean NOVOTE = false;
 
 						if (pos == 0 && neg == 0) {
 							pos = 1;
 							neg = 1;
+							NOVOTE = true;
 						}
 
 						eb.setAuthor("A enquete feita por " + member.getEffectiveName() + " foi encerrada!");
-						eb.setTitle("Enquete:");
+						eb.setTitle("Enquete: ("+ (NOVOTE ? "nenhum voto" : (pos + neg) + " votos") +")");
 						eb.addField("Aprovação: ", Helper.round((((float) pos * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
 						eb.addField("Reprovação: ", Helper.round((((float) neg * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
 
