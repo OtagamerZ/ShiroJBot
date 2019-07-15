@@ -92,8 +92,7 @@ public class PollCommand extends Command {
 	}
 
 	private static void showResult(MessageChannel chn, Member member, EmbedBuilder eb, int pollTime) {
-		Main.getInfo().getScheduler().schedule(() -> {
-			Message msg = chn.getMessageById(msgID).complete();
+		Main.getInfo().getScheduler().schedule(() -> chn.getMessageById(msgID).queue(msg -> {
 			int pos = (int) msg.getReactions().stream().filter(r -> r.getReactionEmote().getName().equals("\uD83D\uDC4D")).count() - 1;
 			System.out.println(msg.getReactions().stream().filter(r -> r.getReactionEmote().getName().equals("\uD83D\uDC4D")).collect(Collectors.toList()));
 			int neg = (int) msg.getReactions().stream().filter(r -> r.getReactionEmote().getName().equals("\uD83D\uDC4E")).count() - 1;
@@ -110,9 +109,9 @@ public class PollCommand extends Command {
 			eb.addField("Aprovação: ", NOVOTE ? "0.0%" : Helper.round((((float) pos * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
 			eb.addField("Reprovação: ", NOVOTE ? "0.0%" : Helper.round((((float) neg * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
 
-			msg.editMessage(eb.build()).submit();
-			member.getUser().openPrivateChannel().queue(c -> c.sendMessage(eb.setAuthor("Sua enquete foi encerrada!").build()).submit());
-			msg.clearReactions().complete();
-		}, pollTime, TimeUnit.SECONDS);
+			msg.editMessage(eb.build()).queue();
+			member.getUser().openPrivateChannel().queue(c -> c.sendMessage(eb.setAuthor("Sua enquete foi encerrada!").build()).queue());
+			msg.clearReactions().queue();
+		}), pollTime, TimeUnit.SECONDS);
 	}
 }
