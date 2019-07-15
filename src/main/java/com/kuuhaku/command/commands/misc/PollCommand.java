@@ -60,58 +60,57 @@ public class PollCommand extends Command {
 		eb.setFooter("Clique nas reações abaixo para votar", null);
 		eb.setColor(Color.decode("#2195f2"));
 
-		final Runnable runnable = () -> showResult(channel, member, eb);
-
 		if (gc.getCanalSUG() == null || gc.getCanalSUG().isEmpty()) {
 			SQLite.updateGuildCanalSUG(null, gc);
 			channel.sendMessage(eb.build()).queue(m -> {
 				m.addReaction("\uD83D\uDC4D").queue();
 				m.addReaction("\uD83D\uDC4E").queue();
 				msgID = m.getId();
+				Main.getInfo().getScheduler().schedule(() -> showResult(m, member, eb), gc.getPollTime(), TimeUnit.SECONDS);
 			});
-			Main.getInfo().getScheduler().schedule(runnable, gc.getPollTime(), TimeUnit.SECONDS);
 		} else {
 			try {
 				guild.getTextChannelById(gc.getCanalSUG()).sendMessage(eb.build()).queue(m -> {
 					m.addReaction("\uD83D\uDC4D").queue();
 					m.addReaction("\uD83D\uDC4E").queue();
 					msgID = m.getId();
+					Main.getInfo().getScheduler().schedule(() -> showResult(m, member, eb), gc.getPollTime(), TimeUnit.SECONDS);
 				});
-				Main.getInfo().getScheduler().schedule(() -> showResult(guild.getTextChannelById(gc.getCanalSUG()), member, eb), gc.getPollTime(), TimeUnit.SECONDS);
 			} catch (Exception e) {
 				SQLite.updateGuildCanalSUG(null, gc);
 				channel.sendMessage(eb.build()).queue(m -> {
 					m.addReaction("\uD83D\uDC4D").queue();
 					m.addReaction("\uD83D\uDC4E").queue();
 					msgID = m.getId();
+					Main.getInfo().getScheduler().schedule(() -> showResult(m, member, eb), gc.getPollTime(), TimeUnit.SECONDS);
 				});
-				Main.getInfo().getScheduler().schedule(runnable, gc.getPollTime(), TimeUnit.SECONDS);
 			}
 		}
 
+		Main.getInfo().getPolls().put(msgID, new Integer[]{0, 0});
 		channel.sendMessage("Enquete criada com sucesso, ela encerrará automaticamente em " + gc.getPollTime() + " segundos.").queue();
 	}
 
-	private static void showResult(MessageChannel chn, Member member, EmbedBuilder eb) {
-		chn.getMessageById(msgID).queue(msg -> {
-			int pos = (int) msg.getReactions().stream().filter(r -> r.getReactionEmote().getName().equals("\uD83D\uDC4D")).count() - 1;
-			int neg = (int) msg.getReactions().stream().filter(r -> r.getReactionEmote().getName().equals("\uD83D\uDC4E")).count() - 1;
-			boolean NOVOTE = false;
+	private static void showResult(Message msg, Member member, EmbedBuilder eb) {
+		int pos = Main.getInfo().getPolls().get(msg.getId())[0];
+		int neg = Main.getInfo().getPolls().get(msg.getId())[1];
+		Main.getInfo().getPolls().remove(msg.getId());
+		System.out.println(pos + " - " + neg);
+		boolean NOVOTE = false;
 
-			if (pos == 0 && neg == 0) {
-				pos = 1;
-				neg = 1;
-				NOVOTE = true;
-			}
+		if (pos == 0 && neg == 0) {
+			pos = 1;
+			neg = 1;
+			NOVOTE = true;
+		}
 
-			eb.setAuthor("A enquete feita por " + member.getEffectiveName() + " foi encerrada!");
-			eb.setTitle("Enquete: (" + (NOVOTE ? "nenhum voto" : (pos + neg) + " votos") + ")");
-			eb.addField("Aprovação: ", NOVOTE ? "0.0%" : Helper.round((((float) pos * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
-			eb.addField("Reprovação: ", NOVOTE ? "0.0%" : Helper.round((((float) neg * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
+		eb.setAuthor("A enquete feita por " + member.getEffectiveName() + " foi encerrada!");
+		eb.setTitle("Enquete: (" + (NOVOTE ? "nenhum voto" : (pos + neg) + " votos") + ")");
+		eb.addField("Aprovação: ", NOVOTE ? "0.0%" : Helper.round((((float) pos * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
+		eb.addField("Reprovação: ", NOVOTE ? "0.0%" : Helper.round((((float) neg * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
 
-			msg.editMessage(eb.build()).queue();
-			member.getUser().openPrivateChannel().queue(c -> c.sendMessage(eb.setAuthor("Sua enquete foi encerrada!").build()).queue());
-			msg.clearReactions().queue();
-		});
+		msg.editMessage(eb.build()).queue();
+		member.getUser().openPrivateChannel().queue(c -> c.sendMessage(eb.setAuthor("Sua enquete foi encerrada!").build()).queue());
+		msg.clearReactions().queue();
 	}
 }
