@@ -75,7 +75,7 @@ public class PollCommand extends Command {
 					}
 
 					eb.setAuthor("A enquete feita por " + member.getEffectiveName() + " foi encerrada!");
-					eb.setTitle("Resultado:");
+					eb.setTitle("Enquete:");
 					eb.addField("Aprovação: ", Helper.round((((float) pos * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
 					eb.addField("Reprovação: ", Helper.round((((float) neg * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
 
@@ -101,7 +101,7 @@ public class PollCommand extends Command {
 						}
 
 						eb.setAuthor("A enquete feita por " + member.getEffectiveName() + " foi encerrada!");
-						eb.setTitle("Resultado:");
+						eb.setTitle("Enquete:");
 						eb.addField("Aprovação: ", Helper.round((((float) pos * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
 						eb.addField("Reprovação: ", Helper.round((((float) neg * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
 
@@ -126,7 +126,7 @@ public class PollCommand extends Command {
 						}
 
 						eb.setAuthor("A enquete feita por " + member.getEffectiveName() + " foi encerrada!");
-						eb.setTitle("Resultado:");
+						eb.setTitle("Enquete:");
 						eb.addField("Aprovação: ", Helper.round((((float) pos * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
 						eb.addField("Reprovação: ", Helper.round((((float) neg * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
 
