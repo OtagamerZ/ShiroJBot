@@ -23,18 +23,12 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
-import net.dv8tion.jda.client.managers.EmoteManager;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
-import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 public class PollCommand extends Command {
 
@@ -66,37 +60,31 @@ public class PollCommand extends Command {
 
 		if (gc.getCanalSUG() == null || gc.getCanalSUG().isEmpty()) {
 			SQLite.updateGuildCanalSUG("", gc);
-			StringBuilder msgID = new StringBuilder();
+			final String[] msgID = {""};
 			channel.sendMessage(eb.build()).queue(m -> {
 				m.addReaction("\uD83D\uDC4D").queue();
 				m.addReaction("\uD83D\uDC4E").queue();
-				msgID.append(m.getId());
+				msgID[0] = m.getId();
 			});
-			final Message[] msg = {null};
-			channel.getMessageById(msgID.toString()).queue(m -> msg[0] = m);
-			showResult(msg[0], member, eb, gc.getPollTime());
+			showResult(channel.getMessageById(msgID[0]).complete(), member, eb, gc.getPollTime());
 		} else {
 			try {
-				StringBuilder msgID = new StringBuilder();
+				final String[] msgID = {""};
 				guild.getTextChannelById(gc.getCanalSUG()).sendMessage(eb.build()).queue(m -> {
 					m.addReaction("\uD83D\uDC4D").queue();
 					m.addReaction("\uD83D\uDC4E").queue();
-					msgID.append(m.getId());
+					msgID[0] = m.getId();
 				});
-				final Message[] msg = {null};
-				channel.getMessageById(msgID.toString()).queue(m -> msg[0] = m);
-				showResult(msg[0], member, eb, gc.getPollTime());
+				showResult(channel.getMessageById(msgID[0]).complete(), member, eb, gc.getPollTime());
 			} catch (Exception e) {
 				SQLite.updateGuildCanalSUG("", gc);
-				StringBuilder msgID = new StringBuilder();
+				final String[] msgID = {""};
 				channel.sendMessage(eb.build()).queue(m -> {
 					m.addReaction("\uD83D\uDC4D").queue();
 					m.addReaction("\uD83D\uDC4E").queue();
-					msgID.append(m.getId());
+					msgID[0] = m.getId();
 				});
-				final Message[] msg = {null};
-				channel.getMessageById(msgID.toString()).queue(m -> msg[0] = m);
-				showResult(msg[0], member, eb, gc.getPollTime());
+				showResult(channel.getMessageById(msgID[0]).complete(), member, eb, gc.getPollTime());
 			}
 		}
 
