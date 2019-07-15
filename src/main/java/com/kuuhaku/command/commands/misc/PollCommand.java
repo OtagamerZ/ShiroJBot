@@ -29,7 +29,6 @@ import net.dv8tion.jda.core.events.Event;
 
 import java.awt.*;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 public class PollCommand extends Command {
 
@@ -61,6 +60,8 @@ public class PollCommand extends Command {
 		eb.setFooter("Clique nas reações abaixo para votar", null);
 		eb.setColor(Color.decode("#2195f2"));
 
+		final Runnable runnable = () -> showResult(channel, member, eb);
+
 		if (gc.getCanalSUG() == null || gc.getCanalSUG().isEmpty()) {
 			SQLite.updateGuildCanalSUG(null, gc);
 			channel.sendMessage(eb.build()).queue(m -> {
@@ -68,7 +69,7 @@ public class PollCommand extends Command {
 				m.addReaction("\uD83D\uDC4E").queue();
 				msgID = m.getId();
 			});
-			showResult(channel, member, eb, gc.getPollTime());
+			Main.getInfo().getScheduler().schedule(runnable, gc.getPollTime(), TimeUnit.SECONDS);
 		} else {
 			try {
 				guild.getTextChannelById(gc.getCanalSUG()).sendMessage(eb.build()).queue(m -> {
@@ -76,7 +77,7 @@ public class PollCommand extends Command {
 					m.addReaction("\uD83D\uDC4E").queue();
 					msgID = m.getId();
 				});
-				showResult(guild.getTextChannelById(gc.getCanalSUG()), member, eb, gc.getPollTime());
+				Main.getInfo().getScheduler().schedule(() -> showResult(guild.getTextChannelById(gc.getCanalSUG()), member, eb), gc.getPollTime(), TimeUnit.SECONDS);
 			} catch (Exception e) {
 				SQLite.updateGuildCanalSUG(null, gc);
 				channel.sendMessage(eb.build()).queue(m -> {
@@ -84,17 +85,16 @@ public class PollCommand extends Command {
 					m.addReaction("\uD83D\uDC4E").queue();
 					msgID = m.getId();
 				});
-				showResult(channel, member, eb, gc.getPollTime());
+				Main.getInfo().getScheduler().schedule(runnable, gc.getPollTime(), TimeUnit.SECONDS);
 			}
 		}
 
 		channel.sendMessage("Enquete criada com sucesso, ela encerrará automaticamente em " + gc.getPollTime() + " segundos.").queue();
 	}
 
-	private static void showResult(MessageChannel chn, Member member, EmbedBuilder eb, int pollTime) {
-		Main.getInfo().getScheduler().schedule(() -> chn.getMessageById(msgID).queue(msg -> {
+	private static void showResult(MessageChannel chn, Member member, EmbedBuilder eb) {
+		chn.getMessageById(msgID).queue(msg -> {
 			int pos = (int) msg.getReactions().stream().filter(r -> r.getReactionEmote().getName().equals("\uD83D\uDC4D")).count() - 1;
-			System.out.println(msg.getReactions().stream().filter(r -> r.getReactionEmote().getName().equals("\uD83D\uDC4D")).collect(Collectors.toList()));
 			int neg = (int) msg.getReactions().stream().filter(r -> r.getReactionEmote().getName().equals("\uD83D\uDC4E")).count() - 1;
 			boolean NOVOTE = false;
 
@@ -112,6 +112,6 @@ public class PollCommand extends Command {
 			msg.editMessage(eb.build()).queue();
 			member.getUser().openPrivateChannel().queue(c -> c.sendMessage(eb.setAuthor("Sua enquete foi encerrada!").build()).queue());
 			msg.clearReactions().queue();
-		}), pollTime, TimeUnit.SECONDS);
+		});
 	}
 }
