@@ -88,6 +88,7 @@ public class CommandManager {
             add(new LocalEmoteListCommand());
             add(new ShiroEmoteListCommand());
             add(new JibrilEmoteListCommand());
+            add(new PollCommand());
 
             //FUN
             add(new SadButTrueCommand());

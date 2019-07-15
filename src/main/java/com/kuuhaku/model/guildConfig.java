@@ -41,6 +41,8 @@ public class guildConfig {
     private String canaladeus = null;
     private String canalav = null;
     private String canalsug = null;
+    @Column(columnDefinition = "int default 60")
+    private int pollTime = 60;
     private String canallvl = null;
     private String canalrelay = null;
     private String canalai = null;
@@ -276,5 +278,13 @@ public class guildConfig {
 
     public void setNoSpamAmount(int noSpamAmount) {
         this.noSpamAmount = noSpamAmount;
+    }
+
+    public int getPollTime() {
+        return pollTime;
+    }
+
+    public void setPollTime(int pollTime) {
+        this.pollTime = pollTime;
     }
 }
