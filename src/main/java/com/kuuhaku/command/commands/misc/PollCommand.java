@@ -143,6 +143,7 @@ public class PollCommand extends Command {
 							neg[0] = (int) msg.getReactions().stream().filter(r -> r.getReactionEmote().getName().equals("\uD83D\uDC4E")).count() - 1;
 						});
 						boolean NOVOTE = false;
+						System.out.println(pos[0] + " - " + neg[0]);
 
 						if (pos[0] == 0 && neg[0] == 0) {
 							pos[0] = 1;
