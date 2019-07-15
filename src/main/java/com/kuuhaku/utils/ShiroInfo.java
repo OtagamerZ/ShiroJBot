@@ -29,6 +29,9 @@ import net.dv8tion.jda.core.entities.User;
 import org.discordbots.api.client.DiscordBotListAPI;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 @SuppressWarnings("localvariable")
 public class ShiroInfo {
@@ -57,6 +60,8 @@ public class ShiroInfo {
 	private static final DiscordBotListAPI dbl = new DiscordBotListAPI.Builder().token(System.getenv("DBL_TOKEN")).botId("572413282653306901").build();
 	private static final IamOptions options = new IamOptions.Builder().apiKey(System.getenv("AI_TOKEN")).build();
 	private static final Assistant ai = new Assistant("2019-06-27", options);
+	public static final List<User[]> queue = new ArrayList<>();
+	public static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(5);
 
 	private JDA api;
 	private long startTime;
@@ -130,6 +135,14 @@ public class ShiroInfo {
 
 	public Assistant getAi() {
 		return ai;
+	}
+
+	public List<User[]> getQueue() {
+		return queue;
+	}
+
+	public ScheduledExecutorService getScheduler() {
+		return scheduler;
 	}
 
 	//VARIABLES

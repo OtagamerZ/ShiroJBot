@@ -43,7 +43,7 @@ public class MarryCommand extends Command {
 
 			channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + ", deseja casar-se com " + author.getAsMention() + ", por toda eternidade ou até que meu Nii-chan crie um comando de divórcio?" +
 					"\nDigite `SIM` para aceitar ou `NÃO` para negar.").queue();
-			Helper.queue.add(new User[]{author, message.getMentionedUsers().get(0)});
+			Main.getInfo().getQueue().add(new User[]{author, message.getMentionedUsers().get(0)});
 		} catch (NoResultException ignore) {
 		}
 	}
