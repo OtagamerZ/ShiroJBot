@@ -57,8 +57,6 @@ import java.util.regex.Pattern;
 public class Helper {
 
 	public static final String VOID = "\u200B";
-	public static List<User[]> queue = new ArrayList<>();
-	public static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(5);
 
 	private static PrivilegeLevel getPrivilegeLevel(Member member) {
 		if (Main.getInfo().getNiiChan().contains(member.getUser().getId())) {

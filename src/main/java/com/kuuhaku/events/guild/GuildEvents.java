@@ -195,9 +195,9 @@ public class GuildEvents extends ListenerAdapter {
 			}
 
 			if (!found && !author.isBot()) {
-				if (Helper.queue.stream().anyMatch(u -> u[1].getId().equals(author.getId()))) {
+				if (Main.getInfo().getQueue().stream().anyMatch(u -> u[1].getId().equals(author.getId()))) {
 					final User[][] hw = {new User[2]};
-					Helper.queue.stream().filter(u -> u[1].getId().equals(author.getId())).findFirst().ifPresent(users -> hw[0] = users);
+					Main.getInfo().getQueue().stream().filter(u -> u[1].getId().equals(author.getId())).findFirst().ifPresent(users -> hw[0] = users);
 					switch (message.getContentRaw().toLowerCase()) {
 						case "sim":
 							channel.sendMessage("Eu os declaro husbando e waifu, pode trancar ela no porão agora!").queue();
@@ -205,11 +205,11 @@ public class GuildEvents extends ListenerAdapter {
 							SQLite.saveMemberWaifu(SQLite.getMemberById(hw[0][0].getId() + guild.getId()), hw[0][1]);
 							MySQL.saveMemberWaifu(SQLite.getMemberById(hw[0][1].getId() + guild.getId()), hw[0][0]);
 							SQLite.saveMemberWaifu(SQLite.getMemberById(hw[0][1].getId() + guild.getId()), hw[0][0]);
-							Helper.queue.removeIf(u -> u[0].getId().equals(author.getId()) || u[1].getId().equals(author.getId()));
+							Main.getInfo().getQueue().removeIf(u -> u[0].getId().equals(author.getId()) || u[1].getId().equals(author.getId()));
 							break;
 						case "não":
 							channel.sendMessage("Pois é, hoje não tivemos um casamento, que pena.").queue();
-							Helper.queue.removeIf(u -> u[0].getId().equals(author.getId()) || u[1].getId().equals(author.getId()));
+							Main.getInfo().getQueue().removeIf(u -> u[0].getId().equals(author.getId()) || u[1].getId().equals(author.getId()));
 							break;
 					}
 				}
