@@ -92,7 +92,6 @@ public class PollCommand extends Command {
 		int pos = Main.getInfo().getPolls().get(msg.getId())[0];
 		int neg = Main.getInfo().getPolls().get(msg.getId())[1];
 		Main.getInfo().getPolls().remove(msg.getId());
-		System.out.println(pos + " - " + neg);
 		boolean NOVOTE = false;
 
 		if (pos == 0 && neg == 0) {
