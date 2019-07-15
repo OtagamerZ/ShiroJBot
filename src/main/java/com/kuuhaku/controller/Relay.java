@@ -114,7 +114,7 @@ public class Relay extends SQLite {
 						Helper.log(this.getClass(), LogLevel.ERROR, ex.toString() + "\n" + k);
 					}
 			});
-		}, 1, TimeUnit.SECONDS);
+		}, 2, TimeUnit.SECONDS);
 	}
 
 	public MessageEmbed getRelayInfo(guildConfig gc) {
