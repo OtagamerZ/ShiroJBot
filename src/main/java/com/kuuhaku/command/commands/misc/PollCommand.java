@@ -60,31 +60,28 @@ public class PollCommand extends Command {
 
 		if (gc.getCanalSUG() == null || gc.getCanalSUG().isEmpty()) {
 			SQLite.updateGuildCanalSUG("", gc);
-			final String[] msgID = {""};
 			channel.sendMessage(eb.build()).queue(m -> {
 				m.addReaction("\uD83D\uDC4D").queue();
 				m.addReaction("\uD83D\uDC4E").queue();
-				msgID[0] = m.getId();
+				String msgID = m.getId();
+				showResult(channel.getMessageById(msgID).complete(), member, eb, gc.getPollTime());
 			});
-			showResult(channel.getMessageById(msgID[0]).complete(), member, eb, gc.getPollTime());
 		} else {
 			try {
-				final String[] msgID = {""};
 				guild.getTextChannelById(gc.getCanalSUG()).sendMessage(eb.build()).queue(m -> {
 					m.addReaction("\uD83D\uDC4D").queue();
 					m.addReaction("\uD83D\uDC4E").queue();
-					msgID[0] = m.getId();
+					String msgID = m.getId();
+					showResult(channel.getMessageById(msgID).complete(), member, eb, gc.getPollTime());
 				});
-				showResult(channel.getMessageById(msgID[0]).complete(), member, eb, gc.getPollTime());
 			} catch (Exception e) {
 				SQLite.updateGuildCanalSUG("", gc);
-				final String[] msgID = {""};
 				channel.sendMessage(eb.build()).queue(m -> {
 					m.addReaction("\uD83D\uDC4D").queue();
 					m.addReaction("\uD83D\uDC4E").queue();
-					msgID[0] = m.getId();
+					String msgID = m.getId();
+					showResult(channel.getMessageById(msgID).complete(), member, eb, gc.getPollTime());
 				});
-				showResult(channel.getMessageById(msgID[0]).complete(), member, eb, gc.getPollTime());
 			}
 		}
 
