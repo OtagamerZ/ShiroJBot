@@ -212,7 +212,7 @@ public class Settings {
 		TextChannel newCanalSUG = message.getMentionedChannels().get(0);
 
 		SQLite.updateGuildCanalSUG(newCanalSUG.getId(), gc);
-		message.getTextChannel().sendMessage("✅ | O canal de adeus do servidor foi trocado para " + newCanalSUG.getAsMention() + " com sucesso.").queue();
+		message.getTextChannel().sendMessage("✅ | O canal de sugestões do servidor foi trocado para " + newCanalSUG.getAsMention() + " com sucesso.").queue();
 	}
 
 	public static void updatePollTime(String[] args, Message message, guildConfig gc) {
