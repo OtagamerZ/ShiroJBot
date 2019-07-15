@@ -28,6 +28,7 @@ import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 import org.apache.commons.lang3.StringUtils;
 
+import java.awt.*;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.ScheduledFuture;
@@ -59,6 +60,7 @@ public class PollCommand extends Command {
 		eb.setThumbnail("https://www.kalkoken.org/apps/easypoll/resources/poll-logo.png");
 		eb.setDescription(String.join(" ", args));
 		eb.setFooter("Clique nas reações abaixo para votar", null);
+		eb.setColor(Color.decode("#2195f2"));
 
 		if (gc.getCanalSUG() == null || gc.getCanalSUG().isEmpty()) {
 			SQLite.updateGuildCanalSUG("", gc);
