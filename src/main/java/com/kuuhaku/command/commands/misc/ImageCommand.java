@@ -34,7 +34,7 @@ public class ImageCommand extends Command {
 
         channel.sendMessage("<a:Loading:598500653215645697> Buscando imagem...").queue(m -> {
             try {
-                URL link = new URL("https://safebooru.org/index.php?page=dapi&s=post&q=index&json=1&limit=1&rating=safe&tags=" +
+                URL link = new URL("https://safebooru.org/index.php?page=dapi&s=post&q=index&json=1&limit=1"+ (!message.getTextChannel().isNSFW() ? "&rating=safe" : "") + "&tags=" +
                         String.join("+", tag).replace(" ", "_"));
                 HttpURLConnection con = (HttpURLConnection) link.openConnection();
                 con.setRequestMethod("GET");
