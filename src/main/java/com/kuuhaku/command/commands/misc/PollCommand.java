@@ -66,24 +66,24 @@ public class PollCommand extends Command {
 				m.addReaction("\uD83D\uDC4D").queue();
 				m.addReaction("\uD83D\uDC4E").queue();
 				msgID = m.getId();
+				Main.getInfo().getScheduler().schedule(() -> showResult(channel, m.getId(), member, eb), gc.getPollTime(), TimeUnit.SECONDS);
 			});
-			Main.getInfo().getScheduler().schedule(() -> showResult(channel.getMessageById(msgID).complete(), member, eb), gc.getPollTime(), TimeUnit.SECONDS);
 		} else {
 			try {
 				guild.getTextChannelById(gc.getCanalSUG()).sendMessage(eb.build()).queue(m -> {
 					m.addReaction("\uD83D\uDC4D").queue();
 					m.addReaction("\uD83D\uDC4E").queue();
 					msgID = m.getId();
+					Main.getInfo().getScheduler().schedule(() -> showResult(guild.getTextChannelById(gc.getCanalSUG()), m.getId(), member, eb), gc.getPollTime(), TimeUnit.SECONDS);
 				});
-				Main.getInfo().getScheduler().schedule(() -> showResult(guild.getTextChannelById(gc.getCanalSUG()).getMessageById(msgID).complete(), member, eb), gc.getPollTime(), TimeUnit.SECONDS);
 			} catch (Exception e) {
 				SQLite.updateGuildCanalSUG(null, gc);
 				channel.sendMessage(eb.build()).queue(m -> {
 					m.addReaction("\uD83D\uDC4D").queue();
 					m.addReaction("\uD83D\uDC4E").queue();
 					msgID = m.getId();
+					Main.getInfo().getScheduler().schedule(() -> showResult(channel, m.getId(), member, eb), gc.getPollTime(), TimeUnit.SECONDS);
 				});
-				Main.getInfo().getScheduler().schedule(() -> showResult(channel.getMessageById(msgID).complete(), member, eb), gc.getPollTime(), TimeUnit.SECONDS);
 			}
 		}
 
@@ -91,26 +91,28 @@ public class PollCommand extends Command {
 		channel.sendMessage("Enquete criada com sucesso, ela encerrará automaticamente em " + gc.getPollTime() + " segundos.").queue();
 	}
 
-	private static void showResult(Message msg, Member member, EmbedBuilder eb) {
-		int pos = Main.getInfo().getPolls().get(msg.getId())[0];
-		int neg = Main.getInfo().getPolls().get(msg.getId())[1];
-		Main.getInfo().getPolls().remove(msg.getId());
-		System.out.println(pos + " - " + neg);
-		boolean NOVOTE = false;
+	private static void showResult(MessageChannel chn, String ID, Member member, EmbedBuilder eb) {
+		chn.getMessageById(ID).queue(msg -> {
+			int pos = Main.getInfo().getPolls().get(msg.getId())[0];
+			int neg = Main.getInfo().getPolls().get(msg.getId())[1];
+			Main.getInfo().getPolls().remove(msg.getId());
+			System.out.println(pos + " - " + neg);
+			boolean NOVOTE = false;
 
-		if (pos == 0 && neg == 0) {
-			pos = 1;
-			neg = 1;
-			NOVOTE = true;
-		}
+			if (pos == 0 && neg == 0) {
+				pos = 1;
+				neg = 1;
+				NOVOTE = true;
+			}
 
-		eb.setAuthor("A enquete feita por " + member.getEffectiveName() + " foi encerrada!");
-		eb.setTitle("Enquete: (" + (NOVOTE ? "nenhum voto" : (pos + neg) + " votos") + ")");
-		eb.addField("Aprovação: ", NOVOTE ? "0.0%" : Helper.round((((float) pos * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
-		eb.addField("Reprovação: ", NOVOTE ? "0.0%" : Helper.round((((float) neg * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
+			eb.setAuthor("A enquete feita por " + member.getEffectiveName() + " foi encerrada!");
+			eb.setTitle("Enquete: (" + (NOVOTE ? "nenhum voto" : (pos + neg) + " votos") + ")");
+			eb.addField("Aprovação: ", NOVOTE ? "0.0%" : Helper.round((((float) pos * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
+			eb.addField("Reprovação: ", NOVOTE ? "0.0%" : Helper.round((((float) neg * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
 
-		msg.editMessage(eb.build()).submit();
-		member.getUser().openPrivateChannel().queue(c -> c.sendMessage(eb.setAuthor("Sua enquete foi encerrada!").build()).submit());
-		msg.clearReactions().complete();
+			msg.editMessage(eb.build()).submit();
+			member.getUser().openPrivateChannel().queue(c -> c.sendMessage(eb.setAuthor("Sua enquete foi encerrada!").build()).submit());
+			msg.clearReactions().complete();
+		});
 	}
 }
