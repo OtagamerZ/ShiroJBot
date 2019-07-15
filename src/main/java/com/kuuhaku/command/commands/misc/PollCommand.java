@@ -72,7 +72,9 @@ public class PollCommand extends Command {
 				m.addReaction("\uD83D\uDC4E").queue();
 				msgID.append(m.getId());
 			});
-			showResult(channel.getMessageById(msgID.toString()).complete(), member, eb, gc.getPollTime());
+			final Message[] msg = {null};
+			channel.getMessageById(msgID.toString()).queue(m -> msg[0] = m);
+			showResult(msg[0], member, eb, gc.getPollTime());
 		} else {
 			try {
 				StringBuilder msgID = new StringBuilder();
@@ -81,7 +83,9 @@ public class PollCommand extends Command {
 					m.addReaction("\uD83D\uDC4E").queue();
 					msgID.append(m.getId());
 				});
-				showResult(channel.getMessageById(msgID.toString()).complete(), member, eb, gc.getPollTime());
+				final Message[] msg = {null};
+				channel.getMessageById(msgID.toString()).queue(m -> msg[0] = m);
+				showResult(msg[0], member, eb, gc.getPollTime());
 			} catch (Exception e) {
 				SQLite.updateGuildCanalSUG("", gc);
 				StringBuilder msgID = new StringBuilder();
@@ -90,7 +94,9 @@ public class PollCommand extends Command {
 					m.addReaction("\uD83D\uDC4E").queue();
 					msgID.append(m.getId());
 				});
-				showResult(channel.getMessageById(msgID.toString()).complete(), member, eb, gc.getPollTime());
+				final Message[] msg = {null};
+				channel.getMessageById(msgID.toString()).queue(m -> msg[0] = m);
+				showResult(msg[0], member, eb, gc.getPollTime());
 			}
 		}
 
