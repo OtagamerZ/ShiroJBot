@@ -43,10 +43,10 @@ public class PollCommand extends Command {
 		if (args.length < 1) {
 			channel.sendMessage(":x: | Você precisa digitar uma pergunta para a enquete.").queue();
 			return;
-		} else if (args[0].length() < 10) {
+		} else if (String.join(" ", args).length() < 10) {
 			channel.sendMessage(":x: | Pergunta muito curta, tente complementá-la mais!").queue();
 			return;
-		} else if (args[0].length() > 2000) {
+		} else if (String.join(" ", args).length() > 2000) {
 			channel.sendMessage(":x: | Pergunta muito longa, tente simplificá-la mais!").queue();
 			return;
 		}
