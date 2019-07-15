@@ -93,8 +93,8 @@ public class PollCommand extends Command {
 
 	private static void showResult(MessageChannel chn, String ID, Member member, EmbedBuilder eb) {
 		chn.getMessageById(ID).queue(msg -> {
-			int pos = Main.getInfo().getPolls().get(msg.getId())[0];
-			int neg = Main.getInfo().getPolls().get(msg.getId())[1];
+			int pos = Main.getInfo().getPolls().get(ID)[0];
+			int neg = Main.getInfo().getPolls().get(ID)[1];
 			Main.getInfo().getPolls().remove(msg.getId());
 			System.out.println(pos + " - " + neg);
 			boolean NOVOTE = false;
