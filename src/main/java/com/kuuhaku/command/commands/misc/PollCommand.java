@@ -73,7 +73,7 @@ public class PollCommand extends Command {
 					int neg = Collections.frequency(m.getReactions().stream().map(r -> r.getReactionEmote().getEmote()).collect(Collectors.toList()), "\uD83D\uDC4E") - 1;
 					boolean NOVOTE = false;
 
-					if (pos == -1 && neg == -1) {
+					if (pos == 0 && neg == 0) {
 						pos = 1;
 						neg = 1;
 						NOVOTE = true;
@@ -101,7 +101,7 @@ public class PollCommand extends Command {
 						int neg = Collections.frequency(m.getReactions().stream().map(r -> r.getReactionEmote().getEmote()).collect(Collectors.toList()), "\uD83D\uDC4E") - 1;
 						boolean NOVOTE = false;
 
-						if (pos == -1 && neg == -1) {
+						if (pos == 0 && neg == 0) {
 							pos = 1;
 							neg = 1;
 							NOVOTE = true;
@@ -128,7 +128,7 @@ public class PollCommand extends Command {
 						int neg = Collections.frequency(m.getReactions().stream().map(r -> r.getReactionEmote().getEmote()).collect(Collectors.toList()), "\uD83D\uDC4E") - 1;
 						boolean NOVOTE = false;
 
-						if (pos == -1 && neg == -1) {
+						if (pos == 0 && neg == 0) {
 							pos = 1;
 							neg = 1;
 							NOVOTE = true;
