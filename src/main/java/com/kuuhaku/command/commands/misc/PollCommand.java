@@ -29,6 +29,7 @@ import net.dv8tion.jda.core.events.Event;
 
 import java.awt.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class PollCommand extends Command {
 
@@ -61,7 +62,7 @@ public class PollCommand extends Command {
 		eb.setColor(Color.decode("#2195f2"));
 
 		if (gc.getCanalSUG() == null || gc.getCanalSUG().isEmpty()) {
-			SQLite.updateGuildCanalSUG("", gc);
+			SQLite.updateGuildCanalSUG(null, gc);
 			channel.sendMessage(eb.build()).queue(m -> {
 				m.addReaction("\uD83D\uDC4D").queue();
 				m.addReaction("\uD83D\uDC4E").queue();
@@ -77,7 +78,7 @@ public class PollCommand extends Command {
 				});
 				showResult(guild.getTextChannelById(gc.getCanalSUG()), member, eb, gc.getPollTime());
 			} catch (Exception e) {
-				SQLite.updateGuildCanalSUG("", gc);
+				SQLite.updateGuildCanalSUG(null, gc);
 				channel.sendMessage(eb.build()).queue(m -> {
 					m.addReaction("\uD83D\uDC4D").queue();
 					m.addReaction("\uD83D\uDC4E").queue();
@@ -94,6 +95,7 @@ public class PollCommand extends Command {
 		Main.getInfo().getScheduler().schedule(() -> {
 			Message msg = chn.getMessageById(msgID).complete();
 			int pos = (int) msg.getReactions().stream().filter(r -> r.getReactionEmote().getName().equals("\uD83D\uDC4D")).count() - 1;
+			System.out.println(msg.getReactions().stream().filter(r -> r.getReactionEmote().getName().equals("\uD83D\uDC4D")).collect(Collectors.toList()));
 			int neg = (int) msg.getReactions().stream().filter(r -> r.getReactionEmote().getName().equals("\uD83D\uDC4E")).count() - 1;
 			boolean NOVOTE = false;
 
