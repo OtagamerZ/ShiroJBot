@@ -32,8 +32,6 @@ import java.util.concurrent.TimeUnit;
 
 public class PollCommand extends Command {
 
-	private static String msgID = "";
-
 	public PollCommand() {
 		super("enquete", new String[]{"poll"}, "<pergunta>", "Inicia uma enquete no canal atual ou no configurado pelos moderadores", Category.MISC);
 	}
@@ -65,7 +63,7 @@ public class PollCommand extends Command {
 			channel.sendMessage(eb.build()).queue(m -> {
 				m.addReaction("\uD83D\uDC4D").queue();
 				m.addReaction("\uD83D\uDC4E").queue();
-				msgID = m.getId();
+				Main.getInfo().getPolls().put(m.getId(), new Integer[]{0, 0});
 				Main.getInfo().getScheduler().schedule(() -> showResult(channel, m.getId(), member, eb), gc.getPollTime(), TimeUnit.SECONDS);
 			});
 		} else {
@@ -73,7 +71,7 @@ public class PollCommand extends Command {
 				guild.getTextChannelById(gc.getCanalSUG()).sendMessage(eb.build()).queue(m -> {
 					m.addReaction("\uD83D\uDC4D").queue();
 					m.addReaction("\uD83D\uDC4E").queue();
-					msgID = m.getId();
+					Main.getInfo().getPolls().put(m.getId(), new Integer[]{0, 0});
 					Main.getInfo().getScheduler().schedule(() -> showResult(guild.getTextChannelById(gc.getCanalSUG()), m.getId(), member, eb), gc.getPollTime(), TimeUnit.SECONDS);
 				});
 			} catch (Exception e) {
@@ -81,19 +79,17 @@ public class PollCommand extends Command {
 				channel.sendMessage(eb.build()).queue(m -> {
 					m.addReaction("\uD83D\uDC4D").queue();
 					m.addReaction("\uD83D\uDC4E").queue();
-					msgID = m.getId();
+					Main.getInfo().getPolls().put(m.getId(), new Integer[]{0, 0});
 					Main.getInfo().getScheduler().schedule(() -> showResult(channel, m.getId(), member, eb), gc.getPollTime(), TimeUnit.SECONDS);
 				});
 			}
 		}
 
-		Main.getInfo().getPolls().put(msgID, new Integer[]{0, 0});
 		channel.sendMessage("Enquete criada com sucesso, ela encerrará automaticamente em " + gc.getPollTime() + " segundos.").queue();
 	}
 
 	private static void showResult(MessageChannel chn, String ID, Member member, EmbedBuilder eb) {
 		chn.getMessageById(ID).queue(msg -> {
-			System.out.println(Main.getInfo().getPolls().toString());
 			int pos = Main.getInfo().getPolls().get(ID)[0];
 			int neg = Main.getInfo().getPolls().get(ID)[1];
 			Main.getInfo().getPolls().remove(msg.getId());
