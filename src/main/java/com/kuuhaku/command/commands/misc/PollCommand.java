@@ -75,6 +75,7 @@ public class PollCommand extends Command {
 					Main.getInfo().getScheduler().schedule(() -> showResult(m, member, eb), gc.getPollTime(), TimeUnit.SECONDS);
 				});
 			} catch (Exception e) {
+				e.printStackTrace();
 				SQLite.updateGuildCanalSUG(null, gc);
 				channel.sendMessage(eb.build()).queue(m -> {
 					m.addReaction("\uD83D\uDC4D").queue();
