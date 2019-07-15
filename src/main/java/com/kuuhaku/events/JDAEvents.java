@@ -81,8 +81,10 @@ public class JDAEvents extends ListenerAdapter {
 
 			if (event.getReactionEmote().getName().equals("\uD83D\uDC4D")) Main.getInfo().getPolls().get(message.getId())[0]++;
 			else if (event.getReactionEmote().getName().equals("\uD83D\uDC4E")) Main.getInfo().getPolls().get(message.getId())[1]++;
-            else if (event.getReactionEmote().getName().equals("\u274C") && message.getEmbeds().get(0).getTitle().equals(":notepad_spiral: Enquete criada por " + event.getMember().getEffectiveName()))
-                Main.getInfo().getPolls().remove(message.getId());
+			else if (event.getReactionEmote().getName().equals("\u274C") && message.getEmbeds().get(0).getTitle().equals(":notepad_spiral: Enquete criada por " + event.getMember().getEffectiveName())) {
+				Main.getInfo().getPolls().remove(message.getId());
+				message.delete().queue();
+			}
 		}
 		if (message.getAuthor() == Main.getInfo().getSelfUser() && event.getUser() != Main.getInfo().getSelfUser() && message.getMentionedUsers().size() > 0 && event.getUser() == message.getMentionedUsers().get(1)) {
 			if (message.getContentRaw().contains("abraçou")) {
