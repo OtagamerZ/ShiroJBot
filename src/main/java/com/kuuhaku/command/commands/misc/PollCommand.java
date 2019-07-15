@@ -109,8 +109,8 @@ public class PollCommand extends Command {
 		eb.addField("Aprovação: ", NOVOTE ? "0.0%" : Helper.round((((float) pos * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
 		eb.addField("Reprovação: ", NOVOTE ? "0.0%" : Helper.round((((float) neg * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
 
-		msg.editMessage(eb.build()).queue();
-		member.getUser().openPrivateChannel().queue(c -> c.sendMessage(eb.setAuthor("Sua enquete foi encerrada!").build()).queue());
-		msg.clearReactions().queue();
+		msg.editMessage(eb.build()).submit();
+		member.getUser().openPrivateChannel().queue(c -> c.sendMessage(eb.setAuthor("Sua enquete foi encerrada!").build()).submit());
+		msg.clearReactions().complete();
 	}
 }
