@@ -64,7 +64,7 @@ public class PollCommand extends Command {
 				m.addReaction("\uD83D\uDC4D").queue();
 				m.addReaction("\uD83D\uDC4E").queue();
 				String msgID = m.getId();
-				showResult(channel.getMessageById(msgID).complete(), member, eb, gc.getPollTime());
+				showResult(msgID, m.getChannel(), member, eb, gc.getPollTime());
 			});
 		} else {
 			try {
@@ -72,7 +72,7 @@ public class PollCommand extends Command {
 					m.addReaction("\uD83D\uDC4D").queue();
 					m.addReaction("\uD83D\uDC4E").queue();
 					String msgID = m.getId();
-					showResult(channel.getMessageById(msgID).complete(), member, eb, gc.getPollTime());
+					showResult(msgID, m.getChannel(), member, eb, gc.getPollTime());
 				});
 			} catch (Exception e) {
 				SQLite.updateGuildCanalSUG("", gc);
@@ -80,7 +80,7 @@ public class PollCommand extends Command {
 					m.addReaction("\uD83D\uDC4D").queue();
 					m.addReaction("\uD83D\uDC4E").queue();
 					String msgID = m.getId();
-					showResult(channel.getMessageById(msgID).complete(), member, eb, gc.getPollTime());
+					showResult(msgID, m.getChannel(), member, eb, gc.getPollTime());
 				});
 			}
 		}
@@ -88,8 +88,9 @@ public class PollCommand extends Command {
 		channel.sendMessage("Enquete criada com sucesso, ela encerrará automaticamente em " + gc.getPollTime() + " segundos.").queue();
 	}
 
-	private static void showResult(Message msg, Member member, EmbedBuilder eb, int pollTime) {
+	private static void showResult(String msgID, MessageChannel chn, Member member, EmbedBuilder eb, int pollTime) {
 		Main.getInfo().getScheduler().schedule(() -> {
+			Message msg = chn.getMessageById(msgID).complete();
 			int pos = (int) msg.getReactions().stream().filter(r -> r.getReactionEmote().getName().equals("\uD83D\uDC4D")).count() - 1;
 			int neg = (int) msg.getReactions().stream().filter(r -> r.getReactionEmote().getName().equals("\uD83D\uDC4E")).count() - 1;
 			boolean NOVOTE = false;
