@@ -77,18 +77,8 @@ public class SettingsCommand extends Command {
             case "canalsug":
                 Settings.updateCanalSUG(args, message, gc);
                 break;
-            case "cavisos":
-            case "canalavisos":
-                Settings.updateCanalAvisos(args, message, gc);
-                break;
             case "rwarn":
             case "rolewarn":
-            case "cwarn":
-            case "cargowarn":
-            case "raviso":
-            case "roleaviso":
-            case "caviso":
-            case "cargoaviso":
                 Settings.updateCargoWarn(args, message, gc);
                 break;
             case "ln":

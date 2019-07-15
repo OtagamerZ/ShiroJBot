@@ -39,7 +39,6 @@ public class guildConfig {
     private String msgAdeus = "Ahh...%user% deixou este servidor!";
     private String canalbv = null;
     private String canaladeus = null;
-    private String canalav = null;
     private String canalsug = null;
     @Column(columnDefinition = "int default 60")
     private int pollTime = 60;
@@ -47,6 +46,8 @@ public class guildConfig {
     private String canalrelay = null;
     private String canalai = null;
     private String cargowarn = null;
+    @Column(columnDefinition = "int default 60")
+    private int warnTime = 60;
     private String cargoslvl = "{}";
     private String lvlNotif = "true";
     private String cargoNew = "{}";
@@ -114,14 +115,6 @@ public class guildConfig {
 
     public void setMsgAdeus(String msgAdeus) {
         this.msgAdeus = msgAdeus;
-    }
-
-    public String getCanalAV() {
-        return canalav;
-    }
-
-    public void setCanalAV(String canalav) {
-        this.canalav = canalav;
     }
 
     public String getCargoWarn() {
@@ -286,5 +279,13 @@ public class guildConfig {
 
     public void setPollTime(int pollTime) {
         this.pollTime = pollTime;
+    }
+
+    public int getWarnTime() {
+        return warnTime;
+    }
+
+    public void setWarnTime(int warnTime) {
+        this.warnTime = warnTime;
     }
 }
