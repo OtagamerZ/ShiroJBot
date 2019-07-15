@@ -98,7 +98,7 @@ public class Relay extends SQLite {
 		relays.forEach((k, r) -> {
 			if (!s.getId().equals(k))
 				try {
-					Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(eb.build()).queue();
+					Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(eb.build()).complete();
 				} catch (NullPointerException e) {
 					SQLite.getGuildById(k).setCanalRelay(null);
 				} catch (InsufficientPermissionException ex) {
