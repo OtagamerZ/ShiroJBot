@@ -74,16 +74,13 @@ public class PollCommand extends Command {
 						neg = 1;
 					}
 
-					m.editMessage("A enquete feita por " + author.getAsMention() + " foi encerrada!\n\nResultado:\n```" +
-							"Aprovação: " + Helper.round((((float) pos * 100f) / (float) pos + (float) neg) * 100f, 1) + "" +
-							"Repovação: " + Helper.round((((float) neg * 100f) / (float) pos + (float) neg) * 100f, 1) + "" +
-							"```").complete();
-					int finalPos = pos;
-					int finalNeg = neg;
-					author.openPrivateChannel().queue(c -> c.sendMessage("Sua enquete foi encerrada!\n\nResultado:\n```" +
-							"Aprovação: " + Helper.round((((float) finalPos * 100f) / (float) finalPos + (float) finalNeg) * 100f, 1) + "" +
-							"Repovação: " + Helper.round((((float) finalNeg * 100f) / (float) finalPos + (float) finalNeg) * 100f, 1) + "" +
-							"```").complete());
+					eb.setAuthor("A enquete feita por " + author.getAsMention() + " foi encerrada!");
+					eb.setTitle("Resultado:");
+					eb.addField("Aprovação: ", Helper.round((((float) pos * 100f) / (float) pos + (float) neg), 1) + "%", true);
+					eb.addField("Reprovação: ", Helper.round((((float) neg * 100f) / (float) pos + (float) neg), 1) + "%", true);
+
+					m.editMessage(eb.build()).submit();
+					author.openPrivateChannel().queue(c -> c.sendMessage(eb.setAuthor("Sua enquete foi encerrada!").build()).submit());
 					m.clearReactions().complete();
 				};
 				Main.getInfo().getScheduler().schedule(awaitPollEnd, gc.getPollTime(), TimeUnit.SECONDS);
@@ -103,16 +100,13 @@ public class PollCommand extends Command {
 							neg = 1;
 						}
 
-						m.editMessage("A enquete feita por " + author.getAsMention() + " foi encerrada!\n\nResultado:\n```" +
-								"Aprovação: " + Helper.round((((float) pos * 100f) / (float) pos + (float) neg) * 100f, 1) + "" +
-								"Repovação: " + Helper.round((((float) neg * 100f) / (float) pos + (float) neg) * 100f, 1) + "" +
-								"```").complete();
-						int finalPos = pos;
-						int finalNeg = neg;
-						author.openPrivateChannel().queue(c -> c.sendMessage("Sua enquete foi encerrada!\n\nResultado:\n```" +
-								"Aprovação: " + Helper.round((((float) finalPos * 100f) / (float) finalPos + (float) finalNeg) * 100f, 1) + "" +
-								"Repovação: " + Helper.round((((float) finalNeg * 100f) / (float) finalPos + (float) finalNeg) * 100f, 1) + "" +
-								"```").complete());
+						eb.setAuthor("A enquete feita por " + author.getAsMention() + " foi encerrada!");
+						eb.setTitle("Resultado:");
+						eb.addField("Aprovação: ", Helper.round((((float) pos * 100f) / (float) pos + (float) neg), 1) + "%", true);
+						eb.addField("Reprovação: ", Helper.round((((float) neg * 100f) / (float) pos + (float) neg), 1) + "%", true);
+
+						m.editMessage(eb.build()).submit();
+						author.openPrivateChannel().queue(c -> c.sendMessage(eb.setAuthor("Sua enquete foi encerrada!").build()).submit());
 						m.clearReactions().complete();
 					};
 					Main.getInfo().getScheduler().schedule(awaitPollEnd, gc.getPollTime(), TimeUnit.SECONDS);
@@ -131,16 +125,13 @@ public class PollCommand extends Command {
 							neg = 1;
 						}
 
-						m.editMessage("A enquete feita por " + author.getAsMention() + " foi encerrada!\n\nResultado:\n```" +
-								"Aprovação: " + Helper.round((((float) pos * 100f) / (float) pos + (float) neg) * 100f, 1) + "" +
-								"Repovação: " + Helper.round((((float) neg * 100f) / (float) pos + (float) neg) * 100f, 1) + "" +
-								"```").complete();
-						int finalPos = pos;
-						int finalNeg = neg;
-						author.openPrivateChannel().queue(c -> c.sendMessage("Sua enquete foi encerrada!\n\nResultado:\n```" +
-								"Aprovação: " + Helper.round((((float) finalPos * 100f) / (float) finalPos + (float) finalNeg) * 100f, 1) + "" +
-								"Repovação: " + Helper.round((((float) finalNeg * 100f) / (float) finalPos + (float) finalNeg) * 100f, 1) + "" +
-								"```").complete());
+						eb.setAuthor("A enquete feita por " + author.getAsMention() + " foi encerrada!");
+						eb.setTitle("Resultado:");
+						eb.addField("Aprovação: ", Helper.round((((float) pos * 100f) / (float) pos + (float) neg), 1) + "%", true);
+						eb.addField("Reprovação: ", Helper.round((((float) neg * 100f) / (float) pos + (float) neg), 1) + "%", true);
+
+						m.editMessage(eb.build()).submit();
+						author.openPrivateChannel().queue(c -> c.sendMessage(eb.setAuthor("Sua enquete foi encerrada!").build()).submit());
 						m.clearReactions().complete();
 					};
 					Main.getInfo().getScheduler().schedule(awaitPollEnd, gc.getPollTime(), TimeUnit.SECONDS);
