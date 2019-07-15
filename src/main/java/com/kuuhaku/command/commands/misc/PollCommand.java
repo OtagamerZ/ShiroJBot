@@ -66,24 +66,24 @@ public class PollCommand extends Command {
 				m.addReaction("\uD83D\uDC4D").queue();
 				m.addReaction("\uD83D\uDC4E").queue();
 				msgID = m.getId();
-				Main.getInfo().getScheduler().schedule(() -> showResult(m, member, eb), gc.getPollTime(), TimeUnit.SECONDS);
 			});
+			Main.getInfo().getScheduler().schedule(() -> showResult(channel.getMessageById(msgID).complete(), member, eb), gc.getPollTime(), TimeUnit.SECONDS);
 		} else {
 			try {
 				guild.getTextChannelById(gc.getCanalSUG()).sendMessage(eb.build()).queue(m -> {
 					m.addReaction("\uD83D\uDC4D").queue();
 					m.addReaction("\uD83D\uDC4E").queue();
 					msgID = m.getId();
-					Main.getInfo().getScheduler().schedule(() -> showResult(m, member, eb), gc.getPollTime(), TimeUnit.SECONDS);
 				});
+				Main.getInfo().getScheduler().schedule(() -> showResult(guild.getTextChannelById(gc.getCanalSUG()).getMessageById(msgID).complete(), member, eb), gc.getPollTime(), TimeUnit.SECONDS);
 			} catch (Exception e) {
 				SQLite.updateGuildCanalSUG(null, gc);
 				channel.sendMessage(eb.build()).queue(m -> {
 					m.addReaction("\uD83D\uDC4D").queue();
 					m.addReaction("\uD83D\uDC4E").queue();
 					msgID = m.getId();
-					Main.getInfo().getScheduler().schedule(() -> showResult(m, member, eb), gc.getPollTime(), TimeUnit.SECONDS);
 				});
+				Main.getInfo().getScheduler().schedule(() -> showResult(channel.getMessageById(msgID).complete(), member, eb), gc.getPollTime(), TimeUnit.SECONDS);
 			}
 		}
 
