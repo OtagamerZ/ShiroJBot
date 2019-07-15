@@ -74,10 +74,10 @@ public class PollCommand extends Command {
 						neg = 1;
 					}
 
-					eb.setAuthor("A enquete feita por " + author.getAsMention() + " foi encerrada!");
+					eb.setAuthor("A enquete feita por " + member.getEffectiveName() + " foi encerrada!");
 					eb.setTitle("Resultado:");
-					eb.addField("Aprovação: ", Helper.round((((float) pos * 100f) / (float) pos + (float) neg), 1) + "%", true);
-					eb.addField("Reprovação: ", Helper.round((((float) neg * 100f) / (float) pos + (float) neg), 1) + "%", true);
+					eb.addField("Aprovação: ", Helper.round((((float) pos * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
+					eb.addField("Reprovação: ", Helper.round((((float) neg * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
 
 					m.editMessage(eb.build()).submit();
 					author.openPrivateChannel().queue(c -> c.sendMessage(eb.setAuthor("Sua enquete foi encerrada!").build()).submit());
@@ -100,10 +100,10 @@ public class PollCommand extends Command {
 							neg = 1;
 						}
 
-						eb.setAuthor("A enquete feita por " + author.getAsMention() + " foi encerrada!");
+						eb.setAuthor("A enquete feita por " + member.getEffectiveName() + " foi encerrada!");
 						eb.setTitle("Resultado:");
-						eb.addField("Aprovação: ", Helper.round((((float) pos * 100f) / (float) pos + (float) neg), 1) + "%", true);
-						eb.addField("Reprovação: ", Helper.round((((float) neg * 100f) / (float) pos + (float) neg), 1) + "%", true);
+						eb.addField("Aprovação: ", Helper.round((((float) pos * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
+						eb.addField("Reprovação: ", Helper.round((((float) neg * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
 
 						m.editMessage(eb.build()).submit();
 						author.openPrivateChannel().queue(c -> c.sendMessage(eb.setAuthor("Sua enquete foi encerrada!").build()).submit());
@@ -125,10 +125,10 @@ public class PollCommand extends Command {
 							neg = 1;
 						}
 
-						eb.setAuthor("A enquete feita por " + author.getAsMention() + " foi encerrada!");
+						eb.setAuthor("A enquete feita por " + member.getEffectiveName() + " foi encerrada!");
 						eb.setTitle("Resultado:");
-						eb.addField("Aprovação: ", Helper.round((((float) pos * 100f) / (float) pos + (float) neg), 1) + "%", true);
-						eb.addField("Reprovação: ", Helper.round((((float) neg * 100f) / (float) pos + (float) neg), 1) + "%", true);
+						eb.addField("Aprovação: ", Helper.round((((float) pos * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
+						eb.addField("Reprovação: ", Helper.round((((float) neg * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
 
 						m.editMessage(eb.build()).submit();
 						author.openPrivateChannel().queue(c -> c.sendMessage(eb.setAuthor("Sua enquete foi encerrada!").build()).submit());
