@@ -47,6 +47,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
@@ -56,6 +58,7 @@ public class Helper {
 
 	public static final String VOID = "\u200B";
 	public static List<User[]> queue = new ArrayList<>();
+	public static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(5);
 
 	private static PrivilegeLevel getPrivilegeLevel(Member member) {
 		if (Main.getInfo().getNiiChan().contains(member.getUser().getId())) {
@@ -161,7 +164,7 @@ public class Helper {
 				Main.getInfo().getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> c.sendMessage("GIF irregular: " + imageURL).queue()));
 			}
 		} catch (Exception e) {
-			log(Helper.class, LogLevel.ERROR, "Erro ao carregar a imagem: " + e);
+			log(Helper.class, LogLevel.ERROR, "Erro ao carregar a imagem: " + e.getStackTrace()[0]);
 		}
 	}
 
