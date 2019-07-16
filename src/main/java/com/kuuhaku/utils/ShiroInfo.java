@@ -147,10 +147,12 @@ public class ShiroInfo {
 	}
 
 	public Supplier<String> getCode(String userID, String msgID) {
+		System.out.println(codes.keySet().toString());
 		return codes.get(new String[]{userID, msgID});
 	}
 
 	public void addCode(String userID, String msgID, Supplier<String> sup) {
+		System.out.println(codes.keySet().toString());
 		codes.put(new String[]{userID, msgID}, sup);
 	}
 

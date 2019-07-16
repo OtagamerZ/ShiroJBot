@@ -16,7 +16,6 @@ public class CompileCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-		message.addReaction("\u2699").queue();
 		String code = String.join(" ", args);
 		channel.sendMessage("<a:Loading:598500653215645697> | Compilando...").queue(m -> {
 			try {
