@@ -28,8 +28,8 @@ public class CompileCommand extends Command {
 								"import com.kuuhaku.utils.Sandbox;" +
 								"import static com.kuuhaku.Main.env;" +
 								"public class Dynamic extends Sandbox implements java.util.function.Supplier<String> {\n" +
-								"	super.msg = env.msg;" +
 								"	public String get() {\n" +
+								"		super.msg = env.msg;" +
 								code +
 								"\n" +
 								"	}\n" +
