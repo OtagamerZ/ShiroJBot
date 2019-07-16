@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 
 public class CompileCommand extends Command {
 	public CompileCommand() {
-		super("compilar", new String[]{"compile", "run"}, "Executa um código Java.", Category.PARTNER);
+		super("compilar", new String[]{"compile"}, "Executa um código Java.", Category.PARTNER);
 	}
 
 	@Override
