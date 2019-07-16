@@ -28,11 +28,13 @@ import net.dv8tion.jda.core.entities.SelfUser;
 import net.dv8tion.jda.core.entities.User;
 import org.discordbots.api.client.DiscordBotListAPI;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 @SuppressWarnings("localvariable")
 public class ShiroInfo {
@@ -62,7 +64,6 @@ public class ShiroInfo {
 	private static final IamOptions options = new IamOptions.Builder().apiKey(System.getenv("AI_TOKEN")).build();
 	private static final Assistant ai = new Assistant("2019-06-27", options);
 	public static final List<User[]> queue = new ArrayList<>();
-	private static final Map<String, Map<User, Supplier<String>>> codes = new HashMap<>();
 	private static final Map<String, Integer[]> polls = new HashMap<>();
 	private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(5);
 
@@ -142,24 +143,6 @@ public class ShiroInfo {
 
 	public List<User[]> getQueue() {
 		return queue;
-	}
-
-	public Supplier<String> getCode(User user, String msgID) {
-		System.out.println(codes.keySet().toString());
-		System.out.println(codes.values().stream().map(Map::values).collect(Collectors.toList()));
-		return codes.get(msgID).get(user);
-	}
-
-	public void addCode(User user, String msgID, Supplier<String> sup) {
-		Map<User, Supplier<String>> map = new HashMap<>();
-		map.put(user, sup);
-		codes.put(msgID, map);
-	}
-
-	public void removeCode(String msgID) {
-		System.out.println(codes.values().stream().map(Map::values).collect(Collectors.toList()));
-		codes.remove(msgID);
-		System.out.println(codes.keySet().toString());
 	}
 
 	public Map<String, Integer[]> getPolls() {
