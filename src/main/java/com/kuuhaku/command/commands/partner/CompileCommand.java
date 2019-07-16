@@ -1,13 +1,10 @@
 package com.kuuhaku.command.commands.partner;
 
+import bsh.Interpreter;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
-import org.joor.Reflect;
-
-import java.io.File;
-import java.util.function.Supplier;
 
 public class CompileCommand extends Command {
 	public CompileCommand() {
@@ -20,10 +17,8 @@ public class CompileCommand extends Command {
 		channel.sendMessage("<a:Loading:598500653215645697> | Compilando...").queue(m -> {
 			try {
 				if (!code.contains("return")) throw new Exception("Código sem retorno");
-				File dyn = new File("Dynamic.java");
-				if (dyn.exists()) dyn.delete();
-				Supplier<String> compCode = Reflect.compile(
-						"Dynamic",
+				Interpreter i = new Interpreter();
+				Object result = i.eval(
 						"import java.util.*;" +
 								"import java.awt.*;" +
 								"import com.kuuhaku.utils.Sandbox;" +
@@ -34,11 +29,11 @@ public class CompileCommand extends Command {
 								code +
 								"\n" +
 								"	}\n" +
-								"}").create().get();
+								"}");
 
 				m.editMessage("<:Verified:591425071772467211> | Compilado com sucesso!").queue(n ->
 						m.getChannel().sendMessage("<a:Loading:598500653215645697> | Executando...").queue(d ->
-								d.editMessage("-> " + compCode.get()).queue()));
+								d.editMessage("-> " + result.toString()).queue()));
 			} catch (Exception e) {
 				m.editMessage(":x: | Erro ao compilar: " + e.toString()).queue();
 			}
