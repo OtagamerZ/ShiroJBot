@@ -144,6 +144,7 @@ public class ShiroInfo {
 	}
 
 	public Supplier<String> getCode(User user, String msgID) {
+		System.out.println(codes.keySet().toString());
 		return codes.get(msgID).get(user);
 	}
 
@@ -154,6 +155,7 @@ public class ShiroInfo {
 	}
 
 	public void removeCode(String msgID) {
+		System.out.println(codes.keySet().toString());
 		codes.remove(msgID);
 	}
 
