@@ -65,7 +65,7 @@ dependencies {
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.2'
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
     compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.11.2'
-    compile group: 'org.jooq', name: 'joor-java-8', version: '0.9.11'
+    compile group: 'org.beanshell', name: 'bsh', version: '2.0b5'
     implementation 'com.graphql-java:graphql-java:2019-05-08T02-56-27-cca4316'
 }
 
