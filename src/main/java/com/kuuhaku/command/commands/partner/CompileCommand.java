@@ -3,7 +3,6 @@ package com.kuuhaku.command.commands.partner;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.sun.org.apache.xalan.internal.xsltc.compiler.CompilerException;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 import org.joor.Reflect;
