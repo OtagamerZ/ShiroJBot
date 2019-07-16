@@ -1,6 +1,7 @@
 package com.kuuhaku.command.commands.partner;
 
 import bsh.Interpreter;
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import net.dv8tion.jda.core.entities.*;
@@ -18,17 +19,17 @@ public class CompileCommand extends Command {
 			try {
 				if (!code.contains("return")) throw new Exception("Código sem retorno");
 				Interpreter i = new Interpreter();
+				i.set("sandbox", Main.env);
 				Object result = i.eval(
 						"import java.util.*;" +
 								"import java.awt.*;" +
+								"import net.dv8tion.jda.core.entities.*;" +
 								"import com.kuuhaku.utils.Sandbox;" +
-								"import static com.kuuhaku.Main.env;" +
-								"public class Dynamic extends Sandbox implements java.util.function.Supplier<String> {\n" +
-								"	public String get() {\n" +
-								"		super.msg = env.msg;" +
-								code +
-								"\n" +
-								"	}\n" +
+								"public class Dynamic {" +
+								"	private static Message msg = sandbox.env;" +
+								"	public String get() {" +
+										code +
+								"	}" +
 								"}");
 
 				m.editMessage("<:Verified:591425071772467211> | Compilado com sucesso!").queue(n ->
