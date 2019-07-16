@@ -17,22 +17,22 @@ public class CompileCommand extends Command {
 		String code = String.join(" ", args);
 		channel.sendMessage("<a:Loading:598500653215645697> | Compilando...").queue(m -> {
 			try {
-				if (!code.contains("return")) throw new Exception("Código sem retorno");
+				if (!code.contains("out")) throw new Exception("Código sem retorno");
 				Interpreter i = new Interpreter();
 				i.set("msg", Main.env.msg);
-				Object result = i.eval(
+				i.eval(
 						"import java.util.*;" +
 								"import java.awt.*;" +
 								"import net.dv8tion.jda.core.entities.*;" +
 								"public class Dynamic {" +
 								"	public static void main(String[] args) {" +
-										code +
+								code +
 								"	}" +
 								"}");
-
+				Object out = i.get("out");
 				m.editMessage("<:Verified:591425071772467211> | Compilado com sucesso!").queue(n ->
 						m.getChannel().sendMessage("<a:Loading:598500653215645697> | Executando...").queue(d ->
-								d.editMessage("-> " + result.toString()).queue()));
+								d.editMessage("-> " + out.toString()).queue()));
 			} catch (Exception e) {
 				m.editMessage(":x: | Erro ao compilar: " + e.toString()).queue();
 			}
