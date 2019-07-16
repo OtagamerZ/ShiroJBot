@@ -21,7 +21,7 @@ public class CompileCommand extends Command {
 		String code = String.join(" ", args);
 		channel.sendMessage("<a:Loading:598500653215645697> | Compilando...").queue(m -> {
 			try {
-				if (!code.contains("return")) throw new CompilerException("Código sem retorno");
+				if (!code.contains("return")) throw new Exception("Código sem retorno");
 				Supplier<String> compCode = Reflect.compile(
 						"Dynamic",
 						"import java.util.*;" +
