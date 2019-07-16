@@ -1,7 +1,6 @@
 package com.kuuhaku.command.commands.partner;
 
 import bsh.Interpreter;
-import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import net.dv8tion.jda.core.entities.*;
@@ -19,7 +18,7 @@ public class CompileCommand extends Command {
 			try {
 				if (!code.contains("out")) throw new Exception("Código sem retorno");
 				Interpreter i = new Interpreter();
-				i.set("msg", Main.env.msg);
+				i.set("msg", message);
 				i.eval(code);
 				Object out = i.get("out");
 				m.editMessage("<:Verified:591425071772467211> | Compilado com sucesso!").queue(n ->
