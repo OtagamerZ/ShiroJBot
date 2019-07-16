@@ -32,6 +32,7 @@ import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("localvariable")
 public class ShiroInfo {
@@ -145,6 +146,7 @@ public class ShiroInfo {
 
 	public Supplier<String> getCode(User user, String msgID) {
 		System.out.println(codes.keySet().toString());
+		System.out.println(codes.values().stream().map(Map::values).collect(Collectors.toList()));
 		return codes.get(msgID).get(user);
 	}
 
@@ -155,8 +157,9 @@ public class ShiroInfo {
 	}
 
 	public void removeCode(String msgID) {
-		System.out.println(codes.keySet().toString());
+		System.out.println(codes.values().stream().map(Map::values).collect(Collectors.toList()));
 		codes.remove(msgID);
+		System.out.println(codes.keySet().toString());
 	}
 
 	public Map<String, Integer[]> getPolls() {
