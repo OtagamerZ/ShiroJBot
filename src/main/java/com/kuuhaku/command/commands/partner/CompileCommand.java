@@ -6,6 +6,7 @@ import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 import org.joor.Reflect;
 
+import java.io.File;
 import java.util.function.Supplier;
 
 public class CompileCommand extends Command {
@@ -19,8 +20,10 @@ public class CompileCommand extends Command {
 		channel.sendMessage("<a:Loading:598500653215645697> | Compilando...").queue(m -> {
 			try {
 				if (!code.contains("return")) throw new Exception("Código sem retorno");
+				File dyn = new File("Dynamic.java");
+				if (dyn.exists()) dyn.delete();
 				Supplier<String> compCode = Reflect.compile(
-						String.valueOf(System.currentTimeMillis()),
+						"Dynamic",
 						"import java.util.*;" +
 								"import java.awt.*;" +
 								"import com.kuuhaku.utils.Sandbox;" +
