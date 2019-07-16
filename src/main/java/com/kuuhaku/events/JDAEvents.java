@@ -78,11 +78,11 @@ public class JDAEvents extends ListenerAdapter {
 		if (event.getMember().getUser().isBot()) return;
 		Message message = event.getChannel().getMessageById(event.getMessageId()).complete();
 		if (event.getReactionEmote().getName().equals("\u25b6")) {
-			if (Main.getInfo().getCode(event.getUser().getId(), event.getMessageId()) != null) {
+			if (Main.getInfo().getCode(event.getUser(), event.getMessageId()) != null) {
 				event.getChannel().sendMessage("<a:Loading:598500653215645697> | Executando...").queue(m -> {
 					Main.env.msg = message;
-					m.editMessage(Main.getInfo().getCode(event.getUser().getId(), event.getMessageId()).get()).queue();
-					Main.getInfo().removeCode(event.getUser().getId(), event.getMessageId());
+					m.editMessage(Main.getInfo().getCode(event.getUser(), event.getMessageId()).get()).queue();
+					Main.getInfo().removeCode(event.getMessageId());
 				});
 			}
 		}
