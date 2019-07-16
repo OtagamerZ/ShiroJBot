@@ -25,6 +25,7 @@ public class CompileCommand extends Command {
 						"Dynamic",
 						"import java.util.*;" +
 								"import java.awt.*;" +
+								"import com.kuuhaku.utils.Sandbox;" +
 								"import static com.kuuhaku.Main.env;" +
 								"public class Dynamic extends Sandbox implements java.util.function.Supplier<String> {\n" +
 								"	super.msg = env.msg;" +
@@ -36,10 +37,12 @@ public class CompileCommand extends Command {
 
 				m.editMessage("<:Verified:591425071772467211> | Compilado com sucesso!").queue();
 				Main.getInfo().addCode(author.getId(), message.getId(), compCode);
-				message.addReaction("\u25b6").queue();
 			} catch (Exception e) {
 				m.editMessage(":x: | Erro ao compilar: " + e.toString()).queue();
+				return;
 			}
+
+			message.addReaction("\u25b6").queue();
 		});
 	}
 
