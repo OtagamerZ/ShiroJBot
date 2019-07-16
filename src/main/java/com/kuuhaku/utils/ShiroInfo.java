@@ -28,10 +28,7 @@ import net.dv8tion.jda.core.entities.SelfUser;
 import net.dv8tion.jda.core.entities.User;
 import org.discordbots.api.client.DiscordBotListAPI;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.Supplier;
@@ -147,12 +144,12 @@ public class ShiroInfo {
 	}
 
 	public Supplier<String> getCode(String userID, String msgID) {
-		System.out.println(codes.keySet().toString());
+		System.out.println(Arrays.toString(codes.keySet().toArray()));
 		return codes.get(new String[]{userID, msgID});
 	}
 
 	public void addCode(String userID, String msgID, Supplier<String> sup) {
-		System.out.println(codes.keySet().toString());
+		System.out.println(Arrays.toString(codes.keySet().toArray()));
 		codes.put(new String[]{userID, msgID}, sup);
 	}
 
