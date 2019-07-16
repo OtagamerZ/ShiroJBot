@@ -61,7 +61,7 @@ public class ShiroInfo {
 	private static final IamOptions options = new IamOptions.Builder().apiKey(System.getenv("AI_TOKEN")).build();
 	private static final Assistant ai = new Assistant("2019-06-27", options);
 	public static final List<User[]> queue = new ArrayList<>();
-	private static final Map<String[], Supplier<String>> codes = new HashMap<>();
+	private static final Map<String, Map<User, Supplier<String>>> codes = new HashMap<>();
 	private static final Map<String, Integer[]> polls = new HashMap<>();
 	private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(5);
 
@@ -143,18 +143,18 @@ public class ShiroInfo {
 		return queue;
 	}
 
-	public Supplier<String> getCode(String userID, String msgID) {
-		System.out.println(Arrays.toString(codes.keySet().toArray()));
-		return codes.get(new String[]{userID, msgID});
+	public Supplier<String> getCode(User user, String msgID) {
+		return codes.get(msgID).get(user);
 	}
 
-	public void addCode(String userID, String msgID, Supplier<String> sup) {
-		System.out.println(Arrays.toString(codes.keySet().toArray()));
-		codes.put(new String[]{userID, msgID}, sup);
+	public void addCode(User user, String msgID, Supplier<String> sup) {
+		Map<User, Supplier<String>> map = new HashMap<>();
+		map.put(user, sup);
+		codes.put(msgID, map);
 	}
 
-	public void removeCode(String userID, String msgID) {
-		codes.remove(new String[]{userID, msgID});
+	public void removeCode(String msgID) {
+		codes.remove(msgID);
 	}
 
 	public Map<String, Integer[]> getPolls() {
