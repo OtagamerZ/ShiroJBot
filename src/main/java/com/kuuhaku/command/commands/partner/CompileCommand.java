@@ -1,6 +1,5 @@
 package com.kuuhaku.command.commands.partner;
 
-import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import net.dv8tion.jda.core.entities.*;
@@ -35,13 +34,10 @@ public class CompileCommand extends Command {
 								"}").create().get();
 
 				m.editMessage("<:Verified:591425071772467211> | Compilado com sucesso!").queue();
-				Main.getInfo().addCode(author, message.getId(), compCode);
+				m.getChannel().sendMessage("<a:Loading:598500653215645697> | Executando...").queue(d -> d.editMessage("-> " + compCode.get()).queue());
 			} catch (Exception e) {
 				m.editMessage(":x: | Erro ao compilar: " + e.toString()).queue();
-				return;
 			}
-
-			message.addReaction("\u25b6").queue();
 		});
 	}
 
