@@ -26,7 +26,6 @@ import com.kuuhaku.events.guild.GuildUpdateEvents;
 import com.kuuhaku.managers.CommandManager;
 import com.kuuhaku.model.DataDump;
 import com.kuuhaku.model.Profile;
-import com.kuuhaku.utils.Sandbox;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
 import com.kuuhaku.utils.ShiroInfo;
@@ -53,7 +52,6 @@ public class Main implements JobListener {
 	private static JDA jbr;
 	private static JobDetail backup;
 	private static Scheduler sched;
-	public static Sandbox env = new Sandbox();
 
 	public static void main(String[] args) throws Exception {
 		info = new ShiroInfo();
