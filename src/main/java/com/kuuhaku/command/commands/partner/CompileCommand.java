@@ -19,15 +19,13 @@ public class CompileCommand extends Command {
 			try {
 				if (!code.contains("return")) throw new Exception("Código sem retorno");
 				Interpreter i = new Interpreter();
-				i.set("sandbox", Main.env);
+				i.set("msg", Main.env.msg);
 				Object result = i.eval(
 						"import java.util.*;" +
 								"import java.awt.*;" +
 								"import net.dv8tion.jda.core.entities.*;" +
-								"import com.kuuhaku.utils.Sandbox;" +
 								"public class Dynamic {" +
-								"	private static Message msg = sandbox.env;" +
-								"	public String get() {" +
+								"	public static void main(String[] args) {" +
 										code +
 								"	}" +
 								"}");
