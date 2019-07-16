@@ -20,15 +20,7 @@ public class CompileCommand extends Command {
 				if (!code.contains("out")) throw new Exception("Código sem retorno");
 				Interpreter i = new Interpreter();
 				i.set("msg", Main.env.msg);
-				i.eval(
-						"import java.util.*;" +
-								"import java.awt.*;" +
-								"import net.dv8tion.jda.core.entities.*;" +
-								"public class Dynamic {" +
-								"	public static void main(String[] args) {" +
-								code +
-								"	}" +
-								"}");
+				i.eval(code);
 				Object out = i.get("out");
 				m.editMessage("<:Verified:591425071772467211> | Compilado com sucesso!").queue(n ->
 						m.getChannel().sendMessage("<a:Loading:598500653215645697> | Executando...").queue(d ->
