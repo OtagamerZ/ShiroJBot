@@ -21,6 +21,7 @@ import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.events.JibrilEvents;
 import com.kuuhaku.events.ScheduledEvents;
+import com.kuuhaku.events.TetEvents;
 import com.kuuhaku.events.guild.GuildEvents;
 import com.kuuhaku.events.guild.GuildUpdateEvents;
 import com.kuuhaku.managers.CommandManager;
@@ -50,6 +51,7 @@ public class Main implements JobListener {
 	private static CommandManager cmdManager;
 	private static JDA api;
 	private static JDA jbr;
+	private static JDA tet;
 	private static JobDetail backup;
 	private static Scheduler sched;
 
@@ -61,16 +63,21 @@ public class Main implements JobListener {
 
 		JDA api = new JDABuilder(AccountType.BOT).setToken(info.getBotToken()).build().awaitReady();
 		JDA jbr = new JDABuilder(AccountType.BOT).setToken(System.getenv("JIBRIL_TOKEN")).build().awaitReady();
+		JDA tet = new JDABuilder(AccountType.BOT).setToken(System.getenv("TET_TOKEN")).build().awaitReady();
 		info.setAPI(api);
 		Main.api = api;
 		Main.jbr = jbr;
+		Main.tet = tet;
+
 		api.getPresence().setGame(Game.playing("Iniciando..."));
 		jbr.getPresence().setGame(Game.listening("as mensagens de " + relay.getRelayMap().size() + " servidores!"));
+		tet.getPresence().setGame(Game.playing("com mundos inteiros, criando universos através da programação!"));
 
 		api.addEventListener(new JDAEvents());
 		api.addEventListener(new GuildEvents());
 		api.addEventListener(new GuildUpdateEvents());
 		jbr.addEventListener(new JibrilEvents());
+		tet.addEventListener(new TetEvents());
 
 		info.setStartTime(Instant.now().getEpochSecond());
 
