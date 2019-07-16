@@ -23,6 +23,7 @@ import com.ibm.watson.assistant.v1.model.MessageInput;
 import com.ibm.watson.assistant.v1.model.MessageOptions;
 import com.ibm.watson.assistant.v1.model.MessageResponse;
 import com.kuuhaku.Main;
+import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
@@ -43,12 +44,9 @@ import javax.persistence.NoResultException;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 public class GuildEvents extends ListenerAdapter {
 
@@ -203,6 +201,7 @@ public class GuildEvents extends ListenerAdapter {
 						Helper.spawnAd(channel);
 						break;
 					}
+					if (command.getCategory() == Category.TET) return;
 					command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
 					Helper.spawnAd(channel);
 					break;
