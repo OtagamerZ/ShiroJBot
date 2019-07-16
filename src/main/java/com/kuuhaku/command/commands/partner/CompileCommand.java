@@ -20,7 +20,7 @@ public class CompileCommand extends Command {
 			try {
 				if (!code.contains("return")) throw new Exception("Código sem retorno");
 				Supplier<String> compCode = Reflect.compile(
-						"Dynamic",
+						String.valueOf(System.currentTimeMillis()),
 						"import java.util.*;" +
 								"import java.awt.*;" +
 								"import com.kuuhaku.utils.Sandbox;" +
@@ -33,8 +33,9 @@ public class CompileCommand extends Command {
 								"	}\n" +
 								"}").create().get();
 
-				m.editMessage("<:Verified:591425071772467211> | Compilado com sucesso!").queue();
-				m.getChannel().sendMessage("<a:Loading:598500653215645697> | Executando...").queue(d -> d.editMessage("-> " + compCode.get()).queue());
+				m.editMessage("<:Verified:591425071772467211> | Compilado com sucesso!").queue(n ->
+						m.getChannel().sendMessage("<a:Loading:598500653215645697> | Executando...").queue(d ->
+								d.editMessage("-> " + compCode.get()).queue()));
 			} catch (Exception e) {
 				m.editMessage(":x: | Erro ao compilar: " + e.toString()).queue();
 			}
