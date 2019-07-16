@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.function.Supplier;
 
 @SuppressWarnings("localvariable")
 public class ShiroInfo {
@@ -63,6 +64,7 @@ public class ShiroInfo {
 	private static final IamOptions options = new IamOptions.Builder().apiKey(System.getenv("AI_TOKEN")).build();
 	private static final Assistant ai = new Assistant("2019-06-27", options);
 	public static final List<User[]> queue = new ArrayList<>();
+	private static final Map<String[], Supplier<String>> codes = new HashMap<>();
 	private static final Map<String, Integer[]> polls = new HashMap<>();
 	private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(5);
 
@@ -142,6 +144,18 @@ public class ShiroInfo {
 
 	public List<User[]> getQueue() {
 		return queue;
+	}
+
+	public Supplier<String> getCode(String userID, String msgID) {
+		return codes.get(new String[]{userID, msgID});
+	}
+
+	public void addCode(String userID, String msgID, Supplier<String> sup) {
+		codes.put(new String[]{userID, msgID}, sup);
+	}
+
+	public void removeCode(String userID, String msgID) {
+		codes.remove(new String[]{userID, msgID});
 	}
 
 	public Map<String, Integer[]> getPolls() {
