@@ -35,7 +35,7 @@ public class CompileCommand extends Command {
 								"}").create().get();
 
 				m.editMessage("<:Verified:591425071772467211> | Compilado com sucesso!").queue();
-				Main.getInfo().addCode(author.getId(), message.getId(), compCode);
+				Main.getInfo().addCode(author, message.getId(), compCode);
 			} catch (Exception e) {
 				m.editMessage(":x: | Erro ao compilar: " + e.toString()).queue();
 				return;
