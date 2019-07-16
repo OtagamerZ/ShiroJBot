@@ -3,8 +3,11 @@ package com.kuuhaku.command.commands.partner;
 import bsh.Interpreter;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.utils.BannedVars;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
+
+import java.util.Arrays;
 
 public class CompileCommand extends Command {
 	public CompileCommand() {
@@ -16,7 +19,8 @@ public class CompileCommand extends Command {
 		String code = String.join(" ", args);
 		channel.sendMessage("<a:Loading:598500653215645697> | Compilando...").queue(m -> {
 			try {
-				if (!code.contains("out")) throw new Exception("Código sem retorno");
+				if (!code.contains("out")) throw new Exception("Código sem retorno.");
+				else if (Arrays.stream(BannedVars.vars).parallel().anyMatch(code::contains)) throw new Exception("Código com métodos proibidos.");
 				Interpreter i = new Interpreter();
 				i.set("msg", message);
 				i.eval(code);

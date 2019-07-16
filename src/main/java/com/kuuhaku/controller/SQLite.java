@@ -24,7 +24,6 @@ import com.kuuhaku.model.Member;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
-import com.kuuhaku.utils.SpamLevel;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.User;
@@ -35,7 +34,9 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import java.io.File;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SQLite {
 
