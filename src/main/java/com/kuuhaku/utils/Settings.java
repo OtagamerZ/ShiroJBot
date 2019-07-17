@@ -427,9 +427,14 @@ public class Settings {
 			message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 cargo por vez.").queue();
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
-			SQLite.updateGuildCargosLvl(args[2], null, gc);
-			message.getTextChannel().sendMessage("✅ | O cargo dado no level " + args[2] + " do servidor foi resetado com sucesso.").queue();
-			return;
+			try {
+				SQLite.updateGuildCargosLvl(args[2], null, gc);
+				message.getTextChannel().sendMessage("✅ | O cargo dado no level " + args[2] + " do servidor foi resetado com sucesso.").queue();
+				return;
+			} catch (Exception e) {
+				message.getTextChannel().sendMessage(":x: | Este nível ainda não possui nenhum cargo.").queue();
+				return;
+			}
 		}
 
 		Role newRoleLevel = message.getMentionedRoles().get(0);
