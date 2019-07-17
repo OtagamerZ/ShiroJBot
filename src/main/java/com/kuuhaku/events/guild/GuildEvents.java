@@ -209,7 +209,7 @@ public class GuildEvents extends ListenerAdapter {
 			if (!found && !author.isBot()) {
 				if (SQLite.getGuildCargosLvl(guild.getId()).containsKey(String.valueOf(SQLite.getMemberById(author.getId() + guild.getId()).getLevel()))) {
 					try {
-						member.getRoles().add(guild.getRoleById((String) SQLite.getGuildCargosLvl(guild.getId()).get(String.valueOf(SQLite.getMemberById(author.getId() + guild.getId()).getLevel()))));
+						guild.getController().addRolesToMember(member, guild.getRoleById((String) SQLite.getGuildCargosLvl(guild.getId()).get(String.valueOf(SQLite.getMemberById(author.getId() + guild.getId()).getLevel())))).queue();
 					} catch (InsufficientPermissionException ignore) {
 					}
 				}
