@@ -201,7 +201,7 @@ public class GuildEvents extends ListenerAdapter {
 						Helper.spawnAd(channel);
 						break;
 					}
-					if (command.getCategory() == Category.PARTNER) return;
+					if (command.getCategory().equals(Category.PARTNER)) return;
 					command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
 					Helper.spawnAd(channel);
 					break;
