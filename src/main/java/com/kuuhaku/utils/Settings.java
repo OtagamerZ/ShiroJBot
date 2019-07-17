@@ -426,7 +426,7 @@ public class Settings {
 		} else if (message.getMentionedRoles().size() > 1) {
 			message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 cargo por vez.").queue();
 			return;
-		} else if (args[2].equals("reset") || args[2].equals("resetar")) {
+		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			SQLite.updateGuildCargosLvl(args[2], null, gc);
 			message.getTextChannel().sendMessage("✅ | O cargo dado no level " + args[2] + " do servidor foi resetado com sucesso.").queue();
 			return;
