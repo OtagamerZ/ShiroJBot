@@ -39,5 +39,4 @@ public class EmbedCommand extends Command {
 			channel.sendMessage(":x: | Erro ao tentar acessar o link da imagem.").queue();
 		}
 	}
-
 }
