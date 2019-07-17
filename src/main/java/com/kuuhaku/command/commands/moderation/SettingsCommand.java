@@ -101,6 +101,11 @@ public class SettingsCommand extends Command {
             case "cai":
                 Settings.updateCanalIA(args, message, gc);
                 break;
+            case "clvl":
+            case "cargolevel":
+            case "cargolvl":
+                Settings.updateCargoLvl(args, message, gc);
+                break;
             default:
                 try {
                     Settings.embedConfig(message);
