@@ -91,6 +91,7 @@ public class CommandManager {
             add(new ShiroEmoteListCommand());
             add(new JibrilEmoteListCommand());
             add(new PollCommand());
+            add(new EmbedCommand());
 
             //FUN
             add(new SadButTrueCommand());
