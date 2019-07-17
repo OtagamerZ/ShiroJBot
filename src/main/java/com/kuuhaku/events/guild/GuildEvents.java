@@ -23,7 +23,6 @@ import com.ibm.watson.assistant.v1.model.MessageInput;
 import com.ibm.watson.assistant.v1.model.MessageOptions;
 import com.ibm.watson.assistant.v1.model.MessageResponse;
 import com.kuuhaku.Main;
-import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
@@ -200,11 +199,10 @@ public class GuildEvents extends ListenerAdapter {
 						channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
 						Helper.spawnAd(channel);
 						break;
-					} else if (!command.getCategory().equals(Category.PARTNER)) {
-						command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
-						Helper.spawnAd(channel);
-						break;
 					}
+					command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
+					Helper.spawnAd(channel);
+					break;
 				}
 			}
 
