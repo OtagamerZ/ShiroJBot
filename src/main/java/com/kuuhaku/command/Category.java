@@ -43,6 +43,10 @@ public enum Category {
 		
 		cmds = new ArrayList<>();
 	}
+
+	public boolean equals(Category other) {
+		return this.getName().equals(other.getName());
+	}
 	
 	public String getName() {
 		return name;
