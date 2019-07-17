@@ -211,7 +211,7 @@ public class GuildEvents extends ListenerAdapter {
 					SQLite.getGuildCargosLvl(guild.getId()).forEach((k, v) -> {
 						if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= Integer.parseInt(k)) {
 							guild.getController().addRolesToMember(member, guild.getRoleById((String) v)).queue();
-							channel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + guild.getRoleById((String) v) + " por alcançar o nível " + k).queue();
+                            channel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + guild.getRoleById((String) v).getAsMention() + " por alcançar o nível " + k).queue();
 						}
 					});
 					if (Main.getInfo().getQueue().stream().anyMatch(u -> u[1].getId().equals(author.getId()))) {
