@@ -207,61 +207,64 @@ public class GuildEvents extends ListenerAdapter {
 			}
 
 			if (!found && !author.isBot()) {
-				if (SQLite.getGuildCargosLvl(guild.getId()).containsKey(String.valueOf(SQLite.getMemberById(author.getId() + guild.getId()).getLevel()))) {
+				try {
+					if (SQLite.getGuildCargosLvl(guild.getId()).containsKey(String.valueOf(SQLite.getMemberById(author.getId() + guild.getId()).getLevel()))) {
+						try {
+							guild.getController().addRolesToMember(member, guild.getRoleById((String) SQLite.getGuildCargosLvl(guild.getId()).get(String.valueOf(SQLite.getMemberById(author.getId() + guild.getId()).getLevel())))).queue();
+						} catch (InsufficientPermissionException ignore) {
+						}
+					}
+					if (Main.getInfo().getQueue().stream().anyMatch(u -> u[1].getId().equals(author.getId()))) {
+						final User[][] hw = {new User[2]};
+						Main.getInfo().getQueue().stream().filter(u -> u[1].getId().equals(author.getId())).findFirst().ifPresent(users -> hw[0] = users);
+						switch (message.getContentRaw().toLowerCase()) {
+							case "sim":
+								channel.sendMessage("Eu os declaro husbando e waifu, pode trancar ela no porão agora!").queue();
+								MySQL.saveMemberWaifu(SQLite.getMemberById(hw[0][0].getId() + guild.getId()), hw[0][1]);
+								SQLite.saveMemberWaifu(SQLite.getMemberById(hw[0][0].getId() + guild.getId()), hw[0][1]);
+								MySQL.saveMemberWaifu(SQLite.getMemberById(hw[0][1].getId() + guild.getId()), hw[0][0]);
+								SQLite.saveMemberWaifu(SQLite.getMemberById(hw[0][1].getId() + guild.getId()), hw[0][0]);
+								Main.getInfo().getQueue().removeIf(u -> u[0].getId().equals(author.getId()) || u[1].getId().equals(author.getId()));
+								break;
+							case "não":
+								channel.sendMessage("Pois é, hoje não tivemos um casamento, que pena.").queue();
+								Main.getInfo().getQueue().removeIf(u -> u[0].getId().equals(author.getId()) || u[1].getId().equals(author.getId()));
+								break;
+						}
+					}
+					if (SQLite.getGuildNoLinkChannels(guild.getId()).contains(channel.getId()) && Helper.findURL(message.getContentRaw())) {
+						message.delete().reason("Mensagem possui um URL").queue(m -> channel.sendMessage(member.getAsMention() + ", é proibido postar links neste canal!").queue());
+					}
+					if (SQLite.getGuildIaMode(guild.getId()) && channel.getId().equals(SQLite.getGuildCanalIA(guild.getId()))) {
+						try {
+							MessageInput msg = new MessageInput();
+							msg.setText(message.getContentRaw());
+
+							MessageOptions opts = new MessageOptions.Builder(Main.getInfo().getInfoInstance()).context(Main.getInfo().getContext()).input(msg).build();
+							MessageResponse answer = Main.getInfo().getAi().message(opts).execute().getResult();
+							Main.getInfo().updateContext(answer);
+
+							List<DialogRuntimeResponseGeneric> responseGeneric = answer.getOutput().getGeneric();
+							if (responseGeneric.size() > 0) {
+								Helper.typeMessage(channel, responseGeneric.get(0).getText());
+							}
+						} catch (ServiceResponseException e) {
+							Helper.log(this.getClass(), LogLevel.WARN, e.toString());
+						}
+					}
 					try {
-						guild.getController().addRolesToMember(member, guild.getRoleById((String) SQLite.getGuildCargosLvl(guild.getId()).get(String.valueOf(SQLite.getMemberById(author.getId() + guild.getId()).getLevel())))).queue();
+						com.kuuhaku.model.Member m = SQLite.getMemberById(member.getUser().getId() + member.getGuild().getId());
+						if (m.getMid() == null) SQLite.saveMemberMid(m, author);
+						boolean lvlUp = m.addXp();
+						if (lvlUp && SQLite.getGuildById(guild.getId()).getLvlNotif()) {
+							channel.sendMessage(member.getEffectiveName() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
+						}
+						SQLite.saveMemberToDB(m);
+					} catch (NoResultException e) {
+						SQLite.addMemberToDB(member);
 					} catch (InsufficientPermissionException ignore) {
 					}
-				}
-				if (Main.getInfo().getQueue().stream().anyMatch(u -> u[1].getId().equals(author.getId()))) {
-					final User[][] hw = {new User[2]};
-					Main.getInfo().getQueue().stream().filter(u -> u[1].getId().equals(author.getId())).findFirst().ifPresent(users -> hw[0] = users);
-					switch (message.getContentRaw().toLowerCase()) {
-						case "sim":
-							channel.sendMessage("Eu os declaro husbando e waifu, pode trancar ela no porão agora!").queue();
-							MySQL.saveMemberWaifu(SQLite.getMemberById(hw[0][0].getId() + guild.getId()), hw[0][1]);
-							SQLite.saveMemberWaifu(SQLite.getMemberById(hw[0][0].getId() + guild.getId()), hw[0][1]);
-							MySQL.saveMemberWaifu(SQLite.getMemberById(hw[0][1].getId() + guild.getId()), hw[0][0]);
-							SQLite.saveMemberWaifu(SQLite.getMemberById(hw[0][1].getId() + guild.getId()), hw[0][0]);
-							Main.getInfo().getQueue().removeIf(u -> u[0].getId().equals(author.getId()) || u[1].getId().equals(author.getId()));
-							break;
-						case "não":
-							channel.sendMessage("Pois é, hoje não tivemos um casamento, que pena.").queue();
-							Main.getInfo().getQueue().removeIf(u -> u[0].getId().equals(author.getId()) || u[1].getId().equals(author.getId()));
-							break;
-					}
-				}
-				if (SQLite.getGuildNoLinkChannels(guild.getId()).contains(channel.getId()) && Helper.findURL(message.getContentRaw())) {
-					message.delete().reason("Mensagem possui um URL").queue(m -> channel.sendMessage(member.getAsMention() + ", é proibido postar links neste canal!").queue());
-				}
-				if (SQLite.getGuildIaMode(guild.getId()) && channel.getId().equals(SQLite.getGuildCanalIA(guild.getId()))) {
-					try {
-						MessageInput msg = new MessageInput();
-						msg.setText(message.getContentRaw());
-
-						MessageOptions opts = new MessageOptions.Builder(Main.getInfo().getInfoInstance()).context(Main.getInfo().getContext()).input(msg).build();
-						MessageResponse answer = Main.getInfo().getAi().message(opts).execute().getResult();
-						Main.getInfo().updateContext(answer);
-
-						List<DialogRuntimeResponseGeneric> responseGeneric = answer.getOutput().getGeneric();
-						if (responseGeneric.size() > 0) {
-							Helper.typeMessage(channel, responseGeneric.get(0).getText());
-						}
-					} catch (ServiceResponseException e) {
-						Helper.log(this.getClass(), LogLevel.WARN, e.toString());
-					}
-				}
-				try {
-					com.kuuhaku.model.Member m = SQLite.getMemberById(member.getUser().getId() + member.getGuild().getId());
-					if (m.getMid() == null) SQLite.saveMemberMid(m, author);
-					boolean lvlUp = m.addXp();
-					if (lvlUp && SQLite.getGuildById(guild.getId()).getLvlNotif()) {
-						channel.sendMessage(member.getEffectiveName() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
-					}
-					SQLite.saveMemberToDB(m);
-				} catch (NoResultException e) {
-					SQLite.addMemberToDB(member);
-				} catch (InsufficientPermissionException ignore) {
+				} catch (NoResultException ignore){
 				}
 			}
 		}
