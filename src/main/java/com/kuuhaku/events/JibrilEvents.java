@@ -53,9 +53,7 @@ public class JibrilEvents extends ListenerAdapter {
 					Main.getRelay().relayMessage(String.join(" ", msg), event.getMember(), event.getGuild(), null);
 				}
 			} else event.getChannel().sendMessage(":x: | Mensagem muito longa! (Max. 2048 letras)").queue();
-		}
-
-		else if (Main.getInfo().isReady()) {
+		} else if (Main.getInfo().isReady()) {
 			User author = event.getAuthor();
 			Member member = event.getMember();
 			Message message = event.getMessage();
@@ -115,11 +113,11 @@ public class JibrilEvents extends ListenerAdapter {
 						channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
 						Helper.spawnAd(channel);
 						break;
+					} else if (command.getCategory().equals(Category.PARTNER)) {
+						command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
+						Helper.spawnAd(channel);
+						break;
 					}
-					if (!command.getCategory().equals(Category.PARTNER)) return;
-					command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
-					Helper.spawnAd(channel);
-					break;
 				}
 			}
 		}
