@@ -631,7 +631,8 @@ public class SQLite {
 		EntityManager em = getEntityManager();
 
 		Map<String, Object> cn = gc.getCargoslvl();
-		cn.put(lvl, r.getId());
+		if (cn.get(lvl) != null) cn.remove(lvl);
+		else cn.put(lvl, r.getId());
 		gc.setCargosLvl(new JSONObject(cn));
 
 		em.getTransaction().begin();

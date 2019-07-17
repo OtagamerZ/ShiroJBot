@@ -11,6 +11,9 @@ import net.dv8tion.jda.core.entities.TextChannel;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Settings {
 
@@ -34,6 +37,15 @@ public class Settings {
 
 		String canalLvlUpNotif = SQLite.getGuildCanalLvlUp(message.getGuild().getId());
 		if (!canalLvlUpNotif.equals("Não definido.")) canalLvlUpNotif = "<#" + canalLvlUpNotif + ">";
+
+		StringBuilder cargosLvl = new StringBuilder();
+		if (SQLite.getGuildCargosLvl(message.getGuild().getId()) != null) {
+			List<Integer> lvls = SQLite.getGuildCargosLvl(message.getGuild().getId()).keySet().stream().map(Integer::parseInt).sorted().collect(Collectors.toList());
+			for (int i : lvls) {
+				Map<String, Object> cargos = SQLite.getGuildCargosLvl(message.getGuild().getId());
+				cargosLvl.append(i).append(" - ").append(message.getGuild().getRoleById((String) cargos.get(String.valueOf(i))).getAsMention()).append("\n");
+			}
+		}
 
 		String canalRelay = SQLite.getGuildCanalRelay(message.getGuild().getId());
 		if (!canalRelay.equals("Não definido.")) canalRelay = "<#" + canalRelay + ">";
@@ -77,6 +89,7 @@ public class Settings {
 		//else { eb.addField("\uD83D\uDCD1 » Cargos automáticos", cargoNewID, true); }
 
 		eb.addField("\uD83D\uDCD6 » Canal de notificação de level up", canalLvlUpNotif, true);
+		eb.addField("\uD83D\uDCD1 » Cargos de nível", cargosLvl.toString().isEmpty() ? "Nenhum" : cargosLvl.toString(), true);
 
 
 		eb.setFooter("Para obter ajuda sobre como configurar o seu servidor, use " + SQLite.getGuildPrefix(message.getGuild().getId()) + "settings ajuda", null);
@@ -246,8 +259,8 @@ public class Settings {
 			}
 			return;
 		}
-		if (message.getMentionedChannels().size() > 1) {
-			message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 `cargo.").queue();
+		if (message.getMentionedRoles().size() > 1) {
+			message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 cargo.").queue();
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			SQLite.updateGuildCargoWarn(null, gc);
@@ -389,5 +402,39 @@ public class Settings {
 
 		SQLite.updateGuildCanalIA(newCanalIA.getId(), gc);
 		message.getTextChannel().sendMessage("✅ | O canal IA do servidor foi trocado para " + newCanalIA.getAsMention() + " com sucesso.").queue();
+	}
+
+	public static void updateCargoLvl(String[] args, Message message, guildConfig gc) {
+		Map<String, Object> antigoCargoLvl = SQLite.getGuildCargosLvl(message.getGuild().getId());
+		List<Integer> lvls = SQLite.getGuildCargosLvl(message.getGuild().getId()).keySet().stream().map(Integer::parseInt).sorted().collect(Collectors.toList());
+		StringBuilder cargosLvl = new StringBuilder();
+		for (int i : lvls) {
+			Map<String, Object> cargos = SQLite.getGuildCargosLvl(message.getGuild().getId());
+			cargosLvl.append(i).append(" - ").append(message.getGuild().getRoleById((String) cargos.get(String.valueOf(i))).getAsMention()).append("\n");
+		}
+
+		if (args.length < 3) {
+			if (antigoCargoLvl.size() == 0) {
+				message.getTextChannel().sendMessage("Nenhum cargo por level foi definido ainda.").queue();
+			} else {
+				message.getTextChannel().sendMessage("Os cargos por level definidos são:```" + cargosLvl.toString() + "```").queue();
+			}
+			return;
+		} else if (!StringUtils.isNumeric(args[2])) {
+			message.getTextChannel().sendMessage(":x: | O terceiro argumento deve ser uma valor inteiro").queue();
+			return;
+		} else if (message.getMentionedRoles().size() > 1) {
+			message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 cargo por vez.").queue();
+			return;
+		} else if (args[2].equals("reset") || args[2].equals("resetar")) {
+			SQLite.updateGuildCargosLvl(args[2], null, gc);
+			message.getTextChannel().sendMessage("✅ | O cargo dado no level " + args[2] + " do servidor foi resetado com sucesso.").queue();
+			return;
+		}
+
+		Role newRoleLevel = message.getMentionedRoles().get(0);
+
+		SQLite.updateGuildCargosLvl(args[2], newRoleLevel, gc);
+		message.getTextChannel().sendMessage("✅ | O cargo dado no level " + args[2] + " do servidor foi trocado para " + newRoleLevel.getAsMention() + " com sucesso.").queue();
 	}
 }
