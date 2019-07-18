@@ -234,10 +234,12 @@ public class GuildEvents extends ListenerAdapter {
 							if (SQLite.getGuildById(guild.getId()).getLvlNotif() && !member.getRoles().contains(guild.getRoleById((String) v))) {
 								guild.getController().addSingleRoleToMember(member, guild.getRoleById((String) v)).queue(m -> {
 									try {
-										if (finalLvlChannel != null) {
-											finalLvlChannel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + guild.getRoleById((String) v).getAsMention() + " por alcançar o nível " + k).queue();
-										} else
-											channel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + guild.getRoleById((String) v).getAsMention() + " por alcançar o nível " + k).queue();
+										if (member.getRoles().contains(guild.getRoleById((String) v))) {
+											if (finalLvlChannel != null) {
+												finalLvlChannel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + guild.getRoleById((String) v).getAsMention() + " por alcançar o nível " + k).queue();
+											} else
+												channel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + guild.getRoleById((String) v).getAsMention() + " por alcançar o nível " + k).queue();
+										}
 									} catch (InsufficientPermissionException ignore) {
 									}
 								});
