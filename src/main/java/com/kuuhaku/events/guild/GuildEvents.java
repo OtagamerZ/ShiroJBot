@@ -234,7 +234,7 @@ public class GuildEvents extends ListenerAdapter {
 
 							boolean announce = false;
 
-							if (SQLite.getGuildById(guild.getId()).getLvlNotif() && !member.getRoles().contains(guild.getRoleById((String) v))) {
+							if (!member.getRoles().contains(guild.getRoleById((String) v))) {
 								guild.getController().addSingleRoleToMember(member, guild.getRoleById((String) v)).queue();
 								announce = true;
 								System.out.println("announce -> true");
