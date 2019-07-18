@@ -231,10 +231,14 @@ public class GuildEvents extends ListenerAdapter {
 								if (Integer.parseInt(k2) < Integer.parseInt(k))
 									guild.getController().removeSingleRoleFromMember(member, guild.getRoleById((String) v2)).queue();
 							});
+
+							boolean newLvl = false;
+
 							if (SQLite.getGuildById(guild.getId()).getLvlNotif() && !member.getRoles().contains(guild.getRoleById((String) v))) {
 								guild.getController().addSingleRoleToMember(member, guild.getRoleById((String) v)).queue();
+								newLvl = true;
 							}
-							if (member.getRoles().contains(guild.getRoleById((String) v))) {
+							if (newLvl && SQLite.getGuildById(guild.getId()).getLvlNotif() && member.getRoles().contains(guild.getRoleById((String) v))) {
 								try {
 									if (finalLvlChannel != null) {
 										finalLvlChannel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + guild.getRoleById((String) v).getAsMention() + " por alcançar o nível " + k).queue();
