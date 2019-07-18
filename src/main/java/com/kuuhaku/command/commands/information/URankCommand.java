@@ -63,7 +63,7 @@ public class URankCommand extends Command {
 				eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
 			}
 			for (int i = 1; i < mbs.size() && i < 10; i++) {
-				sb.append(i + 1).append(" - ").append(args.length == 0 ? " " : ("(" + Main.getInfo().getGuildByID(mbs.get(i).getId().substring(18)).getName() + ") ")).append(Main.getInfo().getGuildByID(mbs.get(i).getId().substring(18)).getMemberById(mbs.get(i).getMid()).getEffectiveName()).append(" - Lvl ").append(mbs.get(i).getLevel()).append(" (").append(mbs.get(i).getXp()).append(" xp)").append("\n");
+				sb.append(i + 1).append(" - (").append(Main.getInfo().getGuildByID(mbs.get(i).getId().substring(18)).getName()).append(") ").append(Main.getInfo().getGuildByID(mbs.get(i).getId().substring(18)).getMemberById(mbs.get(i).getMid()).getEffectiveName()).append(" - Lvl ").append(mbs.get(i).getLevel()).append(" (").append(mbs.get(i).getXp()).append(" xp)").append("\n");
 			}
 			eb.addField("1 - " + (args.length == 0 ? " " : ("(" + Main.getInfo().getGuildByID(mbs.get(0).getId().substring(18)).getName() + ") ")) + Main.getInfo().getGuildByID(mbs.get(0).getId().substring(18)).getMemberById(mbs.get(0).getMid()).getEffectiveName() + " - Lvl" + mbs.get(0).getLevel() + " (" + mbs.get(0).getXp() + " xp)", sb.toString(), false);
 
