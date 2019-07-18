@@ -43,10 +43,7 @@ import javax.persistence.NoResultException;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -224,18 +221,15 @@ public class GuildEvents extends ListenerAdapter {
 				} catch (Exception ignore) {
 				}
 				try {
-					Map<String, Object> lvls = SQLite.getGuildCargosLvl(guild.getId());
-					lvls.forEach((k, v) -> {
-						if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= Integer.parseInt(k)) {
-							lvls.forEach((k2, v2) -> {
-								if (Integer.parseInt(k2) < Integer.parseInt(k))
-									guild.getController().removeSingleRoleFromMember(member, guild.getRoleById((String) v2)).queue();
-							});
-
-							if (!member.getRoles().contains(guild.getRoleById((String) v))) {
-								guild.getController().addSingleRoleToMember(member, guild.getRoleById((String) v)).queue();
-							}
-						}
+					Map<String, Object> rawLvls = SQLite.getGuildCargosLvl(guild.getId()).entrySet().stream().filter(e -> SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= Integer.parseInt(e.getKey())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+					Map<Integer, Role> sortedLvls = new TreeMap<>();
+					rawLvls.forEach((k, v) -> sortedLvls.put(Integer.parseInt(k), guild.getRoleById((String) v)));
+					sortedLvls.keySet().stream().max(Integer::compare).ifPresent(i -> {
+						guild.getController().addSingleRoleToMember(member, sortedLvls.get(i)).queue();
+						rawLvls.remove(String.valueOf(i));
+						List<Role> list = new ArrayList<>();
+						rawLvls.forEach((k, v) -> list.add(guild.getRoleById((String) v)));
+						guild.getController().removeRolesFromMember(member, list).queue();
 					});
 
 					if (Main.getInfo().getQueue().stream().anyMatch(u -> u[1].getId().equals(author.getId()))) {
