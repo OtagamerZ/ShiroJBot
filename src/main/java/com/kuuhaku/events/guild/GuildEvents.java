@@ -224,10 +224,9 @@ public class GuildEvents extends ListenerAdapter {
 					MessageChannel finalLvlChannel = lvlChannel;
 					Map<String, Object> lvls = SQLite.getGuildCargosLvl(guild.getId());
 					lvls.forEach((k, v) -> {
+						Map<String, Role> lowerLvls = lvls.entrySet().stream().filter(m -> Integer.parseInt(m.getKey()) < Integer.parseInt(k)).collect(Collectors.toMap(Map.Entry::getKey, e -> guild.getRoleById((String) e.getValue())));
 						if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= Integer.parseInt(k)) {
-							lvls.forEach((k2, v2) -> {
-								if (Integer.parseInt(k2) < Integer.parseInt(k)) guild.getController().removeSingleRoleFromMember(member, guild.getRoleById((String) v2)).queue();
-							});
+							guild.getController().removeRolesFromMember(member, lowerLvls.values()).queue();
 							if (SQLite.getGuildById(guild.getId()).getLvlNotif() && !member.getRoles().contains(guild.getRoleById((String) v))) {
 								if (finalLvlChannel != null) {
 									finalLvlChannel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + guild.getRoleById((String) v).getAsMention() + " por alcançar o nível " + k).queue();
