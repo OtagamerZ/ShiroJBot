@@ -48,7 +48,7 @@ public class guildConfig {
 	private String cargowarn = null;
 	@Column(columnDefinition = "int default 60")
 	private int warnTime = 60;
-    @Column(length = 191)
+	@Column(columnDefinition = "text")
     private String cargoslvl = "{}";
 	private String lvlNotif = "true";
 	private String cargoNew = "{}";
