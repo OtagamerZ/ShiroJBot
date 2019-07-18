@@ -232,13 +232,11 @@ public class GuildEvents extends ListenerAdapter {
 							lvls.forEach((k2, v2) -> {
 								if (Integer.parseInt(k2) < Integer.parseInt(k))
 									guild.getController().removeSingleRoleFromMember(member, guild.getRoleById((String) v2)).queue();
-								else {
-									notifLvls.put(k2, guild.getRoleById((String) v2));
-								}
 							});
 
 							if (!member.getRoles().contains(guild.getRoleById((String) v))) {
-								guild.getController().addSingleRoleToMember(member, guild.getRoleById((String) v)).queue();
+								guild.getController().addSingleRoleToMember(member, guild.getRoleById((String) v)).queue(m ->
+										notifLvls.put(k, guild.getRoleById((String) v)));
 							}
 
 						}
