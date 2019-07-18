@@ -237,11 +237,14 @@ public class GuildEvents extends ListenerAdapter {
 							if (SQLite.getGuildById(guild.getId()).getLvlNotif() && !member.getRoles().contains(guild.getRoleById((String) v))) {
 								guild.getController().addSingleRoleToMember(member, guild.getRoleById((String) v)).queue();
 								announce = true;
+								System.out.println("announce -> true");
 							}
 							if (SQLite.getGuildById(guild.getId()).getLvlNotif() && member.getRoles().contains(guild.getRoleById((String) v))) {
 								if (announce) {
+									System.out.println("announce == true");
 									try {
 										if (finalLvlChannel != null) {
+											System.out.println("found channel");
 											finalLvlChannel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + guild.getRoleById((String) v).getAsMention() + " por alcançar o nível " + k).queue();
 										} else
 											channel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + guild.getRoleById((String) v).getAsMention() + " por alcançar o nível " + k).queue();
@@ -249,6 +252,7 @@ public class GuildEvents extends ListenerAdapter {
 										Helper.log(this.getClass(), LogLevel.WARN, e.toString());
 									}
 								}
+								System.out.println("announce == false");
 							}
 						}
 					});
