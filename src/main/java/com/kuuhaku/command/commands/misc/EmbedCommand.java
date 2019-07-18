@@ -5,38 +5,48 @@ import com.kuuhaku.command.Command;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.awt.*;
+import java.io.IOException;
 
 public class EmbedCommand extends Command {
 
 	public EmbedCommand() {
-		super("embed", "<título;conteudo;imagem>", "Cria um embed.", Category.MISC);
+		super("embed", "<JSON>", "Cria um embed. Os campos do JSON são `title`, `color`, `thumbnail`, `body`, `fields[name, value]` e `footer`", Category.MISC);
 	}
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-        String format = String.join(" ", args);
-		try {
-			if (format.split(";").length < 3) {
-				channel.sendMessage(":x: | Dados insuficientes, por favor separe o título, o conteúdo e a imagem com `;`.").queue();
-				return;
-			} else if (format.split(";")[0].length() > 256) {
-				channel.sendMessage(":x: | Título muito grande (Max. 256 caracteres).").queue();
-				return;
-			} else if (format.split(";")[1].length() > 2000) {
-				channel.sendMessage(":x: | Conteúdo muito grande (Max. 2000 caracteres).").queue();
-				return;
+		channel.sendMessage("<a:Loading:598500653215645697> Construindo embed...").queue(m -> {
+			try {
+				JSONObject json = new JSONObject(String.join(" ", args));
+
+				EmbedBuilder eb = new EmbedBuilder();
+
+				if (json.has("title")) eb.setTitle(json.getString("title"));
+				if (json.has("color")) eb.setColor(Color.decode(json.getString("color")));
+				if (json.has("thumbnail")) eb.setThumbnail(json.getString("thumbnail"));
+				if (json.has("body")) eb.setDescription(json.getString("body"));
+
+				if (json.has("fields")) json.getJSONArray("fields").forEach(j -> {
+					try {
+						JSONObject jo = (JSONObject) j;
+						eb.addField(jo.getString("name"), jo.getString("value"), true);
+					} catch (Exception ignore) {
+					}
+				});
+
+				if (json.has("footer")) eb.setFooter(json.getString("footer"), null);
+
+				m.delete().queue();
+				channel.sendMessage(eb.build()).queue();
+			} catch (JSONException ex) {
+				m.editMessage(":x: | JSON em formato inválido, recomendo utilizar este site para checar se está tudo correto: https://jsonlint.com/.").queue();
+			} catch (Exception e) {
+				m.editMessage(":x: | Erro ao construir embed, talvez você não tenha passado nenhum argumento.").queue();
 			}
-
-			EmbedBuilder eb = new EmbedBuilder();
-
-			eb.setAuthor("Feito por " + member.getEffectiveName());
-			eb.setTitle(format.split(";")[0]);
-			eb.setDescription(format.split(";")[1]);
-			eb.setThumbnail(format.split(";")[2]);
-
-			channel.sendMessage(eb.build()).queue();
-		} catch (Exception e) {
-			channel.sendMessage(":x: | Erro ao tentar acessar o link da imagem.").queue();
-		}
+		});
 	}
 }
