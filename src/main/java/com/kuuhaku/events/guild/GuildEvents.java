@@ -43,9 +43,7 @@ import javax.persistence.NoResultException;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -225,6 +223,7 @@ public class GuildEvents extends ListenerAdapter {
 				try {
 					Map<String, Object> lvls = SQLite.getGuildCargosLvl(guild.getId());
 					MessageChannel finalLvlChannel = lvlChannel;
+					Map<String, Role> earntRoles = new HashMap<>();
 					lvls.forEach((k, v) -> {
 						if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= Integer.parseInt(k)) {
 							lvls.forEach((k2, v2) -> {
@@ -234,16 +233,17 @@ public class GuildEvents extends ListenerAdapter {
 
 							if (!member.getRoles().contains(guild.getRoleById((String) v))) {
 								guild.getController().addSingleRoleToMember(member, guild.getRoleById((String) v)).queue();
+								earntRoles.put(k, guild.getRoleById((String) v));
 							}
 						}
 					});
-					lvls.forEach((k, v) -> {
-						if (SQLite.getGuildById(guild.getId()).getLvlNotif() && member.getRoles().contains(guild.getRoleById((String) v))) {
+					earntRoles.forEach((k, v) -> {
+						if (SQLite.getGuildById(guild.getId()).getLvlNotif() && member.getRoles().contains(v)) {
 							try {
 								if (finalLvlChannel != null) {
-									finalLvlChannel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + guild.getRoleById((String) v).getAsMention() + " por alcançar o nível " + k).queue();
+									finalLvlChannel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + v.getAsMention() + " por alcançar o nível " + k).queue();
 								} else
-									channel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + guild.getRoleById((String) v).getAsMention() + " por alcançar o nível " + k).queue();
+									channel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + v.getAsMention() + " por alcançar o nível " + k).queue();
 							} catch (InsufficientPermissionException e) {
 								Helper.log(this.getClass(), LogLevel.WARN, e.toString());
 							}
