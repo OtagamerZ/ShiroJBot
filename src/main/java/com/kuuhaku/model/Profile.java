@@ -66,9 +66,15 @@ public class Profile {
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-		con = (HttpURLConnection) new URL(SQLite.getMemberById(m.getUser().getId() + g.getId()).getBg()).openConnection();
-		con.setRequestProperty("User-Agent", "Mozilla/5.0");
-		g2d.drawImage(scaleImage(ImageIO.read(con.getInputStream()), bi.getWidth(), bi.getHeight()), null, 0, 0);
+		try {
+			con = (HttpURLConnection) new URL(SQLite.getMemberById(m.getUser().getId() + g.getId()).getBg()).openConnection();
+			con.setRequestProperty("User-Agent", "Mozilla/5.0");
+			g2d.drawImage(scaleImage(ImageIO.read(con.getInputStream()), bi.getWidth(), bi.getHeight()), null, 0, 0);
+		} catch (IOException e) {
+			con = (HttpURLConnection) new URL("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg").openConnection();
+			con.setRequestProperty("User-Agent", "Mozilla/5.0");
+			g2d.drawImage(scaleImage(ImageIO.read(con.getInputStream()), bi.getWidth(), bi.getHeight()), null, 0, 0);
+		}
 
 		Color main = Helper.reverseColor(Helper.colorThief(SQLite.getMemberById(m.getUser().getId() + g.getId()).getBg()));
 
