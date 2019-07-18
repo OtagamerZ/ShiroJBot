@@ -224,30 +224,30 @@ public class GuildEvents extends ListenerAdapter {
 				} catch (Exception ignore) {
 				}
 				try {
-					Map<String, Object> lvls = SQLite.getGuildCargosLvl(guild.getId()).entrySet().stream().filter(e -> SQLite.getMemberById(author.getId()).getLevel() >= Integer.parseInt(e.getKey())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-					if (lvls.size() > 0) {
-						String lastRole = String.valueOf(lvls.values().stream().map(o -> Integer.parseInt((String) o)).sorted().collect(Collectors.toList()).get(lvls.size() - 1));
-						if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= Integer.parseInt(lastRole)) {
+					Map<String, Object> lvls = SQLite.getGuildCargosLvl(guild.getId());
+					MessageChannel finalLvlChannel = lvlChannel;
+					lvls.forEach((k, v) -> {
+						if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= Integer.parseInt(k)) {
 							lvls.forEach((k2, v2) -> {
-								if (Integer.parseInt(k2) < Integer.parseInt(lastRole))
+								if (Integer.parseInt(k2) < Integer.parseInt(k))
 									guild.getController().removeSingleRoleFromMember(member, guild.getRoleById((String) v2)).queue();
 							});
 
-							if (!member.getRoles().contains(guild.getRoleById(lastRole))) {
-								guild.getController().addSingleRoleToMember(member, guild.getRoleById(lastRole)).queue();
+							if (!member.getRoles().contains(guild.getRoleById((String) v))) {
+								guild.getController().addSingleRoleToMember(member, guild.getRoleById((String) v)).queue();
 								if (SQLite.getGuildById(guild.getId()).getLvlNotif()) {
 									try {
-										if (lvlChannel != null) {
-											lvlChannel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + guild.getRoleById((String) lvls.get(lastRole)).getAsMention() + " por alcançar o nível " + lastRole).queue();
+										if (finalLvlChannel != null) {
+											finalLvlChannel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + guild.getRoleById((String) v).getAsMention() + " por alcançar o nível " + k).queue();
 										} else
-											channel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + guild.getRoleById((String) lvls.get(lastRole)).getAsMention() + " por alcançar o nível " + lastRole).queue();
+											channel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + guild.getRoleById((String) v).getAsMention() + " por alcançar o nível " + k).queue();
 									} catch (InsufficientPermissionException e) {
 										Helper.log(this.getClass(), LogLevel.WARN, e.toString());
 									}
 								}
 							}
 						}
-					}
+					});
 
 					if (Main.getInfo().getQueue().stream().anyMatch(u -> u[1].getId().equals(author.getId()))) {
 						final User[][] hw = {new User[2]};
