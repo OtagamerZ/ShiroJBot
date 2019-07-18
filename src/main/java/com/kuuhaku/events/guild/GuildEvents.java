@@ -225,8 +225,8 @@ public class GuildEvents extends ListenerAdapter {
 				}
 				try {
 					Map<String, Object> lvls = SQLite.getGuildCargosLvl(guild.getId());
-					MessageChannel finalLvlChannel = lvlChannel;
-					Map<String, Role> notifLvls = new HashMap<>();
+					final Role[] notifRole = {null};
+					final String[] notifLvl = {null};
 					lvls.forEach((k, v) -> {
 						if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= Integer.parseInt(k)) {
 							lvls.forEach((k2, v2) -> {
@@ -235,24 +235,26 @@ public class GuildEvents extends ListenerAdapter {
 							});
 
 							if (!member.getRoles().contains(guild.getRoleById((String) v))) {
-								guild.getController().addSingleRoleToMember(member, guild.getRoleById((String) v)).queue(m ->
-										notifLvls.put(k, guild.getRoleById((String) v)));
+								guild.getController().addSingleRoleToMember(member, guild.getRoleById((String) v)).queue(m -> {
+									notifRole[0] = guild.getRoleById((String) v);
+									notifLvl[0] = k;
+								});
 							}
+						}
+					});
+					if (SQLite.getGuildById(guild.getId()).getLvlNotif() && notifRole[0] != null && notifLvl[0] != null) {
+						try {
+							if (lvlChannel != null) {
+								lvlChannel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + notifRole[0].getAsMention() + " por alcançar o nível " + notifLvl[0]).queue();
+							} else
+								channel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + notifRole[0].getAsMention() + " por alcançar o nível " + notifLvl[0]).queue();
+						} catch (InsufficientPermissionException e) {
+							Helper.log(this.getClass(), LogLevel.WARN, e.toString());
+						}
 
-						}
-					});
-					notifLvls.forEach((k, v) -> {
-						if (SQLite.getGuildById(guild.getId()).getLvlNotif()) {
-							try {
-								if (finalLvlChannel != null) {
-									finalLvlChannel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + v.getAsMention() + " por alcançar o nível " + k).queue();
-								} else
-									channel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + v.getAsMention() + " por alcançar o nível " + k).queue();
-							} catch (InsufficientPermissionException e) {
-								Helper.log(this.getClass(), LogLevel.WARN, e.toString());
-							}
-						}
-					});
+						notifRole[0] = null;
+						notifLvl[0] = null;
+					}
 
 					if (Main.getInfo().getQueue().stream().anyMatch(u -> u[1].getId().equals(author.getId()))) {
 						final User[][] hw = {new User[2]};
