@@ -56,7 +56,8 @@ public class GuildEvents extends ListenerAdapter {
 		SQLite.addGuildToDB(event.getGuild());
 		Main.getInfo().getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
 			String msg = "Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".";
-			if (!c.getMessageById(c.getLatestMessageId()).complete().getContentRaw().equals(msg)) c.sendMessage(msg).queue();
+			if (!c.getMessageById(c.getLatestMessageId()).complete().getContentRaw().equals(msg))
+				c.sendMessage(msg).queue();
 		}));
 		Helper.log(this.getClass(), LogLevel.INFO, "Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".");
 	}
@@ -68,7 +69,8 @@ public class GuildEvents extends ListenerAdapter {
 		SQLite.removeGuildFromDB(gc);
 		Main.getInfo().getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
 			String msg = "Acabei de sair do servidor \"" + event.getGuild().getName() + "\".";
-			if (!c.getMessageById(c.getLatestMessageId()).complete().getContentRaw().equals(msg)) c.sendMessage(msg).queue();
+			if (!c.getMessageById(c.getLatestMessageId()).complete().getContentRaw().equals(msg))
+				c.sendMessage(msg).queue();
 		}));
 		Helper.log(this.getClass(), LogLevel.INFO, "Acabei de sair do servidor \"" + event.getGuild().getName() + "\".");
 	}
@@ -221,20 +223,23 @@ public class GuildEvents extends ListenerAdapter {
 				} catch (Exception ignore) {
 				}
 				try {
-					MessageChannel finalLvlChannel = lvlChannel;
 					Map<String, Object> lvls = SQLite.getGuildCargosLvl(guild.getId());
+					MessageChannel finalLvlChannel = lvlChannel;
 					lvls.forEach((k, v) -> {
 						if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= Integer.parseInt(k)) {
 							lvls.forEach((k2, v2) -> {
-								if (Integer.parseInt(k2) < Integer.parseInt(k)) guild.getController().removeSingleRoleFromMember(member, guild.getRoleById((String) v2)).queue();
+								if (Integer.parseInt(k2) < Integer.parseInt(k))
+									guild.getController().removeSingleRoleFromMember(member, guild.getRoleById((String) v2)).queue();
 							});
 							if (SQLite.getGuildById(guild.getId()).getLvlNotif() && !member.getRoles().contains(guild.getRoleById((String) v))) {
 								guild.getController().addSingleRoleToMember(member, guild.getRoleById((String) v)).queue();
 								try {
-									if (finalLvlChannel != null) {
-										finalLvlChannel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + guild.getRoleById((String) v).getAsMention() + " por alcançar o nível " + k).queue();
-									} else
-										channel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + guild.getRoleById((String) v).getAsMention() + " por alcançar o nível " + k).queue();
+									if (member.getRoles().contains(guild.getRoleById((String) v))) {
+										if (finalLvlChannel != null) {
+											finalLvlChannel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + guild.getRoleById((String) v).getAsMention() + " por alcançar o nível " + k).queue();
+										} else
+											channel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + guild.getRoleById((String) v).getAsMention() + " por alcançar o nível " + k).queue();
+									}
 								} catch (InsufficientPermissionException ignore) {
 								}
 							}
@@ -283,8 +288,8 @@ public class GuildEvents extends ListenerAdapter {
 						if (m.getMid() == null) SQLite.saveMemberMid(m, author);
 						boolean lvlUp = m.addXp();
 						if (lvlUp && SQLite.getGuildById(guild.getId()).getLvlNotif()) {
-							if (finalLvlChannel != null) {
-								finalLvlChannel.sendMessage(member.getEffectiveName() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
+							if (lvlChannel != null) {
+								lvlChannel.sendMessage(member.getEffectiveName() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
 							} else
 								channel.sendMessage(member.getEffectiveName() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
 						}
