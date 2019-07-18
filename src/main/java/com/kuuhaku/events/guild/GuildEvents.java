@@ -228,9 +228,9 @@ public class GuildEvents extends ListenerAdapter {
 					sortedLvls.keySet().stream().max(Integer::compare).ifPresent(i -> {
 						if (SQLite.getGuildById(guild.getId()).getLvlNotif() && !member.getRoles().contains(sortedLvls.get(i))) {
 							if (finalLvlChannel != null) {
-								finalLvlChannel.sendMessage(member.getEffectiveName() + " ganhou o cargo " + sortedLvls.get(i).getAsMention() + " por alcançar o level " + i + "! :tada:").queue();
+								finalLvlChannel.sendMessage(author.getAsMention() + " ganhou o cargo " + sortedLvls.get(i).getAsMention() + " por alcançar o level " + i + "! :tada:").queue();
 							} else
-								channel.sendMessage(member.getEffectiveName() + " ganhou o cargo " + sortedLvls.get(i).getAsMention() + " por alcançar o level " + i + "! :tada:").queue();
+								channel.sendMessage(author.getAsMention() + " ganhou o cargo " + sortedLvls.get(i).getAsMention() + " por alcançar o level " + i + "! :tada:").queue();
 						}
 
 						guild.getController().addSingleRoleToMember(member, sortedLvls.get(i)).queue();
