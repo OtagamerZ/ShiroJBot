@@ -2,14 +2,37 @@ package com.kuuhaku.events;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.MySQL;
+import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.RelayBlockList;
+import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.LogLevel;
+import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
+import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import javax.persistence.NoResultException;
 
 public class JibrilEvents extends ListenerAdapter {
+
+	@Override//removeGuildFromDB
+	public void onGuildJoin(GuildJoinEvent event) {
+		Main.getInfo().getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
+			String msg = "Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".";
+			if (!c.getMessageById(c.getLatestMessageId()).complete().getContentRaw().equals(msg)) c.sendMessage(msg).queue();
+		}));
+		Helper.log(this.getClass(), LogLevel.INFO, "Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".");
+	}
+
+	@Override
+	public void onGuildLeave(GuildLeaveEvent event) {
+		Main.getInfo().getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
+			String msg = "Acabei de sair do servidor \"" + event.getGuild().getName() + "\".";
+			if (!c.getMessageById(c.getLatestMessageId()).complete().getContentRaw().equals(msg)) c.sendMessage(msg).queue();
+		}));
+		Helper.log(this.getClass(), LogLevel.INFO, "Acabei de sair do servidor \"" + event.getGuild().getName() + "\".");
+	}
 
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
