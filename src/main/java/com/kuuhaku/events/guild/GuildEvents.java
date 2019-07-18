@@ -47,6 +47,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class GuildEvents extends ListenerAdapter {
 
@@ -223,17 +224,17 @@ public class GuildEvents extends ListenerAdapter {
 					MessageChannel finalLvlChannel = lvlChannel;
 					Map<String, Object> lvls = SQLite.getGuildCargosLvl(guild.getId());
 					lvls.forEach((k, v) -> {
-						lvls.forEach((k2, v2) -> {
-							if (Integer.parseInt(k2) < Integer.parseInt(k)) guild.getController().removeRolesFromMember(member, guild.getRoleById((String) v2)).queue();
-						});
-						if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= Integer.parseInt(k) && !member.getRoles().contains(guild.getRoleById((String) v))) {
-							guild.getController().addRolesToMember(member, guild.getRoleById((String) v)).queue();
-							if (SQLite.getGuildById(guild.getId()).getLvlNotif()) {
+						if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= Integer.parseInt(k)) {
+							lvls.forEach((k2, v2) -> {
+								if (Integer.parseInt(k2) < Integer.parseInt(k)) guild.getController().removeSingleRoleFromMember(member, guild.getRoleById((String) v2)).queue();
+							});
+							if (SQLite.getGuildById(guild.getId()).getLvlNotif() && !member.getRoles().contains(guild.getRoleById((String) v))) {
 								if (finalLvlChannel != null) {
 									finalLvlChannel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + guild.getRoleById((String) v).getAsMention() + " por alcançar o nível " + k).queue();
 								} else
 									channel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + guild.getRoleById((String) v).getAsMention() + " por alcançar o nível " + k).queue();
 							}
+							guild.getController().addSingleRoleToMember(member, guild.getRoleById((String) v)).queue();
 						}
 					});
 					if (Main.getInfo().getQueue().stream().anyMatch(u -> u[1].getId().equals(author.getId()))) {
