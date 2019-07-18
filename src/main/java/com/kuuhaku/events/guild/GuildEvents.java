@@ -224,12 +224,20 @@ public class GuildEvents extends ListenerAdapter {
 					Map<String, Object> rawLvls = SQLite.getGuildCargosLvl(guild.getId()).entrySet().stream().filter(e -> SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= Integer.parseInt(e.getKey())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 					Map<Integer, Role> sortedLvls = new TreeMap<>();
 					rawLvls.forEach((k, v) -> sortedLvls.put(Integer.parseInt(k), guild.getRoleById((String) v)));
+					MessageChannel finalLvlChannel = lvlChannel;
 					sortedLvls.keySet().stream().max(Integer::compare).ifPresent(i -> {
 						guild.getController().addSingleRoleToMember(member, sortedLvls.get(i)).queue();
 						rawLvls.remove(String.valueOf(i));
 						List<Role> list = new ArrayList<>();
 						rawLvls.forEach((k, v) -> list.add(guild.getRoleById((String) v)));
 						guild.getController().removeRolesFromMember(member, list).queue();
+
+						if (SQLite.getGuildById(guild.getId()).getLvlNotif()) {
+							if (finalLvlChannel != null) {
+								finalLvlChannel.sendMessage(member.getEffectiveName() + " ganhou o cargo " + sortedLvls.get(i).getAsMention() + " por alcançar o level " + i + "! :tada:").queue();
+							} else
+								channel.sendMessage(member.getEffectiveName() + " subiu para o nível " + sortedLvls.get(i).getAsMention() + " por alcançar o level " + i + "! :tada:").queue();
+						}
 					});
 
 					if (Main.getInfo().getQueue().stream().anyMatch(u -> u[1].getId().equals(author.getId()))) {
