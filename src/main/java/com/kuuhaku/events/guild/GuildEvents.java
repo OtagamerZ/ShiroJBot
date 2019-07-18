@@ -223,10 +223,10 @@ public class GuildEvents extends ListenerAdapter {
 					MessageChannel finalLvlChannel = lvlChannel;
 					Map<String, Object> lvls = SQLite.getGuildCargosLvl(guild.getId());
 					lvls.forEach((k, v) -> {
+						lvls.forEach((k2, v2) -> {
+							if (Integer.parseInt(k2) < Integer.parseInt(k)) guild.getController().removeRolesFromMember(member, guild.getRoleById((String) v2)).queue();
+						});
 						if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= Integer.parseInt(k) && !member.getRoles().contains(guild.getRoleById((String) v))) {
-							lvls.forEach((k2, v2) -> {
-								if (Integer.parseInt(k2) < Integer.parseInt(k)) guild.getController().removeRolesFromMember(member, guild.getRoleById((String) v2)).queue();
-							});
 							guild.getController().addRolesToMember(member, guild.getRoleById((String) v)).queue();
 							if (SQLite.getGuildById(guild.getId()).getLvlNotif()) {
 								if (finalLvlChannel != null) {
