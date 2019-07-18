@@ -231,21 +231,20 @@ public class GuildEvents extends ListenerAdapter {
 							lvls.forEach((k2, v2) -> {
 								if (Integer.parseInt(k2) < Integer.parseInt(k))
 									guild.getController().removeSingleRoleFromMember(member, guild.getRoleById((String) v2)).queue();
-							});
-
-							if (!member.getRoles().contains(guild.getRoleById((String) v))) {
-								guild.getController().addSingleRoleToMember(member, guild.getRoleById((String) v)).queue();
-								if (SQLite.getGuildById(guild.getId()).getLvlNotif()) {
-									try {
-										if (finalLvlChannel != null) {
-											finalLvlChannel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + guild.getRoleById((String) v).getAsMention() + " por alcançar o nível " + k).queue();
-										} else
-											channel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + guild.getRoleById((String) v).getAsMention() + " por alcançar o nível " + k).queue();
-									} catch (InsufficientPermissionException e) {
-										Helper.log(this.getClass(), LogLevel.WARN, e.toString());
+								else if (!member.getRoles().contains(guild.getRoleById((String) v))) {
+									guild.getController().addSingleRoleToMember(member, guild.getRoleById((String) v)).queue();
+									if (SQLite.getGuildById(guild.getId()).getLvlNotif()) {
+										try {
+											if (finalLvlChannel != null) {
+												finalLvlChannel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + guild.getRoleById((String) v).getAsMention() + " por alcançar o nível " + k).queue();
+											} else
+												channel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + guild.getRoleById((String) v).getAsMention() + " por alcançar o nível " + k).queue();
+										} catch (InsufficientPermissionException e) {
+											Helper.log(this.getClass(), LogLevel.WARN, e.toString());
+										}
 									}
 								}
-							}
+							});
 						}
 					});
 
