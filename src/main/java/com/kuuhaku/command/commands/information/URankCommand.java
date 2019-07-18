@@ -52,23 +52,27 @@ public class URankCommand extends Command {
 		}
 
 		channel.sendMessage("<a:Loading:598500653215645697> Buscando dados...").queue(m -> {
-			EmbedBuilder eb = new EmbedBuilder();
-			StringBuilder sb = new StringBuilder();
-
-			eb.setTitle(":bar_chart: TOP 10 Usuários (" + (args.length > 0 && args[0].equalsIgnoreCase("global") ? "GLOBAL" : "SERVER") + ")");
-			eb.setThumbnail(args.length > 0 && args[0].equalsIgnoreCase("global") ? "https://www.pngkey.com/png/full/21-217733_free-png-trophy-png-images-transparent-winner-trophy.png" : guild.getIconUrl());
 			try {
-				eb.setColor(Helper.colorThief(Main.getInfo().getUserByID(mbs.get(0).getMid()).getAvatarUrl()));
-			} catch (IOException e) {
-				eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
-			}
-			for (int i = 1; i < mbs.size() && i < 10; i++) {
-				sb.append(i + 1).append(" - (").append(Main.getInfo().getGuildByID(mbs.get(i).getId().substring(18)).getName()).append(") ").append(Main.getInfo().getGuildByID(mbs.get(i).getId().substring(18)).getMemberById(mbs.get(i).getMid()).getEffectiveName()).append(" - Lvl ").append(mbs.get(i).getLevel()).append(" (").append(mbs.get(i).getXp()).append(" xp)").append("\n");
-			}
-			eb.addField("1 - " + (args.length == 0 ? " " : ("(" + Main.getInfo().getGuildByID(mbs.get(0).getId().substring(18)).getName() + ") ")) + Main.getInfo().getGuildByID(mbs.get(0).getId().substring(18)).getMemberById(mbs.get(0).getMid()).getEffectiveName() + " - Lvl" + mbs.get(0).getLevel() + " (" + mbs.get(0).getXp() + " xp)", sb.toString(), false);
+				EmbedBuilder eb = new EmbedBuilder();
+				StringBuilder sb = new StringBuilder();
 
-			m.delete().queue();
-			channel.sendMessage(eb.build()).queue();
+				eb.setTitle(":bar_chart: TOP 10 Usuários (" + (args.length > 0 && args[0].equalsIgnoreCase("global") ? "GLOBAL" : "SERVER") + ")");
+				eb.setThumbnail(args.length > 0 && args[0].equalsIgnoreCase("global") ? "https://www.pngkey.com/png/full/21-217733_free-png-trophy-png-images-transparent-winner-trophy.png" : guild.getIconUrl());
+				try {
+					eb.setColor(Helper.colorThief(Main.getInfo().getUserByID(mbs.get(0).getMid()).getAvatarUrl()));
+				} catch (IOException e) {
+					eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
+				}
+				for (int i = 1; i < mbs.size() && i < 10; i++) {
+					sb.append(i + 1).append(" - ").append(args.length == 0 ? " " : ("(" + Main.getInfo().getGuildByID(mbs.get(i).getId().substring(18)).getName() + ") ")).append(Main.getInfo().getGuildByID(mbs.get(i).getId().substring(18)).getMemberById(mbs.get(i).getMid()).getEffectiveName()).append(" - Lvl ").append(mbs.get(i).getLevel()).append(" (").append(mbs.get(i).getXp()).append(" xp)").append("\n");
+				}
+				eb.addField("1 - " + (args.length == 0 ? " " : ("(" + Main.getInfo().getGuildByID(mbs.get(0).getId().substring(18)).getName() + ") ")) + Main.getInfo().getGuildByID(mbs.get(0).getId().substring(18)).getMemberById(mbs.get(0).getMid()).getEffectiveName() + " - Lvl" + mbs.get(0).getLevel() + " (" + mbs.get(0).getXp() + " xp)", sb.toString(), false);
+
+				m.delete().queue();
+				channel.sendMessage(eb.build()).queue();
+			} catch (NullPointerException e) {
+				channel.sendMessage(":x: | Erro, o ranking global está com problemas no momento, já estamos trabalhando em uma solução.").queue();
+			}
 		});
 	}
 }
