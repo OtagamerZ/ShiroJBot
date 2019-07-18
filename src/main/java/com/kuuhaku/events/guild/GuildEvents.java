@@ -230,7 +230,7 @@ public class GuildEvents extends ListenerAdapter {
 							if (finalLvlChannel != null) {
 								finalLvlChannel.sendMessage(member.getEffectiveName() + " ganhou o cargo " + sortedLvls.get(i).getAsMention() + " por alcançar o level " + i + "! :tada:").queue();
 							} else
-								channel.sendMessage(member.getEffectiveName() + " subiu para o nível " + sortedLvls.get(i).getAsMention() + " por alcançar o level " + i + "! :tada:").queue();
+								channel.sendMessage(member.getEffectiveName() + " ganhou o cargo " + sortedLvls.get(i).getAsMention() + " por alcançar o level " + i + "! :tada:").queue();
 						}
 
 						guild.getController().addSingleRoleToMember(member, sortedLvls.get(i)).queue();
