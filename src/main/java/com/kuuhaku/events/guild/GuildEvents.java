@@ -225,7 +225,6 @@ public class GuildEvents extends ListenerAdapter {
 				}
 				try {
 					Map<String, Object> lvls = SQLite.getGuildCargosLvl(guild.getId());
-					MessageChannel finalLvlChannel = lvlChannel;
 					lvls.forEach((k, v) -> {
 						if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= Integer.parseInt(k)) {
 							lvls.forEach((k2, v2) -> {
@@ -235,16 +234,6 @@ public class GuildEvents extends ListenerAdapter {
 
 							if (!member.getRoles().contains(guild.getRoleById((String) v))) {
 								guild.getController().addSingleRoleToMember(member, guild.getRoleById((String) v)).queue();
-								if (SQLite.getGuildById(guild.getId()).getLvlNotif()) {
-									try {
-										if (finalLvlChannel != null) {
-											finalLvlChannel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + guild.getRoleById((String) v).getAsMention() + " por alcançar o nível " + k).queue();
-										} else
-											channel.sendMessage(":tada: " + author.getAsMention() + " ganhou o cargo " + guild.getRoleById((String) v).getAsMention() + " por alcançar o nível " + k).queue();
-									} catch (InsufficientPermissionException e) {
-										Helper.log(this.getClass(), LogLevel.WARN, e.toString());
-									}
-								}
 							}
 						}
 					});
