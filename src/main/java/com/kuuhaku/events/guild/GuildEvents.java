@@ -284,9 +284,9 @@ public class GuildEvents extends ListenerAdapter {
 						boolean lvlUp = m.addXp();
 						if (lvlUp && SQLite.getGuildById(guild.getId()).getLvlNotif()) {
 							if (lvlChannel != null) {
-								lvlChannel.sendMessage(member.getEffectiveName() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
+								lvlChannel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
 							} else
-								channel.sendMessage(member.getEffectiveName() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
+								channel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
 						}
 						SQLite.saveMemberToDB(m);
 					} catch (NoResultException e) {
