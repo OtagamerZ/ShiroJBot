@@ -25,9 +25,9 @@ import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 import org.apache.commons.lang3.StringUtils;
 
-public class AntiRaidCommand extends Command {
+public class AntiraidCommand extends Command {
 
-	public AntiRaidCommand() {
+	public AntiraidCommand() {
 		super("semraid", new String[]{"noraid", "antiraid"}, "Expulsa automaticamente novos membros que possuirem contas muito recentes (< 10 min).", Category.MODERACAO);
 	}
 
@@ -41,7 +41,7 @@ public class AntiRaidCommand extends Command {
 
 		SQLite.updateGuildChannels(gc);
 
-		if (!gc.getNoSpamChannels().contains(channel.getId()))
+		if (!gc.isAntiRaid())
 			channel.sendMessage("Modo anti-raid está desligado").queue();
 		else
 			channel.sendMessage("Modo anti-raid está ligado, expulsarei novos membros que tiverem uma conta com tempo menor que 10 minutos.").queue();
