@@ -20,9 +20,12 @@ package com.kuuhaku.command.commands.information;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.MySQL;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
+
+import java.time.format.DateTimeFormatter;
 
 public class BotInfoCommand extends Command {
 
@@ -39,9 +42,11 @@ public class BotInfoCommand extends Command {
         eb.addField(":triangular_flag_on_post: Projeto inicial por:", Main.getInfo().getUserByID(Main.getInfo().getNiiChan()).getAsTag(), true);
         StringBuilder sb = new StringBuilder();
         Main.getInfo().getDevelopers().forEach(d -> sb.append(Main.getInfo().getUserByID(d).getAsTag()).append(", "));
-        eb.addField(":tools: Desenvolvido por:", sb.toString(), true);
-        eb.addField(":earth_americas: Servidores:", Main.getInfo().getAPI().getGuilds().size() + " servidores", true);
-        eb.addField(":speech_balloon: Usuários:", Main.getInfo().getAPI().getUsers().size() + " usuários", true);
+        eb.addField(":tools: Desenvolvida por:", sb.toString(), true);
+        eb.addField(":calendar_spiral: Criada em:", Main.getInfo().getSelfUser().getCreationTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - hh:mm")), true);
+        eb.addField(":handshake: Apoiada por:", MySQL.getPartnerAmount() + " servidores", true);
+        eb.addField(":earth_americas: Estou em:", Main.getInfo().getAPI().getGuilds().size() + " servidores", true);
+        eb.addField(":speech_balloon: Conheço:", Main.getInfo().getAPI().getUsers().size() + " usuários", true);
         eb.addField(":envelope: Link de convite:", "https://discordbots.org/bot/572413282653306901", true);
 
         channel.sendMessage(eb.build()).queue();
