@@ -43,7 +43,7 @@ public class BotInfoCommand extends Command {
         StringBuilder sb = new StringBuilder();
         Main.getInfo().getDevelopers().forEach(d -> sb.append(Main.getInfo().getUserByID(d).getAsTag()).append(", "));
         eb.addField(":tools: Desenvolvida por:", sb.toString(), true);
-        eb.addField(":calendar_spiral: Criada em:", Main.getInfo().getSelfUser().getCreationTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - hh:mm")), true);
+        eb.addField(":calendar_spiral: Criada em:", Main.getInfo().getSelfUser().getCreationTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), true);
         eb.addField(":handshake: Apoiada por:", MySQL.getPartnerAmount() + " servidores", true);
         eb.addField(":earth_americas: Estou em:", Main.getInfo().getAPI().getGuilds().size() + " servidores", true);
         eb.addField(":speech_balloon: Conheço:", Main.getInfo().getAPI().getUsers().size() + " usuários", true);
