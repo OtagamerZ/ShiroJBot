@@ -35,15 +35,14 @@ public class AntiraidCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		guildConfig gc = SQLite.getGuildById(guild.getId());
 
-		if (gc.isAntiRaid())
+		if (gc.isAntiRaid()) {
 			gc.setAntiRaid(false);
-		else gc.setAntiRaid(true);
+			channel.sendMessage("Modo anti-raid está desligado").queue();
+		} else {
+			gc.setAntiRaid(true);
+			channel.sendMessage("Modo anti-raid está ligado, expulsarei novos membros que tiverem uma conta com tempo menor que 10 minutos.").queue();
+		}
 
 		SQLite.updateGuildChannels(gc);
-
-		if (!gc.isAntiRaid())
-			channel.sendMessage("Modo anti-raid está desligado").queue();
-		else
-			channel.sendMessage("Modo anti-raid está ligado, expulsarei novos membros que tiverem uma conta com tempo menor que 10 minutos.").queue();
 	}
 }
