@@ -176,8 +176,8 @@ public class JDAEvents extends ListenerAdapter {
 			guildConfig gc = SQLite.getGuildById(event.getGuild().getId());
 
 			if (!gc.getMsgBoasVindas().equals("")) {
-				if (gc.isAntiRaid() && ((ChronoUnit.MILLIS.between(event.getUser().getCreationTime().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) / 1000) / 60) < 1000000) {
-					event.getGuild().getTextChannelById(gc.getCanalBV()).sendMessage(event.getUser().getAsMention() + " foi expulso automaticamente por ter uma conta muito recente.\n`(data de criação: " + event.getUser().getCreationTime().format(DateTimeFormatter.ofPattern("dd de MM de yyyy, às hh:mm:ss")) + ")").queue();
+				if (gc.isAntiRaid() && ((ChronoUnit.MILLIS.between(event.getUser().getCreationTime().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) / 1000) / 60) < 10) {
+					Helper.logToChannel(event.getMember(), false, null, "Um usuário foi expulso automaticamente por ter uma conta muito recente.\n`(data de criação: " + event.getUser().getCreationTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - hh:mm:ss")) + "h)`", event.getGuild());
 					event.getGuild().getController().kick(event.getMember()).queue();
 					return;
 				}
@@ -212,11 +212,12 @@ public class JDAEvents extends ListenerAdapter {
 				}
 
 				event.getGuild().getTextChannelById(gc.getCanalBV()).sendMessage(event.getUser().getAsMention()).embed(eb.build()).queue();
-			} else if (gc.isAntiRaid() && ((ChronoUnit.MILLIS.between(event.getUser().getCreationTime().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) / 1000) / 60) < 1000000) {
+				Helper.logToChannel(event.getMember(), false, null, "Um usuário entrou no servidor", event.getGuild());
+			} else if (gc.isAntiRaid() && ((ChronoUnit.MILLIS.between(event.getUser().getCreationTime().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) / 1000) / 60) < 10) {
+				Helper.logToChannel(event.getMember(), false, null, "Um foi bloqueado de entrar no servidor", event.getGuild());
 				event.getGuild().getController().kick(event.getMember()).queue();
 			}
-		} catch (Exception e) {
-			Helper.log(this.getClass(), LogLevel.WARN, e.getStackTrace()[0].toString());
+		} catch (Exception ignore) {
 		}
 	}
 
@@ -259,6 +260,7 @@ public class JDAEvents extends ListenerAdapter {
 				}
 
 				event.getGuild().getTextChannelById(gc.getCanalAdeus()).sendMessage(eb.build()).queue();
+				Helper.logToChannel(event.getMember(), false, null, "Um usuário saiu do servidor", event.getGuild());
 			}
 		} catch (Exception ignore) {
 		}

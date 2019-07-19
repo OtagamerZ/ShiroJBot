@@ -18,6 +18,7 @@
 package com.kuuhaku.model;
 
 import com.kuuhaku.Main;
+import net.dv8tion.jda.core.entities.Channel;
 import net.dv8tion.jda.core.entities.TextChannel;
 import org.json.JSONObject;
 
@@ -56,6 +57,8 @@ public class guildConfig {
 	@Column(columnDefinition = "boolean default false")
 	private boolean aiMode = false;
 	private String noLinkChannels = "";
+	@Column(length = 191)
+	private String logChannel = "";
 	private String noSpamChannels = "";
 	@Column(columnDefinition = "int default 5")
 	private int noSpamAmount = 5;
@@ -302,5 +305,13 @@ public class guildConfig {
 
 	public void setAntiRaid(boolean antiRaid) {
 		this.antiRaid = antiRaid;
+	}
+
+	public String getLogChannel() {
+		return logChannel;
+	}
+
+	public void setLogChannel(String id) {
+		this.logChannel = id;
 	}
 }

@@ -203,6 +203,7 @@ public class GuildEvents extends ListenerAdapter {
 				}
 
 				if (found) {
+					Helper.logToChannel(member, true, command, "Um comando foi usado no canal " + ((TextChannel) channel).getAsMention(), guild);
 					if (!Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
 						channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
 						Helper.spawnAd(channel);
