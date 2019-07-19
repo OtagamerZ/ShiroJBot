@@ -72,6 +72,7 @@ public class URankCommand extends Command {
 				channel.sendMessage(eb.build()).queue();
 			} catch (NullPointerException e) {
 				m.editMessage(":x: | Erro, o ranking global está com problemas no momento, já estamos trabalhando em uma solução.").queue();
+				e.printStackTrace();
 			}
 		});
 	}
