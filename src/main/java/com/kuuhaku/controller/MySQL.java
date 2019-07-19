@@ -149,6 +149,18 @@ public class MySQL {
         return m;
     }
 
+    public static int getPartnerAmount() {
+        EntityManager em = getEntityManager();
+        int size;
+
+        Query q = em.createQuery("SELECT t FROM Tags t WHERE Partner = true", Tags.class);
+        size = q.getResultList().size();
+
+        em.close();
+
+        return size;
+    }
+
     public static void addUserTagsToDB(String id) {
         EntityManager em = getEntityManager();
 
