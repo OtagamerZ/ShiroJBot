@@ -61,8 +61,8 @@ public class ShiroInfo {
 
 	}};
 	private static final DiscordBotListAPI dbl = new DiscordBotListAPI.Builder().token(System.getenv("DBL_TOKEN")).botId("572413282653306901").build();
-	private static final IamOptions options = new IamOptions.Builder().apiKey(System.getenv("AI_TOKEN")).build();
-	private static final Assistant ai = new Assistant("2019-06-27", options);
+	//private static final IamOptions options = new IamOptions.Builder().apiKey(System.getenv("AI_TOKEN")).build();
+	//private static final Assistant ai = new Assistant("2019-06-27", options);
 	public static final List<User[]> queue = new ArrayList<>();
 	private static final Map<String, Integer[]> polls = new HashMap<>();
 	private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(5);
@@ -73,7 +73,7 @@ public class ShiroInfo {
 	private Context context = new Context();
 
 	public ShiroInfo() {
-		ai.setEndPoint("https://gateway.watsonplatform.net/assistant/api");
+		//ai.setEndPoint("https://gateway.watsonplatform.net/assistant/api");
 	}
 
 	//CONSTANTS
@@ -137,9 +137,9 @@ public class ShiroInfo {
 		return dbl;
 	}
 
-	public Assistant getAi() {
-		return ai;
-	}
+	//public Assistant getAi() {
+		//return ai;
+	//}
 
 	public List<User[]> getQueue() {
 		return queue;
