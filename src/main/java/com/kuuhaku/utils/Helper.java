@@ -550,11 +550,9 @@ public class Helper {
 			if (isCommand) eb.addField("Comando:", c.getName(), true);
 			eb.setFooter("Data: " + OffsetDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), null);
 
-			System.out.println(gc.getLogChannel());
 			g.getTextChannelById(gc.getLogChannel()).sendMessage(eb.build()).queue();
 		} catch (Exception e) {
 			log(Helper.class, LogLevel.WARN, e.toString());
-			gc.setLogChannel("");
 		}
 	}
 }

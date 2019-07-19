@@ -28,7 +28,6 @@ public class MakeLogCommand extends Command {
 				gc.setLogChannel(c.getId());
 				channel.sendMessage("Canal de log criado com sucesso em " + ((TextChannel) c).getAsMention()).queue();
 				SQLite.updateGuildChannels(gc);
-				System.out.println(gc.getLogChannel());
 			});
 		} catch (InsufficientPermissionException e) {
 			channel.sendMessage(":x: | Não tenho permissões sufficientes para criar um canal.").queue();
