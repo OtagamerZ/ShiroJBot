@@ -61,6 +61,8 @@ public class guildConfig {
 	private int noSpamAmount = 5;
 	@Column(columnDefinition = "boolean default false")
 	private boolean hardAntispam;
+	@Column(columnDefinition = "boolean default false")
+	private boolean antiRaid = false;
 	private boolean markForDelete;
 
 	public guildConfig() {
@@ -292,5 +294,13 @@ public class guildConfig {
 
 	public void setWarnTime(int warnTime) {
 		this.warnTime = warnTime;
+	}
+
+	public boolean isAntiRaid() {
+		return antiRaid;
+	}
+
+	public void setAntiRaid(boolean antiRaid) {
+		this.antiRaid = antiRaid;
 	}
 }
