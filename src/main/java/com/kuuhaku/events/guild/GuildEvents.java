@@ -262,7 +262,7 @@ public class GuildEvents extends ListenerAdapter {
 					if (SQLite.getGuildNoLinkChannels(guild.getId()).contains(channel.getId()) && Helper.findURL(message.getContentRaw())) {
 						message.delete().reason("Mensagem possui um URL").queue(m -> channel.sendMessage(member.getAsMention() + ", é proibido postar links neste canal!").queue());
 					}
-					if (SQLite.getGuildIaMode(guild.getId()) && channel.getId().equals(SQLite.getGuildCanalIA(guild.getId()))) {
+					/*if (SQLite.getGuildIaMode(guild.getId()) && channel.getId().equals(SQLite.getGuildCanalIA(guild.getId()))) {
 						try {
 							MessageInput msg = new MessageInput();
 							msg.setText(message.getContentRaw());
@@ -278,7 +278,7 @@ public class GuildEvents extends ListenerAdapter {
 						} catch (ServiceResponseException e) {
 							Helper.log(this.getClass(), LogLevel.WARN, e.toString());
 						}
-					}
+					}*/
 					try {
 						com.kuuhaku.model.Member m = SQLite.getMemberById(member.getUser().getId() + member.getGuild().getId());
 						if (m.getMid() == null) SQLite.saveMemberMid(m, author);
