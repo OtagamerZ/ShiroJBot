@@ -44,6 +44,10 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -68,8 +72,10 @@ public class JDAEvents extends ListenerAdapter {
 		Message message = event.getChannel().getMessageById(event.getMessageId()).complete();
 		if (Main.getInfo().getPolls().containsKey(message.getId())) {
 
-			if (event.getReactionEmote().getName().equals("\uD83D\uDC4D")) Main.getInfo().getPolls().get(message.getId())[0]--;
-			else if (event.getReactionEmote().getName().equals("\uD83D\uDC4E")) Main.getInfo().getPolls().get(message.getId())[1]--;
+			if (event.getReactionEmote().getName().equals("\uD83D\uDC4D"))
+				Main.getInfo().getPolls().get(message.getId())[0]--;
+			else if (event.getReactionEmote().getName().equals("\uD83D\uDC4E"))
+				Main.getInfo().getPolls().get(message.getId())[1]--;
 		}
 	}
 
@@ -79,8 +85,10 @@ public class JDAEvents extends ListenerAdapter {
 		Message message = event.getChannel().getMessageById(event.getMessageId()).complete();
 		if (Main.getInfo().getPolls().containsKey(message.getId())) {
 
-			if (event.getReactionEmote().getName().equals("\uD83D\uDC4D")) Main.getInfo().getPolls().get(message.getId())[0]++;
-			else if (event.getReactionEmote().getName().equals("\uD83D\uDC4E")) Main.getInfo().getPolls().get(message.getId())[1]++;
+			if (event.getReactionEmote().getName().equals("\uD83D\uDC4D"))
+				Main.getInfo().getPolls().get(message.getId())[0]++;
+			else if (event.getReactionEmote().getName().equals("\uD83D\uDC4E"))
+				Main.getInfo().getPolls().get(message.getId())[1]++;
 			else if (event.getReactionEmote().getName().equals("\u274C") && message.getEmbeds().get(0).getTitle().equals(":notepad_spiral: Enquete criada por " + event.getMember().getEffectiveName())) {
 				Main.getInfo().getPolls().remove(message.getId());
 				message.delete().queue();
@@ -168,6 +176,10 @@ public class JDAEvents extends ListenerAdapter {
 			guildConfig gc = SQLite.getGuildById(event.getGuild().getId());
 
 			if (!gc.getMsgBoasVindas().equals("")) {
+				if (((ChronoUnit.MILLIS.between(event.getUser().getCreationTime().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) / 1000) / 60) < 10) {
+					event.getGuild().getController().kick(event.getMember()).queue();
+					event.getGuild().getTextChannelById(gc.getCanalBV()).sendMessage(event.getUser().getAsMention() + " foi expulso automaticamente por ter uma conta muito recente.\n`(data de criação: " + event.getUser().getCreationTime().format(DateTimeFormatter.ofPattern("dd de MM de yyyy, às hh:mm:ss")) + ")").queue();
+				}
 				URL url = new URL(event.getUser().getAvatarUrl());
 				HttpURLConnection con = (HttpURLConnection) url.openConnection();
 				con.setRequestProperty("User-Agent", "Mozilla/5.0");
@@ -198,7 +210,7 @@ public class JDAEvents extends ListenerAdapter {
 						break;
 				}
 
-				Main.getInfo().getAPI().getGuildById(event.getGuild().getId()).getTextChannelById(gc.getCanalBV()).sendMessage(event.getUser().getAsMention()).embed(eb.build()).queue();
+				event.getGuild().getTextChannelById(gc.getCanalBV()).sendMessage(event.getUser().getAsMention()).embed(eb.build()).queue();
 			}
 		} catch (Exception ignore) {
 		}
@@ -242,7 +254,7 @@ public class JDAEvents extends ListenerAdapter {
 						break;
 				}
 
-				Main.getInfo().getAPI().getGuildById(event.getGuild().getId()).getTextChannelById(gc.getCanalAdeus()).sendMessage(eb.build()).queue();
+				event.getGuild().getTextChannelById(gc.getCanalAdeus()).sendMessage(eb.build()).queue();
 			}
 		} catch (Exception ignore) {
 		}

@@ -23,22 +23,27 @@ import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.guildConfig;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
+import org.apache.commons.lang3.StringUtils;
 
-public class NoLinkCommand extends Command {
+public class AntiRaidCommand extends Command {
 
-    public NoLinkCommand() {
-        super("semlink", new String[]{"nolink", "blocklink"}, "Bloqueia ou permite links postados no canal onde este comando foi digitado.", Category.MODERACAO);
-    }
+	public AntiRaidCommand() {
+		super("semraid", new String[]{"noraid", "antiraid"}, "Expulsa automaticamente novos membros que possuirem contas muito recentes (< 10 min).", Category.MODERACAO);
+	}
 
-    @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-        guildConfig gc = SQLite.getGuildById(guild.getId());
+	@Override
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+		guildConfig gc = SQLite.getGuildById(guild.getId());
 
-        if (gc.getNoLinkChannels().contains(channel.getId())) gc.removeNoLinkChannel(message.getTextChannel());
-        else gc.addNoLinkChannel(message.getTextChannel());
+		if (gc.isAntiRaid())
+			gc.setAntiRaid(false);
+		else gc.setAntiRaid(true);
 
-        SQLite.updateGuildChannels(gc);
+		SQLite.updateGuildChannels(gc);
 
-        channel.sendMessage("Agora os links neste canal estão " + (gc.getNoLinkChannels().contains(channel.getId()) ? "**bloqueados**" : "**liberados**")).queue();
-    }
+		if (!gc.getNoSpamChannels().contains(channel.getId()))
+			channel.sendMessage("Modo anti-raid está desligado").queue();
+		else
+			channel.sendMessage("Modo anti-raid está ligado, expulsarei novos membros que tiverem uma conta com tempo menor que 10 minutos.").queue();
+	}
 }
