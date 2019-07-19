@@ -233,7 +233,7 @@ public class GuildEvents extends ListenerAdapter {
 								channel.sendMessage(author.getAsMention() + " ganhou o cargo " + sortedLvls.get(i).getAsMention() + " por alcançar o level " + i + "! :tada:").queue();
 						}
 
-						guild.getController().addSingleRoleToMember(member, sortedLvls.get(i)).queue();
+						guild.getController().addSingleRoleToMember(member, sortedLvls.get(i)).complete();
 						rawLvls.remove(String.valueOf(i));
 						List<Role> list = new ArrayList<>();
 						rawLvls.forEach((k, v) -> list.add(guild.getRoleById((String) v)));
