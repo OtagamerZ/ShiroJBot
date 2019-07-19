@@ -18,11 +18,14 @@
 package com.kuuhaku.utils;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.MySQL;
+import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.model.Beyblade;
 import com.kuuhaku.model.DuelData;
 import com.kuuhaku.model.ReactionsList;
+import com.kuuhaku.model.guildConfig;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
@@ -43,6 +46,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -532,5 +537,22 @@ public class Helper {
 			else chkdSrc[i] = source[i];
 		}
 		return String.join(" ", chkdSrc).trim();
+	}
+
+	public static void logToChannel(Member m, boolean isCommand, Command c, String msg, Guild g) {
+		guildConfig gc = SQLite.getGuildById(g.getId());
+		try {
+			EmbedBuilder eb = new EmbedBuilder();
+
+			eb.setAuthor("Relatório de log");
+			eb.setDescription(msg);
+			eb.addField("Referente:", m.getAsMention(), true);
+			if (isCommand) eb.addField("Comando:", c.getName(), true);
+			eb.setFooter("Data: " + OffsetDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), null);
+
+			g.getTextChannelById(gc.getLogChannel()).sendMessage(eb.build()).queue();
+		} catch (Exception e) {
+			gc.setLogChannel("");
+		}
 	}
 }
