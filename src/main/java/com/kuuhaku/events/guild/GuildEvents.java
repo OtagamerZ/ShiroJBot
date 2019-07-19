@@ -228,13 +228,14 @@ public class GuildEvents extends ListenerAdapter {
 					MessageChannel finalLvlChannel = lvlChannel;
 					sortedLvls.keySet().stream().max(Integer::compare).ifPresent(i -> {
 						if (SQLite.getGuildById(guild.getId()).getLvlNotif() && !member.getRoles().contains(sortedLvls.get(i))) {
-							if (finalLvlChannel != null) {
-								guild.getController().addSingleRoleToMember(member, sortedLvls.get(i)).queue();
-								finalLvlChannel.sendMessage(author.getAsMention() + " ganhou o cargo " + sortedLvls.get(i).getAsMention() + " por alcançar o level " + i + "! :tada:").queue();
-							} else {
-								guild.getController().addSingleRoleToMember(member, sortedLvls.get(i)).queue();
-								channel.sendMessage(author.getAsMention() + " ganhou o cargo " + sortedLvls.get(i).getAsMention() + " por alcançar o level " + i + "! :tada:").queue();
-							}
+							guild.getController().addSingleRoleToMember(member, sortedLvls.get(i)).queue(s -> {
+								if (finalLvlChannel != null) {
+									finalLvlChannel.sendMessage(author.getAsMention() + " ganhou o cargo " + sortedLvls.get(i).getAsMention() + " por alcançar o level " + i + "! :tada:").queue();
+								} else {
+									guild.getController().addSingleRoleToMember(member, sortedLvls.get(i)).queue();
+									channel.sendMessage(author.getAsMention() + " ganhou o cargo " + sortedLvls.get(i).getAsMention() + " por alcançar o level " + i + "! :tada:").queue();
+								}
+							});
 						}
 						rawLvls.remove(String.valueOf(i));
 						List<Role> list = new ArrayList<>();
