@@ -61,7 +61,7 @@ public class CommandManager {
             add(new BanMemberCommand());
             add(new NoLinkCommand());
             add(new AntispamCommand());
-            add(new AntiRaidCommand());
+            add(new AntiraidCommand());
 
             //INFORMATION
             add(new ComandosCommand());
