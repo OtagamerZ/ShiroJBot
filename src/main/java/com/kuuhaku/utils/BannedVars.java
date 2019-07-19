@@ -13,6 +13,9 @@ public class BannedVars {
 			"Main.",
 			"getInfo()",
 			"while (true)",
-			"while (false)"
+			"while (false)",
+			"import",
+			"Double.NEGATIVE_INFINITY",
+			"Double.POSITIVE_INFINITY"
 	};
 }
