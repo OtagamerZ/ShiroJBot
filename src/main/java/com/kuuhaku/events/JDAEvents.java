@@ -176,9 +176,10 @@ public class JDAEvents extends ListenerAdapter {
 			guildConfig gc = SQLite.getGuildById(event.getGuild().getId());
 
 			if (!gc.getMsgBoasVindas().equals("")) {
-				if (((ChronoUnit.MILLIS.between(event.getUser().getCreationTime().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) / 1000) / 60) < 10) {
-					event.getGuild().getController().kick(event.getMember()).queue();
+				if (gc.isAntiRaid() && ((ChronoUnit.MILLIS.between(event.getUser().getCreationTime().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) / 1000) / 60) < 10) {
 					event.getGuild().getTextChannelById(gc.getCanalBV()).sendMessage(event.getUser().getAsMention() + " foi expulso automaticamente por ter uma conta muito recente.\n`(data de criação: " + event.getUser().getCreationTime().format(DateTimeFormatter.ofPattern("dd de MM de yyyy, às hh:mm:ss")) + ")").queue();
+					event.getGuild().getController().kick(event.getMember()).queue();
+					return;
 				}
 				URL url = new URL(event.getUser().getAvatarUrl());
 				HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -211,8 +212,11 @@ public class JDAEvents extends ListenerAdapter {
 				}
 
 				event.getGuild().getTextChannelById(gc.getCanalBV()).sendMessage(event.getUser().getAsMention()).embed(eb.build()).queue();
+			} else if (gc.isAntiRaid() && ((ChronoUnit.MILLIS.between(event.getUser().getCreationTime().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) / 1000) / 60) < 10) {
+				event.getGuild().getController().kick(event.getMember()).queue();
 			}
-		} catch (Exception ignore) {
+		} catch (Exception e) {
+			Helper.log(this.getClass(), LogLevel.WARN, e.getStackTrace()[0].toString());
 		}
 	}
 
