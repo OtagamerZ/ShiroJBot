@@ -52,8 +52,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
@@ -539,14 +537,14 @@ public class Helper {
 		return String.join(" ", chkdSrc).trim();
 	}
 
-	public static void logToChannel(Member m, boolean isCommand, Command c, String msg, Guild g) {
+	public static void logToChannel(User u, boolean isCommand, Command c, String msg, Guild g) {
 		guildConfig gc = SQLite.getGuildById(g.getId());
 		try {
 			EmbedBuilder eb = new EmbedBuilder();
 
 			eb.setAuthor("Relatório de log");
 			eb.setDescription(msg);
-			eb.addField("Referente:", m.getAsMention(), true);
+			eb.addField("Referente:", u.getAsMention(), true);
 			if (isCommand) eb.addField("Comando:", c.getName(), true);
 			eb.setFooter("Data: " + OffsetDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), null);
 
