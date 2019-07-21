@@ -7,10 +7,7 @@ import com.kuuhaku.utils.LogLevel;
 import com.kuuhaku.utils.TagIcons;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Game;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.MessageEmbed;
+import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
 
 import javax.persistence.EntityManager;
@@ -21,9 +18,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class Relay extends SQLite {
 	private Map<String, String> relays = new HashMap<>();
@@ -37,7 +31,7 @@ public class Relay extends SQLite {
 		}
 	}
 
-	public void relayMessage(String msg, Member m, Guild s, String imgURL) {
+	public void relayMessage(Message source, String msg, Member m, Guild s, String imgURL) {
 		updateRelays();
 		checkSize();
 
@@ -98,7 +92,12 @@ public class Relay extends SQLite {
 		relays.forEach((k, r) -> {
 			if (!s.getId().equals(k))
 				try {
-					Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(eb.build()).complete();
+					Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(eb.build()).queue();
+					try {
+						source.delete().queue();
+						source.getChannel().sendMessage(eb.build()).queue();
+					} catch (InsufficientPermissionException ignore) {
+					}
 				} catch (NullPointerException e) {
 					SQLite.getGuildById(k).setCanalRelay(null);
 				} catch (InsufficientPermissionException ex) {
@@ -107,7 +106,8 @@ public class Relay extends SQLite {
 							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_EMBED_LINKS) ? "✅" : "❌") + " Inserir links\n" +
 							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_ATTACH_FILES) ? "✅" : "❌") + " Anexar arquivos\n" +
 							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_HISTORY) ? "✅" : "❌") + " Ver histórico de mensagens\n" +
-							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI) ? "✅" : "❌") + " Usar emojis externos" +
+							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI) ? "✅" : "❌") + " Usar emojis externos\n" +
+							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_MANAGE) ? "✅" : "❌") + " Gerenciar mensagens" +
 							"```").queue());
 					Helper.log(this.getClass(), LogLevel.ERROR, ex.toString() + "\n" + k);
 				}
