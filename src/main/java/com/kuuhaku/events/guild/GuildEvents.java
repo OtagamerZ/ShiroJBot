@@ -49,8 +49,7 @@ public class GuildEvents extends ListenerAdapter {
 		SQLite.addGuildToDB(event.getGuild());
 		Main.getInfo().getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
 			String msg = "Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".";
-			if (!c.getMessageById(c.getLatestMessageId()).complete().getContentRaw().equals(msg))
-				c.sendMessage(msg).queue();
+			c.sendMessage(msg).queue();
 		}));
 		Helper.log(this.getClass(), LogLevel.INFO, "Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".");
 	}
@@ -62,8 +61,7 @@ public class GuildEvents extends ListenerAdapter {
 		SQLite.removeGuildFromDB(gc);
 		Main.getInfo().getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
 			String msg = "Acabei de sair do servidor \"" + event.getGuild().getName() + "\".";
-			if (!c.getMessageById(c.getLatestMessageId()).complete().getContentRaw().equals(msg))
-				c.sendMessage(msg).queue();
+			c.sendMessage(msg).queue();
 		}));
 		Helper.log(this.getClass(), LogLevel.INFO, "Acabei de sair do servidor \"" + event.getGuild().getName() + "\".");
 	}
@@ -77,6 +75,12 @@ public class GuildEvents extends ListenerAdapter {
 			MessageChannel channel = message.getChannel();
 			Guild guild = message.getGuild();
 			String rawMessage = message.getContentRaw();
+
+			try {
+				SQLite.getMemberById(author.getId() + guild.getId());
+			} catch (NoResultException e) {
+				SQLite.addMemberToDB(member);
+			}
 
 			String prefix = "";
 			if (!Main.getInfo().isDev()) {
@@ -211,56 +215,55 @@ public class GuildEvents extends ListenerAdapter {
 			}
 
 			if (!found && !author.isBot()) {
+				MessageChannel lvlChannel = null;
 				try {
-					MessageChannel lvlChannel = null;
-					try {
-						lvlChannel = guild.getTextChannelById(SQLite.getGuildCanalLvlUp(guild.getId()));
-					} catch (Exception ignore) {
-					}
-					Map<String, Object> rawLvls = SQLite.getGuildCargosLvl(guild.getId()).entrySet().stream().filter(e -> SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= Integer.parseInt(e.getKey())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-					Map<Integer, Role> sortedLvls = new TreeMap<>();
-					rawLvls.forEach((k, v) -> sortedLvls.put(Integer.parseInt(k), guild.getRoleById((String) v)));
-					MessageChannel finalLvlChannel = lvlChannel;
-					sortedLvls.keySet().stream().max(Integer::compare).ifPresent(i -> {
-						if (SQLite.getGuildById(guild.getId()).getLvlNotif() && !member.getRoles().contains(sortedLvls.get(i))) {
-							guild.getController().addSingleRoleToMember(member, sortedLvls.get(i)).queue(s -> {
-								if (channel.getHistory().retrievePast(20).complete().stream().noneMatch(m -> m.getMentionedUsers().get(0) == author && m.getMentionedRoles().get(0) == sortedLvls.get(i))) {
-									if (finalLvlChannel != null) {
-										finalLvlChannel.sendMessage(author.getAsMention() + " ganhou o cargo " + sortedLvls.get(i).getAsMention() + " por alcançar o level " + i + "! :tada:").queue();
-									} else {
-										guild.getController().addSingleRoleToMember(member, sortedLvls.get(i)).queue();
-										channel.sendMessage(author.getAsMention() + " ganhou o cargo " + sortedLvls.get(i).getAsMention() + " por alcançar o level " + i + "! :tada:").queue();
-									}
+					lvlChannel = guild.getTextChannelById(SQLite.getGuildCanalLvlUp(guild.getId()));
+				} catch (Exception ignore) {
+				}
+				Map<String, Object> rawLvls = SQLite.getGuildCargosLvl(guild.getId()).entrySet().stream().filter(e -> SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= Integer.parseInt(e.getKey())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+				Map<Integer, Role> sortedLvls = new TreeMap<>();
+				rawLvls.forEach((k, v) -> sortedLvls.put(Integer.parseInt(k), guild.getRoleById((String) v)));
+				MessageChannel finalLvlChannel = lvlChannel;
+				sortedLvls.keySet().stream().max(Integer::compare).ifPresent(i -> {
+					if (SQLite.getGuildById(guild.getId()).getLvlNotif() && !member.getRoles().contains(sortedLvls.get(i))) {
+						guild.getController().addSingleRoleToMember(member, sortedLvls.get(i)).queue(s -> {
+							if (channel.getHistory().retrievePast(20).complete().stream().noneMatch(m -> m.getMentionedUsers().get(0) == author && m.getMentionedRoles().get(0) == sortedLvls.get(i))) {
+								if (finalLvlChannel != null) {
+									finalLvlChannel.sendMessage(author.getAsMention() + " ganhou o cargo " + sortedLvls.get(i).getAsMention() + " por alcançar o level " + i + "! :tada:").queue();
+								} else {
+									guild.getController().addSingleRoleToMember(member, sortedLvls.get(i)).queue();
+									channel.sendMessage(author.getAsMention() + " ganhou o cargo " + sortedLvls.get(i).getAsMention() + " por alcançar o level " + i + "! :tada:").queue();
 								}
-							});
-						}
-						rawLvls.remove(String.valueOf(i));
-						List<Role> list = new ArrayList<>();
-						rawLvls.forEach((k, v) -> list.add(guild.getRoleById((String) v)));
-						guild.getController().removeRolesFromMember(member, list).queue();
-					});
+							}
+						});
+					}
+					rawLvls.remove(String.valueOf(i));
+					List<Role> list = new ArrayList<>();
+					rawLvls.forEach((k, v) -> list.add(guild.getRoleById((String) v)));
+					guild.getController().removeRolesFromMember(member, list).queue();
+				});
 
-					if (Main.getInfo().getQueue().stream().anyMatch(u -> u[1].getId().equals(author.getId()))) {
-						final User[][] hw = {new User[2]};
-						Main.getInfo().getQueue().stream().filter(u -> u[1].getId().equals(author.getId())).findFirst().ifPresent(users -> hw[0] = users);
-						switch (message.getContentRaw().toLowerCase()) {
-							case "sim":
-								channel.sendMessage("Eu os declaro husbando e waifu, pode trancar ela no porão agora!").queue();
-								MySQL.saveMemberWaifu(SQLite.getMemberById(hw[0][0].getId() + guild.getId()), hw[0][1]);
-								SQLite.saveMemberWaifu(SQLite.getMemberById(hw[0][0].getId() + guild.getId()), hw[0][1]);
-								MySQL.saveMemberWaifu(SQLite.getMemberById(hw[0][1].getId() + guild.getId()), hw[0][0]);
-								SQLite.saveMemberWaifu(SQLite.getMemberById(hw[0][1].getId() + guild.getId()), hw[0][0]);
-								Main.getInfo().getQueue().removeIf(u -> u[0].getId().equals(author.getId()) || u[1].getId().equals(author.getId()));
-								break;
-							case "não":
-								channel.sendMessage("Pois é, hoje não tivemos um casamento, que pena.").queue();
-								Main.getInfo().getQueue().removeIf(u -> u[0].getId().equals(author.getId()) || u[1].getId().equals(author.getId()));
-								break;
-						}
+				if (Main.getInfo().getQueue().stream().anyMatch(u -> u[1].getId().equals(author.getId()))) {
+					final User[][] hw = {new User[2]};
+					Main.getInfo().getQueue().stream().filter(u -> u[1].getId().equals(author.getId())).findFirst().ifPresent(users -> hw[0] = users);
+					switch (message.getContentRaw().toLowerCase()) {
+						case "sim":
+							channel.sendMessage("Eu os declaro husbando e waifu, pode trancar ela no porão agora!").queue();
+							MySQL.saveMemberWaifu(SQLite.getMemberById(hw[0][0].getId() + guild.getId()), hw[0][1]);
+							SQLite.saveMemberWaifu(SQLite.getMemberById(hw[0][0].getId() + guild.getId()), hw[0][1]);
+							MySQL.saveMemberWaifu(SQLite.getMemberById(hw[0][1].getId() + guild.getId()), hw[0][0]);
+							SQLite.saveMemberWaifu(SQLite.getMemberById(hw[0][1].getId() + guild.getId()), hw[0][0]);
+							Main.getInfo().getQueue().removeIf(u -> u[0].getId().equals(author.getId()) || u[1].getId().equals(author.getId()));
+							break;
+						case "não":
+							channel.sendMessage("Pois é, hoje não tivemos um casamento, que pena.").queue();
+							Main.getInfo().getQueue().removeIf(u -> u[0].getId().equals(author.getId()) || u[1].getId().equals(author.getId()));
+							break;
 					}
-					if (SQLite.getGuildNoLinkChannels(guild.getId()).contains(channel.getId()) && Helper.findURL(message.getContentRaw())) {
-						message.delete().reason("Mensagem possui um URL").queue(m -> channel.sendMessage(member.getAsMention() + ", é proibido postar links neste canal!").queue());
-					}
+				}
+				if (SQLite.getGuildNoLinkChannels(guild.getId()).contains(channel.getId()) && Helper.findURL(message.getContentRaw())) {
+					message.delete().reason("Mensagem possui um URL").queue(m -> channel.sendMessage(member.getAsMention() + ", é proibido postar links neste canal!").queue());
+				}
 					/*if (SQLite.getGuildIaMode(guild.getId()) && channel.getId().equals(SQLite.getGuildCanalIA(guild.getId()))) {
 						try {
 							MessageInput msg = new MessageInput();
@@ -278,23 +281,20 @@ public class GuildEvents extends ListenerAdapter {
 							Helper.log(this.getClass(), LogLevel.WARN, e.toString());
 						}
 					}*/
-					try {
-						com.kuuhaku.model.Member m = SQLite.getMemberById(member.getUser().getId() + member.getGuild().getId());
-						if (m.getMid() == null) SQLite.saveMemberMid(m, author);
-						boolean lvlUp = m.addXp();
-						if (lvlUp && SQLite.getGuildById(guild.getId()).getLvlNotif()) {
-							if (lvlChannel != null) {
-								lvlChannel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
-							} else
-								channel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
-						}
-						SQLite.saveMemberToDB(m);
-					} catch (NoResultException e) {
-						SQLite.addMemberToDB(member);
-					} catch (InsufficientPermissionException ignore) {
+				try {
+					com.kuuhaku.model.Member m = SQLite.getMemberById(member.getUser().getId() + member.getGuild().getId());
+					if (m.getMid() == null) SQLite.saveMemberMid(m, author);
+					boolean lvlUp = m.addXp();
+					if (lvlUp && SQLite.getGuildById(guild.getId()).getLvlNotif()) {
+						if (lvlChannel != null) {
+							lvlChannel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
+						} else
+							channel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
 					}
+					SQLite.saveMemberToDB(m);
 				} catch (NoResultException e) {
 					SQLite.addMemberToDB(member);
+				} catch (InsufficientPermissionException ignore) {
 				}
 			}
 		}

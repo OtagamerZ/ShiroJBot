@@ -18,7 +18,7 @@ public class JibrilEvents extends ListenerAdapter {
 	public void onGuildJoin(GuildJoinEvent event) {
 		Main.getInfo().getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
 			String msg = "Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".";
-			if (!c.getMessageById(c.getLatestMessageId()).complete().getContentRaw().equals(msg)) c.sendMessage(msg).queue();
+			c.sendMessage(msg).queue();
 		}));
 		Helper.log(this.getClass(), LogLevel.INFO, "Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".");
 	}
@@ -27,7 +27,7 @@ public class JibrilEvents extends ListenerAdapter {
 	public void onGuildLeave(GuildLeaveEvent event) {
 		Main.getInfo().getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
 			String msg = "Acabei de sair do servidor \"" + event.getGuild().getName() + "\".";
-			if (!c.getMessageById(c.getLatestMessageId()).complete().getContentRaw().equals(msg)) c.sendMessage(msg).queue();
+			c.sendMessage(msg).queue();
 		}));
 		Helper.log(this.getClass(), LogLevel.INFO, "Acabei de sair do servidor \"" + event.getGuild().getName() + "\".");
 	}
