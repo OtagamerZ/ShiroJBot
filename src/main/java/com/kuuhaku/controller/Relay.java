@@ -93,11 +93,6 @@ public class Relay extends SQLite {
 			if (!s.getId().equals(k))
 				try {
 					Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(eb.build()).queue();
-					try {
-						source.delete().queue();
-						source.getChannel().sendMessage(eb.build()).queue();
-					} catch (InsufficientPermissionException ignore) {
-					}
 				} catch (NullPointerException e) {
 					SQLite.getGuildById(k).setCanalRelay(null);
 				} catch (InsufficientPermissionException ex) {
@@ -112,6 +107,11 @@ public class Relay extends SQLite {
 					Helper.log(this.getClass(), LogLevel.ERROR, ex.toString() + "\n" + k);
 				}
 		});
+		try {
+			source.delete().queue();
+			source.getChannel().sendMessage(eb.build()).queue();
+		} catch (InsufficientPermissionException ignore) {
+		}
 	}
 
 	public MessageEmbed getRelayInfo(guildConfig gc) {
