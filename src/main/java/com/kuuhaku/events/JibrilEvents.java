@@ -2,9 +2,7 @@ package com.kuuhaku.events;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.MySQL;
-import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.RelayBlockList;
-import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
@@ -56,21 +54,21 @@ public class JibrilEvents extends ListenerAdapter {
 					if (Helper.findURL(msg[i])) msg[i] = "`LINK BLOQUEADO`";
 				}
 			}
-			if (String.join(" ", msg).length() < 2048) {
+			if (String.join(" ", msg).length() < 2000) {
 				try {
 					if (MySQL.getTagById(event.getAuthor().getId()).isVerified() && event.getMessage().getAttachments().size() > 0) {
 						try {
-							Main.getRelay().relayMessage(String.join(" ", msg), event.getMember(), event.getGuild(), event.getMessage().getAttachments().get(0).getUrl());
+							Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), event.getMessage().getAttachments().get(0).getUrl());
 						} catch (Exception e) {
-							Main.getRelay().relayMessage(String.join(" ", msg), event.getMember(), event.getGuild(), null);
+							Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), null);
 						}
 						return;
 					}
-					Main.getRelay().relayMessage(String.join(" ", msg), event.getMember(), event.getGuild(), null);
+					Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), null);
 				} catch (NoResultException e) {
-					Main.getRelay().relayMessage(String.join(" ", msg), event.getMember(), event.getGuild(), null);
+					Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), null);
 				}
-			} else event.getChannel().sendMessage(":x: | Mensagem muito longa! (Max. 2048 letras)").queue();
+			} else event.getChannel().sendMessage(":x: | Mensagem muito longa! (Max. 2000 caractéres)").queue();
 		}
 	}
 }
