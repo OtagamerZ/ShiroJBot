@@ -38,6 +38,7 @@ public class Member {
 	private String bio = "";
 	@Column(columnDefinition = "String default \"\"")
 	private String waifu = "";
+	@Column(columnDefinition = "boolean default false")
 	private boolean markForDelete;
 
 	public Member() {
