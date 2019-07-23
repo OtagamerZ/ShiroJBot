@@ -76,12 +76,6 @@ public class GuildEvents extends ListenerAdapter {
 			Guild guild = message.getGuild();
 			String rawMessage = message.getContentRaw();
 
-			try {
-				SQLite.getMemberById(author.getId() + guild.getId());
-			} catch (NoResultException e) {
-				SQLite.addMemberToDB(member);
-			}
-
 			String prefix = "";
 			if (!Main.getInfo().isDev()) {
 				try {
@@ -99,6 +93,12 @@ public class GuildEvents extends ListenerAdapter {
 			}
 
 			if (author.isBot() && !Main.getInfo().getSelfUser().getId().equals(author.getId())) return;
+
+			try {
+				SQLite.getMemberById(author.getId() + guild.getId());
+			} catch (NoResultException e) {
+				SQLite.addMemberToDB(member);
+			}
 
 		/*
 		if(event.getPrivateChannel()!=null) {
