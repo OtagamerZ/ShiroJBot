@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataDump {
-    private List<CustomAnswers> caDump;
-    private List<Member> mDump;
-    private List<guildConfig> gcDump;
+	private final List<CustomAnswers> caDump;
+	private final List<Member> mDump;
+	private final List<guildConfig> gcDump;
 
     public DataDump(List<CustomAnswers> caDump, List<Member> mDump, List<guildConfig> gcDump) {
         this.caDump = caDump;

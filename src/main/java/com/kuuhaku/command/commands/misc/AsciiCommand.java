@@ -20,18 +20,19 @@ public class AsciiCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		
 		if(args.length == 0) { channel.sendMessage(":x: | Você necessita de fornecer um texto para converter em ascii..").queue(); return; }
-		
-        String query = "";
+
+		StringBuilder query = new StringBuilder();
         for(String arg : args) {
-            query += arg + "+ ";
-            query = query.substring(0, query.length()-1);
+			query.append(arg).append("+ ");
+			query = new StringBuilder(query.substring(0, query.length() - 1));
         }
         
         OkHttpClient caller = new OkHttpClient();
         Request request = new Request.Builder().url("http://artii.herokuapp.com/make?text=" + query).build();
         try {
             Response response = caller.newCall(request).execute();
-            channel.sendMessage(":warning: | O texto ascii pode parecer deformado devido ao tamanho do seu ecrã!\n```\n" + response.body().string() + "\n```").queue();
+			assert response.body() != null;
+			channel.sendMessage(":warning: | O texto ascii pode parecer deformado devido ao tamanho do seu ecrã!\n```\n" + response.body().string() + "\n```").queue();
         } catch (IOException e) {
         	channel.sendMessage(":x: | Ocorreu um erro ao contactar a API.").queue();
         }

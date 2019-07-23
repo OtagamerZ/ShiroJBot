@@ -18,7 +18,6 @@
 package com.kuuhaku.command.commands.Reactions;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.command.Category;
 import com.kuuhaku.model.ReactionsList;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.core.entities.*;
@@ -28,7 +27,7 @@ public class BiteReaction extends Reaction {
 	private static boolean answer = false;
 
 	public BiteReaction(boolean isAnswer) {
-		super("morder", new String[]{"moider", "bite", "moide"}, "Morde alguém.", Category.FUN);
+		super("morder", new String[]{"moider", "bite", "moide"}, "Morde alguém.");
 		answer = isAnswer;
 	}
 

@@ -34,7 +34,7 @@ import java.util.List;
 
 public class CommandManager {
 
-    private List<Command> commands;
+	private final List<Command> commands;
 
     public CommandManager() {
         commands = new ArrayList<Command>() {{

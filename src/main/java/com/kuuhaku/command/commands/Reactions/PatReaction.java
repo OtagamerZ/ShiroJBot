@@ -18,7 +18,6 @@
 package com.kuuhaku.command.commands.Reactions;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.command.Category;
 import com.kuuhaku.model.ReactionsList;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.core.entities.*;
@@ -28,7 +27,7 @@ public class PatReaction extends Reaction {
 	private static boolean answer = false;
 
 	public PatReaction(boolean isAnswer) {
-		super("cafuné", new String[]{"cafunhé", "pat", "cafu"}, "Faz cafuné em alguém.", Category.FUN);
+		super("cafuné", new String[]{"cafunhé", "pat", "cafu"}, "Faz cafuné em alguém.");
 		answer = isAnswer;
 	}
 

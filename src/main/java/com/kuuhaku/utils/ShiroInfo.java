@@ -17,8 +17,6 @@
 
 package com.kuuhaku.utils;
 
-import com.ibm.cloud.sdk.core.service.security.IamOptions;
-import com.ibm.watson.assistant.v1.Assistant;
 import com.ibm.watson.assistant.v1.model.Context;
 import com.ibm.watson.assistant.v1.model.MessageResponse;
 import net.dv8tion.jda.core.JDA;
@@ -34,7 +32,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.function.Supplier;
 
 @SuppressWarnings("localvariable")
 public class ShiroInfo {
@@ -63,7 +60,7 @@ public class ShiroInfo {
 	private static final DiscordBotListAPI dbl = new DiscordBotListAPI.Builder().token(System.getenv("DBL_TOKEN")).botId("572413282653306901").build();
 	//private static final IamOptions options = new IamOptions.Builder().apiKey(System.getenv("AI_TOKEN")).build();
 	//private static final Assistant ai = new Assistant("2019-06-27", options);
-	public static final List<User[]> queue = new ArrayList<>();
+	private static final List<User[]> queue = new ArrayList<>();
 	private static final Map<String, Integer[]> polls = new HashMap<>();
 	private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(5);
 

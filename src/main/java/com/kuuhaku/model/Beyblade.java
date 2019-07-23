@@ -19,9 +19,6 @@ package com.kuuhaku.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 @Entity

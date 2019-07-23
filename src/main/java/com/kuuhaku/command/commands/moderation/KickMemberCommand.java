@@ -19,12 +19,9 @@ package com.kuuhaku.command.commands.moderation;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.SQLite;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
-
-import javax.persistence.NoResultException;
 
 public class KickMemberCommand extends Command {
 

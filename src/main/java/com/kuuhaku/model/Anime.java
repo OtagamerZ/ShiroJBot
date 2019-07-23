@@ -27,12 +27,22 @@ import java.util.List;
 
 @SuppressWarnings("deprecation")
 public class Anime {
-    private int idMal;
-    private String tRomaji, tEnglish, status, sDate, duration, cImage, creator, studio, naeEpisode, naeAiringAt, description;
-    private List<Object> genres;
+    private final int idMal;
+    private final String tRomaji;
+    private String tEnglish;
+    private final String status;
+    private final String sDate;
+    private final String duration;
+    private final String cImage;
+    private String creator;
+    private String studio;
+    private String naeEpisode;
+    private String naeAiringAt;
+    private final String description;
+    private final List<Object> genres;
     private Color cColor;
-    private float score;
-    private int popularity;
+    private final float score;
+    private final int popularity;
 
     public Anime(JSONObject data) {
         JSONObject dData = data.getJSONObject("data");

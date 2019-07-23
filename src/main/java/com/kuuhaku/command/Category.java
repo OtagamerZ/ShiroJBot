@@ -30,10 +30,10 @@ public enum Category {
 	INFO("Informação", "Comandos de informação", PrivilegeLevel.USER),
 	BEYBLADE("Beyblade", "Comandos de Beyblade.", PrivilegeLevel.USER)
 	;
-	
-	private String name;
-	private String description;
-	private PrivilegeLevel privilegeLevel;
+
+	private final String name;
+	private final String description;
+	private final PrivilegeLevel privilegeLevel;
 	private boolean enabled = true;
 	
 	Category(String name, String description, PrivilegeLevel privilegeLevel) {
@@ -59,8 +59,8 @@ public enum Category {
 	public PrivilegeLevel getPrivilegeLevel() {
 		return privilegeLevel;
 	}
-	
-	private ArrayList<Command> cmds;
+
+	private final ArrayList<Command> cmds;
 	
     void addCommand(Command cmd) {
 		if(cmd.getCategory() == this)

@@ -18,7 +18,6 @@
 package com.kuuhaku.command.commands.Reactions;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.command.Category;
 import com.kuuhaku.model.ReactionsList;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.core.entities.*;
@@ -28,7 +27,7 @@ public class SlapReaction extends Reaction {
 	private static boolean answer = false;
 
 	public SlapReaction(boolean isAnswer) {
-		super("estapear", new String[]{"tapa", "slap", "baka"}, "Dá um tapa em alguém.", Category.FUN);
+		super("estapear", new String[]{"tapa", "slap", "baka"}, "Dá um tapa em alguém.");
 		answer = isAnswer;
 	}
 
