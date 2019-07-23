@@ -54,8 +54,8 @@ import java.util.List;
 import java.util.Map;
 
 public class JDAEvents extends ListenerAdapter {
-	public static List<DuelData> dd = new ArrayList<>();
-	public static Map<String, DuelData> duels = new HashMap<>();
+	public static final List<DuelData> dd = new ArrayList<>();
+	public static final Map<String, DuelData> duels = new HashMap<>();
 
 	@Override
 	public void onReady(ReadyEvent event) {

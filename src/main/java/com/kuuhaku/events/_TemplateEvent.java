@@ -19,7 +19,7 @@ package com.kuuhaku.events;
 
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
-public class _TemplateEvent extends ListenerAdapter {
+class _TemplateEvent extends ListenerAdapter {
 
 //	@Override
 //	public void onEvento(EventoEvent event) {

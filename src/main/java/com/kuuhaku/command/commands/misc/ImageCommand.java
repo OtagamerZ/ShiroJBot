@@ -71,7 +71,7 @@ public class ImageCommand extends Command {
                 channel.sendMessage(eb.build()).queue();
             } catch (IOException | JSONException e) {
                 m.editMessage(":x: | Humm...não achei nenhuma imagem com essas tags, talvez você tenha escrito algo errado?").queue();
-                Helper.log(this.getClass(), LogLevel.ERROR, e.toString());
+                Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
             }
         });
     }

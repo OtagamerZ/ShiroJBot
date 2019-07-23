@@ -18,7 +18,6 @@
 package com.kuuhaku.command.commands.Reactions;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.command.Category;
 import com.kuuhaku.model.ReactionsList;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.core.entities.*;
@@ -28,7 +27,7 @@ public class PunchReaction extends Reaction {
 	private static boolean answer = false;
 
 	public PunchReaction(boolean isAnswer) {
-		super("socar", new String[]{"chega", "tomaessa", "punch"}, "Soca alguém.", Category.FUN);
+		super("socar", new String[]{"chega", "tomaessa", "punch"}, "Soca alguém.");
 		answer = isAnswer;
 	}
 

@@ -1,6 +1,5 @@
 package com.kuuhaku.command.commands.misc;
 
-import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.SQLite;

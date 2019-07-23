@@ -72,6 +72,7 @@ public class Helper {
 		return PrivilegeLevel.USER;
 	}
 
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 	public static boolean hasPermission(Member member, PrivilegeLevel privilegeLevel) {
 		return getPrivilegeLevel(member).hasAuthority(privilegeLevel);
 	}
@@ -550,7 +551,7 @@ public class Helper {
 
 			g.getTextChannelById(gc.getLogChannel()).sendMessage(eb.build()).queue();
 		} catch (Exception e) {
-			log(Helper.class, LogLevel.WARN, e.toString());
+			log(Helper.class, LogLevel.WARN, e + " | " + e.getStackTrace()[0]);
 		}
 	}
 }

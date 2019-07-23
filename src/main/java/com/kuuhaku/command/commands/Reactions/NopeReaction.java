@@ -17,7 +17,6 @@
 
 package com.kuuhaku.command.commands.Reactions;
 
-import com.kuuhaku.command.Category;
 import com.kuuhaku.model.ReactionsList;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.core.entities.*;
@@ -25,7 +24,7 @@ import net.dv8tion.jda.core.events.Event;
 
 public class NopeReaction extends Reaction {
 	public NopeReaction() {
-		super("nope", new String[]{"sqn", "hojenão", "esquiva"}, "Evita a tentativa de alguém.", Category.FUN);
+		super("nope", new String[]{"sqn", "hojenão", "esquiva"}, "Evita a tentativa de alguém.");
 	}
 
 	@Override

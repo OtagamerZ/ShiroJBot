@@ -20,7 +20,7 @@ package com.kuuhaku.model;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 
-public class Badges {
+class Badges {
     public static String getBadges(boolean[] conquistas) {
         String conq = "";
         conq += (conquistas[0] ? ":white_check_mark:" : ":x:") + " 0 - Moderador!\n\n";

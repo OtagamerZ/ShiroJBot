@@ -17,7 +17,6 @@
 
 package com.kuuhaku.command.commands.Reactions;
 
-import com.kuuhaku.command.Category;
 import com.kuuhaku.model.ReactionsList;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.core.entities.*;
@@ -25,7 +24,7 @@ import net.dv8tion.jda.core.events.Event;
 
 public class RunReaction extends Reaction {
 	public RunReaction() {
-		super("corre", new String[]{"saisai", "run", "foge"}, "Foge de algo.", Category.FUN);
+		super("corre", new String[]{"saisai", "run", "foge"}, "Foge de algo.");
 	}
 
 	@Override

@@ -39,14 +39,14 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.core.entities.User;
 
-public abstract class Reaction extends Command{
+abstract class Reaction extends Command {
     private User user;
     private User target;
     private String[] reaction;
     private String[] selfTarget;
 
-    Reaction(String name, String[] aliases, String description, Category category) {
-        super(name, aliases, description, category);
+	Reaction(String name, String[] aliases, String description) {
+		super(name, aliases, description, Category.FUN);
     }
 
     public User getUser() {
@@ -77,11 +77,11 @@ public abstract class Reaction extends Command{
         this.reaction = reaction;
     }
 
-    public String[] getSelfTarget() {
+	String[] getSelfTarget() {
         return selfTarget;
     }
 
-    public int getSelfTargetLength() {
+	int getSelfTargetLength() {
         return selfTarget.length;
     }
 
