@@ -22,13 +22,13 @@ import net.dv8tion.jda.core.events.Event;
 
 public abstract class Command {
 
-	private String name;
-	private String[] aliases;
-	private String usage;
-	private String description;
-	private Category category;
-	
-	public Command(String name, String description, Category category) {
+	private final String name;
+	private final String[] aliases;
+	private final String usage;
+	private final String description;
+	private final Category category;
+
+	protected Command(String name, String description, Category category) {
 		this.name = name;
 		this.aliases = new String[]{};
 		this.usage = null;
@@ -36,8 +36,8 @@ public abstract class Command {
 		this.category = category;
 		this.category.addCommand(this);
 	}
-	
-	public Command(String name, String[] aliases, String description, Category category) {
+
+	protected Command(String name, String[] aliases, String description, Category category) {
 		this.name = name;
 		this.aliases = aliases;
 		this.usage = null;
@@ -45,8 +45,8 @@ public abstract class Command {
 		this.category = category;
 		this.category.addCommand(this);
 	}
-	
-	public Command(String name, String usage, String description, Category category) {
+
+	protected Command(String name, String usage, String description, Category category) {
 		this.name = name;
 		this.aliases = new String[]{};
 		this.usage = usage;
@@ -54,8 +54,8 @@ public abstract class Command {
 		this.category = category;
 		this.category.addCommand(this);
 	}
-	
-	public Command(String name, String[] aliases, String usage, String description, Category category) {
+
+	protected Command(String name, String[] aliases, String usage, String description, Category category) {
 		this.name = name;
 		this.aliases = aliases;
 		this.usage = usage;

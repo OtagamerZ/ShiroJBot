@@ -21,7 +21,7 @@ public enum PrivilegeLevel {
 
     USER(0), PARTNER(1), MOD(2), DEV(3), NIICHAN(4);
 
-	private Integer authority;
+	private final Integer authority;
 
 	PrivilegeLevel(int authority) {
 		this.authority = authority;

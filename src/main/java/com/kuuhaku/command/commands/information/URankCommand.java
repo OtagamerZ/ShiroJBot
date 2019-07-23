@@ -22,6 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
@@ -72,7 +73,7 @@ public class URankCommand extends Command {
 				channel.sendMessage(eb.build()).queue();
 			} catch (NullPointerException e) {
 				m.editMessage(":x: | Erro, o ranking global está com problemas no momento, já estamos trabalhando em uma solução.").queue();
-				e.printStackTrace();
+				Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
 			}
 		});
 	}

@@ -278,7 +278,7 @@ public class GuildEvents extends ListenerAdapter {
 								Helper.typeMessage(channel, responseGeneric.get(0).getText());
 							}
 						} catch (ServiceResponseException e) {
-							Helper.log(this.getClass(), LogLevel.WARN, e.toString());
+							Helper.log(this.getClass(), LogLevel.WARN, e + " | " + e.getStackTrace()[0]);
 						}
 					}*/
 				try {

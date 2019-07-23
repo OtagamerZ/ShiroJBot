@@ -38,8 +38,10 @@ import com.kuuhaku.controller.MySQL;
 import net.dv8tion.jda.core.entities.User;
 
 public class DuelData {
-    private User p1, p2;
-    private Beyblade b1, b2;
+	private final User p1;
+	private final User p2;
+	private final Beyblade b1;
+	private final Beyblade b2;
     transient private boolean d1, d2;
     transient private boolean s1, s2;
     transient private int m1, m2;

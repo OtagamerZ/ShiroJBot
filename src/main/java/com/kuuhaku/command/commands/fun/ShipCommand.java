@@ -3,6 +3,7 @@ package com.kuuhaku.command.commands.fun;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.*;
@@ -76,7 +77,7 @@ public class ShipCommand extends Command {
 
             channel.sendFile(baos.toByteArray(), "ship.png", mb.build()).queue();
         } catch (IOException e) {
-            e.printStackTrace();
+            Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
         }
     }
 

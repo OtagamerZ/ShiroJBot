@@ -21,6 +21,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Guild;
 
@@ -49,7 +50,7 @@ public class Profile {
 		try {
 			FONT = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(Profile.class.getClassLoader().getResourceAsStream("font/Doreking.ttf")));
 		} catch (FontFormatException | IOException e) {
-			e.printStackTrace();
+			Helper.log(Profile.class, LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
 		}
 	}
 

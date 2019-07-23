@@ -18,7 +18,6 @@
 package com.kuuhaku.command.commands.Reactions;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.command.Category;
 import com.kuuhaku.model.ReactionsList;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.core.entities.*;
@@ -28,7 +27,7 @@ public class KissReaction extends Reaction {
 	private static boolean answer = false;
 
 	public KissReaction(boolean isAnswer) {
-		super("beijar", new String[]{"beijo", "kiss", "smac"}, "Beija alguém.", Category.FUN);
+		super("beijar", new String[]{"beijo", "kiss", "smac"}, "Beija alguém.");
 		answer = isAnswer;
 	}
 

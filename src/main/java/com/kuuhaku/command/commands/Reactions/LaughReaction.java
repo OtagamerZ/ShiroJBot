@@ -17,7 +17,6 @@
 
 package com.kuuhaku.command.commands.Reactions;
 
-import com.kuuhaku.command.Category;
 import com.kuuhaku.model.ReactionsList;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.core.entities.*;
@@ -25,7 +24,7 @@ import net.dv8tion.jda.core.events.Event;
 
 public class LaughReaction extends Reaction {
 	public LaughReaction() {
-		super("rir", new String[]{"kkk", "laugh", "aiai"}, "Ri.", Category.FUN);
+		super("rir", new String[]{"kkk", "laugh", "aiai"}, "Ri.");
 	}
 
 	@Override

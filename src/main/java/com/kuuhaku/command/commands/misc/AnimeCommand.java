@@ -110,7 +110,7 @@ public class AnimeCommand extends Command {
                 channel.sendMessage(eb.build()).queue();
             } catch (IOException e) {
                 m.editMessage(":x: | Humm...não achei nenhum anime com esse nome, talvez você tenha escrito algo errado?").queue();
-                Helper.log(this.getClass(), LogLevel.ERROR, e.toString());
+                Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
             }
         });
     }

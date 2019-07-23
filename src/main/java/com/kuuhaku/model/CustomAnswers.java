@@ -17,15 +17,13 @@
 
 package com.kuuhaku.model;
 
-import org.hibernate.annotations.Type;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
 public class CustomAnswers {
     @Id
-    private Long id = System.currentTimeMillis();
+	private final Long id = System.currentTimeMillis();
     private String guildID;
     private String gatilho;
     private String answer;

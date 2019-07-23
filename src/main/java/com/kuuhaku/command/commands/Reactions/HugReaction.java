@@ -18,7 +18,6 @@
 package com.kuuhaku.command.commands.Reactions;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.command.Category;
 import com.kuuhaku.model.ReactionsList;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.core.entities.*;
@@ -28,7 +27,7 @@ public class HugReaction extends Reaction {
 	private static boolean answer = false;
 
 	public HugReaction(boolean isAnswer) {
-		super("abraçar", new String[]{"abracar", "hug", "vemca"}, "Abraça alguém.", Category.FUN);
+		super("abraçar", new String[]{"abracar", "hug", "vemca"}, "Abraça alguém.");
 		answer = isAnswer;
 	}
 

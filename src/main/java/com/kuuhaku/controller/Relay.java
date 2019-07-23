@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Relay extends SQLite {
-	private Map<String, String> relays = new HashMap<>();
+	private final Map<String, String> relays = new HashMap<>();
 	private int relaySize;
 	private EmbedBuilder eb;
 
@@ -104,7 +104,7 @@ public class Relay extends SQLite {
 							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI) ? "✅" : "❌") + " Usar emojis externos\n" +
 							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_MANAGE) ? "✅" : "❌") + " Gerenciar mensagens" +
 							"```").queue());
-					Helper.log(this.getClass(), LogLevel.ERROR, ex.toString() + "\n" + k);
+					Helper.log(this.getClass(), LogLevel.ERROR, ex + " | " + ex.getStackTrace()[0]);
 				}
 		});
 		try {
