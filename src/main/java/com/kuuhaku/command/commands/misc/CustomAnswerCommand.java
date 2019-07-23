@@ -12,9 +12,7 @@ import net.dv8tion.jda.core.events.Event;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class CustomAnswerCommand extends Command {
 

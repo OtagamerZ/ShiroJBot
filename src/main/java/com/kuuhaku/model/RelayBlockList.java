@@ -8,7 +8,7 @@ import java.awt.*;
 import java.util.List;
 
 public class RelayBlockList {
-	private static List<String> blockedIDs = MySQL.blockedList();
+	private static final List<String> blockedIDs = MySQL.blockedList();
 
 	public static void blockID(String id, String reason) {
 		EmbedBuilder eb = new EmbedBuilder();

@@ -4,6 +4,8 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.guildConfig;
+import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.LogLevel;
 import com.kuuhaku.utils.Settings;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
@@ -25,7 +27,7 @@ public class SettingsCommand extends Command {
                 Settings.embedConfig(message);
             } catch (IOException err) {
                 channel.sendMessage(":x: | Ocorreu um erro durante o processo, os meus developers já foram notificados.").queue();
-                err.printStackTrace();
+                Helper.log(this.getClass(), LogLevel.ERROR, err + " | " + err.getStackTrace()[0]);
                 return;
             }
 
@@ -111,7 +113,7 @@ public class SettingsCommand extends Command {
                     Settings.embedConfig(message);
                 } catch (IOException err) {
                     channel.sendMessage(":x: | Ocorreu um erro durante o processo, os meus developers já foram notificados.").queue();
-                    err.printStackTrace();
+                    Helper.log(this.getClass(), LogLevel.ERROR, err + " | " + err.getStackTrace()[0]);
                 }
         }
     }

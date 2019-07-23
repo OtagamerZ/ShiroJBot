@@ -17,7 +17,6 @@
 
 package com.kuuhaku.model;
 
-import com.kuuhaku.Main;
 import net.dv8tion.jda.core.entities.User;
 
 import javax.persistence.Column;

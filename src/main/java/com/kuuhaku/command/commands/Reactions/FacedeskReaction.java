@@ -17,7 +17,6 @@
 
 package com.kuuhaku.command.commands.Reactions;
 
-import com.kuuhaku.command.Category;
 import com.kuuhaku.model.ReactionsList;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.core.entities.*;
@@ -25,7 +24,7 @@ import net.dv8tion.jda.core.events.Event;
 
 public class FacedeskReaction extends Reaction {
     public FacedeskReaction() {
-        super("facedesk", new String[]{"mds", "ahnão", "nss"}, "Reage a algo quem não é possível que alguém tenha feito.", Category.FUN);
+		super("facedesk", new String[]{"mds", "ahnão", "nss"}, "Reage a algo quem não é possível que alguém tenha feito.");
     }
 
     @Override

@@ -23,7 +23,7 @@ public class ProfileCommand extends Command {
                 channel.sendMessage(":video_game: Perfil de " + author.getAsMention()).addFile(Profile.makeProfile(member, guild).toByteArray(), "perfil.png").queue(s -> m.delete().queue());
             } catch (IOException e) {
                 m.editMessage(":x: | Epa, teve um errinho aqui enquanto eu gerava o perfil, meus criadores já foram notificados!").queue();
-                Helper.log(this.getClass(), LogLevel.ERROR, e.toString());
+                Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
             }
         });
     }
