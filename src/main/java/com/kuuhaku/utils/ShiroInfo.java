@@ -19,6 +19,7 @@ package com.kuuhaku.utils;
 
 import com.ibm.watson.assistant.v1.model.Context;
 import com.ibm.watson.assistant.v1.model.MessageResponse;
+import com.kuuhaku.model.DuelData;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Role;
@@ -63,6 +64,8 @@ public class ShiroInfo {
 	private static final List<User[]> queue = new ArrayList<>();
 	private static final Map<String, Integer[]> polls = new HashMap<>();
 	private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(5);
+	public static final List<DuelData> dd = new ArrayList<>();
+	public static final Map<String, DuelData> duels = new HashMap<>();
 
 	private JDA api;
 	private long startTime;
