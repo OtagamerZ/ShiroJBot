@@ -34,14 +34,12 @@ public class DuelCommand extends Command {
 			if (message.getMentionedUsers().size() > 0) {
 				if (MySQL.getBeybladeById(message.getMentionedUsers().get(0).getId()) != null) {
 					DuelData dd = new DuelData(message.getAuthor(), message.getMentionedUsers().get(0));
-					if (ShiroInfo.duels.containsValue(dd))
+					if (ShiroInfo.duels.values().stream().anyMatch(tryDD -> (tryDD.getP1() == dd.getP1() && tryDD.getP2() == dd.getP2()) || (tryDD.getP1() == dd.getP2() && tryDD.getP2() == dd.getP1())))
 						m.editMessage("Você já possui um duelo pendente!").queue();
 					else
 						m.editMessage(message.getMentionedMembers().get(0).getAsMention() + ", você foi desafiado a um duelo de Beyblades por " + message.getAuthor().getAsMention() + ". Se deseja aceitar, clique no botão abaixo:").queue(ms -> {
 							ms.addReaction("\u2694").queue();
 							ShiroInfo.duels.put(ms.getId(), dd);
-							System.out.println("Desafio feito");
-							System.out.println(ShiroInfo.duels.toString());
 						});
 				} else {
 					m.editMessage("Este usuário ainda não possui uma Beyblade.").queue();
