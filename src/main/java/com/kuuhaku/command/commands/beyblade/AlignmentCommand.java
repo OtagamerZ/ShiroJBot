@@ -11,6 +11,7 @@ import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 
 import java.util.Objects;
+import java.util.Random;
 
 public class AlignmentCommand extends Command {
 
@@ -42,13 +43,13 @@ public class AlignmentCommand extends Command {
                 switch (args[0].trim().toLowerCase()) {
                     case "tigre":
                     case "tiger":
-                        bb.setSpecial(10 + Helper.clamp(Helper.rng(2), 1, 2));
+                        bb.setSpecial(10 + Math.round(1f + new Random().nextFloat()));
                         System.out.println(bb.getSpecial());
                         bb.takePoints((bb.getS() == null ? 150 : 300));
                         break;
                     case "dragão":
                     case "dragon":
-                        bb.setSpecial(20 + Helper.clamp(Helper.rng(2), 1, 2));
+                        bb.setSpecial(20 + Math.round(1f + new Random().nextFloat()));
                         System.out.println(bb.getSpecial());
                         bb.takePoints((bb.getS() == null ? 150 : 300));
                         break;
