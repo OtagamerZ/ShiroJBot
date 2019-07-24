@@ -54,7 +54,7 @@ public class Special {
         this.diff = diff;
     }
 
-    public static Special getSpecial(int s) {
+    static Special getSpecial(int s) {
         switch (s) {
             case 11: return SpeedType.TwinTigerShiningBolt();
             case 12: return SpeedType.TwinTigerTigerWhip();

@@ -57,6 +57,7 @@ public class AlignmentCommand extends Command {
                         return;
                 }
 				m.editMessage("Seu alinhamento foi trocado para **" + bb.getS().getType() + "**, e o especial concedido a você foi: " + bb.getS().getName()).queue();
+                MySQL.sendBeybladeToDB(bb);
             } else {
                 m.editMessage(":x: | Você não possui pontos de combate suficiente!").queue();
             }
