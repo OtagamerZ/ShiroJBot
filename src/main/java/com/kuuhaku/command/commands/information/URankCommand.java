@@ -29,6 +29,7 @@ import net.dv8tion.jda.core.events.Event;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class URankCommand extends Command {
@@ -64,8 +65,24 @@ public class URankCommand extends Command {
 				} catch (IOException e) {
 					eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
 				}
+
+				for (com.kuuhaku.model.Member mb : mbs) {
+					try {
+						Guild g = Main.getInfo().getGuildByID(mb.getId().substring(18));
+						g.getName();
+						g.getMemberById(mb.getMid()).getEffectiveName();
+						//noinspection ResultOfMethodCallIgnored
+						mb.getLevel();
+						//noinspection ResultOfMethodCallIgnored
+						mb.getXp();
+					} catch (Exception e) {
+						mbs.remove(mb);
+					}
+				}
+
 				for (int i = 1; i < mbs.size() && i < 10; i++) {
-					sb.append(i + 1).append(" - ").append(args.length == 0 ? " " : ("(" + Main.getInfo().getGuildByID(mbs.get(i).getId().substring(18)).getName() + ") ")).append(Main.getInfo().getGuildByID(mbs.get(i).getId().substring(18)).getMemberById(mbs.get(i).getMid()).getEffectiveName()).append(" - Lvl ").append(mbs.get(i).getLevel()).append(" (").append(mbs.get(i).getXp()).append(" xp)").append("\n");
+					Guild g = Main.getInfo().getGuildByID(mbs.get(i).getId().substring(18));
+					sb.append(i + 1).append(" - ").append(args.length == 0 ? " " : ("(" + g.getName() + ") ")).append(g.getMemberById(mbs.get(i).getMid()).getEffectiveName()).append(" - Lvl ").append(mbs.get(i).getLevel()).append(" (").append(mbs.get(i).getXp()).append(" xp)\n");
 				}
 				eb.addField("1 - " + (args.length == 0 ? " " : ("(" + Main.getInfo().getGuildByID(mbs.get(0).getId().substring(18)).getName() + ") ")) + Main.getInfo().getGuildByID(mbs.get(0).getId().substring(18)).getMemberById(mbs.get(0).getMid()).getEffectiveName() + " - Lvl" + mbs.get(0).getLevel() + " (" + mbs.get(0).getXp() + " xp)", sb.toString(), false);
 
