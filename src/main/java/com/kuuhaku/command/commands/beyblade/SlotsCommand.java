@@ -22,9 +22,11 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.model.Beyblade;
 import com.kuuhaku.utils.Helper;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 
+import java.awt.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -33,7 +35,7 @@ import java.util.concurrent.TimeUnit;
 public class SlotsCommand extends Command {
 
     public SlotsCommand() {
-        super("bslots", new String[]{"bcassino", "bapostar"}, "Aposta uma quantidade de pontos de combate no cassino, podendo ganhar ou perder.", Category.BEYBLADE);
+        super("bslots", new String[]{"bcassino", "bapostar"}, "<valor/slots>", "Aposta uma quantidade de pontos de combate no cassino, podendo ganhar ou perder.", Category.BEYBLADE);
     }
 
     @Override
@@ -42,8 +44,34 @@ public class SlotsCommand extends Command {
             channel.sendMessage(":x: | Você não possui uma Beyblade.").queue();
             return;
         } else if (args.length < 1) {
-            channel.sendMessage(":x: | Você precisa especificar uma quantidade de pontos para apostar.").queue();
+            channel.sendMessage(":x: | Você precisa especificar uma quantidade de pontos para apostar ou digitar `s!bapostar slots` para ver as premiações.").queue();
             return;
+        } else if (args[0].equalsIgnoreCase("slots") || args[0].equalsIgnoreCase("premio")) {
+            EmbedBuilder eb = new EmbedBuilder();
+
+            eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
+            eb.setTitle(":confetti_ball: Premios");
+            //":cheese:", ":izakaya_lantern:", ":moneybag:", ":diamond_shape_with_a_dot_inside:", ":rosette:"
+            eb.addField(":cheese: Queijo (33% de chance)", "" +
+                    "3 - Ganha 80% do valor apostado\n" +
+                    "4 - Ganha 60% do valor apostado\n" +
+                    "5 - Ganha 40% do valor apostado\n", true);
+            eb.addField(":izakaya_lantern: Lanterna (27% de chance)", "" +
+                    "3 - Ganha 1.3x o valor apostado\n" +
+                    "4 - Ganha 1.6x o valor apostado\n" +
+                    "5 - Ganha 1.9x o valor apostado\n", true);
+            eb.addField(":moneybag: Saco de dinheiro (20% de chance)", "" +
+                    "3 - Ganha 1.4x o valor apostado\n" +
+                    "4 - Ganha 1.8x o valor apostado\n" +
+                    "5 - Ganha 2.2x o valor apostado\n", true);
+            eb.addField(":diamond_shape_with_a_dot_inside: Diamante (13% de chance)", "" +
+                    "3 - Ganha 1.5x o valor apostado\n" +
+                    "4 - Ganha 2x o valor apostado\n" +
+                    "5 - Ganha 2.5x o valor apostado\n", true);
+            eb.addField(":rosette: Roseta (7% de chance)", "" +
+                    "3 - Ganha 2x o valor apostado\n" +
+                    "4 - Ganha 3x o valor apostado\n" +
+                    "5 - Ganha 4x o valor apostado\n", true);
         }
 
         Beyblade bb = Objects.requireNonNull(MySQL.getBeybladeById(author.getId()));
@@ -53,7 +81,7 @@ public class SlotsCommand extends Command {
                 channel.sendMessage(":x: | Você não possui pontos de combate suficientes.").queue();
                 return;
             } else if (aposta[0] < 5) {
-                channel.sendMessage(":x: | Aposta muito baixa, o valor mínimo são 5 pontos de combate.").queue();
+                channel.sendMessage(":x: | Aposta muito baixa, o valor mínimo são 5 pontos de combate. (25 para ativar o seguro de pontos)").queue();
                 return;
             }
             bb.takePoints(aposta[0]);
@@ -61,8 +89,8 @@ public class SlotsCommand extends Command {
             int cheese = Collections.frequency(result, ":cheese:");
             int lantern = Collections.frequency(result, ":izakaya_lantern:");
             int money = Collections.frequency(result, ":moneybag:");
-            int rosette = Collections.frequency(result, ":rosette:");
             int diamond = Collections.frequency(result, ":diamond_shape_with_a_dot_inside:");
+            int rosette = Collections.frequency(result, ":rosette:");
 
             channel.sendMessage("Aposta de " + author.getAsMention() + ": :diamond_shape_with_a_dot_inside: " + aposta[0] + " pontos.").queue(m -> {
                 switch (cheese) {
@@ -98,7 +126,7 @@ public class SlotsCommand extends Command {
                         aposta[0] += Math.round((float) aposta[0] * 2.2f);
                         break;
                 }
-                switch (rosette) {
+                switch (diamond) {
                     case 3:
                         aposta[0] += Math.round((float) aposta[0] * 1.5f);
                         break;
@@ -109,7 +137,7 @@ public class SlotsCommand extends Command {
                         aposta[0] += Math.round((float) aposta[0] * 2.5f);
                         break;
                 }
-                switch (diamond) {
+                switch (rosette) {
                     case 3:
                         aposta[0] += aposta[0] * 2;
                         break;
@@ -127,7 +155,7 @@ public class SlotsCommand extends Command {
                 bb.addPoints(pointWin);
                 MySQL.sendBeybladeToDB(bb);
 
-                if (aposta[0] > 15 && pointWin == 0) {
+                if (aposta[0] >= 25 && pointWin == 0) {
                     pointWin = (Math.round((float) aposta[0] / 5.0f));
                     poorMan = true;
                 }
