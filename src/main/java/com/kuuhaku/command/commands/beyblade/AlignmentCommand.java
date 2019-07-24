@@ -41,14 +41,19 @@ public class AlignmentCommand extends Command {
             if (bb.getPoints() >= (bb.getS() == null ? 150 : 300)) {
                 switch (args[0].trim().toLowerCase()) {
                     case "tigre":
-                        bb.setSpecial(10 + Helper.rng(2));
+                    case "tiger":
+                        bb.setSpecial(10 + Helper.clamp(Helper.rng(2), 1, 2));
+                        System.out.println(bb.getSpecial());
                         bb.takePoints((bb.getS() == null ? 150 : 300));
                         break;
                     case "dragão":
-                        bb.setSpecial(20 + Helper.rng(2));
+                    case "dragon":
+                        bb.setSpecial(20 + Helper.clamp(Helper.rng(2), 1, 2));
+                        System.out.println(bb.getSpecial());
                         bb.takePoints((bb.getS() == null ? 150 : 300));
                         break;
                     case "urso":
+                    case "bear":
                         bb.setSpecial(30 + 1);
                         bb.takePoints((bb.getS() == null ? 150 : 300));
                         break;
