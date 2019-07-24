@@ -248,7 +248,7 @@ public class Helper {
 				} else {
 					duel.setP1turn(true);
 					duel.addM1();
-					event.getMessage().getChannel().sendMessage(duel.getB2().getName() + " erra o ataque (" + Helper.round((duel.getB2().getSpeed() * 100) / (duel.getB1().getStability() * 2) / duel.getM1(), 1) + "), agora é a vez de " + duel.getB1().getName()).queue();
+					event.getMessage().getChannel().sendMessage(duel.getB2().getName() + " erra o ataque (" + Helper.round((duel.getB2().getSpeed() * 100) / (duel.getB1().getStability() * 2) / duel.getM1(), 1) + "% de chance), agora é a vez de " + duel.getB1().getName()).queue();
 				}
 			}
 		} else if (event.getMessage().getContentRaw().equalsIgnoreCase("defender")) {
@@ -268,7 +268,7 @@ public class Helper {
 						duel.setP1turn(false);
 						int chance = Helper.rng(100);
 						duel.setD1(false);
-						final Consumer<Void> Miss = tm -> event.getMessage().getChannel().sendMessage("Quase! " + duel.getB1().getName() + " tenta executar um golpe especial mas falha! (" + chance + " < " + (duel.getB1().getS().getDiff() - duel.getB1().getSpeed()) + ")").queue();
+						final Consumer<Void> Miss = tm -> event.getMessage().getChannel().sendMessage("Quase! " + duel.getB1().getName() + " tenta executar um golpe especial mas falha! (" + chance + " < " + (int) (duel.getB1().getS().getDiff() - duel.getB1().getSpeed()) + ")").queue();
 						switch (duel.getB1().getSpecial()) {
 							case 11:
 								if (chance > duel.getB1().getS().getDiff() - duel.getB1().getSpeed()) {
@@ -283,7 +283,7 @@ public class Helper {
 							case 12:
 								if (chance > duel.getB1().getS().getDiff() - duel.getB1().getSpeed()) {
 									duel.getB2().setLife(duel.getB2().getLife() - Math.round(duel.getB1().getSpeed() * 2 / (duel.getB2().getStability() * Helper.getDefFac(duel.isD2(), duel.getB2())) * (float) Math.random() * 50));
-									event.getMessage().getChannel().sendMessage("Isso foi incrível!! " + duel.getB1().getName() + " executou com perfeição em " + duel.getB1().getS().getName() + " um dos golpes mais difíceis já conhecidos! (" + chance + " > " + duel.getB1().getS().getDiff() + ")").queue();
+									event.getMessage().getChannel().sendMessage("Isso foi incrível!! " + duel.getB1().getName() + " executou com perfeição o " + duel.getB1().getS().getName() + " um dos golpes mais difíceis já conhecidos! (" + chance + " > " + duel.getB1().getS().getDiff() + ")").queue();
 									duel.setP1turn(true);
 									event.getMessage().getChannel().sendMessage(duel.getB2().getName() + " está atordoada, será que teremos uma reviravolta aqui?").queue();
 									duel.setS1(true);
@@ -335,7 +335,7 @@ public class Helper {
 						duel.setP1turn(true);
 						int chance = Helper.rng(100);
 						duel.setD2(false);
-						final Consumer<Void> Miss = tm -> event.getMessage().getChannel().sendMessage("Quase! " + duel.getB2().getName() + " tenta executar um golpe especial mas falha! (" + chance + " < " + (duel.getB2().getS().getDiff() - duel.getB2().getSpeed()) + ")").queue();
+						final Consumer<Void> Miss = tm -> event.getMessage().getChannel().sendMessage("Quase! " + duel.getB2().getName() + " tenta executar um golpe especial mas falha! (" + chance + " < " + (int) (duel.getB2().getS().getDiff() - duel.getB2().getSpeed()) + ")").queue();
 						switch (duel.getB2().getSpecial()) {
 							case 11:
 								if (chance > duel.getB2().getS().getDiff() - duel.getB2().getSpeed()) {
@@ -461,7 +461,7 @@ public class Helper {
 				return;
 			}
 			eb.setTitle("Dados do duelo:");
-			eb.setColor(Color.decode(!player1Turn ? duel.getB1().getColor() : duel.getB2().getColor()));
+			eb.setColor(Color.decode(player1Turn ? duel.getB1().getColor() : duel.getB2().getColor()));
 			eb.setDescription("**" + duel.getB1().getName() + "** :vs: **" + duel.getB2().getName() + "**");
 			eb.addField(duel.getB1().getName(), "Vida: " + duel.getB1().getLife() + "\n\nForça: " + duel.getB1().getStrength() + "\nVelocidade: " + duel.getB1().getSpeed() + "\nEstabilidade: " + duel.getB1().getStability() + "\nTipo: " + (duel.getB1().getS() == null ? "Não possui" : duel.getB1().getS().getType()), true);
 			eb.addField(duel.getB2().getName(), "Vida: " + duel.getB2().getLife() + "\n\nForça: " + duel.getB2().getStrength() + "\nVelocidade: " + duel.getB2().getSpeed() + "\nEstabilidade: " + duel.getB2().getStability() + "\nTipo: " + (duel.getB2().getS() == null ? "Não possui" : duel.getB2().getS().getType()), true);
