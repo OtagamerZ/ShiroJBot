@@ -541,7 +541,8 @@ public class Helper {
 	public static String makeEmoteFromMention(String[] source) {
 		String[] chkdSrc = new String[source.length];
 		for (int i = 0; i < source.length; i++) {
-			if (source[i].startsWith("{") && source[i].endsWith("}")) chkdSrc[i] = source[i].replace("{", "<").replace("}", ">").replace("&", ":");
+			if (source[i].startsWith("{") && source[i].endsWith("}"))
+				chkdSrc[i] = source[i].replace("{", "<").replace("}", ">").replace("&", ":");
 			else chkdSrc[i] = source[i];
 		}
 		return String.join(" ", chkdSrc).trim();
@@ -559,6 +560,7 @@ public class Helper {
 			eb.setFooter("Data: " + OffsetDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), null);
 
 			g.getTextChannelById(gc.getLogChannel()).sendMessage(eb.build()).queue();
+		} catch (NullPointerException ignore) {
 		} catch (Exception e) {
 			log(Helper.class, LogLevel.WARN, e + " | " + e.getStackTrace()[0]);
 		}
