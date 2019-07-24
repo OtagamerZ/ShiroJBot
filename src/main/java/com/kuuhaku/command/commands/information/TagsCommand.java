@@ -43,6 +43,7 @@ public class TagsCommand extends Command {
         eb.addField(TagIcons.getTag(TagIcons.VETERAN) + " Veterano", "Membro com nível maior ou igual a 20", false);
         eb.addField(TagIcons.getTag(TagIcons.VERIFIED) + " Verificado", "Usuário com conduta exemplar e identidade verificada", false);
         eb.addField(TagIcons.getTag(TagIcons.TOXIC) + " Tóxico", "Usuário com péssima conduta", false);
+        eb.addField(TagIcons.getTag(TagIcons.MARRIED) + " Casado", "Usuário que possui uma waifu/husbando", false);
 
         channel.sendMessage(eb.build()).queue();
     }

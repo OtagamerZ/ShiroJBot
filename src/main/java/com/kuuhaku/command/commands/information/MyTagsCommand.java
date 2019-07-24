@@ -90,6 +90,12 @@ public class MyTagsCommand extends Command {
         } catch (NoResultException ignore) {
         }
 
+        try {
+            if (!SQLite.getMemberById(author.getId() + guild.getId()).getWaifu().isEmpty())
+                badges.append(TagIcons.getTag(TagIcons.MARRIED));
+        } catch (NoResultException ignore) {
+        }
+
         eb.addField("Emblemas:", badges.toString(), false);
 
         channel.sendMessage(eb.build()).queue();
