@@ -17,8 +17,6 @@
 
 package com.kuuhaku.utils;
 
-import com.ibm.watson.assistant.v1.model.Context;
-import com.ibm.watson.assistant.v1.model.MessageResponse;
 import com.kuuhaku.model.DuelData;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
@@ -44,7 +42,6 @@ public class ShiroInfo {
 	private static final String BotToken = System.getenv("BOT_TOKEN");
 	private static final String AnilistToken = System.getenv("ANILIST_TOKEN");
 	private static final String YandexToken = System.getenv("YANDEX_TOKEN");
-	private static final String infoInstance = System.getenv("WORKSPACE_ID");
 	private static final String apiVersion = "3.8.3_463";
 	private static final String name = "Shiro";
 	private static final String version = "2.0";
@@ -59,8 +56,6 @@ public class ShiroInfo {
 
 	}};
 	private static final DiscordBotListAPI dbl = new DiscordBotListAPI.Builder().token(System.getenv("DBL_TOKEN")).botId("572413282653306901").build();
-	//private static final IamOptions options = new IamOptions.Builder().apiKey(System.getenv("AI_TOKEN")).build();
-	//private static final Assistant ai = new Assistant("2019-06-27", options);
 	private static final List<User[]> queue = new ArrayList<>();
 	private static final Map<String, Integer[]> polls = new HashMap<>();
 	private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(5);
@@ -70,10 +65,8 @@ public class ShiroInfo {
 	private JDA api;
 	private long startTime;
 	private boolean ready = false;
-	private Context context = new Context();
 
 	public ShiroInfo() {
-		//ai.setEndPoint("https://gateway.watsonplatform.net/assistant/api");
 	}
 
 	//CONSTANTS
@@ -91,10 +84,6 @@ public class ShiroInfo {
 
 	public String getAnilistToken() {
 		return AnilistToken;
-	}
-
-	public String getInfoInstance() {
-		return infoInstance;
 	}
 
 	public String getApiVersion() {
@@ -196,13 +185,5 @@ public class ShiroInfo {
 
 	public Guild getGuildByID(String guildID) {
 		return api.getGuildById(guildID);
-	}
-
-	public Context getContext() {
-		return context;
-	}
-
-	public void updateContext(MessageResponse response) {
-		context = response.getContext();
 	}
 }
