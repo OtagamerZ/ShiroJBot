@@ -87,6 +87,12 @@ public class Relay extends SQLite {
 		} catch (NoResultException ignore) {
 		}
 
+		try {
+			if (!SQLite.getMemberById(m.getUser().getId() + s.getId()).getWaifu().isEmpty())
+				badges.append(TagIcons.getTag(TagIcons.MARRIED));
+		} catch (NoResultException ignore) {
+		}
+
 		eb.addField("Emblemas:", badges.toString(), false);
 
 		relays.forEach((k, r) -> {
