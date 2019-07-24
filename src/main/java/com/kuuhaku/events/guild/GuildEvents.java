@@ -227,13 +227,19 @@ public class GuildEvents extends ListenerAdapter {
 				sortedLvls.keySet().stream().max(Integer::compare).ifPresent(i -> {
 					if (SQLite.getGuildById(guild.getId()).getLvlNotif() && !member.getRoles().contains(sortedLvls.get(i))) {
 						guild.getController().addSingleRoleToMember(member, sortedLvls.get(i)).queue(s -> {
-							if (channel.getHistory().retrievePast(20).complete().stream().noneMatch(m -> m.getMentionedUsers().get(0) == author && m.getMentionedRoles().get(0) == sortedLvls.get(i))) {
-								if (finalLvlChannel != null) {
-									finalLvlChannel.sendMessage(author.getAsMention() + " ganhou o cargo " + sortedLvls.get(i).getAsMention() + " por alcançar o level " + i + "! :tada:").queue();
-								} else {
-									guild.getController().addSingleRoleToMember(member, sortedLvls.get(i)).queue();
-									channel.sendMessage(author.getAsMention() + " ganhou o cargo " + sortedLvls.get(i).getAsMention() + " por alcançar o level " + i + "! :tada:").queue();
-								}
+							String content = author.getAsMention() + " ganhou o cargo " + sortedLvls.get(i).getAsMention() + " por alcançar o level " + i + "! :tada:";
+							if (finalLvlChannel != null) {
+								finalLvlChannel.getHistory().retrievePast(5).queue(m -> {
+									if (m.stream().noneMatch(c -> c.getContentRaw().equals(content))) {
+										finalLvlChannel.sendMessage(content).queue();
+									}
+								});
+							} else {
+								channel.getHistory().retrievePast(5).queue(m -> {
+									if (m.stream().noneMatch(c -> c.getContentRaw().equals(content))) {
+										channel.sendMessage(content).queue();
+									}
+								});
 							}
 						});
 					}
