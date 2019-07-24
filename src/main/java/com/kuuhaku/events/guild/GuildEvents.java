@@ -227,7 +227,7 @@ public class GuildEvents extends ListenerAdapter {
 				sortedLvls.keySet().stream().max(Integer::compare).ifPresent(i -> {
 					if (SQLite.getGuildById(guild.getId()).getLvlNotif() && !member.getRoles().contains(sortedLvls.get(i))) {
 						guild.getController().addSingleRoleToMember(member, sortedLvls.get(i)).queue(s -> {
-							String content = author.getAsMention() + " ganhou o cargo " + sortedLvls.get(i).getAsMention() + " por alcançar o level " + i + "! :tada:";
+							String content = author.getAsMention() + " ganhou o cargo " + sortedLvls.get(i).getAsMention() + "! :tada:";
 							if (finalLvlChannel != null) {
 								finalLvlChannel.getHistory().retrievePast(5).queue(m -> {
 									if (m.stream().noneMatch(c -> c.getContentRaw().equals(content))) {
@@ -270,23 +270,7 @@ public class GuildEvents extends ListenerAdapter {
 				if (SQLite.getGuildNoLinkChannels(guild.getId()).contains(channel.getId()) && Helper.findURL(message.getContentRaw())) {
 					message.delete().reason("Mensagem possui um URL").queue(m -> channel.sendMessage(member.getAsMention() + ", é proibido postar links neste canal!").queue());
 				}
-					/*if (SQLite.getGuildIaMode(guild.getId()) && channel.getId().equals(SQLite.getGuildCanalIA(guild.getId()))) {
-						try {
-							MessageInput msg = new MessageInput();
-							msg.setText(message.getContentRaw());
 
-							MessageOptions opts = new MessageOptions.Builder(Main.getInfo().getInfoInstance()).context(Main.getInfo().getContext()).input(msg).build();
-							MessageResponse answer = Main.getInfo().getAi().message(opts).execute().getResult();
-							Main.getInfo().updateContext(answer);
-
-							List<DialogRuntimeResponseGeneric> responseGeneric = answer.getOutput().getGeneric();
-							if (responseGeneric.size() > 0) {
-								Helper.typeMessage(channel, responseGeneric.get(0).getText());
-							}
-						} catch (ServiceResponseException e) {
-							Helper.log(this.getClass(), LogLevel.WARN, e + " | " + e.getStackTrace()[0]);
-						}
-					}*/
 				try {
 					com.kuuhaku.model.Member m = SQLite.getMemberById(member.getUser().getId() + member.getGuild().getId());
 					if (m.getMid() == null) SQLite.saveMemberMid(m, author);

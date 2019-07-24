@@ -38,9 +38,11 @@ public class DuelCommand extends Command {
 						m.editMessage("Você já possui um duelo pendente!").queue();
 					else
 						m.editMessage(message.getMentionedMembers().get(0).getAsMention() + ", você foi desafiado a um duelo de Beyblades por " + message.getAuthor().getAsMention() + ". Se deseja aceitar, clique no botão abaixo:").queue(ms -> {
-									ms.addReaction("\u2694").queue();
-									ShiroInfo.duels.put(ms.getId(), dd);
-								});
+							ms.addReaction("\u2694").queue();
+							ShiroInfo.duels.put(ms.getId(), dd);
+							System.out.println("Desafio feito");
+							System.out.println(ShiroInfo.duels.toString());
+						});
 				} else {
 					m.editMessage("Este usuário ainda não possui uma Beyblade.").queue();
 				}
