@@ -129,7 +129,6 @@ public class JDAEvents extends ListenerAdapter {
 			}
 
 			if (ShiroInfo.duels.containsKey(event.getMessageId()) && event.getUser() == ShiroInfo.duels.get((event.getMessageId())).getP2()) {
-				System.out.println("Desafio aceito");
 				ShiroInfo.dd.add(ShiroInfo.duels.get(event.getMessageId()));
 				ShiroInfo.duels.remove(event.getMessageId());
 				event.getChannel().sendMessage("O duelo começou!\nUsem `atacar` para atacar, `defender` para defender ou `especial` para tentar utilizar seu poder especial de alinhamento.\n\n**O desafiante começa primeiro!**").queue();
