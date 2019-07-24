@@ -44,13 +44,11 @@ public class AlignmentCommand extends Command {
                     case "tigre":
                     case "tiger":
                         bb.setSpecial(10 + Math.round(1f + new Random().nextFloat()));
-                        System.out.println(bb.getSpecial());
                         bb.takePoints((bb.getS() == null ? 150 : 300));
                         break;
                     case "dragão":
                     case "dragon":
                         bb.setSpecial(20 + Math.round(1f + new Random().nextFloat()));
-                        System.out.println(bb.getSpecial());
                         bb.takePoints((bb.getS() == null ? 150 : 300));
                         break;
                     case "urso":
