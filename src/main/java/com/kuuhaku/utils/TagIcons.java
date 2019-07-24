@@ -18,29 +18,29 @@
 package com.kuuhaku.utils;
 
 public enum TagIcons {
-    DEV, EDITOR, PARTNER, MODERATOR, CHAMPION, VETERAN, VERIFIED, TOXIC, MARRIED;
+	DEV, EDITOR, PARTNER, MODERATOR, CHAMPION, VETERAN, VERIFIED, TOXIC, MARRIED;
 
-    public static String getTag(TagIcons t) {
-        switch (t) {
-            case DEV:
-                return "<:Dev:589103373354270760> ";
-            case EDITOR:
-                return "<:Editor:589120809428058123> ";
-            case PARTNER:
-                return "<:Partner:589103374033485833> ";
-            case MODERATOR:
-                return "<:Moderator:589121447314587744> ";
-            case CHAMPION:
-                return "<:Champion:589120809616932864> ";
-            case VETERAN:
-                return "<:Veteran:589121447151271976> ";
-            case VERIFIED:
-                return "<:Verified:591425071772467211> ";
-            case TOXIC:
-                return "<:Toxic:589103372926451713> ";
-            case MARRIED:
-                return "<:Married:598908829769400320>";
-        }
-        return null;
-    }
+	public static String getTag(TagIcons t) {
+		switch (t) {
+			case DEV:
+				return "<:Dev:589103373354270760> ";
+			case EDITOR:
+				return "<:Editor:589120809428058123> ";
+			case PARTNER:
+				return "<:Partner:589103374033485833> ";
+			case MODERATOR:
+				return "<:Moderator:589121447314587744> ";
+			case CHAMPION:
+				return "<:Champion:589120809616932864> ";
+			case VETERAN:
+				return "<:Veteran:589121447151271976> ";
+			case VERIFIED:
+				return "<:Verified:591425071772467211> ";
+			case TOXIC:
+				return "<:Toxic:589103372926451713> ";
+			case MARRIED:
+				return "<:Married:598908829769400320>";
+		}
+		return null;
+	}
 }
