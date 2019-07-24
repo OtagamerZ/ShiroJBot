@@ -72,6 +72,9 @@ public class SlotsCommand extends Command {
                     "3 - Ganha 2x o valor apostado\n" +
                     "4 - Ganha 3x o valor apostado\n" +
                     "5 - Ganha 4x o valor apostado\n", true);
+
+            channel.sendMessage(eb.build()).queue();
+            return;
         }
 
         Beyblade bb = Objects.requireNonNull(MySQL.getBeybladeById(author.getId()));
