@@ -22,14 +22,12 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.events.JDAEvents;
-import com.kuuhaku.model.Beyblade;
-import com.kuuhaku.model.DuelData;
-import com.kuuhaku.model.ReactionsList;
-import com.kuuhaku.model.guildConfig;
+import com.kuuhaku.model.*;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
 import org.apache.logging.log4j.LogManager;
@@ -83,6 +81,12 @@ public class Helper {
 		BigDecimal bd = new BigDecimal(Double.toString(value));
 		bd = bd.setScale(places, RoundingMode.HALF_UP);
 		return bd.doubleValue();
+	}
+
+	public static <T extends Comparable<T>> T clamp(T val, T min, T max) {
+		if (val.compareTo(min) < 0) return min;
+		else if (val.compareTo(max) > 0) return max;
+		else return val;
 	}
 
 	public static String downloadWebPage(String webpage) throws Exception {
@@ -465,13 +469,18 @@ public class Helper {
 	}
 
 	public static List<String> getGamble() {
+		GamblePool gp = new GamblePool();
 		String[] icon = {":cheese:", ":izakaya_lantern:", ":moneybag:", ":diamond_shape_with_a_dot_inside:", ":rosette:"};
+		for (int i = 0; i < icon.length; i++) {
+			gp.addGamble(new GamblePool.Gamble(icon[i], icon.length - i));
+		}
+		String[] pool = gp.getPool();
 		List<String> result = new ArrayList<>();
-		result.add(icon[rng(icon.length - 1)]);
-		result.add(icon[rng(icon.length - 1)]);
-		result.add(icon[rng(icon.length - 1)]);
-		result.add(icon[rng(icon.length - 1)]);
-		result.add(icon[rng(icon.length - 1)]);
+		result.add(pool[clamp(rng(pool.length), 0, pool.length - 1)]);
+		result.add(pool[clamp(rng(pool.length), 0, pool.length - 1)]);
+		result.add(pool[clamp(rng(pool.length), 0, pool.length - 1)]);
+		result.add(pool[clamp(rng(pool.length), 0, pool.length - 1)]);
+		result.add(pool[clamp(rng(pool.length), 0, pool.length - 1)]);
 		return result;
 	}
 
