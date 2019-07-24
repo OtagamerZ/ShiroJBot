@@ -50,7 +50,6 @@ dependencies {
     compile 'com.github.SvenWoltmann:color-thief-java:master-SNAPSHOT'
     compile 'org.discordbots:DBL-Java-Library:2.0.1'
     compile 'com.enigmabridge:hibernate4-sqlite-dialect:0.1.2'
-    compile 'com.ibm.watson:ibm-watson:7.0.0'
     compile group: 'com.github.gwenn', name: 'sqlite-dialect', version: 'master-SNAPSHOT'
     compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.2.Final'
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.16'
