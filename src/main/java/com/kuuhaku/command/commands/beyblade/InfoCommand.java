@@ -80,6 +80,7 @@ public class InfoCommand extends Command {
 			if (args.length == 1 && (args[0].equals("alinhamento") || args[0].equals("casa"))) {
 				if (bb.getS() == null) {
 					m.editMessage(":x: | Você não possui um alinhamento.").queue();
+					return;
 				}
 				eb.setAuthor("Alinhamento de " + bb.getName() + ":");
 				switch (bb.getS().getType()) {
@@ -120,7 +121,7 @@ public class InfoCommand extends Command {
 			eb.addField("Velocidade:", Float.toString(bb.getSpeed()), true);
 			eb.addField("Força:", Float.toString(bb.getStrength()), true);
 			eb.addField("Estabilidade:", Float.toString(bb.getStability()), true);
-			eb.addField("Especial:", bb.getS() != null ? "(" + bb.getSpecial() + ")" + bb.getS().getName() : "Não obtido", true);
+			eb.addField("Especial:", bb.getS() != null ? "(" + bb.getS().getType() + ") " + bb.getS().getName() : "Não obtido", true);
 			eb.addField("Vitórias/Derrotas:", bb.getWins() + "/" + bb.getLoses(), true);
 			eb.addField(":diamond_shape_with_a_dot_inside: Pontos de combate:", bb.getPoints() + " pontos", true);
 
