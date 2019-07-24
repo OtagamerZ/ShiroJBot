@@ -32,43 +32,49 @@ public class InfoCommand extends Command {
 			EmbedBuilder eb = new EmbedBuilder();
 			Beyblade bb = Objects.requireNonNull(MySQL.getBeybladeById(author.getId()));
 			if (args.length > 0) {
-					switch (args[0].toLowerCase()) {
-						case "tigre":
-						case "tiger":
-							eb.setTitle("Alinhamento TIGRE");
-							eb.setThumbnail("https://i.imgur.com/fLZPBP8.png");
-							eb.setColor(Color.decode("#ffb300"));
-							for (Special s : new ArrayList<Special>(){{
-								add(Special.getSpecial(11));
-								add(Special.getSpecial(12));
-							}}) {
-								eb.addField(s.getName(), s.getDescription(), false);
-							}
-							break;
-						case "dragão":
-						case "dragon":
-							eb.setTitle("Alinhamento DRAGÃO");
-							eb.setThumbnail("https://i.imgur.com/g2L0cfy.png");
-							eb.setColor(Color.RED);
-							for (Special s : new ArrayList<Special>(){{
-								add(Special.getSpecial(21));
-								add(Special.getSpecial(22));
-							}}) {
-								eb.addField(s.getName(), s.getDescription(), false);
-							}
-							break;
-						case "urso":
-						case "bear":
-							eb.setTitle("Alinhamento URSO");
-							eb.setThumbnail("https://i.imgur.com/MG789l8.png");
-							eb.setColor(Color.decode("#00ffb3"));
-							for (Special s : new ArrayList<Special>(){{
-								add(Special.getSpecial(31));
-							}}) {
-								eb.addField(s.getName(), s.getDescription(), false);
-							}
-							break;
-					}
+				switch (args[0].toLowerCase()) {
+					case "tigre":
+					case "tiger":
+						eb.setTitle("Alinhamento TIGRE");
+						eb.setThumbnail("https://i.imgur.com/fLZPBP8.png");
+						eb.setColor(Color.decode("#ffb300"));
+						for (Special s : new ArrayList<Special>() {{
+							add(Special.getSpecial(11));
+							add(Special.getSpecial(12));
+						}}) {
+							eb.addField(s.getName(), s.getDescription(), false);
+						}
+						m.delete().queue();
+						channel.sendMessage(eb.build()).queue();
+						return;
+					case "dragão":
+					case "dragon":
+						eb.setTitle("Alinhamento DRAGÃO");
+						eb.setThumbnail("https://i.imgur.com/g2L0cfy.png");
+						eb.setColor(Color.RED);
+						for (Special s : new ArrayList<Special>() {{
+							add(Special.getSpecial(21));
+							add(Special.getSpecial(22));
+						}}) {
+							eb.addField(s.getName(), s.getDescription(), false);
+						}
+						m.delete().queue();
+						channel.sendMessage(eb.build()).queue();
+						return;
+					case "urso":
+					case "bear":
+						eb.setTitle("Alinhamento URSO");
+						eb.setThumbnail("https://i.imgur.com/MG789l8.png");
+						eb.setColor(Color.decode("#00ffb3"));
+						for (Special s : new ArrayList<Special>() {{
+							add(Special.getSpecial(31));
+						}}) {
+							eb.addField(s.getName(), s.getDescription(), false);
+						}
+						m.delete().queue();
+						channel.sendMessage(eb.build()).queue();
+						return;
+				}
 			}
 
 			if (args.length == 1 && (args[0].equals("alinhamento") || args[0].equals("casa"))) {
