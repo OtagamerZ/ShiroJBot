@@ -1,44 +1,45 @@
 {
-  "name": "Shiro J. Bot",
-  "description": "Bot interativo com muitas funções para complementar seu servidor.",
-  "keywords": [
-    "JDA",
-    "Discord",
-    "Bot",
-  ],
-  "repository": "https://github.com/OtagamerZ/ShiroJBot",
-  "logo": "https://images-ext-2.discordapp.net/external/VEvNfPPxZPcXdnO-erMqFpB5D7tCXtPiTPOKt3chwqM/https/cdn.discordapp.com/avatars/572413282653306901/081151d97708b2e90b45927136abb432.png",
-  "env": {
-    "ANILIST_TOKEN": {
-      "description": "Token de acesso à API do Anilist.",
-      "generator": "secret"
-    },
-    "BOT_TOKEN": {
-      "description": "Token de acesso do bot principal.",
-      "generator": "secret"
-    },
-    "DB_LOGIN": {
-      "description": "Login de acesso do banco de dados.",
-      "generator": "secret"
-    },
-    "DB_PASS": {
-      "description": "Senha de acesso do banco de dados.",
-      "generator": "secret"
-    },
-    "DBL_TOKEN": {
-      "description": "Token de acesso à API do DiscordBots List",
-      "generator": "secret"
-    },
-    "JIBRIL_TOKEN": {
-      "description": "Token de acesso do bot secundário (Relay).",
-      "generator": "secret"
-    },
-    "JIBRIL_LINK": {
-      "description": "Link de convite do bot secundário (Relay).",
-      "generator": "secret"
-    },
-    "YANDEX_TOKEN": {
-      "description": "Token de acesso à API do Yandex Translate.",
-      "generator": "secret"
-    },
-  }
+	"name": "Shiro J. Bot",
+	"description": "Bot interativo com muitas funções para complementar seu servidor.",
+	"keywords": [
+		"JDA",
+		"Discord",
+		"Bot"
+	],
+	"repository": "https://github.com/OtagamerZ/ShiroJBot",
+	"logo": "https://images-ext-2.discordapp.net/external/VEvNfPPxZPcXdnO-erMqFpB5D7tCXtPiTPOKt3chwqM/https/cdn.discordapp.com/avatars/572413282653306901/081151d97708b2e90b45927136abb432.png",
+	"env": {
+		"ANILIST_TOKEN": {
+			"description": "Token de acesso à API do Anilist.",
+			"required": true
+		},
+		"BOT_TOKEN": {
+			"description": "Token de acesso do bot principal.",
+			"required": true
+		},
+		"DB_LOGIN": {
+			"description": "Login de acesso do banco de dados.",
+			"required": true
+		},
+		"DB_PASS": {
+			"description": "Senha de acesso do banco de dados.",
+			"required": true
+		},
+		"DBL_TOKEN": {
+			"description": "Token de acesso à API do DiscordBots List",
+			"required": true
+		},
+		"JIBRIL_TOKEN": {
+			"description": "Token de acesso do bot secundário (Relay).",
+			"required": true
+		},
+		"JIBRIL_LINK": {
+			"description": "Link de convite do bot secundário (Relay).",
+			"required": true
+		},
+		"YANDEX_TOKEN": {
+			"description": "Token de acesso à API do Yandex Translate.",
+			"required": true
+		}
+	}
+}
