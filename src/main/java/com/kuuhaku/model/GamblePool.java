@@ -36,6 +36,6 @@ public class GamblePool {
 			}
 		}
 
-		return (String[]) pool.toArray();
+		return pool.toArray(new String[0]);
 	}
 }
