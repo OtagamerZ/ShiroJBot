@@ -29,8 +29,10 @@ public class Beyblade {
 	@Id
 	private String id;
 	private String name = "";
-	private String color = "#ffffff";
-	private float speed = Helper.clamp(new Random().nextFloat() * 2f, 1f, 2f), strength = Helper.clamp(new Random().nextFloat() * 2f, 1f, 2f), stability = Helper.clamp(new Random().nextFloat() * 2f, 1.2f, 2f);
+	private String color = Helper.getRandomHexColor();
+	private float speed = (float) Helper.round(Helper.clamp(new Random().nextFloat() * 2f, 1f, 2f), 1);
+	private float strength = (float) Helper.round(Helper.clamp(new Random().nextFloat() * 2f, 1f, 2f), 1);
+	private float stability = (float) Helper.round(Helper.clamp(new Random().nextFloat() * 2f, 1.2f, 2f), 1);
 	private int life = Helper.clamp(new Random().nextInt(150), 75, 150), wins = 0, loses = 0, points = 0;
 	private int special;
 	private String voteTime;
@@ -64,7 +66,7 @@ public class Beyblade {
 	}
 
 	public void addSpeed() {
-		this.speed += 0.5f;
+		this.speed += Helper.round(new Random().nextFloat(), 1);
 	}
 
 	public float getStrength() {
@@ -72,7 +74,7 @@ public class Beyblade {
 	}
 
 	public void addStrength() {
-		this.strength += 0.5f;
+		this.strength += Helper.round(new Random().nextFloat(), 1);
 	}
 
 	public float getStability() {
@@ -80,7 +82,7 @@ public class Beyblade {
 	}
 
 	public void addStability() {
-		this.stability += 0.5f;
+		this.stability += Helper.round(new Random().nextFloat(), 1);
 	}
 
 	public int getLife() {
@@ -92,7 +94,7 @@ public class Beyblade {
 	}
 
 	public void addLife() {
-		this.life += 50;
+		this.life += new Random().nextInt(50);
 	}
 
 	public int getWins() {
