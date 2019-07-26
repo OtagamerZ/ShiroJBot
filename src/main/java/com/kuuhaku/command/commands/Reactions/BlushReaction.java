@@ -17,7 +17,6 @@
 
 package com.kuuhaku.command.commands.Reactions;
 
-import com.kuuhaku.model.ReactionsList;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
@@ -35,6 +34,6 @@ public class BlushReaction extends Reaction {
 				"N-N-Nani?!"
 		});
 
-		Helper.sendReaction(ReactionsList.blush(), channel, author.getAsMention() + " está envergonhado(a)! - " + this.getReaction()[this.getReactionLength()], false);
+		Helper.sendReaction(getUrl("blush"), channel, author.getAsMention() + " está envergonhado(a)! - " + this.getReaction()[this.getReactionLength()], false);
 	}
 }
