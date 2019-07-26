@@ -17,7 +17,6 @@
 
 package com.kuuhaku.command.commands.Reactions;
 
-import com.kuuhaku.model.ReactionsList;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
@@ -35,6 +34,6 @@ public class NopeReaction extends Reaction {
 				"Ha ah, errou!"
 		});
 
-		Helper.sendReaction(ReactionsList.nope(), channel, author.getAsMention() + " esquivou! - " + this.getReaction()[this.getReactionLength()], false);
+		Helper.sendReaction(getUrl("nope"), channel, author.getAsMention() + " esquivou! - " + this.getReaction()[this.getReactionLength()], false);
 	}
 }

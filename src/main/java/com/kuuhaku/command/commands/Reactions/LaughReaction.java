@@ -17,7 +17,6 @@
 
 package com.kuuhaku.command.commands.Reactions;
 
-import com.kuuhaku.model.ReactionsList;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
@@ -35,6 +34,6 @@ public class LaughReaction extends Reaction {
 				"Asdjasdnlad."
 		});
 
-		Helper.sendReaction(ReactionsList.laugh(), channel, author.getAsMention() + " está rindo! - " + this.getReaction()[this.getReactionLength()], false);
+		Helper.sendReaction(getUrl("laugh"), channel, author.getAsMention() + " está rindo! - " + this.getReaction()[this.getReactionLength()], false);
 	}
 }
