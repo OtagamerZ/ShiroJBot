@@ -6,6 +6,7 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
 import com.kuuhaku.utils.TagIcons;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
@@ -14,15 +15,16 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.awt.*;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class Relay extends SQLite {
 	private final Map<String, String> relays = new HashMap<>();
 	private int relaySize;
-	private EmbedBuilder eb;
 
 	private void checkSize() {
 		if (relays.size() != relaySize) {
@@ -31,15 +33,15 @@ public class Relay extends SQLite {
 		}
 	}
 
-	public void relayMessage(Message source, String msg, Member m, Guild s, String imgURL) {
+	public void relayMessage(Message source, String msg, Member m, Guild s, ByteArrayOutputStream img) {
 		updateRelays();
 		checkSize();
 
-		eb = new EmbedBuilder();
+		EmbedBuilder eb = new EmbedBuilder();
 		eb.setDescription(Helper.makeEmoteFromMention(msg.split(" ")) + "\n\n ");
+		eb.setImage("attachment://image.png");
 		eb.setAuthor("(" + s.getName() + ") " + m.getEffectiveName(), s.getIconUrl(), s.getIconUrl());
 		eb.setThumbnail(m.getUser().getAvatarUrl());
-		if (imgURL != null) eb.setImage(imgURL);
 		eb.setFooter(m.getUser().getId(), "http://icons.iconarchive.com/icons/killaaaron/adobe-cc-circles/1024/Adobe-Id-icon.png");
 		try {
 			eb.setColor(Helper.colorThief(s.getIconUrl()));
@@ -95,10 +97,15 @@ public class Relay extends SQLite {
 
 		eb.addField("Emblemas:", badges.toString(), false);
 
+		MessageBuilder mb = new MessageBuilder();
+		mb.setEmbed(eb.build());
+
 		relays.forEach((k, r) -> {
 			if (!s.getId().equals(k))
 				try {
-					Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(eb.build()).queue();
+					if (img != null)
+						Main.getJibril().getGuildById(k).getTextChannelById(r).sendFile(img.toByteArray(), "image.png", mb.build()).queue();
+					else Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(mb.build()).queue();
 				} catch (NullPointerException e) {
 					SQLite.getGuildById(k).setCanalRelay(null);
 				} catch (InsufficientPermissionException ex) {
@@ -114,8 +121,10 @@ public class Relay extends SQLite {
 				}
 		});
 		try {
-			source.delete().queue();
-			source.getChannel().sendMessage(eb.build()).queue();
+			Consumer<Message> messageConsumer = message -> source.delete().queue();
+			if (img != null)
+				source.getChannel().sendFile(img.toByteArray(), "image.png", mb.build()).queue(messageConsumer);
+			else source.getChannel().sendMessage(mb.build()).queue(messageConsumer);
 		} catch (InsufficientPermissionException ignore) {
 		}
 	}
