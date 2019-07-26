@@ -196,7 +196,7 @@ public class Helper {
 	}
 
 	private static boolean hit(float speed, float stability, int modifier) {
-		return (new Random().nextFloat() * 100) > ((speed * 100) / (stability * 2)) / modifier;
+		return (new Random().nextFloat() * 100) < ((speed * 50) / (stability * 2)) / modifier;
 	}
 
 	public static int rng(int maxValue) {
@@ -228,7 +228,6 @@ public class Helper {
 					int damage = Math.round(duel.getB1().getStrength() * duel.getB1().getSpeed() / (duel.getB2().getStability() * Helper.getDefFac(duel.isD2(), duel.getB2())) * (float) Math.random() * 50);
 					duel.getB2().setLife(duel.getB2().getLife() - damage);
 					Helper.log(Helper.class, LogLevel.DEBUG, damage + " -> " + duel.getB2().getLife());
-					event.getMessage().getChannel().sendMessage(duel.getB1().getName() + " ataca, agora é a vez de " + duel.getB2().getName()).queue();
 					duel.clearM2();
 				} else {
 					duel.setP1turn(false);
@@ -243,7 +242,6 @@ public class Helper {
 					int damage = Math.round(duel.getB2().getStrength() * duel.getB2().getSpeed() / (duel.getB1().getStability() * Helper.getDefFac(duel.isD1(), duel.getB1())) * (float) Math.random() * 50);
 					duel.getB1().setLife(duel.getB1().getLife() - damage);
 					Helper.log(Helper.class, LogLevel.DEBUG, damage + " -> " + duel.getB1().getLife());
-					event.getMessage().getChannel().sendMessage(duel.getB2().getName() + " ataca, agora é a vez de " + duel.getB1().getName()).queue();
 					duel.clearM1();
 				} else {
 					duel.setP1turn(true);
@@ -262,9 +260,9 @@ public class Helper {
 				event.getMessage().getChannel().sendMessage(duel.getB2().getName() + " assumiu uma postura defensiva, é a vez de " + duel.getB1().getName()).queue();
 			}
 		} else if (event.getMessage().getContentRaw().equalsIgnoreCase("especial")) {
-			if (duel.getB1().getS() != null) {
-				if (!duel.isS1()) {
-					if (player1Turn && event.getMessage().getAuthor() == duel.getP1()) {
+			if (player1Turn && event.getMessage().getAuthor() == duel.getP1()) {
+				if (duel.getB1().getS() != null) {
+					if (!duel.isS1()) {
 						duel.setP1turn(false);
 						int chance = Helper.rng(100);
 						duel.setD1(false);
@@ -425,7 +423,7 @@ public class Helper {
 			}
 		}
 		if (duel.getB2().getLife() <= 0) {
-			int pointWin = Helper.rng(Math.round(duel.getB2().getStrength() + duel.getB2().getSpeed() + duel.getB2().getStability() + (float) duel.getB1().getWins() / (duel.getB1().getLoses() == 0 ? 1 : duel.getB1().getLoses())));
+			int pointWin = Helper.rng(Math.round((duel.getB2().getStrength() + duel.getB2().getSpeed() + duel.getB2().getStability()) * duel.getB2().getKDA()));
 			event.getMessage().getChannel().sendMessage(duel.getP1().getAsMention() + " triunfou sobre " + duel.getP2().getAsMention() + ". Temos um vencedor!\n\n" + duel.getB1().getName() + " ganhou **" + pointWin + "** pontos de combate!").queue();
 			Beyblade bl = MySQL.getBeybladeById(duel.getP2().getId());
 			assert bl != null;
@@ -435,11 +433,11 @@ public class Helper {
 			Beyblade bb = MySQL.getBeybladeById(duel.getP1().getId());
 			assert bb != null;
 			bb.addWins();
-			bb.addPoints(pointWin == 0 ? 1 : pointWin);
+			bb.addPoints(pointWin == 0 ? 5 : pointWin);
 			MySQL.sendBeybladeToDB(bb);
 			ShiroInfo.dd.removeIf(d -> d.getP1() == event.getMessage().getAuthor() || d.getP2() == event.getMessage().getAuthor());
 		} else if (duel.getB1().getLife() <= 0) {
-			int pointWin = Helper.rng(Math.round(duel.getB1().getStrength() + duel.getB1().getSpeed() + duel.getB1().getStability() + (float) duel.getB1().getWins() / (duel.getB1().getLoses() == 0 ? 1 : duel.getB1().getLoses())));
+			int pointWin = Helper.rng(Math.round((duel.getB1().getStrength() + duel.getB1().getSpeed() + duel.getB1().getStability()) * duel.getB1().getKDA()));
 			event.getMessage().getChannel().sendMessage(duel.getP2().getAsMention() + " triunfou sobre " + duel.getP1().getAsMention() + ". Temos um vencedor!\n\n" + duel.getB2().getName() + " ganhou **" + pointWin + "** pontos de combate!").queue();
 			Beyblade bl = MySQL.getBeybladeById(duel.getP1().getId());
 			assert bl != null;
@@ -449,7 +447,7 @@ public class Helper {
 			Beyblade bb = MySQL.getBeybladeById(duel.getP2().getId());
 			assert bb != null;
 			bb.addWins();
-			bb.addPoints(pointWin == 0 ? 1 : pointWin);
+			bb.addPoints(pointWin == 0 ? 5 : pointWin);
 			MySQL.sendBeybladeToDB(bb);
 			ShiroInfo.dd.removeIf(d -> d.getP1() == event.getMessage().getAuthor() || d.getP2() == event.getMessage().getAuthor());
 		} else if (event.getMessage().getContentRaw().equalsIgnoreCase("atacar") || event.getMessage().getContentRaw().equalsIgnoreCase("especial") || event.getMessage().getContentRaw().equalsIgnoreCase("defender")) {
@@ -465,7 +463,7 @@ public class Helper {
 			eb.setDescription("**" + duel.getB1().getName() + "** :vs: **" + duel.getB2().getName() + "**");
 			eb.addField(duel.getB1().getName(), "Vida: " + duel.getB1().getLife() + "\n\nForça: " + duel.getB1().getStrength() + "\nVelocidade: " + duel.getB1().getSpeed() + "\nEstabilidade: " + duel.getB1().getStability() + "\nTipo: " + (duel.getB1().getS() == null ? "Não possui" : duel.getB1().getS().getType()), true);
 			eb.addField(duel.getB2().getName(), "Vida: " + duel.getB2().getLife() + "\n\nForça: " + duel.getB2().getStrength() + "\nVelocidade: " + duel.getB2().getSpeed() + "\nEstabilidade: " + duel.getB2().getStability() + "\nTipo: " + (duel.getB2().getS() == null ? "Não possui" : duel.getB2().getS().getType()), true);
-			event.getMessage().getChannel().sendMessage(eb.build()).queue();
+			event.getMessage().getChannel().sendMessage((!player1Turn ? duel.getB1().getName() : duel.getB2().getName()) + " age, agora é a vez de " + (player1Turn ? duel.getB1().getName() : duel.getB2().getName())).embed(eb.build()).queue();
 			ShiroInfo.dd.stream().filter(d -> d.getP1() == event.getMessage().getAuthor() || d.getP2() == event.getMessage().getAuthor()).findFirst().ifPresent(m -> {
 				m.getB1().setLife(duel.getB1().getLife());
 				m.getB2().setLife(duel.getB2().getLife());
@@ -475,12 +473,13 @@ public class Helper {
 
 	public static List<String> getGamble() {
 		GamblePool gp = new GamblePool();
-		String[] icon = {":cheese:", ":izakaya_lantern:", ":moneybag:", ":diamond_shape_with_a_dot_inside:", ":rosette:"};
+		String[] icon = {":cheese:", ":izakaya_lantern:", ":moneybag:", ":diamond_shape_with_a_dot_inside:", ":rosette:", "<a:Wow:598497560734203926>"};
 		for (int i = 0; i < icon.length; i++) {
 			gp.addGamble(new GamblePool.Gamble(icon[i], icon.length - i));
 		}
 		String[] pool = gp.getPool();
 		List<String> result = new ArrayList<>();
+		result.add(pool[clamp(rng(pool.length), 0, pool.length - 1)]);
 		result.add(pool[clamp(rng(pool.length), 0, pool.length - 1)]);
 		result.add(pool[clamp(rng(pool.length), 0, pool.length - 1)]);
 		result.add(pool[clamp(rng(pool.length), 0, pool.length - 1)]);
@@ -569,5 +568,14 @@ public class Helper {
 		} catch (Exception e) {
 			log(Helper.class, LogLevel.WARN, e + " | " + e.getStackTrace()[0]);
 		}
+	}
+
+	public static String getRandomHexColor() {
+		String[] colorTable = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"};
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < 6; i++) {
+			sb.append(colorTable[clamp(new Random().nextInt(16), 0, 16)]);
+		}
+		return "#" + sb.toString();
 	}
 }

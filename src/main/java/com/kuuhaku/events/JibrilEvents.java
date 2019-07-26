@@ -10,7 +10,9 @@ import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
+import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
+import java.io.ByteArrayOutputStream;
 
 public class JibrilEvents extends ListenerAdapter {
 
@@ -58,7 +60,9 @@ public class JibrilEvents extends ListenerAdapter {
 				try {
 					if (MySQL.getTagById(event.getAuthor().getId()).isVerified() && event.getMessage().getAttachments().size() > 0) {
 						try {
-							Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), event.getMessage().getAttachments().get(0).getUrl());
+							ByteArrayOutputStream baos = new ByteArrayOutputStream();
+							ImageIO.write(ImageIO.read(Helper.getImage(event.getMessage().getAttachments().get(0).getUrl())), "png", baos);
+							Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), baos);
 						} catch (Exception e) {
 							Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), null);
 						}
