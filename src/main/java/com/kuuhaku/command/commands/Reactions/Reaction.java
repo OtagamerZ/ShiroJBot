@@ -37,11 +37,19 @@ package com.kuuhaku.command.commands.Reactions;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.entities.User;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 abstract class Reaction extends Command {
     private User user;
-    private User target;
     private String[] reaction;
     private String[] selfTarget;
 
@@ -55,14 +63,6 @@ abstract class Reaction extends Command {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public User getTarget() {
-        return target;
-    }
-
-    public void setTarget(User target) {
-        this.target = target;
     }
 
     String[] getReaction() {
@@ -87,5 +87,31 @@ abstract class Reaction extends Command {
 
     void setSelfTarget(String[] selfTarget) {
         this.selfTarget = selfTarget;
+    }
+
+    String getUrl(String type) {
+	    try {
+            HttpURLConnection con = (HttpURLConnection) new URL("https://shiro-api.herokuapp.com/reaction?type=" + type).openConnection();
+            con.setRequestProperty("User-Agent", "Mozilla/5.0");
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Accept", "application/json");
+            con.addRequestProperty("Accept-Charset", "UTF-8");
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
+
+            String input;
+            StringBuilder resposta = new StringBuilder();
+            while ((input = br.readLine()) != null) {
+                resposta.append(input);
+            }
+            br.close();
+            con.disconnect();
+
+            Helper.log(this.getClass(), LogLevel.DEBUG, resposta.toString());
+            return new JSONObject(resposta.toString()).get("url").toString();
+        } catch (IOException e) {
+	        Helper.log(this.getClass(), LogLevel.ERROR, "Erro ao recuperar API: " + e.getStackTrace()[0]);
+	        return null;
+        }
     }
 }

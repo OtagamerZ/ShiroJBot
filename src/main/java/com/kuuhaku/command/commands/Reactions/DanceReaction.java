@@ -17,7 +17,6 @@
 
 package com.kuuhaku.command.commands.Reactions;
 
-import com.kuuhaku.model.ReactionsList;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
@@ -35,6 +34,6 @@ public class DanceReaction extends Reaction {
 				"Duas palavras: DANCE BABY!"
 		});
 
-		Helper.sendReaction(ReactionsList.dance(), channel, author.getAsMention() + " está dançando! - " + this.getReaction()[this.getReactionLength()], false);
+		Helper.sendReaction(getUrl("dance"), channel, author.getAsMention() + " está dançando! - " + this.getReaction()[this.getReactionLength()], false);
 	}
 }
