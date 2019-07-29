@@ -10,7 +10,7 @@ import net.dv8tion.jda.core.events.Event;
 public class SayCommand extends Command {
 	
 	public SayCommand() {
-		super("say", new String[] {"dizer", "repetir"}, "<mensagem>", "Repete a mensagem definida no canal atual.", Category.MISC);
+		super("say", new String[] {"diga", "repetir"}, "<mensagem>", "Repete a mensagem, também converterá menções de emotes.", Category.MISC);
 	}
 
 	@Override
