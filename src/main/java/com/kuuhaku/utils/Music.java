@@ -65,6 +65,11 @@ public class Music {
 	public static void trackInfo(TextChannel channel) {
 		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild());
 
+		if (musicManager.player.getPlayingTrack() == null) {
+			channel.sendMessage(":x: | Não há nenhuma musica tocando no momento.").queue();
+			return;
+		}
+
 		EmbedBuilder eb = new EmbedBuilder();
 
 		eb.setTitle(musicManager.player.getPlayingTrack().getInfo().title);
