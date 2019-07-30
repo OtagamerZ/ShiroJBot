@@ -23,6 +23,7 @@ import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
+import com.kuuhaku.utils.Music;
 import com.kuuhaku.utils.ShiroInfo;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -128,10 +129,14 @@ public class JDAEvents extends ListenerAdapter {
 				}
 			}
 
-			if (ShiroInfo.duels.containsKey(event.getMessageId()) && event.getUser() == ShiroInfo.duels.get((event.getMessageId())).getP2()) {
+			if (ShiroInfo.duels.containsKey(event.getMessageId()) && event.getUser() == ShiroInfo.duels.get((event.getMessageId())).getP2() && event.getReactionEmote().getName().equals("\u2694")) {
 				ShiroInfo.dd.add(ShiroInfo.duels.get(event.getMessageId()));
 				ShiroInfo.duels.remove(event.getMessageId());
 				event.getChannel().sendMessage("O duelo começou!\nUsem `atacar` para atacar, `defender` para defender ou `especial` para tentar utilizar seu poder especial de alinhamento.\n\n**O desafiante começa primeiro!**").queue();
+			}
+
+			if (message.getEmbeds().size() > 0 && message.getEmbeds().get(0).getFooter().getText().startsWith("Link: https://www.youtube.com/watch?v=") && event.getReactionEmote().getName().equals("\u25B6")) {
+				Music.loadAndPlay(event.getMember(), event.getTextChannel(), message.getEmbeds().get(0).getFooter().getText().replace("Link: ", ""));
 			}
 		}
 	}
