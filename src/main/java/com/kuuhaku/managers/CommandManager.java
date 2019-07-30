@@ -25,6 +25,7 @@ import com.kuuhaku.command.commands.information.*;
 import com.kuuhaku.command.commands.misc.*;
 import com.kuuhaku.command.commands.moderation.*;
 import com.kuuhaku.command.commands.dev.*;
+import com.kuuhaku.command.commands.music.MusicCommand;
 import com.kuuhaku.command.commands.music.YoutubeCommand;
 import com.kuuhaku.command.commands.partner.AiCommand;
 import com.kuuhaku.command.commands.partner.CompileCommand;
@@ -95,7 +96,6 @@ public class CommandManager {
             add(new JibrilEmoteListCommand());
             add(new EmbedCommand());
             add(new PollCommand());
-            add(new YoutubeCommand());
 
             //FUN
             add(new SadButTrueCommand());
@@ -132,6 +132,10 @@ public class CommandManager {
             add(new RankCommand());
             add(new SlotsCommand());
             add(new RedeemCommand());
+
+            //MUSICA
+            add(new MusicCommand());
+            add(new YoutubeCommand());
         }};
     }
 
