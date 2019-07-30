@@ -123,7 +123,7 @@ public class GuildEvents extends ListenerAdapter {
 
 			Helper.battle(event);
 
-			if (SQLite.getGuildNoSpamChannels(guild.getId()).contains(channel.getId())) {
+			if (SQLite.getGuildNoSpamChannels(guild.getId()).contains(channel.getId()) && author != Main.getInfo().getSelfUser()) {
 				if (SQLite.getGuildById(guild.getId()).isHardAntispam()) {
 					channel.getHistory().retrievePast(20).queue(h -> {
 						h.removeIf(m -> ChronoUnit.MILLIS.between(m.getCreationTime().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author);
