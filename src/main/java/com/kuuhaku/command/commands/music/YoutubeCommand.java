@@ -1,4 +1,4 @@
-package com.kuuhaku.command.commands.information;
+package com.kuuhaku.command.commands.music;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
@@ -20,7 +20,7 @@ import java.util.List;
 public class YoutubeCommand extends Command {
 
     public YoutubeCommand() {
-        super("video", new String[]{"yt", "youtube"}, "Busca um vídeo no YouTube.", Category.INFO);
+        super("play", new String[]{"yt", "youtube"}, "Busca um vídeo no YouTube.", Category.MUSICA);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class YoutubeCommand extends Command {
                                 eb.setThumbnail(v.getThumb());
                                 eb.setColor(Helper.colorThief(v.getThumb()));
                                 eb.setFooter("Link: " + v.getUrl(), null);
-                                channel.sendMessage(eb.build()).queue();
+                                channel.sendMessage(eb.build()).queue(msg -> msg.addReaction("\u25B6").queue());
                             }
                         } else m.editMessage(":x: | Nenhum vídeo encontrado").queue();
                     }catch (IOException e) {

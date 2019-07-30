@@ -17,7 +17,10 @@
 
 package com.kuuhaku.utils;
 
+import com.kuuhaku.handlers.music.GuildMusicManager;
 import com.kuuhaku.model.DuelData;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
+import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Role;
@@ -62,6 +65,8 @@ public class ShiroInfo {
 	private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(5);
 	public static final List<DuelData> dd = new ArrayList<>();
 	public static final Map<String, DuelData> duels = new HashMap<>();
+	private static final Map<Long, GuildMusicManager> gmms = new HashMap<>();
+	private static final AudioPlayerManager apm = new DefaultAudioPlayerManager();
 
 	private JDA api;
 	private long startTime;
@@ -131,10 +136,6 @@ public class ShiroInfo {
 		return dbl;
 	}
 
-	//public Assistant getAi() {
-		//return ai;
-	//}
-
 	public List<User[]> getQueue() {
 		return queue;
 	}
@@ -145,6 +146,18 @@ public class ShiroInfo {
 
 	public ScheduledExecutorService getScheduler() {
 		return scheduler;
+	}
+
+	AudioPlayerManager getApm() {
+		return apm;
+	}
+
+	Map<Long, GuildMusicManager> getGmms() {
+		return gmms;
+	}
+
+	void addGmm(long id, GuildMusicManager gmm) {
+		gmms.put(id, gmm);
 	}
 
 	//VARIABLES
