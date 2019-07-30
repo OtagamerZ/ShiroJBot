@@ -25,6 +25,7 @@ import com.kuuhaku.command.commands.information.*;
 import com.kuuhaku.command.commands.misc.*;
 import com.kuuhaku.command.commands.moderation.*;
 import com.kuuhaku.command.commands.dev.*;
+import com.kuuhaku.command.commands.music.YoutubeCommand;
 import com.kuuhaku.command.commands.partner.AiCommand;
 import com.kuuhaku.command.commands.partner.CompileCommand;
 import com.kuuhaku.command.commands.partner.JibrilCommand;
