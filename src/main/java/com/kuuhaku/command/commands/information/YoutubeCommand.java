@@ -43,7 +43,7 @@ public class YoutubeCommand extends Command {
                                 eb.setThumbnail(videos.get(0).getThumb());
                                 eb.setColor(Helper.colorThief(v.getThumb()));
                                 eb.setFooter("Link: " + v.getUrl(), null);
-                                channel.sendMessage(eb.build()).complete();
+                                channel.sendMessage(eb.build()).queue();
                             }
                         } else m.editMessage(":x: | Nenhum vídeo encontrado").queue();
                     }catch (IOException e) {
