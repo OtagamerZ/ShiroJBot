@@ -72,7 +72,7 @@ public class URankCommand extends Command {
 						sb.append(i + 1).append(" - ").append(args.length == 0 ? " " : ("(" + g.getName() + ") ")).append(g.getMemberById(mbs.get(i).getMid()).getEffectiveName()).append(" - Lvl ").append(mbs.get(i).getLevel()).append(" (").append(mbs.get(i).getXp()).append(" xp)\n");
 					} catch (Exception e) {
 						mbs.remove(i);
-						i--;
+						i -= i == 1 ? 0 : 1;
 					}
 				}
 				eb.addField("1 - " + (args.length == 0 ? " " : ("(" + Main.getInfo().getGuildByID(mbs.get(0).getId().substring(18)).getName() + ") ")) + Main.getInfo().getGuildByID(mbs.get(0).getId().substring(18)).getMemberById(mbs.get(0).getMid()).getEffectiveName() + " - Lvl" + mbs.get(0).getLevel() + " (" + mbs.get(0).getXp() + " xp)", sb.toString(), false);
