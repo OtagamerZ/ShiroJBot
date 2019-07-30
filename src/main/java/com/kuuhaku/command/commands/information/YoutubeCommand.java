@@ -34,12 +34,13 @@ public class YoutubeCommand extends Command {
                 List<YoutubeVideo> videos = Youtube.getData(String.join(" ", args));
                 EmbedBuilder eb = new EmbedBuilder();
 
-                eb.setTitle(":mag: Resultado da busca");
+                eb.setTitle(":mag: Resultados da busca");
                 if (videos.stream().findFirst().isPresent()) {
                     eb.setThumbnail(videos.get(0).getThumb());
                     eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
                     for (YoutubeVideo v : videos) {
                         eb.addField(v.getTitle(), v.getDesc() + "\n`" + v.getUrl() + "`", false);
+                    	eb.addBlankField(false);
                     }
 
                     m.delete().queue();
