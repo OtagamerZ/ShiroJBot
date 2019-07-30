@@ -28,7 +28,8 @@ public enum Category {
 	FUN("Diversão", "Comandos para diversão.", PrivilegeLevel.USER),
 	MISC("Diversos", "Comandos diversos.", PrivilegeLevel.USER),
 	INFO("Informação", "Comandos de informação", PrivilegeLevel.USER),
-	BEYBLADE("Beyblade", "Comandos de Beyblade.", PrivilegeLevel.USER)
+	BEYBLADE("Beyblade", "Comandos de Beyblade.", PrivilegeLevel.USER),
+	MUSICA("Música", "Comandos de música.", PrivilegeLevel.USER)
 	;
 
 	private final String name;
