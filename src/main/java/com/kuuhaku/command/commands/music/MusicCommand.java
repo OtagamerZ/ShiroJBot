@@ -61,7 +61,7 @@ public class MusicCommand extends Command {
 				Music.trackInfo((TextChannel) channel);
 				break;
 			default:
-				channel.sendMessage(":x: | Comando de música inválid.").queue();
+				channel.sendMessage(":x: | Comando de música inválido.").queue();
 		}
 	}
 }
