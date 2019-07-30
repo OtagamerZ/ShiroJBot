@@ -40,7 +40,7 @@ public class YoutubeCommand extends Command {
                             for (YoutubeVideo v : videos) {
                                 eb.setTitle(v.getTitle(), v.getUrl());
                                 eb.setDescription(v.getDesc());
-                                eb.setThumbnail(videos.get(0).getThumb());
+                                eb.setThumbnail(v.getThumb());
                                 eb.setColor(Helper.colorThief(v.getThumb()));
                                 eb.setFooter("Link: " + v.getUrl(), null);
                                 channel.sendMessage(eb.build()).queue();
