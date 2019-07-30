@@ -138,7 +138,7 @@ public class JDAEvents extends ListenerAdapter {
 		}
 
 		if (!event.getUser().isBot() && message.getEmbeds().size() > 0 && message.getEmbeds().get(0).getFooter().getText().startsWith("Link: https://www.youtube.com/watch?v=") && event.getReactionEmote().getName().equals("\u25B6")) {
-			Music.loadAndPlay(event.getMember(), event.getTextChannel(), message.getEmbeds().get(0).getFooter().getText().replace("Link: ", ""));
+			Music.loadAndPlay(event.getMember(), event.getTextChannel(), message.getEmbeds().get(0).getUrl());
 		}
 	}
 
