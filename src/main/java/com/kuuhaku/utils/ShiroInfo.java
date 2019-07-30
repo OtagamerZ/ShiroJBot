@@ -42,6 +42,7 @@ public class ShiroInfo {
 	private static final String BotToken = System.getenv("BOT_TOKEN");
 	private static final String AnilistToken = System.getenv("ANILIST_TOKEN");
 	private static final String YandexToken = System.getenv("YANDEX_TOKEN");
+	private static final String YoutubeToken = System.getenv("YOUTUBE_TOKEN");
 	private static final String apiVersion = "3.8.3_463";
 	private static final String name = "Shiro";
 	private static final String version = "2.0";
@@ -84,6 +85,10 @@ public class ShiroInfo {
 
 	public String getAnilistToken() {
 		return AnilistToken;
+	}
+
+	public String getYoutubeToken() {
+		return YoutubeToken;
 	}
 
 	public String getApiVersion() {

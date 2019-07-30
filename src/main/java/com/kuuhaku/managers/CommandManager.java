@@ -94,6 +94,7 @@ public class CommandManager {
             add(new JibrilEmoteListCommand());
             add(new EmbedCommand());
             add(new PollCommand());
+            add(new YoutubeCommand());
 
             //FUN
             add(new SadButTrueCommand());
