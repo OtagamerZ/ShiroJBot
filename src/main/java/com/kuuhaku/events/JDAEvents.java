@@ -89,6 +89,7 @@ public class JDAEvents extends ListenerAdapter {
 				message.delete().queue();
 			}
 		}
+
 		if (message.getAuthor() == Main.getInfo().getSelfUser() && message.getMentionedUsers().size() > 0) {
 			if (event.getUser() == message.getMentionedUsers().get(1)) {
 				if (message.getContentRaw().contains("abraçou")) {
@@ -129,16 +130,15 @@ public class JDAEvents extends ListenerAdapter {
 				}
 			}
 
-			if (ShiroInfo.duels.containsKey(event.getMessageId()) && event.getUser() == ShiroInfo.duels.get((event.getMessageId())).getP2()) {
+			if (ShiroInfo.duels.containsKey(event.getMessageId()) && event.getUser() == ShiroInfo.duels.get((event.getMessageId())).getP2() && event.getReactionEmote().getName().equals("\u2694")) {
 				ShiroInfo.dd.add(ShiroInfo.duels.get(event.getMessageId()));
 				ShiroInfo.duels.remove(event.getMessageId());
 				event.getChannel().sendMessage("O duelo começou!\nUsem `atacar` para atacar, `defender` para defender ou `especial` para tentar utilizar seu poder especial de alinhamento.\n\n**O desafiante começa primeiro!**").queue();
 			}
+		}
 
-			System.out.println(message.getEmbeds().toString());
-			if (message.getEmbeds().size() > 0) {
-				Music.loadAndPlay(event.getMember(), event.getTextChannel(), message.getEmbeds().get(0).getUrl());
-			}
+		if (!event.getUser().isBot() && message.getEmbeds().size() > 0 && message.getEmbeds().get(0).getFooter().getText().startsWith("Link: https://www.youtube.com/watch?v=") && event.getReactionEmote().getName().equals("\u25B6")) {
+			Music.loadAndPlay(event.getMember(), event.getTextChannel(), message.getEmbeds().get(0).getFooter().getText().replace("Link: ", ""));
 		}
 	}
 
