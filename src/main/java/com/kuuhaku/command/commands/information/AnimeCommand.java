@@ -1,4 +1,4 @@
-package com.kuuhaku.command.commands.misc;
+package com.kuuhaku.command.commands.information;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
