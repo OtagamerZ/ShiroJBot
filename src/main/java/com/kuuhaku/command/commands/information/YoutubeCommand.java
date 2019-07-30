@@ -34,20 +34,25 @@ public class YoutubeCommand extends Command {
                 List<YoutubeVideo> videos = Youtube.getData(String.join(" ", args));
                 EmbedBuilder eb = new EmbedBuilder();
 
-                eb.setTitle(":mag: Resultados da busca");
-                if (videos.stream().findFirst().isPresent()) {
-                    eb.setThumbnail(videos.get(0).getThumb());
-                    eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
-                    for (YoutubeVideo v : videos) {
-                        eb.addField(v.getTitle(), v.getDesc() + "\n`" + v.getUrl() + "`", false);
-                    	eb.addBlankField(false);
+                m.editMessage(":mag: Resultados da busca").queue(s -> {
+                    try {
+                        if (videos.stream().findFirst().isPresent()) {
+                            for (YoutubeVideo v : videos) {
+                                eb.setTitle(v.getTitle(), v.getUrl());
+                                eb.setDescription(v.getDesc());
+                                eb.setThumbnail(videos.get(0).getThumb());
+                                eb.setColor(Helper.colorThief(v.getThumb()));
+                                eb.setFooter("Link: " + v.getUrl(), null);
+                                channel.sendMessage(eb.build()).complete();
+                            }
+                        } else m.editMessage(":x: | Nenhum vídeo encontrado").queue();
+                    }catch (IOException e) {
+                        m.editMessage(":x: | Erro ao buscar vídeos, meus developers já foram notificados.").queue();
+                        Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
                     }
-
-                    m.delete().queue();
-                    channel.sendMessage(eb.build()).queue();
-                } else m.editMessage(":x: | Nenhum vídeo encontrado").queue();
+                });
             } catch (IOException e) {
-                m.editMessage(":x: | Erro ao buscar vídeo, meus developers já foram notificados.").queue();
+                m.editMessage(":x: | Erro ao buscar vídeos, meus developers já foram notificados.").queue();
                 Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
             }
         });
