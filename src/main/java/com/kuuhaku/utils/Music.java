@@ -84,8 +84,8 @@ public class Music {
 			eb.setTitle(musicManager.player.getPlayingTrack().getInfo().title, yv.getUrl());
 			eb.setImage(yv.getThumb());
 			eb.setColor(Helper.colorThief(yv.getThumb()));
-			eb.setAuthor(musicManager.player.getPlayingTrack().getInfo().author);
-			eb.setFooter(String.valueOf(Helper.round((musicManager.player.getPlayingTrack().getDuration() / 1000) / 60, 2)).replace(".", ":"), null);
+			eb.addField("Postado por:", musicManager.player.getPlayingTrack().getInfo().author, true);
+			eb.addField("Duração:", String.valueOf(Helper.round(((double) musicManager.player.getPlayingTrack().getDuration() / 1000) / 60, 2)).replace(".", ":"), true);
 
 			channel.sendMessage(eb.build()).queue();
 		} catch (IOException e) {
