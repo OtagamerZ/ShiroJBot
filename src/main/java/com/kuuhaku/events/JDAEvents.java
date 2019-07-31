@@ -50,6 +50,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 public class JDAEvents extends ListenerAdapter {
 
@@ -142,7 +143,11 @@ public class JDAEvents extends ListenerAdapter {
 
 			if (!event.getUser().isBot() && message.getEmbeds().size() > 0 && message.getEmbeds().get(0).getFooter().getText().startsWith("Link: https://www.youtube.com/watch?v=") && event.getReactionEmote().getName().equals("\u25B6")) {
 				Music.loadAndPlay(event.getMember(), event.getTextChannel(), message.getEmbeds().get(0).getUrl());
-				if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) message.delete().queue();
+				if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) {
+					List<Message> msgs = event.getChannel().getHistoryAround(event.getMessageId(), 5).complete().getRetrievedHistory();
+					msgs.removeIf(m -> m.getAuthor() != Main.getInfo().getSelfUser());
+					event.getChannel().purgeMessages(msgs);
+				}
 			}
 		} catch (NullPointerException ignore) {
 		}
