@@ -9,10 +9,7 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.entities.VoiceChannel;
+import net.dv8tion.jda.core.entities.*;
 
 import java.io.IOException;
 
@@ -93,6 +90,23 @@ public class Music {
 		}
 	}
 
+	public static void queueInfo(TextChannel channel) {
+		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild());
+
+		if (musicManager.player.getPlayingTrack() == null) {
+			channel.sendMessage(":x: | Não há nenhuma musica na fila no momento.").queue();
+			return;
+		}
+
+		EmbedBuilder eb = new EmbedBuilder();
+
+		eb.setTitle("Fila de músicas:");
+		musicManager.scheduler.queue().forEach(t -> eb.addField(t.getPosition() + t.getInfo().title, "Requisitado por " + ((User) t.getUserData()).getAsMention(), false));
+		eb.setFooter("Tempo estimado da fila: " + String.valueOf(Helper.round((musicManager.scheduler.queue().stream().mapToDouble(AudioTrack::getDuration).sum() / 1000) / 60, 2)).replace(".", ":"), null);
+
+		channel.sendMessage(eb.build()).queue();
+	}
+
 	public static void setVolume(TextChannel channel, int volume) {
 		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild());
 
@@ -113,8 +127,10 @@ public class Music {
 			public void trackLoaded(AudioTrack track) {
 				channel.sendMessage("Musíca adicionada com sucesso à fila: " + track.getInfo().title).queue();
 
-				if (m.getVoiceState().inVoiceChannel()) play(m.getVoiceState().getChannel(), channel.getGuild(), musicManager, track);
-				else channel.sendMessage(":x: | Você não está conectado em um canal de voz.").queue();
+				if (m.getVoiceState().inVoiceChannel()) {
+					track.setUserData(m.getUser());
+					play(m.getVoiceState().getChannel(), channel.getGuild(), musicManager, track);
+				} else channel.sendMessage(":x: | Você não está conectado em um canal de voz.").queue();
 			}
 
 			@Override
@@ -127,8 +143,10 @@ public class Music {
 
 				channel.sendMessage("Musíca adicionada com sucesso à fila: " + playlist.getName()).queue();
 
-				if (m.getVoiceState().inVoiceChannel()) play(m.getVoiceState().getChannel(), channel.getGuild(), musicManager, firstTrack);
-				else channel.sendMessage(":x: | Você não está conectado em um canal de voz.").queue();
+				if (m.getVoiceState().inVoiceChannel()) {
+					firstTrack.setUserData(m.getUser());
+					play(m.getVoiceState().getChannel(), channel.getGuild(), musicManager, firstTrack);
+				} else channel.sendMessage(":x: | Você não está conectado em um canal de voz.").queue();
 			}
 
 			@Override
