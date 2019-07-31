@@ -25,7 +25,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class PruneCommand extends Command {
 
@@ -46,9 +45,12 @@ public class PruneCommand extends Command {
 			channel.sendMessage(msgs.size() + " mensage" + (msgs.size() == 1 ? "m limpa." : "ns limpas.")).queue();
 		} else if (args[0].equalsIgnoreCase("all")) {
 			Executors.newSingleThreadExecutor().execute(() -> {
-				List<Message> msgs = channel.getIterableHistory().complete();
-				channel.purgeMessages(msgs);
-				channel.sendMessage(msgs.size() + " mensage" + (msgs.size() == 1 ? "m limpa." : "ns limpas.")).queue();
+				int count = 0;
+				while (channel.hasLatestMessage()) {
+					channel.purgeMessagesById(channel.getLatestMessageId());
+					count++;
+				}
+				channel.sendMessage(count + " mensage" + (count == 1 ? "m limpa." : "ns limpas.")).queue();
 			});
 		} else {
 			channel.sendMessage(":x: | Valor inválido, a quantidade deve ser um valor inteiro.").queue();
