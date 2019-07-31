@@ -75,8 +75,8 @@ public class ShiroInfo {
 	}
 
 	//CONSTANTS
-	public boolean isEmergency() {
-		return EMERGENCY;
+	public boolean isNotEmergency() {
+		return !EMERGENCY;
 	}
 
 	public String getBotToken() {

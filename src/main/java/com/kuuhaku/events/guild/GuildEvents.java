@@ -77,7 +77,7 @@ public class GuildEvents extends ListenerAdapter {
 			String rawMessage = message.getContentRaw();
 
 			String prefix = "";
-			if (!Main.getInfo().isEmergency()) {
+			if (Main.getInfo().isNotEmergency()) {
 				try {
 					prefix = SQLite.getGuildPrefix(guild.getId());
 				} catch (NoResultException | NullPointerException ignore) {
