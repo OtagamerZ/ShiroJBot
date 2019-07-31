@@ -24,6 +24,8 @@ import net.dv8tion.jda.core.events.Event;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PruneCommand extends Command {
 
@@ -34,12 +36,20 @@ public class PruneCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		if (args.length == 0) {
-			List<Message> msgs = channel.getHistory().retrievePast(channel.getHistory().size()).complete();
-			msgs.removeIf(m -> !m.getAuthor().isBot());
-			for (Message msg : msgs) {
-				msg.delete().queue();
+			AtomicBoolean noBotMessages = new AtomicBoolean(false);
+			int i = 0;
+			AtomicInteger count = new AtomicInteger();
+			while (!noBotMessages.get()) {
+				channel.getHistory().retrievePast(i += 100).queue(msgs -> {
+					msgs.removeIf(m -> !m.getAuthor().isBot());
+					for (Message msg : msgs) {
+						msg.delete().queue();
+						count.getAndIncrement();
+					}
+					if (msgs.isEmpty()) noBotMessages.set(true);
+				});
 			}
-			channel.sendMessage(msgs.size() + " mensagens de bots limpas.").queue();
+			channel.sendMessage(count.get() + " mensagens de bots limpas.").queue();
 		} else if (StringUtils.isNumeric(args[0])) {
 			List<Message> msgs = channel.getHistory().retrievePast(Integer.parseInt(args[0])).complete();
 			for (Message msg : msgs) {
