@@ -26,6 +26,7 @@ public class MusicCommand extends Command {
 			eb.addField(prefix + "skip", "Pula a música atual.", true);
 			eb.addField(prefix + "volume", "Define o volume do som.", true);
 			eb.addField(prefix + "info", "Mostra a música atual.", true);
+			eb.addField(prefix + "queue", "Mostra a fila atual.", true);
 
 			channel.sendMessage(eb.build()).queue();
 			return;
@@ -49,6 +50,9 @@ public class MusicCommand extends Command {
 				break;
 			case "info":
 				Music.trackInfo((TextChannel) channel);
+				break;
+			case "queue":
+				Music.queueInfo((TextChannel) channel);
 				break;
 			default:
 				channel.sendMessage(":x: | Comando de música inválido.").queue();
