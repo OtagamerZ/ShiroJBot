@@ -2,18 +2,14 @@ package com.kuuhaku.command.commands.music;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.Tradutor;
 import com.kuuhaku.controller.Youtube;
-import com.kuuhaku.model.Anime;
 import com.kuuhaku.model.YoutubeVideo;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
-import org.json.JSONObject;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 
@@ -43,7 +39,9 @@ public class YoutubeCommand extends Command {
                                 eb.setThumbnail(v.getThumb());
                                 eb.setColor(Helper.colorThief(v.getThumb()));
                                 eb.setFooter("Link: " + v.getUrl(), null);
-                                channel.sendMessage(eb.build()).queue(msg -> msg.addReaction("\u25B6").queue());
+                                channel.sendMessage(eb.build()).queue(msg -> {
+                                    if (member.getVoiceState().inVoiceChannel()) msg.addReaction("\u25B6").queue();
+                                });
                             }
                         } else m.editMessage(":x: | Nenhum vídeo encontrado").queue();
                     }catch (IOException e) {
