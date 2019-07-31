@@ -21,10 +21,10 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
+import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
-import java.util.concurrent.Executors;
 
 public class PruneCommand extends Command {
 
@@ -44,17 +44,14 @@ public class PruneCommand extends Command {
 			channel.purgeMessages(msgs);
 			channel.sendMessage(msgs.size() + " mensage" + (msgs.size() == 1 ? "m limpa." : "ns limpas.")).queue();
 		} else if (args[0].equalsIgnoreCase("all")) {
-			Executors.newSingleThreadExecutor().execute(() -> {
-				int count = 0;
-				try {
-					while (count < Double.POSITIVE_INFINITY) {
-						channel.purgeMessages(channel.getHistory().retrievePast(100).complete());
-						count++;
-					}
-				} catch (Exception e) {
-					channel.sendMessage(count + " mensage" + (count == 1 ? "m limpa." : "ns limpas.")).queue();
-				}
-			});
+			try {
+				((Channel) channel).createCopy().queue(s -> {
+					((Channel) channel).delete().queue();
+					((MessageChannel) s).sendMessage("Canal limpo com sucesso!").queue();
+				});
+			} catch (InsufficientPermissionException e) {
+				channel.sendMessage(":x: | Preciso de permissão para gerenciar canais para limpar o canal todo.").queue();
+			}
 		} else {
 			channel.sendMessage(":x: | Valor inválido, a quantidade deve ser um valor inteiro.").queue();
 		}
