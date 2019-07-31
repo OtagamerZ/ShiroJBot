@@ -77,7 +77,7 @@ public class GuildEvents extends ListenerAdapter {
 			String rawMessage = message.getContentRaw();
 
 			String prefix = "";
-			if (!Main.getInfo().isDev()) {
+			if (!Main.getInfo().isEmergency()) {
 				try {
 					prefix = SQLite.getGuildPrefix(guild.getId());
 				} catch (NoResultException | NullPointerException ignore) {
@@ -167,7 +167,7 @@ public class GuildEvents extends ListenerAdapter {
 			String rawMsgNoPrefix = rawMessage;
 			String commandName = "";
 			if (rawMessage.toLowerCase().contains(prefix)) {
-				rawMsgNoPrefix = rawMessage.substring(prefix.length()).trim();
+				rawMsgNoPrefix = rawMessage.replace(prefix, "").trim();
 				commandName = rawMsgNoPrefix.split(" ")[0].trim();
 			}
 
