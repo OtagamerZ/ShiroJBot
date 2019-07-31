@@ -14,6 +14,7 @@ public class MySQL {
 	private static EntityManagerFactory emf;
 
 	private static EntityManager getEntityManager() {
+		if (!Main.getInfo().isNotEmergency()) return null;
 		Map<String, String> props = new HashMap<>();
 		props.put("javax.persistence.jdbc.user", System.getenv("DB_LOGIN"));
 		props.put("javax.persistence.jdbc.password", System.getenv("DB_PASS"));
@@ -25,7 +26,7 @@ public class MySQL {
 
 		emf.getCache().evictAll();
 
-		return Main.getInfo().isNotEmergency() ? emf.createEntityManager() : null;
+		return emf.createEntityManager();
 	}
 
 	public static void dumpData(DataDump data) {
