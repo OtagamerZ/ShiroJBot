@@ -1,15 +1,20 @@
 package com.kuuhaku.utils;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.Youtube;
 import com.kuuhaku.handlers.music.GuildMusicManager;
+import com.kuuhaku.model.YoutubeVideo;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.entities.VoiceChannel;
 
-import java.awt.*;
+import java.io.IOException;
 
 public class Music {
 	private static void play(VoiceChannel vc, Guild guild, GuildMusicManager musicManager, AudioTrack track) {
@@ -50,7 +55,7 @@ public class Music {
 		}
 		musicManager.scheduler.resumeTrack();
 
-		channel.sendMessage("Música reiniciada.").queue();
+		channel.sendMessage("Música despausada.").queue();
 	}
 
 	public static void clearQueue(TextChannel channel) {
@@ -58,6 +63,7 @@ public class Music {
 
 		musicManager.scheduler.clear();
 		musicManager.player.destroy();
+		channel.getGuild().getAudioManager().closeAudioConnection();
 
 		channel.sendMessage("Fila limpa com sucesso.").queue(s -> Helper.spawnAd(channel));
 	}
@@ -70,14 +76,21 @@ public class Music {
 			return;
 		}
 
-		EmbedBuilder eb = new EmbedBuilder();
+		try {
+			YoutubeVideo yv = Youtube.getSingleData("allintitle:\"" + musicManager.player.getPlayingTrack().getInfo().title + "\"");
 
-		eb.setTitle(musicManager.player.getPlayingTrack().getInfo().title);
-		eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
-		eb.setAuthor(musicManager.player.getPlayingTrack().getInfo().author);
-		eb.setFooter(String.valueOf(musicManager.player.getPlayingTrack().getDuration()), null);
+			EmbedBuilder eb = new EmbedBuilder();
 
-		channel.sendMessage(eb.build()).queue();
+			eb.setTitle(musicManager.player.getPlayingTrack().getInfo().title, yv.getUrl());
+			eb.setImage(yv.getThumb());
+			eb.setColor(Helper.colorThief(yv.getThumb()));
+			eb.setAuthor(musicManager.player.getPlayingTrack().getInfo().author);
+			eb.setFooter(String.valueOf(Helper.round((musicManager.player.getPlayingTrack().getDuration() / 1000) / 60, 2)).replace(".", ":"), null);
+
+			channel.sendMessage(eb.build()).queue();
+		} catch (IOException e) {
+			channel.sendMessage(":x: | Erro ao recuperar dados da música.").queue();
+		}
 	}
 
 	public static void setVolume(TextChannel channel, int volume) {

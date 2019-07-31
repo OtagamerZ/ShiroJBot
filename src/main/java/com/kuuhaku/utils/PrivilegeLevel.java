@@ -19,7 +19,7 @@ package com.kuuhaku.utils;
 
 public enum PrivilegeLevel {
 
-    USER(0), DJ(0), PARTNER(1), MOD(2), DEV(3), NIICHAN(4);
+    USER(0), DJ(1), PARTNER(2), MOD(3), DEV(4), NIICHAN(5);
 
 	private final Integer authority;
 

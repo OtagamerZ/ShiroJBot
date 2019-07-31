@@ -203,12 +203,12 @@ public class GuildEvents extends ListenerAdapter {
 
 				if (found) {
 					Helper.logToChannel(author, true, command, "Um comando foi usado no canal " + ((TextChannel) channel).getAsMention(), guild);
-					if (!Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
-						channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
+					if (Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
+						command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
 						Helper.spawnAd(channel);
 						break;
 					}
-					command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
+					channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
 					Helper.spawnAd(channel);
 					break;
 				}
