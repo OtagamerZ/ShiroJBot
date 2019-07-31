@@ -21,6 +21,7 @@ import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.events.JibrilEvents;
 import com.kuuhaku.events.ScheduledEvents;
+import com.kuuhaku.events.guild.EmergencyEvents;
 import com.kuuhaku.events.guild.GuildEvents;
 import com.kuuhaku.events.guild.GuildUpdateEvents;
 import com.kuuhaku.managers.CommandManager;
@@ -69,39 +70,42 @@ public class Main implements JobListener {
 		api.getPresence().setGame(Game.playing("Iniciando..."));
 		jbr.getPresence().setGame(Game.listening("as mensagens de " + relay.getRelayMap().size() + " servidores!"));
 
-		api.addEventListener(new JDAEvents());
-		api.addEventListener(new GuildEvents());
-		api.addEventListener(new GuildUpdateEvents());
-		jbr.addEventListener(new JibrilEvents());
+		if (getInfo().isNotEmergency()) {
+			api.addEventListener(new JDAEvents());
+			api.addEventListener(new GuildEvents());
+			api.addEventListener(new GuildUpdateEvents());
+			jbr.addEventListener(new JibrilEvents());
+		} else api.addEventListener(new EmergencyEvents());
 
 		info.setStartTime(Instant.now().getEpochSecond());
 
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		ge.registerFont(Profile.FONT);
 
-		SQLite.connect();
-		if (SQLite.restoreData(MySQL.getData()))
-			Helper.log(Main.class, LogLevel.INFO, "Dados recuperados com sucesso!");
-		else Helper.log(Main.class, LogLevel.ERROR, "Erro ao recuperar dados.");
+		if (getInfo().isNotEmergency()) {
+			SQLite.connect();
+			if (SQLite.restoreData(MySQL.getData()))
+				Helper.log(Main.class, LogLevel.INFO, "Dados recuperados com sucesso!");
+			else Helper.log(Main.class, LogLevel.ERROR, "Erro ao recuperar dados.");
 
-		try {
-			if (backup == null) {
-				backup = JobBuilder.newJob(ScheduledEvents.class).withIdentity("backup", "1").build();
-			}
-			Trigger cron = TriggerBuilder.newTrigger().withIdentity("backup", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0 0/1 ? * * *")).build();
-			SchedulerFactory sf = new StdSchedulerFactory();
 			try {
-				sched = sf.getScheduler();
-				sched.scheduleJob(backup, cron);
-			} catch (Exception ignore) {
-			} finally {
-				sched.start();
-				Helper.log(Main.class, LogLevel.INFO, "Cronograma inicializado com sucesso!");
+				if (backup == null) {
+					backup = JobBuilder.newJob(ScheduledEvents.class).withIdentity("backup", "1").build();
+				}
+				Trigger cron = TriggerBuilder.newTrigger().withIdentity("backup", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0 0/1 ? * * *")).build();
+				SchedulerFactory sf = new StdSchedulerFactory();
+				try {
+					sched = sf.getScheduler();
+					sched.scheduleJob(backup, cron);
+				} catch (Exception ignore) {
+				} finally {
+					sched.start();
+					Helper.log(Main.class, LogLevel.INFO, "Cronograma inicializado com sucesso!");
+				}
+			} catch (SchedulerException e) {
+				Helper.log(Main.class, LogLevel.ERROR, "Erro ao inicializar cronograma: " + e);
 			}
-		} catch (SchedulerException e) {
-			Helper.log(Main.class, LogLevel.ERROR, "Erro ao inicializar cronograma: " + e);
 		}
-
 		AudioSourceManagers.registerRemoteSources(getInfo().getApm());
 		AudioSourceManagers.registerLocalSource(getInfo().getApm());
 
@@ -110,14 +114,16 @@ public class Main implements JobListener {
 
 	private static void finishStartUp() {
 		api.getPresence().setGame(getRandomGame());
-		Main.getInfo().getAPI().getGuilds().forEach(g -> {
-			try {
-				SQLite.getGuildById(g.getId());
-			} catch (NoResultException e) {
-				SQLite.addGuildToDB(g);
-				Helper.log(Main.class, LogLevel.INFO, "Guild adicionada ao banco: " + g.getName());
-			}
-		});
+		if (getInfo().isNotEmergency()) {
+			Main.getInfo().getAPI().getGuilds().forEach(g -> {
+				try {
+					SQLite.getGuildById(g.getId());
+				} catch (NoResultException e) {
+					SQLite.addGuildToDB(g);
+					Helper.log(Main.class, LogLevel.INFO, "Guild adicionada ao banco: " + g.getName());
+				}
+			});
+		}
 		Helper.log(Main.class, LogLevel.INFO, "<----------END OF BOOT---------->");
 		Helper.log(Main.class, LogLevel.INFO, "Estou pronta!");
 		getInfo().setReady(true);
