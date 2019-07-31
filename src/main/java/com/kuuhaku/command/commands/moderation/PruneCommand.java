@@ -39,7 +39,7 @@ public class PruneCommand extends Command {
 			channel.purgeMessages(msgs);
 			channel.sendMessage(msgs.size() + " mensage" + (msgs.size() == 1 ? "m de bot limpa." : "ns de bots limpas.")).queue();
 		} else if (StringUtils.isNumeric(args[0])) {
-			List<Message> msgs = channel.getHistory().retrievePast(Integer.parseInt(args[0])).complete();
+			List<Message> msgs = channel.getHistory().retrievePast(Integer.parseInt(args[0]) + 1).complete();
 			channel.purgeMessages(msgs);
 			channel.sendMessage(msgs.size() + " mensage" + (msgs.size() == 1 ? "m limpa." : "ns limpas.")).queue();
 		} else if (args[0].equalsIgnoreCase("all")) {
