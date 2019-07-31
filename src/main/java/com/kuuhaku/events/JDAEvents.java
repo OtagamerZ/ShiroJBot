@@ -27,6 +27,7 @@ import com.kuuhaku.utils.Music;
 import com.kuuhaku.utils.ShiroInfo;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.TextChannel;
@@ -139,6 +140,7 @@ public class JDAEvents extends ListenerAdapter {
 
 		if (!event.getUser().isBot() && message.getEmbeds().size() > 0 && message.getEmbeds().get(0).getFooter().getText().startsWith("Link: https://www.youtube.com/watch?v=") && event.getReactionEmote().getName().equals("\u25B6")) {
 			Music.loadAndPlay(event.getMember(), event.getTextChannel(), message.getEmbeds().get(0).getUrl());
+			if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) message.delete().queue();
 		}
 	}
 
