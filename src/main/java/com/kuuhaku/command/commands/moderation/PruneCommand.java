@@ -34,7 +34,7 @@ public class PruneCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		if (args.length == 0) {
-			List<Message> msgs = channel.getHistory().getRetrievedHistory();
+			List<Message> msgs = channel.getHistory().retrievePast(channel.getHistory().size()).complete();
 			msgs.removeIf(m -> !m.getAuthor().isBot());
 			for (Message msg : msgs) {
 				msg.delete().queue();
@@ -45,7 +45,7 @@ public class PruneCommand extends Command {
 			for (Message msg : msgs) {
 				msg.delete().queue();
 			}
-			channel.sendMessage(msgs.size() + " mensagens limpas.").queue();
+			channel.sendMessage(msgs.size() + " mensagen" + (msgs.size() == 1 ? "" : "s") + " limpas.").queue();
 		} else {
 			channel.sendMessage(":x: | Valor inválido, a quantidade deve ser um valor inteiro.").queue();
 		}
