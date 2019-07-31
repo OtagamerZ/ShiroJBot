@@ -78,69 +78,73 @@ public class JDAEvents extends ListenerAdapter {
 	@Override
 	public void onMessageReactionAdd(MessageReactionAddEvent event) {
 		if (event.getUser().isBot()) return;
-		Message message = event.getChannel().getMessageById(event.getMessageId()).complete();
-		if (Main.getInfo().getPolls().containsKey(message.getId())) {
 
-			if (event.getReactionEmote().getName().equals("\uD83D\uDC4D"))
-				Main.getInfo().getPolls().get(message.getId())[0]++;
-			else if (event.getReactionEmote().getName().equals("\uD83D\uDC4E"))
-				Main.getInfo().getPolls().get(message.getId())[1]++;
-			else if (event.getReactionEmote().getName().equals("\u274C") && message.getEmbeds().get(0).getTitle().equals(":notepad_spiral: Enquete criada por " + event.getMember().getEffectiveName())) {
-				Main.getInfo().getPolls().remove(message.getId());
-				message.delete().queue();
-			}
-		}
+		try {
+			Message message = event.getChannel().getMessageById(event.getMessageId()).complete();
+			if (Main.getInfo().getPolls().containsKey(message.getId())) {
 
-		if (message.getAuthor() == Main.getInfo().getSelfUser() && message.getMentionedUsers().size() > 0) {
-			if (event.getUser() == message.getMentionedUsers().get(1)) {
-				if (message.getContentRaw().contains("abraçou")) {
-					User author = message.getMentionedUsers().get(0);
-					MessageChannel channel = message.getChannel();
-
-					new HugReaction(true).execute(author, null, null, null, message, channel, null, null, null);
-				} else if (message.getContentRaw().contains("beijou")) {
-					User author = message.getMentionedUsers().get(0);
-					MessageChannel channel = message.getChannel();
-
-					new KissReaction(true).execute(author, null, null, null, message, channel, null, null, null);
-				} else if (message.getContentRaw().contains("fez cafuné em")) {
-					User author = message.getMentionedUsers().get(0);
-					MessageChannel channel = message.getChannel();
-
-					new PatReaction(true).execute(author, null, null, null, message, channel, null, null, null);
-				} else if (message.getContentRaw().contains("encarou")) {
-					User author = message.getMentionedUsers().get(0);
-					MessageChannel channel = message.getChannel();
-
-					new StareReaction(true).execute(author, null, null, null, message, channel, null, null, null);
-				} else if (message.getContentRaw().contains("deu um tapa em")) {
-					User author = message.getMentionedUsers().get(0);
-					MessageChannel channel = message.getChannel();
-
-					new SlapReaction(true).execute(author, null, null, null, message, channel, null, null, null);
-				} else if (message.getContentRaw().contains("socou")) {
-					User author = message.getMentionedUsers().get(0);
-					MessageChannel channel = message.getChannel();
-
-					new PunchReaction(true).execute(author, null, null, null, message, channel, null, null, null);
-				} else if (message.getContentRaw().contains("mordeu")) {
-					User author = message.getMentionedUsers().get(0);
-					MessageChannel channel = message.getChannel();
-
-					new BiteReaction(true).execute(author, null, null, null, message, channel, null, null, null);
+				if (event.getReactionEmote().getName().equals("\uD83D\uDC4D"))
+					Main.getInfo().getPolls().get(message.getId())[0]++;
+				else if (event.getReactionEmote().getName().equals("\uD83D\uDC4E"))
+					Main.getInfo().getPolls().get(message.getId())[1]++;
+				else if (event.getReactionEmote().getName().equals("\u274C") && message.getEmbeds().get(0).getTitle().equals(":notepad_spiral: Enquete criada por " + event.getMember().getEffectiveName())) {
+					Main.getInfo().getPolls().remove(message.getId());
+					message.delete().queue();
 				}
 			}
 
-			if (ShiroInfo.duels.containsKey(event.getMessageId()) && event.getUser() == ShiroInfo.duels.get((event.getMessageId())).getP2() && event.getReactionEmote().getName().equals("\u2694")) {
-				ShiroInfo.dd.add(ShiroInfo.duels.get(event.getMessageId()));
-				ShiroInfo.duels.remove(event.getMessageId());
-				event.getChannel().sendMessage("O duelo começou!\nUsem `atacar` para atacar, `defender` para defender ou `especial` para tentar utilizar seu poder especial de alinhamento.\n\n**O desafiante começa primeiro!**").queue();
-			}
-		}
+			if (message.getAuthor() == Main.getInfo().getSelfUser() && message.getMentionedUsers().size() > 0) {
+				if (event.getUser() == message.getMentionedUsers().get(1)) {
+					if (message.getContentRaw().contains("abraçou")) {
+						User author = message.getMentionedUsers().get(0);
+						MessageChannel channel = message.getChannel();
 
-		if (!event.getUser().isBot() && message.getEmbeds().size() > 0 && message.getEmbeds().get(0).getFooter().getText().startsWith("Link: https://www.youtube.com/watch?v=") && event.getReactionEmote().getName().equals("\u25B6")) {
-			Music.loadAndPlay(event.getMember(), event.getTextChannel(), message.getEmbeds().get(0).getUrl());
-			if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) message.delete().queue();
+						new HugReaction(true).execute(author, null, null, null, message, channel, null, null, null);
+					} else if (message.getContentRaw().contains("beijou")) {
+						User author = message.getMentionedUsers().get(0);
+						MessageChannel channel = message.getChannel();
+
+						new KissReaction(true).execute(author, null, null, null, message, channel, null, null, null);
+					} else if (message.getContentRaw().contains("fez cafuné em")) {
+						User author = message.getMentionedUsers().get(0);
+						MessageChannel channel = message.getChannel();
+
+						new PatReaction(true).execute(author, null, null, null, message, channel, null, null, null);
+					} else if (message.getContentRaw().contains("encarou")) {
+						User author = message.getMentionedUsers().get(0);
+						MessageChannel channel = message.getChannel();
+
+						new StareReaction(true).execute(author, null, null, null, message, channel, null, null, null);
+					} else if (message.getContentRaw().contains("deu um tapa em")) {
+						User author = message.getMentionedUsers().get(0);
+						MessageChannel channel = message.getChannel();
+
+						new SlapReaction(true).execute(author, null, null, null, message, channel, null, null, null);
+					} else if (message.getContentRaw().contains("socou")) {
+						User author = message.getMentionedUsers().get(0);
+						MessageChannel channel = message.getChannel();
+
+						new PunchReaction(true).execute(author, null, null, null, message, channel, null, null, null);
+					} else if (message.getContentRaw().contains("mordeu")) {
+						User author = message.getMentionedUsers().get(0);
+						MessageChannel channel = message.getChannel();
+
+						new BiteReaction(true).execute(author, null, null, null, message, channel, null, null, null);
+					}
+				}
+
+				if (ShiroInfo.duels.containsKey(event.getMessageId()) && event.getUser() == ShiroInfo.duels.get((event.getMessageId())).getP2() && event.getReactionEmote().getName().equals("\u2694")) {
+					ShiroInfo.dd.add(ShiroInfo.duels.get(event.getMessageId()));
+					ShiroInfo.duels.remove(event.getMessageId());
+					event.getChannel().sendMessage("O duelo começou!\nUsem `atacar` para atacar, `defender` para defender ou `especial` para tentar utilizar seu poder especial de alinhamento.\n\n**O desafiante começa primeiro!**").queue();
+				}
+			}
+
+			if (!event.getUser().isBot() && message.getEmbeds().size() > 0 && message.getEmbeds().get(0).getFooter().getText().startsWith("Link: https://www.youtube.com/watch?v=") && event.getReactionEmote().getName().equals("\u25B6")) {
+				Music.loadAndPlay(event.getMember(), event.getTextChannel(), message.getEmbeds().get(0).getUrl());
+				if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) message.delete().queue();
+			}
+		} catch (NullPointerException ignore) {
 		}
 	}
 
