@@ -2,21 +2,11 @@ package com.kuuhaku.command.commands.music;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.Youtube;
-import com.kuuhaku.handlers.music.GuildMusicManager;
-import com.kuuhaku.model.YoutubeVideo;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import com.kuuhaku.utils.Music;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
-import net.dv8tion.jda.core.managers.AudioManager;
 import org.apache.commons.lang3.StringUtils;
-
-import java.io.IOException;
-import java.util.List;
 
 public class MusicCommand extends Command {
 
@@ -32,7 +22,7 @@ public class MusicCommand extends Command {
 			eb.setTitle("Comandos de controle de música");
 			eb.addField(prefix + "resume", "Continua a fila de músicas caso esteja pausada.", true);
 			eb.addField(prefix + "pause", "Pausa a fila de músicas.", true);
-			eb.addField(prefix + "stop", "Para e limpa a fila de músicas.", true);
+			eb.addField(prefix + "clear", "Para e limpa a fila de músicas.", true);
 			eb.addField(prefix + "skip", "Pula a música atual.", true);
 			eb.addField(prefix + "volume", "Define o volume do som.", true);
 			eb.addField(prefix + "info", "Mostra a música atual.", true);
@@ -45,9 +35,9 @@ public class MusicCommand extends Command {
 				Music.resumeTrack((TextChannel) channel);
 				break;
 			case "pause":
-				Music.stopTrack((TextChannel) channel);
+				Music.pauseTrack((TextChannel) channel);
 				break;
-			case "stop":
+			case "clear":
 				Music.clearQueue((TextChannel) channel);
 				break;
 			case "skip":

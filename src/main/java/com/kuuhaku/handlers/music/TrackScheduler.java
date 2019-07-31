@@ -41,12 +41,12 @@ public class TrackScheduler extends AudioEventAdapter {
 	/**
 	 * Stop the track.
 	 */
-	public void stopTrack() {
-		player.stopTrack();
+	public void pauseTrack() {
+		player.setPaused(true);
 	}
 
 	public void resumeTrack() {
-		player.playTrack(player.getPlayingTrack());
+		player.setPaused(false);
 	}
 
 	@Override
