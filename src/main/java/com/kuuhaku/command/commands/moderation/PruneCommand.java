@@ -45,7 +45,7 @@ public class PruneCommand extends Command {
 		} else if (args[0].equalsIgnoreCase("all")) {
 			int count = 0;
 			while (channel.hasLatestMessage()) {
-				channel.pinMessageById(channel.getLatestMessageId()).queue();
+				channel.purgeMessagesById(channel.getLatestMessageId());
 				count++;
 			}
 			channel.sendMessage(count + " mensage" + (count == 1 ? "m limpa." : "ns limpas.")).queue();
