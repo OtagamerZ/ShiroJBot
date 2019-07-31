@@ -41,18 +41,15 @@ public class PruneCommand extends Command {
 			channel.purgeMessages(msgs);
 			channel.sendMessage(msgs.size() + " mensage" + (msgs.size() == 1 ? "m de bot limpa." : "ns de bots limpas.")).queue();
 		} else if (StringUtils.isNumeric(args[0])) {
-			List<Message> msgs = channel.getHistory().retrievePast(Integer.parseInt(args[0]) + 1).complete();
+			List<Message> msgs = channel.getHistory().retrievePast(Integer.parseInt(args[0]) == 100 ? 100 : Integer.parseInt(args[0]) + 1).complete();
 			channel.purgeMessages(msgs);
 			channel.sendMessage(msgs.size() + " mensage" + (msgs.size() == 1 ? "m limpa." : "ns limpas.")).queue();
 		} else if (args[0].equalsIgnoreCase("all")) {
-			AtomicInteger count = new AtomicInteger();
 			Executors.newSingleThreadExecutor().execute(() -> {
-				while (channel.hasLatestMessage()) {
-					channel.purgeMessages(channel.getHistory().retrievePast(100).complete());
-					count.getAndIncrement();
-				}
+				List<Message> msgs = channel.getIterableHistory().complete();
+				channel.purgeMessages(msgs);
+				channel.sendMessage(msgs.size() + " mensage" + (msgs.size() == 1 ? "m limpa." : "ns limpas.")).queue();
 			});
-			channel.sendMessage(count + " mensage" + (count.get() == 1 ? "m limpa." : "ns limpas.")).queue();
 		} else {
 			channel.sendMessage(":x: | Valor inválido, a quantidade deve ser um valor inteiro.").queue();
 		}
