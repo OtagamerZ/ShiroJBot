@@ -24,6 +24,7 @@ import net.dv8tion.jda.core.events.Event;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.concurrent.Executors;
 
 public class PruneCommand extends Command {
 
@@ -43,12 +44,14 @@ public class PruneCommand extends Command {
 			channel.purgeMessages(msgs);
 			channel.sendMessage(msgs.size() + " mensage" + (msgs.size() == 1 ? "m limpa." : "ns limpas.")).queue();
 		} else if (args[0].equalsIgnoreCase("all")) {
-			int count = 0;
-			while (channel.hasLatestMessage()) {
-				channel.purgeMessages(channel.getHistory().retrievePast(100).complete());
-				count++;
-			}
-			channel.sendMessage(count + " mensage" + (count == 1 ? "m limpa." : "ns limpas.")).queue();
+			Executors.newSingleThreadExecutor().execute(() -> {
+				int count = 0;
+				while (channel.hasLatestMessage()) {
+					channel.purgeMessages(channel.getHistory().retrievePast(100).complete());
+					count++;
+				}
+				channel.sendMessage(count + " mensage" + (count == 1 ? "m limpa." : "ns limpas.")).queue();
+			});
 		} else {
 			channel.sendMessage(":x: | Valor inválido, a quantidade deve ser um valor inteiro.").queue();
 		}
