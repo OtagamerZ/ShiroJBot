@@ -70,7 +70,7 @@ public class Main implements JobListener {
 		api.getPresence().setGame(Game.playing("Iniciando..."));
 		jbr.getPresence().setGame(Game.listening("as mensagens de " + relay.getRelayMap().size() + " servidores!"));
 
-		if (!getInfo().isEmergency()) {
+		if (getInfo().isNotEmergency()) {
 			api.addEventListener(new JDAEvents());
 			api.addEventListener(new GuildEvents());
 			api.addEventListener(new GuildUpdateEvents());
@@ -82,7 +82,7 @@ public class Main implements JobListener {
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		ge.registerFont(Profile.FONT);
 
-		if (!getInfo().isEmergency()) {
+		if (getInfo().isNotEmergency()) {
 			SQLite.connect();
 			if (SQLite.restoreData(MySQL.getData()))
 				Helper.log(Main.class, LogLevel.INFO, "Dados recuperados com sucesso!");
@@ -114,7 +114,7 @@ public class Main implements JobListener {
 
 	private static void finishStartUp() {
 		api.getPresence().setGame(getRandomGame());
-		if (!getInfo().isEmergency()) {
+		if (getInfo().isNotEmergency()) {
 			Main.getInfo().getAPI().getGuilds().forEach(g -> {
 				try {
 					SQLite.getGuildById(g.getId());

@@ -1,5 +1,6 @@
 package com.kuuhaku.controller;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.model.*;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
@@ -13,18 +14,20 @@ public class MySQL {
     private static EntityManagerFactory emf;
 
     private static EntityManager getEntityManager() {
-        Map<String, String> props = new HashMap<>();
-        props.put("javax.persistence.jdbc.user", System.getenv("DB_LOGIN"));
-        props.put("javax.persistence.jdbc.password", System.getenv("DB_PASS"));
+        if (Main.getInfo().isNotEmergency()) {
+            Map<String, String> props = new HashMap<>();
+            props.put("javax.persistence.jdbc.user", System.getenv("DB_LOGIN"));
+            props.put("javax.persistence.jdbc.password", System.getenv("DB_PASS"));
 
-        if (emf == null) {
-            emf = Persistence.createEntityManagerFactory("shiro_remote", props);
-            Helper.log(MySQL.class, LogLevel.INFO, "✅ | Ligação à base de dados MySQL estabelecida.");
-        }
+            if (emf == null) {
+                emf = Persistence.createEntityManagerFactory("shiro_remote", props);
+                Helper.log(MySQL.class, LogLevel.INFO, "✅ | Ligação à base de dados MySQL estabelecida.");
+            }
 
-        emf.getCache().evictAll();
+            emf.getCache().evictAll();
 
-        return emf.createEntityManager();
+            return emf.createEntityManager();
+        } else return null;
     }
 
     public static void dumpData(DataDump data) {
