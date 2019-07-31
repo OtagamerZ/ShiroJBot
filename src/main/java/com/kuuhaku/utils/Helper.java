@@ -71,7 +71,6 @@ public class Helper {
 		return PrivilegeLevel.USER;
 	}
 
-	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 	public static boolean hasPermission(Member member, PrivilegeLevel privilegeLevel) {
 		return getPrivilegeLevel(member).hasAuthority(privilegeLevel);
 	}
