@@ -26,6 +26,7 @@ import com.kuuhaku.command.commands.misc.*;
 import com.kuuhaku.command.commands.moderation.*;
 import com.kuuhaku.command.commands.dev.*;
 import com.kuuhaku.command.commands.music.MusicCommand;
+import com.kuuhaku.command.commands.music.VideoCommand;
 import com.kuuhaku.command.commands.music.YoutubeCommand;
 import com.kuuhaku.command.commands.partner.AiCommand;
 import com.kuuhaku.command.commands.partner.CompileCommand;
@@ -136,6 +137,7 @@ public class CommandManager {
             //MUSICA
             add(new MusicCommand());
             add(new YoutubeCommand());
+            add(new VideoCommand());
         }};
     }
 
