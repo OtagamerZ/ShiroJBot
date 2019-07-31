@@ -38,8 +38,7 @@ import java.util.concurrent.ScheduledExecutorService;
 @SuppressWarnings("localvariable")
 public class ShiroInfo {
 
-	//TODO Alternador do modo desenvolvimento (true quando utilizar em IDEs, false quando for dar push para o master)
-	private static final boolean DEV = false;
+	private static final boolean EMERGENCY = true;
 
 	//CONSTANTS
 	private static final String BotToken = System.getenv("BOT_TOKEN");
@@ -49,7 +48,7 @@ public class ShiroInfo {
 	private static final String apiVersion = "3.8.3_463";
 	private static final String name = "Shiro";
 	private static final String version = "2.0";
-	private static final String default_prefix = DEV ? "dev!" : "s!";
+	private static final String default_prefix = EMERGENCY ? "dev!" : "s!";
 	private static final String nomeDB = "shiro.sqlite";
 	private static final String niichan = "350836145921327115"; //KuuHaKu
 	private static final ArrayList<String> developers = new ArrayList<String>() {{
@@ -76,8 +75,8 @@ public class ShiroInfo {
 	}
 
 	//CONSTANTS
-	public boolean isDev() {
-		return DEV;
+	public boolean isEmergency() {
+		return EMERGENCY;
 	}
 
 	public String getBotToken() {
