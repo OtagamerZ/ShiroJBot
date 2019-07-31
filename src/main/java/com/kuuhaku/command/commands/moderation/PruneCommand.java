@@ -46,11 +46,14 @@ public class PruneCommand extends Command {
 		} else if (args[0].equalsIgnoreCase("all")) {
 			Executors.newSingleThreadExecutor().execute(() -> {
 				int count = 0;
-				while (channel.hasLatestMessage()) {
-					channel.purgeMessages(channel.getHistory().retrievePast(5).complete());
-					count++;
+				try {
+					while (count < Double.POSITIVE_INFINITY) {
+						channel.purgeMessages(channel.getHistory().retrievePast(5).complete());
+						count++;
+					}
+				} catch (Exception e) {
+					channel.sendMessage(count + " mensage" + (count == 1 ? "m limpa." : "ns limpas.")).queue();
 				}
-				channel.sendMessage(count + " mensage" + (count == 1 ? "m limpa." : "ns limpas.")).queue();
 			});
 		} else {
 			channel.sendMessage(":x: | Valor inválido, a quantidade deve ser um valor inteiro.").queue();
