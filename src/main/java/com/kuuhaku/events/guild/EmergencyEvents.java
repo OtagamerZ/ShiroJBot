@@ -83,7 +83,8 @@ public class EmergencyEvents extends ListenerAdapter {
 							break;
 						}
 					} catch (Exception e) {
-						channel.sendMessage(":warning: | Eu estou no modo emergencia (servidor caiu). Alguns comandos (como este) estão temporariamente desabilitados.").queue();
+						channel.sendMessage(":warning: | Eu estou no modo de emergencia devido à queda do servidor, alguns comandos estão indisponíveis.").queue();
+						return;
 					}
 					channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
 					Helper.spawnAd(channel);
