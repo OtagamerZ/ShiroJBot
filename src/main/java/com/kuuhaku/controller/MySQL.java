@@ -1,5 +1,6 @@
 package com.kuuhaku.controller;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.model.*;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
@@ -24,7 +25,7 @@ public class MySQL {
 
 		emf.getCache().evictAll();
 
-		return emf.createEntityManager();
+		return Main.getInfo().isNotEmergency() ? emf.createEntityManager() : null;
 	}
 
 	public static void dumpData(DataDump data) {
