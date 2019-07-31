@@ -66,6 +66,7 @@ public class CommandManager {
             add(new AntispamCommand());
             add(new AntiraidCommand());
             add(new MakeLogCommand());
+            add(new PruneCommand());
 
             //INFORMATION
             add(new ComandosCommand());
