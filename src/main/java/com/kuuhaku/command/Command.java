@@ -91,6 +91,5 @@ public abstract class Command {
      *         O membro do servidor que executou o comando
      *
      */
-	public abstract void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix);
-	
+	public abstract void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) throws Exception;
 }
