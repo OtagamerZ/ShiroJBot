@@ -52,4 +52,37 @@ public class Youtube {
 		}
 		return videos;
 	}
+
+	public static YoutubeVideo getSingleData(String query) throws IOException {
+		URL url = new URL(YouTube.DEFAULT_BASE_URL + "search?key=" + Main.getInfo().getYoutubeToken() + "&part=snippet&q=" + URLEncoder.encode(query, StandardCharsets.UTF_8.toString()) + "&maxResults=5");
+		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+		con.setRequestMethod("GET");
+		con.setRequestProperty("Accept", "application/json");
+		con.addRequestProperty("Accept-Charset", "UTF-8");
+		con.addRequestProperty("User-Agent", "Mozilla/5.0");
+
+		BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
+
+		String input;
+		StringBuilder resposta = new StringBuilder();
+		while ((input = br.readLine()) != null) {
+			resposta.append(input);
+		}
+		br.close();
+		con.disconnect();
+
+		Helper.log(Tradutor.class, LogLevel.DEBUG, resposta.toString());
+		JSONObject json = new JSONObject(resposta.toString());
+		JSONArray ja = json.getJSONArray("items");
+		JSONObject jid = ja.getJSONObject(0).getJSONObject("id");
+		JSONObject jsnippet = ja.getJSONObject(0).getJSONObject("snippet");
+
+		String id = jid.getString(jid.has("videoId") ? "videoId" : "playlistId");
+		String title = jsnippet.getString("title");
+		String desc = jsnippet.getString("description");
+		String thumb = jsnippet.getJSONObject("thumbnails").getJSONObject("medium").getString("url");
+		String channel = jsnippet.getString("channelTitle");
+
+		return new YoutubeVideo(id, title, desc, thumb, channel);
+	}
 }
