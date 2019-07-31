@@ -19,22 +19,17 @@ package com.kuuhaku.utils;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.handlers.games.Beyblade;
-import com.kuuhaku.handlers.music.GuildMusicManager;
-import com.kuuhaku.model.*;
-import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
-import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
-import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.kuuhaku.model.GamblePool;
+import com.kuuhaku.model.guildConfig;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -56,7 +51,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -71,6 +65,8 @@ public class Helper {
 			return PrivilegeLevel.DEV;
 		} else if (member.hasPermission(Permission.MESSAGE_MANAGE)) {
 			return PrivilegeLevel.MOD;
+		} else if (member.getRoles().stream().anyMatch(r -> StringUtils.containsIgnoreCase(r.getName(), "dj"))) {
+			return PrivilegeLevel.DJ;
 		}
 		return PrivilegeLevel.USER;
 	}
