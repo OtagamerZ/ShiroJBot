@@ -29,6 +29,7 @@ import com.kuuhaku.model.Profile;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
 import com.kuuhaku.utils.ShiroInfo;
+import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -100,6 +101,9 @@ public class Main implements JobListener {
 		} catch (SchedulerException e) {
 			Helper.log(Main.class, LogLevel.ERROR, "Erro ao inicializar cronograma: " + e);
 		}
+
+		AudioSourceManagers.registerRemoteSources(getInfo().getApm());
+		AudioSourceManagers.registerLocalSource(getInfo().getApm());
 
 		finishStartUp();
 	}

@@ -148,7 +148,7 @@ public class ShiroInfo {
 		return scheduler;
 	}
 
-	AudioPlayerManager getApm() {
+	public AudioPlayerManager getApm() {
 		return apm;
 	}
 
