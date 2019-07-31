@@ -38,7 +38,6 @@ import java.util.concurrent.ScheduledExecutorService;
 @SuppressWarnings("localvariable")
 public class ShiroInfo {
 
-	//TODO Alternador do modo desenvolvimento (true quando utilizar em IDEs, false quando for dar push para o master)
 	private static final boolean DEV = false;
 
 	//CONSTANTS
