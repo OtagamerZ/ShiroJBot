@@ -29,14 +29,14 @@ public class Music {
 		channel.sendMessage("Música pulada. Tocando agora: " + musicManager.player.getPlayingTrack().getInfo().title).queue();
 	}
 
-	public static void stopTrack(TextChannel channel) {
+	public static void pauseTrack(TextChannel channel) {
 		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild());
 
 		if (musicManager.player.isPaused()) {
 			channel.sendMessage(":x: | A música já está pausada.").queue();
 			return;
 		}
-		musicManager.scheduler.stopTrack();
+		musicManager.scheduler.pauseTrack();
 
 		channel.sendMessage("Música pausada.").queue();
 	}

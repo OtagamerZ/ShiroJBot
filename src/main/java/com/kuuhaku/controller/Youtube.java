@@ -40,11 +40,14 @@ public class Youtube {
 		JSONArray ja = json.getJSONArray("items");
 		List<YoutubeVideo> videos = new ArrayList<>();
 		for (Object j : ja) {
-			String id = ((JSONObject) j).getJSONObject("id").getString("videoId");
-			String title = ((JSONObject) j).getJSONObject("snippet").getString("title");
-			String desc = ((JSONObject) j).getJSONObject("snippet").getString("description");
-			String thumb = ((JSONObject) j).getJSONObject("snippet").getJSONObject("thumbnails").getJSONObject("medium").getString("url");
-			String channel = ((JSONObject) j).getJSONObject("snippet").getString("channelTitle");
+			JSONObject jid = ((JSONObject) j).getJSONObject("id");
+			JSONObject jsnippet = ((JSONObject) j).getJSONObject("snippet");
+
+			String id = jid.getString(jid.has("videoId") ? "videoId" : "playlistId");
+			String title = jsnippet.getString("title");
+			String desc = jsnippet.getString("description");
+			String thumb = jsnippet.getJSONObject("thumbnails").getJSONObject("medium").getString("url");
+			String channel = jsnippet.getString("channelTitle");
 			videos.add(new YoutubeVideo(id, title, desc, thumb, channel));
 		}
 		return videos;
