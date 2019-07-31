@@ -48,7 +48,7 @@ public class PruneCommand extends Command {
 				int count = 0;
 				try {
 					while (count < Double.POSITIVE_INFINITY) {
-						channel.purgeMessages(channel.getHistory().retrievePast(5).complete());
+						channel.purgeMessages(channel.getHistory().retrievePast(100).complete());
 						count++;
 					}
 				} catch (Exception e) {
