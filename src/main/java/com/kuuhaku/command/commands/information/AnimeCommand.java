@@ -40,7 +40,7 @@ public class AnimeCommand extends Command {
 						"month\n" +
 						"day\n" +
 						"}\n" +
-						"duration\n" +
+						"episodes\n" +
 						"coverImage {\n" +
 						"extraLarge\n" +
 						"large\n" +
