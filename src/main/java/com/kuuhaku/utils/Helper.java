@@ -46,10 +46,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -305,5 +303,9 @@ public class Helper {
 			sb.append(colorTable[clamp(new Random().nextInt(16), 0, 16)]);
 		}
 		return "#" + sb.toString();
+	}
+
+	public static boolean compareWithValues(int value, int... compareWith) {
+		return Arrays.stream(compareWith).anyMatch(v -> v == value);
 	}
 }
