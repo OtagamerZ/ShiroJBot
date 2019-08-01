@@ -101,7 +101,7 @@ public class AnimeCommand extends Command {
 				eb.addField("Estado:", anime.getStatus(), true);
 				eb.addField("Episódios:", anime.getDuration(), true);
 				if (anime.getNaeAiringAt() != null)
-					eb.addField("Próximo episódio:", anime.getNaeEpisode() + " -> " + anime.getNaeAiringAt(), true);
+					eb.addField("Próximo episódio:", anime.getNaeAiringAt(), true);
 				eb.addField("Nota:", Float.toString(anime.getScore() / 10), true);
 				eb.addField("Popularidade:", Integer.toString(anime.getPopularity()), true);
 				eb.addField("Assista em:", link, true);
