@@ -28,10 +28,7 @@ import com.kuuhaku.utils.ShiroInfo;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.events.ShutdownEvent;
 import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
@@ -144,7 +141,8 @@ public class JDAEvents extends ListenerAdapter {
 			if (!event.getUser().isBot() && message.getEmbeds().size() > 0 && message.getEmbeds().get(0).getFooter().getText().startsWith("Link: https://www.youtube.com/watch?v=") && event.getReactionEmote().getName().equals("\u25B6")) {
 				Music.loadAndPlay(event.getMember(), event.getTextChannel(), message.getEmbeds().get(0).getUrl());
 				if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) {
-					List<Message> msgs = event.getChannel().getHistoryAround(event.getMessageId(), 5).complete().getRetrievedHistory();
+					MessageHistory h = MessageHistory.getHistoryAround(event.getChannel(), event.getMessageId()).limit(20).complete();
+					List<Message> msgs = h.getRetrievedHistory();
 					msgs.removeIf(m -> m.getAuthor() != Main.getInfo().getSelfUser());
 					event.getChannel().purgeMessages(msgs);
 				}
