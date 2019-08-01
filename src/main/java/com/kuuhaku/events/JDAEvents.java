@@ -48,6 +48,7 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class JDAEvents extends ListenerAdapter {
 
@@ -141,9 +142,7 @@ public class JDAEvents extends ListenerAdapter {
 			if (message.getAuthor() == Main.getInfo().getSelfUser() && message.getEmbeds().size() > 0 && message.getEmbeds().get(0).getFooter().getText().startsWith("Link: https://www.youtube.com/watch?v=") && event.getReactionEmote().getName().equals("\u25B6")) {
 				Music.loadAndPlay(event.getMember(), event.getTextChannel(), message.getEmbeds().get(0).getUrl());
 				if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) {
-					MessageHistory h = MessageHistory.getHistoryAround(event.getChannel(), event.getMessageId()).limit(20).complete();
-					List<Message> msgs = h.getRetrievedHistory();
-					msgs.removeIf(m -> m.getAuthor() != Main.getInfo().getSelfUser());
+					List<Message> msgs = event.getChannel().getHistoryAround(event.getMessageId(), 50).complete().getRetrievedHistory().stream().filter(m -> m.getAuthor() == Main.getInfo().getSelfUser() && m.getEmbeds().size() == 1 && m.getEmbeds().get(0).getFooter().getText().startsWith("Link: https://www.youtube.com/watch?v=")).collect(Collectors.toList());
 					event.getChannel().purgeMessages(msgs);
 				}
 			}
