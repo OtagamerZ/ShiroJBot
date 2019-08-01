@@ -18,7 +18,10 @@
 package com.kuuhaku.controller;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.LogLevel;
 import org.apache.commons.io.IOUtils;
+import org.json.JSONObject;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -62,5 +65,27 @@ public class Anime {
         con.getInputStream();
 
         return con.getResponseCode();
+    }
+
+    public static JSONObject getDAData(String name) throws IOException {
+        URL url = new URL("https://shiro-api.herokuapp.com/apis/da?name=" + name);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+        con.setRequestProperty("Accept", "application/json");
+        con.addRequestProperty("Accept-Charset", "UTF-8");
+        con.addRequestProperty("User-Agent", "Mozilla/5.0");
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
+
+        String input;
+        StringBuilder resposta = new StringBuilder();
+        while ((input = br.readLine()) != null) {
+            resposta.append(input);
+        }
+        br.close();
+        con.disconnect();
+
+        Helper.log(Tradutor.class, LogLevel.DEBUG, resposta.toString());
+        return new JSONObject(resposta.toString());
     }
 }
