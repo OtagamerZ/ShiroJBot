@@ -66,7 +66,7 @@ public class ImageCommand extends Command {
                 eb.setAuthor("Aqui está!", "https://safebooru.org//images/" + jo.getString("directory") + "/" + jo.getString("image"));
                 eb.addField("Largura:", Integer.toString(jo.getInt("width")), true);
                 eb.addField("Altura:", Integer.toString(jo.getInt("height")), true);
-                eb.addField("Tags:", "`" + String.join("` `", jo.getString("tags").split(" ")) + "`", true);
+                eb.addField("Tags:", "`" + String.join("` `", Arrays.copyOfRange(jo.getString("tags").split(" "), 0, jo.getString("tags").split(" ").length < 14 ? jo.getString("tags").split(" ").length - 1 : 14)) + "`", true);
                 eb.setImage(url);
 
                 m.delete().queue();
