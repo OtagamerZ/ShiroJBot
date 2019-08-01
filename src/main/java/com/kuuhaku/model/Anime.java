@@ -109,7 +109,7 @@ public class Anime {
 
         idMal = media.getInt("idMal");
         status = media.getString("status").equals("FINISHED") ? "Completo" : "Transmitindo";
-        duration = Integer.toString(media.getInt("episodes"));
+        duration = String.valueOf(media.get("episodes"));
         genres = media.getJSONArray("genres").toList();
         score = media.getInt("averageScore");
         popularity = media.getInt("popularity");
