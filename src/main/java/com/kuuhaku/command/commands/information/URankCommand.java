@@ -29,7 +29,6 @@ import net.dv8tion.jda.core.events.Event;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class URankCommand extends Command {
@@ -68,8 +67,10 @@ public class URankCommand extends Command {
 
 				for (int i = 1; i < mbs.size() && i < 10; i++) {
 					try {
+						StringBuilder lb = new StringBuilder();
 						Guild g = Main.getInfo().getGuildByID(mbs.get(i).getId().substring(18));
-						sb.append(i + 1).append(" - ").append(args.length == 0 ? " " : ("(" + g.getName() + ") ")).append(g.getMemberById(mbs.get(i).getMid()).getEffectiveName()).append(" - Lvl ").append(mbs.get(i).getLevel()).append(" (").append(mbs.get(i).getXp()).append(" xp)\n");
+						lb.append(i + 1).append(" - ").append(args.length == 0 ? " " : ("(" + g.getName() + ") ")).append(g.getMemberById(mbs.get(i).getMid()).getEffectiveName()).append(" - Lvl ").append(mbs.get(i).getLevel()).append(" (").append(mbs.get(i).getXp()).append(" xp)\n");
+						sb.append(lb.toString());
 					} catch (Exception e) {
 						mbs.remove(i);
 						i -= i == 1 ? 0 : 1;
