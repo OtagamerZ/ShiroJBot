@@ -7,6 +7,7 @@ import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,7 +35,7 @@ public class ImageCommand extends Command {
 
         channel.sendMessage("<a:Loading:598500653215645697> Buscando imagem...").queue(m -> {
             try {
-                URL link = new URL("https://safebooru.org/index.php?page=dapi&s=post&q=index&json=1&limit=1"+ (!message.getTextChannel().isNSFW() ? "&rating=safe" : "") + "&tags=" +
+                URL link = new URL("https://safebooru.org/index.php?page=dapi&s=post&q=index&json=1"+ (!message.getTextChannel().isNSFW() ? "&rating=safe" : "") + "&tags=" +
                         String.join("+", tag).replace(" ", "_"));
                 HttpURLConnection con = (HttpURLConnection) link.openConnection();
                 con.setRequestMethod("GET");
@@ -51,7 +52,8 @@ public class ImageCommand extends Command {
                 br.close();
 
                 Helper.log(this.getClass(), LogLevel.DEBUG, resposta.toString());
-                JSONObject jo = new JSONObject(resposta.toString().replace("[", "").replace("]", ""));
+                JSONArray ja = new JSONArray(resposta.toString());
+                JSONObject jo = ja.getJSONObject(Helper.rng(ja.length() - 1));
                 String url = "https://safebooru.org//images/" + jo.getString("directory") + "/" + jo.getString("image");
 
                 if (Arrays.asList(jo.getString("tags").split(" ")).contains("hentai")) {
