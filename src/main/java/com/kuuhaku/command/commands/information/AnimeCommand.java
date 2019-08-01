@@ -108,8 +108,8 @@ public class AnimeCommand extends Command {
 
 				if (!link.equalsIgnoreCase("Link indisponível")) {
 					JSONObject jo = com.kuuhaku.controller.Anime.getDAData(anime.gettRomaji().replace(" ", "-"));
-					eb.setDescription(jo.getString("description"));
-					eb.addField("Gêneros:", jo.getJSONArray("genres").toString().replace("[", "`").replace("]", "`").replace(",", "` `").replace("\"", ""), false);
+					eb.setDescription(jo.getString("Sinopse"));
+					eb.addField("Gêneros:", jo.getJSONArray("tags").toString().replace("[", "`").replace("]", "`").replace(",", "` `").replace("\"", ""), false);
 				} else {
 					eb.setDescription(Tradutor.translate("en", "pt", anime.getDescription()));
 					eb.addField("Gêneros:", anime.getGenres(), false);
