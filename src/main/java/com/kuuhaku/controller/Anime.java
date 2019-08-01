@@ -54,13 +54,13 @@ public class Anime {
         return data;
     }
 
-    public static String getLink(String name) throws IOException {
+    public static int getLink(String name) throws IOException {
         URL url = new URL("https://www.dreamanimes.com.br/anime-info/"+name.replace(" ", "-"));
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.addRequestProperty("User-Agent", "Mozilla/5.0");
         con.setRequestMethod("GET");
         con.getInputStream();
 
-        return con.getURL().toString();
+        return con.getResponseCode();
     }
 }
