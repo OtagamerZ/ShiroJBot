@@ -58,7 +58,7 @@ public class Anime {
         URL url = new URL("https://www.dreamanimes.com.br/anime-info/"+name.replace(" ", "-"));
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.addRequestProperty("User-Agent", "Mozilla/5.0");
-        con.setRequestMethod("HEAD");
+        con.setRequestMethod("GET");
         con.getInputStream();
 
         return con.getURL().toString();
