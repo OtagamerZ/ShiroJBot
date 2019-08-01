@@ -138,7 +138,7 @@ public class JDAEvents extends ListenerAdapter {
 				}
 			}
 
-			if (message.getEmbeds().size() > 0 && message.getEmbeds().get(0).getFooter().getText().startsWith("Link: https://www.youtube.com/watch?v=") && event.getReactionEmote().getName().equals("\u25B6")) {
+			if (message.getAuthor() == Main.getInfo().getSelfUser() && message.getEmbeds().size() > 0 && message.getEmbeds().get(0).getFooter().getText().startsWith("Link: https://www.youtube.com/watch?v=") && event.getReactionEmote().getName().equals("\u25B6")) {
 				Music.loadAndPlay(event.getMember(), event.getTextChannel(), message.getEmbeds().get(0).getUrl());
 				if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) {
 					MessageHistory h = MessageHistory.getHistoryAround(event.getChannel(), event.getMessageId()).limit(20).complete();
