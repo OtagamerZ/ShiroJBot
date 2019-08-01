@@ -101,7 +101,6 @@ public class Anime {
             JSONObject nae = media.getJSONObject("nextAiringEpisode");
             Date naeD = new Date(nae.getLong("airingAt"));
             naeAiringAt = naeD.getDay() + "/" + naeD.getMonth() + "/" + naeD.getYear();
-            naeEpisode = Integer.toString(nae.getInt("episode"));
         } catch (JSONException e) {
             naeAiringAt = null;
             naeEpisode = null;
@@ -109,7 +108,7 @@ public class Anime {
 
         idMal = media.getInt("idMal");
         status = media.getString("status").equals("FINISHED") ? "Completo" : "Transmitindo";
-        duration = String.valueOf(media.get("episodes"));
+        duration = String.valueOf(media.get("episodes") == null ? Integer.toString(media.getJSONObject("nextAiringEpisode").getInt("episode")) : media.get("episodes"));
         genres = media.getJSONArray("genres").toList();
         score = media.getInt("averageScore");
         popularity = media.getInt("popularity");
