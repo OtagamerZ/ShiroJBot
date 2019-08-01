@@ -71,9 +71,10 @@ public class Anime {
         URL url = new URL("https://www.dreamanimes.com.br/api/anime-info/" + name);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
-        con.setRequestProperty("Authorization", System.getenv("DA_TOKEN"));
+        con.setRequestProperty("Accept", "application/json");
         con.addRequestProperty("Accept-Charset", "UTF-8");
         con.addRequestProperty("User-Agent", "Mozilla/5.0");
+        con.addRequestProperty("Authorization", System.getenv("DA_TOKEN"));
 
         BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
 
