@@ -18,7 +18,7 @@ import java.util.List;
 
 public class Youtube {
 	public static List<YoutubeVideo> getData(String query) throws IOException {
-		URL url = new URL(YouTube.DEFAULT_BASE_URL + "search?key=" + Main.getInfo().getYoutubeToken() + "&part=snippet&q=" + URLEncoder.encode(query, StandardCharsets.UTF_8.toString()) + "&maxResults=5");
+		URL url = new URL(YouTube.DEFAULT_BASE_URL + "search?key=" + Main.getInfo().getYoutubeToken() + "&part=snippet&type=video&q=" + URLEncoder.encode(query, StandardCharsets.UTF_8.toString()) + "&maxResults=5");
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setRequestMethod("GET");
 		con.setRequestProperty("Accept", "application/json");
