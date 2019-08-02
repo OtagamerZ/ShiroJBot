@@ -99,7 +99,7 @@ public class Anime {
 
         try {
             JSONObject nae = media.getJSONObject("nextAiringEpisode");
-            Date naeD = new Date(nae.getLong("airingAt"));
+            Date naeD = new Date(nae.getLong("airingAt") * 1000);
             naeAiringAt = naeD.getDay() + "/" + naeD.getMonth() + "/" + naeD.getYear();
         } catch (JSONException e) {
             naeAiringAt = null;
