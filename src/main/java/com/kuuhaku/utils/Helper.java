@@ -280,13 +280,14 @@ public class Helper {
 
 	public static void logToChannel(User u, boolean isCommand, Command c, String msg, Guild g) {
 		guildConfig gc = SQLite.getGuildById(g.getId());
+		if (gc.getLogChannel() == null || gc.getLogChannel().isEmpty()) return;
 		try {
 			EmbedBuilder eb = new EmbedBuilder();
 
 			eb.setAuthor("Relatório de log");
 			eb.setDescription(msg);
 			eb.addField("Referente:", u.getAsMention(), true);
-			if (isCommand) eb.addField("Comando:", c.getName(), true);
+			if (isCommand) eb.addField("Comando:", gc.getPrefix() + c.getName(), true);
 			eb.setFooter("Data: " + OffsetDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), null);
 
 			g.getTextChannelById(gc.getLogChannel()).sendMessage(eb.build()).queue();
