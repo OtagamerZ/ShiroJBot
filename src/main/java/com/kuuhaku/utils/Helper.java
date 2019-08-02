@@ -281,6 +281,7 @@ public class Helper {
 	public static void logToChannel(User u, boolean isCommand, Command c, String msg, Guild g) {
 		guildConfig gc = SQLite.getGuildById(g.getId());
 		if (gc.getLogChannel() == null || gc.getLogChannel().isEmpty()) return;
+		else if (g.getTextChannelById(gc.getLogChannel()) == null) gc.setLogChannel("");
 		try {
 			EmbedBuilder eb = new EmbedBuilder();
 
