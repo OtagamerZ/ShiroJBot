@@ -20,13 +20,13 @@ public class MusicCommand extends Command {
 			EmbedBuilder eb = new EmbedBuilder();
 
 			eb.setTitle("Comandos de controle de música");
-			eb.addField(prefix + "resume", "Continua a fila de músicas caso esteja pausada.", true);
-			eb.addField(prefix + "pause", "Pausa a fila de músicas.", true);
-			eb.addField(prefix + "clear", "Para e limpa a fila de músicas.", true);
-			eb.addField(prefix + "skip", "Pula a música atual.", true);
-			eb.addField(prefix + "volume", "Define o volume do som.", true);
-			eb.addField(prefix + "info", "Mostra a música atual.", true);
-			eb.addField(prefix + "queue", "Mostra a fila atual.", true);
+			eb.addField(prefix + "m resume", "Continua a fila de músicas caso esteja pausada.", true);
+			eb.addField(prefix + "m pause", "Pausa a fila de músicas.", true);
+			eb.addField(prefix + "m clear", "Para e limpa a fila de músicas.", true);
+			eb.addField(prefix + "m skip", "Pula a música atual.", true);
+			eb.addField(prefix + "m volume", "Define o volume do som.", true);
+			eb.addField(prefix + "m info", "Mostra a música atual.", true);
+			eb.addField(prefix + "m queue", "Mostra a fila atual.", true);
 
 			channel.sendMessage(eb.build()).queue();
 			return;

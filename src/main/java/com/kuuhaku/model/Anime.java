@@ -21,7 +21,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.swing.text.DateFormatter;
 import java.awt.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -100,7 +103,7 @@ public class Anime {
         try {
             JSONObject nae = media.getJSONObject("nextAiringEpisode");
             Date naeD = new Date(nae.getLong("airingAt") * 1000);
-            naeAiringAt = naeD.getDay() + "/" + naeD.getMonth() + "/" + naeD.getYear();
+            naeAiringAt = new SimpleDateFormat("dd/MM/yyyy").format(naeD);
         } catch (JSONException e) {
             naeAiringAt = null;
             naeEpisode = null;
