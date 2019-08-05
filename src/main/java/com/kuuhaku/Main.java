@@ -34,8 +34,6 @@ import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Game;
-import org.quartz.*;
-import org.quartz.impl.StdSchedulerFactory;
 
 import javax.persistence.NoResultException;
 import java.awt.*;
@@ -44,15 +42,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Main implements JobListener {
+public class Main {
 
 	private static ShiroInfo info;
 	private static Relay relay;
 	private static CommandManager cmdManager;
 	private static JDA api;
 	private static JDA jbr;
-	private static JobDetail backup;
-	private static Scheduler sched;
+	private static ScheduledEvents se;
 
 	public static void main(String[] args) throws Exception {
 		info = new ShiroInfo();
@@ -84,23 +81,7 @@ public class Main implements JobListener {
 			Helper.log(Main.class, LogLevel.INFO, "Dados recuperados com sucesso!");
 		else Helper.log(Main.class, LogLevel.ERROR, "Erro ao recuperar dados.");
 
-		try {
-			if (backup == null) {
-				backup = JobBuilder.newJob(ScheduledEvents.class).withIdentity("backup", "1").build();
-			}
-			Trigger cron = TriggerBuilder.newTrigger().withIdentity("backup", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0 0/1 ? * * *")).build();
-			SchedulerFactory sf = new StdSchedulerFactory();
-			try {
-				sched = sf.getScheduler();
-				sched.scheduleJob(backup, cron);
-			} catch (Exception ignore) {
-			} finally {
-				sched.start();
-				Helper.log(Main.class, LogLevel.INFO, "Cronograma inicializado com sucesso!");
-			}
-		} catch (SchedulerException e) {
-			Helper.log(Main.class, LogLevel.ERROR, "Erro ao inicializar cronograma: " + e);
-		}
+		se = new ScheduledEvents();
 
 		AudioSourceManagers.registerRemoteSources(getInfo().getApm());
 		AudioSourceManagers.registerLocalSource(getInfo().getApm());
@@ -159,25 +140,5 @@ public class Main implements JobListener {
 
 	public static JDA getJibril() {
 		return jbr;
-	}
-
-	@Override
-	public String getName() {
-		return null;
-	}
-
-	@Override
-	public void jobToBeExecuted(JobExecutionContext context) {
-
-	}
-
-	@Override
-	public void jobExecutionVetoed(JobExecutionContext context) {
-
-	}
-
-	@Override
-	public void jobWasExecuted(JobExecutionContext context, JobExecutionException jobException) {
-		Helper.log(this.getClass(), LogLevel.INFO, "Programação executada em " + context.getFireTime() + ".\nPróxima execução em " + context.getNextFireTime());
 	}
 }

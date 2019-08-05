@@ -161,7 +161,7 @@ public class Music {
 		});
 	}
 
-	private static synchronized GuildMusicManager getGuildAudioPlayer(Guild guild) {
+	public static synchronized GuildMusicManager getGuildAudioPlayer(Guild guild) {
 		long guildId = guild.getIdLong();
 		GuildMusicManager musicManager = Main.getInfo().getGmms().get(guildId);
 

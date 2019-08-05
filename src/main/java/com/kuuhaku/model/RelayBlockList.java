@@ -39,4 +39,12 @@ public class RelayBlockList {
 	public static boolean check(String id) {
 		return blockedIDs.contains(id);
 	}
+
+	public static List<String> getBlockedIDs() {
+		return blockedIDs;
+	}
+
+	public static void unblock(String id) {
+		blockedIDs.remove(id);
+	}
 }
