@@ -127,11 +127,19 @@ public class Relay extends SQLite {
 			if (!s.getId().equals(k))
 				try {
 					if (img != null) {
-						if (SQLite.getGuildById(k).isLiteMode()) relayLite(source, msg, m, s, img);
-						else Main.getJibril().getGuildById(k).getTextChannelById(r).sendFile(img.toByteArray(), "image.png", mb.build()).queue();
+						if (SQLite.getGuildById(k).isLiteMode()) {
+							relayLite(source, msg, m, Main.getJibril().getGuildById(k), img);
+						}
+						else {
+							Main.getJibril().getGuildById(k).getTextChannelById(r).sendFile(img.toByteArray(), "image.png", mb.build()).queue();
+						}
 					} else {
-						if (SQLite.getGuildById(k).isLiteMode()) relayLite(source, msg, m, s, null);
-						else Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(mb.build()).queue();
+						if (SQLite.getGuildById(k).isLiteMode()) {
+							relayLite(source, msg, m, Main.getJibril().getGuildById(k), null);
+						}
+						else {
+							Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(mb.build()).queue();
+						}
 					}
 				} catch (NullPointerException e) {
 					SQLite.getGuildById(k).setCanalRelay(null);
@@ -149,9 +157,13 @@ public class Relay extends SQLite {
 		});
 		try {
 			Consumer<Message> messageConsumer = message -> source.delete().queue();
-			if (img != null)
-				source.getChannel().sendFile(img.toByteArray(), "image.png", mb.build()).queue(messageConsumer);
-			else source.getChannel().sendMessage(mb.build()).queue(messageConsumer);
+			if (img != null) {
+				if (SQLite.getGuildById(s.getId()).isLiteMode()) relayLite(source, msg, m, s, img);
+				else source.getChannel().sendFile(img.toByteArray(), "image.png", mb.build()).queue(messageConsumer);
+			} else {
+				if (SQLite.getGuildById(s.getId()).isLiteMode()) relayLite(source, msg, m, s, null);
+				else source.getChannel().sendMessage(mb.build()).queue(messageConsumer);
+			}
 		} catch (InsufficientPermissionException ignore) {
 		}
 	}
