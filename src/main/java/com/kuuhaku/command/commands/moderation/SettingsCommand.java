@@ -97,12 +97,6 @@ public class SettingsCommand extends Command {
             case "crelay":
                 Settings.updateCanalRelay(args, message, gc);
                 break;
-            case "canalai":
-            case "canalia":
-            case "cia":
-            case "cai":
-                Settings.updateCanalIA(args, message, gc);
-                break;
             case "clvl":
             case "cargolevel":
             case "cargolvl":

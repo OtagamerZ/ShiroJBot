@@ -67,6 +67,7 @@ public class CommandManager {
             add(new AntiraidCommand());
             add(new MakeLogCommand());
             add(new PruneCommand());
+            add(new LiteModeCommand());
 
             //INFORMATION
             add(new ComandosCommand());

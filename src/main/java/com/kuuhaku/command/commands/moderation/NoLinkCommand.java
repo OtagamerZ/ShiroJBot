@@ -37,7 +37,7 @@ public class NoLinkCommand extends Command {
         if (gc.getNoLinkChannels().contains(channel.getId())) gc.removeNoLinkChannel(message.getTextChannel());
         else gc.addNoLinkChannel(message.getTextChannel());
 
-        SQLite.updateGuildChannels(gc);
+        SQLite.updateGuildSettings(gc);
 
         channel.sendMessage("Agora os links neste canal estão " + (gc.getNoLinkChannels().contains(channel.getId()) ? "**bloqueados**" : "**liberados**")).queue();
     }
