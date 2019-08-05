@@ -17,20 +17,13 @@
 
 package com.kuuhaku.events;
 
-import com.kuuhaku.Main;
-import com.kuuhaku.controller.MySQL;
-import com.kuuhaku.controller.SQLite;
-import com.kuuhaku.handlers.music.GuildMusicManager;
-import com.kuuhaku.model.DataDump;
-import com.kuuhaku.model.RelayBlockList;
+import com.kuuhaku.events.cron.BackupEvent;
+import com.kuuhaku.events.cron.ClearEvent;
+import com.kuuhaku.events.cron.UnblockEvent;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
-import com.kuuhaku.utils.Music;
-import net.dv8tion.jda.core.entities.Guild;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
-
-import static com.kuuhaku.model.RelayBlockList.unblock;
 
 public class ScheduledEvents implements JobListener {
 	private static Scheduler sched;
@@ -122,43 +115,3 @@ public class ScheduledEvents implements JobListener {
 	}
 }
 
-class ClearEvent implements Job {
-	static JobDetail clear;
-
-	@Override
-	public void execute(JobExecutionContext context) {
-		for (Guild g : Main.getInfo().getAPI().getGuilds()) {
-			GuildMusicManager gmm = Music.getGuildAudioPlayer(g);
-			if (g.getAudioManager().isConnected() && (g.getAudioManager().getConnectedChannel().getMembers().size() < 2 || gmm.scheduler.queue().size() == 0)) {
-				g.getAudioManager().closeAudioConnection();
-				gmm.scheduler.clear();
-				gmm.player.destroy();
-			}
-		}
-	}
-}
-
-class BackupEvent implements Job {
-	static JobDetail backup;
-
-	@Override
-	public void execute(JobExecutionContext context) {
-		Main.getInfo().getAPI().getPresence().setGame(Main.getRandomGame());
-		MySQL.dumpData(new DataDump(SQLite.getCADump(), SQLite.getGuildDump()));
-		Helper.log(this.getClass(), LogLevel.INFO, "Respostas/Guilds salvos com sucesso!");
-		MySQL.dumpData(new DataDump(SQLite.getMemberDump()));
-		Helper.log(this.getClass(), LogLevel.INFO, "Membros salvos com sucesso!");
-	}
-}
-
-class UnblockEvent implements Job {
-	static JobDetail unblock;
-
-	@Override
-	public void execute(JobExecutionContext context) {
-		RelayBlockList.getBlockedIDs().forEach(id -> {
-			Main.getJibril().getUserById(id).openPrivateChannel().queue(c -> c.sendMessage(":stopwatch: | O tempo do seu bloqueio acabou, você está liberado para conversar no chat global novamente.\n\nReincidências podem fazer com que seja bloqueado permanentemente do chat global.").queue());
-			unblock(id);
-		});
-	}
-}
