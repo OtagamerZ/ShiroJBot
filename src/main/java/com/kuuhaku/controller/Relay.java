@@ -129,7 +129,11 @@ public class Relay extends SQLite {
 				try {
 					if (img != null) {
 						if (SQLite.getGuildById(k).isLiteMode()) {
-							getClient(Main.getJibril().getGuildById(k).getTextChannelById(r), Main.getJibril().getGuildById(k)).send(getMessage(msg, m, s, img));
+							try {
+								getClient(Main.getJibril().getGuildById(k).getTextChannelById(r), Main.getJibril().getGuildById(k)).send(getMessage(msg, m, s, img));
+							} catch (InsufficientPermissionException e) {
+								getClient(Main.getJibril().getGuildById(k).getTextChannelById(r), Main.getJibril().getGuildById(k)).send(getMessage(msg, m, s, null));
+							}
 						}
 						else {
 							Main.getJibril().getGuildById(k).getTextChannelById(r).sendFile(img.toByteArray(), "image.png", mb.build()).queue();
