@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Relay extends SQLite {
@@ -130,19 +131,23 @@ public class Relay extends SQLite {
 					if (img != null) {
 						if (SQLite.getGuildById(k).isLiteMode()) {
 							try {
-								getClient(Main.getJibril().getGuildById(k).getTextChannelById(r), Main.getJibril().getGuildById(k)).send(getMessage(msg, m, s, img));
+								WebhookClient client = getClient(Main.getJibril().getGuildById(k).getTextChannelById(r), Main.getJibril().getGuildById(k));
+								client.send(getMessage(msg, m, s, img));
+								client.close();
 							} catch (InsufficientPermissionException e) {
-								getClient(Main.getJibril().getGuildById(k).getTextChannelById(r), Main.getJibril().getGuildById(k)).send(getMessage(msg, m, s, null));
+								WebhookClient client = getClient(Main.getJibril().getGuildById(k).getTextChannelById(r), Main.getJibril().getGuildById(k));
+								client.send(getMessage(msg, m, s, null));
+								client.close();
 							}
-						}
-						else {
+						} else {
 							Main.getJibril().getGuildById(k).getTextChannelById(r).sendFile(img.toByteArray(), "image.png", mb.build()).queue();
 						}
 					} else {
 						if (SQLite.getGuildById(k).isLiteMode()) {
-							getClient(Main.getJibril().getGuildById(k).getTextChannelById(r), Main.getJibril().getGuildById(k)).send(getMessage(msg, m, s, null));
-						}
-						else {
+							WebhookClient client = getClient(Main.getJibril().getGuildById(k).getTextChannelById(r), Main.getJibril().getGuildById(k));
+							client.send(getMessage(msg, m, s, null));
+							client.close();
+						} else {
 							Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(mb.build()).queue();
 						}
 					}
@@ -162,24 +167,14 @@ public class Relay extends SQLite {
 				}
 		});
 		try {
+			final Consumer<Message> messageConsumer = f -> source.delete().queue();
 			if (img != null) {
-				if (SQLite.getGuildById(s.getId()).isLiteMode()) {
-					getClient(source.getTextChannel(), s).send(getMessage(msg, m, s, img));
-					source.delete().queue();
-				}
-				else {
-					source.getChannel().sendFile(img.toByteArray(), "image.png", mb.build()).queue();
-					source.delete().queue();
-				}
+				if (!SQLite.getGuildById(s.getId()).isLiteMode())
+					source.getChannel().sendFile(img.toByteArray(), "image.png", mb.build()).queue(messageConsumer);
+
 			} else {
-				if (SQLite.getGuildById(s.getId()).isLiteMode()) {
-					getClient(source.getTextChannel(), s).send(getMessage(msg, m, s, null));
-					source.delete().queue();
-				}
-				else {
-					source.getChannel().sendMessage(mb.build()).queue();
-					source.delete().queue();
-				}
+				if (!SQLite.getGuildById(s.getId()).isLiteMode())
+					source.getChannel().sendMessage(mb.build()).queue(messageConsumer);
 			}
 		} catch (InsufficientPermissionException ignore) {
 		}
