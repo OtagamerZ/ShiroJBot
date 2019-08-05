@@ -24,10 +24,10 @@ import com.kuuhaku.model.guildConfig;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 
-public class AntiraidCommand extends Command {
+public class LiteModeCommand extends Command {
 
-	public AntiraidCommand() {
-		super("semraid", new String[]{"noraid", "antiraid"}, "Expulsa automaticamente novos membros que possuirem contas muito recentes (< 10 min).", Category.MODERACAO);
+	public LiteModeCommand() {
+		super("litemode", new String[]{"lite"}, "Ativa ou desativa o modo lite do relay", Category.MODERACAO);
 	}
 
 	@Override
@@ -35,11 +35,11 @@ public class AntiraidCommand extends Command {
 		guildConfig gc = SQLite.getGuildById(guild.getId());
 
 		if (gc.isAntiRaid()) {
-			gc.setAntiRaid(false);
-			channel.sendMessage("Modo anti-raid está desligado").queue();
+			gc.setLiteMode(false);
+			channel.sendMessage("Modo lite está desligado").queue();
 		} else {
-			gc.setAntiRaid(true);
-			channel.sendMessage("Modo anti-raid está ligado, expulsarei novos membros que tiverem uma conta com tempo menor que 10 minutos.").queue();
+			gc.setLiteMode(true);
+			channel.sendMessage("Modo lite está ligado, as mensagens globais estarão em um padrão mais leve.").queue();
 		}
 
 		SQLite.updateGuildSettings(gc);

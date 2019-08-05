@@ -2,6 +2,7 @@ package com.kuuhaku.events;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.MySQL;
+import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.RelayBlockList;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
@@ -64,13 +65,16 @@ public class JibrilEvents extends ListenerAdapter {
 						try {
 							ByteArrayOutputStream baos = new ByteArrayOutputStream();
 							ImageIO.write(ImageIO.read(Helper.getImage(event.getMessage().getAttachments().get(0).getUrl())), "png", baos);
-							Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), baos);
+							if (SQLite.getGuildById(event.getGuild().getId()).isLiteMode()) Main.getRelay().relayLite(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), baos);
+							else Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), baos);
 						} catch (Exception e) {
-							Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), null);
+							if (SQLite.getGuildById(event.getGuild().getId()).isLiteMode()) Main.getRelay().relayLite(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), null);
+							else Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), null);
 						}
 						return;
 					}
-					Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), null);
+					if (SQLite.getGuildById(event.getGuild().getId()).isLiteMode()) Main.getRelay().relayLite(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), null);
+					else Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), null);
 				} catch (NoResultException e) {
 					Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), null);
 				} catch (ErrorResponseException ex) {
