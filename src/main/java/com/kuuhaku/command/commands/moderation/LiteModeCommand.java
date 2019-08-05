@@ -34,7 +34,7 @@ public class LiteModeCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		guildConfig gc = SQLite.getGuildById(guild.getId());
 
-		if (gc.isAntiRaid()) {
+		if (gc.isLiteMode()) {
 			gc.setLiteMode(false);
 			channel.sendMessage("Modo lite está desligado").queue();
 		} else {

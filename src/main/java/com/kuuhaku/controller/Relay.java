@@ -10,8 +10,6 @@ import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
-import net.dv8tion.jda.webhook.WebhookClient;
-import net.dv8tion.jda.webhook.WebhookCluster;
 import net.dv8tion.jda.webhook.WebhookMessageBuilder;
 
 import javax.persistence.EntityManager;
@@ -23,12 +21,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
 public class Relay extends SQLite {
 	private final Map<String, String> relays = new HashMap<>();
-	private final WebhookCluster cluster = new WebhookCluster();
 	private int relaySize;
 
 	private void checkSize() {
@@ -38,30 +35,25 @@ public class Relay extends SQLite {
 		}
 	}
 
-	public void relayLite(Message source, String msg, Member m, Guild s, ByteArrayOutputStream img) {
-		updateRelays();
-		checkSize();
+	private void relayLite(Message source, String msg, Member m, Guild s, ByteArrayOutputStream img) {
+		WebhookMessageBuilder wmb = new WebhookMessageBuilder();
 
+		wmb.setContent(msg);
+		if (img != null) wmb.addFile("image.png", img.toByteArray());
+		wmb.setAvatarUrl(m.getUser().getAvatarUrl());
 		try {
-			source.getTextChannel().getWebhooks().complete().stream().filter(w -> w.getOwner() == s.getSelfMember()).findAny().ifPresent(w -> {
-				WebhookClient wc = w.newClient().build();
-				if (!cluster.getWebhooks().contains(wc)) {
-					cluster.addWebhooks(wc);
-				}
-			});
-
-			WebhookMessageBuilder wmb = new WebhookMessageBuilder();
-			wmb.setContent(msg);
-			if (img != null) wmb.addFile("file.png", img.toByteArray());
-			wmb.setAvatarUrl(m.getUser().getAvatarUrl());
-			try {
-				wmb.setUsername("Lvl " + SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() + " - " + m.getEffectiveName());
-			} catch (Exception e) {
-				wmb.setUsername("Lvl ?? - " + m.getEffectiveName());
-			}
-			cluster.multicast(Objects::nonNull, wmb.build());
-		} catch (Exception ignore) {
+			wmb.setUsername("Lvl " + SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() + " - " + m.getEffectiveName());
+		} catch (Exception e) {
+			wmb.setUsername("Lvl ?? - " + m.getEffectiveName());
 		}
+
+		source.getTextChannel().getWebhooks().complete().stream().filter(w -> w.getOwner() == s.getSelfMember()).findAny().ifPresent(w -> {
+			try {
+				w.newClient().build().send(wmb.build()).get();
+			} catch (InterruptedException | ExecutionException e) {
+				Helper.log(this.getClass(), LogLevel.WARN, e + " | " + e.getStackTrace()[0]);
+			}
+		});
 	}
 
 	public void relayMessage(Message source, String msg, Member m, Guild s, ByteArrayOutputStream img) {
@@ -134,9 +126,13 @@ public class Relay extends SQLite {
 		relays.forEach((k, r) -> {
 			if (!s.getId().equals(k))
 				try {
-					if (img != null)
-						Main.getJibril().getGuildById(k).getTextChannelById(r).sendFile(img.toByteArray(), "image.png", mb.build()).queue();
-					else Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(mb.build()).queue();
+					if (img != null) {
+						if (SQLite.getGuildById(k).isLiteMode()) relayLite(source, msg, m, s, img);
+						else Main.getJibril().getGuildById(k).getTextChannelById(r).sendFile(img.toByteArray(), "image.png", mb.build()).queue();
+					} else {
+						if (SQLite.getGuildById(k).isLiteMode()) relayLite(source, msg, m, s, img);
+						else Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(mb.build()).queue();
+					}
 				} catch (NullPointerException e) {
 					SQLite.getGuildById(k).setCanalRelay(null);
 				} catch (InsufficientPermissionException ex) {
