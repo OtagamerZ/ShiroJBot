@@ -43,7 +43,7 @@ public class AntispamCommand extends Command {
 						return;
 					}
 					gc.setHardAntispam(false);
-					SQLite.updateGuildChannels(gc);
+					SQLite.updateGuildSettings(gc);
 					channel.sendMessage("Modo de anti-spam trocado para **SOFT**").queue();
 					return;
 				case "hard":
@@ -52,7 +52,7 @@ public class AntispamCommand extends Command {
 						return;
 					}
 					gc.setHardAntispam(true);
-					SQLite.updateGuildChannels(gc);
+					SQLite.updateGuildSettings(gc);
 					channel.sendMessage("Modo de anti-spam trocado para **HARD**").queue();
 					return;
 			}
@@ -73,7 +73,7 @@ public class AntispamCommand extends Command {
 			gc.removeNoSpamChannel(message.getTextChannel());
 		else gc.addNoSpamChannel(message.getTextChannel());
 
-		SQLite.updateGuildChannels(gc);
+		SQLite.updateGuildSettings(gc);
 
 		if (!gc.getNoSpamChannels().contains(channel.getId()))
 			channel.sendMessage("Modo antispam neste canal está desligado").queue();

@@ -10,6 +10,9 @@ import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
+import net.dv8tion.jda.webhook.WebhookClient;
+import net.dv8tion.jda.webhook.WebhookCluster;
+import net.dv8tion.jda.webhook.WebhookMessageBuilder;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -20,16 +23,44 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class Relay extends SQLite {
 	private final Map<String, String> relays = new HashMap<>();
+	private final WebhookCluster cluster = new WebhookCluster();
 	private int relaySize;
 
 	private void checkSize() {
 		if (relays.size() != relaySize) {
 			relaySize = relays.size();
 			Main.getJibril().getPresence().setGame(Game.listening("as mensagens de " + relaySize + " servidores!"));
+		}
+	}
+
+	public void relayLite(Message source, String msg, Member m, Guild s, ByteArrayOutputStream img) {
+		updateRelays();
+		checkSize();
+
+		try {
+			source.getTextChannel().getWebhooks().complete().stream().filter(w -> w.getOwner() == s.getSelfMember()).findAny().ifPresent(w -> {
+				WebhookClient wc = w.newClient().build();
+				if (!cluster.getWebhooks().contains(wc)) {
+					cluster.addWebhooks(wc);
+				}
+			});
+
+			WebhookMessageBuilder wmb = new WebhookMessageBuilder();
+			wmb.setContent(msg);
+			if (img != null) wmb.addFile("file.png", img.toByteArray());
+			wmb.setAvatarUrl(m.getUser().getAvatarUrl());
+			try {
+				wmb.setUsername("Lvl " + SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() + " - " + m.getEffectiveName());
+			} catch (Exception e) {
+				wmb.setUsername("Lvl ?? - " + m.getEffectiveName());
+			}
+			cluster.multicast(Objects::nonNull, wmb.build());
+		} catch (Exception ignore) {
 		}
 	}
 

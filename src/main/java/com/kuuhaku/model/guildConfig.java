@@ -18,7 +18,6 @@
 package com.kuuhaku.model;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.handlers.music.GuildMusicManager;
 import net.dv8tion.jda.core.entities.TextChannel;
 import org.json.JSONObject;
 
@@ -66,6 +65,8 @@ public class guildConfig {
 	private boolean hardAntispam;
 	@Column(columnDefinition = "boolean default false")
 	private boolean antiRaid = false;
+	@Column(columnDefinition = "boolean default false")
+	private boolean liteMode = false;
 	private boolean markForDelete;
 
 	public guildConfig() {
@@ -313,5 +314,13 @@ public class guildConfig {
 
 	public void setLogChannel(String id) {
 		this.logChannel = id;
+	}
+
+	public boolean isLiteMode() {
+		return liteMode;
+	}
+
+	public void setLiteMode(boolean liteMode) {
+		this.liteMode = liteMode;
 	}
 }
