@@ -44,11 +44,7 @@ public class Relay extends SQLite {
 		wmb.setContent(msg);
 		if (img != null) wmb.addFile("image.png", img.toByteArray());
 		wmb.setAvatarUrl(m.getUser().getAvatarUrl());
-		try {
-			wmb.setUsername("(" + s.getName() + ") Lvl " + SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() + " - " + m.getEffectiveName());
-		} catch (Exception e) {
-			wmb.setUsername("Lvl ?? - " + m.getEffectiveName());
-		}
+		wmb.setUsername("(" + s.getName() + " " + m.getEffectiveName());
 		return wmb.build();
 	}
 
