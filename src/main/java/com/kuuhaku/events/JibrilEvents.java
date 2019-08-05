@@ -56,36 +56,45 @@ public class JibrilEvents extends ListenerAdapter {
 			}
 			if (String.join(" ", msg).length() < 2000) {
 				try {
-					event.getAuthor().openPrivateChannel().queue(c -> c.getMessageById(c.getLatestMessageId()).queue(m -> {
-						String s = ":warning: | Cuidado, mensagens de SPAM podem fazer com que você seja bloqueado do chat global (isto é só um aviso!\nEsta mensagem não aparecerá novamente enquanto for a última mensagem.";
-						if (!m.getContentRaw().equals(s)) c.sendMessage(s).queue();
-					}));
+					try {
+						event.getAuthor().openPrivateChannel().queue(c -> c.getMessageById(c.getLatestMessageId()).queue(m -> {
+							String s = ":warning: | Cuidado, mensagens de SPAM podem fazer com que você seja bloqueado do chat global (isto é só um aviso!\nEsta mensagem não aparecerá novamente enquanto for a última mensagem.";
+							if (!m.getContentRaw().equals(s)) c.sendMessage(s).queue();
+						}));
+					} catch (ErrorResponseException ex) {
+						event.getChannel().sendMessage(":x: | " + event.getAuthor().getAsMention() + ", você está com a opção \"Permitir mensagens diretas de membros do servidor.\" desligada, você não poderá mandar mensagens no chat global enquanto ela estiver desligada.\nPara habilitá-la, vá em `Configurações de privacidade -> Mensagens diretas` no menu do canto superior esquerdo, ao lado do nome do servidor.").queue();
+						if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE))
+							event.getMessage().delete().queue();
+						return;
+					}
 
 					if (MySQL.getTagById(event.getAuthor().getId()).isVerified() && event.getMessage().getAttachments().size() > 0) {
 						try {
 							ByteArrayOutputStream baos = new ByteArrayOutputStream();
 							ImageIO.write(ImageIO.read(Helper.getImage(event.getMessage().getAttachments().get(0).getUrl())), "png", baos);
-							if (SQLite.getGuildById(event.getGuild().getId()).isLiteMode()) Main.getRelay().relayLite(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), baos);
-							else Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), baos);
+							if (SQLite.getGuildById(event.getGuild().getId()).isLiteMode())
+								Main.getRelay().relayLite(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), baos);
+							else
+								Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), baos);
 						} catch (Exception e) {
-							if (SQLite.getGuildById(event.getGuild().getId()).isLiteMode()) Main.getRelay().relayLite(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), null);
-							else Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), null);
+							if (SQLite.getGuildById(event.getGuild().getId()).isLiteMode())
+								Main.getRelay().relayLite(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), null);
+							else
+								Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), null);
 						}
 						return;
 					}
-					if (SQLite.getGuildById(event.getGuild().getId()).isLiteMode()) Main.getRelay().relayLite(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), null);
-					else Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), null);
+					if (SQLite.getGuildById(event.getGuild().getId()).isLiteMode())
+						Main.getRelay().relayLite(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), null);
+					else
+						Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), null);
 				} catch (NoResultException e) {
 					Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), null);
-				} catch (ErrorResponseException ex) {
-					if (Helper.compareWithValues(ex.getErrorCode(), 10008, 50007)) {
-						event.getChannel().sendMessage(":x: | " + event.getAuthor().getAsMention() + ", você está com a opção \"Permitir mensagens diretas de membros do servidor.\" desligada, você não poderá mandar mensagens no chat global enquanto ela estiver desligada.\nPara habilitá-la, vá em `Configurações de privacidade -> Mensagens diretas` no menu do canto superior esquerdo, ao lado do nome do servidor.").queue();
-						if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) event.getMessage().delete().queue();
-					}
 				}
 			} else {
 				event.getChannel().sendMessage(":x: | Mensagem muito longa! (Max. 2000 caractéres)").queue();
-				if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) event.getMessage().delete().queue();
+				if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE))
+					event.getMessage().delete().queue();
 			}
 		}
 	}
