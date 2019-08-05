@@ -78,7 +78,7 @@ public class JibrilEvents extends ListenerAdapter {
 				} catch (NoResultException e) {
 					Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), null);
 				} catch (ErrorResponseException ex) {
-					if (ex.getErrorCode() == 50007) {
+					if (Helper.compareWithValues(ex.getErrorCode(), 10008, 50007)) {
 						event.getChannel().sendMessage(":x: | " + event.getAuthor().getAsMention() + ", você está com a opção \"Permitir mensagens diretas de membros do servidor.\" desligada, você não poderá mandar mensagens no chat global enquanto ela estiver desligada.\nPara habilitá-la, vá em `Configurações de privacidade -> Mensagens diretas` no menu do canto superior esquerdo, ao lado do nome do servidor.").queue();
 						if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) event.getMessage().delete().queue();
 					}

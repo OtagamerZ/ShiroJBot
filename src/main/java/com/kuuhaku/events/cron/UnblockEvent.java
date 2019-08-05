@@ -14,7 +14,9 @@ public class UnblockEvent implements Job {
 	@Override
 	public void execute(JobExecutionContext context) {
 		RelayBlockList.getBlockedIDs().forEach(id -> {
-			Main.getJibril().getUserById(id).openPrivateChannel().queue(c -> c.sendMessage(":stopwatch: | O tempo do seu bloqueio acabou, você está liberado para conversar no chat global novamente.\n\nReincidências podem fazer com que seja bloqueado permanentemente do chat global.").queue());
+			if (!id.isEmpty()) {
+				Main.getJibril().getUserById(id).openPrivateChannel().queue(c -> c.sendMessage(":stopwatch: | O tempo do seu bloqueio acabou, você está liberado para conversar no chat global novamente.\n\nReincidências podem fazer com que seja bloqueado permanentemente do chat global.").queue());
+			}
 			unblock(id);
 		});
 	}
