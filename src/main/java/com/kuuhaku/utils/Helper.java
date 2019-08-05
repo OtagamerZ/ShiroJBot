@@ -294,6 +294,8 @@ public class Helper {
 			g.getTextChannelById(gc.getLogChannel()).sendMessage(eb.build()).queue();
 		} catch (NullPointerException ignore) {
 		} catch (Exception e) {
+			gc.setLogChannel("");
+			SQLite.updateGuildSettings(gc);
 			log(Helper.class, LogLevel.WARN, e + " | " + e.getStackTrace()[0]);
 		}
 	}
