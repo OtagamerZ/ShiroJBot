@@ -10,6 +10,8 @@ import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
+import net.dv8tion.jda.webhook.WebhookClient;
+import net.dv8tion.jda.webhook.WebhookMessage;
 import net.dv8tion.jda.webhook.WebhookMessageBuilder;
 
 import javax.persistence.EntityManager;
@@ -21,8 +23,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
+import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class Relay extends SQLite {
 	private final Map<String, String> relays = new HashMap<>();
@@ -35,7 +38,7 @@ public class Relay extends SQLite {
 		}
 	}
 
-	private void relayLite(Message source, String msg, Member m, Guild s, ByteArrayOutputStream img) {
+	private WebhookMessage getMessage(String msg, Member m, Guild s, ByteArrayOutputStream img) {
 		WebhookMessageBuilder wmb = new WebhookMessageBuilder();
 
 		wmb.setContent(msg);
@@ -46,14 +49,13 @@ public class Relay extends SQLite {
 		} catch (Exception e) {
 			wmb.setUsername("Lvl ?? - " + m.getEffectiveName());
 		}
+		return wmb.build();
+	}
 
-		source.getTextChannel().getWebhooks().complete().stream().filter(w -> w.getOwner() == s.getSelfMember()).findAny().ifPresent(w -> {
-			try {
-				w.newClient().build().send(wmb.build()).get();
-			} catch (InterruptedException | ExecutionException e) {
-				Helper.log(this.getClass(), LogLevel.WARN, e + " | " + e.getStackTrace()[0]);
-			}
-		});
+	private WebhookClient getClient(TextChannel ch, Guild s) {
+		List<Webhook> wbs = ch.getWebhooks().complete().stream().filter(w -> w.getOwner() == s.getSelfMember()).collect(Collectors.toList());
+		if (wbs.size() != 0) return wbs.get(0).newClient().build();
+		else return Objects.requireNonNull(Helper.getOrCreateWebhook(ch)).newClient().build();
 	}
 
 	public void relayMessage(Message source, String msg, Member m, Guild s, ByteArrayOutputStream img) {
@@ -128,14 +130,14 @@ public class Relay extends SQLite {
 				try {
 					if (img != null) {
 						if (SQLite.getGuildById(k).isLiteMode()) {
-							relayLite(source, msg, m, Main.getJibril().getGuildById(k), img);
+							getClient(Main.getJibril().getGuildById(k).getTextChannelById(r), Main.getJibril().getGuildById(k)).send(getMessage(msg, m, s, img));
 						}
 						else {
 							Main.getJibril().getGuildById(k).getTextChannelById(r).sendFile(img.toByteArray(), "image.png", mb.build()).queue();
 						}
 					} else {
 						if (SQLite.getGuildById(k).isLiteMode()) {
-							relayLite(source, msg, m, Main.getJibril().getGuildById(k), null);
+							getClient(Main.getJibril().getGuildById(k).getTextChannelById(r), Main.getJibril().getGuildById(k)).send(getMessage(msg, m, s, null));
 						}
 						else {
 							Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(mb.build()).queue();
@@ -158,10 +160,10 @@ public class Relay extends SQLite {
 		try {
 			Consumer<Message> messageConsumer = message -> source.delete().queue();
 			if (img != null) {
-				if (SQLite.getGuildById(s.getId()).isLiteMode()) relayLite(source, msg, m, s, img);
+				if (SQLite.getGuildById(s.getId()).isLiteMode()) getClient(source.getTextChannel(), s).send(getMessage(msg, m, s, img));
 				else source.getChannel().sendFile(img.toByteArray(), "image.png", mb.build()).queue(messageConsumer);
 			} else {
-				if (SQLite.getGuildById(s.getId()).isLiteMode()) relayLite(source, msg, m, s, null);
+				if (SQLite.getGuildById(s.getId()).isLiteMode()) getClient(source.getTextChannel(), s).send(getMessage(msg, m, s, null));
 				else source.getChannel().sendMessage(mb.build()).queue(messageConsumer);
 			}
 		} catch (InsufficientPermissionException ignore) {
@@ -175,6 +177,7 @@ public class Relay extends SQLite {
 
 		eb.setTitle(":globe_with_meridians: Dados do relay");
 		eb.addField(":busts_in_silhouette: Clientes conectados: " + relays.size(), "Canal relay: " + (gc.getCanalRelay() == null ? "Não configurado" : Main.getInfo().getGuildByID(gc.getGuildID()).getTextChannelById(gc.getCanalRelay()).getAsMention()), false);
+		eb.addField("Modo:", gc.isLiteMode() ? "Lite" : "Normal", false);
 		eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
 
 		return eb.build();

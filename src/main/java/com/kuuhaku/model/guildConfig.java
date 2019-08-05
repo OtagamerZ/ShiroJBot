@@ -44,7 +44,6 @@ public class guildConfig {
 	private int pollTime = 60;
 	private String canallvl = null;
 	private String canalrelay = null;
-	private String canalai = null;
 	private String cargowarn = null;
 	@Column(columnDefinition = "int default 60")
 	private int warnTime = 60;
@@ -53,8 +52,6 @@ public class guildConfig {
 	private String lvlNotif = "true";
 	private String cargoNew = "{}";
 	private boolean anyTell = false;
-	@Column(columnDefinition = "boolean default false")
-	private boolean aiMode = false;
 	private String noLinkChannels = "";
 	@Column(length = 191)
 	private String logChannel = "";
@@ -206,22 +203,6 @@ public class guildConfig {
 
 	public void setGuildID(String guildID) {
 		this.guildID = guildID;
-	}
-
-	public boolean isAiMode() {
-		return aiMode;
-	}
-
-	public void setAiMode(boolean aiMode) {
-		this.aiMode = aiMode;
-	}
-
-	public String getCanalai() {
-		return canalai;
-	}
-
-	public void setCanalAi(String canalai) {
-		this.canalai = canalai;
 	}
 
 	public ArrayList<String> getNoLinkChannels() {
