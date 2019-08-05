@@ -130,7 +130,7 @@ public class Relay extends SQLite {
 						if (SQLite.getGuildById(k).isLiteMode()) relayLite(source, msg, m, s, img);
 						else Main.getJibril().getGuildById(k).getTextChannelById(r).sendFile(img.toByteArray(), "image.png", mb.build()).queue();
 					} else {
-						if (SQLite.getGuildById(k).isLiteMode()) relayLite(source, msg, m, s, img);
+						if (SQLite.getGuildById(k).isLiteMode()) relayLite(source, msg, m, s, null);
 						else Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(mb.build()).queue();
 					}
 				} catch (NullPointerException e) {
