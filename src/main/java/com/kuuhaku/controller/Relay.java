@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Relay extends SQLite {
@@ -158,13 +157,24 @@ public class Relay extends SQLite {
 				}
 		});
 		try {
-			Consumer<Message> messageConsumer = message -> source.delete().queue();
 			if (img != null) {
-				if (SQLite.getGuildById(s.getId()).isLiteMode()) getClient(source.getTextChannel(), s).send(getMessage(msg, m, s, img));
-				else source.getChannel().sendFile(img.toByteArray(), "image.png", mb.build()).queue(messageConsumer);
+				if (SQLite.getGuildById(s.getId()).isLiteMode()) {
+					getClient(source.getTextChannel(), s).send(getMessage(msg, m, s, img));
+					source.delete().queue();
+				}
+				else {
+					source.getChannel().sendFile(img.toByteArray(), "image.png", mb.build()).queue();
+					source.delete().queue();
+				}
 			} else {
-				if (SQLite.getGuildById(s.getId()).isLiteMode()) getClient(source.getTextChannel(), s).send(getMessage(msg, m, s, null));
-				else source.getChannel().sendMessage(mb.build()).queue(messageConsumer);
+				if (SQLite.getGuildById(s.getId()).isLiteMode()) {
+					getClient(source.getTextChannel(), s).send(getMessage(msg, m, s, null));
+					source.delete().queue();
+				}
+				else {
+					source.getChannel().sendMessage(mb.build()).queue();
+					source.delete().queue();
+				}
 			}
 		} catch (InsufficientPermissionException ignore) {
 		}
