@@ -2,10 +2,10 @@ package com.kuuhaku.events;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.MySQL;
+import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.RelayBlockList;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
-import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
@@ -48,15 +48,18 @@ public class JibrilEvents extends ListenerAdapter {
 						});
 					} else c.sendMessage(s).queue();
 				});
-			} catch (ErrorResponseException ex) {
-				event.getChannel().sendMessage(":x: | " + event.getAuthor().getAsMention() + ", você está com a opção \"Permitir mensagens diretas de membros do servidor.\" desligada, você não poderá mandar mensagens no chat global enquanto ela estiver desligada.\nPara habilitá-la, vá em `Configurações de privacidade -> Mensagens diretas` no menu do canto superior esquerdo, ao lado do nome do servidor.").queue();
-				if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE))
-					event.getMessage().delete().queue();
-				return;
+			} catch (ErrorResponseException ignore) {
 			}
 			if (RelayBlockList.check(event.getAuthor().getId())) {
-				event.getMessage().delete().queue();
-				event.getAuthor().openPrivateChannel().queue(c -> c.sendMessage(":x: | Você não pode mandar mensagens no chat global (bloqueado).").queue());
+				if (!SQLite.getGuildById(event.getGuild().getId()).isLiteMode()) event.getMessage().delete().queue();
+				event.getAuthor().openPrivateChannel().queue(c -> {
+					String s = ":x: | Você não pode mandar mensagens no chat global (bloqueado).";
+					if (c.hasLatestMessage()) {
+						c.getMessageById(c.getLatestMessageId()).queue(m -> {
+							if (!m.getContentRaw().equals(s)) c.sendMessage(s).queue();
+						});
+					} else c.sendMessage(s).queue();
+				});
 				return;
 			}
 			String[] msg = event.getMessage().getContentRaw().split(" ");
@@ -84,10 +87,6 @@ public class JibrilEvents extends ListenerAdapter {
 				} catch (NoResultException e) {
 					Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), null);
 				}
-			} else {
-				event.getChannel().sendMessage(":x: | Mensagem muito longa! (Max. 2000 caractéres)").queue();
-				if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE))
-					event.getMessage().delete().queue();
 			}
 		}
 	}
