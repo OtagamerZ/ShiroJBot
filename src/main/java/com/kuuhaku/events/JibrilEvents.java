@@ -40,6 +40,21 @@ public class JibrilEvents extends ListenerAdapter {
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		if (Main.getRelay().getRelayMap().containsValue(event.getChannel().getId()) && !event.getAuthor().isBot()) {
+			try {
+				event.getAuthor().openPrivateChannel().queue(c -> {
+					String s = ":warning: | Cuidado, mensagens de SPAM podem fazer com que você seja bloqueado do chat global (isto é só um aviso!\nEsta mensagem não aparecerá novamente enquanto for a última mensagem.";
+					if (c.hasLatestMessage()) {
+						c.getMessageById(c.getLatestMessageId()).queue(m -> {
+							if (!m.getContentRaw().equals(s)) c.sendMessage(s).queue();
+						});
+					} else c.sendMessage(s).queue();
+				});
+			} catch (ErrorResponseException ex) {
+				event.getChannel().sendMessage(":x: | " + event.getAuthor().getAsMention() + ", você está com a opção \"Permitir mensagens diretas de membros do servidor.\" desligada, você não poderá mandar mensagens no chat global enquanto ela estiver desligada.\nPara habilitá-la, vá em `Configurações de privacidade -> Mensagens diretas` no menu do canto superior esquerdo, ao lado do nome do servidor.").queue();
+				if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE))
+					event.getMessage().delete().queue();
+				return;
+			}
 			if (RelayBlockList.check(event.getAuthor().getId())) {
 				event.getMessage().delete().queue();
 				event.getAuthor().openPrivateChannel().queue(c -> c.sendMessage(":x: | Você não pode mandar mensagens no chat global (bloqueado).").queue());
@@ -56,18 +71,6 @@ public class JibrilEvents extends ListenerAdapter {
 			}
 			if (String.join(" ", msg).length() < 2000) {
 				try {
-					try {
-						event.getAuthor().openPrivateChannel().queue(c -> c.getMessageById(c.getLatestMessageId()).queue(m -> {
-							String s = ":warning: | Cuidado, mensagens de SPAM podem fazer com que você seja bloqueado do chat global (isto é só um aviso!\nEsta mensagem não aparecerá novamente enquanto for a última mensagem.";
-							if (!m.getContentRaw().equals(s)) c.sendMessage(s).queue();
-						}));
-					} catch (ErrorResponseException ex) {
-						event.getChannel().sendMessage(":x: | " + event.getAuthor().getAsMention() + ", você está com a opção \"Permitir mensagens diretas de membros do servidor.\" desligada, você não poderá mandar mensagens no chat global enquanto ela estiver desligada.\nPara habilitá-la, vá em `Configurações de privacidade -> Mensagens diretas` no menu do canto superior esquerdo, ao lado do nome do servidor.").queue();
-						if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE))
-							event.getMessage().delete().queue();
-						return;
-					}
-
 					if (MySQL.getTagById(event.getAuthor().getId()).isVerified() && event.getMessage().getAttachments().size() > 0) {
 						try {
 							ByteArrayOutputStream baos = new ByteArrayOutputStream();
