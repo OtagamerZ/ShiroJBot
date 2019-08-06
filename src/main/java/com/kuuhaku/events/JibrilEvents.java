@@ -39,7 +39,7 @@ public class JibrilEvents extends ListenerAdapter {
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		if (Main.getRelay().getRelayMap().containsValue(event.getChannel().getId()) && !event.getAuthor().isBot()) {
-			try {
+			/*try {
 				event.getAuthor().openPrivateChannel().queue(c -> {
 					String s = ":warning: | Cuidado, mensagens de SPAM podem fazer com que você seja bloqueado do chat global (isto é só um aviso!\nEsta mensagem não aparecerá novamente enquanto for a última mensagem.";
 					if (c.hasLatestMessage()) {
@@ -49,7 +49,7 @@ public class JibrilEvents extends ListenerAdapter {
 					} else c.sendMessage(s).queue();
 				});
 			} catch (ErrorResponseException ignore) {
-			}
+			}*/
 			if (RelayBlockList.check(event.getAuthor().getId())) {
 				if (!SQLite.getGuildById(event.getGuild().getId()).isLiteMode()) event.getMessage().delete().queue();
 				event.getAuthor().openPrivateChannel().queue(c -> {
