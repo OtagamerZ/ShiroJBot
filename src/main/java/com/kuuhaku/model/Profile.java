@@ -58,9 +58,7 @@ public class Profile {
 		int w = 944;
 		int h = 600;
 
-		HttpURLConnection con = (HttpURLConnection) new URL(m.getUser().getAvatarUrl()).openConnection();
-		con.setRequestProperty("User-Agent", "Mozilla/5.0");
-		BufferedImage avatar = scaleImage(ImageIO.read(con.getInputStream()), 200, 200);
+		HttpURLConnection con = null;
 
 		BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2d = bi.createGraphics();
@@ -150,9 +148,21 @@ public class Profile {
 
 		drawBadges(m, g, g2d);
 
-		g2d.setClip(new Ellipse2D.Float(50, 200, avatar.getWidth(), avatar.getHeight()));
-		g2d.fillOval(50, 200, avatar.getWidth(), avatar.getHeight());
-		g2d.drawImage(avatar, null, 50, 200);
+		try {
+			con = (HttpURLConnection) new URL(m.getUser().getAvatarUrl()).openConnection();
+			con.setRequestProperty("User-Agent", "Mozilla/5.0");
+			BufferedImage avatar = scaleImage(ImageIO.read(con.getInputStream()), 200, 200);
+			g2d.setClip(new Ellipse2D.Float(50, 200, avatar.getWidth(), avatar.getHeight()));
+			g2d.fillOval(50, 200, avatar.getWidth(), avatar.getHeight());
+			g2d.drawImage(avatar, null, 50, 200);
+		} catch (IOException e) {
+			con = (HttpURLConnection) new URL("https://institutogoldenprana.com.br/wp-content/uploads/2015/08/no-avatar-25359d55aa3c93ab3466622fd2ce712d1.jpg").openConnection();
+			con.setRequestProperty("User-Agent", "Mozilla/5.0");
+			BufferedImage avatar = scaleImage(ImageIO.read(con.getInputStream()), 200, 200);
+			g2d.setClip(new Ellipse2D.Float(50, 200, avatar.getWidth(), avatar.getHeight()));
+			g2d.fillOval(50, 200, avatar.getWidth(), avatar.getHeight());
+			g2d.drawImage(avatar, null, 50, 200);
+		}
 
 		g2d.dispose();
 
