@@ -9,7 +9,6 @@ import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.core.exceptions.ErrorResponseException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import javax.imageio.ImageIO;
@@ -55,8 +54,9 @@ public class JibrilEvents extends ListenerAdapter {
 				event.getAuthor().openPrivateChannel().queue(c -> {
 					String s = ":x: | Você não pode mandar mensagens no chat global (bloqueado).";
 					if (c.hasLatestMessage()) {
-						c.getMessageById(c.getLatestMessageId()).queue(m -> {
-							if (!m.getContentRaw().equals(s)) c.sendMessage(s).queue();
+						c.getHistory().retrievePast(20).queue(h -> {
+							if (h.stream().noneMatch(m -> m.getContentRaw().equalsIgnoreCase(s)))
+								c.sendMessage(s).queue();
 						});
 					} else c.sendMessage(s).queue();
 				});
