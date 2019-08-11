@@ -29,12 +29,10 @@ version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
-allprojects {
-    repositories {
-        mavenCentral()
-        jcenter()
-        maven { url "https://jitpack.io" }
-    }
+repositories {
+    mavenCentral()
+    jcenter()
+    maven { url "https://jitpack.io" }
 }
 
 task stage(dependsOn: ['build', 'clean'])
@@ -49,12 +47,12 @@ stage.dependsOn(copyToLib)
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compile 'net.dv8tion:JDA:3.8.3_462'
-    compile 'com.github.SvenWoltmann:color-thief-java:master-SNAPSHOT'
+    compile 'com.github.SvenWoltmann:color-thief-java:v1.1.2'
     compile 'org.discordbots:DBL-Java-Library:2.0.1'
     compile 'com.enigmabridge:hibernate4-sqlite-dialect:0.1.2'
     compile 'com.google.apis:google-api-services-youtube:v3-rev212-1.25.0'
     compile 'com.sedmelluq:lavaplayer:1.3.19'
-    compile group: 'com.github.gwenn', name: 'sqlite-dialect', version: 'master-SNAPSHOT'
+    compile group: 'com.github.gwenn', name: 'sqlite-dialect', version: '0.1.0'
     compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.2.Final'
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.16'
     compile group: 'org.quartz-scheduler', name: 'quartz', version: '2.3.1'
