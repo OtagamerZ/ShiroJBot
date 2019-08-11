@@ -29,10 +29,12 @@ version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
-repositories {
-    mavenCentral()
-    jcenter()
-    maven { url "https://jitpack.io" }
+allprojects {
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven { url "https://jitpack.io" }
+    }
 }
 
 task stage(dependsOn: ['build', 'clean'])
