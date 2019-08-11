@@ -124,11 +124,12 @@ public class Relay extends SQLite {
 		relays.forEach((k, r) -> {
 			if (!s.getId().equals(k))
 				try {
-					if (img != null) {
+					ByteArrayOutputStream canImg = Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_ATTACH_FILES) ? img : null;
+					if (canImg != null) {
 						if (SQLite.getGuildById(k).isLiteMode()) {
 							try {
 								WebhookClient client = getClient(Main.getJibril().getGuildById(k).getTextChannelById(r), Main.getJibril().getGuildById(k));
-								client.send(getMessage(msg, m, s, img));
+								client.send(getMessage(msg, m, s, canImg));
 								client.close();
 							} catch (InsufficientPermissionException e) {
 								WebhookClient client = getClient(Main.getJibril().getGuildById(k).getTextChannelById(r), Main.getJibril().getGuildById(k));
@@ -136,7 +137,7 @@ public class Relay extends SQLite {
 								client.close();
 							}
 						} else {
-							Main.getJibril().getGuildById(k).getTextChannelById(r).sendFile(img.toByteArray(), "image.png", mb.build()).queue();
+							Main.getJibril().getGuildById(k).getTextChannelById(r).sendFile(canImg.toByteArray(), "image.png", mb.build()).queue();
 						}
 					} else {
 						if (SQLite.getGuildById(k).isLiteMode()) {
