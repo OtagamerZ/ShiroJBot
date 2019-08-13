@@ -64,6 +64,8 @@ public class guildConfig {
 	private boolean antiRaid = false;
 	@Column(columnDefinition = "boolean default false")
 	private boolean liteMode = false;
+	@Column(columnDefinition = "boolean default false")
+	private boolean allowImg = false;
 	private boolean markForDelete;
 
 	public guildConfig() {
@@ -303,5 +305,13 @@ public class guildConfig {
 
 	public void setLiteMode(boolean liteMode) {
 		this.liteMode = liteMode;
+	}
+
+	public boolean isAllowImg() {
+		return allowImg;
+	}
+
+	public void setAllowImg(boolean allowImg) {
+		this.allowImg = allowImg;
 	}
 }

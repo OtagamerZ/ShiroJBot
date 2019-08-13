@@ -124,12 +124,11 @@ public class Relay extends SQLite {
 		relays.forEach((k, r) -> {
 			if (!s.getId().equals(k))
 				try {
-					ByteArrayOutputStream canImg = Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_ATTACH_FILES) ? img : null;
-					if (canImg != null) {
+					if (SQLite.getGuildById(k).isAllowImg()) {
 						if (SQLite.getGuildById(k).isLiteMode()) {
 							try {
 								WebhookClient client = getClient(Main.getJibril().getGuildById(k).getTextChannelById(r), Main.getJibril().getGuildById(k));
-								client.send(getMessage(msg, m, s, canImg));
+								client.send(getMessage(msg, m, s, img));
 								client.close();
 							} catch (InsufficientPermissionException e) {
 								WebhookClient client = getClient(Main.getJibril().getGuildById(k).getTextChannelById(r), Main.getJibril().getGuildById(k));
@@ -137,7 +136,7 @@ public class Relay extends SQLite {
 								client.close();
 							}
 						} else {
-							Main.getJibril().getGuildById(k).getTextChannelById(r).sendFile(canImg.toByteArray(), "image.png", mb.build()).queue();
+							Main.getJibril().getGuildById(k).getTextChannelById(r).sendFile(img.toByteArray(), "image.png", mb.build()).queue();
 						}
 					} else {
 						if (SQLite.getGuildById(k).isLiteMode()) {
@@ -185,6 +184,7 @@ public class Relay extends SQLite {
 		eb.setTitle(":globe_with_meridians: Dados do relay");
 		eb.addField(":busts_in_silhouette: Clientes conectados: " + relays.size(), "Canal relay: " + (gc.getCanalRelay() == null ? "Não configurado" : Main.getInfo().getGuildByID(gc.getGuildID()).getTextChannelById(gc.getCanalRelay()).getAsMention()), false);
 		eb.addField("Modo:", gc.isLiteMode() ? "Lite" : "Normal", false);
+		eb.addField("Imagens:", gc.isAllowImg() ? "Permitidas" : "Negadas", false);
 		eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
 
 		return eb.build();
