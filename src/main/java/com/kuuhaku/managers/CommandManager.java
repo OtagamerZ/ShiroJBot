@@ -66,6 +66,7 @@ public class CommandManager {
             add(new MakeLogCommand());
             add(new PruneCommand());
             add(new LiteModeCommand());
+            add(new AllowImgCommand());
 
             //INFORMATION
             add(new ComandosCommand());
