@@ -19,6 +19,7 @@ package com.kuuhaku.events;
 
 import com.kuuhaku.events.cron.BackupEvent;
 import com.kuuhaku.events.cron.ClearEvent;
+import com.kuuhaku.events.cron.PartnerCheckEvent;
 import com.kuuhaku.events.cron.UnblockEvent;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
@@ -32,6 +33,27 @@ public class ScheduledEvents implements JobListener {
 		schedBackup();
 		schedClear();
 		schedUnblock();
+		schedCheck();
+	}
+
+	private void schedCheck() {
+		try {
+			if (PartnerCheckEvent.check == null) {
+				PartnerCheckEvent.check = JobBuilder.newJob(PartnerCheckEvent.class).withIdentity("check", "1").build();
+			}
+			Trigger cron = TriggerBuilder.newTrigger().withIdentity("check", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0/10 * ? * * *")).build();
+			SchedulerFactory sf = new StdSchedulerFactory();
+			try {
+				sched = sf.getScheduler();
+				sched.scheduleJob(PartnerCheckEvent.check, cron);
+			} catch (Exception ignore) {
+			} finally {
+				sched.start();
+				Helper.log(this.getClass(), LogLevel.INFO, "Cronograma inicializado com sucesso: check");
+			}
+		} catch (SchedulerException e) {
+			Helper.log(this.getClass(), LogLevel.ERROR, "Erro ao inicializar cronograma check: " + e);
+		}
 	}
 
 	private void schedClear() {
