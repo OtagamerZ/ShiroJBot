@@ -19,12 +19,13 @@ public class PartnerCheckEvent implements Job {
 	public void execute(JobExecutionContext context) {
 		Main.getJibril().getGuilds().forEach(g -> {
 			try {
-				if (!MySQL.getTagById(g.getOwnerId()).isPartner()) {
+				if (!MySQL.getTagById(g.getOwnerId()).isPartner() && !Main.getInfo().getDevelopers().contains(g.getOwnerId())) {
 					g.leave().queue();
 					Helper.log(this.getClass(), LogLevel.INFO, "Saí do servidor " + g.getName() + " por " + g.getOwner().getUser().getAsTag() + " não estar na lista de parceiros.");
 				}
 			} catch (NoResultException e) {
-				Helper.log(this.getClass(), LogLevel.WARN, "Erro ao sair de " + g.getName() + ", gerenciado por " + g.getOwner().getUser().getAsTag() + "(" + g.getOwnerId() + ").");
+				g.leave().queue();
+				Helper.log(this.getClass(), LogLevel.INFO, "Saí do servidor " + g.getName() + " por " + g.getOwner().getUser().getAsTag() + " não possuir tags.");
 			}
 		});
 	}
