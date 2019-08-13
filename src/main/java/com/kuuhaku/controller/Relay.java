@@ -38,11 +38,10 @@ public class Relay extends SQLite {
 		}
 	}
 
-	private WebhookMessage getMessage(String msg, Member m, Guild s, ByteArrayOutputStream img) {
+	private WebhookMessage getMessage(String msg, Member m, Guild s) {
 		WebhookMessageBuilder wmb = new WebhookMessageBuilder();
 
 		wmb.setContent(msg);
-		if (img != null) wmb.addFile("image.png", img.toByteArray());
 		wmb.setAvatarUrl(m.getUser().getAvatarUrl());
 		wmb.setUsername("(" + s.getName() + ") " + m.getEffectiveName());
 		return wmb.build();
@@ -126,22 +125,20 @@ public class Relay extends SQLite {
 				try {
 					if (SQLite.getGuildById(k).isAllowImg()) {
 						if (SQLite.getGuildById(k).isLiteMode()) {
-							try {
-								WebhookClient client = getClient(Main.getJibril().getGuildById(k).getTextChannelById(r), Main.getJibril().getGuildById(k));
-								client.send(getMessage(msg, m, s, img));
-								client.close();
-							} catch (InsufficientPermissionException e) {
-								WebhookClient client = getClient(Main.getJibril().getGuildById(k).getTextChannelById(r), Main.getJibril().getGuildById(k));
-								client.send(getMessage(msg, m, s, null));
-								client.close();
-							}
+							WebhookClient client = getClient(Main.getJibril().getGuildById(k).getTextChannelById(r), Main.getJibril().getGuildById(k));
+							client.send(getMessage(msg, m, s));
+							client.close();
 						} else {
-							Main.getJibril().getGuildById(k).getTextChannelById(r).sendFile(img.toByteArray(), "image.png", mb.build()).queue();
+							if (img != null) {
+								Main.getJibril().getGuildById(k).getTextChannelById(r).sendFile(img.toByteArray(), "image.png", mb.build()).queue();
+							} else {
+								Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(mb.build()).queue();
+							}
 						}
 					} else {
 						if (SQLite.getGuildById(k).isLiteMode()) {
 							WebhookClient client = getClient(Main.getJibril().getGuildById(k).getTextChannelById(r), Main.getJibril().getGuildById(k));
-							client.send(getMessage(msg, m, s, null));
+							client.send(getMessage(msg, m, s));
 							client.close();
 						} else {
 							Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(mb.build()).queue();
@@ -167,7 +164,6 @@ public class Relay extends SQLite {
 			if (img != null) {
 				if (!SQLite.getGuildById(s.getId()).isLiteMode())
 					source.getChannel().sendFile(img.toByteArray(), "image.png", mb.build()).queue(messageConsumer);
-
 			} else {
 				if (!SQLite.getGuildById(s.getId()).isLiteMode())
 					source.getChannel().sendMessage(mb.build()).queue(messageConsumer);
