@@ -183,8 +183,8 @@ public class Relay extends SQLite {
 
 		eb.setTitle(":globe_with_meridians: Dados do relay");
 		eb.addField(":busts_in_silhouette: Clientes conectados: " + relays.size(), "Canal relay: " + (gc.getCanalRelay() == null ? "Não configurado" : Main.getInfo().getGuildByID(gc.getGuildID()).getTextChannelById(gc.getCanalRelay()).getAsMention()), false);
-		eb.addField("Modo:", gc.isLiteMode() ? "Lite" : "Normal", false);
-		eb.addField("Imagens:", gc.isAllowImg() ? "Permitidas" : "Negadas", false);
+		eb.addField("Modo:", gc.isLiteMode() ? "Lite" : "Normal", true);
+		eb.addField("Imagens:", gc.isAllowImg() ? "Permitidas" : "Negadas", true);
 		eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
 
 		return eb.build();
