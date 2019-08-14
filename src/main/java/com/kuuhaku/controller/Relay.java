@@ -92,8 +92,16 @@ public class Relay extends SQLite {
 		}
 
 		try {
-			if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 20)
-				badges.append(TagIcons.getTag(TagIcons.VETERAN));
+			if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 60)
+				badges.append(TagIcons.getTag(TagIcons.LVL60));
+			else if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 50)
+				badges.append(TagIcons.getTag(TagIcons.LVL50));
+			else if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 40)
+				badges.append(TagIcons.getTag(TagIcons.LVL40));
+			else if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 30)
+				badges.append(TagIcons.getTag(TagIcons.LVL30));
+			else if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 20)
+				badges.append(TagIcons.getTag(TagIcons.LVL20));
 		} catch (NoResultException ignore) {
 		}
 
