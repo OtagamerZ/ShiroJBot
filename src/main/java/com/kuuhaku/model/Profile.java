@@ -22,6 +22,7 @@ import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
+import com.kuuhaku.utils.TagIcons;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Guild;
 
@@ -201,8 +202,16 @@ public class Profile {
 			} catch (NoResultException ignore) {
 			}
 			try {
-				if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 20)
-					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/veteran.png"))));
+				if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 60)
+					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_60.png"))));
+				else if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 50)
+					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_50.png"))));
+				else if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 40)
+					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_40.png"))));
+				else if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 30)
+					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_30.png"))));
+				else if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 20)
+					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_20.png"))));
 			} catch (NoResultException ignore) {
 			}
 			try {

@@ -73,8 +73,16 @@ public class MyTagsCommand extends Command {
         }
 
         try {
-            if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= 20)
-                badges.append(TagIcons.getTag(TagIcons.VETERAN));
+            if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= 60)
+                badges.append(TagIcons.getTag(TagIcons.LVL60));
+            else if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= 50)
+                badges.append(TagIcons.getTag(TagIcons.LVL50));
+            else if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= 40)
+                badges.append(TagIcons.getTag(TagIcons.LVL40));
+            else if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= 30)
+                badges.append(TagIcons.getTag(TagIcons.LVL30));
+            else if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= 20)
+                badges.append(TagIcons.getTag(TagIcons.LVL20));
         } catch (NoResultException ignore) {
         }
 
