@@ -40,7 +40,11 @@ public class TagsCommand extends Command {
         eb.addField(TagIcons.getTag(TagIcons.PARTNER) + " Parceiro", "Parceiros de desenvolvimento da Shiro/Jibril", false);
         eb.addField(TagIcons.getTag(TagIcons.MODERATOR) + " Moderador", "Equipe administrativa do servidor de onde a mensagem foi enviada", false);
         eb.addField(TagIcons.getTag(TagIcons.CHAMPION) + " Campeão", "Usuário que está no ranking Nº 1 das Beyblades", false);
-        eb.addField(TagIcons.getTag(TagIcons.VETERAN) + " Veterano", "Membro com nível maior ou igual a 20", false);
+        eb.addField(TagIcons.getTag(TagIcons.LVL20) +
+                TagIcons.getTag(TagIcons.LVL30) +
+                TagIcons.getTag(TagIcons.LVL40) +
+                TagIcons.getTag(TagIcons.LVL50) +
+                TagIcons.getTag(TagIcons.LVL60) + " Nível", "Membro com nível maior ou igual a 20/30/40/50/60 respectivamente", false);
         eb.addField(TagIcons.getTag(TagIcons.VERIFIED) + " Verificado", "Usuário com conduta exemplar e identidade verificada", false);
         eb.addField(TagIcons.getTag(TagIcons.TOXIC) + " Tóxico", "Usuário com péssima conduta", false);
         eb.addField(TagIcons.getTag(TagIcons.MARRIED) + " Casado", "Usuário que possui uma waifu/husbando", false);
