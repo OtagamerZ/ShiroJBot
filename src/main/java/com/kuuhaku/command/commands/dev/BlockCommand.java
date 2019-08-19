@@ -6,6 +6,9 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.model.RelayBlockList;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Arrays;
 
 public class BlockCommand extends Command {
 
@@ -16,32 +19,27 @@ public class BlockCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		try {
-			if (message.getMentionedUsers().size() > 0) {
-				if (args.length == 1) {
-					channel.sendMessage(":x: | Você precisa passar o a razão para o bloqueio.").queue();
-					return;
-				} else if (args[1].equals("perma")) {
-					RelayBlockList.permaBlockID(message.getMentionedUsers().get(0).getId());
-					Main.getRelay().relayMessage(message, message.getMentionedUsers().get(0).getAsMention() + " banido permanentemente do chat global.\nRazão: " + String.join(" ", args).substring(1), guild.getSelfMember(), guild, null);
-					return;
+			if (args.length > 2) {
+				if (StringUtils.isNumeric(args[0])) {
+					String reason = String.join(" ", Arrays.copyOfRange(args, 2, args.length - 1));
+					boolean isMentioned = message.getMentionedUsers().size() > 0;
+					switch (args[1]) {
+						case "temp":
+							RelayBlockList.blockID(isMentioned ? message.getMentionedUsers().get(0).getId() : args[0], reason);
+							Main.getRelay().relayMessage(message, (isMentioned ? message.getMentionedUsers().get(0).getAsMention() : "<@" + args[0] + ">") + " bloqueado do chat global.\nRazão: " + reason, guild.getSelfMember(), guild, null);
+							break;
+						case "perma":
+							RelayBlockList.permaBlockID(isMentioned ? message.getMentionedUsers().get(0).getId() : args[0]);
+							Main.getRelay().relayMessage(message, (isMentioned ? message.getMentionedUsers().get(0).getAsMention() : "<@" + args[0] + ">") + " banido permanentemente do chat global.\nRazão: " + reason, guild.getSelfMember(), guild, null);
+							break;
+						default:
+							channel.sendMessage(":x: | Tipo inválido, o tipo deve ser temp ou perma.").queue();
+					}
+				} else {
+					channel.sendMessage(":x: | ID inválido, identificadores possuem apenas dígitos de 0 à 9.").queue();
 				}
-
-				RelayBlockList.blockID(message.getMentionedUsers().get(0).getId(), String.join(" ", args).replace(args[1], "").trim());
-				Main.getRelay().relayMessage(message, message.getMentionedUsers().get(0).getAsMention() + " bloqueado do chat global.\nRazão: " + String.join(" ", args).substring(2), guild.getSelfMember(), guild, null);
-			} else if (Main.getInfo().getUserByID(args[0]) != null) {
-				if (args.length == 1) {
-					channel.sendMessage(":x: | Você precisa passar o a razão para o bloqueio.").queue();
-					return;
-				} else if (args[1].equals("perma")) {
-					RelayBlockList.permaBlockID(message.getMentionedUsers().get(0).getId());
-					Main.getRelay().relayMessage(message, "<@" + args[0] + "> banido permanentemente do chat global.\nRazão: " + String.join(" ", args).substring(2), guild.getSelfMember(), guild, null);
-					return;
-				}
-
-				RelayBlockList.blockID(args[0], String.join(" ", args).replace(args[0], "").trim());
-				Main.getRelay().relayMessage(message, "<@" + args[0] + "> bloqueado do chat global.\nRazão: " + String.join(" ", args).substring(1), guild.getSelfMember(), guild, null);
 			} else {
-				channel.sendMessage(":x: | Você precisa passar o ID do usuário a ser bloqueado.").queue();
+				channel.sendMessage(":x: | Você precisa passar o ID do usuário a ser bloqueado, o tipo de bloqueio (temp/perma) e a razão para o bloqueio.").queue();
 			}
 		} catch (NumberFormatException e) {
 			channel.sendMessage(":x: | ID de usuário incorreto.").queue();
