@@ -5,10 +5,12 @@ import com.kuuhaku.controller.MySQL;
 import net.dv8tion.jda.core.EmbedBuilder;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RelayBlockList {
 	private static final List<String> blockedIDs = MySQL.blockedList();
+	private static final List<String> blockedThumbs = new ArrayList<>();
 
 	public static void blockID(String id, String reason) {
 		EmbedBuilder eb = new EmbedBuilder();
@@ -36,8 +38,23 @@ public class RelayBlockList {
 		Main.getInfo().getUserByID(id).openPrivateChannel().queue(c -> c.sendMessage(eb.build()).queue());
 	}
 
+	public static void blockThumb(String id) {
+		EmbedBuilder eb = new EmbedBuilder();
+		blockedThumbs.add(id);
+
+		eb.setTitle("Seu avatar foi bloqueado por ser considerado indecente:");
+		eb.setDescription("Seu avatar foi considerado indecente ou explícito, por esta razão ele foi temporariamente censurado. Recomendo que troque-o assim que possível pois poderá resultar em bloqueio do uso do chat global caso você mantenha este avatar.");
+		eb.setColor(Color.yellow);
+		eb.setThumbnail("https://www.rhinocarhire.com/CorporateSite/media/Drive-Smart/Dash-Symbols/brake_warning_symbol_in_red.png");
+		Main.getInfo().getUserByID(id).openPrivateChannel().queue(c -> c.sendMessage(eb.build()).queue());
+	}
+
 	public static boolean check(String id) {
 		return blockedIDs.contains(id);
+	}
+
+	public static boolean checkThumb(String id) {
+		return blockedThumbs.contains(id);
 	}
 
 	public static List<String> getBlockedIDs() {

@@ -32,6 +32,10 @@ public class BlockCommand extends Command {
 							RelayBlockList.permaBlockID(isMentioned ? message.getMentionedUsers().get(0).getId() : args[0]);
 							Main.getRelay().relayMessage(message, (isMentioned ? message.getMentionedUsers().get(0).getAsMention() : "<@" + args[0] + ">") + " banido permanentemente do chat global.\nRazão: " + reason, guild.getSelfMember(), guild, null);
 							break;
+						case "thumb":
+							RelayBlockList.blockThumb(isMentioned ? message.getMentionedUsers().get(0).getId() : args[0]);
+							Main.getRelay().relayMessage(message, (isMentioned ? message.getMentionedUsers().get(0).getAsMention() : "Avatar de <@" + args[0] + ">") + " foi censurado do chat global.", guild.getSelfMember(), guild, null);
+							break;
 						default:
 							channel.sendMessage(":x: | Tipo inválido, o tipo deve ser temp ou perma.").queue();
 					}
