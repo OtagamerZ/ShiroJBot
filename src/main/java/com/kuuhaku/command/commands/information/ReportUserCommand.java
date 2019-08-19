@@ -25,6 +25,7 @@ import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 
 public class ReportUserCommand extends Command {
 
@@ -43,7 +44,7 @@ public class ReportUserCommand extends Command {
             return;
         }
 
-        String mensagem = String.join(" ", args).trim();
+        String mensagem = String.join(" ", Arrays.copyOfRange(args, 1, args.length)).trim();
         DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy - hh:mm");
 
         EmbedBuilder eb = new EmbedBuilder();
