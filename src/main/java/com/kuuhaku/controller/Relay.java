@@ -1,6 +1,7 @@
 package com.kuuhaku.controller;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.model.RelayBlockList;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
@@ -43,7 +44,7 @@ public class Relay extends SQLite {
 		WebhookMessageBuilder wmb = new WebhookMessageBuilder();
 
 		wmb.setContent(msg);
-		wmb.setAvatarUrl(m.getUser().getAvatarUrl());
+		wmb.setAvatarUrl(RelayBlockList.checkThumb(m.getUser().getId()) ? "https://i.pinimg.com/originals/46/15/87/461587d51087bfdf8906149d356f972f.jpg" : m.getUser().getAvatarUrl());
 		wmb.setUsername("(" + s.getName() + ") " + m.getEffectiveName());
 		return wmb.build();
 	}
@@ -62,7 +63,7 @@ public class Relay extends SQLite {
 		eb.setDescription(Helper.makeEmoteFromMention(msg.split(" ")) + "\n\n ");
 		eb.setImage("attachment://image.png");
 		eb.setAuthor("(" + s.getName() + ") " + m.getEffectiveName(), s.getIconUrl(), s.getIconUrl());
-		eb.setThumbnail(m.getUser().getAvatarUrl());
+		eb.setThumbnail(RelayBlockList.checkThumb(m.getUser().getId()) ? "https://i.pinimg.com/originals/46/15/87/461587d51087bfdf8906149d356f972f.jpg" : m.getUser().getAvatarUrl());
 		eb.setFooter(m.getUser().getId(), "http://icons.iconarchive.com/icons/killaaaron/adobe-cc-circles/1024/Adobe-Id-icon.png");
 		try {
 			eb.setColor(Helper.colorThief(s.getIconUrl()));
