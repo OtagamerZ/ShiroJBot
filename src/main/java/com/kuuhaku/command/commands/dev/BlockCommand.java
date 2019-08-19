@@ -21,7 +21,7 @@ public class BlockCommand extends Command {
 		try {
 			if (args.length > 2) {
 				if (StringUtils.isNumeric(args[0])) {
-					String reason = String.join(" ", Arrays.copyOfRange(args, 2, args.length - 1));
+					String reason = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
 					boolean isMentioned = message.getMentionedUsers().size() > 0;
 					switch (args[1]) {
 						case "temp":
