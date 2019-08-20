@@ -39,10 +39,7 @@ public class Relay extends SQLite {
 	private WebhookMessage getMessage(String msg, Member m, Guild s) {
 		WebhookMessageBuilder wmb = new WebhookMessageBuilder();
 
-		String filtered = Arrays.stream(msg.split(" ")).map(w -> w =
-				w.contains("<") && w.contains(">") && w.contains(":") ? ":question:" : w
-		).collect(Collectors.joining(" "));
-		wmb.setContent(filtered);
+		wmb.setContent(msg);
 		wmb.setAvatarUrl(RelayBlockList.checkThumb(m.getUser().getId()) ? "https://i.pinimg.com/originals/46/15/87/461587d51087bfdf8906149d356f972f.jpg" : m.getUser().getAvatarUrl());
 		wmb.setUsername("(" + s.getName() + ") " + m.getEffectiveName());
 		return wmb.build();
