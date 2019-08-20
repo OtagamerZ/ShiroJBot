@@ -14,7 +14,6 @@ import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.webhook.WebhookClient;
 import net.dv8tion.jda.webhook.WebhookMessage;
 import net.dv8tion.jda.webhook.WebhookMessageBuilder;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -41,7 +40,7 @@ public class Relay extends SQLite {
 		WebhookMessageBuilder wmb = new WebhookMessageBuilder();
 
 		String filtered = Arrays.stream(msg.split(" ")).map(w -> w =
-				StringUtils.containsAny(w, "<", ">", ":") ? ":question:" : w
+				(w.contains("<") && w.contains(">") && w.contains(":")) ? ":question:" : w
 		).collect(Collectors.joining(" "));
 		wmb.setContent(filtered);
 		wmb.setAvatarUrl(RelayBlockList.checkThumb(m.getUser().getId()) ? "https://i.pinimg.com/originals/46/15/87/461587d51087bfdf8906149d356f972f.jpg" : m.getUser().getAvatarUrl());
