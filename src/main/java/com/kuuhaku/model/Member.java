@@ -17,6 +17,7 @@
 
 package com.kuuhaku.model;
 
+import com.kuuhaku.Main;
 import net.dv8tion.jda.core.entities.User;
 
 import javax.persistence.Column;
@@ -37,6 +38,8 @@ public class Member {
 	private String bio = "";
 	@Column(columnDefinition = "String default \"\"")
 	private String waifu = "";
+	@Column(columnDefinition = "String default \"\"")
+	private String exceed = "";
 	@Column(columnDefinition = "boolean default false")
 	private boolean markForDelete;
 
@@ -45,7 +48,7 @@ public class Member {
 	}
 
 	public boolean addXp() {
-		xp += 15;
+		xp += Main.getInfo().getWinner().equals(this.exceed) ? 30 : 15;
 		if (xp >= (int) Math.pow(level, 2) * 100) {
 			level++;
 			return true;
@@ -129,5 +132,13 @@ public class Member {
 
 	public void setWaifu(User waifu) {
 		this.waifu = waifu.getId();
+	}
+
+	public String getExceed() {
+		return exceed;
+	}
+
+	public void setExceed(String exceed) {
+		this.exceed = exceed;
 	}
 }
