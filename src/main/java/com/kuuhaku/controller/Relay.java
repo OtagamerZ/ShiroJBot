@@ -39,10 +39,7 @@ public class Relay extends SQLite {
 	private WebhookMessage getMessage(String msg, Member m, Guild s) {
 		WebhookMessageBuilder wmb = new WebhookMessageBuilder();
 
-		String filtered = Arrays.stream(msg.split(" ")).map(w -> w =
-				(w.contains("<") && w.contains(">") && w.contains(":")) ? ":question:" : w
-		).collect(Collectors.joining(" "));
-		wmb.setContent(filtered);
+		wmb.setContent(msg);
 		wmb.setAvatarUrl(RelayBlockList.checkThumb(m.getUser().getId()) ? "https://i.pinimg.com/originals/46/15/87/461587d51087bfdf8906149d356f972f.jpg" : m.getUser().getAvatarUrl());
 		wmb.setUsername("(" + s.getName() + ") " + m.getEffectiveName());
 		return wmb.build();
@@ -135,12 +132,16 @@ public class Relay extends SQLite {
 		MessageBuilder mb = new MessageBuilder();
 		mb.setEmbed(eb.build());
 
+		msg = Arrays.stream(msg.split(" ")).map(w -> w =
+				Main.getJibril().getEmotesByName(w, true).size() == 0 ? ":question:" : w
+		).collect(Collectors.joining(" "));
+		String finalMsg = msg;
 		relays.forEach((k, r) -> {
 			try {
 				if (SQLite.getGuildById(k).isAllowImg()) {
 					if (SQLite.getGuildById(k).isLiteMode()) {
 						WebhookClient client = getClient(Main.getJibril().getGuildById(k).getTextChannelById(r), Main.getJibril().getGuildById(k));
-						client.send(getMessage(msg, m, s));
+						client.send(getMessage(finalMsg, m, s));
 						client.close();
 					} else {
 						if (img != null) {
@@ -152,7 +153,7 @@ public class Relay extends SQLite {
 				} else {
 					if (SQLite.getGuildById(k).isLiteMode()) {
 						WebhookClient client = getClient(Main.getJibril().getGuildById(k).getTextChannelById(r), Main.getJibril().getGuildById(k));
-						client.send(getMessage(msg, m, s));
+						client.send(getMessage(finalMsg, m, s));
 						client.close();
 					} else {
 						Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(mb.build()).queue();
