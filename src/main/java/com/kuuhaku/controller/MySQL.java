@@ -291,7 +291,7 @@ public class MySQL {
     public static String getWinner() {
         EntityManager em = getEntityManager();
 
-        Query q = em.createQuery("SELECT w FROM MonthWinner w WHERE id == MAX(id)", MonthWinner.class);
+        Query q = em.createQuery("SELECT w FROM MonthWinner w WHERE id = MAX(id)", MonthWinner.class);
         try {
             MonthWinner winner = ((MonthWinner) q.getSingleResult());
 
