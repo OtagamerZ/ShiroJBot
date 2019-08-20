@@ -37,13 +37,13 @@ public class BlockCommand extends Command {
 							Main.getRelay().relayMessage(message, (isMentioned ? message.getMentionedUsers().get(0).getAsMention() : "Avatar de <@" + args[0] + ">") + " foi censurado do chat global.", guild.getSelfMember(), guild, null);
 							break;
 						default:
-							channel.sendMessage(":x: | Tipo inválido, o tipo deve ser temp ou perma.").queue();
+							channel.sendMessage(":x: | Tipo inválido, o tipo deve ser thumb, temp ou perma.").queue();
 					}
 				} else {
 					channel.sendMessage(":x: | ID inválido, identificadores possuem apenas dígitos de 0 à 9.").queue();
 				}
 			} else {
-				channel.sendMessage(":x: | Você precisa passar o ID do usuário a ser bloqueado, o tipo de bloqueio (temp/perma) e a razão para o bloqueio.").queue();
+				channel.sendMessage(":x: | Você precisa passar o ID do usuário a ser bloqueado, o tipo de bloqueio (thumb/temp/perma) e a razão para o bloqueio.").queue();
 			}
 		} catch (NumberFormatException e) {
 			channel.sendMessage(":x: | ID de usuário incorreto.").queue();

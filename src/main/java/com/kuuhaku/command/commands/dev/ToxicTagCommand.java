@@ -67,7 +67,7 @@ public class ToxicTagCommand extends Command {
                 if (Main.getInfo().getUserByID(args[0]) != null) {
                     try {
                         Tags t = MySQL.getTagById(args[0]);
-                        if (t.isPartner()) {
+						if (t.isToxic()) {
                             MySQL.removeTagToxic(args[0]);
                             channel.sendMessage("<@" + args[0] + "> não é mais tóxico, que bom!").queue();
                         } else {
@@ -78,11 +78,11 @@ public class ToxicTagCommand extends Command {
                     } catch (NoResultException e) {
                         MySQL.addUserTagsToDB(args[0]);
                         Tags t = MySQL.getTagById(args[0]);
-                        if (t.isPartner()) {
+						if (t.isToxic()) {
                             MySQL.removeTagToxic(args[0]);
                             channel.sendMessage("<@" + args[0] + "> não é mais tóxico, que bom!").queue();
                         } else {
-                            MySQL.removeTagToxic(args[0]);
+							MySQL.giveTagToxic(args[0]);
                             MySQL.removeTagVerified(args[0]);
                             channel.sendMessage("<@" + args[0] + "> agora é tóxico, reporta ele!").queue();
                         }
