@@ -52,7 +52,7 @@ public class ExceedRankCommand extends Command {
 				g2d.drawImage(bg, null, 0, 0);
 
 				for (int i = 0; i < 6; i++) {
-					g2d.drawImage(bars.get(i), null, 152 + (113 * i), 240);
+					g2d.drawImage(bars.get(i), null, 152 + (113 * i), 220);
 				}
 
 				g2d.drawImage(fg, null, 0, 0);
