@@ -37,9 +37,12 @@ public class ExceedRankCommand extends Command {
 				}
 
 				BufferedImage bg = Profile.scaleImage(ImageIO.read(Helper.getImage("http://snagfilms-a.akamaihd.net/08/bd/a9131d1c48089e81990bdeafc0c4/1426-lec3-1536x865.jpg")), WIDTH, HEIGTH);
+				BufferedImage fg = ImageIO.read(Helper.getImage("https://i.imgur.com/wXV3YZX.png"));
 
 				Graphics2D g2d = (Graphics2D) bi.getGraphics();
 				g2d.drawImage(bg, null, 0, 0);
+
+				g2d.drawImage(fg, null, 0, 0);
 				g2d.dispose();
 
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
