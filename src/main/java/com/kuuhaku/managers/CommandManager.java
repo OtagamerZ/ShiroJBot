@@ -20,6 +20,7 @@ package com.kuuhaku.managers;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.Reactions.*;
 import com.kuuhaku.command.commands.beyblade.*;
+import com.kuuhaku.command.commands.exceed.ExceedRankCommand;
 import com.kuuhaku.command.commands.fun.*;
 import com.kuuhaku.command.commands.information.*;
 import com.kuuhaku.command.commands.misc.*;
@@ -139,6 +140,9 @@ public class CommandManager {
             add(new MusicCommand());
             add(new YoutubeCommand());
             add(new VideoCommand());
+
+            //EXCEED
+            add(new ExceedRankCommand());
         }};
     }
 
