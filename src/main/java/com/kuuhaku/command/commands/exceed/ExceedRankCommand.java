@@ -64,7 +64,7 @@ public class ExceedRankCommand extends Command {
 				g2d.drawImage(bg, null, 0, 0);
 
 				for (int i = 0; i < 6; i++) {
-					int h = (int) (10 * 350 / 100);
+					int h = (int) (10 + (10 * 100 / 90) * 350 / 100);
 					Profile.printCenteredString(names.get(i), 68, 152 + (113 * i), h - 10, g2d);
 					g2d.setClip(new Rectangle2D.Float(152 + (113 * i), 580, 68, h));
 					g2d.drawImage(bars.get(i), null, 152 + (113 * i), 230);
