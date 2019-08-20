@@ -1,11 +1,13 @@
 package com.kuuhaku.controller;
 
 import com.kuuhaku.model.*;
+import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.entities.User;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.*;
 
 public class MySQL {
@@ -262,5 +264,44 @@ public class MySQL {
         em.getTransaction().commit();
 
         em.close();
+    }
+
+    @SuppressWarnings("unchecked")
+    public static Exceed getExceed(ExceedEnums ex) {
+        EntityManager em = getEntityManager();
+
+        Query q = em.createQuery("SELECT m FROM Member m WHERE exceed LIKE ?1", Member.class);
+        q.setParameter(1, ex.getName());
+
+        List<Member> members = (List<Member>) q.getResultList();
+
+        return new Exceed(ex, members.size(), members.stream().mapToLong(Member::getXp).sum());
+    }
+
+    public static void markWinner(ExceedEnums ex) {
+        EntityManager em = getEntityManager();
+
+        em.getTransaction().begin();
+        em.merge(new MonthWinner(ex, LocalDate.now().plusWeeks(1)));
+        em.getTransaction().commit();
+
+        em.close();
+    }
+
+    public static String getWinner() {
+        EntityManager em = getEntityManager();
+
+        Query q = em.createQuery("SELECT w FROM MonthWinner w ORDER BY id DESC LIMIT 1", MonthWinner.class);
+        try {
+            MonthWinner winner = ((MonthWinner) q.getSingleResult());
+
+            if (LocalDate.now().isBefore(winner.getExpiry())) {
+                return winner.getExceed();
+            } else {
+                return "none";
+            }
+        } catch (NoResultException e) {
+            return "none";
+        }
     }
 }
