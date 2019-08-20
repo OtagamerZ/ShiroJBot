@@ -43,7 +43,7 @@ public class ExceedRankCommand extends Command {
 				g2d.dispose();
 
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				ImageIO.write(bi, "png", baos);
+				ImageIO.write(Profile.clipRoundEdges(bi), "png", baos);
 				channel.sendFile(baos.toByteArray(), "ranking.png").queue();
 				m.delete().queue();
 			} catch (Exception e) {
