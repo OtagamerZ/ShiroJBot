@@ -21,6 +21,10 @@ public class RelayBlockList {
 		eb.setColor(Color.orange);
 		eb.setThumbnail("https://image.flaticon.com/icons/png/512/718/718672.png");
 		Main.getInfo().getUserByID(id).openPrivateChannel().queue(c -> c.sendMessage(eb.build()).queue());
+		Main.getInfo().getDevelopers().forEach(d -> Main.getJibril().getUserById(d).openPrivateChannel().queue(c -> {
+			String msg = "Usuário bloqueado do chat global.```Usuário: " + Main.getInfo().getUserByID(id).getAsTag() + "\n\nRazão: " + reason + "```";
+			c.sendMessage(msg).queue();
+		}));
 	}
 
 	public static void permaBlockID(String id) {
@@ -36,6 +40,10 @@ public class RelayBlockList {
 		eb.setColor(Color.red);
 		eb.setThumbnail("https://cdn.pixabay.com/photo/2013/07/12/12/40/abort-146072_640.png");
 		Main.getInfo().getUserByID(id).openPrivateChannel().queue(c -> c.sendMessage(eb.build()).queue());
+		Main.getInfo().getDevelopers().forEach(d -> Main.getJibril().getUserById(d).openPrivateChannel().queue(c -> {
+			String msg = "Usuário bloqueado permanentemente do chat global.```Usuário: " + Main.getInfo().getUserByID(id).getAsTag();
+			c.sendMessage(msg).queue();
+		}));
 	}
 
 	public static void blockThumb(String id) {
