@@ -22,7 +22,6 @@ import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
-import com.kuuhaku.utils.TagIcons;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Guild;
 
@@ -46,6 +45,8 @@ import java.util.Objects;
 
 public class Profile {
 	public static Font FONT;
+	public static final int WIDTH = 944;
+	public static final int HEIGTH = 600;
 
 	static {
 		try {
@@ -56,9 +57,8 @@ public class Profile {
 	}
 
 	public static ByteArrayOutputStream makeProfile(net.dv8tion.jda.core.entities.Member m, Guild g) throws IOException {
-		int w = 944;
-		int h = 600;
-
+		int w = WIDTH;
+		int h = HEIGTH;
 		HttpURLConnection con = null;
 		BufferedImage avatar = null;
 		
@@ -172,7 +172,7 @@ public class Profile {
 		return baos;
 	}
 
-	private static BufferedImage clipRoundEdges(BufferedImage image) {
+	public static BufferedImage clipRoundEdges(BufferedImage image) {
 		BufferedImage bi = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 
@@ -247,7 +247,7 @@ public class Profile {
 		}
 	}
 
-	private static BufferedImage scaleImage(BufferedImage image, int w, int h) {
+	public static BufferedImage scaleImage(BufferedImage image, int w, int h) {
 
 		// Make sure the aspect ratio is maintained, so the image is not distorted
 		double thumbRatio = (double) w / (double) h;

@@ -29,7 +29,8 @@ public enum Category {
 	MISC("Diversos", "Comandos diversos.", PrivilegeLevel.USER),
 	INFO("Informação", "Comandos de informação", PrivilegeLevel.USER),
 	BEYBLADE("Beyblade", "Comandos de Beyblade.", PrivilegeLevel.USER),
-	MUSICA("Música", "Comandos de música.", PrivilegeLevel.DJ)
+	MUSICA("Música", "Comandos de música.", PrivilegeLevel.DJ),
+	EXCEED("Exceed", "Comandos de exceed", PrivilegeLevel.EXCEED)
 	;
 
 	private final String name;
