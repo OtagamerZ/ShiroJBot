@@ -137,46 +137,47 @@ public class Relay extends SQLite {
 		).collect(Collectors.joining(" "));
 		String finalMsg = msg;
 		relays.forEach((k, r) -> {
-			try {
-				if (SQLite.getGuildById(k).isAllowImg()) {
-					if (SQLite.getGuildById(k).isLiteMode()) {
-						WebhookClient client = getClient(Main.getJibril().getGuildById(k).getTextChannelById(r), Main.getJibril().getGuildById(k));
-						client.send(getMessage(finalMsg, m, s));
-						client.close();
+			if (!source.getId().equals(k) && !SQLite.getGuildById(k).isLiteMode())
+				try {
+					if (SQLite.getGuildById(k).isAllowImg()) {
+						if (SQLite.getGuildById(k).isLiteMode()) {
+							WebhookClient client = getClient(Main.getJibril().getGuildById(k).getTextChannelById(r), Main.getJibril().getGuildById(k));
+							client.send(getMessage(finalMsg, m, s));
+							client.close();
+						} else {
+							if (img != null) {
+								Main.getJibril().getGuildById(k).getTextChannelById(r).sendFile(img.toByteArray(), "image.png", mb.build()).queue();
+							} else {
+								Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(mb.build()).queue();
+							}
+						}
 					} else {
-						if (img != null) {
-							Main.getJibril().getGuildById(k).getTextChannelById(r).sendFile(img.toByteArray(), "image.png", mb.build()).queue();
+						if (SQLite.getGuildById(k).isLiteMode()) {
+							WebhookClient client = getClient(Main.getJibril().getGuildById(k).getTextChannelById(r), Main.getJibril().getGuildById(k));
+							client.send(getMessage(finalMsg, m, s));
+							client.close();
 						} else {
 							Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(mb.build()).queue();
 						}
 					}
-				} else {
-					if (SQLite.getGuildById(k).isLiteMode()) {
-						WebhookClient client = getClient(Main.getJibril().getGuildById(k).getTextChannelById(r), Main.getJibril().getGuildById(k));
-						client.send(getMessage(finalMsg, m, s));
-						client.close();
-					} else {
-						Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(mb.build()).queue();
+				} catch (NullPointerException e) {
+					SQLite.getGuildById(k).setCanalRelay(null);
+				} catch (InsufficientPermissionException ex) {
+					try {
+						Main.getJibril().getGuildById(k).getOwner().getUser().openPrivateChannel().queue(c -> c.sendMessage(":x: | Me faltam permissões para enviar mensagens globais no servidor " + s.getName() + ".\n\nPermissões que eu possuo:```" +
+								(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_WRITE) ? "✅" : "❌") + " Ler/Enviar mensagens\n" +
+								(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_EMBED_LINKS) ? "✅" : "❌") + " Inserir links\n" +
+								(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_ATTACH_FILES) ? "✅" : "❌") + " Anexar arquivos\n" +
+								(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_HISTORY) ? "✅" : "❌") + " Ver histórico de mensagens\n" +
+								(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI) ? "✅" : "❌") + " Usar emojis externos\n" +
+								(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_MANAGE) ? "✅" : "❌") + " Gerenciar mensagens\n" +
+								(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MANAGE_WEBHOOKS) ? "✅" : "❌") + " Gerenciar webhooks" +
+								"```").queue());
+						Helper.log(this.getClass(), LogLevel.ERROR, ex + " | Sevidor " + Main.getJibril().getGuildById(k).getName());
+					} catch (Exception e) {
+						Helper.log(this.getClass(), LogLevel.ERROR, ex + " | Dono " + Main.getJibril().getGuildById(k).getOwner().getUser().getAsTag());
 					}
 				}
-			} catch (NullPointerException e) {
-				SQLite.getGuildById(k).setCanalRelay(null);
-			} catch (InsufficientPermissionException ex) {
-				try {
-					Main.getJibril().getGuildById(k).getOwner().getUser().openPrivateChannel().queue(c -> c.sendMessage(":x: | Me faltam permissões para enviar mensagens globais no servidor " + s.getName() + ".\n\nPermissões que eu possuo:```" +
-							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_WRITE) ? "✅" : "❌") + " Ler/Enviar mensagens\n" +
-							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_EMBED_LINKS) ? "✅" : "❌") + " Inserir links\n" +
-							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_ATTACH_FILES) ? "✅" : "❌") + " Anexar arquivos\n" +
-							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_HISTORY) ? "✅" : "❌") + " Ver histórico de mensagens\n" +
-							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI) ? "✅" : "❌") + " Usar emojis externos\n" +
-							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_MANAGE) ? "✅" : "❌") + " Gerenciar mensagens\n" +
-							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MANAGE_WEBHOOKS) ? "✅" : "❌") + " Gerenciar webhooks" +
-							"```").queue());
-					Helper.log(this.getClass(), LogLevel.ERROR, ex + " | Sevidor " + Main.getJibril().getGuildById(k).getName());
-				} catch (Exception e) {
-					Helper.log(this.getClass(), LogLevel.ERROR, ex + " | Dono " + Main.getJibril().getGuildById(k).getOwner().getUser().getAsTag());
-				}
-			}
 		});
 	}
 
