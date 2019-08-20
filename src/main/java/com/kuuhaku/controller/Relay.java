@@ -40,9 +40,9 @@ public class Relay extends SQLite {
 	private WebhookMessage getMessage(String msg, Member m, Guild s) {
 		WebhookMessageBuilder wmb = new WebhookMessageBuilder();
 
-		String filtered = String.join(" ", (String[]) Arrays.stream(msg.split(" ")).map(w -> w =
+		String filtered = Arrays.stream(msg.split(" ")).map(w -> w =
 				StringUtils.containsAny(w, "<", ">", ":") ? ":question:" : w
-		).toArray());
+		).collect(Collectors.joining(" "));
 		wmb.setContent(filtered);
 		wmb.setAvatarUrl(RelayBlockList.checkThumb(m.getUser().getId()) ? "https://i.pinimg.com/originals/46/15/87/461587d51087bfdf8906149d356f972f.jpg" : m.getUser().getAvatarUrl());
 		wmb.setUsername("(" + s.getName() + ") " + m.getEffectiveName());
@@ -58,6 +58,10 @@ public class Relay extends SQLite {
 	public void relayMessage(Message source, String msg, Member m, Guild s, ByteArrayOutputStream img) {
 		updateRelays();
 		checkSize();
+		try {
+			source.delete().queue();
+		} catch (InsufficientPermissionException ignore) {
+		}
 
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setDescription(Helper.makeEmoteFromMention(msg.split(" ")) + "\n\n ");
@@ -172,10 +176,6 @@ public class Relay extends SQLite {
 				}
 			}
 		});
-		try {
-			source.delete().queue();
-		} catch (InsufficientPermissionException ignore) {
-		}
 	}
 
 	public MessageEmbed getRelayInfo(guildConfig gc) {
