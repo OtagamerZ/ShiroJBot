@@ -28,7 +28,7 @@ public class ExceedRankCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-		channel.sendMessage("<a:Loading:598500653215645697> Gerando perfil...").queue(m -> {
+		channel.sendMessage("<a:Loading:598500653215645697> Gerando placares...").queue(m -> {
 			try {
 				BufferedImage bi = new BufferedImage(WIDTH, HEIGTH, BufferedImage.TYPE_INT_ARGB);
 				List<Exceed> exceeds = new ArrayList<>();
