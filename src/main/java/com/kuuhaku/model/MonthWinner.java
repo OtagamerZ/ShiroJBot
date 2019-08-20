@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Entity
 public class MonthWinner {
 	@Id
-	private String id;
+	private int id;
 	private final String exceed;
 	private final LocalDate expiry;
 
