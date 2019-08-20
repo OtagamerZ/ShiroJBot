@@ -291,9 +291,9 @@ public class MySQL {
     public static String getWinner() {
         EntityManager em = getEntityManager();
 
-        Query q = em.createQuery("SELECT w FROM MonthWinner w WHERE id = MAX(id)", MonthWinner.class);
+        Query q = em.createQuery("SELECT w FROM MonthWinner w ORDER BY id DESC", MonthWinner.class);
         try {
-            MonthWinner winner = ((MonthWinner) q.getSingleResult());
+            MonthWinner winner = ((MonthWinner) q.getResultList().get(0));
 
             if (LocalDate.now().isBefore(winner.getExpiry())) {
                 return winner.getExceed();
