@@ -136,6 +136,7 @@ public class Relay extends SQLite {
 		mb.setEmbed(eb.build());
 
 		relays.forEach((k, r) -> {
+			if (k.equals(s.getId()) && SQLite.getGuildById(k).isLiteMode()) return;
 			try {
 				if (SQLite.getGuildById(k).isAllowImg()) {
 					if (SQLite.getGuildById(k).isLiteMode()) {
