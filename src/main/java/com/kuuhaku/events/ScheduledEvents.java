@@ -17,10 +17,7 @@
 
 package com.kuuhaku.events;
 
-import com.kuuhaku.events.cron.BackupEvent;
-import com.kuuhaku.events.cron.ClearEvent;
-import com.kuuhaku.events.cron.PartnerCheckEvent;
-import com.kuuhaku.events.cron.UnblockEvent;
+import com.kuuhaku.events.cron.*;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
 import org.quartz.*;
@@ -34,6 +31,8 @@ public class ScheduledEvents implements JobListener {
 		schedClear();
 		schedUnblock();
 		schedCheck();
+		schedRefreshWinner();
+		schedMarkWinner();
 	}
 
 	private void schedCheck() {
@@ -113,6 +112,46 @@ public class ScheduledEvents implements JobListener {
 			}
 		} catch (SchedulerException e) {
 			Helper.log(this.getClass(), LogLevel.ERROR, "Erro ao inicializar cronograma unblock: " + e);
+		}
+	}
+
+	private void schedRefreshWinner() {
+		try {
+			if (GetWinnerEvent.refreshWinner == null) {
+				GetWinnerEvent.refreshWinner = JobBuilder.newJob(GetWinnerEvent.class).withIdentity("refreshWinner", "1").build();
+			}
+			Trigger cron = TriggerBuilder.newTrigger().withIdentity("refreshWinner", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0 0/1 ? * * *")).build();
+			SchedulerFactory sf = new StdSchedulerFactory();
+			try {
+				sched = sf.getScheduler();
+				sched.scheduleJob(GetWinnerEvent.refreshWinner, cron);
+			} catch (Exception ignore) {
+			} finally {
+				sched.start();
+				Helper.log(this.getClass(), LogLevel.INFO, "Cronograma inicializado com sucesso: refreshWinner");
+			}
+		} catch (SchedulerException e) {
+			Helper.log(this.getClass(), LogLevel.ERROR, "Erro ao inicializar cronograma refreshWinner: " + e);
+		}
+	}
+
+	private void schedMarkWinner() {
+		try {
+			if (MarkWinnerEvent.markWinner == null) {
+				MarkWinnerEvent.markWinner = JobBuilder.newJob(MarkWinnerEvent.class).withIdentity("markWinner", "1").build();
+			}
+			Trigger cron = TriggerBuilder.newTrigger().withIdentity("markWinner", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0 0 1 1/1 ? *")).build();
+			SchedulerFactory sf = new StdSchedulerFactory();
+			try {
+				sched = sf.getScheduler();
+				sched.scheduleJob(MarkWinnerEvent.markWinner, cron);
+			} catch (Exception ignore) {
+			} finally {
+				sched.start();
+				Helper.log(this.getClass(), LogLevel.INFO, "Cronograma inicializado com sucesso: markWinner");
+			}
+		} catch (SchedulerException e) {
+			Helper.log(this.getClass(), LogLevel.ERROR, "Erro ao inicializar cronograma markWinner: " + e);
 		}
 	}
 

@@ -71,6 +71,7 @@ public class ShiroInfo {
 	private JDA api;
 	private long startTime;
 	private boolean ready = false;
+	private String winner = "";
 
 	public ShiroInfo() {
 	}
@@ -203,5 +204,13 @@ public class ShiroInfo {
 
 	public Guild getGuildByID(String guildID) {
 		return api.getGuildById(guildID);
+	}
+
+	public String getWinner() {
+		return winner;
+	}
+
+	public void setWinner(String winner) {
+		this.winner = winner;
 	}
 }
