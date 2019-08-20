@@ -9,6 +9,7 @@ import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.core.exceptions.ErrorResponseException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import javax.imageio.ImageIO;
@@ -52,13 +53,16 @@ public class JibrilEvents extends ListenerAdapter {
 			if (RelayBlockList.check(event.getAuthor().getId())) {
 				if (!SQLite.getGuildById(event.getGuild().getId()).isLiteMode()) event.getMessage().delete().queue();
 				event.getAuthor().openPrivateChannel().queue(c -> {
-					String s = ":x: | Você não pode mandar mensagens no chat global (bloqueado).";
-					if (c.hasLatestMessage()) {
-						c.getHistory().retrievePast(20).queue(h -> {
-							if (h.stream().noneMatch(m -> m.getContentRaw().equalsIgnoreCase(s)))
-								c.sendMessage(s).queue();
-						});
-					} else c.sendMessage(s).queue();
+					try {
+						String s = ":x: | Você não pode mandar mensagens no chat global (bloqueado).";
+						if (c.hasLatestMessage()) {
+							c.getHistory().retrievePast(20).queue(h -> {
+								if (h.stream().noneMatch(m -> m.getContentRaw().equalsIgnoreCase(s)))
+									c.sendMessage(s).queue();
+							});
+						} else c.sendMessage(s).queue();
+					} catch (ErrorResponseException ignore) {
+					}
 				});
 				return;
 			}
