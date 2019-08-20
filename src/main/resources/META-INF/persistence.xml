@@ -34,6 +34,7 @@
         <class>com.kuuhaku.model.Beyblade</class>
         <class>com.kuuhaku.model.Tags</class>
         <class>com.kuuhaku.model.PermaBlock</class>
+        <class>com.kuuhaku.model.MonthWinner</class>
         <class>java.lang.String</class>
 
         <properties>
