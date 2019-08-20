@@ -21,6 +21,7 @@ import java.util.List;
 
 import static com.kuuhaku.model.Profile.HEIGTH;
 import static com.kuuhaku.model.Profile.WIDTH;
+import static com.kuuhaku.model.Profile.FONT;
 
 public class ExceedRankCommand extends Command {
 	public ExceedRankCommand() {
@@ -49,14 +50,27 @@ public class ExceedRankCommand extends Command {
 					add(Profile.scaleImage(ImageIO.read(Helper.getImage("https://i.imgur.com/H725kN3.jpg")), 68, 350));
 				}};
 
+				List<String> names = new ArrayList<String>() {{
+					add(ExceedEnums.IMANITY.getName());
+					add(ExceedEnums.SEIREN.getName());
+					add(ExceedEnums.WEREBEAST.getName());
+					add(ExceedEnums.LUMAMANA.getName());
+					add(ExceedEnums.EXMACHINA.getName());
+					add(ExceedEnums.FLUGEL.getName());
+				}};
+
 				Graphics2D g2d = (Graphics2D) bi.getGraphics();
+				g2d.setFont(new Font(FONT.getName(), Font.PLAIN, 40));
 				g2d.drawImage(bg, null, 0, 0);
 
 				for (int i = 0; i < 6; i++) {
-					g2d.setClip(new Rectangle2D.Float(152 + (113 * i), 580, 68, 10 * 350 / 100));
+					int h = (int) (10 + (exceeds.get(i).getExp() * 100 / 90) * 350 / 100);
+					Profile.printCenteredString(names.get(i), 68, 152 + (113 * i), h - 10, g2d);
+					g2d.setClip(new Rectangle2D.Float(152 + (113 * i), 580, 68, h));
 					g2d.drawImage(bars.get(i), null, 152 + (113 * i), 230);
 				}
 
+				g2d.setClip(null);
 				g2d.drawImage(fg, null, 0, 0);
 				g2d.dispose();
 
