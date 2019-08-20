@@ -49,7 +49,6 @@ public class Main {
 	private static CommandManager cmdManager;
 	private static JDA api;
 	private static JDA jbr;
-	private static ScheduledEvents se;
 
 	public static void main(String[] args) throws Exception {
 		info = new ShiroInfo();
@@ -81,7 +80,7 @@ public class Main {
 			Helper.log(Main.class, LogLevel.INFO, "Dados recuperados com sucesso!");
 		else Helper.log(Main.class, LogLevel.ERROR, "Erro ao recuperar dados.");
 
-		se = new ScheduledEvents();
+		new ScheduledEvents();
 
 		AudioSourceManagers.registerRemoteSources(getInfo().getApm());
 		AudioSourceManagers.registerLocalSource(getInfo().getApm());
