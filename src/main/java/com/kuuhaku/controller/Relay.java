@@ -59,7 +59,9 @@ public class Relay extends SQLite {
 		updateRelays();
 		checkSize();
 		try {
-			source.delete().queue();
+			if (!SQLite.getGuildById(s.getId()).isLiteMode()) {
+				source.delete().queue();
+			}
 		} catch (InsufficientPermissionException ignore) {
 		}
 
