@@ -13,6 +13,7 @@ import net.dv8tion.jda.core.events.Event;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -52,7 +53,8 @@ public class ExceedRankCommand extends Command {
 				g2d.drawImage(bg, null, 0, 0);
 
 				for (int i = 0; i < 6; i++) {
-					g2d.drawImage(bars.get(i), null, 152 + (113 * i), 220);
+					g2d.setClip(new Rectangle2D.Float(152 + (113 * i), 580, 68, 10 * 350 / 100));
+					g2d.drawImage(bars.get(i), null, 152 + (113 * i), 230);
 				}
 
 				g2d.drawImage(fg, null, 0, 0);
