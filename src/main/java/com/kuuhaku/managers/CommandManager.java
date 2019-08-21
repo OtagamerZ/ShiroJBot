@@ -21,6 +21,7 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.Reactions.*;
 import com.kuuhaku.command.commands.beyblade.*;
 import com.kuuhaku.command.commands.exceed.ExceedRankCommand;
+import com.kuuhaku.command.commands.exceed.ExceedSelectCommand;
 import com.kuuhaku.command.commands.fun.*;
 import com.kuuhaku.command.commands.information.*;
 import com.kuuhaku.command.commands.misc.*;
@@ -143,6 +144,7 @@ public class CommandManager {
 
             //EXCEED
             add(new ExceedRankCommand());
+            add(new ExceedSelectCommand());
         }};
     }
 
