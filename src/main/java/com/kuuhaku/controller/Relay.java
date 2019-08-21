@@ -3,6 +3,7 @@ package com.kuuhaku.controller;
 import com.kuuhaku.Main;
 import com.kuuhaku.model.RelayBlockList;
 import com.kuuhaku.model.guildConfig;
+import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
 import com.kuuhaku.utils.TagIcons;
@@ -77,6 +78,10 @@ public class Relay extends SQLite {
 		}
 
 		StringBuilder badges = new StringBuilder();
+		if (!SQLite.getMemberByMid(m.getUser().getId()).getExceed().isEmpty()) {
+			badges.append(TagIcons.getExceed(ExceedEnums.getByName(SQLite.getMemberByMid(m.getUser().getId()).getExceed())));
+		}
+
 		if (m.getUser().getId().equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(m.getUser().getId()))
 			badges.append(TagIcons.getTag(TagIcons.DEV));
 
