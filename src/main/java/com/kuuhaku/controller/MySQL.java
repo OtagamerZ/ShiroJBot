@@ -309,7 +309,7 @@ public class MySQL {
     public static ExceedEnums findWinner() {
         EntityManager em = getEntityManager();
 
-        Query q = em.createQuery("SELECT exceed FROM Member m WHERE exceed <> \"\" GROUP BY exceed ORDER BY xp DESC", String.class);
+        Query q = em.createQuery("SELECT exceed FROM Member m WHERE exceed NOT LIKE '' GROUP BY exceed ORDER BY xp DESC", String.class);
 
         String winner = (String) q.getSingleResult();
         em.close();
