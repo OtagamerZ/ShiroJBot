@@ -300,7 +300,7 @@ public class MySQL {
             } else {
                 return "none";
             }
-        } catch (NoResultException e) {
+        } catch (NoResultException | IndexOutOfBoundsException e) {
             return "none";
         }
     }
