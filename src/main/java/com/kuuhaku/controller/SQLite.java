@@ -222,6 +222,19 @@ public class SQLite {
 		return m;
 	}
 
+	public static Member getMemberByMid(String id) {
+		EntityManager em = getEntityManager();
+		Member m;
+
+		Query q = em.createQuery("SELECT m FROM Member m WHERE mid = ?1 FIRST", Member.class);
+		q.setParameter(1, id);
+		m = (Member) q.getResultList();
+
+		em.close();
+
+		return m;
+	}
+
 	public static void addMemberToDB(net.dv8tion.jda.core.entities.Member u) {
 		EntityManager em = getEntityManager();
 
