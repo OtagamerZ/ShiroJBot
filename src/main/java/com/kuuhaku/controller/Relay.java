@@ -58,6 +58,8 @@ public class Relay extends SQLite {
 	public void relayMessage(Message source, String msg, Member m, Guild s, ByteArrayOutputStream img) {
 		updateRelays();
 		checkSize();
+
+		String exceed = SQLite.getMemberByMid(m.getUser().getId()).getExceed();
 		try {
 			if (!SQLite.getGuildById(s.getId()).isLiteMode()) {
 				source.delete().queue();
@@ -68,7 +70,7 @@ public class Relay extends SQLite {
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setDescription(Helper.makeEmoteFromMention(msg.split(" ")) + "\n\n ");
 		eb.setImage("attachment://image.png");
-		eb.setAuthor("(" + s.getName() + ") " + m.getEffectiveName(), s.getIconUrl(), s.getIconUrl());
+		eb.setAuthor("(" + s.getName() + ") " + (exceed.isEmpty() ? "" : TagIcons.getExceed(ExceedEnums.getByName(exceed)) + " ") + m.getEffectiveName(), s.getIconUrl(), s.getIconUrl());
 		eb.setThumbnail(RelayBlockList.checkThumb(m.getUser().getId()) ? "https://i.pinimg.com/originals/46/15/87/461587d51087bfdf8906149d356f972f.jpg" : m.getUser().getAvatarUrl());
 		eb.setFooter(m.getUser().getId(), "http://icons.iconarchive.com/icons/killaaaron/adobe-cc-circles/1024/Adobe-Id-icon.png");
 		try {
@@ -78,9 +80,6 @@ public class Relay extends SQLite {
 		}
 
 		StringBuilder badges = new StringBuilder();
-		if (!SQLite.getMemberByMid(m.getUser().getId()).getExceed().isEmpty()) {
-			badges.append(TagIcons.getExceed(ExceedEnums.getByName(SQLite.getMemberByMid(m.getUser().getId()).getExceed())));
-		}
 
 		if (m.getUser().getId().equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(m.getUser().getId()))
 			badges.append(TagIcons.getTag(TagIcons.DEV));
