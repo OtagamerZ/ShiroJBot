@@ -35,13 +35,13 @@ public class ExceedSelectCommand extends Command {
 			if (u.getExceed().isEmpty()) {
 				if (args.length == 0) {
 					channel.sendMessage("Os exceeds disponíveis são:" +
-							"**" + ExceedEnums.IMANITY.getName() + "**\n" +
-							"**" + ExceedEnums.SEIREN.getName() + "**\n" +
-							"**" + ExceedEnums.WEREBEAST.getName() + "**\n" +
-							"**" + ExceedEnums.LUMAMANA.getName() + "**\n" +
-							"**" + ExceedEnums.EXMACHINA.getName() + "**\n" +
-							"**" + ExceedEnums.FLUGEL.getName() + "\n**" +
-							"\nEscolha usando " + prefix + "`exselect EXCEED`. __**ESTA ESCOLHA É PERMANENTE**__").queue();
+							"\n**" + ExceedEnums.IMANITY.getName() + "**" +
+							"\n**" + ExceedEnums.SEIREN.getName() + "**" +
+							"\n**" + ExceedEnums.WEREBEAST.getName() + "**" +
+							"\n**" + ExceedEnums.LUMAMANA.getName() + "**" +
+							"\n**" + ExceedEnums.EXMACHINA.getName() + "**" +
+							"\n**" + ExceedEnums.FLUGEL.getName() + "**" +
+							"\n\nEscolha usando " + prefix + "`exselect EXCEED`.\n__**ESTA ESCOLHA É PERMANENTE**__").queue();
 					return;
 				}
 				switch (args[0].toLowerCase()) {
