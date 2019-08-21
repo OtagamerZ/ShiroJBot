@@ -45,7 +45,7 @@ public class MyTagsCommand extends Command {
         EmbedBuilder eb = new EmbedBuilder();
         String exceed = SQLite.getMemberByMid(author.getId()).getExceed();
 
-        eb.setTitle((exceed.isEmpty() ? ":label:" : TagIcons.getExceed(ExceedEnums.getByName(exceed))) + " Emblemas de " + author.getName());
+        eb.setTitle(":label: Emblemas de " + author.getName());
         try {
             eb.setColor(Helper.colorThief(author.getAvatarUrl()));
         } catch (IOException e) {
@@ -53,6 +53,10 @@ public class MyTagsCommand extends Command {
         }
 
         StringBuilder badges = new StringBuilder();
+
+        if (!exceed.isEmpty()) {
+            badges.append(TagIcons.getExceed(ExceedEnums.getByName(exceed)));
+        }
 
         if (author.getId().equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(author.getId()))
             badges.append(TagIcons.getTag(TagIcons.DEV));
