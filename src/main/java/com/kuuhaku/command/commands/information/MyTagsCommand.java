@@ -22,6 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
+import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.TagIcons;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -51,6 +52,10 @@ public class MyTagsCommand extends Command {
         }
 
         StringBuilder badges = new StringBuilder();
+        if (!SQLite.getMemberByMid(author.getId()).getExceed().isEmpty()) {
+            badges.append(TagIcons.getExceed(ExceedEnums.getByName(SQLite.getMemberByMid(author.getId()).getExceed())));
+        }
+
         if (author.getId().equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(author.getId()))
             badges.append(TagIcons.getTag(TagIcons.DEV));
 

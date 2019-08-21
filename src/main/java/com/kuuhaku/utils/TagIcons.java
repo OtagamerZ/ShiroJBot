@@ -51,4 +51,22 @@ public enum TagIcons {
 		}
 		return null;
 	}
+
+	public static String getExceed(ExceedEnums t) {
+		switch (t) {
+			case IMANITY:
+				return "<:imanity:613741198288617474>";
+			case SEIREN:
+				return "<:seiren:613741198334754827>";
+			case WEREBEAST:
+				return "<:werebeast:613741197680312321>";
+			case LUMAMANA:
+				return "<:lumamana:613741197764067358>";
+			case EXMACHINA:
+				return "<:exmachina:613741197231390720>";
+			case FLUGEL:
+				return "<:flugel:613741197726318592>";
+		}
+		return null;
+	}
 }
