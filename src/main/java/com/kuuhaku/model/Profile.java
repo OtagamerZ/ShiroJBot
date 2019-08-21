@@ -58,9 +58,8 @@ public class Profile {
 
 	public static ByteArrayOutputStream makeProfile(net.dv8tion.jda.core.entities.Member m, Guild g) throws IOException {
 		int w = WIDTH;
-		int h = HEIGTH;
-		HttpURLConnection con = null;
-		BufferedImage avatar = null;
+		HttpURLConnection con;
+		BufferedImage avatar;
 		
 		try {
 			con = (HttpURLConnection) new URL(m.getUser().getAvatarUrl()).openConnection();
@@ -72,7 +71,7 @@ public class Profile {
 			avatar = scaleImage(ImageIO.read(con.getInputStream()), 200, 200);
 		}
 
-		BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+		BufferedImage bi = new BufferedImage(w, HEIGTH, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
