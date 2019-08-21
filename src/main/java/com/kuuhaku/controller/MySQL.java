@@ -306,6 +306,17 @@ public class MySQL {
         return new Exceed(ex, members.size(), members.stream().mapToLong(Member::getXp).sum());
     }
 
+    public static ExceedEnums findWinner() {
+        EntityManager em = getEntityManager();
+
+        Query q = em.createQuery("SELECT exceed FROM Member m WHERE exceed <> \"\" GROUP BY exceed ORDER BY xp DESC", String.class);
+
+        String winner = (String) q.getSingleResult();
+        em.close();
+
+        return ExceedEnums.getByName(winner);
+    }
+
     public static void markWinner(ExceedEnums ex) {
         EntityManager em = getEntityManager();
 
