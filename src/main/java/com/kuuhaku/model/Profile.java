@@ -318,7 +318,14 @@ public class Profile {
 	{
 		g2d.translate((float)x,(float)y);
 		g2d.rotate(Math.toRadians(angle));
-		drawOutlinedText(text,0,0, g2d);
+		g2d.setColor(Color.black);
+		FontRenderContext frc = g2d.getFontRenderContext();
+		TextLayout tl = new TextLayout(text, g2d.getFont(), frc);
+		Shape shape = tl.getOutline(null);
+		g2d.setStroke(new BasicStroke(4));
+		g2d.draw(shape);
+		g2d.setColor(Color.white);
+		g2d.fill(shape);
 		g2d.rotate(-Math.toRadians(angle));
 		g2d.translate(-(float)x,-(float)y);
 	}
