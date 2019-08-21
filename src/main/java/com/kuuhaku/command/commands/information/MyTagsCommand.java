@@ -43,8 +43,9 @@ public class MyTagsCommand extends Command {
     @Override
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
         EmbedBuilder eb = new EmbedBuilder();
+        String exceed = SQLite.getMemberByMid(author.getId()).getExceed();
 
-        eb.setTitle(":label: Emblemas de " + author.getName());
+        eb.setTitle((exceed.isEmpty() ? ":label:" : TagIcons.getExceed(ExceedEnums.getByName(exceed))) + " Emblemas de " + author.getName());
         try {
             eb.setColor(Helper.colorThief(author.getAvatarUrl()));
         } catch (IOException e) {
@@ -52,9 +53,6 @@ public class MyTagsCommand extends Command {
         }
 
         StringBuilder badges = new StringBuilder();
-        if (!SQLite.getMemberByMid(author.getId()).getExceed().isEmpty()) {
-            badges.append(TagIcons.getExceed(ExceedEnums.getByName(SQLite.getMemberByMid(author.getId()).getExceed())));
-        }
 
         if (author.getId().equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(author.getId()))
             badges.append(TagIcons.getTag(TagIcons.DEV));
