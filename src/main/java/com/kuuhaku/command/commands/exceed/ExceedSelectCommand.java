@@ -5,22 +5,10 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
-import com.kuuhaku.model.Exceed;
-import com.kuuhaku.model.Profile;
 import com.kuuhaku.utils.ExceedEnums;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
+import com.kuuhaku.utils.TagIcons;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.kuuhaku.model.Profile.*;
 
 public class ExceedSelectCommand extends Command {
 	public ExceedSelectCommand() {
@@ -35,12 +23,12 @@ public class ExceedSelectCommand extends Command {
 			if (u.getExceed().isEmpty()) {
 				if (args.length == 0) {
 					channel.sendMessage("Os exceeds disponíveis são:" +
-							"\n**" + ExceedEnums.IMANITY.getName() + "**" +
-							"\n**" + ExceedEnums.SEIREN.getName() + "**" +
-							"\n**" + ExceedEnums.WEREBEAST.getName() + "**" +
-							"\n**" + ExceedEnums.LUMAMANA.getName() + "**" +
-							"\n**" + ExceedEnums.EXMACHINA.getName() + "**" +
-							"\n**" + ExceedEnums.FLUGEL.getName() + "**" +
+							"\n" + TagIcons.getExceed(ExceedEnums.IMANITY) + "**" + ExceedEnums.IMANITY.getName() + "**" +
+							"\n" + TagIcons.getExceed(ExceedEnums.SEIREN) + "**" + ExceedEnums.SEIREN.getName() + "**" +
+							"\n" + TagIcons.getExceed(ExceedEnums.WEREBEAST) + "**" + ExceedEnums.WEREBEAST.getName() + "**" +
+							"\n" + TagIcons.getExceed(ExceedEnums.LUMAMANA) + "**" + ExceedEnums.LUMAMANA.getName() + "**" +
+							"\n" + TagIcons.getExceed(ExceedEnums.EXMACHINA) + "**" + ExceedEnums.EXMACHINA.getName() + "**" +
+							"\n" + TagIcons.getExceed(ExceedEnums.FLUGEL) + "**" + ExceedEnums.FLUGEL.getName() + "**" +
 							"\n\nEscolha usando " + prefix + "`exselect EXCEED`.\n__**ESTA ESCOLHA É PERMANENTE**__").queue();
 					m.delete().queue();
 					return;
@@ -71,12 +59,12 @@ public class ExceedSelectCommand extends Command {
 				SQLite.updateMemberSettings(u);
 				channel.sendMessage("Exceed escolhido com sucesso, você agora pertence à **" + u.getExceed() + "**.").queue();
 				MySQL.getExceedMembers(ExceedEnums.getByName(u.getExceed())).forEach(em ->
-					Main.getInfo().getUserByID(em.getMid()).openPrivateChannel().queue(c -> {
-						try {
-							c.sendMessage(author.getAsTag() + " juntou-se à " + u.getExceed() + ", dê-o(a) as boas-vindas!").queue();
-						} catch (Exception ignore) {
-						}
-					}));
+						Main.getInfo().getUserByID(em.getMid()).openPrivateChannel().queue(c -> {
+							try {
+								c.sendMessage(author.getAsTag() + " juntou-se à " + u.getExceed() + ", dê-o(a) as boas-vindas!").queue();
+							} catch (Exception ignore) {
+							}
+						}));
 				m.delete().queue();
 			} else {
 				m.editMessage(":x: | Você já pertence à um exceed, não é possível trocá-lo.").queue();
