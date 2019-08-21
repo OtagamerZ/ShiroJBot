@@ -23,12 +23,12 @@ public class ExceedSelectCommand extends Command {
 			if (u.getExceed().isEmpty()) {
 				if (args.length == 0) {
 					channel.sendMessage("Os exceeds disponíveis são:" +
-							"\n" + TagIcons.getExceed(ExceedEnums.IMANITY) + "**" + ExceedEnums.IMANITY.getName() + "**" +
-							"\n" + TagIcons.getExceed(ExceedEnums.SEIREN) + "**" + ExceedEnums.SEIREN.getName() + "**" +
-							"\n" + TagIcons.getExceed(ExceedEnums.WEREBEAST) + "**" + ExceedEnums.WEREBEAST.getName() + "**" +
-							"\n" + TagIcons.getExceed(ExceedEnums.LUMAMANA) + "**" + ExceedEnums.LUMAMANA.getName() + "**" +
-							"\n" + TagIcons.getExceed(ExceedEnums.EXMACHINA) + "**" + ExceedEnums.EXMACHINA.getName() + "**" +
-							"\n" + TagIcons.getExceed(ExceedEnums.FLUGEL) + "**" + ExceedEnums.FLUGEL.getName() + "**" +
+							"\n" + TagIcons.getExceed(ExceedEnums.IMANITY) + "**" + ExceedEnums.IMANITY.getName() + "** - Os engenhosos humanos." +
+							"\n" + TagIcons.getExceed(ExceedEnums.SEIREN) + "**" + ExceedEnums.SEIREN.getName() + "** - As inusitadas sereias." +
+							"\n" + TagIcons.getExceed(ExceedEnums.WEREBEAST) + "**" + ExceedEnums.WEREBEAST.getName() + "** - Os sábios bestiais." +
+							"\n" + TagIcons.getExceed(ExceedEnums.LUMAMANA) + "**" + ExceedEnums.LUMAMANA.getName() + "** - Os orgulhosos centauros." +
+							"\n" + TagIcons.getExceed(ExceedEnums.EXMACHINA) + "**" + ExceedEnums.EXMACHINA.getName() + "** - Os poderosos androides." +
+							"\n" + TagIcons.getExceed(ExceedEnums.FLUGEL) + "**" + ExceedEnums.FLUGEL.getName() + "** - Os místicos elfos." +
 							"\n\nEscolha usando " + prefix + "`exselect EXCEED`.\n__**ESTA ESCOLHA É PERMANENTE**__").queue();
 					m.delete().queue();
 					return;
