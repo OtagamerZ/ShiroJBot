@@ -3,6 +3,7 @@ package com.kuuhaku.command.commands.exceed;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.MySQL;
+import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.Exceed;
 import com.kuuhaku.model.Profile;
 import com.kuuhaku.utils.ExceedEnums;
@@ -18,6 +19,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static com.kuuhaku.model.Profile.HEIGTH;
 import static com.kuuhaku.model.Profile.WIDTH;
@@ -31,6 +33,11 @@ public class ExceedRankCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		channel.sendMessage("<a:Loading:598500653215645697> Gerando placares...").queue(m -> {
+			if (SQLite.getMemberByMid(author.getId()).getExceed().isEmpty()) {
+				m.editMessage(":x: | Você não escolheu um exceed ainda, então não poderá ver o placar").queue();
+				return;
+			}
+
 			try {
 				BufferedImage bi = new BufferedImage(WIDTH, HEIGTH, BufferedImage.TYPE_INT_ARGB);
 				List<Exceed> exceeds = new ArrayList<>();
@@ -78,7 +85,7 @@ public class ExceedRankCommand extends Command {
 
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				ImageIO.write(Profile.clipRoundEdges(bi), "png", baos);
-				channel.sendFile(baos.toByteArray(), "ranking.png").queue();
+				channel.sendFile(baos.toByteArray(), "ranking.png").queue(s -> s.delete().queueAfter(2, TimeUnit.MINUTES));
 				m.delete().queue();
 			} catch (Exception e) {
 				m.editMessage(":x: | Epa, teve um erro ao gerar o placar, meus criadores já foram notificados!").queue();
