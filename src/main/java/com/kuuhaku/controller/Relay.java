@@ -39,13 +39,14 @@ public class Relay extends SQLite {
 
 	private WebhookMessage getMessage(String msg, Member m, Guild s) {
 		WebhookMessageBuilder wmb = new WebhookMessageBuilder();
+		String exceed = SQLite.getMemberByMid(m.getUser().getId()).getExceed();
 
 		String filtered = Arrays.stream(msg.split(" ")).map(w -> w =
 				(w.contains("<") && w.contains(">") && w.contains(":")) ? ":question:" : w
 		).collect(Collectors.joining(" "));
 		wmb.setContent(filtered);
 		wmb.setAvatarUrl(RelayBlockList.checkThumb(m.getUser().getId()) ? "https://i.pinimg.com/originals/46/15/87/461587d51087bfdf8906149d356f972f.jpg" : m.getUser().getAvatarUrl());
-		wmb.setUsername("(" + s.getName() + ") " + m.getEffectiveName());
+		wmb.setUsername("(" + s.getName() + ") " + (exceed.isEmpty() ? "" : "[" + exceed + "] ") + m.getEffectiveName());
 		return wmb.build();
 	}
 
@@ -70,7 +71,7 @@ public class Relay extends SQLite {
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setDescription(Helper.makeEmoteFromMention(msg.split(" ")) + "\n\n ");
 		eb.setImage("attachment://image.png");
-		eb.setAuthor("(" + s.getName() + ") " + (exceed.isEmpty() ? "" : TagIcons.getExceed(ExceedEnums.getByName(exceed)) + " ") + m.getEffectiveName(), s.getIconUrl(), s.getIconUrl());
+		eb.setAuthor("(" + s.getName() + ") " + (exceed.isEmpty() ? "" : "[" + exceed + "] ") + m.getEffectiveName(), s.getIconUrl(), s.getIconUrl());
 		eb.setThumbnail(RelayBlockList.checkThumb(m.getUser().getId()) ? "https://i.pinimg.com/originals/46/15/87/461587d51087bfdf8906149d356f972f.jpg" : m.getUser().getAvatarUrl());
 		eb.setFooter(m.getUser().getId(), "http://icons.iconarchive.com/icons/killaaaron/adobe-cc-circles/1024/Adobe-Id-icon.png");
 		try {
@@ -80,6 +81,10 @@ public class Relay extends SQLite {
 		}
 
 		StringBuilder badges = new StringBuilder();
+
+		if (!exceed.isEmpty()) {
+			badges.append(TagIcons.getExceed(ExceedEnums.getByName(exceed)));
+		}
 
 		if (m.getUser().getId().equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(m.getUser().getId()))
 			badges.append(TagIcons.getTag(TagIcons.DEV));
