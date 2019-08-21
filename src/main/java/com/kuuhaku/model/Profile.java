@@ -318,7 +318,7 @@ public class Profile {
 	{
 		g2d.translate((float)x,(float)y);
 		g2d.rotate(Math.toRadians(angle));
-		g2d.drawString(text,0,0);
+		drawOutlinedText(text,0,0, g2d);
 		g2d.rotate(-Math.toRadians(angle));
 		g2d.translate(-(float)x,-(float)y);
 	}
