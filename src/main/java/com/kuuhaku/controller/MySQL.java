@@ -292,8 +292,9 @@ public class MySQL {
         EntityManager em = getEntityManager();
 
         Query q = em.createQuery("SELECT w FROM MonthWinner w ORDER BY id DESC", MonthWinner.class);
+        q.setMaxResults(1);
         try {
-            MonthWinner winner = ((MonthWinner) q.getResultList().get(0));
+            MonthWinner winner = (MonthWinner) q.getSingleResult();
 
             if (LocalDate.now().isBefore(winner.getExpiry())) {
                 return winner.getExceed();
