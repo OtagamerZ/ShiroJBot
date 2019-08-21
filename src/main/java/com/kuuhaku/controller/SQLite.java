@@ -229,7 +229,7 @@ public class SQLite {
 		Query q = em.createQuery("SELECT m FROM Member m WHERE mid = ?1", Member.class);
 		q.setParameter(1, id);
 		q.setMaxResults(1);
-		m = (Member) q.getResultList();
+		m = (Member) q.getSingleResult();
 
 		em.close();
 
