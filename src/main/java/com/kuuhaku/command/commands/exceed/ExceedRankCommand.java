@@ -66,10 +66,9 @@ public class ExceedRankCommand extends Command {
 				long total = exceeds.stream().mapToLong(Exceed::getExp).sum();
 
 				for (int i = 0; i < 6; i++) {
-					int h = (int) (10 + ((exceeds.get(i).getExp() * 100 / total) * 90 / 100)) * 350 / 100;
-					System.out.println(h);
-					Profile.printCenteredString(names.get(i), 68, 152 + (113 * i), h - 10, g2d);
-					g2d.drawRect(152 + (113 * i), 230 + (350 - h), 68, h);
+					int h = (int) (10 + ((exceeds.get(i).getExp() * 100 / total) * 90 / 100)) * 358 / 100;
+					Profile.printCenteredString(names.get(i), 68, 152 + (113 * i), 348 - h, g2d);
+					g2d.drawRect(152 + (113 * i), 230 + (358 - h), 68, h);
 					//g2d.setClip(new Rectangle2D.Float(152 + (113 * i), 580 - h, 68, h));
 					g2d.drawImage(bars.get(i), null, 152 + (113 * i), 230);
 					g2d.setClip(null);
