@@ -1,6 +1,8 @@
 package com.kuuhaku.events.cron;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.controller.MySQL;
+import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.Exceed;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
@@ -18,13 +20,18 @@ public class MarkWinnerEvent implements Job {
 
 	@Override
 	public void execute(JobExecutionContext context) {
-		List<Exceed> exceeds = new ArrayList<>();
-		for (ExceedEnums ex : ExceedEnums.values()) {
-			exceeds.add(MySQL.getExceed(ex));
-		}
-		exceeds.sort(Comparator.comparingLong(Exceed::getExp).reversed());
+		MySQL.markWinner(MySQL.findWinner());
+		Helper.log(this.getClass(), LogLevel.INFO, "Vencedor mensal: " + MySQL.getWinner());
 
-		MySQL.markWinner(exceeds.get(0).getExceed());
-		Helper.log(this.getClass(), LogLevel.INFO, "Vencedor mensal: " + exceeds.get(0).getExceed().getName());
+		String ex = MySQL.getWinner();
+		MySQL.getExceedMembers(ExceedEnums.getByName(ex)).forEach(em ->
+				Main.getInfo().getUserByID(em.getMid()).openPrivateChannel().queue(c -> {
+					try {
+						c.sendMessage("O seu exceed foi campeão neste mês, parabéns!\n" +
+								"Foi adicionado 5 essências no cofre do seu exceed, o lider poderá utilizá-las para adquirir melhorias e bônus para os membros.\n" +
+								"Todos da " + ex + " ganharão experiência em dobro durante 1 semana.").queue();
+					} catch (Exception ignore) {
+					}
+				}));
 	}
 }
