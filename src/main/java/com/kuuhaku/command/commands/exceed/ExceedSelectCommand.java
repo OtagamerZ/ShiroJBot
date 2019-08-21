@@ -29,7 +29,7 @@ public class ExceedSelectCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-		channel.sendMessage("<a:Loading:598500653215645697> Gerando placares...").queue(m -> {
+		channel.sendMessage("<a:Loading:598500653215645697> Analisando dados...").queue(m -> {
 			com.kuuhaku.model.Member u = SQLite.getMemberByMid(author.getId());
 
 			if (u.getExceed().isEmpty()) {
@@ -76,8 +76,9 @@ public class ExceedSelectCommand extends Command {
 						} catch (Exception ignore) {
 						}
 					}));
+				m.delete().queue();
 			} else {
-				channel.sendMessage(":x: | Você já pertence à um exceed, não é possível trocá-lo.").queue();
+				m.editMessage(":x: | Você já pertence à um exceed, não é possível trocá-lo.").queue();
 			}
 		});
 	}
