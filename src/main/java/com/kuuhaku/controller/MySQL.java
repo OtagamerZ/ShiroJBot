@@ -49,6 +49,7 @@ public class MySQL {
         }
 
         em.getTransaction().commit();
+        em.close();
     }
 
     @SuppressWarnings("unchecked")
@@ -58,8 +59,10 @@ public class MySQL {
         Query ca = em.createQuery("SELECT c FROM CustomAnswers c", CustomAnswers.class);
         Query m = em.createQuery("SELECT m FROM Member m", Member.class);
         Query gc = em.createQuery("SELECT g FROM guildConfig g", guildConfig.class);
+        DataDump dump = new DataDump(ca.getResultList(), m.getResultList(), gc.getResultList());
+        em.close();
 
-        return new DataDump(ca.getResultList(), m.getResultList(), gc.getResultList());
+        return dump;
     }
 
     @SuppressWarnings("unchecked")
@@ -67,8 +70,10 @@ public class MySQL {
         EntityManager em = getEntityManager();
 
         Query q = em.createQuery("SELECT m FROM Member m", Member.class);
+        List<Member> members = q.getResultList();
+        em.close();
 
-        return q.getResultList();
+        return members;
     }
 
     public static void sendBeybladeToDB(Beyblade bb) {
@@ -77,6 +82,8 @@ public class MySQL {
         em.getTransaction().begin();
         em.merge(bb);
         em.getTransaction().commit();
+
+        em.close();
     }
 
     public static Beyblade getBeybladeById(String id) {
@@ -88,9 +95,11 @@ public class MySQL {
             Query b = em.createQuery("SELECT b FROM Beyblade b WHERE id = ?1", Beyblade.class);
             b.setParameter(1, id);
             bb = (Beyblade) b.getSingleResult();
+            em.close();
 
             return bb;
         } catch (NoResultException e) {
+            em.close();
             return null;
         }
     }
@@ -101,9 +110,11 @@ public class MySQL {
 
         try {
             Query b = em.createQuery("SELECT b FROM Beyblade b", Beyblade.class);
-
-            return (List<Beyblade>) b.getResultList();
+            List<Beyblade> bbs = (List<Beyblade>) b.getResultList();
+            em.close();
+            return bbs;
         } catch (NoResultException e) {
+            em.close();
             return null;
         }
     }
@@ -132,8 +143,11 @@ public class MySQL {
 
         try {
             Query q = em.createQuery("SELECT p.id FROM PermaBlock p", String.class);
-            return q.getResultList();
+            List<String> blocks = q.getResultList();
+            em.close();
+            return blocks;
         } catch (NoResultException e) {
+            em.close();
             return new ArrayList<>();
         }
     }
@@ -267,6 +281,19 @@ public class MySQL {
     }
 
     @SuppressWarnings("unchecked")
+    public static List<Member> getExceedMembers(ExceedEnums ex) {
+        EntityManager em = getEntityManager();
+
+        Query q = em.createQuery("SELECT m FROM Member m WHERE exceed LIKE ?1", Member.class);
+        q.setParameter(1, ex.getName());
+
+        List<Member> members = (List<Member>) q.getResultList();
+        em.close();
+
+        return members;
+    }
+
+    @SuppressWarnings("unchecked")
     public static Exceed getExceed(ExceedEnums ex) {
         EntityManager em = getEntityManager();
 
@@ -274,6 +301,7 @@ public class MySQL {
         q.setParameter(1, ex.getName());
 
         List<Member> members = (List<Member>) q.getResultList();
+        em.close();
 
         return new Exceed(ex, members.size(), members.stream().mapToLong(Member::getXp).sum());
     }
@@ -295,6 +323,7 @@ public class MySQL {
         q.setMaxResults(1);
         try {
             MonthWinner winner = (MonthWinner) q.getSingleResult();
+            em.close();
 
             if (LocalDate.now().isBefore(winner.getExpiry())) {
                 return winner.getExceed();
@@ -302,6 +331,7 @@ public class MySQL {
                 return "none";
             }
         } catch (NoResultException | IndexOutOfBoundsException e) {
+            em.close();
             return "none";
         }
     }

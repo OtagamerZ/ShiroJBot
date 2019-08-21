@@ -1,9 +1,13 @@
 package com.kuuhaku.utils;
 
+import com.kuuhaku.model.Exceed;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public enum ExceedEnums {
 	IMANITY("Imanity"), SEIREN("Seiren"), WEREBEAST("Werebeast"), LUMAMANA("Lumamana"), EXMACHINA("Ex-Machina"), FLUGEL("Flügel");
@@ -16,6 +20,10 @@ public enum ExceedEnums {
 
 	public String getName() {
 		return this.name;
+	}
+
+	public static ExceedEnums getByName(String name) {
+		return Arrays.stream(ExceedEnums.values()).filter(e -> e.getName().equalsIgnoreCase(name)).collect(Collectors.toList()).get(0);
 	}
 
 	public static String getExceedEmote(ExceedEnums ex) {
