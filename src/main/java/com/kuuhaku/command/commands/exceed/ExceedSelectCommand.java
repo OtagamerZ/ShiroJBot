@@ -42,6 +42,7 @@ public class ExceedSelectCommand extends Command {
 							"\n**" + ExceedEnums.EXMACHINA.getName() + "**" +
 							"\n**" + ExceedEnums.FLUGEL.getName() + "**" +
 							"\n\nEscolha usando " + prefix + "`exselect EXCEED`.\n__**ESTA ESCOLHA É PERMANENTE**__").queue();
+					m.delete().queue();
 					return;
 				}
 				switch (args[0].toLowerCase()) {
