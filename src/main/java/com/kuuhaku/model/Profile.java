@@ -20,6 +20,7 @@ package com.kuuhaku.model;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
+import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.core.Permission;
@@ -184,6 +185,28 @@ public class Profile {
 
 	private static void drawBadges(net.dv8tion.jda.core.entities.Member m, Guild s, Graphics2D g2d) throws IOException {
 		java.util.List<BufferedImage> badges = new ArrayList<BufferedImage>() {{
+			if (!SQLite.getMemberByMid(m.getUser().getId()).getExceed().isEmpty()) {
+				switch (ExceedEnums.getByName(SQLite.getMemberByMid(m.getUser().getId()).getExceed())) {
+					case IMANITY:
+						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/imanity.png"))));
+						break;
+					case SEIREN:
+						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/seiren.png"))));
+						break;
+					case WEREBEAST:
+						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/werebeast.png"))));
+						break;
+					case LUMAMANA:
+						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lumamana.png"))));
+						break;
+					case EXMACHINA:
+						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/exmachina.png"))));
+						break;
+					case FLUGEL:
+						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/flugel.png"))));
+						break;
+				}
+			}
 			if (m.getUser().getId().equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(m.getUser().getId()))
 				add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/dev.png"))));
 			if (Main.getInfo().getEditors().contains(m.getUser().getId()))
