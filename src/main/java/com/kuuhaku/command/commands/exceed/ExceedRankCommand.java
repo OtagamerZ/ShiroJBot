@@ -68,11 +68,11 @@ public class ExceedRankCommand extends Command {
 				for (int i = 0; i < 6; i++) {
 					int h = (int) (exceeds.get(i).getExp() * total / 100);
 					System.out.println(h);
-					/*Profile.printCenteredString(names.get(i), 68, 152 + (113 * i), h - 10, g2d);
+					Profile.printCenteredString(names.get(i), 68, 152 + (113 * i), h - 10, g2d);
 					g2d.drawRect(152 + (113 * i), 230 + (350 - h), 68, h);
-					g2d.setClip(new Rectangle2D.Float(152 + (113 * i), 580 - h, 68, h));
+					//g2d.setClip(new Rectangle2D.Float(152 + (113 * i), 580 - h, 68, h));
 					g2d.drawImage(bars.get(i), null, 152 + (113 * i), 230);
-					g2d.setClip(null);*/
+					g2d.setClip(null);
 				}
 
 				g2d.drawImage(fg, null, 0, 0);
