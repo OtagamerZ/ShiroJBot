@@ -13,6 +13,7 @@ public class UnblockEvent implements Job {
 
 	@Override
 	public void execute(JobExecutionContext context) {
+		RelayBlockList.clearBlockedThumbs();
 		RelayBlockList.getBlockedIDs().forEach(id -> {
 			if (!id.isEmpty()) {
 				Main.getInfo().getDevelopers().forEach(d -> Main.getJibril().getUserById(d).openPrivateChannel().queue(c -> {
