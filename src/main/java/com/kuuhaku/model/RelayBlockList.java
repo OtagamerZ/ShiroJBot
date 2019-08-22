@@ -56,6 +56,10 @@ public class RelayBlockList {
 		eb.setThumbnail("https://www.rhinocarhire.com/CorporateSite/media/Drive-Smart/Dash-Symbols/brake_warning_symbol_in_red.png");
 		Main.getInfo().getUserByID(id).openPrivateChannel().queue(c -> c.sendMessage(eb.build()).queue());
 	}
+	
+	public static void clearBlockedThumbs() {
+		blockedThumbs = new ArrayList<>();
+	}
 
 	public static boolean check(String id) {
 		return blockedIDs.contains(id);
