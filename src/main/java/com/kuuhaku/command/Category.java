@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 public enum Category {
     DEVS("Dev", "Comandos dedicados aos devs do bot.", PrivilegeLevel.DEV),
+	SHERIFFS("Sheriffs", "Comandos de moderação global.", PrivilegeLevel.SHERIFF),
     MODERACAO("Moderação", "Comandos dedicados à staff do servidor.", PrivilegeLevel.MOD),
 	PARTNER("Parceiros", "Comandos exclusivos para parceiros", PrivilegeLevel.USER),
 	FUN("Diversão", "Comandos para diversão.", PrivilegeLevel.USER),

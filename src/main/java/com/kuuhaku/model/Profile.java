@@ -61,7 +61,7 @@ public class Profile {
 		int w = WIDTH;
 		HttpURLConnection con;
 		BufferedImage avatar;
-		
+
 		try {
 			con = (HttpURLConnection) new URL(m.getUser().getAvatarUrl()).openConnection();
 			con.setRequestProperty("User-Agent", "Mozilla/5.0");
@@ -209,6 +209,9 @@ public class Profile {
 			}
 			if (m.getUser().getId().equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(m.getUser().getId()))
 				add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/dev.png"))));
+			if (Main.getInfo().getSheriffs().contains(m.getUser().getId())) {
+				add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/sheriff.png"))));
+			}
 			if (Main.getInfo().getEditors().contains(m.getUser().getId()))
 				add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/writer.png"))));
 			try {
@@ -337,9 +340,8 @@ public class Profile {
 		}
 	}
 
-	public static void drawRotate(Graphics2D g2d, double x, double y, int angle, String text)
-	{
-		g2d.translate((float)x,(float)y);
+	public static void drawRotate(Graphics2D g2d, double x, double y, int angle, String text) {
+		g2d.translate((float) x, (float) y);
 		g2d.rotate(Math.toRadians(angle));
 		g2d.setColor(Color.black);
 		FontRenderContext frc = g2d.getFontRenderContext();
@@ -350,6 +352,6 @@ public class Profile {
 		g2d.setColor(Color.white);
 		g2d.fill(shape);
 		g2d.rotate(-Math.toRadians(angle));
-		g2d.translate(-(float)x,-(float)y);
+		g2d.translate(-(float) x, -(float) y);
 	}
 }

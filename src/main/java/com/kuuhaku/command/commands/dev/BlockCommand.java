@@ -4,6 +4,8 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.model.RelayBlockList;
+import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.PrivilegeLevel;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
 import org.apache.commons.lang3.StringUtils;
@@ -13,7 +15,7 @@ import java.util.Arrays;
 public class BlockCommand extends Command {
 
 	public BlockCommand() {
-		super("block", new String[]{"bloquear"}, "Bloqueia alguém de usar o chat global.", Category.DEVS);
+		super("block", new String[]{"bloquear"}, "Bloqueia alguém de usar o chat global.", Category.SHERIFFS);
 	}
 
 	@Override
@@ -29,8 +31,12 @@ public class BlockCommand extends Command {
 							Main.getRelay().relayMessage(message, (isMentioned ? message.getMentionedUsers().get(0).getAsMention() : "<@" + args[0] + ">") + " bloqueado do chat global.\nRazão: " + reason, guild.getSelfMember(), guild, null);
 							break;
 						case "perma":
-							RelayBlockList.permaBlockID(isMentioned ? message.getMentionedUsers().get(0).getId() : args[0]);
-							Main.getRelay().relayMessage(message, (isMentioned ? message.getMentionedUsers().get(0).getAsMention() : "<@" + args[0] + ">") + " banido permanentemente do chat global.\nRazão: " + reason, guild.getSelfMember(), guild, null);
+							if (Helper.hasPermission(member, PrivilegeLevel.DEV)) {
+								RelayBlockList.permaBlockID(isMentioned ? message.getMentionedUsers().get(0).getId() : args[0]);
+								Main.getRelay().relayMessage(message, (isMentioned ? message.getMentionedUsers().get(0).getAsMention() : "<@" + args[0] + ">") + " banido permanentemente do chat global.\nRazão: " + reason, guild.getSelfMember(), guild, null);
+							} else {
+								channel.sendMessage(":x: | Permissões insuficientes.").queue();
+							}
 							break;
 						case "thumb":
 							RelayBlockList.blockThumb(isMentioned ? message.getMentionedUsers().get(0).getId() : args[0]);
