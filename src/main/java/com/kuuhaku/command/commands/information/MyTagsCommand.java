@@ -61,6 +61,10 @@ public class MyTagsCommand extends Command {
         if (author.getId().equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(author.getId()))
             badges.append(TagIcons.getTag(TagIcons.DEV));
 
+        if (Main.getInfo().getSheriffs().contains(author.getId())) {
+            badges.append(TagIcons.getTag(TagIcons.SHERIFF));
+        }
+
         if (Main.getInfo().getEditors().contains(author.getId()))
             badges.append(TagIcons.getTag(TagIcons.EDITOR));
 

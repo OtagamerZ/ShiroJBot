@@ -61,6 +61,8 @@ public class Helper {
 			return PrivilegeLevel.NIICHAN;
 		} else if (Main.getInfo().getDevelopers().contains(member.getUser().getId())) {
 			return PrivilegeLevel.DEV;
+		} else if (Main.getInfo().getSheriffs().contains(member.getUser().getId())) {
+			return PrivilegeLevel.SHERIFF;
 		} else if (member.hasPermission(Permission.MESSAGE_MANAGE)) {
 			return PrivilegeLevel.MOD;
 		} else if (member.getRoles().stream().anyMatch(r -> StringUtils.containsIgnoreCase(r.getName(), "dj"))) {
