@@ -89,6 +89,10 @@ public class Relay extends SQLite {
 		if (m.getUser().getId().equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(m.getUser().getId()))
 			badges.append(TagIcons.getTag(TagIcons.DEV));
 
+		if (Main.getInfo().getSheriffs().contains(m.getUser().getId())) {
+			badges.append(TagIcons.getTag(TagIcons.SHERIFF));
+		}
+
 		if (Main.getInfo().getEditors().contains(m.getUser().getId()))
 			badges.append(TagIcons.getTag(TagIcons.EDITOR));
 
