@@ -58,7 +58,7 @@ public class RelayBlockList {
 	}
 	
 	public static void clearBlockedThumbs() {
-		blockedThumbs = new ArrayList<>();
+		blockedThumbs.clear();
 	}
 
 	public static boolean check(String id) {
