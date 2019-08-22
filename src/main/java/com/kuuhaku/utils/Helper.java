@@ -32,6 +32,7 @@ import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -44,10 +45,11 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -312,5 +314,25 @@ public class Helper {
 
 	public static boolean compareWithValues(int value, int... compareWith) {
 		return Arrays.stream(compareWith).anyMatch(v -> v == value);
+	}
+
+	public static JSONObject getAPI(String directory, String value) throws IOException {
+		HttpURLConnection con = (HttpURLConnection) new URL("https://shiro-api.herokuapp.com/" + directory + value).openConnection();
+		con.setRequestProperty("User-Agent", "Mozilla/5.0");
+		con.setRequestMethod("GET");
+		con.setRequestProperty("Accept", "application/json");
+		con.addRequestProperty("Accept-Charset", "UTF-8");
+
+		BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
+		String input;
+		StringBuilder resposta = new StringBuilder();
+		while ((input = br.readLine()) != null) {
+			resposta.append(input);
+		}
+		br.close();
+		con.disconnect();
+
+		Helper.log(Helper.class, LogLevel.DEBUG, resposta.toString());
+		return new JSONObject(resposta.toString());
 	}
 }
