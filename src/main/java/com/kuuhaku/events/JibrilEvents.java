@@ -38,6 +38,8 @@ public class JibrilEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+		if (event.getMessage().getContentRaw().startsWith(SQLite.getGuildPrefix(event.getGuild().getId()))) return;
+
 		if (Main.getRelay().getRelayMap().containsValue(event.getChannel().getId()) && !event.getAuthor().isBot()) {
 			/*try {
 				event.getAuthor().openPrivateChannel().queue(c -> {
