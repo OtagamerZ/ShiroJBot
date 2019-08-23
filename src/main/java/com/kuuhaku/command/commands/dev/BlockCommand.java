@@ -32,7 +32,7 @@ public class BlockCommand extends Command {
 							break;
 						case "perma":
 							if (Helper.hasPermission(member, PrivilegeLevel.DEV)) {
-								RelayBlockList.permaBlockID(isMentioned ? message.getMentionedUsers().get(0).getId() : args[0]);
+								RelayBlockList.permaBlockID(isMentioned ? message.getMentionedUsers().get(0).getId() : args[0], reason);
 								Main.getRelay().relayMessage(message, (isMentioned ? message.getMentionedUsers().get(0).getAsMention() : "<@" + args[0] + ">") + " banido permanentemente do chat global.\nRazão: " + reason, guild.getSelfMember(), guild, null);
 							} else {
 								channel.sendMessage(":x: | Permissões insuficientes.").queue();
