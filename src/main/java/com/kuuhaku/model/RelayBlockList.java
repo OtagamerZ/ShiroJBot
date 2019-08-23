@@ -27,7 +27,7 @@ public class RelayBlockList {
 		}));
 	}
 
-	public static void permaBlockID(String id) {
+	public static void permaBlockID(String id, String reason) {
 		EmbedBuilder eb = new EmbedBuilder();
 		blockedIDs.add(id);
 
@@ -36,12 +36,12 @@ public class RelayBlockList {
 		MySQL.permaBlock(pb);
 
 		eb.setTitle("Você foi bloqueado permanentemente de utilizar o chat global");
-		eb.setDescription("Este bloqueio **NÃO** será removido em momento algum, por melhor que seja a explicação para isto ter ocorrido!");
+		eb.setDescription("Este bloqueio **NÃO** será removido em momento algum, por melhor que seja a explicação para isto ter ocorrido!\n\nRazão: " + reason);
 		eb.setColor(Color.red);
 		eb.setThumbnail("https://cdn.pixabay.com/photo/2013/07/12/12/40/abort-146072_640.png");
 		Main.getInfo().getUserByID(id).openPrivateChannel().queue(c -> c.sendMessage(eb.build()).queue());
 		Main.getInfo().getDevelopers().forEach(d -> Main.getJibril().getUserById(d).openPrivateChannel().queue(c -> {
-			String msg = "Usuário bloqueado permanentemente do chat global.```Usuário: " + Main.getInfo().getUserByID(id).getAsTag() + "```";
+			String msg = "Usuário bloqueado permanentemente do chat global.```Usuário: " + Main.getInfo().getUserByID(id).getAsTag() + "\n\nRazão: " + reason + "```";
 			c.sendMessage(msg).queue();
 		}));
 	}
@@ -56,7 +56,7 @@ public class RelayBlockList {
 		eb.setThumbnail("https://www.rhinocarhire.com/CorporateSite/media/Drive-Smart/Dash-Symbols/brake_warning_symbol_in_red.png");
 		Main.getInfo().getUserByID(id).openPrivateChannel().queue(c -> c.sendMessage(eb.build()).queue());
 	}
-	
+
 	public static void clearBlockedThumbs() {
 		blockedThumbs.clear();
 	}
@@ -69,11 +69,8 @@ public class RelayBlockList {
 		return blockedThumbs.contains(id);
 	}
 
-	public static List<String> getBlockedIDs() {
-		return blockedIDs;
-	}
-
-	public static void unblock(String id) {
-		blockedIDs.remove(id);
+	public static void refresh(){
+		blockedIDs.clear();
+		blockedIDs.addAll(MySQL.blockedList());
 	}
 }
