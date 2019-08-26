@@ -24,10 +24,15 @@ public class IDCommand extends Command {
 		if (args.length > 0) {
 			try {
 				String arg = String.join(" ", args);
+				System.out.println(arg);
 				String sv = Helper.containsAll(arg, "(", ")") ? arg.substring(arg.indexOf("("), arg.indexOf(")") + 1) : "";
+				System.out.println(sv);
 				String ex = Helper.containsAll(arg, "[", "]") ? arg.substring(arg.indexOf("["), arg.indexOf("]") + 1) : "";
+				System.out.println(ex);
 				String name = arg.replace(sv, "").replace(ex, "").trim();
+				System.out.println(name);
 				List<User> us = Main.getInfo().getAPI().getUsersByName(name, false);
+				System.out.println(us);
 				try {
 					if (!sv.isEmpty())
 						us.removeIf(
