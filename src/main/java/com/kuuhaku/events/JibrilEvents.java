@@ -7,15 +7,20 @@ import com.kuuhaku.model.Member;
 import com.kuuhaku.model.RelayBlockList;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.core.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.ErrorResponseException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
 import java.io.ByteArrayOutputStream;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 
 public class JibrilEvents extends ListenerAdapter {
 
@@ -38,6 +43,16 @@ public class JibrilEvents extends ListenerAdapter {
 	}
 
 	@Override
+	public void onPrivateMessageReceived(PrivateMessageReceivedEvent event) {
+		if (event.getAuthor() == Main.getJibril().getUserById(Main.getInfo().getNiiChan())) return;
+		EmbedBuilder eb = new EmbedBuilder();
+
+		eb.setAuthor(event.getAuthor().getName(), event.getAuthor().getAvatarUrl());
+		eb.setFooter(LocalDateTime.now().atOffset(ZoneOffset.ofHours(-3)).format(DateTimeFormatter.ofPattern("HH:mm / dd/MMM/yyyy")), null);
+		Main.getJibril().getUserById(Main.getInfo().getNiiChan()).openPrivateChannel().queue(c -> c.sendMessage(event.getMessage()).embed(eb.build()).queue());
+	}
+
+	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		if (event.getMessage().getContentRaw().startsWith(SQLite.getGuildPrefix(event.getGuild().getId()))) return;
 
@@ -46,18 +61,18 @@ public class JibrilEvents extends ListenerAdapter {
 		if (mb.getMid() == null) SQLite.saveMemberMid(mb, event.getAuthor());
 
 		if (Main.getRelay().getRelayMap().containsValue(event.getChannel().getId()) && !event.getAuthor().isBot()) {
-			event.getAuthor().openPrivateChannel().queue(c -> {
-				try {
-					if (!mb.isRulesSent())
-					c.sendMessage(introMsg()).queue(s1 ->
-							c.sendMessage(rulesMsg()).queue(s2 ->
-									c.sendMessage(finalMsg()).queue(s3 -> {
-										mb.setRulesSent(true);
-										SQLite.updateMemberSettings(mb);
-											})));
-				} catch (ErrorResponseException ignore) {
-				}
-			});
+			if (!mb.isRulesSent())
+				event.getAuthor().openPrivateChannel().queue(c -> {
+					try {
+						c.sendMessage(introMsg()).queue(s1 ->
+								c.sendMessage(rulesMsg()).queue(s2 ->
+										c.sendMessage(finalMsg()).queue(s3 -> {
+											mb.setRulesSent(true);
+											SQLite.updateMemberSettings(mb);
+										})));
+					} catch (ErrorResponseException ignore) {
+					}
+				});
 			if (RelayBlockList.check(event.getAuthor().getId())) {
 				if (!SQLite.getGuildById(event.getGuild().getId()).isLiteMode()) event.getMessage().delete().queue();
 				event.getAuthor().openPrivateChannel().queue(c -> {
