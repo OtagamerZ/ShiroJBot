@@ -28,15 +28,7 @@ public class IDCommand extends Command {
 				String ex = Helper.containsAll(arg, "[", "]") ? arg.substring(arg.indexOf("["), arg.indexOf("]") + 1) : "";
 				String name = arg.replace(sv, "").replace(ex, "").trim();
 				List<User> us = Main.getInfo().getAPI().getUsersByName(name, true);
-				try {
-					if (!sv.isEmpty())
-						us.removeIf(
-								u -> u.getMutualGuilds().stream().map(g -> g.getName().toLowerCase()).collect(Collectors.toList()).contains(sv.toLowerCase())
-						);
-				} catch (Exception ignore) {
-				}
-				String ids = us.stream()
-						.map(u -> u.getAsTag() + " -> " + u.getId() + "\n").collect(Collectors.joining());
+				String ids = us.stream().map(u -> u.getAsTag() + " -> " + u.getId() + "\n").collect(Collectors.joining());
 				EmbedBuilder eb = new EmbedBuilder();
 
 				eb.setTitle("IDs dos usuários encontrados");
