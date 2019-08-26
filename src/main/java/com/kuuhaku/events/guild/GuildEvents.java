@@ -208,9 +208,12 @@ public class GuildEvents extends ListenerAdapter {
 						Helper.spawnAd(channel);
 						break;
 					}
-					channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
-					Helper.spawnAd(channel);
-					break;
+					try {
+						channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
+						Helper.spawnAd(channel);
+						break;
+					} catch (InsufficientPermissionException ignore){
+					}
 				}
 			}
 

@@ -3,6 +3,7 @@ package com.kuuhaku.events;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
+import com.kuuhaku.model.Member;
 import com.kuuhaku.model.RelayBlockList;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
@@ -39,6 +40,10 @@ public class JibrilEvents extends ListenerAdapter {
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		if (event.getMessage().getContentRaw().startsWith(SQLite.getGuildPrefix(event.getGuild().getId()))) return;
+
+		Member mb = SQLite.getMemberById(event.getAuthor().getId() + event.getGuild().getId());
+
+		if (mb.getMid() == null) SQLite.saveMemberMid(mb, event.getAuthor());
 
 		if (Main.getRelay().getRelayMap().containsValue(event.getChannel().getId()) && !event.getAuthor().isBot()) {
 			/*try {
