@@ -24,26 +24,22 @@ public class IDCommand extends Command {
 		if (args.length > 0) {
 			try {
 				String arg = String.join(" ", args);
-				System.out.println(arg);
 				String sv = Helper.containsAll(arg, "(", ")") ? arg.substring(arg.indexOf("("), arg.indexOf(")") + 1) : "";
-				System.out.println(sv);
 				String ex = Helper.containsAll(arg, "[", "]") ? arg.substring(arg.indexOf("["), arg.indexOf("]") + 1) : "";
-				System.out.println(ex);
 				String name = arg.replace(sv, "").replace(ex, "").trim();
-				System.out.println(name);
-				List<User> us = Main.getInfo().getAPI().getUsersByName(name, false);
+				List<User> us = Main.getInfo().getAPI().getUsersByName(name, true);
 				System.out.println(us);
 				try {
 					if (!sv.isEmpty())
 						us.removeIf(
-								u -> u.getMutualGuilds().stream().map(Guild::getName).collect(Collectors.toList()).contains(sv)
+								u -> u.getMutualGuilds().stream().map(g -> g.getName().toLowerCase()).collect(Collectors.toList()).contains(sv.toLowerCase())
 						);
 				} catch (Exception ignore) {
 				}
 				try {
 					if (!ex.isEmpty())
 						us.removeIf(u ->
-								MySQL.getMembers().stream().noneMatch(m -> m.getExceed().equals(ex))
+								MySQL.getMembers().stream().noneMatch(m -> m.getExceed().equalsIgnoreCase(ex))
 						);
 				} catch (Exception ignore) {
 				}
