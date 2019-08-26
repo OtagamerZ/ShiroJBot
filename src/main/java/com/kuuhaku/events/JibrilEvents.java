@@ -73,6 +73,8 @@ public class JibrilEvents extends ListenerAdapter {
 				try {
 					if (Helper.findURL(msg[i]) && !MySQL.getTagById(event.getAuthor().getId()).isVerified())
 						msg[i] = "`LINK BLOQUEADO`";
+					if (Helper.findMentions(msg[i]))
+						msg[i] = "`EVERYONE/HERE BLOQUEADO`";
 				} catch (NoResultException e) {
 					if (Helper.findURL(msg[i])) msg[i] = "`LINK BLOQUEADO`";
 				}
