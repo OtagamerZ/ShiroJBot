@@ -57,6 +57,7 @@ public class JibrilEvents extends ListenerAdapter {
 		if (event.getMessage().getContentRaw().startsWith(SQLite.getGuildPrefix(event.getGuild().getId()))) return;
 
 		Member mb = SQLite.getMemberById(event.getAuthor().getId() + event.getGuild().getId());
+		System.out.println(event.getAuthor().getId() + event.getGuild().getId());
 
 		if (mb.getMid() == null) SQLite.saveMemberMid(mb, event.getAuthor());
 
