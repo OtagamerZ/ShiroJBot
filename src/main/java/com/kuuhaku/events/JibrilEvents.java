@@ -44,7 +44,7 @@ public class JibrilEvents extends ListenerAdapter {
 
 	@Override
 	public void onPrivateMessageReceived(PrivateMessageReceivedEvent event) {
-		if (event.getAuthor() == Main.getJibril().getUserById(Main.getInfo().getNiiChan())) return;
+		if (event.getAuthor() == Main.getJibril().getUserById(Main.getInfo().getNiiChan()) || event.getAuthor().isBot()) return;
 		EmbedBuilder eb = new EmbedBuilder();
 
 		eb.setAuthor(event.getAuthor().getName(), event.getAuthor().getAvatarUrl());
