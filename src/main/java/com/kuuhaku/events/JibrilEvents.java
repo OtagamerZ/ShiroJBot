@@ -121,17 +121,17 @@ public class JibrilEvents extends ListenerAdapter {
 		return "__**Olá, sou Jibril, a gerenciadora do chat global!**__\n" +
 				"Pera, o que? Você não sabe o que é o chat global?? Bem, vou te explicar!\n\n" +
 				"O chat global (ou relay) é uma criação original de meu mestre KuuHaKu, ele une todos os servidores em que estou em um único canal de texto. " +
-				"Assim, todos os servidores participantes terão um fluxo de mensagens a todo momento, quebrando aquele \"gelo\" que muitos servidores pequenos possuem";
+				"Assim, todos os servidores participantes terão um fluxo de mensagens a todo momento, quebrando aquele \"gelo\" que muitos servidores pequenos possuem\n";
 	}
 
 	private static String rulesMsg() {
 		return "__**Mas existem regras, viu?**__\n" +
 				"Como todo chat, para mantermos um ambiente saudável e amigável são necessárias regras.\n\n" +
 				"O chat global possue suas próprias regras, além daquelas do servidor atual, que são:\n" +
-				"1 - SPAM ou flood é proibido, pois além de ser desnecessário faz com que eu fique lenta;" +
-				"2 - Links e imagens são bloqueadas, você não será punido por elas pois elas não serão enviadas;" +
-				"3 - Avatares indecentes serão bloqueados 3 vezes antes de te causar um bloqueio no chat global;" +
-				"4 - Os bloqueios são temporários, todos serão desbloqueados às 00:00h e 12:00h. Mas o terceiro bloqueio é permanente, você NÃO será desbloqueado de um permanente.";
+				"1 - SPAM ou flood é proibido, pois além de ser desnecessário faz com que eu fique lenta;\n" +
+				"2 - Links e imagens são bloqueadas, você não será punido por elas pois elas não serão enviadas;\n" +
+				"3 - Avatares indecentes serão bloqueados 3 vezes antes de te causar um bloqueio no chat global;\n" +
+				"4 - Os bloqueios são temporários, todos serão desbloqueados às 00:00h e 12:00h. Mas o terceiro bloqueio é permanente, você NÃO será desbloqueado de um permanente.\n";
 	}
 
 	private static String finalMsg() {
