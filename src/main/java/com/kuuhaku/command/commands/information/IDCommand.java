@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class IDCommand extends Command {
 
 	public IDCommand() {
-		super("id", "Pesquisa o ID dos usuários com o nome informado", Category.MISC);
+		super("id", "<(guild)> <nome>", "Pesquisa o ID dos usuários com o nome informado", Category.MISC);
 	}
 
 	@Override
