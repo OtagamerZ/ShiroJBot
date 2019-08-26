@@ -213,7 +213,7 @@ public class SQLite {
 		EntityManager em = getEntityManager();
 		Member m;
 
-		Query q = em.createQuery("SELECT m FROM Member m WHERE id = ?1", Member.class);
+		Query q = em.createQuery("SELECT m FROM Member m WHERE id LIKE ?1", Member.class);
 		q.setParameter(1, id);
 		m = (Member) q.getSingleResult();
 
@@ -226,7 +226,7 @@ public class SQLite {
 		EntityManager em = getEntityManager();
 		Member m;
 
-		Query q = em.createQuery("SELECT m FROM Member m WHERE mid = ?1", Member.class);
+		Query q = em.createQuery("SELECT m FROM Member m WHERE mid LIKE ?1", Member.class);
 		q.setParameter(1, id);
 		q.setMaxResults(1);
 		m = (Member) q.getSingleResult();
