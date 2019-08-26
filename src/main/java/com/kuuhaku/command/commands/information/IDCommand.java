@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class IDCommand extends Command {
 
 	public IDCommand() {
-		super("ping", "Ping", Category.MISC);
+		super("id", "Pesquisa o ID dos usuários com o nome informado", Category.MISC);
 	}
 
 	@Override
@@ -24,9 +24,10 @@ public class IDCommand extends Command {
 		if (args.length > 0) {
 			try {
 				String arg = String.join(" ", args);
-				String sv = Helper.containsAll(arg, "(", ")") ? arg.substring(arg.indexOf("("), arg.indexOf(")")) : "";
-				String ex = Helper.containsAll(arg, "[", "]") ? arg.substring(arg.indexOf("["), arg.indexOf("]")) : "";
-				List<User> us = Main.getInfo().getAPI().getUsersByName(arg, false);
+				String sv = Helper.containsAll(arg, "(", ")") ? arg.substring(arg.indexOf("("), arg.indexOf(")") + 1) : "";
+				String ex = Helper.containsAll(arg, "[", "]") ? arg.substring(arg.indexOf("["), arg.indexOf("]") + 1) : "";
+				String name = arg.replace(sv, "").replace(ex, "").trim();
+				List<User> us = Main.getInfo().getAPI().getUsersByName(name, false);
 				try {
 					if (!sv.isEmpty())
 						us.removeIf(
