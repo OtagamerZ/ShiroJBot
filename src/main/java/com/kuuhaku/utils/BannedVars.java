@@ -10,12 +10,14 @@ public class BannedVars {
 			"getSelfUser()",
 			"getSelfMember()",
 			"delete()",
-			"Main.",
+			//"Main.",
 			"getInfo()",
 			"while (true)",
 			"while (false)",
 			"import",
 			"Double.NEGATIVE_INFINITY",
-			"Double.POSITIVE_INFINITY"
+			"Double.POSITIVE_INFINITY",
+			"SQLite",
+			"MySQL"
 	};
 }
