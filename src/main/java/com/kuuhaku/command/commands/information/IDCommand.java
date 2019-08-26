@@ -7,6 +7,7 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;
+import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
 
 import java.awt.*;
 import java.util.List;
@@ -43,6 +44,8 @@ public class IDCommand extends Command {
 				eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
 
 				channel.sendMessage(eb.build()).queue();
+			} catch (InsufficientPermissionException ex) {
+				channel.sendMessage(":x: | Não consigo mandar embeds aqui.").queue();
 			} catch (Exception e) {
 				channel.sendMessage(":x: | Nenhum usuário encontrado.").queue();
 			}
