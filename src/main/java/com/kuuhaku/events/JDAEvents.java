@@ -280,7 +280,7 @@ public class JDAEvents extends ListenerAdapter {
 
 	@Override
 	public void onPrivateMessageReceived(PrivateMessageReceivedEvent event) {
-		if (event.getAuthor() == Main.getInfo().getUserByID(Main.getInfo().getNiiChan())) return;
+		if (event.getAuthor() == Main.getInfo().getUserByID(Main.getInfo().getNiiChan()) || event.getAuthor().isBot()) return;
 		EmbedBuilder eb = new EmbedBuilder();
 
 		eb.setAuthor(event.getAuthor().getName(), event.getAuthor().getAvatarUrl());
