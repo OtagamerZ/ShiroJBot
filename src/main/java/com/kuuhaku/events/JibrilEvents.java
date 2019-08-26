@@ -60,7 +60,7 @@ public class JibrilEvents extends ListenerAdapter {
 			Member mb = SQLite.getMemberById(event.getAuthor().getId() + event.getGuild().getId());
 			if (mb.getMid() == null) SQLite.saveMemberMid(mb, event.getAuthor());
 
-			/*if (!mb.isRulesSent())
+			if (!mb.isRulesSent())
 				event.getAuthor().openPrivateChannel().queue(c -> {
 					try {
 						c.sendMessage(introMsg()).queue(s1 ->
@@ -71,7 +71,7 @@ public class JibrilEvents extends ListenerAdapter {
 										})));
 					} catch (ErrorResponseException ignore) {
 					}
-				});*/
+				});
 			if (RelayBlockList.check(event.getAuthor().getId())) {
 				if (!SQLite.getGuildById(event.getGuild().getId()).isLiteMode()) event.getMessage().delete().queue();
 				event.getAuthor().openPrivateChannel().queue(c -> {
