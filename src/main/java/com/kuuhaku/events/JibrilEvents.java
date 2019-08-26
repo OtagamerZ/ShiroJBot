@@ -56,12 +56,10 @@ public class JibrilEvents extends ListenerAdapter {
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		if (event.getMessage().getContentRaw().startsWith(SQLite.getGuildPrefix(event.getGuild().getId()))) return;
 
-		Member mb = SQLite.getMemberById(event.getAuthor().getId() + event.getGuild().getId());
-		System.out.println(event.getAuthor().getId() + event.getGuild().getId());
-
-		if (mb.getMid() == null) SQLite.saveMemberMid(mb, event.getAuthor());
-
 		if (Main.getRelay().getRelayMap().containsValue(event.getChannel().getId()) && !event.getAuthor().isBot()) {
+			Member mb = SQLite.getMemberById(event.getAuthor().getId() + event.getGuild().getId());
+			if (mb.getMid() == null) SQLite.saveMemberMid(mb, event.getAuthor());
+
 			/*if (!mb.isRulesSent())
 				event.getAuthor().openPrivateChannel().queue(c -> {
 					try {
