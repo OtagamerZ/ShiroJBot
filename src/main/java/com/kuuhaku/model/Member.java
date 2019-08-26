@@ -42,6 +42,8 @@ public class Member {
 	private String exceed = "";
 	@Column(columnDefinition = "boolean default false")
 	private boolean markForDelete;
+	@Column(columnDefinition = "boolean default false")
+	private boolean rulesSent;
 
 	public Member() {
 
@@ -140,5 +142,13 @@ public class Member {
 
 	public void setExceed(String exceed) {
 		this.exceed = exceed;
+	}
+
+	public boolean isRulesSent() {
+		return rulesSent;
+	}
+
+	public void setRulesSent(boolean rulesSent) {
+		this.rulesSent = rulesSent;
 	}
 }
