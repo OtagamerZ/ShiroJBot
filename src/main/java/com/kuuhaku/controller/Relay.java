@@ -44,7 +44,7 @@ public class Relay extends SQLite {
 		String filtered = Arrays.stream(msg.split(" ")).map(w -> w =
 				(w.contains("<") && w.contains(">") && w.contains(":")) ? ":question:" : w
 		).collect(Collectors.joining(" "));
-		wmb.setContent(filtered + "\nID: " + m.getUser().getId());
+		wmb.setContent(filtered);
 		wmb.setAvatarUrl(RelayBlockList.checkThumb(m.getUser().getId()) ? "https://i.pinimg.com/originals/46/15/87/461587d51087bfdf8906149d356f972f.jpg" : m.getUser().getAvatarUrl());
 		wmb.setUsername("(" + s.getName() + ") " + (exceed.isEmpty() ? "" : "[" + exceed + "] ") + m.getEffectiveName());
 		return wmb.build();
@@ -149,7 +149,7 @@ public class Relay extends SQLite {
 		mb.setEmbed(eb.build());
 
 		relays.forEach((k, r) -> {
-			if (k.equals(s.getId()) && SQLite.getGuildById(k).isLiteMode()) return;
+			if (k.equals(s.getId()) && SQLite.getGuildById(k).isLiteMode() && m.getUser() != Main.getJibril().getSelfUser()) return;
 			try {
 				if (SQLite.getGuildById(k).isAllowImg()) {
 					if (SQLite.getGuildById(k).isLiteMode()) {

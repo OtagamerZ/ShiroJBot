@@ -28,19 +28,19 @@ public class BlockCommand extends Command {
 					switch (args[1]) {
 						case "temp":
 							RelayBlockList.blockID(isMentioned ? message.getMentionedUsers().get(0).getId() : args[0], reason);
-							Main.getRelay().relayMessage(message, (isMentioned ? message.getMentionedUsers().get(0).getAsMention() : "<@" + args[0] + ">") + " bloqueado do chat global.\nRazão: " + reason, guild.getSelfMember(), guild, null);
+							Main.getRelay().relayMessage(message, (isMentioned ? message.getMentionedUsers().get(0).getAsMention() : "<@" + args[0] + ">") + " bloqueado do chat global.\nRazão: " + reason, guild.getMember(Main.getJibril().getSelfUser()), guild, null);
 							break;
 						case "perma":
 							if (Helper.hasPermission(member, PrivilegeLevel.DEV)) {
 								RelayBlockList.permaBlockID(isMentioned ? message.getMentionedUsers().get(0).getId() : args[0], reason);
-								Main.getRelay().relayMessage(message, (isMentioned ? message.getMentionedUsers().get(0).getAsMention() : "<@" + args[0] + ">") + " banido permanentemente do chat global.\nRazão: " + reason, guild.getSelfMember(), guild, null);
+								Main.getRelay().relayMessage(message, (isMentioned ? message.getMentionedUsers().get(0).getAsMention() : "<@" + args[0] + ">") + " banido permanentemente do chat global.\nRazão: " + reason, guild.getMember(Main.getJibril().getSelfUser()), guild, null);
 							} else {
 								channel.sendMessage(":x: | Permissões insuficientes.").queue();
 							}
 							break;
 						case "thumb":
 							RelayBlockList.blockThumb(isMentioned ? message.getMentionedUsers().get(0).getId() : args[0]);
-							Main.getRelay().relayMessage(message, (isMentioned ? message.getMentionedUsers().get(0).getAsMention() : "Avatar de <@" + args[0] + ">") + " foi censurado do chat global.", guild.getSelfMember(), guild, null);
+							Main.getRelay().relayMessage(message, (isMentioned ? message.getMentionedUsers().get(0).getAsMention() : "Avatar de <@" + args[0] + ">") + " foi censurado do chat global.", guild.getMember(Main.getJibril().getSelfUser()), guild, null);
 							break;
 						default:
 							channel.sendMessage(":x: | Tipo inválido, o tipo deve ser thumb, temp ou perma.").queue();
