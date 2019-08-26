@@ -3,7 +3,6 @@ package com.kuuhaku.command.commands.information;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
@@ -33,13 +32,6 @@ public class IDCommand extends Command {
 					if (!sv.isEmpty())
 						us.removeIf(
 								u -> u.getMutualGuilds().stream().map(g -> g.getName().toLowerCase()).collect(Collectors.toList()).contains(sv.toLowerCase())
-						);
-				} catch (Exception ignore) {
-				}
-				try {
-					if (!ex.isEmpty())
-						us.removeIf(u ->
-								MySQL.getMembers().stream().noneMatch(m -> m.getExceed().equalsIgnoreCase(ex))
 						);
 				} catch (Exception ignore) {
 				}
