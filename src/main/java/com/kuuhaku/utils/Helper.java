@@ -129,6 +129,13 @@ public class Helper {
 		return msg.matches();
 	}
 
+	public static boolean findMentions(String text) {
+		final Pattern everyone = Message.MentionType.EVERYONE.getPattern();
+		final Pattern here = Message.MentionType.HERE.getPattern();
+
+		return everyone.matcher(text).matches() || here.matcher(text).matches();
+	}
+
 	public static void sendPM(User user, String message) {
 		user.openPrivateChannel().queue((channel) -> channel.sendMessage(message).queue());
 	}
@@ -314,6 +321,10 @@ public class Helper {
 
 	public static boolean compareWithValues(int value, int... compareWith) {
 		return Arrays.stream(compareWith).anyMatch(v -> v == value);
+	}
+
+	public static boolean containsAll(String string, String... compareWith) {
+		return Arrays.stream(compareWith).allMatch(string::contains);
 	}
 
 	public static JSONObject getAPI(String directory, String value) throws IOException {
