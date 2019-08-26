@@ -27,7 +27,6 @@ public class IDCommand extends Command {
 				String ex = Helper.containsAll(arg, "[", "]") ? arg.substring(arg.indexOf("["), arg.indexOf("]") + 1) : "";
 				String name = arg.replace(sv, "").replace(ex, "").trim();
 				List<User> us = Main.getInfo().getAPI().getUsersByName(name, true);
-				System.out.println(us);
 				try {
 					if (!sv.isEmpty())
 						us.removeIf(
