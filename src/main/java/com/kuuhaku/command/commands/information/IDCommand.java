@@ -24,8 +24,8 @@ public class IDCommand extends Command {
 		if (args.length > 0) {
 			try {
 				String arg = String.join(" ", args);
-				String sv = Helper.containsAll(arg, "(", ")") ? arg.substring(arg.indexOf("("), arg.indexOf(")") + 1) : "";
-				String ex = Helper.containsAll(arg, "[", "]") ? arg.substring(arg.indexOf("["), arg.indexOf("]") + 1) : "";
+				String sv = Helper.containsAll(arg, "(", ")") ? arg.substring(arg.indexOf("("), arg.indexOf(")") + 1) : "NOTFOUND";
+				String ex = Helper.containsAll(arg, "[", "]") ? arg.substring(arg.indexOf("["), arg.indexOf("]") + 1) : "NOTFOUND";
 				String name = arg.replace(sv, "").replace(ex, "").trim();
 				List<User> us = Main.getInfo().getAPI().getUsersByName(name, false);
 				try {
