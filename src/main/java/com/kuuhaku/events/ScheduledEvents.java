@@ -100,7 +100,7 @@ public class ScheduledEvents implements JobListener {
 			if (UnblockEvent.unblock == null) {
 				UnblockEvent.unblock = JobBuilder.newJob(UnblockEvent.class).withIdentity("unblock", "1").build();
 			}
-			Trigger cron = TriggerBuilder.newTrigger().withIdentity("unblock", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0 0/6 ? * * *")).build();
+			Trigger cron = TriggerBuilder.newTrigger().withIdentity("unblock", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0 0/12 ? * * *")).build();
 			SchedulerFactory sf = new StdSchedulerFactory();
 			try {
 				sched = sf.getScheduler();
