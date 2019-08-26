@@ -46,28 +46,27 @@ public class JibrilEvents extends ListenerAdapter {
 		if (mb.getMid() == null) SQLite.saveMemberMid(mb, event.getAuthor());
 
 		if (Main.getRelay().getRelayMap().containsValue(event.getChannel().getId()) && !event.getAuthor().isBot()) {
-			/*try {
-				event.getAuthor().openPrivateChannel().queue(c -> {
-					String s = ":warning: | Cuidado, mensagens de SPAM podem fazer com que você seja bloqueado do chat global (isto é só um aviso!\nEsta mensagem não aparecerá novamente enquanto for a última mensagem.";
-					if (c.hasLatestMessage()) {
-						c.getMessageById(c.getLatestMessageId()).queue(m -> {
-							if (!m.getContentRaw().equals(s)) c.sendMessage(s).queue();
-						});
-					} else c.sendMessage(s).queue();
-				});
-			} catch (ErrorResponseException ignore) {
-			}*/
+			event.getAuthor().openPrivateChannel().queue(c -> {
+				try {
+					if (!mb.isRulesSent())
+					c.sendMessage(introMsg()).queue(s1 ->
+							c.sendMessage(rulesMsg()).queue(s2 ->
+									c.sendMessage(finalMsg()).queue(s3 -> {
+										mb.setRulesSent(true);
+										SQLite.updateMemberSettings(mb);
+											})));
+				} catch (ErrorResponseException ignore) {
+				}
+			});
 			if (RelayBlockList.check(event.getAuthor().getId())) {
 				if (!SQLite.getGuildById(event.getGuild().getId()).isLiteMode()) event.getMessage().delete().queue();
 				event.getAuthor().openPrivateChannel().queue(c -> {
 					try {
 						String s = ":x: | Você não pode mandar mensagens no chat global (bloqueado).";
-						if (c.hasLatestMessage()) {
-							c.getHistory().retrievePast(20).queue(h -> {
-								if (h.stream().noneMatch(m -> m.getContentRaw().equalsIgnoreCase(s)))
-									c.sendMessage(s).queue();
-							});
-						} else c.sendMessage(s).queue();
+						c.getHistory().retrievePast(20).queue(h -> {
+							if (h.stream().noneMatch(m -> m.getContentRaw().equalsIgnoreCase(s)))
+								c.sendMessage(s).queue();
+						});
 					} catch (ErrorResponseException ignore) {
 					}
 				});
@@ -102,5 +101,27 @@ public class JibrilEvents extends ListenerAdapter {
 				}
 			}
 		}
+	}
+
+	private static String introMsg() {
+		return "__**Olá, sou Jibril, a gerenciadora do chat global!**__\n" +
+				"Pera, o que? Você não sabe o que é o chat global?? Bem, vou te explicar!\n\n" +
+				"O chat global (ou relay) é uma criação original de meu mestre KuuHaKu, ele une todos os servidores em que estou em um único canal de texto. " +
+				"Assim, todos os servidores participantes terão um fluxo de mensagens a todo momento, quebrando aquele \"gelo\" que muitos servidores pequenos possuem";
+	}
+
+	private static String rulesMsg() {
+		return "__**Mas existem regras, viu?**__\n" +
+				"Como todo chat, para mantermos um ambiente saudável e amigável são necessárias regras.\n\n" +
+				"O chat global possue suas próprias regras, além daquelas do servidor atual, que são:\n" +
+				"1 - SPAM ou flood é proibido, pois além de ser desnecessário faz com que eu fique lenta;" +
+				"2 - Links e imagens são bloqueadas, você não será punido por elas pois elas não serão enviadas;" +
+				"3 - Avatares indecentes serão bloqueados 3 vezes antes de te causar um bloqueio no chat global;" +
+				"4 - Os bloqueios são temporários, todos serão desbloqueados às 00:00h e 12:00h. Mas o terceiro bloqueio é permanente, você NÃO será desbloqueado de um permanente.";
+	}
+
+	private static String finalMsg() {
+		return "__**E é isso, seja bem-vindo(a) ao grande chat global!**__\n" +
+				"Se tiver dúvidas, denúncias ou sugestões, basta me enviar uma mensagem neste canal privado, ou usar os comando `bug` (feedback) ou `report` (denúncia).";
 	}
 }
