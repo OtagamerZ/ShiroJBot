@@ -135,7 +135,7 @@ public class JibrilEvents extends ListenerAdapter {
 	}
 
 	private static String finalMsg() {
-		return "__**E é isso, seja bem-vindo(a) ao grande chat global!**__\n" +
+		return "__**E é isso, seja bem-vindo(a) ao grande chat global!**__\n\n" +
 				"Se tiver dúvidas, denúncias ou sugestões, basta me enviar uma mensagem neste canal privado, ou usar os comando `bug` (feedback) ou `report` (denúncia).";
 	}
 }
