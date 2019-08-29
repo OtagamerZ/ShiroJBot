@@ -25,7 +25,7 @@ public class SettingsCommand extends Command {
         if (args.length == 0) {
             try {
                 Settings.embedConfig(message);
-            } catch (IOException err) {
+			} catch (Exception err) {
                 channel.sendMessage(":x: | Ocorreu um erro durante o processo, os meus developers já foram notificados.").queue();
                 Helper.log(this.getClass(), LogLevel.ERROR, err + " | " + err.getStackTrace()[0]);
                 return;
