@@ -6,9 +6,9 @@ import com.kuuhaku.controller.Tradutor;
 import com.kuuhaku.model.Anime;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.Event;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.Event;
 import org.json.JSONObject;
 
 import java.io.IOException;

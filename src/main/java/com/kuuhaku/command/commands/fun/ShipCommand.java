@@ -4,10 +4,10 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.MessageBuilder;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.Event;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.Event;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -75,7 +75,7 @@ public class ShipCommand extends Command {
             mb.append(sb.toString());
             mb.setEmbed(eb.build());
 
-            channel.sendFile(baos.toByteArray(), "ship.png", mb.build()).queue();
+            channel.sendMessage(mb.build()).addFile(baos.toByteArray(), "ship.png").queue();
         } catch (IOException e) {
             Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
         }

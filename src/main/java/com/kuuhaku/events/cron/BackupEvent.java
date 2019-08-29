@@ -15,7 +15,7 @@ public class BackupEvent implements Job {
 
 	@Override
 	public void execute(JobExecutionContext context) {
-		Main.getInfo().getAPI().getPresence().setGame(Main.getRandomGame());
+		Main.getInfo().getAPI().getPresence().setActivity(Main.getRandomActivity());
 		MySQL.dumpData(new DataDump(SQLite.getCADump(), SQLite.getGuildDump()));
 		Helper.log(this.getClass(), LogLevel.INFO, "Respostas/Guilds salvos com sucesso!");
 		MySQL.dumpData(new DataDump(SQLite.getMemberDump()));

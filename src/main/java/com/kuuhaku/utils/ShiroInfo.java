@@ -21,11 +21,11 @@ import com.kuuhaku.handlers.music.GuildMusicManager;
 import com.kuuhaku.model.DuelData;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Role;
-import net.dv8tion.jda.core.entities.SelfUser;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.SelfUser;
+import net.dv8tion.jda.api.entities.User;
 import org.discordbots.api.client.DiscordBotListAPI;
 
 import java.util.ArrayList;
@@ -46,9 +46,8 @@ public class ShiroInfo {
 	private static final String AnilistToken = System.getenv("ANILIST_TOKEN");
 	private static final String YandexToken = System.getenv("YANDEX_TOKEN");
 	private static final String YoutubeToken = System.getenv("YOUTUBE_TOKEN");
-	private static final String apiVersion = "3.8.3_463";
 	private static final String name = "Shiro";
-	private static final String version = "2.0";
+	private static final String version = "3.0";
 	private static final String default_prefix = DEV ? "dev!" : "s!";
 	private static final String nomeDB = "shiro.sqlite";
 	private static final String niichan = "350836145921327115"; //KuuHaKu
@@ -98,10 +97,6 @@ public class ShiroInfo {
 
 	public String getYoutubeToken() {
 		return YoutubeToken;
-	}
-
-	public String getApiVersion() {
-		return apiVersion;
 	}
 
 	public String getName() {
@@ -182,7 +177,7 @@ public class ShiroInfo {
 	}
 
 	public long getPing() {
-		return api.getPing();
+		return api.getGatewayPing();
 	}
 
 	public long getStartTime() {

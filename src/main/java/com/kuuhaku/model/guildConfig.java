@@ -18,7 +18,7 @@
 package com.kuuhaku.model;
 
 import com.kuuhaku.Main;
-import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.api.entities.TextChannel;
 import org.json.JSONObject;
 
 import javax.persistence.Column;
@@ -183,10 +183,6 @@ public class guildConfig {
 		this.anyTell = anyTell;
 	}
 
-	public boolean isMarkForDelete() {
-		return markForDelete;
-	}
-
 	public void setMarkForDelete(boolean markForDelete) {
 		this.markForDelete = markForDelete;
 	}
@@ -201,10 +197,6 @@ public class guildConfig {
 
 	public String getGuildID() {
 		return guildID;
-	}
-
-	public void setGuildID(String guildID) {
-		this.guildID = guildID;
 	}
 
 	public ArrayList<String> getNoLinkChannels() {
@@ -313,5 +305,9 @@ public class guildConfig {
 
 	public void setAllowImg(boolean allowImg) {
 		this.allowImg = allowImg;
+	}
+
+	public boolean isMarkForDelete() {
+		return markForDelete;
 	}
 }

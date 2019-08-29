@@ -30,10 +30,10 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
 import com.kuuhaku.utils.ShiroInfo;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
-import net.dv8tion.jda.core.AccountType;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.entities.Game;
+import net.dv8tion.jda.api.AccountType;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Activity;
 
 import javax.persistence.NoResultException;
 import java.awt.*;
@@ -62,8 +62,8 @@ public class Main {
 		Main.api = api;
 		Main.jbr = jbr;
 
-		api.getPresence().setGame(Game.playing("Iniciando..."));
-		jbr.getPresence().setGame(Game.listening("as mensagens de " + relay.getRelayMap().size() + " servidores!"));
+		api.getPresence().setActivity(Activity.playing("Iniciando..."));
+		jbr.getPresence().setActivity(Activity.listening("as mensagens de " + relay.getRelayMap().size() + " servidores!"));
 
 		api.addEventListener(new JDAEvents());
 		api.addEventListener(new GuildEvents());
@@ -89,7 +89,7 @@ public class Main {
 	}
 
 	private static void finishStartUp() {
-		api.getPresence().setGame(getRandomGame());
+		api.getPresence().setActivity(getRandomActivity());
 		Main.getInfo().getAPI().getGuilds().forEach(g -> {
 			try {
 				SQLite.getGuildById(g.getId());
@@ -103,16 +103,16 @@ public class Main {
 		getInfo().setReady(true);
 	}
 
-	public static Game getRandomGame() {
-		List<Game> games = new ArrayList<Game>() {{
-			add(Game.playing("Digite " + info.getDefaultPrefix() + "ajuda para ver meus comandos!"));
-			add(Game.streaming("Na conta do meu Nii-chan sem ele saber!", "https://twitch.tv/kuuhaku_otgmz"));
-			add(Game.playing("Nico nico nii!!"));
-			add(Game.listening(api.getGuilds().size() + " servidores, e isso ainda é só o começo!"));
-			add(Game.watching("No Game No Life pela 13ª vez, e ainda não enjoei de ver como eu atuo bem!"));
+	public static Activity getRandomActivity() {
+		List<Activity> activities = new ArrayList<Activity>() {{
+			add(Activity.playing("Digite " + info.getDefaultPrefix() + "ajuda para ver meus comandos!"));
+			add(Activity.streaming("Na conta do meu Nii-chan sem ele saber!", "https://twitch.tv/kuuhaku_otgmz"));
+			add(Activity.playing("Nico nico nii!!"));
+			add(Activity.listening(api.getGuilds().size() + " servidores, e isso ainda é só o começo!"));
+			add(Activity.watching("No Game No Life pela 13ª vez, e ainda não enjoei de ver como eu atuo bem!"));
 		}};
 
-		return games.get(Helper.rng(games.size()));
+		return activities.get(Helper.rng(activities.size()));
 	}
 
 	public static ShiroInfo getInfo() {

@@ -17,7 +17,7 @@
 
 package com.kuuhaku.events;
 
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 class _TemplateEvent extends ListenerAdapter {
 

@@ -7,8 +7,8 @@ import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
 import com.kuuhaku.utils.Settings;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.Event;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.Event;
 
 import java.io.IOException;
 
