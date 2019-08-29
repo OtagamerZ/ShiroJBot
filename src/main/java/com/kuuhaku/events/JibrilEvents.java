@@ -120,7 +120,7 @@ public class JibrilEvents extends ListenerAdapter {
 	private static String introMsg() {
 		return "__**Olá, sou Jibril, a gerenciadora do chat global!**__\n" +
 				"Pera, o que? Você não sabe o que é o chat global?? Bem, vou te explicar!\n\n" +
-				"O chat global (ou relay) é uma criação original de meu mestre KuuHaKu, ele une todos os servidores em que estou em um único canal de texto. " +
+				"O chat global (ou relay) é uma criação de meu mestre KuuHaKu, ele une todos os servidores em que estou em um único canal de texto. " +
 				"Assim, todos os servidores participantes terão um fluxo de mensagens a todo momento, quebrando aquele \"gelo\" que muitos servidores pequenos possuem\n";
 	}
 
