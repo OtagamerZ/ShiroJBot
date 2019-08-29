@@ -19,40 +19,45 @@ import java.util.stream.Collectors;
 public class Settings {
 
 	public static void embedConfig(Message message) throws IOException {
-		String prefix = SQLite.getGuildPrefix(message.getGuild().getId());
+		guildConfig gc = SQLite.getGuildById(message.getGuild().getId());
+		String prefix = gc.getPrefix();
 
-		String canalBV = SQLite.getGuildCanalBV(message.getGuild().getId());
+		String canalBV = gc.getCanalBV();
 		if (!canalBV.equals("Não definido.")) canalBV = "<#" + canalBV + ">";
-		String msgBV = SQLite.getGuildMsgBV(message.getGuild().getId());
+		String msgBV = gc.getMsgBoasVindas();
 		if (!msgBV.equals("Não definido.")) msgBV = "`" + msgBV + "`";
 
-		String canalAdeus = SQLite.getGuildCanalAdeus(message.getGuild().getId());
+		String canalAdeus = gc.getCanalAdeus();
 		if (!canalAdeus.equals("Não definido.")) canalAdeus = "<#" + canalAdeus + ">";
-		String msgAdeus = SQLite.getGuildMsgAdeus(message.getGuild().getId());
+		String msgAdeus = gc.getMsgAdeus();
 		if (!msgAdeus.equals("Não definido.")) msgAdeus = "`" + msgAdeus + "`";
 
-		String canalSUG = SQLite.getGuildCanalSUG(message.getGuild().getId());
+		String canalSUG = gc.getCanalSUG();
 		if (!canalSUG.equals("Não definido.")) canalSUG = "<#" + canalSUG + ">";
 
-		int pollTime = SQLite.getGuildPollTime(message.getGuild().getId());
+		int pollTime = gc.getPollTime();
 
-		String canalLvlUpNotif = SQLite.getGuildCanalLvlUp(message.getGuild().getId());
+		String canalLvlUpNotif = gc.getCanalLvl();
 		if (!canalLvlUpNotif.equals("Não definido.")) canalLvlUpNotif = "<#" + canalLvlUpNotif + ">";
 
 		StringBuilder cargosLvl = new StringBuilder();
 		if (SQLite.getGuildCargosLvl(message.getGuild().getId()) != null) {
-			List<Integer> lvls = SQLite.getGuildCargosLvl(message.getGuild().getId()).keySet().stream().map(Integer::parseInt).sorted().collect(Collectors.toList());
+			List<Integer> lvls = gc.getCargoslvl().keySet().stream().map(Integer::parseInt).sorted().collect(Collectors.toList());
 			for (int i : lvls) {
-				Map<String, Object> cargos = SQLite.getGuildCargosLvl(message.getGuild().getId());
-				cargosLvl.append(i).append(" - ").append(Objects.requireNonNull(message.getGuild().getRoleById((String) cargos.get(String.valueOf(i)))).getAsMention()).append("\n");
+				try {
+					Map<String, Object> cargos = gc.getCargoslvl();
+					cargosLvl.append(i).append(" - ").append(Objects.requireNonNull(message.getGuild().getRoleById((String) cargos.get(String.valueOf(i)))).getAsMention()).append("\n");
+				} catch (NullPointerException e) {
+					SQLite.updateGuildCargosLvl(String.valueOf(i), null, gc);
+				}
 			}
 		}
 
-		String canalRelay = SQLite.getGuildCanalRelay(message.getGuild().getId());
+		String canalRelay = gc.getCanalRelay();
 		if (!canalRelay.equals("Não definido.")) canalRelay = "<#" + canalRelay + ">";
 
-		String cargoWarnID = SQLite.getGuildCargoWarn(message.getGuild().getId());
-		int warnTime = SQLite.getGuildWarnTime(message.getGuild().getId());
+		String cargoWarnID = gc.getCargoWarn();
+		int warnTime = gc.getWarnTime();
 		//String cargoNewID = SQLite.getGuildCargoNew(message.getGuild().getId());
 
 		EmbedBuilder eb = new EmbedBuilder();
