@@ -166,7 +166,7 @@ public class GuildEvents extends ListenerAdapter {
 
 			String rawMsgNoPrefix = rawMessage;
 			String commandName = "";
-			if (rawMessage.toLowerCase().contains(prefix)) {
+			if (rawMessage.toLowerCase().startsWith(prefix)) {
 				rawMsgNoPrefix = rawMessage.substring(prefix.length()).trim();
 				commandName = rawMsgNoPrefix.split(" ")[0].trim();
 			}
@@ -181,7 +181,7 @@ public class GuildEvents extends ListenerAdapter {
 			boolean hasArgs = (rawMsgNoPrefix.split(" ").length > 1);
 			String[] args = new String[]{};
 			if (hasArgs) {
-				args = rawMsgNoPrefix.substring(commandName.length()).trim().split(" ");
+				args = Arrays.copyOfRange(rawMsgNoPrefix.split(" "), 1, rawMsgNoPrefix.split(" ").length);
 			}
 
 			boolean found = false;
