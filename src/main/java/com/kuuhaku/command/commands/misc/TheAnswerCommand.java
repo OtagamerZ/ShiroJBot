@@ -15,7 +15,7 @@ public class TheAnswerCommand extends Command {
 		if (guild.getId().equals("421495229594730496")) {
 			if (!MySQL.getTagById(author.getId()).isReader()) {
 				message.delete().queue(s -> {
-					if (String.join(" ", args).equalsIgnoreCase("punidos de acordo com seus atos")) {
+					if (String.join(" ", args).equalsIgnoreCase(System.getenv("SECRET"))) {
 						MySQL.giveTagReader(author.getId());
 						channel.sendMessage("Obrigado por ler as regras!").queue();
 					} else {
