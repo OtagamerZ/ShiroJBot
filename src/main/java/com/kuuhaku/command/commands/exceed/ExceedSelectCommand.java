@@ -7,8 +7,8 @@ import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.TagIcons;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.Event;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.Event;
 
 public class ExceedSelectCommand extends Command {
 	public ExceedSelectCommand() {

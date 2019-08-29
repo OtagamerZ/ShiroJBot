@@ -6,13 +6,14 @@ import com.kuuhaku.controller.Youtube;
 import com.kuuhaku.model.YoutubeVideo;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.Event;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.Event;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class YoutubeCommand extends Command {
@@ -42,7 +43,7 @@ public class YoutubeCommand extends Command {
                                 eb.setColor(Helper.colorThief(v.getThumb()));
                                 eb.setFooter("Link: " + v.getUrl(), null);
                                 channel.sendMessage(eb.build()).queue(msg -> {
-                                    if (member.getVoiceState().inVoiceChannel()) {
+                                    if (Objects.requireNonNull(member.getVoiceState()).inVoiceChannel()) {
                                         msg.addReaction("\u25B6").queue();
                                         if (guild.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) msg.delete().queueAfter(1, TimeUnit.MINUTES);
                                     }

@@ -2,18 +2,12 @@ package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.MySQL;
-import com.kuuhaku.controller.SQLite;
-import com.kuuhaku.model.Exceed;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
 
 public class MarkWinnerEvent implements Job {
 	public static JobDetail markWinner;

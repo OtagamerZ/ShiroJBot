@@ -24,11 +24,11 @@ import com.kuuhaku.handlers.games.Beyblade;
 import com.kuuhaku.model.GamblePool;
 import com.kuuhaku.model.guildConfig;
 import de.androidpit.colorthief.ColorThief;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -97,21 +97,6 @@ public class Helper {
 		else return val;
 	}
 
-	public static String downloadWebPage(String webpage) throws Exception {
-		URL url = new URL(webpage);
-		BufferedReader rdr = new BufferedReader(new InputStreamReader(url.openStream()));
-
-		StringBuilder sb = new StringBuilder();
-
-		String line;
-		while ((line = rdr.readLine()) != null)
-			sb.append(line).append("\n");
-
-		rdr.close();
-
-		return sb.toString();
-	}
-
 	public static boolean findURL(String text) {
 		final Pattern urlPattern = Pattern.compile(
 				".*?(?:^|[\\W])((ht|f)tp(s?)://|www\\.)(([\\w\\-]+\\.)+?([\\w\\-.~]+/?)*[\\p{Alnum}.,%_=?&#\\-+()\\[\\]*$~@!:/{};']*?)",
@@ -138,27 +123,6 @@ public class Helper {
 
 	public static void sendPM(User user, String message) {
 		user.openPrivateChannel().queue((channel) -> channel.sendMessage(message).queue());
-	}
-
-	public static void purge(MessageChannel channel, int num) {
-		MessageHistory history = new MessageHistory(channel);
-		history.retrievePast(num).queue(channel::purgeMessages);
-	}
-
-	public static String getCustomEmoteMention(Guild guild, String name) {
-		for (Emote em : guild.getEmotes()) {
-			if (em.getName().equalsIgnoreCase(name))
-				return em.getAsMention();
-		}
-		return null;
-	}
-
-	public static Emote getCustomEmote(Guild guild, String name) {
-		for (Emote em : guild.getEmotes()) {
-			if (em.getName().equalsIgnoreCase(name))
-				return em;
-		}
-		return null;
 	}
 
 	public static void typeMessage(MessageChannel channel, String message) {
@@ -261,11 +225,11 @@ public class Helper {
 	public static Webhook getOrCreateWebhook(TextChannel chn) {
 		try {
 			final Webhook[] webhook = {null};
-			chn.getWebhooks().queue(whs -> whs.stream().filter(w -> Objects.requireNonNull(w.getOwner()).getUser() == Main.getJibril().getSelfUser()).findFirst().ifPresent(webhook1 -> webhook[0] = webhook1));
+			chn.retrieveWebhooks().queue(whs -> whs.stream().filter(w -> Objects.requireNonNull(w.getOwner()).getUser() == Main.getJibril().getSelfUser()).findFirst().ifPresent(webhook1 -> webhook[0] = webhook1));
 			if (webhook[0] == null) return chn.createWebhook("Jibril").complete();
 			else return webhook[0];
 		} catch (InsufficientPermissionException e) {
-			sendPM(chn.getGuild().getOwner().getUser(), ":x: | A Jibril não possui permissão para criar um webhook em seu servidor");
+			sendPM(Objects.requireNonNull(chn.getGuild().getOwner()).getUser(), ":x: | A Jibril não possui permissão para criar um webhook em seu servidor");
 		}
 		return null;
 	}
@@ -301,7 +265,7 @@ public class Helper {
 			if (isCommand) eb.addField("Comando:", gc.getPrefix() + c.getName(), true);
 			eb.setFooter("Data: " + OffsetDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), null);
 
-			g.getTextChannelById(gc.getLogChannel()).sendMessage(eb.build()).queue();
+			Objects.requireNonNull(g.getTextChannelById(gc.getLogChannel())).sendMessage(eb.build()).queue();
 		} catch (NullPointerException ignore) {
 		} catch (Exception e) {
 			gc.setLogChannel("");

@@ -8,10 +8,11 @@ import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.*;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class Music {
 	private static void play(VoiceChannel vc, Guild guild, GuildMusicManager musicManager, AudioTrack track) {
@@ -127,7 +128,7 @@ public class Music {
 			public void trackLoaded(AudioTrack track) {
 				channel.sendMessage("Musíca adicionada com sucesso à fila: " + track.getInfo().title).queue();
 
-				if (m.getVoiceState().inVoiceChannel()) {
+				if (Objects.requireNonNull(m.getVoiceState()).inVoiceChannel()) {
 					track.setUserData(m.getUser());
 					play(m.getVoiceState().getChannel(), channel.getGuild(), musicManager, track);
 				} else channel.sendMessage(":x: | Você não está conectado em um canal de voz.").queue();
@@ -143,7 +144,7 @@ public class Music {
 
 				channel.sendMessage("Musíca adicionada com sucesso à fila: " + playlist.getName()).queue();
 
-				if (m.getVoiceState().inVoiceChannel()) {
+				if (Objects.requireNonNull(m.getVoiceState()).inVoiceChannel()) {
 					firstTrack.setUserData(m.getUser());
 					play(m.getVoiceState().getChannel(), channel.getGuild(), musicManager, firstTrack);
 				} else channel.sendMessage(":x: | Você não está conectado em um canal de voz.").queue();

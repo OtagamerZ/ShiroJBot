@@ -25,10 +25,10 @@ import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.TagIcons;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.Event;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.Event;
 
 import javax.persistence.NoResultException;
 import java.awt.*;
@@ -69,8 +69,8 @@ public class MyTagsCommand extends Command {
             badges.append(TagIcons.getTag(TagIcons.EDITOR));
 
         try {
-            if (MySQL.getTagById(author.getId()).isPartner())
-                badges.append(TagIcons.getTag(TagIcons.PARTNER));
+            if (MySQL.getTagById(author.getId()).isReader())
+                badges.append(TagIcons.getTag(TagIcons.READER));
         } catch (NoResultException ignore) {
         }
 
@@ -84,7 +84,9 @@ public class MyTagsCommand extends Command {
         }
 
         try {
-            if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= 60)
+            if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= 70)
+                badges.append(TagIcons.getTag(TagIcons.LVL70));
+            else if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= 60)
                 badges.append(TagIcons.getTag(TagIcons.LVL60));
             else if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= 50)
                 badges.append(TagIcons.getTag(TagIcons.LVL50));

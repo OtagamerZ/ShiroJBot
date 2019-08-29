@@ -18,8 +18,8 @@
 package com.kuuhaku.events.guild;
 
 import com.kuuhaku.controller.SQLite;
-import net.dv8tion.jda.core.events.guild.update.GuildUpdateNameEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.events.guild.update.GuildUpdateNameEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class GuildUpdateEvents extends ListenerAdapter {
 

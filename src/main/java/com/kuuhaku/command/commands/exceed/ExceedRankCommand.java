@@ -9,8 +9,8 @@ import com.kuuhaku.model.Profile;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.Event;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.Event;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -21,9 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static com.kuuhaku.model.Profile.HEIGTH;
-import static com.kuuhaku.model.Profile.WIDTH;
-import static com.kuuhaku.model.Profile.FONT;
+import static com.kuuhaku.model.Profile.*;
 
 public class ExceedRankCommand extends Command {
 	public ExceedRankCommand() {

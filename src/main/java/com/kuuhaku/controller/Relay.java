@@ -1,5 +1,9 @@
 package com.kuuhaku.controller;
 
+import club.minnced.discord.webhook.WebhookClient;
+import club.minnced.discord.webhook.WebhookClientBuilder;
+import club.minnced.discord.webhook.send.WebhookMessage;
+import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.kuuhaku.Main;
 import com.kuuhaku.model.RelayBlockList;
 import com.kuuhaku.model.guildConfig;
@@ -7,14 +11,11 @@ import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
 import com.kuuhaku.utils.TagIcons;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.MessageBuilder;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
-import net.dv8tion.jda.webhook.WebhookClient;
-import net.dv8tion.jda.webhook.WebhookMessage;
-import net.dv8tion.jda.webhook.WebhookMessageBuilder;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -33,7 +34,7 @@ public class Relay extends SQLite {
 	private void checkSize() {
 		if (relays.size() != relaySize) {
 			relaySize = relays.size();
-			Main.getJibril().getPresence().setGame(Game.listening("as mensagens de " + relaySize + " servidores!"));
+			Main.getJibril().getPresence().setActivity(Activity.listening("as mensagens de " + relaySize + " servidores!"));
 		}
 	}
 
@@ -51,9 +52,15 @@ public class Relay extends SQLite {
 	}
 
 	private WebhookClient getClient(TextChannel ch, Guild s) {
-		List<Webhook> wbs = ch.getWebhooks().complete().stream().filter(w -> w.getOwner() == s.getSelfMember()).collect(Collectors.toList());
-		if (wbs.size() != 0) return wbs.get(0).newClient().build();
-		else return Objects.requireNonNull(Helper.getOrCreateWebhook(ch)).newClient().build();
+		List<Webhook> wbs = ch.retrieveWebhooks().complete().stream().filter(w -> w.getOwner() == s.getSelfMember()).collect(Collectors.toList());
+		if (wbs.size() != 0){
+			WebhookClientBuilder wcb = new WebhookClientBuilder(wbs.get(0).getUrl());
+			return wcb.build();
+		}
+		else {
+			WebhookClientBuilder wcb = new WebhookClientBuilder(Objects.requireNonNull(Helper.getOrCreateWebhook(ch)).getUrl());
+			return wcb.build();
+		}
 	}
 
 	public void relayMessage(Message source, String msg, Member m, Guild s, ByteArrayOutputStream img) {
@@ -97,8 +104,8 @@ public class Relay extends SQLite {
 			badges.append(TagIcons.getTag(TagIcons.EDITOR));
 
 		try {
-			if (MySQL.getTagById(m.getUser().getId()).isPartner())
-				badges.append(TagIcons.getTag(TagIcons.PARTNER));
+			if (MySQL.getTagById(m.getUser().getId()).isReader())
+				badges.append(TagIcons.getTag(TagIcons.READER));
 		} catch (NoResultException ignore) {
 		}
 
@@ -112,7 +119,9 @@ public class Relay extends SQLite {
 		}
 
 		try {
-			if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 60)
+			if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 70)
+				badges.append(TagIcons.getTag(TagIcons.LVL70));
+			else if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 60)
 				badges.append(TagIcons.getTag(TagIcons.LVL60));
 			else if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 50)
 				badges.append(TagIcons.getTag(TagIcons.LVL50));
@@ -151,43 +160,47 @@ public class Relay extends SQLite {
 		relays.forEach((k, r) -> {
 			if (k.equals(s.getId()) && SQLite.getGuildById(k).isLiteMode() && m.getUser() != Main.getJibril().getSelfUser()) return;
 			try {
+				TextChannel t = Objects.requireNonNull(Main.getJibril().getGuildById(k)).getTextChannelById(r);
+				assert t != null;
 				if (SQLite.getGuildById(k).isAllowImg()) {
 					if (SQLite.getGuildById(k).isLiteMode()) {
-						WebhookClient client = getClient(Main.getJibril().getGuildById(k).getTextChannelById(r), Main.getJibril().getGuildById(k));
+						WebhookClient client = getClient(t, Main.getJibril().getGuildById(k));
 						client.send(getMessage(msg, m, s));
 						client.close();
 					} else {
 						if (img != null) {
-							Main.getJibril().getGuildById(k).getTextChannelById(r).sendFile(img.toByteArray(), "image.png", mb.build()).queue();
+							t.sendMessage(mb.build()).addFile(img.toByteArray(), "image.png").queue();
 						} else {
-							Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(mb.build()).queue();
+							t.sendMessage(mb.build()).queue();
 						}
 					}
 				} else {
 					if (SQLite.getGuildById(k).isLiteMode()) {
-						WebhookClient client = getClient(Main.getJibril().getGuildById(k).getTextChannelById(r), Main.getJibril().getGuildById(k));
+						WebhookClient client = getClient(t, Main.getJibril().getGuildById(k));
 						client.send(getMessage(msg, m, s));
 						client.close();
 					} else {
-						Main.getJibril().getGuildById(k).getTextChannelById(r).sendMessage(mb.build()).queue();
+						t.sendMessage(mb.build()).queue();
 					}
 				}
 			} catch (NullPointerException e) {
 				SQLite.getGuildById(k).setCanalRelay(null);
 			} catch (InsufficientPermissionException ex) {
+				Guild g = Main.getJibril().getGuildById(k);
+				assert g != null;
 				try {
-					Main.getJibril().getGuildById(k).getOwner().getUser().openPrivateChannel().queue(c -> c.sendMessage(":x: | Me faltam permissões para enviar mensagens globais no servidor " + s.getName() + ".\n\nPermissões que eu possuo:```" +
-							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_WRITE) ? "✅" : "❌") + " Ler/Enviar mensagens\n" +
-							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_EMBED_LINKS) ? "✅" : "❌") + " Inserir links\n" +
-							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_ATTACH_FILES) ? "✅" : "❌") + " Anexar arquivos\n" +
-							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_HISTORY) ? "✅" : "❌") + " Ver histórico de mensagens\n" +
-							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI) ? "✅" : "❌") + " Usar emojis externos\n" +
-							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MESSAGE_MANAGE) ? "✅" : "❌") + " Gerenciar mensagens\n" +
-							(Main.getJibril().getGuildById(k).getSelfMember().hasPermission(Permission.MANAGE_WEBHOOKS) ? "✅" : "❌") + " Gerenciar webhooks" +
+					Objects.requireNonNull(g.getOwner()).getUser().openPrivateChannel().queue(c -> c.sendMessage(":x: | Me faltam permissões para enviar mensagens globais no servidor " + s.getName() + ".\n\nPermissões que eu possuo:```" +
+							(g.getSelfMember().hasPermission(Permission.MESSAGE_WRITE) ? "✅" : "❌") + " Ler/Enviar mensagens\n" +
+							(g.getSelfMember().hasPermission(Permission.MESSAGE_EMBED_LINKS) ? "✅" : "❌") + " Inserir links\n" +
+							(g.getSelfMember().hasPermission(Permission.MESSAGE_ATTACH_FILES) ? "✅" : "❌") + " Anexar arquivos\n" +
+							(g.getSelfMember().hasPermission(Permission.MESSAGE_HISTORY) ? "✅" : "❌") + " Ver histórico de mensagens\n" +
+							(g.getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI) ? "✅" : "❌") + " Usar emojis externos\n" +
+							(g.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE) ? "✅" : "❌") + " Gerenciar mensagens\n" +
+							(g.getSelfMember().hasPermission(Permission.MANAGE_WEBHOOKS) ? "✅" : "❌") + " Gerenciar webhooks" +
 							"```").queue());
-					Helper.log(this.getClass(), LogLevel.ERROR, ex + " | Sevidor " + Main.getJibril().getGuildById(k).getName());
+					Helper.log(this.getClass(), LogLevel.ERROR, ex + " | Sevidor " + g.getName());
 				} catch (Exception e) {
-					Helper.log(this.getClass(), LogLevel.ERROR, ex + " | Dono " + Main.getJibril().getGuildById(k).getOwner().getUser().getAsTag());
+					Helper.log(this.getClass(), LogLevel.ERROR, ex + " | Dono " + Objects.requireNonNull(g.getOwner()).getUser().getAsTag());
 				}
 			}
 		});
@@ -199,7 +212,7 @@ public class Relay extends SQLite {
 		EmbedBuilder eb = new EmbedBuilder();
 
 		eb.setTitle(":globe_with_meridians: Dados do relay");
-		eb.addField(":busts_in_silhouette: Clientes conectados: " + relays.size(), "Canal relay: " + (gc.getCanalRelay() == null ? "Não configurado" : Main.getInfo().getGuildByID(gc.getGuildID()).getTextChannelById(gc.getCanalRelay()).getAsMention()), false);
+		eb.addField(":busts_in_silhouette: Clientes conectados: " + relays.size(), "Canal relay: " + (gc.getCanalRelay() == null ? "Não configurado" : Objects.requireNonNull(Main.getInfo().getGuildByID(gc.getGuildID()).getTextChannelById(gc.getCanalRelay())).getAsMention()), false);
 		eb.addField("Modo:", gc.isLiteMode() ? "Lite" : "Normal", true);
 		eb.addField("Imagens:", gc.isAllowImg() ? "Permitidas" : "Negadas", true);
 		eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));

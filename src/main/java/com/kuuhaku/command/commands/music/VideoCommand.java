@@ -6,11 +6,12 @@ import com.kuuhaku.controller.Youtube;
 import com.kuuhaku.model.YoutubeVideo;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.Event;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.Event;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class VideoCommand extends Command {
 
@@ -37,7 +38,7 @@ public class VideoCommand extends Command {
 						eb.setColor(Helper.colorThief(v.getThumb()));
 						eb.setFooter("Link: " + v.getUrl(), null);
 						channel.sendMessage(eb.build()).queue(msg -> {
-							if (member.getVoiceState().inVoiceChannel()) msg.addReaction("\u25B6").queue();
+							if (Objects.requireNonNull(member.getVoiceState()).inVoiceChannel()) msg.addReaction("\u25B6").queue();
 						});
 					} catch (IOException e) {
 						m.editMessage(":x: | Nenhum vídeo encontrado.").queue();

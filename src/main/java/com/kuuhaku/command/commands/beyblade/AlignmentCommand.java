@@ -6,9 +6,8 @@ import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.Beyblade;
 import com.kuuhaku.model.guildConfig;
-import com.kuuhaku.utils.Helper;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.Event;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.Event;
 
 import java.util.Objects;
 import java.util.Random;
