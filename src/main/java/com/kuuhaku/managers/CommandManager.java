@@ -101,6 +101,7 @@ public class CommandManager {
             add(new JibrilEmoteListCommand());
             add(new EmbedCommand());
             add(new PollCommand());
+            add(new TheAnswerCommand());
 
             //FUN
             add(new SadButTrueCommand());

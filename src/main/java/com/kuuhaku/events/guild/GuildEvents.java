@@ -32,6 +32,7 @@ import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,6 +41,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -89,7 +91,15 @@ public class GuildEvents extends ListenerAdapter {
 			if (rawMessage.startsWith(";") && author.getId().equals(Main.getInfo().getNiiChan())) {
 				try {
 					message.delete().queue();
-					channel.sendMessage(rawMessage.substring(1)).queue();
+					MessageAction send = channel.sendMessage(rawMessage.substring(1));
+					message.getAttachments().forEach(a -> {
+						try {
+							//noinspection ResultOfMethodCallIgnored
+							send.addFile(a.downloadToFile().get());
+						} catch (InterruptedException | ExecutionException ignore) {
+						}
+					});
+					send.queue();
 				} catch (InsufficientPermissionException ignore) {
 				}
 			}

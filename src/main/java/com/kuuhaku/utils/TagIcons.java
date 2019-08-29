@@ -29,7 +29,7 @@ public enum TagIcons {
 			case EDITOR:
 				return "<:Editor:589120809428058123> ";
 			case READER:
-				return "";
+				return "<:reader:616680618037870642> ";
 			case MODERATOR:
 				return "<:Moderator:589121447314587744> ";
 			case CHAMPION:
@@ -45,7 +45,7 @@ public enum TagIcons {
 			case LVL60:
 				return "<:lvl_60:611156384989577241> ";
 			case LVL70:
-				return "";
+				return "<:lvl_70:616680678804815927> ";
 			case VERIFIED:
 				return "<:Verified:591425071772467211> ";
 			case TOXIC:
