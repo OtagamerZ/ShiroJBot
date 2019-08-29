@@ -5,9 +5,9 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.model.Beyblade;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.Event;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.Event;
 
 import java.awt.*;
 import java.util.Collections;
@@ -36,9 +36,9 @@ public class RankCommand extends Command {
             eb.setThumbnail("https://www.pngkey.com/png/full/21-217733_free-png-trophy-png-images-transparent-winner-trophy.png");
             eb.setColor(Color.decode(champ.getColor()));
             for (int i = 0; i < rank.size() && i < 10; i++) {
-                sb.append(i + 2).append(" - ").append(rank.get(i).getName()).append(" (").append(Main.getInfo().getAPI().getUserById(rank.get(i).getId()).getName()).append(") | ").append(rank.get(i).getWins()).append("/").append(rank.get(i).getLoses()).append("\n");
+                sb.append(i + 2).append(" - ").append(rank.get(i).getName()).append(" (").append(Main.getInfo().getUserByID(rank.get(i).getId()).getName()).append(") | ").append(rank.get(i).getWins()).append("/").append(rank.get(i).getLoses()).append("\n");
             }
-            eb.addField("1 - " + champ.getName() + " (" + Main.getInfo().getAPI().getUserById(champ.getId()).getName() + ") | " + champ.getWins() + "/" + champ.getLoses(), sb.toString(), false);
+            eb.addField("1 - " + champ.getName() + " (" + Main.getInfo().getUserByID(champ.getId()).getName() + ") | " + champ.getWins() + "/" + champ.getLoses(), sb.toString(), false);
 
             m.delete().queue();
             channel.sendMessage(eb.build()).queue();

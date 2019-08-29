@@ -19,9 +19,9 @@ package com.kuuhaku.command.commands.moderation;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.Event;
-import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.Event;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -45,9 +45,9 @@ public class PruneCommand extends Command {
 			channel.sendMessage(msgs.size() + " mensage" + (msgs.size() == 1 ? "m limpa." : "ns limpas.")).queue();
 		} else if (args[0].equalsIgnoreCase("all")) {
 			try {
-				((Channel) channel).createCopy().queue(s -> {
-					((Channel) channel).delete().queue();
-					((MessageChannel) s).sendMessage("Canal limpo com sucesso!").queue();
+				((TextChannel) channel).createCopy().queue(s -> {
+					((GuildChannel) channel).delete().queue();
+					s.sendMessage("Canal limpo com sucesso!").queue();
 				});
 			} catch (InsufficientPermissionException e) {
 				channel.sendMessage(":x: | Preciso de permissão para gerenciar canais para limpar o canal todo.").queue();

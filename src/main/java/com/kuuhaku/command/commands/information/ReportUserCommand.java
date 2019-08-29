@@ -20,9 +20,9 @@ package com.kuuhaku.command.commands.information;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.Event;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.Event;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -51,11 +51,11 @@ public class ReportUserCommand extends Command {
 
         eb.setTitle("Relatório de report");
         eb.addField("Enviador por:", author.getAsTag() + " (" + guild.getName() + " | " + channel.getName() + ")", true);
-        eb.addField("Enviado em:", df.format(message.getCreationTime()), true);
+        eb.addField("Enviado em:", df.format(message.getTimeCreated()), true);
         eb.addField("Usuário reportado:", message.getMentionedUsers().get(0).getAsTag(), true);
         eb.addField("Report:", "```" + mensagem + "```", false);
 
-        Main.getInfo().getDevelopers().forEach(dev -> Main.getInfo().getAPI().getUserById(dev).openPrivateChannel().queue(m -> m.sendMessage(eb.build()).queue()));
+        Main.getInfo().getDevelopers().forEach(dev -> Main.getInfo().getUserByID(dev).openPrivateChannel().queue(m -> m.sendMessage(eb.build()).queue()));
         channel.sendMessage("✅ | Usuário reportado com sucesso.").queue();
     }
 }

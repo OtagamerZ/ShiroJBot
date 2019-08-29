@@ -3,8 +3,8 @@ package com.kuuhaku.command.commands.dev;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.Event;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.Event;
 
 public class RelaysCommand extends Command {
 

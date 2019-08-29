@@ -7,13 +7,13 @@ import com.kuuhaku.model.Member;
 import com.kuuhaku.model.RelayBlockList;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
-import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.core.events.message.priv.PrivateMessageReceivedEvent;
-import net.dv8tion.jda.core.exceptions.ErrorResponseException;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
+import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
@@ -21,12 +21,13 @@ import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class JibrilEvents extends ListenerAdapter {
 
 	@Override//removeGuildFromDB
 	public void onGuildJoin(GuildJoinEvent event) {
-		Main.getInfo().getDevelopers().forEach(d -> Main.getJibril().getUserById(d).openPrivateChannel().queue(c -> {
+		Main.getInfo().getDevelopers().forEach(d -> Objects.requireNonNull(Main.getJibril().getUserById(d)).openPrivateChannel().queue(c -> {
 			String msg = "Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".";
 			c.sendMessage(msg).queue();
 		}));
@@ -35,7 +36,7 @@ public class JibrilEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildLeave(GuildLeaveEvent event) {
-		Main.getInfo().getDevelopers().forEach(d -> Main.getJibril().getUserById(d).openPrivateChannel().queue(c -> {
+		Main.getInfo().getDevelopers().forEach(d -> Objects.requireNonNull(Main.getJibril().getUserById(d)).openPrivateChannel().queue(c -> {
 			String msg = "Acabei de sair do servidor \"" + event.getGuild().getName() + "\".";
 			c.sendMessage(msg).queue();
 		}));
@@ -49,7 +50,7 @@ public class JibrilEvents extends ListenerAdapter {
 
 		eb.setAuthor(event.getAuthor().getName(), event.getAuthor().getAvatarUrl());
 		eb.setFooter(LocalDateTime.now().atOffset(ZoneOffset.ofHours(-3)).format(DateTimeFormatter.ofPattern("HH:mm / dd/MMM/yyyy")), null);
-		Main.getJibril().getUserById(Main.getInfo().getNiiChan()).openPrivateChannel().queue(c -> c.sendMessage(event.getMessage()).embed(eb.build()).queue());
+		Objects.requireNonNull(Main.getJibril().getUserById(Main.getInfo().getNiiChan())).openPrivateChannel().queue(c -> c.sendMessage(event.getMessage()).embed(eb.build()).queue());
 	}
 
 	@Override
@@ -98,20 +99,22 @@ public class JibrilEvents extends ListenerAdapter {
 				}
 			}
 			if (String.join(" ", msg).length() < 2000) {
+				net.dv8tion.jda.api.entities.Member m = event.getMember();
+				assert m != null;
 				try {
 					if (MySQL.getTagById(event.getAuthor().getId()).isVerified() && event.getMessage().getAttachments().size() > 0) {
 						try {
 							ByteArrayOutputStream baos = new ByteArrayOutputStream();
 							ImageIO.write(ImageIO.read(Helper.getImage(event.getMessage().getAttachments().get(0).getUrl())), "png", baos);
-							Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), baos);
+							Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), m, event.getGuild(), baos);
 						} catch (Exception e) {
-							Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), null);
+							Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), m, event.getGuild(), null);
 						}
 						return;
 					}
-					Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), null);
+					Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), m, event.getGuild(), null);
 				} catch (NoResultException e) {
-					Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), event.getMember(), event.getGuild(), null);
+					Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), m, event.getGuild(), null);
 				}
 			}
 		}

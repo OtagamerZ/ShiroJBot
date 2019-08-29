@@ -19,9 +19,9 @@ package com.kuuhaku.command.commands.moderation;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.Event;
-import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.Event;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 public class KickMemberCommand extends Command {
 
@@ -41,10 +41,10 @@ public class KickMemberCommand extends Command {
 
         try {
             if (args.length < 2) {
-                guild.getController().kick(message.getMentionedMembers().get(0)).queue();
+                guild.kick(message.getMentionedMembers().get(0)).queue();
                 channel.sendMessage("Membro expulso com sucesso!").queue();
             } else {
-                guild.getController().kick(message.getMentionedMembers().get(0), String.join(" ", args).replace(args[0], "").trim()).queue();
+                guild.kick(message.getMentionedMembers().get(0), String.join(" ", args).replace(args[0], "").trim()).queue();
                 channel.sendMessage("Membro expulso com sucesso!\nRazão:```" + String.join(" ", args).replace(args[0], "").trim() + "```").queue();
             }
         } catch (InsufficientPermissionException e) {

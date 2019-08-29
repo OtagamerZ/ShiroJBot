@@ -6,8 +6,8 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.model.RelayBlockList;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.PrivilegeLevel;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.Event;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.Event;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
@@ -25,22 +25,24 @@ public class BlockCommand extends Command {
 				if (StringUtils.isNumeric(args[0])) {
 					String reason = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
 					boolean isMentioned = message.getMentionedUsers().size() > 0;
+					Member m = guild.getMember(Main.getJibril().getSelfUser());
+					assert m != null;
 					switch (args[1]) {
 						case "temp":
 							RelayBlockList.blockID(isMentioned ? message.getMentionedUsers().get(0).getId() : args[0], reason);
-							Main.getRelay().relayMessage(message, (isMentioned ? message.getMentionedUsers().get(0).getAsMention() : "<@" + args[0] + ">") + " bloqueado do chat global.\nRazão: " + reason, guild.getMember(Main.getJibril().getSelfUser()), guild, null);
+							Main.getRelay().relayMessage(message, (isMentioned ? message.getMentionedUsers().get(0).getAsMention() : "<@" + args[0] + ">") + " bloqueado do chat global.\nRazão: " + reason, m, guild, null);
 							break;
 						case "perma":
 							if (Helper.hasPermission(member, PrivilegeLevel.DEV)) {
 								RelayBlockList.permaBlockID(isMentioned ? message.getMentionedUsers().get(0).getId() : args[0], reason);
-								Main.getRelay().relayMessage(message, (isMentioned ? message.getMentionedUsers().get(0).getAsMention() : "<@" + args[0] + ">") + " banido permanentemente do chat global.\nRazão: " + reason, guild.getMember(Main.getJibril().getSelfUser()), guild, null);
+								Main.getRelay().relayMessage(message, (isMentioned ? message.getMentionedUsers().get(0).getAsMention() : "<@" + args[0] + ">") + " banido permanentemente do chat global.\nRazão: " + reason, m, guild, null);
 							} else {
 								channel.sendMessage(":x: | Permissões insuficientes.").queue();
 							}
 							break;
 						case "thumb":
 							RelayBlockList.blockThumb(isMentioned ? message.getMentionedUsers().get(0).getId() : args[0]);
-							Main.getRelay().relayMessage(message, (isMentioned ? message.getMentionedUsers().get(0).getAsMention() : "Avatar de <@" + args[0] + ">") + " foi censurado do chat global.", guild.getMember(Main.getJibril().getSelfUser()), guild, null);
+							Main.getRelay().relayMessage(message, (isMentioned ? message.getMentionedUsers().get(0).getAsMention() : "Avatar de <@" + args[0] + ">") + " foi censurado do chat global.", m, guild, null);
 							break;
 						default:
 							channel.sendMessage(":x: | Tipo inválido, o tipo deve ser thumb, temp ou perma.").queue();

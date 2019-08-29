@@ -4,7 +4,7 @@ import com.kuuhaku.model.*;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.entities.User;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -260,6 +260,32 @@ public class MySQL {
 
         Tags t = getTagById(id);
         t.setVerified(false);
+
+        em.getTransaction().begin();
+        em.merge(t);
+        em.getTransaction().commit();
+
+        em.close();
+    }
+
+    public static void giveTagReader(String id) {
+        EntityManager em = getEntityManager();
+
+        Tags t = getTagById(id);
+        t.setReader(true);
+
+        em.getTransaction().begin();
+        em.merge(t);
+        em.getTransaction().commit();
+
+        em.close();
+    }
+
+    public static void removeTagReader(String id) {
+        EntityManager em = getEntityManager();
+
+        Tags t = getTagById(id);
+        t.setReader(false);
 
         em.getTransaction().begin();
         em.merge(t);

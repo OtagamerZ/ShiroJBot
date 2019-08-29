@@ -24,9 +24,9 @@ import com.kuuhaku.model.Member;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Role;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.User;
 import org.json.JSONObject;
 
 import javax.persistence.EntityManager;
@@ -236,7 +236,7 @@ public class SQLite {
 		return m;
 	}
 
-	public static void addMemberToDB(net.dv8tion.jda.core.entities.Member u) {
+	public static void addMemberToDB(net.dv8tion.jda.api.entities.Member u) {
 		EntityManager em = getEntityManager();
 
 		Member m = new Member();

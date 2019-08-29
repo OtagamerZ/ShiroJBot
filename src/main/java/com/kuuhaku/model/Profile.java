@@ -23,8 +23,8 @@ import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Guild;
 
 import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
@@ -57,16 +57,16 @@ public class Profile {
 		}
 	}
 
-	public static ByteArrayOutputStream makeProfile(net.dv8tion.jda.core.entities.Member m, Guild g) throws IOException {
+	public static ByteArrayOutputStream makeProfile(net.dv8tion.jda.api.entities.Member m, Guild g) throws IOException {
 		int w = WIDTH;
 		HttpURLConnection con;
 		BufferedImage avatar;
 
 		try {
-			con = (HttpURLConnection) new URL(m.getUser().getAvatarUrl()).openConnection();
+			con = (HttpURLConnection) new URL(Objects.requireNonNull(m.getUser().getAvatarUrl())).openConnection();
 			con.setRequestProperty("User-Agent", "Mozilla/5.0");
 			avatar = scaleImage(ImageIO.read(con.getInputStream()), 200, 200);
-		} catch (IOException e) {
+		} catch (NullPointerException | IOException e) {
 			con = (HttpURLConnection) new URL("https://institutogoldenprana.com.br/wp-content/uploads/2015/08/no-avatar-25359d55aa3c93ab3466622fd2ce712d1.jpg").openConnection();
 			con.setRequestProperty("User-Agent", "Mozilla/5.0");
 			avatar = scaleImage(ImageIO.read(con.getInputStream()), 200, 200);
@@ -183,7 +183,7 @@ public class Profile {
 		return bi;
 	}
 
-	private static void drawBadges(net.dv8tion.jda.core.entities.Member m, Guild s, Graphics2D g2d) throws IOException {
+	private static void drawBadges(net.dv8tion.jda.api.entities.Member m, Guild s, Graphics2D g2d) throws IOException {
 		java.util.List<BufferedImage> badges = new ArrayList<BufferedImage>() {{
 			if (!SQLite.getMemberByMid(m.getUser().getId()).getExceed().isEmpty()) {
 				switch (ExceedEnums.getByName(SQLite.getMemberByMid(m.getUser().getId()).getExceed())) {
@@ -215,8 +215,8 @@ public class Profile {
 			if (Main.getInfo().getEditors().contains(m.getUser().getId()))
 				add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/writer.png"))));
 			try {
-				if (MySQL.getTagById(m.getUser().getId()).isPartner())
-					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/partner.png"))));
+				if (MySQL.getTagById(m.getUser().getId()).isReader())
+					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/reader.png"))));
 			} catch (NoResultException ignore) {
 			}
 			if (m.hasPermission(Permission.MANAGE_CHANNEL))
@@ -227,7 +227,9 @@ public class Profile {
 			} catch (NoResultException ignore) {
 			}
 			try {
-				if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 60)
+				if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 70)
+					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_70.png"))));
+				else if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 60)
 					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_60.png"))));
 				else if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 50)
 					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_50.png"))));

@@ -38,7 +38,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.entities.User;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
