@@ -26,18 +26,22 @@ import com.kuuhaku.utils.LogLevel;
 import com.kuuhaku.utils.Music;
 import com.kuuhaku.utils.ShiroInfo;
 import de.androidpit.colorthief.ColorThief;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.ReadyEvent;
-import net.dv8tion.jda.core.events.ShutdownEvent;
-import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
-import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
-import net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent;
-import net.dv8tion.jda.core.events.message.priv.PrivateMessageReceivedEvent;
-import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
-import net.dv8tion.jda.core.events.message.react.MessageReactionRemoveEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.ReadyEvent;
+import net.dv8tion.jda.api.events.ShutdownEvent;
+import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberLeaveEvent;
+import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -50,12 +54,13 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class JDAEvents extends ListenerAdapter {
 
 	@Override
-	public void onReady(ReadyEvent event) {
+	public void onReady(@NotNull ReadyEvent event) {
 		try {
 			Helper.log(this.getClass(), LogLevel.INFO, "Estou pronta!");
 		} catch (Exception e) {
@@ -65,8 +70,8 @@ public class JDAEvents extends ListenerAdapter {
 
 	@Override
 	public void onMessageReactionRemove(MessageReactionRemoveEvent event) {
-		if (event.getMember().getUser().isBot()) return;
-		Message message = event.getChannel().getMessageById(event.getMessageId()).complete();
+		if (Objects.requireNonNull(event.getMember()).getUser().isBot()) return;
+		Message message = event.getChannel().retrieveMessageById(event.getMessageId()).complete();
 		if (Main.getInfo().getPolls().containsKey(message.getId())) {
 
 			if (event.getReactionEmote().getName().equals("\uD83D\uDC4D"))
@@ -81,14 +86,14 @@ public class JDAEvents extends ListenerAdapter {
 		if (event.getUser().isBot()) return;
 
 		try {
-			Message message = event.getChannel().getMessageById(event.getMessageId()).complete();
+			Message message = event.getChannel().retrieveMessageById(event.getMessageId()).complete();
 			if (Main.getInfo().getPolls().containsKey(message.getId())) {
 
 				if (event.getReactionEmote().getName().equals("\uD83D\uDC4D"))
 					Main.getInfo().getPolls().get(message.getId())[0]++;
 				else if (event.getReactionEmote().getName().equals("\uD83D\uDC4E"))
 					Main.getInfo().getPolls().get(message.getId())[1]++;
-				else if (event.getReactionEmote().getName().equals("\u274C") && message.getEmbeds().get(0).getTitle().equals(":notepad_spiral: Enquete criada por " + event.getMember().getEffectiveName())) {
+				else if (event.getReactionEmote().getName().equals("\u274C") && Objects.requireNonNull(message.getEmbeds().get(0).getTitle()).equals(":notepad_spiral: Enquete criada por " + Objects.requireNonNull(event.getMember()).getEffectiveName())) {
 					Main.getInfo().getPolls().remove(message.getId());
 					message.delete().queue();
 				}
@@ -141,10 +146,10 @@ public class JDAEvents extends ListenerAdapter {
 				}
 			}
 
-			if (message.getAuthor() == Main.getInfo().getSelfUser() && message.getEmbeds().size() > 0 && message.getEmbeds().get(0).getFooter().getText().startsWith("Link: https://www.youtube.com/watch?v=") && event.getReactionEmote().getName().equals("\u25B6")) {
+			if (message.getAuthor() == Main.getInfo().getSelfUser() && message.getEmbeds().size() > 0 && Objects.requireNonNull(Objects.requireNonNull(message.getEmbeds().get(0).getFooter()).getText()).startsWith("Link: https://www.youtube.com/watch?v=") && event.getReactionEmote().getName().equals("\u25B6")) {
 				Music.loadAndPlay(event.getMember(), event.getTextChannel(), message.getEmbeds().get(0).getUrl());
 				if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) {
-					List<Message> msgs = event.getChannel().getHistoryAround(event.getMessageId(), 50).complete().getRetrievedHistory().stream().filter(m -> m.getAuthor() == Main.getInfo().getSelfUser() && m.getEmbeds().size() == 1 && m.getEmbeds().get(0).getFooter().getText().startsWith("Link: https://www.youtube.com/watch?v=")).collect(Collectors.toList());
+					List<Message> msgs = event.getChannel().getHistoryAround(event.getMessageId(), 50).complete().getRetrievedHistory().stream().filter(m -> m.getAuthor() == Main.getInfo().getSelfUser() && m.getEmbeds().size() == 1 && Objects.requireNonNull(Objects.requireNonNull(m.getEmbeds().get(0).getFooter()).getText()).startsWith("Link: https://www.youtube.com/watch?v=")).collect(Collectors.toList());
 					event.getChannel().purgeMessages(msgs);
 				}
 			}
@@ -156,7 +161,7 @@ public class JDAEvents extends ListenerAdapter {
 	public void onGuildJoin(GuildJoinEvent event) {
 		SQLite.addGuildToDB(event.getGuild());
 		try {
-			Helper.sendPM(event.getGuild().getOwner().getUser(), "Obrigada por me adicionar ao seu servidor!");
+			Helper.sendPM(Objects.requireNonNull(event.getGuild().getOwner()).getUser(), "Obrigada por me adicionar ao seu servidor!");
 		} catch (Exception err) {
 			TextChannel dch = event.getGuild().getDefaultChannel();
 			if (dch != null) {
@@ -173,7 +178,7 @@ public class JDAEvents extends ListenerAdapter {
 	}*/
 
 	@Override
-	public void onShutdown(ShutdownEvent event) {
+	public void onShutdown(@NotNull ShutdownEvent event) {
 		//com.kuuhaku.MainANT.getInfo().getLogChannel().sendMessage(DiscordHelper.getCustomEmoteMention(com.kuuhaku.MainANT.getInfo().getGuild(), "choro") + " | Nunca vos esquecerei... Faleci! " + DiscordHelper.getCustomEmoteMention(com.kuuhaku.MainANT.getInfo().getGuild(), "bruh")).queue();
 	}
 	
@@ -183,17 +188,17 @@ public class JDAEvents extends ListenerAdapter {
 	}*/
 
 	@Override
-	public void onGuildMemberJoin(GuildMemberJoinEvent event) {
+	public void onGuildMemberJoin(@NotNull GuildMemberJoinEvent event) {
 		try {
 			guildConfig gc = SQLite.getGuildById(event.getGuild().getId());
 
 			if (!gc.getMsgBoasVindas().equals("")) {
-				if (gc.isAntiRaid() && ((ChronoUnit.MILLIS.between(event.getUser().getCreationTime().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) / 1000) / 60) < 10) {
-					Helper.logToChannel(event.getUser(), false, null, "Um usuário foi expulso automaticamente por ter uma conta muito recente.\n`(data de criação: " + event.getUser().getCreationTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - hh:mm:ss")) + "h)`", event.getGuild());
-					event.getGuild().getController().kick(event.getMember()).queue();
+				if (gc.isAntiRaid() && ((ChronoUnit.MILLIS.between(event.getUser().getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) / 1000) / 60) < 10) {
+					Helper.logToChannel(event.getUser(), false, null, "Um usuário foi expulso automaticamente por ter uma conta muito recente.\n`(data de criação: " + event.getUser().getTimeCreated().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - hh:mm:ss")) + "h)`", event.getGuild());
+					event.getGuild().kick(event.getMember()).queue();
 					return;
 				}
-				URL url = new URL(event.getUser().getAvatarUrl());
+				URL url = new URL(Objects.requireNonNull(event.getUser().getAvatarUrl()));
 				HttpURLConnection con = (HttpURLConnection) url.openConnection();
 				con.setRequestProperty("User-Agent", "Mozilla/5.0");
 				BufferedImage image = ImageIO.read(con.getInputStream());
@@ -223,23 +228,23 @@ public class JDAEvents extends ListenerAdapter {
 						break;
 				}
 
-				event.getGuild().getTextChannelById(gc.getCanalBV()).sendMessage(event.getUser().getAsMention()).embed(eb.build()).queue();
+				Objects.requireNonNull(event.getGuild().getTextChannelById(gc.getCanalBV())).sendMessage(event.getUser().getAsMention()).embed(eb.build()).queue();
 				Helper.logToChannel(event.getUser(), false, null, "Um usuário entrou no servidor", event.getGuild());
-			} else if (gc.isAntiRaid() && ((ChronoUnit.MILLIS.between(event.getUser().getCreationTime().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) / 1000) / 60) < 10) {
+			} else if (gc.isAntiRaid() && ((ChronoUnit.MILLIS.between(event.getUser().getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) / 1000) / 60) < 10) {
 				Helper.logToChannel(event.getUser(), false, null, "Um foi bloqueado de entrar no servidor", event.getGuild());
-				event.getGuild().getController().kick(event.getMember()).queue();
+				event.getGuild().kick(event.getMember()).queue();
 			}
 		} catch (Exception ignore) {
 		}
 	}
 
 	@Override
-	public void onGuildMemberLeave(GuildMemberLeaveEvent event) {
+	public void onGuildMemberLeave(@NotNull GuildMemberLeaveEvent event) {
 		try {
 			guildConfig gc = SQLite.getGuildById(event.getGuild().getId());
 
 			if (!gc.getMsgAdeus().equals("")) {
-				URL url = new URL(event.getUser().getAvatarUrl());
+				URL url = new URL(Objects.requireNonNull(event.getUser().getAvatarUrl()));
 				HttpURLConnection con = (HttpURLConnection) url.openConnection();
 				con.setRequestProperty("User-Agent", "Mozilla/5.0");
 				BufferedImage image = ImageIO.read(con.getInputStream());
@@ -252,7 +257,7 @@ public class JDAEvents extends ListenerAdapter {
 				eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
 				eb.setThumbnail(event.getUser().getAvatarUrl());
 				eb.setDescription(gc.getMsgAdeus().replace("%user%", event.getUser().getName()).replace("%guild%", event.getGuild().getName()));
-				eb.setFooter("ID do usuário: " + event.getUser().getId() + "\n\nServidor gerenciado por " + event.getGuild().getOwner().getEffectiveName(), event.getGuild().getOwner().getUser().getAvatarUrl());
+				eb.setFooter("ID do usuário: " + event.getUser().getId() + "\n\nServidor gerenciado por " + Objects.requireNonNull(event.getGuild().getOwner()).getEffectiveName(), event.getGuild().getOwner().getUser().getAvatarUrl());
 				switch (rmsg) {
 					case 0:
 						eb.setTitle("Nãããoo...um membro deixou este servidor!");
@@ -271,7 +276,7 @@ public class JDAEvents extends ListenerAdapter {
 						break;
 				}
 
-				event.getGuild().getTextChannelById(gc.getCanalAdeus()).sendMessage(eb.build()).queue();
+				Objects.requireNonNull(event.getGuild().getTextChannelById(gc.getCanalAdeus())).sendMessage(eb.build()).queue();
 				Helper.logToChannel(event.getUser(), false, null, "Um usuário saiu do servidor", event.getGuild());
 			}
 		} catch (Exception ignore) {

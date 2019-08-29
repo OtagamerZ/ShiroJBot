@@ -4,6 +4,8 @@ public class BannedVars {
 	public static final String[] vars = new String[]{
 			"getJDA()",
 			"getAPI()",
+			"kick()",
+			"ban(),",
 			"getManager()",
 			"getController()",
 			"getSelfUser()",

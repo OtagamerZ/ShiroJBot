@@ -4,15 +4,16 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.guildConfig;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.Role;
-import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.TextChannel;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Settings {
@@ -43,7 +44,7 @@ public class Settings {
 			List<Integer> lvls = SQLite.getGuildCargosLvl(message.getGuild().getId()).keySet().stream().map(Integer::parseInt).sorted().collect(Collectors.toList());
 			for (int i : lvls) {
 				Map<String, Object> cargos = SQLite.getGuildCargosLvl(message.getGuild().getId());
-				cargosLvl.append(i).append(" - ").append(message.getGuild().getRoleById((String) cargos.get(String.valueOf(i))).getAsMention()).append("\n");
+				cargosLvl.append(i).append(" - ").append(Objects.requireNonNull(message.getGuild().getRoleById((String) cargos.get(String.valueOf(i)))).getAsMention()).append("\n");
 			}
 		}
 
@@ -69,7 +70,7 @@ public class Settings {
 		eb.addBlankField(true);
 		eb.addField("\uD83D\uDCD6 » Canal de Sugestões", canalSUG, true);
 		eb.addField("\u23F2 » Tempo de enquetes", String.valueOf(pollTime), true);
-		if (MySQL.getTagById(message.getGuild().getOwner().getUser().getId()).isPartner()) {
+		if (MySQL.getTagById(Objects.requireNonNull(message.getGuild().getOwner()).getUser().getId()).isPartner()) {
 			eb.addField("\uD83D\uDCD6 » Canal Relay", canalRelay, true);
 		}
 
@@ -380,7 +381,7 @@ public class Settings {
 		StringBuilder cargosLvl = new StringBuilder();
 		for (int i : lvls) {
 			Map<String, Object> cargos = SQLite.getGuildCargosLvl(message.getGuild().getId());
-			cargosLvl.append(i).append(" - ").append(message.getGuild().getRoleById((String) cargos.get(String.valueOf(i))).getAsMention()).append("\n");
+			cargosLvl.append(i).append(" - ").append(Objects.requireNonNull(message.getGuild().getRoleById((String) cargos.get(String.valueOf(i)))).getAsMention()).append("\n");
 		}
 
 		if (args.length < 3) {

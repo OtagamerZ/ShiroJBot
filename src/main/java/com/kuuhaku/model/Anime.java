@@ -21,14 +21,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import javax.swing.text.DateFormatter;
 import java.awt.*;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-@SuppressWarnings("deprecation")
 public class Anime {
     private final int idMal;
     private final String tRomaji;

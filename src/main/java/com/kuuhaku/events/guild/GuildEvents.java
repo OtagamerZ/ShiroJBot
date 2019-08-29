@@ -25,14 +25,15 @@ import com.kuuhaku.model.CustomAnswers;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
-import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
+import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.NoResultException;
 import java.time.OffsetDateTime;
@@ -67,7 +68,7 @@ public class GuildEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+	public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
 		if (Main.getInfo().isReady()) {
 			User author = event.getAuthor();
 			Member member = event.getMember();
@@ -75,6 +76,7 @@ public class GuildEvents extends ListenerAdapter {
 			MessageChannel channel = message.getChannel();
 			Guild guild = message.getGuild();
 			String rawMessage = message.getContentRaw();
+			assert member != null;
 
 			String prefix = "";
 			if (!Main.getInfo().isDev()) {
@@ -126,32 +128,28 @@ public class GuildEvents extends ListenerAdapter {
 			if (SQLite.getGuildNoSpamChannels(guild.getId()).contains(channel.getId()) && author != Main.getInfo().getSelfUser()) {
 				if (SQLite.getGuildById(guild.getId()).isHardAntispam()) {
 					channel.getHistory().retrievePast(20).queue(h -> {
-						h.removeIf(m -> ChronoUnit.MILLIS.between(m.getCreationTime().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author);
+						h.removeIf(m -> ChronoUnit.MILLIS.between(m.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author);
 
 						if (h.size() >= SQLite.getGuildById(guild.getId()).getNoSpamAmount()) {
 							h.forEach(m -> channel.deleteMessageById(m.getId()).queue());
 							channel.sendMessage(":warning: | Opa, sem spam meu amigo!").queue();
 							try {
 								member.getRoles().add(guild.getRoleById(SQLite.getGuildCargoWarn(guild.getId())));
-								Main.getInfo().getScheduler().schedule(() -> {
-									member.getRoles().remove(guild.getRoleById(SQLite.getGuildCargoWarn(guild.getId())));
-								}, SQLite.getGuildWarnTime(guild.getId()), TimeUnit.SECONDS);
+								Main.getInfo().getScheduler().schedule(() -> member.getRoles().remove(guild.getRoleById(SQLite.getGuildCargoWarn(guild.getId()))), SQLite.getGuildWarnTime(guild.getId()), TimeUnit.SECONDS);
 							} catch (Exception ignore) {
 							}
 						}
 					});
 				} else {
 					channel.getHistory().retrievePast(20).queue(h -> {
-						h.removeIf(m -> ChronoUnit.MILLIS.between(m.getCreationTime().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author && StringUtils.containsIgnoreCase(m.getContentRaw(), message.getContentRaw()));
+						h.removeIf(m -> ChronoUnit.MILLIS.between(m.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author && StringUtils.containsIgnoreCase(m.getContentRaw(), message.getContentRaw()));
 
 						if (h.size() >= SQLite.getGuildById(guild.getId()).getNoSpamAmount()) {
 							h.forEach(m -> channel.deleteMessageById(m.getId()).queue());
 							channel.sendMessage(":warning: | Opa, sem spam meu amigo!").queue();
 							try {
 								member.getRoles().add(guild.getRoleById(SQLite.getGuildCargoWarn(guild.getId())));
-								Main.getInfo().getScheduler().schedule(() -> {
-									member.getRoles().remove(guild.getRoleById(SQLite.getGuildCargoWarn(guild.getId())));
-								}, SQLite.getGuildWarnTime(guild.getId()), TimeUnit.SECONDS);
+								Main.getInfo().getScheduler().schedule(() -> member.getRoles().remove(guild.getRoleById(SQLite.getGuildCargoWarn(guild.getId()))), SQLite.getGuildWarnTime(guild.getId()), TimeUnit.SECONDS);
 							} catch (Exception ignore) {
 							}
 						}
@@ -230,7 +228,7 @@ public class GuildEvents extends ListenerAdapter {
 				sortedLvls.keySet().stream().max(Integer::compare).ifPresent(i -> {
 					if (SQLite.getGuildById(guild.getId()).getLvlNotif() && !member.getRoles().contains(sortedLvls.get(i))) {
 						try {
-							guild.getController().addSingleRoleToMember(member, sortedLvls.get(i)).queue(s -> {
+							guild.addRoleToMember(member, sortedLvls.get(i)).queue(s -> {
 								String content = author.getAsMention() + " ganhou o cargo " + sortedLvls.get(i).getAsMention() + "! :tada:";
 								if (finalLvlChannel != null) {
 									finalLvlChannel.getHistory().retrievePast(5).queue(m -> {
@@ -253,7 +251,7 @@ public class GuildEvents extends ListenerAdapter {
 					rawLvls.remove(String.valueOf(i));
 					List<Role> list = new ArrayList<>();
 					rawLvls.forEach((k, v) -> list.add(guild.getRoleById((String) v)));
-					guild.getController().removeRolesFromMember(member, list).queue();
+					guild.modifyMemberRoles(member, null, list).queue();
 				});
 
 				if (Main.getInfo().getQueue().stream().anyMatch(u -> u[1].getId().equals(author.getId()))) {

@@ -5,8 +5,8 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.model.Profile;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.Event;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.Event;
 
 import java.io.IOException;
 

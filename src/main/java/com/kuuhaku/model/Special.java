@@ -17,7 +17,8 @@
 
 package com.kuuhaku.model;
 
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.function.Consumer;
 
@@ -78,56 +79,57 @@ public class Special {
 	}
 	
 	public static boolean trySpecial(int chance, float defFac, Beyblade b1, Beyblade b2, GuildMessageReceivedEvent event) {
-		final Consumer<Void> Miss = tm -> event.getMessage().getChannel().sendMessage("Quase! " + b1.getName() + " tenta executar um golpe especial mas falha! (" + chance + " < " + (int) (b1.getS().getDiff() - b1.getSpeed()) + ")").queue();
+		final Message msg = event.getMessage();
+		final Consumer<Void> Miss = tm -> msg.getChannel().sendMessage("Quase! " + b1.getName() + " tenta executar um golpe especial mas falha! (" + chance + " < " + (int) (b1.getS().getDiff() - b1.getSpeed()) + ")").queue();
 		switch (b1.getSpecial()) {
 			case 11:
 				if (chance > b1.getS().getDiff() - b1.getSpeed()) {
 					b2.setLife(b2.getLife() - Math.round(b1.getStrength() * b1.getSpeed() / (b2.getStability() * defFac) * (float) Math.random() * 50));
-					event.getMessage().getChannel().sendMessage("O-O que?? " + b1.getName() + " desapareceu? Ah, lá está ele, com um movimento digno dos tigres ele executa o golpe especial " + b1.getS().getName() + "! (" + (100 - b1.getS().getDiff()) + "% de chance)").queue();
+					msg.getChannel().sendMessage("O-O que?? " + b1.getName() + " desapareceu? Ah, lá está ele, com um movimento digno dos tigres ele executa o golpe especial " + b1.getS().getName() + "! (" + (100 - b1.getS().getDiff()) + "% de chance)").queue();
 					if (b2.getS() != null) b2.getS().setBear(false);
 					return true;
 				} else {
-					event.getMessage().getChannel().sendTyping().queue(Miss);
+					msg.getChannel().sendTyping().queue(Miss);
 				}
 				break;
 			case 12:
 				if (chance > b1.getS().getDiff() - b1.getSpeed()) {
 					b2.setLife(b2.getLife() - Math.round(b1.getSpeed() * 2 / (b2.getStability() * defFac) * (float) Math.random() * 50));
-					event.getMessage().getChannel().sendMessage("Isso foi incrível!! " + b1.getName() + " executou com perfeição o " + b1.getS().getName() + " um dos golpes mais difíceis já conhecidos! (" + (100 - b1.getS().getDiff()) + "% de chance)").queue();
-					event.getMessage().getChannel().sendMessage(b2.getName() + " está atordoado, será que teremos uma reviravolta aqui?").queue();
+					msg.getChannel().sendMessage("Isso foi incrível!! " + b1.getName() + " executou com perfeição o " + b1.getS().getName() + " um dos golpes mais difíceis já conhecidos! (" + (100 - b1.getS().getDiff()) + "% de chance)").queue();
+					msg.getChannel().sendMessage(b2.getName() + " está atordoado, será que teremos uma reviravolta aqui?").queue();
 					if (b2.getS() != null) b2.getS().setBear(false);
 					return true;
 				} else {
-					event.getMessage().getChannel().sendTyping().queue(Miss);
+					msg.getChannel().sendTyping().queue(Miss);
 				}
 				break;
 			case 21:
 				if (chance > b1.getS().getDiff() - b1.getSpeed()) {
 					b2.setLife(b2.getLife() - Math.round(b1.getStrength() * b2.getStability() / (b2.getStability() * defFac) * (float) Math.random() * 50));
-					event.getMessage().getChannel().sendMessage("O que foi isso!? " + b1.getName() + " lançou " + b2.getName() + " ao ar, depois o arremessou no chão utilizando sua própria defesa como impulso! (" + (100 - b1.getS().getDiff()) + "% de chance)").queue();
+					msg.getChannel().sendMessage("O que foi isso!? " + b1.getName() + " lançou " + b2.getName() + " ao ar, depois o arremessou no chão utilizando sua própria defesa como impulso! (" + (100 - b1.getS().getDiff()) + "% de chance)").queue();
 					if (b2.getS() != null) b2.getS().setBear(false);
 					return true;
 				} else {
-					event.getMessage().getChannel().sendTyping().queue(Miss);
+					msg.getChannel().sendTyping().queue(Miss);
 				}
 				break;
 			case 22:
 				if (chance > b1.getS().getDiff() - b1.getSpeed()) {
 					b2.setLife(b2.getLife() - Math.round(b1.getStrength() * b1.getStrength() / (b2.getStability() * defFac) * (float) Math.random() * 150));
-					event.getMessage().getChannel().sendMessage("Não é possível!! Eu jamais acreditaria se alguém me dissesse que era possível executar este golpe, mas " + b1.getName() + " provou que é possivel!!! " + b2.getName() + " mal consegue se manter em pé! (" + (100 - b1.getS().getDiff()) + "% de chance)").queue();
+					msg.getChannel().sendMessage("Não é possível!! Eu jamais acreditaria se alguém me dissesse que era possível executar este golpe, mas " + b1.getName() + " provou que é possivel!!! " + b2.getName() + " mal consegue se manter em pé! (" + (100 - b1.getS().getDiff()) + "% de chance)").queue();
 					if (b2.getS() != null) b2.getS().setBear(false);
 					return true;
 				} else {
-					event.getMessage().getChannel().sendTyping().queue(Miss);
+					msg.getChannel().sendTyping().queue(Miss);
 				}
 				break;
 			case 31:
 				if (chance > b1.getS().getDiff() - b1.getSpeed()) {
 					b1.getS().setBear(true);
-					event.getMessage().getChannel().sendMessage("Mais alguém está sentindo isso? " + b1.getName() + " acaba de executar a assinatura dos ursos!! Essa aura poderá virar o fluxo da partida! (" + (100 - b1.getS().getDiff()) + "% de chance)").queue();
+					msg.getChannel().sendMessage("Mais alguém está sentindo isso? " + b1.getName() + " acaba de executar a assinatura dos ursos!! Essa aura poderá virar o fluxo da partida! (" + (100 - b1.getS().getDiff()) + "% de chance)").queue();
 					return true;
 				} else {
-					event.getMessage().getChannel().sendTyping().queue(Miss);
+					msg.getChannel().sendTyping().queue(Miss);
 				}
 				break;
 		}

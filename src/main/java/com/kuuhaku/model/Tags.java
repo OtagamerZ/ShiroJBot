@@ -48,6 +48,8 @@ public class Tags {
     private boolean Toxic = false;
     @Column(columnDefinition = "boolean default false")
     private boolean Verified = false;
+    @Column(columnDefinition = "boolean default false")
+    private boolean Reader = false;
 
     public String getId() {
         return id;
@@ -79,5 +81,13 @@ public class Tags {
 
     public void setVerified(boolean verified) {
         Verified = verified;
+    }
+
+    public boolean isReader() {
+        return Reader;
+    }
+
+    public void setReader(boolean reader) {
+        Reader = reader;
     }
 }

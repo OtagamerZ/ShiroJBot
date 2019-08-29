@@ -20,9 +20,9 @@ package com.kuuhaku.command.commands.information;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.TagIcons;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.Event;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.Event;
 
 public class TagsCommand extends Command {
 
@@ -37,7 +37,7 @@ public class TagsCommand extends Command {
         eb.setTitle(":label: Emblemas do chat global");
         eb.addField(TagIcons.getTag(TagIcons.DEV) + " Desenvolvedor", "Desenvolvedores da Shiro/Jibril", false);
         eb.addField(TagIcons.getTag(TagIcons.EDITOR) + " Redator", "Redatores da Shiro/Jibril", false);
-        eb.addField(TagIcons.getTag(TagIcons.PARTNER) + " Parceiro", "Parceiros de desenvolvimento da Shiro/Jibril", false);
+        eb.addField(TagIcons.getTag(TagIcons.READER) + " Leitor", "Pessoas que leram as regras no servidor de suporte", false);
         eb.addField(TagIcons.getTag(TagIcons.MODERATOR) + " Moderador", "Equipe administrativa do servidor de onde a mensagem foi enviada", false);
         eb.addField(TagIcons.getTag(TagIcons.CHAMPION) + " Campeão", "Usuário que está no ranking Nº 1 das Beyblades", false);
         eb.addField(TagIcons.getTag(TagIcons.LVL20) +

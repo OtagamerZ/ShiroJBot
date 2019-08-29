@@ -23,8 +23,8 @@ import com.kuuhaku.model.Special;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
 import com.kuuhaku.utils.ShiroInfo;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.*;
 import java.util.Random;
@@ -36,7 +36,7 @@ public class Beyblade{
 		EmbedBuilder eb = new EmbedBuilder();
 
 		if (event.getMessage().getContentRaw().equalsIgnoreCase("atacar")) {
-			if (player1Turn && event.getMessage().getAuthor() == duel.getP1()) {
+			if (player1Turn && event.getAuthor() == duel.getP1()) {
 				if (hit(duel.getB1().getSpeed(), duel.getB2().getStability(), duel.getM2())) {
 					duel.setP1turn(false);
 					duel.setD1(false);
