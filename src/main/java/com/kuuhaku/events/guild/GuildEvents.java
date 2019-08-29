@@ -91,16 +91,20 @@ public class GuildEvents extends ListenerAdapter {
 			if (rawMessage.startsWith(";") && author.getId().equals(Main.getInfo().getNiiChan())) {
 				try {
 					message.delete().queue();
-					MessageAction send = channel.sendMessage(rawMessage.substring(1));
-					message.getAttachments().forEach(a -> {
-						try {
-							//noinspection ResultOfMethodCallIgnored
-							send.addFile(a.downloadToFile().get());
-						} catch (InterruptedException | ExecutionException ignore) {
-						}
-					});
-					send.queue();
-				} catch (InsufficientPermissionException ignore) {
+					if (rawMessage.replace(";", "").length() == 0) {
+						channel.sendFile(message.getAttachments().get(0).downloadToFile().get()).queue();
+					} else {
+						MessageAction send = channel.sendMessage(rawMessage.substring(1));
+						message.getAttachments().forEach(a -> {
+							try {
+								//noinspection ResultOfMethodCallIgnored
+								send.addFile(a.downloadToFile().get());
+							} catch (InterruptedException | ExecutionException ignore) {
+							}
+						});
+						send.queue();
+					}
+				} catch (InsufficientPermissionException | ExecutionException | InterruptedException ignore) {
 				}
 			}
 
