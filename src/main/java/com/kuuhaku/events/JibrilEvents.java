@@ -70,6 +70,7 @@ public class JibrilEvents extends ListenerAdapter {
 										c.sendMessage(finalMsg()).queue(s3 -> {
 											mb.setRulesSent(true);
 											SQLite.updateMemberSettings(mb);
+											MySQL.saveMemberToBD(mb);
 										})));
 					});
 				} catch (ErrorResponseException ignore) {
