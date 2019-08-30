@@ -81,7 +81,11 @@ public class Settings {
 		}
 
 		if (!cargoWarnID.equals("Não definido.")) {
-			eb.addField("\uD83D\uDCD1 » Cargo de punição", Main.getInfo().getRoleByID(cargoWarnID).getAsMention(), true);
+			try {
+				eb.addField("\uD83D\uDCD1 » Cargo de punição", Main.getInfo().getRoleByID(cargoWarnID).getAsMention(), true);
+			} catch (NullPointerException e) {
+				SQLite.updateGuildCargoWarn("reset", gc);
+			}
 		} else {
 			eb.addField("\uD83D\uDCD1 » Cargo de punição", cargoWarnID, true);
 		}
