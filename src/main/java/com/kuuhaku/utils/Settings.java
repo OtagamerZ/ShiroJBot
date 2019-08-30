@@ -20,55 +20,45 @@ public class Settings {
 
 	public static void embedConfig(Message message) throws IOException {
 		guildConfig gc = SQLite.getGuildById(message.getGuild().getId());
-		String prefix = gc.getPrefix();
+		String prefix = SQLite.getGuildPrefix(message.getGuild().getId());
 
-		String canalBV = gc.getCanalBV();
-		if (canalBV != null) canalBV = "<#" + canalBV + ">";
-		else canalBV = "Não definido";
+		String canalBV = SQLite.getGuildCanalBV(message.getGuild().getId());
+		if (!canalBV.equals("Não definido.")) canalBV = "<#" + canalBV + ">";
+		String msgBV = SQLite.getGuildMsgBV(message.getGuild().getId());
+		if (!msgBV.equals("Não definido.")) msgBV = "`" + msgBV + "`";
 
-		String msgBV = gc.getMsgBoasVindas();
-		if (msgBV != null) msgBV = "`" + msgBV + "`";
-		else msgBV = "Não definido";
+		String canalAdeus = SQLite.getGuildCanalAdeus(message.getGuild().getId());
+		if (!canalAdeus.equals("Não definido.")) canalAdeus = "<#" + canalAdeus + ">";
+		String msgAdeus = SQLite.getGuildMsgAdeus(message.getGuild().getId());
+		if (!msgAdeus.equals("Não definido.")) msgAdeus = "`" + msgAdeus + "`";
 
-		String canalAdeus = gc.getCanalAdeus();
-		if (canalAdeus != null) canalAdeus = "<#" + canalAdeus + ">";
-		else canalAdeus = "Não definido";
+		String canalSUG = SQLite.getGuildCanalSUG(message.getGuild().getId());
+		if (!canalSUG.equals("Não definido.")) canalSUG = "<#" + canalSUG + ">";
 
-		String msgAdeus = gc.getMsgAdeus();
-		if (msgAdeus != null) msgAdeus = "`" + msgAdeus + "`";
-		else msgAdeus = "Não definido";
+		int pollTime = SQLite.getGuildPollTime(message.getGuild().getId());
 
-		String canalSUG = gc.getCanalSUG();
-		if (canalSUG != null) canalSUG = "<#" + canalSUG + ">";
-		else canalSUG = "Não definido";
-
-		int pollTime = gc.getPollTime();
-
-		String canalLvlUpNotif = gc.getCanalLvl();
-		if (canalLvlUpNotif != null) canalLvlUpNotif = "<#" + canalLvlUpNotif + ">";
-		else canalLvlUpNotif = "Não definido";
+		String canalLvlUpNotif = SQLite.getGuildCanalLvlUp(message.getGuild().getId());
+		if (!canalLvlUpNotif.equals("Não definido.")) canalLvlUpNotif = "<#" + canalLvlUpNotif + ">";
 
 		StringBuilder cargosLvl = new StringBuilder();
 		if (SQLite.getGuildCargosLvl(message.getGuild().getId()) != null) {
 			List<Integer> lvls = gc.getCargoslvl().keySet().stream().map(Integer::parseInt).sorted().collect(Collectors.toList());
 			for (int i : lvls) {
 				try {
-					Map<String, Object> cargos = gc.getCargoslvl();
-					cargosLvl.append(i).append(" - ").append(Objects.requireNonNull(message.getGuild().getRoleById((String) cargos.get(String.valueOf(i)))).getAsMention()).append("\n");
+					Map<String, Object> cargos = SQLite.getGuildCargosLvl(message.getGuild().getId());
+					Role role = message.getGuild().getRoleById((String) cargos.get(String.valueOf(i)));
+					cargosLvl.append(i).append(" - ").append(Objects.requireNonNull(role).getAsMention()).append("\n");
 				} catch (NullPointerException e) {
 					SQLite.updateGuildCargosLvl(String.valueOf(i), null, gc);
 				}
 			}
 		}
 
-		String canalRelay = gc.getCanalRelay();
-		if (canalRelay != null) canalRelay = "<#" + canalRelay + ">";
-		else canalRelay = "Não definido";
+		String canalRelay = SQLite.getGuildCanalRelay(message.getGuild().getId());
+		if (!canalRelay.equals("Não definido.")) canalRelay = "<#" + canalRelay + ">";
 
-		String cargoWarnID = gc.getCargoWarn();
-		if (cargoWarnID != null) cargoWarnID = "<@" + cargoWarnID + ">";
-		else cargoWarnID = "Não definido";
-		int warnTime = gc.getWarnTime();
+		String cargoWarnID = SQLite.getGuildCargoWarn(message.getGuild().getId());
+		int warnTime = SQLite.getGuildWarnTime(message.getGuild().getId());
 		//String cargoNewID = SQLite.getGuildCargoNew(message.getGuild().getId());
 
 		EmbedBuilder eb = new EmbedBuilder();
@@ -89,10 +79,16 @@ public class Settings {
 		if (MySQL.getTagById(Objects.requireNonNull(message.getGuild().getOwner()).getUser().getId()).isPartner()) {
 			eb.addField("\uD83D\uDCD6 » Canal Relay", canalRelay, true);
 		}
-		eb.addField("\uD83D\uDCD1 » Cargo de punição", Main.getInfo().getRoleByID(cargoWarnID).getAsMention(), true);
+
+		if (!cargoWarnID.equals("Não definido.")) {
+			eb.addField("\uD83D\uDCD1 » Cargo de punição", Main.getInfo().getRoleByID(cargoWarnID).getAsMention(), true);
+		} else {
+			eb.addField("\uD83D\uDCD1 » Cargo de punição", cargoWarnID, true);
+		}
+
 		eb.addField("\u23F2 » Tempo de punição", String.valueOf(warnTime), true);
 
-		//if(cargoNewID != null) { eb.addField("\uD83D\uDCD1 » Cargo automático", com.kuuhaku.Main.getInfo().getRoleByID(cargoNewID).getAsMention(), false); }
+		//if(!cargoNewID.equals("Não definido.")) { eb.addField("\uD83D\uDCD1 » Cargo automático", com.kuuhaku.Main.getInfo().getRoleByID(cargoNewID).getAsMention(), false); }
 		//else { eb.addField("\uD83D\uDCD1 » Cargos automáticos", cargoNewID, true); }
 
 		eb.addField("\uD83D\uDCD6 » Canal de notificação de level up", canalLvlUpNotif, true);
