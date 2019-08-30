@@ -45,7 +45,8 @@ public class JibrilEvents extends ListenerAdapter {
 
 	@Override
 	public void onPrivateMessageReceived(PrivateMessageReceivedEvent event) {
-		if (event.getAuthor() == Main.getJibril().getUserById(Main.getInfo().getNiiChan()) || event.getAuthor().isBot()) return;
+		if (event.getAuthor() == Main.getJibril().getUserById(Main.getInfo().getNiiChan()) || event.getAuthor().isBot())
+			return;
 		EmbedBuilder eb = new EmbedBuilder();
 
 		eb.setAuthor(event.getAuthor().getName(), event.getAuthor().getAvatarUrl());
@@ -62,17 +63,17 @@ public class JibrilEvents extends ListenerAdapter {
 			if (mb.getMid() == null) SQLite.saveMemberMid(mb, event.getAuthor());
 
 			if (!mb.isRulesSent())
-				event.getAuthor().openPrivateChannel().queue(c -> {
-					try {
+				try {
+					event.getAuthor().openPrivateChannel().queue(c -> {
 						c.sendMessage(introMsg()).queue(s1 ->
 								c.sendMessage(rulesMsg()).queue(s2 ->
 										c.sendMessage(finalMsg()).queue(s3 -> {
 											mb.setRulesSent(true);
 											SQLite.updateMemberSettings(mb);
 										})));
-					} catch (ErrorResponseException ignore) {
-					}
-				});
+					});
+				} catch (ErrorResponseException ignore) {
+				}
 			if (RelayBlockList.check(event.getAuthor().getId())) {
 				if (!SQLite.getGuildById(event.getGuild().getId()).isLiteMode()) event.getMessage().delete().queue();
 				event.getAuthor().openPrivateChannel().queue(c -> {
