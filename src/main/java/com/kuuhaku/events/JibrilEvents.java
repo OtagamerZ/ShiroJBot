@@ -64,15 +64,13 @@ public class JibrilEvents extends ListenerAdapter {
 
 			if (!mb.isRulesSent())
 				try {
-					event.getAuthor().openPrivateChannel().queue(c -> {
-						c.sendMessage(introMsg()).queue(s1 ->
-								c.sendMessage(rulesMsg()).queue(s2 ->
-										c.sendMessage(finalMsg()).queue(s3 -> {
-											mb.setRulesSent(true);
-											SQLite.updateMemberSettings(mb);
-											MySQL.saveMemberToBD(mb);
-										})));
-					});
+					event.getAuthor().openPrivateChannel().queue(c -> c.sendMessage(introMsg()).queue(s1 ->
+							c.sendMessage(rulesMsg()).queue(s2 ->
+									c.sendMessage(finalMsg()).queue(s3 -> {
+										mb.setRulesSent(true);
+										SQLite.updateMemberSettings(mb);
+										MySQL.saveMemberToBD(mb);
+									}))));
 				} catch (ErrorResponseException ignore) {
 				}
 			if (RelayBlockList.check(event.getAuthor().getId())) {
