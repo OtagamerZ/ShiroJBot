@@ -76,6 +76,16 @@ public class MySQL {
         return members;
     }
 
+	public static void saveMemberToBD(Member m) {
+		EntityManager em = getEntityManager();
+
+		em.getTransaction().begin();
+		em.merge(m);
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
     public static void sendBeybladeToDB(Beyblade bb) {
         EntityManager em = getEntityManager();
 
