@@ -288,8 +288,8 @@ public class JDAEvents extends ListenerAdapter {
 		if (event.getAuthor() == Main.getInfo().getUserByID(Main.getInfo().getNiiChan()) || event.getAuthor().isBot()) return;
 		EmbedBuilder eb = new EmbedBuilder();
 
-		eb.setAuthor(event.getAuthor().getName(), event.getAuthor().getAvatarUrl());
-		eb.setFooter(LocalDateTime.now().atOffset(ZoneOffset.ofHours(-3)).format(DateTimeFormatter.ofPattern("HH:mm / dd/MMM/yyyy")), null);
+		eb.setAuthor(event.getAuthor().getAsTag(), event.getAuthor().getAvatarUrl());
+		eb.setFooter(LocalDateTime.now().atOffset(ZoneOffset.ofHours(-3)).format(DateTimeFormatter.ofPattern("HH:mm | dd/MMM/yyyy")), null);
 		Main.getInfo().getUserByID(Main.getInfo().getNiiChan()).openPrivateChannel().queue(c -> c.sendMessage(event.getMessage()).embed(eb.build()).queue());
 	}
 }
