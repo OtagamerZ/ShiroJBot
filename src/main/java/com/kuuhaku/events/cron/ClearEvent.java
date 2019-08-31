@@ -17,7 +17,7 @@ public class ClearEvent implements Job {
 	public void execute(JobExecutionContext context) {
 		for (Guild g : Main.getInfo().getAPI().getGuilds()) {
 			GuildMusicManager gmm = Music.getGuildAudioPlayer(g);
-			if (g.getAudioManager().isConnected() && (Objects.requireNonNull(g.getAudioManager().getConnectedChannel()).getMembers().size() < 2 || gmm.scheduler.queue().size() == 0)) {
+			if (g.getAudioManager().isConnected() && (Objects.requireNonNull(g.getAudioManager().getConnectedChannel()).getMembers().size() < 1 || gmm.scheduler.queue().size() == 0)) {
 				g.getAudioManager().closeAudioConnection();
 				gmm.scheduler.clear();
 				gmm.player.destroy();
