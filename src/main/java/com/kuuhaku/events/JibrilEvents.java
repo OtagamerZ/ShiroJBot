@@ -49,74 +49,79 @@ public class JibrilEvents extends ListenerAdapter {
 			return;
 		EmbedBuilder eb = new EmbedBuilder();
 
-		eb.setAuthor(event.getAuthor().getName(), event.getAuthor().getAvatarUrl());
-		eb.setFooter(LocalDateTime.now().atOffset(ZoneOffset.ofHours(-3)).format(DateTimeFormatter.ofPattern("HH:mm / dd/MMM/yyyy")), null);
+		eb.setAuthor(event.getAuthor().getAsTag(), event.getAuthor().getAvatarUrl());
+		eb.setFooter(LocalDateTime.now().atOffset(ZoneOffset.ofHours(-3)).format(DateTimeFormatter.ofPattern("HH:mm | dd/MMM/yyyy")), null);
 		Objects.requireNonNull(Main.getJibril().getUserById(Main.getInfo().getNiiChan())).openPrivateChannel().queue(c -> c.sendMessage(event.getMessage()).embed(eb.build()).queue());
 	}
 
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-		if (event.getMessage().getContentRaw().startsWith(SQLite.getGuildPrefix(event.getGuild().getId()))) return;
+		try {
+			if (event.getMessage().getContentRaw().startsWith(SQLite.getGuildPrefix(event.getGuild().getId()))) return;
 
-		if (Main.getRelay().getRelayMap().containsValue(event.getChannel().getId()) && !event.getAuthor().isBot()) {
-			Member mb = SQLite.getMemberById(event.getAuthor().getId() + event.getGuild().getId());
-			if (mb.getMid() == null) SQLite.saveMemberMid(mb, event.getAuthor());
+			if (Main.getRelay().getRelayMap().containsValue(event.getChannel().getId()) && !event.getAuthor().isBot()) {
+				Member mb = SQLite.getMemberById(event.getAuthor().getId() + event.getGuild().getId());
+				if (mb.getMid() == null) SQLite.saveMemberMid(mb, event.getAuthor());
 
-			if (!mb.isRulesSent())
-				try {
-					event.getAuthor().openPrivateChannel().queue(c -> c.sendMessage(introMsg()).queue(s1 ->
-							c.sendMessage(rulesMsg()).queue(s2 ->
-									c.sendMessage(finalMsg()).queue(s3 -> {
-										mb.setRulesSent(true);
-										SQLite.updateMemberSettings(mb);
-										MySQL.saveMemberToBD(mb);
-									}))));
-				} catch (ErrorResponseException ignore) {
-				}
-			if (RelayBlockList.check(event.getAuthor().getId())) {
-				if (!SQLite.getGuildById(event.getGuild().getId()).isLiteMode()) event.getMessage().delete().queue();
-				event.getAuthor().openPrivateChannel().queue(c -> {
+				if (!mb.isRulesSent())
 					try {
-						String s = ":x: | Você não pode mandar mensagens no chat global (bloqueado).";
-						c.getHistory().retrievePast(20).queue(h -> {
-							if (h.stream().noneMatch(m -> m.getContentRaw().equalsIgnoreCase(s)))
-								c.sendMessage(s).queue();
-						});
+						event.getAuthor().openPrivateChannel().queue(c -> c.sendMessage(introMsg()).queue(s1 ->
+								c.sendMessage(rulesMsg()).queue(s2 ->
+										c.sendMessage(finalMsg()).queue(s3 -> {
+											mb.setRulesSent(true);
+											SQLite.updateMemberSettings(mb);
+											MySQL.saveMemberToBD(mb);
+										}))));
 					} catch (ErrorResponseException ignore) {
 					}
-				});
-				return;
-			}
-			String[] msg = event.getMessage().getContentRaw().split(" ");
-			for (int i = 0; i < msg.length; i++) {
-				try {
-					if (Helper.findURL(msg[i]) && !MySQL.getTagById(event.getAuthor().getId()).isVerified())
-						msg[i] = "`LINK BLOQUEADO`";
-					if (Helper.findMentions(msg[i]))
-						msg[i] = "`EVERYONE/HERE BLOQUEADO`";
-				} catch (NoResultException e) {
-					if (Helper.findURL(msg[i])) msg[i] = "`LINK BLOQUEADO`";
-				}
-			}
-			if (String.join(" ", msg).length() < 2000) {
-				net.dv8tion.jda.api.entities.Member m = event.getMember();
-				assert m != null;
-				try {
-					if (MySQL.getTagById(event.getAuthor().getId()).isVerified() && event.getMessage().getAttachments().size() > 0) {
+				if (RelayBlockList.check(event.getAuthor().getId())) {
+					if (!SQLite.getGuildById(event.getGuild().getId()).isLiteMode())
+						event.getMessage().delete().queue();
+					event.getAuthor().openPrivateChannel().queue(c -> {
 						try {
-							ByteArrayOutputStream baos = new ByteArrayOutputStream();
-							ImageIO.write(ImageIO.read(Helper.getImage(event.getMessage().getAttachments().get(0).getUrl())), "png", baos);
-							Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), m, event.getGuild(), baos);
-						} catch (Exception e) {
-							Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), m, event.getGuild(), null);
+							String s = ":x: | Você não pode mandar mensagens no chat global (bloqueado).";
+							c.getHistory().retrievePast(20).queue(h -> {
+								if (h.stream().noneMatch(m -> m.getContentRaw().equalsIgnoreCase(s)))
+									c.sendMessage(s).queue();
+							});
+						} catch (ErrorResponseException ignore) {
 						}
-						return;
+					});
+					return;
+				}
+				String[] msg = event.getMessage().getContentRaw().split(" ");
+				for (int i = 0; i < msg.length; i++) {
+					try {
+						if (Helper.findURL(msg[i]) && !MySQL.getTagById(event.getAuthor().getId()).isVerified())
+							msg[i] = "`LINK BLOQUEADO`";
+						if (Helper.findMentions(msg[i]))
+							msg[i] = "`EVERYONE/HERE BLOQUEADO`";
+					} catch (NoResultException e) {
+						if (Helper.findURL(msg[i])) msg[i] = "`LINK BLOQUEADO`";
 					}
-					Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), m, event.getGuild(), null);
-				} catch (NoResultException e) {
-					Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), m, event.getGuild(), null);
+				}
+				if (String.join(" ", msg).length() < 2000) {
+					net.dv8tion.jda.api.entities.Member m = event.getMember();
+					assert m != null;
+					try {
+						if (MySQL.getTagById(event.getAuthor().getId()).isVerified() && event.getMessage().getAttachments().size() > 0) {
+							try {
+								ByteArrayOutputStream baos = new ByteArrayOutputStream();
+								ImageIO.write(ImageIO.read(Helper.getImage(event.getMessage().getAttachments().get(0).getUrl())), "png", baos);
+								Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), m, event.getGuild(), baos);
+							} catch (Exception e) {
+								Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), m, event.getGuild(), null);
+							}
+							return;
+						}
+						Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), m, event.getGuild(), null);
+					} catch (NoResultException e) {
+						Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), m, event.getGuild(), null);
+					}
 				}
 			}
+		} catch (ErrorResponseException e) {
+			Helper.log(this.getClass(), LogLevel.ERROR, e.getErrorCode() + ": " + e + " | " + e.getStackTrace()[0]);
 		}
 	}
 
