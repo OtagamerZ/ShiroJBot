@@ -126,7 +126,7 @@ public class Helper {
 	}
 
 	public static void typeMessage(MessageChannel channel, String message) {
-		channel.sendTyping().queue(tm -> channel.sendMessage(message).queueAfter(message.length() * 25 > 10000 ? 10000 : message.length(), TimeUnit.MILLISECONDS));
+		channel.sendTyping().queue(tm -> channel.sendMessage(Helper.makeEmoteFromMention(message.split(" "))).queueAfter(message.length() * 25 > 10000 ? 10000 : message.length() + 500, TimeUnit.MILLISECONDS));
 	}
 
 	public static void sendReaction(String imageURL, MessageChannel channel, String message, boolean reacted) {
