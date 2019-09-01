@@ -96,7 +96,7 @@ public class GuildEvents extends ListenerAdapter {
 						if (rawMessage.replace(";", "").length() == 0) {
 							channel.sendFile(message.getAttachments().get(0).downloadToFile().get()).queue();
 						} else {
-							MessageAction send = channel.sendMessage(rawMessage.substring(1));
+							MessageAction send = channel.sendMessage(Helper.makeEmoteFromMention(rawMessage.substring(1).split(" ")));
 							message.getAttachments().forEach(a -> {
 								try {
 									//noinspection ResultOfMethodCallIgnored
@@ -237,38 +237,41 @@ public class GuildEvents extends ListenerAdapter {
 						lvlChannel = guild.getTextChannelById(SQLite.getGuildCanalLvlUp(guild.getId()));
 					} catch (Exception ignore) {
 					}
-					Map<String, Object> rawLvls = SQLite.getGuildCargosLvl(guild.getId()).entrySet().stream().filter(e -> SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= Integer.parseInt(e.getKey())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-					Map<Integer, Role> sortedLvls = new TreeMap<>();
-					rawLvls.forEach((k, v) -> sortedLvls.put(Integer.parseInt(k), guild.getRoleById((String) v)));
-					MessageChannel finalLvlChannel = lvlChannel;
-					sortedLvls.keySet().stream().max(Integer::compare).ifPresent(i -> {
-						if (SQLite.getGuildById(guild.getId()).getLvlNotif() && !member.getRoles().contains(sortedLvls.get(i))) {
-							try {
-								guild.addRoleToMember(member, sortedLvls.get(i)).queue(s -> {
-									String content = author.getAsMention() + " ganhou o cargo " + sortedLvls.get(i).getAsMention() + "! :tada:";
-									if (finalLvlChannel != null) {
-										finalLvlChannel.getHistory().retrievePast(5).queue(m -> {
-											if (m.stream().noneMatch(c -> c.getContentRaw().equals(content))) {
-												finalLvlChannel.sendMessage(content).queue();
-											}
-										});
-									} else {
-										channel.getHistory().retrievePast(5).queue(m -> {
-											if (m.stream().noneMatch(c -> c.getContentRaw().equals(content))) {
-												channel.sendMessage(content).queue();
-											}
-										});
-									}
-								});
-							} catch (IllegalArgumentException e) {
-								SQLite.updateGuildCargosLvl(String.valueOf(i), null, SQLite.getGuildById(guild.getId()));
+					try {
+						Map<String, Object> rawLvls = SQLite.getGuildCargosLvl(guild.getId()).entrySet().stream().filter(e -> SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= Integer.parseInt(e.getKey())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+						Map<Integer, Role> sortedLvls = new TreeMap<>();
+						rawLvls.forEach((k, v) -> sortedLvls.put(Integer.parseInt(k), guild.getRoleById((String) v)));
+						MessageChannel finalLvlChannel = lvlChannel;
+						sortedLvls.keySet().stream().max(Integer::compare).ifPresent(i -> {
+							if (SQLite.getGuildById(guild.getId()).getLvlNotif() && !member.getRoles().contains(sortedLvls.get(i))) {
+								try {
+									guild.addRoleToMember(member, sortedLvls.get(i)).queue(s -> {
+										String content = author.getAsMention() + " ganhou o cargo " + sortedLvls.get(i).getAsMention() + "! :tada:";
+										if (finalLvlChannel != null) {
+											finalLvlChannel.getHistory().retrievePast(5).queue(m -> {
+												if (m.stream().noneMatch(c -> c.getContentRaw().equals(content))) {
+													finalLvlChannel.sendMessage(content).queue();
+												}
+											});
+										} else {
+											channel.getHistory().retrievePast(5).queue(m -> {
+												if (m.stream().noneMatch(c -> c.getContentRaw().equals(content))) {
+													channel.sendMessage(content).queue();
+												}
+											});
+										}
+									});
+								} catch (IllegalArgumentException e) {
+									SQLite.updateGuildCargosLvl(String.valueOf(i), null, SQLite.getGuildById(guild.getId()));
+								}
 							}
-						}
-						rawLvls.remove(String.valueOf(i));
-						List<Role> list = new ArrayList<>();
-						rawLvls.forEach((k, v) -> list.add(guild.getRoleById((String) v)));
-						guild.modifyMemberRoles(member, null, list).queue();
-					});
+							rawLvls.remove(String.valueOf(i));
+							List<Role> list = new ArrayList<>();
+							rawLvls.forEach((k, v) -> list.add(guild.getRoleById((String) v)));
+							guild.modifyMemberRoles(member, null, list).queue();
+						});
+					} catch (InsufficientPermissionException ignore) {
+					}
 
 					if (Main.getInfo().getQueue().stream().anyMatch(u -> u[1].getId().equals(author.getId()))) {
 						final User[][] hw = {new User[2]};

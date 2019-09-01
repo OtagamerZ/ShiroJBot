@@ -6,6 +6,8 @@ import com.kuuhaku.controller.MySQL;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
+import javax.persistence.NoResultException;
+
 public class TheAnswerCommand extends Command {
 	
 	public TheAnswerCommand() { super("arespostaé", new String[]{"theansweris", "responder", "answer"}, "Leu as regras?", Category.MISC); }
@@ -16,7 +18,12 @@ public class TheAnswerCommand extends Command {
 			if (!MySQL.getTagById(author.getId()).isReader()) {
 				message.delete().queue(s -> {
 					if (String.join(" ", args).equalsIgnoreCase(System.getenv("SECRET"))) {
-						MySQL.giveTagReader(author.getId());
+						try {
+							MySQL.giveTagReader(author.getId());
+						} catch (NoResultException e) {
+							MySQL.addUserTagsToDB(author.getId());
+							MySQL.giveTagReader(author.getId());
+						}
 						channel.sendMessage("Obrigado por ler as regras!").queue();
 					} else {
 						channel.sendMessage(":x: | Resposta errada, leia as regras para achar a resposta.").queue();
