@@ -28,6 +28,7 @@ import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.GenericMessageReactionEvent;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
@@ -321,7 +322,6 @@ public class Helper {
 		return new JSONObject(resposta.toString());
 	}
 
-	//RETORNA ERROR CODE 10080
 	public static void paginate(Message msg, List<MessageEmbed> pages) {
 		try {
 			msg.addReaction(PREVIOUS).queue();
@@ -354,13 +354,17 @@ public class Helper {
 						msg.clearReactions().queue(success);
 					}
 				}
+
+				@Override
+				public void onMessageDelete(@Nonnull MessageDeleteEvent event) {
+					if (event.getMessageId().equals(msg.getId())) timeout.cancel(true);
+				}
 			});
 		} catch (Exception e) {
 			log(Helper.class, LogLevel.WARN, e + " | " + e.getStackTrace()[0]);
 		}
 	}
 
-	//RETORNA ERROR CODE 10080
 	public static void categorize(Message msg, Map<String, MessageEmbed> categories) {
 		try {
 			categories.keySet().forEach(k -> msg.addReaction(k).queue());
@@ -383,6 +387,11 @@ public class Helper {
 					timeout.cancel(true);
 					timeout = msg.clearReactions().queueAfter(10, TimeUnit.SECONDS, success);
 					msg.editMessage(categories.get(event.getReactionEmote().getName())).queue(s -> currCat = event.getReactionEmote().getName());
+				}
+
+				@Override
+				public void onMessageDelete(@Nonnull MessageDeleteEvent event) {
+					if (event.getMessageId().equals(msg.getId())) timeout.cancel(true);
 				}
 			});
 		} catch (Exception e) {
