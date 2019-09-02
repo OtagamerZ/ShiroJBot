@@ -40,7 +40,7 @@ public class CustomAnswerCommand extends Command {
 				eb.clear();
 				eb.setTitle(":pencil: Respostas deste servidor:");
 				eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
-				for (int i = -10 + (10 * x); i < ca.size() && i < (10 * x); i++) {
+				for (int i = -10 + (10 * (x + 1)); i < ca.size() && i < (10 * (x + 1)); i++) {
 					eb.addField(ca.get(i).getId() + " - " + ca.get(i).getGatilho(), ca.get(i).getAnswer().length() > 100 ? ca.get(i).getAnswer().substring(0, 100) + "..." : ca.get(i).getAnswer(), false);
 				}
 				pages.add(eb.build());
