@@ -341,7 +341,7 @@ public class Helper {
 				public void onGenericMessageReaction(@Nonnull GenericMessageReactionEvent event) {
 					try {
 						if (timeout == null) {
-							timeout = scheduler.scheduleWithFixedDelay(clear, 0, 10, TimeUnit.SECONDS);
+							timeout = scheduler.scheduleWithFixedDelay(clear, 10, 0, TimeUnit.SECONDS);
 							timeout.get();
 						}
 						if (event.getUser().isBot()) return;
@@ -390,7 +390,7 @@ public class Helper {
 				public void onGenericMessageReaction(@Nonnull GenericMessageReactionEvent event) {
 					try {
 						if (timeout == null) {
-							timeout = scheduler.scheduleWithFixedDelay(clear, 0, 10, TimeUnit.SECONDS);
+							timeout = scheduler.scheduleWithFixedDelay(clear, 10, 0, TimeUnit.SECONDS);
 							timeout.get();
 						}
 
