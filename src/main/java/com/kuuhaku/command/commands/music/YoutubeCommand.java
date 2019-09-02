@@ -50,7 +50,7 @@ public class YoutubeCommand extends Command {
                             channel.sendMessage(pages.get(0)).queue(msg -> {
                                 Helper.paginate(msg, pages);
                                 if (Objects.requireNonNull(member.getVoiceState()).inVoiceChannel()) {
-                                    msg.addReaction("\u25B6").queue();
+                                    msg.addReaction(Helper.ACCEPT).queue();
                                 }
                             });
                         } else m.editMessage(":x: | Nenhum vídeo encontrado").queue();
