@@ -22,25 +22,27 @@ import com.kuuhaku.utils.PrivilegeLevel;
 import java.util.ArrayList;
 
 public enum Category {
-    DEVS("Dev", "Comandos dedicados aos devs do bot.", PrivilegeLevel.DEV),
-	SHERIFFS("Sheriffs", "Comandos de moderação global.", PrivilegeLevel.SHERIFF),
-    MODERACAO("Moderação", "Comandos dedicados à staff do servidor.", PrivilegeLevel.MOD),
-	PARTNER("Parceiros", "Comandos exclusivos para parceiros", PrivilegeLevel.USER),
-	FUN("Diversão", "Comandos para diversão.", PrivilegeLevel.USER),
-	MISC("Diversos", "Comandos diversos.", PrivilegeLevel.USER),
-	INFO("Informação", "Comandos de informação", PrivilegeLevel.USER),
-	BEYBLADE("Beyblade", "Comandos de Beyblade.", PrivilegeLevel.USER),
-	MUSICA("Música", "Comandos de música.", PrivilegeLevel.DJ),
-	EXCEED("Exceed", "Comandos de exceed", PrivilegeLevel.EXCEED)
+    DEVS("Dev", "<:Dev:589103373354270760>", "Comandos dedicados aos devs do bot.", PrivilegeLevel.DEV),
+	SHERIFFS("Sheriffs", "<:sheriff:613934507619385374>", "Comandos de moderação global.", PrivilegeLevel.SHERIFF),
+    MODERACAO("Moderação", "\u2699", "Comandos dedicados à staff do servidor.", PrivilegeLevel.MOD),
+	PARTNER("Parceiros", "\uD83D\uDC8E", "Comandos exclusivos para parceiros", PrivilegeLevel.USER),
+	FUN("Diversão", "\uD83C\uDF89", "Comandos para diversão.", PrivilegeLevel.USER),
+	MISC("Diversos", "\u2733", "Comandos diversos.", PrivilegeLevel.USER),
+	INFO("Informação", "\u2139", "Comandos de informação", PrivilegeLevel.USER),
+	BEYBLADE("Beyblade", "\uD83D\uDCA0", "Comandos de Beyblade.", PrivilegeLevel.USER),
+	MUSICA("Música", "\uD83C\uDFB6", "Comandos de música.", PrivilegeLevel.DJ),
+	EXCEED("Exceed", "\uD83C\uDF8C", "Comandos de exceed", PrivilegeLevel.EXCEED)
 	;
 
 	private final String name;
+	private final String EMOTE;
 	private final String description;
 	private final PrivilegeLevel privilegeLevel;
 	private boolean enabled = true;
 	
-	Category(String name, String description, PrivilegeLevel privilegeLevel) {
+	Category(String name, String emote, String description, PrivilegeLevel privilegeLevel) {
 		this.name = name;
+		this.EMOTE = emote;
 		this.description = description;
 		this.privilegeLevel = privilegeLevel;
 		
@@ -80,5 +82,9 @@ public enum Category {
 	
 	public void disable() {
 		enabled = false;
+	}
+
+	public String getEMOTE() {
+		return EMOTE;
 	}
 }

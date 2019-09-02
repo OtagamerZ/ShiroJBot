@@ -9,6 +9,8 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ComandosCommand extends Command {
 
@@ -25,19 +27,21 @@ public class ComandosCommand extends Command {
 			eb.setThumbnail("https://cdn.pixabay.com/photo/2012/04/14/16/26/question-34499_960_720.png");
 
 			if(args.length == 0) {
-
-				eb.setTitle("**Lista de Comandos**");
-
-				eb.setDescription("Prefixo: `" + prefix + "`\n"
-						+ Category.values().length + " categorias encontradas!" + "\n"
-						+ Main.getCommandManager().getCommands().size() + " comandos encontrados!"
-						+ "\n" + Helper.VOID);
+				Map<String, MessageEmbed> pages = new HashMap<>();
 
 				for(Category cat : Category.values()) {
+					EmbedBuilder ceb = new EmbedBuilder();
+					eb.setTitle("**Lista de Comandos**");
+
+					eb.setDescription("Prefixo: `" + prefix + "`\n"
+							+ Category.values().length + " categorias encontradas!" + "\n"
+							+ Main.getCommandManager().getCommands().size() + " comandos encontrados!"
+							+ "\n" + Helper.VOID);
+
 					if(cat.isEnabled())
 						continue;
 					if(cat.getCmds().size()==0) {
-						eb.addField(cat.getName(), cat.getDescription() + "\n*Ainda não existem comandos nesta categoria.*", false);
+						ceb.addField(cat.getName(), cat.getDescription() + "\n*Ainda não existem comandos nesta categoria.*", false);
 						continue;
 					}
 
@@ -45,12 +49,12 @@ public class ComandosCommand extends Command {
 
 					for(Command cmd : cat.getCmds()) { cmds.append("`").append(cmd.getName()).append("`  "); }
 
-					eb.addField(cat.getName(), cat.getDescription() + "\n" + cmds.toString().trim(), false);
+					ceb.addField(cat.getName(), cat.getDescription() + "\n" + cmds.toString().trim(), false);
+					eb.addField(Helper.VOID, "Para informações sobre um comando em especifico digite `" + prefix + "cmds [comando]`.", false);
+					pages.put(cat.getEMOTE(), ceb.build());
 				}
 
-				eb.addField(Helper.VOID, "Para informações sobre um comando em especifico digite `" + prefix + "cmds [comando]`.", false);
-
-				channel.sendMessage(eb.build()).queue();
+				channel.sendMessage(eb.build()).queue(s -> Helper.categorize(s, pages));
 				return;
 			}
 
