@@ -18,55 +18,29 @@ import java.util.stream.Collectors;
 public class ShiroEmoteListCommand extends Command {
 
 	public ShiroEmoteListCommand() {
-		super("semotes", "<nome> <página>", "Mostra a lista de emotes disponíveis para uso através da Shiro.", Category.MISC);
+		super("semotes", "<nome>", "Mostra a lista de emotes disponíveis para uso através da Shiro.", Category.MISC);
 	}
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-		if (args.length == 0) {
-			channel.sendMessage(":x: | Você precisa definir uma página de emotes.").queue();
-		} else if (!StringUtils.isNumeric(args[0])) {
-			if (args.length == 1) {
-				channel.sendMessage(":x: | Você precisa definir uma página de emotes logo após o nome.").queue();
-				return;
-			}
-			try {
-				List<MessageEmbed.Field> f = new ArrayList<>();
-				int page = Integer.parseInt(args[1]);
-				EmbedBuilder eb = new EmbedBuilder();
+		List<MessageEmbed> pages = new ArrayList<>();
+		List<MessageEmbed.Field> f = new ArrayList<>();
 
-				eb.setTitle("<a:SmugDance:598842924725305344> Emotes disponíveis para a Shiro:");
-				eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
+		for (int i = 0; i < Math.ceil(f.size() / 10f); i++) {
+			EmbedBuilder eb = new EmbedBuilder();
 
-				Main.getInfo().getAPI().getEmotes().stream().filter(e -> StringUtils.containsIgnoreCase(e.getAsMention(), args[0])).collect(Collectors.toList()).forEach(e -> f.add(new MessageEmbed.Field("Emote " + e.getAsMention(), "Menção: " + e.getAsMention().replace("<", "`{").replace(">", "}`").replace(":", "&"), false)));
-				List<MessageEmbed.Field> subF = f.subList(-10 + (10 * page), 10 * page > f.size() ? f.size() : 10 * page);
-				subF.forEach(eb::addField);
-				eb.setAuthor("Para usar estes emotes, utilize o comando \"" + SQLite.getGuildPrefix(guild.getId()) + "say MENÇÃO\"");
-				eb.setFooter("Página " + page + ". Mostrando " + (-10 + 10 * page) + " - " + (10 * page > f.size() ? f.size() : 10 * page) + " resultados.", null);
+			eb.setTitle("<a:SmugDance:598842924725305344> Emotes disponíveis para a Shiro:");
+			eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
 
-				channel.sendMessage(eb.build()).queue();
-			} catch (IndexOutOfBoundsException | IllegalArgumentException ex) {
-				channel.sendMessage(":x: | Página inválida, no total existem `" + (int) Main.getInfo().getAPI().getEmotes().stream().filter(e -> StringUtils.containsIgnoreCase(e.getName(), args[0])).count() / 10 + 1 + "` páginas de emotes.").queue();
-			}
-		} else {
-			try {
-				List<MessageEmbed.Field> f = new ArrayList<>();
-				int page = Integer.parseInt(args[0]);
-				EmbedBuilder eb = new EmbedBuilder();
+			Main.getInfo().getAPI().getEmotes().stream().filter(e -> StringUtils.containsIgnoreCase(e.getAsMention(), args.length > 0 ? args[0] : "")).collect(Collectors.toList()).forEach(e -> f.add(new MessageEmbed.Field("Emote " + e.getAsMention(), "Menção: " + e.getAsMention().replace("<", "`{").replace(">", "}`").replace(":", "&"), false)));
+			List<MessageEmbed.Field> subF = f.subList(-10 + (10 * (i + 1)), 10 * (i + 1) > f.size() ? f.size() : 10 * (i + 1));
+			subF.forEach(eb::addField);
+			eb.setAuthor("Para usar estes emotes, utilize o comando \"" + SQLite.getGuildPrefix(guild.getId()) + "say MENÇÃO\"");
+			eb.setFooter("Página " + (i + 1) + ". Mostrando " + (-10 + 10 * (i + 1)) + " - " + (10 * (i + 1) > f.size() ? f.size() : 10 * (i + 1)) + " resultados.", null);
 
-				eb.setTitle("<a:SmugDance:598842924725305344> Emotes disponíveis para a Shiro:");
-				eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
-
-				Main.getInfo().getAPI().getEmotes().forEach(e -> f.add(new MessageEmbed.Field("Emote " + e.getAsMention(), "Menção: " + e.getAsMention().replace("<", "`{").replace(">", "}`").replace(":", "&"), false)));
-				List<MessageEmbed.Field> subF = f.subList(-10 + (10 * page), 10 * page > f.size() ? f.size() : 10 * page);
-				subF.forEach(eb::addField);
-				eb.setAuthor("Para usar estes emotes, utilize o comando \"" + SQLite.getGuildPrefix(guild.getId()) + "say MENÇÃO\"");
-				eb.setFooter("Página " + page + ". Mostrando " + (-10 + 10 * page) + " - " + (10 * page > f.size() ? f.size() : 10 * page) + " resultados.", null);
-
-				channel.sendMessage(eb.build()).queue();
-			} catch (IndexOutOfBoundsException | IllegalArgumentException ex) {
-				channel.sendMessage(":x: | Página inválida, no total existem `" + Main.getInfo().getAPI().getEmotes().size() / 10 + 1 + "` páginas de emotes.").queue();
-			}
+			pages.add(eb.build());
 		}
+
+		channel.sendMessage(pages.get(0)).queue(s -> Helper.paginate(s, pages));
 	}
 }
