@@ -339,7 +339,7 @@ public class Helper {
 					if (event.getUser().isBot()) return;
 
 					timeout.cancel(true);
-					timeout = msg.clearReactions().queueAfter(10, TimeUnit.SECONDS, success);
+					timeout = msg.clearReactions().queueAfter(60, TimeUnit.SECONDS, success);
 					if (event.getReactionEmote().getName().equals(PREVIOUS)) {
 						if (p > 0) {
 							p--;
@@ -385,7 +385,7 @@ public class Helper {
 					}
 
 					timeout.cancel(true);
-					timeout = msg.clearReactions().queueAfter(10, TimeUnit.SECONDS, success);
+					timeout = msg.clearReactions().queueAfter(60, TimeUnit.SECONDS, success);
 					msg.editMessage(categories.get(event.getReactionEmote().getName())).queue(s -> currCat = event.getReactionEmote().getName());
 				}
 
