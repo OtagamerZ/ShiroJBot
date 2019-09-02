@@ -7,14 +7,13 @@ import com.kuuhaku.model.YoutubeVideo;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 public class YoutubeCommand extends Command {
 
@@ -36,19 +35,24 @@ public class YoutubeCommand extends Command {
                 m.editMessage(":mag: Resultados da busca").queue(s -> {
                     try {
                         if (videos.stream().findFirst().isPresent()) {
+                            List<MessageEmbed> pages = new ArrayList<>();
+
                             for (YoutubeVideo v : videos) {
+                                eb.clear();
                                 eb.setTitle(v.getTitle(), v.getUrl());
                                 eb.setDescription(v.getDesc());
                                 eb.setThumbnail(v.getThumb());
                                 eb.setColor(Helper.colorThief(v.getThumb()));
                                 eb.setFooter("Link: " + v.getUrl(), null);
-                                channel.sendMessage(eb.build()).queue(msg -> {
-                                    if (Objects.requireNonNull(member.getVoiceState()).inVoiceChannel()) {
-                                        msg.addReaction("\u25B6").queue();
-                                        if (guild.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) msg.delete().queueAfter(1, TimeUnit.MINUTES);
-                                    }
-                                });
+                                pages.add(eb.build());
                             }
+
+                            channel.sendMessage(pages.get(0)).queue(msg -> {
+                                Helper.paginate(msg, pages);
+                                if (Objects.requireNonNull(member.getVoiceState()).inVoiceChannel()) {
+                                    msg.addReaction("\u25B6").queue();
+                                }
+                            });
                         } else m.editMessage(":x: | Nenhum vídeo encontrado").queue();
                     }catch (IOException e) {
                         m.editMessage(":x: | Erro ao buscar vídeos, meus developers já foram notificados.").queue();
