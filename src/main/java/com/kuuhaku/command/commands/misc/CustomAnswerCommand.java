@@ -32,7 +32,6 @@ public class CustomAnswerCommand extends Command {
 		} else if (args[0].equals("lista")) {
 			List<MessageEmbed> pages = new ArrayList<>();
 
-			int page = Integer.parseInt(args[1]);
 			List<CustomAnswers> ca = SQLite.getCADump();
 			EmbedBuilder eb = new EmbedBuilder();
 			ca.removeIf(a -> !a.getGuildID().equals(guild.getId()));
@@ -41,7 +40,7 @@ public class CustomAnswerCommand extends Command {
 				eb.clear();
 				eb.setTitle(":pencil: Respostas deste servidor:");
 				eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
-				for (int i = -10 + (10 * page); i < ca.size() && i < (10 * page); i++) {
+				for (int i = -10 + (10 * x); i < ca.size() && i < (10 * x); i++) {
 					eb.addField(ca.get(i).getId() + " - " + ca.get(i).getGatilho(), ca.get(i).getAnswer().length() > 100 ? ca.get(i).getAnswer().substring(0, 100) + "..." : ca.get(i).getAnswer(), false);
 				}
 				pages.add(eb.build());
