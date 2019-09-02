@@ -26,15 +26,17 @@ public class ShiroEmoteListCommand extends Command {
 		List<MessageEmbed> pages = new ArrayList<>();
 		List<MessageEmbed.Field> f = new ArrayList<>();
 
+		EmbedBuilder eb = new EmbedBuilder();
+
+		Main.getInfo().getAPI().getEmotes().stream().filter(e -> StringUtils.containsIgnoreCase(e.getAsMention(), args.length > 0 ? args[0] : "")).collect(Collectors.toList()).forEach(e -> f.add(new MessageEmbed.Field("Emote " + e.getAsMention(), "Menção: " + e.getAsMention().replace("<", "`{").replace(">", "}`").replace(":", "&"), false)));
+
 		for (int i = 0; i < Math.ceil(f.size() / 10f); i++) {
-			EmbedBuilder eb = new EmbedBuilder();
+			eb.clear();
+			List<MessageEmbed.Field> subF = f.subList(-10 + (10 * (i + 1)), 10 * (i + 1) > f.size() ? f.size() : 10 * (i + 1));
+			subF.forEach(eb::addField);
 
 			eb.setTitle("<a:SmugDance:598842924725305344> Emotes disponíveis para a Shiro:");
 			eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
-
-			Main.getInfo().getAPI().getEmotes().stream().filter(e -> StringUtils.containsIgnoreCase(e.getAsMention(), args.length > 0 ? args[0] : "")).collect(Collectors.toList()).forEach(e -> f.add(new MessageEmbed.Field("Emote " + e.getAsMention(), "Menção: " + e.getAsMention().replace("<", "`{").replace(">", "}`").replace(":", "&"), false)));
-			List<MessageEmbed.Field> subF = f.subList(-10 + (10 * (i + 1)), 10 * (i + 1) > f.size() ? f.size() : 10 * (i + 1));
-			subF.forEach(eb::addField);
 			eb.setAuthor("Para usar estes emotes, utilize o comando \"" + SQLite.getGuildPrefix(guild.getId()) + "say MENÇÃO\"");
 			eb.setFooter("Página " + (i + 1) + ". Mostrando " + (-10 + 10 * (i + 1)) + " - " + (10 * (i + 1) > f.size() ? f.size() : 10 * (i + 1)) + " resultados.", null);
 
