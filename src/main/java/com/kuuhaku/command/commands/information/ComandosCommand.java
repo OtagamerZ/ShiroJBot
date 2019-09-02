@@ -23,7 +23,10 @@ public class ComandosCommand extends Command {
 
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setTitle("**Lista de Comandos**");
-		eb.setDescription("Clique nas categorias abaixo para ver os comandos de cada uma.");
+		eb.setDescription("Clique nas categorias abaixo para ver os comandos de cada uma.\n\n" +
+				"Prefixo: `" + prefix + "`\n"
+				+ Category.values().length + " categorias encontradas!" + "\n"
+				+ Main.getCommandManager().getCommands().size() + " comandos encontrados!");
 		for (Category cat : Category.values()) {
 			eb.addField(cat.getEMOTE() + " | " + cat.getName(), Helper.VOID, true);
 		}
@@ -42,9 +45,7 @@ public class ComandosCommand extends Command {
 				ceb.setThumbnail("https://cdn.pixabay.com/photo/2012/04/14/16/26/question-34499_960_720.png");
 
 				ceb.setDescription("Prefixo: `" + prefix + "`\n"
-						+ Category.values().length + " categorias encontradas!" + "\n"
-						+ Main.getCommandManager().getCommands().size() + " comandos encontrados!"
-						+ "\n" + Helper.VOID);
+						+ cat.getCmds().size() + " comandos encontrados nesta categoria!");
 
 				if (cat.isEnabled())
 					continue;
