@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.events.Event;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CustomAnswerCommand extends Command {
@@ -29,27 +30,25 @@ public class CustomAnswerCommand extends Command {
 			channel.sendMessage(":x: | Você precisa definir um gatilho e uma mensagem.").queue();
 			return;
 		} else if (args[0].equals("lista")) {
-			try {
-				int page = Integer.parseInt(args[1]);
-				List<CustomAnswers> ca = SQLite.getCADump();
-				EmbedBuilder eb = new EmbedBuilder();
-				ca.removeIf(a -> !a.getGuildID().equals(guild.getId()));
+			List<MessageEmbed> pages = new ArrayList<>();
 
+			int page = Integer.parseInt(args[1]);
+			List<CustomAnswers> ca = SQLite.getCADump();
+			EmbedBuilder eb = new EmbedBuilder();
+			ca.removeIf(a -> !a.getGuildID().equals(guild.getId()));
+
+			for (int x = 0; x < Math.ceil(ca.size() / 10); x++) {
+				eb.clear();
 				eb.setTitle(":pencil: Respostas deste servidor:");
 				eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
 				for (int i = -10 + (10 * page); i < ca.size() && i < (10 * page); i++) {
 					eb.addField(ca.get(i).getId() + " - " + ca.get(i).getGatilho(), ca.get(i).getAnswer().length() > 100 ? ca.get(i).getAnswer().substring(0, 100) + "..." : ca.get(i).getAnswer(), false);
 				}
-
-				channel.sendMessage(eb.build()).queue();
-				return;
-			} catch (NumberFormatException e) {
-				channel.sendMessage(":x: | Número inválido.").queue();
-				return;
-			} catch (ArrayIndexOutOfBoundsException ex) {
-				channel.sendMessage(":x: | Você precisa definir uma página.").queue();
-				return;
+				pages.add(eb.build());
 			}
+
+			channel.sendMessage(pages.get(0)).queue(s -> Helper.paginate(s, pages));
+			return;
 		} else if (StringUtils.isNumeric(args[0]) && !args[0].contains(";")) {
 			List<CustomAnswers> ca = SQLite.getCADump();
 			ca.removeIf(a -> !String.valueOf(a.getId()).equals(args[0]) || !a.getGuildID().equals(guild.getId()));
