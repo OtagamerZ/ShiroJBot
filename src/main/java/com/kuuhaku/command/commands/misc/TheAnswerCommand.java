@@ -17,7 +17,7 @@ public class TheAnswerCommand extends Command {
 		if (guild.getId().equals("421495229594730496")) {
 			if (!MySQL.getTagById(author.getId()).isReader()) {
 				message.delete().queue(s -> {
-					if (String.join(" ", args).equalsIgnoreCase(System.getenv("SECRET"))) {
+					if (String.join(" ", args).replace(".", "").equalsIgnoreCase(System.getenv("SECRET"))) {
 						try {
 							MySQL.giveTagReader(author.getId());
 						} catch (NoResultException e) {

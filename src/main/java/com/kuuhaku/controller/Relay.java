@@ -68,12 +68,6 @@ public class Relay extends SQLite {
 		checkSize();
 
 		String exceed = SQLite.getMemberByMid(m.getUser().getId()).getExceed();
-		try {
-			if (!SQLite.getGuildById(s.getId()).isLiteMode()) {
-				source.delete().queue();
-			}
-		} catch (InsufficientPermissionException ignore) {
-		}
 
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setDescription(Helper.makeEmoteFromMention(msg.split(" ")) + "\n\n ");
@@ -204,6 +198,12 @@ public class Relay extends SQLite {
 				}
 			}
 		});
+		try {
+			if (!SQLite.getGuildById(s.getId()).isLiteMode()) {
+				source.delete().queue();
+			}
+		} catch (InsufficientPermissionException ignore) {
+		}
 	}
 
 	public MessageEmbed getRelayInfo(guildConfig gc) {

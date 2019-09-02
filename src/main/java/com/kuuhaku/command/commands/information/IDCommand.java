@@ -28,11 +28,16 @@ public class IDCommand extends Command {
 				String ex = Helper.containsAll(arg, "[", "]") ? arg.substring(arg.indexOf("["), arg.indexOf("]") + 1) : "";
 				String name = arg.replace(sv, "").replace(ex, "").trim();
 				List<User> us = Main.getInfo().getAPI().getUsersByName(name, true);
-				String ids = us.stream().map(u -> u.getAsTag() + " -> " + u.getId() + "\n").collect(Collectors.joining());
 				EmbedBuilder eb = new EmbedBuilder();
 
 				eb.setTitle("IDs dos usuários encontrados");
-				eb.setDescription(ids);
+				for (User u : us) {
+					eb.addField(
+							u.getAsTag() + ": " + u.getId(),
+							"Guilds: " + u.getMutualGuilds().stream().map(g -> "`" + g.getName() + "`").collect(Collectors.joining()),
+							false
+					);
+				}
 				eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
 
 				channel.sendMessage(eb.build()).queue();
