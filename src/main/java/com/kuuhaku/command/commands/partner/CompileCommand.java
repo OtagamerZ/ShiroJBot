@@ -16,6 +16,7 @@ public class CompileCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+		Message msg = message;
 		message.delete().queue();
 		channel.sendMessage("<a:Loading:598500653215645697> | Compilando...").queue(m -> {
 			try {
@@ -27,7 +28,7 @@ public class CompileCommand extends Command {
 					throw new Exception("Código com métodos proibidos.");
 				code = code.replace("```java", "").replace("```", "");
 				Interpreter i = new Interpreter();
-				i.set("msg", message);
+				i.set("msg", msg);
 				i.eval(code);
 				Object out = i.get("out");
 				m.editMessage("<:Verified:591425071772467211> | Compilado com sucesso!").queue(n ->

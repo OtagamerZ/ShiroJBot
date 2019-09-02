@@ -19,6 +19,9 @@ public class BannedVars {
 			"Double.NEGATIVE_INFINITY",
 			"Double.POSITIVE_INFINITY",
 			"SQLite",
-			"MySQL"
+			"MySQL",
+			"System.",
+			"exit()",
+			"getenv()"
 	};
 }

@@ -18,8 +18,8 @@ public class SayCommand extends Command {
 		
 		if(args.length == 0) { channel.sendMessage(":x: | Você precisa definir uma mensagem.").queue(); return; }
 
-		if (guild.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) message.delete().queue();
 		channel.sendMessage(Helper.makeEmoteFromMention(args)).queue();
+		if (guild.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) message.delete().queue();
 	}
 
 }
