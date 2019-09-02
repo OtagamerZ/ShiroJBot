@@ -22,8 +22,8 @@ import com.kuuhaku.utils.PrivilegeLevel;
 import java.util.ArrayList;
 
 public enum Category {
-    DEVS("Dev", "<:Dev:589103373354270760>", "Comandos dedicados aos devs do bot.", PrivilegeLevel.DEV),
-	SHERIFFS("Sheriffs", "<:sheriff:613934507619385374>", "Comandos de moderação global.", PrivilegeLevel.SHERIFF),
+    DEVS("Dev", "\uD83D\uDEE0", "Comandos dedicados aos devs do bot.", PrivilegeLevel.DEV),
+	SHERIFFS("Sheriffs", "\uD83D\uDCDB", "Comandos de moderação global.", PrivilegeLevel.SHERIFF),
     MODERACAO("Moderação", "\u2699", "Comandos dedicados à staff do servidor.", PrivilegeLevel.MOD),
 	PARTNER("Parceiros", "\uD83D\uDC8E", "Comandos exclusivos para parceiros", PrivilegeLevel.USER),
 	FUN("Diversão", "\uD83C\uDF89", "Comandos para diversão.", PrivilegeLevel.USER),
