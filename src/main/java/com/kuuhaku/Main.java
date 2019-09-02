@@ -90,6 +90,7 @@ public class Main {
 
 	private static void finishStartUp() {
 		api.getPresence().setActivity(getRandomActivity());
+		getInfo().setWinner(MySQL.getWinner());
 		Main.getInfo().getAPI().getGuilds().forEach(g -> {
 			try {
 				SQLite.getGuildById(g.getId());
