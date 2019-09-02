@@ -357,6 +357,7 @@ public class Helper {
 				if (event.getUser().isBot() || event.getReactionEmote().getName().equals(currCat)) return;
 				else if (event.getReactionEmote().getName().equals(CANCEL)) {
 					msg.clearReactions().queue(s -> Main.getInfo().getAPI().removeEventListener(this));
+					return;
 				}
 				msg.editMessage(categories.get(event.getReactionEmote().getName())).queue(s -> currCat = event.getReactionEmote().getName());
 			}
