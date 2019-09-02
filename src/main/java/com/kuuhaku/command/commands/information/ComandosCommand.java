@@ -69,6 +69,11 @@ public class ComandosCommand extends Command {
 			return;
 		}
 
+		eb.clear();
+		eb.setColor(Color.PINK);
+		eb.setFooter(Main.getInfo().getFullName(), null);
+		eb.setThumbnail("https://cdn.pixabay.com/photo/2012/04/14/16/26/question-34499_960_720.png");
+
 		String cmdName = args[0];
 
 		Command cmd = null;
