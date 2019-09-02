@@ -36,7 +36,7 @@ public class CustomAnswerCommand extends Command {
 			EmbedBuilder eb = new EmbedBuilder();
 			ca.removeIf(a -> !a.getGuildID().equals(guild.getId()));
 
-			for (int x = 0; x < Math.ceil(ca.size() / 10); x++) {
+			for (int x = 0; x < Math.ceil(ca.size() / 10f); x++) {
 				eb.clear();
 				eb.setTitle(":pencil: Respostas deste servidor:");
 				eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
