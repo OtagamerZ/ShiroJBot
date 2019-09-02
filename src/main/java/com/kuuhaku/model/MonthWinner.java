@@ -10,16 +10,15 @@ import java.time.LocalDate;
 public class MonthWinner {
 	@Id
 	private int id;
-	private final String exceed;
-	private final LocalDate expiry;
-
-	public MonthWinner(ExceedEnums ex, LocalDate expiry) {
-		this.exceed = ex.getName();
-		this.expiry = expiry;
-	}
+	private String exceed;
+	private final LocalDate expiry = LocalDate.now().plusWeeks(1);
 
 	public String getExceed() {
 		return exceed;
+	}
+
+	public void setExceed(String exceed) {
+		this.exceed = exceed;
 	}
 
 	public LocalDate getExpiry() {
