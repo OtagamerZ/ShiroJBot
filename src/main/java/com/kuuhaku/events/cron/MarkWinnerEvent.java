@@ -18,6 +18,7 @@ public class MarkWinnerEvent implements Job {
 		Helper.log(this.getClass(), LogLevel.INFO, "Vencedor mensal: " + MySQL.getWinner());
 
 		String ex = MySQL.getWinner();
+		/*
 		MySQL.getExceedMembers(ExceedEnums.getByName(ex)).forEach(em ->
 				Main.getInfo().getUserByID(em.getMid()).openPrivateChannel().queue(c -> {
 					try {
@@ -27,5 +28,6 @@ public class MarkWinnerEvent implements Job {
 					} catch (Exception ignore) {
 					}
 				}));
+		 */
 	}
 }
