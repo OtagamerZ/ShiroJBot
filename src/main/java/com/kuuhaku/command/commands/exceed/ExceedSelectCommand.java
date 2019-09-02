@@ -30,7 +30,7 @@ public class ExceedSelectCommand extends Command {
 							"\n" + TagIcons.getExceed(ExceedEnums.LUMAMANA) + "**" + ExceedEnums.LUMAMANA.getName() + "** - Os orgulhosos centauros." +
 							"\n" + TagIcons.getExceed(ExceedEnums.EXMACHINA) + "**" + ExceedEnums.EXMACHINA.getName() + "** - Os poderosos androides." +
 							"\n" + TagIcons.getExceed(ExceedEnums.FLUGEL) + "**" + ExceedEnums.FLUGEL.getName() + "** - Os místicos elfos." +
-							"\n\nEscolha usando " + prefix + "`exselect EXCEED`.\n__**ESTA ESCOLHA É PERMANENTE**__").queue();
+							"\n\nEscolha usando `" + prefix + "exselect EXCEED`.\n__**ESTA ESCOLHA É PERMANENTE**__").queue();
 					m.delete().queue();
 					return;
 				}
