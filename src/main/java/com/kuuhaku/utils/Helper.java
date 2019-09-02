@@ -53,7 +53,9 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -326,10 +328,16 @@ public class Helper {
 			Main.getInfo().getAPI().addEventListener(new MessageListener() {
 				private final int maxP = pages.size() - 1;
 				private int p = 0;
+				private ScheduledFuture<?> timeout;
+				private final Consumer<Void> success = s -> Main.getInfo().getAPI().removeEventListener(this);
 
 				@Override
 				public void onGenericMessageReaction(@Nonnull GenericMessageReactionEvent event) {
+					if (timeout == null) timeout = msg.clearReactions().queueAfter(10, TimeUnit.SECONDS, success);
 					if (event.getUser().isBot()) return;
+
+					timeout.cancel(true);
+					timeout = msg.clearReactions().queueAfter(10, TimeUnit.SECONDS, success);
 					if (event.getReactionEmote().getName().equals(PREVIOUS)) {
 						if (p > 0) {
 							p--;
@@ -341,7 +349,7 @@ public class Helper {
 							msg.editMessage(pages.get(p)).queue();
 						}
 					} else if (event.getReactionEmote().getName().equals(CANCEL)) {
-						msg.clearReactions().queue(s -> Main.getInfo().getAPI().removeEventListener(this));
+						msg.clearReactions().queue(success);
 					}
 				}
 			});
@@ -356,14 +364,21 @@ public class Helper {
 			msg.addReaction(CANCEL).queue();
 			Main.getInfo().getAPI().addEventListener(new MessageListener() {
 				private String currCat = "";
+				private ScheduledFuture<?> timeout;
+				private final Consumer<Void> success = s -> Main.getInfo().getAPI().removeEventListener(this);
 
 				@Override
 				public void onGenericMessageReaction(@Nonnull GenericMessageReactionEvent event) {
+					if (timeout == null) timeout = msg.clearReactions().queueAfter(10, TimeUnit.SECONDS, success);
+
 					if (event.getUser().isBot() || event.getReactionEmote().getName().equals(currCat)) return;
 					else if (event.getReactionEmote().getName().equals(CANCEL)) {
 						msg.clearReactions().queue(s -> Main.getInfo().getAPI().removeEventListener(this));
 						return;
 					}
+
+					timeout.cancel(true);
+					timeout = msg.clearReactions().queueAfter(10, TimeUnit.SECONDS, success);
 					msg.editMessage(categories.get(event.getReactionEmote().getName())).queue(s -> currCat = event.getReactionEmote().getName());
 				}
 			});
