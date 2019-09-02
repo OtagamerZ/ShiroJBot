@@ -92,7 +92,6 @@ public class GuildEvents extends ListenerAdapter {
 
 				if (rawMessage.startsWith(";") && author.getId().equals(Main.getInfo().getNiiChan())) {
 					try {
-						message.delete().queue();
 						if (rawMessage.replace(";", "").length() == 0) {
 							channel.sendFile(message.getAttachments().get(0).downloadToFile().get()).queue();
 						} else {
@@ -105,6 +104,7 @@ public class GuildEvents extends ListenerAdapter {
 								}
 							});
 							send.queue();
+							message.delete().queue();
 						}
 					} catch (InsufficientPermissionException | ExecutionException | InterruptedException ignore) {
 					}
