@@ -344,8 +344,11 @@ public class MySQL {
     public static void markWinner(ExceedEnums ex) {
         EntityManager em = getEntityManager();
 
+        MonthWinner m = new MonthWinner();
+        m.setExceed(ex.getName());
+
         em.getTransaction().begin();
-        em.merge(new MonthWinner(ex, LocalDate.now().plusWeeks(1)));
+        em.merge(m);
         em.getTransaction().commit();
 
         em.close();
