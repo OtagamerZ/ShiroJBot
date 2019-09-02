@@ -53,8 +53,6 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -322,6 +320,7 @@ public class Helper {
 		return new JSONObject(resposta.toString());
 	}
 
+	//RETORNA ERROR CODE 10080
 	public static void paginate(Message msg, List<MessageEmbed> pages) {
 		try {
 			msg.addReaction(PREVIOUS).queue();
@@ -360,6 +359,7 @@ public class Helper {
 		}
 	}
 
+	//RETORNA ERROR CODE 10080
 	public static void categorize(Message msg, Map<String, MessageEmbed> categories) {
 		try {
 			categories.keySet().forEach(k -> msg.addReaction(k).queue());
