@@ -319,48 +319,56 @@ public class Helper {
 	}
 
 	public static void paginate(Message msg, List<MessageEmbed> pages) {
-		msg.addReaction(PREVIOUS).queue();
-		msg.addReaction(CANCEL).queue();
-		msg.addReaction(NEXT).queue();
-		Main.getInfo().getAPI().addEventListener(new MessageListener() {
-			private final int maxP = pages.size() - 1;
-			private int p = 0;
+		try {
+			msg.addReaction(PREVIOUS).queue();
+			msg.addReaction(CANCEL).queue();
+			msg.addReaction(NEXT).queue();
+			Main.getInfo().getAPI().addEventListener(new MessageListener() {
+				private final int maxP = pages.size() - 1;
+				private int p = 0;
 
-			@Override
-			public void onGenericMessageReaction(@Nonnull GenericMessageReactionEvent event) {
-				if (event.getUser().isBot()) return;
-				if (event.getReactionEmote().getName().equals(PREVIOUS)) {
-					if (p > 0) {
-						p--;
-						msg.editMessage(pages.get(p)).queue();
+				@Override
+				public void onGenericMessageReaction(@Nonnull GenericMessageReactionEvent event) {
+					if (event.getUser().isBot()) return;
+					if (event.getReactionEmote().getName().equals(PREVIOUS)) {
+						if (p > 0) {
+							p--;
+							msg.editMessage(pages.get(p)).queue();
+						}
+					} else if (event.getReactionEmote().getName().equals(NEXT)) {
+						if (p < maxP) {
+							p++;
+							msg.editMessage(pages.get(p)).queue();
+						}
+					} else if (event.getReactionEmote().getName().equals(CANCEL)) {
+						msg.clearReactions().queue(s -> Main.getInfo().getAPI().removeEventListener(this));
 					}
-				} else if (event.getReactionEmote().getName().equals(NEXT)) {
-					if (p < maxP) {
-						p++;
-						msg.editMessage(pages.get(p)).queue();
-					}
-				} else if (event.getReactionEmote().getName().equals(CANCEL)) {
-					msg.clearReactions().queue(s -> Main.getInfo().getAPI().removeEventListener(this));
 				}
-			}
-		});
+			});
+		} catch (Exception e) {
+			log(Helper.class, LogLevel.WARN, e + " | " + e.getStackTrace()[0]);
+		}
 	}
 
 	public static void categorize(Message msg, Map<String, MessageEmbed> categories) {
-		categories.keySet().forEach(k -> msg.addReaction(k).queue());
-		msg.addReaction(CANCEL).queue();
-		Main.getInfo().getAPI().addEventListener(new MessageListener() {
-			private String currCat = "";
+		try {
+			categories.keySet().forEach(k -> msg.addReaction(k).queue());
+			msg.addReaction(CANCEL).queue();
+			Main.getInfo().getAPI().addEventListener(new MessageListener() {
+				private String currCat = "";
 
-			@Override
-			public void onGenericMessageReaction(@Nonnull GenericMessageReactionEvent event) {
-				if (event.getUser().isBot() || event.getReactionEmote().getName().equals(currCat)) return;
-				else if (event.getReactionEmote().getName().equals(CANCEL)) {
-					msg.clearReactions().queue(s -> Main.getInfo().getAPI().removeEventListener(this));
-					return;
+				@Override
+				public void onGenericMessageReaction(@Nonnull GenericMessageReactionEvent event) {
+					if (event.getUser().isBot() || event.getReactionEmote().getName().equals(currCat)) return;
+					else if (event.getReactionEmote().getName().equals(CANCEL)) {
+						msg.clearReactions().queue(s -> Main.getInfo().getAPI().removeEventListener(this));
+						return;
+					}
+					msg.editMessage(categories.get(event.getReactionEmote().getName())).queue(s -> currCat = event.getReactionEmote().getName());
 				}
-				msg.editMessage(categories.get(event.getReactionEmote().getName())).queue(s -> currCat = event.getReactionEmote().getName());
-			}
-		});
+			});
+		} catch (Exception e) {
+			log(Helper.class, LogLevel.WARN, e + " | " + e.getStackTrace()[0]);
+		}
 	}
 }
