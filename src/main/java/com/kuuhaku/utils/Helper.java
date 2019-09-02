@@ -20,6 +20,7 @@ package com.kuuhaku.utils;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.SQLite;
+import com.kuuhaku.events.MessageListener;
 import com.kuuhaku.handlers.games.Beyblade;
 import com.kuuhaku.model.GamblePool;
 import com.kuuhaku.model.guildConfig;
@@ -28,12 +29,14 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.react.GenericMessageReactionEvent;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
+import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -57,6 +60,10 @@ import java.util.regex.Pattern;
 public class Helper {
 
 	public static final String VOID = "\u200B";
+	public static final String PREVIOUS = "\u25C0";
+	public static final String CANCEL = "\u274E";
+	public static final String NEXT = "\u25B6";
+
 
 	private static PrivilegeLevel getPrivilegeLevel(Member member) {
 		if (Main.getInfo().getNiiChan().contains(member.getUser().getId())) {
@@ -309,5 +316,50 @@ public class Helper {
 
 		Helper.log(Helper.class, LogLevel.DEBUG, resposta.toString());
 		return new JSONObject(resposta.toString());
+	}
+
+	public static void paginate(Message msg, List<MessageEmbed> pages) {
+		msg.addReaction(PREVIOUS).queue();
+		msg.addReaction(CANCEL).queue();
+		msg.addReaction(NEXT).queue();
+		Main.getInfo().getAPI().addEventListener(new MessageListener() {
+			private final int maxP = pages.size() - 1;
+			private int p = 0;
+
+			@Override
+			public void onGenericMessageReaction(@Nonnull GenericMessageReactionEvent event) {
+				if (event.getUser().isBot()) return;
+				if (event.getReactionEmote().getName().equals(PREVIOUS)) {
+					if (p > 0) {
+						p--;
+						msg.editMessage(pages.get(p)).queue();
+					}
+				} else if (event.getReactionEmote().getName().equals(NEXT)) {
+					if (p < maxP) {
+						p++;
+						msg.editMessage(pages.get(p)).queue();
+					}
+				} else if (event.getReactionEmote().getName().equals(CANCEL)) {
+					msg.clearReactions().queue(s -> Main.getInfo().getAPI().removeEventListener(this));
+				}
+			}
+		});
+	}
+
+	public static void categorize(Message msg, Map<String, MessageEmbed> categories) {
+		categories.keySet().forEach(k -> msg.addReaction(k).queue());
+		msg.addReaction(CANCEL).queue();
+		Main.getInfo().getAPI().addEventListener(new MessageListener() {
+			private String currCat = "";
+
+			@Override
+			public void onGenericMessageReaction(@Nonnull GenericMessageReactionEvent event) {
+				if (event.getUser().isBot() || event.getReactionEmote().getName().equals(currCat)) return;
+				else if (event.getReactionEmote().getName().equals(CANCEL)) {
+					msg.clearReactions().queue(s -> Main.getInfo().getAPI().removeEventListener(this));
+				}
+				msg.editMessage(categories.get(event.getReactionEmote().getName())).queue(s -> currCat = event.getReactionEmote().getName());
+			}
+		});
 	}
 }
