@@ -30,7 +30,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.GenericMessageReactionEvent;
-import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -54,16 +53,20 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Helper {
 
 	public static final String VOID = "\u200B";
-	private static final String PREVIOUS = "\u25C0";
-	private static final String CANCEL = "\u274E";
-	private static final String NEXT = "\u25B6";
+	public static final String PREVIOUS = "\u25C0";
+	public static final String CANCEL = "\u274E";
+	public static final String NEXT = "\u25B6";
 
 
 	private static PrivilegeLevel getPrivilegeLevel(Member member) {
@@ -320,7 +323,6 @@ public class Helper {
 	}
 
 	public static void paginate(Message msg, List<MessageEmbed> pages) {
-		ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 		try {
 			msg.addReaction(PREVIOUS).queue();
 			msg.addReaction(CANCEL).queue();
@@ -329,39 +331,27 @@ public class Helper {
 				private final int maxP = pages.size() - 1;
 				private int p = 0;
 				private ScheduledFuture<?> timeout;
-				private final Runnable clear = () -> {
-					try {
-						msg.clearReactions().queue(s -> Main.getInfo().getAPI().removeEventListener(this));
-					} catch (ErrorResponseException e) {
-						Main.getInfo().getAPI().removeEventListener(this);
-					}
-				};
+				private final Consumer<Void> success = s -> Main.getInfo().getAPI().removeEventListener(this);
 
 				@Override
 				public void onGenericMessageReaction(@Nonnull GenericMessageReactionEvent event) {
-					try {
-						if (timeout == null) {
-							timeout = scheduler.scheduleWithFixedDelay(clear, 10, 0, TimeUnit.SECONDS);
-							timeout.get();
-						}
-						if (event.getUser().isBot()) return;
+					if (timeout == null) timeout = msg.clearReactions().queueAfter(10, TimeUnit.SECONDS, success);
+					if (event.getUser().isBot()) return;
 
-						timeout.cancel(true);
-						timeout.get();
-						if (event.getReactionEmote().getName().equals(PREVIOUS)) {
-							if (p > 0) {
-								p--;
-								msg.editMessage(pages.get(p)).queue();
-							}
-						} else if (event.getReactionEmote().getName().equals(NEXT)) {
-							if (p < maxP) {
-								p++;
-								msg.editMessage(pages.get(p)).queue();
-							}
-						} else if (event.getReactionEmote().getName().equals(CANCEL)) {
-							msg.clearReactions().queue(s -> clear.run());
+					timeout.cancel(true);
+					timeout = msg.clearReactions().queueAfter(10, TimeUnit.SECONDS, success);
+					if (event.getReactionEmote().getName().equals(PREVIOUS)) {
+						if (p > 0) {
+							p--;
+							msg.editMessage(pages.get(p)).queue();
 						}
-					} catch (InterruptedException | ExecutionException ignore) {
+					} else if (event.getReactionEmote().getName().equals(NEXT)) {
+						if (p < maxP) {
+							p++;
+							msg.editMessage(pages.get(p)).queue();
+						}
+					} else if (event.getReactionEmote().getName().equals(CANCEL)) {
+						msg.clearReactions().queue(success);
 					}
 				}
 			});
@@ -371,40 +361,27 @@ public class Helper {
 	}
 
 	public static void categorize(Message msg, Map<String, MessageEmbed> categories) {
-		ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 		try {
 			categories.keySet().forEach(k -> msg.addReaction(k).queue());
 			msg.addReaction(CANCEL).queue();
 			Main.getInfo().getAPI().addEventListener(new MessageListener() {
 				private String currCat = "";
 				private ScheduledFuture<?> timeout;
-				private final Runnable clear = () -> {
-					try {
-						msg.clearReactions().queue(s -> Main.getInfo().getAPI().removeEventListener(this));
-					} catch (ErrorResponseException e) {
-						Main.getInfo().getAPI().removeEventListener(this);
-					}
-				};
+				private final Consumer<Void> success = s -> Main.getInfo().getAPI().removeEventListener(this);
 
 				@Override
 				public void onGenericMessageReaction(@Nonnull GenericMessageReactionEvent event) {
-					try {
-						if (timeout == null) {
-							timeout = scheduler.scheduleWithFixedDelay(clear, 10, 0, TimeUnit.SECONDS);
-							timeout.get();
-						}
+					if (timeout == null) timeout = msg.clearReactions().queueAfter(10, TimeUnit.SECONDS, success);
 
-						if (event.getUser().isBot() || event.getReactionEmote().getName().equals(currCat)) return;
-						else if (event.getReactionEmote().getName().equals(CANCEL)) {
-							msg.clearReactions().queue(s -> Main.getInfo().getAPI().removeEventListener(this));
-							return;
-						}
-
-						timeout.cancel(true);
-						timeout.get();
-						msg.editMessage(categories.get(event.getReactionEmote().getName())).queue(s -> currCat = event.getReactionEmote().getName());
-					} catch (InterruptedException | ExecutionException ignore) {
+					if (event.getUser().isBot() || event.getReactionEmote().getName().equals(currCat)) return;
+					else if (event.getReactionEmote().getName().equals(CANCEL)) {
+						msg.clearReactions().queue(s -> Main.getInfo().getAPI().removeEventListener(this));
+						return;
 					}
+
+					timeout.cancel(true);
+					timeout = msg.clearReactions().queueAfter(10, TimeUnit.SECONDS, success);
+					msg.editMessage(categories.get(event.getReactionEmote().getName())).queue(s -> currCat = event.getReactionEmote().getName());
 				}
 			});
 		} catch (Exception e) {
