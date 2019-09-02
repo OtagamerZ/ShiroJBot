@@ -22,7 +22,8 @@ public class ExceedSelectCommand extends Command {
 
 			if (u.getExceed().isEmpty()) {
 				if (args.length == 0) {
-					channel.sendMessage("Os exceeds disponíveis são:" +
+					channel.sendMessage("Exceed é um sistema global de clãs, onde todo mês o clã vencedor ira receber experiência em dobro por uma semana. A pontuação é dada pela soma da experiência de todos os membros do clã, **independente do servidor**.\n\n" +
+							"Os exceeds disponíveis são:" +
 							"\n" + TagIcons.getExceed(ExceedEnums.IMANITY) + "**" + ExceedEnums.IMANITY.getName() + "** - Os engenhosos humanos." +
 							"\n" + TagIcons.getExceed(ExceedEnums.SEIREN) + "**" + ExceedEnums.SEIREN.getName() + "** - As inusitadas sereias." +
 							"\n" + TagIcons.getExceed(ExceedEnums.WEREBEAST) + "**" + ExceedEnums.WEREBEAST.getName() + "** - Os sábios bestiais." +
