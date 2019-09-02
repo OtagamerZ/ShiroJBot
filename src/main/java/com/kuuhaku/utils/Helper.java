@@ -62,9 +62,10 @@ import java.util.regex.Pattern;
 public class Helper {
 
 	public static final String VOID = "\u200B";
-	public static final String PREVIOUS = "\u25C0";
-	public static final String CANCEL = "\u274E";
-	public static final String NEXT = "\u25B6";
+	private static final String PREVIOUS = "\u25C0";
+	private static final String CANCEL = "\u274E";
+	private static final String NEXT = "\u25B6";
+	public static final String ACCEPT = "\u2705";
 
 
 	private static PrivilegeLevel getPrivilegeLevel(Member member) {
