@@ -140,7 +140,7 @@ public class ScheduledEvents implements JobListener {
 			if (MarkWinnerEvent.markWinner == null) {
 				MarkWinnerEvent.markWinner = JobBuilder.newJob(MarkWinnerEvent.class).withIdentity("markWinner", "1").build();
 			}
-			Trigger cron = TriggerBuilder.newTrigger().withIdentity("markWinner", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0 0 1 1/1 ? *")).build();
+			Trigger cron = TriggerBuilder.newTrigger().withIdentity("markWinner", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0/5 * 1/1 * ? *")).build();
 			SchedulerFactory sf = new StdSchedulerFactory();
 			try {
 				sched = sf.getScheduler();
