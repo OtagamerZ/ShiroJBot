@@ -291,19 +291,6 @@ public class MySQL {
         em.close();
     }
 
-    public static void removeTagReader(String id) {
-        EntityManager em = getEntityManager();
-
-        Tags t = getTagById(id);
-        t.setReader(false);
-
-        em.getTransaction().begin();
-        em.merge(t);
-        em.getTransaction().commit();
-
-        em.close();
-    }
-
     public static void saveMemberWaifu(Member m, User u) {
         EntityManager em = getEntityManager();
 
@@ -346,6 +333,7 @@ public class MySQL {
         EntityManager em = getEntityManager();
 
         Query q = em.createQuery("SELECT exceed FROM Member m WHERE exceed NOT LIKE '' GROUP BY exceed ORDER BY xp DESC", String.class);
+        q.setMaxResults(1);
 
         String winner = (String) q.getSingleResult();
         em.close();
