@@ -45,18 +45,20 @@ public class URankCommand extends Command {
 			mbs = SQLite.getMemberRank(guild.getId(), false);
 		}
 
-		String champ = (global ? "(" + Main.getInfo().getGuildByID(mbs.get(0).getId().replace(mbs.get(0).getMid(), "")).getName() + ") " : "") + "1 - " + Main.getInfo().getUserByID(mbs.get(0).getMid()).getAsTag() + " (Level " + mbs.get(0).getLevel() + ")";
+		String champ = "1 - " + (global ? "(" + Main.getInfo().getGuildByID(mbs.get(0).getId().replace(mbs.get(0).getMid(), "")).getName() + ") " : "") + Main.getInfo().getUserByID(mbs.get(0).getMid()).getAsTag() + " (Level " + mbs.get(0).getLevel() + ")";
 		List<com.kuuhaku.model.Member> sub9 = mbs.subList(1, 9);
 		StringBuilder sub9Formatted = new StringBuilder();
 		for (int i = 0; i < sub9.size(); i++) {
 			sub9Formatted
-					.append((global ? "(" + Main.getInfo().getGuildByID(sub9.get(i).getId().replace(sub9.get(i).getMid(), "")).getName() + ") " : ""))
+					.append("```")
 					.append(i + 2)
 					.append(" - ")
+					.append((global ? "(" + Main.getInfo().getGuildByID(sub9.get(i).getId().replace(sub9.get(i).getMid(), "")).getName() + ") " : ""))
 					.append(Main.getInfo().getUserByID(sub9.get(i).getMid()).getAsTag())
 					.append(" (Level ")
 					.append(sub9.get(i).getLevel())
 					.append(")")
+					.append("```")
 					.append("\n");
 		}
 
