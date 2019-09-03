@@ -59,7 +59,7 @@ public class ExceedRankCommand extends Command {
 					add(ExceedEnums.IMANITY.getName());
 					add(ExceedEnums.SEIREN.getName());
 					add(ExceedEnums.WEREBEAST.getName());
-					add(ExceedEnums.LUMAMANA.getName());
+					add(ExceedEnums.ELF.getName());
 					add(ExceedEnums.EXMACHINA.getName());
 					add(ExceedEnums.FLUGEL.getName());
 				}};

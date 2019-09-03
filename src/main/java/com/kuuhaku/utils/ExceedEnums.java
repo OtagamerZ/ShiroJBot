@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public enum ExceedEnums {
-	IMANITY("Imanity"), SEIREN("Seiren"), WEREBEAST("Werebeast"), LUMAMANA("Lumamana"), EXMACHINA("Ex-Machina"), FLUGEL("Flügel");
+	IMANITY("Imanity"), SEIREN("Seiren"), WEREBEAST("Werebeast"), ELF("Elf"), EXMACHINA("Ex-Machina"), FLUGEL("Flügel");
 
 	private String name;
 

@@ -21,15 +21,12 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.SQLite;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
-import java.awt.*;
-import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class URankCommand extends Command {
 
@@ -40,50 +37,27 @@ public class URankCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		List<com.kuuhaku.model.Member> mbs;
-
-		if (args.length == 0) {
-			mbs = SQLite.getMemberRank(guild.getId(), false);
-			if (mbs.size() > 7) mbs.subList(7, mbs.size()).clear();
-		} else if (args[0].equalsIgnoreCase("global")) {
-			mbs = SQLite.getMemberRank(guild.getId(), true);
-			if (mbs.size() > 7) mbs.subList(7, mbs.size()).clear();
+		boolean global = false;
+		if (args.length > 0 && args[0].equals("global")) {
+			mbs = SQLite.getMemberRank(null, true);
+			global = true;
 		} else {
-			channel.sendMessage(":x: | O único parâmetro permitido após o comando é `global`.").queue();
-			return;
+			mbs = SQLite.getMemberRank(guild.getId(), false);
 		}
 
-		channel.sendMessage("<a:Loading:598500653215645697> Buscando dados...").queue(m -> {
-			try {
-				EmbedBuilder eb = new EmbedBuilder();
-				StringBuilder sb = new StringBuilder();
+		String champ = "1 - " + Main.getInfo().getUserByID(mbs.get(0).getMid()).getAsTag() + " (Level " + mbs.get(0).getLevel() + ")";
+		List<String> sub9 = mbs.subList(1, 9).stream().map(m -> Main.getInfo().getUserByID(m.getMid()).getAsTag() + " (Level " + m.getLevel() + ")").collect(Collectors.toList());
+		StringBuilder sub9Formatted = new StringBuilder();
+		for (int i = 1; i < sub9.size(); i++) {
+			sub9Formatted.append(i).append(" - ").append(sub9.get(i - 1)).append("\n");
+		}
 
-				eb.setTitle(":bar_chart: TOP 10 Usuários (" + (args.length > 0 && args[0].equalsIgnoreCase("global") ? "GLOBAL" : "SERVER") + ")");
-				eb.setThumbnail(args.length > 0 && args[0].equalsIgnoreCase("global") ? "https://www.pngkey.com/png/full/21-217733_free-png-trophy-png-images-transparent-winner-trophy.png" : guild.getIconUrl());
-				try {
-					eb.setColor(Helper.colorThief(Main.getInfo().getUserByID(mbs.get(0).getMid()).getAvatarUrl()));
-				} catch (IOException e) {
-					eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
-				}
+		EmbedBuilder eb = new EmbedBuilder();
 
-				for (int i = 1; i < mbs.size() && i < 10; i++) {
-					try {
-						StringBuilder lb = new StringBuilder();
-						Guild g = Main.getInfo().getGuildByID(mbs.get(i).getId().substring(18));
-						lb.append(i + 1).append(" - ").append(args.length == 0 ? " " : ("(" + g.getName() + ") ")).append(g.getMemberById(mbs.get(i).getMid()).getEffectiveName()).append(" - Lvl ").append(mbs.get(i).getLevel()).append(" (").append(mbs.get(i).getXp()).append(" xp)\n");
-						sb.append(lb.toString());
-					} catch (Exception e) {
-						mbs.remove(i);
-						i -= i == 1 ? 0 : 1;
-					}
-				}
-				eb.addField("1 - " + (args.length == 0 ? " " : ("(" + Main.getInfo().getGuildByID(mbs.get(0).getId().substring(18)).getName() + ") ")) + Main.getInfo().getGuildByID(mbs.get(0).getId().substring(18)).getMemberById(mbs.get(0).getMid()).getEffectiveName() + " - Lvl" + mbs.get(0).getLevel() + " (" + mbs.get(0).getXp() + " xp)", sb.toString(), false);
+		eb.setTitle("Ranking de usuários (" + (global ? "GLOBAL" : "LOCAL") + ")");
+		eb.addField(champ, sub9Formatted.toString(), false);
+		eb.setThumbnail("http://www.marquishoa.com/wp-content/uploads/2018/01/Ranking-icon.png");
 
-				m.delete().queue();
-				channel.sendMessage(eb.build()).queue();
-			} catch (NullPointerException e) {
-				m.editMessage(":x: | Erro, o ranking global está com problemas no momento, já estamos trabalhando em uma solução.").queue();
-				Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
-			}
-		});
+		channel.sendMessage(eb.build()).queue();
 	}
 }
