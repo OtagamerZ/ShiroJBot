@@ -62,6 +62,7 @@ public class URankCommand extends Command {
 		}
 
 		List<MessageEmbed> pages = new ArrayList<>();
+		StringBuilder next10 = new StringBuilder();
 		EmbedBuilder eb = new EmbedBuilder();
 
 		eb.setTitle("Ranking de usuários (" + (global ? "GLOBAL" : "LOCAL") + ")");
@@ -73,8 +74,8 @@ public class URankCommand extends Command {
 
 		for (int x = 1; x < Math.ceil(mbs.size() / 10f); x++) {
 			eb.clear();
-			StringBuilder next10 = new StringBuilder();
-			for (int i = 10 * x; i < mbs.size(); i++) {
+			next10.setLength(0);
+			for (int i = 10 * x; i < mbs.size() && i < 20 * x; i++) {
 				next10
 						.append(i + 1)
 						.append(" - ")
