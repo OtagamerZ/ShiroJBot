@@ -308,9 +308,10 @@ public class GuildEvents extends ListenerAdapter {
 						SQLite.saveMemberToDB(m);
 					} catch (NoResultException e) {
 						SQLite.addMemberToDB(member);
-					} catch (InsufficientPermissionException ignore) {
 					}
 				}
+			} catch (InsufficientPermissionException ignore) {
+
 			} catch (ErrorResponseException e) {
 				Helper.log(this.getClass(), LogLevel.ERROR, e.getErrorCode() + ": " + e + " | " + e.getStackTrace()[0]);
 			}
