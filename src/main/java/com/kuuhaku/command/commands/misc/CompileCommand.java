@@ -27,7 +27,7 @@ public class CompileCommand extends Command {
 				code = code.replace("```java", "").replace("```", "");
 				Interpreter i = new Interpreter();
 				i.set("msg", message);
-				i.set("code", message.getContentRaw());
+				i.set("code", String.join(" ", args));
 				i.eval(code);
 				Object out = i.get("out");
 				m.editMessage("<:Verified:591425071772467211> | Compilado com sucesso!").queue(n ->
