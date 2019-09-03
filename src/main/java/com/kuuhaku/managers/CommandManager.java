@@ -30,7 +30,7 @@ import com.kuuhaku.command.commands.dev.*;
 import com.kuuhaku.command.commands.music.MusicCommand;
 import com.kuuhaku.command.commands.music.VideoCommand;
 import com.kuuhaku.command.commands.music.YoutubeCommand;
-import com.kuuhaku.command.commands.partner.CompileCommand;
+import com.kuuhaku.command.commands.misc.CompileCommand;
 import com.kuuhaku.command.commands.partner.JibrilCommand;
 
 import java.util.ArrayList;
