@@ -63,7 +63,7 @@ public class Main {
 		Main.jbr = jbr;
 
 		api.getPresence().setActivity(Activity.playing("Iniciando..."));
-		jbr.getPresence().setActivity(Activity.listening("as mensagens de " + relay.getRelayMap().size() + " servidores!"));
+		jbr.getPresence().setActivity(Activity.playing("Iniciando..."));
 
 		api.addEventListener(new JDAEvents());
 		api.addEventListener(new GuildEvents());
@@ -90,6 +90,7 @@ public class Main {
 
 	private static void finishStartUp() {
 		api.getPresence().setActivity(getRandomActivity());
+		jbr.getPresence().setActivity(Activity.listening("as mensagens de " + relay.getRelayMap().size() + " servidores!"));
 		getInfo().setWinner(MySQL.getWinner());
 		Main.getInfo().getAPI().getGuilds().forEach(g -> {
 			try {
