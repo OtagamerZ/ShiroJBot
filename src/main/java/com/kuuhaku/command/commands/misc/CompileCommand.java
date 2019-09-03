@@ -1,4 +1,4 @@
-package com.kuuhaku.command.commands.partner;
+package com.kuuhaku.command.commands.misc;
 
 import bsh.Interpreter;
 import com.kuuhaku.command.Category;
@@ -11,7 +11,7 @@ import java.util.Arrays;
 
 public class CompileCommand extends Command {
 	public CompileCommand() {
-		super("compilar", new String[]{"compile"}, "Executa um código Java.", Category.PARTNER);
+		super("compilar", new String[]{"compile"}, "Executa um código Java.", Category.MISC);
 	}
 
 	@Override
@@ -27,6 +27,7 @@ public class CompileCommand extends Command {
 				code = code.replace("```java", "").replace("```", "");
 				Interpreter i = new Interpreter();
 				i.set("msg", message);
+				i.set("code", message.getContentRaw());
 				i.eval(code);
 				Object out = i.get("out");
 				m.editMessage("<:Verified:591425071772467211> | Compilado com sucesso!").queue(n ->
