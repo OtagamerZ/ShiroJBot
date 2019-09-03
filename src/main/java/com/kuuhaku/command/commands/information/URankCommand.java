@@ -64,11 +64,18 @@ public class URankCommand extends Command {
 		List<MessageEmbed> pages = new ArrayList<>();
 		EmbedBuilder eb = new EmbedBuilder();
 
+		eb.setTitle("Ranking de usuários (" + (global ? "GLOBAL" : "LOCAL") + ")");
+		eb.addField(champ, sub9Formatted.toString(), false);
+		eb.setThumbnail("http://www.marquishoa.com/wp-content/uploads/2018/01/Ranking-icon.png");
+		eb.setColor(Helper.getRandomColor());
+
+		pages.add(eb.build());
+
 		for (int x = 1; x < Math.ceil(mbs.size() / 10f); x++) {
 			StringBuilder next10 = new StringBuilder();
 			for (int i = 10 * x; i < mbs.size(); i++) {
 				next10
-						.append(i + 2)
+						.append(i + 1)
 						.append(" - ")
 						.append((global ? "(" + Main.getInfo().getGuildByID(mbs.get(i).getId().replace(mbs.get(i).getMid(), "")).getName() + ") " : ""))
 						.append(Main.getInfo().getUserByID(mbs.get(i).getMid()).getAsTag())
@@ -86,13 +93,6 @@ public class URankCommand extends Command {
 			pages.add(eb.build());
 			eb.clear();
 		}
-
-		eb.setTitle("Ranking de usuários (" + (global ? "GLOBAL" : "LOCAL") + ")");
-		eb.addField(champ, sub9Formatted.toString(), false);
-		eb.setThumbnail("http://www.marquishoa.com/wp-content/uploads/2018/01/Ranking-icon.png");
-		eb.setColor(Helper.getRandomColor());
-
-		pages.add(eb.build());
 
 		channel.sendMessage(pages.get(0)).queue(s -> Helper.paginate(s, pages));
 	}
