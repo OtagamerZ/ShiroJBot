@@ -26,6 +26,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class URankCommand extends Command {
@@ -60,13 +61,39 @@ public class URankCommand extends Command {
 					.append("\n");
 		}
 
+		List<MessageEmbed> pages = new ArrayList<>();
 		EmbedBuilder eb = new EmbedBuilder();
+
+		for (int x = 1; x < Math.ceil(mbs.size() / 10f); x++) {
+			StringBuilder next10 = new StringBuilder();
+			for (int i = 10 * x; i < mbs.size(); i++) {
+				next10
+						.append(i + 2)
+						.append(" - ")
+						.append((global ? "(" + Main.getInfo().getGuildByID(sub9.get(i).getId().replace(sub9.get(i).getMid(), "")).getName() + ") " : ""))
+						.append(Main.getInfo().getUserByID(sub9.get(i).getMid()).getAsTag())
+						.append(" (Level ")
+						.append(sub9.get(i).getLevel())
+						.append(")")
+						.append("\n");
+			}
+
+			eb.setTitle("Ranking de usuários (" + (global ? "GLOBAL" : "LOCAL") + ")");
+			eb.addField(Helper.VOID, next10.toString(), false);
+			eb.setThumbnail("http://www.marquishoa.com/wp-content/uploads/2018/01/Ranking-icon.png");
+			eb.setColor(Helper.getRandomColor());
+
+			pages.add(eb.build());
+			eb.clear();
+		}
 
 		eb.setTitle("Ranking de usuários (" + (global ? "GLOBAL" : "LOCAL") + ")");
 		eb.addField(champ, sub9Formatted.toString(), false);
 		eb.setThumbnail("http://www.marquishoa.com/wp-content/uploads/2018/01/Ranking-icon.png");
 		eb.setColor(Helper.getRandomColor());
 
-		channel.sendMessage(eb.build()).queue();
+		pages.add(eb.build());
+
+		channel.sendMessage(pages.get(0)).queue(s -> Helper.paginate(s, pages));
 	}
 }
