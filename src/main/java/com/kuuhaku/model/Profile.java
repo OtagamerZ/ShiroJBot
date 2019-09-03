@@ -196,7 +196,7 @@ public class Profile {
 					case WEREBEAST:
 						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/werebeast.png"))));
 						break;
-					case LUMAMANA:
+					case ELF:
 						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lumamana.png"))));
 						break;
 					case EXMACHINA:
