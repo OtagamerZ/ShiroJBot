@@ -23,7 +23,7 @@ public class AvatarCommand extends Command {
 		if (message.getMentionedUsers().size() > 1) { channel.sendMessage(":x: | Você só pode mencionar 1 utilizador de cada vez.").queue(); return; }
 
 		EmbedBuilder eb = new EmbedBuilder();
-        eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
+        eb.setColor(Helper.getRandomColor());
 
 
 		if (message.getMentionedUsers().size() == 0) {
