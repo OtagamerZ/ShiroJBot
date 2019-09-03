@@ -26,7 +26,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
-import java.awt.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -49,7 +48,7 @@ public class SlotsCommand extends Command {
 		} else if (args[0].equalsIgnoreCase("slots") || args[0].equalsIgnoreCase("premio")) {
 			EmbedBuilder eb = new EmbedBuilder();
 
-			eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
+			eb.setColor(Helper.getRandomColor());
 			eb.setTitle(":confetti_ball: Premios");
 			//":cheese:", ":izakaya_lantern:", ":moneybag:", ":diamond_shape_with_a_dot_inside:", ":rosette:"
 			eb.addField(":cheese: Queijo (29% de chance)", "" +

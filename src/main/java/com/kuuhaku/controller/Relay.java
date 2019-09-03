@@ -78,7 +78,7 @@ public class Relay extends SQLite {
 		try {
 			eb.setColor(Helper.colorThief(s.getIconUrl()));
 		} catch (IOException e) {
-			eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
+			eb.setColor(Helper.getRandomColor());
 		}
 
 		StringBuilder badges = new StringBuilder();
@@ -215,7 +215,7 @@ public class Relay extends SQLite {
 		eb.addField(":busts_in_silhouette: Clientes conectados: " + relays.size(), "Canal relay: " + (gc.getCanalRelay() == null ? "Não configurado" : Objects.requireNonNull(Main.getInfo().getGuildByID(gc.getGuildID()).getTextChannelById(gc.getCanalRelay())).getAsMention()), false);
 		eb.addField("Modo:", gc.isLiteMode() ? "Lite" : "Normal", true);
 		eb.addField("Imagens:", gc.isAllowImg() ? "Permitidas" : "Negadas", true);
-		eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
+		eb.setColor(Helper.getRandomColor());
 
 		return eb.build();
 	}

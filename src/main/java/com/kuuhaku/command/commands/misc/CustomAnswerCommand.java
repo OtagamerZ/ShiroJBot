@@ -39,7 +39,7 @@ public class CustomAnswerCommand extends Command {
 			for (int x = 0; x < Math.ceil(ca.size() / 10f); x++) {
 				eb.clear();
 				eb.setTitle(":pencil: Respostas deste servidor:");
-				eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
+				eb.setColor(Helper.getRandomColor());
 				for (int i = -10 + (10 * (x + 1)); i < ca.size() && i < (10 * (x + 1)); i++) {
 					eb.addField(ca.get(i).getId() + " - " + ca.get(i).getGatilho(), ca.get(i).getAnswer().length() > 100 ? ca.get(i).getAnswer().substring(0, 100) + "..." : ca.get(i).getAnswer(), false);
 				}
@@ -61,7 +61,7 @@ public class CustomAnswerCommand extends Command {
 
 			eb.setTitle(":speech_balloon: Resposta Nº " + c.getId());
 			eb.addField(":arrow_right: " + c.getGatilho(), ":arrow_left: " + c.getAnswer(), false);
-			eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
+			eb.setColor(Helper.getRandomColor());
 
 			channel.sendMessage(eb.build()).queue();
 			return;
