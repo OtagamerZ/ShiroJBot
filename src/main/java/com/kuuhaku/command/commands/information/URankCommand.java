@@ -50,7 +50,6 @@ public class URankCommand extends Command {
 		StringBuilder sub9Formatted = new StringBuilder();
 		for (int i = 0; i < sub9.size(); i++) {
 			sub9Formatted
-					.append("`")
 					.append(i + 2)
 					.append(" - ")
 					.append((global ? "(" + Main.getInfo().getGuildByID(sub9.get(i).getId().replace(sub9.get(i).getMid(), "")).getName() + ") " : ""))
@@ -58,7 +57,6 @@ public class URankCommand extends Command {
 					.append(" (Level ")
 					.append(sub9.get(i).getLevel())
 					.append(")")
-					.append("`")
 					.append("\n");
 		}
 
