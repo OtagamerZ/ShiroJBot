@@ -25,11 +25,11 @@ public class ExceedSelectCommand extends Command {
 					channel.sendMessage("Exceed é um sistema global de clãs, onde todo mês o clã vencedor ira receber experiência em dobro por uma semana. A pontuação é dada pela soma da experiência de todos os membros do clã, **independente do servidor**.\n\n" +
 							"Os exceeds disponíveis são:" +
 							"\n" + TagIcons.getExceed(ExceedEnums.IMANITY) + "**" + ExceedEnums.IMANITY.getName() + "** - Os engenhosos humanos." +
-							"\n" + TagIcons.getExceed(ExceedEnums.SEIREN) + "**" + ExceedEnums.SEIREN.getName() + "** - As inusitadas sereias." +
+							"\n" + TagIcons.getExceed(ExceedEnums.SEIREN) + "**" + ExceedEnums.SEIREN.getName() + "** - As curiosas sereias." +
 							"\n" + TagIcons.getExceed(ExceedEnums.WEREBEAST) + "**" + ExceedEnums.WEREBEAST.getName() + "** - Os sábios bestiais." +
-							"\n" + TagIcons.getExceed(ExceedEnums.LUMAMANA) + "**" + ExceedEnums.LUMAMANA.getName() + "** - Os orgulhosos centauros." +
+							"\n" + TagIcons.getExceed(ExceedEnums.ELF) + "**" + ExceedEnums.ELF.getName() + "** - Os místicos elfos." +
 							"\n" + TagIcons.getExceed(ExceedEnums.EXMACHINA) + "**" + ExceedEnums.EXMACHINA.getName() + "** - Os poderosos androides." +
-							"\n" + TagIcons.getExceed(ExceedEnums.FLUGEL) + "**" + ExceedEnums.FLUGEL.getName() + "** - Os místicos elfos." +
+							"\n" + TagIcons.getExceed(ExceedEnums.FLUGEL) + "**" + ExceedEnums.FLUGEL.getName() + "** - Os divinos anjos." +
 							"\n\nEscolha usando `" + prefix + "exselect EXCEED`.\n__**ESTA ESCOLHA É PERMANENTE**__").queue();
 					m.delete().queue();
 					return;
@@ -44,8 +44,8 @@ public class ExceedSelectCommand extends Command {
 					case "werebeast":
 						u.setExceed(ExceedEnums.WEREBEAST.getName());
 						break;
-					case "lumamana":
-						u.setExceed(ExceedEnums.LUMAMANA.getName());
+					case "elf":
+						u.setExceed(ExceedEnums.ELF.getName());
 						break;
 					case "ex-machina":
 						u.setExceed(ExceedEnums.EXMACHINA.getName());

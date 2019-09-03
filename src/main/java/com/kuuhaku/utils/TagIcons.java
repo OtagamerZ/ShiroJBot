@@ -64,7 +64,7 @@ public enum TagIcons {
 				return "<:seiren:613741198334754827>";
 			case WEREBEAST:
 				return "<:werebeast:613741197680312321>";
-			case LUMAMANA:
+			case ELF:
 				return "<:lumamana:613741197764067358>";
 			case EXMACHINA:
 				return "<:exmachina:613741197231390720>";
