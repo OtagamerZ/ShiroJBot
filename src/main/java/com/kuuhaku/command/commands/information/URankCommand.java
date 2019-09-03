@@ -75,7 +75,7 @@ public class URankCommand extends Command {
 		for (int x = 1; x < Math.ceil(mbs.size() / 10f); x++) {
 			eb.clear();
 			next10.setLength(0);
-			for (int i = 10 * x; i < mbs.size() && i < 20 * x; i++) {
+			for (int i = 10 * x; i < mbs.size() && i < (10 * x) + 10; i++) {
 				next10
 						.append(i + 1)
 						.append(" - ")
