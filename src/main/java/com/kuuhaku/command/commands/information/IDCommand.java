@@ -38,7 +38,7 @@ public class IDCommand extends Command {
 							false
 					);
 				}
-				eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
+				eb.setColor(Helper.getRandomColor());
 
 				channel.sendMessage(eb.build()).queue();
 			} catch (InsufficientPermissionException ex) {

@@ -21,12 +21,12 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.SQLite;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class URankCommand extends Command {
 
@@ -45,11 +45,19 @@ public class URankCommand extends Command {
 			mbs = SQLite.getMemberRank(guild.getId(), false);
 		}
 
-		String champ = "1 - " + Main.getInfo().getUserByID(mbs.get(0).getMid()).getAsTag() + " (Level " + mbs.get(0).getLevel() + ")";
-		List<String> sub9 = mbs.subList(1, 9).stream().map(m -> Main.getInfo().getUserByID(m.getMid()).getAsTag() + " (Level " + m.getLevel() + ")").collect(Collectors.toList());
+		String champ = (global ? "(" + Main.getInfo().getGuildByID(mbs.get(0).getId().replace(mbs.get(0).getMid(), "")).getName() + ") " : "") + "1 - " + Main.getInfo().getUserByID(mbs.get(0).getMid()).getAsTag() + " (Level " + mbs.get(0).getLevel() + ")";
+		List<com.kuuhaku.model.Member> sub9 = mbs.subList(1, 9);
 		StringBuilder sub9Formatted = new StringBuilder();
-		for (int i = 1; i < sub9.size(); i++) {
-			sub9Formatted.append(i).append(" - ").append(sub9.get(i - 1)).append("\n");
+		for (int i = 0; i < sub9.size(); i++) {
+			sub9Formatted
+					.append((global ? "(" + Main.getInfo().getGuildByID(sub9.get(i).getId().replace(sub9.get(i).getMid(), "")).getName() + ") " : ""))
+					.append(i + 2)
+					.append(" - ")
+					.append(Main.getInfo().getUserByID(sub9.get(i).getMid()).getAsTag())
+					.append(" (Level ")
+					.append(sub9.get(i).getLevel())
+					.append(")")
+					.append("\n");
 		}
 
 		EmbedBuilder eb = new EmbedBuilder();
@@ -57,6 +65,7 @@ public class URankCommand extends Command {
 		eb.setTitle("Ranking de usuários (" + (global ? "GLOBAL" : "LOCAL") + ")");
 		eb.addField(champ, sub9Formatted.toString(), false);
 		eb.setThumbnail("http://www.marquishoa.com/wp-content/uploads/2018/01/Ranking-icon.png");
+		eb.setColor(Helper.getRandomColor());
 
 		channel.sendMessage(eb.build()).queue();
 	}
