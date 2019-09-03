@@ -294,6 +294,10 @@ public class Helper {
 		return "#" + sb.toString();
 	}
 
+	public static Color getRandomColor() {
+		return new Color(rng(255), rng(255), rng(255));
+	}
+
 	public static boolean compareWithValues(int value, int... compareWith) {
 		return Arrays.stream(compareWith).anyMatch(v -> v == value);
 	}

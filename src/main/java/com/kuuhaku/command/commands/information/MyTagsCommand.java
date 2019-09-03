@@ -49,7 +49,7 @@ public class MyTagsCommand extends Command {
         try {
             eb.setColor(Helper.colorThief(author.getAvatarUrl()));
         } catch (IOException e) {
-            eb.setColor(new Color(Helper.rng(255), Helper.rng(255), Helper.rng(255)));
+            eb.setColor(Helper.getRandomColor());
         }
 
         StringBuilder badges = new StringBuilder();
