@@ -53,8 +53,8 @@ public class URankCommand extends Command {
 			sub9Formatted
 					.append(i + 2)
 					.append(" - ")
-					.append((global ? "(" + Main.getInfo().getGuildByID(sub9.get(i).getId().replace(sub9.get(i).getMid(), "")).getName() + ") " : ""))
-					.append(Main.getInfo().getUserByID(sub9.get(i).getMid()).getAsTag())
+					.append((global ? checkGuild(sub9.get(i)) : ""))
+					.append(checkUser(sub9.get(i)))
 					.append(" (Level ")
 					.append(sub9.get(i).getLevel())
 					.append(")")
@@ -78,8 +78,8 @@ public class URankCommand extends Command {
 				next10
 						.append(i + 1)
 						.append(" - ")
-						.append((global ? "(" + Main.getInfo().getGuildByID(mbs.get(i).getId().replace(mbs.get(i).getMid(), "")).getName() + ") " : ""))
-						.append(Main.getInfo().getUserByID(mbs.get(i).getMid()).getAsTag())
+						.append((global ? checkGuild(mbs.get(i)) : ""))
+						.append(checkUser(mbs.get(i)))
 						.append(" (Level ")
 						.append(mbs.get(i).getLevel())
 						.append(")")
@@ -95,5 +95,21 @@ public class URankCommand extends Command {
 		}
 
 		channel.sendMessage(pages.get(0)).queue(s -> Helper.paginate(s, pages));
+	}
+
+	private static String checkUser(com.kuuhaku.model.Member m) {
+		try {
+			return Main.getInfo().getUserByID(m.getMid()).getAsTag();
+		} catch (Exception e) {
+			return "`Usuário inválido`";
+		}
+	}
+
+	private static String checkGuild(com.kuuhaku.model.Member m) {
+		try {
+			return "(" + Main.getInfo().getGuildByID(m.getId().replace(m.getMid(), "")).getName() + ") ";
+		} catch (Exception e) {
+			return "";
+		}
 	}
 }
