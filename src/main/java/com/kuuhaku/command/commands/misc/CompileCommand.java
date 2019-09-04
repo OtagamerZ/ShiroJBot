@@ -44,7 +44,7 @@ public class CompileCommand extends Command {
 
 				@Override
 				public Object get() {
-					Main.getInfo().getPool().execute(() -> {
+					Main.getInfo().getPool().submit(() -> {
 						final long start = System.currentTimeMillis();
 						try {
 							String code = String.join(" ", args);
@@ -68,7 +68,6 @@ public class CompileCommand extends Command {
 							m.editMessage(":x: | Erro ao compilar: ```" + e.toString().replace("`", "´") + "```").queue();
 						}
 					});
-					Thread.currentThread().interrupt();
 					return null;
 				}
 
