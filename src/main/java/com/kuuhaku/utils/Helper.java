@@ -54,7 +54,7 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
@@ -334,7 +334,7 @@ public class Helper {
 			Main.getInfo().getAPI().addEventListener(new MessageListener() {
 				private final int maxP = pages.size() - 1;
 				private int p = 0;
-				private ScheduledFuture<?> timeout;
+				private Future<?> timeout;
 				private final Consumer<Void> success = s -> Main.getInfo().getAPI().removeEventListener(this);
 
 				@Override
@@ -361,7 +361,10 @@ public class Helper {
 
 				@Override
 				public void onMessageDelete(@Nonnull MessageDeleteEvent event) {
-					if (event.getMessageId().equals(msg.getId())) timeout.cancel(true);
+					if (event.getMessageId().equals(msg.getId())) {
+						timeout.cancel(true);
+						timeout = null;
+					}
 				}
 			});
 		} catch (Exception e) {
@@ -375,7 +378,7 @@ public class Helper {
 			msg.addReaction(CANCEL).queue();
 			Main.getInfo().getAPI().addEventListener(new MessageListener() {
 				private String currCat = "";
-				private ScheduledFuture<?> timeout;
+				private Future<?> timeout;
 				private final Consumer<Void> success = s -> Main.getInfo().getAPI().removeEventListener(this);
 
 				@Override
@@ -395,7 +398,10 @@ public class Helper {
 
 				@Override
 				public void onMessageDelete(@Nonnull MessageDeleteEvent event) {
-					if (event.getMessageId().equals(msg.getId())) timeout.cancel(true);
+					if (event.getMessageId().equals(msg.getId())) {
+						timeout.cancel(true);
+						timeout = null;
+					}
 				}
 			});
 		} catch (Exception e) {
