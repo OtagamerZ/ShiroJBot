@@ -49,6 +49,7 @@ public class Main {
 	private static CommandManager cmdManager;
 	private static JDA api;
 	private static JDA jbr;
+	private static String[] arguments;
 
 	public static void main(String[] args) throws Exception {
 		info = new ShiroInfo();
@@ -87,6 +88,7 @@ public class Main {
 		AudioSourceManagers.registerLocalSource(getInfo().getApm());
 
 		finishStartUp();
+		arguments = args;
 	}
 
 	private static void finishStartUp() {
@@ -122,6 +124,10 @@ public class Main {
 		return info;
 	}
 
+	public static String[] getArgs() {
+		return arguments;
+	}
+
 	public static CommandManager getCommandManager() {
 		return cmdManager;
 	}
@@ -132,6 +138,7 @@ public class Main {
 		MySQL.dumpData(new DataDump(SQLite.getMemberDump()));
 		Helper.log(Main.class, LogLevel.INFO, "Membros salvos com sucesso!");
 		SQLite.disconnect();
+		jbr.shutdown();
 		api.shutdown();
 		Helper.log(Main.class, LogLevel.INFO, "Fui desligada.");
 	}
