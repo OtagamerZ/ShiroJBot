@@ -1,13 +1,22 @@
 package com.kuuhaku.command.commands.misc;
 
 import bsh.Interpreter;
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.BannedVars;
+import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadMXBean;
 import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class CompileCommand extends Command {
 	public CompileCommand() {
@@ -16,14 +25,14 @@ public class CompileCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-		channel.sendMessage("<a:Loading:598500653215645697> | Compilando...").queue(m -> {
+		final Runnable compile = () -> channel.sendMessage("<a:Loading:598500653215645697> | Compilando...").queue(m -> {
 			try {
 				String code = String.join(" ", args);
 				if (!code.contains("out")) throw new Exception("Código sem retorno.");
 				else if (code.contains("```") && !code.contains("```java")) {
-					throw new Exception("Bloco de código com começo incorreto");
+					throw new IllegalArgumentException("Bloco de código com começo incorreto");
 				} else if (Arrays.stream(BannedVars.vars).parallel().anyMatch(code::contains))
-					throw new Exception("Código com métodos proibidos.");
+					throw new IllegalAccessException("Código com métodos proibidos.");
 				code = code.replace("```java", "").replace("```", "");
 				Interpreter i = new Interpreter();
 				i.set("msg", message);
@@ -38,6 +47,14 @@ public class CompileCommand extends Command {
 				m.editMessage(":x: | Erro ao compilar: ```" + e.toString().replace("`", "´") + "```").queue();
 			}
 		});
+		try {
+			long time = Main.getInfo().getPool().submit(compile, ManagementFactory.getThreadMXBean().getThreadCpuTime(Thread.currentThread().getId())).get(5, TimeUnit.SECONDS);
+			channel.sendMessage("<:Verified:591425071772467211> | Tempo de execução: " + time + " ms").queue();
+		} catch (InterruptedException | ExecutionException e) {
+			Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
+		} catch (TimeoutException e) {
+			channel.sendMessage(":x: | Seu código ultrapassou o tempo limite de compilação.").queue();
+		}
 	}
 
 }
