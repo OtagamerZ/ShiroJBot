@@ -40,6 +40,7 @@ import java.awt.*;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 public class Main {
@@ -71,6 +72,8 @@ public class Main {
 		jbr.addEventListener(new JibrilEvents());
 
 		info.setStartTime(Instant.now().getEpochSecond());
+		info.getPool().allowCoreThreadTimeOut(true);
+		info.getPool().setKeepAliveTime(1, TimeUnit.SECONDS);
 
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		ge.registerFont(Profile.FONT);
