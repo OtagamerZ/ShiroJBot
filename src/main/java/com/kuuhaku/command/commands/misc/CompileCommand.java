@@ -49,7 +49,7 @@ public class CompileCommand extends Command {
 
 				@Override
 				public Object get(long timeout, @NotNull TimeUnit unit) {
-					Main.getInfo().getPool().execute(() -> {
+					return Main.getInfo().getPool().submit(() -> {
 						final long start = System.currentTimeMillis();
 						try {
 							String code = String.join(" ", args);
@@ -72,7 +72,6 @@ public class CompileCommand extends Command {
 							m.editMessage(":x: | Erro ao compilar: ```" + e.toString().replace("`", "´") + "```").queue();
 						}
 					});
-					return null;
 				}
 			};
 			try {
