@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class CompileCommand extends Command {
 	public CompileCommand() {
@@ -25,11 +26,9 @@ public class CompileCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		channel.sendMessage("<a:Loading:598500653215645697> | Compilando...").queue(m -> {
 			Future<?> execute = new Future<Object>() {
-				private boolean done = false;
-
 				@Override
 				public boolean cancel(boolean mayInterruptIfRunning) {
-					if (isDone()) m.editMessage(":x: | Tempo limite de execução atingido.").queue();
+					m.editMessage(":x: | Tempo limite de execução esgotado.").queue();
 					return true;
 				}
 
@@ -40,11 +39,16 @@ public class CompileCommand extends Command {
 
 				@Override
 				public boolean isDone() {
-					return done;
+					return false;
 				}
 
 				@Override
 				public Object get() {
+					return null;
+				}
+
+				@Override
+				public Object get(long timeout, @NotNull TimeUnit unit) {
 					Main.getInfo().getPool().execute(() -> {
 						final long start = System.currentTimeMillis();
 						try {
@@ -63,27 +67,22 @@ public class CompileCommand extends Command {
 							m.getChannel().sendMessage("<a:Loading:598500653215645697> | Executando...").queue(d ->
 									d.editMessage("-> " + out.toString()).queue());
 							message.delete().queue();
-							channel.sendMessage("<:Verified:591425071772467211> | Tempo de execução: " + (System.currentTimeMillis() - start) + " ms").queue();
+							m.editMessage("<:Verified:591425071772467211> | Tempo de execução: " + (System.currentTimeMillis() - start) + " ms").queue();
 						} catch (Exception e) {
 							m.editMessage(":x: | Erro ao compilar: ```" + e.toString().replace("`", "´") + "```").queue();
 						}
-						done = true;
 					});
-					return null;
-				}
-
-				@Override
-				public Object get(long timeout, @NotNull TimeUnit unit) {
 					return null;
 				}
 			};
 			try {
-				execute.get();
+				execute.get(10, TimeUnit.SECONDS);
 				Main.getInfo().getPool().purge();
 			} catch (InterruptedException | ExecutionException e) {
 				Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
+			} catch (TimeoutException e) {
+				execute.cancel(true);
 			}
-			Main.getInfo().getScheduler().schedule(() -> execute.cancel(true), 10, TimeUnit.SECONDS);
 		});
 	}
 
