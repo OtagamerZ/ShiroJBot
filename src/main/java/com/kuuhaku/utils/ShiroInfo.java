@@ -69,7 +69,6 @@ public class ShiroInfo {
 	private static final DiscordBotListAPI dbl = new DiscordBotListAPI.Builder().token(System.getenv("DBL_TOKEN")).botId("572413282653306901").build();
 	private static final List<User[]> queue = new ArrayList<>();
 	private static final Map<String, Integer[]> polls = new HashMap<>();
-	private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(5);
 	public static final List<DuelData> dd = new ArrayList<>();
 	public static final Map<String, DuelData> duels = new HashMap<>();
 	private static final Map<Long, GuildMusicManager> gmms = new HashMap<>();
@@ -161,7 +160,7 @@ public class ShiroInfo {
 	}
 
 	public ScheduledExecutorService getScheduler() {
-		return scheduler;
+		return Executors.newSingleThreadScheduledExecutor();
 	}
 
 	public AudioPlayerManager getApm() {
