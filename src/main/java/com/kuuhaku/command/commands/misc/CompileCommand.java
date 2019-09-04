@@ -45,7 +45,6 @@ public class CompileCommand extends Command {
 
 				@Override
 				public Object get() {
-					Thread.currentThread().setDaemon(true);
 					Main.getInfo().getPool().execute(() -> {
 						final long start = System.currentTimeMillis();
 						try {
@@ -80,6 +79,7 @@ public class CompileCommand extends Command {
 			};
 			try {
 				execute.get();
+				Main.getInfo().getPool().purge();
 			} catch (InterruptedException | ExecutionException e) {
 				Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
 			}
