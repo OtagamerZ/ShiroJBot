@@ -5,13 +5,15 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.BannedVars;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class CompileCommand extends Command {
 	public CompileCommand() {
@@ -46,11 +48,39 @@ public class CompileCommand extends Command {
 				}
 			});
 		};
-		Future<?> execute = Main.getInfo().getPool().submit(compile);
+		Future<?> execute = new Future<Object>() {
+			@Override
+			public boolean cancel(boolean mayInterruptIfRunning) {
+				channel.sendMessage(":x: | Tempo limite de execução atingido.").queue();
+				return true;
+			}
+
+			@Override
+			public boolean isCancelled() {
+				return false;
+			}
+
+			@Override
+			public boolean isDone() {
+				return false;
+			}
+
+			@Override
+			public Object get() throws ExecutionException, InterruptedException {
+				try {
+					Main.getInfo().getPool().submit(compile).get(5, TimeUnit.SECONDS);
+				} catch (TimeoutException e) {
+					channel.sendMessage(":x: | A fila de execuções está lotada.").queue();
+				}
+				return null;
+			}
+
+			@Override
+			public Object get(long timeout, @NotNull TimeUnit unit) {
+				return null;
+			}
+		};
 		Main.getInfo().getScheduler().schedule(() -> execute.cancel(true), 10, TimeUnit.SECONDS);
-		if (execute.isCancelled()) {
-			channel.sendMessage(":x: | Tempo limite de execução atingido.").queue();
-		}
 	}
 
 }
