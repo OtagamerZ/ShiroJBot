@@ -101,8 +101,7 @@ public class CompileCommand extends Command {
 				}
 			};
 			try {
-				System.out.println("Iniciando execução");
-				execute.get(5, TimeUnit.SECONDS);
+				execute.get(1, TimeUnit.SECONDS);
 			} catch (InterruptedException | ExecutionException e) {
 				Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
 			} catch (TimeoutException e) {
