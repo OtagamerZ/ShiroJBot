@@ -9,7 +9,6 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
@@ -25,31 +24,7 @@ public class CompileCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		channel.sendMessage("<a:Loading:598500653215645697> | Compilando...").queue(m -> {
-			Future<?> execute = new Future<Object>() {
-				@Override
-				public boolean cancel(boolean mayInterruptIfRunning) {
-					m.editMessage(":x: | Tempo limite de execução esgotado.").queue();
-					return true;
-				}
-
-				@Override
-				public boolean isCancelled() {
-					return false;
-				}
-
-				@Override
-				public boolean isDone() {
-					return false;
-				}
-
-				@Override
-				public Object get() {
-					return null;
-				}
-
-				@Override
-				public Object get(long timeout, @NotNull TimeUnit unit) {
-					return Main.getInfo().getPool().submit(() -> {
+			Future<?> execute = Main.getInfo().getPool().submit(() -> {
 						final long start = System.currentTimeMillis();
 						try {
 							String code = String.join(" ", args);
@@ -71,15 +46,15 @@ public class CompileCommand extends Command {
 						} catch (Exception e) {
 							m.editMessage(":x: | Erro ao compilar: ```" + e.toString().replace("`", "´") + "```").queue();
 						}
+						return null;
 					});
-				}
-			};
 			try {
 				execute.get(10, TimeUnit.SECONDS);
 			} catch (InterruptedException | ExecutionException e) {
 				Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
 			} catch (TimeoutException e) {
 				execute.cancel(true);
+				m.editMessage(":x: | Tempo limite de execução esgotado.").queue();
 			}
 		});
 	}
