@@ -23,6 +23,10 @@ public class CompileCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+		if (Main.getInfo().getPool().getActiveCount() == 5) {
+			channel.sendMessage(":x: | A fila de execução está cheia.").queue();
+			return;
+		}
 		channel.sendMessage("<a:Loading:598500653215645697> | Compilando...").queue(m -> {
 			Future<?> execute = new Future<Object>() {
 				@Override
@@ -76,10 +80,6 @@ public class CompileCommand extends Command {
 				}
 			};
 			try {
-				if (Main.getInfo().getPool().getActiveCount() == 5) {
-					m.editMessage(":x: | A fila de execução está cheia.").queue();
-					return;
-				}
 				execute.get();
 			} catch (InterruptedException | ExecutionException e) {
 				Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
