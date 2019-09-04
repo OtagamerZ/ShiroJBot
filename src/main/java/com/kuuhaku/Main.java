@@ -49,7 +49,6 @@ public class Main {
 	private static CommandManager cmdManager;
 	private static JDA api;
 	private static JDA jbr;
-	private static String[] arguments;
 
 	public static void main(String[] args) throws Exception {
 		info = new ShiroInfo();
@@ -88,7 +87,6 @@ public class Main {
 		AudioSourceManagers.registerLocalSource(getInfo().getApm());
 
 		finishStartUp();
-		arguments = args;
 	}
 
 	private static void finishStartUp() {
@@ -122,10 +120,6 @@ public class Main {
 
 	public static ShiroInfo getInfo() {
 		return info;
-	}
-
-	public static String[] getArgs() {
-		return arguments;
 	}
 
 	public static CommandManager getCommandManager() {
