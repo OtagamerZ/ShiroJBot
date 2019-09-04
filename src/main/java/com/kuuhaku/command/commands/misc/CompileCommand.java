@@ -23,7 +23,7 @@ public class CompileCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-		if (Main.getInfo().getPool().getActiveCount() == 5) {
+		if (Main.getInfo().getPool().getTaskCount() == 5) {
 			channel.sendMessage(":x: | A fila de execução está cheia.").queue();
 			return;
 		}
