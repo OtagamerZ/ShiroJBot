@@ -23,7 +23,7 @@ public class CompileCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-		System.out.println(Main.getInfo().getPool().getRunningThreadCount());
+		System.out.println(Main.getInfo().getPool().getQueue().size());
 		channel.sendMessage("<a:Loading:598500653215645697> | Compilando...").queue(m -> {
 			Future<?> execute = new Future<Object>() {
 				@Override

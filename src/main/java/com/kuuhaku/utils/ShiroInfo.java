@@ -35,8 +35,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
 
 @SuppressWarnings("localvariable")
 public class ShiroInfo {
@@ -46,7 +46,7 @@ public class ShiroInfo {
 
 	//CONSTANTS
 	private static final ThreadMXBean tBean = ManagementFactory.getThreadMXBean();
-	private static final ForkJoinPool compilationPools = (ForkJoinPool) Executors.newWorkStealingPool(5);
+	private static final ThreadPoolExecutor compilationPools = (ThreadPoolExecutor) Executors.newFixedThreadPool(5);
 	private static final String BotToken = System.getenv("BOT_TOKEN");
 	private static final String AnilistToken = System.getenv("ANILIST_TOKEN");
 	private static final String YandexToken = System.getenv("YANDEX_TOKEN");
@@ -87,7 +87,7 @@ public class ShiroInfo {
 		return (float) Helper.round(tBean.getCurrentThreadCpuTime() * 100, 2);
 	}
 
-	public ForkJoinPool getPool() {
+	public ThreadPoolExecutor getPool() {
 		return compilationPools;
 	}
 
