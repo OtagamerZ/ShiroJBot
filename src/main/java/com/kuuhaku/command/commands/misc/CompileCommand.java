@@ -48,7 +48,7 @@ public class CompileCommand extends Command {
 			}
 		});
 		try {
-			long time = Main.getInfo().getPool().submit(compile, ManagementFactory.getThreadMXBean().getThreadCpuTime(Thread.currentThread().getId())).get(5, TimeUnit.SECONDS);
+			String time = Main.getInfo().getPool().submit(compile, ManagementFactory.getThreadMXBean().getThreadInfo(Thread.currentThread().getId()).getThreadName()).get(5, TimeUnit.SECONDS);
 			channel.sendMessage("<:Verified:591425071772467211> | Tempo de execução: " + time + " ms").queue();
 		} catch (InterruptedException | ExecutionException e) {
 			Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
