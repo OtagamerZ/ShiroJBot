@@ -77,7 +77,6 @@ public class CompileCommand extends Command {
 			};
 			try {
 				execute.get(10, TimeUnit.SECONDS);
-				Main.getInfo().getPool().purge();
 			} catch (InterruptedException | ExecutionException e) {
 				Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
 			} catch (TimeoutException e) {
