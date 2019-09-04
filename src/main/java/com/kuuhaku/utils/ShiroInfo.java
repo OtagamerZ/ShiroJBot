@@ -21,7 +21,6 @@ import com.kuuhaku.handlers.music.GuildMusicManager;
 import com.kuuhaku.model.DuelData;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
-import com.sun.management.OperatingSystemMXBean;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
@@ -30,10 +29,12 @@ import net.dv8tion.jda.api.entities.User;
 import org.discordbots.api.client.DiscordBotListAPI;
 
 import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadMXBean;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -44,7 +45,8 @@ public class ShiroInfo {
 	private static final boolean DEV = false;
 
 	//CONSTANTS
-	private static final OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
+	private static final ThreadMXBean tBean = ManagementFactory.getThreadMXBean();
+	private static final ExecutorService compilationPools = Executors.newFixedThreadPool(5);
 	private static final String BotToken = System.getenv("BOT_TOKEN");
 	private static final String AnilistToken = System.getenv("ANILIST_TOKEN");
 	private static final String YandexToken = System.getenv("YANDEX_TOKEN");
@@ -83,7 +85,11 @@ public class ShiroInfo {
 
 	//CONSTANTS
 	public float getCPULoad() {
-		return (float) Helper.round(osBean.getProcessCpuLoad() * 100, 2);
+		return (float) Helper.round(tBean.getCurrentThreadCpuTime() * 100, 2);
+	}
+
+	public ExecutorService getPool() {
+		return compilationPools;
 	}
 
 	public boolean isDev() {
