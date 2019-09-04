@@ -44,7 +44,6 @@ public class CommandManager {
         commands = new ArrayList<Command>() {{
             //DEV
             add(new KillCommand());
-            add(new RestartCommand());
             add(new LeaveCommand());
             add(new ToxicTagCommand());
             add(new PartnerTagCommand());
