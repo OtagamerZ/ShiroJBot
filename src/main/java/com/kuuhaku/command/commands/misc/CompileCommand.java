@@ -23,10 +23,6 @@ public class CompileCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-		if (Main.getInfo().getPool().getPoolSize() == 5) {
-			channel.sendMessage(":x: | A fila de execução está cheia.").queue();
-			return;
-		}
 		System.out.println(Main.getInfo().getPool().getPoolSize());
 		channel.sendMessage("<a:Loading:598500653215645697> | Compilando...").queue(m -> {
 			Future<?> execute = new Future<Object>() {
@@ -43,7 +39,8 @@ public class CompileCommand extends Command {
 
 				@Override
 				public boolean isDone() {
-					return false;
+					Thread.currentThread().interrupt();
+					return true;
 				}
 
 				@Override
