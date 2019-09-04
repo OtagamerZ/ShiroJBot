@@ -40,7 +40,6 @@ import java.awt.*;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 
 public class Main {
@@ -72,8 +71,7 @@ public class Main {
 		jbr.addEventListener(new JibrilEvents());
 
 		info.setStartTime(Instant.now().getEpochSecond());
-		info.getPool().setKeepAliveTime(1, TimeUnit.SECONDS);
-		info.getPool().allowCoreThreadTimeOut(true);
+		Helper.log(Main.class, LogLevel.INFO, "Criada pool de compilação: " + info.getPool().getPoolSize() + " espaços alocados");
 
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		ge.registerFont(Profile.FONT);
