@@ -10,10 +10,8 @@ import net.dv8tion.jda.api.events.Event;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 public class CompileCommand extends Command {
 	public CompileCommand() {
@@ -22,9 +20,9 @@ public class CompileCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-		final Runnable compile = () -> {
-			final long start = System.currentTimeMillis();
-			channel.sendMessage("<a:Loading:598500653215645697> | Compilando...").queue(m -> {
+		channel.sendMessage("<a:Loading:598500653215645697> | Compilando...").queue(m -> {
+			final Runnable compile = () -> {
+				final long start = System.currentTimeMillis();
 				try {
 					String code = String.join(" ", args);
 					if (!code.contains("out")) throw new Exception("Código sem retorno.");
@@ -46,41 +44,38 @@ public class CompileCommand extends Command {
 				} catch (Exception e) {
 					m.editMessage(":x: | Erro ao compilar: ```" + e.toString().replace("`", "´") + "```").queue();
 				}
-			});
-		};
-		Future<?> execute = new Future<Object>() {
-			@Override
-			public boolean cancel(boolean mayInterruptIfRunning) {
-				channel.sendMessage(":x: | Tempo limite de execução atingido.").queue();
-				return true;
-			}
-
-			@Override
-			public boolean isCancelled() {
-				return false;
-			}
-
-			@Override
-			public boolean isDone() {
-				return false;
-			}
-
-			@Override
-			public Object get() throws ExecutionException, InterruptedException {
-				try {
-					Main.getInfo().getPool().submit(compile).get(5, TimeUnit.SECONDS);
-				} catch (TimeoutException e) {
-					channel.sendMessage(":x: | A fila de execuções está lotada.").queue();
+			};
+			Future<?> execute = new Future<Object>() {
+				@Override
+				public boolean cancel(boolean mayInterruptIfRunning) {
+					m.editMessage(":x: | Tempo limite de execução atingido.").queue();
+					return true;
 				}
-				return null;
-			}
 
-			@Override
-			public Object get(long timeout, @NotNull TimeUnit unit) {
-				return null;
-			}
-		};
-		Main.getInfo().getScheduler().schedule(() -> execute.cancel(true), 10, TimeUnit.SECONDS);
+				@Override
+				public boolean isCancelled() {
+					return false;
+				}
+
+				@Override
+				public boolean isDone() {
+					return false;
+				}
+
+				@Override
+				public Object get() {
+					Main.getInfo().getPool().submit(compile);
+					return null;
+				}
+
+				@Override
+				public Object get(long timeout, @NotNull TimeUnit unit) {
+					return null;
+				}
+			};
+			Main.getInfo().getScheduler().schedule(() -> execute.cancel(true), 10, TimeUnit.SECONDS);
+		});
 	}
+
 
 }
