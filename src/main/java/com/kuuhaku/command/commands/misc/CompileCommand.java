@@ -15,7 +15,6 @@ import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 public class CompileCommand extends Command {
 	public CompileCommand() {
@@ -44,7 +43,7 @@ public class CompileCommand extends Command {
 
 				@Override
 				public Object get() {
-					Main.getInfo().getPool().submit(() -> {
+					Main.getInfo().getPool().execute(() -> {
 						final long start = System.currentTimeMillis();
 						try {
 							String code = String.join(" ", args);
@@ -73,39 +72,17 @@ public class CompileCommand extends Command {
 
 				@Override
 				public Object get(long timeout, @NotNull TimeUnit unit) {
-					Main.getInfo().getPool().submit(() -> {
-						final long start = System.currentTimeMillis();
-						try {
-							String code = String.join(" ", args);
-							if (!code.contains("out")) throw new IllegalArgumentException("Código sem retorno.");
-							else if (code.contains("```") && !code.contains("```java")) {
-								throw new IllegalArgumentException("Bloco de código com começo incorreto");
-							} else if (Arrays.stream(BannedVars.vars).parallel().anyMatch(code::contains))
-								throw new IllegalAccessException("Código com métodos proibidos.");
-							code = code.replace("```java", "").replace("```", "");
-							Interpreter i = new Interpreter();
-							i.set("msg", message);
-							i.set("code", String.join(" ", args));
-							i.eval(code);
-							Object out = i.get("out");
-							m.editMessage("<:Verified:591425071772467211> | Compilado com sucesso!").queue(n ->
-									m.getChannel().sendMessage("<a:Loading:598500653215645697> | Executando...").queue(d ->
-											d.editMessage("-> " + out.toString()).queue()));
-							message.delete().queue();
-							channel.sendMessage("<:Verified:591425071772467211> | Tempo de execução: " + (System.currentTimeMillis() - start) + " ms").queue();
-						} catch (Exception e) {
-							m.editMessage(":x: | Erro ao compilar: ```" + e.toString().replace("`", "´") + "```").queue();
-						}
-					});
 					return null;
 				}
 			};
 			try {
-				execute.get(1, TimeUnit.SECONDS);
+				if (Main.getInfo().getPool().getActiveCount() == 5) {
+					m.editMessage(":x: | A fila de execução está cheia.").queue();
+					return;
+				}
+				execute.get();
 			} catch (InterruptedException | ExecutionException e) {
 				Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
-			} catch (TimeoutException e) {
-				m.editMessage(":x: | A fila de execução está cheia.").queue();
 			}
 			Main.getInfo().getScheduler().schedule(() -> execute.cancel(true), 10, TimeUnit.SECONDS);
 		});
