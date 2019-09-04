@@ -23,7 +23,7 @@ public class CompileCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-		System.out.println(Main.getInfo().getPool().getQueue().size());
+		System.out.println(Main.getInfo().getPool().getPoolSize());
 		channel.sendMessage("<a:Loading:598500653215645697> | Compilando...").queue(m -> {
 			Future<?> execute = new Future<Object>() {
 				@Override
@@ -44,7 +44,7 @@ public class CompileCommand extends Command {
 
 				@Override
 				public Object get() {
-					Main.getInfo().getPool().submit(() -> {
+					Main.getInfo().getPool().execute(() -> {
 						final long start = System.currentTimeMillis();
 						try {
 							String code = String.join(" ", args);
@@ -68,6 +68,7 @@ public class CompileCommand extends Command {
 							m.editMessage(":x: | Erro ao compilar: ```" + e.toString().replace("`", "´") + "```").queue();
 						}
 					});
+					Main.getInfo().getPool().remove(Thread.currentThread());
 					return null;
 				}
 
