@@ -103,6 +103,7 @@ public class CommandManager {
             add(new EmbedCommand());
             add(new PollCommand());
             add(new TheAnswerCommand());
+            add(new BinaryCommand());
 
             //FUN
             add(new SadButTrueCommand());
