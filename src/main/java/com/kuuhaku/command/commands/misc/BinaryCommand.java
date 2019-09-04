@@ -27,7 +27,7 @@ public class BinaryCommand extends Command {
 				}
 				binary.append(' ');
 			}
-			channel.sendMessage(":1234: " + binary.toString()).queue();
+			channel.sendMessage(":1234: `" + binary.toString() + "`").queue();
 		} catch (IllegalStateException e) {
 			channel.sendMessage(":x: | Mensagem muito grande (Max: 2000 | Lembre-se que cada caractére vale por 8, incluindo espaços).").queue();
 		}
