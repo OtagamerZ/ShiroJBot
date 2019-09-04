@@ -39,7 +39,6 @@ public class CompileCommand extends Command {
 
 				@Override
 				public boolean isDone() {
-					Thread.currentThread().interrupt();
 					return true;
 				}
 
@@ -69,6 +68,7 @@ public class CompileCommand extends Command {
 							m.editMessage(":x: | Erro ao compilar: ```" + e.toString().replace("`", "´") + "```").queue();
 						}
 					});
+					Thread.currentThread().interrupt();
 					return null;
 				}
 
