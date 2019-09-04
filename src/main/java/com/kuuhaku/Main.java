@@ -71,7 +71,7 @@ public class Main {
 		jbr.addEventListener(new JibrilEvents());
 
 		info.setStartTime(Instant.now().getEpochSecond());
-		Helper.log(Main.class, LogLevel.INFO, "Criada pool de compilação: " + info.getPool().getPoolSize() + " espaços alocados");
+		Helper.log(Main.class, LogLevel.INFO, "Criada pool de compilação: " + info.getPool().getCorePoolSize() + " espaços alocados");
 
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		ge.registerFont(Profile.FONT);
