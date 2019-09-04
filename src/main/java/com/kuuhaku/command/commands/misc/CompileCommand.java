@@ -45,6 +45,7 @@ public class CompileCommand extends Command {
 
 				@Override
 				public Object get() {
+					Thread.currentThread().setDaemon(true);
 					Main.getInfo().getPool().execute(() -> {
 						final long start = System.currentTimeMillis();
 						try {
