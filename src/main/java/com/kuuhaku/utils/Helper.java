@@ -112,7 +112,7 @@ public class Helper {
 		final Pattern urlPattern = Pattern.compile(
 				".*?(?:^|[\\W])((ht|f)tp(s?)://|www\\.)(([\\w\\-]+\\.)+?([\\w\\-.~]+/?)*[\\p{Alnum}.,%_=?&#\\-+()\\[\\]*$~@!:/{};']*?)",
 				Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
-		text = (StringUtils.containsAny(text, ".gg", ".com", ".net", ".site", ".tech", ".br") ? "http://" : "") + text;
+		text = (StringUtils.containsAny(text, ".gg", ".com", ".net", ".site", ".tech", ".br", ".me", ".org", ".gov") ? "http://" : "") + text;
 		text = text.replace("1", "i").replace("!", "i");
 		text = text.replace("3", "e");
 		text = text.replace("4", "a");
