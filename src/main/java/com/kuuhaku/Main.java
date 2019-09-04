@@ -72,8 +72,8 @@ public class Main {
 		jbr.addEventListener(new JibrilEvents());
 
 		info.setStartTime(Instant.now().getEpochSecond());
-		info.getPool().allowCoreThreadTimeOut(true);
 		info.getPool().setKeepAliveTime(1, TimeUnit.SECONDS);
+		info.getPool().allowCoreThreadTimeOut(true);
 
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		ge.registerFont(Profile.FONT);
