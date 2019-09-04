@@ -46,7 +46,7 @@ public class ShiroInfo {
 
 	//CONSTANTS
 	private static final ThreadMXBean tBean = ManagementFactory.getThreadMXBean();
-	private static final ThreadPoolExecutor compilationPools = (ThreadPoolExecutor) Executors.newFixedThreadPool(5);
+	private static final ThreadPoolExecutor compilationPools = (ThreadPoolExecutor) Executors.newFixedThreadPool(3);
 	private static final String BotToken = System.getenv("BOT_TOKEN");
 	private static final String AnilistToken = System.getenv("ANILIST_TOKEN");
 	private static final String YandexToken = System.getenv("YANDEX_TOKEN");
