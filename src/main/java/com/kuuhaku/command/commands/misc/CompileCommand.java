@@ -44,11 +44,13 @@ public class CompileCommand extends Command {
 
 				@Override
 				public Object get() {
+					System.out.println("Executando");
 					Main.getInfo().getPool().submit(() -> {
+						System.out.println("Adicionado à fila");
 						final long start = System.currentTimeMillis();
 						try {
 							String code = String.join(" ", args);
-							if (!code.contains("out")) throw new Exception("Código sem retorno.");
+							if (!code.contains("out")) throw new IllegalArgumentException("Código sem retorno.");
 							else if (code.contains("```") && !code.contains("```java")) {
 								throw new IllegalArgumentException("Bloco de código com começo incorreto");
 							} else if (Arrays.stream(BannedVars.vars).parallel().anyMatch(code::contains))
@@ -77,6 +79,7 @@ public class CompileCommand extends Command {
 				}
 			};
 			try {
+				System.out.println("Iniciando execução");
 				execute.get(5, TimeUnit.SECONDS);
 			} catch (InterruptedException | ExecutionException e) {
 				Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
