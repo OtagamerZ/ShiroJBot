@@ -339,7 +339,7 @@ public class Helper {
 
 				@Override
 				public void onGenericMessageReaction(@Nonnull GenericMessageReactionEvent event) {
-					if (timeout == null) timeout = msg.clearReactions().queueAfter(10, TimeUnit.SECONDS, success);
+					if (timeout == null) timeout = msg.clearReactions().queueAfter(60, TimeUnit.SECONDS, success);
 					if (event.getUser().isBot()) return;
 
 					timeout.cancel(true);
@@ -383,7 +383,7 @@ public class Helper {
 
 				@Override
 				public void onGenericMessageReaction(@Nonnull GenericMessageReactionEvent event) {
-					if (timeout == null) timeout = msg.clearReactions().queueAfter(10, TimeUnit.SECONDS, success);
+					if (timeout == null) timeout = msg.clearReactions().queueAfter(60, TimeUnit.SECONDS, success);
 
 					if (event.getUser().isBot() || event.getReactionEmote().getName().equals(currCat)) return;
 					else if (event.getReactionEmote().getName().equals(CANCEL)) {
