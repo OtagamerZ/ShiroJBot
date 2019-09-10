@@ -115,6 +115,7 @@ public class CommandManager {
             add(new PPTCommand());
             add(new ShipCommand());
             add(new MarryCommand());
+            add(new StonksCommand());
             //REAÇÕES
             //RECIPROCOS
             add(new HugReaction(false));
