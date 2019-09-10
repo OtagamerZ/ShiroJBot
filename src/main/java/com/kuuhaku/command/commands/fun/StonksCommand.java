@@ -23,20 +23,22 @@ public class StonksCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-
 		if (args.length < 1) {
 			channel.sendMessage(":x: | Você tem que escrever a mensagem que deseja que apareca no meme.").queue();
 			return;
 		}
 
 		try {
+			String text = String.join(" ", args);
 			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("stonks.jpg")));
-			Graphics2D g2d = bi.createGraphics();
+			BufferedImage canvas = new BufferedImage(bi.getWidth(), 50 * (text.length() / 26) + bi.getHeight(), BufferedImage.TYPE_INT_RGB);
+			Graphics2D g2d = canvas.createGraphics();
 
 			g2d.setBackground(Color.WHITE);
 			g2d.setColor(Color.BLACK);
 			g2d.setFont(new Font("Impact", Font.BOLD, 25));
-			Profile.drawStringMultiLine(g2d, String.join(" ", args), 700, 50, 50);
+			Profile.drawStringMultiLine(g2d, text, 700, 38, 50);
+			g2d.drawImage(bi, 0, canvas.getHeight() - bi.getHeight(), null);
 
 			g2d.dispose();
 
