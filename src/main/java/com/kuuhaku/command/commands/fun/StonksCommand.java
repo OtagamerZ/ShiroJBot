@@ -31,7 +31,7 @@ public class StonksCommand extends Command {
 		try {
 			String text = String.join(" ", args);
 			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("stonks.jpg")));
-			BufferedImage canvas = new BufferedImage(bi.getWidth(), 50 * (Math.round(text.length() / 26f)) + bi.getHeight(), BufferedImage.TYPE_INT_RGB);
+			BufferedImage canvas = new BufferedImage(bi.getWidth(), 50 * (text.length() / 26) + bi.getHeight(), BufferedImage.TYPE_INT_RGB);
 			Graphics2D g2d = canvas.createGraphics();
 
 			g2d.setBackground(Color.WHITE);
@@ -43,9 +43,9 @@ public class StonksCommand extends Command {
 			g2d.dispose();
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write(bi, "png", baos);
+			ImageIO.write(canvas, "png", baos);
 
-			channel.sendMessage("Aqui está seu meme " + author.getAsMention() + "!").addFile(baos.toByteArray(), "tmv.jpg").queue();
+			channel.sendMessage("Aqui está seu meme " + author.getAsMention() + "!").addFile(baos.toByteArray(), "stks.jpg").queue();
 		} catch (IOException e) {
 			Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
 		}
