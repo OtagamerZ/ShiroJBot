@@ -408,4 +408,39 @@ public class Helper {
 			log(Helper.class, LogLevel.WARN, e + " | " + e.getStackTrace()[0]);
 		}
 	}
+
+	public static String getRequiredPerms(TextChannel c) {
+		EnumSet channelPerms = c.getGuild().getSelfMember().getPermissions(c);
+		EnumSet guildPerms = c.getGuild().getSelfMember().getPermissions();
+		String jibrilPerms = "";
+
+		if (c.getGuild().getMembers().stream().map(Member::getUser).anyMatch(u -> u == Main.getJibril().getSelfUser())) {
+			EnumSet JchannelPerms = Objects.requireNonNull(c.getGuild().getMember(Main.getJibril().getSelfUser())).getPermissions(c);
+			EnumSet JguildPerms = Objects.requireNonNull(c.getGuild().getMember(Main.getJibril().getSelfUser())).getPermissions();
+			jibrilPerms = "\n\n\n__**Permissões necessárias para uso completo da Jibril**__\n\n" +
+					((JchannelPerms.contains(Permission.MANAGE_WEBHOOKS) || JguildPerms.contains(Permission.MANAGE_WEBHOOKS)) ? ":white_check_mark: -> " : ":x: -> ") + "Gerenciar webhooks\n" +
+					((JchannelPerms.contains(Permission.MESSAGE_WRITE) || JguildPerms.contains(Permission.MESSAGE_WRITE)) ? ":white_check_mark: -> " : ":x: -> ") + "Escrever mensagens\n" +
+					((JchannelPerms.contains(Permission.MESSAGE_MANAGE) || JguildPerms.contains(Permission.MESSAGE_MANAGE)) ? ":white_check_mark: -> " : ":x: -> ") + "Gerenciar mensagens\n" +
+					((JchannelPerms.contains(Permission.MESSAGE_EMBED_LINKS) || JguildPerms.contains(Permission.MESSAGE_EMBED_LINKS)) ? ":white_check_mark: -> " : ":x: -> ") + "Inserir links\n" +
+					((JchannelPerms.contains(Permission.MESSAGE_ATTACH_FILES) || JguildPerms.contains(Permission.MESSAGE_ATTACH_FILES)) ? ":white_check_mark: -> " : ":x: -> ") + "Enviar arquivos\n" +
+					((JchannelPerms.contains(Permission.MESSAGE_EXT_EMOJI) || JguildPerms.contains(Permission.MESSAGE_EXT_EMOJI)) ? ":white_check_mark: -> " : ":x: -> ") + "Usar emotes externos";
+		}
+
+		return "__**Permissões necessárias para uso completo da Shiro**__\n\n" +
+				(channelPerms.contains(Permission.MANAGE_CHANNEL) || guildPerms.contains(Permission.MANAGE_CHANNEL) ? ":white_check_mark: -> " : ":x: -> ") + "Gerenciar canal \n" +
+				(channelPerms.contains(Permission.BAN_MEMBERS) || guildPerms.contains(Permission.BAN_MEMBERS) ? ":white_check_mark: -> " : ":x: -> ") + "Banir membros \n" +
+				(channelPerms.contains(Permission.KICK_MEMBERS) || guildPerms.contains(Permission.KICK_MEMBERS) ? ":white_check_mark: -> " : ":x: -> ") + "Expulsar membros \n" +
+				(channelPerms.contains(Permission.CREATE_INSTANT_INVITE) || guildPerms.contains(Permission.CREATE_INSTANT_INVITE) ? ":white_check_mark: -> " : ":x: -> ") + "Criar convite instantâneo \n" +
+				(channelPerms.contains(Permission.MESSAGE_READ) || guildPerms.contains(Permission.MESSAGE_READ) ? ":white_check_mark: -> " : ":x: -> ") + "Ler mensagens \n" +
+				(channelPerms.contains(Permission.MESSAGE_MANAGE) || guildPerms.contains(Permission.MESSAGE_MANAGE) ? ":white_check_mark: -> " : ":x: -> ") + "Gerenciar mensagens \n" +
+				(channelPerms.contains(Permission.MESSAGE_WRITE) || guildPerms.contains(Permission.MESSAGE_WRITE) ? ":white_check_mark: -> " : ":x: -> ") + "Escrever mensagens \n" +
+				(channelPerms.contains(Permission.MESSAGE_EMBED_LINKS) || guildPerms.contains(Permission.MESSAGE_EMBED_LINKS) ? ":white_check_mark: -> " : ":x: -> ") + "Inserir links \n" +
+				(channelPerms.contains(Permission.MESSAGE_ATTACH_FILES) || guildPerms.contains(Permission.MESSAGE_ATTACH_FILES) ? ":white_check_mark: -> " : ":x: -> ") + "Enviar arquivos \n" +
+				(channelPerms.contains(Permission.MESSAGE_HISTORY) || guildPerms.contains(Permission.MESSAGE_HISTORY) ? ":white_check_mark: -> " : ":x: -> ") + "Ver histórico de mensagens \n" +
+				(channelPerms.contains(Permission.MESSAGE_ADD_REACTION) || guildPerms.contains(Permission.MESSAGE_ADD_REACTION) ? ":white_check_mark: -> " : ":x: -> ") + "Adicionar reações \n" +
+				(channelPerms.contains(Permission.MESSAGE_EXT_EMOJI) || guildPerms.contains(Permission.MESSAGE_EXT_EMOJI) ? ":white_check_mark: -> " : ":x: -> ") + "Usar emotes externos \n" +
+				(channelPerms.contains(Permission.MESSAGE_EXT_EMOJI) || guildPerms.contains(Permission.VOICE_CONNECT) ? ":white_check_mark: -> " : ":x: -> ") + "Conectar à canais de voz \n" +
+				(channelPerms.contains(Permission.MESSAGE_EXT_EMOJI) || guildPerms.contains(Permission.VOICE_SPEAK) ? ":white_check_mark: -> " : ":x: -> ") + "Falar em canais de voz" +
+				jibrilPerms;
+	}
 }
