@@ -31,7 +31,7 @@ public class StonksCommand extends Command {
 		try {
 			String text = String.join(" ", args);
 			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("stonks.jpg")));
-			BufferedImage canvas = new BufferedImage(bi.getWidth(), 50 * (text.length() / 26) + bi.getHeight(), BufferedImage.TYPE_INT_RGB);
+			BufferedImage canvas = new BufferedImage(bi.getWidth(), 50 * (Math.round(text.length() / 26f)) + bi.getHeight(), BufferedImage.TYPE_INT_RGB);
 			Graphics2D g2d = canvas.createGraphics();
 
 			g2d.setBackground(Color.WHITE);
