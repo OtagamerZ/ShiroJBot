@@ -345,7 +345,7 @@ public class Profile {
 	public static void drawStringMultiLineNO(Graphics2D g, String text, int lineWidth, int x, int y) {
 		FontMetrics m = g.getFontMetrics();
 		if (m.stringWidth(text) < lineWidth) {
-			drawOutlinedText(text, x, y, g);
+			g.drawString(text, x, y);
 		} else {
 			String[] words = text.split(" ");
 			StringBuilder currentLine = new StringBuilder(words[0]);
