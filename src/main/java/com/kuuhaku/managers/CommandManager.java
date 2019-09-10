@@ -32,6 +32,7 @@ import com.kuuhaku.command.commands.music.VideoCommand;
 import com.kuuhaku.command.commands.music.YoutubeCommand;
 import com.kuuhaku.command.commands.misc.CompileCommand;
 import com.kuuhaku.command.commands.partner.JibrilCommand;
+import org.dom4j.rule.Rule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,7 @@ public class CommandManager {
             add(new RelaysCommand());
             add(new BlockCommand());
             add(new LogCommand());
+            add(new RegenRulesCommand());
 
             //PARTNER
             add(new JibrilCommand());
@@ -104,6 +106,7 @@ public class CommandManager {
             add(new PollCommand());
             add(new TheAnswerCommand());
             add(new BinaryCommand());
+            add(new PermissionCommand());
 
             //FUN
             add(new SadButTrueCommand());
