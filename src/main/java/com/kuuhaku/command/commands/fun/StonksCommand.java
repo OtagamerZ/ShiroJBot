@@ -15,10 +15,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Objects;
 
-public class HardDecisionCommand extends Command {
+public class StonksCommand extends Command {
 
-	public HardDecisionCommand() {
-		super("doisbotoes", new String[]{"tb", "twobuttons", "buttons"}, "<opção 1>;<opção 2>", "Gera um meme no formato \"Dois botões\"", Category.FUN);
+	public StonksCommand() {
+		super("stonks", new String[]{"stks"}, "<texto>", "Gera um meme no formato \"Stonks\"", Category.FUN);
 	}
 
 	@Override
@@ -27,31 +27,23 @@ public class HardDecisionCommand extends Command {
 		if (args.length < 1) {
 			channel.sendMessage(":x: | Você tem que escrever a mensagem que deseja que apareca no meme.").queue();
 			return;
-		} else if (String.join(" ", args).split(";").length < 2) {
-			channel.sendMessage(":x: | Você precisa escrever duas opções para o meme (separados por ponto-e-vírgula).").queue();
-			return;
 		}
 
 		try {
-			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("Two-Buttons.jpg")));
+			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("stonks.jpg")));
 			Graphics2D g2d = bi.createGraphics();
 
+			g2d.setBackground(Color.WHITE);
 			g2d.setColor(Color.BLACK);
 			g2d.setFont(new Font("Impact", Font.BOLD, 25));
-			if (g2d.getFontMetrics().getStringBounds(String.join(" ", args), g2d).getWidth() > 270) {
-				Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[0], 215, 55, 135);
-				Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[1], 215, 255, 100);
-			} else {
-				Profile.printCenteredString(String.join(" ", args).split(";")[0], 215, 55, 135, g2d);
-				Profile.printCenteredString(String.join(" ", args).split(";")[1], 215, 255, 100, g2d);
-			}
+			Profile.drawStringMultiLine(g2d, String.join(" ", args), 700, 50, 50);
 
 			g2d.dispose();
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ImageIO.write(bi, "png", baos);
 
-			channel.sendMessage("Aqui está seu meme " + author.getAsMention() + "!").addFile(baos.toByteArray(), "tb.jpg").queue();
+			channel.sendMessage("Aqui está seu meme " + author.getAsMention() + "!").addFile(baos.toByteArray(), "tmv.jpg").queue();
 		} catch (IOException e) {
 			Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
 		}
