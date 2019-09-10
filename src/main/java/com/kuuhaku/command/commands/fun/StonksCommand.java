@@ -33,13 +33,14 @@ public class StonksCommand extends Command {
 			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("stonks.jpg")));
 			BufferedImage canvas = new BufferedImage(bi.getWidth(), 50 * (text.length() / 26 + 1) + bi.getHeight(), BufferedImage.TYPE_INT_RGB);
 			Graphics2D g2d = canvas.createGraphics();
+			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 			g2d.setColor(Color.WHITE);
 			g2d.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
 			g2d.setColor(Color.BLACK);
 			g2d.setFont(new Font("Impact", Font.BOLD, 25));
-			Profile.drawStringMultiLine(g2d, text, 700, 38, 50);
+			Profile.drawStringMultiLineNO(g2d, text, 700, 38, 50);
 			g2d.drawImage(bi, 0, canvas.getHeight() - bi.getHeight(), null);
 
 			g2d.dispose();
