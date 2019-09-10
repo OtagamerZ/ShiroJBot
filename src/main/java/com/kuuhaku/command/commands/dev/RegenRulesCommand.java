@@ -28,15 +28,15 @@ public class RegenRulesCommand extends Command {
 						"Por razões obvias, tais coisas poluem o servidor e prejudicam a comunidade e é considerado um ato grave para medidas de punição.\n" +
 						"Infratores serão punidos de acordo com seus atos.\n\n" +
 						"**2 - Proibido postar qualquer conteúdo pornográfico ou racista**\n" +
-						"Ninguem gosta de racismo, e este servidor não é um lugar para coisas NSFW, então mantenha-os no seu HD. (Incluí usar avatares disso)\n\n" +
+						"Ninguem gosta de racismo, e este servidor não é um lugar para coisas NSFW, então mantenha-os no seu HD. (Inclui avatares)\n\n" +
 						"**3 - Atenha-se ao tópico**\n" +
 						"Existem vários canais para diversos assuntos, não há necessidade de entupir tudo em um canal só.\n\n" +
 						"**4 - Não peça cargos, xp ou coisas do tipo**\n" +
 						"Eu sou a única que gerencia isso, e meu Nii-chan não irá favorecer ninguem!\n" +
 						"Pronto pessoal, isso é tudo!\n" +
-						"Divirta-se e, caso tenha lido as regras você pode utilizar o comando s!arespostaé RESPOSTA para completar a seguinte frase e ganhar um emblema único:\n" +
+						(guild.getId().equals("421495229594730496") ? "Divirta-se e, caso tenha lido as regras você pode utilizar o comando `s!arespostaé RESPOSTA` para completar a seguinte frase e ganhar um emblema único:\n" +
 						"Infratores serão `_______ __ ______ ___ ____ ____`\n\n" +
-						"É proibido compartilhar qual é a resposta, se não não teria graça!").queue();
+						"É proibido compartilhar qual é a resposta, se não não teria graça!" : "")).queue();
 				channel.sendFile(Helper.getImage("https://i.imgur.com/U9lTSWD.png"), "partners.png").queue();
 			} catch (IOException e) {
 				Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
