@@ -107,6 +107,7 @@ public class CommandManager {
             add(new TheAnswerCommand());
             add(new BinaryCommand());
             add(new PermissionCommand());
+            add(new PixelzoneCommand());
 
             //FUN
             add(new SadButTrueCommand());
