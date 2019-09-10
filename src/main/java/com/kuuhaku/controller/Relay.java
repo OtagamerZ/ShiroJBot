@@ -47,7 +47,7 @@ public class Relay extends SQLite {
 		).collect(Collectors.joining(" "));
 		wmb.setContent(filtered);
 		wmb.setAvatarUrl(RelayBlockList.checkThumb(m.getUser().getId()) ? "https://i.pinimg.com/originals/46/15/87/461587d51087bfdf8906149d356f972f.jpg" : m.getUser().getAvatarUrl());
-		wmb.setUsername("(" + s.getName() + ") " + (exceed.isEmpty() ? "" : "[" + exceed + "] ") + m.getUser().getName());
+		wmb.setUsername("(" + s.getName() + ") " + (exceed.isEmpty() ? "" : "[" + exceed + "] ") + (m.getUser().getName().length() > 15 ? m.getUser().getName().substring(0, 15) + "..." : m.getUser().getName()));
 		return wmb.build();
 	}
 
