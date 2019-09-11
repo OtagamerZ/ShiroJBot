@@ -67,6 +67,7 @@ public class Helper {
 	private static final String CANCEL = "\u274E";
 	private static final String NEXT = "\u25B6";
 	public static final String ACCEPT = "\u2705";
+	public static final int CANVAS_SIZE = 1024;
 
 
 	private static PrivilegeLevel getPrivilegeLevel(Member member) {
