@@ -373,4 +373,32 @@ public class MySQL {
             return "none";
         }
     }
+
+    public static PixelCanvas getCanvas() {
+        EntityManager em = getEntityManager();
+
+        Query q = em.createQuery("SELECT c FROM PixelCanvas c ORDER BY id DESC", PixelCanvas.class);
+        q.setMaxResults(1);
+
+        try {
+            PixelCanvas p = (PixelCanvas) q.getSingleResult();
+            em.close();
+
+            return p;
+        } catch (NoResultException e) {
+            em.close();
+
+            return new PixelCanvas();
+        }
+    }
+
+    public static void saveCanvas(PixelCanvas canvas) {
+        EntityManager em = getEntityManager();
+
+        em.getTransaction().begin();
+        em.merge(canvas);
+        em.getTransaction().commit();
+
+        em.close();
+    }
 }
