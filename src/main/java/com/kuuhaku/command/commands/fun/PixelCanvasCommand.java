@@ -26,13 +26,27 @@ public class PixelCanvasCommand extends Command {
 
 		String[] opts = args[0].split(";");
 
-		if (!StringUtils.isNumeric(opts[0]) || !StringUtils.isNumeric(opts[1]) || Integer.parseInt(opts[0]) > 1000 || Integer.parseInt(opts[1]) > 500 || Integer.parseInt(opts[0]) < 0 || Integer.parseInt(opts[1]) < 0) {
-			channel.sendMessage(":x: | As coordenadas devem ser numéricas, e estar dentro da grade de 1000px x 500px.").queue();
+		if (opts.length == 1) {
+			channel.sendMessage(":x: | É preciso especificar a coordenada e a cor neste formato: `X;Y;#cor`.\nPara ver um chunk, digite apenas as coordenadas X e Y.").queue();
+			return;
+		} else if (!StringUtils.isNumeric(opts[0]) || !StringUtils.isNumeric(opts[1]) || Integer.parseInt(opts[0]) > 1024 || Integer.parseInt(opts[1]) > 1024 || Integer.parseInt(opts[0]) < -1024 || Integer.parseInt(opts[1]) < -1024) {
+			channel.sendMessage(":x: | As coordenadas devem ser numéricas, e estar dentro da grade de 2048px x 2048px.").queue();
 			return;
 		}
 
 		try {
 			int[] coords = new int[]{Integer.parseInt(opts[0]), Integer.parseInt(opts[1])};
+
+			if (opts.length == 2) {
+				if (coords[0] < 8 && coords[0] > 0 && coords[1] < 8 && coords[1] > 0) {
+					Main.getInfo().getCanvas().viewChunk(message.getTextChannel(), coords).queue();
+					return;
+				} else {
+					channel.sendMessage(":x: | A coordenada do chunk deve estar dentro da grade de 7 x 7.").queue();
+					return;
+				}
+			}
+
 			Color color = Color.decode(opts[2]);
 
 			PixelCanvas canvas = Main.getInfo().getCanvas();

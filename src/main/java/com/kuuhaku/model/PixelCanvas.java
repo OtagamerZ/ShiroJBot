@@ -33,10 +33,10 @@ public class PixelCanvas {
 				Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
 			}
 		}
-		BufferedImage bi = new BufferedImage(1000, 500, BufferedImage.TYPE_INT_RGB);
+		BufferedImage bi = new BufferedImage(2048, 2048, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setColor(Color.decode("#333333"));
-		g2d.fillRect(0, 0, 1000, 500);
+		g2d.fillRect(0, 0, 2048, 2048);
 		g2d.dispose();
 
 		return bi;
@@ -54,12 +54,29 @@ public class PixelCanvas {
 		return channel.sendMessage(":x: | Erro ao recuperar o canvas, estamos resolvendo isso.");
 	}
 
+	public RestAction viewChunk(TextChannel channel, int[] coords) {
+		try {
+			BufferedImage chunk = new BufferedImage(1024, 1024, BufferedImage.TYPE_INT_RGB);
+			Graphics2D g2d = chunk.createGraphics();
+
+			g2d.drawImage(getCanvas().getSubimage(coords[0] * 256, coords[1] * 256, 256, 256).getScaledInstance(1024, 1024, 0), 0, 0, null);
+
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ImageIO.write(chunk, "png", baos);
+
+			return channel.sendFile(baos.toByteArray(), "chunk.png");
+		} catch (IOException e) {
+			Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
+		}
+		return channel.sendMessage(":x: | Erro ao recuperar o chunk, estamos resolvendo isso.");
+	}
+
 	public RestAction addPixel(TextChannel channel, int[] coords, Color color) {
 		try {
 			BufferedImage canvas = getCanvas();
 			Graphics2D g2d = canvas.createGraphics();
 			g2d.setColor(color);
-			g2d.fillRect(coords[0], coords[1], 1, 1);
+			g2d.fillRect(coords[0] + 1024, coords[1] + 1024, 1, 1);
 			g2d.dispose();
 			saveCanvas(canvas);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
