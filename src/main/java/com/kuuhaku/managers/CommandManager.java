@@ -84,7 +84,7 @@ public class CommandManager {
             add(new BotInfoCommand());
             add(new URankCommand());
             add(new IDCommand());
-            add(new ColorCommand());
+            add(new ColorTesterCommand());
 
             //MISC
             add(new AsciiCommand());
