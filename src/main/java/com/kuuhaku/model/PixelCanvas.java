@@ -80,10 +80,7 @@ public class PixelCanvas {
 	public RestAction addPixel(TextChannel channel, int[] coords, Color color) {
 		try {
 			BufferedImage canvas = getCanvas();
-			Graphics2D g2d = canvas.createGraphics();
-			g2d.setColor(color);
-			g2d.fillRect(coords[0] + 256, (coords[1] - 256) + 512, 1, 1);
-			g2d.dispose();
+			canvas.setRGB(coords[0] + 256, (coords[1] - 256) + 512, color.getRGB());
 			saveCanvas(canvas);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ImageIO.write(canvas, "png", baos);
