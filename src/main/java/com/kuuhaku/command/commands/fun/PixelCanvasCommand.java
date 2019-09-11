@@ -7,6 +7,7 @@ import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.model.PixelCanvas;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
+import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 
@@ -41,12 +42,12 @@ public class PixelCanvasCommand extends Command {
 		try {
 			int[] coords = new int[]{Integer.parseInt(opts[0]), Integer.parseInt(opts[1])};
 
-			if (opts.length == 2) {
-				if (coords[0] < 192 && coords[0] > -193 && coords[1] < 192 && coords[1] > -193) {
-					Main.getInfo().getCanvas().viewChunk(message.getTextChannel(), coords).queue();
+			if (StringUtils.isNumeric(opts[2])) {
+				if (coords[0] < 256 - (256 / (int) Math.pow(2, Integer.parseInt(opts[2]))) && coords[0] > -257 + (256 / (int) Math.pow(2, Integer.parseInt(opts[2]))) && coords[1] < 256 - (256 / (int) Math.pow(2, Integer.parseInt(opts[2]))) && coords[1] > -257 + (256 / (int) Math.pow(2, Integer.parseInt(opts[2])))) {
+					Main.getInfo().getCanvas().viewChunk(message.getTextChannel(), coords, Integer.parseInt(opts[2])).queue();
 					return;
 				} else {
-					channel.sendMessage(":x: | A coordenada do chunk deve estar dentro da grade de 512px X 512px, lembrando que existe uma margem de 64px para as duas direções.").queue();
+					channel.sendMessage(":x: | A coordenada do chunk deve estar dentro da grade de 512px X 512px, lembrando que existe uma margem de " + (256 / (int) Math.pow(2, Integer.parseInt(opts[2]))) + "px para as duas direções.").queue();
 					return;
 				}
 			}
