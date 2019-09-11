@@ -16,6 +16,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
 
+import static com.kuuhaku.utils.Helper.CANVAS_SIZE;
+
 @Entity
 public class PixelCanvas {
 	@Id
@@ -33,10 +35,10 @@ public class PixelCanvas {
 				Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
 			}
 		}
-		BufferedImage bi = new BufferedImage(512, 512, BufferedImage.TYPE_INT_RGB);
+		BufferedImage bi = new BufferedImage(CANVAS_SIZE, CANVAS_SIZE, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setColor(Color.decode("#333333"));
-		g2d.fillRect(0, 0, 512, 512);
+		g2d.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
 		g2d.dispose();
 
 		return bi;
@@ -45,11 +47,7 @@ public class PixelCanvas {
 	public RestAction viewCanvas(TextChannel channel) {
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			BufferedImage canvas = new BufferedImage(2048, 2048, BufferedImage.TYPE_INT_RGB);
-			Graphics2D g2d = canvas.createGraphics();
-
-			g2d.drawImage(getCanvas().getScaledInstance(2048, 2048, 0), 0, 0, null);
-			g2d.dispose();
+			BufferedImage canvas = new BufferedImage(CANVAS_SIZE, CANVAS_SIZE, BufferedImage.TYPE_INT_RGB);
 
 			ImageIO.write(canvas, "png", baos);
 
@@ -63,16 +61,16 @@ public class PixelCanvas {
 	public RestAction viewChunk(TextChannel channel, int[] coords, int zoom) {
 		int fac = (int) Math.pow(2, zoom);
 		try {
-			BufferedImage chunk = new BufferedImage(2048, 2048, BufferedImage.TYPE_INT_RGB);
-			BufferedImage canvas = new BufferedImage(512 + (512 / fac), 512 + (512 / fac), BufferedImage.TYPE_INT_RGB);
+			BufferedImage chunk = new BufferedImage(CANVAS_SIZE, CANVAS_SIZE, BufferedImage.TYPE_INT_RGB);
+			BufferedImage canvas = new BufferedImage(CANVAS_SIZE + (CANVAS_SIZE / fac), CANVAS_SIZE + (CANVAS_SIZE / fac), BufferedImage.TYPE_INT_RGB);
 			Graphics2D g2d = canvas.createGraphics();
 
-			g2d.drawImage(getCanvas(), (canvas.getWidth() / 2) - 256, (canvas.getHeight() / 2) - 256, null);
+			g2d.drawImage(getCanvas(), (canvas.getWidth() / 2) - CANVAS_SIZE / 2, (canvas.getHeight() / 2) - CANVAS_SIZE / 2, null);
 
 			g2d = chunk.createGraphics();
-			int x = ((512 / 2) / fac) + (coords[0] + 256) - (256 / fac);
-			int y = ((512 / 2) / fac) + (256 - coords[1]) - (256 / fac);
-			g2d.drawImage(canvas.getSubimage(x, y, 512 / fac, 512 / fac).getScaledInstance(2048, 2048, 0), 0, 0, null);
+			int x = ((CANVAS_SIZE / 2) / fac) + (coords[0] + (CANVAS_SIZE / 2)) - ((CANVAS_SIZE / 2) / fac);
+			int y = ((CANVAS_SIZE / 2) / fac) + ((CANVAS_SIZE / 2) - coords[1]) - ((CANVAS_SIZE / 2) / fac);
+			g2d.drawImage(canvas.getSubimage(x, y, CANVAS_SIZE / fac, CANVAS_SIZE / fac), 0, 0, null);
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ImageIO.write(chunk, "png", baos);
@@ -86,7 +84,7 @@ public class PixelCanvas {
 
 	public RestAction addPixel(TextChannel channel, int[] coords, Color color) {
 		BufferedImage canvas = getCanvas();
-		canvas.setRGB(coords[0] + 256, 256 - coords[1], color.getRGB());
+		canvas.setRGB(coords[0] + CANVAS_SIZE / 2, CANVAS_SIZE / 2 - coords[1], color.getRGB());
 		saveCanvas(canvas);
 
 		return viewCanvas(channel);
