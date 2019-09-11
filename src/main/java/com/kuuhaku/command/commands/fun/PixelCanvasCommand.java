@@ -38,7 +38,7 @@ public class PixelCanvasCommand extends Command {
 			int[] coords = new int[]{Integer.parseInt(opts[0]), Integer.parseInt(opts[1])};
 
 			if (opts.length == 2) {
-				if (coords[0] < 8 && coords[0] > 0 && coords[1] < 8 && coords[1] > 0) {
+				if (coords[0] < 8 && coords[0] >= 0 && coords[1] < 8 && coords[1] >= 0) {
 					Main.getInfo().getCanvas().viewChunk(message.getTextChannel(), coords).queue();
 					return;
 				} else {
