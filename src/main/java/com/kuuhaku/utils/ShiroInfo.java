@@ -17,8 +17,10 @@
 
 package com.kuuhaku.utils;
 
+import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.handlers.music.GuildMusicManager;
 import com.kuuhaku.model.DuelData;
+import com.kuuhaku.model.PixelCanvas;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import net.dv8tion.jda.api.JDA;
@@ -78,6 +80,7 @@ public class ShiroInfo {
 	private long startTime;
 	private boolean ready = false;
 	private String winner = "";
+	private PixelCanvas canvas = MySQL.getCanvas();
 
 	public ShiroInfo() {
 	}
@@ -226,5 +229,13 @@ public class ShiroInfo {
 
 	public void setWinner(String winner) {
 		this.winner = winner;
+	}
+
+	public PixelCanvas getCanvas() {
+		return canvas;
+	}
+
+	public void reloadCanvas() {
+		this.canvas = MySQL.getCanvas();
 	}
 }
