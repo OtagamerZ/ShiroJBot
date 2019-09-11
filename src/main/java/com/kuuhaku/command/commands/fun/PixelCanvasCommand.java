@@ -39,10 +39,10 @@ public class PixelCanvasCommand extends Command {
 		}
 
 		try {
-			int[] coords = new int[]{Integer.parseInt(opts[0]), Integer.parseInt(opts[1])};
+			int[] coords = new int[]{Integer.parseInt(opts[0]), Integer.parseInt(opts[1]) + 1};
 
 			if (opts.length == 2) {
-				if (coords[0] < 2 && coords[0] > -3 && coords[1] < 3 && coords[1] > -2) {
+				if (coords[0] < 2 && coords[0] > -3 && coords[1] < 2 && coords[1] > -3) {
 					Main.getInfo().getCanvas().viewChunk(message.getTextChannel(), coords).queue();
 					return;
 				} else {
