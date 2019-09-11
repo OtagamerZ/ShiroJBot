@@ -377,7 +377,7 @@ public class MySQL {
     public static PixelCanvas getCanvas() {
         EntityManager em = getEntityManager();
 
-        Query q = em.createQuery("SELECT c FROM PixelCanvas c ORDER BY id DESC", PixelCanvas.class);
+		Query q = em.createQuery("SELECT c FROM PixelCanvas c WHERE shelved = 0 ORDER BY id DESC", PixelCanvas.class);
         q.setMaxResults(1);
 
         try {
