@@ -42,6 +42,18 @@ public class PixelCanvas {
 		return bi;
 	}
 
+	public RestAction viewCanvas(TextChannel channel) {
+		try {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ImageIO.write(getCanvas(), "png", baos);
+
+		return channel.sendFile(baos.toByteArray(), "canvas.png");
+		} catch (IOException e) {
+			Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
+		}
+		return channel.sendMessage(":x: | Erro ao recuperar o canvas, estamos resolvendo isso.");
+	}
+
 	public RestAction addPixel(TextChannel channel, int[] coords, Color color) {
 		try {
 			BufferedImage canvas = getCanvas();
