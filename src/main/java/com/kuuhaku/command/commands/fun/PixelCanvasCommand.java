@@ -47,7 +47,7 @@ public class PixelCanvasCommand extends Command {
 					Main.getInfo().getCanvas().viewChunk(message.getTextChannel(), coords, Integer.parseInt(opts[2])).queue();
 					return;
 				} else {
-					channel.sendMessage(":x: | A coordenada do chunk deve estar dentro da grade de 512px X 512px e o zoom deve ser maior que 0, lembrando que existe uma margem de " + (256 / (int) Math.pow(2, Integer.parseInt(opts[2]))) + "px para as duas direções.").queue();
+					channel.sendMessage(":x: | A coordenada do chunk deve estar dentro da grade de 512px X 512px e o zoom deve ser maior que 0.").queue();
 					return;
 				}
 			}

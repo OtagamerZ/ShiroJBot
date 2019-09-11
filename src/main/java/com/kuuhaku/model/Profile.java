@@ -354,7 +354,7 @@ public class Profile {
 					currentLine.append(" ").append(words[i]);
 				} else {
 					String s = currentLine.toString();
-					drawOutlinedText(s, x, y, g);
+					g.drawString(s, x, y);
 					y += m.getHeight();
 					currentLine = new StringBuilder(words[i]);
 				}
