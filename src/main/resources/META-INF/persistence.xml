@@ -35,6 +35,7 @@
         <class>com.kuuhaku.model.Tags</class>
         <class>com.kuuhaku.model.PermaBlock</class>
         <class>com.kuuhaku.model.MonthWinner</class>
+        <class>com.kuuhaku.model.PixelCanvas</class>
         <class>java.lang.String</class>
 
         <properties>
