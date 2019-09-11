@@ -33,10 +33,10 @@ public class PixelCanvas {
 				Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
 			}
 		}
-		BufferedImage bi = new BufferedImage(2048, 2048, BufferedImage.TYPE_INT_RGB);
+		BufferedImage bi = new BufferedImage(1024, 1024, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setColor(Color.decode("#333333"));
-		g2d.fillRect(0, 0, 2048, 2048);
+		g2d.fillRect(0, 0, 1024, 1024);
 		g2d.dispose();
 
 		return bi;
@@ -76,7 +76,7 @@ public class PixelCanvas {
 			BufferedImage canvas = getCanvas();
 			Graphics2D g2d = canvas.createGraphics();
 			g2d.setColor(color);
-			g2d.fillRect(coords[0] + 1024, coords[1] + 1024, 1, 1);
+			g2d.fillRect(coords[0] + 512, coords[1] + 512, 1, 1);
 			g2d.dispose();
 			saveCanvas(canvas);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
