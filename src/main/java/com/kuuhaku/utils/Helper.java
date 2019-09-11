@@ -120,6 +120,7 @@ public class Helper {
 		text = text.replace("7", "t");
 		text = text.replace("0", "o");
 		text = text.replace(" ", "");
+		text = text.replace("#", ".").replace("%", ".").replace("$", ".").replace("@", ".").replace("*", ".").replace("#", ".").replace("&", ".");
 
 		final Matcher msg = urlPattern.matcher(text.toLowerCase());
 		return msg.matches();
