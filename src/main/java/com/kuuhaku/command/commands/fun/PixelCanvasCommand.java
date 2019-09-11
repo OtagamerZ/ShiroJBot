@@ -29,7 +29,7 @@ public class PixelCanvasCommand extends Command {
 			if (opts.length == 1) {
 				channel.sendMessage(":x: | É preciso especificar a coordenada e a cor neste formato: `X;Y;#cor`.\nPara ver um chunk, digite apenas as coordenadas X e Y.").queue();
 				return;
-			} else if (Integer.parseInt(opts[0]) > 512 || Integer.parseInt(opts[1]) > 512 || Integer.parseInt(opts[0]) < -513 || Integer.parseInt(opts[1]) < -513) {
+			} else if (Integer.parseInt(opts[0]) > 513 || Integer.parseInt(opts[1]) > 513 || Integer.parseInt(opts[0]) < -512 || Integer.parseInt(opts[1]) < -512) {
 				channel.sendMessage(":x: | As coordenadas devem estar dentro da grade de 1024px x 1024px.").queue();
 				return;
 			}
