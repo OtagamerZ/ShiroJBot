@@ -33,10 +33,10 @@ public class PixelCanvas {
 				Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
 			}
 		}
-		BufferedImage bi = new BufferedImage(1024, 1024, BufferedImage.TYPE_INT_RGB);
+		BufferedImage bi = new BufferedImage(512, 512, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setColor(Color.decode("#333333"));
-		g2d.fillRect(0, 0, 1024, 1024);
+		g2d.fillRect(0, 0, 512, 512);
 		g2d.dispose();
 
 		return bi;
@@ -80,7 +80,7 @@ public class PixelCanvas {
 	public RestAction addPixel(TextChannel channel, int[] coords, Color color) {
 		try {
 			BufferedImage canvas = getCanvas();
-			canvas.setRGB(coords[0] + 512, (coords[1] - 512) + 512, color.getRGB());
+			canvas.setRGB(coords[0] + 256, (coords[1] - 256) + 512, color.getRGB());
 			saveCanvas(canvas);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ImageIO.write(canvas, "png", baos);
