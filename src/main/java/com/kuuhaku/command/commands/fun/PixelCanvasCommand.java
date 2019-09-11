@@ -14,13 +14,13 @@ import java.awt.*;
 public class PixelCanvasCommand extends Command {
 
 	public PixelCanvasCommand() {
-		super("canvas", new String[]{"pixel", "pixelcanvas"}, "<X>;<Y>;<#cor>", "Adiciona um pixel da cor selecionada no canvas.", Category.FUN);
+		super("canvas", new String[]{"pixel", "pixelcanvas"}, "[<X>;<Y>;<#cor>]", "Adiciona um pixel da cor selecionada no canvas.", Category.FUN);
 	}
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		if (args.length < 1) {
-			channel.sendMessage(":x: | Você tem que especificar a posição e a cor no seguinte formato: `X;Y;#cor`").queue();
+			Main.getInfo().getCanvas().viewCanvas(message.getTextChannel()).queue();
 			return;
 		}
 
