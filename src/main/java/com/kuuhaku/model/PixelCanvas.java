@@ -78,18 +78,11 @@ public class PixelCanvas {
 	}
 
 	public RestAction addPixel(TextChannel channel, int[] coords, Color color) {
-		try {
-			BufferedImage canvas = getCanvas();
-			canvas.setRGB(coords[0] + 256, (coords[1] - 256) + 512, color.getRGB());
-			saveCanvas(canvas);
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write(canvas, "png", baos);
+		BufferedImage canvas = getCanvas();
+		canvas.setRGB(coords[0] + 256, (coords[1] - 256) + 512, color.getRGB());
+		saveCanvas(canvas);
 
-			return channel.sendFile(baos.toByteArray(), "canvas.png");
-		} catch (IOException e) {
-			Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
-		}
-		return channel.sendMessage(":x: | Erro ao recuperar o canvas, estamos resolvendo isso.");
+		return viewCanvas(channel);
 	}
 
 	private void saveCanvas(BufferedImage canvas) {
