@@ -30,7 +30,7 @@ public class PixelCanvasCommand extends Command {
 				channel.sendMessage(":x: | É preciso especificar a coordenada e a cor neste formato: `X;Y;#cor`.\nPara ver um chunk, digite apenas as coordenadas X e Y.").queue();
 				return;
 			} else if (Integer.parseInt(opts[0]) > 256 || Integer.parseInt(opts[1]) > 256 || Integer.parseInt(opts[0]) < -257 || Integer.parseInt(opts[1]) < -257) {
-				channel.sendMessage(":x: | As coordenadas devem estar dentro da grade de 512px x 512px.").queue();
+				channel.sendMessage(":x: | As coordenadas devem estar dentro da grade de 512px X 512px.").queue();
 				return;
 			}
 		} catch (NumberFormatException e) {
@@ -39,14 +39,14 @@ public class PixelCanvasCommand extends Command {
 		}
 
 		try {
-			int[] coords = new int[]{Integer.parseInt(opts[0]), Integer.parseInt(opts[1]) + 1};
+			int[] coords = new int[]{Integer.parseInt(opts[0]), Integer.parseInt(opts[1])};
 
 			if (opts.length == 2) {
-				if (coords[0] < 2 && coords[0] > -3 && coords[1] < 3 && coords[1] > -3) {
+				if (coords[0] < 192 && coords[0] > -193 && coords[1] < 192 && coords[1] > -193) {
 					Main.getInfo().getCanvas().viewChunk(message.getTextChannel(), coords).queue();
 					return;
 				} else {
-					channel.sendMessage(":x: | A coordenada do chunk deve estar dentro da grade de 4 x 4.").queue();
+					channel.sendMessage(":x: | A coordenada do chunk deve estar dentro da grade de 512px X 512px, lembrando que existe uma margem de 64px para as duas direções.").queue();
 					return;
 				}
 			}
