@@ -70,8 +70,8 @@ public class PixelCanvas {
 			g2d.drawImage(getCanvas(), (canvas.getWidth() / 2) - 256, (canvas.getHeight() / 2) - 256, null);
 
 			g2d = chunk.createGraphics();
-			int x = (coords[0] + 256) - (256 / fac);
-			int y = (256 - coords[1]) - (256 / fac);
+			int x = (512 / fac) + (coords[0] + 256) - (256 / fac);
+			int y = (512 / fac) + (256 - coords[1]) - (256 / fac);
 			g2d.drawImage(canvas.getSubimage(x, y, 512 / fac, 512 / fac).getScaledInstance(2048, 2048, 0), 0, 0, null);
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
