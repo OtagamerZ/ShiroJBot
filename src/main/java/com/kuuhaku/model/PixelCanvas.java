@@ -59,7 +59,7 @@ public class PixelCanvas {
 			BufferedImage chunk = new BufferedImage(1024, 1024, BufferedImage.TYPE_INT_RGB);
 			Graphics2D g2d = chunk.createGraphics();
 
-			g2d.drawImage(getCanvas().getSubimage((coords[0] + 2) * 256, ((coords[1] + 2) * -255) + 1024, 256, 256).getScaledInstance(1024, 1024, 0), 0, 0, null);
+			g2d.drawImage(getCanvas().getSubimage((coords[0] + 2) * 256, ((coords[1] + 2) * -256) + 1024, 256, 256).getScaledInstance(1024, 1024, 0), 0, 0, null);
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ImageIO.write(chunk, "png", baos);
@@ -76,7 +76,7 @@ public class PixelCanvas {
 			BufferedImage canvas = getCanvas();
 			Graphics2D g2d = canvas.createGraphics();
 			g2d.setColor(color);
-			g2d.fillRect(coords[0] + 512, (coords[1] - 511) + 512, 1, 1);
+			g2d.fillRect(coords[0] + 512, (coords[1] - 512) + 512, 1, 1);
 			g2d.dispose();
 			saveCanvas(canvas);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
