@@ -25,7 +25,7 @@ public class PixelCanvas {
 	@Column(columnDefinition = "String default \"\"")
 	private String canvas;
 	@Column(columnDefinition = "boolean default false")
-	private boolean achieved;
+	private boolean shelved;
 
 	public BufferedImage getCanvas() {
 		if (canvas != null) {
