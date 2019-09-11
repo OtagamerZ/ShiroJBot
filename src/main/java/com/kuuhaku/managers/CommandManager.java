@@ -20,19 +20,17 @@ package com.kuuhaku.managers;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.Reactions.*;
 import com.kuuhaku.command.commands.beyblade.*;
+import com.kuuhaku.command.commands.dev.*;
 import com.kuuhaku.command.commands.exceed.ExceedRankCommand;
 import com.kuuhaku.command.commands.exceed.ExceedSelectCommand;
 import com.kuuhaku.command.commands.fun.*;
 import com.kuuhaku.command.commands.information.*;
 import com.kuuhaku.command.commands.misc.*;
 import com.kuuhaku.command.commands.moderation.*;
-import com.kuuhaku.command.commands.dev.*;
 import com.kuuhaku.command.commands.music.MusicCommand;
 import com.kuuhaku.command.commands.music.VideoCommand;
 import com.kuuhaku.command.commands.music.YoutubeCommand;
-import com.kuuhaku.command.commands.misc.CompileCommand;
 import com.kuuhaku.command.commands.partner.JibrilCommand;
-import org.dom4j.rule.Rule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,6 +84,7 @@ public class CommandManager {
             add(new BotInfoCommand());
             add(new URankCommand());
             add(new IDCommand());
+            add(new ColorCommand());
 
             //MISC
             add(new AsciiCommand());
@@ -107,7 +106,6 @@ public class CommandManager {
             add(new TheAnswerCommand());
             add(new BinaryCommand());
             add(new PermissionCommand());
-            add(new PixelzoneCommand());
 
             //FUN
             add(new SadButTrueCommand());
@@ -117,6 +115,7 @@ public class CommandManager {
             add(new ShipCommand());
             add(new MarryCommand());
             add(new StonksCommand());
+            add(new PixelCanvasCommand());
             //REAÇÕES
             //RECIPROCOS
             add(new HugReaction(false));
