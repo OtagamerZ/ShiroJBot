@@ -30,7 +30,7 @@ public class PixelCanvasCommand extends Command {
 
 		try {
 			if (opts.length == 1) {
-				channel.sendMessage(":x: | É preciso especificar a coordenada e a cor neste formato: `X;Y;#cor`.\nPara ver um chunk, digite apenas as coordenadas X e Y.").queue();
+				channel.sendMessage(":x: | É preciso especificar a coordenada e a cor neste formato: `X;Y;#cor`.\nPara dar zoom, digite apenas as coordenadas X e Y e o nível do zoom.").queue();
 				return;
 			} else if (Integer.parseInt(opts[0]) > CANVAS_SIZE / 2 && Integer.parseInt(opts[0]) < -CANVAS_SIZE / 2 && Integer.parseInt(opts[1]) > CANVAS_SIZE / 2 && Integer.parseInt(opts[1]) < -CANVAS_SIZE / 2) {
 				channel.sendMessage(":x: | As coordenadas não podem ser menores que -" + (CANVAS_SIZE / 2) + "px ou maiores que " + (CANVAS_SIZE / 2) + "px.").queue();
