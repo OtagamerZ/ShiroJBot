@@ -49,7 +49,7 @@ public class PixelCanvasCommand extends Command {
 					channel.sendMessage(":x: | O zoom não pode ser menor ou igual à 0, nem maior que 10").queue();
 					return;
 				}
-				Main.getInfo().getCanvas().viewChunk(message.getTextChannel(), coords, Integer.parseInt(opts[2])).queue();
+				Main.getInfo().getCanvas().viewChunk(message.getTextChannel(), coords, Integer.parseInt(opts[2]), false).queue();
 				return;
 			}
 
