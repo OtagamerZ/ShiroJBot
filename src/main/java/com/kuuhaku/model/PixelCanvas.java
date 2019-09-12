@@ -65,7 +65,7 @@ public class PixelCanvas {
 			BufferedImage canvas = new BufferedImage(CANVAS_SIZE + (CANVAS_SIZE / fac), CANVAS_SIZE + (CANVAS_SIZE / fac), BufferedImage.TYPE_INT_RGB);
 			Graphics2D g2d = canvas.createGraphics();
 
-			g2d.drawImage(getCanvas(), (canvas.getWidth() / 2) - CANVAS_SIZE / 2, (canvas.getHeight() / 2) - CANVAS_SIZE / 2, null);
+			g2d.drawImage(getCanvas(), (canvas.getWidth() / 2) - CANVAS_SIZE, (canvas.getHeight() / 2) - CANVAS_SIZE, null);
 
 			g2d = chunk.createGraphics();
 			int x = ((CANVAS_SIZE / 2) / fac) + (coords[0] + (CANVAS_SIZE / 2)) - ((CANVAS_SIZE / 2) / fac);
