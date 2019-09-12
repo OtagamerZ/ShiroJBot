@@ -62,14 +62,14 @@ public class PixelCanvas {
 		int fac = (int) Math.pow(2, zoom);
 		try {
 			BufferedImage chunk = new BufferedImage(CANVAS_SIZE, CANVAS_SIZE, BufferedImage.TYPE_INT_RGB);
-			BufferedImage canvas = new BufferedImage(CANVAS_SIZE + (CANVAS_SIZE / fac), CANVAS_SIZE + (CANVAS_SIZE / fac), BufferedImage.TYPE_INT_RGB);
+			BufferedImage canvas = new BufferedImage(CANVAS_SIZE + (CANVAS_SIZE / 2 / fac), CANVAS_SIZE + (CANVAS_SIZE / 2 / fac), BufferedImage.TYPE_INT_RGB);
 			Graphics2D g2d = canvas.createGraphics();
 
 			g2d.drawImage(getCanvas(), (canvas.getWidth() / 2) - CANVAS_SIZE, (canvas.getHeight() / 2) - CANVAS_SIZE, null);
 
 			g2d = chunk.createGraphics();
-			int x = (CANVAS_SIZE / 2 / fac) + (coords[0] + CANVAS_SIZE / 2) - (CANVAS_SIZE / 2 / fac);
-			int y = (CANVAS_SIZE / 2 / fac) + (CANVAS_SIZE / 2 - coords[1]) - (CANVAS_SIZE / 2 / fac);
+			int x = (CANVAS_SIZE / fac) + (coords[0] + CANVAS_SIZE / 2) - (CANVAS_SIZE / 2 / fac);
+			int y = (CANVAS_SIZE / fac) + (CANVAS_SIZE / 2 - coords[1]) - (CANVAS_SIZE / 2 / fac);
 			g2d.drawImage(canvas.getSubimage(x, y, CANVAS_SIZE / fac, CANVAS_SIZE / fac), 0, 0, null);
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
