@@ -384,12 +384,10 @@ public class MySQL {
             PixelCanvas p = (PixelCanvas) q.getSingleResult();
             em.close();
 
-			Helper.log(MySQL.class, LogLevel.INFO, "Recuperado canvas.");
             return p;
         } catch (NoResultException e) {
             em.close();
 
-			Helper.log(MySQL.class, LogLevel.INFO, "Criado novo canvas.");
             return new PixelCanvas();
         }
     }
