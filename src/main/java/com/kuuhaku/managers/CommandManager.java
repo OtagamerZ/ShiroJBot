@@ -116,6 +116,7 @@ public class CommandManager {
             add(new MarryCommand());
             add(new StonksCommand());
             add(new PixelCanvasCommand());
+            add(new PixelChunkCommand());
             //REAÇÕES
             //RECIPROCOS
             add(new HugReaction(false));
