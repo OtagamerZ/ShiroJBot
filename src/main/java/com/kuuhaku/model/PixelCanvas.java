@@ -49,9 +49,7 @@ public class PixelCanvas {
 	public RestAction viewCanvas(TextChannel channel) {
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			BufferedImage canvas = new BufferedImage(CANVAS_SIZE, CANVAS_SIZE, BufferedImage.TYPE_INT_RGB);
-
-			ImageIO.write(canvas, "png", baos);
+			ImageIO.write(getCanvas(), "png", baos);
 
 			return channel.sendFile(baos.toByteArray(), "canvas.png");
 		} catch (IOException e) {
