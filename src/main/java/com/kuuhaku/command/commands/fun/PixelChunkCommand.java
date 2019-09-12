@@ -16,7 +16,7 @@ import static com.kuuhaku.utils.Helper.CANVAS_SIZE;
 public class PixelChunkCommand extends Command {
 
 	public PixelChunkCommand() {
-		super("chunk", new String[]{"zone", "pixelchunk"}, "<>;[<X>;<Y>;<#cor>]", "Adiciona um pixel da cor selecionada no chunk do canvas.", Category.FUN);
+		super("chunk", new String[]{"zone", "pixelchunk"}, "<zona> [<X>;<Y>;<#cor>]", "Adiciona um pixel da cor selecionada no chunk do canvas.", Category.FUN);
 	}
 
 	@Override
@@ -26,24 +26,24 @@ public class PixelChunkCommand extends Command {
 			return;
 		}
 
-		String[] opts = args[0].split(";");
+		String[] opts = args.length < 2 ? new String[]{} : args[1].split(";");
 		int[] offset = new int[0];
 
 		if (args.length < 2) {
-			Main.getInfo().getCanvas().viewSection(message.getTextChannel(), Integer.parseInt(opts[0])).queue();
+			Main.getInfo().getCanvas().viewSection(message.getTextChannel(), Integer.parseInt(args[0])).queue();
 			return;
 		}
 
 		try {
 			if (opts.length == 2) {
-				channel.sendMessage(":x: | É preciso especificar a coordenada e a cor neste formato: `C;X;Y;#cor`.\nPara dar zoom, digite apenas o número do chunk e as coordenadas X e Y.").queue();
+				channel.sendMessage(":x: | É preciso especificar a coordenada e a cor neste formato: `zona X;Y;#cor`.\nPara dar zoom, digite apenas o número do chunk e as coordenadas X e Y.").queue();
 				return;
-			} else if (Integer.parseInt(opts[1]) > CANVAS_SIZE / 4 && Integer.parseInt(opts[1]) < -CANVAS_SIZE / 4 && Integer.parseInt(opts[2]) > CANVAS_SIZE / 4 && Integer.parseInt(opts[2]) < -CANVAS_SIZE / 4) {
+			} else if (Integer.parseInt(opts[0]) > CANVAS_SIZE / 4 && Integer.parseInt(opts[0]) < -CANVAS_SIZE / 4 && Integer.parseInt(opts[1]) > CANVAS_SIZE / 4 && Integer.parseInt(opts[1]) < -CANVAS_SIZE / 4) {
 				channel.sendMessage(":x: | As coordenadas não podem ser menores que -" + (CANVAS_SIZE / 4) + "px ou maiores que " + (CANVAS_SIZE / 4) + "px.").queue();
 				return;
-			} else if (Integer.parseInt(opts[0]) < 1 || Integer.parseInt(opts[0]) > 4)
+			} else if (Integer.parseInt(args[0]) < 1 || Integer.parseInt(args[0]) > 4)
 
-			switch (Integer.parseInt(opts[0])) {
+			switch (Integer.parseInt(args[0])) {
 				case 1:
 					offset = new int[]{0, 0};
 					break;
@@ -65,10 +65,10 @@ public class PixelChunkCommand extends Command {
 		}
 
 		try {
-			int[] coords = new int[]{Integer.parseInt(opts[1]) + offset[0], Integer.parseInt(opts[2]) + offset[1]};
+			int[] coords = new int[]{Integer.parseInt(opts[0]) + offset[0], Integer.parseInt(opts[1]) + offset[1]};
 
-			if (StringUtils.isNumeric(opts[3])) {
-				if (Integer.parseInt(opts[2]) <= 0 || Integer.parseInt(opts[2]) > 10) {
+			if (StringUtils.isNumeric(opts[2])) {
+				if (Integer.parseInt(opts[1]) <= 0 || Integer.parseInt(opts[1]) > 10) {
 					channel.sendMessage(":x: | O zoom não pode ser menor ou igual à 0, nem maior que 10").queue();
 					return;
 				}
@@ -76,7 +76,7 @@ public class PixelChunkCommand extends Command {
 				return;
 			}
 
-			Color color = Color.decode(opts[3]);
+			Color color = Color.decode(opts[2]);
 
 			PixelCanvas canvas = Main.getInfo().getCanvas();
 			canvas.addPixel(message.getTextChannel(), coords, color).queue();
