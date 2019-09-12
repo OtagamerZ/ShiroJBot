@@ -45,7 +45,7 @@ public class PixelCanvasCommand extends Command {
 			int[] coords = new int[]{Integer.parseInt(opts[0]), Integer.parseInt(opts[1]) + 1};
 
 			if (StringUtils.isNumeric(opts[2])) {
-				if (coords[0] < CANVAS_SIZE / 2 && coords[0] > -CANVAS_SIZE / 2 - 1 && coords[1] < CANVAS_SIZE / 2 && coords[1] > -CANVAS_SIZE / 2 - 1) {
+				if (coords[0] < CANVAS_SIZE / 2 + 1 && coords[0] > -CANVAS_SIZE / 2 - 1 && coords[1] < CANVAS_SIZE / 2 + 1 && coords[1] > -CANVAS_SIZE / 2 - 1) {
 					Main.getInfo().getCanvas().viewChunk(message.getTextChannel(), coords, Integer.parseInt(opts[2])).queue();
 					return;
 				} else {
