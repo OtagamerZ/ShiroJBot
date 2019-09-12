@@ -63,7 +63,7 @@ public class PixelCanvas {
 		int chunkSize = CANVAS_SIZE / fac;
 		try {
 			BufferedImage chunk = new BufferedImage(CANVAS_SIZE, CANVAS_SIZE, BufferedImage.TYPE_INT_RGB);
-			BufferedImage canvas = new BufferedImage(CANVAS_SIZE + chunkSize / 2, CANVAS_SIZE + chunkSize / 2, BufferedImage.TYPE_INT_RGB);
+			BufferedImage canvas = new BufferedImage(CANVAS_SIZE + chunkSize, CANVAS_SIZE + chunkSize, BufferedImage.TYPE_INT_RGB);
 			Graphics2D g2d = canvas.createGraphics();
 
 			g2d.drawImage(getCanvas(), (canvas.getWidth() / 2) - CANVAS_SIZE / 2, (canvas.getHeight() / 2) - CANVAS_SIZE / 2, null);
