@@ -52,6 +52,7 @@ public class CommandManager {
             add(new BlockCommand());
             add(new LogCommand());
             add(new RegenRulesCommand());
+            add(new TokenCommand());
 
             //PARTNER
             add(new JibrilCommand());
