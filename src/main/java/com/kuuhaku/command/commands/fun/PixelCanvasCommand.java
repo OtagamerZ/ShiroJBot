@@ -32,7 +32,7 @@ public class PixelCanvasCommand extends Command {
 			if (opts.length == 1) {
 				channel.sendMessage(":x: | É preciso especificar a coordenada e a cor neste formato: `X;Y;#cor`.\nPara ver um chunk, digite apenas as coordenadas X e Y.").queue();
 				return;
-			} else if (Integer.parseInt(opts[0]) > CANVAS_SIZE / 2 || Integer.parseInt(opts[1]) > CANVAS_SIZE / 2 || Integer.parseInt(opts[0]) < -CANVAS_SIZE / 2 - 1 || Integer.parseInt(opts[1]) < -CANVAS_SIZE / 2 - 1) {
+			} else if (Integer.parseInt(opts[0]) > CANVAS_SIZE / 2 - 1 || Integer.parseInt(opts[1]) > CANVAS_SIZE / 2 - 1 || Integer.parseInt(opts[0]) < -CANVAS_SIZE / 2 || Integer.parseInt(opts[1]) < -CANVAS_SIZE / 2) {
 				channel.sendMessage(":x: | As coordenadas devem estar dentro da grade de " + CANVAS_SIZE + "px X " + CANVAS_SIZE + "px.").queue();
 				return;
 			}
@@ -42,7 +42,7 @@ public class PixelCanvasCommand extends Command {
 		}
 
 		try {
-			int[] coords = new int[]{Integer.parseInt(opts[0]), Integer.parseInt(opts[1])};
+			int[] coords = new int[]{Integer.parseInt(opts[0]), Integer.parseInt(opts[1]) - 1};
 
 			if (StringUtils.isNumeric(opts[2])) {
 				if (coords[0] < CANVAS_SIZE / 2 && coords[0] > -CANVAS_SIZE / 2 - 1 && coords[1] < CANVAS_SIZE / 2 && coords[1] > -CANVAS_SIZE / 2 - 1) {
