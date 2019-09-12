@@ -42,16 +42,16 @@ public class PixelCanvasCommand extends Command {
 		}
 
 		try {
-			int[] coords = new int[]{Integer.parseInt(opts[0]), Integer.parseInt(opts[1]) + 1};
+			int[] coords = new int[]{Integer.parseInt(opts[0]), Integer.parseInt(opts[1])};
 
 			if (StringUtils.isNumeric(opts[2])) {
-				if (coords[0] < CANVAS_SIZE / 2 + 1 && coords[0] > -CANVAS_SIZE / 2 - 2 && coords[1] < CANVAS_SIZE / 2 + 1 && coords[1] > -CANVAS_SIZE / 2 - 2) {
+				//if () {
 					Main.getInfo().getCanvas().viewChunk(message.getTextChannel(), coords, Integer.parseInt(opts[2])).queue();
 					return;
-				} else {
+				/*} else {
 					channel.sendMessage(":x: | A coordenada do chunk deve estar dentro da grade de " + CANVAS_SIZE + "px X " + CANVAS_SIZE + "px e o zoom deve ser maior que 0.").queue();
 					return;
-				}
+				}*/
 			}
 
 			Color color = Color.decode(opts[2]);
