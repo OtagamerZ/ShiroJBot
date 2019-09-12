@@ -11,8 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 
-import static com.kuuhaku.utils.Helper.CANVAS_SIZE;
-
 public class PixelCanvasCommand extends Command {
 
 	public PixelCanvasCommand() {
@@ -32,10 +30,10 @@ public class PixelCanvasCommand extends Command {
 			if (opts.length == 1) {
 				channel.sendMessage(":x: | É preciso especificar a coordenada e a cor neste formato: `X;Y;#cor`.\nPara ver um chunk, digite apenas as coordenadas X e Y.").queue();
 				return;
-			} else if (Integer.parseInt(opts[0]) > CANVAS_SIZE / 2 - 1 || Integer.parseInt(opts[1]) > CANVAS_SIZE / 2 - 1 || Integer.parseInt(opts[0]) < -CANVAS_SIZE / 2 || Integer.parseInt(opts[1]) < -CANVAS_SIZE / 2) {
+			} /*else if (Integer.parseInt(opts[0]) > CANVAS_SIZE / 2 - 1 || Integer.parseInt(opts[1]) > CANVAS_SIZE / 2 - 1 || Integer.parseInt(opts[0]) < -CANVAS_SIZE / 2 || Integer.parseInt(opts[1]) < -CANVAS_SIZE / 2) {
 				channel.sendMessage(":x: | As coordenadas devem estar dentro da grade de " + CANVAS_SIZE + "px X " + CANVAS_SIZE + "px.").queue();
 				return;
-			}
+			}*/
 		} catch (NumberFormatException e) {
 			channel.sendMessage(":x: | As coordenadas devem ser numéricas.").queue();
 			return;
