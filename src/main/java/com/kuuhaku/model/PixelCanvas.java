@@ -58,6 +58,41 @@ public class PixelCanvas {
 		return channel.sendMessage(":x: | Erro ao recuperar o canvas, estamos resolvendo isso.");
 	}
 
+	public RestAction viewSection(TextChannel channel, int number) {
+		int[] section;
+		switch (number) {
+			case 1:
+				section = new int[]{0, 0};
+				break;
+			case 2:
+				section = new int[]{512, 0};
+				break;
+			case 3:
+				section = new int[]{0, 512};
+				break;
+			case 4:
+				section = new int[]{512, 512};
+				break;
+			default:
+				throw new IllegalStateException("Unexpected value: " + number);
+		}
+		try {
+			BufferedImage bi = new BufferedImage(CANVAS_SIZE / 2, CANVAS_SIZE / 2, BufferedImage.TYPE_INT_RGB);
+			Graphics2D g2d = bi.createGraphics();
+
+			g2d.drawImage(getCanvas().getSubimage(section[0], section[1], 512, 512), 0, 0, null);
+			g2d.dispose();
+
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ImageIO.write(bi, "png", baos);
+
+			return channel.sendFile(baos.toByteArray(), "chunk_" + number + ".png");
+		} catch (IOException e) {
+			Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
+		}
+		return channel.sendMessage(":x: | Erro ao recuperar o canvas, estamos resolvendo isso.");
+	}
+
 	public RestAction viewChunk(TextChannel channel, int[] coords, int zoom) {
 		int fac = (int) Math.pow(2, zoom);
 		int chunkSize = CANVAS_SIZE / fac;
