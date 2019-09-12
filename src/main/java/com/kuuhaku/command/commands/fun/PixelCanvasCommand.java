@@ -11,6 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 
+import static com.kuuhaku.utils.Helper.CANVAS_SIZE;
+
 public class PixelCanvasCommand extends Command {
 
 	public PixelCanvasCommand() {
@@ -30,10 +32,10 @@ public class PixelCanvasCommand extends Command {
 			if (opts.length == 1) {
 				channel.sendMessage(":x: | É preciso especificar a coordenada e a cor neste formato: `X;Y;#cor`.\nPara ver um chunk, digite apenas as coordenadas X e Y.").queue();
 				return;
-			} /*else if (Integer.parseInt(opts[0]) > CANVAS_SIZE / 2 - 1 || Integer.parseInt(opts[1]) > CANVAS_SIZE / 2 - 1 || Integer.parseInt(opts[0]) < -CANVAS_SIZE / 2 || Integer.parseInt(opts[1]) < -CANVAS_SIZE / 2) {
-				channel.sendMessage(":x: | As coordenadas devem estar dentro da grade de " + CANVAS_SIZE + "px X " + CANVAS_SIZE + "px.").queue();
+			} else if (Integer.parseInt(opts[0]) > CANVAS_SIZE / 2 && Integer.parseInt(opts[0]) < -CANVAS_SIZE / 2 && Integer.parseInt(opts[1]) > CANVAS_SIZE / 2 && Integer.parseInt(opts[1]) < -CANVAS_SIZE / 2) {
+				channel.sendMessage(":x: | As coordenadas não podem ser menores que -" + (CANVAS_SIZE / 2) + "px ou maiores que " + (CANVAS_SIZE / 2) + "px.").queue();
 				return;
-			}*/
+			}
 		} catch (NumberFormatException e) {
 			channel.sendMessage(":x: | As coordenadas devem ser numéricas.").queue();
 			return;
@@ -43,13 +45,12 @@ public class PixelCanvasCommand extends Command {
 			int[] coords = new int[]{Integer.parseInt(opts[0]), Integer.parseInt(opts[1])};
 
 			if (StringUtils.isNumeric(opts[2])) {
-				//if () {
-					Main.getInfo().getCanvas().viewChunk(message.getTextChannel(), coords, Integer.parseInt(opts[2])).queue();
+				if (Integer.parseInt(opts[2]) <= 0 || Integer.parseInt(opts[2]) > 10) {
+					channel.sendMessage(":x: | O zoom não pode ser menor ou igual à 0, nem maior que 10").queue();
 					return;
-				/*} else {
-					channel.sendMessage(":x: | A coordenada do chunk deve estar dentro da grade de " + CANVAS_SIZE + "px X " + CANVAS_SIZE + "px e o zoom deve ser maior que 0.").queue();
-					return;
-				}*/
+				}
+				Main.getInfo().getCanvas().viewChunk(message.getTextChannel(), coords, Integer.parseInt(opts[2])).queue();
+				return;
 			}
 
 			Color color = Color.decode(opts[2]);
