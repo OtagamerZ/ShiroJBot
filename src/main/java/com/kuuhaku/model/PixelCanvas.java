@@ -58,7 +58,42 @@ public class PixelCanvas {
 		return channel.sendMessage(":x: | Erro ao recuperar o canvas, estamos resolvendo isso.");
 	}
 
-	public RestAction viewChunk(TextChannel channel, int[] coords, int zoom) {
+	public RestAction viewSection(TextChannel channel, int number) {
+		int[] section;
+		switch (number) {
+			case 1:
+				section = new int[]{0, 0};
+				break;
+			case 2:
+				section = new int[]{512, 0};
+				break;
+			case 3:
+				section = new int[]{0, 512};
+				break;
+			case 4:
+				section = new int[]{512, 512};
+				break;
+			default:
+				throw new IllegalStateException("Unexpected value: " + number);
+		}
+		try {
+			BufferedImage bi = new BufferedImage(CANVAS_SIZE / 2, CANVAS_SIZE / 2, BufferedImage.TYPE_INT_RGB);
+			Graphics2D g2d = bi.createGraphics();
+
+			g2d.drawImage(getCanvas().getSubimage(section[0], section[1], 512, 512), 0, 0, null);
+			g2d.dispose();
+
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ImageIO.write(bi, "png", baos);
+
+			return channel.sendFile(baos.toByteArray(), "chunk_" + number + ".png");
+		} catch (IOException e) {
+			Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
+		}
+		return channel.sendMessage(":x: | Erro ao recuperar o canvas, estamos resolvendo isso.");
+	}
+
+	public RestAction viewChunk(TextChannel channel, int[] coords, int zoom, boolean section) {
 		int fac = (int) Math.pow(2, zoom);
 		int chunkSize = CANVAS_SIZE / fac;
 		try {
@@ -69,8 +104,8 @@ public class PixelCanvas {
 			g2d.drawImage(getCanvas(), (canvas.getWidth() / 2) - CANVAS_SIZE / 2, (canvas.getHeight() / 2) - CANVAS_SIZE / 2, null);
 
 			g2d = chunk.createGraphics();
-			int x = (CANVAS_SIZE / 2 / fac) + (coords[0] + CANVAS_SIZE / 2) - (chunkSize / 2);
-			int y = (CANVAS_SIZE / 2 / fac) + (CANVAS_SIZE / 2 - coords[1]) - (chunkSize / 2);
+			int x = (CANVAS_SIZE / 2 / fac) + (coords[0] + CANVAS_SIZE / (section ? 4 : 2)) - (chunkSize / 2);
+			int y = (CANVAS_SIZE / 2 / fac) + (CANVAS_SIZE / (section ? 4 : 2) - coords[1]) - (chunkSize / 2);
 			g2d.drawImage(canvas.getSubimage(x, y, chunkSize, chunkSize).getScaledInstance(CANVAS_SIZE, CANVAS_SIZE, 0), 0, 0, null);
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
