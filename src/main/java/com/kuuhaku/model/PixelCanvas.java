@@ -93,7 +93,7 @@ public class PixelCanvas {
 		return channel.sendMessage(":x: | Erro ao recuperar o canvas, estamos resolvendo isso.");
 	}
 
-	public RestAction viewChunk(TextChannel channel, int[] coords, int zoom) {
+	public RestAction viewChunk(TextChannel channel, int[] coords, int zoom, boolean section) {
 		int fac = (int) Math.pow(2, zoom);
 		int chunkSize = CANVAS_SIZE / fac;
 		try {
@@ -104,8 +104,8 @@ public class PixelCanvas {
 			g2d.drawImage(getCanvas(), (canvas.getWidth() / 2) - CANVAS_SIZE / 2, (canvas.getHeight() / 2) - CANVAS_SIZE / 2, null);
 
 			g2d = chunk.createGraphics();
-			int x = (CANVAS_SIZE / 2 / fac) + (coords[0] + CANVAS_SIZE / 2) - (chunkSize / 2);
-			int y = (CANVAS_SIZE / 2 / fac) + (CANVAS_SIZE / 2 - coords[1]) - (chunkSize / 2);
+			int x = (CANVAS_SIZE / 2 / fac) + (coords[0] + CANVAS_SIZE / (section ? 4 : 2)) - (chunkSize / 2);
+			int y = (CANVAS_SIZE / 2 / fac) + (CANVAS_SIZE / (section ? 4 : 2) - coords[1]) - (chunkSize / 2);
 			g2d.drawImage(canvas.getSubimage(x, y, chunkSize, chunkSize).getScaledInstance(CANVAS_SIZE, CANVAS_SIZE, 0), 0, 0, null);
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
