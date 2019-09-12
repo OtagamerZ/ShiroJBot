@@ -71,7 +71,7 @@ public class PixelCanvas {
 			g2d = chunk.createGraphics();
 			int x = (CANVAS_SIZE / 2 / fac) + (coords[0] + CANVAS_SIZE / 2) - (chunkSize / 2);
 			int y = (CANVAS_SIZE / 2 / fac) + (CANVAS_SIZE / 2 - coords[1]) - (chunkSize / 2);
-			g2d.drawImage(canvas.getSubimage(x, y, CANVAS_SIZE, CANVAS_SIZE), 0, 0, null);
+			g2d.drawImage(canvas.getSubimage(x, y, chunkSize, chunkSize).getScaledInstance(CANVAS_SIZE, CANVAS_SIZE, 0), 0, 0, null);
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ImageIO.write(chunk, "png", baos);
