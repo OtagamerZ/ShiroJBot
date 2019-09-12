@@ -27,7 +27,30 @@ public class PixelChunkCommand extends Command {
 		}
 
 		String[] opts = args.length < 2 ? new String[]{} : args[1].split(";");
-		int[] offset = new int[0];
+		int[] offset;
+
+		assert StringUtils.isNumeric(args[0]);
+		if (Integer.parseInt(args[0]) < 1 || Integer.parseInt(args[0]) > 4) {
+			channel.sendMessage(":x: | O número do chunk deve ser de 1 à 4").queue();
+			return;
+		}
+
+		switch (Integer.parseInt(args[0])) {
+			case 1:
+				offset = new int[]{0, 0};
+				break;
+			case 2:
+				offset = new int[]{512, 0};
+				break;
+			case 3:
+				offset = new int[]{0, 512};
+				break;
+			case 4:
+				offset = new int[]{512, 512};
+				break;
+			default:
+				throw new IllegalStateException("Unexpected value: " + opts[0]);
+		}
 
 		if (args.length < 2) {
 			Main.getInfo().getCanvas().viewSection(message.getTextChannel(), Integer.parseInt(args[0])).queue();
@@ -41,23 +64,6 @@ public class PixelChunkCommand extends Command {
 			} else if (Integer.parseInt(opts[0]) > CANVAS_SIZE / 4 && Integer.parseInt(opts[0]) < -CANVAS_SIZE / 4 && Integer.parseInt(opts[1]) > CANVAS_SIZE / 4 && Integer.parseInt(opts[1]) < -CANVAS_SIZE / 4) {
 				channel.sendMessage(":x: | As coordenadas não podem ser menores que -" + (CANVAS_SIZE / 4) + "px ou maiores que " + (CANVAS_SIZE / 4) + "px.").queue();
 				return;
-			} else if (Integer.parseInt(args[0]) < 1 || Integer.parseInt(args[0]) > 4)
-
-			switch (Integer.parseInt(args[0])) {
-				case 1:
-					offset = new int[]{0, 0};
-					break;
-				case 2:
-					offset = new int[]{512, 0};
-					break;
-				case 3:
-					offset = new int[]{0, 512};
-					break;
-				case 4:
-					offset = new int[]{512, 512};
-					break;
-				default:
-					throw new IllegalStateException("Unexpected value: " + opts[0]);
 			}
 		} catch (NumberFormatException e) {
 			channel.sendMessage(":x: | As coordenadas devem ser numéricas.").queue();
