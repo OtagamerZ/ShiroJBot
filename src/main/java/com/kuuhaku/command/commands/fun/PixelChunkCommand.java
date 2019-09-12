@@ -41,13 +41,13 @@ public class PixelChunkCommand extends Command {
 				offset = new int[]{0, 0};
 				break;
 			case 2:
-				offset = new int[]{CANVAS_SIZE / 4, 0};
+				offset = new int[]{512, 0};
 				break;
 			case 3:
-				offset = new int[]{0, CANVAS_SIZE / 4};
+				offset = new int[]{0, 512};
 				break;
 			case 4:
-				offset = new int[]{CANVAS_SIZE / 4, CANVAS_SIZE / 4};
+				offset = new int[]{512, 512};
 				break;
 			default:
 				throw new IllegalStateException("Unexpected value: " + opts[0]);
@@ -59,11 +59,10 @@ public class PixelChunkCommand extends Command {
 		}
 
 		try {
-			System.out.println(Arrays.toString(opts));
 			if (opts.length == 2) {
 				channel.sendMessage(":x: | É preciso especificar a coordenada e a cor neste formato: `zona X;Y;#cor`.\nPara dar zoom, digite apenas o número do chunk, as coordenadas X e Y e o nível do zoom.").queue();
 				return;
-			} else if (Integer.parseInt(opts[0]) > CANVAS_SIZE / 4 && Integer.parseInt(opts[0]) < -CANVAS_SIZE / 4 && Integer.parseInt(opts[1]) > CANVAS_SIZE / 4 && Integer.parseInt(opts[1]) < -CANVAS_SIZE / 4) {
+			} else if (Integer.parseInt(opts[0]) > CANVAS_SIZE / 4 || Integer.parseInt(opts[0]) < -CANVAS_SIZE / 4 || Integer.parseInt(opts[1]) > CANVAS_SIZE / 4 || Integer.parseInt(opts[1]) < -CANVAS_SIZE / 4) {
 				channel.sendMessage(":x: | As coordenadas não podem ser menores que -" + (CANVAS_SIZE / 4) + "px ou maiores que " + (CANVAS_SIZE / 4) + "px.").queue();
 				return;
 			}
@@ -73,7 +72,7 @@ public class PixelChunkCommand extends Command {
 		}
 
 		try {
-			int[] coords = new int[]{Integer.parseInt(opts[0]) + offset[0], Integer.parseInt(opts[1]) + offset[1]};
+			int[] coords = new int[]{Integer.parseInt(opts[0]) + offset[0] + CANVAS_SIZE / 4, Integer.parseInt(opts[1]) + offset[1] + CANVAS_SIZE / 4};
 
 			if (StringUtils.isNumeric(opts[2])) {
 				if (Integer.parseInt(opts[2]) <= 0 || Integer.parseInt(opts[2]) > 10) {
