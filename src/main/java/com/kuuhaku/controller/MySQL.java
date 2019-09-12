@@ -378,16 +378,18 @@ public class MySQL {
         EntityManager em = getEntityManager();
 
 		Query q = em.createQuery("SELECT c FROM PixelCanvas c WHERE shelved = 0", PixelCanvas.class);
-        q.setMaxResults(1);
+		q.setMaxResults(1);
 
         try {
             PixelCanvas p = (PixelCanvas) q.getSingleResult();
             em.close();
 
+			Helper.log(MySQL.class, LogLevel.INFO, "Recuperado canvas.");
             return p;
         } catch (NoResultException e) {
             em.close();
 
+			Helper.log(MySQL.class, LogLevel.INFO, "Criado novo canvas.");
             return new PixelCanvas();
         }
     }
