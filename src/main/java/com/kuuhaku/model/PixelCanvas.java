@@ -27,6 +27,10 @@ public class PixelCanvas {
 	@Column(columnDefinition = "boolean default false")
 	private boolean shelved;
 
+	public PixelCanvas() {
+		saveCanvas(getCanvas());
+	}
+
 	public BufferedImage getCanvas() {
 		if (canvas != null) {
 			try {
