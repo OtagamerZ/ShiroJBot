@@ -74,7 +74,7 @@ public class PixelChunkCommand extends Command {
 			int[] coords = new int[]{Integer.parseInt(opts[0]) + offset[0], Integer.parseInt(opts[1]) + offset[1]};
 
 			if (StringUtils.isNumeric(opts[2])) {
-				if (Integer.parseInt(opts[1]) <= 0 || Integer.parseInt(opts[1]) > 10) {
+				if (Integer.parseInt(opts[2]) <= 0 || Integer.parseInt(opts[2]) > 10) {
 					channel.sendMessage(":x: | O zoom não pode ser menor ou igual à 0, nem maior que 10").queue();
 					return;
 				}
