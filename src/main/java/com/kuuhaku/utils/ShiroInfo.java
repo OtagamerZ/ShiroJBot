@@ -80,7 +80,6 @@ public class ShiroInfo {
 	private long startTime;
 	private boolean ready = false;
 	private String winner = "";
-	private PixelCanvas canvas = MySQL.getCanvas();
 
 	public ShiroInfo() {
 	}
@@ -232,10 +231,6 @@ public class ShiroInfo {
 	}
 
 	public PixelCanvas getCanvas() {
-		return canvas;
-	}
-
-	public void reloadCanvas() {
-		this.canvas = MySQL.getCanvas();
+		return MySQL.getCanvas();
 	}
 }

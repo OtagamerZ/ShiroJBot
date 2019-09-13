@@ -89,7 +89,6 @@ public class PixelChunkCommand extends Command {
 			canvas.addPixel(message.getTextChannel(), coords, color).queue();
 
 			MySQL.saveCanvas(canvas);
-			Main.getInfo().reloadCanvas();
 		} catch (NumberFormatException e) {
 			channel.sendMessage(":x: | Cor no formato incorreto, ela deve seguir o padrão hexadecimal (#RRGGBB).").queue();
 		}
