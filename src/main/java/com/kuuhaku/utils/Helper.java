@@ -19,6 +19,7 @@ package com.kuuhaku.utils;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.events.MessageListener;
 import com.kuuhaku.handlers.games.Beyblade;
@@ -416,7 +417,7 @@ public class Helper {
 		EnumSet guildPerms = c.getGuild().getSelfMember().getPermissions();
 		String jibrilPerms = "";
 
-		if (c.getGuild().getMembers().stream().map(Member::getUser).anyMatch(u -> u == Main.getJibril().getSelfUser())) {
+		if (MySQL.getTagById(c.getGuild().getOwnerId()).isPartner()) {
 			EnumSet JchannelPerms = Objects.requireNonNull(c.getGuild().getMember(Main.getJibril().getSelfUser())).getPermissions(c);
 			EnumSet JguildPerms = Objects.requireNonNull(c.getGuild().getMember(Main.getJibril().getSelfUser())).getPermissions();
 			jibrilPerms = "\n\n\n__**Permissões necessárias para uso completo da Jibril**__\n\n" +
