@@ -123,7 +123,7 @@ public class PixelCanvas {
 		canvas.setRGB(coords[0] + CANVAS_SIZE / 2, CANVAS_SIZE / 2 - coords[1], color.getRGB());
 		saveCanvas(canvas);
 
-		return viewCanvas(channel);
+		return viewChunk(channel, coords, 3, false);
 	}
 
 	private void saveCanvas(BufferedImage canvas) {
