@@ -36,7 +36,7 @@ public class RegenRulesCommand extends Command {
 						"Pronto pessoal, isso é tudo!\n" +
 						(guild.getId().equals("421495229594730496") ? "Divirta-se e, caso tenha lido as regras você pode utilizar o comando `s!arespostaé RESPOSTA` para completar a seguinte frase e ganhar um emblema único:\n" +
 						"Infratores serão `_______ __ ______ ___ ____ ____`\n\n" +
-						"É proibido compartilhar qual é a resposta, se não não teria graça!" : "")).queue();
+						"É proibido compartilhar qual é a resposta, se não não teria graça!" : "Caso precise de ajuda, ou queira ajudar no meu desenvolvimento, venha para nosso servidor de suporte: https://discord.gg/9sgkzna")).queue();
 				channel.sendFile(Helper.getImage("https://i.imgur.com/U9lTSWD.png"), "partners.png").queue();
 			} catch (IOException e) {
 				Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
