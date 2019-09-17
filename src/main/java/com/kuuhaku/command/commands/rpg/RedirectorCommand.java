@@ -39,9 +39,9 @@ public class RedirectorCommand extends Command {
 			return;
 		}
 		if (world.getMaster() == author) {
-			new MasterCommands().execute(world.getCurrentMap(), Main.getTet(), author, world, message.getTextChannel(), message, args[1], Arrays.copyOfRange(args, 1, args.length));
+			new MasterCommands().execute(world.getCurrentMap(), Main.getTet(), author, world, message.getTextChannel(), message, args[1], args);
 		} else {
-			new PlayerCommands().execute(world.getCurrentMap(), Main.getTet(), author, world, message.getTextChannel(), message, args[1], Arrays.copyOfRange(args, 1, args.length));
+			new PlayerCommands().execute(world.getCurrentMap(), Main.getTet(), author, world, message.getTextChannel(), message, args[1], args);
 		}
 	}
 }
