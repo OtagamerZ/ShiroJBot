@@ -18,6 +18,7 @@
 package com.kuuhaku.utils;
 
 import com.kuuhaku.controller.MySQL;
+import com.kuuhaku.handlers.games.RPG.World.World;
 import com.kuuhaku.handlers.music.GuildMusicManager;
 import com.kuuhaku.model.DuelData;
 import com.kuuhaku.model.PixelCanvas;
@@ -54,7 +55,7 @@ public class ShiroInfo {
 	private static final String YandexToken = System.getenv("YANDEX_TOKEN");
 	private static final String YoutubeToken = System.getenv("YOUTUBE_TOKEN");
 	private static final String name = "Shiro";
-	private static final String version = "3.0";
+	private static final String version = "3.1";
 	private static final String default_prefix = DEV ? "dev!" : "s!";
 	private static final String nomeDB = "shiro.sqlite";
 	private static final String niichan = "350836145921327115"; //KuuHaKu
@@ -75,6 +76,7 @@ public class ShiroInfo {
 	public static final Map<String, DuelData> duels = new HashMap<>();
 	private static final Map<Long, GuildMusicManager> gmms = new HashMap<>();
 	private static final AudioPlayerManager apm = new DefaultAudioPlayerManager();
+	private static final Map<String, World> games = new HashMap<>();
 
 	private JDA api;
 	private long startTime;
@@ -167,6 +169,10 @@ public class ShiroInfo {
 
 	public AudioPlayerManager getApm() {
 		return apm;
+	}
+
+	public Map<String, World> getGames() {
+		return games;
 	}
 
 	Map<Long, GuildMusicManager> getGmms() {

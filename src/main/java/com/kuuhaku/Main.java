@@ -21,6 +21,7 @@ import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.events.JibrilEvents;
 import com.kuuhaku.events.ScheduledEvents;
+import com.kuuhaku.events.TetEvents;
 import com.kuuhaku.events.guild.GuildEvents;
 import com.kuuhaku.events.guild.GuildUpdateEvents;
 import com.kuuhaku.managers.CommandManager;
@@ -49,6 +50,7 @@ public class Main {
 	private static CommandManager cmdManager;
 	private static JDA api;
 	private static JDA jbr;
+	private static JDA tet;
 	private static String[] arguments;
 
 	public static void main(String[] args) throws Exception {
@@ -59,17 +61,21 @@ public class Main {
 
 		JDA api = new JDABuilder(AccountType.BOT).setToken(info.getBotToken()).build().awaitReady();
 		JDA jbr = new JDABuilder(AccountType.BOT).setToken(System.getenv("JIBRIL_TOKEN")).build().awaitReady();
+		JDA tet = new JDABuilder(AccountType.BOT).setToken(System.getenv("TET_TOKEN")).build().awaitReady();
 		info.setAPI(api);
 		Main.api = api;
 		Main.jbr = jbr;
+		Main.tet = tet;
 
 		api.getPresence().setActivity(Activity.playing("Iniciando..."));
 		jbr.getPresence().setActivity(Activity.playing("Iniciando..."));
+		tet.getPresence().setActivity(Activity.playing("Iniciando..."));
 
 		api.addEventListener(new JDAEvents());
 		api.addEventListener(new GuildEvents());
 		api.addEventListener(new GuildUpdateEvents());
 		jbr.addEventListener(new JibrilEvents());
+		tet.addEventListener(new TetEvents());
 
 		info.setStartTime(Instant.now().getEpochSecond());
 		Helper.log(Main.class, LogLevel.INFO, "Criada pool de compilação: " + info.getPool().getCorePoolSize() + " espaços alocados");
@@ -94,6 +100,7 @@ public class Main {
 	private static void finishStartUp() {
 		api.getPresence().setActivity(getRandomActivity());
 		jbr.getPresence().setActivity(Activity.listening("as mensagens de " + relay.getRelayMap().size() + " servidores!"));
+		tet.getPresence().setActivity(Activity.playing(" em diversos mundos espalhados em " + tet.getGuilds().size() + " servidores!"));
 		getInfo().setWinner(MySQL.getWinner());
 		Main.getInfo().getAPI().getGuilds().forEach(g -> {
 			try {
@@ -138,6 +145,7 @@ public class Main {
 		MySQL.dumpData(new DataDump(SQLite.getMemberDump()));
 		Helper.log(Main.class, LogLevel.INFO, "Membros salvos com sucesso!");
 		SQLite.disconnect();
+		tet.shutdown();
 		jbr.shutdown();
 		api.shutdown();
 		Helper.log(Main.class, LogLevel.INFO, "Fui desligada.");
@@ -149,5 +157,9 @@ public class Main {
 
 	public static JDA getJibril() {
 		return jbr;
+	}
+
+	public static JDA getTet() {
+		return tet;
 	}
 }
