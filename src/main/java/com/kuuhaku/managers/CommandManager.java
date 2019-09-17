@@ -31,6 +31,8 @@ import com.kuuhaku.command.commands.music.MusicCommand;
 import com.kuuhaku.command.commands.music.VideoCommand;
 import com.kuuhaku.command.commands.music.YoutubeCommand;
 import com.kuuhaku.command.commands.partner.JibrilCommand;
+import com.kuuhaku.command.commands.partner.TetCommand;
+import com.kuuhaku.command.commands.rpg.RedirectorCommand;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +59,8 @@ public class CommandManager {
             //PARTNER
             add(new JibrilCommand());
             add(new CompileCommand());
+            add(new TetCommand());
+            add(new RedirectorCommand());
 
             //MODERATION
             add(new RemoveAnswerCommand());
