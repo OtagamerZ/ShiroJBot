@@ -34,8 +34,8 @@ public class RedirectorCommand extends Command {
 
 		World world = Main.getInfo().getGames().get(guild.getId());
 
-		if (args.length < 2) {
-			channel.sendMessage(":x: | São necessários ao menos 2 argumentos.").queue();
+		if (args.length < 1) {
+			channel.sendMessage(":x: | São necessários ao menos 1 argumentos.").queue();
 			return;
 		}
 		if (world.getMaster() == author) {
