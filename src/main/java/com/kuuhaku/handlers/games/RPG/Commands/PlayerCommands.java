@@ -197,7 +197,7 @@ public class PlayerCommands implements RPGCommand {
 		}
 	}
 
-	private void attack(JDA jda, TextChannel channel, Message msg, User p1) {
+	/*private void attack(JDA jda, TextChannel channel, Message msg, User p1) {
 		if (msg.getMentionedUsers().size() == 0) {
 			channel.sendMessage(":x: | Você precisa especificar um usuário para duelar").queue();
 			return;
@@ -211,5 +211,5 @@ public class PlayerCommands implements RPGCommand {
 		}
 
 		new PvPHandler(jda, channel, player, target);
-	}
+	}*/
 }
