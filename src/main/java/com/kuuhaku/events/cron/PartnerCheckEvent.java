@@ -26,5 +26,16 @@ public class PartnerCheckEvent implements Job {
 				Helper.log(this.getClass(), LogLevel.INFO, "Saí do servidor " + g.getName() + " por " + g.getOwner().getUser().getAsTag() + " não possuir tags.");
 			}
 		});
+		Main.getTet().getGuilds().forEach(g -> {
+			try {
+				if (!MySQL.getTagById(g.getOwnerId()).isPartner() && !Main.getInfo().getDevelopers().contains(g.getOwnerId())) {
+					g.leave().queue();
+					Helper.log(this.getClass(), LogLevel.INFO, "Saí do servidor " + g.getName() + " por " + g.getOwner().getUser().getAsTag() + " não estar na lista de parceiros.");
+				}
+			} catch (NoResultException e) {
+				g.leave().queue();
+				Helper.log(this.getClass(), LogLevel.INFO, "Saí do servidor " + g.getName() + " por " + g.getOwner().getUser().getAsTag() + " não possuir tags.");
+			}
+		});
 	}
 }
