@@ -104,9 +104,9 @@ public class MapRegisterHandler extends ListenerAdapter {
 				break;
 			case ACCEPT:
 				try {
-					channel.sendMessage("Registrado com sucesso!").queue();
 					Main.getInfo().getGames().get(event.getGuild().getId()).addMap(new Map(image, startPos));
 					jda.removeEventListener(this);
+					channel.sendMessage("Registrado com sucesso!").queue();
 				} catch (IllegalArgumentException e) {
 					channel.sendMessage(":x: | Mapa com tamanho muito grande, por favor escolha imagem.").queue();
 				} catch (IOException ignore) {

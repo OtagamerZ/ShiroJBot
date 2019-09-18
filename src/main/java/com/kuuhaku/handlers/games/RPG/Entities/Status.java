@@ -43,16 +43,25 @@ public class Status {
 		return baseStats;
 	}
 
-	public int damage(int damage, boolean defending) {
+	public void damage(int damage, boolean defending) {
 		float fac = (float) damage / ((float) damage + (float) agility + new Random().nextInt(defense) * (defending ? 1.5f : 1));
 		modifyLife(Math.round(-(damage * fac)));
 		if (getLife() <= 0) setAlive(false);
 		else setAlive(true);
-		return (int) -(new Random().nextInt(20) + damage * fac);
+	}
+
+	public void trueDamage(int damage) {
+		modifyLife(damage);
+		if (getLife() <= 0) setAlive(false);
+		else setAlive(true);
 	}
 
 	public void addXp(int xp) {
 		this.xp += xp;
+	}
+
+	public int getXp() {
+		return xp;
 	}
 
 	public void setStats(int[] stats) {

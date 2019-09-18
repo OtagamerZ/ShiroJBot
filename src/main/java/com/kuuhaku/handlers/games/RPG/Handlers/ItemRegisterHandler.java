@@ -67,8 +67,10 @@ public class ItemRegisterHandler extends ListenerAdapter {
 					render(msg);
 					break;
 				case 1:
-					if (Main.getInfo().getGames().get(event.getGuild().getId()).getPlayers().values().stream().anyMatch(p -> p.getCharacter().getName().equals(event.getMessage().getContentRaw())))
-						throw new NameTakenException();
+					if (Main.getInfo().getGames().get(event.getGuild().getId()).getPlayers().values().stream().anyMatch(p -> p.getCharacter().getName().equals(event.getMessage().getContentRaw()))) {
+						channel.sendMessage(":x: | Este nome já está em uso").queue();
+						return;
+					}
 					name = event.getMessage().getContentRaw();
 					event.getChannel().sendMessage("Nome trocado para **" + event.getMessage().getContentRaw() + "**!").queue();
 					complete[0] = true;
@@ -158,7 +160,6 @@ public class ItemRegisterHandler extends ListenerAdapter {
 				msg.delete().queue();
 				break;
 			case ACCEPT:
-				channel.sendMessage("Registrado com sucesso!").queue();
 				switch (type) {
 					case HEAD:
 						Main.getInfo().getGames().get(event.getGuild().getId()).addItem(new Item.Head(name, desc, image, price, attrib1, attrib2));
@@ -192,6 +193,7 @@ public class ItemRegisterHandler extends ListenerAdapter {
 						break;
 				}
 				jda.removeEventListener(this);
+				channel.sendMessage("Registrado com sucesso!").queue();
 				msg.clearReactions().queue();
 				break;
 			case PREVIOUS:

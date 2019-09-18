@@ -267,6 +267,7 @@ public class CombatHandler extends ListenerAdapter {
 			form.setThumbnail(player.getCharacter().getImage());
 			form.setColor(Color.green);
 			dialog.editMessage(form.build()).queue();
+			player.getCharacter().getStatus().addXp(monster.getMob().getXp());
 			api.removeEventListener(this);
 			return true;
 		}
@@ -275,7 +276,7 @@ public class CombatHandler extends ListenerAdapter {
 			boolean success = player.getCharacter().getStatus().getAgility() >= monster.getMob().getStatus().getAgility() && new Random().nextInt(player.getCharacter().getStatus().getAgility() * 100) > monster.getMob().getStatus().getAgility() * 50;
 			if (success) {
 				form.setTitle("Fim de combate: " + player.getCharacter().getName() + " fugiu!");
-				form.setDescription("Como os sabios dizem: \"Perder a batalha não significa que você perdeu a guerra!\".");
+				form.setDescription("Como os sabios dizem: \"Perder a batalha não significa perder a guerra!\".");
 				form.setThumbnail(player.getCharacter().getImage());
 				form.setColor(Color.yellow);
 				dialog.editMessage(form.build()).queue();

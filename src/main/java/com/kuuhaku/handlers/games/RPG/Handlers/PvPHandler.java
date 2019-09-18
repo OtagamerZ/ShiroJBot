@@ -275,6 +275,8 @@ public class PvPHandler extends ListenerAdapter {
 			form.setThumbnail(player.getCharacter().getImage());
 			form.setColor(Color.green);
 			dialog.editMessage(form.build()).queue();
+			player.getCharacter().getStatus().addXp(player2.getCharacter().getStatus().getXp() / 2);
+			player2.getCharacter().getStatus().addXp(-player2.getCharacter().getStatus().getXp() / 2);
 			api.removeEventListener(this);
 			return true;
 		} else if (!player2.getCharacter().getStatus().isAlive()) {
@@ -283,6 +285,8 @@ public class PvPHandler extends ListenerAdapter {
 			form.setThumbnail(player2.getCharacter().getImage());
 			form.setColor(Color.green);
 			dialog.editMessage(form.build()).queue();
+			player2.getCharacter().getStatus().addXp(player.getCharacter().getStatus().getXp() / 2);
+			player.getCharacter().getStatus().addXp(-player.getCharacter().getStatus().getXp() / 2);
 			api.removeEventListener(this);
 			return true;
 		}
@@ -291,7 +295,7 @@ public class PvPHandler extends ListenerAdapter {
 			boolean success = player.getCharacter().getStatus().getAgility() >= player2.getCharacter().getStatus().getAgility() && new Random().nextInt(player.getCharacter().getStatus().getAgility() * 100) > player2.getCharacter().getStatus().getAgility() * 50;
 			if (success) {
 				form.setTitle("Fim de combate: " + player.getCharacter().getName() + " fugiu!");
-				form.setDescription("Como os sabios dizem: \"Perder a batalha não significa que você perdeu a guerra!\".");
+				form.setDescription("Como os sabios dizem: \"Perder a batalha não significa perder a guerra!\".");
 				form.setThumbnail(player.getCharacter().getImage());
 				form.setColor(Color.yellow);
 				dialog.editMessage(form.build()).queue();
@@ -312,7 +316,7 @@ public class PvPHandler extends ListenerAdapter {
 			boolean success = player2.getCharacter().getStatus().getAgility() >= player.getCharacter().getStatus().getAgility() && new Random().nextInt(player2.getCharacter().getStatus().getAgility() * 100) > player.getCharacter().getStatus().getAgility() * 50;
 			if (success) {
 				form.setTitle("Fim de combate: " + player2.getCharacter().getName() + " fugiu!");
-				form.setDescription("Como os sabios dizem: \"Perder a batalha não significa que você perdeu a guerra!\".");
+				form.setDescription("Como os sabios dizem: \"Perder a batalha não significa perder a guerra!\".");
 				form.setThumbnail(player2.getCharacter().getImage());
 				form.setColor(Color.yellow);
 				dialog.editMessage(form.build()).queue();
