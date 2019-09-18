@@ -1,6 +1,7 @@
 package com.kuuhaku.handlers.games.RPG.World;
 
 import com.kuuhaku.handlers.games.RPG.Actors.Actor;
+import com.kuuhaku.handlers.games.RPG.Entities.Chest;
 import com.kuuhaku.handlers.games.RPG.Entities.Item;
 import com.kuuhaku.handlers.games.RPG.Exceptions.UnknownItemException;
 import com.kuuhaku.handlers.games.RPG.Utils;
@@ -27,6 +28,7 @@ public class World implements Serializable {
 	private final User master;
 	private final Map<String, Actor.Player> players = new HashMap<>();
 	private final Map<String, Actor.Monster> monsters = new HashMap<>();
+	private final Map<String, Chest> chests = new HashMap<>();
 	private final List<Item> items = new ArrayList<>();
 	private boolean locked = false;
 
@@ -76,6 +78,14 @@ public class World implements Serializable {
 
 	public void removeItem(String name) throws UnknownItemException {
 		items.remove(getItem(name));
+	}
+
+	public void addChest(Chest cst) {
+		chests.put(cst.getName(), cst);
+	}
+
+	public void removeChest(String name) {
+		chests.remove(name);
 	}
 
 	public Map<String, Actor.Player> getPlayers() {
@@ -186,10 +196,30 @@ public class World implements Serializable {
 		return channel.sendMessage(eb.build());
 	}
 
+	public RestAction listChests(TextChannel channel) {
+		EmbedBuilder eb = new EmbedBuilder();
+
+		eb.setTitle("Baús cadastrados");
+		eb.setThumbnail("https://www.worldlandtrust.org/wp-content/uploads/2018/04/globe-icon.png");
+
+		if (chests.size() > 0)
+			eb.addField("Baús", chests.values().stream().map(p -> p.getName() + "\n").collect(Collectors.joining()), false);
+		return channel.sendMessage(eb.build());
+	}
+
 	public Item getItem(String name) throws UnknownItemException {
 		List<Item> its = items.stream().filter(i -> StringUtils.containsIgnoreCase(i.getName(), name)).collect(Collectors.toList());
 		if (its.size() > 0) return its.get(0).getThis();
 		else throw new UnknownItemException();
+	}
+
+	public Chest getChest(String name) {
+		Chest cst = chests.get(name);
+		if (cst != null) {
+			return cst;
+		} else {
+			throw new RuntimeException();
+		}
 	}
 
 	public boolean isLocked() {

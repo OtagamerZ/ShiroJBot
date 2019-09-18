@@ -73,8 +73,10 @@ public class PlayerRegisterHandler extends ListenerAdapter {
 					render(msg);
 					break;
 				case 1:
-					if (Main.getInfo().getGames().get(event.getGuild().getId()).getPlayers().values().stream().anyMatch(p -> p.getCharacter().getName().equals(event.getMessage().getContentRaw())))
-						throw new NameTakenException();
+					if (Main.getInfo().getGames().get(event.getGuild().getId()).getPlayers().values().stream().anyMatch(p -> p.getCharacter().getName().equals(event.getMessage().getContentRaw()))) {
+						channel.sendMessage(":x: | Este nome já está em uso").queue();
+						return;
+					}
 					name = event.getMessage().getContentRaw();
 					event.getChannel().sendMessage("Nome trocado para **" + event.getMessage().getContentRaw() + "**!").queue();
 					complete[0] = true;
@@ -140,9 +142,9 @@ public class PlayerRegisterHandler extends ListenerAdapter {
 				break;
 			case ACCEPT:
 				try {
-					channel.sendMessage("Registrado com sucesso!").queue();
 					Main.getInfo().getGames().get(event.getGuild().getId()).addPlayer(new Actor.Player(map, user, new Character(name, image, desc, str, per, end, cha, intl, agl, lck)));
 					jda.removeEventListener(this);
+					channel.sendMessage("Registrado com sucesso!").queue();
 				} catch (IOException ignore) {
 				}
 				msg.clearReactions().queue();
