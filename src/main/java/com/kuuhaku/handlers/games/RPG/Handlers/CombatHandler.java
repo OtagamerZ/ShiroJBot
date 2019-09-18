@@ -2,6 +2,7 @@ package com.kuuhaku.handlers.games.RPG.Handlers;
 
 import com.kuuhaku.handlers.games.RPG.Actors.Actor;
 import com.kuuhaku.handlers.games.RPG.Dialogs.CombatDialog;
+import com.kuuhaku.handlers.games.RPG.Exceptions.BadLuckException;
 import com.kuuhaku.handlers.games.RPG.World.World;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -132,7 +133,7 @@ public class CombatHandler extends ListenerAdapter {
 					break;
 			}
 			changeTurn();
-		} else if (player.getId() == event.getUser().getIdLong() && playerTurn){
+		} else if (player.getId() == event.getUser().getIdLong() && playerTurn) {
 			switch (event.getReactionEmote().getName()) {
 				case ATTACK:
 					adbf.get(player).setAttacking();
@@ -259,11 +260,18 @@ public class CombatHandler extends ListenerAdapter {
 			form.setThumbnail("https://www.shareicon.net/download/2015/09/26/107761_dead.ico");
 			form.setColor(Color.red);
 			dialog.editMessage(form.build()).queue();
+			player.getCharacter().getStatus().addXp(-player.getCharacter().getStatus().getXp() / 2);
 			api.removeEventListener(this);
 			return true;
 		} else if (!monster.getMob().getStatus().isAlive()) {
 			form.setTitle("Fim de combate: " + monster.getMob().getName() + " venceu!");
-			form.setDescription("Você recebeu " + monster.getMob().dropLoot(player.getCharacter().getStatus().getLuck()));
+			String result;
+			try {
+				result = "Você recebeu " + monster.getMob().dropLoot(player.getCharacter().getStatus().getLuck()).getName();
+			} catch (BadLuckException e) {
+				result = "Que azar! Você não ganhou nenhum item!";
+			}
+			form.setDescription(result);
 			form.setThumbnail(player.getCharacter().getImage());
 			form.setColor(Color.green);
 			dialog.editMessage(form.build()).queue();

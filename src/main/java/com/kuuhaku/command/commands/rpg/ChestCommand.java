@@ -4,6 +4,9 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.handlers.games.RPG.Entities.Equipped;
+import com.kuuhaku.handlers.games.RPG.Entities.Item;
+import com.kuuhaku.handlers.games.RPG.Exceptions.BadLuckException;
+import com.kuuhaku.handlers.games.RPG.Exceptions.UnknownItemException;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
@@ -28,12 +31,15 @@ public class ChestCommand extends Command {
 
 			try {
 				Equipped inv = Main.getInfo().getGames().get(guild.getId()).getPlayers().get(message.getMentionedUsers().get(0).getId()).getCharacter().getInventory();
-				inv.addItem(
-						Main.getInfo().getGames().get(guild.getId()).getChest(String.join(" ", Arrays.copyOfRange(args, 1, args.length))).dropLoot(Main.getInfo().getGames().get(guild.getId()).getPlayers().get(message.getMentionedUsers().get(0).getId()).getCharacter().getStatus().getLuck())
-				);
-			} catch (RuntimeException e) {
+				Item dropped = Main.getInfo().getGames().get(guild.getId()).getChest(String.join(" ", Arrays.copyOfRange(args, 1, args.length))).dropLoot(Main.getInfo().getGames().get(guild.getId()).getPlayers().get(message.getMentionedUsers().get(0).getId()).getCharacter().getStatus().getLuck());
+				inv.addItem(dropped);
+				channel.sendMessage(Main.getInfo().getGames().get(guild.getId()).getPlayers().get(message.getMentionedUsers().get(0).getId()).getCharacter().getName() + " ganhou " + dropped).queue();
+			} catch (BadLuckException e) {
+				channel.sendMessage("Que azar! Você não ganhou nenhum item!").queue();
+			} catch (UnknownItemException e) {
 				channel.sendMessage(":x: | Baú não encontrado").queue();
-				e.printStackTrace();
+			} catch (RuntimeException e) {
+				channel.sendMessage(":x: | Jogador inválido").queue();
 			}
 		}
 	}
