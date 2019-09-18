@@ -16,12 +16,10 @@ public class NewPlayerCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-		if (Main.getInfo().getGames().get(guild.getId()).getMaster() != author) {
-			if (Main.getInfo().getGames().get(guild.getId()).getCurrentMap() == null) {
-				channel.sendMessage(":x: | Ainda não existe nenhum mapa marcado como ativo, espere o mestre da campanha criá-lo").queue();
-				return;
-			}
-			new PlayerRegisterHandler(Main.getInfo().getGames().get(guild.getId()).getCurrentMap(), message.getTextChannel(), Main.getTet(), author);
+		if (Main.getInfo().getGames().get(guild.getId()).getCurrentMap() == null) {
+			channel.sendMessage(":x: | Ainda não existe nenhum mapa marcado como ativo, espere o mestre da campanha criá-lo").queue();
+			return;
 		}
+		new PlayerRegisterHandler(Main.getInfo().getGames().get(guild.getId()).getCurrentMap(), message.getTextChannel(), Main.getTet(), author);
 	}
 }

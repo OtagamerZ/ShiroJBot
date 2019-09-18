@@ -19,10 +19,19 @@ public class RollCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-		try {
-			channel.sendMessage(Utils.rollDice(String.join(" ", args), Main.getInfo().getGames().get(guild.getId()).getMaster() == author ? null : Main.getInfo().getGames().get(guild.getId()).getPlayers().get(author.getId()).getCharacter().getStatus())).queue();
-		} catch (Exception e) {
-			Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
+		if (Main.getInfo().getGames().get(guild.getId()).getPlayers().containsKey(author.getId())) {
+			try {
+				channel.sendMessage(Utils.rollDice(String.join(" ", args), Main.getInfo().getGames().get(guild.getId()).getPlayers().get(author.getId()).getCharacter().getStatus())).queue();
+			} catch (Exception e) {
+				Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
+			}
+		} else if (Main.getInfo().getGames().get(guild.getId()).getMaster() == author) {
+			try {
+				channel.sendMessage(Utils.rollDice(String.join(" ", args), null)).queue();
+			} catch (Exception e) {
+				Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
+			}
 		}
+
 	}
 }
