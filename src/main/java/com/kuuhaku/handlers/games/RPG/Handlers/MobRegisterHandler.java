@@ -6,6 +6,7 @@ import com.kuuhaku.handlers.games.RPG.Entities.LootItem;
 import com.kuuhaku.handlers.games.RPG.Entities.Mob;
 import com.kuuhaku.handlers.games.RPG.Enums.Rarity;
 import com.kuuhaku.handlers.games.RPG.Exceptions.NameTakenException;
+import com.kuuhaku.handlers.games.RPG.Exceptions.UnknownItemException;
 import com.kuuhaku.handlers.games.RPG.World.World;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -165,6 +166,8 @@ public class MobRegisterHandler extends ListenerAdapter {
 			}
 		} catch (NameTakenException e) {
 			event.getChannel().sendMessage(":x: | Este monstro já existe!").queue();
+		} catch (UnknownItemException e) {
+			event.getChannel().sendMessage(":x: | Item desconhecido.").queue();
 		} catch (NumberFormatException e) {
 			event.getChannel().sendMessage(":x: | Os atributos devem estar no formato:\n `FORÇA;PERCEPÇÃO;RESISTÊNCIA;CARISMA;INTELIGENCIA;AGILIDADE;SORTE`.").queue();
 		} catch (IllegalArgumentException e) {
