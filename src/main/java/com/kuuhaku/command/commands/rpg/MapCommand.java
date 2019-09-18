@@ -22,6 +22,8 @@ public class MapCommand extends Command {
 			Main.getInfo().getGames().get(guild.getId()).render(message.getTextChannel()).queue();
 		} catch (IOException e) {
 			Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
+		} catch (NullPointerException e) {
+			channel.sendMessage(":x: | Não há nenhum mapa ativo.").queue();
 		}
 	}
 }
