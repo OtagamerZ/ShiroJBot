@@ -405,5 +405,7 @@ public class MySQL {
     public static void saveCampaigns() {
         EntityManager em = getEntityManager();
 
+
+
     }
 }
