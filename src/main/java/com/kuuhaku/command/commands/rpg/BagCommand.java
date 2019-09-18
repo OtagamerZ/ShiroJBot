@@ -15,7 +15,7 @@ public class BagCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-		if (Main.getInfo().getGames().get(guild.getId()).getMaster() != author) {
+		if (Main.getInfo().getGames().get(guild.getId()).getPlayers().containsKey(author.getId())) {
 			Main.getInfo().getGames().get(guild.getId()).getPlayers().get(author.getId()).getCharacter().openInventory(message.getTextChannel()).queue();
 		}
 	}
