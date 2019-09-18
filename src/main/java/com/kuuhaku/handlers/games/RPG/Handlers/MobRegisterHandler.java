@@ -16,6 +16,11 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GenericGuildMessageReactionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,6 +45,7 @@ public class MobRegisterHandler extends ListenerAdapter {
 	private int page = 0;
 	private final EmbedBuilder eb = new EmbedBuilder();
 	private Message msg;
+	private final TextChannel chn;
 	private final boolean[] complete = new boolean[]{false, false, false, false, false};
 
 	private static final String PREVIOUS = "\u25C0";
@@ -52,6 +58,7 @@ public class MobRegisterHandler extends ListenerAdapter {
 		this.jda = jda;
 		this.user = user;
 		this.world = world;
+		this.chn = channel;
 		eb.setTitle("Registro de monstro");
 		eb.setDescription("Clique nas setas para mudar as páginas.");
 		channel.sendMessage(eb.build()).queue(m -> {
@@ -64,7 +71,7 @@ public class MobRegisterHandler extends ListenerAdapter {
 
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-		if (event.getAuthor().isBot() || event.getAuthor() != user) return;
+		if (event.getAuthor().isBot() || event.getAuthor() != user || event.getChannel() != chn) return;
 		try {
 			switch (page) {
 				case 0:
@@ -81,9 +88,18 @@ public class MobRegisterHandler extends ListenerAdapter {
 					break;
 				case 2:
 					image = event.getMessage().getContentRaw();
-					event.getChannel().sendMessage("Imagem trocada com sucesso!").queue();
-					complete[1] = true;
-					render(msg);
+					try {
+						HttpURLConnection con = (HttpURLConnection) new URL(image).openConnection();
+						con.setRequestProperty("User-Agent", "Mozilla/5.0");
+						BufferedImage map = ImageIO.read(con.getInputStream());
+
+						event.getChannel().sendMessage("Imagem trocada com sucesso!").queue();
+						complete[1] = true;
+						render(msg);
+					} catch (IOException e) {
+						e.printStackTrace();
+						event.getChannel().sendMessage(":x: | Imagem inválida, veja se pegou o link corretamente.").queue();
+					}
 					break;
 				case 3:
 					desc = event.getMessage().getContentRaw();
@@ -145,7 +161,7 @@ public class MobRegisterHandler extends ListenerAdapter {
 
 	@Override
 	public void onGenericGuildMessageReaction(GenericGuildMessageReactionEvent event) {
-		if (event.getUser().isBot() || event.getUser() != user || event.getChannel() != msg.getChannel()) return;
+		if (event.getUser().isBot() || event.getUser() != user || event.getChannel() != chn) return;
 		switch (event.getReactionEmote().getName()) {
 			case CANCEL:
 				channel.sendMessage("Registro abortado!").queue();
