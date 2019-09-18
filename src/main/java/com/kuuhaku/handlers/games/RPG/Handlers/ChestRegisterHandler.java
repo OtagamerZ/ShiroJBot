@@ -7,6 +7,7 @@ import com.kuuhaku.handlers.games.RPG.Entities.LootItem;
 import com.kuuhaku.handlers.games.RPG.Entities.Mob;
 import com.kuuhaku.handlers.games.RPG.Enums.Rarity;
 import com.kuuhaku.handlers.games.RPG.Exceptions.NameTakenException;
+import com.kuuhaku.handlers.games.RPG.Exceptions.UnknownItemException;
 import com.kuuhaku.handlers.games.RPG.World.World;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -109,6 +110,8 @@ public class ChestRegisterHandler extends ListenerAdapter {
 			}
 		} catch (NameTakenException e) {
 			event.getChannel().sendMessage(":x: | Este baú já existe!").queue();
+		} catch (UnknownItemException e) {
+			event.getChannel().sendMessage(":x: | Item desconhecido.").queue();
 		}
 		event.getMessage().delete().queue();
 	}
