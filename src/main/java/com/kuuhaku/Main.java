@@ -60,6 +60,7 @@ public class Main {
 		relay = new Relay();
 
 		cmdManager = new CommandManager();
+		rpgCmdManager = new RPGCommandManager();
 
 		JDA api = new JDABuilder(AccountType.BOT).setToken(info.getBotToken()).build().awaitReady();
 		JDA jbr = new JDABuilder(AccountType.BOT).setToken(System.getenv("JIBRIL_TOKEN")).build().awaitReady();
