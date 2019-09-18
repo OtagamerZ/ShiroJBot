@@ -64,6 +64,8 @@ public class RPGCommandManager {
             add(new UnequipCommand());
             add(new ViewCommand());
             add(new WorldListCommand());
+            add(new ChestCommand());
+            add(new ChestCommand());
         }};
     }
 
