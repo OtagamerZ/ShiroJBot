@@ -12,20 +12,24 @@ import java.util.stream.Collectors;
 
 public class Mob extends Character{
 	private final List<LootItem> lootTable;
+	private final int xp;
 
-	public Mob(String name, String img, String bio, int strength, int perception, int endurance, int charisma, int intelligence, int agility, int luck) {
+	public Mob(String name, String img, String bio, int strength, int perception, int endurance, int charisma, int intelligence, int agility, int luck, int xp) {
 		super(name, img, bio, strength, perception, endurance, charisma, intelligence, agility, luck);
 		this.lootTable = new ArrayList<>();
+		this.xp = xp;
 	}
 
-	public Mob(String name, String img, String bio, int strength, int perception, int endurance, int charisma, int intelligence, int agility, int luck, List<LootItem> loot) {
+	public Mob(String name, String img, String bio, int strength, int perception, int endurance, int charisma, int intelligence, int agility, int xp, int luck, List<LootItem> loot) {
 		super(name, img, bio, strength, perception, endurance, charisma, intelligence, agility, luck);
 		this.lootTable = loot;
+		this.xp = xp;
 	}
 
-	public Mob(String[] ssvData) {
+	public Mob(String[] ssvData, int xp) {
 		super(ssvData);
 		this.lootTable = new ArrayList<>();
+		this.xp = xp;
 	}
 
 	@Override
@@ -45,6 +49,7 @@ public class Mob extends Character{
 		eb.addField("Agilidade", String.valueOf(super.getStatus().getAgility()), true);
 		eb.addField("Sorte", String.valueOf(super.getStatus().getLuck()), true);
 		eb.addBlankField(false);
+		eb.addField("XP", String.valueOf(xp), true);
 		eb.addField("Drops", lootTable.stream().map(i -> "(" + i.getItem().getType().getName() + " " + i.getRarity().getName() + ") " +i.getItem().getName() + "\n").collect(Collectors.joining()), false);
 
 		return channel.sendMessage(eb.build());
@@ -65,5 +70,9 @@ public class Mob extends Character{
 	public Item dropLoot(int luck) {
 		List<Item> filteredList = lootTable.stream().filter(i -> i.getRarity().equals(Rarity.roll(luck))).map(LootItem::getItem).collect(Collectors.toList());
 		return filteredList.get(new Random().nextInt(filteredList.size() - 1));
+	}
+
+	public int getXp() {
+		return xp;
 	}
 }
