@@ -1,6 +1,7 @@
 package com.kuuhaku.handlers.games.RPG.Entities;
 
 import com.kuuhaku.handlers.games.RPG.Enums.Rarity;
+import com.kuuhaku.handlers.games.RPG.Exceptions.BadLuckException;
 
 import java.util.List;
 import java.util.Random;
@@ -21,6 +22,7 @@ public class Chest {
 
 	public Item dropLoot(int luck) {
 		List<Item> filteredList = lootTable.stream().filter(i -> i.getRarity().equals(Rarity.roll(luck))).map(LootItem::getItem).collect(Collectors.toList());
-		return filteredList.get(new Random().nextInt(filteredList.size() - 1));
+		if (filteredList.size() == 0) throw new BadLuckException();
+		return filteredList.get((int) Math.round(Math.random() * filteredList.size() - 1));
 	}
 }
