@@ -159,6 +159,9 @@ public class TetEvents extends ListenerAdapter {
 									break;
 								} catch (InsufficientPermissionException ignore) {
 								}
+							} else {
+								channel.sendMessage(":x: | Você ainda não criou um personagem, use o comando `" + prefix + "rnovo` para criar.").queue();
+								break;
 							}
 						}
 						if (Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
@@ -173,9 +176,6 @@ public class TetEvents extends ListenerAdapter {
 							break;
 						} catch (InsufficientPermissionException ignore) {
 						}
-					} else {
-						channel.sendMessage(":x: | Você ainda não criou um personagem, use o comando `" + prefix + "rnovo` para criar.").queue();
-						break;
 					}
 				}
 			} catch (InsufficientPermissionException ignore) {
