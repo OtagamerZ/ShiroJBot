@@ -17,7 +17,7 @@ public class WorldListCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		if (Main.getInfo().getGames().get(guild.getId()).getMaster() == author) {
 			if (args.length == 0) {
-				channel.sendMessage(":x: | É necessário especificar um tipo de lista (player, mob ou item)").queue();
+				channel.sendMessage(":x: | É necessário especificar um tipo de lista (player, mob, item ou bau)").queue();
 				return;
 			}
 			switch (args[0]) {
@@ -33,7 +33,11 @@ public class WorldListCommand extends Command {
 				case "item":
 					Main.getInfo().getGames().get(guild.getId()).listItems(message.getTextChannel()).queue();
 					break;
-					default: channel.sendMessage(":x: | É necessário especificar um tipo de lista (player, mob ou item)").queue();
+				case "b":
+				case "bau":
+					Main.getInfo().getGames().get(guild.getId()).listChests(message.getTextChannel()).queue();
+					break;
+					default: channel.sendMessage(":x: | É necessário especificar um tipo de lista (player, mob, item ou bau)").queue();
 			}
 		}
 	}
