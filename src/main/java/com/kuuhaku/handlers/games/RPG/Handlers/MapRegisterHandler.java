@@ -12,7 +12,12 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GenericGuildMessageReactionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 
 public class MapRegisterHandler extends ListenerAdapter {
@@ -24,6 +29,7 @@ public class MapRegisterHandler extends ListenerAdapter {
 	private int page = 0;
 	private final EmbedBuilder eb = new EmbedBuilder();
 	private Message msg;
+	private final TextChannel chn;
 	private final boolean[] complete = new boolean[]{false, false};
 
 	private static final String PREVIOUS = "\u25C0";
@@ -35,6 +41,7 @@ public class MapRegisterHandler extends ListenerAdapter {
 		this.channel = channel;
 		this.jda = jda;
 		this.user = user;
+		this.chn = channel;
 		eb.setTitle("Registro de mapa");
 		eb.setDescription("Clique nas setas para mudar as páginas.");
 		channel.sendMessage(eb.build()).queue(m -> {
@@ -47,7 +54,7 @@ public class MapRegisterHandler extends ListenerAdapter {
 
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-		if (event.getAuthor().isBot() || event.getAuthor() != user) return;
+		if (event.getAuthor().isBot() || event.getAuthor() != user || event.getChannel() != chn) return;
 		try {
 			switch (page) {
 				case 0:
@@ -58,9 +65,18 @@ public class MapRegisterHandler extends ListenerAdapter {
 					if (Main.getInfo().getGames().get(event.getGuild().getId()).getPlayers().values().stream().anyMatch(p -> p.getCharacter().getName().equals(event.getMessage().getContentRaw())))
 						throw new NameTakenException();
 					image = event.getMessage().getContentRaw();
-					event.getChannel().sendMessage("Mapa trocado com sucesso!").queue();
-					complete[0] = true;
-					render(msg);
+					try {
+						HttpURLConnection con = (HttpURLConnection) new URL(image).openConnection();
+						con.setRequestProperty("User-Agent", "Mozilla/5.0");
+						BufferedImage map = ImageIO.read(con.getInputStream());
+
+						event.getChannel().sendMessage("Mapa trocado com sucesso!").queue();
+						complete[0] = true;
+						render(msg);
+					} catch (IOException e) {
+						e.printStackTrace();
+						event.getChannel().sendMessage(":x: | Imagem inválida, veja se pegou o link corretamente.").queue();
+					}
 					break;
 				case 2:
 					String[] args = event.getMessage().getContentRaw().split(";");
@@ -79,7 +95,7 @@ public class MapRegisterHandler extends ListenerAdapter {
 
 	@Override
 	public void onGenericGuildMessageReaction(GenericGuildMessageReactionEvent event) {
-		if (event.getUser().isBot() || event.getUser() != user || event.getChannel() != msg.getChannel()) return;
+		if (event.getUser().isBot() || event.getUser() != user || event.getChannel() != chn) return;
 		switch (event.getReactionEmote().getName()) {
 			case CANCEL:
 				channel.sendMessage("Registro abortado!").queue();
