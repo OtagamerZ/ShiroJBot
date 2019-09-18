@@ -214,12 +214,9 @@ public class World implements Serializable {
 	}
 
 	public Chest getChest(String name) {
-		Chest cst = chests.get(name);
-		if (cst != null) {
-			return cst;
-		} else {
-			throw new RuntimeException();
-		}
+		List<Chest> cst = chests.values().stream().filter(c -> StringUtils.containsIgnoreCase(c.getName(), name)).collect(Collectors.toList());
+		if (cst.size() > 0) return cst.get(0);
+		else throw new RuntimeException();
 	}
 
 	public boolean isLocked() {
