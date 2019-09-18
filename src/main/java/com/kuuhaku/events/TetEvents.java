@@ -19,6 +19,7 @@ package com.kuuhaku.events;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.command.commands.rpg.NewCampaignCommand;
 import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.CustomAnswers;
@@ -99,8 +100,6 @@ public class TetEvents extends ListenerAdapter {
 					commandName = rawMsgNoPrefix.split(" ")[0].trim();
 				}
 
-				if (!commandName.equalsIgnoreCase("rpg")) return;
-
 				boolean hasArgs = (rawMsgNoPrefix.split(" ").length > 1);
 				String[] args = new String[]{};
 				if (hasArgs) {
@@ -111,7 +110,8 @@ public class TetEvents extends ListenerAdapter {
 				if (!guild.getSelfMember().hasPermission(Permission.MESSAGE_WRITE)) {
 					return;
 				}
-				for (Command command : Main.getCommandManager().getCommands()) {
+
+				for (Command command : Main.getRPGCommandManager().getCommands()) {
 					if (command.getName().equalsIgnoreCase(commandName)) {
 						found = true;
 					}
@@ -126,16 +126,37 @@ public class TetEvents extends ListenerAdapter {
 
 					if (found) {
 						Helper.logToChannel(author, true, command, "Um comando foi usado no canal " + ((TextChannel) channel).getAsMention(), guild);
-						if (Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
-							command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
-							Helper.spawnAd(channel);
+						if (Main.getInfo().getGames().get(guild.getId()) == null) {
+							if (command.getClass() == NewCampaignCommand.class) {
+								if (Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
+									command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
+									Helper.spawnAd(channel);
+									break;
+								}
+
+								try {
+									channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
+									Helper.spawnAd(channel);
+									break;
+								} catch (InsufficientPermissionException ignore) {
+								}
+								return;
+							}
+							channel.sendMessage(":x: | Este servidor ainda não possui uma campanha ativa.").queue();
 							break;
-						}
-						try {
-							channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
-							Helper.spawnAd(channel);
-							break;
-						} catch (InsufficientPermissionException ignore) {
+						} else {
+							if (Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
+								command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
+								Helper.spawnAd(channel);
+								break;
+							}
+
+							try {
+								channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
+								Helper.spawnAd(channel);
+								break;
+							} catch (InsufficientPermissionException ignore) {
+							}
 						}
 					}
 				}

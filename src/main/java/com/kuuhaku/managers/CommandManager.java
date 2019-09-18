@@ -19,7 +19,6 @@ package com.kuuhaku.managers;
 
 import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.Reactions.*;
-import com.kuuhaku.command.commands.beyblade.*;
 import com.kuuhaku.command.commands.dev.*;
 import com.kuuhaku.command.commands.exceed.ExceedRankCommand;
 import com.kuuhaku.command.commands.exceed.ExceedSelectCommand;
@@ -32,7 +31,6 @@ import com.kuuhaku.command.commands.music.VideoCommand;
 import com.kuuhaku.command.commands.music.YoutubeCommand;
 import com.kuuhaku.command.commands.partner.JibrilCommand;
 import com.kuuhaku.command.commands.partner.TetCommand;
-import com.kuuhaku.command.commands.rpg.RedirectorCommand;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +58,6 @@ public class CommandManager {
             add(new JibrilCommand());
             add(new CompileCommand());
             add(new TetCommand());
-            add(new RedirectorCommand());
 
             //MODERATION
             add(new RemoveAnswerCommand());
@@ -139,17 +136,6 @@ public class CommandManager {
             add(new LaughReaction());
             add(new NopeReaction());
             add(new RunReaction());
-
-            //BEYBLADE
-            add(new StartCommand());
-            add(new ColorCommand());
-            add(new DuelCommand());
-            add(new ShopCommand());
-            add(new AlignmentCommand());
-            add(new InfoCommand());
-            add(new RankCommand());
-            add(new SlotsCommand());
-            add(new RedeemCommand());
 
             //MUSICA
             add(new MusicCommand());
