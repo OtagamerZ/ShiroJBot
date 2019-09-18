@@ -401,4 +401,9 @@ public class MySQL {
 
         em.close();
     }
+
+    public static void saveCampaigns() {
+        EntityManager em = getEntityManager();
+
+    }
 }

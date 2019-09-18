@@ -144,7 +144,7 @@ public class TetEvents extends ListenerAdapter {
 							}
 							channel.sendMessage(":x: | Este servidor ainda não possui uma campanha ativa.").queue();
 							break;
-						} else {
+						} else if (Main.getInfo().getGames().get(guild.getId()).getPlayers().containsKey(author.getId())){
 							if (Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
 								command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
 								Helper.spawnAd(channel);
@@ -157,6 +157,9 @@ public class TetEvents extends ListenerAdapter {
 								break;
 							} catch (InsufficientPermissionException ignore) {
 							}
+						} else {
+							channel.sendMessage(":x: | Você ainda não criou um personagem, use o comando `" + prefix + "rnovo` para criar.").queue();
+							break;
 						}
 					}
 				}
