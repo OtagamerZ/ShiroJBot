@@ -1,5 +1,6 @@
 package com.kuuhaku.controller;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.model.*;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
@@ -7,6 +8,8 @@ import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.api.entities.User;
 
 import javax.persistence.*;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -402,10 +405,11 @@ public class MySQL {
         em.close();
     }
 
-    public static void saveCampaigns() {
+    /*public static void saveCampaigns() throws IOException {
         EntityManager em = getEntityManager();
+        ObjectOutputStream oos = new ObjectOutputStream();
+        Main.getInfo().getGames().
 
 
-
-    }
+    }*/
 }
