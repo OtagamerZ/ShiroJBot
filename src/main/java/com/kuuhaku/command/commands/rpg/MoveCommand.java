@@ -22,7 +22,7 @@ public class MoveCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		try {
-			if (Main.getInfo().getGames().get(guild.getId()).getMaster() != author) {
+			if (Main.getInfo().getGames().get(guild.getId()).getPlayers().containsKey(author.getId())) {
 				if (args.length == 0) {
 					channel.sendMessage(":x: | Você precisa especificar as coordenadas.").queue();
 					return;

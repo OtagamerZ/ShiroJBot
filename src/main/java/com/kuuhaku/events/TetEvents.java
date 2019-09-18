@@ -20,6 +20,7 @@ package com.kuuhaku.events;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.rpg.NewCampaignCommand;
+import com.kuuhaku.command.commands.rpg.NewPlayerCommand;
 import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.CustomAnswers;
@@ -144,23 +145,37 @@ public class TetEvents extends ListenerAdapter {
 							}
 							channel.sendMessage(":x: | Este servidor ainda não possui uma campanha ativa.").queue();
 							break;
-						} else if (Main.getInfo().getGames().get(guild.getId()).getPlayers().containsKey(author.getId())){
-							if (Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
-								command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
-								Helper.spawnAd(channel);
-								break;
-							}
-
-							try {
-								channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
-								Helper.spawnAd(channel);
-								break;
-							} catch (InsufficientPermissionException ignore) {
-							}
 						} else {
-							channel.sendMessage(":x: | Você ainda não criou um personagem, use o comando `" + prefix + "rnovo` para criar.").queue();
+							if (!Main.getInfo().getGames().get(guild.getId()).getPlayers().containsKey(author.getId()) && command.getClass() == NewPlayerCommand.class) {
+								if (Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
+									command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
+									Helper.spawnAd(channel);
+									break;
+								}
+
+								try {
+									channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
+									Helper.spawnAd(channel);
+									break;
+								} catch (InsufficientPermissionException ignore) {
+								}
+							}
+						}
+						if (Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
+							command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
+							Helper.spawnAd(channel);
 							break;
 						}
+
+						try {
+							channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
+							Helper.spawnAd(channel);
+							break;
+						} catch (InsufficientPermissionException ignore) {
+						}
+					} else {
+						channel.sendMessage(":x: | Você ainda não criou um personagem, use o comando `" + prefix + "rnovo` para criar.").queue();
+						break;
 					}
 				}
 			} catch (InsufficientPermissionException ignore) {
