@@ -112,6 +112,8 @@ public class ChestRegisterHandler extends ListenerAdapter {
 			event.getChannel().sendMessage(":x: | Este baú já existe!").queue();
 		} catch (UnknownItemException e) {
 			event.getChannel().sendMessage(":x: | Item desconhecido.").queue();
+		} catch (IndexOutOfBoundsException e) {
+			event.getChannel().sendMessage(":x: | Formatação incorreta.").queue();
 		}
 		event.getMessage().delete().queue();
 	}

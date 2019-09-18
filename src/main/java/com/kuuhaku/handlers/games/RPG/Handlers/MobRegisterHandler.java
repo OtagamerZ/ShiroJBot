@@ -168,6 +168,8 @@ public class MobRegisterHandler extends ListenerAdapter {
 			event.getChannel().sendMessage(":x: | Este monstro já existe!").queue();
 		} catch (UnknownItemException e) {
 			event.getChannel().sendMessage(":x: | Item desconhecido.").queue();
+		} catch (IndexOutOfBoundsException e) {
+			event.getChannel().sendMessage(":x: | Formatação incorreta.").queue();
 		} catch (NumberFormatException e) {
 			event.getChannel().sendMessage(":x: | Os atributos devem estar no formato:\n `FORÇA;PERCEPÇÃO;RESISTÊNCIA;CARISMA;INTELIGENCIA;AGILIDADE;SORTE`.").queue();
 		} catch (IllegalArgumentException e) {
