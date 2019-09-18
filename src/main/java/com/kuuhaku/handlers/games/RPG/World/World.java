@@ -216,7 +216,7 @@ public class World implements Serializable {
 	public Chest getChest(String name) {
 		List<Chest> cst = chests.values().stream().filter(c -> StringUtils.containsIgnoreCase(c.getName(), name)).collect(Collectors.toList());
 		if (cst.size() > 0) return cst.get(0);
-		else throw new RuntimeException();
+		else throw new UnknownItemException();
 	}
 
 	public boolean isLocked() {
