@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.events.Event;
 public class NewCampaignCommand extends Command {
 
 	public NewCampaignCommand() {
-		super("rnovocampanha", new String[]{"rnewcampaign"}, "Abre uma nova campanha de RPG no servidor", Category.BEYBLADE);
+		super("rnovacampanha", new String[]{"rnewcampaign"}, "Abre uma nova campanha de RPG no servidor", Category.BEYBLADE);
 	}
 
 	@Override
