@@ -207,57 +207,61 @@ public class Profile {
 						break;
 				}
 			}
-			if (m.getUser().getId().equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(m.getUser().getId()))
-				add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/dev.png"))));
-			if (Main.getInfo().getSheriffs().contains(m.getUser().getId())) {
-				add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/sheriff.png"))));
-			}
-			if (Main.getInfo().getEditors().contains(m.getUser().getId()))
-				add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/writer.png"))));
-			try {
-				if (MySQL.getTagById(m.getUser().getId()).isReader())
-					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/reader.png"))));
-			} catch (NoResultException ignore) {
-			}
-			if (m.hasPermission(Permission.MANAGE_CHANNEL))
-				add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/mod.png"))));
-			try {
-				if (MySQL.getChampionBeyblade().getId().equals(m.getUser().getId()))
-					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/champ.png"))));
-			} catch (NoResultException ignore) {
-			}
-			try {
-				if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 70)
-					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_70.png"))));
-				else if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 60)
-					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_60.png"))));
-				else if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 50)
-					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_50.png"))));
-				else if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 40)
-					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_40.png"))));
-				else if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 30)
-					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_30.png"))));
-				else if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 20)
-					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_20.png"))));
-			} catch (NoResultException ignore) {
-			}
-			try {
-				if (MySQL.getTagById(m.getUser().getId()).isVerified())
-					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/verified.png"))));
-			} catch (NoResultException ignore) {
-			}
-			try {
-				if (MySQL.getTagById(m.getUser().getId()).isToxic())
-					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/toxic.png"))));
-			} catch (NoResultException ignore) {
-			}
-			try {
-				if (!SQLite.getMemberById(m.getUser().getId() + s.getId()).getWaifu().isEmpty()) {
-					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/married.png"))));
-					g2d.setFont(new Font(FONT.getName(), Font.PLAIN, 30));
-					drawOutlinedText("Casado(a) com: " + Main.getInfo().getUserByID(SQLite.getMemberById(m.getUser().getId() + s.getId()).getWaifu()).getName(), 270, 298, g2d);
+			if (m.getUser().getId().equals(Main.getInfo().getNiiChan())) {
+				add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/niichan.png"))));
+			} else {
+				if (m.getUser().getId().equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(m.getUser().getId()))
+					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/dev.png"))));
+				if (Main.getInfo().getSheriffs().contains(m.getUser().getId())) {
+					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/sheriff.png"))));
 				}
-			} catch (NoResultException ignore) {
+				if (Main.getInfo().getEditors().contains(m.getUser().getId()))
+					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/writer.png"))));
+				try {
+					if (MySQL.getTagById(m.getUser().getId()).isReader())
+						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/reader.png"))));
+				} catch (NoResultException ignore) {
+				}
+				if (m.hasPermission(Permission.MANAGE_CHANNEL))
+					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/mod.png"))));
+				try {
+					if (MySQL.getChampionBeyblade().getId().equals(m.getUser().getId()))
+						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/champ.png"))));
+				} catch (NoResultException ignore) {
+				}
+				try {
+					if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 70)
+						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_70.png"))));
+					else if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 60)
+						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_60.png"))));
+					else if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 50)
+						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_50.png"))));
+					else if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 40)
+						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_40.png"))));
+					else if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 30)
+						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_30.png"))));
+					else if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 20)
+						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_20.png"))));
+				} catch (NoResultException ignore) {
+				}
+				try {
+					if (MySQL.getTagById(m.getUser().getId()).isVerified())
+						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/verified.png"))));
+				} catch (NoResultException ignore) {
+				}
+				try {
+					if (MySQL.getTagById(m.getUser().getId()).isToxic())
+						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/toxic.png"))));
+				} catch (NoResultException ignore) {
+				}
+				try {
+					if (!SQLite.getMemberById(m.getUser().getId() + s.getId()).getWaifu().isEmpty()) {
+						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/married.png"))));
+						g2d.setFont(new Font(FONT.getName(), Font.PLAIN, 30));
+						drawOutlinedText("Casado(a) com: " + Main.getInfo().getUserByID(SQLite.getMemberById(m.getUser().getId() + s.getId()).getWaifu()).getName(), 270, 298, g2d);
+					}
+				} catch (NoResultException ignore) {
+				}
 			}
 		}};
 

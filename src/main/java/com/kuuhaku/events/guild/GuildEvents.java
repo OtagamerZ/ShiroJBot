@@ -185,8 +185,6 @@ public class GuildEvents extends ListenerAdapter {
 					commandName = rawMsgNoPrefix.split(" ")[0].trim();
 				}
 
-				if (commandName.equalsIgnoreCase("rpg")) return;
-
 				try {
 					CustomAnswers ca = SQLite.getCAByTrigger(rawMessage, guild.getId());
 					if (!Objects.requireNonNull(ca).isMarkForDelete() && author != Main.getInfo().getSelfUser())
