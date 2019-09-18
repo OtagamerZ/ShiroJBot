@@ -25,6 +25,7 @@ import com.kuuhaku.events.TetEvents;
 import com.kuuhaku.events.guild.GuildEvents;
 import com.kuuhaku.events.guild.GuildUpdateEvents;
 import com.kuuhaku.managers.CommandManager;
+import com.kuuhaku.managers.RPGCommandManager;
 import com.kuuhaku.model.DataDump;
 import com.kuuhaku.model.Profile;
 import com.kuuhaku.utils.Helper;
@@ -48,6 +49,7 @@ public class Main {
 	private static ShiroInfo info;
 	private static Relay relay;
 	private static CommandManager cmdManager;
+	private static RPGCommandManager rpgCmdManager;
 	private static JDA api;
 	private static JDA jbr;
 	private static JDA tet;
@@ -137,6 +139,10 @@ public class Main {
 
 	public static CommandManager getCommandManager() {
 		return cmdManager;
+	}
+
+	public static RPGCommandManager getRPGCommandManager() {
+		return rpgCmdManager;
 	}
 
 	public static void shutdown() {

@@ -58,63 +58,67 @@ public class MyTagsCommand extends Command {
             badges.append(TagIcons.getExceed(ExceedEnums.getByName(exceed)));
         }
 
-        if (author.getId().equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(author.getId()))
-            badges.append(TagIcons.getTag(TagIcons.DEV));
+        if (author.getId().equals(Main.getInfo().getNiiChan())) {
+            badges.append("<:niichan:623841337610862602>");
+        } else {
+            if (author.getId().equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(author.getId()))
+                badges.append(TagIcons.getTag(TagIcons.DEV));
 
-        if (Main.getInfo().getSheriffs().contains(author.getId())) {
-            badges.append(TagIcons.getTag(TagIcons.SHERIFF));
-        }
+            if (Main.getInfo().getSheriffs().contains(author.getId())) {
+                badges.append(TagIcons.getTag(TagIcons.SHERIFF));
+            }
 
-        if (Main.getInfo().getEditors().contains(author.getId()))
-            badges.append(TagIcons.getTag(TagIcons.EDITOR));
+            if (Main.getInfo().getEditors().contains(author.getId()))
+                badges.append(TagIcons.getTag(TagIcons.EDITOR));
 
-        try {
-            if (MySQL.getTagById(author.getId()).isReader())
-                badges.append(TagIcons.getTag(TagIcons.READER));
-        } catch (NoResultException ignore) {
-        }
+            try {
+                if (MySQL.getTagById(author.getId()).isReader())
+                    badges.append(TagIcons.getTag(TagIcons.READER));
+            } catch (NoResultException ignore) {
+            }
 
-        if (member.hasPermission(Permission.MANAGE_CHANNEL))
-            badges.append(TagIcons.getTag(TagIcons.MODERATOR));
+            if (member.hasPermission(Permission.MANAGE_CHANNEL))
+                badges.append(TagIcons.getTag(TagIcons.MODERATOR));
 
-        try {
-            if (MySQL.getChampionBeyblade().getId().equals(author.getId()))
-                badges.append(TagIcons.getTag(TagIcons.CHAMPION));
-        } catch (NoResultException ignore) {
-        }
+            try {
+                if (MySQL.getChampionBeyblade().getId().equals(author.getId()))
+                    badges.append(TagIcons.getTag(TagIcons.CHAMPION));
+            } catch (NoResultException ignore) {
+            }
 
-        try {
-            if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= 70)
-                badges.append(TagIcons.getTag(TagIcons.LVL70));
-            else if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= 60)
-                badges.append(TagIcons.getTag(TagIcons.LVL60));
-            else if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= 50)
-                badges.append(TagIcons.getTag(TagIcons.LVL50));
-            else if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= 40)
-                badges.append(TagIcons.getTag(TagIcons.LVL40));
-            else if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= 30)
-                badges.append(TagIcons.getTag(TagIcons.LVL30));
-            else if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= 20)
-                badges.append(TagIcons.getTag(TagIcons.LVL20));
-        } catch (NoResultException ignore) {
-        }
+            try {
+                if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= 70)
+                    badges.append(TagIcons.getTag(TagIcons.LVL70));
+                else if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= 60)
+                    badges.append(TagIcons.getTag(TagIcons.LVL60));
+                else if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= 50)
+                    badges.append(TagIcons.getTag(TagIcons.LVL50));
+                else if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= 40)
+                    badges.append(TagIcons.getTag(TagIcons.LVL40));
+                else if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= 30)
+                    badges.append(TagIcons.getTag(TagIcons.LVL30));
+                else if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= 20)
+                    badges.append(TagIcons.getTag(TagIcons.LVL20));
+            } catch (NoResultException ignore) {
+            }
 
-        try {
-            if (MySQL.getTagById(author.getId()).isVerified())
-                badges.append(TagIcons.getTag(TagIcons.VERIFIED));
-        } catch (NoResultException ignore) {
-        }
+            try {
+                if (MySQL.getTagById(author.getId()).isVerified())
+                    badges.append(TagIcons.getTag(TagIcons.VERIFIED));
+            } catch (NoResultException ignore) {
+            }
 
-        try {
-            if (MySQL.getTagById(author.getId()).isToxic())
-                badges.append(TagIcons.getTag(TagIcons.TOXIC));
-        } catch (NoResultException ignore) {
-        }
+            try {
+                if (MySQL.getTagById(author.getId()).isToxic())
+                    badges.append(TagIcons.getTag(TagIcons.TOXIC));
+            } catch (NoResultException ignore) {
+            }
 
-        try {
-            if (!SQLite.getMemberById(author.getId() + guild.getId()).getWaifu().isEmpty())
-                badges.append(TagIcons.getTag(TagIcons.MARRIED));
-        } catch (NoResultException ignore) {
+            try {
+                if (!SQLite.getMemberById(author.getId() + guild.getId()).getWaifu().isEmpty())
+                    badges.append(TagIcons.getTag(TagIcons.MARRIED));
+            } catch (NoResultException ignore) {
+            }
         }
 
         eb.addField("Emblemas:", badges.toString(), false);
