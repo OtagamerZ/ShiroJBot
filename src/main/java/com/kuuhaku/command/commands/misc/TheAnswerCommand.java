@@ -19,10 +19,11 @@ public class TheAnswerCommand extends Command {
 		if (guild.getId().equals("421495229594730496")) {
 			try {
 				if (MySQL.getTagById(author.getId()).isReader())
-					message.delete().queue(s -> channel.sendMessage(":x: | Você já descobriu a resposta, não precisa mais usar este comando.").queue());
+					channel.sendMessage(":x: | Você já descobriu a resposta, não precisa mais usar este comando.").queue();
 			} catch (NoResultException e) {
 				MySQL.addUserTagsToDB(author.getId());
 			} finally {
+				message.delete().queue();
 				if (!MySQL.getTagById(author.getId()).isReader()) {
 					if (String.join(" ", args).replace(".", "").equalsIgnoreCase(System.getenv("SECRET"))) {
 						MySQL.giveTagReader(author.getId());
