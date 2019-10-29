@@ -80,7 +80,6 @@ public class ShiroInfo {
 
 	private JDA api;
 	private long startTime;
-	private boolean ready = false;
 	private String winner = "";
 
 	public ShiroInfo() {
@@ -206,14 +205,6 @@ public class ShiroInfo {
 
 	public void setStartTime(long startTime) {
 		this.startTime = startTime;
-	}
-
-	public boolean isReady() {
-		return ready;
-	}
-
-	public void setReady(boolean ready) {
-		this.ready = ready;
 	}
 
 	public User getUserByID(String userID) {

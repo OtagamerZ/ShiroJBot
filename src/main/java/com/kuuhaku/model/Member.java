@@ -29,7 +29,6 @@ import java.util.Arrays;
 import java.util.List;
 
 @Entity
-@Table
 public class Member {
 	@Id
 	private String id;
@@ -38,9 +37,7 @@ public class Member {
 	private String warns = "";
 	private String bg = "https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg";
 	private String bio = "";
-	@Column(columnDefinition = "String default \"\"")
 	private String waifu = "";
-	@Column(columnDefinition = "String default \"\"")
 	private String exceed = "";
 	@Column(columnDefinition = "boolean default false")
 	private boolean markForDelete;

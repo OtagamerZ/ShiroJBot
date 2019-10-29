@@ -22,12 +22,11 @@ import static com.kuuhaku.utils.Helper.CANVAS_SIZE;
 public class PixelCanvas {
 	@Id
 	private int id;
-	@Column(columnDefinition = "String default \"\"")
-	private String canvas;
+	private String canvas = "";
 	@Column(columnDefinition = "boolean default false")
 	private boolean shelved;
 
-	public BufferedImage getCanvas() {
+	private BufferedImage getCanvas() {
 		if (canvas != null) {
 			try {
 				byte[] bytes = Base64.getDecoder().decode(canvas);
