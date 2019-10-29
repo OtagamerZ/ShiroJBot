@@ -74,115 +74,113 @@ public class TetEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
-		if (Main.getInfo().isReady()) {
-			try {
-				User author = event.getAuthor();
-				Member member = event.getMember();
-				Message message = event.getMessage();
-				MessageChannel channel = message.getChannel();
-				Guild guild = message.getGuild();
-				String rawMessage = message.getContentRaw();
-				assert member != null;
+		try {
+			User author = event.getAuthor();
+			Member member = event.getMember();
+			Message message = event.getMessage();
+			MessageChannel channel = message.getChannel();
+			Guild guild = message.getGuild();
+			String rawMessage = message.getContentRaw();
+			assert member != null;
 
-				if (author.isBot()) return;
+			if (author.isBot()) return;
 
-				String prefix = "";
-				if (!Main.getInfo().isDev()) {
-					try {
-						prefix = SQLite.getGuildPrefix(guild.getId());
-					} catch (NoResultException | NullPointerException ignore) {
-					}
-				} else prefix = Main.getInfo().getDefaultPrefix();
-
-				String rawMsgNoPrefix = rawMessage;
-				String commandName = "";
-				if (rawMessage.toLowerCase().startsWith(prefix)) {
-					rawMsgNoPrefix = rawMessage.substring(prefix.length()).trim();
-					commandName = rawMsgNoPrefix.split(" ")[0].trim();
+			String prefix = "";
+			if (!Main.getInfo().isDev()) {
+				try {
+					prefix = SQLite.getGuildPrefix(guild.getId());
+				} catch (NoResultException | NullPointerException ignore) {
 				}
+			} else prefix = Main.getInfo().getDefaultPrefix();
 
-				boolean hasArgs = (rawMsgNoPrefix.split(" ").length > 1);
-				String[] args = new String[]{};
-				if (hasArgs) {
-					args = Arrays.copyOfRange(rawMsgNoPrefix.split(" "), 1, rawMsgNoPrefix.split(" ").length);
+			String rawMsgNoPrefix = rawMessage;
+			String commandName = "";
+			if (rawMessage.toLowerCase().startsWith(prefix)) {
+				rawMsgNoPrefix = rawMessage.substring(prefix.length()).trim();
+				commandName = rawMsgNoPrefix.split(" ")[0].trim();
+			}
+
+			boolean hasArgs = (rawMsgNoPrefix.split(" ").length > 1);
+			String[] args = new String[]{};
+			if (hasArgs) {
+				args = Arrays.copyOfRange(rawMsgNoPrefix.split(" "), 1, rawMsgNoPrefix.split(" ").length);
+			}
+
+			boolean found = false;
+			if (!guild.getSelfMember().hasPermission(Permission.MESSAGE_WRITE)) {
+				return;
+			}
+
+			for (Command command : Main.getRPGCommandManager().getCommands()) {
+				if (command.getName().equalsIgnoreCase(commandName)) {
+					found = true;
 				}
-
-				boolean found = false;
-				if (!guild.getSelfMember().hasPermission(Permission.MESSAGE_WRITE)) {
-					return;
-				}
-
-				for (Command command : Main.getRPGCommandManager().getCommands()) {
-					if (command.getName().equalsIgnoreCase(commandName)) {
+				for (String alias : command.getAliases()) {
+					if (alias.equalsIgnoreCase(commandName)) {
 						found = true;
 					}
-					for (String alias : command.getAliases()) {
-						if (alias.equalsIgnoreCase(commandName)) {
-							found = true;
-						}
-					}
-					if (command.getCategory().isEnabled()) {
-						found = false;
-					}
+				}
+				if (command.getCategory().isEnabled()) {
+					found = false;
+				}
 
-					if (found) {
-						Helper.logToChannel(author, true, command, "Um comando foi usado no canal " + ((TextChannel) channel).getAsMention(), guild);
-						if (Main.getInfo().getGames().get(guild.getId()) == null) {
-							if (command.getClass() == NewCampaignCommand.class) {
-								if (Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
-									command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
-									Helper.spawnAd(channel);
-									break;
-								}
-
-								try {
-									channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
-									Helper.spawnAd(channel);
-									break;
-								} catch (InsufficientPermissionException ignore) {
-								}
-								return;
-							}
-							channel.sendMessage(":x: | Este servidor ainda não possui uma campanha ativa.").queue();
-							break;
-						} else {
-							if (Main.getInfo().getGames().get(guild.getId()).getPlayers().containsKey(author.getId()) || (!Main.getInfo().getGames().get(guild.getId()).getPlayers().containsKey(author.getId()) && command.getClass() == NewPlayerCommand.class) || Main.getInfo().getGames().get(guild.getId()).getMaster() == author) {
-								if (Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
-									command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
-									Helper.spawnAd(channel);
-									break;
-								}
-
-								try {
-									channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
-									Helper.spawnAd(channel);
-									break;
-								} catch (InsufficientPermissionException ignore) {
-								}
-							} else {
-								channel.sendMessage(":x: | Você ainda não criou um personagem, use o comando `" + prefix + "rnovo` para criar.").queue();
+				if (found) {
+					Helper.logToChannel(author, true, command, "Um comando foi usado no canal " + ((TextChannel) channel).getAsMention(), guild);
+					if (Main.getInfo().getGames().get(guild.getId()) == null) {
+						if (command.getClass() == NewCampaignCommand.class) {
+							if (Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
+								command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
+								Helper.spawnAd(channel);
 								break;
 							}
-						}
-						if (Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
-							command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
-							Helper.spawnAd(channel);
-							break;
-						}
 
-						try {
-							channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
-							Helper.spawnAd(channel);
+							try {
+								channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
+								Helper.spawnAd(channel);
+								break;
+							} catch (InsufficientPermissionException ignore) {
+							}
+							return;
+						}
+						channel.sendMessage(":x: | Este servidor ainda não possui uma campanha ativa.").queue();
+						break;
+					} else {
+						if (Main.getInfo().getGames().get(guild.getId()).getPlayers().containsKey(author.getId()) || (!Main.getInfo().getGames().get(guild.getId()).getPlayers().containsKey(author.getId()) && command.getClass() == NewPlayerCommand.class) || Main.getInfo().getGames().get(guild.getId()).getMaster() == author) {
+							if (Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
+								command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
+								Helper.spawnAd(channel);
+								break;
+							}
+
+							try {
+								channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
+								Helper.spawnAd(channel);
+								break;
+							} catch (InsufficientPermissionException ignore) {
+							}
+						} else {
+							channel.sendMessage(":x: | Você ainda não criou um personagem, use o comando `" + prefix + "rnovo` para criar.").queue();
 							break;
-						} catch (InsufficientPermissionException ignore) {
 						}
 					}
-				}
-			} catch (InsufficientPermissionException ignore) {
+					if (Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
+						command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
+						Helper.spawnAd(channel);
+						break;
+					}
 
-			} catch (ErrorResponseException e) {
-				Helper.log(this.getClass(), LogLevel.ERROR, e.getErrorCode() + ": " + e + " | " + e.getStackTrace()[0]);
+					try {
+						channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
+						Helper.spawnAd(channel);
+						break;
+					} catch (InsufficientPermissionException ignore) {
+					}
+				}
 			}
+		} catch (InsufficientPermissionException ignore) {
+
+		} catch (ErrorResponseException e) {
+			Helper.log(this.getClass(), LogLevel.ERROR, e.getErrorCode() + ": " + e + " | " + e.getStackTrace()[0]);
 		}
 	}
 }
