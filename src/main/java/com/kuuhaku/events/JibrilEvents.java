@@ -60,17 +60,25 @@ public class JibrilEvents extends ListenerAdapter {
 			if (event.getMessage().getContentRaw().startsWith(SQLite.getGuildPrefix(event.getGuild().getId()))) return;
 
 			if (Main.getRelay().getRelayMap().containsValue(event.getChannel().getId()) && !event.getAuthor().isBot()) {
-				Member mb = SQLite.getMemberById(event.getAuthor().getId() + event.getGuild().getId());
+				Member mb;
+				try {
+					mb = SQLite.getMemberById(event.getAuthor().getId() + event.getGuild().getId());
+				} catch (NoResultException e) {
+					assert event.getMember() != null;
+					SQLite.addMemberToDB(event.getMember());
+					mb = SQLite.getMemberById(event.getAuthor().getId() + event.getGuild().getId());
+				}
 				if (mb.getMid() == null) SQLite.saveMemberMid(mb, event.getAuthor());
 
 				if (!mb.isRulesSent())
 					try {
+						Member finalMb = mb;
 						event.getAuthor().openPrivateChannel().queue(c -> c.sendMessage(introMsg()).queue(s1 ->
 								c.sendMessage(rulesMsg()).queue(s2 ->
 										c.sendMessage(finalMsg()).queue(s3 -> {
-											mb.setRulesSent(true);
-											SQLite.updateMemberSettings(mb);
-											MySQL.saveMemberToBD(mb);
+											finalMb.setRulesSent(true);
+											SQLite.updateMemberSettings(finalMb);
+											MySQL.saveMemberToBD(finalMb);
 										}))));
 					} catch (ErrorResponseException ignore) {
 					}
