@@ -23,11 +23,13 @@ import net.dv8tion.jda.api.entities.User;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 @Entity
+@Table
 public class Member {
 	@Id
 	private String id;
