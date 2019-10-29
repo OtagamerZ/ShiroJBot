@@ -34,7 +34,7 @@ public class IDCommand extends Command {
 				for (User u : us) {
 					eb.addField(
 							u.getAsTag() + ": " + u.getId(),
-							"Guilds: " + u.getMutualGuilds().stream().map(g -> "`" + g.getName() + "`").collect(Collectors.joining()),
+							"Guilds: " + u.getMutualGuilds().stream().map(g -> " `" + g.getName() + "` ").collect(Collectors.joining()),
 							false
 					);
 				}
@@ -46,6 +46,8 @@ public class IDCommand extends Command {
 			} catch (Exception e) {
 				channel.sendMessage(":x: | Nenhum usuário encontrado.").queue();
 			}
+		} else {
+			channel.sendMessage(":x: | É necessário especificar o nome a ser pesquisado.").queue();
 		}
 	}
 
