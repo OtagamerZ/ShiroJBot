@@ -74,12 +74,6 @@ public class Main {
 		jbr.getPresence().setActivity(Activity.playing("Iniciando..."));
 		tet.getPresence().setActivity(Activity.playing("Iniciando..."));
 
-		api.addEventListener(new JDAEvents());
-		api.addEventListener(new GuildEvents());
-		api.addEventListener(new GuildUpdateEvents());
-		jbr.addEventListener(new JibrilEvents());
-		tet.addEventListener(new TetEvents());
-
 		info.setStartTime(Instant.now().getEpochSecond());
 		Helper.log(Main.class, LogLevel.INFO, "Criada pool de compilação: " + info.getPool().getCorePoolSize() + " espaços alocados");
 
@@ -113,9 +107,13 @@ public class Main {
 				Helper.log(Main.class, LogLevel.INFO, "Guild adicionada ao banco: " + g.getName());
 			}
 		});
+		api.addEventListener(new JDAEvents());
+		api.addEventListener(new GuildEvents());
+		api.addEventListener(new GuildUpdateEvents());
+		jbr.addEventListener(new JibrilEvents());
+		tet.addEventListener(new TetEvents());
 		Helper.log(Main.class, LogLevel.INFO, "<----------END OF BOOT---------->");
 		Helper.log(Main.class, LogLevel.INFO, "Estou pronta!");
-		getInfo().setReady(true);
 	}
 
 	public static Activity getRandomActivity() {
