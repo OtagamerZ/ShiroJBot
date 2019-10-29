@@ -220,14 +220,14 @@ public class Profile {
 				try {
 					if (MySQL.getTagById(m.getUser().getId()).isReader())
 						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/reader.png"))));
-				} catch (NoResultException ignore) {
+				} catch (Exception ignore) {
 				}
 				if (m.hasPermission(Permission.MANAGE_CHANNEL))
 					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/mod.png"))));
 				try {
 					if (MySQL.getChampionBeyblade().getId().equals(m.getUser().getId()))
 						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/champ.png"))));
-				} catch (NoResultException ignore) {
+				} catch (Exception ignore) {
 				}
 				try {
 					if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 70)
@@ -242,17 +242,17 @@ public class Profile {
 						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_30.png"))));
 					else if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 20)
 						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_20.png"))));
-				} catch (NoResultException ignore) {
+				} catch (Exception ignore) {
 				}
 				try {
 					if (MySQL.getTagById(m.getUser().getId()).isVerified())
 						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/verified.png"))));
-				} catch (NoResultException ignore) {
+				} catch (Exception ignore) {
 				}
 				try {
 					if (MySQL.getTagById(m.getUser().getId()).isToxic())
 						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/toxic.png"))));
-				} catch (NoResultException ignore) {
+				} catch (Exception ignore) {
 				}
 				try {
 					if (!SQLite.getMemberById(m.getUser().getId() + s.getId()).getWaifu().isEmpty()) {
@@ -260,7 +260,7 @@ public class Profile {
 						g2d.setFont(new Font(FONT.getName(), Font.PLAIN, 30));
 						drawOutlinedText("Casado(a) com: " + Main.getInfo().getUserByID(SQLite.getMemberById(m.getUser().getId() + s.getId()).getWaifu()).getName(), 270, 298, g2d);
 					}
-				} catch (NoResultException ignore) {
+				} catch (Exception ignore) {
 				}
 			}
 		}};

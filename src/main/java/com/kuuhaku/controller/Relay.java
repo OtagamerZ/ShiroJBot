@@ -103,7 +103,7 @@ public class Relay extends SQLite {
 			try {
 				if (MySQL.getTagById(m.getUser().getId()).isReader())
 					badges.append(TagIcons.getTag(TagIcons.READER));
-			} catch (NoResultException ignore) {
+			} catch (Exception ignore) {
 			}
 
 			if (m.hasPermission(Permission.MANAGE_CHANNEL))
@@ -112,7 +112,7 @@ public class Relay extends SQLite {
 			try {
 				if (MySQL.getChampionBeyblade().getId().equals(m.getUser().getId()))
 					badges.append(TagIcons.getTag(TagIcons.CHAMPION));
-			} catch (NoResultException ignore) {
+			} catch (Exception ignore) {
 			}
 
 			try {
@@ -128,25 +128,25 @@ public class Relay extends SQLite {
 					badges.append(TagIcons.getTag(TagIcons.LVL30));
 				else if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 20)
 					badges.append(TagIcons.getTag(TagIcons.LVL20));
-			} catch (NoResultException ignore) {
+			} catch (Exception ignore) {
 			}
 
 			try {
 				if (MySQL.getTagById(m.getUser().getId()).isVerified())
 					badges.append(TagIcons.getTag(TagIcons.VERIFIED));
-			} catch (NoResultException ignore) {
+			} catch (Exception ignore) {
 			}
 
 			try {
 				if (MySQL.getTagById(m.getUser().getId()).isToxic())
 					badges.append(TagIcons.getTag(TagIcons.TOXIC));
-			} catch (NoResultException ignore) {
+			} catch (Exception ignore) {
 			}
 
 			try {
 				if (!SQLite.getMemberById(m.getUser().getId() + s.getId()).getWaifu().isEmpty())
 					badges.append(TagIcons.getTag(TagIcons.MARRIED));
-			} catch (NoResultException ignore) {
+			} catch (Exception ignore) {
 			}
 		}
 
