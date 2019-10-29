@@ -25,9 +25,8 @@ public class SettingsCommand extends Command {
         try {
             gc = SQLite.getGuildById(guild.getId());
         } catch (NoResultException e) {
-            gc = new guildConfig();
-            gc.setGuildId(guild.getId());
-            SQLite.updateGuildSettings(gc);
+            SQLite.addGuildToDB(guild);
+            gc = SQLite.getGuildById(guild.getId());
         }
 
         if (args.length == 0) {
