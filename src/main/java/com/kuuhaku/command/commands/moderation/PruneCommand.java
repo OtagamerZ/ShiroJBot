@@ -44,14 +44,14 @@ public class PruneCommand extends Command {
 			channel.purgeMessages(msgs);
 			channel.sendMessage(msgs.size() + " mensage" + (msgs.size() == 1 ? "m limpa." : "ns limpas.")).queue();
 		} else if (args[0].equalsIgnoreCase("all")) {
-			try {
-				((TextChannel) channel).createCopy().queue(s -> {
+			((TextChannel) channel).createCopy().queue(s -> {
+				try {
 					((GuildChannel) channel).delete().queue();
 					s.sendMessage("Canal limpo com sucesso!").queue();
-				});
-			} catch (InsufficientPermissionException e) {
-				channel.sendMessage(":x: | Preciso de permissão para gerenciar canais para limpar o canal todo.").queue();
-			}
+				} catch (InsufficientPermissionException e) {
+					channel.sendMessage(":x: | Preciso de permissão para gerenciar canais para limpar o canal todo.").queue();
+				}
+			});
 		} else {
 			channel.sendMessage(":x: | Valor inválido, a quantidade deve ser um valor inteiro.").queue();
 		}
