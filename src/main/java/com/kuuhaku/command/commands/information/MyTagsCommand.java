@@ -74,7 +74,7 @@ public class MyTagsCommand extends Command {
             try {
                 if (MySQL.getTagById(author.getId()).isReader())
                     badges.append(TagIcons.getTag(TagIcons.READER));
-            } catch (NoResultException ignore) {
+            } catch (Exception ignore) {
             }
 
             if (member.hasPermission(Permission.MANAGE_CHANNEL))
@@ -83,7 +83,7 @@ public class MyTagsCommand extends Command {
             try {
                 if (MySQL.getChampionBeyblade().getId().equals(author.getId()))
                     badges.append(TagIcons.getTag(TagIcons.CHAMPION));
-            } catch (NoResultException ignore) {
+            } catch (Exception ignore) {
             }
 
             try {
@@ -99,25 +99,25 @@ public class MyTagsCommand extends Command {
                     badges.append(TagIcons.getTag(TagIcons.LVL30));
                 else if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= 20)
                     badges.append(TagIcons.getTag(TagIcons.LVL20));
-            } catch (NoResultException ignore) {
+            } catch (Exception ignore) {
             }
 
             try {
                 if (MySQL.getTagById(author.getId()).isVerified())
                     badges.append(TagIcons.getTag(TagIcons.VERIFIED));
-            } catch (NoResultException ignore) {
+            } catch (Exception ignore) {
             }
 
             try {
                 if (MySQL.getTagById(author.getId()).isToxic())
                     badges.append(TagIcons.getTag(TagIcons.TOXIC));
-            } catch (NoResultException ignore) {
+            } catch (Exception ignore) {
             }
 
             try {
                 if (!SQLite.getMemberById(author.getId() + guild.getId()).getWaifu().isEmpty())
                     badges.append(TagIcons.getTag(TagIcons.MARRIED));
-            } catch (NoResultException ignore) {
+            } catch (Exception ignore) {
             }
         }
 
