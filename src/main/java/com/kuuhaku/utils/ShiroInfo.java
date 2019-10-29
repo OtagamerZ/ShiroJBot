@@ -55,7 +55,7 @@ public class ShiroInfo {
 	private static final String YandexToken = System.getenv("YANDEX_TOKEN");
 	private static final String YoutubeToken = System.getenv("YOUTUBE_TOKEN");
 	private static final String name = "Shiro";
-	private static final String version = "3.1";
+	private static final String version = "3.2";
 	private static final String default_prefix = DEV ? "dev!" : "s!";
 	private static final String nomeDB = "shiro.sqlite";
 	private static final String niichan = "350836145921327115"; //KuuHaKu
