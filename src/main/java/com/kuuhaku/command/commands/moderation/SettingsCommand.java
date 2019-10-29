@@ -10,6 +10,7 @@ import com.kuuhaku.utils.Settings;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
+import javax.persistence.NoResultException;
 import java.io.IOException;
 
 public class SettingsCommand extends Command {
@@ -20,7 +21,12 @@ public class SettingsCommand extends Command {
 
     @Override
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-        guildConfig gc = SQLite.getGuildById(guild.getId());
+        guildConfig gc;
+        try {
+            gc = SQLite.getGuildById(guild.getId());
+        } catch (NoResultException e) {
+            gc = new guildConfig();
+        }
 
         if (args.length == 0) {
             try {
