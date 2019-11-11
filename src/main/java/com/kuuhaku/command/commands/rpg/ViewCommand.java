@@ -3,17 +3,14 @@ package com.kuuhaku.command.commands.rpg;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.handlers.games.RPG.Actors.Actor;
 import com.kuuhaku.handlers.games.RPG.Exceptions.UnknownItemException;
-import com.kuuhaku.handlers.games.RPG.Handlers.CombatHandler;
-import com.kuuhaku.handlers.games.RPG.Handlers.PvPHandler;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
 public class ViewCommand extends Command {
 
 	public ViewCommand() {
-		super("rver", new String[]{"rinfo"}, "Vê a descrição de um item", Category.BEYBLADE);
+		super("rver", new String[]{"rinfo"}, "Vê a descrição de um item", Category.RPG);
 	}
 
 	@Override

@@ -5,18 +5,15 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.handlers.games.RPG.Utils;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
-import java.awt.*;
 import java.io.IOException;
-import java.util.Arrays;
 
 public class MoveCommand extends Command {
 
 	public MoveCommand() {
-		super("rmover", new String[]{"rmove"}, "Move seu personagem 1 coordenada em qualquer direção", Category.BEYBLADE);
+		super("rmover", new String[]{"rmove"}, "Move seu personagem 1 coordenada em qualquer direção", Category.RPG);
 	}
 
 	@Override

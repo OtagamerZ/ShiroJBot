@@ -39,7 +39,6 @@ public class TagsCommand extends Command {
         eb.addField(TagIcons.getTag(TagIcons.EDITOR) + " Redator", "Redatores da Shiro/Jibril", false);
         eb.addField(TagIcons.getTag(TagIcons.READER) + " Leitor", "Pessoas que leram as regras no servidor de suporte", false);
         eb.addField(TagIcons.getTag(TagIcons.MODERATOR) + " Moderador", "Equipe administrativa do servidor de onde a mensagem foi enviada", false);
-        eb.addField(TagIcons.getTag(TagIcons.CHAMPION) + " Campeão", "Usuário que está no ranking Nº 1 das Beyblades", false);
         eb.addField(TagIcons.getTag(TagIcons.LVL20) +
                 TagIcons.getTag(TagIcons.LVL30) +
                 TagIcons.getTag(TagIcons.LVL40) +

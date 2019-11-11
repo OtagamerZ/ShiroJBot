@@ -4,7 +4,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.handlers.games.RPG.Exceptions.UnknownItemException;
-import com.kuuhaku.handlers.games.RPG.Handlers.ItemRegisterHandler;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
@@ -13,7 +12,7 @@ import java.util.Arrays;
 public class RemoveCommand extends Command {
 
 	public RemoveCommand() {
-		super("rremover", new String[]{"rremove"}, "Remove um registro", Category.BEYBLADE);
+		super("rremover", new String[]{"rremove"}, "Remove um registro", Category.RPG);
 	}
 
 	@Override

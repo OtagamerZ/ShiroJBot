@@ -4,17 +4,13 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.handlers.games.RPG.Handlers.ItemRegisterHandler;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
-
-import java.io.IOException;
 
 public class NewItemCommand extends Command {
 
 	public NewItemCommand() {
-		super("rnovoitem", new String[]{"rnewitem"}, "Inicia o cadastro de um novo item", Category.BEYBLADE);
+		super("rnovoitem", new String[]{"rnewitem"}, "Inicia o cadastro de um novo item", Category.RPG);
 	}
 
 	@Override

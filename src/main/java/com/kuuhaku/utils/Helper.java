@@ -22,7 +22,6 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.events.MessageListener;
-import com.kuuhaku.handlers.games.Beyblade;
 import com.kuuhaku.model.GamblePool;
 import com.kuuhaku.model.guildConfig;
 import de.androidpit.colorthief.ColorThief;
@@ -30,7 +29,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.GenericMessageReactionEvent;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.apache.commons.lang3.StringUtils;
@@ -168,13 +166,6 @@ public class Helper {
 		BufferedImage icon = ImageIO.read(con.getInputStream());
 
 		return new Color(ColorThief.getColor(icon)[0], ColorThief.getColor(icon)[1], ColorThief.getColor(icon)[2]);
-	}
-
-	public static void battle(GuildMessageReceivedEvent event) {
-		if (ShiroInfo.dd.stream().noneMatch(d -> d.getP1() == event.getAuthor() || d.getP2() == event.getAuthor())) {
-			return;
-		}
-		Beyblade.play(event);
 	}
 
 	public static List<String> getGamble() {

@@ -15,7 +15,7 @@ import java.util.Arrays;
 public class ChestCommand extends Command {
 
 	public ChestCommand() {
-		super("rloot", new String[]{"rchest"}, "Roda os espólios de um baú e dá ao jogador mencionado", Category.BEYBLADE);
+		super("rloot", new String[]{"rchest"}, "Roda os espólios de um baú e dá ao jogador mencionado", Category.RPG);
 	}
 
 	@Override

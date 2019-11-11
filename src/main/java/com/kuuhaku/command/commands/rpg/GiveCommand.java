@@ -3,10 +3,7 @@ package com.kuuhaku.command.commands.rpg;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.handlers.games.RPG.Actors.Actor;
 import com.kuuhaku.handlers.games.RPG.Entities.Equipped;
-import com.kuuhaku.handlers.games.RPG.Handlers.CombatHandler;
-import com.kuuhaku.handlers.games.RPG.Handlers.PvPHandler;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
@@ -15,7 +12,7 @@ import java.util.Arrays;
 public class GiveCommand extends Command {
 
 	public GiveCommand() {
-		super("rdar", new String[]{"rgive"}, "Dá um item ou dinheiro à outro jogador", Category.BEYBLADE);
+		super("rdar", new String[]{"rgive"}, "Dá um item ou dinheiro à outro jogador", Category.RPG);
 	}
 
 	@Override

@@ -3,7 +3,6 @@ package com.kuuhaku.command.commands.rpg;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.handlers.games.RPG.Handlers.ItemRegisterHandler;
 import com.kuuhaku.handlers.games.RPG.World.World;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.PrivilegeLevel;
@@ -13,7 +12,7 @@ import net.dv8tion.jda.api.events.Event;
 public class NewCampaignCommand extends Command {
 
 	public NewCampaignCommand() {
-		super("rnovacampanha", new String[]{"rnewcampaign"}, "Abre uma nova campanha de RPG no servidor", Category.BEYBLADE);
+		super("rnovacampanha", new String[]{"rnewcampaign"}, "Abre uma nova campanha de RPG no servidor", Category.RPG);
 	}
 
 	@Override

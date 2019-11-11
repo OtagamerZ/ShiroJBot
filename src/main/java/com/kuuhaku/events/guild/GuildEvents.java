@@ -133,8 +133,6 @@ public class GuildEvents extends ListenerAdapter {
         }
 		*/
 
-			Helper.battle(event);
-
 			if (SQLite.getGuildNoSpamChannels(guild.getId()).contains(channel.getId()) && author != Main.getInfo().getSelfUser()) {
 				if (SQLite.getGuildById(guild.getId()).isHardAntispam()) {
 					channel.getHistory().retrievePast(20).queue(h -> {
