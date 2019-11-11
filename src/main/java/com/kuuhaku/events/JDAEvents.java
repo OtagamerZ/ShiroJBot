@@ -274,11 +274,26 @@ public class JDAEvents extends ListenerAdapter {
 
 	@Override
 	public void onPrivateMessageReceived(PrivateMessageReceivedEvent event) {
-		if (event.getAuthor() == Main.getInfo().getUserByID(Main.getInfo().getNiiChan()) || event.getAuthor().isBot()) return;
-		EmbedBuilder eb = new EmbedBuilder();
+		if (event.getAuthor().isBot()) return;
+		if (event.getAuthor() == Main.getInfo().getUserByID(Main.getInfo().getNiiChan())) {
+			String msg = event.getMessage().getContentRaw();
+			String[] args = msg.split(" ");
+			if (args.length < 2) return;
+			String msgNoArgs = msg.replaceFirst(args[0] + " " + args[1], "");
 
-		eb.setAuthor(event.getAuthor().getAsTag(), event.getAuthor().getAvatarUrl());
-		eb.setFooter(LocalDateTime.now().atOffset(ZoneOffset.ofHours(-3)).format(DateTimeFormatter.ofPattern("HH:mm | dd/MMM/yyyy")), null);
-		Main.getInfo().getUserByID(Main.getInfo().getNiiChan()).openPrivateChannel().queue(c -> c.sendMessage(event.getMessage()).embed(eb.build()).queue());
+			switch (args[0].toLowerCase()) {
+				case "send":
+				case "s":
+					Main.getInfo().getUserByID(args[1]).openPrivateChannel().queue(c ->
+							c.sendMessage(msgNoArgs).queue());
+					break;
+			}
+		} else {
+			EmbedBuilder eb = new EmbedBuilder();
+
+			eb.setAuthor(event.getAuthor().getAsTag(), event.getAuthor().getAvatarUrl());
+			eb.setFooter(event.getAuthor().getId() + " - " + LocalDateTime.now().atOffset(ZoneOffset.ofHours(-3)).format(DateTimeFormatter.ofPattern("HH:mm | dd/MMM/yyyy")), null);
+			Main.getInfo().getUserByID(Main.getInfo().getNiiChan()).openPrivateChannel().queue(c -> c.sendMessage(event.getMessage()).embed(eb.build()).queue());
+		}
 	}
 }

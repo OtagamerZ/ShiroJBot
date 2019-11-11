@@ -108,6 +108,7 @@ public class CommandManager {
             add(new TheAnswerCommand());
             add(new BinaryCommand());
             add(new PermissionCommand());
+            add(new LinkTesterCommand());
 
             //FUN
             add(new SadButTrueCommand());
