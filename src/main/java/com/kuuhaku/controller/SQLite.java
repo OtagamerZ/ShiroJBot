@@ -283,18 +283,6 @@ public class SQLite {
 		em.close();
 	}
 
-	public static void removeMemberFromDB(Member m) {
-		EntityManager em = getEntityManager();
-
-		m.setMarkForDelete(true);
-
-		em.getTransaction().begin();
-		em.merge(m);
-		em.getTransaction().commit();
-
-		em.close();
-	}
-
 	@SuppressWarnings("unchecked")
 	public static List<Member> getMemberRank(String gid, boolean global) {
 		EntityManager em = getEntityManager();
