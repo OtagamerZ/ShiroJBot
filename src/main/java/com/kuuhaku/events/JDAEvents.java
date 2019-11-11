@@ -275,13 +275,6 @@ public class JDAEvents extends ListenerAdapter {
 	@Override
 	public void onPrivateMessageReceived(PrivateMessageReceivedEvent event) {
 		if (event.getAuthor().isBot()) return;
-		try {
-			event.getAuthor().openPrivateChannel().queue(c ->
-					c.sendMessage("Mensagem enviada, aguardando resposta...").queue());
-		} catch (Exception e) {
-			return;
-		}
-
 		if (Main.getInfo().getDevelopers().contains(event.getAuthor().getId())) {
 			String msg = event.getMessage().getContentRaw();
 			String[] args = msg.split(" ");
@@ -303,6 +296,13 @@ public class JDAEvents extends ListenerAdapter {
 					break;
 			}
 		} else {
+			try {
+				event.getAuthor().openPrivateChannel().queue(c ->
+						c.sendMessage("Mensagem enviada, aguardando resposta...").queue());
+			} catch (Exception e) {
+				return;
+			}
+
 			EmbedBuilder eb = new EmbedBuilder();
 
 			eb.setAuthor(event.getAuthor().getAsTag(), event.getAuthor().getAvatarUrl());
