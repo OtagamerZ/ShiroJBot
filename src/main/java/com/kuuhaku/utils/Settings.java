@@ -20,13 +20,7 @@ public class Settings {
 
 	public static void embedConfig(Message message) {
 		try {
-			guildConfig gc;
-			try {
-				gc = SQLite.getGuildById(message.getGuild().getId());
-			} catch (NoResultException e) {
-				SQLite.addGuildToDB(message.getGuild());
-				gc = SQLite.getGuildById(message.getGuild().getId());
-			}
+			guildConfig gc = SQLite.getGuildById(message.getGuild().getId());
 			String prefix = Helper.getOr(message.getGuild().getId(), "s!");
 
 			String canalBV = Helper.getOr(gc.getCanalBV(), "Não definido.");
@@ -83,8 +77,11 @@ public class Settings {
 			eb.addBlankField(true);
 			eb.addField("\uD83D\uDCD6 » Canal de Sugestões", canalSUG, true);
 			eb.addField("\u23F2 » Tempo de enquetes", String.valueOf(pollTime), true);
-			if (MySQL.getTagById(Objects.requireNonNull(message.getGuild().getOwner()).getUser().getId()).isPartner()) {
-				eb.addField("\uD83D\uDCD6 » Canal Relay", canalRelay, true);
+			try {
+				if (MySQL.getTagById(Objects.requireNonNull(message.getGuild().getOwner()).getUser().getId()).isPartner()) {
+					eb.addField("\uD83D\uDCD6 » Canal Relay", canalRelay, true);
+				}
+			} catch (NoResultException ignore) {
 			}
 
 			if (!cargoWarnID.equals("Não definido.")) {
