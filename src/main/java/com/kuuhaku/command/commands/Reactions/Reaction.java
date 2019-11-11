@@ -107,10 +107,10 @@ abstract class Reaction extends Command {
             br.close();
             con.disconnect();
 
-            Helper.log(this.getClass(), LogLevel.DEBUG, resposta.toString());
+            Helper.logger(this.getClass()).debug(resposta.toString());
             return new JSONObject(resposta.toString()).get("url").toString();
         } catch (IOException e) {
-	        Helper.log(this.getClass(), LogLevel.ERROR, "Erro ao recuperar API: " + e.getStackTrace()[0]);
+	        Helper.logger(this.getClass()).error("Erro ao recuperar API: " + e.getStackTrace()[0]);
 	        return null;
         }
     }

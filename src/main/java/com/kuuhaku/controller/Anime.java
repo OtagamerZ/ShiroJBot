@@ -19,7 +19,6 @@ package com.kuuhaku.controller;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 
@@ -50,7 +49,7 @@ public class Anime {
         osw.flush();
 
         InputStream iStream = new BufferedInputStream(con.getInputStream());
-        String data = IOUtils.toString(iStream, "UTF-8");
+        String data = IOUtils.toString(iStream, StandardCharsets.UTF_8);
         iStream.close();
 
         con.disconnect();
@@ -86,7 +85,7 @@ public class Anime {
         br.close();
         con.disconnect();
 
-        Helper.log(Tradutor.class, LogLevel.DEBUG, resposta.toString());
+        Helper.logger(Tradutor.class).debug(resposta.toString());
         return new JSONObject(resposta.toString()).getJSONObject("anime");
     }
 }

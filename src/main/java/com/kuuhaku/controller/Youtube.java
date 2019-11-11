@@ -4,11 +4,12 @@ import com.google.api.services.youtube.YouTube;
 import com.kuuhaku.Main;
 import com.kuuhaku.model.YoutubeVideo;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -35,7 +36,7 @@ public class Youtube {
 		br.close();
 		con.disconnect();
 
-		Helper.log(Tradutor.class, LogLevel.DEBUG, resposta.toString());
+		Helper.logger(Tradutor.class).debug(resposta.toString());
 		JSONObject json = new JSONObject(resposta.toString());
 		JSONArray ja = json.getJSONArray("items");
 		List<YoutubeVideo> videos = new ArrayList<>();
@@ -71,7 +72,7 @@ public class Youtube {
 		br.close();
 		con.disconnect();
 
-		Helper.log(Tradutor.class, LogLevel.DEBUG, resposta.toString());
+		Helper.logger(Tradutor.class).debug(resposta.toString());
 		JSONObject json = new JSONObject(resposta.toString());
 		JSONArray ja = json.getJSONArray("items");
 		JSONObject jid = ja.getJSONObject(0).getJSONObject("id");

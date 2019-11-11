@@ -4,7 +4,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
@@ -15,7 +14,7 @@ public class MarkWinnerEvent implements Job {
 	@Override
 	public void execute(JobExecutionContext context) {
 		MySQL.markWinner(MySQL.findWinner());
-		Helper.log(this.getClass(), LogLevel.INFO, "Vencedor mensal: " + MySQL.getWinner());
+		Helper.logger(this.getClass()).info("Vencedor mensal: " + MySQL.getWinner());
 
 		String ex = MySQL.getWinner();
 		MySQL.getExceedMembers(ExceedEnums.getByName(ex)).forEach(em ->

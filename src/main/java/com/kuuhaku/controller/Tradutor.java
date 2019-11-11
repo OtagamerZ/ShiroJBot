@@ -19,10 +19,11 @@ package com.kuuhaku.controller;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import org.json.JSONObject;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -49,7 +50,7 @@ public class Tradutor {
         br.close();
         con.disconnect();
 
-        Helper.log(Tradutor.class, LogLevel.DEBUG, resposta.toString());
+        Helper.logger(Tradutor.class).debug(resposta.toString());
         JSONObject json = new JSONObject(resposta.toString());
         return json.get("text").toString().replace("[", "").replace("]", "").replace("<br>", "\n").replace("\\n", "").replace("\"", "");
     }
