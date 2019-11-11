@@ -277,12 +277,12 @@ public class JDAEvents extends ListenerAdapter {
 		if (event.getAuthor().isBot()) return;
 		try {
 			event.getAuthor().openPrivateChannel().queue(c ->
-				c.sendMessage("Mensagem recebida, aguardando resposta...").queue());
+					c.sendMessage("Mensagem enviada, aguardando resposta...").queue());
 		} catch (Exception e) {
 			return;
 		}
 
-		if (event.getAuthor() == Main.getInfo().getUserByID(Main.getInfo().getNiiChan())) {
+		if (Main.getInfo().getDevelopers().contains(event.getAuthor().getId())) {
 			String msg = event.getMessage().getContentRaw();
 			String[] args = msg.split(" ");
 			if (args.length < 2) return;
@@ -293,6 +293,10 @@ public class JDAEvents extends ListenerAdapter {
 				case "s":
 					Main.getInfo().getUserByID(args[1]).openPrivateChannel().queue(c ->
 							c.sendMessage(msgNoArgs).queue());
+
+					Main.getInfo().getDevelopers().forEach(d ->
+							Main.getInfo().getUserByID(d).openPrivateChannel().queue(c ->
+							c.sendMessage(event.getAuthor().getName() + " respondeu: ```" + msgNoArgs + "```").queue()));
 					break;
 			}
 		} else {
@@ -300,7 +304,8 @@ public class JDAEvents extends ListenerAdapter {
 
 			eb.setAuthor(event.getAuthor().getAsTag(), event.getAuthor().getAvatarUrl());
 			eb.setFooter(event.getAuthor().getId() + " - " + LocalDateTime.now().atOffset(ZoneOffset.ofHours(-3)).format(DateTimeFormatter.ofPattern("HH:mm | dd/MMM/yyyy")), null);
-			Main.getInfo().getUserByID(Main.getInfo().getNiiChan()).openPrivateChannel().queue(c -> c.sendMessage(event.getMessage()).embed(eb.build()).queue());
+			Main.getInfo().getDevelopers().forEach(d ->
+					Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> c.sendMessage(event.getMessage()).embed(eb.build()).queue()));
 		}
 	}
 }
