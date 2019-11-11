@@ -275,6 +275,13 @@ public class JDAEvents extends ListenerAdapter {
 	@Override
 	public void onPrivateMessageReceived(PrivateMessageReceivedEvent event) {
 		if (event.getAuthor().isBot()) return;
+		try {
+			event.getAuthor().openPrivateChannel().queue(c ->
+				c.sendMessage("Mensagem recebida, aguardando resposta...").queue());
+		} catch (Exception e) {
+			return;
+		}
+
 		if (event.getAuthor() == Main.getInfo().getUserByID(Main.getInfo().getNiiChan())) {
 			String msg = event.getMessage().getContentRaw();
 			String[] args = msg.split(" ");
