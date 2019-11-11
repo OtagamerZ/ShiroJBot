@@ -5,6 +5,7 @@ import com.kuuhaku.handlers.games.RPG.Entities.Chest;
 import com.kuuhaku.handlers.games.RPG.Entities.Item;
 import com.kuuhaku.handlers.games.RPG.Exceptions.UnknownItemException;
 import com.kuuhaku.handlers.games.RPG.Utils;
+import com.kuuhaku.model.Profile;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -129,7 +130,7 @@ public class World implements Serializable {
 		if (playerList.size() == 0) return playerMap;
 		for (int i = 0; i < playerList.size(); i++) {
 			g2d.drawLine(97 + Utils.toDotPos(playerList.get(i).wasAt())[0], 97 + Utils.toDotPos(playerList.get(i).wasAt())[1], 97 + Utils.toDotPos(playerList.get(i).getPos())[0], 97 + Utils.toDotPos(playerList.get(i).getPos())[1]);
-			g2d.drawImage(scaleImage(playerList.get(i).getPin(), 72, 95), Utils.toPinPos(playerList.get(i).getPos())[0] + offset[0], Utils.toPinPos(playerList.get(i).getPos())[1] + offset[1], null);
+			g2d.drawImage(Profile.scaleImage(playerList.get(i).getPin(), 72, 95), Utils.toPinPos(playerList.get(i).getPos())[0] + offset[0], Utils.toPinPos(playerList.get(i).getPos())[1] + offset[1], null);
 			g2d.drawString(playerList.get(i).getCharacter().getName() + " -> " + Arrays.toString(Utils.arrayToCoord(playerList.get(i).getPos())), 15, currentMap.getMap().getHeight() + 50 * (i + 1));
 		}
 
@@ -138,29 +139,6 @@ public class World implements Serializable {
 
 	private BufferedImage getModifiableMap() {
 		return new BufferedImage(currentMap.getMap().getWidth(), currentMap.getMap().getHeight() + 70 * Math.max(players.values().size(), monsters.values().size()), BufferedImage.TYPE_INT_RGB);
-	}
-
-	private static BufferedImage scaleImage(BufferedImage image, int w, int h) {
-
-		// Make sure the aspect ratio is maintained, so the image is not distorted
-		double thumbRatio = (double) w / (double) h;
-		int imageWidth = image.getWidth(null);
-		int imageHeight = image.getHeight(null);
-		double aspectRatio = (double) imageWidth / (double) imageHeight;
-
-		if (thumbRatio > aspectRatio) {
-			h = (int) (w / aspectRatio);
-		} else {
-			w = (int) (h * aspectRatio);
-		}
-
-		// Draw the scaled image
-		BufferedImage newImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D graphics2D = newImage.createGraphics();
-		graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-		graphics2D.drawImage(image, 0, 0, w, h, null);
-
-		return newImage;
 	}
 
 	public RestAction listItems(TextChannel channel) {

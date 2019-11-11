@@ -85,57 +85,6 @@ public class MySQL {
 		em.close();
 	}
 
-    public static void sendBeybladeToDB(Beyblade bb) {
-        EntityManager em = getEntityManager();
-
-        em.getTransaction().begin();
-        em.merge(bb);
-        em.getTransaction().commit();
-
-        em.close();
-    }
-
-    public static Beyblade getBeybladeById(String id) {
-        EntityManager em = getEntityManager();
-
-        Beyblade bb;
-
-        try {
-            Query b = em.createQuery("SELECT b FROM Beyblade b WHERE id = ?1", Beyblade.class);
-            b.setParameter(1, id);
-            bb = (Beyblade) b.getSingleResult();
-            em.close();
-
-            return bb;
-        } catch (NoResultException e) {
-            em.close();
-            return null;
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public static List<Beyblade> getBeybladeList() {
-        EntityManager em = getEntityManager();
-
-        try {
-            Query b = em.createQuery("SELECT b FROM Beyblade b", Beyblade.class);
-            List<Beyblade> bbs = (List<Beyblade>) b.getResultList();
-            em.close();
-            return bbs;
-        } catch (NoResultException e) {
-            em.close();
-            return null;
-        }
-    }
-
-    public static Beyblade getChampionBeyblade() {
-        List<Beyblade> rank = MySQL.getBeybladeList();
-        assert rank != null;
-        rank.sort(Comparator.comparing(Beyblade::getKDA));
-        Collections.reverse(rank);
-        return rank.get(0);
-    }
-
     public static void permaBlock(PermaBlock p) {
         EntityManager em = getEntityManager();
 

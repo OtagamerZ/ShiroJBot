@@ -4,7 +4,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
@@ -14,7 +13,7 @@ import java.io.IOException;
 public class EquippedCommand extends Command {
 
 	public EquippedCommand() {
-		super("requipados", new String[]{"requipped"}, "Mostra os itens equipados", Category.BEYBLADE);
+		super("requipados", new String[]{"requipped"}, "Mostra os itens equipados", Category.RPG);
 	}
 
 	@Override

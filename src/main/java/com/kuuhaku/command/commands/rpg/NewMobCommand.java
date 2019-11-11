@@ -3,8 +3,6 @@ package com.kuuhaku.command.commands.rpg;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.handlers.games.RPG.Entities.Mob;
-import com.kuuhaku.handlers.games.RPG.Handlers.ItemRegisterHandler;
 import com.kuuhaku.handlers.games.RPG.Handlers.MobRegisterHandler;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
@@ -12,7 +10,7 @@ import net.dv8tion.jda.api.events.Event;
 public class NewMobCommand extends Command {
 
 	public NewMobCommand() {
-		super("rnovomonstro", new String[]{"rnewmob"}, "Inicia o cadastro de um novo monstro", Category.BEYBLADE);
+		super("rnovomonstro", new String[]{"rnewmob"}, "Inicia o cadastro de um novo monstro", Category.RPG);
 	}
 
 	@Override
