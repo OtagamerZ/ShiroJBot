@@ -60,9 +60,6 @@ public class GuildEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildLeave(GuildLeaveEvent event) {
-		guildConfig gc = new guildConfig();
-		gc.setGuildId(event.getGuild().getId());
-		SQLite.removeGuildFromDB(gc);
 		Main.getInfo().getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
 			String msg = "Acabei de sair do servidor \"" + event.getGuild().getName() + "\".";
 			c.sendMessage(msg).queue();

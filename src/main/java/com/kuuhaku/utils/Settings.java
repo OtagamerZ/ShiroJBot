@@ -20,28 +20,28 @@ public class Settings {
 
 	public static void embedConfig(Message message) throws IOException {
 		guildConfig gc = SQLite.getGuildById(message.getGuild().getId());
-		String prefix = SQLite.getGuildPrefix(message.getGuild().getId());
+		String prefix = Helper.getOr(message.getGuild().getId(), "s!");
 
-		String canalBV = SQLite.getGuildCanalBV(message.getGuild().getId());
+		String canalBV = Helper.getOr(gc.getCanalBV(), "Não definido.");
 		if (!canalBV.equals("Não definido.")) canalBV = "<#" + canalBV + ">";
-		String msgBV = SQLite.getGuildMsgBV(message.getGuild().getId());
+		String msgBV = Helper.getOr(gc.getMsgBoasVindas(), "Não definido.");
 		if (!msgBV.equals("Não definido.")) msgBV = "`" + msgBV + "`";
 
-		String canalAdeus = SQLite.getGuildCanalAdeus(message.getGuild().getId());
+		String canalAdeus = Helper.getOr(gc.getCanalAdeus(), "Não definido.");
 		if (!canalAdeus.equals("Não definido.")) canalAdeus = "<#" + canalAdeus + ">";
-		String msgAdeus = SQLite.getGuildMsgAdeus(message.getGuild().getId());
+		String msgAdeus = Helper.getOr(gc.getMsgAdeus(), "Não definido.");
 		if (!msgAdeus.equals("Não definido.")) msgAdeus = "`" + msgAdeus + "`";
 
-		String canalSUG = SQLite.getGuildCanalSUG(message.getGuild().getId());
+		String canalSUG = Helper.getOr(gc.getCanalSUG(), "Não definido.");
 		if (!canalSUG.equals("Não definido.")) canalSUG = "<#" + canalSUG + ">";
 
-		int pollTime = SQLite.getGuildPollTime(message.getGuild().getId());
+		int pollTime = gc.getPollTime();
 
-		String canalLvlUpNotif = SQLite.getGuildCanalLvlUp(message.getGuild().getId());
+		String canalLvlUpNotif = Helper.getOr(gc.getCanalLvl(), "Não definido.");
 		if (!canalLvlUpNotif.equals("Não definido.")) canalLvlUpNotif = "<#" + canalLvlUpNotif + ">";
 
 		StringBuilder cargosLvl = new StringBuilder();
-		if (SQLite.getGuildCargosLvl(message.getGuild().getId()) != null) {
+		if (gc.getCargoslvl() != null) {
 			List<Integer> lvls = gc.getCargoslvl().keySet().stream().map(Integer::parseInt).sorted().collect(Collectors.toList());
 			for (int i : lvls) {
 				try {
@@ -54,11 +54,11 @@ public class Settings {
 			}
 		}
 
-		String canalRelay = SQLite.getGuildCanalRelay(message.getGuild().getId());
+		String canalRelay = Helper.getOr(gc.getCanalRelay(), "Não definido.");
 		if (!canalRelay.equals("Não definido.")) canalRelay = "<#" + canalRelay + ">";
 
-		String cargoWarnID = SQLite.getGuildCargoWarn(message.getGuild().getId());
-		int warnTime = SQLite.getGuildWarnTime(message.getGuild().getId());
+		String cargoWarnID = Helper.getOr(gc.getCargoWarn(), "Não definido.");
+		int warnTime = gc.getWarnTime();
 		//String cargoNewID = SQLite.getGuildCargoNew(message.getGuild().getId());
 
 		EmbedBuilder eb = new EmbedBuilder();

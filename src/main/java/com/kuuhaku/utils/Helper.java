@@ -446,4 +446,8 @@ public class Helper {
 				(channelPerms.contains(Permission.MESSAGE_EXT_EMOJI) || guildPerms.contains(Permission.VOICE_SPEAK) ? ":white_check_mark: -> " : ":x: -> ") + "Falar em canais de voz" +
 				jibrilPerms;
 	}
+
+	public static <T> T getOr(T get, T or) {
+		return get == null ? or : get;
+	}
 }
