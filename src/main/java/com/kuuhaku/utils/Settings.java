@@ -21,7 +21,7 @@ public class Settings {
 	public static void embedConfig(Message message) {
 		try {
 			guildConfig gc = SQLite.getGuildById(message.getGuild().getId());
-			String prefix = Helper.getOr(message.getGuild().getId(), "s!");
+			String prefix = Helper.getOr(gc.getPrefix(), "s!");
 
 			String canalBV = Helper.getOr(gc.getCanalBV(), "Não definido.");
 			if (!canalBV.equals("Não definido.")) canalBV = "<#" + canalBV + ">";
