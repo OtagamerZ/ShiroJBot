@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.persistence.NoResultException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -19,7 +20,13 @@ public class Settings {
 
 	public static void embedConfig(Message message) {
 		try {
-			guildConfig gc = SQLite.getGuildById(message.getGuild().getId());
+			guildConfig gc;
+			try {
+				gc = SQLite.getGuildById(message.getGuild().getId());
+			} catch (NoResultException e) {
+				SQLite.addGuildToDB(message.getGuild());
+				gc = SQLite.getGuildById(message.getGuild().getId());
+			}
 			String prefix = Helper.getOr(message.getGuild().getId(), "s!");
 
 			String canalBV = Helper.getOr(gc.getCanalBV(), "Não definido.");
@@ -45,7 +52,7 @@ public class Settings {
 				List<Integer> lvls = gc.getCargoslvl().keySet().stream().map(Integer::parseInt).sorted().collect(Collectors.toList());
 				for (int i : lvls) {
 					try {
-						Map<String, Object> cargos = SQLite.getGuildCargosLvl(message.getGuild().getId());
+						Map<String, Object> cargos = gc.getCargoslvl();
 						Role role = message.getGuild().getRoleById((String) cargos.get(String.valueOf(i)));
 						cargosLvl.append(i).append(" - ").append(Objects.requireNonNull(role).getAsMention()).append("\n");
 					} catch (NullPointerException e) {
