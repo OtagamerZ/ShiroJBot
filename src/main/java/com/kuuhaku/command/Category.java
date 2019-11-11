@@ -29,7 +29,7 @@ public enum Category {
 	FUN("Diversão", "\uD83C\uDF89", "Comandos para diversão.", PrivilegeLevel.USER),
 	MISC("Diversos", "\u2733", "Comandos diversos.", PrivilegeLevel.USER),
 	INFO("Informação", "\u2139", "Comandos de informação", PrivilegeLevel.USER),
-	BEYBLADE("Beyblade", "\uD83D\uDCA0", "Comandos de Beyblade.", PrivilegeLevel.USER),
+	RPG("RPG", "\uD83D\uDCA0", "Comandos de RPG (Módulo Tet).", PrivilegeLevel.USER),
 	MUSICA("Música", "\uD83C\uDFB6", "Comandos de música.", PrivilegeLevel.DJ),
 	EXCEED("Exceed", "\uD83C\uDF8C", "Comandos de exceed", PrivilegeLevel.EXCEED)
 	;

@@ -10,7 +10,6 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -18,90 +17,95 @@ import java.util.stream.Collectors;
 
 public class Settings {
 
-	public static void embedConfig(Message message) throws IOException {
-		guildConfig gc = SQLite.getGuildById(message.getGuild().getId());
-		String prefix = Helper.getOr(message.getGuild().getId(), "s!");
+	public static void embedConfig(Message message) {
+		try {
+			guildConfig gc = SQLite.getGuildById(message.getGuild().getId());
+			String prefix = Helper.getOr(message.getGuild().getId(), "s!");
 
-		String canalBV = Helper.getOr(gc.getCanalBV(), "Não definido.");
-		if (!canalBV.equals("Não definido.")) canalBV = "<#" + canalBV + ">";
-		String msgBV = Helper.getOr(gc.getMsgBoasVindas(), "Não definido.");
-		if (!msgBV.equals("Não definido.")) msgBV = "`" + msgBV + "`";
+			String canalBV = Helper.getOr(gc.getCanalBV(), "Não definido.");
+			if (!canalBV.equals("Não definido.")) canalBV = "<#" + canalBV + ">";
+			String msgBV = Helper.getOr(gc.getMsgBoasVindas(), "Não definido.");
+			if (!msgBV.equals("Não definido.")) msgBV = "`" + msgBV + "`";
 
-		String canalAdeus = Helper.getOr(gc.getCanalAdeus(), "Não definido.");
-		if (!canalAdeus.equals("Não definido.")) canalAdeus = "<#" + canalAdeus + ">";
-		String msgAdeus = Helper.getOr(gc.getMsgAdeus(), "Não definido.");
-		if (!msgAdeus.equals("Não definido.")) msgAdeus = "`" + msgAdeus + "`";
+			String canalAdeus = Helper.getOr(gc.getCanalAdeus(), "Não definido.");
+			if (!canalAdeus.equals("Não definido.")) canalAdeus = "<#" + canalAdeus + ">";
+			String msgAdeus = Helper.getOr(gc.getMsgAdeus(), "Não definido.");
+			if (!msgAdeus.equals("Não definido.")) msgAdeus = "`" + msgAdeus + "`";
 
-		String canalSUG = Helper.getOr(gc.getCanalSUG(), "Não definido.");
-		if (!canalSUG.equals("Não definido.")) canalSUG = "<#" + canalSUG + ">";
+			String canalSUG = Helper.getOr(gc.getCanalSUG(), "Não definido.");
+			if (!canalSUG.equals("Não definido.")) canalSUG = "<#" + canalSUG + ">";
 
-		int pollTime = gc.getPollTime();
+			int pollTime = gc.getPollTime();
 
-		String canalLvlUpNotif = Helper.getOr(gc.getCanalLvl(), "Não definido.");
-		if (!canalLvlUpNotif.equals("Não definido.")) canalLvlUpNotif = "<#" + canalLvlUpNotif + ">";
+			String canalLvlUpNotif = Helper.getOr(gc.getCanalLvl(), "Não definido.");
+			if (!canalLvlUpNotif.equals("Não definido.")) canalLvlUpNotif = "<#" + canalLvlUpNotif + ">";
 
-		StringBuilder cargosLvl = new StringBuilder();
-		if (gc.getCargoslvl() != null) {
-			List<Integer> lvls = gc.getCargoslvl().keySet().stream().map(Integer::parseInt).sorted().collect(Collectors.toList());
-			for (int i : lvls) {
-				try {
-					Map<String, Object> cargos = SQLite.getGuildCargosLvl(message.getGuild().getId());
-					Role role = message.getGuild().getRoleById((String) cargos.get(String.valueOf(i)));
-					cargosLvl.append(i).append(" - ").append(Objects.requireNonNull(role).getAsMention()).append("\n");
-				} catch (NullPointerException e) {
-					SQLite.updateGuildCargosLvl(String.valueOf(i), null, gc);
+			StringBuilder cargosLvl = new StringBuilder();
+			if (gc.getCargoslvl() != null) {
+				List<Integer> lvls = gc.getCargoslvl().keySet().stream().map(Integer::parseInt).sorted().collect(Collectors.toList());
+				for (int i : lvls) {
+					try {
+						Map<String, Object> cargos = SQLite.getGuildCargosLvl(message.getGuild().getId());
+						Role role = message.getGuild().getRoleById((String) cargos.get(String.valueOf(i)));
+						cargosLvl.append(i).append(" - ").append(Objects.requireNonNull(role).getAsMention()).append("\n");
+					} catch (NullPointerException e) {
+						SQLite.updateGuildCargosLvl(String.valueOf(i), null, gc);
+					}
 				}
 			}
-		}
 
-		String canalRelay = Helper.getOr(gc.getCanalRelay(), "Não definido.");
-		if (!canalRelay.equals("Não definido.")) canalRelay = "<#" + canalRelay + ">";
+			String canalRelay = Helper.getOr(gc.getCanalRelay(), "Não definido.");
+			if (!canalRelay.equals("Não definido.")) canalRelay = "<#" + canalRelay + ">";
 
-		String cargoWarnID = Helper.getOr(gc.getCargoWarn(), "Não definido.");
-		int warnTime = gc.getWarnTime();
-		//String cargoNewID = SQLite.getGuildCargoNew(message.getGuild().getId());
+			String cargoWarnID = Helper.getOr(gc.getCargoWarn(), "Não definido.");
+			int warnTime = gc.getWarnTime();
+			//String cargoNewID = SQLite.getGuildCargoNew(message.getGuild().getId());
 
-		EmbedBuilder eb = new EmbedBuilder();
+			EmbedBuilder eb = new EmbedBuilder();
 
-		eb.setColor(Helper.colorThief(message.getGuild().getIconUrl()));
-		eb.setThumbnail(message.getGuild().getIconUrl());
-		eb.setTitle("⚙ | Configurações do servidor");
-		eb.setDescription(Helper.VOID);
-		eb.addField("\uD83D\uDD17 » Prefixo: __" + prefix + "__", Helper.VOID, false);
-		eb.addField("\uD83D\uDCD6 » Canal de Boas-vindas", canalBV, false);
-		eb.addField("\uD83D\uDCDD » Mensagem de Boas-vindas", msgBV, false);
-		eb.addField(Helper.VOID + "\n" + "\uD83D\uDCD6 » Canal de Adeus", canalAdeus, false);
-		eb.addField("\uD83D\uDCDD » Mensagem de Adeus", msgAdeus, false);
-		eb.addBlankField(true);
-		eb.addBlankField(true);
-		eb.addField("\uD83D\uDCD6 » Canal de Sugestões", canalSUG, true);
-		eb.addField("\u23F2 » Tempo de enquetes", String.valueOf(pollTime), true);
-		if (MySQL.getTagById(Objects.requireNonNull(message.getGuild().getOwner()).getUser().getId()).isPartner()) {
-			eb.addField("\uD83D\uDCD6 » Canal Relay", canalRelay, true);
-		}
-
-		if (!cargoWarnID.equals("Não definido.")) {
-			try {
-				eb.addField("\uD83D\uDCD1 » Cargo de punição", Main.getInfo().getRoleByID(cargoWarnID).getAsMention(), true);
-			} catch (NullPointerException e) {
-				SQLite.updateGuildCargoWarn("reset", gc);
+			eb.setColor(Helper.colorThief(message.getGuild().getIconUrl()));
+			eb.setThumbnail(message.getGuild().getIconUrl());
+			eb.setTitle("⚙ | Configurações do servidor");
+			eb.setDescription(Helper.VOID);
+			eb.addField("\uD83D\uDD17 » Prefixo: __" + prefix + "__", Helper.VOID, false);
+			eb.addField("\uD83D\uDCD6 » Canal de Boas-vindas", canalBV, false);
+			eb.addField("\uD83D\uDCDD » Mensagem de Boas-vindas", msgBV, false);
+			eb.addField(Helper.VOID + "\n" + "\uD83D\uDCD6 » Canal de Adeus", canalAdeus, false);
+			eb.addField("\uD83D\uDCDD » Mensagem de Adeus", msgAdeus, false);
+			eb.addBlankField(true);
+			eb.addBlankField(true);
+			eb.addField("\uD83D\uDCD6 » Canal de Sugestões", canalSUG, true);
+			eb.addField("\u23F2 » Tempo de enquetes", String.valueOf(pollTime), true);
+			if (MySQL.getTagById(Objects.requireNonNull(message.getGuild().getOwner()).getUser().getId()).isPartner()) {
+				eb.addField("\uD83D\uDCD6 » Canal Relay", canalRelay, true);
 			}
-		} else {
-			eb.addField("\uD83D\uDCD1 » Cargo de punição", cargoWarnID, true);
+
+			if (!cargoWarnID.equals("Não definido.")) {
+				try {
+					eb.addField("\uD83D\uDCD1 » Cargo de punição", Main.getInfo().getRoleByID(cargoWarnID).getAsMention(), true);
+				} catch (NullPointerException e) {
+					SQLite.updateGuildCargoWarn("reset", gc);
+				}
+			} else {
+				eb.addField("\uD83D\uDCD1 » Cargo de punição", cargoWarnID, true);
+			}
+
+			eb.addField("\u23F2 » Tempo de punição", String.valueOf(warnTime), true);
+
+			//if(!cargoNewID.equals("Não definido.")) { eb.addField("\uD83D\uDCD1 » Cargo automático", com.kuuhaku.Main.getInfo().getRoleByID(cargoNewID).getAsMention(), false); }
+			//else { eb.addField("\uD83D\uDCD1 » Cargos automáticos", cargoNewID, true); }
+
+			eb.addField("\uD83D\uDCD6 » Canal de notificação de level up", canalLvlUpNotif, true);
+			eb.addField("\uD83D\uDCD1 » Cargos de nível", cargosLvl.toString().isEmpty() ? "Nenhum" : cargosLvl.toString(), true);
+
+
+			eb.setFooter("Para obter ajuda sobre como configurar o seu servidor, use " + SQLite.getGuildPrefix(message.getGuild().getId()) + "settings ajuda", null);
+
+			message.getTextChannel().sendMessage(eb.build()).queue();
+		} catch (Exception err) {
+			message.getChannel().sendMessage(":x: | Ocorreu um erro durante o processo, os meus developers já foram notificados.").queue();
+			Helper.logger(Settings.class).error(err + " | " + err.getStackTrace()[0]);
 		}
-
-		eb.addField("\u23F2 » Tempo de punição", String.valueOf(warnTime), true);
-
-		//if(!cargoNewID.equals("Não definido.")) { eb.addField("\uD83D\uDCD1 » Cargo automático", com.kuuhaku.Main.getInfo().getRoleByID(cargoNewID).getAsMention(), false); }
-		//else { eb.addField("\uD83D\uDCD1 » Cargos automáticos", cargoNewID, true); }
-
-		eb.addField("\uD83D\uDCD6 » Canal de notificação de level up", canalLvlUpNotif, true);
-		eb.addField("\uD83D\uDCD1 » Cargos de nível", cargosLvl.toString().isEmpty() ? "Nenhum" : cargosLvl.toString(), true);
-
-
-		eb.setFooter("Para obter ajuda sobre como configurar o seu servidor, use " + SQLite.getGuildPrefix(message.getGuild().getId()) + "settings ajuda", null);
-
-		message.getTextChannel().sendMessage(eb.build()).queue();
 	}
 
 	public static void updatePrefix(String[] args, Message message, guildConfig gc) {
