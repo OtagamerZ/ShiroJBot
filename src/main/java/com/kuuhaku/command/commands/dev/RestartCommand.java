@@ -27,7 +27,7 @@ public class RestartCommand extends Command {
 			Main.getInfo().getAPI().shutdown();
 			Main.main(Main.getArgs());
 		} catch (Exception e) {
-			Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 	}
 }

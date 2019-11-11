@@ -23,7 +23,7 @@ public class EquippedCommand extends Command {
 			try {
 				Main.getInfo().getGames().get(guild.getId()).getPlayers().get(author.getId()).getCharacter().openNiceInventory(message.getTextChannel()).queue();
 			} catch (IOException | FontFormatException e) {
-				Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
+				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
 		}
 	}

@@ -5,7 +5,6 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.Youtube;
 import com.kuuhaku.model.YoutubeVideo;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
@@ -42,12 +41,12 @@ public class VideoCommand extends Command {
 						});
 					} catch (IOException e) {
 						m.editMessage(":x: | Nenhum vídeo encontrado.").queue();
-						Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
+						Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 					}
 				});
 			} catch (IOException e) {
 				m.editMessage(":x: | Erro ao buscar vídeos, meus developers já foram notificados.").queue();
-				Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
+				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
 		});
 	}

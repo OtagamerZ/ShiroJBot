@@ -23,7 +23,6 @@ import com.kuuhaku.model.DataDump;
 import com.kuuhaku.model.Member;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
@@ -46,7 +45,7 @@ public class SQLite {
 
 		File DBfile = new File(Main.getInfo().getDBFileName());
 		if (!DBfile.exists()) {
-			Helper.log(SQLite.class, LogLevel.FATAL, "A base de dados não foi encontrada. Entre no servidor discord oficial da Shiro para obter ajuda.");
+			Helper.logger(SQLite.class).fatal("A base de dados não foi encontrada. Entre no servidor discord oficial da Shiro para obter ajuda.");
 			System.exit(1);
 		}
 
@@ -66,7 +65,7 @@ public class SQLite {
 	public static void disconnect() {
 		if (emf != null) {
 			emf.close();
-			Helper.log(SQLite.class, LogLevel.INFO, "Ligação à base de dados desfeita.");
+			Helper.logger(SQLite.class).info("Ligação à base de dados desfeita.");
 		}
 	}
 

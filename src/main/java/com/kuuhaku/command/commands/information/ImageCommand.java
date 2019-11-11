@@ -40,8 +40,8 @@ public class ImageCommand extends Command {
                 HttpURLConnection con = (HttpURLConnection) link.openConnection();
                 con.setRequestMethod("GET");
                 con.setRequestProperty("User-Agent", "Mozilla/5.0");
-                Helper.log(this.getClass(), LogLevel.DEBUG, "Requisição 'GET' para o URL: " + link);
-                Helper.log(this.getClass(), LogLevel.DEBUG, "Resposta: " + con.getResponseCode());
+                Helper.logger(this.getClass()).debug("Requisição 'GET' para o URL: " + link);
+                Helper.logger(this.getClass()).debug("Resposta: " + con.getResponseCode());
                 BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
 
                 String input;
@@ -51,7 +51,7 @@ public class ImageCommand extends Command {
                 }
                 br.close();
 
-                Helper.log(this.getClass(), LogLevel.DEBUG, resposta.toString());
+                Helper.logger(this.getClass()).debug(resposta.toString());
                 JSONArray ja = new JSONArray(resposta.toString());
                 JSONObject jo = ja.getJSONObject(Helper.rng(ja.length() - 1));
                 String url = "https://safebooru.org//images/" + jo.getString("directory") + "/" + jo.getString("image");
@@ -73,7 +73,7 @@ public class ImageCommand extends Command {
                 channel.sendMessage(eb.build()).queue();
             } catch (IOException | JSONException e) {
                 m.editMessage(":x: | Humm...não achei nenhuma imagem com essas tags, talvez você tenha escrito algo errado?").queue();
-                Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
+                Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
             }
         });
     }

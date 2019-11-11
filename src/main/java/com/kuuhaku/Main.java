@@ -29,7 +29,6 @@ import com.kuuhaku.managers.RPGCommandManager;
 import com.kuuhaku.model.DataDump;
 import com.kuuhaku.model.Profile;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import com.kuuhaku.utils.ShiroInfo;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import net.dv8tion.jda.api.AccountType;
@@ -75,15 +74,15 @@ public class Main {
 		tet.getPresence().setActivity(Activity.playing("Iniciando..."));
 
 		info.setStartTime(Instant.now().getEpochSecond());
-		Helper.log(Main.class, LogLevel.INFO, "Criada pool de compilação: " + info.getPool().getCorePoolSize() + " espaços alocados");
+		Helper.logger(Main.class).info("Criada pool de compilação: " + info.getPool().getCorePoolSize() + " espaços alocados");
 
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		ge.registerFont(Profile.FONT);
 
 		SQLite.connect();
 		if (SQLite.restoreData(MySQL.getData()))
-			Helper.log(Main.class, LogLevel.INFO, "Dados recuperados com sucesso!");
-		else Helper.log(Main.class, LogLevel.ERROR, "Erro ao recuperar dados.");
+			Helper.logger(Main.class).info("Dados recuperados com sucesso!");
+		else Helper.logger(Main.class).error("Erro ao recuperar dados.");
 
 		new ScheduledEvents();
 
@@ -104,7 +103,7 @@ public class Main {
 				SQLite.getGuildById(g.getId());
 			} catch (NoResultException e) {
 				SQLite.addGuildToDB(g);
-				Helper.log(Main.class, LogLevel.INFO, "Guild adicionada ao banco: " + g.getName());
+				Helper.logger(Main.class).info("Guild adicionada ao banco: " + g.getName());
 			}
 		});
 		api.addEventListener(new JDAEvents());
@@ -112,8 +111,8 @@ public class Main {
 		api.addEventListener(new GuildUpdateEvents());
 		jbr.addEventListener(new JibrilEvents());
 		tet.addEventListener(new TetEvents());
-		Helper.log(Main.class, LogLevel.INFO, "<----------END OF BOOT---------->");
-		Helper.log(Main.class, LogLevel.INFO, "Estou pronta!");
+		Helper.logger(Main.class).info("<----------END OF BOOT---------->");
+		Helper.logger(Main.class).info("Estou pronta!");
 	}
 
 	public static Activity getRandomActivity() {
@@ -146,14 +145,14 @@ public class Main {
 
 	public static void shutdown() {
 		MySQL.dumpData(new DataDump(SQLite.getCADump(), SQLite.getGuildDump()));
-		Helper.log(Main.class, LogLevel.INFO, "Respostas/Guilds salvos com sucesso!");
+		Helper.logger(Main.class).info("Respostas/Guilds salvos com sucesso!");
 		MySQL.dumpData(new DataDump(SQLite.getMemberDump()));
-		Helper.log(Main.class, LogLevel.INFO, "Membros salvos com sucesso!");
+		Helper.logger(Main.class).info("Membros salvos com sucesso!");
 		SQLite.disconnect();
 		tet.shutdown();
 		jbr.shutdown();
 		api.shutdown();
-		Helper.log(Main.class, LogLevel.INFO, "Fui desligada.");
+		Helper.logger(Main.class).info("Fui desligada.");
 	}
 
 	public static Relay getRelay() {

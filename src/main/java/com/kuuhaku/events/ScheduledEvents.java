@@ -19,7 +19,6 @@ package com.kuuhaku.events;
 
 import com.kuuhaku.events.cron.*;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
@@ -48,10 +47,10 @@ public class ScheduledEvents implements JobListener {
 			} catch (Exception ignore) {
 			} finally {
 				sched.start();
-				Helper.log(this.getClass(), LogLevel.INFO, "Cronograma inicializado com sucesso: check");
+				Helper.logger(this.getClass()).info("Cronograma inicializado com sucesso: check");
 			}
 		} catch (SchedulerException e) {
-			Helper.log(this.getClass(), LogLevel.ERROR, "Erro ao inicializar cronograma check: " + e);
+			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma check: " + e);
 		}
 	}
 
@@ -68,10 +67,10 @@ public class ScheduledEvents implements JobListener {
 			} catch (Exception ignore) {
 			} finally {
 				sched.start();
-				Helper.log(this.getClass(), LogLevel.INFO, "Cronograma inicializado com sucesso: clear");
+				Helper.logger(this.getClass()).info("Cronograma inicializado com sucesso: clear");
 			}
 		} catch (SchedulerException e) {
-			Helper.log(this.getClass(), LogLevel.ERROR, "Erro ao inicializar cronograma clear: " + e);
+			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma clear: " + e);
 		}
 	}
 	
@@ -88,10 +87,10 @@ public class ScheduledEvents implements JobListener {
 			} catch (Exception ignore) {
 			} finally {
 				sched.start();
-				Helper.log(this.getClass(), LogLevel.INFO, "Cronograma inicializado com sucesso: backup");
+				Helper.logger(this.getClass()).info("Cronograma inicializado com sucesso: backup");
 			}
 		} catch (SchedulerException e) {
-			Helper.log(this.getClass(), LogLevel.ERROR, "Erro ao inicializar cronograma backup: " + e);
+			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma backup: " + e);
 		}
 	}
 
@@ -108,10 +107,10 @@ public class ScheduledEvents implements JobListener {
 			} catch (Exception ignore) {
 			} finally {
 				sched.start();
-				Helper.log(this.getClass(), LogLevel.INFO, "Cronograma inicializado com sucesso: unblock");
+				Helper.logger(this.getClass()).info("Cronograma inicializado com sucesso: unblock");
 			}
 		} catch (SchedulerException e) {
-			Helper.log(this.getClass(), LogLevel.ERROR, "Erro ao inicializar cronograma unblock: " + e);
+			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma unblock: " + e);
 		}
 	}
 
@@ -128,10 +127,10 @@ public class ScheduledEvents implements JobListener {
 			} catch (Exception ignore) {
 			} finally {
 				sched.start();
-				Helper.log(this.getClass(), LogLevel.INFO, "Cronograma inicializado com sucesso: refreshWinner");
+				Helper.logger(this.getClass()).info("Cronograma inicializado com sucesso: refreshWinner");
 			}
 		} catch (SchedulerException e) {
-			Helper.log(this.getClass(), LogLevel.ERROR, "Erro ao inicializar cronograma refreshWinner: " + e);
+			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma refreshWinner: " + e);
 		}
 	}
 
@@ -148,10 +147,10 @@ public class ScheduledEvents implements JobListener {
 			} catch (Exception ignore) {
 			} finally {
 				sched.start();
-				Helper.log(this.getClass(), LogLevel.INFO, "Cronograma inicializado com sucesso: markWinner");
+				Helper.logger(this.getClass()).info("Cronograma inicializado com sucesso: markWinner");
 			}
 		} catch (SchedulerException e) {
-			Helper.log(this.getClass(), LogLevel.ERROR, "Erro ao inicializar cronograma markWinner: " + e);
+			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma markWinner: " + e);
 		}
 	}
 
@@ -172,7 +171,7 @@ public class ScheduledEvents implements JobListener {
 
 	@Override
 	public void jobWasExecuted(JobExecutionContext context, JobExecutionException jobException) {
-		Helper.log(this.getClass(), LogLevel.INFO, "Programação executada em " + context.getFireTime() + ".\nPróxima execução em " + context.getNextFireTime());
+		Helper.logger(this.getClass()).info("Programação executada em " + context.getFireTime() + ".\nPróxima execução em " + context.getNextFireTime());
 	}
 }
 

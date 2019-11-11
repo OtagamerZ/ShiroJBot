@@ -36,21 +36,17 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.JSONObject;
 
 import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -99,15 +95,11 @@ public class Helper {
 	}
 
 	public static float clamp(float val, float min, float max) {
-		if (val < min) return min;
-		else if (val > max) return max;
-		else return val;
+		return Math.max(min, Math.min(val, max));
 	}
 
 	public static int clamp(int val, int min, int max) {
-		if (val < min) return min;
-		else if (val > max) return max;
-		else return val;
+		return Math.max(min, Math.min(val, max));
 	}
 
 	public static boolean findURL(String text) {
@@ -158,11 +150,11 @@ public class Helper {
 					channel.sendMessage(message + "\n:warning: | GIF com proporções irregulares, os desenvolvedores já foram informados.").embed(eb.build()).queue(m -> m.addReaction("\u21aa").queue());
 				else
 					channel.sendMessage(message + "\n:warning: | GIF com proporções irregulares, os desenvolvedores já foram informados.").embed(eb.build()).queue();
-				log(Helper.class, LogLevel.WARN, "GIF irregular: " + imageURL);
+				logger(Helper.class).warn("GIF irregular: " + imageURL);
 				Main.getInfo().getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> c.sendMessage("GIF irregular: " + imageURL).queue()));
 			}
 		} catch (Exception e) {
-			log(Helper.class, LogLevel.ERROR, "Erro ao carregar a imagem: " + e.getStackTrace()[0]);
+			logger(Helper.class).error("Erro ao carregar a imagem: " + e.getStackTrace()[0]);
 		}
 	}
 
@@ -208,26 +200,8 @@ public class Helper {
 		}
 	}
 
-	public static void log(Class source, LogLevel level, String msg) {
-		final Logger logger = LogManager.getLogger(source.getName());
-
-		switch (level) {
-			case DEBUG:
-				logger.debug(msg.trim());
-				break;
-			case INFO:
-				logger.info(msg.trim());
-				break;
-			case WARN:
-				logger.warn(msg.trim());
-				break;
-			case ERROR:
-				logger.error(msg.trim());
-				break;
-			case FATAL:
-				logger.fatal(msg.trim());
-				break;
-		}
+	public static Logger logger(Class source) {
+		return LogManager.getLogger(source.getName());
 	}
 
 	public static InputStream getImage(String url) throws IOException {
@@ -284,7 +258,7 @@ public class Helper {
 		} catch (Exception e) {
 			gc.setLogChannel("");
 			SQLite.updateGuildSettings(gc);
-			log(Helper.class, LogLevel.WARN, e + " | " + e.getStackTrace()[0]);
+			logger(Helper.class).warn(e + " | " + e.getStackTrace()[0]);
 		}
 	}
 
@@ -307,26 +281,6 @@ public class Helper {
 
 	public static boolean containsAll(String string, String... compareWith) {
 		return Arrays.stream(compareWith).allMatch(string::contains);
-	}
-
-	public static JSONObject getAPI(String directory, String value) throws IOException {
-		HttpURLConnection con = (HttpURLConnection) new URL("https://shiro-api.herokuapp.com/" + directory + value).openConnection();
-		con.setRequestProperty("User-Agent", "Mozilla/5.0");
-		con.setRequestMethod("GET");
-		con.setRequestProperty("Accept", "application/json");
-		con.addRequestProperty("Accept-Charset", "UTF-8");
-
-		BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
-		String input;
-		StringBuilder resposta = new StringBuilder();
-		while ((input = br.readLine()) != null) {
-			resposta.append(input);
-		}
-		br.close();
-		con.disconnect();
-
-		Helper.log(Helper.class, LogLevel.DEBUG, resposta.toString());
-		return new JSONObject(resposta.toString());
 	}
 
 	public static void paginate(Message msg, List<MessageEmbed> pages) {
@@ -371,7 +325,7 @@ public class Helper {
 				}
 			});
 		} catch (Exception e) {
-			log(Helper.class, LogLevel.WARN, e + " | " + e.getStackTrace()[0]);
+			logger(Helper.class).warn(e + " | " + e.getStackTrace()[0]);
 		}
 	}
 
@@ -408,7 +362,7 @@ public class Helper {
 				}
 			});
 		} catch (Exception e) {
-			log(Helper.class, LogLevel.WARN, e + " | " + e.getStackTrace()[0]);
+			logger(Helper.class).warn(e + " | " + e.getStackTrace()[0]);
 		}
 	}
 
