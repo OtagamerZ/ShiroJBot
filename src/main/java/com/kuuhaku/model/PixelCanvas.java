@@ -1,7 +1,6 @@
 package com.kuuhaku.model;
 
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.requests.RestAction;
 
@@ -33,7 +32,7 @@ public class PixelCanvas {
 				ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
 				return ImageIO.read(bais);
 			} catch (IOException e) {
-				Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
+				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
 		}
 		BufferedImage bi = new BufferedImage(CANVAS_SIZE, CANVAS_SIZE, BufferedImage.TYPE_INT_RGB);
@@ -52,7 +51,7 @@ public class PixelCanvas {
 
 			return channel.sendFile(baos.toByteArray(), "canvas.png");
 		} catch (IOException e) {
-			Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 		return channel.sendMessage(":x: | Erro ao recuperar o canvas, estamos resolvendo isso.");
 	}
@@ -87,7 +86,7 @@ public class PixelCanvas {
 
 			return channel.sendFile(baos.toByteArray(), "chunk_" + number + ".png");
 		} catch (IOException e) {
-			Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 		return channel.sendMessage(":x: | Erro ao recuperar o canvas, estamos resolvendo isso.");
 	}
@@ -112,7 +111,7 @@ public class PixelCanvas {
 
 			return channel.sendFile(baos.toByteArray(), "chunk.png");
 		} catch (IOException e) {
-			Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 		return channel.sendMessage(":x: | Erro ao recuperar o chunk, estamos resolvendo isso.");
 	}
@@ -131,7 +130,7 @@ public class PixelCanvas {
 			ImageIO.write(canvas, "png", baos);
 			this.canvas = Base64.getEncoder().encodeToString(baos.toByteArray());
 		} catch (IOException e) {
-			Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 	}
 }

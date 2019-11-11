@@ -22,9 +22,7 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.CustomAnswers;
-import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
@@ -55,7 +53,7 @@ public class GuildEvents extends ListenerAdapter {
 			String msg = "Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".";
 			c.sendMessage(msg).queue();
 		}));
-		Helper.log(this.getClass(), LogLevel.INFO, "Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".");
+		Helper.logger(this.getClass()).info("Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".");
 	}
 
 	@Override
@@ -64,7 +62,7 @@ public class GuildEvents extends ListenerAdapter {
 			String msg = "Acabei de sair do servidor \"" + event.getGuild().getName() + "\".";
 			c.sendMessage(msg).queue();
 		}));
-		Helper.log(this.getClass(), LogLevel.INFO, "Acabei de sair do servidor \"" + event.getGuild().getName() + "\".");
+		Helper.logger(this.getClass()).info("Acabei de sair do servidor \"" + event.getGuild().getName() + "\".");
 	}
 
 	@Override
@@ -142,29 +140,13 @@ public class GuildEvents extends ListenerAdapter {
 					channel.getHistory().retrievePast(20).queue(h -> {
 						h.removeIf(m -> ChronoUnit.MILLIS.between(m.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author);
 
-						if (h.size() >= SQLite.getGuildById(guild.getId()).getNoSpamAmount()) {
-							h.forEach(m -> channel.deleteMessageById(m.getId()).queue());
-							channel.sendMessage(":warning: | Opa, sem spam meu amigo!").queue();
-							try {
-								member.getRoles().add(guild.getRoleById(SQLite.getGuildCargoWarn(guild.getId())));
-								Main.getInfo().getScheduler().schedule(() -> member.getRoles().remove(guild.getRoleById(SQLite.getGuildCargoWarn(guild.getId()))), SQLite.getGuildWarnTime(guild.getId()), TimeUnit.SECONDS);
-							} catch (Exception ignore) {
-							}
-						}
+						countSpam(member, channel, guild, h);
 					});
 				} else {
 					channel.getHistory().retrievePast(20).queue(h -> {
 						h.removeIf(m -> ChronoUnit.MILLIS.between(m.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author && StringUtils.containsIgnoreCase(m.getContentRaw(), message.getContentRaw()));
 
-						if (h.size() >= SQLite.getGuildById(guild.getId()).getNoSpamAmount()) {
-							h.forEach(m -> channel.deleteMessageById(m.getId()).queue());
-							channel.sendMessage(":warning: | Opa, sem spam meu amigo!").queue();
-							try {
-								member.getRoles().add(guild.getRoleById(SQLite.getGuildCargoWarn(guild.getId())));
-								Main.getInfo().getScheduler().schedule(() -> member.getRoles().remove(guild.getRoleById(SQLite.getGuildCargoWarn(guild.getId()))), SQLite.getGuildWarnTime(guild.getId()), TimeUnit.SECONDS);
-							} catch (Exception ignore) {
-							}
-						}
+						countSpam(member, channel, guild, h);
 					});
 				}
 			}
@@ -205,6 +187,7 @@ public class GuildEvents extends ListenerAdapter {
 				for (String alias : command.getAliases()) {
 					if (alias.equalsIgnoreCase(commandName)) {
 						found = true;
+						break;
 					}
 				}
 				if (command.getCategory().isEnabled()) {
@@ -309,7 +292,19 @@ public class GuildEvents extends ListenerAdapter {
 		} catch (InsufficientPermissionException ignore) {
 
 		} catch (ErrorResponseException e) {
-			Helper.log(this.getClass(), LogLevel.ERROR, e.getErrorCode() + ": " + e + " | " + e.getStackTrace()[0]);
+			Helper.logger(this.getClass()).error(e.getErrorCode() + ": " + e + " | " + e.getStackTrace()[0]);
+		}
+	}
+
+	private void countSpam(Member member, MessageChannel channel, Guild guild, List<Message> h) {
+		if (h.size() >= SQLite.getGuildById(guild.getId()).getNoSpamAmount()) {
+			h.forEach(m -> channel.deleteMessageById(m.getId()).queue());
+			channel.sendMessage(":warning: | Opa, sem spam meu amigo!").queue();
+			try {
+				member.getRoles().add(guild.getRoleById(SQLite.getGuildCargoWarn(guild.getId())));
+				Main.getInfo().getScheduler().schedule(() -> member.getRoles().remove(guild.getRoleById(SQLite.getGuildCargoWarn(guild.getId()))), SQLite.getGuildWarnTime(guild.getId()), TimeUnit.SECONDS);
+			} catch (Exception ignore) {
+			}
 		}
 	}
 }

@@ -5,11 +5,8 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.handlers.games.RPG.Utils;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
-
-import java.io.IOException;
 
 public class RollCommand extends Command {
 
@@ -23,13 +20,13 @@ public class RollCommand extends Command {
 			try {
 				channel.sendMessage(Utils.rollDice(String.join(" ", args), Main.getInfo().getGames().get(guild.getId()).getPlayers().get(author.getId()).getCharacter().getStatus())).queue();
 			} catch (Exception e) {
-				Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
+				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
 		} else if (Main.getInfo().getGames().get(guild.getId()).getMaster() == author) {
 			try {
 				channel.sendMessage(Utils.rollDice(String.join(" ", args), null)).queue();
 			} catch (Exception e) {
-				Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
+				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
 		}
 

@@ -43,7 +43,7 @@ public class MoveCommand extends Command {
 				Main.getInfo().getGames().get(guild.getId()).render(message.getTextChannel()).queue();
 			}
 		} catch (IOException e) {
-			Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 	}
 }

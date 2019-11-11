@@ -43,7 +43,7 @@ public class Beyblade{
 					if (duel.getB2().getS() != null) duel.getB2().getS().setBear(false);
 					int damage = Math.round(duel.getB1().getStrength() * duel.getB1().getSpeed() / (duel.getB2().getStability() * getDefFac(duel.isD2(), duel.getB2())) * (float) Math.random() * 50);
 					duel.getB2().setLife(duel.getB2().getLife() - damage);
-					Helper.log(Helper.class, LogLevel.DEBUG, damage + " -> " + duel.getB2().getLife());
+					Helper.logger(Helper.class).debug(damage + " -> " + duel.getB2().getLife());
 					duel.clearM2();
 				} else {
 					duel.setP1turn(false);
@@ -57,7 +57,7 @@ public class Beyblade{
 					if (duel.getB1().getS() != null) duel.getB1().getS().setBear(false);
 					int damage = Math.round(duel.getB2().getStrength() * duel.getB2().getSpeed() / (duel.getB1().getStability() * getDefFac(duel.isD1(), duel.getB1())) * (float) Math.random() * 50);
 					duel.getB1().setLife(duel.getB1().getLife() - damage);
-					Helper.log(Helper.class, LogLevel.DEBUG, damage + " -> " + duel.getB1().getLife());
+					Helper.logger(Helper.class).debug(damage + " -> " + duel.getB1().getLife());
 					duel.clearM1();
 				} else {
 					duel.setP1turn(true);
