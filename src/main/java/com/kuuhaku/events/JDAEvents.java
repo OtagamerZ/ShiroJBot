@@ -294,9 +294,12 @@ public class JDAEvents extends ListenerAdapter {
 					Main.getInfo().getUserByID(args[1]).openPrivateChannel().queue(c ->
 							c.sendMessage(msgNoArgs).queue());
 
-					Main.getInfo().getDevelopers().forEach(d ->
+					Main.getInfo().getDevelopers().forEach(d -> {
+						if (!d.equals(event.getAuthor().getId())) {
 							Main.getInfo().getUserByID(d).openPrivateChannel().queue(c ->
-							c.sendMessage(event.getAuthor().getName() + " respondeu: ```" + msgNoArgs + "```").queue()));
+									c.sendMessage(event.getAuthor().getName() + " respondeu: ```" + msgNoArgs + "```").queue());
+						}
+					});
 					break;
 			}
 		} else {
