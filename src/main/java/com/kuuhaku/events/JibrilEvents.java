@@ -6,7 +6,6 @@ import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.Member;
 import com.kuuhaku.model.RelayBlockList;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
@@ -31,7 +30,7 @@ public class JibrilEvents extends ListenerAdapter {
 			String msg = "Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".";
 			c.sendMessage(msg).queue();
 		}));
-		Helper.log(this.getClass(), LogLevel.INFO, "Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".");
+		Helper.logger(this.getClass()).info("Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".");
 	}
 
 	@Override
@@ -40,7 +39,7 @@ public class JibrilEvents extends ListenerAdapter {
 			String msg = "Acabei de sair do servidor \"" + event.getGuild().getName() + "\".";
 			c.sendMessage(msg).queue();
 		}));
-		Helper.log(this.getClass(), LogLevel.INFO, "Acabei de sair do servidor \"" + event.getGuild().getName() + "\".");
+		Helper.logger(this.getClass()).info("Acabei de sair do servidor \"" + event.getGuild().getName() + "\".");
 	}
 
 	@Override
@@ -129,7 +128,7 @@ public class JibrilEvents extends ListenerAdapter {
 				}
 			}
 		} catch (ErrorResponseException e) {
-			Helper.log(this.getClass(), LogLevel.ERROR, e.getErrorCode() + ": " + e + " | " + e.getStackTrace()[0]);
+			Helper.logger(this.getClass()).error(e.getErrorCode() + ": " + e + " | " + e.getStackTrace()[0]);
 		}
 	}
 

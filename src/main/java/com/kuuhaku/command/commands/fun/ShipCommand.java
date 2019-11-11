@@ -77,7 +77,7 @@ public class ShipCommand extends Command {
 
             channel.sendMessage(mb.build()).addFile(baos.toByteArray(), "ship.png").queue();
         } catch (IOException e) {
-            Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
+            Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
         }
     }
 

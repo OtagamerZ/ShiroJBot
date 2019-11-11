@@ -53,7 +53,7 @@ public class Profile {
 		try {
 			FONT = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(Profile.class.getClassLoader().getResourceAsStream("font/Doreking.ttf")));
 		} catch (FontFormatException | IOException e) {
-			Helper.log(Profile.class, LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
+			Helper.logger(Profile.class).error(e + " | " + e.getStackTrace()[0]);
 		}
 	}
 

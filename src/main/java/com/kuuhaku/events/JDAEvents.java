@@ -22,7 +22,6 @@ import com.kuuhaku.command.commands.Reactions.*;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import com.kuuhaku.utils.Music;
 import com.kuuhaku.utils.ShiroInfo;
 import de.androidpit.colorthief.ColorThief;
@@ -60,9 +59,9 @@ public class JDAEvents extends ListenerAdapter {
 	@Override
 	public void onReady(@NotNull ReadyEvent event) {
 		try {
-			Helper.log(this.getClass(), LogLevel.INFO, "Estou pronta!");
+			Helper.logger(this.getClass()).info("Estou pronta!");
 		} catch (Exception e) {
-			Helper.log(this.getClass(), LogLevel.ERROR, "Erro ao inicializar bot: " + e);
+			Helper.logger(this.getClass()).error("Erro ao inicializar bot: " + e);
 		}
 	}
 

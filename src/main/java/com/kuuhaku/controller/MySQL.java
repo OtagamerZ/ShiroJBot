@@ -1,15 +1,11 @@
 package com.kuuhaku.controller;
 
-import com.kuuhaku.Main;
 import com.kuuhaku.model.*;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.api.entities.User;
 
 import javax.persistence.*;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -24,7 +20,7 @@ public class MySQL {
 
         if (emf == null) {
             emf = Persistence.createEntityManagerFactory("shiro_remote", props);
-            Helper.log(MySQL.class, LogLevel.INFO, "✅ | Ligação à base de dados MySQL estabelecida.");
+            Helper.logger(MySQL.class).info("✅ | Ligação à base de dados MySQL estabelecida.");
         }
 
         emf.getCache().evictAll();
@@ -380,7 +376,7 @@ public class MySQL {
     public static PixelCanvas getCanvas() {
         EntityManager em = getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM PixelCanvas c WHERE shelved = 0", PixelCanvas.class);
+		Query q = em.createQuery("SELECT c FROM PixelCanvas c WHERE shelved = false", PixelCanvas.class);
 		q.setMaxResults(1);
 
         try {

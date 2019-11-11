@@ -52,7 +52,7 @@ public class CompileCommand extends Command {
 				try {
 					execute.get(10, TimeUnit.SECONDS);
 				} catch (InterruptedException | ExecutionException e) {
-					Helper.log(this.getClass(), LogLevel.ERROR, e + " | " + e.getStackTrace()[0]);
+					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				} catch (TimeoutException e) {
 					execute.cancel(true);
 					m.editMessage(":x: | Tempo limite de execução esgotado.").queue();

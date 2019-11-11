@@ -9,7 +9,6 @@ import com.kuuhaku.model.RelayBlockList;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import com.kuuhaku.utils.TagIcons;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
@@ -18,12 +17,9 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -196,9 +192,9 @@ public class Relay extends SQLite {
 							(g.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE) ? "✅" : "❌") + " Gerenciar mensagens\n" +
 							(g.getSelfMember().hasPermission(Permission.MANAGE_WEBHOOKS) ? "✅" : "❌") + " Gerenciar webhooks" +
 							"```").queue());
-					Helper.log(this.getClass(), LogLevel.ERROR, ex + " | Sevidor " + g.getName());
+					Helper.logger(this.getClass()).error(ex + " | Sevidor " + g.getName());
 				} catch (Exception e) {
-					Helper.log(this.getClass(), LogLevel.ERROR, ex + " | Dono " + Objects.requireNonNull(g.getOwner()).getUser().getAsTag());
+					Helper.logger(this.getClass()).error(ex + " | Dono " + Objects.requireNonNull(g.getOwner()).getUser().getAsTag());
 				}
 			}
 		});
