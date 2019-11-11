@@ -3,14 +3,13 @@ package com.kuuhaku.command.commands.rpg;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.handlers.games.RPG.Handlers.ItemRegisterHandler;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
 public class WorldListCommand extends Command {
 
 	public WorldListCommand() {
-		super("rlista", new String[]{"rlist"}, "Mostra a lista de cadastros", Category.BEYBLADE);
+		super("rlista", new String[]{"rlist"}, "Mostra a lista de cadastros", Category.RPG);
 	}
 
 	@Override

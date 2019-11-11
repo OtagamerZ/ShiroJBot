@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.events.Event;
 public class StatusCommand extends Command {
 
 	public StatusCommand() {
-		super("rperfil", new String[]{"rprofile", "rstatus"}, "Mostra a ficha do seu personagem", Category.BEYBLADE);
+		super("rperfil", new String[]{"rprofile", "rstatus"}, "Mostra a ficha do seu personagem", Category.RPG);
 	}
 
 	@Override

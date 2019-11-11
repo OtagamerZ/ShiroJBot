@@ -12,7 +12,7 @@ import java.io.IOException;
 public class MapCommand extends Command {
 
 	public MapCommand() {
-		super("rmapa", new String[]{"rmap"}, "Vê o mapa atual", Category.BEYBLADE);
+		super("rmapa", new String[]{"rmap"}, "Vê o mapa atual", Category.RPG);
 	}
 
 	@Override

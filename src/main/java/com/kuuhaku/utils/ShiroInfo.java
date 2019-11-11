@@ -20,7 +20,6 @@ package com.kuuhaku.utils;
 import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.handlers.games.RPG.World.World;
 import com.kuuhaku.handlers.music.GuildMusicManager;
-import com.kuuhaku.model.DuelData;
 import com.kuuhaku.model.PixelCanvas;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
@@ -72,8 +71,6 @@ public class ShiroInfo {
 	private static final DiscordBotListAPI dbl = new DiscordBotListAPI.Builder().token(System.getenv("DBL_TOKEN")).botId("572413282653306901").build();
 	private static final List<User[]> queue = new ArrayList<>();
 	private static final Map<String, Integer[]> polls = new HashMap<>();
-	public static final List<DuelData> dd = new ArrayList<>();
-	public static final Map<String, DuelData> duels = new HashMap<>();
 	private static final Map<Long, GuildMusicManager> gmms = new HashMap<>();
 	private static final AudioPlayerManager apm = new DefaultAudioPlayerManager();
 	private static final Map<String, World> games = new HashMap<>();

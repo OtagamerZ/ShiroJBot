@@ -18,7 +18,7 @@
 package com.kuuhaku.utils;
 
 public enum TagIcons {
-	DEV, SHERIFF, EDITOR, READER, MODERATOR, CHAMPION, LVL20, LVL30, LVL40, LVL50, LVL60, LVL70, VERIFIED, TOXIC, MARRIED;
+	DEV, SHERIFF, EDITOR, READER, MODERATOR, LVL20, LVL30, LVL40, LVL50, LVL60, LVL70, VERIFIED, TOXIC, MARRIED;
 
 	public static String getTag(TagIcons t) {
 		switch (t) {
@@ -32,8 +32,6 @@ public enum TagIcons {
 				return "<:reader:616680618037870642> ";
 			case MODERATOR:
 				return "<:Moderator:589121447314587744> ";
-			case CHAMPION:
-				return "<:Champion:589120809616932864> ";
 			case LVL20:
 				return "<:lvl_20:611156384909623296> ";
 			case LVL30:

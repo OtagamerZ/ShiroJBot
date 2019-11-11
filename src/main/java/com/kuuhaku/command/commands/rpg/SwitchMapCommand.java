@@ -3,16 +3,13 @@ package com.kuuhaku.command.commands.rpg;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.handlers.games.RPG.Actors.Actor;
-import com.kuuhaku.handlers.games.RPG.Handlers.CombatHandler;
-import com.kuuhaku.handlers.games.RPG.Handlers.PvPHandler;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
 public class SwitchMapCommand extends Command {
 
 	public SwitchMapCommand() {
-		super("raomapa", new String[]{"rtrocarmapa", "rtomap"}, "Muda de mapa", Category.BEYBLADE);
+		super("raomapa", new String[]{"rtrocarmapa", "rtomap"}, "Muda de mapa", Category.RPG);
 	}
 
 	@Override
