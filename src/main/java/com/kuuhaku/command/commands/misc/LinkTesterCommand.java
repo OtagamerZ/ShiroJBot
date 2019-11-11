@@ -19,7 +19,7 @@ public class LinkTesterCommand extends Command {
 			return;
 		}
 
-		String link = rawCmd.replaceFirst(args[0], "");
+		String link = message.getContentRaw().replaceFirst(args[0], "");
 
 		String[] quotes = new String[]{
 				"Peguei esse!",
