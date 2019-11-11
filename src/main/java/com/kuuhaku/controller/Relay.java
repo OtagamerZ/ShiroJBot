@@ -106,12 +106,6 @@ public class Relay extends SQLite {
 				badges.append(TagIcons.getTag(TagIcons.MODERATOR));
 
 			try {
-				if (MySQL.getChampionBeyblade().getId().equals(m.getUser().getId()))
-					badges.append(TagIcons.getTag(TagIcons.CHAMPION));
-			} catch (Exception ignore) {
-			}
-
-			try {
 				if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 70)
 					badges.append(TagIcons.getTag(TagIcons.LVL70));
 				else if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 60)

@@ -22,12 +22,10 @@ import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 
 import javax.imageio.ImageIO;
-import javax.persistence.NoResultException;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
@@ -224,11 +222,6 @@ public class Profile {
 				}
 				if (m.hasPermission(Permission.MANAGE_CHANNEL))
 					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/mod.png"))));
-				try {
-					if (MySQL.getChampionBeyblade().getId().equals(m.getUser().getId()))
-						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/champ.png"))));
-				} catch (Exception ignore) {
-				}
 				try {
 					if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 70)
 						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_70.png"))));

@@ -23,7 +23,6 @@ import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.Music;
-import com.kuuhaku.utils.ShiroInfo;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -134,12 +133,6 @@ public class JDAEvents extends ListenerAdapter {
 
 						new BiteReaction(true).execute(author, null, null, null, message, channel, null, null, null);
 					}
-				}
-
-				if (ShiroInfo.duels.containsKey(event.getMessageId()) && event.getUser() == ShiroInfo.duels.get((event.getMessageId())).getP2() && event.getReactionEmote().getName().equals("\u2694")) {
-					ShiroInfo.dd.add(ShiroInfo.duels.get(event.getMessageId()));
-					ShiroInfo.duels.remove(event.getMessageId());
-					event.getChannel().sendMessage("O duelo começou!\nUsem `atacar` para atacar, `defender` para defender ou `especial` para tentar utilizar seu poder especial de alinhamento.\n\n**O desafiante começa primeiro!**").queue();
 				}
 			}
 

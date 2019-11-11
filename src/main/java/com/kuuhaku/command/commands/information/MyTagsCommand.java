@@ -30,8 +30,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
-import javax.persistence.NoResultException;
-import java.awt.*;
 import java.io.IOException;
 
 public class MyTagsCommand extends Command {
@@ -79,12 +77,6 @@ public class MyTagsCommand extends Command {
 
             if (member.hasPermission(Permission.MANAGE_CHANNEL))
                 badges.append(TagIcons.getTag(TagIcons.MODERATOR));
-
-            try {
-                if (MySQL.getChampionBeyblade().getId().equals(author.getId()))
-                    badges.append(TagIcons.getTag(TagIcons.CHAMPION));
-            } catch (Exception ignore) {
-            }
 
             try {
                 if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= 70)

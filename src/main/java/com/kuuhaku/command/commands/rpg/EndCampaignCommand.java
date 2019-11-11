@@ -3,16 +3,13 @@ package com.kuuhaku.command.commands.rpg;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.handlers.games.RPG.World.World;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.PrivilegeLevel;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
 public class EndCampaignCommand extends Command {
 
 	public EndCampaignCommand() {
-		super("rfimdejogo", new String[]{"rendcampaign", "rgameover"}, "Finaliza a campanha ativa no servidor", Category.BEYBLADE);
+		super("rfimdejogo", new String[]{"rendcampaign", "rgameover"}, "Finaliza a campanha ativa no servidor", Category.RPG);
 	}
 
 	@Override
