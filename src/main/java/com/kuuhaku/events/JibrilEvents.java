@@ -99,8 +99,10 @@ public class JibrilEvents extends ListenerAdapter {
 				String[] msg = event.getMessage().getContentRaw().split(" ");
 				for (int i = 0; i < msg.length; i++) {
 					try {
-						if (Helper.findURL(msg[i]) && !MySQL.getTagById(event.getAuthor().getId()).isVerified())
-							msg[i] = "`LINK BLOQUEADO`";
+						for (int x = i; x < msg.length; x++) {
+							if (Helper.findURL(msg[i] + msg[x]) && !MySQL.getTagById(event.getAuthor().getId()).isVerified())
+								msg[i] = "`LINK BLOQUEADO`";
+						}
 						if (Helper.findMentions(msg[i]))
 							msg[i] = "`EVERYONE/HERE BLOQUEADO`";
 					} catch (NoResultException e) {
