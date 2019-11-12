@@ -22,6 +22,7 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.events.MessageListener;
+import com.kuuhaku.model.Extensions;
 import com.kuuhaku.model.GamblePool;
 import com.kuuhaku.model.guildConfig;
 import de.androidpit.colorthief.ColorThief;
@@ -104,7 +105,7 @@ public class Helper {
 		final Pattern urlPattern = Pattern.compile(
 				".*?(?:^|[\\W])((ht|f)tp(s?)://|www\\.)(([\\w\\-]+\\.)+?([\\w\\-.~]+/?)*[\\p{Alnum}.,%_=?&#\\-+()\\[\\]*$~@!:/{};']*?)",
 				Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
-		text = (StringUtils.containsAny(text, ".gg", ".com", ".net", ".site", ".tech", ".br", ".me", ".org", ".gov") ? "http://" : "") + text;
+		text = (Extensions.checkExtension(text) ? "http://" : "") + text;
 		text = text.replace("1", "i").replace("!", "i");
 		text = text.replace("3", "e");
 		text = text.replace("4", "a");
