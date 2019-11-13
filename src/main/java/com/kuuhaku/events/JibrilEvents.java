@@ -44,13 +44,7 @@ public class JibrilEvents extends ListenerAdapter {
 
 	@Override
 	public void onPrivateMessageReceived(PrivateMessageReceivedEvent event) {
-		if (event.getAuthor() == Main.getJibril().getUserById(Main.getInfo().getNiiChan()) || event.getAuthor().isBot())
-			return;
-		EmbedBuilder eb = new EmbedBuilder();
-
-		eb.setAuthor(event.getAuthor().getAsTag(), event.getAuthor().getAvatarUrl());
-		eb.setFooter(LocalDateTime.now().atOffset(ZoneOffset.ofHours(-3)).format(DateTimeFormatter.ofPattern("HH:mm | dd/MMM/yyyy")), null);
-		Objects.requireNonNull(Main.getJibril().getUserById(Main.getInfo().getNiiChan())).openPrivateChannel().queue(c -> c.sendMessage(event.getMessage()).embed(eb.build()).queue());
+		Main.getInfo().getShiroEvents().onPrivateMessageReceived(event);
 	}
 
 	@Override

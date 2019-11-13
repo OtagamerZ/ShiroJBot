@@ -18,6 +18,7 @@
 package com.kuuhaku.events;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.reactions.*;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.guildConfig;
@@ -26,18 +27,17 @@ import com.kuuhaku.utils.Music;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberLeaveEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
@@ -310,5 +310,37 @@ public class JDAEvents extends ListenerAdapter {
 			Main.getInfo().getDevelopers().forEach(d ->
 					Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> c.sendMessage(event.getMessage()).embed(eb.build()).queue()));
 		}
+	}
+
+	public static boolean checkPermissions(@NotNull GuildMessageReceivedEvent event, User author, Member member, Message message, MessageChannel channel, Guild guild, String prefix, String rawMsgNoPrefix, String[] args, Command command) {
+		if (Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
+			command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
+			Helper.spawnAd(channel);
+			return true;
+		}
+
+		try {
+			channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
+			Helper.spawnAd(channel);
+			return true;
+		} catch (InsufficientPermissionException ignore) {
+		}
+		return false;
+	}
+
+	public static boolean isFound(String commandName, boolean found, Command command) {
+		if (command.getName().equalsIgnoreCase(commandName)) {
+			found = true;
+		}
+		for (String alias : command.getAliases()) {
+			if (alias.equalsIgnoreCase(commandName)) {
+				found = true;
+				break;
+			}
+		}
+		if (command.getCategory().isEnabled()) {
+			found = false;
+		}
+		return found;
 	}
 }
