@@ -15,25 +15,25 @@
  *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.Reactions;
+package com.kuuhaku.command.commands.reactions;
 
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
-public class NopeReaction extends Reaction {
-	public NopeReaction() {
-		super("nope", new String[]{"sqn", "hojenão", "esquiva"}, "Evita a tentativa de alguém.");
+public class DanceReaction extends Reaction {
+	public DanceReaction() {
+		super("dançar", new String[]{"dancar", "dance", "tuts"}, "Dança.");
 	}
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		this.setReaction(new String[]{
-				"Hoje não!",
-				"Fluido como a água!",
-				"Ha ah, errou!"
+				"Vai vai vai!",
+				"Se liga nos m-o-v-i-m-e-n-t-o-s!",
+				"Duas palavras: DANCE BABY!"
 		});
 
-		Helper.sendReaction(getUrl("nope"), channel, author.getAsMention() + " esquivou! - " + this.getReaction()[this.getReactionLength()], false);
+		Helper.sendReaction(getUrl("dance"), channel, author.getAsMention() + " está dançando! - " + this.getReaction()[this.getReactionLength()], false);
 	}
 }

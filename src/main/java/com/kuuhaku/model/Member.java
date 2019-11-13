@@ -23,7 +23,6 @@ import net.dv8tion.jda.api.entities.User;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -43,6 +42,7 @@ public class Member {
 	private boolean markForDelete;
 	@Column(columnDefinition = "boolean default false")
 	private boolean rulesSent;
+	private long lastVoted;
 
 	public Member() {
 
@@ -149,5 +149,13 @@ public class Member {
 
 	public void setRulesSent(boolean rulesSent) {
 		this.rulesSent = rulesSent;
+	}
+
+	public boolean canVote() {
+		return (System.currentTimeMillis() / 1000) - lastVoted > 86400;
+	}
+
+	public void vote() {
+		lastVoted = System.currentTimeMillis() / 1000;
 	}
 }
