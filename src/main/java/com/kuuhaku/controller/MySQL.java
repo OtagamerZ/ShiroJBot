@@ -9,10 +9,7 @@ import net.dv8tion.jda.api.entities.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MySQL {
 
@@ -377,21 +374,43 @@ public class MySQL {
     public static void getVotes(Guild guild, TextChannel channel) {
         EntityManager em = getEntityManager();
 
-        class result {
-            private String votedUserID;
-        	private String votedUser;
-        	private int score;
-		}
-
-        Query q = em.createQuery("SELECT votedUserID, votedUser, SUM(vote) AS votes FROM Votes v WHERE guildID = ?1 AND votes != 0 GROUP BY votedUserID", result.class);
+        Query q = em.createQuery("SELECT v FROM Votes v WHERE guildID = ?1 AND vote != 0", Votes.class);
 		q.setParameter(1, guild.getId());
 
-        List<result> votes = (List<result>) q.getResultList();
+		class result {
+			private String name;
+			private int votes;
+
+			private result(String name, int votes) {
+				this.name = name;
+				this.votes = votes;
+			}
+
+			private int getVotes() {
+				return votes;
+			}
+		}
+
+        List<Votes> votes = (List<Votes>) q.getResultList();
+        HashMap<String, result> voteMap = new HashMap<>();
+
+        votes.forEach(v -> {
+        	String user = v.getVotedUserID();
+        	if (voteMap.containsKey(user)) {
+				voteMap.get(user).votes += v.getVote();
+			} else {
+        		voteMap.put(v.getVotedUserID(), new result(v.getVotedUser(), v.getVote()));
+			}
+		});
+
+		List<result> results = (List<result>) voteMap.values();
+		results.sort(Comparator.comparing(result::getVotes));
+
         List<MessageEmbed> pages = new ArrayList<>();
         EmbedBuilder eb = new EmbedBuilder();
         List<MessageEmbed.Field> f = new ArrayList<>();
 
-		votes.forEach(v -> f.add(new MessageEmbed.Field(v.votedUser, "Pontuação: " + v.score, false)));
+		results.forEach(v -> f.add(new MessageEmbed.Field(v.name, "Pontuação: " + v.votes, false)));
 
 		for (int i = 0; i < Math.ceil(f.size() / 10f); i++) {
 			eb.clear();
