@@ -29,6 +29,7 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -60,6 +61,11 @@ public class TetEvents extends ListenerAdapter {
 			c.sendMessage(msg).queue();
 		}));
 		Helper.logger(this.getClass()).info("Acabei de sair do servidor \"" + event.getGuild().getName() + "\".");
+	}
+
+	@Override
+	public void onPrivateMessageReceived(PrivateMessageReceivedEvent event) {
+		Main.getInfo().getShiroEvents().onPrivateMessageReceived(event);
 	}
 
 	@Override
@@ -102,70 +108,29 @@ public class TetEvents extends ListenerAdapter {
 			}
 
 			for (Command command : Main.getRPGCommandManager().getCommands()) {
-				if (command.getName().equalsIgnoreCase(commandName)) {
-					found = true;
-				}
-				for (String alias : command.getAliases()) {
-					if (alias.equalsIgnoreCase(commandName)) {
-						found = true;
-						break;
-					}
-				}
-				if (command.getCategory().isEnabled()) {
-					found = false;
-				}
+				found = JDAEvents.isFound(commandName, found, command);
 
 				if (found) {
 					Helper.logToChannel(author, true, command, "Um comando foi usado no canal " + ((TextChannel) channel).getAsMention(), guild);
 					if (Main.getInfo().getGames().get(guild.getId()) == null) {
 						if (command.getClass() == NewCampaignCommand.class) {
-							if (Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
-								command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
-								Helper.spawnAd(channel);
+							if (JDAEvents.checkPermissions(event, author, member, message, channel, guild, prefix, rawMsgNoPrefix, args, command))
 								break;
-							}
-
-							try {
-								channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
-								Helper.spawnAd(channel);
-								break;
-							} catch (InsufficientPermissionException ignore) {
-							}
 							return;
 						}
 						channel.sendMessage(":x: | Este servidor ainda não possui uma campanha ativa.").queue();
 						break;
 					} else {
 						if (Main.getInfo().getGames().get(guild.getId()).getPlayers().containsKey(author.getId()) || (!Main.getInfo().getGames().get(guild.getId()).getPlayers().containsKey(author.getId()) && command.getClass() == NewPlayerCommand.class) || Main.getInfo().getGames().get(guild.getId()).getMaster() == author) {
-							if (Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
-								command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
-								Helper.spawnAd(channel);
+							if (JDAEvents.checkPermissions(event, author, member, message, channel, guild, prefix, rawMsgNoPrefix, args, command))
 								break;
-							}
-
-							try {
-								channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
-								Helper.spawnAd(channel);
-								break;
-							} catch (InsufficientPermissionException ignore) {
-							}
 						} else {
 							channel.sendMessage(":x: | Você ainda não criou um personagem, use o comando `" + prefix + "rnovo` para criar.").queue();
 							break;
 						}
 					}
-					if (Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
-						command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
-						Helper.spawnAd(channel);
+					if (JDAEvents.checkPermissions(event, author, member, message, channel, guild, prefix, rawMsgNoPrefix, args, command))
 						break;
-					}
-
-					try {
-						channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
-						Helper.spawnAd(channel);
-						break;
-					} catch (InsufficientPermissionException ignore) {
-					}
 				}
 			}
 		} catch (InsufficientPermissionException ignore) {

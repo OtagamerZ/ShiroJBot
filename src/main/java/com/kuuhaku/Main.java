@@ -106,7 +106,7 @@ public class Main {
 				Helper.logger(Main.class).info("Guild adicionada ao banco: " + g.getName());
 			}
 		});
-		api.addEventListener(new JDAEvents());
+		api.addEventListener(Main.getInfo().getShiroEvents());
 		api.addEventListener(new GuildEvents());
 		api.addEventListener(new GuildUpdateEvents());
 		jbr.addEventListener(new JibrilEvents());
