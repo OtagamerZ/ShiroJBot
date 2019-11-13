@@ -74,7 +74,6 @@
         <class>com.kuuhaku.model.CustomAnswers</class>
         <class>com.kuuhaku.model.Tags</class>
         <class>com.kuuhaku.model.PermaBlock</class>
-        <class>com.kuuhaku.model.Votes</class>
 
         <properties>
             <!-- dados da conexao -->
