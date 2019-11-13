@@ -18,6 +18,7 @@
 package com.kuuhaku.utils;
 
 import com.kuuhaku.controller.MySQL;
+import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.handlers.games.RPG.World.World;
 import com.kuuhaku.handlers.music.GuildMusicManager;
 import com.kuuhaku.model.PixelCanvas;
@@ -74,6 +75,7 @@ public class ShiroInfo {
 	private static final Map<Long, GuildMusicManager> gmms = new HashMap<>();
 	private static final AudioPlayerManager apm = new DefaultAudioPlayerManager();
 	private static final Map<String, World> games = new HashMap<>();
+	private static final JDAEvents shiroEvents = new JDAEvents();
 
 	private JDA api;
 	private long startTime;
@@ -177,6 +179,10 @@ public class ShiroInfo {
 
 	void addGmm(long id, GuildMusicManager gmm) {
 		gmms.put(id, gmm);
+	}
+
+	public JDAEvents getShiroEvents() {
+		return shiroEvents;
 	}
 
 	//VARIABLES

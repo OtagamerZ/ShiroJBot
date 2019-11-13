@@ -21,6 +21,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
+import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.model.CustomAnswers;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
@@ -179,32 +180,12 @@ public class GuildEvents extends ListenerAdapter {
 				return;
 			}
 			for (Command command : Main.getCommandManager().getCommands()) {
-				if (command.getName().equalsIgnoreCase(commandName)) {
-					found = true;
-				}
-				for (String alias : command.getAliases()) {
-					if (alias.equalsIgnoreCase(commandName)) {
-						found = true;
-						break;
-					}
-				}
-				if (command.getCategory().isEnabled()) {
-					found = false;
-				}
+				found = JDAEvents.isFound(commandName, found, command);
 
 				if (found) {
 					Helper.logToChannel(author, true, command, "Um comando foi usado no canal " + ((TextChannel) channel).getAsMention(), guild);
-					if (Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
-						command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
-						Helper.spawnAd(channel);
+					if (JDAEvents.checkPermissions(event, author, member, message, channel, guild, prefix, rawMsgNoPrefix, args, command))
 						break;
-					}
-					try {
-						channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
-						Helper.spawnAd(channel);
-						break;
-					} catch (InsufficientPermissionException ignore) {
-					}
 				}
 			}
 
