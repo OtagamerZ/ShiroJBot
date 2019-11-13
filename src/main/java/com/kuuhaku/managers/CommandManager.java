@@ -18,7 +18,7 @@
 package com.kuuhaku.managers;
 
 import com.kuuhaku.command.Command;
-import com.kuuhaku.command.commands.Reactions.*;
+import com.kuuhaku.command.commands.reactions.*;
 import com.kuuhaku.command.commands.dev.*;
 import com.kuuhaku.command.commands.exceed.ExceedRankCommand;
 import com.kuuhaku.command.commands.exceed.ExceedSelectCommand;
@@ -109,6 +109,8 @@ public class CommandManager {
             add(new BinaryCommand());
             add(new PermissionCommand());
             add(new LinkTesterCommand());
+            add(new VoteCommand());
+            add(new ListScoreCommand());
 
             //FUN
             add(new SadButTrueCommand());

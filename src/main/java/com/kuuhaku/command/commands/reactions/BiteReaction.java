@@ -15,18 +15,18 @@
  *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.Reactions;
+package com.kuuhaku.command.commands.reactions;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
-public class PunchReaction extends Reaction {
+public class BiteReaction extends Reaction {
 	private static boolean answer = false;
 
-	public PunchReaction(boolean isAnswer) {
-		super("socar", new String[]{"chega", "tomaessa", "punch"}, "Soca alguém.");
+	public BiteReaction(boolean isAnswer) {
+		super("morder", new String[]{"moider", "bite", "moide"}, "Morde alguém.");
 		answer = isAnswer;
 	}
 
@@ -38,28 +38,28 @@ public class PunchReaction extends Reaction {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		if (message.getMentionedUsers().size() > 0) {
 			this.setReaction(new String[]{
-					"Conheça a dor!",
-					"Pow!",
-					"Detroit...SMASH!"
+					"Snack!",
+					"~~moide!",
+					"Munch!"
 			});
 
 			this.setSelfTarget(new String[]{
-					"Errou!",
-					"Ha, hoje não!",
-					"Tio tá ai?"
+					"Não, não, NÃO!",
+					"Complicado ein!",
+					"Não sou biscoito pra morder!"
 			});
 
 			if (message.getMentionedUsers().get(0) == Main.getInfo().getAPI().getSelfUser()) {
-				Helper.sendReaction(getUrl("smash"), channel, author.getAsMention() + " tentou socar a " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget()[this.getSelfTargetLength()], false);
+				Helper.sendReaction(getUrl("bite"), channel, author.getAsMention() + " tentou morder a " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget()[this.getSelfTargetLength()], false);
 				return;
 			}
 
 			if (!isAnswer())
-				Helper.sendReaction(getUrl("smash"), channel, author.getAsMention() + " socou " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], true);
+				Helper.sendReaction(getUrl("bite"), channel, author.getAsMention() + " mordeu " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], true);
 			else
-				Helper.sendReaction(getUrl("smash"), channel, message.getMentionedUsers().get(1).getAsMention() + " devolveu o soco de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], false);
+                Helper.sendReaction(getUrl("bite"), channel, message.getMentionedUsers().get(1).getAsMention() + " devolveu a mordida de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], false);
 		} else {
-			Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para socar!");
+			Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para morder!");
 		}
 	}
 }
