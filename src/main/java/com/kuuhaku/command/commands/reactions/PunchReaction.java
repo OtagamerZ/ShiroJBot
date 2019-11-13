@@ -15,18 +15,18 @@
  *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.Reactions;
+package com.kuuhaku.command.commands.reactions;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
-public class PatReaction extends Reaction {
+public class PunchReaction extends Reaction {
 	private static boolean answer = false;
 
-	public PatReaction(boolean isAnswer) {
-		super("cafuné", new String[]{"cafunhé", "pat", "cafu"}, "Faz cafuné em alguém.");
+	public PunchReaction(boolean isAnswer) {
+		super("socar", new String[]{"chega", "tomaessa", "punch"}, "Soca alguém.");
 		answer = isAnswer;
 	}
 
@@ -38,28 +38,28 @@ public class PatReaction extends Reaction {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		if (message.getMentionedUsers().size() > 0) {
 			this.setReaction(new String[]{
-					"Fuu~~",
-					"Parece até um gato!",
-					"Quem não gosta de um cafuné?"
+					"Conheça a dor!",
+					"Pow!",
+					"Detroit...SMASH!"
 			});
 
 			this.setSelfTarget(new String[]{
-					"Não, desgrudaa!",
-					"Não sou um gato!",
-					"Nem tenta!"
+					"Errou!",
+					"Ha, hoje não!",
+					"Tio tá ai?"
 			});
 
 			if (message.getMentionedUsers().get(0) == Main.getInfo().getAPI().getSelfUser()) {
-				Helper.sendReaction(getUrl("pat"), channel, author.getAsMention() + " tentou fazer cafuné na " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget()[this.getSelfTargetLength()], false);
+				Helper.sendReaction(getUrl("smash"), channel, author.getAsMention() + " tentou socar a " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget()[this.getSelfTargetLength()], false);
 				return;
 			}
 
 			if (!isAnswer())
-				Helper.sendReaction(getUrl("pat"), channel, author.getAsMention() + " fez cafuné em " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], true);
+				Helper.sendReaction(getUrl("smash"), channel, author.getAsMention() + " socou " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], true);
 			else
-				Helper.sendReaction(getUrl("pat"), channel, message.getMentionedUsers().get(1).getAsMention() + " fez outro cafuné em " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], false);
+				Helper.sendReaction(getUrl("smash"), channel, message.getMentionedUsers().get(1).getAsMention() + " devolveu o soco de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], false);
 		} else {
-			Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para fazer cafuné!");
+			Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para socar!");
 		}
 	}
 }

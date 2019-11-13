@@ -18,20 +18,6 @@
 package com.kuuhaku.managers;
 
 import com.kuuhaku.command.Command;
-import com.kuuhaku.command.commands.Reactions.*;
-import com.kuuhaku.command.commands.dev.*;
-import com.kuuhaku.command.commands.exceed.ExceedRankCommand;
-import com.kuuhaku.command.commands.exceed.ExceedSelectCommand;
-import com.kuuhaku.command.commands.fun.*;
-import com.kuuhaku.command.commands.information.*;
-import com.kuuhaku.command.commands.information.ProfileCommand;
-import com.kuuhaku.command.commands.misc.*;
-import com.kuuhaku.command.commands.moderation.*;
-import com.kuuhaku.command.commands.music.MusicCommand;
-import com.kuuhaku.command.commands.music.VideoCommand;
-import com.kuuhaku.command.commands.music.YoutubeCommand;
-import com.kuuhaku.command.commands.partner.JibrilCommand;
-import com.kuuhaku.command.commands.partner.TetCommand;
 import com.kuuhaku.command.commands.rpg.*;
 
 import java.util.ArrayList;
