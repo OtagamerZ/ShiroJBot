@@ -22,6 +22,9 @@ public class VoteCommand extends Command {
 		} else if (!SQLite.getMemberByMid(author.getId()).canVote()) {
 			channel.sendMessage(":x: | Você já votou hoje, cada usuário possui apenas um voto por dia").queue();
 			return;
+		} else if (message.getMentionedUsers().get(0) == author) {
+			channel.sendMessage(":x: | Você não pode votar em si mesmo").queue();
+			return;
 		}
 
 		switch (args[1]) {
