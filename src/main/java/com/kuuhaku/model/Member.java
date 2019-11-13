@@ -42,6 +42,7 @@ public class Member {
 	private boolean markForDelete;
 	@Column(columnDefinition = "boolean default false")
 	private boolean rulesSent;
+	@Column(columnDefinition = "long default 0")
 	private long lastVoted;
 
 	public Member() {
