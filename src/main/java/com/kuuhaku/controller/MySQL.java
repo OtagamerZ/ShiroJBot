@@ -403,7 +403,7 @@ public class MySQL {
 			}
 		});
 
-		List<result> results = (List<result>) voteMap.values();
+		List<result> results = new ArrayList<>(voteMap.values());
 		results.sort(Comparator.comparing(result::getVotes));
 
         List<MessageEmbed> pages = new ArrayList<>();
