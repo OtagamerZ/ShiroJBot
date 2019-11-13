@@ -15,18 +15,18 @@
  *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.Reactions;
+package com.kuuhaku.command.commands.reactions;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
-public class KissReaction extends Reaction {
+public class PatReaction extends Reaction {
 	private static boolean answer = false;
 
-	public KissReaction(boolean isAnswer) {
-		super("beijar", new String[]{"beijo", "kiss", "smac"}, "Beija alguém.");
+	public PatReaction(boolean isAnswer) {
+		super("cafuné", new String[]{"cafunhé", "pat", "cafu"}, "Faz cafuné em alguém.");
 		answer = isAnswer;
 	}
 
@@ -38,28 +38,28 @@ public class KissReaction extends Reaction {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		if (message.getMentionedUsers().size() > 0) {
 			this.setReaction(new String[]{
-					"Ow wow, vai com calma pessoal!",
-					"Eu...vou deixar vocês sozinhos!",
-					"Um romance melhor que Crepúsculo!"
+					"Fuu~~",
+					"Parece até um gato!",
+					"Quem não gosta de um cafuné?"
 			});
 
 			this.setSelfTarget(new String[]{
-					"Eu não, sai, xispa!",
-					"Saaaai, não to afim de você!",
-					"Temos um lolicon-sama aqui!"
+					"Não, desgrudaa!",
+					"Não sou um gato!",
+					"Nem tenta!"
 			});
 
 			if (message.getMentionedUsers().get(0) == Main.getInfo().getAPI().getSelfUser()) {
-				Helper.sendReaction(getUrl("kiss"), channel, author.getAsMention() + " tentou beijar a " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget()[this.getSelfTargetLength()], false);
+				Helper.sendReaction(getUrl("pat"), channel, author.getAsMention() + " tentou fazer cafuné na " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget()[this.getSelfTargetLength()], false);
 				return;
 			}
 
 			if (!isAnswer())
-				Helper.sendReaction(getUrl("kiss"), channel, author.getAsMention() + " beijou " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], true);
+				Helper.sendReaction(getUrl("pat"), channel, author.getAsMention() + " fez cafuné em " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], true);
 			else
-				Helper.sendReaction(getUrl("kiss"), channel, message.getMentionedUsers().get(1).getAsMention() + " devolveu o beijo de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], false);
+				Helper.sendReaction(getUrl("pat"), channel, message.getMentionedUsers().get(1).getAsMention() + " fez outro cafuné em " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], false);
 		} else {
-			Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para beijar!");
+			Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para fazer cafuné!");
 		}
 	}
 }

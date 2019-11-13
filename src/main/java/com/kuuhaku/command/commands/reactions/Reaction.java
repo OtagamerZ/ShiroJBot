@@ -32,12 +32,11 @@
  *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.Reactions;
+package com.kuuhaku.command.commands.reactions;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.api.entities.User;
 import org.json.JSONObject;
 

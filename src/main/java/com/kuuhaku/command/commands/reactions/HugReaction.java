@@ -15,18 +15,18 @@
  *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.Reactions;
+package com.kuuhaku.command.commands.reactions;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
-public class BiteReaction extends Reaction {
+public class HugReaction extends Reaction {
 	private static boolean answer = false;
 
-	public BiteReaction(boolean isAnswer) {
-		super("morder", new String[]{"moider", "bite", "moide"}, "Morde alguém.");
+	public HugReaction(boolean isAnswer) {
+		super("abraçar", new String[]{"abracar", "hug", "vemca"}, "Abraça alguém.");
 		answer = isAnswer;
 	}
 
@@ -38,28 +38,27 @@ public class BiteReaction extends Reaction {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		if (message.getMentionedUsers().size() > 0) {
 			this.setReaction(new String[]{
-					"Snack!",
-					"~~moide!",
-					"Munch!"
+					"Awnn...ai qualquer um shippa!",
+					"Ai sim ein, vai pra cima garoto(a)!",
 			});
 
 			this.setSelfTarget(new String[]{
-					"Não, não, NÃO!",
-					"Complicado ein!",
-					"Não sou biscoito pra morder!"
+					"Ow ow ow, sem pegação!",
+					"Meu Nii-chan vai ficar bravo com isso!",
+					"Moshi moshi, FBI-sama?"
 			});
 
 			if (message.getMentionedUsers().get(0) == Main.getInfo().getAPI().getSelfUser()) {
-				Helper.sendReaction(getUrl("bite"), channel, author.getAsMention() + " tentou morder a " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget()[this.getSelfTargetLength()], false);
+				Helper.sendReaction(getUrl("hug"), channel, author.getAsMention() + " tentou abraçar a " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget()[this.getSelfTargetLength()], false);
 				return;
 			}
 
 			if (!isAnswer())
-				Helper.sendReaction(getUrl("bite"), channel, author.getAsMention() + " mordeu " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], true);
+				Helper.sendReaction(getUrl("hug"), channel, author.getAsMention() + " abraçou " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], true);
 			else
-                Helper.sendReaction(getUrl("bite"), channel, message.getMentionedUsers().get(1).getAsMention() + " devolveu a mordida de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], false);
+				Helper.sendReaction(getUrl("hug"), channel, message.getMentionedUsers().get(1).getAsMention() + " devolveu o abraço de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], false);
 		} else {
-			Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para morder!");
+			Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para abraçar!");
 		}
 	}
 }

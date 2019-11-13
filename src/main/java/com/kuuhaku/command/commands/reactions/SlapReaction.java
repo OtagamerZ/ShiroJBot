@@ -15,18 +15,18 @@
  *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.Reactions;
+package com.kuuhaku.command.commands.reactions;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
-public class HugReaction extends Reaction {
+public class SlapReaction extends Reaction {
 	private static boolean answer = false;
 
-	public HugReaction(boolean isAnswer) {
-		super("abraçar", new String[]{"abracar", "hug", "vemca"}, "Abraça alguém.");
+	public SlapReaction(boolean isAnswer) {
+		super("estapear", new String[]{"tapa", "slap", "baka"}, "Dá um tapa em alguém.");
 		answer = isAnswer;
 	}
 
@@ -38,27 +38,27 @@ public class HugReaction extends Reaction {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		if (message.getMentionedUsers().size() > 0) {
 			this.setReaction(new String[]{
-					"Awnn...ai qualquer um shippa!",
-					"Ai sim ein, vai pra cima garoto(a)!",
+					"Kono BAKA!",
+					"Eu faria o mesmo!",
+					"Bem que mereceu!"
 			});
 
 			this.setSelfTarget(new String[]{
-					"Ow ow ow, sem pegação!",
-					"Meu Nii-chan vai ficar bravo com isso!",
-					"Moshi moshi, FBI-sama?"
+					"Fui treinada por meu Nii-chan, POR MEU NII-CHAN!",
+					"Você não pode acertar quem você não vê!",
+					"O que você achou que ia acontecer?!"
 			});
 
 			if (message.getMentionedUsers().get(0) == Main.getInfo().getAPI().getSelfUser()) {
-				Helper.sendReaction(getUrl("hug"), channel, author.getAsMention() + " tentou abraçar a " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget()[this.getSelfTargetLength()], false);
+				Helper.sendReaction(getUrl("slap"), channel, author.getAsMention() + " errou o tapa na " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget()[this.getSelfTargetLength()], false);
 				return;
 			}
-
 			if (!isAnswer())
-				Helper.sendReaction(getUrl("hug"), channel, author.getAsMention() + " abraçou " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], true);
+				Helper.sendReaction(getUrl("slap"), channel, author.getAsMention() + " deu um tapa em " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], true);
 			else
-				Helper.sendReaction(getUrl("hug"), channel, message.getMentionedUsers().get(1).getAsMention() + " devolveu o abraço de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], false);
+				Helper.sendReaction(getUrl("slap"), channel, message.getMentionedUsers().get(1).getAsMention() + " devolveu o tapa de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], false);
 		} else {
-			Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para abraçar!");
+			Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para dar um tapa!");
 		}
 	}
 }

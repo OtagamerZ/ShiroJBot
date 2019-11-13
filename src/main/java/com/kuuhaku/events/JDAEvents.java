@@ -18,7 +18,7 @@
 package com.kuuhaku.events;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.command.commands.Reactions.*;
+import com.kuuhaku.command.commands.reactions.*;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;

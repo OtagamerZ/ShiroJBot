@@ -1,13 +1,18 @@
 package com.kuuhaku.controller;
 
 import com.kuuhaku.model.*;
+import com.kuuhaku.model.Member;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MySQL {
 
@@ -348,6 +353,59 @@ public class MySQL {
         em.getTransaction().commit();
 
         em.close();
+    }
+
+    public static void voteUser(Guild guild, User user, User target, boolean vote) {
+        EntityManager em = getEntityManager();
+
+        Votes v = new Votes();
+        v.addArgs(guild, user, target, vote);
+
+        em.getTransaction().begin();
+        em.merge(v);
+        em.getTransaction().commit();
+
+        em.close();
+
+        Member m = SQLite.getMemberById(user.getId() + guild.getId());
+        m.vote();
+
+        SQLite.saveMemberToDB(m);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void getVotes(Guild guild, TextChannel channel) {
+        EntityManager em = getEntityManager();
+
+        class result {
+            private String votedUserID;
+        	private String votedUser;
+        	private int score;
+		}
+
+        Query q = em.createQuery("SELECT votedUserID, votedUser, SUM(vote) AS votes FROM Votes v WHERE guildID = ?1 AND votes != 0 GROUP BY votedUserID", result.class);
+		q.setParameter(1, guild.getId());
+
+        List<result> votes = (List<result>) q.getResultList();
+        List<MessageEmbed> pages = new ArrayList<>();
+        EmbedBuilder eb = new EmbedBuilder();
+        List<MessageEmbed.Field> f = new ArrayList<>();
+
+		votes.forEach(v -> f.add(new MessageEmbed.Field(v.votedUser, "Pontuação: " + v.score, false)));
+
+		for (int i = 0; i < Math.ceil(f.size() / 10f); i++) {
+			eb.clear();
+			List<MessageEmbed.Field> subF = f.subList(-10 + (10 * (i + 1)), Math.min(10 * (i + 1), f.size()));
+			subF.forEach(eb::addField);
+
+			eb.setTitle("Pontuação de usuários deste servidor");
+			eb.setColor(Helper.getRandomColor());
+			eb.setFooter("Página " + (i + 1) + ". Mostrando " + (-10 + 10 * (i + 1)) + " - " + (Math.min(10 * (i + 1), f.size())) + " usuários.", null);
+
+			pages.add(eb.build());
+		}
+
+		channel.sendMessage(pages.get(0)).queue(s -> Helper.paginate(s, pages));
     }
 
     /*public static void saveCampaigns() throws IOException {
