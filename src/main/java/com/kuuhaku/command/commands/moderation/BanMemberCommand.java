@@ -37,6 +37,8 @@ public class BanMemberCommand extends Command {
 		} else if (message.getMentionedUsers().size() > 1) {
 			channel.sendMessage(":x: | Você mencionou membros demais.").queue();
 			return;
+		} else if (!member.hasPermission(Permission.BAN_MEMBERS)) {
+			channel.sendMessage(":x: | Seu cargo não possui permissão de banir membros.").queue();
 		}
 
 		try {
