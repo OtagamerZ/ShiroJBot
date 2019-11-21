@@ -38,7 +38,7 @@ public class KickMemberCommand extends Command {
             channel.sendMessage(":x: | Você mencionou membros demais.").queue();
             return;
         } else if (!member.hasPermission(Permission.KICK_MEMBERS)) {
-			channel.sendMessage(":x: | Você não possui a permissão de expulsar membros.").queue();
+			channel.sendMessage(":x: | Você não possui permissão para expulsar membros.").queue();
 		}
 
         try {
