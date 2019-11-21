@@ -81,7 +81,7 @@ abstract class Reaction extends Command {
     }
 
 	int getSelfTargetLength() {
-        return selfTarget.length;
+        return Helper.rng(selfTarget.length);
     }
 
     void setSelfTarget(String[] selfTarget) {
