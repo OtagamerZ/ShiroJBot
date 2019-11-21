@@ -363,8 +363,8 @@ public class Helper {
 		EnumSet guildPerms = c.getGuild().getSelfMember().getPermissions();
 		String jibrilPerms = "";
 
-		if (MySQL.getTagById(c.getGuild().getOwnerId()).isPartner()) {
-			EnumSet JchannelPerms = Objects.requireNonNull(c.getGuild().getMember(Main.getJibril().getSelfUser())).getPermissions(c);
+		if (MySQL.getTagById(c.getGuild().getOwnerId()).isPartner() && c.getGuild().getMembers().contains(Main.getJibril().getSelfUser())) {
+			EnumSet JchannelPermsObjects.requireNonNull(c.getGuild().getMember(Main.getJibril().getSelfUser())).getPermissions(c);
 			EnumSet JguildPerms = Objects.requireNonNull(c.getGuild().getMember(Main.getJibril().getSelfUser())).getPermissions();
 			jibrilPerms = "\n\n\n__**Permissões necessárias para uso completo da Jibril**__\n\n" +
 					((JchannelPerms.contains(Permission.MANAGE_WEBHOOKS) || JguildPerms.contains(Permission.MANAGE_WEBHOOKS)) ? ":white_check_mark: -> " : ":x: -> ") + "Gerenciar webhooks\n" +
