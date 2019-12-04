@@ -3,6 +3,7 @@ package com.kuuhaku.model;
 import com.kuuhaku.utils.Helper;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
@@ -10,6 +11,7 @@ import java.time.ZoneId;
 @Entity
 public class Log {
 	@Id
+	@GeneratedValue
 	private int id;
 	private String user;
 	private String guild;
