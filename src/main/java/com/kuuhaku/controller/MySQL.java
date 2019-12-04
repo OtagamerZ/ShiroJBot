@@ -426,7 +426,6 @@ public class MySQL {
 
 		channel.sendMessage(pages.get(0)).queue(s -> Helper.paginate(s, pages));
     }
-
     /*public static void saveCampaigns() throws IOException {
         EntityManager em = getEntityManager();
         ObjectOutputStream oos = new ObjectOutputStream();
@@ -434,4 +433,13 @@ public class MySQL {
 
 
     }*/
+    public static void saveLog(Log log) {
+        EntityManager em = getEntityManager();
+
+        em.getTransaction().begin();
+        em.merge(log);
+        em.getTransaction().commit();
+
+        em.close();
+    }
 }
