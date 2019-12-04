@@ -50,13 +50,13 @@ public class SlapReaction extends Reaction {
 			});
 
 			if (message.getMentionedUsers().get(0) == Main.getInfo().getAPI().getSelfUser()) {
-				Helper.sendReaction(getUrl("slap"), channel, author.getAsMention() + " errou o tapa na " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget()[this.getSelfTargetLength()], false);
+				Helper.sendReaction(getUrl("slap", (TextChannel) channel), channel, author.getAsMention() + " errou o tapa na " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget()[this.getSelfTargetLength()], false);
 				return;
 			}
 			if (!isAnswer())
-				Helper.sendReaction(getUrl("slap"), channel, author.getAsMention() + " deu um tapa em " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], true);
+				Helper.sendReaction(getUrl("slap", (TextChannel) channel), channel, author.getAsMention() + " deu um tapa em " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], true);
 			else
-				Helper.sendReaction(getUrl("slap"), channel, message.getMentionedUsers().get(1).getAsMention() + " devolveu o tapa de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], false);
+				Helper.sendReaction(getUrl("slap", (TextChannel) channel), channel, message.getMentionedUsers().get(1).getAsMention() + " devolveu o tapa de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], false);
 		} else {
 			Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para dar um tapa!");
 		}
