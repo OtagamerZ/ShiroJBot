@@ -34,6 +34,6 @@ public class NopeReaction extends Reaction {
 				"Ha ah, errou!"
 		});
 
-		Helper.sendReaction(getUrl("nope"), channel, author.getAsMention() + " esquivou! - " + this.getReaction()[this.getReactionLength()], false);
+		Helper.sendReaction(getUrl("nope", (TextChannel) channel), channel, author.getAsMention() + " esquivou! - " + this.getReaction()[this.getReactionLength()], false);
 	}
 }

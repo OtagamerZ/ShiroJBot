@@ -50,14 +50,14 @@ public class StareReaction extends Reaction {
 			});
 
 			if (message.getMentionedUsers().get(0) == Main.getInfo().getAPI().getSelfUser()) {
-				Helper.sendReaction(getUrl("stare"), channel, author.getAsMention() + " está encarando a " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget()[this.getSelfTargetLength()], false);
+				Helper.sendReaction(getUrl("stare", (TextChannel) channel), channel, author.getAsMention() + " está encarando a " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget()[this.getSelfTargetLength()], false);
 				return;
 			}
 
 			if (!isAnswer())
-				Helper.sendReaction(getUrl("stare"), channel, author.getAsMention() + " encarou " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], true);
+				Helper.sendReaction(getUrl("stare", (TextChannel) channel), channel, author.getAsMention() + " encarou " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], true);
 			else
-				Helper.sendReaction(getUrl("stare"), channel, message.getMentionedUsers().get(1).getAsMention() + " também está encarando " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], false);
+				Helper.sendReaction(getUrl("stare", (TextChannel) channel), channel, message.getMentionedUsers().get(1).getAsMention() + " também está encarando " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], false);
 		} else {
 			Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para encarar!");
 		}

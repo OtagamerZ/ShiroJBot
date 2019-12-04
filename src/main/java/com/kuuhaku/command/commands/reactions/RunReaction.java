@@ -34,6 +34,6 @@ public class RunReaction extends Reaction {
 				"Foge geral!"
 		});
 
-		Helper.sendReaction(getUrl("run"), channel, author.getAsMention() + " ta fugindo! - " + this.getReaction()[this.getReactionLength()], false);
+		Helper.sendReaction(getUrl("run", (TextChannel) channel), channel, author.getAsMention() + " ta fugindo! - " + this.getReaction()[this.getReactionLength()], false);
 	}
 }
