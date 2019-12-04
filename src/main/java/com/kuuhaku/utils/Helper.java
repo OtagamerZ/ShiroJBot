@@ -64,6 +64,7 @@ public class Helper {
 	private static final String NEXT = "\u25B6";
 	public static final String ACCEPT = "\u2705";
 	public static final int CANVAS_SIZE = 1024;
+	public static final DateTimeFormatter dateformat = DateTimeFormatter.ofPattern("dd/MMM/yyyy | HH:mm:ss");
 
 
 	private static PrivilegeLevel getPrivilegeLevel(Member member) {

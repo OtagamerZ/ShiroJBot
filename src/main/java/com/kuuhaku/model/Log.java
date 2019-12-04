@@ -1,5 +1,7 @@
 package com.kuuhaku.model;
 
+import com.kuuhaku.utils.Helper;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.time.OffsetDateTime;
@@ -10,7 +12,7 @@ public class Log {
 	private int id;
 	private String user;
 	private String guild;
-	private final OffsetDateTime timestamp = OffsetDateTime.now().minusHours(3);
+	private final String timestamp = OffsetDateTime.now().format(Helper.dateformat);
 
 	public int getId() {
 		return id;
@@ -38,7 +40,7 @@ public class Log {
 		return this;
 	}
 
-	public OffsetDateTime getTimestamp() {
+	public String getTimestamp() {
 		return timestamp;
 	}
 }
