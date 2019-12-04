@@ -22,7 +22,6 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.rpg.NewCampaignCommand;
 import com.kuuhaku.command.commands.rpg.NewPlayerCommand;
 import com.kuuhaku.controller.SQLite;
-import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -63,9 +62,6 @@ public class TetEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildLeave(GuildLeaveEvent event) {
-		guildConfig gc = new guildConfig();
-		gc.setGuildId(event.getGuild().getId());
-		SQLite.removeGuildFromDB(gc);
 		Main.getInfo().getDevelopers().forEach(d -> Objects.requireNonNull(Main.getTet().getUserById(d)).openPrivateChannel().queue(c -> {
 			String msg = "Acabei de sair do servidor \"" + event.getGuild().getName() + "\".";
 			c.sendMessage(msg).queue();
