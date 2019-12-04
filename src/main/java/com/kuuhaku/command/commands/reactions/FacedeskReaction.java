@@ -34,6 +34,6 @@ public class FacedeskReaction extends Reaction {
                     "Meeeeee."
             });
 
-            Helper.sendReaction(getUrl("facedesk"), channel, author.getAsMention() + " não ta acreditando nisso! - " + this.getReaction()[this.getReactionLength()], false);
+            Helper.sendReaction(getUrl("facedesk", (TextChannel) channel), channel, author.getAsMention() + " não ta acreditando nisso! - " + this.getReaction()[this.getReactionLength()], false);
     }
 }
