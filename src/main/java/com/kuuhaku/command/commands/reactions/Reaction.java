@@ -20,15 +20,20 @@ package com.kuuhaku.command.commands.reactions;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 abstract class Reaction extends Command {
     private User user;
@@ -71,7 +76,9 @@ abstract class Reaction extends Command {
         this.selfTarget = selfTarget;
     }
 
-    String getUrl(String type) {
+    String getUrl(String type, TextChannel chn) {
+        AtomicReference<Message> msg = null;
+        chn.sendMessage("Conectando à API...").addFile(new File(Objects.requireNonNull(Helper.class.getClassLoader().getResource("loading.gif")).getPath())).queue(msg::set);
 	    try {
             HttpURLConnection con = (HttpURLConnection) new URL("https://shiro-api.herokuapp.com/reaction?type=" + type).openConnection();
             con.setRequestProperty("User-Agent", "Mozilla/5.0");
@@ -94,6 +101,8 @@ abstract class Reaction extends Command {
         } catch (IOException e) {
 	        Helper.logger(this.getClass()).error("Erro ao recuperar API: " + e.getStackTrace()[0]);
 	        return null;
+        } finally {
+            msg.get().delete().queue();
         }
     }
 }
