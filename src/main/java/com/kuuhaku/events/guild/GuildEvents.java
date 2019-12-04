@@ -27,7 +27,6 @@ import com.kuuhaku.model.Log;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
@@ -47,26 +46,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class GuildEvents extends ListenerAdapter {
-
-	@Override//removeGuildFromDB
-	public void onGuildJoin(GuildJoinEvent event) {
-		SQLite.addGuildToDB(event.getGuild());
-		Main.getInfo().getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
-			String msg = "Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".";
-			c.sendMessage(msg).queue();
-		}));
-		Helper.logger(this.getClass()).info("Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".");
-	}
-
-	@Override
-	public void onGuildLeave(GuildLeaveEvent event) {
-		Main.getInfo().getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
-			String msg = "Acabei de sair do servidor \"" + event.getGuild().getName() + "\".";
-			c.sendMessage(msg).queue();
-		}));
-		Helper.logger(this.getClass()).info("Acabei de sair do servidor \"" + event.getGuild().getName() + "\".");
-	}
-
 	@Override
 	public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
 		try {
