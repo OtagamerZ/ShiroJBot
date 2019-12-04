@@ -40,6 +40,7 @@ import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -136,26 +137,30 @@ public class Helper {
 	}
 
 	public static void sendReaction(String imageURL, MessageChannel channel, String message, boolean reacted) {
-		try {
-			if (ImageIO.read(getImage(imageURL)).getWidth() >= 400) {
-				EmbedBuilder eb = new EmbedBuilder();
-				eb.setImage(imageURL);
-				if (reacted)
-					channel.sendMessage(message).embed(eb.build()).queue(m -> m.addReaction("\u21aa").queue());
-				else channel.sendMessage(message).embed(eb.build()).queue();
-			} else {
-				EmbedBuilder eb = new EmbedBuilder();
-				eb.setImage(imageURL);
-				if (reacted)
-					channel.sendMessage(message + "\n:warning: | GIF com proporções irregulares, os desenvolvedores já foram informados.").embed(eb.build()).queue(m -> m.addReaction("\u21aa").queue());
-				else
-					channel.sendMessage(message + "\n:warning: | GIF com proporções irregulares, os desenvolvedores já foram informados.").embed(eb.build()).queue();
-				logger(Helper.class).warn("GIF irregular: " + imageURL);
-				Main.getInfo().getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> c.sendMessage("GIF irregular: " + imageURL).queue()));
+		channel.sendMessage("Conectando à API...").addFile(new File(Objects.requireNonNull(Helper.class.getClassLoader().getResource("loading.gif")).getPath())).queue(msg -> {
+			try {
+				if (ImageIO.read(getImage(imageURL)).getWidth() >= 400) {
+					EmbedBuilder eb = new EmbedBuilder();
+					eb.setImage(imageURL);
+					if (reacted)
+						channel.sendMessage(message).embed(eb.build()).queue(m -> m.addReaction("\u21aa").queue());
+					else channel.sendMessage(message).embed(eb.build()).queue();
+				} else {
+					EmbedBuilder eb = new EmbedBuilder();
+					eb.setImage(imageURL);
+					if (reacted)
+						channel.sendMessage(message + "\n:warning: | GIF com proporções irregulares, os desenvolvedores já foram informados.").embed(eb.build()).queue(m -> m.addReaction("\u21aa").queue());
+					else
+						channel.sendMessage(message + "\n:warning: | GIF com proporções irregulares, os desenvolvedores já foram informados.").embed(eb.build()).queue();
+					logger(Helper.class).warn("GIF irregular: " + imageURL);
+					Main.getInfo().getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> c.sendMessage("GIF irregular: " + imageURL).queue()));
+				}
+			} catch (Exception e) {
+				logger(Helper.class).error("Erro ao carregar a imagem: " + e.getStackTrace()[0]);
+			} finally {
+				msg.delete().queue();
 			}
-		} catch (Exception e) {
-			logger(Helper.class).error("Erro ao carregar a imagem: " + e.getStackTrace()[0]);
-		}
+		});
 	}
 
 	public static int rng(int maxValue) {
