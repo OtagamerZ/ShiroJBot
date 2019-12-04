@@ -42,8 +42,18 @@ import java.util.Objects;
 public class TetEvents extends ListenerAdapter {
 
 	@Override//removeGuildFromDB
-	public void onGuildJoin(GuildJoinEvent event) {
-		SQLite.addGuildToDB(event.getGuild());
+	public void onGuildJoin(@NotNull GuildJoinEvent event) {
+		try {
+			Helper.sendPM(Objects.requireNonNull(event.getGuild().getOwner()).getUser(), "Obrigado por me adicionar ao seu servidor, utilize `s!help` e selecione a categoria `RPG` para ver meus comandos!\n\nDúvidas? Pergunte-me diretamente e um de meus desenvolvedores responderá assim que possível!");
+		} catch (Exception err) {
+			TextChannel dch = event.getGuild().getDefaultChannel();
+			if (dch != null) {
+				if (dch.canTalk()) {
+					dch.sendMessage("Obrigado por me adicionar ao seu servidor, utilize `s!help` e selecione a categoria `RPG` para ver meus comandos!\n\nDúvidas? Pergunte-me diretamente e um de meus desenvolvedores responderá assim que possível!").queue();
+				}
+			}
+		}
+
 		Main.getInfo().getDevelopers().forEach(d -> Objects.requireNonNull(Main.getTet().getUserById(d)).openPrivateChannel().queue(c -> {
 			String msg = "Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".";
 			c.sendMessage(msg).queue();
