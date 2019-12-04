@@ -12,6 +12,7 @@ public class Log {
 	private int id;
 	private String user;
 	private String guild;
+	private String command;
 	private final String timestamp = OffsetDateTime.now().format(Helper.dateformat);
 
 	public int getId() {
@@ -37,6 +38,15 @@ public class Log {
 
 	public Log setGuild(String guild) {
 		this.guild = guild;
+		return this;
+	}
+
+	public String getCommand() {
+		return command;
+	}
+
+	public Log setCommand(String command) {
+		this.command = command;
 		return this;
 	}
 
