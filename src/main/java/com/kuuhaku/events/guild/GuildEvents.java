@@ -184,7 +184,7 @@ public class GuildEvents extends ListenerAdapter {
 				found = JDAEvents.isFound(commandName, found, command);
 
 				if (found) {
-					MySQL.saveLog(new Log().setGuild(guild.getName()).setUser(author.getAsTag()));
+					MySQL.saveLog(new Log().setGuild(guild.getName()).setUser(author.getAsTag()).setCommand(commandName));
 					Helper.logToChannel(author, true, command, "Um comando foi usado no canal " + ((TextChannel) channel).getAsMention(), guild);
 					if (JDAEvents.checkPermissions(event, author, member, message, channel, guild, prefix, rawMsgNoPrefix, args, command))
 						break;
