@@ -34,6 +34,6 @@ public class BlushReaction extends Reaction {
 				"N-N-Nani?!"
 		});
 
-		Helper.sendReaction(getUrl("blush"), channel, author.getAsMention() + " está envergonhado(a)! - " + this.getReaction()[this.getReactionLength()], false);
+		Helper.sendReaction(getUrl("blush", (TextChannel) channel), channel, author.getAsMention() + " está envergonhado(a)! - " + this.getReaction()[this.getReactionLength()], false);
 	}
 }

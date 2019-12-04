@@ -34,6 +34,6 @@ public class LaughReaction extends Reaction {
 				"Asdjasdnlad."
 		});
 
-		Helper.sendReaction(getUrl("laugh"), channel, author.getAsMention() + " está rindo! - " + this.getReaction()[this.getReactionLength()], false);
+		Helper.sendReaction(getUrl("laugh", (TextChannel) channel), channel, author.getAsMention() + " está rindo! - " + this.getReaction()[this.getReactionLength()], false);
 	}
 }

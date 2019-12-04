@@ -34,6 +34,6 @@ public class CryReaction extends Reaction {
                     "Me deixa sozinho(a)."
             });
 
-            Helper.sendReaction(getUrl("sad"), channel, author.getAsMention() + " está chorando! - " + this.getReaction()[this.getReactionLength()], false);
+            Helper.sendReaction(getUrl("sad", (TextChannel) channel), channel, author.getAsMention() + " está chorando! - " + this.getReaction()[this.getReactionLength()], false);
     }
 }
