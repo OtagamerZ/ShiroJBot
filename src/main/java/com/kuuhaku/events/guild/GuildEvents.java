@@ -23,6 +23,7 @@ import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.controller.SQLite;
 import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.model.CustomAnswers;
+import com.kuuhaku.model.Log;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -183,6 +184,7 @@ public class GuildEvents extends ListenerAdapter {
 				found = JDAEvents.isFound(commandName, found, command);
 
 				if (found) {
+					MySQL.saveLog(new Log().setGuild(guild.getName()).setUser(author.getAsTag()));
 					Helper.logToChannel(author, true, command, "Um comando foi usado no canal " + ((TextChannel) channel).getAsMention(), guild);
 					if (JDAEvents.checkPermissions(event, author, member, message, channel, guild, prefix, rawMsgNoPrefix, args, command))
 						break;

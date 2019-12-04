@@ -36,6 +36,7 @@
         <class>com.kuuhaku.model.MonthWinner</class>
         <class>com.kuuhaku.model.PixelCanvas</class>
         <class>com.kuuhaku.model.Votes</class>
+        <class>com.kuuhaku.model.Log</class>
         <class>java.lang.String</class>
 
         <properties>
