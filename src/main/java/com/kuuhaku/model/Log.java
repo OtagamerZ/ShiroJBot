@@ -5,6 +5,7 @@ import com.kuuhaku.utils.Helper;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 
 @Entity
 public class Log {
@@ -13,7 +14,7 @@ public class Log {
 	private String user;
 	private String guild;
 	private String command;
-	private final String timestamp = OffsetDateTime.now().format(Helper.dateformat);
+	private final String timestamp = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.dateformat);
 
 	public int getId() {
 		return id;
