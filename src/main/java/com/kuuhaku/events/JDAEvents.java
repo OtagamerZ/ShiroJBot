@@ -20,7 +20,7 @@ package com.kuuhaku.events;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.reactions.*;
-import com.kuuhaku.controller.SQLite;
+import com.kuuhaku.controller.SQLiteOld;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.Music;
@@ -148,7 +148,7 @@ public class JDAEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildJoin(GuildJoinEvent event) {
-		SQLite.addGuildToDB(event.getGuild());
+		SQLiteOld.addGuildToDB(event.getGuild());
 		try {
 			Helper.sendPM(Objects.requireNonNull(event.getGuild().getOwner()).getUser(), "Obrigada por me adicionar ao seu servidor, utilize `s!ajuda` para ver meus comandos!\n\nDúvidas? Pergunte-me diretamente e um de meus desenvolvedores responderá assim que possível!");
 		} catch (Exception err) {
@@ -189,7 +189,7 @@ public class JDAEvents extends ListenerAdapter {
 	@Override
 	public void onGuildMemberJoin(@NotNull GuildMemberJoinEvent event) {
 		try {
-			guildConfig gc = SQLite.getGuildById(event.getGuild().getId());
+			guildConfig gc = SQLiteOld.getGuildById(event.getGuild().getId());
 
 			if (!gc.getMsgBoasVindas().equals("")) {
 				if (gc.isAntiRaid() && ((ChronoUnit.MILLIS.between(event.getUser().getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) / 1000) / 60) < 10) {
@@ -240,7 +240,7 @@ public class JDAEvents extends ListenerAdapter {
 	@Override
 	public void onGuildMemberLeave(@NotNull GuildMemberLeaveEvent event) {
 		try {
-			guildConfig gc = SQLite.getGuildById(event.getGuild().getId());
+			guildConfig gc = SQLiteOld.getGuildById(event.getGuild().getId());
 
 			if (!gc.getMsgAdeus().equals("")) {
 				URL url = new URL(Objects.requireNonNull(event.getUser().getAvatarUrl()));

@@ -19,7 +19,7 @@ package com.kuuhaku.command.commands.moderation;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.SQLite;
+import com.kuuhaku.controller.SQLiteOld;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
@@ -31,8 +31,8 @@ public class AllowCommunityCommand extends Command {
 
     @Override
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-        SQLite.switchGuildAnyTell(guild.getId());
-        if (SQLite.getGuildById(guild.getId()).isAnyTell()) {
+        SQLiteOld.switchGuildAnyTell(guild.getId());
+        if (SQLiteOld.getGuildById(guild.getId()).isAnyTell()) {
             channel.sendMessage(":loud_sound: | Agora irei ouvir as respostas da comunidade!").queue();
         } else {
             channel.sendMessage(":mute: | Não irei mais ouvir as respostas da comunidade!").queue();

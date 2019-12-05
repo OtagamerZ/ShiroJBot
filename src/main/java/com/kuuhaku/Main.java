@@ -15,10 +15,10 @@ package com.kuuhaku;/*
  *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import com.kuuhaku.controller.MySQL;
+import com.kuuhaku.controller.MySQL.Backup;
+import com.kuuhaku.controller.MySQL.Exceed;
 import com.kuuhaku.controller.Relay;
-import com.kuuhaku.controller.SQLite;
-import com.kuuhaku.events.JDAEvents;
+import com.kuuhaku.controller.SQLiteOld;
 import com.kuuhaku.events.JibrilEvents;
 import com.kuuhaku.events.ScheduledEvents;
 import com.kuuhaku.events.TetEvents;
@@ -79,8 +79,8 @@ public class Main {
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		ge.registerFont(Profile.FONT);
 
-		SQLite.connect();
-		if (SQLite.restoreData(MySQL.getData()))
+		SQLiteOld.connect();
+		if (SQLiteOld.restoreData(Backup.getData()))
 			Helper.logger(Main.class).info("Dados recuperados com sucesso!");
 		else Helper.logger(Main.class).error("Erro ao recuperar dados.");
 
@@ -97,12 +97,12 @@ public class Main {
 		api.getPresence().setActivity(getRandomActivity());
 		jbr.getPresence().setActivity(Activity.listening("as mensagens de " + relay.getRelayMap().size() + " servidores!"));
 		tet.getPresence().setActivity(Activity.playing(" em diversos mundos espalhados em " + tet.getGuilds().size() + " servidores!"));
-		getInfo().setWinner(MySQL.getWinner());
+		getInfo().setWinner(Exceed.getWinner());
 		Main.getInfo().getAPI().getGuilds().forEach(g -> {
 			try {
-				SQLite.getGuildById(g.getId());
+				SQLiteOld.getGuildById(g.getId());
 			} catch (NoResultException e) {
-				SQLite.addGuildToDB(g);
+				SQLiteOld.addGuildToDB(g);
 				Helper.logger(Main.class).info("Guild adicionada ao banco: " + g.getName());
 			}
 		});
@@ -144,11 +144,11 @@ public class Main {
 	}
 
 	public static void shutdown() {
-		MySQL.dumpData(new DataDump(SQLite.getCADump(), SQLite.getGuildDump()));
+		Backup.dumpData(new DataDump(SQLiteOld.getCADump(), SQLiteOld.getGuildDump()));
 		Helper.logger(Main.class).info("Respostas/Guilds salvos com sucesso!");
-		MySQL.dumpData(new DataDump(SQLite.getMemberDump()));
+		Backup.dumpData(new DataDump(SQLiteOld.getMemberDump()));
 		Helper.logger(Main.class).info("Membros salvos com sucesso!");
-		SQLite.disconnect();
+		SQLiteOld.disconnect();
 		tet.shutdown();
 		jbr.shutdown();
 		api.shutdown();

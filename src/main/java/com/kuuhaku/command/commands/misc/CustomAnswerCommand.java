@@ -2,7 +2,7 @@ package com.kuuhaku.command.commands.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.SQLite;
+import com.kuuhaku.controller.SQLiteOld;
 import com.kuuhaku.model.CustomAnswers;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.PrivilegeLevel;
@@ -11,7 +11,6 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 import org.apache.commons.lang3.StringUtils;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +22,7 @@ public class CustomAnswerCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-		if (!Helper.hasPermission(member, PrivilegeLevel.MOD) && !SQLite.getGuildById(guild.getId()).isAnyTell()) {
+		if (!Helper.hasPermission(member, PrivilegeLevel.MOD) && !SQLiteOld.getGuildById(guild.getId()).isAnyTell()) {
 			channel.sendMessage(":x: | Este servidor não está configurado para permitir respostas customizadas da comunidade.").queue();
 			return;
 		} else if (args.length == 0) {
@@ -32,7 +31,7 @@ public class CustomAnswerCommand extends Command {
 		} else if (args[0].equals("lista")) {
 			List<MessageEmbed> pages = new ArrayList<>();
 
-			List<CustomAnswers> ca = SQLite.getCADump();
+			List<CustomAnswers> ca = SQLiteOld.getCADump();
 			EmbedBuilder eb = new EmbedBuilder();
 			ca.removeIf(a -> !a.getGuildID().equals(guild.getId()));
 
@@ -49,7 +48,7 @@ public class CustomAnswerCommand extends Command {
 			channel.sendMessage(pages.get(0)).queue(s -> Helper.paginate(s, pages));
 			return;
 		} else if (StringUtils.isNumeric(args[0]) && !args[0].contains(";")) {
-			List<CustomAnswers> ca = SQLite.getCADump();
+			List<CustomAnswers> ca = SQLiteOld.getCADump();
 			ca.removeIf(a -> !String.valueOf(a.getId()).equals(args[0]) || !a.getGuildID().equals(guild.getId()));
 			if (ca.size() == 0) {
 				channel.sendMessage(":x: | Esta resposta não existe!").queue();
@@ -72,7 +71,7 @@ public class CustomAnswerCommand extends Command {
 		if (txt.contains(";")) {
 			if (txt.split(";")[0].length() <= 200) {
 				if (txt.split(";")[1].length() <= 200) {
-					SQLite.addCAtoDB(guild, txt.split(";")[0], txt.split(";")[1]);
+					SQLiteOld.addCAtoDB(guild, txt.split(";")[0], txt.split(";")[1]);
 					channel.sendMessage("Agora quando alguém disser `" + txt.split(";")[0] + "` irei responder `" + txt.split(";")[1] + "`.").queue();
 				} else {
 					channel.sendMessage(":x: | Woah, essa resposta é muito longa, não consigo decorar isso tudo!").queue();

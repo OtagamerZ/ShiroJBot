@@ -21,7 +21,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.rpg.NewCampaignCommand;
 import com.kuuhaku.command.commands.rpg.NewPlayerCommand;
-import com.kuuhaku.controller.SQLite;
+import com.kuuhaku.controller.SQLiteOld;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -70,7 +70,7 @@ public class TetEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onPrivateMessageReceived(PrivateMessageReceivedEvent event) {
+	public void onPrivateMessageReceived(@NotNull PrivateMessageReceivedEvent event) {
 		Main.getInfo().getShiroEvents().onPrivateMessageReceived(event);
 	}
 
@@ -90,7 +90,7 @@ public class TetEvents extends ListenerAdapter {
 			String prefix = "";
 			if (!Main.getInfo().isDev()) {
 				try {
-					prefix = SQLite.getGuildPrefix(guild.getId());
+					prefix = SQLiteOld.getGuildPrefix(guild.getId());
 				} catch (NoResultException | NullPointerException ignore) {
 				}
 			} else prefix = Main.getInfo().getDefaultPrefix();
@@ -100,6 +100,11 @@ public class TetEvents extends ListenerAdapter {
 			if (rawMessage.toLowerCase().startsWith(prefix)) {
 				rawMsgNoPrefix = rawMessage.substring(prefix.length()).trim();
 				commandName = rawMsgNoPrefix.split(" ")[0].trim();
+			}
+
+			if (message.getContentRaw().trim().equals("<@" + Main.getTet().getSelfUser().getId() + ">")) {
+				channel.sendMessage("Opa, eae jogador! Meus comandos são listados pela Shiro, digite `" + prefix + "help` e clique na categoria `RPG` para vê-los!").queue();
+				return;
 			}
 
 			boolean hasArgs = (rawMsgNoPrefix.split(" ").length > 1);

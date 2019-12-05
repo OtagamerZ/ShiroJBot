@@ -19,7 +19,7 @@ package com.kuuhaku.command.commands.moderation;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.SQLite;
+import com.kuuhaku.controller.SQLiteOld;
 import com.kuuhaku.model.guildConfig;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
@@ -32,7 +32,7 @@ public class AntiraidCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-		guildConfig gc = SQLite.getGuildById(guild.getId());
+		guildConfig gc = SQLiteOld.getGuildById(guild.getId());
 
 		if (gc.isAntiRaid()) {
 			gc.setAntiRaid(false);
@@ -42,6 +42,6 @@ public class AntiraidCommand extends Command {
 			channel.sendMessage("Modo anti-raid está ligado, expulsarei novos membros que tiverem uma conta com tempo menor que 10 minutos.").queue();
 		}
 
-		SQLite.updateGuildSettings(gc);
+		SQLiteOld.updateGuildSettings(gc);
 	}
 }
