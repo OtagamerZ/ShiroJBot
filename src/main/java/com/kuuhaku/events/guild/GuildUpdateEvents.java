@@ -17,14 +17,37 @@
 
 package com.kuuhaku.events.guild;
 
-import com.kuuhaku.controller.SQLite;
+import com.kuuhaku.controller.MySQL.Tag;
+import com.kuuhaku.controller.SQLiteOld;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateNameEvent;
+import net.dv8tion.jda.api.events.guild.update.GuildUpdateOwnerEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+
+import javax.annotation.Nonnull;
+import javax.persistence.NoResultException;
 
 public class GuildUpdateEvents extends ListenerAdapter {
 
     @Override
     public void onGuildUpdateName(GuildUpdateNameEvent event) {
-        SQLite.updateGuildName(event.getNewName(), SQLite.getGuildById(event.getGuild().getId()));
+        SQLiteOld.updateGuildName(event.getNewName(), SQLiteOld.getGuildById(event.getGuild().getId()));
+    }
+
+    @Override
+    public void onGuildUpdateOwner(@Nonnull GuildUpdateOwnerEvent event) {
+        assert event.getOldOwner() != null;
+        assert event.getNewOwner() != null;
+
+        if (Tag.getTagById(event.getOldOwner().getId()).isPartner()) {
+            Tag.removeTagPartner(event.getOldOwner().getId());
+
+            try {
+                Tag.getTagById(event.getNewOwner().getId());
+            } catch (NoResultException e) {
+                Tag.addUserTagsToDB(event.getNewOwner().getId());
+            } finally {
+                Tag.giveTagPartner(event.getNewOwner().getId());
+            }
+        }
     }
 }

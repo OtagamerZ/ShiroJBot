@@ -3,14 +3,12 @@ package com.kuuhaku.command.commands.fun;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.MySQL;
 import com.kuuhaku.model.PixelCanvas;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
-import java.util.Arrays;
 
 import static com.kuuhaku.utils.Helper.CANVAS_SIZE;
 
@@ -88,7 +86,7 @@ public class PixelChunkCommand extends Command {
 			PixelCanvas canvas = Main.getInfo().getCanvas();
 			canvas.addPixel(message.getTextChannel(), coords, color).queue();
 
-			MySQL.saveCanvas(canvas);
+			com.kuuhaku.controller.MySQL.Canvas.saveCanvas(canvas);
 		} catch (NumberFormatException e) {
 			channel.sendMessage(":x: | Cor no formato incorreto, ela deve seguir o padrão hexadecimal (#RRGGBB).").queue();
 		}

@@ -18,6 +18,8 @@
 package com.kuuhaku.model;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.utils.Helper;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 
 import javax.persistence.Column;
@@ -26,6 +28,7 @@ import javax.persistence.Id;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 public class Member {
@@ -33,6 +36,8 @@ public class Member {
 	private String id;
 	private String mid;
 	private int level = 1, xp = 0;
+	@Column(columnDefinition = "float default 1")
+	private float waifuMult = 1.25f;
 	private String warns = "";
 	private String bg = "https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg";
 	private String bio = "";
@@ -49,8 +54,11 @@ public class Member {
 
 	}
 
-	public boolean addXp() {
-		xp += Main.getInfo().getWinner().equals(this.exceed) ? 30 : 15;
+	public boolean addXp(Guild g) {
+		if (g.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).collect(Collectors.toList()).contains(waifu)) {
+			xp += (Main.getInfo().getWinner().equals(this.exceed) ? 30 : 15) * waifuMult;
+		} else xp += (Main.getInfo().getWinner().equals(this.exceed) ? 30 : 15);
+
 		if (xp >= (int) Math.pow(level, 2) * 100) {
 			level++;
 			return true;
@@ -132,8 +140,14 @@ public class Member {
 		return waifu;
 	}
 
-	public void setWaifu(User waifu) {
+	public void marry(User waifu) {
 		this.waifu = waifu.getId();
+	}
+
+	public void divorce() {
+		this.waifu = "";
+		this.waifuMult *= 0.99f;
+		Helper.clamp(this.waifuMult, 1.05f, 1.25f);
 	}
 
 	public String getExceed() {

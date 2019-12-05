@@ -1,8 +1,8 @@
 package com.kuuhaku.utils;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.MySQL;
-import com.kuuhaku.controller.SQLite;
+import com.kuuhaku.controller.MySQL.Tag;
+import com.kuuhaku.controller.SQLiteOld;
 import com.kuuhaku.model.guildConfig;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
@@ -20,7 +20,7 @@ public class Settings {
 
 	public static void embedConfig(Message message) {
 		try {
-			guildConfig gc = SQLite.getGuildById(message.getGuild().getId());
+			guildConfig gc = SQLiteOld.getGuildById(message.getGuild().getId());
 			String prefix = Helper.getOr(gc.getPrefix(), "s!");
 
 			String canalBV = Helper.getOr(gc.getCanalBV(), "Não definido.");
@@ -50,7 +50,7 @@ public class Settings {
 						Role role = message.getGuild().getRoleById((String) cargos.get(String.valueOf(i)));
 						cargosLvl.append(i).append(" - ").append(Objects.requireNonNull(role).getAsMention()).append("\n");
 					} catch (NullPointerException e) {
-						SQLite.updateGuildCargosLvl(String.valueOf(i), null, gc);
+						SQLiteOld.updateGuildCargosLvl(String.valueOf(i), null, gc);
 					}
 				}
 			}
@@ -78,7 +78,7 @@ public class Settings {
 			eb.addField("\uD83D\uDCD6 » Canal de Sugestões", canalSUG, true);
 			eb.addField("\u23F2 » Tempo de enquetes", String.valueOf(pollTime), true);
 			try {
-				if (MySQL.getTagById(Objects.requireNonNull(message.getGuild().getOwner()).getUser().getId()).isPartner()) {
+				if (Tag.getTagById(Objects.requireNonNull(message.getGuild().getOwner()).getUser().getId()).isPartner()) {
 					eb.addField("\uD83D\uDCD6 » Canal Relay", canalRelay, true);
 				}
 			} catch (NoResultException ignore) {
@@ -88,7 +88,7 @@ public class Settings {
 				try {
 					eb.addField("\uD83D\uDCD1 » Cargo de punição", Main.getInfo().getRoleByID(cargoWarnID).getAsMention(), true);
 				} catch (NullPointerException e) {
-					SQLite.updateGuildCargoWarn("reset", gc);
+					SQLiteOld.updateGuildCargoWarn("reset", gc);
 				}
 			} else {
 				eb.addField("\uD83D\uDCD1 » Cargo de punição", cargoWarnID, true);
@@ -103,7 +103,7 @@ public class Settings {
 			eb.addField("\uD83D\uDCD1 » Cargos de nível", cargosLvl.toString().isEmpty() ? "Nenhum" : cargosLvl.toString(), true);
 
 
-			eb.setFooter("Para obter ajuda sobre como configurar o seu servidor, use " + SQLite.getGuildPrefix(message.getGuild().getId()) + "settings ajuda", null);
+			eb.setFooter("Para obter ajuda sobre como configurar o seu servidor, use " + SQLiteOld.getGuildPrefix(message.getGuild().getId()) + "settings ajuda", null);
 
 			message.getTextChannel().sendMessage(eb.build()).queue();
 		} catch (Exception err) {
@@ -114,7 +114,7 @@ public class Settings {
 
 	public static void updatePrefix(String[] args, Message message, guildConfig gc) {
 		if (args.length < 2) {
-			message.getTextChannel().sendMessage("O prefixo atual deste servidor é `" + SQLite.getGuildPrefix(message.getGuild().getId()) + "`.").queue();
+			message.getTextChannel().sendMessage("O prefixo atual deste servidor é `" + SQLiteOld.getGuildPrefix(message.getGuild().getId()) + "`.").queue();
 			return;
 		}
 
@@ -124,12 +124,12 @@ public class Settings {
 			return;
 		}
 
-		SQLite.updateGuildPrefix(newPrefix, gc);
+		SQLiteOld.updateGuildPrefix(newPrefix, gc);
 		message.getTextChannel().sendMessage("✅ | O prefixo deste servidor foi trocado para `" + newPrefix + "` com sucesso.").queue();
 	}
 
 	public static void updateCanalBV(String[] args, Message message, guildConfig gc) {
-		String antigoCanalBVID = SQLite.getGuildCanalBV(message.getGuild().getId());
+		String antigoCanalBVID = SQLiteOld.getGuildCanalBV(message.getGuild().getId());
 
 		if (args.length < 2) {
 			if (antigoCanalBVID.equals("Não definido.")) {
@@ -143,37 +143,37 @@ public class Settings {
 			message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 canal.").queue();
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
-			SQLite.updateGuildCanalBV(null, gc);
+			SQLiteOld.updateGuildCanalBV(null, gc);
 			message.getTextChannel().sendMessage("✅ | O canal de boas-vindas do servidor foi resetado com sucesso.").queue();
 			return;
 		}
 
 		TextChannel newCanalBV = message.getMentionedChannels().get(0);
 
-		SQLite.updateGuildCanalBV(newCanalBV.getId(), gc);
+		SQLiteOld.updateGuildCanalBV(newCanalBV.getId(), gc);
 		message.getTextChannel().sendMessage("✅ | O canal de boas-vindas do servidor foi trocado para " + newCanalBV.getAsMention() + " com sucesso.").queue();
 	}
 
 	public static void updateMsgBV(String[] args, Message message, guildConfig gc) {
-		String antigaMsgBV = SQLite.getGuildMsgBV(message.getGuild().getId());
+		String antigaMsgBV = SQLiteOld.getGuildMsgBV(message.getGuild().getId());
 
 		if (args.length < 2) {
 			message.getTextChannel().sendMessage("A mensagem de boas-vindas atual do servidor é `" + antigaMsgBV + "`.").queue();
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
-			SQLite.updateGuildMsgBV("Seja bem-vindo(a) ao %guild%, %user%!", gc);
+			SQLiteOld.updateGuildMsgBV("Seja bem-vindo(a) ao %guild%, %user%!", gc);
 			message.getTextChannel().sendMessage("✅ | A mensagem de boas-vindas do servidor foi resetado com sucesso.").queue();
 			return;
 		}
 
 		String newMsgBv = String.join(" ", args).replace(args[0], "").trim();
 
-		SQLite.updateGuildMsgBV(newMsgBv, gc);
+		SQLiteOld.updateGuildMsgBV(newMsgBv, gc);
 		message.getTextChannel().sendMessage("✅ | A mensagem de boas-vindas do servidor foi trocado para " + newMsgBv + " com sucesso.").queue();
 	}
 
 	public static void updateCanalAdeus(String[] args, Message message, guildConfig gc) {
-		String antigoCanalAdeusID = SQLite.getGuildCanalAdeus(message.getGuild().getId());
+		String antigoCanalAdeusID = SQLiteOld.getGuildCanalAdeus(message.getGuild().getId());
 
 		if (args.length < 2) {
 			if (antigoCanalAdeusID.equals("Não definido.")) {
@@ -187,37 +187,37 @@ public class Settings {
 			message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 canal.").queue();
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
-			SQLite.updateGuildCanalAdeus(null, gc);
+			SQLiteOld.updateGuildCanalAdeus(null, gc);
 			message.getTextChannel().sendMessage("✅ | O canal de adeus do servidor foi resetado com sucesso.").queue();
 			return;
 		}
 
 		TextChannel newCanalAdeus = message.getMentionedChannels().get(0);
 
-		SQLite.updateGuildCanalAdeus(newCanalAdeus.getId(), gc);
+		SQLiteOld.updateGuildCanalAdeus(newCanalAdeus.getId(), gc);
 		message.getTextChannel().sendMessage("✅ | O canal de adeus do servidor foi trocado para " + newCanalAdeus.getAsMention() + " com sucesso.").queue();
 	}
 
 	public static void updateMsgAdeus(String[] args, Message message, guildConfig gc) {
-		String antigaMsgAdeus = SQLite.getGuildMsgAdeus(message.getGuild().getId());
+		String antigaMsgAdeus = SQLiteOld.getGuildMsgAdeus(message.getGuild().getId());
 
 		if (args.length < 2) {
 			message.getTextChannel().sendMessage("A mensagem de adeus atual do servidor é `" + antigaMsgAdeus + "`.").queue();
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
-			SQLite.updateGuildMsgAdeus("Ahhh...%user% saiu do servidor!", gc);
+			SQLiteOld.updateGuildMsgAdeus("Ahhh...%user% saiu do servidor!", gc);
 			message.getTextChannel().sendMessage("✅ | A mensagem de adeus do servidor foi resetada com sucesso.").queue();
 			return;
 		}
 
 		String newMsgAdeus = String.join(" ", args).replace(args[0], "").trim();
 
-		SQLite.updateGuildMsgAdeus(newMsgAdeus, gc);
+		SQLiteOld.updateGuildMsgAdeus(newMsgAdeus, gc);
 		message.getTextChannel().sendMessage("✅ | A mensagem de adeus do servidor foi trocada para " + newMsgAdeus + " com sucesso.").queue();
 	}
 
 	public static void updateCanalSUG(String[] args, Message message, guildConfig gc) {
-		String antigoCanalSUGID = SQLite.getGuildCanalSUG(message.getGuild().getId());
+		String antigoCanalSUGID = SQLiteOld.getGuildCanalSUG(message.getGuild().getId());
 
 		if (args.length < 2) {
 			if (antigoCanalSUGID.equals("Não definido.")) {
@@ -231,25 +231,25 @@ public class Settings {
 			message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 canal.").queue();
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
-			SQLite.updateGuildCanalSUG(null, gc);
+			SQLiteOld.updateGuildCanalSUG(null, gc);
 			message.getTextChannel().sendMessage("✅ | O canal de sugestões do servidor foi resetado com sucesso.").queue();
 			return;
 		}
 
 		TextChannel newCanalSUG = message.getMentionedChannels().get(0);
 
-		SQLite.updateGuildCanalSUG(newCanalSUG.getId(), gc);
+		SQLiteOld.updateGuildCanalSUG(newCanalSUG.getId(), gc);
 		message.getTextChannel().sendMessage("✅ | O canal de sugestões do servidor foi trocado para " + newCanalSUG.getAsMention() + " com sucesso.").queue();
 	}
 
 	public static void updatePollTime(String[] args, Message message, guildConfig gc) {
-		int antigoPollTime = SQLite.getGuildPollTime(message.getGuild().getId());
+		int antigoPollTime = SQLiteOld.getGuildPollTime(message.getGuild().getId());
 
 		if (args.length < 2) {
 			message.getTextChannel().sendMessage("O tempo de enquetes atual do servidor é " + antigoPollTime + " segundos.").queue();
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
-			SQLite.updateGuildPollTime(60, gc);
+			SQLiteOld.updateGuildPollTime(60, gc);
 			message.getTextChannel().sendMessage("✅ | O tempo de enquetes do servidor foi resetado para 60 segundos com sucesso.").queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[1])) {
@@ -259,12 +259,12 @@ public class Settings {
 
 		int newPollTime = Integer.parseInt(args[1]);
 
-		SQLite.updateGuildPollTime(newPollTime, gc);
+		SQLiteOld.updateGuildPollTime(newPollTime, gc);
 		message.getTextChannel().sendMessage("✅ | O tempo de enquetes do servidor foi trocado para " + newPollTime + " segundos com sucesso.").queue();
 	}
 
 	public static void updateCargoWarn(String[] args, Message message, guildConfig gc) {
-		String antigoCargoWarn = SQLite.getGuildCargoWarn(message.getGuild().getId());
+		String antigoCargoWarn = SQLiteOld.getGuildCargoWarn(message.getGuild().getId());
 
 		if (args.length < 2) {
 			if (antigoCargoWarn.equals("Não definido.")) {
@@ -278,14 +278,14 @@ public class Settings {
 			message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 cargo.").queue();
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
-			SQLite.updateGuildCargoWarn(null, gc);
+			SQLiteOld.updateGuildCargoWarn(null, gc);
 			message.getTextChannel().sendMessage("✅ | O cargo de warns do servidor foi resetado com sucesso.").queue();
 			return;
 		}
 
 		Role newRoleWarns = message.getMentionedRoles().get(0);
 
-		SQLite.updateGuildCargoWarn(newRoleWarns.getId(), gc);
+		SQLiteOld.updateGuildCargoWarn(newRoleWarns.getId(), gc);
 		message.getTextChannel().sendMessage("✅ | O cargo de warns do servidor foi trocado para " + newRoleWarns.getAsMention() + " com sucesso.").queue();
 	}
 
@@ -316,7 +316,7 @@ public class Settings {
     */
 
 	public static void updateLevelNotif(String[] args, Message message, guildConfig gc) {
-		Boolean LevelUpNotif = SQLite.getGuildLvlUpNotif(message.getGuild().getId());
+		Boolean LevelUpNotif = SQLiteOld.getGuildLvlUpNotif(message.getGuild().getId());
 
 		if (args.length < 2) {
 			if (LevelUpNotif) {
@@ -331,10 +331,10 @@ public class Settings {
 			return;
 		}
 		if (args[1].equals("ativar") || args[1].equals("sim")) {
-			SQLite.updateGuildLvlUpNotif(true, gc);
+			SQLiteOld.updateGuildLvlUpNotif(true, gc);
 			message.getTextChannel().sendMessage("✅ | As mensagens quando alguém sobe de nível foram ativadas com sucesso.").queue();
 		} else if (args[1].equals("desativar") || args[1].equals("nao") || args[1].equals("não")) {
-			SQLite.updateGuildLvlUpNotif(false, gc);
+			SQLiteOld.updateGuildLvlUpNotif(false, gc);
 			message.getTextChannel().sendMessage("✅ | As mensagens quando alguém sobe de nível foram desativadas com sucesso.").queue();
 		} else {
 			message.getTextChannel().sendMessage(":x: | \"" + args[1] + "\" não é uma opção válida, por favor escolha \"ativar\" ou então \"desativar\".").queue();
@@ -342,7 +342,7 @@ public class Settings {
 	}
 
 	public static void updateCanalLevelUp(String[] args, Message message, guildConfig gc) {
-		String antigoCanalLvlUpID = SQLite.getGuildCanalLvlUp(message.getGuild().getId());
+		String antigoCanalLvlUpID = SQLiteOld.getGuildCanalLvlUp(message.getGuild().getId());
 
 		if (args.length < 2) {
 			if (antigoCanalLvlUpID.equals("Não definido.")) {
@@ -356,19 +356,19 @@ public class Settings {
 			message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 canal.").queue();
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
-			SQLite.updateGuildCanalLvlUp(null, gc);
+			SQLiteOld.updateGuildCanalLvlUp(null, gc);
 			message.getTextChannel().sendMessage("✅ | O canal de level up do servidor foi resetado com sucesso.").queue();
 			return;
 		}
 
 		TextChannel newCanalLvlUp = message.getMentionedChannels().get(0);
 
-		SQLite.updateGuildCanalLvlUp(newCanalLvlUp.getId(), gc);
+		SQLiteOld.updateGuildCanalLvlUp(newCanalLvlUp.getId(), gc);
 		message.getTextChannel().sendMessage("✅ | O canal de level up do servidor foi trocado para " + newCanalLvlUp.getAsMention() + " com sucesso.").queue();
 	}
 
 	public static void updateCanalRelay(String[] args, Message message, guildConfig gc) {
-		String antigoCanalRelayID = SQLite.getGuildCanalRelay(message.getGuild().getId());
+		String antigoCanalRelayID = SQLiteOld.getGuildCanalRelay(message.getGuild().getId());
 
 		if (args.length < 2) {
 			if (antigoCanalRelayID.equals("Não definido.")) {
@@ -382,23 +382,23 @@ public class Settings {
 			message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 canal.").queue();
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
-			SQLite.updateGuildCanalRelay(null, gc);
+			SQLiteOld.updateGuildCanalRelay(null, gc);
 			message.getTextChannel().sendMessage("✅ | O canal relay do servidor foi resetado com sucesso.").queue();
 			return;
 		}
 
 		TextChannel newCanalRelay = message.getMentionedChannels().get(0);
 
-		SQLite.updateGuildCanalRelay(newCanalRelay.getId(), gc);
+		SQLiteOld.updateGuildCanalRelay(newCanalRelay.getId(), gc);
 		message.getTextChannel().sendMessage("✅ | O canal relay do servidor foi trocado para " + newCanalRelay.getAsMention() + " com sucesso.").queue();
 	}
 
 	public static void updateCargoLvl(String[] args, Message message, guildConfig gc) {
-		Map<String, Object> antigoCargoLvl = SQLite.getGuildCargosLvl(message.getGuild().getId());
-		List<Integer> lvls = SQLite.getGuildCargosLvl(message.getGuild().getId()).keySet().stream().map(Integer::parseInt).sorted().collect(Collectors.toList());
+		Map<String, Object> antigoCargoLvl = SQLiteOld.getGuildCargosLvl(message.getGuild().getId());
+		List<Integer> lvls = SQLiteOld.getGuildCargosLvl(message.getGuild().getId()).keySet().stream().map(Integer::parseInt).sorted().collect(Collectors.toList());
 		StringBuilder cargosLvl = new StringBuilder();
 		for (int i : lvls) {
-			Map<String, Object> cargos = SQLite.getGuildCargosLvl(message.getGuild().getId());
+			Map<String, Object> cargos = SQLiteOld.getGuildCargosLvl(message.getGuild().getId());
 			cargosLvl.append(i).append(" - ").append(Objects.requireNonNull(message.getGuild().getRoleById((String) cargos.get(String.valueOf(i)))).getAsMention()).append("\n");
 		}
 
@@ -417,7 +417,7 @@ public class Settings {
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			try {
-				SQLite.updateGuildCargosLvl(args[2], null, gc);
+				SQLiteOld.updateGuildCargosLvl(args[2], null, gc);
 				message.getTextChannel().sendMessage("✅ | O cargo dado no level " + args[2] + " do servidor foi resetado com sucesso.").queue();
 				return;
 			} catch (Exception e) {
@@ -428,7 +428,7 @@ public class Settings {
 
 		Role newRoleLevel = message.getMentionedRoles().get(0);
 
-		SQLite.updateGuildCargosLvl(args[2], newRoleLevel, gc);
+		SQLiteOld.updateGuildCargosLvl(args[2], newRoleLevel, gc);
 		message.getTextChannel().sendMessage("✅ | O cargo dado no level " + args[2] + " do servidor foi trocado para " + newRoleLevel.getAsMention() + " com sucesso.").queue();
 	}
 }

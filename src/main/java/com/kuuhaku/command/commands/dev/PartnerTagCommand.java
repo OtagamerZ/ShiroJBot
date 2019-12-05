@@ -20,7 +20,7 @@ package com.kuuhaku.command.commands.dev;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.MySQL;
+import com.kuuhaku.controller.MySQL.Tag;
 import com.kuuhaku.model.Tags;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
@@ -38,22 +38,22 @@ public class PartnerTagCommand extends Command {
         if (message.getMentionedUsers().size() > 0) {
             if (message.getMentionedUsers().size() == 1) {
                 try {
-                    Tags t = MySQL.getTagById(message.getMentionedUsers().get(0).getId());
+                    Tags t = Tag.getTagById(message.getMentionedUsers().get(0).getId());
                     if (t.isPartner()) {
-                        MySQL.removeTagPartner(message.getMentionedUsers().get(0).getId());
+                        Tag.removeTagPartner(message.getMentionedUsers().get(0).getId());
                         channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " não é mais parceiro, foi bom enquanto durou!").queue();
                     } else {
-                        MySQL.giveTagPartner(message.getMentionedUsers().get(0).getId());
+                        Tag.giveTagPartner(message.getMentionedUsers().get(0).getId());
                         channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " agora é um parceiro, que iniciem os negócios!").queue();
                     }
                 } catch (NoResultException e) {
-                    MySQL.addUserTagsToDB(message.getMentionedUsers().get(0).getId());
-                    Tags t = MySQL.getTagById(message.getMentionedUsers().get(0).getId());
+                    Tag.addUserTagsToDB(message.getMentionedUsers().get(0).getId());
+                    Tags t = Tag.getTagById(message.getMentionedUsers().get(0).getId());
                     if (t.isPartner()) {
-                        MySQL.removeTagPartner(message.getMentionedUsers().get(0).getId());
+                        Tag.removeTagPartner(message.getMentionedUsers().get(0).getId());
                         channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " não é mais parceiro, foi bom enquanto durou!").queue();
                     } else {
-                        MySQL.giveTagPartner(message.getMentionedUsers().get(0).getId());
+                        Tag.giveTagPartner(message.getMentionedUsers().get(0).getId());
                         channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " agora é um parceiro, que iniciem os negócios!").queue();
                     }
                 }
@@ -64,22 +64,22 @@ public class PartnerTagCommand extends Command {
             try {
                 if (Main.getInfo().getUserByID(args[0]) != null) {
                     try {
-                        Tags t = MySQL.getTagById(args[0]);
+                        Tags t = Tag.getTagById(args[0]);
                         if (t.isPartner()) {
-                            MySQL.removeTagPartner(args[0]);
+                            Tag.removeTagPartner(args[0]);
                             channel.sendMessage("<@" + args[0] + "> não é mais parceiro, foi bom enquanto durou!").queue();
                         } else {
-                            MySQL.giveTagPartner(args[0]);
+                            Tag.giveTagPartner(args[0]);
                             channel.sendMessage("<@" + args[0] + "> agora é um parceiro, que iniciem os negócios!").queue();
                         }
                     } catch (NoResultException e) {
-                        MySQL.addUserTagsToDB(args[0]);
-                        Tags t = MySQL.getTagById(args[0]);
+                        Tag.addUserTagsToDB(args[0]);
+                        Tags t = Tag.getTagById(args[0]);
                         if (t.isPartner()) {
-                            MySQL.removeTagPartner(args[0]);
+                            Tag.removeTagPartner(args[0]);
                             channel.sendMessage("<@" + args[0] + "> não é mais parceiro, foi bom enquanto durou!").queue();
                         } else {
-                            MySQL.giveTagPartner(args[0]);
+                            Tag.giveTagPartner(args[0]);
                             channel.sendMessage("<@" + args[0] + "> agora é um parceiro, que iniciem os negócios!").queue();
                         }
                     }
