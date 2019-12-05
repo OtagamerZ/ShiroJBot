@@ -5,6 +5,7 @@ import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookMessage;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.MySQL.Tag;
 import com.kuuhaku.model.RelayBlockList;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.ExceedEnums;
@@ -23,7 +24,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Relay extends SQLite {
+public class Relay extends SQLiteOld {
 	private final Map<String, String> relays = new HashMap<>();
 	private int relaySize;
 
@@ -36,7 +37,7 @@ public class Relay extends SQLite {
 
 	private WebhookMessage getMessage(String msg, Member m, Guild s) {
 		WebhookMessageBuilder wmb = new WebhookMessageBuilder();
-		String exceed = SQLite.getMemberByMid(m.getUser().getId()).getExceed();
+		String exceed = SQLiteOld.getMemberByMid(m.getUser().getId()).getExceed();
 
 		String filtered = Arrays.stream(msg.split(" ")).map(w -> w =
 				(w.contains("<") && w.contains(">") && w.contains(":")) ? ":question:" : w
@@ -63,7 +64,7 @@ public class Relay extends SQLite {
 		updateRelays();
 		checkSize();
 
-		String exceed = SQLite.getMemberByMid(m.getUser().getId()).getExceed();
+		String exceed = SQLiteOld.getMemberByMid(m.getUser().getId()).getExceed();
 
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setDescription(Helper.makeEmoteFromMention(msg.split(" ")) + "\n\n ");
@@ -97,7 +98,7 @@ public class Relay extends SQLite {
 				badges.append(TagIcons.getTag(TagIcons.EDITOR));
 
 			try {
-				if (MySQL.getTagById(m.getUser().getId()).isReader())
+				if (Tag.getTagById(m.getUser().getId()).isReader())
 					badges.append(TagIcons.getTag(TagIcons.READER));
 			} catch (Exception ignore) {
 			}
@@ -106,35 +107,35 @@ public class Relay extends SQLite {
 				badges.append(TagIcons.getTag(TagIcons.MODERATOR));
 
 			try {
-				if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 70)
+				if (SQLiteOld.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 70)
 					badges.append(TagIcons.getTag(TagIcons.LVL70));
-				else if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 60)
+				else if (SQLiteOld.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 60)
 					badges.append(TagIcons.getTag(TagIcons.LVL60));
-				else if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 50)
+				else if (SQLiteOld.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 50)
 					badges.append(TagIcons.getTag(TagIcons.LVL50));
-				else if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 40)
+				else if (SQLiteOld.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 40)
 					badges.append(TagIcons.getTag(TagIcons.LVL40));
-				else if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 30)
+				else if (SQLiteOld.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 30)
 					badges.append(TagIcons.getTag(TagIcons.LVL30));
-				else if (SQLite.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 20)
+				else if (SQLiteOld.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 20)
 					badges.append(TagIcons.getTag(TagIcons.LVL20));
 			} catch (Exception ignore) {
 			}
 
 			try {
-				if (MySQL.getTagById(m.getUser().getId()).isVerified())
+				if (Tag.getTagById(m.getUser().getId()).isVerified())
 					badges.append(TagIcons.getTag(TagIcons.VERIFIED));
 			} catch (Exception ignore) {
 			}
 
 			try {
-				if (MySQL.getTagById(m.getUser().getId()).isToxic())
+				if (Tag.getTagById(m.getUser().getId()).isToxic())
 					badges.append(TagIcons.getTag(TagIcons.TOXIC));
 			} catch (Exception ignore) {
 			}
 
 			try {
-				if (!SQLite.getMemberById(m.getUser().getId() + s.getId()).getWaifu().isEmpty())
+				if (!SQLiteOld.getMemberById(m.getUser().getId() + s.getId()).getWaifu().isEmpty())
 					badges.append(TagIcons.getTag(TagIcons.MARRIED));
 			} catch (Exception ignore) {
 			}
@@ -146,12 +147,12 @@ public class Relay extends SQLite {
 		mb.setEmbed(eb.build());
 
 		relays.forEach((k, r) -> {
-			if (k.equals(s.getId()) && SQLite.getGuildById(k).isLiteMode() && m.getUser() != Main.getJibril().getSelfUser()) return;
+			if (k.equals(s.getId()) && SQLiteOld.getGuildById(k).isLiteMode() && m.getUser() != Main.getJibril().getSelfUser()) return;
 			try {
 				TextChannel t = Objects.requireNonNull(Main.getJibril().getGuildById(k)).getTextChannelById(r);
 				assert t != null;
-				if (SQLite.getGuildById(k).isAllowImg()) {
-					if (SQLite.getGuildById(k).isLiteMode()) {
+				if (SQLiteOld.getGuildById(k).isAllowImg()) {
+					if (SQLiteOld.getGuildById(k).isLiteMode()) {
 						WebhookClient client = getClient(t, Main.getJibril().getGuildById(k));
 						client.send(getMessage(msg, m, s));
 						client.close();
@@ -163,7 +164,7 @@ public class Relay extends SQLite {
 						}
 					}
 				} else {
-					if (SQLite.getGuildById(k).isLiteMode()) {
+					if (SQLiteOld.getGuildById(k).isLiteMode()) {
 						WebhookClient client = getClient(t, Main.getJibril().getGuildById(k));
 						client.send(getMessage(msg, m, s));
 						client.close();
@@ -172,7 +173,7 @@ public class Relay extends SQLite {
 					}
 				}
 			} catch (NullPointerException e) {
-				SQLite.getGuildById(k).setCanalRelay(null);
+				SQLiteOld.getGuildById(k).setCanalRelay(null);
 			} catch (InsufficientPermissionException ex) {
 				Guild g = Main.getJibril().getGuildById(k);
 				assert g != null;
@@ -193,7 +194,7 @@ public class Relay extends SQLite {
 			}
 		});
 		try {
-			if (!SQLite.getGuildById(s.getId()).isLiteMode()) {
+			if (!SQLiteOld.getGuildById(s.getId()).isLiteMode()) {
 				source.delete().queue();
 			}
 		} catch (InsufficientPermissionException ignore) {

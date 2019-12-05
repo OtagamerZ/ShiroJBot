@@ -1,7 +1,7 @@
 package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.MySQL;
+import com.kuuhaku.controller.MySQL.Tag;
 import com.kuuhaku.utils.Helper;
 import org.quartz.Job;
 import org.quartz.JobDetail;
@@ -17,7 +17,7 @@ public class PartnerCheckEvent implements Job {
 	public void execute(JobExecutionContext context) {
 		Main.getJibril().getGuilds().forEach(g -> {
 			try {
-				if (!MySQL.getTagById(g.getOwnerId()).isPartner() && !Main.getInfo().getDevelopers().contains(g.getOwnerId())) {
+				if (!Tag.getTagById(g.getOwnerId()).isPartner() && !Main.getInfo().getDevelopers().contains(g.getOwnerId())) {
 					g.leave().queue();
 					Helper.logger(this.getClass()).info("Saí do servidor " + g.getName() + " por " + Objects.requireNonNull(g.getOwner()).getUser().getAsTag() + " não estar na lista de parceiros.");
 				}
@@ -28,7 +28,7 @@ public class PartnerCheckEvent implements Job {
 		});
 		Main.getTet().getGuilds().forEach(g -> {
 			try {
-				if (!MySQL.getTagById(g.getOwnerId()).isPartner() && !Main.getInfo().getDevelopers().contains(g.getOwnerId())) {
+				if (!Tag.getTagById(g.getOwnerId()).isPartner() && !Main.getInfo().getDevelopers().contains(g.getOwnerId())) {
 					g.leave().queue();
 					Helper.logger(this.getClass()).info("Saí do servidor " + g.getName() + " por " + Objects.requireNonNull(g.getOwner()).getUser().getAsTag() + " não estar na lista de parceiros.");
 				}

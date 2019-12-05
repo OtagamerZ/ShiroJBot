@@ -20,7 +20,7 @@ package com.kuuhaku.command.commands.misc;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.SQLite;
+import com.kuuhaku.controller.SQLiteOld;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -49,7 +49,7 @@ public class PollCommand extends Command {
 			return;
 		}
 
-		guildConfig gc = SQLite.getGuildById(guild.getId());
+		guildConfig gc = SQLiteOld.getGuildById(guild.getId());
 
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setTitle(":notepad_spiral: Enquete criada por " + member.getEffectiveName());
@@ -59,7 +59,7 @@ public class PollCommand extends Command {
 		eb.setColor(Color.decode("#2195f2"));
 
 		if (gc.getCanalSUG() == null || gc.getCanalSUG().isEmpty()) {
-			SQLite.updateGuildCanalSUG(null, gc);
+			SQLiteOld.updateGuildCanalSUG(null, gc);
 			channel.sendMessage(eb.build()).queue(m -> {
 				m.addReaction("\uD83D\uDC4D").queue();
 				m.addReaction("\uD83D\uDC4E").queue();

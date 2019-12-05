@@ -3,8 +3,8 @@ package com.kuuhaku.command.commands.exceed;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.MySQL;
-import com.kuuhaku.controller.SQLite;
+import com.kuuhaku.controller.MySQL.Exceed;
+import com.kuuhaku.controller.SQLiteOld;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.TagIcons;
 import net.dv8tion.jda.api.entities.*;
@@ -18,7 +18,7 @@ public class ExceedSelectCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		channel.sendMessage("<a:Loading:598500653215645697> Analisando dados...").queue(m -> {
-			com.kuuhaku.model.Member u = SQLite.getMemberByMid(author.getId());
+			com.kuuhaku.model.Member u = SQLiteOld.getMemberByMid(author.getId());
 
 			if (u.getExceed().isEmpty()) {
 				if (args.length == 0) {
@@ -57,9 +57,9 @@ public class ExceedSelectCommand extends Command {
 						channel.sendMessage(":x: | Exceed inexistente.").queue();
 						return;
 				}
-				SQLite.updateMemberSettings(u);
+				SQLiteOld.updateMemberSettings(u);
 				channel.sendMessage("Exceed escolhido com sucesso, você agora pertence à **" + u.getExceed() + "**.").queue();
-				MySQL.getExceedMembers(ExceedEnums.getByName(u.getExceed())).forEach(em ->
+				Exceed.getExceedMembers(ExceedEnums.getByName(u.getExceed())).forEach(em ->
 						Main.getInfo().getUserByID(em.getMid()).openPrivateChannel().queue(c -> {
 							try {
 								c.sendMessage(author.getAsTag() + " juntou-se à " + u.getExceed() + ", dê-o(a) as boas-vindas!").queue();

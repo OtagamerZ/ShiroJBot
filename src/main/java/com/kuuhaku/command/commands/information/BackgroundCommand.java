@@ -19,7 +19,7 @@ package com.kuuhaku.command.commands.information;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.SQLite;
+import com.kuuhaku.controller.SQLiteOld;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
@@ -49,9 +49,9 @@ public class BackgroundCommand extends Command {
             con.disconnect();
             bi.flush();
 
-            com.kuuhaku.model.Member m = SQLite.getMemberById(author.getId() + guild.getId());
+            com.kuuhaku.model.Member m = SQLiteOld.getMemberById(author.getId() + guild.getId());
             m.setBg(args[0]);
-            SQLite.saveMemberToDB(m);
+            SQLiteOld.saveMemberToDB(m);
             channel.sendMessage("Imagem de fundo trocada com sucesso!").queue();
         } catch (IOException e) {
             channel.sendMessage(":x: | O link da imagem não me parece correto.").queue();

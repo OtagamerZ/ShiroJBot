@@ -1,7 +1,7 @@
 package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.MySQL;
+import com.kuuhaku.controller.MySQL.Exceed;
 import com.kuuhaku.utils.Helper;
 import org.quartz.Job;
 import org.quartz.JobDetail;
@@ -12,7 +12,7 @@ public class GetWinnerEvent implements Job {
 
 	@Override
 	public void execute(JobExecutionContext context) {
-		Main.getInfo().setWinner(MySQL.getWinner());
+		Main.getInfo().setWinner(Exceed.getWinner());
 		Helper.logger(this.getClass()).info("Atualizado vencedor mensal.");
 	}
 }
