@@ -20,7 +20,7 @@ package com.kuuhaku.command.commands.information;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.MySQL;
+import com.kuuhaku.controller.MySQL.Tag;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
@@ -44,7 +44,7 @@ public class BotInfoCommand extends Command {
         Main.getInfo().getDevelopers().forEach(d -> sb.append(Main.getInfo().getUserByID(d).getAsTag()).append(", "));
         eb.addField(":tools: Desenvolvida por:", sb.toString(), true);
         eb.addField(":calendar_spiral: Criada em:", Main.getInfo().getSelfUser().getTimeCreated().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), true);
-        eb.addField(":handshake: Apoiada por:", MySQL.getPartnerAmount() + " servidores", true);
+        eb.addField(":handshake: Apoiada por:", Tag.getPartnerAmount() + " servidores", true);
         eb.addField(":earth_americas: Estou em:", Main.getInfo().getAPI().getGuilds().size() + " servidores", true);
         eb.addField(":speech_balloon: Conheço:", Main.getInfo().getAPI().getUsers().size() + " usuários", true);
         eb.addField(":envelope: Link de convite:", "https://discordbots.org/bot/572413282653306901", true);

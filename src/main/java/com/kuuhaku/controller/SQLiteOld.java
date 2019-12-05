@@ -37,7 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SQLite {
+public class SQLiteOld {
 
 	private static EntityManagerFactory emf;
 
@@ -45,7 +45,7 @@ public class SQLite {
 
 		File DBfile = new File(Main.getInfo().getDBFileName());
 		if (!DBfile.exists()) {
-			Helper.logger(SQLite.class).fatal("A base de dados não foi encontrada. Entre no servidor discord oficial da Shiro para obter ajuda.");
+			Helper.logger(SQLiteOld.class).fatal("A base de dados não foi encontrada. Entre no servidor discord oficial da Shiro para obter ajuda.");
 			System.exit(1);
 		}
 
@@ -65,7 +65,7 @@ public class SQLite {
 	public static void disconnect() {
 		if (emf != null) {
 			emf.close();
-			Helper.logger(SQLite.class).info("Ligação à base de dados desfeita.");
+			Helper.logger(SQLiteOld.class).info("Ligação à base de dados desfeita.");
 		}
 	}
 
@@ -274,7 +274,7 @@ public class SQLite {
 	public static void saveMemberWaifu(Member m, User u) {
 		EntityManager em = getEntityManager();
 
-		m.setWaifu(u);
+		m.marry(u);
 
 		em.getTransaction().begin();
 		em.merge(m);

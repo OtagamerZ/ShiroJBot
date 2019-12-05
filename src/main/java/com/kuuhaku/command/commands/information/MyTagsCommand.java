@@ -20,8 +20,8 @@ package com.kuuhaku.command.commands.information;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.MySQL;
-import com.kuuhaku.controller.SQLite;
+import com.kuuhaku.controller.MySQL.Tag;
+import com.kuuhaku.controller.SQLiteOld;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.TagIcons;
@@ -41,7 +41,7 @@ public class MyTagsCommand extends Command {
     @Override
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
         EmbedBuilder eb = new EmbedBuilder();
-        String exceed = SQLite.getMemberByMid(author.getId()).getExceed();
+        String exceed = SQLiteOld.getMemberByMid(author.getId()).getExceed();
 
         eb.setTitle(":label: Emblemas de " + author.getName());
         try {
@@ -70,7 +70,7 @@ public class MyTagsCommand extends Command {
                 badges.append(TagIcons.getTag(TagIcons.EDITOR));
 
             try {
-                if (MySQL.getTagById(author.getId()).isReader())
+                if (Tag.getTagById(author.getId()).isReader())
                     badges.append(TagIcons.getTag(TagIcons.READER));
             } catch (Exception ignore) {
             }
@@ -79,35 +79,35 @@ public class MyTagsCommand extends Command {
                 badges.append(TagIcons.getTag(TagIcons.MODERATOR));
 
             try {
-                if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= 70)
+                if (SQLiteOld.getMemberById(author.getId() + guild.getId()).getLevel() >= 70)
                     badges.append(TagIcons.getTag(TagIcons.LVL70));
-                else if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= 60)
+                else if (SQLiteOld.getMemberById(author.getId() + guild.getId()).getLevel() >= 60)
                     badges.append(TagIcons.getTag(TagIcons.LVL60));
-                else if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= 50)
+                else if (SQLiteOld.getMemberById(author.getId() + guild.getId()).getLevel() >= 50)
                     badges.append(TagIcons.getTag(TagIcons.LVL50));
-                else if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= 40)
+                else if (SQLiteOld.getMemberById(author.getId() + guild.getId()).getLevel() >= 40)
                     badges.append(TagIcons.getTag(TagIcons.LVL40));
-                else if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= 30)
+                else if (SQLiteOld.getMemberById(author.getId() + guild.getId()).getLevel() >= 30)
                     badges.append(TagIcons.getTag(TagIcons.LVL30));
-                else if (SQLite.getMemberById(author.getId() + guild.getId()).getLevel() >= 20)
+                else if (SQLiteOld.getMemberById(author.getId() + guild.getId()).getLevel() >= 20)
                     badges.append(TagIcons.getTag(TagIcons.LVL20));
             } catch (Exception ignore) {
             }
 
             try {
-                if (MySQL.getTagById(author.getId()).isVerified())
+                if (Tag.getTagById(author.getId()).isVerified())
                     badges.append(TagIcons.getTag(TagIcons.VERIFIED));
             } catch (Exception ignore) {
             }
 
             try {
-                if (MySQL.getTagById(author.getId()).isToxic())
+                if (Tag.getTagById(author.getId()).isToxic())
                     badges.append(TagIcons.getTag(TagIcons.TOXIC));
             } catch (Exception ignore) {
             }
 
             try {
-                if (!SQLite.getMemberById(author.getId() + guild.getId()).getWaifu().isEmpty())
+                if (!SQLiteOld.getMemberById(author.getId() + guild.getId()).getWaifu().isEmpty())
                     badges.append(TagIcons.getTag(TagIcons.MARRIED));
             } catch (Exception ignore) {
             }

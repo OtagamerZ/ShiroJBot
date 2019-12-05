@@ -20,7 +20,7 @@ package com.kuuhaku.command.commands.dev;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.MySQL;
+import com.kuuhaku.controller.MySQL.Tag;
 import com.kuuhaku.model.Tags;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
@@ -38,24 +38,24 @@ public class VerifiedTagCommand extends Command {
 		if (message.getMentionedUsers().size() > 0) {
 			if (message.getMentionedUsers().size() == 1) {
 				try {
-					Tags t = MySQL.getTagById(message.getMentionedUsers().get(0).getId());
+					Tags t = Tag.getTagById(message.getMentionedUsers().get(0).getId());
                     if (t.isVerified()) {
-						MySQL.removeTagVerified(message.getMentionedUsers().get(0).getId());
+						Tag.removeTagVerified(message.getMentionedUsers().get(0).getId());
 						channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " não é mais verificado, perdeu a confiança!").queue();
 					} else {
-						MySQL.giveTagVerified(message.getMentionedUsers().get(0).getId());
-						MySQL.removeTagToxic(message.getMentionedUsers().get(0).getId());
+						Tag.giveTagVerified(message.getMentionedUsers().get(0).getId());
+						Tag.removeTagToxic(message.getMentionedUsers().get(0).getId());
 						channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " agora é verificado, te considero alguém confiável!").queue();
 					}
 				} catch (NoResultException e) {
-					MySQL.addUserTagsToDB(message.getMentionedUsers().get(0).getId());
-					Tags t = MySQL.getTagById(message.getMentionedUsers().get(0).getId());
+					Tag.addUserTagsToDB(message.getMentionedUsers().get(0).getId());
+					Tags t = Tag.getTagById(message.getMentionedUsers().get(0).getId());
                     if (t.isVerified()) {
-						MySQL.removeTagVerified(message.getMentionedUsers().get(0).getId());
+						Tag.removeTagVerified(message.getMentionedUsers().get(0).getId());
 						channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " não é mais verificado, perdeu a confiança!").queue();
 					} else {
-						MySQL.giveTagVerified(message.getMentionedUsers().get(0).getId());
-						MySQL.removeTagToxic(message.getMentionedUsers().get(0).getId());
+						Tag.giveTagVerified(message.getMentionedUsers().get(0).getId());
+						Tag.removeTagToxic(message.getMentionedUsers().get(0).getId());
 						channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " agora é verificado, te considero alguém confiável!").queue();
 					}
 				}
@@ -66,24 +66,24 @@ public class VerifiedTagCommand extends Command {
 			try {
 				if (Main.getInfo().getUserByID(args[0]) != null) {
 					try {
-						Tags t = MySQL.getTagById(args[0]);
+						Tags t = Tag.getTagById(args[0]);
                         if (t.isVerified()) {
-							MySQL.removeTagVerified(args[0]);
+							Tag.removeTagVerified(args[0]);
 							channel.sendMessage("<@" + args[0] + "> não é mais verificado, perdeu a confiança!").queue();
 						} else {
-							MySQL.giveTagVerified(args[0]);
-							MySQL.removeTagToxic(args[0]);
+							Tag.giveTagVerified(args[0]);
+							Tag.removeTagToxic(args[0]);
 							channel.sendMessage("<@" + args[0] + "> agora é verificado, te considero alguém confiável!").queue();
 						}
 					} catch (NoResultException e) {
-						MySQL.addUserTagsToDB(args[0]);
-						Tags t = MySQL.getTagById(args[0]);
+						Tag.addUserTagsToDB(args[0]);
+						Tags t = Tag.getTagById(args[0]);
                         if (t.isVerified()) {
-							MySQL.removeTagVerified(args[0]);
+							Tag.removeTagVerified(args[0]);
 							channel.sendMessage("<@" + args[0] + "> não é mais verificado, perdeu a confiança!").queue();
 						} else {
-							MySQL.giveTagVerified(args[0]);
-							MySQL.removeTagToxic(args[0]);
+							Tag.giveTagVerified(args[0]);
+							Tag.removeTagToxic(args[0]);
 							channel.sendMessage("<@" + args[0] + "> agora é verificado, te considero alguém confiável!").queue();
 						}
 					}
