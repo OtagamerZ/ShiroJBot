@@ -1,321 +1,19 @@
-/*
- * This file is part of Shiro J Bot.
- *
- *     Shiro J Bot is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
- *
- *     Shiro J Bot is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
- *
- *     You should have received a copy of the GNU General Public License
- *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
- */
+package com.kuuhaku.controller.SQLite;
 
-package com.kuuhaku.controller;
-
-import com.kuuhaku.Main;
-import com.kuuhaku.model.CustomAnswers;
-import com.kuuhaku.model.DataDump;
 import com.kuuhaku.model.Member;
 import com.kuuhaku.model.guildConfig;
-import com.kuuhaku.utils.Helper;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.User;
 import org.json.JSONObject;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.Query;
-import java.io.File;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SQLiteOld {
+import static com.kuuhaku.controller.SQLite.Manager.getEntityManager;
 
-	private static EntityManagerFactory emf;
-
-	public static void connect() {
-
-		File DBfile = new File(Main.getInfo().getDBFileName());
-		if (!DBfile.exists()) {
-			Helper.logger(SQLiteOld.class).fatal("A base de dados não foi encontrada. Entre no servidor discord oficial da Shiro para obter ajuda.");
-			System.exit(1);
-		}
-
-		Map<String, String> props = new HashMap<>();
-		props.put("javax.persistence.jdbc.url", "jdbc:sqlite:" + DBfile.getPath());
-
-		if (emf == null) emf = Persistence.createEntityManagerFactory("shiro_local", props);
-
-		emf.getCache().evictAll();
-	}
-
-	static EntityManager getEntityManager() {
-		if (emf == null) connect();
-		return emf.createEntityManager();
-	}
-
-	public static void disconnect() {
-		if (emf != null) {
-			emf.close();
-			Helper.logger(SQLiteOld.class).info("Ligação à base de dados desfeita.");
-		}
-	}
-
-	public static boolean restoreData(DataDump data) {
-		EntityManager em = getEntityManager();
-
-		try {
-			em.getTransaction().begin();
-			data.getCaDump().forEach(em::merge);
-			data.getmDump().forEach(em::merge);
-			data.getGcDump().forEach(em::merge);
-			em.getTransaction().commit();
-
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public static List<CustomAnswers> getCADump() {
-		EntityManager em = getEntityManager();
-
-		Query q = em.createQuery("SELECT c FROM CustomAnswers c", CustomAnswers.class);
-		List<CustomAnswers> ca = q.getResultList();
-		ca.removeIf(CustomAnswers::isMarkForDelete);
-
-		return ca;
-	}
-
-	@SuppressWarnings("unchecked")
-	public static List<Member> getMemberDump() {
-		EntityManager em = getEntityManager();
-
-		Query q = em.createQuery("SELECT m FROM Member m", Member.class);
-
-		return q.getResultList();
-	}
-
-	@SuppressWarnings("unchecked")
-	public static List<guildConfig> getGuildDump() {
-		EntityManager em = getEntityManager();
-
-		Query q = em.createQuery("SELECT g FROM guildConfig g", guildConfig.class);
-
-		return q.getResultList();
-	}
-
-	public static guildConfig getGuildById(String id) {
-		EntityManager em = getEntityManager();
-		guildConfig gc;
-
-		Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
-		q.setParameter(1, id);
-		gc = (guildConfig) q.getSingleResult();
-
-		em.close();
-
-		return gc;
-	}
-
-	public static void addGuildToDB(Guild guild) {
-		EntityManager em = getEntityManager();
-
-		guildConfig gc = new guildConfig();
-		gc.setName(guild.getName());
-		gc.setGuildId(guild.getId());
-
-		em.getTransaction().begin();
-		em.merge(gc);
-		em.getTransaction().commit();
-
-		em.close();
-	}
-
-	public static void removeGuildFromDB(guildConfig gc) {
-		EntityManager em = getEntityManager();
-
-		gc.setMarkForDelete(true);
-
-		em.getTransaction().begin();
-		em.merge(gc);
-		em.getTransaction().commit();
-
-		em.close();
-	}
-
-	@SuppressWarnings("unchecked")
-	public static CustomAnswers getCAByTrigger(String trigger, String guild) {
-		EntityManager em = getEntityManager();
-		List<CustomAnswers> ca;
-
-		Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE LOWER(gatilho) LIKE ?1 AND guildID = ?2", CustomAnswers.class);
-		q.setParameter(1, trigger.toLowerCase());
-		q.setParameter(2, guild);
-		ca = (List<CustomAnswers>) q.getResultList();
-
-		em.close();
-
-		return ca.size() > 0 ? ca.get(Helper.rng(ca.size())) : null;
-	}
-
-	public static CustomAnswers getCAByID(Long id) {
-		EntityManager em = getEntityManager();
-		CustomAnswers ca;
-
-		Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE id = ?1", CustomAnswers.class);
-		q.setParameter(1, id);
-		ca = (CustomAnswers) q.getSingleResult();
-
-		em.close();
-
-		return ca;
-	}
-
-	public static void addCAtoDB(Guild g, String trigger, String answer) {
-		EntityManager em = getEntityManager();
-
-		CustomAnswers ca = new CustomAnswers();
-		ca.setGuildID(g.getId());
-		ca.setGatilho(trigger);
-		ca.setAnswer(answer);
-
-		em.getTransaction().begin();
-		em.merge(ca);
-		em.getTransaction().commit();
-
-		em.close();
-	}
-
-	public static void removeCAFromDB(CustomAnswers ca) {
-		EntityManager em = getEntityManager();
-
-		ca.setMarkForDelete(true);
-
-		em.getTransaction().begin();
-		em.merge(ca);
-		em.getTransaction().commit();
-
-		em.close();
-	}
-
-	public static Member getMemberById(String id) {
-		EntityManager em = getEntityManager();
-		Member m;
-
-		Query q = em.createQuery("SELECT m FROM Member m WHERE id LIKE ?1", Member.class);
-		q.setParameter(1, id);
-		m = (Member) q.getSingleResult();
-
-		em.close();
-
-		return m;
-	}
-
-	public static Member getMemberByMid(String id) {
-		EntityManager em = getEntityManager();
-		Member m;
-
-		Query q = em.createQuery("SELECT m FROM Member m WHERE mid LIKE ?1", Member.class);
-		q.setParameter(1, id);
-		q.setMaxResults(1);
-		m = (Member) q.getSingleResult();
-
-		em.close();
-
-		return m;
-	}
-
-	public static void addMemberToDB(net.dv8tion.jda.api.entities.Member u) {
-		EntityManager em = getEntityManager();
-
-		Member m = new Member();
-		m.setId(u.getUser().getId() + u.getGuild().getId());
-		m.setMid(u.getUser().getId());
-
-		em.getTransaction().begin();
-		em.merge(m);
-		em.getTransaction().commit();
-
-		em.close();
-	}
-
-	public static void saveMemberToDB(Member m) {
-		EntityManager em = getEntityManager();
-
-		em.getTransaction().begin();
-		em.merge(m);
-		em.getTransaction().commit();
-
-		em.close();
-	}
-
-	public static void saveMemberMid(Member m, User u) {
-		EntityManager em = getEntityManager();
-
-		m.setMid(u.getId());
-
-		em.getTransaction().begin();
-		em.merge(m);
-		em.getTransaction().commit();
-
-		em.close();
-	}
-
-	public static void saveMemberWaifu(Member m, User u) {
-		EntityManager em = getEntityManager();
-
-		m.marry(u);
-
-		em.getTransaction().begin();
-		em.merge(m);
-		em.getTransaction().commit();
-
-		em.close();
-	}
-
-	@SuppressWarnings("unchecked")
-	public static List<Member> getMemberRank(String gid, boolean global) {
-		EntityManager em = getEntityManager();
-
-		Query q;
-
-		if (global)
-			q = em.createQuery("SELECT m FROM Member m WHERE m.mid IS NOT NULL ORDER BY m.level DESC", Member.class);
-		else {
-			q = em.createQuery("SELECT m FROM Member m WHERE id LIKE ?1 AND m.mid IS NOT NULL ORDER BY m.level DESC", Member.class);
-			q.setParameter(1, "%" + gid);
-		}
-
-		List<Member> mbs = (List<Member>) q.getResultList();
-
-		em.close();
-
-		return mbs;
-	}
-
-	// --- guildConfig -- \\
-	public static void updateGuildName(String newName, guildConfig gc) {
-		EntityManager em = getEntityManager();
-
-		gc.setName(newName);
-
-		em.getTransaction().begin();
-		em.merge(gc);
-		em.getTransaction().commit();
-
-		em.close();
-	}
-
+public class GuildOperationsDAO {
+	//GETTERS
 	public static String getGuildPrefix(String id) {
 		EntityManager em = getEntityManager();
 
@@ -330,10 +28,23 @@ public class SQLiteOld {
 		return prefix;
 	}
 
+	//UPDATERS
 	public static void updateGuildPrefix(String newPrefix, guildConfig gc) {
 		EntityManager em = getEntityManager();
 
 		gc.setPrefix(newPrefix);
+
+		em.getTransaction().begin();
+		em.merge(gc);
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
+	public static void updateGuildName(String newName, guildConfig gc) {
+		EntityManager em = getEntityManager();
+
+		gc.setName(newName);
 
 		em.getTransaction().begin();
 		em.merge(gc);
@@ -603,7 +314,7 @@ public class SQLiteOld {
 		guildConfig gc = (guildConfig) q.getSingleResult();
 		em.close();
 
-		return gc.getLvlNotif();
+		return gc.isLvlNotif();
 	}
 
 	public static void updateGuildLvlUpNotif(Boolean LvlUpNotif, guildConfig gc) {

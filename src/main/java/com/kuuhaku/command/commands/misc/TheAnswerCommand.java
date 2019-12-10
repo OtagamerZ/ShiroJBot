@@ -2,7 +2,7 @@ package com.kuuhaku.command.commands.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.MySQL.Tag;
+import com.kuuhaku.controller.MySQL.TagDAO;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
@@ -18,15 +18,15 @@ public class TheAnswerCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		if (guild.getId().equals("421495229594730496")) {
 			try {
-				if (Tag.getTagById(author.getId()).isReader())
+				if (TagDAO.getTagById(author.getId()).isReader())
 					channel.sendMessage(":x: | Você já descobriu a resposta, não precisa mais usar este comando.").queue();
 			} catch (NoResultException e) {
-				Tag.addUserTagsToDB(author.getId());
+				TagDAO.addUserTagsToDB(author.getId());
 			} finally {
 				message.delete().queue();
-				if (!Tag.getTagById(author.getId()).isReader()) {
+				if (!TagDAO.getTagById(author.getId()).isReader()) {
 					if (String.join(" ", args).replace(".", "").equalsIgnoreCase(System.getenv("SECRET"))) {
-						Tag.giveTagReader(author.getId());
+						TagDAO.giveTagReader(author.getId());
 						channel.sendMessage("Obrigado por ler as regras!").queue();
 					} else {
 						channel.sendMessage(":x: | Resposta errada, leia as regras para achar a resposta.").queue();

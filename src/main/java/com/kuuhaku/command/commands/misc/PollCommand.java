@@ -20,7 +20,7 @@ package com.kuuhaku.command.commands.misc;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.SQLiteOld;
+import com.kuuhaku.controller.SQLite.GuildDAO;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -28,6 +28,7 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
 import java.awt.*;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class PollCommand extends Command {
@@ -49,7 +50,7 @@ public class PollCommand extends Command {
 			return;
 		}
 
-		guildConfig gc = SQLiteOld.getGuildById(guild.getId());
+		guildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setTitle(":notepad_spiral: Enquete criada por " + member.getEffectiveName());
@@ -59,7 +60,8 @@ public class PollCommand extends Command {
 		eb.setColor(Color.decode("#2195f2"));
 
 		if (gc.getCanalSUG() == null || gc.getCanalSUG().isEmpty()) {
-			SQLiteOld.updateGuildCanalSUG(null, gc);
+			gc.setCanalSUG("Não definido");
+			GuildDAO.updateGuildSettings(gc);
 			channel.sendMessage(eb.build()).queue(m -> {
 				m.addReaction("\uD83D\uDC4D").queue();
 				m.addReaction("\uD83D\uDC4E").queue();
@@ -69,7 +71,7 @@ public class PollCommand extends Command {
 			});
 		} else {
 			try {
-				guild.getTextChannelById(gc.getCanalSUG()).sendMessage(eb.build()).queue(m -> {
+				Objects.requireNonNull(guild.getTextChannelById(gc.getCanalSUG())).sendMessage(eb.build()).queue(m -> {
 					m.addReaction("\uD83D\uDC4D").queue();
 					m.addReaction("\uD83D\uDC4E").queue();
                     m.addReaction("\u274C").queue();
@@ -77,7 +79,7 @@ public class PollCommand extends Command {
 					Main.getInfo().getScheduler().schedule(() -> showResult(m, member, eb), gc.getPollTime(), TimeUnit.SECONDS);
 				});
 			} catch (Exception e) {
-				channel.sendMessage(":x: | Não possuo permissões suficientes para mandar embeds no canal " + guild.getTextChannelById(gc.getCanalSUG()).getAsMention() + ".").queue();
+				channel.sendMessage(":x: | Não possuo permissões suficientes para mandar embeds no canal " + Objects.requireNonNull(guild.getTextChannelById(gc.getCanalSUG())).getAsMention() + ".").queue();
 				return;
 			}
 		}

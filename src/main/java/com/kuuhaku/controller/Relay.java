@@ -5,7 +5,10 @@ import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookMessage;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.MySQL.Tag;
+import com.kuuhaku.controller.MySQL.TagDAO;
+import com.kuuhaku.controller.SQLite.GuildDAO;
+import com.kuuhaku.controller.SQLite.Manager;
+import com.kuuhaku.controller.SQLite.MemberDAO;
 import com.kuuhaku.model.RelayBlockList;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.ExceedEnums;
@@ -24,7 +27,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Relay extends SQLiteOld {
+public class Relay {
 	private final Map<String, String> relays = new HashMap<>();
 	private int relaySize;
 
@@ -37,7 +40,7 @@ public class Relay extends SQLiteOld {
 
 	private WebhookMessage getMessage(String msg, Member m, Guild s) {
 		WebhookMessageBuilder wmb = new WebhookMessageBuilder();
-		String exceed = SQLiteOld.getMemberByMid(m.getUser().getId()).getExceed();
+		String exceed = MemberDAO.getMemberByMid(m.getUser().getId()).getExceed();
 
 		String filtered = Arrays.stream(msg.split(" ")).map(w -> w =
 				(w.contains("<") && w.contains(">") && w.contains(":")) ? ":question:" : w
@@ -64,7 +67,7 @@ public class Relay extends SQLiteOld {
 		updateRelays();
 		checkSize();
 
-		String exceed = SQLiteOld.getMemberByMid(m.getUser().getId()).getExceed();
+		String exceed = MemberDAO.getMemberByMid(m.getUser().getId()).getExceed();
 
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setDescription(Helper.makeEmoteFromMention(msg.split(" ")) + "\n\n ");
@@ -98,7 +101,7 @@ public class Relay extends SQLiteOld {
 				badges.append(TagIcons.getTag(TagIcons.EDITOR));
 
 			try {
-				if (Tag.getTagById(m.getUser().getId()).isReader())
+				if (TagDAO.getTagById(m.getUser().getId()).isReader())
 					badges.append(TagIcons.getTag(TagIcons.READER));
 			} catch (Exception ignore) {
 			}
@@ -107,35 +110,35 @@ public class Relay extends SQLiteOld {
 				badges.append(TagIcons.getTag(TagIcons.MODERATOR));
 
 			try {
-				if (SQLiteOld.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 70)
+				if (MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 70)
 					badges.append(TagIcons.getTag(TagIcons.LVL70));
-				else if (SQLiteOld.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 60)
+				else if (MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 60)
 					badges.append(TagIcons.getTag(TagIcons.LVL60));
-				else if (SQLiteOld.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 50)
+				else if (MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 50)
 					badges.append(TagIcons.getTag(TagIcons.LVL50));
-				else if (SQLiteOld.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 40)
+				else if (MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 40)
 					badges.append(TagIcons.getTag(TagIcons.LVL40));
-				else if (SQLiteOld.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 30)
+				else if (MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 30)
 					badges.append(TagIcons.getTag(TagIcons.LVL30));
-				else if (SQLiteOld.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 20)
+				else if (MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 20)
 					badges.append(TagIcons.getTag(TagIcons.LVL20));
 			} catch (Exception ignore) {
 			}
 
 			try {
-				if (Tag.getTagById(m.getUser().getId()).isVerified())
+				if (TagDAO.getTagById(m.getUser().getId()).isVerified())
 					badges.append(TagIcons.getTag(TagIcons.VERIFIED));
 			} catch (Exception ignore) {
 			}
 
 			try {
-				if (Tag.getTagById(m.getUser().getId()).isToxic())
+				if (TagDAO.getTagById(m.getUser().getId()).isToxic())
 					badges.append(TagIcons.getTag(TagIcons.TOXIC));
 			} catch (Exception ignore) {
 			}
 
 			try {
-				if (!SQLiteOld.getMemberById(m.getUser().getId() + s.getId()).getWaifu().isEmpty())
+				if (!MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getWaifu().isEmpty())
 					badges.append(TagIcons.getTag(TagIcons.MARRIED));
 			} catch (Exception ignore) {
 			}
@@ -147,12 +150,12 @@ public class Relay extends SQLiteOld {
 		mb.setEmbed(eb.build());
 
 		relays.forEach((k, r) -> {
-			if (k.equals(s.getId()) && SQLiteOld.getGuildById(k).isLiteMode() && m.getUser() != Main.getJibril().getSelfUser()) return;
+			if (k.equals(s.getId()) && GuildDAO.getGuildById(k).isLiteMode() && m.getUser() != Main.getJibril().getSelfUser()) return;
 			try {
 				TextChannel t = Objects.requireNonNull(Main.getJibril().getGuildById(k)).getTextChannelById(r);
 				assert t != null;
-				if (SQLiteOld.getGuildById(k).isAllowImg()) {
-					if (SQLiteOld.getGuildById(k).isLiteMode()) {
+				if (GuildDAO.getGuildById(k).isAllowImg()) {
+					if (GuildDAO.getGuildById(k).isLiteMode()) {
 						WebhookClient client = getClient(t, Main.getJibril().getGuildById(k));
 						client.send(getMessage(msg, m, s));
 						client.close();
@@ -164,7 +167,7 @@ public class Relay extends SQLiteOld {
 						}
 					}
 				} else {
-					if (SQLiteOld.getGuildById(k).isLiteMode()) {
+					if (GuildDAO.getGuildById(k).isLiteMode()) {
 						WebhookClient client = getClient(t, Main.getJibril().getGuildById(k));
 						client.send(getMessage(msg, m, s));
 						client.close();
@@ -173,7 +176,7 @@ public class Relay extends SQLiteOld {
 					}
 				}
 			} catch (NullPointerException e) {
-				SQLiteOld.getGuildById(k).setCanalRelay(null);
+				GuildDAO.getGuildById(k).setCanalRelay(null);
 			} catch (InsufficientPermissionException ex) {
 				Guild g = Main.getJibril().getGuildById(k);
 				assert g != null;
@@ -194,7 +197,7 @@ public class Relay extends SQLiteOld {
 			}
 		});
 		try {
-			if (!SQLiteOld.getGuildById(s.getId()).isLiteMode()) {
+			if (!GuildDAO.getGuildById(s.getId()).isLiteMode()) {
 				source.delete().queue();
 			}
 		} catch (InsufficientPermissionException ignore) {
@@ -224,7 +227,7 @@ public class Relay extends SQLiteOld {
 
 	@SuppressWarnings("unchecked")
 	private void updateRelays() {
-		EntityManager em = getEntityManager();
+		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT g FROM guildConfig g", guildConfig.class);
 

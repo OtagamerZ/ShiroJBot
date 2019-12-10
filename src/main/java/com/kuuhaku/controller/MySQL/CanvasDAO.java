@@ -6,7 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
-public class Canvas {
+public class CanvasDAO {
 	public static PixelCanvas getCanvas() {
         EntityManager em = Manager.getEntityManager();
 

@@ -5,7 +5,7 @@ import net.dv8tion.jda.api.entities.User;
 
 import javax.persistence.EntityManager;
 
-public class Waifu {
+public class WaifuDAO {
 	public static void saveMemberWaifu(Member m, User u) {
 		EntityManager em = Manager.getEntityManager();
 

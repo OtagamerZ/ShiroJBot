@@ -18,8 +18,8 @@
 package com.kuuhaku.model;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.MySQL.Tag;
-import com.kuuhaku.controller.SQLiteOld;
+import com.kuuhaku.controller.MySQL.TagDAO;
+import com.kuuhaku.controller.SQLite.MemberDAO;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
@@ -76,7 +76,7 @@ public class Profile {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 		try {
-			con = (HttpURLConnection) new URL(SQLiteOld.getMemberById(m.getUser().getId() + g.getId()).getBg()).openConnection();
+			con = (HttpURLConnection) new URL(MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getBg()).openConnection();
 			con.setRequestProperty("User-Agent", "Mozilla/5.0");
 			g2d.drawImage(scaleImage(ImageIO.read(con.getInputStream()), bi.getWidth(), bi.getHeight()), null, 0, 0);
 		} catch (IOException e) {
@@ -85,7 +85,7 @@ public class Profile {
 			g2d.drawImage(scaleImage(ImageIO.read(con.getInputStream()), bi.getWidth(), bi.getHeight()), null, 0, 0);
 		}
 
-		Color main = Helper.reverseColor(Helper.colorThief(SQLiteOld.getMemberById(m.getUser().getId() + g.getId()).getBg()));
+		Color main = Helper.reverseColor(Helper.colorThief(MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getBg()));
 
 
 		g2d.setColor(new Color(main.getRed(), main.getGreen(), main.getBlue(), 100));
@@ -94,7 +94,7 @@ public class Profile {
 
 		g2d.setColor(new Color(0, 255, 0));
 		g2d.setClip(new Rectangle2D.Float(0, 100, w, 250));
-		g2d.fillArc(40, 190, avatar.getWidth() + 20, avatar.getHeight() + 20, 210, (SQLiteOld.getMemberById(m.getUser().getId() + g.getId()).getXp() * 240) / ((int) Math.pow(SQLiteOld.getMemberById(m.getUser().getId() + g.getId()).getLevel(), 2) * 100) * -1);
+		g2d.fillArc(40, 190, avatar.getWidth() + 20, avatar.getHeight() + 20, 210, (MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getXp() * 240) / ((int) Math.pow(MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getLevel(), 2) * 100) * -1);
 
 		g2d.setColor(main);
 		g2d.setClip(null);
@@ -121,12 +121,12 @@ public class Profile {
 		drawOutlinedText(name, 270, 342, g2d);
 
 		g2d.setFont(new Font(FONT.getName(), Font.BOLD, 85));
-		printCenteredString(String.valueOf(SQLiteOld.getMemberById(m.getUser().getId() + g.getId()).getLevel()), 196, 52, 515, g2d);
+		printCenteredString(String.valueOf(MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getLevel()), 196, 52, 515, g2d);
 
 		g2d.setFont(new Font(FONT.getName(), Font.PLAIN, 25));
-		printCenteredString(SQLiteOld.getMemberById(m.getUser().getId() + g.getId()).getXp() + "/" + ((int) Math.pow(SQLiteOld.getMemberById(m.getUser().getId() + g.getId()).getLevel(), 2) * 100), 196, 52, 538, g2d);
+		printCenteredString(MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getXp() + "/" + ((int) Math.pow(MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getLevel(), 2) * 100), 196, 52, 538, g2d);
 
-		List<Member> mbs = SQLiteOld.getMemberRank(g.getId(), false);
+		List<Member> mbs = MemberDAO.getMemberRank(g.getId(), false);
 		int pos = 0;
 		for (int i = 0; i < mbs.size(); i++) {
 			if (mbs.get(i).getId().equals(m.getUser().getId() + g.getId())) {
@@ -135,7 +135,7 @@ public class Profile {
 			}
 		}
 
-		mbs = SQLiteOld.getMemberRank(g.getId(), true);
+		mbs = MemberDAO.getMemberRank(g.getId(), true);
 		int posG = 0;
 		for (int i = 0; i < mbs.size(); i++) {
 			if (mbs.get(i).getId().equals(m.getUser().getId() + g.getId())) {
@@ -153,7 +153,7 @@ public class Profile {
 
 
 		g2d.setFont(new Font("DejaVu Sans", Font.BOLD, 25));
-		String s = SQLiteOld.getMemberById(m.getUser().getId() + g.getId()).getBio();
+		String s = MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getBio();
 		drawStringMultiLine(g2d, s.isEmpty() ? "Sem biografia" : s, 440, 474, 403);
 
 		drawBadges(m, g, g2d);
@@ -183,8 +183,8 @@ public class Profile {
 
 	private static void drawBadges(net.dv8tion.jda.api.entities.Member m, Guild s, Graphics2D g2d) throws IOException {
 		java.util.List<BufferedImage> badges = new ArrayList<BufferedImage>() {{
-			if (!SQLiteOld.getMemberByMid(m.getUser().getId()).getExceed().isEmpty()) {
-				switch (ExceedEnums.getByName(SQLiteOld.getMemberByMid(m.getUser().getId()).getExceed())) {
+			if (!MemberDAO.getMemberByMid(m.getUser().getId()).getExceed().isEmpty()) {
+				switch (ExceedEnums.getByName(MemberDAO.getMemberByMid(m.getUser().getId()).getExceed())) {
 					case IMANITY:
 						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/imanity.png"))));
 						break;
@@ -216,42 +216,42 @@ public class Profile {
 				if (Main.getInfo().getEditors().contains(m.getUser().getId()))
 					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/writer.png"))));
 				try {
-					if (Tag.getTagById(m.getUser().getId()).isReader())
+					if (TagDAO.getTagById(m.getUser().getId()).isReader())
 						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/reader.png"))));
 				} catch (Exception ignore) {
 				}
 				if (m.hasPermission(Permission.MANAGE_CHANNEL))
 					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/mod.png"))));
 				try {
-					if (SQLiteOld.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 70)
+					if (MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 70)
 						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_70.png"))));
-					else if (SQLiteOld.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 60)
+					else if (MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 60)
 						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_60.png"))));
-					else if (SQLiteOld.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 50)
+					else if (MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 50)
 						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_50.png"))));
-					else if (SQLiteOld.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 40)
+					else if (MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 40)
 						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_40.png"))));
-					else if (SQLiteOld.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 30)
+					else if (MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 30)
 						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_30.png"))));
-					else if (SQLiteOld.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 20)
+					else if (MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 20)
 						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_20.png"))));
 				} catch (Exception ignore) {
 				}
 				try {
-					if (Tag.getTagById(m.getUser().getId()).isVerified())
+					if (TagDAO.getTagById(m.getUser().getId()).isVerified())
 						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/verified.png"))));
 				} catch (Exception ignore) {
 				}
 				try {
-					if (Tag.getTagById(m.getUser().getId()).isToxic())
+					if (TagDAO.getTagById(m.getUser().getId()).isToxic())
 						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/toxic.png"))));
 				} catch (Exception ignore) {
 				}
 				try {
-					if (!SQLiteOld.getMemberById(m.getUser().getId() + s.getId()).getWaifu().isEmpty()) {
+					if (!MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getWaifu().isEmpty()) {
 						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/married.png"))));
 						g2d.setFont(new Font(FONT.getName(), Font.PLAIN, 30));
-						drawOutlinedText("Casado(a) com: " + Main.getInfo().getUserByID(SQLiteOld.getMemberById(m.getUser().getId() + s.getId()).getWaifu()).getName(), 270, 298, g2d);
+						drawOutlinedText("Casado(a) com: " + Main.getInfo().getUserByID(MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getWaifu()).getName(), 270, 298, g2d);
 					}
 				} catch (Exception ignore) {
 				}

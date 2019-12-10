@@ -3,6 +3,7 @@ package com.kuuhaku.command.commands.fun;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.MySQL.CanvasDAO;
 import com.kuuhaku.model.PixelCanvas;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
@@ -57,7 +58,7 @@ public class PixelCanvasCommand extends Command {
 			PixelCanvas canvas = Main.getInfo().getCanvas();
 			canvas.addPixel(message.getTextChannel(), coords, color).queue();
 
-			com.kuuhaku.controller.MySQL.Canvas.saveCanvas(canvas);
+			CanvasDAO.saveCanvas(canvas);
 		} catch (NumberFormatException e) {
 			channel.sendMessage(":x: | Cor no formato incorreto, ela deve seguir o padrão hexadecimal (#RRGGBB).").queue();
 		}
