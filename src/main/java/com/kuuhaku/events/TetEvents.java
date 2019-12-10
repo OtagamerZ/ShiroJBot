@@ -21,7 +21,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.rpg.NewCampaignCommand;
 import com.kuuhaku.command.commands.rpg.NewPlayerCommand;
-import com.kuuhaku.controller.SQLiteOld;
+import com.kuuhaku.controller.SQLite.GuildOperationsDAO;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -90,7 +90,7 @@ public class TetEvents extends ListenerAdapter {
 			String prefix = "";
 			if (!Main.getInfo().isDev()) {
 				try {
-					prefix = SQLiteOld.getGuildPrefix(guild.getId());
+					prefix = GuildOperationsDAO.getGuildPrefix(guild.getId());
 				} catch (NoResultException | NullPointerException ignore) {
 				}
 			} else prefix = Main.getInfo().getDefaultPrefix();

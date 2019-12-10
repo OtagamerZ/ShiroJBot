@@ -3,7 +3,7 @@ package com.kuuhaku.command.commands.misc;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.SQLiteOld;
+import com.kuuhaku.controller.SQLite.GuildOperationsDAO;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -36,7 +36,7 @@ public class ShiroEmoteListCommand extends Command {
 
 			eb.setTitle("<a:SmugDance:598842924725305344> Emotes disponíveis para a Shiro:");
 			eb.setColor(Helper.getRandomColor());
-			eb.setAuthor("Para usar estes emotes, utilize o comando \"" + SQLiteOld.getGuildPrefix(guild.getId()) + "say MENÇÃO\"");
+			eb.setAuthor("Para usar estes emotes, utilize o comando \"" + GuildOperationsDAO.getGuildPrefix(guild.getId()) + "say MENÇÃO\"");
 			eb.setFooter("Página " + (i + 1) + ". Mostrando " + (-10 + 10 * (i + 1)) + " - " + (Math.min(10 * (i + 1), f.size())) + " resultados.", null);
 
 			pages.add(eb.build());

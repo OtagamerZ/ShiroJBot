@@ -8,7 +8,7 @@ import com.kuuhaku.model.guildConfig;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-public class Backup {
+public class BackupDAO {
 	public static void dumpData(DataDump data) {
 		EntityManager em = Manager.getEntityManager();
 		em.getTransaction().begin();

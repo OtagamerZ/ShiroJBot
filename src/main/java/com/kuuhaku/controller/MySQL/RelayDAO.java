@@ -8,7 +8,7 @@ import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Relay {
+public class RelayDAO {
 	public static void permaBlock(PermaBlock p) {
 		EntityManager em = Manager.getEntityManager();
 

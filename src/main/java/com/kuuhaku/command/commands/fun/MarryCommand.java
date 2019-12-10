@@ -3,7 +3,7 @@ package com.kuuhaku.command.commands.fun;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.SQLiteOld;
+import com.kuuhaku.controller.SQLite.MemberDAO;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
@@ -23,7 +23,7 @@ public class MarryCommand extends Command {
 			} else if (message.getMentionedUsers().get(0) == author) {
 				channel.sendMessage(":x: | Por mais que eu respeite seu lado otaku, você não pode se casar com sí mesmo!").queue();
 				return;
-			} else if (!SQLiteOld.getMemberById(author.getId() + guild.getId()).getWaifu().isEmpty() || !SQLiteOld.getMemberById(message.getMentionedUsers().get(0).getId() + guild.getId()).getWaifu().isEmpty()) {
+			} else if (!MemberDAO.getMemberById(author.getId() + guild.getId()).getWaifu().isEmpty() || !MemberDAO.getMemberById(message.getMentionedUsers().get(0).getId() + guild.getId()).getWaifu().isEmpty()) {
 				channel.sendMessage(":x: | Essa pessoa já está casada, hora de passar pra frente!").queue();
 				return;
 			}

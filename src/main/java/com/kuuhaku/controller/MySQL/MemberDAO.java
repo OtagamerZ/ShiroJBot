@@ -4,7 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
 
-public class Member {
+public class MemberDAO {
 	@SuppressWarnings("unchecked")
 	public static List<com.kuuhaku.model.Member> getMembers() {
 		EntityManager em = Manager.getEntityManager();

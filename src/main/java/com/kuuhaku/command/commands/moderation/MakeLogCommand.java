@@ -2,7 +2,7 @@ package com.kuuhaku.command.commands.moderation;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.SQLiteOld;
+import com.kuuhaku.controller.SQLite.GuildDAO;
 import com.kuuhaku.model.guildConfig;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
@@ -20,7 +20,7 @@ public class MakeLogCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		try {
 
-			guildConfig gc = SQLiteOld.getGuildById(guild.getId());
+			guildConfig gc = GuildDAO.getGuildById(guild.getId());
 			try {
 				Objects.requireNonNull(guild.getTextChannelById(gc.getLogChannel())).delete().queue();
 			} catch (Exception ignore) {
@@ -29,7 +29,7 @@ public class MakeLogCommand extends Command {
 			guild.createTextChannel("shiro-log").queue(c -> {
 				gc.setLogChannel(c.getId());
 				channel.sendMessage("Canal de log criado com sucesso em " + c.getAsMention()).queue();
-				SQLiteOld.updateGuildSettings(gc);
+				GuildDAO.updateGuildSettings(gc);
 			});
 		} catch (InsufficientPermissionException e) {
 			channel.sendMessage(":x: | Não tenho permissões sufficientes para criar um canal.").queue();

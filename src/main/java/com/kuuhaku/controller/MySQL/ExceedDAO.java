@@ -10,7 +10,7 @@ import javax.persistence.Query;
 import java.time.LocalDate;
 import java.util.List;
 
-public class Exceed {
+public class ExceedDAO {
 	@SuppressWarnings("unchecked")
     public static List<com.kuuhaku.model.Member> getExceedMembers(ExceedEnums ex) {
         EntityManager em = Manager.getEntityManager();

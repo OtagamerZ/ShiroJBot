@@ -19,8 +19,8 @@ package com.kuuhaku.utils;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.MySQL.Tag;
-import com.kuuhaku.controller.SQLiteOld;
+import com.kuuhaku.controller.MySQL.TagDAO;
+import com.kuuhaku.controller.SQLite.GuildDAO;
 import com.kuuhaku.events.MessageListener;
 import com.kuuhaku.model.Extensions;
 import com.kuuhaku.model.GamblePool;
@@ -234,7 +234,7 @@ public class Helper {
 	}
 
 	public static void logToChannel(User u, boolean isCommand, Command c, String msg, Guild g) {
-		guildConfig gc = SQLiteOld.getGuildById(g.getId());
+		guildConfig gc = GuildDAO.getGuildById(g.getId());
 		if (gc.getLogChannel() == null || gc.getLogChannel().isEmpty()) return;
 		else if (g.getTextChannelById(gc.getLogChannel()) == null) gc.setLogChannel("");
 		try {
@@ -250,7 +250,7 @@ public class Helper {
 		} catch (NullPointerException ignore) {
 		} catch (Exception e) {
 			gc.setLogChannel("");
-			SQLiteOld.updateGuildSettings(gc);
+			GuildDAO.updateGuildSettings(gc);
 			logger(Helper.class).warn(e + " | " + e.getStackTrace()[0]);
 		}
 	}
@@ -364,7 +364,7 @@ public class Helper {
 		EnumSet guildPerms = c.getGuild().getSelfMember().getPermissions();
 		String jibrilPerms = "";
 
-		if (Tag.getTagById(c.getGuild().getOwnerId()).isPartner() && c.getGuild().getMembers().contains(Main.getJibril().getSelfUser())) {
+		if (TagDAO.getTagById(c.getGuild().getOwnerId()).isPartner() && c.getGuild().getMembers().contains(Main.getJibril().getSelfUser())) {
 			EnumSet JchannelPerms = Objects.requireNonNull(c.getGuild().getMember(Main.getJibril().getSelfUser())).getPermissions(c);
 			EnumSet JguildPerms = Objects.requireNonNull(c.getGuild().getMember(Main.getJibril().getSelfUser())).getPermissions();
 			jibrilPerms = "\n\n\n__**Permissões necessárias para uso completo da Jibril**__\n\n" +

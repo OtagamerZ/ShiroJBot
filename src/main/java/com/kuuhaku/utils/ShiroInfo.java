@@ -17,7 +17,7 @@
 
 package com.kuuhaku.utils;
 
-import com.kuuhaku.controller.MySQL.Canvas;
+import com.kuuhaku.controller.MySQL.CanvasDAO;
 import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.handlers.games.RPG.World.World;
 import com.kuuhaku.handlers.music.GuildMusicManager;
@@ -231,6 +231,6 @@ public class ShiroInfo {
 	}
 
 	public PixelCanvas getCanvas() {
-		return Canvas.getCanvas();
+		return CanvasDAO.getCanvas();
 	}
 }

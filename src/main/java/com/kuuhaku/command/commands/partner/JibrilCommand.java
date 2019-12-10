@@ -2,7 +2,7 @@ package com.kuuhaku.command.commands.partner;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.MySQL.Tag;
+import com.kuuhaku.controller.MySQL.TagDAO;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.PrivilegeLevel;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -21,7 +21,7 @@ public class JibrilCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		try {
-			if (!Tag.getTagById(author.getId()).isPartner() && !Helper.hasPermission(member, PrivilegeLevel.DEV)) {
+			if (!TagDAO.getTagById(author.getId()).isPartner() && !Helper.hasPermission(member, PrivilegeLevel.DEV)) {
 				channel.sendMessage(":x: | Este comando é exlusivo para parceiros!").queue();
 				return;
 			}

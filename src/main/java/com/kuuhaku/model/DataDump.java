@@ -1,5 +1,7 @@
 package com.kuuhaku.model;
 
+import com.kuuhaku.controller.MySQL.MemberDAO;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +26,7 @@ public class DataDump {
         this.caDump = new ArrayList<>();
         this.gcDump = new ArrayList<>();
 
-        List<Member> oldMembers = com.kuuhaku.controller.MySQL.Member.getMembers();
+        List<Member> oldMembers = MemberDAO.getMembers();
         mDump.removeAll(oldMembers);
 
         this.mDump = mDump;
