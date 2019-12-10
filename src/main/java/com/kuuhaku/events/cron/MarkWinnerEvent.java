@@ -1,7 +1,7 @@
 package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.MySQL.Exceed;
+import com.kuuhaku.controller.MySQL.ExceedDAO;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import org.quartz.Job;
@@ -13,11 +13,11 @@ public class MarkWinnerEvent implements Job {
 
 	@Override
 	public void execute(JobExecutionContext context) {
-		Exceed.markWinner(Exceed.findWinner());
-		Helper.logger(this.getClass()).info("Vencedor mensal: " + Exceed.getWinner());
+		ExceedDAO.markWinner(ExceedDAO.findWinner());
+		Helper.logger(this.getClass()).info("Vencedor mensal: " + ExceedDAO.getWinner());
 
-		String ex = Exceed.getWinner();
-		Exceed.getExceedMembers(ExceedEnums.getByName(ex)).forEach(em ->
+		String ex = ExceedDAO.getWinner();
+		ExceedDAO.getExceedMembers(ExceedEnums.getByName(ex)).forEach(em ->
 				Main.getInfo().getUserByID(em.getMid()).openPrivateChannel().queue(c -> {
 					try {
 						c.sendMessage("O seu exceed foi campeão neste mês, parabéns!\n" +

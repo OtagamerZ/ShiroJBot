@@ -20,7 +20,7 @@ package com.kuuhaku.command.commands.information;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.SQLiteOld;
+import com.kuuhaku.controller.SQLite.MemberDAO;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -40,10 +40,10 @@ public class URankCommand extends Command {
 		List<com.kuuhaku.model.Member> mbs;
 		boolean global = false;
 		if (args.length > 0 && args[0].equals("global")) {
-			mbs = SQLiteOld.getMemberRank(null, true);
+			mbs = MemberDAO.getMemberRank(null, true);
 			global = true;
 		} else {
-			mbs = SQLiteOld.getMemberRank(guild.getId(), false);
+			mbs = MemberDAO.getMemberRank(guild.getId(), false);
 		}
 
 		String champ = "1 - " + (global ? "(" + Main.getInfo().getGuildByID(mbs.get(0).getId().replace(mbs.get(0).getMid(), "")).getName() + ") " : "") + Main.getInfo().getUserByID(mbs.get(0).getMid()).getAsTag() + " (Level " + mbs.get(0).getLevel() + ")";

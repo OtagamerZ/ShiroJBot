@@ -20,7 +20,7 @@ package com.kuuhaku.command.commands.dev;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.MySQL.Tag;
+import com.kuuhaku.controller.MySQL.TagDAO;
 import com.kuuhaku.model.Tags;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
@@ -38,24 +38,24 @@ public class ToxicTagCommand extends Command {
         if (message.getMentionedUsers().size() > 0) {
             if (message.getMentionedUsers().size() == 1) {
                 try {
-                    Tags t = Tag.getTagById(message.getMentionedUsers().get(0).getId());
+                    Tags t = TagDAO.getTagById(message.getMentionedUsers().get(0).getId());
                     if (t.isToxic()) {
-                        Tag.removeTagToxic(message.getMentionedUsers().get(0).getId());
+                        TagDAO.removeTagToxic(message.getMentionedUsers().get(0).getId());
                         channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " não é mais tóxico, que bom!").queue();
                     } else {
-                        Tag.giveTagToxic(message.getMentionedUsers().get(0).getId());
-                        Tag.removeTagVerified(message.getMentionedUsers().get(0).getId());
+                        TagDAO.giveTagToxic(message.getMentionedUsers().get(0).getId());
+                        TagDAO.removeTagVerified(message.getMentionedUsers().get(0).getId());
                         channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " agora é tóxico, reporta ele!").queue();
                     }
                 } catch (NoResultException e) {
-                    Tag.addUserTagsToDB(message.getMentionedUsers().get(0).getId());
-                    Tags t = Tag.getTagById(message.getMentionedUsers().get(0).getId());
+                    TagDAO.addUserTagsToDB(message.getMentionedUsers().get(0).getId());
+                    Tags t = TagDAO.getTagById(message.getMentionedUsers().get(0).getId());
                     if (t.isToxic()) {
-                        Tag.removeTagToxic(message.getMentionedUsers().get(0).getId());
+                        TagDAO.removeTagToxic(message.getMentionedUsers().get(0).getId());
                         channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " não é mais tóxico, que bom!").queue();
                     } else {
-                        Tag.giveTagToxic(message.getMentionedUsers().get(0).getId());
-                        Tag.removeTagVerified(message.getMentionedUsers().get(0).getId());
+                        TagDAO.giveTagToxic(message.getMentionedUsers().get(0).getId());
+                        TagDAO.removeTagVerified(message.getMentionedUsers().get(0).getId());
                         channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " agora é tóxico, reporta ele!").queue();
                     }
                 }
@@ -66,24 +66,24 @@ public class ToxicTagCommand extends Command {
             try {
                 if (Main.getInfo().getUserByID(args[0]) != null) {
                     try {
-                        Tags t = Tag.getTagById(args[0]);
+                        Tags t = TagDAO.getTagById(args[0]);
 						if (t.isToxic()) {
-                            Tag.removeTagToxic(args[0]);
+                            TagDAO.removeTagToxic(args[0]);
                             channel.sendMessage("<@" + args[0] + "> não é mais tóxico, que bom!").queue();
                         } else {
-                            Tag.giveTagToxic(args[0]);
-                            Tag.removeTagVerified(args[0]);
+                            TagDAO.giveTagToxic(args[0]);
+                            TagDAO.removeTagVerified(args[0]);
                             channel.sendMessage("<@" + args[0] + "> agora é tóxico, reporta ele!").queue();
                         }
                     } catch (NoResultException e) {
-                        Tag.addUserTagsToDB(args[0]);
-                        Tags t = Tag.getTagById(args[0]);
+                        TagDAO.addUserTagsToDB(args[0]);
+                        Tags t = TagDAO.getTagById(args[0]);
 						if (t.isToxic()) {
-                            Tag.removeTagToxic(args[0]);
+                            TagDAO.removeTagToxic(args[0]);
                             channel.sendMessage("<@" + args[0] + "> não é mais tóxico, que bom!").queue();
                         } else {
-							Tag.giveTagToxic(args[0]);
-                            Tag.removeTagVerified(args[0]);
+							TagDAO.giveTagToxic(args[0]);
+                            TagDAO.removeTagVerified(args[0]);
                             channel.sendMessage("<@" + args[0] + "> agora é tóxico, reporta ele!").queue();
                         }
                     }

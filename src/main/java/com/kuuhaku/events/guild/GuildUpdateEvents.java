@@ -17,8 +17,9 @@
 
 package com.kuuhaku.events.guild;
 
-import com.kuuhaku.controller.MySQL.Tag;
-import com.kuuhaku.controller.SQLiteOld;
+import com.kuuhaku.controller.MySQL.TagDAO;
+import com.kuuhaku.controller.SQLite.GuildDAO;
+import com.kuuhaku.controller.SQLite.GuildOperationsDAO;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateNameEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateOwnerEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -30,7 +31,7 @@ public class GuildUpdateEvents extends ListenerAdapter {
 
     @Override
     public void onGuildUpdateName(GuildUpdateNameEvent event) {
-        SQLiteOld.updateGuildName(event.getNewName(), SQLiteOld.getGuildById(event.getGuild().getId()));
+        GuildOperationsDAO.updateGuildName(event.getNewName(), GuildDAO.getGuildById(event.getGuild().getId()));
     }
 
     @Override
@@ -38,15 +39,15 @@ public class GuildUpdateEvents extends ListenerAdapter {
         assert event.getOldOwner() != null;
         assert event.getNewOwner() != null;
 
-        if (Tag.getTagById(event.getOldOwner().getId()).isPartner()) {
-            Tag.removeTagPartner(event.getOldOwner().getId());
+        if (TagDAO.getTagById(event.getOldOwner().getId()).isPartner()) {
+            TagDAO.removeTagPartner(event.getOldOwner().getId());
 
             try {
-                Tag.getTagById(event.getNewOwner().getId());
+                TagDAO.getTagById(event.getNewOwner().getId());
             } catch (NoResultException e) {
-                Tag.addUserTagsToDB(event.getNewOwner().getId());
+                TagDAO.addUserTagsToDB(event.getNewOwner().getId());
             } finally {
-                Tag.giveTagPartner(event.getNewOwner().getId());
+                TagDAO.giveTagPartner(event.getNewOwner().getId());
             }
         }
     }

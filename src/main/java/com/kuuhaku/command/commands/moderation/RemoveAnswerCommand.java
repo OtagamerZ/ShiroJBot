@@ -19,7 +19,7 @@ package com.kuuhaku.command.commands.moderation;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.SQLiteOld;
+import com.kuuhaku.controller.SQLite.CustomAnswerDAO;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
@@ -39,7 +39,7 @@ public class RemoveAnswerCommand extends Command {
         }
 
         try {
-            SQLiteOld.removeCAFromDB(SQLiteOld.getCAByID(Long.parseLong(args[0])));
+            CustomAnswerDAO.removeCAFromDB(CustomAnswerDAO.getCAByID(Long.parseLong(args[0])));
             channel.sendMessage("Não vou mais responder com a resposta `" + args[0] + "`.").queue();
         } catch (NoResultException e) {
             channel.sendMessage(":x: | ID de resposta inválido.").queue();

@@ -19,7 +19,7 @@ package com.kuuhaku.command.commands.moderation;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.SQLiteOld;
+import com.kuuhaku.controller.SQLite.GuildDAO;
 import com.kuuhaku.model.guildConfig;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
@@ -32,7 +32,7 @@ public class AllowImgCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-		guildConfig gc = SQLiteOld.getGuildById(guild.getId());
+		guildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (gc.isAllowImg()) {
 			gc.setAllowImg(false);
@@ -42,6 +42,6 @@ public class AllowImgCommand extends Command {
 			channel.sendMessage("Agora imagens enviadas no chat global aparecerão neste servidor.").queue();
 		}
 
-		SQLiteOld.updateGuildSettings(gc);
+		GuildDAO.updateGuildSettings(gc);
 	}
 }

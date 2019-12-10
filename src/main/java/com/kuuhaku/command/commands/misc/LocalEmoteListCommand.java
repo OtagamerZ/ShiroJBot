@@ -2,7 +2,7 @@ package com.kuuhaku.command.commands.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.SQLiteOld;
+import com.kuuhaku.controller.SQLite.GuildDAO;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -35,7 +35,7 @@ public class LocalEmoteListCommand extends Command {
 
 			eb.setTitle("<a:SmugDance:598842924725305344> Emotes disponíveis neste servidor:");
 			eb.setColor(Helper.getRandomColor());
-			eb.setAuthor("Para usar estes emotes, utilize o comando \"" + SQLiteOld.getGuildPrefix(guild.getId()) + "say MENÇÃO\"");
+			eb.setAuthor("Para usar estes emotes, utilize o comando \"" + GuildDAO.getGuildById(guild.getId()).getPrefix() + "say MENÇÃO\"");
 			eb.setFooter("Página " + (i + 1) + ". Mostrando " + (-10 + 10 * (i + 1)) + " - " + (Math.min(10 * (i + 1), f.size())) + " resultados.", null);
 
 			pages.add(eb.build());

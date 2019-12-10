@@ -159,7 +159,7 @@ public class guildConfig {
 		this.cargoslvl = cargoslvl.toString();
 	}
 
-	public boolean getLvlNotif() {
+	public boolean isLvlNotif() {
 		return Boolean.parseBoolean(lvlNotif);
 	}
 

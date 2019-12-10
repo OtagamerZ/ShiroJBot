@@ -1,6 +1,6 @@
 package com.kuuhaku.controller.MySQL;
 
-import com.kuuhaku.controller.SQLiteOld;
+import com.kuuhaku.controller.SQLite.MemberDAO;
 import com.kuuhaku.model.Member;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -16,7 +16,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
-public class Votes {
+public class VotesDAO {
 	public static void voteUser(Guild guild, User user, User target, boolean vote) {
         EntityManager em = Manager.getEntityManager();
 
@@ -29,10 +29,10 @@ public class Votes {
 
         em.close();
 
-        Member m = SQLiteOld.getMemberById(user.getId() + guild.getId());
+        Member m = MemberDAO.getMemberById(user.getId() + guild.getId());
         m.vote();
 
-        SQLiteOld.saveMemberToDB(m);
+        MemberDAO.updateMemberConfigs(m);
     }
 
 	@SuppressWarnings("unchecked")
