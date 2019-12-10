@@ -1,8 +1,10 @@
 package com.kuuhaku.events;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.MySQL.Tag;
-import com.kuuhaku.controller.SQLiteOld;
+import com.kuuhaku.controller.MySQL.MemberDAO;
+import com.kuuhaku.controller.MySQL.TagDAO;
+import com.kuuhaku.controller.SQLite.GuildDAO;
+import com.kuuhaku.controller.SQLite.GuildOperationsDAO;
 import com.kuuhaku.model.Member;
 import com.kuuhaku.model.RelayBlockList;
 import com.kuuhaku.utils.Helper;
@@ -59,21 +61,21 @@ public class JibrilEvents extends ListenerAdapter {
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		try {
-			if (event.getMessage().getContentRaw().startsWith(SQLiteOld.getGuildPrefix(event.getGuild().getId()))) return;
+			if (event.getMessage().getContentRaw().startsWith(GuildOperationsDAO.getGuildPrefix(event.getGuild().getId()))) return;
 
 			if (Main.getRelay().getRelayMap().containsValue(event.getChannel().getId()) && !event.getAuthor().isBot()) {
 				Member mb;
 				try {
-					mb = SQLiteOld.getMemberById(event.getAuthor().getId() + event.getGuild().getId());
+					mb = com.kuuhaku.controller.SQLite.MemberDAO.getMemberById(event.getAuthor().getId() + event.getGuild().getId());
 				} catch (NoResultException e) {
 					assert event.getMember() != null;
-					SQLiteOld.addMemberToDB(event.getMember());
-					mb = SQLiteOld.getMemberById(event.getAuthor().getId() + event.getGuild().getId());
+					com.kuuhaku.controller.SQLite.MemberDAO.addMemberToDB(event.getMember());
+					mb = com.kuuhaku.controller.SQLite.MemberDAO.getMemberById(event.getAuthor().getId() + event.getGuild().getId());
 				}
-				if (mb.getMid() == null) SQLiteOld.saveMemberMid(mb, event.getAuthor());
+				if (mb.getMid() == null) com.kuuhaku.controller.SQLite.MemberDAO.saveMemberMid(mb, event.getAuthor());
 
 				if (event.getMessage().getContentRaw().trim().equals("<@" + Main.getJibril().getSelfUser().getId() + ">")) {
-					event.getChannel().sendMessage("Oi? Ah, você quer saber meus comandos né?\nBem, eu não sou uma bot de comandos, eu apenas gerencio o chat global, que pode ser definido pelos moderadores desse servidor usando `" + SQLiteOld.getGuildPrefix(event.getGuild().getId()) + "settings crelay #CANAL`!").queue();
+					event.getChannel().sendMessage("Oi? Ah, você quer saber meus comandos né?\nBem, eu não sou uma bot de comandos, eu apenas gerencio o chat global, que pode ser definido pelos moderadores desse servidor usando `" + GuildOperationsDAO.getGuildPrefix(event.getGuild().getId()) + "settings crelay #CANAL`!").queue();
 					return;
 				}
 
@@ -84,13 +86,13 @@ public class JibrilEvents extends ListenerAdapter {
 								c.sendMessage(rulesMsg()).queue(s2 ->
 										c.sendMessage(finalMsg()).queue(s3 -> {
 											finalMb.setRulesSent(true);
-											SQLiteOld.updateMemberSettings(finalMb);
-											com.kuuhaku.controller.MySQL.Member.saveMemberToBD(finalMb);
+											GuildOperationsDAO.updateMemberSettings(finalMb);
+											MemberDAO.saveMemberToBD(finalMb);
 										}))));
 					} catch (ErrorResponseException ignore) {
 					}
 				if (RelayBlockList.check(event.getAuthor().getId())) {
-					if (!SQLiteOld.getGuildById(event.getGuild().getId()).isLiteMode())
+					if (!GuildDAO.getGuildById(event.getGuild().getId()).isLiteMode())
 						event.getMessage().delete().queue();
 					event.getAuthor().openPrivateChannel().queue(c -> {
 						try {
@@ -107,7 +109,7 @@ public class JibrilEvents extends ListenerAdapter {
 				String[] msg = event.getMessage().getContentRaw().split(" ");
 				for (int i = 0; i < msg.length; i++) {
 					try {
-						if (Helper.findURL(msg[i]) && !Tag.getTagById(event.getAuthor().getId()).isVerified())
+						if (Helper.findURL(msg[i]) && !TagDAO.getTagById(event.getAuthor().getId()).isVerified())
 							msg[i] = "`LINK BLOQUEADO`";
 						if (Helper.findMentions(msg[i]))
 							msg[i] = "`EVERYONE/HERE BLOQUEADO`";
@@ -119,7 +121,7 @@ public class JibrilEvents extends ListenerAdapter {
 					net.dv8tion.jda.api.entities.Member m = event.getMember();
 					assert m != null;
 					try {
-						if (Tag.getTagById(event.getAuthor().getId()).isVerified() && event.getMessage().getAttachments().size() > 0) {
+						if (TagDAO.getTagById(event.getAuthor().getId()).isVerified() && event.getMessage().getAttachments().size() > 0) {
 							try {
 								ByteArrayOutputStream baos = new ByteArrayOutputStream();
 								ImageIO.write(ImageIO.read(Helper.getImage(event.getMessage().getAttachments().get(0).getUrl())), "png", baos);

@@ -5,7 +5,7 @@ import com.kuuhaku.model.Tags;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-public class Tag {
+public class TagDAO {
 	public static Tags getTagById(String id) {
 		EntityManager em = Manager.getEntityManager();
 		Tags m;

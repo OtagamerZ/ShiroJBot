@@ -19,7 +19,7 @@ package com.kuuhaku.command.commands.moderation;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.SQLiteOld;
+import com.kuuhaku.controller.SQLite.GuildDAO;
 import com.kuuhaku.model.guildConfig;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
@@ -33,7 +33,7 @@ public class AntispamCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-		guildConfig gc = SQLiteOld.getGuildById(guild.getId());
+		guildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (args.length > 0 && (args[0].equalsIgnoreCase("soft") || args[0].equalsIgnoreCase("hard"))) {
 			switch (args[0].toLowerCase()) {
@@ -43,7 +43,7 @@ public class AntispamCommand extends Command {
 						return;
 					}
 					gc.setHardAntispam(false);
-					SQLiteOld.updateGuildSettings(gc);
+					GuildDAO.updateGuildSettings(gc);
 					channel.sendMessage("Modo de anti-spam trocado para **SOFT**").queue();
 					return;
 				case "hard":
@@ -52,7 +52,7 @@ public class AntispamCommand extends Command {
 						return;
 					}
 					gc.setHardAntispam(true);
-					SQLiteOld.updateGuildSettings(gc);
+					GuildDAO.updateGuildSettings(gc);
 					channel.sendMessage("Modo de anti-spam trocado para **HARD**").queue();
 					return;
 			}
@@ -73,7 +73,7 @@ public class AntispamCommand extends Command {
 			gc.removeNoSpamChannel(message.getTextChannel());
 		else gc.addNoSpamChannel(message.getTextChannel());
 
-		SQLiteOld.updateGuildSettings(gc);
+		GuildDAO.updateGuildSettings(gc);
 
 		if (!gc.getNoSpamChannels().contains(channel.getId()))
 			channel.sendMessage("Modo antispam neste canal está desligado").queue();

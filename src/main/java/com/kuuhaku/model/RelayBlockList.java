@@ -1,7 +1,7 @@
 package com.kuuhaku.model;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.MySQL.Relay;
+import com.kuuhaku.controller.MySQL.RelayDAO;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.awt.*;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class RelayBlockList {
-	private static final List<String> blockedIDs = Relay.blockedList();
+	private static final List<String> blockedIDs = RelayDAO.blockedList();
 	private static final List<String> blockedThumbs = new ArrayList<>();
 
 	public static void blockID(String id, String reason) {
@@ -34,7 +34,7 @@ public class RelayBlockList {
 
 		PermaBlock pb = new PermaBlock();
 		pb.block(id);
-		Relay.permaBlock(pb);
+		RelayDAO.permaBlock(pb);
 
 		eb.setTitle("Você foi bloqueado permanentemente de utilizar o chat global");
 		eb.setDescription("Este bloqueio **NÃO** será removido em momento algum, por melhor que seja a explicação para isto ter ocorrido!\n\nRazão: " + reason);
@@ -72,6 +72,6 @@ public class RelayBlockList {
 
 	public static void refresh(){
 		blockedIDs.clear();
-		blockedIDs.addAll(Relay.blockedList());
+		blockedIDs.addAll(RelayDAO.blockedList());
 	}
 }

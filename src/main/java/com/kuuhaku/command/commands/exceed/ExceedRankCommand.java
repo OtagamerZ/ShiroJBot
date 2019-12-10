@@ -2,7 +2,8 @@ package com.kuuhaku.command.commands.exceed;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.SQLiteOld;
+import com.kuuhaku.controller.MySQL.ExceedDAO;
+import com.kuuhaku.controller.SQLite.MemberDAO;
 import com.kuuhaku.model.Exceed;
 import com.kuuhaku.model.Profile;
 import com.kuuhaku.utils.ExceedEnums;
@@ -29,7 +30,7 @@ public class ExceedRankCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		channel.sendMessage("<a:Loading:598500653215645697> Gerando placares...").queue(m -> {
-			if (SQLiteOld.getMemberByMid(author.getId()).getExceed().isEmpty()) {
+			if (MemberDAO.getMemberByMid(author.getId()).getExceed().isEmpty()) {
 				m.editMessage(":x: | Você não escolheu um exceed ainda, então não poderá ver o placar").queue();
 				return;
 			}
@@ -38,7 +39,7 @@ public class ExceedRankCommand extends Command {
 				BufferedImage bi = new BufferedImage(WIDTH, HEIGTH, BufferedImage.TYPE_INT_ARGB);
 				List<Exceed> exceeds = new ArrayList<>();
 				for (ExceedEnums ex : ExceedEnums.values()) {
-					exceeds.add(com.kuuhaku.controller.MySQL.Exceed.getExceed(ex));
+					exceeds.add(ExceedDAO.getExceed(ex));
 				}
 
 				BufferedImage bg = Profile.scaleImage(ImageIO.read(Helper.getImage("http://snagfilms-a.akamaihd.net/08/bd/a9131d1c48089e81990bdeafc0c4/1426-lec3-1536x865.jpg")), WIDTH, HEIGTH);

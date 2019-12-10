@@ -15,10 +15,11 @@ package com.kuuhaku;/*
  *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import com.kuuhaku.controller.MySQL.Backup;
-import com.kuuhaku.controller.MySQL.Exceed;
+import com.kuuhaku.controller.MySQL.BackupDAO;
+import com.kuuhaku.controller.MySQL.ExceedDAO;
 import com.kuuhaku.controller.Relay;
-import com.kuuhaku.controller.SQLiteOld;
+import com.kuuhaku.controller.SQLite.GuildDAO;
+import com.kuuhaku.controller.SQLite.Manager;
 import com.kuuhaku.events.JibrilEvents;
 import com.kuuhaku.events.ScheduledEvents;
 import com.kuuhaku.events.TetEvents;
@@ -79,8 +80,8 @@ public class Main {
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		ge.registerFont(Profile.FONT);
 
-		SQLiteOld.connect();
-		if (SQLiteOld.restoreData(Backup.getData()))
+		Manager.connect();
+		if (com.kuuhaku.controller.SQLite.BackupDAO.restoreData(BackupDAO.getData()))
 			Helper.logger(Main.class).info("Dados recuperados com sucesso!");
 		else Helper.logger(Main.class).error("Erro ao recuperar dados.");
 
@@ -97,12 +98,12 @@ public class Main {
 		api.getPresence().setActivity(getRandomActivity());
 		jbr.getPresence().setActivity(Activity.listening("as mensagens de " + relay.getRelayMap().size() + " servidores!"));
 		tet.getPresence().setActivity(Activity.playing(" em diversos mundos espalhados em " + tet.getGuilds().size() + " servidores!"));
-		getInfo().setWinner(Exceed.getWinner());
+		getInfo().setWinner(ExceedDAO.getWinner());
 		Main.getInfo().getAPI().getGuilds().forEach(g -> {
 			try {
-				SQLiteOld.getGuildById(g.getId());
+				GuildDAO.getGuildById(g.getId());
 			} catch (NoResultException e) {
-				SQLiteOld.addGuildToDB(g);
+				GuildDAO.addGuildToDB(g);
 				Helper.logger(Main.class).info("Guild adicionada ao banco: " + g.getName());
 			}
 		});
@@ -144,11 +145,11 @@ public class Main {
 	}
 
 	public static void shutdown() {
-		Backup.dumpData(new DataDump(SQLiteOld.getCADump(), SQLiteOld.getGuildDump()));
+		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.SQLite.BackupDAO.getCADump(), com.kuuhaku.controller.SQLite.BackupDAO.getGuildDump()));
 		Helper.logger(Main.class).info("Respostas/Guilds salvos com sucesso!");
-		Backup.dumpData(new DataDump(SQLiteOld.getMemberDump()));
+		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.SQLite.BackupDAO.getMemberDump()));
 		Helper.logger(Main.class).info("Membros salvos com sucesso!");
-		SQLiteOld.disconnect();
+		Manager.disconnect();
 		tet.shutdown();
 		jbr.shutdown();
 		api.shutdown();
