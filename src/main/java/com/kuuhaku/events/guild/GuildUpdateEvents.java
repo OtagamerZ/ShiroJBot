@@ -1,0 +1,54 @@
+/*
+ * This file is part of Shiro J Bot.
+ *
+ *     Shiro J Bot is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     Shiro J Bot is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
+ */
+
+package com.kuuhaku.events.guild;
+
+import com.kuuhaku.controller.MySQL.TagDAO;
+import com.kuuhaku.controller.SQLite.GuildDAO;
+import com.kuuhaku.controller.SQLite.GuildOperationsDAO;
+import net.dv8tion.jda.api.events.guild.update.GuildUpdateNameEvent;
+import net.dv8tion.jda.api.events.guild.update.GuildUpdateOwnerEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+
+import javax.annotation.Nonnull;
+import javax.persistence.NoResultException;
+
+public class GuildUpdateEvents extends ListenerAdapter {
+
+    @Override
+    public void onGuildUpdateName(GuildUpdateNameEvent event) {
+        GuildOperationsDAO.updateGuildName(event.getNewName(), GuildDAO.getGuildById(event.getGuild().getId()));
+    }
+
+    @Override
+    public void onGuildUpdateOwner(@Nonnull GuildUpdateOwnerEvent event) {
+        assert event.getOldOwner() != null;
+        assert event.getNewOwner() != null;
+
+        if (TagDAO.getTagById(event.getOldOwner().getId()).isPartner()) {
+            TagDAO.removeTagPartner(event.getOldOwner().getId());
+
+            try {
+                TagDAO.getTagById(event.getNewOwner().getId());
+            } catch (NoResultException e) {
+                TagDAO.addUserTagsToDB(event.getNewOwner().getId());
+            } finally {
+                TagDAO.giveTagPartner(event.getNewOwner().getId());
+            }
+        }
+    }
+}
