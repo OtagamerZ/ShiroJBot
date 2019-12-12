@@ -44,7 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Main {
+public class Main implements Thread.UncaughtExceptionHandler {
 
 	private static ShiroInfo info;
 	private static Relay relay;
@@ -56,6 +56,7 @@ public class Main {
 	private static String[] arguments;
 
 	public static void main(String[] args) throws Exception {
+		Thread.setDefaultUncaughtExceptionHandler(new Main());
 		info = new ShiroInfo();
 		relay = new Relay();
 
@@ -166,5 +167,10 @@ public class Main {
 
 	public static JDA getTet() {
 		return tet;
+	}
+
+	@Override
+	public void uncaughtException(Thread t, Throwable e) {
+		Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 	}
 }
