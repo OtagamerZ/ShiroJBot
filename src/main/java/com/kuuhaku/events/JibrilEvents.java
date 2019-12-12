@@ -73,7 +73,7 @@ public class JibrilEvents extends ListenerAdapter {
 				}
 				if (mb.getMid() == null) com.kuuhaku.controller.SQLite.MemberDAO.saveMemberMid(mb, event.getAuthor());
 
-				if (event.getMessage().getContentRaw().trim().equals("<@!" + Main.getJibril().getSelfUser().getId() + ">")) {
+				if (event.getMessage().getContentRaw().trim().equals(Main.getJibril().getSelfUser().getAsMention())) {
 					event.getChannel().sendMessage("Oi? Ah, você quer saber meus comandos né?\nBem, eu não sou uma bot de comandos, eu apenas gerencio o chat global, que pode ser definido pelos moderadores desse servidor usando `" + GuildDAO.getGuildById(event.getGuild().getId()).getPrefix() + "settings crelay #CANAL`!").queue();
 					return;
 				}
