@@ -4,7 +4,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.MySQL.MemberDAO;
 import com.kuuhaku.controller.MySQL.TagDAO;
 import com.kuuhaku.controller.SQLite.GuildDAO;
-import com.kuuhaku.controller.SQLite.GuildOperationsDAO;
 import com.kuuhaku.model.Member;
 import com.kuuhaku.model.RelayBlockList;
 import com.kuuhaku.utils.Helper;
@@ -61,7 +60,7 @@ public class JibrilEvents extends ListenerAdapter {
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		try {
-			if (event.getMessage().getContentRaw().startsWith(GuildOperationsDAO.getGuildPrefix(event.getGuild().getId()))) return;
+			if (event.getMessage().getContentRaw().startsWith(GuildDAO.getGuildById(event.getGuild().getId()).getPrefix())) return;
 
 			if (Main.getRelay().getRelayMap().containsValue(event.getChannel().getId()) && !event.getAuthor().isBot()) {
 				Member mb;
@@ -75,7 +74,7 @@ public class JibrilEvents extends ListenerAdapter {
 				if (mb.getMid() == null) com.kuuhaku.controller.SQLite.MemberDAO.saveMemberMid(mb, event.getAuthor());
 
 				if (event.getMessage().getContentRaw().trim().equals("<@!" + Main.getJibril().getSelfUser().getId() + ">")) {
-					event.getChannel().sendMessage("Oi? Ah, você quer saber meus comandos né?\nBem, eu não sou uma bot de comandos, eu apenas gerencio o chat global, que pode ser definido pelos moderadores desse servidor usando `" + GuildOperationsDAO.getGuildPrefix(event.getGuild().getId()) + "settings crelay #CANAL`!").queue();
+					event.getChannel().sendMessage("Oi? Ah, você quer saber meus comandos né?\nBem, eu não sou uma bot de comandos, eu apenas gerencio o chat global, que pode ser definido pelos moderadores desse servidor usando `" + GuildDAO.getGuildById(event.getGuild().getId()).getPrefix() + "settings crelay #CANAL`!").queue();
 					return;
 				}
 
@@ -86,7 +85,7 @@ public class JibrilEvents extends ListenerAdapter {
 								c.sendMessage(rulesMsg()).queue(s2 ->
 										c.sendMessage(finalMsg()).queue(s3 -> {
 											finalMb.setRulesSent(true);
-											GuildOperationsDAO.updateMemberSettings(finalMb);
+											com.kuuhaku.controller.SQLite.MemberDAO.updateMemberConfigs(finalMb);
 											MemberDAO.saveMemberToBD(finalMb);
 										}))));
 					} catch (ErrorResponseException ignore) {
