@@ -102,7 +102,7 @@ public class TetEvents extends ListenerAdapter {
 				commandName = rawMsgNoPrefix.split(" ")[0].trim();
 			}
 
-			if (message.getContentRaw().trim().equals("<@!" + Main.getTet().getSelfUser().getId() + ">")) {
+			if (message.getContentRaw().trim().equals(Main.getTet().getSelfUser().getAsMention())) {
 				channel.sendMessage("Opa, eae jogador! Meus comandos são listados pela Shiro, digite `" + prefix + "help` e clique na categoria `RPG` para vê-los!").queue();
 				return;
 			}
