@@ -133,7 +133,7 @@ public class GuildEvents extends ListenerAdapter {
 				}
 			}
 
-			if (message.getContentRaw().trim().equals("<@!" + Main.getInfo().getSelfUser().getId() + ">")) {
+			if (message.getContentRaw().trim().equals(Main.getInfo().getSelfUser().getAsMention())) {
 				channel.sendMessage("Quer saber como pode usar meus comandos? Digite `" + prefix + "ajuda` para ver todos eles ordenados por categoria!").queue();
 				return;
 			}
