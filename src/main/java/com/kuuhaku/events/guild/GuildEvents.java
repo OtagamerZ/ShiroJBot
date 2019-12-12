@@ -23,11 +23,11 @@ import com.kuuhaku.controller.MySQL.LogDAO;
 import com.kuuhaku.controller.MySQL.WaifuDAO;
 import com.kuuhaku.controller.SQLite.CustomAnswerDAO;
 import com.kuuhaku.controller.SQLite.GuildDAO;
-import com.kuuhaku.controller.SQLite.GuildOperationsDAO;
 import com.kuuhaku.controller.SQLite.MemberDAO;
 import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.model.CustomAnswers;
 import com.kuuhaku.model.Log;
+import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -63,7 +63,7 @@ public class GuildEvents extends ListenerAdapter {
 			String prefix = "";
 			if (!Main.getInfo().isDev()) {
 				try {
-					prefix = GuildOperationsDAO.getGuildPrefix(guild.getId());
+					prefix = GuildDAO.getGuildById(guild.getId()).getPrefix();
 				} catch (NoResultException | NullPointerException ignore) {
 				}
 			} else prefix = Main.getInfo().getDefaultPrefix();
@@ -117,7 +117,7 @@ public class GuildEvents extends ListenerAdapter {
         }
 		*/
 
-			if (GuildOperationsDAO.getGuildNoSpamChannels(guild.getId()).contains(channel.getId()) && author != Main.getInfo().getSelfUser()) {
+			if (GuildDAO.getGuildById(guild.getId()).getNoSpamChannels().contains(channel.getId()) && author != Main.getInfo().getSelfUser()) {
 				if (GuildDAO.getGuildById(guild.getId()).isHardAntispam()) {
 					channel.getHistory().retrievePast(20).queue(h -> {
 						h.removeIf(m -> ChronoUnit.MILLIS.between(m.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author);
@@ -176,11 +176,11 @@ public class GuildEvents extends ListenerAdapter {
 			if (!found && !author.isBot()) {
 				MessageChannel lvlChannel = null;
 				try {
-					lvlChannel = guild.getTextChannelById(GuildOperationsDAO.getGuildCanalLvlUp(guild.getId()));
+					lvlChannel = guild.getTextChannelById(GuildDAO.getGuildById(guild.getId()).getCanalLvl());
 				} catch (Exception ignore) {
 				}
 				try {
-					Map<String, Object> rawLvls = GuildOperationsDAO.getGuildCargosLvl(guild.getId()).entrySet().stream().filter(e -> MemberDAO.getMemberById(author.getId() + guild.getId()).getLevel() >= Integer.parseInt(e.getKey())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+					Map<String, Object> rawLvls = GuildDAO.getGuildById(guild.getId()).getCargoslvl().entrySet().stream().filter(e -> MemberDAO.getMemberById(author.getId() + guild.getId()).getLevel() >= Integer.parseInt(e.getKey())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 					Map<Integer, Role> sortedLvls = new TreeMap<>();
 					rawLvls.forEach((k, v) -> sortedLvls.put(Integer.parseInt(k), guild.getRoleById((String) v)));
 					MessageChannel finalLvlChannel = lvlChannel;
@@ -204,7 +204,10 @@ public class GuildEvents extends ListenerAdapter {
 									}
 								});
 							} catch (IllegalArgumentException e) {
-								GuildOperationsDAO.updateGuildCargosLvl(String.valueOf(i), null, GuildDAO.getGuildById(guild.getId()));
+								guildConfig gc = GuildDAO.getGuildById(guild.getId());
+								Map<String, Object> cl = gc.getCargoslvl();
+								cl.remove(String.valueOf(i));
+								GuildDAO.updateGuildSettings(gc);
 							}
 						}
 						rawLvls.remove(String.valueOf(i));
@@ -240,7 +243,7 @@ public class GuildEvents extends ListenerAdapter {
 							break;
 					}
 				}
-				if (GuildOperationsDAO.getGuildNoLinkChannels(guild.getId()).contains(channel.getId()) && Helper.findURL(message.getContentRaw())) {
+				if (GuildDAO.getGuildById(guild.getId()).getNoLinkChannels().contains(channel.getId()) && Helper.findURL(message.getContentRaw())) {
 					message.delete().reason("Mensagem possui um URL").queue(m -> channel.sendMessage(member.getAsMention() + ", é proibido postar links neste canal!").queue());
 				}
 
@@ -271,8 +274,8 @@ public class GuildEvents extends ListenerAdapter {
 			h.forEach(m -> channel.deleteMessageById(m.getId()).queue());
 			channel.sendMessage(":warning: | Opa, sem spam meu amigo!").queue();
 			try {
-				member.getRoles().add(guild.getRoleById(GuildOperationsDAO.getGuildCargoWarn(guild.getId())));
-				Main.getInfo().getScheduler().schedule(() -> member.getRoles().remove(guild.getRoleById(GuildOperationsDAO.getGuildCargoWarn(guild.getId()))), GuildOperationsDAO.getGuildWarnTime(guild.getId()), TimeUnit.SECONDS);
+				member.getRoles().add(guild.getRoleById(GuildDAO.getGuildById(guild.getId()).getCargoWarn()));
+				Main.getInfo().getScheduler().schedule(() -> member.getRoles().remove(guild.getRoleById(GuildDAO.getGuildById(guild.getId()).getCargoWarn())), GuildDAO.getGuildById(guild.getId()).getWarnTime(), TimeUnit.SECONDS);
 			} catch (Exception ignore) {
 			}
 		}
