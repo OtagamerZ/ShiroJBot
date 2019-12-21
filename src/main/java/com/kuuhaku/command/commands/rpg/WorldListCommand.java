@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.events.Event;
 public class WorldListCommand extends Command {
 
 	public WorldListCommand() {
-		super("rlista", new String[]{"rlist"}, "Mostra a lista de cadastros", Category.RPG);
+		super("rlista", new String[]{"rlist"}, "Mostra a lista de cadastros. Os tipos são **player**, **monster**, **item** ou **bau**.", Category.RPG);
 	}
 
 	@Override
@@ -26,6 +26,7 @@ public class WorldListCommand extends Command {
 					break;
 				case "m":
 				case "mob":
+				case "monster":
 					Main.getInfo().getGames().get(guild.getId()).listMonsters(message.getTextChannel()).queue();
 					break;
 				case "i":

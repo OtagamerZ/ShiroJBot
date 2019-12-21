@@ -15,7 +15,7 @@ import java.util.Arrays;
 public class BlockCommand extends Command {
 
 	public BlockCommand() {
-		super("block", new String[]{"bloquear"}, "Bloqueia alguém de usar o chat global.", Category.SHERIFFS);
+		super("block", new String[]{"bloquear"}, "<tipo> <ID> <razão>", "Bloqueia alguém de usar o chat global.", Category.SHERIFFS);
 	}
 
 	@Override

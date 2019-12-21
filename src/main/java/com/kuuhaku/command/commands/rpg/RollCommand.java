@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.events.Event;
 public class RollCommand extends Command {
 
 	public RollCommand() {
-		super("rrolar", new String[]{"rdado"}, "Rola um ou mais dados seguindo o padrão D&D", Category.RPG);
+		super("rrolar", new String[]{"rdado"}, "<função de dados>", "Rola um ou mais dados seguindo o padrão D&D.", Category.RPG);
 	}
 
 	@Override

@@ -2,10 +2,9 @@ package com.kuuhaku.command.commands.fun;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
-
-import java.util.Random;
 
 public class PPTCommand extends Command {
 	
@@ -16,9 +15,12 @@ public class PPTCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		
-		if(args.length < 1) { channel.sendMessage(":x: | Você tem que escolher pedra, papel ou tesoura!").queue(); return; }
+		if(args.length < 1) {
+			channel.sendMessage(":x: | Você tem que escolher pedra, papel ou tesoura!").queue();
+			return;
+		}
 		
-		int pcOption = Math.abs((new Random()).nextInt()) % 3;
+		int pcOption = Helper.rng(3);
 		int win = 2;
 		
 		switch(args[0].toLowerCase()) {
@@ -82,7 +84,5 @@ public class PPTCommand extends Command {
 				channel.sendMessage("Empate! Eu escolhi " + pcChoice).queue();
 				break;
 		}
-		
 	}
-
 }

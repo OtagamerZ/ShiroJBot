@@ -15,7 +15,7 @@ import java.util.Map;
 public class ComandosCommand extends Command {
 
 	public ComandosCommand() {
-		super("comandos", new String[]{"cmds", "cmd", "comando", "ajuda", "help"}, "Fornece uma lista de todos os comandos disponiveis no bot.", Category.INFO);
+		super("comandos", new String[]{"cmds", "cmd", "comando", "ajuda", "help"}, "[comando]", "Fornece uma lista de todos os comandos disponiveis no bot.", Category.INFO);
 	}
 
 	@Override

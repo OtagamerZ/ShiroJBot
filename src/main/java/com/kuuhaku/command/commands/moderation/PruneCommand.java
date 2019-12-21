@@ -29,7 +29,7 @@ import java.util.List;
 public class PruneCommand extends Command {
 
 	public PruneCommand() {
-		super("prune", new String[]{"clean", "limpar"}, "Limpa X mensagens do canal atual.", Category.MODERACAO);
+		super("prune", new String[]{"clean", "limpar"}, "[qtd/all]", "Limpa X mensagens do canal atual.", Category.MODERACAO);
 	}
 
 	@Override

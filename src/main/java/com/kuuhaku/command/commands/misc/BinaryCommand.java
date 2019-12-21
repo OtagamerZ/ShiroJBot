@@ -8,7 +8,7 @@ import net.dv8tion.jda.api.events.Event;
 public class BinaryCommand extends Command {
 
 	public BinaryCommand() {
-		super("bin", "Transforma uma frase ou texto em binário", Category.MISC);
+		super("bin", "<texto>", "Transforma uma frase ou texto em binário", Category.MISC);
 	}
 
 	@Override

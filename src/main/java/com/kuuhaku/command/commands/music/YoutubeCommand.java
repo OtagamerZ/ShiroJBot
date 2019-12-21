@@ -17,7 +17,7 @@ import java.util.Objects;
 public class YoutubeCommand extends Command {
 
     public YoutubeCommand() {
-        super("play", new String[]{"yt", "youtube"}, "Busca um vídeo no YouTube.", Category.MUSICA);
+        super("play", new String[]{"yt", "youtube"}, "<nome>", "Busca um vídeo no YouTube.", Category.MUSICA);
     }
 
     @Override

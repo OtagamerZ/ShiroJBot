@@ -30,6 +30,8 @@ public class JibrilCommand extends Command {
 			return;
 		}
 
+		channel.sendMessage("Link enviado no privado!").queue();
+
 		EmbedBuilder eb = new EmbedBuilder();
 
 		eb.setThumbnail("https://www.pacific.edu/Images/library/Renovation%20Renderings/LogoMakr_2mPTly.png");

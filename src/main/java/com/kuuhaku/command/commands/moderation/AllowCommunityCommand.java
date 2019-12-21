@@ -27,7 +27,7 @@ import net.dv8tion.jda.api.events.Event;
 public class AllowCommunityCommand extends Command {
 
     public AllowCommunityCommand() {
-        super("ouçatodos", "Permite que a comunidade ensine respostas à Shiro, ou não.", Category.MODERACAO);
+        super("ouçatodos", "Permite que a comunidade ensine respostas a Shiro, ou não.", Category.MODERACAO);
     }
 
     @Override

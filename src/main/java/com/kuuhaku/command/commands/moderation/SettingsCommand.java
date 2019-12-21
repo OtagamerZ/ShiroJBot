@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.events.Event;
 public class SettingsCommand extends Command {
 
 	public SettingsCommand() {
-		super("settings", new String[]{"setting", "definições", "definiçoes", "definicões", "parametros", "parâmetros"}, "<parâmetro> <novo valor do parâmetro>", "Muda as configurações da Shiro no seu servidor.", Category.MODERACAO);
+		super("settings", new String[]{"setting", "definições", "definiçoes", "definicões", "parametros", "parâmetros"}, "[<parâmetro> <novo valor do parâmetro>]", "Muda as configurações da Shiro no seu servidor.", Category.MODERACAO);
 	}
 
 	@Override

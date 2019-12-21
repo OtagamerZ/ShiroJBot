@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.events.Event;
 public class NewItemCommand extends Command {
 
 	public NewItemCommand() {
-		super("rnovoitem", new String[]{"rnewitem"}, "Inicia o cadastro de um novo item", Category.RPG);
+		super("rnovoitem", new String[]{"rnewitem"}, "Inicia o cadastro de um novo item.", Category.RPG);
 	}
 
 	@Override

@@ -32,7 +32,7 @@ import java.util.List;
 public class URankCommand extends Command {
 
 	public URankCommand() {
-		super("rank", new String[]{"ranking", "top10"}, "<global>", "Mostra o ranking de usuários do servidor ou global.", Category.MISC);
+		super("rank", new String[]{"ranking", "top10"}, "[global]", "Mostra o ranking de usuários do servidor ou global.", Category.MISC);
 	}
 
 	@Override

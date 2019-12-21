@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.events.Event;
 public class SwitchMapCommand extends Command {
 
 	public SwitchMapCommand() {
-		super("raomapa", new String[]{"rtrocarmapa", "rtomap"}, "Muda de mapa", Category.RPG);
+		super("raomapa", new String[]{"rtrocarmapa", "rtomap"}, "<índice>", "Muda de mapa.", Category.RPG);
 	}
 
 	@Override

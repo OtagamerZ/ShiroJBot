@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class LocalEmoteListCommand extends Command {
 
 	public LocalEmoteListCommand() {
-		super("emotes", "<nome> <página>", "Mostra a lista de emotes disponíveis no servidor em que o comando foi executado.", Category.MISC);
+		super("emotes", "<nome>", "Mostra a lista de emotes disponíveis no servidor em que o comando foi executado.", Category.MISC);
 	}
 
 	@Override

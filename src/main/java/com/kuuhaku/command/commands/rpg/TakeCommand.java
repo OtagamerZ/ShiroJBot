@@ -12,7 +12,7 @@ import java.util.Arrays;
 public class TakeCommand extends Command {
 
 	public TakeCommand() {
-		super("rtirar", new String[]{"rpegar"}, "Tira um item ou dinheiro de outro jogador", Category.RPG);
+		super("rtirar", new String[]{"rpegar"}, "<@usuário> <item/ouro> [qtd de ouro]", "Tira um item ou dinheiro de outro jogador.", Category.RPG);
 	}
 
 	@Override

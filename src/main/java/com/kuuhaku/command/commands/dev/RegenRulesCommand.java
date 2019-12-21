@@ -18,9 +18,9 @@ public class RegenRulesCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		message.delete().queue(s -> {
 			try {
-				channel.sendFile(Helper.getImage("https://i.imgur.com/JQ3LvGK.png"), "title.png").queue();
+				if (guild.getId().equals("421495229594730496")) channel.sendFile(Helper.getImage("https://i.imgur.com/JQ3LvGK.png"), "title.png").queue();
 				channel.sendFile(Helper.getImage("https://i.imgur.com/9dfpeel.png"), "welcome.png").queue();
-				channel.sendMessage("Seja bem-vindo(a) ao meu servidor oficial de suporte, qualquer duvida que tenha sobre como me utilizar será esclarecida por um de nossos membros, fique à vontade e lembre-se de sempre relatar quando achar algo suspeito").queue();
+				channel.sendMessage(guild.getId().equals("421495229594730496") ? "Seja bem-vindo(a) ao meu servidor oficial de suporte, qualquer duvida que tenha sobre como me utilizar será esclarecida por um de nossos membros, fique à vontade e lembre-se de sempre relatar quando achar algo suspeito" : "Seja bem-vindo(a) ao servidor " + guild.getName() + ", fique à vontade e lembre-se de sempre relatar quando achar algo suspeito").queue();
 				channel.sendFile(Helper.getImage("https://i.imgur.com/aCYUW1G.png"), "rules.png").queue();
 				channel.sendMessage("**1 - É proibido qualquer ato de SPAM, flood ou bullying**\n" +
 						"Por razões obvias, tais coisas poluem o servidor e prejudicam a comunidade e é considerado um ato grave para medidas de punição.\n" +

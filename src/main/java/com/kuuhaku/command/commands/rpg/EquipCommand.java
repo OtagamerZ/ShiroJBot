@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.events.Event;
 public class EquipCommand extends Command {
 
 	public EquipCommand() {
-		super("requipar", new String[]{"requip"}, "Equipa um item do inventário", Category.RPG);
+		super("requipar", new String[]{"requip"}, "<item>", "Equipa um item do inventário.", Category.RPG);
 	}
 
 	@Override

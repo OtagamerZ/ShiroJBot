@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.events.Event;
 public class EndCampaignCommand extends Command {
 
 	public EndCampaignCommand() {
-		super("rfimdejogo", new String[]{"rendcampaign", "rgameover"}, "Finaliza a campanha ativa no servidor", Category.RPG);
+		super("rfimdejogo", new String[]{"rendcampaign", "rgameover"}, "Finaliza a campanha ativa no servidor.", Category.RPG);
 	}
 
 	@Override

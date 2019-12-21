@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class JibrilEmoteListCommand extends Command {
 
 	public JibrilEmoteListCommand() {
-		super("jemotes", "<nome> <página>", "Mostra a lista de emotes disponíveis para uso através da Jibril.", Category.PARTNER);
+		super("jemotes", "<nome>", "Mostra a lista de emotes disponíveis para uso através da Jibril.", Category.PARTNER);
 	}
 
 	@Override
