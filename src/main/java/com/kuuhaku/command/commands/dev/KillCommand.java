@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.events.Event;
 public class KillCommand extends Command {
 	
 	public KillCommand() {
-		super("kill", new String[]{"shutdown"}, "Mata a Shiro!", Category.DEVS);
+		super("kill", new String[]{"shutdown"}, "Desliga a Shiro.", Category.DEVS);
 	}
 
 	@Override

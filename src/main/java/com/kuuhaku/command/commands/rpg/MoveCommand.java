@@ -13,7 +13,7 @@ import java.io.IOException;
 public class MoveCommand extends Command {
 
 	public MoveCommand() {
-		super("rmover", new String[]{"rmove"}, "Move seu personagem 1 coordenada em qualquer direção", Category.RPG);
+		super("rmover", new String[]{"rmove"}, "<XY>", "Move seu personagem 1 coordenada em qualquer direção.", Category.RPG);
 	}
 
 	@Override

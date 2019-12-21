@@ -15,7 +15,7 @@ import java.util.Objects;
 public class VideoCommand extends Command {
 
 	public VideoCommand() {
-		super("video", new String[]{"vid"}, "Busca um vídeo específico no YouTube.", Category.MUSICA);
+		super("video", new String[]{"vid"}, "<nome>", "Busca um vídeo específico no YouTube.", Category.MUSICA);
 	}
 
 	@Override

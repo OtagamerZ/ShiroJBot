@@ -12,7 +12,7 @@ import java.util.Arrays;
 public class GiveCommand extends Command {
 
 	public GiveCommand() {
-		super("rdar", new String[]{"rgive"}, "Dá um item ou dinheiro à outro jogador", Category.RPG);
+		super("rdar", new String[]{"rgive"}, "<@usuário> <item/ouro> [qtd de ouro]", "Dá um item ou dinheiro à outro jogador.", Category.RPG);
 	}
 
 	@Override

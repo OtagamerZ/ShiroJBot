@@ -11,7 +11,7 @@ import javax.persistence.NoResultException;
 
 public class MarryCommand extends Command {
 	public MarryCommand() {
-		super("casar", new String[]{"declarar", "marry"}, "<usuário>", "Pede um usuário em casamento.", Category.FUN);
+		super("casar", new String[]{"declarar", "marry"}, "<@usuário>", "Pede um usuário em casamento.", Category.FUN);
 	}
 
 	@Override

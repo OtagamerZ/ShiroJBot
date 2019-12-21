@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.events.Event;
 public class NewMapCommand extends Command {
 
 	public NewMapCommand() {
-		super("rnovomapa", new String[]{"rnewmap"}, "Inicia o cadastro de um novo mapa", Category.RPG);
+		super("rnovomapa", new String[]{"rnewmap"}, "Inicia o cadastro de um novo mapa.", Category.RPG);
 	}
 
 	@Override

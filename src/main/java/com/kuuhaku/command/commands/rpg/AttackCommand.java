@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.events.Event;
 public class AttackCommand extends Command {
 
 	public AttackCommand() {
-		super("rduelar", new String[]{"rattack", "rduel"}, "Inicia um duelo com um jogador", Category.RPG);
+		super("rduelar", new String[]{"rattack", "rduel"}, "<@usuário>", "Inicia um duelo com um jogador.", Category.RPG);
 	}
 
 	@Override

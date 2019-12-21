@@ -3,7 +3,6 @@ package com.kuuhaku.command.commands.information;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
@@ -21,7 +20,7 @@ import java.util.Arrays;
 public class ImageCommand extends Command {
 
     public ImageCommand() {
-        super("image", new String[]{"imagem", "img"}, "Busca uma imagem na internet.", Category.INFO);
+        super("image", new String[]{"imagem", "img"}, "<tags>", "Busca uma imagem de anime na internet.", Category.INFO);
     }
 
     @Override

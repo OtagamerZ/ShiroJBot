@@ -12,7 +12,7 @@ import java.util.List;
 public class LeaveCommand extends Command {
 
 	public LeaveCommand() {
-        super("leave", new String[]{"sair"}, "<ID do servidor>", "Sai do servidor cujo o ID foi dado.", Category.DEVS);
+        super("leave", new String[]{"sair"}, "<ID do servidor>", "Sai do servidor com o ID informado.", Category.DEVS);
 	}
 
 	@Override

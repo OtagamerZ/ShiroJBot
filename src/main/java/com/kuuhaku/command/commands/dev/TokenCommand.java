@@ -46,7 +46,7 @@ import java.util.Base64;
 public class TokenCommand extends Command {
 
 	public TokenCommand() {
-		super("token", "Gera um token aleatório de 64 caractéres", Category.DEVS);
+		super("token", "<nome>", "Gera um token aleatório de 64 caractéres", Category.DEVS);
 	}
 
 	@Override
