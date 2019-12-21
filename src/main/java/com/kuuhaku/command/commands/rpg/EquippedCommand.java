@@ -13,7 +13,7 @@ import java.io.IOException;
 public class EquippedCommand extends Command {
 
 	public EquippedCommand() {
-		super("requipados", new String[]{"requipped"}, "Mostra os itens equipados", Category.RPG);
+		super("requipados", new String[]{"requipped"}, "Mostra os itens equipados.", Category.RPG);
 	}
 
 	@Override

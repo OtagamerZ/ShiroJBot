@@ -12,7 +12,7 @@ import java.util.Arrays;
 public class RemoveCommand extends Command {
 
 	public RemoveCommand() {
-		super("rremover", new String[]{"rremove"}, "Remove um registro", Category.RPG);
+		super("rremover", new String[]{"rremove"}, "<tipo> <@usuário/nome>", "Remove um registro. Os tipos são **player**, **monster**, **item** ou **map**.", Category.RPG);
 	}
 
 	@Override
@@ -23,7 +23,7 @@ public class RemoveCommand extends Command {
 				return;
 			}
 			try {
-				switch (args[0]) {
+				switch (args[0].toLowerCase()) {
 					case "p":
 					case "player":
 						if (message.getMentionedUsers().size() == 0) {

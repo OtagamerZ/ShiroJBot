@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.events.Event;
 public class NewMobCommand extends Command {
 
 	public NewMobCommand() {
-		super("rnovomonstro", new String[]{"rnewmob"}, "Inicia o cadastro de um novo monstro", Category.RPG);
+		super("rnovomonstro", new String[]{"rnewmob"}, "Inicia o cadastro de um novo monstro.", Category.RPG);
 	}
 
 	@Override

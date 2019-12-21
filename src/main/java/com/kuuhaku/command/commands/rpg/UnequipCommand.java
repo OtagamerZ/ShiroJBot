@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.events.Event;
 public class UnequipCommand extends Command {
 
 	public UnequipCommand() {
-		super("rdesequipar", new String[]{"runequip"}, "Desequipa um item", Category.RPG);
+		super("rdesequipar", new String[]{"runequip"}, "<item>", "Desequipa um item.", Category.RPG);
 	}
 
 	@Override

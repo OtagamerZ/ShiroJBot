@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.events.Event;
 public class BagCommand extends Command {
 
 	public BagCommand() {
-		super("rbolsa", new String[]{"rbag"}, "Abre a mochila de seu personagem", Category.RPG);
+		super("rbolsa", new String[]{"rbag"}, "Abre a mochila de seu personagem.", Category.RPG);
 	}
 
 	@Override

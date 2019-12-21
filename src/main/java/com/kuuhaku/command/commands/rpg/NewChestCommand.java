@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.events.Event;
 public class NewChestCommand extends Command {
 
 	public NewChestCommand() {
-		super("rnovobau", new String[]{"rnew"}, "Inicia seu cadastro como jogador", Category.RPG);
+		super("rnovobau", new String[]{"rnew"}, "Inicia seu cadastro como jogador.", Category.RPG);
 	}
 
 	@Override

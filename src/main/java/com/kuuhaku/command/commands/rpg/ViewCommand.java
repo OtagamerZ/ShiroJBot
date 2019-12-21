@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.events.Event;
 public class ViewCommand extends Command {
 
 	public ViewCommand() {
-		super("rver", new String[]{"rinfo"}, "Vê a descrição de um item", Category.RPG);
+		super("rver", new String[]{"rinfo"}, "<item>", "Vê a descrição de um item", Category.RPG);
 	}
 
 	@Override

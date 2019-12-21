@@ -3,7 +3,6 @@ package com.kuuhaku.command.commands.fun;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -21,7 +20,7 @@ import java.util.Random;
 public class ShipCommand extends Command {
 
     public ShipCommand() {
-        super("ship", new String[]{"shippar"}, "<usuário 1> <usuário 2>", "Mede o nível de love entre duas pessoas.", Category.FUN);
+        super("ship", new String[]{"shippar"}, "<@usuário 1> <@usuário 2>", "Mede o nível de love entre duas pessoas.", Category.FUN);
     }
 
     @Override
