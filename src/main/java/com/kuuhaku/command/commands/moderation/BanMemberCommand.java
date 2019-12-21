@@ -17,8 +17,10 @@
 
 package com.kuuhaku.command.commands.moderation;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 import net.dv8tion.jda.api.Permission;
@@ -40,6 +42,13 @@ public class BanMemberCommand extends Command {
 			return;
 		} else if (!member.hasPermission(Permission.BAN_MEMBERS)) {
 			channel.sendMessage(":x: | Você não possui permissão para banir membros.").queue();
+			return;
+		} else if (Helper.hasRoleHigherThan(member, message.getMentionedMembers().get(0))) {
+			channel.sendMessage(":x: | Você não pode banir membros que possuem o mesmo cargo ou maior.").queue();
+			return;
+		} else if (Main.getInfo().getDevelopers().contains(message.getMentionedUsers().get(0).getId())) {
+			channel.sendMessage(":x: | Não posso banir meus desenvolvedores, faça isso manualmente.").queue();
+			return;
 		}
 
 		try {

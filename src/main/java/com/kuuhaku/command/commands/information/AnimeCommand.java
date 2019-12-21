@@ -5,7 +5,6 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.Tradutor;
 import com.kuuhaku.model.Anime;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
@@ -16,7 +15,7 @@ import java.io.IOException;
 public class AnimeCommand extends Command {
 
 	public AnimeCommand() {
-		super("anime", new String[]{"desenho", "cartoon"}, "Mostra dados sobre um anime.", Category.INFO);
+		super("anime", new String[]{"desenho", "cartoon"}, "<nome>", "Mostra dados sobre um anime.", Category.INFO);
 	}
 
 	@Override
@@ -25,6 +24,7 @@ public class AnimeCommand extends Command {
 			channel.sendMessage(":x: | Você precisa digitar um nome para pesquisar.").queue();
 			return;
 		}
+
 		channel.sendMessage("<a:Loading:598500653215645697> Buscando anime...").queue(m -> {
 			try {
 				String query = "{\n" +

@@ -6,7 +6,6 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.BannedVars;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.LogLevel;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
@@ -18,7 +17,7 @@ import java.util.concurrent.TimeoutException;
 
 public class CompileCommand extends Command {
 	public CompileCommand() {
-		super("compilar", new String[]{"compile"}, "Executa um código Java.", Category.MISC);
+		super("compilar", new String[]{"compile"}, "```java\n<código>\n```", "Executa um código Java.", Category.MISC);
 	}
 
 	@Override

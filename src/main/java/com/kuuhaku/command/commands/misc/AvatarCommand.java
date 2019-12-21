@@ -7,14 +7,13 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
-import java.awt.*;
 import java.io.IOException;
 
 
 public class AvatarCommand extends Command {
 
 	public AvatarCommand() {
-		super("avatar", "<@usuário>", "Dá-lhe o seu avatar ou então o avatar da pessoa mencionada.", Category.MISC);
+		super("avatar", "<@usuário/guild>", "Dá-lhe o seu avatar ou então o avatar da pessoa mencionada. Para pegar o ícone do servidor digite apenas guild no lugar da menção.", Category.MISC);
 	}
 
 	@Override

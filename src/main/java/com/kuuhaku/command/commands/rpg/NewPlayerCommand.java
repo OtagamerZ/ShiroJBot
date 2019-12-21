@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.events.Event;
 public class NewPlayerCommand extends Command {
 
 	public NewPlayerCommand() {
-		super("rnovo", new String[]{"rnew"}, "Inicia seu cadastro como jogador", Category.RPG);
+		super("rnovo", new String[]{"rnew"}, "Inicia seu cadastro como jogador.", Category.RPG);
 	}
 
 	@Override

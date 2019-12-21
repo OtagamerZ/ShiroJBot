@@ -9,7 +9,6 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
-import java.awt.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,9 +23,8 @@ public class IDCommand extends Command {
 		if (args.length > 0) {
 			try {
 				String arg = String.join(" ", args);
-				String sv = Helper.containsAll(arg, "(", ")") ? arg.substring(arg.indexOf("("), arg.indexOf(")") + 1) : "";
 				String ex = Helper.containsAll(arg, "[", "]") ? arg.substring(arg.indexOf("["), arg.indexOf("]") + 1) : "";
-				String name = arg.replace(sv, "").replace(ex, "").trim();
+				String name = arg.replace(ex, "").trim();
 				List<User> us = Main.getInfo().getAPI().getUsersByName(name, true);
 				EmbedBuilder eb = new EmbedBuilder();
 

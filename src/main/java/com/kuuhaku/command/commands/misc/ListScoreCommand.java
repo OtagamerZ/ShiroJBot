@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.events.Event;
 public class ListScoreCommand extends Command {
 
 	public ListScoreCommand() {
-		super("notas", new String[]{"scores"}, "Vota em um usuário.", Category.MISC);
+		super("notas", new String[]{"scores"}, "Mostra o ranking de votos de usuários.", Category.MISC);
 	}
 
 	@Override
