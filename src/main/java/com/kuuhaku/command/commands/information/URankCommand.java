@@ -47,7 +47,7 @@ public class URankCommand extends Command {
 		}
 
 		String champ = "1 - " + (global ? "(" + Main.getInfo().getGuildByID(mbs.get(0).getId().replace(mbs.get(0).getMid(), "")).getName() + ") " : "") + Main.getInfo().getUserByID(mbs.get(0).getMid()).getAsTag() + " (Level " + mbs.get(0).getLevel() + ")";
-		List<com.kuuhaku.model.Member> sub9 = mbs.subList(1, 10);
+		List<com.kuuhaku.model.Member> sub9 = mbs.subList(1, Math.min(mbs.size(), 10));
 		StringBuilder sub9Formatted = new StringBuilder();
 		for (int i = 0; i < sub9.size(); i++) {
 			sub9Formatted
