@@ -14,6 +14,12 @@ public class RelaysCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-		channel.sendMessage(Main.getRelay().getRelayMap().values().stream().map(s -> "`" + s + "`\n").toString()).queue();
+		StringBuilder sb = new StringBuilder();
+		sb.append("```\n");
+		for (String s : Main.getRelay().getRelayMap().values()) {
+			sb.append(s).append("\n");
+		}
+		sb.append("```\n");
+		channel.sendMessage(sb.toString()).queue();
 	}
 }
