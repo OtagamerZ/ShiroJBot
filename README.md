@@ -23,4 +23,4 @@ Ambos estão disponíveis para uso em servidores que aceitem tornar-se parceiros
 ## Como me utilizar? Eu explico!
 Use o comando `s!help` para ver os módulos e comandos disponíveis, este comando também pode ser utilizado para ver a descrição de como utilizar um certo comando (e.g. `s!help ping`).
 
-A documentação também está disponivel na wiki do repositório.
+~~A documentação também está disponivel na wiki do repositório.~~
