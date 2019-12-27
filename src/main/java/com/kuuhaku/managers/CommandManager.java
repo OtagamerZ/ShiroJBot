@@ -53,6 +53,7 @@ public class CommandManager {
             add(new LogCommand());
             add(new RegenRulesCommand());
             add(new TokenCommand());
+            add(new BroadcastCommand());
 
             //PARTNER
             add(new JibrilCommand());
