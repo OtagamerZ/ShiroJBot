@@ -22,12 +22,12 @@ public class MakeLogCommand extends Command {
 
 			guildConfig gc = GuildDAO.getGuildById(guild.getId());
 			try {
-				Objects.requireNonNull(guild.getTextChannelById(gc.getLogChannel())).delete().queue();
+				Objects.requireNonNull(guild.getTextChannelById(gc.getCanalLog())).delete().queue();
 			} catch (Exception ignore) {
 			}
 
 			guild.createTextChannel("shiro-log").queue(c -> {
-				gc.setLogChannel(c.getId());
+				gc.setCanalLog(c.getId());
 				channel.sendMessage("Canal de log criado com sucesso em " + c.getAsMention()).queue();
 				GuildDAO.updateGuildSettings(gc);
 			});

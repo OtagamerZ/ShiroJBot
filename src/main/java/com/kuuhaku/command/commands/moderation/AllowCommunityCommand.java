@@ -33,7 +33,7 @@ public class AllowCommunityCommand extends Command {
     @Override
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
         guildConfig gc = GuildDAO.getGuildById(guild.getId());
-        if (!gc.isAnyTell()) {
+        if (gc.isNotAnyTell()) {
             channel.sendMessage(":loud_sound: | Agora irei ouvir as respostas da comunidade!").queue();
             gc.setAnyTell(true);
         } else {
