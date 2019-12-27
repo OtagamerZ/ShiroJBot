@@ -29,7 +29,7 @@ public class BroadcastCommand extends Command {
 		}
 
 		String msg = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-		switch (args[0]) {
+		switch (args[0].toLowerCase()) {
 			case "geral":
 				List<guildConfig> gcs = BackupDAO.getGuildDump();
 				for (guildConfig gc : gcs) {
