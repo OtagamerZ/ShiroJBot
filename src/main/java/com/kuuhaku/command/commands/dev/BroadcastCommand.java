@@ -21,7 +21,7 @@ public class BroadcastCommand extends Command {
 			channel.sendMessage(":x: | É necessário informar uma mensagem para enviar.").queue();
 		}
 
-		String msg = String.join(" ", Arrays.copyOfRange(args, 2, args.length - 1));
+		String msg = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
 		switch (args[1]) {
 			case "geral":
 				channel.sendMessage(msg).queue();
