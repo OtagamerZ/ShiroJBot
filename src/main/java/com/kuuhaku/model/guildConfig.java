@@ -54,7 +54,7 @@ public class guildConfig {
 	private boolean anyTell = false;
 	private String noLinkChannels = "";
 	@Column(length = 191)
-	private String logChannel = "";
+	private String canalLog = "";
 	private String noSpamChannels = "";
 	@Column(columnDefinition = "int default 5")
 	private int noSpamAmount = 5;
@@ -175,8 +175,8 @@ public class guildConfig {
 		this.cargoNew = cargoNew.toString();
 	}
 
-	public boolean isAnyTell() {
-		return anyTell;
+	public boolean isNotAnyTell() {
+		return !anyTell;
 	}
 
 	public void setAnyTell(boolean anyTell) {
@@ -283,12 +283,12 @@ public class guildConfig {
 		this.antiRaid = antiRaid;
 	}
 
-	public String getLogChannel() {
-		return logChannel;
+	public String getCanalLog() {
+		return canalLog;
 	}
 
-	public void setLogChannel(String id) {
-		this.logChannel = id;
+	public void setCanalLog(String id) {
+		this.canalLog = id;
 	}
 
 	public boolean isLiteMode() {
