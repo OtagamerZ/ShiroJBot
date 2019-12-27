@@ -24,7 +24,7 @@ public class CustomAnswerCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-		if (!Helper.hasPermission(member, PrivilegeLevel.MOD) && !GuildDAO.getGuildById(guild.getId()).isAnyTell()) {
+		if (!Helper.hasPermission(member, PrivilegeLevel.MOD) && GuildDAO.getGuildById(guild.getId()).isNotAnyTell()) {
 			channel.sendMessage(":x: | Este servidor não está configurado para permitir respostas customizadas da comunidade.").queue();
 			return;
 		} else if (args.length == 0) {
