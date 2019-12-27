@@ -10,9 +10,7 @@ import com.kuuhaku.model.guildConfig;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class BroadcastCommand extends Command {
 
@@ -29,29 +27,55 @@ public class BroadcastCommand extends Command {
 		}
 
 		String msg = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+		Map<String, Boolean> result = new HashMap<>();
+		StringBuilder sb = new StringBuilder();
+
 		switch (args[0].toLowerCase()) {
 			case "geral":
 				List<guildConfig> gcs = BackupDAO.getGuildDump();
 				for (guildConfig gc : gcs) {
 					if (gc.getCanalLog().equals("") || gc.getCanalLog() == null) {
+						result.put(gc.getName(), false);
 						return;
 					}
 
-					Objects.requireNonNull(Main.getInfo().getGuildByID(gc.getGuildID()).getTextChannelById(gc.getCanalLog())).sendMessage(msg).queue();
+					try {
+						Objects.requireNonNull(Main.getInfo().getGuildByID(gc.getGuildID()).getTextChannelById(gc.getCanalLog())).sendMessage(msg).queue();
+						result.put(gc.getName(), true);
+					} catch (Exception e) {
+						result.put(gc.getName(), false);
+					}
 				}
+
+				sb.append("```diff\n");
+				result.forEach((key, value) -> sb.append(value ? "+ " : "- ").append(key).append("\n"));
+				sb.append("```");
+
+				channel.sendMessage("__**STATUS**__" + sb.toString()).queue();
 				break;
 			case "parceiros":
 				List<Tags> ps = TagDAO.getAllTags();
 				for (Tags t : ps) {
 					if (t.isPartner()) {
-						try {
-							Main.getInfo().getUserByID(t.getId()).openPrivateChannel().queue(c -> c.sendMessage(msg).queue());
-						} catch (Exception ignore) {
-						}
+						Main.getInfo().getUserByID(t.getId()).openPrivateChannel().queue(c -> {
+							try {
+								c.sendMessage(msg).queue();
+								result.put(Main.getInfo().getUserByID(t.getId()).getAsTag(), true);
+							} catch (Exception e) {
+								result.put(Main.getInfo().getUserByID(t.getId()).getAsTag(), false);
+							}
+						});
 					}
 				}
+
+				sb.append("```diff\n");
+				result.forEach((key, value) -> sb.append(value ? "+ " : "- ").append(key).append("\n"));
+				sb.append("```");
+
+				channel.sendMessage("__**STATUS**__" + sb.toString()).queue();
 				break;
-			default: channel.sendMessage(":x: | Tipo desconhecido, os tipos válidos são **geral** ou **parceiros**").queue();
+			default:
+				channel.sendMessage(":x: | Tipo desconhecido, os tipos válidos são **geral** ou **parceiros**").queue();
 		}
 	}
 }
