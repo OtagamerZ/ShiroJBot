@@ -31,8 +31,7 @@ public enum Category {
 	INFO("Informação", "\u2139", "Comandos de informação", PrivilegeLevel.USER),
 	RPG("RPG", "\uD83D\uDCA0", "Comandos de RPG (Módulo Tet).", PrivilegeLevel.USER),
 	MUSICA("Música", "\uD83C\uDFB6", "Comandos de música.", PrivilegeLevel.DJ),
-	EXCEED("Exceed", "\uD83C\uDF8C", "Comandos de exceed", PrivilegeLevel.EXCEED)
-	;
+	EXCEED("Exceed", "\uD83C\uDF8C", "Comandos de exceed", PrivilegeLevel.EXCEED);
 
 	private final String name;
 	private final String EMOTE;
