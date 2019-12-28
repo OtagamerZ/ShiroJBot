@@ -57,14 +57,17 @@ public class BroadcastCommand extends Command {
 				List<Tags> ps = TagDAO.getAllTags();
 				for (Tags t : ps) {
 					if (t.isPartner()) {
-						Main.getInfo().getUserByID(t.getId()).openPrivateChannel().queue(c -> {
-							try {
-								c.sendMessage(msg).queue();
-								result.put(Main.getInfo().getUserByID(t.getId()).getAsTag(), true);
-							} catch (Exception e) {
-								result.put(Main.getInfo().getUserByID(t.getId()).getAsTag(), false);
-							}
-						});
+						try {
+							Main.getInfo().getUserByID(t.getId()).openPrivateChannel().queue(c -> {
+								try {
+									c.sendMessage(msg).queue();
+									result.put(Main.getInfo().getUserByID(t.getId()).getAsTag(), true);
+								} catch (Exception e) {
+									result.put(Main.getInfo().getUserByID(t.getId()).getAsTag(), false);
+								}
+							});
+						} catch (Exception ignore) {
+						}
 					}
 				}
 
