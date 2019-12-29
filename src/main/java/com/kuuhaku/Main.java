@@ -36,7 +36,7 @@ import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.exceptions.ErrorResponseException;
+import net.dv8tion.jda.api.exceptions.ContextException;
 
 import javax.persistence.NoResultException;
 import java.awt.*;
@@ -172,7 +172,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 	@Override
 	public void uncaughtException(Thread t, Throwable e) {
-		if (e.getClass().getCanonicalName().equals(ErrorResponseException.class.getCanonicalName())) {
+		if (e.getClass().getCanonicalName().equals(ContextException.class.getCanonicalName())) {
 			return;
 		}
 		Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
