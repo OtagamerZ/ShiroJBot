@@ -39,6 +39,7 @@ public class BroadcastCommand extends Command {
 		switch (args[0].toLowerCase()) {
 			case "geral":
 				List<guildConfig> gcs = GuildDAO.getAllGuilds();
+
 				for (guildConfig gc : gcs) {
 					try {
 						//Objects.requireNonNull(Main.getInfo().getGuildByID(gc.getGuildID()).getTextChannelById(gc.getCanalLog())).sendMessage(msg).queue();
@@ -55,25 +56,24 @@ public class BroadcastCommand extends Command {
 				channel.sendMessage("__**STATUS**__ " + sb.toString()).queue();
 				break;
 			case "parceiros":
-				List<Tags> ps = TagDAO.getAllTags();
+				List<Tags> ps = TagDAO.getAllPartners();
 				for (Tags t : ps) {
-					if (t.isPartner()) {
-						User u = Helper.getOr(Main.getInfo().getUserByID(t.getId()), null);
-						if (u == null) {
-							result.put("Desconhecido (" + t.getId() + ")", false);
-						} else {
-							try {
-								u.openPrivateChannel().queue(c -> {
-									try {
-										//c.sendMessage(msg).queue();
-										result.put(u.getAsTag(), true);
-									} catch (Exception e) {
-										result.put(u.getAsTag(), false);
-									}
-								});
-							} catch (Exception e) {
-								result.put(u.getAsTag(), false);
-							}
+					User u = Helper.getOr(Main.getInfo().getUserByID(t.getId()), null);
+
+					if (u == null) {
+						result.put("Desconhecido (" + t.getId() + ")", false);
+					} else {
+						try {
+							u.openPrivateChannel().queue(c -> {
+								try {
+									//c.sendMessage(msg).queue();
+									result.put(u.getAsTag(), true);
+								} catch (Exception e) {
+									result.put(u.getAsTag(), false);
+								}
+							});
+						} catch (Exception e) {
+							result.put(u.getAsTag(), false);
 						}
 					}
 				}
