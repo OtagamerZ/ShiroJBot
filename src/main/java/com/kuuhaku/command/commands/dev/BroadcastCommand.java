@@ -33,7 +33,7 @@ public class BroadcastCommand extends Command {
 		}
 
 		String msg = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-		Map<String, Boolean> result = new HashMap<>();
+		Map<Object, Boolean> result = new HashMap<>();
 		StringBuilder sb = new StringBuilder();
 
 		switch (args[0].toLowerCase()) {
@@ -68,21 +68,19 @@ public class BroadcastCommand extends Command {
 							u.openPrivateChannel().queue(c -> {
 								try {
 									//c.sendMessage(msg).queue();
-									result.put(u.getAsTag(), true);
+									result.put(u, true);
 								} catch (Exception e) {
-									result.put(u.getAsTag(), false);
+									result.put(u, false);
 								}
 							});
 						} catch (Exception e) {
-							result.put(u.getAsTag(), false);
+							result.put(u, false);
 						}
 					}
 				}
 
-				System.out.println(result.size());
-
 				sb.append("```diff\n");
-				result.forEach((key, value) -> sb.append(value ? "+ " : "- ").append(key).append("\n"));
+				result.forEach((key, value) -> sb.append(value ? "+ " : "- ").append(((User) key).getAsTag()).append("\n"));
 				sb.append("```");
 
 				channel.sendMessage("__**STATUS**__ " + sb.toString()).queue();
