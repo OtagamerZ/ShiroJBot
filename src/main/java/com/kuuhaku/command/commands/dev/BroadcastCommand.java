@@ -40,6 +40,8 @@ public class BroadcastCommand extends Command {
 			case "geral":
 				List<guildConfig> gcs = GuildDAO.getAllGuilds();
 
+				System.out.println(Arrays.toString(Helper.chunkify(gcs, 10).toArray()));
+
 				for (guildConfig gc : gcs) {
 					try {
 						//Objects.requireNonNull(Main.getInfo().getGuildByID(gc.getGuildID()).getTextChannelById(gc.getCanalLog())).sendMessage(msg).queue();
