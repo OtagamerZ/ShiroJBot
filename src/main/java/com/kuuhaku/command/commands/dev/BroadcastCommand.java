@@ -7,6 +7,7 @@ import com.kuuhaku.controller.MySQL.GuildDAO;
 import com.kuuhaku.controller.MySQL.TagDAO;
 import com.kuuhaku.model.Tags;
 import com.kuuhaku.model.guildConfig;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
@@ -25,8 +26,10 @@ public class BroadcastCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
 		if (args.length < 1) {
 			channel.sendMessage(":x: | É necessário informar um tipo de broadcast (geral/parceiros).").queue();
+			return;
 		} else if (args.length < 2) {
 			channel.sendMessage(":x: | É necessário informar uma mensagem para enviar.").queue();
+			return;
 		}
 
 		String msg = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
@@ -37,11 +40,6 @@ public class BroadcastCommand extends Command {
 			case "geral":
 				List<guildConfig> gcs = GuildDAO.getAllGuilds();
 				for (guildConfig gc : gcs) {
-					if (gc.getCanalLog().equals("") || gc.getCanalLog() == null) {
-						result.put(gc.getName(), false);
-						return;
-					}
-
 					try {
 						//Objects.requireNonNull(Main.getInfo().getGuildByID(gc.getGuildID()).getTextChannelById(gc.getCanalLog())).sendMessage(msg).queue();
 						result.put(gc.getName(), true);
@@ -60,17 +58,22 @@ public class BroadcastCommand extends Command {
 				List<Tags> ps = TagDAO.getAllTags();
 				for (Tags t : ps) {
 					if (t.isPartner()) {
-						try {
-							Main.getInfo().getUserByID(t.getId()).openPrivateChannel().queue(c -> {
-								try {
-									//c.sendMessage(msg).queue();
-									result.put(Main.getInfo().getUserByID(t.getId()).getAsTag(), true);
-								} catch (Exception e) {
-									result.put(Main.getInfo().getUserByID(t.getId()).getAsTag(), false);
-								}
-							});
-						} catch (Exception e) {
-							result.put(Main.getInfo().getUserByID(t.getId()).getAsTag(), false);
+						User u = Helper.getOr(Main.getInfo().getUserByID(t.getId()), null);
+						if (u == null) {
+							result.put("Desconhecido (" + t.getId() + ")", false);
+						} else {
+							try {
+								u.openPrivateChannel().queue(c -> {
+									try {
+										//c.sendMessage(msg).queue();
+										result.put(u.getAsTag(), true);
+									} catch (Exception e) {
+										result.put(u.getAsTag(), false);
+									}
+								});
+							} catch (Exception e) {
+								result.put(u.getAsTag(), false);
+							}
 						}
 					}
 				}
