@@ -48,7 +48,7 @@ public class BroadcastCommand extends Command {
 
 					for (guildConfig gc : gs) {
 						try {
-							//Objects.requireNonNull(Main.getInfo().getGuildByID(gc.getGuildID()).getTextChannelById(gc.getCanalLog())).sendMessage(msg).queue();
+							Objects.requireNonNull(Main.getInfo().getGuildByID(gc.getGuildID()).getTextChannelById(gc.getCanalLog())).sendMessage(msg).queue();
 							result.put(gc.getName(), true);
 						} catch (Exception e) {
 							result.put(gc.getName(), false);
@@ -82,7 +82,7 @@ public class BroadcastCommand extends Command {
 							result.put("Desconhecido (" + t.getId() + ")", false);
 						} else {
 							try {
-								//u.openPrivateChannel().complete().sendMessage(msg).queue();
+								u.openPrivateChannel().complete().sendMessage(msg).queue();
 								result.put(u.getAsTag(), true);
 							} catch (Exception e) {
 								result.put(u.getAsTag(), false);
