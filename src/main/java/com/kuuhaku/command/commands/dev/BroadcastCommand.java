@@ -77,6 +77,7 @@ public class BroadcastCommand extends Command {
 							result.put(u, false);
 						}
 					}
+					System.out.println(Arrays.toString(result.entrySet().toArray()));
 				}
 
 				sb.append("```diff\n");
