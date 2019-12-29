@@ -58,25 +58,28 @@ public class BroadcastCommand extends Command {
 			case "parceiros":
 				List<Tags> ps = TagDAO.getAllPartners();
 
-				System.out.println(Arrays.toString(ps.toArray()));
-
 				for (Tags t : ps) {
+					System.out.println(t.getId());
 					User u = Helper.getOr(Main.getInfo().getUserByID(t.getId()), null);
 
 					if (u == null) {
 						result.put("Desconhecido (" + t.getId() + ")", false);
+						System.out.println("null");
 					} else {
 						try {
 							u.openPrivateChannel().queue(c -> {
 								try {
 									//c.sendMessage(msg).queue();
 									result.put(u.getAsTag(), true);
+									System.out.println("done");
 								} catch (Exception e) {
 									result.put(u.getAsTag(), false);
+									System.out.println("fail");
 								}
 							});
 						} catch (Exception e) {
 							result.put(u.getAsTag(), false);
+							System.out.println("ex");
 						}
 					}
 				}
