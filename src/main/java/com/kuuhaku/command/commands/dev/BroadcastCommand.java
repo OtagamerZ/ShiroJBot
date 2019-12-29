@@ -7,7 +7,6 @@ import com.kuuhaku.controller.MySQL.GuildDAO;
 import com.kuuhaku.controller.MySQL.TagDAO;
 import com.kuuhaku.model.Tags;
 import com.kuuhaku.model.guildConfig;
-import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
@@ -57,12 +56,11 @@ public class BroadcastCommand extends Command {
 				break;
 			case "parceiros":
 				List<Tags> ps = TagDAO.getAllPartners();
-				for (Tags t : ps) {
-					User u = Helper.getOr(Main.getInfo().getUserByID(t.getId()), null);
 
-					if (u == null) {
-						result.put("Desconhecido (" + t.getId() + ")", false);
-					} else {
+				for (Tags t : ps) {
+					try {
+						User u = Main.getInfo().getUserByID(t.getId());
+
 						try {
 							u.openPrivateChannel().queue(c -> {
 								try {
@@ -75,6 +73,8 @@ public class BroadcastCommand extends Command {
 						} catch (Exception e) {
 							result.put(u.getAsTag(), false);
 						}
+					} catch (Exception e) {
+						result.put("Desconhecido (" + t.getId() + ")", false);
 					}
 				}
 
