@@ -3,14 +3,17 @@ package com.kuuhaku.command.commands.dev;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.MySQL.GuildDAO;
 import com.kuuhaku.controller.MySQL.TagDAO;
-import com.kuuhaku.controller.SQLite.BackupDAO;
 import com.kuuhaku.model.Tags;
 import com.kuuhaku.model.guildConfig;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class BroadcastCommand extends Command {
 
@@ -32,7 +35,7 @@ public class BroadcastCommand extends Command {
 
 		switch (args[0].toLowerCase()) {
 			case "geral":
-				List<guildConfig> gcs = BackupDAO.getGuildDump();
+				List<guildConfig> gcs = GuildDAO.getAllGuilds();
 				for (guildConfig gc : gcs) {
 					if (gc.getCanalLog().equals("") || gc.getCanalLog() == null) {
 						result.put(gc.getName(), false);
@@ -40,14 +43,14 @@ public class BroadcastCommand extends Command {
 					}
 
 					try {
-						Objects.requireNonNull(Main.getInfo().getGuildByID(gc.getGuildID()).getTextChannelById(gc.getCanalLog())).sendMessage(msg).queue();
+						//Objects.requireNonNull(Main.getInfo().getGuildByID(gc.getGuildID()).getTextChannelById(gc.getCanalLog())).sendMessage(msg).queue();
 						result.put(gc.getName(), true);
 					} catch (Exception e) {
 						result.put(gc.getName(), false);
 					}
 				}
 
-				sb.append("```diff\n");
+				sb.append("```diff \n");
 				result.forEach((key, value) -> sb.append(value ? "+ " : "- ").append(key).append("\n"));
 				sb.append("```");
 
@@ -66,12 +69,13 @@ public class BroadcastCommand extends Command {
 									result.put(Main.getInfo().getUserByID(t.getId()).getAsTag(), false);
 								}
 							});
-						} catch (Exception ignore) {
+						} catch (Exception e) {
+							result.put(Main.getInfo().getUserByID(t.getId()).getAsTag(), false);
 						}
 					}
 				}
 
-				sb.append("```diff\n");
+				sb.append("```diff \n");
 				result.forEach((key, value) -> sb.append(value ? "+ " : "- ").append(key).append("\n"));
 				sb.append("```");
 
