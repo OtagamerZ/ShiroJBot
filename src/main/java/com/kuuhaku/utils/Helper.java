@@ -38,6 +38,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
+import javax.persistence.NoResultException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -367,16 +368,19 @@ public class Helper {
 		EnumSet<Permission> guildPerms = c.getGuild().getSelfMember().getPermissions();
 		String jibrilPerms = "";
 
-		if (TagDAO.getTagById(c.getGuild().getOwnerId()).isPartner() && c.getGuild().getMembers().contains(c.getGuild().getMember(Main.getJibril().getSelfUser()))) {
-			List<PermissionOverride> JchannelPerms = c.getPermissionOverrides().stream().filter(p -> Objects.requireNonNull(c.getGuild().getMember(Main.getJibril().getSelfUser())).getRoles().contains(p.getRole()) || p.getMember() == c.getGuild().getMember(Main.getJibril().getSelfUser())).collect(Collectors.toList());
-			EnumSet<Permission> JguildPerms = Objects.requireNonNull(c.getGuild().getMember(Main.getJibril().getSelfUser())).getPermissions();
-			jibrilPerms = "\n\n\n__**Permissões necessárias para uso completo da Jibril**__\n\n" +
-					(JchannelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.MANAGE_WEBHOOKS)) || (JguildPerms.contains(Permission.MANAGE_WEBHOOKS) && JchannelPerms.stream().noneMatch(p -> p.getDenied().contains(Permission.MANAGE_WEBHOOKS))) ? ":white_check_mark: -> " : ":x: -> ") + "Gerenciar webhooks\n" +
-					(JchannelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.MESSAGE_WRITE)) || (JguildPerms.contains(Permission.MESSAGE_WRITE) && JchannelPerms.stream().noneMatch(p -> p.getDenied().contains(Permission.MESSAGE_WRITE))) ? ":white_check_mark: -> " : ":x: -> ") + "Escrever mensagens\n" +
-					(JchannelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.MESSAGE_MANAGE)) || (JguildPerms.contains(Permission.MESSAGE_MANAGE) && JchannelPerms.stream().noneMatch(p -> p.getDenied().contains(Permission.MESSAGE_MANAGE))) ? ":white_check_mark: -> " : ":x: -> ") + "Gerenciar mensagens\n" +
-					(JchannelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.MESSAGE_EMBED_LINKS)) || (JguildPerms.contains(Permission.MESSAGE_EMBED_LINKS) && JchannelPerms.stream().noneMatch(p -> p.getDenied().contains(Permission.MESSAGE_EMBED_LINKS))) ? ":white_check_mark: -> " : ":x: -> ") + "Inserir links\n" +
-					(JchannelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.MESSAGE_ATTACH_FILES)) || (JguildPerms.contains(Permission.MESSAGE_ATTACH_FILES) && JchannelPerms.stream().noneMatch(p -> p.getDenied().contains(Permission.MESSAGE_ATTACH_FILES))) ? ":white_check_mark: -> " : ":x: -> ") + "Enviar arquivos\n" +
-					(JchannelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.MESSAGE_EXT_EMOJI) ) || (JguildPerms.contains(Permission.MESSAGE_EXT_EMOJI) && JchannelPerms.stream().noneMatch(p -> p.getDenied().contains(Permission.MESSAGE_EXT_EMOJI))) ? ":white_check_mark: -> " : ":x: -> ") + "Usar emotes externos";
+		try {
+			if (TagDAO.getTagById(c.getGuild().getOwnerId()).isPartner() && c.getGuild().getMembers().contains(c.getGuild().getMember(Main.getJibril().getSelfUser()))) {
+				List<PermissionOverride> JchannelPerms = c.getPermissionOverrides().stream().filter(p -> Objects.requireNonNull(c.getGuild().getMember(Main.getJibril().getSelfUser())).getRoles().contains(p.getRole()) || p.getMember() == c.getGuild().getMember(Main.getJibril().getSelfUser())).collect(Collectors.toList());
+				EnumSet<Permission> JguildPerms = Objects.requireNonNull(c.getGuild().getMember(Main.getJibril().getSelfUser())).getPermissions();
+				jibrilPerms = "\n\n\n__**Permissões necessárias para uso completo da Jibril**__\n\n" +
+						(JchannelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.MANAGE_WEBHOOKS)) || (JguildPerms.contains(Permission.MANAGE_WEBHOOKS) && JchannelPerms.stream().noneMatch(p -> p.getDenied().contains(Permission.MANAGE_WEBHOOKS))) ? ":white_check_mark: -> " : ":x: -> ") + "Gerenciar webhooks\n" +
+						(JchannelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.MESSAGE_WRITE)) || (JguildPerms.contains(Permission.MESSAGE_WRITE) && JchannelPerms.stream().noneMatch(p -> p.getDenied().contains(Permission.MESSAGE_WRITE))) ? ":white_check_mark: -> " : ":x: -> ") + "Escrever mensagens\n" +
+						(JchannelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.MESSAGE_MANAGE)) || (JguildPerms.contains(Permission.MESSAGE_MANAGE) && JchannelPerms.stream().noneMatch(p -> p.getDenied().contains(Permission.MESSAGE_MANAGE))) ? ":white_check_mark: -> " : ":x: -> ") + "Gerenciar mensagens\n" +
+						(JchannelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.MESSAGE_EMBED_LINKS)) || (JguildPerms.contains(Permission.MESSAGE_EMBED_LINKS) && JchannelPerms.stream().noneMatch(p -> p.getDenied().contains(Permission.MESSAGE_EMBED_LINKS))) ? ":white_check_mark: -> " : ":x: -> ") + "Inserir links\n" +
+						(JchannelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.MESSAGE_ATTACH_FILES)) || (JguildPerms.contains(Permission.MESSAGE_ATTACH_FILES) && JchannelPerms.stream().noneMatch(p -> p.getDenied().contains(Permission.MESSAGE_ATTACH_FILES))) ? ":white_check_mark: -> " : ":x: -> ") + "Enviar arquivos\n" +
+						(JchannelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.MESSAGE_EXT_EMOJI)) || (JguildPerms.contains(Permission.MESSAGE_EXT_EMOJI) && JchannelPerms.stream().noneMatch(p -> p.getDenied().contains(Permission.MESSAGE_EXT_EMOJI))) ? ":white_check_mark: -> " : ":x: -> ") + "Usar emotes externos";
+			}
+		} catch (NoResultException ignore) {
 		}
 
 		return "__**Permissões necessárias para uso completo da Shiro**__\n\n" +
