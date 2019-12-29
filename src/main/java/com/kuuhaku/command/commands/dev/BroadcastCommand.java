@@ -48,11 +48,11 @@ public class BroadcastCommand extends Command {
 					}
 				}
 
-				sb.append("```diff \n");
+				sb.append("```diff\n");
 				result.forEach((key, value) -> sb.append(value ? "+ " : "- ").append(key).append("\n"));
 				sb.append("```");
 
-				channel.sendMessage("__**STATUS**__" + sb.toString()).queue();
+				channel.sendMessage("__**STATUS**__ " + sb.toString()).queue();
 				break;
 			case "parceiros":
 				List<Tags> ps = TagDAO.getAllTags();
@@ -78,11 +78,11 @@ public class BroadcastCommand extends Command {
 					}
 				}
 
-				sb.append("```diff \n");
+				sb.append("```diff\n");
 				result.forEach((key, value) -> sb.append(value ? "+ " : "- ").append(key).append("\n"));
 				sb.append("```");
 
-				channel.sendMessage("__**STATUS**__" + sb.toString()).queue();
+				channel.sendMessage("__**STATUS**__ " + sb.toString()).queue();
 				break;
 			default:
 				channel.sendMessage(":x: | Tipo desconhecido, os tipos válidos são **geral** ou **parceiros**").queue();
