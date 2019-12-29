@@ -124,7 +124,7 @@ public class TetEvents extends ListenerAdapter {
 				found = JDAEvents.isFound(commandName, found, command);
 
 				if (found) {
-					LogDAO.saveLog(new Log().setGuild(guild.getName()).setUser(author.getAsTag()).setCommand(rawMessage));
+					LogDAO.saveLog(new Log().setGuild(guild.getName()).setUser(author.getAsTag() + " (" + author.getId() + ")").setCommand(rawMessage));
 					Helper.logToChannel(author, true, command, "Um comando foi usado no canal " + ((TextChannel) channel).getAsMention(), guild);
 					if (Main.getInfo().getGames().get(guild.getId()) == null) {
 						if (command.getClass() == NewCampaignCommand.class) {
