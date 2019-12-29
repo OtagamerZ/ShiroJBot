@@ -8,10 +8,10 @@ import java.util.List;
 
 public class TagDAO {
 	@SuppressWarnings("unchecked")
-	public static List<Tags> getAllTags() {
+	public static List<Tags> getAllPartners() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT t FROM Tags t", Tags.class);
+		Query q = em.createQuery("SELECT t FROM Tags t WHERE t.Partner = true", Tags.class);
 		List<Tags> ts = (List<Tags>) q.getResultList();
 
 		em.close();
