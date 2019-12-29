@@ -74,6 +74,7 @@ public class BroadcastCommand extends Command {
 							result.put(u.getAsTag(), false);
 						}
 					} catch (Exception e) {
+						e.printStackTrace();
 						result.put("Desconhecido (" + t.getId() + ")", false);
 					}
 				}
