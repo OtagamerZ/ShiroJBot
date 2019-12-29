@@ -33,17 +33,18 @@ public class BroadcastCommand extends Command {
 		String msg = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 		Map<String, Boolean> result = new HashMap<>();
 		StringBuilder sb = new StringBuilder();
+		List<MessageEmbed> pages = new ArrayList<>();
+		EmbedBuilder eb = new EmbedBuilder();
 
 		switch (args[0].toLowerCase()) {
 			case "geral":
 				List<guildConfig> gcs = GuildDAO.getAllGuilds();
 				List<List<guildConfig>> gcPages = Helper.chunkify(gcs, 10);
-				List<MessageEmbed> pages = new ArrayList<>();
-				EmbedBuilder eb = new EmbedBuilder();
 
 				for (List<guildConfig> gs : gcPages) {
 					result.clear();
 					eb.clear();
+					sb.setLength(0);
 
 					for (guildConfig gc : gs) {
 						try {
@@ -63,33 +64,43 @@ public class BroadcastCommand extends Command {
 					pages.add(eb.build());
 				}
 
-				channel.sendMessage(pages.get(0)).queue(m -> {
-						Helper.paginate(m, pages);
-				});
+				channel.sendMessage(pages.get(0)).queue(m -> Helper.paginate(m, pages));
 				break;
 			case "parceiros":
 				List<Tags> ps = TagDAO.getAllPartners();
+				List<List<Tags>> psPages = Helper.chunkify(ps, 10);
 
-				for (Tags t : ps) {
-					User u = Helper.getOr(Main.getInfo().getUserByID(t.getId()), null);
+				for (List<Tags> p : psPages) {
+					result.clear();
+					eb.clear();
+					sb.setLength(0);
 
-					if (u == null) {
-						result.put("Desconhecido (" + t.getId() + ")", false);
-					} else {
-						try {
-							//u.openPrivateChannel().complete().sendMessage(msg).queue();
-							result.put(u.getAsTag(), true);
-						} catch (Exception e) {
-							result.put(u.getAsTag(), false);
+					for (Tags t : p) {
+						User u = Helper.getOr(Main.getInfo().getUserByID(t.getId()), null);
+
+						if (u == null) {
+							result.put("Desconhecido (" + t.getId() + ")", false);
+						} else {
+							try {
+								//u.openPrivateChannel().complete().sendMessage(msg).queue();
+								result.put(u.getAsTag(), true);
+							} catch (Exception e) {
+								result.put(u.getAsTag(), false);
+							}
 						}
 					}
+
+					sb.append("```diff\n");
+					result.forEach((key, value) -> sb.append(value ? "+ " : "- ").append(key).append("\n"));
+					sb.append("```");
+
+					eb.setTitle("__**STATUS**__ ");
+					eb.setDescription(sb.toString());
+					pages.add(eb.build());
+
 				}
 
-				sb.append("```diff\n");
-				result.forEach((key, value) -> sb.append(value ? "+ " : "- ").append(key).append("\n"));
-				sb.append("```");
-
-				channel.sendMessage("__**STATUS**__ " + sb.toString()).queue();
+				channel.sendMessage(pages.get(0)).queue(m -> Helper.paginate(m, pages));
 				break;
 			default:
 				channel.sendMessage(":x: | Tipo desconhecido, os tipos válidos são **geral** ou **parceiros**").queue();
