@@ -8,13 +8,11 @@ import com.kuuhaku.controller.MySQL.TagDAO;
 import com.kuuhaku.model.Tags;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class BroadcastCommand extends Command {
 
@@ -39,23 +37,35 @@ public class BroadcastCommand extends Command {
 		switch (args[0].toLowerCase()) {
 			case "geral":
 				List<guildConfig> gcs = GuildDAO.getAllGuilds();
+				List<List<guildConfig>> gcPages = Helper.chunkify(gcs, 10);
+				List<MessageEmbed> pages = new ArrayList<>();
+				EmbedBuilder eb = new EmbedBuilder();
 
-				System.out.println(Arrays.toString(Helper.chunkify(gcs, 10).toArray()));
+				for (List<guildConfig> gs : gcPages) {
+					result.clear();
+					eb.clear();
 
-				for (guildConfig gc : gcs) {
-					try {
-						//Objects.requireNonNull(Main.getInfo().getGuildByID(gc.getGuildID()).getTextChannelById(gc.getCanalLog())).sendMessage(msg).queue();
-						result.put(gc.getName(), true);
-					} catch (Exception e) {
-						result.put(gc.getName(), false);
+					for (guildConfig gc : gs) {
+						try {
+							//Objects.requireNonNull(Main.getInfo().getGuildByID(gc.getGuildID()).getTextChannelById(gc.getCanalLog())).sendMessage(msg).queue();
+							result.put(gc.getName(), true);
+						} catch (Exception e) {
+							result.put(gc.getName(), false);
+						}
 					}
+
+					sb.append("```diff\n");
+					result.forEach((key, value) -> sb.append(value ? "+ " : "- ").append(key).append("\n"));
+					sb.append("```");
+
+					eb.setTitle("__**STATUS**__ ");
+					eb.setDescription(sb.toString());
+					pages.add(eb.build());
 				}
 
-				sb.append("```diff\n");
-				result.forEach((key, value) -> sb.append(value ? "+ " : "- ").append(key).append("\n"));
-				sb.append("```");
-
-				channel.sendMessage("__**STATUS**__ " + sb.toString()).queue();
+				channel.sendMessage(pages.get(0)).queue(m -> {
+						Helper.paginate(m, pages);
+				});
 				break;
 			case "parceiros":
 				List<Tags> ps = TagDAO.getAllPartners();
