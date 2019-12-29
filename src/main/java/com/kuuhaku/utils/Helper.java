@@ -411,4 +411,17 @@ public class Helper {
 		
 		return usrRoles.get(0).getPosition() < tgtRoles.get(0).getPosition();
 	}
+
+	public static <T> List<List<T>> chunkify(List<T> list, int chunkSize) {
+		int overflow = list.size() % chunkSize;
+		List<List<T>> chunks = new ArrayList<>();
+
+		for (int i = 0; i < (list.size() - overflow) / chunkSize; i++) {
+			chunks.add(list.subList(i * chunkSize, (i * chunkSize) + chunkSize));
+		}
+
+		chunks.add(list.subList(list.size() - overflow, list.size()));
+
+		return chunks;
+	}
 }
