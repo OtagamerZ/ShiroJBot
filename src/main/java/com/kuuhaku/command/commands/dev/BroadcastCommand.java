@@ -8,11 +8,15 @@ import com.kuuhaku.controller.MySQL.TagDAO;
 import com.kuuhaku.model.Tags;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
+import kuuhaku.Enum.PageType;
+import kuuhaku.Method.Pages;
+import kuuhaku.Model.Page;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class BroadcastCommand extends Command {
 
@@ -33,7 +37,7 @@ public class BroadcastCommand extends Command {
 		String msg = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 		Map<String, Boolean> result = new HashMap<>();
 		StringBuilder sb = new StringBuilder();
-		List<MessageEmbed> pages = new ArrayList<>();
+		List<Page> pages = new ArrayList<>();
 		EmbedBuilder eb = new EmbedBuilder();
 
 		switch (args[0].toLowerCase()) {
@@ -61,10 +65,10 @@ public class BroadcastCommand extends Command {
 
 					eb.setTitle("__**STATUS**__ ");
 					eb.setDescription(sb.toString());
-					pages.add(eb.build());
+					pages.add(new Page(PageType.TEXT, eb.build()));
 				}
 
-				channel.sendMessage(pages.get(0)).queue(m -> Helper.paginate(m, pages));
+				channel.sendMessage((Message) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
 				break;
 			case "parceiros":
 				List<Tags> ps = TagDAO.getAllPartners();
@@ -96,11 +100,10 @@ public class BroadcastCommand extends Command {
 
 					eb.setTitle("__**STATUS**__ ");
 					eb.setDescription(sb.toString());
-					pages.add(eb.build());
-
+					pages.add(new Page(PageType.TEXT, eb.build()));
 				}
 
-				channel.sendMessage(pages.get(0)).queue(m -> Helper.paginate(m, pages));
+				channel.sendMessage((Message) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
 				break;
 			default:
 				channel.sendMessage(":x: | Tipo desconhecido, os tipos válidos são **geral** ou **parceiros**").queue();

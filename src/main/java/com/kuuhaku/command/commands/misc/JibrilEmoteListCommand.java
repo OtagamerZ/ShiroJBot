@@ -4,6 +4,9 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
+import kuuhaku.Enum.PageType;
+import kuuhaku.Method.Pages;
+import kuuhaku.Model.Page;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
@@ -11,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class JibrilEmoteListCommand extends Command {
@@ -21,7 +25,7 @@ public class JibrilEmoteListCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-		List<MessageEmbed> pages = new ArrayList<>();
+		List<Page> pages = new ArrayList<>();
 		List<MessageEmbed.Field> f = new ArrayList<>();
 
 		EmbedBuilder eb = new EmbedBuilder();
@@ -38,9 +42,9 @@ public class JibrilEmoteListCommand extends Command {
 			eb.setAuthor("Para usar estes emotes, simplesmente digite a menção no chat global, ela será convertida automaticamente.");
 			eb.setFooter("Página " + (i + 1) + ". Mostrando " + (-10 + 10 * (i + 1)) + " - " + (Math.min(10 * (i + 1), f.size())) + " resultados.", null);
 
-			pages.add(eb.build());
+			pages.add(new Page(PageType.EMBED, eb.build()));
 		}
 
-		channel.sendMessage(pages.get(0)).queue(s -> Helper.paginate(s, pages));
+		channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
 	}
 }
