@@ -25,9 +25,9 @@ public class UptimeCommand extends Command {
 		long minutos = TimeUnit.SECONDS.toMinutes(uptimeSec) - (TimeUnit.SECONDS.toHours(uptimeSec)* 60);
 		long segundos = TimeUnit.SECONDS.toSeconds(uptimeSec) - (TimeUnit.SECONDS.toMinutes(uptimeSec) * 60);
 
-		String uptime = dias + " dias " + horas + " horas " + minutos + " mins " + segundos + " segundos...";
+		String uptime = dias + " dias, " + horas + " horas, " + minutos + " mins e " + segundos + " segundos.";
 
-		channel.sendMessage("Hummm... acho que estou acordada a  " + uptime).queue();
+		channel.sendMessage("Hummm... acho que estou acordada há " + uptime).queue();
 	}
 
 }

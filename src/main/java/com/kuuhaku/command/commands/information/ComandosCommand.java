@@ -4,6 +4,9 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
+import kuuhaku.Enum.PageType;
+import kuuhaku.Method.Pages;
+import kuuhaku.Model.Page;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
@@ -11,6 +14,7 @@ import net.dv8tion.jda.api.events.Event;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class ComandosCommand extends Command {
 
@@ -36,7 +40,7 @@ public class ComandosCommand extends Command {
 
 
 		if (args.length == 0) {
-			Map<String, MessageEmbed> pages = new HashMap<>();
+			Map<String, Page> pages = new HashMap<>();
 
 			for (Category cat : Category.values()) {
 				EmbedBuilder ceb = new EmbedBuilder();
@@ -62,10 +66,10 @@ public class ComandosCommand extends Command {
 
 				ceb.addField(cat.getName(), cat.getDescription() + "\n" + cmds.toString().trim(), false);
 				ceb.addField(Helper.VOID, "Para informações sobre um comando em especifico digite `" + prefix + "cmds [comando]`.", false);
-				pages.put(cat.getEMOTE(), ceb.build());
+				pages.put(cat.getEMOTE(), new Page(PageType.EMBED, ceb.build()));
 			}
 
-			channel.sendMessage(eb.build()).queue(s -> Helper.categorize(s, pages));
+			channel.sendMessage(eb.build()).queue(s -> Pages.categorize(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
 			return;
 		}
 

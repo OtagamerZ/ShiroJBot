@@ -21,7 +21,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.MySQL.TagDAO;
 import com.kuuhaku.controller.SQLite.GuildDAO;
-import com.kuuhaku.events.MessageListener;
 import com.kuuhaku.model.Extensions;
 import com.kuuhaku.model.GamblePool;
 import com.kuuhaku.model.guildConfig;
@@ -29,14 +28,11 @@ import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
-import net.dv8tion.jda.api.events.message.react.GenericMessageReactionEvent;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
 import java.awt.*;
@@ -51,9 +47,7 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -277,89 +271,6 @@ public class Helper {
 
 	public static boolean containsAll(String string, String... compareWith) {
 		return Arrays.stream(compareWith).allMatch(string::contains);
-	}
-
-	public static void paginate(Message msg, List<MessageEmbed> pages) {
-		try {
-			msg.addReaction(PREVIOUS).queue();
-			msg.addReaction(CANCEL).queue();
-			msg.addReaction(NEXT).queue();
-			Main.getInfo().getAPI().addEventListener(new MessageListener() {
-				private final int maxP = pages.size() - 1;
-				private int p = 0;
-				private Future<?> timeout;
-				private final Consumer<Void> success = s -> Main.getInfo().getAPI().removeEventListener(this);
-
-				@Override
-				public void onGenericMessageReaction(@Nonnull GenericMessageReactionEvent event) {
-					if (timeout == null) timeout = msg.clearReactions().queueAfter(60, TimeUnit.SECONDS, success);
-					if (event.getUser().isBot()) return;
-
-					timeout.cancel(true);
-					timeout = msg.clearReactions().queueAfter(60, TimeUnit.SECONDS, success);
-					if (event.getReactionEmote().getName().equals(PREVIOUS)) {
-						if (p > 0) {
-							p--;
-							msg.editMessage(pages.get(p)).queue();
-						}
-					} else if (event.getReactionEmote().getName().equals(NEXT)) {
-						if (p < maxP) {
-							p++;
-							msg.editMessage(pages.get(p)).queue();
-						}
-					} else if (event.getReactionEmote().getName().equals(CANCEL)) {
-						msg.clearReactions().queue(success);
-					}
-				}
-
-				@Override
-				public void onMessageDelete(@Nonnull MessageDeleteEvent event) {
-					if (event.getMessageId().equals(msg.getId())) {
-						timeout.cancel(true);
-						timeout = null;
-					}
-				}
-			});
-		} catch (Exception e) {
-			logger(Helper.class).warn(e + " | " + e.getStackTrace()[0]);
-		}
-	}
-
-	public static void categorize(Message msg, Map<String, MessageEmbed> categories) {
-		try {
-			categories.keySet().forEach(k -> msg.addReaction(k).queue());
-			msg.addReaction(CANCEL).queue();
-			Main.getInfo().getAPI().addEventListener(new MessageListener() {
-				private String currCat = "";
-				private Future<?> timeout;
-				private final Consumer<Void> success = s -> Main.getInfo().getAPI().removeEventListener(this);
-
-				@Override
-				public void onGenericMessageReaction(@Nonnull GenericMessageReactionEvent event) {
-					if (timeout == null) timeout = msg.clearReactions().queueAfter(60, TimeUnit.SECONDS, success);
-
-					if (event.getUser().isBot() || event.getReactionEmote().getName().equals(currCat)) return;
-					else if (event.getReactionEmote().getName().equals(CANCEL)) {
-						msg.clearReactions().queue(s -> Main.getInfo().getAPI().removeEventListener(this));
-						return;
-					}
-
-					timeout.cancel(true);
-					timeout = msg.clearReactions().queueAfter(60, TimeUnit.SECONDS, success);
-					msg.editMessage(categories.get(event.getReactionEmote().getName())).queue(s -> currCat = event.getReactionEmote().getName());
-				}
-
-				@Override
-				public void onMessageDelete(@Nonnull MessageDeleteEvent event) {
-					if (event.getMessageId().equals(msg.getId())) {
-						timeout.cancel(true);
-						timeout = null;
-					}
-				}
-			});
-		} catch (Exception e) {
-			logger(Helper.class).warn(e + " | " + e.getStackTrace()[0]);
-		}
 	}
 
 	@SuppressWarnings("ConstantConditions")
