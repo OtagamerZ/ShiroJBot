@@ -1,10 +1,14 @@
 package com.kuuhaku.command.commands.music;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.Youtube;
 import com.kuuhaku.model.YoutubeVideo;
 import com.kuuhaku.utils.Helper;
+import kuuhaku.Enum.PageType;
+import kuuhaku.Method.Pages;
+import kuuhaku.Model.Page;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
@@ -13,6 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class YoutubeCommand extends Command {
 
@@ -34,7 +39,7 @@ public class YoutubeCommand extends Command {
                 m.editMessage(":mag: Resultados da busca").queue(s -> {
                     try {
                         if (videos.stream().findFirst().isPresent()) {
-                            List<MessageEmbed> pages = new ArrayList<>();
+                            List<Page> pages = new ArrayList<>();
 
                             for (YoutubeVideo v : videos) {
                                 eb.clear();
@@ -43,11 +48,11 @@ public class YoutubeCommand extends Command {
                                 eb.setThumbnail(v.getThumb());
                                 eb.setColor(Helper.colorThief(v.getThumb()));
                                 eb.setFooter("Link: " + v.getUrl(), null);
-                                pages.add(eb.build());
+                                pages.add(new Page(PageType.EMBED, eb.build()));
                             }
 
-                            channel.sendMessage(pages.get(0)).queue(msg -> {
-                                Helper.paginate(msg, pages);
+                            channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(msg -> {
+                                Pages.paginate(Main.getInfo().getAPI(), msg, pages, 60, TimeUnit.SECONDS);
                                 if (Objects.requireNonNull(member.getVoiceState()).inVoiceChannel()) {
                                     msg.addReaction(Helper.ACCEPT).queue();
                                 }

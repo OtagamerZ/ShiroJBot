@@ -22,12 +22,16 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.SQLite.MemberDAO;
 import com.kuuhaku.utils.Helper;
+import kuuhaku.Enum.PageType;
+import kuuhaku.Method.Pages;
+import kuuhaku.Model.Page;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class URankCommand extends Command {
 
@@ -61,7 +65,7 @@ public class URankCommand extends Command {
 					.append("\n");
 		}
 
-		List<MessageEmbed> pages = new ArrayList<>();
+		List<Page> pages = new ArrayList<>();
 		StringBuilder next10 = new StringBuilder();
 		EmbedBuilder eb = new EmbedBuilder();
 
@@ -70,7 +74,7 @@ public class URankCommand extends Command {
 		eb.setThumbnail("http://www.marquishoa.com/wp-content/uploads/2018/01/Ranking-icon.png");
 		eb.setColor(Helper.getRandomColor());
 
-		pages.add(eb.build());
+		pages.add(new Page(PageType.EMBED, eb.build()));
 
 		for (int x = 1; x < Math.ceil(mbs.size() / 10f); x++) {
 			eb.clear();
@@ -92,10 +96,10 @@ public class URankCommand extends Command {
 			eb.setThumbnail("http://www.marquishoa.com/wp-content/uploads/2018/01/Ranking-icon.png");
 			eb.setColor(Helper.getRandomColor());
 
-			pages.add(eb.build());
+			pages.add(new Page(PageType.EMBED, eb.build()));
 		}
 
-		channel.sendMessage(pages.get(0)).queue(s -> Helper.paginate(s, pages));
+		channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
 	}
 
 	private static String checkUser(com.kuuhaku.model.Member m) {
