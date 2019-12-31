@@ -1,5 +1,6 @@
 package com.kuuhaku.command.commands.misc;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.SQLite.BackupDAO;
@@ -8,6 +9,9 @@ import com.kuuhaku.controller.SQLite.GuildDAO;
 import com.kuuhaku.model.CustomAnswers;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.PrivilegeLevel;
+import kuuhaku.Enum.PageType;
+import kuuhaku.Method.Pages;
+import kuuhaku.Model.Page;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.Event;
@@ -15,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class CustomAnswerCommand extends Command {
 
@@ -31,7 +36,7 @@ public class CustomAnswerCommand extends Command {
 			channel.sendMessage(":x: | Você precisa definir um gatilho e uma mensagem.").queue();
 			return;
 		} else if (args[0].equals("lista")) {
-			List<MessageEmbed> pages = new ArrayList<>();
+			List<Page> pages = new ArrayList<>();
 
 			List<CustomAnswers> ca = BackupDAO.getCADump();
 			EmbedBuilder eb = new EmbedBuilder();
@@ -44,10 +49,10 @@ public class CustomAnswerCommand extends Command {
 				for (int i = -10 + (10 * (x + 1)); i < ca.size() && i < (10 * (x + 1)); i++) {
 					eb.addField(ca.get(i).getId() + " - " + ca.get(i).getGatilho(), ca.get(i).getAnswer().length() > 100 ? ca.get(i).getAnswer().substring(0, 100) + "..." : ca.get(i).getAnswer(), false);
 				}
-				pages.add(eb.build());
+				pages.add(new Page(PageType.EMBED, eb.build()));
 			}
 
-			channel.sendMessage(pages.get(0)).queue(s -> Helper.paginate(s, pages));
+			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
 			return;
 		} else if (StringUtils.isNumeric(args[0]) && !args[0].contains(";")) {
 			List<CustomAnswers> ca = BackupDAO.getCADump();
