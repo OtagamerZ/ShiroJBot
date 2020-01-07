@@ -338,7 +338,7 @@ public class JDAEvents extends ListenerAdapter {
 		return false;
 	}
 
-	public static boolean isFound(String commandName, boolean found, Command command) {
+	public static boolean isFound(guildConfig gc, String commandName, boolean found, Command command) {
 		if (command.getName().equalsIgnoreCase(commandName)) {
 			found = true;
 		}
@@ -348,7 +348,7 @@ public class JDAEvents extends ListenerAdapter {
 				break;
 			}
 		}
-		if (command.getCategory().isEnabled()) {
+		if (command.getCategory().isEnabled(gc)) {
 			found = false;
 		}
 		return found;

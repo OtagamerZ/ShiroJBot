@@ -163,7 +163,7 @@ public class GuildEvents extends ListenerAdapter {
 				return;
 			}
 			for (Command command : Main.getCommandManager().getCommands()) {
-				found = JDAEvents.isFound(commandName, found, command);
+				found = JDAEvents.isFound(GuildDAO.getGuildById(guild.getId()), commandName, found, command);
 
 				if (found) {
 					LogDAO.saveLog(new Log().setGuild(guild.getName()).setUser(author.getAsTag()).setCommand(rawMessage));
