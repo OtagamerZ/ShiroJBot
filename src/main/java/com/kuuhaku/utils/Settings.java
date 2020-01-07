@@ -472,6 +472,8 @@ public class Settings {
                 message.getTextChannel().sendMessage("Os módulos desligados são:```\n" + antigoModulo.stream().map(c -> c.getName() + "\n").toString() + "```").queue();
             }
             return;
+        } else if (args[1].equalsIgnoreCase("Moderação")) {
+            message.getTextChannel().sendMessage(":x: | É impossível desativar o módulo de moderação.").queue();
         } else if (args[1].equals("reset") || args[1].equals("resetar")) {
             gc.setDisabledModules(new ArrayList<>());
             GuildDAO.updateGuildSettings(gc);
@@ -488,7 +490,7 @@ public class Settings {
 				}
 			} else if (Helper.containsAny(args[2].toLowerCase(), "desligado", "disabled", "off")) {
 				if (antigoModulo.contains(Category.getByName(args[1]))) {
-					message.getTextChannel().sendMessage(":x: | Módulo já desligado.").queue();
+					message.getTextChannel().sendMessage(":x: | Módulo já desativado.").queue();
 				} else {
 					antigoModulo.add(Category.getByName(args[1]));
 				}
