@@ -3,7 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="271f62a3-9e6a-4818-8029-c8d623fc8628" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/guildConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/guildConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/ComandosCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/ComandosCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Settings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Settings.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,7 +80,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1578417110885</updated>
-      <workItem from="1578417115081" duration="8028000" />
+      <workItem from="1578417115081" duration="8827000" />
     </task>
     <task id="LOCAL-00001" summary="Correções gerais de sintaxe">
       <created>1578422410609</created>
@@ -102,7 +103,14 @@
       <option name="project" value="LOCAL" />
       <updated>1578425194800</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Configuração de permissão de módulos por servidor adicionada">
+      <created>1578425453928</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1578425453928</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -134,10 +142,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1578421403620" />
-    <state x="366" y="100" key="CommitChangelistDialog2" timestamp="1578425192046">
+    <state x="366" y="100" key="CommitChangelistDialog2" timestamp="1578425451265">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="366" y="100" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1578425192046" />
+    <state x="366" y="100" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1578425451265" />
     <state x="160" y="89" key="DiffContextDialog" timestamp="1578421042559">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -146,10 +154,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1578417783560" />
-    <state x="432" y="239" key="Vcs.Push.Dialog.v2" timestamp="1578425196212">
+    <state x="432" y="239" key="Vcs.Push.Dialog.v2" timestamp="1578425455138">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="432" y="239" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1578425196212" />
+    <state x="432" y="239" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1578425455138" />
     <state x="789" y="335" key="extract.method.dialog" timestamp="1578421333008">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>

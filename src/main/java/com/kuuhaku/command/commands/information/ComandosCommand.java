@@ -53,7 +53,7 @@ public class ComandosCommand extends Command {
 				ceb.setDescription("Prefixo: `" + prefix + "`\n"
 						+ cat.getCmds().size() + " comandos encontrados nesta categoria!");
 
-				if (!gc.getDisabledModules().contains(cat))
+				if (gc.getDisabledModules().contains(cat))
 					continue;
 				if (cat.getCmds().size() == 0) {
 					ceb.addField(cat.getName(), cat.getDescription() + "\n*Ainda não existem comandos nesta categoria.*", false);
