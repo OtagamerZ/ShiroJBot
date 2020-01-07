@@ -34,7 +34,7 @@ public class ComandosCommand extends Command {
 				+ Category.values().length + " categorias encontradas!" + "\n"
 				+ Main.getCommandManager().getCommands().size() + " comandos encontrados!");
 		for (Category cat : Category.values()) {
-			eb.addField(cat.getEMOTE() + " | " + cat.getName(), Helper.VOID, true);
+			if (!gc.getDisabledModules().contains(cat)) eb.addField(cat.getEMOTE() + " | " + cat.getName(), Helper.VOID, true);
 		}
 		eb.setColor(Color.PINK);
 		eb.setFooter(Main.getInfo().getFullName(), null);
@@ -113,7 +113,7 @@ public class ComandosCommand extends Command {
 		StringBuilder aliases = new StringBuilder("**Aliases**: ");
 
 		for (String al : cmd.getAliases()) {
-			aliases.append("`").append(al).append("` ");
+			aliases.append("`").append(al).append("`  ");
 		}
 
 		eb.setDescription(cmd.getDescription() + "\n"
