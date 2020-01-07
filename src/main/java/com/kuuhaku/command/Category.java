@@ -17,9 +17,11 @@
 
 package com.kuuhaku.command;
 
+import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.PrivilegeLevel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public enum Category {
     DEVS("Dev", "\uD83D\uDEE0", "Comandos dedicados aos devs do bot.", PrivilegeLevel.DEV),
@@ -37,7 +39,6 @@ public enum Category {
 	private final String EMOTE;
 	private final String description;
 	private final PrivilegeLevel privilegeLevel;
-	private boolean enabled = true;
 	
 	Category(String name, String emote, String description, PrivilegeLevel privilegeLevel) {
 		this.name = name;
@@ -54,6 +55,10 @@ public enum Category {
 	
 	public String getName() {
 		return name;
+	}
+
+	public static Category getByName(String name) {
+		return Arrays.stream(Category.values()).filter(c -> c.name.equals(name)).findFirst().orElseThrow(RuntimeException::new);
 	}
 
 	public String getDescription() {
@@ -75,12 +80,8 @@ public enum Category {
 		return cmds;
 	}
 	
-	public boolean isEnabled() {
-		return !enabled;
-	}
-	
-	public void disable() {
-		enabled = false;
+	public boolean isEnabled(guildConfig gc) {
+		return gc.getDisabledModules().contains(this);
 	}
 
 	public String getEMOTE() {

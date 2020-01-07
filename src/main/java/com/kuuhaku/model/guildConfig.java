@@ -18,6 +18,7 @@
 package com.kuuhaku.model;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.command.Category;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
@@ -25,10 +26,7 @@ import org.json.JSONObject;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Entity
 public class guildConfig {
@@ -67,6 +65,7 @@ public class guildConfig {
 	private boolean liteMode = false;
 	@Column(columnDefinition = "boolean default false")
 	private boolean allowImg = false;
+	private String disabledModules = "";
 	private boolean markForDelete;
 
 	public guildConfig() {
@@ -309,5 +308,20 @@ public class guildConfig {
 
 	public boolean isMarkForDelete() {
 		return markForDelete;
+	}
+
+	public List<Category> getDisabledModules() {
+		List<Category> cats = new ArrayList<>();
+		String[] dmods = disabledModules.split(",");
+		for (String mod : dmods) {
+			cats.add(Category.getByName(mod));
+		}
+		return cats;
+	}
+
+	public void setDisabledModules(List<Category> disabledModules) {
+		StringBuilder sb = new StringBuilder();
+		disabledModules.forEach(c -> sb.append(c.getName()).append(","));
+		this.disabledModules = sb.toString().substring(0, sb.length() - 1);
 	}
 }

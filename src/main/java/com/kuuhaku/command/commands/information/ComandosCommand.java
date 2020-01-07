@@ -1,12 +1,14 @@
 package com.kuuhaku.command.commands.information;
 
-import com.kuuhaku.Main;
-import com.kuuhaku.command.Category;
-import com.kuuhaku.command.Command;
-import com.kuuhaku.utils.Helper;
 import com.kuuhaku.Enum.PageType;
+import com.kuuhaku.Main;
 import com.kuuhaku.Method.Pages;
 import com.kuuhaku.Model.Page;
+import com.kuuhaku.command.Category;
+import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.model.guildConfig;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 
@@ -23,6 +25,7 @@ public class ComandosCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		guildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setTitle("**Lista de Comandos**");
@@ -50,7 +53,7 @@ public class ComandosCommand extends Command {
 				ceb.setDescription("Prefixo: `" + prefix + "`\n"
 						+ cat.getCmds().size() + " comandos encontrados nesta categoria!");
 
-				if (cat.isEnabled())
+				if (!gc.getDisabledModules().contains(cat))
 					continue;
 				if (cat.getCmds().size() == 0) {
 					ceb.addField(cat.getName(), cat.getDescription() + "\n*Ainda não existem comandos nesta categoria.*", false);
