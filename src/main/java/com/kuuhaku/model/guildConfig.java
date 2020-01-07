@@ -19,6 +19,7 @@ package com.kuuhaku.model;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
@@ -312,6 +313,7 @@ public class guildConfig {
 
 	public List<Category> getDisabledModules() {
 		List<Category> cats = new ArrayList<>();
+		if (Helper.getOr(disabledModules, null) == null) return cats;
 		String[] dmods = disabledModules.split(",");
 		for (String mod : dmods) {
 			cats.add(Category.getByName(mod));
