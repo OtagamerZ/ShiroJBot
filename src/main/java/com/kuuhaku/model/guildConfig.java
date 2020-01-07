@@ -322,7 +322,9 @@ public class guildConfig {
 	}
 
 	public void setDisabledModules(List<Category> disabledModules) {
-		this.disabledModules = Arrays.toString(disabledModules.toArray()).replace("[", "").replace("]", "").replace(" ", "");
-		System.out.println(this.disabledModules);
+		StringBuilder sb = new StringBuilder();
+		disabledModules.forEach(c -> sb.append(c.getName()).append(","));
+		if (sb.toString().charAt(Math.max(sb.toString().length() - 1, sb.toString().length())) == ',') this.disabledModules = sb.toString().substring(0, sb.length() - 1);
+		else this.disabledModules = sb.toString();
 	}
 }
