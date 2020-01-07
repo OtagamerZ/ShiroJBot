@@ -479,6 +479,7 @@ public class Settings {
             return;
         } else if (Helper.containsAny(args[1].toLowerCase(), "moderação", "dev", "parceiros")) {
             message.getTextChannel().sendMessage(":x: | É impossível desativar o módulo " + args[1].toLowerCase() + ".").queue();
+            return;
         }
 
         try {
