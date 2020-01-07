@@ -121,7 +121,7 @@ public class TetEvents extends ListenerAdapter {
 			}
 
 			for (Command command : Main.getRPGCommandManager().getCommands()) {
-				found = JDAEvents.isFound(GuildDAO.getGuildById(guild.getId()), commandName, found, command);
+				found = JDAEvents.isFound(GuildDAO.getGuildById(guild.getId()), guild, commandName, found, command);
 
 				if (found) {
 					LogDAO.saveLog(new Log().setGuild(guild.getName()).setUser(author.getAsTag()).setCommand(rawMessage));
