@@ -61,7 +61,7 @@ public enum Category {
 
 	public static Category getByName(String name) {
 		System.out.println(name);
-		return Arrays.stream(Category.values()).filter(c -> c.name.equals(name)).findFirst().orElseThrow(RuntimeException::new);
+		return Arrays.stream(Category.values()).filter(c -> c.name.equalsIgnoreCase(name)).findFirst().orElseThrow(RuntimeException::new);
 	}
 
 	public String getDescription() {
