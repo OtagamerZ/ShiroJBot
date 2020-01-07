@@ -20,14 +20,13 @@ package com.kuuhaku.command.commands.information;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.SQLite.MemberDAO;
+import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.utils.Helper;
-import kuuhaku.Enum.PageType;
-import kuuhaku.Method.Pages;
-import kuuhaku.Model.Page;
+import com.kuuhaku.Enum.PageType;
+import com.kuuhaku.Method.Pages;
+import com.kuuhaku.Model.Page;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +39,7 @@ public class URankCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		List<com.kuuhaku.model.Member> mbs;
 		boolean global = false;
 		if (args.length > 0 && args[0].equals("global")) {

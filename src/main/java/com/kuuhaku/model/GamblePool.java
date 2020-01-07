@@ -5,8 +5,8 @@ import java.util.List;
 
 public class GamblePool {
 	public static class Gamble {
-		private String slot;
-		private int weight;
+		private final String slot;
+		private final int weight;
 
 		public Gamble(String s, int w) {
 			this.slot = s;
@@ -26,7 +26,7 @@ public class GamblePool {
 		g.add(gamble);
 	}
 
-	private static List<Gamble> g = new ArrayList<>();
+	private static final List<Gamble> g = new ArrayList<>();
 
 	public String[] getPool() {
 		List<String> pool = new ArrayList<>();

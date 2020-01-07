@@ -25,13 +25,10 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -86,18 +83,10 @@ abstract class Reaction extends Command {
             con.setRequestProperty("Accept", "application/json");
             con.addRequestProperty("Accept-Charset", "UTF-8");
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
+            String resposta = Helper.getResponse(con);
 
-            String input;
-            StringBuilder resposta = new StringBuilder();
-            while ((input = br.readLine()) != null) {
-                resposta.append(input);
-            }
-            br.close();
-            con.disconnect();
-
-            Helper.logger(this.getClass()).debug(resposta.toString());
-            return new JSONObject(resposta.toString()).get("url").toString();
+            Helper.logger(this.getClass()).debug(resposta);
+            return new JSONObject(resposta).get("url").toString();
         } catch (IOException e) {
 	        Helper.logger(this.getClass()).error("Erro ao recuperar API: " + e.getStackTrace()[0]);
 	        return null;

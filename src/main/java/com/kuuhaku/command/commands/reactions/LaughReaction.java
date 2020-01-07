@@ -19,7 +19,6 @@ package com.kuuhaku.command.commands.reactions;
 
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 
 public class LaughReaction extends Reaction {
 	public LaughReaction() {
@@ -27,7 +26,7 @@ public class LaughReaction extends Reaction {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		this.setReaction(new String[]{
 				"Kkkkkkkk!",
 				"Rsrsrsrs!",

@@ -17,10 +17,12 @@
 
 package com.kuuhaku.utils;
 
+import com.kuuhaku.Enum.PageType;
 import com.kuuhaku.Main;
+import com.kuuhaku.Model.Page;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.MySQL.TagDAO;
-import com.kuuhaku.controller.SQLite.GuildDAO;
+import com.kuuhaku.controller.mysql.TagDAO;
+import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.Extensions;
 import com.kuuhaku.model.GamblePool;
 import com.kuuhaku.model.guildConfig;
@@ -37,12 +39,15 @@ import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -174,12 +179,9 @@ public class Helper {
 		}
 		String[] pool = gp.getPool();
 		List<String> result = new ArrayList<>();
-		result.add(pool[clamp(rng(pool.length), 0, pool.length - 1)]);
-		result.add(pool[clamp(rng(pool.length), 0, pool.length - 1)]);
-		result.add(pool[clamp(rng(pool.length), 0, pool.length - 1)]);
-		result.add(pool[clamp(rng(pool.length), 0, pool.length - 1)]);
-		result.add(pool[clamp(rng(pool.length), 0, pool.length - 1)]);
-		result.add(pool[clamp(rng(pool.length), 0, pool.length - 1)]);
+		for (int i = 0; i < 6; i++) {
+			result.add(pool[clamp(rng(pool.length), 0, pool.length - 1)]);
+		}
 		return result;
 	}
 
@@ -335,4 +337,49 @@ public class Helper {
 
 		return chunks;
 	}
+
+	public static String getResponse(HttpURLConnection con) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
+
+		String input;
+		StringBuilder resposta = new StringBuilder();
+		while ((input = br.readLine()) != null) {
+			resposta.append(input);
+		}
+		br.close();
+		con.disconnect();
+
+		return resposta.toString();
+	}
+
+    public static void nonPartnerAlert(User author, Member member, MessageChannel channel, String s, String link) {
+        try {
+            if (!TagDAO.getTagById(author.getId()).isPartner() && !hasPermission(member, PrivilegeLevel.DEV)) {
+                channel.sendMessage(":x: | Este comando é exlusivo para parceiros!").queue();
+                return;
+            }
+        } catch (NoResultException e) {
+            channel.sendMessage(":x: | Este comando é exlusivo para parceiros!").queue();
+            return;
+        }
+
+        channel.sendMessage("Link enviado no privado!").queue();
+
+        EmbedBuilder eb = new EmbedBuilder();
+
+        eb.setThumbnail("https://www.pacific.edu/Images/library/Renovation%20Renderings/LogoMakr_2mPTly.png");
+        eb.setTitle("Olá, obrigado por apoiar meu desenvolvimento!");
+        eb.setDescription(s +System.getenv(link));
+        eb.setColor(Color.green);
+
+        author.openPrivateChannel().queue(c -> c.sendMessage(eb.build()).queue());
+    }
+
+    public static void finishEmbed(Guild guild, List<Page> pages, List<MessageEmbed.Field> f, EmbedBuilder eb, int i) {
+        eb.setColor(getRandomColor());
+        eb.setAuthor("Para usar estes emotes, utilize o comando \"" + GuildDAO.getGuildById(guild.getId()).getPrefix() + "say MENÇÃO\"");
+        eb.setFooter("Página " + (i + 1) + ". Mostrando " + (-10 + 10 * (i + 1)) + " - " + (Math.min(10 * (i + 1), f.size())) + " resultados.", null);
+
+        pages.add(new Page(PageType.EMBED, eb.build()));
+    }
 }

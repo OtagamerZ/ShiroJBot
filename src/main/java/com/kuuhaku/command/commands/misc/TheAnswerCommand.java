@@ -2,9 +2,8 @@ package com.kuuhaku.command.commands.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.MySQL.TagDAO;
+import com.kuuhaku.controller.mysql.TagDAO;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 
 import javax.persistence.NoResultException;
 
@@ -15,7 +14,7 @@ public class TheAnswerCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (guild.getId().equals("421495229594730496")) {
 			try {
 				if (TagDAO.getTagById(author.getId()).isReader())

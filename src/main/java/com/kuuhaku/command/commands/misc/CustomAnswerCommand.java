@@ -1,20 +1,19 @@
 package com.kuuhaku.command.commands.misc;
 
+import com.kuuhaku.Enum.PageType;
 import com.kuuhaku.Main;
+import com.kuuhaku.Method.Pages;
+import com.kuuhaku.Model.Page;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.SQLite.BackupDAO;
-import com.kuuhaku.controller.SQLite.CustomAnswerDAO;
-import com.kuuhaku.controller.SQLite.GuildDAO;
+import com.kuuhaku.controller.sqlite.BackupDAO;
+import com.kuuhaku.controller.sqlite.CustomAnswerDAO;
+import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.CustomAnswers;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.PrivilegeLevel;
-import kuuhaku.Enum.PageType;
-import kuuhaku.Method.Pages;
-import kuuhaku.Model.Page;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ public class CustomAnswerCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (!Helper.hasPermission(member, PrivilegeLevel.MOD) && GuildDAO.getGuildById(guild.getId()).isNotAnyTell()) {
 			channel.sendMessage(":x: | Este servidor não está configurado para permitir respostas customizadas da comunidade.").queue();
 			return;

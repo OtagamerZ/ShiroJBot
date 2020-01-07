@@ -3,7 +3,6 @@ package com.kuuhaku.command.commands.dev;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 
 import java.io.File;
 
@@ -14,7 +13,7 @@ public class LogCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		File log = new File("logs/stacktrace.log");
 		try {
 			if (log.exists()) channel.sendMessage("Aqui está!").addFile(log).queue();

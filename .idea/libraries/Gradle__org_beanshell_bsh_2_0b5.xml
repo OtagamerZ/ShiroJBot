@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.beanshell:bsh:2.0b5">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.beanshell/bsh/2.0b5/fdc2ab6ae8b53e0d4761b296c116df747cd85199/bsh-2.0b5.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.beanshell/bsh/2.0b5/99337ee4d907acc995c6f853e177097e5a6f06a/bsh-2.0b5-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

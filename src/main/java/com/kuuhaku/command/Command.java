@@ -18,7 +18,6 @@
 package com.kuuhaku.command;
 
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 
 public abstract class Command {
 
@@ -84,13 +83,6 @@ public abstract class Command {
 		return category;
 	}
 
-	/**
-     * @param  author
-     *         O utilizador discord que executou o comando
-     * @param  member
-     *         O membro do servidor que executou o comando
-     *
-     */
-	public abstract void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix);
+	public abstract void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix);
 	
 }

@@ -3,11 +3,10 @@ package com.kuuhaku.command.commands.rpg;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.handlers.games.RPG.Actors.Actor;
-import com.kuuhaku.handlers.games.RPG.Handlers.CombatHandler;
-import com.kuuhaku.handlers.games.RPG.Handlers.PvPHandler;
+import com.kuuhaku.handlers.games.rpg.actors.Actor;
+import com.kuuhaku.handlers.games.rpg.handlers.CombatHandler;
+import com.kuuhaku.handlers.games.rpg.handlers.PvPHandler;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 
 public class AttackCommand extends Command {
 
@@ -16,7 +15,7 @@ public class AttackCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (Main.getInfo().getGames().get(guild.getId()).getMaster() == author) {
 			if (message.getMentionedUsers().size() == 0) {
 				channel.sendMessage(":x: | Você precisa especificar um usuário para atacar").queue();

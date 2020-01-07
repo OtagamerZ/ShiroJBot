@@ -37,7 +37,6 @@ package com.kuuhaku.command.commands.dev;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.security.SecureRandom;
@@ -50,7 +49,7 @@ public class TokenCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
 			channel.sendMessage(":x: | Preciso do nome do usuário para adicionar na geração do token").queue();
 			return;

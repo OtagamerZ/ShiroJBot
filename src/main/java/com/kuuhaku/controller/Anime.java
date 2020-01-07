@@ -75,17 +75,10 @@ public class Anime {
         con.addRequestProperty("User-Agent", "Mozilla/5.0");
         con.addRequestProperty("Authorization", System.getenv("DA_TOKEN"));
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
+        String resposta = Helper.getResponse(con);
 
-        String input;
-        StringBuilder resposta = new StringBuilder();
-        while ((input = br.readLine()) != null) {
-            resposta.append(input);
-        }
-        br.close();
-        con.disconnect();
-
-        Helper.logger(Tradutor.class).debug(resposta.toString());
-        return new JSONObject(resposta.toString()).getJSONObject("anime");
+        Helper.logger(Anime.class).debug(resposta);
+        return new JSONObject(resposta).getJSONObject("anime");
     }
+
 }

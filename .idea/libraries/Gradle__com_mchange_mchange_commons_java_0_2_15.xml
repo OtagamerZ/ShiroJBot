@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.mchange:mchange-commons-java:0.2.15">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.mchange/mchange-commons-java/0.2.15/6ef5abe5f1b94ac45b7b5bad42d871da4fda6bbc/mchange-commons-java-0.2.15.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.mchange/mchange-commons-java/0.2.15/dbcfc59448950a4899d9ad88f0a916d5f1e420a0/mchange-commons-java-0.2.15-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

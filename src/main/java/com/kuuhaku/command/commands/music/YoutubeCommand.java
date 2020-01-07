@@ -6,12 +6,11 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.Youtube;
 import com.kuuhaku.model.YoutubeVideo;
 import com.kuuhaku.utils.Helper;
-import kuuhaku.Enum.PageType;
-import kuuhaku.Method.Pages;
-import kuuhaku.Model.Page;
+import com.kuuhaku.Enum.PageType;
+import com.kuuhaku.Method.Pages;
+import com.kuuhaku.Model.Page;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,7 +25,7 @@ public class YoutubeCommand extends Command {
     }
 
     @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
         if (args.length < 1) {
             channel.sendMessage(":x: | Você precisa digitar um nome para pesquisar.").queue();
             return;

@@ -1,9 +1,9 @@
 package com.kuuhaku.events;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.MySQL.MemberDAO;
-import com.kuuhaku.controller.MySQL.TagDAO;
-import com.kuuhaku.controller.SQLite.GuildDAO;
+import com.kuuhaku.controller.mysql.MemberDAO;
+import com.kuuhaku.controller.mysql.TagDAO;
+import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.Member;
 import com.kuuhaku.model.RelayBlockList;
 import com.kuuhaku.utils.Helper;
@@ -65,13 +65,13 @@ public class JibrilEvents extends ListenerAdapter {
 			if (Main.getRelay().getRelayMap().containsValue(event.getChannel().getId()) && !event.getAuthor().isBot()) {
 				Member mb;
 				try {
-					mb = com.kuuhaku.controller.SQLite.MemberDAO.getMemberById(event.getAuthor().getId() + event.getGuild().getId());
+					mb = com.kuuhaku.controller.sqlite.MemberDAO.getMemberById(event.getAuthor().getId() + event.getGuild().getId());
 				} catch (NoResultException e) {
 					assert event.getMember() != null;
-					com.kuuhaku.controller.SQLite.MemberDAO.addMemberToDB(event.getMember());
-					mb = com.kuuhaku.controller.SQLite.MemberDAO.getMemberById(event.getAuthor().getId() + event.getGuild().getId());
+					com.kuuhaku.controller.sqlite.MemberDAO.addMemberToDB(event.getMember());
+					mb = com.kuuhaku.controller.sqlite.MemberDAO.getMemberById(event.getAuthor().getId() + event.getGuild().getId());
 				}
-				if (mb.getMid() == null) com.kuuhaku.controller.SQLite.MemberDAO.saveMemberMid(mb, event.getAuthor());
+				if (mb.getMid() == null) com.kuuhaku.controller.sqlite.MemberDAO.saveMemberMid(mb, event.getAuthor());
 
 				if (event.getMessage().getContentRaw().trim().equals("<@" + Main.getJibril().getSelfUser().getId() + ">")) {
 					event.getChannel().sendMessage("Oi? Ah, você quer saber meus comandos né?\nBem, eu não sou uma bot de comandos, eu apenas gerencio o chat global, que pode ser definido pelos moderadores desse servidor usando `" + GuildDAO.getGuildById(event.getGuild().getId()).getPrefix() + "settings crelay #CANAL`!").queue();
@@ -85,7 +85,7 @@ public class JibrilEvents extends ListenerAdapter {
 								c.sendMessage(rulesMsg()).queue(s2 ->
 										c.sendMessage(finalMsg()).queue(s3 -> {
 											finalMb.setRulesSent(true);
-											com.kuuhaku.controller.SQLite.MemberDAO.updateMemberConfigs(finalMb);
+											com.kuuhaku.controller.sqlite.MemberDAO.updateMemberConfigs(finalMb);
 											MemberDAO.saveMemberToBD(finalMb);
 										}))));
 					} catch (ErrorResponseException ignore) {

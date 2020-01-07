@@ -4,7 +4,6 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,7 +16,7 @@ public class EmbedCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		channel.sendMessage("<a:Loading:598500653215645697> Construindo embed...").queue(m -> {
 			try {
 				JSONObject json = new JSONObject(String.join(" ", args));
