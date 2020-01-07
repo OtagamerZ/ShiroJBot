@@ -275,6 +275,10 @@ public class Helper {
 		return Arrays.stream(compareWith).allMatch(string::contains);
 	}
 
+	public static boolean containsAny(String string, String... compareWith) {
+		return Arrays.stream(compareWith).anyMatch(string::contains);
+	}
+
 	@SuppressWarnings("ConstantConditions")
 	public static String getRequiredPerms(TextChannel c) {
 		List<PermissionOverride> channelPerms = c.getPermissionOverrides().stream().filter(p -> c.getGuild().getSelfMember().getRoles().contains(p.getRole()) || p.getMember() == c.getGuild().getSelfMember()).collect(Collectors.toList());
