@@ -17,8 +17,10 @@
 
 package com.kuuhaku.command;
 
+import com.kuuhaku.controller.mysql.TagDAO;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.PrivilegeLevel;
+import net.dv8tion.jda.api.entities.Guild;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -80,8 +82,8 @@ public enum Category {
 		return cmds;
 	}
 	
-	public boolean isEnabled(guildConfig gc) {
-		return gc.getDisabledModules().contains(this);
+	public boolean isEnabled(guildConfig gc, Guild g) {
+		return gc.getDisabledModules().contains(this) || (this == PARTNER && TagDAO.getTagById(g.getOwnerId()).isPartner()) || (this == DEVS && g.getId().equals("421495229594730496"));
 	}
 
 	public String getEMOTE() {

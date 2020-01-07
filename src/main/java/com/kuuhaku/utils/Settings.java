@@ -465,20 +465,20 @@ public class Settings {
     public static void updateModules(String[] args, Message message, guildConfig gc) {
         List<Category> antigoModulo = GuildDAO.getGuildById(message.getGuild().getId()).getDisabledModules();
 
-        if (args.length < 3) {
-            if (antigoModulo.size() == 0) {
-                message.getTextChannel().sendMessage("Nenhum módulo desligado.").queue();
-            } else {
-                message.getTextChannel().sendMessage("Os módulos desligados são:```\n" + antigoModulo.stream().map(c -> c.getName() + "\n").toString() + "```").queue();
-            }
-            return;
-        } else if (args[1].equalsIgnoreCase("Moderação")) {
-            message.getTextChannel().sendMessage(":x: | É impossível desativar o módulo de moderação.").queue();
-        } else if (args[1].equals("reset") || args[1].equals("resetar")) {
+        if (args[1].equals("reset") || args[1].equals("resetar")) {
             gc.setDisabledModules(new ArrayList<>());
             GuildDAO.updateGuildSettings(gc);
             message.getTextChannel().sendMessage("✅ | Todos os módulos habilitados novamente.").queue();
             return;
+        } else if (args.length < 3) {
+            if (antigoModulo.size() == 0) {
+                message.getTextChannel().sendMessage("Nenhum módulo desligado.").queue();
+            } else {
+                message.getTextChannel().sendMessage("Os módulos desligados são:```\n" + antigoModulo.stream().map(c -> c.getName() + "\n").collect(Collectors.joining()) + "```").queue();
+            }
+            return;
+        } else if (Helper.containsAny(args[1].toLowerCase(), "moderação", "dev", "parceiros")) {
+            message.getTextChannel().sendMessage(":x: | É impossível desativar o módulo " + args[1].toLowerCase() + ".").queue();
         }
 
         try {
