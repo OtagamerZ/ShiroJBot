@@ -51,7 +51,6 @@ public class CommandManager {
             add(new RelaysCommand());
             add(new BlockCommand());
             add(new LogCommand());
-            add(new RegenRulesCommand());
             add(new TokenCommand());
             add(new BroadcastCommand());
 
@@ -88,6 +87,7 @@ public class CommandManager {
             add(new URankCommand());
             add(new IDCommand());
             add(new ColorTesterCommand());
+            add(new RegenRulesCommand());
 
             //MISC
             add(new AsciiCommand());
