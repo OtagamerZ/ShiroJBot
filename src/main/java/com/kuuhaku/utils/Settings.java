@@ -505,6 +505,7 @@ public class Settings {
 			message.getTextChannel().sendMessage("✅ | Módulo " + args[1] + " " + (antigoModulo.contains(Category.getByName(args[1])) ? "desabilitado" : "habilitado") + " com sucesso.").queue();
 		} catch (RuntimeException e) {
 			message.getTextChannel().sendMessage(":x: | Módulo inválido.").queue();
+			e.printStackTrace();
 		}
     }
 }
