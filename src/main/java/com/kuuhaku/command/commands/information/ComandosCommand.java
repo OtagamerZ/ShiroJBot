@@ -32,7 +32,7 @@ public class ComandosCommand extends Command {
 		eb.setDescription("Clique nas categorias abaixo para ver os comandos de cada uma.\n\n" +
 				"Prefixo: `" + prefix + "`\n"
 				+ Category.values().length + " categorias encontradas!" + "\n"
-				+ Main.getCommandManager().getCommands().size() + " comandos encontrados!");
+				+ Main.getCommandManager().getCommands().stream().filter(c -> c.getCategory().isEnabled(gc, guild)).count() + " comandos encontrados!");
 		for (Category cat : Category.values()) {
 			if (!gc.getDisabledModules().contains(cat)) eb.addField(cat.getEMOTE() + " | " + cat.getName(), Helper.VOID, true);
 		}
