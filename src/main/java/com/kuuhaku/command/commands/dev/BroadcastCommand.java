@@ -1,19 +1,18 @@
 package com.kuuhaku.command.commands.dev;
 
+import com.kuuhaku.Enum.PageType;
 import com.kuuhaku.Main;
+import com.kuuhaku.Method.Pages;
+import com.kuuhaku.Model.Page;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.MySQL.GuildDAO;
-import com.kuuhaku.controller.MySQL.TagDAO;
+import com.kuuhaku.controller.mysql.GuildDAO;
+import com.kuuhaku.controller.mysql.TagDAO;
 import com.kuuhaku.model.Tags;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
-import kuuhaku.Enum.PageType;
-import kuuhaku.Method.Pages;
-import kuuhaku.Model.Page;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -25,7 +24,7 @@ public class BroadcastCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
 			channel.sendMessage(":x: | É necessário informar um tipo de broadcast (geral/parceiros).").queue();
 			return;
@@ -59,13 +58,7 @@ public class BroadcastCommand extends Command {
 						}
 					}
 
-					sb.append("```diff\n");
-					result.forEach((key, value) -> sb.append(value ? "+ " : "- ").append(key).append("\n"));
-					sb.append("```");
-
-					eb.setTitle("__**STATUS**__ ");
-					eb.setDescription(sb.toString());
-					pages.add(new Page(PageType.TEXT, eb.build()));
+					showResult(result, sb, pages, eb);
 				}
 
 				channel.sendMessage((Message) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
@@ -94,13 +87,7 @@ public class BroadcastCommand extends Command {
 						}
 					}
 
-					sb.append("```diff\n");
-					result.forEach((key, value) -> sb.append(value ? "+ " : "- ").append(key).append("\n"));
-					sb.append("```");
-
-					eb.setTitle("__**STATUS**__ ");
-					eb.setDescription(sb.toString());
-					pages.add(new Page(PageType.TEXT, eb.build()));
+					showResult(result, sb, pages, eb);
 				}
 
 				channel.sendMessage((Message) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
@@ -108,5 +95,15 @@ public class BroadcastCommand extends Command {
 			default:
 				channel.sendMessage(":x: | Tipo desconhecido, os tipos válidos são **geral** ou **parceiros**").queue();
 		}
+	}
+
+	private void showResult(Map<String, Boolean> result, StringBuilder sb, List<Page> pages, EmbedBuilder eb) {
+		sb.append("```diff\n");
+		result.forEach((key, value) -> sb.append(value ? "+ " : "- ").append(key).append("\n"));
+		sb.append("```");
+
+		eb.setTitle("__**STATUS**__ ");
+		eb.setDescription(sb.toString());
+		pages.add(new Page(PageType.TEXT, eb.build()));
 	}
 }

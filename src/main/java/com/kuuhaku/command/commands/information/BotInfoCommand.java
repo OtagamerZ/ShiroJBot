@@ -20,10 +20,9 @@ package com.kuuhaku.command.commands.information;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.MySQL.TagDAO;
+import com.kuuhaku.controller.mysql.TagDAO;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 
 import java.time.format.DateTimeFormatter;
 
@@ -34,7 +33,7 @@ public class BotInfoCommand extends Command {
     }
 
     @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
         EmbedBuilder eb = new EmbedBuilder();
 
         eb.setTitle(":dividers: Dados sobre a Shiro J. Bot");

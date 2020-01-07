@@ -7,7 +7,6 @@ import com.kuuhaku.model.YoutubeVideo;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -19,7 +18,7 @@ public class VideoCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
 			channel.sendMessage(":x: | Você precisa digitar um nome para pesquisar.").queue();
 			return;

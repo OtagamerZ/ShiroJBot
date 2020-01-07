@@ -2,10 +2,9 @@ package com.kuuhaku.command.commands.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.MySQL.VotesDAO;
-import com.kuuhaku.controller.SQLite.MemberDAO;
+import com.kuuhaku.controller.mysql.VotesDAO;
+import com.kuuhaku.controller.sqlite.MemberDAO;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 public class VoteCommand extends Command {
@@ -15,7 +14,7 @@ public class VoteCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length == 0 || message.getMentionedUsers().size() < 1) {
 			channel.sendMessage(":x: | É necessário mencionar um usuário").queue();
 			return;

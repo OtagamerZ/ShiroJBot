@@ -5,7 +5,6 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 
 import java.io.IOException;
 
@@ -17,7 +16,7 @@ public class AvatarCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 
 		if (message.getMentionedUsers().size() > 1) { channel.sendMessage(":x: | Você só pode mencionar 1 utilizador de cada vez.").queue(); return; }
 

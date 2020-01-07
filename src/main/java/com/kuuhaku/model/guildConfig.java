@@ -19,6 +19,7 @@ package com.kuuhaku.model;
 
 import com.kuuhaku.Main;
 import net.dv8tion.jda.api.entities.TextChannel;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import javax.persistence.Column;
@@ -200,6 +201,11 @@ public class guildConfig {
 	}
 
 	public ArrayList<String> getNoLinkChannels() {
+		return getChannels(noLinkChannels);
+	}
+
+	@NotNull
+	private ArrayList<String> getChannels(String noLinkChannels) {
 		try {
 			ArrayList<String> l = new ArrayList<>(Arrays.asList(noLinkChannels.replace("[", "").replace("]", "").replace(" ", "").replace("\n", "").split(",")));
 			l.removeIf(String::isEmpty);
@@ -222,13 +228,7 @@ public class guildConfig {
 	}
 
 	public ArrayList<String> getNoSpamChannels() {
-		try {
-			ArrayList<String> l = new ArrayList<>(Arrays.asList(noSpamChannels.replace("[", "").replace("]", "").replace(" ", "").replace("\n", "").split(",")));
-			l.removeIf(String::isEmpty);
-			return l;
-		} catch (NullPointerException e) {
-			return new ArrayList<>();
-		}
+		return getChannels(noSpamChannels);
 	}
 
 	public void addNoSpamChannel(TextChannel ch) {

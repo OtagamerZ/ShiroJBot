@@ -20,7 +20,7 @@ package com.kuuhaku.events;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.reactions.*;
-import com.kuuhaku.controller.SQLite.GuildDAO;
+import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.Music;
@@ -101,37 +101,37 @@ public class JDAEvents extends ListenerAdapter {
 						User author = message.getMentionedUsers().get(0);
 						MessageChannel channel = message.getChannel();
 
-						new HugReaction(true).execute(author, null, null, null, message, channel, null, null, null);
+						new HugReaction(true).execute(author, null, null, null, message, channel, null, null);
 					} else if (message.getContentRaw().contains("beijou")) {
 						User author = message.getMentionedUsers().get(0);
 						MessageChannel channel = message.getChannel();
 
-						new KissReaction(true).execute(author, null, null, null, message, channel, null, null, null);
+						new KissReaction(true).execute(author, null, null, null, message, channel, null, null);
 					} else if (message.getContentRaw().contains("fez cafuné em")) {
 						User author = message.getMentionedUsers().get(0);
 						MessageChannel channel = message.getChannel();
 
-						new PatReaction(true).execute(author, null, null, null, message, channel, null, null, null);
+						new PatReaction(true).execute(author, null, null, null, message, channel, null, null);
 					} else if (message.getContentRaw().contains("encarou")) {
 						User author = message.getMentionedUsers().get(0);
 						MessageChannel channel = message.getChannel();
 
-						new StareReaction(true).execute(author, null, null, null, message, channel, null, null, null);
+						new StareReaction(true).execute(author, null, null, null, message, channel, null, null);
 					} else if (message.getContentRaw().contains("deu um tapa em")) {
 						User author = message.getMentionedUsers().get(0);
 						MessageChannel channel = message.getChannel();
 
-						new SlapReaction(true).execute(author, null, null, null, message, channel, null, null, null);
+						new SlapReaction(true).execute(author, null, null, null, message, channel, null, null);
 					} else if (message.getContentRaw().contains("socou")) {
 						User author = message.getMentionedUsers().get(0);
 						MessageChannel channel = message.getChannel();
 
-						new PunchReaction(true).execute(author, null, null, null, message, channel, null, null, null);
+						new PunchReaction(true).execute(author, null, null, null, message, channel, null, null);
 					} else if (message.getContentRaw().contains("mordeu")) {
 						User author = message.getMentionedUsers().get(0);
 						MessageChannel channel = message.getChannel();
 
-						new BiteReaction(true).execute(author, null, null, null, message, channel, null, null, null);
+						new BiteReaction(true).execute(author, null, null, null, message, channel, null, null);
 					}
 				}
 			}
@@ -324,7 +324,7 @@ public class JDAEvents extends ListenerAdapter {
 
 	public static boolean checkPermissions(@NotNull GuildMessageReceivedEvent event, User author, Member member, Message message, MessageChannel channel, Guild guild, String prefix, String rawMsgNoPrefix, String[] args, Command command) {
 		if (Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
-			command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, event, prefix);
+			command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, prefix);
 			Helper.spawnAd(channel);
 			return true;
 		}

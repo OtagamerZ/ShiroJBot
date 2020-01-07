@@ -3,9 +3,8 @@ package com.kuuhaku.command.commands.rpg;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.handlers.games.RPG.Exceptions.UnknownItemException;
+import com.kuuhaku.handlers.games.rpg.exceptions.UnknownItemException;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 
 import java.util.Arrays;
 
@@ -16,7 +15,7 @@ public class RemoveCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (Main.getInfo().getGames().get(guild.getId()).getMaster() == author) {
 			if (args.length < 2) {
 				channel.sendMessage(":x: | É necessário especificar o tipo de registro e o nome do registro").queue();

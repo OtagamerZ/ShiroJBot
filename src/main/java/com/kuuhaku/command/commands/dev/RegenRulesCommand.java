@@ -4,7 +4,6 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 
 import java.io.IOException;
 
@@ -15,7 +14,7 @@ public class RegenRulesCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		message.delete().queue(s -> {
 			try {
 				if (guild.getId().equals("421495229594730496")) channel.sendFile(Helper.getImage("https://i.imgur.com/JQ3LvGK.png"), "title.png").queue();
