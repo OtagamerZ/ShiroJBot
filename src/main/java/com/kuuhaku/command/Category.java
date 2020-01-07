@@ -60,7 +60,8 @@ public enum Category {
 	}
 
 	public static Category getByName(String name) {
-		return Arrays.stream(Category.values()).filter(c -> c.name.equals(name)).findFirst().orElseGet(null);
+		System.out.println(name);
+		return Arrays.stream(Category.values()).filter(c -> c.name.equals(name)).findFirst().orElseThrow(RuntimeException::new);
 	}
 
 	public String getDescription() {
