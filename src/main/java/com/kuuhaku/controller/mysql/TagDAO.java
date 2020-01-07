@@ -3,6 +3,7 @@ package com.kuuhaku.controller.mysql;
 import com.kuuhaku.model.Tags;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.List;
 
@@ -23,13 +24,20 @@ public class TagDAO {
 		EntityManager em = Manager.getEntityManager();
 		Tags m;
 
-		Query q = em.createQuery("SELECT t FROM Tags t WHERE t.id = ?1", Tags.class);
-		q.setParameter(1, id);
-		m = (Tags) q.getSingleResult();
+		try {
+			Query q = em.createQuery("SELECT t FROM Tags t WHERE t.id = ?1", Tags.class);
+			q.setParameter(1, id);
+			m = (Tags) q.getSingleResult();
 
-		em.close();
+			em.close();
 
-		return m;
+			return m;
+		} catch (NoResultException e) {
+			TagDAO.addUserTagsToDB(id);
+			Tags t = new Tags();
+			t.setId(id);
+			return t;
+		}
 	}
 
 	public static int getPartnerAmount() {
