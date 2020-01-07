@@ -41,7 +41,7 @@ public class SettingsCommand extends Command {
 			case "mensagembv":
 			case "msgbv":
 				if (msg.length() > 2000) {
-					channel.sendMessage(":x: | Mensagem muito longo (Max. 2000)").queue();
+					channel.sendMessage(":x: | Mensagem muito longa (Max. 2000 caractéres)").queue();
 					return;
 				}
 				Settings.updateMsgBV(args, message, gc);
@@ -54,7 +54,7 @@ public class SettingsCommand extends Command {
 			case "mensagema":
 			case "msgadeus":
 				if (msg.length() > 2000) {
-					channel.sendMessage(":x: | Mensagem muito longo (Max. 2000)").queue();
+					channel.sendMessage(":x: | Mensagem muito longa (Max. 2000 caractéres)").queue();
 					return;
 				}
 				Settings.updateMsgAdeus(args, message, gc);
@@ -89,6 +89,12 @@ public class SettingsCommand extends Command {
 			case "cargolevel":
 			case "cargolvl":
 				Settings.updateCargoLvl(args, message, gc);
+				break;
+			case "mod":
+			case "module":
+			case "categoria":
+			case "cat:":
+				Settings.updateModules(args, message, gc);
 				break;
 			default:
 				Settings.embedConfig(message);
