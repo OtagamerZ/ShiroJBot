@@ -323,6 +323,6 @@ public class guildConfig {
 
 	public void setDisabledModules(List<Category> disabledModules) {
 		this.disabledModules = Arrays.toString(disabledModules.toArray()).replace("[", "").replace("]", "").replace(" ", "");
-		System.out.println(this.disabledModules)
+		System.out.println(this.disabledModules);
 	}
 }
