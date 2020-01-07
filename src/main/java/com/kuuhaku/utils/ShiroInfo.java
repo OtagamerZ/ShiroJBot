@@ -67,7 +67,7 @@ public class ShiroInfo {
 
 	}};
 	private static final ArrayList<String> sheriffs = new ArrayList<String>() {{
-		add("556566137031098368");
+
 	}};
 	private static final DiscordBotListAPI dbl = new DiscordBotListAPI.Builder().token(System.getenv("DBL_TOKEN")).botId("572413282653306901").build();
 	private static final List<User[]> queue = new ArrayList<>();
