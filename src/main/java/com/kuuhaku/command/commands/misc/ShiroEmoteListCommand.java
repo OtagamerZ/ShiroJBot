@@ -1,16 +1,13 @@
 package com.kuuhaku.command.commands.misc;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.Method.Pages;
+import com.kuuhaku.Model.Page;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.SQLite.GuildDAO;
 import com.kuuhaku.utils.Helper;
-import kuuhaku.Enum.PageType;
-import kuuhaku.Method.Pages;
-import kuuhaku.Model.Page;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -25,7 +22,7 @@ public class ShiroEmoteListCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		List<Page> pages = new ArrayList<>();
 		List<MessageEmbed.Field> f = new ArrayList<>();
 
@@ -39,13 +36,10 @@ public class ShiroEmoteListCommand extends Command {
 			subF.forEach(eb::addField);
 
 			eb.setTitle("<a:SmugDance:598842924725305344> Emotes disponíveis para a Shiro:");
-			eb.setColor(Helper.getRandomColor());
-			eb.setAuthor("Para usar estes emotes, utilize o comando \"" + GuildDAO.getGuildById(guild.getId()).getPrefix() + "say MENÇÃO\"");
-			eb.setFooter("Página " + (i + 1) + ". Mostrando " + (-10 + 10 * (i + 1)) + " - " + (Math.min(10 * (i + 1), f.size())) + " resultados.", null);
-
-			pages.add(new Page(PageType.EMBED, eb.build()));
+			Helper.finishEmbed(guild, pages, f, eb, i);
 		}
 
 		channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
 	}
+
 }

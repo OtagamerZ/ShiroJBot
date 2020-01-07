@@ -1,7 +1,7 @@
 package com.kuuhaku.model;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.MySQL.RelayDAO;
+import com.kuuhaku.controller.mysql.RelayDAO;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.awt.*;

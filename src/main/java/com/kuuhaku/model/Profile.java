@@ -18,8 +18,8 @@
 package com.kuuhaku.model;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.MySQL.TagDAO;
-import com.kuuhaku.controller.SQLite.MemberDAO;
+import com.kuuhaku.controller.mysql.TagDAO;
+import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
@@ -304,6 +304,12 @@ public class Profile {
 		AffineTransform transform = g2d.getTransform();
 		transform.translate(x, y);
 		g2d.transform(transform);
+		makeOutline(s, g2d);
+		transform.translate(-x, -y);
+		g2d.setTransform(transform);
+	}
+
+	private static void makeOutline(String s, Graphics2D g2d) {
 		g2d.setColor(Color.black);
 		FontRenderContext frc = g2d.getFontRenderContext();
 		TextLayout tl = new TextLayout(s, g2d.getFont(), frc);
@@ -312,8 +318,6 @@ public class Profile {
 		g2d.draw(shape);
 		g2d.setColor(Color.white);
 		g2d.fill(shape);
-		transform.translate(-x, -y);
-		g2d.setTransform(transform);
 	}
 
 	public static void drawStringMultiLine(Graphics2D g, String text, int lineWidth, int x, int y) {
@@ -365,14 +369,7 @@ public class Profile {
 	public static void drawRotate(Graphics2D g2d, double x, double y, int angle, String text) {
 		g2d.translate((float) x, (float) y);
 		g2d.rotate(Math.toRadians(angle));
-		g2d.setColor(Color.black);
-		FontRenderContext frc = g2d.getFontRenderContext();
-		TextLayout tl = new TextLayout(text, g2d.getFont(), frc);
-		Shape shape = tl.getOutline(null);
-		g2d.setStroke(new BasicStroke(4));
-		g2d.draw(shape);
-		g2d.setColor(Color.white);
-		g2d.fill(shape);
+		makeOutline(text, g2d);
 		g2d.rotate(-Math.toRadians(angle));
 		g2d.translate(-(float) x, -(float) y);
 	}

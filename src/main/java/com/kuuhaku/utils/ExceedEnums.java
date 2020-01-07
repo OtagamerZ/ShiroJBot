@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 public enum ExceedEnums {
 	IMANITY("Imanity"), SEIREN("Seiren"), WEREBEAST("Werebeast"), ELF("Elf"), EXMACHINA("Ex-Machina"), FLUGEL("Flügel");
 
-	private String name;
+	private final String name;
 
 	ExceedEnums(String name) {
 		this.name = name;

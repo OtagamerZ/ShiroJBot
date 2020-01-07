@@ -1,6 +1,6 @@
 package com.kuuhaku.model;
 
-import com.kuuhaku.controller.MySQL.MemberDAO;
+import com.kuuhaku.controller.mysql.MemberDAO;
 
 import java.util.ArrayList;
 import java.util.List;

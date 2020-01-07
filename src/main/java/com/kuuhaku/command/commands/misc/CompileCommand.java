@@ -7,7 +7,6 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.BannedVars;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
@@ -21,7 +20,7 @@ public class CompileCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		channel.sendMessage("<a:Loading:598500653215645697> | Compilando...").queue(m -> {
 			try {
 				Future<?> execute = Main.getInfo().getPool().submit(() -> {

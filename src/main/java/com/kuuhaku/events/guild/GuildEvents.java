@@ -19,11 +19,11 @@ package com.kuuhaku.events.guild;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.MySQL.LogDAO;
-import com.kuuhaku.controller.MySQL.WaifuDAO;
-import com.kuuhaku.controller.SQLite.CustomAnswerDAO;
-import com.kuuhaku.controller.SQLite.GuildDAO;
-import com.kuuhaku.controller.SQLite.MemberDAO;
+import com.kuuhaku.controller.mysql.LogDAO;
+import com.kuuhaku.controller.mysql.WaifuDAO;
+import com.kuuhaku.controller.sqlite.CustomAnswerDAO;
+import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.model.CustomAnswers;
 import com.kuuhaku.model.Log;

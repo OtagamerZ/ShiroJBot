@@ -17,6 +17,7 @@ import java.util.Base64;
 
 import static com.kuuhaku.utils.Helper.CANVAS_SIZE;
 
+@SuppressWarnings("rawtypes")
 @Entity
 public class PixelCanvas {
 	@Id
