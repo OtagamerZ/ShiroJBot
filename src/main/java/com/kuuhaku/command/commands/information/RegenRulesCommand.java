@@ -1,4 +1,4 @@
-package com.kuuhaku.command.commands.dev;
+package com.kuuhaku.command.commands.information;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
@@ -10,7 +10,7 @@ import java.io.IOException;
 public class RegenRulesCommand extends Command {
 
 	public RegenRulesCommand() {
-		super("rrules", new String[]{"makerules"}, "Regenera as regras do servidor de suporte.", Category.DEVS);
+		super("rrules", new String[]{"makerules"}, "Regenera as regras do servidor de suporte.", Category.INFO);
 	}
 
 	@Override
