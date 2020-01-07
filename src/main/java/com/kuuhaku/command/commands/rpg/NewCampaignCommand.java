@@ -3,11 +3,10 @@ package com.kuuhaku.command.commands.rpg;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.handlers.games.RPG.World.World;
+import com.kuuhaku.handlers.games.rpg.world.World;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.PrivilegeLevel;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 
 public class NewCampaignCommand extends Command {
 
@@ -16,7 +15,7 @@ public class NewCampaignCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (Helper.hasPermission(member, PrivilegeLevel.MOD)) {
 			if (Main.getInfo().getGames().get(guild.getId()) != null) {
 				channel.sendMessage(":x: | Já existe uma campanha iniciada neste servidor.").queue();

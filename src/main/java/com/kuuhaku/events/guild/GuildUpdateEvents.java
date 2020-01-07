@@ -17,8 +17,8 @@
 
 package com.kuuhaku.events.guild;
 
-import com.kuuhaku.controller.MySQL.TagDAO;
-import com.kuuhaku.controller.SQLite.GuildDAO;
+import com.kuuhaku.controller.mysql.TagDAO;
+import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.guildConfig;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateNameEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateOwnerEvent;

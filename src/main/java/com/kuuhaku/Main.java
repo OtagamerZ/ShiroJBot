@@ -15,11 +15,11 @@ package com.kuuhaku;/*
  *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import com.kuuhaku.controller.MySQL.BackupDAO;
-import com.kuuhaku.controller.MySQL.ExceedDAO;
+import com.kuuhaku.controller.mysql.BackupDAO;
+import com.kuuhaku.controller.mysql.ExceedDAO;
 import com.kuuhaku.controller.Relay;
-import com.kuuhaku.controller.SQLite.GuildDAO;
-import com.kuuhaku.controller.SQLite.Manager;
+import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.controller.sqlite.Manager;
 import com.kuuhaku.events.JibrilEvents;
 import com.kuuhaku.events.ScheduledEvents;
 import com.kuuhaku.events.TetEvents;
@@ -83,7 +83,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		ge.registerFont(Profile.FONT);
 
 		Manager.connect();
-		if (com.kuuhaku.controller.SQLite.BackupDAO.restoreData(BackupDAO.getData()))
+		if (com.kuuhaku.controller.sqlite.BackupDAO.restoreData(BackupDAO.getData()))
 			Helper.logger(Main.class).info("Dados recuperados com sucesso!");
 		else Helper.logger(Main.class).error("Erro ao recuperar dados.");
 
@@ -147,9 +147,9 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	}
 
 	public static void shutdown() {
-		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.SQLite.BackupDAO.getCADump(), com.kuuhaku.controller.SQLite.BackupDAO.getGuildDump()));
+		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getCADump(), com.kuuhaku.controller.sqlite.BackupDAO.getGuildDump()));
 		Helper.logger(Main.class).info("Respostas/Guilds salvos com sucesso!");
-		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.SQLite.BackupDAO.getMemberDump()));
+		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump()));
 		Helper.logger(Main.class).info("Membros salvos com sucesso!");
 		Manager.disconnect();
 		tet.shutdown();

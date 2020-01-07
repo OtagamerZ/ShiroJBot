@@ -3,9 +3,9 @@ package com.kuuhaku.command.commands.rpg;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.handlers.games.RPG.Entities.Equipped;
+import com.kuuhaku.handlers.games.rpg.Utils;
+import com.kuuhaku.handlers.games.rpg.entities.Equipped;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 
 import java.util.Arrays;
 
@@ -16,19 +16,10 @@ public class GiveCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
-		if (message.getMentionedUsers().size() < 1) {
-			channel.sendMessage(":x: | Você precisa especificar o jogador").queue();
-			return;
-		} else if (args.length < 2) {
-			channel.sendMessage(":x: | O segundo argumento precisa ser o nome do item ou ouro").queue();
-			return;
-		} else if (args.length < 3 && (args[1].equalsIgnoreCase("gold") || args[1].equalsIgnoreCase("ouro"))) {
-			channel.sendMessage(":x: | Você precisa especificar a quantidade de ouro").queue();
-			return;
-		}
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+        if (Utils.noPlayerAlert(args, message, channel)) return;
 
-		if (Main.getInfo().getGames().get(guild.getId()).getMaster() == author) {
+        if (Main.getInfo().getGames().get(guild.getId()).getMaster() == author) {
 			if (args.length < 3 && (args[1].equalsIgnoreCase("xp") || args[1].equalsIgnoreCase("ouro"))) {
 				channel.sendMessage(":x: | Você precisa especificar a quantidade de XP").queue();
 				return;

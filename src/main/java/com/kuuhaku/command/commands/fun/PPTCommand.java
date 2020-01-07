@@ -4,7 +4,6 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 
 public class PPTCommand extends Command {
 	
@@ -13,7 +12,7 @@ public class PPTCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		
 		if(args.length < 1) {
 			channel.sendMessage(":x: | Você tem que escolher pedra, papel ou tesoura!").queue();

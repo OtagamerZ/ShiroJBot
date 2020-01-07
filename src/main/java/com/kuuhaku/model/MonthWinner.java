@@ -1,7 +1,5 @@
 package com.kuuhaku.model;
 
-import com.kuuhaku.utils.ExceedEnums;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.time.LocalDate;

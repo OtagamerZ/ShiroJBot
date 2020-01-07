@@ -6,7 +6,6 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -24,7 +23,7 @@ public class ShipCommand extends Command {
     }
 
     @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
         if (message.getMentionedUsers().size() < 2) {
             channel.sendMessage(":x: | Você precisa mencionar dois usuários!").queue();
             return;

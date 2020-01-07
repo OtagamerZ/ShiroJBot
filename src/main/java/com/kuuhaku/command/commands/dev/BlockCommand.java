@@ -7,7 +7,6 @@ import com.kuuhaku.model.RelayBlockList;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.PrivilegeLevel;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
@@ -19,7 +18,7 @@ public class BlockCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		try {
 			if (args.length > 2) {
 				if (StringUtils.isNumeric(args[0])) {

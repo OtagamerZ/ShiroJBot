@@ -4,7 +4,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,7 @@ public class LeaveCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		List<String> servers = new ArrayList<>();
 		Main.getInfo().getAPI().getGuilds().forEach(g -> servers.add("(" + g.getId() + ") " + g.getName()));
 		String serverList = servers.toString().replace("[", "```").replace("]", "```").replace(",", "\n");

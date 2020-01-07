@@ -17,9 +17,9 @@
 
 package com.kuuhaku.utils;
 
-import com.kuuhaku.controller.MySQL.CanvasDAO;
+import com.kuuhaku.controller.mysql.CanvasDAO;
 import com.kuuhaku.events.JDAEvents;
-import com.kuuhaku.handlers.games.RPG.World.World;
+import com.kuuhaku.handlers.games.rpg.world.World;
 import com.kuuhaku.handlers.music.GuildMusicManager;
 import com.kuuhaku.model.PixelCanvas;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;

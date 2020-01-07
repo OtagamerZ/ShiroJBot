@@ -2,14 +2,13 @@ package com.kuuhaku.command.commands.exceed;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.MySQL.ExceedDAO;
-import com.kuuhaku.controller.SQLite.MemberDAO;
+import com.kuuhaku.controller.mysql.ExceedDAO;
+import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.Exceed;
 import com.kuuhaku.model.Profile;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -28,7 +27,7 @@ public class ExceedRankCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		channel.sendMessage("<a:Loading:598500653215645697> Gerando placares...").queue(m -> {
 			if (MemberDAO.getMemberByMid(author.getId()).getExceed().isEmpty()) {
 				m.editMessage(":x: | Você não escolheu um exceed ainda, então não poderá ver o placar").queue();

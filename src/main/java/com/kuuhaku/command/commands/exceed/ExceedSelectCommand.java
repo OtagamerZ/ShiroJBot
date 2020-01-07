@@ -3,12 +3,11 @@ package com.kuuhaku.command.commands.exceed;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.MySQL.ExceedDAO;
-import com.kuuhaku.controller.SQLite.MemberDAO;
+import com.kuuhaku.controller.mysql.ExceedDAO;
+import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.TagIcons;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 
 public class ExceedSelectCommand extends Command {
 	public ExceedSelectCommand() {
@@ -16,7 +15,7 @@ public class ExceedSelectCommand extends Command {
 	}
 
 	@Override
-	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, Event event, String prefix) {
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		channel.sendMessage("<a:Loading:598500653215645697> Analisando dados...").queue(m -> {
 			com.kuuhaku.model.Member u = MemberDAO.getMemberByMid(author.getId());
 
