@@ -72,6 +72,7 @@ public class CommandManager {
             add(new PruneCommand());
             add(new LiteModeCommand());
             add(new AllowImgCommand());
+            add(new RoleChooserCommand());
 
             //INFORMATION
             add(new ComandosCommand());
