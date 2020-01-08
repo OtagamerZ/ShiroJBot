@@ -348,8 +348,8 @@ public class JDAEvents extends ListenerAdapter {
 				break;
 			}
 		}
-		if (command.getCategory().isEnabled(gc, g)) {
-			found = true;
+		if (!command.getCategory().isEnabled(gc, g)) {
+			found = false;
 		}
 		return found;
 	}
