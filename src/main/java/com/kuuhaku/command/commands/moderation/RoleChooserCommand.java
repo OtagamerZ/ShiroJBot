@@ -24,7 +24,6 @@ import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class RoleChooserCommand extends Command {
@@ -38,9 +37,9 @@ public class RoleChooserCommand extends Command {
 		guildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (args.length == 1 && Helper.containsAny(args[0], "reboot", "reset", "restart", "refresh")) {
-            Helper.refreshButtons(gc);
-            channel.sendMessage("Botões atualizados com sucesso!").queue();
-            return;
+			Helper.refreshButtons(gc);
+			channel.sendMessage("Botões atualizados com sucesso!").queue();
+			return;
 		} else if (args.length < 3) {
 			channel.sendMessage(":x: | É necessário informar o ID da mensagem, o emote do botão e o cargo a ser dado ao usuário que clicar nele.").queue();
 			return;
@@ -52,22 +51,34 @@ public class RoleChooserCommand extends Command {
 			return;
 		}
 
-		JSONArray ja = gc.getButtonConfigs();
-		JSONObject jo = new JSONObject();
+		try {
+			JSONObject root = gc.getButtonConfigs();
+			String msgId = channel.retrieveMessageById(args[0]).complete().getId();
 
-		jo.put("channel", channel.getId());
-		jo.put("message", channel.retrieveMessageById(args[0]).complete().getId());
-		jo.put("button", args[1]);
-		jo.put("role", message.getMentionedRoles().get(0).getId());
+			JSONObject msg = new JSONObject();
 
-		ja.put(jo);
+			JSONObject btn = new JSONObject();
+			btn.put("emote", args[1]);
+			btn.put("role", message.getMentionedRoles().get(0).getId());
 
-		gc.setButtonConfigs(ja);
+			if (!root.has(msgId)) {
+				msg.put("msgId", msgId);
+				msg.put("canalId", channel.getId());
+				msg.put("buttons", new JSONObject());
+			} else {
+				msg = root.getJSONObject(msgId);
+			}
 
-		GuildDAO.updateGuildSettings(gc);
+			msg.getJSONObject("buttons").put(args[1], btn);
 
-		Helper.refreshButtons(gc);
+			root.put(msgId, msg);
 
-		channel.sendMessage("Botão adicionado com sucesso!").queue();
+			gc.setButtonConfigs(root);
+			GuildDAO.updateGuildSettings(gc);
+			Helper.refreshButtons(gc);
+			channel.sendMessage("Botão adicionado com sucesso!").queue();
+		} catch (IllegalArgumentException e) {
+			channel.sendMessage(":x: | Erro em um dos argumentos: " + e).queue();
+		}
 	}
 }
