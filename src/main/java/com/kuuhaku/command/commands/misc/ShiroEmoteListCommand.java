@@ -1,10 +1,10 @@
 package com.kuuhaku.command.commands.misc;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.Method.Pages;
-import com.kuuhaku.Model.Page;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.method.Pages;
+import com.kuuhaku.model.Page;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;

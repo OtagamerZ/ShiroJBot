@@ -1,15 +1,15 @@
 package com.kuuhaku.command.commands.dev;
 
-import com.kuuhaku.Enum.PageType;
 import com.kuuhaku.Main;
-import com.kuuhaku.Method.Pages;
-import com.kuuhaku.Model.Page;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.mysql.GuildDAO;
 import com.kuuhaku.controller.mysql.TagDAO;
+import com.kuuhaku.method.Pages;
+import com.kuuhaku.model.Page;
 import com.kuuhaku.model.Tags;
 import com.kuuhaku.model.guildConfig;
+import com.kuuhaku.type.PageType;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
