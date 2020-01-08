@@ -22,7 +22,6 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.persistence.Column;
@@ -334,12 +333,12 @@ public class guildConfig {
 		this.disabledModules = Arrays.toString(disabledModules.toArray()).replace("[", "").replace("]", "").replace(" ", "");
 	}
 
-	public JSONArray getButtonConfigs() {
-		if (buttonConfigs == null || buttonConfigs.isEmpty()) return new JSONArray();
-		else return new JSONArray(buttonConfigs);
+	public JSONObject getButtonConfigs() {
+		if (buttonConfigs == null || buttonConfigs.isEmpty()) return new JSONObject();
+		else return new JSONObject(buttonConfigs);
 	}
 
-	public void setButtonConfigs(JSONArray buttonConfigs) {
+	public void setButtonConfigs(JSONObject buttonConfigs) {
 		this.buttonConfigs = buttonConfigs.toString();
 	}
 }
