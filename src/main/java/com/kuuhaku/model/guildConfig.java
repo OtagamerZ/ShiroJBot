@@ -318,7 +318,8 @@ public class guildConfig {
 		for (String mod : dmods) {
 			try {
 				cats.add(Category.getByName(mod));
-			} catch (IndexOutOfBoundsException ignore) {
+			} catch (IndexOutOfBoundsException e) {
+				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
 		}
 		return cats;
