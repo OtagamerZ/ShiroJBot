@@ -393,6 +393,8 @@ public class Helper {
 	public static void refreshButtons(guildConfig gc) {
 		JSONObject ja = gc.getButtonConfigs();
 
+		if (ja.isEmpty()) return;
+
 		Guild g = Main.getInfo().getGuildByID(gc.getGuildID());
 
 		ja.keySet().forEach(k -> {
@@ -417,7 +419,7 @@ public class Helper {
 			});
 
 			buttons.put(CANCEL, (m, ms) -> {
-				gc.setButtonConfigs((JSONObject) gc.getButtonConfigs().remove(ms.getId()));
+				gc.setButtonConfigs(gc.getButtonConfigs().put(ms.getId(), ""));
 				GuildDAO.updateGuildSettings(gc);
 			});
 
