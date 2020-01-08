@@ -22,12 +22,16 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 @Entity
 public class guildConfig {
@@ -67,6 +71,7 @@ public class guildConfig {
 	@Column(columnDefinition = "boolean default false")
 	private boolean allowImg = false;
 	private String disabledModules = "";
+	private String buttonConfigs = "";
 	private boolean markForDelete;
 
 	public guildConfig() {
@@ -327,5 +332,14 @@ public class guildConfig {
 
 	public void setDisabledModules(List<Category> disabledModules) {
 		this.disabledModules = Arrays.toString(disabledModules.toArray()).replace("[", "").replace("]", "").replace(" ", "");
+	}
+
+	public JSONArray getButtonConfigs() {
+		if (buttonConfigs == null || buttonConfigs.isEmpty()) return new JSONArray();
+		else return new JSONArray(buttonConfigs);
+	}
+
+	public void setButtonConfigs(JSONArray buttonConfigs) {
+		this.buttonConfigs = buttonConfigs.toString();
 	}
 }

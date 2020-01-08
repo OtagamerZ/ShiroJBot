@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.ygimenez:PaginationUtils:v0.4-UNSTABLE">
+    <CLASSES>
+      <root url="file://$APPLICATION_HOME_DIR$/jbr/bin/Could not find com.github.ygimenez:PaginationUtils:v0.4-UNSTABLE." />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.ygimenez/PaginationUtils/v0.4-UNSTABLE/4804e4a99a686231bfb2796f76fb9d46656003a6/PaginationUtils-v0.4-UNSTABLE.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.ygimenez/PaginationUtils/v0.4-UNSTABLE/74fabc4af8bc5bd9c6276c8a35a9470de05ca97a/PaginationUtils-v0.4-UNSTABLE-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
