@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -31,10 +32,10 @@ public class ComandosCommand extends Command {
 		eb.setTitle("**Lista de Comandos**");
 		eb.setDescription("Clique nas categorias abaixo para ver os comandos de cada uma.\n\n" +
 				"Prefixo: `" + prefix + "`\n"
-				+ Category.values().length + " categorias encontradas!" + "\n"
+				+ Arrays.stream(Category.values()).filter(c -> c.isEnabled(gc, guild)).count() + " categorias encontradas!" + "\n"
 				+ Main.getCommandManager().getCommands().stream().filter(c -> c.getCategory().isEnabled(gc, guild)).count() + " comandos encontrados!");
 		for (Category cat : Category.values()) {
-			if (!gc.getDisabledModules().contains(cat)) eb.addField(cat.getEMOTE() + " | " + cat.getName(), Helper.VOID, true);
+			if (cat.isEnabled(gc, guild)) eb.addField(cat.getEMOTE() + " | " + cat.getName(), Helper.VOID, true);
 		}
 		eb.setColor(Color.PINK);
 		eb.setFooter(Main.getInfo().getFullName(), null);
