@@ -349,7 +349,7 @@ public class JDAEvents extends ListenerAdapter {
 			}
 		}
 		if (command.getCategory().isEnabled(gc, g)) {
-			found = false;
+			found = true;
 		}
 		return found;
 	}
