@@ -13,6 +13,7 @@ import com.kuuhaku.type.PageType;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -81,7 +82,7 @@ public class BroadcastCommand extends Command {
 							try {
 								u.openPrivateChannel().complete().sendMessage(msg).queue();
 								result.put(u.getAsTag(), true);
-							} catch (Exception e) {
+							} catch (ErrorResponseException e) {
 								result.put(u.getAsTag(), false);
 							}
 						}
