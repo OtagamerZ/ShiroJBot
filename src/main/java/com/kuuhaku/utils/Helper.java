@@ -17,15 +17,16 @@
 
 package com.kuuhaku.utils;
 
-import com.kuuhaku.Enum.PageType;
 import com.kuuhaku.Main;
-import com.kuuhaku.Model.Page;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.mysql.TagDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.method.Pages;
 import com.kuuhaku.model.Extensions;
 import com.kuuhaku.model.GamblePool;
+import com.kuuhaku.model.Page;
 import com.kuuhaku.model.guildConfig;
+import com.kuuhaku.type.PageType;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -34,6 +35,8 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
@@ -53,6 +56,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -386,4 +390,31 @@ public class Helper {
 
         pages.add(new Page(PageType.EMBED, eb.build()));
     }
+
+    public static void refreshButtons(guildConfig gc) {
+		JSONArray ja = gc.getButtonConfigs();
+
+		Guild g = Main.getInfo().getGuildByID(gc.getGuildID());
+
+		for (Object obj : ja) {
+			JSONObject jo = (JSONObject) obj;
+			Map<String, Consumer<Member>> buttons = new HashMap<>();
+
+			TextChannel channel = g.getTextChannelById(jo.getString("channel"));
+			assert channel != null;
+			Message msg = channel.retrieveMessageById(jo.getString("message")).complete();
+			Role role = g.getRoleById(jo.getString("role"));
+			assert role != null;
+			buttons.put(jo.getString("button"), m -> {
+				if (m.getRoles().contains(role)) {
+					g.removeRoleFromMember(m, role).queue();
+				} else {
+					g.addRoleToMember(m, role).queue();
+				}
+			});
+
+			msg.clearReactions().complete();
+			Pages.buttonfy(Main.getInfo().getAPI(), msg, buttons);
+		}
+	}
 }
