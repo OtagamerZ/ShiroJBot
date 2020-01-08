@@ -315,6 +315,7 @@ public class guildConfig {
 		List<Category> cats = new ArrayList<>();
 		if (Helper.getOr(disabledModules, null) == null) return cats;
 		String[] dmods = disabledModules.split(",");
+		System.out.println(dmods);
 		for (String mod : dmods) {
 			cats.add(Category.getByName(mod));
 		}
