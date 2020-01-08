@@ -55,7 +55,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -397,7 +397,7 @@ public class Helper {
 
 		ja.keySet().forEach(k -> {
 			JSONObject jo = ja.getJSONObject(k);
-			Map<String, Consumer<Member>> buttons = new HashMap<>();
+			Map<String, BiConsumer<Member, Message>> buttons = new HashMap<>();
 
 			TextChannel channel = g.getTextChannelById(jo.getString("canalId"));
 			assert channel != null;
@@ -407,13 +407,18 @@ public class Helper {
 				JSONObject btns = jo.getJSONObject("buttons").getJSONObject(b);
 				Role role = g.getRoleById(btns.getString("role"));
 				assert role != null;
-				buttons.put(btns.getString("emote"), m -> {
+				buttons.put(btns.getString("emote"), (m, ms) -> {
 					if (m.getRoles().contains(role)) {
 						g.removeRoleFromMember(m, role).queue();
 					} else {
 						g.addRoleToMember(m, role).queue();
 					}
 				});
+			});
+
+			buttons.put(CANCEL, (m, ms) -> {
+				gc.getButtonConfigs().remove(ms.getId());
+				GuildDAO.updateGuildSettings(gc);
 			});
 
 			msg.clearReactions().complete();
