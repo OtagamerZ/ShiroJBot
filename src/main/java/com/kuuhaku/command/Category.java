@@ -24,6 +24,7 @@ import net.dv8tion.jda.api.entities.Guild;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public enum Category {
     DEVS("Dev", "\uD83D\uDEE0", "Comandos dedicados aos devs do bot.", PrivilegeLevel.DEV),
@@ -60,7 +61,8 @@ public enum Category {
 	}
 
 	public static Category getByName(String name) {
-		return Arrays.stream(Category.values()).filter(c -> c.name.equalsIgnoreCase(name)).findFirst().orElseThrow(RuntimeException::new);
+		System.out.println(Arrays.toString(Arrays.stream(Category.values()).filter(c -> c.name.equalsIgnoreCase(name)).toArray()));
+		return Arrays.stream(Category.values()).filter(c -> c.name.equalsIgnoreCase(name)).collect(Collectors.toList()).get(0);
 	}
 
 	public String getDescription() {
