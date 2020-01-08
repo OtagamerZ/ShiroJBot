@@ -315,9 +315,12 @@ public class guildConfig {
 		List<Category> cats = new ArrayList<>();
 		if (Helper.getOr(disabledModules, null) == null) return cats;
 		String[] dmods = disabledModules.split(",");
-		if (dmods.length == 0) return cats;
 		for (String mod : dmods) {
-			cats.add(Category.getByName(mod));
+			try {
+				cats.add(Category.getByName(mod));
+			} catch (ArrayIndexOutOfBoundsException e) {
+				return cats;
+			}
 		}
 		return cats;
 	}
