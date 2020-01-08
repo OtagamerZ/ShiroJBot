@@ -17,6 +17,7 @@
 
 package com.kuuhaku.command.commands.moderation;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.GuildDAO;
@@ -37,7 +38,7 @@ public class RoleChooserCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		guildConfig gc = GuildDAO.getGuildById(guild.getId());
 
-		if (args.length == 2 && Helper.containsAny(args[1], "reboot", "reset", "restart", "refresh")) {
+		if (args.length == 1 && Helper.containsAny(args[0], "reboot", "reset", "restart", "refresh")) {
             Helper.refreshButtons(gc);
             channel.sendMessage("Botões atualizados com sucesso!").queue();
             return;
@@ -47,8 +48,8 @@ public class RoleChooserCommand extends Command {
 		} else if (!StringUtils.isNumeric(args[0])) {
 			channel.sendMessage(":x: | O ID da mensagem deve ser numérico.").queue();
 			return;
-		} else if (message.getEmotes().size() == 0) {
-			channel.sendMessage(":x: | É necessário informar o emote a ser usado como botão.").queue();
+		} else if (Main.getInfo().getAPI().getEmotesByName(args[1], true).size() == 0) {
+			channel.sendMessage(":x: | É necessário informar um emote válido conhecido pela Shiro para ser usado como botão.").queue();
 			return;
 		} else if (message.getMentionedRoles().size() == 0) {
 			channel.sendMessage(":x: | É necessário informar o cargo a ser dado ao clicar no botão.").queue();
@@ -60,7 +61,7 @@ public class RoleChooserCommand extends Command {
 
 		jo.put("channel", channel.getId());
 		jo.put("message", channel.retrieveMessageById(args[0]).complete());
-		jo.put("button", message.getEmotes().get(0).getName());
+		jo.put("button", args[1]);
 		jo.put("role", message.getMentionedRoles().get(0).getId());
 
 		ja.put(jo);

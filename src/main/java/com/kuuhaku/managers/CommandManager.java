@@ -39,121 +39,121 @@ public class CommandManager {
 
 	private final List<Command> commands;
 
-    public CommandManager() {
-        commands = new ArrayList<Command>() {{
-            //DEV
-            add(new KillCommand());
-            add(new RestartCommand());
-            add(new LeaveCommand());
-            add(new ToxicTagCommand());
-            add(new PartnerTagCommand());
-            add(new VerifiedTagCommand());
-            add(new RelaysCommand());
-            add(new BlockCommand());
-            add(new LogCommand());
-            add(new TokenCommand());
-            add(new BroadcastCommand());
+	public CommandManager() {
+		commands = new ArrayList<Command>() {{
+			//DEV
+			add(new KillCommand());
+			add(new RestartCommand());
+			add(new LeaveCommand());
+			add(new ToxicTagCommand());
+			add(new PartnerTagCommand());
+			add(new VerifiedTagCommand());
+			add(new RelaysCommand());
+			add(new BlockCommand());
+			add(new LogCommand());
+			add(new TokenCommand());
+			add(new BroadcastCommand());
 
-            //PARTNER
-            add(new JibrilCommand());
-            add(new CompileCommand());
-            add(new TetCommand());
+			//PARTNER
+			add(new JibrilCommand());
+			add(new CompileCommand());
+			add(new TetCommand());
 
-            //MODERATION
-            add(new RemoveAnswerCommand());
-            add(new SettingsCommand());
-            add(new AllowCommunityCommand());
-            add(new KickMemberCommand());
-            add(new BanMemberCommand());
-            add(new NoLinkCommand());
-            add(new AntispamCommand());
-            add(new AntiraidCommand());
-            add(new MakeLogCommand());
-            add(new PruneCommand());
-            add(new LiteModeCommand());
-            add(new AllowImgCommand());
-            add(new RoleChooserCommand());
+			//MODERATION
+			add(new RemoveAnswerCommand());
+			add(new SettingsCommand());
+			add(new AllowCommunityCommand());
+			add(new KickMemberCommand());
+			add(new BanMemberCommand());
+			add(new NoLinkCommand());
+			add(new AntispamCommand());
+			add(new AntiraidCommand());
+			add(new MakeLogCommand());
+			add(new PruneCommand());
+			add(new LiteModeCommand());
+			add(new AllowImgCommand());
+			add(new RoleChooserCommand());
 
-            //INFORMATION
-            add(new ComandosCommand());
-            add(new ProfileCommand());
-            add(new ReportBugCommand());
-            add(new ReportUserCommand());
-            add(new BackgroundCommand());
-            add(new BiographyCommand());
-            add(new RelayCommand());
-            add(new TagsCommand());
-            add(new MyTagsCommand());
-            add(new BotInfoCommand());
-            add(new URankCommand());
-            add(new IDCommand());
-            add(new ColorTesterCommand());
-            add(new RegenRulesCommand());
+			//INFORMATION
+			add(new ComandosCommand());
+			add(new ProfileCommand());
+			add(new ReportBugCommand());
+			add(new ReportUserCommand());
+			add(new BackgroundCommand());
+			add(new BiographyCommand());
+			add(new RelayCommand());
+			add(new TagsCommand());
+			add(new MyTagsCommand());
+			add(new BotInfoCommand());
+			add(new URankCommand());
+			add(new IDCommand());
+			add(new ColorTesterCommand());
+			add(new RegenRulesCommand());
 
-            //MISC
-            add(new AsciiCommand());
-            add(new AvatarCommand());
-            add(new FlipCoinCommand());
-            add(new PingCommand());
-            add(new ReverseCommand());
-            add(new SayCommand());
-            add(new UptimeCommand());
-            add(new CustomAnswerCommand());
-            add(new AnimeCommand());
-            add(new ImageCommand());
-            add(new ValidateGIFCommand());
-            add(new LocalEmoteListCommand());
-            add(new ShiroEmoteListCommand());
-            add(new JibrilEmoteListCommand());
-            add(new EmbedCommand());
-            add(new PollCommand());
-            add(new TheAnswerCommand());
-            add(new BinaryCommand());
-            add(new PermissionCommand());
-            add(new LinkTesterCommand());
-            add(new VoteCommand());
-            add(new ListScoreCommand());
+			//MISC
+			add(new AsciiCommand());
+			add(new AvatarCommand());
+			add(new FlipCoinCommand());
+			add(new PingCommand());
+			add(new ReverseCommand());
+			add(new SayCommand());
+			add(new UptimeCommand());
+			add(new CustomAnswerCommand());
+			add(new AnimeCommand());
+			add(new ImageCommand());
+			add(new ValidateGIFCommand());
+			add(new LocalEmoteListCommand());
+			add(new ShiroEmoteListCommand());
+			add(new JibrilEmoteListCommand());
+			add(new EmbedCommand());
+			add(new PollCommand());
+			add(new TheAnswerCommand());
+			add(new BinaryCommand());
+			add(new PermissionCommand());
+			add(new LinkTesterCommand());
+			add(new VoteCommand());
+			add(new ListScoreCommand());
 
-            //FUN
-            add(new SadButTrueCommand());
-            add(new HardDecisionCommand());
-            add(new ExpandingBrainCommand());
-            add(new PPTCommand());
-            add(new ShipCommand());
-            add(new MarryCommand());
-            add(new StonksCommand());
-            add(new PixelCanvasCommand());
-            add(new PixelChunkCommand());
-            //REAÇÕES
-            //RECIPROCOS
-            add(new HugReaction(false));
-            add(new KissReaction(false));
-            add(new PatReaction(false));
-            add(new StareReaction(false));
-            add(new SlapReaction(false));
-            add(new PunchReaction(false));
-            add(new BiteReaction(false));
-            //NÃO RECIPROCOS
-            add(new BlushReaction());
-            add(new CryReaction());
-            add(new DanceReaction());
-            add(new FacedeskReaction());
-            add(new LaughReaction());
-            add(new NopeReaction());
-            add(new RunReaction());
+			//FUN
+			add(new SadButTrueCommand());
+			add(new HardDecisionCommand());
+			add(new ExpandingBrainCommand());
+			add(new PPTCommand());
+			add(new ShipCommand());
+			add(new MarryCommand());
+			add(new StonksCommand());
+			add(new PixelCanvasCommand());
+			add(new PixelChunkCommand());
+			//REAÇÕES
+			//RECIPROCOS
+			add(new HugReaction(false));
+			add(new KissReaction(false));
+			add(new PatReaction(false));
+			add(new StareReaction(false));
+			add(new SlapReaction(false));
+			add(new PunchReaction(false));
+			add(new BiteReaction(false));
+			//NÃO RECIPROCOS
+			add(new BlushReaction());
+			add(new CryReaction());
+			add(new DanceReaction());
+			add(new FacedeskReaction());
+			add(new LaughReaction());
+			add(new NopeReaction());
+			add(new RunReaction());
 
-            //MUSICA
-            add(new MusicCommand());
-            add(new YoutubeCommand());
-            add(new VideoCommand());
+			//MUSICA
+			add(new MusicCommand());
+			add(new YoutubeCommand());
+			add(new VideoCommand());
 
-            //EXCEED
-            add(new ExceedRankCommand());
-            add(new ExceedSelectCommand());
-        }};
-    }
+			//EXCEED
+			add(new ExceedRankCommand());
+			add(new ExceedSelectCommand());
+		}};
+	}
 
-    public List<Command> getCommands() {
-        return commands;
-    }
+	public List<Command> getCommands() {
+		return commands;
+	}
 }
