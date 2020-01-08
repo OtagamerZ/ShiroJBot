@@ -17,7 +17,6 @@
 
 package com.kuuhaku.command.commands.moderation;
 
-import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.GuildDAO;
@@ -47,9 +46,6 @@ public class RoleChooserCommand extends Command {
 			return;
 		} else if (!StringUtils.isNumeric(args[0])) {
 			channel.sendMessage(":x: | O ID da mensagem deve ser numérico.").queue();
-			return;
-		} else if (Main.getInfo().getAPI().getEmotesByName(args[1], true).size() == 0) {
-			channel.sendMessage(":x: | É necessário informar um emote válido conhecido pela Shiro para ser usado como botão.").queue();
 			return;
 		} else if (message.getMentionedRoles().size() == 0) {
 			channel.sendMessage(":x: | É necessário informar o cargo a ser dado ao clicar no botão.").queue();
