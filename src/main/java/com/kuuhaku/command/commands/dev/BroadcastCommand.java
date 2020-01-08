@@ -104,6 +104,6 @@ public class BroadcastCommand extends Command {
 
 		eb.setTitle("__**STATUS**__ ");
 		eb.setDescription(sb.toString());
-		pages.add(new Page(PageType.TEXT, eb.build()));
+		pages.add(new Page(PageType.EMBED, eb.build()));
 	}
 }
