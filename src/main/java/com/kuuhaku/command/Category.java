@@ -88,7 +88,7 @@ public enum Category {
 			return true;
 		} else if (this == PARTNER && TagDAO.getTagById(g.getOwnerId()).isPartner()) {
 			return true;
-		} else return gc.getDisabledModules().contains(this);
+		} else return !gc.getDisabledModules().contains(this);
 	}
 
 	public String getEMOTE() {
