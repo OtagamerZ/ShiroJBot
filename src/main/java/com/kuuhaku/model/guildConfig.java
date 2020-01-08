@@ -319,7 +319,7 @@ public class guildConfig {
 			try {
 				cats.add(Category.getByName(mod));
 			} catch (IndexOutOfBoundsException e) {
-				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				return cats;
 			}
 		}
 		return cats;
