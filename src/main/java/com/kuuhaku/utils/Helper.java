@@ -419,8 +419,7 @@ public class Helper {
 			});
 
 			buttons.put(CANCEL, (m, ms) -> {
-				JSONObject gcjo = gc.getButtonConfigs().put(ms.getId(), "");
-				gcjo.remove(ms.getId());
+				JSONObject gcjo = gc.getButtonConfigs();
 				gc.setButtonConfigs(gcjo);
 				GuildDAO.updateGuildSettings(gc);
 			});
