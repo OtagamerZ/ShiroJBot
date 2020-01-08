@@ -56,7 +56,7 @@ public class RoleChooserCommand extends Command {
 		JSONObject jo = new JSONObject();
 
 		jo.put("channel", channel.getId());
-		jo.put("message", channel.retrieveMessageById(args[0]).complete());
+		jo.put("message", channel.retrieveMessageById(args[0]).complete().getId());
 		jo.put("button", args[1]);
 		jo.put("role", message.getMentionedRoles().get(0).getId());
 
