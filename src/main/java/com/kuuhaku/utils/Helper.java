@@ -35,7 +35,6 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
@@ -325,11 +324,11 @@ public class Helper {
 	public static <T> T getOr(T get, T or) {
 		return get == null ? or : get;
 	}
-	
+
 	public static boolean hasRoleHigherThan(Member user, Member target) {
 		List<Role> usrRoles = user.getRoles().stream().sorted(Comparator.comparingInt(Role::getPosition)).collect(Collectors.toList());
 		List<Role> tgtRoles = target.getRoles().stream().sorted(Comparator.comparingInt(Role::getPosition)).collect(Collectors.toList());
-		
+
 		return usrRoles.get(0).getPosition() < tgtRoles.get(0).getPosition();
 	}
 
@@ -360,61 +359,65 @@ public class Helper {
 		return resposta.toString();
 	}
 
-    public static void nonPartnerAlert(User author, Member member, MessageChannel channel, String s, String link) {
-        try {
-            if (!TagDAO.getTagById(author.getId()).isPartner() && !hasPermission(member, PrivilegeLevel.DEV)) {
-                channel.sendMessage(":x: | Este comando é exlusivo para parceiros!").queue();
-                return;
-            }
-        } catch (NoResultException e) {
-            channel.sendMessage(":x: | Este comando é exlusivo para parceiros!").queue();
-            return;
-        }
+	public static void nonPartnerAlert(User author, Member member, MessageChannel channel, String s, String link) {
+		try {
+			if (!TagDAO.getTagById(author.getId()).isPartner() && !hasPermission(member, PrivilegeLevel.DEV)) {
+				channel.sendMessage(":x: | Este comando é exlusivo para parceiros!").queue();
+				return;
+			}
+		} catch (NoResultException e) {
+			channel.sendMessage(":x: | Este comando é exlusivo para parceiros!").queue();
+			return;
+		}
 
-        channel.sendMessage("Link enviado no privado!").queue();
+		channel.sendMessage("Link enviado no privado!").queue();
 
-        EmbedBuilder eb = new EmbedBuilder();
+		EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setThumbnail("https://www.pacific.edu/Images/library/Renovation%20Renderings/LogoMakr_2mPTly.png");
-        eb.setTitle("Olá, obrigado por apoiar meu desenvolvimento!");
-        eb.setDescription(s +System.getenv(link));
-        eb.setColor(Color.green);
+		eb.setThumbnail("https://www.pacific.edu/Images/library/Renovation%20Renderings/LogoMakr_2mPTly.png");
+		eb.setTitle("Olá, obrigado por apoiar meu desenvolvimento!");
+		eb.setDescription(s + System.getenv(link));
+		eb.setColor(Color.green);
 
-        author.openPrivateChannel().queue(c -> c.sendMessage(eb.build()).queue());
-    }
+		author.openPrivateChannel().queue(c -> c.sendMessage(eb.build()).queue());
+	}
 
-    public static void finishEmbed(Guild guild, List<Page> pages, List<MessageEmbed.Field> f, EmbedBuilder eb, int i) {
-        eb.setColor(getRandomColor());
-        eb.setAuthor("Para usar estes emotes, utilize o comando \"" + GuildDAO.getGuildById(guild.getId()).getPrefix() + "say MENÇÃO\"");
-        eb.setFooter("Página " + (i + 1) + ". Mostrando " + (-10 + 10 * (i + 1)) + " - " + (Math.min(10 * (i + 1), f.size())) + " resultados.", null);
+	public static void finishEmbed(Guild guild, List<Page> pages, List<MessageEmbed.Field> f, EmbedBuilder eb, int i) {
+		eb.setColor(getRandomColor());
+		eb.setAuthor("Para usar estes emotes, utilize o comando \"" + GuildDAO.getGuildById(guild.getId()).getPrefix() + "say MENÇÃO\"");
+		eb.setFooter("Página " + (i + 1) + ". Mostrando " + (-10 + 10 * (i + 1)) + " - " + (Math.min(10 * (i + 1), f.size())) + " resultados.", null);
 
-        pages.add(new Page(PageType.EMBED, eb.build()));
-    }
+		pages.add(new Page(PageType.EMBED, eb.build()));
+	}
 
-    public static void refreshButtons(guildConfig gc) {
-		JSONArray ja = gc.getButtonConfigs();
+	public static void refreshButtons(guildConfig gc) {
+		JSONObject ja = gc.getButtonConfigs();
 
 		Guild g = Main.getInfo().getGuildByID(gc.getGuildID());
 
-		for (Object obj : ja) {
-			JSONObject jo = (JSONObject) obj;
+		ja.keySet().forEach(k -> {
+			JSONObject jo = ja.getJSONObject(k);
 			Map<String, Consumer<Member>> buttons = new HashMap<>();
 
-			TextChannel channel = g.getTextChannelById(jo.getString("channel"));
+			TextChannel channel = g.getTextChannelById(jo.getString("canalId"));
 			assert channel != null;
-			Message msg = channel.retrieveMessageById(jo.getString("message")).complete();
-			Role role = g.getRoleById(jo.getString("role"));
-			assert role != null;
-			buttons.put(jo.getString("button"), m -> {
-				if (m.getRoles().contains(role)) {
-					g.removeRoleFromMember(m, role).queue();
-				} else {
-					g.addRoleToMember(m, role).queue();
-				}
+			Message msg = channel.retrieveMessageById(jo.getString("msgId")).complete();
+
+			jo.getJSONObject("buttons").keySet().forEach(b -> {
+				JSONObject btns = jo.getJSONObject("buttons").getJSONObject(b);
+				Role role = g.getRoleById(btns.getString("role"));
+				assert role != null;
+				buttons.put(btns.getString("emote"), m -> {
+					if (m.getRoles().contains(role)) {
+						g.removeRoleFromMember(m, role).queue();
+					} else {
+						g.addRoleToMember(m, role).queue();
+					}
+				});
 			});
 
 			msg.clearReactions().complete();
 			Pages.buttonfy(Main.getInfo().getAPI(), msg, buttons);
-		}
+		});
 	}
 }
