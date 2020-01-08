@@ -4,11 +4,11 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.Youtube;
+import com.kuuhaku.method.Pages;
+import com.kuuhaku.model.Page;
 import com.kuuhaku.model.YoutubeVideo;
+import com.kuuhaku.type.PageType;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.Enum.PageType;
-import com.kuuhaku.Method.Pages;
-import com.kuuhaku.Model.Page;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 

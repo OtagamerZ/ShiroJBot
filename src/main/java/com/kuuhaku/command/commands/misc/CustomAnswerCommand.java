@@ -1,15 +1,15 @@
 package com.kuuhaku.command.commands.misc;
 
-import com.kuuhaku.Enum.PageType;
 import com.kuuhaku.Main;
-import com.kuuhaku.Method.Pages;
-import com.kuuhaku.Model.Page;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.BackupDAO;
 import com.kuuhaku.controller.sqlite.CustomAnswerDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.method.Pages;
 import com.kuuhaku.model.CustomAnswers;
+import com.kuuhaku.model.Page;
+import com.kuuhaku.type.PageType;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.PrivilegeLevel;
 import net.dv8tion.jda.api.EmbedBuilder;
