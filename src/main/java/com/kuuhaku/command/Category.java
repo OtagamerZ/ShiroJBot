@@ -84,7 +84,11 @@ public enum Category {
 	}
 	
 	public boolean isEnabled(guildConfig gc, Guild g) {
-		return gc.getDisabledModules().contains(this) || (this == PARTNER && TagDAO.getTagById(g.getOwnerId()).isPartner()) || (this == DEVS && g.getId().equals("421495229594730496"));
+		if (!gc.getDisabledModules().contains(this)) {
+			return true;
+		} else if (this == PARTNER && TagDAO.getTagById(g.getOwnerId()).isPartner()) {
+			return true;
+		} else return this == DEVS && g.getId().equals("421495229594730496");
 	}
 
 	public String getEMOTE() {
