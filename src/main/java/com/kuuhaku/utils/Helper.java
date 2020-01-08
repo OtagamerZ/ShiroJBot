@@ -63,9 +63,7 @@ import java.util.stream.Collectors;
 public class Helper {
 
 	public static final String VOID = "\u200B";
-	private static final String PREVIOUS = "\u25C0";
 	private static final String CANCEL = "\u274E";
-	private static final String NEXT = "\u25B6";
 	public static final String ACCEPT = "\u2705";
 	public static final int CANVAS_SIZE = 1024;
 	public static final DateTimeFormatter dateformat = DateTimeFormatter.ofPattern("dd/MMM/yyyy | HH:mm:ss (z)");
@@ -390,7 +388,7 @@ public class Helper {
 		pages.add(new Page(PageType.EMBED, eb.build()));
 	}
 
-	public static void refreshButtons(guildConfig gc) {
+	public static void refreshButtons(guildConfig gc, User author) {
 		JSONObject ja = gc.getButtonConfigs();
 
 		if (ja.isEmpty()) return;
@@ -419,9 +417,11 @@ public class Helper {
 			});
 
 			buttons.put(CANCEL, (m, ms) -> {
-				JSONObject gcjo = gc.getButtonConfigs();
-				gc.setButtonConfigs(gcjo);
-				GuildDAO.updateGuildSettings(gc);
+				if (m.getUser() == author) {
+					JSONObject gcjo = gc.getButtonConfigs();
+					gc.setButtonConfigs(gcjo);
+					GuildDAO.updateGuildSettings(gc);
+				}
 			});
 
 			msg.clearReactions().complete();
