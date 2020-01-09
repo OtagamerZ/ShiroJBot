@@ -41,23 +41,25 @@ public class BackupCommand extends Command {
 		if (args.length < 1) {
 			channel.sendMessage(":x: | É necessário definir se a ação é de salvar ou recuperar.").queue();
 			return;
-		} else if (!Helper.containsAny(args[0], "salvar", "recuperar")) {
-			channel.sendMessage(":x: | O primeiro argumento deve ser salvar ou recuperar.").queue();
+		} else if (!Helper.containsAny(args[0], "salvar", "recuperar", "permissoes")) {
+			channel.sendMessage(":x: | O primeiro argumento deve ser salvar, recuperar ou permissoes.").queue();
 			return;
 		} else if (!guild.getSelfMember().hasPermission(Permission.ADMINISTRATOR)) {
-            channel.sendMessage(":x: | Preciso da permissão de administrador para efetuar operações de backup.").queue();
-            return;
-        }
+			channel.sendMessage(":x: | Preciso da permissão de administrador para efetuar operações de backup.").queue();
+			return;
+		}
 
 		if (args[0].equalsIgnoreCase("salvar")) {
-            data.setGuild(guild.getId());
-            data.saveServerData(guild);
-            BackupDAO.saveBackup(data);
-            channel.sendMessage("Backup feito com sucesso, utilize `" + prefix + "backup recuperar` para recuperar para este estado do servidor. (ISSO IRÁ REESCREVER O SERVIDOR, TODAS AS MENSAGENS SERÃO PERDIDAS)").queue();
-		} else if (data.getGuild() == null || data.getGuild().isEmpty()) {
-            channel.sendMessage(":x: | Nenhum backup foi feito ainda, utilize o comando `" + prefix + "backup salvar` para criar um backup.").queue();
-        } else if (args[0].equalsIgnoreCase("recuperar")) {
-		    data.recoverServerData(guild);
+			data.setGuild(guild.getId());
+			data.saveServerData(guild);
+			BackupDAO.saveBackup(data);
+			channel.sendMessage("Backup feito com sucesso, utilize `" + prefix + "backup recuperar` para recuperar para este estado do servidor. (ISSO IRÁ REESCREVER O SERVIDOR, TODAS AS MENSAGENS SERÃO PERDIDAS)").queue();
+		} /*else if (data.getLastRestore().toLocalDateTime().plusDays(1).compareTo(LocalDateTime.now()) < 0) {
+			channel.sendMessage(":x: | Você precisa aguardar 1 dia antes de restaurar o backup novamente.").queue();
+		}*/ else if (data.getGuild() == null || data.getGuild().isEmpty()) {
+			channel.sendMessage(":x: | Nenhum backup foi feito ainda, utilize o comando `" + prefix + "backup salvar` para criar um backup.").queue();
+		} else if (args[0].equalsIgnoreCase("recuperar")) {
+			data.recoverServerData(guild);
 		} else if (args[0].equalsIgnoreCase("permissoes")) {
 			data.restorePermissions(guild);
 		}

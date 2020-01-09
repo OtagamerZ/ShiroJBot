@@ -220,4 +220,12 @@ public class Backup {
 
 		channelData.put("permissions", permissions);
 	}
+
+	public Timestamp getLastRestore() {
+		return lastRestore;
+	}
+
+	public void setLastRestore(Timestamp lastRestore) {
+		this.lastRestore = lastRestore;
+	}
 }
