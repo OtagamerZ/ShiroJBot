@@ -17,7 +17,6 @@ public class Backup {
 	private String guild;
 	private String serverData;
 	@Column(columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-	@Temporal(TemporalType.TIMESTAMP)
 	private Timestamp lastRestore;
 
 	public int getId() {
