@@ -8,15 +8,15 @@ import java.util.List;
 public class DataDump {
 	private final List<CustomAnswers> caDump;
 	private final List<Member> mDump;
-	private final List<guildConfig> gcDump;
+	private final List<GuildConfig> gcDump;
 
-    public DataDump(List<CustomAnswers> caDump, List<Member> mDump, List<guildConfig> gcDump) {
+    public DataDump(List<CustomAnswers> caDump, List<Member> mDump, List<GuildConfig> gcDump) {
         this.caDump = caDump;
         this.gcDump = gcDump;
         this.mDump = mDump;
     }
 
-    public DataDump(List<CustomAnswers> caDump, List<guildConfig> gcDump) {
+    public DataDump(List<CustomAnswers> caDump, List<GuildConfig> gcDump) {
         this.caDump = caDump;
         this.gcDump = gcDump;
         this.mDump = new ArrayList<>();
@@ -40,7 +40,7 @@ public class DataDump {
         return mDump;
     }
 
-    public List<guildConfig> getGcDump() {
+    public List<GuildConfig> getGcDump() {
         return gcDump;
     }
 }

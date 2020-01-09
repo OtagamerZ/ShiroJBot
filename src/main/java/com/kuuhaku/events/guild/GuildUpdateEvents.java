@@ -19,7 +19,7 @@ package com.kuuhaku.events.guild;
 
 import com.kuuhaku.controller.mysql.TagDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
-import com.kuuhaku.model.guildConfig;
+import com.kuuhaku.model.GuildConfig;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateNameEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateOwnerEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -31,7 +31,7 @@ public class GuildUpdateEvents extends ListenerAdapter {
 
     @Override
     public void onGuildUpdateName(GuildUpdateNameEvent event) {
-        guildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
+        GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
         gc.setName(event.getNewName());
         GuildDAO.updateGuildSettings(gc);
     }

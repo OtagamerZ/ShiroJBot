@@ -20,7 +20,7 @@ package com.kuuhaku.command.commands.moderation;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.GuildDAO;
-import com.kuuhaku.model.guildConfig;
+import com.kuuhaku.model.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -34,7 +34,7 @@ public class GatekeeperCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		guildConfig gc = GuildDAO.getGuildById(guild.getId());
+		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (args.length < 2) {
 			channel.sendMessage(":x: | É necessário informar o ID da mensagem e um cargo para ser atribuido a quem aceitar as regras.").queue();

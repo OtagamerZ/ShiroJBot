@@ -20,7 +20,7 @@ package com.kuuhaku.command.commands.moderation;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.GuildDAO;
-import com.kuuhaku.model.guildConfig;
+import com.kuuhaku.model.GuildConfig;
 import net.dv8tion.jda.api.entities.*;
 
 public class AllowCommunityCommand extends Command {
@@ -31,7 +31,7 @@ public class AllowCommunityCommand extends Command {
 
     @Override
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-        guildConfig gc = GuildDAO.getGuildById(guild.getId());
+        GuildConfig gc = GuildDAO.getGuildById(guild.getId());
         if (gc.isNotAnyTell()) {
             channel.sendMessage(":loud_sound: | Agora irei ouvir as respostas da comunidade!").queue();
             gc.setAnyTell(true);

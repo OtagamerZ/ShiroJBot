@@ -21,7 +21,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.reactions.*;
 import com.kuuhaku.controller.sqlite.GuildDAO;
-import com.kuuhaku.model.guildConfig;
+import com.kuuhaku.model.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.Music;
 import de.androidpit.colorthief.ColorThief;
@@ -189,7 +189,7 @@ public class JDAEvents extends ListenerAdapter {
 	@Override
 	public void onGuildMemberJoin(@NotNull GuildMemberJoinEvent event) {
 		try {
-			guildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
+			GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
 
 			if (!gc.getMsgBoasVindas().equals("")) {
 				if (gc.isAntiRaid() && ((ChronoUnit.MILLIS.between(event.getUser().getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) / 1000) / 60) < 10) {
@@ -240,7 +240,7 @@ public class JDAEvents extends ListenerAdapter {
 	@Override
 	public void onGuildMemberLeave(@NotNull GuildMemberLeaveEvent event) {
 		try {
-			guildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
+			GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
 
 			if (!gc.getMsgAdeus().equals("")) {
 				URL url = new URL(Objects.requireNonNull(event.getUser().getAvatarUrl()));
@@ -338,7 +338,7 @@ public class JDAEvents extends ListenerAdapter {
 		return false;
 	}
 
-	public static boolean isFound(guildConfig gc, Guild g, String commandName, boolean found, Command command) {
+	public static boolean isFound(GuildConfig gc, Guild g, String commandName, boolean found, Command command) {
 		if (command.getName().equalsIgnoreCase(commandName)) {
 			found = true;
 		}

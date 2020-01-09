@@ -3,7 +3,7 @@ package com.kuuhaku.command.commands.moderation;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.GuildDAO;
-import com.kuuhaku.model.guildConfig;
+import com.kuuhaku.model.GuildConfig;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
@@ -19,7 +19,7 @@ public class MakeLogCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		try {
 
-			guildConfig gc = GuildDAO.getGuildById(guild.getId());
+			GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 			try {
 				Objects.requireNonNull(guild.getTextChannelById(gc.getCanalLog())).delete().queue();
 			} catch (Exception ignore) {
