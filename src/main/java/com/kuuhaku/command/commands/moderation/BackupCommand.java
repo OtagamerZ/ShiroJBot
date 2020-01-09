@@ -37,10 +37,9 @@ public class BackupCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 		Backup data = BackupDAO.getGuildBackup(guild);
 
-		if (args.length < 2) {
+		if (args.length < 1 || (args[0].equalsIgnoreCase("recuperar") && args.length < 2)) {
 			channel.sendMessage(":x: | É necessário definir se a ação é de salvar ou recuperar e definir o que devo recuperar (canais ou cargos).").queue();
 			return;
 		} else if (!Helper.containsAny(args[0], "salvar", "recuperar")) {
