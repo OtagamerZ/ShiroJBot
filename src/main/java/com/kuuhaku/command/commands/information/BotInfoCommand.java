@@ -46,7 +46,7 @@ public class BotInfoCommand extends Command {
         eb.addField(":handshake: Apoiada por:", TagDAO.getPartnerAmount() + " servidores", true);
         eb.addField(":earth_americas: Estou em:", Main.getInfo().getAPI().getGuilds().size() + " servidores", true);
         eb.addField(":speech_balloon: Conheço:", Main.getInfo().getAPI().getUsers().size() + " usuários", true);
-        eb.addField(":envelope: Link de convite:", "https://discordbots.org/bot/572413282653306901", true);
+        eb.addField(":envelope: Link de convite:", "https://top.gg/bot/572413282653306901", true);
 
         channel.sendMessage(eb.build()).queue();
     }
