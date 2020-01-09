@@ -19,7 +19,9 @@ public class Backup {
 	private String guild;
 	private String serverData;
 	@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-	private Timestamp lastRestore;
+	private Timestamp lastRestoredChannels;
+	@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	private Timestamp lastRestoredRoles;
 	private Timestamp lastBackup;
 
 	public int getId() {
@@ -45,7 +47,7 @@ public class Backup {
 
 		if (data.isEmpty()) return;
 
-		lastRestore = Timestamp.from(Instant.now());
+		lastRestoredChannels = Timestamp.from(Instant.now());
 
 		g.getChannels().forEach(c -> {
 			try {
@@ -102,6 +104,8 @@ public class Backup {
 		JSONObject data = new JSONObject(serverData);
 
 		if (data.isEmpty()) return;
+
+		lastRestoredRoles = Timestamp.from(Instant.now());
 
 		JSONArray categories = data.getJSONArray("categories");
 		JSONArray roles = data.getJSONArray("roles");
@@ -222,11 +226,11 @@ public class Backup {
 		channelData.put("permissions", permissions);
 	}
 
-	public Timestamp getLastRestore() {
-		return lastRestore;
+	public Timestamp getLastRestoredChannels() {
+		return lastRestoredChannels;
 	}
 
-	public void setLastRestore(Timestamp lastRestore) {
-		this.lastRestore = lastRestore;
+	public Timestamp getLastRestoredRoles() {
+		return lastRestoredRoles;
 	}
 }
