@@ -26,8 +26,8 @@ import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.model.CustomAnswers;
+import com.kuuhaku.model.GuildConfig;
 import com.kuuhaku.model.Log;
-import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -204,7 +204,7 @@ public class GuildEvents extends ListenerAdapter {
 									}
 								});
 							} catch (IllegalArgumentException e) {
-								guildConfig gc = GuildDAO.getGuildById(guild.getId());
+								GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 								Map<String, Object> cl = gc.getCargoslvl();
 								cl.remove(String.valueOf(i));
 								GuildDAO.updateGuildSettings(gc);
@@ -249,7 +249,11 @@ public class GuildEvents extends ListenerAdapter {
 
 				try {
 					com.kuuhaku.model.Member m = MemberDAO.getMemberById(member.getUser().getId() + member.getGuild().getId());
-					if (m.getMid() == null) MemberDAO.saveMemberMid(m, author);
+					if (m.getMid() == null) {
+						m.setMid(author.getId());
+						m.setSid(guild.getId());
+						MemberDAO.updateMemberConfigs(m);
+					}
 					boolean lvlUp = m.addXp(guild);
 					if (lvlUp && GuildDAO.getGuildById(guild.getId()).isLvlNotif()) {
 						if (lvlChannel != null) {

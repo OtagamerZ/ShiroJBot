@@ -18,7 +18,7 @@
 package com.kuuhaku.command;
 
 import com.kuuhaku.controller.mysql.TagDAO;
-import com.kuuhaku.model.guildConfig;
+import com.kuuhaku.model.GuildConfig;
 import com.kuuhaku.utils.PrivilegeLevel;
 import net.dv8tion.jda.api.entities.Guild;
 
@@ -83,7 +83,7 @@ public enum Category {
 		return cmds;
 	}
 	
-	public boolean isEnabled(guildConfig gc, Guild g) {
+	public boolean isEnabled(GuildConfig gc, Guild g) {
 		if (this == DEVS && !g.getId().equals("421495229594730496")) {
 			return false;
 		} else if (this == PARTNER && !TagDAO.getTagById(g.getOwnerId()).isPartner()) {

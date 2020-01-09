@@ -35,6 +35,7 @@ public class Member {
 	@Id
 	private String id;
 	private String mid;
+	private String sid;
 	private int level = 1, xp = 0;
 	@Column(columnDefinition = "float default 1")
 	private float waifuMult = 1.25f;
@@ -172,5 +173,13 @@ public class Member {
 
 	public void vote() {
 		lastVoted = System.currentTimeMillis() / 1000;
+	}
+
+	public String getSid() {
+		return sid;
+	}
+
+	public void setSid(String sid) {
+		this.sid = sid;
 	}
 }

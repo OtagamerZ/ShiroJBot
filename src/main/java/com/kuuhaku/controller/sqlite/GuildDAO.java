@@ -1,18 +1,18 @@
 package com.kuuhaku.controller.sqlite;
 
-import com.kuuhaku.model.guildConfig;
+import com.kuuhaku.model.GuildConfig;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 public class GuildDAO {
-	public static guildConfig getGuildById(String id) {
+	public static GuildConfig getGuildById(String id) {
 		EntityManager em = Manager.getEntityManager();
-		guildConfig gc;
+		GuildConfig gc;
 
-		Query q = em.createQuery("SELECT g FROM guildConfig g WHERE guildID = ?1", guildConfig.class);
+		Query q = em.createQuery("SELECT g FROM GuildConfig g WHERE guildID = ?1", GuildConfig.class);
 		q.setParameter(1, id);
-		gc = (guildConfig) q.getSingleResult();
+		gc = (GuildConfig) q.getSingleResult();
 
 		em.close();
 
@@ -22,7 +22,7 @@ public class GuildDAO {
 	public static void addGuildToDB(net.dv8tion.jda.api.entities.Guild guild) {
 		EntityManager em = Manager.getEntityManager();
 
-		guildConfig gc = new guildConfig();
+		GuildConfig gc = new GuildConfig();
 		gc.setName(guild.getName());
 		gc.setGuildId(guild.getId());
 
@@ -33,7 +33,7 @@ public class GuildDAO {
 		em.close();
 	}
 
-	public static void removeGuildFromDB(guildConfig gc) {
+	public static void removeGuildFromDB(GuildConfig gc) {
 		EntityManager em = Manager.getEntityManager();
 
 		gc.setMarkForDelete(true);
@@ -45,7 +45,7 @@ public class GuildDAO {
 		em.close();
 	}
 
-	public static void updateGuildSettings(guildConfig gc) {
+	public static void updateGuildSettings(GuildConfig gc) {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();

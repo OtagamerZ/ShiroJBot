@@ -5,8 +5,8 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.method.Pages;
+import com.kuuhaku.model.GuildConfig;
 import com.kuuhaku.model.Page;
-import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.type.PageType;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -26,7 +26,7 @@ public class ComandosCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		guildConfig gc = GuildDAO.getGuildById(guild.getId());
+		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setTitle("**Lista de Comandos**");
