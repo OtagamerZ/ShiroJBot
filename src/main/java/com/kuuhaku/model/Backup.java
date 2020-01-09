@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Objects;
 
 @Entity
@@ -19,6 +20,7 @@ public class Backup {
 	private String serverData;
 	@Column(columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private Timestamp lastRestore;
+	private Timestamp lastBackup;
 
 	public int getId() {
 		return id;
@@ -43,21 +45,23 @@ public class Backup {
 
 		if (data.isEmpty()) return;
 
+		lastRestore = Timestamp.from(Instant.now());
+
 		g.getChannels().forEach(c -> {
 			try {
-				c.delete().queue();
+				c.delete().complete();
 			} catch (ErrorResponseException ignore) {
 			}
 		});
 		g.getCategories().forEach(c -> {
 			try {
-				c.delete().queue();
+				c.delete().complete();
 			} catch (ErrorResponseException ignore) {
 			}
 		});
 		g.getRoles().forEach(c -> {
 			try {
-				if (!c.getName().equalsIgnoreCase("Shiro") && !c.isPublicRole()) c.delete().queue();
+				if (!c.getName().equalsIgnoreCase("Shiro") && !c.isPublicRole()) c.delete().complete();
 			} catch (ErrorResponseException ignore) {
 			}
 		});
@@ -147,6 +151,8 @@ public class Backup {
 		JSONObject data = new JSONObject();
 
 		JSONArray categories = new JSONArray();
+
+		lastBackup = Timestamp.from(Instant.now());
 
 		g.getCategories().forEach(cat -> {
 			JSONObject category = new JSONObject();
