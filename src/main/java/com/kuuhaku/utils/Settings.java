@@ -66,7 +66,6 @@ public class Settings {
 
             String cargoWarnID = Helper.getOr(gc.getCargoWarn(), "Não definido.");
             int warnTime = gc.getWarnTime();
-            //String cargoNewID = SQLite.getGuildCargoNew(message.getGuild().getId());
 
             EmbedBuilder eb = new EmbedBuilder();
 
@@ -102,9 +101,6 @@ public class Settings {
             }
 
             eb.addField("\u23F2 » Tempo de punição", String.valueOf(warnTime), true);
-
-            //if(!cargoNewID.equals("Não definido.")) { eb.addField("\uD83D\uDCD1 » Cargo automático", com.kuuhaku.Main.getInfo().getRoleByID(cargoNewID).getAsMention(), false); }
-            //else { eb.addField("\uD83D\uDCD1 » Cargos automáticos", cargoNewID, true); }
 
             eb.addField("\uD83D\uDCD6 » Canal de notificação de level up", canalLvlUpNotif, true);
             eb.addField("\uD83D\uDCD1 » Cargos de nível", cargosLvl.toString().isEmpty() ? "Nenhum" : cargosLvl.toString(), true);
@@ -445,6 +441,7 @@ public class Settings {
             try {
                 Map<String, Object> cl = gc.getCargoslvl();
                 cl.remove(args[2]);
+                gc.setCargosLvl(new JSONObject(cl));
                 GuildDAO.updateGuildSettings(gc);
                 message.getTextChannel().sendMessage("✅ | O cargo dado no level " + args[2] + " do servidor foi resetado com sucesso.").queue();
                 return;
@@ -458,6 +455,7 @@ public class Settings {
 
         Map<String, Object> cl = gc.getCargoslvl();
         cl.put(args[2], newRoleLevel);
+        gc.setCargosLvl(new JSONObject(cl));
         GuildDAO.updateGuildSettings(gc);
         message.getTextChannel().sendMessage("✅ | O cargo dado no level " + args[2] + " do servidor foi trocado para " + newRoleLevel.getAsMention() + " com sucesso.").queue();
     }
