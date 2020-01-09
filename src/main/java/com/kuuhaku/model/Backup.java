@@ -109,7 +109,7 @@ public class Backup {
 							chn.getJSONArray("permissions").forEach(o -> {
 								JSONObject override = (JSONObject) o;
 
-								channel[0].createPermissionOverride(override.getBoolean("role") ? g.getRolesByName(override.getString("nameOrId"), true).get(0) : Objects.requireNonNull(g.getMemberById(override.getString("nameOrId"))))
+								channel[0].createPermissionOverride(override.getString("nameOrId").equals("@everyone") ? g.getPublicRole() : (override.getBoolean("role") ? g.getRolesByName(override.getString("nameOrId"), true).get(0) : Objects.requireNonNull(g.getMemberById(override.getString("nameOrId")))))
 										.setAllow(override.getLong("allowed"))
 										.setDeny(override.getLong("denied"))
 										.queue();
