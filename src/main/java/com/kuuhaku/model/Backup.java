@@ -62,44 +62,44 @@ public class Backup {
 		JSONArray categories = data.getJSONArray("categories");
 		JSONArray roles = data.getJSONArray("roles");
 
+		Callable<Boolean> setup = () -> {
+			roles.forEach(r -> {
+				JSONObject role = (JSONObject) r;
 
-		roles.forEach(r -> {
-			JSONObject role = (JSONObject) r;
+				g.createRole()
+						.setName(role.getString("name"))
+						.setColor(role.has("color") ? (Integer) role.get("color") : null)
+						.setPermissions(role.getLong("permissions"))
+						.queue();
+			});
 
-			g.createRole()
-					.setName(role.getString("name"))
-					.setColor(role.has("color") ? (Integer) role.get("color") : null)
-					.setPermissions(role.getLong("permissions"))
-					.queue();
-		});
+			categories.forEach(c -> {
+				JSONObject cat = (JSONObject) c;
 
-		categories.forEach(c -> {
-			JSONObject cat = (JSONObject) c;
+				g.createCategory(cat.getString("name"))
+						.setPosition(cat.getInt("index"))
+						.queue(s -> {
 
-			g.createCategory(cat.getString("name"))
-					.setPosition(cat.getInt("index"))
-					.queue(s -> {
+							JSONArray channels = cat.getJSONArray("channels");
 
-						JSONArray channels = cat.getJSONArray("channels");
+							channels.forEach(ch -> {
+								JSONObject chn = (JSONObject) ch;
 
-						channels.forEach(ch -> {
-							JSONObject chn = (JSONObject) ch;
-
-							if (chn.getString("type").equals("text")) {
-								s.createTextChannel(chn.getString("name"))
-										.setTopic(chn.has("topic") ? chn.getString("topic") : null)
-										.setParent(s)
-										.setPosition(chn.getInt("index"))
-										.setNSFW(chn.has("nsfw") && chn.getBoolean("nsfw"))
-										.queue();
-							} else {
-								s.createVoiceChannel(chn.getString("name")).queue();
-							}
+								if (chn.getString("type").equals("text")) {
+									s.createTextChannel(chn.getString("name"))
+											.setTopic(chn.has("topic") ? chn.getString("topic") : null)
+											.setParent(s)
+											.setPosition(chn.getInt("index"))
+											.setNSFW(chn.has("nsfw") && chn.getBoolean("nsfw"))
+											.queue();
+								} else {
+									s.createVoiceChannel(chn.getString("name")).queue();
+								}
+							});
 						});
-					});
-		});
-
-		System.out.println("fase 1 pronta");
+			});
+			return true;
+		};
 
 		Callable<Boolean> finish = () -> {
 			categories.forEach(s -> {
@@ -134,6 +134,13 @@ public class Backup {
 			});
 			return true;
 		};
+
+		try {
+			setup.call();
+			System.out.println("fase 1 pronta");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void saveServerData(Guild g) {
