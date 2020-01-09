@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import org.json.JSONObject;
 
 import javax.persistence.Entity;
@@ -42,8 +43,18 @@ public class Backup {
 
 		if (data.isEmpty()) return;
 
-		g.getChannels().forEach(c -> c.delete().queue());
-		g.getCategories().forEach(c -> c.delete().queue());
+		g.getChannels().forEach(c -> {
+			try {
+				c.delete().queue();
+			} catch (ErrorResponseException ignore) {
+			}
+		});
+		g.getCategories().forEach(c -> {
+			try {
+				c.delete().queue();
+			} catch (ErrorResponseException ignore) {
+			}
+		});
 
 		Map<String, Object> categories = data.getJSONObject("categories").toMap();
 		Map<String, Object> roles = data.getJSONObject("roles").toMap();
