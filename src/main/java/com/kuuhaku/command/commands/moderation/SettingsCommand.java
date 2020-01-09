@@ -59,6 +59,11 @@ public class SettingsCommand extends Command {
 				}
 				Settings.updateMsgAdeus(args, message, gc);
 				break;
+			case "twarn":
+			case "tempowarn":
+			case "tpun":
+				Settings.updateWarnTime(args, message, gc);
+				break;
 			case "tpoll":
 			case "tempopoll":
 				Settings.updatePollTime(args, message, gc);
