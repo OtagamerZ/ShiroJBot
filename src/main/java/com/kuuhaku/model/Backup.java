@@ -96,7 +96,7 @@ public class Backup {
 		});
 	}
 
-	public void restorePermissions(Guild g) {
+	public void restoreRoles(Guild g) {
 		if (serverData == null || serverData.isEmpty()) return;
 
 		JSONObject data = new JSONObject(serverData);
@@ -113,10 +113,10 @@ public class Backup {
 					.setName(role.getString("name"))
 					.setColor(role.has("color") ? (Integer) role.get("color") : null)
 					.setPermissions(role.getLong("permissions"))
-					.complete();
+					.queue();
 		});
 
-		categories.forEach(s -> {
+		/*categories.forEach(s -> {
 			try {
 				Category cat = g.getCategoriesByName(((JSONObject) s).getString("name"), true).get(0);
 				((JSONObject) s).getJSONArray("permissions").forEach(o -> {
@@ -145,7 +145,7 @@ public class Backup {
 				});
 			} catch (ErrorResponseException | IndexOutOfBoundsException ignore) {
 			}
-		});
+		});*/
 	}
 
 	public void saveServerData(Guild g) {
