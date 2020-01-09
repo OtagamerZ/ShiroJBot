@@ -143,8 +143,12 @@ public class Backup {
 			task = executor.submit(setup);
 			task.get();
 
-			task = executor.submit(finish);
+			Helper.logger(this.getClass()).info(g.getName() + ": canais e cargos restaurados.");
+
+			/*task = executor.submit(finish);
 			task.get();
+
+			Helper.logger(this.getClass()).info(g.getName() + ": permissões restauradas.");*/
 
 			executor.shutdown();
 		} catch (InterruptedException | ExecutionException e) {
