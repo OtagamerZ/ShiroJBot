@@ -75,8 +75,7 @@ public class RoleChooserCommand extends Command {
 
 			gc.setButtonConfigs(root);
 			GuildDAO.updateGuildSettings(gc);
-			channel.sendMessage("Botão adicionado com sucesso!").queue();
-			Helper.refreshButtons(gc, author);
+			channel.sendMessage("Botão adicionado com sucesso!").queue(s -> Helper.refreshButtons(gc, author));
 		} catch (IllegalArgumentException e) {
 			channel.sendMessage(":x: | Erro em um dos argumentos: " + e).queue();
 		}

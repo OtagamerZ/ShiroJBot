@@ -71,8 +71,7 @@ public class GatekeeperCommand extends Command {
 
 			gc.setButtonConfigs(root);
 			GuildDAO.updateGuildSettings(gc);
-			channel.sendMessage("Porteiro adicionado com sucesso!").queue();
-			Helper.gatekeep(gc);
+			channel.sendMessage("Porteiro adicionado com sucesso!").queue(s -> Helper.gatekeep(gc));
 		} catch (IllegalArgumentException e) {
 			channel.sendMessage(":x: | Erro em um dos argumentos: " + e).queue();
 		}
