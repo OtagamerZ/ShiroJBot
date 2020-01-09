@@ -80,7 +80,7 @@ public class BroadcastCommand extends Command {
 							result.put("Desconhecido (" + t.getId() + ")", false);
 						} else {
 							try {
-								u.openPrivateChannel().complete().sendMessage(msg).queue();
+								u.openPrivateChannel().complete().sendMessage(msg).complete();
 								result.put(u.getAsTag(), true);
 							} catch (ErrorResponseException e) {
 								result.put(u.getAsTag(), false);
