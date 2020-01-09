@@ -11,7 +11,6 @@ import javax.persistence.Id;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
 
 @Entity
 public class Backup {
@@ -19,7 +18,7 @@ public class Backup {
 	private int id;
 	private String guild;
 	private String serverData;
-	@Column(columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private Timestamp lastRestore;
 	private Timestamp lastBackup;
 
@@ -110,14 +109,11 @@ public class Backup {
 		roles.forEach(r -> {
 			JSONObject role = (JSONObject) r;
 
-			try {
-				g.createRole()
-						.setName(role.getString("name"))
-						.setColor(role.has("color") ? (Integer) role.get("color") : null)
-						.setPermissions(role.getLong("permissions"))
-						.submit().get();
-			} catch (InterruptedException | ExecutionException ignore) {
-			}
+			g.createRole()
+					.setName(role.getString("name"))
+					.setColor(role.has("color") ? (Integer) role.get("color") : null)
+					.setPermissions(role.getLong("permissions"))
+					.queue();
 		});
 
 		categories.forEach(s -> {
