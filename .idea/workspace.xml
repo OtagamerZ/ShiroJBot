@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="271f62a3-9e6a-4818-8029-c8d623fc8628" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/Backup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/Backup.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -94,20 +95,6 @@
       <workItem from="1578417115081" duration="11257000" />
       <workItem from="1578453407096" duration="2905000" />
       <workItem from="1578529344055" duration="11359000" />
-    </task>
-    <task id="LOCAL-00039" summary="Correção no comando de cargo por botão">
-      <created>1578491762169</created>
-      <option name="number" value="00039" />
-      <option name="presentableId" value="LOCAL-00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1578491762169</updated>
-    </task>
-    <task id="LOCAL-00040" summary="Correção no comando de cargo por botão">
-      <created>1578494981422</created>
-      <option name="number" value="00040" />
-      <option name="presentableId" value="LOCAL-00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1578494981422</updated>
     </task>
     <task id="LOCAL-00041" summary="Correção no comando de cargo por botão">
       <created>1578500627868</created>
@@ -438,7 +425,21 @@
       <option name="project" value="LOCAL" />
       <updated>1578594436855</updated>
     </task>
-    <option name="localTasksCounter" value="88" />
+    <task id="LOCAL-00088" summary="Correção no JSON do backup">
+      <created>1578594460950</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1578594460950</updated>
+    </task>
+    <task id="LOCAL-00089" summary="Correção no JSON do backup">
+      <created>1578594649790</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1578594649790</updated>
+    </task>
+    <option name="localTasksCounter" value="90" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -485,11 +486,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1578421403620" />
-    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1578594647038">
+    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1578594692752">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="298" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1578542083729" />
-    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1578594647038" />
+    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1578594692752" />
     <state x="160" y="89" key="DiffContextDialog" timestamp="1578421042559">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -498,11 +499,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1578417783560" />
-    <state x="432" y="239" key="Vcs.Push.Dialog.v2" timestamp="1578594462887">
+    <state x="432" y="239" key="Vcs.Push.Dialog.v2" timestamp="1578594664191">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1578542090151" />
-    <state x="432" y="239" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1578594462887" />
+    <state x="432" y="239" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1578594664191" />
     <state x="488" y="297" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1578441442611">
       <screen x="0" y="0" width="1366" height="768" />
     </state>

@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 @Entity
 public class Backup {
@@ -109,14 +110,17 @@ public class Backup {
 		roles.forEach(r -> {
 			JSONObject role = (JSONObject) r;
 
-			g.createRole()
-					.setName(role.getString("name"))
-					.setColor(role.has("color") ? (Integer) role.get("color") : null)
-					.setPermissions(role.getLong("permissions"))
-					.queue();
+			try {
+				g.createRole()
+						.setName(role.getString("name"))
+						.setColor(role.has("color") ? (Integer) role.get("color") : null)
+						.setPermissions(role.getLong("permissions"))
+						.submit().get();
+			} catch (InterruptedException | ExecutionException ignore) {
+			}
 		});
 
-		/*categories.forEach(s -> {
+		categories.forEach(s -> {
 			try {
 				Category cat = g.getCategoriesByName(((JSONObject) s).getString("name"), true).get(0);
 				((JSONObject) s).getJSONArray("permissions").forEach(o -> {
@@ -145,7 +149,7 @@ public class Backup {
 				});
 			} catch (ErrorResponseException | IndexOutOfBoundsException ignore) {
 			}
-		});*/
+		});
 	}
 
 	public void saveServerData(Guild g) {
