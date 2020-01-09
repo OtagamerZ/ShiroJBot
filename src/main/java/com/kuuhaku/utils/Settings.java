@@ -457,7 +457,7 @@ public class Settings {
         cl.put(args[2], newRoleLevel);
         gc.setCargosLvl(new JSONObject(cl));
         GuildDAO.updateGuildSettings(gc);
-        message.getTextChannel().sendMessage("✅ | O cargo dado no level " + args[2] + " do servidor foi trocado para " + newRoleLevel.getAsMention() + " com sucesso.").queue();
+        message.getTextChannel().sendMessage("✅ | O cargo " + newRoleLevel.getAsMention() + " foi atribuido ao level " + args[2] + " com sucesso.").queue();
     }
 
     public static void updateModules(String[] args, Message message, GuildConfig gc) {
