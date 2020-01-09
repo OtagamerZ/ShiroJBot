@@ -1,15 +1,14 @@
 package com.kuuhaku.model;
 
-import net.dv8tion.jda.api.entities.ChannelType;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.GuildChannel;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 @Entity
@@ -64,13 +63,15 @@ public class Backup {
 		JSONArray categories = data.getJSONArray("categories");
 		JSONArray roles = data.getJSONArray("roles");
 
+		Map<String, Role> createdRoles = new HashMap<>();
+
 		roles.forEach(r -> {
 			JSONObject role = (JSONObject) r;
-			g.createRole()
+			createdRoles.put(((JSONObject) r).getString("name"), g.createRole()
 					.setName(role.getString("name"))
 					.setColor(role.has("color") ? (Integer) role.get("color") : null)
 					.setPermissions(role.getLong("permissions"))
-					.complete();
+					.complete());
 		});
 
 		categories.forEach(c -> {
@@ -82,7 +83,7 @@ public class Backup {
 						cat.getJSONArray("permissions").forEach(o -> {
 							JSONObject override = (JSONObject) o;
 
-							s.createPermissionOverride(override.getBoolean("role") ? g.getRolesByName(override.getString("nameOrId"), true).get(0) : Objects.requireNonNull(g.getMemberById(override.getString("nameOrId"))))
+							s.createPermissionOverride(createdRoles.get(override.getString("name")))
 									.setAllow(override.getLong("allowed"))
 									.setDeny(override.getLong("denied"))
 									.queue();
@@ -97,7 +98,7 @@ public class Backup {
 
 							if (chn.getString("type").equals("text")) {
 								s.createTextChannel(chn.getString("name"))
-										.setTopic(chn.getString("topic"))
+										.setTopic(chn.has("topic") ? chn.getString("topic") : null)
 										.setParent(s)
 										.setPosition(chn.getInt("index"))
 										.setNSFW(chn.has("nsfw") && chn.getBoolean("nsfw"))
@@ -109,7 +110,7 @@ public class Backup {
 							chn.getJSONArray("permissions").forEach(o -> {
 								JSONObject override = (JSONObject) o;
 
-								channel[0].createPermissionOverride(override.getString("nameOrId").equals("@everyone") ? g.getPublicRole() : (override.getBoolean("role") ? g.getRolesByName(override.getString("nameOrId"), true).get(0) : Objects.requireNonNull(g.getMemberById(override.getString("nameOrId")))))
+								channel[0].createPermissionOverride(createdRoles.get(override.getString("name")))
 										.setAllow(override.getLong("allowed"))
 										.setDeny(override.getLong("denied"))
 										.queue();
@@ -177,14 +178,15 @@ public class Backup {
 		JSONArray permissions = new JSONArray();
 
 		channel.getPermissionOverrides().forEach(o -> {
-			JSONObject permission = new JSONObject();
+			if (o.isRoleOverride()) {
+				JSONObject permission = new JSONObject();
 
-			permission.put("nameOrId", o.isRoleOverride() ? Objects.requireNonNull(o.getRole()).getName() : Objects.requireNonNull(o.getMember()).getId());
-			permission.put("role", o.isRoleOverride());
-			permission.put("allowed", o.getAllowedRaw());
-			permission.put("denied", o.getDeniedRaw());
+				permission.put("name", Objects.requireNonNull(o.getRole()).getName());
+				permission.put("allowed", o.getAllowedRaw());
+				permission.put("denied", o.getDeniedRaw());
 
-			permissions.put(permission);
+				permissions.put(permission);
+			}
 		});
 
 		channelData.put("permissions", permissions);
