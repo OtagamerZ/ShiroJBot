@@ -401,31 +401,30 @@ public class Helper {
 
 			TextChannel channel = g.getTextChannelById(jo.getString("canalId"));
 			assert channel != null;
-			Message msg = channel.retrieveMessageById(jo.getString("msgId")).complete();
+			channel.retrieveMessageById(jo.getString("msgId")).queue(msg -> {
+				jo.getJSONObject("buttons").keySet().forEach(b -> {
+					JSONObject btns = jo.getJSONObject("buttons").getJSONObject(b);
+					Role role = g.getRoleById(btns.getString("role"));
+					assert role != null;
+					buttons.put(btns.getString("emote"), (m, ms) -> {
+						if (m.getRoles().contains(role)) {
+							g.removeRoleFromMember(m, role).queue();
+						} else {
+							g.addRoleToMember(m, role).queue();
+						}
+					});
+				});
 
-			jo.getJSONObject("buttons").keySet().forEach(b -> {
-				JSONObject btns = jo.getJSONObject("buttons").getJSONObject(b);
-				Role role = g.getRoleById(btns.getString("role"));
-				assert role != null;
-				buttons.put(btns.getString("emote"), (m, ms) -> {
-					if (m.getRoles().contains(role)) {
-						g.removeRoleFromMember(m, role).queue();
-					} else {
-						g.addRoleToMember(m, role).queue();
+				buttons.put(CANCEL, (m, ms) -> {
+					if (m.getUser() == author) {
+						JSONObject gcjo = gc.getButtonConfigs();
+						gc.setButtonConfigs(gcjo);
+						GuildDAO.updateGuildSettings(gc);
 					}
 				});
-			});
 
-			buttons.put(CANCEL, (m, ms) -> {
-				if (m.getUser() == author) {
-					JSONObject gcjo = gc.getButtonConfigs();
-					gc.setButtonConfigs(gcjo);
-					GuildDAO.updateGuildSettings(gc);
-				}
+				msg.clearReactions().queue(s -> Pages.buttonfy(Main.getInfo().getAPI(), msg, buttons, true));
 			});
-
-			msg.clearReactions().complete();
-			Pages.buttonfy(Main.getInfo().getAPI(), msg, buttons, true);
 		});
 	}
 
@@ -442,30 +441,29 @@ public class Helper {
 
 			TextChannel channel = g.getTextChannelById(jo.getString("canalId"));
 			assert channel != null;
-			Message msg = channel.retrieveMessageById(jo.getString("msgId")).complete();
+			channel.retrieveMessageById(jo.getString("msgId")).queue(msg -> {
+				jo.getJSONObject("buttons").keySet().forEach(b -> {
+					JSONObject btns = jo.getJSONObject("buttons").getJSONObject(b);
+					Role role = g.getRoleById(btns.getString("role"));
+					assert role != null;
+					buttons.put(btns.getString("emote"), (m, ms) -> {
+						if (m.getRoles().contains(role)) {
+							g.removeRoleFromMember(m, role).queue();
+						} else {
+							g.addRoleToMember(m, role).queue();
+						}
+					});
+				});
 
-			jo.getJSONObject("buttons").keySet().forEach(b -> {
-				JSONObject btns = jo.getJSONObject("buttons").getJSONObject(b);
-				Role role = g.getRoleById(btns.getString("role"));
-				assert role != null;
-				buttons.put(btns.getString("emote"), (m, ms) -> {
-					if (m.getRoles().contains(role)) {
-						g.removeRoleFromMember(m, role).queue();
-					} else {
-						g.addRoleToMember(m, role).queue();
+				buttons.put("\uD83D\uDEAA", (m, v) -> {
+					try {
+						m.kick("Não aceitou as regras.").queue();
+					} catch (InsufficientPermissionException ignore) {
 					}
 				});
-			});
 
-			buttons.put("\uD83D\uDEAA", (m, v) -> {
-				try {
-					m.kick("Não aceitou as regras.").queue();
-				} catch (InsufficientPermissionException ignore) {
-				}
+				msg.clearReactions().queue(s -> Pages.buttonfy(Main.getInfo().getAPI(), msg, buttons, false));
 			});
-
-			msg.clearReactions().complete();
-			Pages.buttonfy(Main.getInfo().getAPI(), msg, buttons, false);
 		});
 	}
 }
