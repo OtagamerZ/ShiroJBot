@@ -1,6 +1,5 @@
 package com.kuuhaku.model;
 
-import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import org.json.JSONArray;
@@ -9,7 +8,8 @@ import org.json.JSONObject;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Objects;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 
 @Entity
 public class Backup {
@@ -43,20 +43,20 @@ public class Backup {
 
 		g.getChannels().forEach(c -> {
 			try {
-				c.delete().complete();
-			} catch (ErrorResponseException ignore) {
+				c.delete().submit().get();
+			} catch (ErrorResponseException | InterruptedException | ExecutionException ignore) {
 			}
 		});
 		g.getCategories().forEach(c -> {
 			try {
-				c.delete().complete();
-			} catch (ErrorResponseException ignore) {
+				c.delete().submit().get();
+			} catch (ErrorResponseException | InterruptedException | ExecutionException ignore) {
 			}
 		});
 		g.getRoles().forEach(c -> {
 			try {
-				if (!c.getName().equalsIgnoreCase("Shiro") && !c.isPublicRole()) c.delete().complete();
-			} catch (ErrorResponseException ignore) {
+				if (!c.getName().equalsIgnoreCase("Shiro") && !c.isPublicRole()) c.delete().submit().get();
+			} catch (ErrorResponseException | InterruptedException | ExecutionException ignore) {
 			}
 		});
 
@@ -65,41 +65,53 @@ public class Backup {
 
 
 		roles.forEach(r -> {
+			try {
 			JSONObject role = (JSONObject) r;
-			g.createRole()
-					.setName(role.getString("name"))
-					.setColor(role.has("color") ? (Integer) role.get("color") : null)
-					.setPermissions(role.getLong("permissions"))
-					.queue();
+
+				g.createRole()
+						.setName(role.getString("name"))
+						.setColor(role.has("color") ? (Integer) role.get("color") : null)
+						.setPermissions(role.getLong("permissions"))
+						.submit().get();
+			} catch (InterruptedException | ExecutionException ignore) {
+			}
 		});
 
-		Callable<Boolean> setup = () -> {
-			categories.forEach(c -> {
-				JSONObject cat = (JSONObject) c;
+		categories.forEach(c -> {
+			JSONObject cat = (JSONObject) c;
 
-				g.createCategory(cat.getString("name"))
+			try {
+				Category s = g.createCategory(cat.getString("name"))
 						.setPosition(cat.getInt("index"))
-						.queue(s -> {
-							JSONArray channels = cat.getJSONArray("channels");
+						.submit().get();
 
-							channels.forEach(ch -> {
-								JSONObject chn = (JSONObject) ch;
+				JSONArray channels = cat.getJSONArray("channels");
 
-								if (chn.getString("type").equals("text")) {
-									s.createTextChannel(chn.getString("name"))
-											.setTopic(chn.has("topic") ? chn.getString("topic") : null)
-											.setParent(s)
-											.setPosition(chn.getInt("index"))
-											.setNSFW(chn.has("nsfw") && chn.getBoolean("nsfw"))
-											.queue();
-								} else {
-									s.createVoiceChannel(chn.getString("name")).queue();
-								}
-							});
-						});
-			});
-			return true;
-		};
+				channels.forEach(ch -> {
+					JSONObject chn = (JSONObject) ch;
+
+					if (chn.getString("type").equals("text")) {
+						try {
+							s.createTextChannel(chn.getString("name"))
+									.setTopic(chn.has("topic") ? chn.getString("topic") : null)
+									.setParent(s)
+									.setPosition(chn.getInt("index"))
+									.setNSFW(chn.has("nsfw") && chn.getBoolean("nsfw"))
+									.submit().get();
+						} catch (InterruptedException | ExecutionException ignore) {
+						}
+					} else {
+						try {
+							s.createVoiceChannel(chn.getString("name")).submit().get();
+						} catch (InterruptedException | ExecutionException ignore) {
+						}
+					}
+				});
+			} catch (InterruptedException | ExecutionException ignore) {
+			}
+		});
+
+		System.out.println("fase 1 pronta");
 
 		Callable<Boolean> finish = () -> {
 			categories.forEach(s -> {
@@ -134,26 +146,6 @@ public class Backup {
 			});
 			return true;
 		};
-
-		try {
-			Future<Boolean> task;
-
-			ExecutorService executor = Executors.newSingleThreadExecutor();
-
-			task = executor.submit(setup);
-			task.get();
-
-			Helper.logger(this.getClass()).info(g.getName() + ": canais e cargos restaurados.");
-
-			/*task = executor.submit(finish);
-			task.get();
-
-			Helper.logger(this.getClass()).info(g.getName() + ": permissões restauradas.");*/
-
-			executor.shutdown();
-		} catch (InterruptedException | ExecutionException e) {
-			Helper.logger(this.getClass()).error("Erro ao recuperar backup: " + e + " | " + e.getStackTrace()[0]);
-		}
 	}
 
 	public void saveServerData(Guild g) {
