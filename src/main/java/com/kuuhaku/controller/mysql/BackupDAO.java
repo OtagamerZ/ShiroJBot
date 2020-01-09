@@ -1,11 +1,10 @@
 package com.kuuhaku.controller.mysql;
 
-import com.kuuhaku.model.CustomAnswers;
-import com.kuuhaku.model.DataDump;
-import com.kuuhaku.model.Member;
-import com.kuuhaku.model.guildConfig;
+import com.kuuhaku.model.*;
+import net.dv8tion.jda.api.entities.Guild;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 public class BackupDAO {
@@ -38,10 +37,35 @@ public class BackupDAO {
 
 		Query ca = em.createQuery("SELECT c FROM CustomAnswers c", CustomAnswers.class);
 		Query m = em.createQuery("SELECT m FROM Member m", Member.class);
-		Query gc = em.createQuery("SELECT g FROM guildConfig g", guildConfig.class);
+		Query gc = em.createQuery("SELECT g FROM GuildConfig g", GuildConfig.class);
 		DataDump dump = new DataDump(ca.getResultList(), m.getResultList(), gc.getResultList());
 		em.close();
 
 		return dump;
+	}
+
+	public static Backup getGuildBackup(Guild g) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT b FROM Backup b WHERE b.id = :id", Backup.class);
+		q.setParameter("id", g.getId());
+
+		try {
+			return (Backup) q.getSingleResult();
+		} catch (NoResultException e) {
+			return new Backup();
+		} finally {
+			em.close();
+		}
+	}
+
+	public static void saveBackup(Backup b) {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		em.merge(b);
+		em.getTransaction().commit();
+
+		em.close();
 	}
 }

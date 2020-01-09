@@ -74,6 +74,7 @@ public class CommandManager {
 			add(new AllowImgCommand());
 			add(new RoleChooserCommand());
 			add(new GatekeeperCommand());
+			add(new BackupCommand());
 
 			//INFORMATION
 			add(new ComandosCommand());

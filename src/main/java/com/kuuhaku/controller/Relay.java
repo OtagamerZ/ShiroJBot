@@ -9,8 +9,8 @@ import com.kuuhaku.controller.mysql.TagDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.Manager;
 import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.model.GuildConfig;
 import com.kuuhaku.model.RelayBlockList;
-import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.TagIcons;
@@ -204,7 +204,7 @@ public class Relay {
 		}
 	}
 
-	public MessageEmbed getRelayInfo(guildConfig gc) {
+	public MessageEmbed getRelayInfo(GuildConfig gc) {
 		updateRelays();
 		checkSize();
 		EmbedBuilder eb = new EmbedBuilder();
@@ -229,9 +229,9 @@ public class Relay {
 	private void updateRelays() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT g FROM guildConfig g", guildConfig.class);
+		Query q = em.createQuery("SELECT g FROM GuildConfig g", GuildConfig.class);
 
-		List<guildConfig> gc = q.getResultList();
+		List<GuildConfig> gc = q.getResultList();
 		gc.removeIf(g -> g.getCanalRelay() == null || Main.getJibril().getGuildById(g.getGuildID()) == null);
 
 		gc.forEach(g -> relays.put(g.getGuildID(), g.getCanalRelay()));
