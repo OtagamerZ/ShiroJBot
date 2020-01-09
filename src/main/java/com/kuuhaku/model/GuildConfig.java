@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 @Entity
-public class guildConfig {
+public class GuildConfig {
 	@Id
 	private String guildID;
 	private String name;
@@ -73,7 +73,7 @@ public class guildConfig {
 	private String buttonConfigs = "";
 	private boolean markForDelete;
 
-	public guildConfig() {
+	public GuildConfig() {
 	}
 
 	public String getName() {

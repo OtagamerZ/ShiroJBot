@@ -24,8 +24,8 @@ import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.method.Pages;
 import com.kuuhaku.model.Extensions;
 import com.kuuhaku.model.GamblePool;
+import com.kuuhaku.model.GuildConfig;
 import com.kuuhaku.model.Page;
-import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.type.PageType;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -234,7 +234,7 @@ public class Helper {
 	}
 
 	public static void logToChannel(User u, boolean isCommand, Command c, String msg, Guild g) {
-		guildConfig gc = GuildDAO.getGuildById(g.getId());
+		GuildConfig gc = GuildDAO.getGuildById(g.getId());
 		if (gc.getCanalLog() == null || gc.getCanalLog().isEmpty()) return;
 		else if (g.getTextChannelById(gc.getCanalLog()) == null) gc.setCanalLog("");
 		try {
@@ -388,7 +388,7 @@ public class Helper {
 		pages.add(new Page(PageType.EMBED, eb.build()));
 	}
 
-	public static void refreshButtons(guildConfig gc, User author) {
+	public static void refreshButtons(GuildConfig gc, User author) {
 		JSONObject ja = gc.getButtonConfigs();
 
 		if (ja.isEmpty()) return;
@@ -428,7 +428,7 @@ public class Helper {
 		});
 	}
 
-	public static void gatekeep(guildConfig gc) {
+	public static void gatekeep(GuildConfig gc) {
 		JSONObject ja = gc.getButtonConfigs();
 
 		if (ja.isEmpty()) return;

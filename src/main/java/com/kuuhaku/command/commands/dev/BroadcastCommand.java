@@ -6,9 +6,9 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.mysql.GuildDAO;
 import com.kuuhaku.controller.mysql.TagDAO;
 import com.kuuhaku.method.Pages;
+import com.kuuhaku.model.GuildConfig;
 import com.kuuhaku.model.Page;
 import com.kuuhaku.model.Tags;
-import com.kuuhaku.model.guildConfig;
 import com.kuuhaku.type.PageType;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -42,15 +42,15 @@ public class BroadcastCommand extends Command {
 
 		switch (args[0].toLowerCase()) {
 			case "geral":
-				List<guildConfig> gcs = GuildDAO.getAllGuilds();
-				List<List<guildConfig>> gcPages = Helper.chunkify(gcs, 10);
+				List<GuildConfig> gcs = GuildDAO.getAllGuilds();
+				List<List<GuildConfig>> gcPages = Helper.chunkify(gcs, 10);
 
-				for (List<guildConfig> gs : gcPages) {
+				for (List<GuildConfig> gs : gcPages) {
 					result.clear();
 					eb.clear();
 					sb.setLength(0);
 
-					for (guildConfig gc : gs) {
+					for (GuildConfig gc : gs) {
 						try {
 							Objects.requireNonNull(Main.getInfo().getGuildByID(gc.getGuildID()).getTextChannelById(gc.getCanalLog())).sendMessage(msg).queue();
 							result.put(gc.getName(), true);

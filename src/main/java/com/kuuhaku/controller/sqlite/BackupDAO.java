@@ -2,8 +2,8 @@ package com.kuuhaku.controller.sqlite;
 
 import com.kuuhaku.model.CustomAnswers;
 import com.kuuhaku.model.DataDump;
+import com.kuuhaku.model.GuildConfig;
 import com.kuuhaku.model.Member;
-import com.kuuhaku.model.guildConfig;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -47,10 +47,10 @@ public class BackupDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static List<guildConfig> getGuildDump() {
+	public static List<GuildConfig> getGuildDump() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT g FROM guildConfig g", guildConfig.class);
+		Query q = em.createQuery("SELECT g FROM GuildConfig g", GuildConfig.class);
 
 		return q.getResultList();
 	}

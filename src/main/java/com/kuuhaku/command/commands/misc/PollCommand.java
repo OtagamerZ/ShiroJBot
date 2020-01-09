@@ -21,7 +21,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.GuildDAO;
-import com.kuuhaku.model.guildConfig;
+import com.kuuhaku.model.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -49,7 +49,7 @@ public class PollCommand extends Command {
 			return;
 		}
 
-		guildConfig gc = GuildDAO.getGuildById(guild.getId());
+		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setTitle(":notepad_spiral: Enquete criada por " + member.getEffectiveName());
