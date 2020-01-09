@@ -58,10 +58,13 @@ public class BackupCommand extends Command {
 			channel.sendMessage(":x: | Você precisa aguardar 1 dia antes de restaurar o backup novamente.").queue();
 		}*/ else if (data.getGuild() == null || data.getGuild().isEmpty()) {
 			channel.sendMessage(":x: | Nenhum backup foi feito ainda, utilize o comando `" + prefix + "backup salvar` para criar um backup.").queue();
+		} else if (args[0].equalsIgnoreCase("recuperar") && !Helper.containsAny(args[1], "canais", "cargos")) {
+			channel.sendMessage(":x: | O segundo argumento deve ser canais ou cargos.").queue();
+			return;
 		} else if (args[1].equalsIgnoreCase("canais")) {
 			data.restoreChannels(guild);
 		} else if (args[1].equalsIgnoreCase("cargos")) {
-			data.restorePermissions(guild);
+			data.restoreRoles(guild);
 		}
 	}
 }
