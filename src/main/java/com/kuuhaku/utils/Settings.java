@@ -256,6 +256,29 @@ public class Settings {
         message.getTextChannel().sendMessage("✅ | O canal de sugestões do servidor foi trocado para " + newCanalSUG.getAsMention() + " com sucesso.").queue();
     }
 
+    public static void updateWarnTime(String[] args, Message message, GuildConfig gc) {
+        int antigoWarnTime = GuildDAO.getGuildById(message.getGuild().getId()).getWarnTime();
+
+        if (args.length < 2) {
+            message.getTextChannel().sendMessage("O tempo de punições atual do servidor é " + antigoWarnTime + " segundos.").queue();
+            return;
+        } else if (args[1].equals("reset") || args[1].equals("resetar")) {
+            gc.setWarnTime(60);
+            GuildDAO.updateGuildSettings(gc);
+            message.getTextChannel().sendMessage("✅ | O tempo de punições do servidor foi resetado para 60 segundos com sucesso.").queue();
+            return;
+        } else if (!StringUtils.isNumeric(args[1])) {
+            message.getTextChannel().sendMessage(":x: | O tempo inserido é inválido, ele deve ser um valor inteiro.").queue();
+            return;
+        }
+
+        int newWarnTime = Integer.parseInt(args[1]);
+
+        gc.setWarnTime(newWarnTime);
+        GuildDAO.updateGuildSettings(gc);
+        message.getTextChannel().sendMessage("✅ | O tempo de punições do servidor foi trocado para " + newWarnTime + " segundos com sucesso.").queue();
+    }
+
     public static void updatePollTime(String[] args, Message message, GuildConfig gc) {
         int antigoPollTime = GuildDAO.getGuildById(message.getGuild().getId()).getPollTime();
 
@@ -304,34 +327,8 @@ public class Settings {
 
         gc.setCargoWarn(newRoleWarns.getId());
         GuildDAO.updateGuildSettings(gc);
-        message.getTextChannel().sendMessage("✅ | O cargo de warns do servidor foi trocado para " + newRoleWarns.getAsMention() + " com sucesso.").queue();
+        message.getTextChannel().sendMessage("✅ | O cargo de punição do servidor foi trocado para " + newRoleWarns.getAsMention() + " com sucesso.").queue();
     }
-
-    /*
-    public static void updateCargoNew(String[] args, Message message, GuildConfig gc) {
-        String antigoCargoWarn = SQLite.getGuildCargoWarn(message.getGuild().getId());
-
-        if(args.length < 2) {
-            if(antigoCargoWarn.equals("Não definido.")) {
-                message.getTextChannel().sendMessage("O cargo de warns atual do servidor ainda não foi definido.").queue();
-            } else {
-                message.getTextChannel().sendMessage("O cargo de warns atual do servidor é `" + antigoCargoWarn + "`.").queue();
-            }
-            return;
-        }
-        if(message.getMentionedChannels().size() > 1) { message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 `cargo.").queue(); return; }
-        if(args[1].equals("reset") || args[1].equals("resetar")) {
-            SQLite.updateGuildCargoWarn(null, gc);
-            message.getTextChannel().sendMessage("✅ | O cargo de warns do servidor foi resetado com sucesso.").queue();
-            return;
-        }
-
-        Role newRoleWarns = message.getMentionedRoles().get(0);
-
-        SQLite.updateGuildCargoWarn(newRoleWarns.getId(), gc);
-        message.getTextChannel().sendMessage("✅ | O cargo de warns do servidor foi trocado para " + newRoleWarns.getAsMention() + " com sucesso.").queue();
-    }
-    */
 
     public static void updateLevelNotif(String[] args, Message message, GuildConfig gc) {
         boolean LevelUpNotif = GuildDAO.getGuildById(message.getGuild().getId()).isLvlNotif();
