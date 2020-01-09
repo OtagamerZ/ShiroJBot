@@ -10,10 +10,6 @@ import javax.persistence.Id;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 @Entity
 public class Backup {
@@ -69,23 +65,17 @@ public class Backup {
 
 		Map<String, Role> createdRoles = new HashMap<>();
 
-		Callable<Boolean> addRoles = () -> {
-			roles.forEach(r -> {
-				JSONObject role = (JSONObject) r;
-				createdRoles.put(((JSONObject) r).getString("name"), g.createRole()
-						.setName(role.getString("name"))
-						.setColor(role.has("color") ? (Integer) role.get("color") : null)
-						.setPermissions(role.getLong("permissions"))
-						.complete());
-			});
-			return true;
-		};
+		roles.forEach(r -> {
+			JSONObject role = (JSONObject) r;
+			Role ro = g.createRole()
+					.setName(role.getString("name"))
+					.setColor(role.has("color") ? (Integer) role.get("color") : null)
+					.setPermissions(role.getLong("permissions"))
+					.complete();
+			createdRoles.put(ro.getName(), ro);
+		});
 
-		Future<Boolean> done = Executors.newSingleThreadExecutor().submit(addRoles);
-		try {
-			done.get();
-		} catch (InterruptedException | ExecutionException ignore) {
-		}
+		System.out.println(createdRoles);
 
 		categories.forEach(c -> {
 			JSONObject cat = (JSONObject) c;
