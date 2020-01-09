@@ -5,10 +5,10 @@ import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Objects;
-import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
 
 @Entity
 public class Backup {
@@ -16,6 +16,9 @@ public class Backup {
 	private int id;
 	private String guild;
 	private String serverData;
+	@Column(columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Timestamp lastRestore;
 
 	public int getId() {
 		return id;
@@ -62,85 +65,76 @@ public class Backup {
 		JSONArray categories = data.getJSONArray("categories");
 		JSONArray roles = data.getJSONArray("roles");
 
-		Callable<Boolean> setup = () -> {
-			roles.forEach(r -> {
-				JSONObject role = (JSONObject) r;
+		CompletableFuture.runAsync(() -> roles.forEach(r -> {
+			JSONObject role = (JSONObject) r;
 
-				g.createRole()
-						.setName(role.getString("name"))
-						.setColor(role.has("color") ? (Integer) role.get("color") : null)
-						.setPermissions(role.getLong("permissions"))
-						.queue();
-			});
+			g.createRole()
+					.setName(role.getString("name"))
+					.setColor(role.has("color") ? (Integer) role.get("color") : null)
+					.setPermissions(role.getLong("permissions"))
+					.queue();
+		}));
 
-			categories.forEach(c -> {
-				JSONObject cat = (JSONObject) c;
+		System.out.println("cargos adicionados");
 
-				g.createCategory(cat.getString("name"))
-						.setPosition(cat.getInt("index"))
-						.queue(s -> {
+		CompletableFuture.runAsync(() -> categories.forEach(c -> {
+			JSONObject cat = (JSONObject) c;
 
-							JSONArray channels = cat.getJSONArray("channels");
+			g.createCategory(cat.getString("name"))
+					.setPosition(cat.getInt("index"))
+					.queue(s -> {
 
-							channels.forEach(ch -> {
-								JSONObject chn = (JSONObject) ch;
+						JSONArray channels = cat.getJSONArray("channels");
 
-								if (chn.getString("type").equals("text")) {
-									s.createTextChannel(chn.getString("name"))
-											.setTopic(chn.has("topic") ? chn.getString("topic") : null)
-											.setParent(s)
-											.setPosition(chn.getInt("index"))
-											.setNSFW(chn.has("nsfw") && chn.getBoolean("nsfw"))
-											.queue();
-								} else {
-									s.createVoiceChannel(chn.getString("name")).queue();
-								}
-							});
-						});
-			});
-			return true;
-		};
+						channels.forEach(ch -> {
+							JSONObject chn = (JSONObject) ch;
 
-		Callable<Boolean> finish = () -> {
-			categories.forEach(s -> {
-				try {
-					Category cat = g.getCategoriesByName(((JSONObject) s).getString("name"), true).get(0);
-					((JSONObject) s).getJSONArray("permissions").forEach(o -> {
-						JSONObject override = (JSONObject) o;
-
-						cat.createPermissionOverride(override.get("name").equals("@everyone") ? g.getPublicRole() : g.getRolesByName(override.getString("name"), true).get(0))
-								.setAllow(override.getLong("allowed"))
-								.setDeny(override.getLong("denied"))
-								.queue();
-					});
-
-					((JSONObject) s).getJSONArray("channels").forEach(chn -> {
-						try {
-							GuildChannel channel = ((JSONObject) chn).getString("type").equals("text") ? g.getTextChannelsByName(((JSONObject) chn).getString("name"), true).get(0) : g.getVoiceChannelsByName(((JSONObject) chn).getString("name"), true).get(0);
-
-							((JSONObject) chn).getJSONArray("permissions").forEach(o -> {
-								JSONObject override = (JSONObject) o;
-
-								channel.createPermissionOverride(override.get("name").equals("@everyone") ? g.getPublicRole() : g.getRolesByName(override.getString("name"), true).get(0))
-										.setAllow(override.getLong("allowed"))
-										.setDeny(override.getLong("denied"))
+							if (chn.getString("type").equals("text")) {
+								s.createTextChannel(chn.getString("name"))
+										.setTopic(chn.has("topic") ? chn.getString("topic") : null)
+										.setParent(s)
+										.setPosition(chn.getInt("index"))
+										.setNSFW(chn.has("nsfw") && chn.getBoolean("nsfw"))
 										.queue();
-							});
-						} catch (ErrorResponseException | IndexOutOfBoundsException ignore) {
-						}
+							} else {
+								s.createVoiceChannel(chn.getString("name")).queue();
+							}
+						});
 					});
-				} catch (ErrorResponseException | IndexOutOfBoundsException ignore) {
-				}
-			});
-			return true;
-		};
+		}));
 
-		try {
-			setup.call();
-			System.out.println("fase 1 pronta");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		System.out.println("canais e categorias adicionadas");
+
+		/*categories.forEach(s -> {
+			try {
+				Category cat = g.getCategoriesByName(((JSONObject) s).getString("name"), true).get(0);
+				((JSONObject) s).getJSONArray("permissions").forEach(o -> {
+					JSONObject override = (JSONObject) o;
+
+					cat.createPermissionOverride(override.get("name").equals("@everyone") ? g.getPublicRole() : g.getRolesByName(override.getString("name"), true).get(0))
+							.setAllow(override.getLong("allowed"))
+							.setDeny(override.getLong("denied"))
+							.queue();
+				});
+
+				((JSONObject) s).getJSONArray("channels").forEach(chn -> {
+					try {
+						GuildChannel channel = ((JSONObject) chn).getString("type").equals("text") ? g.getTextChannelsByName(((JSONObject) chn).getString("name"), true).get(0) : g.getVoiceChannelsByName(((JSONObject) chn).getString("name"), true).get(0);
+
+						((JSONObject) chn).getJSONArray("permissions").forEach(o -> {
+							JSONObject override = (JSONObject) o;
+
+							channel.createPermissionOverride(override.get("name").equals("@everyone") ? g.getPublicRole() : g.getRolesByName(override.getString("name"), true).get(0))
+									.setAllow(override.getLong("allowed"))
+									.setDeny(override.getLong("denied"))
+									.queue();
+						});
+					} catch (ErrorResponseException | IndexOutOfBoundsException ignore) {
+					}
+				});
+			} catch (ErrorResponseException | IndexOutOfBoundsException ignore) {
+			}
+		});*/
 	}
 
 	public void saveServerData(Guild g) {
