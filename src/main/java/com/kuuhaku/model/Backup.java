@@ -5,12 +5,11 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.util.Comparator;
-import java.util.Map;
 import java.util.Objects;
 
 @Entity
@@ -62,10 +61,10 @@ public class Backup {
 			}
 		});
 
-		Map<String, Object> categories = data.getJSONObject("categories").toMap();
-		Map<String, Object> roles = data.getJSONObject("roles").toMap();
+		JSONArray categories = data.getJSONArray("categories");
+		JSONArray roles = data.getJSONArray("roles");
 
-		roles.values().forEach(r -> {
+		roles.forEach(r -> {
 			JSONObject role = (JSONObject) r;
 			g.createRole()
 					.setName(role.getString("name"))
@@ -74,7 +73,7 @@ public class Backup {
 					.queue();
 		});
 
-		categories.values().stream().sorted(Comparator.comparingInt(c -> ((JSONObject) c).getInt("index"))).forEach(c -> {
+		categories.forEach(c -> {
 			JSONObject cat = (JSONObject) c;
 
 			g.createCategory(cat.getString("name"))
@@ -89,9 +88,9 @@ public class Backup {
 									.queue();
 						});
 
-						Map<String, Object> channels = cat.getJSONObject("channels").toMap();
+						JSONArray channels = cat.getJSONArray("channels");
 
-						channels.values().stream().sorted(Comparator.comparingInt(i -> ((JSONObject) i).getInt("index"))).forEach(ch -> {
+						channels.forEach(ch -> {
 							JSONObject chn = (JSONObject) ch;
 
 							final GuildChannel[] channel = new GuildChannel[1];
@@ -122,7 +121,7 @@ public class Backup {
 	public void saveServerData(Guild g) {
 		JSONObject data = new JSONObject();
 
-		JSONObject categories = new JSONObject();
+		JSONArray categories = new JSONArray();
 
 		g.getCategories().forEach(cat -> {
 			JSONObject category = new JSONObject();
@@ -130,7 +129,7 @@ public class Backup {
 			category.put("name", cat.getName());
 			category.put("index", cat.getPosition());
 
-			JSONObject channels = new JSONObject();
+			JSONArray channels = new JSONArray();
 
 			cat.getChannels().forEach(channel -> {
 				JSONObject channelData = new JSONObject();
@@ -155,7 +154,7 @@ public class Backup {
 
 				channelData.put("permissions", permissions);
 
-				channels.put(channel.getId(), channelData);
+				channels.put(channelData);
 			});
 
 			JSONObject permissions = new JSONObject();
@@ -174,10 +173,10 @@ public class Backup {
 			category.put("permissions", permissions);
 			category.put("channels", channels);
 
-			categories.put(cat.getId(), category);
+			categories.put(category);
 		});
 
-		JSONObject roles = new JSONObject();
+		JSONArray roles = new JSONArray();
 
 		g.getRoles().forEach(r -> {
 			if (!r.getName().equalsIgnoreCase("Shiro") && !r.isPublicRole()) {
@@ -188,7 +187,7 @@ public class Backup {
 
 				role.put("permissions", r.getPermissionsRaw());
 
-				roles.put(r.getId(), role);
+				roles.put(role);
 			}
 		});
 
