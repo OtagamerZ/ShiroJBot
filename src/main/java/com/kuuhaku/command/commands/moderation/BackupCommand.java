@@ -30,7 +30,7 @@ import net.dv8tion.jda.api.entities.*;
 public class BackupCommand extends Command {
 
 	public BackupCommand() {
-		super("backup", new String[]{"dados"}, "<salvar/recuperar/permissoes>", "Salva ou recupera um backup do servidor - ISSO IRÁ SOBRESCREVER COMPLETAMENTE O ESTADO ATUAL DO SERVIDOR.", Category.MODERACAO);
+		super("backup", new String[]{"dados"}, "<salvar/recuperar>", "Salva ou recupera um backup do servidor - ISSO IRÁ SOBRESCREVER COMPLETAMENTE O ESTADO ATUAL DO SERVIDOR.", Category.MODERACAO);
 	}
 
 	@Override
@@ -38,14 +38,14 @@ public class BackupCommand extends Command {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 		Backup data = BackupDAO.getGuildBackup(guild);
 
-		if (args.length < 1) {
-			channel.sendMessage(":x: | É necessário definir se a ação é de salvar ou recuperar.").queue();
+		if (args.length < 2) {
+			channel.sendMessage(":x: | É necessário definir se a ação é de salvar ou recuperar e definir o que devo recuperar (canais ou cargos).").queue();
 			return;
-		} else if (!Helper.containsAny(args[0], "salvar", "recuperar", "permissoes")) {
-			channel.sendMessage(":x: | O primeiro argumento deve ser salvar, recuperar ou permissoes.").queue();
+		} else if (!Helper.containsAny(args[0], "salvar", "recuperar")) {
+			channel.sendMessage(":x: | O primeiro argumento deve ser salvar ou recuperar.").queue();
 			return;
 		} else if (!guild.getSelfMember().hasPermission(Permission.ADMINISTRATOR)) {
-			channel.sendMessage(":x: | Preciso da permissão de administrador para efetuar operações de backup.").queue();
+			channel.sendMessage(":x: | Preciso da permissão de administradora para efetuar operações de backup.").queue();
 			return;
 		}
 
@@ -58,9 +58,9 @@ public class BackupCommand extends Command {
 			channel.sendMessage(":x: | Você precisa aguardar 1 dia antes de restaurar o backup novamente.").queue();
 		}*/ else if (data.getGuild() == null || data.getGuild().isEmpty()) {
 			channel.sendMessage(":x: | Nenhum backup foi feito ainda, utilize o comando `" + prefix + "backup salvar` para criar um backup.").queue();
-		} else if (args[0].equalsIgnoreCase("recuperar")) {
-			data.recoverServerData(guild);
-		} else if (args[0].equalsIgnoreCase("permissoes")) {
+		} else if (args[1].equalsIgnoreCase("canais")) {
+			data.restoreChannels(guild);
+		} else if (args[1].equalsIgnoreCase("cargos")) {
 			data.restorePermissions(guild);
 		}
 	}
