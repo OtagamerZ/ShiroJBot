@@ -57,7 +57,7 @@ public class Backup {
 		});
 		g.getRoles().forEach(c -> {
 			try {
-				c.delete().queue();
+				if (!c.getName().equalsIgnoreCase("Shiro")) c.delete().queue();
 			} catch (ErrorResponseException ignore) {
 			}
 		});
@@ -80,42 +80,42 @@ public class Backup {
 			g.createCategory(cat.getString("name"))
 					.setPosition(cat.getInt("index"))
 					.queue(s -> {
-				cat.getJSONObject("permissions").toMap().values().forEach(o -> {
-					JSONObject override = (JSONObject) o;
+						cat.getJSONObject("permissions").toMap().values().forEach(o -> {
+							JSONObject override = (JSONObject) o;
 
-					s.createPermissionOverride(override.getBoolean("role") ? g.getRolesByName(override.getString("nameOrId"), true).get(0) : Objects.requireNonNull(g.getMemberById(override.getString("nameOrId"))))
-							.setAllow(override.getLong("allowed"))
-							.setDeny(override.getLong("denied"))
-							.queue();
-				});
+							s.createPermissionOverride(override.getBoolean("role") ? g.getRolesByName(override.getString("nameOrId"), true).get(0) : Objects.requireNonNull(g.getMemberById(override.getString("nameOrId"))))
+									.setAllow(override.getLong("allowed"))
+									.setDeny(override.getLong("denied"))
+									.queue();
+						});
 
-				Map <String, Object> channels = cat.getJSONObject("channels").toMap();
+						Map<String, Object> channels = cat.getJSONObject("channels").toMap();
 
-				channels.values().stream().sorted(Comparator.comparingInt(i -> ((JSONObject) i).getInt("index"))).forEach(ch -> {
-					JSONObject chn = (JSONObject) ch;
+						channels.values().stream().sorted(Comparator.comparingInt(i -> ((JSONObject) i).getInt("index"))).forEach(ch -> {
+							JSONObject chn = (JSONObject) ch;
 
-					final GuildChannel[] channel = new GuildChannel[1];
+							final GuildChannel[] channel = new GuildChannel[1];
 
-					if (chn.getString("type").equals("text")) {
-						s.createTextChannel(chn.getString("name"))
-								.setTopic(chn.getString("topic"))
-								.setParent(s)
-								.setPosition(chn.getInt("index"))
-								.queue(textChannel -> channel[0] = textChannel);
-					} else {
-						s.createVoiceChannel(chn.getString("name")).queue(voiceChannel -> channel[0] = voiceChannel);
-					}
+							if (chn.getString("type").equals("text")) {
+								s.createTextChannel(chn.getString("name"))
+										.setTopic(chn.getString("topic"))
+										.setParent(s)
+										.setPosition(chn.getInt("index"))
+										.queue(textChannel -> channel[0] = textChannel);
+							} else {
+								s.createVoiceChannel(chn.getString("name")).queue(voiceChannel -> channel[0] = voiceChannel);
+							}
 
-					chn.getJSONObject("permissions").toMap().values().forEach(o -> {
-						JSONObject override = (JSONObject) o;
+							chn.getJSONObject("permissions").toMap().values().forEach(o -> {
+								JSONObject override = (JSONObject) o;
 
-						channel[0].createPermissionOverride(override.getBoolean("role") ? g.getRolesByName(override.getString("nameOrId"), true).get(0) : Objects.requireNonNull(g.getMemberById(override.getString("nameOrId"))))
-								.setAllow(override.getLong("allowed"))
-								.setDeny(override.getLong("denied"))
-								.queue();
+								channel[0].createPermissionOverride(override.getBoolean("role") ? g.getRolesByName(override.getString("nameOrId"), true).get(0) : Objects.requireNonNull(g.getMemberById(override.getString("nameOrId"))))
+										.setAllow(override.getLong("allowed"))
+										.setDeny(override.getLong("denied"))
+										.queue();
+							});
+						});
 					});
-				});
-			});
 		});
 	}
 
@@ -180,14 +180,16 @@ public class Backup {
 		JSONObject roles = new JSONObject();
 
 		g.getRoles().forEach(r -> {
-			JSONObject role = new JSONObject();
+			if (!r.getName().equalsIgnoreCase("Shiro")) {
+				JSONObject role = new JSONObject();
 
-			role.put("name", r.getName());
-			role.put("color", r.getColor() == null ? null : r.getColor().getRGB());
+				role.put("name", r.getName());
+				role.put("color", r.getColor() == null ? null : r.getColor().getRGB());
 
-			role.put("permissions", r.getPermissionsRaw());
+				role.put("permissions", r.getPermissionsRaw());
 
-			roles.put(r.getId(), role);
+				roles.put(r.getId(), role);
+			}
 		});
 
 		data.put("categories", categories);
