@@ -44,19 +44,25 @@ public class Backup {
 
 		g.getChannels().forEach(c -> {
 			try {
-				c.delete().queue();
+				if (g.getChannels().contains(c)) {
+					c.delete().queue();
+				}
 			} catch (ErrorResponseException ignore) {
 			}
 		});
 		g.getCategories().forEach(c -> {
 			try {
-				c.delete().queue();
+				if (g.getCategories().contains(c)) {
+					c.delete().queue();
+				}
 			} catch (ErrorResponseException ignore) {
 			}
 		});
 		g.getRoles().forEach(c -> {
 			try {
-				if (!c.getName().equalsIgnoreCase("Shiro") && !c.isPublicRole()) c.delete().queue();
+				if (g.getRoles().contains(c) && !c.getName().equalsIgnoreCase("Shiro") && !c.isPublicRole()) {
+					c.delete().queue();
+				}
 			} catch (ErrorResponseException ignore) {
 			}
 		});
