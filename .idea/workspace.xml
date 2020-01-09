@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="271f62a3-9e6a-4818-8029-c8d623fc8628" name="Default Changelist" comment="Correção">
+    <list default="true" id="271f62a3-9e6a-4818-8029-c8d623fc8628" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/Backup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/Backup.java" afterDir="false" />
     </list>
@@ -95,13 +95,6 @@
       <workItem from="1578417115081" duration="11257000" />
       <workItem from="1578453407096" duration="2905000" />
       <workItem from="1578529344055" duration="11359000" />
-    </task>
-    <task id="LOCAL-00016" summary="Atualizada versão da Shiro">
-      <created>1578442019332</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1578442019332</updated>
     </task>
     <task id="LOCAL-00017" summary="Atualizada versão da Shiro">
       <created>1578442084011</created>
@@ -439,7 +432,14 @@
       <option name="project" value="LOCAL" />
       <updated>1578541919088</updated>
     </task>
-    <option name="localTasksCounter" value="65" />
+    <task id="LOCAL-00065" summary="Correção no JSON do backup">
+      <created>1578581000382</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1578581000383</updated>
+    </task>
+    <option name="localTasksCounter" value="66" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -453,7 +453,9 @@
     <MESSAGE value="Correção no comando de cargo por botão" />
     <MESSAGE value="Comando de porteiro adicionado" />
     <MESSAGE value="Comando de backup adicionado" />
-    <option name="LAST_COMMIT_MESSAGE" value="Comando de backup adicionado" />
+    <MESSAGE value="Correção" />
+    <MESSAGE value="Correção no JSON do backup" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção no JSON do backup" />
   </component>
   <component name="WindowStateProjectService">
     <state x="275" y="44" key="#Assign_Data_Sources" timestamp="1578540224250">
@@ -484,11 +486,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1578421403620" />
-    <state x="366" y="100" key="CommitChangelistDialog2" timestamp="1578580843914">
+    <state x="366" y="100" key="CommitChangelistDialog2" timestamp="1578580997550">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="298" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1578542083729" />
-    <state x="366" y="100" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1578580843914" />
+    <state x="366" y="100" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1578580997550" />
     <state x="160" y="89" key="DiffContextDialog" timestamp="1578421042559">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -497,19 +499,19 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1578417783560" />
-    <state x="351" y="182" key="Vcs.Push.Dialog.v2" timestamp="1578542090151">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state x="432" y="239" key="Vcs.Push.Dialog.v2" timestamp="1578581002249">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1578542090151" />
-    <state x="432" y="239" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1578502372730" />
+    <state x="432" y="239" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1578581002249" />
     <state x="488" y="297" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1578441442611">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="488" y="297" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1366.768@0.0.1366.768" timestamp="1578441442611" />
-    <state x="789" y="335" key="extract.method.dialog" timestamp="1578421333008">
+    <state x="448" y="274" key="extract.method.dialog" timestamp="1578581399813">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="789" y="335" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1578421333008" />
+    <state x="448" y="274" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1578581399813" />
     <state x="362" y="134" width="642" height="500" key="find.popup" timestamp="1578441421038">
       <screen x="0" y="0" width="1366" height="768" />
     </state>

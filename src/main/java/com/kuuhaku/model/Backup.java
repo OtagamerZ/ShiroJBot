@@ -79,7 +79,7 @@ public class Backup {
 			g.createCategory(cat.getString("name"))
 					.setPosition(cat.getInt("index"))
 					.queue(s -> {
-						cat.getJSONObject("permissions").toMap().values().forEach(o -> {
+						cat.getJSONArray("permissions").forEach(o -> {
 							JSONObject override = (JSONObject) o;
 
 							s.createPermissionOverride(override.getBoolean("role") ? g.getRolesByName(override.getString("nameOrId"), true).get(0) : Objects.requireNonNull(g.getMemberById(override.getString("nameOrId"))))
@@ -100,13 +100,13 @@ public class Backup {
 										.setTopic(chn.getString("topic"))
 										.setParent(s)
 										.setPosition(chn.getInt("index"))
-										.setNSFW(chn.getBoolean("nsfw"))
+										.setNSFW(chn.has("nsfw") && chn.getBoolean("nsfw"))
 										.queue(textChannel -> channel[0] = textChannel);
 							} else {
 								s.createVoiceChannel(chn.getString("name")).queue(voiceChannel -> channel[0] = voiceChannel);
 							}
 
-							chn.getJSONObject("permissions").toMap().values().forEach(o -> {
+							chn.getJSONArray("permissions").forEach(o -> {
 								JSONObject override = (JSONObject) o;
 
 								channel[0].createPermissionOverride(override.getBoolean("role") ? g.getRolesByName(override.getString("nameOrId"), true).get(0) : Objects.requireNonNull(g.getMemberById(override.getString("nameOrId"))))
@@ -141,38 +141,12 @@ public class Backup {
 				channelData.put("type", channel.getType() == ChannelType.TEXT ? "text" : "voice");
 				channelData.put("nsfw", channel.getType() == ChannelType.TEXT && ((TextChannel) channel).isNSFW());
 
-				JSONObject permissions = new JSONObject();
-
-				channel.getPermissionOverrides().forEach(o -> {
-					JSONObject permission = new JSONObject();
-
-					permission.put("id", o.isRoleOverride() ? Objects.requireNonNull(o.getRole()).getId() : Objects.requireNonNull(o.getMember()).getId());
-					permission.put("role", o.isRoleOverride());
-					permission.put("allowed", o.getAllowedRaw());
-					permission.put("denied", o.getDeniedRaw());
-
-					permissions.put(permission.getString("id"), permission);
-				});
-
-				channelData.put("permissions", permissions);
+				getPermissions(channel, channelData);
 
 				channels.put(channelData);
 			});
 
-			JSONObject permissions = new JSONObject();
-
-			cat.getPermissionOverrides().forEach(o -> {
-				JSONObject permission = new JSONObject();
-
-				permission.put("nameOrId", o.isRoleOverride() ? Objects.requireNonNull(o.getRole()).getName() : Objects.requireNonNull(o.getMember()).getId());
-				permission.put("role", o.isRoleOverride());
-				permission.put("allowed", o.getAllowedRaw());
-				permission.put("denied", o.getDeniedRaw());
-
-				permissions.put(permission.getString("nameOrId"), permission);
-			});
-
-			category.put("permissions", permissions);
+			getPermissions(cat, category);
 			category.put("channels", channels);
 
 			categories.put(category);
@@ -197,5 +171,22 @@ public class Backup {
 		data.put("roles", roles);
 
 		this.serverData = data.toString();
+	}
+
+	private void getPermissions(GuildChannel channel, JSONObject channelData) {
+		JSONArray permissions = new JSONArray();
+
+		channel.getPermissionOverrides().forEach(o -> {
+			JSONObject permission = new JSONObject();
+
+			permission.put("nameOrId", o.isRoleOverride() ? Objects.requireNonNull(o.getRole()).getName() : Objects.requireNonNull(o.getMember()).getId());
+			permission.put("role", o.isRoleOverride());
+			permission.put("allowed", o.getAllowedRaw());
+			permission.put("denied", o.getDeniedRaw());
+
+			permissions.put(permission);
+		});
+
+		channelData.put("permissions", permissions);
 	}
 }
