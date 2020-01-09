@@ -70,7 +70,7 @@ public class Backup {
 					.setName(role.getString("name"))
 					.setColor(role.has("color") ? (Integer) role.get("color") : null)
 					.setPermissions(role.getLong("permissions"))
-					.queue();
+					.complete();
 		});
 
 		categories.forEach(c -> {
