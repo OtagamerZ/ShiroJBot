@@ -2,13 +2,16 @@ package com.kuuhaku.model;
 
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.sql.Timestamp;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.*;
 
 @Entity
 public class Backup {
@@ -64,7 +67,7 @@ public class Backup {
 		JSONArray categories = data.getJSONArray("categories");
 		JSONArray roles = data.getJSONArray("roles");
 
-		CompletableFuture.runAsync(() -> roles.forEach(r -> {
+		roles.forEach(r -> {
 			JSONObject role = (JSONObject) r;
 
 			g.createRole()
@@ -72,11 +75,9 @@ public class Backup {
 					.setColor(role.has("color") ? (Integer) role.get("color") : null)
 					.setPermissions(role.getLong("permissions"))
 					.queue();
-		}));
+		});
 
-		System.out.println("cargos adicionados");
-
-		CompletableFuture.runAsync(() -> categories.forEach(c -> {
+		categories.forEach(c -> {
 			JSONObject cat = (JSONObject) c;
 
 			g.createCategory(cat.getString("name"))
@@ -100,40 +101,86 @@ public class Backup {
 							}
 						});
 					});
-		}));
+		});
 
-		System.out.println("canais e categorias adicionadas");
-
-		/*categories.forEach(s -> {
-			try {
-				Category cat = g.getCategoriesByName(((JSONObject) s).getString("name"), true).get(0);
-				((JSONObject) s).getJSONArray("permissions").forEach(o -> {
-					JSONObject override = (JSONObject) o;
-
-					cat.createPermissionOverride(override.get("name").equals("@everyone") ? g.getPublicRole() : g.getRolesByName(override.getString("name"), true).get(0))
-							.setAllow(override.getLong("allowed"))
-							.setDeny(override.getLong("denied"))
-							.queue();
-				});
-
-				((JSONObject) s).getJSONArray("channels").forEach(chn -> {
-					try {
-						GuildChannel channel = ((JSONObject) chn).getString("type").equals("text") ? g.getTextChannelsByName(((JSONObject) chn).getString("name"), true).get(0) : g.getVoiceChannelsByName(((JSONObject) chn).getString("name"), true).get(0);
-
-						((JSONObject) chn).getJSONArray("permissions").forEach(o -> {
-							JSONObject override = (JSONObject) o;
-
-							channel.createPermissionOverride(override.get("name").equals("@everyone") ? g.getPublicRole() : g.getRolesByName(override.getString("name"), true).get(0))
-									.setAllow(override.getLong("allowed"))
-									.setDeny(override.getLong("denied"))
-									.queue();
-						});
-					} catch (ErrorResponseException | IndexOutOfBoundsException ignore) {
-					}
-				});
-			} catch (ErrorResponseException | IndexOutOfBoundsException ignore) {
+		ScheduledFuture<?> setPermissions = new ScheduledFuture<Object>() {
+			@Override
+			public long getDelay(@NotNull TimeUnit unit) {
+				return 0;
 			}
-		});*/
+
+			@Override
+			public int compareTo(@NotNull Delayed o) {
+				return 0;
+			}
+
+			@Override
+			public boolean cancel(boolean mayInterruptIfRunning) {
+				return false;
+			}
+
+			@Override
+			public boolean isCancelled() {
+				return false;
+			}
+
+			@Override
+			public boolean isDone() {
+				return false;
+			}
+
+			@Override
+			public Object get() {
+				return null;
+			}
+
+			@Override
+			public Object get(long timeout, @NotNull TimeUnit unit) {
+				if (g.getCategories().size() == categories.length() &&
+								g.getChannels().size() == categories.toList().stream().mapToInt(o -> ((JSONObject) o).getJSONArray("channels").length()).count() &&
+								g.getRoles().size() == roles.length()) {
+					categories.forEach(s -> {
+						try {
+							Category cat = g.getCategoriesByName(((JSONObject) s).getString("name"), true).get(0);
+							((JSONObject) s).getJSONArray("permissions").forEach(o -> {
+								JSONObject override = (JSONObject) o;
+
+								cat.createPermissionOverride(override.get("name").equals("@everyone") ? g.getPublicRole() : g.getRolesByName(override.getString("name"), true).get(0))
+										.setAllow(override.getLong("allowed"))
+										.setDeny(override.getLong("denied"))
+										.queue();
+							});
+
+							((JSONObject) s).getJSONArray("channels").forEach(chn -> {
+								try {
+									GuildChannel channel = ((JSONObject) chn).getString("type").equals("text") ? g.getTextChannelsByName(((JSONObject) chn).getString("name"), true).get(0) : g.getVoiceChannelsByName(((JSONObject) chn).getString("name"), true).get(0);
+
+									((JSONObject) chn).getJSONArray("permissions").forEach(o -> {
+										JSONObject override = (JSONObject) o;
+
+										channel.createPermissionOverride(override.get("name").equals("@everyone") ? g.getPublicRole() : g.getRolesByName(override.getString("name"), true).get(0))
+												.setAllow(override.getLong("allowed"))
+												.setDeny(override.getLong("denied"))
+												.queue();
+									});
+								} catch (ErrorResponseException | IndexOutOfBoundsException ignore) {
+								}
+							});
+						} catch (ErrorResponseException | IndexOutOfBoundsException ignore) {
+						}
+					});
+				} else {
+					this.get(3, TimeUnit.SECONDS);
+				}
+
+				return null;
+			}
+		};
+
+		try {
+			setPermissions.get(3, TimeUnit.SECONDS);
+		} catch (InterruptedException | ExecutionException | TimeoutException ignore) {
+		}
 	}
 
 	public void saveServerData(Guild g) {
