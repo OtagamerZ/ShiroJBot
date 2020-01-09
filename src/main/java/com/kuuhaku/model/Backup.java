@@ -9,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Objects;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 
 @Entity
 public class Backup {
@@ -43,20 +42,20 @@ public class Backup {
 
 		g.getChannels().forEach(c -> {
 			try {
-				c.delete().submit().get();
-			} catch (ErrorResponseException | InterruptedException | ExecutionException ignore) {
+				c.delete().complete();
+			} catch (ErrorResponseException ignore) {
 			}
 		});
 		g.getCategories().forEach(c -> {
 			try {
-				c.delete().submit().get();
-			} catch (ErrorResponseException | InterruptedException | ExecutionException ignore) {
+				c.delete().complete();
+			} catch (ErrorResponseException ignore) {
 			}
 		});
 		g.getRoles().forEach(c -> {
 			try {
-				if (!c.getName().equalsIgnoreCase("Shiro") && !c.isPublicRole()) c.delete().submit().get();
-			} catch (ErrorResponseException | InterruptedException | ExecutionException ignore) {
+				if (!c.getName().equalsIgnoreCase("Shiro") && !c.isPublicRole()) c.delete().complete();
+			} catch (ErrorResponseException ignore) {
 			}
 		});
 
@@ -65,50 +64,38 @@ public class Backup {
 
 
 		roles.forEach(r -> {
-			try {
 			JSONObject role = (JSONObject) r;
 
-				g.createRole()
-						.setName(role.getString("name"))
-						.setColor(role.has("color") ? (Integer) role.get("color") : null)
-						.setPermissions(role.getLong("permissions"))
-						.submit().get();
-			} catch (InterruptedException | ExecutionException ignore) {
-			}
+			g.createRole()
+					.setName(role.getString("name"))
+					.setColor(role.has("color") ? (Integer) role.get("color") : null)
+					.setPermissions(role.getLong("permissions"))
+					.complete();
 		});
 
 		categories.forEach(c -> {
 			JSONObject cat = (JSONObject) c;
 
-			try {
-				Category s = g.createCategory(cat.getString("name"))
-						.setPosition(cat.getInt("index"))
-						.submit().get();
+			Category s = g.createCategory(cat.getString("name"))
+					.setPosition(cat.getInt("index"))
+					.complete();
 
-				JSONArray channels = cat.getJSONArray("channels");
+			JSONArray channels = cat.getJSONArray("channels");
 
-				channels.forEach(ch -> {
-					JSONObject chn = (JSONObject) ch;
+			channels.forEach(ch -> {
+				JSONObject chn = (JSONObject) ch;
 
-					if (chn.getString("type").equals("text")) {
-						try {
-							s.createTextChannel(chn.getString("name"))
-									.setTopic(chn.has("topic") ? chn.getString("topic") : null)
-									.setParent(s)
-									.setPosition(chn.getInt("index"))
-									.setNSFW(chn.has("nsfw") && chn.getBoolean("nsfw"))
-									.submit().get();
-						} catch (InterruptedException | ExecutionException ignore) {
-						}
-					} else {
-						try {
-							s.createVoiceChannel(chn.getString("name")).submit().get();
-						} catch (InterruptedException | ExecutionException ignore) {
-						}
-					}
-				});
-			} catch (InterruptedException | ExecutionException ignore) {
-			}
+				if (chn.getString("type").equals("text")) {
+					s.createTextChannel(chn.getString("name"))
+							.setTopic(chn.has("topic") ? chn.getString("topic") : null)
+							.setParent(s)
+							.setPosition(chn.getInt("index"))
+							.setNSFW(chn.has("nsfw") && chn.getBoolean("nsfw"))
+							.complete();
+				} else {
+					s.createVoiceChannel(chn.getString("name")).complete();
+				}
+			});
 		});
 
 		System.out.println("fase 1 pronta");
