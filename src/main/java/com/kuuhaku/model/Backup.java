@@ -44,25 +44,19 @@ public class Backup {
 
 		g.getChannels().forEach(c -> {
 			try {
-				if (g.getChannels().contains(c)) {
-					c.delete().queue();
-				}
+					c.delete().complete();
 			} catch (ErrorResponseException ignore) {
 			}
 		});
 		g.getCategories().forEach(c -> {
 			try {
-				if (g.getCategories().contains(c)) {
-					c.delete().queue();
-				}
+					c.delete().complete();
 			} catch (ErrorResponseException ignore) {
 			}
 		});
 		g.getRoles().forEach(c -> {
 			try {
-				if (g.getRoles().contains(c) && !c.getName().equalsIgnoreCase("Shiro") && !c.isPublicRole()) {
-					c.delete().queue();
-				}
+				if (!c.getName().equalsIgnoreCase("Shiro") && !c.isPublicRole()) c.delete().complete();
 			} catch (ErrorResponseException ignore) {
 			}
 		});
@@ -74,7 +68,7 @@ public class Backup {
 			JSONObject role = (JSONObject) r;
 			g.createRole()
 					.setName(role.getString("name"))
-					.setColor((Integer) role.get("color"))
+					.setColor(role.has("color") ? (Integer) role.get("color") : null)
 					.setPermissions(role.getLong("permissions"))
 					.queue();
 		});
@@ -106,6 +100,7 @@ public class Backup {
 										.setTopic(chn.getString("topic"))
 										.setParent(s)
 										.setPosition(chn.getInt("index"))
+										.setNSFW(chn.getBoolean("nsfw"))
 										.queue(textChannel -> channel[0] = textChannel);
 							} else {
 								s.createVoiceChannel(chn.getString("name")).queue(voiceChannel -> channel[0] = voiceChannel);
@@ -144,6 +139,7 @@ public class Backup {
 				channelData.put("index", channel.getPosition());
 				channelData.put("topic", channel.getType() == ChannelType.TEXT ? ((TextChannel) channel).getTopic() : null);
 				channelData.put("type", channel.getType() == ChannelType.TEXT ? "text" : "voice");
+				channelData.put("nsfw", channel.getType() == ChannelType.TEXT && ((TextChannel) channel).isNSFW());
 
 				JSONObject permissions = new JSONObject();
 
