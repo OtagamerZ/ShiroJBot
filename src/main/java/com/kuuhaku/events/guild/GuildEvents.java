@@ -265,7 +265,7 @@ public class GuildEvents extends ListenerAdapter {
 		} catch (InsufficientPermissionException ignore) {
 
 		} catch (ErrorResponseException e) {
-			Helper.logger(this.getClass()).error(e.getErrorCode() + ": " + e + " | " + Arrays.toString(e.getStackTrace()));
+			Helper.logger(this.getClass()).error(e.getErrorCode() + ": " + e + " | " + e.getStackTrace()[0]);
 		}
 	}
 
