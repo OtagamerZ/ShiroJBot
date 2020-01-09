@@ -38,7 +38,7 @@ public class Backup {
 		this.guild = guild;
 	}
 
-	public void recoverServerData(Guild g) {
+	public void restoreChannels(Guild g) {
 		if (serverData == null || serverData.isEmpty()) return;
 
 		JSONObject data = new JSONObject(serverData);
@@ -68,16 +68,6 @@ public class Backup {
 
 		JSONArray categories = data.getJSONArray("categories");
 		JSONArray roles = data.getJSONArray("roles");
-
-		roles.forEach(r -> {
-			JSONObject role = (JSONObject) r;
-
-			g.createRole()
-					.setName(role.getString("name"))
-					.setColor(role.has("color") ? (Integer) role.get("color") : null)
-					.setPermissions(role.getLong("permissions"))
-					.queue();
-		});
 
 		categories.forEach(c -> {
 			JSONObject cat = (JSONObject) c;
@@ -114,6 +104,17 @@ public class Backup {
 		if (data.isEmpty()) return;
 
 		JSONArray categories = data.getJSONArray("categories");
+		JSONArray roles = data.getJSONArray("roles");
+
+		roles.forEach(r -> {
+			JSONObject role = (JSONObject) r;
+
+			g.createRole()
+					.setName(role.getString("name"))
+					.setColor(role.has("color") ? (Integer) role.get("color") : null)
+					.setPermissions(role.getLong("permissions"))
+					.queue();
+		});
 
 		categories.forEach(s -> {
 			try {
