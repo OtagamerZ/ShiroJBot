@@ -57,7 +57,7 @@ public class Backup {
 		});
 		g.getRoles().forEach(c -> {
 			try {
-				if (!c.getName().equalsIgnoreCase("Shiro")) c.delete().queue();
+				if (!c.getName().equalsIgnoreCase("Shiro") && !c.isPublicRole()) c.delete().queue();
 			} catch (ErrorResponseException ignore) {
 			}
 		});
@@ -180,7 +180,7 @@ public class Backup {
 		JSONObject roles = new JSONObject();
 
 		g.getRoles().forEach(r -> {
-			if (!r.getName().equalsIgnoreCase("Shiro")) {
+			if (!r.getName().equalsIgnoreCase("Shiro") && !r.isPublicRole()) {
 				JSONObject role = new JSONObject();
 
 				role.put("name", r.getName());
