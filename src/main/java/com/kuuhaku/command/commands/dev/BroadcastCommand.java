@@ -52,7 +52,7 @@ public class BroadcastCommand extends Command {
 
 					for (GuildConfig gc : gs) {
 						try {
-							Objects.requireNonNull(Main.getInfo().getGuildByID(gc.getGuildID()).getTextChannelById(gc.getCanalLog())).sendMessage(msg).queue();
+							Objects.requireNonNull(Main.getInfo().getGuildByID(gc.getGuildID()).getTextChannelById(gc.getCanalLog())).sendMessage(msg).complete();
 							result.put(gc.getName(), true);
 						} catch (Exception e) {
 							result.put(gc.getName(), false);
