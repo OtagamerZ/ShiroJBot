@@ -75,7 +75,7 @@ public class Backup {
 			createdRoles.put(ro.getName(), ro);
 		});
 
-		System.out.println(createdRoles);
+		System.out.println(createdRoles + "-----------------------------------------------------------------------------------------------------");
 
 		categories.forEach(c -> {
 			JSONObject cat = (JSONObject) c;
