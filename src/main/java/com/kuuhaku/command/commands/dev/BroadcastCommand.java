@@ -62,7 +62,7 @@ public class BroadcastCommand extends Command {
 					showResult(result, sb, pages, eb);
 				}
 
-				channel.sendMessage((Message) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
+				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
 				break;
 			case "parceiros":
 				List<Tags> ps = TagDAO.getAllPartners();
@@ -91,7 +91,7 @@ public class BroadcastCommand extends Command {
 					showResult(result, sb, pages, eb);
 				}
 
-				channel.sendMessage((Message) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
+				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
 				break;
 			default:
 				channel.sendMessage(":x: | Tipo desconhecido, os tipos válidos são **geral** ou **parceiros**").queue();
