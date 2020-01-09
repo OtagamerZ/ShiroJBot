@@ -30,7 +30,7 @@ import net.dv8tion.jda.api.entities.*;
 public class BackupCommand extends Command {
 
 	public BackupCommand() {
-		super("backup", new String[]{"dados"}, "<salvar/recuperar>", "Salva ou recupera um backup do servidor - ISSO IRÁ SOBRESCREVER COMPLETAMENTE O ESTADO ATUAL DO SERVIDOR.", Category.MODERACAO);
+		super("backup", new String[]{"dados"}, "<salvar/recuperar/permissoes>", "Salva ou recupera um backup do servidor - ISSO IRÁ SOBRESCREVER COMPLETAMENTE O ESTADO ATUAL DO SERVIDOR.", Category.MODERACAO);
 	}
 
 	@Override
@@ -58,6 +58,8 @@ public class BackupCommand extends Command {
             channel.sendMessage(":x: | Nenhum backup foi feito ainda, utilize o comando `" + prefix + "backup salvar` para criar um backup.").queue();
         } else if (args[0].equalsIgnoreCase("recuperar")) {
 		    data.recoverServerData(guild);
+		} else if (args[0].equalsIgnoreCase("permissoes")) {
+			data.restorePermissions(guild);
 		}
 	}
 }
