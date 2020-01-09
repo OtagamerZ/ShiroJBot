@@ -55,6 +55,12 @@ public class Backup {
 			} catch (ErrorResponseException ignore) {
 			}
 		});
+		g.getRoles().forEach(c -> {
+			try {
+				c.delete().queue();
+			} catch (ErrorResponseException ignore) {
+			}
+		});
 
 		Map<String, Object> categories = data.getJSONObject("categories").toMap();
 		Map<String, Object> roles = data.getJSONObject("roles").toMap();
