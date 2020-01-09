@@ -93,30 +93,53 @@ public class Backup {
 										.setParent(s)
 										.setPosition(chn.getInt("index"))
 										.setNSFW(chn.has("nsfw") && chn.getBoolean("nsfw"))
-										.queue(channel -> {
-											chn.getJSONArray("permissions").forEach(o -> {
-												JSONObject override = (JSONObject) o;
-
-												channel.createPermissionOverride(override.get("name").equals("@everyone") ? g.getPublicRole() : g.getRolesByName(override.getString("name"), true).get(0))
-														.setAllow(override.getLong("allowed"))
-														.setDeny(override.getLong("denied"))
-														.queue();
-											});
-										});
+										.queue();
 							} else {
 								s.createVoiceChannel(chn.getString("name")).queue();
 							}
 						});
+					});
+		});
+	}
 
-						((JSONObject) s).getJSONArray("permissions").forEach(o -> {
+	public void restorePermissions(Guild g) {
+		if (serverData == null || serverData.isEmpty()) return;
+
+		JSONObject data = new JSONObject(serverData);
+
+		if (data.isEmpty()) return;
+
+		JSONArray categories = data.getJSONArray("categories");
+
+		categories.forEach(s -> {
+			try {
+				Category cat = g.getCategoriesByName(((JSONObject) s).getString("name"), true).get(0);
+				((JSONObject) s).getJSONArray("permissions").forEach(o -> {
+					JSONObject override = (JSONObject) o;
+
+					cat.createPermissionOverride(override.get("name").equals("@everyone") ? g.getPublicRole() : g.getRolesByName(override.getString("name"), true).get(0))
+							.setAllow(override.getLong("allowed"))
+							.setDeny(override.getLong("denied"))
+							.queue();
+				});
+
+				((JSONObject) s).getJSONArray("channels").forEach(chn -> {
+					try {
+						GuildChannel channel = ((JSONObject) chn).getString("type").equals("text") ? g.getTextChannelsByName(((JSONObject) chn).getString("name"), true).get(0) : g.getVoiceChannelsByName(((JSONObject) chn).getString("name"), true).get(0);
+
+						((JSONObject) chn).getJSONArray("permissions").forEach(o -> {
 							JSONObject override = (JSONObject) o;
 
-							s.createPermissionOverride(override.get("name").equals("@everyone") ? g.getPublicRole() : g.getRolesByName(override.getString("name"), true).get(0))
+							channel.createPermissionOverride(override.get("name").equals("@everyone") ? g.getPublicRole() : g.getRolesByName(override.getString("name"), true).get(0))
 									.setAllow(override.getLong("allowed"))
 									.setDeny(override.getLong("denied"))
 									.queue();
 						});
-					});
+					} catch (ErrorResponseException | IndexOutOfBoundsException ignore) {
+					}
+				});
+			} catch (ErrorResponseException | IndexOutOfBoundsException ignore) {
+			}
 		});
 	}
 
