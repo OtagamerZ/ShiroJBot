@@ -2,7 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/moderation/RoleChooserCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/moderation/RoleChooserCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_ygimenez_PaginationUtils_20b20a71e5.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/moderation/GatekeeperCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1922b6bb-e9cb-42d9-8f93-e283b3e8e488.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/1922b6bb-e9cb-42d9-8f93-e283b3e8e488.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.test.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -87,6 +94,7 @@
       <updated>1578417110885</updated>
       <workItem from="1578417115081" duration="11257000" />
       <workItem from="1578453407096" duration="2905000" />
+      <workItem from="1578529344055" duration="1298000" />
     </task>
     <task id="LOCAL-00001" summary="Correções gerais de sintaxe">
       <created>1578422410609</created>
@@ -417,7 +425,14 @@
       <option name="project" value="LOCAL" />
       <updated>1578502167953</updated>
     </task>
-    <option name="localTasksCounter" value="48" />
+    <task id="LOCAL-00048" summary="Correção no comando de cargo por botão">
+      <created>1578527989402</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1578527989402</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -452,10 +467,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1578421403620" />
-    <state x="366" y="100" key="CommitChangelistDialog2" timestamp="1578502447130">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="298" y="0" key="CommitChangelistDialog2" timestamp="1578527978914">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state x="298" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1578456383914" />
+    <state x="298" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1578527978914" />
     <state x="366" y="100" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1578502447130" />
     <state x="160" y="89" key="DiffContextDialog" timestamp="1578421042559">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -465,10 +480,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1578417783560" />
-    <state x="432" y="239" key="Vcs.Push.Dialog.v2" timestamp="1578502372730">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="351" y="182" key="Vcs.Push.Dialog.v2" timestamp="1578528037422">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1578444900704" />
+    <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1578528037422" />
     <state x="432" y="239" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1578502372730" />
     <state x="488" y="297" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1578441442611">
       <screen x="0" y="0" width="1366" height="768" />

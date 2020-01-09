@@ -73,6 +73,7 @@ public class CommandManager {
 			add(new LiteModeCommand());
 			add(new AllowImgCommand());
 			add(new RoleChooserCommand());
+			add(new GatekeeperCommand());
 
 			//INFORMATION
 			add(new ComandosCommand());

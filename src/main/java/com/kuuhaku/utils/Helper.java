@@ -425,7 +425,47 @@ public class Helper {
 			});
 
 			msg.clearReactions().complete();
-			Pages.buttonfy(Main.getInfo().getAPI(), msg, buttons);
+			Pages.buttonfy(Main.getInfo().getAPI(), msg, buttons, true);
+		});
+	}
+
+	public static void gatekeep(guildConfig gc) {
+		JSONObject ja = gc.getButtonConfigs();
+
+		if (ja.isEmpty()) return;
+
+		Guild g = Main.getInfo().getGuildByID(gc.getGuildID());
+
+		ja.keySet().forEach(k -> {
+			JSONObject jo = ja.getJSONObject(k);
+			Map<String, BiConsumer<Member, Message>> buttons = new HashMap<>();
+
+			TextChannel channel = g.getTextChannelById(jo.getString("canalId"));
+			assert channel != null;
+			Message msg = channel.retrieveMessageById(jo.getString("msgId")).complete();
+
+			jo.getJSONObject("buttons").keySet().forEach(b -> {
+				JSONObject btns = jo.getJSONObject("buttons").getJSONObject(b);
+				Role role = g.getRoleById(btns.getString("role"));
+				assert role != null;
+				buttons.put(btns.getString("emote"), (m, ms) -> {
+					if (m.getRoles().contains(role)) {
+						g.removeRoleFromMember(m, role).queue();
+					} else {
+						g.addRoleToMember(m, role).queue();
+					}
+				});
+			});
+
+			buttons.put("\uD83D\uDEAA", (m, v) -> {
+				try {
+					m.kick("Não aceitou as regras.").queue();
+				} catch (InsufficientPermissionException ignore) {
+				}
+			});
+
+			msg.clearReactions().complete();
+			Pages.buttonfy(Main.getInfo().getAPI(), msg, buttons, false);
 		});
 	}
 }
