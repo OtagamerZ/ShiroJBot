@@ -1,5 +1,6 @@
 package com.kuuhaku.model;
 
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import org.json.JSONArray;
@@ -8,6 +9,7 @@ import org.json.JSONObject;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Objects;
+import java.util.concurrent.*;
 
 @Entity
 public class Backup {
@@ -71,61 +73,83 @@ public class Backup {
 					.queue();
 		});
 
-		categories.forEach(c -> {
-			JSONObject cat = (JSONObject) c;
+		Callable<Boolean> setup = () -> {
+			categories.forEach(c -> {
+				JSONObject cat = (JSONObject) c;
 
-			g.createCategory(cat.getString("name"))
-					.setPosition(cat.getInt("index"))
-					.queue(s -> {
-						JSONArray channels = cat.getJSONArray("channels");
+				g.createCategory(cat.getString("name"))
+						.setPosition(cat.getInt("index"))
+						.queue(s -> {
+							JSONArray channels = cat.getJSONArray("channels");
 
-						channels.forEach(ch -> {
-							JSONObject chn = (JSONObject) ch;
+							channels.forEach(ch -> {
+								JSONObject chn = (JSONObject) ch;
 
-							if (chn.getString("type").equals("text")) {
-								s.createTextChannel(chn.getString("name"))
-										.setTopic(chn.has("topic") ? chn.getString("topic") : null)
-										.setParent(s)
-										.setPosition(chn.getInt("index"))
-										.setNSFW(chn.has("nsfw") && chn.getBoolean("nsfw"))
-										.queue();
-							} else {
-								s.createVoiceChannel(chn.getString("name")).queue();
-							}
+								if (chn.getString("type").equals("text")) {
+									s.createTextChannel(chn.getString("name"))
+											.setTopic(chn.has("topic") ? chn.getString("topic") : null)
+											.setParent(s)
+											.setPosition(chn.getInt("index"))
+											.setNSFW(chn.has("nsfw") && chn.getBoolean("nsfw"))
+											.queue();
+								} else {
+									s.createVoiceChannel(chn.getString("name")).queue();
+								}
+							});
 						});
+			});
+			return true;
+		};
+
+		Callable<Boolean> finish = () -> {
+			categories.forEach(s -> {
+				try {
+					Category cat = g.getCategoriesByName(((JSONObject) s).getString("name"), true).get(0);
+					((JSONObject) s).getJSONArray("permissions").forEach(o -> {
+						JSONObject override = (JSONObject) o;
+
+						cat.createPermissionOverride(override.get("name").equals("@everyone") ? g.getPublicRole() : g.getRolesByName(override.getString("name"), true).get(0))
+								.setAllow(override.getLong("allowed"))
+								.setDeny(override.getLong("denied"))
+								.queue();
 					});
-		});
 
-		categories.forEach(s -> {
-			try {
-				Category c = g.getCategoriesByName(((JSONObject) s).getString("name"), true).get(0);
-				((JSONObject) s).getJSONArray("permissions").forEach(o -> {
-					JSONObject override = (JSONObject) o;
+					((JSONObject) s).getJSONArray("channels").forEach(chn -> {
+						try {
+							GuildChannel channel = ((JSONObject) chn).getString("type").equals("text") ? g.getTextChannelsByName(((JSONObject) chn).getString("name"), true).get(0) : g.getVoiceChannelsByName(((JSONObject) chn).getString("name"), true).get(0);
 
-					c.createPermissionOverride(override.get("name").equals("@everyone") ? g.getPublicRole() : g.getRolesByName(override.getString("name"), true).get(0))
-							.setAllow(override.getLong("allowed"))
-							.setDeny(override.getLong("denied"))
-							.queue();
-				});
+							((JSONObject) chn).getJSONArray("permissions").forEach(o -> {
+								JSONObject override = (JSONObject) o;
 
-				((JSONObject) s).getJSONArray("channels").forEach(chn -> {
-					try {
-						GuildChannel channel = ((JSONObject) chn).getString("type").equals("text") ? g.getTextChannelsByName(((JSONObject) chn).getString("name"), true).get(0) : g.getVoiceChannelsByName(((JSONObject) chn).getString("name"), true).get(0);
+								channel.createPermissionOverride(override.get("name").equals("@everyone") ? g.getPublicRole() : g.getRolesByName(override.getString("name"), true).get(0))
+										.setAllow(override.getLong("allowed"))
+										.setDeny(override.getLong("denied"))
+										.queue();
+							});
+						} catch (ErrorResponseException | IndexOutOfBoundsException ignore) {
+						}
+					});
+				} catch (ErrorResponseException | IndexOutOfBoundsException ignore) {
+				}
+			});
+			return true;
+		};
 
-						((JSONObject) chn).getJSONArray("permissions").forEach(o -> {
-							JSONObject override = (JSONObject) o;
+		try {
+			Future<Boolean> task;
 
-							channel.createPermissionOverride(override.get("name").equals("@everyone") ? g.getPublicRole() : g.getRolesByName(override.getString("name"), true).get(0))
-									.setAllow(override.getLong("allowed"))
-									.setDeny(override.getLong("denied"))
-									.queue();
-						});
-					} catch (ErrorResponseException | IndexOutOfBoundsException ignore) {
-					}
-				});
-			} catch (ErrorResponseException | IndexOutOfBoundsException ignore) {
-			}
-		});
+			ExecutorService executor = Executors.newSingleThreadExecutor();
+
+			task = executor.submit(setup);
+			task.get();
+
+			task = executor.submit(finish);
+			task.get();
+
+			executor.shutdown();
+		} catch (InterruptedException | ExecutionException e) {
+			Helper.logger(this.getClass()).error("Erro ao recuperar backup: " + e + " | " + e.getStackTrace()[0]);
+		}
 	}
 
 	public void saveServerData(Guild g) {
