@@ -96,13 +96,6 @@
       <workItem from="1578453407096" duration="2905000" />
       <workItem from="1578529344055" duration="11359000" />
     </task>
-    <task id="LOCAL-00033" summary="Atualizada versão da Shiro">
-      <created>1578444735715</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1578444735715</updated>
-    </task>
     <task id="LOCAL-00034" summary="Atualizada versão da Shiro">
       <created>1578444883696</created>
       <option name="number" value="00034" />
@@ -439,7 +432,14 @@
       <option name="project" value="LOCAL" />
       <updated>1578592280577</updated>
     </task>
-    <option name="localTasksCounter" value="82" />
+    <task id="LOCAL-00082" summary="Correção no JSON do backup">
+      <created>1578593038006</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1578593038006</updated>
+    </task>
+    <option name="localTasksCounter" value="83" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -486,11 +486,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1578421403620" />
-    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1578592277834">
+    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1578593466287">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="298" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1578542083729" />
-    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1578592277834" />
+    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1578593466287" />
     <state x="160" y="89" key="DiffContextDialog" timestamp="1578421042559">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -499,11 +499,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1578417783560" />
-    <state x="432" y="239" key="Vcs.Push.Dialog.v2" timestamp="1578592281961">
+    <state x="432" y="239" key="Vcs.Push.Dialog.v2" timestamp="1578593039784">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1578542090151" />
-    <state x="432" y="239" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1578592281961" />
+    <state x="432" y="239" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1578593039784" />
     <state x="488" y="297" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1578441442611">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -516,6 +516,10 @@
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="362" y="134" width="642" height="500" key="find.popup/0.0.1366.768@0.0.1366.768" timestamp="1578441421038" />
+    <state x="496" y="233" key="run.anything.popup" timestamp="1578593146181">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="496" y="233" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1578593146181" />
     <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1578590391643">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
