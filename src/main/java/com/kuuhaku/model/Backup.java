@@ -7,8 +7,6 @@ import org.json.JSONObject;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 @Entity
@@ -63,19 +61,15 @@ public class Backup {
 		JSONArray categories = data.getJSONArray("categories");
 		JSONArray roles = data.getJSONArray("roles");
 
-		Map<String, Role> createdRoles = new HashMap<>();
 
 		roles.forEach(r -> {
 			JSONObject role = (JSONObject) r;
-			Role ro = g.createRole()
+			g.createRole()
 					.setName(role.getString("name"))
 					.setColor(role.has("color") ? (Integer) role.get("color") : null)
 					.setPermissions(role.getLong("permissions"))
-					.complete();
-			createdRoles.put(ro.getName(), ro);
+					.queue();
 		});
-
-		System.out.println(createdRoles + "-----------------------------------------------------------------------------------------------------");
 
 		categories.forEach(c -> {
 			JSONObject cat = (JSONObject) c;
@@ -83,21 +77,10 @@ public class Backup {
 			g.createCategory(cat.getString("name"))
 					.setPosition(cat.getInt("index"))
 					.queue(s -> {
-						cat.getJSONArray("permissions").forEach(o -> {
-							JSONObject override = (JSONObject) o;
-
-							s.createPermissionOverride(createdRoles.get(override.getString("name")))
-									.setAllow(override.getLong("allowed"))
-									.setDeny(override.getLong("denied"))
-									.queue();
-						});
-
 						JSONArray channels = cat.getJSONArray("channels");
 
 						channels.forEach(ch -> {
 							JSONObject chn = (JSONObject) ch;
-
-							final GuildChannel[] channel = new GuildChannel[1];
 
 							if (chn.getString("type").equals("text")) {
 								s.createTextChannel(chn.getString("name"))
@@ -105,21 +88,43 @@ public class Backup {
 										.setParent(s)
 										.setPosition(chn.getInt("index"))
 										.setNSFW(chn.has("nsfw") && chn.getBoolean("nsfw"))
-										.queue(textChannel -> channel[0] = textChannel);
-							} else {
-								s.createVoiceChannel(chn.getString("name")).queue(voiceChannel -> channel[0] = voiceChannel);
-							}
-
-							chn.getJSONArray("permissions").forEach(o -> {
-								JSONObject override = (JSONObject) o;
-
-								channel[0].createPermissionOverride(createdRoles.get(override.getString("name")))
-										.setAllow(override.getLong("allowed"))
-										.setDeny(override.getLong("denied"))
 										.queue();
-							});
+							} else {
+								s.createVoiceChannel(chn.getString("name")).queue();
+							}
 						});
 					});
+		});
+
+		categories.forEach(s -> {
+			try {
+				Category c = g.getCategoriesByName(((JSONObject) s).getString("name"), true).get(0);
+				((JSONObject) s).getJSONArray("permissions").forEach(o -> {
+					JSONObject override = (JSONObject) o;
+
+					c.createPermissionOverride(override.get("name").equals("@everyone") ? g.getPublicRole() : g.getRolesByName(override.getString("name"), true).get(0))
+							.setAllow(override.getLong("allowed"))
+							.setDeny(override.getLong("denied"))
+							.queue();
+				});
+
+				((JSONObject) s).getJSONArray("channels").forEach(chn -> {
+					try {
+						GuildChannel channel = ((JSONObject) chn).getString("type").equals("text") ? g.getTextChannelsByName(((JSONObject) chn).getString("name"), true).get(0) : g.getVoiceChannelsByName(((JSONObject) chn).getString("name"), true).get(0);
+
+						((JSONObject) chn).getJSONArray("permissions").forEach(o -> {
+							JSONObject override = (JSONObject) o;
+
+							channel.createPermissionOverride(override.get("name").equals("@everyone") ? g.getPublicRole() : g.getRolesByName(override.getString("name"), true).get(0))
+									.setAllow(override.getLong("allowed"))
+									.setDeny(override.getLong("denied"))
+									.queue();
+						});
+					} catch (ErrorResponseException | IndexOutOfBoundsException ignore) {
+					}
+				});
+			} catch (ErrorResponseException | IndexOutOfBoundsException ignore) {
+			}
 		});
 	}
 
