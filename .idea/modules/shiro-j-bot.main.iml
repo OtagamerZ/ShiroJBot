@@ -6,7 +6,7 @@
         <setting name="validation-enabled" value="true" />
         <datasource-mapping>
           <factory-entry name="shiro_local" />
-          <factory-entry name="shiro_remote" />
+          <factory-entry name="shiro_remote" value="1922b6bb-e9cb-42d9-8f93-e283b3e8e488" />
         </datasource-mapping>
         <naming-strategy-map />
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/../../src/main/resources/META-INF/persistence.xml" />
