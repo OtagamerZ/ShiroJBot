@@ -42,19 +42,19 @@ public class Backup {
 
 		g.getChannels().forEach(c -> {
 			try {
-				c.delete().complete();
+				c.delete().queue();
 			} catch (ErrorResponseException ignore) {
 			}
 		});
 		g.getCategories().forEach(c -> {
 			try {
-				c.delete().complete();
+				c.delete().queue();
 			} catch (ErrorResponseException ignore) {
 			}
 		});
 		g.getRoles().forEach(c -> {
 			try {
-				if (!c.getName().equalsIgnoreCase("Shiro") && !c.isPublicRole()) c.delete().complete();
+				if (!c.getName().equalsIgnoreCase("Shiro") && !c.isPublicRole()) c.delete().queue();
 			} catch (ErrorResponseException ignore) {
 			}
 		});
@@ -70,32 +70,33 @@ public class Backup {
 					.setName(role.getString("name"))
 					.setColor(role.has("color") ? (Integer) role.get("color") : null)
 					.setPermissions(role.getLong("permissions"))
-					.complete();
+					.queue();
 		});
 
 		categories.forEach(c -> {
 			JSONObject cat = (JSONObject) c;
 
-			Category s = g.createCategory(cat.getString("name"))
+			g.createCategory(cat.getString("name"))
 					.setPosition(cat.getInt("index"))
-					.complete();
+					.queue(s -> {
 
-			JSONArray channels = cat.getJSONArray("channels");
+						JSONArray channels = cat.getJSONArray("channels");
 
-			channels.forEach(ch -> {
-				JSONObject chn = (JSONObject) ch;
+						channels.forEach(ch -> {
+							JSONObject chn = (JSONObject) ch;
 
-				if (chn.getString("type").equals("text")) {
-					s.createTextChannel(chn.getString("name"))
-							.setTopic(chn.has("topic") ? chn.getString("topic") : null)
-							.setParent(s)
-							.setPosition(chn.getInt("index"))
-							.setNSFW(chn.has("nsfw") && chn.getBoolean("nsfw"))
-							.complete();
-				} else {
-					s.createVoiceChannel(chn.getString("name")).complete();
-				}
-			});
+							if (chn.getString("type").equals("text")) {
+								s.createTextChannel(chn.getString("name"))
+										.setTopic(chn.has("topic") ? chn.getString("topic") : null)
+										.setParent(s)
+										.setPosition(chn.getInt("index"))
+										.setNSFW(chn.has("nsfw") && chn.getBoolean("nsfw"))
+										.queue();
+							} else {
+								s.createVoiceChannel(chn.getString("name")).queue();
+							}
+						});
+					});
 		});
 
 		System.out.println("fase 1 pronta");
