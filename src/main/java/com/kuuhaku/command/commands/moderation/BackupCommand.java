@@ -52,6 +52,7 @@ public class BackupCommand extends Command {
 		if (args[0].equalsIgnoreCase("salvar")) {
             data.setGuild(guild.getId());
             data.saveServerData(guild);
+            BackupDAO.saveBackup(data);
             channel.sendMessage("Backup feito com sucesso, utilize `" + prefix + "backup recuperar` para recuperar para este estado do servidor. (ISSO IRÁ REESCREVER O SERVIDOR, TODAS AS MENSAGENS SERÃO PERDIDAS)").queue();
 		} else if (data.getGuild() == null || data.getGuild().isEmpty()) {
             channel.sendMessage(":x: | Nenhum backup foi feito ainda, utilize o comando `" + prefix + "backup salvar` para criar um backup.").queue();
