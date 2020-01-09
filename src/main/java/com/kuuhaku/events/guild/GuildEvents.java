@@ -96,6 +96,14 @@ public class GuildEvents extends ListenerAdapter {
 				MemberDAO.addMemberToDB(member);
 			}
 
+			try {
+				if (member.getRoles().stream().anyMatch(r -> r.getId().equals(GuildDAO.getGuildById(guild.getId()).getCargoWarn()))) {
+					message.delete().queue();
+					return;
+				}
+			} catch (InsufficientPermissionException ignore) {
+			}
+
 		/*
 		if(event.getPrivateChannel()!=null) {
 			try {
