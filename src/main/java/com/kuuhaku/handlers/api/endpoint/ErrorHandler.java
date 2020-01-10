@@ -16,6 +16,6 @@ public class ErrorHandler {
 
 	@ExceptionHandler(NoResultException.class)
 	public Exception noResult(Exception e) {
-		return new Exception(500, e.getCause(), e.getStacktrace());
+		return new Exception(404, e.getCause(), e.getStacktrace());
 	}
 }
