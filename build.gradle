@@ -81,7 +81,6 @@ dependencies {
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.2'
     compile group: 'org.apache.logging.log4j', name: 'log4j-jcl', version: '2.11.2'
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
-    compile 'org.apache.logging.log4j:log4j-slf4j-impl:2.11.2'
     compile group: 'org.beanshell', name: 'bsh', version: '2.0b5'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.1.6.RELEASE'
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.1.6.RELEASE'
