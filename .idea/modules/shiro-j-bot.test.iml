@@ -40,7 +40,6 @@
     <orderEntry type="library" name="Gradle: org.xerial:sqlite-jdbc:3.27.2.1" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-slf4j-impl:2.11.2" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-core:2.11.2" level="project" />
-    <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-jcl:2.13.0" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-web:2.1.6.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-test:2.1.6.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-aop:2.1.6.RELEASE" level="project" />
@@ -103,7 +102,6 @@
     <orderEntry type="library" name="Gradle: javax.activation:javax.activation-api:1.2.0" level="project" />
     <orderEntry type="library" name="Gradle: org.dom4j:dom4j:2.1.1" level="project" />
     <orderEntry type="library" name="Gradle: com.mchange:mchange-commons-java:0.2.15" level="project" />
-    <orderEntry type="library" name="Gradle: commons-logging:commons-logging:1.2" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-tomcat:2.1.6.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-webmvc:5.1.8.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-web:5.1.8.RELEASE" level="project" />
