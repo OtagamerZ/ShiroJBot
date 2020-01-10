@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.persistence.NoResultException;
+
 @RestController
 @ControllerAdvice
 public class ErrorHandler implements ErrorController {
@@ -17,8 +19,13 @@ public class ErrorHandler implements ErrorController {
 	}
 
 	@ExceptionHandler(InvalidTokenException.class)
-	public Exception collectData(Exception e) {
-		return new Exception(403, e.getCause(), e.getStacktrace());
+	public Exception invalidToken(InvalidTokenException e) {
+		return new Exception(403, e.toString(), e.getStackTrace());
+	}
+
+	@ExceptionHandler(NoResultException.class)
+	public Exception noResult(NoResultException e) {
+		return new Exception(404, e.toString(), e.getStackTrace());
 	}
 
 	@Override
