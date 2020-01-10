@@ -25,6 +25,7 @@ import com.kuuhaku.events.ScheduledEvents;
 import com.kuuhaku.events.TetEvents;
 import com.kuuhaku.events.guild.GuildEvents;
 import com.kuuhaku.events.guild.GuildUpdateEvents;
+import com.kuuhaku.handlers.api.Application;
 import com.kuuhaku.managers.CommandManager;
 import com.kuuhaku.managers.RPGCommandManager;
 import com.kuuhaku.model.DataDump;
@@ -37,13 +38,13 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.exceptions.ContextException;
+import org.springframework.boot.SpringApplication;
 
 import javax.persistence.NoResultException;
 import java.awt.*;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class Main implements Thread.UncaughtExceptionHandler {
 
@@ -91,6 +92,8 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 		AudioSourceManagers.registerRemoteSources(getInfo().getApm());
 		AudioSourceManagers.registerLocalSource(getInfo().getApm());
+
+		SpringApplication.run(Application.class, args);
 
 		finishStartUp();
 		arguments = args;
