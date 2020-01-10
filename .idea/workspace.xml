@@ -105,13 +105,6 @@
       <workItem from="1578596045638" duration="246000" />
       <workItem from="1578596510990" duration="2556000" />
     </task>
-    <task id="LOCAL-00073" summary="Correção no JSON do backup">
-      <created>1578590091375</created>
-      <option name="number" value="00073" />
-      <option name="presentableId" value="LOCAL-00073" />
-      <option name="project" value="LOCAL" />
-      <updated>1578590091375</updated>
-    </task>
     <task id="LOCAL-00074" summary="Correção no JSON do backup">
       <created>1578590575819</created>
       <option name="number" value="00074" />
@@ -448,7 +441,14 @@
       <option name="project" value="LOCAL" />
       <updated>1578665341035</updated>
     </task>
-    <option name="localTasksCounter" value="122" />
+    <task id="LOCAL-00122" summary="Adição de endpoints para requisições HTTP">
+      <created>1578665456633</created>
+      <option name="number" value="00122" />
+      <option name="presentableId" value="LOCAL-00122" />
+      <option name="project" value="LOCAL" />
+      <updated>1578665456633</updated>
+    </task>
+    <option name="localTasksCounter" value="123" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -511,11 +511,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1578417783560" />
-    <state x="432" y="239" key="Vcs.Push.Dialog.v2" timestamp="1578665344197">
+    <state x="432" y="239" key="Vcs.Push.Dialog.v2" timestamp="1578665457861">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1578542090151" />
-    <state x="432" y="239" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1578665344197" />
+    <state x="432" y="239" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1578665457861" />
     <state x="600" y="391" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1578663450830">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
