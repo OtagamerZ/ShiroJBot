@@ -37,7 +37,7 @@ public class Member {
 	private String mid;
 	private String sid;
 	private int level = 1, xp = 0;
-	@Column(columnDefinition = "float default 1")
+	@Column(columnDefinition = "float default 1.25")
 	private float waifuMult = 1.25f;
 	private String warns = "";
 	private String bg = "https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg";
