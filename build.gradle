@@ -15,10 +15,21 @@
  *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.6.RELEASE")
+    }
+}
+
 plugins {
     id 'java'
     id 'application'
     id "com.github.johnrengelman.shadow" version "4.0.2"
+    id "org.springframework.boot" version "2.1.6.RELEASE"
 }
 
 application {
@@ -78,12 +89,19 @@ dependencies {
 }
 
 apply plugin: "com.github.johnrengelman.shadow"
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 
 shadowJar {
     //noinspection GroovyAssignabilityCheck
     manifest {
         attributes 'Main-Class': 'Main'
     }
+}
+
+bootJar {
+    baseName = 'gs-rest-service'
+    version =  '0.1.0'
 }
 
 compileJava.options.encoding = 'UTF-8'
