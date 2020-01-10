@@ -15,17 +15,17 @@ import javax.persistence.NoResultException;
 public class ErrorHandler implements ErrorController {
 	@RequestMapping("/error")
 	public Exception error() {
-		return new Exception(500, "Erro interno", new String[]{});
+		return new Exception(500, "Erro interno do servidor");
 	}
 
 	@ExceptionHandler(InvalidTokenException.class)
-	public Exception invalidToken(InvalidTokenException e) {
-		return new Exception(403, e.toString(), e.getStackTrace());
+	public Exception invalidToken() {
+		return new Exception(403, "Token inválido");
 	}
 
 	@ExceptionHandler(NoResultException.class)
-	public Exception noResult(NoResultException e) {
-		return new Exception(404, e.toString(), e.getStackTrace());
+	public Exception noResult() {
+		return new Exception(404, "Nenhuma entidade com o ID informado encontrada");
 	}
 
 	@Override
