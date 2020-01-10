@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.persistence.NoResultException;
 import java.io.IOException;
 
 @RestController
@@ -19,11 +18,7 @@ public class MemberRequest {
 
 	@RequestMapping(value = "/member/get", method = RequestMethod.GET)
 	public Member requestProfile(@RequestParam(value = "id") String id) {
-		try {
-			return MemberDAO.getMemberById(id);
-		} catch (NoResultException e) {
-			throw e;
-		}
+		return MemberDAO.getMemberById(id);
 	}
 
 	@RequestMapping(value = "/member/update", method = RequestMethod.POST)
