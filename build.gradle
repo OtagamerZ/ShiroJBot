@@ -18,9 +18,7 @@
 
 buildscript {
     configurations {
-        classpath {
-            exclude group: 'ch.qos.logback', module: 'logback-classic'
-        }
+        compile.exclude group:'ch.qos.logback'
     }
     repositories {
         mavenCentral()
