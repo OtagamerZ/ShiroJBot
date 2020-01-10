@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="271f62a3-9e6a-4818-8029-c8d623fc8628" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/HttpCodes.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/ErrorHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/ErrorHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,20 +104,6 @@
       <workItem from="1578529344055" duration="11359000" />
       <workItem from="1578596045638" duration="246000" />
       <workItem from="1578596510990" duration="2556000" />
-    </task>
-    <task id="LOCAL-00078" summary="Correção no JSON do backup">
-      <created>1578591508536</created>
-      <option name="number" value="00078" />
-      <option name="presentableId" value="LOCAL-00078" />
-      <option name="project" value="LOCAL" />
-      <updated>1578591508536</updated>
-    </task>
-    <task id="LOCAL-00079" summary="Correção no JSON do backup">
-      <created>1578591664109</created>
-      <option name="number" value="00079" />
-      <option name="presentableId" value="LOCAL-00079" />
-      <option name="project" value="LOCAL" />
-      <updated>1578591664109</updated>
     </task>
     <task id="LOCAL-00080" summary="Correção no JSON do backup">
       <created>1578592194621</created>
@@ -447,7 +434,21 @@
       <option name="project" value="LOCAL" />
       <updated>1578667089011</updated>
     </task>
-    <option name="localTasksCounter" value="127" />
+    <task id="LOCAL-00127" summary="Adição de endpoints para requisições HTTP">
+      <created>1578667246427</created>
+      <option name="number" value="00127" />
+      <option name="presentableId" value="LOCAL-00127" />
+      <option name="project" value="LOCAL" />
+      <updated>1578667246427</updated>
+    </task>
+    <task id="LOCAL-00128" summary="Adição de endpoints para requisições HTTP">
+      <created>1578667304952</created>
+      <option name="number" value="00128" />
+      <option name="presentableId" value="LOCAL-00128" />
+      <option name="project" value="LOCAL" />
+      <updated>1578667304952</updated>
+    </task>
+    <option name="localTasksCounter" value="129" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -472,11 +473,11 @@
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="275" y="44" key="#Assign_Data_Sources/0.0.1366.768@0.0.1366.768" timestamp="1578540224250" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1578661402267">
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1578667530832">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="488" y="71" key="#com.intellij.ide.util.MemberChooser/0.0.1366.768@0.0.1366.768" timestamp="1578538922492" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1578661402267" />
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1578667530832" />
     <state x="688" y="395" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1578417184444">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -497,11 +498,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1578421403620" />
-    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1578667302218">
+    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1578667518707">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="298" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1578542083729" />
-    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1578667302218" />
+    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1578667518707" />
     <state x="160" y="89" key="DiffContextDialog" timestamp="1578421042559">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -510,11 +511,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1578417783560" />
-    <state x="432" y="239" key="Vcs.Push.Dialog.v2" timestamp="1578667247978">
+    <state x="432" y="239" key="Vcs.Push.Dialog.v2" timestamp="1578667306152">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1578542090151" />
-    <state x="432" y="239" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1578667247978" />
+    <state x="432" y="239" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1578667306152" />
     <state x="600" y="391" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1578663450830">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
