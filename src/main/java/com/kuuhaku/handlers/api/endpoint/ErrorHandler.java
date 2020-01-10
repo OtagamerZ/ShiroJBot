@@ -12,7 +12,7 @@ import java.net.URLEncoder;
 @ControllerAdvice
 public class ErrorHandler implements ErrorController {
 	@RequestMapping("/error")
-	public Exception error(@RequestParam(value = "code") String code, @RequestParam(value = "cause") String cause) {
+	public Exception error(@RequestParam(value = "code", defaultValue = "500") String code, @RequestParam(value = "cause", defaultValue = "Erro interno") String cause) {
 		return new Exception(Integer.parseInt(code), cause);
 	}
 
