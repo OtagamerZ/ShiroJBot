@@ -21,6 +21,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.CustomAnswerDAO;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.NoResultException;
 
@@ -34,6 +35,9 @@ public class RemoveAnswerCommand extends Command {
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
         if (args.length == 0) {
             channel.sendMessage(":x: | Você precisa especificar um ID.").queue();
+            return;
+        } else if (!StringUtils.isNumeric(args[0])) {
+            channel.sendMessage(":x: | O ID deve ser um valor numérico informado na lista de respostas (`" + prefix + "fale lista`).").queue();
             return;
         }
 

@@ -174,6 +174,10 @@ public class GuildEvents extends ListenerAdapter {
 				found = JDAEvents.isFound(GuildDAO.getGuildById(guild.getId()), guild, commandName, found, command);
 
 				if (found) {
+					if (author == Main.getInfo().getSelfUser() && command.getCategory().isBotBlocked()) {
+						channel.sendMessage(":x: | Não posso executar este comando, apenas usuários humanos podem usar ele.").queue();
+						return;
+					}
 					LogDAO.saveLog(new Log().setGuild(guild.getName()).setUser(author.getAsTag()).setCommand(rawMessage));
 					Helper.logToChannel(author, true, command, "Um comando foi usado no canal " + ((TextChannel) channel).getAsMention(), guild);
 					if (JDAEvents.checkPermissions(event, author, member, message, channel, guild, prefix, rawMsgNoPrefix, args, command))
