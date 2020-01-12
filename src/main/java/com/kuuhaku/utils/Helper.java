@@ -407,7 +407,7 @@ public class Helper {
 					resolveButton(g, jo, buttons);
 
 					buttons.put(CANCEL, (m, ms) -> {
-						if (m.getUser() == author) {
+						if (m.getUser().getId() == jo.getString("author")) {
 							JSONObject gcjo = gc.getButtonConfigs();
 							gcjo.remove(jo.getString("msgId"));
 							gc.setButtonConfigs(gcjo);
@@ -485,6 +485,7 @@ public class Helper {
 			msg.put("msgId", msgId);
 			msg.put("canalId", channel.getId());
 			msg.put("buttons", new JSONObject());
+			msg.put("author", message.getAuthor().getId());
 		} else {
 			msg = root.getJSONObject(msgId);
 		}
