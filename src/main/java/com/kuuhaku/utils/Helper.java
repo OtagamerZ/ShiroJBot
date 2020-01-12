@@ -31,6 +31,7 @@ import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -401,29 +402,41 @@ public class Helper {
 
 			TextChannel channel = g.getTextChannelById(jo.getString("canalId"));
 			assert channel != null;
-			channel.retrieveMessageById(jo.getString("msgId")).queue(msg -> {
-				jo.getJSONObject("buttons").keySet().forEach(b -> {
-					JSONObject btns = jo.getJSONObject("buttons").getJSONObject(b);
-					Role role = g.getRoleById(btns.getString("role"));
-					assert role != null;
-					buttons.put(btns.getString("emote"), (m, ms) -> {
-						if (m.getRoles().contains(role)) {
-							g.removeRoleFromMember(m, role).queue();
-						} else {
-							g.addRoleToMember(m, role).queue();
+			try {
+				channel.retrieveMessageById(jo.getString("msgId")).queue(msg -> {
+					resolveButton(g, jo, buttons);
+
+					buttons.put(CANCEL, (m, ms) -> {
+						if (m.getUser() == author) {
+							JSONObject gcjo = gc.getButtonConfigs();
+							gcjo.remove(jo.getString("msgId"));
+							gc.setButtonConfigs(gcjo);
+							GuildDAO.updateGuildSettings(gc);
 						}
 					});
-				});
 
-				buttons.put(CANCEL, (m, ms) -> {
-					if (m.getUser() == author) {
-						JSONObject gcjo = gc.getButtonConfigs();
-						gc.setButtonConfigs(gcjo);
-						GuildDAO.updateGuildSettings(gc);
-					}
+					msg.clearReactions().queue(s -> Pages.buttonfy(Main.getInfo().getAPI(), msg, buttons, true));
 				});
+			} catch (ErrorResponseException e) {
+				JSONObject gcjo = gc.getButtonConfigs();
+				gcjo.remove(jo.getString("msgId"));
+				gc.setButtonConfigs(gcjo);
+				GuildDAO.updateGuildSettings(gc);
+			}
+		});
+	}
 
-				msg.clearReactions().queue(s -> Pages.buttonfy(Main.getInfo().getAPI(), msg, buttons, true));
+	public static void resolveButton(Guild g, JSONObject jo, Map<String, BiConsumer<Member, Message>> buttons) {
+		jo.getJSONObject("buttons").keySet().forEach(b -> {
+			JSONObject btns = jo.getJSONObject("buttons").getJSONObject(b);
+			Role role = g.getRoleById(btns.getString("role"));
+			assert role != null;
+			buttons.put(btns.getString("emote"), (m, ms) -> {
+				if (m.getRoles().contains(role)) {
+					g.removeRoleFromMember(m, role).queue();
+				} else {
+					g.addRoleToMember(m, role).queue();
+				}
 			});
 		});
 	}
@@ -442,18 +455,7 @@ public class Helper {
 			TextChannel channel = g.getTextChannelById(jo.getString("canalId"));
 			assert channel != null;
 			channel.retrieveMessageById(jo.getString("msgId")).queue(msg -> {
-				jo.getJSONObject("buttons").keySet().forEach(b -> {
-					JSONObject btns = jo.getJSONObject("buttons").getJSONObject(b);
-					Role role = g.getRoleById(btns.getString("role"));
-					assert role != null;
-					buttons.put(btns.getString("emote"), (m, ms) -> {
-						if (m.getRoles().contains(role)) {
-							g.removeRoleFromMember(m, role).queue();
-						} else {
-							g.addRoleToMember(m, role).queue();
-						}
-					});
-				});
+				resolveButton(g, jo, buttons);
 
 				buttons.put("\uD83D\uDEAA", (m, v) -> {
 					try {
@@ -465,5 +467,33 @@ public class Helper {
 				msg.clearReactions().queue(s -> Pages.buttonfy(Main.getInfo().getAPI(), msg, buttons, false));
 			});
 		});
+	}
+
+	public static void addButton(String[] args, Message message, MessageChannel channel, GuildConfig gc, String s2) {
+		JSONObject root = gc.getButtonConfigs();
+		String msgId = channel.retrieveMessageById(args[0]).complete().getId();
+
+		JSONObject msg = new JSONObject();
+
+		JSONObject btn = new JSONObject();
+		btn.put("emote", s2);
+		btn.put("role", message.getMentionedRoles().get(0).getId());
+
+		channel.retrieveMessageById(msgId).queue();
+
+		if (!root.has(msgId)) {
+			msg.put("msgId", msgId);
+			msg.put("canalId", channel.getId());
+			msg.put("buttons", new JSONObject());
+		} else {
+			msg = root.getJSONObject(msgId);
+		}
+
+		msg.getJSONObject("buttons").put(args[1], btn);
+
+		root.put(msgId, msg);
+
+		gc.setButtonConfigs(root);
+		GuildDAO.updateGuildSettings(gc);
 	}
 }
