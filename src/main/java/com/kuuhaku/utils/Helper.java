@@ -403,20 +403,19 @@ public class Helper {
 			TextChannel channel = g.getTextChannelById(jo.getString("canalId"));
 			assert channel != null;
 			try {
-				channel.retrieveMessageById(jo.getString("msgId")).queue(msg -> {
-					resolveButton(g, jo, buttons);
+				Message msg = channel.retrieveMessageById(jo.getString("msgId")).complete();
+				resolveButton(g, jo, buttons);
 
-					buttons.put(CANCEL, (m, ms) -> {
-						if (m.getUser().getId().equals(jo.getString("author"))) {
-							JSONObject gcjo = gc.getButtonConfigs();
-							gcjo.remove(jo.getString("msgId"));
-							gc.setButtonConfigs(gcjo);
-							GuildDAO.updateGuildSettings(gc);
-						}
-					});
-
-					msg.clearReactions().queue(s -> Pages.buttonfy(Main.getInfo().getAPI(), msg, buttons, true));
+				buttons.put(CANCEL, (m, ms) -> {
+					if (m.getUser().getId().equals(jo.getString("author"))) {
+						JSONObject gcjo = gc.getButtonConfigs();
+						gcjo.remove(jo.getString("msgId"));
+						gc.setButtonConfigs(gcjo);
+						GuildDAO.updateGuildSettings(gc);
+					}
 				});
+
+				msg.clearReactions().queue(s -> Pages.buttonfy(Main.getInfo().getAPI(), msg, buttons, true));
 			} catch (ErrorResponseException e) {
 				JSONObject gcjo = gc.getButtonConfigs();
 				gcjo.remove(jo.getString("msgId"));
