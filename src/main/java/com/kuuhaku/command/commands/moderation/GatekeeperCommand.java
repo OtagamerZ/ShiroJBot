@@ -23,8 +23,8 @@ import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONObject;
 
 public class GatekeeperCommand extends Command {
 
@@ -48,32 +48,13 @@ public class GatekeeperCommand extends Command {
 		}
 
 		try {
-			JSONObject root = gc.getButtonConfigs();
-			String msgId = channel.retrieveMessageById(args[0]).complete().getId();
+			Helper.addButton(args, message, channel, gc, "\u2611");
 
-			JSONObject msg = new JSONObject();
-
-			JSONObject btn = new JSONObject();
-			btn.put("emote", "\u2611");
-			btn.put("role", message.getMentionedRoles().get(0).getId());
-
-			if (!root.has(msgId)) {
-				msg.put("msgId", msgId);
-				msg.put("canalId", channel.getId());
-				msg.put("buttons", new JSONObject());
-			} else {
-				msg = root.getJSONObject(msgId);
-			}
-
-			msg.getJSONObject("buttons").put(args[1], btn);
-
-			root.put(msgId, msg);
-
-			gc.setButtonConfigs(root);
-			GuildDAO.updateGuildSettings(gc);
 			channel.sendMessage("Porteiro adicionado com sucesso!").queue(s -> Helper.gatekeep(gc));
 		} catch (IllegalArgumentException e) {
 			channel.sendMessage(":x: | Erro em um dos argumentos: " + e).queue();
+		} catch (ErrorResponseException e) {
+			channel.sendMessage(":x: | Este comando deve ser enviado no mesmo canal onde se encontra a mensagem a receber o botão.").queue();
 		}
 	}
 }

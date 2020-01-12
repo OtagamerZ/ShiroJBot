@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="271f62a3-9e6a-4818-8029-c8d623fc8628" name="Default Changelist" comment="">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_gwenn_sqlite_dialect_master_SNAPSHOT.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_gwenn_sqlite_dialect_master_SNAPSHOT.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/moderation/GatekeeperCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/moderation/GatekeeperCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/moderation/RoleChooserCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/moderation/RoleChooserCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,7 +64,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="extract.method.default.visibility" value="private" />
+    <property name="extract.method.default.visibility" value="public" />
     <property name="project.structure.last.edited" value="Facets" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -485,9 +489,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="620" y="336" key="#com.intellij.refactoring.move.moveInstanceMethod.MoveInstanceMethodDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1578419740782" />
-    <state x="556" y="224" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog" timestamp="1578421172703">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="452" y="144" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog" timestamp="1578793226369">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
+    <state x="452" y="144" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog/0.0.1366.768@0.0.1366.768" timestamp="1578793226369" />
     <state x="556" y="224" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1578421172703" />
     <state x="209" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1578420559932">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -520,9 +525,10 @@
     </state>
     <state x="488" y="297" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1366.768@0.0.1366.768" timestamp="1578441442611" />
     <state x="600" y="391" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1680.1010@0.0.1680.1010" timestamp="1578663450830" />
-    <state x="448" y="274" key="extract.method.dialog" timestamp="1578581399813">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="682" y="113" key="extract.method.dialog" timestamp="1578793315116">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
+    <state x="682" y="113" key="extract.method.dialog/0.0.1366.768@0.0.1366.768" timestamp="1578793315116" />
     <state x="448" y="274" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1578581399813" />
     <state x="445" y="176" width="790" height="658" key="find.popup" timestamp="1578660086606">
       <screen x="0" y="0" width="1680" height="1010" />
