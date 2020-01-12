@@ -117,6 +117,9 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		api.addEventListener(new GuildUpdateEvents());
 		jbr.addEventListener(new JibrilEvents());
 		tet.addEventListener(new TetEvents());
+
+		com.kuuhaku.controller.mysql.GuildDAO.getAllGuilds().forEach(Helper::refreshButtons);
+
 		Helper.logger(Main.class).info("<----------END OF BOOT---------->");
 		Helper.logger(Main.class).info("Estou pronta!");
 	}
