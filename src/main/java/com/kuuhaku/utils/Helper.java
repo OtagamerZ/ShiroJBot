@@ -389,7 +389,7 @@ public class Helper {
 		pages.add(new Page(PageType.EMBED, eb.build()));
 	}
 
-	public static void refreshButtons(GuildConfig gc, User author) {
+	public static void refreshButtons(GuildConfig gc) {
 		JSONObject ja = gc.getButtonConfigs();
 
 		if (ja.isEmpty()) return;

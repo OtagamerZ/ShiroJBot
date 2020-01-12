@@ -37,7 +37,7 @@ public class RoleChooserCommand extends Command {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (args.length == 1 && Helper.containsAny(args[0], "reboot", "reset", "restart", "refresh")) {
-			Helper.refreshButtons(gc, author);
+			Helper.refreshButtons(gc);
 			channel.sendMessage("Botões atualizados com sucesso!").queue();
 			return;
 		} else if (args.length < 3) {
@@ -54,7 +54,7 @@ public class RoleChooserCommand extends Command {
 		try {
 			Helper.addButton(args, message, channel, gc, args[1]);
 
-			channel.sendMessage("Botão adicionado com sucesso!").queue(s -> Helper.refreshButtons(gc, author));
+			channel.sendMessage("Botão adicionado com sucesso!").queue(s -> Helper.refreshButtons(gc));
 		} catch (IllegalArgumentException e) {
 			channel.sendMessage(":x: | Erro em um dos argumentos: " + e).queue();
 		} catch (ErrorResponseException e) {
