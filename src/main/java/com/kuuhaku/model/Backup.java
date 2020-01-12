@@ -22,6 +22,7 @@ public class Backup {
 	private Timestamp lastRestoredChannels;
 	@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private Timestamp lastRestoredRoles;
+	@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private Timestamp lastBackup;
 
 	public int getId() {

@@ -31,6 +31,7 @@ import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.exceptions.ContextException;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.apache.commons.lang3.StringUtils;
@@ -407,7 +408,7 @@ public class Helper {
 					resolveButton(g, jo, buttons);
 
 					buttons.put(CANCEL, (m, ms) -> {
-						if (m.getUser().getId() == jo.getString("author")) {
+						if (m.getUser().getId().equals(jo.getString("author"))) {
 							JSONObject gcjo = gc.getButtonConfigs();
 							gcjo.remove(jo.getString("msgId"));
 							gc.setButtonConfigs(gcjo);
