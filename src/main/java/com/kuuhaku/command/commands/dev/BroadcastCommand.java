@@ -62,9 +62,14 @@ public class BroadcastCommand extends Command {
 
 					for (Guild g : gs) {
 						try {
-							assert g.getDefaultChannel() != null;
-							g.getDefaultChannel().sendMessage(msg).submit().get();
-							result.put(g.getName(), true);
+							result.put(g.getName(), false);
+							for (TextChannel c : g.getTextChannels()) {
+								if (c.canTalk()) {
+									c.sendMessage(msg).submit().get();
+									result.put(g.getName(), true);
+									break;
+								}
+							}
 						} catch (Exception e) {
 							result.put(g.getName(), false);
 						}
