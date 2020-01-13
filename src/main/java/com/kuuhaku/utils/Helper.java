@@ -17,18 +17,18 @@
 
 package com.kuuhaku.utils;
 
-import com.coder4.emoji.EmojiUtils;
+import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.Page;
+import com.github.ygimenez.type.PageType;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.mysql.TagDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
-import com.kuuhaku.method.Pages;
 import com.kuuhaku.model.Extensions;
 import com.kuuhaku.model.GamblePool;
 import com.kuuhaku.model.GuildConfig;
-import com.kuuhaku.model.Page;
-import com.kuuhaku.type.PageType;
 import de.androidpit.colorthief.ColorThief;
+import emoji4j.EmojiUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -417,7 +417,7 @@ public class Helper {
 					}
 				});
 
-				msg.clearReactions().queue(s -> Pages.buttonfy(Main.getInfo().getAPI(), msg, buttons, true));
+				msg.clearReactions().queue(s -> Pages.buttonize(Main.getInfo().getAPI(), msg, buttons, true));
 			} catch (ErrorResponseException | InterruptedException | ExecutionException ignore) {
 			}
 		});
@@ -461,7 +461,7 @@ public class Helper {
 					}
 				});
 
-				msg.clearReactions().queue(s -> Pages.buttonfy(Main.getInfo().getAPI(), msg, buttons, false));
+				msg.clearReactions().queue(s -> Pages.buttonize(Main.getInfo().getAPI(), msg, buttons, false));
 			});
 		});
 	}
@@ -470,12 +470,10 @@ public class Helper {
 		JSONObject root = gc.getButtonConfigs();
 		String msgId = channel.retrieveMessageById(args[0]).complete().getId();
 
-		Emote e = EmojiUtils.containsEmoji(s2) ? null : Main.getInfo().getAPI().getEmoteById(s2);
-
 		JSONObject msg = new JSONObject();
 
 		JSONObject btn = new JSONObject();
-		btn.put("emote", e == null ? s2 : "<" + (e.isAnimated() ? "a:" : ":") + e.getName() + ":" + e.getId() + ">");
+		btn.put("emote", EmojiUtils.isEmoji(s2) ? s2 : Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById(s2)).getId());
 		btn.put("role", message.getMentionedRoles().get(0).getId());
 
 		channel.retrieveMessageById(msgId).queue();

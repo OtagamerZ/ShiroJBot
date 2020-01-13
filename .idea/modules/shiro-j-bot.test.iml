@@ -17,7 +17,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="shiro-j-bot.main" />
-    <orderEntry type="library" name="Gradle: com.github.ygimenez:PaginationUtils:20b20a71e5" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.ygimenez:PaginationUtils:1.0.2" level="project" />
     <orderEntry type="library" name="Gradle: net.dv8tion:JDA:4.0.0_45" level="project" />
     <orderEntry type="library" name="Gradle: club.minnced:discord-webhooks:0.1.7" level="project" />
     <orderEntry type="library" name="Gradle: com.github.SvenWoltmann:color-thief-java:master-SNAPSHOT" level="project" />
@@ -62,7 +62,7 @@
     <orderEntry type="library" name="Gradle: org.slf4j:jul-to-slf4j:1.7.26" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.25" level="project" />
     <orderEntry type="library" name="Gradle: org.beanshell:bsh:2.0b5" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.liheyuan:simple-emoji-4j:f26d3b39be" level="project" />
+    <orderEntry type="library" name="Gradle: com.kcthota:emoji4j:5.0" level="project" />
     <orderEntry type="library" name="Gradle: junit:junit:4.12" level="project" />
     <orderEntry type="library" name="Gradle: com.google.api-client:google-api-client:1.25.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.oauth-client:google-oauth-client:1.25.0" level="project" />
@@ -110,6 +110,7 @@
     <orderEntry type="library" name="Gradle: org.dom4j:dom4j:2.1.1" level="project" />
     <orderEntry type="library" name="Gradle: com.mchange:mchange-commons-java:0.2.15" level="project" />
     <orderEntry type="library" name="Gradle: commons-logging:commons-logging:1.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.googlecode.lambdaj:lambdaj:2.3.3" level="project" />
     <orderEntry type="library" name="Gradle: org.antlr:antlr4-runtime:4.7.2" level="project" />
     <orderEntry type="library" name="Gradle: com.graphql-java:java-dataloader:2.1.1" level="project" />
     <orderEntry type="library" name="Gradle: org.reactivestreams:reactive-streams:1.0.2" level="project" />
@@ -149,9 +150,11 @@
     <orderEntry type="library" name="Gradle: com.sun.istack:istack-commons-runtime:3.0.7" level="project" />
     <orderEntry type="library" name="Gradle: org.jvnet.staxex:stax-ex:1.8" level="project" />
     <orderEntry type="library" name="Gradle: com.sun.xml.fastinfoset:FastInfoset:1.2.15" level="project" />
+    <orderEntry type="library" name="Gradle: org.hamcrest:hamcrest-all:1.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.objenesis:objenesis:2.6" level="project" />
+    <orderEntry type="library" name="Gradle: cglib:cglib-nodep:2.2" level="project" />
     <orderEntry type="library" name="Gradle: net.minidev:json-smart:2.3" level="project" />
     <orderEntry type="library" name="Gradle: net.bytebuddy:byte-buddy-agent:1.9.13" level="project" />
-    <orderEntry type="library" name="Gradle: org.objenesis:objenesis:2.6" level="project" />
     <orderEntry type="library" name="Gradle: com.vaadin.external.google:android-json:0.0.20131108.vaadin1" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-jcl:5.1.8.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: net.java.dev.jna:jna:4.5.2" level="project" />
