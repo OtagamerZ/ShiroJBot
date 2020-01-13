@@ -2,7 +2,7 @@ package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.mysql.BackupDAO;
-import com.kuuhaku.controller.mysql.Sweeper;
+import com.kuuhaku.controller.Sweeper;
 import com.kuuhaku.model.DataDump;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Activity;
@@ -17,6 +17,9 @@ public class BackupEvent implements Job {
 	public void execute(JobExecutionContext context) {
 		Main.getInfo().getAPI().getPresence().setActivity(Main.getRandomActivity());
 		Main.getTet().getPresence().setActivity(Activity.playing(" em diversos mundos espalhados em " + Main.getTet().getGuilds().size() + " servidores!"));
+
+		Sweeper.mark();
+
 		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getCADump(), com.kuuhaku.controller.sqlite.BackupDAO.getGuildDump()));
 		Helper.logger(this.getClass()).info("Respostas/Guilds salvos com sucesso!");
 		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump()));

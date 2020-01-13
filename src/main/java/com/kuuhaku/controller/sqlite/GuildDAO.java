@@ -4,6 +4,7 @@ import com.kuuhaku.model.GuildConfig;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.util.List;
 
 public class GuildDAO {
 	public static GuildConfig getGuildById(String id) {
@@ -18,6 +19,8 @@ public class GuildDAO {
 
 		return gc;
 	}
+
+
 
 	public static void addGuildToDB(net.dv8tion.jda.api.entities.Guild guild) {
 		EntityManager em = Manager.getEntityManager();
@@ -53,5 +56,17 @@ public class GuildDAO {
 		em.getTransaction().commit();
 
 		em.close();
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<GuildConfig> getAllGuilds() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query gc = em.createQuery("SELECT g FROM GuildConfig g", GuildConfig.class);
+		List<GuildConfig> gcs = (List<GuildConfig>) gc.getResultList();
+
+		em.close();
+
+		return gcs;
 	}
 }
