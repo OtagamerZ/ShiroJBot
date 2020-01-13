@@ -18,6 +18,7 @@ package com.kuuhaku;/*
 import com.kuuhaku.controller.mysql.BackupDAO;
 import com.kuuhaku.controller.mysql.ExceedDAO;
 import com.kuuhaku.controller.Relay;
+import com.kuuhaku.controller.mysql.Sweeper;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.Manager;
 import com.kuuhaku.events.JibrilEvents;
@@ -157,6 +158,8 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		Helper.logger(Main.class).info("Respostas/Guilds salvos com sucesso!");
 		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump()));
 		Helper.logger(Main.class).info("Membros salvos com sucesso!");
+		Sweeper.sweep();
+		Helper.logger(Main.class).info("Entidades marcadas para remoção removidas!");
 		Manager.disconnect();
 		tet.shutdown();
 		jbr.shutdown();
