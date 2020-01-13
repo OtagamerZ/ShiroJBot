@@ -1,13 +1,13 @@
 package com.kuuhaku.command.commands.music;
 
+import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.Page;
+import com.github.ygimenez.type.PageType;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.Youtube;
-import com.kuuhaku.method.Pages;
-import com.kuuhaku.model.Page;
 import com.kuuhaku.model.YoutubeVideo;
-import com.kuuhaku.type.PageType;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
