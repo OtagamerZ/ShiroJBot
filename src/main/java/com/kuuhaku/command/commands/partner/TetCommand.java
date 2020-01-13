@@ -7,8 +7,20 @@ import net.dv8tion.jda.api.entities.*;
 
 public class TetCommand extends Command {
 
-	public TetCommand() {
-		super("tet", "Chama o Tet para ser a mensageira em seu servidor.", Category.PARTNER);
+	public TetCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public TetCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public TetCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public TetCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

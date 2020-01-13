@@ -28,8 +28,20 @@ import javax.persistence.NoResultException;
 
 public class PartnerTagCommand extends Command {
 
-    public PartnerTagCommand() {
-        super("switchpartner", new String[]{"mudaparceiro", "tagparceiro", "éparça"}, "<@usuário>", "Define um usuário como parceiro ou não.", Category.DEVS);
+    public PartnerTagCommand(String name, String description, Category category) {
+        super(name, description, category);
+    }
+
+    public PartnerTagCommand(String name, String[] aliases, String description, Category category) {
+        super(name, aliases, description, category);
+    }
+
+    public PartnerTagCommand(String name, String usage, String description, Category category) {
+        super(name, usage, description, category);
+    }
+
+    public PartnerTagCommand(String name, String[] aliases, String usage, String description, Category category) {
+        super(name, aliases, usage, description, category);
     }
 
     @Override

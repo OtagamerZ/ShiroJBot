@@ -8,8 +8,20 @@ import java.io.File;
 
 public class LogCommand extends Command {
 
-	public LogCommand() {
-		super("log", "Recupera o log da Shiro.", Category.DEVS);
+	public LogCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public LogCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public LogCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public LogCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override
