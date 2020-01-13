@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.entities.Guild;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -69,6 +70,8 @@ public class Sweeper {
 		em.getTransaction().commit();
 
 		em.close();
+
+		System.out.println(Arrays.toString(gcs.toArray()) + "----------" + Arrays.toString(mbs.toArray()));
 
 		return gcs.size() + mbs.size();
 	}
