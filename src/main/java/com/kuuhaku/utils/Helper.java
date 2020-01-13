@@ -470,10 +470,12 @@ public class Helper {
 		JSONObject root = gc.getButtonConfigs();
 		String msgId = channel.retrieveMessageById(args[0]).complete().getId();
 
+		Emote e = EmojiUtils.containsEmoji(s2) ? null : Main.getInfo().getAPI().getEmoteById(s2);
+
 		JSONObject msg = new JSONObject();
 
 		JSONObject btn = new JSONObject();
-		btn.put("emote", EmojiUtils.containsEmoji(s2) ? s2 : Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById(s2)).getAsMention());
+		btn.put("emote", e == null ? s2 : "<" + (e.isAnimated() ? "a:" : ":") + e.getName() + ":" + e.getId() + ">");
 		btn.put("role", message.getMentionedRoles().get(0).getId());
 
 		channel.retrieveMessageById(msgId).queue();
