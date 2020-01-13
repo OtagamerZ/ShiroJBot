@@ -1,11 +1,11 @@
 package com.kuuhaku.controller.mysql;
 
+import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.Page;
+import com.github.ygimenez.type.PageType;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.sqlite.MemberDAO;
-import com.kuuhaku.method.Pages;
 import com.kuuhaku.model.Member;
-import com.kuuhaku.model.Page;
-import com.kuuhaku.type.PageType;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;

@@ -66,6 +66,7 @@ dependencies {
     compile 'com.enigmabridge:hibernate4-sqlite-dialect:0.1.2'
     compile 'com.google.apis:google-api-services-youtube:v3-rev212-1.25.0'
     compile 'com.rollbar:rollbar-java:1.+'
+    compile 'com.kcthota:emoji4j:5.0'
     compile ('org.springframework.boot:spring-boot-starter-data-jpa') {
         exclude module : 'spring-boot-starter-logging'
     }
@@ -90,8 +91,7 @@ dependencies {
     compile group: 'org.apache.logging.log4j', name: 'log4j-jcl', version: '2.11.2'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2', version: '2.1.6.RELEASE'
     compile group: 'org.beanshell', name: 'bsh', version: '2.0b5'
-    compile group: 'com.github.liheyuan', name: 'simple-emoji-4j', version: 'f26d3b39be'
-    compile group: 'com.github.ygimenez', name: 'PaginationUtils', version: '20b20a71e5'
+    compile group: 'com.github.ygimenez', name: 'PaginationUtils', version: '1.0.2'
     implementation 'com.graphql-java:graphql-java:2019-05-08T02-56-27-cca4316'
 }
 
