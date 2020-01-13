@@ -17,12 +17,12 @@
 
 package com.kuuhaku.command.commands.moderation;
 
-import com.coder4.emoji.EmojiUtils;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.GuildConfig;
 import com.kuuhaku.utils.Helper;
+import emoji4j.EmojiUtils;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import org.apache.commons.lang3.StringUtils;
@@ -53,7 +53,7 @@ public class RoleChooserCommand extends Command {
 		} else if (args[1].equals(Helper.CANCEL)) {
 			channel.sendMessage(":x: | Não é possível atribuir um cargo ao emote " + Helper.CANCEL + ".").queue();
 			return;
-		} else if (!EmojiUtils.containsEmoji(args[1]) && message.getEmotes().size() == 0) {
+		} else if (!EmojiUtils.isEmoji(args[1]) && message.getEmotes().size() == 0) {
 			channel.sendMessage(":x: | Emote inválido, verifique se você colocou o emote na posição correta (após o ID, separado por espaço).").queue();
 			return;
 		}
