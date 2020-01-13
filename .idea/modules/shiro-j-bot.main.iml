@@ -68,6 +68,7 @@
     <orderEntry type="library" name="Gradle: org.springframework.data:spring-data-commons:2.1.9.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.25" level="project" />
     <orderEntry type="library" name="Gradle: org.beanshell:bsh:2.0b5" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.liheyuan:simple-emoji-4j:f26d3b39be" level="project" />
     <orderEntry type="library" name="Gradle: com.google.api-client:google-api-client:1.25.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.oauth-client:google-oauth-client:1.25.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.http-client:google-http-client-jackson2:1.25.0" level="project" />
