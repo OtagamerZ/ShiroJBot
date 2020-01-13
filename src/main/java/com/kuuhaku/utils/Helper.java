@@ -17,6 +17,7 @@
 
 package com.kuuhaku.utils;
 
+import com.coder4.emoji.EmojiUtils;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.mysql.TagDAO;
@@ -472,7 +473,7 @@ public class Helper {
 		JSONObject msg = new JSONObject();
 
 		JSONObject btn = new JSONObject();
-		btn.put("emote", s2);
+		btn.put("emote", EmojiUtils.containsEmoji(s2) ? s2 : Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById(s2)).getAsMention());
 		btn.put("role", message.getMentionedRoles().get(0).getId());
 
 		channel.retrieveMessageById(msgId).queue();
