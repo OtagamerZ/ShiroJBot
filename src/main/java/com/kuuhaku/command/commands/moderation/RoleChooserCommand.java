@@ -49,6 +49,9 @@ public class RoleChooserCommand extends Command {
 		} else if (message.getMentionedRoles().size() == 0) {
 			channel.sendMessage(":x: | É necessário informar o cargo a ser dado ao clicar no botão.").queue();
 			return;
+		} else if (args[1].equals(Helper.CANCEL)) {
+			channel.sendMessage(":x: | Não é possível atribuir um cargo ao emote " + Helper.CANCEL + ".").queue();
+			return;
 		}
 
 		try {

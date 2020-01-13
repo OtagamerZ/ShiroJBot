@@ -64,7 +64,7 @@ import java.util.stream.Collectors;
 public class Helper {
 
 	public static final String VOID = "\u200B";
-	private static final String CANCEL = "\u274E";
+	public static final String CANCEL = "\u274E";
 	public static final String ACCEPT = "\u2705";
 	public static final int CANVAS_SIZE = 1024;
 	public static final DateTimeFormatter dateformat = DateTimeFormatter.ofPattern("dd/MMM/yyyy | HH:mm:ss (z)");
