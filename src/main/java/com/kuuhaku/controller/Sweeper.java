@@ -10,29 +10,23 @@ import net.dv8tion.jda.api.entities.Guild;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Sweeper {
-	public static int sweep() {
+	public static void sweep() {
 		EntityManager em = Manager.getEntityManager();
-
-		int affected = 0;
 
 		em.getTransaction().begin();
 		Query q = em.createQuery("DELETE FROM GuildConfig WHERE markForDelete = TRUE");
-
-		affected += q.executeUpdate();
+		q.executeUpdate();
 
 		q = em.createQuery("DELETE FROM Member WHERE markForDelete = TRUE");
-		affected += q.executeUpdate();
+		q.executeUpdate();
 		em.getTransaction().commit();
 
 		em.close();
-
-		return affected;
 	}
 
 	public static int mark() {
@@ -41,24 +35,21 @@ public class Sweeper {
 
 		Map<String, List<net.dv8tion.jda.api.entities.Member>> gs = Main.getInfo().getAPI().getGuilds().stream().collect(Collectors.toMap(Guild::getId, Guild::getMembers));
 
-		System.out.println(Arrays.toString(gs.keySet().toArray()));
-
-		gcs.removeIf(g -> gs.containsKey(g.getGuildID()));
-		mbs.removeIf(m -> {
+		List<GuildConfig> safeGcs = gcs.stream().filter(g -> gs.containsKey(g.getGuildID())).collect(Collectors.toList());
+		List<Member> safeMbs = mbs.stream().filter(m -> {
 			List<net.dv8tion.jda.api.entities.Member> ms = gs.getOrDefault(m.getSid(), null);
 			if (ms == null) return false;
 			else return ms.stream().anyMatch(c -> c.getId().equals(m.getMid()));
-		});
+		}).collect(Collectors.toList());
 
-		gcs.forEach(gc -> {
-			gc.setMarkForDelete(true);
-			GuildDAO.updateGuildSettings(gc);
-		});
+		gcs.removeAll(safeGcs);
+		mbs.removeAll(safeMbs);
 
-		mbs.forEach(mb -> {
-			mb.setMarkForDelete(true);
-			MemberDAO.updateMemberConfigs(mb);
-		});
+		gcs.forEach(gc -> gc.setMarkForDelete(true));
+		mbs.forEach(mb -> mb.setMarkForDelete(true));
+
+		safeGcs.forEach(gc -> gc.setMarkForDelete(false));
+		safeMbs.forEach(mb -> mb.setMarkForDelete(false));
 
 		return gcs.size() + mbs.size();
 	}
