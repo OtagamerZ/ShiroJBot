@@ -4,15 +4,19 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 public class Sweeper {
-	public static void sweep() {
+	public static int sweep() {
 		EntityManager em = Manager.getEntityManager();
 
+		int affected = 0;
+
 		Query q = em.createQuery("DELETE FROM GuildConfig WHERE markForDelete = TRUE");
-		q.executeUpdate();
+		affected += q.executeUpdate();
 
 		q = em.createQuery("DELETE FROM Member WHERE markForDelete = TRUE");
-		q.executeUpdate();
+		affected += q.executeUpdate();
 
 		em.close();
+
+		return affected;
 	}
 }
