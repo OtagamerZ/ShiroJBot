@@ -17,7 +17,7 @@
 
 package com.kuuhaku.command.commands.moderation;
 
-import com.kuuhaku.Main;
+import com.coder4.emoji.EmojiUtils;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.GuildDAO;
@@ -53,13 +53,13 @@ public class RoleChooserCommand extends Command {
 		} else if (args[1].equals(Helper.CANCEL)) {
 			channel.sendMessage(":x: | Não é possível atribuir um cargo ao emote " + Helper.CANCEL + ".").queue();
 			return;
-		} else if (Main.getInfo().getAPI().getEmotes().stream().noneMatch(e -> e.getAsMention().equals(args[1]))) {
+		} else if (!EmojiUtils.containsEmoji(args[1]) && message.getEmotes().size() == 0) {
 			channel.sendMessage(":x: | Emote inválido, verifique se você colocou o emote na posição correta (após o ID, separado por espaço).").queue();
 			return;
 		}
 
 		try {
-			Helper.addButton(args, message, channel, gc, args[1]);
+			Helper.addButton(args, message, channel, gc, message.getEmotes().size() > 0 ? message.getEmotes().get(0).getAsMention() : args[1]);
 
 			channel.sendMessage("Botão adicionado com sucesso!").queue(s -> Helper.refreshButtons(gc));
 		} catch (IllegalArgumentException e) {
