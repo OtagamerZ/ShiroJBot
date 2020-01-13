@@ -18,7 +18,7 @@ package com.kuuhaku;/*
 import com.kuuhaku.controller.mysql.BackupDAO;
 import com.kuuhaku.controller.mysql.ExceedDAO;
 import com.kuuhaku.controller.Relay;
-import com.kuuhaku.controller.mysql.Sweeper;
+import com.kuuhaku.controller.Sweeper;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.Manager;
 import com.kuuhaku.events.JibrilEvents;
@@ -119,7 +119,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		jbr.addEventListener(new JibrilEvents());
 		tet.addEventListener(new TetEvents());
 
-		com.kuuhaku.controller.mysql.GuildDAO.getAllGuilds().forEach(Helper::refreshButtons);
+		GuildDAO.getAllGuilds().forEach(Helper::refreshButtons);
 
 		Helper.logger(Main.class).info("<----------END OF BOOT---------->");
 		Helper.logger(Main.class).info("Estou pronta!");
@@ -154,6 +154,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	}
 
 	public static void shutdown() {
+		Sweeper.mark();
 		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getCADump(), com.kuuhaku.controller.sqlite.BackupDAO.getGuildDump()));
 		Helper.logger(Main.class).info("Respostas/Guilds salvos com sucesso!");
 		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump()));
