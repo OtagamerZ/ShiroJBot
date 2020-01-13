@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.entities.Guild;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -40,11 +41,13 @@ public class Sweeper {
 
 		Map<String, List<net.dv8tion.jda.api.entities.Member>> gs = Main.getInfo().getAPI().getGuilds().stream().collect(Collectors.toMap(Guild::getId, Guild::getMembers));
 
-		gcs.removeIf(g -> !gs.containsKey(g.getGuildID()));
+		System.out.println(Arrays.toString(gs.keySet().toArray()));
+
+		gcs.removeIf(g -> gs.containsKey(g.getGuildID()));
 		mbs.removeIf(m -> {
 			List<net.dv8tion.jda.api.entities.Member> ms = gs.getOrDefault(m.getSid(), null);
-			if (ms == null) return true;
-			else return ms.stream().noneMatch(c -> c.getId().equals(m.getMid()));
+			if (ms == null) return false;
+			else return ms.stream().anyMatch(c -> c.getId().equals(m.getMid()));
 		});
 
 		gcs.forEach(gc -> {
