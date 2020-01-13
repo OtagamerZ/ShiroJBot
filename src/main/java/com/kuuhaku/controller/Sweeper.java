@@ -51,6 +51,15 @@ public class Sweeper {
 		safeGcs.forEach(gc -> gc.setMarkForDelete(false));
 		safeMbs.forEach(mb -> mb.setMarkForDelete(false));
 
+		EntityManager em = com.kuuhaku.controller.sqlite.Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		gcs.forEach(em::merge);
+		mbs.forEach(em::merge);
+		safeGcs.forEach(em::merge);
+		safeMbs.forEach(em::merge);
+		em.getTransaction().commit();
+
 		return gcs.size() + mbs.size();
 	}
 }
