@@ -159,7 +159,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump()));
 		Helper.logger(Main.class).info("Membros salvos com sucesso!");
 		Sweeper.sweep();
-		Helper.logger(Main.class).info("Entidades marcadas para remoção removidas!");
+		Helper.logger(Main.class).info(Sweeper.sweep() + " entradas no banco de dados liberadas!");
 		Manager.disconnect();
 		tet.shutdown();
 		jbr.shutdown();
