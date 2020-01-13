@@ -88,16 +88,20 @@ public class ComandosCommand extends Command {
 		for (Command cmmd : Main.getCommandManager().getCommands()) {
 			boolean found = false;
 
-			if (!cmmd.getCategory().isEnabled(gc, guild)) {
+			if (cmmd.getName().equalsIgnoreCase(cmdName) && cmmd.getCategory().isEnabled(gc, guild)) found = true;
+			else if (cmmd.getName().equalsIgnoreCase(cmdName) && !cmmd.getCategory().isEnabled(gc, guild)) {
 				channel.sendMessage(":x: | Módulo desabilitado neste servidor!").queue();
-				continue;
+				return;
 			}
-			else if (cmmd.getName().equalsIgnoreCase(cmdName)) found = true;
 
 			for (String alias : cmmd.getAliases()) {
-				if (alias.equalsIgnoreCase(cmdName)) {
+				if (alias.equalsIgnoreCase(cmdName) && cmmd.getCategory().isEnabled(gc, guild)) {
 					found = true;
 					break;
+				}
+				else if (alias.equalsIgnoreCase(cmdName) && !cmmd.getCategory().isEnabled(gc, guild)) {
+					channel.sendMessage(":x: | Módulo desabilitado neste servidor!").queue();
+					return;
 				}
 			}
 
