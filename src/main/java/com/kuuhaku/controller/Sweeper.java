@@ -27,6 +27,18 @@ public class Sweeper {
 		em.getTransaction().commit();
 
 		em.close();
+
+		em = com.kuuhaku.controller.sqlite.Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		q = em.createQuery("DELETE FROM GuildConfig WHERE markForDelete = TRUE");
+		q.executeUpdate();
+
+		q = em.createQuery("DELETE FROM Member WHERE markForDelete = TRUE");
+		q.executeUpdate();
+		em.getTransaction().commit();
+
+		em.close();
 	}
 
 	public static int mark() {
@@ -59,6 +71,8 @@ public class Sweeper {
 		safeGcs.forEach(em::merge);
 		safeMbs.forEach(em::merge);
 		em.getTransaction().commit();
+
+		em.close();
 
 		return gcs.size() + mbs.size();
 	}
