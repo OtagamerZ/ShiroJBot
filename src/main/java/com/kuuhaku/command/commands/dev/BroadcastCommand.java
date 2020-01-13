@@ -4,9 +4,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.mysql.TagDAO;
-import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.method.Pages;
-import com.kuuhaku.model.GuildConfig;
 import com.kuuhaku.model.Page;
 import com.kuuhaku.model.Tags;
 import com.kuuhaku.type.PageType;
@@ -54,20 +52,21 @@ public class BroadcastCommand extends Command {
 
 		switch (args[0].toLowerCase()) {
 			case "geral":
-				List<GuildConfig> gcs = GuildDAO.getAllGuilds();
-				List<List<GuildConfig>> gcPages = Helper.chunkify(gcs, 10);
+				List<Guild> gcs = Main.getInfo().getAPI().getGuilds();
+				List<List<Guild>> gcPages = Helper.chunkify(gcs, 10);
 
-				for (List<GuildConfig> gs : gcPages) {
+				for (List<Guild> gs : gcPages) {
 					result.clear();
 					eb.clear();
 					sb.setLength(0);
 
-					for (GuildConfig gc : gs) {
+					for (Guild g : gs) {
 						try {
-							Objects.requireNonNull(Main.getInfo().getGuildByID(gc.getGuildID()).getTextChannelById(gc.getCanalLog())).sendMessage(msg).complete();
-							result.put(gc.getName(), true);
+							assert g.getDefaultChannel() != null;
+							g.getDefaultChannel().sendMessage(msg).submit().get();
+							result.put(g.getName(), true);
 						} catch (Exception e) {
-							result.put(gc.getName(), false);
+							result.put(g.getName(), false);
 						}
 					}
 
