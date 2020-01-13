@@ -37,21 +37,17 @@ public class JibrilEmoteListCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		List<Page> pages = new ArrayList<>();
-		List<MessageEmbed.Field> f = new ArrayList<>();
-
 		EmbedBuilder eb = new EmbedBuilder();
+		List<List<Emote>> emotes = Helper.chunkify(Main.getJibril().getEmotes().stream().filter(e -> StringUtils.containsIgnoreCase(e.getAsMention(), args.length > 0 ? args[0] : "")).collect(Collectors.toList()), 10);
 
-		Main.getJibril().getEmotes().stream().filter(e -> StringUtils.containsIgnoreCase(e.getAsMention(), args.length > 0 ? args[0] : "")).collect(Collectors.toList()).forEach(e -> f.add(new MessageEmbed.Field("Emote " + e.getAsMention(), "Menção: " + e.getAsMention().replace("<", "`{").replace(">", "}`").replace(":", "&"), false)));
-
-		for (int i = 0; i < Math.ceil(f.size() / 10f); i++) {
+		for (int i = 0; i < emotes.size(); i++) {
 			eb.clear();
-			List<MessageEmbed.Field> subF = f.subList(-10 + (10 * (i + 1)), Math.min(10 * (i + 1), f.size()));
-			subF.forEach(eb::addField);
 
 			eb.setTitle("<a:SmugDance:598842924725305344> Emotes disponíveis para a Jibril:");
 			eb.setColor(Helper.getRandomColor());
+			emotes.get(i).forEach(e -> eb.addField("Emote: " + e.getAsMention(), "Menção: " + e.getAsMention().replace("<", "`{").replace(">", "}`").replace(":", "&"), false));
 			eb.setAuthor("Para usar estes emotes, simplesmente digite a menção no chat global, ela será convertida automaticamente.");
-			eb.setFooter("Página " + (i + 1) + ". Mostrando " + (-10 + 10 * (i + 1)) + " - " + (Math.min(10 * (i + 1), f.size())) + " resultados.", null);
+			eb.setFooter("Página " + (i + 1) + " de " + emotes.size() + ". Total de " + emotes.stream().mapToInt(List::size).count() + " resultados.", null);
 
 			pages.add(new Page(PageType.EMBED, eb.build()));
 		}
