@@ -48,11 +48,7 @@ public class Sweeper {
 		Map<String, List<net.dv8tion.jda.api.entities.Member>> gs = Main.getInfo().getAPI().getGuilds().stream().collect(Collectors.toMap(Guild::getId, Guild::getMembers));
 
 		List<GuildConfig> safeGcs = gcs.stream().filter(g -> gs.containsKey(g.getGuildID())).collect(Collectors.toList());
-		List<Member> safeMbs = mbs.stream().filter(m -> {
-			List<net.dv8tion.jda.api.entities.Member> ms = gs.getOrDefault(m.getSid(), null);
-			if (ms == null) return false;
-			else return ms.stream().anyMatch(c -> c.getId().equals(m.getMid()));
-		}).collect(Collectors.toList());
+		List<Member> safeMbs = mbs.stream().filter(m -> gs.containsKey(m.getSid()) && gs.get(m.getSid()).stream().anyMatch(mb -> mb.getId().equals(m.getMid()))).collect(Collectors.toList());
 
 		gcs.removeAll(safeGcs);
 		mbs.removeAll(safeMbs);
