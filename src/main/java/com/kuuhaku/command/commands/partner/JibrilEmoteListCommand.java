@@ -1,4 +1,4 @@
-package com.kuuhaku.command.commands.misc;
+package com.kuuhaku.command.commands.partner;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
@@ -18,8 +18,20 @@ import java.util.stream.Collectors;
 
 public class JibrilEmoteListCommand extends Command {
 
-	public JibrilEmoteListCommand() {
-		super("jemotes", "<nome>", "Mostra a lista de emotes disponíveis para uso através da Jibril.", Category.PARTNER);
+	public JibrilEmoteListCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public JibrilEmoteListCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public JibrilEmoteListCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public JibrilEmoteListCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

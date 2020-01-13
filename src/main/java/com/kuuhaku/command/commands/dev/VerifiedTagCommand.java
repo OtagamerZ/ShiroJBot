@@ -28,8 +28,20 @@ import javax.persistence.NoResultException;
 
 public class VerifiedTagCommand extends Command {
 
-	public VerifiedTagCommand() {
-		super("switchverified", new String[]{"mudaverificado", "tagverificado", "verificado"}, "<@usuário>", "Define um usuário como verificado ou não.", Category.DEVS);
+	public VerifiedTagCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public VerifiedTagCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public VerifiedTagCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public VerifiedTagCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

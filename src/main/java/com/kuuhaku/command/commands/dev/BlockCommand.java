@@ -13,8 +13,20 @@ import java.util.Arrays;
 
 public class BlockCommand extends Command {
 
-	public BlockCommand() {
-		super("block", new String[]{"bloquear"}, "<tipo> <ID> <razão>", "Bloqueia alguém de usar o chat global.", Category.SHERIFFS);
+	public BlockCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public BlockCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public BlockCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public BlockCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

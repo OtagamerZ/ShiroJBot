@@ -1,4 +1,4 @@
-package com.kuuhaku.command.commands.misc;
+package com.kuuhaku.command.commands.information;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
@@ -15,10 +15,10 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-public class LocalEmoteListCommand extends Command {
+public class ShiroEmoteListCommand extends Command {
 
-	public LocalEmoteListCommand() {
-		super("emotes", "<nome>", "Mostra a lista de emotes disponíveis no servidor em que o comando foi executado.", Category.MISC);
+	public ShiroEmoteListCommand() {
+		super("semotes", "<nome>", "Mostra a lista de emotes disponíveis para uso através da Shiro.", Category.INFO);
 	}
 
 	@Override
@@ -28,17 +28,18 @@ public class LocalEmoteListCommand extends Command {
 
 		EmbedBuilder eb = new EmbedBuilder();
 
-		guild.getEmotes().stream().filter(e -> StringUtils.containsIgnoreCase(e.getAsMention(), args.length > 0 ? args[0] : "")).collect(Collectors.toList()).forEach(e -> f.add(new MessageEmbed.Field("Emote " + e.getAsMention(), "Menção: " + e.getAsMention().replace("<", "`{").replace(">", "}`").replace(":", "&"), false)));
+		Main.getInfo().getAPI().getEmotes().stream().filter(e -> StringUtils.containsIgnoreCase(e.getAsMention(), args.length > 0 ? args[0] : "")).collect(Collectors.toList()).forEach(e -> f.add(new MessageEmbed.Field("Emote " + e.getAsMention(), "Menção: " + e.getAsMention().replace("<", "`{").replace(">", "}`").replace(":", "&"), false)));
 
 		for (int i = 0; i < Math.ceil(f.size() / 10f); i++) {
 			eb.clear();
 			List<MessageEmbed.Field> subF = f.subList(-10 + (10 * (i + 1)), Math.min(10 * (i + 1), f.size()));
 			subF.forEach(eb::addField);
 
-			eb.setTitle("<a:SmugDance:598842924725305344> Emotes disponíveis neste servidor:");
+			eb.setTitle("<a:SmugDance:598842924725305344> Emotes disponíveis para a Shiro:");
 			Helper.finishEmbed(guild, pages, f, eb, i);
 		}
 
 		channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
 	}
+
 }

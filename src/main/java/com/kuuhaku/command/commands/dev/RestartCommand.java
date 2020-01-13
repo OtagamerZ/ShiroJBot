@@ -8,8 +8,20 @@ import net.dv8tion.jda.api.entities.*;
 
 public class RestartCommand extends Command {
 
-	public RestartCommand() {
-		super("restart", new String[]{"reset"}, "Reinicia a Shiro!", Category.DEVS);
+	public RestartCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public RestartCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public RestartCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public RestartCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

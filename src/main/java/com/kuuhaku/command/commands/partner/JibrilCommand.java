@@ -7,8 +7,20 @@ import net.dv8tion.jda.api.entities.*;
 
 public class JibrilCommand extends Command {
 
-	public JibrilCommand() {
-		super("jibril", "Chama a Jibril para ser a mensageira em seu servidor.", Category.PARTNER);
+	public JibrilCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public JibrilCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public JibrilCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public JibrilCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

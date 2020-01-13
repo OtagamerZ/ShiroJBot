@@ -7,8 +7,20 @@ import net.dv8tion.jda.api.entities.*;
 
 public class RelaysCommand extends Command {
 
-	public RelaysCommand() {
-		super("relays", new String[]{"relist"}, "Mostra os IDs dos clientes do relay.", Category.DEVS);
+	public RelaysCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public RelaysCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public RelaysCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public RelaysCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

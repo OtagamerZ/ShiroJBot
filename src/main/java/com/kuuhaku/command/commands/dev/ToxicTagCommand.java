@@ -28,8 +28,20 @@ import javax.persistence.NoResultException;
 
 public class ToxicTagCommand extends Command {
 
-    public ToxicTagCommand() {
-        super("switchtoxic", new String[]{"mudatoxico", "tagtoxico", "reportayasuo"}, "<@usuário>", "Define um usuário como tóxico ou não.", Category.DEVS);
+    public ToxicTagCommand(String name, String description, Category category) {
+        super(name, description, category);
+    }
+
+    public ToxicTagCommand(String name, String[] aliases, String description, Category category) {
+        super(name, aliases, description, category);
+    }
+
+    public ToxicTagCommand(String name, String usage, String description, Category category) {
+        super(name, usage, description, category);
+    }
+
+    public ToxicTagCommand(String name, String[] aliases, String usage, String description, Category category) {
+        super(name, aliases, usage, description, category);
     }
 
     @Override

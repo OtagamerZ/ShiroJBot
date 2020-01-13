@@ -1,4 +1,4 @@
-package com.kuuhaku.command.commands.misc;
+package com.kuuhaku.command.commands.partner;
 
 import bsh.Interpreter;
 import com.kuuhaku.Main;
@@ -15,8 +15,21 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 public class CompileCommand extends Command {
-	public CompileCommand() {
-		super("compilar", new String[]{"compile"}, "```java\n<código>\n```", "Executa um código Java.", Category.MISC);
+
+	public CompileCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public CompileCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public CompileCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public CompileCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override
