@@ -17,7 +17,10 @@
 
 package com.kuuhaku.managers;
 
+import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.command.commands.partner.CompileCommand;
+import com.kuuhaku.command.commands.partner.JibrilEmoteListCommand;
 import com.kuuhaku.command.commands.reactions.*;
 import com.kuuhaku.command.commands.dev.*;
 import com.kuuhaku.command.commands.exceed.ExceedRankCommand;
@@ -42,22 +45,26 @@ public class CommandManager {
 	public CommandManager() {
 		commands = new ArrayList<Command>() {{
 			//DEV
-			add(new KillCommand());
-			add(new RestartCommand());
-			add(new LeaveCommand());
-			add(new ToxicTagCommand());
-			add(new PartnerTagCommand());
-			add(new VerifiedTagCommand());
-			add(new RelaysCommand());
-			add(new BlockCommand());
-			add(new LogCommand());
-			add(new TokenCommand());
-			add(new BroadcastCommand());
+			add(new KillCommand("desligar", new String[]{"kill"}, "Desliga a Shiro.", Category.DEVS));
+			add(new RestartCommand("reiniciar", new String[]{"restart"}, "Reinicia a Shiro.", Category.DEVS));
+			add(new LeaveCommand("sair", new String[]{"leave"}, "<ID do servidor>", "Sai do servidor com o ID informado.", Category.DEVS));
+			add(new ToxicTagCommand("toxico", new String[]{"toxic"}, "<@usuário>", "Define um usuário como tóxico ou não.", Category.DEVS));
+			add(new PartnerTagCommand("parceiro", new String[]{"partner"}, "<@usuário>", "Define um usuário como parceiro ou não.", Category.DEVS));
+			add(new VerifiedTagCommand("verificado", new String[]{"verified"}, "<@usuário>", "Define um usuário como verificado ou não.", Category.DEVS));
+			add(new RelaysCommand("relays", "Mostra os IDs dos clientes do relay.", Category.DEVS));
+			add(new LogCommand("log", "Recupera o arquivo de logs", Category.DEVS));
+			add(new TokenCommand("chave", new String[]{"token"}, "<nome>", "Gera um token aleatório de 64 caractéres.", Category.DEVS));
+			add(new BroadcastCommand("transmitir", new String[]{"broadcast", "bc"}, "<tipo> <mensagem>", "Envia um aviso a todos os donos de servidor que possuem a Shiro, ou a todos o parceiros.", Category.DEVS));
+			add(new InviteCommand("convite", new String[]{"invite"}, "<ID do servidor>", "Obtém um convite de uso único do servidor informado.", Category.DEVS));
+
+			//SHERIFF
+			add(new BlockCommand("bloquear", new String[]{"block"}, "<tipo> <ID> <razão>", "Bloqueia alguém de usar o chat global.", Category.SHERIFFS));
 
 			//PARTNER
-			add(new JibrilCommand());
-			add(new CompileCommand());
-			add(new TetCommand());
+			add(new JibrilCommand("jibril", "Chama a Jibril para usar o chat global em seu servidor.", Category.PARTNER));
+			add(new CompileCommand("compilar", new String[]{"compile"}, "```java\n<código>\n```", "Executa um código Java.", Category.PARTNER));
+			add(new TetCommand("tet", "Chama o Tet para usar o módulo de RPG em seu servidor.", Category.PARTNER));
+			add(new JibrilEmoteListCommand("jemotes", "<nome>", "Mostra a lista de emotes disponíveis para uso através da Jibril.", Category.PARTNER));
 
 			//MODERATION
 			add(new RemoveAnswerCommand());
@@ -91,6 +98,8 @@ public class CommandManager {
 			add(new IDCommand());
 			add(new ColorTesterCommand());
 			add(new RegenRulesCommand());
+			add(new LocalEmoteListCommand());
+			add(new ShiroEmoteListCommand());
 
 			//MISC
 			add(new AsciiCommand());
@@ -104,9 +113,6 @@ public class CommandManager {
 			add(new AnimeCommand());
 			add(new ImageCommand());
 			add(new ValidateGIFCommand());
-			add(new LocalEmoteListCommand());
-			add(new ShiroEmoteListCommand());
-			add(new JibrilEmoteListCommand());
 			add(new EmbedCommand());
 			add(new PollCommand());
 			add(new TheAnswerCommand());

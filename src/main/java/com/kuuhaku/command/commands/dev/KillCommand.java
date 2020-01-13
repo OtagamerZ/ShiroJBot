@@ -6,9 +6,21 @@ import com.kuuhaku.command.Command;
 import net.dv8tion.jda.api.entities.*;
 
 public class KillCommand extends Command {
-	
-	public KillCommand() {
-		super("kill", new String[]{"shutdown"}, "Desliga a Shiro.", Category.DEVS);
+
+	public KillCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public KillCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public KillCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public KillCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

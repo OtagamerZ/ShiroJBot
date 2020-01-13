@@ -20,8 +20,20 @@ import java.util.concurrent.TimeUnit;
 
 public class BroadcastCommand extends Command {
 
-	public BroadcastCommand() {
-		super("broadcast", new String[]{"bc", "avisar"}, "<tipo> <mensagem>", "Envia um aviso a todos os donos de servidor que possuem a Shiro, ou a todos o parceiros.", Category.DEVS);
+	public BroadcastCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public BroadcastCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public BroadcastCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public BroadcastCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override
