@@ -47,7 +47,7 @@ public class LeaveCommand extends Command {
 
 			eb.setTitle("Servidores que eu participo:");
 			svPages.get(i).forEach(p -> eb.addField("Nome: " + p[0], "ID: " + p[1], false));
-			eb.setFooter("Página " + (i + 1) + " de " + svPages.size() + ". Total de " + svPages.stream().mapToInt(List::size).count() + " resultados.", null);
+			eb.setFooter("Página " + (i + 1) + " de " + svPages.size() + ". Total de " + svPages.stream().mapToInt(List::size).sum() + " resultados.", null);
 
 			pages.add(new Page(PageType.EMBED, eb.build()));
 		}
