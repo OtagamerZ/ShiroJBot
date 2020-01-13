@@ -21,6 +21,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.reactions.*;
 import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.Music;
@@ -170,6 +171,9 @@ public class JDAEvents extends ListenerAdapter {
 	@Override
 	public void onGuildLeave(GuildLeaveEvent event) {
 		Main.getInfo().getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
+			GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
+			gc.setMarkForDelete(true);
+			GuildDAO.updateGuildSettings(gc);
 			String msg = "Acabei de sair do servidor \"" + event.getGuild().getName() + "\".";
 			c.sendMessage(msg).queue();
 		}));
@@ -190,6 +194,8 @@ public class JDAEvents extends ListenerAdapter {
 	public void onGuildMemberJoin(@NotNull GuildMemberJoinEvent event) {
 		try {
 			GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
+
+			MemberDAO.addMemberToDB(event.getMember());
 
 			if (!gc.getMsgBoasVindas().equals("")) {
 				if (gc.isAntiRaid() && ((ChronoUnit.MILLIS.between(event.getUser().getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) / 1000) / 60) < 10) {
@@ -241,6 +247,10 @@ public class JDAEvents extends ListenerAdapter {
 	public void onGuildMemberLeave(@NotNull GuildMemberLeaveEvent event) {
 		try {
 			GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
+
+			com.kuuhaku.model.Member m = MemberDAO.getMemberById(event.getMember().getId() + event.getGuild().getId());
+			m.setMarkForDelete(true);
+			MemberDAO.updateMemberConfigs(m);
 
 			if (!gc.getMsgAdeus().equals("")) {
 				URL url = new URL(Objects.requireNonNull(event.getUser().getAvatarUrl()));

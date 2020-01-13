@@ -11,8 +11,32 @@ public class BackupDAO {
 	public static void dumpData(DataDump data) {
 		EntityManager em = Manager.getEntityManager();
 		em.getTransaction().begin();
-		data.getCaDump().forEach(em::merge);
-		data.getGcDump().forEach(em::merge);
+
+		for (int i = 0; i < data.getCaDump().size(); i++) {
+			em.merge(data.getCaDump().get(i));
+			if (i % 20 == 0) {
+				em.flush();
+				em.clear();
+			}
+			if (i % 1000 == 0) {
+				em.getTransaction().commit();
+				em.clear();
+				em.getTransaction().begin();
+			}
+		}
+
+		for (int i = 0; i < data.getGcDump().size(); i++) {
+			em.merge(data.getGcDump().get(i));
+			if (i % 20 == 0) {
+				em.flush();
+				em.clear();
+			}
+			if (i % 1000 == 0) {
+				em.getTransaction().commit();
+				em.clear();
+				em.getTransaction().begin();
+			}
+		}
 
 		for (int i = 0; i < data.getmDump().size(); i++) {
 			em.merge(data.getmDump().get(i));
