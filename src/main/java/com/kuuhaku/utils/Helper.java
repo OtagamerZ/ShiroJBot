@@ -417,12 +417,7 @@ public class Helper {
 				});
 
 				msg.clearReactions().queue(s -> Pages.buttonfy(Main.getInfo().getAPI(), msg, buttons, true));
-			} catch (ErrorResponseException e) {
-				JSONObject gcjo = gc.getButtonConfigs();
-				gcjo.remove(jo.getString("msgId"));
-				gc.setButtonConfigs(gcjo);
-				GuildDAO.updateGuildSettings(gc);
-			} catch (InterruptedException | ExecutionException ignore) {
+			} catch (ErrorResponseException | InterruptedException | ExecutionException ignore) {
 			}
 		});
 	}
