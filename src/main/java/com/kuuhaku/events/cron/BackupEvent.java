@@ -25,6 +25,6 @@ public class BackupEvent implements Job {
 		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump()));
 		Helper.logger(this.getClass()).info("Membros salvos com sucesso!");
 
-		Helper.logger(this.getClass()).info(Sweeper.sweep() + " entradas no banco de dados liberadas!");
+		Sweeper.sweep();
 	}
 }
