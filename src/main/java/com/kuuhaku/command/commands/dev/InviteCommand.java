@@ -37,9 +37,9 @@ public class InviteCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		EmbedBuilder eb = new EmbedBuilder();
 
-		List<String> servers = new ArrayList<>();
-		Main.getInfo().getAPI().getGuilds().stream().filter(s -> s.getSelfMember().hasPermission(Permission.CREATE_INSTANT_INVITE)).forEach(g -> servers.add("(" + g.getId() + ") " + g.getName()));
-		List<List<String>> svPages = Helper.chunkify(servers, 10);
+		List<String[]> servers = new ArrayList<>();
+		Main.getInfo().getAPI().getGuilds().stream().filter(s -> s.getSelfMember().hasPermission(Permission.CREATE_INSTANT_INVITE) && s.getDefaultChannel() != null).forEach(g -> servers.add(new String[]{g.getName(), g.getId()}));
+		List<List<String[]>> svPages = Helper.chunkify(servers, 10);
 
 		List<Page> pages = new ArrayList<>();
 
@@ -47,8 +47,8 @@ public class InviteCommand extends Command {
 			eb.clear();
 
 			eb.setTitle("Servidores que eu posso criar um convite:");
-			svPages.get(i).forEach(p -> eb.appendDescription(p + "\n"));
-			eb.setFooter("Página " + (i + 1) + " de " + svPages.size() + ". Mostrando " + svPages.get(i).size() + " resultados.", null);
+			svPages.get(i).forEach(p -> eb.addField("Nome: " + p[0], "ID: " + p[1], false));
+			eb.setFooter("Página " + (i + 1) + " de " + svPages.size() + ". Total de " + svPages.stream().mapToInt(List::size).count() + " resultados.", null);
 
 			pages.add(new Page(PageType.EMBED, eb.build()));
 		}
