@@ -55,6 +55,7 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
@@ -403,7 +404,7 @@ public class Helper {
 			TextChannel channel = g.getTextChannelById(jo.getString("canalId"));
 			assert channel != null;
 			try {
-				Message msg = channel.retrieveMessageById(jo.getString("msgId")).complete();
+				Message msg = channel.retrieveMessageById(jo.getString("msgId")).submit().get();
 				resolveButton(g, jo, buttons);
 
 				buttons.put(CANCEL, (m, ms) -> {
@@ -421,6 +422,7 @@ public class Helper {
 				gcjo.remove(jo.getString("msgId"));
 				gc.setButtonConfigs(gcjo);
 				GuildDAO.updateGuildSettings(gc);
+			} catch (InterruptedException | ExecutionException ignore) {
 			}
 		});
 	}
