@@ -18,7 +18,7 @@ public class BackupEvent implements Job {
 		Main.getInfo().getAPI().getPresence().setActivity(Main.getRandomActivity());
 		Main.getTet().getPresence().setActivity(Activity.playing(" em diversos mundos espalhados em " + Main.getTet().getGuilds().size() + " servidores!"));
 
-		Sweeper.mark();
+		Helper.logger(this.getClass()).info(Sweeper.mark() + " entradas dispensáveis encontradas!");
 
 		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getCADump(), com.kuuhaku.controller.sqlite.BackupDAO.getGuildDump()));
 		Helper.logger(this.getClass()).info("Respostas/Guilds salvos com sucesso!");

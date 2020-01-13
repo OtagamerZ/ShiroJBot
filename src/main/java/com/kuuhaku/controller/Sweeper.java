@@ -10,8 +10,9 @@ import net.dv8tion.jda.api.entities.Guild;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Sweeper {
 	public static int sweep() {
@@ -33,23 +34,29 @@ public class Sweeper {
 		return affected;
 	}
 
-	public static void mark() {
+	public static int mark() {
 		List<GuildConfig> gcs = GuildDAO.getAllGuilds();
 		List<Member> mbs = MemberDAO.getAllMembers();
 
-		List<Guild> gs = Main.getInfo().getAPI().getGuilds();
-		List<net.dv8tion.jda.api.entities.Member> us = gs.stream().map(Guild::getMembers).collect(ArrayList::new, List::addAll, List::addAll);
+		Map<String, List<net.dv8tion.jda.api.entities.Member>> gs = Main.getInfo().getAPI().getGuilds().stream().collect(Collectors.toMap(Guild::getId, Guild::getMembers));
+
+		gcs.removeIf(g -> !gs.containsKey(g.getGuildID()));
+		mbs.removeIf(m -> {
+			List<net.dv8tion.jda.api.entities.Member> ms = gs.getOrDefault(m.getSid(), null);
+			if (ms == null) return true;
+			else return ms.stream().noneMatch(c -> c.getId().equals(m.getMid()));
+		});
 
 		gcs.forEach(gc -> {
-			if (gs.stream().noneMatch(g -> g.getId().equals(gc.getGuildID()))) gc.setMarkForDelete(true);
-			else gc.setMarkForDelete(false);
+			gc.setMarkForDelete(true);
 			GuildDAO.updateGuildSettings(gc);
 		});
 
 		mbs.forEach(mb -> {
-			if (us.stream().noneMatch(u -> (u.getId() + u.getGuild().getId()).equals(mb.getId()))) mb.setMarkForDelete(true);
-			else mb.setMarkForDelete(false);
+			mb.setMarkForDelete(true);
 			MemberDAO.updateMemberConfigs(mb);
 		});
+
+		return gcs.size() + mbs.size();
 	}
 }
