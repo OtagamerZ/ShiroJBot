@@ -82,7 +82,7 @@ public class GuildEvents extends ListenerAdapter {
 							}
 						});
 						send.queue();
-						message.delete().queue();
+						message.delete().complete();
 					}
 				} catch (InsufficientPermissionException | ExecutionException | InterruptedException ignore) {
 				}
@@ -98,7 +98,7 @@ public class GuildEvents extends ListenerAdapter {
 
 			try {
 				if (member.getRoles().stream().anyMatch(r -> r.getId().equals(GuildDAO.getGuildById(guild.getId()).getCargoWarn()))) {
-					message.delete().queue();
+					message.delete().complete();
 					return;
 				}
 			} catch (InsufficientPermissionException ignore) {
@@ -127,17 +127,15 @@ public class GuildEvents extends ListenerAdapter {
 
 			if (GuildDAO.getGuildById(guild.getId()).getNoSpamChannels().contains(channel.getId()) && author != Main.getInfo().getSelfUser()) {
 				if (GuildDAO.getGuildById(guild.getId()).isHardAntispam()) {
-					channel.getHistory().retrievePast(20).queue(h -> {
-						h.removeIf(m -> ChronoUnit.MILLIS.between(m.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author);
+					List<Message> h = channel.getHistory().retrievePast(20).complete();
+					h.removeIf(m -> ChronoUnit.MILLIS.between(m.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author);
 
-						countSpam(member, channel, guild, h);
-					});
+					countSpam(member, channel, guild, h);
 				} else {
-					channel.getHistory().retrievePast(20).queue(h -> {
-						h.removeIf(m -> ChronoUnit.MILLIS.between(m.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author && StringUtils.containsIgnoreCase(m.getContentRaw(), message.getContentRaw()));
+					List<Message> h = channel.getHistory().retrievePast(20).complete();
+					h.removeIf(m -> ChronoUnit.MILLIS.between(m.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author && StringUtils.containsIgnoreCase(m.getContentRaw(), message.getContentRaw()));
 
-						countSpam(member, channel, guild, h);
-					});
+					countSpam(member, channel, guild, h);
 				}
 			}
 
@@ -199,33 +197,31 @@ public class GuildEvents extends ListenerAdapter {
 					sortedLvls.keySet().stream().max(Integer::compare).ifPresent(i -> {
 						if (GuildDAO.getGuildById(guild.getId()).isLvlNotif() && !member.getRoles().contains(sortedLvls.get(i))) {
 							try {
-								guild.addRoleToMember(member, sortedLvls.get(i)).queue(s -> {
-									String content = author.getAsMention() + " ganhou o cargo " + sortedLvls.get(i).getAsMention() + "! :tada:";
-									if (finalLvlChannel != null) {
-										finalLvlChannel.getHistory().retrievePast(5).queue(m -> {
-											if (m.stream().noneMatch(c -> c.getContentRaw().equals(content))) {
-												finalLvlChannel.sendMessage(content).queue();
-											}
-										});
-									} else {
-										channel.getHistory().retrievePast(5).queue(m -> {
-											if (m.stream().noneMatch(c -> c.getContentRaw().equals(content))) {
-												channel.sendMessage(content).queue();
-											}
-										});
+								guild.addRoleToMember(member, sortedLvls.get(i)).complete();
+								String content = author.getAsMention() + " ganhou o cargo " + sortedLvls.get(i).getAsMention() + "! :tada:";
+								if (finalLvlChannel != null) {
+									List<Message> m = finalLvlChannel.getHistory().retrievePast(5).complete();
+									if (m.stream().noneMatch(c -> c.getContentRaw().equals(content))) {
+										finalLvlChannel.sendMessage(content).queue();
 									}
-								});
+								} else {
+									List<Message> m = channel.getHistory().retrievePast(5).complete();
+									if (m.stream().noneMatch(c -> c.getContentRaw().equals(content))) {
+										channel.sendMessage(content).queue();
+									}
+								}
 							} catch (IllegalArgumentException e) {
 								GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 								Map<String, Object> cl = gc.getCargoslvl();
 								cl.remove(String.valueOf(i));
 								GuildDAO.updateGuildSettings(gc);
+							} catch (ErrorResponseException ignore) {
 							}
 						}
 						rawLvls.remove(String.valueOf(i));
 						List<Role> list = new ArrayList<>();
 						rawLvls.forEach((k, v) -> list.add(guild.getRoleById((String) v)));
-						guild.modifyMemberRoles(member, null, list).queue();
+						guild.modifyMemberRoles(member, null, list).complete();
 					});
 				} catch (InsufficientPermissionException ignore) {
 				}
@@ -256,7 +252,8 @@ public class GuildEvents extends ListenerAdapter {
 					}
 				}
 				if (GuildDAO.getGuildById(guild.getId()).getNoLinkChannels().contains(channel.getId()) && Helper.findURL(message.getContentRaw())) {
-					message.delete().reason("Mensagem possui um URL").queue(m -> channel.sendMessage(member.getAsMention() + ", é proibido postar links neste canal!").queue());
+					message.delete().reason("Mensagem possui um URL").complete();
+					channel.sendMessage(member.getAsMention() + ", é proibido postar links neste canal!").queue();
 				}
 
 				try {
@@ -287,7 +284,7 @@ public class GuildEvents extends ListenerAdapter {
 
 	private void countSpam(Member member, MessageChannel channel, Guild guild, List<Message> h) {
 		if (h.size() >= GuildDAO.getGuildById(guild.getId()).getNoSpamAmount()) {
-			h.forEach(m -> channel.deleteMessageById(m.getId()).queue());
+			h.forEach(m -> channel.deleteMessageById(m.getId()).complete());
 			channel.sendMessage(":warning: | Opa, sem spam meu amigo!").queue();
 			try {
 				member.getRoles().add(guild.getRoleById(GuildDAO.getGuildById(guild.getId()).getCargoWarn()));

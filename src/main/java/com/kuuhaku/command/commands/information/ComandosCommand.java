@@ -87,9 +87,12 @@ public class ComandosCommand extends Command {
 
 		for (Command cmmd : Main.getCommandManager().getCommands()) {
 			boolean found = false;
-			if (cmmd.getName().equalsIgnoreCase(cmdName)) {
-				found = true;
+
+			if (!cmmd.getCategory().isEnabled(gc, guild)) {
+				channel.sendMessage(":x: | Módulo desabilitado neste servidor!").queue();
+				continue;
 			}
+			else if (cmmd.getName().equalsIgnoreCase(cmdName)) found = true;
 
 			for (String alias : cmmd.getAliases()) {
 				if (alias.equalsIgnoreCase(cmdName)) {
