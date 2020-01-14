@@ -128,7 +128,7 @@ public class TetEvents extends ListenerAdapter {
 					Helper.logToChannel(author, true, command, "Um comando foi usado no canal " + ((TextChannel) channel).getAsMention(), guild);
 					if (Main.getInfo().getGames().get(guild.getId()) == null) {
 						if (command.getClass() == NewCampaignCommand.class) {
-							if (JDAEvents.checkPermissions(event, author, member, message, channel, guild, prefix, rawMsgNoPrefix, args, command))
+							if (JDAEvents.checkPermissions(author, member, message, channel, guild, prefix, rawMsgNoPrefix, args, command))
 								break;
 							return;
 						}
@@ -136,14 +136,14 @@ public class TetEvents extends ListenerAdapter {
 						break;
 					} else {
 						if (Main.getInfo().getGames().get(guild.getId()).getPlayers().containsKey(author.getId()) || (!Main.getInfo().getGames().get(guild.getId()).getPlayers().containsKey(author.getId()) && command.getClass() == NewPlayerCommand.class) || Main.getInfo().getGames().get(guild.getId()).getMaster() == author) {
-							if (JDAEvents.checkPermissions(event, author, member, message, channel, guild, prefix, rawMsgNoPrefix, args, command))
+							if (JDAEvents.checkPermissions(author, member, message, channel, guild, prefix, rawMsgNoPrefix, args, command))
 								break;
 						} else {
 							channel.sendMessage(":x: | Você ainda não criou um personagem, use o comando `" + prefix + "rnovo` para criar.").queue();
 							break;
 						}
 					}
-					if (JDAEvents.checkPermissions(event, author, member, message, channel, guild, prefix, rawMsgNoPrefix, args, command))
+					if (JDAEvents.checkPermissions(author, member, message, channel, guild, prefix, rawMsgNoPrefix, args, command))
 						break;
 				}
 			}
