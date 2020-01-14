@@ -29,6 +29,7 @@ import com.kuuhaku.model.CustomAnswers;
 import com.kuuhaku.model.GuildConfig;
 import com.kuuhaku.model.Log;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -143,6 +144,8 @@ public class GuildEvents extends ListenerAdapter {
 				channel.sendMessage("Quer saber como pode usar meus comandos? Digite `" + prefix + "ajuda` para ver todos eles ordenados por categoria!").queue();
 				return;
 			}
+
+			ShiroInfo.cache(guild, message);
 
 			String rawMsgNoPrefix = rawMessage;
 			String commandName = "";

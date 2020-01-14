@@ -25,6 +25,7 @@ import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.Music;
+import com.kuuhaku.utils.ShiroInfo;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -368,8 +369,8 @@ public class JDAEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildMessageDelete(@Nonnull GuildMessageDeleteEvent event) {
-		Message msg = event.getChannel().retrieveMessageById(event.getMessageId()).complete();
+		Message msg = ShiroInfo.retrieveCachedMessage(event.getGuild(), event.getMessageId());
 
-		Helper.logToChannel(msg.getAuthor(), false, null, "Uma mensagem foi deletada no canal " + msg.getTextChannel().getAsMention() + ":```diff \n- " + msg.getContentRaw() + "```", msg.getGuild());
+		if (msg != null) Helper.logToChannel(msg.getAuthor(), false, null, "Uma mensagem foi deletada no canal " + event.getChannel().getAsMention() + ":```diff \nAutor: " + msg.getAuthor().getAsMention() + "\n\n- " + msg.getContentRaw() + "```", msg.getGuild());
 	}
 }
