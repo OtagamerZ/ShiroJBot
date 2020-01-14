@@ -66,7 +66,7 @@ dependencies {
     compile 'com.enigmabridge:hibernate4-sqlite-dialect:0.1.2'
     compile 'com.google.apis:google-api-services-youtube:v3-rev212-1.25.0'
     compile 'com.rollbar:rollbar-java:1.+'
-    compile 'com.kcthota:emoji4j:5.0'
+    compile 'com.github.liheyuan:simple-emoji-4j:f26d3b39be'
     compile ('org.springframework.boot:spring-boot-starter-data-jpa') {
         exclude module : 'spring-boot-starter-logging'
     }
