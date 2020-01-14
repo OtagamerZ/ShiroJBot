@@ -283,6 +283,14 @@ public class Helper {
 		return Arrays.stream(compareWith).anyMatch(string::contains);
 	}
 
+	public static boolean hasPermission(Member m, Permission p, TextChannel c) {
+		boolean allowedPermInChannel = c.getRolePermissionOverrides().stream().anyMatch(po -> m.getRoles().contains(po.getRole()) && po.getAllowed().contains(p)) || c.getMemberPermissionOverrides().stream().anyMatch(po -> po.getMember() == m && po.getAllowed().contains(p));
+		boolean deniedPermInChannel = c.getRolePermissionOverrides().stream().anyMatch(po -> m.getRoles().contains(po.getRole()) && po.getDenied().contains(p)) || c.getMemberPermissionOverrides().stream().anyMatch(po -> po.getMember() == m && po.getDenied().contains(p));
+		boolean hasPermissionInGuild = m.hasPermission(p);
+
+		return (hasPermissionInGuild && !deniedPermInChannel) || allowedPermInChannel;
+	}
+
 	@SuppressWarnings("ConstantConditions")
 	public static String getRequiredPerms(TextChannel c) {
 		List<PermissionOverride> channelPerms = c.getPermissionOverrides().stream().filter(p -> c.getGuild().getSelfMember().getRoles().contains(p.getRole()) || p.getMember() == c.getGuild().getSelfMember()).collect(Collectors.toList());
@@ -291,34 +299,35 @@ public class Helper {
 
 		try {
 			if (TagDAO.getTagById(c.getGuild().getOwnerId()).isPartner() && c.getGuild().getMembers().contains(c.getGuild().getMember(Main.getJibril().getSelfUser()))) {
-				List<PermissionOverride> JchannelPerms = c.getPermissionOverrides().stream().filter(p -> Objects.requireNonNull(c.getGuild().getMember(Main.getJibril().getSelfUser())).getRoles().contains(p.getRole()) || p.getMember() == c.getGuild().getMember(Main.getJibril().getSelfUser())).collect(Collectors.toList());
-				EnumSet<Permission> JguildPerms = Objects.requireNonNull(c.getGuild().getMember(Main.getJibril().getSelfUser())).getPermissions();
+				Member jibril = c.getGuild().getMemberById(Main.getJibril().getSelfUser().getId());
 				jibrilPerms = "\n\n\n__**Permissões necessárias para uso completo da Jibril**__\n\n" +
-						(JchannelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.MANAGE_WEBHOOKS)) || (JguildPerms.contains(Permission.MANAGE_WEBHOOKS) && JchannelPerms.stream().noneMatch(p -> p.getDenied().contains(Permission.MANAGE_WEBHOOKS))) ? ":white_check_mark: -> " : ":x: -> ") + "Gerenciar webhooks\n" +
-						(JchannelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.MESSAGE_WRITE)) || (JguildPerms.contains(Permission.MESSAGE_WRITE) && JchannelPerms.stream().noneMatch(p -> p.getDenied().contains(Permission.MESSAGE_WRITE))) ? ":white_check_mark: -> " : ":x: -> ") + "Escrever mensagens\n" +
-						(JchannelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.MESSAGE_MANAGE)) || (JguildPerms.contains(Permission.MESSAGE_MANAGE) && JchannelPerms.stream().noneMatch(p -> p.getDenied().contains(Permission.MESSAGE_MANAGE))) ? ":white_check_mark: -> " : ":x: -> ") + "Gerenciar mensagens\n" +
-						(JchannelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.MESSAGE_EMBED_LINKS)) || (JguildPerms.contains(Permission.MESSAGE_EMBED_LINKS) && JchannelPerms.stream().noneMatch(p -> p.getDenied().contains(Permission.MESSAGE_EMBED_LINKS))) ? ":white_check_mark: -> " : ":x: -> ") + "Inserir links\n" +
-						(JchannelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.MESSAGE_ATTACH_FILES)) || (JguildPerms.contains(Permission.MESSAGE_ATTACH_FILES) && JchannelPerms.stream().noneMatch(p -> p.getDenied().contains(Permission.MESSAGE_ATTACH_FILES))) ? ":white_check_mark: -> " : ":x: -> ") + "Enviar arquivos\n" +
-						(JchannelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.MESSAGE_EXT_EMOJI)) || (JguildPerms.contains(Permission.MESSAGE_EXT_EMOJI) && JchannelPerms.stream().noneMatch(p -> p.getDenied().contains(Permission.MESSAGE_EXT_EMOJI))) ? ":white_check_mark: -> " : ":x: -> ") + "Usar emotes externos";
+						(hasPermission(jibril, Permission.MANAGE_WEBHOOKS, c) ? ":white_check_mark: -> " : ":x: -> ") + "Gerenciar webhooks\n" +
+						(hasPermission(jibril, Permission.MESSAGE_WRITE, c) ? ":white_check_mark: -> " : ":x: -> ") + "Escrever mensagens\n" +
+						(hasPermission(jibril, Permission.MESSAGE_MANAGE, c) ? ":white_check_mark: -> " : ":x: -> ") + "Gerenciar mensagens\n" +
+						(hasPermission(jibril, Permission.MESSAGE_EMBED_LINKS, c) ? ":white_check_mark: -> " : ":x: -> ") + "Inserir links\n" +
+						(hasPermission(jibril, Permission.MESSAGE_ATTACH_FILES, c) ? ":white_check_mark: -> " : ":x: -> ") + "Enviar arquivos\n" +
+						(hasPermission(jibril, Permission.MESSAGE_EXT_EMOJI, c) ? ":white_check_mark: -> " : ":x: -> ") + "Usar emotes externos";
 			}
 		} catch (NoResultException ignore) {
 		}
 
+		Member shiro = c.getGuild().getSelfMember();
+
 		return "__**Permissões necessárias para uso completo da Shiro**__\n\n" +
-				(channelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.MANAGE_CHANNEL)) || (guildPerms.contains(Permission.MANAGE_CHANNEL) && channelPerms.stream().noneMatch(p -> p.getAllowed().contains(Permission.MANAGE_CHANNEL))) ? ":white_check_mark: -> " : ":x: -> ") + "Gerenciar canal \n" +
-				(channelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.BAN_MEMBERS)) || (guildPerms.contains(Permission.BAN_MEMBERS) && channelPerms.stream().noneMatch(p -> p.getAllowed().contains(Permission.BAN_MEMBERS))) ? ":white_check_mark: -> " : ":x: -> ") + "Banir membros \n" +
-				(channelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.KICK_MEMBERS)) || (guildPerms.contains(Permission.KICK_MEMBERS) && channelPerms.stream().noneMatch(p -> p.getAllowed().contains(Permission.KICK_MEMBERS))) ? ":white_check_mark: -> " : ":x: -> ") + "Expulsar membros \n" +
-				(channelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.CREATE_INSTANT_INVITE)) || (guildPerms.contains(Permission.CREATE_INSTANT_INVITE) && channelPerms.stream().noneMatch(p -> p.getAllowed().contains(Permission.CREATE_INSTANT_INVITE))) ? ":white_check_mark: -> " : ":x: -> ") + "Criar convite instantâneo \n" +
-				(channelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.MESSAGE_READ)) || (guildPerms.contains(Permission.MESSAGE_READ) && channelPerms.stream().noneMatch(p -> p.getAllowed().contains(Permission.MESSAGE_READ))) ? ":white_check_mark: -> " : ":x: -> ") + "Ler mensagens \n" +
-				(channelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.MESSAGE_MANAGE)) || (guildPerms.contains(Permission.MESSAGE_MANAGE) && channelPerms.stream().noneMatch(p -> p.getAllowed().contains(Permission.MESSAGE_MANAGE))) ? ":white_check_mark: -> " : ":x: -> ") + "Gerenciar mensagens \n" +
-				(channelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.MESSAGE_WRITE)) || (guildPerms.contains(Permission.MESSAGE_WRITE) && channelPerms.stream().noneMatch(p -> p.getAllowed().contains(Permission.MESSAGE_WRITE))) ? ":white_check_mark: -> " : ":x: -> ") + "Escrever mensagens \n" +
-				(channelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.MESSAGE_EMBED_LINKS)) || (guildPerms.contains(Permission.MESSAGE_EMBED_LINKS) && channelPerms.stream().noneMatch(p -> p.getAllowed().contains(Permission.MESSAGE_EMBED_LINKS))) ? ":white_check_mark: -> " : ":x: -> ") + "Inserir links \n" +
-				(channelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.MESSAGE_ATTACH_FILES)) || (guildPerms.contains(Permission.MESSAGE_ATTACH_FILES) && channelPerms.stream().noneMatch(p -> p.getAllowed().contains(Permission.MESSAGE_ATTACH_FILES))) ? ":white_check_mark: -> " : ":x: -> ") + "Enviar arquivos \n" +
-				(channelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.MESSAGE_HISTORY)) || (guildPerms.contains(Permission.MESSAGE_HISTORY) && channelPerms.stream().noneMatch(p -> p.getAllowed().contains(Permission.MESSAGE_HISTORY))) ? ":white_check_mark: -> " : ":x: -> ") + "Ver histórico de mensagens \n" +
-				(channelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.MESSAGE_ADD_REACTION)) || (guildPerms.contains(Permission.MESSAGE_ADD_REACTION) && channelPerms.stream().noneMatch(p -> p.getAllowed().contains(Permission.MESSAGE_ADD_REACTION))) ? ":white_check_mark: -> " : ":x: -> ") + "Adicionar reações \n" +
-				(channelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.MESSAGE_EXT_EMOJI)) || (guildPerms.contains(Permission.MESSAGE_EXT_EMOJI) && channelPerms.stream().noneMatch(p -> p.getAllowed().contains(Permission.MESSAGE_EXT_EMOJI))) ? ":white_check_mark: -> " : ":x: -> ") + "Usar emotes externos \n" +
-				(channelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.MESSAGE_EXT_EMOJI)) || (guildPerms.contains(Permission.VOICE_CONNECT) && channelPerms.stream().noneMatch(p -> p.getAllowed().contains(Permission.VOICE_CONNECT))) ? ":white_check_mark: -> " : ":x: -> ") + "Conectar à canais de voz \n" +
-				(channelPerms.stream().anyMatch(p -> p.getAllowed().contains(Permission.MESSAGE_EXT_EMOJI)) || (guildPerms.contains(Permission.VOICE_SPEAK) && channelPerms.stream().noneMatch(p -> p.getAllowed().contains(Permission.VOICE_SPEAK))) ? ":white_check_mark: -> " : ":x: -> ") + "Falar em canais de voz" +
+				(hasPermission(shiro, Permission.MANAGE_CHANNEL, c) ? ":white_check_mark: -> " : ":x: -> ") + "Gerenciar canal \n" +
+				(hasPermission(shiro, Permission.BAN_MEMBERS, c) ? ":white_check_mark: -> " : ":x: -> ") + "Banir membros \n" +
+				(hasPermission(shiro, Permission.KICK_MEMBERS, c) ? ":white_check_mark: -> " : ":x: -> ") + "Expulsar membros \n" +
+				(hasPermission(shiro, Permission.CREATE_INSTANT_INVITE, c) ? ":white_check_mark: -> " : ":x: -> ") + "Criar convite instantâneo \n" +
+				(hasPermission(shiro, Permission.MESSAGE_READ, c) ? ":white_check_mark: -> " : ":x: -> ") + "Ler mensagens \n" +
+				(hasPermission(shiro, Permission.MESSAGE_MANAGE, c) ? ":white_check_mark: -> " : ":x: -> ") + "Gerenciar mensagens \n" +
+				(hasPermission(shiro, Permission.MESSAGE_WRITE, c) ? ":white_check_mark: -> " : ":x: -> ") + "Escrever mensagens \n" +
+				(hasPermission(shiro, Permission.MESSAGE_EMBED_LINKS, c) ? ":white_check_mark: -> " : ":x: -> ") + "Inserir links \n" +
+				(hasPermission(shiro, Permission.MESSAGE_ATTACH_FILES, c) ? ":white_check_mark: -> " : ":x: -> ") + "Enviar arquivos \n" +
+				(hasPermission(shiro, Permission.MESSAGE_HISTORY, c) ? ":white_check_mark: -> " : ":x: -> ") + "Ver histórico de mensagens \n" +
+				(hasPermission(shiro, Permission.MESSAGE_ADD_REACTION, c) ? ":white_check_mark: -> " : ":x: -> ") + "Adicionar reações \n" +
+				(hasPermission(shiro, Permission.MESSAGE_EXT_EMOJI, c) ? ":white_check_mark: -> " : ":x: -> ") + "Usar emotes externos \n" +
+				(hasPermission(shiro, Permission.VOICE_CONNECT, c) ? ":white_check_mark: -> " : ":x: -> ") + "Conectar à canais de voz \n" +
+				(hasPermission(shiro, Permission.VOICE_SPEAK, c) ? ":white_check_mark: -> " : ":x: -> ") + "Falar em canais de voz" +
 				jibrilPerms;
 	}
 
