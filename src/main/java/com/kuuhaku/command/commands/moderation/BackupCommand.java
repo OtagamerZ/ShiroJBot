@@ -55,16 +55,10 @@ public class BackupCommand extends Command {
 			channel.sendMessage("Backup feito com sucesso, utilize `" + prefix + "backup recuperar` para recuperar para este estado do servidor. (ISSO IRÁ REESCREVER O SERVIDOR, TODAS AS MENSAGENS SERÃO PERDIDAS)").queue();
 		} else if (data.getGuild() == null || data.getGuild().isEmpty()) {
 			channel.sendMessage(":x: | Nenhum backup foi feito ainda, utilize o comando `" + prefix + "backup salvar` para criar um backup.").queue();
-		} else if (args[0].equalsIgnoreCase("recuperar") && !Helper.containsAny(args[1], "canais", "cargos")) {
-			channel.sendMessage(":x: | O segundo argumento deve ser canais ou cargos.").queue();
-		} else if (data.getLastRestoredChannels().toLocalDateTime().plusDays(7).compareTo(LocalDateTime.now()) > 0 && args[1].equalsIgnoreCase("canais")) {
+		} else if (data.getLastRestored().toLocalDateTime().plusDays(7).compareTo(LocalDateTime.now()) > 0) {
 			channel.sendMessage(":x: | Você precisa aguardar 1 semana antes de restaurar o backup de canais novamente.").queue();
-		} else if (data.getLastRestoredRoles().toLocalDateTime().plusDays(7).compareTo(LocalDateTime.now()) > 0 && args[1].equalsIgnoreCase("cargos")) {
-			channel.sendMessage(":x: | Você precisa aguardar 1 semana antes de restaurar o backup de cargos novamente.").queue();
-		} else if (args[1].equalsIgnoreCase("canais")) {
-			data.restoreChannels(guild);
-		} else if (args[1].equalsIgnoreCase("cargos")) {
-			data.restoreRoles(guild);
+		} else {
+			data.restore(guild);
 		}
 	}
 }

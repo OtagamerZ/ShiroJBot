@@ -19,9 +19,7 @@ public class Backup {
 	private String guild;
 	private String serverData;
 	@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-	private Timestamp lastRestoredChannels;
-	@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-	private Timestamp lastRestoredRoles;
+	private Timestamp lastRestored;
 	@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private Timestamp lastBackup;
 
@@ -41,14 +39,14 @@ public class Backup {
 		this.guild = guild;
 	}
 
-	public void restoreChannels(Guild g) {
+	public void restore(Guild g) {
 		if (serverData == null || serverData.isEmpty()) return;
 
 		JSONObject data = new JSONObject(serverData);
 
 		if (data.isEmpty()) return;
 
-		lastRestoredChannels = Timestamp.from(Instant.now());
+		lastRestored = Timestamp.from(Instant.now());
 
 		g.getChannels().forEach(c -> {
 			try {
@@ -97,19 +95,6 @@ public class Backup {
 						});
 					});
 		});
-	}
-
-	public void restoreRoles(Guild g) {
-		if (serverData == null || serverData.isEmpty()) return;
-
-		JSONObject data = new JSONObject(serverData);
-
-		if (data.isEmpty()) return;
-
-		lastRestoredRoles = Timestamp.from(Instant.now());
-
-		JSONArray categories = data.getJSONArray("categories");
-		JSONArray roles = data.getJSONArray("roles");
 
 		roles.forEach(r -> {
 			JSONObject role = (JSONObject) r;
@@ -119,37 +104,6 @@ public class Backup {
 					.setColor(role.has("color") ? (Integer) role.get("color") : null)
 					.setPermissions(role.getLong("permissions"))
 					.queue();
-		});
-
-		categories.forEach(s -> {
-			try {
-				Category cat = g.getCategoriesByName(((JSONObject) s).getString("name"), true).get(0);
-				((JSONObject) s).getJSONArray("permissions").forEach(o -> {
-					JSONObject override = (JSONObject) o;
-
-					cat.createPermissionOverride(override.get("name").equals("@everyone") ? g.getPublicRole() : g.getRolesByName(override.getString("name"), true).get(0))
-							.setAllow(override.getLong("allowed"))
-							.setDeny(override.getLong("denied"))
-							.queue();
-				});
-
-				((JSONObject) s).getJSONArray("channels").forEach(chn -> {
-					try {
-						GuildChannel channel = ((JSONObject) chn).getString("type").equals("text") ? g.getTextChannelsByName(((JSONObject) chn).getString("name"), true).get(0) : g.getVoiceChannelsByName(((JSONObject) chn).getString("name"), true).get(0);
-
-						((JSONObject) chn).getJSONArray("permissions").forEach(o -> {
-							JSONObject override = (JSONObject) o;
-
-							channel.createPermissionOverride(override.get("name").equals("@everyone") ? g.getPublicRole() : g.getRolesByName(override.getString("name"), true).get(0))
-									.setAllow(override.getLong("allowed"))
-									.setDeny(override.getLong("denied"))
-									.queue();
-						});
-					} catch (ErrorResponseException | IndexOutOfBoundsException ignore) {
-					}
-				});
-			} catch (ErrorResponseException | IndexOutOfBoundsException ignore) {
-			}
 		});
 	}
 
@@ -227,11 +181,7 @@ public class Backup {
 		channelData.put("permissions", permissions);
 	}
 
-	public Timestamp getLastRestoredChannels() {
-		return lastRestoredChannels;
-	}
-
-	public Timestamp getLastRestoredRoles() {
-		return lastRestoredRoles;
+	public Timestamp getLastRestored() {
+		return lastRestored;
 	}
 }
