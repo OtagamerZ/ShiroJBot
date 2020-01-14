@@ -24,11 +24,9 @@ import com.kuuhaku.handlers.music.GuildMusicManager;
 import com.kuuhaku.model.PixelCanvas;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
+import com.spaceprogram.kittycache.KittyCache;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.SelfUser;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import org.discordbots.api.client.DiscordBotListAPI;
 
 import java.lang.management.ManagementFactory;
@@ -40,6 +38,7 @@ import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("localvariable")
 public class ShiroInfo {
@@ -76,6 +75,7 @@ public class ShiroInfo {
 	private static final AudioPlayerManager apm = new DefaultAudioPlayerManager();
 	private static final Map<String, World> games = new HashMap<>();
 	private static final JDAEvents shiroEvents = new JDAEvents();
+	private static final Map<String, KittyCache<String, Message>> messageCache = new HashMap<>();
 
 	private JDA api;
 	private long startTime;
@@ -183,6 +183,16 @@ public class ShiroInfo {
 
 	public JDAEvents getShiroEvents() {
 		return shiroEvents;
+	}
+
+	public static void cache(Guild guild, Message message) {
+		KittyCache<String, Message> cache = messageCache.getOrDefault(guild.getId(), new KittyCache<>(64));
+		cache.put(message.getId(), message, (int) TimeUnit.DAYS.toSeconds(1));
+		messageCache.put(guild.getId(), cache);
+	}
+
+	public static Message retrieveCachedMessage(Guild guild, String id) {
+		return messageCache.getOrDefault(guild.getId(), new KittyCache<>(64)).removeAndGet(id);
 	}
 
 	//VARIABLES
