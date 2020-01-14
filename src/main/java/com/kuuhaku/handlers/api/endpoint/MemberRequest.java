@@ -39,8 +39,13 @@ public class MemberRequest {
 		}
 	}
 
-	@RequestMapping(value = "/member/avatar", method = RequestMethod.GET)
+	@RequestMapping(value = "/user/avatar", method = RequestMethod.GET)
 	public String requestAvatar(@RequestParam(value = "id") String id) {
 		return Main.getInfo().getUserByID(id).getAvatarUrl();
+	}
+
+	@RequestMapping(value = "/user/name", method = RequestMethod.GET)
+	public String requestName(@RequestParam(value = "id") String id) {
+		return Main.getInfo().getUserByID(id).getName();
 	}
 }
