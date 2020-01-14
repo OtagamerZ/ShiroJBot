@@ -34,14 +34,16 @@ import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberLeaveEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -143,7 +145,7 @@ public class JDAEvents extends ListenerAdapter {
 					message.delete().queue();
 				}
 			}
-		} catch (NullPointerException ignore) {
+		} catch (NullPointerException | ErrorResponseException ignore) {
 		}
 	}
 
@@ -236,7 +238,7 @@ public class JDAEvents extends ListenerAdapter {
 				Objects.requireNonNull(event.getGuild().getTextChannelById(gc.getCanalBV())).sendMessage(event.getUser().getAsMention()).embed(eb.build()).queue();
 				Helper.logToChannel(event.getUser(), false, null, "Um usuário entrou no servidor", event.getGuild());
 			} else if (gc.isAntiRaid() && ((ChronoUnit.MILLIS.between(event.getUser().getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) / 1000) / 60) < 10) {
-				Helper.logToChannel(event.getUser(), false, null, "Um foi bloqueado de entrar no servidor", event.getGuild());
+				Helper.logToChannel(event.getUser(), false, null, "Um usuário foi bloqueado de entrar no servidor", event.getGuild());
 				event.getGuild().kick(event.getMember()).queue();
 			}
 		} catch (Exception ignore) {
@@ -332,7 +334,7 @@ public class JDAEvents extends ListenerAdapter {
 		}
 	}
 
-	public static boolean checkPermissions(@NotNull GuildMessageReceivedEvent event, User author, Member member, Message message, MessageChannel channel, Guild guild, String prefix, String rawMsgNoPrefix, String[] args, Command command) {
+	public static boolean checkPermissions(User author, Member member, Message message, MessageChannel channel, Guild guild, String prefix, String rawMsgNoPrefix, String[] args, Command command) {
 		if (Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
 			command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, prefix);
 			Helper.spawnAd(channel);
@@ -362,5 +364,12 @@ public class JDAEvents extends ListenerAdapter {
 			found = false;
 		}
 		return found;
+	}
+
+	@Override
+	public void onGuildMessageDelete(@Nonnull GuildMessageDeleteEvent event) {
+		Message msg = event.getChannel().retrieveMessageById(event.getMessageId()).complete();
+
+		Helper.logToChannel(msg.getAuthor(), false, null, "Uma mensagem foi deletada no canal " + msg.getTextChannel().getAsMention() + ":```diff \n- " + msg.getContentRaw() + "```", msg.getGuild());
 	}
 }
