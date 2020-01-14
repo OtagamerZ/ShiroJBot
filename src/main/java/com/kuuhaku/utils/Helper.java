@@ -28,7 +28,7 @@ import com.kuuhaku.model.Extensions;
 import com.kuuhaku.model.GamblePool;
 import com.kuuhaku.model.GuildConfig;
 import de.androidpit.colorthief.ColorThief;
-import emoji4j.EmojiUtils;
+import com.coder4.emoji.EmojiUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -473,7 +473,7 @@ public class Helper {
 		JSONObject msg = new JSONObject();
 
 		JSONObject btn = new JSONObject();
-		btn.put("emote", EmojiUtils.isEmoji(s2) ? s2 : Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById(s2)).getId());
+		btn.put("emote", EmojiUtils.containsEmoji(s2) ? s2 : Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById(s2)).getId());
 		btn.put("role", message.getMentionedRoles().get(0).getId());
 
 		channel.retrieveMessageById(msgId).queue();
