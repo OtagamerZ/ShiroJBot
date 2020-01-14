@@ -36,6 +36,7 @@ import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberLeaveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageUpdateEvent;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
@@ -371,6 +372,13 @@ public class JDAEvents extends ListenerAdapter {
 	public void onGuildMessageDelete(@Nonnull GuildMessageDeleteEvent event) {
 		Message msg = ShiroInfo.retrieveCachedMessage(event.getGuild(), event.getMessageId());
 
-		if (msg != null) Helper.logToChannel(msg.getAuthor(), false, null, "Uma mensagem foi deletada no canal " + event.getChannel().getAsMention() + ":```diff \nAutor: " + msg.getAuthor().getAsMention() + "\n\n- " + msg.getContentRaw() + "```", msg.getGuild());
+		if (msg != null) Helper.logToChannel(msg.getAuthor(), false, null, "Uma mensagem foi deletada no canal " + event.getChannel().getAsMention() + ":```diff \n" + msg.getAuthor().getAsMention() + "\n\n- " + msg.getContentRaw() + "```", msg.getGuild());
+	}
+
+	@Override
+	public void onGuildMessageUpdate(@Nonnull GuildMessageUpdateEvent event) {
+		Message msg = ShiroInfo.retrieveCachedMessage(event.getGuild(), event.getMessageId());
+
+		if (msg != null) Helper.logToChannel(msg.getAuthor(), false, null, "Uma mensagem foi editada no canal " + event.getChannel().getAsMention() + ":```diff \nAutor: " + msg.getAuthor().getAsMention() + "\n\n- " + msg.getContentRaw() + "\n+ " + event.getMessage().getContentRaw() + "```", msg.getGuild());
 	}
 }
