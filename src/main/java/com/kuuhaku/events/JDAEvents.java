@@ -372,13 +372,13 @@ public class JDAEvents extends ListenerAdapter {
 	public void onGuildMessageDelete(@Nonnull GuildMessageDeleteEvent event) {
 		Message msg = ShiroInfo.retrieveCachedMessage(event.getGuild(), event.getMessageId());
 
-		if (msg != null) Helper.logToChannel(msg.getAuthor(), false, null, "Uma mensagem foi deletada no canal " + event.getChannel().getName() + ":```diff\n" + msg.getAuthor().getAsTag() + "\n\n- " + msg.getContentRaw() + "```", msg.getGuild());
+		if (msg != null) Helper.logToChannel(msg.getAuthor(), false, null, "Uma mensagem foi deletada no canal " + event.getChannel().getName() + ":```diff\n-" + msg.getContentRaw() + "```", msg.getGuild());
 	}
 
 	@Override
 	public void onGuildMessageUpdate(@Nonnull GuildMessageUpdateEvent event) {
 		Message msg = ShiroInfo.retrieveCachedMessage(event.getGuild(), event.getMessageId());
 
-		if (msg != null) Helper.logToChannel(msg.getAuthor(), false, null, "Uma mensagem foi editada no canal " + event.getChannel().getName() + ":```diff\n" + msg.getAuthor().getAsTag() + "\n\n- " + msg.getContentRaw() + "\n+ " + event.getMessage().getContentRaw() + "```", msg.getGuild());
+		if (msg != null) Helper.logToChannel(msg.getAuthor(), false, null, "Uma mensagem foi editada no canal " + event.getChannel().getName() + ":```diff\n- " + msg.getContentRaw() + "\n+ " + event.getMessage().getContentRaw() + "```", msg.getGuild());
 	}
 }
