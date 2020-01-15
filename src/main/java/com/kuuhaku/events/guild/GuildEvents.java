@@ -145,7 +145,7 @@ public class GuildEvents extends ListenerAdapter {
 				return;
 			}
 
-			ShiroInfo.cache(guild, message);
+			if (!author.isBot()) ShiroInfo.cache(guild, message);
 
 			String rawMsgNoPrefix = rawMessage;
 			String commandName = "";
