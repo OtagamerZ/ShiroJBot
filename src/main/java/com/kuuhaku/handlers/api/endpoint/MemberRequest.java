@@ -19,20 +19,20 @@ public class MemberRequest {
 	}
 
 	@RequestMapping(value = "/member/get/bymid", method = RequestMethod.GET)
-	public Object[] requestProfileByMid(@RequestParam(value = "id") String mid) {
-		return MemberDAO.getMemberByMid(mid).toArray();
+	public Member[] requestProfileByMid(@RequestParam(value = "id") String mid) {
+		return MemberDAO.getMemberByMid(mid).toArray(new Member[0]);
 	}
 
 	@RequestMapping(value = "/member/get/bysid", method = RequestMethod.GET)
-	public Object[] requestProfileBySid(@RequestParam(value = "id") String sid) {
-		return MemberDAO.getMemberBySid(sid).toArray();
+	public Member[] requestProfileBySid(@RequestParam(value = "id") String sid) {
+		return MemberDAO.getMemberBySid(sid).toArray(new Member[0]);
 	}
 
 	@RequestMapping(value = "/member/auth", method = RequestMethod.POST)
-	public Object[] authProfile(@RequestHeader(value = "login") String login, @RequestHeader(value = "password") String pass) {
+	public Member[] authProfile(@RequestHeader(value = "login") String login, @RequestHeader(value = "password") String pass) {
 		Helper.logger(this.getClass()).info(login + " - " + pass);
 
-		return MemberDAO.authMember(login, pass).toArray();
+		return MemberDAO.authMember(login, pass).toArray(new Member[0]);
 	}
 
 	@RequestMapping(value = "/member/update", method = RequestMethod.POST)
