@@ -28,6 +28,11 @@ public class ErrorHandler implements ErrorController {
 		return new Exception(404, "Nenhuma entidade com o ID informado encontrada");
 	}
 
+	@ExceptionHandler(NoResultException.class)
+	public Exception unauthorized() {
+		return new Exception(403, "Login nao autorizado");
+	}
+
 	@Override
 	public String getErrorPath() {
 		return "/error";

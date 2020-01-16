@@ -1,8 +1,10 @@
 package com.kuuhaku.controller.sqlite;
 
+import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.model.Member;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.List;
 
@@ -89,5 +91,21 @@ public class MemberDAO {
 		em.close();
 
 		return gcs;
+	}
+
+	public static Member authMember(String login, String password) {
+		EntityManager em = com.kuuhaku.controller.mysql.Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT m FROM Member m WHERE login LIKE :login AND password LIKE :pass", Member.class);
+		q.setParameter("login", login);
+		q.setParameter("pass", password);
+
+		try {
+			return (Member) q.getSingleResult();
+		} catch (NoResultException e) {
+			throw new UnauthorizedException();
+		} finally {
+			em.close();
+		}
 	}
 }

@@ -6,10 +6,13 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1922b6bb-e9cb-42d9-8f93-e283b3e8e488.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/1922b6bb-e9cb-42d9-8f93-e283b3e8e488.xml" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Pequenas otimizações">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/exception/UnauthorizedException.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/JDAEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/JDAEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/MemberDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/MemberDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/ErrorHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/ErrorHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/MemberRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/MemberRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/Member.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,14 +118,8 @@
       <workItem from="1578799770818" duration="908000" />
       <workItem from="1578802234030" duration="350000" />
       <workItem from="1578922267333" duration="22367000" />
-      <workItem from="1579090672186" duration="551000" />
-    </task>
-    <task id="LOCAL-00135" summary="Adição de endpoints para requisições HTTP">
-      <created>1578673218478</created>
-      <option name="number" value="00135" />
-      <option name="presentableId" value="LOCAL-00135" />
-      <option name="project" value="LOCAL" />
-      <updated>1578673218478</updated>
+      <workItem from="1579090672186" duration="969000" />
+      <workItem from="1579180300352" duration="1056000" />
     </task>
     <task id="LOCAL-00136" summary="Adição de endpoints para requisições HTTP">
       <created>1578673376838</created>
@@ -460,7 +457,14 @@
       <option name="project" value="LOCAL" />
       <updated>1579028236924</updated>
     </task>
-    <option name="localTasksCounter" value="184" />
+    <task id="LOCAL-00184" summary="Pequenas otimizações">
+      <created>1579091448190</created>
+      <option name="number" value="00184" />
+      <option name="presentableId" value="LOCAL-00184" />
+      <option name="project" value="LOCAL" />
+      <updated>1579091448206</updated>
+    </task>
+    <option name="localTasksCounter" value="185" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -490,11 +494,11 @@
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="275" y="44" key="#Assign_Data_Sources/0.0.1366.768@0.0.1366.768" timestamp="1578540224250" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1578926135340">
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1579180444405">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="488" y="71" key="#com.intellij.ide.util.MemberChooser/0.0.1366.768@0.0.1366.768" timestamp="1578538922492" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1578926135340" />
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1579180444405" />
     <state x="509" y="169" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1578969843084">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -524,11 +528,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1578421403620" />
-    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1579028234198">
+    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1579181367027">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1578802365771" />
-    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1579028234198" />
+    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1579181367027" />
     <state x="160" y="89" key="DiffContextDialog" timestamp="1578421042559">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -546,11 +550,11 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1578969869825" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1578417783560" />
-    <state x="432" y="239" key="Vcs.Push.Dialog.v2" timestamp="1579028238454">
+    <state x="432" y="239" key="Vcs.Push.Dialog.v2" timestamp="1579091576058">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1578802376392" />
-    <state x="432" y="239" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1579028238454" />
+    <state x="432" y="239" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1579091576058" />
     <state x="600" y="391" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1578663450830">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -570,6 +574,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="605" y="219" key="git4idea.branch.GitSmartOperationDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1579030853134" />
+    <state x="222" y="230" key="new project wizard" timestamp="1579091647212">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="222" y="230" key="new project wizard/0.0.1680.1010@0.0.1680.1010" timestamp="1579091647212" />
     <state x="496" y="233" key="run.anything.popup" timestamp="1578593146181">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
