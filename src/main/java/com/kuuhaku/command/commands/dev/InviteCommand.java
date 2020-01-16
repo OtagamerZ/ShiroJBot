@@ -64,5 +64,4 @@ public class InviteCommand extends Command {
 			channel.sendMessage(":x: | Servidor não encontrado!\n").embed((MessageEmbed) pages.get(0).getContent()).queue(m -> Pages.paginate(Main.getInfo().getAPI(), m, pages, 60, TimeUnit.SECONDS));
 		}
 	}
-
 }
