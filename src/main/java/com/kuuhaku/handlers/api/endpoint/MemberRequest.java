@@ -7,8 +7,7 @@ import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.exception.InvalidTokenException;
 import com.kuuhaku.model.Member;
 import com.kuuhaku.utils.Helper;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import net.dv8tion.jda.api.entities.Guild;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -35,21 +34,19 @@ public class MemberRequest {
 
 	@RequestMapping(value = "/member/auth", method = RequestMethod.POST)
 	public Object authProfile(@RequestHeader(value = "login") String login, @RequestHeader(value = "password") String pass) {
-		JSONObject response = new JSONObject();
-
 		try {
 			List<Member> profileList = MemberDAO.authMember(login, pass);
 			List<String> guildIds = profileList.stream().map(Member::getSid).collect(Collectors.toList());
-			JSONArray guilds = new JSONArray(Main.getInfo().getAPI().getGuilds().stream().filter(g -> guildIds.contains(g.getId())).collect(Collectors.toList()));
+			Guild[] gs = Main.getInfo().getAPI().getGuilds().stream().filter(g -> guildIds.contains(g.getId())).toArray(Guild[]::new);
 
 			List<String> memberIds = profileList.stream().map(Member::getMid).collect(Collectors.toList());
-			JSONArray members = new JSONArray(Main.getInfo().getAPI().getGuilds().stream().flatMap(g -> g.getMembers().stream()).filter(m -> memberIds.contains(m.getId())).collect(Collectors.toList()));
+			net.dv8tion.jda.api.entities.Member[] mbs = Main.getInfo().getAPI().getGuilds().stream().flatMap(g -> g.getMembers().stream()).filter(m -> memberIds.contains(m.getId())).toArray(net.dv8tion.jda.api.entities.Member[]::new);
 
-			response.put("profiles", new JSONArray(profileList));
-			response.put("guilds", guilds);
-			response.put("members", members);
-
-			return response;
+			return new Object(){
+				public Member[] profiles = profileList.toArray(new Member[0]);
+				public Guild[] guilds = gs;
+				public net.dv8tion.jda.api.entities.Member[] members = mbs;
+			};
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
