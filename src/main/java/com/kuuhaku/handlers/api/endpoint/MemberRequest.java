@@ -6,7 +6,6 @@ import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.exception.InvalidTokenException;
 import com.kuuhaku.model.Member;
 import com.kuuhaku.utils.Helper;
-import org.json.JSONArray;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -20,20 +19,20 @@ public class MemberRequest {
 	}
 
 	@RequestMapping(value = "/member/get/bymid", method = RequestMethod.GET)
-	public JSONArray requestProfileByMid(@RequestParam(value = "id") String mid) {
-		return new JSONArray(MemberDAO.getMemberByMid(mid).toArray());
+	public Object[] requestProfileByMid(@RequestParam(value = "id") String mid) {
+		return MemberDAO.getMemberByMid(mid).toArray();
 	}
 
 	@RequestMapping(value = "/member/get/bysid", method = RequestMethod.GET)
-	public JSONArray requestProfileBySid(@RequestParam(value = "id") String sid) {
-		return new JSONArray(MemberDAO.getMemberBySid(sid).toArray());
+	public Object[] requestProfileBySid(@RequestParam(value = "id") String sid) {
+		return MemberDAO.getMemberBySid(sid).toArray();
 	}
 
 	@RequestMapping(value = "/member/auth", method = RequestMethod.POST)
-	public JSONArray authProfile(@RequestHeader(value = "login") String login, @RequestHeader(value = "password") String pass) {
+	public Object[] authProfile(@RequestHeader(value = "login") String login, @RequestHeader(value = "password") String pass) {
 		Helper.logger(this.getClass()).info(login + " - " + pass);
 
-		return new JSONArray(MemberDAO.authMember(login, pass).toArray());
+		return MemberDAO.authMember(login, pass).toArray();
 	}
 
 	@RequestMapping(value = "/member/update", method = RequestMethod.POST)
