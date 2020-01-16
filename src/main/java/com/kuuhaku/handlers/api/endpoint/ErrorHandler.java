@@ -2,6 +2,7 @@ package com.kuuhaku.handlers.api.endpoint;
 
 import com.kuuhaku.handlers.api.exception.Exception;
 import com.kuuhaku.handlers.api.exception.InvalidTokenException;
+import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,7 +29,7 @@ public class ErrorHandler implements ErrorController {
 		return new Exception(404, "Nenhuma entidade com o ID informado encontrada");
 	}
 
-	@ExceptionHandler(NoResultException.class)
+	@ExceptionHandler(UnauthorizedException.class)
 	public Exception unauthorized() {
 		return new Exception(403, "Login nao autorizado");
 	}
