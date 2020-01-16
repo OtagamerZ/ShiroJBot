@@ -45,7 +45,7 @@ public class MemberRequest {
 			Map<com.kuuhaku.model.jda.Guild, List<com.kuuhaku.model.jda.Member>> svs = new HashMap<>();
 			gs.forEach(s -> {
 				List<com.kuuhaku.model.jda.Member> mbs = new ArrayList<>();
-				s.getMembers().forEach(m -> mbs.add(new com.kuuhaku.model.jda.Member(m.getId(), m.getNickname(), m.getUser().getAvatarUrl())));
+				s.getMembers().forEach(m -> mbs.add(new com.kuuhaku.model.jda.Member(m.getId(), m.getEffectiveName(), m.getNickname(), m.getUser().getAvatarUrl())));
 
 				svs.put(new com.kuuhaku.model.jda.Guild(s.getId(), s.getName(), s.getIconUrl()), mbs);
 			});
