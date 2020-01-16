@@ -1,7 +1,6 @@
 package com.kuuhaku.handlers.api.endpoint;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kuuhaku.Main;
 import com.kuuhaku.controller.mysql.TokenDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.exception.InvalidTokenException;
@@ -22,6 +21,11 @@ public class MemberRequest {
 		return MemberDAO.getMemberById(id);
 	}
 
+	@RequestMapping(value = "/member/auth", method = RequestMethod.POST)
+	public Member authProfile(@RequestParam(value = "login") String login, @RequestParam(value = "password") String pass) {
+		return MemberDAO.authMember(login, pass);
+	}
+
 	@RequestMapping(value = "/member/update", method = RequestMethod.POST)
 	public void updateProfile(@RequestParam(value = "profile") String profile, @RequestParam(value = "token") String token) {
 		try {
@@ -37,15 +41,5 @@ public class MemberRequest {
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
-	}
-
-	@RequestMapping(value = "/user/avatar", method = RequestMethod.GET)
-	public String requestAvatar(@RequestParam(value = "id") String id) {
-		return Main.getInfo().getUserByID(id).getAvatarUrl();
-	}
-
-	@RequestMapping(value = "/user/name", method = RequestMethod.GET)
-	public String requestName(@RequestParam(value = "id") String id) {
-		return Main.getInfo().getUserByID(id).getName();
 	}
 }
