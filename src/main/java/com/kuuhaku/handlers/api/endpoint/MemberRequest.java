@@ -42,18 +42,16 @@ public class MemberRequest {
 			List<String> guildIds = profileList.stream().map(Member::getSid).collect(Collectors.toList());
 			List<Guild> gs = Main.getInfo().getAPI().getGuilds().stream().filter(g -> guildIds.contains(g.getId())).collect(Collectors.toList());
 
-			Map<com.kuuhaku.model.jda.Guild, List<com.kuuhaku.model.jda.Member>> svs = new HashMap<>();
-			gs.forEach(s -> {
-				List<com.kuuhaku.model.jda.Member> mbs = new ArrayList<>();
-				s.getMembers().forEach(m -> mbs.add(new com.kuuhaku.model.jda.Member(m.getId(), m.getEffectiveName(), m.getNickname(), m.getUser().getAvatarUrl())));
+			List<com.kuuhaku.model.jda.Guild> svs = new ArrayList<>();
+			gs.forEach(s -> svs.add(new com.kuuhaku.model.jda.Guild(s.getId(), s.getName(), s.getIconUrl())));
 
-				svs.put(new com.kuuhaku.model.jda.Guild(s.getId(), s.getName(), s.getIconUrl()), mbs);
-			});
-
+			Map<String, List<com.kuuhaku.model.jda.Member>> mbs = new HashMap<>();
+			gs.forEach(s -> mbs.put(s.getId(), s.getMembers().stream().map(m -> new com.kuuhaku.model.jda.Member(m.getId(), m.getEffectiveName(), m.getNickname(), m.getUser().getAvatarUrl())).collect(Collectors.toList())));
 
 			return new Object(){
 				public List<Member> profiles = profileList;
-				public Map<com.kuuhaku.model.jda.Guild, List<com.kuuhaku.model.jda.Member>> guilds = svs;
+				public List<com.kuuhaku.model.jda.Guild> guilds = svs;
+				public Map<String, List<com.kuuhaku.model.jda.Member>> members = mbs;
 			};
 		} catch (Exception e) {
 			e.printStackTrace();
