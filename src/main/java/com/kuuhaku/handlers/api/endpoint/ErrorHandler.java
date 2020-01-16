@@ -12,6 +12,12 @@ import javax.persistence.NoResultException;
 @RestController
 @ControllerAdvice
 public class ErrorHandler implements ErrorController {
+	@RequestMapping("/error")
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	public Exception error() {
+		return new Exception(500, "Erro interno do servidor");
+	}
+
 	@ExceptionHandler(InvalidTokenException.class)
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
 	public Exception invalidToken() {
