@@ -51,6 +51,11 @@ public class CustomAnswerCommand extends Command {
 				pages.add(new Page(PageType.EMBED, eb.build()));
 			}
 
+			if (pages.size() == 0) {
+				channel.sendMessage("Não há nenhuma resposta cadastrada neste servidor.").queue();
+				return;
+			}
+
 			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
 			return;
 		} else if (StringUtils.isNumeric(args[0]) && !args[0].contains(";")) {
