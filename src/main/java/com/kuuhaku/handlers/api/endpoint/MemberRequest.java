@@ -39,13 +39,9 @@ public class MemberRequest {
 			List<String> guildIds = profileList.stream().map(Member::getSid).collect(Collectors.toList());
 			Guild[] gs = Main.getInfo().getAPI().getGuilds().stream().filter(g -> guildIds.contains(g.getId())).toArray(Guild[]::new);
 
-			List<String> memberIds = profileList.stream().map(Member::getMid).collect(Collectors.toList());
-			net.dv8tion.jda.api.entities.Member[] mbs = Main.getInfo().getAPI().getGuilds().stream().flatMap(g -> g.getMembers().stream()).filter(m -> memberIds.contains(m.getId())).toArray(net.dv8tion.jda.api.entities.Member[]::new);
-
 			return new Object(){
 				public Member[] profiles = profileList.toArray(new Member[0]);
-				public Guild[] guilds = gs;
-				public net.dv8tion.jda.api.entities.Member[] members = mbs;
+				public com.kuuhaku.model.jda.Guild[] guilds = (com.kuuhaku.model.jda.Guild[]) gs;
 			};
 		} catch (Exception e) {
 			e.printStackTrace();
