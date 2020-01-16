@@ -183,8 +183,8 @@ public class Profile {
 
 	private static void drawBadges(net.dv8tion.jda.api.entities.Member m, Guild s, Graphics2D g2d) throws IOException {
 		java.util.List<BufferedImage> badges = new ArrayList<BufferedImage>() {{
-			if (!MemberDAO.getMemberByMid(m.getUser().getId()).getExceed().isEmpty()) {
-				switch (ExceedEnums.getByName(MemberDAO.getMemberByMid(m.getUser().getId()).getExceed())) {
+			if (!MemberDAO.getMemberByMid(m.getUser().getId()).get(0).getExceed().isEmpty()) {
+				switch (ExceedEnums.getByName(MemberDAO.getMemberByMid(m.getUser().getId()).get(0).getExceed())) {
 					case IMANITY:
 						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/imanity.png"))));
 						break;
