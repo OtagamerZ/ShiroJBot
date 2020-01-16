@@ -50,6 +50,8 @@ public class Member {
 	private boolean rulesSent;
 	@Column(columnDefinition = "long default 0")
 	private long lastVoted;
+	private String login;
+	private String password;
 
 	public Member() {
 
@@ -181,5 +183,21 @@ public class Member {
 
 	public void setSid(String sid) {
 		this.sid = sid;
+	}
+
+	public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }
