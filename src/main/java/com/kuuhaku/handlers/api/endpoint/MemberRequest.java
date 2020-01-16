@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kuuhaku.controller.mysql.TokenDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.exception.InvalidTokenException;
+import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.model.Member;
 import com.kuuhaku.utils.Helper;
+import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -19,8 +21,12 @@ public class MemberRequest {
 	}
 
 	@RequestMapping(value = "/member/auth", method = RequestMethod.POST)
-	public Member authProfile(@RequestHeader(value = "login") String login, @RequestHeader(value = "password") String pass) {
-		return MemberDAO.authMember(login, pass);
+	public Member authProfile(@RequestBody String body) {
+		JSONObject json = new JSONObject(body);
+
+		if (!json.has("login") || !json.has("password")) throw new UnauthorizedException();
+
+		return MemberDAO.authMember(json.getString("login"), json.getString("password"));
 	}
 
 	@RequestMapping(value = "/member/update", method = RequestMethod.POST)
