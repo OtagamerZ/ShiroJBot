@@ -11,7 +11,10 @@ import net.dv8tion.jda.api.entities.Guild;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -37,11 +40,20 @@ public class MemberRequest {
 		try {
 			List<Member> profileList = MemberDAO.authMember(login, pass);
 			List<String> guildIds = profileList.stream().map(Member::getSid).collect(Collectors.toList());
-			Guild[] gs = Main.getInfo().getAPI().getGuilds().stream().filter(g -> guildIds.contains(g.getId())).toArray(Guild[]::new);
+			List<Guild> gs = Main.getInfo().getAPI().getGuilds().stream().filter(g -> guildIds.contains(g.getId())).collect(Collectors.toList());
+
+			Map<com.kuuhaku.model.jda.Guild, List<com.kuuhaku.model.jda.Member>> svs = new HashMap<>();
+			gs.forEach(s -> {
+				List<com.kuuhaku.model.jda.Member> mbs = new ArrayList<>();
+				s.getMembers().forEach(m -> mbs.add(new com.kuuhaku.model.jda.Member(m.getId(), m.getNickname(), m.getUser().getAvatarUrl())));
+
+				svs.put(new com.kuuhaku.model.jda.Guild(s.getId(), s.getName(), s.getIconUrl()), mbs);
+			});
+
 
 			return new Object(){
-				public Member[] profiles = profileList.toArray(new Member[0]);
-				public com.kuuhaku.model.jda.Guild[] guilds = (com.kuuhaku.model.jda.Guild[]) gs;
+				public List<Member> profiles = profileList;
+				public Map<com.kuuhaku.model.jda.Guild, List<com.kuuhaku.model.jda.Member>> guilds = svs;
 			};
 		} catch (Exception e) {
 			e.printStackTrace();
