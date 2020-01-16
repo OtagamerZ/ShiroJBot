@@ -40,7 +40,7 @@ public class Relay {
 
 	private WebhookMessage getMessage(String msg, Member m, Guild s) {
 		WebhookMessageBuilder wmb = new WebhookMessageBuilder();
-		String exceed = MemberDAO.getMemberByMid(m.getUser().getId()).getExceed();
+		String exceed = MemberDAO.getMemberByMid(m.getUser().getId()).get(0).getExceed();
 
 		String filtered = Arrays.stream(msg.split(" ")).map(w -> w =
 				(w.contains("<") && w.contains(">") && w.contains(":")) ? ":question:" : w
@@ -67,7 +67,7 @@ public class Relay {
 		updateRelays();
 		checkSize();
 
-		String exceed = MemberDAO.getMemberByMid(m.getUser().getId()).getExceed();
+		String exceed = MemberDAO.getMemberByMid(m.getUser().getId()).get(0).getExceed();
 
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setDescription(Helper.makeEmoteFromMention(msg.split(" ")) + "\n\n ");

@@ -14,15 +14,25 @@ import java.io.IOException;
 public class MemberRequest {
 
 	@RequestMapping(value = "/member/get", method = RequestMethod.GET)
-	public Member requestProfile(@RequestParam(value = "id") String id) {
+	public Member requestProfileById(@RequestParam(value = "id") String id) {
 		return MemberDAO.getMemberById(id);
 	}
 
+	@RequestMapping(value = "/member/get", method = RequestMethod.GET)
+	public Member[] requestProfileByMid(@RequestParam(value = "mid") String mid) {
+		return (Member[]) MemberDAO.getMemberByMid(mid).toArray();
+	}
+
+	@RequestMapping(value = "/member/get", method = RequestMethod.GET)
+	public Member[] requestProfileBySid(@RequestParam(value = "sid") String sid) {
+		return (Member[]) MemberDAO.getMemberBySid(sid).toArray();
+	}
+
 	@RequestMapping(value = "/member/auth", method = RequestMethod.POST)
-	public Member authProfile(@RequestHeader(value = "login") String login, @RequestHeader(value = "password") String pass) {
+	public Member[] authProfile(@RequestHeader(value = "login") String login, @RequestHeader(value = "password") String pass) {
 		Helper.logger(this.getClass()).info(login + " - " + pass);
 
-		return MemberDAO.authMember(login, pass);
+		return (Member[]) MemberDAO.authMember(login, pass).toArray();
 	}
 
 	@RequestMapping(value = "/member/update", method = RequestMethod.POST)

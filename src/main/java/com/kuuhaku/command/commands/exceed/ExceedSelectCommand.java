@@ -9,6 +9,8 @@ import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.TagIcons;
 import net.dv8tion.jda.api.entities.*;
 
+import java.util.List;
+
 public class ExceedSelectCommand extends Command {
 	public ExceedSelectCommand() {
 		super("exceedselect", new String[]{"exselect", "sou"}, "Escolhe seu exceed, esta escolha é permanente.", Category.EXCEED);
@@ -17,9 +19,9 @@ public class ExceedSelectCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		channel.sendMessage("<a:Loading:598500653215645697> Analisando dados...").queue(m -> {
-			com.kuuhaku.model.Member u = MemberDAO.getMemberByMid(author.getId());
+			List<com.kuuhaku.model.Member> u = MemberDAO.getMemberByMid(author.getId());
 
-			if (u.getExceed().isEmpty()) {
+			if (u.get(0).getExceed().isEmpty()) {
 				if (args.length == 0) {
 					channel.sendMessage("Exceed é um sistema global de clãs, onde todo mês o clã vencedor ira receber experiência em dobro por uma semana. A pontuação é dada pela soma da experiência de todos os membros do clã, **independente do servidor**.\n\n" +
 							"Os exceeds disponíveis são:" +
@@ -35,33 +37,33 @@ public class ExceedSelectCommand extends Command {
 				}
 				switch (args[0].toLowerCase()) {
 					case "imanity":
-						u.setExceed(ExceedEnums.IMANITY.getName());
+						u.forEach(us -> us.setExceed(ExceedEnums.IMANITY.getName()));
 						break;
 					case "seiren":
-						u.setExceed(ExceedEnums.SEIREN.getName());
+						u.forEach(us -> us.setExceed(ExceedEnums.SEIREN.getName()));
 						break;
 					case "werebeast":
-						u.setExceed(ExceedEnums.WEREBEAST.getName());
+						u.forEach(us -> us.setExceed(ExceedEnums.WEREBEAST.getName()));
 						break;
 					case "elf":
-						u.setExceed(ExceedEnums.ELF.getName());
+						u.forEach(us -> us.setExceed(ExceedEnums.ELF.getName()));
 						break;
 					case "ex-machina":
-						u.setExceed(ExceedEnums.EXMACHINA.getName());
+						u.forEach(us -> us.setExceed(ExceedEnums.EXMACHINA.getName()));
 						break;
 					case "flügel":
-						u.setExceed(ExceedEnums.FLUGEL.getName());
+						u.forEach(us -> us.setExceed(ExceedEnums.FLUGEL.getName()));
 						break;
 					default:
 						channel.sendMessage(":x: | Exceed inexistente.").queue();
 						return;
 				}
-				MemberDAO.updateMemberConfigs(u);
-				channel.sendMessage("Exceed escolhido com sucesso, você agora pertence à **" + u.getExceed() + "**.").queue();
-				ExceedDAO.getExceedMembers(ExceedEnums.getByName(u.getExceed())).forEach(em ->
+				u.forEach(MemberDAO::updateMemberConfigs);
+				channel.sendMessage("Exceed escolhido com sucesso, você agora pertence à **" + u.get(0).getExceed() + "**.").queue();
+				ExceedDAO.getExceedMembers(ExceedEnums.getByName(u.get(0).getExceed())).forEach(em ->
 						Main.getInfo().getUserByID(em.getMid()).openPrivateChannel().queue(c -> {
 							try {
-								c.sendMessage(author.getAsTag() + " juntou-se à " + u.getExceed() + ", dê-o(a) as boas-vindas!").queue();
+								c.sendMessage(author.getAsTag() + " juntou-se à " + u.get(0).getExceed() + ", dê-o(a) as boas-vindas!").queue();
 							} catch (Exception ignore) {
 							}
 						}));

@@ -40,7 +40,7 @@ public class MyTagsCommand extends Command {
     @Override
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
         EmbedBuilder eb = new EmbedBuilder();
-        String exceed = MemberDAO.getMemberByMid(author.getId()).getExceed();
+        String exceed = MemberDAO.getMemberByMid(author.getId()).get(0).getExceed();
 
         eb.setTitle(":label: Emblemas de " + author.getName());
         try {
