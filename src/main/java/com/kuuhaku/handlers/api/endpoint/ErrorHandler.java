@@ -33,7 +33,7 @@ public class ErrorHandler implements ErrorController {
 	@ExceptionHandler(UnauthorizedException.class)
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
 	public Exception unauthorized() {
-		return new Exception(403, "Login nao autorizado");
+		return new Exception(403, "Login não autorizado");
 	}
 
 	@Override
