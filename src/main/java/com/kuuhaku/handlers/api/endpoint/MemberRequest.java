@@ -30,12 +30,7 @@ public class MemberRequest {
 
 	@RequestMapping(value = "/member/auth", method = RequestMethod.POST)
 	public Member[] authProfile(@RequestHeader(value = "login") String login, @RequestHeader(value = "password") String pass) {
-		try {
-			return MemberDAO.authMember(login, pass).toArray(new Member[0]);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw e;
-		}
+		return MemberDAO.authMember(login, pass).toArray(new Member[0]);
 	}
 
 	@RequestMapping(value = "/member/update", method = RequestMethod.POST)
