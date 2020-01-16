@@ -13,17 +13,17 @@ import java.io.IOException;
 @RestController
 public class MemberRequest {
 
-	@RequestMapping(value = "/member/get", method = RequestMethod.GET)
+	@RequestMapping(value = "/member/get/byid", method = RequestMethod.GET)
 	public Member requestProfileById(@RequestParam(value = "id") String id) {
 		return MemberDAO.getMemberById(id);
 	}
 
-	@RequestMapping(value = "/member/get", method = RequestMethod.GET)
+	@RequestMapping(value = "/member/get/bymid", method = RequestMethod.GET)
 	public Member[] requestProfileByMid(@RequestParam(value = "mid") String mid) {
 		return (Member[]) MemberDAO.getMemberByMid(mid).toArray();
 	}
 
-	@RequestMapping(value = "/member/get", method = RequestMethod.GET)
+	@RequestMapping(value = "/member/get/bysid", method = RequestMethod.GET)
 	public Member[] requestProfileBySid(@RequestParam(value = "sid") String sid) {
 		return (Member[]) MemberDAO.getMemberBySid(sid).toArray();
 	}
