@@ -34,7 +34,7 @@ public class MemberRequest {
 	}
 
 	@RequestMapping(value = "/member/auth", method = RequestMethod.POST)
-	public JSONObject authProfile(@RequestHeader(value = "login") String login, @RequestHeader(value = "password") String pass) {
+	public Object authProfile(@RequestHeader(value = "login") String login, @RequestHeader(value = "password") String pass) {
 		JSONObject response = new JSONObject();
 
 		try {
