@@ -6,10 +6,7 @@ import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.exception.InvalidTokenException;
 import com.kuuhaku.model.Member;
 import com.kuuhaku.utils.Helper;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -22,12 +19,12 @@ public class MemberRequest {
 	}
 
 	@RequestMapping(value = "/member/auth", method = RequestMethod.POST)
-	public Member authProfile(@RequestParam(value = "login") String login, @RequestParam(value = "password") String pass) {
+	public Member authProfile(@RequestBody String login, @RequestBody String pass) {
 		return MemberDAO.authMember(login, pass);
 	}
 
 	@RequestMapping(value = "/member/update", method = RequestMethod.POST)
-	public void updateProfile(@RequestParam(value = "profile") String profile, @RequestParam(value = "token") String token) {
+	public void updateProfile(@RequestBody String profile, @RequestBody String token) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 
