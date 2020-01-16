@@ -19,12 +19,12 @@ public class MemberRequest {
 	}
 
 	@RequestMapping(value = "/member/auth", method = RequestMethod.POST)
-	public Member authProfile(@RequestBody String login, @RequestBody String pass) {
+	public Member authProfile(@RequestHeader String login, @RequestHeader String pass) {
 		return MemberDAO.authMember(login, pass);
 	}
 
 	@RequestMapping(value = "/member/update", method = RequestMethod.POST)
-	public void updateProfile(@RequestBody String profile, @RequestBody String token) {
+	public void updateProfile(@RequestHeader String profile, @RequestHeader String token) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 
