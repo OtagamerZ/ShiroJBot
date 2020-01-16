@@ -1,24 +1,25 @@
 package com.kuuhaku.model.jda;
 
-public abstract class Guild implements net.dv8tion.jda.api.entities.Guild {
-	private final String id = getId();
-	private final String name = getName();
-	private final String icon = getIconUrl();
-	private final Member[] members = (Member[]) getMembers().toArray(new net.dv8tion.jda.api.entities.Member[0]);
+public class Guild {
+	private final String id;
+	private final String name;
+	private final String icon;
 
-	public String getid() {
+	public Guild(String id, String name, String icon) {
+		this.id = id;
+		this.name = name;
+		this.icon = icon;
+	}
+
+	public String getId() {
 		return id;
 	}
 
-	public String getname() {
+	public String getName() {
 		return name;
 	}
 
-	public String geticon() {
+	public String getIcon() {
 		return icon;
-	}
-
-	public Member[] getmembers() {
-		return members;
 	}
 }
