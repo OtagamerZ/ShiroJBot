@@ -31,10 +31,9 @@ public class VotesDAO {
 
         em.close();
 
-        Member m = MemberDAO.getMemberById(user.getId() + guild.getId());
-        m.vote();
-
-        MemberDAO.updateMemberConfigs(m);
+        List<Member> m = MemberDAO.getMemberByMid(user.getId());
+        m.forEach(Member::vote);
+		m.forEach(MemberDAO::updateMemberConfigs);
     }
 
 	@SuppressWarnings("unchecked")

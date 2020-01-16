@@ -22,14 +22,29 @@ public class MemberDAO {
 		return m;
 	}
 
-	public static Member getMemberByMid(String id) {
+	@SuppressWarnings("unchecked")
+	public static List<Member> getMemberByMid(String id) {
 		EntityManager em = Manager.getEntityManager();
-		Member m;
+		List<Member> m;
 
 		Query q = em.createQuery("SELECT m FROM Member m WHERE mid LIKE ?1", Member.class);
 		q.setParameter(1, id);
 		q.setMaxResults(1);
-		m = (Member) q.getSingleResult();
+		m = (List<Member>) q.getResultList();
+
+		em.close();
+
+		return m;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Member> getMemberBySid(String id) {
+		EntityManager em = Manager.getEntityManager();
+		List<Member> m;
+
+		Query q = em.createQuery("SELECT m FROM Member m WHERE sid LIKE ?1", Member.class);
+		q.setParameter(1, id);
+		m = (List<Member>) q.getResultList();
 
 		em.close();
 
@@ -93,7 +108,8 @@ public class MemberDAO {
 		return gcs;
 	}
 
-	public static Member authMember(String login, String password) {
+	@SuppressWarnings("unchecked")
+	public static List<Member> authMember(String login, String password) {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT m FROM Member m WHERE mid LIKE (SELECT mid FROM Member WHERE login LIKE :login AND password LIKE :pass)", Member.class);
@@ -101,7 +117,7 @@ public class MemberDAO {
 		q.setParameter("pass", password);
 
 		try {
-			return (Member) q.getSingleResult();
+			return (List<Member>) q.getResultList();
 		} catch (NoResultException e) {
 			throw new UnauthorizedException();
 		} finally {
