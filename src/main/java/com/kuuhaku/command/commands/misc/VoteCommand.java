@@ -18,7 +18,7 @@ public class VoteCommand extends Command {
 		if (args.length == 0 || message.getMentionedUsers().size() < 1) {
 			channel.sendMessage(":x: | É necessário mencionar um usuário").queue();
 			return;
-		} else if (!MemberDAO.getMemberByMid(author.getId()).canVote()) {
+		} else if (!MemberDAO.getMemberByMid(author.getId()).get(0).canVote()) {
 			channel.sendMessage(":x: | Você já votou hoje, cada usuário possui apenas um voto por dia").queue();
 			return;
 		} else if (message.getMentionedUsers().get(0) == author) {
