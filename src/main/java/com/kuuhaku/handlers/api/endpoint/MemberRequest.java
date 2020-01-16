@@ -19,7 +19,7 @@ public class MemberRequest {
 	}
 
 	@RequestMapping(value = "/member/auth", method = RequestMethod.POST)
-	public Member authProfile(@RequestHeader String login, @RequestHeader String pass) {
+	public Member authProfile(@RequestHeader(value = "login") String login, @RequestHeader(value = "password") String pass) {
 		return MemberDAO.authMember(login, pass);
 	}
 
