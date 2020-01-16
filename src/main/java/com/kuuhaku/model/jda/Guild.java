@@ -22,4 +22,9 @@ public class Guild {
 	public String getIcon() {
 		return icon;
 	}
+
+	@Override
+	public String toString() {
+		return id;
+	}
 }
