@@ -26,6 +26,8 @@ public class MemberRequest {
 
 		if (!json.has("login") || !json.has("password")) throw new UnauthorizedException();
 
+		Helper.logger(this.getClass()).info(json.getString("login") + " - " + json.getString("password"));
+
 		return MemberDAO.authMember(json.getString("login"), json.getString("password"));
 	}
 
