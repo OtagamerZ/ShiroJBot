@@ -38,7 +38,7 @@ public class InviteCommand extends Command {
 		EmbedBuilder eb = new EmbedBuilder();
 
 		List<String[]> servers = new ArrayList<>();
-		Main.getInfo().getAPI().getGuilds().stream().filter(s -> s.getSelfMember().hasPermission(Permission.CREATE_INSTANT_INVITE) && s.getDefaultChannel() != null).forEach(g -> servers.add(new String[]{g.getName(), g.getId()}));
+		Main.getInfo().getAPI().getGuilds().stream().filter(s -> s.getSelfMember().hasPermission(Permission.CREATE_INSTANT_INVITE) && s.getDefaultChannel() != null).forEach(g -> servers.add(new String[]{g.getName(), g.getId(), String.valueOf(g.getMembers().stream().filter(m -> !m.getUser().isBot()).count())}));
 		List<List<String[]>> svPages = Helper.chunkify(servers, 10);
 
 		List<Page> pages = new ArrayList<>();
@@ -47,7 +47,7 @@ public class InviteCommand extends Command {
 			eb.clear();
 
 			eb.setTitle("Servidores que eu posso criar um convite:");
-			svPages.get(i).forEach(p -> eb.addField("Nome: " + p[0], "ID: " + p[1], false));
+			svPages.get(i).forEach(p -> eb.addField("Nome: " + p[0], "ID: " + p[1] + "\nMembros: " + p[2], false));
 			eb.setFooter("Página " + (i + 1) + " de " + svPages.size() + ". Total de " + svPages.stream().mapToInt(List::size).sum() + " resultados.", null);
 
 			pages.add(new Page(PageType.EMBED, eb.build()));
@@ -64,5 +64,4 @@ public class InviteCommand extends Command {
 			channel.sendMessage(":x: | Servidor não encontrado!\n").embed((MessageEmbed) pages.get(0).getContent()).queue(m -> Pages.paginate(Main.getInfo().getAPI(), m, pages, 60, TimeUnit.SECONDS));
 		}
 	}
-
 }
