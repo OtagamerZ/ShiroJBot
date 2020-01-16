@@ -1,6 +1,7 @@
 package com.kuuhaku.handlers.api.endpoint;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kuuhaku.Main;
 import com.kuuhaku.controller.mysql.TokenDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.exception.InvalidTokenException;
@@ -26,6 +27,11 @@ public class MemberRequest {
 	@RequestMapping(value = "/member/get/bysid", method = RequestMethod.GET)
 	public Member[] requestProfileBySid(@RequestParam(value = "id") String sid) {
 		return MemberDAO.getMemberBySid(sid).toArray(new Member[0]);
+	}
+
+	@RequestMapping(value = "/member/get/jda", method = RequestMethod.GET)
+	public net.dv8tion.jda.api.entities.Member requestJDAMember(@RequestParam(value = "sid") String sid, @RequestParam(value = "mid") String mid) {
+		return Main.getInfo().getGuildByID(sid).getMemberById(mid);
 	}
 
 	@RequestMapping(value = "/member/auth", method = RequestMethod.POST)
