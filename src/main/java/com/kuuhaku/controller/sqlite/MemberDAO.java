@@ -111,9 +111,9 @@ public class MemberDAO {
 	public static List<Member> authMember(String login, String password) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT m FROM Member m WHERE mid LIKE (SELECT u.mid FROM Member u WHERE login LIKE :login AND password LIKE :pass)", Member.class);
-		q.setParameter("login", login);
-		q.setParameter("pass", password);
+		Query q = em.createNativeQuery("SELECT m FROM Member m WHERE mid LIKE (SELECT u.mid FROM Member u WHERE login LIKE ? AND password LIKE ?)", Member.class);
+		q.setParameter(1, login);
+		q.setParameter(2, password);
 
 		try {
 			return (List<Member>) q.getResultList();
