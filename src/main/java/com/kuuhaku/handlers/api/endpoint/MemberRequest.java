@@ -19,12 +19,12 @@ public class MemberRequest {
 	}
 
 	@RequestMapping(value = "/member/get/bymid", method = RequestMethod.GET)
-	public Member[] requestProfileByMid(@RequestParam(value = "mid") String mid) {
+	public Member[] requestProfileByMid(@RequestParam(value = "id") String mid) {
 		return (Member[]) MemberDAO.getMemberByMid(mid).toArray();
 	}
 
 	@RequestMapping(value = "/member/get/bysid", method = RequestMethod.GET)
-	public Member[] requestProfileBySid(@RequestParam(value = "sid") String sid) {
+	public Member[] requestProfileBySid(@RequestParam(value = "id") String sid) {
 		return (Member[]) MemberDAO.getMemberBySid(sid).toArray();
 	}
 
