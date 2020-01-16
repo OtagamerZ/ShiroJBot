@@ -21,7 +21,7 @@ public class LogDAO {
 	public static List<UsageView> getUses() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT u FROM UsageView u", UsageView.class);
+		Query q = em.createQuery("SELECT guild, COUNT(guild) AS uses FROM UsageView u GROUP BY guild ORDER BY uses DESC", Object.class);
 
 		return (List<UsageView>) q.getResultList();
 	}
