@@ -7,9 +7,13 @@ import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.exception.InvalidTokenException;
 import com.kuuhaku.model.Member;
 import com.kuuhaku.utils.Helper;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class MemberRequest {
@@ -29,14 +33,22 @@ public class MemberRequest {
 		return MemberDAO.getMemberBySid(sid).toArray(new Member[0]);
 	}
 
-	@RequestMapping(value = "/member/get/jda", method = RequestMethod.GET)
-	public net.dv8tion.jda.api.entities.Member requestJDAMember(@RequestParam(value = "sid") String sid, @RequestParam(value = "mid") String mid) {
-		return Main.getInfo().getGuildByID(sid).getMemberById(mid);
-	}
-
 	@RequestMapping(value = "/member/auth", method = RequestMethod.POST)
-	public Member[] authProfile(@RequestHeader(value = "login") String login, @RequestHeader(value = "password") String pass) {
-		return MemberDAO.authMember(login, pass).toArray(new Member[0]);
+	public JSONObject authProfile(@RequestHeader(value = "login") String login, @RequestHeader(value = "password") String pass) {
+		JSONObject response = new JSONObject();
+
+		List<Member> profileList = MemberDAO.authMember(login, pass);
+		List<String> guildIds = profileList.stream().map(Member::getSid).collect(Collectors.toList());
+		JSONArray guilds = new JSONArray(Main.getInfo().getAPI().getGuilds().stream().filter(g -> guildIds.contains(g.getId())).collect(Collectors.toList()));
+
+		List<String> memberIds = profileList.stream().map(Member::getMid).collect(Collectors.toList());
+		JSONArray members = new JSONArray(Main.getInfo().getAPI().getGuilds().stream().flatMap(g -> g.getMembers().stream()).filter(m -> memberIds.contains(m.getId())).collect(Collectors.toList()));
+
+		response.put("profiles", new JSONArray(profileList));
+		response.put("guilds", guilds);
+		response.put("members", members);
+
+		return response;
 	}
 
 	@RequestMapping(value = "/member/update", method = RequestMethod.POST)
