@@ -37,18 +37,23 @@ public class MemberRequest {
 	public JSONObject authProfile(@RequestHeader(value = "login") String login, @RequestHeader(value = "password") String pass) {
 		JSONObject response = new JSONObject();
 
-		List<Member> profileList = MemberDAO.authMember(login, pass);
-		List<String> guildIds = profileList.stream().map(Member::getSid).collect(Collectors.toList());
-		JSONArray guilds = new JSONArray(Main.getInfo().getAPI().getGuilds().stream().filter(g -> guildIds.contains(g.getId())).collect(Collectors.toList()));
+		try {
+			List<Member> profileList = MemberDAO.authMember(login, pass);
+			List<String> guildIds = profileList.stream().map(Member::getSid).collect(Collectors.toList());
+			JSONArray guilds = new JSONArray(Main.getInfo().getAPI().getGuilds().stream().filter(g -> guildIds.contains(g.getId())).collect(Collectors.toList()));
 
-		List<String> memberIds = profileList.stream().map(Member::getMid).collect(Collectors.toList());
-		JSONArray members = new JSONArray(Main.getInfo().getAPI().getGuilds().stream().flatMap(g -> g.getMembers().stream()).filter(m -> memberIds.contains(m.getId())).collect(Collectors.toList()));
+			List<String> memberIds = profileList.stream().map(Member::getMid).collect(Collectors.toList());
+			JSONArray members = new JSONArray(Main.getInfo().getAPI().getGuilds().stream().flatMap(g -> g.getMembers().stream()).filter(m -> memberIds.contains(m.getId())).collect(Collectors.toList()));
 
-		response.put("profiles", new JSONArray(profileList));
-		response.put("guilds", guilds);
-		response.put("members", members);
+			response.put("profiles", new JSONArray(profileList));
+			response.put("guilds", guilds);
+			response.put("members", members);
 
-		return response;
+			return response;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 
 	@RequestMapping(value = "/member/update", method = RequestMethod.POST)
