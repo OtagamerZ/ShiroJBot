@@ -30,8 +30,6 @@ public class MemberRequest {
 
 	@RequestMapping(value = "/member/auth", method = RequestMethod.POST)
 	public Member[] authProfile(@RequestHeader(value = "login") String login, @RequestHeader(value = "password") String pass) {
-		Helper.logger(this.getClass()).info(login + " - " + pass);
-
 		return MemberDAO.authMember(login, pass).toArray(new Member[0]);
 	}
 
