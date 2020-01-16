@@ -6,8 +6,6 @@ import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.exception.InvalidTokenException;
 import com.kuuhaku.model.Member;
 import com.kuuhaku.utils.Helper;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -16,15 +14,15 @@ import java.io.IOException;
 public class MemberRequest {
 
 	@RequestMapping(value = "/member/get", method = RequestMethod.GET)
-	public ResponseEntity<Object> requestProfile(@RequestParam(value = "id") String id) {
-		return ResponseHandler.generateResponse(HttpStatus.OK, false, "Results", MemberDAO.getMemberById(id));
+	public Member requestProfile(@RequestParam(value = "id") String id) {
+		return MemberDAO.getMemberById(id);
 	}
 
 	@RequestMapping(value = "/member/auth", method = RequestMethod.POST)
-	public ResponseEntity<Object> authProfile(@RequestHeader(value = "login") String login, @RequestHeader(value = "password") String pass) {
+	public Member authProfile(@RequestHeader(value = "login") String login, @RequestHeader(value = "password") String pass) {
 		Helper.logger(this.getClass()).info(login + " - " + pass);
 
-		return ResponseHandler.generateResponse(HttpStatus.OK, false, "Results", MemberDAO.authMember(login, pass));
+		return MemberDAO.authMember(login, pass);
 	}
 
 	@RequestMapping(value = "/member/update", method = RequestMethod.POST)

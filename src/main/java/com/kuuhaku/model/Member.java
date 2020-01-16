@@ -25,9 +25,6 @@ import net.dv8tion.jda.api.entities.User;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
@@ -39,7 +36,6 @@ public class Member {
 	private int level = 1, xp = 0;
 	@Column(columnDefinition = "float default 1.25")
 	private float waifuMult = 1.25f;
-	private String warns = "";
 	private String bg = "https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg";
 	private String bio = "";
 	private String waifu = "";
@@ -74,18 +70,6 @@ public class Member {
 		xp = 0;
 	}
 
-	public void addWarn(String reason) {
-		List<String> ph = new ArrayList<>(Arrays.asList(getWarns()));
-		ph.add(reason);
-		warns = ph.toString();
-	}
-
-	public void removeWarn(int index) {
-		List<String> ph = new ArrayList<>(Arrays.asList(getWarns()));
-		ph.remove(index);
-		warns = ph.toString();
-	}
-
 	public String getId() {
 		return id;
 	}
@@ -98,15 +82,11 @@ public class Member {
 		return xp;
 	}
 
-	private String[] getWarns() {
-		return warns.replace("[", "").replace("]", "").split(",");
-	}
-
 	public void setId(String id) {
 		this.id = id;
 	}
 
-	String getBg() {
+	public String getBg() {
 		return bg;
 	}
 
@@ -122,7 +102,7 @@ public class Member {
 		this.markForDelete = markForDelete;
 	}
 
-	String getBio() {
+	public String getBio() {
 		return bio;
 	}
 
@@ -199,5 +179,13 @@ public class Member {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public float getWaifuMult() {
+		return waifuMult;
+	}
+
+	public long getLastVoted() {
+		return lastVoted;
 	}
 }
