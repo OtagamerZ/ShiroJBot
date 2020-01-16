@@ -1,19 +1,25 @@
 package com.kuuhaku.model.jda;
 
-public abstract class Member implements net.dv8tion.jda.api.entities.Member {
-	private final String id = getId();
-	private final String nickname = getNickname();
-	private final String avatar = getUser().getAvatarUrl();
+public class Member {
+	private final String id;
+	private final String nickname;
+	private final String avatar;
 
-	public String getid() {
+	public Member(String id, String nickname, String avatar) {
+		this.id = id;
+		this.nickname = nickname;
+		this.avatar = avatar;
+	}
+
+	public String getId() {
 		return id;
 	}
 
-	public String getnickname() {
+	public String getNickname() {
 		return nickname;
 	}
 
-	public String getavatar() {
+	public String getAvatar() {
 		return avatar;
 	}
 }
