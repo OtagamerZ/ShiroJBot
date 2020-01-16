@@ -29,7 +29,6 @@ public class MemberDAO {
 
 		Query q = em.createQuery("SELECT m FROM Member m WHERE mid LIKE ?1", Member.class);
 		q.setParameter(1, id);
-		q.setMaxResults(1);
 		m = (List<Member>) q.getResultList();
 
 		em.close();
