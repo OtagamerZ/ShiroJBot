@@ -37,8 +37,8 @@ public class UsageCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		EmbedBuilder eb = new EmbedBuilder();
 
-		List<LogDAO.UsageView> usos = LogDAO.getUses();
-		List<List<LogDAO.UsageView>> uPages = Helper.chunkify(usos, 10);
+		List<Object[]> usos = LogDAO.getUses();
+		List<List<Object[]>> uPages = Helper.chunkify(usos, 10);
 
 		List<Page> pages = new ArrayList<>();
 
@@ -46,7 +46,7 @@ public class UsageCommand extends Command {
 			eb.clear();
 
 			eb.setTitle("Quantidade de comandos usados por servidor:");
-			uPages.get(i).forEach(p -> eb.addField("Servidor: " + p.getGuild(), "Usos: " + p.getUses(), false));
+			uPages.get(i).forEach(p -> eb.addField("Servidor: " + p[0], "Usos: " + p[1], false));
 			eb.setFooter("Página " + (i + 1) + " de " + uPages.size() + ". Total de " + uPages.stream().mapToInt(List::size).sum() + " resultados.", null);
 
 			pages.add(new Page(PageType.EMBED, eb.build()));
