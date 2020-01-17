@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -45,13 +43,13 @@ public class MemberRequest {
 			List<com.kuuhaku.model.jda.Guild> svs = new ArrayList<>();
 			gs.forEach(s -> svs.add(new com.kuuhaku.model.jda.Guild(s.getId(), s.getName(), s.getIconUrl())));
 
-			Map<String, List<com.kuuhaku.model.jda.Member>> mbs = new HashMap<>();
-			gs.forEach(s -> mbs.put(s.getId(), s.getMembers().stream().map(m -> new com.kuuhaku.model.jda.Member(m.getId(), m.getEffectiveName(), m.getNickname(), m.getUser().getAvatarUrl())).collect(Collectors.toList())));
+			List<com.kuuhaku.model.jda.Member> mbs = new ArrayList<>();
+			gs.forEach(s -> mbs.addAll(s.getMembers().stream().map(m -> new com.kuuhaku.model.jda.Member(m.getId(), s.getId(), m.getEffectiveName(), m.getNickname(), m.getUser().getAvatarUrl())).collect(Collectors.toList())));
 
 			return new Object(){
 				public List<Member> profiles = profileList;
 				public List<com.kuuhaku.model.jda.Guild> guilds = svs;
-				public Map<String, List<com.kuuhaku.model.jda.Member>> members = mbs;
+				public List<com.kuuhaku.model.jda.Member> members = mbs;
 			};
 		} catch (Exception e) {
 			e.printStackTrace();
