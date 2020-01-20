@@ -41,7 +41,7 @@ public class MemberRequest {
 			List<Guild> gs = Main.getInfo().getAPI().getGuilds().stream().filter(g -> guildIds.contains(g.getId())).collect(Collectors.toList());
 
 			List<com.kuuhaku.model.jda.Guild> svs = new ArrayList<>();
-			gs.forEach(s -> svs.add(new com.kuuhaku.model.jda.Guild(s.getId(), s.getName(), s.getIconUrl())));
+			gs.forEach(s -> svs.add(new com.kuuhaku.model.jda.Guild(s.getId(), s.getName(), s.getIconUrl(), s.getOwnerId())));
 
 			List<com.kuuhaku.model.jda.Member> mbs = new ArrayList<>();
 			gs.forEach(s -> mbs.addAll(s.getMembers().stream().map(m -> new com.kuuhaku.model.jda.Member(m.getId(), s.getId(), m.getEffectiveName(), m.getNickname(), m.getUser().getAvatarUrl())).collect(Collectors.toList())));
