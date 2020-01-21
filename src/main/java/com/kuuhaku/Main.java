@@ -27,6 +27,7 @@ import com.kuuhaku.events.TetEvents;
 import com.kuuhaku.events.guild.GuildEvents;
 import com.kuuhaku.events.guild.GuildUpdateEvents;
 import com.kuuhaku.handlers.api.Application;
+import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
 import com.kuuhaku.managers.CommandManager;
 import com.kuuhaku.managers.RPGCommandManager;
 import com.kuuhaku.model.DataDump;
@@ -43,11 +44,10 @@ import org.springframework.boot.SpringApplication;
 
 import javax.persistence.NoResultException;
 import java.awt.*;
-import java.io.IOException;
-import java.net.ServerSocket;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
 
 public class Main implements Thread.UncaughtExceptionHandler {
 
@@ -121,12 +121,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		jbr.addEventListener(new JibrilEvents());
 		tet.addEventListener(new TetEvents());
 
-		try {
-			info.setSocket(new ServerSocket(3000));
-			Helper.logger(Main.class).info("Socket aberto na porta 3000");
-		} catch (IOException e) {
-			Helper.logger(Main.class).error("Erro ao abrir socket: " + e + " | " + e.getStackTrace()[1]);
-		}
+		Executors.newSingleThreadExecutor().execute(new WebSocketConfig());
 
 		GuildDAO.getAllGuilds().forEach(Helper::refreshButtons);
 
