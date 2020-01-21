@@ -19,7 +19,6 @@ package com.kuuhaku.utils;
 
 import com.kuuhaku.controller.mysql.CanvasDAO;
 import com.kuuhaku.events.JDAEvents;
-import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
 import com.kuuhaku.handlers.games.rpg.world.World;
 import com.kuuhaku.handlers.music.GuildMusicManager;
 import com.kuuhaku.model.PixelCanvas;
@@ -32,6 +31,8 @@ import org.discordbots.api.client.DiscordBotListAPI;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -77,11 +78,12 @@ public class ShiroInfo {
 	private static final Map<String, World> games = new HashMap<>();
 	private static final JDAEvents shiroEvents = new JDAEvents();
 	private static final Map<String, KittyCache<String, Message>> messageCache = new HashMap<>();
-	private static final WebSocketConfig websocket = new WebSocketConfig();
 
 	private JDA api;
 	private long startTime;
 	private String winner = "";
+	private ServerSocket socket;
+	private Socket listener;
 
 	public ShiroInfo() {
 	}
@@ -197,10 +199,6 @@ public class ShiroInfo {
 		return messageCache.getOrDefault(guild.getId(), new KittyCache<>(64)).removeAndGet(id);
 	}
 
-	public static WebSocketConfig getWebsocket() {
-		return websocket;
-	}
-
 	//VARIABLES
 	public JDA getAPI() {
 		return api;
@@ -248,5 +246,21 @@ public class ShiroInfo {
 
 	public PixelCanvas getCanvas() {
 		return CanvasDAO.getCanvas();
+	}
+
+	public ServerSocket getSocket() {
+		return socket;
+	}
+
+	public void setSocket(ServerSocket socket) {
+		this.socket = socket;
+	}
+
+	public Socket getListener() {
+		return listener;
+	}
+
+	public void setListener(Socket listener) {
+		this.listener = listener;
 	}
 }

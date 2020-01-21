@@ -15,10 +15,10 @@ package com.kuuhaku;/*
  *     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-import com.kuuhaku.controller.mysql.BackupDAO;
-import com.kuuhaku.controller.mysql.ExceedDAO;
 import com.kuuhaku.controller.Relay;
 import com.kuuhaku.controller.Sweeper;
+import com.kuuhaku.controller.mysql.BackupDAO;
+import com.kuuhaku.controller.mysql.ExceedDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.Manager;
 import com.kuuhaku.events.JibrilEvents;
@@ -43,6 +43,8 @@ import org.springframework.boot.SpringApplication;
 
 import javax.persistence.NoResultException;
 import java.awt.*;
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -118,6 +120,14 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		api.addEventListener(new GuildUpdateEvents());
 		jbr.addEventListener(new JibrilEvents());
 		tet.addEventListener(new TetEvents());
+
+		try {
+			info.setSocket(new ServerSocket(3000));
+			Helper.logger(Main.class).info("Socket aberto na porta 3000");
+			info.setListener(info.getSocket().accept());
+		} catch (IOException e) {
+			Helper.logger(Main.class).error("Erro ao abrir socket: " + e + " | " + e.getStackTrace()[1]);
+		}
 
 		GuildDAO.getAllGuilds().forEach(Helper::refreshButtons);
 
