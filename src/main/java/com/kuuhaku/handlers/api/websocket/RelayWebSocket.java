@@ -14,18 +14,18 @@ public class RelayWebSocket {
 
 	@OnOpen
 	public void onOpen(Session session) {
-		LOGGER.debug(String.format("WebSocket opened: %s", session.getId()));
+		LOGGER.info(String.format("WebSocket opened: %s", session.getId()));
 	}
 
 	@OnMessage
 	public void onMessage(String txt, Session session) throws IOException {
-		LOGGER.debug(String.format("Message received: %s", txt));
+		LOGGER.info(String.format("Message received: %s", txt));
 		session.getBasicRemote().sendText(txt.toUpperCase());
 	}
 
 	@OnClose
 	public void onClose(CloseReason reason, Session session) {
-		LOGGER.debug(String.format("Closing a WebSocket (%s) due to %s", session.getId(), reason.getReasonPhrase()));
+		LOGGER.info(String.format("Closing a WebSocket (%s) due to %s", session.getId(), reason.getReasonPhrase()));
 	}
 
 	@OnError
