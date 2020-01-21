@@ -27,7 +27,7 @@ import com.kuuhaku.events.TetEvents;
 import com.kuuhaku.events.guild.GuildEvents;
 import com.kuuhaku.events.guild.GuildUpdateEvents;
 import com.kuuhaku.handlers.api.Application;
-import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
+import com.kuuhaku.handlers.api.websocket.ChatServer;
 import com.kuuhaku.managers.CommandManager;
 import com.kuuhaku.managers.RPGCommandManager;
 import com.kuuhaku.model.DataDump;
@@ -47,7 +47,6 @@ import java.awt.*;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executors;
 
 public class Main implements Thread.UncaughtExceptionHandler {
 
@@ -59,6 +58,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	private static JDA jbr;
 	private static JDA tet;
 	private static String[] arguments;
+	private static ChatServer chat;
 
 	public static void main(String[] args) throws Exception {
 		Thread.setDefaultUncaughtExceptionHandler(new Main());
@@ -121,7 +121,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		jbr.addEventListener(new JibrilEvents());
 		tet.addEventListener(new TetEvents());
 
-		Executors.newSingleThreadExecutor().execute(new WebSocketConfig());
+		chat = new ChatServer(3000);
 
 		GuildDAO.getAllGuilds().forEach(Helper::refreshButtons);
 
