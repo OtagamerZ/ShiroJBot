@@ -19,7 +19,7 @@ package com.kuuhaku.utils;
 
 import com.kuuhaku.controller.mysql.CanvasDAO;
 import com.kuuhaku.events.JDAEvents;
-import com.kuuhaku.handlers.api.websocket.RelayWebsocket;
+import com.kuuhaku.handlers.api.websocket.RelayWebSocket;
 import com.kuuhaku.handlers.games.rpg.world.World;
 import com.kuuhaku.handlers.music.GuildMusicManager;
 import com.kuuhaku.model.PixelCanvas;
@@ -77,7 +77,7 @@ public class ShiroInfo {
 	private static final Map<String, World> games = new HashMap<>();
 	private static final JDAEvents shiroEvents = new JDAEvents();
 	private static final Map<String, KittyCache<String, Message>> messageCache = new HashMap<>();
-	private static final RelayWebsocket websocket = new RelayWebsocket();
+	private static final RelayWebSocket websocket = new RelayWebSocket();
 
 	private JDA api;
 	private long startTime;
@@ -197,7 +197,7 @@ public class ShiroInfo {
 		return messageCache.getOrDefault(guild.getId(), new KittyCache<>(64)).removeAndGet(id);
 	}
 
-	public static RelayWebsocket getWebsocket() {
+	public static RelayWebSocket getWebsocket() {
 		return websocket;
 	}
 
