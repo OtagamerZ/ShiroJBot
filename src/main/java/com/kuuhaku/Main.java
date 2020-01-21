@@ -124,7 +124,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		try {
 			info.setSocket(new ServerSocket(3000));
 			Helper.logger(Main.class).info("Socket aberto na porta 3000");
-			info.setListener(info.getSocket().accept());
 		} catch (IOException e) {
 			Helper.logger(Main.class).error("Erro ao abrir socket: " + e + " | " + e.getStackTrace()[1]);
 		}
