@@ -1,5 +1,6 @@
 package com.kuuhaku.handlers.api.websocket;
 
+import com.kuuhaku.utils.Helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -18,5 +19,6 @@ public class WebSocketController {
 	@MessageMapping("/send/message")
 	public void onReceivedMessage(String message) {
 		this.template.convertAndSend("/chat", message);
+		Helper.logger(this.getClass()).info("Mensagem recebida: " + message);
 	}
 }
