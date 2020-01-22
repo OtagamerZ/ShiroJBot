@@ -17,9 +17,9 @@
 
 package com.kuuhaku.utils;
 
-import com.corundumstudio.socketio.SocketIOServer;
 import com.kuuhaku.controller.mysql.CanvasDAO;
 import com.kuuhaku.events.JDAEvents;
+import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
 import com.kuuhaku.handlers.games.rpg.world.World;
 import com.kuuhaku.handlers.music.GuildMusicManager;
 import com.kuuhaku.model.PixelCanvas;
@@ -81,7 +81,7 @@ public class ShiroInfo {
 	private JDA api;
 	private long startTime;
 	private String winner = "";
-	private SocketIOServer socket;
+	private WebSocketConfig socket;
 
 	public ShiroInfo() {
 	}
@@ -246,11 +246,11 @@ public class ShiroInfo {
 		return CanvasDAO.getCanvas();
 	}
 
-	public SocketIOServer getSocket() {
+	public WebSocketConfig getSocket() {
 		return socket;
 	}
 
-	public void setSocket(SocketIOServer socket) {
+	public void setSocket(WebSocketConfig socket) {
 		this.socket = socket;
 	}
 }
