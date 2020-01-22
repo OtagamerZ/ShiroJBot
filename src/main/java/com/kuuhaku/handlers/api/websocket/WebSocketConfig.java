@@ -32,8 +32,8 @@ public class WebSocketConfig {
 			out.put("content", data.getString("content"));
 
 			socket.getBroadcastOperations().sendEvent("chat", out.toString());
-			socket.start();
 		});
+		socket.start();
 	}
 
 	public static SocketIOServer getSocket() {
