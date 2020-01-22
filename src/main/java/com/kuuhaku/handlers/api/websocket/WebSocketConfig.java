@@ -36,6 +36,8 @@ public class WebSocketConfig {
 
 			GlobalMessageDAO.saveMessage(gm);
 
+			Main.getRelay().relayMessage(gm);
+
 			socket.getBroadcastOperations().sendEvent("chat", gm.toString());
 		});
 		socket.start();

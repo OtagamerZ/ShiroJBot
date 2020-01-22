@@ -53,13 +53,21 @@ public class Relay {
 		return wmb.build();
 	}
 
+	private WebhookMessage getMessage(GlobalMessage gm) {
+		WebhookMessageBuilder wmb = new WebhookMessageBuilder();
+
+		wmb.setContent(gm.getContent());
+		wmb.setAvatarUrl(RelayBlockList.checkThumb(gm.getUserId()) ? "https://i.pinimg.com/originals/46/15/87/461587d51087bfdf8906149d356f972f.jpg" :gm.getAvatar());
+		wmb.setUsername(gm.getName().length() > 15 ? gm.getName().substring(0, 15) + "..." : gm.getName());
+		return wmb.build();
+	}
+
 	private WebhookClient getClient(TextChannel ch, Guild s) {
 		List<Webhook> wbs = ch.retrieveWebhooks().complete().stream().filter(w -> w.getOwner() == s.getSelfMember()).collect(Collectors.toList());
-		if (wbs.size() != 0){
+		if (wbs.size() != 0) {
 			WebhookClientBuilder wcb = new WebhookClientBuilder(wbs.get(0).getUrl());
 			return wcb.build();
-		}
-		else {
+		} else {
 			WebhookClientBuilder wcb = new WebhookClientBuilder(Objects.requireNonNull(Helper.getOrCreateWebhook(ch)).getUrl());
 			return wcb.build();
 		}
@@ -161,7 +169,8 @@ public class Relay {
 		mb.setEmbed(eb.build());
 
 		relays.forEach((k, r) -> {
-			if (k.equals(s.getId()) && GuildDAO.getGuildById(k).isLiteMode() && m.getUser() != Main.getJibril().getSelfUser()) return;
+			if (k.equals(s.getId()) && GuildDAO.getGuildById(k).isLiteMode() && m.getUser() != Main.getJibril().getSelfUser())
+				return;
 			try {
 				TextChannel t = Objects.requireNonNull(Main.getJibril().getGuildById(k)).getTextChannelById(r);
 				assert t != null;
@@ -192,7 +201,7 @@ public class Relay {
 				Guild g = Main.getJibril().getGuildById(k);
 				assert g != null;
 				try {
-					Objects.requireNonNull(g.getOwner()).getUser().openPrivateChannel().queue(c -> c.sendMessage(":x: | Me faltam permissões para enviar mensagens globais no servidor " + s.getName() + ".\n\nPermissões que eu possuo:```" +
+					Objects.requireNonNull(g.getOwner()).getUser().openPrivateChannel().queue(c -> c.sendMessage(":x: | Me faltam permissões para enviar mensagens globais no servidor " + g.getName() + ".\n\nPermissões que eu possuo:```" +
 							(g.getSelfMember().hasPermission(Permission.MESSAGE_WRITE) ? "✅" : "❌") + " Ler/Enviar mensagens\n" +
 							(g.getSelfMember().hasPermission(Permission.MESSAGE_EMBED_LINKS) ? "✅" : "❌") + " Inserir links\n" +
 							(g.getSelfMember().hasPermission(Permission.MESSAGE_ATTACH_FILES) ? "✅" : "❌") + " Anexar arquivos\n" +
@@ -213,6 +222,70 @@ public class Relay {
 			}
 		} catch (InsufficientPermissionException ignore) {
 		}
+	}
+
+	public void relayMessage(GlobalMessage gm) {
+		updateRelays();
+		checkSize();
+
+		EmbedBuilder eb = new EmbedBuilder();
+		eb.setDescription(gm.getContent());
+		eb.setAuthor(gm.getName(), "https://www.pngkey.com/png/full/334-3346073_no-game-no-life-icon.png", "https://www.pngkey.com/png/full/334-3346073_no-game-no-life-icon.png");
+		eb.setThumbnail(RelayBlockList.checkThumb(gm.getUserId()) ? "https://i.pinimg.com/originals/46/15/87/461587d51087bfdf8906149d356f972f.jpg" : gm.getAvatar());
+		eb.setFooter(gm.getUserId(), "http://icons.iconarchive.com/icons/killaaaron/adobe-cc-circles/1024/Adobe-Id-icon.png");
+		try {
+			eb.setColor(Helper.colorThief(gm.getAvatar()));
+		} catch (IOException e) {
+			eb.setColor(Helper.getRandomColor());
+		}
+
+		eb.addField("Enviado pelo aplicativo", null, false);
+
+		MessageBuilder mb = new MessageBuilder();
+		mb.setEmbed(eb.build());
+
+		relays.forEach((k, r) -> {
+			try {
+				TextChannel t = Objects.requireNonNull(Main.getJibril().getGuildById(k)).getTextChannelById(r);
+				assert t != null;
+				if (GuildDAO.getGuildById(k).isAllowImg()) {
+					if (GuildDAO.getGuildById(k).isLiteMode()) {
+						WebhookClient client = getClient(t, Main.getJibril().getGuildById(k));
+						client.send(getMessage(gm));
+						client.close();
+					} else {
+						t.sendMessage(mb.build()).queue();
+					}
+				} else {
+					if (GuildDAO.getGuildById(k).isLiteMode()) {
+						WebhookClient client = getClient(t, Main.getJibril().getGuildById(k));
+						client.send(getMessage(gm));
+						client.close();
+					} else {
+						t.sendMessage(mb.build()).queue();
+					}
+				}
+			} catch (NullPointerException e) {
+				GuildDAO.getGuildById(k).setCanalRelay(null);
+			} catch (InsufficientPermissionException ex) {
+				Guild g = Main.getJibril().getGuildById(k);
+				assert g != null;
+				try {
+					Objects.requireNonNull(g.getOwner()).getUser().openPrivateChannel().queue(c -> c.sendMessage(":x: | Me faltam permissões para enviar mensagens globais no servidor " + g.getName() + ".\n\nPermissões que eu possuo:```" +
+							(g.getSelfMember().hasPermission(Permission.MESSAGE_WRITE) ? "✅" : "❌") + " Ler/Enviar mensagens\n" +
+							(g.getSelfMember().hasPermission(Permission.MESSAGE_EMBED_LINKS) ? "✅" : "❌") + " Inserir links\n" +
+							(g.getSelfMember().hasPermission(Permission.MESSAGE_ATTACH_FILES) ? "✅" : "❌") + " Anexar arquivos\n" +
+							(g.getSelfMember().hasPermission(Permission.MESSAGE_HISTORY) ? "✅" : "❌") + " Ver histórico de mensagens\n" +
+							(g.getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI) ? "✅" : "❌") + " Usar emojis externos\n" +
+							(g.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE) ? "✅" : "❌") + " Gerenciar mensagens\n" +
+							(g.getSelfMember().hasPermission(Permission.MANAGE_WEBHOOKS) ? "✅" : "❌") + " Gerenciar webhooks" +
+							"```").queue());
+					Helper.logger(this.getClass()).error(ex + " | Sevidor " + g.getName());
+				} catch (Exception e) {
+					Helper.logger(this.getClass()).error(ex + " | Dono " + Objects.requireNonNull(g.getOwner()).getUser().getAsTag());
+				}
+			}
+		});
 	}
 
 	public MessageEmbed getRelayInfo(GuildConfig gc) {
