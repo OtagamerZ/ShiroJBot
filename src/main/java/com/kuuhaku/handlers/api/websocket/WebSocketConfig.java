@@ -23,9 +23,9 @@ public class WebSocketConfig {
 			socket.addEventListener("chatevent", String.class, (client, data, ackSender) -> {
 				JSONObject jo = new JSONObject(data);
 
-				User u = Main.getInfo().getUserByID(jo.getString("userID"));
+				User u = Main.getInfo().getUserByID((String) jo.get("userID"));
 
-				System.out.println("Mensagem enviada por " + u.getName() + ": " + jo.getString("content"));
+				System.out.println("Mensagem enviada por " + u.getName() + ": " + jo.get("content"));
 
 				JSONObject out = new JSONObject();
 
