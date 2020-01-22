@@ -23,16 +23,16 @@ public class WebSocketConfig {
 			socket.addEventListener("chatevent", JSONObject.class, (client, data, ackSender) -> {
 				System.out.println(data);
 
-				User u = Main.getInfo().getUserByID((String) data.get("userID"));
+				User u = Main.getInfo().getUserByID(data.getString("userID"));
 
-				System.out.println("Mensagem enviada por " + u.getName() + ": " + data.get("content"));
+				System.out.println("Mensagem enviada por " + u.getName() + ": " + data.getString("content"));
 
 				JSONObject out = new JSONObject();
 
 				out.put("id", u.getId());
 				out.put("name", u.getName());
 				out.put("avatar", u.getAvatarUrl());
-				out.put("content", data.get("content"));
+				out.put("content", data.getString("content"));
 
 				socket.getBroadcastOperations().sendEvent("chat", out.toString());
 			});
