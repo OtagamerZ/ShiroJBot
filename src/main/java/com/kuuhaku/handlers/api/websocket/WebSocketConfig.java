@@ -32,7 +32,7 @@ public class WebSocketConfig {
 				out.put("id", u.getId());
 				out.put("name", u.getName());
 				out.put("avatar", u.getAvatarUrl());
-				out.put("content", jo.getString("content"));
+				out.put("content", jo.get("content"));
 
 				socket.getBroadcastOperations().sendEvent("chat", out.toString());
 			});
