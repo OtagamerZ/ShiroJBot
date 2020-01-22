@@ -17,6 +17,7 @@
 
 package com.kuuhaku.utils;
 
+import com.corundumstudio.socketio.SocketIOServer;
 import com.kuuhaku.controller.mysql.CanvasDAO;
 import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.handlers.games.rpg.world.World;
@@ -31,8 +32,6 @@ import org.discordbots.api.client.DiscordBotListAPI;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -82,8 +81,7 @@ public class ShiroInfo {
 	private JDA api;
 	private long startTime;
 	private String winner = "";
-	private ServerSocket socket;
-	private Socket listener;
+	private SocketIOServer socket;
 
 	public ShiroInfo() {
 	}
@@ -248,19 +246,11 @@ public class ShiroInfo {
 		return CanvasDAO.getCanvas();
 	}
 
-	public ServerSocket getSocket() {
+	public SocketIOServer getSocket() {
 		return socket;
 	}
 
-	public void setSocket(ServerSocket socket) {
+	public void setSocket(SocketIOServer socket) {
 		this.socket = socket;
-	}
-
-	public Socket getListener() {
-		return listener;
-	}
-
-	public void setListener(Socket listener) {
-		this.listener = listener;
 	}
 }

@@ -27,6 +27,7 @@ import com.kuuhaku.events.TetEvents;
 import com.kuuhaku.events.guild.GuildEvents;
 import com.kuuhaku.events.guild.GuildUpdateEvents;
 import com.kuuhaku.handlers.api.Application;
+import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
 import com.kuuhaku.managers.CommandManager;
 import com.kuuhaku.managers.RPGCommandManager;
 import com.kuuhaku.model.DataDump;
@@ -119,6 +120,8 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		jbr.addEventListener(new JibrilEvents());
 		tet.addEventListener(new TetEvents());
 
+		info.setSocket(WebSocketConfig.getServerSocket());
+
 		GuildDAO.getAllGuilds().forEach(Helper::refreshButtons);
 
 		Helper.logger(Main.class).info("<----------END OF BOOT---------->");
@@ -164,6 +167,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		tet.shutdown();
 		jbr.shutdown();
 		api.shutdown();
+		info.getSocket().stop();
 		Helper.logger(Main.class).info("Fui desligada.");
 	}
 
