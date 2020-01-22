@@ -25,6 +25,7 @@ public class WebSocketConfig {
 
 			JSONObject out = new JSONObject();
 
+			out.put("id", u.getId());
 			out.put("name", u.getName());
 			out.put("avatar", u.getAvatarUrl());
 			out.put("content", jo.getString("content"));
