@@ -6,6 +6,7 @@ import com.kuuhaku.controller.mysql.GlobalMessageDAO;
 import com.kuuhaku.controller.mysql.TokenDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.exception.InvalidTokenException;
+import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.model.GlobalMessage;
 import com.kuuhaku.model.Member;
 import com.kuuhaku.utils.Helper;
@@ -36,7 +37,8 @@ public class MemberRequest {
 	}
 
 	@RequestMapping(value = "/member/auth", method = RequestMethod.POST)
-	public Object authProfile(@RequestHeader(value = "login") String login, @RequestHeader(value = "password") String pass) {
+	public Object authProfile(@RequestHeader(value = "login") String login, @RequestHeader(value = "password") String pass, @RequestHeader(value = "token") String token) {
+		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
 		try {
 			List<Member> profileList = MemberDAO.authMember(login, pass);
 			List<String> guildIds = profileList.stream().map(Member::getSid).collect(Collectors.toList());
