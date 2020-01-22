@@ -16,6 +16,7 @@ public class GlobalMessage {
 	private String name;
 	private String avatar;
 	private String content;
+	private long time = System.currentTimeMillis();
 
 	public String getUserId() {
 		return userId;
@@ -49,6 +50,10 @@ public class GlobalMessage {
 		this.content = content;
 	}
 
+	public long getTime() {
+		return time;
+	}
+
 	@Override
 	public String toString() {
 		JSONObject out = new JSONObject();
@@ -56,6 +61,7 @@ public class GlobalMessage {
 		out.put("name", name);
 		out.put("avatar", avatar);
 		out.put("content", content);
+		out.put("time", time);
 		return out.toString();
 	}
 }
