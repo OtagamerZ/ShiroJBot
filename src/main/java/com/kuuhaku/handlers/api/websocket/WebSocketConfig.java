@@ -20,7 +20,7 @@ public class WebSocketConfig {
 			config.setPort(8000);
 
 			socket = new SocketIOServer(config);
-			socket.addEventListener("chatevent", String.class, (client, data, ackSender) -> {
+			socket.addEventListener("chatevent", Object.class, (client, data, ackSender) -> {
 				JSONObject jo = new JSONObject(data);
 
 				User u = Main.getInfo().getUserByID((String) jo.get("userID"));
