@@ -12,7 +12,7 @@ public class WebSocketConfig {
 	public WebSocketConfig() throws URISyntaxException {
 		IO.Options options = new IO.Options();
 		options.reconnection = true;
-		Socket socket = IO.socket("http://164.68.110.221/chat");
+		Socket socket = IO.socket("http://164.68.110.221/");
 
 		socket.on(Socket.EVENT_MESSAGE, System.out::println);
 		this.socket = socket.connect();
