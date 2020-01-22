@@ -120,7 +120,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		jbr.addEventListener(new JibrilEvents());
 		tet.addEventListener(new TetEvents());
 
-		info.setSocket(WebSocketConfig.getSocket());
+		info.setServer(new WebSocketConfig());
 
 		GuildDAO.getAllGuilds().forEach(Helper::refreshButtons);
 
