@@ -120,11 +120,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		jbr.addEventListener(new JibrilEvents());
 		tet.addEventListener(new TetEvents());
 
-		try {
-			info.setSocket(new WebSocketConfig());
-		} catch (Exception e) {
-			Helper.logger(Main.class).error("Erro ao conectar socket: " + e + " | " + e.getStackTrace()[0]);
-		}
+		info.setSocket(WebSocketConfig.getSocket());
 
 		GuildDAO.getAllGuilds().forEach(Helper::refreshButtons);
 
@@ -171,6 +167,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		tet.shutdown();
 		jbr.shutdown();
 		api.shutdown();
+		info.getSocket().stop();
 		Helper.logger(Main.class).info("Fui desligada.");
 	}
 
