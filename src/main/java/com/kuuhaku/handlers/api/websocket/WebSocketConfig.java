@@ -6,33 +6,38 @@ import com.kuuhaku.Main;
 import net.dv8tion.jda.api.entities.User;
 import org.json.JSONObject;
 
+import java.util.concurrent.Executors;
+
 public class WebSocketConfig {
 
-	private final SocketIOServer socket;
+	private SocketIOServer socket;
 
 	private WebSocketConfig() {
-		Configuration config = new Configuration();
-		config.setHostname("localhost");
-		config.setPort(8000);
+		Executors.newSingleThreadExecutor().execute(() -> {
+			Thread.currentThread().setName("chat-websocket");
+			Configuration config = new Configuration();
+			config.setHostname("localhost");
+			config.setPort(8000);
 
-		socket = new SocketIOServer(config);
-		socket.addEventListener("chatevent", String.class, (client, data, ackSender) -> {
-			JSONObject jo = new JSONObject(data);
+			socket = new SocketIOServer(config);
+			socket.addEventListener("chatevent", String.class, (client, data, ackSender) -> {
+				JSONObject jo = new JSONObject(data);
 
-			User u = Main.getInfo().getUserByID(jo.getString("userID"));
+				User u = Main.getInfo().getUserByID(jo.getString("userID"));
 
-			System.out.println("Mensagem enviada por " + u.getName() + ": " + jo.getString("content"));
+				System.out.println("Mensagem enviada por " + u.getName() + ": " + jo.getString("content"));
 
-			JSONObject out = new JSONObject();
+				JSONObject out = new JSONObject();
 
-			out.put("id", u.getId());
-			out.put("name", u.getName());
-			out.put("avatar", u.getAvatarUrl());
-			out.put("content", jo.getString("content"));
+				out.put("id", u.getId());
+				out.put("name", u.getName());
+				out.put("avatar", u.getAvatarUrl());
+				out.put("content", jo.getString("content"));
 
-			socket.getBroadcastOperations().sendEvent("chat", out.toString());
+				socket.getBroadcastOperations().sendEvent("chat", out.toString());
+			});
+			socket.start();
 		});
-		socket.start();
 	}
 
 	public static SocketIOServer getSocket() {
