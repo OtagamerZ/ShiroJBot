@@ -38,6 +38,7 @@
         <class>com.kuuhaku.model.Votes</class>
         <class>com.kuuhaku.model.Log</class>
         <class>com.kuuhaku.model.Backup</class>
+        <class>com.kuuhaku.model.Token</class>
         <class>com.kuuhaku.model.GlobalMessage</class>
         <class>java.lang.String</class>
 
