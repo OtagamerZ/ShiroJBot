@@ -44,7 +44,6 @@ import org.springframework.boot.SpringApplication;
 
 import javax.persistence.NoResultException;
 import java.awt.*;
-import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -123,7 +122,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 		try {
 			info.setSocket(new WebSocketConfig());
-		} catch (URISyntaxException e) {
+		} catch (Exception e) {
 			Helper.logger(Main.class).error("Erro ao conectar socket: " + e + " | " + e.getStackTrace()[0]);
 		}
 
