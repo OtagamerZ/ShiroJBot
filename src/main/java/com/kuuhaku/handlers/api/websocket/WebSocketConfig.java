@@ -9,8 +9,8 @@ public class WebSocketConfig {
 
 	private WebSocketConfig() {
 		Configuration config = new Configuration();
-		config.setHostname("164.68.110.221/chat");
-		config.setPort(8080);
+		config.setHostname("164.68.110.221");
+		config.setPort(8000);
 
 		socket = new SocketIOServer(config);
 		socket.addEventListener("chatevent", String.class, (client, data, ackSender) -> System.out.println(data));
