@@ -9,9 +9,9 @@ import org.json.JSONObject;
 
 public class WebSocketConfig {
 
-	private SocketIOServer socket;
+	private final SocketIOServer socket;
 
-	private WebSocketConfig() {
+	public WebSocketConfig() {
 		Thread.currentThread().setName("chat-websocket");
 		Configuration config = new Configuration();
 		config.setHostname("localhost");
@@ -37,7 +37,7 @@ public class WebSocketConfig {
 		socket.start();
 	}
 
-	public static SocketIOServer getSocket() {
-		return new WebSocketConfig().socket;
+	public SocketIOServer getSocket() {
+		return socket;
 	}
 }
