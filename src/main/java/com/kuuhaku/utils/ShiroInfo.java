@@ -26,6 +26,7 @@ import com.kuuhaku.model.PixelCanvas;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.spaceprogram.kittycache.KittyCache;
+import io.socket.client.Socket;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
 import org.discordbots.api.client.DiscordBotListAPI;
@@ -82,6 +83,7 @@ public class ShiroInfo {
 	private long startTime;
 	private String winner = "";
 	private WebSocketConfig server;
+	private Socket client;
 
 	public ShiroInfo() {
 	}
@@ -252,5 +254,14 @@ public class ShiroInfo {
 
 	public void setServer(WebSocketConfig server) {
 		this.server = server;
+	}
+
+	public Socket getClient() {
+		return client;
+	}
+
+	public Socket setClient(Socket client) {
+		this.client = client;
+		return this.client;
 	}
 }

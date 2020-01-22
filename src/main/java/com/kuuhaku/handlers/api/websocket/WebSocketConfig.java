@@ -36,8 +36,4 @@ public class WebSocketConfig {
 		});
 		socket.start();
 	}
-
-	public SocketIOServer getSocket() {
-		return socket;
-	}
 }

@@ -73,6 +73,9 @@ dependencies {
     compile ('org.springframework.boot:spring-boot-starter-web:2.1.6.RELEASE') {
         exclude module : 'spring-boot-starter-logging'
     }
+    compile ('io.socket:socket.io-client:1.0.0') {
+        exclude group: 'org.json', module: 'json'
+    }
     compile group: 'com.sedmelluq', name: 'lavaplayer', version: '1.3.32'
     compile group: 'com.github.gwenn', name: 'sqlite-dialect', version: 'master-SNAPSHOT'
     compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.2.Final'
