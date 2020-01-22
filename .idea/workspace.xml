@@ -139,13 +139,6 @@
       <workItem from="1579543351530" duration="22000" />
       <workItem from="1579608521452" duration="1628000" />
     </task>
-    <task id="LOCAL-00233" summary="Pequenas otimizações">
-      <created>1579629720226</created>
-      <option name="number" value="00233" />
-      <option name="presentableId" value="LOCAL-00233" />
-      <option name="project" value="LOCAL" />
-      <updated>1579629720227</updated>
-    </task>
     <task id="LOCAL-00234" summary="Pequenas otimizações">
       <created>1579629814502</created>
       <option name="number" value="00234" />
@@ -482,7 +475,14 @@
       <option name="project" value="LOCAL" />
       <updated>1579721011580</updated>
     </task>
-    <option name="localTasksCounter" value="282" />
+    <task id="LOCAL-00282" summary="Pequenas otimizações">
+      <created>1579721517741</created>
+      <option name="number" value="00282" />
+      <option name="presentableId" value="LOCAL-00282" />
+      <option name="project" value="LOCAL" />
+      <updated>1579721517741</updated>
+    </task>
+    <option name="localTasksCounter" value="283" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -585,11 +585,11 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1578969869825" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1578417783560" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1579721013643">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1579721543358">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1579146198967" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1579721013643" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1579721543358" />
     <state x="544" y="399" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD" timestamp="1579615180701">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
