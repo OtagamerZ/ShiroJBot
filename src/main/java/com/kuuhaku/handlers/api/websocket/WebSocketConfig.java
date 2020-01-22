@@ -3,6 +3,8 @@ package com.kuuhaku.handlers.api.websocket;
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.mysql.GlobalMessageDAO;
+import com.kuuhaku.model.GlobalMessage;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
 import org.json.JSONObject;
@@ -25,14 +27,16 @@ public class WebSocketConfig {
 
 			Helper.logger(this.getClass()).info("Mensagem enviada por " + u.getName() + ": " + data.getString("content"));
 
-			JSONObject out = new JSONObject();
+			GlobalMessage gm = new GlobalMessage();
 
-			out.put("id", u.getId());
-			out.put("name", u.getName());
-			out.put("avatar", u.getAvatarUrl());
-			out.put("content", data.getString("content"));
+			gm.setUserId(u.getId());
+			gm.setName(u.getName());
+			gm.setAvatar(u.getAvatarUrl());
+			gm.setContent(data.getString("content"));
 
-			socket.getBroadcastOperations().sendEvent("chat", out.toString());
+			GlobalMessageDAO.saveMessage(gm);
+
+			socket.getBroadcastOperations().sendEvent("chat", gm.toString());
 		});
 		socket.start();
 	}
