@@ -17,7 +17,7 @@ public class WebSocketController {
 		this.template = template;
 	}
 
-	@MessageMapping("/chat")
+	@RequestMapping(value = "/chat")
 	public void onMessage(Message<String> message) {
 		Helper.logger(this.getClass()).info("Mensagem recebida: " + message);
 		this.template.convertAndSend("/topic/message", message);
