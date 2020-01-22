@@ -20,19 +20,19 @@ public class WebSocketConfig {
 			config.setPort(8000);
 
 			socket = new SocketIOServer(config);
-			socket.addEventListener("chatevent", Object.class, (client, data, ackSender) -> {
-				JSONObject jo = new JSONObject(data);
+			socket.addEventListener("chatevent", JSONObject.class, (client, data, ackSender) -> {
+				System.out.println(data);
 
-				User u = Main.getInfo().getUserByID((String) jo.get("userID"));
+				User u = Main.getInfo().getUserByID((String) data.get("userID"));
 
-				System.out.println("Mensagem enviada por " + u.getName() + ": " + jo.get("content"));
+				System.out.println("Mensagem enviada por " + u.getName() + ": " + data.get("content"));
 
 				JSONObject out = new JSONObject();
 
 				out.put("id", u.getId());
 				out.put("name", u.getName());
 				out.put("avatar", u.getAvatarUrl());
-				out.put("content", jo.get("content"));
+				out.put("content", data.get("content"));
 
 				socket.getBroadcastOperations().sendEvent("chat", out.toString());
 			});
