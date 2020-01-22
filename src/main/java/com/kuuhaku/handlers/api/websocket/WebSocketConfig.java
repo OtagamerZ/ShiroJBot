@@ -1,24 +1,25 @@
 package com.kuuhaku.handlers.api.websocket;
 
-import io.socket.client.IO;
-import io.socket.client.Socket;
-
-import java.net.URISyntaxException;
+import com.corundumstudio.socketio.Configuration;
+import com.corundumstudio.socketio.SocketIOServer;
+import com.kuuhaku.utils.Helper;
 
 public class WebSocketConfig {
 
-	private final Socket socket;
+	private final SocketIOServer socket;
 
-	public WebSocketConfig() throws URISyntaxException {
-		IO.Options options = new IO.Options();
-		options.reconnection = true;
-		Socket socket = IO.socket("http://164.68.110.221/");
+	private WebSocketConfig() {
+		Configuration config = new Configuration();
+		config.setHostname("164.68.110.221");
+		config.setPort(8080);
 
-		socket.on(Socket.EVENT_MESSAGE, System.out::println);
-		this.socket = socket.connect();
+		socket = new SocketIOServer(config);
+		socket.addEventListener("chatevent", String.class, (client, data, ackSender) -> System.out.println(data));
+		socket.start();
+		Helper.logger(this.getClass()).info("Socket conectado com sucesso!");
 	}
 
-	public Socket getSocket() {
-		return socket;
+	public static SocketIOServer getSocket() {
+		return new WebSocketConfig().socket;
 	}
 }
