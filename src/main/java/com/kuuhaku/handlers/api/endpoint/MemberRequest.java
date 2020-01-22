@@ -2,9 +2,11 @@ package com.kuuhaku.handlers.api.endpoint;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.mysql.GlobalMessageDAO;
 import com.kuuhaku.controller.mysql.TokenDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.exception.InvalidTokenException;
+import com.kuuhaku.model.GlobalMessage;
 import com.kuuhaku.model.Member;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Guild;
@@ -50,6 +52,7 @@ public class MemberRequest {
 				public List<Member> profiles = profileList;
 				public List<com.kuuhaku.model.jda.Guild> guilds = svs;
 				public List<com.kuuhaku.model.jda.Member> members = mbs;
+				public List<GlobalMessage> messages = GlobalMessageDAO.getMessages();
 			};
 		} catch (Exception e) {
 			e.printStackTrace();

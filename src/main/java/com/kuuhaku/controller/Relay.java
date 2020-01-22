@@ -5,10 +5,12 @@ import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookMessage;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.mysql.GlobalMessageDAO;
 import com.kuuhaku.controller.mysql.TagDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.Manager;
 import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.model.GlobalMessage;
 import com.kuuhaku.model.GuildConfig;
 import com.kuuhaku.model.RelayBlockList;
 import com.kuuhaku.utils.ExceedEnums;
@@ -66,6 +68,15 @@ public class Relay {
 	public void relayMessage(Message source, String msg, Member m, Guild s, ByteArrayOutputStream img) {
 		updateRelays();
 		checkSize();
+
+		GlobalMessage gm = new GlobalMessage();
+		gm.setUserId(m.getId());
+		gm.setName(m.getUser().getName());
+		gm.setAvatar(m.getUser().getAvatarUrl());
+		gm.setContent(msg);
+
+		Main.getInfo().getClient().emit("chat", gm.toString());
+		GlobalMessageDAO.saveMessage(gm);
 
 		String exceed = MemberDAO.getMemberByMid(m.getUser().getId()).get(0).getExceed();
 
