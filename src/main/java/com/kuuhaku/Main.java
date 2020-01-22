@@ -167,7 +167,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		tet.shutdown();
 		jbr.shutdown();
 		api.shutdown();
-		info.getSocket().stop();
 		Helper.logger(Main.class).info("Fui desligada.");
 	}
 
