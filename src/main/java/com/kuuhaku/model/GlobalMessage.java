@@ -57,7 +57,8 @@ public class GlobalMessage {
 	@Override
 	public String toString() {
 		JSONObject out = new JSONObject();
-		out.put("id", userId);
+		out.put("id", id);
+		out.put("userId", userId);
 		out.put("name", name);
 		out.put("avatar", avatar);
 		out.put("content", content);
