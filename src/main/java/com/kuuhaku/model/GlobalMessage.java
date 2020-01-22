@@ -18,6 +18,10 @@ public class GlobalMessage {
 	private String content;
 	private long time = System.currentTimeMillis();
 
+	public int getId() {
+		return id;
+	}
+
 	public String getUserId() {
 		return userId;
 	}
