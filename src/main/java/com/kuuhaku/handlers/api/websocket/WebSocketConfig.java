@@ -1,23 +1,24 @@
 package com.kuuhaku.handlers.api.websocket;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
-import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
-import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+import com.corundumstudio.socketio.Configuration;
+import com.corundumstudio.socketio.SocketIOServer;
 
-@Configuration
-@EnableWebSocketMessageBroker
-public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+public class WebSocketConfig {
 
-	@Override
-	public void configureMessageBroker(MessageBrokerRegistry config) {
-		config.enableSimpleBroker("/topic");
-		config.setApplicationDestinationPrefixes("/app");
+	private final SocketIOServer server;
+
+	private WebSocketConfig() {
+		Configuration config = new Configuration();
+		config.setHostname("164.68.110.221");
+		config.setPort(8080);
+
+		server = new SocketIOServer(config);
+		server.addEventListener("chatevent", String.class, (client, data, ackSender) -> System.out.println(data));
 	}
 
-	@Override
-	public void registerStompEndpoints(StompEndpointRegistry registry) {
-		registry.addEndpoint("/chat").setAllowedOrigins("*");
+	public static SocketIOServer getServerSocket() {
+		WebSocketConfig socket = new WebSocketConfig();
+		socket.server.start();
+		return socket.server;
 	}
 }
