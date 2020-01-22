@@ -19,6 +19,7 @@ public class SendFakeMessageCommand extends Command {
 		out.put("name", "Shiro");
 		out.put("avatar", Main.getInfo().getAPI().getSelfUser().getAvatarUrl());
 		out.put("content", String.join(" ", args));
-		Main.getInfo().getSocket().getBroadcastOperations().sendEvent("chat", out.toString());
+
+		Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("chat", out.toString());
 	}
 }
