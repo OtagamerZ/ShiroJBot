@@ -10,7 +10,7 @@ public class WebSocketConfig {
 	private WebSocketConfig() {
 		Configuration config = new Configuration();
 		config.setHostname("localhost");
-		config.setPort(80);
+		config.setPort(8000);
 
 		socket = new SocketIOServer(config);
 		socket.addEventListener("chatevent", String.class, (client, data, ackSender) -> System.out.println(data));
