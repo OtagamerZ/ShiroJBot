@@ -239,7 +239,7 @@ public class Relay {
 			eb.setColor(Helper.getRandomColor());
 		}
 
-		eb.addField("Enviado pelo aplicativo", null, false);
+		eb.addField("Enviado pelo aplicativo", "", false);
 
 		MessageBuilder mb = new MessageBuilder();
 		mb.setEmbed(eb.build());
