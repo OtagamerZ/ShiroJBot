@@ -124,7 +124,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 		info.setServer(new WebSocketConfig());
 		try {
-			info.setClient(IO.socket("http://localhost")).connect();
+			info.setClient(IO.socket("http://localhost:8080/")).connect();
 		} catch (URISyntaxException e) {
 			Helper.logger(Main.class).error("Erro ao conectar client: " + e + " | " + e.getStackTrace()[0]);
 		}
