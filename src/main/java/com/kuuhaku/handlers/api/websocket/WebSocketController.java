@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.socket.TextMessage;
 
 @Controller
 public class WebSocketController {
@@ -17,9 +16,9 @@ public class WebSocketController {
 		this.template = template;
 	}
 
-	@MessageMapping
-	public void onMessage(TextMessage message) {
-		Helper.logger(this.getClass()).info("Mensagem recebida: " + message);
+	@MessageMapping("/chat")
+	public void onMessage() {
+		Helper.logger(this.getClass()).info("Mensagem recebida: ");
 		//this.template.convertAndSend("/topic/message", message);
 	}
 }
