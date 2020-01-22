@@ -3,6 +3,7 @@ package com.kuuhaku.handlers.api.websocket;
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.kuuhaku.Main;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
 import org.json.JSONObject;
 
@@ -22,7 +23,7 @@ public class WebSocketConfig {
 
 			User u = Main.getInfo().getUserByID(data.getString("userID"));
 
-			System.out.println("Mensagem enviada por " + u.getName() + ": " + data.getString("content"));
+			Helper.logger(this.getClass()).info("Mensagem enviada por " + u.getName() + ": " + data.getString("content"));
 
 			JSONObject out = new JSONObject();
 
