@@ -44,6 +44,7 @@ import org.springframework.boot.SpringApplication;
 
 import javax.persistence.NoResultException;
 import java.awt.*;
+import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -120,7 +121,11 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		jbr.addEventListener(new JibrilEvents());
 		tet.addEventListener(new TetEvents());
 
-		info.setSocket(WebSocketConfig.getServerSocket());
+		try {
+			info.setSocket(new WebSocketConfig());
+		} catch (URISyntaxException e) {
+			Helper.logger(Main.class).error("Erro ao conectar socket: " + e + " | " + e.getStackTrace()[0]);
+		}
 
 		GuildDAO.getAllGuilds().forEach(Helper::refreshButtons);
 
@@ -167,7 +172,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		tet.shutdown();
 		jbr.shutdown();
 		api.shutdown();
-		info.getSocket().stop();
 		Helper.logger(Main.class).info("Fui desligada.");
 	}
 
