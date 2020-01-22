@@ -17,6 +17,7 @@ public class SendFakeMessageCommand extends Command {
 		JSONObject jo = new JSONObject();
 		jo.put("userID", "572413282653306901");
 		jo.put("content", String.join(" ", args));
-		Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("chatevent", jo.toString());
+
+		Main.getInfo().getClient().emit("chatevent", jo.toString());
 	}
 }

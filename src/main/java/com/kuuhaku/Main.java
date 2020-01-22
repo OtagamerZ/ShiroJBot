@@ -35,6 +35,7 @@ import com.kuuhaku.model.Profile;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
+import io.socket.client.IO;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -44,6 +45,7 @@ import org.springframework.boot.SpringApplication;
 
 import javax.persistence.NoResultException;
 import java.awt.*;
+import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -121,6 +123,11 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		tet.addEventListener(new TetEvents());
 
 		info.setServer(new WebSocketConfig());
+		try {
+			info.setClient(IO.socket("http://localhost")).connect();
+		} catch (URISyntaxException e) {
+			Helper.logger(Main.class).error("Erro ao conectar client: " + e + " | " + e.getStackTrace()[0]);
+		}
 
 		GuildDAO.getAllGuilds().forEach(Helper::refreshButtons);
 
