@@ -57,7 +57,6 @@ public class CommandManager {
 			add(new BroadcastCommand("transmitir", new String[]{"broadcast", "bc"}, "<tipo> <mensagem>", "Envia um aviso a todos os donos de servidor que possuem a Shiro, ou a todos o parceiros.", Category.DEVS));
 			add(new InviteCommand("convite", new String[]{"invite"}, "<ID do servidor>", "Obtém um convite de uso único do servidor informado.", Category.DEVS));
 			add(new UsageCommand("usos", new String[]{"uses", "usage"}, "Vê a quantidade de comandos usados por servidor.", Category.DEVS));
-			add(new SendFakeMessageCommand());
 
 			//SHERIFF
 			add(new BlockCommand("bloquear", new String[]{"block"}, "<tipo> <ID> <razão>", "Bloqueia alguém de usar o chat global.", Category.SHERIFFS));
