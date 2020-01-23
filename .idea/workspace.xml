@@ -8,6 +8,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -137,14 +138,7 @@
       <workItem from="1579532057924" duration="99000" />
       <workItem from="1579543351530" duration="22000" />
       <workItem from="1579608521452" duration="1628000" />
-      <workItem from="1579782689895" duration="2883000" />
-    </task>
-    <task id="LOCAL-00242" summary="Pequenas otimizações">
-      <created>1579636848673</created>
-      <option name="number" value="00242" />
-      <option name="presentableId" value="LOCAL-00242" />
-      <option name="project" value="LOCAL" />
-      <updated>1579636848673</updated>
+      <workItem from="1579782689895" duration="3900000" />
     </task>
     <task id="LOCAL-00243" summary="Pequenas otimizações">
       <created>1579636941915</created>
@@ -482,7 +476,14 @@
       <option name="project" value="LOCAL" />
       <updated>1579785252286</updated>
     </task>
-    <option name="localTasksCounter" value="291" />
+    <task id="LOCAL-00291" summary="Pequenas otimizações">
+      <created>1579785767933</created>
+      <option name="number" value="00291" />
+      <option name="presentableId" value="LOCAL-00291" />
+      <option name="project" value="LOCAL" />
+      <updated>1579785767933</updated>
+    </task>
+    <option name="localTasksCounter" value="292" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -554,11 +555,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1578421403620" />
-    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1579785249289">
+    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1579786746343">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1579146194728" />
-    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1579785249289" />
+    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1579786746343" />
     <state x="160" y="89" key="DiffContextDialog" timestamp="1578421042559">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -585,11 +586,11 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1578969869825" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1578417783560" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1579785257099">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1579785775438">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1579146198967" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1579785257099" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1579785775438" />
     <state x="544" y="399" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD" timestamp="1579615180701">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>

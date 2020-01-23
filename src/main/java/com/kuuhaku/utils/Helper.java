@@ -505,8 +505,14 @@ public class Helper {
 	}
 
 	public static void notifyDashboard(List<String> users, String id, com.kuuhaku.model.jda.Guild payload) {
+		JSONObject load = new JSONObject();
+		load.put("id", payload.getId());
+		load.put("name", payload.getName());
+		load.put("icon", payload.getIcon());
+		load.put("owner", payload.getOwner());
+
 		JSONObject out = new JSONObject();
-		out.put("payload", payload);
+		out.put("payload", load);
 		out.put("id", id);
 		users.forEach(u -> {
 			out.put("uid", u);
@@ -516,8 +522,15 @@ public class Helper {
 	}
 
 	public static void notifyDashboard(String user, String id, com.kuuhaku.model.jda.Member payload) {
+		JSONObject load = new JSONObject();
+		load.put("id", payload.getId());
+		load.put("guild", payload.getGuild());
+		load.put("name", payload.getName());
+		load.put("nickname", payload.getNickname());
+		load.put("avatar", payload.getAvatar());
+
 		JSONObject out = new JSONObject();
-		out.put("payload", payload);
+		out.put("payload", load);
 		out.put("id", id);
 		out.put("uid", user);
 		Main.getInfo().getClient().emit("memberupdate", out.toString());
