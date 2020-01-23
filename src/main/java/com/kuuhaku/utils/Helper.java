@@ -516,7 +516,7 @@ public class Helper {
 		out.put("id", id);
 		users.forEach(u -> {
 			out.put("uid", u);
-			Main.getInfo().getClient().emit("guildupdate", out.toString());
+			Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("guildupdate", out.toString());
 		});
 		System.out.println("Evento disparado com o payload: " + out);
 	}
@@ -533,7 +533,7 @@ public class Helper {
 		out.put("payload", load);
 		out.put("id", id);
 		out.put("uid", user);
-		Main.getInfo().getClient().emit("memberupdate", out.toString());
+		Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("memberupdate", out.toString());
 
 		System.out.println("Evento disparado com o payload: " + out);
 	}
