@@ -125,13 +125,13 @@ public class MemberDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static List<Member> getRegisteredUsers() {
+	public static List<Object> getRegisteredUsers() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createNativeQuery("SELECT * FROM Member WHERE mid LIKE (SELECT mid FROM Member u WHERE login NOT NULL AND password NOT NULL)", Member.class);
+		Query q = em.createNativeQuery("SELECT mid FROM Member WHERE mid LIKE (SELECT mid FROM Member u WHERE login IS NOT NULL AND password IS NOT NULL) GROUP BY mid");
 
 		try {
-			return (List<Member>) q.getResultList();
+			return q.getResultList();
 		} finally {
 			em.close();
 		}
