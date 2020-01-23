@@ -504,7 +504,7 @@ public class Helper {
 		GuildDAO.updateGuildSettings(gc);
 	}
 
-	public static void notifyDashboard(List<String> users, String id) {
+	public static void notifyGuildUpdate(List<String> users, String id) {
 		JSONObject out = new JSONObject();
 		out.put("id", id);
 		users.forEach(u -> {
@@ -513,10 +513,17 @@ public class Helper {
 		});
 	}
 
-	public static void notifyDashboard(String user, String id) {
+	public static void notifyMemberUpdate(String user, String id) {
 		JSONObject out = new JSONObject();
 		out.put("id", id);
 		out.put("uid", user);
 		Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("memberupdate", out.toString());
+	}
+
+	public static void notifyProfileUpdate(String user, String id) {
+		JSONObject out = new JSONObject();
+		out.put("id", id);
+		out.put("uid", user);
+		Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("profileupdate", out.toString());
 	}
 }

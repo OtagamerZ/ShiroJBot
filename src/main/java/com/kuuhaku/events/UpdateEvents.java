@@ -16,13 +16,11 @@ public class UpdateEvents extends ListenerAdapter {
 		List<String> mbs = MemberDAO.getRegisteredUsers().stream().map(Object::toString).collect(Collectors.toList());
 		List<String> ids = event.getGuild().getMembers().stream().filter(m -> mbs.contains(m.getId())).map(net.dv8tion.jda.api.entities.Member::getId).collect(Collectors.toList());
 
-		Helper.notifyDashboard(ids, event.getGuild().getId());
+		Helper.notifyGuildUpdate(ids, event.getGuild().getId());
 	}
 
 	@Override
 	public void onGenericGuildMemberUpdate(@Nonnull GenericGuildMemberUpdateEvent event) {
-		com.kuuhaku.model.jda.Member m = new com.kuuhaku.model.jda.Member(event.getUser().getId(), event.getGuild().getId(), event.getUser().getName(), event.getMember().getNickname(), event.getUser().getAvatarUrl());
-
-		Helper.notifyDashboard(event.getUser().getId(), event.getUser().getId());
+		Helper.notifyMemberUpdate(event.getUser().getId(), event.getUser().getId());
 	}
 }
