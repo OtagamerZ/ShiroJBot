@@ -2,6 +2,7 @@ package com.kuuhaku.controller.sqlite;
 
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.model.Member;
+import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -63,6 +64,8 @@ public class MemberDAO {
 		em.getTransaction().commit();
 
 		em.close();
+
+		Helper.notifyProfileUpdate(m.getMid(), m.getId());
 	}
 
 	public static void updateMemberConfigs(Member m) {
@@ -73,6 +76,8 @@ public class MemberDAO {
 		em.getTransaction().commit();
 
 		em.close();
+
+		Helper.notifyProfileUpdate(m.getMid(), m.getId());
 	}
 
 	@SuppressWarnings("unchecked")
