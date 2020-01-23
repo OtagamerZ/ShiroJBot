@@ -9,7 +9,6 @@ import net.dv8tion.jda.api.events.guild.update.GenericGuildUpdateEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,12 +23,8 @@ public class UpdateEvents extends ListenerAdapter {
 
 	@Override
 	public void onGenericGuildMemberUpdate(@Nonnull GenericGuildMemberUpdateEvent event) {
-		List<String> ids = new ArrayList<String>(){{
-			add(event.getUser().getId());
-		}};
-
 		com.kuuhaku.model.jda.Member m = new com.kuuhaku.model.jda.Member(event.getUser().getId(), event.getGuild().getId(), event.getUser().getName(), event.getMember().getNickname(), event.getUser().getAvatarUrl());
 
-		Helper.notifyDashboard(ids, event.getUser().getId(), m);
+		Helper.notifyDashboard(event.getUser().getId(), event.getUser().getId(), m);
 	}
 }
