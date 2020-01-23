@@ -40,6 +40,7 @@
         <class>com.kuuhaku.model.Backup</class>
         <class>com.kuuhaku.model.Token</class>
         <class>com.kuuhaku.model.GlobalMessage</class>
+        <class>com.kuuhaku.model.AppUser</class>
         <class>java.lang.String</class>
 
         <properties>
