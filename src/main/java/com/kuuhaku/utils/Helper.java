@@ -17,6 +17,7 @@
 
 package com.kuuhaku.utils;
 
+import com.coder4.emoji.EmojiUtils;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
@@ -27,9 +28,7 @@ import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.Extensions;
 import com.kuuhaku.model.GamblePool;
 import com.kuuhaku.model.GuildConfig;
-import com.kuuhaku.model.Profile;
 import de.androidpit.colorthief.ColorThief;
-import com.coder4.emoji.EmojiUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -505,26 +504,24 @@ public class Helper {
 		GuildDAO.updateGuildSettings(gc);
 	}
 
-	public static void notifyDashboard(List<String> users, String id, Object payload) {
-		String channel = "";
-		if (payload instanceof com.kuuhaku.model.jda.Guild) {
-			channel = "guildupdate";
-		} else if (payload instanceof com.kuuhaku.model.jda.Member) {
-			channel = "memberupdate";
-		} else if (payload instanceof GuildConfig) {
-			channel = "gcupdate";
-		} else if (payload instanceof Profile) {
-			channel = "profileupdate";
-		}
-
+	public static void notifyDashboard(List<String> users, String id, com.kuuhaku.model.jda.Guild payload) {
 		JSONObject out = new JSONObject();
 		out.put("payload", payload);
 		out.put("id", id);
-		String finalChannel = channel;
 		users.forEach(u -> {
 			out.put("uid", u);
-			Main.getInfo().getClient().emit(finalChannel, out.toString());
+			Main.getInfo().getClient().emit("guildupdate", out.toString());
 		});
+		System.out.println("Evento disparado com o payload: " + out);
+	}
+
+	public static void notifyDashboard(String user, String id, com.kuuhaku.model.jda.Member payload) {
+		JSONObject out = new JSONObject();
+		out.put("payload", payload);
+		out.put("id", id);
+		out.put("uid", user);
+		Main.getInfo().getClient().emit("memberupdate", out.toString());
+
 		System.out.println("Evento disparado com o payload: " + out);
 	}
 }
