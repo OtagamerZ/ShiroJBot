@@ -112,16 +112,15 @@ public class MemberDAO {
 		return gcs;
 	}
 
-	@SuppressWarnings("unchecked")
-	public static List<Member> authMember(String login, String password) {
+	public static String authMember(String login, String password) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createNativeQuery("SELECT * FROM Member WHERE mid LIKE (SELECT mid FROM Member u WHERE login LIKE ? AND password LIKE ?)", Member.class);
+		Query q = em.createNativeQuery("SELECT mid FROM Member WHERE mid LIKE (SELECT mid FROM Member u WHERE login LIKE ? AND password LIKE ?) GROUP BY mid");
 		q.setParameter(1, login);
 		q.setParameter(2, password);
 
 		try {
-			return (List<Member>) q.getResultList();
+			return (String) q.getSingleResult();
 		} catch (NoResultException e) {
 			throw new UnauthorizedException();
 		} finally {
