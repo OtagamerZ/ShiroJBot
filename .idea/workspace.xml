@@ -138,14 +138,7 @@
       <workItem from="1579532057924" duration="99000" />
       <workItem from="1579543351530" duration="22000" />
       <workItem from="1579608521452" duration="1628000" />
-      <workItem from="1579782689895" duration="3900000" />
-    </task>
-    <task id="LOCAL-00243" summary="Pequenas otimizações">
-      <created>1579636941915</created>
-      <option name="number" value="00243" />
-      <option name="presentableId" value="LOCAL-00243" />
-      <option name="project" value="LOCAL" />
-      <updated>1579636941915</updated>
+      <workItem from="1579782689895" duration="4718000" />
     </task>
     <task id="LOCAL-00244" summary="Pequenas otimizações">
       <created>1579637208185</created>
@@ -483,7 +476,14 @@
       <option name="project" value="LOCAL" />
       <updated>1579785767933</updated>
     </task>
-    <option name="localTasksCounter" value="292" />
+    <task id="LOCAL-00292" summary="Pequenas otimizações">
+      <created>1579786749335</created>
+      <option name="number" value="00292" />
+      <option name="presentableId" value="LOCAL-00292" />
+      <option name="project" value="LOCAL" />
+      <updated>1579786749335</updated>
+    </task>
+    <option name="localTasksCounter" value="293" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -517,11 +517,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="432" y="164" key="#SQL_Dialects/0.0.1680.1010@0.0.1680.1010" timestamp="1579196244431" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1579722532420">
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1579787604147">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="488" y="71" key="#com.intellij.ide.util.MemberChooser/0.0.1366.768@0.0.1366.768" timestamp="1579144618537" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1579722532420" />
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1579787604147" />
     <state x="509" y="169" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1578969843084">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -586,11 +586,11 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1578969869825" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1578417783560" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1579785775438">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1579786751042">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1579146198967" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1579785775438" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1579786751042" />
     <state x="544" y="399" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD" timestamp="1579615180701">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
