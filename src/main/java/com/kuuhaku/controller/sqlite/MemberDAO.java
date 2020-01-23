@@ -123,4 +123,17 @@ public class MemberDAO {
 			em.close();
 		}
 	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Member> getRegisteredUsers() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createNativeQuery("SELECT * FROM Member WHERE mid LIKE (SELECT mid FROM Member u WHERE login NOT NULL AND password NOT NULL)", Member.class);
+
+		try {
+			return (List<Member>) q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
 }

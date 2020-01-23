@@ -27,6 +27,7 @@ import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.Extensions;
 import com.kuuhaku.model.GamblePool;
 import com.kuuhaku.model.GuildConfig;
+import com.kuuhaku.model.Profile;
 import de.androidpit.colorthief.ColorThief;
 import com.coder4.emoji.EmojiUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -502,5 +503,27 @@ public class Helper {
 
 		gc.setButtonConfigs(root);
 		GuildDAO.updateGuildSettings(gc);
+	}
+
+	public static void notifyDashboard(List<String> users, String id, Object payload) {
+		String channel = "";
+		if (payload instanceof com.kuuhaku.model.jda.Guild) {
+			channel = "guildupdate";
+		} else if (payload instanceof com.kuuhaku.model.jda.Member) {
+			channel = "memberupdate";
+		} else if (payload instanceof GuildConfig) {
+			channel = "gcupdate";
+		} else if (payload instanceof Profile) {
+			channel = "profileupdate";
+		}
+
+		JSONObject out = new JSONObject();
+		out.put("payload", payload);
+		out.put("id", id);
+		String finalChannel = channel;
+		users.forEach(u -> {
+			out.put("uid", u);
+			Main.getInfo().getClient().emit(finalChannel, out.toString());
+		});
 	}
 }
