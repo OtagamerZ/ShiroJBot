@@ -24,6 +24,7 @@ import com.kuuhaku.controller.sqlite.Manager;
 import com.kuuhaku.events.JibrilEvents;
 import com.kuuhaku.events.ScheduledEvents;
 import com.kuuhaku.events.TetEvents;
+import com.kuuhaku.events.UpdateEvents;
 import com.kuuhaku.events.guild.GuildEvents;
 import com.kuuhaku.events.guild.GuildUpdateEvents;
 import com.kuuhaku.handlers.api.Application;
@@ -119,6 +120,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		api.addEventListener(Main.getInfo().getShiroEvents());
 		api.addEventListener(new GuildEvents());
 		api.addEventListener(new GuildUpdateEvents());
+		api.addEventListener(new UpdateEvents());
 		jbr.addEventListener(new JibrilEvents());
 		tet.addEventListener(new TetEvents());
 
