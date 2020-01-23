@@ -525,5 +525,6 @@ public class Helper {
 			out.put("uid", u);
 			Main.getInfo().getClient().emit(finalChannel, out.toString());
 		});
+		System.out.println("Evento disparado com o payload: " + out);
 	}
 }
