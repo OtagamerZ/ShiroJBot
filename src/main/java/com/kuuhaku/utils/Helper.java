@@ -504,37 +504,19 @@ public class Helper {
 		GuildDAO.updateGuildSettings(gc);
 	}
 
-	public static void notifyDashboard(List<String> users, String id, com.kuuhaku.model.jda.Guild payload) {
-		JSONObject load = new JSONObject();
-		load.put("id", payload.getId());
-		load.put("name", payload.getName());
-		load.put("icon", payload.getIcon());
-		load.put("owner", payload.getOwner());
-
+	public static void notifyDashboard(List<String> users, String id) {
 		JSONObject out = new JSONObject();
-		out.put("payload", load);
 		out.put("id", id);
 		users.forEach(u -> {
 			out.put("uid", u);
 			Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("guildupdate", out.toString());
 		});
-		System.out.println("Evento disparado com o payload: " + out);
 	}
 
-	public static void notifyDashboard(String user, String id, com.kuuhaku.model.jda.Member payload) {
-		JSONObject load = new JSONObject();
-		load.put("id", payload.getId());
-		load.put("guild", payload.getGuild());
-		load.put("name", payload.getName());
-		load.put("nickname", payload.getNickname());
-		load.put("avatar", payload.getAvatar());
-
+	public static void notifyDashboard(String user, String id) {
 		JSONObject out = new JSONObject();
-		out.put("payload", load);
 		out.put("id", id);
 		out.put("uid", user);
 		Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("memberupdate", out.toString());
-
-		System.out.println("Evento disparado com o payload: " + out);
 	}
 }
