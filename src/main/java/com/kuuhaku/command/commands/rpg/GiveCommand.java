@@ -1,3 +1,20 @@
+/*
+ * This file is part of Shiro J Bot.
+ *
+ * Shiro J Bot is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Shiro J Bot is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
+ */
+
 package com.kuuhaku.command.commands.rpg;
 
 import com.kuuhaku.Main;
@@ -17,9 +34,9 @@ public class GiveCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-        if (Utils.noPlayerAlert(args, message, channel)) return;
+		if (Utils.noPlayerAlert(args, message, channel)) return;
 
-        if (Main.getInfo().getGames().get(guild.getId()).getMaster() == author) {
+		if (Main.getInfo().getGames().get(guild.getId()).getMaster() == author) {
 			if (args.length < 3 && (args[1].equalsIgnoreCase("xp") || args[1].equalsIgnoreCase("ouro"))) {
 				channel.sendMessage(":x: | Você precisa especificar a quantidade de XP").queue();
 				return;

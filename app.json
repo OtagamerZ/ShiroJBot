@@ -1,6 +1,6 @@
 {
   "name": "Shiro J. Bot",
-  "description": "Bot interativo com muitas funções para complementar seu servidor.",
+  "description": "Uma bot meiga e um tanto rígida, seja qual for sua necessidade Shiro pode lhe ajudar!",
   "keywords": [
     "JDA",
     "Discord",
@@ -9,6 +9,10 @@
   "repository": "https://github.com/OtagamerZ/ShiroJBot",
   "logo": "https://images-ext-2.discordapp.net/external/VEvNfPPxZPcXdnO-erMqFpB5D7tCXtPiTPOKt3chwqM/https/cdn.discordapp.com/avatars/572413282653306901/081151d97708b2e90b45927136abb432.png",
   "env": {
+    "SERVER_URL": {
+      "description": "URL do servidor.",
+      "required": true
+    },
     "ANILIST_TOKEN": {
       "description": "Token de acesso à API do Anilist.",
       "required": true
@@ -39,6 +43,26 @@
     },
     "YANDEX_TOKEN": {
       "description": "Token de acesso à API do Yandex Translate.",
+      "required": true
+    },
+    "YOUTUBE_TOKEN": {
+      "description": "Token de acesso à API do YouTube.",
+      "required": true
+    },
+    "DA_TOKEN": {
+      "description": "Token de acesso à API do Dream Animes.",
+      "required": true
+    },
+    "SECRET": {
+      "description": "Frase secreta para ser usada no comando TheAnswerCommand.",
+      "required": true
+    },
+    "TET_TOKEN": {
+      "description": "Token de acesso do bot secundário (RPG).",
+      "required": true
+    },
+    "TET_LINK": {
+      "description": "Link de convite do bot secundário (RPG).",
       "required": true
     }
   }
