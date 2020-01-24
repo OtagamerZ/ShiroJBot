@@ -1,3 +1,20 @@
+/*
+ * This file is part of Shiro J Bot.
+ *
+ * Shiro J Bot is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Shiro J Bot is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
+ */
+
 package com.kuuhaku.controller.mysql;
 
 import com.kuuhaku.model.Member;
@@ -12,73 +29,73 @@ import java.util.List;
 
 public class ExceedDAO {
 	@SuppressWarnings("unchecked")
-    public static List<com.kuuhaku.model.Member> getExceedMembers(ExceedEnums ex) {
-        EntityManager em = Manager.getEntityManager();
+	public static List<com.kuuhaku.model.Member> getExceedMembers(ExceedEnums ex) {
+		EntityManager em = Manager.getEntityManager();
 
-        Query q = em.createQuery("SELECT m FROM Member m WHERE exceed LIKE ?1", com.kuuhaku.model.Member.class);
-        q.setParameter(1, ex.getName());
+		Query q = em.createQuery("SELECT m FROM Member m WHERE exceed LIKE ?1", com.kuuhaku.model.Member.class);
+		q.setParameter(1, ex.getName());
 
-        List<com.kuuhaku.model.Member> members = (List<Member>) q.getResultList();
-        em.close();
+		List<com.kuuhaku.model.Member> members = (List<Member>) q.getResultList();
+		em.close();
 
-        return members;
-    }
+		return members;
+	}
 
 	@SuppressWarnings("unchecked")
-    public static com.kuuhaku.model.Exceed getExceed(ExceedEnums ex) {
-        EntityManager em = Manager.getEntityManager();
+	public static com.kuuhaku.model.Exceed getExceed(ExceedEnums ex) {
+		EntityManager em = Manager.getEntityManager();
 
-        Query q = em.createQuery("SELECT m FROM Member m WHERE exceed LIKE ?1", Member.class);
-        q.setParameter(1, ex.getName());
+		Query q = em.createQuery("SELECT m FROM Member m WHERE exceed LIKE ?1", Member.class);
+		q.setParameter(1, ex.getName());
 
-        List<Member> members = (List<Member>) q.getResultList();
-        em.close();
+		List<Member> members = (List<Member>) q.getResultList();
+		em.close();
 
-        return new com.kuuhaku.model.Exceed(ex, members.size(), members.stream().mapToLong(Member::getXp).sum());
-    }
+		return new com.kuuhaku.model.Exceed(ex, members.size(), members.stream().mapToLong(Member::getXp).sum());
+	}
 
 	public static ExceedEnums findWinner() {
-        EntityManager em = Manager.getEntityManager();
+		EntityManager em = Manager.getEntityManager();
 
-        Query q = em.createQuery("SELECT exceed FROM Member m WHERE exceed NOT LIKE '' GROUP BY exceed ORDER BY xp DESC", String.class);
-        q.setMaxResults(1);
+		Query q = em.createQuery("SELECT exceed FROM Member m WHERE exceed NOT LIKE '' GROUP BY exceed ORDER BY xp DESC", String.class);
+		q.setMaxResults(1);
 
-        String winner = (String) q.getSingleResult();
-        em.close();
+		String winner = (String) q.getSingleResult();
+		em.close();
 
-        return ExceedEnums.getByName(winner);
-    }
+		return ExceedEnums.getByName(winner);
+	}
 
 	public static void markWinner(ExceedEnums ex) {
-        EntityManager em = Manager.getEntityManager();
+		EntityManager em = Manager.getEntityManager();
 
-        MonthWinner m = new MonthWinner();
-        m.setExceed(ex.getName());
+		MonthWinner m = new MonthWinner();
+		m.setExceed(ex.getName());
 
-        em.getTransaction().begin();
-        em.merge(m);
-        em.getTransaction().commit();
+		em.getTransaction().begin();
+		em.merge(m);
+		em.getTransaction().commit();
 
-        em.close();
-    }
+		em.close();
+	}
 
 	public static String getWinner() {
-        EntityManager em = Manager.getEntityManager();
+		EntityManager em = Manager.getEntityManager();
 
-        Query q = em.createQuery("SELECT w FROM MonthWinner w ORDER BY id DESC", MonthWinner.class);
-        q.setMaxResults(1);
-        try {
-            MonthWinner winner = (MonthWinner) q.getSingleResult();
-            em.close();
+		Query q = em.createQuery("SELECT w FROM MonthWinner w ORDER BY id DESC", MonthWinner.class);
+		q.setMaxResults(1);
+		try {
+			MonthWinner winner = (MonthWinner) q.getSingleResult();
+			em.close();
 
-            if (LocalDate.now().isBefore(winner.getExpiry())) {
-                return winner.getExceed();
-            } else {
-                return "none";
-            }
-        } catch (NoResultException | IndexOutOfBoundsException e) {
-            em.close();
-            return "none";
-        }
-    }
+			if (LocalDate.now().isBefore(winner.getExpiry())) {
+				return winner.getExceed();
+			} else {
+				return "none";
+			}
+		} catch (NoResultException | IndexOutOfBoundsException e) {
+			em.close();
+			return "none";
+		}
+	}
 }

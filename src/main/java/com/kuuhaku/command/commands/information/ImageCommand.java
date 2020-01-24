@@ -1,3 +1,20 @@
+/*
+ * This file is part of Shiro J Bot.
+ *
+ * Shiro J Bot is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Shiro J Bot is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
+ */
+
 package com.kuuhaku.command.commands.information;
 
 import com.kuuhaku.command.Category;
@@ -18,61 +35,61 @@ import java.util.Arrays;
 
 public class ImageCommand extends Command {
 
-    public ImageCommand() {
-        super("image", new String[]{"imagem", "img"}, "<tags>", "Busca uma imagem de anime na internet.", Category.INFO);
-    }
+	public ImageCommand() {
+		super("image", new String[]{"imagem", "img"}, "<tags>", "Busca uma imagem de anime na internet.", Category.INFO);
+	}
 
-    @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-        if (args.length < 1) {
-            channel.sendMessage(":x: | Você precisa de indicar uma ou ou mais tags separadas por `;`.").queue();
-            return;
-        }
+	@Override
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		if (args.length < 1) {
+			channel.sendMessage(":x: | Você precisa de indicar uma ou ou mais tags separadas por `;`.").queue();
+			return;
+		}
 
-        String[] tag = String.join(" ", args).split(";");
+		String[] tag = String.join(" ", args).split(";");
 
-        channel.sendMessage("<a:Loading:598500653215645697> Buscando imagem...").queue(m -> {
-            try {
-                URL link = new URL("https://safebooru.org/index.php?page=dapi&s=post&q=index&json=1"+ (!message.getTextChannel().isNSFW() ? "&rating=safe" : "") + "&tags=" +
-                        String.join("+", tag).replace(" ", "_"));
-                HttpURLConnection con = (HttpURLConnection) link.openConnection();
-                con.setRequestMethod("GET");
-                con.setRequestProperty("User-Agent", "Mozilla/5.0");
-                Helper.logger(this.getClass()).debug("Requisição 'GET' para o URL: " + link);
-                Helper.logger(this.getClass()).debug("Resposta: " + con.getResponseCode());
-                BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+		channel.sendMessage("<a:Loading:598500653215645697> Buscando imagem...").queue(m -> {
+			try {
+				URL link = new URL("https://safebooru.org/index.php?page=dapi&s=post&q=index&json=1" + (!message.getTextChannel().isNSFW() ? "&rating=safe" : "") + "&tags=" +
+						String.join("+", tag).replace(" ", "_"));
+				HttpURLConnection con = (HttpURLConnection) link.openConnection();
+				con.setRequestMethod("GET");
+				con.setRequestProperty("User-Agent", "Mozilla/5.0");
+				Helper.logger(this.getClass()).debug("Requisição 'GET' para o URL: " + link);
+				Helper.logger(this.getClass()).debug("Resposta: " + con.getResponseCode());
+				BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
 
-                String input;
-                StringBuilder resposta = new StringBuilder();
-                while ((input = br.readLine()) != null) {
-                    resposta.append(input);
-                }
-                br.close();
+				String input;
+				StringBuilder resposta = new StringBuilder();
+				while ((input = br.readLine()) != null) {
+					resposta.append(input);
+				}
+				br.close();
 
-                Helper.logger(this.getClass()).debug(resposta.toString());
-                JSONArray ja = new JSONArray(resposta.toString());
-                JSONObject jo = ja.getJSONObject(Helper.rng(ja.length() - 1));
-                String url = "https://safebooru.org//images/" + jo.getString("directory") + "/" + jo.getString("image");
+				Helper.logger(this.getClass()).debug(resposta.toString());
+				JSONArray ja = new JSONArray(resposta.toString());
+				JSONObject jo = ja.getJSONObject(Helper.rng(ja.length() - 1));
+				String url = "https://safebooru.org//images/" + jo.getString("directory") + "/" + jo.getString("image");
 
-                if (Arrays.asList(jo.getString("tags").split(" ")).contains("hentai")) {
-                    m.editMessage("Humm safadinho, eu não posso postar sobre Hentais neste canal!").queue();
-                    return;
-                }
+				if (Arrays.asList(jo.getString("tags").split(" ")).contains("hentai")) {
+					m.editMessage("Humm safadinho, eu não posso postar sobre Hentais neste canal!").queue();
+					return;
+				}
 
-                EmbedBuilder eb = new EmbedBuilder();
-                eb.setColor(Helper.colorThief(url));
-                eb.setAuthor("Aqui está!", "https://safebooru.org//images/" + jo.getString("directory") + "/" + jo.getString("image"));
-                eb.addField("Largura:", Integer.toString(jo.getInt("width")), true);
-                eb.addField("Altura:", Integer.toString(jo.getInt("height")), true);
-                eb.addField("Tags:", "`" + String.join("` `", Arrays.copyOfRange(jo.getString("tags").split(" "), 0, jo.getString("tags").split(" ").length < 14 ? jo.getString("tags").split(" ").length - 1 : 14)) + "`", true);
-                eb.setImage(url);
+				EmbedBuilder eb = new EmbedBuilder();
+				eb.setColor(Helper.colorThief(url));
+				eb.setAuthor("Aqui está!", "https://safebooru.org//images/" + jo.getString("directory") + "/" + jo.getString("image"));
+				eb.addField("Largura:", Integer.toString(jo.getInt("width")), true);
+				eb.addField("Altura:", Integer.toString(jo.getInt("height")), true);
+				eb.addField("Tags:", "`" + String.join("` `", Arrays.copyOfRange(jo.getString("tags").split(" "), 0, jo.getString("tags").split(" ").length < 14 ? jo.getString("tags").split(" ").length - 1 : 14)) + "`", true);
+				eb.setImage(url);
 
-                m.delete().queue();
-                channel.sendMessage(eb.build()).queue();
-            } catch (IOException | JSONException e) {
-                m.editMessage(":x: | Humm...não achei nenhuma imagem com essas tags, talvez você tenha escrito algo errado?").queue();
-                Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-            }
-        });
-    }
+				m.delete().queue();
+				channel.sendMessage(eb.build()).queue();
+			} catch (IOException | JSONException e) {
+				m.editMessage(":x: | Humm...não achei nenhuma imagem com essas tags, talvez você tenha escrito algo errado?").queue();
+				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			}
+		});
+	}
 }
