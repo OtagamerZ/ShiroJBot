@@ -17,7 +17,6 @@
 
 package com.kuuhaku.controller.sqlite;
 
-import com.kuuhaku.controller.mysql.Manager;
 import com.kuuhaku.model.AppUser;
 
 import javax.persistence.EntityManager;
