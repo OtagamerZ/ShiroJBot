@@ -53,8 +53,8 @@ public class DashboardRequest {
 	}
 
 	@RequestMapping(value = "/app/profile", method = RequestMethod.POST)
-	public List<Member> retrieveProfiles(@RequestHeader(value = "id") String id, @RequestHeader(value = "token") String token) {
+	public Member retrieveProfiles(@RequestHeader(value = "id") String id, @RequestHeader(value = "token") String token) {
 		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
-		return MemberDAO.getMemberByMid(id);
+		return MemberDAO.getMemberById(id);
 	}
 }
