@@ -37,6 +37,8 @@ public class AppUser {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String uid;
+	private String login;
+	private String password;
 	private String name;
 	private String avatar;
 	private String guilds;
@@ -44,7 +46,7 @@ public class AppUser {
 	public AppUser() {
 	}
 
-	public AppUser(String uid, String name, String avatar) {
+	public void update(String uid, String name, String avatar) {
 		this.uid = uid;
 		this.name = name;
 		this.avatar = avatar;
@@ -78,6 +80,14 @@ public class AppUser {
 		return uid;
 	}
 
+	public String getLogin() {
+		return login;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -95,6 +105,8 @@ public class AppUser {
 		JSONObject json = new JSONObject();
 		json.put("id", id);
 		json.put("uid", uid);
+		json.put("login", login);
+		json.put("password", password);
 		json.put("name", name);
 		json.put("avatar", avatar);
 		json.put("guilds", guilds);

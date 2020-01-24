@@ -293,8 +293,6 @@ public class Helper {
 
 	@SuppressWarnings("ConstantConditions")
 	public static String getRequiredPerms(TextChannel c) {
-		List<PermissionOverride> channelPerms = c.getPermissionOverrides().stream().filter(p -> c.getGuild().getSelfMember().getRoles().contains(p.getRole()) || p.getMember() == c.getGuild().getSelfMember()).collect(Collectors.toList());
-		EnumSet<Permission> guildPerms = c.getGuild().getSelfMember().getPermissions();
 		String jibrilPerms = "";
 
 		try {
