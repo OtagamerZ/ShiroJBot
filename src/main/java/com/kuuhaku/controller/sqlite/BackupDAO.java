@@ -38,6 +38,8 @@ public class BackupDAO {
 			return true;
 		} catch (Exception e) {
 			return false;
+		} finally {
+			em.close();
 		}
 	}
 
@@ -46,9 +48,12 @@ public class BackupDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT c FROM CustomAnswers c", CustomAnswers.class);
-		List<CustomAnswers> ca = q.getResultList();
 
-		return ca;
+		try {
+			return q.getResultList();
+		} finally {
+			em.close();
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -57,7 +62,11 @@ public class BackupDAO {
 
 		Query q = em.createQuery("SELECT m FROM Member m", Member.class);
 
-		return q.getResultList();
+		try {
+			return q.getResultList();
+		} finally {
+			em.close();
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -66,7 +75,11 @@ public class BackupDAO {
 
 		Query q = em.createQuery("SELECT g FROM GuildConfig g", GuildConfig.class);
 
-		return q.getResultList();
+		try {
+			return q.getResultList();
+		} finally {
+			em.close();
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -75,6 +88,10 @@ public class BackupDAO {
 
 		Query q = em.createQuery("SELECT u FROM AppUser u", AppUser.class);
 
-		return q.getResultList();
+		try {
+			return q.getResultList();
+		} finally {
+			em.close();
+		}
 	}
 }
