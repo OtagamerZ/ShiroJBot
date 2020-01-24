@@ -52,7 +52,7 @@ public class DashboardDAO {
 	public static String auth(String login, String pass) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT uid FROM AppUser u WHERE login = :login AND password = :pass");
+		Query q = em.createQuery("SELECT uid FROM AppUser u WHERE login LIKE :login AND password LIKE :pass");
 		q.setParameter("login", login);
 		q.setParameter("pass", pass);
 
