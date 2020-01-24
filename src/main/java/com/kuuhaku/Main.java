@@ -43,6 +43,8 @@ import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.exceptions.ContextException;
 import org.springframework.boot.SpringApplication;
 
@@ -64,6 +66,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	private static JDA jbr;
 	private static JDA tet;
 	private static String[] arguments;
+	public static String[] kill = new String[2];
 
 	public static void main(String[] args) throws Exception {
 		Thread.setDefaultUncaughtExceptionHandler(new Main());
@@ -112,7 +115,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		jbr.getPresence().setActivity(Activity.listening("as mensagens de " + relay.getRelayMap().size() + " servidores!"));
 		tet.getPresence().setActivity(Activity.playing(" em diversos mundos espalhados em " + tet.getGuilds().size() + " servidores!"));
 		getInfo().setWinner(ExceedDAO.getWinner());
-		Main.getInfo().getAPI().getGuilds().forEach(g -> {
+		api.getGuilds().forEach(g -> {
 			try {
 				GuildDAO.getGuildById(g.getId());
 			} catch (NoResultException e) {
@@ -169,15 +172,28 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	}
 
 	public static void shutdown() {
-		Helper.logger(Main.class).info(Sweeper.mark() + " entradas dispensáveis encontradas!");
+		int sweeper = Sweeper.mark();
+		TextChannel chn = api.getTextChannelById(kill[0]);
+		assert chn != null;
+		Message msg = chn.retrieveMessageById(kill[1]).complete();
+
+		Helper.logger(Main.class).info(sweeper + " entradas dispensáveis encontradas!");
+		msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> " + sweeper + " entradas dispensáveis encontradas!").queue();
+
 		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getCADump(), com.kuuhaku.controller.sqlite.BackupDAO.getGuildDump(), com.kuuhaku.controller.sqlite.BackupDAO.getAppUserDump()));
 		Helper.logger(Main.class).info("Respostas/Guilds/Usuários salvos com sucesso!");
+		msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> Respostas/Guilds/Usuários salvos com sucesso!").queue();
+
 		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump()));
 		Helper.logger(Main.class).info("Membros salvos com sucesso!");
+		msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> Membros salvos com sucesso!").queue();
+
 		Sweeper.sweep();
 		Manager.disconnect();
 		tet.shutdown();
 		jbr.shutdown();
+		msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> Fui desligada!").queue();
+
 		api.shutdown();
 		Helper.logger(Main.class).info("Fui desligada.");
 	}
