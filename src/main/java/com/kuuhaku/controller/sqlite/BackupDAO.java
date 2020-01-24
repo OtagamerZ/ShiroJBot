@@ -17,10 +17,7 @@
 
 package com.kuuhaku.controller.sqlite;
 
-import com.kuuhaku.model.CustomAnswers;
-import com.kuuhaku.model.DataDump;
-import com.kuuhaku.model.GuildConfig;
-import com.kuuhaku.model.Member;
+import com.kuuhaku.model.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -35,6 +32,7 @@ public class BackupDAO {
 			data.getCaDump().forEach(em::merge);
 			data.getmDump().forEach(em::merge);
 			data.getGcDump().forEach(em::merge);
+			data.getAuDump().forEach(em::merge);
 			em.getTransaction().commit();
 
 			return true;
@@ -68,6 +66,15 @@ public class BackupDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT g FROM GuildConfig g", GuildConfig.class);
+
+		return q.getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<AppUser> getAppUserDump() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT u FROM AppUser u", AppUser.class);
 
 		return q.getResultList();
 	}
