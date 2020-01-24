@@ -47,7 +47,6 @@ public class BackupDAO {
 
 		Query q = em.createQuery("SELECT c FROM CustomAnswers c", CustomAnswers.class);
 		List<CustomAnswers> ca = q.getResultList();
-		ca.removeIf(CustomAnswers::isMarkForDelete);
 
 		return ca;
 	}
