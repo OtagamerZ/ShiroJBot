@@ -41,6 +41,9 @@ public class Sweeper {
 
 		q = em.createQuery("DELETE FROM Member WHERE markForDelete = TRUE");
 		q.executeUpdate();
+
+		q = em.createQuery("DELETE FROM CustomAnswers WHERE markForDelete = TRUE");
+		q.executeUpdate();
 		em.getTransaction().commit();
 
 		em.close();
@@ -52,6 +55,9 @@ public class Sweeper {
 		q.executeUpdate();
 
 		q = em.createQuery("DELETE FROM Member WHERE markForDelete = TRUE");
+		q.executeUpdate();
+
+		q = em.createQuery("DELETE FROM CustomAnswers WHERE markForDelete = TRUE");
 		q.executeUpdate();
 		em.getTransaction().commit();
 
