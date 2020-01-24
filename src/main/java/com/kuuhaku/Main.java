@@ -52,6 +52,7 @@ import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
 
 public class Main implements Thread.UncaughtExceptionHandler {
 
@@ -95,7 +96,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 			Helper.logger(Main.class).info("Dados recuperados com sucesso!");
 		else Helper.logger(Main.class).error("Erro ao recuperar dados.");
 
-		new ScheduledEvents();
+		Executors.newSingleThreadExecutor().execute(ScheduledEvents::new);
 
 		AudioSourceManagers.registerRemoteSources(getInfo().getApm());
 		AudioSourceManagers.registerLocalSource(getInfo().getApm());
