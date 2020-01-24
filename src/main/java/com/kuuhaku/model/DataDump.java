@@ -19,7 +19,6 @@ package com.kuuhaku.model;
 
 import com.kuuhaku.controller.mysql.MemberDAO;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class DataDump {
@@ -39,13 +38,13 @@ public class DataDump {
         this.caDump = caDump;
         this.gcDump = gcDump;
         this.auDump = auDump;
-        this.mDump = new ArrayList<>();
+        this.mDump = null;
     }
 
     public DataDump(List<Member> mDump) {
-        this.caDump = new ArrayList<>();
-        this.gcDump = new ArrayList<>();
-        this.auDump = new ArrayList<>();
+        this.caDump = null;
+        this.gcDump = null;
+        this.auDump = null;
 
         List<Member> oldMembers = MemberDAO.getMembers();
         mDump.removeAll(oldMembers);

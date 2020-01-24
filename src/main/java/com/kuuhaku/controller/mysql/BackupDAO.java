@@ -29,57 +29,61 @@ public class BackupDAO {
 		EntityManager em = Manager.getEntityManager();
 		em.getTransaction().begin();
 
-		for (int i = 0; i < data.getCaDump().size(); i++) {
-			em.merge(data.getCaDump().get(i));
-			if (i % 20 == 0) {
-				em.flush();
-				em.clear();
+		if (data.getCaDump() != null)
+			for (int i = 0; i < data.getCaDump().size(); i++) {
+				em.merge(data.getCaDump().get(i));
+				if (i % 20 == 0) {
+					em.flush();
+					em.clear();
+				}
+				if (i % 1000 == 0) {
+					em.getTransaction().commit();
+					em.clear();
+					em.getTransaction().begin();
+				}
 			}
-			if (i % 1000 == 0) {
-				em.getTransaction().commit();
-				em.clear();
-				em.getTransaction().begin();
-			}
-		}
 
-		for (int i = 0; i < data.getGcDump().size(); i++) {
-			em.merge(data.getGcDump().get(i));
-			if (i % 20 == 0) {
-				em.flush();
-				em.clear();
+		if (data.getGcDump() != null)
+			for (int i = 0; i < data.getGcDump().size(); i++) {
+				em.merge(data.getGcDump().get(i));
+				if (i % 20 == 0) {
+					em.flush();
+					em.clear();
+				}
+				if (i % 1000 == 0) {
+					em.getTransaction().commit();
+					em.clear();
+					em.getTransaction().begin();
+				}
 			}
-			if (i % 1000 == 0) {
-				em.getTransaction().commit();
-				em.clear();
-				em.getTransaction().begin();
-			}
-		}
 
-		for (int i = 0; i < data.getmDump().size(); i++) {
-			em.merge(data.getmDump().get(i));
-			if (i % 20 == 0) {
-				em.flush();
-				em.clear();
+		if (data.getmDump() != null)
+			for (int i = 0; i < data.getmDump().size(); i++) {
+				em.merge(data.getmDump().get(i));
+				if (i % 20 == 0) {
+					em.flush();
+					em.clear();
+				}
+				if (i % 1000 == 0) {
+					em.getTransaction().commit();
+					em.clear();
+					em.getTransaction().begin();
+				}
 			}
-			if (i % 1000 == 0) {
-				em.getTransaction().commit();
-				em.clear();
-				em.getTransaction().begin();
-			}
-		}
 
-		for (int i = 0; i < data.getAuDump().size(); i++) {
-			em.merge(data.getAuDump().get(i));
-			if (i % 20 == 0) {
-				em.flush();
-				em.clear();
+		if (data.getAuDump() != null)
+			for (int i = 0; i < data.getAuDump().size(); i++) {
+				em.merge(data.getAuDump().get(i));
+				if (i % 20 == 0) {
+					em.flush();
+					em.clear();
+				}
+				if (i % 1000 == 0) {
+					em.getTransaction().commit();
+					em.clear();
+					em.getTransaction().begin();
+				}
 			}
-			if (i % 1000 == 0) {
-				em.getTransaction().commit();
-				em.clear();
-				em.getTransaction().begin();
-			}
-		}
 
 		em.getTransaction().commit();
 		em.close();
