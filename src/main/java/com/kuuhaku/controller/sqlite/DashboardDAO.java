@@ -15,8 +15,9 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.controller.mysql;
+package com.kuuhaku.controller.sqlite;
 
+import com.kuuhaku.controller.mysql.Manager;
 import com.kuuhaku.model.AppUser;
 
 import javax.persistence.EntityManager;
@@ -31,6 +32,19 @@ public class DashboardDAO {
 
 		try {
 			return (AppUser) q.getSingleResult();
+		} finally {
+			em.close();
+		}
+	}
+
+	public static boolean isRegistered(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT u FROM AppUser u WHERE uid LIKE :id AND login IS NOT NULL AND password IS NOT NULL");
+		q.setParameter("id", id);
+
+		try {
+			return q.getResultList().size() > 0;
 		} finally {
 			em.close();
 		}
