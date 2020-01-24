@@ -109,7 +109,7 @@ public class AppUser {
 		json.put("password", password);
 		json.put("name", name);
 		json.put("avatar", avatar);
-		json.put("guilds", guilds);
+		json.put("guilds", new JSONArray(guilds));
 
 		return json.toString();
 	}
