@@ -26,6 +26,7 @@ public class ScheduledEvents implements JobListener {
 	private static Scheduler sched;
 
 	public ScheduledEvents() {
+		Thread.currentThread().setName("backup");
 		schedBackup();
 		schedClear();
 		schedUnblock();
