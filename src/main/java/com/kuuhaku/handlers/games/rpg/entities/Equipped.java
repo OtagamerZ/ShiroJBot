@@ -1,3 +1,20 @@
+/*
+ * This file is part of Shiro J Bot.
+ *
+ * Shiro J Bot is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Shiro J Bot is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
+ */
+
 package com.kuuhaku.handlers.games.rpg.entities;
 
 import com.kuuhaku.handlers.games.rpg.exceptions.NoSlotAvailableException;
@@ -37,7 +54,7 @@ public class Equipped extends Inventory {
 				(chest == null ? 0 : chest.getEndurance());
 		int charisma = rings.stream().mapToInt(Item.Ring::getCharisma).sum();
 		int intelligence = rings.stream().mapToInt(Item.Ring::getIntelligence).sum() +
-						(weapon == null ? 0 : weapon.getIntelligence());
+				(weapon == null ? 0 : weapon.getIntelligence());
 		int agility =
 				(boot == null ? 0 : boot.getAgility());
 		int luck =

@@ -1,3 +1,20 @@
+/*
+ * This file is part of Shiro J Bot.
+ *
+ * Shiro J Bot is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Shiro J Bot is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
+ */
+
 package com.kuuhaku.command.commands.misc;
 
 import com.kuuhaku.command.Category;
@@ -8,16 +25,16 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class FlipCoinCommand extends Command {
-	
+
 	public FlipCoinCommand() {
 		super("flipcoin", new String[] {"caracoroa", "headstails"}, "Lança uma moeda ao ar. (Cara-ou-Coroa)", Category.MISC);
 	}
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		
+
 		channel.sendMessage("Calculando cara ou coroa....").queue((msg) -> msg.editMessage(((new Random()).nextBoolean() ? "<@" + author.getId() + "> **CARA** :smile:!" : "<@" + author.getId() + "> **COROA** :crown:!")).queueAfter(750, TimeUnit.MILLISECONDS));
-		
+
 	}
 
 }

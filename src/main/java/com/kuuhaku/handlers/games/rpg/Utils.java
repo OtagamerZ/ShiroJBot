@@ -1,3 +1,20 @@
+/*
+ * This file is part of Shiro J Bot.
+ *
+ * Shiro J Bot is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Shiro J Bot is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
+ */
+
 package com.kuuhaku.handlers.games.rpg;
 
 import com.kuuhaku.handlers.games.rpg.entities.Character;
@@ -113,38 +130,38 @@ public class Utils {
 				int amount = Integer.parseInt(rawDice.split("d")[0]);
 				for (int x = 0; x < amount; x++) {
 					String dice;
-						switch (rawDice.split("d")[1]) {
-							case "s":
-								if (status != null) dice = String.valueOf(status.getStrength());
-								else dice = "1";
-								break;
-							case "p":
-								if (status != null) dice = String.valueOf(status.getPerception());
-								else dice = "1";
-								break;
-							case "e":
-								if (status != null) dice = String.valueOf(status.getEndurance());
-								else dice = "1";
-								break;
-							case "c":
-								if (status != null) dice = String.valueOf(status.getCharisma());
-								else dice = "1";
-								break;
-							case "i":
-								if (status != null) dice = String.valueOf(status.getIntelligence());
-								else dice = "1";
-								break;
-							case "a":
-								if (status != null) dice = String.valueOf(status.getAgility());
-								else dice = "1";
-								break;
-							case "l":
-								if (status != null) dice = String.valueOf(status.getLuck());
-								else dice = "1";
-								break;
-							default:
-								dice = rawDice.split("d")[1];
-						}
+					switch (rawDice.split("d")[1]) {
+						case "s":
+							if (status != null) dice = String.valueOf(status.getStrength());
+							else dice = "1";
+							break;
+						case "p":
+							if (status != null) dice = String.valueOf(status.getPerception());
+							else dice = "1";
+							break;
+						case "e":
+							if (status != null) dice = String.valueOf(status.getEndurance());
+							else dice = "1";
+							break;
+						case "c":
+							if (status != null) dice = String.valueOf(status.getCharisma());
+							else dice = "1";
+							break;
+						case "i":
+							if (status != null) dice = String.valueOf(status.getIntelligence());
+							else dice = "1";
+							break;
+						case "a":
+							if (status != null) dice = String.valueOf(status.getAgility());
+							else dice = "1";
+							break;
+						case "l":
+							if (status != null) dice = String.valueOf(status.getLuck());
+							else dice = "1";
+							break;
+						default:
+							dice = rawDice.split("d")[1];
+					}
 					dices.add(dice);
 					descriptors.add(rawDice);
 				}
@@ -267,31 +284,31 @@ public class Utils {
 		}.parse();
 	}
 
-    public static Item getItem(int luck, List<LootItem> lootTable) {
-        List<Item> filteredList = lootTable.stream().filter(i -> i.getRarity().equals(Rarity.roll(luck))).map(LootItem::getItem).collect(Collectors.toList());
-        if (filteredList.size() == 0) throw new BadLuckException();
-        return filteredList.get((int) Math.round(Math.random() * filteredList.size() - 1));
-    }
+	public static Item getItem(int luck, List<LootItem> lootTable) {
+		List<Item> filteredList = lootTable.stream().filter(i -> i.getRarity().equals(Rarity.roll(luck))).map(LootItem::getItem).collect(Collectors.toList());
+		if (filteredList.size() == 0) throw new BadLuckException();
+		return filteredList.get((int) Math.round(Math.random() * filteredList.size() - 1));
+	}
 
-    public static void checkRarity(String op, String rarity, List<LootItem> loot, World world, TextChannel channel) {
-        if (op.contains("+")) {
-            op = op.replace("+", "").trim();
-            try {
-                loot.add(new LootItem(world.getItem(op), Rarity.byName(rarity)));
-            } catch (IllegalArgumentException e) {
-                channel.sendMessage(":x: | Raridade inválida. Os tipos de raridade são:\n" +
-                        "\n`Comum`" +
-                        "\n`Incomum`" +
-                        "\n`Raro`" +
-                        "\n`Épico`" +
-                        "\n`Lendário`").queue();
-            }
-        } else if (op.contains("-")) {
-            op = op.replace("+", "").trim();
-            String finalOp = op;
-            loot.removeIf(i -> i.getItem().getName().equalsIgnoreCase(finalOp));
-        }
-    }
+	public static void checkRarity(String op, String rarity, List<LootItem> loot, World world, TextChannel channel) {
+		if (op.contains("+")) {
+			op = op.replace("+", "").trim();
+			try {
+				loot.add(new LootItem(world.getItem(op), Rarity.byName(rarity)));
+			} catch (IllegalArgumentException e) {
+				channel.sendMessage(":x: | Raridade inválida. Os tipos de raridade são:\n" +
+						"\n`Comum`" +
+						"\n`Incomum`" +
+						"\n`Raro`" +
+						"\n`Épico`" +
+						"\n`Lendário`").queue();
+			}
+		} else if (op.contains("-")) {
+			op = op.replace("+", "").trim();
+			String finalOp = op;
+			loot.removeIf(i -> i.getItem().getName().equalsIgnoreCase(finalOp));
+		}
+	}
 
 	public static boolean noPlayerAlert(String[] args, Message message, MessageChannel channel) {
 		if (message.getMentionedUsers().size() < 1) {

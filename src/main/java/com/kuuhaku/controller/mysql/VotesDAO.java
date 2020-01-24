@@ -1,3 +1,20 @@
+/*
+ * This file is part of Shiro J Bot.
+ *
+ * Shiro J Bot is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Shiro J Bot is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
+ */
+
 package com.kuuhaku.controller.mysql;
 
 import com.github.ygimenez.method.Pages;
@@ -20,27 +37,27 @@ import java.util.concurrent.TimeUnit;
 
 public class VotesDAO {
 	public static void voteUser(Guild guild, User user, User target, boolean vote) {
-        EntityManager em = Manager.getEntityManager();
+		EntityManager em = Manager.getEntityManager();
 
-        com.kuuhaku.model.Votes v = new com.kuuhaku.model.Votes();
-        v.addArgs(guild, user, target, vote);
+		com.kuuhaku.model.Votes v = new com.kuuhaku.model.Votes();
+		v.addArgs(guild, user, target, vote);
 
-        em.getTransaction().begin();
-        em.merge(v);
-        em.getTransaction().commit();
+		em.getTransaction().begin();
+		em.merge(v);
+		em.getTransaction().commit();
 
-        em.close();
+		em.close();
 
-        List<Member> m = MemberDAO.getMemberByMid(user.getId());
-        m.forEach(Member::vote);
+		List<Member> m = MemberDAO.getMemberByMid(user.getId());
+		m.forEach(Member::vote);
 		m.forEach(MemberDAO::updateMemberConfigs);
-    }
+	}
 
 	@SuppressWarnings("unchecked")
-    public static void getVotes(Guild guild, TextChannel channel) {
-        EntityManager em = Manager.getEntityManager();
+	public static void getVotes(Guild guild, TextChannel channel) {
+		EntityManager em = Manager.getEntityManager();
 
-        Query q = em.createQuery("SELECT v FROM Votes v WHERE guildID = ?1 AND vote != 0", com.kuuhaku.model.Votes.class);
+		Query q = em.createQuery("SELECT v FROM Votes v WHERE guildID = ?1 AND vote != 0", com.kuuhaku.model.Votes.class);
 		q.setParameter(1, guild.getId());
 
 		class result {
@@ -57,24 +74,24 @@ public class VotesDAO {
 			}
 		}
 
-        List<com.kuuhaku.model.Votes> votes = (List<com.kuuhaku.model.Votes>) q.getResultList();
-        HashMap<String, result> voteMap = new HashMap<>();
+		List<com.kuuhaku.model.Votes> votes = (List<com.kuuhaku.model.Votes>) q.getResultList();
+		HashMap<String, result> voteMap = new HashMap<>();
 
-        votes.forEach(v -> {
-        	String user = v.getVotedUserID();
-        	if (voteMap.containsKey(user)) {
+		votes.forEach(v -> {
+			String user = v.getVotedUserID();
+			if (voteMap.containsKey(user)) {
 				voteMap.get(user).votes += v.getVote();
 			} else {
-        		voteMap.put(v.getVotedUserID(), new result(v.getVotedUser(), v.getVote()));
+				voteMap.put(v.getVotedUserID(), new result(v.getVotedUser(), v.getVote()));
 			}
 		});
 
 		List<result> results = new ArrayList<>(voteMap.values());
 		results.sort(Comparator.comparing(result::getVotes));
 
-        List<Page> pages = new ArrayList<>();
-        EmbedBuilder eb = new EmbedBuilder();
-        List<MessageEmbed.Field> f = new ArrayList<>();
+		List<Page> pages = new ArrayList<>();
+		EmbedBuilder eb = new EmbedBuilder();
+		List<MessageEmbed.Field> f = new ArrayList<>();
 
 		results.forEach(v -> f.add(new MessageEmbed.Field(v.name, "Pontuação: " + v.votes, false)));
 
@@ -91,5 +108,5 @@ public class VotesDAO {
 		}
 
 		channel.sendMessage((Message) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
-    }
+	}
 }

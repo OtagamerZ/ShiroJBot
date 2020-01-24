@@ -1,3 +1,20 @@
+/*
+ * This file is part of Shiro J Bot.
+ *
+ * Shiro J Bot is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Shiro J Bot is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
+ */
+
 package com.kuuhaku.command.commands.information;
 
 import com.kuuhaku.command.Category;
@@ -32,8 +49,8 @@ public class RegenRulesCommand extends Command {
 						"Eu sou a única que gerencia isso, e meu Nii-chan não irá favorecer ninguem!\n" +
 						"Pronto pessoal, isso é tudo!\n" +
 						(guild.getId().equals("421495229594730496") ? "\nDivirta-se e, caso tenha lido as regras você pode utilizar o comando `s!arespostaé RESPOSTA` para completar a seguinte frase e ganhar um emblema único:\n" +
-						"Infratores serão `_______ __ ______ ___ ____ ____`\n\n" +
-						"É proibido compartilhar qual é a resposta, se não não teria graça!" : "Caso precise de ajuda, ou queira ajudar no meu desenvolvimento, venha para nosso servidor de suporte: https://discord.gg/9sgkzna")).queue();
+								"Infratores serão `_______ __ ______ ___ ____ ____`\n\n" +
+								"É proibido compartilhar qual é a resposta, se não não teria graça!" : "Caso precise de ajuda, ou queira ajudar no meu desenvolvimento, venha para nosso servidor de suporte: https://discord.gg/9sgkzna")).queue();
 				channel.sendFile(Helper.getImage("https://i.imgur.com/U9lTSWD.png"), "partners.png").queue();
 			} catch (IOException e) {
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
