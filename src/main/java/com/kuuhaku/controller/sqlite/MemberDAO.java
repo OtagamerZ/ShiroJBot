@@ -17,6 +17,7 @@
 
 package com.kuuhaku.controller.sqlite;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.model.Member;
 
@@ -80,6 +81,8 @@ public class MemberDAO {
 		em.getTransaction().commit();
 
 		em.close();
+
+		Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("update", "{\"uid\": \"" + u.getId() + "\", \"gid\": \"" + u.getGuild().getId() + "\"}");
 	}
 
 	public static void updateMemberConfigs(Member m) {
@@ -90,6 +93,8 @@ public class MemberDAO {
 		em.getTransaction().commit();
 
 		em.close();
+
+		Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("update", "{\"uid\": \"" + m.getMid() + "\", \"gid\": \"" + m.getSid() + "\"}");
 	}
 
 	@SuppressWarnings("unchecked")
