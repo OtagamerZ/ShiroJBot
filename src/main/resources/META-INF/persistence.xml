@@ -2,18 +2,18 @@
 <!--
   ~ This file is part of Shiro J Bot.
   ~
-  ~     Shiro J Bot is free software: you can redistribute it and/or modify
-  ~     it under the terms of the GNU General Public License as published by
-  ~     the Free Software Foundation, either version 3 of the License, or
-  ~     (at your option) any later version.
+  ~ Shiro J Bot is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
   ~
-  ~     Shiro J Bot is distributed in the hope that it will be useful,
-  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~     GNU General Public License for more details.
+  ~ Shiro J Bot is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
   ~
-  ~     You should have received a copy of the GNU General Public License
-  ~     along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
   -->
 
 <persistence xmlns="http://java.sun.com/xml/ns/persistence"
@@ -46,8 +46,6 @@
         <properties>
             <!-- dados da conexao -->
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-            <property name="javax.persistence.jdbc.url"
-                      value="jdbc:mysql://164.68.110.221/Shiro?serverTimezone=EST5EDT&amp;autoReconnect=true&amp;useUnicode=yes&amp;characterEncoding=UTF-8&amp;interactiveClient=true"/>
 
             <!--  propriedades do hibernate -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
