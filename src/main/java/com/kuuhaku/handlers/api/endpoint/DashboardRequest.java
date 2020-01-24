@@ -17,9 +17,9 @@
 
 package com.kuuhaku.handlers.api.endpoint;
 
-import com.kuuhaku.controller.mysql.DashboardDAO;
 import com.kuuhaku.controller.mysql.GlobalMessageDAO;
 import com.kuuhaku.controller.mysql.TokenDAO;
+import com.kuuhaku.controller.sqlite.DashboardDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.model.AppUser;
