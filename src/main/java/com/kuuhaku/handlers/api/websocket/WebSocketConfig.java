@@ -60,6 +60,7 @@ public class WebSocketConfig {
 		socket.addEventListener("requestprofile", JSONObject.class, (client, data, ackSender) -> {
 			try {
 				JSONObject request = new JSONObject(data);
+				System.out.println(data);
 				if (!TokenDAO.validateToken(request.getString("token"))) return;
 				socket.getBroadcastOperations().sendEvent("update", MemberDAO.getMemberById(request.getString("id")));
 			} catch (Exception ignore) {
