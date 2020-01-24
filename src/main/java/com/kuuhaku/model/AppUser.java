@@ -18,15 +18,13 @@
 package com.kuuhaku.model;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.sqlite.MemberDAO;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -54,19 +52,23 @@ public class AppUser {
 		List<Guild> guilds = Main.getInfo().getAPI().getGuilds().stream().filter(g -> g.getMemberById(uid) != null).collect(Collectors.toList());
 		JSONArray guildArray = new JSONArray();
 		guilds.forEach(g -> {
-			JSONObject json = new JSONObject();
-			json.put("id", g.getId());
-			json.put("name", g.getName());
-			json.put("icon", g.getIconUrl());
+			try {
+				MemberDAO.getMemberById(uid + g.getId());
+				JSONObject json = new JSONObject();
+				json.put("id", g.getId());
+				json.put("name", g.getName());
+				json.put("icon", g.getIconUrl());
 
-			JSONObject user = new JSONObject();
-			user.put("profileId", uid + g.getId());
-			user.put("nickname", Objects.requireNonNull(g.getMemberById(uid)).getNickname());
-			user.put("isAdmin", Objects.requireNonNull(g.getMemberById(uid)).hasPermission(Permission.MANAGE_SERVER));
+				JSONObject user = new JSONObject();
+				user.put("profileId", uid + g.getId());
+				user.put("nickname", Objects.requireNonNull(g.getMemberById(uid)).getNickname());
+				user.put("isAdmin", Objects.requireNonNull(g.getMemberById(uid)).hasPermission(Permission.MANAGE_SERVER));
 
-			json.put("user", user);
+				json.put("user", user);
 
-			guildArray.put(json);
+				guildArray.put(json);
+			} catch (NoResultException ignore) {
+			}
 		});
 
 		this.guilds = guildArray.toString();
