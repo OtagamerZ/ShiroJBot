@@ -43,7 +43,7 @@ public class DashboardRequest {
 	@RequestMapping(value = "/app/auth", method = RequestMethod.POST)
 	public String validateAccount(@RequestHeader(value = "login") String login, @RequestHeader(value = "password") String pass, @RequestHeader(value = "token") String token) {
 		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
-		return MemberDAO.authMember(login, pass);
+		return DashboardDAO.auth(login, pass);
 	}
 
 	@RequestMapping(value = "/app/data", method = RequestMethod.POST)
