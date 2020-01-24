@@ -68,6 +68,19 @@ public class BackupDAO {
 			}
 		}
 
+		for (int i = 0; i < data.getAuDump().size(); i++) {
+			em.merge(data.getAuDump().get(i));
+			if (i % 20 == 0) {
+				em.flush();
+				em.clear();
+			}
+			if (i % 1000 == 0) {
+				em.getTransaction().commit();
+				em.clear();
+				em.getTransaction().begin();
+			}
+		}
+
 		em.getTransaction().commit();
 		em.close();
 	}
@@ -79,7 +92,8 @@ public class BackupDAO {
 		Query ca = em.createQuery("SELECT c FROM CustomAnswers c", CustomAnswers.class);
 		Query m = em.createQuery("SELECT m FROM Member m", Member.class);
 		Query gc = em.createQuery("SELECT g FROM GuildConfig g", GuildConfig.class);
-		DataDump dump = new DataDump(ca.getResultList(), m.getResultList(), gc.getResultList());
+		Query au = em.createQuery("SELECT u FROM AppUser u", AppUser.class);
+		DataDump dump = new DataDump(ca.getResultList(), m.getResultList(), gc.getResultList(), au.getResultList());
 		em.close();
 
 		return dump;

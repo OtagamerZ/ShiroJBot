@@ -26,22 +26,26 @@ public class DataDump {
     private final List<CustomAnswers> caDump;
     private final List<Member> mDump;
     private final List<GuildConfig> gcDump;
+    private final List<AppUser> auDump;
 
-    public DataDump(List<CustomAnswers> caDump, List<Member> mDump, List<GuildConfig> gcDump) {
+    public DataDump(List<CustomAnswers> caDump, List<Member> mDump, List<GuildConfig> gcDump, List<AppUser> auDump) {
         this.caDump = caDump;
         this.gcDump = gcDump;
         this.mDump = mDump;
+        this.auDump = auDump;
     }
 
-    public DataDump(List<CustomAnswers> caDump, List<GuildConfig> gcDump) {
+    public DataDump(List<CustomAnswers> caDump, List<GuildConfig> gcDump, List<AppUser> auDump) {
         this.caDump = caDump;
         this.gcDump = gcDump;
+        this.auDump = auDump;
         this.mDump = new ArrayList<>();
     }
 
     public DataDump(List<Member> mDump) {
         this.caDump = new ArrayList<>();
         this.gcDump = new ArrayList<>();
+        this.auDump = new ArrayList<>();
 
         List<Member> oldMembers = MemberDAO.getMembers();
         mDump.removeAll(oldMembers);
@@ -59,5 +63,9 @@ public class DataDump {
 
     public List<GuildConfig> getGcDump() {
         return gcDump;
+    }
+
+    public List<AppUser> getAuDump() {
+        return auDump;
     }
 }
