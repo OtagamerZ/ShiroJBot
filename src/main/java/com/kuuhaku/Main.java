@@ -169,8 +169,8 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 	public static void shutdown() {
 		Helper.logger(Main.class).info(Sweeper.mark() + " entradas dispensáveis encontradas!");
-		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getCADump(), com.kuuhaku.controller.sqlite.BackupDAO.getGuildDump()));
-		Helper.logger(Main.class).info("Respostas/Guilds salvos com sucesso!");
+		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getCADump(), com.kuuhaku.controller.sqlite.BackupDAO.getGuildDump(), com.kuuhaku.controller.sqlite.BackupDAO.getAppUserDump()));
+		Helper.logger(Main.class).info("Respostas/Guilds/Usuários salvos com sucesso!");
 		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump()));
 		Helper.logger(Main.class).info("Membros salvos com sucesso!");
 		Sweeper.sweep();
