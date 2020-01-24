@@ -57,7 +57,7 @@ public class DashboardDAO {
 		q.setParameter("pass", pass);
 
 		try {
-			return (String) q.getSingleResult();
+			return "{\"id\": \"" + q.getSingleResult() + "\"}";
 		} finally {
 			em.close();
 		}
