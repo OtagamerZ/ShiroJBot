@@ -55,14 +55,13 @@ public class WebSocketConfig {
 
 			Main.getRelay().relayMessage(gm);
 
-			socket.getBroadcastOperations().sendEvent("chat", gm.toString());
+			Main.getInfo().getClient().emit("chat", gm.toString());
 		});
 		socket.addEventListener("requestprofile", JSONObject.class, (client, data, ackSender) -> {
 			try {
 				JSONObject request = new JSONObject(data);
-				System.out.println(data);
 				if (!TokenDAO.validateToken(request.getString("token"))) return;
-				socket.getBroadcastOperations().sendEvent("update", MemberDAO.getMemberById(request.getString("id")));
+				Main.getInfo().getClient().emit("update", MemberDAO.getMemberById(request.getString("id")));
 			} catch (Exception ignore) {
 			}
 		});
