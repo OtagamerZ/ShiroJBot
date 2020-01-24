@@ -21,8 +21,6 @@ import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.mysql.GlobalMessageDAO;
-import com.kuuhaku.controller.mysql.TokenDAO;
-import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.GlobalMessage;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
@@ -55,15 +53,7 @@ public class WebSocketConfig {
 
 			Main.getRelay().relayMessage(gm);
 
-			Main.getInfo().getClient().emit("chat", gm.toString());
-		});
-		socket.addEventListener("requestprofile", JSONObject.class, (client, data, ackSender) -> {
-			try {
-				JSONObject request = new JSONObject(data);
-				if (!TokenDAO.validateToken(request.getString("token"))) return;
-				Main.getInfo().getClient().emit("update", MemberDAO.getMemberById(request.getString("id")));
-			} catch (Exception ignore) {
-			}
+			socket.getBroadcastOperations().sendEvent("chat", gm.toString());
 		});
 		socket.start();
 	}
