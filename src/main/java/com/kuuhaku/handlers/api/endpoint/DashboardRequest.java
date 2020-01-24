@@ -22,7 +22,6 @@ import com.kuuhaku.controller.mysql.TokenDAO;
 import com.kuuhaku.controller.sqlite.DashboardDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
-import com.kuuhaku.model.AppUser;
 import com.kuuhaku.model.GlobalMessage;
 import com.kuuhaku.model.Member;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -48,9 +47,9 @@ public class DashboardRequest {
 	}
 
 	@RequestMapping(value = "/app/data", method = RequestMethod.POST)
-	public AppUser retrieveData(@RequestHeader(value = "uid") String uid, @RequestHeader(value = "token") String token) {
+	public String retrieveData(@RequestHeader(value = "uid") String uid, @RequestHeader(value = "token") String token) {
 		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
-		return DashboardDAO.getData(uid);
+		return DashboardDAO.getData(uid).toString();
 	}
 
 	@RequestMapping(value = "/app/profile", method = RequestMethod.POST)
