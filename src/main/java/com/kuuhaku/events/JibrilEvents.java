@@ -18,11 +18,9 @@
 package com.kuuhaku.events;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.mysql.GlobalMessageDAO;
 import com.kuuhaku.controller.mysql.MemberDAO;
 import com.kuuhaku.controller.mysql.TagDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
-import com.kuuhaku.model.GlobalMessage;
 import com.kuuhaku.model.Member;
 import com.kuuhaku.model.RelayBlockList;
 import com.kuuhaku.utils.Helper;
@@ -142,20 +140,12 @@ public class JibrilEvents extends ListenerAdapter {
 				if (String.join(" ", msg).length() < 2000) {
 					net.dv8tion.jda.api.entities.Member m = event.getMember();
 					assert m != null;
-					GlobalMessage gm = new GlobalMessage();
-					gm.setUserId(m.getId());
-					gm.setName(m.getUser().getName());
-					gm.setAvatar(m.getUser().getAvatarUrl());
-					gm.setContent(event.getMessage().getContentRaw());
-
 					try {
 						if (TagDAO.getTagById(event.getAuthor().getId()).isVerified() && event.getMessage().getAttachments().size() > 0) {
 							try {
 								ByteArrayOutputStream baos = new ByteArrayOutputStream();
 								ImageIO.write(ImageIO.read(Helper.getImage(event.getMessage().getAttachments().get(0).getUrl())), "png", baos);
 								Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), m, event.getGuild(), baos);
-
-
 							} catch (Exception e) {
 								Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), m, event.getGuild(), null);
 							}
@@ -165,9 +155,6 @@ public class JibrilEvents extends ListenerAdapter {
 					} catch (NoResultException e) {
 						Main.getRelay().relayMessage(event.getMessage(), String.join(" ", msg), m, event.getGuild(), null);
 					}
-
-					Main.getInfo().getClient().emit("chat", gm.toString());
-					GlobalMessageDAO.saveMessage(gm);
 				}
 			}
 		} catch (ErrorResponseException e) {
