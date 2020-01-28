@@ -57,6 +57,18 @@ public class TagDAO {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public static List<Tags> getSponsors() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT t FROM Tags t WHERE t.Sponsor = true", Tags.class);
+		List<Tags> ts = (List<Tags>) q.getResultList();
+
+		em.close();
+
+		return ts;
+	}
+
 	public static int getPartnerAmount() {
 		EntityManager em = Manager.getEntityManager();
 		int size;
