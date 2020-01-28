@@ -438,7 +438,6 @@ public class Helper {
 							gcjo.remove(jo.getString("msgId"));
 							gc.setButtonConfigs(gcjo);
 							GuildDAO.updateGuildSettings(gc);
-							com.kuuhaku.controller.mysql.GuildDAO.updateGuildSettings(gc);
 						}
 					});
 
@@ -522,6 +521,5 @@ public class Helper {
 		gc.setButtonConfigs(root);
 		System.out.println(root.toString());
 		GuildDAO.updateGuildSettings(gc);
-		com.kuuhaku.controller.mysql.GuildDAO.updateGuildSettings(gc);
 	}
 }
