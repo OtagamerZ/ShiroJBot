@@ -411,8 +411,8 @@ public class Helper {
 
 			TextChannel channel = g.getTextChannelById(jo.getString("canalId"));
 			assert channel != null;
-			if (k.equals("gatekeeper")) {
-				try {
+			try {
+				if (k.equals("gatekeeper")) {
 					Message msg = channel.retrieveMessageById(jo.getString("msgId")).submit().get();
 					resolveButton(g, jo, buttons);
 
@@ -424,11 +424,8 @@ public class Helper {
 					});
 
 					msg.clearReactions().queue(s -> Pages.buttonize(Main.getInfo().getAPI(), msg, buttons, false));
-				} catch (NullPointerException | ErrorResponseException | InterruptedException | ExecutionException e) {
-					Helper.logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
-				}
-			} else {
-				try {
+
+				} else {
 					Message msg = channel.retrieveMessageById(jo.getString("msgId")).submit().get();
 					resolveButton(g, jo, buttons);
 
@@ -443,9 +440,9 @@ public class Helper {
 					});
 
 					msg.clearReactions().queue(s -> Pages.buttonize(Main.getInfo().getAPI(), msg, buttons, true));
-				} catch (NullPointerException | ErrorResponseException | InterruptedException | ExecutionException e) {
-					Helper.logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
 				}
+			} catch (NullPointerException | ErrorResponseException | InterruptedException | ExecutionException e) {
+				Helper.logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
 			}
 		});
 	}
