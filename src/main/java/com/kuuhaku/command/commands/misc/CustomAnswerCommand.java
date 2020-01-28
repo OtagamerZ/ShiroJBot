@@ -99,8 +99,8 @@ public class CustomAnswerCommand extends Command {
 		if (txt.contains(";")) {
 			if (txt.split(";")[0].length() <= 200) {
 				if (txt.split(";")[1].length() <= 200) {
-					CustomAnswerDAO.addCAtoDB(guild, txt.split(";")[0], txt.split(";")[1]);
-					channel.sendMessage("Agora quando alguém disser `" + txt.split(";")[0] + "` irei responder `" + txt.split(";")[1] + "`.").queue();
+					CustomAnswerDAO.addCAtoDB(guild, txt.split(";")[0], txt.replace(txt.split(";")[0] + ";", ""));
+					channel.sendMessage("Agora quando alguém disser `" + txt.split(";")[0] + "` irei responder `" + txt.replace(txt.split(";")[0] + ";", "") + "`.").queue();
 				} else {
 					channel.sendMessage(":x: | Woah, essa resposta é muito longa, não consigo decorar isso tudo!").queue();
 				}
