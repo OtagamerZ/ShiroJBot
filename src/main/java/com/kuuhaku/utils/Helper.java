@@ -28,6 +28,7 @@ import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.Extensions;
 import com.kuuhaku.model.GamblePool;
 import com.kuuhaku.model.GuildConfig;
+import com.kuuhaku.model.Tags;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -518,5 +519,26 @@ public class Helper {
 
 		gc.setButtonConfigs(root);
 		GuildDAO.updateGuildSettings(gc);
+	}
+
+	public static String getSponsors() {
+		List<String> sponsors = TagDAO.getSponsors().stream().map(Tags::getId).collect(Collectors.toList());
+		List<Guild> spGuilds = Main.getInfo().getAPI().getGuilds().stream().filter(g -> sponsors.contains(g.getOwnerId()) && g.getSelfMember().hasPermission(Permission.CREATE_INSTANT_INVITE)).collect(Collectors.toList());
+		StringBuilder sb = new StringBuilder();
+
+		for (Guild g : spGuilds) {
+			g.retrieveInvites().queue(invs -> invs.forEach(inv -> {
+				if (inv.getInviter() == Main.getInfo().getAPI().getSelfUser()) {
+					inv.delete().queue();
+				}
+			}));
+			Invite i = Objects.requireNonNull(g.getDefaultChannel()).createInvite()
+					.setMaxAge(0)
+					.complete();
+
+			sb.append(i.getUrl()).append("\n");
+		}
+
+		return sb.toString();
 	}
 }

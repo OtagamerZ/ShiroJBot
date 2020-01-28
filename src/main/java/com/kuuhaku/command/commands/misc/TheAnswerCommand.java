@@ -20,6 +20,7 @@ package com.kuuhaku.command.commands.misc;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.mysql.TagDAO;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 
 import javax.persistence.NoResultException;
@@ -49,6 +50,7 @@ public class TheAnswerCommand extends Command {
 					}
 				}
 			}
-		} else channel.sendMessage(":x: | Este comando só pode ser usado no servidor OtagamerZ.").queue();
+		} else
+			channel.sendMessage(":x: | Este comando só pode ser usado no servidor " + ShiroInfo.getSupportServer() + ".").queue();
 	}
 }
