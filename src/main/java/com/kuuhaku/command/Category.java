@@ -69,7 +69,6 @@ public enum Category {
 			case DEVS:
 			case EXCEED:
 			case MUSICA:
-			case PARTNER:
 			case MODERACAO:
 			case SHERIFFS:
 				return true;
