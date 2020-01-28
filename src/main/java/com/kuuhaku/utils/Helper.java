@@ -439,6 +439,8 @@ public class Helper {
 							gcjo.remove(jo.getString("msgId"));
 							gc.setButtonConfigs(gcjo);
 							GuildDAO.updateGuildSettings(gc);
+						} else {
+							System.out.println(m.getUser().getId() + " | " + jo.getString("author"));
 						}
 					});
 
@@ -520,7 +522,6 @@ public class Helper {
 		else root.put(msgId, msg);
 
 		gc.setButtonConfigs(root);
-		System.out.println(root.toString());
 		GuildDAO.updateGuildSettings(gc);
 	}
 }
