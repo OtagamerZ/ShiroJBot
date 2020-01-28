@@ -33,6 +33,8 @@ public class Tags {
     private boolean Verified = false;
     @Column(columnDefinition = "boolean default false")
     private boolean Reader = false;
+    @Column(columnDefinition = "boolean default false")
+    private boolean Sponsor = false;
 
     public String getId() {
         return id;
@@ -72,5 +74,13 @@ public class Tags {
 
     public void setReader(boolean reader) {
         Reader = reader;
+    }
+
+    public boolean isSponsor() {
+        return Sponsor;
+    }
+
+    public void setSponsor(boolean sponsor) {
+        Sponsor = sponsor;
     }
 }
