@@ -100,7 +100,7 @@ public class Relay {
 		gm.setAvatar(m.getUser().getAvatarUrl());
 		gm.setContent(msg);
 
-		Main.getInfo().getClient().emit("chat", gm.toString());
+		Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("chat", gm.toString());
 		GlobalMessageDAO.saveMessage(gm);
 
 		String exceed = MemberDAO.getMemberByMid(m.getUser().getId()).get(0).getExceed();
