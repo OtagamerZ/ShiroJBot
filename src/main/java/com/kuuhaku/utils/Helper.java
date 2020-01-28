@@ -426,7 +426,7 @@ public class Helper {
 
 				msg.clearReactions().queue(s -> Pages.buttonize(Main.getInfo().getAPI(), msg, buttons, true));
 			} catch (NullPointerException | ErrorResponseException | InterruptedException | ExecutionException e) {
-				e.printStackTrace();
+				Helper.logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
 			}
 		});
 	}
