@@ -59,7 +59,7 @@ public class RoleChooserCommand extends Command {
 		}
 
 		try {
-			Helper.addButton(args, message, channel, gc, message.getEmotes().size() > 0 ? message.getEmotes().get(0).getId() : args[1]);
+			Helper.addButton(args, message, channel, gc, message.getEmotes().size() > 0 ? message.getEmotes().get(0).getId() : args[1], false);
 
 			channel.sendMessage("Botão adicionado com sucesso!").queue(s -> Helper.refreshButtons(gc));
 		} catch (IllegalArgumentException e) {
