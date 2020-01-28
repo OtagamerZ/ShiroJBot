@@ -52,6 +52,7 @@ public class RegenRulesCommand extends Command {
 								"Infratores serão `_______ __ ______ ___ ____ ____`\n\n" +
 								"É proibido compartilhar qual é a resposta, se não não teria graça!" : "Caso precise de ajuda, ou queira ajudar no meu desenvolvimento, venha para nosso servidor de suporte: https://discord.gg/9sgkzna")).queue();
 				channel.sendFile(Helper.getImage("https://i.imgur.com/U9lTSWD.png"), "partners.png").queue();
+				channel.sendMessage(Helper.getSponsors()).queue();
 			} catch (IOException e) {
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}

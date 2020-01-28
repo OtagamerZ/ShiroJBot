@@ -57,6 +57,7 @@ public class ShiroInfo {
 	private static final String YoutubeToken = System.getenv("YOUTUBE_TOKEN");
 	private static final String name = "Shiro";
 	private static final String version = "3.3";
+	private static final String supportServer = "Shiro Support";
 	private static final String default_prefix = DEV ? "dev!" : "s!";
 	private static final String nomeDB = "shiro.sqlite";
 	private static final String niichan = "350836145921327115"; //KuuHaKu
@@ -197,6 +198,10 @@ public class ShiroInfo {
 
 	public static Message retrieveCachedMessage(Guild guild, String id) {
 		return messageCache.getOrDefault(guild.getId(), new KittyCache<>(64)).removeAndGet(id);
+	}
+
+	public static String getSupportServer() {
+		return supportServer;
 	}
 
 	//VARIABLES
