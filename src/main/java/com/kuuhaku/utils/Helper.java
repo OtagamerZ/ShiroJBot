@@ -520,5 +520,6 @@ public class Helper {
 
 		gc.setButtonConfigs(root);
 		GuildDAO.updateGuildSettings(gc);
+		com.kuuhaku.controller.mysql.GuildDAO.updateGuildSettings(gc);
 	}
 }
