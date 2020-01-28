@@ -438,6 +438,7 @@ public class Helper {
 							gcjo.remove(jo.getString("msgId"));
 							gc.setButtonConfigs(gcjo);
 							GuildDAO.updateGuildSettings(gc);
+							ms.clearReactions().queue();
 						}
 					});
 
