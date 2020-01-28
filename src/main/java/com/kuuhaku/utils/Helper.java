@@ -513,9 +513,10 @@ public class Helper {
 			msg = root.getJSONObject(msgId);
 		}
 
-		msg.getJSONObject("buttons").put("gatekeeper", btn);
+		msg.getJSONObject("buttons").put(args[1], btn);
 
-		root.put(msgId, msg);
+		if (gatekeeper) root.put("gatekeeper", msg);
+		else root.put(msgId, msg);
 
 		gc.setButtonConfigs(root);
 		GuildDAO.updateGuildSettings(gc);
