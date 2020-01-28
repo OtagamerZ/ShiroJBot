@@ -516,39 +516,11 @@ public class Helper {
 
 		msg.getJSONObject("buttons").put(args[1], btn);
 
-		root.put("gatekeeper", msg);
+		if (gatekeeper) root.put("gatekeeper", msg);
+		else root.put(msgId, msg);
 
 		gc.setButtonConfigs(root);
-		GuildDAO.updateGuildSettings(gc);
-		com.kuuhaku.controller.mysql.GuildDAO.updateGuildSettings(gc);
-	}
-
-	public static void addButton(String[] args, Message message, MessageChannel channel, GuildConfig gc, String s2) {
-		JSONObject root = gc.getButtonConfigs();
-		String msgId = channel.retrieveMessageById(args[0]).complete().getId();
-
-		JSONObject msg = new JSONObject();
-
-		JSONObject btn = new JSONObject();
-		btn.put("emote", EmojiUtils.containsEmoji(s2) ? s2 : Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById(s2)).getId());
-		btn.put("role", message.getMentionedRoles().get(0).getId());
-
-		channel.retrieveMessageById(msgId).queue();
-
-		if (!root.has(msgId)) {
-			msg.put("msgId", msgId);
-			msg.put("canalId", channel.getId());
-			msg.put("buttons", new JSONObject());
-			msg.put("author", message.getAuthor().getId());
-		} else {
-			msg = root.getJSONObject(msgId);
-		}
-
-		msg.getJSONObject("buttons").put(args[1], btn);
-
-		root.put(msgId, msg);
-
-		gc.setButtonConfigs(root);
+		System.out.println(root.toString());
 		GuildDAO.updateGuildSettings(gc);
 		com.kuuhaku.controller.mysql.GuildDAO.updateGuildSettings(gc);
 	}
