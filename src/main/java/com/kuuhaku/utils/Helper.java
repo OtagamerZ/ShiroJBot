@@ -411,22 +411,40 @@ public class Helper {
 
 			TextChannel channel = g.getTextChannelById(jo.getString("canalId"));
 			assert channel != null;
-			try {
-				Message msg = channel.retrieveMessageById(jo.getString("msgId")).submit().get();
-				resolveButton(g, jo, buttons);
+			if (k.equals("gatekeeper")) {
+				try {
+					Message msg = channel.retrieveMessageById(jo.getString("msgId")).submit().get();
+					resolveButton(g, jo, buttons);
 
-				buttons.put(CANCEL, (m, ms) -> {
-					if (m.getUser().getId().equals(jo.getString("author"))) {
-						JSONObject gcjo = gc.getButtonConfigs();
-						gcjo.remove(jo.getString("msgId"));
-						gc.setButtonConfigs(gcjo);
-						GuildDAO.updateGuildSettings(gc);
-					}
-				});
+					buttons.put("\uD83D\uDEAA", (m, v) -> {
+						try {
+							m.kick("Não aceitou as regras.").queue();
+						} catch (InsufficientPermissionException ignore) {
+						}
+					});
 
-				msg.clearReactions().queue(s -> Pages.buttonize(Main.getInfo().getAPI(), msg, buttons, true));
-			} catch (NullPointerException | ErrorResponseException | InterruptedException | ExecutionException e) {
-				Helper.logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
+					msg.clearReactions().queue(s -> Pages.buttonize(Main.getInfo().getAPI(), msg, buttons, false));
+				} catch (NullPointerException | ErrorResponseException | InterruptedException | ExecutionException e) {
+					Helper.logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
+				}
+			} else {
+				try {
+					Message msg = channel.retrieveMessageById(jo.getString("msgId")).submit().get();
+					resolveButton(g, jo, buttons);
+
+					buttons.put(CANCEL, (m, ms) -> {
+						if (m.getUser().getId().equals(jo.getString("author"))) {
+							JSONObject gcjo = gc.getButtonConfigs();
+							gcjo.remove(jo.getString("msgId"));
+							gc.setButtonConfigs(gcjo);
+							GuildDAO.updateGuildSettings(gc);
+						}
+					});
+
+					msg.clearReactions().queue(s -> Pages.buttonize(Main.getInfo().getAPI(), msg, buttons, true));
+				} catch (NullPointerException | ErrorResponseException | InterruptedException | ExecutionException e) {
+					Helper.logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
+				}
 			}
 		});
 	}
@@ -474,7 +492,7 @@ public class Helper {
 		});
 	}
 
-	public static void addButton(String[] args, Message message, MessageChannel channel, GuildConfig gc, String s2) {
+	public static void addButton(String[] args, Message message, MessageChannel channel, GuildConfig gc, String s2, boolean gatekeeper) {
 		JSONObject root = gc.getButtonConfigs();
 		String msgId = channel.retrieveMessageById(args[0]).complete().getId();
 
@@ -495,7 +513,7 @@ public class Helper {
 			msg = root.getJSONObject(msgId);
 		}
 
-		msg.getJSONObject("buttons").put(args[1], btn);
+		msg.getJSONObject("buttons").put("gatekeeper", btn);
 
 		root.put(msgId, msg);
 
