@@ -434,6 +434,7 @@ public class Helper {
 
 					buttons.put(CANCEL, (m, ms) -> {
 						if (m.getUser().getId().equals(jo.getString("author"))) {
+							System.out.println(m.getUser().getId() + " | " + jo.getString("author"));
 							JSONObject gcjo = gc.getButtonConfigs();
 							gcjo.remove(jo.getString("msgId"));
 							gc.setButtonConfigs(gcjo);
