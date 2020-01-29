@@ -17,19 +17,23 @@
 
 package com.kuuhaku.controller.mysql;
 
+import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.Member;
 import net.dv8tion.jda.api.entities.User;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 
 public class WaifuDAO {
 	public static void saveMemberWaifu(Member m, User u) {
 		EntityManager em = Manager.getEntityManager();
 
-		m.marry(u);
+		List<Member> mbs = MemberDAO.getMemberByMid(m.getMid());
+
+		mbs.forEach(mb -> mb.marry(u));
 
 		em.getTransaction().begin();
-		em.merge(m);
+		mbs.forEach(em::merge);
 		em.getTransaction().commit();
 
 		em.close();
@@ -38,10 +42,12 @@ public class WaifuDAO {
 	public static void removeMemberWaifu(Member m) {
 		EntityManager em = Manager.getEntityManager();
 
-		m.divorce();
+		List<Member> mbs = MemberDAO.getMemberByMid(m.getMid());
+
+		mbs.forEach(Member::divorce);
 
 		em.getTransaction().begin();
-		em.merge(m);
+		mbs.forEach(em::merge);
 		em.getTransaction().commit();
 
 		em.close();
