@@ -34,7 +34,6 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -70,7 +69,6 @@ public class ShiroInfo {
 	private static final ArrayList<String> sheriffs = new ArrayList<String>() {{
 
 	}};
-	private static final List<User[]> queue = new ArrayList<>();
 	private static final Map<String, Integer[]> polls = new HashMap<>();
 	private static final Map<Long, GuildMusicManager> gmms = new HashMap<>();
 	private static final AudioPlayerManager apm = new DefaultAudioPlayerManager();
@@ -150,10 +148,6 @@ public class ShiroInfo {
 
 	public ArrayList<String> getSheriffs() {
 		return sheriffs;
-	}
-
-	public List<User[]> getQueue() {
-		return queue;
 	}
 
 	public Map<String, Integer[]> getPolls() {
