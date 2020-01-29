@@ -29,7 +29,7 @@ import java.util.Objects;
 
 public class MarryCommand extends Command {
 	public MarryCommand() {
-		super("casar", new String[]{"declarar", "marry"}, "<@usuário>", "Pede um usuário em casamento.", Category.FUN);
+		super("casar", new String[]{"declarar", "marry"}, "<@usuário>", "Pede um usuário em casamento. Isso lhe dará um bônus de XP quando estiver no mesmo servidor que ela/ele.", Category.FUN);
 	}
 
 	@Override

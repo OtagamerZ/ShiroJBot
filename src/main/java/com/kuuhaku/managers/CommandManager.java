@@ -133,6 +133,7 @@ public class CommandManager {
 			add(new StonksCommand());
 			add(new PixelCanvasCommand());
 			add(new PixelChunkCommand());
+			add(new DivorceCommand());
 			//REAÇÕES
 			//RECIPROCOS
 			add(new HugReaction(false));
