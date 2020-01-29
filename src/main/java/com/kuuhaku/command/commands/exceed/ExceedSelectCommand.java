@@ -36,7 +36,7 @@ public class ExceedSelectCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		channel.sendMessage("<a:Loading:598500653215645697> Analisando dados...").queue(m -> {
-			List<com.kuuhaku.model.Member> u = MemberDAO.getMemberByMid(author.getId());
+			List<com.kuuhaku.model.persistent.Member> u = MemberDAO.getMemberByMid(author.getId());
 
 			if (u.get(0).getExceed().isEmpty()) {
 				if (args.length == 0) {

@@ -15,9 +15,13 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model;
+package com.kuuhaku.model.common;
 
 import com.kuuhaku.controller.mysql.MemberDAO;
+import com.kuuhaku.model.persistent.AppUser;
+import com.kuuhaku.model.persistent.CustomAnswers;
+import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.Member;
 
 import java.util.ArrayList;
 import java.util.List;

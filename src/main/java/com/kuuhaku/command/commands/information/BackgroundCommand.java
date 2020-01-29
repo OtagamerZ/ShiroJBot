@@ -48,7 +48,7 @@ public class BackgroundCommand extends Command {
             con.disconnect();
             bi.flush();
 
-            com.kuuhaku.model.Member m = MemberDAO.getMemberById(author.getId() + guild.getId());
+            com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(author.getId() + guild.getId());
             m.setBg(args[0]);
             MemberDAO.updateMemberConfigs(m);
             channel.sendMessage("Imagem de fundo trocada com sucesso!").queue();

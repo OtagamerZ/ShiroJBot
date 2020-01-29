@@ -18,7 +18,7 @@
 package com.kuuhaku.controller.mysql;
 
 import com.kuuhaku.controller.sqlite.MemberDAO;
-import com.kuuhaku.model.Member;
+import com.kuuhaku.model.persistent.Member;
 import net.dv8tion.jda.api.entities.User;
 
 import javax.persistence.EntityManager;

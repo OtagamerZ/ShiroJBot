@@ -20,7 +20,7 @@ package com.kuuhaku.command.commands.moderation;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.GuildDAO;
-import com.kuuhaku.model.GuildConfig;
+import com.kuuhaku.model.persistent.GuildConfig;
 import net.dv8tion.jda.api.entities.*;
 
 public class AllowCommunityCommand extends Command {

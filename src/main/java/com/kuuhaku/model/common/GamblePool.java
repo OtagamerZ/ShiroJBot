@@ -15,31 +15,44 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.controller.mysql;
+package com.kuuhaku.model.common;
 
-import com.kuuhaku.model.persistent.Log;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 
-public class LogDAO {
-	public static void saveLog(Log log) {
-		EntityManager em = Manager.getEntityManager();
+public class GamblePool {
+	public static class Gamble {
+		private final String slot;
+		private final int weight;
 
-		em.getTransaction().begin();
-		em.merge(log);
-		em.getTransaction().commit();
+		public Gamble(String s, int w) {
+			this.slot = s;
+			this.weight = w;
+		}
 
-		em.close();
+		String getSlot() {
+			return slot;
+		}
+
+		int getWeight() {
+			return weight;
+		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public static List<Object[]> getUses() {
-		EntityManager em = Manager.getEntityManager();
+	public void addGamble(Gamble gamble) {
+		g.add(gamble);
+	}
 
-		Query q = em.createQuery("SELECT guild, COUNT(guild) AS uses FROM Log l GROUP BY guild ORDER BY uses DESC");
+	private static final List<Gamble> g = new ArrayList<>();
 
-		return q.getResultList();
+	public String[] getPool() {
+		List<String> pool = new ArrayList<>();
+		for (Gamble gamble : g) {
+			for (int x = gamble.getWeight(); x > 0; x--) {
+				pool.add(gamble.getSlot());
+			}
+		}
+
+		return pool.toArray(new String[0]);
 	}
 }

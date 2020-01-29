@@ -24,9 +24,9 @@ import com.kuuhaku.controller.sqlite.CustomAnswerDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.events.JDAEvents;
-import com.kuuhaku.model.CustomAnswers;
-import com.kuuhaku.model.GuildConfig;
-import com.kuuhaku.model.Log;
+import com.kuuhaku.model.persistent.CustomAnswers;
+import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.Log;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
@@ -217,7 +217,7 @@ public class GuildEvents extends ListenerAdapter {
 				}
 
 				try {
-					com.kuuhaku.model.Member m = MemberDAO.getMemberById(member.getUser().getId() + member.getGuild().getId());
+					com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(member.getUser().getId() + member.getGuild().getId());
 					if (m.getMid() == null) {
 						m.setMid(author.getId());
 						m.setSid(guild.getId());

@@ -89,8 +89,8 @@ public class MarryCommand extends Command {
 					switch (msg.getContentRaw().toLowerCase()) {
 						case "sim":
 							channel.sendMessage("Eu os declaro husbando e waifu!").queue();
-							com.kuuhaku.model.Member h = MemberDAO.getMemberById(author.getId() + guild.getId());
-							com.kuuhaku.model.Member w = MemberDAO.getMemberById(message.getMentionedUsers().get(0).getId() + guild.getId());
+							com.kuuhaku.model.persistent.Member h = MemberDAO.getMemberById(author.getId() + guild.getId());
+							com.kuuhaku.model.persistent.Member w = MemberDAO.getMemberById(message.getMentionedUsers().get(0).getId() + guild.getId());
 
 							WaifuDAO.saveMemberWaifu(h, message.getMentionedUsers().get(0));
 							h.marry(message.getMentionedUsers().get(0));

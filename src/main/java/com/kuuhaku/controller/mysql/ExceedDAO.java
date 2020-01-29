@@ -17,8 +17,9 @@
 
 package com.kuuhaku.controller.mysql;
 
-import com.kuuhaku.model.Member;
-import com.kuuhaku.model.MonthWinner;
+import com.kuuhaku.model.common.Exceed;
+import com.kuuhaku.model.persistent.Member;
+import com.kuuhaku.model.persistent.MonthWinner;
 import com.kuuhaku.utils.ExceedEnums;
 
 import javax.persistence.EntityManager;
@@ -29,20 +30,7 @@ import java.util.List;
 
 public class ExceedDAO {
 	@SuppressWarnings("unchecked")
-	public static List<com.kuuhaku.model.Member> getExceedMembers(ExceedEnums ex) {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createQuery("SELECT m FROM Member m WHERE exceed LIKE ?1", com.kuuhaku.model.Member.class);
-		q.setParameter(1, ex.getName());
-
-		List<com.kuuhaku.model.Member> members = (List<Member>) q.getResultList();
-		em.close();
-
-		return members;
-	}
-
-	@SuppressWarnings("unchecked")
-	public static com.kuuhaku.model.Exceed getExceed(ExceedEnums ex) {
+	public static List<Member> getExceedMembers(ExceedEnums ex) {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT m FROM Member m WHERE exceed LIKE ?1", Member.class);
@@ -51,7 +39,20 @@ public class ExceedDAO {
 		List<Member> members = (List<Member>) q.getResultList();
 		em.close();
 
-		return new com.kuuhaku.model.Exceed(ex, members.size(), members.stream().mapToLong(Member::getXp).sum());
+		return members;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static Exceed getExceed(ExceedEnums ex) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT m FROM Member m WHERE exceed LIKE ?1", Member.class);
+		q.setParameter(1, ex.getName());
+
+		List<Member> members = (List<Member>) q.getResultList();
+		em.close();
+
+		return new Exceed(ex, members.size(), members.stream().mapToLong(Member::getXp).sum());
 	}
 
 	public static ExceedEnums findWinner() {
