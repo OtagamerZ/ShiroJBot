@@ -54,13 +54,15 @@ public class MarryCommand extends Command {
 			} else if (message.getMentionedUsers().get(0) == Main.getJibril().getSelfUser() && !author.getId().equals(Main.getInfo().getNiiChan())) {
 				try {
 					Objects.requireNonNull(Main.getJibril().getTextChannelById(channel.getId())).sendMessage(":x: | Não tenho interesse em meros mortais!").queue();
-				} catch (InsufficientPermissionException ignore) {
+				} catch (InsufficientPermissionException e) {
+					channel.sendMessage(":x: | Ela não não tem como responder aqui, mas disse que não!").queue();
 				}
 				return;
 			} else if (message.getMentionedUsers().get(0) == Main.getTet().getSelfUser()) {
 				try {
 					Objects.requireNonNull(Main.getTet().getTextChannelById(channel.getId())).sendMessage(":x: | Nah, meus interesses são outros!").queue();
-				} catch (InsufficientPermissionException ignore) {
+				} catch (InsufficientPermissionException e) {
+					channel.sendMessage(":x: | Ele pediu pra dizer que não!").queue();
 				}
 				return;
 			} else if (!MemberDAO.getMemberById(author.getId() + guild.getId()).getWaifu().isEmpty() || !MemberDAO.getMemberById(message.getMentionedUsers().get(0).getId() + guild.getId()).getWaifu().isEmpty()) {
@@ -68,13 +70,15 @@ public class MarryCommand extends Command {
 				return;
 			}
 
+			channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + ", deseja casar-se com " + author.getAsMention() + ", por toda eternidade (ou não) em troca de um bônus de XP?" +
+					"\nDigite `SIM` para aceitar ou `NÃO` para negar.").queue();
+
 			Main.getInfo().getAPI().addEventListener(new WaifuListener() {
 				private final Consumer<Void> success = s -> {
 					channel.sendMessage("Visto que " + author.getAsMention() + " foi deixado no vácuo, vou me retirar e esperar um outro pedido.").queue();
 					Main.getInfo().getAPI().removeEventListener(this);
 				};
-				private Future<?> timeout = channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + ", deseja casar-se com " + author.getAsMention() + ", por toda eternidade (ou não) em troca de um bônus de XP?" +
-						"\nDigite `SIM` para aceitar ou `NÃO` para negar.").queueAfter(10, TimeUnit.MINUTES, msg -> success.accept(null));
+				private Future<?> timeout = message.clearReactions().queueAfter(10, TimeUnit.MINUTES, success);
 
 				@Override
 				public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
