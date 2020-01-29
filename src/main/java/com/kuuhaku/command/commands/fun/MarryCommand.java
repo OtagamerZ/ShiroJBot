@@ -22,8 +22,10 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 import javax.persistence.NoResultException;
+import java.util.Objects;
 
 public class MarryCommand extends Command {
 	public MarryCommand() {
@@ -36,11 +38,26 @@ public class MarryCommand extends Command {
 			if (message.getMentionedUsers().size() < 1) {
 				channel.sendMessage(":x: | Você precisa mencionar um usuário!").queue();
 				return;
+			} else if (message.getMentionedUsers().get(0).isBot()) {
+				channel.sendMessage(":x: | Não acho que ele(a) vá aceitar seu pedido...").queue();
+				return;
 			} else if (message.getMentionedUsers().get(0) == author) {
 				channel.sendMessage(":x: | Por mais que eu respeite seu lado otaku, você não pode se casar com sí mesmo!").queue();
 				return;
 			} else if (message.getMentionedUsers().get(0) == Main.getInfo().getAPI().getSelfUser() && !author.getId().equals(Main.getInfo().getNiiChan())) {
 				channel.sendMessage(":x: | Eu...já tenho alguém que estou de olho!").queue();
+				return;
+			} else if (message.getMentionedUsers().get(0) == Main.getJibril().getSelfUser() && !author.getId().equals(Main.getInfo().getNiiChan())) {
+				try {
+					Objects.requireNonNull(Main.getJibril().getTextChannelById(channel.getId())).sendMessage(":x: | Não tenho interesse em meros mortais!").queue();
+				} catch (InsufficientPermissionException ignore) {
+				}
+				return;
+			} else if (message.getMentionedUsers().get(0) == Main.getTet().getSelfUser()) {
+				try {
+					Objects.requireNonNull(Main.getTet().getTextChannelById(channel.getId())).sendMessage(":x: | Nah, meus interesses são outros!").queue();
+				} catch (InsufficientPermissionException ignore) {
+				}
 				return;
 			} else if (!MemberDAO.getMemberById(author.getId() + guild.getId()).getWaifu().isEmpty() || !MemberDAO.getMemberById(message.getMentionedUsers().get(0).getId() + guild.getId()).getWaifu().isEmpty()) {
 				channel.sendMessage(":x: | Essa pessoa já está casada, hora de passar pra frente!").queue();
