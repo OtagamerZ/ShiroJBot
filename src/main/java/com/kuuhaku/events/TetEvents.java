@@ -104,9 +104,7 @@ public class TetEvents extends ListenerAdapter {
 				commandName = rawMsgNoPrefix.split(" ")[0].trim();
 			}
 
-			System.out.println(message.getContentRaw().trim());
-
-			if (message.getContentRaw().trim().equals("<@" + Main.getTet().getSelfUser().getId() + ">")) {
+			if (message.getContentRaw().trim().equals("<@" + Main.getTet().getSelfUser().getId() + ">") || message.getContentRaw().trim().equals("<@!" + Main.getTet().getSelfUser().getId() + ">")) {
 				channel.sendMessage("Opa, eae jogador! Meus comandos são listados pela Shiro, digite `" + prefix + "help` e clique na categoria `RPG` para vê-los!").queue();
 				return;
 			}
@@ -149,8 +147,7 @@ public class TetEvents extends ListenerAdapter {
 						break;
 				}
 			}
-		} catch (InsufficientPermissionException e) {
-			e.printStackTrace();
+		} catch (InsufficientPermissionException ignore) {
 		} catch (ErrorResponseException e) {
 			Helper.logger(this.getClass()).error(e.getErrorCode() + ": " + e + " | " + e.getStackTrace()[0]);
 		}
