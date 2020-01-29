@@ -39,7 +39,7 @@ public class PixelCanvas {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(columnDefinition = "TEXT DEFAULT ''")
+	@Column(columnDefinition = "TEXT")
 	private String canvas = "";
 
 	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")

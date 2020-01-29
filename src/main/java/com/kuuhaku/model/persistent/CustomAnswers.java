@@ -33,7 +33,7 @@ public class CustomAnswers {
     @Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
     private String gatilho = "";
 
-    @Column(columnDefinition = "TEXT DEFAULT ''")
+    @Column(columnDefinition = "TEXT")
     private String answer = "";
 
     @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
