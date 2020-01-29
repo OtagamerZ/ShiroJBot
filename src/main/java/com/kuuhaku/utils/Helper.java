@@ -424,9 +424,11 @@ public class Helper {
 						}
 					});
 
-
-					Pages.buttonize(Main.getInfo().getAPI(), msg, buttons, false);
-
+					msg.delete().queue(s ->
+							channel.sendMessage(msg).queue(q ->
+									Pages.buttonize(Main.getInfo().getAPI(), msg, buttons, false)
+							)
+					);
 				} else {
 					Message msg = channel.retrieveMessageById(jo.getString("msgId")).submit().get();
 					resolveButton(g, jo, buttons);
@@ -441,7 +443,11 @@ public class Helper {
 						}
 					});
 
-					Pages.buttonize(Main.getInfo().getAPI(), msg, buttons, true);
+					msg.delete().queue(s ->
+							channel.sendMessage(msg).queue(q ->
+									Pages.buttonize(Main.getInfo().getAPI(), msg, buttons, true)
+							)
+					);
 				}
 			} catch (NullPointerException | ErrorResponseException | InterruptedException | ExecutionException e) {
 				Helper.logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
@@ -487,7 +493,11 @@ public class Helper {
 					}
 				});
 
-				msg.clearReactions().queue(s -> Pages.buttonize(Main.getInfo().getAPI(), msg, buttons, false));
+				msg.delete().queue(s ->
+						channel.sendMessage(msg).queue(q ->
+								Pages.buttonize(Main.getInfo().getAPI(), msg, buttons, false)
+						)
+				);
 			});
 		});
 	}
