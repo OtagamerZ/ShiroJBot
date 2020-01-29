@@ -77,7 +77,13 @@ public class JibrilEvents extends ListenerAdapter {
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		try {
-			if (event.getMessage().getContentRaw().startsWith(GuildDAO.getGuildById(event.getGuild().getId()).getPrefix())) return;
+			if (event.getMessage().getContentRaw().startsWith(GuildDAO.getGuildById(event.getGuild().getId()).getPrefix()))
+				return;
+
+			if (event.getMessage().getContentRaw().trim().equals("<@" + Main.getJibril().getSelfUser().getId() + ">")) {
+				event.getChannel().sendMessage("Oi? Ah, você quer saber meus comandos né?\nBem, eu não sou uma bot de comandos, eu apenas gerencio o chat global, que pode ser definido pelos moderadores desse servidor usando `" + GuildDAO.getGuildById(event.getGuild().getId()).getPrefix() + "settings crelay #CANAL`!").queue();
+				return;
+			}
 
 			if (Main.getRelay().getRelayMap().containsValue(event.getChannel().getId()) && !event.getAuthor().isBot()) {
 				Member mb;
@@ -92,11 +98,6 @@ public class JibrilEvents extends ListenerAdapter {
 					mb.setMid(event.getAuthor().getId());
 					mb.setSid(event.getGuild().getId());
 					com.kuuhaku.controller.sqlite.MemberDAO.updateMemberConfigs(mb);
-				}
-
-				if (event.getMessage().getContentRaw().trim().equals("<@" + Main.getJibril().getSelfUser().getId() + ">")) {
-					event.getChannel().sendMessage("Oi? Ah, você quer saber meus comandos né?\nBem, eu não sou uma bot de comandos, eu apenas gerencio o chat global, que pode ser definido pelos moderadores desse servidor usando `" + GuildDAO.getGuildById(event.getGuild().getId()).getPrefix() + "settings crelay #CANAL`!").queue();
-					return;
 				}
 
 				if (!mb.isRulesSent())
