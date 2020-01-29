@@ -49,7 +49,7 @@ public class Member {
 	@Column(columnDefinition = "TEXT")
 	private String bg = "https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg";
 
-	@Column(columnDefinition = "TEXT DEFAULT ''")
+	@Column(columnDefinition = "TEXT")
 	private String bio = "";
 
 	//NUMBERS
