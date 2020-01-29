@@ -17,7 +17,7 @@
 
 package com.kuuhaku.controller.mysql;
 
-import com.kuuhaku.model.GlobalMessage;
+import com.kuuhaku.model.persistent.GlobalMessage;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;

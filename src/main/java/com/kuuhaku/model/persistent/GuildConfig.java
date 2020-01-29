@@ -15,7 +15,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model;
+package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
@@ -37,43 +37,93 @@ import java.util.Map;
 @Table(name = "guildConfig")
 public class GuildConfig {
 	@Id
-	private String guildID;
-	private String name;
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String guildID = "";
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String name = "";
+
+	@Column(columnDefinition = "VARCHAR(191)")
 	private String prefix = Main.getInfo().getDefaultPrefix();
-	private String msgBoasVindas = "Seja bem-vindo(a) ao %guild%, %user%!";
-	private String msgAdeus = "Ahh...%user% deixou este servidor!";
-	private String canalbv = null;
-	private String canaladeus = null;
-	private String canalsug = null;
-	@Column(columnDefinition = "int default 60")
-	private int pollTime = 60;
-	private String canallvl = null;
-	private String canalrelay = null;
-	private String cargowarn = null;
-	@Column(columnDefinition = "int default 60")
-	private int warnTime = 60;
-	@Column(columnDefinition = "text")
-    private String cargoslvl = "{}";
-	private String lvlNotif = "true";
-	private String cargoNew = "{}";
-	private boolean anyTell = false;
-	private String noLinkChannels = "";
-	@Column(length = 191)
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String cargowarn = "";
+
+
+	//CHANNELS
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String canalbv = "";
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String canaladeus = "";
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String canalsug = "";
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String canallvl = "";
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String canalrelay = "";
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
 	private String canalLog = "";
-	private String noSpamChannels = "";
-	@Column(columnDefinition = "int default 5")
-	private int noSpamAmount = 5;
-	@Column(columnDefinition = "boolean default false")
-	private boolean hardAntispam;
-	@Column(columnDefinition = "boolean default false")
-	private boolean antiRaid = false;
-	@Column(columnDefinition = "boolean default false")
-	private boolean liteMode = false;
-	@Column(columnDefinition = "boolean default false")
-	private boolean allowImg = false;
+
+	//TEXTS
+	@Column(columnDefinition = "TEXT")
+	private String msgBoasVindas = "Seja bem-vindo(a) ao %guild%, %user%!";
+
+	@Column(columnDefinition = "TEXT")
+	private String msgAdeus = "Ahh...%user% deixou este servidor!";
+
+	@Column(columnDefinition = "TEXT DEFAULT ''")
+	private String cargoslvl = "";
+
+	@Column(columnDefinition = "TEXT DEFAULT ''")
 	private String disabledModules = "";
+
+	@Column(columnDefinition = "TEXT DEFAULT ''")
 	private String buttonConfigs = "";
-	private boolean markForDelete;
+
+	//NUMBERS
+	@Column(columnDefinition = "INT DEFAULT 60")
+	private int pollTime = 60;
+
+	@Column(columnDefinition = "INT DEFAULT 60")
+	private int warnTime = 60;
+
+	@Column(columnDefinition = "INT DEFAULT 5")
+	private int noSpamAmount = 5;
+
+	//CHANNELS
+	@Column(columnDefinition = "TEXT DEFAULT ''")
+	private String noLinkChannels = "";
+
+	@Column(columnDefinition = "TEXT DEFAULT ''")
+	private String noSpamChannels = "";
+
+
+	//SWITCHES
+	@Column(columnDefinition = "BOOLEAN DEFAULT TRUE")
+	private boolean lvlNotif = true;
+
+	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	private boolean anyTell = false;
+
+	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	private boolean hardAntispam = false;
+
+	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	private boolean antiRaid = false;
+
+	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	private boolean liteMode = false;
+
+	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	private boolean allowImg = false;
+
+	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	private boolean markForDelete = false;
 
 	public GuildConfig() {
 	}
@@ -167,19 +217,11 @@ public class GuildConfig {
 	}
 
 	public boolean isLvlNotif() {
-		return Boolean.parseBoolean(lvlNotif);
+		return lvlNotif;
 	}
 
 	public void setLvlNotif(boolean lvlNotif) {
-		this.lvlNotif = Boolean.toString(lvlNotif);
-	}
-
-	public Map<String, Object> getCargoNew() {
-		return new JSONObject(cargoNew).toMap();
-	}
-
-	public void setCargoNew(JSONObject cargoNew) {
-		this.cargoNew = cargoNew.toString();
+		this.lvlNotif = lvlNotif;
 	}
 
 	public boolean isNotAnyTell() {

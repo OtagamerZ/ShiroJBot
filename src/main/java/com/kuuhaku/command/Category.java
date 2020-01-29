@@ -18,7 +18,7 @@
 package com.kuuhaku.command;
 
 import com.kuuhaku.controller.mysql.TagDAO;
-import com.kuuhaku.model.GuildConfig;
+import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.PrivilegeLevel;
 import net.dv8tion.jda.api.entities.Guild;
 

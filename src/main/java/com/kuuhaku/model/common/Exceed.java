@@ -15,28 +15,30 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model;
+package com.kuuhaku.model.common;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import java.time.LocalDate;
+import com.kuuhaku.utils.ExceedEnums;
 
-@Entity
-public class MonthWinner {
-	@Id
-	private int id;
-	private String exceed;
-	private final LocalDate expiry = LocalDate.now().plusWeeks(1);
+public class Exceed {
+	private final ExceedEnums exceed;
+	private final int members;
+	private final long exp;
 
-	public String getExceed() {
+	public Exceed(ExceedEnums exceed, int members, long exp) {
+		this.exceed = exceed;
+		this.members = members;
+		this.exp = exp;
+	}
+
+	public ExceedEnums getExceed() {
 		return exceed;
 	}
 
-	public void setExceed(String exceed) {
-		this.exceed = exceed;
+	public int getMembers() {
+		return members;
 	}
 
-	public LocalDate getExpiry() {
-		return expiry;
+	public long getExp() {
+		return exp;
 	}
 }

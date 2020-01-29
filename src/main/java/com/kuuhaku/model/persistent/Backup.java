@@ -15,7 +15,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model;
+package com.kuuhaku.model.persistent;
 
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Guild;
@@ -36,10 +36,16 @@ import java.util.Objects;
 public class Backup {
 	@Id
 	private int id;
-	private String guild;
-	private String serverData;
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String guild = "";
+
+	@Column(columnDefinition = "LONGTEXT DEFAULT ''")
+	private String serverData = "";
+
 	@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private Timestamp lastRestored;
+
 	@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private Timestamp lastBackup;
 

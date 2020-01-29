@@ -17,7 +17,7 @@
 
 package com.kuuhaku.controller.sqlite;
 
-import com.kuuhaku.model.GuildConfig;
+import com.kuuhaku.model.persistent.GuildConfig;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;

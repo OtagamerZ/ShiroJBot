@@ -22,7 +22,8 @@ import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.sqlite.MemberDAO;
-import com.kuuhaku.model.Member;
+import com.kuuhaku.model.persistent.Member;
+import com.kuuhaku.model.persistent.Votes;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -39,7 +40,7 @@ public class VotesDAO {
 	public static void voteUser(Guild guild, User user, User target, boolean vote) {
 		EntityManager em = Manager.getEntityManager();
 
-		com.kuuhaku.model.Votes v = new com.kuuhaku.model.Votes();
+		Votes v = new Votes();
 		v.addArgs(guild, user, target, vote);
 
 		em.getTransaction().begin();
@@ -57,7 +58,7 @@ public class VotesDAO {
 	public static void getVotes(Guild guild, TextChannel channel) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT v FROM Votes v WHERE guildID = ?1 AND vote != 0", com.kuuhaku.model.Votes.class);
+		Query q = em.createQuery("SELECT v FROM Votes v WHERE guildID = ?1 AND vote != 0", Votes.class);
 		q.setParameter(1, guild.getId());
 
 		class result {
@@ -74,7 +75,7 @@ public class VotesDAO {
 			}
 		}
 
-		List<com.kuuhaku.model.Votes> votes = (List<com.kuuhaku.model.Votes>) q.getResultList();
+		List<Votes> votes = (List<Votes>) q.getResultList();
 		HashMap<String, result> voteMap = new HashMap<>();
 
 		votes.forEach(v -> {

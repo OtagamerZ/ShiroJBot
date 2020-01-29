@@ -17,7 +17,7 @@
 
 package com.kuuhaku.controller.mysql;
 
-import com.kuuhaku.model.Token;
+import com.kuuhaku.model.persistent.Token;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;

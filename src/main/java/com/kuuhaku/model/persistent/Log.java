@@ -15,24 +15,30 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model;
+package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.utils.Helper;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 
 @Entity
 public class Log {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private String user;
-	private String guild;
-	private String command;
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String user = "";
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String guild = "";
+
+	@Column(columnDefinition = "TEXT DEFAULT ''")
+	private String command = "";
+
+	@Column(columnDefinition = "VARCHAR(191)")
 	private final String timestamp = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.dateformat);
 
 	public int getId() {

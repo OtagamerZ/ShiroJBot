@@ -22,7 +22,7 @@ import com.kuuhaku.handlers.games.rpg.actors.Actor;
 import com.kuuhaku.handlers.games.rpg.entities.Chest;
 import com.kuuhaku.handlers.games.rpg.entities.Item;
 import com.kuuhaku.handlers.games.rpg.exceptions.UnknownItemException;
-import com.kuuhaku.model.Profile;
+import com.kuuhaku.model.common.Profile;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;

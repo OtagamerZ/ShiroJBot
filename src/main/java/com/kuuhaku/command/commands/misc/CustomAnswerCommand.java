@@ -26,7 +26,7 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.BackupDAO;
 import com.kuuhaku.controller.sqlite.CustomAnswerDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
-import com.kuuhaku.model.CustomAnswers;
+import com.kuuhaku.model.persistent.CustomAnswers;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.PrivilegeLevel;
 import net.dv8tion.jda.api.EmbedBuilder;

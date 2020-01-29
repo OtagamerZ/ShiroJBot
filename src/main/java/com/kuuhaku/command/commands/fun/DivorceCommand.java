@@ -33,7 +33,7 @@ public class DivorceCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		try {
-			com.kuuhaku.model.Member mb = MemberDAO.getMemberById(author.getId() + guild.getId());
+			com.kuuhaku.model.persistent.Member mb = MemberDAO.getMemberById(author.getId() + guild.getId());
 			if (mb.getWaifu() == null || mb.getWaifu().equals("")) {
 				channel.sendMessage(":x: | Você não possui uma waifu!").queue();
 				return;

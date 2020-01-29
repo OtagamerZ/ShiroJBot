@@ -15,44 +15,40 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model;
+package com.kuuhaku.model.common;
 
-import java.util.ArrayList;
-import java.util.List;
+public class YoutubeVideo {
+	private final String id, title, desc, thumb, channel;
 
-public class GamblePool {
-	public static class Gamble {
-		private final String slot;
-		private final int weight;
-
-		public Gamble(String s, int w) {
-			this.slot = s;
-			this.weight = w;
-		}
-
-		String getSlot() {
-			return slot;
-		}
-
-		int getWeight() {
-			return weight;
-		}
+	public YoutubeVideo(String id, String title, String desc, String thumb, String channel) {
+		this.id = id;
+		this.title = title;
+		this.desc = desc;
+		this.thumb = thumb;
+		this.channel = channel;
 	}
 
-	public void addGamble(Gamble gamble) {
-		g.add(gamble);
+	public String getUrl() {
+		return "https://www.youtube.com/watch?v=" + id;
 	}
 
-	private static final List<Gamble> g = new ArrayList<>();
+	public String getId() {
+		return id;
+	}
 
-	public String[] getPool() {
-		List<String> pool = new ArrayList<>();
-		for (Gamble gamble : g) {
-			for (int x = gamble.getWeight(); x > 0; x--) {
-				pool.add(gamble.getSlot());
-			}
-		}
+	public String getTitle() {
+		return title;
+	}
 
-		return pool.toArray(new String[0]);
+	public String getDesc() {
+		return desc;
+	}
+
+	public String getThumb() {
+		return thumb;
+	}
+
+	public String getChannel() {
+		return channel;
 	}
 }

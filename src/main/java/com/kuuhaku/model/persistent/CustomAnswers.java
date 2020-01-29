@@ -15,19 +15,28 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model;
+package com.kuuhaku.model.persistent;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
 public class CustomAnswers {
     @Id
-	private final Long id = System.currentTimeMillis();
-    private String guildID;
-    private String gatilho;
-    private String answer;
-    private boolean markForDelete;
+    private final long id = System.currentTimeMillis();
+
+    @Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+    private String guildID = "";
+
+    @Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+    private String gatilho = "";
+
+    @Column(columnDefinition = "TEXT DEFAULT ''")
+    private String answer = "";
+
+    @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private boolean markForDelete = false;
 
     public CustomAnswers() {
 
@@ -53,7 +62,7 @@ public class CustomAnswers {
         this.answer = answer;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 

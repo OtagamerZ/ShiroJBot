@@ -17,7 +17,7 @@
 
 package com.kuuhaku.controller.mysql;
 
-import com.kuuhaku.model.PermaBlock;
+import com.kuuhaku.model.persistent.PermaBlock;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;

@@ -28,19 +28,19 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
         <!-- entidade mapeada -->
-        <class>com.kuuhaku.model.GuildConfig</class>
-        <class>com.kuuhaku.model.Member</class>
-        <class>com.kuuhaku.model.CustomAnswers</class>
-        <class>com.kuuhaku.model.Tags</class>
-        <class>com.kuuhaku.model.PermaBlock</class>
-        <class>com.kuuhaku.model.MonthWinner</class>
-        <class>com.kuuhaku.model.PixelCanvas</class>
-        <class>com.kuuhaku.model.Votes</class>
-        <class>com.kuuhaku.model.Log</class>
-        <class>com.kuuhaku.model.Backup</class>
-        <class>com.kuuhaku.model.Token</class>
-        <class>com.kuuhaku.model.GlobalMessage</class>
-        <class>com.kuuhaku.model.AppUser</class>
+        <class>com.kuuhaku.model.persistent.GuildConfig</class>
+        <class>com.kuuhaku.model.persistent.Member</class>
+        <class>com.kuuhaku.model.persistent.CustomAnswers</class>
+        <class>com.kuuhaku.model.persistent.Tags</class>
+        <class>com.kuuhaku.model.persistent.PermaBlock</class>
+        <class>com.kuuhaku.model.persistent.MonthWinner</class>
+        <class>com.kuuhaku.model.persistent.PixelCanvas</class>
+        <class>com.kuuhaku.model.persistent.Votes</class>
+        <class>com.kuuhaku.model.persistent.Log</class>
+        <class>com.kuuhaku.model.persistent.Backup</class>
+        <class>com.kuuhaku.model.persistent.Token</class>
+        <class>com.kuuhaku.model.persistent.GlobalMessage</class>
+        <class>com.kuuhaku.model.persistent.AppUser</class>
         <class>java.lang.String</class>
 
         <properties>
@@ -72,12 +72,12 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
         <!-- entidade mapeada -->
-        <class>com.kuuhaku.model.GuildConfig</class>
-        <class>com.kuuhaku.model.Member</class>
-        <class>com.kuuhaku.model.CustomAnswers</class>
-        <class>com.kuuhaku.model.Tags</class>
-        <class>com.kuuhaku.model.PermaBlock</class>
-        <class>com.kuuhaku.model.AppUser</class>
+        <class>com.kuuhaku.model.persistent.GuildConfig</class>
+        <class>com.kuuhaku.model.persistent.Member</class>
+        <class>com.kuuhaku.model.persistent.CustomAnswers</class>
+        <class>com.kuuhaku.model.persistent.Tags</class>
+        <class>com.kuuhaku.model.persistent.PermaBlock</class>
+        <class>com.kuuhaku.model.persistent.AppUser</class>
 
         <properties>
             <!-- dados da conexao -->

@@ -17,7 +17,8 @@
 
 package com.kuuhaku.controller.mysql;
 
-import com.kuuhaku.model.*;
+import com.kuuhaku.model.common.DataDump;
+import com.kuuhaku.model.persistent.*;
 import net.dv8tion.jda.api.entities.Guild;
 
 import javax.persistence.EntityManager;

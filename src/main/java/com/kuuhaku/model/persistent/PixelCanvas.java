@@ -15,16 +15,14 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model;
+package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.requests.RestAction;
 
 import javax.imageio.ImageIO;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -38,10 +36,14 @@ import static com.kuuhaku.utils.Helper.CANVAS_SIZE;
 @Entity
 public class PixelCanvas {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+
+	@Column(columnDefinition = "TEXT DEFAULT ''")
 	private String canvas = "";
-	@Column(columnDefinition = "boolean default false")
-	private boolean shelved;
+
+	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	private boolean shelved = false;
 
 	private BufferedImage getCanvas() {
 		if (canvas != null) {

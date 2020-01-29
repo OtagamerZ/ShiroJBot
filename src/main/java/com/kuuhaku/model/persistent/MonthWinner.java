@@ -15,17 +15,32 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model;
+package com.kuuhaku.model.persistent;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
-public class PermaBlock {
+public class MonthWinner {
 	@Id
-	private String id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 
-	void block(String id) {
-		this.id = id;
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String exceed = "";
+
+	@Column(columnDefinition = "DATE")
+	private final LocalDate expiry = LocalDate.now().plusWeeks(1);
+
+	public String getExceed() {
+		return exceed;
+	}
+
+	public void setExceed(String exceed) {
+		this.exceed = exceed;
+	}
+
+	public LocalDate getExpiry() {
+		return expiry;
 	}
 }
