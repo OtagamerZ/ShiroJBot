@@ -80,7 +80,7 @@ public class JibrilEvents extends ListenerAdapter {
 			if (event.getMessage().getContentRaw().startsWith(GuildDAO.getGuildById(event.getGuild().getId()).getPrefix()))
 				return;
 
-			if (event.getMessage().getContentRaw().trim().equals("<@" + Main.getJibril().getSelfUser().getId() + ">")) {
+			if (event.getMessage().getContentRaw().trim().equals("<@" + Main.getJibril().getSelfUser().getId() + ">") || event.getMessage().getContentRaw().trim().equals("<@!" + Main.getJibril().getSelfUser().getId() + ">")) {
 				event.getChannel().sendMessage("Oi? Ah, você quer saber meus comandos né?\nBem, eu não sou uma bot de comandos, eu apenas gerencio o chat global, que pode ser definido pelos moderadores desse servidor usando `" + GuildDAO.getGuildById(event.getGuild().getId()).getPrefix() + "settings crelay #CANAL`!").queue();
 				return;
 			}
