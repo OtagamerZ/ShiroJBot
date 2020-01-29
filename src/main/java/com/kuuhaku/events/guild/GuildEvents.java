@@ -104,27 +104,6 @@ public class GuildEvents extends ListenerAdapter {
 			} catch (InsufficientPermissionException ignore) {
 			}
 
-		/*
-		if(event.getPrivateChannel()!=null) {
-			try {
-				Helper.sendPM(author, Helper.formatMessage(Messages.PM_CHANNEL, "help", author));
-			} catch (Exception e) {
-				DiscordHelper.sendAutoDeleteMessage(channel, YuiHelper.formatMessage(Messages.PM_CHANNEL, "help", author));
-			}
-			return;
-		}
-
-		if(message.getInvites().size()>0 && Helper.getPrivilegeLevel(member) == PrivilegeLevel.USER) {
-            message.delete().queue();
-            try {
-				Helper.sendPM(author, Messages.INVITE_SENT);
-            } catch (Exception e) {
-				Helper.sendPM(author, ":x: | ");
-            }
-            return;
-        }
-		*/
-
 			if (GuildDAO.getGuildById(guild.getId()).getNoSpamChannels().contains(channel.getId()) && author != Main.getInfo().getSelfUser()) {
 				if (GuildDAO.getGuildById(guild.getId()).isHardAntispam()) {
 					List<Message> h = channel.getHistory().retrievePast(20).complete();
