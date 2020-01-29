@@ -20,7 +20,6 @@ package com.kuuhaku.events.guild;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.mysql.LogDAO;
-import com.kuuhaku.controller.mysql.WaifuDAO;
 import com.kuuhaku.controller.sqlite.CustomAnswerDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
@@ -233,31 +232,6 @@ public class GuildEvents extends ListenerAdapter {
 				} catch (InsufficientPermissionException ignore) {
 				}
 
-				if (Main.getInfo().getQueue().stream().anyMatch(u -> u[1].getId().equals(author.getId()))) {
-					User[][] hw = {new User[2]};
-					Main.getInfo().getQueue().stream().filter(u -> u[1].getId().equals(author.getId())).findFirst().ifPresent(users -> hw[0] = users);
-					switch (message.getContentRaw().toLowerCase()) {
-						case "sim":
-							channel.sendMessage("Eu os declaro husbando e waifu, pode trancar ela no porão agora!").queue();
-							com.kuuhaku.model.Member h = MemberDAO.getMemberById(hw[0][0].getId() + guild.getId());
-							com.kuuhaku.model.Member w = MemberDAO.getMemberById(hw[0][1].getId() + guild.getId());
-
-							WaifuDAO.saveMemberWaifu(MemberDAO.getMemberById(hw[0][0].getId() + guild.getId()), hw[0][1]);
-							h.marry(hw[0][1]);
-
-							WaifuDAO.saveMemberWaifu(MemberDAO.getMemberById(hw[0][1].getId() + guild.getId()), hw[0][0]);
-							w.marry(hw[0][0]);
-
-							MemberDAO.updateMemberConfigs(h);
-							MemberDAO.updateMemberConfigs(w);
-							Main.getInfo().getQueue().removeIf(u -> u[0].getId().equals(author.getId()) || u[1].getId().equals(author.getId()));
-							break;
-						case "não":
-							channel.sendMessage("Pois é, hoje não tivemos um casamento, que pena.").queue();
-							Main.getInfo().getQueue().removeIf(u -> u[0].getId().equals(author.getId()) || u[1].getId().equals(author.getId()));
-							break;
-					}
-				}
 				if (GuildDAO.getGuildById(guild.getId()).getNoLinkChannels().contains(channel.getId()) && Helper.findURL(message.getContentRaw())) {
 					message.delete().reason("Mensagem possui um URL").complete();
 					channel.sendMessage(member.getAsMention() + ", é proibido postar links neste canal!").queue();
