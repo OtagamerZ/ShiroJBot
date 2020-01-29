@@ -35,7 +35,7 @@ public class Log {
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
 	private String guild = "";
 
-	@Column(columnDefinition = "TEXT DEFAULT ''")
+	@Column(columnDefinition = "TEXT")
 	private String command = "";
 
 	@Column(columnDefinition = "VARCHAR(191)")

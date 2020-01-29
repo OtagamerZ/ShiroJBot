@@ -50,7 +50,7 @@ public class AppUser {
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
 	private String avatar = "";
 
-	@Column(columnDefinition = "TEXT DEFAULT ''")
+	@Column(columnDefinition = "TEXT")
 	private String guilds = "";
 
 	public AppUser() {
