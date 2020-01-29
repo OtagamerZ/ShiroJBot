@@ -29,7 +29,6 @@ import com.spaceprogram.kittycache.KittyCache;
 import io.socket.client.Socket;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
-import org.discordbots.api.client.DiscordBotListAPI;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
@@ -71,7 +70,6 @@ public class ShiroInfo {
 	private static final ArrayList<String> sheriffs = new ArrayList<String>() {{
 
 	}};
-	private static final DiscordBotListAPI dbl = new DiscordBotListAPI.Builder().token(System.getenv("DBL_TOKEN")).botId("572413282653306901").build();
 	private static final List<User[]> queue = new ArrayList<>();
 	private static final Map<String, Integer[]> polls = new HashMap<>();
 	private static final Map<Long, GuildMusicManager> gmms = new HashMap<>();
@@ -152,10 +150,6 @@ public class ShiroInfo {
 
 	public ArrayList<String> getSheriffs() {
 		return sheriffs;
-	}
-
-	public DiscordBotListAPI getDBL() {
-		return dbl;
 	}
 
 	public List<User[]> getQueue() {
