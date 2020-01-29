@@ -74,9 +74,7 @@ public class MarryCommand extends Command {
 					"\nDigite `SIM` para aceitar ou `NÃO` para negar.").queue();
 
 			Main.getInfo().getAPI().addEventListener(new WaifuListener() {
-				private final Consumer<Void> success = s -> {
-					Main.getInfo().getAPI().removeEventListener(this);
-				};
+				private final Consumer<Void> success = s -> Main.getInfo().getAPI().removeEventListener(this);
 				private Future<?> timeout = channel.sendMessage("Visto que " + author.getAsMention() + " foi deixado no vácuo, vou me retirar e esperar um outro pedido.").queueAfter(10, TimeUnit.MINUTES, msg -> success.accept(null));
 
 				@Override
