@@ -18,7 +18,7 @@
 package com.kuuhaku.handlers.api.endpoint;
 
 import com.kuuhaku.controller.sqlite.MemberDAO;
-import com.kuuhaku.model.Member;
+import com.kuuhaku.model.persistent.Member;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;

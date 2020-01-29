@@ -17,7 +17,7 @@
 
 package com.kuuhaku.events.cron;
 
-import com.kuuhaku.model.RelayBlockList;
+import com.kuuhaku.model.common.RelayBlockList;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;

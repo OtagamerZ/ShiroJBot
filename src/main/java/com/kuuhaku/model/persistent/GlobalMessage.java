@@ -15,24 +15,31 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model;
+package com.kuuhaku.model.persistent;
 
 import org.json.JSONObject;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class GlobalMessage {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private String userId;
-	private String name;
-	private String avatar;
-	private String content;
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String userId = "";
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String name = "";
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String avatar = "";
+
+	@Column(columnDefinition = "TEXT DEFAULT ''")
+	private String content = "";
+
+	@Column(columnDefinition = "BIGINT")
 	private long time = System.currentTimeMillis();
 
 	public int getId() {

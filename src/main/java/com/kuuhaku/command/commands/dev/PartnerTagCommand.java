@@ -21,7 +21,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.mysql.TagDAO;
-import com.kuuhaku.model.Tags;
+import com.kuuhaku.model.persistent.Tags;
 import net.dv8tion.jda.api.entities.*;
 
 import javax.persistence.NoResultException;

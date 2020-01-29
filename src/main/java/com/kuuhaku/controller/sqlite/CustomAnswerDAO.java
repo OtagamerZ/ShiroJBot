@@ -17,7 +17,7 @@
 
 package com.kuuhaku.controller.sqlite;
 
-import com.kuuhaku.model.CustomAnswers;
+import com.kuuhaku.model.persistent.CustomAnswers;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Guild;
 

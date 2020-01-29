@@ -17,7 +17,7 @@
 
 package com.kuuhaku.controller.sqlite;
 
-import com.kuuhaku.model.AppUser;
+import com.kuuhaku.model.persistent.AppUser;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;

@@ -15,7 +15,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model;
+package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.sqlite.MemberDAO;
@@ -34,12 +34,24 @@ public class AppUser {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private String uid;
-	private String login;
-	private String password;
-	private String name;
-	private String avatar;
-	private String guilds;
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String uid = "";
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String login = "";
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String password = "";
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String name = "";
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String avatar = "";
+
+	@Column(columnDefinition = "TEXT DEFAULT ''")
+	private String guilds = "";
 
 	public AppUser() {
 	}

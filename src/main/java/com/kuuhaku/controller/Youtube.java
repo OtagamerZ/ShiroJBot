@@ -19,7 +19,7 @@ package com.kuuhaku.controller;
 
 import com.google.api.services.youtube.YouTube;
 import com.kuuhaku.Main;
-import com.kuuhaku.model.YoutubeVideo;
+import com.kuuhaku.model.common.YoutubeVideo;
 import com.kuuhaku.utils.Helper;
 import org.json.JSONArray;
 import org.json.JSONObject;

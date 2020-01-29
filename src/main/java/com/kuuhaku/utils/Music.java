@@ -20,7 +20,7 @@ package com.kuuhaku.utils;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.Youtube;
 import com.kuuhaku.handlers.music.GuildMusicManager;
-import com.kuuhaku.model.YoutubeVideo;
+import com.kuuhaku.model.common.YoutubeVideo;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;

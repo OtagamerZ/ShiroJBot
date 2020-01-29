@@ -19,7 +19,7 @@ package com.kuuhaku.command.commands.information;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.model.Profile;
+import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 

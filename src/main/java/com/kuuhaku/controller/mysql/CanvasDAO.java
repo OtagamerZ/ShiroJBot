@@ -17,7 +17,7 @@
 
 package com.kuuhaku.controller.mysql;
 
-import com.kuuhaku.model.PixelCanvas;
+import com.kuuhaku.model.persistent.PixelCanvas;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;

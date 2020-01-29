@@ -15,40 +15,35 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model;
+package com.kuuhaku.model.persistent;
 
-public class YoutubeVideo {
-	private final String id, title, desc, thumb, channel;
+import javax.persistence.*;
 
-	public YoutubeVideo(String id, String title, String desc, String thumb, String channel) {
-		this.id = id;
-		this.title = title;
-		this.desc = desc;
-		this.thumb = thumb;
-		this.channel = channel;
+@Entity
+public class Token {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String token = "";
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String holder = "";
+
+	@Column(columnDefinition = "INT DEFAULT 0")
+	private int calls = 0;
+
+	public String getToken() {
+		return token;
 	}
 
-	public String getUrl() {
-		return "https://www.youtube.com/watch?v=" + id;
+	public String getHolder() {
+		return holder;
 	}
 
-	public String getId() {
-		return id;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public String getDesc() {
-		return desc;
-	}
-
-	public String getThumb() {
-		return thumb;
-	}
-
-	public String getChannel() {
-		return channel;
+	public Token addCall() {
+		calls++;
+		return this;
 	}
 }

@@ -23,8 +23,8 @@ import com.kuuhaku.command.commands.reactions.*;
 import com.kuuhaku.controller.sqlite.DashboardDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
-import com.kuuhaku.model.AppUser;
-import com.kuuhaku.model.GuildConfig;
+import com.kuuhaku.model.persistent.AppUser;
+import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.Music;
 import com.kuuhaku.utils.ShiroInfo;
@@ -255,7 +255,7 @@ public class JDAEvents extends ListenerAdapter {
 		try {
 			GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
 
-			com.kuuhaku.model.Member m = MemberDAO.getMemberById(event.getMember().getId() + event.getGuild().getId());
+			com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(event.getMember().getId() + event.getGuild().getId());
 			m.setMarkForDelete(true);
 			MemberDAO.updateMemberConfigs(m);
 

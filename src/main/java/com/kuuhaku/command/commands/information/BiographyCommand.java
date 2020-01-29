@@ -40,7 +40,7 @@ public class BiographyCommand extends Command {
             return;
         }
 
-        com.kuuhaku.model.Member m = MemberDAO.getMemberById(author.getId() + guild.getId());
+        com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(author.getId() + guild.getId());
         m.setBio(String.join(" ", args));
         MemberDAO.updateMemberConfigs(m);
         channel.sendMessage("Biografia definida com sucesso!").queue();

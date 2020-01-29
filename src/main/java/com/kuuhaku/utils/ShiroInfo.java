@@ -22,7 +22,7 @@ import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
 import com.kuuhaku.handlers.games.rpg.world.World;
 import com.kuuhaku.handlers.music.GuildMusicManager;
-import com.kuuhaku.model.PixelCanvas;
+import com.kuuhaku.model.persistent.PixelCanvas;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.spaceprogram.kittycache.KittyCache;
