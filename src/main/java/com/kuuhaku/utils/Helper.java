@@ -532,11 +532,9 @@ public class Helper {
 					inv.delete().queue();
 				}
 			}));
-			Invite i = Objects.requireNonNull(g.getDefaultChannel()).createInvite()
+			Objects.requireNonNull(g.getDefaultChannel()).createInvite()
 					.setMaxAge(0)
-					.complete();
-
-			sb.append(i.getUrl()).append("\n");
+					.queue(i -> sb.append(i.getUrl()).append("\n"));
 		}
 
 		return sb.toString();

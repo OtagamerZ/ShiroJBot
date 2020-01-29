@@ -7,7 +7,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/mysql/GuildDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -605,10 +610,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="544" y="399" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD/0.0.1680.1010@0.0.1680.1010" timestamp="1579615180701" />
-    <state x="600" y="391" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1579608604955">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="488" y="297" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1580267810034">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state x="488" y="297" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1366.768@0.0.1366.768" timestamp="1578441442611" />
+    <state x="488" y="297" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1366.768@0.0.1366.768" timestamp="1580267810034" />
     <state x="600" y="391" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1680.1010@0.0.1680.1010" timestamp="1579608604955" />
     <state x="682" y="113" key="extract.method.dialog" timestamp="1578793315116">
       <screen x="0" y="0" width="1366" height="768" />
@@ -624,9 +629,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="605" y="219" key="git4idea.branch.GitSmartOperationDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1579030853134" />
-    <state x="496" y="233" key="run.anything.popup" timestamp="1578593146181">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="403" y="177" key="run.anything.popup" timestamp="1580268172098">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
+    <state x="403" y="177" key="run.anything.popup/0.0.1366.768@0.0.1366.768" timestamp="1580268172098" />
     <state x="496" y="233" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1578593146181" />
     <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1580231878968">
       <screen x="0" y="0" width="1680" height="1010" />
