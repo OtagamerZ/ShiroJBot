@@ -45,9 +45,6 @@ public class MarryCommand extends Command {
 			if (message.getMentionedUsers().size() < 1) {
 				channel.sendMessage(":x: | Você precisa mencionar um usuário!").queue();
 				return;
-			} else if (message.getMentionedUsers().get(0).isBot()) {
-				channel.sendMessage(":x: | Não acho que ele(a) vá aceitar seu pedido...").queue();
-				return;
 			} else if (message.getMentionedUsers().get(0) == author) {
 				channel.sendMessage(":x: | Por mais que eu respeite seu lado otaku, você não pode se casar com sí mesmo!").queue();
 				return;
@@ -68,6 +65,9 @@ public class MarryCommand extends Command {
 				return;
 			} else if (!MemberDAO.getMemberById(author.getId() + guild.getId()).getWaifu().isEmpty() || !MemberDAO.getMemberById(message.getMentionedUsers().get(0).getId() + guild.getId()).getWaifu().isEmpty()) {
 				channel.sendMessage(":x: | Essa pessoa já está casada, hora de passar pra frente!").queue();
+				return;
+			} else if (message.getMentionedUsers().get(0).isBot()) {
+				channel.sendMessage(":x: | Não acho que ele(a) vá aceitar seu pedido...").queue();
 				return;
 			}
 
