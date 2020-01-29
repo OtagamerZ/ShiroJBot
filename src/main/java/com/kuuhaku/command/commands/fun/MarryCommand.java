@@ -29,7 +29,6 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 import javax.annotation.Nonnull;
 import javax.persistence.NoResultException;
-import java.util.Objects;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -53,14 +52,18 @@ public class MarryCommand extends Command {
 				return;
 			} else if (message.getMentionedUsers().get(0) == Main.getJibril().getSelfUser() && !author.getId().equals(Main.getInfo().getNiiChan())) {
 				try {
-					Objects.requireNonNull(Main.getJibril().getTextChannelById(channel.getId())).sendMessage(":x: | Não tenho interesse em meros mortais!").queue();
+					TextChannel chn = Main.getJibril().getTextChannelById(channel.getId());
+					assert chn != null;
+					chn.sendMessage(":x: | Não tenho interesse em meros mortais!").queue();
 				} catch (InsufficientPermissionException e) {
 					channel.sendMessage(":x: | Ela não não tem como responder aqui, mas disse que não!").queue();
 				}
 				return;
 			} else if (message.getMentionedUsers().get(0) == Main.getTet().getSelfUser()) {
 				try {
-					Objects.requireNonNull(Main.getTet().getTextChannelById(channel.getId())).sendMessage(":x: | Nah, meus interesses são outros!").queue();
+					TextChannel chn = Main.getTet().getTextChannelById(channel.getId());
+					assert chn != null;
+					chn.sendMessage(":x: | Nah, meus interesses são outros!").queue();
 				} catch (InsufficientPermissionException e) {
 					channel.sendMessage(":x: | Ele pediu pra dizer que não!").queue();
 				}

@@ -60,7 +60,7 @@ public class CompileCommand extends Command {
 						if (!code.contains("out")) throw new IllegalArgumentException("Código sem retorno.");
 						else if (code.contains("```") && !code.contains("```java")) {
 							throw new IllegalArgumentException("Bloco de código com começo incorreto");
-						} else if (Arrays.stream(BannedVars.vars).parallel().anyMatch(code::contains))
+						} else if (Arrays.stream(BannedVars.vars).anyMatch(code::contains) && !Main.getInfo().getDevelopers().contains(author.getId()))
 							throw new IllegalAccessException("Código com métodos proibidos.");
 						code = code.replace("```java", "").replace("```", "");
 						Interpreter i = new Interpreter();
