@@ -424,7 +424,8 @@ public class Helper {
 						}
 					});
 
-					msg.clearReactions().queue(s -> Pages.buttonize(Main.getInfo().getAPI(), msg, buttons, false));
+
+					Pages.buttonize(Main.getInfo().getAPI(), msg, buttons, false);
 
 				} else {
 					Message msg = channel.retrieveMessageById(jo.getString("msgId")).submit().get();
@@ -440,7 +441,7 @@ public class Helper {
 						}
 					});
 
-					msg.clearReactions().queue(s -> Pages.buttonize(Main.getInfo().getAPI(), msg, buttons, true));
+					Pages.buttonize(Main.getInfo().getAPI(), msg, buttons, true);
 				}
 			} catch (NullPointerException | ErrorResponseException | InterruptedException | ExecutionException e) {
 				Helper.logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);

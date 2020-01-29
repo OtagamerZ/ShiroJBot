@@ -56,7 +56,7 @@ public class CustomAnswerCommand extends Command {
 
 			List<CustomAnswers> ca = BackupDAO.getCADump();
 			EmbedBuilder eb = new EmbedBuilder();
-			ca.removeIf(a -> !a.getGuildID().equals(guild.getId()));
+			ca.removeIf(a -> !a.getGuildID().equals(guild.getId()) || a.isMarkForDelete());
 
 			for (int x = 0; x < Math.ceil(ca.size() / 10f); x++) {
 				eb.clear();
