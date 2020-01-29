@@ -73,13 +73,13 @@ public class GuildConfig {
 	@Column(columnDefinition = "TEXT")
 	private String msgAdeus = "Ahh...%user% deixou este servidor!";
 
-	@Column(columnDefinition = "TEXT DEFAULT ''")
+	@Column(columnDefinition = "TEXT")
 	private String cargoslvl = "";
 
-	@Column(columnDefinition = "TEXT DEFAULT ''")
+	@Column(columnDefinition = "TEXT")
 	private String disabledModules = "";
 
-	@Column(columnDefinition = "TEXT DEFAULT ''")
+	@Column(columnDefinition = "TEXT")
 	private String buttonConfigs = "";
 
 	//NUMBERS
@@ -93,10 +93,10 @@ public class GuildConfig {
 	private int noSpamAmount = 5;
 
 	//CHANNELS
-	@Column(columnDefinition = "TEXT DEFAULT ''")
+	@Column(columnDefinition = "TEXT")
 	private String noLinkChannels = "";
 
-	@Column(columnDefinition = "TEXT DEFAULT ''")
+	@Column(columnDefinition = "TEXT")
 	private String noSpamChannels = "";
 
 	//SWITCHES
