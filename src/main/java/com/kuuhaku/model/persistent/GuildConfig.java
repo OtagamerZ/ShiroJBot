@@ -37,8 +37,8 @@ import java.util.Map;
 @Table(name = "guildConfig")
 public class GuildConfig {
 	@Id
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
-	private String guildID = "";
+	@Column(columnDefinition = "VARCHAR(191)")
+	private String guildID;
 
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
 	private String name = "";
@@ -48,7 +48,6 @@ public class GuildConfig {
 
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
 	private String cargowarn = "";
-
 
 	//CHANNELS
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
@@ -101,7 +100,6 @@ public class GuildConfig {
 
 	@Column(columnDefinition = "TEXT DEFAULT ''")
 	private String noSpamChannels = "";
-
 
 	//SWITCHES
 	@Column(columnDefinition = "BOOLEAN DEFAULT TRUE")

@@ -25,9 +25,7 @@ import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Objects;
@@ -35,10 +33,11 @@ import java.util.Objects;
 @Entity
 public class Backup {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
-	private String guild = "";
+	@Column(columnDefinition = "VARCHAR(191)")
+	private String guild;
 
 	@Column(columnDefinition = "LONGTEXT DEFAULT ''")
 	private String serverData = "";
