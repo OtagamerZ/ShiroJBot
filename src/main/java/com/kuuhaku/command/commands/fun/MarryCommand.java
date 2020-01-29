@@ -66,9 +66,6 @@ public class MarryCommand extends Command {
 			} else if (!MemberDAO.getMemberById(author.getId() + guild.getId()).getWaifu().isEmpty() || !MemberDAO.getMemberById(message.getMentionedUsers().get(0).getId() + guild.getId()).getWaifu().isEmpty()) {
 				channel.sendMessage(":x: | Essa pessoa já está casada, hora de passar pra frente!").queue();
 				return;
-			} else if (message.getMentionedUsers().get(0).isBot()) {
-				channel.sendMessage(":x: | Não acho que ele(a) vá aceitar seu pedido...").queue();
-				return;
 			}
 
 			Main.getInfo().getAPI().addEventListener(new WaifuListener() {
