@@ -24,8 +24,8 @@ import javax.persistence.Id;
 @Entity
 public class Tags {
     @Id
-    @Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
-    private String id = "";
+    @Column(columnDefinition = "VARCHAR(191)")
+    private String id;
 
     @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean Partner = false;

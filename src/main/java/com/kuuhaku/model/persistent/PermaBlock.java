@@ -24,8 +24,8 @@ import javax.persistence.Id;
 @Entity
 public class PermaBlock {
 	@Id
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
-	private String id = "";
+	@Column(columnDefinition = "VARCHAR(191)")
+	private String id;
 
 	public void block(String id) {
 		this.id = id;

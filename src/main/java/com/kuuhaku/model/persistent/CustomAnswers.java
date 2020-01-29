@@ -24,6 +24,7 @@ import javax.persistence.Id;
 @Entity
 public class CustomAnswers {
     @Id
+    @Column(columnDefinition = "BIGINT")
     private final long id = System.currentTimeMillis();
 
     @Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
