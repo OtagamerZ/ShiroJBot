@@ -147,8 +147,8 @@ public class TetEvents extends ListenerAdapter {
 						break;
 				}
 			}
-		} catch (InsufficientPermissionException ignore) {
-
+		} catch (InsufficientPermissionException e) {
+			e.printStackTrace();
 		} catch (ErrorResponseException e) {
 			Helper.logger(this.getClass()).error(e.getErrorCode() + ": " + e + " | " + e.getStackTrace()[0]);
 		}
