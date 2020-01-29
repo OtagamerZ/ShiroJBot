@@ -72,18 +72,22 @@ public class MarryCommand extends Command {
 			}
 
 			Main.getInfo().getAPI().addEventListener(new WaifuListener() {
-				private final Consumer<Void> success = s -> Main.getInfo().getAPI().removeEventListener(this);
+				private final Consumer<Void> success = s -> {
+					channel.sendMessage("Visto que " + author.getAsMention() + " foi deixado no vácuo, vou me retirar e esperar um outro pedido.").queue();
+					Main.getInfo().getAPI().removeEventListener(this);
+				};
 				private Future<?> timeout = channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + ", deseja casar-se com " + author.getAsMention() + ", por toda eternidade (ou não) em troca de um bônus de XP?" +
 						"\nDigite `SIM` para aceitar ou `NÃO` para negar.").queueAfter(10, TimeUnit.MINUTES, msg -> success.accept(null));
 
 				@Override
 				public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
-					if (event.getAuthor().isBot() || event.getAuthor() != message.getMentionedUsers().get(0)) return;
+					if (event.getAuthor().isBot() || event.getAuthor() != message.getMentionedUsers().get(0) || event.getChannel() != channel)
+						return;
 
 					Message msg = channel.retrieveMessageById(event.getMessageId()).complete();
 					switch (msg.getContentRaw().toLowerCase()) {
 						case "sim":
-							event.getChannel().sendMessage("Eu os declaro husbando e waifu, pode trancar ela no porão agora!").queue();
+							channel.sendMessage("Eu os declaro husbando e waifu!").queue();
 							com.kuuhaku.model.Member h = MemberDAO.getMemberById(author.getId() + guild.getId());
 							com.kuuhaku.model.Member w = MemberDAO.getMemberById(message.getMentionedUsers().get(0).getId() + guild.getId());
 
@@ -95,14 +99,17 @@ public class MarryCommand extends Command {
 
 							MemberDAO.updateMemberConfigs(h);
 							MemberDAO.updateMemberConfigs(w);
+							success.accept(null);
+							timeout.cancel(true);
+							timeout = null;
 							break;
 						case "não":
-							event.getChannel().sendMessage("Pois é, hoje não tivemos um casamento, que pena.").queue();
+							channel.sendMessage("Pois é, hoje não tivemos um casamento, que pena.").queue();
+							success.accept(null);
+							timeout.cancel(true);
+							timeout = null;
 							break;
 					}
-					success.accept(null);
-					timeout.cancel(true);
-					timeout = null;
 				}
 			});
 		} catch (NoResultException ignore) {
