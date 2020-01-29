@@ -20,12 +20,19 @@ package com.kuuhaku.command.commands.fun;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.mysql.WaifuDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.events.WaifuListener;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
+import javax.annotation.Nonnull;
 import javax.persistence.NoResultException;
 import java.util.Objects;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 public class MarryCommand extends Command {
 	public MarryCommand() {
@@ -64,9 +71,40 @@ public class MarryCommand extends Command {
 				return;
 			}
 
-			channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + ", deseja casar-se com " + author.getAsMention() + ", por toda eternidade (ou não) em troca de um bônus de XP?" +
-					"\nDigite `SIM` para aceitar ou `NÃO` para negar.").queue();
-			Main.getInfo().getQueue().add(new User[]{author, message.getMentionedUsers().get(0)});
+			Main.getInfo().getAPI().addEventListener(new WaifuListener() {
+				private final Consumer<Void> success = s -> Main.getInfo().getAPI().removeEventListener(this);
+				private Future<?> timeout = channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + ", deseja casar-se com " + author.getAsMention() + ", por toda eternidade (ou não) em troca de um bônus de XP?" +
+						"\nDigite `SIM` para aceitar ou `NÃO` para negar.").queueAfter(10, TimeUnit.MINUTES, msg -> success.accept(null));
+
+				@Override
+				public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
+					if (event.getAuthor().isBot() || event.getAuthor() != message.getMentionedUsers().get(0)) return;
+
+					Message msg = channel.retrieveMessageById(event.getMessageId()).complete();
+					switch (msg.getContentRaw().toLowerCase()) {
+						case "sim":
+							event.getChannel().sendMessage("Eu os declaro husbando e waifu, pode trancar ela no porão agora!").queue();
+							com.kuuhaku.model.Member h = MemberDAO.getMemberById(author.getId() + guild.getId());
+							com.kuuhaku.model.Member w = MemberDAO.getMemberById(message.getMentionedUsers().get(0).getId() + guild.getId());
+
+							WaifuDAO.saveMemberWaifu(h, message.getMentionedUsers().get(0));
+							h.marry(message.getMentionedUsers().get(0));
+
+							WaifuDAO.saveMemberWaifu(w, author);
+							w.marry(author);
+
+							MemberDAO.updateMemberConfigs(h);
+							MemberDAO.updateMemberConfigs(w);
+							break;
+						case "não":
+							event.getChannel().sendMessage("Pois é, hoje não tivemos um casamento, que pena.").queue();
+							break;
+					}
+					success.accept(null);
+					timeout.cancel(true);
+					timeout = null;
+				}
+			});
 		} catch (NoResultException ignore) {
 		}
 	}
