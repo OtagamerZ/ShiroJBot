@@ -39,12 +39,15 @@ public class MarryCommand extends Command {
 			} else if (message.getMentionedUsers().get(0) == author) {
 				channel.sendMessage(":x: | Por mais que eu respeite seu lado otaku, você não pode se casar com sí mesmo!").queue();
 				return;
+			} else if (message.getMentionedUsers().get(0) == Main.getInfo().getAPI().getSelfUser() && !author.getId().equals(Main.getInfo().getNiiChan())) {
+				channel.sendMessage(":x: | Eu...já tenho alguém que estou de olho!").queue();
+				return;
 			} else if (!MemberDAO.getMemberById(author.getId() + guild.getId()).getWaifu().isEmpty() || !MemberDAO.getMemberById(message.getMentionedUsers().get(0).getId() + guild.getId()).getWaifu().isEmpty()) {
 				channel.sendMessage(":x: | Essa pessoa já está casada, hora de passar pra frente!").queue();
 				return;
 			}
 
-			channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + ", deseja casar-se com " + author.getAsMention() + ", por toda eternidade ou até que meu Nii-chan crie um comando de divórcio?" +
+			channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + ", deseja casar-se com " + author.getAsMention() + ", por toda eternidade (ou não) em troca de um bônus de XP?" +
 					"\nDigite `SIM` para aceitar ou `NÃO` para negar.").queue();
 			Main.getInfo().getQueue().add(new User[]{author, message.getMentionedUsers().get(0)});
 		} catch (NoResultException ignore) {
