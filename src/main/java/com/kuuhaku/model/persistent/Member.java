@@ -30,8 +30,8 @@ import java.util.stream.Collectors;
 @Entity
 public class Member {
 	@Id
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
-	private String id = "";
+	@Column(columnDefinition = "VARCHAR(191)")
+	private String id;
 
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
 	private String mid = "";
