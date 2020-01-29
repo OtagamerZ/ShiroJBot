@@ -15,7 +15,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model;
+package com.kuuhaku.model.persistent;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,16 +24,22 @@ import javax.persistence.Id;
 @Entity
 public class Tags {
     @Id
-    private String id;
-    @Column(columnDefinition = "boolean default false")
+    @Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+    private String id = "";
+
+    @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean Partner = false;
-    @Column(columnDefinition = "boolean default false")
+
+    @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean Toxic = false;
-    @Column(columnDefinition = "boolean default false")
+
+    @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean Verified = false;
-    @Column(columnDefinition = "boolean default false")
+
+    @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean Reader = false;
-    @Column(columnDefinition = "boolean default false")
+
+    @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean Sponsor = false;
 
     public String getId() {

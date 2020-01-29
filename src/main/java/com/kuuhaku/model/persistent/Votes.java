@@ -15,24 +15,36 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model;
+package com.kuuhaku.model.persistent;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Votes {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private String guildID;
-	private String votedUser;
-	private String votedUserID;
-	private String user;
-	private String userID;
-	private int vote;
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String guildID = "";
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String votedUser = "";
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String votedUserID = "";
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String user = "";
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String userID = "";
+
+	@Column(columnDefinition = "INT DEFAULT 0")
+	private int vote = 0;
 
 	public void addArgs(Guild guild, User user, User target, boolean positive) {
 		this.guildID = guild.getId();

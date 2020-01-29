@@ -15,7 +15,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model;
+package com.kuuhaku.model.common;
 
 import org.apache.commons.lang3.StringUtils;
 

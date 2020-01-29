@@ -15,10 +15,11 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model;
+package com.kuuhaku.model.common;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.mysql.RelayDAO;
+import com.kuuhaku.model.persistent.PermaBlock;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.awt.*;

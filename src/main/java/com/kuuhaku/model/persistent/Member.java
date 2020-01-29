@@ -15,7 +15,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model;
+package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.utils.Helper;
@@ -30,22 +30,47 @@ import java.util.stream.Collectors;
 @Entity
 public class Member {
 	@Id
-	private String id;
-	private String mid;
-	private String sid;
-	private int level = 1, xp = 0;
-	@Column(columnDefinition = "float default 1.25")
-	private float waifuMult = 1.25f;
-	private String bg = "https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg";
-	private String bio = "";
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String id = "";
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String mid = "";
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String sid = "";
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
 	private String waifu = "";
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
 	private String exceed = "";
-	@Column(columnDefinition = "boolean default false")
-	private boolean markForDelete;
-	@Column(columnDefinition = "boolean default false")
-	private boolean rulesSent;
-	@Column(columnDefinition = "long default 0")
-	private long lastVoted;
+
+	//TEXTS
+	@Column(columnDefinition = "TEXT")
+	private String bg = "https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg";
+
+	@Column(columnDefinition = "TEXT DEFAULT ''")
+	private String bio = "";
+
+	//NUMBERS
+	@Column(columnDefinition = "INT DEFAULT 0")
+	private int level = 1;
+
+	@Column(columnDefinition = "INT DEFAULT 0")
+	private int xp = 0;
+
+	@Column(columnDefinition = "FLOAT DEFAULT 1.25")
+	private float waifuMult = 1.25f;
+
+	@Column(columnDefinition = "BIGINT DEFAULT 0")
+	private long lastVoted = 0;
+
+	//SWITCHES
+	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	private boolean markForDelete = false;
+
+	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	private boolean rulesSent = false;
 
 	public Member() {
 

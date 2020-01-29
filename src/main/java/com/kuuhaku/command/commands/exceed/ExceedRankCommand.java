@@ -21,8 +21,8 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.mysql.ExceedDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
-import com.kuuhaku.model.Exceed;
-import com.kuuhaku.model.Profile;
+import com.kuuhaku.model.common.Exceed;
+import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static com.kuuhaku.model.Profile.*;
+import static com.kuuhaku.model.common.Profile.*;
 
 public class ExceedRankCommand extends Command {
 	public ExceedRankCommand() {

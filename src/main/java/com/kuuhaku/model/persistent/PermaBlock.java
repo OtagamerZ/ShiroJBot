@@ -15,30 +15,19 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model;
+package com.kuuhaku.model.persistent;
 
-import com.kuuhaku.utils.ExceedEnums;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
-public class Exceed {
-	private final ExceedEnums exceed;
-	private final int members;
-	private final long exp;
+@Entity
+public class PermaBlock {
+	@Id
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String id = "";
 
-	public Exceed(ExceedEnums exceed, int members, long exp) {
-		this.exceed = exceed;
-		this.members = members;
-		this.exp = exp;
-	}
-
-	public ExceedEnums getExceed() {
-		return exceed;
-	}
-
-	public int getMembers() {
-		return members;
-	}
-
-	public long getExp() {
-		return exp;
+	public void block(String id) {
+		this.id = id;
 	}
 }

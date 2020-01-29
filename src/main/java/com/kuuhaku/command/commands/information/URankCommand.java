@@ -40,7 +40,7 @@ public class URankCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		List<com.kuuhaku.model.Member> mbs;
+		List<com.kuuhaku.model.persistent.Member> mbs;
 		boolean global = false;
 		if (args.length > 0 && args[0].equals("global")) {
 			mbs = MemberDAO.getMemberRank(null, true);
@@ -50,7 +50,7 @@ public class URankCommand extends Command {
 		}
 
 		String champ = "1 - " + (global ? "(" + Main.getInfo().getGuildByID(mbs.get(0).getId().replace(mbs.get(0).getMid(), "")).getName() + ") " : "") + Main.getInfo().getUserByID(mbs.get(0).getMid()).getAsTag() + " (Level " + mbs.get(0).getLevel() + ")";
-		List<com.kuuhaku.model.Member> sub9 = mbs.subList(1, Math.min(mbs.size(), 10));
+		List<com.kuuhaku.model.persistent.Member> sub9 = mbs.subList(1, Math.min(mbs.size(), 10));
 		StringBuilder sub9Formatted = new StringBuilder();
 		for (int i = 0; i < sub9.size(); i++) {
 			sub9Formatted
@@ -101,7 +101,7 @@ public class URankCommand extends Command {
 		channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
 	}
 
-	private static String checkUser(com.kuuhaku.model.Member m) {
+	private static String checkUser(com.kuuhaku.model.persistent.Member m) {
 		try {
 			return Main.getInfo().getUserByID(m.getMid()).getAsTag();
 		} catch (Exception e) {
@@ -109,7 +109,7 @@ public class URankCommand extends Command {
 		}
 	}
 
-	private static String checkGuild(com.kuuhaku.model.Member m) {
+	private static String checkGuild(com.kuuhaku.model.persistent.Member m) {
 		try {
 			return "(" + Main.getInfo().getGuildByID(m.getId().replace(m.getMid(), "")).getName() + ") ";
 		} catch (Exception e) {

@@ -19,7 +19,7 @@ package com.kuuhaku.controller.sqlite;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
-import com.kuuhaku.model.Member;
+import com.kuuhaku.model.persistent.Member;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;

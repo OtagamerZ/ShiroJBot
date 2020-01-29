@@ -21,8 +21,8 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.mysql.Manager;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
-import com.kuuhaku.model.GuildConfig;
-import com.kuuhaku.model.Member;
+import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.Member;
 import net.dv8tion.jda.api.entities.Guild;
 
 import javax.persistence.EntityManager;

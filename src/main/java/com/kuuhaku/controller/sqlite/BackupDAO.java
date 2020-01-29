@@ -17,7 +17,11 @@
 
 package com.kuuhaku.controller.sqlite;
 
-import com.kuuhaku.model.*;
+import com.kuuhaku.model.common.DataDump;
+import com.kuuhaku.model.persistent.AppUser;
+import com.kuuhaku.model.persistent.CustomAnswers;
+import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.Member;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;

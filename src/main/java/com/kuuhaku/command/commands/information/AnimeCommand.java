@@ -20,7 +20,7 @@ package com.kuuhaku.command.commands.information;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.Tradutor;
-import com.kuuhaku.model.Anime;
+import com.kuuhaku.model.common.Anime;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
