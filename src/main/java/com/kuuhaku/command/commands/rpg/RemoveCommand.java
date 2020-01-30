@@ -33,7 +33,7 @@ public class RemoveCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		if (Main.getInfo().getGames().get(guild.getId()).getMaster() == author) {
+		if (Main.getInfo().getGames().get(guild.getId()).getMaster().equals(author.getId())) {
 			if (args.length < 2) {
 				channel.sendMessage(":x: | É necessário especificar o tipo de registro e o nome do registro").queue();
 				return;

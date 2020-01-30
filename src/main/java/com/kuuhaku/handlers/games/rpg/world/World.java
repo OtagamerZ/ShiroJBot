@@ -17,7 +17,6 @@
 
 package com.kuuhaku.handlers.games.rpg.world;
 
-import com.kuuhaku.Main;
 import com.kuuhaku.handlers.games.rpg.Utils;
 import com.kuuhaku.handlers.games.rpg.actors.Actor;
 import com.kuuhaku.handlers.games.rpg.entities.Chest;
@@ -72,8 +71,8 @@ public class World {
 		currentMap = maps.get(map);
 	}
 
-	public User getMaster() {
-		return Main.getInfo().getUserByID(master);
+	public String getMaster() {
+		return master;
 	}
 
 	public void addPlayer(Actor.Player player) {

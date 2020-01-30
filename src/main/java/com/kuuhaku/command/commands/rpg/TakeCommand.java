@@ -34,13 +34,14 @@ public class TakeCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		if (Main.getInfo().getGames().get(guild.getId()).getMaster() == author) {
+		if (Main.getInfo().getGames().get(guild.getId()).getMaster().equals(author.getId())) {
 			if (Utils.noPlayerAlert(args, message, channel)) return;
 
 			Equipped inv = Main.getInfo().getGames().get(guild.getId()).getPlayers().get(message.getMentionedUsers().get(0).getId()).getCharacter().getInventory();
 			if ((args[1].equalsIgnoreCase("gold") || args[1].equalsIgnoreCase("ouro")))
 				inv.addGold(-Integer.parseInt(args[2]));
-			else inv.removeItem(Main.getInfo().getGames().get(guild.getId()).getItem(String.join(" ", Arrays.copyOfRange(args, 1, args.length))));
+			else
+				inv.removeItem(Main.getInfo().getGames().get(guild.getId()).getItem(String.join(" ", Arrays.copyOfRange(args, 1, args.length))));
 		}
 	}
 

@@ -41,7 +41,7 @@ public class ViewCommand extends Command {
 			}
 
 
-			if (Main.getInfo().getGames().get(guild.getId()).getMaster() == author) {
+			if (Main.getInfo().getGames().get(guild.getId()).getMaster().equals(author.getId())) {
 				Main.getInfo().getGames().get(guild.getId()).getItem(args[0]).info(message.getTextChannel()).queue();
 				return;
 			}
