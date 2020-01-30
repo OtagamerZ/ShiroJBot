@@ -31,6 +31,7 @@ import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Tags;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
@@ -207,14 +208,14 @@ public class Helper {
 		return con.getInputStream();
 	}
 
-	public static Webhook getOrCreateWebhook(TextChannel chn) {
+	public static Webhook getOrCreateWebhook(TextChannel chn, String name, JDA bot) {
 		try {
 			final Webhook[] webhook = {null};
-			chn.retrieveWebhooks().queue(whs -> whs.stream().filter(w -> Objects.requireNonNull(w.getOwner()).getUser() == Main.getJibril().getSelfUser()).findFirst().ifPresent(webhook1 -> webhook[0] = webhook1));
-			if (webhook[0] == null) return chn.createWebhook("Jibril").complete();
+			chn.retrieveWebhooks().queue(whs -> whs.stream().filter(w -> Objects.requireNonNull(w.getOwner()).getUser() == bot.getSelfUser()).findFirst().ifPresent(webhook1 -> webhook[0] = webhook1));
+			if (webhook[0] == null) return chn.createWebhook(name).complete();
 			else return webhook[0];
 		} catch (InsufficientPermissionException e) {
-			sendPM(Objects.requireNonNull(chn.getGuild().getOwner()).getUser(), ":x: | A Jibril não possui permissão para criar um webhook em seu servidor");
+			sendPM(Objects.requireNonNull(chn.getGuild().getOwner()).getUser(), ":x: | " + name + " não possui permissão para criar um webhook em seu servidor");
 		}
 		return null;
 	}

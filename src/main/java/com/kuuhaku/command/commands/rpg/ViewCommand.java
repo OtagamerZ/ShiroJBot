@@ -35,9 +35,6 @@ public class ViewCommand extends Command {
 			if (args.length == 0) {
 				channel.sendMessage(":x: | É necessário especificar o nome do item").queue();
 				return;
-			} else if (args[0].equals("json")) {
-				System.out.println(Main.getInfo().getGames().get(guild.getId()).getAsJSON());
-				return;
 			}
 
 
