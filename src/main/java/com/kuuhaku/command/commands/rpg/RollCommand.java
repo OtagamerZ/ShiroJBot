@@ -38,7 +38,7 @@ public class RollCommand extends Command {
 			} catch (Exception e) {
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
-		} else if (Main.getInfo().getGames().get(guild.getId()).getMaster() == author) {
+		} else if (Main.getInfo().getGames().get(guild.getId()).getMaster().equals(author.getId())) {
 			try {
 				channel.sendMessage(Utils.rollDice(String.join(" ", args), null)).queue();
 			} catch (Exception e) {

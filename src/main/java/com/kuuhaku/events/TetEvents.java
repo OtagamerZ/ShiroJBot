@@ -135,7 +135,7 @@ public class TetEvents extends ListenerAdapter {
 						channel.sendMessage(":x: | Este servidor ainda não possui uma campanha ativa.").queue();
 						break;
 					} else {
-						if (Main.getInfo().getGames().get(guild.getId()).getPlayers().containsKey(author.getId()) || (!Main.getInfo().getGames().get(guild.getId()).getPlayers().containsKey(author.getId()) && command.getClass() == NewPlayerCommand.class) || Main.getInfo().getGames().get(guild.getId()).getMaster() == author) {
+						if (Main.getInfo().getGames().get(guild.getId()).getPlayers().containsKey(author.getId()) || (!Main.getInfo().getGames().get(guild.getId()).getPlayers().containsKey(author.getId()) && command.getClass() == NewPlayerCommand.class) || Main.getInfo().getGames().get(guild.getId()).getMaster().equals(author.getId())) {
 							if (JDAEvents.checkPermissions(author, member, message, channel, guild, prefix, rawMsgNoPrefix, args, command))
 								break;
 						} else {

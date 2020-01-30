@@ -137,7 +137,7 @@ public class CombatHandler extends ListenerAdapter {
 	@Override
 	public void onMessageReactionAdd(MessageReactionAddEvent event) {
 		if (event.getUser().isBot()) return;
-		if (event.getUser() == world.getMaster() && !playerTurn) {
+		if (event.getUser().getId().equals(world.getMaster()) && !playerTurn) {
 			switch (event.getReactionEmote().getName()) {
 				case ATTACK:
 					adbf.get(monster).setAttacking();

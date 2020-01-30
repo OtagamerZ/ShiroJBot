@@ -36,7 +36,7 @@ public class GiveCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (Utils.noPlayerAlert(args, message, channel)) return;
 
-		if (Main.getInfo().getGames().get(guild.getId()).getMaster() == author) {
+		if (Main.getInfo().getGames().get(guild.getId()).getMaster().equals(author.getId())) {
 			if (args.length < 3 && (args[1].equalsIgnoreCase("xp") || args[1].equalsIgnoreCase("ouro"))) {
 				channel.sendMessage(":x: | Você precisa especificar a quantidade de XP").queue();
 				return;
