@@ -36,7 +36,7 @@ public class ChestCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		if (Main.getInfo().getGames().get(guild.getId()).getMaster() == author) {
+		if (Main.getInfo().getGames().get(guild.getId()).getMaster().equals(author.getId())) {
 			if (message.getMentionedUsers().size() < 1) {
 				channel.sendMessage(":x: | Você precisa especificar o jogador").queue();
 				return;
