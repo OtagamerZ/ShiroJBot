@@ -211,10 +211,15 @@ public class Helper {
 	public static Webhook getOrCreateWebhook(TextChannel chn, String name, JDA bot) {
 		try {
 			final Webhook[] webhook = {null};
-			chn.retrieveWebhooks().queue(whs -> whs.stream().filter(w -> Objects.requireNonNull(w.getOwner()).getUser() == bot.getSelfUser()).findFirst().ifPresent(webhook1 -> webhook[0] = webhook1));
+			List<Webhook> whs = chn.retrieveWebhooks().submit().get();
+			whs.stream()
+					.filter(w -> Objects.requireNonNull(w.getOwner()).getUser() == bot.getSelfUser())
+					.findFirst()
+					.ifPresent(w -> webhook[0] = w);
+
 			if (webhook[0] == null) return chn.createWebhook(name).complete();
 			else return webhook[0];
-		} catch (InsufficientPermissionException e) {
+		} catch (InsufficientPermissionException | InterruptedException | ExecutionException e) {
 			sendPM(Objects.requireNonNull(chn.getGuild().getOwner()).getUser(), ":x: | " + name + " não possui permissão para criar um webhook em seu servidor");
 		}
 		return null;
