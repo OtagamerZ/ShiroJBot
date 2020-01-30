@@ -125,6 +125,7 @@ public class PlayerRegisterHandler extends ListenerAdapter {
 					int[] stats = Arrays.stream(args).mapToInt(Integer::parseInt).toArray();
 
 					if (Arrays.stream(stats).sum() > 10) throw new IllegalArgumentException();
+					else if (args.length != 7) throw new NumberFormatException();
 
 					str = stats[0];
 					per = stats[1];
