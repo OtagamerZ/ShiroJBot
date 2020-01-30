@@ -117,8 +117,8 @@ public class TetEvents extends ListenerAdapter {
 				WebhookClientBuilder wcb = new WebhookClientBuilder(Objects.requireNonNull(Helper.getOrCreateWebhook((TextChannel) channel, "Tet", Main.getTet())).getUrl());
 				WebhookClient client = wcb.build();
 
-				String state = Helper.containsAll(rawMessage, "{", "}") ? rawMessage.substring(rawMessage.indexOf("{"), rawMessage.indexOf("}")) : null;
-				String quote = rawMessage.replace("{", "").replace("}", "");
+				String state = Helper.containsAll(rawMessage, "{", "}") ? rawMessage.substring(rawMessage.indexOf("{") + 1, rawMessage.indexOf("}")) : null;
+				String quote = rawMessage.replace("{", "");
 
 				if (state != null) {
 					quote = quote.replaceFirst(".*(disse).*", "");
@@ -127,7 +127,7 @@ public class TetEvents extends ListenerAdapter {
 				WebhookMessageBuilder wmb = new WebhookMessageBuilder();
 				wmb.setUsername(player.getCharacter().getName());
 				wmb.setAvatarUrl(player.getCharacter().getImage());
-				wmb.setContent("**" + player.getCharacter().getName() + " " + (state == null ? "disse" : state) + ":** _" + quote.substring(1) + "_");
+				wmb.setContent("**" + player.getCharacter().getName() + " " + (state == null ? "disse" : state) + ":** _" + (state == null ? quote.substring(1) : quote.split("}")[1].substring(1)) + "_");
 
 				try {
 					client.send(wmb.build());
