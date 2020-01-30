@@ -118,6 +118,10 @@ public class World {
 		return items;
 	}
 
+	public Map<String, Chest> getChests() {
+		return chests;
+	}
+
 	private byte[] getMap() throws IOException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		ImageIO.write(positionPlayers(), "png", baos);
