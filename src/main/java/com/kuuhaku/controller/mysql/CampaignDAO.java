@@ -17,25 +17,35 @@
 
 package com.kuuhaku.controller.mysql;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.handlers.games.rpg.world.World;
 import com.kuuhaku.model.persistent.Campaign;
 import com.kuuhaku.utils.ShiroInfo;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class CampaignDAO {
 	public static void saveCampaigns(Map<String, World> games) {
 		EntityManager em = Manager.getEntityManager();
 
-		List<String> g = games.values().stream().map(World::getAsJSON).collect(Collectors.toList());
+		List<Campaign> c = new ArrayList<>();
+		games.forEach((k, v) -> {
+			Campaign cp = new Campaign();
+
+			cp.setId(k);
+			cp.setServer(Main.getInfo().getGuildByID(k).getName());
+			cp.setData(v.getAsJSON());
+
+			c.add(cp);
+		});
 
 		em.getTransaction().begin();
-		g.forEach(em::merge);
+		c.forEach(em::merge);
 		em.getTransaction().commit();
 
 		em.close();
