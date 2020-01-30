@@ -53,6 +53,7 @@ public class World {
 
 	public World(User master) {
 		this.master = master.getId();
+		System.out.println(master.getId() + " | " + this.master);
 	}
 
 	public void addMap(com.kuuhaku.handlers.games.rpg.world.Map map) {
