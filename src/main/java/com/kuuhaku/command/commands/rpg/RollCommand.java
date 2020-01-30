@@ -21,6 +21,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.handlers.games.rpg.Utils;
+import com.kuuhaku.handlers.games.rpg.actors.Actor;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
@@ -34,7 +35,8 @@ public class RollCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (Main.getInfo().getGames().get(guild.getId()).getPlayers().containsKey(author.getId())) {
 			try {
-				channel.sendMessage(Utils.rollDice(String.join(" ", args), Main.getInfo().getGames().get(guild.getId()).getPlayers().get(author.getId()).getCharacter().getStatus())).queue();
+				Actor.Player p = Main.getInfo().getGames().get(guild.getId()).getPlayers().get(author.getId());
+				channel.sendMessage("_**" + p.getCharacter().getName() + " rolou os dados:**_" + Utils.rollDice(String.join(" ", args), Main.getInfo().getGames().get(guild.getId()).getPlayers().get(author.getId()).getCharacter().getStatus())).queue();
 			} catch (Exception e) {
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
