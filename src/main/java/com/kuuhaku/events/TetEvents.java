@@ -17,12 +17,16 @@
 
 package com.kuuhaku.events;
 
+import club.minnced.discord.webhook.WebhookClient;
+import club.minnced.discord.webhook.WebhookClientBuilder;
+import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.rpg.NewCampaignCommand;
 import com.kuuhaku.command.commands.rpg.NewPlayerCommand;
 import com.kuuhaku.controller.mysql.LogDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.handlers.games.rpg.actors.Actor;
 import com.kuuhaku.model.persistent.Log;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
@@ -104,9 +108,22 @@ public class TetEvents extends ListenerAdapter {
 				commandName = rawMsgNoPrefix.split(" ")[0].trim();
 			}
 
-			if (message.getContentRaw().trim().equals("<@" + Main.getTet().getSelfUser().getId() + ">") || message.getContentRaw().trim().equals("<@!" + Main.getTet().getSelfUser().getId() + ">")) {
+			if (rawMessage.trim().equals("<@" + Main.getTet().getSelfUser().getId() + ">") || rawMessage.trim().equals("<@!" + Main.getTet().getSelfUser().getId() + ">")) {
 				channel.sendMessage("Opa, eae jogador! Meus comandos são listados pela Shiro, digite `" + prefix + "help` e clique na categoria `RPG` para vê-los!").queue();
 				return;
+			} else if (rawMessage.startsWith("-") && Main.getInfo().getGames().containsKey(guild.getId()) && Main.getInfo().getGames().get(guild.getId()).getPlayers().containsKey(author.getId())) {
+				Actor.Player player = Main.getInfo().getGames().get(guild.getId()).getPlayers().get(author.getId());
+
+				WebhookClientBuilder wcb = new WebhookClientBuilder(Objects.requireNonNull(Helper.getOrCreateWebhook((TextChannel) channel, "Tet", Main.getTet())).getUrl());
+				WebhookClient client = wcb.build();
+
+				WebhookMessageBuilder wmb = new WebhookMessageBuilder();
+				wmb.setUsername(player.getCharacter().getName());
+				wmb.setAvatarUrl(player.getCharacter().getImage());
+				wmb.setContent(rawMessage.replaceFirst("-", ""));
+				client.send(wmb.build());
+
+				client.close();
 			}
 
 			boolean hasArgs = (rawMsgNoPrefix.split(" ").length > 1);
