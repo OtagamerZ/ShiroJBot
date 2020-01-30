@@ -51,11 +51,27 @@ public class CampaignDAO {
 		em.close();
 	}
 
+	public static void closeCampaign(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT g FROM Campaign g WHERE id LIKE :id", Campaign.class);
+		q.setParameter("id", id);
+
+		Campaign c = (Campaign) q.getSingleResult();
+		c.close();
+
+		em.getTransaction().begin();
+		em.merge(c);
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
 	@SuppressWarnings("unchecked")
 	public static Map<String, World> getCampaigns() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT g FROM Campaign g", Campaign.class);
+		Query q = em.createQuery("SELECT g FROM Campaign g WHERE closed = FALSE", Campaign.class);
 
 		Map<String, World> g = new HashMap<>();
 		List<Campaign> cps = q.getResultList();
