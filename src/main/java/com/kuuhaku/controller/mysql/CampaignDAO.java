@@ -23,6 +23,7 @@ import com.kuuhaku.model.persistent.Campaign;
 import com.kuuhaku.utils.ShiroInfo;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,14 +58,17 @@ public class CampaignDAO {
 		Query q = em.createQuery("SELECT g FROM Campaign g WHERE id LIKE :id", Campaign.class);
 		q.setParameter("id", id);
 
-		Campaign c = (Campaign) q.getSingleResult();
-		c.close();
+		try {
+			Campaign c = (Campaign) q.getSingleResult();
+			c.close();
 
-		em.getTransaction().begin();
-		em.merge(c);
-		em.getTransaction().commit();
-
-		em.close();
+			em.getTransaction().begin();
+			em.merge(c);
+			em.getTransaction().commit();
+		} catch (NoResultException ignore) {
+		} finally {
+			em.close();
+		}
 	}
 
 	@SuppressWarnings("unchecked")
