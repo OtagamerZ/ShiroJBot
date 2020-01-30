@@ -76,7 +76,7 @@ public class ShiroInfo {
 	private static final Map<String, World> games = new HashMap<>();
 	private static final JDAEvents shiroEvents = new JDAEvents();
 	private static final Map<String, KittyCache<String, Message>> messageCache = new HashMap<>();
-	private static final Gson JSONMaker = new Gson();
+	private static final Gson JSONFactory = new Gson();
 
 	private JDA api;
 	private long startTime;
@@ -194,8 +194,8 @@ public class ShiroInfo {
 		return supportServer;
 	}
 
-	public static Gson getJSONMaker() {
-		return JSONMaker;
+	public static Gson getJSONFactory() {
+		return JSONFactory;
 	}
 
 	//VARIABLES

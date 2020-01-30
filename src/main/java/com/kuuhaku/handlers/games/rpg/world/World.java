@@ -17,6 +17,7 @@
 
 package com.kuuhaku.handlers.games.rpg.world;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.handlers.games.rpg.Utils;
 import com.kuuhaku.handlers.games.rpg.actors.Actor;
 import com.kuuhaku.handlers.games.rpg.entities.Chest;
@@ -44,7 +45,7 @@ import java.util.stream.Collectors;
 public class World {
 	private com.kuuhaku.handlers.games.rpg.world.Map currentMap;
 	private final ArrayList<com.kuuhaku.handlers.games.rpg.world.Map> maps = new ArrayList<>();
-	private final User master;
+	private final String master;
 	private final Map<String, Actor.Player> players = new HashMap<>();
 	private final Map<String, Actor.Monster> monsters = new HashMap<>();
 	private final Map<String, Chest> chests = new HashMap<>();
@@ -52,7 +53,7 @@ public class World {
 	private boolean locked = false;
 
 	public World(User master) {
-		this.master = master;
+		this.master = master.getId();
 	}
 
 	public void addMap(com.kuuhaku.handlers.games.rpg.world.Map map) {
@@ -72,7 +73,7 @@ public class World {
 	}
 
 	public User getMaster() {
-		return master;
+		return Main.getInfo().getUserByID(master);
 	}
 
 	public void addPlayer(Actor.Player player) {
@@ -224,7 +225,7 @@ public class World {
 	}
 
 	public String getAsJSON() {
-		return ShiroInfo.getJSONMaker().toJson(this);
+		return ShiroInfo.getJSONFactory().toJson(this);
 	}
 }
 

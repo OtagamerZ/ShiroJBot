@@ -17,6 +17,8 @@
 
 package com.kuuhaku.handlers.games.rpg.world;
 
+import com.kuuhaku.handlers.games.rpg.Utils;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -26,7 +28,7 @@ import java.net.URL;
 import java.util.Objects;
 
 public class Map {
-	private final BufferedImage map;
+	private final String map;
 	private int[] size;
 	private final int[] defaultPos;
 	private final static String alpha = "abcdefghijklmnopqrstuvwxyz";
@@ -36,7 +38,7 @@ public class Map {
 		this.defaultPos = defaultPos;
 	}
 
-	private BufferedImage initMap(String url) throws IOException, IllegalArgumentException {
+	private String initMap(String url) throws IOException, IllegalArgumentException {
 		HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
 		con.setRequestProperty("User-Agent", "Mozilla/5.0");
 		BufferedImage map = ImageIO.read(con.getInputStream());
@@ -79,11 +81,11 @@ public class Map {
 
 		g2d.dispose();
 
-		return overlay;
+		return Utils.encodeToBase64(overlay);
 	}
 
 	public BufferedImage getMap() {
-		return map;
+		return Utils.decodeBase64(map);
 	}
 
 	public int[] getDefaultPos() {

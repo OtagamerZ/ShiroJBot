@@ -17,6 +17,7 @@
 
 package com.kuuhaku.handlers.games.rpg.actors;
 
+import com.kuuhaku.handlers.games.rpg.Utils;
 import com.kuuhaku.handlers.games.rpg.entities.Character;
 import com.kuuhaku.handlers.games.rpg.entities.Mob;
 import com.kuuhaku.handlers.games.rpg.world.Map;
@@ -37,7 +38,7 @@ public abstract class Actor {
 	private final java.util.Map<Map, Integer[]> pos = new HashMap<>();
 	private java.util.Map<Map, Integer[]> oldPos = new HashMap<>();
 	private Map atMap;
-	private final BufferedImage pin;
+	private final String pin;
 
 	private Actor(User user, Map map) throws IOException {
 		this.id = user.getIdLong();
@@ -101,10 +102,10 @@ public abstract class Actor {
 	}
 
 	public BufferedImage getPin() {
-		return pin;
+		return Utils.decodeBase64(pin);
 	}
 
-	private BufferedImage makePlayerPin(User user) throws IOException {
+	private String makePlayerPin(User user) throws IOException {
 		BufferedImage pin = ImageIO.read(Objects.requireNonNull(Actor.class.getClassLoader().getResourceAsStream("allypin.png")));
 		BufferedImage canvas = new BufferedImage(pin.getWidth(), pin.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = canvas.createGraphics();
@@ -120,6 +121,6 @@ public abstract class Actor {
 		g2d.setClip(null);
 		g2d.drawImage(pin, 0, 0, null);
 
-		return canvas;
+		return Utils.encodeToBase64(canvas);
 	}
 }
