@@ -20,6 +20,7 @@ package com.kuuhaku.command.commands.rpg;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.mysql.CampaignDAO;
 import net.dv8tion.jda.api.entities.*;
 
 public class EndCampaignCommand extends Command {
@@ -31,6 +32,7 @@ public class EndCampaignCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (Main.getInfo().getGames().get(guild.getId()).getMaster().equals(author.getId())) {
+			CampaignDAO.closeCampaign(guild.getId());
 			Main.getInfo().getGames().remove(guild.getId());
 			channel.sendMessage("Campanha encerrada com sucesso.").queue();
 		}
