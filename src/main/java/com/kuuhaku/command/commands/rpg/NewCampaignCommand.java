@@ -38,7 +38,7 @@ public class NewCampaignCommand extends Command {
 				channel.sendMessage(":x: | Já existe uma campanha iniciada neste servidor.").queue();
 				return;
 			}
-			Main.getInfo().getGames().put(guild.getId(), new World(author));
+			Main.getInfo().getGames().put(guild.getId(), new World(author.getId()));
 			channel.sendMessage("Nova campanha iniciada com sucesso.\nMestre da campanha: " + author.getAsMention()).queue();
 		} else {
 			channel.sendMessage(":x: | Apenas moderadores podem mestrar campanhas.").queue();
