@@ -24,6 +24,7 @@ import com.kuuhaku.handlers.games.rpg.entities.Status;
 import com.kuuhaku.handlers.games.rpg.enums.Rarity;
 import com.kuuhaku.handlers.games.rpg.exceptions.BadLuckException;
 import com.kuuhaku.handlers.games.rpg.world.World;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -33,6 +34,8 @@ import org.apache.commons.lang3.StringUtils;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.*;
@@ -322,5 +325,27 @@ public class Utils {
 			return true;
 		}
 		return false;
+	}
+
+	public static String encodeToBase64(BufferedImage bi) {
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+			ImageIO.write(bi, "png", baos);
+			byte[] b = baos.toByteArray();
+
+			return Base64.getEncoder().encodeToString(b);
+		} catch (IOException e) {
+			Helper.logger(Utils.class).error(e + " | " + e.getStackTrace()[0]);
+			return null;
+		}
+	}
+
+	public static BufferedImage decodeBase64(String b64) {
+		byte[] b = Base64.getDecoder().decode(b64);
+		try (ByteArrayInputStream bais = new ByteArrayInputStream(b)) {
+			return ImageIO.read(bais);
+		} catch (Exception e) {
+			Helper.logger(Utils.class).error(e + " | " + e.getStackTrace()[0]);
+			return null;
+		}
 	}
 }

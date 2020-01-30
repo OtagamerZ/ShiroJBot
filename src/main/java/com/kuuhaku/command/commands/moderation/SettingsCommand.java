@@ -37,6 +37,9 @@ public class SettingsCommand extends Command {
 		if (args.length == 0) {
 			Settings.embedConfig(message);
 			return;
+		} else if (args.length == 1) {
+			channel.sendMessage(":x: | Nenhum argumento informado para a configuração `" + args[0] + "`.").queue();
+			return;
 		}
 
 		final String msg = String.join(" ", args).replace(args[0], "").replace(args[1], "").trim();
