@@ -7,14 +7,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/rpg/MoveCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/rpg/MoveCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/rpg/ViewCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/rpg/ViewCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Relay.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Relay.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/TetEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/TetEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/guild/GuildEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/guild/GuildEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/rpg/world/World.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/rpg/world/World.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/mysql/CampaignDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Campaign.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -153,14 +148,7 @@
       <workItem from="1580214110049" duration="2466000" />
       <workItem from="1580221892471" duration="12901000" />
       <workItem from="1580386171309" duration="208000" />
-      <workItem from="1580386528739" duration="9953000" />
-    </task>
-    <task id="LOCAL-00320" summary="Melhorias na API">
-      <created>1579890010334</created>
-      <option name="number" value="00320" />
-      <option name="presentableId" value="LOCAL-00320" />
-      <option name="project" value="LOCAL" />
-      <updated>1579890010334</updated>
+      <workItem from="1580386528739" duration="10509000" />
     </task>
     <task id="LOCAL-00321" summary="Melhorias na API">
       <created>1580143566052</created>
@@ -498,7 +486,14 @@
       <option name="project" value="LOCAL" />
       <updated>1580400845333</updated>
     </task>
-    <option name="localTasksCounter" value="369" />
+    <task id="LOCAL-00369" summary="Melhorias na API">
+      <created>1580402916809</created>
+      <option name="number" value="00369" />
+      <option name="presentableId" value="LOCAL-00369" />
+      <option name="project" value="LOCAL" />
+      <updated>1580402916810</updated>
+    </task>
+    <option name="localTasksCounter" value="370" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -543,11 +538,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="585" y="309" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1580395607218" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1580393553697">
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1580403012334">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="488" y="71" key="#com.intellij.ide.util.MemberChooser/0.0.1366.768@0.0.1366.768" timestamp="1579144618537" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1580393553697" />
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1580403012334" />
     <state x="509" y="169" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1578969843084">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -612,11 +607,11 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1579834568153" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1578417783560" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1580400851366">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1580402919022">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1579146198967" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1580400851366" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1580402919022" />
     <state x="544" y="399" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD" timestamp="1579615180701">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -649,10 +644,10 @@
     </state>
     <state x="403" y="177" key="run.anything.popup/0.0.1366.768@0.0.1366.768" timestamp="1580268172098" />
     <state x="496" y="233" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1580307385661" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1580394368515">
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1580403360876">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="409" y="165" width="672" height="516" key="search.everywhere.popup/0.0.1366.768@0.0.1366.768" timestamp="1579834584354" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1580394368515" />
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1580403360876" />
   </component>
 </project>
