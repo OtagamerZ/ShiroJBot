@@ -17,8 +17,6 @@
 
 package com.kuuhaku.handlers.games.rpg.entities;
 
-import java.util.Random;
-
 public class Status {
 	private boolean alive = true;
 	private int xp = 0;
@@ -60,9 +58,8 @@ public class Status {
 		return baseStats;
 	}
 
-	public void damage(int damage, boolean defending) {
-		float fac = (float) damage / ((float) damage + (float) agility + new Random().nextInt(defense) * (defending ? 1.5f : 1));
-		modifyLife(Math.round(-(damage * fac)));
+	public void damage(int damage) {
+		modifyLife(damage);
 		if (getLife() <= 0) setAlive(false);
 		else setAlive(true);
 	}

@@ -45,6 +45,5 @@ public class RollCommand extends Command {
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
 		}
-
 	}
 }
