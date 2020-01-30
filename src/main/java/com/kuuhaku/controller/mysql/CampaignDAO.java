@@ -47,12 +47,12 @@ public class CampaignDAO {
 
 		Query q = em.createQuery("SELECT g FROM Campaign g", Campaign.class);
 
-		em.close();
-
 		Map<String, World> g = new HashMap<>();
 		List<Campaign> cps = q.getResultList();
 
 		cps.forEach(c -> g.put(c.getId(), ShiroInfo.getJSONFactory().fromJson(c.getData(), World.class)));
+
+		em.close();
 
 		return g;
 	}
