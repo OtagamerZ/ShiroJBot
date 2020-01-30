@@ -85,7 +85,7 @@ public class Relay {
 			WebhookClientBuilder wcb = new WebhookClientBuilder(wbs.get(0).getUrl());
 			return wcb.build();
 		} else {
-			WebhookClientBuilder wcb = new WebhookClientBuilder(Objects.requireNonNull(Helper.getOrCreateWebhook(ch)).getUrl());
+			WebhookClientBuilder wcb = new WebhookClientBuilder(Objects.requireNonNull(Helper.getOrCreateWebhook(ch, "Jibril", Main.getJibril())).getUrl());
 			return wcb.build();
 		}
 	}

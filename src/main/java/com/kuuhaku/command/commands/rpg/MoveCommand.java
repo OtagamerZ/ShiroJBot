@@ -52,8 +52,12 @@ public class MoveCommand extends Command {
 					return;
 				}
 
-				Main.getInfo().getGames().get(guild.getId()).getPlayers().get(author.getId()).move(Main.getInfo().getGames().get(guild.getId()).getCurrentMap(), Utils.coordToArray(coords[0], coords[1]));
-				Main.getInfo().getGames().get(guild.getId()).render(message.getTextChannel()).queue();
+				try {
+					Main.getInfo().getGames().get(guild.getId()).getPlayers().get(author.getId()).move(Main.getInfo().getGames().get(guild.getId()).getCurrentMap(), Utils.coordToArray(coords[0], coords[1]));
+					Main.getInfo().getGames().get(guild.getId()).render(message.getTextChannel()).queue();
+				} catch (IllegalArgumentException e) {
+					channel.sendMessage(":x: | A coordenada deve conter apenas 2 letras, onde a primeira é maiúscula e a segunda minúscula, e deve estar dentro dos limites do mapa.").queue();
+				}
 			}
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
