@@ -81,8 +81,8 @@ public class ChestRegisterHandler extends ListenerAdapter {
 					render(msg);
 					break;
 				case 1:
-					if (Main.getInfo().getGames().get(event.getGuild().getId()).getMonsters().containsKey(event.getMessage().getContentRaw())) {
-						channel.sendMessage(":x: | Este nome já está em uso").queue();
+					if (Main.getInfo().getGames().get(event.getGuild().getId()).getChests().containsKey(event.getMessage().getContentRaw())) {
+						channel.sendMessage(":x: | Este baú já existe.").queue();
 						return;
 					}
 					name = event.getMessage().getContentRaw();
