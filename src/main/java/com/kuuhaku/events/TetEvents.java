@@ -130,7 +130,8 @@ public class TetEvents extends ListenerAdapter {
 				wmb.setContent("**" + player.getCharacter().getName() + " " + (state == null ? "disse" : state) + ":** _" + quote.substring(1) + "_");
 
 				try {
-					message.delete().queue(s -> client.send(wmb.build()));
+					client.send(wmb.build());
+					message.delete().queue();
 				} catch (InsufficientPermissionException ignore) {
 				}
 

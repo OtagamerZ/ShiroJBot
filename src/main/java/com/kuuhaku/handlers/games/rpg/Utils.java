@@ -162,6 +162,10 @@ public class Utils {
 							if (status != null) dice = String.valueOf(status.getLuck());
 							else dice = "1";
 							break;
+						case "r":
+							if (status != null) dice = String.valueOf(status.getDefense());
+							else dice = "1";
+							break;
 						default:
 							dice = rawDice.split("d")[1];
 					}
