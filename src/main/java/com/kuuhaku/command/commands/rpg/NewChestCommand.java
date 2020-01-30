@@ -26,7 +26,7 @@ import net.dv8tion.jda.api.entities.*;
 public class NewChestCommand extends Command {
 
 	public NewChestCommand() {
-		super("rnovobau", new String[]{"rnew"}, "Inicia seu cadastro como jogador.", Category.RPG);
+		super("rnovobau", new String[]{"rnewchest"}, "Inicia o cadastro de um novo baú.", Category.RPG);
 	}
 
 	@Override
