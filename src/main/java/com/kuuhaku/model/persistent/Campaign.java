@@ -32,6 +32,9 @@ public class Campaign {
 	@Column(columnDefinition = "LONGTEXT")
 	private String data;
 
+	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	private boolean closed;
+
 	public String getId() {
 		return id;
 	}
@@ -54,5 +57,13 @@ public class Campaign {
 
 	public void setData(String data) {
 		this.data = data;
+	}
+
+	public boolean isClosed() {
+		return closed;
+	}
+
+	public void close() {
+		this.closed = true;
 	}
 }
