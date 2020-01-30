@@ -41,6 +41,7 @@
         <class>com.kuuhaku.model.persistent.Token</class>
         <class>com.kuuhaku.model.persistent.GlobalMessage</class>
         <class>com.kuuhaku.model.persistent.AppUser</class>
+        <class>com.kuuhaku.model.persistent.Campaign</class>
         <class>java.lang.String</class>
 
         <properties>

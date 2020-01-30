@@ -20,6 +20,7 @@ package com.kuuhaku.events.cron;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.Sweeper;
 import com.kuuhaku.controller.mysql.BackupDAO;
+import com.kuuhaku.controller.mysql.CampaignDAO;
 import com.kuuhaku.model.common.DataDump;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Activity;
@@ -41,6 +42,8 @@ public class BackupEvent implements Job {
 		Helper.logger(this.getClass()).info("Respostas/Guilds/Usuários salvos com sucesso!");
 		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump()));
 		Helper.logger(this.getClass()).info("Membros salvos com sucesso!");
+		CampaignDAO.saveCampaigns(Main.getInfo().getGames());
+		Helper.logger(this.getClass()).info("Campanhas salvas com sucesso!");
 
 		Sweeper.sweep();
 	}
