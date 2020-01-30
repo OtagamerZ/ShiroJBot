@@ -117,18 +117,22 @@ public class TetEvents extends ListenerAdapter {
 				WebhookClientBuilder wcb = new WebhookClientBuilder(Objects.requireNonNull(Helper.getOrCreateWebhook((TextChannel) channel, "Tet", Main.getTet())).getUrl());
 				WebhookClient client = wcb.build();
 
-				String state = Helper.containsAll(rawMessage, "{", "}") ? rawMessage.substring(rawMessage.indexOf("{"), rawMessage.indexOf("}") - 1) : null;
+				String state = Helper.containsAll(rawMessage, "{", "}") ? rawMessage.substring(rawMessage.indexOf("{"), rawMessage.indexOf("}")) : null;
 				String quote = rawMessage.replace("{", "").replace("}", "");
 
 				if (state != null) {
-					quote = quote.replaceFirst(state, "");
+					quote = quote.replaceFirst(".*(disse).*", "");
 				}
 
 				WebhookMessageBuilder wmb = new WebhookMessageBuilder();
 				wmb.setUsername(player.getCharacter().getName());
 				wmb.setAvatarUrl(player.getCharacter().getImage());
-				wmb.setContent("**" + player.getCharacter().getName() + " " + state + ":** _" + quote.replaceFirst("-", "") + "_");
-				client.send(wmb.build());
+				wmb.setContent("**" + player.getCharacter().getName() + " " + (state == null ? "disse" : state) + ":** _" + quote.substring(1) + "_");
+
+				try {
+					message.delete().queue(s -> client.send(wmb.build()));
+				} catch (InsufficientPermissionException ignore) {
+				}
 
 				client.close();
 			}
