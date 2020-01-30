@@ -21,45 +21,45 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.handlers.games.rpg.actors.Actor;
-import com.kuuhaku.handlers.games.rpg.handlers.CombatHandler;
-import com.kuuhaku.handlers.games.rpg.handlers.PvPHandler;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.lang3.StringUtils;
 
 public class AttackCommand extends Command {
 
 	public AttackCommand() {
-		super("rduelar", new String[]{"rattack", "rduel"}, "<@usuário>", "Inicia um duelo com um jogador.", Category.RPG);
+		super("ratacar", new String[]{"rattack", "rdamage", "rdmg"}, "<@usuário>", "Causa dano ou cura um jogador.", Category.RPG);
 	}
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		if (Main.getInfo().getGames().get(guild.getId()).getMaster().equals(author.getId())) {
-			if (message.getMentionedUsers().size() == 0) {
-				channel.sendMessage(":x: | Você precisa especificar um usuário para atacar").queue();
-				return;
-			} else if (args.length == 1) {
-				channel.sendMessage(":x: | Você precisa especificar um monstro como atacante").queue();
-				return;
-			}
-
-			Actor.Player player = Main.getInfo().getGames().get(guild.getId()).getPlayers().get(author.getId());
-			Actor.Monster mob = Main.getInfo().getGames().get(guild.getId()).getMonsters().get(args[1]);
-
-			new CombatHandler(Main.getTet(), Main.getInfo().getGames().get(guild.getId()), message.getTextChannel(), player, mob);
+		if (args.length == 0) {
+			channel.sendMessage(":x: | Você precisa informar o dano a ser causado ao jogador. Valores negativos irão curar.").queue();
 			return;
-		}
-		if (message.getMentionedUsers().size() == 0) {
-			channel.sendMessage(":x: | Você precisa especificar um usuário para duelar").queue();
+		} else if (!StringUtils.isNumeric(args[0])) {
+			channel.sendMessage(":x: | O valor deve ser numérico.").queue();
 			return;
-		}
-		Actor.Player player = Main.getInfo().getGames().get(guild.getId()).getPlayers().get(author.getId());
-		Actor.Player target = Main.getInfo().getGames().get(guild.getId()).getPlayers().get(message.getMentionedUsers().get(0).getId());
-
-		if (player.getPos() != target.getPos()) {
-			channel.sendMessage(":x: | Este jogador não está na mesma área que você").queue();
+		} else if (message.getMentionedUsers().size() == 0) {
+			channel.sendMessage(":x: | Você precisa informar um usuário alvo.").queue();
 			return;
 		}
 
-		new PvPHandler(Main.getTet(), message.getTextChannel(), player, target);
+		int value = Integer.parseInt(args[0]);
+		Actor.Player p = Main.getInfo().getGames().get(guild.getId()).getPlayers().get(author.getId());
+		Actor.Player t = Main.getInfo().getGames().get(guild.getId()).getPlayers().getOrDefault(message.getMentionedUsers().get(0).getId(), null);
+
+		if (t == null) {
+			channel.sendMessage(":x: | O alvo deve ser um jogador participante da campanha atual.").queue();
+			return;
+		}
+
+		if (value > 0) {
+			channel.sendMessage("_**" + p.getCharacter().getName() + " atacou " + t.getCharacter().getName() + ", causando " + value + " de dano.**_").queue();
+			t.getCharacter().getStatus().damage(value);
+		} else if (value < 0) {
+			channel.sendMessage("_**" + p.getCharacter().getName() + " curou " + t.getCharacter().getName() + ", recuperando " + value + " pontos vida.**_").queue();
+			t.getCharacter().getStatus().damage(value);
+		} else {
+			channel.sendMessage("_**Nada ocorreu.**_").queue();
+		}
 	}
 }
