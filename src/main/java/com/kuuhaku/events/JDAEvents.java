@@ -158,7 +158,7 @@ public class JDAEvents extends ListenerAdapter {
 	public void onGuildJoin(GuildJoinEvent event) {
 		GuildDAO.addGuildToDB(event.getGuild());
 		try {
-			Helper.sendPM(Objects.requireNonNull(event.getGuild().getOwner()).getUser(), "Obrigada por me adicionar ao seu servidor, utilize `s!ajuda` para ver meus comandos!\n\nDúvidas? Pergunte-me diretamente e um de meus desenvolvedores responderá assim que possível!");
+			Helper.sendPM(Objects.requireNonNull(event.getGuild().getOwner()).getUser(), "Obrigada por me adicionar ao seu servidor, utilize `s!ajuda` em um dos canais do servidor para ver meus comandos!\n\nDúvidas? Pergunte-me diretamente e um de meus desenvolvedores responderá assim que possível!");
 		} catch (Exception err) {
 			TextChannel dch = event.getGuild().getDefaultChannel();
 			if (dch != null) {
