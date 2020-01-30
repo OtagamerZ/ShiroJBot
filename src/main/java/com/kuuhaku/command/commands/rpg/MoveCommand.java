@@ -21,10 +21,12 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.handlers.games.rpg.Utils;
+import com.kuuhaku.handlers.games.rpg.actors.Actor;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class MoveCommand extends Command {
 
@@ -53,7 +55,9 @@ public class MoveCommand extends Command {
 				}
 
 				try {
-					Main.getInfo().getGames().get(guild.getId()).getPlayers().get(author.getId()).move(Main.getInfo().getGames().get(guild.getId()).getCurrentMap(), Utils.coordToArray(coords[0], coords[1]));
+					Actor.Player p = Main.getInfo().getGames().get(guild.getId()).getPlayers().get(author.getId());
+					channel.sendMessage("_**" + p.getCharacter().getName() + " move-se para " + Arrays.toString(coords) + "**_").queue();
+					p.move(Main.getInfo().getGames().get(guild.getId()).getCurrentMap(), Utils.coordToArray(coords[0], coords[1]));
 					Main.getInfo().getGames().get(guild.getId()).render(message.getTextChannel()).queue();
 				} catch (IllegalArgumentException e) {
 					channel.sendMessage(":x: | A coordenada deve conter apenas 2 letras, onde a primeira é maiúscula e a segunda minúscula, e deve estar dentro dos limites do mapa.").queue();
