@@ -25,6 +25,7 @@
     <orderEntry type="library" name="Gradle: com.google.apis:google-api-services-youtube:v3-rev212-1.25.0" level="project" />
     <orderEntry type="library" name="Gradle: com.rollbar:rollbar-java:1.5.2" level="project" />
     <orderEntry type="library" name="Gradle: com.github.liheyuan:simple-emoji-4j:f26d3b39be" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.8.6" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-data-jpa:2.1.6.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-web:2.1.6.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: io.socket:socket.io-client:1.0.0" level="project" />
