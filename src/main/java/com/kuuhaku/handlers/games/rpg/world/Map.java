@@ -61,7 +61,6 @@ public class Map {
 		g2d.setStroke(new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL));
 		g2d.setFont(new Font("Arial", Font.PLAIN, 40));
 
-
 		g2d.drawImage(pointer, 0, 0, null);
 		g2d.drawImage(map, 64, 64, null);
 		for (int x = 1; x <= size[0]; x++) {
