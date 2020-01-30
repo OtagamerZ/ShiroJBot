@@ -147,9 +147,25 @@ public class World {
 
 		if (playerList.size() == 0) return playerMap;
 		for (int i = 0; i < playerList.size(); i++) {
-			g2d.drawLine(97 + Utils.toDotPos(playerList.get(i).wasAt())[0], 97 + Utils.toDotPos(playerList.get(i).wasAt())[1], 97 + Utils.toDotPos(playerList.get(i).getPos())[0], 97 + Utils.toDotPos(playerList.get(i).getPos())[1]);
-			g2d.drawImage(Profile.scaleImage(playerList.get(i).getPin(), 72, 95), Utils.toPinPos(playerList.get(i).getPos())[0] + offset[0], Utils.toPinPos(playerList.get(i).getPos())[1] + offset[1], null);
-			g2d.drawString(playerList.get(i).getCharacter().getName() + " -> " + Arrays.toString(Utils.arrayToCoord(playerList.get(i).getPos())), 15, currentMap.getMap().getHeight() + 50 * (i + 1));
+			g2d.drawLine(
+					97 + Utils.toDotPos(playerList.get(i).wasAt())[0],
+					97 + Utils.toDotPos(playerList.get(i).wasAt())[1],
+					97 + Utils.toDotPos(playerList.get(i).getPos())[0],
+					97 + Utils.toDotPos(playerList.get(i).getPos())[1]
+			);
+
+			g2d.drawImage(
+					Profile.scaleImage(playerList.get(i).getPin(), 72, 95),
+					Utils.toPinPos(playerList.get(i).getPos())[0] + offset[0],
+					Utils.toPinPos(playerList.get(i).getPos())[1] + offset[1],
+					null
+			);
+
+			g2d.drawString(
+					playerList.get(i).getCharacter().getName() + " -> " + Arrays.toString(Utils.arrayToCoord(playerList.get(i).getPos())),
+					15,
+					currentMap.getMap().getHeight() + 50 * (i + 1)
+			);
 		}
 
 		return playerMap;

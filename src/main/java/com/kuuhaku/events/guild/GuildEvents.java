@@ -112,13 +112,13 @@ public class GuildEvents extends ListenerAdapter {
 					countSpam(member, channel, guild, h);
 				} else {
 					List<Message> h = channel.getHistory().retrievePast(20).complete();
-					h.removeIf(m -> ChronoUnit.MILLIS.between(m.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author && StringUtils.containsIgnoreCase(m.getContentRaw(), message.getContentRaw()));
+					h.removeIf(m -> ChronoUnit.MILLIS.between(m.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author && StringUtils.containsIgnoreCase(m.getContentRaw(), rawMessage));
 
 					countSpam(member, channel, guild, h);
 				}
 			}
 
-			if (message.getContentRaw().trim().equals("<@" + Main.getInfo().getSelfUser().getId() + ">") || message.getContentRaw().trim().equals("<@!" + Main.getInfo().getSelfUser().getId() + ">")) {
+			if (rawMessage.trim().equals("<@" + Main.getInfo().getSelfUser().getId() + ">") || rawMessage.trim().equals("<@!" + Main.getInfo().getSelfUser().getId() + ">")) {
 				channel.sendMessage("Quer saber como pode usar meus comandos? Digite `" + prefix + "ajuda` para ver todos eles ordenados por categoria!").queue();
 				return;
 			}
@@ -211,7 +211,7 @@ public class GuildEvents extends ListenerAdapter {
 				} catch (InsufficientPermissionException ignore) {
 				}
 
-				if (GuildDAO.getGuildById(guild.getId()).getNoLinkChannels().contains(channel.getId()) && Helper.findURL(message.getContentRaw())) {
+				if (GuildDAO.getGuildById(guild.getId()).getNoLinkChannels().contains(channel.getId()) && Helper.findURL(rawMessage)) {
 					message.delete().reason("Mensagem possui um URL").complete();
 					channel.sendMessage(member.getAsMention() + ", é proibido postar links neste canal!").queue();
 				}
