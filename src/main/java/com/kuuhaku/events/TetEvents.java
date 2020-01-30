@@ -111,7 +111,7 @@ public class TetEvents extends ListenerAdapter {
 			if (rawMessage.trim().equals("<@" + Main.getTet().getSelfUser().getId() + ">") || rawMessage.trim().equals("<@!" + Main.getTet().getSelfUser().getId() + ">")) {
 				channel.sendMessage("Opa, eae jogador! Meus comandos são listados pela Shiro, digite `" + prefix + "help` e clique na categoria `RPG` para vê-los!").queue();
 				return;
-			} else if (rawMessage.startsWith("-") && Main.getInfo().getGames().containsKey(guild.getId()) && Main.getInfo().getGames().get(guild.getId()).getPlayers().containsKey(author.getId())) {
+			} else if (rawMessage.startsWith("-") && rawMessage.length() > 1 && Main.getInfo().getGames().containsKey(guild.getId()) && Main.getInfo().getGames().get(guild.getId()).getPlayers().containsKey(author.getId())) {
 				Actor.Player player = Main.getInfo().getGames().get(guild.getId()).getPlayers().get(author.getId());
 
 				WebhookClientBuilder wcb = new WebhookClientBuilder(Objects.requireNonNull(Helper.getOrCreateWebhook((TextChannel) channel, "Tet", Main.getTet())).getUrl());
@@ -128,6 +128,22 @@ public class TetEvents extends ListenerAdapter {
 				wmb.setUsername(player.getCharacter().getName());
 				wmb.setAvatarUrl(player.getCharacter().getImage());
 				wmb.setContent("**" + (state == null ? "disse" : state) + ":** _" + (state == null ? quote.substring(1) : quote.split("}")[1].substring(1)) + "_");
+
+				try {
+					client.send(wmb.build());
+					message.delete().queue();
+				} catch (InsufficientPermissionException ignore) {
+				}
+
+				client.close();
+			} else if (rawMessage.startsWith("-") && rawMessage.length() > 1 && Main.getInfo().getGames().containsKey(guild.getId()) && Main.getInfo().getGames().get(guild.getId()).getMaster().equals(author.getId())) {
+				WebhookClientBuilder wcb = new WebhookClientBuilder(Objects.requireNonNull(Helper.getOrCreateWebhook((TextChannel) channel, "Tet", Main.getTet())).getUrl());
+				WebhookClient client = wcb.build();
+
+				WebhookMessageBuilder wmb = new WebhookMessageBuilder();
+				wmb.setUsername("Narrador");
+				wmb.setAvatarUrl("https://pbs.twimg.com/profile_images/805843452013510657/rZ7w_GlD.jpg");
+				wmb.setContent("_**" + rawMessage.substring(1) + "**_");
 
 				try {
 					client.send(wmb.build());
