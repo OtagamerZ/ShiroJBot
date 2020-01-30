@@ -127,7 +127,7 @@ public class TetEvents extends ListenerAdapter {
 				WebhookMessageBuilder wmb = new WebhookMessageBuilder();
 				wmb.setUsername(player.getCharacter().getName());
 				wmb.setAvatarUrl(player.getCharacter().getImage());
-				wmb.setContent("**" + player.getCharacter().getName() + " " + (state == null ? "disse" : state) + ":** _" + (state == null ? quote.substring(1) : quote.split("}")[1].substring(1)) + "_");
+				wmb.setContent("**" + (state == null ? "disse" : state) + ":** _" + (state == null ? quote.substring(1) : quote.split("}")[1].substring(1)) + "_");
 
 				try {
 					client.send(wmb.build());
