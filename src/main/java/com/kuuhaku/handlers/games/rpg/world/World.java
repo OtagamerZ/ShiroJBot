@@ -26,7 +26,6 @@ import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.requests.RestAction;
 import org.apache.commons.lang3.StringUtils;
 
@@ -51,9 +50,9 @@ public class World {
 	private final List<Item> items = new ArrayList<>();
 	private boolean locked = false;
 
-	public World(User master) {
-		this.master = master.getId();
-		System.out.println(master.getId() + " | " + this.master);
+	public World(String master) {
+		this.master = master;
+		System.out.println(master + " | " + this.master);
 	}
 
 	public void addMap(com.kuuhaku.handlers.games.rpg.world.Map map) {
