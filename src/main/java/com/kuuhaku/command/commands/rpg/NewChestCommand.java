@@ -31,6 +31,7 @@ public class NewChestCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		if (Main.getInfo().getGames().get(guild.getId()).getMaster() == author) new ChestRegisterHandler(message.getTextChannel(), Main.getTet(), author, Main.getInfo().getGames().get(guild.getId()));
+		if (Main.getInfo().getGames().get(guild.getId()).getMaster().equals(author.getId()))
+			new ChestRegisterHandler(message.getTextChannel(), Main.getTet(), author, Main.getInfo().getGames().get(guild.getId()));
 	}
 }
