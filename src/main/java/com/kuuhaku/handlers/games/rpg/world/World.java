@@ -52,7 +52,6 @@ public class World {
 
 	public World(String master) {
 		this.master = master;
-		System.out.println(master + " | " + this.master);
 	}
 
 	public void addMap(com.kuuhaku.handlers.games.rpg.world.Map map) {
