@@ -35,7 +35,12 @@ public class ViewCommand extends Command {
 			if (args.length == 0) {
 				channel.sendMessage(":x: | É necessário especificar o nome do item").queue();
 				return;
+			} else if (args[0].equals("json")) {
+				channel.sendMessage("```" + Main.getInfo().getGames().get(guild.getId()).getAsJSON() + "```").queue();
+				return;
 			}
+
+
 			if (Main.getInfo().getGames().get(guild.getId()).getMaster() == author) {
 				Main.getInfo().getGames().get(guild.getId()).getItem(args[0]).info(message.getTextChannel()).queue();
 				return;
