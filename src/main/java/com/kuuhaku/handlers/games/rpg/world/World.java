@@ -23,6 +23,7 @@ import com.kuuhaku.handlers.games.rpg.entities.Chest;
 import com.kuuhaku.handlers.games.rpg.entities.Item;
 import com.kuuhaku.handlers.games.rpg.exceptions.UnknownItemException;
 import com.kuuhaku.model.common.Profile;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -34,14 +35,13 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("rawtypes")
-public class World implements Serializable {
+public class World {
 	private com.kuuhaku.handlers.games.rpg.world.Map currentMap;
 	private final ArrayList<com.kuuhaku.handlers.games.rpg.world.Map> maps = new ArrayList<>();
 	private final User master;
@@ -221,6 +221,10 @@ public class World implements Serializable {
 
 	public void setLocked(boolean locked) {
 		this.locked = locked;
+	}
+
+	public String getAsJSON() {
+		return ShiroInfo.getJSONMaker().toJson(this);
 	}
 }
 
