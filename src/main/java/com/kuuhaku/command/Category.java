@@ -20,6 +20,7 @@ package com.kuuhaku.command;
 import com.kuuhaku.controller.mysql.TagDAO;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.PrivilegeLevel;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Guild;
 
 import java.util.ArrayList;
@@ -96,7 +97,7 @@ public enum Category {
 	}
 	
 	public boolean isEnabled(GuildConfig gc, Guild g) {
-		if (this == DEVS && !g.getId().equals("421495229594730496")) {
+		if (this == DEVS && !g.getId().equals(ShiroInfo.getSupportServerID())) {
 			return false;
 		} else if (this == PARTNER && !TagDAO.getTagById(g.getOwnerId()).isPartner()) {
 			return false;
