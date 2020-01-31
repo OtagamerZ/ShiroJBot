@@ -57,6 +57,7 @@ public class ShiroInfo {
 	private static final String name = "Shiro";
 	private static final String version = "3.3";
 	private static final String supportServer = "Shiro Support";
+	private static final String supportServerID = "421495229594730496";
 	private static final String default_prefix = DEV ? "dev!" : "s!";
 	private static final String nomeDB = "shiro.sqlite";
 	private static final String niichan = "350836145921327115"; //KuuHaKu
@@ -88,6 +89,30 @@ public class ShiroInfo {
 	}
 
 	//CONSTANTS
+	//STATIC
+	public static void cache(Guild guild, Message message) {
+		KittyCache<String, Message> cache = messageCache.getOrDefault(guild.getId(), new KittyCache<>(64));
+		cache.put(message.getId(), message, (int) TimeUnit.DAYS.toSeconds(1));
+		messageCache.put(guild.getId(), cache);
+	}
+
+	public static Message retrieveCachedMessage(Guild guild, String id) {
+		return messageCache.getOrDefault(guild.getId(), new KittyCache<>(64)).removeAndGet(id);
+	}
+
+	public static String getSupportServer() {
+		return supportServer;
+	}
+
+	public static Gson getJSONFactory() {
+		return JSONFactory;
+	}
+
+	public static String getSupportServerID() {
+		return supportServerID;
+	}
+
+	//NON-STATIC
 	public float getCPULoad() {
 		return (float) Helper.round(tBean.getCurrentThreadCpuTime() * 100, 2);
 	}
@@ -178,24 +203,6 @@ public class ShiroInfo {
 
 	public JDAEvents getShiroEvents() {
 		return shiroEvents;
-	}
-
-	public static void cache(Guild guild, Message message) {
-		KittyCache<String, Message> cache = messageCache.getOrDefault(guild.getId(), new KittyCache<>(64));
-		cache.put(message.getId(), message, (int) TimeUnit.DAYS.toSeconds(1));
-		messageCache.put(guild.getId(), cache);
-	}
-
-	public static Message retrieveCachedMessage(Guild guild, String id) {
-		return messageCache.getOrDefault(guild.getId(), new KittyCache<>(64)).removeAndGet(id);
-	}
-
-	public static String getSupportServer() {
-		return supportServer;
-	}
-
-	public static Gson getJSONFactory() {
-		return JSONFactory;
 	}
 
 	//VARIABLES
