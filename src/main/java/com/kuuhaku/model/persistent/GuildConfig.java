@@ -204,7 +204,7 @@ public class GuildConfig {
 		try {
 			return new JSONObject(cargoslvl).toMap();
 		} catch (Exception e) {
-			return null;
+			return new JSONObject().toMap();
 		}
 	}
 
