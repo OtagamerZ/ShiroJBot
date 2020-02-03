@@ -68,13 +68,13 @@ public class MarryCommand extends Command {
 					channel.sendMessage(":x: | Ele pediu pra dizer que não!").queue();
 				}
 				return;
-			} else if (!MemberDAO.getMemberById(author.getId() + guild.getId()).getWaifu().isEmpty() || !MemberDAO.getMemberById(message.getMentionedUsers().get(0).getId() + guild.getId()).getWaifu().isEmpty()) {
+			} else if (WaifuDAO.isWaifued(author.getId()) || WaifuDAO.isWaifued(message.getMentionedUsers().get(0).getId())) {
 				channel.sendMessage(":x: | Essa pessoa já está casada, hora de passar pra frente!").queue();
 				return;
 			}
 
 			channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + ", deseja casar-se com " + author.getAsMention() + ", por toda eternidade (ou não) em troca de um bônus de XP?" +
-					"\nDigite `SIM` para aceitar ou `NÃO` para negar.").queue();
+					"\nDigite « Sim » para aceitar ou « Não » para negar.").queue();
 
 			Main.getInfo().getAPI().addEventListener(new WaifuListener() {
 				private final Consumer<Void> success = s -> Main.getInfo().getAPI().removeEventListener(this);
