@@ -64,12 +64,6 @@ public class Status {
 		else setAlive(true);
 	}
 
-	public void trueDamage(int damage) {
-		modifyLife(damage);
-		if (getLife() <= 0) setAlive(false);
-		else setAlive(true);
-	}
-
 	public void addXp(int xp) {
 		this.xp += xp;
 	}

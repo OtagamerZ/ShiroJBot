@@ -40,9 +40,6 @@ public class GiveCommand extends Command {
 			if (args.length < 3 && (args[1].equalsIgnoreCase("xp") || args[1].equalsIgnoreCase("ouro"))) {
 				channel.sendMessage(":x: | Você precisa especificar a quantidade de XP").queue();
 				return;
-			} else if (args.length < 3 && (args[1].equalsIgnoreCase("dano"))) {
-				channel.sendMessage(":x: | Você precisa especificar a quantidade de dano").queue();
-				return;
 			}
 
 			Equipped inv = Main.getInfo().getGames().get(guild.getId()).getPlayers().get(message.getMentionedUsers().get(0).getId()).getCharacter().getInventory();
@@ -50,8 +47,6 @@ public class GiveCommand extends Command {
 				inv.addGold(Integer.parseInt(args[2]));
 			else if ((args[1].equalsIgnoreCase("xp")))
 				Main.getInfo().getGames().get(guild.getId()).getPlayers().get(message.getMentionedUsers().get(0).getId()).getCharacter().getStatus().addXp(Integer.parseInt(args[2]));
-			else if ((args[1].equalsIgnoreCase("dano")))
-				Main.getInfo().getGames().get(guild.getId()).getPlayers().get(message.getMentionedUsers().get(0).getId()).getCharacter().getStatus().trueDamage(Integer.parseInt(args[2]));
 			else inv.addItem(Main.getInfo().getGames().get(guild.getId()).getItem(String.join(" ", Arrays.copyOfRange(args, 1, args.length))));
 			return;
 		}
