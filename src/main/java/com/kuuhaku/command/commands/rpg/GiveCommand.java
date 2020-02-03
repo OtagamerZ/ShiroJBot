@@ -21,44 +21,70 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.handlers.games.rpg.Utils;
-import com.kuuhaku.handlers.games.rpg.entities.Equipped;
+import com.kuuhaku.handlers.games.rpg.actors.Actor;
+import com.kuuhaku.handlers.games.rpg.entities.Item;
+import com.kuuhaku.handlers.games.rpg.enums.Resource;
+import com.kuuhaku.handlers.games.rpg.exceptions.UnknownItemException;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.Arrays;
 
 public class GiveCommand extends Command {
 
 	public GiveCommand() {
-		super("rdar", new String[]{"rgive"}, "<@usuário> <item/ouro> [qtd de ouro]", "Dá um item ou dinheiro à outro jogador.", Category.RPG);
+		super("rdar", new String[]{"rgive"}, "<@usuário> <item/ouro/xp> [qtd de ouro/xp]", "Dá um item, dinheiro ou xp à outro jogador.", Category.RPG);
 	}
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (Utils.noPlayerAlert(args, message, channel)) return;
 
-		if (Main.getInfo().getGames().get(guild.getId()).getMaster().equals(author.getId())) {
-			if (args.length < 3 && (args[1].equalsIgnoreCase("xp") || args[1].equalsIgnoreCase("ouro"))) {
-				channel.sendMessage(":x: | Você precisa especificar a quantidade de XP").queue();
-				return;
-			}
+		Actor.Player t = Main.getInfo().getGames().get(guild.getId()).getPlayers().getOrDefault(message.getMentionedUsers().get(0).getId(), null);
 
-			Equipped inv = Main.getInfo().getGames().get(guild.getId()).getPlayers().get(message.getMentionedUsers().get(0).getId()).getCharacter().getInventory();
-			if ((args[1].equalsIgnoreCase("gold") || args[1].equalsIgnoreCase("ouro")))
-				inv.addGold(Integer.parseInt(args[2]));
-			else if ((args[1].equalsIgnoreCase("xp")))
-				Main.getInfo().getGames().get(guild.getId()).getPlayers().get(message.getMentionedUsers().get(0).getId()).getCharacter().getStatus().addXp(Integer.parseInt(args[2]));
-			else inv.addItem(Main.getInfo().getGames().get(guild.getId()).getItem(String.join(" ", Arrays.copyOfRange(args, 1, args.length))));
+		if (t == null) {
+			channel.sendMessage(":x: | O alvo deve ser um jogador participante da campanha atual.").queue();
 			return;
 		}
 
-		Equipped selfInv = Main.getInfo().getGames().get(guild.getId()).getPlayers().get(author.getId()).getCharacter().getInventory();
-		Equipped targetInv = Main.getInfo().getGames().get(guild.getId()).getPlayers().get(message.getMentionedUsers().get(0).getId()).getCharacter().getInventory();
-		if ((args[1].equalsIgnoreCase("gold") || args[1].equalsIgnoreCase("ouro"))) {
-			selfInv.addGold(-Integer.parseInt(args[2]));
-			targetInv.addGold(Integer.parseInt(args[2]));
+		if (Main.getInfo().getGames().get(guild.getId()).getMaster().equals(author.getId())) {
+			if (args.length < 3 && (Helper.containsAny(args[1], ArrayUtils.addAll(Resource.MONEY.getAliases(), Resource.XP.getAliases())))) {
+				channel.sendMessage(":x: | Você precisa especificar a quantidade de XP.").queue();
+				return;
+			}
+
+			if (Helper.containsAny(args[1], Resource.MONEY.getAliases())) {
+				t.getCharacter().getInventory().addGold(Integer.parseInt(args[2]));
+				channel.sendMessage("_**" + t.getCharacter().getName() + " recebeu $" + args[2] + " moeda" + (Integer.parseInt(args[2]) != 1 ? "s" : "") + ".**_").queue();
+			} else if (Helper.containsAny(args[1], Resource.XP.getAliases())) {
+				t.getCharacter().getStatus().addXp(Integer.parseInt(args[2]));
+				channel.sendMessage("_**" + t.getCharacter().getName() + " recebeu " + args[2] + " ponto" + (Integer.parseInt(args[2]) != 1 ? "s" : "") + " de experiência.**_").queue();
+			} else {
+				t.getCharacter().getInventory().addItem(Main.getInfo().getGames().get(guild.getId()).getItem(String.join(" ", Arrays.copyOfRange(args, 1, args.length))));
+			}
+			return;
+		}
+
+		Actor.Player p = Main.getInfo().getGames().get(guild.getId()).getPlayers().get(author.getId());
+		if (Helper.containsAny(args[1], Resource.MONEY.getAliases())) {
+			if (p.getCharacter().getInventory().getGold() < Integer.parseInt(args[1])) {
+				channel.sendMessage(":x: | Você não possui essa quantia de ouro.").queue();
+				return;
+			}
+
+			p.getCharacter().getInventory().addGold(-Integer.parseInt(args[2]));
+			t.getCharacter().getInventory().addGold(Integer.parseInt(args[2]));
+			channel.sendMessage("_**" + p.getCharacter().getName() + " deu $" + args[2] + " moeda" + (Integer.parseInt(args[2]) != 1 ? "s" : "") + " para " + t.getCharacter().getName() + "!**_").queue();
 		} else {
-			selfInv.removeItem(selfInv.getItem(String.join(" ", Arrays.copyOfRange(args, 1, args.length))));
-			targetInv.addItem(Main.getInfo().getGames().get(guild.getId()).getItem(String.join(" ", Arrays.copyOfRange(args, 1, args.length))));
+			try {
+				Item i = p.getCharacter().getInventory().getItem(String.join(" ", Arrays.copyOfRange(args, 1, args.length)));
+				p.getCharacter().getInventory().removeItem(i);
+				t.getCharacter().getInventory().addItem(i);
+				channel.sendMessage("_**" + p.getCharacter().getName() + " deu o item " + i.getName() + " para " + t.getCharacter().getName() + "!**_").queue();
+			} catch (UnknownItemException e) {
+				channel.sendMessage(":x: | Você não possui este item.").queue();
+			}
 		}
 	}
 }

@@ -54,7 +54,7 @@ public class UsageCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		EmbedBuilder eb = new EmbedBuilder();
 
-		List<Object[]> usos = LogDAO.getUses();
+		List<Object[]> usos = LogDAO.getUsage();
 		List<List<Object[]>> uPages = Helper.chunkify(usos, 10);
 
 		List<Page> pages = new ArrayList<>();
