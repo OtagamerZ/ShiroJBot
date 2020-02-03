@@ -28,6 +28,7 @@ import com.kuuhaku.model.persistent.CustomAnswers;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Log;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.PrivilegeLevel;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -68,7 +69,7 @@ public class GuildEvents extends ListenerAdapter {
 				}
 			} else prefix = Main.getInfo().getDefaultPrefix();
 
-			if (rawMessage.startsWith(";") && author.getId().equals(Main.getInfo().getNiiChan())) {
+			if (rawMessage.startsWith(";") && Helper.hasPermission(member, PrivilegeLevel.NIICHAN)) {
 				try {
 					if (rawMessage.replace(";", "").length() == 0) {
 						channel.sendFile(message.getAttachments().get(0).downloadToFile().get()).queue();
@@ -85,6 +86,14 @@ public class GuildEvents extends ListenerAdapter {
 						message.delete().complete();
 					}
 				} catch (InsufficientPermissionException | ExecutionException | InterruptedException ignore) {
+				}
+				return;
+			} else if (rawMessage.startsWith("e:") && Helper.hasPermission(member, PrivilegeLevel.PARTNER)) {
+				try {
+					List<Emote> emt = Main.getInfo().getAPI().getEmotesByName(rawMessage.substring(2), true);
+					channel.sendMessage(emt.get(Helper.rng(emt.size())).getAsMention()).queue();
+					message.delete().complete();
+				} catch (InsufficientPermissionException ignore) {
 				}
 			}
 

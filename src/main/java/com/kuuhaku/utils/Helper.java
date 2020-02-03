@@ -75,14 +75,16 @@ public class Helper {
 
 
 	private static PrivilegeLevel getPrivilegeLevel(Member member) {
-		if (Main.getInfo().getNiiChan().contains(member.getUser().getId())) {
+		if (Main.getInfo().getNiiChan().contains(member.getId())) {
 			return PrivilegeLevel.NIICHAN;
-		} else if (Main.getInfo().getDevelopers().contains(member.getUser().getId())) {
+		} else if (Main.getInfo().getDevelopers().contains(member.getId())) {
 			return PrivilegeLevel.DEV;
-		} else if (Main.getInfo().getSheriffs().contains(member.getUser().getId())) {
+		} else if (Main.getInfo().getSheriffs().contains(member.getId())) {
 			return PrivilegeLevel.SHERIFF;
 		} else if (member.hasPermission(Permission.MESSAGE_MANAGE)) {
 			return PrivilegeLevel.MOD;
+		} else if (TagDAO.getTagById(member.getId()).isPartner()) {
+			return PrivilegeLevel.PARTNER;
 		} else if (member.getRoles().stream().anyMatch(r -> StringUtils.containsIgnoreCase(r.getName(), "dj"))) {
 			return PrivilegeLevel.DJ;
 		}
