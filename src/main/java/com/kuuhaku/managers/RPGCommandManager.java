@@ -52,6 +52,7 @@ public class RPGCommandManager {
             add(new WorldListCommand());
             add(new ChestCommand());
             add(new NewChestCommand());
+            add(new UseCommand());
         }};
     }
 
