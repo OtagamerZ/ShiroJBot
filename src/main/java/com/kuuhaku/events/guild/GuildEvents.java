@@ -90,10 +90,10 @@ public class GuildEvents extends ListenerAdapter {
 				return;
 			} else if (rawMessage.startsWith("e:") && Helper.hasPermission(member, PrivilegeLevel.PARTNER)) {
 				try {
-					List<Emote> emt = Main.getInfo().getAPI().getEmotesByName(rawMessage.substring(2), true);
-					channel.sendMessage(emt.get(Helper.rng(emt.size())).getAsMention()).queue();
+					List<Emote> emt = Main.getInfo().getAPI().getEmotes().stream().filter(e -> StringUtils.containsIgnoreCase(e.getName(), rawMessage.substring(2))).collect(Collectors.toList());
+					channel.sendMessage(emt.size() == 0 ? ":question:" : emt.get(Helper.rng(emt.size())).getAsMention()).queue();
 					message.delete().complete();
-				} catch (InsufficientPermissionException ignore) {
+				} catch (IndexOutOfBoundsException | InsufficientPermissionException ignore) {
 				}
 			}
 
