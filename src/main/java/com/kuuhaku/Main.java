@@ -99,8 +99,8 @@ public class Main implements Thread.UncaughtExceptionHandler {
 			Helper.logger(Main.class).info("Dados recuperados com sucesso!");
 		else Helper.logger(Main.class).error("Erro ao recuperar dados.");
 
-		Main.getInfo().getGames().putAll(CampaignDAO.getCampaigns());
-		Helper.logger(Main.class).info("Campanhas recuperadas com sucesso!");
+		//Main.getInfo().getGames().putAll(CampaignDAO.getCampaigns());
+		//Helper.logger(Main.class).info("Campanhas recuperadas com sucesso!");
 
 		Executors.newSingleThreadExecutor().execute(ScheduledEvents::new);
 
