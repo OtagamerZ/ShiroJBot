@@ -458,12 +458,13 @@ public class Helper {
 		jo.getJSONObject("buttons").keySet().forEach(b -> {
 			JSONObject btns = jo.getJSONObject("buttons").getJSONObject(b);
 			Role role = g.getRoleById(btns.getString("role"));
-			assert role != null;
 			buttons.put(btns.getString("emote"), (m, ms) -> {
-				if (m.getRoles().contains(role)) {
-					g.removeRoleFromMember(m, role).queue();
-				} else {
-					g.addRoleToMember(m, role).queue();
+				if (role != null) {
+					if (m.getRoles().contains(role)) {
+						g.removeRoleFromMember(m, role).queue();
+					} else {
+						g.addRoleToMember(m, role).queue();
+					}
 				}
 			});
 		});

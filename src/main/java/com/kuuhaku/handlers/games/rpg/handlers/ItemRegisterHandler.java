@@ -20,7 +20,6 @@ package com.kuuhaku.handlers.games.rpg.handlers;
 import com.kuuhaku.Main;
 import com.kuuhaku.handlers.games.rpg.entities.Item;
 import com.kuuhaku.handlers.games.rpg.enums.Equipment;
-import com.kuuhaku.handlers.games.rpg.exceptions.NameTakenException;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Message;
@@ -84,8 +83,8 @@ public class ItemRegisterHandler extends ListenerAdapter {
 					render(msg);
 					break;
 				case 1:
-					if (Main.getInfo().getGames().get(event.getGuild().getId()).getPlayers().values().stream().anyMatch(p -> p.getCharacter().getName().equals(event.getMessage().getContentRaw()))) {
-						channel.sendMessage(":x: | Este nome já está em uso").queue();
+					if (Main.getInfo().getGames().get(event.getGuild().getId()).getItems().stream().anyMatch(i -> i.getName().equals(event.getMessage().getContentRaw()))) {
+						channel.sendMessage(":x: | Este nome já está em uso.").queue();
 						return;
 					}
 					name = event.getMessage().getContentRaw();
@@ -104,7 +103,6 @@ public class ItemRegisterHandler extends ListenerAdapter {
 						complete[1] = true;
 						render(msg);
 					} catch (IOException e) {
-						e.printStackTrace();
 						event.getChannel().sendMessage(":x: | Imagem inválida, veja se pegou o link corretamente.").queue();
 					}
 					break;
@@ -159,8 +157,6 @@ public class ItemRegisterHandler extends ListenerAdapter {
 					event.getChannel().sendMessage("Registro completo!\nConfirme o cadastro na mensagem inicial ou use os botões para alterar valores anteriores!").queue();
 					break;
 			}
-		} catch (NameTakenException e) {
-			event.getChannel().sendMessage(":x: | Este nome já está em uso!").queue();
 		} catch (NumberFormatException e) {
 			event.getChannel().sendMessage(":x: | Os atributos devem ser números inteiros, separados por ponto e vírgula \";\".").queue();
 		}
@@ -321,8 +317,7 @@ public class ItemRegisterHandler extends ListenerAdapter {
 			} else {
 				msg.editMessage(eb.build()).queue();
 			}
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		} catch (InterruptedException ignore) {
 		}
 	}
 }
