@@ -345,7 +345,8 @@ public abstract class Item {
 		eb.setDescription(description);
 		eb.setThumbnail(image);
 		eb.addField("Tipo", type.getName(), true);
-		eb.addField("Valor", ":small_orange_diamond: " + price + " moeda" + (price != 0 ? "s" : ""), false);
+		eb.addField("Valor", ":small_orange_diamond: " + price + " moeda" + (price != 0 ? "s" : ""), true);
+		eb.addBlankField(false);
 
 		return eb;
 	}
