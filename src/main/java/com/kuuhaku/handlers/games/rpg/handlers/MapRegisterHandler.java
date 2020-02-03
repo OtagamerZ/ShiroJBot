@@ -18,8 +18,10 @@
 package com.kuuhaku.handlers.games.rpg.handlers;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.handlers.games.rpg.Utils;
 import com.kuuhaku.handlers.games.rpg.exceptions.NameTakenException;
 import com.kuuhaku.handlers.games.rpg.world.Map;
+import com.kuuhaku.model.common.Profile;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Message;
@@ -80,11 +82,15 @@ public class MapRegisterHandler extends ListenerAdapter {
 				case 1:
 					if (Main.getInfo().getGames().get(event.getGuild().getId()).getPlayers().values().stream().anyMatch(p -> p.getCharacter().getName().equals(event.getMessage().getContentRaw())))
 						throw new NameTakenException();
-					image = event.getMessage().getContentRaw();
 					try {
 						HttpURLConnection con = (HttpURLConnection) new URL(image).openConnection();
 						con.setRequestProperty("User-Agent", "Mozilla/5.0");
 						BufferedImage map = ImageIO.read(con.getInputStream());
+
+						if (map.getWidth() > 1664) map = Profile.scaleImage(map, 1664, map.getHeight());
+						else if (map.getHeight() > 1664) map = Profile.scaleImage(map, map.getWidth(), 1664);
+
+						image = Utils.encodeToBase64(map);
 
 						event.getChannel().sendMessage("Mapa trocado com sucesso!").queue();
 						complete[0] = true;
@@ -122,12 +128,12 @@ public class MapRegisterHandler extends ListenerAdapter {
 				try {
 					Main.getInfo().getGames().get(event.getGuild().getId()).addMap(new Map(image, startPos));
 					jda.removeEventListener(this);
+					msg.clearReactions().queue();
 					channel.sendMessage("Registrado com sucesso!").queue();
 				} catch (IllegalArgumentException e) {
-					channel.sendMessage(":x: | Mapa com tamanho muito grande, por favor escolha imagem.").queue();
+					channel.sendMessage(":x: | Mapa com tamanho muito grande, por favor escolha uma imagem menor.").queue();
 				} catch (IOException ignore) {
 				}
-				msg.clearReactions().queue();
 				break;
 			case PREVIOUS:
 				page--;
