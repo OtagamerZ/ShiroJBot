@@ -21,7 +21,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.handlers.games.rpg.Utils;
 import com.kuuhaku.handlers.games.rpg.entities.Chest;
 import com.kuuhaku.handlers.games.rpg.entities.LootItem;
-import com.kuuhaku.handlers.games.rpg.exceptions.NameTakenException;
 import com.kuuhaku.handlers.games.rpg.exceptions.UnknownItemException;
 import com.kuuhaku.handlers.games.rpg.world.World;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -101,8 +100,6 @@ public class ChestRegisterHandler extends ListenerAdapter {
 					render(msg);
 					break;
 			}
-		} catch (NameTakenException e) {
-			event.getChannel().sendMessage(":x: | Este baú já existe!").queue();
 		} catch (UnknownItemException e) {
 			event.getChannel().sendMessage(":x: | Item desconhecido.").queue();
 		} catch (IndexOutOfBoundsException e) {
@@ -168,8 +165,7 @@ public class ChestRegisterHandler extends ListenerAdapter {
 			} else {
 				msg.editMessage(eb.build()).queue();
 			}
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		} catch (InterruptedException ignore) {
 		}
 	}
 }
