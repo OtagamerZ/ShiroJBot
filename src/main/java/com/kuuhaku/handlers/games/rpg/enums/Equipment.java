@@ -29,31 +29,22 @@ public enum Equipment {
 	public static Equipment byName(String name) throws IllegalArgumentException {
 		switch (name.toLowerCase()) {
 			case "elmo":
-			case "head":
 				return Equipment.HEAD;
 			case "peitoral":
-			case "chest":
 				return Equipment.CHEST;
 			case "calça":
-			case "leg":
 				return Equipment.LEG;
 			case "botas":
-			case "foot":
 				return Equipment.FOOT;
 			case "luvas":
-			case "arm":
 				return Equipment.ARM;
 			case "colar:":
-			case "neck":
 				return Equipment.NECK;
 			case "bolsa":
-			case "bag":
 				return Equipment.BAG;
 			case "anel":
-			case "ring":
 				return Equipment.RING;
 			case "arma":
-			case "weapon":
 			case "escudo":
 				return Equipment.WEAPON;
 			case "misc":
