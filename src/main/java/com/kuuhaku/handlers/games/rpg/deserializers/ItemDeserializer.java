@@ -26,7 +26,7 @@ import java.lang.reflect.Type;
 public class ItemDeserializer implements JsonDeserializer<Item> {
 	@Override
 	public Item deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-		Equipment type = Equipment.valueOf(json.getAsJsonObject().get("type").toString());
+		Equipment type = Equipment.valueOf(json.getAsJsonObject().get("type").toString().replace("\"", ""));
 		switch (type) {
 			case HEAD:
 				return new Gson().fromJson(json, Item.Head.class);
