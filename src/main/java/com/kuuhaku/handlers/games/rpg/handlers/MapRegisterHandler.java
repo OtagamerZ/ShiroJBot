@@ -83,7 +83,7 @@ public class MapRegisterHandler extends ListenerAdapter {
 					if (Main.getInfo().getGames().get(event.getGuild().getId()).getPlayers().values().stream().anyMatch(p -> p.getCharacter().getName().equals(event.getMessage().getContentRaw())))
 						throw new NameTakenException();
 					try {
-						HttpURLConnection con = (HttpURLConnection) new URL(image).openConnection();
+						HttpURLConnection con = (HttpURLConnection) new URL(event.getMessage().getContentRaw()).openConnection();
 						con.setRequestProperty("User-Agent", "Mozilla/5.0");
 						BufferedImage map = ImageIO.read(con.getInputStream());
 
