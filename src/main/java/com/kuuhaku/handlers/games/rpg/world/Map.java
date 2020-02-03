@@ -23,8 +23,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Objects;
 
 public class Map {
@@ -38,11 +36,10 @@ public class Map {
 		this.defaultPos = defaultPos;
 	}
 
-	private String initMap(String url) throws IOException, IllegalArgumentException {
-		HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
-		con.setRequestProperty("User-Agent", "Mozilla/5.0");
-		BufferedImage map = ImageIO.read(con.getInputStream());
+	private String initMap(String base64) throws IOException, IllegalArgumentException {
+		BufferedImage map = Utils.decodeBase64(base64);
 
+		assert map != null;
 		if (map.getWidth() % 64 != 0 || map.getHeight() % 64 != 0) {
 			BufferedImage rescaledMap = new BufferedImage(64 * Math.round(map.getWidth() / 64f), 64 * Math.round(map.getHeight() / 64f), BufferedImage.TYPE_INT_RGB);
 			Graphics2D g2d = rescaledMap.createGraphics();

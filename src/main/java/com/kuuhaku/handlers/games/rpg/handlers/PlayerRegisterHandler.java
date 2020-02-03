@@ -163,9 +163,9 @@ public class PlayerRegisterHandler extends ListenerAdapter {
 					Main.getInfo().getGames().get(event.getGuild().getId()).addPlayer(new Actor.Player(map, user, new Character(name, image, desc, str, per, end, cha, intl, agl, lck)));
 					jda.removeEventListener(this);
 					channel.sendMessage("Registrado com sucesso!").queue();
+					msg.clearReactions().queue();
 				} catch (IOException ignore) {
 				}
-				msg.clearReactions().queue();
 				break;
 			case PREVIOUS:
 				page--;
