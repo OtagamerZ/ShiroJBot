@@ -22,7 +22,6 @@ import com.kuuhaku.handlers.games.rpg.Utils;
 import com.kuuhaku.handlers.games.rpg.actors.Actor;
 import com.kuuhaku.handlers.games.rpg.entities.LootItem;
 import com.kuuhaku.handlers.games.rpg.entities.Mob;
-import com.kuuhaku.handlers.games.rpg.exceptions.NameTakenException;
 import com.kuuhaku.handlers.games.rpg.exceptions.UnknownItemException;
 import com.kuuhaku.handlers.games.rpg.world.World;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -97,7 +96,7 @@ public class MobRegisterHandler extends ListenerAdapter {
 					break;
 				case 1:
 					if (Main.getInfo().getGames().get(event.getGuild().getId()).getMonsters().containsKey(event.getMessage().getContentRaw())) {
-						channel.sendMessage(":x: | Este nome já está em uso").queue();
+						channel.sendMessage(":x: | Este monstro já existe.").queue();
 						return;
 					}
 					name = event.getMessage().getContentRaw();
@@ -115,7 +114,6 @@ public class MobRegisterHandler extends ListenerAdapter {
 						complete[1] = true;
 						render(msg);
 					} catch (IOException e) {
-						e.printStackTrace();
 						event.getChannel().sendMessage(":x: | Imagem inválida, veja se pegou o link corretamente.").queue();
 					}
 					break;
@@ -162,8 +160,6 @@ public class MobRegisterHandler extends ListenerAdapter {
 					}
 					break;
 			}
-		} catch (NameTakenException e) {
-			event.getChannel().sendMessage(":x: | Este monstro já existe!").queue();
 		} catch (UnknownItemException e) {
 			event.getChannel().sendMessage(":x: | Item desconhecido.").queue();
 		} catch (IndexOutOfBoundsException e) {
@@ -271,8 +267,7 @@ public class MobRegisterHandler extends ListenerAdapter {
 			} else {
 				msg.editMessage(eb.build()).queue();
 			}
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		} catch (InterruptedException ignore) {
 		}
 	}
 }

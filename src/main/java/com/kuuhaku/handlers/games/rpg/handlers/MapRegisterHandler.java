@@ -19,7 +19,6 @@ package com.kuuhaku.handlers.games.rpg.handlers;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.handlers.games.rpg.Utils;
-import com.kuuhaku.handlers.games.rpg.exceptions.NameTakenException;
 import com.kuuhaku.handlers.games.rpg.world.Map;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -81,8 +80,6 @@ public class MapRegisterHandler extends ListenerAdapter {
 					render(msg);
 					break;
 				case 1:
-					if (Main.getInfo().getGames().get(event.getGuild().getId()).getPlayers().values().stream().anyMatch(p -> p.getCharacter().getName().equals(event.getMessage().getContentRaw())))
-						throw new NameTakenException();
 					try {
 						HttpURLConnection con = (HttpURLConnection) new URL(event.getMessage().getContentRaw()).openConnection();
 						con.setRequestProperty("User-Agent", "Mozilla/5.0");
@@ -103,7 +100,6 @@ public class MapRegisterHandler extends ListenerAdapter {
 						complete[0] = true;
 						render(msg);
 					} catch (IOException e) {
-						e.printStackTrace();
 						event.getChannel().sendMessage(":x: | Imagem inválida, veja se pegou o link corretamente.").queue();
 					}
 					break;
@@ -181,8 +177,7 @@ public class MapRegisterHandler extends ListenerAdapter {
 			} else {
 				msg.editMessage(eb.build()).queue();
 			}
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		} catch (InterruptedException ignore) {
 		}
 	}
 }
