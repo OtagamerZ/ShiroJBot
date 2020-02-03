@@ -19,15 +19,17 @@ package com.kuuhaku.utils;
 
 public enum PrivilegeLevel {
 
-	USER(0), DJ(1), EXCEED(1), PARTNER(2), MOD(3), SHERIFF(3), DEV(4), NIICHAN(5);
+	USER(0, 0), DJ(1, 1), EXCEED(1, 2), PARTNER(2, 3), MOD(3, 4), SHERIFF(3, 5), DEV(4, 6), NIICHAN(5, 7);
 
-	private final Integer authority;
+	private final int authority;
+	private final int id;
 
-	PrivilegeLevel(int authority) {
+	PrivilegeLevel(int authority, int id) {
 		this.authority = authority;
+		this.id = id;
 	}
 
 	public boolean hasAuthority(PrivilegeLevel outro) {
-		return this.authority >= outro.authority;
+		return this.authority > outro.authority || this.id == outro.id;
 	}
 }
