@@ -122,6 +122,7 @@ public class CommandManager {
 			add(new LinkTesterCommand());
 			add(new VoteCommand());
 			add(new ListScoreCommand());
+			add(new TranslateCommand());
 
 			//FUN
 			add(new SadButTrueCommand());

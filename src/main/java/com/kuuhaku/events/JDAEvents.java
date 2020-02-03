@@ -75,13 +75,17 @@ public class JDAEvents extends ListenerAdapter {
 	@Override
 	public void onMessageReactionRemove(MessageReactionRemoveEvent event) {
 		if (Objects.requireNonNull(event.getMember()).getUser().isBot()) return;
-		Message message = event.getChannel().retrieveMessageById(event.getMessageId()).complete();
-		if (Main.getInfo().getPolls().containsKey(message.getId())) {
 
-			if (event.getReactionEmote().getName().equals("\uD83D\uDC4D"))
-				Main.getInfo().getPolls().get(message.getId())[0]--;
-			else if (event.getReactionEmote().getName().equals("\uD83D\uDC4E"))
-				Main.getInfo().getPolls().get(message.getId())[1]--;
+		try {
+			Message message = event.getChannel().retrieveMessageById(event.getMessageId()).complete();
+			if (Main.getInfo().getPolls().containsKey(message.getId())) {
+
+				if (event.getReactionEmote().getName().equals("\uD83D\uDC4D"))
+					Main.getInfo().getPolls().get(message.getId())[0]--;
+				else if (event.getReactionEmote().getName().equals("\uD83D\uDC4E"))
+					Main.getInfo().getPolls().get(message.getId())[1]--;
+			}
+		} catch (NullPointerException | ErrorResponseException ignore) {
 		}
 	}
 

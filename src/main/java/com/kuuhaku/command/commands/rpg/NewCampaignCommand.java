@@ -28,7 +28,7 @@ import net.dv8tion.jda.api.entities.*;
 public class NewCampaignCommand extends Command {
 
 	public NewCampaignCommand() {
-		super("rnovacampanha", new String[]{"rnewcampaign"}, "Abre uma nova campanha de RPG no servidor.", Category.RPG);
+		super("rnovacampanha", new String[]{"rnewcampaign", "rnewgame"}, "Abre uma nova campanha de RPG no servidor.", Category.RPG);
 	}
 
 	@Override
