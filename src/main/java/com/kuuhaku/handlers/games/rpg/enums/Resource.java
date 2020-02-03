@@ -15,31 +15,40 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.controller.mysql;
+package com.kuuhaku.handlers.games.rpg.enums;
 
-import com.kuuhaku.model.persistent.Log;
+public enum Resource {
+	MONEY(new String[]{
+			"gold",
+			"money",
+			"coin",
+			"coins",
+			"ouro",
+			"dinheiro",
+			"moeda",
+			"moedas"
+	}),
+	XP(new String[]{
+			"xp",
+			"experience",
+			"exp",
+			"experiencia"
+	}),
+	HEALTH(new String[]{
+			"life",
+			"health",
+			"hp",
+			"vida",
+			"saude"
+	});
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import java.util.List;
+	private final String[] aliases;
 
-public class LogDAO {
-	public static void saveLog(Log log) {
-		EntityManager em = Manager.getEntityManager();
-
-		em.getTransaction().begin();
-		em.merge(log);
-		em.getTransaction().commit();
-
-		em.close();
+	Resource(String[] aliases) {
+		this.aliases = aliases;
 	}
 
-	@SuppressWarnings("unchecked")
-	public static List<Object[]> getUsage() {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createQuery("SELECT guild, COUNT(guild) AS uses FROM Log l GROUP BY guild ORDER BY uses DESC");
-
-		return q.getResultList();
+	public String[] getAliases() {
+		return aliases;
 	}
 }
