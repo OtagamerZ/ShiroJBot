@@ -17,23 +17,20 @@
 
 package com.kuuhaku.controller.mysql;
 
-import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.persistent.Member;
 import net.dv8tion.jda.api.entities.User;
 
 import javax.persistence.EntityManager;
-import java.util.List;
+import javax.persistence.Query;
 
 public class WaifuDAO {
 	public static void saveMemberWaifu(Member m, User u) {
 		EntityManager em = Manager.getEntityManager();
 
-		List<Member> mbs = MemberDAO.getMemberByMid(m.getMid());
-
-		mbs.forEach(mb -> mb.marry(u));
+		m.marry(u);
 
 		em.getTransaction().begin();
-		mbs.forEach(em::merge);
+		em.merge(m);
 		em.getTransaction().commit();
 
 		em.close();
@@ -42,14 +39,27 @@ public class WaifuDAO {
 	public static void removeMemberWaifu(Member m) {
 		EntityManager em = Manager.getEntityManager();
 
-		List<Member> mbs = MemberDAO.getMemberByMid(m.getMid());
-
-		mbs.forEach(Member::divorce);
+		m.divorce();
 
 		em.getTransaction().begin();
-		mbs.forEach(em::merge);
+		em.merge(m);
 		em.getTransaction().commit();
 
 		em.close();
+	}
+
+	public static boolean isWaifued(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		boolean married = false;
+
+		Query q = em.createQuery("SELECT m FROM Member m WHERE mid LIKE :id AND waifu IS NOT NULL AND waifu NOT LIKE ''");
+		q.setParameter("id", id);
+
+		married = q.getResultList().size() > 0;
+
+		em.close();
+
+		return married;
 	}
 }
