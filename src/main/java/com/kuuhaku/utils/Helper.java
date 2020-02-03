@@ -416,16 +416,13 @@ public class Helper {
 			JSONObject jo = ja.getJSONObject(k);
 			Map<String, BiConsumer<Member, Message>> buttons = new HashMap<>();
 
-			if (!jo.has("canalId")) {
-				ja.remove(k);
+			TextChannel channel = g.getTextChannelById(jo.getString("canalId"));
+
+			if (channel == null) {
+				ja.remove(jo.getString("canalId"));
 				gc.setButtonConfigs(ja);
 				GuildDAO.updateGuildSettings(gc);
-				return;
-			}
-
-			TextChannel channel = g.getTextChannelById(jo.getString("canalId"));
-			assert channel != null;
-			try {
+			} else try {
 				if (k.equals("gatekeeper")) {
 					Message msg = channel.retrieveMessageById(jo.getString("msgId")).submit().get();
 					resolveButton(g, jo, buttons);
@@ -497,13 +494,6 @@ public class Helper {
 		ja.keySet().forEach(k -> {
 			JSONObject jo = ja.getJSONObject(k);
 			Map<String, BiConsumer<Member, Message>> buttons = new HashMap<>();
-
-			if (!jo.has("canalId")) {
-				ja.remove(k);
-				gc.setButtonConfigs(ja);
-				GuildDAO.updateGuildSettings(gc);
-				return;
-			}
 
 			TextChannel channel = g.getTextChannelById(jo.getString("canalId"));
 			assert channel != null;
