@@ -276,8 +276,8 @@ public class Profile {
 
 		// Make sure the aspect ratio is maintained, so the image is not distorted
 		double thumbRatio = (double) w / (double) h;
-		int imageWidth = image.getWidth(null);
-		int imageHeight = image.getHeight(null);
+		int imageWidth = image.getWidth();
+		int imageHeight = image.getHeight();
 		double aspectRatio = (double) imageWidth / (double) imageHeight;
 
 		if (thumbRatio > aspectRatio) {
