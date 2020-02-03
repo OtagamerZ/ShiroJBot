@@ -8,6 +8,9 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/rpg/GiveCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/rpg/GiveCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/rpg/entities/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/rpg/entities/Item.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/rpg/entities/Status.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/rpg/entities/Status.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -157,14 +160,7 @@
       <workItem from="1580491566131" duration="1919000" />
       <workItem from="1580496830954" duration="6521000" />
       <workItem from="1580504076104" duration="42000" />
-      <workItem from="1580731623238" duration="4832000" />
-    </task>
-    <task id="LOCAL-00344" summary="Melhorias na API">
-      <created>1580306128552</created>
-      <option name="number" value="00344" />
-      <option name="presentableId" value="LOCAL-00344" />
-      <option name="project" value="LOCAL" />
-      <updated>1580306128552</updated>
+      <workItem from="1580731623238" duration="5305000" />
     </task>
     <task id="LOCAL-00345" summary="Melhorias na API">
       <created>1580306481741</created>
@@ -502,7 +498,14 @@
       <option name="project" value="LOCAL" />
       <updated>1580737034066</updated>
     </task>
-    <option name="localTasksCounter" value="393" />
+    <task id="LOCAL-00393" summary="Correções no Settings">
+      <created>1580737388202</created>
+      <option name="number" value="00393" />
+      <option name="presentableId" value="LOCAL-00393" />
+      <option name="project" value="LOCAL" />
+      <updated>1580737388202</updated>
+    </task>
+    <option name="localTasksCounter" value="394" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -587,11 +590,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1578421403620" />
-    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1580737031227">
+    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1580737385315">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1579836482498" />
-    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1580737031227" />
+    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1580737385315" />
     <state x="160" y="89" key="DiffContextDialog" timestamp="1578421042559">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -618,11 +621,11 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1579834568153" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1580502350745" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1580737064673">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1580737389394">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1579146198967" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1580737064673" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1580737389394" />
     <state x="544" y="399" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD" timestamp="1579615180701">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
