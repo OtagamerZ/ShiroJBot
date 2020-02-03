@@ -17,7 +17,7 @@
 
 package com.kuuhaku.utils;
 
-import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.kuuhaku.controller.mysql.CanvasDAO;
 import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
@@ -77,7 +77,7 @@ public class ShiroInfo {
 	private static final Map<String, World> games = new HashMap<>();
 	private static final JDAEvents shiroEvents = new JDAEvents();
 	private static final Map<String, KittyCache<String, Message>> messageCache = new HashMap<>();
-	private static final Gson JSONFactory = new Gson();
+	private static final GsonBuilder JSONFactory = new GsonBuilder();
 
 	private JDA api;
 	private long startTime;
@@ -104,7 +104,7 @@ public class ShiroInfo {
 		return supportServer;
 	}
 
-	public static Gson getJSONFactory() {
+	public static GsonBuilder getJSONFactory() {
 		return JSONFactory;
 	}
 

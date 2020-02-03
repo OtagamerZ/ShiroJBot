@@ -243,7 +243,7 @@ public class World {
 	}
 
 	public String getAsJSON() {
-		return ShiroInfo.getJSONFactory().toJson(this);
+		return ShiroInfo.getJSONFactory().create().toJson(this);
 	}
 }
 
