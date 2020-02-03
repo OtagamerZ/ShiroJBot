@@ -21,7 +21,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.handlers.games.rpg.Utils;
 import com.kuuhaku.handlers.games.rpg.exceptions.NameTakenException;
 import com.kuuhaku.handlers.games.rpg.world.Map;
-import com.kuuhaku.model.common.Profile;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Message;
@@ -32,6 +32,7 @@ import net.dv8tion.jda.api.events.message.guild.react.GenericGuildMessageReactio
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -87,8 +88,14 @@ public class MapRegisterHandler extends ListenerAdapter {
 						con.setRequestProperty("User-Agent", "Mozilla/5.0");
 						BufferedImage map = ImageIO.read(con.getInputStream());
 
-						if (map.getWidth() > 1664) map = Profile.scaleImage(map, 1664, map.getHeight());
-						else if (map.getHeight() > 1664) map = Profile.scaleImage(map, map.getWidth(), 1664);
+						Dimension dim = Helper.getScaledDimension(new Dimension(map.getWidth(), map.getHeight()), new Dimension(1664, 1664));
+
+						Image img = map.getScaledInstance(dim.width, dim.height, Image.SCALE_DEFAULT);
+						map = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_RGB);
+
+						Graphics2D g2d = map.createGraphics();
+						g2d.drawImage(img, 0, 0, null);
+						g2d.dispose();
 
 						image = Utils.encodeToBase64(map);
 
