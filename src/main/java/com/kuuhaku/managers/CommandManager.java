@@ -83,6 +83,7 @@ public class CommandManager {
 			add(new RoleChooserCommand());
 			add(new GatekeeperCommand());
 			add(new BackupCommand());
+			add(new RegenRulesCommand());
 
 			//INFORMATION
 			add(new ComandosCommand());
@@ -98,7 +99,6 @@ public class CommandManager {
 			add(new URankCommand());
 			add(new IDCommand());
 			add(new ColorTesterCommand());
-			add(new RegenRulesCommand());
 			add(new LocalEmoteListCommand());
 			add(new ShiroEmoteListCommand());
 
