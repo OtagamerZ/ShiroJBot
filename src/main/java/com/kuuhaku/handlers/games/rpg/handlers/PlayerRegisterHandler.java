@@ -20,7 +20,6 @@ package com.kuuhaku.handlers.games.rpg.handlers;
 import com.kuuhaku.Main;
 import com.kuuhaku.handlers.games.rpg.actors.Actor;
 import com.kuuhaku.handlers.games.rpg.entities.Character;
-import com.kuuhaku.handlers.games.rpg.exceptions.NameTakenException;
 import com.kuuhaku.handlers.games.rpg.world.Map;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -110,7 +109,6 @@ public class PlayerRegisterHandler extends ListenerAdapter {
 						complete[1] = true;
 						render(msg);
 					} catch (IOException e) {
-						e.printStackTrace();
 						event.getChannel().sendMessage(":x: | Imagem inválida, veja se pegou o link corretamente.").queue();
 					}
 					break;
@@ -139,8 +137,6 @@ public class PlayerRegisterHandler extends ListenerAdapter {
 					event.getChannel().sendMessage("Registro completo!\nConfirme o cadastro na mensagem inicial ou use os botões para alterar valores anteriores!").queue();
 					break;
 			}
-		} catch (NameTakenException e) {
-			event.getChannel().sendMessage(":x: | Este nome já está em uso!").queue();
 		} catch (NumberFormatException e) {
 			event.getChannel().sendMessage(":x: | Os atributos devem estar no formato:\n `FORÇA;PERCEPÇÃO;RESISTÊNCIA;CARISMA;INTELIGENCIA;AGILIDADE;SORTE`.").queue();
 		} catch (IllegalArgumentException e) {
@@ -229,8 +225,7 @@ public class PlayerRegisterHandler extends ListenerAdapter {
 			} else {
 				msg.editMessage(eb.build()).queue();
 			}
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		} catch (InterruptedException ignore) {
 		}
 	}
 }
