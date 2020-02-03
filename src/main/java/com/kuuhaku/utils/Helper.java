@@ -465,6 +465,16 @@ public class Helper {
 					} else {
 						g.addRoleToMember(m, role).queue();
 					}
+				} else {
+					ms.clearReactions().queue(s -> {
+						ms.getChannel().sendMessage(":warning: | Botões removidos devido a cargo inexistente.").queue();
+						GuildConfig gc = GuildDAO.getGuildById(g.getId());
+						JSONObject bt = jo.getJSONObject("buttons");
+						bt.remove(b);
+						jo.put("buttons", bt);
+						gc.setButtonConfigs(jo);
+						GuildDAO.updateGuildSettings(gc);
+					});
 				}
 			});
 		});
