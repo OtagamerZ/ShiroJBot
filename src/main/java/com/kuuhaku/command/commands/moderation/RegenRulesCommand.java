@@ -15,7 +15,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.information;
+package com.kuuhaku.command.commands.moderation;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
@@ -27,7 +27,7 @@ import java.io.IOException;
 public class RegenRulesCommand extends Command {
 
 	public RegenRulesCommand() {
-		super("rrules", new String[]{"makerules"}, "Regenera as regras do servidor de suporte.", Category.INFO);
+		super("rrules", new String[]{"makerules"}, "Regenera as regras do servidor de suporte.", Category.MODERACAO);
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class RegenRulesCommand extends Command {
 								"Infratores serão `_______ __ ______ ___ ____ ____`\n\n" +
 								"É proibido compartilhar qual é a resposta, se não não teria graça!" : "Caso precise de ajuda, ou queira ajudar no meu desenvolvimento, venha para nosso servidor de suporte: https://discord.gg/9sgkzna")).queue();
 				channel.sendFile(Helper.getImage("https://i.imgur.com/U9lTSWD.png"), "partners.png").queue();
-				channel.sendMessage(Helper.getSponsors()).queue();
+				if (Helper.getSponsors().length() > 0) channel.sendMessage(Helper.getSponsors()).queue();
 			} catch (IOException e) {
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
