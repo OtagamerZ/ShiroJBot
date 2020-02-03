@@ -57,18 +57,22 @@ public class JibrilEmoteListCommand extends Command {
 		EmbedBuilder eb = new EmbedBuilder();
 		List<List<Emote>> emotes = Helper.chunkify(Main.getJibril().getEmotes().stream().filter(e -> StringUtils.containsIgnoreCase(e.getAsMention(), args.length > 0 ? args[0] : "")).collect(Collectors.toList()), 10);
 
-		for (int i = 0; i < emotes.size(); i++) {
-			eb.clear();
+		try {
+			for (int i = 0; i < emotes.size(); i++) {
+				eb.clear();
 
-			eb.setTitle("<a:SmugDance:598842924725305344> Emotes disponíveis para a Jibril:");
-			eb.setColor(Helper.getRandomColor());
-			emotes.get(i).forEach(e -> eb.addField("Emote: " + e.getAsMention(), "Menção: " + e.getAsMention().replace("<", "`{").replace(">", "}`").replace(":", "&"), false));
-			eb.setAuthor("Para usar estes emotes, simplesmente digite a menção no chat global, ela será convertida automaticamente.");
-			eb.setFooter("Página " + (i + 1) + " de " + emotes.size() + ". Total de " + emotes.stream().mapToInt(List::size).sum() + " resultados.", null);
+				eb.setTitle("<a:SmugDance:598842924725305344> Emotes disponíveis para a Jibril:");
+				eb.setColor(Helper.getRandomColor());
+				emotes.get(i).forEach(e -> eb.addField("Emote: " + e.getAsMention(), "Menção: " + e.getAsMention().replace("<", "`{").replace(">", "}`").replace(":", "&"), false));
+				eb.setAuthor("Para usar estes emotes, simplesmente digite a menção no chat global, ela será convertida automaticamente.");
+				eb.setFooter("Página " + (i + 1) + " de " + emotes.size() + ". Total de " + emotes.stream().mapToInt(List::size).sum() + " resultados.", null);
 
-			pages.add(new Page(PageType.EMBED, eb.build()));
+				pages.add(new Page(PageType.EMBED, eb.build()));
+			}
+
+			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
+		} catch (IndexOutOfBoundsException e) {
+			channel.sendMessage(":x: | Nenhum emote encontrado com esse nome.").queue();
 		}
-
-		channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
 	}
 }
