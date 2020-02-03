@@ -18,6 +18,8 @@
 package com.kuuhaku.controller.mysql;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.handlers.games.rpg.deserializers.ItemDeserializer;
+import com.kuuhaku.handlers.games.rpg.entities.Item;
 import com.kuuhaku.handlers.games.rpg.world.World;
 import com.kuuhaku.model.persistent.Campaign;
 import com.kuuhaku.utils.ShiroInfo;
@@ -80,7 +82,9 @@ public class CampaignDAO {
 		Map<String, World> g = new HashMap<>();
 		List<Campaign> cps = q.getResultList();
 
-		cps.forEach(c -> g.put(c.getId(), ShiroInfo.getJSONFactory().fromJson(c.getData(), World.class)));
+		cps.forEach(c -> g.put(c.getId(), ShiroInfo.getJSONFactory()
+				.registerTypeAdapter(Item.class, new ItemDeserializer())
+				.create().fromJson(c.getData(), World.class)));
 
 		em.close();
 
