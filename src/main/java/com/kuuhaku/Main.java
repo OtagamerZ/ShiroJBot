@@ -134,6 +134,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		tet.addEventListener(new TetEvents());
 
 		boolean apiOnline = false;
+		int tries = 1;
 		while (!apiOnline) {
 			try {
 				info.setServer(new WebSocketConfig());
@@ -141,6 +142,11 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				apiOnline = true;
 			} catch (URISyntaxException | BindException e) {
 				Helper.logger(Main.class).error("Erro ao conectar client: " + e + " | " + e.getStackTrace()[0]);
+				try {
+					Thread.sleep((long) Math.pow(2000, tries));
+					tries++;
+				} catch (InterruptedException ignore) {
+				}
 			}
 		}
 
