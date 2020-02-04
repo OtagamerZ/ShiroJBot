@@ -31,7 +31,7 @@ import net.dv8tion.jda.api.entities.*;
 
 import java.awt.*;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -45,7 +45,7 @@ public class ComandosCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
-		Map<String, Page> pages = new HashMap<>();
+		Map<String, Page> pages = new LinkedHashMap<>();
 
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setTitle("**Lista de Comandos**");
