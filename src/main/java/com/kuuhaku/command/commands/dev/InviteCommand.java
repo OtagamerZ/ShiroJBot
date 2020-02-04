@@ -30,6 +30,7 @@ import net.dv8tion.jda.api.entities.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class InviteCommand extends Command {
@@ -55,7 +56,7 @@ public class InviteCommand extends Command {
 		EmbedBuilder eb = new EmbedBuilder();
 
 		List<String[]> servers = new ArrayList<>();
-		Main.getInfo().getAPI().getGuilds().stream().filter(s -> s.getSelfMember().hasPermission(Permission.CREATE_INSTANT_INVITE) && s.getDefaultChannel() != null).forEach(g -> servers.add(new String[]{g.getName(), g.getId(), String.valueOf(g.getMembers().stream().filter(m -> !m.getUser().isBot()).count())}));
+		Main.getInfo().getAPI().getGuilds().stream().filter(s -> s.getSelfMember().hasPermission(Permission.CREATE_INSTANT_INVITE) && s.getDefaultChannel() != null && !(s.getDefaultChannel().getPermissionOverride(s.getSelfMember()) != null && !Objects.requireNonNull(s.getDefaultChannel().getPermissionOverride(s.getSelfMember())).getAllowed().contains(Permission.CREATE_INSTANT_INVITE))).forEach(g -> servers.add(new String[]{g.getName(), g.getId(), String.valueOf(g.getMembers().stream().filter(m -> !m.getUser().isBot()).count())}));
 		List<List<String[]>> svPages = Helper.chunkify(servers, 10);
 
 		List<Page> pages = new ArrayList<>();
