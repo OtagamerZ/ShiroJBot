@@ -549,9 +549,7 @@ public class Helper {
 
 	public static String getSponsors() {
 		List<String> sponsors = TagDAO.getSponsors().stream().map(Tags::getId).collect(Collectors.toList());
-		System.out.println(sponsors);
 		List<Guild> spGuilds = Main.getInfo().getAPI().getGuilds().stream().filter(g -> sponsors.contains(g.getOwnerId()) && g.getSelfMember().hasPermission(Permission.CREATE_INSTANT_INVITE)).collect(Collectors.toList());
-		System.out.println(spGuilds);
 		StringBuilder sb = new StringBuilder();
 
 		for (Guild g : spGuilds) {
