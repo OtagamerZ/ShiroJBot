@@ -33,6 +33,7 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class ComandosCommand extends Command {
@@ -59,7 +60,7 @@ public class ComandosCommand extends Command {
 
 		eb.setColor(Color.PINK);
 		eb.setFooter(Main.getInfo().getFullName(), null);
-		eb.setThumbnail("https://cdn.pixabay.com/photo/2012/04/14/16/26/question-34499_960_720.png");
+		eb.setThumbnail(Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById(Helper.HOME)).getImageUrl());
 
 		pages.put(Helper.HOME, new Page(PageType.EMBED, eb.build()));
 
@@ -69,7 +70,7 @@ public class ComandosCommand extends Command {
 				EmbedBuilder ceb = new EmbedBuilder();
 				ceb.setColor(Color.PINK);
 				ceb.setFooter(Main.getInfo().getFullName(), null);
-				ceb.setThumbnail("https://cdn.pixabay.com/photo/2012/04/14/16/26/question-34499_960_720.png");
+				ceb.setThumbnail(Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById(cat.getEmoteId())).getImageUrl());
 
 				ceb.setDescription("Prefixo: `" + prefix + "`\n"
 						+ cat.getCmds().size() + " comandos encontrados nesta categoria!");
