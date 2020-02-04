@@ -26,11 +26,13 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
 import org.json.JSONObject;
 
+import java.net.BindException;
+
 public class WebSocketConfig {
 
 	private final SocketIOServer socket;
 
-	public WebSocketConfig() {
+	public WebSocketConfig() throws BindException {
 		Thread.currentThread().setName("chat-websocket");
 		Configuration config = new Configuration();
 		config.setHostname("localhost");
