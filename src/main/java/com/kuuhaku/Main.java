@@ -132,12 +132,15 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		jbr.addEventListener(new JibrilEvents());
 		tet.addEventListener(new TetEvents());
 
-
-		info.setServer(new WebSocketConfig());
-		try {
-			info.setClient(IO.socket("http://" + System.getenv("SERVER_URL") + "/")).connect();
-		} catch (URISyntaxException e) {
-			Helper.logger(Main.class).error("Erro ao conectar client: " + e + " | " + e.getStackTrace()[0]);
+		boolean apiOnline = false;
+		while (!apiOnline) {
+			info.setServer(new WebSocketConfig());
+			try {
+				info.setClient(IO.socket("http://" + System.getenv("SERVER_URL") + "/")).connect();
+				apiOnline = true;
+			} catch (URISyntaxException e) {
+				Helper.logger(Main.class).error("Erro ao conectar client: " + e + " | " + e.getStackTrace()[0]);
+			}
 		}
 
 		GuildDAO.getAllGuilds().forEach(Helper::refreshButtons);
