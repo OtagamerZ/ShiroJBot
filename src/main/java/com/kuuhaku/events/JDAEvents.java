@@ -154,7 +154,7 @@ public class JDAEvents extends ListenerAdapter {
 					message.delete().queue();
 				}
 			}
-		} catch (NullPointerException | ErrorResponseException ignore) {
+		} catch (NullPointerException | ErrorResponseException | InsufficientPermissionException ignore) {
 		}
 	}
 
