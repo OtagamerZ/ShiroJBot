@@ -295,49 +295,26 @@ public class Helper {
 		return Arrays.stream(compareWith).anyMatch(string::contains);
 	}
 
-	public static boolean hasPermission(Member m, Permission p, TextChannel c) {
-		boolean allowedPermInChannel = c.getRolePermissionOverrides().stream().anyMatch(po -> m.getRoles().contains(po.getRole()) && po.getAllowed().contains(p)) || c.getMemberPermissionOverrides().stream().anyMatch(po -> po.getMember() == m && po.getAllowed().contains(p));
-		boolean deniedPermInChannel = c.getRolePermissionOverrides().stream().anyMatch(po -> m.getRoles().contains(po.getRole()) && po.getDenied().contains(p)) || c.getMemberPermissionOverrides().stream().anyMatch(po -> po.getMember() == m && po.getDenied().contains(p));
-		boolean hasPermissionInGuild = m.hasPermission(p);
-
-		return (hasPermissionInGuild && !deniedPermInChannel) || allowedPermInChannel;
-	}
-
-	@SuppressWarnings("ConstantConditions")
-	public static String getRequiredPerms(TextChannel c) {
+	public static String getCurrentdPerms(TextChannel c) {
 		String jibrilPerms = "";
 
 		try {
 			if (TagDAO.getTagById(c.getGuild().getOwnerId()).isPartner() && c.getGuild().getMembers().contains(c.getGuild().getMember(Main.getJibril().getSelfUser()))) {
 				Member jibril = c.getGuild().getMemberById(Main.getJibril().getSelfUser().getId());
-				jibrilPerms = "\n\n\n__**Permissões necessárias para uso completo da Jibril**__\n\n" +
-						(hasPermission(jibril, Permission.MANAGE_WEBHOOKS, c) ? ":white_check_mark: -> " : ":x: -> ") + "Gerenciar webhooks\n" +
-						(hasPermission(jibril, Permission.MESSAGE_WRITE, c) ? ":white_check_mark: -> " : ":x: -> ") + "Escrever mensagens\n" +
-						(hasPermission(jibril, Permission.MESSAGE_MANAGE, c) ? ":white_check_mark: -> " : ":x: -> ") + "Gerenciar mensagens\n" +
-						(hasPermission(jibril, Permission.MESSAGE_EMBED_LINKS, c) ? ":white_check_mark: -> " : ":x: -> ") + "Inserir links\n" +
-						(hasPermission(jibril, Permission.MESSAGE_ATTACH_FILES, c) ? ":white_check_mark: -> " : ":x: -> ") + "Enviar arquivos\n" +
-						(hasPermission(jibril, Permission.MESSAGE_EXT_EMOJI, c) ? ":white_check_mark: -> " : ":x: -> ") + "Usar emotes externos";
+				assert jibril != null;
+				EnumSet<Permission> perms = Objects.requireNonNull(c.getGuild().getMemberById(jibril.getId())).getPermissions(c);
+
+				jibrilPerms = "\n\n\n__**Permissões atuais da Jibril**__\n\n" +
+						perms.stream().map(p -> ":white_check_mark: -> " + p.getName() + "\n").sorted().collect(Collectors.joining());
 			}
 		} catch (NoResultException ignore) {
 		}
 
 		Member shiro = c.getGuild().getSelfMember();
+		EnumSet<Permission> perms = shiro.getPermissions(c);
 
-		return "__**Permissões necessárias para uso completo da Shiro**__\n\n" +
-				(hasPermission(shiro, Permission.MANAGE_CHANNEL, c) ? ":white_check_mark: -> " : ":x: -> ") + "Gerenciar canal \n" +
-				(hasPermission(shiro, Permission.BAN_MEMBERS, c) ? ":white_check_mark: -> " : ":x: -> ") + "Banir membros \n" +
-				(hasPermission(shiro, Permission.KICK_MEMBERS, c) ? ":white_check_mark: -> " : ":x: -> ") + "Expulsar membros \n" +
-				(hasPermission(shiro, Permission.CREATE_INSTANT_INVITE, c) ? ":white_check_mark: -> " : ":x: -> ") + "Criar convite instantâneo \n" +
-				(hasPermission(shiro, Permission.MESSAGE_READ, c) ? ":white_check_mark: -> " : ":x: -> ") + "Ler mensagens \n" +
-				(hasPermission(shiro, Permission.MESSAGE_MANAGE, c) ? ":white_check_mark: -> " : ":x: -> ") + "Gerenciar mensagens \n" +
-				(hasPermission(shiro, Permission.MESSAGE_WRITE, c) ? ":white_check_mark: -> " : ":x: -> ") + "Escrever mensagens \n" +
-				(hasPermission(shiro, Permission.MESSAGE_EMBED_LINKS, c) ? ":white_check_mark: -> " : ":x: -> ") + "Inserir links \n" +
-				(hasPermission(shiro, Permission.MESSAGE_ATTACH_FILES, c) ? ":white_check_mark: -> " : ":x: -> ") + "Enviar arquivos \n" +
-				(hasPermission(shiro, Permission.MESSAGE_HISTORY, c) ? ":white_check_mark: -> " : ":x: -> ") + "Ver histórico de mensagens \n" +
-				(hasPermission(shiro, Permission.MESSAGE_ADD_REACTION, c) ? ":white_check_mark: -> " : ":x: -> ") + "Adicionar reações \n" +
-				(hasPermission(shiro, Permission.MESSAGE_EXT_EMOJI, c) ? ":white_check_mark: -> " : ":x: -> ") + "Usar emotes externos \n" +
-				(hasPermission(shiro, Permission.VOICE_CONNECT, c) ? ":white_check_mark: -> " : ":x: -> ") + "Conectar à canais de voz \n" +
-				(hasPermission(shiro, Permission.VOICE_SPEAK, c) ? ":white_check_mark: -> " : ":x: -> ") + "Falar em canais de voz" +
+		return "__**Permissões atuais da Shiro**__\n\n" +
+				perms.stream().map(p -> ":white_check_mark: -> " + p.getName() + "\n").sorted().collect(Collectors.joining()) +
 				jibrilPerms;
 	}
 
