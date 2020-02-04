@@ -93,7 +93,7 @@ dependencies {
     compile group: 'org.apache.logging.log4j', name: 'log4j-jcl', version: '2.11.2'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2', version: '2.1.6.RELEASE'
     compile group: 'org.beanshell', name: 'bsh', version: '2.0b5'
-    compile group: 'com.github.ygimenez', name: 'PaginationUtils', version: 'e202ea6cc3'
+    compile group: 'com.github.ygimenez', name: 'PaginationUtils', version: '15931fd701'
     compile group: 'com.github.treeder', name: 'kitty-cache', version: '065b8d34e2'
     compile group: 'com.corundumstudio.socketio', name: 'netty-socketio', version: '1.7.17'
     implementation 'com.graphql-java:graphql-java:2019-05-08T02-56-27-cca4316'
