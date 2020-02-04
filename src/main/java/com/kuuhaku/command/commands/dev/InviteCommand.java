@@ -30,7 +30,6 @@ import net.dv8tion.jda.api.entities.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class InviteCommand extends Command {
@@ -56,7 +55,7 @@ public class InviteCommand extends Command {
 		EmbedBuilder eb = new EmbedBuilder();
 
 		List<String[]> servers = new ArrayList<>();
-		Main.getInfo().getAPI().getGuilds().stream().filter(s -> s.getSelfMember().hasPermission(Permission.CREATE_INSTANT_INVITE) && s.getDefaultChannel() != null && !(s.getDefaultChannel().getPermissionOverride(s.getSelfMember()) != null && !Objects.requireNonNull(s.getDefaultChannel().getPermissionOverride(s.getSelfMember())).getAllowed().contains(Permission.CREATE_INSTANT_INVITE))).forEach(g -> servers.add(new String[]{g.getName(), g.getId(), String.valueOf(g.getMembers().stream().filter(m -> !m.getUser().isBot()).count())}));
+		Main.getInfo().getAPI().getGuilds().stream().filter(s -> s.getSelfMember().hasPermission(Permission.CREATE_INSTANT_INVITE)).forEach(g -> servers.add(new String[]{g.getName(), g.getId(), String.valueOf(g.getMembers().stream().filter(m -> !m.getUser().isBot()).count())}));
 		List<List<String[]>> svPages = Helper.chunkify(servers, 10);
 
 		List<Page> pages = new ArrayList<>();
@@ -74,7 +73,7 @@ public class InviteCommand extends Command {
 		try {
 			Guild guildToInvite = Main.getInfo().getGuildByID(rawCmd.split(" ")[1]);
 			assert guildToInvite.getDefaultChannel() != null;
-			String invite = guildToInvite.getDefaultChannel().createInvite().setMaxUses(1).setMaxAge((long) 30, TimeUnit.SECONDS).complete().getUrl();
+			String invite = Helper.createInvite(guildToInvite).getUrl();
 			channel.sendMessage("Aqui está!\n" + invite).queue();
 		} catch (ArrayIndexOutOfBoundsException e) {
 			channel.sendMessage("Escolha o servidor que devo criar um convite!\n").embed((MessageEmbed) pages.get(0).getContent()).queue(m -> Pages.paginate(Main.getInfo().getAPI(), m, pages, 60, TimeUnit.SECONDS));

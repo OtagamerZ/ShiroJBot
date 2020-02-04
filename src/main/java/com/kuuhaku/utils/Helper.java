@@ -586,4 +586,16 @@ public class Helper {
 
 		return new Dimension(new_width, new_height);
 	}
+
+	public static Invite createInvite(Guild guild) {
+		Invite i = null;
+		for (TextChannel tc : guild.getTextChannels()) {
+			try {
+				i = tc.createInvite().setMaxUses(1).setMaxAge((long) 30, TimeUnit.SECONDS).complete();
+				break;
+			} catch (InsufficientPermissionException | NullPointerException ignore) {
+			}
+		}
+		return i;
+	}
 }
