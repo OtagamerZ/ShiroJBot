@@ -295,7 +295,15 @@ public class Helper {
 		return Arrays.stream(compareWith).anyMatch(string::contains);
 	}
 
-	public static String getCurrentdPerms(TextChannel c) {
+	public static boolean hasPermission(Member m, Permission p, TextChannel c) {
+		boolean allowedPermInChannel = c.getRolePermissionOverrides().stream().anyMatch(po -> m.getRoles().contains(po.getRole()) && po.getAllowed().contains(p)) || c.getMemberPermissionOverrides().stream().anyMatch(po -> po.getMember() == m && po.getAllowed().contains(p));
+		boolean deniedPermInChannel = c.getRolePermissionOverrides().stream().anyMatch(po -> m.getRoles().contains(po.getRole()) && po.getDenied().contains(p)) || c.getMemberPermissionOverrides().stream().anyMatch(po -> po.getMember() == m && po.getDenied().contains(p));
+		boolean hasPermissionInGuild = m.hasPermission(p);
+
+		return (hasPermissionInGuild && !deniedPermInChannel) || allowedPermInChannel;
+	}
+
+	public static String getCurrentPerms(TextChannel c) {
 		String jibrilPerms = "";
 
 		try {
