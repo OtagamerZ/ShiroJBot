@@ -56,6 +56,7 @@ public class ComandosCommand extends Command {
 		for (Category cat : Category.values()) {
 			if (cat.isEnabled(gc, guild)) eb.addField(cat.getEmote() + " | " + cat.getName(), Helper.VOID, true);
 		}
+
 		eb.setColor(Color.PINK);
 		eb.setFooter(Main.getInfo().getFullName(), null);
 		eb.setThumbnail("https://cdn.pixabay.com/photo/2012/04/14/16/26/question-34499_960_720.png");
