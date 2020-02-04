@@ -143,7 +143,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 			} catch (URISyntaxException | BindException e) {
 				Helper.logger(Main.class).error("Erro ao conectar client: " + e + " | " + e.getStackTrace()[0]);
 				try {
-					Thread.sleep((long) Math.pow(2000, tries));
+					Thread.sleep(1000 * (long) Math.pow(2, tries));
 					tries++;
 				} catch (InterruptedException ignore) {
 				}
