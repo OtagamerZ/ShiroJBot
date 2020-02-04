@@ -310,7 +310,7 @@ public class Helper {
 			if (TagDAO.getTagById(c.getGuild().getOwnerId()).isPartner() && c.getGuild().getMembers().contains(c.getGuild().getMember(Main.getJibril().getSelfUser()))) {
 				Member jibril = c.getGuild().getMemberById(Main.getJibril().getSelfUser().getId());
 				assert jibril != null;
-				EnumSet<Permission> perms = Objects.requireNonNull(c.getGuild().getMemberById(jibril.getId())).getPermissions(c);
+				EnumSet<Permission> perms = Objects.requireNonNull(c.getGuild().getMemberById(jibril.getId())).getPermissionsExplicit(c);
 
 				jibrilPerms = "\n\n\n__**Permissões atuais da Jibril**__\n\n" +
 						perms.stream().map(p -> ":white_check_mark: -> " + p.getName() + "\n").sorted().collect(Collectors.joining());
@@ -319,7 +319,7 @@ public class Helper {
 		}
 
 		Member shiro = c.getGuild().getSelfMember();
-		EnumSet<Permission> perms = shiro.getPermissions(c);
+		EnumSet<Permission> perms = shiro.getPermissionsExplicit(c);
 
 		return "__**Permissões atuais da Shiro**__\n\n" +
 				perms.stream().map(p -> ":white_check_mark: -> " + p.getName() + "\n").sorted().collect(Collectors.joining()) +
