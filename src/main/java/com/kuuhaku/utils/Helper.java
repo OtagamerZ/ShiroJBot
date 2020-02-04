@@ -36,6 +36,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
+import net.dv8tion.jda.api.requests.restaction.InviteAction;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -60,6 +61,7 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -553,14 +555,22 @@ public class Helper {
 		StringBuilder sb = new StringBuilder();
 
 		for (Guild g : spGuilds) {
+			AtomicReference<Invite> i = new AtomicReference<>();
 			g.retrieveInvites().queue(invs -> invs.forEach(inv -> {
 				if (inv.getInviter() == Main.getInfo().getAPI().getSelfUser()) {
-					inv.delete().queue();
+					i.set(inv);
 				}
 			}));
-			Objects.requireNonNull(g.getDefaultChannel()).createInvite()
-					.setMaxAge(0)
-					.queue(i -> sb.append(i.getUrl()).append("\n"));
+
+			if (i.get() == null) {
+				try {
+					sb.append(Helper.createInvite(g).setMaxAge(0).submit().get().getUrl()).append("\n");
+				} catch (InterruptedException | ExecutionException e) {
+					Helper.logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
+				}
+			} else {
+				sb.append(i.get().getUrl()).append("\n");
+			}
 		}
 
 		return sb.toString();
@@ -587,11 +597,11 @@ public class Helper {
 		return new Dimension(new_width, new_height);
 	}
 
-	public static Invite createInvite(Guild guild) {
-		Invite i = null;
+	public static InviteAction createInvite(Guild guild) {
+		InviteAction i = null;
 		for (TextChannel tc : guild.getTextChannels()) {
 			try {
-				i = tc.createInvite().setMaxUses(1).setMaxAge((long) 30, TimeUnit.SECONDS).complete();
+				i = tc.createInvite().setMaxUses(1);
 				break;
 			} catch (InsufficientPermissionException | NullPointerException ignore) {
 			}
