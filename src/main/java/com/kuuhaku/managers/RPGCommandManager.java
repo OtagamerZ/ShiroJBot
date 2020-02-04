@@ -53,6 +53,7 @@ public class RPGCommandManager {
             add(new ChestCommand());
             add(new NewChestCommand());
             add(new UseCommand());
+            add(new SetMaxPointsCommand());
         }};
     }
 

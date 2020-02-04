@@ -42,6 +42,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("rawtypes")
 public class World {
 	private com.kuuhaku.handlers.games.rpg.world.Map currentMap;
+	private int maxPts = 10;
 	private final ArrayList<com.kuuhaku.handlers.games.rpg.world.Map> maps = new ArrayList<>();
 	private final String master;
 	private final Map<String, Actor.Player> players = new HashMap<>();
@@ -244,6 +245,14 @@ public class World {
 
 	public String getAsJSON() {
 		return ShiroInfo.getJSONFactory().create().toJson(this);
+	}
+
+	public int getMaxPts() {
+		return maxPts;
+	}
+
+	public void setMaxPts(int maxPts) {
+		this.maxPts = maxPts;
 	}
 }
 
