@@ -50,6 +50,7 @@ import org.springframework.boot.SpringApplication;
 
 import javax.persistence.NoResultException;
 import java.awt.*;
+import java.net.BindException;
 import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -134,11 +135,11 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 		boolean apiOnline = false;
 		while (!apiOnline) {
-			info.setServer(new WebSocketConfig());
 			try {
+				info.setServer(new WebSocketConfig());
 				info.setClient(IO.socket("http://" + System.getenv("SERVER_URL") + "/")).connect();
 				apiOnline = true;
-			} catch (URISyntaxException e) {
+			} catch (URISyntaxException | BindException e) {
 				Helper.logger(Main.class).error("Erro ao conectar client: " + e + " | " + e.getStackTrace()[0]);
 			}
 		}
