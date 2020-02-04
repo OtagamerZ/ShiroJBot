@@ -132,6 +132,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		jbr.addEventListener(new JibrilEvents());
 		tet.addEventListener(new TetEvents());
 
+
 		info.setServer(new WebSocketConfig());
 		try {
 			info.setClient(IO.socket("http://" + System.getenv("SERVER_URL") + "/")).connect();
