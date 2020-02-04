@@ -73,7 +73,7 @@ public class InviteCommand extends Command {
 		try {
 			Guild guildToInvite = Main.getInfo().getGuildByID(rawCmd.split(" ")[1]);
 			assert guildToInvite.getDefaultChannel() != null;
-			String invite = Helper.createInvite(guildToInvite).getUrl();
+			String invite = Helper.createInvite(guildToInvite).setMaxAge((long) 30, TimeUnit.SECONDS).complete().getUrl();
 			channel.sendMessage("Aqui está!\n" + invite).queue();
 		} catch (ArrayIndexOutOfBoundsException e) {
 			channel.sendMessage("Escolha o servidor que devo criar um convite!\n").embed((MessageEmbed) pages.get(0).getContent()).queue(m -> Pages.paginate(Main.getInfo().getAPI(), m, pages, 60, TimeUnit.SECONDS));
