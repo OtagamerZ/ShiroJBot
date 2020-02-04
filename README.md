@@ -7,11 +7,11 @@ Não sinta-se inseguro para pedir ajuda, sugerir novas funções ou deixar seu c
 
 ## Seja um parceiro!
 Pela Shiro estar em desenvolvimento constante, foram criados dois bots adicionais para testar novos módulos, a Jibril e o Tet.
-Ambos estão disponíveis para uso em servidores que aceitem tornar-se parceiros!
+Ambos estão disponíveis para uso em servidores que aceitem tornar-se parceiros, assim como comandos exclusivos!
 
 #### Para ser um parceiro
 * Convidar um dos desenvolvedores para participar do servidor, a fim de monitorar o uso da Shiro
-* Ter ao menos 20 membros ativos
+* Ter ao menos 20 membros ativos (exceto bots e contas fake)
 * Utilizar a Shiro como um dos bots principais
 * Informar os desenvolvedores caso ocorram erros no uso da Shiro
 
