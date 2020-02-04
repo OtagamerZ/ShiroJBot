@@ -45,6 +45,8 @@ public class ComandosCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
+		Map<String, Page> pages = new HashMap<>();
+
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setTitle("**Lista de Comandos**");
 		eb.setDescription("Clique nas categorias abaixo para ver os comandos de cada uma.\n\n" +
@@ -52,15 +54,15 @@ public class ComandosCommand extends Command {
 				+ Arrays.stream(Category.values()).filter(c -> c.isEnabled(gc, guild)).count() + " categorias encontradas!" + "\n"
 				+ Main.getCommandManager().getCommands().stream().filter(c -> c.getCategory().isEnabled(gc, guild)).count() + " comandos encontrados!");
 		for (Category cat : Category.values()) {
-			if (cat.isEnabled(gc, guild)) eb.addField(cat.getEMOTE() + " | " + cat.getName(), Helper.VOID, true);
+			if (cat.isEnabled(gc, guild)) eb.addField(cat.getEmote() + " | " + cat.getName(), Helper.VOID, true);
 		}
 		eb.setColor(Color.PINK);
 		eb.setFooter(Main.getInfo().getFullName(), null);
 		eb.setThumbnail("https://cdn.pixabay.com/photo/2012/04/14/16/26/question-34499_960_720.png");
 
+		pages.put(Helper.HOME, new Page(PageType.EMBED, eb.build()));
 
 		if (args.length == 0) {
-			Map<String, Page> pages = new HashMap<>();
 
 			for (Category cat : Category.values()) {
 				EmbedBuilder ceb = new EmbedBuilder();
@@ -86,7 +88,7 @@ public class ComandosCommand extends Command {
 
 				ceb.addField(cat.getName(), cat.getDescription() + "\n" + cmds.toString().trim(), false);
 				ceb.addField(Helper.VOID, "Para informações sobre um comando em especifico digite `" + prefix + "cmds [comando]`.", false);
-				pages.put(cat.getEMOTE(), new Page(PageType.EMBED, ceb.build()));
+				pages.put(cat.getEmoteId(), new Page(PageType.EMBED, ceb.build()));
 			}
 
 			channel.sendMessage(eb.build()).queue(s -> Pages.categorize(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));

@@ -28,28 +28,30 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public enum Category {
-    DEVS("Dev", "\uD83D\uDEE0", "Comandos dedicados aos devs do bot.", PrivilegeLevel.DEV),
-	SHERIFFS("Sheriffs", "\uD83D\uDCDB", "Comandos de moderação global.", PrivilegeLevel.SHERIFF),
-    MODERACAO("Moderação", "\u2699", "Comandos dedicados à staff do servidor.", PrivilegeLevel.MOD),
-	PARTNER("Parceiros", "\uD83D\uDC8E", "Comandos exclusivos para parceiros", PrivilegeLevel.USER),
-	FUN("Diversão", "\uD83C\uDF89", "Comandos para diversão.", PrivilegeLevel.USER),
-	MISC("Diversos", "\u2733", "Comandos diversos.", PrivilegeLevel.USER),
-	INFO("Informação", "\u2139", "Comandos de informação", PrivilegeLevel.USER),
-	RPG("RPG", "\uD83D\uDCA0", "Comandos de RPG (Módulo Tet).", PrivilegeLevel.USER),
-	MUSICA("Música", "\uD83C\uDFB6", "Comandos de música.", PrivilegeLevel.DJ),
-	EXCEED("Exceed", "\uD83C\uDF8C", "Comandos de exceed", PrivilegeLevel.EXCEED);
+	DEVS("Dev", "\uD83D\uDEE0", "674247107053617192", "Comandos dedicados aos devs do bot.", PrivilegeLevel.DEV),
+	SHERIFFS("Sheriffs", "\uD83D\uDCDB", "674247106487255042", "Comandos de moderação global.", PrivilegeLevel.SHERIFF),
+	MODERACAO("Moderação", "\u2699", "674247106868805639", "Comandos dedicados à staff do servidor.", PrivilegeLevel.MOD),
+	PARTNER("Parceiros", "\uD83D\uDC8E", "674247106856353830", "Comandos exclusivos para parceiros", PrivilegeLevel.USER),
+	FUN("Diversão", "\uD83C\uDF89", "674247106923462667", "Comandos para diversão.", PrivilegeLevel.USER),
+	MISC("Diversos", "\u2733", "674247106776530946", "Comandos diversos.", PrivilegeLevel.USER),
+	INFO("Informação", "\u2139", "674247107070263296", "Comandos de informação", PrivilegeLevel.USER),
+	RPG("RPG", "\uD83D\uDCA0", "674247106890039297", "Comandos de RPG (Módulo Tet).", PrivilegeLevel.USER),
+	MUSICA("Música", "\uD83C\uDFB6", "674247106956886016", "Comandos de música.", PrivilegeLevel.DJ),
+	EXCEED("Exceed", "\uD83C\uDF8C", "674247106906685461", "Comandos de exceed", PrivilegeLevel.EXCEED);
 
 	private final String name;
-	private final String EMOTE;
+	private final String emote;
+	private final String emoteId;
 	private final String description;
 	private final PrivilegeLevel privilegeLevel;
-	
-	Category(String name, String emote, String description, PrivilegeLevel privilegeLevel) {
+
+	Category(String name, String emote, String emoteId, String description, PrivilegeLevel privilegeLevel) {
 		this.name = name;
-		this.EMOTE = emote;
+		this.emote = emote;
+		this.emoteId = emoteId;
 		this.description = description;
 		this.privilegeLevel = privilegeLevel;
-		
+
 		cmds = new ArrayList<>();
 	}
 
@@ -95,7 +97,7 @@ public enum Category {
 	public ArrayList<Command> getCmds(){
 		return cmds;
 	}
-	
+
 	public boolean isEnabled(GuildConfig gc, Guild g) {
 		if (this == DEVS && !g.getId().equals(ShiroInfo.getSupportServerID())) {
 			return false;
@@ -104,7 +106,11 @@ public enum Category {
 		} else return !gc.getDisabledModules().contains(this);
 	}
 
-	public String getEMOTE() {
-		return EMOTE;
+	public String getEmote() {
+		return emote;
+	}
+
+	public String getEmoteId() {
+		return emoteId;
 	}
 }
