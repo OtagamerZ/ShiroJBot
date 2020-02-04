@@ -28,16 +28,16 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public enum Category {
-	DEVS("Dev", "<:1_:674247107053617192>", "674247107053617192", "Comandos dedicados aos devs do bot.", PrivilegeLevel.DEV),
-	SHERIFFS("Sheriffs", "<:2_:674247106487255042>", "674247106487255042", "Comandos de moderação global.", PrivilegeLevel.SHERIFF),
-	MODERACAO("Moderação", "<:3_:674247106868805639>", "674247106868805639", "Comandos dedicados à staff do servidor.", PrivilegeLevel.MOD),
-	PARTNER("Parceiros", "<:4_:674247106856353830>", "674247106856353830", "Comandos exclusivos para parceiros", PrivilegeLevel.USER),
-	FUN("Diversão", "<:5_:674247106923462667>", "674247106923462667", "Comandos para diversão.", PrivilegeLevel.USER),
-	MISC("Diversos", "<:6_:674247106776530946>", "674247106776530946", "Comandos diversos.", PrivilegeLevel.USER),
-	INFO("Informação", "<:7_:674247107070263296>", "674247107070263296", "Comandos de informação", PrivilegeLevel.USER),
-	RPG("RPG", "<:8_:674247106890039297>", "674247106890039297", "Comandos de RPG (Módulo Tet).", PrivilegeLevel.USER),
-	MUSICA("Música", "<:9_:674247106956886016>", "674247106956886016", "Comandos de música.", PrivilegeLevel.DJ),
-	EXCEED("Exceed", "<:10:674247106906685461>", "674247106906685461", "Comandos de exceed", PrivilegeLevel.EXCEED);
+	DEVS("Dev", "<:dev:674261700333142046>", "674261700333142046", "Comandos dedicados aos devs do bot.", PrivilegeLevel.DEV),
+	SHERIFFS("Sheriffs", "<:sheriff:674261700538662913>", "674261700538662913", "Comandos de moderação global.", PrivilegeLevel.SHERIFF),
+	MODERACAO("Moderação", "<:mod:674261700844716082>", "674261700844716082", "Comandos dedicados à staff do servidor.", PrivilegeLevel.MOD),
+	PARTNER("Parceiros", "<:partner:674261701109219328>", "674261701109219328", "Comandos exclusivos para parceiros", PrivilegeLevel.USER),
+	FUN("Diversão", "<:fun:674261700941185035>", "674261700941185035", "Comandos para diversão.", PrivilegeLevel.USER),
+	MISC("Diversos", "<:misc:674261700354113536>", "674261700354113536", "Comandos diversos.", PrivilegeLevel.USER),
+	INFO("Informação", "<:info:674261700643651645>", "674261700643651645", "Comandos de informação", PrivilegeLevel.USER),
+	RPG("RPG", "<:rpg:674261700962418688>", "674261700962418688", "Comandos de RPG (Módulo Tet).", PrivilegeLevel.USER),
+	MUSICA("Música", "<:music:674261701507678220>", "674261701507678220", "Comandos de música.", PrivilegeLevel.DJ),
+	EXCEED("Exceed", "<:exceed:674261700312170496>", "674261700312170496", "Comandos de exceed", PrivilegeLevel.EXCEED);
 
 	private final String name;
 	private final String emote;
