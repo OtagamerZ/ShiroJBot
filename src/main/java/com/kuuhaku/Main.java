@@ -110,6 +110,23 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 		SpringApplication.run(Application.class, args);
 
+		boolean apiOnline = false;
+		int tries = 1;
+		while (!apiOnline) {
+			try {
+				info.setServer(new WebSocketConfig());
+				info.setClient(IO.socket("http://" + System.getenv("SERVER_URL") + "/")).connect();
+				apiOnline = true;
+			} catch (URISyntaxException | BindException e) {
+				Helper.logger(Main.class).error("Erro ao conectar client: " + e + " | " + e.getStackTrace()[0]);
+				try {
+					Thread.sleep(1000 * (long) Math.pow(2, tries));
+					tries++;
+				} catch (InterruptedException ignore) {
+				}
+			}
+		}
+
 		finishStartUp();
 		arguments = args;
 	}
@@ -132,23 +149,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		api.addEventListener(new GuildUpdateEvents());
 		jbr.addEventListener(new JibrilEvents());
 		tet.addEventListener(new TetEvents());
-
-		boolean apiOnline = false;
-		int tries = 1;
-		while (!apiOnline) {
-			try {
-				info.setServer(new WebSocketConfig());
-				info.setClient(IO.socket("http://" + System.getenv("SERVER_URL") + "/")).connect();
-				apiOnline = true;
-			} catch (URISyntaxException | BindException e) {
-				Helper.logger(Main.class).error("Erro ao conectar client: " + e + " | " + e.getStackTrace()[0]);
-				try {
-					Thread.sleep(1000 * (long) Math.pow(2, tries));
-					tries++;
-				} catch (InterruptedException ignore) {
-				}
-			}
-		}
 
 		GuildDAO.getAllGuilds().forEach(Helper::refreshButtons);
 
