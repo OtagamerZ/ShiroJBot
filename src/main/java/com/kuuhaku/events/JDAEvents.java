@@ -85,7 +85,7 @@ public class JDAEvents extends ListenerAdapter {
 				else if (event.getReactionEmote().getName().equals("\uD83D\uDC4E"))
 					Main.getInfo().getPolls().get(message.getId())[1]--;
 			}
-		} catch (NullPointerException | ErrorResponseException ignore) {
+		} catch (NullPointerException | ErrorResponseException | InsufficientPermissionException ignore) {
 		}
 	}
 

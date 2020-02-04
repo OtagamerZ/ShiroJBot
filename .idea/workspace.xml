@@ -6,12 +6,8 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhoria no Help">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/rpg/SetMaxPointsCommand.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/rpg/SwitchMapCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/rpg/SwitchMapCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/rpg/handlers/PlayerRegisterHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/rpg/handlers/PlayerRegisterHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/rpg/world/World.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/rpg/world/World.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -162,14 +158,7 @@
       <workItem from="1580496830954" duration="6521000" />
       <workItem from="1580504076104" duration="42000" />
       <workItem from="1580731623238" duration="22416000" />
-      <workItem from="1580819327475" duration="10456000" />
-    </task>
-    <task id="LOCAL-00370" summary="Persistencia das campanhas de RPG">
-      <created>1580403651805</created>
-      <option name="number" value="00370" />
-      <option name="presentableId" value="LOCAL-00370" />
-      <option name="project" value="LOCAL" />
-      <updated>1580403651805</updated>
+      <workItem from="1580819327475" duration="10982000" />
     </task>
     <task id="LOCAL-00371" summary="Persistencia das campanhas de RPG">
       <created>1580404530541</created>
@@ -507,7 +496,14 @@
       <option name="project" value="LOCAL" />
       <updated>1580831824629</updated>
     </task>
-    <option name="localTasksCounter" value="419" />
+    <task id="LOCAL-00419" summary="Comando para definir o máximo de pontos de atributo">
+      <created>1580833148573</created>
+      <option name="number" value="00419" />
+      <option name="presentableId" value="LOCAL-00419" />
+      <option name="project" value="LOCAL" />
+      <updated>1580833148573</updated>
+    </task>
+    <option name="localTasksCounter" value="420" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -538,7 +534,8 @@
     <MESSAGE value="Correções no Settings" />
     <MESSAGE value="Comando Use e correções gerais nos comandos de RPG" />
     <MESSAGE value="Melhoria no Help" />
-    <option name="LAST_COMMIT_MESSAGE" value="Melhoria no Help" />
+    <MESSAGE value="Comando para definir o máximo de pontos de atributo" />
+    <option name="LAST_COMMIT_MESSAGE" value="Comando para definir o máximo de pontos de atributo" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -629,11 +626,11 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1579834568153" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1580502350745" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1580831825988">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1580833151845">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1579146198967" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1580831825988" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1580833151845" />
     <state x="544" y="399" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD" timestamp="1579615180701">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
