@@ -33,7 +33,6 @@ public class WebSocketConfig {
 	private final SocketIOServer socket;
 
 	public WebSocketConfig() throws BindException {
-		Thread.currentThread().setName("chat-websocket");
 		Configuration config = new Configuration();
 		config.setHostname("localhost");
 		config.setPort(8000);
