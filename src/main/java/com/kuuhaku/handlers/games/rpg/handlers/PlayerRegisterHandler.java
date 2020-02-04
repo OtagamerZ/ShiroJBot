@@ -57,6 +57,7 @@ public class PlayerRegisterHandler extends ListenerAdapter {
 	private Message msg;
 	private final TextChannel chn;
 	private final boolean[] complete = new boolean[]{false, false, false, false};
+	private final int maxPts;
 
 	private static final String PREVIOUS = "\u25C0";
 	private static final String CANCEL = "\u274E";
@@ -69,6 +70,7 @@ public class PlayerRegisterHandler extends ListenerAdapter {
 		this.user = user;
 		this.map = map;
 		this.chn = channel;
+		this.maxPts = Main.getInfo().getGames().get(channel.getGuild().getId()).getMaxPts();
 		eb.setTitle("Registro de pesonagem de " + user.getName());
 		eb.setDescription("Clique nas setas para mudar as páginas.");
 		channel.sendMessage(eb.build()).queue(m -> {
@@ -122,7 +124,7 @@ public class PlayerRegisterHandler extends ListenerAdapter {
 					String[] args = event.getMessage().getContentRaw().split(";");
 					int[] stats = Arrays.stream(args).mapToInt(Integer::parseInt).toArray();
 
-					if (Arrays.stream(stats).sum() > 10) throw new IllegalArgumentException();
+					if (Arrays.stream(stats).sum() > maxPts) throw new IllegalArgumentException();
 					else if (args.length != 7) throw new NumberFormatException();
 
 					str = stats[0];
@@ -203,9 +205,9 @@ public class PlayerRegisterHandler extends ListenerAdapter {
 							}));
 					break;
 				case 4:
-					eb.setDescription("Digite os atributos no seguinte formato:\n`FORÇA`;`PERCEPÇÃO`;`RESISTENCIA`;`CARISMA`;`INTELIGÊNCIA`;`AGILIDADE`;`SORTE`");
+					eb.setDescription("Digite os atributos no seguinte formato:\n`FORÇA`;`PERCEPÇÃO`;`RESISTENCIA`;`CARISMA`;`INTELIGÊNCIA`;`AGILIDADE`;`SORTE`\n\n(todo atributo têm como base o valor 1, o valor final será `atributo + base`)");
 
-					eb.addField("Pontos restantes: " + (10 - (str + per + end + cha + intl + agl + lck)), "", false);
+					eb.addField("Pontos restantes: " + (maxPts - (str + per + end + cha + intl + agl + lck)), "", false);
 					eb.addField("Força: " + str, "", true);
 					eb.addField("Percepção: " + per, "", true);
 					eb.addField("Resistência: " + end, "", true);
