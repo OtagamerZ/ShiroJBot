@@ -21,26 +21,26 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.lang3.StringUtils;
 
-public class SwitchMapCommand extends Command {
+public class SetMaxPointsCommand extends Command {
 
-	public SwitchMapCommand() {
-		super("raomapa", new String[]{"rtrocarmapa", "rtomap"}, "<índice>", "Muda de mapa.", Category.RPG);
+	public SetMaxPointsCommand() {
+		super("rmaxpts", "<quantidade>", "Define a quantidade máxima de pontos a serem atribuidos na criação de personagem.", Category.RPG);
 	}
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (Main.getInfo().getGames().get(guild.getId()).getMaster().equals(author.getId())) {
 			if (args.length == 0) {
-				channel.sendMessage(":x: | É necessário especificar o número do mapa.").queue();
+				channel.sendMessage(":x: | É necessário informar a quantidade máxima de pontos.").queue();
+				return;
+			} else if (!StringUtils.isNumeric(args[0])) {
+				channel.sendMessage(":x: | A quantidade deve ser um valor inteiro.").queue();
 				return;
 			}
 
-			try {
-				Main.getInfo().getGames().get(guild.getId()).switchMap(Integer.parseInt(args[0]));
-			} catch (IndexOutOfBoundsException | NumberFormatException e) {
-				channel.sendMessage(":x: | Índice inválido, existem " + Main.getInfo().getGames().get(guild.getId()).getMaps().size() + " mapas cadastrados. (primeiro = 0)").queue();
-			}
+			Main.getInfo().getGames().get(guild.getId()).setMaxPts(Integer.parseInt(args[0]));
 		}
 	}
 }
