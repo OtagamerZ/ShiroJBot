@@ -30,6 +30,6 @@ public class PermissionCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		channel.sendMessage(Helper.getCurrentdPerms(message.getTextChannel())).queue();
+		channel.sendMessage(Helper.getCurrentPerms(message.getTextChannel())).queue();
 	}
 }
