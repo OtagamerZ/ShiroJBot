@@ -77,7 +77,7 @@ public class CompileCommand extends Command {
 							PythonInterpreter pi = new PythonInterpreter();
 							pi.set("msg", message);
 							pi.set("code", String.join(" ", args));
-							pi.exec(code);
+							pi.eval(code);
 							Object out = pi.get("out", Object.class);
 							m.getChannel().sendMessage("<a:Loading:598500653215645697> | Executando...").queue(d ->
 									d.editMessage("-> " + out.toString()).queue());
