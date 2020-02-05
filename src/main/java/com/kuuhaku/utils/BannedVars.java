@@ -19,6 +19,8 @@ package com.kuuhaku.utils;
 
 public class BannedVars {
 	public static final String[] vars = new String[]{
+			//JAVA
+			"system",
 			"getJDA",
 			"getAPI",
 			"kick",
@@ -51,6 +53,8 @@ public class BannedVars {
 			"args",
 			"exit",
 			"getenv",
+
+			//PYTHON
 			"read",
 			"write",
 			"readline",
@@ -62,6 +66,11 @@ public class BannedVars {
 			"eval",
 			"exec",
 			"os",
-			"system"
+
+			//JAVASCRIPT
+			"document",
+			"anyElement",
+			"window",
+			"element"
 	};
 }
