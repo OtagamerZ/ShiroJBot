@@ -26,6 +26,8 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import org.python.util.PythonInterpreter;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -76,6 +78,15 @@ public class CompileCommand extends Command {
 							PythonInterpreter pi = new PythonInterpreter();
 							pi.exec(code);
 							Object out = pi.get("out", Object.class);
+							m.getChannel().sendMessage("<a:Loading:598500653215645697> | Executando...").queue(d ->
+									d.editMessage("-> " + out.toString()).queue());
+							message.delete().queue();
+							m.editMessage("<:Verified:591425071772467211> | Tempo de execução: " + (System.currentTimeMillis() - start) + " ms").queue();
+						} else if ((code.startsWith("```js") || code.startsWith("```javascript")) && code.endsWith("```")) {
+							code = code.replace("```js", "").replace("```javascript", "").replace("```", "");
+							ScriptEngine se = new ScriptEngineManager().getEngineByName("nashorn");
+							se.eval(code);
+							Object out = se.get("out");
 							m.getChannel().sendMessage("<a:Loading:598500653215645697> | Executando...").queue(d ->
 									d.editMessage("-> " + out.toString()).queue());
 							message.delete().queue();
