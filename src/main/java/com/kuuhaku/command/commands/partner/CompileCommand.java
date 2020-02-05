@@ -65,7 +65,6 @@ public class CompileCommand extends Command {
 							code = code.replace("```java", "").replace("```", "");
 							Interpreter i = new Interpreter();
 							i.set("msg", message);
-							i.set("code", String.join(" ", args));
 							i.eval(code);
 							Object out = i.get("out");
 							m.getChannel().sendMessage("<a:Loading:598500653215645697> | Executando...").queue(d ->
@@ -75,9 +74,7 @@ public class CompileCommand extends Command {
 						} else if ((code.startsWith("```py") || code.startsWith("```python")) && code.endsWith("```")) {
 							code = code.replace("```py", "").replace("```python", "").replace("```", "");
 							PythonInterpreter pi = new PythonInterpreter();
-							pi.set("msg", message);
-							pi.set("code", String.join(" ", args));
-							pi.eval(code);
+							pi.exec(code);
 							Object out = pi.get("out", Object.class);
 							m.getChannel().sendMessage("<a:Loading:598500653215645697> | Executando...").queue(d ->
 									d.editMessage("-> " + out.toString()).queue());
