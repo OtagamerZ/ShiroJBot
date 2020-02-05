@@ -40,7 +40,7 @@ public class EightBallCommand extends Command {
 		long seed = 0;
 		String question = String.join(" ", args);
 
-		for (char c : question.toCharArray()) {
+		for (char c : question.toLowerCase().toCharArray()) {
 			seed += (int) c;
 		}
 

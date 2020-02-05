@@ -42,7 +42,7 @@ public class ChooseCommand extends Command {
 		String[] opts = args[0].split(";");
 		long seed = 0;
 
-		for (char c : args[0].toCharArray()) {
+		for (char c : args[0].toLowerCase().toCharArray()) {
 			seed += (int) c;
 		}
 
