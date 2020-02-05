@@ -21,6 +21,7 @@ public class BannedVars {
 	public static final String[] vars = new String[]{
 			//JAVA
 			"system",
+			"start",
 			"getJDA",
 			"getAPI",
 			"kick",

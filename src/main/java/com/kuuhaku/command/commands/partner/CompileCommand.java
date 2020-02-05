@@ -61,7 +61,7 @@ public class CompileCommand extends Command {
 						String code = String.join(" ", args);
 						if (!code.contains("out")) throw new IllegalArgumentException("Código sem retorno.");
 						else if (Helper.containsAny(code, BannedVars.vars) && !Main.getInfo().getDevelopers().contains(author.getId()))
-							throw new IllegalAccessException("Código com métodos proibidos.");
+							throw new IllegalAccessException("Código com variáveis ou métodos proibidos.");
 
 						if (code.startsWith("```java") && code.endsWith("```")) {
 							code = code.replace("```java", "").replace("```", "");
