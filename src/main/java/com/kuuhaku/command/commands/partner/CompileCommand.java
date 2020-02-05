@@ -24,8 +24,8 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.BannedVars;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
+import org.python.util.PythonInterpreter;
 
-import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -58,20 +58,34 @@ public class CompileCommand extends Command {
 					try {
 						String code = String.join(" ", args);
 						if (!code.contains("out")) throw new IllegalArgumentException("Código sem retorno.");
-						else if (code.contains("```") && !code.contains("```java")) {
-							throw new IllegalArgumentException("Bloco de código com começo incorreto");
-						} else if (Arrays.stream(BannedVars.vars).anyMatch(code::contains) && !Main.getInfo().getDevelopers().contains(author.getId()))
+						else if (Helper.containsAny(code, BannedVars.vars) && !Main.getInfo().getDevelopers().contains(author.getId()))
 							throw new IllegalAccessException("Código com métodos proibidos.");
-						code = code.replace("```java", "").replace("```", "");
-						Interpreter i = new Interpreter();
-						i.set("msg", message);
-						i.set("code", String.join(" ", args));
-						i.eval(code);
-						Object out = i.get("out");
-						m.getChannel().sendMessage("<a:Loading:598500653215645697> | Executando...").queue(d ->
-								d.editMessage("-> " + out.toString()).queue());
-						message.delete().queue();
-						m.editMessage("<:Verified:591425071772467211> | Tempo de execução: " + (System.currentTimeMillis() - start) + " ms").queue();
+
+						if (code.startsWith("```java") && code.endsWith("```")) {
+							code = code.replace("```java", "").replace("```", "");
+							Interpreter i = new Interpreter();
+							i.set("msg", message);
+							i.set("code", String.join(" ", args));
+							i.eval(code);
+							Object out = i.get("out");
+							m.getChannel().sendMessage("<a:Loading:598500653215645697> | Executando...").queue(d ->
+									d.editMessage("-> " + out.toString()).queue());
+							message.delete().queue();
+							m.editMessage("<:Verified:591425071772467211> | Tempo de execução: " + (System.currentTimeMillis() - start) + " ms").queue();
+						} else if ((code.startsWith("```py") || code.startsWith("```python")) && code.endsWith("```")) {
+							code = code.replace("```py", "").replace("```python", "").replace("```", "");
+							PythonInterpreter pi = new PythonInterpreter();
+							pi.set("msg", message);
+							pi.set("code", String.join(" ", args));
+							pi.exec(code);
+							Object out = pi.get("out", Object.class);
+							m.getChannel().sendMessage("<a:Loading:598500653215645697> | Executando...").queue(d ->
+									d.editMessage("-> " + out.toString()).queue());
+							message.delete().queue();
+							m.editMessage("<:Verified:591425071772467211> | Tempo de execução: " + (System.currentTimeMillis() - start) + " ms").queue();
+						} else {
+							throw new IllegalArgumentException("Bloco de código com começo incorreto");
+						}
 					} catch (Exception e) {
 						m.editMessage(":x: | Erro ao compilar: ```" + e.toString().replace("`", "´") + "```").queue();
 					}

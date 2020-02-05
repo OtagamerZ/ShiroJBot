@@ -288,11 +288,11 @@ public class Helper {
 	}
 
 	public static boolean containsAll(String string, String... compareWith) {
-		return Arrays.stream(compareWith).allMatch(string::contains);
+		return Arrays.stream(compareWith).map(String::toLowerCase).allMatch(string.toLowerCase()::contains);
 	}
 
 	public static boolean containsAny(String string, String... compareWith) {
-		return Arrays.stream(compareWith).anyMatch(string::contains);
+		return Arrays.stream(compareWith).map(String::toLowerCase).anyMatch(string.toLowerCase()::contains);
 	}
 
 	public static boolean hasPermission(Member m, Permission p, TextChannel c) {
