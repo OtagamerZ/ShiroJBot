@@ -135,6 +135,8 @@ public class CommandManager {
 			add(new PixelCanvasCommand());
 			add(new PixelChunkCommand());
 			add(new DivorceCommand());
+			add(new EightBallCommand());
+			add(new ChooseCommand());
 			//REAÇÕES
 			//RECIPROCOS
 			add(new HugReaction(false));

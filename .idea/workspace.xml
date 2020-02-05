@@ -7,6 +7,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/ChooseCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/EightBallCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -93,10 +95,10 @@
       <recent name="com.kuuhaku.handlers.games.rpg.Utils" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.command.commands.fun" />
       <recent name="com.kuuhaku.command.commands.rpg" />
       <recent name="com.kuuhaku.command.commands.misc" />
       <recent name="com.kuuhaku.events" />
-      <recent name="com.kuuhaku.command.commands.fun" />
       <recent name="com.kuuhaku.controller.mysql" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
@@ -159,14 +161,7 @@
       <workItem from="1580504076104" duration="42000" />
       <workItem from="1580731623238" duration="22416000" />
       <workItem from="1580819327475" duration="20351000" />
-      <workItem from="1580904724507" duration="9247000" />
-    </task>
-    <task id="LOCAL-00394" summary="Correções no Settings">
-      <created>1580737643853</created>
-      <option name="number" value="00394" />
-      <option name="presentableId" value="LOCAL-00394" />
-      <option name="project" value="LOCAL" />
-      <updated>1580737643853</updated>
+      <workItem from="1580904724507" duration="11951000" />
     </task>
     <task id="LOCAL-00395" summary="Correções no Settings">
       <created>1580741863863</created>
@@ -504,7 +499,14 @@
       <option name="project" value="LOCAL" />
       <updated>1580926812126</updated>
     </task>
-    <option name="localTasksCounter" value="443" />
+    <task id="LOCAL-00443" summary="Dois novos compiladores embutidos no comando compile: Python (Jython) e Javascript (Nashorn)">
+      <created>1580930041005</created>
+      <option name="number" value="00443" />
+      <option name="presentableId" value="LOCAL-00443" />
+      <option name="project" value="LOCAL" />
+      <updated>1580930041005</updated>
+    </task>
+    <option name="localTasksCounter" value="444" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -607,11 +609,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1578421403620" />
-    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1580926809043">
+    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1580930037475">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1579836482498" />
-    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1580926809043" />
+    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1580930037475" />
     <state x="160" y="89" width="1344" height="834" key="DiffContextDialog" timestamp="1580842925618">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -638,11 +640,11 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1579834568153" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1580502350745" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1580926813605">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1580930043125">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1579146198967" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1580926813605" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1580930043125" />
     <state x="544" y="399" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD" timestamp="1579615180701">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
