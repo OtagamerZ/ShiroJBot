@@ -11,6 +11,7 @@ Ambos estão disponíveis para uso em servidores que aceitem tornar-se parceiros
 
 #### Para ser um parceiro
 * Convidar um dos desenvolvedores para participar do servidor, a fim de monitorar o uso da Shiro
+* Ter uma administração ativa, com regras de comportamento e conduta
 * Ter ao menos 20 membros ativos (exceto bots e contas fake)
 * Utilizar a Shiro como um dos bots principais
 * Informar os desenvolvedores caso ocorram erros no uso da Shiro
