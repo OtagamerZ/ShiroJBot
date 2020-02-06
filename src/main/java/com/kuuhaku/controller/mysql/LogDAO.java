@@ -38,7 +38,7 @@ public class LogDAO {
 	public static List<Object[]> getUsage() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT guild, COUNT(guild) AS uses FROM Log l GROUP BY guild ORDER BY uses DESC");
+		Query q = em.createQuery("SELECT guild, COUNT(guild) AS uses, (SELECT MAX(i.id) FROM Log i WHERE i.guild = l.guild) AS lastid, (SELECT t.timestamp FROM Log t WHERE t.id = lastid) AS lastused FROM Log l GROUP BY guild ORDER BY uses DESC");
 
 		return q.getResultList();
 	}
