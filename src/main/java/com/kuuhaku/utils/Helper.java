@@ -202,7 +202,7 @@ public class Helper {
 				Main.getInfo().getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> c.sendMessage("GIF irregular: " + imageURL).queue()));
 			}
 		} catch (Exception e) {
-			logger(Helper.class).error("Erro ao carregar a imagem: " + e.getStackTrace()[0]);
+			logger(Helper.class).error("Erro ao carregar a imagem: " + e + " | " + e.getStackTrace()[0]);
 		}
 	}
 
