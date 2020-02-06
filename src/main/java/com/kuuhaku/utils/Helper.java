@@ -23,6 +23,7 @@ import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.command.commands.reactions.*;
 import com.kuuhaku.controller.mysql.TagDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.Extensions;
@@ -153,7 +154,42 @@ public class Helper {
 				EmbedBuilder eb = new EmbedBuilder();
 				eb.setImage(imageURL);
 				if (reacted)
-					channel.sendMessage(message).embed(eb.build()).queue(m -> m.addReaction("\u21aa").queue());
+					channel.sendMessage(message).embed(eb.build()).queue(m -> {
+						Pages.buttonize(Main.getInfo().getAPI(), m, Collections.singletonMap("\u21aa", (mb, ms) -> {
+							if (ms.getMentionedMembers().size() > 1 && mb == ms.getMentionedMembers().get(1)) {
+								ms.clearReactions().queue();
+								if (ms.getContentRaw().contains("abraçou")) {
+									User author = ms.getMentionedUsers().get(0);
+
+									new HugReaction(true).execute(author, null, null, null, ms, channel, null, null);
+								} else if (ms.getContentRaw().contains("beijou")) {
+									User author = ms.getMentionedUsers().get(0);
+
+									new KissReaction(true).execute(author, null, null, null, ms, channel, null, null);
+								} else if (ms.getContentRaw().contains("fez cafuné em")) {
+									User author = ms.getMentionedUsers().get(0);
+
+									new PatReaction(true).execute(author, null, null, null, ms, channel, null, null);
+								} else if (ms.getContentRaw().contains("encarou")) {
+									User author = ms.getMentionedUsers().get(0);
+
+									new StareReaction(true).execute(author, null, null, null, ms, channel, null, null);
+								} else if (ms.getContentRaw().contains("deu um tapa em")) {
+									User author = ms.getMentionedUsers().get(0);
+
+									new SlapReaction(true).execute(author, null, null, null, ms, channel, null, null);
+								} else if (ms.getContentRaw().contains("socou")) {
+									User author = ms.getMentionedUsers().get(0);
+
+									new PunchReaction(true).execute(author, null, null, null, ms, channel, null, null);
+								} else if (ms.getContentRaw().contains("mordeu")) {
+									User author = ms.getMentionedUsers().get(0);
+
+									new BiteReaction(true).execute(author, null, null, null, ms, channel, null, null);
+								}
+							}
+						}), false);
+					});
 				else channel.sendMessage(message).embed(eb.build()).queue();
 			} else {
 				EmbedBuilder eb = new EmbedBuilder();
