@@ -57,7 +57,7 @@ public class DiscordBotsListHandler {
 			eb.setTitle("Olá, obrigado por votar em mim!");
 			eb.setDescription("Como agradecimento, aqui estão " + credit + (body.getBoolean("isWeekend") ? " (bônus x2)" : "") + " créditos para serem utilizados nos módulos que utilizam o sistema de dinheiro.");
 			eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
-			eb.setColor(Color.green);
+			eb.setColor(Color.cyan);
 
 			chn.sendMessage(eb.build()).queue();
 		} catch (RuntimeException ignore) {
