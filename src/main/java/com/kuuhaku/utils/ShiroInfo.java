@@ -30,6 +30,7 @@ import com.spaceprogram.kittycache.KittyCache;
 import io.socket.client.Socket;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
+import org.discordbots.api.client.DiscordBotListAPI;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
@@ -54,6 +55,7 @@ public class ShiroInfo {
 	private static final String AnilistToken = System.getenv("ANILIST_TOKEN");
 	private static final String YandexToken = System.getenv("YANDEX_TOKEN");
 	private static final String YoutubeToken = System.getenv("YOUTUBE_TOKEN");
+	private static final String DBLToken;
 	private static final String name = "Shiro";
 	private static final String version = "3.3";
 	private static final String supportServer = "Shiro Support";
@@ -79,14 +81,21 @@ public class ShiroInfo {
 	private static final Map<String, KittyCache<String, Message>> messageCache = new HashMap<>();
 	private static final GsonBuilder JSONFactory = new GsonBuilder();
 
-	private JDA api;
-	private long startTime;
+	//STATIC CONSTRUCTOR
+	static {
+		if (System.getenv().containsKey("DBL_TOKEN")) DBLToken = System.getenv("DBL_TOKEN");
+		else DBLToken = null;
+	}
+
+	private JDA api = null;
+	private long startTime = 0;
 	private String winner = "";
 	private WebSocketConfig server;
-	private Socket client;
-
-	public ShiroInfo() {
-	}
+	private Socket client = null;
+	private DiscordBotListAPI dblApi = DBLToken == null ? null : new DiscordBotListAPI.Builder()
+			.token(DBLToken)
+			.botId("572413282653306901")
+			.build();
 
 	//CONSTANTS
 	//STATIC
@@ -139,6 +148,14 @@ public class ShiroInfo {
 
 	public String getYoutubeToken() {
 		return YoutubeToken;
+	}
+
+	public static String getDBLToken() {
+		return DBLToken;
+	}
+
+	public DiscordBotListAPI getDblApi() {
+		return dblApi;
 	}
 
 	public String getName() {
