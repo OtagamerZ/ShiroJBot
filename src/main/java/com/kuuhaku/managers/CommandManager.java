@@ -66,6 +66,7 @@ public class CommandManager {
 			add(new CompileCommand("compilar", new String[]{"compile", "exec"}, "```java/py/js\n<código>\n```", "Executa um código Java, Python ou Javascript.", Category.PARTNER));
 			add(new TetCommand("tet", "Chama o Tet para usar o módulo de RPG em seu servidor.", Category.PARTNER));
 			add(new JibrilEmoteListCommand("jemotes", "<nome>", "Mostra a lista de emotes disponíveis para uso através da Jibril.", Category.PARTNER));
+			//add(new PurchaceKGotchiCommand("pkgotchi", new String[]{"buykgotchi", "comprarkgotchi"}, "Abre a loja de Kawaigotchis.", Category.PARTNER));
 
 			//MODERATION
 			add(new RemoveAnswerCommand());
