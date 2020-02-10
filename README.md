@@ -13,7 +13,7 @@ Ambos estão disponíveis para uso em servidores que aceitem tornar-se parceiros
 * Convidar um dos desenvolvedores para participar do servidor, a fim de monitorar o uso da Shiro
 * Ter uma administração ativa, com ao menos regras de comportamento
 * Ter ao menos 20 membros ativos (exceto bots e contas fake)
-* Utilizar a Shiro como um dos bots principais
+* Utilizar a Shiro ativamente (não deixar ela apenas como "mais um bot")
 * Informar os desenvolvedores caso ocorram erros no uso da Shiro
 
 #### Para informar erros
