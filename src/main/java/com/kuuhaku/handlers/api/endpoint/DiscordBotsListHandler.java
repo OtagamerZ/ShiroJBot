@@ -44,6 +44,8 @@ public class DiscordBotsListHandler {
 
 		if (!body.getString("type").equals("test")) acc.addCredit(credit);
 
+		acc.voted();
+
 		AccountDAO.saveAccount(acc);
 
 		try {
