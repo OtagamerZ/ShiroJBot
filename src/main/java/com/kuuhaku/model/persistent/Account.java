@@ -32,7 +32,7 @@ public class Account {
 	@Column(columnDefinition = "INT DEFAULT 0")
 	private int balance;
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT 'never'")
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT 'Never'")
 	private String lastVoted;
 
 	public String getUserId() {
