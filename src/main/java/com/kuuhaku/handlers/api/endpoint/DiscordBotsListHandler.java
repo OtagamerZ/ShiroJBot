@@ -36,15 +36,13 @@ public class DiscordBotsListHandler {
 	public void handleVote(@RequestHeader(value = "Authorization") String token, @RequestBody String payload) {
 		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
 
-		System.out.println(payload);
-
 		JSONObject body = new JSONObject(payload);
 
 		int credit = body.getBoolean("isWeekend") ? 250 : 125;
 
 		Account acc = AccountDAO.getAccount(body.getString("user"));
 
-		acc.addCredit(credit);
+		if (!body.getString("type").equals("test")) acc.addCredit(credit);
 
 		AccountDAO.saveAccount(acc);
 
@@ -56,7 +54,7 @@ public class DiscordBotsListHandler {
 			eb.setThumbnail("https://i.imgur.com/A0jXqpe.png");
 			eb.setTitle("Olá, obrigado por votar em mim!");
 			eb.setDescription("Como agradecimento, aqui estão " + credit + (body.getBoolean("isWeekend") ? " (bônus x2)" : "") + " créditos para serem utilizados nos módulos que utilizam o sistema de dinheiro.");
-			eb.setFooter("Seus créditos: " + acc.getBalance());
+			eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
 			eb.setColor(Color.green);
 
 			chn.sendMessage(eb.build()).queue();
