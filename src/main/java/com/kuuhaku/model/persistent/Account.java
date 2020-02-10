@@ -22,7 +22,8 @@ import com.kuuhaku.utils.Helper;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 
 @Entity
 public class Account {
@@ -56,6 +57,6 @@ public class Account {
 	}
 
 	public void voted() {
-		this.lastVoted = LocalDateTime.now().format(Helper.dateformat);
+		this.lastVoted = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.dateformat);
 	}
 }
