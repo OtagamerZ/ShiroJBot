@@ -17,6 +17,7 @@
 
 package com.kuuhaku.events;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.events.cron.*;
 import com.kuuhaku.utils.Helper;
 import org.quartz.*;
@@ -33,6 +34,7 @@ public class ScheduledEvents implements JobListener {
 		schedCheck();
 		schedRefreshWinner();
 		schedMarkWinner();
+		if (Main.getInfo().getDblApi() != null) schedUpdateServerCount();
 	}
 
 	private void schedCheck() {
@@ -152,6 +154,26 @@ public class ScheduledEvents implements JobListener {
 			}
 		} catch (SchedulerException e) {
 			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma markWinner: " + e);
+		}
+	}
+
+	private void schedUpdateServerCount() {
+		try {
+			if (UpdateServerCountEvent.updateServerCount == null) {
+				UpdateServerCountEvent.updateServerCount = JobBuilder.newJob(UpdateServerCountEvent.class).withIdentity("updateServerCount", "1").build();
+			}
+			Trigger cron = TriggerBuilder.newTrigger().withIdentity("updateServerCount", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0 * ? * * *")).build();
+			SchedulerFactory sf = new StdSchedulerFactory();
+			try {
+				sched = sf.getScheduler();
+				sched.scheduleJob(UpdateServerCountEvent.updateServerCount, cron);
+			} catch (Exception ignore) {
+			} finally {
+				sched.start();
+				Helper.logger(this.getClass()).info("Cronograma inicializado com sucesso: updateServerCount");
+			}
+		} catch (SchedulerException e) {
+			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma updateServerCount: " + e);
 		}
 	}
 
