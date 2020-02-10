@@ -34,7 +34,6 @@ import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
 import com.kuuhaku.managers.CommandManager;
 import com.kuuhaku.managers.RPGCommandManager;
 import com.kuuhaku.model.common.DataDump;
-import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
@@ -49,7 +48,6 @@ import net.dv8tion.jda.api.exceptions.ContextException;
 import org.springframework.boot.SpringApplication;
 
 import javax.persistence.NoResultException;
-import java.awt.*;
 import java.net.BindException;
 import java.net.URISyntaxException;
 import java.time.Instant;
@@ -91,9 +89,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 		info.setStartTime(Instant.now().getEpochSecond());
 		Helper.logger(Main.class).info("Criada pool de compilação: " + info.getPool().getCorePoolSize() + " espaços alocados");
-
-		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		ge.registerFont(Profile.FONT);
 
 		Manager.connect();
 		if (com.kuuhaku.controller.sqlite.BackupDAO.restoreData(BackupDAO.getData()))
