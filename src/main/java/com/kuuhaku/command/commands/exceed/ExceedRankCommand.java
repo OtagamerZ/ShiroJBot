@@ -80,7 +80,7 @@ public class ExceedRankCommand extends Command {
 				}};
 
 				Graphics2D g2d = (Graphics2D) bi.getGraphics();
-				g2d.setFont(new Font(FONT.getName(), Font.PLAIN, 30));
+				g2d.setFont(FONT.deriveFont(Font.PLAIN, 30));
 				g2d.drawImage(bg, null, 0, 0);
 
 				long total = exceeds.stream().mapToLong(Exceed::getExp).sum();
