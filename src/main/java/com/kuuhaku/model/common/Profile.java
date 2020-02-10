@@ -114,17 +114,17 @@ public class Profile {
 			g2d.drawLine(268, 370 + (177 / 3 * i), 445, 370 + (177 / 3 * i));
 		}
 
-		g2d.setFont(new Font(FONT.getName(), Font.PLAIN, 50));
+		g2d.setFont(FONT.deriveFont(Font.PLAIN, 50));
 		printCenteredString("LEVEL", 196, 52, 440, g2d);
 		String name = m.getEffectiveName();
 		if ((int) g2d.getFontMetrics().getStringBounds(m.getEffectiveName(), g2d).getWidth() >= 678)
 			name = m.getEffectiveName().substring(0, 21).concat("...");
 		drawOutlinedText(name, 270, 342, g2d);
 
-		g2d.setFont(new Font(FONT.getName(), Font.BOLD, 85));
+		g2d.setFont(FONT.deriveFont(Font.BOLD, 85));
 		printCenteredString(String.valueOf(MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getLevel()), 196, 52, 515, g2d);
 
-		g2d.setFont(new Font(FONT.getName(), Font.PLAIN, 25));
+		g2d.setFont(FONT.deriveFont(Font.PLAIN, 25));
 		printCenteredString(MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getXp() + "/" + ((int) Math.pow(MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getLevel(), 2) * 100), 196, 52, 538, g2d);
 
 		List<Member> mbs = MemberDAO.getMemberRank(g.getId(), false);
@@ -145,11 +145,11 @@ public class Profile {
 			}
 		}
 
-		g2d.setFont(new Font(FONT.getName(), Font.PLAIN, 40));
+		g2d.setFont(FONT.deriveFont(Font.PLAIN, 40));
 		printCenteredString("Emblemas", 182, 266, 590, g2d);
 		printCenteredString("Biografia", 460, 466, 590, g2d);
 
-		g2d.setFont(new Font(FONT.getName(), Font.PLAIN, 30));
+		g2d.setFont(FONT.deriveFont(Font.PLAIN, 30));
 		printCenteredString("Rank: #" + pos + "/#" + posG, 196, 52, 585, g2d);
 
 
@@ -251,7 +251,7 @@ public class Profile {
 				try {
 					if (!MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getWaifu().isEmpty()) {
 						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/married.png"))));
-						g2d.setFont(new Font(FONT.getName(), Font.PLAIN, 30));
+						g2d.setFont(FONT.deriveFont(Font.PLAIN, 30));
 						drawOutlinedText("Casado(a) com: " + Main.getInfo().getUserByID(MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getWaifu()).getName(), 270, 298, g2d);
 					}
 				} catch (Exception ignore) {
