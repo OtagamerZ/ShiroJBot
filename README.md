@@ -9,6 +9,8 @@ Não sinta-se inseguro para pedir ajuda, sugerir novas funções ou deixar seu c
 Pela Shiro estar em desenvolvimento constante, foram criados dois bots adicionais para testar novos módulos, a Jibril e o Tet.
 Ambos estão disponíveis para uso em servidores que aceitem tornar-se parceiros, assim como comandos exclusivos!
 
+**Obs: A Shiro é um bot aberto e livre para uso em qualquer servidor, apenas a Jibril e o Tet requerem que o usuário seja parceiro para tê-los.**
+
 #### Para ser um parceiro
 * Convidar um dos desenvolvedores para participar do servidor, a fim de monitorar o uso da Shiro
 * Ter uma administração ativa, com pelo menos regras de comportamento
