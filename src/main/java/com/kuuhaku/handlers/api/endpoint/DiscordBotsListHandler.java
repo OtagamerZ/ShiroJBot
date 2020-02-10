@@ -32,9 +32,11 @@ import java.awt.*;
 @RestController
 public class DiscordBotsListHandler {
 
-	@RequestMapping(value = "/webhook/dbl", consumes = "application/json", method = RequestMethod.POST)
-	public void handleVote(@RequestHeader(value = "Authorization") String token, @RequestBody JSONObject body) {
+	@RequestMapping(value = "/webhook/dbl", method = RequestMethod.POST)
+	public void handleVote(@RequestHeader(value = "Authorization") String token, @RequestBody String payload) {
 		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
+
+		JSONObject body = new JSONObject(payload);
 
 		int credit = body.getBoolean("isWeekend") ? 250 : 125;
 
@@ -54,6 +56,8 @@ public class DiscordBotsListHandler {
 			eb.setDescription("Como agradecimento, aqui estão " + credit + (body.getBoolean("isWeekend") ? " (bônus x2)" : "") + " créditos para serem utilizados nos módulos que utilizam o sistema de dinheiro.");
 			eb.setFooter("Seus créditos: " + acc.getBalance());
 			eb.setColor(Color.green);
+
+			chn.sendMessage(eb.build()).queue();
 		} catch (RuntimeException ignore) {
 		}
 	}
