@@ -36,6 +36,8 @@ public class DiscordBotsListHandler {
 	public void handleVote(@RequestHeader(value = "Authorization") String token, @RequestBody String payload) {
 		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
 
+		System.out.println(payload);
+
 		JSONObject body = new JSONObject(payload);
 
 		int credit = body.getBoolean("isWeekend") ? 250 : 125;
