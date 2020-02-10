@@ -54,7 +54,7 @@ public class DiscordBotsListHandler {
 			EmbedBuilder eb = new EmbedBuilder();
 
 			eb.setThumbnail("https://i.imgur.com/A0jXqpe.png");
-			eb.setTitle("Olá, obrigado por votar em mim!");
+			eb.setTitle("Opa, obrigada por votar em mim!");
 			eb.setDescription("Como agradecimento, aqui estão " + credit + (body.getBoolean("isWeekend") ? " (bônus x2)" : "") + " créditos para serem utilizados nos módulos que utilizam o sistema de dinheiro.");
 			eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
 			eb.setColor(Color.cyan);
