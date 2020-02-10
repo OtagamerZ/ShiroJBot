@@ -200,21 +200,7 @@
       <workItem from="1580904724507" duration="15261000" />
       <workItem from="1580996095881" duration="6299000" />
       <workItem from="1581353463564" duration="2292000" />
-      <workItem from="1581360047448" duration="3492000" />
-    </task>
-    <task id="LOCAL-00405" summary="Comando Use e correções gerais nos comandos de RPG">
-      <created>1580757772715</created>
-      <option name="number" value="00405" />
-      <option name="presentableId" value="LOCAL-00405" />
-      <option name="project" value="LOCAL" />
-      <updated>1580757772715</updated>
-    </task>
-    <task id="LOCAL-00406" summary="Comando Use e correções gerais nos comandos de RPG">
-      <created>1580758377533</created>
-      <option name="number" value="00406" />
-      <option name="presentableId" value="LOCAL-00406" />
-      <option name="project" value="LOCAL" />
-      <updated>1580758377533</updated>
+      <workItem from="1581360047448" duration="4119000" />
     </task>
     <task id="LOCAL-00407" summary="Comando Use e correções gerais nos comandos de RPG">
       <created>1580759559780</created>
@@ -545,7 +531,21 @@
       <option name="project" value="LOCAL" />
       <updated>1581364234759</updated>
     </task>
-    <option name="localTasksCounter" value="454" />
+    <task id="LOCAL-00454" summary="Votos agora lhe dão créditos">
+      <created>1581364379403</created>
+      <option name="number" value="00454" />
+      <option name="presentableId" value="LOCAL-00454" />
+      <option name="project" value="LOCAL" />
+      <updated>1581364379403</updated>
+    </task>
+    <task id="LOCAL-00455" summary="Votos agora lhe dão créditos">
+      <created>1581364555450</created>
+      <option name="number" value="00455" />
+      <option name="presentableId" value="LOCAL-00455" />
+      <option name="project" value="LOCAL" />
+      <updated>1581364555450</updated>
+    </task>
+    <option name="localTasksCounter" value="456" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -564,7 +564,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Atualizada versão da Shiro" />
     <MESSAGE value="Correção nos imports" />
     <MESSAGE value="Correção no comando de cargo por botão" />
     <MESSAGE value="Comando de porteiro adicionado" />
@@ -589,7 +588,8 @@
     <MESSAGE value="Comandos de 8Ball e Escolha" />
     <MESSAGE value="Melhoria na resposta de reações" />
     <MESSAGE value="Atualização de número de servidores na página da Shiro no Top.gg" />
-    <option name="LAST_COMMIT_MESSAGE" value="Atualização de número de servidores na página da Shiro no Top.gg" />
+    <MESSAGE value="Votos agora lhe dão créditos" />
+    <option name="LAST_COMMIT_MESSAGE" value="Votos agora lhe dão créditos" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -657,11 +657,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1578421403620" />
-    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1581364376778">
+    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1581364552933">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1581305070134" />
-    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1581364376778" />
+    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1581364552933" />
     <state x="160" y="89" width="1344" height="834" key="DiffContextDialog" timestamp="1580842925618">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -712,11 +712,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1581364385725">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1581364580096">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1581305079042" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1581364385725" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1581364580096" />
     <state x="312" y="66" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1581001292879">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
