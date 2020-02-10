@@ -43,6 +43,7 @@
         <class>com.kuuhaku.model.persistent.AppUser</class>
         <class>com.kuuhaku.model.persistent.Campaign</class>
         <class>com.kuuhaku.model.persistent.Account</class>
+        <class>com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi</class>
         <class>java.lang.String</class>
 
         <properties>
@@ -80,6 +81,7 @@
         <class>com.kuuhaku.model.persistent.Tags</class>
         <class>com.kuuhaku.model.persistent.PermaBlock</class>
         <class>com.kuuhaku.model.persistent.AppUser</class>
+        <class>com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi</class>
 
         <properties>
             <!-- dados da conexao -->
