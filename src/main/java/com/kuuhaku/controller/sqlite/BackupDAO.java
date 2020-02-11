@@ -17,6 +17,7 @@
 
 package com.kuuhaku.controller.sqlite;
 
+import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.model.common.DataDump;
 import com.kuuhaku.model.persistent.AppUser;
 import com.kuuhaku.model.persistent.CustomAnswers;
@@ -37,6 +38,7 @@ public class BackupDAO {
 			data.getmDump().forEach(em::merge);
 			data.getGcDump().forEach(em::merge);
 			data.getAuDump().forEach(em::merge);
+			data.getKgDump().forEach(em::merge);
 			em.getTransaction().commit();
 
 			return true;
@@ -91,6 +93,19 @@ public class BackupDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT u FROM AppUser u", AppUser.class);
+
+		try {
+			return q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Kawaigotchi> getKawaigotchiDump() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT u FROM Kawaigotchi u", Kawaigotchi.class);
 
 		try {
 			return q.getResultList();
