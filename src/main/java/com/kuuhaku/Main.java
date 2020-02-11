@@ -93,7 +93,10 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		Manager.connect();
 		if (com.kuuhaku.controller.sqlite.BackupDAO.restoreData(BackupDAO.getData()))
 			Helper.logger(Main.class).info("Dados recuperados com sucesso!");
-		else Helper.logger(Main.class).error("Erro ao recuperar dados.");
+		else {
+			Helper.logger(Main.class).error("Erro ao recuperar dados.");
+			return;
+		}
 
 		Main.getInfo().getGames().putAll(CampaignDAO.getCampaigns());
 		Helper.logger(Main.class).info("Campanhas recuperadas com sucesso!");
