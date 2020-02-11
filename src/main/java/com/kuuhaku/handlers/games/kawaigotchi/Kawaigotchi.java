@@ -124,6 +124,7 @@ public class Kawaigotchi {
 				if (hunger > 80 && mood < 80) mood += (0.02f + ((100 - hunger) * 0.01f / 20)) * nature.getKindness();
 				else mood -= 0.01f / nature.getKindness();
 
+				hunger -= 0.04f;
 				energy -= 0.02f / nature.getEnergy();
 			} else {
 				if (energy == 100) stance = Stance.IDLE;
@@ -158,6 +159,8 @@ public class Kawaigotchi {
 				mood += Helper.clamp(roll * 100 / 6, 6, 3) * nature.getKindness();
 				energy -= Helper.clamp(roll * 100 / 6, 5, 1) / 3f;
 				hunger -= Helper.clamp(roll * 100 / 6, 5, 1) / 3f;
+
+				System.out.println(energy);
 
 				mood = Helper.clamp(mood, 100f, 0f);
 				energy = Helper.clamp(energy, 100f, 0f);
