@@ -27,6 +27,7 @@ import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.util.Arrays;
 import java.util.List;
 
 public class BackupDAO {
@@ -44,7 +45,7 @@ public class BackupDAO {
 
 			return true;
 		} catch (Exception e) {
-			Helper.logger(BackupDAO.class).error(e + " | " + e.getStackTrace()[0]);
+			Helper.logger(BackupDAO.class).error(e + " | " + Arrays.toString(e.getStackTrace()));
 			return false;
 		} finally {
 			em.close();
