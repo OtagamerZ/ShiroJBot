@@ -28,13 +28,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataDump {
-    private final List<CustomAnswers> caDump;
-    private final List<Member> mDump;
-    private final List<GuildConfig> gcDump;
+	private final List<CustomAnswers> caDump;
+	private final List<Member> mDump;
+	private final List<GuildConfig> gcDump;
 	private final List<AppUser> auDump;
 	private final List<Kawaigotchi> kgDump;
 
-	public DataDump(List<CustomAnswers> caDump, List<GuildConfig> gcDump, List<AppUser> auDump, List<Kawaigotchi> kgDump, List<Member> mDump) {
+	public DataDump(List<CustomAnswers> caDump, List<Member> mDump, List<GuildConfig> gcDump, List<AppUser> auDump, List<Kawaigotchi> kgDump) {
 		this.caDump = caDump;
 		this.gcDump = gcDump;
 		this.auDump = auDump;
