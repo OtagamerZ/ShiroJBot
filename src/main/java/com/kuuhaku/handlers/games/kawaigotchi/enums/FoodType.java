@@ -21,7 +21,8 @@ public enum FoodType {
 	RATION("https://i.imgur.com/H2qidsS.png", "\uD83E\uDD6B"),
 	MEAT("https://i.imgur.com/3khMjRv.png", "\uD83C\uDF57"),
 	SWEET("https://i.imgur.com/02K2786.png", "\uD83C\uDF6C"),
-	PLANT("https://i.imgur.com/UYpmwF7.png", "\uD83E\uDD6C");
+	PLANT("https://i.imgur.com/UYpmwF7.png", "\uD83E\uDD6C"),
+	SPECIAL("https://i.imgur.com/WuQF6lM.png", "\uD83E\uDDEA");
 
 	private final String icon;
 	private final String button;
@@ -50,6 +51,8 @@ public enum FoodType {
 				return "Doce";
 			case PLANT:
 				return "Vegetal";
+			case SPECIAL:
+				return "Especial";
 			default:
 				throw new RuntimeException();
 		}
@@ -65,6 +68,8 @@ public enum FoodType {
 				return "Doces";
 			case PLANT:
 				return "Vegetais";
+			case SPECIAL:
+				return "Especiais";
 			default:
 				throw new RuntimeException();
 		}
