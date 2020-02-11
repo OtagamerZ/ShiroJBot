@@ -152,7 +152,7 @@ public class Kawaigotchi {
 
 	public com.kuuhaku.handlers.games.kawaigotchi.enums.Action play() {
 		if (stance.canPlay()) {
-			int threshold = (int) ((Helper.clamp(100 - (int) health, 40, 10)) / nature.getKindness());
+			int threshold = (int) ((Helper.clamp(100 - (int) health, 10, 40)) / nature.getKindness());
 			int roll = new Random().nextInt(100);
 
 			if (roll >= threshold) {
