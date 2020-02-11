@@ -197,7 +197,6 @@ public class KGotchiCommand extends Command {
 				channel.sendMessage((MessageEmbed) pages.get(FoodType.MEAT.getButton()).getContent()).queue(m -> Pages.categorize(Main.getInfo().getAPI(), m, pages, 60, TimeUnit.SECONDS));
 			} else {
 				Food f = FoodMenu.getFood(args[1].toLowerCase());
-				JSONObject bag = new JSONObject(k.getBag());
 
 				if (f == null) {
 					channel.sendMessage(":x: | Comida inválida, você não quis dizer **" + Helper.didYouMean(args[1], FoodMenu.getMenu().keySet().toArray(new String[0])) + "**?").queue();
@@ -210,8 +209,6 @@ public class KGotchiCommand extends Command {
 
 					channel.sendMessage("Você comprou 1 unidade de " + f.getName().toLowerCase() + " por " + f.getPrice() + " créditos.").queue();
 
-					KGotchiDAO.saveKawaigotchi(k);
-					AccountDAO.saveAccount(acc);
 				} else {
 					if (!StringUtils.isNumeric(args[2])) {
 						channel.sendMessage(":x: | A quantidade deve ser numérica.").queue();
@@ -226,9 +223,9 @@ public class KGotchiCommand extends Command {
 
 					channel.sendMessage("Você comprou " + args[2] + " unidades de " + f.getName().toLowerCase() + " por " + (f.getPrice() * Integer.parseInt(args[2])) + " créditos.").queue();
 
-					KGotchiDAO.saveKawaigotchi(k);
-					AccountDAO.saveAccount(acc);
 				}
+				KGotchiDAO.saveKawaigotchi(k);
+				AccountDAO.saveAccount(acc);
 			}
 		}
 	}
