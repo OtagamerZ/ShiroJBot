@@ -210,6 +210,8 @@ public class KGotchiCommand extends Command {
 
 				KGotchiDAO.saveKawaigotchi(k);
 				AccountDAO.saveAccount(acc);
+
+				System.out.println(k.getBag());
 			}
 		}
 	}
