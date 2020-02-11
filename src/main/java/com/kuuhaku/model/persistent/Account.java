@@ -22,6 +22,7 @@ import com.kuuhaku.utils.Helper;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 
@@ -35,6 +36,12 @@ public class Account {
 
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT 'Never'")
 	private String lastVoted;
+
+	@Column(columnDefinition = "TIMESTAMP")
+	private LocalDateTime lastVotedNoFormat;
+
+	@Column(columnDefinition = "INT DEFAULT 0")
+	private int streak;
 
 	public String getUserId() {
 		return userId;
@@ -56,7 +63,23 @@ public class Account {
 		this.balance -= credit;
 	}
 
-	public void voted() {
+	public String getLastVoted() {
+		return lastVoted;
+	}
+
+	public int voted() {
 		this.lastVoted = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.dateformat);
+		if (lastVotedNoFormat != null && LocalDateTime.now().isBefore(lastVotedNoFormat.plusHours(12))) streak++;
+		else streak = 0;
+
+		if (streak > 7) streak = 7;
+
+		lastVotedNoFormat = LocalDateTime.now();
+
+		return streak;
+	}
+
+	public int getStreak() {
+		return streak;
 	}
 }
