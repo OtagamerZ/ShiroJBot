@@ -100,6 +100,7 @@ public class CommandManager {
 			add(new ColorTesterCommand());
 			add(new LocalEmoteListCommand());
 			add(new ShiroEmoteListCommand());
+			add(new WalletCommand());
 
 			//MISC
 			add(new AsciiCommand());
