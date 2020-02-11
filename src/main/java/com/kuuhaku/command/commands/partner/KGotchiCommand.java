@@ -194,7 +194,7 @@ public class KGotchiCommand extends Command {
 					pages.put(t.getButton(), new Page(PageType.EMBED, eb.build()));
 				});
 
-				channel.sendMessage((MessageEmbed) pages.get(FoodType.RATION.getButton()).getContent()).queue(m -> Pages.categorize(Main.getInfo().getAPI(), m, pages, 60, TimeUnit.SECONDS));
+				channel.sendMessage((MessageEmbed) pages.get(FoodType.MEAT.getButton()).getContent()).queue(m -> Pages.categorize(Main.getInfo().getAPI(), m, pages, 60, TimeUnit.SECONDS));
 			} else {
 				Food f = FoodMenu.getFood(args[1].toLowerCase());
 				JSONObject bag = new JSONObject(k.getBag());
