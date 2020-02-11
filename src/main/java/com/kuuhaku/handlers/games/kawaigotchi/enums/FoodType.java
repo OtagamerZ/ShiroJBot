@@ -18,10 +18,26 @@
 package com.kuuhaku.handlers.games.kawaigotchi.enums;
 
 public enum FoodType {
-	RATION,
-	MEAT,
-	SWEET,
-	PLANT;
+	RATION("https://discordapp.com/assets/2396da35337ea36298e29e868ea4407b.svg", "\uD83E\uDD6B"),
+	MEAT("https://discordapp.com/assets/cb026612789e2a304448f7d84c6d1f61.svg", "\uD83C\uDF57"),
+	SWEET("https://discordapp.com/assets/45c8f940aac4dab66e6e73181663a59e.svg", "\uD83C\uDF6C"),
+	PLANT("https://discordapp.com/assets/816f010a6094fe98836610d2f080a5fb.svg", "\uD83E\uDD6C");
+
+	private final String icon;
+	private final String button;
+
+	FoodType(String icon, String button) {
+		this.icon = icon;
+		this.button = button;
+	}
+
+	public String getIcon() {
+		return icon;
+	}
+
+	public String getButton() {
+		return button;
+	}
 
 	@Override
 	public String toString() {
@@ -35,7 +51,7 @@ public enum FoodType {
 			case PLANT:
 				return "Vegetal";
 			default:
-				return null;
+				throw new RuntimeException();
 		}
 	}
 }
