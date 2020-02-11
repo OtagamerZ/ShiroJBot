@@ -18,7 +18,6 @@
 package com.kuuhaku.controller.sqlite;
 
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
-import com.kuuhaku.model.persistent.Account;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -29,7 +28,7 @@ public class KGotchiDAO {
 	public static Kawaigotchi getKawaigotchi(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT k FROM Kawaigotchi k WHERE userId LIKE :id", Account.class);
+		Query q = em.createQuery("SELECT k FROM Kawaigotchi k WHERE userId LIKE :id", Kawaigotchi.class);
 		q.setParameter("id", id);
 
 		try {
