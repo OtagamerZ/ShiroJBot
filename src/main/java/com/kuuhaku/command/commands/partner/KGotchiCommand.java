@@ -96,7 +96,7 @@ public class KGotchiCommand extends Command {
 
 				fields.forEach((t, f) -> {
 					eb.clear();
-					eb.setTitle("Estoque de " + t.toString().toLowerCase());
+					eb.setTitle("Estoque de " + t.toStrings().toLowerCase());
 					f.forEach(eb::addField);
 					eb.setThumbnail(t.getIcon());
 					eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
