@@ -20,7 +20,6 @@ package com.kuuhaku.controller.mysql;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.model.common.DataDump;
 import com.kuuhaku.model.persistent.*;
-import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Guild;
 
 import javax.persistence.EntityManager;
@@ -30,7 +29,75 @@ import javax.persistence.Query;
 public class BackupDAO {
 	public static void dumpData(DataDump data) {
 		EntityManager em = Manager.getEntityManager();
-		Helper.TransferData(data, em);
+		em.getTransaction().begin();
+
+		for (int i = 0; i < data.getCaDump().size(); i++) {
+			em.merge(data.getCaDump().get(i));
+			if (i % 20 == 0) {
+				em.flush();
+				em.clear();
+			}
+			if (i % 1000 == 0) {
+				em.getTransaction().commit();
+				em.clear();
+				em.getTransaction().begin();
+			}
+		}
+
+		for (int i = 0; i < data.getGcDump().size(); i++) {
+			em.merge(data.getGcDump().get(i));
+			if (i % 20 == 0) {
+				em.flush();
+				em.clear();
+			}
+			if (i % 1000 == 0) {
+				em.getTransaction().commit();
+				em.clear();
+				em.getTransaction().begin();
+			}
+		}
+
+		for (int i = 0; i < data.getmDump().size(); i++) {
+			em.merge(data.getmDump().get(i));
+			if (i % 20 == 0) {
+				em.flush();
+				em.clear();
+			}
+			if (i % 1000 == 0) {
+				em.getTransaction().commit();
+				em.clear();
+				em.getTransaction().begin();
+			}
+		}
+
+		for (int i = 0; i < data.getAuDump().size(); i++) {
+			em.merge(data.getAuDump().get(i));
+			if (i % 20 == 0) {
+				em.flush();
+				em.clear();
+			}
+			if (i % 1000 == 0) {
+				em.getTransaction().commit();
+				em.clear();
+				em.getTransaction().begin();
+			}
+		}
+
+		for (int i = 0; i < data.getKgDump().size(); i++) {
+			em.merge(data.getKgDump().get(i));
+			if (i % 20 == 0) {
+				em.flush();
+				em.clear();
+			}
+			if (i % 1000 == 0) {
+				em.getTransaction().commit();
+				em.clear();
+				em.getTransaction().begin();
+			}
+		}
+
+		em.getTransaction().commit();
+		em.close();
 	}
 
 	@SuppressWarnings("unchecked")
