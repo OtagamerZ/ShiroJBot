@@ -160,17 +160,17 @@ public class Kawaigotchi {
 				this.energy -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
 				this.hunger -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
 
-				this.mood = Helper.clamp(mood, 0f, 100f);
-				System.out.println(mood);
-				this.energy = Helper.clamp(energy, 0f, 100f);
-				this.hunger = Helper.clamp(hunger, 0f, 100f);
+				this.mood = Helper.clamp(this.mood, 0f, 100f);
+				System.out.println(this.mood);
+				this.energy = Helper.clamp(this.energy, 0f, 100f);
+				this.hunger = Helper.clamp(this.hunger, 0f, 100f);
 				return com.kuuhaku.handlers.games.kawaigotchi.enums.Action.SUCCESS;
 			} else {
 				this.energy -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
 				this.hunger -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
 
-				this.energy = Helper.clamp(energy, 0f, 100f);
-				this.hunger = Helper.clamp(hunger, 0f, 100f);
+				this.energy = Helper.clamp(this.energy, 0f, 100f);
+				this.hunger = Helper.clamp(this.hunger, 0f, 100f);
 				return com.kuuhaku.handlers.games.kawaigotchi.enums.Action.FAILED;
 			}
 		} else return com.kuuhaku.handlers.games.kawaigotchi.enums.Action.UNABLE;
@@ -186,16 +186,16 @@ public class Kawaigotchi {
 				this.energy -= Helper.clamp(roll * 100 / 6, 1, 5) / 2f;
 				this.hunger -= Helper.clamp(roll * 100 / 6, 1, 5) / 2f;
 
-				this.xp = Helper.clamp(xp, 0, 100);
-				this.energy = Helper.clamp(energy, 0f, 100f);
-				this.hunger = Helper.clamp(hunger, 0f, 100f);
+				this.xp = Helper.clamp(this.xp, 0, 100);
+				this.energy = Helper.clamp(this.energy, 0f, 100f);
+				this.hunger = Helper.clamp(this.hunger, 0f, 100f);
 				return com.kuuhaku.handlers.games.kawaigotchi.enums.Action.SUCCESS;
 			} else {
 				this.energy -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
 				this.hunger -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
 
-				this.energy = Helper.clamp(energy, 0f, 100f);
-				this.hunger = Helper.clamp(hunger, 0f, 100f);
+				this.energy = Helper.clamp(this.energy, 0f, 100f);
+				this.hunger = Helper.clamp(this.hunger, 0f, 100f);
 				return com.kuuhaku.handlers.games.kawaigotchi.enums.Action.FAILED;
 			}
 		} else return Action.UNABLE;
