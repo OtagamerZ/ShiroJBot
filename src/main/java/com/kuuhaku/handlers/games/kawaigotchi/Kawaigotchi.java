@@ -75,7 +75,7 @@ public class Kawaigotchi {
 	private boolean alive = true;
 
 	@Column(columnDefinition = "TEXT")
-	private String bag = "{}";
+	private String bag = "{\"almondega\":5}";
 
 	public Kawaigotchi() {
 
