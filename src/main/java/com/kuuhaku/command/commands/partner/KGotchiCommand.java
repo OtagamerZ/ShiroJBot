@@ -118,8 +118,6 @@ public class KGotchiCommand extends Command {
 
 				try {
 					k.feed(f);
-					k.useFromBag(f);
-					KGotchiDAO.saveKawaigotchi(k);
 
 					String res = "";
 
@@ -160,7 +158,6 @@ public class KGotchiCommand extends Command {
 				case UNABLE:
 					channel.sendMessage("Não parece que " + k.getName() + " possa brincar agora!").queue();
 			}
-			KGotchiDAO.saveKawaigotchi(k);
 		} else if (Helper.containsAny(args[0], "treinar", "train")) {
 			switch (k.train()) {
 				case FAILED:
@@ -172,7 +169,6 @@ public class KGotchiCommand extends Command {
 				case UNABLE:
 					channel.sendMessage("Não parece que " + k.getName() + " possa treinar agora!").queue();
 			}
-			KGotchiDAO.saveKawaigotchi(k);
 		} else if (Helper.containsAny(args[0], "comprar", "buy")) {
 			if (args.length < 2) {
 				EmbedBuilder eb = new EmbedBuilder();
