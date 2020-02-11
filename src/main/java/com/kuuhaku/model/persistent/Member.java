@@ -18,6 +18,7 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.mysql.AccountDAO;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
@@ -83,6 +84,8 @@ public class Member {
 
 		if (xp >= (int) Math.pow(level, 2) * 100) {
 			level++;
+			Account acc = AccountDAO.getAccount(mid);
+			acc.addCredit(100 + (50 * level));
 			return true;
 		}
 		return false;

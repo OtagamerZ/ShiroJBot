@@ -62,7 +62,7 @@ public class PurchaceKGotchiCommand extends Command {
 
 			eb.setTitle("Bem vindo(a) à loja de Kawaigotchis!");
 			eb.setDescription("Kawaigotchis são animais fofinhos que lhe ajudarão a ganhar mais experiência para o seu perfil, assim como acompanhá-lo nos servidores que eu estou.\n\nValhe a pena notar que ele será \"pausado\" enquanto você estiver offline, então não precisa se preocupar!");
-			eb.addField("Como compro um?", "Para comprar um Kawaigotchi de raça aleatória você precisará de 500 créditos que podem ser adquiridos votando em mim, agora, caso você deseje escolher a raça, serão necessários 2500 créditos!", true);
+			eb.addField("Como compro um?", "Para comprar um Kawaigotchi de raça aleatória você precisará de 500 créditos. Agora, caso você deseje escolher a raça, serão necessários 2500 créditos!", true);
 			eb.setThumbnail("https://lens-storage.storage.googleapis.com/png/7314bb86-3d18-425c-8e95-0bebf4135060");
 			eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
 			eb.setColor(Helper.getRandomColor());
