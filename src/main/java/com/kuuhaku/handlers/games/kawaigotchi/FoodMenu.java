@@ -44,4 +44,8 @@ public class FoodMenu {
 	public static Food getFood(String name) {
 		return menu.getOrDefault(name, null);
 	}
+
+	public static Map<String, Food> getMenu() {
+		return menu;
+	}
 }
