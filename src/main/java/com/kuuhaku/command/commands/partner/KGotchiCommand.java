@@ -72,6 +72,7 @@ public class KGotchiCommand extends Command {
 		} else if (args.length == 0) {
 			try {
 				k.view((TextChannel) channel).queue();
+				System.out.println(k.getHealth() + " | " + k.getHunger() + " | " + k.getEnergy() + " | " + k.getMood());
 			} catch (IOException e) {
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
