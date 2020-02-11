@@ -94,6 +94,8 @@ public class PurchaceKGotchiCommand extends Command {
 						Kawaigotchi k = new Kawaigotchi(author.getId(), name, Race.SNUGGET);
 
 						KGotchiDAO.saveKawaigotchi(k);
+						com.kuuhaku.controller.sqlite.KGotchiDAO.saveKawaigotchi(k);
+						AccountDAO.saveAccount(acc);
 
 						channel.sendMessage("Seu mais novo Kawaigotchi é um...**Snugget**!").queue();
 						break;
@@ -122,6 +124,8 @@ public class PurchaceKGotchiCommand extends Command {
 				Kawaigotchi k = new Kawaigotchi(author.getId(), nome, Race.SNUGGET/*Race.values()[Helper.rng(2)]*/);
 
 				KGotchiDAO.saveKawaigotchi(k);
+				com.kuuhaku.controller.sqlite.KGotchiDAO.saveKawaigotchi(k);
+				AccountDAO.saveAccount(acc);
 
 				channel.sendMessage("Seu mais novo Kawaigotchi é um...**" + k.getRace() + "**!").queue();
 				break;
