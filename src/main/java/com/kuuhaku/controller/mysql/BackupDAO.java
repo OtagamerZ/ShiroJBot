@@ -17,6 +17,7 @@
 
 package com.kuuhaku.controller.mysql;
 
+import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.model.common.DataDump;
 import com.kuuhaku.model.persistent.*;
 import net.dv8tion.jda.api.entities.Guild;
@@ -82,6 +83,19 @@ public class BackupDAO {
 			}
 		}
 
+		for (int i = 0; i < data.getKgDump().size(); i++) {
+			em.merge(data.getKgDump().get(i));
+			if (i % 20 == 0) {
+				em.flush();
+				em.clear();
+			}
+			if (i % 1000 == 0) {
+				em.getTransaction().commit();
+				em.clear();
+				em.getTransaction().begin();
+			}
+		}
+
 		em.getTransaction().commit();
 		em.close();
 	}
@@ -94,7 +108,8 @@ public class BackupDAO {
 		Query m = em.createQuery("SELECT m FROM Member m", Member.class);
 		Query gc = em.createQuery("SELECT g FROM GuildConfig g", GuildConfig.class);
 		Query au = em.createQuery("SELECT u FROM AppUser u", AppUser.class);
-		DataDump dump = new DataDump(ca.getResultList(), m.getResultList(), gc.getResultList(), au.getResultList());
+		Query kg = em.createQuery("SELECT k FROM Kawaigotchi k", Kawaigotchi.class);
+		DataDump dump = new DataDump(ca.getResultList(), m.getResultList(), gc.getResultList(), au.getResultList(), kg.getResultList());
 		em.close();
 
 		return dump;
