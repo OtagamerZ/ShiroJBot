@@ -394,6 +394,16 @@ public class Kawaigotchi {
 		bag = jo.toString();
 	}
 
+	public void addToBag(Food f, int qtd) {
+		JSONObject jo = new JSONObject(bag);
+
+		int qtdAtual = jo.has(f.getIdentifier()) ? jo.getInt(f.getIdentifier()) : 0;
+
+		jo.put(f.getIdentifier(), qtdAtual + qtd);
+
+		bag = jo.toString();
+	}
+
 	private void useFromBag(Food f) {
 		JSONObject jo = new JSONObject(bag);
 
