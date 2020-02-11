@@ -214,7 +214,12 @@ public class Kawaigotchi {
 		int currTime = OffsetDateTime.now(ZoneId.of("GMT-3")).getHour();
 		int dir = (Math.random() > 0.5 ? 1 : -1);
 
-		if (stance != Stance.SLEEPING) pos = (dir == -1 ? 0 : pet.getWidth()) + new Random().nextInt(1024);
+		if (stance != Stance.SLEEPING)
+			pos = (dir == -1 ? -pet.getWidth() : pet.getWidth()) + new Random().nextInt(1024);
+		else {
+			pos = 256;
+			dir = 1;
+		}
 
 		Graphics2D g2d = scn.createGraphics();
 
