@@ -52,7 +52,7 @@ public class PurchaceKGotchiCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		Account acc = AccountDAO.getAccount(author.getId());
 
-		if (KGotchiDAO.getKawaigotchi(author.getId()) != null) {
+		if (KGotchiDAO.getKawaigotchi(author.getId()) != null || com.kuuhaku.controller.sqlite.KGotchiDAO.getKawaigotchi(author.getId()) != null) {
 			channel.sendMessage(":x: | Você já possui um Kawaigotchi!").queue();
 			return;
 		}
