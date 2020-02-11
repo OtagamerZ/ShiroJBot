@@ -54,4 +54,19 @@ public enum FoodType {
 				throw new RuntimeException();
 		}
 	}
+
+	public String toStrings() {
+		switch (this) {
+			case RATION:
+				return "Rações";
+			case MEAT:
+				return "Carnes";
+			case SWEET:
+				return "Doces";
+			case PLANT:
+				return "Vegetais";
+			default:
+				throw new RuntimeException();
+		}
+	}
 }
