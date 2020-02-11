@@ -106,7 +106,7 @@ public class KGotchiCommand extends Command {
 				channel.sendMessage((MessageEmbed) pages.get(FoodType.MEAT.getButton()).getContent()).queue(m -> Pages.categorize(Main.getInfo().getAPI(), m, pages, 60, TimeUnit.SECONDS));
 			}
 
-			//Food f = FoodMenu.getFood(args[1].toLowerCase());
+			Food f = FoodMenu.getFood(args[1].toLowerCase());
 		} else if (Helper.containsAny(args[0], "brincar", "play")) {
 			switch (k.play()) {
 				case FAILED:
