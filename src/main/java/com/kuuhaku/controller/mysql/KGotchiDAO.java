@@ -24,7 +24,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 public class KGotchiDAO {
-
 	public static Kawaigotchi getKawaigotchi(String id) {
 		EntityManager em = Manager.getEntityManager();
 
