@@ -34,16 +34,22 @@ public class BackupDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
-			Helper.TransferData(data, em);
+			em.getTransaction().begin();
+			data.getCaDump().forEach(em::merge);
+			data.getmDump().forEach(em::merge);
+			data.getGcDump().forEach(em::merge);
+			data.getAuDump().forEach(em::merge);
+			data.getKgDump().forEach(em::merge);
+			em.getTransaction().commit();
 
 			return true;
 		} catch (Exception e) {
+			Helper.logger(BackupDAO.class).error(e + " | " + e.getStackTrace()[0]);
 			return false;
 		} finally {
 			em.close();
 		}
 	}
-
 
 	@SuppressWarnings("unchecked")
 	public static List<CustomAnswers> getCADump() {
