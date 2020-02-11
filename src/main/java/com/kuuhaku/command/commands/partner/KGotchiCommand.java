@@ -149,6 +149,12 @@ public class KGotchiCommand extends Command {
 					return;
 				case SUCCESS:
 					channel.sendMessage("Vocês brincaram por bastante tempo, " + k.getName() + " está mais feliz agora!").queue();
+					int rng = Helper.rng(100);
+					if (rng > 90) {
+						acc.addCredit(50 * (100 - rng));
+						AccountDAO.saveAccount(acc);
+						channel.sendMessage("Opa, o que é isso? Parece que " + k.getName() + " encontrou " + (50 * (100 - rng)) + " créditos!").queue();
+					}
 					return;
 				case UNABLE:
 					channel.sendMessage("Não parece que " + k.getName() + " possa brincar agora!").queue();
