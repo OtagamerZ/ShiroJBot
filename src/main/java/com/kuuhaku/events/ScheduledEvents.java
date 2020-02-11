@@ -35,7 +35,7 @@ public class ScheduledEvents implements JobListener {
 		schedRefreshWinner();
 		schedMarkWinner();
 		if (Main.getInfo().getDblApi() != null) schedUpdateServerCount();
-		schedUpdateKawaigotchi();
+		//schedUpdateKawaigotchi();
 	}
 
 	private void schedCheck() {
