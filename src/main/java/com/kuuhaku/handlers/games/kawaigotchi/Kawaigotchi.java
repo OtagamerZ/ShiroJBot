@@ -2,12 +2,14 @@ package com.kuuhaku.handlers.games.kawaigotchi;
 
 import com.kuuhaku.handlers.games.kawaigotchi.enums.Action;
 import com.kuuhaku.handlers.games.kawaigotchi.enums.*;
+import com.kuuhaku.handlers.games.kawaigotchi.exceptions.EmptyStockException;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
+import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
 import javax.persistence.*;
@@ -72,6 +74,9 @@ public class Kawaigotchi {
 	@Column(columnDefinition = "BOOLEAN DEFAULT TRUE")
 	private boolean alive = true;
 
+	@Column(columnDefinition = "TEXT")
+	private String bag = "{}";
+
 	public Kawaigotchi() {
 
 	}
@@ -119,9 +124,9 @@ public class Kawaigotchi {
 
 	public com.kuuhaku.handlers.games.kawaigotchi.enums.Action feed(Food food) {
 		if (stance.canEat()) {
-			hunger = Helper.clamp(hunger + food.getNutrition() * food.getType().getNutritionModifier(), 100f, 0f);
-			health = Helper.clamp(health + food.getHealthiness() * food.getType().getHealthModifier(), 100f, 0f);
-			mood = Helper.clamp(mood + food.getMoodBoost() * food.getType().getMoodModifier(), 100f, 0f);
+			hunger = Helper.clamp(hunger + food.getNutrition(), 100f, 0f);
+			health = Helper.clamp(health + food.getHealthiness(), 100f, 0f);
+			mood = Helper.clamp(mood + food.getMoodBoost(), 100f, 0f);
 			return com.kuuhaku.handlers.games.kawaigotchi.enums.Action.SUCCESS;
 		} else return com.kuuhaku.handlers.games.kawaigotchi.enums.Action.UNABLE;
 	}
@@ -309,5 +314,29 @@ public class Kawaigotchi {
 
 	public boolean isAlive() {
 		return alive;
+	}
+
+	public String getBag() {
+		return bag;
+	}
+
+	public void addToBag(Food f) {
+		JSONObject jo = new JSONObject(bag);
+
+		int qtd = jo.has(f.getName()) ? jo.getInt(f.getName()) : 0;
+
+		jo.put(f.getName(), qtd + 1);
+
+		bag = jo.toString();
+	}
+
+	public void useFromBag(Food f) {
+		JSONObject jo = new JSONObject(bag);
+
+		if (!jo.has(f.getName()) || jo.getInt(f.getName()) == 0) throw new EmptyStockException();
+
+		jo.put(f.getName(), jo.getInt(f.getName()) - 1);
+
+		bag = jo.toString();
 	}
 }

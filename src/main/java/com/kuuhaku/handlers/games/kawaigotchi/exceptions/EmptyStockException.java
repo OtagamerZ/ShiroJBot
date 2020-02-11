@@ -15,27 +15,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.handlers.games.kawaigotchi.enums;
+package com.kuuhaku.handlers.games.kawaigotchi.exceptions;
 
-public enum FoodType {
-	RATION,
-	MEAT,
-	SWEET,
-	PLANT;
-
-	@Override
-	public String toString() {
-		switch (this) {
-			case RATION:
-				return "Ração";
-			case MEAT:
-				return "Carne";
-			case SWEET:
-				return "Doce";
-			case PLANT:
-				return "Vegetal";
-			default:
-				return null;
-		}
-	}
+public class EmptyStockException extends RuntimeException {
 }
