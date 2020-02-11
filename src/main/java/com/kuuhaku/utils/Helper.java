@@ -87,7 +87,7 @@ public class Helper {
 			return PrivilegeLevel.SHERIFF;
 		} else if (member.hasPermission(Permission.MESSAGE_MANAGE)) {
 			return PrivilegeLevel.MOD;
-		} else if (TagDAO.getTagById(member.getId()).isPartner()) {
+		} else if (TagDAO.getTagById(member.getGuild().getOwnerId()).isPartner()) {
 			return PrivilegeLevel.PARTNER;
 		} else if (member.getRoles().stream().anyMatch(r -> StringUtils.containsIgnoreCase(r.getName(), "dj"))) {
 			return PrivilegeLevel.DJ;
