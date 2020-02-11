@@ -34,13 +34,11 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class KGotchiCommand extends Command {
@@ -92,7 +90,7 @@ public class KGotchiCommand extends Command {
 					fields.put(food.getType(), field);
 				});
 
-				Map<String, Page> pages = new HashMap<>();
+				Map<String, Page> pages = new LinkedHashMap<>();
 
 				fields.forEach((t, f) -> {
 					eb.clear();
@@ -180,7 +178,7 @@ public class KGotchiCommand extends Command {
 					fields.put(food.getType(), field);
 				});
 
-				Map<String, Page> pages = new HashMap<>();
+				Map<String, Page> pages = new LinkedHashMap<>();
 
 				fields.forEach((t, f) -> {
 					eb.clear();
@@ -203,13 +201,31 @@ public class KGotchiCommand extends Command {
 					return;
 				}
 
-				k.addToBag(f);
-				acc.removeCredit(f.getPrice());
+				if (args.length < 3) {
+					k.addToBag(f);
+					acc.removeCredit(f.getPrice());
 
-				channel.sendMessage("Você comprou 1 unidade de " + f.getName().toLowerCase() + " por " + f.getPrice() + " créditos.").queue();
+					channel.sendMessage("Você comprou 1 unidade de " + f.getName().toLowerCase() + " por " + f.getPrice() + " créditos.").queue();
 
-				KGotchiDAO.saveKawaigotchi(k);
-				AccountDAO.saveAccount(acc);
+					KGotchiDAO.saveKawaigotchi(k);
+					AccountDAO.saveAccount(acc);
+				} else {
+					if (!StringUtils.isNumeric(args[2])) {
+						channel.sendMessage(":x: | A quantidade deve ser numérica.").queue();
+						return;
+					} else if (Integer.parseInt(args[2]) <= 0) {
+						channel.sendMessage(":x: | A quantidade deve ser maior que zero.").queue();
+						return;
+					}
+
+					k.addToBag(f, Integer.parseInt(args[2]));
+					acc.removeCredit(f.getPrice() * Integer.parseInt(args[2]));
+
+					channel.sendMessage("Você comprou " + args[2] + " unidades de " + f.getName().toLowerCase() + " por " + (f.getPrice() * Integer.parseInt(args[2])) + " créditos.").queue();
+
+					KGotchiDAO.saveKawaigotchi(k);
+					AccountDAO.saveAccount(acc);
+				}
 			}
 		}
 	}
