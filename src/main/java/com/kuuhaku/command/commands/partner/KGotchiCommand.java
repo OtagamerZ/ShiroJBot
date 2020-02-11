@@ -29,6 +29,7 @@ import com.kuuhaku.handlers.games.kawaigotchi.Food;
 import com.kuuhaku.handlers.games.kawaigotchi.FoodMenu;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.handlers.games.kawaigotchi.enums.FoodType;
+import com.kuuhaku.handlers.games.kawaigotchi.exceptions.EmptyStockException;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -104,9 +105,22 @@ public class KGotchiCommand extends Command {
 				});
 
 				channel.sendMessage((MessageEmbed) pages.get(FoodType.MEAT.getButton()).getContent()).queue(m -> Pages.categorize(Main.getInfo().getAPI(), m, pages, 60, TimeUnit.SECONDS));
-			}
+			} else {
+				Food f = FoodMenu.getFood(args[1].toLowerCase());
+				JSONObject bag = new JSONObject(k.getBag());
 
-			Food f = FoodMenu.getFood(args[1].toLowerCase());
+				if (f == null || !bag.has(args[1])) {
+					channel.sendMessage(":x: | Comida inválida, você não quis dizer " + Helper.didYouMean(args[1], bag.keySet().toArray(new String[0])) + "?").queue();
+					return;
+				}
+
+				try {
+					k.feed(f);
+					k.useFromBag(f);
+				} catch (EmptyStockException e) {
+					channel.sendMessage(":x: | Seu estoque de " + f.getName().toLowerCase() + " está vazio!").queue();
+				}
+			}
 		} else if (Helper.containsAny(args[0], "brincar", "play")) {
 			switch (k.play()) {
 				case FAILED:
