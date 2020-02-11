@@ -37,7 +37,7 @@ public class Account {
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT 'Never'")
 	private String lastVoted;
 
-	@Column(columnDefinition = "TIMESTAMP")
+	@Column(columnDefinition = "TIMESTAMP DEFAULT NULL")
 	private LocalDateTime lastVotedNoFormat;
 
 	@Column(columnDefinition = "INT DEFAULT 0")
