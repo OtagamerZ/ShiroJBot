@@ -38,7 +38,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class KGotchiCommand extends Command {
@@ -90,7 +93,7 @@ public class KGotchiCommand extends Command {
 					fields.put(food.getType(), field);
 				});
 
-				Map<String, Page> pages = new LinkedHashMap<>();
+				Map<String, Page> pages = new HashMap<>();
 
 				fields.forEach((t, f) -> {
 					eb.clear();
@@ -178,7 +181,7 @@ public class KGotchiCommand extends Command {
 					fields.put(food.getType(), field);
 				});
 
-				Map<String, Page> pages = new LinkedHashMap<>();
+				Map<String, Page> pages = new HashMap<>();
 
 				fields.forEach((t, f) -> {
 					eb.clear();
