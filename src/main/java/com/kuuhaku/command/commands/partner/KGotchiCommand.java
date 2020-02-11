@@ -86,6 +86,7 @@ public class KGotchiCommand extends Command {
 
 				jo.toMap().forEach((f, v) -> {
 					Food food = FoodMenu.getFood(f);
+					System.out.println(food);
 					List<MessageEmbed.Field> field = fields.getOrDefault(food.getType(), new ArrayList<>());
 					field.add(new MessageEmbed.Field(food.getName() + " - " + v, "", true));
 					fields.put(food.getType(), field);
@@ -103,10 +104,13 @@ public class KGotchiCommand extends Command {
 					pages.put(t.getButton(), new Page(PageType.EMBED, eb.build()));
 				});
 
-				channel.sendMessage((MessageEmbed) pages.get(FoodType.RATION.getButton()).getContent()).queue(m -> Pages.categorize(Main.getInfo().getAPI(), m, pages, 60, TimeUnit.SECONDS));
+				channel.sendMessage(
+						(MessageEmbed) pages.get(FoodType.RATION.getButton()).getContent()).queue(
+						m -> Pages.categorize(Main.getInfo().getAPI(), m, pages, 60, TimeUnit.SECONDS)
+				);
 			}
 
-			Food f = FoodMenu.getFood(args[1].toLowerCase());
+			//Food f = FoodMenu.getFood(args[1].toLowerCase());
 		} else if (Helper.containsAny(args[0], "brincar", "play")) {
 			switch (k.play()) {
 				case FAILED:
