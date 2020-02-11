@@ -29,6 +29,19 @@ import java.util.Random;
 
 @Entity
 public class Kawaigotchi {
+	//FOOD | ENERGY | MOOD
+	private enum rate {
+		FOOD(0.02f),
+		ENERGY(0.01f),
+		MOOD(0.03f);
+
+		private final float fac;
+
+		rate(float fac) {
+			this.fac = fac;
+		}
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -122,14 +135,15 @@ public class Kawaigotchi {
 					alerted = false;
 				}
 
-				if (hunger > 80 && mood < 80) mood += (0.02f + ((100 - hunger) * 0.01f / 20)) * nature.getKindness();
-				else mood -= 0.01f / nature.getKindness();
+				if (hunger > 80 && mood < 80)
+					mood += (rate.MOOD.fac + ((100 - hunger) * 0.01f / 20)) * nature.getKindness();
+				else mood -= rate.MOOD.fac / nature.getKindness();
 
-				hunger -= 0.04f;
-				energy -= 0.02f / nature.getEnergy();
+				hunger -= rate.FOOD.fac;
+				energy -= rate.ENERGY.fac / nature.getEnergy();
 			} else {
 				if (energy == 100) stance = Stance.IDLE;
-				energy += 0.04f * nature.getEnergy();
+				energy += rate.ENERGY.fac * 2 * nature.getEnergy();
 			}
 		} else {
 			stance = Stance.SLEEPING;
