@@ -42,9 +42,7 @@ public class DiscordBotsListHandler {
 
 		Account acc = AccountDAO.getAccount(body.getString("user"));
 
-		if (!body.getString("type").equals("test")) acc.addCredit(credit);
-
-		acc.voted();
+		if (!body.getString("type").equals("test")) acc.addCredit(credit + (25 * acc.getStreak()));
 
 		AccountDAO.saveAccount(acc);
 
