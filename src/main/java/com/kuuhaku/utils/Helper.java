@@ -26,6 +26,7 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.reactions.*;
 import com.kuuhaku.controller.mysql.TagDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.model.common.DataDump;
 import com.kuuhaku.model.common.Extensions;
 import com.kuuhaku.model.common.GamblePool;
 import com.kuuhaku.model.persistent.GuildConfig;
@@ -44,6 +45,7 @@ import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
+import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -626,5 +628,77 @@ public class Helper {
 			}
 		}
 		return i;
+	}
+
+	public static void TransferData(DataDump data, EntityManager em) {
+		em.getTransaction().begin();
+
+		for (int i = 0; i < data.getCaDump().size(); i++) {
+			em.merge(data.getCaDump().get(i));
+			if (i % 20 == 0) {
+				em.flush();
+				em.clear();
+			}
+			if (i % 1000 == 0) {
+				em.getTransaction().commit();
+				em.clear();
+				em.getTransaction().begin();
+			}
+		}
+
+		for (int i = 0; i < data.getGcDump().size(); i++) {
+			em.merge(data.getGcDump().get(i));
+			if (i % 20 == 0) {
+				em.flush();
+				em.clear();
+			}
+			if (i % 1000 == 0) {
+				em.getTransaction().commit();
+				em.clear();
+				em.getTransaction().begin();
+			}
+		}
+
+		for (int i = 0; i < data.getmDump().size(); i++) {
+			em.merge(data.getmDump().get(i));
+			if (i % 20 == 0) {
+				em.flush();
+				em.clear();
+			}
+			if (i % 1000 == 0) {
+				em.getTransaction().commit();
+				em.clear();
+				em.getTransaction().begin();
+			}
+		}
+
+		for (int i = 0; i < data.getAuDump().size(); i++) {
+			em.merge(data.getAuDump().get(i));
+			if (i % 20 == 0) {
+				em.flush();
+				em.clear();
+			}
+			if (i % 1000 == 0) {
+				em.getTransaction().commit();
+				em.clear();
+				em.getTransaction().begin();
+			}
+		}
+
+		for (int i = 0; i < data.getKgDump().size(); i++) {
+			em.merge(data.getKgDump().get(i));
+			if (i % 20 == 0) {
+				em.flush();
+				em.clear();
+			}
+			if (i % 1000 == 0) {
+				em.getTransaction().commit();
+				em.clear();
+				em.getTransaction().begin();
+			}
+		}
+
+		em.getTransaction().commit();
+		em.close();
 	}
 }
