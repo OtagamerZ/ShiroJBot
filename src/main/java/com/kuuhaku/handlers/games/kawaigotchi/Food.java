@@ -24,14 +24,16 @@ public class Food {
 	private final String name;
 	private final int moodBoost;
 	private final int nutrition;
-	private final int tastiness;
+	private final int healthiness;
+	private final int price;
 
-	public Food(FoodType type, String name, int moodBoost, int nutrition, int tastiness) {
+	public Food(FoodType type, String name, int moodBoost, int nutrition, int healthiness, int price) {
 		this.type = type;
 		this.name = name;
 		this.moodBoost = moodBoost;
 		this.nutrition = nutrition;
-		this.tastiness = tastiness;
+		this.healthiness = healthiness;
+		this.price = price;
 	}
 
 	public FoodType getType() {
@@ -51,6 +53,10 @@ public class Food {
 	}
 
 	public int getHealthiness() {
-		return tastiness;
+		return healthiness;
+	}
+
+	public int getPrice() {
+		return price;
 	}
 }
