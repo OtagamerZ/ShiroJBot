@@ -379,6 +379,7 @@ public class Kawaigotchi {
 	private void useFromBag(Food f) {
 		JSONObject jo = new JSONObject(bag);
 
+		System.out.println(jo);
 		if (!jo.has(f.getName()) || jo.getInt(f.getName()) == 0) throw new EmptyStockException();
 
 		jo.put(f.getName(), jo.getInt(f.getName()) - 1);
