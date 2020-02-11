@@ -1,5 +1,6 @@
 package com.kuuhaku.handlers.games.kawaigotchi;
 
+import com.kuuhaku.controller.sqlite.KGotchiDAO;
 import com.kuuhaku.handlers.games.kawaigotchi.enums.Action;
 import com.kuuhaku.handlers.games.kawaigotchi.enums.*;
 import com.kuuhaku.handlers.games.kawaigotchi.exceptions.EmptyStockException;
@@ -146,6 +147,8 @@ public class Kawaigotchi {
 			hunger = Helper.clamp(hunger + food.getNutrition(), 0f, 100f);
 			health = Helper.clamp(health + food.getHealthiness(), 0f, 100f);
 			mood = Helper.clamp(mood + food.getMoodBoost(), 0f, 100f);
+			useFromBag(food);
+			KGotchiDAO.saveKawaigotchi(this);
 			return com.kuuhaku.handlers.games.kawaigotchi.enums.Action.SUCCESS;
 		} else return com.kuuhaku.handlers.games.kawaigotchi.enums.Action.UNABLE;
 	}
@@ -156,21 +159,23 @@ public class Kawaigotchi {
 			int roll = Helper.rng(100);
 
 			if (roll >= threshold) {
-				this.mood += Helper.clamp(roll * 100 / 10, 3, 10) * nature.getKindness();
-				this.energy -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
-				this.hunger -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
+				mood += Helper.clamp(roll * 100 / 10, 3, 10) * nature.getKindness();
+				energy -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
+				hunger -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
 
-				this.mood = Helper.clamp(this.mood, 0f, 100f);
-				System.out.println(this.mood);
-				this.energy = Helper.clamp(this.energy, 0f, 100f);
-				this.hunger = Helper.clamp(this.hunger, 0f, 100f);
+				mood = Helper.clamp(mood, 0f, 100f);
+				System.out.println(mood);
+				energy = Helper.clamp(energy, 0f, 100f);
+				hunger = Helper.clamp(hunger, 0f, 100f);
+				KGotchiDAO.saveKawaigotchi(this);
 				return com.kuuhaku.handlers.games.kawaigotchi.enums.Action.SUCCESS;
 			} else {
-				this.energy -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
-				this.hunger -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
+				energy -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
+				hunger -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
 
-				this.energy = Helper.clamp(this.energy, 0f, 100f);
-				this.hunger = Helper.clamp(this.hunger, 0f, 100f);
+				energy = Helper.clamp(energy, 0f, 100f);
+				hunger = Helper.clamp(hunger, 0f, 100f);
+				KGotchiDAO.saveKawaigotchi(this);
 				return com.kuuhaku.handlers.games.kawaigotchi.enums.Action.FAILED;
 			}
 		} else return com.kuuhaku.handlers.games.kawaigotchi.enums.Action.UNABLE;
@@ -182,20 +187,22 @@ public class Kawaigotchi {
 			int roll = Helper.rng(100);
 
 			if (roll >= threshold) {
-				this.xp += Helper.clamp(roll * 100 / 6, 1, 5) * tier.getTrainability();
-				this.energy -= Helper.clamp(roll * 100 / 6, 1, 5) / 2f;
-				this.hunger -= Helper.clamp(roll * 100 / 6, 1, 5) / 2f;
+				xp += Helper.clamp(roll * 100 / 6, 1, 5) * tier.getTrainability();
+				energy -= Helper.clamp(roll * 100 / 6, 1, 5) / 2f;
+				hunger -= Helper.clamp(roll * 100 / 6, 1, 5) / 2f;
 
-				this.xp = Helper.clamp(this.xp, 0, 100);
-				this.energy = Helper.clamp(this.energy, 0f, 100f);
-				this.hunger = Helper.clamp(this.hunger, 0f, 100f);
+				xp = Helper.clamp(xp, 0, 100);
+				energy = Helper.clamp(energy, 0f, 100f);
+				hunger = Helper.clamp(hunger, 0f, 100f);
+				KGotchiDAO.saveKawaigotchi(this);
 				return com.kuuhaku.handlers.games.kawaigotchi.enums.Action.SUCCESS;
 			} else {
-				this.energy -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
-				this.hunger -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
+				energy -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
+				hunger -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
 
-				this.energy = Helper.clamp(this.energy, 0f, 100f);
-				this.hunger = Helper.clamp(this.hunger, 0f, 100f);
+				energy = Helper.clamp(energy, 0f, 100f);
+				hunger = Helper.clamp(hunger, 0f, 100f);
+				KGotchiDAO.saveKawaigotchi(this);
 				return com.kuuhaku.handlers.games.kawaigotchi.enums.Action.FAILED;
 			}
 		} else return Action.UNABLE;
@@ -364,7 +371,7 @@ public class Kawaigotchi {
 		bag = jo.toString();
 	}
 
-	public void useFromBag(Food f) {
+	private void useFromBag(Food f) {
 		JSONObject jo = new JSONObject(bag);
 
 		if (!jo.has(f.getName()) || jo.getInt(f.getName()) == 0) throw new EmptyStockException();
