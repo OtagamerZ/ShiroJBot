@@ -48,10 +48,10 @@ public class AvatarCommand extends Command {
 			if (args.length > 0) {
 				if (args[0].trim().equalsIgnoreCase("guild")) {
 					if (guild.getIconUrl() == null) {
-						channel.sendMessage(":x: | O servidor não possui icon.").queue();
+						channel.sendMessage(":x: | O servidor não possui ícone.").queue();
 						return;
 					}
-					eb.setTitle("Icon do servidor");
+					eb.setTitle("Ícone do servidor");
 					eb.setImage(guild.getIconUrl());
 					try {
 						eb.setColor(Helper.colorThief(guild.getIconUrl()));
