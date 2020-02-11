@@ -88,7 +88,7 @@ public class KGotchiCommand extends Command {
 				jo.toMap().forEach((f, v) -> {
 					Food food = FoodMenu.getFood(f);
 					List<MessageEmbed.Field> field = fields.getOrDefault(food.getType(), new ArrayList<>());
-					field.add(new MessageEmbed.Field(food.getName() + " - " + v, "", true));
+					field.add(new MessageEmbed.Field(food.getName() + " - " + v + " unidades\n(`" + prefix + "kgotchi alimentar " + f + "`)", "Bônus de humor: " + food.getMoodBoost() + "\nNutrição: " + food.getNutrition() + "\nSaúde: " + food.getHealthiness(), true));
 					fields.put(food.getType(), field);
 				});
 
@@ -100,6 +100,7 @@ public class KGotchiCommand extends Command {
 					f.forEach(eb::addField);
 					eb.setThumbnail(t.getIcon());
 					eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
+					eb.setColor(Helper.getRandomColor());
 
 					pages.put(t.getButton(), new Page(PageType.EMBED, eb.build()));
 				});
@@ -117,6 +118,26 @@ public class KGotchiCommand extends Command {
 				try {
 					k.feed(f);
 					k.useFromBag(f);
+					KGotchiDAO.saveKawaigotchi(k);
+
+					String res = "";
+
+					switch (f.getType()) {
+						case RATION:
+							res = "não gostou muito, mas da pro gasto!";
+							break;
+						case MEAT:
+							res = "gostou bastante, e é bem nutritivo!";
+							break;
+						case SWEET:
+							res = "amou, apesar de não ser muito saudável!";
+							break;
+						case PLANT:
+							res = "gostou, e é bem saudável!";
+							break;
+					}
+
+					channel.sendMessage("Você deu " + f.getName().toLowerCase() + " para " + k.getName() + ", parece que " + res).queue();
 				} catch (EmptyStockException e) {
 					channel.sendMessage(":x: | Seu estoque de " + f.getName().toLowerCase() + " está vazio!").queue();
 				}
@@ -132,6 +153,7 @@ public class KGotchiCommand extends Command {
 				case UNABLE:
 					channel.sendMessage("Não parece que " + k.getName() + " possa brincar agora!").queue();
 			}
+			KGotchiDAO.saveKawaigotchi(k);
 		} else if (Helper.containsAny(args[0], "treinar", "train")) {
 			switch (k.train()) {
 				case FAILED:
@@ -143,30 +165,50 @@ public class KGotchiCommand extends Command {
 				case UNABLE:
 					channel.sendMessage("Não parece que " + k.getName() + " possa treinar agora!").queue();
 			}
+			KGotchiDAO.saveKawaigotchi(k);
 		} else if (Helper.containsAny(args[0], "comprar", "buy")) {
-			EmbedBuilder eb = new EmbedBuilder();
+			if (args.length < 2) {
+				EmbedBuilder eb = new EmbedBuilder();
 
-			Map<FoodType, List<MessageEmbed.Field>> fields = new HashMap<>();
+				Map<FoodType, List<MessageEmbed.Field>> fields = new HashMap<>();
 
-			FoodMenu.getMenu().forEach((n, food) -> {
-				List<MessageEmbed.Field> field = fields.getOrDefault(food.getType(), new ArrayList<>());
-				field.add(new MessageEmbed.Field(food.getName() + " - " + food.getPrice() + " créditos (`" + prefix + "kgotchi comprar " + n + "`)", "Bônus de humor: " + food.getMoodBoost() + "\nNutrição: " + food.getNutrition() + "\nSaúde: " + food.getHealthiness(), true));
-				fields.put(food.getType(), field);
-			});
+				FoodMenu.getMenu().forEach((n, food) -> {
+					List<MessageEmbed.Field> field = fields.getOrDefault(food.getType(), new ArrayList<>());
+					field.add(new MessageEmbed.Field(food.getName() + " - " + food.getPrice() + " créditos\n(`" + prefix + "kgotchi comprar " + n + "`)", "Bônus de humor: " + food.getMoodBoost() + "\nNutrição: " + food.getNutrition() + "\nSaúde: " + food.getHealthiness(), true));
+					fields.put(food.getType(), field);
+				});
 
-			Map<String, Page> pages = new HashMap<>();
+				Map<String, Page> pages = new HashMap<>();
 
-			fields.forEach((t, f) -> {
-				eb.clear();
-				eb.setTitle("Setor de " + t.toStrings().toLowerCase());
-				f.forEach(eb::addField);
-				eb.setThumbnail(t.getIcon());
-				eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
+				fields.forEach((t, f) -> {
+					eb.clear();
+					eb.setTitle("Setor de " + t.toStrings().toLowerCase());
+					f.forEach(eb::addField);
+					eb.setThumbnail(t.getIcon());
+					eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
+					eb.setColor(Helper.getRandomColor());
 
-				pages.put(t.getButton(), new Page(PageType.EMBED, eb.build()));
-			});
+					pages.put(t.getButton(), new Page(PageType.EMBED, eb.build()));
+				});
 
-			channel.sendMessage((MessageEmbed) pages.get(FoodType.RATION.getButton()).getContent()).queue(m -> Pages.categorize(Main.getInfo().getAPI(), m, pages, 60, TimeUnit.SECONDS));
+				channel.sendMessage((MessageEmbed) pages.get(FoodType.RATION.getButton()).getContent()).queue(m -> Pages.categorize(Main.getInfo().getAPI(), m, pages, 60, TimeUnit.SECONDS));
+			} else {
+				Food f = FoodMenu.getFood(args[1].toLowerCase());
+				JSONObject bag = new JSONObject(k.getBag());
+
+				if (f == null || !bag.has(args[1])) {
+					channel.sendMessage(":x: | Comida inválida, você não quis dizer **" + Helper.didYouMean(args[1], FoodMenu.getMenu().keySet().toArray(new String[0])) + "**?").queue();
+					return;
+				}
+
+				k.addToBag(f);
+				acc.removeCredit(f.getPrice());
+
+				channel.sendMessage("Você comprou 1 unidade de " + f.getName().toLowerCase() + " por " + f.getPrice() + " créditos.").queue();
+
+				KGotchiDAO.saveKawaigotchi(k);
+				AccountDAO.saveAccount(acc);
+			}
 		}
 	}
 }
