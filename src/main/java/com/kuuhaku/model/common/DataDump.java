@@ -18,6 +18,7 @@
 package com.kuuhaku.model.common;
 
 import com.kuuhaku.controller.mysql.MemberDAO;
+import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.model.persistent.AppUser;
 import com.kuuhaku.model.persistent.CustomAnswers;
 import com.kuuhaku.model.persistent.GuildConfig;
@@ -30,26 +31,30 @@ public class DataDump {
     private final List<CustomAnswers> caDump;
     private final List<Member> mDump;
     private final List<GuildConfig> gcDump;
-    private final List<AppUser> auDump;
+	private final List<AppUser> auDump;
+	private final List<Kawaigotchi> kgDump;
 
-    public DataDump(List<CustomAnswers> caDump, List<Member> mDump, List<GuildConfig> gcDump, List<AppUser> auDump) {
-        this.caDump = caDump;
-        this.gcDump = gcDump;
-        this.mDump = mDump;
-        this.auDump = auDump;
-    }
+	public DataDump(List<CustomAnswers> caDump, List<GuildConfig> gcDump, List<AppUser> auDump, List<Kawaigotchi> kgDump, List<Member> mDump) {
+		this.caDump = caDump;
+		this.gcDump = gcDump;
+		this.auDump = auDump;
+		this.mDump = mDump;
+		this.kgDump = kgDump;
+	}
 
-    public DataDump(List<CustomAnswers> caDump, List<GuildConfig> gcDump, List<AppUser> auDump) {
-        this.caDump = caDump;
-        this.gcDump = gcDump;
-        this.auDump = auDump;
-        this.mDump = new ArrayList<>();
-    }
+	public DataDump(List<CustomAnswers> caDump, List<GuildConfig> gcDump, List<AppUser> auDump, List<Kawaigotchi> kgDump) {
+		this.caDump = caDump;
+		this.gcDump = gcDump;
+		this.auDump = auDump;
+		this.kgDump = kgDump;
+		this.mDump = new ArrayList<>();
+	}
 
     public DataDump(List<Member> mDump) {
         this.caDump = new ArrayList<>();
         this.gcDump = new ArrayList<>();
-        this.auDump = new ArrayList<>();
+		this.auDump = new ArrayList<>();
+		this.kgDump = new ArrayList<>();
 
         List<Member> oldMembers = MemberDAO.getMembers();
         mDump.removeAll(oldMembers);
@@ -62,14 +67,18 @@ public class DataDump {
     }
 
     public List<Member> getmDump() {
-        return mDump;
-    }
+		return mDump;
+	}
 
-    public List<GuildConfig> getGcDump() {
-        return gcDump;
-    }
+	public List<GuildConfig> getGcDump() {
+		return gcDump;
+	}
 
-    public List<AppUser> getAuDump() {
-        return auDump;
-    }
+	public List<AppUser> getAuDump() {
+		return auDump;
+	}
+
+	public List<Kawaigotchi> getKgDump() {
+		return kgDump;
+	}
 }
