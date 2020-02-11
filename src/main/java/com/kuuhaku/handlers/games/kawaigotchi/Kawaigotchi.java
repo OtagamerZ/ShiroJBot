@@ -156,15 +156,26 @@ public class Kawaigotchi {
 			int roll = Helper.rng(100);
 
 			if (roll >= threshold) {
-				mood += Helper.clamp(roll * 100 / 6, 3, 6) * nature.getKindness();
+				mood += Helper.clamp(roll * 100 / 10, 3, 10) * nature.getKindness();
 				energy -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
 				hunger -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
 
+				System.out.println(Helper.clamp(roll * 100 / 10, 3, 10) * nature.getKindness());
+				System.out.println(mood);
+
 				mood = Helper.clamp(mood, 0f, 100f);
+				System.out.println(mood);
 				energy = Helper.clamp(energy, 0f, 100f);
 				hunger = Helper.clamp(hunger, 0f, 100f);
 				return com.kuuhaku.handlers.games.kawaigotchi.enums.Action.SUCCESS;
-			} else return com.kuuhaku.handlers.games.kawaigotchi.enums.Action.FAILED;
+			} else {
+				energy -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
+				hunger -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
+
+				energy = Helper.clamp(energy, 0f, 100f);
+				hunger = Helper.clamp(hunger, 0f, 100f);
+				return com.kuuhaku.handlers.games.kawaigotchi.enums.Action.FAILED;
+			}
 		} else return com.kuuhaku.handlers.games.kawaigotchi.enums.Action.UNABLE;
 	}
 
@@ -182,7 +193,14 @@ public class Kawaigotchi {
 				energy = Helper.clamp(energy, 0f, 100f);
 				hunger = Helper.clamp(hunger, 0f, 100f);
 				return com.kuuhaku.handlers.games.kawaigotchi.enums.Action.SUCCESS;
-			} else return com.kuuhaku.handlers.games.kawaigotchi.enums.Action.FAILED;
+			} else {
+				energy -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
+				hunger -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
+
+				energy = Helper.clamp(energy, 0f, 100f);
+				hunger = Helper.clamp(hunger, 0f, 100f);
+				return com.kuuhaku.handlers.games.kawaigotchi.enums.Action.FAILED;
+			}
 		} else return Action.UNABLE;
 	}
 
