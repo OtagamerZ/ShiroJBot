@@ -77,6 +77,9 @@ public class Kawaigotchi {
 	@Column(columnDefinition = "TEXT")
 	private String bag = "{\"almondega\":5}";
 
+	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	private boolean alerted;
+
 	public Kawaigotchi() {
 
 	}
@@ -98,10 +101,25 @@ public class Kawaigotchi {
 
 		if (currTime < Time.NIGHT.getStart() && currTime > Time.NIGHT.getEnd() - 24 && energy > 5) {
 			if (!stance.isResting()) {
-				if (hunger < 50 || health < 50) stance = Stance.SAD;
-				else if (mood > 75) stance = Stance.HAPPY;
-				else if (mood < 25) stance = Stance.ANGRY;
-				else stance = Stance.IDLE;
+				if (hunger < 50 || health < 50) {
+					stance = Stance.SAD;
+					if (!alerted) {
+						try {
+							m.getUser().openPrivateChannel().complete().sendMessage("Seu Kawaigotchi " + name + " está triste, vá ver o porquê!").queue();
+						} catch (RuntimeException ignore) {
+						}
+						alerted = true;
+					}
+				} else if (mood > 75) {
+					stance = Stance.HAPPY;
+					alerted = false;
+				} else if (mood < 25) {
+					stance = Stance.ANGRY;
+					alerted = false;
+				} else {
+					stance = Stance.IDLE;
+					alerted = false;
+				}
 
 				if (hunger > 80 && mood < 80) mood += (0.02f + ((100 - hunger) * 0.01f / 20)) * nature.getKindness();
 				else mood -= 0.01f / nature.getKindness();

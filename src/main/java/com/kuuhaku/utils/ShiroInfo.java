@@ -251,7 +251,12 @@ public class ShiroInfo {
 		return api.getUserById(userID);
 	}
 
-	Role getRoleByID(String roleID) {
+	public Member getMemberByID(String userID) {
+		User u = getUserByID(userID);
+		return u.getMutualGuilds().get(0).getMember(u);
+	}
+
+	public Role getRoleByID(String roleID) {
 		return api.getRoleById(roleID);
 	}
 
