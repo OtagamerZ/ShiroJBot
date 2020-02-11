@@ -22,8 +22,24 @@ import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import java.util.ArrayList;
+import java.util.List;
 
 public class KGotchiDAO {
+	@SuppressWarnings("unchecked")
+	public static List<Kawaigotchi> getAllKawaigotchi() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT k FROM Kawaigotchi k", Kawaigotchi.class);
+
+		try {
+			return (List<Kawaigotchi>) q.getResultList();
+		} catch (NoResultException e) {
+			return new ArrayList<>();
+		} finally {
+			em.close();
+		}
+	}
 
 	public static Kawaigotchi getKawaigotchi(String id) {
 		EntityManager em = Manager.getEntityManager();

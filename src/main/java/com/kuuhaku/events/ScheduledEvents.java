@@ -35,6 +35,7 @@ public class ScheduledEvents implements JobListener {
 		schedRefreshWinner();
 		schedMarkWinner();
 		if (Main.getInfo().getDblApi() != null) schedUpdateServerCount();
+		schedUpdateKawaigotchi();
 	}
 
 	private void schedCheck() {
@@ -174,6 +175,26 @@ public class ScheduledEvents implements JobListener {
 			}
 		} catch (SchedulerException e) {
 			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma updateServerCount: " + e);
+		}
+	}
+
+	private void schedUpdateKawaigotchi() {
+		try {
+			if (UpdateKawaigotchiEvent.updateKawaigotchi == null) {
+				UpdateKawaigotchiEvent.updateKawaigotchi = JobBuilder.newJob(UpdateKawaigotchiEvent.class).withIdentity("updateKawaigotchi", "1").build();
+			}
+			Trigger cron = TriggerBuilder.newTrigger().withIdentity("updateKawaigotchi", "1").withSchedule(CronScheduleBuilder.cronSchedule("* * * ? * * *")).build();
+			SchedulerFactory sf = new StdSchedulerFactory();
+			try {
+				sched = sf.getScheduler();
+				sched.scheduleJob(UpdateKawaigotchiEvent.updateKawaigotchi, cron);
+			} catch (Exception ignore) {
+			} finally {
+				sched.start();
+				Helper.logger(this.getClass()).info("Cronograma inicializado com sucesso: updateKawaigotchi");
+			}
+		} catch (SchedulerException e) {
+			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma updateKawaigotchi: " + e);
 		}
 	}
 
