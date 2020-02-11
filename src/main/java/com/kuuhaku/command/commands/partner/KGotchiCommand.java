@@ -17,6 +17,10 @@
 
 package com.kuuhaku.command.commands.partner;
 
+import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.Page;
+import com.github.ygimenez.type.PageType;
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.mysql.AccountDAO;
@@ -24,11 +28,19 @@ import com.kuuhaku.controller.sqlite.KGotchiDAO;
 import com.kuuhaku.handlers.games.kawaigotchi.Food;
 import com.kuuhaku.handlers.games.kawaigotchi.FoodMenu;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
+import com.kuuhaku.handlers.games.kawaigotchi.enums.FoodType;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class KGotchiCommand extends Command {
 
@@ -66,7 +78,34 @@ public class KGotchiCommand extends Command {
 		}
 
 		if (Helper.containsAny(args[0], "alimentar", "feed", "darcomida", "givefood")) {
-			//TODO Menu de alimentos
+			if (args.length < 2) {
+				JSONObject jo = new JSONObject(k.getBag());
+				EmbedBuilder eb = new EmbedBuilder();
+
+				Map<FoodType, List<MessageEmbed.Field>> fields = new HashMap<>();
+
+				jo.toMap().forEach((f, v) -> {
+					Food food = FoodMenu.getFood(f);
+					List<MessageEmbed.Field> field = fields.getOrDefault(food.getType(), new ArrayList<>());
+					field.add(new MessageEmbed.Field(food.getName() + " - " + v, "", true));
+					fields.put(food.getType(), field);
+				});
+
+				Map<String, Page> pages = new HashMap<>();
+
+				fields.forEach((t, f) -> {
+					eb.clear();
+					eb.setTitle("Estoque de " + t.toString().toLowerCase());
+					f.forEach(eb::addField);
+					eb.setThumbnail(t.getIcon());
+					eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
+
+					pages.put(t.getButton(), new Page(PageType.EMBED, eb.build()));
+				});
+
+				channel.sendMessage((MessageEmbed) pages.get(FoodType.RATION.getButton()).getContent()).queue(m -> Pages.categorize(Main.getInfo().getAPI(), m, pages, 60, TimeUnit.SECONDS));
+			}
+
 			Food f = FoodMenu.getFood(args[1].toLowerCase());
 		} else if (Helper.containsAny(args[0], "brincar", "play")) {
 			switch (k.play()) {
@@ -78,7 +117,6 @@ public class KGotchiCommand extends Command {
 					return;
 				case UNABLE:
 					channel.sendMessage("Não parece que " + k.getName() + " possa brincar agora!").queue();
-					return;
 			}
 		} else if (Helper.containsAny(args[0], "treinar", "train")) {
 			switch (k.train()) {
@@ -90,7 +128,6 @@ public class KGotchiCommand extends Command {
 					return;
 				case UNABLE:
 					channel.sendMessage("Não parece que " + k.getName() + " possa treinar agora!").queue();
-					return;
 			}
 		} else if (Helper.containsAny(args[0], "comprar", "buy")) {
 			//TODO Menu de loja de alimentos

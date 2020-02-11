@@ -64,6 +64,7 @@ public class CommandManager {
 			add(new TetCommand("tet", "Chama o Tet para usar o módulo de RPG em seu servidor.", Category.PARTNER));
 			add(new JibrilEmoteListCommand("jemotes", "<nome>", "Mostra a lista de emotes disponíveis para uso através da Jibril.", Category.PARTNER));
 			add(new PurchaceKGotchiCommand("pkgotchi", new String[]{"buykgotchi", "comprarkgotchi"}, "<escolher/aleatorio> [raça] <nome>", "Abre a loja de Kawaigotchis.", Category.PARTNER));
+			add(new KGotchiCommand("kgotchi", new String[]{"kg", "kawaig"}, "[alimentar/brincar/treinar/comprar]", "Interage com seu Kawaigotchi.", Category.PARTNER));
 
 			//MODERATION
 			add(new RemoveAnswerCommand());
