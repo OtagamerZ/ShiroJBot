@@ -144,7 +144,29 @@ public class KGotchiCommand extends Command {
 					channel.sendMessage("Não parece que " + k.getName() + " possa treinar agora!").queue();
 			}
 		} else if (Helper.containsAny(args[0], "comprar", "buy")) {
-			//TODO Menu de loja de alimentos
+			EmbedBuilder eb = new EmbedBuilder();
+
+			Map<FoodType, List<MessageEmbed.Field>> fields = new HashMap<>();
+
+			FoodMenu.getMenu().forEach((n, food) -> {
+				List<MessageEmbed.Field> field = fields.getOrDefault(food.getType(), new ArrayList<>());
+				field.add(new MessageEmbed.Field(food.getName() + " - " + food.getPrice() + " créditos (`" + prefix + "kgotchi comprar " + n + "`)", "Bônus de humor: " + food.getMoodBoost() + "\nNutrição: " + food.getNutrition() + "\nSaúde: " + food.getHealthiness(), true));
+				fields.put(food.getType(), field);
+			});
+
+			Map<String, Page> pages = new HashMap<>();
+
+			fields.forEach((t, f) -> {
+				eb.clear();
+				eb.setTitle("Setor de " + t.toStrings().toLowerCase());
+				f.forEach(eb::addField);
+				eb.setThumbnail(t.getIcon());
+				eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
+
+				pages.put(t.getButton(), new Page(PageType.EMBED, eb.build()));
+			});
+
+			channel.sendMessage((MessageEmbed) pages.get(FoodType.RATION.getButton()).getContent()).queue(m -> Pages.categorize(Main.getInfo().getAPI(), m, pages, 60, TimeUnit.SECONDS));
 		}
 	}
 }
