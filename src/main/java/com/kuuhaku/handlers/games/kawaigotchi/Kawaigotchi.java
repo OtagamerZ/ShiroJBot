@@ -142,18 +142,22 @@ public class Kawaigotchi {
 		tier = Tier.CHILD;
 	}
 
-	public com.kuuhaku.handlers.games.kawaigotchi.enums.Action feed(Food food) {
+	public Action feed(Food food) {
 		if (stance.canEat()) {
-			hunger = Helper.clamp(hunger + food.getNutrition(), 0f, 100f);
-			health = Helper.clamp(health + food.getHealthiness(), 0f, 100f);
-			mood = Helper.clamp(mood + food.getMoodBoost(), 0f, 100f);
-			useFromBag(food);
-			KGotchiDAO.saveKawaigotchi(this);
-			return com.kuuhaku.handlers.games.kawaigotchi.enums.Action.SUCCESS;
-		} else return com.kuuhaku.handlers.games.kawaigotchi.enums.Action.UNABLE;
+			try {
+				useFromBag(food);
+				hunger = Helper.clamp(hunger + food.getNutrition(), 0f, 100f);
+				health = Helper.clamp(health + food.getHealthiness(), 0f, 100f);
+				mood = Helper.clamp(mood + food.getMoodBoost(), 0f, 100f);
+				KGotchiDAO.saveKawaigotchi(this);
+				return Action.SUCCESS;
+			} catch (EmptyStockException e) {
+				return Action.FAILED;
+			}
+		} else return Action.UNABLE;
 	}
 
-	public com.kuuhaku.handlers.games.kawaigotchi.enums.Action play() {
+	public Action play() {
 		if (stance.canPlay()) {
 			int threshold = (int) ((Helper.clamp(100 - (int) health, 10, 40)) / nature.getKindness());
 			int roll = Helper.rng(100);
@@ -168,7 +172,7 @@ public class Kawaigotchi {
 				energy = Helper.clamp(energy, 0f, 100f);
 				hunger = Helper.clamp(hunger, 0f, 100f);
 				KGotchiDAO.saveKawaigotchi(this);
-				return com.kuuhaku.handlers.games.kawaigotchi.enums.Action.SUCCESS;
+				return Action.SUCCESS;
 			} else {
 				energy -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
 				hunger -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
@@ -176,12 +180,12 @@ public class Kawaigotchi {
 				energy = Helper.clamp(energy, 0f, 100f);
 				hunger = Helper.clamp(hunger, 0f, 100f);
 				KGotchiDAO.saveKawaigotchi(this);
-				return com.kuuhaku.handlers.games.kawaigotchi.enums.Action.FAILED;
+				return Action.FAILED;
 			}
-		} else return com.kuuhaku.handlers.games.kawaigotchi.enums.Action.UNABLE;
+		} else return Action.UNABLE;
 	}
 
-	public com.kuuhaku.handlers.games.kawaigotchi.enums.Action train() {
+	public Action train() {
 		if (stance.canTrain()) {
 			int threshold = (int) ((Helper.clamp(100 - (int) mood, 10, 40)) / nature.getTrainability());
 			int roll = Helper.rng(100);
@@ -195,7 +199,7 @@ public class Kawaigotchi {
 				energy = Helper.clamp(energy, 0f, 100f);
 				hunger = Helper.clamp(hunger, 0f, 100f);
 				KGotchiDAO.saveKawaigotchi(this);
-				return com.kuuhaku.handlers.games.kawaigotchi.enums.Action.SUCCESS;
+				return Action.SUCCESS;
 			} else {
 				energy -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
 				hunger -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
@@ -203,7 +207,7 @@ public class Kawaigotchi {
 				energy = Helper.clamp(energy, 0f, 100f);
 				hunger = Helper.clamp(hunger, 0f, 100f);
 				KGotchiDAO.saveKawaigotchi(this);
-				return com.kuuhaku.handlers.games.kawaigotchi.enums.Action.FAILED;
+				return Action.FAILED;
 			}
 		} else return Action.UNABLE;
 	}
@@ -215,7 +219,7 @@ public class Kawaigotchi {
 		int dir = (Math.random() > 0.5 ? 1 : -1);
 
 		if (stance != Stance.SLEEPING)
-			pos = (dir == -1 ? -pet.getWidth() : pet.getWidth()) + new Random().nextInt(1024);
+			pos = (dir == -1 ? 0 : pet.getWidth()) + new Random().nextInt(1280 - pet.getWidth() * 4);
 		else {
 			pos = 256;
 			dir = 1;
@@ -369,7 +373,7 @@ public class Kawaigotchi {
 	public void addToBag(Food f) {
 		JSONObject jo = new JSONObject(bag);
 
-		int qtd = jo.has(f.getName()) ? jo.getInt(f.getName()) : 0;
+		int qtd = jo.has(f.getIdentifier()) ? jo.getInt(f.getIdentifier()) : 0;
 
 		jo.put(f.getIdentifier(), qtd + 1);
 
@@ -380,9 +384,9 @@ public class Kawaigotchi {
 		JSONObject jo = new JSONObject(bag);
 
 		System.out.println(jo);
-		if (!jo.has(f.getName()) || jo.getInt(f.getName()) == 0) throw new EmptyStockException();
+		if (!jo.has(f.getIdentifier()) || jo.getInt(f.getIdentifier()) == 0) throw new EmptyStockException();
 
-		jo.put(f.getName(), jo.getInt(f.getName()) - 1);
+		jo.put(f.getIdentifier(), jo.getInt(f.getIdentifier()) - 1);
 
 		bag = jo.toString();
 	}
