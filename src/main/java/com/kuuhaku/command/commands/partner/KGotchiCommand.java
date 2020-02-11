@@ -72,7 +72,6 @@ public class KGotchiCommand extends Command {
 		} else if (args.length == 0) {
 			try {
 				k.view((TextChannel) channel).queue();
-				System.out.println(k.getHealth() + " | " + k.getHunger() + " | " + k.getEnergy() + " | " + k.getMood());
 			} catch (IOException e) {
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
@@ -199,7 +198,7 @@ public class KGotchiCommand extends Command {
 				Food f = FoodMenu.getFood(args[1].toLowerCase());
 				JSONObject bag = new JSONObject(k.getBag());
 
-				if (f == null || !bag.has(args[1])) {
+				if (f == null) {
 					channel.sendMessage(":x: | Comida inválida, você não quis dizer **" + Helper.didYouMean(args[1], FoodMenu.getMenu().keySet().toArray(new String[0])) + "**?").queue();
 					return;
 				}
