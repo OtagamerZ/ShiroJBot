@@ -23,6 +23,7 @@ import com.kuuhaku.model.persistent.AppUser;
 import com.kuuhaku.model.persistent.CustomAnswers;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Member;
+import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -33,13 +34,7 @@ public class BackupDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
-			em.getTransaction().begin();
-			data.getCaDump().forEach(em::merge);
-			data.getmDump().forEach(em::merge);
-			data.getGcDump().forEach(em::merge);
-			data.getAuDump().forEach(em::merge);
-			data.getKgDump().forEach(em::merge);
-			em.getTransaction().commit();
+			Helper.TransferData(data, em);
 
 			return true;
 		} catch (Exception e) {
@@ -48,6 +43,7 @@ public class BackupDAO {
 			em.close();
 		}
 	}
+
 
 	@SuppressWarnings("unchecked")
 	public static List<CustomAnswers> getCADump() {
