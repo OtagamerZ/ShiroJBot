@@ -86,8 +86,8 @@ public class Settings {
 
 			EmbedBuilder eb = new EmbedBuilder();
 
-			eb.setColor(Helper.colorThief(message.getGuild().getIconUrl()));
-			eb.setThumbnail(message.getGuild().getIconUrl());
+			eb.setColor(message.getGuild().getIconUrl() == null ? Helper.getRandomColor() : Helper.colorThief(message.getGuild().getIconUrl()));
+			if (message.getGuild().getIconUrl() != null) eb.setThumbnail(message.getGuild().getIconUrl());
 			eb.setTitle("⚙ | Configurações do servidor");
 			eb.setDescription(Helper.VOID);
 			eb.addField("\uD83D\uDD17 » Prefixo: __" + prefix + "__", Helper.VOID, false);
