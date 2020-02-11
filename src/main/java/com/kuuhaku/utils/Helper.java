@@ -641,7 +641,6 @@ public class Helper {
 				List<Character> secondChars = Lists.charactersOf(w);
 
 				int chars = (int) secondChars.stream().filter(firstChars::contains).count();
-				chars += w.startsWith(String.valueOf(word.charAt(0))) ? 1 : 0;
 
 				if (chars > threshold) {
 					match = w;
