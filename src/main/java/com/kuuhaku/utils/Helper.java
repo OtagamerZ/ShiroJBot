@@ -643,7 +643,7 @@ public class Helper {
 				int chars = (int) secondChars.stream().filter(firstChars::contains).count();
 
 				if (chars > threshold) {
-					match = word;
+					match = w;
 				}
 			}
 		}

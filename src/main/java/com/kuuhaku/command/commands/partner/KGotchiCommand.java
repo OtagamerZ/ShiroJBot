@@ -110,7 +110,7 @@ public class KGotchiCommand extends Command {
 				JSONObject bag = new JSONObject(k.getBag());
 
 				if (f == null || !bag.has(args[1])) {
-					channel.sendMessage(":x: | Comida inválida, você não quis dizer " + Helper.didYouMean(args[1], bag.keySet().toArray(new String[0])) + "?").queue();
+					channel.sendMessage(":x: | Comida inválida, você não quis dizer **" + Helper.didYouMean(args[1], bag.keySet().toArray(new String[0])) + "**?").queue();
 					return;
 				}
 
