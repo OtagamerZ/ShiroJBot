@@ -371,7 +371,7 @@ public class Kawaigotchi {
 
 		int qtd = jo.has(f.getName()) ? jo.getInt(f.getName()) : 0;
 
-		jo.put(f.getName(), qtd + 1);
+		jo.put(f.getIdentifier(), qtd + 1);
 
 		bag = jo.toString();
 	}
