@@ -22,14 +22,16 @@ import com.kuuhaku.handlers.games.kawaigotchi.enums.FoodType;
 public class Food {
 	private final FoodType type;
 	private final String name;
+	private final String identifier;
 	private final int moodBoost;
 	private final int nutrition;
 	private final int healthiness;
 	private final int price;
 
-	public Food(FoodType type, String name, int moodBoost, int nutrition, int healthiness, int price) {
+	public Food(FoodType type, String name, String identifier, int moodBoost, int nutrition, int healthiness, int price) {
 		this.type = type;
 		this.name = name;
+		this.identifier = identifier;
 		this.moodBoost = moodBoost;
 		this.nutrition = nutrition;
 		this.healthiness = healthiness;
@@ -42,6 +44,10 @@ public class Food {
 
 	public String getName() {
 		return name;
+	}
+
+	public String getIdentifier() {
+		return identifier;
 	}
 
 	public int getMoodBoost() {

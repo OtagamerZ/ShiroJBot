@@ -644,6 +644,7 @@ public class Helper {
 
 				if (chars > threshold) {
 					match = w;
+					threshold = chars;
 				}
 			}
 		}
