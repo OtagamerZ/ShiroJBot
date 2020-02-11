@@ -219,7 +219,7 @@ public class Kawaigotchi {
 		int dir = (Math.random() > 0.5 ? 1 : -1);
 
 		if (stance != Stance.SLEEPING)
-			pos = (dir == -1 ? 0 : pet.getWidth()) + new Random().nextInt(1280 - pet.getWidth() * 4);
+			pos = pet.getWidth() + new Random().nextInt(1280 - pet.getWidth() * 2);
 		else {
 			pos = 256;
 			dir = 1;
