@@ -284,7 +284,7 @@ public class KGotchiCommand extends Command {
 		int mood = k.getLastMoodRoll();
 		int resource = k.getLastResourceRoll(true);
 
-		eb.setFooter("Xp: " + (xp >= 0 ? "+" : "") + xp + " | " + "Humor: " + (mood >= 0 ? "+" : "") + mood + " | " + "Energia/Fome: " + (resource >= 0 ? "+" : "") + resource + "\n" + k.getTier().toString() + " -> " + k.getTier().next() + ": " + k.getXp() + "/" + k.getTier().next().getRequiredXp());
+		eb.setFooter("Xp: " + (xp >= 0 ? "+" : "") + xp + " | " + "Humor: " + (mood >= 0 ? "+" : "") + mood + " | " + "Energia/Fome: " + (resource >= 0 ? "+" : "") + resource + "\n" + k.getTier().toString() + " -> " + k.getTier().next() + ": " + Math.round(k.getXp()) + "/" + k.getTier().next().getRequiredXp());
 		eb.setThumbnail("attachment://img.png");
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			ImageIO.write(bi, "png", baos);
