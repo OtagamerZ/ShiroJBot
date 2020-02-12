@@ -17,6 +17,8 @@
 
 package com.kuuhaku.handlers.games.kawaigotchi;
 
+import com.kuuhaku.handlers.games.kawaigotchi.enums.Stance;
+
 import javax.swing.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,6 +47,7 @@ public class FoodMenu {
 		//SPECIAL
 		put("energetico", new Food(SPECIAL, "Energético", "energetico", 0, 0, -25, 125, k -> k.setEnergy(100f), "Recupera toda a energia do Kawaigotchi, mas faz mal à saúde.", "está a todo vapor!", new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("energyUp.png"))).getImage()));
 		put("resserum", new Food(SPECIAL, "Serum da Ressureição", "resserum", 0, 0, 0, 3000, Kawaigotchi::resurrect, "Ressuscita o Kawaigotchi, ao custo de metade da experiência atual.", "foi ressuscitado!", new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("ressurrected.png"))).getImage()));
+		put("sonifero", new Food(SPECIAL, "Sonifero", "sonifero", 0, 0, 0, 50, k -> k.setStance(Stance.SLEEPING), "Coloca o Kawaigotchi para dormir, ele irá acordar assim que sua energia chegar a 100% novamente.", "foi sedado!", new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("sleeping.png"))).getImage()));
 	}};
 
 	public static Food getFood(String name) {

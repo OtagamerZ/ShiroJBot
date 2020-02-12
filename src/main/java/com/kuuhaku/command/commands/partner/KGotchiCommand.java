@@ -290,6 +290,9 @@ public class KGotchiCommand extends Command {
 				if (f == null) {
 					channel.sendMessage(":x: | Comida inválida, você não quis dizer **" + Helper.didYouMean(args[1], FoodMenu.getMenu().keySet().toArray(new String[0])) + "**?").queue();
 					return;
+				} else if (acc.getBalance() < f.getPrice()) {
+					channel.sendMessage(":x: | Você não tem créditos suficientes.").queue();
+					return;
 				}
 
 				if (args.length < 3) {
@@ -304,6 +307,9 @@ public class KGotchiCommand extends Command {
 						return;
 					} else if (Integer.parseInt(args[2]) <= 0) {
 						channel.sendMessage(":x: | A quantidade deve ser maior que zero.").queue();
+						return;
+					} else if (acc.getBalance() < f.getPrice()) {
+						channel.sendMessage(":x: | Você não tem créditos suficientes.").queue();
 						return;
 					}
 
