@@ -7,7 +7,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/moodUp.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/sleeping.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/xpUp.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/KGotchiCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/KGotchiCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -203,14 +207,7 @@
       <workItem from="1580996095881" duration="6299000" />
       <workItem from="1581353463564" duration="2292000" />
       <workItem from="1581360047448" duration="7296000" />
-      <workItem from="1581509154196" duration="8245000" />
-    </task>
-    <task id="LOCAL-00469" summary="Comandos de Kawaigotchi implementados">
-      <created>1581427335397</created>
-      <option name="number" value="00469" />
-      <option name="presentableId" value="LOCAL-00469" />
-      <option name="project" value="LOCAL" />
-      <updated>1581427335397</updated>
+      <workItem from="1581509154196" duration="9899000" />
     </task>
     <task id="LOCAL-00470" summary="Comandos de Kawaigotchi implementados">
       <created>1581427530657</created>
@@ -548,7 +545,14 @@
       <option name="project" value="LOCAL" />
       <updated>1581517403246</updated>
     </task>
-    <option name="localTasksCounter" value="518" />
+    <task id="LOCAL-00518" summary="Comandos de Kawaigotchi implementados">
+      <created>1581517460483</created>
+      <option name="number" value="00518" />
+      <option name="presentableId" value="LOCAL-00518" />
+      <option name="project" value="LOCAL" />
+      <updated>1581517460483</updated>
+    </task>
+    <option name="localTasksCounter" value="519" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
