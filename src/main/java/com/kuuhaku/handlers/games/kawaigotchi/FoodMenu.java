@@ -17,32 +17,34 @@
 
 package com.kuuhaku.handlers.games.kawaigotchi;
 
+import javax.swing.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.kuuhaku.handlers.games.kawaigotchi.enums.FoodType.*;
 
 public class FoodMenu {
 	private static Map<String, Food> menu = new HashMap<String, Food>() {{
 		//RATION
-		put("racao", new Food(RATION, "Ração", "racao", -5, 3, 1, 15, null, null));
-		put("poritos", new Food(RATION, "Poritos", "poritos", 5, 5, 5, 50, null, null));
+		put("racao", new Food(RATION, "Ração", "racao", -5, 3, 1, 15));
+		put("poritos", new Food(RATION, "Poritos", "poritos", 5, 5, 5, 50));
 
 		//MEAT
-		put("almondega", new Food(MEAT, "Almondega", "almondega", 7, 10, 2, 35, null, null));
-		put("parmigiana", new Food(MEAT, "Parmigiana", "parmigiana", 15, 12, 4, 80, null, null));
+		put("almondega", new Food(MEAT, "Almondega", "almondega", 7, 10, 2, 35));
+		put("parmigiana", new Food(MEAT, "Parmigiana", "parmigiana", 15, 12, 4, 80));
 
 		//PLANT
-		put("aspargo", new Food(PLANT, "Aspargo", "aspargo", -2, 5, 6, 20, null, null));
-		put("tomate", new Food(PLANT, "Tomate", "tomate", 2, 8, 12, 45, null, null));
+		put("aspargo", new Food(PLANT, "Aspargo", "aspargo", -2, 5, 6, 20));
+		put("tomate", new Food(PLANT, "Tomate", "tomate", 2, 8, 12, 45));
 
 		//SWEET
-		put("marshmallow", new Food(SWEET, "Marshmallow", "marshmallow", 10, 2, -2, 30, null, null));
-		put("caramelo", new Food(SWEET, "Caramelo", "caramelo", 15, 3, -5, 60, null, null));
+		put("marshmallow", new Food(SWEET, "Marshmallow", "marshmallow", 10, 2, -2, 30));
+		put("caramelo", new Food(SWEET, "Caramelo", "caramelo", 15, 3, -5, 60));
 
 		//SPECIAL
-		put("energetico", new Food(SPECIAL, "Energético", "energetico", 0, 0, -25, 125, k -> k.setEnergy(100f), "Recupera toda a energia do Kawaigotchi, mas faz mal à saúde."));
-		put("resserum", new Food(SPECIAL, "Serum da Ressureição", "resserum", 0, 0, 0, 3000, Kawaigotchi::resurrect, "Ressuscita o Kawaigotchi, ao custo de metade da experiência atual."));
+		put("energetico", new Food(SPECIAL, "Energético", "energetico", 0, 0, -25, 125, k -> k.setEnergy(100f), "Recupera toda a energia do Kawaigotchi, mas faz mal à saúde.", "está a todo vapor!", new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("energyUp.png"))).getImage()));
+		put("resserum", new Food(SPECIAL, "Serum da Ressureição", "resserum", 0, 0, 0, 3000, Kawaigotchi::resurrect, "Ressuscita o Kawaigotchi, ao custo de metade da experiência atual.", "foi ressuscitado!", new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("ressurrected.png"))).getImage()));
 	}};
 
 	public static Food getFood(String name) {

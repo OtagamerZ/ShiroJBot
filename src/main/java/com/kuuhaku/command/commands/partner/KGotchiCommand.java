@@ -132,7 +132,10 @@ public class KGotchiCommand extends Command {
 					case SUCCESS:
 						bi = k.getRace().extract(Stance.HAPPY, k.getSkin());
 						g2d = bi.createGraphics();
-						g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("foodUp.png"))).getImage(), bi.getWidth() - 64, 0, 64, 64, null);
+						if (f.getType() == FoodType.SPECIAL)
+							g2d.drawImage(f.getSpecialIcon(), bi.getWidth() - 64, 0, 64, 64, null);
+						else
+							g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("foodUp.png"))).getImage(), bi.getWidth() - 64, 0, 64, 64, null);
 						String res = "";
 
 						switch (f.getType()) {
@@ -148,6 +151,9 @@ public class KGotchiCommand extends Command {
 							case PLANT:
 								res = "gostou, e é bem saudável!";
 								break;
+							case SPECIAL:
+								res = f.getSpecialDesc();
+								break;
 						}
 
 						eb.setTitle("Sucesso!");
@@ -156,7 +162,7 @@ public class KGotchiCommand extends Command {
 						break;
 					case UNABLE:
 						if (k.getStance().isResting())
-							g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("sleeping.png"))).getImage(), bi.getWidth() - 128, 0, 128, 128, null);
+							g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("sleeping.png"))).getImage(), bi.getWidth() - 64, 0, 64, 64, null);
 						else
 							g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("troubled.png"))).getImage(), bi.getWidth() - 64, 0, 64, 64, null);
 
@@ -205,7 +211,7 @@ public class KGotchiCommand extends Command {
 					break;
 				case UNABLE:
 					if (k.getStance().isResting())
-						g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("sleeping.png"))).getImage(), bi.getWidth() - 128, 0, 128, 128, null);
+						g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("sleeping.png"))).getImage(), bi.getWidth() - 64, 0, 64, 64, null);
 					else
 						g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("troubled.png"))).getImage(), bi.getWidth() - 64, 0, 64, 64, null);
 
@@ -240,7 +246,7 @@ public class KGotchiCommand extends Command {
 					break;
 				case UNABLE:
 					if (k.getStance().isResting())
-						g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("sleeping.png"))).getImage(), bi.getWidth() - 128, 0, 128, 128, null);
+						g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("sleeping.png"))).getImage(), bi.getWidth() - 64, 0, 64, 64, null);
 					else
 						g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("troubled.png"))).getImage(), bi.getWidth() - 64, 0, 64, 64, null);
 
