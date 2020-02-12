@@ -308,7 +308,7 @@ public class KGotchiCommand extends Command {
 					} else if (Integer.parseInt(args[2]) <= 0) {
 						channel.sendMessage(":x: | A quantidade deve ser maior que zero.").queue();
 						return;
-					} else if (acc.getBalance() < f.getPrice()) {
+					} else if (acc.getBalance() < f.getPrice() * Integer.parseInt(args[2])) {
 						channel.sendMessage(":x: | Você não tem créditos suficientes.").queue();
 						return;
 					}
