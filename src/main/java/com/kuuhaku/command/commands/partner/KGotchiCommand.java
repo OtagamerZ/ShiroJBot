@@ -124,7 +124,7 @@ public class KGotchiCommand extends Command {
 				Graphics2D g2d = bi.createGraphics();
 				switch (k.feed(f)) {
 					case FAILED:
-						g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("troubled.png"))).getImage(), 0, 0, 64, 64, null);
+						g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("troubled.png"))).getImage(), bi.getWidth() - 64, 0, 64, 64, null);
 						eb.setTitle("Estoque vazio!");
 						eb.setDescription("Seu estoque de " + f.getName().toLowerCase() + " está vazio!");
 						eb.setColor(Color.yellow);
@@ -132,7 +132,7 @@ public class KGotchiCommand extends Command {
 					case SUCCESS:
 						bi = k.getRace().extract(Stance.HAPPY, k.getSkin());
 						g2d = bi.createGraphics();
-						g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("foodUp.png"))).getImage(), 0, 0, 64, 64, null);
+						g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("foodUp.png"))).getImage(), bi.getWidth() - 64, 0, 64, 64, null);
 						String res = "";
 
 						switch (f.getType()) {
@@ -156,9 +156,9 @@ public class KGotchiCommand extends Command {
 						break;
 					case UNABLE:
 						if (k.getStance().isResting())
-							g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("sleeping.png"))).getImage(), 0, 0, 128, 128, null);
+							g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("sleeping.png"))).getImage(), bi.getWidth() - 128, 0, 128, 128, null);
 						else
-							g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("troubled.png"))).getImage(), 0, 0, 64, 64, null);
+							g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("troubled.png"))).getImage(), bi.getWidth() - 64, 0, 64, 64, null);
 
 						eb.setTitle("Impossibilitado.");
 						eb.setDescription("Não parece que " + k.getName() + " possa comer agora!");
@@ -183,7 +183,7 @@ public class KGotchiCommand extends Command {
 			Graphics2D g2d = bi.createGraphics();
 			switch (k.play()) {
 				case FAILED:
-					g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("troubled.png"))).getImage(), 0, 0, 64, 64, null);
+					g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("troubled.png"))).getImage(), bi.getWidth() - 64, 0, 64, 64, null);
 					eb.setTitle("Tente novamente!");
 					eb.setDescription("Ah, parece que " + k.getName() + " não quer brincar.");
 					eb.setColor(Color.yellow);
@@ -191,7 +191,7 @@ public class KGotchiCommand extends Command {
 				case SUCCESS:
 					bi = k.getRace().extract(Stance.HAPPY, k.getSkin());
 					g2d = bi.createGraphics();
-					g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("moodUp.png"))).getImage(), 0, 0, 64, 64, null);
+					g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("moodUp.png"))).getImage(), bi.getWidth() - 64, 0, 64, 64, null);
 
 					eb.setTitle("Sucesso!");
 					eb.setDescription("Vocês brincaram por bastante tempo, " + k.getName() + " está mais feliz agora!");
@@ -205,9 +205,9 @@ public class KGotchiCommand extends Command {
 					break;
 				case UNABLE:
 					if (k.getStance().isResting())
-						g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("sleeping.png"))).getImage(), 0, 0, 128, 128, null);
+						g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("sleeping.png"))).getImage(), bi.getWidth() - 128, 0, 128, 128, null);
 					else
-						g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("troubled.png"))).getImage(), 0, 0, 64, 64, null);
+						g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("troubled.png"))).getImage(), bi.getWidth() - 64, 0, 64, 64, null);
 
 					eb.setTitle("Impossibilitado.");
 					eb.setDescription("Não parece que " + k.getName() + " possa brincar agora!");
@@ -223,7 +223,7 @@ public class KGotchiCommand extends Command {
 			Graphics2D g2d = bi.createGraphics();
 			switch (k.train()) {
 				case FAILED:
-					g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("troubled.png"))).getImage(), 0, 0, 64, 64, null);
+					g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("troubled.png"))).getImage(), bi.getWidth() - 64, 0, 64, 64, null);
 					eb.setTitle("Tente novamente!");
 					eb.setDescription(k.getName() + " fugiu do treino, parece que está com preguiça.");
 					eb.setColor(Color.yellow);
@@ -231,7 +231,7 @@ public class KGotchiCommand extends Command {
 				case SUCCESS:
 					bi = k.getRace().extract(Stance.HAPPY, k.getSkin());
 					g2d = bi.createGraphics();
-					g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("xpUp.png"))).getImage(), 0, 0, 64, 64, null);
+					g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("xpUp.png"))).getImage(), bi.getWidth() - 64, 0, 64, 64, null);
 
 					eb.setTitle("Sucesso!");
 					eb.setDescription(k.getName() + " treinou muito, tá ficando monstrão!");
@@ -240,9 +240,9 @@ public class KGotchiCommand extends Command {
 					break;
 				case UNABLE:
 					if (k.getStance().isResting())
-						g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("sleeping.png"))).getImage(), 0, 0, 128, 128, null);
+						g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("sleeping.png"))).getImage(), bi.getWidth() - 128, 0, 128, 128, null);
 					else
-						g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("troubled.png"))).getImage(), 0, 0, 64, 64, null);
+						g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("troubled.png"))).getImage(), bi.getWidth() - 64, 0, 64, 64, null);
 
 					eb.setTitle("Impossibilitado.");
 					eb.setDescription("Não parece que " + k.getName() + " possa treinar agora!");
