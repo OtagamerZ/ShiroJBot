@@ -19,6 +19,7 @@ package com.kuuhaku.handlers.games.kawaigotchi;
 
 import com.kuuhaku.handlers.games.kawaigotchi.enums.FoodType;
 
+import java.awt.*;
 import java.util.function.Consumer;
 
 public class Food {
@@ -31,8 +32,10 @@ public class Food {
 	private final int price;
 	private final Consumer<Kawaigotchi> special;
 	private final String specialDesc;
+	private final String specialQuote;
+	private final Image specialIcon;
 
-	public Food(FoodType type, String name, String identifier, int moodBoost, int nutrition, int healthiness, int price, Consumer<Kawaigotchi> special, String specialDesc) {
+	public Food(FoodType type, String name, String identifier, int moodBoost, int nutrition, int healthiness, int price, Consumer<Kawaigotchi> special, String specialDesc, String specialQuote, Image specialIcon) {
 		this.type = type;
 		this.name = name;
 		this.identifier = identifier;
@@ -42,6 +45,22 @@ public class Food {
 		this.price = price;
 		this.special = special;
 		this.specialDesc = specialDesc;
+		this.specialQuote = specialQuote;
+		this.specialIcon = specialIcon;
+	}
+
+	public Food(FoodType type, String name, String identifier, int moodBoost, int nutrition, int healthiness, int price) {
+		this.type = type;
+		this.name = name;
+		this.identifier = identifier;
+		this.moodBoost = moodBoost;
+		this.nutrition = nutrition;
+		this.healthiness = healthiness;
+		this.price = price;
+		this.special = null;
+		this.specialDesc = null;
+		this.specialQuote = null;
+		this.specialIcon = null;
 	}
 
 	public FoodType getType() {
@@ -78,5 +97,13 @@ public class Food {
 
 	public String getSpecialDesc() {
 		return specialDesc;
+	}
+
+	public String getSpecialQuote() {
+		return specialQuote;
+	}
+
+	public Image getSpecialIcon() {
+		return specialIcon;
 	}
 }
