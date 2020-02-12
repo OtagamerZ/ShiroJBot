@@ -168,6 +168,7 @@ public class Kawaigotchi {
 				hunger = Helper.clamp(hunger + food.getNutrition(), 0f, 100f);
 				health = Helper.clamp(health + food.getHealthiness(), 0f, 100f);
 				mood = Helper.clamp(mood + food.getMoodBoost(), 0f, 100f);
+				if (food.getType() == FoodType.SPECIAL) food.getSpecial().accept(this);
 				KGotchiDAO.saveKawaigotchi(this);
 				return Action.SUCCESS;
 			} catch (EmptyStockException e) {
@@ -327,64 +328,144 @@ public class Kawaigotchi {
 		return id;
 	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public String getUserId() {
 		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 	public String getName() {
 		return name;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public Nature getNature() {
 		return nature;
+	}
+
+	public void setNature(Nature nature) {
+		this.nature = nature;
 	}
 
 	public int getSkin() {
 		return skin;
 	}
 
+	public void setSkin(int skin) {
+		this.skin = skin;
+	}
+
 	public Stance getStance() {
 		return stance;
+	}
+
+	public void setStance(Stance stance) {
+		this.stance = stance;
 	}
 
 	public Race getRace() {
 		return race;
 	}
 
+	public void setRace(Race race) {
+		this.race = race;
+	}
+
 	public Tier getTier() {
 		return tier;
+	}
+
+	public void setTier(Tier tier) {
+		this.tier = tier;
 	}
 
 	public float getHunger() {
 		return hunger;
 	}
 
+	public void setHunger(float hunger) {
+		this.hunger = hunger;
+	}
+
 	public float getHealth() {
 		return health;
+	}
+
+	public void setHealth(float health) {
+		this.health = health;
 	}
 
 	public float getMood() {
 		return mood;
 	}
 
+	public void setMood(float mood) {
+		this.mood = mood;
+	}
+
 	public float getEnergy() {
 		return energy;
+	}
+
+	public void setEnergy(float energy) {
+		this.energy = energy;
 	}
 
 	public float getXp() {
 		return xp;
 	}
 
+	public void setXp(float xp) {
+		this.xp = xp;
+	}
+
 	public int getPos() {
 		return pos;
+	}
+
+	public void setPos(int pos) {
+		this.pos = pos;
 	}
 
 	public boolean isAlive() {
 		return alive;
 	}
 
+	public void setAlive(boolean alive) {
+		this.alive = alive;
+	}
+
 	public String getBag() {
 		return bag;
+	}
+
+	public void setBag(String bag) {
+		this.bag = bag;
+	}
+
+	public boolean isAlerted() {
+		return alerted;
+	}
+
+	public void setAlerted(boolean alerted) {
+		this.alerted = alerted;
+	}
+
+	public int getLastRoll() {
+		return lastRoll;
+	}
+
+	public void setLastRoll(int lastRoll) {
+		this.lastRoll = lastRoll;
 	}
 
 	public void addToBag(Food f) {
