@@ -19,6 +19,8 @@ package com.kuuhaku.handlers.games.kawaigotchi;
 
 import com.kuuhaku.handlers.games.kawaigotchi.enums.FoodType;
 
+import java.util.function.Consumer;
+
 public class Food {
 	private final FoodType type;
 	private final String name;
@@ -27,8 +29,9 @@ public class Food {
 	private final int nutrition;
 	private final int healthiness;
 	private final int price;
+	private final Consumer<Kawaigotchi> special;
 
-	public Food(FoodType type, String name, String identifier, int moodBoost, int nutrition, int healthiness, int price) {
+	public Food(FoodType type, String name, String identifier, int moodBoost, int nutrition, int healthiness, int price, Consumer<Kawaigotchi> special) {
 		this.type = type;
 		this.name = name;
 		this.identifier = identifier;
@@ -36,6 +39,7 @@ public class Food {
 		this.nutrition = nutrition;
 		this.healthiness = healthiness;
 		this.price = price;
+		this.special = special;
 	}
 
 	public FoodType getType() {
@@ -64,5 +68,9 @@ public class Food {
 
 	public int getPrice() {
 		return price;
+	}
+
+	public Consumer<Kawaigotchi> getSpecial() {
+		return special;
 	}
 }

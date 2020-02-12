@@ -25,20 +25,24 @@ import static com.kuuhaku.handlers.games.kawaigotchi.enums.FoodType.*;
 public class FoodMenu {
 	private static Map<String, Food> menu = new HashMap<String, Food>() {{
 		//RATION
-		put("racao", new Food(RATION, "Ração", "racao", -5, 3, 1, 15));
-		put("poritos", new Food(RATION, "Poritos", "poritos", 5, 5, 5, 50));
+		put("racao", new Food(RATION, "Ração", "racao", -5, 3, 1, 15, null));
+		put("poritos", new Food(RATION, "Poritos", "poritos", 5, 5, 5, 50, null));
 
 		//MEAT
-		put("almondega", new Food(MEAT, "Almondega", "almondega", 7, 10, 2, 35));
-		put("parmigiana", new Food(MEAT, "Parmigiana", "parmigiana", 15, 12, 4, 80));
+		put("almondega", new Food(MEAT, "Almondega", "almondega", 7, 10, 2, 35, null));
+		put("parmigiana", new Food(MEAT, "Parmigiana", "parmigiana", 15, 12, 4, 80, null));
 
 		//PLANT
-		put("aspargo", new Food(PLANT, "Aspargo", "aspargo", -2, 5, 6, 20));
-		put("tomate", new Food(PLANT, "Tomate", "tomate", 2, 8, 12, 45));
+		put("aspargo", new Food(PLANT, "Aspargo", "aspargo", -2, 5, 6, 20, null));
+		put("tomate", new Food(PLANT, "Tomate", "tomate", 2, 8, 12, 45, null));
 
 		//SWEET
-		put("marshmallow", new Food(SWEET, "Marshmallow", "marshmallow", 10, 2, -2, 30));
-		put("caramelo", new Food(SWEET, "Caramelo", "caramelo", 15, 3, -5, 60));
+		put("marshmallow", new Food(SWEET, "Marshmallow", "marshmallow", 10, 2, -2, 30, null));
+		put("caramelo", new Food(SWEET, "Caramelo", "caramelo", 15, 3, -5, 60, null));
+
+		//SPECIAL
+		put("energetico", new Food(SPECIAL, "Energético", "energetico", 0, 0, -25, 125, k -> k.setEnergy(100f)));
+		put("resserum", new Food(SPECIAL, "Serum da Ressureição", "resserum", 0, 0, 0, 3000, k -> k.setAlive(true)));
 	}};
 
 	public static Food getFood(String name) {
