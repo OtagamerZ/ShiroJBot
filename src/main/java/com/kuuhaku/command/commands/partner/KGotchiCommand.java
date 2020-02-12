@@ -169,6 +169,7 @@ public class KGotchiCommand extends Command {
 		} else if (Helper.containsAny(args[0], "brincar", "play")) {
 			BufferedImage bi = k.getRace().extract(k.getStance(), k.getSkin());
 			EmbedBuilder eb = new EmbedBuilder();
+			Graphics2D g2d = bi.createGraphics();
 			switch (k.play()) {
 				case FAILED:
 					eb.setTitle("Tente novamente!");
@@ -176,9 +177,7 @@ public class KGotchiCommand extends Command {
 					eb.setColor(Color.yellow);
 					break;
 				case SUCCESS:
-					Graphics2D g2d = bi.createGraphics();
 					g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("moodUp.png"))).getImage(), 0, 0, null);
-					g2d.dispose();
 
 					eb.setTitle("Sucesso!");
 					eb.setDescription("Vocês brincaram por bastante tempo, " + k.getName() + " está mais feliz agora!");
@@ -191,16 +190,21 @@ public class KGotchiCommand extends Command {
 					}
 					break;
 				case UNABLE:
+					if (k.getStance().isResting())
+						g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("sleeping.png"))).getImage(), 0, 0, null);
+
 					eb.setTitle("Impossibilitado.");
 					eb.setDescription("Não parece que " + k.getName() + " possa brincar agora!");
 					eb.setColor(Color.red);
 					break;
 			}
 
+			g2d.dispose();
 			sendEmbed(channel, k, bi, eb);
 		} else if (Helper.containsAny(args[0], "treinar", "train")) {
 			BufferedImage bi = k.getRace().extract(k.getStance(), k.getSkin());
 			EmbedBuilder eb = new EmbedBuilder();
+			Graphics2D g2d = bi.createGraphics();
 			switch (k.train()) {
 				case FAILED:
 					eb.setTitle("Tente novamente!");
@@ -208,9 +212,7 @@ public class KGotchiCommand extends Command {
 					eb.setColor(Color.yellow);
 					break;
 				case SUCCESS:
-					Graphics2D g2d = bi.createGraphics();
 					g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("xpUp.png"))).getImage(), 0, 0, null);
-					g2d.dispose();
 
 					eb.setTitle("Sucesso!");
 					eb.setDescription(k.getName() + " treinou muito, tá ficando monstrão!");
@@ -218,12 +220,16 @@ public class KGotchiCommand extends Command {
 					eb.setFooter("+");
 					break;
 				case UNABLE:
+					if (k.getStance().isResting())
+						g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("sleeping.png"))).getImage(), 0, 0, null);
+
 					eb.setTitle("Impossibilitado.");
 					eb.setDescription("Não parece que " + k.getName() + " possa treinar agora!");
 					eb.setColor(Color.red);
 					break;
 			}
 
+			g2d.dispose();
 			sendEmbed(channel, k, bi, eb);
 		} else if (Helper.containsAny(args[0], "comprar", "buy")) {
 			if (args.length < 2) {
@@ -291,7 +297,7 @@ public class KGotchiCommand extends Command {
 		int mood = k.getLastMoodRoll();
 		int resource = k.getLastResourceRoll(true);
 
-		eb.addField("Xp: " + (xp >= 0 ? "+" : "") + xp + " | " + "Humor: " + (mood >= 0 ? "+" : "") + mood + " | " + "Energia/Fome: " + (resource >= 0 ? "+" : "") + resource, k.getTier().toString() + " -> " + k.getTier().next() + ": " + Math.round(k.getXp()) + "/" + k.getTier().next().getRequiredXp() + " xp", true);
+		eb.addField(k.getTier().toString() + " -> " + k.getTier().next() + ": " + Math.round(k.getXp()) + "/" + k.getTier().next().getRequiredXp() + " xp", "Xp: " + (xp >= 0 ? "+" : "") + xp + " | " + "Humor: " + (mood >= 0 ? "+" : "") + mood + " | " + "Energia/Fome: " + (resource >= 0 ? "+" : "") + resource, true);
 		eb.setThumbnail("attachment://img.png");
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			ImageIO.write(bi, "png", baos);
