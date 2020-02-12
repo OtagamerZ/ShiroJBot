@@ -148,6 +148,7 @@ public class Kawaigotchi {
 		} else {
 			stance = Stance.SLEEPING;
 		}
+		KGotchiDAO.saveKawaigotchi(this);
 	}
 
 	public void resurrect() {
