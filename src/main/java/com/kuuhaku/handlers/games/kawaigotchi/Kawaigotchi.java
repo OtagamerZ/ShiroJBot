@@ -113,38 +113,36 @@ public class Kawaigotchi {
 
 		int currTime = OffsetDateTime.now(ZoneId.of("GMT-3")).getHour();
 
-		if (currTime < Time.NIGHT.getStart() && currTime > Time.NIGHT.getEnd() - 24 && energy > 5) {
-			if (!stance.isResting()) {
-				if (hunger < 50 || health < 50) {
-					stance = Stance.SAD;
-					if (!alerted) {
-						try {
-							m.getUser().openPrivateChannel().complete().sendMessage("Seu Kawaigotchi " + name + " está triste, vá ver o porquê!").queue();
-						} catch (RuntimeException ignore) {
-						}
-						alerted = true;
+		if (stance.isResting()) {
+			if (energy == 100) stance = Stance.IDLE;
+			energy += rate.ENERGY.fac * 2 * nature.getEnergy();
+		} else if (currTime < Time.NIGHT.getStart() && currTime > Time.NIGHT.getEnd() - 24 && energy > 5) {
+			if (hunger < 50 || health < 50) {
+				stance = Stance.SAD;
+				if (!alerted) {
+					try {
+						m.getUser().openPrivateChannel().complete().sendMessage("Seu Kawaigotchi " + name + " está triste, vá ver o porquê!").queue();
+					} catch (RuntimeException ignore) {
 					}
-				} else if (mood > 75) {
-					stance = Stance.HAPPY;
-					alerted = false;
-				} else if (mood < 25) {
-					stance = Stance.ANGRY;
-					alerted = false;
-				} else {
-					stance = Stance.IDLE;
-					alerted = false;
+					alerted = true;
 				}
-
-				if (hunger > 80 && mood < 80)
-					mood += (rate.MOOD.fac + ((100 - hunger) * 0.01f / 20)) * nature.getKindness();
-				else mood -= rate.MOOD.fac / nature.getKindness();
-
-				hunger -= rate.FOOD.fac;
-				energy -= rate.ENERGY.fac / nature.getEnergy();
+			} else if (mood > 75) {
+				stance = Stance.HAPPY;
+				alerted = false;
+			} else if (mood < 25) {
+				stance = Stance.ANGRY;
+				alerted = false;
 			} else {
-				if (energy == 100) stance = Stance.IDLE;
-				energy += rate.ENERGY.fac * 2 * nature.getEnergy();
+				stance = Stance.IDLE;
+				alerted = false;
 			}
+
+			if (hunger > 80 && mood < 80)
+				mood += (rate.MOOD.fac + ((100 - hunger) * 0.01f / 20)) * nature.getKindness();
+			else mood -= rate.MOOD.fac / nature.getKindness();
+
+			hunger -= rate.FOOD.fac;
+			energy -= rate.ENERGY.fac / nature.getEnergy();
 		} else {
 			stance = Stance.SLEEPING;
 		}
