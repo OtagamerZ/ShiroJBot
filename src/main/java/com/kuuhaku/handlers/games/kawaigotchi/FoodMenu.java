@@ -48,8 +48,7 @@ public class FoodMenu {
 		put("energetico", new Food(SPECIAL, "Energético", "energetico", 0, 0, -25, 125, k -> k.setEnergy(100f), "Recupera toda a energia do Kawaigotchi, mas faz mal à saúde.", "está a todo vapor!", new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("energyUp.png"))).getImage()));
 		put("resserum", new Food(SPECIAL, "Serum da Ressureição", "resserum", 0, 0, 0, 3000, Kawaigotchi::resurrect, "Ressuscita o Kawaigotchi, ao custo de metade da experiência atual.", "foi ressuscitado!", new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("ressurrected.png"))).getImage()));
 		put("sonifero", new Food(SPECIAL, "Sonifero", "sonifero", 0, 0, 0, 50, k -> k.setStance(Stance.SLEEPING), "Coloca o Kawaigotchi para dormir, ele irá acordar assim que sua energia chegar a 100% novamente.", "foi sedado!", new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("sleeping.png"))).getImage()));
-		put("vacina", new Food(SPECIAL, "Vacina", "vacina", -25, 0, 50, 150, k -> {
-		}, "Vacina seu Kawaigotchi, recuperando 50% de saúde, porém ele não ficará muito feliz com uma agulhada.", "foi vacinado!", new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("healthUp.png"))).getImage()));
+		put("vacina", new Food(SPECIAL, "Vacina", "vacina", -25, 0, 50, 150, Kawaigotchi::doNothing, "Vacina seu Kawaigotchi, recuperando 50% de saúde, porém ele não ficará muito feliz com uma agulhada.", "foi vacinado!", new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("healthUp.png"))).getImage()));
 	}};
 
 	public static Food getFood(String name) {
