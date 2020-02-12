@@ -290,7 +290,7 @@ public class Kawaigotchi {
 		drawOutlinedText(currTime + "h", (int) g2d.getFontMetrics().getStringBounds(stance.toString(), g2d).getWidth() + 33, 105, g2d);
 
 		//GROUND = 108
-		g2d.drawImage(pet, pos, scn.getHeight() - pet.getHeight(null) - 108, dir * pet.getWidth(null), pet.getHeight(null), null);
+		g2d.drawImage(pet, pos, scn.getHeight() - (tier == Tier.CHILD ? pet.getHeight(null) / 3 : tier == Tier.TEEN ? pet.getHeight(null) / 2 : pet.getHeight(null)) - 108, dir * (tier == Tier.CHILD ? pet.getWidth(null) / 3 : tier == Tier.TEEN ? pet.getWidth(null) / 2 : pet.getWidth(null)), (tier == Tier.CHILD ? pet.getHeight(null) / 3 : tier == Tier.TEEN ? pet.getHeight(null) / 2 : pet.getHeight(null)), null);
 
 		g2d.dispose();
 
