@@ -41,7 +41,7 @@ public class FoodMenu {
 		put("caramelo", new Food(SWEET, "Caramelo", "caramelo", 15, 3, -5, 60, null, null));
 
 		//SPECIAL
-		put("energetico", new Food(SPECIAL, "Energético", "energetico", 0, 0, -25, 125, k -> k.setEnergy(100f), "Recupera toda a energia do Kawaigotchi."));
+		put("energetico", new Food(SPECIAL, "Energético", "energetico", 0, 0, -25, 125, k -> k.setEnergy(100f), "Recupera toda a energia do Kawaigotchi, mas faz mal à saúde."));
 		put("resserum", new Food(SPECIAL, "Serum da Ressureição", "resserum", 0, 0, 0, 3000, Kawaigotchi::resurrect, "Ressuscita o Kawaigotchi, ao custo de metade da experiência atual."));
 	}};
 
