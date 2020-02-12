@@ -109,6 +109,13 @@ public class Kawaigotchi {
 
 	public void update(Member m) {
 		if (m.getOnlineStatus() == OnlineStatus.OFFLINE || m.getOnlineStatus() == OnlineStatus.UNKNOWN) return;
+
+		//CLAMPS
+		health = Helper.clamp(health, 0, 100);
+		hunger = Helper.clamp(hunger, 0, 100);
+		mood = Helper.clamp(mood, 0, 100);
+		energy = Helper.clamp(energy, 0, 100);
+
 		if (hunger == 0 || health == 0) {
 			alive = false;
 			return;
@@ -119,8 +126,8 @@ public class Kawaigotchi {
 
 		if (stance.isResting()) {
 			if (energy == 100) stance = Stance.IDLE;
-			energy = Helper.clamp(energy + rate.ENERGY.fac * 2 * nature.getEnergy(), 0, 100);
-			health = Helper.clamp(health + rate.HEALTH.fac * (hunger / 50), 0, 100);
+			energy += rate.ENERGY.fac * 2 * nature.getEnergy();
+			health += rate.HEALTH.fac * (hunger / 50);
 		} else if (currTime < Time.NIGHT.getStart() && currTime > Time.NIGHT.getEnd() - 24 && energy > 5) {
 			if (hunger < 50 || health < 50) {
 				stance = Stance.SAD;
@@ -157,6 +164,10 @@ public class Kawaigotchi {
 
 	public void resurrect() {
 		alive = true;
+		health = 100;
+		hunger = 100;
+		mood = (int) (50 * nature.getKindness());
+		energy = 100;
 		xp /= 2;
 		KGotchiDAO.saveKawaigotchi(this);
 	}
@@ -165,9 +176,9 @@ public class Kawaigotchi {
 		if (stance.canEat()) {
 			try {
 				useFromBag(food);
-				hunger = Helper.clamp(hunger + food.getNutrition(), 0f, 100f);
-				health = Helper.clamp(health + food.getHealthiness(), 0f, 100f);
-				mood = Helper.clamp(mood + food.getMoodBoost(), 0f, 100f);
+				hunger += food.getNutrition();
+				health += food.getHealthiness();
+				mood += food.getMoodBoost();
 				if (food.getType() == FoodType.SPECIAL) food.getSpecial().accept(this);
 				KGotchiDAO.saveKawaigotchi(this);
 				return Action.SUCCESS;
@@ -183,21 +194,16 @@ public class Kawaigotchi {
 			lastRoll = Helper.rng(100);
 
 			if (lastRoll >= threshold) {
-				mood += Helper.clamp(lastRoll * 100 / 10, 3, 10) * nature.getKindness();
-				energy -= Helper.clamp(lastRoll * 100 / 6, 1, 5) / 3f;
-				hunger -= Helper.clamp(lastRoll * 100 / 6, 1, 5) / 3f;
+				mood += (lastRoll * 100 / 10f) * nature.getKindness();
+				energy -= (lastRoll * 100 / 6f) / 3f;
+				hunger -= (lastRoll * 100 / 6f) / 3f;
 
-				mood = Helper.clamp(mood, 0f, 100f);
-				energy = Helper.clamp(energy, 0f, 100f);
-				hunger = Helper.clamp(hunger, 0f, 100f);
 				KGotchiDAO.saveKawaigotchi(this);
 				return Action.SUCCESS;
 			} else {
-				energy -= Helper.clamp(lastRoll * 100 / 6, 1, 5) / 3f;
-				hunger -= Helper.clamp(lastRoll * 100 / 6, 1, 5) / 3f;
+				energy -= (lastRoll * 100 / 6f) / 3f;
+				hunger -= (lastRoll * 100 / 6f) / 3f;
 
-				energy = Helper.clamp(energy, 0f, 100f);
-				hunger = Helper.clamp(hunger, 0f, 100f);
 				KGotchiDAO.saveKawaigotchi(this);
 				return Action.FAILED;
 			}
@@ -210,20 +216,16 @@ public class Kawaigotchi {
 			lastRoll = Helper.rng(100);
 
 			if (lastRoll >= threshold) {
-				xp += Helper.clamp(lastRoll * 100 / 6, 1, 5) * tier.getTrainability();
-				energy -= Helper.clamp(lastRoll * 100 / 6, 1, 5) / 2f;
-				hunger -= Helper.clamp(lastRoll * 100 / 6, 1, 5) / 2f;
+				xp += (lastRoll * 100 / 6f) * tier.getTrainability();
+				energy -= (lastRoll * 100 / 6f) / 2f;
+				hunger -= (lastRoll * 100 / 6f) / 2f;
 
-				energy = Helper.clamp(energy, 0f, 100f);
-				hunger = Helper.clamp(hunger, 0f, 100f);
 				KGotchiDAO.saveKawaigotchi(this);
 				return Action.SUCCESS;
 			} else {
-				energy -= Helper.clamp(lastRoll * 100 / 6, 1, 5) / 2f;
-				hunger -= Helper.clamp(lastRoll * 100 / 6, 1, 5) / 2f;
+				energy -= (lastRoll * 100 / 6f) / 2f;
+				hunger -= (lastRoll * 100 / 6f) / 2f;
 
-				energy = Helper.clamp(energy, 0f, 100f);
-				hunger = Helper.clamp(hunger, 0f, 100f);
 				KGotchiDAO.saveKawaigotchi(this);
 				return Action.FAILED;
 			}
