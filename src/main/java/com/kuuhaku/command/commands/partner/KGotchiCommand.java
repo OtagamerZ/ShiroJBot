@@ -260,7 +260,7 @@ public class KGotchiCommand extends Command {
 
 				FoodMenu.getMenu().forEach((n, food) -> {
 					List<MessageEmbed.Field> field = fields.getOrDefault(food.getType(), new ArrayList<>());
-					field.add(new MessageEmbed.Field(food.getName() + " - " + food.getPrice() + " créditos\n(`" + prefix + "kgotchi comprar " + n + "`)", "Bônus de humor: " + food.getMoodBoost() + "\nNutrição: " + food.getNutrition() + "\nSaúde: " + food.getHealthiness(), true));
+					field.add(new MessageEmbed.Field(food.getName() + " - " + food.getPrice() + " créditos\n(`" + prefix + "kgotchi comprar " + n + "`)", food.getType() == FoodType.SPECIAL ? food.getSpecialDesc() : "Bônus de humor: " + food.getMoodBoost() + "\nNutrição: " + food.getNutrition() + "\nSaúde: " + food.getHealthiness(), true));
 					fields.put(food.getType(), field);
 				});
 
