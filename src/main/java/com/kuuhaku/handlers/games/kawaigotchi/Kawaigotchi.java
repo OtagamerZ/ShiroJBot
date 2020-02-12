@@ -119,8 +119,8 @@ public class Kawaigotchi {
 
 		if (stance.isResting()) {
 			if (energy == 100) stance = Stance.IDLE;
-			energy += rate.ENERGY.fac * 2 * nature.getEnergy();
-			health += rate.HEALTH.fac * (hunger / 50);
+			energy = Helper.clamp(energy + rate.ENERGY.fac * 2 * nature.getEnergy(), 0, 100);
+			health = Helper.clamp(health + rate.HEALTH.fac * (hunger / 50), 0, 100);
 		} else if (currTime < Time.NIGHT.getStart() && currTime > Time.NIGHT.getEnd() - 24 && energy > 5) {
 			if (hunger < 50 || health < 50) {
 				stance = Stance.SAD;
