@@ -30,8 +30,9 @@ public class Food {
 	private final int healthiness;
 	private final int price;
 	private final Consumer<Kawaigotchi> special;
+	private final String specialDesc;
 
-	public Food(FoodType type, String name, String identifier, int moodBoost, int nutrition, int healthiness, int price, Consumer<Kawaigotchi> special) {
+	public Food(FoodType type, String name, String identifier, int moodBoost, int nutrition, int healthiness, int price, Consumer<Kawaigotchi> special, String specialDesc) {
 		this.type = type;
 		this.name = name;
 		this.identifier = identifier;
@@ -40,6 +41,7 @@ public class Food {
 		this.healthiness = healthiness;
 		this.price = price;
 		this.special = special;
+		this.specialDesc = specialDesc;
 	}
 
 	public FoodType getType() {
@@ -72,5 +74,9 @@ public class Food {
 
 	public Consumer<Kawaigotchi> getSpecial() {
 		return special;
+	}
+
+	public String getSpecialDesc() {
+		return specialDesc;
 	}
 }
