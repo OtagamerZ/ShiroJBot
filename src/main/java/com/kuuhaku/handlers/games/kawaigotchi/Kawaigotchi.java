@@ -95,6 +95,9 @@ public class Kawaigotchi {
 	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
 	private boolean alerted;
 
+	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	private boolean warned;
+
 	private transient int lastRoll;
 
 	public Kawaigotchi() {
@@ -138,15 +141,26 @@ public class Kawaigotchi {
 					}
 					alerted = true;
 				}
+			} else if (hunger < 25 || health < 25) {
+				if (!warned) {
+					try {
+						m.getUser().openPrivateChannel().complete().sendMessage("Seu Kawaigotchi " + name + " está muito triste, corra ver o porquê!").queue();
+					} catch (RuntimeException ignore) {
+					}
+					warned = true;
+				}
 			} else if (mood > 75) {
 				stance = Stance.HAPPY;
 				alerted = false;
+				warned = false;
 			} else if (mood < 25) {
 				stance = Stance.ANGRY;
 				alerted = false;
+				warned = false;
 			} else {
 				stance = Stance.IDLE;
 				alerted = false;
+				warned = false;
 			}
 
 			if (hunger > 80 && mood < 80)
