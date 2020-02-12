@@ -109,11 +109,11 @@ public class Kawaigotchi {
 
 	public void update(Member m) {
 		if (m.getOnlineStatus() == OnlineStatus.OFFLINE || m.getOnlineStatus() == OnlineStatus.UNKNOWN) return;
-		if (hunger == 0 || health == 0) alive = false;
-		else if (tier.xpToNext(xp) <= 0) {
-			tier = tier.next();
-			xp = 0;
+		if (hunger == 0 || health == 0) {
+			alive = false;
+			return;
 		}
+		tier = Tier.tierByXp(xp);
 
 		int currTime = OffsetDateTime.now(ZoneId.of("GMT-3")).getHour();
 
@@ -157,8 +157,8 @@ public class Kawaigotchi {
 
 	public void resurrect() {
 		alive = true;
-		xp = 0;
-		tier = Tier.CHILD;
+		xp /= 2;
+		KGotchiDAO.saveKawaigotchi(this);
 	}
 
 	public Action feed(Food food) {
