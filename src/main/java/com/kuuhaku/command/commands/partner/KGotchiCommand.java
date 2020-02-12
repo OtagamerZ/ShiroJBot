@@ -177,7 +177,7 @@ public class KGotchiCommand extends Command {
 					eb.setColor(Color.yellow);
 					break;
 				case SUCCESS:
-					g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("moodUp.png"))).getImage(), 0, 0, 128, 128, null);
+					g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("moodUp.png"))).getImage(), 0, 0, 64, 64, null);
 
 					eb.setTitle("Sucesso!");
 					eb.setDescription("Vocês brincaram por bastante tempo, " + k.getName() + " está mais feliz agora!");
@@ -212,7 +212,7 @@ public class KGotchiCommand extends Command {
 					eb.setColor(Color.yellow);
 					break;
 				case SUCCESS:
-					g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("xpUp.png"))).getImage(), 0, 0, 128, 128, null);
+					g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("xpUp.png"))).getImage(), 0, 0, 64, 64, null);
 
 					eb.setTitle("Sucesso!");
 					eb.setDescription(k.getName() + " treinou muito, tá ficando monstrão!");
