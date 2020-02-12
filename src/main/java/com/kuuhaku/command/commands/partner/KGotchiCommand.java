@@ -37,14 +37,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class KGotchiCommand extends Command {
@@ -177,6 +176,10 @@ public class KGotchiCommand extends Command {
 					eb.setColor(Color.yellow);
 					break;
 				case SUCCESS:
+					Graphics2D g2d = bi.createGraphics();
+					g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("moodUp.png"))).getImage(), 0, 0, null);
+					g2d.dispose();
+
 					eb.setTitle("Sucesso!");
 					eb.setDescription("Vocês brincaram por bastante tempo, " + k.getName() + " está mais feliz agora!");
 					eb.setColor(Color.green);
@@ -205,6 +208,10 @@ public class KGotchiCommand extends Command {
 					eb.setColor(Color.yellow);
 					break;
 				case SUCCESS:
+					Graphics2D g2d = bi.createGraphics();
+					g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("xpUp.png"))).getImage(), 0, 0, null);
+					g2d.dispose();
+
 					eb.setTitle("Sucesso!");
 					eb.setDescription(k.getName() + " treinou muito, tá ficando monstrão!");
 					eb.setColor(Color.green);
@@ -284,7 +291,7 @@ public class KGotchiCommand extends Command {
 		int mood = k.getLastMoodRoll();
 		int resource = k.getLastResourceRoll(true);
 
-		eb.setFooter("Xp: " + (xp >= 0 ? "+" : "") + xp + " | " + "Humor: " + (mood >= 0 ? "+" : "") + mood + " | " + "Energia/Fome: " + (resource >= 0 ? "+" : "") + resource + "\n" + k.getTier().toString() + " -> " + k.getTier().next() + ": " + Math.round(k.getXp()) + "/" + k.getTier().next().getRequiredXp() + " xp");
+		eb.addField("Xp: " + (xp >= 0 ? "+" : "") + xp + " | " + "Humor: " + (mood >= 0 ? "+" : "") + mood + " | " + "Energia/Fome: " + (resource >= 0 ? "+" : "") + resource, k.getTier().toString() + " -> " + k.getTier().next() + ": " + Math.round(k.getXp()) + "/" + k.getTier().next().getRequiredXp() + " xp", true);
 		eb.setThumbnail("attachment://img.png");
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			ImageIO.write(bi, "png", baos);
