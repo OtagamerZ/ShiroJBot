@@ -179,6 +179,7 @@ public class KGotchiCommand extends Command {
 					break;
 				case SUCCESS:
 					bi = k.getRace().extract(k.getStance(), k.getSkin());
+					g2d = bi.createGraphics();
 					g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("moodUp.png"))).getImage(), 0, 0, 64, 64, null);
 
 					eb.setTitle("Sucesso!");
@@ -215,6 +216,7 @@ public class KGotchiCommand extends Command {
 					break;
 				case SUCCESS:
 					bi = k.getRace().extract(k.getStance(), k.getSkin());
+					g2d = bi.createGraphics();
 					g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("xpUp.png"))).getImage(), 0, 0, 64, 64, null);
 
 					eb.setTitle("Sucesso!");
