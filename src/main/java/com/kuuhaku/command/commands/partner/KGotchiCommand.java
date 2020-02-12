@@ -29,7 +29,6 @@ import com.kuuhaku.handlers.games.kawaigotchi.Food;
 import com.kuuhaku.handlers.games.kawaigotchi.FoodMenu;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.handlers.games.kawaigotchi.enums.FoodType;
-import com.kuuhaku.handlers.games.kawaigotchi.exceptions.EmptyStockException;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -37,6 +36,10 @@ import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -116,59 +119,105 @@ public class KGotchiCommand extends Command {
 					return;
 				}
 
-				try {
-					k.feed(f);
+				BufferedImage bi = k.getRace().extract(k.getStance(), k.getSkin());
+				EmbedBuilder eb = new EmbedBuilder();
 
-					String res = "";
+				switch (k.feed(f)) {
+					case FAILED:
+						eb.setTitle("Estoque vazio!");
+						eb.setDescription("Seu estoque de " + f.getName().toLowerCase() + " está vazio!");
+						eb.setColor(Color.yellow);
+						break;
+					case SUCCESS:
+						String res = "";
 
-					switch (f.getType()) {
-						case RATION:
-							res = "não gostou muito, mas da pro gasto!";
-							break;
-						case MEAT:
-							res = "gostou bastante, e é bem nutritivo!";
-							break;
-						case SWEET:
-							res = "amou, apesar de não ser muito saudável!";
-							break;
-						case PLANT:
-							res = "gostou, e é bem saudável!";
-							break;
-					}
+						switch (f.getType()) {
+							case RATION:
+								res = "não gostou muito, mas da pro gasto!";
+								break;
+							case MEAT:
+								res = "gostou bastante, e é bem nutritivo!";
+								break;
+							case SWEET:
+								res = "amou, apesar de não ser muito saudável!";
+								break;
+							case PLANT:
+								res = "gostou, e é bem saudável!";
+								break;
+						}
 
-					channel.sendMessage("Você deu " + f.getName().toLowerCase() + " para " + k.getName() + ", parece que " + res).queue();
-				} catch (EmptyStockException e) {
-					channel.sendMessage(":x: | Seu estoque de " + f.getName().toLowerCase() + " está vazio!").queue();
+						eb.setTitle("Sucesso!");
+						eb.setDescription("Você deu " + f.getName().toLowerCase() + " para " + k.getName() + ", parece que " + res);
+						eb.setColor(Color.green);
+						break;
+					case UNABLE:
+						eb.setTitle("Impossibilitado.");
+						eb.setDescription("Não parece que " + k.getName() + " possa comer agora!");
+						eb.setColor(Color.red);
+						break;
+				}
+
+				eb.setThumbnail("attachment://img.png");
+				try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+					ImageIO.write(bi, "png", baos);
+					baos.flush();
+
+					channel.sendMessage(eb.build()).addFile(baos.toByteArray(), "img.png").queue();
+				} catch (IOException e) {
+					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
 			}
 		} else if (Helper.containsAny(args[0], "brincar", "play")) {
+			BufferedImage bi = k.getRace().extract(k.getStance(), k.getSkin());
+			EmbedBuilder eb = new EmbedBuilder();
 			switch (k.play()) {
 				case FAILED:
-					channel.sendMessage("Ah, parece que " + k.getName() + " não quer brincar. Tente novamente!").queue();
-					return;
+					eb.setTitle("Tente novamente!");
+					eb.setDescription("Ah, parece que " + k.getName() + " não quer brincar.");
+					eb.setColor(Color.yellow);
+					break;
 				case SUCCESS:
-					channel.sendMessage("Vocês brincaram por bastante tempo, " + k.getName() + " está mais feliz agora!").queue();
+					eb.setTitle("Sucesso!");
+					eb.setDescription("Vocês brincaram por bastante tempo, " + k.getName() + " está mais feliz agora!");
+					eb.setColor(Color.green);
 					int rng = Helper.rng(100);
 					if (rng > 90) {
 						acc.addCredit(50 * (100 - rng));
 						AccountDAO.saveAccount(acc);
 						channel.sendMessage("Opa, o que é isso? Parece que " + k.getName() + " encontrou " + (50 * (100 - rng)) + " créditos!").queue();
 					}
-					return;
+					break;
 				case UNABLE:
-					channel.sendMessage("Não parece que " + k.getName() + " possa brincar agora!").queue();
+					eb.setTitle("Impossibilitado.");
+					eb.setDescription("Não parece que " + k.getName() + " possa brincar agora!");
+					eb.setColor(Color.red);
+					break;
 			}
+
+			sendEmbed(channel, k, bi, eb);
 		} else if (Helper.containsAny(args[0], "treinar", "train")) {
+			BufferedImage bi = k.getRace().extract(k.getStance(), k.getSkin());
+			EmbedBuilder eb = new EmbedBuilder();
 			switch (k.train()) {
 				case FAILED:
-					channel.sendMessage(k.getName() + " fugiu do treino, parece que está com preguiça. Tente novamente!").queue();
-					return;
+					eb.setTitle("Tente novamente!");
+					eb.setDescription(k.getName() + " fugiu do treino, parece que está com preguiça.");
+					eb.setColor(Color.yellow);
+					break;
 				case SUCCESS:
-					channel.sendMessage(k.getName() + " treinou muito, agora ficou monstrão!").queue();
-					return;
+					eb.setTitle("Sucesso!");
+					eb.setDescription(k.getName() + " treinou muito, tá ficando monstrão!");
+					eb.setColor(Color.green);
+					eb.setFooter("+");
+					break;
 				case UNABLE:
-					channel.sendMessage("Não parece que " + k.getName() + " possa treinar agora!").queue();
+					eb.setTitle("Impossibilitado.");
+					eb.setDescription("Não parece que " + k.getName() + " possa treinar agora!");
+					eb.setColor(Color.red);
+					break;
 			}
+
+			sendEmbed(channel, k, bi, eb);
 		} else if (Helper.containsAny(args[0], "comprar", "buy")) {
 			if (args.length < 2) {
 				EmbedBuilder eb = new EmbedBuilder();
@@ -227,6 +276,23 @@ public class KGotchiCommand extends Command {
 				KGotchiDAO.saveKawaigotchi(k);
 				AccountDAO.saveAccount(acc);
 			}
+		}
+	}
+
+	public void sendEmbed(MessageChannel channel, Kawaigotchi k, BufferedImage bi, EmbedBuilder eb) {
+		int xp = k.getLastXpRoll();
+		int mood = k.getLastMoodRoll();
+		int resource = k.getLastResourceRoll(true);
+
+		eb.setFooter("Xp: " + (xp >= 0 ? "+" : "") + xp + " | " + "Humor: " + (mood >= 0 ? "+" : "") + mood + " | " + "Energia/Fome: " + (resource >= 0 ? "+" : "") + resource + "\n" + k.getTier().toString() + " -> " + k.getTier().next() + ": " + k.getXp() + "/" + k.getTier().next().getRequiredXp());
+		eb.setThumbnail("attachment://img.png");
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+			ImageIO.write(bi, "png", baos);
+			baos.flush();
+
+			channel.sendMessage(eb.build()).addFile(baos.toByteArray(), "img.png").queue();
+		} catch (IOException e) {
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 	}
 }

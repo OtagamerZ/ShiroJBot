@@ -80,8 +80,8 @@ public class Kawaigotchi {
 	@Column(columnDefinition = "FLOAT DEFAULT 100")
 	private float energy = 100;
 
-	@Column(columnDefinition = "INT DEFAULT 0")
-	private int xp = 0;
+	@Column(columnDefinition = "FLOAT DEFAULT 0")
+	private float xp = 0;
 
 	@Column(columnDefinition = "INT")
 	private int pos = new Random().nextInt(1024);
@@ -94,6 +94,8 @@ public class Kawaigotchi {
 
 	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
 	private boolean alerted;
+
+	private transient int lastRoll;
 
 	public Kawaigotchi() {
 
@@ -110,6 +112,7 @@ public class Kawaigotchi {
 		if (hunger == 0 || health == 0) alive = false;
 		else if (tier.xpToNext(xp) <= 0) {
 			tier = tier.next();
+			xp = 0;
 		}
 
 		int currTime = OffsetDateTime.now(ZoneId.of("GMT-3")).getHour();
@@ -148,6 +151,7 @@ public class Kawaigotchi {
 		} else {
 			stance = Stance.SLEEPING;
 		}
+		xp += 0.1f * tier.getTrainability();
 		KGotchiDAO.saveKawaigotchi(this);
 	}
 
@@ -175,22 +179,21 @@ public class Kawaigotchi {
 	public Action play() {
 		if (stance.canPlay()) {
 			int threshold = (int) ((Helper.clamp(100 - (int) health, 10, 40)) / nature.getKindness());
-			int roll = Helper.rng(100);
+			lastRoll = Helper.rng(100);
 
-			if (roll >= threshold) {
-				mood += Helper.clamp(roll * 100 / 10, 3, 10) * nature.getKindness();
-				energy -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
-				hunger -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
+			if (lastRoll >= threshold) {
+				mood += Helper.clamp(lastRoll * 100 / 10, 3, 10) * nature.getKindness();
+				energy -= Helper.clamp(lastRoll * 100 / 6, 1, 5) / 3f;
+				hunger -= Helper.clamp(lastRoll * 100 / 6, 1, 5) / 3f;
 
 				mood = Helper.clamp(mood, 0f, 100f);
-				System.out.println(mood);
 				energy = Helper.clamp(energy, 0f, 100f);
 				hunger = Helper.clamp(hunger, 0f, 100f);
 				KGotchiDAO.saveKawaigotchi(this);
 				return Action.SUCCESS;
 			} else {
-				energy -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
-				hunger -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
+				energy -= Helper.clamp(lastRoll * 100 / 6, 1, 5) / 3f;
+				hunger -= Helper.clamp(lastRoll * 100 / 6, 1, 5) / 3f;
 
 				energy = Helper.clamp(energy, 0f, 100f);
 				hunger = Helper.clamp(hunger, 0f, 100f);
@@ -203,21 +206,20 @@ public class Kawaigotchi {
 	public Action train() {
 		if (stance.canTrain()) {
 			int threshold = (int) ((Helper.clamp(100 - (int) mood, 10, 40)) / nature.getTrainability());
-			int roll = Helper.rng(100);
+			lastRoll = Helper.rng(100);
 
-			if (roll >= threshold) {
-				xp += Helper.clamp(roll * 100 / 6, 1, 5) * tier.getTrainability();
-				energy -= Helper.clamp(roll * 100 / 6, 1, 5) / 2f;
-				hunger -= Helper.clamp(roll * 100 / 6, 1, 5) / 2f;
+			if (lastRoll >= threshold) {
+				xp += Helper.clamp(lastRoll * 100 / 6, 1, 5) * tier.getTrainability();
+				energy -= Helper.clamp(lastRoll * 100 / 6, 1, 5) / 2f;
+				hunger -= Helper.clamp(lastRoll * 100 / 6, 1, 5) / 2f;
 
-				xp = Helper.clamp(xp, 0, 100);
 				energy = Helper.clamp(energy, 0f, 100f);
 				hunger = Helper.clamp(hunger, 0f, 100f);
 				KGotchiDAO.saveKawaigotchi(this);
 				return Action.SUCCESS;
 			} else {
-				energy -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
-				hunger -= Helper.clamp(roll * 100 / 6, 1, 5) / 3f;
+				energy -= Helper.clamp(lastRoll * 100 / 6, 1, 5) / 2f;
+				hunger -= Helper.clamp(lastRoll * 100 / 6, 1, 5) / 2f;
 
 				energy = Helper.clamp(energy, 0f, 100f);
 				hunger = Helper.clamp(hunger, 0f, 100f);
@@ -369,7 +371,7 @@ public class Kawaigotchi {
 		return energy;
 	}
 
-	public int getXp() {
+	public float getXp() {
 		return xp;
 	}
 
@@ -413,5 +415,30 @@ public class Kawaigotchi {
 		jo.put(f.getIdentifier(), jo.getInt(f.getIdentifier()) - 1);
 
 		bag = jo.toString();
+	}
+
+	public int getLastMoodRoll() {
+		try {
+			return (int) (Helper.clamp(lastRoll * 100 / 10, 3, 10) * nature.getKindness());
+		} finally {
+			lastRoll = 0;
+		}
+	}
+
+	public int getLastResourceRoll(boolean train) {
+		try {
+			if (train) return (int) (Helper.clamp(lastRoll * 100 / 6, 1, 5) / 3f);
+			else return (int) (Helper.clamp(lastRoll * 100 / 6, 1, 5) / 2f);
+		} finally {
+			lastRoll = 0;
+		}
+	}
+
+	public int getLastXpRoll() {
+		try {
+			return (int) (Helper.clamp(lastRoll * 100 / 6, 1, 5) * tier.getTrainability());
+		} finally {
+			lastRoll = 0;
+		}
 	}
 }
