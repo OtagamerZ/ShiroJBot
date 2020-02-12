@@ -128,6 +128,7 @@ public class KGotchiCommand extends Command {
 						eb.setColor(Color.yellow);
 						break;
 					case SUCCESS:
+						bi = k.getRace().extract(k.getStance(), k.getSkin());
 						String res = "";
 
 						switch (f.getType()) {
@@ -177,6 +178,7 @@ public class KGotchiCommand extends Command {
 					eb.setColor(Color.yellow);
 					break;
 				case SUCCESS:
+					bi = k.getRace().extract(k.getStance(), k.getSkin());
 					g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("moodUp.png"))).getImage(), 0, 0, 64, 64, null);
 
 					eb.setTitle("Sucesso!");
@@ -212,6 +214,7 @@ public class KGotchiCommand extends Command {
 					eb.setColor(Color.yellow);
 					break;
 				case SUCCESS:
+					bi = k.getRace().extract(k.getStance(), k.getSkin());
 					g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("xpUp.png"))).getImage(), 0, 0, 64, 64, null);
 
 					eb.setTitle("Sucesso!");
@@ -297,7 +300,7 @@ public class KGotchiCommand extends Command {
 		int mood = k.getLastMoodRoll();
 		int resource = k.getLastResourceRoll(true);
 
-		eb.addField(k.getTier().toString() + " -> " + k.getTier().next() + ": " + Math.round(k.getXp()) + "/" + k.getTier().next().getRequiredXp() + " xp", "Xp: " + (xp >= 0 ? "+" : "") + xp + " | " + "Humor: " + (mood >= 0 ? "+" : "") + mood + " | " + "Energia/Fome: " + (resource >= 0 ? "+" : "") + resource, true);
+		eb.setFooter(k.getTier().toString() + " -> " + k.getTier().next() + ": " + Math.round(k.getXp()) + "/" + k.getTier().next().getRequiredXp() + " xp");
 		eb.setThumbnail("attachment://img.png");
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			ImageIO.write(bi, "png", baos);
