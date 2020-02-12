@@ -86,6 +86,7 @@ public class Member {
 			level++;
 			Account acc = AccountDAO.getAccount(mid);
 			acc.addCredit(100 + (50 * level));
+			AccountDAO.saveAccount(acc);
 			return true;
 		}
 		return false;
