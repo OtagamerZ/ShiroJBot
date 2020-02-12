@@ -121,7 +121,7 @@ public class KGotchiCommand extends Command {
 
 				BufferedImage bi = k.getRace().extract(k.getStance(), k.getSkin());
 				EmbedBuilder eb = new EmbedBuilder();
-
+				Graphics2D g2d = bi.createGraphics();
 				switch (k.feed(f)) {
 					case FAILED:
 						eb.setTitle("Estoque vazio!");
@@ -152,12 +152,18 @@ public class KGotchiCommand extends Command {
 						eb.setColor(Color.green);
 						break;
 					case UNABLE:
+						if (k.getStance().isResting())
+							g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("sleeping.png"))).getImage(), 0, 0, 128, 128, null);
+						else
+							g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("troubled.png"))).getImage(), 0, 0, 64, 64, null);
+
 						eb.setTitle("Impossibilitado.");
 						eb.setDescription("Não parece que " + k.getName() + " possa comer agora!");
 						eb.setColor(Color.red);
 						break;
 				}
 
+				g2d.dispose();
 				eb.setThumbnail("attachment://img.png");
 				try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 					ImageIO.write(bi, "png", baos);
@@ -196,6 +202,8 @@ public class KGotchiCommand extends Command {
 				case UNABLE:
 					if (k.getStance().isResting())
 						g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("sleeping.png"))).getImage(), 0, 0, 128, 128, null);
+					else
+						g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("troubled.png"))).getImage(), 0, 0, 64, 64, null);
 
 					eb.setTitle("Impossibilitado.");
 					eb.setDescription("Não parece que " + k.getName() + " possa brincar agora!");
@@ -228,6 +236,8 @@ public class KGotchiCommand extends Command {
 				case UNABLE:
 					if (k.getStance().isResting())
 						g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("sleeping.png"))).getImage(), 0, 0, 128, 128, null);
+					else
+						g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("troubled.png"))).getImage(), 0, 0, 64, 64, null);
 
 					eb.setTitle("Impossibilitado.");
 					eb.setDescription("Não parece que " + k.getName() + " possa treinar agora!");
