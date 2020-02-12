@@ -20,7 +20,7 @@ package com.kuuhaku.handlers.games.kawaigotchi.enums;
 public enum Tier {
 	CHILD(1, 0),
 	TEEN(0.5f, 5000),
-	ADULT(0, 10000);
+	ADULT(0, 15000);
 
 	private final float trainability;
 	private final int requiredXp;
@@ -38,24 +38,17 @@ public enum Tier {
 		return requiredXp;
 	}
 
-	public float xpToNext(float xp) {
-		switch (this) {
-			case CHILD:
-				return Tier.TEEN.requiredXp - xp;
-			case TEEN:
-				return Tier.ADULT.requiredXp - xp;
-			default:
-				return 0;
+	public Tier next() {
+		if (this == Tier.CHILD) {
+			return TEEN;
 		}
+		return ADULT;
 	}
 
-	public Tier next() {
-		switch (this) {
-			case CHILD:
-				return Tier.TEEN;
-			default:
-				return Tier.ADULT;
-		}
+	public static Tier tierByXp(float xp) {
+		if (xp >= ADULT.getRequiredXp()) return ADULT;
+		else if (xp >= TEEN.getRequiredXp() && xp < ADULT.getRequiredXp()) return TEEN;
+		else return CHILD;
 	}
 
 	@Override
