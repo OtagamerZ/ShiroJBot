@@ -104,7 +104,7 @@ public class AnimeCommand extends Command {
 					return;
 				}
 
-				String link = Helper.compareWithValues(com.kuuhaku.controller.Anime.getLink(anime.gettRomaji()), 403, 404) ? "Link indisponível" : "https://www.dreamanimes.com.br/anime-info/" + anime.gettRomaji().replace(" ", "-");
+				String link = com.kuuhaku.controller.Anime.getLink("https://www.dreamanimes.com.br/anime-info/" + anime.gettRomaji().replace(" ", "-"));
 
 				eb.setColor(anime.getcColor());
 				eb.setAuthor("Bem, aqui está um novo anime para você assistir!\n");
