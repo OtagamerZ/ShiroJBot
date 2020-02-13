@@ -131,10 +131,8 @@ public class Kawaigotchi {
 
 		int currTime = 0;//OffsetDateTime.now(ZoneId.of("GMT-3")).getHour();
 
-		System.out.println("checking time");
-		if (stance.isResting()) {
-			if (!Time.inRange(Time.NIGHT, currTime) && energy >= 100)
-				stance = Stance.IDLE;
+		if (stance == Stance.SLEEPING) {
+			if (!Time.inRange(Time.NIGHT, currTime) && energy >= 100) stance = Stance.IDLE;
 			energy += rate.ENERGY.fac * 2 * nature.getEnergy();
 			health += rate.HEALTH.fac * (hunger / 50);
 			return;
@@ -143,7 +141,6 @@ public class Kawaigotchi {
 			return;
 		}
 
-		System.out.println("setting state");
 		if (hunger < 50 || health < 50) {
 			stance = Stance.SAD;
 			System.out.println("sad");
@@ -164,23 +161,19 @@ public class Kawaigotchi {
 			}
 		} else if (mood > 75) {
 			stance = Stance.HAPPY;
-			System.out.println("happy");
 			alerted = false;
 			warned = false;
 		} else if (mood < 25) {
 			stance = Stance.ANGRY;
-			System.out.println("angry");
 			alerted = false;
 			warned = false;
 		} else {
 			stance = Stance.IDLE;
-			System.out.println("normal");
 			alerted = false;
 			warned = false;
 		}
 
-		if (hunger > 80 && mood < 80)
-			mood += (rate.MOOD.fac + ((100 - hunger) * 0.01f / 20)) * nature.getKindness();
+		if (hunger > 80 && mood < 80) mood += (rate.MOOD.fac + ((100 - hunger) * 0.01f / 20)) * nature.getKindness();
 		else mood -= rate.MOOD.fac / nature.getKindness();
 
 		hunger -= rate.FOOD.fac;
