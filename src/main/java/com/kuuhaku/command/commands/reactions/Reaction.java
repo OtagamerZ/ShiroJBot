@@ -97,11 +97,11 @@ public abstract class Reaction extends Command {
 			con.setRequestProperty("Accept", "application/json");
 			con.addRequestProperty("Accept-Charset", "UTF-8");
 
-			String resposta = Helper.getResponse(con);
+			JSONObject resposta = Helper.getResponse(con);
 
 			Helper.logger(this.getClass()).debug(resposta);
 
-			String url = new JSONObject(resposta).get("url").toString();
+			String url = resposta.get("url").toString();
 
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setImage(url);

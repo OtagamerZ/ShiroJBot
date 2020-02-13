@@ -58,11 +58,10 @@ public class Youtube {
 		con.addRequestProperty("Accept-Charset", "UTF-8");
 		con.addRequestProperty("User-Agent", "Mozilla/5.0");
 
-		String resposta = Helper.getResponse(con);
+		JSONObject resposta = Helper.getResponse(con);
 
 		Helper.logger(Tradutor.class).debug(resposta);
-		JSONObject json = new JSONObject(resposta);
-		return json.getJSONArray("items");
+		return resposta.getJSONArray("items");
 	}
 
 	public static YoutubeVideo getSingleData(String query) throws IOException {
