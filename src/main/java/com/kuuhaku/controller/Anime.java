@@ -77,10 +77,9 @@ public class Anime {
         con.addRequestProperty("User-Agent", "Mozilla/5.0");
         con.addRequestProperty("Authorization", System.getenv("DA_TOKEN"));
 
-        String redir = Helper.getOr(con.getHeaderField("Location"), con.getHeaderField("location"));
+        con.connect();
 
-        Helper.logger(Anime.class).info(redir);
-        Helper.logger(Anime.class).info(IOUtils.toString(con.getInputStream(), StandardCharsets.UTF_8));
+        String redir = Helper.getOr(con.getHeaderField("Location"), con.getHeaderField("location"));
 
         if (redir != null) {
             return getDAData(redir.replace("/anime-info/", ""));
