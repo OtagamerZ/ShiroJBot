@@ -24,12 +24,14 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
+import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 public abstract class Reaction extends Command {
@@ -97,7 +99,7 @@ public abstract class Reaction extends Command {
 			con.setRequestProperty("Accept", "application/json");
 			con.addRequestProperty("Accept-Charset", "UTF-8");
 
-			JSONObject resposta = Helper.getResponse(con);
+			JSONObject resposta = new JSONObject(IOUtils.toString(con.getInputStream(), StandardCharsets.UTF_8));
 
 			Helper.logger(this.getClass()).debug(resposta);
 
