@@ -56,16 +56,24 @@ public class Anime {
 		return data;
 	}
 
-	public static int getLink(String name) throws IOException {
-		URL url = new URL("https://www.dreamanimes.com.br/anime-info/" + name.replace(" ", "-"));
+	public static String getLink(String name) throws IOException {
+		URL url = new URL("https://www.dreamanimes.com.br/anime-info/" + name);
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setRequestMethod("GET");
 		con.addRequestProperty("User-Agent", "Mozilla/5.0");
 		con.setInstanceFollowRedirects(false);
 
+		String redir = con.getHeaderField("Location");
+
+		if (Helper.compareWithValues(con.getResponseCode(), 403, 404)) {
+			return "Link indisponível";
+		} else if (redir != null) {
+			return getLink(redir.replace("/anime-info/", ""));
+		}
+
 		con.connect();
 
-		return con.getResponseCode();
+		return con.getURL().toString();
 	}
 
 	public static JSONObject getDAData(String name) throws IOException {
@@ -89,5 +97,4 @@ public class Anime {
 		Helper.logger(Anime.class).debug(resposta);
 		return resposta.getJSONObject("anime");
 	}
-
 }
