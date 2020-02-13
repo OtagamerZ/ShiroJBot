@@ -21,6 +21,7 @@ import com.google.api.services.youtube.YouTube;
 import com.kuuhaku.Main;
 import com.kuuhaku.model.common.YoutubeVideo;
 import com.kuuhaku.utils.Helper;
+import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -58,7 +59,7 @@ public class Youtube {
 		con.addRequestProperty("Accept-Charset", "UTF-8");
 		con.addRequestProperty("User-Agent", "Mozilla/5.0");
 
-		JSONObject resposta = Helper.getResponse(con);
+		JSONObject resposta = new JSONObject(IOUtils.toString(con.getInputStream(), StandardCharsets.UTF_8));
 
 		Helper.logger(Tradutor.class).debug(resposta);
 		return resposta.getJSONArray("items");
