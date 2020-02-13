@@ -17,22 +17,26 @@
 
 package com.kuuhaku.command.commands.reactions;
 
-import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
 public class FacedeskReaction extends Reaction {
     public FacedeskReaction() {
-		super("facedesk", new String[]{"mds", "ahnão", "nss"}, "Reage a algo quem não é possível que alguém tenha feito.");
+        super("facedesk", new String[]{"mds", "ahnão", "nss"}, "Reage a algo quem não é possível que alguém tenha feito.", false, "facedesk");
     }
 
     @Override
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-            this.setReaction(new String[]{
-                    "Nuss.",
-                    "Bah.",
-                    "Meeeeee."
-            });
+        this.setReaction(new String[]{
+                "Nuss.",
+                "Bah.",
+                "Meeeeee."
+        });
 
-            Helper.sendReaction(getUrl("facedesk", (TextChannel) channel), channel, author.getAsMention() + " não ta acreditando nisso! - " + this.getReaction()[this.getReactionLength()], false);
+        sendReaction(getType(), (TextChannel) channel, author.getAsMention() + " não ta acreditando nisso! - " + this.getReaction(), false);
+    }
+
+    @Override
+    public void answer(TextChannel chn) {
+
     }
 }

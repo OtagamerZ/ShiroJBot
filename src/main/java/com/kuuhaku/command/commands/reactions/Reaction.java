@@ -20,6 +20,7 @@ package com.kuuhaku.command.commands.reactions;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -30,68 +31,87 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
 
-abstract class Reaction extends Command {
-    private User user;
-    private String[] reaction;
-    private String[] selfTarget;
+public abstract class Reaction extends Command {
+	private User user;
+	private String[] reaction;
+	private String[] selfTarget;
+	private final boolean answerable;
+	private final String type;
+	private User[] interaction;
 
-	Reaction(String name, String[] aliases, String description) {
+	public Reaction(String name, String[] aliases, String description, boolean answerable, String type) {
 		super(name, aliases, description, Category.FUN);
-    }
+		this.answerable = answerable;
+		this.type = type;
+	}
 
-    public User getUser() {
-        return user;
-    }
+	public User getUser() {
+		return user;
+	}
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+	public void setUser(User user) {
+		this.user = user;
+	}
 
-    String[] getReaction() {
-        return reaction;
-    }
+	public String getReaction() {
+		return reaction.length == 0 ? "SEM RESPOSTA SETADA" : reaction[Helper.rng(reaction.length)];
+	}
 
-    int getReactionLength() {
-        return Helper.rng(reaction.length);
-    }
+	public boolean isAnswerable() {
+		return answerable;
+	}
 
-    void setReaction(String[] reaction) {
-        this.reaction = reaction;
-    }
+	public String getType() {
+		return type;
+	}
 
-	String[] getSelfTarget() {
-        return selfTarget;
-    }
+	public void setReaction(String[] reaction) {
+		this.reaction = reaction;
+	}
 
-	int getSelfTargetLength() {
-        return Helper.rng(selfTarget.length);
-    }
+	public String getSelfTarget() {
+		return selfTarget.length == 0 ? "SEM RESPOSTA SETADA" : selfTarget[Helper.rng(selfTarget.length)];
+	}
 
-    void setSelfTarget(String[] selfTarget) {
-        this.selfTarget = selfTarget;
-    }
+	public void setSelfTarget(String[] selfTarget) {
+		this.selfTarget = selfTarget;
+	}
 
-    String getUrl(String type, TextChannel chn) {
-        AtomicReference<Message> msg = new AtomicReference<>();
-        chn.sendMessage("Conectando à API...").addFile(new File(Objects.requireNonNull(this.getClass().getClassLoader().getResource("loading.gif")).getPath())).queue(msg::set);
-        try {
-            HttpURLConnection con = (HttpURLConnection) new URL("https://shiro-api.herokuapp.com/reaction?type=" + type).openConnection();
-            con.setRequestProperty("User-Agent", "Mozilla/5.0");
-            con.setRequestMethod("GET");
-            con.setRequestProperty("Accept", "application/json");
-            con.addRequestProperty("Accept-Charset", "UTF-8");
+	public User[] getInteraction() {
+		return interaction;
+	}
 
-            String resposta = Helper.getResponse(con);
+	public void setInteraction(User[] interaction) {
+		this.interaction = interaction;
+	}
 
-            Helper.logger(this.getClass()).info(resposta);
-            return new JSONObject(resposta).get("url").toString();
-        } catch (IOException e) {
-	        Helper.logger(this.getClass()).error("Erro ao recuperar API: " + e.getStackTrace()[0]);
-	        return null;
-        } finally {
-            msg.get().delete().queue();
-        }
-    }
+	public abstract void answer(TextChannel chn);
+
+	public void sendReaction(String type, TextChannel chn, String message, boolean allowReact) {
+		Message msg = chn.sendMessage("Conectando à API...").addFile(new File(Objects.requireNonNull(this.getClass().getClassLoader().getResource("loading.gif")).getPath())).complete();
+		try {
+			HttpURLConnection con = (HttpURLConnection) new URL("https://shiro-api.herokuapp.com/reaction?type=" + type).openConnection();
+			con.setRequestProperty("User-Agent", "Mozilla/5.0");
+			con.setRequestMethod("GET");
+			con.setRequestProperty("Accept", "application/json");
+			con.addRequestProperty("Accept-Charset", "UTF-8");
+
+			String resposta = Helper.getResponse(con);
+
+			Helper.logger(this.getClass()).info(resposta);
+
+			String url = new JSONObject(resposta).get("url").toString();
+
+			EmbedBuilder eb = new EmbedBuilder();
+			eb.setImage(url);
+
+			Helper.sendReaction(this, url, chn, allowReact).accept(chn.sendMessage(message).embed(eb.build()));
+		} catch (IOException e) {
+			Helper.logger(this.getClass()).error("Erro ao recuperar API: " + e.getStackTrace()[0]);
+		} catch (IllegalAccessException ignore) {
+		} finally {
+			msg.delete().queue();
+		}
+	}
 }

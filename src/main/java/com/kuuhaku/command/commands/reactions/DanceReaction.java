@@ -17,12 +17,11 @@
 
 package com.kuuhaku.command.commands.reactions;
 
-import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
 public class DanceReaction extends Reaction {
 	public DanceReaction() {
-		super("dançar", new String[]{"dancar", "dance", "tuts"}, "Dança.");
+		super("dançar", new String[]{"dancar", "dance", "tuts"}, "Dança.", false, "dance");
 	}
 
 	@Override
@@ -33,6 +32,11 @@ public class DanceReaction extends Reaction {
 				"Duas palavras: DANCE BABY!"
 		});
 
-		Helper.sendReaction(getUrl("dance", (TextChannel) channel), channel, author.getAsMention() + " está dançando! - " + this.getReaction()[this.getReactionLength()], false);
+		sendReaction(getType(), (TextChannel) channel, author.getAsMention() + " está dançando! - " + this.getReaction(), false);
+	}
+
+	@Override
+	public void answer(TextChannel chn) {
+
 	}
 }

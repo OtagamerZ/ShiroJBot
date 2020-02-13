@@ -24,7 +24,7 @@ import com.github.ygimenez.type.PageType;
 import com.google.common.collect.Lists;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.command.commands.reactions.*;
+import com.kuuhaku.command.commands.reactions.Reaction;
 import com.kuuhaku.controller.mysql.TagDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.Extensions;
@@ -38,7 +38,9 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
+import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.InviteAction;
+import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -65,6 +67,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -149,62 +152,27 @@ public class Helper {
 		channel.sendTyping().queue(tm -> channel.sendMessage(Helper.makeEmoteFromMention(message.split(" "))).queueAfter(message.length() * 25 > 10000 ? 10000 : message.length() + 500, TimeUnit.MILLISECONDS));
 	}
 
-	public static void sendReaction(String imageURL, MessageChannel channel, String message, boolean reacted) {
+	public static Consumer<MessageAction> sendReaction(Reaction r, String imageURL, MessageChannel channel, boolean allowReact) throws IllegalAccessException {
 		try {
 			if (ImageIO.read(getImage(imageURL)).getWidth() >= 400) {
-				EmbedBuilder eb = new EmbedBuilder();
-				eb.setImage(imageURL);
-				if (reacted)
-					channel.sendMessage(message).embed(eb.build()).queue(m -> {
-						Pages.buttonize(Main.getInfo().getAPI(), m, Collections.singletonMap("\u21aa", (mb, ms) -> {
-							if (ms.getMentionedMembers().size() > 1 && mb == ms.getMentionedMembers().get(1)) {
-								ms.clearReactions().queue();
-								if (ms.getContentRaw().contains("abraçou")) {
-									User author = ms.getMentionedUsers().get(0);
-
-									new HugReaction(true).execute(author, null, null, null, ms, channel, null, null);
-								} else if (ms.getContentRaw().contains("beijou")) {
-									User author = ms.getMentionedUsers().get(0);
-
-									new KissReaction(true).execute(author, null, null, null, ms, channel, null, null);
-								} else if (ms.getContentRaw().contains("fez cafuné em")) {
-									User author = ms.getMentionedUsers().get(0);
-
-									new PatReaction(true).execute(author, null, null, null, ms, channel, null, null);
-								} else if (ms.getContentRaw().contains("encarou")) {
-									User author = ms.getMentionedUsers().get(0);
-
-									new StareReaction(true).execute(author, null, null, null, ms, channel, null, null);
-								} else if (ms.getContentRaw().contains("deu um tapa em")) {
-									User author = ms.getMentionedUsers().get(0);
-
-									new SlapReaction(true).execute(author, null, null, null, ms, channel, null, null);
-								} else if (ms.getContentRaw().contains("socou")) {
-									User author = ms.getMentionedUsers().get(0);
-
-									new PunchReaction(true).execute(author, null, null, null, ms, channel, null, null);
-								} else if (ms.getContentRaw().contains("mordeu")) {
-									User author = ms.getMentionedUsers().get(0);
-
-									new BiteReaction(true).execute(author, null, null, null, ms, channel, null, null);
-								}
-							}
-						}), false);
-					});
-				else channel.sendMessage(message).embed(eb.build()).queue();
+				if (r.isAnswerable() && allowReact) {
+					return act -> act.queue(m -> Pages.buttonize(Main.getInfo().getAPI(), m, Collections.singletonMap("\u21AA", (mb, msg) -> r.answer((TextChannel) channel)), false, 60, TimeUnit.SECONDS));
+				} else
+					return RestAction::queue;
 			} else {
-				EmbedBuilder eb = new EmbedBuilder();
-				eb.setImage(imageURL);
-				if (reacted)
-					channel.sendMessage(message + "\n:warning: | GIF com proporções irregulares, os desenvolvedores já foram informados.").embed(eb.build()).queue(m -> m.addReaction("\u21aa").queue());
-				else
-					channel.sendMessage(message + "\n:warning: | GIF com proporções irregulares, os desenvolvedores já foram informados.").embed(eb.build()).queue();
 				logger(Helper.class).warn("GIF irregular: " + imageURL);
 				Main.getInfo().getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> c.sendMessage("GIF irregular: " + imageURL).queue()));
+
+				channel.sendMessage(":warning: | GIF com proporções irregulares, meus desenvolvedores já foram informados.").queue();
+				if (r.isAnswerable() && allowReact) {
+					return act -> act.queue(m -> Pages.buttonize(Main.getInfo().getAPI(), m, Collections.singletonMap("\u21AA", (mb, msg) -> r.answer((TextChannel) channel)), false, 60, TimeUnit.SECONDS));
+				} else
+					return RestAction::queue;
 			}
 		} catch (Exception e) {
 			logger(Helper.class).error("Erro ao carregar a imagem: " + imageURL + " -> " + e + " | " + e.getStackTrace()[0]);
-			sendReaction(imageURL, channel, message, reacted);
+			sendReaction(r, imageURL, channel, allowReact);
+			throw new IllegalAccessException();
 		}
 	}
 
