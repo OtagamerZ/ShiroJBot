@@ -15,30 +15,27 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.reactions;
+package com.kuuhaku.command.commands.reactions.answerable;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.command.commands.reactions.Reaction;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
 public class PatReaction extends Reaction {
-	private static boolean answer = false;
 
-	public PatReaction(boolean isAnswer) {
-		super("cafuné", new String[]{"cafunhé", "pat", "cafu"}, "Faz cafuné em alguém.");
-		answer = isAnswer;
-	}
-
-	private static boolean isAnswer() {
-		return answer;
+	public PatReaction() {
+		super("cafuné", new String[]{"cafunhé", "pat", "cafu"}, "Faz cafuné em alguém.", true, "pat");
 	}
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		setInteraction(new User[]{author, message.getMentionedUsers().get(0)});
+
 		if (message.getMentionedUsers().size() > 0) {
 			this.setReaction(new String[]{
 					"Fuu~~",
-					"Parece até um gato!",
+					"Purr purr~~",
 					"Quem não gosta de um cafuné?"
 			});
 
@@ -49,16 +46,18 @@ public class PatReaction extends Reaction {
 			});
 
 			if (message.getMentionedUsers().get(0) == Main.getInfo().getAPI().getSelfUser()) {
-				Helper.sendReaction(getUrl("pat", (TextChannel) channel), channel, author.getAsMention() + " tentou fazer cafuné na " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget()[this.getSelfTargetLength()], false);
+				sendReaction(getType(), (TextChannel) channel, getInteraction()[0].getAsMention() + " tentou acariciar a " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget(), false);
 				return;
 			}
 
-			if (!isAnswer())
-				Helper.sendReaction(getUrl("pat", (TextChannel) channel), channel, author.getAsMention() + " fez cafuné em " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], true);
-			else
-				Helper.sendReaction(getUrl("pat", (TextChannel) channel), channel, message.getMentionedUsers().get(1).getAsMention() + " fez outro cafuné em " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], false);
+			sendReaction(getType(), (TextChannel) channel, getInteraction()[0].getAsMention() + " acariciou " + getInteraction()[1].getAsMention() + " - " + this.getReaction(), true);
 		} else {
 			Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para fazer cafuné!");
 		}
+	}
+
+	@Override
+	public void answer(TextChannel chn) {
+		sendReaction(getType(), chn, getInteraction()[1].getAsMention() + " devolveu o cafuné de " + getInteraction()[0].getAsMention() + " - " + this.getReaction(), false);
 	}
 }

@@ -15,26 +15,23 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.reactions;
+package com.kuuhaku.command.commands.reactions.answerable;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.command.commands.reactions.Reaction;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
 public class StareReaction extends Reaction {
-	private static boolean answer = false;
 
-	public StareReaction(boolean isAnswer) {
-		super("encarar", new String[]{"shiii", "stare", "..."}, "Encara alguém.");
-		answer = isAnswer;
-	}
-
-	private static boolean isAnswer() {
-		return answer;
+	public StareReaction() {
+		super("encarar", new String[]{"shiii", "stare", "..."}, "Encara alguém.", true, "stare");
 	}
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		setInteraction(new User[]{author, message.getMentionedUsers().get(0)});
+
 		if (message.getMentionedUsers().size() > 0) {
 			this.setReaction(new String[]{
 					"Shiii~~",
@@ -49,16 +46,18 @@ public class StareReaction extends Reaction {
 			});
 
 			if (message.getMentionedUsers().get(0) == Main.getInfo().getAPI().getSelfUser()) {
-				Helper.sendReaction(getUrl("stare", (TextChannel) channel), channel, author.getAsMention() + " está encarando a " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget()[this.getSelfTargetLength()], false);
+				sendReaction(getType(), (TextChannel) channel, getInteraction()[0].getAsMention() + " encarou a " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget(), false);
 				return;
 			}
 
-			if (!isAnswer())
-				Helper.sendReaction(getUrl("stare", (TextChannel) channel), channel, author.getAsMention() + " encarou " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], true);
-			else
-				Helper.sendReaction(getUrl("stare", (TextChannel) channel), channel, message.getMentionedUsers().get(1).getAsMention() + " também está encarando " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], false);
+			sendReaction(getType(), (TextChannel) channel, getInteraction()[0].getAsMention() + " encarou " + getInteraction()[1].getAsMention() + " - " + this.getReaction(), true);
 		} else {
 			Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para encarar!");
 		}
+	}
+
+	@Override
+	public void answer(TextChannel chn) {
+		sendReaction(getType(), chn, getInteraction()[1].getAsMention() + " também encarou " + getInteraction()[0].getAsMention() + " - " + this.getReaction(), false);
 	}
 }

@@ -15,26 +15,23 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.reactions;
+package com.kuuhaku.command.commands.reactions.answerable;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.command.commands.reactions.Reaction;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
 public class PunchReaction extends Reaction {
-	private static boolean answer = false;
 
-	public PunchReaction(boolean isAnswer) {
-		super("socar", new String[]{"chega", "tomaessa", "punch"}, "Soca alguém.");
-		answer = isAnswer;
-	}
-
-	private static boolean isAnswer() {
-		return answer;
+	public PunchReaction() {
+		super("socar", new String[]{"chega", "tomaessa", "punch"}, "Soca alguém.", true, "smash");
 	}
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		setInteraction(new User[]{author, message.getMentionedUsers().get(0)});
+
 		if (message.getMentionedUsers().size() > 0) {
 			this.setReaction(new String[]{
 					"Conheça a dor!",
@@ -49,16 +46,18 @@ public class PunchReaction extends Reaction {
 			});
 
 			if (message.getMentionedUsers().get(0) == Main.getInfo().getAPI().getSelfUser()) {
-				Helper.sendReaction(getUrl("smash", (TextChannel) channel), channel, author.getAsMention() + " tentou socar a " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget()[this.getSelfTargetLength()], false);
+				sendReaction(getType(), (TextChannel) channel, getInteraction()[0].getAsMention() + " tentou socar a " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget(), false);
 				return;
 			}
 
-			if (!isAnswer())
-				Helper.sendReaction(getUrl("smash", (TextChannel) channel), channel, author.getAsMention() + " socou " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], true);
-			else
-				Helper.sendReaction(getUrl("smash", (TextChannel) channel), channel, message.getMentionedUsers().get(1).getAsMention() + " devolveu o soco de " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], false);
+			sendReaction(getType(), (TextChannel) channel, getInteraction()[0].getAsMention() + " socou " + getInteraction()[1].getAsMention() + " - " + this.getReaction(), true);
 		} else {
 			Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para socar!");
 		}
+	}
+
+	@Override
+	public void answer(TextChannel chn) {
+		sendReaction(getType(), chn, getInteraction()[1].getAsMention() + " devolveu o soco de " + getInteraction()[0].getAsMention() + " - " + this.getReaction(), false);
 	}
 }
