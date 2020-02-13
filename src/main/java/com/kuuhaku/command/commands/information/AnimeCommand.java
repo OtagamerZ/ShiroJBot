@@ -105,8 +105,6 @@ public class AnimeCommand extends Command {
 				}
 
 				JSONObject jo = com.kuuhaku.controller.Anime.getDAData(anime.gettRomaji().replace(" ", "-"));
-				Helper.logger(com.kuuhaku.controller.Anime.class).info(jo.toString());
-				Helper.logger(com.kuuhaku.controller.Anime.class).info(jo.getString("url"));
 
 				String link = jo.has("url") ? jo.getString("url") : "Link indisponível";
 
@@ -127,8 +125,8 @@ public class AnimeCommand extends Command {
 				eb.addField("Assista em:", link, true);
 
 				if (!link.equalsIgnoreCase("Link indisponível")) {
-					eb.setDescription(jo.getString("Sinopse"));
-					eb.addField("Gêneros:", jo.getJSONArray("tags").toString().replace("[", "`").replace("]", "`").replace(",", "` `").replace("\"", ""), false);
+					eb.setDescription(jo.getJSONObject("anime").getString("Sinopse"));
+					eb.addField("Gêneros:", jo.getJSONObject("anime").getJSONArray("tags").toString().replace("[", "`").replace("]", "`").replace(",", "` `").replace("\"", ""), false);
 				} else {
 					eb.setDescription(Tradutor.translate("en", "pt", anime.getDescription()));
 					eb.addField("Gêneros:", anime.getGenres(), false);
