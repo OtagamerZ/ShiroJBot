@@ -28,7 +28,7 @@ import java.util.Objects;
 import java.util.Random;
 
 @Entity
-public abstract class Kawaigotchi {
+public class Kawaigotchi {
 	//FOOD | ENERGY | MOOD
 	private enum rate {
 		FOOD(0.015f),
@@ -539,5 +539,6 @@ public abstract class Kawaigotchi {
 		}
 	}
 
-	public abstract void doNothing();
+	public void doNothing() {
+	}
 }
