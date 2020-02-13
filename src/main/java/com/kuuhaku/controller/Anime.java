@@ -57,7 +57,7 @@ public class Anime {
     }
 
     public static int getLink(String name) throws IOException {
-        URL url = new URL("https://www.dreamanimes.com.br/anime-info/" + name.replace(" ", "-"));
+        URL url = new URL(Helper.getFinalURL("https://www.dreamanimes.com.br/anime-info/" + name.replace(" ", "-")));
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
         con.addRequestProperty("User-Agent", "Mozilla/5.0");
@@ -69,16 +69,15 @@ public class Anime {
     }
 
     public static JSONObject getDAData(String name) throws IOException {
-        URL url = new URL("https://www.dreamanimes.com.br/api/anime-info/" + name);
+        URL url = new URL(Helper.getFinalURL("https://www.dreamanimes.com.br/api/anime-info/" + name));
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
         con.setRequestProperty("Accept", "application/json");
         con.addRequestProperty("Accept-Charset", "UTF-8");
         con.addRequestProperty("User-Agent", "Mozilla/5.0");
         con.addRequestProperty("Authorization", System.getenv("DA_TOKEN"));
-        con.setInstanceFollowRedirects(true);
 
-        JSONObject resposta = Helper.getResponse(con);
+        JSONObject resposta = new JSONObject(IOUtils.toString(con.getInputStream(), StandardCharsets.UTF_8));
 
         Helper.logger(Anime.class).debug(resposta);
         return resposta.getJSONObject("anime");

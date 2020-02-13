@@ -353,18 +353,17 @@ public class Helper {
 		return chunks;
 	}
 
-	public static JSONObject getResponse(HttpURLConnection con) throws IOException {
-		Scanner sc = new Scanner(con.getInputStream());
+	public static String getFinalURL(String url) throws IOException {
+		HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
+		con.setInstanceFollowRedirects(false);
+		con.connect();
+		con.getInputStream();
 
-		StringBuilder sb = new StringBuilder();
-		while (sc.hasNextLine()) {
-			sb.append(sc.nextLine());
+		if (con.getResponseCode() == HttpURLConnection.HTTP_MOVED_PERM || con.getResponseCode() == HttpURLConnection.HTTP_MOVED_TEMP) {
+			String redirectUrl = con.getHeaderField("Location");
+			return getFinalURL(redirectUrl);
 		}
-
-		sc.close();
-		con.disconnect();
-
-		return new JSONObject(sb.toString());
+		return url;
 	}
 
 	public static void nonPartnerAlert(User author, Member member, MessageChannel channel, String s, String link) {

@@ -19,6 +19,7 @@ package com.kuuhaku.controller;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.utils.Helper;
+import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -38,7 +39,7 @@ public class Tradutor {
         con.setRequestProperty("Accept", "application/json");
         con.addRequestProperty("Accept-Charset", "UTF-8");
 
-        JSONObject resposta = Helper.getResponse(con);
+        JSONObject resposta = new JSONObject(IOUtils.toString(con.getInputStream(), StandardCharsets.UTF_8));
 
         Helper.logger(Tradutor.class).debug(resposta);
         return resposta.get("text").toString().replace("[", "").replace("]", "").replace("<br>", "\n").replace("\\n", "").replace("\"", "");
