@@ -6,7 +6,6 @@ import com.kuuhaku.handlers.games.kawaigotchi.enums.*;
 import com.kuuhaku.handlers.games.kawaigotchi.exceptions.EmptyStockException;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -122,17 +121,13 @@ public class Kawaigotchi {
 
 		if (health <= 0) {
 			alive = false;
-			System.out.println("no hp");
 			return;
 		} else if (hunger <= 0) {
 			health -= rate.HEALTH.fac;
-			System.out.println("no hunger");
 			return;
 		}
 
 		tier = Tier.tierByXp(xp);
-
-		System.out.println(ShiroInfo.getJSONFactory().create().toJson(this));
 
 		int currTime = 0;//OffsetDateTime.now(ZoneId.of("GMT-3")).getHour();
 
@@ -149,6 +144,7 @@ public class Kawaigotchi {
 
 		if (hunger < 50 || health < 50) {
 			stance = Stance.SAD;
+			System.out.println("low hunger/hp");
 			if (!alerted) {
 				try {
 					m.getUser().openPrivateChannel().complete().sendMessage("Seu Kawaigotchi " + name + " está triste, vá ver o porquê!").queue();
