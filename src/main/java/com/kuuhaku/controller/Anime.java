@@ -57,7 +57,7 @@ public class Anime {
     }
 
     public static int getLink(String name) throws IOException {
-        URL url = new URL("https://www.dreamanimes.com.br/anime-info/" + name.replace(" ", "-"));
+        URL url = new URL("https://www.dreamanimes.com.br/api/anime-info/" + name.replace(" ", "-"));
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
         con.addRequestProperty("User-Agent", "Mozilla/5.0");
@@ -79,7 +79,7 @@ public class Anime {
 
         Helper.logger(Anime.class).info(name);
         Helper.logger(Anime.class).info(IOUtils.toString(con.getInputStream(), StandardCharsets.UTF_8));
-        
+
         JSONObject resposta = new JSONObject(IOUtils.toString(con.getInputStream(), StandardCharsets.UTF_8));
 
         Helper.logger(Anime.class).debug(resposta);
