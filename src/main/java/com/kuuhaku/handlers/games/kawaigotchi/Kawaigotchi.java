@@ -113,7 +113,6 @@ public class Kawaigotchi {
 
 	public void update(Member m) {
 		if (m.getOnlineStatus() == OnlineStatus.OFFLINE || m.getOnlineStatus() == OnlineStatus.UNKNOWN) return;
-		System.out.println(ShiroInfo.getJSONFactory().create().toJson(this));
 
 		//CLAMPS
 		health = Helper.clamp(health, 0, 100);
@@ -123,13 +122,17 @@ public class Kawaigotchi {
 
 		if (health <= 0) {
 			alive = false;
+			System.out.println("no hp");
 			return;
 		} else if (hunger <= 0) {
 			health -= rate.HEALTH.fac;
+			System.out.println("no hunger");
 			return;
 		}
 
 		tier = Tier.tierByXp(xp);
+
+		System.out.println(ShiroInfo.getJSONFactory().create().toJson(this));
 
 		int currTime = 0;//OffsetDateTime.now(ZoneId.of("GMT-3")).getHour();
 
