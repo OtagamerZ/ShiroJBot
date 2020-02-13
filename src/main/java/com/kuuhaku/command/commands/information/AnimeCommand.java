@@ -104,7 +104,9 @@ public class AnimeCommand extends Command {
 					return;
 				}
 
-				String link = com.kuuhaku.controller.Anime.getLink("https://www.dreamanimes.com.br/anime-info/" + anime.gettRomaji().replace(" ", "-"));
+				JSONObject jo = com.kuuhaku.controller.Anime.getDAData(anime.gettRomaji().replace(" ", "-"));
+
+				String link = jo.has("url") ? jo.getString("url") : "Link indisponível";
 
 				eb.setColor(anime.getcColor());
 				eb.setAuthor("Bem, aqui está um novo anime para você assistir!\n");
@@ -123,7 +125,6 @@ public class AnimeCommand extends Command {
 				eb.addField("Assista em:", link, true);
 
 				if (!link.equalsIgnoreCase("Link indisponível")) {
-					JSONObject jo = com.kuuhaku.controller.Anime.getDAData(anime.gettRomaji().replace(" ", "-"));
 					eb.setDescription(jo.getString("Sinopse"));
 					eb.addField("Gêneros:", jo.getJSONArray("tags").toString().replace("[", "`").replace("]", "`").replace(",", "` `").replace("\"", ""), false);
 				} else {
