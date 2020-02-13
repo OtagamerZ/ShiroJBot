@@ -28,68 +28,66 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 public class Anime {
-    public static String getData(String query) throws IOException {
-        String json = "{\"query\":\"query" + query + "\"}";
-        URL url = new URL("https://graphql.anilist.co");
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setConnectTimeout(5000);
-        con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-        con.addRequestProperty("Accept", "application/json");
-        con.addRequestProperty("User-Agent", "Mozilla/5.0");
-        con.setDoOutput(true);
-        con.setDoInput(true);
-        con.setRequestMethod("POST");
+	public static String getData(String query) throws IOException {
+		String json = "{\"query\":\"query" + query + "\"}";
+		URL url = new URL("https://graphql.anilist.co");
+		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+		con.setConnectTimeout(5000);
+		con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+		con.addRequestProperty("Accept", "application/json");
+		con.addRequestProperty("User-Agent", "Mozilla/5.0");
+		con.setDoOutput(true);
+		con.setDoInput(true);
+		con.setRequestMethod("POST");
 
-        OutputStream oStream = con.getOutputStream();
-        oStream.write(json.getBytes(StandardCharsets.UTF_8));
-        oStream.close();
+		OutputStream oStream = con.getOutputStream();
+		oStream.write(json.getBytes(StandardCharsets.UTF_8));
+		oStream.close();
 
-        OutputStreamWriter osw = new OutputStreamWriter(con.getOutputStream());
-        osw.write(Main.getInfo().getAnilistToken());
-        osw.flush();
+		OutputStreamWriter osw = new OutputStreamWriter(con.getOutputStream());
+		osw.write(Main.getInfo().getAnilistToken());
+		osw.flush();
 
-        InputStream iStream = new BufferedInputStream(con.getInputStream());
-        String data = IOUtils.toString(iStream, StandardCharsets.UTF_8);
-        iStream.close();
+		InputStream iStream = new BufferedInputStream(con.getInputStream());
+		String data = IOUtils.toString(iStream, StandardCharsets.UTF_8);
+		iStream.close();
 
-        con.disconnect();
-        return data;
-    }
+		con.disconnect();
+		return data;
+	}
 
-    public static int getLink(String name) throws IOException {
-        URL url = new URL("https://www.dreamanimes.com.br/anime-info/" + name.replace(" ", "-"));
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
-        con.addRequestProperty("User-Agent", "Mozilla/5.0");
-        con.setInstanceFollowRedirects(true);
+	public static int getLink(String name) throws IOException {
+		URL url = new URL("https://www.dreamanimes.com.br/anime-info/" + name.replace(" ", "-"));
+		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+		con.setRequestMethod("GET");
+		con.addRequestProperty("User-Agent", "Mozilla/5.0");
+		con.setInstanceFollowRedirects(false);
 
-        con.connect();
+		con.connect();
 
-        return con.getResponseCode();
-    }
+		return con.getResponseCode();
+	}
 
-    public static JSONObject getDAData(String name) throws IOException {
-        URL url = new URL("https://www.dreamanimes.com.br/api/anime-info/" + name);
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
-        con.setRequestProperty("Accept", "application/json");
-        con.addRequestProperty("Accept-Charset", "UTF-8");
-        con.addRequestProperty("User-Agent", "Mozilla/5.0");
-        con.addRequestProperty("Authorization", System.getenv("DA_TOKEN"));
-        con.setInstanceFollowRedirects(false);
+	public static JSONObject getDAData(String name) throws IOException {
+		URL url = new URL("https://www.dreamanimes.com.br/api/anime-info/" + name);
+		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+		con.setRequestMethod("GET");
+		con.setRequestProperty("Accept", "application/json");
+		con.addRequestProperty("Accept-Charset", "UTF-8");
+		con.addRequestProperty("User-Agent", "Mozilla/5.0");
+		con.addRequestProperty("Authorization", System.getenv("DA_TOKEN"));
+		con.setInstanceFollowRedirects(false);
 
-        System.out.println(con.getURL());
+		String redir = con.getHeaderField("Location");
 
-        String redir = con.getHeaderField("Location");
+		if (redir != null) {
+			return getDAData(redir.replace("/anime-info/", ""));
+		}
 
-        if (redir != null) {
-            return getDAData(redir.replace("/anime-info/", ""));
-        }
+		JSONObject resposta = new JSONObject(IOUtils.toString(con.getInputStream(), StandardCharsets.UTF_8));
 
-        JSONObject resposta = new JSONObject(IOUtils.toString(con.getInputStream(), StandardCharsets.UTF_8));
-
-        Helper.logger(Anime.class).debug(resposta);
-        return resposta.getJSONObject("anime");
-    }
+		Helper.logger(Anime.class).debug(resposta);
+		return resposta.getJSONObject("anime");
+	}
 
 }
