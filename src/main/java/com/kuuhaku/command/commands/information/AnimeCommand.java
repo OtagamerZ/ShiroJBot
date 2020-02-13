@@ -105,6 +105,8 @@ public class AnimeCommand extends Command {
 				}
 
 				JSONObject jo = com.kuuhaku.controller.Anime.getDAData(anime.gettRomaji().replace(" ", "-"));
+				Helper.logger(com.kuuhaku.controller.Anime.class).info(jo.toString());
+				Helper.logger(com.kuuhaku.controller.Anime.class).info(jo.getString("url"));
 
 				String link = jo.has("url") ? jo.getString("url") : "Link indisponível";
 
