@@ -142,8 +142,10 @@ public class Kawaigotchi {
 			return;
 		}
 
+		System.out.println("setting state");
 		if (hunger < 50 || health < 50) {
 			stance = Stance.SAD;
+			System.out.println("sad");
 			if (!alerted) {
 				try {
 					m.getUser().openPrivateChannel().complete().sendMessage("Seu Kawaigotchi " + name + " está triste, vá ver o porquê!").queue();
@@ -161,10 +163,12 @@ public class Kawaigotchi {
 			}
 		} else if (mood > 75) {
 			stance = Stance.HAPPY;
+			System.out.println("happy");
 			alerted = false;
 			warned = false;
 		} else if (mood < 25) {
 			stance = Stance.ANGRY;
+			System.out.println("angry");
 			alerted = false;
 			warned = false;
 		} else {
