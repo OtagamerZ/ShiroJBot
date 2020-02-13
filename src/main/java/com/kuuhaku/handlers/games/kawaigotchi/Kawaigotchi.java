@@ -131,6 +131,7 @@ public class Kawaigotchi {
 
 		int currTime = 0;//OffsetDateTime.now(ZoneId.of("GMT-3")).getHour();
 
+		System.out.println("checking time");
 		if (stance.isResting()) {
 			if (!Time.inRange(Time.NIGHT, currTime) && energy >= 100)
 				stance = Stance.IDLE;
