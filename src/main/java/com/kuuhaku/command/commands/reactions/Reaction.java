@@ -99,7 +99,7 @@ public abstract class Reaction extends Command {
 
 			String resposta = Helper.getResponse(con);
 
-			Helper.logger(this.getClass()).info(resposta);
+			Helper.logger(this.getClass()).debug(resposta);
 
 			String url = new JSONObject(resposta).get("url").toString();
 
