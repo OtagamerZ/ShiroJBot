@@ -56,29 +56,6 @@ public class Anime {
 		return data;
 	}
 
-	public static String getLink(String name) throws IOException {
-		URL url = new URL("https://www.dreamanimes.com.br/api/anime-info/" + name);
-		HttpURLConnection con = (HttpURLConnection) url.openConnection();
-		con.setRequestMethod("GET");
-		con.setRequestProperty("Accept", "application/json");
-		con.addRequestProperty("Accept-Charset", "UTF-8");
-		con.addRequestProperty("User-Agent", "Mozilla/5.0");
-		con.addRequestProperty("Authorization", System.getenv("DA_TOKEN"));
-		con.setInstanceFollowRedirects(false);
-
-		String redir = con.getHeaderField("Location");
-
-		if (Helper.compareWithValues(con.getResponseCode(), 403, 404)) {
-			return "Link indisponível";
-		} else if (redir != null) {
-			return getLink(redir.replace("/anime-info/", ""));
-		}
-
-		con.connect();
-
-		return con.getURL().toString();
-	}
-
 	public static JSONObject getDAData(String name) throws IOException {
 		URL url = new URL("https://www.dreamanimes.com.br/api/anime-info/" + name);
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -96,6 +73,7 @@ public class Anime {
 		}
 
 		JSONObject resposta = new JSONObject(IOUtils.toString(con.getInputStream(), StandardCharsets.UTF_8));
+		if (Helper.compareWithValues(con.getResponseCode(), 403, 404)) resposta.put("url", con.getURL().toString());
 
 		Helper.logger(Anime.class).debug(resposta);
 		return resposta.getJSONObject("anime");
