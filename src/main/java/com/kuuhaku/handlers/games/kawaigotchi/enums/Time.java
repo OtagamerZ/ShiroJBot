@@ -70,7 +70,7 @@ public enum Time {
 		} else throw new RuntimeException();
 	}
 
-	private static boolean inRange(Time time, int value) {
+	public static boolean inRange(Time time, int value) {
 		int x = (value >= 0 && value < 5 ? value + 24 : value);
 		return x >= time.start && x < time.end;
 	}
