@@ -128,7 +128,8 @@ public class Kawaigotchi {
 		int currTime = OffsetDateTime.now(ZoneId.of("GMT-3")).getHour();
 
 		if (stance.isResting()) {
-			if (energy == 100) stance = Stance.IDLE;
+			if (energy == 100 && currTime < Time.NIGHT.getStart() && currTime > Time.NIGHT.getEnd() - 24)
+				stance = Stance.IDLE;
 			energy += rate.ENERGY.fac * 2 * nature.getEnergy();
 			health += rate.HEALTH.fac * (hunger / 50);
 		} else if (currTime < Time.NIGHT.getStart() && currTime > Time.NIGHT.getEnd() - 24 && energy > 5) {
