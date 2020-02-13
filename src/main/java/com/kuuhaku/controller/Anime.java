@@ -78,6 +78,6 @@ public class Anime {
 		con.disconnect();
 
 		Helper.logger(Anime.class).debug(resposta);
-		return resposta.getJSONObject("anime");
+		return resposta;
 	}
 }
