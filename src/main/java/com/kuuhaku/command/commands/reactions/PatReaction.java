@@ -56,7 +56,7 @@ public class PatReaction extends Reaction {
 			if (!isAnswer())
 				Helper.sendReaction(getUrl("pat", (TextChannel) channel), channel, author.getAsMention() + " fez cafuné em " + message.getMentionedUsers().get(0).getAsMention() + " - " + this.getReaction()[this.getReactionLength()], true);
 			else
-				Helper.sendReaction(getUrl("pat", (TextChannel) channel), channel, message.getMentionedUsers().get(0).getAsMention() + " fez outro cafuné em " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], false);
+				Helper.sendReaction(getUrl("pat", (TextChannel) channel), channel, message.getMentionedUsers().get(1).getAsMention() + " fez outro cafuné em " + author.getAsMention() + " - " + this.getReaction()[this.getReactionLength()], false);
 		} else {
 			Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para fazer cafuné!");
 		}
