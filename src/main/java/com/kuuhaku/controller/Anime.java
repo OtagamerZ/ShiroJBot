@@ -79,6 +79,9 @@ public class Anime {
 
         String redir = Helper.getOr(con.getHeaderField("Location"), con.getHeaderField("location"));
 
+        System.out.println(redir);
+        System.out.println(IOUtils.toString(con.getInputStream(), StandardCharsets.UTF_8));
+
         if (redir != null) {
             return getDAData(redir.replace("/anime-info/", ""));
         }
