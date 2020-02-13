@@ -121,9 +121,11 @@ public class Kawaigotchi {
 
 		if (health <= 0) {
 			alive = false;
+			KGotchiDAO.saveKawaigotchi(this);
 			return;
 		} else if (hunger <= 0) {
 			health -= rate.HEALTH.fac;
+			KGotchiDAO.saveKawaigotchi(this);
 			return;
 		}
 
@@ -131,13 +133,15 @@ public class Kawaigotchi {
 
 		int currTime = 0;//OffsetDateTime.now(ZoneId.of("GMT-3")).getHour();
 
-		if (stance == Stance.SLEEPING) {
+		if (stance.isResting()) {
 			if (!Time.inRange(Time.NIGHT, currTime) && energy >= 100) stance = Stance.IDLE;
 			energy += rate.ENERGY.fac * 2 * nature.getEnergy();
 			health += rate.HEALTH.fac * (hunger / 50);
+			KGotchiDAO.saveKawaigotchi(this);
 			return;
 		} else if (Time.inRange(Time.NIGHT, currTime) || energy < 5) {
 			stance = Stance.SLEEPING;
+			KGotchiDAO.saveKawaigotchi(this);
 			return;
 		}
 
