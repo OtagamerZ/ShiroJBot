@@ -204,6 +204,7 @@ public class Helper {
 			}
 		} catch (Exception e) {
 			logger(Helper.class).error("Erro ao carregar a imagem: " + e + " | " + e.getStackTrace()[0]);
+			e.printStackTrace();
 		}
 	}
 
