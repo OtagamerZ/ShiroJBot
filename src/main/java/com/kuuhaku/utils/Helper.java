@@ -353,19 +353,6 @@ public class Helper {
 		return chunks;
 	}
 
-	public static String getFinalURL(String url) throws IOException {
-		HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
-		con.setInstanceFollowRedirects(false);
-		con.connect();
-		con.getInputStream();
-
-		if (con.getResponseCode() == HttpURLConnection.HTTP_MOVED_PERM || con.getResponseCode() == HttpURLConnection.HTTP_MOVED_TEMP) {
-			String redirectUrl = con.getHeaderField("Location");
-			return getFinalURL(redirectUrl);
-		}
-		return url;
-	}
-
 	public static void nonPartnerAlert(User author, Member member, MessageChannel channel, String s, String link) {
 		try {
 			if (!TagDAO.getTagById(author.getId()).isPartner() && !hasPermission(member, PrivilegeLevel.DEV)) {
