@@ -77,7 +77,7 @@ public class Anime {
         con.addRequestProperty("User-Agent", "Mozilla/5.0");
         con.addRequestProperty("Authorization", System.getenv("DA_TOKEN"));
 
-        con.connect();
+        System.out.println(con.getURL());
 
         String redir = Helper.getOr(con.getHeaderField("Location"), con.getHeaderField("location"));
 
