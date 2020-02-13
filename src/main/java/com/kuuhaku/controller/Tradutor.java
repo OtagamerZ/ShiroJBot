@@ -38,10 +38,9 @@ public class Tradutor {
         con.setRequestProperty("Accept", "application/json");
         con.addRequestProperty("Accept-Charset", "UTF-8");
 
-        String resposta = Helper.getResponse(con);
+        JSONObject resposta = Helper.getResponse(con);
 
         Helper.logger(Tradutor.class).debug(resposta);
-        JSONObject json = new JSONObject(resposta);
-        return json.get("text").toString().replace("[", "").replace("]", "").replace("<br>", "\n").replace("\\n", "").replace("\"", "");
+        return resposta.get("text").toString().replace("[", "").replace("]", "").replace("<br>", "\n").replace("\\n", "").replace("\"", "");
     }
 }
