@@ -119,60 +119,68 @@ public class Kawaigotchi {
 		mood = Helper.clamp(mood, 0, 100);
 		energy = Helper.clamp(energy, 0, 100);
 
-		if (hunger == 0 || health == 0) {
+		if (health <= 0) {
 			alive = false;
 			return;
+		} else if (hunger <= 0) {
+			health -= rate.HEALTH.fac;
+			return;
 		}
+
 		tier = Tier.tierByXp(xp);
 
-		int currTime = 0;//OffsetDateTime.now(ZoneId.of("GMT-3")).getHour();
+		int currTime = OffsetDateTime.now(ZoneId.of("GMT-3")).getHour();
 
 		if (stance.isResting()) {
-			if (energy == 100 && currTime < Time.NIGHT.getStart() && currTime > Time.NIGHT.getEnd() - 24)
+			if ((currTime < Time.NIGHT.getStart() && currTime >= Time.NIGHT.getEnd() - 24) && energy > 99)
 				stance = Stance.IDLE;
 			energy += rate.ENERGY.fac * 2 * nature.getEnergy();
 			health += rate.HEALTH.fac * (hunger / 50);
-		} else if (currTime < Time.NIGHT.getStart() && currTime > Time.NIGHT.getEnd() - 24 && energy > 5) {
-			if (hunger < 50 || health < 50) {
-				stance = Stance.SAD;
-				if (!alerted) {
-					try {
-						m.getUser().openPrivateChannel().complete().sendMessage("Seu Kawaigotchi " + name + " está triste, vá ver o porquê!").queue();
-					} catch (RuntimeException ignore) {
-					}
-					alerted = true;
-				}
-			} else if (hunger < 25 || health < 25) {
-				if (!warned) {
-					try {
-						m.getUser().openPrivateChannel().complete().sendMessage("Seu Kawaigotchi " + name + " está muito triste, corra ver o porquê!").queue();
-					} catch (RuntimeException ignore) {
-					}
-					warned = true;
-				}
-			} else if (mood > 75) {
-				stance = Stance.HAPPY;
-				alerted = false;
-				warned = false;
-			} else if (mood < 25) {
-				stance = Stance.ANGRY;
-				alerted = false;
-				warned = false;
-			} else {
-				stance = Stance.IDLE;
-				alerted = false;
-				warned = false;
-			}
-
-			if (hunger > 80 && mood < 80)
-				mood += (rate.MOOD.fac + ((100 - hunger) * 0.01f / 20)) * nature.getKindness();
-			else mood -= rate.MOOD.fac / nature.getKindness();
-
-			hunger -= rate.FOOD.fac;
-			energy -= rate.ENERGY.fac / nature.getEnergy();
-		} else {
+			return;
+		} else if ((currTime >= Time.NIGHT.getStart() && currTime < Time.NIGHT.getEnd() - 24) || energy < 5) {
 			stance = Stance.SLEEPING;
+			return;
 		}
+
+
+		if (hunger < 50 || health < 50) {
+			stance = Stance.SAD;
+			if (!alerted) {
+				try {
+					m.getUser().openPrivateChannel().complete().sendMessage("Seu Kawaigotchi " + name + " está triste, vá ver o porquê!").queue();
+				} catch (RuntimeException ignore) {
+				}
+				alerted = true;
+			}
+		} else if (hunger < 25 || health < 25) {
+			if (!warned) {
+				try {
+					m.getUser().openPrivateChannel().complete().sendMessage("Seu Kawaigotchi " + name + " está muito triste, corra ver o porquê!").queue();
+				} catch (RuntimeException ignore) {
+				}
+				warned = true;
+			}
+		} else if (mood > 75) {
+			stance = Stance.HAPPY;
+			alerted = false;
+			warned = false;
+		} else if (mood < 25) {
+			stance = Stance.ANGRY;
+			alerted = false;
+			warned = false;
+		} else {
+			stance = Stance.IDLE;
+			alerted = false;
+			warned = false;
+		}
+
+		if (hunger > 80 && mood < 80)
+			mood += (rate.MOOD.fac + ((100 - hunger) * 0.01f / 20)) * nature.getKindness();
+		else mood -= rate.MOOD.fac / nature.getKindness();
+
+		hunger -= rate.FOOD.fac;
+		energy -= rate.ENERGY.fac / nature.getEnergy();
+
 		xp += 0.1f * tier.getTrainability();
 		KGotchiDAO.saveKawaigotchi(this);
 	}
