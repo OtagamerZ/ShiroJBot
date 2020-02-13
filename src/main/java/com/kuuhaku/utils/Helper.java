@@ -203,8 +203,8 @@ public class Helper {
 				Main.getInfo().getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> c.sendMessage("GIF irregular: " + imageURL).queue()));
 			}
 		} catch (Exception e) {
-			logger(Helper.class).error("Erro ao carregar a imagem: " + e + " | " + e.getStackTrace()[0]);
-			e.printStackTrace();
+			logger(Helper.class).error("Erro ao carregar a imagem: " + imageURL + " -> " + e + " | " + e.getStackTrace()[0]);
+			sendReaction(imageURL, channel, message, reacted);
 		}
 	}
 
