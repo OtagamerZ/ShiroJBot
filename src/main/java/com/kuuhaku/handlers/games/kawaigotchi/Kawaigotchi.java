@@ -6,6 +6,7 @@ import com.kuuhaku.handlers.games.kawaigotchi.enums.*;
 import com.kuuhaku.handlers.games.kawaigotchi.exceptions.EmptyStockException;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -141,6 +142,8 @@ public class Kawaigotchi {
 			stance = Stance.SLEEPING;
 			return;
 		}
+
+		System.out.println(ShiroInfo.getJSONFactory().create().toJson(this));
 
 
 		if (hunger < 50 || health < 50) {
