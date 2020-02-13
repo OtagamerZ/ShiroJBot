@@ -113,12 +113,13 @@ public class Kawaigotchi {
 
 	public void update(Member m) {
 		if (m.getOnlineStatus() == OnlineStatus.OFFLINE || m.getOnlineStatus() == OnlineStatus.UNKNOWN) return;
+		System.out.println(ShiroInfo.getJSONFactory().create().toJson(this));
 
 		//CLAMPS
-		health = Helper.clamp(health, 0f, 100f);
-		hunger = Helper.clamp(hunger, 0f, 100f);
-		mood = Helper.clamp(mood, 0f, 100f);
-		energy = Helper.clamp(energy, 0f, 100f);
+		health = Helper.clamp(health, 0, 100);
+		hunger = Helper.clamp(hunger, 0, 100);
+		mood = Helper.clamp(mood, 0, 100);
+		energy = Helper.clamp(energy, 0, 100);
 
 		if (health <= 0) {
 			alive = false;
@@ -142,9 +143,6 @@ public class Kawaigotchi {
 			stance = Stance.SLEEPING;
 			return;
 		}
-
-		System.out.println(ShiroInfo.getJSONFactory().create().toJson(this));
-
 
 		if (hunger < 50 || health < 50) {
 			stance = Stance.SAD;
