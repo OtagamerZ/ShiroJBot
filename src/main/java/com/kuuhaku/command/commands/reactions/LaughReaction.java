@@ -17,12 +17,11 @@
 
 package com.kuuhaku.command.commands.reactions;
 
-import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
 public class LaughReaction extends Reaction {
 	public LaughReaction() {
-		super("rir", new String[]{"kkk", "laugh", "aiai"}, "Ri.");
+		super("rir", new String[]{"kkk", "laugh", "aiai"}, "Ri.", false, "laugh");
 	}
 
 	@Override
@@ -33,6 +32,11 @@ public class LaughReaction extends Reaction {
 				"Asdjasdnlad."
 		});
 
-		Helper.sendReaction(getUrl("laugh", (TextChannel) channel), channel, author.getAsMention() + " está rindo! - " + this.getReaction()[this.getReactionLength()], false);
+		sendReaction(getType(), (TextChannel) channel, author.getAsMention() + " está rindo! - " + this.getReaction(), false);
+	}
+
+	@Override
+	public void answer(TextChannel chn) {
+
 	}
 }

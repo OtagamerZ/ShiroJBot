@@ -131,7 +131,7 @@ public class Kawaigotchi {
 
 		tier = Tier.tierByXp(xp);
 
-		int currTime = 0;//OffsetDateTime.now(ZoneId.of("GMT-3")).getHour();
+		int currTime = OffsetDateTime.now(ZoneId.of("GMT-3")).getHour();
 
 		if (stance.isResting()) {
 			if (!Time.inRange(Time.NIGHT, currTime) && energy >= 100) stance = Stance.IDLE;

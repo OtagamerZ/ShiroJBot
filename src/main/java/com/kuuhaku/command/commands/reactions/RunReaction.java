@@ -17,12 +17,11 @@
 
 package com.kuuhaku.command.commands.reactions;
 
-import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
 public class RunReaction extends Reaction {
 	public RunReaction() {
-		super("corre", new String[]{"saisai", "run", "foge"}, "Foge de algo.");
+		super("corre", new String[]{"saisai", "run", "foge"}, "Foge de algo.", false, "run");
 	}
 
 	@Override
@@ -33,6 +32,11 @@ public class RunReaction extends Reaction {
 				"Foge geral!"
 		});
 
-		Helper.sendReaction(getUrl("run", (TextChannel) channel), channel, author.getAsMention() + " ta fugindo! - " + this.getReaction()[this.getReactionLength()], false);
+		sendReaction(getType(), (TextChannel) channel, author.getAsMention() + " está fugindo! - " + this.getReaction(), false);
+	}
+
+	@Override
+	public void answer(TextChannel chn) {
+
 	}
 }

@@ -17,12 +17,11 @@
 
 package com.kuuhaku.command.commands.reactions;
 
-import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
 public class BlushReaction extends Reaction {
 	public BlushReaction() {
-		super("vergonha", new String[]{"n-nani", "blush", "pft"}, "Se envergonha.");
+		super("vergonha", new String[]{"n-nani", "blush", "pft"}, "Se envergonha.", false, "blush");
 	}
 
 	@Override
@@ -33,6 +32,11 @@ public class BlushReaction extends Reaction {
 				"N-N-Nani?!"
 		});
 
-		Helper.sendReaction(getUrl("blush", (TextChannel) channel), channel, author.getAsMention() + " está envergonhado(a)! - " + this.getReaction()[this.getReactionLength()], false);
+		sendReaction(getType(), (TextChannel) channel, author.getAsMention() + " está envergonhado(a)! - " + this.getReaction(), false);
+	}
+
+	@Override
+	public void answer(TextChannel chn) {
+
 	}
 }

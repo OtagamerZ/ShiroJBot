@@ -17,22 +17,26 @@
 
 package com.kuuhaku.command.commands.reactions;
 
-import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
 public class CryReaction extends Reaction {
     public CryReaction() {
-		super("chorar", new String[]{"buaa", "cry", "sadboy"}, "Chora.");
+        super("chorar", new String[]{"buaa", "cry", "sadboy"}, "Chora.", false, "sad");
     }
 
     @Override
     public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-            this.setReaction(new String[]{
-                    "Faça isso parar!",
-                    "Sadboy feels.",
-                    "Me deixa sozinho(a)."
-            });
+        this.setReaction(new String[]{
+                "Faça isso parar!",
+                "Sadboy feels.",
+                "Me deixa sozinho(a)."
+        });
 
-            Helper.sendReaction(getUrl("sad", (TextChannel) channel), channel, author.getAsMention() + " está chorando! - " + this.getReaction()[this.getReactionLength()], false);
+        sendReaction(getType(), (TextChannel) channel, author.getAsMention() + " está chorando! - " + this.getReaction(), false);
+    }
+
+    @Override
+    public void answer(TextChannel chn) {
+
     }
 }
