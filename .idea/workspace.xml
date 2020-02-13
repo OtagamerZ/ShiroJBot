@@ -9,6 +9,7 @@
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/Kawaigotchi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/Kawaigotchi.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/enums/Time.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/enums/Time.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -208,20 +209,6 @@
       <workItem from="1581353463564" duration="2292000" />
       <workItem from="1581360047448" duration="7296000" />
       <workItem from="1581509154196" duration="21059000" />
-    </task>
-    <task id="LOCAL-00499" summary="Comandos de Kawaigotchi implementados">
-      <created>1581443698588</created>
-      <option name="number" value="00499" />
-      <option name="presentableId" value="LOCAL-00499" />
-      <option name="project" value="LOCAL" />
-      <updated>1581443698588</updated>
-    </task>
-    <task id="LOCAL-00500" summary="Comandos de Kawaigotchi implementados">
-      <created>1581444099200</created>
-      <option name="number" value="00500" />
-      <option name="presentableId" value="LOCAL-00500" />
-      <option name="project" value="LOCAL" />
-      <updated>1581444099200</updated>
     </task>
     <task id="LOCAL-00501" summary="Comandos de Kawaigotchi implementados">
       <created>1581444147292</created>
@@ -552,7 +539,21 @@
       <option name="project" value="LOCAL" />
       <updated>1581600305420</updated>
     </task>
-    <option name="localTasksCounter" value="548" />
+    <task id="LOCAL-00548" summary="Comandos de Kawaigotchi implementados">
+      <created>1581600883109</created>
+      <option name="number" value="00548" />
+      <option name="presentableId" value="LOCAL-00548" />
+      <option name="project" value="LOCAL" />
+      <updated>1581600883109</updated>
+    </task>
+    <task id="LOCAL-00549" summary="Comandos de Kawaigotchi implementados">
+      <created>1581600941336</created>
+      <option name="number" value="00549" />
+      <option name="presentableId" value="LOCAL-00549" />
+      <option name="project" value="LOCAL" />
+      <updated>1581600941336</updated>
+    </task>
+    <option name="localTasksCounter" value="550" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -664,11 +665,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1578421403620" />
-    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1581600880366">
+    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1581600938516">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1581560655769" />
-    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1581600880366" />
+    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1581600938516" />
     <state x="160" y="89" width="1344" height="834" key="DiffContextDialog" timestamp="1580842925618">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -719,11 +720,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1581600885357">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1581600949848">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1581560661721" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1581600885357" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1581600949848" />
     <state x="312" y="66" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1581001292879">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -760,10 +761,10 @@
     </state>
     <state x="403" y="177" key="run.anything.popup/0.0.1366.768@0.0.1366.768" timestamp="1580268172098" />
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1581519454013" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1581363576334">
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1581601225571">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="409" y="165" width="672" height="516" key="search.everywhere.popup/0.0.1366.768@0.0.1366.768" timestamp="1579834584354" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1581363576334" />
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1581601225571" />
   </component>
 </project>
