@@ -76,10 +76,11 @@ public class Anime {
         con.addRequestProperty("Accept-Charset", "UTF-8");
         con.addRequestProperty("User-Agent", "Mozilla/5.0");
         con.addRequestProperty("Authorization", System.getenv("DA_TOKEN"));
+        con.setInstanceFollowRedirects(false);
 
         System.out.println(con.getURL());
 
-        String redir = Helper.getOr(con.getHeaderField("Location"), con.getHeaderField("location"));
+        String redir = con.getHeaderField("Location");
 
         if (redir != null) {
             return getDAData(redir.replace("/anime-info/", ""));
