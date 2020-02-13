@@ -77,7 +77,7 @@ public class Anime {
 
         String resposta = Helper.getResponse(con);
 
-        Helper.logger(Anime.class).debug(resposta);
+        Helper.logger(Anime.class).info(resposta);
         return new JSONObject(resposta).getJSONObject("anime");
     }
 
