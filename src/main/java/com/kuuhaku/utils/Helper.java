@@ -50,15 +50,12 @@ import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -356,18 +353,19 @@ public class Helper {
 		return chunks;
 	}
 
-	public static String getResponse(HttpURLConnection con) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
+	public static JSONObject getResponse(HttpURLConnection con) throws IOException {
+		con.connect();
+		Scanner sc = new Scanner(con.getURL().openStream());
 
-		String input;
-		StringBuilder resposta = new StringBuilder();
-		while ((input = br.readLine()) != null) {
-			resposta.append(input);
+		StringBuilder sb = new StringBuilder();
+		while (sc.hasNextLine()) {
+			sb.append(sc.nextLine());
 		}
-		br.close();
+
+		sc.close();
 		con.disconnect();
 
-		return resposta.toString();
+		return new JSONObject(sb.toString());
 	}
 
 	public static void nonPartnerAlert(User author, Member member, MessageChannel channel, String s, String link) {
