@@ -354,7 +354,6 @@ public class Helper {
 	}
 
 	public static JSONObject getResponse(HttpURLConnection con) throws IOException {
-		con.connect();
 		Scanner sc = new Scanner(con.getURL().openStream());
 
 		StringBuilder sb = new StringBuilder();
