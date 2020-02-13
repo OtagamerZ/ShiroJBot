@@ -214,27 +214,6 @@
       <workItem from="1581360047448" duration="7296000" />
       <workItem from="1581509154196" duration="21059000" />
     </task>
-    <task id="LOCAL-00529" summary="Comandos de Kawaigotchi implementados">
-      <created>1581525875993</created>
-      <option name="number" value="00529" />
-      <option name="presentableId" value="LOCAL-00529" />
-      <option name="project" value="LOCAL" />
-      <updated>1581525875993</updated>
-    </task>
-    <task id="LOCAL-00530" summary="Comandos de Kawaigotchi implementados">
-      <created>1581526077610</created>
-      <option name="number" value="00530" />
-      <option name="presentableId" value="LOCAL-00530" />
-      <option name="project" value="LOCAL" />
-      <updated>1581526077611</updated>
-    </task>
-    <task id="LOCAL-00531" summary="Comandos de Kawaigotchi implementados">
-      <created>1581527957933</created>
-      <option name="number" value="00531" />
-      <option name="presentableId" value="LOCAL-00531" />
-      <option name="project" value="LOCAL" />
-      <updated>1581527957933</updated>
-    </task>
     <task id="LOCAL-00532" summary="Comandos de Kawaigotchi implementados">
       <created>1581528575984</created>
       <option name="number" value="00532" />
@@ -557,7 +536,28 @@
       <option name="project" value="LOCAL" />
       <updated>1581620448137</updated>
     </task>
-    <option name="localTasksCounter" value="578" />
+    <task id="LOCAL-00578" summary="Correção nos comandos de reação">
+      <created>1581620593673</created>
+      <option name="number" value="00578" />
+      <option name="presentableId" value="LOCAL-00578" />
+      <option name="project" value="LOCAL" />
+      <updated>1581620593673</updated>
+    </task>
+    <task id="LOCAL-00579" summary="Correção nos comandos de reação">
+      <created>1581620748356</created>
+      <option name="number" value="00579" />
+      <option name="presentableId" value="LOCAL-00579" />
+      <option name="project" value="LOCAL" />
+      <updated>1581620748356</updated>
+    </task>
+    <task id="LOCAL-00580" summary="Correção nos comandos de reação">
+      <created>1581620806795</created>
+      <option name="number" value="00580" />
+      <option name="presentableId" value="LOCAL-00580" />
+      <option name="project" value="LOCAL" />
+      <updated>1581620806795</updated>
+    </task>
+    <option name="localTasksCounter" value="581" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -724,11 +724,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1581620771388">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1581620808023">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1581560661721" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1581620771388" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1581620808023" />
     <state x="312" y="66" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1581001292879">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
