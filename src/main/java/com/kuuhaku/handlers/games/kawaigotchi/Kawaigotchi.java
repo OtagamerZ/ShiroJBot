@@ -144,7 +144,6 @@ public class Kawaigotchi {
 
 		if (hunger < 50 || health < 50) {
 			stance = Stance.SAD;
-			System.out.println("low hunger/hp");
 			if (!alerted) {
 				try {
 					m.getUser().openPrivateChannel().complete().sendMessage("Seu Kawaigotchi " + name + " está triste, vá ver o porquê!").queue();
@@ -170,6 +169,7 @@ public class Kawaigotchi {
 			warned = false;
 		} else {
 			stance = Stance.IDLE;
+			System.out.println("normal");
 			alerted = false;
 			warned = false;
 		}
