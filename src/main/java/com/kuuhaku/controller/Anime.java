@@ -77,9 +77,11 @@ public class Anime {
         con.addRequestProperty("User-Agent", "Mozilla/5.0");
         con.addRequestProperty("Authorization", System.getenv("DA_TOKEN"));
 
+        Helper.logger(Anime.class).info(name);
+        Helper.logger(Anime.class).info(IOUtils.toString(con.getInputStream(), StandardCharsets.UTF_8));
+        
         JSONObject resposta = new JSONObject(IOUtils.toString(con.getInputStream(), StandardCharsets.UTF_8));
 
-        Helper.logger(Anime.class).info(name);
         Helper.logger(Anime.class).debug(resposta);
         return resposta.getJSONObject("anime");
     }
