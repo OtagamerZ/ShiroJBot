@@ -17,12 +17,11 @@
 
 package com.kuuhaku.command.commands.reactions;
 
-import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
 public class NopeReaction extends Reaction {
 	public NopeReaction() {
-		super("nope", new String[]{"sqn", "hojenão", "esquiva"}, "Evita a tentativa de alguém.");
+		super("nope", new String[]{"sqn", "hojenão", "esquiva"}, "Evita a tentativa de alguém.", false, "nope");
 	}
 
 	@Override
@@ -33,6 +32,11 @@ public class NopeReaction extends Reaction {
 				"Ha ah, errou!"
 		});
 
-		Helper.sendReaction(getUrl("nope", (TextChannel) channel), channel, author.getAsMention() + " esquivou! - " + this.getReaction()[this.getReactionLength()], false);
+		sendReaction(getType(), (TextChannel) channel, author.getAsMention() + " esquivou! - " + this.getReaction(), false);
+	}
+
+	@Override
+	public void answer(TextChannel chn) {
+
 	}
 }

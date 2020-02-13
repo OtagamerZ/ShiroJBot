@@ -31,6 +31,7 @@ import com.kuuhaku.command.commands.music.VideoCommand;
 import com.kuuhaku.command.commands.music.YoutubeCommand;
 import com.kuuhaku.command.commands.partner.*;
 import com.kuuhaku.command.commands.reactions.*;
+import com.kuuhaku.command.commands.reactions.answerable.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -139,13 +140,13 @@ public class CommandManager {
 			add(new ChooseCommand());
 			//REAÇÕES
 			//RECIPROCOS
-			add(new HugReaction(false));
-			add(new KissReaction(false));
-			add(new PatReaction(false));
-			add(new StareReaction(false));
-			add(new SlapReaction(false));
-			add(new PunchReaction(false));
-			add(new BiteReaction(false));
+			add(new HugReaction());
+			add(new KissReaction());
+			add(new PatReaction());
+			add(new StareReaction());
+			add(new SlapReaction());
+			add(new PunchReaction());
+			add(new BiteReaction());
 			//NÃO RECIPROCOS
 			add(new BlushReaction());
 			add(new CryReaction());
