@@ -74,7 +74,7 @@ abstract class Reaction extends Command {
     }
 
     String getUrl(String type, TextChannel chn) {
-        AtomicReference<Message> msg = new AtomicReference<>();
+        AtomicReference<Message> msg = null;
         chn.sendMessage("Conectando à API...").addFile(new File(Objects.requireNonNull(Helper.class.getClassLoader().getResource("loading.gif")).getPath())).queue(msg::set);
 	    try {
             HttpURLConnection con = (HttpURLConnection) new URL("https://shiro-api.herokuapp.com/reaction?type=" + type).openConnection();
