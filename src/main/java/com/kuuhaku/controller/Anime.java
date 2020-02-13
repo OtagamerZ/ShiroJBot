@@ -66,6 +66,8 @@ public class Anime {
 		con.addRequestProperty("Authorization", System.getenv("DA_TOKEN"));
 		con.setInstanceFollowRedirects(false);
 
+		con.connect();
+
 		String redir = con.getHeaderField("Location");
 
 		if (redir != null) {
@@ -74,6 +76,8 @@ public class Anime {
 
 		JSONObject resposta = new JSONObject(IOUtils.toString(con.getInputStream(), StandardCharsets.UTF_8));
 		if (Helper.compareWithValues(con.getResponseCode(), 403, 404)) resposta.put("url", con.getURL().toString());
+
+		con.disconnect();
 
 		Helper.logger(Anime.class).debug(resposta);
 		return resposta.getJSONObject("anime");
