@@ -115,10 +115,10 @@ public class Kawaigotchi {
 		if (m.getOnlineStatus() == OnlineStatus.OFFLINE || m.getOnlineStatus() == OnlineStatus.UNKNOWN) return;
 
 		//CLAMPS
-		health = Helper.clamp(health, 0, 100);
-		hunger = Helper.clamp(hunger, 0, 100);
-		mood = Helper.clamp(mood, 0, 100);
-		energy = Helper.clamp(energy, 0, 100);
+		health = Helper.clamp(health, 0f, 100f);
+		hunger = Helper.clamp(hunger, 0f, 100f);
+		mood = Helper.clamp(mood, 0f, 100f);
+		energy = Helper.clamp(energy, 0f, 100f);
 
 		if (health <= 0) {
 			alive = false;
