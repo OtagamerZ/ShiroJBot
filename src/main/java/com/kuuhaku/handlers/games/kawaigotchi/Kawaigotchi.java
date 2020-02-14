@@ -145,23 +145,22 @@ public class Kawaigotchi {
 			return;
 		}
 
-		if (hunger < 50 || health < 50) {
-			stance = Stance.SAD;
-			System.out.println("sad");
-			if (!alerted) {
-				try {
-					m.getUser().openPrivateChannel().complete().sendMessage("Seu Kawaigotchi " + name + " está triste, vá ver o porquê!").queue();
-				} catch (RuntimeException ignore) {
-				}
-				alerted = true;
-			}
-		} else if (hunger < 25 || health < 25) {
+		if (hunger < 25 || health < 25) {
 			if (!warned) {
 				try {
 					m.getUser().openPrivateChannel().complete().sendMessage("Seu Kawaigotchi " + name + " está muito triste, corra ver o porquê!").queue();
 				} catch (RuntimeException ignore) {
 				}
 				warned = true;
+			}
+		} else if (hunger < 50 || health < 50) {
+			stance = Stance.SAD;
+			if (!alerted) {
+				try {
+					m.getUser().openPrivateChannel().complete().sendMessage("Seu Kawaigotchi " + name + " está triste, vá ver o porquê!").queue();
+				} catch (RuntimeException ignore) {
+				}
+				alerted = true;
 			}
 		} else if (mood > 75) {
 			stance = Stance.HAPPY;
