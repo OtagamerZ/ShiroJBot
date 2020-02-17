@@ -22,7 +22,8 @@ public enum Stance {
 	SLEEPING(false, false, false, true),
 	HAPPY(true, true, true, false),
 	SAD(true, false, false, false),
-	ANGRY(true, false, true, false);
+	ANGRY(true, false, true, false),
+	DEAD(false, false, false, false);
 
 	private final boolean canEat;
 	private final boolean canPlay;
@@ -65,6 +66,8 @@ public enum Stance {
 				return "Triste";
 			case ANGRY:
 				return "Bravo";
+			case DEAD:
+				return "Morto";
 			default:
 				return null;
 		}
