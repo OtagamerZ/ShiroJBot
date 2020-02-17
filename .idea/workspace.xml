@@ -7,10 +7,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/SimpleWHMCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/enums/Race.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/enums/Race.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/enums/Stance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/enums/Stance.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/snugget_sheet.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/snugget_sheet.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -135,21 +133,21 @@
       <recent name="com.kuuhaku.utils.Helper" />
       <recent name="com.kuuhaku.handlers.games.rpg.Utils" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.kuuhaku.command.commands.information" />
-      <recent name="com.kuuhaku.events.cron" />
-      <recent name="com.kuuhaku.command.commands.partner" />
-      <recent name="com.kuuhaku.controller.sqlite" />
-      <recent name="com.kuuhaku.controller.mysql" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games\kawaigotchi" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\api\websocket" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.command.commands.dev" />
+      <recent name="com.kuuhaku.command.commands.information" />
+      <recent name="com.kuuhaku.events.cron" />
+      <recent name="com.kuuhaku.command.commands.partner" />
+      <recent name="com.kuuhaku.controller.sqlite" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
     </key>
   </component>
   <component name="ServiceViewManager">
@@ -218,14 +216,7 @@
       <workItem from="1581626143609" duration="1160000" />
       <workItem from="1581681634124" duration="1755000" />
       <workItem from="1581713431855" duration="97000" />
-      <workItem from="1581942657201" duration="6207000" />
-    </task>
-    <task id="LOCAL-00544" summary="Comandos de Kawaigotchi implementados">
-      <created>1581560227732</created>
-      <option name="number" value="00544" />
-      <option name="presentableId" value="LOCAL-00544" />
-      <option name="project" value="LOCAL" />
-      <updated>1581560227733</updated>
+      <workItem from="1581942657201" duration="7102000" />
     </task>
     <task id="LOCAL-00545" summary="Comandos de Kawaigotchi implementados">
       <created>1581560369457</created>
@@ -563,7 +554,14 @@
       <option name="project" value="LOCAL" />
       <updated>1581945474548</updated>
     </task>
-    <option name="localTasksCounter" value="593" />
+    <task id="LOCAL-00593" summary="Mudanças na notificação do Kawaigotchi">
+      <created>1581949875201</created>
+      <option name="number" value="00593" />
+      <option name="presentableId" value="LOCAL-00593" />
+      <option name="project" value="LOCAL" />
+      <updated>1581949875201</updated>
+    </task>
+    <option name="localTasksCounter" value="594" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -675,11 +673,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1578421403620" />
-    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1581945471376">
+    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1581949872394">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1581560655769" />
-    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1581945471376" />
+    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1581949872394" />
     <state x="160" y="89" width="1344" height="834" key="DiffContextDialog" timestamp="1580842925618">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -730,11 +728,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1581945480923">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1581949888994">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1581560661721" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1581945480923" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1581949888994" />
     <state x="312" y="66" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1581001292879">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
