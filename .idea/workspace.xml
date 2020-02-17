@@ -8,7 +8,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/Kawaigotchi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/Kawaigotchi.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -214,14 +213,9 @@
       <workItem from="1581360047448" duration="7296000" />
       <workItem from="1581509154196" duration="21059000" />
       <workItem from="1581626143609" duration="1160000" />
-      <workItem from="1581681634124" duration="1460000" />
-    </task>
-    <task id="LOCAL-00541" summary="Comandos de Kawaigotchi implementados">
-      <created>1581558833357</created>
-      <option name="number" value="00541" />
-      <option name="presentableId" value="LOCAL-00541" />
-      <option name="project" value="LOCAL" />
-      <updated>1581558833357</updated>
+      <workItem from="1581681634124" duration="1755000" />
+      <workItem from="1581713431855" duration="97000" />
+      <workItem from="1581942657201" duration="1459000" />
     </task>
     <task id="LOCAL-00542" summary="Comandos de Kawaigotchi implementados">
       <created>1581558929161</created>
@@ -559,7 +553,14 @@
       <option name="project" value="LOCAL" />
       <updated>1581624804697</updated>
     </task>
-    <option name="localTasksCounter" value="590" />
+    <task id="LOCAL-00590" summary="Mudanças na notificação do Kawaigotchi">
+      <created>1581684857292</created>
+      <option name="number" value="00590" />
+      <option name="presentableId" value="LOCAL-00590" />
+      <option name="project" value="LOCAL" />
+      <updated>1581684857293</updated>
+    </task>
+    <option name="localTasksCounter" value="591" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -578,7 +579,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Comando de backup adicionado" />
     <MESSAGE value="Correção" />
     <MESSAGE value="Correção no JSON do backup" />
     <MESSAGE value="Correção no salvamento dos cargos de nível" />
@@ -603,7 +603,8 @@
     <MESSAGE value="Comandos de Kawaigotchi implementados" />
     <MESSAGE value="Correção nos comandos de reação" />
     <MESSAGE value="Correção na pesquisa de anime" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção na pesquisa de anime" />
+    <MESSAGE value="Mudanças na notificação do Kawaigotchi" />
+    <option name="LAST_COMMIT_MESSAGE" value="Mudanças na notificação do Kawaigotchi" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -671,11 +672,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1578421403620" />
-    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1581624801210">
+    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1581684854332">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1581560655769" />
-    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1581624801210" />
+    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1581684854332" />
     <state x="160" y="89" width="1344" height="834" key="DiffContextDialog" timestamp="1580842925618">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -726,11 +727,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1581624839976">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1581684880241">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1581560661721" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1581624839976" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1581684880241" />
     <state x="312" y="66" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1581001292879">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -758,10 +759,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="605" y="219" key="git4idea.branch.GitSmartOperationDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1579030853134" />
-    <state x="239" y="152" key="new project wizard" timestamp="1581600001567">
+    <state x="239" y="152" key="new project wizard" timestamp="1581685105848">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="239" y="152" key="new project wizard/0.0.1680.1010@0.0.1680.1010" timestamp="1581600001567" />
+    <state x="239" y="152" key="new project wizard/0.0.1680.1010@0.0.1680.1010" timestamp="1581685105848" />
     <state x="496" y="233" width="672" height="677" key="run.anything.popup" timestamp="1581625433977">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
