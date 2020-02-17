@@ -214,6 +214,7 @@ public class Kawaigotchi {
 
 	public Action play() {
 		if (stance.canPlay()) {
+			System.out.println(mood + " | " + energy + " | " + hunger);
 			int threshold = (int) ((Helper.clamp(100 - (int) health, 10, 40)) / nature.getKindness());
 			lastRoll = Helper.rng(100);
 
@@ -221,6 +222,7 @@ public class Kawaigotchi {
 				mood += (lastRoll * 100 / 10f) * nature.getKindness();
 				energy -= (lastRoll * 100 / 6f) / 3f;
 				hunger -= (lastRoll * 100 / 6f) / 3f;
+				System.out.println(mood + " | " + energy + " | " + hunger);
 
 				KGotchiDAO.saveKawaigotchi(this);
 				return Action.SUCCESS;
