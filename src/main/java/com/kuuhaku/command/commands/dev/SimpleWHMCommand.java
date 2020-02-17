@@ -51,7 +51,7 @@ public class SimpleWHMCommand extends Command {
 		Webhook wh = Helper.getOrCreateWebhook((TextChannel) channel, "Webhook Test", Main.getInfo().getAPI());
 
 		WebhookMessageBuilder wmb = new WebhookMessageBuilder();
-		wmb.setContent(String.join(" ", args));
+		wmb.setContent(Helper.replaceEmotes(String.join(" ", args)));
 		wmb.setAvatarUrl(author.getAvatarUrl());
 		wmb.setUsername(author.getName());
 

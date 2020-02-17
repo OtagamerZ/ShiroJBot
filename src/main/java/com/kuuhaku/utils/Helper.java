@@ -603,4 +603,17 @@ public class Helper {
 
 		return match;
 	}
+
+	public static String replaceEmotes(String msg) {
+		String[] args = msg.split(" ");
+
+		for (int i = 0; i < args.length; i++) {
+			if (args[i].startsWith(":") && args[i].endsWith(":")) {
+				List<Emote> emt = Main.getInfo().getAPI().getEmotesByName(args[i].replace(":", ""), true);
+				if (emt.size() > 0) args[i] = emt.get(Helper.rng(emt.size())).getAsMention();
+			}
+		}
+
+		return String.join(" ", args);
+	}
 }
