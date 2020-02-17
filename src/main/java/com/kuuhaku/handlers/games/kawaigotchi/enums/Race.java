@@ -52,6 +52,8 @@ public enum Race {
 				return bi.getSubimage(size[0] * var, size[1] * 3, size[0], size[1]);
 			case ANGRY:
 				return bi.getSubimage(size[0] * var, size[1] * 4, size[0], size[1]);
+			case DEAD:
+				return bi.getSubimage(size[0] * var, size[1] * 5, size[0], size[1]);
 			default:
 				throw new RuntimeException();
 		}

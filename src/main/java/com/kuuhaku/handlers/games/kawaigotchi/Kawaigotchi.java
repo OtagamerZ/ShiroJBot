@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
@@ -119,6 +120,8 @@ public class Kawaigotchi {
 		mood = Helper.clamp(mood, 0, 100);
 		energy = Helper.clamp(energy, 0, 100);
 
+		if (!alive) stance = Stance.DEAD;
+
 		if (health <= 0) {
 			alive = false;
 			KGotchiDAO.saveKawaigotchi(this);
@@ -197,19 +200,26 @@ public class Kawaigotchi {
 	}
 
 	public Action feed(Food food) {
-		if (stance.canEat()) {
-			try {
-				useFromBag(food);
-				hunger += food.getNutrition();
-				health += food.getHealthiness();
-				mood += food.getMoodBoost();
-				if (food.getType() == FoodType.SPECIAL) food.getSpecial().accept(this);
-				KGotchiDAO.saveKawaigotchi(this);
-				return Action.SUCCESS;
-			} catch (EmptyStockException e) {
-				return Action.FAILED;
-			}
+		if (food.getType() == FoodType.SPECIAL) {
+			return useFood(food);
+		} else if (stance.canEat()) {
+			return useFood(food);
 		} else return Action.UNABLE;
+	}
+
+	@NotNull
+	public Action useFood(Food food) {
+		try {
+			useFromBag(food);
+			hunger += food.getNutrition();
+			health += food.getHealthiness();
+			mood += food.getMoodBoost();
+			if (food.getType() == FoodType.SPECIAL) food.getSpecial().accept(this);
+			KGotchiDAO.saveKawaigotchi(this);
+			return Action.SUCCESS;
+		} catch (EmptyStockException e) {
+			return Action.FAILED;
+		}
 	}
 
 	public Action play() {
