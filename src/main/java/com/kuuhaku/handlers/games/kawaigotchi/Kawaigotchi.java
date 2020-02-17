@@ -214,21 +214,19 @@ public class Kawaigotchi {
 
 	public Action play() {
 		if (stance.canPlay()) {
-			System.out.println(mood + " | " + energy + " | " + hunger);
 			int threshold = (int) ((Helper.clamp(100 - (int) health, 10, 40)) / nature.getKindness());
 			lastRoll = Helper.rng(100);
 
 			if (lastRoll >= threshold) {
-				mood += (lastRoll * 100 / 10f) * nature.getKindness();
-				energy -= (lastRoll * 100 / 6f) / 3f;
-				hunger -= (lastRoll * 100 / 6f) / 3f;
-				System.out.println(mood + " | " + energy + " | " + hunger);
+				mood += Helper.clamp(Helper.rng(10), 3, 10) * nature.getKindness();
+				energy -= Helper.clamp(Helper.rng(6), 1, 6);
+				hunger -= Helper.clamp(Helper.rng(6), 1, 6);
 
 				KGotchiDAO.saveKawaigotchi(this);
 				return Action.SUCCESS;
 			} else {
-				energy -= (lastRoll * 100 / 6f) / 3f;
-				hunger -= (lastRoll * 100 / 6f) / 3f;
+				energy -= Helper.clamp(Helper.rng(6), 1, 6);
+				hunger -= Helper.clamp(Helper.rng(6), 1, 6);
 
 				KGotchiDAO.saveKawaigotchi(this);
 				return Action.FAILED;
@@ -242,15 +240,15 @@ public class Kawaigotchi {
 			lastRoll = Helper.rng(100);
 
 			if (lastRoll >= threshold) {
-				xp += (lastRoll * 100 / 6f) * tier.getTrainability();
-				energy -= (lastRoll * 100 / 6f) / 2f;
-				hunger -= (lastRoll * 100 / 6f) / 2f;
+				xp += Helper.clamp(Helper.rng(6), 1, 6) * tier.getTrainability();
+				energy -= Helper.clamp(Helper.rng(10), 3, 10);
+				hunger -= Helper.clamp(Helper.rng(10), 3, 10);
 
 				KGotchiDAO.saveKawaigotchi(this);
 				return Action.SUCCESS;
 			} else {
-				energy -= (lastRoll * 100 / 6f) / 2f;
-				hunger -= (lastRoll * 100 / 6f) / 2f;
+				energy -= Helper.clamp(Helper.rng(10), 3, 10);
+				hunger -= Helper.clamp(Helper.rng(10), 3, 10);
 
 				KGotchiDAO.saveKawaigotchi(this);
 				return Action.FAILED;
