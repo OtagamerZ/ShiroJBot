@@ -352,13 +352,13 @@ public class Profile {
 			String[] words = text.split(" ");
 			StringBuilder currentLine = new StringBuilder(words[0]);
 			for (String word : words) {
-				if (m.stringWidth(currentLine + word) < lineWidth && !Helper.containsAny(word, "\n", "\\n")) {
-					currentLine.append(" ").append(word);
-				} else {
+				if (m.stringWidth(currentLine + word) >= lineWidth || word.equals("\\n")) {
 					String s = currentLine.toString();
 					g.drawString(s, x, y);
 					y += m.getHeight();
 					currentLine = new StringBuilder(word);
+				} else {
+					currentLine.append(" ").append(word);
 				}
 			}
 			if (currentLine.toString().trim().length() > 0) {
