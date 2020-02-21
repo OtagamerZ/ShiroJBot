@@ -65,14 +65,14 @@ public class Map {
 			g2d.drawLine(64 * (x + 1), 0, 64 * (x + 1), overlay.getHeight());
 			g2d.setColor(Color.WHITE);
 			String str = String.valueOf(alpha.charAt(x - 1)).toUpperCase();
-			g2d.drawString(str, (64 * x) + ((64 / 2f) - Math.round(g2d.getFontMetrics().getStringBounds(str, g2d).getWidth() / 2)), 64 - Math.round(g2d.getFontMetrics().getStringBounds(str, g2d).getHeight() / 2));
+			g2d.drawString(str, (64 * x) + ((64 / 2f) - Math.round(g2d.getFontMetrics().stringWidth(str) / 2f)), 64 - Math.round(g2d.getFontMetrics().getStringBounds(str, g2d).getHeight() / 2));
 		}
 
 		for (int y = 1; y <= size[1]; y++) {
 			g2d.setColor(Color.BLACK);
 			g2d.drawLine(0, 64 * (y + 1), overlay.getWidth(), 64 * (y + 1));
 			g2d.setColor(Color.WHITE);
-			g2d.drawString(String.valueOf(alpha.charAt(y - 1)), (64 / 2f) - Math.round(g2d.getFontMetrics().getStringBounds(String.valueOf(alpha.charAt(y - 1)), g2d).getWidth() / 2), (64 * (y + 1)) - Math.round(g2d.getFontMetrics().getStringBounds(String.valueOf(alpha.charAt(y - 1)), g2d).getHeight() / 2));
+			g2d.drawString(String.valueOf(alpha.charAt(y - 1)), (64 / 2f) - Math.round(g2d.getFontMetrics().stringWidth(String.valueOf(alpha.charAt(y - 1))) / 2f), (64 * (y + 1)) - Math.round(g2d.getFontMetrics().getStringBounds(String.valueOf(alpha.charAt(y - 1)), g2d).getHeight() / 2));
 		}
 
 		g2d.dispose();
