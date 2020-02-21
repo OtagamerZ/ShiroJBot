@@ -352,7 +352,7 @@ public class Profile {
 			String[] words = text.split(" ");
 			StringBuilder currentLine = new StringBuilder(words[0]);
 			for (String word : words) {
-				if (m.stringWidth(currentLine + word) >= lineWidth || word.equals("&br")) {
+				if (m.stringWidth(currentLine + word) >= lineWidth || currentLine.toString().contains("&br")) {
 					String s = currentLine.toString().replace("&br", "");
 					g.drawString(s, x, y);
 					y += m.getHeight();
