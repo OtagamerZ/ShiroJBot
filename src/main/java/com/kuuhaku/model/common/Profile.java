@@ -328,14 +328,14 @@ public class Profile {
 		} else {
 			String[] words = text.split(" ");
 			StringBuilder currentLine = new StringBuilder(words[0]);
-			for (String word : words) {
-				if (m.stringWidth(currentLine + word) < lineWidth) {
-					currentLine.append(" ").append(word);
+			for (int i = 1; i < words.length; i++) {
+				if (m.stringWidth(currentLine + words[i]) < lineWidth) {
+					currentLine.append(" ").append(words[i]);
 				} else {
 					String s = currentLine.toString();
 					drawOutlinedText(s, x, y, g);
 					y += m.getHeight();
-					currentLine = new StringBuilder(word);
+					currentLine = new StringBuilder(words[i]);
 				}
 			}
 			if (currentLine.toString().trim().length() > 0) {
@@ -351,14 +351,14 @@ public class Profile {
 		} else {
 			String[] words = text.split(" ");
 			StringBuilder currentLine = new StringBuilder(words[0]);
-			for (String word : words) {
-				if (m.stringWidth(currentLine + word) >= lineWidth || currentLine.toString().contains("&br")) {
-					String s = currentLine.toString().replace("&br", "");
+			for (int i = 1; i < words.length; i++) {
+				if (m.stringWidth(currentLine + words[i]) < lineWidth) {
+					currentLine.append(" ").append(words[i]);
+				} else {
+					String s = currentLine.toString();
 					g.drawString(s, x, y);
 					y += m.getHeight();
-					currentLine = new StringBuilder(word);
-				} else {
-					currentLine.append(" ").append(word);
+					currentLine = new StringBuilder(words[i]);
 				}
 			}
 			if (currentLine.toString().trim().length() > 0) {
