@@ -28,7 +28,6 @@ import com.kuuhaku.command.commands.reactions.Reaction;
 import com.kuuhaku.controller.mysql.TagDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.Extensions;
-import com.kuuhaku.model.common.GamblePool;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Tags;
 import de.androidpit.colorthief.ColorThief;
@@ -183,20 +182,6 @@ public class Helper {
 		BufferedImage icon = ImageIO.read(con.getInputStream());
 
 		return new Color(ColorThief.getColor(icon)[0], ColorThief.getColor(icon)[1], ColorThief.getColor(icon)[2]);
-	}
-
-	public static List<String> getGamble() {
-		GamblePool gp = new GamblePool();
-		String[] icon = {":cheese:", ":izakaya_lantern:", ":moneybag:", ":diamond_shape_with_a_dot_inside:", ":rosette:", "<a:Wow:598497560734203926>"};
-		for (int i = 0; i < icon.length; i++) {
-			gp.addGamble(new GamblePool.Gamble(icon[i], icon.length - i));
-		}
-		String[] pool = gp.getPool();
-		List<String> result = new ArrayList<>();
-		for (int i = 0; i < 6; i++) {
-			result.add(pool[clamp(rng(pool.length), 0, pool.length - 1)]);
-		}
-		return result;
 	}
 
 	public static void spawnAd(MessageChannel channel) {
