@@ -291,9 +291,10 @@ public class Kawaigotchi {
 
 		g2d.setColor(new Color(89, 44, 27, 150));
 
-		g2d.fillRoundRect(5, 15, (int) g2d.getFontMetrics().getStringBounds(desc, g2d).getWidth() + 15, 50, 25, 25);
-		g2d.fillRoundRect(5, 70, (int) g2d.getFontMetrics().getStringBounds(stance.toString(), g2d).getWidth() + 15, 50, 25, 25);
-		g2d.fillRoundRect((int) g2d.getFontMetrics().getStringBounds(stance.toString(), g2d).getWidth() + 25, 70, (int) g2d.getFontMetrics().getStringBounds(currTime + "h", g2d).getWidth() + 15, 50, 25, 25);
+		g2d.fillRoundRect(5, 15, g2d.getFontMetrics().stringWidth(desc) + 15, 50, 25, 25);
+		assert stance.toString() != null;
+		g2d.fillRoundRect(5, 70, g2d.getFontMetrics().stringWidth(stance.toString()) + 15, 50, 25, 25);
+		g2d.fillRoundRect(g2d.getFontMetrics().stringWidth(stance.toString()) + 25, 70, g2d.getFontMetrics().stringWidth(currTime + "h") + 15, 50, 25, 25);
 
 		g2d.setColor(Color.red);
 		g2d.fillRoundRect((int) (1070 + (150 - (150 * health / 100))), 30, (int) (150 * health / 100), 20, 15, 15);
@@ -310,9 +311,9 @@ public class Kawaigotchi {
 		g2d.setColor(Color.black);
 		g2d.setStroke(new BasicStroke(2));
 
-		g2d.drawRoundRect(5, 15, (int) g2d.getFontMetrics().getStringBounds(desc, g2d).getWidth() + 15, 50, 25, 25);
-		g2d.drawRoundRect(5, 70, (int) g2d.getFontMetrics().getStringBounds(stance.toString(), g2d).getWidth() + 15, 50, 25, 25);
-		g2d.drawRoundRect((int) g2d.getFontMetrics().getStringBounds(stance.toString(), g2d).getWidth() + 25, 70, (int) g2d.getFontMetrics().getStringBounds(currTime + "h", g2d).getWidth() + 15, 50, 25, 25);
+		g2d.drawRoundRect(5, 15, g2d.getFontMetrics().stringWidth(desc) + 15, 50, 25, 25);
+		g2d.drawRoundRect(5, 70, g2d.getFontMetrics().stringWidth(stance.toString()) + 15, 50, 25, 25);
+		g2d.drawRoundRect(g2d.getFontMetrics().stringWidth(stance.toString()) + 25, 70, g2d.getFontMetrics().stringWidth(currTime + "h") + 15, 50, 25, 25);
 
 		g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("health.png"))).getImage(), 1225, 15, null);
 		g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("food.png"))).getImage(), 1225, 70, null);
@@ -326,7 +327,7 @@ public class Kawaigotchi {
 
 		drawOutlinedText(desc, 13, 50, g2d);
 		drawOutlinedText(stance.toString(), 13, 105, g2d);
-		drawOutlinedText(currTime + "h", (int) g2d.getFontMetrics().getStringBounds(stance.toString(), g2d).getWidth() + 33, 105, g2d);
+		drawOutlinedText(currTime + "h", g2d.getFontMetrics().stringWidth(stance.toString()) + 33, 105, g2d);
 
 		//GROUND = 108
 		g2d.drawImage(pet, pos, scn.getHeight() - (tier == Tier.CHILD ? pet.getHeight(null) / 3 : tier == Tier.TEEN ? pet.getHeight(null) / 2 : pet.getHeight(null)) - 108, dir * (tier == Tier.CHILD ? pet.getWidth(null) / 3 : tier == Tier.TEEN ? pet.getWidth(null) / 2 : pet.getWidth(null)), (tier == Tier.CHILD ? pet.getHeight(null) / 3 : tier == Tier.TEEN ? pet.getHeight(null) / 2 : pet.getHeight(null)), null);

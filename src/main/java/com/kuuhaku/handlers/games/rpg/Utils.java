@@ -109,7 +109,7 @@ public class Utils {
 
 		int[] stats = c.getInventory().getStatModifiers();
 		g2d.drawRoundRect(x + 10, y + 10, w, h, 64, 64);
-		g2d.drawString("Modificadores", x + 10 + (int) (w / 2 - (g2d.getFontMetrics().getStringBounds("Modificadores", g2d).getWidth() / 2)), y + 70);
+		g2d.drawString("Modificadores", x + 10 + (w / 2 - (g2d.getFontMetrics().stringWidth("Modificadores") / 2)), y + 70);
 		g2d.drawString("ATK: " + (stats[1] > 0 ? "+" + stats[1] : (stats[1] < 0 ? "-" + stats[1] : stats[1])), x + 30, y + 140);
 		g2d.drawString("DEF: " + (stats[0] > 0 ? "+" + stats[0] : (stats[0] < 0 ? "-" + stats[0] : stats[0])), x + 30, y + 200);
 

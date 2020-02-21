@@ -151,7 +151,7 @@ public class Character {
 
 		g2d.drawImage(bi, 0, 120, null);
 		g2d.drawRoundRect(10, 10, bi.getWidth() - 20, 100, 64, 64);
-		g2d.drawString("Equipamentos de " + getName(), bi.getWidth() / 2 - (int) (g2d.getFontMetrics().getStringBounds("Equipamento de " + getName(), g2d).getWidth() / 2), 80);
+		g2d.drawString("Equipamentos de " + getName(), bi.getWidth() / 2 - (g2d.getFontMetrics().stringWidth("Equipamento de " + getName()) / 2), 80);
 
 		g2d.dispose();
 
