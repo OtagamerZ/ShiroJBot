@@ -19,6 +19,8 @@ package com.kuuhaku.command.commands.fun;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.mysql.AccountDAO;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
@@ -37,6 +39,8 @@ public class PPTCommand extends Command {
 			channel.sendMessage(":x: | Você tem que escolher pedra, papel ou tesoura!").queue();
 			return;
 		}
+
+		Account acc = AccountDAO.getAccount(author.getId());
 
 		int pcOption = Helper.rng(3);
 		int win = 2;
@@ -108,7 +112,8 @@ public class PPTCommand extends Command {
 																	p3.editMessage(p3.getContentRaw() + "\nVocê perdeu!").queue();
 																	break;
 																case 1:
-																	p3.editMessage(p3.getContentRaw() + "\nVocê ganhou!").queue();
+																	int crd = Helper.rng(10);
+																	p3.editMessage(p3.getContentRaw() + "\nVocê ganhou! Aqui, " + crd + " créditos por ter jogado comigo!").queue();
 																	break;
 																case 2:
 																	p3.editMessage(p3.getContentRaw() + "\nEmpate!").queue();
