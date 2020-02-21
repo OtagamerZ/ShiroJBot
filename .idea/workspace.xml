@@ -8,7 +8,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/SlotsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/SlotsCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -218,21 +217,7 @@
       <workItem from="1581713431855" duration="97000" />
       <workItem from="1581942657201" duration="8436000" />
       <workItem from="1581955921548" duration="13000" />
-      <workItem from="1582288075220" duration="12368000" />
-    </task>
-    <task id="LOCAL-00564" summary="Correção nos comandos de reação">
-      <created>1581616508125</created>
-      <option name="number" value="00564" />
-      <option name="presentableId" value="LOCAL-00564" />
-      <option name="project" value="LOCAL" />
-      <updated>1581616508125</updated>
-    </task>
-    <task id="LOCAL-00565" summary="Correção nos comandos de reação">
-      <created>1581616718014</created>
-      <option name="number" value="00565" />
-      <option name="presentableId" value="LOCAL-00565" />
-      <option name="project" value="LOCAL" />
-      <updated>1581616718014</updated>
+      <workItem from="1582288075220" duration="12731000" />
     </task>
     <task id="LOCAL-00566" summary="Correção nos comandos de reação">
       <created>1581616991240</created>
@@ -563,7 +548,21 @@
       <option name="project" value="LOCAL" />
       <updated>1582305780096</updated>
     </task>
-    <option name="localTasksCounter" value="613" />
+    <task id="LOCAL-00613" summary="Comando de slots">
+      <created>1582306214255</created>
+      <option name="number" value="00613" />
+      <option name="presentableId" value="LOCAL-00613" />
+      <option name="project" value="LOCAL" />
+      <updated>1582306214255</updated>
+    </task>
+    <task id="LOCAL-00614" summary="Comando de slots">
+      <created>1582306356495</created>
+      <option name="number" value="00614" />
+      <option name="presentableId" value="LOCAL-00614" />
+      <option name="project" value="LOCAL" />
+      <updated>1582306356495</updated>
+    </task>
+    <option name="localTasksCounter" value="615" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -730,11 +729,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1582306237061">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1582306358695">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1581560661721" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1582306237061" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1582306358695" />
     <state x="312" y="66" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1581001292879">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
