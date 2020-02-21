@@ -49,7 +49,7 @@ public class StonksCommand extends Command {
 
 			Graphics2D g2d = bi.createGraphics();
 			g2d.setFont(new Font("Impact", Font.BOLD, 25));
-			int h = (int) g2d.getFontMetrics().getStringBounds(text, g2d).getWidth() / (bi.getWidth() - 50);
+			int h = g2d.getFontMetrics().stringWidth(text) / (bi.getWidth() - 50);
 
 			BufferedImage canvas = new BufferedImage(bi.getWidth(), 32 * (h + 1) + bi.getHeight(), BufferedImage.TYPE_INT_RGB);
 			g2d = canvas.createGraphics();
