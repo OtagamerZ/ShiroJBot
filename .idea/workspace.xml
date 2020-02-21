@@ -8,7 +8,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/SlotsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/SlotsCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -218,14 +217,7 @@
       <workItem from="1581713431855" duration="97000" />
       <workItem from="1581942657201" duration="8436000" />
       <workItem from="1581955921548" duration="13000" />
-      <workItem from="1582288075220" duration="16036000" />
-    </task>
-    <task id="LOCAL-00577" summary="Correção nos comandos de reação">
-      <created>1581620448137</created>
-      <option name="number" value="00577" />
-      <option name="presentableId" value="LOCAL-00577" />
-      <option name="project" value="LOCAL" />
-      <updated>1581620448137</updated>
+      <workItem from="1582288075220" duration="17249000" />
     </task>
     <task id="LOCAL-00578" summary="Correção nos comandos de reação">
       <created>1581620593673</created>
@@ -563,7 +555,14 @@
       <option name="project" value="LOCAL" />
       <updated>1582309840473</updated>
     </task>
-    <option name="localTasksCounter" value="626" />
+    <task id="LOCAL-00626" summary="Comando de slots">
+      <created>1582309922924</created>
+      <option name="number" value="00626" />
+      <option name="presentableId" value="LOCAL-00626" />
+      <option name="project" value="LOCAL" />
+      <updated>1582309922924</updated>
+    </task>
+    <option name="localTasksCounter" value="627" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -658,11 +657,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="620" y="336" key="#com.intellij.refactoring.move.moveInstanceMethod.MoveInstanceMethodDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1578419740782" />
-    <state x="556" y="224" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog" timestamp="1578938350237">
+    <state x="934" y="185" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog" timestamp="1582311152915">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="452" y="144" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog/0.0.1366.768@0.0.1366.768" timestamp="1578793226369" />
-    <state x="556" y="224" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1578938350237" />
+    <state x="934" y="185" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1582311152915" />
     <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1579810412666">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -675,11 +674,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1578421403620" />
-    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1582309837247">
+    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1582309919807">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1581560655769" />
-    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1582309837247" />
+    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1582309919807" />
     <state x="160" y="89" width="1344" height="834" key="DiffContextDialog" timestamp="1580842925618">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -730,11 +729,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1582309848324">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1582309929344">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1581560661721" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1582309848324" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1582309929344" />
     <state x="312" y="66" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1581001292879">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
