@@ -60,7 +60,8 @@ public class StonksCommand extends Command {
 
 			g2d.setColor(Color.BLACK);
 			g2d.setFont(new Font("Impact", Font.BOLD, 25));
-			Profile.drawStringMultiLineNO(g2d, text, bi.getWidth() - 50, 25, 30);
+			if (text.contains("\\n")) Helper.drawString(g2d, text, 25, 30);
+			else Profile.drawStringMultiLineNO(g2d, text, bi.getWidth() - 50, 25, 30);
 			g2d.drawImage(bi, 0, canvas.getHeight() - bi.getHeight(), null);
 
 			g2d.dispose();
