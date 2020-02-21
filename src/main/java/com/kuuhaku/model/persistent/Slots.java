@@ -24,14 +24,14 @@ import javax.persistence.*;
 
 @Entity
 public class Slots {
-	public static final String SLOT = "<a:slots:680405919300845600>";
+	public static final String SLOT = "<a:slots:680448443692744956>";
 	public static final String JACKPOT = "<:7_s:680405919057969155>";
 	public static final String DIAMOND = "<:diamond_s:680405919317753877>";
 	public static final String HORSESHOE = "<:horseshoe_s:680405919213158525>";
 	public static final String BAR = "<:bar_s:680405918667898910>";
 	public static final String BELL = "<:bell_s:680405919732990017>";
 	public static final String HEART = "<:heart_s:680405919183405086>";
-	public static final String CHERRY = "<:cherry_s:680405919221153812>";
+	public static final String CHERRY = "<:cherry_s:680448442832912419>";
 	public static final String WATERMELON = "<:watermelon_s:680405919548440587>";
 	public static final String LEMON = "<:lemon_s:680405919901024284>";
 	private static final String[] slots;
