@@ -23,6 +23,8 @@ import com.kuuhaku.controller.mysql.AccountDAO;
 import com.kuuhaku.controller.mysql.SlotsDAO;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Slots;
+import com.kuuhaku.utils.Helper;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 
@@ -42,7 +44,13 @@ public class SlotsCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length == 0) {
-			channel.sendMessage("__**Tabela de prêmios:**__\n\n" + prizeTable() + "\n\nUse `" + prefix + "slots VALOR` para jogar (valor mínimo: 25 créditos)").queue();
+			EmbedBuilder eb = new EmbedBuilder();
+			eb.setColor(Helper.getRandomColor());
+			eb.setDescription(prizeTable());
+			eb.setTitle("Tabela de prêmios");
+			eb.setFooter("Use `" + prefix + "slots VALOR` para jogar (valor mínimo: 25 créditos)");
+
+			channel.sendMessage(eb.build()).queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[0]) || Integer.parseInt(args[0]) < 25) {
 			channel.sendMessage(":x: | A aposta deve ser um valor numérico maior ou igual a 25.").queue();
