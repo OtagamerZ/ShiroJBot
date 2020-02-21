@@ -51,7 +51,7 @@ public class StonksCommand extends Command {
 			g2d.setFont(new Font("Impact", Font.BOLD, 25));
 			int h = (int) g2d.getFontMetrics().getStringBounds(text, g2d).getWidth() / (bi.getWidth() - 50);
 
-			BufferedImage canvas = new BufferedImage(bi.getWidth(), 30 * (h + 1) + bi.getHeight(), BufferedImage.TYPE_INT_RGB);
+			BufferedImage canvas = new BufferedImage(bi.getWidth(), 35 * (h + 1) + bi.getHeight(), BufferedImage.TYPE_INT_RGB);
 			g2d = canvas.createGraphics();
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
