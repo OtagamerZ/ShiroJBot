@@ -117,7 +117,7 @@ public class Profile {
 		g2d.setFont(FONT.deriveFont(Font.PLAIN, 50));
 		printCenteredString("LEVEL", 196, 52, 440, g2d);
 		String name = m.getEffectiveName();
-		if ((int) g2d.getFontMetrics().getStringBounds(m.getEffectiveName(), g2d).getWidth() >= 678)
+		if (g2d.getFontMetrics().stringWidth(m.getEffectiveName()) >= 678)
 			name = m.getEffectiveName().substring(0, 21).concat("...");
 		drawOutlinedText(name, 270, 342, g2d);
 
@@ -296,7 +296,7 @@ public class Profile {
 	}
 
 	public static void printCenteredString(String s, int width, int XPos, int YPos, Graphics2D g2d) {
-		int stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
+		int stringLen = g2d.getFontMetrics().stringWidth(s);
 		int start = width / 2 - stringLen / 2;
 		drawOutlinedText(s, start + XPos, YPos, g2d);
 	}
@@ -328,14 +328,14 @@ public class Profile {
 		} else {
 			String[] words = text.split(" ");
 			StringBuilder currentLine = new StringBuilder(words[0]);
-			for (int i = 1; i < words.length; i++) {
-				if (m.stringWidth(currentLine + words[i]) < lineWidth) {
-					currentLine.append(" ").append(words[i]);
+			for (String word : words) {
+				if (m.stringWidth(currentLine + word) < lineWidth) {
+					currentLine.append(" ").append(word);
 				} else {
 					String s = currentLine.toString();
 					drawOutlinedText(s, x, y, g);
 					y += m.getHeight();
-					currentLine = new StringBuilder(words[i]);
+					currentLine = new StringBuilder(word);
 				}
 			}
 			if (currentLine.toString().trim().length() > 0) {
@@ -351,14 +351,14 @@ public class Profile {
 		} else {
 			String[] words = text.split(" ");
 			StringBuilder currentLine = new StringBuilder(words[0]);
-			for (int i = 1; i < words.length; i++) {
-				if (m.stringWidth(currentLine + words[i]) < lineWidth) {
-					currentLine.append(" ").append(words[i]);
+			for (String word : words) {
+				if (m.stringWidth(currentLine + word) < lineWidth || word.contains("\n")) {
+					currentLine.append(" ").append(word);
 				} else {
 					String s = currentLine.toString();
 					g.drawString(s, x, y);
 					y += m.getHeight();
-					currentLine = new StringBuilder(words[i]);
+					currentLine = new StringBuilder(word);
 				}
 			}
 			if (currentLine.toString().trim().length() > 0) {
