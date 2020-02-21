@@ -142,7 +142,7 @@ public class SlotsCommand extends Command {
 				msg += "Poxa, parece que você não teve sorte hoje. Volte sempre!";
 			}
 
-			channel.sendMessage(msg).queueAfter(14, TimeUnit.SECONDS);
+			channel.sendMessage(msg).queue();
 			acc.addCredit(bet.get());
 			SlotsDAO.saveSlots(slt);
 		};
