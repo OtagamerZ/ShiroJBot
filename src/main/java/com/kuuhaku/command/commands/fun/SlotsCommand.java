@@ -78,53 +78,53 @@ public class SlotsCommand extends Command {
 			String msg = "";
 
 			boolean win = false;
-			if (lemon == 3) {
+			if (lemon >= 3) {
 				bet.set(Math.round(bet.get() * 0.8f));
 				msg = "Eita, parece que você não teve sorte hoje!";
 				win = true;
 			}
-			if (watermelon == 3) {
+			if (watermelon >= 3) {
 				bet.set(Math.round(bet.get() * 1.2f));
 				msg = "E temos três melancias!";
 				win = true;
 			}
-			if (cherry == 3) {
+			if (cherry >= 3) {
 				bet.set(Math.round(bet.get() * 1.35f));
 				msg = "Três cerejas no bolo!";
 				win = true;
 			}
-			if (lemon + watermelon + cherry == 3) {
+			if (lemon + watermelon + cherry >= 3) {
 				bet.set(Math.round(bet.get() * 1.5f));
 				msg = "Temos uma salada de frutas!";
 				win = true;
 			}
-			if (heart == 3) {
+			if (heart >= 3) {
 				bet.set(Math.round(bet.get() * 1.75f));
 				msg = "Três corações apaixonados!";
 				win = true;
 			}
-			if (bell == 3) {
+			if (bell >= 3) {
 				bet.set(Math.round(bet.get() * 2.25f));
 				msg = "Toquem os sinos!";
 				win = true;
 			}
-			if (bar == 3) {
+			if (bar >= 3) {
 				bet.updateAndGet(v -> v * 3);
 				msg = "Chamem a polícia, temos um sortudo!";
 				win = true;
 			}
-			if (horseshoe == 3) {
+			if (horseshoe >= 3) {
 				bet.updateAndGet(v -> v * 5);
 				msg = "Alguem sequestrou um doente, três ferraduras de ouro!";
 				win = true;
 			}
-			if (diamond == 3) {
+			if (diamond >= 3) {
 				bet.updateAndGet(v -> v * 10);
 				msg = "Assalto ao banco da sorte, temos três diamantes!";
 				win = true;
 			}
 			boolean pot = false;
-			if (jackpot == 3) {
+			if (jackpot >= 3) {
 				bet.set(slt.jackpot());
 				pot = true;
 				msg = "Impossível! " + guild.getPublicRole().getAsMention() + " " + author.getAsMention() + " detonou a loteria, **JACKPOT**!!!";
