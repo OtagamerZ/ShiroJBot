@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 public class PPTCommand extends Command {
 
 	public PPTCommand() {
-		super("jankenpo", new String[]{"ppt", "rps", "jokenpo"}, "<pedra/papel/tesoura>", "A Shiro joga jankenpo com você.", Category.FUN);
+		super("jankenpon", new String[]{"ppt", "rps", "jokenpo", "janken"}, "<pedra/papel/tesoura>", "A Shiro joga jankenpo com você.", Category.FUN);
 	}
 
 	@Override
@@ -96,20 +96,30 @@ public class PPTCommand extends Command {
 
 		int finalWin = win;
 		String finalPcChoice = pcChoice;
-		channel.sendMessage("Jan...").queue(p1 -> {
-			p1.editMessage(p1.getContentRaw() + "Ken...").queueAfter(1, TimeUnit.SECONDS, p2 -> p2.editMessage(p2.getContentRaw() + "Pon! " + finalPcChoice).queueAfter(1, TimeUnit.SECONDS, p3 -> {
-				switch (finalWin) {
-					case 0:
-						p3.editMessage(p3.getContentRaw() + "\nVocê perdeu!").queue();
-						break;
-					case 1:
-						p3.editMessage(p3.getContentRaw() + "\nVocê ganhou!").queue();
-						break;
-					case 2:
-						p3.editMessage(p3.getContentRaw() + "\nEmpate!").queue();
-						break;
-				}
-			}));
-		});
+		channel.sendMessage("Sai").queue(p1 ->
+				p1.editMessage(p1.getContentRaw() + "sho").queueAfter(333, TimeUnit.MILLISECONDS, p2 ->
+						p2.editMessage(p2.getContentRaw() + " wa ").queueAfter(333, TimeUnit.MILLISECONDS, p3 ->
+								p3.editMessage(p3.getContentRaw() + " guu!").queueAfter(333, TimeUnit.MILLISECONDS, p4 ->
+										p4.editMessage(p4.getContentRaw() + "\nJan...").queueAfter(1, TimeUnit.SECONDS, p5 ->
+												p5.editMessage(p5.getContentRaw() + "Ken...").queueAfter(1, TimeUnit.SECONDS, p6 ->
+														p6.editMessage(p6.getContentRaw() + "Pon! " + finalPcChoice).queueAfter(1, TimeUnit.SECONDS, p7 -> {
+															switch (finalWin) {
+																case 0:
+																	p3.editMessage(p3.getContentRaw() + "\nVocê perdeu!").queue();
+																	break;
+																case 1:
+																	p3.editMessage(p3.getContentRaw() + "\nVocê ganhou!").queue();
+																	break;
+																case 2:
+																	p3.editMessage(p3.getContentRaw() + "\nEmpate!").queue();
+																	break;
+															}
+														})
+												)
+										)
+								)
+						)
+				)
+		);
 	}
 }
