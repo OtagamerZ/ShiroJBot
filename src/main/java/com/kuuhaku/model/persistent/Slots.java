@@ -52,6 +52,10 @@ public class Slots {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int pot;
 
+	public int getPot() {
+		return pot;
+	}
+
 	public int jackpot() {
 		int prize = pot;
 		this.pot = 0;
