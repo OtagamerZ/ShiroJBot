@@ -32,10 +32,10 @@ public class WebSocketConfig {
 
 	private final SocketIOServer socket;
 
-	public WebSocketConfig() throws BindException {
+	public WebSocketConfig(int port) throws BindException {
 		Configuration config = new Configuration();
 		config.setHostname("localhost");
-		config.setPort(8000);
+		config.setPort(port);
 
 		socket = new SocketIOServer(config);
 		socket.addEventListener("chatevent", JSONObject.class, (client, data, ackSender) -> {

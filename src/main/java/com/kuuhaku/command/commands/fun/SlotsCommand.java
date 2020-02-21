@@ -23,10 +23,10 @@ import net.dv8tion.jda.api.entities.*;
 
 import java.util.Random;
 
-public class EightBallCommand extends Command {
+public class SlotsCommand extends Command {
 
-	public EightBallCommand() {
-		super("8ball", "<pergunta>", "Faz uma pergunta de sim ou não à Shiro.", Category.MISC);
+	public SlotsCommand() {
+		super("slots", "<aposta>", "Aposta um quantidade de créditos nos slots.", Category.MISC);
 	}
 
 	@Override

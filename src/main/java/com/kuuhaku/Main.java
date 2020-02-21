@@ -112,8 +112,8 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		int tries = 1;
 		while (!apiOnline) {
 			try {
-				info.setServer(new WebSocketConfig());
-				info.setClient(IO.socket("http://" + System.getenv("SERVER_URL") + "/")).connect();
+				info.setServer(new WebSocketConfig(7999 + tries));
+				info.setClient(IO.socket("http://" + System.getenv("SOCKET_URL") + "/")).connect();
 				apiOnline = true;
 			} catch (URISyntaxException | BindException e) {
 				Helper.logger(Main.class).error("Erro ao conectar client: " + e + " | " + e.getStackTrace()[0]);
