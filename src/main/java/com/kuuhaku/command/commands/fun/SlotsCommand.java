@@ -29,6 +29,7 @@ import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -83,6 +84,8 @@ public class SlotsCommand extends Command {
 			int diamond = Collections.frequency(rolled, Slots.DIAMOND);
 			int jackpot = Collections.frequency(rolled, Slots.JACKPOT);
 
+			System.out.println(Arrays.toString(rolled.toArray()));
+
 			String msg = "";
 
 			boolean win = false;
@@ -90,47 +93,36 @@ public class SlotsCommand extends Command {
 				bet.set(Math.round(bet.get() * 0.8f));
 				msg = "Eita, parece que você não teve sorte hoje!";
 				win = true;
-			}
-			if (watermelon >= 3) {
-				bet.set(Math.round(bet.get() * 1.2f));
+			} else if (watermelon >= 3) {
+				bet.set(Math.round(bet.get() * 1.35f));
 				msg = "E temos três melancias!";
 				win = true;
-			}
-			if (cherry >= 3) {
-				bet.set(Math.round(bet.get() * 1.35f));
+			} else if (cherry >= 3) {
+				bet.set(Math.round(bet.get() * 1.5f));
 				msg = "Três cerejas no bolo!";
 				win = true;
-			}
-			if (lemon + watermelon + cherry >= 3) {
-				bet.set(Math.round(bet.get() * 1.5f));
-				msg = "Temos uma salada de frutas!";
-				win = true;
-			}
-			if (heart >= 3) {
+			} else if (heart >= 3) {
 				bet.set(Math.round(bet.get() * 1.75f));
 				msg = "Três corações apaixonados!";
 				win = true;
-			}
-			if (bell >= 3) {
+			} else if (bell >= 3) {
 				bet.set(Math.round(bet.get() * 2.25f));
 				msg = "Toquem os sinos!";
 				win = true;
-			}
-			if (bar >= 3) {
+			} else if (bar >= 3) {
 				bet.updateAndGet(v -> v * 3);
 				msg = "Chamem a polícia, temos um sortudo!";
 				win = true;
-			}
-			if (horseshoe >= 3) {
+			} else if (horseshoe >= 3) {
 				bet.updateAndGet(v -> v * 5);
 				msg = "Alguem sequestrou um doente, três ferraduras de ouro!";
 				win = true;
-			}
-			if (diamond >= 3) {
+			} else if (diamond >= 3) {
 				bet.updateAndGet(v -> v * 10);
 				msg = "Assalto ao banco da sorte, temos três diamantes!";
 				win = true;
 			}
+
 			boolean pot = false;
 			if (jackpot >= 3) {
 				bet.set(slt.jackpot());
@@ -155,13 +147,13 @@ public class SlotsCommand extends Command {
 			SlotsDAO.saveSlots(slt);
 		};
 
-		channel.sendMessage(":white_flower: | Aposta de " + author.getAsMention() + ": " + args[0]).queue(s -> {
-			s.editMessage(s.getContentRaw() + "\n\n" + "Prêmio acumulado: " + slt.getPot() + "\n" + (highbet ? "     ⇩       ⇩      ⇩       ⇩      ⇩" : "              ⇩       ⇩       ⇩") + "\n┌──┬──┬──┬──┬──┐\n" + rollSlot(0) + "\n└──┴──┴──┴──┴──┘\n" + (highbet ? "     ⇧       ⇧      ⇧       ⇧      ⇧" : "              ⇧       ⇧       ⇧")).queue();
+		channel.sendMessage(":white_flower: | **Aposta de " + author.getAsMention() + ": __" + args[0] + "__**").queue(s -> {
+			s.editMessage(s.getContentRaw() + "\n\n" + "**Prêmio acumulado: __" + slt.getPot() + "__**\n" + (highbet ? "     ⇩       ⇩      ⇩       ⇩      ⇩" : "              ⇩       ⇩       ⇩") + "\n┌──┬──┬──┬──┬──┐\n" + rollSlot(0) + "\n└──┴──┴──┴──┴──┘\n" + (highbet ? "     ⇧       ⇧      ⇧       ⇧      ⇧" : "              ⇧       ⇧       ⇧")).queue();
 			for (int i = 1; i < 6; i++) {
 				if (i != 5)
-					s.editMessage(s.getContentRaw() + "\n\n" + "Prêmio acumulado: " + slt.getPot() + "\n" + (highbet ? "     ⇩       ⇩      ⇩       ⇩      ⇩" : "              ⇩       ⇩       ⇩") + "\n┌──┬──┬──┬──┬──┐\n" + rollSlot(i) + "\n└──┴──┴──┴──┴──┘\n" + (highbet ? "     ⇧       ⇧      ⇧       ⇧      ⇧" : "              ⇧       ⇧       ⇧")).queueAfter(2 + (2 * i), TimeUnit.SECONDS);
+					s.editMessage(s.getContentRaw() + "\n\n" + "**Prêmio acumulado: __" + slt.getPot() + "__**\n" + (highbet ? "     ⇩       ⇩      ⇩       ⇩      ⇩" : "              ⇩       ⇩       ⇩") + "\n┌──┬──┬──┬──┬──┐\n" + rollSlot(i) + "\n└──┴──┴──┴──┴──┘\n" + (highbet ? "     ⇧       ⇧      ⇧       ⇧      ⇧" : "              ⇧       ⇧       ⇧")).queueAfter(2 + (2 * i), TimeUnit.SECONDS);
 				else
-					s.editMessage(s.getContentRaw() + "\n\n" + "Prêmio acumulado: " + slt.getPot() + "\n" + (highbet ? "     ⇩       ⇩      ⇩       ⇩      ⇩" : "              ⇩       ⇩       ⇩") + "\n┌──┬──┬──┬──┬──┐\n" + rollSlot(i) + "\n└──┴──┴──┴──┴──┘\n" + (highbet ? "     ⇧       ⇧      ⇧       ⇧      ⇧" : "              ⇧       ⇧       ⇧")).queueAfter(2 + (2 * i), TimeUnit.SECONDS, f -> r.run());
+					s.editMessage(s.getContentRaw() + "\n\n" + "**Prêmio acumulado: __" + slt.getPot() + "__**\n" + (highbet ? "     ⇩       ⇩      ⇩       ⇩      ⇩" : "              ⇩       ⇩       ⇩") + "\n┌──┬──┬──┬──┬──┐\n" + rollSlot(i) + "\n└──┴──┴──┴──┴──┘\n" + (highbet ? "     ⇧       ⇧      ⇧       ⇧      ⇧" : "              ⇧       ⇧       ⇧")).queueAfter(2 + (2 * i), TimeUnit.SECONDS, f -> r.run());
 			}
 		});
 	}
@@ -188,9 +180,8 @@ public class SlotsCommand extends Command {
 
 	private String prizeTable() {
 		return Slots.LEMON + Slots.LEMON + Slots.LEMON + " -> x0.8\n" +
-				Slots.WATERMELON + Slots.WATERMELON + Slots.WATERMELON + " -> x1.2\n" +
-				Slots.CHERRY + Slots.CHERRY + Slots.CHERRY + " -> x1.35\n" +
-				Slots.LEMON + Slots.WATERMELON + Slots.CHERRY + " -> x1.5\n" +
+				Slots.WATERMELON + Slots.WATERMELON + Slots.WATERMELON + " -> x1.35\n" +
+				Slots.CHERRY + Slots.CHERRY + Slots.CHERRY + " -> x1.5\n" +
 				Slots.HEART + Slots.HEART + Slots.HEART + " -> x1.75\n" +
 				Slots.BELL + Slots.BELL + Slots.BELL + " -> x2.25\n" +
 				Slots.BAR + Slots.BAR + Slots.BAR + " -> x3\n" +
