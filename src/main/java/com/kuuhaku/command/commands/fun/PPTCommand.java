@@ -22,16 +22,18 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
+import java.util.concurrent.TimeUnit;
+
 public class PPTCommand extends Command {
 
 	public PPTCommand() {
-		super("ppt", new String[] {"rps"}, "<pedra/papel/tesoura>", "A Shiro joga pedra/papel/tesoura com você.", Category.FUN);
+		super("jankenpo", new String[]{"ppt", "rps", "jokenpo"}, "<pedra/papel/tesoura>", "A Shiro joga jankenpo com você.", Category.FUN);
 	}
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 
-		if(args.length < 1) {
+		if (args.length < 1) {
 			channel.sendMessage(":x: | Você tem que escolher pedra, papel ou tesoura!").queue();
 			return;
 		}
@@ -39,9 +41,10 @@ public class PPTCommand extends Command {
 		int pcOption = Helper.rng(3);
 		int win = 2;
 
-		switch(args[0].toLowerCase()) {
+		switch (args[0].toLowerCase()) {
 			case "pedra":
-				switch(pcOption) {
+			case ":punch:":
+				switch (pcOption) {
 					case 1:
 						win = 0;
 						break;
@@ -51,7 +54,8 @@ public class PPTCommand extends Command {
 				}
 				break;
 			case "papel":
-				switch(pcOption) {
+			case ":raised_back_of_hand:":
+				switch (pcOption) {
 					case 0:
 						win = 1;
 						break;
@@ -61,6 +65,7 @@ public class PPTCommand extends Command {
 				}
 				break;
 			case "tesoura":
+			case ":v:":
 				switch (pcOption) {
 					case 0:
 						win = 0;
@@ -77,28 +82,34 @@ public class PPTCommand extends Command {
 
 		String pcChoice = "";
 
-		switch(pcOption) {
+		switch (pcOption) {
 			case 0:
-				pcChoice = ":punch: **Pedra**";
+				pcChoice = ":punch:";
 				break;
 			case 1:
-				pcChoice = ":raised_back_of_hand: **Papel**";
+				pcChoice = ":raised_back_of_hand:";
 				break;
 			case 2:
-				pcChoice = ":v: **Tesoura**";
+				pcChoice = ":v:";
 				break;
 		}
 
-		switch(win) {
-			case 0:
-				channel.sendMessage("Perdeu! Eu escolhi " + pcChoice).queue();
-				break;
-			case 1:
-				channel.sendMessage("Ganhou! Eu escolhi " + pcChoice).queue();
-				break;
-			case 2:
-				channel.sendMessage("Empate! Eu escolhi " + pcChoice).queue();
-				break;
-		}
+		int finalWin = win;
+		String finalPcChoice = pcChoice;
+		channel.sendMessage("Jan...").queue(p1 -> {
+			p1.editMessage(p1.getContentRaw() + "Ken...").queueAfter(1, TimeUnit.SECONDS, p2 -> p2.editMessage(p2.getContentRaw() + "Pon! " + finalPcChoice).queueAfter(1, TimeUnit.SECONDS, p3 -> {
+				switch (finalWin) {
+					case 0:
+						p3.editMessage(p3.getContentRaw() + "\nVocê perdeu!").queue();
+						break;
+					case 1:
+						p3.editMessage(p3.getContentRaw() + "\nVocê ganhou!").queue();
+						break;
+					case 2:
+						p3.editMessage(p3.getContentRaw() + "\nEmpate!").queue();
+						break;
+				}
+			}));
+		});
 	}
 }
