@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SlotsCommand extends Command {
 	private List<String> rolled = new ArrayList<>();
@@ -49,107 +50,112 @@ public class SlotsCommand extends Command {
 		}
 
 		Account acc = AccountDAO.getAccount(author.getId());
-		int bet = Integer.parseInt(args[0]);
+		AtomicInteger bet = new AtomicInteger(Integer.parseInt(args[0]));
 
-		if (acc.getBalance() < bet) {
+		if (acc.getBalance() < bet.get()) {
 			channel.sendMessage(":x: | Você não tem créditos suficientes.").queue();
 			return;
 		}
 
-		boolean highbet = bet >= 100;
+		boolean highbet = bet.get() >= 100;
 		Slots slt = SlotsDAO.getSlots();
-		acc.removeCredit(bet);
-		slt.addToPot(bet);
+		acc.removeCredit(bet.get());
+		slt.addToPot(bet.get());
+
+		Runnable r = () -> {
+			if (!highbet) rolled = rolled.subList(1, rolled.size() - 1);
+
+			int lemon = Collections.frequency(rolled, Slots.LEMON);
+			int watermelon = Collections.frequency(rolled, Slots.WATERMELON);
+			int cherry = Collections.frequency(rolled, Slots.CHERRY);
+			int heart = Collections.frequency(rolled, Slots.HEART);
+			int bell = Collections.frequency(rolled, Slots.BELL);
+			int bar = Collections.frequency(rolled, Slots.BAR);
+			int horseshoe = Collections.frequency(rolled, Slots.HORSESHOE);
+			int diamond = Collections.frequency(rolled, Slots.DIAMOND);
+			int jackpot = Collections.frequency(rolled, Slots.JACKPOT);
+
+			String msg = "";
+
+			boolean win = false;
+			if (lemon == 3) {
+				bet.set(Math.round(bet.get() * 0.8f));
+				msg = "Eita, parece que você não teve sorte hoje!";
+				win = true;
+			}
+			if (watermelon == 3) {
+				bet.set(Math.round(bet.get() * 1.2f));
+				msg = "E temos três melancias!";
+				win = true;
+			}
+			if (cherry == 3) {
+				bet.set(Math.round(bet.get() * 1.35f));
+				msg = "Três cerejas no bolo!";
+				win = true;
+			}
+			if (lemon + watermelon + cherry == 3) {
+				bet.set(Math.round(bet.get() * 1.5f));
+				msg = "Temos uma salada de frutas!";
+				win = true;
+			}
+			if (heart == 3) {
+				bet.set(Math.round(bet.get() * 1.75f));
+				msg = "Três corações apaixonados!";
+				win = true;
+			}
+			if (bell == 3) {
+				bet.set(Math.round(bet.get() * 2.25f));
+				msg = "Toquem os sinos!";
+				win = true;
+			}
+			if (bar == 3) {
+				bet.updateAndGet(v -> v * 3);
+				msg = "Chamem a polícia, temos um sortudo!";
+				win = true;
+			}
+			if (horseshoe == 3) {
+				bet.updateAndGet(v -> v * 5);
+				msg = "Alguem sequestrou um doente, três ferraduras de ouro!";
+				win = true;
+			}
+			if (diamond == 3) {
+				bet.updateAndGet(v -> v * 10);
+				msg = "Assalto ao banco da sorte, temos três diamantes!";
+				win = true;
+			}
+			boolean pot = false;
+			if (jackpot == 3) {
+				bet.set(slt.jackpot());
+				pot = true;
+				msg = "Impossível! " + guild.getPublicRole().getAsMention() + " " + author.getAsMention() + " detonou a loteria, **JACKPOT**!!!";
+				win = true;
+			}
+
+			if (win) {
+				if (pot)
+					msg += "<a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503>\n\n__**";
+				msg += "\nSeu prêmio é de " + bet + " créditos.";
+				if (pot)
+					msg += "**__\n\n<a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360>";
+			} else {
+				bet.set(0);
+				msg += "Poxa, parece que você não teve sorte hoje. Volte sempre!";
+			}
+
+			channel.sendMessage(msg).queueAfter(14, TimeUnit.SECONDS);
+			acc.addCredit(bet.get());
+			SlotsDAO.saveSlots(slt);
+		};
 
 		channel.sendMessage(":white_flower: | Aposta de " + author.getAsMention() + ": " + args[0]).queue(s -> {
-			s.editMessage(s.getContentRaw() + "\n\n" + "Prêmio acumulado: " + slt.getPot() + "\n" + (highbet ? "     ⇩       ⇩      ⇩       ⇩      ⇩" : "              ⇩       ⇩       ⇩") + "\n┌──┬──┬──┬──┬──┐\n" + rollSlot(0) + "\n└──┴──┴──┴──┴──┘\n" + (highbet ? "     ⇧       ⇧      ⇧       ⇧      ⇧" : "              ⇧       ⇧       ⇧") + prizeTable()).queue();
+			s.editMessage(s.getContentRaw() + "\n\n" + "Prêmio acumulado: " + slt.getPot() + "\n" + (highbet ? "     ⇩       ⇩      ⇩       ⇩      ⇩" : "              ⇩       ⇩       ⇩") + "\n┌──┬──┬──┬──┬──┐\n" + rollSlot(0) + "\n└──┴──┴──┴──┴──┘\n" + (highbet ? "     ⇧       ⇧      ⇧       ⇧      ⇧" : "              ⇧       ⇧       ⇧") + "\n\n" + prizeTable()).queue();
 			for (int i = 1; i < 6; i++) {
-				s.editMessage(s.getContentRaw() + "\n\n" + "Prêmio acumulado: " + slt.getPot() + "\n" + (highbet ? "     ⇩       ⇩      ⇩       ⇩      ⇩" : "              ⇩       ⇩       ⇩") + "\n┌──┬──┬──┬──┬──┐\n" + rollSlot(i) + "\n└──┴──┴──┴──┴──┘\n" + (highbet ? "     ⇧       ⇧      ⇧       ⇧      ⇧" : "              ⇧       ⇧       ⇧") + prizeTable()).queueAfter(2 + (2 * i), TimeUnit.SECONDS);
+				if (i != 5)
+					s.editMessage(s.getContentRaw() + "\n\n" + "Prêmio acumulado: " + slt.getPot() + "\n" + (highbet ? "     ⇩       ⇩      ⇩       ⇩      ⇩" : "              ⇩       ⇩       ⇩") + "\n┌──┬──┬──┬──┬──┐\n" + rollSlot(i) + "\n└──┴──┴──┴──┴──┘\n" + (highbet ? "     ⇧       ⇧      ⇧       ⇧      ⇧" : "              ⇧       ⇧       ⇧") + "\n\n" + prizeTable()).queueAfter(2 + (2 * i), TimeUnit.SECONDS);
+				else
+					s.editMessage(s.getContentRaw() + "\n\n" + "Prêmio acumulado: " + slt.getPot() + "\n" + (highbet ? "     ⇩       ⇩      ⇩       ⇩      ⇩" : "              ⇩       ⇩       ⇩") + "\n┌──┬──┬──┬──┬──┐\n" + rollSlot(i) + "\n└──┴──┴──┴──┴──┘\n" + (highbet ? "     ⇧       ⇧      ⇧       ⇧      ⇧" : "              ⇧       ⇧       ⇧") + "\n\n" + prizeTable()).queueAfter(2 + (2 * i), TimeUnit.SECONDS, f -> r.run());
 			}
 		});
-
-		if (!highbet) rolled = rolled.subList(1, rolled.size() - 1);
-
-		int lemon = Collections.frequency(rolled, Slots.LEMON);
-		int watermelon = Collections.frequency(rolled, Slots.WATERMELON);
-		int cherry = Collections.frequency(rolled, Slots.CHERRY);
-		int heart = Collections.frequency(rolled, Slots.HEART);
-		int bell = Collections.frequency(rolled, Slots.BELL);
-		int bar = Collections.frequency(rolled, Slots.BAR);
-		int horseshoe = Collections.frequency(rolled, Slots.HORSESHOE);
-		int diamond = Collections.frequency(rolled, Slots.DIAMOND);
-		int jackpot = Collections.frequency(rolled, Slots.JACKPOT);
-
-		String msg = "";
-
-		boolean win = false;
-		if (lemon == 3) {
-			bet = Math.round(bet * 0.8f);
-			msg = "Eita, parece que você não teve sorte hoje!";
-			win = true;
-		}
-		if (watermelon == 3) {
-			bet = Math.round(bet * 1.2f);
-			msg = "E temos três melancias!";
-			win = true;
-		}
-		if (cherry == 3) {
-			bet = Math.round(bet * 1.35f);
-			msg = "Três cerejas no bolo!";
-			win = true;
-		}
-		if (lemon + watermelon + cherry == 3) {
-			bet = Math.round(bet * 1.5f);
-			msg = "Temos uma salada de frutas!";
-			win = true;
-		}
-		if (heart == 3) {
-			bet = Math.round(bet * 1.75f);
-			msg = "Três corações apaixonados!";
-			win = true;
-		}
-		if (bell == 3) {
-			bet = Math.round(bet * 2.25f);
-			msg = "Toquem os sinos!";
-			win = true;
-		}
-		if (bar == 3) {
-			bet *= 3;
-			msg = "Chamem a polícia, temos um sortudo!";
-			win = true;
-		}
-		if (horseshoe == 3) {
-			bet *= 5;
-			msg = "Alguem sequestrou um doente, três ferraduras de ouro!";
-			win = true;
-		}
-		if (diamond == 3) {
-			bet *= 10;
-			msg = "Assalto ao banco da sorte, temos três diamantes!";
-			win = true;
-		}
-		boolean pot = false;
-		if (jackpot == 3) {
-			bet = slt.jackpot();
-			pot = true;
-			msg = "Impossível! " + guild.getPublicRole().getAsMention() + " " + author.getAsMention() + " detonou a loteria, **JACKPOT**!!!";
-			win = true;
-		}
-
-		if (win) {
-			if (pot)
-				msg += "<a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503>\n\n__**";
-			msg += "\nSeu prêmio é de " + bet + " créditos.";
-			if (pot)
-				msg += "**__\n\n<a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360>";
-		} else {
-			bet = 0;
-			msg += "Poxa, parece que você não teve sorte hoje. Volte sempre!";
-		}
-
-		channel.sendMessage(msg).queueAfter(14, TimeUnit.SECONDS);
-		acc.addCredit(bet);
-		SlotsDAO.saveSlots(slt);
 	}
 
 	private String rollSlot(int phase) {
