@@ -20,6 +20,7 @@ package com.kuuhaku.command.commands.fun;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.mysql.AccountDAO;
+import com.kuuhaku.controller.mysql.SlotsDAO;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Slots;
 import net.dv8tion.jda.api.entities.*;
@@ -55,11 +56,12 @@ public class SlotsCommand extends Command {
 		}
 
 		boolean highbet = bet >= 100;
+		Slots slt = SlotsDAO.getSlots();
 
 		channel.sendMessage(":white_flower: | Aposta de " + author.getAsMention() + ": " + args[0]).queue(s -> {
-			s.editMessage(s.getContentRaw() + "\n" + (highbet ? "     ⇩       ⇩      ⇩       ⇩      ⇩" : "              ⇩       ⇩       ⇩") + "\n┌──┬──┬──┬──┬──┐\n" + rollSlot(0) + "\n└──┴──┴──┴──┴──┘\n" + (highbet ? "     ⇧       ⇧      ⇧       ⇧      ⇧" : "              ⇧       ⇧       ⇧")).queue();
+			s.editMessage(s.getContentRaw() + "\n" + "Jackpot: " + slt.getPot() + "\n" + (highbet ? "     ⇩       ⇩      ⇩       ⇩      ⇩" : "              ⇩       ⇩       ⇩") + "\n┌──┬──┬──┬──┬──┐\n" + rollSlot(0) + "\n└──┴──┴──┴──┴──┘\n" + (highbet ? "     ⇧       ⇧      ⇧       ⇧      ⇧" : "              ⇧       ⇧       ⇧")).queue();
 			for (int i = 1; i < 6; i++) {
-				s.editMessage(s.getContentRaw() + "\n" + (highbet ? "     ⇩       ⇩      ⇩       ⇩      ⇩" : "              ⇩       ⇩       ⇩") + "\n┌──┬──┬──┬──┬──┐\n" + rollSlot(i) + "\n└──┴──┴──┴──┴──┘\n" + (highbet ? "     ⇧       ⇧      ⇧       ⇧      ⇧" : "              ⇧       ⇧       ⇧")).queueAfter(2 + (2 * i), TimeUnit.SECONDS);
+				s.editMessage(s.getContentRaw() + "\n" + "Jackpot: " + slt.getPot() + "\n" + (highbet ? "     ⇩       ⇩      ⇩       ⇩      ⇩" : "              ⇩       ⇩       ⇩") + "\n┌──┬──┬──┬──┬──┐\n" + rollSlot(i) + "\n└──┴──┴──┴──┴──┘\n" + (highbet ? "     ⇧       ⇧      ⇧       ⇧      ⇧" : "              ⇧       ⇧       ⇧")).queueAfter(2 + (2 * i), TimeUnit.SECONDS);
 			}
 		});
 	}
@@ -84,5 +86,18 @@ public class SlotsCommand extends Command {
 			default:
 				return "";
 		}
+	}
+
+	private String prizeTable() {
+		return Slots.LEMON + Slots.LEMON + Slots.LEMON + " -> x0.8\n" +
+				Slots.WATERMELON + Slots.WATERMELON + Slots.WATERMELON + " -> x1.2\n" +
+				Slots.CHERRY + Slots.CHERRY + Slots.CHERRY + " -> x1.35\n" +
+				Slots.LEMON + Slots.WATERMELON + Slots.CHERRY + " -> x1.5\n" +
+				Slots.HEART + Slots.HEART + Slots.HEART + " -> x1.75\n" +
+				Slots.BELL + Slots.BELL + Slots.BELL + " -> x2.25\n" +
+				Slots.BAR + Slots.BAR + Slots.BAR + " -> x3\n" +
+				Slots.HORSESHOE + Slots.HORSESHOE + Slots.HORSESHOE + " -> x5\n" +
+				Slots.DIAMOND + Slots.DIAMOND + Slots.DIAMOND + " -> x10\n" +
+				Slots.JACKPOT + Slots.JACKPOT + Slots.JACKPOT + " -> JACKPOT!\n";
 	}
 }
