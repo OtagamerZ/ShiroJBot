@@ -109,16 +109,16 @@ public class PPTCommand extends Command {
 														p6.editMessage(p6.getContentRaw() + "Pon! " + finalPcChoice).queueAfter(1, TimeUnit.SECONDS, p7 -> {
 															switch (finalWin) {
 																case 0:
-																	p3.editMessage(p3.getContentRaw() + "\nVocê perdeu!").queue();
+																	p7.editMessage(p7.getContentRaw() + "\nVocê perdeu!").queue();
 																	break;
 																case 1:
 																	int crd = Helper.rng(10);
 																	acc.addCredit(crd);
 																	AccountDAO.saveAccount(acc);
-																	p3.editMessage(p3.getContentRaw() + "\nVocê ganhou! Aqui, " + crd + " créditos por ter jogado comigo!").queue();
+																	p7.editMessage(p7.getContentRaw() + "\nVocê ganhou! Aqui, " + crd + " créditos por ter jogado comigo!").queue();
 																	break;
 																case 2:
-																	p3.editMessage(p3.getContentRaw() + "\nEmpate!").queue();
+																	p7.editMessage(p7.getContentRaw() + "\nEmpate!").queue();
 																	break;
 															}
 														})
