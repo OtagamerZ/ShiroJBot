@@ -55,7 +55,8 @@ public class SlotsCommand extends Command {
 		}
 
 		channel.sendMessage(":white_flower: | Aposta de " + author.getAsMention() + ": " + args[0]).queue(s -> {
-			for (int i = 0; i < 6; i++) {
+			s.editMessage(s.getContentRaw() + "\n ┌──┬──┬──┬──┬──┐\n" + rollSlot(0) + "\n └──┴──┴──┴──┴──┘").queue();
+			for (int i = 1; i < 6; i++) {
 				s.editMessage(s.getContentRaw() + "\n ┌──┬──┬──┬──┬──┐\n" + rollSlot(i) + "\n └──┴──┴──┴──┴──┘").queueAfter(2 + (2 * i), TimeUnit.SECONDS);
 			}
 		});
