@@ -125,6 +125,8 @@ public class CommandManager {
 			add(new VoteCommand());
 			add(new ListScoreCommand());
 			add(new TranslateCommand());
+			add(new EightBallCommand());
+			add(new ChooseCommand());
 
 			//FUN
 			add(new SadButTrueCommand());
@@ -137,8 +139,7 @@ public class CommandManager {
 			add(new PixelCanvasCommand());
 			add(new PixelChunkCommand());
 			add(new DivorceCommand());
-			add(new EightBallCommand());
-			add(new ChooseCommand());
+			add(new SlotsCommand());
 			//REAÇÕES
 			//RECIPROCOS
 			add(new HugReaction());
