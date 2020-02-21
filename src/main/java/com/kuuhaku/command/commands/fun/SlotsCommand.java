@@ -44,8 +44,8 @@ public class SlotsCommand extends Command {
 		if (args.length == 0) {
 			channel.sendMessage(":x: | Você não fez nenhuma aposta.").queue();
 			return;
-		} else if (!StringUtils.isNumeric(args[0]) || Integer.parseInt(args[0]) < 0) {
-			channel.sendMessage(":x: | A aposta deve ser um valor numérico maior que zero.").queue();
+		} else if (!StringUtils.isNumeric(args[0]) || Integer.parseInt(args[0]) < 25) {
+			channel.sendMessage(":x: | A aposta deve ser um valor numérico maior ou igual a 25.").queue();
 			return;
 		}
 
