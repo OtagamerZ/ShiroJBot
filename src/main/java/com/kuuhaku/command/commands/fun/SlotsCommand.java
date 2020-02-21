@@ -29,7 +29,6 @@ import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -71,6 +70,8 @@ public class SlotsCommand extends Command {
 		acc.removeCredit(bet.get());
 		slt.addToPot(bet.get());
 
+		rolled.clear();
+
 		Runnable r = () -> {
 			if (!highbet) rolled = rolled.subList(1, rolled.size() - 1);
 
@@ -83,8 +84,6 @@ public class SlotsCommand extends Command {
 			int horseshoe = Collections.frequency(rolled, Slots.HORSESHOE);
 			int diamond = Collections.frequency(rolled, Slots.DIAMOND);
 			int jackpot = Collections.frequency(rolled, Slots.JACKPOT);
-
-			System.out.println(Arrays.toString(rolled.toArray()));
 
 			String msg = "";
 
