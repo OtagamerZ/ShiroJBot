@@ -50,7 +50,7 @@ public class Slots {
 	private int id;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-	private int pot;
+	private int pot = 0;
 
 	public int getPot() {
 		return pot;
