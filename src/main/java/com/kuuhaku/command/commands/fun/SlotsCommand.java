@@ -134,7 +134,7 @@ public class SlotsCommand extends Command {
 			if (win) {
 				if (pot)
 					msg += "<a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503>\n\n__**";
-				msg += "\nSeu prêmio é de " + bet + " créditos.";
+				msg += "\nSeu prêmio é de __**" + bet + " créditos.**__";
 				if (pot)
 					msg += "**__\n\n<a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360>";
 			} else {
