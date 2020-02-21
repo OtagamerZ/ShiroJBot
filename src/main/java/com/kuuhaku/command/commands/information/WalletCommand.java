@@ -37,7 +37,7 @@ public class WalletCommand extends Command {
 		EmbedBuilder eb = new EmbedBuilder();
 
 		eb.setTitle("Saldo de " + author.getName());
-		eb.addField(":moneybag: | " + acc.getBalance() + " créditos", "Ultimo voto em: " + acc.getLastVoted(), true);
+		eb.addField(":moneybag: | " + acc.getBalance() + " créditos", "Ultimo voto em: " + (acc.getLastVoted() == null ? "Nunca" : acc.getLastVoted()), true);
 		eb.setColor(Helper.getRandomColor());
 		eb.setThumbnail("https://lh3.googleusercontent.com/proxy/HPc-AN89uCegIfGS69Ii7Q-g2NhPzRxX1sJMrX_A80c8S7luf9LgFVt4vIsGiwgYRb77UVvyVAmhDlW4HQ7e5YUc-QWMqr8vAImtD1yADcP21MIHHfvDFAKJMD-Tf0ifrMCF23Y");
 
