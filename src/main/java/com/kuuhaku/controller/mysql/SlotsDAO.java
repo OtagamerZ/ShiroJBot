@@ -29,14 +29,13 @@ public class SlotsDAO {
 		try {
 			return em.find(Slots.class, 1);
 		} catch (NoResultException e) {
-			saveSlots(new Slots());
-			return getSlots();
+			return saveSlots(new Slots());
 		} finally {
 			em.close();
 		}
 	}
 
-	public static void saveSlots(Slots s) {
+	public static Slots saveSlots(Slots s) {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
@@ -44,5 +43,7 @@ public class SlotsDAO {
 		em.getTransaction().commit();
 
 		em.close();
+
+		return s;
 	}
 }
