@@ -352,7 +352,7 @@ public class Profile {
 			String[] words = text.split(" ");
 			StringBuilder currentLine = new StringBuilder(words[0]);
 			for (String word : words) {
-				if (m.stringWidth(currentLine + word) < lineWidth || word.contains("\n")) {
+				if (m.stringWidth(currentLine + word) < lineWidth || word.contains("\\n")) {
 					currentLine.append(" ").append(word);
 				} else {
 					String s = currentLine.toString();
