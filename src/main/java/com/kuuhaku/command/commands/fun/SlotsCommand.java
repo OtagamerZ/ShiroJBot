@@ -159,7 +159,7 @@ public class SlotsCommand extends Command {
 	}
 
 	private String rollSlot(int phase) {
-		rolled.add(Slots.getSlot());
+		if (phase > 0) rolled.add(Slots.getSlot());
 		switch (phase) {
 			case 0:
 				return "│" + Slots.SLOT + " │" + Slots.SLOT + " │" + Slots.SLOT + "│ " + Slots.SLOT + "│ " + Slots.SLOT + "│";
