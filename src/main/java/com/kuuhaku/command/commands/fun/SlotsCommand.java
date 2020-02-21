@@ -42,7 +42,7 @@ public class SlotsCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length == 0) {
-			channel.sendMessage(":x: | Você não fez nenhuma aposta.").queue();
+			channel.sendMessage("__**Tabela de prêmios:**__\n\n" + prizeTable() + "\n\nUse `" + prefix + "slots VALOR` para jogar (valor mínimo: 25 créditos)").queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[0]) || Integer.parseInt(args[0]) < 25) {
 			channel.sendMessage(":x: | A aposta deve ser um valor numérico maior ou igual a 25.").queue();
@@ -148,12 +148,12 @@ public class SlotsCommand extends Command {
 		};
 
 		channel.sendMessage(":white_flower: | Aposta de " + author.getAsMention() + ": " + args[0]).queue(s -> {
-			s.editMessage(s.getContentRaw() + "\n\n" + "Prêmio acumulado: " + slt.getPot() + "\n" + (highbet ? "     ⇩       ⇩      ⇩       ⇩      ⇩" : "              ⇩       ⇩       ⇩") + "\n┌──┬──┬──┬──┬──┐\n" + rollSlot(0) + "\n└──┴──┴──┴──┴──┘\n" + (highbet ? "     ⇧       ⇧      ⇧       ⇧      ⇧" : "              ⇧       ⇧       ⇧") + "\n\n" + prizeTable()).queue();
+			s.editMessage(s.getContentRaw() + "\n\n" + "Prêmio acumulado: " + slt.getPot() + "\n" + (highbet ? "     ⇩       ⇩      ⇩       ⇩      ⇩" : "              ⇩       ⇩       ⇩") + "\n┌──┬──┬──┬──┬──┐\n" + rollSlot(0) + "\n└──┴──┴──┴──┴──┘\n" + (highbet ? "     ⇧       ⇧      ⇧       ⇧      ⇧" : "              ⇧       ⇧       ⇧")).queue();
 			for (int i = 1; i < 6; i++) {
 				if (i != 5)
-					s.editMessage(s.getContentRaw() + "\n\n" + "Prêmio acumulado: " + slt.getPot() + "\n" + (highbet ? "     ⇩       ⇩      ⇩       ⇩      ⇩" : "              ⇩       ⇩       ⇩") + "\n┌──┬──┬──┬──┬──┐\n" + rollSlot(i) + "\n└──┴──┴──┴──┴──┘\n" + (highbet ? "     ⇧       ⇧      ⇧       ⇧      ⇧" : "              ⇧       ⇧       ⇧") + "\n\n" + prizeTable()).queueAfter(2 + (2 * i), TimeUnit.SECONDS);
+					s.editMessage(s.getContentRaw() + "\n\n" + "Prêmio acumulado: " + slt.getPot() + "\n" + (highbet ? "     ⇩       ⇩      ⇩       ⇩      ⇩" : "              ⇩       ⇩       ⇩") + "\n┌──┬──┬──┬──┬──┐\n" + rollSlot(i) + "\n└──┴──┴──┴──┴──┘\n" + (highbet ? "     ⇧       ⇧      ⇧       ⇧      ⇧" : "              ⇧       ⇧       ⇧")).queueAfter(2 + (2 * i), TimeUnit.SECONDS);
 				else
-					s.editMessage(s.getContentRaw() + "\n\n" + "Prêmio acumulado: " + slt.getPot() + "\n" + (highbet ? "     ⇩       ⇩      ⇩       ⇩      ⇩" : "              ⇩       ⇩       ⇩") + "\n┌──┬──┬──┬──┬──┐\n" + rollSlot(i) + "\n└──┴──┴──┴──┴──┘\n" + (highbet ? "     ⇧       ⇧      ⇧       ⇧      ⇧" : "              ⇧       ⇧       ⇧") + "\n\n" + prizeTable()).queueAfter(2 + (2 * i), TimeUnit.SECONDS, f -> r.run());
+					s.editMessage(s.getContentRaw() + "\n\n" + "Prêmio acumulado: " + slt.getPot() + "\n" + (highbet ? "     ⇩       ⇩      ⇩       ⇩      ⇩" : "              ⇩       ⇩       ⇩") + "\n┌──┬──┬──┬──┬──┐\n" + rollSlot(i) + "\n└──┴──┴──┴──┴──┘\n" + (highbet ? "     ⇧       ⇧      ⇧       ⇧      ⇧" : "              ⇧       ⇧       ⇧")).queueAfter(2 + (2 * i), TimeUnit.SECONDS, f -> r.run());
 			}
 		});
 	}
