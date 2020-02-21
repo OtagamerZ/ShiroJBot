@@ -142,7 +142,7 @@ public class SlotsCommand extends Command {
 				msg += "Poxa, parece que você não teve sorte hoje. Volte sempre!";
 			}
 
-			channel.sendMessage(msg).queue();
+			channel.sendMessage("\n" + msg).queue();
 			acc.addCredit(bet.get());
 			SlotsDAO.saveSlots(slt);
 		};
@@ -159,9 +159,7 @@ public class SlotsCommand extends Command {
 	}
 
 	private String rollSlot(int phase) {
-		for (int i = 0; i < 5; i++) {
-			rolled.add(Slots.getSlot());
-		}
+		rolled.add(Slots.getSlot());
 		switch (phase) {
 			case 0:
 				return "│" + Slots.SLOT + " │" + Slots.SLOT + " │" + Slots.SLOT + "│ " + Slots.SLOT + "│ " + Slots.SLOT + "│";
