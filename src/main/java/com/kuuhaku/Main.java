@@ -45,6 +45,7 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.exceptions.ContextException;
+import net.dv8tion.jda.api.utils.ChunkingFilter;
 import org.springframework.boot.SpringApplication;
 
 import javax.persistence.NoResultException;
@@ -75,9 +76,23 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		cmdManager = new CommandManager();
 		rpgCmdManager = new RPGCommandManager();
 
-		JDA api = new JDABuilder(AccountType.BOT).setToken(info.getBotToken()).build().awaitReady();
-		JDA jbr = new JDABuilder(AccountType.BOT).setToken(System.getenv("JIBRIL_TOKEN")).build().awaitReady();
-		JDA tet = new JDABuilder(AccountType.BOT).setToken(System.getenv("TET_TOKEN")).build().awaitReady();
+		JDA api = new JDABuilder(AccountType.BOT)
+				.setToken(info.getBotToken())
+				.setChunkingFilter(ChunkingFilter.NONE)
+				.build()
+				.awaitReady();
+
+		JDA jbr = new JDABuilder(AccountType.BOT)
+				.setToken(System.getenv("JIBRIL_TOKEN"))
+				.setChunkingFilter(ChunkingFilter.NONE)
+				.build()
+				.awaitReady();
+
+		JDA tet = new JDABuilder(AccountType.BOT)
+				.setToken(System.getenv("TET_TOKEN"))
+				.setChunkingFilter(ChunkingFilter.NONE)
+				.build()
+				.awaitReady();
 		info.setAPI(api);
 		Main.api = api;
 		Main.jbr = jbr;
