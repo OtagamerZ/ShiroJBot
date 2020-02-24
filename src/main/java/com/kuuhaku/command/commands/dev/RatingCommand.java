@@ -26,6 +26,7 @@ import com.kuuhaku.model.persistent.DevRating;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.exceptions.PermissionException;
 
 import java.io.File;
 import java.util.LinkedHashMap;
@@ -109,9 +110,9 @@ public class RatingCommand extends Command {
 	}
 
 	private void addRates(User author, Message msg, BiConsumer<DevRating, Integer> act) {
-		DevRating dev = VotesDAO.getRating(author.getId());
 		Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<String, BiConsumer<Member, Message>>() {{
 			put("1️⃣", (mb, ms) -> {
+				DevRating dev = VotesDAO.getRating(author.getId());
 				act.accept(dev, 1);
 				VotesDAO.evaluate(dev);
 				ms.delete()
@@ -119,6 +120,7 @@ public class RatingCommand extends Command {
 						.queue();
 			});
 			put("2️⃣", (mb, ms) -> {
+				DevRating dev = VotesDAO.getRating(author.getId());
 				act.accept(dev, 2);
 				VotesDAO.evaluate(dev);
 				ms.delete()
@@ -126,6 +128,7 @@ public class RatingCommand extends Command {
 						.queue();
 			});
 			put("3️⃣", (mb, ms) -> {
+				DevRating dev = VotesDAO.getRating(author.getId());
 				act.accept(dev, 3);
 				VotesDAO.evaluate(dev);
 				ms.delete()
@@ -133,6 +136,7 @@ public class RatingCommand extends Command {
 						.queue();
 			});
 			put("4️⃣", (mb, ms) -> {
+				DevRating dev = VotesDAO.getRating(author.getId());
 				act.accept(dev, 4);
 				VotesDAO.evaluate(dev);
 				ms.delete()
@@ -140,6 +144,7 @@ public class RatingCommand extends Command {
 						.queue();
 			});
 			put("5️⃣", (mb, ms) -> {
+				DevRating dev = VotesDAO.getRating(author.getId());
 				act.accept(dev, 5);
 				VotesDAO.evaluate(dev);
 				ms.delete()
@@ -147,6 +152,9 @@ public class RatingCommand extends Command {
 						.queue();
 			});
 		}};
-		Pages.buttonize(Main.getInfo().getAPI(), msg, buttons, false);
+		try {
+			Pages.buttonize(Main.getInfo().getAPI(), msg, buttons, false);
+		} catch (PermissionException ignore) {
+		}
 	}
 }
