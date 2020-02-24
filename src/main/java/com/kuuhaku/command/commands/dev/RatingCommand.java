@@ -147,6 +147,6 @@ public class RatingCommand extends Command {
 						.queue();
 			});
 		}};
-		Pages.buttonize(Main.getInfo().getAPI(), msg, buttons, false, 5, TimeUnit.MINUTES);
+		Pages.buttonize(Main.getInfo().getAPI(), msg, buttons, false);
 	}
 }
