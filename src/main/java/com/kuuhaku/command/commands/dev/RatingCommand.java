@@ -63,9 +63,22 @@ public class RatingCommand extends Command {
 						c.sendFile(new File(Objects.requireNonNull(this.getClass().getClassLoader().getResource("feedback.png")).getPath()))
 								.flatMap(s -> c.sendMessage(eval(author)))
 								.queue(s -> {
-									c.sendMessage(questions()[0]).queue(m -> addRates(author, m, (dev, i) -> dev.setInteraction(dev.getInteraction() == 0 ? i : (dev.getInteraction() + i) / 2f)));
-									c.sendMessage(questions()[1]).queue(m -> addRates(author, m, (dev, i) -> dev.setSolution(dev.getSolution() == 0 ? i : (dev.getSolution() + i) / 2f)));
-									c.sendMessage(questions()[2]).queue(m -> addRates(author, m, (dev, i) -> dev.setKnowledge(dev.getKnowledge() == 0 ? i : (dev.getKnowledge() + i) / 2f)));
+									s.delete().delay(5, TimeUnit.MINUTES).queue();
+									c.sendMessage(questions()[0])
+											.queue(m -> {
+												addRates(author, m, (dev, i) -> dev.setInteraction(dev.getInteraction() == 0 ? i : (dev.getInteraction() + i) / 2f));
+												m.delete().delay(5, TimeUnit.MINUTES).queue();
+											});
+									c.sendMessage(questions()[1])
+											.queue(m -> {
+												addRates(author, m, (dev, i) -> dev.setSolution(dev.getSolution() == 0 ? i : (dev.getSolution() + i) / 2f));
+												m.delete().delay(5, TimeUnit.MINUTES).queue();
+											});
+									c.sendMessage(questions()[2])
+											.queue(m -> {
+												addRates(author, m, (dev, i) -> dev.setKnowledge(dev.getKnowledge() == 0 ? i : (dev.getKnowledge() + i) / 2f));
+												m.delete().delay(5, TimeUnit.MINUTES).queue();
+											});
 								}),
 				ex -> channel.sendMessage(":x: | Não foi possível enviar a avaliação ao usuário. Razão: " + ex).queue()
 		);
@@ -101,27 +114,37 @@ public class RatingCommand extends Command {
 			put("1️⃣", (mb, ms) -> {
 				act.accept(dev, 1);
 				VotesDAO.evaluate(dev);
-				ms.getReactions().forEach(r -> r.removeReaction().queue());
+				ms.delete()
+						.flatMap(s -> ms.getChannel().sendMessage("Obrigada por votar!"))
+						.queue();
 			});
 			put("2️⃣", (mb, ms) -> {
 				act.accept(dev, 2);
 				VotesDAO.evaluate(dev);
-				ms.getReactions().forEach(r -> r.removeReaction().queue());
+				ms.delete()
+						.flatMap(s -> ms.getChannel().sendMessage("Obrigada por votar!"))
+						.queue();
 			});
 			put("3️⃣", (mb, ms) -> {
 				act.accept(dev, 3);
 				VotesDAO.evaluate(dev);
-				ms.getReactions().forEach(r -> r.removeReaction().queue());
+				ms.delete()
+						.flatMap(s -> ms.getChannel().sendMessage("Obrigada por votar!"))
+						.queue();
 			});
 			put("4️⃣", (mb, ms) -> {
 				act.accept(dev, 4);
 				VotesDAO.evaluate(dev);
-				ms.getReactions().forEach(r -> r.removeReaction().queue());
+				ms.delete()
+						.flatMap(s -> ms.getChannel().sendMessage("Obrigada por votar!"))
+						.queue();
 			});
 			put("5️⃣", (mb, ms) -> {
 				act.accept(dev, 5);
 				VotesDAO.evaluate(dev);
-				ms.getReactions().forEach(r -> r.removeReaction().queue());
+				ms.delete()
+						.flatMap(s -> ms.getChannel().sendMessage("Obrigada por votar!"))
+						.queue();
 			});
 		}};
 		Pages.buttonize(Main.getInfo().getAPI(), msg, buttons, false, 5, TimeUnit.MINUTES);
