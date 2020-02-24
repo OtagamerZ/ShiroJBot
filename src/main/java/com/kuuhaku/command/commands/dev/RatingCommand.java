@@ -96,27 +96,27 @@ public class RatingCommand extends Command {
 	private void addRates(User author, Message msg, BiConsumer<DevRating, Integer> act) {
 		DevRating dev = VotesDAO.getRating(author.getId());
 		Map<String, BiConsumer<Member, Message>> buttons = new HashMap<String, BiConsumer<Member, Message>>() {{
-			put("\u0031", (mb, ms) -> {
+			put("1️⃣", (mb, ms) -> {
 				act.accept(dev, 1);
 				VotesDAO.evaluate(dev);
 				ms.clearReactions().queue();
 			});
-			put("\u0032", (mb, ms) -> {
+			put("2️⃣", (mb, ms) -> {
 				act.accept(dev, 2);
 				VotesDAO.evaluate(dev);
 				ms.clearReactions().queue();
 			});
-			put("\u0033", (mb, ms) -> {
+			put("3️⃣", (mb, ms) -> {
 				act.accept(dev, 3);
 				VotesDAO.evaluate(dev);
 				ms.clearReactions().queue();
 			});
-			put("\u0034", (mb, ms) -> {
+			put("4️⃣", (mb, ms) -> {
 				act.accept(dev, 4);
 				VotesDAO.evaluate(dev);
 				ms.clearReactions().queue();
 			});
-			put("\u0035", (mb, ms) -> {
+			put("5️⃣", (mb, ms) -> {
 				act.accept(dev, 5);
 				VotesDAO.evaluate(dev);
 				ms.clearReactions().queue();
