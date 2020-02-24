@@ -58,15 +58,14 @@ public class RatingCommand extends Command {
 			return;
 		}
 
-		Main.getInfo().getUserByID(args[0]).openPrivateChannel().queue(c -> {
-					c.sendFile(new File(Objects.requireNonNull(this.getClass().getClassLoader().getResource("feedback.png")).getPath()))
-							.flatMap(s -> c.sendMessage(eval(author)))
-							.queue(s -> {
-								c.sendMessage(questions()[0]).queue(m -> addRates(author, m, (dev, i) -> dev.setInteraction(dev.getInteraction() == 0 ? i : (dev.getInteraction() + i) / 2f)));
-								c.sendMessage(questions()[1]).queue(m -> addRates(author, m, (dev, i) -> dev.setInteraction(dev.getInteraction() == 0 ? i : (dev.getInteraction() + i) / 2f)));
-								c.sendMessage(questions()[2]).queue(m -> addRates(author, m, (dev, i) -> dev.setInteraction(dev.getInteraction() == 0 ? i : (dev.getInteraction() + i) / 2f)));
-							});
-				},
+		Main.getInfo().getUserByID(args[0]).openPrivateChannel().queue(c ->
+						c.sendFile(new File(Objects.requireNonNull(this.getClass().getClassLoader().getResource("feedback.png")).getPath()))
+								.flatMap(s -> c.sendMessage(eval(author)))
+								.queue(s -> {
+									c.sendMessage(questions()[0]).queue(m -> addRates(author, m, (dev, i) -> dev.setInteraction(dev.getInteraction() == 0 ? i : (dev.getInteraction() + i) / 2f)));
+									c.sendMessage(questions()[1]).queue(m -> addRates(author, m, (dev, i) -> dev.setSolution(dev.getInteraction() == 0 ? i : (dev.getInteraction() + i) / 2f)));
+									c.sendMessage(questions()[2]).queue(m -> addRates(author, m, (dev, i) -> dev.setKnowledge(dev.getInteraction() == 0 ? i : (dev.getInteraction() + i) / 2f)));
+								}),
 				ex -> channel.sendMessage(":x: | Não foi possível enviar a avaliação ao usuário. Razão: " + ex).queue()
 		);
 	}
