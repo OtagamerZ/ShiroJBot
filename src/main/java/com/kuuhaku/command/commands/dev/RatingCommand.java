@@ -60,27 +60,28 @@ public class RatingCommand extends Command {
 			return;
 		}
 
-		Main.getInfo().getUserByID(args[0]).openPrivateChannel().queue(c ->
-						c.sendFile(new File(Objects.requireNonNull(this.getClass().getClassLoader().getResource("feedback.png")).getPath()))
-								.flatMap(s -> c.sendMessage(eval(author)))
-								.queue(s -> {
-									s.delete().queueAfter(5, TimeUnit.MINUTES);
-									c.sendMessage(questions()[0])
-											.queue(m -> {
-												addRates(author, m, (dev, i) -> dev.setInteraction(dev.getInteraction() == 0 ? i : (dev.getInteraction() + i) / 2f));
-												m.delete().queueAfter(5, TimeUnit.MINUTES);
-											});
-									c.sendMessage(questions()[1])
-											.queue(m -> {
-												addRates(author, m, (dev, i) -> dev.setSolution(dev.getSolution() == 0 ? i : (dev.getSolution() + i) / 2f));
-												m.delete().queueAfter(5, TimeUnit.MINUTES);
-											});
-									c.sendMessage(questions()[2])
-											.queue(m -> {
-												addRates(author, m, (dev, i) -> dev.setKnowledge(dev.getKnowledge() == 0 ? i : (dev.getKnowledge() + i) / 2f));
-												m.delete().queueAfter(5, TimeUnit.MINUTES);
-											});
-								}),
+		Main.getInfo().getUserByID(args[0]).openPrivateChannel().queue(c -> {
+					c.sendFile(new File(Objects.requireNonNull(this.getClass().getClassLoader().getResource("feedback.png")).getPath()))
+							.queue(s -> s.delete().queueAfter(5, TimeUnit.MINUTES));
+					c.sendMessage(eval(author)).queue(s -> {
+						s.delete().queueAfter(5, TimeUnit.MINUTES);
+						c.sendMessage(questions()[0])
+								.queue(m -> {
+									addRates(author, m, (dev, i) -> dev.setInteraction(dev.getInteraction() == 0 ? i : (dev.getInteraction() + i) / 2f));
+									m.delete().queueAfter(5, TimeUnit.MINUTES);
+								});
+						c.sendMessage(questions()[1])
+								.queue(m -> {
+									addRates(author, m, (dev, i) -> dev.setSolution(dev.getSolution() == 0 ? i : (dev.getSolution() + i) / 2f));
+									m.delete().queueAfter(5, TimeUnit.MINUTES);
+								});
+						c.sendMessage(questions()[2])
+								.queue(m -> {
+									addRates(author, m, (dev, i) -> dev.setKnowledge(dev.getKnowledge() == 0 ? i : (dev.getKnowledge() + i) / 2f));
+									m.delete().queueAfter(5, TimeUnit.MINUTES);
+								});
+					});
+				},
 				ex -> channel.sendMessage(":x: | Não foi possível enviar a avaliação ao usuário. Razão: " + ex).queue()
 		);
 	}

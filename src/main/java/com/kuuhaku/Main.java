@@ -142,6 +142,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 		finishStartUp();
 		arguments = args;
+		Runtime.getRuntime().addShutdownHook(shutdown());
 	}
 
 	private static void finishStartUp() {
@@ -197,35 +198,37 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		return rpgCmdManager;
 	}
 
-	public static void shutdown() {
-		int sweeper = Sweeper.mark();
-		TextChannel chn = api.getTextChannelById(kill[0]);
-		assert chn != null;
-		Message msg = chn.retrieveMessageById(kill[1]).complete();
+	public static Thread shutdown() {
+		return new Thread(() -> {
+			int sweeper = Sweeper.mark();
+			TextChannel chn = api.getTextChannelById(kill[0]);
+			assert chn != null;
+			Message msg = chn.retrieveMessageById(kill[1]).complete();
 
-		Helper.logger(Main.class).info(sweeper + " entradas dispensáveis encontradas!");
-		msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> " + sweeper + " entradas dispensáveis encontradas!").queue();
+			Helper.logger(Main.class).info(sweeper + " entradas dispensáveis encontradas!");
+			msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> " + sweeper + " entradas dispensáveis encontradas!").queue();
 
-		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getCADump(), com.kuuhaku.controller.sqlite.BackupDAO.getGuildDump(), com.kuuhaku.controller.sqlite.BackupDAO.getAppUserDump(), com.kuuhaku.controller.sqlite.BackupDAO.getKawaigotchiDump()));
-		Helper.logger(Main.class).info("Respostas/Guilds/Usuários salvos com sucesso!");
-		msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> Respostas/Guilds/Usuários/Kawaigotchis salvos com sucesso!").queue();
+			BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getCADump(), com.kuuhaku.controller.sqlite.BackupDAO.getGuildDump(), com.kuuhaku.controller.sqlite.BackupDAO.getAppUserDump(), com.kuuhaku.controller.sqlite.BackupDAO.getKawaigotchiDump()));
+			Helper.logger(Main.class).info("Respostas/Guilds/Usuários salvos com sucesso!");
+			msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> Respostas/Guilds/Usuários/Kawaigotchis salvos com sucesso!").queue();
 
-		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump()));
-		Helper.logger(Main.class).info("Membros salvos com sucesso!");
-		msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> Membros salvos com sucesso!").queue();
+			BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump()));
+			Helper.logger(Main.class).info("Membros salvos com sucesso!");
+			msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> Membros salvos com sucesso!").queue();
 
-		CampaignDAO.saveCampaigns(Main.getInfo().getGames());
-		Helper.logger(Main.class).info("Campanhas salvas com sucesso!");
-		msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> Campanhas salvas com sucesso!").queue();
+			CampaignDAO.saveCampaigns(Main.getInfo().getGames());
+			Helper.logger(Main.class).info("Campanhas salvas com sucesso!");
+			msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> Campanhas salvas com sucesso!").queue();
 
-		Sweeper.sweep();
-		Manager.disconnect();
-		tet.shutdown();
-		jbr.shutdown();
-		msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> Fui desligada!").queue();
+			Sweeper.sweep();
+			Manager.disconnect();
+			tet.shutdown();
+			jbr.shutdown();
+			msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> Fui desligada!").queue();
 
-		api.shutdown();
-		Helper.logger(Main.class).info("Fui desligada.");
+			api.shutdown();
+			Helper.logger(Main.class).info("Fui desligada.");
+		});
 	}
 
 	public static Relay getRelay() {
