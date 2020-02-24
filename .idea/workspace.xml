@@ -6,20 +6,8 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Comando de slots">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_rollbar_rollbar_api_1_6_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_rollbar_rollbar_java_1_6_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__net_dv8tion_JDA_4_1_1_108.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_neovisionaries_nv_websocket_client_2_5.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_neovisionaries_nv_websocket_client_2_9.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_rollbar_rollbar_api_1_5_2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_rollbar_rollbar_java_1_5_2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__net_dv8tion_JDA_4_0_0_45.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.test.iml" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/misc/PingCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/misc/PingCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -230,14 +218,7 @@
       <workItem from="1581942657201" duration="8436000" />
       <workItem from="1581955921548" duration="13000" />
       <workItem from="1582288075220" duration="24839000" />
-      <workItem from="1582546176407" duration="782000" />
-    </task>
-    <task id="LOCAL-00595" summary="Mudanças na notificação do Kawaigotchi">
-      <created>1581950762524</created>
-      <option name="number" value="00595" />
-      <option name="presentableId" value="LOCAL-00595" />
-      <option name="project" value="LOCAL" />
-      <updated>1581950762524</updated>
+      <workItem from="1582546176407" duration="1112000" />
     </task>
     <task id="LOCAL-00596" summary="Mudanças na notificação do Kawaigotchi">
       <created>1581951176391</created>
@@ -575,7 +556,14 @@
       <option name="project" value="LOCAL" />
       <updated>1582318716597</updated>
     </task>
-    <option name="localTasksCounter" value="644" />
+    <task id="LOCAL-00644" summary="Atualização do framework JDA">
+      <created>1582547102538</created>
+      <option name="number" value="00644" />
+      <option name="presentableId" value="LOCAL-00644" />
+      <option name="project" value="LOCAL" />
+      <updated>1582547102538</updated>
+    </task>
+    <option name="localTasksCounter" value="645" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -594,7 +582,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Correção no JSON do backup" />
     <MESSAGE value="Correção no salvamento dos cargos de nível" />
     <MESSAGE value="Adição de endpoints para requisições HTTP" />
     <MESSAGE value="Mensagem de erro ao tentar adicionar um botão em uma mensagem em um canal diferente do qual o comando foi usado" />
@@ -619,7 +606,8 @@
     <MESSAGE value="Correção na pesquisa de anime" />
     <MESSAGE value="Mudanças na notificação do Kawaigotchi" />
     <MESSAGE value="Comando de slots" />
-    <option name="LAST_COMMIT_MESSAGE" value="Comando de slots" />
+    <MESSAGE value="Atualização do framework JDA" />
+    <option name="LAST_COMMIT_MESSAGE" value="Atualização do framework JDA" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -687,11 +675,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1578421403620" />
-    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1582546849869">
+    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1582547099259">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1581560655769" />
-    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1582546849869" />
+    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1582547099259" />
     <state x="160" y="89" width="1344" height="834" key="DiffContextDialog" timestamp="1580842925618">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -742,11 +730,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1582318732467">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1582547103790">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1581560661721" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1582318732467" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1582547103790" />
     <state x="312" y="66" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1581001292879">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
