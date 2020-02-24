@@ -32,6 +32,9 @@ public class PingCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (guild.getSelfMember().hasPermission(Permission.MESSAGE_WRITE))
-			channel.sendMessage(":ping_pong: Pong! ").queue(msg -> msg.editMessage(msg.getContentRaw() + " " + Main.getInfo().getPing() + " ms!").queue());
+			channel.sendMessage(":ping_pong: Pong! ")
+					.flatMap(m -> m.editMessage(m.getContentRaw() + "\n" + Main.getInfo().getPing() + " ms!"))
+					.flatMap(m -> m.editMessage(m.getContentRaw() + "\n" + ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024f / 1024f) + " MB!"))
+					.queue();
 	}
 }
