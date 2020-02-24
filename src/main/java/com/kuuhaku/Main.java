@@ -143,7 +143,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		finishStartUp();
 		arguments = args;
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-			Thread.currentThread().setName("shutdown-protocol");
 			int sweeper = Sweeper.mark();
 
 			Helper.logger(Main.class).info(sweeper + " entradas dispensáveis encontradas!");
@@ -163,7 +162,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 			jbr.shutdown();
 			api.shutdown();
 			Helper.logger(Main.class).info("Fui desligada.");
-		}));
+		}, "shutdown-protocol"));
 	}
 
 	private static void finishStartUp() {
