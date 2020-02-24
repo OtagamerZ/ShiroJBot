@@ -48,7 +48,6 @@ public class KillCommand extends Command {
 			channel.sendMessage("Iniciando o protocolo de encerramento...").queue(m -> Main.kill = new String[]{channel.getId(), m.getId()});
 		}
 
-		Main.shutdown();
 		System.exit(0);
 	}
 }
