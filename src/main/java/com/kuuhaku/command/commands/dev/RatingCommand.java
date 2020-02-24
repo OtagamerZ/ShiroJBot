@@ -86,7 +86,7 @@ public class RatingCommand extends Command {
 	}
 
 	private String eval(User author) {
-		return "Olá, gostaria que você avaliasse o atendimento de " + author.getName() + " se possível, isso irá levar apenas alguns segundos!";
+		return "Olá, gostaria que você avaliasse o atendimento de " + author.getName() + " se possível, isso irá levar apenas alguns segundos! (Essa enquete será removida após 5 minutos para não poluir este chat)";
 	}
 
 	private MessageEmbed[] questions() {
