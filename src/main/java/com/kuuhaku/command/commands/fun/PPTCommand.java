@@ -100,33 +100,34 @@ public class PPTCommand extends Command {
 
 		int finalWin = win;
 		String finalPcChoice = pcChoice;
-		channel.sendMessage("Sai").queue(p1 ->
-				p1.editMessage(p1.getContentRaw() + "sho").queueAfter(333, TimeUnit.MILLISECONDS, p2 ->
-						p2.editMessage(p2.getContentRaw() + " wa ").queueAfter(333, TimeUnit.MILLISECONDS, p3 ->
-								p3.editMessage(p3.getContentRaw() + " guu!").queueAfter(333, TimeUnit.MILLISECONDS, p4 ->
-										p4.editMessage(p4.getContentRaw() + "\nJan...").queueAfter(1, TimeUnit.SECONDS, p5 ->
-												p5.editMessage(p5.getContentRaw() + "Ken...").queueAfter(1, TimeUnit.SECONDS, p6 ->
-														p6.editMessage(p6.getContentRaw() + "Pon! " + finalPcChoice).queueAfter(1, TimeUnit.SECONDS, p7 -> {
-															switch (finalWin) {
-																case 0:
-																	p7.editMessage(p7.getContentRaw() + "\nVocê perdeu!").queue();
-																	break;
-																case 1:
-																	int crd = Helper.rng(10);
-																	acc.addCredit(crd);
-																	AccountDAO.saveAccount(acc);
-																	p7.editMessage(p7.getContentRaw() + "\nVocê ganhou! Aqui, " + crd + " créditos por ter jogado comigo!").queue();
-																	break;
-																case 2:
-																	p7.editMessage(p7.getContentRaw() + "\nEmpate!").queue();
-																	break;
-															}
-														})
-												)
-										)
-								)
-						)
-				)
-		);
+		channel.sendMessage("Sai")
+				.delay(333, TimeUnit.MILLISECONDS)
+				.flatMap(m -> m.editMessage(m.getContentRaw() + "sho"))
+				.delay(333, TimeUnit.MILLISECONDS)
+				.flatMap(m -> m.editMessage(m.getContentRaw() + " wa "))
+				.delay(333, TimeUnit.MILLISECONDS)
+				.flatMap(m -> m.editMessage(m.getContentRaw() + "guu!"))
+				.delay(1, TimeUnit.SECONDS)
+				.flatMap(m -> m.editMessage(m.getContentRaw() + "\nJan..."))
+				.delay(1, TimeUnit.SECONDS)
+				.flatMap(m -> m.editMessage(m.getContentRaw() + "Ken..."))
+				.delay(1, TimeUnit.SECONDS)
+				.flatMap(m -> m.editMessage(m.getContentRaw() + "Pon! " + finalPcChoice))
+				.queue(m -> {
+					switch (finalWin) {
+						case 0:
+							m.editMessage(m.getContentRaw() + "\nVocê perdeu!").queue();
+							break;
+						case 1:
+							int crd = Helper.rng(10);
+							acc.addCredit(crd);
+							AccountDAO.saveAccount(acc);
+							m.editMessage(m.getContentRaw() + "\nVocê ganhou! Aqui, " + crd + " créditos por ter jogado comigo!").queue();
+							break;
+						case 2:
+							m.editMessage(m.getContentRaw() + "\nEmpate!").queue();
+							break;
+					}
+				});
 	}
 }
