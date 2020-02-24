@@ -58,7 +58,7 @@ stage.dependsOn(copyToLib)
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.1.6.RELEASE'
-    compile 'net.dv8tion:JDA:4.0.0_45'
+    compile 'net.dv8tion:JDA:4.1.1_108'
     compile 'club.minnced:discord-webhooks:0.1.7'
     compile 'com.github.SvenWoltmann:color-thief-java:master-SNAPSHOT'
     compile 'com.enigmabridge:hibernate4-sqlite-dialect:0.1.2'
