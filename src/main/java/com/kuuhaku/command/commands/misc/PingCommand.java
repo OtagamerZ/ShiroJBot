@@ -20,8 +20,10 @@ package com.kuuhaku.command.commands.misc;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class PingCommand extends Command {
 
@@ -31,10 +33,11 @@ public class PingCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		if (guild.getSelfMember().hasPermission(Permission.MESSAGE_WRITE))
-			channel.sendMessage(":ping_pong: Pong! ")
-					.flatMap(m -> m.editMessage(m.getContentRaw() + "\n" + Main.getInfo().getPing() + " ms!"))
-					.flatMap(m -> m.editMessage(m.getContentRaw() + "\n" + ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024f / 1024f) + " MB!"))
-					.queue();
+		float fp = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024f / 1024f;
+		float max = Runtime.getRuntime().totalMemory() / 1024f / 1024f;
+		channel.sendMessage(":ping_pong: Pong! ")
+				.flatMap(m -> m.editMessage(m.getContentRaw() + " " + Main.getInfo().getPing() + " ms!"))
+				.flatMap(m -> m.editMessage(m.getContentRaw() + "\n:floppy_disk: " + BigDecimal.valueOf(fp).setScale(2, RoundingMode.HALF_EVEN) + "/" + BigDecimal.valueOf(max).setScale(2, RoundingMode.HALF_EVEN) + " MB!"))
+				.queue();
 	}
 }
