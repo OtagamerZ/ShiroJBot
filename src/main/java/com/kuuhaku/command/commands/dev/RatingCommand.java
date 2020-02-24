@@ -63,8 +63,8 @@ public class RatingCommand extends Command {
 								.flatMap(s -> c.sendMessage(eval(author)))
 								.queue(s -> {
 									c.sendMessage(questions()[0]).queue(m -> addRates(author, m, (dev, i) -> dev.setInteraction(dev.getInteraction() == 0 ? i : (dev.getInteraction() + i) / 2f)));
-									c.sendMessage(questions()[1]).queue(m -> addRates(author, m, (dev, i) -> dev.setSolution(dev.getInteraction() == 0 ? i : (dev.getInteraction() + i) / 2f)));
-									c.sendMessage(questions()[2]).queue(m -> addRates(author, m, (dev, i) -> dev.setKnowledge(dev.getInteraction() == 0 ? i : (dev.getInteraction() + i) / 2f)));
+									c.sendMessage(questions()[1]).queue(m -> addRates(author, m, (dev, i) -> dev.setSolution(dev.getSolution() == 0 ? i : (dev.getSolution() + i) / 2f)));
+									c.sendMessage(questions()[2]).queue(m -> addRates(author, m, (dev, i) -> dev.setKnowledge(dev.getKnowledge() == 0 ? i : (dev.getKnowledge() + i) / 2f)));
 								}),
 				ex -> channel.sendMessage(":x: | Não foi possível enviar a avaliação ao usuário. Razão: " + ex).queue()
 		);
