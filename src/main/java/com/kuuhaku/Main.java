@@ -66,7 +66,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	private static JDA jbr;
 	private static JDA tet;
 	private static String[] arguments;
-	public static String[] kill = new String[2];
 
 	public static void main(String[] args) throws Exception {
 		Thread.setDefaultUncaughtExceptionHandler(new Main());
@@ -201,9 +200,9 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	public static Thread shutdown() {
 		return new Thread(() -> {
 			int sweeper = Sweeper.mark();
-			TextChannel chn = api.getTextChannelById(kill[0]);
+			TextChannel chn = api.getTextChannelById("589058470733676547");
 			assert chn != null;
-			Message msg = chn.retrieveMessageById(kill[1]).complete();
+			Message msg = chn.sendMessage("Iniciando o protocolo de encerramento...").complete();
 
 			Helper.logger(Main.class).info(sweeper + " entradas dispensáveis encontradas!");
 			msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> " + sweeper + " entradas dispensáveis encontradas!").queue();
