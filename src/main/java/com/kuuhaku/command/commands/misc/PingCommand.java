@@ -35,6 +35,7 @@ public class PingCommand extends Command {
 		channel.sendMessage(":ping_pong: Pong! ")
 				.flatMap(m -> m.editMessage(m.getContentRaw() + " " + Main.getInfo().getPing() + " ms!"))
 				.flatMap(m -> m.editMessage(m.getContentRaw() + "\n:floppy_disk: " + fp + "/" + max + " MB!"))
+				.flatMap(m -> m.editMessage(m.getContentRaw() + "\n:telephone_receiver: " + Main.getInfo().getAPI().getEventManager().getRegisteredListeners().size() + " eventos!"))
 				.queue();
 	}
 }
