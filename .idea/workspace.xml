@@ -7,7 +7,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_ygimenez_PaginationUtils_1fc71480d4.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
     </list>
@@ -220,14 +219,7 @@
       <workItem from="1581942657201" duration="8436000" />
       <workItem from="1581955921548" duration="13000" />
       <workItem from="1582288075220" duration="24839000" />
-      <workItem from="1582546176407" duration="12548000" />
-    </task>
-    <task id="LOCAL-00617" summary="Comando de slots">
-      <created>1582306795020</created>
-      <option name="number" value="00617" />
-      <option name="presentableId" value="LOCAL-00617" />
-      <option name="project" value="LOCAL" />
-      <updated>1582306795020</updated>
+      <workItem from="1582546176407" duration="12800000" />
     </task>
     <task id="LOCAL-00618" summary="Comando de slots">
       <created>1582306978512</created>
@@ -565,7 +557,14 @@
       <option name="project" value="LOCAL" />
       <updated>1582576732652</updated>
     </task>
-    <option name="localTasksCounter" value="666" />
+    <task id="LOCAL-00666" summary="Atualização do framework JDA">
+      <created>1582577005183</created>
+      <option name="number" value="00666" />
+      <option name="presentableId" value="LOCAL-00666" />
+      <option name="project" value="LOCAL" />
+      <updated>1582577005183</updated>
+    </task>
+    <option name="localTasksCounter" value="667" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -732,11 +731,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1582576762632">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1582577006792">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1581560661721" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1582576762632" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1582577006792" />
     <state x="312" y="66" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1581001292879">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
