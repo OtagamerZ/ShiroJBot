@@ -56,6 +56,7 @@ public class CommandManager {
 			add(new InviteCommand("convite", new String[]{"invite"}, "<ID do servidor>", "Obtém um convite de uso único do servidor informado.", Category.DEVS));
 			add(new UsageCommand("usos", new String[]{"uses", "usage"}, "Vê a quantidade de comandos usados por servidor.", Category.DEVS));
 			add(new SimpleWHMCommand("wh", "Envia uma simples mensagem via webhook.", Category.DEVS));
+			add(new RatingCommand("pedirvoto", new String[]{"requestvote", "howwasi"}, "Pede que um usuário avalie seu atendimento.", Category.DEVS));
 
 			//SHERIFF
 			add(new BlockCommand("bloquear", new String[]{"block"}, "<tipo> <ID> <razão>", "Bloqueia alguém de usar o chat global.", Category.SHERIFFS));
@@ -136,6 +137,7 @@ public class CommandManager {
 			add(new ShipCommand());
 			add(new MarryCommand());
 			add(new StonksCommand());
+			add(new SpiderManCommand());
 			add(new PixelCanvasCommand());
 			add(new PixelChunkCommand());
 			add(new DivorceCommand());
