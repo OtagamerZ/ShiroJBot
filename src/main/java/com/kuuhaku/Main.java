@@ -66,6 +66,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	private static JDA jbr;
 	private static JDA tet;
 	private static String[] arguments;
+	public static String[] kill = new String[2];
 
 	public static void main(String[] args) throws Exception {
 		Thread.setDefaultUncaughtExceptionHandler(new Main());
@@ -139,38 +140,30 @@ public class Main implements Thread.UncaughtExceptionHandler {
 			}
 		}
 
+		finishStartUp();
 		arguments = args;
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+			Thread.currentThread().setName("shutdown-protocol");
 			int sweeper = Sweeper.mark();
-			TextChannel chn = api.getTextChannelById("589058470733676547");
-			assert chn != null;
-			Message msg = chn.sendMessage("Iniciando o protocolo de encerramento...").complete();
 
 			Helper.logger(Main.class).info(sweeper + " entradas dispensáveis encontradas!");
-			msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> " + sweeper + " entradas dispensáveis encontradas!").queue();
 
 			BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getCADump(), com.kuuhaku.controller.sqlite.BackupDAO.getGuildDump(), com.kuuhaku.controller.sqlite.BackupDAO.getAppUserDump(), com.kuuhaku.controller.sqlite.BackupDAO.getKawaigotchiDump()));
 			Helper.logger(Main.class).info("Respostas/Guilds/Usuários salvos com sucesso!");
-			msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> Respostas/Guilds/Usuários/Kawaigotchis salvos com sucesso!").queue();
 
 			BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump()));
 			Helper.logger(Main.class).info("Membros salvos com sucesso!");
-			msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> Membros salvos com sucesso!").queue();
 
 			CampaignDAO.saveCampaigns(Main.getInfo().getGames());
 			Helper.logger(Main.class).info("Campanhas salvas com sucesso!");
-			msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> Campanhas salvas com sucesso!").queue();
 
 			Sweeper.sweep();
 			Manager.disconnect();
 			tet.shutdown();
 			jbr.shutdown();
-			msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> Fui desligada!").queue();
-
 			api.shutdown();
 			Helper.logger(Main.class).info("Fui desligada.");
 		}));
-		finishStartUp();
 	}
 
 	private static void finishStartUp() {
@@ -224,6 +217,37 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 	public static RPGCommandManager getRPGCommandManager() {
 		return rpgCmdManager;
+	}
+
+	public static void shutdown() {
+		int sweeper = Sweeper.mark();
+		TextChannel chn = api.getTextChannelById(kill[0]);
+		assert chn != null;
+		Message msg = chn.retrieveMessageById(kill[1]).complete();
+
+		Helper.logger(Main.class).info(sweeper + " entradas dispensáveis encontradas!");
+		msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> " + sweeper + " entradas dispensáveis encontradas!").queue();
+
+		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getCADump(), com.kuuhaku.controller.sqlite.BackupDAO.getGuildDump(), com.kuuhaku.controller.sqlite.BackupDAO.getAppUserDump(), com.kuuhaku.controller.sqlite.BackupDAO.getKawaigotchiDump()));
+		Helper.logger(Main.class).info("Respostas/Guilds/Usuários salvos com sucesso!");
+		msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> Respostas/Guilds/Usuários/Kawaigotchis salvos com sucesso!").queue();
+
+		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump()));
+		Helper.logger(Main.class).info("Membros salvos com sucesso!");
+		msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> Membros salvos com sucesso!").queue();
+
+		CampaignDAO.saveCampaigns(Main.getInfo().getGames());
+		Helper.logger(Main.class).info("Campanhas salvas com sucesso!");
+		msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> Campanhas salvas com sucesso!").queue();
+
+		Sweeper.sweep();
+		Manager.disconnect();
+		tet.shutdown();
+		jbr.shutdown();
+		msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> Fui desligada!").queue();
+
+		api.shutdown();
+		Helper.logger(Main.class).info("Fui desligada.");
 	}
 
 	public static Relay getRelay() {
