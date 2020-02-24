@@ -139,9 +139,9 @@ public class Main implements Thread.UncaughtExceptionHandler {
 			}
 		}
 
-		finishStartUp();
 		arguments = args;
 		Runtime.getRuntime().addShutdownHook(shutdown());
+		finishStartUp();
 	}
 
 	private static void finishStartUp() {
