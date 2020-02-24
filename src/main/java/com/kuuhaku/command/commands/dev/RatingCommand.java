@@ -28,7 +28,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 
 import java.io.File;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -97,31 +97,31 @@ public class RatingCommand extends Command {
 
 	private void addRates(User author, Message msg, BiConsumer<DevRating, Integer> act) {
 		DevRating dev = VotesDAO.getRating(author.getId());
-		Map<String, BiConsumer<Member, Message>> buttons = new HashMap<String, BiConsumer<Member, Message>>() {{
+		Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<String, BiConsumer<Member, Message>>() {{
 			put("1️⃣", (mb, ms) -> {
 				act.accept(dev, 1);
 				VotesDAO.evaluate(dev);
-				ms.clearReactions().queue();
+				ms.getReactions().forEach(r -> r.removeReaction().queue());
 			});
 			put("2️⃣", (mb, ms) -> {
 				act.accept(dev, 2);
 				VotesDAO.evaluate(dev);
-				ms.clearReactions().queue();
+				ms.getReactions().forEach(r -> r.removeReaction().queue());
 			});
 			put("3️⃣", (mb, ms) -> {
 				act.accept(dev, 3);
 				VotesDAO.evaluate(dev);
-				ms.clearReactions().queue();
+				ms.getReactions().forEach(r -> r.removeReaction().queue());
 			});
 			put("4️⃣", (mb, ms) -> {
 				act.accept(dev, 4);
 				VotesDAO.evaluate(dev);
-				ms.clearReactions().queue();
+				ms.getReactions().forEach(r -> r.removeReaction().queue());
 			});
 			put("5️⃣", (mb, ms) -> {
 				act.accept(dev, 5);
 				VotesDAO.evaluate(dev);
-				ms.clearReactions().queue();
+				ms.getReactions().forEach(r -> r.removeReaction().queue());
 			});
 		}};
 		Pages.buttonize(Main.getInfo().getAPI(), msg, buttons, false, 5, TimeUnit.MINUTES);
