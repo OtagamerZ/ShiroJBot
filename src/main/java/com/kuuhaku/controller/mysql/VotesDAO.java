@@ -22,6 +22,7 @@ import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.model.persistent.DevRating;
 import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.model.persistent.Votes;
 import com.kuuhaku.utils.Helper;
@@ -109,5 +110,25 @@ public class VotesDAO {
 		}
 
 		channel.sendMessage((Message) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
+	}
+
+	public static DevRating getRating(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		try {
+			return Helper.getOr(em.find(DevRating.class, id), new DevRating(id));
+		} finally {
+			em.close();
+		}
+	}
+
+	public static void evaluate(DevRating dev) {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		em.merge(dev);
+		em.getTransaction().commit();
+
+		em.close();
 	}
 }
