@@ -23,6 +23,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.mysql.VotesDAO;
 import com.kuuhaku.model.persistent.DevRating;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 
@@ -77,6 +78,7 @@ public class RatingCommand extends Command {
 	private MessageEmbed[] questions() {
 		MessageEmbed[] embeds = {null, null, null};
 		EmbedBuilder eb = new EmbedBuilder();
+		eb.setColor(Helper.getRandomColor());
 
 		eb.setTitle("Atendimento");
 		eb.setDescription("Que nota você daria para o atendimento, considerando a interação com o usuário?");
