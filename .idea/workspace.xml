@@ -7,12 +7,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/StinksCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/stinks.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/SpiderManCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/SpiderManCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/StinksCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/StinksCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/StonksCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/StonksCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -137,21 +135,22 @@
       <recent name="com.kuuhaku.controller.sqlite.GuildDAO" />
       <recent name="com.kuuhaku.handlers.games.rpg.Utils" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
+    <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games\kawaigotchi" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\api\websocket" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.kuuhaku.command.commands.dev" />
       <recent name="com.kuuhaku.command.commands.fun" />
+      <recent name="com.kuuhaku.command.commands.dev" />
       <recent name="com.kuuhaku.command.commands.information" />
       <recent name="com.kuuhaku.events.cron" />
       <recent name="com.kuuhaku.command.commands.partner" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\yagog\ShiroJBot\src\main\resources" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games\kawaigotchi" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\api\websocket" />
     </key>
   </component>
   <component name="ServiceViewManager">
@@ -224,13 +223,6 @@
       <workItem from="1581955921548" duration="13000" />
       <workItem from="1582288075220" duration="24839000" />
       <workItem from="1582546176407" duration="13278000" />
-    </task>
-    <task id="LOCAL-00625" summary="Comando de slots">
-      <created>1582309840473</created>
-      <option name="number" value="00625" />
-      <option name="presentableId" value="LOCAL-00625" />
-      <option name="project" value="LOCAL" />
-      <updated>1582309840473</updated>
     </task>
     <task id="LOCAL-00626" summary="Comando de slots">
       <created>1582309922924</created>
@@ -568,7 +560,14 @@
       <option name="project" value="LOCAL" />
       <updated>1582604036722</updated>
     </task>
-    <option name="localTasksCounter" value="674" />
+    <task id="LOCAL-00674" summary="Correção na quebra de linha dos memes">
+      <created>1582604514282</created>
+      <option name="number" value="00674" />
+      <option name="presentableId" value="LOCAL-00674" />
+      <option name="project" value="LOCAL" />
+      <updated>1582604514282</updated>
+    </task>
+    <option name="localTasksCounter" value="675" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -587,7 +586,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Correção no salvamento dos cargos de nível" />
     <MESSAGE value="Adição de endpoints para requisições HTTP" />
     <MESSAGE value="Mensagem de erro ao tentar adicionar um botão em uma mensagem em um canal diferente do qual o comando foi usado" />
     <MESSAGE value="Adição do criador dos botões no JSON" />
@@ -612,7 +610,8 @@
     <MESSAGE value="Mudanças na notificação do Kawaigotchi" />
     <MESSAGE value="Comando de slots" />
     <MESSAGE value="Atualização do framework JDA" />
-    <option name="LAST_COMMIT_MESSAGE" value="Atualização do framework JDA" />
+    <MESSAGE value="Correção na quebra de linha dos memes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção na quebra de linha dos memes" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -663,10 +662,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="620" y="336" key="#com.intellij.refactoring.move.moveInstanceMethod.MoveInstanceMethodDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1578419740782" />
-    <state x="934" y="185" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog" timestamp="1582311152915">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="452" y="144" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog" timestamp="1582605115940">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state x="452" y="144" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog/0.0.1366.768@0.0.1366.768" timestamp="1578793226369" />
+    <state x="452" y="144" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog/0.0.1366.768@0.0.1366.768" timestamp="1582605115940" />
     <state x="934" y="185" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1582311152915" />
     <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1579810412666">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -680,10 +679,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1578421403620" />
-    <state x="203" y="0" key="CommitChangelistDialog2" timestamp="1582604031129">
+    <state x="203" y="0" key="CommitChangelistDialog2" timestamp="1582604510538">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1582604031129" />
+    <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1582604510538" />
     <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1582577800847" />
     <state x="160" y="89" width="1344" height="834" key="DiffContextDialog" timestamp="1580842925618">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -735,10 +734,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="351" y="182" key="Vcs.Push.Dialog.v2" timestamp="1582604037925">
+    <state x="351" y="182" key="Vcs.Push.Dialog.v2" timestamp="1582604543626">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1582604037925" />
+    <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1582604543626" />
     <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1582577558607" />
     <state x="312" y="66" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1581001292879">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -757,10 +756,10 @@
     </state>
     <state x="488" y="297" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1366.768@0.0.1366.768" timestamp="1580267810034" />
     <state x="600" y="391" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1680.1010@0.0.1680.1010" timestamp="1579608604955" />
-    <state x="448" y="274" key="extract.method.dialog" timestamp="1581949856141">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="682" y="113" key="extract.method.dialog" timestamp="1582605093359">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state x="682" y="113" key="extract.method.dialog/0.0.1366.768@0.0.1366.768" timestamp="1578793315116" />
+    <state x="682" y="113" key="extract.method.dialog/0.0.1366.768@0.0.1366.768" timestamp="1582605093359" />
     <state x="448" y="274" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1581949856141" />
     <state x="445" y="176" width="790" height="658" key="find.popup" timestamp="1582318557182">
       <screen x="0" y="0" width="1680" height="1010" />
