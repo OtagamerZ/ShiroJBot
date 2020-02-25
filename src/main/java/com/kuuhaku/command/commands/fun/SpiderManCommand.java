@@ -27,6 +27,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class SpiderManCommand extends Command {
@@ -59,6 +60,7 @@ public class SpiderManCommand extends Command {
 
 			g2d.setColor(Color.BLACK);
 			g2d.setFont(new Font("Impact", Font.BOLD, 25));
+			System.out.println(Arrays.toString(text.split("\\r?\\n")));
 			Helper.drawString(g2d, text, 25, 30);
 			g2d.drawImage(bi, 0, canvas.getHeight() - bi.getHeight(), null);
 
