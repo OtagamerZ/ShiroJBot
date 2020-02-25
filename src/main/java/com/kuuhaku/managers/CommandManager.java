@@ -137,6 +137,7 @@ public class CommandManager {
 			add(new ShipCommand());
 			add(new MarryCommand());
 			add(new StonksCommand());
+			add(new StinksCommand());
 			add(new SpiderManCommand());
 			add(new PixelCanvasCommand());
 			add(new PixelChunkCommand());

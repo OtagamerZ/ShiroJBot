@@ -29,10 +29,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Objects;
 
-public class SpiderManCommand extends Command {
+public class StinksCommand extends Command {
 
-	public SpiderManCommand() {
-		super("homemaranha", new String[]{"spiderman", "spoda", "miranha"}, "<texto>", "Gera um meme no formato \"Homem-Aranha Pistola\"", Category.FUN);
+	public StinksCommand() {
+		super("stinks", new String[]{"notstks"}, "<texto>", "Gera um meme no formato \"Stinks\"", Category.FUN);
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class SpiderManCommand extends Command {
 
 		try {
 			String text = String.join(" ", args);
-			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("miranha.jpg")));
+			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("stinks.jpg")));
 
 			Graphics2D g2d = bi.createGraphics();
 			g2d.setFont(new Font("Impact", Font.BOLD, 25));
@@ -67,7 +67,7 @@ public class SpiderManCommand extends Command {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ImageIO.write(canvas, "png", baos);
 
-			channel.sendMessage("Aqui está seu meme " + author.getAsMention() + "!").addFile(baos.toByteArray(), "miranha.jpg").queue();
+			channel.sendMessage("Aqui está seu meme " + author.getAsMention() + "!").addFile(baos.toByteArray(), "notstks.jpg").queue();
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
