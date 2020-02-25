@@ -603,6 +603,6 @@ public class Helper {
 	}
 
 	public static void drawString(Graphics2D g, String text, int x, int y) {
-		for (String line : text.split(Pattern.quote("\n"))) g.drawString(line, x, y += g.getFontMetrics().getHeight());
+		for (String line : text.split("\\r?\\n")) g.drawString(line, x, y += g.getFontMetrics().getHeight());
 	}
 }
