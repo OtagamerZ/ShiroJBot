@@ -49,6 +49,7 @@ import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -607,5 +608,25 @@ public class Helper {
 		for (int i = 0; i < words.length; i++) {
 			g.drawString(words[i], x, y + (g.getFontMetrics().getHeight() * i));
 		}
+	}
+
+	public static ByteArrayOutputStream renderMeme(String text, BufferedImage bi) throws IOException {
+		BufferedImage canvas = new BufferedImage(bi.getWidth(), (30 * (text.split("\\r?\\n").length + 1)) + 15 + bi.getHeight(), BufferedImage.TYPE_INT_RGB);
+		Graphics2D g2d = canvas.createGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+		g2d.setColor(Color.WHITE);
+		g2d.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+		g2d.setColor(Color.BLACK);
+		g2d.setFont(new Font("Impact", Font.BOLD, 30));
+		drawString(g2d, text, 25, 15);
+		g2d.drawImage(bi, 0, canvas.getHeight() - bi.getHeight(), null);
+
+		g2d.dispose();
+
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ImageIO.write(canvas, "png", baos);
+		return baos;
 	}
 }

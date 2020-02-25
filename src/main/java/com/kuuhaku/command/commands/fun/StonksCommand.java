@@ -23,7 +23,6 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -46,31 +45,12 @@ public class StonksCommand extends Command {
 			String text = String.join(" ", args);
 			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("stonks.jpg")));
 
-			Graphics2D g2d = bi.createGraphics();
-			g2d.setFont(new Font("Impact", Font.BOLD, 25));
-			int h = text.contains("\n") ? text.split("\\r?\\n").length - 1 : g2d.getFontMetrics().stringWidth(text) / (bi.getWidth() - 50);
-
-			BufferedImage canvas = new BufferedImage(bi.getWidth(), 32 * (h + 1) + bi.getHeight(), BufferedImage.TYPE_INT_RGB);
-			g2d = canvas.createGraphics();
-			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-			g2d.setColor(Color.WHITE);
-			g2d.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-
-			g2d.setColor(Color.BLACK);
-			g2d.setFont(new Font("Impact", Font.BOLD, 25));
-			Helper.drawString(g2d, text, 25, 30);
-			g2d.drawImage(bi, 0, canvas.getHeight() - bi.getHeight(), null);
-
-			g2d.dispose();
-
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write(canvas, "png", baos);
+			ByteArrayOutputStream baos = Helper.renderMeme(text, bi);
 
 			channel.sendMessage("Aqui está seu meme " + author.getAsMention() + "!").addFile(baos.toByteArray(), "stks.jpg").queue();
+			baos.close();
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 	}
-
 }
