@@ -19,7 +19,6 @@ package com.kuuhaku.command.commands.fun;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
@@ -29,7 +28,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Objects;
-import java.util.regex.Pattern;
 
 public class SpiderManCommand extends Command {
 
@@ -50,7 +48,7 @@ public class SpiderManCommand extends Command {
 
 			Graphics2D g2d = bi.createGraphics();
 			g2d.setFont(new Font("Impact", Font.BOLD, 25));
-			int h = text.contains(Pattern.quote("\n")) ? text.split(Pattern.quote("\n")).length - 1 : g2d.getFontMetrics().stringWidth(text) / (bi.getWidth() - 50);
+			int h = text.contains("\n") ? text.split("\\r?\\n").length - 1 : g2d.getFontMetrics().stringWidth(text) / (bi.getWidth() - 50);
 
 			BufferedImage canvas = new BufferedImage(bi.getWidth(), 32 * (h + 1) + bi.getHeight(), BufferedImage.TYPE_INT_RGB);
 			g2d = canvas.createGraphics();
@@ -61,8 +59,7 @@ public class SpiderManCommand extends Command {
 
 			g2d.setColor(Color.BLACK);
 			g2d.setFont(new Font("Impact", Font.BOLD, 25));
-			if (text.contains(Pattern.quote("\n"))) Helper.drawString(g2d, text, 25, 30);
-			else Profile.drawStringMultiLineNO(g2d, text, bi.getWidth() - 50, 25, 30);
+			Helper.drawString(g2d, text, 25, 30);
 			g2d.drawImage(bi, 0, canvas.getHeight() - bi.getHeight(), null);
 
 			g2d.dispose();
