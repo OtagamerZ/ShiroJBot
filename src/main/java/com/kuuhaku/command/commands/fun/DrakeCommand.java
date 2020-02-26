@@ -53,7 +53,7 @@ public class DrakeCommand extends Command {
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 			g2d.setColor(Color.BLACK);
-			g2d.setFont(new Font("Impact", Font.BOLD, 40));
+			g2d.setFont(new Font("Arial", Font.BOLD, 40));
 			Profile.drawStringMultiLineNO(g2d, String.join(" ", args).split(";")[0], 313, 362, 55);
 			Profile.drawStringMultiLineNO(g2d, String.join(" ", args).split(";")[1], 313, 362, 337);
 
