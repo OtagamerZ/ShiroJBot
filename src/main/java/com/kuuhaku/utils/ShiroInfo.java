@@ -32,6 +32,9 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
 import org.discordbots.api.client.DiscordBotListAPI;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
 import java.util.ArrayList;
@@ -80,9 +83,18 @@ public class ShiroInfo {
 	private static final JDAEvents shiroEvents = new JDAEvents();
 	private static final Map<String, KittyCache<String, Message>> messageCache = new HashMap<>();
 	private static final GsonBuilder JSONFactory = new GsonBuilder();
+	private static final DocumentBuilder docBuilder;
 
 	//STATIC CONSTRUCTOR
 	static {
+		DocumentBuilder tempDocBuilder = null;
+		try {
+			tempDocBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+		} catch (ParserConfigurationException e) {
+			Helper.logger(ShiroInfo.class).fatal("Não foi possível instanciar o leitor de arquivos XML.");
+		}
+		if (tempDocBuilder == null) System.exit(1);
+		docBuilder = tempDocBuilder;
 		if (System.getenv().containsKey("DBL_TOKEN")) DBLToken = System.getenv("DBL_TOKEN");
 		else DBLToken = null;
 	}
@@ -220,6 +232,10 @@ public class ShiroInfo {
 
 	public JDAEvents getShiroEvents() {
 		return shiroEvents;
+	}
+
+	public static DocumentBuilder getDocBuilder() {
+		return docBuilder;
 	}
 
 	//VARIABLES
