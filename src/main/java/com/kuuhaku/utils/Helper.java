@@ -44,9 +44,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
+import org.xml.sax.SAXException;
 
 import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -633,8 +637,9 @@ public class Helper {
 
 	public static String getString(I18n code, String name) {
 		try {
-			return ShiroInfo.getxPath().evaluate("/values/" + name + "/text()", Helper.class.getClassLoader().getResourceAsStream("i18n/strings/" + code + ".xml"));
-		} catch (XPathExpressionException e) {
+			DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			return ShiroInfo.getxPath().evaluate("/values/" + name + "/text()", db.parse(Objects.requireNonNull(Helper.class.getClassLoader().getResourceAsStream("i18n/strings/" + code + ".xml"))));
+		} catch (XPathExpressionException | ParserConfigurationException | SAXException | IOException e) {
 			return null;
 		}
 	}
