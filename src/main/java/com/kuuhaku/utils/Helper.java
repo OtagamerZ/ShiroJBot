@@ -636,7 +636,7 @@ public class Helper {
 	}
 
 	public static String getString(I18n code, String name) {
-		try (InputStream is = Helper.class.getClassLoader().getResourceAsStream("i18n/strings/" + code + ".xml")) {
+		try (InputStream is = Helper.class.getClassLoader().getResourceAsStream("i18n.strings/" + code + ".xml")) {
 			DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			assert is != null;
 			return ShiroInfo.getxPath().evaluate("/values/" + name + "/text()", db.parse(is));
