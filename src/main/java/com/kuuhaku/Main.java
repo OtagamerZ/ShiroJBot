@@ -142,27 +142,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 		finishStartUp();
 		arguments = args;
-		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-			int sweeper = Sweeper.mark();
-
-			Helper.logger(Main.class).info(sweeper + " entradas dispensáveis encontradas!");
-
-			BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getCADump(), com.kuuhaku.controller.sqlite.BackupDAO.getGuildDump(), com.kuuhaku.controller.sqlite.BackupDAO.getAppUserDump(), com.kuuhaku.controller.sqlite.BackupDAO.getKawaigotchiDump()));
-			Helper.logger(Main.class).info("Respostas/Guilds/Usuários salvos com sucesso!");
-
-			BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump()));
-			Helper.logger(Main.class).info("Membros salvos com sucesso!");
-
-			CampaignDAO.saveCampaigns(Main.getInfo().getGames());
-			Helper.logger(Main.class).info("Campanhas salvas com sucesso!");
-
-			Sweeper.sweep();
-			Manager.disconnect();
-			tet.shutdown();
-			jbr.shutdown();
-			api.shutdown();
-			Helper.logger(Main.class).info("Fui desligada.");
-		}, "shutdown-protocol"));
 	}
 
 	private static void finishStartUp() {
