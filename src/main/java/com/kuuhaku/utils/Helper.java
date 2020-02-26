@@ -619,8 +619,8 @@ public class Helper {
 		g2d.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
 		g2d.setColor(Color.BLACK);
-		g2d.setFont(new Font("Impact", Font.BOLD, 45));
-		drawString(g2d, text, 25, 15);
+		g2d.setFont(new Font("Impact", Font.BOLD, 30));
+		drawString(g2d, text, 25, 45);
 		g2d.drawImage(bi, 0, canvas.getHeight() - bi.getHeight(), null);
 
 		g2d.dispose();
