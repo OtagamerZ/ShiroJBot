@@ -54,8 +54,8 @@ public class DrakeCommand extends Command {
 
 			g2d.setColor(Color.BLACK);
 			g2d.setFont(new Font("Impact", Font.BOLD, 40));
-			Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[0], 313, 362, 55);
-			Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[1], 313, 362, 337);
+			Profile.drawStringMultiLineNO(g2d, String.join(" ", args).split(";")[0], 313, 362, 55);
+			Profile.drawStringMultiLineNO(g2d, String.join(" ", args).split(";")[1], 313, 362, 337);
 
 			g2d.dispose();
 
