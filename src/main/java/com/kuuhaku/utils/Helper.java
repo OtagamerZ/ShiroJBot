@@ -44,6 +44,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
@@ -628,5 +630,16 @@ public class Helper {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		ImageIO.write(canvas, "png", baos);
 		return baos;
+	}
+
+	public static String getString(I18n code, String name) {
+		Document doc = null;
+		try {
+			doc = ShiroInfo.getDocBuilder().parse(Objects.requireNonNull(Helper.class.getClassLoader().getResourceAsStream("i18n/strings/" + code.getCode() + ".xml")));
+		} catch (SAXException | IOException e) {
+			logger(Helper.class).fatal("Não foi possível decodificar o arquivo de strings.");
+			System.exit(1);
+		}
+		return doc.getDocumentElement().getAttribute(name);
 	}
 }
