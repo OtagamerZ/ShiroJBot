@@ -17,5 +17,5 @@
   -->
 
 <values>
-    <ping_desc>Ping</ping_desc>
+    <ping_desc>Mostra meu tempo de resposta em milissegundos.</ping_desc>
 </values>
