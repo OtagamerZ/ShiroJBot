@@ -20,12 +20,14 @@ package com.kuuhaku.command.commands.misc;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
 import net.dv8tion.jda.api.entities.*;
 
 public class PingCommand extends Command {
 
 	public PingCommand() {
-		super("ping", "Ping", Category.MISC);
+		super("ping", Helper.getString(I18n.PTBR, "ping_desc"), Category.MISC);
 	}
 
 	@Override
