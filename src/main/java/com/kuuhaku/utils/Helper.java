@@ -44,11 +44,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
 import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
+import javax.xml.xpath.XPathExpressionException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -633,13 +632,10 @@ public class Helper {
 	}
 
 	public static String getString(I18n code, String name) {
-		Document doc = null;
 		try {
-			doc = ShiroInfo.getDocBuilder().parse(Objects.requireNonNull(Helper.class.getClassLoader().getResourceAsStream("i18n/strings/" + code.getCode() + ".xml")));
-		} catch (SAXException | IOException e) {
-			logger(Helper.class).fatal("Não foi possível decodificar o arquivo de strings.");
-			System.exit(1);
+			return ShiroInfo.getxPath().evaluate("/values/" + name + "/text()", Helper.class.getClassLoader().getResourceAsStream("i18n/strings/" + code + ".xml"));
+		} catch (XPathExpressionException e) {
+			return null;
 		}
-		return doc.getDocumentElement().getAttribute(name);
 	}
 }
