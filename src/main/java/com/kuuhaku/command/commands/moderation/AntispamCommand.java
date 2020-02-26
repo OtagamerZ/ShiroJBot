@@ -26,8 +26,20 @@ import org.apache.commons.lang3.StringUtils;
 
 public class AntispamCommand extends Command {
 
-	public AntispamCommand() {
-		super("semspam", new String[]{"nospam", "antispam"}, "<qtd/soft/hard>", "Bloqueia X mensagens de spam no canal onde este comando foi digitado. O modo **SOFT** bloqueia apenas mensagens repetidas, enquato o **HARD** bloqueia mensagens frequentes independente do conteúdo.", Category.MODERACAO);
+	public AntispamCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public AntispamCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public AntispamCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public AntispamCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

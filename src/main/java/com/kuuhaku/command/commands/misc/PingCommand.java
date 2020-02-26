@@ -27,7 +27,7 @@ import net.dv8tion.jda.api.entities.*;
 public class PingCommand extends Command {
 
 	public PingCommand() {
-		super("ping", Helper.getString(I18n.PTBR, "ping_desc"), Category.MISC);
+		super("ping", Helper.getString(I18n.PTBR, "ping"), Category.MISC);
 	}
 
 	@Override
