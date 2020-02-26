@@ -90,7 +90,7 @@ public class JDAEvents extends ListenerAdapter {
 
 	@Override
 	public void onMessageReactionAdd(MessageReactionAddEvent event) {
-		if (event.getUser().isBot()) return;
+		if (Objects.requireNonNull(event.getUser()).isBot()) return;
 
 		try {
 			Message message = event.getChannel().retrieveMessageById(event.getMessageId()).complete();
@@ -167,7 +167,7 @@ public class JDAEvents extends ListenerAdapter {
 			MemberDAO.addMemberToDB(event.getMember());
 
 			if (!gc.getMsgBoasVindas().equals("")) {
-				if (gc.isAntiRaid() && ((ChronoUnit.MILLIS.between(event.getUser().getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) / 1000) / 60) < 10) {
+				if (gc.isAntiRaid() && ChronoUnit.MINUTES.between(event.getUser().getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) < 10) {
 					Helper.logToChannel(event.getUser(), false, null, "Um usuário foi expulso automaticamente por ter uma conta muito recente.\n`(data de criação: " + event.getUser().getTimeCreated().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - hh:mm:ss")) + "h)`", event.getGuild());
 					event.getGuild().kick(event.getMember()).queue();
 					return;
@@ -204,7 +204,7 @@ public class JDAEvents extends ListenerAdapter {
 
 				Objects.requireNonNull(event.getGuild().getTextChannelById(gc.getCanalBV())).sendMessage(event.getUser().getAsMention()).embed(eb.build()).queue();
 				Helper.logToChannel(event.getUser(), false, null, "Um usuário entrou no servidor", event.getGuild());
-			} else if (gc.isAntiRaid() && ((ChronoUnit.MILLIS.between(event.getUser().getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) / 1000) / 60) < 10) {
+			} else if (gc.isAntiRaid() && ChronoUnit.MINUTES.between(event.getUser().getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) < 10) {
 				Helper.logToChannel(event.getUser(), false, null, "Um usuário foi bloqueado de entrar no servidor", event.getGuild());
 				event.getGuild().kick(event.getMember()).queue();
 			}

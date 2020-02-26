@@ -28,8 +28,20 @@ import org.apache.commons.lang3.StringUtils;
 
 public class GatekeeperCommand extends Command {
 
-	public GatekeeperCommand() {
-		super("porteiro", new String[]{"gatekeeper", "gk"}, "<ID> <@cargo>", "Adiciona botões de \"Li e aceito as regras\" a uma mensagem, clicar em \"Não aceito\" irá expulsar o membro do servidor.", Category.MODERACAO);
+	public GatekeeperCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public GatekeeperCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public GatekeeperCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public GatekeeperCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

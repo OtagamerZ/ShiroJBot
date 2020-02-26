@@ -25,18 +25,30 @@ import net.dv8tion.jda.api.entities.*;
 
 public class AllowCommunityCommand extends Command {
 
-    public AllowCommunityCommand() {
-        super("ouçatodos", "Permite que a comunidade ensine respostas a Shiro, ou não.", Category.MODERACAO);
-    }
+	public AllowCommunityCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
 
-    @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-        GuildConfig gc = GuildDAO.getGuildById(guild.getId());
-        if (gc.isNotAnyTell()) {
-            channel.sendMessage(":loud_sound: | Agora irei ouvir as respostas da comunidade!").queue();
-            gc.setAnyTell(true);
-        } else {
-            channel.sendMessage(":mute: | Não irei mais ouvir as respostas da comunidade!").queue();
+	public AllowCommunityCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public AllowCommunityCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public AllowCommunityCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
+	}
+
+	@Override
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+		if (gc.isNotAnyTell()) {
+			channel.sendMessage(":loud_sound: | Agora irei ouvir as respostas da comunidade!").queue();
+			gc.setAnyTell(true);
+		} else {
+			channel.sendMessage(":mute: | Não irei mais ouvir as respostas da comunidade!").queue();
             gc.setAnyTell(false);
         }
         GuildDAO.updateGuildSettings(gc);

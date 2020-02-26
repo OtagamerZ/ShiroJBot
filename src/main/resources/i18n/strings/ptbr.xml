@@ -16,6 +16,66 @@
   ~ along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
   -->
 
-<values>
-    <ping_desc>Mostra meu tempo de resposta em milissegundos.</ping_desc>
-</values>
+<resources>
+    <!--COMMAND DESCRIPTIONS-->
+    <!--DEV-->
+    <kill>Desliga a Shiro.</kill>
+    <restart>Reinicia a Shiro.</restart>
+    <leave>Sai do servidor com o ID informado.</leave>
+    <toxictag>Define um usuário como tóxico ou não.</toxictag>
+    <partnertag>Define um usuário como parceiro ou não.</partnertag>
+    <verifiedtag>Define um usuário como verificado ou não.</verifiedtag>
+    <relaylist>Mostra os IDs dos clientes do relay.</relaylist>
+    <log>Recupera o arquivo de logs.</log>
+    <token>Gera um token aleatório de 64 caractéres.</token>
+    <broadcast>Envia um aviso a todos os donos de servidor que possuem a Shiro, ou a todos o parceiros.</broadcast>
+    <invite>Obtém um convite de uso único do servidor informado</invite>
+    <simplewh>Vê a quantidade de comandos usados por servidor</simplewh>
+    <rating>Pede que um usuário avalie seu atendimento</rating>
+
+    <!--SHERIFF-->
+    <block>Bloqueia alguém de usar o chat global.</block>
+
+    <!--PARTNER-->
+    <jibril>Chama a Jibril para usar o chat global em seu servidor.</jibril>
+    <tet>Chama o Tet para usar o módulo de RPG em seu servidor.</tet>
+    <compile>Executa um código Java, Python ou Javascript.</compile>
+    <jemotes>Mostra a lista de emotes disponíveis para uso através da Jibril.</jemotes>
+    <kgotchishop>Abre a loja de Kawaigotchis.</kgotchishop>
+    <kgotchi>Interage com seu Kawaigotchi.</kgotchi>
+
+    <!--MODERATION-->
+    <dontsay>Remove uma resposta especificada.</dontsay>
+    <settings>Muda as configurações da Shiro no seu servidor.</settings>
+    <allowcommunity>Permite que a comunidade ensine respostas a Shiro, ou não.</allowcommunity>
+    <ban>Bane o membro especificado por 30 dias.</ban>
+    <kick>Expulsa o membro especificado.</kick>
+    <nolink>Bloqueia ou permite links postados no canal onde este comando foi digitado.</nolink>
+    <nospam>Bloqueia X mensagens de spam no canal onde este comando foi digitado. O modo **SOFT** bloqueia apenas
+        mensagens repetidas, enquato o **HARD** bloqueia mensagens frequentes independente do conteúdo.
+    </nospam>
+    <noraid>Expulsa automaticamente novos membros que possuirem contas muito recentes (menos que 10 minutos)</noraid>
+    <makelog>Cria um canal de log para as ações da Shiro.</makelog>
+    <prune>Limpa X mensagens do canal atual.</prune>
+    <litemode>Ativa ou desativa o modo lite do relay.</litemode>
+    <allowimages>Ativa ou desativa o recebimento de imagens do chat global.</allowimages>
+    <rolebutton>Adiciona botões de cargo na mensagem informada.</rolebutton>
+    <gatekeeper>Adiciona botões de "Li e aceito as regras" a uma mensagem, clicar em "Não aceito" irá expulsar o membro
+        do servidor.
+    </gatekeeper>
+    <backup>Salva ou recupera um backup do servidor - ISSO IRÁ SOBRESCREVER COMPLETAMENTE O ESTADO ATUAL DO SERVIDOR.
+    </backup>
+    <regenrules>Gera regras de conduta padrão da Shiro.</regenrules>
+
+    <!--MISC-->
+    <ping>Mostra meu tempo de resposta em milissegundos.</ping>
+
+    <!--MUSIC-->
+    <control>Controla a fila de músicas.</control>
+    <play>Busca um vídeo no YouTube.</play>
+    <video>Busca um vídeo específico no YouTube.</video>
+
+    <!--EXCEED-->
+    <exceedrank>Mostra o ranking dos exceeds.</exceedrank>
+    <exceed>Escolhe seu exceed, esta escolha é permanente.</exceed>
+</resources>

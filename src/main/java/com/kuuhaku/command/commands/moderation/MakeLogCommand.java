@@ -28,8 +28,20 @@ import java.util.Objects;
 
 public class MakeLogCommand extends Command {
 
-	public MakeLogCommand() {
-		super("logchannel", new String[]{"makelog"}, "Cria um canal de log para as ações da Shiro.", Category.MODERACAO);
+	public MakeLogCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public MakeLogCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public MakeLogCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public MakeLogCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

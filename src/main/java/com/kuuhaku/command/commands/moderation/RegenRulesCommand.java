@@ -27,8 +27,20 @@ import java.io.IOException;
 
 public class RegenRulesCommand extends Command {
 
-	public RegenRulesCommand() {
-		super("rrules", new String[]{"makerules"}, "Regenera as regras do servidor de suporte.", Category.MODERACAO);
+	public RegenRulesCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public RegenRulesCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public RegenRulesCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public RegenRulesCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

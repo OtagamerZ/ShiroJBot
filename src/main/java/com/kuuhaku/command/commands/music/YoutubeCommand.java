@@ -37,8 +37,20 @@ import java.util.concurrent.TimeUnit;
 
 public class YoutubeCommand extends Command {
 
-    public YoutubeCommand() {
-        super("play", new String[]{"yt", "youtube"}, "<nome>", "Busca um vídeo no YouTube.", Category.MUSICA);
+    public YoutubeCommand(String name, String description, Category category) {
+        super(name, description, category);
+    }
+
+    public YoutubeCommand(String name, String[] aliases, String description, Category category) {
+        super(name, aliases, description, category);
+    }
+
+    public YoutubeCommand(String name, String usage, String description, Category category) {
+        super(name, usage, description, category);
+    }
+
+    public YoutubeCommand(String name, String[] aliases, String usage, String description, Category category) {
+        super(name, aliases, usage, description, category);
     }
 
     @Override
