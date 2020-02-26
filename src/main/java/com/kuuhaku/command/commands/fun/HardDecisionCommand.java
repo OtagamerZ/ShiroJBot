@@ -53,7 +53,7 @@ public class HardDecisionCommand extends Command {
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 			g2d.setColor(Color.BLACK);
-			g2d.setFont(new Font("Impact", Font.BOLD, 25));
+			g2d.setFont(new Font("Arial", Font.BOLD, 25));
 			if (g2d.getFontMetrics().stringWidth(String.join(" ", args)) > 270) {
 				Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[0], 215, 55, 135);
 				Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[1], 215, 255, 100);
