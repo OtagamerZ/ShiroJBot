@@ -636,9 +636,10 @@ public class Helper {
 	}
 
 	public static String getString(I18n code, String name) {
-		try {
+		try (InputStream is = Helper.class.getClassLoader().getResourceAsStream("i18n/strings/" + code + ".xml")) {
 			DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			return ShiroInfo.getxPath().evaluate("/values/" + name + "/text()", db.parse(Objects.requireNonNull(Helper.class.getClassLoader().getResourceAsStream("i18n/strings/" + code + ".xml"))));
+			assert is != null;
+			return ShiroInfo.getxPath().evaluate("/values/" + name + "/text()", db.parse(is));
 		} catch (XPathExpressionException | ParserConfigurationException | SAXException | IOException e) {
 			return null;
 		}
