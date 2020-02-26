@@ -52,7 +52,7 @@ public class SadButTrueCommand extends Command {
 			g2d.setColor(Color.BLACK);
 			g2d.setFont(new Font("Impact", Font.BOLD, 20));
 			if (g2d.getFontMetrics().stringWidth(String.join(" ", args)) > 270) {
-				Profile.drawStringMultiLine(g2d, String.join(" ", args), 263, 75, 554);
+				Profile.drawStringMultiLineNO(g2d, String.join(" ", args), 263, 75, 554);
 			} else {
 				Profile.printCenteredString(String.join(" ", args), 270, 63, 554, g2d);
 			}

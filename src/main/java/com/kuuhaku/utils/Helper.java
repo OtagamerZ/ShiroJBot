@@ -644,4 +644,14 @@ public class Helper {
 			return null;
 		}
 	}
+
+	public static String getString(I18n code, String value, Object... fields) {
+		try (InputStream is = Helper.class.getClassLoader().getResourceAsStream("i18n/strings/" + code.getValue() + ".xml")) {
+			DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			assert is != null;
+			return String.format(ShiroInfo.getxPath().evaluate("/resources/" + value + "/text()", db.parse(is)), fields);
+		} catch (XPathExpressionException | ParserConfigurationException | SAXException | IOException e) {
+			return null;
+		}
+	}
 }

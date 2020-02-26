@@ -321,6 +321,29 @@ public class Profile {
 		g2d.fill(shape);
 	}
 
+	public static void drawStringMultiLineNO(Graphics2D g, String text, int lineWidth, int x, int y) {
+		FontMetrics m = g.getFontMetrics();
+		if (m.stringWidth(text) < lineWidth) {
+			drawOutlinedText(text, x, y, g);
+		} else {
+			String[] words = text.split(" ");
+			StringBuilder currentLine = new StringBuilder(words[0]);
+			for (int i = 1; i < words.length; i++) {
+				if (m.stringWidth(currentLine + words[i]) < lineWidth) {
+					currentLine.append(" ").append(words[i]);
+				} else {
+					String s = currentLine.toString();
+					drawOutlinedText(s, x, y, g);
+					y += m.getHeight();
+					currentLine = new StringBuilder(words[i]);
+				}
+			}
+			if (currentLine.toString().trim().length() > 0) {
+				g.drawString(currentLine.toString(), x, y);
+			}
+		}
+	}
+
 	public static void drawStringMultiLine(Graphics2D g, String text, int lineWidth, int x, int y) {
 		FontMetrics m = g.getFontMetrics();
 		if (m.stringWidth(text) < lineWidth) {
