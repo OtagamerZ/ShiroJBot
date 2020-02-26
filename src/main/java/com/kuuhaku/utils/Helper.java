@@ -635,11 +635,11 @@ public class Helper {
 		return baos;
 	}
 
-	public static String getString(I18n code, String name) {
-		try (InputStream is = Helper.class.getClassLoader().getResourceAsStream("i18n/strings/" + code.getCode() + ".xml")) {
+	public static String getString(I18n code, String value) {
+		try (InputStream is = Helper.class.getClassLoader().getResourceAsStream("i18n/strings/" + code.getValue() + ".xml")) {
 			DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			assert is != null;
-			return ShiroInfo.getxPath().evaluate("/values/" + name + "/text()", db.parse(is));
+			return ShiroInfo.getxPath().evaluate("/resources/" + value + "/text()", db.parse(is));
 		} catch (XPathExpressionException | ParserConfigurationException | SAXException | IOException e) {
 			return null;
 		}

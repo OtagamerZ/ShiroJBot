@@ -30,8 +30,20 @@ import java.util.Objects;
 
 public class VideoCommand extends Command {
 
-	public VideoCommand() {
-		super("video", new String[]{"vid"}, "<nome>", "Busca um vídeo específico no YouTube.", Category.MUSICA);
+	public VideoCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public VideoCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public VideoCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public VideoCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

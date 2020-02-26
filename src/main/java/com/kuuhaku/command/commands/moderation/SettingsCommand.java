@@ -26,8 +26,20 @@ import net.dv8tion.jda.api.entities.*;
 
 public class SettingsCommand extends Command {
 
-	public SettingsCommand() {
-		super("settings", new String[]{"setting", "definições", "definiçoes", "definicões", "parametros", "parâmetros"}, "[<parâmetro> <novo valor do parâmetro>]", "Muda as configurações da Shiro no seu servidor.", Category.MODERACAO);
+	public SettingsCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public SettingsCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public SettingsCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public SettingsCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

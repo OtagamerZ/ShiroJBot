@@ -20,13 +20,13 @@ package com.kuuhaku.utils;
 public enum I18n {
 	PTBR("ptbr");
 
-	private final String code;
+	private final String value;
 
 	I18n(String code) {
-		this.code = code;
+		this.value = code;
 	}
 
-	public String getCode() {
-		return code;
+	public String getValue() {
+		return value;
 	}
 }

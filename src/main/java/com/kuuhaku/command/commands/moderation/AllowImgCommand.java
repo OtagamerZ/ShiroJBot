@@ -25,8 +25,20 @@ import net.dv8tion.jda.api.entities.*;
 
 public class AllowImgCommand extends Command {
 
-	public AllowImgCommand() {
-		super("allowimg", new String[]{"aimg"}, "Ativa ou desativa o recebimento de imagens do chat global.", Category.MODERACAO);
+	public AllowImgCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public AllowImgCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public AllowImgCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public AllowImgCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

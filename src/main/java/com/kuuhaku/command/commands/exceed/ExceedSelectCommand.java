@@ -29,8 +29,21 @@ import net.dv8tion.jda.api.entities.*;
 import java.util.List;
 
 public class ExceedSelectCommand extends Command {
-	public ExceedSelectCommand() {
-		super("exceedselect", new String[]{"exselect", "sou"}, "Escolhe seu exceed, esta escolha é permanente.", Category.EXCEED);
+
+	public ExceedSelectCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public ExceedSelectCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public ExceedSelectCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public ExceedSelectCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

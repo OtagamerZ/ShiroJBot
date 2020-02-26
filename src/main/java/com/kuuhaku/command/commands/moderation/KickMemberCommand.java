@@ -27,18 +27,30 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 public class KickMemberCommand extends Command {
 
-    public KickMemberCommand() {
-        super("kick", new String[]{"expulsar", "remover"}, "<membro> <razão>", "Expulsa o membro especificado.", Category.MODERACAO);
-    }
+	public KickMemberCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
 
-    @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-        if (message.getMentionedUsers().size() == 0) {
-            channel.sendMessage(":x: | Você precisa mencionar um membro.").queue();
-            return;
-        } else if (message.getMentionedUsers().size() > 1) {
-            channel.sendMessage(":x: | Você mencionou membros demais.").queue();
-            return;
+	public KickMemberCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public KickMemberCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public KickMemberCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
+	}
+
+	@Override
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		if (message.getMentionedUsers().size() == 0) {
+			channel.sendMessage(":x: | Você precisa mencionar um membro.").queue();
+			return;
+		} else if (message.getMentionedUsers().size() > 1) {
+			channel.sendMessage(":x: | Você mencionou membros demais.").queue();
+			return;
         } else if (!member.hasPermission(Permission.KICK_MEMBERS)) {
 			channel.sendMessage(":x: | Você não possui permissão para expulsar membros.").queue();
 			return;

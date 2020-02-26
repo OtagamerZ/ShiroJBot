@@ -25,8 +25,20 @@ import net.dv8tion.jda.api.entities.*;
 
 public class AntiraidCommand extends Command {
 
-	public AntiraidCommand() {
-		super("semraid", new String[]{"noraid", "antiraid"}, "Expulsa automaticamente novos membros que possuirem contas muito recentes (< 10 min).", Category.MODERACAO);
+	public AntiraidCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public AntiraidCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public AntiraidCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public AntiraidCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override
