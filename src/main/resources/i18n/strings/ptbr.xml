@@ -17,5 +17,5 @@
   -->
 
 <values>
-    <string name="ping_desc">Ping</string>
+    <ping_desc>Ping</ping_desc>
 </values>
