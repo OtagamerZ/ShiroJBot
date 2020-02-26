@@ -27,8 +27,20 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 public class BanMemberCommand extends Command {
 
-	public BanMemberCommand() {
-		super("ban", new String[]{"banir"}, "<membro> <razão>", "Bane o membro especificado por 30 dias.", Category.MODERACAO);
+	public BanMemberCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public BanMemberCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public BanMemberCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public BanMemberCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

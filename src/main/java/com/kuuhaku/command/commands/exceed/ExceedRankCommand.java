@@ -39,8 +39,21 @@ import java.util.concurrent.TimeUnit;
 import static com.kuuhaku.model.common.Profile.*;
 
 public class ExceedRankCommand extends Command {
-	public ExceedRankCommand() {
-		super("exceedrank", new String[]{"exrank", "topexceed", "topex"}, "Mostra o ranking dos exceeds.", Category.EXCEED);
+
+	public ExceedRankCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public ExceedRankCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public ExceedRankCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public ExceedRankCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

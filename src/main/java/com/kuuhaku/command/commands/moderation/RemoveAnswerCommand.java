@@ -27,18 +27,30 @@ import javax.persistence.NoResultException;
 
 public class RemoveAnswerCommand extends Command {
 
-    public RemoveAnswerCommand() {
-        super("nãofale", "<id>", "Remove uma resposta especificada.", Category.MODERACAO);
-    }
+	public RemoveAnswerCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
 
-    @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-        if (args.length == 0) {
-            channel.sendMessage(":x: | Você precisa especificar um ID.").queue();
-            return;
-        } else if (!StringUtils.isNumeric(args[0])) {
-            channel.sendMessage(":x: | O ID deve ser um valor numérico informado na lista de respostas (`" + prefix + "fale lista`).").queue();
-            return;
+	public RemoveAnswerCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public RemoveAnswerCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public RemoveAnswerCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
+	}
+
+	@Override
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		if (args.length == 0) {
+			channel.sendMessage(":x: | Você precisa especificar um ID.").queue();
+			return;
+		} else if (!StringUtils.isNumeric(args[0])) {
+			channel.sendMessage(":x: | O ID deve ser um valor numérico informado na lista de respostas (`" + prefix + "fale lista`).").queue();
+			return;
         }
 
         try {

@@ -29,8 +29,20 @@ import org.apache.commons.lang3.StringUtils;
 
 public class RoleChooserCommand extends Command {
 
-	public RoleChooserCommand() {
-		super("botaocargo", new String[]{"rolebutton", "bc", "rb"}, "<reset>/[<ID> <emote> <@cargo>]", "Adiciona botões de cargo na mensagem informada.", Category.MODERACAO);
+	public RoleChooserCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public RoleChooserCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public RoleChooserCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public RoleChooserCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

@@ -26,8 +26,20 @@ import org.apache.commons.lang3.StringUtils;
 
 public class MusicCommand extends Command {
 
-	public MusicCommand() {
-		super("musica", new String[]{"music", "m"}, "Controla a fila de músicas.", Category.MUSICA);
+	public MusicCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public MusicCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public MusicCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public MusicCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

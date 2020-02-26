@@ -25,18 +25,30 @@ import net.dv8tion.jda.api.entities.*;
 
 public class NoLinkCommand extends Command {
 
-    public NoLinkCommand() {
-        super("semlink", new String[]{"nolink", "blocklink"}, "Bloqueia ou permite links postados no canal onde este comando foi digitado.", Category.MODERACAO);
-    }
+	public NoLinkCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
 
-    @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-        GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+	public NoLinkCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
 
-        if (gc.getNoLinkChannels().contains(channel.getId())) gc.removeNoLinkChannel(message.getTextChannel());
-        else gc.addNoLinkChannel(message.getTextChannel());
+	public NoLinkCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
 
-        GuildDAO.updateGuildSettings(gc);
+	public NoLinkCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
+	}
+
+	@Override
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+
+		if (gc.getNoLinkChannels().contains(channel.getId())) gc.removeNoLinkChannel(message.getTextChannel());
+		else gc.addNoLinkChannel(message.getTextChannel());
+
+		GuildDAO.updateGuildSettings(gc);
 
         channel.sendMessage("Agora os links neste canal estão " + (gc.getNoLinkChannels().contains(channel.getId()) ? "**bloqueados**" : "**liberados**")).queue();
     }

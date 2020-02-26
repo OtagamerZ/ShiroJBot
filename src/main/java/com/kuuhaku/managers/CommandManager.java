@@ -3,7 +3,9 @@
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
+ * the Free Software Foundation,
+either version 3 of the License,
+or
  * (at your option) any later version.
  *
  * Shiro J Bot is distributed in the hope that it will be useful,
@@ -12,7 +14,8 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
+ * along with Shiro J Bot.  If not,
+see <https://www.gnu.org/licenses/>
  */
 
 package com.kuuhaku.managers;
@@ -36,6 +39,10 @@ import com.kuuhaku.command.commands.reactions.answerable.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.kuuhaku.command.Category.*;
+import static com.kuuhaku.utils.Helper.getString;
+import static com.kuuhaku.utils.I18n.PTBR;
+
 public class CommandManager {
 
 	private final List<Command> commands;
@@ -43,49 +50,85 @@ public class CommandManager {
 	public CommandManager() {
 		commands = new ArrayList<Command>() {{
 			//DEV
-			add(new KillCommand("desligar", new String[]{"kill"}, "Desliga a Shiro.", Category.DEVS));
-			add(new RestartCommand("reiniciar", new String[]{"restart"}, "Reinicia a Shiro.", Category.DEVS));
-			add(new LeaveCommand("sair", new String[]{"leave"}, "<ID do servidor>", "Sai do servidor com o ID informado.", Category.DEVS));
-			add(new ToxicTagCommand("toxico", new String[]{"toxic"}, "<@usuário>", "Define um usuário como tóxico ou não.", Category.DEVS));
-			add(new PartnerTagCommand("parceiro", new String[]{"partner"}, "<@usuário>", "Define um usuário como parceiro ou não.", Category.DEVS));
-			add(new VerifiedTagCommand("verificado", new String[]{"verified"}, "<@usuário>", "Define um usuário como verificado ou não.", Category.DEVS));
-			add(new RelaysCommand("relays", "Mostra os IDs dos clientes do relay.", Category.DEVS));
-			add(new LogCommand("log", "Recupera o arquivo de logs", Category.DEVS));
-			add(new TokenCommand("chave", new String[]{"token"}, "<nome>", "Gera um token aleatório de 64 caractéres.", Category.DEVS));
-			add(new BroadcastCommand("transmitir", new String[]{"broadcast", "bc"}, "<tipo> <mensagem>", "Envia um aviso a todos os donos de servidor que possuem a Shiro, ou a todos o parceiros.", Category.DEVS));
-			add(new InviteCommand("convite", new String[]{"invite"}, "<ID do servidor>", "Obtém um convite de uso único do servidor informado.", Category.DEVS));
-			add(new UsageCommand("usos", new String[]{"uses", "usage"}, "Vê a quantidade de comandos usados por servidor.", Category.DEVS));
-			add(new SimpleWHMCommand("wh", "Envia uma simples mensagem via webhook.", Category.DEVS));
-			add(new RatingCommand("pedirvoto", new String[]{"requestvote", "howwasi"}, "Pede que um usuário avalie seu atendimento.", Category.DEVS));
+			add(new KillCommand(
+					"desligar", new String[]{"kill"}, getString(PTBR, "kill"), DEV));
+			add(new RestartCommand(
+					"reiniciar", new String[]{"restart"}, getString(PTBR, "restart"), DEV));
+			add(new LeaveCommand(
+					"sair", new String[]{"leave"}, "<ID do servidor>", getString(PTBR, "leave"), DEV));
+			add(new ToxicTagCommand(
+					"toxico", new String[]{"toxic"}, "<@usuário>", getString(PTBR, "toxictag"), DEV));
+			add(new PartnerTagCommand(
+					"parceiro", new String[]{"partner"}, "<@usuário>", getString(PTBR, "partnertag"), DEV));
+			add(new VerifiedTagCommand(
+					"verificado", new String[]{"verified"}, "<@usuário>", getString(PTBR, "verifiedtag"), DEV));
+			add(new RelaysCommand(
+					"relays", getString(PTBR, "relaylist"), DEV));
+			add(new LogCommand(
+					"log", getString(PTBR, "log"), DEV));
+			add(new TokenCommand(
+					"chave", new String[]{"token"}, "<nome>", getString(PTBR, "token"), DEV));
+			add(new BroadcastCommand(
+					"transmitir", new String[]{"broadcast", "bc"}, "<tipo> <mensagem>", getString(PTBR, "broadcast"), DEV));
+			add(new InviteCommand(
+					"convite", new String[]{"invite"}, "<ID do servidor>", getString(PTBR, "invite"), DEV));
+			add(new UsageCommand(
+					"usos", new String[]{"uses", "usage"}, getString(PTBR, "usage"), DEV));
+			add(new SimpleWHMCommand(
+					"wh", "<mensagem>", getString(PTBR, "simplewh"), DEV));
+			add(new RatingCommand(
+					"pedirvoto", new String[]{"requestvote", "howwasi"}, getString(PTBR, "rating"), DEV));
 
 			//SHERIFF
-			add(new BlockCommand("bloquear", new String[]{"block"}, "<tipo> <ID> <razão>", "Bloqueia alguém de usar o chat global.", Category.SHERIFFS));
+			add(new BlockCommand("bloquear", new String[]{"block"}, "<tipo> <ID> <razão>", getString(PTBR, "block"), SHERIFFS));
 
 			//PARTNER
-			add(new JibrilCommand("jibril", "Chama a Jibril para usar o chat global em seu servidor.", Category.PARTNER));
-			add(new CompileCommand("compilar", new String[]{"compile", "exec"}, "```java/py/js\n<código>\n```", "Executa um código Java, Python ou Javascript.", Category.PARTNER));
-			add(new TetCommand("tet", "Chama o Tet para usar o módulo de RPG em seu servidor.", Category.PARTNER));
-			add(new JibrilEmoteListCommand("jemotes", "<nome>", "Mostra a lista de emotes disponíveis para uso através da Jibril.", Category.PARTNER));
-			add(new PurchaceKGotchiCommand("pkgotchi", new String[]{"buykgotchi", "comprarkgotchi"}, "<escolher/aleatorio> [raça] <nome>", "Abre a loja de Kawaigotchis.", Category.PARTNER));
-			add(new KGotchiCommand("kgotchi", new String[]{"kg", "kawaig"}, "[alimentar/brincar/treinar/comprar]", "Interage com seu Kawaigotchi.", Category.PARTNER));
+			add(new JibrilCommand(
+					"jibril", getString(PTBR, "jibril"), PARTNER));
+			add(new TetCommand(
+					"tet", getString(PTBR, "tet"), PARTNER));
+			add(new CompileCommand(
+					"compilar", new String[]{"compile", "exec"}, "```java/py/js\n<código>\n```", getString(PTBR, "compile"), PARTNER));
+			add(new JibrilEmoteListCommand(
+					"jemotes", "<nome>", getString(PTBR, "jemotes"), PARTNER));
+			add(new PurchaceKGotchiCommand(
+					"pkgotchi", new String[]{"buykgotchi", "comprarkgotchi"}, "<escolher/aleatorio> [raça] <nome>", getString(PTBR, "kgotchishop"), PARTNER));
+			add(new KGotchiCommand(
+					"kgotchi", new String[]{"kg", "kawaig"}, "[alimentar/brincar/treinar/comprar]", getString(PTBR, "kgotchi"), PARTNER));
 
 			//MODERATION
-			add(new RemoveAnswerCommand());
-			add(new SettingsCommand());
-			add(new AllowCommunityCommand());
-			add(new KickMemberCommand());
-			add(new BanMemberCommand());
-			add(new NoLinkCommand());
-			add(new AntispamCommand());
-			add(new AntiraidCommand());
-			add(new MakeLogCommand());
-			add(new PruneCommand());
-			add(new LiteModeCommand());
-			add(new AllowImgCommand());
-			add(new RoleChooserCommand());
-			add(new GatekeeperCommand());
-			add(new BackupCommand());
-			add(new RegenRulesCommand());
+			add(new RemoveAnswerCommand(
+					"nãofale", "<id>", getString(PTBR, "dontsay"), Category.MODERACAO));
+			add(new SettingsCommand(
+					"settings", new String[]{"definicoes", "parametros", "configs"}, "[<parâmetro> <novo valor do parâmetro>]", getString(PTBR, "settings"), Category.MODERACAO));
+			add(new AllowCommunityCommand(
+					"ouçatodos", getString(PTBR, "allowcommunity"), Category.MODERACAO));
+			add(new KickMemberCommand(
+					"kick", new String[]{"expulsar", "remover"}, "<membro> <razão>", getString(PTBR, "kick"), Category.MODERACAO));
+			add(new BanMemberCommand(
+					"ban", new String[]{"banir"}, "<membro> <razão>", getString(PTBR, "ban"), Category.MODERACAO));
+			add(new NoLinkCommand(
+					"semlink", new String[]{"nolink", "blocklink"}, getString(PTBR, "nolink"), Category.MODERACAO));
+			add(new AntispamCommand(
+					"semspam", new String[]{"nospam", "antispam"}, "<qtd/soft/hard>", getString(PTBR, "nospam"), Category.MODERACAO));
+			add(new AntiraidCommand(
+					"semraid", new String[]{"noraid", "antiraid"}, getString(PTBR, "noraid"), Category.MODERACAO));
+			add(new MakeLogCommand(
+					"logchannel", new String[]{"makelog"}, getString(PTBR, "makelog"), Category.MODERACAO));
+			add(new PruneCommand(
+					"prune", new String[]{"clean", "limpar"}, "[qtd/all]", getString(PTBR, "prune"), Category.MODERACAO));
+			add(new LiteModeCommand(
+					"litemode", new String[]{"lite"}, getString(PTBR, "litemode"), Category.MODERACAO));
+			add(new AllowImgCommand(
+					"allowimg", new String[]{"aimg"}, getString(PTBR, "allowimage"), Category.MODERACAO));
+			add(new RoleChooserCommand(
+					"botaocargo", new String[]{"rolebutton", "bc", "rb"}, "<reset>/[<ID> <emote> <@cargo>]", getString(PTBR, "rolebutton"), Category.MODERACAO));
+			add(new GatekeeperCommand(
+					"porteiro", new String[]{"gatekeeper", "gk"}, "<ID> <@cargo>", getString(PTBR, "gatekeeper"), Category.MODERACAO));
+			add(new BackupCommand(
+					"backup", new String[]{"dados"}, "<salvar/recuperar>", getString(PTBR, "backup"), Category.MODERACAO));
+			add(new RegenRulesCommand(
+					"rrules", new String[]{"makerules"}, getString(PTBR, "regenrules"), Category.MODERACAO));
 
 			//INFORMATION
 			add(new ComandosCommand());
@@ -144,8 +187,6 @@ public class CommandManager {
 			add(new PixelChunkCommand());
 			add(new DivorceCommand());
 			add(new SlotsCommand());
-			//REAÇÕES
-			//RECIPROCOS
 			add(new HugReaction());
 			add(new KissReaction());
 			add(new PatReaction());
@@ -153,7 +194,6 @@ public class CommandManager {
 			add(new SlapReaction());
 			add(new PunchReaction());
 			add(new BiteReaction());
-			//NÃO RECIPROCOS
 			add(new BlushReaction());
 			add(new CryReaction());
 			add(new DanceReaction());
@@ -163,13 +203,13 @@ public class CommandManager {
 			add(new RunReaction());
 
 			//MUSICA
-			add(new MusicCommand());
-			add(new YoutubeCommand());
-			add(new VideoCommand());
+			add(new MusicCommand("controle", new String[]{"control", "c"}, getString(PTBR, "control"), Category.MUSICA));
+			add(new YoutubeCommand("play", new String[]{"yt", "youtube"}, "<nome>", getString(PTBR, "play"), Category.MUSICA));
+			add(new VideoCommand("video", new String[]{"vid"}, "<nome>", getString(PTBR, "video"), Category.MUSICA));
 
 			//EXCEED
-			add(new ExceedRankCommand());
-			add(new ExceedSelectCommand());
+			add(new ExceedRankCommand("exceedrank", new String[]{"exrank", "topexceed", "topex"}, getString(PTBR, "exceedrank"), Category.EXCEED));
+			add(new ExceedSelectCommand("exceedselect", new String[]{"exselect", "sou"}, getString(PTBR, "exceed"), Category.EXCEED));
 		}};
 	}
 

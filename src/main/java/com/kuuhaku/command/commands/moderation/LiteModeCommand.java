@@ -25,8 +25,20 @@ import net.dv8tion.jda.api.entities.*;
 
 public class LiteModeCommand extends Command {
 
-	public LiteModeCommand() {
-		super("litemode", new String[]{"lite"}, "Ativa ou desativa o modo lite do relay", Category.MODERACAO);
+	public LiteModeCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public LiteModeCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public LiteModeCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public LiteModeCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

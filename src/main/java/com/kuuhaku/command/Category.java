@@ -28,7 +28,7 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public enum Category {
-	DEVS("Dev", "<:dev:674261700333142046>", "674261700333142046", "Comandos dedicados aos devs do bot.", PrivilegeLevel.DEV),
+	DEV("Dev", "<:dev:674261700333142046>", "674261700333142046", "Comandos dedicados aos devs do bot.", PrivilegeLevel.DEV),
 	SHERIFFS("Sheriffs", "<:sheriff:674261700538662913>", "674261700538662913", "Comandos de moderação global.", PrivilegeLevel.SHERIFF),
 	MODERACAO("Moderação", "<:mod:674261700844716082>", "674261700844716082", "Comandos dedicados à staff do servidor.", PrivilegeLevel.MOD),
 	PARTNER("Parceiros", "<:partner:674261701109219328>", "674261701109219328", "Comandos exclusivos para parceiros", PrivilegeLevel.USER),
@@ -69,13 +69,14 @@ public enum Category {
 
 	public boolean isBotBlocked() {
 		switch (this) {
-			case DEVS:
+			case DEV:
 			case EXCEED:
 			case MUSICA:
 			case MODERACAO:
 			case SHERIFFS:
 				return true;
-			default: return false;
+			default:
+				return false;
 		}
 	}
 
@@ -99,7 +100,7 @@ public enum Category {
 	}
 
 	public boolean isEnabled(GuildConfig gc, Guild g) {
-		if (this == DEVS && !g.getId().equals(ShiroInfo.getSupportServerID())) {
+		if (this == DEV && !g.getId().equals(ShiroInfo.getSupportServerID())) {
 			return false;
 		} else if (this == PARTNER && !TagDAO.getTagById(g.getOwnerId()).isPartner()) {
 			return false;

@@ -29,8 +29,20 @@ import java.time.LocalDateTime;
 
 public class BackupCommand extends Command {
 
-	public BackupCommand() {
-		super("backup", new String[]{"dados"}, "<salvar/recuperar>", "Salva ou recupera um backup do servidor - ISSO IRÁ SOBRESCREVER COMPLETAMENTE O ESTADO ATUAL DO SERVIDOR.", Category.MODERACAO);
+	public BackupCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public BackupCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public BackupCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public BackupCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override
