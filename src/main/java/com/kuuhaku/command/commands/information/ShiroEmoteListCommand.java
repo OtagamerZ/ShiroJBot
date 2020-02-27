@@ -34,8 +34,20 @@ import java.util.stream.Collectors;
 
 public class ShiroEmoteListCommand extends Command {
 
-	public ShiroEmoteListCommand() {
-		super("semotes", "<nome>", "Mostra a lista de emotes disponíveis para uso através da Shiro.", Category.INFO);
+	public ShiroEmoteListCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public ShiroEmoteListCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public ShiroEmoteListCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public ShiroEmoteListCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

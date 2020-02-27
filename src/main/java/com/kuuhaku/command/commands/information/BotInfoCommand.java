@@ -29,18 +29,30 @@ import java.time.format.DateTimeFormatter;
 
 public class BotInfoCommand extends Command {
 
-    public BotInfoCommand() {
-        super("info", new String[]{"botinfo", "bot"}, "Mostra dados sobre a Shiro.", Category.INFO);
-    }
+	public BotInfoCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
 
-    @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-        EmbedBuilder eb = new EmbedBuilder();
+	public BotInfoCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
 
-        eb.setTitle(":dividers: Dados sobre a Shiro J. Bot");
-        eb.setThumbnail(Main.getInfo().getAPI().getSelfUser().getAvatarUrl());
-        eb.addField(":triangular_flag_on_post: Projeto inicial por:", Main.getInfo().getUserByID(Main.getInfo().getNiiChan()).getAsTag(), true);
-        StringBuilder sb = new StringBuilder();
+	public BotInfoCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public BotInfoCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
+	}
+
+	@Override
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		EmbedBuilder eb = new EmbedBuilder();
+
+		eb.setTitle(":dividers: Dados sobre a Shiro J. Bot");
+		eb.setThumbnail(Main.getInfo().getAPI().getSelfUser().getAvatarUrl());
+		eb.addField(":triangular_flag_on_post: Projeto inicial por:", Main.getInfo().getUserByID(Main.getInfo().getNiiChan()).getAsTag(), true);
+		StringBuilder sb = new StringBuilder();
         Main.getInfo().getDevelopers().forEach(d -> sb.append(Main.getInfo().getUserByID(d).getAsTag()).append(", "));
         eb.addField(":tools: Desenvolvida por:", sb.toString(), true);
         eb.addField(":calendar_spiral: Criada em:", Main.getInfo().getSelfUser().getTimeCreated().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), true);

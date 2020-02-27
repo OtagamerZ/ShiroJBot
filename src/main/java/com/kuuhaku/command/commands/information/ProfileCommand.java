@@ -27,8 +27,20 @@ import java.io.IOException;
 
 public class ProfileCommand extends Command {
 
-	public ProfileCommand() {
-		super("perfil", new String[]{"xp", "profile", "pf"}, "Mostra dados sobre você neste servidor.", Category.INFO);
+	public ProfileCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public ProfileCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public ProfileCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public ProfileCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

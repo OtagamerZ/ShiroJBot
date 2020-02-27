@@ -24,8 +24,20 @@ import net.dv8tion.jda.api.entities.*;
 
 public class ListScoreCommand extends Command {
 
-	public ListScoreCommand() {
-		super("notas", new String[]{"scores"}, "Mostra o ranking de votos de usuários.", Category.MISC);
+	public ListScoreCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public ListScoreCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public ListScoreCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public ListScoreCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

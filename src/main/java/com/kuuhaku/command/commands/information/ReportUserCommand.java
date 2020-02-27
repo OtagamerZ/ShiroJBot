@@ -28,18 +28,30 @@ import java.util.Arrays;
 
 public class ReportUserCommand extends Command {
 
-    public ReportUserCommand() {
-        super("report", new String[]{"reportar"}, "<@usuário> <razão>", "Reporta alguém tóxico.", Category.INFO);
-    }
+	public ReportUserCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
 
-    @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public ReportUserCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
 
-        if (message.getMentionedUsers().size() < 1) {
-            channel.sendMessage(":x: | Você precisa mencionar um usuário.").queue();
-            return;
-        } else if (args.length < 2) {
-            channel.sendMessage(":x: | Você precisa dizer o motivo do report.").queue();
+	public ReportUserCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public ReportUserCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
+	}
+
+	@Override
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+
+		if (message.getMentionedUsers().size() < 1) {
+			channel.sendMessage(":x: | Você precisa mencionar um usuário.").queue();
+			return;
+		} else if (args.length < 2) {
+			channel.sendMessage(":x: | Você precisa dizer o motivo do report.").queue();
             return;
         }
 

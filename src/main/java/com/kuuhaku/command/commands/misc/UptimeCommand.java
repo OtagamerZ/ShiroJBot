@@ -27,8 +27,20 @@ import java.util.concurrent.TimeUnit;
 
 public class UptimeCommand extends Command {
 
-	public UptimeCommand() {
-		super("uptime", "Diz-lhe à quanto tempo estou acordada.", Category.MISC);
+	public UptimeCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public UptimeCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public UptimeCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public UptimeCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override
@@ -36,9 +48,9 @@ public class UptimeCommand extends Command {
 
 		long uptimeSec = Instant.now().getEpochSecond() - Main.getInfo().getStartTime();
 
-		int dias = (int)TimeUnit.SECONDS.toDays(uptimeSec);
-		long horas = TimeUnit.SECONDS.toHours(uptimeSec) - (dias *24);
-		long minutos = TimeUnit.SECONDS.toMinutes(uptimeSec) - (TimeUnit.SECONDS.toHours(uptimeSec)* 60);
+		int dias = (int) TimeUnit.SECONDS.toDays(uptimeSec);
+		long horas = TimeUnit.SECONDS.toHours(uptimeSec) - (dias * 24);
+		long minutos = TimeUnit.SECONDS.toMinutes(uptimeSec) - (TimeUnit.SECONDS.toHours(uptimeSec) * 60);
 		long segundos = TimeUnit.SECONDS.toSeconds(uptimeSec) - (TimeUnit.SECONDS.toMinutes(uptimeSec) * 60);
 
 		String uptime = dias + " dias, " + horas + " horas, " + minutos + " mins e " + segundos + " segundos.";
