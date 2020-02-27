@@ -60,7 +60,6 @@ public class BotInfoCommand extends Command {
 		eb.addField(":earth_americas: Estou em:", Main.getInfo().getAPI().getGuilds().size() + " servidores", true);
 		eb.addField(":speech_balloon: Conheço:", Main.getInfo().getAPI().getUsers().size() + " usuários (" + MemberDAO.getAllMembers().size() + " cadastrados)", true);
 		eb.addField(":envelope: Link de convite:", "https://top.gg/bot/572413282653306901", true);
-		eb.setImage("https://top.gg/api/widget/572413282653306901.svg");
 
 		channel.sendMessage(eb.build()).queue();
 	}
