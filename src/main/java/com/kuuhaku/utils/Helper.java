@@ -616,7 +616,7 @@ public class Helper {
 	}
 
 	public static ByteArrayOutputStream renderMeme(String text, BufferedImage bi) throws IOException {
-		BufferedImage canvas = new BufferedImage(bi.getWidth(), (30 * (text.split("\\r?\\n").length + 1)) + 15 + bi.getHeight(), BufferedImage.TYPE_INT_RGB);
+		BufferedImage canvas = new BufferedImage(bi.getWidth(), (30 * (text.split("\\r?\\n").length + 1) + (6 * text.split("\\r?\\n").length)) + 15 + bi.getHeight(), BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2d = canvas.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
