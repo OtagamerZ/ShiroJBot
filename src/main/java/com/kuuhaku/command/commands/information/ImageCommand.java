@@ -26,33 +26,34 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
-import java.util.Arrays;
+import java.net.URLEncoder;
 
 public class ImageCommand extends Command {
 
 	public ImageCommand() {
-		super("image", new String[]{"imagem", "img"}, "<tags>", "Busca uma imagem de anime na internet.", Category.INFO);
+		super("image", new String[]{"imagem", "img"}, "<tags>", "Busca uma imagem na internet.", Category.INFO);
 	}
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
-			channel.sendMessage(":x: | Você precisa de indicar uma ou ou mais tags separadas por `;`.").queue();
+			channel.sendMessage(":x: | Você precisa indicar o que devo pesquisar.").queue();
 			return;
 		}
 
-		String[] tag = String.join(" ", args).split(";");
+		String query = String.join(" ", args);
 
 		channel.sendMessage("<a:Loading:598500653215645697> Buscando imagem...").queue(m -> {
 			try {
-				URL link = new URL("https://safebooru.org/index.php?page=dapi&s=post&q=index&json=1" + (!message.getTextChannel().isNSFW() ? "&rating=safe" : "") + "&tags=" +
-						String.join("+", tag).replace(" ", "_"));
-				HttpURLConnection con = (HttpURLConnection) link.openConnection();
+				URL link = new URL("https://www.googleapis.com/customsearch/v1?key=" + System.getenv("GOOGLE_TOKEN") + "&cx=" + System.getenv("GOOGLE_SEARCH") + "&searchType=image&q=" + URLEncoder.encode(query, "UTF-8"));
+				HttpsURLConnection con = (HttpsURLConnection) link.openConnection();
 				con.setRequestMethod("GET");
 				con.setRequestProperty("User-Agent", "Mozilla/5.0");
 				Helper.logger(this.getClass()).debug("Requisição 'GET' para o URL: " + link);
@@ -67,27 +68,24 @@ public class ImageCommand extends Command {
 				br.close();
 
 				Helper.logger(this.getClass()).debug(resposta.toString());
-				JSONArray ja = new JSONArray(resposta.toString());
-				JSONObject jo = ja.getJSONObject(Helper.rng(ja.length() - 1));
-				String url = "https://safebooru.org//images/" + jo.getString("directory") + "/" + jo.getString("image");
-
-				if (Arrays.asList(jo.getString("tags").split(" ")).contains("hentai")) {
-					m.editMessage("Humm safadinho, eu não posso postar sobre Hentais neste canal!").queue();
-					return;
-				}
+				JSONObject jo = new JSONObject(resposta.toString());
+				JSONArray items = jo.getJSONArray("items");
+				JSONObject item = items.getJSONObject(Helper.rng(items.length()));
+				JSONObject image = item.getJSONObject("image");
 
 				EmbedBuilder eb = new EmbedBuilder();
-				eb.setColor(Helper.colorThief(url));
-				eb.setAuthor("Aqui está!", "https://safebooru.org//images/" + jo.getString("directory") + "/" + jo.getString("image"));
-				eb.addField("Largura:", Integer.toString(jo.getInt("width")), true);
-				eb.addField("Altura:", Integer.toString(jo.getInt("height")), true);
-				eb.addField("Tags:", "`" + String.join("` `", Arrays.copyOfRange(jo.getString("tags").split(" "), 0, jo.getString("tags").split(" ").length < 14 ? jo.getString("tags").split(" ").length - 1 : 14)) + "`", true);
-				eb.setImage(url);
+				eb.setColor(Helper.colorThief(item.getString("link")));
+				eb.setAuthor("Aqui está!");
+				eb.setTitle(item.getString("title"), image.getString("contextLink"));
+				eb.addField("Largura:", Integer.toString(image.getInt("width")), true);
+				eb.addField("Altura:", Integer.toString(image.getInt("height")), true);
+				eb.addField("Tamanho: ", BigDecimal.valueOf(image.getInt("byteSize") / 1024f / 1024f).setScale(2, RoundingMode.HALF_EVEN) + " MB", true);
+				eb.setImage(item.getString("link"));
 
 				m.delete().queue();
 				channel.sendMessage(eb.build()).queue();
 			} catch (IOException | JSONException e) {
-				m.editMessage(":x: | Humm...não achei nenhuma imagem com essas tags, talvez você tenha escrito algo errado?").queue();
+				m.editMessage(":x: | Humm...não achei nenhuma imagem com esses termos, talvez você tenha escrito algo errado?").queue();
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
 		});
