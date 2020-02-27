@@ -22,15 +22,15 @@
     <kill>Desliga a Shiro.</kill>
     <restart>Reinicia a Shiro.</restart>
     <leave>Sai do servidor com o ID informado.</leave>
-    <toxictag>Define um usuário como tóxico ou não.</toxictag>
-    <partnertag>Define um usuário como parceiro ou não.</partnertag>
-    <verifiedtag>Define um usuário como verificado ou não.</verifiedtag>
-    <relaylist>Mostra os IDs dos clientes do relay.</relaylist>
+    <toxic_tag>Define um usuário como tóxico ou não.</toxic_tag>
+    <partner_tag>Define um usuário como parceiro ou não.</partner_tag>
+    <verified_tag>Define um usuário como verificado ou não.</verified_tag>
+    <relay_list>Mostra os IDs dos clientes do relay.</relay_list>
     <log>Recupera o arquivo de logs.</log>
     <token>Gera um token aleatório de 64 caractéres.</token>
     <broadcast>Envia um aviso a todos os donos de servidor que possuem a Shiro, ou a todos o parceiros.</broadcast>
     <invite>Obtém um convite de uso único do servidor informado</invite>
-    <simplewh>Vê a quantidade de comandos usados por servidor</simplewh>
+    <simple_wh>Vê a quantidade de comandos usados por servidor</simple_wh>
     <rating>Pede que um usuário avalie seu atendimento</rating>
 
     <!--SHERIFF-->
@@ -40,35 +40,58 @@
     <jibril>Chama a Jibril para usar o chat global em seu servidor.</jibril>
     <tet>Chama o Tet para usar o módulo de RPG em seu servidor.</tet>
     <compile>Executa um código Java, Python ou Javascript.</compile>
-    <jemotes>Mostra a lista de emotes disponíveis para uso através da Jibril.</jemotes>
-    <kgotchishop>Abre a loja de Kawaigotchis.</kgotchishop>
+    <j_emotes>Mostra a lista de emotes disponíveis para uso através da Jibril.</j_emotes>
+    <kgotchi_shop>Abre a loja de Kawaigotchis.</kgotchi_shop>
     <kgotchi>Interage com seu Kawaigotchi.</kgotchi>
+    <relay>Mostra dados sobre a conexão relay.</relay>
+    <tags>Mostra os emblemas disponíveis.</tags>
+    <my_tags>Mostra seus emblemas obtidos.</my_tags>
 
     <!--MODERATION-->
-    <dontsay>Remove uma resposta especificada.</dontsay>
+    <dont_say>Remove uma resposta especificada.</dont_say>
     <settings>Muda as configurações da Shiro no seu servidor.</settings>
-    <allowcommunity>Permite que a comunidade ensine respostas a Shiro, ou não.</allowcommunity>
+    <allow_community>Permite que a comunidade ensine respostas a Shiro, ou não.</allow_community>
     <ban>Bane o membro especificado por 30 dias.</ban>
     <kick>Expulsa o membro especificado.</kick>
-    <nolink>Bloqueia ou permite links postados no canal onde este comando foi digitado.</nolink>
-    <nospam>Bloqueia X mensagens de spam no canal onde este comando foi digitado. O modo **SOFT** bloqueia apenas
+    <no_link>Bloqueia ou permite links postados no canal onde este comando foi digitado.</no_link>
+    <no_spam>Bloqueia X mensagens de spam no canal onde este comando foi digitado. O modo **SOFT** bloqueia apenas
         mensagens repetidas, enquato o **HARD** bloqueia mensagens frequentes independente do conteúdo.
-    </nospam>
-    <noraid>Expulsa automaticamente novos membros que possuirem contas muito recentes (menos que 10 minutos)</noraid>
-    <makelog>Cria um canal de log para as ações da Shiro.</makelog>
+    </no_spam>
+    <no_raid>Expulsa automaticamente novos membros que possuirem contas muito recentes (menos que 10 minutos)</no_raid>
+    <make_log>Cria um canal de log para as ações da Shiro.</make_log>
     <prune>Limpa X mensagens do canal atual.</prune>
-    <litemode>Ativa ou desativa o modo lite do relay.</litemode>
-    <allowimages>Ativa ou desativa o recebimento de imagens do chat global.</allowimages>
-    <rolebutton>Adiciona botões de cargo na mensagem informada.</rolebutton>
+    <lite_mode>Ativa ou desativa o modo lite do relay.</lite_mode>
+    <allow_images>Ativa ou desativa o recebimento de imagens do chat global.</allow_images>
+    <role_button>Adiciona botões de cargo na mensagem informada.</role_button>
     <gatekeeper>Adiciona botões de "Li e aceito as regras" a uma mensagem, clicar em "Não aceito" irá expulsar o membro
         do servidor.
     </gatekeeper>
     <backup>Salva ou recupera um backup do servidor - ISSO IRÁ SOBRESCREVER COMPLETAMENTE O ESTADO ATUAL DO SERVIDOR.
     </backup>
-    <regenrules>Gera regras de conduta padrão da Shiro.</regenrules>
+    <regen_rules>Gera regras de conduta padrão da Shiro.</regen_rules>
+    <permission>Mostra quais permissões a Shiro/Jibril possuem.</permission>
+
+    <!--INFORMATION-->
+    <help>Fornece uma lista de todos os comandos disponiveis no bot.</help>
+    <profile>Mostra dados sobre você neste servidor.</profile>
+    <bug>Envia um relatório de bug para os devs.</bug>
+    <report>Reporta alguém tóxico.</report>
+    <info>Mostra dados sobre a Shiro.</info>
+    <rank>Mostra o ranking de usuários do servidor ou global.</rank>
+    <id>Pesquisa o ID dos usuários com o nome informado</id>
+    <color>Vê o tom da cor informada.</color>
+    <emotes>Mostra a lista de emotes disponíveis no servidor em que o comando foi executado.</emotes>
+    <s_emotes>Mostra a lista de emotes disponíveis para uso através da Shiro.</s_emotes>
+    <wallet>Mostra o seu saldo de créditos.</wallet>
+    <ping>Mostra meu tempo de resposta em milissegundos.</ping>
+    <uptime>Diz-lhe à quanto tempo estou acordada.</uptime>
+    <score>Mostra o ranking de votos de usuários.</score>
 
     <!--MISC-->
-    <ping>Mostra meu tempo de resposta em milissegundos.</ping>
+    <background>Muda o fundo do seu perfil (a imagem especificada será redimensionada, então utilize imagens de
+        resolução 1080p ou similar).
+    </background>
+    <biography>Muda a biografia do seu perfil.</biography>
 
     <!--MUSIC-->
     <control>Controla a fila de músicas.</control>
@@ -76,8 +99,31 @@
     <video>Busca um vídeo específico no YouTube.</video>
 
     <!--EXCEED-->
-    <exceedrank>Mostra o ranking dos exceeds.</exceedrank>
+    <exceed_rank>Mostra o ranking dos exceeds.</exceed_rank>
     <exceed>Escolhe seu exceed, esta escolha é permanente.</exceed>
+
+    <!--USAGE FRAGMENTS-->
+    <req_mention>{@usuário}</req_mention>
+    <req_server_id>{ID do servidor}</req_server_id>
+    <req_name>{nome}</req_name>
+    <req_type_message>{tipo} {mensagem}</req_type_message>
+    <req_message>{mensagem}</req_message>
+    <req_type_id_reason>{tipo} {ID} {razão}</req_type_id_reason>
+    <req_code>\`\`\`java/py/js {código} \`\`\`</req_code>
+    <req_kgotchi>{escolher/aleatorio} [raça] {nome}</req_kgotchi>
+    <req_action>[alimentar/brincar/treinar/comprar]</req_action>
+    <req_parameter>[{parâmetro} {novo valor do parâmetro}]</req_parameter>
+    <req_mention_reason>{@membro} {razão}</req_mention_reason>
+    <req_spam_type>{qtd/soft/hard}</req_spam_type>
+    <req_qtd_all>[qtd/all]</req_qtd_all>
+    <req_role_button>{reset/[{ID} {emote} {@cargo}]}</req_role_button>
+    <req_id_role>{ID} {@cargo}</req_id_role>
+    <req_save_restore>{salvar/recuperar}</req_save_restore>
+    <req_command>[comando]</req_command>
+    <req_user_reason>{@usuário} {razão}</req_user_reason>
+    <req_global>[global]</req_global>
+    <req_color>{#cor}</req_color>
+    <req_link>{link}</req_link>
 
     <!--COMMON STRINGS-->
 </resources>

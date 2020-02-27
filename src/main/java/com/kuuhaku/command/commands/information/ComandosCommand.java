@@ -38,8 +38,20 @@ import java.util.concurrent.TimeUnit;
 
 public class ComandosCommand extends Command {
 
-	public ComandosCommand() {
-		super("comandos", new String[]{"cmds", "cmd", "comando", "ajuda", "help"}, "[comando]", "Fornece uma lista de todos os comandos disponiveis no bot.", Category.INFO);
+	public ComandosCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public ComandosCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public ComandosCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public ComandosCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

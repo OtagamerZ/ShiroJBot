@@ -30,8 +30,20 @@ import java.util.stream.Collectors;
 
 public class IDCommand extends Command {
 
-	public IDCommand() {
-		super("id", "<nome>", "Pesquisa o ID dos usuários com o nome informado", Category.MISC);
+	public IDCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public IDCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public IDCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public IDCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

@@ -52,34 +52,29 @@ public class AvatarCommand extends Command {
 						return;
 					}
 					eb.setTitle("Ícone do servidor");
-					eb.setImage(guild.getIconUrl());
+					eb.setImage(guild.getIconUrl() + "?size=4096");
 					try {
 						eb.setColor(Helper.colorThief(guild.getIconUrl()));
 					} catch (IOException ignore) {
 					}
 				}
 			} else {
-				if (author.getAvatarUrl() == null) {
-					channel.sendMessage(":x: | Você não possui avatar").queue();
-					return;
-				}
 				eb.setTitle("Seu avatar");
-				eb.setImage(author.getAvatarUrl());
+				eb.setImage(author.getEffectiveAvatarUrl() + "?size=4096");
 				try {
-					eb.setColor(Helper.colorThief(author.getAvatarUrl()));
+					eb.setColor(Helper.colorThief(author.getEffectiveAvatarUrl()));
 				} catch (IOException ignore) {
 				}
 			}
 		} else if (message.getMentionedUsers().size() == 1) {
-			if(message.getMentionedUsers().get(0).getAvatarUrl() == null) { channel.sendMessage(":x: | O utilizador `" + message.getMentionedUsers().get(0).getAsTag() + "` não possui avatar.").queue(); return;}
 			if(author.getId().equals(message.getMentionedUsers().get(0).getId())) {
 				eb.setTitle("Seu avatar");
-				eb.setImage(author.getAvatarUrl());
+				eb.setImage(author.getEffectiveAvatarUrl() + "?size=4096");
 			} else {
 				eb.setTitle("Avatar de: " + message.getMentionedUsers().get(0).getAsTag());
-				eb.setImage(message.getMentionedUsers().get(0).getAvatarUrl());
+				eb.setImage(message.getMentionedUsers().get(0).getEffectiveAvatarUrl() + "?size=4096");
 				try {
-					eb.setColor(Helper.colorThief(message.getMentionedUsers().get(0).getAvatarUrl()));
+					eb.setColor(Helper.colorThief(message.getMentionedUsers().get(0).getEffectiveAvatarUrl()));
 				} catch (IOException ignore) {
 				}
 			}

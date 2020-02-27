@@ -31,8 +31,20 @@ import java.io.IOException;
 
 public class ColorTesterCommand extends Command {
 
-	public ColorTesterCommand() {
-		super("cor", new String[]{"color"}, "<#cor>", "Vê o tom da cor informada.", Category.INFO);
+	public ColorTesterCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public ColorTesterCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public ColorTesterCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public ColorTesterCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override
