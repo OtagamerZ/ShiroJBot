@@ -64,6 +64,14 @@
     "TET_LINK": {
       "description": "Link de convite do bot secundário (RPG).",
       "required": true
+    },
+    "GOOGLE_TOKEN": {
+      "description": "Token de acesso à API do Google.",
+      "required": true
+    },
+    "GOOGLE_SEARCH": {
+      "description": "Código de Custom Search do Google.",
+      "required": true
     }
   }
 }
