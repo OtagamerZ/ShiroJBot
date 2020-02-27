@@ -40,7 +40,7 @@ public class PixelCanvas {
 	private int id;
 
 	@Column(columnDefinition = "TEXT")
-	private String canvas = "";
+	private String canvas;
 
 	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
 	private boolean shelved = false;
@@ -70,7 +70,7 @@ public class PixelCanvas {
 			ImageIO.write(getCanvas(), "png", baos);
 
 			return channel.sendFile(baos.toByteArray(), "canvas.png");
-		} catch (IOException e) {
+		} catch (IOException | IllegalArgumentException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 		return channel.sendMessage(":x: | Erro ao recuperar o canvas, estamos resolvendo isso.");
