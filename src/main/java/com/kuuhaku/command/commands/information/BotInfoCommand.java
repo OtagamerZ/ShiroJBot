@@ -53,14 +53,15 @@ public class BotInfoCommand extends Command {
 		eb.setThumbnail(Main.getInfo().getAPI().getSelfUser().getAvatarUrl());
 		eb.addField(":triangular_flag_on_post: Projeto inicial por:", Main.getInfo().getUserByID(Main.getInfo().getNiiChan()).getAsTag(), true);
 		StringBuilder sb = new StringBuilder();
-        Main.getInfo().getDevelopers().forEach(d -> sb.append(Main.getInfo().getUserByID(d).getAsTag()).append(", "));
-        eb.addField(":tools: Desenvolvida por:", sb.toString(), true);
-        eb.addField(":calendar_spiral: Criada em:", Main.getInfo().getSelfUser().getTimeCreated().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), true);
-        eb.addField(":handshake: Apoiada por:", TagDAO.getPartnerAmount() + " servidores", true);
-        eb.addField(":earth_americas: Estou em:", Main.getInfo().getAPI().getGuilds().size() + " servidores", true);
-        eb.addField(":speech_balloon: Conheço:", Main.getInfo().getAPI().getUsers().size() + " usuários (" + MemberDAO.getAllMembers().size() + " cadastrados)", true);
-        eb.addField(":envelope: Link de convite:", "https://top.gg/bot/572413282653306901", true);
+		Main.getInfo().getDevelopers().forEach(d -> sb.append(Main.getInfo().getUserByID(d).getAsTag()).append(", "));
+		eb.addField(":tools: Desenvolvida por:", sb.toString(), true);
+		eb.addField(":calendar_spiral: Criada em:", Main.getInfo().getSelfUser().getTimeCreated().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), true);
+		eb.addField(":handshake: Apoiada por:", TagDAO.getPartnerAmount() + " servidores", true);
+		eb.addField(":earth_americas: Estou em:", Main.getInfo().getAPI().getGuilds().size() + " servidores", true);
+		eb.addField(":speech_balloon: Conheço:", Main.getInfo().getAPI().getUsers().size() + " usuários (" + MemberDAO.getAllMembers().size() + " cadastrados)", true);
+		eb.addField(":envelope: Link de convite:", "https://top.gg/bot/572413282653306901", true);
+		eb.setImage("https://top.gg/api/widget/572413282653306901.png");
 
-        channel.sendMessage(eb.build()).queue();
-    }
+		channel.sendMessage(eb.build()).queue();
+	}
 }
