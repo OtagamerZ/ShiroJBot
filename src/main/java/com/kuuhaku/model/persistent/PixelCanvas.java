@@ -65,8 +65,7 @@ public class PixelCanvas {
 	}
 
 	public RestAction viewCanvas(TextChannel channel) {
-		try {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			ImageIO.write(getCanvas(), "png", baos);
 
 			return channel.sendFile(baos.toByteArray(), "canvas.png");
@@ -94,14 +93,13 @@ public class PixelCanvas {
 			default:
 				throw new IllegalStateException("Unexpected value: " + number);
 		}
-		try {
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			BufferedImage bi = new BufferedImage(CANVAS_SIZE / 2, CANVAS_SIZE / 2, BufferedImage.TYPE_INT_RGB);
 			Graphics2D g2d = bi.createGraphics();
 
 			g2d.drawImage(getCanvas().getSubimage(section[0], section[1], 512, 512), 0, 0, null);
 			g2d.dispose();
 
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ImageIO.write(bi, "png", baos);
 
 			return channel.sendFile(baos.toByteArray(), "chunk_" + number + ".png");
@@ -114,7 +112,7 @@ public class PixelCanvas {
 	public RestAction viewChunk(TextChannel channel, int[] coords, int zoom, boolean section) {
 		int fac = (int) Math.pow(2, zoom);
 		int chunkSize = CANVAS_SIZE / fac;
-		try {
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			BufferedImage chunk = new BufferedImage(CANVAS_SIZE, CANVAS_SIZE, BufferedImage.TYPE_INT_RGB);
 			BufferedImage canvas = new BufferedImage(CANVAS_SIZE + chunkSize, CANVAS_SIZE + chunkSize, BufferedImage.TYPE_INT_RGB);
 			Graphics2D g2d = canvas.createGraphics();
@@ -126,7 +124,6 @@ public class PixelCanvas {
 			int y = (CANVAS_SIZE / 2 / fac) + (CANVAS_SIZE / (section ? 4 : 2) - coords[1]) - (chunkSize / 2);
 			g2d.drawImage(canvas.getSubimage(x, y, chunkSize, chunkSize).getScaledInstance(CANVAS_SIZE, CANVAS_SIZE, 0), 0, 0, null);
 
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ImageIO.write(chunk, "png", baos);
 
 			return channel.sendFile(baos.toByteArray(), "chunk.png");
@@ -145,8 +142,7 @@ public class PixelCanvas {
 	}
 
 	private void saveCanvas(BufferedImage canvas) {
-		try {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			ImageIO.write(canvas, "png", baos);
 			this.canvas = Base64.getEncoder().encodeToString(baos.toByteArray());
 		} catch (IOException e) {
