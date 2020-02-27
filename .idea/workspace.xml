@@ -8,7 +8,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/AnimeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/AnimeCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -225,14 +225,7 @@
       <workItem from="1582288075220" duration="24839000" />
       <workItem from="1582546176407" duration="13278000" />
       <workItem from="1582747643583" duration="1476000" />
-      <workItem from="1582809254868" duration="5490000" />
-    </task>
-    <task id="LOCAL-00646" summary="Atualização do framework JDA">
-      <created>1582560261370</created>
-      <option name="number" value="00646" />
-      <option name="presentableId" value="LOCAL-00646" />
-      <option name="project" value="LOCAL" />
-      <updated>1582560261370</updated>
+      <workItem from="1582809254868" duration="6693000" />
     </task>
     <task id="LOCAL-00647" summary="Atualização do framework JDA">
       <created>1582560750346</created>
@@ -570,7 +563,14 @@
       <option name="project" value="LOCAL" />
       <updated>1582815225254</updated>
     </task>
-    <option name="localTasksCounter" value="695" />
+    <task id="LOCAL-00695" summary="Começo da implementação do i18n">
+      <created>1582819693449</created>
+      <option name="number" value="00695" />
+      <option name="presentableId" value="LOCAL-00695" />
+      <option name="project" value="LOCAL" />
+      <updated>1582819693449</updated>
+    </task>
+    <option name="localTasksCounter" value="696" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -737,11 +737,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1582815256268">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1582819695049">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1582604543626" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1582815256268" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1582819695049" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
