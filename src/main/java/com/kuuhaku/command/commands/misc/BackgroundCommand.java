@@ -15,7 +15,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.information;
+package com.kuuhaku.command.commands.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
@@ -30,18 +30,30 @@ import java.net.URL;
 
 public class BackgroundCommand extends Command {
 
-    public BackgroundCommand() {
-        super("background", new String[]{"fundo", "bg"}, "<link>", "Muda o fundo do seu perfil (a imagem especificada será redimensionada, então utilize imagens de resolução 1080p ou similar).", Category.MISC);
-    }
+	public BackgroundCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
 
-    @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-        if (args.length == 0) {
-            channel.sendMessage(":x: | Você precisa definir uma imagem.").queue();
-            return;
-        }
+	public BackgroundCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
 
-        try {
+	public BackgroundCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public BackgroundCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
+	}
+
+	@Override
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		if (args.length == 0) {
+			channel.sendMessage(":x: | Você precisa definir uma imagem.").queue();
+			return;
+		}
+
+		try {
             HttpURLConnection con = (HttpURLConnection) new URL(args[0]).openConnection();
             con.setRequestProperty("User-Agent", "Mozilla/5.0");
             BufferedImage bi = ImageIO.read(con.getInputStream());

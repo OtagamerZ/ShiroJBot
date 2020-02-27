@@ -20,7 +20,6 @@ see <https://www.gnu.org/licenses/>
 
 package com.kuuhaku.managers;
 
-import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.dev.*;
 import com.kuuhaku.command.commands.exceed.ExceedRankCommand;
@@ -35,6 +34,8 @@ import com.kuuhaku.command.commands.music.YoutubeCommand;
 import com.kuuhaku.command.commands.partner.*;
 import com.kuuhaku.command.commands.reactions.*;
 import com.kuuhaku.command.commands.reactions.answerable.*;
+import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,32 +56,32 @@ public class CommandManager {
 			add(new RestartCommand(
 					"reiniciar", new String[]{"restart"}, getString(PTBR, "restart"), DEV));
 			add(new LeaveCommand(
-					"sair", new String[]{"leave"}, "<ID do servidor>", getString(PTBR, "leave"), DEV));
+					"sair", new String[]{"leave"}, getString(PTBR, "req_server_id"), getString(PTBR, "leave"), DEV));
 			add(new ToxicTagCommand(
-					"toxico", new String[]{"toxic"}, "<@usuário>", getString(PTBR, "toxictag"), DEV));
+					"toxico", new String[]{"toxic"}, getString(PTBR, "req_mention"), getString(PTBR, "toxic_tag"), DEV));
 			add(new PartnerTagCommand(
-					"parceiro", new String[]{"partner"}, "<@usuário>", getString(PTBR, "partnertag"), DEV));
+					"parceiro", new String[]{"partner"}, getString(PTBR, "req_mention"), getString(PTBR, "partner_tag"), DEV));
 			add(new VerifiedTagCommand(
-					"verificado", new String[]{"verified"}, "<@usuário>", getString(PTBR, "verifiedtag"), DEV));
+					"verificado", new String[]{"verified"}, getString(PTBR, "req_mention"), getString(PTBR, "verified_tag"), DEV));
 			add(new RelaysCommand(
 					"relays", getString(PTBR, "relaylist"), DEV));
 			add(new LogCommand(
 					"log", getString(PTBR, "log"), DEV));
 			add(new TokenCommand(
-					"chave", new String[]{"token"}, "<nome>", getString(PTBR, "token"), DEV));
+					"chave", new String[]{"token"}, getString(PTBR, "req_name"), getString(PTBR, "token"), DEV));
 			add(new BroadcastCommand(
-					"transmitir", new String[]{"broadcast", "bc"}, "<tipo> <mensagem>", getString(PTBR, "broadcast"), DEV));
+					"transmitir", new String[]{"broadcast", "bc"}, getString(PTBR, "req_type_message"), getString(PTBR, "broadcast"), DEV));
 			add(new InviteCommand(
-					"convite", new String[]{"invite"}, "<ID do servidor>", getString(PTBR, "invite"), DEV));
+					"convite", new String[]{"invite"}, getString(PTBR, "req_server_id"), getString(PTBR, "invite"), DEV));
 			add(new UsageCommand(
 					"usos", new String[]{"uses", "usage"}, getString(PTBR, "usage"), DEV));
 			add(new SimpleWHMCommand(
-					"wh", "<mensagem>", getString(PTBR, "simplewh"), DEV));
+					"wh", getString(PTBR, "req_message"), getString(PTBR, "simple_wh"), DEV));
 			add(new RatingCommand(
 					"pedirvoto", new String[]{"requestvote", "howwasi"}, getString(PTBR, "rating"), DEV));
 
 			//SHERIFF
-			add(new BlockCommand("bloquear", new String[]{"block"}, "<tipo> <ID> <razão>", getString(PTBR, "block"), SHERIFFS));
+			add(new BlockCommand("bloquear", new String[]{"block"}, getString(PTBR, "req_type_id_reason"), getString(PTBR, "block"), SHERIFFS));
 
 			//PARTNER
 			add(new JibrilCommand(
@@ -88,74 +89,96 @@ public class CommandManager {
 			add(new TetCommand(
 					"tet", getString(PTBR, "tet"), PARTNER));
 			add(new CompileCommand(
-					"compilar", new String[]{"compile", "exec"}, "```java/py/js\n<código>\n```", getString(PTBR, "compile"), PARTNER));
+					"compilar", new String[]{"compile", "exec"}, getString(PTBR, "req_code"), getString(PTBR, "compile"), PARTNER));
 			add(new JibrilEmoteListCommand(
-					"jemotes", "<nome>", getString(PTBR, "jemotes"), PARTNER));
+					"jemotes", getString(PTBR, "req_name"), getString(PTBR, "jemotes"), PARTNER));
 			add(new PurchaceKGotchiCommand(
-					"pkgotchi", new String[]{"buykgotchi", "comprarkgotchi"}, "<escolher/aleatorio> [raça] <nome>", getString(PTBR, "kgotchishop"), PARTNER));
+					"pkgotchi", new String[]{"buykgotchi", "comprarkgotchi"}, getString(PTBR, "req_kgotchi"), getString(PTBR, "kgotchi_shop"), PARTNER));
 			add(new KGotchiCommand(
-					"kgotchi", new String[]{"kg", "kawaig"}, "[alimentar/brincar/treinar/comprar]", getString(PTBR, "kgotchi"), PARTNER));
+					"kgotchi", new String[]{"kg", "kawaig"}, getString(PTBR, "req_action"), getString(PTBR, "kgotchi"), PARTNER));
+			add(new RelayCommand(
+					"relay", new String[]{"relinfo", "relcon"}, getString(PTBR, "relay"), PARTNER));
+			add(new TagsCommand(
+					"tags", new String[]{"emblemas", "insignias"}, getString(PTBR, "tags"), PARTNER));
+			add(new MyTagsCommand(
+					"eu", new String[]{"meusemblemas", "mytags"}, getString(PTBR, "my_tags"), PARTNER));
 
 			//MODERATION
 			add(new RemoveAnswerCommand(
-					"nãofale", "<id>", getString(PTBR, "dontsay"), Category.MODERACAO));
+					"nãofale", "<id>", getString(PTBR, "dont_say"), MODERACAO));
 			add(new SettingsCommand(
-					"settings", new String[]{"definicoes", "parametros", "configs"}, "[<parâmetro> <novo valor do parâmetro>]", getString(PTBR, "settings"), Category.MODERACAO));
+					"settings", new String[]{"definicoes", "parametros", "configs"}, getString(PTBR, "req_parameter"), getString(PTBR, "settings"), MODERACAO));
 			add(new AllowCommunityCommand(
-					"ouçatodos", getString(PTBR, "allowcommunity"), Category.MODERACAO));
+					"ouçatodos", getString(PTBR, "allow_community"), MODERACAO));
 			add(new KickMemberCommand(
-					"kick", new String[]{"expulsar", "remover"}, "<membro> <razão>", getString(PTBR, "kick"), Category.MODERACAO));
+					"kick", new String[]{"expulsar", "remover"}, getString(PTBR, "req_mention_reason"), getString(PTBR, "kick"), MODERACAO));
 			add(new BanMemberCommand(
-					"ban", new String[]{"banir"}, "<membro> <razão>", getString(PTBR, "ban"), Category.MODERACAO));
+					"ban", new String[]{"banir"}, getString(PTBR, "req_mention_reason"), getString(PTBR, "ban"), MODERACAO));
 			add(new NoLinkCommand(
-					"semlink", new String[]{"nolink", "blocklink"}, getString(PTBR, "nolink"), Category.MODERACAO));
+					"semlink", new String[]{"nolink", "blocklink"}, getString(PTBR, "no_link"), MODERACAO));
 			add(new AntispamCommand(
-					"semspam", new String[]{"nospam", "antispam"}, "<qtd/soft/hard>", getString(PTBR, "nospam"), Category.MODERACAO));
+					"semspam", new String[]{"nospam", "antispam"}, getString(PTBR, "req_spam_type"), getString(PTBR, "no_spam"), MODERACAO));
 			add(new AntiraidCommand(
-					"semraid", new String[]{"noraid", "antiraid"}, getString(PTBR, "noraid"), Category.MODERACAO));
+					"semraid", new String[]{"noraid", "antiraid"}, getString(PTBR, "no_raid"), MODERACAO));
 			add(new MakeLogCommand(
-					"logchannel", new String[]{"makelog"}, getString(PTBR, "makelog"), Category.MODERACAO));
+					"logchannel", new String[]{"makelog"}, getString(PTBR, "make_log"), MODERACAO));
 			add(new PruneCommand(
-					"prune", new String[]{"clean", "limpar"}, "[qtd/all]", getString(PTBR, "prune"), Category.MODERACAO));
+					"prune", new String[]{"clean", "limpar"}, getString(PTBR, "req_qtd_all"), getString(PTBR, "prune"), MODERACAO));
 			add(new LiteModeCommand(
-					"litemode", new String[]{"lite"}, getString(PTBR, "litemode"), Category.MODERACAO));
+					"litemode", new String[]{"lite"}, getString(PTBR, "lite_mode"), MODERACAO));
 			add(new AllowImgCommand(
-					"allowimg", new String[]{"aimg"}, getString(PTBR, "allowimage"), Category.MODERACAO));
+					"allowimg", new String[]{"aimg"}, getString(PTBR, "allow_image"), MODERACAO));
 			add(new RoleChooserCommand(
-					"botaocargo", new String[]{"rolebutton", "bc", "rb"}, "<reset>/[<ID> <emote> <@cargo>]", getString(PTBR, "rolebutton"), Category.MODERACAO));
+					"botaocargo", new String[]{"rolebutton", "bc", "rb"}, getString(PTBR, "req_role_button"), getString(PTBR, "role_button"), MODERACAO));
 			add(new GatekeeperCommand(
-					"porteiro", new String[]{"gatekeeper", "gk"}, "<ID> <@cargo>", getString(PTBR, "gatekeeper"), Category.MODERACAO));
+					"porteiro", new String[]{"gatekeeper", "gk"}, getString(PTBR, "req_id_role"), getString(PTBR, "gatekeeper"), MODERACAO));
 			add(new BackupCommand(
-					"backup", new String[]{"dados"}, "<salvar/recuperar>", getString(PTBR, "backup"), Category.MODERACAO));
+					"backup", new String[]{"dados"}, getString(PTBR, "req_save_restore"), getString(PTBR, "backup"), MODERACAO));
 			add(new RegenRulesCommand(
-					"rrules", new String[]{"makerules"}, getString(PTBR, "regenrules"), Category.MODERACAO));
+					"rrules", new String[]{"makerules"}, getString(PTBR, "regen_rules"), MODERACAO));
+			add(new PermissionCommand(
+					"permissões", new String[]{"perms", "permisions"}, getString(PTBR, "permission"), MODERACAO));
 
 			//INFORMATION
-			add(new ComandosCommand());
-			add(new ProfileCommand());
-			add(new ReportBugCommand());
-			add(new ReportUserCommand());
-			add(new BackgroundCommand());
-			add(new BiographyCommand());
-			add(new RelayCommand());
-			add(new TagsCommand());
-			add(new MyTagsCommand());
-			add(new BotInfoCommand());
-			add(new URankCommand());
-			add(new IDCommand());
-			add(new ColorTesterCommand());
-			add(new LocalEmoteListCommand());
-			add(new ShiroEmoteListCommand());
-			add(new WalletCommand());
+			add(new ComandosCommand(
+					"comandos", new String[]{"cmds", "cmd", "comando", "ajuda", "help"}, getString(PTBR, "req_command"), getString(PTBR, "help"), INFO));
+			add(new ProfileCommand(
+					"perfil", new String[]{"xp", "profile", "pf"}, getString(PTBR, "profile"), INFO));
+			add(new ReportBugCommand(
+					"bug", new String[]{"sendbug", "feedback"}, getString(PTBR, "req_message"), getString(PTBR, "bug"), INFO));
+			add(new ReportUserCommand(
+					"report", new String[]{"reportar"}, getString(PTBR, "req_user_reason"), getString(PTBR, "report"), INFO));
+			add(new BotInfoCommand(
+					"info", new String[]{"botinfo", "bot"}, getString(PTBR, "info"), INFO));
+			add(new URankCommand(
+					"rank", new String[]{"ranking", "top10"}, getString(PTBR, "req_global"), getString(PTBR, "rank"), INFO));
+			add(new IDCommand(
+					"id", getString(PTBR, "req_name"), getString(PTBR, "id"), INFO));
+			add(new ColorTesterCommand(
+					"cor", new String[]{"color"}, getString(PTBR, "req_color"), getString(PTBR, "color"), INFO));
+			add(new LocalEmoteListCommand(
+					"emotes", getString(PTBR, "req_name"), getString(PTBR, "emotes"), INFO));
+			add(new ShiroEmoteListCommand(
+					"semotes", getString(PTBR, "req_name"), getString(PTBR, "s_emotes"), INFO));
+			add(new WalletCommand(
+					"carteira", new String[]{"banco", "bank", "money", "wallet", "atm"}, getString(PTBR, "wallet"), INFO));
+			add(new PingCommand(
+					"ping", Helper.getString(I18n.PTBR, "ping"), INFO));
+			add(new UptimeCommand(
+					"uptime", Helper.getString(I18n.PTBR, "uptime"), INFO));
+			add(new ListScoreCommand(
+					"notas", new String[]{"scores"}, Helper.getString(I18n.PTBR, "score"), INFO));
 
 			//MISC
+			add(new BackgroundCommand(
+					"background", new String[]{"fundo", "bg"}, getString(PTBR, "req_link"), getString(PTBR, "background"), MISC));
+			add(new BiographyCommand(
+					"bio", new String[]{"story", "desc"}, getString(PTBR, "req_message"), getString(PTBR, "biography"), MISC));
 			add(new AsciiCommand());
 			add(new AvatarCommand());
 			add(new FlipCoinCommand());
-			add(new PingCommand());
 			add(new ReverseCommand());
 			add(new SayCommand());
-			add(new UptimeCommand());
 			add(new CustomAnswerCommand());
 			add(new AnimeCommand());
 			add(new ImageCommand());
@@ -164,10 +187,8 @@ public class CommandManager {
 			add(new PollCommand());
 			add(new TheAnswerCommand());
 			add(new BinaryCommand());
-			add(new PermissionCommand());
 			add(new LinkTesterCommand());
 			add(new VoteCommand());
-			add(new ListScoreCommand());
 			add(new TranslateCommand());
 			add(new EightBallCommand());
 			add(new ChooseCommand());
@@ -203,13 +224,18 @@ public class CommandManager {
 			add(new RunReaction());
 
 			//MUSICA
-			add(new MusicCommand("controle", new String[]{"control", "c"}, getString(PTBR, "control"), Category.MUSICA));
-			add(new YoutubeCommand("play", new String[]{"yt", "youtube"}, "<nome>", getString(PTBR, "play"), Category.MUSICA));
-			add(new VideoCommand("video", new String[]{"vid"}, "<nome>", getString(PTBR, "video"), Category.MUSICA));
+			add(new MusicCommand(
+					"controle", new String[]{"control", "c"}, getString(PTBR, "control"), MUSICA));
+			add(new YoutubeCommand(
+					"play", new String[]{"yt", "youtube"}, getString(PTBR, "req_name"), getString(PTBR, "play"), MUSICA));
+			add(new VideoCommand(
+					"video", new String[]{"vid"}, getString(PTBR, "req_name"), getString(PTBR, "video"), MUSICA));
 
 			//EXCEED
-			add(new ExceedRankCommand("exceedrank", new String[]{"exrank", "topexceed", "topex"}, getString(PTBR, "exceedrank"), Category.EXCEED));
-			add(new ExceedSelectCommand("exceedselect", new String[]{"exselect", "sou"}, getString(PTBR, "exceed"), Category.EXCEED));
+			add(new ExceedRankCommand(
+					"exceedrank", new String[]{"exrank", "topexceed", "topex"}, getString(PTBR, "exceed_rank"), EXCEED));
+			add(new ExceedSelectCommand(
+					"exceedselect", new String[]{"exselect", "sou"}, getString(PTBR, "exceed"), EXCEED));
 		}};
 	}
 

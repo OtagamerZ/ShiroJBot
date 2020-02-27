@@ -27,17 +27,32 @@ import java.time.format.DateTimeFormatter;
 
 public class ReportBugCommand extends Command {
 
-    public ReportBugCommand() {
-        super("bug", new String[]{"sendbug", "feedback"}, "<mensagem>", "Envia um relatório de bug para os devs.", Category.INFO);
-    }
+	public ReportBugCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
 
-    @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+	public ReportBugCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
 
-        if (args.length == 0) { channel.sendMessage(":x: | Você precisa definir uma mensagem.").queue(); return; }
+	public ReportBugCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
 
-        String mensagem = String.join(" ", args).trim();
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy - hh:mm");
+	public ReportBugCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
+	}
+
+	@Override
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+
+		if (args.length == 0) {
+			channel.sendMessage(":x: | Você precisa definir uma mensagem.").queue();
+			return;
+		}
+
+		String mensagem = String.join(" ", args).trim();
+		DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy - hh:mm");
 
         EmbedBuilder eb = new EmbedBuilder();
 

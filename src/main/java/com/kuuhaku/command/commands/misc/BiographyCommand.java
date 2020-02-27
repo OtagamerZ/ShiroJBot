@@ -15,7 +15,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.information;
+package com.kuuhaku.command.commands.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
@@ -24,18 +24,31 @@ import net.dv8tion.jda.api.entities.*;
 
 public class BiographyCommand extends Command {
 
-    public BiographyCommand() {
-        super("bio", new String[]{"story", "desc"}, "<mensagem>", "Muda a biografia do seu perfil.", Category.MISC);
-    }
+	public BiographyCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
 
-    @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-        if (String.join(" ", args).length() > 140) {
-            channel.sendMessage(":x: | A biografia é muito grande, o tamanho máximo é 140 caractéres.").queue();
-            return;
-        }
+	public BiographyCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
 
-        for (String s : args) if (s.length() > 29) {
+	public BiographyCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public BiographyCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
+	}
+
+	@Override
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		if (String.join(" ", args).length() > 140) {
+			channel.sendMessage(":x: | A biografia é muito grande, o tamanho máximo é 140 caractéres.").queue();
+			return;
+		}
+
+		for (String s : args)
+			if (s.length() > 29) {
             channel.sendMessage(":x: | A biografia possui uma ou mais falavras MUITO grandes (limite de 29 caractéres por palavra).").queue();
             return;
         }

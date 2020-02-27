@@ -15,7 +15,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.information;
+package com.kuuhaku.command.commands.partner;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
@@ -25,18 +25,30 @@ import net.dv8tion.jda.api.entities.*;
 
 public class TagsCommand extends Command {
 
-    public TagsCommand() {
-        super("tags", new String[]{"emblemas", "insignias"}, "Mostra os emblemas disponíveis.", Category.PARTNER);
-    }
+	public TagsCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
 
-    @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-        EmbedBuilder eb = new EmbedBuilder();
+	public TagsCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
 
-        eb.setTitle(":label: Emblemas do chat global");
-        eb.addField(TagIcons.getTag(TagIcons.DEV) + " Desenvolvedor", "Desenvolvedores da Shiro/Jibril", false);
-        eb.addField(TagIcons.getTag(TagIcons.EDITOR) + " Redator", "Redatores da Shiro/Jibril", false);
-        eb.addField(TagIcons.getTag(TagIcons.READER) + " Leitor", "Pessoas que leram as regras no servidor de suporte", false);
+	public TagsCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public TagsCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
+	}
+
+	@Override
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		EmbedBuilder eb = new EmbedBuilder();
+
+		eb.setTitle(":label: Emblemas do chat global");
+		eb.addField(TagIcons.getTag(TagIcons.DEV) + " Desenvolvedor", "Desenvolvedores da Shiro/Jibril", false);
+		eb.addField(TagIcons.getTag(TagIcons.EDITOR) + " Redator", "Redatores da Shiro/Jibril", false);
+		eb.addField(TagIcons.getTag(TagIcons.READER) + " Leitor", "Pessoas que leram as regras no servidor de suporte", false);
         eb.addField(TagIcons.getTag(TagIcons.MODERATOR) + " Moderador", "Equipe administrativa do servidor de onde a mensagem foi enviada", false);
         eb.addField(TagIcons.getTag(TagIcons.LVL20) +
                 TagIcons.getTag(TagIcons.LVL30) +

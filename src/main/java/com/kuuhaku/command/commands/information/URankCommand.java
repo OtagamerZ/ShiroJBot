@@ -34,8 +34,20 @@ import java.util.concurrent.TimeUnit;
 
 public class URankCommand extends Command {
 
-	public URankCommand() {
-		super("rank", new String[]{"ranking", "top10"}, "[global]", "Mostra o ranking de usuários do servidor ou global.", Category.MISC);
+	public URankCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public URankCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public URankCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public URankCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override
