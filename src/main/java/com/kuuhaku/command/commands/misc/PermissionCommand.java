@@ -24,8 +24,20 @@ import net.dv8tion.jda.api.entities.*;
 
 public class PermissionCommand extends Command {
 
-	public PermissionCommand() {
-		super("permissões", new String[]{"perms", "permisions"}, "Mostra quais permissões a Shiro/Jibril possuem.", Category.MISC);
+	public PermissionCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public PermissionCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public PermissionCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public PermissionCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

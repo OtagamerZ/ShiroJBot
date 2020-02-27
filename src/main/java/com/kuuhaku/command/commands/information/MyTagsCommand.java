@@ -33,18 +33,30 @@ import java.io.IOException;
 
 public class MyTagsCommand extends Command {
 
-    public MyTagsCommand() {
-        super("eu", new String[]{"meusemblemas", "mytags"}, "Mostra suas tags.", Category.PARTNER);
-    }
+	public MyTagsCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
 
-    @Override
-    public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-        EmbedBuilder eb = new EmbedBuilder();
-        String exceed = MemberDAO.getMemberByMid(author.getId()).get(0).getExceed();
+	public MyTagsCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
 
-        eb.setTitle(":label: Emblemas de " + author.getName());
-        try {
-            eb.setColor(Helper.colorThief(author.getAvatarUrl()));
+	public MyTagsCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public MyTagsCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
+	}
+
+	@Override
+	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		EmbedBuilder eb = new EmbedBuilder();
+		String exceed = MemberDAO.getMemberByMid(author.getId()).get(0).getExceed();
+
+		eb.setTitle(":label: Emblemas de " + author.getName());
+		try {
+			eb.setColor(Helper.colorThief(author.getAvatarUrl()));
         } catch (IOException e) {
             eb.setColor(Helper.getRandomColor());
         }

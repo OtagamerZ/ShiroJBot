@@ -27,8 +27,20 @@ import net.dv8tion.jda.api.entities.*;
 
 public class WalletCommand extends Command {
 
-	public WalletCommand() {
-		super("carteira", new String[]{"banco", "bank", "money", "wallet", "atm"}, "Mostra o seu saldo de créditos.", Category.MISC);
+	public WalletCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public WalletCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public WalletCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public WalletCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override
