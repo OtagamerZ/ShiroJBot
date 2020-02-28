@@ -111,7 +111,8 @@ public abstract class Reaction extends Command {
 			Helper.sendReaction(this, url, chn, allowReact).accept(chn.sendMessage(message).embed(eb.build()));
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error("Erro ao recuperar API: " + e.getStackTrace()[0]);
-		} catch (IllegalAccessException ignore) {
+		} catch (IllegalAccessException e) {
+			chn.sendMessage(":x: | Opa, deu uma errinho ao tentar pegar o GIF, tente novamente!").queue();
 		} finally {
 			msg.delete().queue();
 		}
