@@ -670,12 +670,13 @@ public class Helper {
 			Emote e;
 			try {
 				e = g.getEmotesByName(oldWords[i].replace("&", ""), true).get(0);
-				if (e == null) {
+			} catch (IndexOutOfBoundsException ex) {
+				try {
 					e = Main.getInfo().getAPI().getEmotesByName(oldWords[i].replace("&", ""), true).get(0);
 					makenew = true;
+				} catch (IndexOutOfBoundsException exc) {
+					e = null;
 				}
-			} catch (IndexOutOfBoundsException ex) {
-				e = null;
 			}
 
 			if (e != null) {
