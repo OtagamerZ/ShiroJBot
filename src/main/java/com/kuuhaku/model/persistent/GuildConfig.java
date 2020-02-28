@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.utils.Helper;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
@@ -81,6 +82,9 @@ public class GuildConfig {
 
 	@Column(columnDefinition = "TEXT")
 	private String buttonConfigs = "";
+
+	@Column(columnDefinition = "TEXT")
+	private String colorRoles = "";
 
 	//NUMBERS
 	@Column(columnDefinition = "INT DEFAULT 60")
@@ -380,5 +384,26 @@ public class GuildConfig {
 
 	public void setButtonConfigs(JSONObject buttonConfigs) {
 		this.buttonConfigs = buttonConfigs.toString();
+	}
+
+	public JSONObject getColorRoles() {
+		return new JSONObject(colorRoles);
+	}
+
+	public void addColorRole(String name, String color, Role role) {
+		JSONObject jo = getColorRoles();
+		JSONObject r = new JSONObject();
+
+		r.put("color", color);
+		r.put("role", role.getId());
+
+		jo.put(name, r);
+		this.colorRoles = jo.toString();
+	}
+
+	public void removeColorRole(String name) {
+		JSONObject jo = getColorRoles();
+		jo.remove(name);
+		this.colorRoles = jo.toString();
 	}
 }
