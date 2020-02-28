@@ -658,6 +658,16 @@ public class Helper {
 	/*public static String getEmotifiedString(String text) {
 		String[] oldWords = text.split(" ");
 		String[] newWords = new String[oldWords.length];
-		for
+		for (int i = 0; i < oldWords.length; i++) {
+			Emote e;
+			try {
+				e = Main.getInfo().getAPI().getEmotesByName(oldWords[i], true).get(0);
+			} catch (IndexOutOfBoundsException ex) {
+				e = null;
+			}
+
+			if (e != null) newWords[i] = e.getAsMention();
+			else newWords[i] = oldWords[i];
+		}
 	}*/
 }
