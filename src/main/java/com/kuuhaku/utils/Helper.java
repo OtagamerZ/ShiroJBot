@@ -47,6 +47,7 @@ import org.json.JSONObject;
 import org.xml.sax.SAXException;
 
 import javax.imageio.ImageIO;
+import javax.net.ssl.HttpsURLConnection;
 import javax.persistence.NoResultException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -202,7 +203,7 @@ public class Helper {
 	}
 
 	public static InputStream getImage(String url) throws IOException {
-		HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
+		HttpsURLConnection con = (HttpsURLConnection) new URL(url).openConnection();
 		con.addRequestProperty("User-Agent", "Mozilla/5.0");
 		return con.getInputStream();
 	}
