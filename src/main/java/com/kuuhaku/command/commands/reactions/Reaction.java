@@ -27,9 +27,9 @@ import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 
+import javax.net.ssl.HttpsURLConnection;
 import java.io.File;
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
@@ -93,7 +93,7 @@ public abstract class Reaction extends Command {
 	public void sendReaction(String type, TextChannel chn, String message, boolean allowReact) {
 		Message msg = chn.sendMessage("Conectando à API...").addFile(new File(Objects.requireNonNull(this.getClass().getClassLoader().getResource("loading.gif")).getPath())).complete();
 		try {
-			HttpURLConnection con = (HttpURLConnection) new URL("https://shiro-api.herokuapp.com/reaction?type=" + type).openConnection();
+			HttpsURLConnection con = (HttpsURLConnection) new URL("https://shiro-api.herokuapp.com/reaction?type=" + type).openConnection();
 			con.setRequestProperty("User-Agent", "Mozilla/5.0");
 			con.setRequestMethod("GET");
 			con.setRequestProperty("Accept", "application/json");
