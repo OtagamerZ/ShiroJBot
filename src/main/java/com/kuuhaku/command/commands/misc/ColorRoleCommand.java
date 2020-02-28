@@ -100,15 +100,16 @@ public class ColorRoleCommand extends Command {
 		Role r = guild.getRoleById(jo.getJSONObject(name).getString("role"));
 
 		if (jo.has(name) && r == null) {
+			String c = jo.getJSONObject(name).getString("color");
 			r = guild.createRole()
-					.setColor(Color.decode(args[1]))
+					.setColor(Color.decode(c))
 					.setName(name)
 					.complete();
 			guild.modifyRolePositions()
 					.selectPosition(r)
 					.moveTo(guild.getSelfMember().getRoles().get(0).getPosition() - 1)
 					.complete();
-			gc.addColorRole(name, args[1], r);
+			gc.addColorRole(name, c, r);
 		}
 
 		assert r != null;
