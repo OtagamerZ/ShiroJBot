@@ -17,6 +17,9 @@
 
 package com.kuuhaku.events.guild;
 
+import club.minnced.discord.webhook.WebhookClient;
+import club.minnced.discord.webhook.WebhookClientBuilder;
+import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.mysql.LogDAO;
@@ -47,6 +50,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class GuildEvents extends ListenerAdapter {
@@ -88,11 +93,24 @@ public class GuildEvents extends ListenerAdapter {
 				} catch (InsufficientPermissionException | ExecutionException | InterruptedException ignore) {
 				}
 				return;
-			} else if (rawMessage.startsWith("e:") && Helper.hasPermission(member, PrivilegeLevel.PARTNER)) {
+			} else if (rawMessage.startsWith("e:") && guild.getSelfMember().hasPermission(Permission.MANAGE_EMOTES, Permission.MESSAGE_MANAGE, Permission.MANAGE_WEBHOOKS)) {
 				try {
-					List<Emote> emt = Main.getInfo().getAPI().getEmotes().stream().filter(e -> StringUtils.containsIgnoreCase(e.getName(), rawMessage.substring(2))).collect(Collectors.toList());
-					channel.sendMessage(emt.size() == 0 ? ":question:" : emt.get(Helper.rng(emt.size())).getAsMention()).queue();
-					message.delete().complete();
+					Webhook wh = Helper.getOrCreateWebhook((TextChannel) channel, "Shiro", Main.getInfo().getAPI());
+					Map<String, Consumer<Void>> s = Helper.sendEmotifiedString(guild, rawMessage.replaceFirst(Pattern.quote("e:"), ""));
+
+					WebhookMessageBuilder wmb = new WebhookMessageBuilder();
+					wmb.setContent(String.valueOf(s.keySet().toArray()[0]));
+					wmb.setAvatarUrl(author.getAvatarUrl());
+					wmb.setUsername(author.getName());
+
+					assert wh != null;
+					WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
+					try {
+						message.delete().queue();
+						wc.send(wmb.build()).thenAccept(rm -> s.get(String.valueOf(s.keySet().toArray()[0])).accept(null)).get();
+					} catch (InterruptedException | ExecutionException e) {
+						Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+					}
 				} catch (IndexOutOfBoundsException | InsufficientPermissionException ignore) {
 				}
 			}
