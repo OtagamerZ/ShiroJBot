@@ -28,6 +28,7 @@ import org.json.JSONObject;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -80,7 +81,8 @@ public class ColorRoleCommand extends Command {
 		JSONObject jo = gc.getColorRoles();
 
 		if (args[0].equalsIgnoreCase("nenhum")) {
-			List<String> ids = jo.toJSONArray(jo.names()).toList().stream().map(j -> new JSONObject(j).getString("role")).collect(Collectors.toList());
+			List<String> ids = new ArrayList<>();
+			jo.keys().forEachRemaining(k -> ids.add(jo.getJSONObject(k).getString("role")));
 			List<Role> roles = member.getRoles().stream().filter(r -> !ids.contains(r.getId())).collect(Collectors.toList());
 			guild.modifyMemberRoles(member, roles).queue();
 
