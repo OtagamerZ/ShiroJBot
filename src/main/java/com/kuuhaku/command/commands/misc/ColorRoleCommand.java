@@ -92,11 +92,11 @@ public class ColorRoleCommand extends Command {
 		}
 
 		JSONObject jo = gc.getColorRoles();
+		List<String> ids = new ArrayList<>();
+		jo.keys().forEachRemaining(k -> ids.add(jo.getJSONObject(k).getString("role")));
+		List<Role> roles = member.getRoles().stream().filter(r -> !ids.contains(r.getId())).collect(Collectors.toList());
 
 		if (args[0].equalsIgnoreCase("nenhum")) {
-			List<String> ids = new ArrayList<>();
-			jo.keys().forEachRemaining(k -> ids.add(jo.getJSONObject(k).getString("role")));
-			List<Role> roles = member.getRoles().stream().filter(r -> !ids.contains(r.getId())).collect(Collectors.toList());
 			guild.modifyMemberRoles(member, roles).queue();
 
 			channel.sendMessage("Sua cor foi removida com sucesso!").queue();
@@ -125,6 +125,7 @@ public class ColorRoleCommand extends Command {
 			gc.addColorRole(name, c, r);
 		}
 
+		guild.modifyMemberRoles(member, roles).queue();
 		assert r != null;
 		guild.addRoleToMember(member, r).queue();
 		channel.sendMessage("Sua cor foi definida como " + r.getName() + " com sucesso!").queue();
