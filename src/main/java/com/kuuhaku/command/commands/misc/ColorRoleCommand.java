@@ -21,7 +21,9 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.persistent.GuildConfig;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 
 import java.awt.*;
@@ -50,7 +52,10 @@ public class ColorRoleCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
-		if (args.length < 1) {
+		if (!guild.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) {
+			channel.sendMessage(":x: | Eu preciso da permissão de gerenciar cargos para que possa dar cargos.").queue();
+			return;
+		} else if (args.length < 1) {
 			JSONObject jo = gc.getColorRoles();
 			if (jo.keySet().size() == 0) {
 				channel.sendMessage(":x: | Nenhuma cor cadastrada ainda.").queue();
@@ -70,22 +75,12 @@ public class ColorRoleCommand extends Command {
 			return;
 		}
 
-		try {
-
-
-			channel.sendMessage("Cor adicionada com sucesso!").queue();
-		} catch (NumberFormatException e) {
-			channel.sendMessage(":x: | Cor inválida, verifique se digitou no formato `#RRGGBB`.").queue();
-		} catch (ArrayIndexOutOfBoundsException e) {
-			if (!gc.getColorRoles().has(args[0])) {
-				channel.sendMessage("Essa cor não existe!").queue();
-				return;
-			}
-			gc.removeColorRole(args[0]);
-
-			channel.sendMessage("Cor removida com sucesso!").queue();
-		} finally {
-			GuildDAO.updateGuildSettings(gc);
-		}
+		String name = StringUtils.capitalize(args[0].toLowerCase());
+		JSONObject jo = gc.getColorRoles();
+		Role r = guild.getRoleById(jo.getJSONObject(name).getString("role"));
+		assert r != null;
+		guild.addRoleToMember(member, r).queue();
+		channel.sendMessage("Sua cor foi definida como " + r.getName() + " com sucesso!").queue();
+		GuildDAO.updateGuildSettings(gc);
 	}
 }
