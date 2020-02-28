@@ -655,19 +655,43 @@ public class Helper {
 		}
 	}
 
-	/*public static String getEmotifiedString(String text) {
+	public static Map<String, Consumer<Void>> sendEmotifiedString(Guild g, String text) {
 		String[] oldWords = text.split(" ");
 		String[] newWords = new String[oldWords.length];
+		List<Consumer<Void>> queue = new ArrayList<>();
+		Consumer<Emote> after = e -> e.delete().queue();
 		for (int i = 0; i < oldWords.length; i++) {
+			if (!oldWords[i].startsWith("&")) {
+				newWords[i] = oldWords[i];
+				continue;
+			}
+
+			boolean makenew = false;
 			Emote e;
 			try {
-				e = Main.getInfo().getAPI().getEmotesByName(oldWords[i], true).get(0);
+				e = g.getEmotesByName(oldWords[i].replace("&", ""), true).get(0);
+				if (e == null) {
+					e = Main.getInfo().getAPI().getEmotesByName(oldWords[i].replace("&", ""), true).get(0);
+					makenew = true;
+				}
 			} catch (IndexOutOfBoundsException ex) {
 				e = null;
 			}
 
-			if (e != null) newWords[i] = e.getAsMention();
-			else newWords[i] = oldWords[i];
+			if (e != null) {
+				try {
+					if (makenew) {
+						e = g.createEmote(e.getName(), Icon.from(getImage(e.getImageUrl())), g.getSelfMember().getRoles().get(0)).complete();
+						Emote finalE = e;
+						queue.add(aVoid -> after.accept(finalE));
+					}
+					newWords[i] = e.getAsMention();
+				} catch (IOException ex) {
+					Helper.logger(Helper.class).error(ex + " | " + ex.getStackTrace()[0]);
+				}
+			} else newWords[i] = oldWords[i];
 		}
-	}*/
+
+		return Collections.singletonMap(String.join(" ", newWords), aVoid -> queue.forEach(q -> q.accept(null)));
+	}
 }
