@@ -26,7 +26,9 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
 public class SimpleWHMCommand extends Command {
 
@@ -49,16 +51,17 @@ public class SimpleWHMCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		Webhook wh = Helper.getOrCreateWebhook((TextChannel) channel, "Webhook Test", Main.getInfo().getAPI());
+		Map<String, Consumer<Void>> s = Helper.sendEmotifiedString(guild, String.join(" ", args));
 
 		WebhookMessageBuilder wmb = new WebhookMessageBuilder();
-		wmb.setContent(Helper.replaceEmotes(String.join(" ", args)));
+		wmb.setContent(String.valueOf(s.keySet().toArray()[0]));
 		wmb.setAvatarUrl(author.getAvatarUrl());
 		wmb.setUsername(author.getName());
 
 		assert wh != null;
 		WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
 		try {
-			wc.send(wmb.build()).get();
+			wc.send(wmb.build()).thenAccept(rm -> s.get(String.valueOf(s.keySet().toArray()[0])).accept(null)).get();
 		} catch (InterruptedException | ExecutionException e) {
 			e.printStackTrace();
 		}
