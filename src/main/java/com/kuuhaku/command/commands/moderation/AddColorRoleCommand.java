@@ -61,6 +61,10 @@ public class AddColorRoleCommand extends Command {
 					.setColor(Color.decode(args[1]))
 					.setName(args[0])
 					.complete();
+			guild.modifyRolePositions()
+					.selectPosition(r)
+					.moveTo(guild.getSelfMember().getRoles().get(0).getPosition() - 1)
+					.complete();
 			gc.addColorRole(args[0], args[1], r);
 
 			channel.sendMessage("Cor adicionada com sucesso!").queue();
