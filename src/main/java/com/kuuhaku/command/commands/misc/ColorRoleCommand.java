@@ -68,7 +68,7 @@ public class ColorRoleCommand extends Command {
 				channel.sendMessage(":x: | Nenhuma cor cadastrada ainda.").queue();
 				return;
 			}
-			BufferedImage bi = new BufferedImage(512, 30 * jo.keySet().size(), BufferedImage.TYPE_INT_ARGB);
+			BufferedImage bi = new BufferedImage(600, 30 * jo.keySet().size(), BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g2d = bi.createGraphics();
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -77,7 +77,7 @@ public class ColorRoleCommand extends Command {
 				JSONObject color = jo.getJSONObject(k);
 				g2d.setFont(new Font("arial", Font.BOLD, 30));
 				g2d.setColor(Color.decode(color.getString("color")));
-				g2d.drawString(k, (i.get() % 3) * 15, 30 + (30 * (i.get() / 4)));
+				g2d.drawString(k, (i.get() % 3) * 200, 30 + (30 * (i.get() / 4)));
 				i.getAndIncrement();
 			});
 
