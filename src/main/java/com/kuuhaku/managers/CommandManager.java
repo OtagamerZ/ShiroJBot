@@ -138,6 +138,8 @@ public class CommandManager {
 					"rrules", new String[]{"makerules"}, getString(PTBR, "regen_rules"), MODERACAO));
 			add(new PermissionCommand(
 					"permissões", new String[]{"perms", "permisions"}, getString(PTBR, "permission"), MODERACAO));
+			add(new ColorRoleCommand(
+					"cargocor", new String[]{"rolecolor"}, getString(PTBR, "req_name_color"), getString(PTBR, "add_color_role"), MODERACAO));
 
 			//INFORMATION
 			add(new ComandosCommand(
@@ -155,7 +157,7 @@ public class CommandManager {
 			add(new IDCommand(
 					"id", getString(PTBR, "req_name"), getString(PTBR, "id"), INFO));
 			add(new ColorTesterCommand(
-					"cor", new String[]{"color"}, getString(PTBR, "req_color"), getString(PTBR, "color"), INFO));
+					"quecor", new String[]{"tcolor", "testcolor"}, getString(PTBR, "req_color"), getString(PTBR, "color"), INFO));
 			add(new LocalEmoteListCommand(
 					"emotes", getString(PTBR, "req_name"), getString(PTBR, "emotes"), INFO));
 			add(new ShiroEmoteListCommand(
@@ -192,6 +194,8 @@ public class CommandManager {
 			add(new TranslateCommand());
 			add(new EightBallCommand());
 			add(new ChooseCommand());
+			add(new ColorRoleCommand(
+					"cor", new String[]{"color"}, getString(PTBR, "req_name"), getString(PTBR, "color_role"), MISC));
 
 			//FUN
 			add(new SadButTrueCommand());
