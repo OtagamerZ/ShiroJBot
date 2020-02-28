@@ -157,21 +157,10 @@ public class Helper {
 
 	public static Consumer<MessageAction> sendReaction(Reaction r, String imageURL, MessageChannel channel, boolean allowReact) throws IllegalAccessException {
 		try {
-			if (ImageIO.read(getImage(imageURL)).getWidth() >= 400) {
-				if (r.isAnswerable() && allowReact) {
-					return act -> act.queue(m -> Pages.buttonize(Main.getInfo().getAPI(), m, Collections.singletonMap("\u21AA", (mb, msg) -> r.answer((TextChannel) channel)), false, 60, TimeUnit.SECONDS));
-				} else
-					return RestAction::queue;
-			} else {
-				logger(Helper.class).warn("GIF irregular: " + imageURL);
-				Main.getInfo().getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> c.sendMessage("GIF irregular: " + imageURL).queue()));
-
-				channel.sendMessage(":warning: | GIF com proporções irregulares, meus desenvolvedores já foram informados.").queue();
-				if (r.isAnswerable() && allowReact) {
-					return act -> act.queue(m -> Pages.buttonize(Main.getInfo().getAPI(), m, Collections.singletonMap("\u21AA", (mb, msg) -> r.answer((TextChannel) channel)), false, 60, TimeUnit.SECONDS));
-				} else
-					return RestAction::queue;
-			}
+			if (r.isAnswerable() && allowReact) {
+				return act -> act.queue(m -> Pages.buttonize(Main.getInfo().getAPI(), m, Collections.singletonMap("\u21AA", (mb, msg) -> r.answer((TextChannel) channel)), false, 60, TimeUnit.SECONDS));
+			} else
+				return RestAction::queue;
 		} catch (Exception e) {
 			Main.getInfo().getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> c.sendMessage("GIF com erro: " + imageURL).queue()));
 			logger(Helper.class).error("Erro ao carregar a imagem: " + imageURL + " -> " + e + " | " + e.getStackTrace()[0]);
