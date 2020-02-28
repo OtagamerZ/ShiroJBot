@@ -80,7 +80,7 @@ public class ColorRoleCommand extends Command {
 		JSONObject jo = gc.getColorRoles();
 
 		if (args[0].equalsIgnoreCase("nenhum")) {
-			List<String> ids = jo.toMap().values().stream().map(j -> ((JSONObject) j).getString("role")).collect(Collectors.toList());
+			List<String> ids = jo.toMap().values().stream().map(j -> new JSONObject(j).getString("role")).collect(Collectors.toList());
 			List<Role> roles = member.getRoles().stream().filter(r -> !ids.contains(r.getId())).collect(Collectors.toList());
 			guild.modifyMemberRoles(member, roles).queue();
 
