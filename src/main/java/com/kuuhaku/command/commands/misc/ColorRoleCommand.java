@@ -52,6 +52,10 @@ public class ColorRoleCommand extends Command {
 
 		if (args.length < 1) {
 			JSONObject jo = gc.getColorRoles();
+			if (jo.keySet().size() == 0) {
+				channel.sendMessage(":x: | Nenhuma cor cadastrada ainda.").queue();
+				return;
+			}
 			BufferedImage bi = new BufferedImage(256, 30 * jo.keySet().size(), BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g2d = bi.createGraphics();
 
