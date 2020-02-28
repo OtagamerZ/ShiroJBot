@@ -172,8 +172,8 @@ public class Helper {
 					return RestAction::queue;
 			}
 		} catch (Exception e) {
+			Main.getInfo().getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> c.sendMessage("GIF com erro: " + imageURL).queue()));
 			logger(Helper.class).error("Erro ao carregar a imagem: " + imageURL + " -> " + e + " | " + e.getStackTrace()[0]);
-			sendReaction(r, imageURL, channel, allowReact);
 			throw new IllegalAccessException();
 		}
 	}
