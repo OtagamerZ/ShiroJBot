@@ -272,7 +272,7 @@ public class Kawaigotchi {
 		int currTime = OffsetDateTime.now(ZoneId.of("GMT-3")).getHour();
 		int dir = (Math.random() > 0.5 ? 1 : -1);
 
-		if (stance != Stance.SLEEPING)
+		if (stance != Stance.SLEEPING && stance != Stance.DEAD)
 			pos = pet.getWidth() + new Random().nextInt(1280 - pet.getWidth() * 2);
 		else {
 			pos = 256;
