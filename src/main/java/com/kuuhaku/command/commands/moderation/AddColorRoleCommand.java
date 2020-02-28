@@ -24,6 +24,7 @@ import com.kuuhaku.model.persistent.GuildConfig;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONObject;
 
 import java.awt.*;
 
@@ -59,6 +60,20 @@ public class AddColorRoleCommand extends Command {
 
 		try {
 			String name = StringUtils.capitalize(args[0].toLowerCase());
+			JSONObject jo = gc.getColorRoles();
+
+			if (jo.has(name) && guild.getRoleById(jo.getJSONObject(name).getString("role")) != null) {
+				Role r = guild.getRoleById(jo.getJSONObject(name).getString("role"));
+				assert r != null;
+				r.getManager()
+						.setColor(Color.decode(args[1]))
+						.complete();
+
+				gc.addColorRole(name, args[1], r);
+				channel.sendMessage("Cor modificada com sucesso!").queue();
+				return;
+			}
+
 			Role r = guild.createRole()
 					.setColor(Color.decode(args[1]))
 					.setName(name)
