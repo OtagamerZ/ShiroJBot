@@ -86,6 +86,9 @@ public class GuildConfig {
 	@Column(columnDefinition = "TEXT")
 	private String colorRoles = "";
 
+	@Column(columnDefinition = "TEXT")
+	private String ambientSounds = "";
+
 	//NUMBERS
 	@Column(columnDefinition = "INT DEFAULT 60")
 	private int pollTime = 60;
@@ -405,5 +408,22 @@ public class GuildConfig {
 		JSONObject jo = getColorRoles();
 		jo.remove(name);
 		this.colorRoles = jo.toString();
+	}
+
+	public JSONObject getAmbientSounds() {
+		return new JSONObject(Helper.getOr(ambientSounds, "{}"));
+	}
+
+	public void addAmbientSound(String name, String link) {
+		JSONObject jo = getAmbientSounds();
+
+		jo.put(name, link);
+		this.ambientSounds = jo.toString();
+	}
+
+	public void removeAmbientSound(String name) {
+		JSONObject jo = getAmbientSounds();
+		jo.remove(name);
+		this.ambientSounds = jo.toString();
 	}
 }
