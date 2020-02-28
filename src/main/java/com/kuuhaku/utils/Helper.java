@@ -661,7 +661,7 @@ public class Helper {
 		List<Consumer<Void>> queue = new ArrayList<>();
 		Consumer<Emote> after = e -> e.delete().queue();
 		for (int i = 0; i < oldWords.length; i++) {
-			if (!oldWords[i].startsWith(":") && oldWords[i].endsWith(":")) {
+			if (!oldWords[i].startsWith("&")) {
 				newWords[i] = oldWords[i];
 				continue;
 			}
@@ -669,7 +669,7 @@ public class Helper {
 			boolean makenew = false;
 			Emote e;
 			try {
-				e = g.getEmotesByName(oldWords[i].replace(":", ""), true).get(0);
+				e = g.getEmotesByName(oldWords[i].replace("&", ""), true).get(0);
 			} catch (IndexOutOfBoundsException ex) {
 				try {
 					e = Main.getInfo().getAPI().getEmotesByName(oldWords[i].replace("&", ""), true).get(0);
