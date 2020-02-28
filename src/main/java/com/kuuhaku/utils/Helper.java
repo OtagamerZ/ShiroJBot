@@ -655,5 +655,9 @@ public class Helper {
 		}
 	}
 
-
+	/*public static String getEmotifiedString(String text) {
+		String[] oldWords = text.split(" ");
+		String[] newWords = new String[oldWords.length];
+		for
+	}*/
 }
