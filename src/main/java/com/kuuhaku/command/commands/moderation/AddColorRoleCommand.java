@@ -23,6 +23,7 @@ import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.persistent.GuildConfig;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 
@@ -57,28 +58,30 @@ public class AddColorRoleCommand extends Command {
 		}
 
 		try {
+			String name = StringUtils.capitalize(args[0].toLowerCase());
 			Role r = guild.createRole()
 					.setColor(Color.decode(args[1]))
-					.setName(args[0])
+					.setName(name)
 					.complete();
 			guild.modifyRolePositions()
 					.selectPosition(r)
 					.moveTo(guild.getSelfMember().getRoles().get(0).getPosition() - 1)
 					.complete();
-			gc.addColorRole(args[0], args[1], r);
+			gc.addColorRole(name, args[1], r);
 
 			channel.sendMessage("Cor adicionada com sucesso!").queue();
 		} catch (NumberFormatException e) {
 			channel.sendMessage(":x: | Cor inválida, verifique se digitou no formato `#RRGGBB`.").queue();
 		} catch (ArrayIndexOutOfBoundsException e) {
-			if (!gc.getColorRoles().has(args[0])) {
+			String name = StringUtils.capitalize(args[0].toLowerCase());
+			if (!gc.getColorRoles().has(name)) {
 				channel.sendMessage("Essa cor não existe!").queue();
 				return;
 			}
-			Role r = guild.getRoleById(gc.getColorRoles().getJSONObject(args[0]).getString("role"));
+			Role r = guild.getRoleById(gc.getColorRoles().getJSONObject(name).getString("role"));
 
 			if (r != null) r.delete().queue();
-			gc.removeColorRole(args[0]);
+			gc.removeColorRole(name);
 
 			channel.sendMessage("Cor removida com sucesso!").queue();
 		} finally {
