@@ -387,7 +387,7 @@ public class GuildConfig {
 	}
 
 	public JSONObject getColorRoles() {
-		return new JSONObject(colorRoles);
+		return new JSONObject(Helper.getOr(colorRoles, "{}"));
 	}
 
 	public void addColorRole(String name, String color, Role role) {
