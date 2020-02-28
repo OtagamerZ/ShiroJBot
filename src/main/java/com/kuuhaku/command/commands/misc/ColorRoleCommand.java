@@ -81,8 +81,7 @@ public class ColorRoleCommand extends Command {
 
 		if (args[0].equalsIgnoreCase("nenhum")) {
 			List<String> ids = jo.toMap().values().stream().map(j -> ((JSONObject) j).getString("role")).collect(Collectors.toList());
-			List<Role> roles = member.getRoles();
-			roles.removeIf(r -> ids.contains(r.getId()));
+			List<Role> roles = member.getRoles().stream().filter(r -> !ids.contains(r.getId())).collect(Collectors.toList());
 			guild.modifyMemberRoles(member, roles).queue();
 
 			channel.sendMessage("Sua cor foi removida com sucesso!").queue();
