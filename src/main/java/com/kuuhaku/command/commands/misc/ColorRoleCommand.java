@@ -28,7 +28,9 @@ import org.json.JSONObject;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class ColorRoleCommand extends Command {
 
@@ -75,9 +77,39 @@ public class ColorRoleCommand extends Command {
 			return;
 		}
 
-		String name = StringUtils.capitalize(args[0].toLowerCase());
 		JSONObject jo = gc.getColorRoles();
+
+		if (args[0].equalsIgnoreCase("nenhum")) {
+			List<String> ids = jo.toMap().values().stream().map(j -> ((JSONObject) j).getString("role")).collect(Collectors.toList());
+			List<Role> roles = member.getRoles();
+			roles.removeIf(r -> ids.contains(r.getId()));
+			guild.modifyMemberRoles(member, roles).queue();
+
+			channel.sendMessage("Sua cor foi removida com sucesso!").queue();
+			return;
+		}
+
+		String name = StringUtils.capitalize(args[0].toLowerCase());
+
+		if (!jo.has(name)) {
+			channel.sendMessage(":x: | Essa cor ainda não foi cadastrada neste servidor.").queue();
+			return;
+		}
+
 		Role r = guild.getRoleById(jo.getJSONObject(name).getString("role"));
+
+		if (jo.has(name) && r == null) {
+			r = guild.createRole()
+					.setColor(Color.decode(args[1]))
+					.setName(name)
+					.complete();
+			guild.modifyRolePositions()
+					.selectPosition(r)
+					.moveTo(guild.getSelfMember().getRoles().get(0).getPosition() - 1)
+					.complete();
+			gc.addColorRole(name, args[1], r);
+		}
+
 		assert r != null;
 		guild.addRoleToMember(member, r).queue();
 		channel.sendMessage("Sua cor foi definida como " + r.getName() + " com sucesso!").queue();
