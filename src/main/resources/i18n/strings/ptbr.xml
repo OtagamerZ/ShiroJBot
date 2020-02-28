@@ -70,6 +70,7 @@
     </backup>
     <regen_rules>Gera regras de conduta padrão da Shiro.</regen_rules>
     <permission>Mostra quais permissões a Shiro/Jibril possuem.</permission>
+    <add_color_role>Adiciona um novo cargo de cor ao servidor</add_color_role>
 
     <!--INFORMATION-->
     <help>Fornece uma lista de todos os comandos disponiveis no bot.</help>
@@ -92,6 +93,7 @@
         resolução 1080p ou similar).
     </background>
     <biography>Muda a biografia do seu perfil.</biography>
+    <color_role>Pega um cargo de cor para você</color_role>
 
     <!--MUSIC-->
     <control>Controla a fila de músicas.</control>
@@ -124,6 +126,7 @@
     <req_global>[global]</req_global>
     <req_color>{#cor}</req_color>
     <req_link>{link}</req_link>
+    <req_name_color>{nome} {#cor}</req_name_color>
 
     <!--COMMON STRINGS-->
 </resources>
