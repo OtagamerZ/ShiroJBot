@@ -77,7 +77,7 @@ public class ColorRoleCommand extends Command {
 				JSONObject color = jo.getJSONObject(k);
 				g2d.setFont(new Font("arial", Font.BOLD, 30));
 				g2d.setColor(Color.decode(color.getString("color")));
-				g2d.drawString(k, (i.get() % 3) * 200, 30 + (30 * (i.get() / 4)));
+				g2d.drawString(k, (i.get() % 3) * 200, 30 + (30 * (i.get() / 3)));
 				i.getAndIncrement();
 			});
 
