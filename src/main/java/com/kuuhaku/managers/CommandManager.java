@@ -138,7 +138,7 @@ public class CommandManager {
 					"rrules", new String[]{"makerules"}, getString(PTBR, "regen_rules"), MODERACAO));
 			add(new PermissionCommand(
 					"permissões", new String[]{"perms", "permisions"}, getString(PTBR, "permission"), MODERACAO));
-			add(new ColorRoleCommand(
+			add(new AddColorRoleCommand(
 					"cargocor", new String[]{"rolecolor"}, getString(PTBR, "req_name_color"), getString(PTBR, "add_color_role"), MODERACAO));
 
 			//INFORMATION
