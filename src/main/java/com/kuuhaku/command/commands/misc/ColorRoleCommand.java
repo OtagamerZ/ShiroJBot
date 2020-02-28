@@ -21,13 +21,17 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -75,6 +79,15 @@ public class ColorRoleCommand extends Command {
 				g2d.drawString(k, 15, 30 + (30 * i.get()));
 				i.getAndIncrement();
 			});
+
+			g2d.dispose();
+
+			try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+				ImageIO.write(bi, "png", baos);
+				channel.sendMessage("**Cores disponíveis neste servidor:**").addFile(baos.toByteArray(), "colors.png").queue();
+			} catch (IOException e) {
+				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			}
 			return;
 		}
 
