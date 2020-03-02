@@ -103,7 +103,7 @@ public class ComandosCommand extends Command {
 					cmds.append("`").append(cmd.getName()).append("`  ");
 				}
 
-				ceb.addField(cat.getName(), cat.getDescription() + "\n" + cmds.toString().trim(), false);
+				ceb.addField(Helper.VOID, cat.getDescription() + "\n" + cmds.toString().trim(), false);
 				ceb.addField(Helper.VOID, "Para informações sobre um comando em especifico digite `" + prefix + "cmds [comando]`.", false);
 				pages.put(cat.getEmoteId(), new Page(PageType.EMBED, ceb.build()));
 			}
