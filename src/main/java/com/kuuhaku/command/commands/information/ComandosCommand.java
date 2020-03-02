@@ -70,6 +70,8 @@ public class ComandosCommand extends Command {
 			if (cat.isEnabled(gc, guild)) eb.addField(cat.getEmote() + " | " + cat.getName(), Helper.VOID, true);
 		}
 
+		eb.addField("<:tips:684039810079522846> | Dicas", Helper.VOID, true);
+
 		eb.setColor(Color.PINK);
 		eb.setFooter(Main.getInfo().getFullName(), null);
 		eb.setThumbnail(Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById(Helper.HOME)).getImageUrl());
@@ -80,6 +82,7 @@ public class ComandosCommand extends Command {
 
 			for (Category cat : Category.values()) {
 				EmbedBuilder ceb = new EmbedBuilder();
+				ceb.setTitle(cat.getName());
 				ceb.setColor(Color.PINK);
 				ceb.setFooter(Main.getInfo().getFullName(), null);
 				ceb.setThumbnail(Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById(cat.getEmoteId())).getImageUrl());
@@ -106,15 +109,15 @@ public class ComandosCommand extends Command {
 			}
 
 			EmbedBuilder ceb = new EmbedBuilder();
+			ceb.setTitle("Dicas e Curiosidades");
 			ceb.setColor(Color.PINK);
 			ceb.setFooter(Main.getInfo().getFullName(), null);
 			ceb.setThumbnail(Objects.requireNonNull(Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById("684039810079522846")).getImageUrl()));
 
-			ceb.addField("Dicas e Curiosidades", "", false);
-			ceb.addField("", "Você pode usar emotes de qualquer servidor que a Shiro participe, basta digitar `e:` antes da mensagem, e `&` antes do nome do emote.", false);
-			ceb.addField("", "Os botões que aparecem em alguns comandos, como estes abaixo, são feitos usando uma biblioteca aberta de paginação escrita pelo meu Nii-chan.", false);
-			ceb.addField("", "Membros que tenham uma waifu (usando o comando `" + prefix + "marry`) recebem 25% mais experiência quando no mesmo servidor que a/o waifu.", false);
-			ceb.addField("", "Todo começo de mês, o membros do exceed vitorioso recebem 2x mais experiência por uma semana.", false);
+			ceb.addField(Helper.VOID, "Você pode usar emotes de qualquer servidor que a Shiro participe, basta digitar `e:` antes da mensagem, e `&` antes do nome do emote.", false);
+			ceb.addField(Helper.VOID, "Os botões que aparecem em alguns comandos, como estes abaixo, são feitos usando uma biblioteca aberta de paginação escrita pelo meu Nii-chan.", false);
+			ceb.addField(Helper.VOID, "Membros que tenham uma waifu (usando o comando `" + prefix + "marry`) recebem 25% mais experiência quando no mesmo servidor que a/o waifu.", false);
+			ceb.addField(Helper.VOID, "Todo começo de mês, o membros do exceed vitorioso recebem 2x mais experiência por uma semana.", false);
 
 			pages.put("684039810079522846", new Page(PageType.EMBED, ceb.build()));
 
