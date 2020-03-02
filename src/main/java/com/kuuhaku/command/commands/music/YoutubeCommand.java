@@ -71,6 +71,7 @@ public class YoutubeCommand extends Command {
 
                             for (YoutubeVideo v : videos) {
                                 eb.clear();
+                                eb.setAuthor("Para ouvir essa música, conecte-se à um canal de voz e clique no botão ✅");
                                 eb.setTitle(v.getTitle(), v.getUrl());
                                 eb.setDescription(v.getDesc());
                                 eb.setThumbnail(v.getThumb());
