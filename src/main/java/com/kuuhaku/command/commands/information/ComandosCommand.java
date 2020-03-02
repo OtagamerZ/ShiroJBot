@@ -93,7 +93,7 @@ public class ComandosCommand extends Command {
 				if (!cat.isEnabled(gc, guild))
 					continue;
 				if (cat.getCmds().size() == 0) {
-					ceb.addField(cat.getName(), cat.getDescription() + "\n*Ainda não existem comandos nesta categoria.*", false);
+					ceb.addField(Helper.VOID, cat.getDescription() + "\n*Ainda não existem comandos nesta categoria.*", false);
 					continue;
 				}
 
