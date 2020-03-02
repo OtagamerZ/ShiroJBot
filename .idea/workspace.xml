@@ -6,8 +6,10 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Começo da implementação do i18n">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/ComandosCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/ComandosCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/music/YoutubeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/music/YoutubeCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,10 +77,10 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTML File" />
-        <option value="Class" />
         <option value="FxmlFile" />
         <option value="Enum" />
         <option value="AnnotationType" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -226,14 +228,8 @@
       <workItem from="1582747643583" duration="1476000" />
       <workItem from="1582809254868" duration="8720000" />
       <workItem from="1582835613783" duration="1240000" />
-      <workItem from="1582892511105" duration="17558000" />
-    </task>
-    <task id="LOCAL-00677" summary="Correção na quebra de linha dos memes">
-      <created>1582720651767</created>
-      <option name="number" value="00677" />
-      <option name="presentableId" value="LOCAL-00677" />
-      <option name="project" value="LOCAL" />
-      <updated>1582720651767</updated>
+      <workItem from="1582892511105" duration="19132000" />
+      <workItem from="1583150789004" duration="5242000" />
     </task>
     <task id="LOCAL-00678" summary="Meme do Drake">
       <created>1582721146523</created>
@@ -571,7 +567,14 @@
       <option name="project" value="LOCAL" />
       <updated>1582917699147</updated>
     </task>
-    <option name="localTasksCounter" value="726" />
+    <task id="LOCAL-00726" summary="Começo da implementação do i18n">
+      <created>1582921171753</created>
+      <option name="number" value="00726" />
+      <option name="presentableId" value="LOCAL-00726" />
+      <option name="project" value="LOCAL" />
+      <updated>1582921171753</updated>
+    </task>
+    <option name="localTasksCounter" value="727" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -637,10 +640,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="432" y="164" key="#SQL_Resolution_Scopes/0.0.1680.1010@0.0.1680.1010" timestamp="1581000411417" />
-    <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1581005058084">
+    <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1583154908529">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1581005058084" />
+    <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1583154908529" />
     <state x="585" y="309" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1580395607218">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -683,11 +686,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1578421403620" />
-    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1582917696273">
+    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1583155484970">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1582604510538" />
-    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1582917696273" />
+    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1583155484970" />
     <state x="160" y="89" width="1344" height="834" key="DiffContextDialog" timestamp="1580842925618">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -696,22 +699,22 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="620" y="261" key="FileChooserDialogImpl/0.0.1680.1010@0.0.1680.1010" timestamp="1579293733975" />
-    <state width="818" height="272" key="GridCell.Tab.0.bottom" timestamp="1581001073437">
+    <state width="1637" height="279" key="GridCell.Tab.0.bottom" timestamp="1583152885412">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="818" height="272" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1581001073437" />
-    <state width="818" height="272" key="GridCell.Tab.0.center" timestamp="1581001073437">
+    <state width="1637" height="279" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1583152885412" />
+    <state width="1637" height="279" key="GridCell.Tab.0.center" timestamp="1583152885411">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="818" height="272" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1581001073437" />
-    <state width="818" height="272" key="GridCell.Tab.0.left" timestamp="1581001073437">
+    <state width="1637" height="279" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1583152885411" />
+    <state width="1637" height="279" key="GridCell.Tab.0.left" timestamp="1583152885411">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="818" height="272" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1581001073437" />
-    <state width="818" height="272" key="GridCell.Tab.0.right" timestamp="1581001073437">
+    <state width="1637" height="279" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1583152885411" />
+    <state width="1637" height="279" key="GridCell.Tab.0.right" timestamp="1583152885411">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="818" height="272" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1581001073437" />
+    <state width="1637" height="279" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1583152885411" />
     <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1581005137300">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -738,11 +741,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1582917700888">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1582921172810">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1582604543626" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1582917700888" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1582921172810" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -782,10 +785,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="605" y="219" key="git4idea.branch.GitSmartOperationDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1579030853134" />
-    <state x="239" y="152" key="new project wizard" timestamp="1581685105848">
+    <state x="239" y="152" key="new project wizard" timestamp="1583152080469">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="239" y="152" key="new project wizard/0.0.1680.1010@0.0.1680.1010" timestamp="1581685105848" />
+    <state x="239" y="152" key="new project wizard/0.0.1680.1010@0.0.1680.1010" timestamp="1583152080469" />
     <state x="496" y="233" width="672" height="677" key="run.anything.popup" timestamp="1582825658960">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>

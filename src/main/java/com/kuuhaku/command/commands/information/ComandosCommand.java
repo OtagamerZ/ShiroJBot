@@ -105,6 +105,19 @@ public class ComandosCommand extends Command {
 				pages.put(cat.getEmoteId(), new Page(PageType.EMBED, ceb.build()));
 			}
 
+			EmbedBuilder ceb = new EmbedBuilder();
+			ceb.setColor(Color.PINK);
+			ceb.setFooter(Main.getInfo().getFullName(), null);
+			ceb.setThumbnail(Objects.requireNonNull(Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById("684039810079522846")).getImageUrl()));
+
+			ceb.addField("Dicas e Curiosidades", "", false);
+			ceb.addField("", "Você pode usar emotes de qualquer servidor que a Shiro participe, basta digitar `e:` antes da mensagem, e `&` antes do nome do emote.", false);
+			ceb.addField("", "Os botões que aparecem em alguns comandos, como estes abaixo, são feitos usando uma biblioteca aberta de paginação escrita pelo meu Nii-chan.", false);
+			ceb.addField("", "Membros que tenham uma waifu (usando o comando `" + prefix + "marry`) recebem 25% mais experiência quando no mesmo servidor que a/o waifu.", false);
+			ceb.addField("", "Todo começo de mês, o membros do exceed vitorioso recebem 2x mais experiência por uma semana.", false);
+
+			pages.put("684039810079522846", new Page(PageType.EMBED, ceb.build()));
+
 			channel.sendMessage(eb.build()).queue(s -> Pages.categorize(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
 			return;
 		}
