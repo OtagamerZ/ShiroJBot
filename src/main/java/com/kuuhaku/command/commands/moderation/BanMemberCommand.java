@@ -24,6 +24,7 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
+import org.jetbrains.annotations.NonNls;
 
 public class BanMemberCommand extends Command {
 
@@ -39,7 +40,7 @@ public class BanMemberCommand extends Command {
 		super(name, usage, description, category);
 	}
 
-	public BanMemberCommand(String name, String[] aliases, String usage, String description, Category category) {
+	public BanMemberCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
 		super(name, aliases, usage, description, category);
 	}
 

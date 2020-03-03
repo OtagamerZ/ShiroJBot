@@ -24,6 +24,7 @@ import com.kuuhaku.model.common.YoutubeVideo;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -42,7 +43,7 @@ public class VideoCommand extends Command {
 		super(name, usage, description, category);
 	}
 
-	public VideoCommand(String name, String[] aliases, String usage, String description, Category category) {
+	public VideoCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
 		super(name, aliases, usage, description, category);
 	}
 

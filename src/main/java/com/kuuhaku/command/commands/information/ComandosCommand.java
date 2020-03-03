@@ -26,10 +26,14 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import java.awt.*;
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -50,7 +54,7 @@ public class ComandosCommand extends Command {
 		super(name, usage, description, category);
 	}
 
-	public ComandosCommand(String name, String[] aliases, String usage, String description, Category category) {
+	public ComandosCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
 		super(name, aliases, usage, description, category);
 	}
 
@@ -61,11 +65,8 @@ public class ComandosCommand extends Command {
 		Map<String, Page> pages = new LinkedHashMap<>();
 
 		EmbedBuilder eb = new EmbedBuilder();
-		eb.setTitle("**Lista de Comandos**");
-		eb.setDescription("Clique nas categorias abaixo para ver os comandos de cada uma.\n\n" +
-				"Prefixo: `" + prefix + "`\n"
-				+ Arrays.stream(Category.values()).filter(c -> c.isEnabled(gc, guild)).count() + " categorias encontradas!" + "\n"
-				+ Main.getCommandManager().getCommands().stream().filter(c -> c.getCategory().isEnabled(gc, guild)).count() + " comandos encontrados!");
+		eb.setTitle(ShiroInfo.getLocale(I18n.PT).getString("str_command-list-title"));
+		eb.setDescription(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_command-list-description"), prefix, Arrays.stream(Category.values()).filter(c -> c.isEnabled(gc, guild)).count(), Main.getCommandManager().getCommands().stream().filter(c -> c.getCategory().isEnabled(gc, guild)).count()));
 		for (Category cat : Category.values()) {
 			if (cat.isEnabled(gc, guild)) eb.addField(cat.getEmote() + " | " + cat.getName(), Helper.VOID, true);
 		}

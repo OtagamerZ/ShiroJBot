@@ -25,6 +25,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -40,7 +41,7 @@ public class SimpleWHMCommand extends Command {
 		super(name, aliases, description, category);
 	}
 
-	public SimpleWHMCommand(String name, String usage, String description, Category category) {
+	public SimpleWHMCommand(@NonNls String name, String usage, String description, Category category) {
 		super(name, usage, description, category);
 	}
 

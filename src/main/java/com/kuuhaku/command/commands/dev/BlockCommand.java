@@ -25,6 +25,7 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.PrivilegeLevel;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.Arrays;
 
@@ -42,7 +43,7 @@ public class BlockCommand extends Command {
 		super(name, usage, description, category);
 	}
 
-	public BlockCommand(String name, String[] aliases, String usage, String description, Category category) {
+	public BlockCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
 		super(name, aliases, usage, description, category);
 	}
 

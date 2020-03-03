@@ -29,6 +29,7 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -47,7 +48,7 @@ public class BroadcastCommand extends Command {
 		super(name, usage, description, category);
 	}
 
-	public BroadcastCommand(String name, String[] aliases, String usage, String description, Category category) {
+	public BroadcastCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
 		super(name, aliases, usage, description, category);
 	}
 

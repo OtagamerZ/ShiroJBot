@@ -26,6 +26,7 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,7 @@ public class LocalEmoteListCommand extends Command {
 		super(name, aliases, description, category);
 	}
 
-	public LocalEmoteListCommand(String name, String usage, String description, Category category) {
+	public LocalEmoteListCommand(@NonNls String name, String usage, String description, Category category) {
 		super(name, usage, description, category);
 	}
 

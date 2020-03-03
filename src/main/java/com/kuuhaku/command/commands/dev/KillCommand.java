@@ -21,6 +21,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 public class KillCommand extends Command {
 
@@ -28,7 +29,7 @@ public class KillCommand extends Command {
 		super(name, description, category);
 	}
 
-	public KillCommand(String name, String[] aliases, String description, Category category) {
+	public KillCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
 		super(name, aliases, description, category);
 	}
 

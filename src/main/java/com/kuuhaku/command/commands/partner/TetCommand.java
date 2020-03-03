@@ -21,10 +21,11 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 public class TetCommand extends Command {
 
-	public TetCommand(String name, String description, Category category) {
+	public TetCommand(@NonNls String name, String description, Category category) {
 		super(name, description, category);
 	}
 

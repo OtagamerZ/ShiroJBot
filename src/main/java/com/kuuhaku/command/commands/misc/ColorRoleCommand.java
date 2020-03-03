@@ -25,6 +25,7 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NonNls;
 import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
@@ -51,7 +52,7 @@ public class ColorRoleCommand extends Command {
 		super(name, usage, description, category);
 	}
 
-	public ColorRoleCommand(String name, String[] aliases, String usage, String description, Category category) {
+	public ColorRoleCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
 		super(name, aliases, usage, description, category);
 	}
 

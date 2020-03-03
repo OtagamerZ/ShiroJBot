@@ -17,16 +17,18 @@
 
 package com.kuuhaku.utils;
 
+import java.util.Locale;
+
 public enum I18n {
-	PTBR("ptbr");
+	PT(new Locale("pt"));
 
-	private final String value;
+	private final Locale locale;
 
-	I18n(String code) {
-		this.value = code;
+	I18n(Locale locale) {
+		this.locale = locale;
 	}
 
-	public String getValue() {
-		return value;
+	public Locale getLocale() {
+		return locale;
 	}
 }

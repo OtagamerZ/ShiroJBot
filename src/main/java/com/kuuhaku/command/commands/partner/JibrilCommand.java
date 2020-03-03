@@ -21,10 +21,11 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 public class JibrilCommand extends Command {
 
-	public JibrilCommand(String name, String description, Category category) {
+	public JibrilCommand(@NonNls String name, String description, Category category) {
 		super(name, description, category);
 	}
 
