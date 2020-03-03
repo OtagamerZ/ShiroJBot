@@ -22,6 +22,7 @@ import com.kuuhaku.command.Command;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class PruneCommand extends Command {
 		super(name, usage, description, category);
 	}
 
-	public PruneCommand(String name, String[] aliases, String usage, String description, Category category) {
+	public PruneCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
 		super(name, aliases, usage, description, category);
 	}
 

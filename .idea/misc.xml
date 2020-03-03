@@ -4,4 +4,7 @@
     <option name="languageLevel" value="ES6" />
   </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="1.8" project-jdk-type="JavaSDK" />
+  <component name="PropertiesSeparatorManager">
+    <file url="file://$PROJECT_DIR$/src/main/resources/locale" separator="\u005f" />
+  </component>
 </project>

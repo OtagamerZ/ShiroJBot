@@ -24,6 +24,7 @@ import com.kuuhaku.model.persistent.GuildConfig;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NonNls;
 import org.json.JSONObject;
 
 import java.awt.*;
@@ -42,7 +43,7 @@ public class AddColorRoleCommand extends Command {
 		super(name, usage, description, category);
 	}
 
-	public AddColorRoleCommand(String name, String[] aliases, String usage, String description, Category category) {
+	public AddColorRoleCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
 		super(name, aliases, usage, description, category);
 	}
 

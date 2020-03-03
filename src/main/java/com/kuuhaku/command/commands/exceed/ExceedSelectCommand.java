@@ -25,6 +25,7 @@ import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.TagIcons;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class ExceedSelectCommand extends Command {
 		super(name, description, category);
 	}
 
-	public ExceedSelectCommand(String name, String[] aliases, String description, Category category) {
+	public ExceedSelectCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
 		super(name, aliases, description, category);
 	}
 

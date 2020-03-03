@@ -21,10 +21,11 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 public class RelaysCommand extends Command {
 
-	public RelaysCommand(String name, String description, Category category) {
+	public RelaysCommand(@NonNls String name, String description, Category category) {
 		super(name, description, category);
 	}
 

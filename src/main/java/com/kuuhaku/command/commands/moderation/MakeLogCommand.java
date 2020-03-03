@@ -23,6 +23,7 @@ import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.persistent.GuildConfig;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.Objects;
 
@@ -32,7 +33,7 @@ public class MakeLogCommand extends Command {
 		super(name, description, category);
 	}
 
-	public MakeLogCommand(String name, String[] aliases, String description, Category category) {
+	public MakeLogCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
 		super(name, aliases, description, category);
 	}
 

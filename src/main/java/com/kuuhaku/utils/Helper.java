@@ -44,15 +44,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
-import org.xml.sax.SAXException;
 
 import javax.imageio.ImageIO;
 import javax.net.ssl.HttpsURLConnection;
 import javax.persistence.NoResultException;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathExpressionException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -623,26 +618,6 @@ public class Helper {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		ImageIO.write(canvas, "png", baos);
 		return baos;
-	}
-
-	public static String getString(I18n code, String value) {
-		try (InputStream is = Helper.class.getClassLoader().getResourceAsStream("i18n/strings/" + code.getValue() + ".xml")) {
-			DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			assert is != null;
-			return ShiroInfo.getxPath().evaluate("/resources/" + value + "/text()", db.parse(is));
-		} catch (XPathExpressionException | ParserConfigurationException | SAXException | IOException e) {
-			return null;
-		}
-	}
-
-	public static String getString(I18n code, String value, Object... fields) {
-		try (InputStream is = Helper.class.getClassLoader().getResourceAsStream("i18n/strings/" + code.getValue() + ".xml")) {
-			DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			assert is != null;
-			return String.format(ShiroInfo.getxPath().evaluate("/resources/" + value + "/text()", db.parse(is)), fields);
-		} catch (XPathExpressionException | ParserConfigurationException | SAXException | IOException e) {
-			return null;
-		}
 	}
 
 	public static Map<String, Consumer<Void>> sendEmotifiedString(Guild g, String text) {

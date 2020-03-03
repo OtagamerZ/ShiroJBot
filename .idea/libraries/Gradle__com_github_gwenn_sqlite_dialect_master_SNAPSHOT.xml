@@ -5,7 +5,6 @@
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.gwenn/sqlite-dialect/master-SNAPSHOT/81d5092df7f68e1afa1cdbe6cd9c2c71fc95e48a/sqlite-dialect-master-SNAPSHOT-sources.jar!/" />
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.gwenn/sqlite-dialect/master-SNAPSHOT/c4d80f448f2217bf9af7848b6439b0cc50c1b6a/sqlite-dialect-master-SNAPSHOT-sources.jar!/" />
     </SOURCES>
   </library>

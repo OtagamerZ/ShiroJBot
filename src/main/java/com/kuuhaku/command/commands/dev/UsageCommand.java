@@ -27,6 +27,7 @@ import com.kuuhaku.controller.mysql.LogDAO;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,7 @@ public class UsageCommand extends Command {
 		super(name, description, category);
 	}
 
-	public UsageCommand(String name, String[] aliases, String description, Category category) {
+	public UsageCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
 		super(name, aliases, description, category);
 	}
 

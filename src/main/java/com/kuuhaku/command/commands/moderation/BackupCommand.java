@@ -24,6 +24,7 @@ import com.kuuhaku.model.persistent.Backup;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import java.time.LocalDateTime;
 
@@ -41,7 +42,7 @@ public class BackupCommand extends Command {
 		super(name, usage, description, category);
 	}
 
-	public BackupCommand(String name, String[] aliases, String usage, String description, Category category) {
+	public BackupCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
 		super(name, aliases, usage, description, category);
 	}
 

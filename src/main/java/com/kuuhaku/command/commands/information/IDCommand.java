@@ -24,6 +24,7 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,7 +39,7 @@ public class IDCommand extends Command {
 		super(name, aliases, description, category);
 	}
 
-	public IDCommand(String name, String usage, String description, Category category) {
+	public IDCommand(@NonNls String name, String usage, String description, Category category) {
 		super(name, usage, description, category);
 	}
 

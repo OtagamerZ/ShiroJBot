@@ -1,5 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: javax.persistence:javax.persistence-api:2.2">
+    <ANNOTATIONS>
+      <root url="file://$PROJECT_DIR$/src/main/resources" />
+    </ANNOTATIONS>
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.persistence/javax.persistence-api/2.2/25665ac8c0b62f50e6488173233239120fc52c96/javax.persistence-api-2.2.jar!/" />
     </CLASSES>
