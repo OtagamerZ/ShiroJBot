@@ -31,6 +31,7 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,7 +53,7 @@ public class PurchaceKGotchiCommand extends Command {
 		super(name, usage, description, category);
 	}
 
-	public PurchaceKGotchiCommand(String name, String[] aliases, String usage, String description, Category category) {
+	public PurchaceKGotchiCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
 		super(name, aliases, usage, description, category);
 	}
 

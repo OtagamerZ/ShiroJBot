@@ -24,6 +24,7 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.BannedVars;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 import org.python.util.PythonInterpreter;
 
 import javax.script.ScriptEngine;
@@ -47,7 +48,7 @@ public class CompileCommand extends Command {
 		super(name, usage, description, category);
 	}
 
-	public CompileCommand(String name, String[] aliases, String usage, String description, Category category) {
+	public CompileCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
 		super(name, aliases, usage, description, category);
 	}
 

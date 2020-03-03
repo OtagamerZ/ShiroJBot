@@ -21,6 +21,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.ArrayUtils;
+import org.jetbrains.annotations.NonNls;
 
 import java.security.SecureRandom;
 import java.util.Base64;
@@ -39,7 +40,7 @@ public class TokenCommand extends Command {
 		super(name, usage, description, category);
 	}
 
-	public TokenCommand(String name, String[] aliases, String usage, String description, Category category) {
+	public TokenCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
 		super(name, aliases, usage, description, category);
 	}
 

@@ -23,6 +23,7 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.mysql.TagDAO;
 import com.kuuhaku.model.persistent.Tags;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import javax.persistence.NoResultException;
 
@@ -40,7 +41,7 @@ public class VerifiedTagCommand extends Command {
 		super(name, usage, description, category);
 	}
 
-	public VerifiedTagCommand(String name, String[] aliases, String usage, String description, Category category) {
+	public VerifiedTagCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
 		super(name, aliases, usage, description, category);
 	}
 

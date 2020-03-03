@@ -32,13 +32,12 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
 import org.discordbots.api.client.DiscordBotListAPI;
 
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathFactory;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -66,7 +65,7 @@ public class ShiroInfo {
 	private static final String nomeDB = "shiro.sqlite";
 	private static final String niichan = "350836145921327115"; //KuuHaKu
 	private static final ArrayList<String> developers = new ArrayList<String>() {{
-		add("350836145921327115"); //KuuHaKu
+		add(niichan); //KuuHaKu
 		add("321665807988031495"); //Reydux
 	}};
 	private static final ArrayList<String> editors = new ArrayList<String>() {{
@@ -82,7 +81,6 @@ public class ShiroInfo {
 	private static final JDAEvents shiroEvents = new JDAEvents();
 	private static final Map<String, KittyCache<String, Message>> messageCache = new HashMap<>();
 	private static final GsonBuilder JSONFactory = new GsonBuilder();
-	private static final XPath xPath = XPathFactory.newInstance().newXPath();
 
 	//STATIC CONSTRUCTOR
 	static {
@@ -102,6 +100,10 @@ public class ShiroInfo {
 
 	//CONSTANTS
 	//STATIC
+	public static ResourceBundle getLocale(I18n lang) {
+		return ResourceBundle.getBundle("locale", lang.getLocale());
+	}
+
 	public static void cache(Guild guild, Message message) {
 		KittyCache<String, Message> cache = messageCache.getOrDefault(guild.getId(), new KittyCache<>(64));
 		cache.put(message.getId(), message, (int) TimeUnit.DAYS.toSeconds(1));
@@ -223,10 +225,6 @@ public class ShiroInfo {
 
 	public JDAEvents getShiroEvents() {
 		return shiroEvents;
-	}
-
-	public static XPath getxPath() {
-		return xPath;
 	}
 
 	//VARIABLES

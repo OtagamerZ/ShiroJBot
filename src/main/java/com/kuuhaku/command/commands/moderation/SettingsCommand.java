@@ -23,6 +23,7 @@ import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.Settings;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 public class SettingsCommand extends Command {
 
@@ -38,7 +39,7 @@ public class SettingsCommand extends Command {
 		super(name, usage, description, category);
 	}
 
-	public SettingsCommand(String name, String[] aliases, String usage, String description, Category category) {
+	public SettingsCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
 		super(name, aliases, usage, description, category);
 	}
 

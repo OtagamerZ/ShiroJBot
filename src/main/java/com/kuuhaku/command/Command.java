@@ -18,6 +18,7 @@
 package com.kuuhaku.command;
 
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 public abstract class Command {
 
@@ -27,7 +28,7 @@ public abstract class Command {
 	private final String description;
 	private final Category category;
 
-	protected Command(String name, String description, Category category) {
+	protected Command(@NonNls String name, String description, Category category) {
 		this.name = name;
 		this.aliases = new String[]{};
 		this.usage = null;
@@ -36,7 +37,7 @@ public abstract class Command {
 		this.category.addCommand(this);
 	}
 
-	protected Command(String name, String[] aliases, String description, Category category) {
+	protected Command(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
 		this.name = name;
 		this.aliases = aliases;
 		this.usage = null;
@@ -45,7 +46,7 @@ public abstract class Command {
 		this.category.addCommand(this);
 	}
 
-	protected Command(String name, String usage, String description, Category category) {
+	protected Command(@NonNls String name, String usage, String description, Category category) {
 		this.name = name;
 		this.aliases = new String[]{};
 		this.usage = usage;
@@ -54,7 +55,7 @@ public abstract class Command {
 		this.category.addCommand(this);
 	}
 
-	protected Command(String name, String[] aliases, String usage, String description, Category category) {
+	protected Command(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
 		this.name = name;
 		this.aliases = aliases;
 		this.usage = usage;

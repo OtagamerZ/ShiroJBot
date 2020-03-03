@@ -22,6 +22,7 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.CustomAnswerDAO;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NonNls;
 
 import javax.persistence.NoResultException;
 
@@ -35,7 +36,7 @@ public class RemoveAnswerCommand extends Command {
 		super(name, aliases, description, category);
 	}
 
-	public RemoveAnswerCommand(String name, String usage, String description, Category category) {
+	public RemoveAnswerCommand(@NonNls String name, String usage, String description, Category category) {
 		super(name, usage, description, category);
 	}
 

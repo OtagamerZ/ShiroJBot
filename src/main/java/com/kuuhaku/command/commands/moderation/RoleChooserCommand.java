@@ -26,6 +26,7 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NonNls;
 
 public class RoleChooserCommand extends Command {
 
@@ -41,7 +42,7 @@ public class RoleChooserCommand extends Command {
 		super(name, usage, description, category);
 	}
 
-	public RoleChooserCommand(String name, String[] aliases, String usage, String description, Category category) {
+	public RoleChooserCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
 		super(name, aliases, usage, description, category);
 	}
 

@@ -23,6 +23,7 @@ import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.persistent.GuildConfig;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NonNls;
 
 public class AntispamCommand extends Command {
 
@@ -38,7 +39,7 @@ public class AntispamCommand extends Command {
 		super(name, usage, description, category);
 	}
 
-	public AntispamCommand(String name, String[] aliases, String usage, String description, Category category) {
+	public AntispamCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
 		super(name, aliases, usage, description, category);
 	}
 

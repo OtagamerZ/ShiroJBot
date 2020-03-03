@@ -28,6 +28,7 @@ import com.kuuhaku.utils.TagIcons;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import java.io.IOException;
 
@@ -37,7 +38,7 @@ public class MyTagsCommand extends Command {
 		super(name, description, category);
 	}
 
-	public MyTagsCommand(String name, String[] aliases, String description, Category category) {
+	public MyTagsCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
 		super(name, aliases, description, category);
 	}
 

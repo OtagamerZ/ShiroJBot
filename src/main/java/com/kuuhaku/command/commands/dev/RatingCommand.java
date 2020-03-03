@@ -27,6 +27,7 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.PermissionException;
+import org.jetbrains.annotations.NonNls;
 
 import java.io.File;
 import java.util.LinkedHashMap;
@@ -41,7 +42,7 @@ public class RatingCommand extends Command {
 		super(name, description, category);
 	}
 
-	public RatingCommand(String name, String[] aliases, String description, Category category) {
+	public RatingCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
 		super(name, aliases, description, category);
 	}
 
