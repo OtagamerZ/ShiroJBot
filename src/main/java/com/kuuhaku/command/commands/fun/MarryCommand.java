@@ -26,6 +26,7 @@ import com.kuuhaku.events.WaifuListener;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
+import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import javax.persistence.NoResultException;
@@ -34,8 +35,21 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class MarryCommand extends Command {
-	public MarryCommand() {
-		super("casar", new String[]{"declarar", "marry"}, "<@usuário>", "Pede um usuário em casamento. Isso lhe dará um bônus de XP quando estiver no mesmo servidor que ela/ele.", Category.FUN);
+
+	public MarryCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public MarryCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public MarryCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public MarryCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

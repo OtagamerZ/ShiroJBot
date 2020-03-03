@@ -22,14 +22,27 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import java.awt.*;
 import java.io.IOException;
 
 public class EquippedCommand extends Command {
 
-	public EquippedCommand() {
-		super("requipados", new String[]{"requipped"}, "Mostra os itens equipados.", Category.RPG);
+	public EquippedCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public EquippedCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public EquippedCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public EquippedCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

@@ -21,6 +21,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,8 +29,20 @@ import java.awt.*;
 
 public class EmbedCommand extends Command {
 
-	public EmbedCommand() {
-		super("embed", "<JSON>", "Cria um embed. Os campos do JSON são `title`, `color`, `thumbnail`, `body`, `fields[name, value]` e `footer`", Category.MISC);
+	public EmbedCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public EmbedCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public EmbedCommand(@NonNls String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public EmbedCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

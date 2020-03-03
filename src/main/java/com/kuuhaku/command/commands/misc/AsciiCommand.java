@@ -23,13 +23,26 @@ import net.dv8tion.jda.api.entities.*;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.jetbrains.annotations.NonNls;
 
 import java.io.IOException;
 
 public class AsciiCommand extends Command {
 
-	public AsciiCommand() {
-		super("ascii", "<texto>", "Converte o texto fornecido em ascii.", Category.MISC);
+	public AsciiCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public AsciiCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public AsciiCommand(@NonNls String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public AsciiCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

@@ -21,11 +21,24 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 public class LinkTesterCommand extends Command {
 
-	public LinkTesterCommand() {
-		super("link", new String[]{"try"}, "<link>", "Testa um link para ver se ele consegue burlar a detecção de links.", Category.MISC);
+	public LinkTesterCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public LinkTesterCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public LinkTesterCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public LinkTesterCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

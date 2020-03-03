@@ -20,14 +20,27 @@ package com.kuuhaku.command.commands.misc;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class FlipCoinCommand extends Command {
 
-	public FlipCoinCommand() {
-		super("flipcoin", new String[] {"caracoroa", "headstails"}, "Lança uma moeda ao ar. (Cara-ou-Coroa)", Category.MISC);
+	public FlipCoinCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public FlipCoinCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public FlipCoinCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public FlipCoinCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

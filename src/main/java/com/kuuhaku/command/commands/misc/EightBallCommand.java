@@ -20,13 +20,26 @@ package com.kuuhaku.command.commands.misc;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.Random;
 
 public class EightBallCommand extends Command {
 
-	public EightBallCommand() {
-		super("8ball", "<pergunta>", "Faz uma pergunta de sim ou não à Shiro.", Category.MISC);
+	public EightBallCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public EightBallCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public EightBallCommand(@NonNls String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public EightBallCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

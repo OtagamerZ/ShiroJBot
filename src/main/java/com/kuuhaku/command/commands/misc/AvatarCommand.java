@@ -22,14 +22,27 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import java.io.IOException;
 
 
 public class AvatarCommand extends Command {
 
-	public AvatarCommand() {
-		super("avatar", "<@usuário/guild>", "Dá-lhe o seu avatar ou então o avatar da pessoa mencionada. Para pegar o ícone do servidor digite apenas guild no lugar da menção.", Category.MISC);
+	public AvatarCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public AvatarCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public AvatarCommand(@NonNls String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public AvatarCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

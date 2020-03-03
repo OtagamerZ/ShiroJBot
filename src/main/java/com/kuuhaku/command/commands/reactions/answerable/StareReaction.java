@@ -21,11 +21,12 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.commands.reactions.Reaction;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 public class StareReaction extends Reaction {
 
-	public StareReaction() {
-		super("encarar", new String[]{"shiii", "stare", "..."}, "Encara alguém.", true, "stare");
+	public StareReaction(@NonNls String name, @NonNls String[] aliases, String description, boolean answerable, @NonNls String type) {
+		super(name, aliases, description, answerable, type);
 	}
 
 	@Override

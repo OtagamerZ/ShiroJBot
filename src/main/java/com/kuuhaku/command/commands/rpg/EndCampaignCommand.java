@@ -22,11 +22,24 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.mysql.CampaignDAO;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 public class EndCampaignCommand extends Command {
 
-	public EndCampaignCommand() {
-		super("rfimdejogo", new String[]{"rendcampaign", "rgameover"}, "Finaliza a campanha ativa no servidor.", Category.RPG);
+	public EndCampaignCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public EndCampaignCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public EndCampaignCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public EndCampaignCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

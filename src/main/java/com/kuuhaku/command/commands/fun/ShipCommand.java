@@ -23,6 +23,7 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -35,8 +36,20 @@ import java.util.Random;
 
 public class ShipCommand extends Command {
 
-	public ShipCommand() {
-		super("ship", new String[]{"shippar"}, "<@usuário 1> <@usuário 2>", "Mede o nível de love entre duas pessoas.", Category.FUN);
+	public ShipCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public ShipCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public ShipCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public ShipCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

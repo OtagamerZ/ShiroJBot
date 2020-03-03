@@ -21,6 +21,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -28,8 +29,20 @@ import java.io.IOException;
 
 public class ValidateGIFCommand extends Command {
 
-	public ValidateGIFCommand() {
-		super("validate", new String[]{"testgif", "tgif"}, "<link>", "Testa se as dimensões da GIF são recomendadas para o uso em reações.", Category.MISC);
+	public ValidateGIFCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public ValidateGIFCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public ValidateGIFCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public ValidateGIFCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

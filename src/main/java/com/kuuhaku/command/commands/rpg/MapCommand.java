@@ -22,13 +22,26 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import java.io.IOException;
 
 public class MapCommand extends Command {
 
-	public MapCommand() {
-		super("rmapa", new String[]{"rmap"}, "Vê o mapa atual.", Category.RPG);
+	public MapCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public MapCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public MapCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public MapCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

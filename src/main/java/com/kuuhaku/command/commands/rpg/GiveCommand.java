@@ -28,13 +28,26 @@ import com.kuuhaku.handlers.games.rpg.exceptions.UnknownItemException;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.ArrayUtils;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.Arrays;
 
 public class GiveCommand extends Command {
 
-	public GiveCommand() {
-		super("rdar", new String[]{"rgive"}, "<@usuário> <item/ouro/xp> [qtd de ouro/xp]", "Dá um item, dinheiro ou xp à outro jogador.", Category.RPG);
+	public GiveCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public GiveCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public GiveCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public GiveCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override
