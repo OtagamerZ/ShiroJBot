@@ -22,11 +22,24 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.handlers.games.rpg.handlers.ItemRegisterHandler;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 public class NewItemCommand extends Command {
 
-	public NewItemCommand() {
-		super("rnovoitem", new String[]{"rnewitem"}, "Inicia o cadastro de um novo item.", Category.RPG);
+	public NewItemCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public NewItemCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public NewItemCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public NewItemCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

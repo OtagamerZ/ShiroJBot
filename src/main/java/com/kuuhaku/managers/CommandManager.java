@@ -20,6 +20,7 @@ see <https://www.gnu.org/licenses/>
 
 package com.kuuhaku.managers;
 
+import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.dev.*;
 import com.kuuhaku.command.commands.exceed.ExceedRankCommand;
@@ -49,6 +50,10 @@ public class CommandManager {
 	private static final String REQ_NAME = "req_name";
 	private static final String REQ_SERVER_ID = "req_server-id";
 	private static final String REQ_MENTION_REASON = "req_mention-reason";
+	private static final String REQ_TEXT = "req_text";
+	private static final String REQ_LINK = "req_link";
+	private static final String REQ_QUESTION = "req_question";
+	private static final String REQ_TWO_OPTIONS = "req_two-options";
 	private final List<Command> commands;
 
 	public CommandManager() {
@@ -176,59 +181,151 @@ public class CommandManager {
 
 			//MISC
 			add(new BackgroundCommand(
-					"background", new String[]{"fundo", "bg"}, getLocale(PT).getString("req_link"), getLocale(PT).getString("cmd_background"), MISC));
+					"background", new String[]{"fundo", "bg"}, getLocale(PT).getString(REQ_LINK), getLocale(PT).getString("cmd_background"), MISC));
 			add(new BiographyCommand(
 					"bio", new String[]{"story", "desc"}, getLocale(PT).getString(REQ_MESSAGE), getLocale(PT).getString("cmd_biography"), MISC));
-			add(new AsciiCommand());
-			add(new AvatarCommand());
-			add(new FlipCoinCommand());
-			add(new ReverseCommand());
-			add(new SayCommand());
-			add(new CustomAnswerCommand());
-			add(new AnimeCommand());
-			add(new ImageCommand());
-			add(new ValidateGIFCommand());
-			add(new EmbedCommand());
-			add(new PollCommand());
-			add(new TheAnswerCommand());
-			add(new BinaryCommand());
-			add(new LinkTesterCommand());
-			add(new VoteCommand());
-			add(new TranslateCommand());
-			add(new EightBallCommand());
-			add(new ChooseCommand());
+			add(new AsciiCommand(
+					"ascii", getLocale(PT).getString(REQ_TEXT), getLocale(PT).getString("cmd_ascii"), MISC
+			));
+			add(new AvatarCommand(
+					"avatar", getLocale(PT).getString("req_mention-guild"), getLocale(PT).getString("cmd_avatar"), MISC
+			));
+			add(new FlipCoinCommand(
+					"flipcoin", new String[]{"caracoroa", "headstails"}, getLocale(PT).getString("cmd_heads-tails"), MISC
+			));
+			add(new ReverseCommand(
+					"reverse", new String[]{"inverter"}, getLocale(PT).getString(REQ_TEXT), getLocale(PT).getString("cmd_reverse"), MISC
+			));
+			add(new SayCommand(
+					"say", new String[]{"diga", "repetir"}, getLocale(PT).getString(REQ_MESSAGE), getLocale(PT).getString("cmd_repeat"), MISC
+			));
+			add(new CustomAnswerCommand(
+					"fale", getLocale(PT).getString("req_trigger-response"), getLocale(PT).getString("cmd_custom-answer"), MISC
+			));
+			add(new AnimeCommand(
+					"anime", new String[]{"desenho", "cartoon"}, getLocale(PT).getString(REQ_NAME), getLocale(PT).getString("cmd_anime"), INFO
+			));
+			add(new ImageCommand(
+					"image", new String[]{"imagem", "img"}, getLocale(PT).getString("req_tags"), getLocale(PT).getString("cmd_image"), INFO
+			));
+			add(new ValidateGIFCommand(
+					"validate", new String[]{"testgif", "tgif"}, getLocale(PT).getString(REQ_LINK), getLocale(PT).getString("cmd_dimension-test"), MISC
+			));
+			add(new EmbedCommand(
+					"embed", getLocale(PT).getString("req_json"), getLocale(PT).getString("cmd_embed"), MISC
+			));
+			add(new PollCommand(
+					"enquete", new String[]{"poll"}, getLocale(PT).getString(REQ_QUESTION), getLocale(PT).getString("cmd_poll"), MISC
+			));
+			add(new TheAnswerCommand(
+					"arespostaé", new String[]{"theansweris", "responder", "answer"}, getLocale(PT).getString("cmd_rules"), MISC
+			));
+			add(new BinaryCommand(
+					"bin", getLocale(PT).getString(REQ_TEXT), getLocale(PT).getString("cmd_binary"), MISC
+			));
+			add(new LinkTesterCommand(
+					"link", new String[]{"try"}, getLocale(PT).getString(REQ_LINK), getLocale(PT).getString("cmd_link-test"), MISC
+			));
+			add(new VoteCommand(
+					"votar", new String[]{"vote"}, getLocale(PT).getString("req_mention-positive-negative"), getLocale(PT).getString("cmd_vote"), MISC
+			));
+			add(new TranslateCommand(
+					"traduzir", new String[]{"translate", "traduza", "trad"}, getLocale(PT).getString("req_from-to-text"), getLocale(PT).getString("cmd_translate"), MISC
+			));
+			add(new EightBallCommand(
+					"8ball", getLocale(PT).getString(REQ_QUESTION), getLocale(PT).getString("cmd_8ball"), MISC
+			));
+			add(new ChooseCommand(
+					"escolha", new String[]{"choose"}, getLocale(PT).getString("req_options"), getLocale(PT).getString("cmd_choose"), MISC
+			));
 			add(new ColorRoleCommand(
 					"cor", new String[]{"color"}, getLocale(PT).getString(REQ_NAME), getLocale(PT).getString("cmd_color-role"), MISC));
 
 			//FUN
-			add(new SadButTrueCommand());
-			add(new HardDecisionCommand());
-			add(new ExpandingBrainCommand());
-			add(new PPTCommand());
-			add(new ShipCommand());
-			add(new MarryCommand());
-			add(new StonksCommand());
-			add(new StinksCommand());
-			add(new DrakeCommand());
-			add(new SpiderManCommand());
-			add(new PixelCanvasCommand());
-			add(new PixelChunkCommand());
-			add(new DivorceCommand());
-			add(new SlotsCommand());
-			add(new HugReaction());
-			add(new KissReaction());
-			add(new PatReaction());
-			add(new StareReaction());
-			add(new SlapReaction());
-			add(new PunchReaction());
-			add(new BiteReaction());
-			add(new BlushReaction());
-			add(new CryReaction());
-			add(new DanceReaction());
-			add(new FacedeskReaction());
-			add(new LaughReaction());
-			add(new NopeReaction());
-			add(new RunReaction());
+			add(new SadButTrueCommand(
+					"tristemasverdade", new String[]{"tmv", "sadbuttrue", "sbt"}, getLocale(PT).getString("req_truth"), getLocale(PT).getString("cmd_sad-but-true"), FUN
+			));
+			add(new HardDecisionCommand(
+					"doisbotoes", new String[]{"tb", "twobuttons", "buttons"}, getLocale(PT).getString(REQ_TWO_OPTIONS), getLocale(PT).getString("cmd_two-buttons"), Category.FUN
+			));
+			add(new ExpandingBrainCommand(
+					"menteexpandida", new String[]{"eb", "expandingbrain", "brain"}, getLocale(PT).getString("req_four-options"), getLocale(PT).getString("cmd_expanded-brain"), Category.FUN
+			));
+			add(new PPTCommand(
+					"jankenpon", new String[]{"ppt", "rps", "jokenpo", "janken"}, getLocale(PT).getString("req_jakenpon"), getLocale(PT).getString("cmd_jankenpon"), Category.FUN
+			));
+			add(new ShipCommand(
+					"ship", new String[]{"shippar"}, getLocale(PT).getString("req_two-mentions"), getLocale(PT).getString("cmd_ship"), Category.FUN
+			));
+			add(new MarryCommand(
+					"casar", new String[]{"declarar", "marry"}, getLocale(PT).getString(REQ_MENTION), getLocale(PT).getString("cmd_marry"), Category.FUN
+			));
+			add(new StonksCommand(
+					"stonks", new String[]{"stks"}, getLocale(PT).getString(REQ_TEXT), getLocale(PT).getString("cmd_stonks"), Category.FUN
+			));
+			add(new StinksCommand(
+					"stinks", new String[]{"notstks"}, getLocale(PT).getString(REQ_TEXT), getLocale(PT).getString("cmd_stinks"), Category.FUN
+			));
+			add(new DrakeCommand(
+					"drake", new String[]{"drk"}, getLocale(PT).getString(REQ_TWO_OPTIONS), getLocale(PT).getString("cmd_drake"), Category.FUN
+			));
+			add(new SpiderManCommand(
+					"homemaranha", new String[]{"spiderman", "spoda", "miranha"}, getLocale(PT).getString(REQ_TEXT), getLocale(PT).getString("cmd_spider-man"), Category.FUN
+			));
+			add(new PixelCanvasCommand(
+					"canvas", new String[]{"pixel", "pixelcanvas"}, getLocale(PT).getString("req_x-y-color"), getLocale(PT).getString("cmd_canvas"), Category.FUN
+			));
+			add(new PixelChunkCommand(
+					"chunk", new String[]{"zone", "pixelchunk"}, getLocale(PT).getString("req_zone-x-y-color"), getLocale(PT).getString("cmd_canvas-chunk"), Category.FUN
+			));
+			add(new DivorceCommand(
+					"divorciar", new String[]{"separar", "divorce"}, getLocale(PT).getString("cmd_divorce"), Category.FUN
+			));
+			add(new SlotsCommand(
+					"slots", new String[]{"roleta"}, getLocale(PT).getString("req_bet"), getLocale(PT).getString("cmd_slots"), Category.MISC
+			));
+			add(new HugReaction(
+					"abraçar", new String[]{"abracar", "hug", "vemca"}, getLocale(PT).getString("cmd_hug"), true, "hug"
+			));
+			add(new KissReaction(
+					"beijar", new String[]{"beijo", "kiss", "smac"}, getLocale(PT).getString("cmd_kiss"), true, "kiss"
+			));
+			add(new PatReaction(
+					"cafuné", new String[]{"cafunhé", "pat", "cafu"}, getLocale(PT).getString("cmd_pat"), true, "pat"
+			));
+			add(new StareReaction(
+					"encarar", new String[]{"shiii", "stare", "..."}, getLocale(PT).getString("cmd_stare"), true, "stare"
+			));
+			add(new SlapReaction(
+					"estapear", new String[]{"tapa", "slap", "baka"}, getLocale(PT).getString("cmd_slap"), true, "slap"
+			));
+			add(new PunchReaction(
+					"socar", new String[]{"chega", "tomaessa", "punch"}, getLocale(PT).getString("cmd_punch"), true, "smash"
+			));
+			add(new BiteReaction(
+					"morder", new String[]{"moider", "bite", "moide"}, getLocale(PT).getString("cmd_bite"), true, "bite"
+			));
+			add(new BlushReaction(
+					"vergonha", new String[]{"n-nani", "blush", "pft"}, getLocale(PT).getString("cmd_blush"), false, "blush"
+			));
+			add(new CryReaction(
+					"chorar", new String[]{"buaa", "cry", "sadboy"}, getLocale(PT).getString("cmd_cry"), false, "sad"
+			));
+			add(new DanceReaction(
+					"dançar", new String[]{"dancar", "dance", "tuts"}, getLocale(PT).getString("cmd_dance"), false, "dance"
+			));
+			add(new FacedeskReaction(
+					"facedesk", new String[]{"mds", "ahnão", "nss"}, getLocale(PT).getString("cmd_facedesk"), false, "facedesk"
+			));
+			add(new LaughReaction(
+					"rir", new String[]{"kkk", "laugh", "aiai"}, getLocale(PT).getString("cmd_laugh"), false, "laugh"
+			));
+			add(new NopeReaction(
+					"nope", new String[]{"sqn", "hojenão", "esquiva"}, getLocale(PT).getString("cmd_nope"), false, "nope"
+			));
+			add(new RunReaction(
+					"corre", new String[]{"saisai", "run", "foge"}, getLocale(PT).getString("cmd_run"), false, "run"
+			));
 
 			//MUSICA
 			add(new MusicCommand(

@@ -22,11 +22,24 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.handlers.games.rpg.exceptions.UnknownItemException;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 public class ViewCommand extends Command {
 
-	public ViewCommand() {
-		super("rver", new String[]{"rinfo"}, "<item>", "Vê a descrição de um item", Category.RPG);
+	public ViewCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public ViewCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public ViewCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public ViewCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

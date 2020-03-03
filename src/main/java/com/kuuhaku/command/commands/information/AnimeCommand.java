@@ -24,14 +24,27 @@ import com.kuuhaku.model.common.Anime;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 import org.json.JSONObject;
 
 import java.io.IOException;
 
 public class AnimeCommand extends Command {
 
-	public AnimeCommand() {
-		super("anime", new String[]{"desenho", "cartoon"}, "<nome>", "Mostra dados sobre um anime.", Category.INFO);
+	public AnimeCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public AnimeCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public AnimeCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public AnimeCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

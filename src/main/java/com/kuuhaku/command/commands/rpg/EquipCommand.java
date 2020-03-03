@@ -22,11 +22,24 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.handlers.games.rpg.entities.Equipped;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 public class EquipCommand extends Command {
 
-	public EquipCommand() {
-		super("requipar", new String[]{"requip"}, "<item>", "Equipa um item do inventário.", Category.RPG);
+	public EquipCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public EquipCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public EquipCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public EquipCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

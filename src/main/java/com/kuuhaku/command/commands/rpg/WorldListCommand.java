@@ -21,11 +21,24 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 public class WorldListCommand extends Command {
 
-	public WorldListCommand() {
-		super("rlista", new String[]{"rlist"}, "Mostra a lista de cadastros. Os tipos são **player**, **monster**, **item** ou **bau**.", Category.RPG);
+	public WorldListCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public WorldListCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public WorldListCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public WorldListCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

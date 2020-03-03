@@ -27,13 +27,26 @@ import com.kuuhaku.handlers.games.rpg.enums.Resource;
 import com.kuuhaku.handlers.games.rpg.exceptions.UnknownItemException;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.Arrays;
 
 public class TakeCommand extends Command {
 
-	public TakeCommand() {
-		super("rtirar", new String[]{"rpegar"}, "<@usuário> <item/ouro> [qtd de ouro]", "Tira um item ou dinheiro de outro jogador.", Category.RPG);
+	public TakeCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public TakeCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public TakeCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public TakeCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

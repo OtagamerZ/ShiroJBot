@@ -23,11 +23,24 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.handlers.games.rpg.actors.Actor;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NonNls;
 
 public class AttackCommand extends Command {
 
-	public AttackCommand() {
-		super("ratacar", new String[]{"rattack", "rdamage", "rdmg"}, "<@usuário>", "Causa dano ou cura um jogador.", Category.RPG);
+	public AttackCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public AttackCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public AttackCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public AttackCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

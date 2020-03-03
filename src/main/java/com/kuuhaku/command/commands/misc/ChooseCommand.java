@@ -20,13 +20,26 @@ package com.kuuhaku.command.commands.misc;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.Random;
 
 public class ChooseCommand extends Command {
 
-	public ChooseCommand() {
-		super("escolha", new String[]{"choose"}, "<opção 1;opção 2;...>", "Pede para a Shiro escolher uma das opções informadas. (Opções separadas por ponto-e-vírgula)", Category.MISC);
+	public ChooseCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public ChooseCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public ChooseCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public ChooseCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

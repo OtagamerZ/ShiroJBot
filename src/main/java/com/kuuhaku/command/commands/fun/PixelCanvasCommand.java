@@ -24,6 +24,7 @@ import com.kuuhaku.controller.mysql.CanvasDAO;
 import com.kuuhaku.model.persistent.PixelCanvas;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NonNls;
 
 import java.awt.*;
 
@@ -31,8 +32,20 @@ import static com.kuuhaku.utils.Helper.CANVAS_SIZE;
 
 public class PixelCanvasCommand extends Command {
 
-	public PixelCanvasCommand() {
-		super("canvas", new String[]{"pixel", "pixelcanvas"}, "[<X>;<Y>;<#cor>]", "Adiciona um pixel da cor selecionada no canvas.", Category.FUN);
+	public PixelCanvasCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public PixelCanvasCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public PixelCanvasCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public PixelCanvasCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

@@ -21,11 +21,24 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 public class BagCommand extends Command {
 
-	public BagCommand() {
-		super("rbolsa", new String[]{"rbag"}, "Abre a mochila de seu personagem.", Category.RPG);
+	public BagCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public BagCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public BagCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public BagCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

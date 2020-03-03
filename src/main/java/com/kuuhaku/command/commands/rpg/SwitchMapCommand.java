@@ -21,11 +21,24 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 public class SwitchMapCommand extends Command {
 
-	public SwitchMapCommand() {
-		super("raomapa", new String[]{"rtrocarmapa", "rtomap"}, "<índice>", "Muda de mapa.", Category.RPG);
+	public SwitchMapCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public SwitchMapCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public SwitchMapCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public SwitchMapCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

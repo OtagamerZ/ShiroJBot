@@ -24,14 +24,27 @@ import com.kuuhaku.handlers.games.rpg.Utils;
 import com.kuuhaku.handlers.games.rpg.actors.Actor;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import java.io.IOException;
 import java.util.Arrays;
 
 public class MoveCommand extends Command {
 
-	public MoveCommand() {
-		super("rmover", new String[]{"rmove"}, "<XY>", "Move seu personagem 1 coordenada em qualquer direção.", Category.RPG);
+	public MoveCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public MoveCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public MoveCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public MoveCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

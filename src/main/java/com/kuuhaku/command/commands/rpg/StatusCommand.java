@@ -21,11 +21,24 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 public class StatusCommand extends Command {
 
-	public StatusCommand() {
-		super("rperfil", new String[]{"rprofile", "rstatus"}, "Mostra a ficha do seu personagem.", Category.RPG);
+	public StatusCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public StatusCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public StatusCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public StatusCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

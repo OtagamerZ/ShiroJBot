@@ -21,6 +21,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -30,8 +31,20 @@ import java.util.Objects;
 
 public class StinksCommand extends Command {
 
-	public StinksCommand() {
-		super("stinks", new String[]{"notstks"}, "<texto>", "Gera um meme no formato \"Stinks\"", Category.FUN);
+	public StinksCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public StinksCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public StinksCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public StinksCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override
