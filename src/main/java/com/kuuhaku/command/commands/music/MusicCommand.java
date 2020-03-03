@@ -23,6 +23,7 @@ import com.kuuhaku.utils.Music;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NonNls;
 
 public class MusicCommand extends Command {
 
@@ -30,7 +31,7 @@ public class MusicCommand extends Command {
 		super(name, description, category);
 	}
 
-	public MusicCommand(String name, String[] aliases, String description, Category category) {
+	public MusicCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
 		super(name, aliases, description, category);
 	}
 

@@ -21,13 +21,14 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
 public class UptimeCommand extends Command {
 
-	public UptimeCommand(String name, String description, Category category) {
+	public UptimeCommand(@NonNls String name, String description, Category category) {
 		super(name, description, category);
 	}
 

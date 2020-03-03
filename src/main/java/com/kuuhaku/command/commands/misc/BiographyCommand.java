@@ -21,6 +21,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 public class BiographyCommand extends Command {
 
@@ -36,7 +37,7 @@ public class BiographyCommand extends Command {
 		super(name, usage, description, category);
 	}
 
-	public BiographyCommand(String name, String[] aliases, String usage, String description, Category category) {
+	public BiographyCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
 		super(name, aliases, usage, description, category);
 	}
 

@@ -25,6 +25,7 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NonNls;
 
 public class GatekeeperCommand extends Command {
 
@@ -40,7 +41,7 @@ public class GatekeeperCommand extends Command {
 		super(name, usage, description, category);
 	}
 
-	public GatekeeperCommand(String name, String[] aliases, String usage, String description, Category category) {
+	public GatekeeperCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
 		super(name, aliases, usage, description, category);
 	}
 

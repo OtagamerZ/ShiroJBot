@@ -20,12 +20,13 @@ package com.kuuhaku.command.commands.dev;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import java.io.File;
 
 public class LogCommand extends Command {
 
-	public LogCommand(String name, String description, Category category) {
+	public LogCommand(@NonNls String name, String description, Category category) {
 		super(name, description, category);
 	}
 

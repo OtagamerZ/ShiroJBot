@@ -22,6 +22,7 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import java.io.IOException;
 
@@ -31,7 +32,7 @@ public class RegenRulesCommand extends Command {
 		super(name, description, category);
 	}
 
-	public RegenRulesCommand(String name, String[] aliases, String description, Category category) {
+	public RegenRulesCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
 		super(name, aliases, description, category);
 	}
 

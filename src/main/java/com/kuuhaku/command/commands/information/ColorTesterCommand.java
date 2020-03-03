@@ -22,6 +22,7 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -43,7 +44,7 @@ public class ColorTesterCommand extends Command {
 		super(name, usage, description, category);
 	}
 
-	public ColorTesterCommand(String name, String[] aliases, String usage, String description, Category category) {
+	public ColorTesterCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
 		super(name, aliases, usage, description, category);
 	}
 

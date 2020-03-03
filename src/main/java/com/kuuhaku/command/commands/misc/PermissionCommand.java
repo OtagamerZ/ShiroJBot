@@ -21,6 +21,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 public class PermissionCommand extends Command {
 
@@ -28,7 +29,7 @@ public class PermissionCommand extends Command {
 		super(name, description, category);
 	}
 
-	public PermissionCommand(String name, String[] aliases, String description, Category category) {
+	public PermissionCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
 		super(name, aliases, description, category);
 	}
 

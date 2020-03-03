@@ -22,10 +22,11 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.persistent.GuildConfig;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 public class AllowCommunityCommand extends Command {
 
-	public AllowCommunityCommand(String name, String description, Category category) {
+	public AllowCommunityCommand(@NonNls String name, String description, Category category) {
 		super(name, description, category);
 	}
 

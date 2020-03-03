@@ -22,6 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -40,7 +41,7 @@ public class ReportUserCommand extends Command {
 		super(name, usage, description, category);
 	}
 
-	public ReportUserCommand(String name, String[] aliases, String usage, String description, Category category) {
+	public ReportUserCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
 		super(name, aliases, usage, description, category);
 	}
 

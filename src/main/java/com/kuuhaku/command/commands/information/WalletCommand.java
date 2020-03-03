@@ -24,6 +24,7 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 public class WalletCommand extends Command {
 
@@ -31,7 +32,7 @@ public class WalletCommand extends Command {
 		super(name, description, category);
 	}
 
-	public WalletCommand(String name, String[] aliases, String description, Category category) {
+	public WalletCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
 		super(name, aliases, description, category);
 	}
 

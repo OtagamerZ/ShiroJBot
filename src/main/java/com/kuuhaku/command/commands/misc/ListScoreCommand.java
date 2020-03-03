@@ -21,6 +21,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.mysql.VotesDAO;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 public class ListScoreCommand extends Command {
 
@@ -28,7 +29,7 @@ public class ListScoreCommand extends Command {
 		super(name, description, category);
 	}
 
-	public ListScoreCommand(String name, String[] aliases, String description, Category category) {
+	public ListScoreCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
 		super(name, aliases, description, category);
 	}
 
