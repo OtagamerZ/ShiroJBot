@@ -116,9 +116,9 @@ public class ComandosCommand extends Command {
 			ceb.setThumbnail(Objects.requireNonNull(Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById("684039810079522846")).getImageUrl()));
 
 			ceb.addField(Helper.VOID, "Você pode usar emotes de qualquer servidor que a Shiro participe, basta digitar `e:` antes da mensagem, e `&` antes do nome do emote.", false);
-			ceb.addField(Helper.VOID, "Os botões que aparecem em alguns comandos, como estes abaixo, são feitos usando uma biblioteca aberta de paginação escrita pelo meu Nii-chan.", false);
-			ceb.addField(Helper.VOID, "Membros que tenham uma waifu (usando o comando `" + prefix + "marry`) recebem 25% mais experiência quando no mesmo servidor que a/o waifu.", false);
-			ceb.addField(Helper.VOID, "Todo começo de mês, o membros do exceed vitorioso recebem 2x mais experiência por uma semana.", false);
+			ceb.addField(Helper.VOID, "Os botões que aparecem em alguns comandos, como estes abaixo, são feitos usando uma biblioteca aberta de paginação escrita pelo meu Nii-chan. Você pode usá-la se quiser!", false);
+			ceb.addField(Helper.VOID, "Membros que tenham uma waifu (usando o comando `" + prefix + "marry`) recebem 25% mais experiência quando no mesmo servidor que a/o waifu. Cada divórcio reduz permanentemente esse bônus!", false);
+			ceb.addField(Helper.VOID, "Todo começo de mês, os membros do exceed vitorioso recebem 2x mais experiência por uma semana.", false);
 
 			pages.put("684039810079522846", new Page(PageType.EMBED, ceb.build()));
 
