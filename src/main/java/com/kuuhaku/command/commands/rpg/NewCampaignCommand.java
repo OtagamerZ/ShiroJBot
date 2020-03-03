@@ -24,11 +24,24 @@ import com.kuuhaku.handlers.games.rpg.world.World;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.PrivilegeLevel;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 public class NewCampaignCommand extends Command {
 
-	public NewCampaignCommand() {
-		super("rnovacampanha", new String[]{"rnewcampaign", "rnewgame"}, "Abre uma nova campanha de RPG no servidor.", Category.RPG);
+	public NewCampaignCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public NewCampaignCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public NewCampaignCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public NewCampaignCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

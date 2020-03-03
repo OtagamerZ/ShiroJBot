@@ -22,6 +22,7 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -32,8 +33,20 @@ import java.util.Objects;
 
 public class ExpandingBrainCommand extends Command {
 
-	public ExpandingBrainCommand() {
-		super("menteexpandida", new String[]{"eb", "expandingbrain", "brain"}, "<opção 1>;<opção 2>;<opção 3>;<opção 4>", "Gera um meme no formato \"Mente Expandida\"", Category.FUN);
+	public ExpandingBrainCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public ExpandingBrainCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public ExpandingBrainCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public ExpandingBrainCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

@@ -24,11 +24,24 @@ import com.kuuhaku.handlers.games.rpg.Utils;
 import com.kuuhaku.handlers.games.rpg.actors.Actor;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 public class RollCommand extends Command {
 
-	public RollCommand() {
-		super("rrolar", new String[]{"rdado"}, "<função de dados>", "Rola um ou mais dados seguindo o padrão D&D.", Category.RPG);
+	public RollCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public RollCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public RollCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public RollCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

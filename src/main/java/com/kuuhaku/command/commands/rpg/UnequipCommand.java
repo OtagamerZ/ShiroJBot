@@ -22,11 +22,24 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.handlers.games.rpg.entities.Equipped;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 public class UnequipCommand extends Command {
 
-	public UnequipCommand() {
-		super("rdesequipar", new String[]{"runequip"}, "<item>", "Desequipa um item.", Category.RPG);
+	public UnequipCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public UnequipCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public UnequipCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public UnequipCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

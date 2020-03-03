@@ -22,13 +22,26 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.mysql.TagDAO;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import javax.persistence.NoResultException;
 
 public class TheAnswerCommand extends Command {
 
-	public TheAnswerCommand() {
-		super("arespostaé", new String[]{"theansweris", "responder", "answer"}, "Leu as regras?", Category.MISC);
+	public TheAnswerCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public TheAnswerCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public TheAnswerCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public TheAnswerCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

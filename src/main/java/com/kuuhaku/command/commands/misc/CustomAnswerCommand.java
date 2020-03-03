@@ -32,6 +32,7 @@ import com.kuuhaku.utils.PrivilegeLevel;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,8 +40,20 @@ import java.util.concurrent.TimeUnit;
 
 public class CustomAnswerCommand extends Command {
 
-	public CustomAnswerCommand() {
-		super("fale", "<gatilho>;<resposta>", "Configura uma resposta para o gatilho (frase) especificado.", Category.MISC);
+	public CustomAnswerCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public CustomAnswerCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public CustomAnswerCommand(@NonNls String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public CustomAnswerCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

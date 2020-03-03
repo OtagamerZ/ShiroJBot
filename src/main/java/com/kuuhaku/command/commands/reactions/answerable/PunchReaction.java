@@ -21,11 +21,12 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.commands.reactions.Reaction;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 public class PunchReaction extends Reaction {
 
-	public PunchReaction() {
-		super("socar", new String[]{"chega", "tomaessa", "punch"}, "Soca alguém.", true, "smash");
+	public PunchReaction(@NonNls String name, @NonNls String[] aliases, String description, boolean answerable, @NonNls String type) {
+		super(name, aliases, description, answerable, type);
 	}
 
 	@Override

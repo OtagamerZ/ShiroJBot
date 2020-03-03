@@ -20,11 +20,24 @@ package com.kuuhaku.command.commands.misc;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 public class BinaryCommand extends Command {
 
-	public BinaryCommand() {
-		super("bin", "<texto>", "Transforma uma frase ou texto em binário", Category.MISC);
+	public BinaryCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public BinaryCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public BinaryCommand(@NonNls String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public BinaryCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

@@ -20,11 +20,24 @@ package com.kuuhaku.command.commands.misc;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 public class ReverseCommand extends Command {
 
-	public ReverseCommand() {
-		super("reverse", new String[] {"inverter"}, "<texto>", "Inverte o texto fornecido.", Category.MISC);
+	public ReverseCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public ReverseCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public ReverseCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public ReverseCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

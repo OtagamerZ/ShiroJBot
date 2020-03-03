@@ -25,6 +25,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.io.IOUtils;
+import org.jetbrains.annotations.NonNls;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -42,7 +43,7 @@ public abstract class Reaction extends Command {
 	private final String type;
 	private User[] interaction;
 
-	public Reaction(String name, String[] aliases, String description, boolean answerable, String type) {
+	public Reaction(@NonNls String name, @NonNls String[] aliases, String description, boolean answerable, @NonNls String type) {
 		super(name, aliases, description, Category.FUN);
 		this.answerable = answerable;
 		this.type = type;
