@@ -17,10 +17,14 @@
 
 package com.kuuhaku.utils;
 
+import org.jetbrains.annotations.NonNls;
+
 import java.util.Locale;
 
 public enum I18n {
-	PT(new Locale("pt"));
+	@NonNls PT(new Locale("pt")),
+	@NonNls EN(new Locale("en")),
+	@NonNls ES(new Locale("es"));
 
 	private final Locale locale;
 

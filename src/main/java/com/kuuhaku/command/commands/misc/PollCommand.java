@@ -25,6 +25,7 @@ import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import java.awt.*;
 import java.util.Objects;
@@ -32,8 +33,20 @@ import java.util.concurrent.TimeUnit;
 
 public class PollCommand extends Command {
 
-	public PollCommand() {
-		super("enquete", new String[]{"poll"}, "<pergunta>", "Inicia uma enquete no canal atual ou no configurado pelos moderadores", Category.MISC);
+	public PollCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public PollCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public PollCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public PollCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

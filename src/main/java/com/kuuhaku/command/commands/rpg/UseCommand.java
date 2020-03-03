@@ -28,13 +28,26 @@ import com.kuuhaku.handlers.games.rpg.exceptions.UnknownItemException;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.Arrays;
 
 public class UseCommand extends Command {
 
-	public UseCommand() {
-		super("rusar", new String[]{"ruse"}, "<item/ouro> [qtd de ouro]", "Utiliza um item ou uma quantidade de ouro.", Category.RPG);
+	public UseCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public UseCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public UseCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public UseCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

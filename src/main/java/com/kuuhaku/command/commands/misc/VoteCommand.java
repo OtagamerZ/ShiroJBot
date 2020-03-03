@@ -23,11 +23,24 @@ import com.kuuhaku.controller.mysql.VotesDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
+import org.jetbrains.annotations.NonNls;
 
 public class VoteCommand extends Command {
 
-	public VoteCommand() {
-		super("votar", new String[]{"vote"}, "<@usuário> <positivo/negativo>", "Vota em um usuário.", Category.MISC);
+	public VoteCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public VoteCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public VoteCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public VoteCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

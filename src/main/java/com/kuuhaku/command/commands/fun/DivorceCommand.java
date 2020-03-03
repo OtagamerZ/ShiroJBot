@@ -22,12 +22,26 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.mysql.WaifuDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import javax.persistence.NoResultException;
 
 public class DivorceCommand extends Command {
-	public DivorceCommand() {
-		super("divorciar", new String[]{"separar", "divorce"}, "Se separa de sua waifu. Isso irá reduzir seu bônus de XP com futuras waifus.", Category.FUN);
+
+	public DivorceCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public DivorceCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public DivorceCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public DivorceCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

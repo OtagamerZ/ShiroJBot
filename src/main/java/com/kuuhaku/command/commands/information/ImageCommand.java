@@ -22,6 +22,7 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,8 +38,20 @@ import java.net.URLEncoder;
 
 public class ImageCommand extends Command {
 
-	public ImageCommand() {
-		super("image", new String[]{"imagem", "img"}, "<tags>", "Busca uma imagem na internet.", Category.INFO);
+	public ImageCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public ImageCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public ImageCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public ImageCommand(String name, @NonNls String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

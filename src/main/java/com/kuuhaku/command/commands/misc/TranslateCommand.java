@@ -21,14 +21,27 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.Tradutor;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import java.io.IOException;
 import java.util.Arrays;
 
 public class TranslateCommand extends Command {
 
-	public TranslateCommand() {
-		super("traduzir", new String[]{"translate", "traduza", "trad"}, "<de>para> <texto>", "Traduz um texto para um outro idioma.", Category.MISC);
+	public TranslateCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public TranslateCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public TranslateCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public TranslateCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

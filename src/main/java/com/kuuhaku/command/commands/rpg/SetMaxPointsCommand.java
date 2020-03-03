@@ -22,11 +22,24 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NonNls;
 
 public class SetMaxPointsCommand extends Command {
 
-	public SetMaxPointsCommand() {
-		super("rmaxpts", "<quantidade>", "Define a quantidade máxima de pontos a serem atribuidos na criação de personagem.", Category.RPG);
+	public SetMaxPointsCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public SetMaxPointsCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public SetMaxPointsCommand(@NonNls String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public SetMaxPointsCommand(String name, String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

@@ -22,6 +22,7 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -32,8 +33,20 @@ import java.util.Objects;
 
 public class HardDecisionCommand extends Command {
 
-	public HardDecisionCommand() {
-		super("doisbotoes", new String[]{"tb", "twobuttons", "buttons"}, "<opção 1>;<opção 2>", "Gera um meme no formato \"Dois botões\"", Category.FUN);
+	public HardDecisionCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public HardDecisionCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public HardDecisionCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public HardDecisionCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

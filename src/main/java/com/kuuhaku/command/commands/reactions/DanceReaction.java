@@ -18,10 +18,12 @@
 package com.kuuhaku.command.commands.reactions;
 
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 public class DanceReaction extends Reaction {
-	public DanceReaction() {
-		super("dançar", new String[]{"dancar", "dance", "tuts"}, "Dança.", false, "dance");
+
+	public DanceReaction(@NonNls String name, @NonNls String[] aliases, String description, boolean answerable, @NonNls String type) {
+		super(name, aliases, description, answerable, type);
 	}
 
 	@Override

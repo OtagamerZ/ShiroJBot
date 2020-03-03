@@ -18,10 +18,12 @@
 package com.kuuhaku.command.commands.reactions;
 
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 public class FacedeskReaction extends Reaction {
-    public FacedeskReaction() {
-        super("facedesk", new String[]{"mds", "ahnão", "nss"}, "Reage a algo quem não é possível que alguém tenha feito.", false, "facedesk");
+
+    public FacedeskReaction(@NonNls String name, @NonNls String[] aliases, String description, boolean answerable, @NonNls String type) {
+        super(name, aliases, description, answerable, type);
     }
 
     @Override

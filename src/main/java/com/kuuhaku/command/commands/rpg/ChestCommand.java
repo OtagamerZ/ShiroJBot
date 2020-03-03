@@ -25,13 +25,26 @@ import com.kuuhaku.handlers.games.rpg.entities.Item;
 import com.kuuhaku.handlers.games.rpg.exceptions.BadLuckException;
 import com.kuuhaku.handlers.games.rpg.exceptions.UnknownItemException;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.Arrays;
 
 public class ChestCommand extends Command {
 
-	public ChestCommand() {
-		super("rloot", new String[]{"rchest"}, "<@usuário> <baú>", "Roda os espólios de um baú e dá ao jogador mencionado.", Category.RPG);
+	public ChestCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public ChestCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public ChestCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public ChestCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

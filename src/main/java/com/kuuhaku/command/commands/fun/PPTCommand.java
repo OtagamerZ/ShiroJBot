@@ -23,13 +23,26 @@ import com.kuuhaku.controller.mysql.AccountDAO;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.concurrent.TimeUnit;
 
 public class PPTCommand extends Command {
 
-	public PPTCommand() {
-		super("jankenpon", new String[]{"ppt", "rps", "jokenpo", "janken"}, "<pedra/papel/tesoura>", "A Shiro joga jankenpo com você.", Category.FUN);
+	public PPTCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public PPTCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public PPTCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public PPTCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override

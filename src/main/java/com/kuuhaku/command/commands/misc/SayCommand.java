@@ -22,17 +22,33 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NonNls;
 
 public class SayCommand extends Command {
 
-	public SayCommand() {
-		super("say", new String[] {"diga", "repetir"}, "<mensagem>", "Repete a mensagem, também converterá menções de emotes.", Category.MISC);
+	public SayCommand(String name, String description, Category category) {
+		super(name, description, category);
+	}
+
+	public SayCommand(String name, String[] aliases, String description, Category category) {
+		super(name, aliases, description, category);
+	}
+
+	public SayCommand(String name, String usage, String description, Category category) {
+		super(name, usage, description, category);
+	}
+
+	public SayCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
+		super(name, aliases, usage, description, category);
 	}
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 
-		if(args.length == 0) { channel.sendMessage(":x: | Você precisa definir uma mensagem.").queue(); return; }
+		if (args.length == 0) {
+			channel.sendMessage(":x: | Você precisa definir uma mensagem.").queue();
+			return;
+		}
 
 		channel.sendMessage(Helper.makeEmoteFromMention(args)).queue();
 		if (guild.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) message.delete().queue();
