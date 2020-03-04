@@ -66,9 +66,10 @@ public class ComandosCommand extends Command {
 
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setTitle(ShiroInfo.getLocale(I18n.PT).getString("str_command-list-title"));
-		eb.setDescription(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_command-list-description"), prefix, Arrays.stream(Category.values()).filter(c -> c.isEnabled(gc, guild)).count(), Main.getCommandManager().getCommands().stream().filter(c -> c.getCategory().isEnabled(gc, guild)).count()));
+		eb.setDescription(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_command-list-description"), prefix, Arrays.stream(Category.values()).filter(c -> c.isEnabled(gc, guild, author)).count(), Main.getCommandManager().getCommands().stream().filter(c -> c.getCategory().isEnabled(gc, guild, author)).count()));
 		for (Category cat : Category.values()) {
-			if (cat.isEnabled(gc, guild)) eb.addField(cat.getEmote() + " | " + cat.getName(), Helper.VOID, true);
+			if (cat.isEnabled(gc, guild, author))
+				eb.addField(cat.getEmote() + " | " + cat.getName(), Helper.VOID, true);
 		}
 
 		eb.addField("<:tips:684039810079522846> | Dicas", Helper.VOID, true);
@@ -91,7 +92,7 @@ public class ComandosCommand extends Command {
 				ceb.setDescription("Prefixo: `" + prefix + "`\n"
 						+ cat.getCmds().size() + " comandos encontrados nesta categoria!");
 
-				if (!cat.isEnabled(gc, guild))
+				if (!cat.isEnabled(gc, guild, author))
 					continue;
 				if (cat.getCmds().size() == 0) {
 					ceb.addField(Helper.VOID, cat.getDescription() + "\n*Ainda não existem comandos nesta categoria.*", false);
@@ -138,17 +139,18 @@ public class ComandosCommand extends Command {
 		for (Command cmmd : Main.getCommandManager().getCommands()) {
 			boolean found = false;
 
-			if (cmmd.getName().equalsIgnoreCase(cmdName) && cmmd.getCategory().isEnabled(gc, guild)) found = true;
-			else if (cmmd.getName().equalsIgnoreCase(cmdName) && !cmmd.getCategory().isEnabled(gc, guild)) {
+			if (cmmd.getName().equalsIgnoreCase(cmdName) && cmmd.getCategory().isEnabled(gc, guild, author))
+				found = true;
+			else if (cmmd.getName().equalsIgnoreCase(cmdName) && !cmmd.getCategory().isEnabled(gc, guild, author)) {
 				channel.sendMessage(":x: | Módulo desabilitado neste servidor!").queue();
 				return;
 			}
 
 			for (String alias : cmmd.getAliases()) {
-				if (alias.equalsIgnoreCase(cmdName) && cmmd.getCategory().isEnabled(gc, guild)) {
+				if (alias.equalsIgnoreCase(cmdName) && cmmd.getCategory().isEnabled(gc, guild, author)) {
 					found = true;
 					break;
-				} else if (alias.equalsIgnoreCase(cmdName) && !cmmd.getCategory().isEnabled(gc, guild)) {
+				} else if (alias.equalsIgnoreCase(cmdName) && !cmmd.getCategory().isEnabled(gc, guild, author)) {
 					channel.sendMessage(":x: | Módulo desabilitado neste servidor!").queue();
 					return;
 				}
