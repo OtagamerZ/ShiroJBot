@@ -19,6 +19,7 @@ package com.kuuhaku.utils;
 
 import com.google.gson.GsonBuilder;
 import com.kuuhaku.controller.mysql.CanvasDAO;
+import com.kuuhaku.controller.mysql.VersionDAO;
 import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
 import com.kuuhaku.handlers.games.rpg.world.World;
@@ -58,7 +59,7 @@ public class ShiroInfo {
 	private static final String YoutubeToken = System.getenv("YOUTUBE_TOKEN");
 	private static final String DBLToken;
 	private static final String name = "Shiro";
-	private static final String version = "3.3";
+	private static final String version = VersionDAO.getMinorVersion(3);
 	private static final String supportServer = "Shiro Support";
 	private static final String supportServerID = "421495229594730496";
 	private static final String default_prefix = DEV ? "dev!" : "s!";
