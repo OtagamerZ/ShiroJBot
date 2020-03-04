@@ -49,7 +49,7 @@ public class MMLockCommand extends Command {
 		gc.switchServerMMLock();
 
 
-		if (gc.isServerMMLocked()) {
+		if (!gc.isServerMMLocked()) {
 			channel.sendMessage("Trava de Message Manage liberada neste servidor.").queue();
 		} else {
 			channel.sendMessage("Trava de Message Manage ativada neste servidor.").queue();
