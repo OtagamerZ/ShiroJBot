@@ -125,6 +125,9 @@ public class GuildConfig {
 	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
 	private boolean allowImg = false;
 
+	@Column(columnDefinition = "BOOLEAN DEFAULT TRUE")
+	private boolean mmPermissionLock = true;
+
 	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
 	private boolean markForDelete = false;
 
@@ -425,5 +428,13 @@ public class GuildConfig {
 		JSONObject jo = getAmbientSounds();
 		jo.remove(name);
 		this.ambientSounds = jo.toString();
+	}
+
+	public void switchServerMMLock() {
+		this.mmPermissionLock = !this.mmPermissionLock;
+	}
+
+	public boolean isServerMMLocked() {
+		return mmPermissionLock;
 	}
 }
