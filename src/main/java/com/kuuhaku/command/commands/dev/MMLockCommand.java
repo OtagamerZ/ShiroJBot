@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NonNls;
 
 public class MMLockCommand extends Command {
 
-	public MMLockCommand(String name, String description, Category category) {
+	public MMLockCommand(@NonNls String name, String description, Category category) {
 		super(name, description, category);
 	}
 
