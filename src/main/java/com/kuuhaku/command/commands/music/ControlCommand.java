@@ -25,21 +25,21 @@ import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 
-public class MusicCommand extends Command {
+public class ControlCommand extends Command {
 
-	public MusicCommand(String name, String description, Category category) {
+	public ControlCommand(String name, String description, Category category) {
 		super(name, description, category);
 	}
 
-	public MusicCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
+	public ControlCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
 		super(name, aliases, description, category);
 	}
 
-	public MusicCommand(String name, String usage, String description, Category category) {
+	public ControlCommand(String name, String usage, String description, Category category) {
 		super(name, usage, description, category);
 	}
 
-	public MusicCommand(String name, String[] aliases, String usage, String description, Category category) {
+	public ControlCommand(String name, String[] aliases, String usage, String description, Category category) {
 		super(name, aliases, usage, description, category);
 	}
 
@@ -49,13 +49,13 @@ public class MusicCommand extends Command {
 			EmbedBuilder eb = new EmbedBuilder();
 
 			eb.setTitle("Comandos de controle de música");
-			eb.addField(prefix + "m resume", "Continua a fila de músicas caso esteja pausada.", true);
-			eb.addField(prefix + "m pause", "Pausa a fila de músicas.", true);
-			eb.addField(prefix + "m clear", "Para e limpa a fila de músicas.", true);
-			eb.addField(prefix + "m skip", "Pula a música atual.", true);
-			eb.addField(prefix + "m volume", "Define o volume do som.", true);
-			eb.addField(prefix + "m info", "Mostra a música atual.", true);
-			eb.addField(prefix + "m queue", "Mostra a fila atual.", true);
+			eb.addField(prefix + "c resume", "Continua a fila de músicas caso esteja pausada.", true);
+			eb.addField(prefix + "c pause", "Pausa a fila de músicas.", true);
+			eb.addField(prefix + "c clear", "Para e limpa a fila de músicas.", true);
+			eb.addField(prefix + "c skip", "Pula a música atual.", true);
+			eb.addField(prefix + "c volume", "Define o volume do som.", true);
+			eb.addField(prefix + "c info", "Mostra a música atual.", true);
+			eb.addField(prefix + "c queue", "Mostra a fila atual.", true);
 
 			channel.sendMessage(eb.build()).queue();
 			return;
