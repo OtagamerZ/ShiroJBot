@@ -46,6 +46,7 @@
         <class>com.kuuhaku.model.persistent.Slots</class>
         <class>com.kuuhaku.model.persistent.DevRating</class>
         <class>com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi</class>
+        <class>com.kuuhaku.model.persistent.Version</class>
         <class>java.lang.String</class>
 
         <properties>
