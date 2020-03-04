@@ -108,7 +108,7 @@ public class GuildConfig {
 
 	//SWITCHES
 	@Column(columnDefinition = "BOOLEAN DEFAULT TRUE")
-	private boolean lvlNotif = true;
+	private boolean lvlNotif = false;
 
 	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
 	private boolean anyTell = false;

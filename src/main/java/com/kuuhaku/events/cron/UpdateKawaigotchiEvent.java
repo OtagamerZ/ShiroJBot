@@ -33,6 +33,11 @@ public class UpdateKawaigotchiEvent implements Job {
 	public void execute(JobExecutionContext context) {
 		List<Kawaigotchi> kgs = KGotchiDAO.getAllKawaigotchi();
 
-		kgs.forEach(k -> k.update(Main.getInfo().getMemberByID(k.getUserId())));
+		kgs.forEach(k -> {
+			try {
+				k.update(Main.getInfo().getMemberByID(k.getUserId()));
+			} catch (NullPointerException ignore) {
+			}
+		});
 	}
 }
