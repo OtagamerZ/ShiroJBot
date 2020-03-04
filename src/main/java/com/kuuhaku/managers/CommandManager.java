@@ -87,6 +87,9 @@ public class CommandManager {
 					"wh", getLocale(PT).getString(REQ_MESSAGE), getLocale(PT).getString("cmd_simple-wh"), DEV));
 			add(new RatingCommand(
 					"pedirvoto", new String[]{"requestvote", "howwasi"}, getLocale(PT).getString("cmd_rating"), DEV));
+			add(new MMLockCommand(
+					"mmlock", getLocale(PT).getString("cmd_mm-lock"), DEV)
+			);
 
 			//SHERIFF
 			add(new BlockCommand("bloquear", new String[]{"block"}, getLocale(PT).getString("req_type-id-reason"), getLocale(PT).getString("cmd_block"), SHERIFFS));
