@@ -17,11 +17,13 @@
 
 package com.kuuhaku.command;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.controller.mysql.TagDAO;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.PrivilegeLevel;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -89,18 +91,18 @@ public enum Category {
 	}
 
 	private final ArrayList<Command> cmds;
-	
-    void addCommand(Command cmd) {
-		if(cmd.getCategory() == this)
+
+	void addCommand(Command cmd) {
+		if (cmd.getCategory() == this)
 			cmds.add(cmd);
 	}
-	
-	public ArrayList<Command> getCmds(){
+
+	public ArrayList<Command> getCmds() {
 		return cmds;
 	}
 
-	public boolean isEnabled(GuildConfig gc, Guild g) {
-		if (this == DEV && !g.getId().equals(ShiroInfo.getSupportServerID())) {
+	public boolean isEnabled(GuildConfig gc, Guild g, User u) {
+		if (this == DEV && (!g.getId().equals(ShiroInfo.getSupportServerID()) || !Main.getInfo().getDevelopers().contains(u.getId()))) {
 			return false;
 		} else if (this == PARTNER && !TagDAO.getTagById(g.getOwnerId()).isPartner()) {
 			return false;

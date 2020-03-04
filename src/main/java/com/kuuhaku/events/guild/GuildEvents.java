@@ -31,7 +31,6 @@ import com.kuuhaku.model.persistent.CustomAnswers;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Log;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.PrivilegeLevel;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -74,7 +73,7 @@ public class GuildEvents extends ListenerAdapter {
 				}
 			} else prefix = Main.getInfo().getDefaultPrefix();
 
-			if (rawMessage.startsWith(";") && Helper.hasPermission(member, PrivilegeLevel.NIICHAN)) {
+			if (rawMessage.startsWith(";")) {
 				try {
 					if (rawMessage.replace(";", "").length() == 0) {
 						channel.sendFile(message.getAttachments().get(0).downloadToFile().get()).queue();
@@ -177,7 +176,7 @@ public class GuildEvents extends ListenerAdapter {
 				return;
 			}
 			for (Command command : Main.getCommandManager().getCommands()) {
-				found = JDAEvents.isFound(GuildDAO.getGuildById(guild.getId()), guild, commandName, found, command);
+				found = JDAEvents.isFound(GuildDAO.getGuildById(guild.getId()), guild, commandName, found, command, author);
 
 				if (found) {
 					if (author == Main.getInfo().getSelfUser() && command.getCategory().isBotBlocked()) {
