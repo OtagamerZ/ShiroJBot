@@ -98,7 +98,7 @@ public class Settings {
 			eb.addBlankField(true);
 			eb.addBlankField(true);
 			eb.addField("\uD83D\uDCD6 » Canal de Sugestões", canalSUG, true);
-			eb.addField("\u23F2 » Tempo de enquetes", String.valueOf(pollTime), true);
+			eb.addField("⏲ » Tempo de enquetes", String.valueOf(pollTime), true);
 			try {
 				if (TagDAO.getTagById(Objects.requireNonNull(message.getGuild().getOwner()).getUser().getId()).isPartner()) {
 					eb.addField("\uD83D\uDCD6 » Canal Relay", canalRelay, true);
@@ -117,7 +117,7 @@ public class Settings {
 				eb.addField("\uD83D\uDCD1 » Cargo de punição", cargoWarnID, true);
 			}
 
-			eb.addField("\u23F2 » Tempo de punição", String.valueOf(warnTime), true);
+			eb.addField("⏲ » Tempo de punição", String.valueOf(warnTime), true);
 
 			eb.addField("\uD83D\uDCD6 » Canal de notificação de level up", canalLvlUpNotif, true);
 			eb.addField("\uD83D\uDCD1 » Cargos de nível", cargosLvl.toString().isEmpty() ? "Nenhum" : cargosLvl.toString(), true);

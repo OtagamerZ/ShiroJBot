@@ -59,10 +59,10 @@ public class PlayerRegisterHandler extends ListenerAdapter {
 	private final boolean[] complete = new boolean[]{false, false, false, false};
 	private final int maxPts;
 
-	private static final String PREVIOUS = "\u25C0";
-	private static final String CANCEL = "\u274E";
-	private static final String NEXT = "\u25B6";
-	private static final String ACCEPT = "\u2705";
+	private static final String PREVIOUS = "◀";
+	private static final String CANCEL = "❎";
+	private static final String NEXT = "▶";
+	private static final String ACCEPT = "✅";
 
 	public PlayerRegisterHandler(Map map, TextChannel channel, JDA jda, User user) {
 		this.channel = channel;
