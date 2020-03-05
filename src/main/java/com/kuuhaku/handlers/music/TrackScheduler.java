@@ -81,16 +81,24 @@ public class TrackScheduler extends AudioEventAdapter {
 	public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
 		if (endReason.mayStartNext) {
 			nextTrack();
+
 			EmbedBuilder eb = new EmbedBuilder();
 
-			AudioTrackInfo ati = player.getPlayingTrack().getInfo();
+			if (queue.size() == 0) {
+				eb.setColor(Helper.getRandomColor());
+				eb.setTitle("Fila de músicas encerrada, obrigado por mais um ouvinte da Shiro FM!");
+				eb.setFooter("Se gostou das minhas funções, não deixe de votar em https://top.gg/bot/572413282653306901");
 
-			eb.setColor(Helper.getRandomColor());
-			eb.setTitle("Tocando agora: " + ati.title + " (" + ati.length + ")");
-			eb.setFooter("Autor: " + ati.author);
-			eb.setAuthor("Requisitado por: " + ((User) player.getPlayingTrack().getUserData()).getAsTag());
+				channel.sendMessage(eb.build()).queue(null, Helper::doNothing);
+			} else {
+				AudioTrackInfo ati = player.getPlayingTrack().getInfo();
 
-			channel.sendMessage(eb.build()).queue(null, Helper::doNothing);
+				eb.setColor(Helper.getRandomColor());
+				eb.setTitle("Tocando agora: " + ati.title + " (" + String.valueOf(Helper.round((ati.length / 1000f) / 60f, 2)).replace(".", ":") + ")");
+				eb.setFooter("Autor: " + ati.author + "Requisitado por: " + ((User) player.getPlayingTrack().getUserData()).getAsTag());
+
+				channel.sendMessage(eb.build()).queue(null, Helper::doNothing);
+			}
 		}
 	}
 
