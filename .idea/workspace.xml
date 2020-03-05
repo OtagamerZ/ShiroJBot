@@ -258,14 +258,7 @@
       <workItem from="1583237929900" duration="2184000" />
       <workItem from="1583258906087" duration="10114000" />
       <workItem from="1583340498714" duration="11085000" />
-      <workItem from="1583410394110" duration="1233000" />
-    </task>
-    <task id="LOCAL-00693" summary="Começo da implementação do i18n">
-      <created>1582814939036</created>
-      <option name="number" value="00693" />
-      <option name="presentableId" value="LOCAL-00693" />
-      <option name="project" value="LOCAL" />
-      <updated>1582814939036</updated>
+      <workItem from="1583410394110" duration="1507000" />
     </task>
     <task id="LOCAL-00694" summary="Começo da implementação do i18n">
       <created>1582815225254</created>
@@ -603,7 +596,14 @@
       <option name="project" value="LOCAL" />
       <updated>1583355133400</updated>
     </task>
-    <option name="localTasksCounter" value="742" />
+    <task id="LOCAL-00742" summary="Continuação da implementação do i18n">
+      <created>1583417890208</created>
+      <option name="number" value="00742" />
+      <option name="presentableId" value="LOCAL-00742" />
+      <option name="project" value="LOCAL" />
+      <updated>1583417890209</updated>
+    </task>
+    <option name="localTasksCounter" value="743" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -727,11 +727,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1583268085669" />
-    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1583355129384">
+    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1583418147295">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1582604510538" />
-    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1583355129384" />
+    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1583418147295" />
     <state x="160" y="89" width="1344" height="834" key="DiffContextDialog" timestamp="1580842925618">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -768,25 +768,29 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="505" y="205" key="NewModule_or_Project.wizard/0.0.1680.1010@0.0.1680.1010" timestamp="1579026622636" />
+    <state x="454" y="171" key="Registry" timestamp="1583417958203">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="454" y="171" key="Registry/0.0.1680.1010@0.0.1680.1010" timestamp="1583417958203" />
     <state x="616" y="30" key="RollbackChangesDialog" timestamp="1583263109258">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="501" y="23" key="RollbackChangesDialog/0.0.1366.768@0.0.1366.768" timestamp="1578969825199" />
     <state x="616" y="30" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1583263109258" />
-    <state x="320" y="80" key="SettingsEditor" timestamp="1583342422986">
+    <state x="320" y="80" key="SettingsEditor" timestamp="1583417993368">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1579834568153" />
-    <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1583342422986" />
+    <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1583417993368" />
     <state width="82" height="441" key="SqlResolveConfigurable" timestamp="1581000410448">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1583355321078">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1583417892445">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1582604543626" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1583355321078" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1583417892445" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -835,11 +839,11 @@
     </state>
     <state x="403" y="177" key="run.anything.popup/0.0.1366.768@0.0.1366.768" timestamp="1580268172098" />
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1582825658960" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1582825665366">
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1583417902872">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="409" y="165" width="672" height="516" key="search.everywhere.popup/0.0.1366.768@0.0.1366.768" timestamp="1579834584354" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1582825665366" />
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1583417902872" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
