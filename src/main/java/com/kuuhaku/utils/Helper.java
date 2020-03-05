@@ -73,8 +73,8 @@ import java.util.stream.Collectors;
 public class Helper {
 
 	public static final String VOID = "\u200B";
-	public static final String CANCEL = "\u274E";
-	public static final String ACCEPT = "\u2705";
+	public static final String CANCEL = "❎";
+	public static final String ACCEPT = "✅";
 	public static final int CANVAS_SIZE = 1024;
 	public static final DateTimeFormatter dateformat = DateTimeFormatter.ofPattern("dd/MMM/yyyy | HH:mm:ss (z)");
 	public static final String HOME = "674261700366827539";
@@ -153,7 +153,7 @@ public class Helper {
 	public static Consumer<MessageAction> sendReaction(Reaction r, String imageURL, MessageChannel channel, boolean allowReact) throws IllegalAccessException {
 		try {
 			if (r.isAnswerable() && allowReact) {
-				return act -> act.queue(m -> Pages.buttonize(Main.getInfo().getAPI(), m, Collections.singletonMap("\u21AA", (mb, msg) -> r.answer((TextChannel) channel)), false, 60, TimeUnit.SECONDS));
+				return act -> act.queue(m -> Pages.buttonize(Main.getInfo().getAPI(), m, Collections.singletonMap("↪", (mb, msg) -> r.answer((TextChannel) channel)), false, 60, TimeUnit.SECONDS));
 			} else
 				return RestAction::queue;
 		} catch (Exception e) {
