@@ -660,4 +660,15 @@ public class Helper {
 
 		return Collections.singletonMap(String.join(" ", newWords), aVoid -> queue.forEach(q -> q.accept(null)));
 	}
+
+	public static void playAudio(Member member, Message message, TextChannel channel, Guild guild, Message msg) {
+		if (Objects.requireNonNull(member.getVoiceState()).inVoiceChannel()) {
+			Pages.buttonize(Main.getInfo().getAPI(), msg, Collections.singletonMap(ACCEPT, (mb, ms) -> {
+				Music.loadAndPlay(member, channel, msg.getEmbeds().get(0).getUrl());
+				if (hasPermission(guild.getSelfMember(), Permission.MESSAGE_MANAGE, channel)) {
+					message.delete().queue();
+				}
+			}), true, 60, TimeUnit.SECONDS);
+		}
+	}
 }

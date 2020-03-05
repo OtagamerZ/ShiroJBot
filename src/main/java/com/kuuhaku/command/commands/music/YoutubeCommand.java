@@ -33,7 +33,6 @@ import org.jetbrains.annotations.NonNls;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class YoutubeCommand extends Command {
@@ -83,9 +82,7 @@ public class YoutubeCommand extends Command {
 
                             channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(msg -> {
                                 Pages.paginate(Main.getInfo().getAPI(), msg, pages, 60, TimeUnit.SECONDS);
-                                if (Objects.requireNonNull(member.getVoiceState()).inVoiceChannel()) {
-                                    msg.addReaction(Helper.ACCEPT).queue();
-                                }
+                                Helper.playAudio(member, message, (TextChannel) channel, guild, msg);
                             });
                         } else m.editMessage(":x: | Nenhum vídeo encontrado").queue();
                     }catch (IOException e) {

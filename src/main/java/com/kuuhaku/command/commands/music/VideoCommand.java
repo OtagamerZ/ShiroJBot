@@ -17,23 +17,16 @@
 
 package com.kuuhaku.command.commands.music;
 
-import com.github.ygimenez.method.Pages;
-import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.Youtube;
 import com.kuuhaku.model.common.YoutubeVideo;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.Music;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 public class VideoCommand extends Command {
 
@@ -72,13 +65,7 @@ public class VideoCommand extends Command {
 						eb.setColor(Helper.colorThief(v.getThumb()));
 						eb.setFooter("Link: " + v.getUrl(), null);
 						channel.sendMessage(eb.build()).queue(msg -> {
-							if (Objects.requireNonNull(member.getVoiceState()).inVoiceChannel())
-								Pages.buttonize(Main.getInfo().getAPI(), msg, Collections.singletonMap("✅", (mb, ms) -> {
-									Music.loadAndPlay(member, (TextChannel) channel, msg.getEmbeds().get(0).getUrl());
-									if (Helper.hasPermission(guild.getSelfMember(), Permission.MESSAGE_MANAGE, (TextChannel) channel)) {
-										message.delete().queue();
-									}
-								}), true, 60, TimeUnit.SECONDS);
+							Helper.playAudio(member, message, (TextChannel) channel, guild, msg);
 						});
 					} catch (IOException e) {
 						m.editMessage(":x: | Nenhum vídeo encontrado.").queue();
