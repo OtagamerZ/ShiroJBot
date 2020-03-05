@@ -17,10 +17,15 @@
 
 package com.kuuhaku.handlers.music;
 
+import com.kuuhaku.utils.Helper;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -28,13 +33,15 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class TrackScheduler extends AudioEventAdapter {
 	private final AudioPlayer player;
 	private final BlockingQueue<AudioTrack> queue;
+	public TextChannel channel;
 
 	/**
 	 * @param player The audio player this scheduler uses
 	 */
-	TrackScheduler(AudioPlayer player) {
+	TrackScheduler(AudioPlayer player, TextChannel channel) {
 		this.player = player;
 		this.queue = new LinkedBlockingQueue<>();
+		this.channel = channel;
 	}
 
 	/**
@@ -74,6 +81,16 @@ public class TrackScheduler extends AudioEventAdapter {
 	public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
 		if (endReason.mayStartNext) {
 			nextTrack();
+			EmbedBuilder eb = new EmbedBuilder();
+
+			AudioTrackInfo ati = player.getPlayingTrack().getInfo();
+
+			eb.setColor(Helper.getRandomColor());
+			eb.setTitle("Tocando agora: " + ati.title + " (" + ati.length + ")");
+			eb.setFooter("Autor: " + ati.author);
+			eb.setAuthor("Requisitado por: " + ((User) player.getPlayingTrack().getUserData()).getAsTag());
+
+			channel.sendMessage(eb.build()).queue(null, Helper::doNothing);
 		}
 	}
 

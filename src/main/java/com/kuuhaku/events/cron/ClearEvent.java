@@ -33,11 +33,11 @@ public class ClearEvent implements Job {
 	@Override
 	public void execute(JobExecutionContext context) {
 		for (Guild g : Main.getInfo().getAPI().getGuilds()) {
-			GuildMusicManager gmm = Music.getGuildAudioPlayer(g);
+			GuildMusicManager gmm = Music.getGuildAudioPlayer(g, null);
 			if (g.getAudioManager().isConnected() && (Objects.requireNonNull(g.getAudioManager().getConnectedChannel()).getMembers().size() < 1)) {
 				g.getAudioManager().closeAudioConnection();
+				gmm.scheduler.channel.sendMessage("Me deixaram sozinha no chat de voz, então eu saí também!").queue();
 				gmm.scheduler.clear();
-				gmm.currentChannel.sendMessage("Me deixaram sozinha no chat de voz, então eu saí também!").queue();
 				gmm.player.destroy();
 			}
 		}
