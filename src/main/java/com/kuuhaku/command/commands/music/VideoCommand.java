@@ -65,7 +65,7 @@ public class VideoCommand extends Command {
 						eb.setColor(Helper.colorThief(v.getThumb()));
 						eb.setFooter("Link: " + v.getUrl(), null);
 						channel.sendMessage(eb.build()).queue(msg -> {
-							Helper.playAudio(member, message, (TextChannel) channel, guild, msg);
+							Helper.playAudio(member, message, (TextChannel) channel, msg);
 						});
 					} catch (IOException e) {
 						m.editMessage(":x: | Nenhum vídeo encontrado.").queue();

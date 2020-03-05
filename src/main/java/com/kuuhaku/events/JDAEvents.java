@@ -30,7 +30,6 @@ import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.ReadyEvent;
-import net.dv8tion.jda.api.events.channel.voice.GenericVoiceChannelEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
@@ -85,11 +84,6 @@ public class JDAEvents extends ListenerAdapter {
 			}
 		} catch (NullPointerException | ErrorResponseException | InsufficientPermissionException ignore) {
 		}
-	}
-
-	@Override
-	public void onGenericVoiceChannel(@Nonnull GenericVoiceChannelEvent event) {
-		System.out.println("aaaaaaaaaaaa");
 	}
 
 	@Override
