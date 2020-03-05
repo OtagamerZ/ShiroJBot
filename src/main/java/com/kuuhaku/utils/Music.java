@@ -33,12 +33,12 @@ public class Music {
 	private static void play(VoiceChannel vc, TextChannel channel, Guild guild, GuildMusicManager musicManager, AudioTrack track) {
 		if (!guild.getAudioManager().isConnected()) guild.getAudioManager().openAudioConnection(vc);
 
-		musicManager.currentChannel = channel;
+		musicManager.scheduler.channel = channel;
 		musicManager.scheduler.queue(track);
 	}
 
 	public static void skipTrack(TextChannel channel) {
-		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild());
+		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild(), channel);
 		musicManager.scheduler.nextTrack();
 
 		if (musicManager.player.getPlayingTrack() == null) {
@@ -49,7 +49,7 @@ public class Music {
 	}
 
 	public static void pauseTrack(TextChannel channel) {
-		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild());
+		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild(), channel);
 
 		if (musicManager.player.isPaused()) {
 			channel.sendMessage(":x: | A música já está pausada.").queue();
@@ -61,7 +61,7 @@ public class Music {
 	}
 
 	public static void resumeTrack(TextChannel channel) {
-		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild());
+		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild(), channel);
 
 		if (!musicManager.player.isPaused()) {
 			channel.sendMessage(":x: | A música não está pausada.").queue();
@@ -73,7 +73,7 @@ public class Music {
 	}
 
 	public static void clearQueue(TextChannel channel) {
-		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild());
+		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild(), channel);
 
 		musicManager.scheduler.clear();
 		musicManager.player.destroy();
@@ -83,7 +83,7 @@ public class Music {
 	}
 
 	public static void trackInfo(TextChannel channel) {
-		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild());
+		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild(), channel);
 
 		if (musicManager.player.getPlayingTrack() == null) {
 			channel.sendMessage(":x: | Não há nenhuma musica tocando no momento.").queue();
@@ -109,7 +109,7 @@ public class Music {
 	}
 
 	public static void queueInfo(TextChannel channel) {
-		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild());
+		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild(), channel);
 
 		if (musicManager.player.getPlayingTrack() == null) {
 			channel.sendMessage(":x: | Não há nenhuma musica na fila no momento.").queue();
@@ -126,7 +126,7 @@ public class Music {
 	}
 
 	public static void setVolume(TextChannel channel, int volume) {
-		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild());
+		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild(), channel);
 
 		if (volume <= 100 && volume > 0) musicManager.player.setVolume(volume);
 		else {
@@ -138,7 +138,7 @@ public class Music {
 	}
 
 	public static void loadAndPlay(final Member m, final TextChannel channel, final String trackUrl) {
-		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild());
+		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild(), channel);
 
 		Main.getInfo().getApm().loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
 			@Override
@@ -179,12 +179,12 @@ public class Music {
 		});
 	}
 
-	public static synchronized GuildMusicManager getGuildAudioPlayer(Guild guild) {
+	public static synchronized GuildMusicManager getGuildAudioPlayer(Guild guild, TextChannel channel) {
 		long guildId = guild.getIdLong();
 		GuildMusicManager musicManager = Main.getInfo().getGmms().get(guildId);
 
 		if (musicManager == null) {
-			musicManager = new GuildMusicManager(Main.getInfo().getApm());
+			musicManager = new GuildMusicManager(Main.getInfo().getApm(), channel);
 			Main.getInfo().addGmm(guildId, musicManager);
 		}
 
