@@ -156,6 +156,7 @@ public class SlotsCommand extends Command {
 
 			channel.sendMessage(msg).queue();
 			acc.addCredit(bet.get());
+			AccountDAO.saveAccount(acc);
 			SlotsDAO.saveSlots(slt);
 		};
 
