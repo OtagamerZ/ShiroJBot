@@ -20,7 +20,6 @@ see <https://www.gnu.org/licenses/>
 
 package com.kuuhaku.managers;
 
-import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.dev.*;
 import com.kuuhaku.command.commands.exceed.ExceedRankCommand;
@@ -60,133 +59,191 @@ public class CommandManager {
 		commands = new ArrayList<Command>() {{
 			//DEV
 			add(new KillCommand(
-					"desligar", new String[]{"kill"}, getLocale(PT).getString("cmd_kill"), DEV));
+					"desligar", new String[]{"kill"}, getLocale(PT).getString("cmd_kill"), DEV
+			));
 			add(new RestartCommand(
-					"reiniciar", new String[]{"restart"}, getLocale(PT).getString("cmd_restart"), DEV));
+					"reiniciar", new String[]{"restart"}, getLocale(PT).getString("cmd_restart"), DEV
+			));
 			add(new LeaveCommand(
-					"sair", new String[]{"leave"}, getLocale(PT).getString(REQ_SERVER_ID), getLocale(PT).getString("cmd_leave"), DEV));
+					"sair", new String[]{"leave"}, getLocale(PT).getString(REQ_SERVER_ID), getLocale(PT).getString("cmd_leave"), DEV
+			));
 			add(new ToxicTagCommand(
-					"toxico", new String[]{"toxic"}, getLocale(PT).getString(REQ_MENTION), getLocale(PT).getString("cmd_toxic-tag"), DEV));
+					"toxico", new String[]{"toxic"}, getLocale(PT).getString(REQ_MENTION), getLocale(PT).getString("cmd_toxic-tag"), DEV
+			));
 			add(new PartnerTagCommand(
-					"parceiro", new String[]{"partner"}, getLocale(PT).getString(REQ_MENTION), getLocale(PT).getString("cmd_partner-tag"), DEV));
+					"parceiro", new String[]{"partner"}, getLocale(PT).getString(REQ_MENTION), getLocale(PT).getString("cmd_partner-tag"), DEV
+			));
 			add(new VerifiedTagCommand(
-					"verificado", new String[]{"verified"}, getLocale(PT).getString(REQ_MENTION), getLocale(PT).getString("cmd_verified-tag"), DEV));
+					"verificado", new String[]{"verified"}, getLocale(PT).getString(REQ_MENTION), getLocale(PT).getString("cmd_verified-tag"), DEV
+			));
 			add(new RelaysCommand(
-					"relays", getLocale(PT).getString("cmd_relay-list"), DEV));
+					"relays", getLocale(PT).getString("cmd_relay-list"), DEV
+			));
 			add(new LogCommand(
-					"log", getLocale(PT).getString("cmd_log"), DEV));
+					"log", getLocale(PT).getString("cmd_log"), DEV
+			));
 			add(new TokenCommand(
-					"chave", new String[]{"token"}, getLocale(PT).getString(REQ_NAME), getLocale(PT).getString("cmd_token"), DEV));
+					"chave", new String[]{"token"}, getLocale(PT).getString(REQ_NAME), getLocale(PT).getString("cmd_token"), DEV
+			));
 			add(new BroadcastCommand(
-					"transmitir", new String[]{"broadcast", "bc"}, getLocale(PT).getString("req_type-message"), getLocale(PT).getString("cmd_broadcast"), DEV));
+					"transmitir", new String[]{"broadcast", "bc"}, getLocale(PT).getString("req_type-message"), getLocale(PT).getString("cmd_broadcast"), DEV
+			));
 			add(new InviteCommand(
-					"convite", new String[]{"invite"}, getLocale(PT).getString(REQ_SERVER_ID), getLocale(PT).getString("cmd_invite"), DEV));
+					"convite", new String[]{"invite"}, getLocale(PT).getString(REQ_SERVER_ID), getLocale(PT).getString("cmd_invite"), DEV
+			));
 			add(new UsageCommand(
-					"usos", new String[]{"uses", "usage"}, getLocale(PT).getString("cmd_usage"), DEV));
+					"usos", new String[]{"uses", "usage"}, getLocale(PT).getString("cmd_usage"), DEV
+			));
 			add(new SimpleWHMCommand(
-					"wh", getLocale(PT).getString(REQ_MESSAGE), getLocale(PT).getString("cmd_simple-wh"), DEV));
+					"wh", getLocale(PT).getString(REQ_MESSAGE), getLocale(PT).getString("cmd_simple-wh"), DEV
+			));
 			add(new RatingCommand(
-					"pedirvoto", new String[]{"requestvote", "howwasi"}, getLocale(PT).getString("cmd_rating"), DEV));
+					"pedirvoto", new String[]{"requestvote", "howwasi"}, getLocale(PT).getString("cmd_rating"), DEV
+			));
 			add(new MMLockCommand(
-					"mmlock", getLocale(PT).getString("cmd_mm-lock"), DEV)
-			);
+					"mmlock", getLocale(PT).getString("cmd_mm-lock"), DEV
+			));
 
 			//SHERIFF
-			add(new BlockCommand("bloquear", new String[]{"block"}, getLocale(PT).getString("req_type-id-reason"), getLocale(PT).getString("cmd_block"), SHERIFFS));
+			add(new BlockCommand("bloquear", new String[]{"block"}, getLocale(PT).getString("req_type-id-reason"), getLocale(PT).getString("cmd_block"), SHERIFFS
+			));
 
 			//PARTNER
 			add(new JibrilCommand(
-					"jibril", getLocale(PT).getString("cmd_jibril"), PARTNER));
+					"jibril", getLocale(PT).getString("cmd_jibril"), PARTNER
+			));
 			add(new TetCommand(
-					"tet", getLocale(PT).getString("cmd_tet"), PARTNER));
+					"tet", getLocale(PT).getString("cmd_tet"), PARTNER
+			));
 			add(new CompileCommand(
-					"compilar", new String[]{"compile", "exec"}, getLocale(PT).getString("req_code"), getLocale(PT).getString("cmd_compile"), PARTNER));
+					"compilar", new String[]{"compile", "exec"}, getLocale(PT).getString("req_code"), getLocale(PT).getString("cmd_compile"), PARTNER
+			));
 			add(new JibrilEmoteListCommand(
-					"jemotes", getLocale(PT).getString(REQ_NAME), getLocale(PT).getString("cmd_j-emotes"), PARTNER));
+					"jemotes", getLocale(PT).getString(REQ_NAME), getLocale(PT).getString("cmd_j-emotes"), PARTNER
+			));
 			add(new PurchaceKGotchiCommand(
-					"pkgotchi", new String[]{"buykgotchi", "comprarkgotchi"}, getLocale(PT).getString("req_kgotchi"), getLocale(PT).getString("cmd_kgotchi-shop"), PARTNER));
+					"pkgotchi", new String[]{"buykgotchi", "comprarkgotchi"}, getLocale(PT).getString("req_kgotchi"), getLocale(PT).getString("cmd_kgotchi-shop"), PARTNER
+			));
 			add(new KGotchiCommand(
-					"kgotchi", new String[]{"kg", "kawaig"}, getLocale(PT).getString("req_action"), getLocale(PT).getString("cmd_kgotchi"), PARTNER));
+					"kgotchi", new String[]{"kg", "kawaig"}, getLocale(PT).getString("req_action"), getLocale(PT).getString("cmd_kgotchi"), PARTNER
+			));
 			add(new RelayCommand(
-					"relay", new String[]{"relinfo", "relcon"}, getLocale(PT).getString("cmd_relay"), PARTNER));
+					"relay", new String[]{"relinfo", "relcon"}, getLocale(PT).getString("cmd_relay"), PARTNER
+			));
 			add(new TagsCommand(
-					"tags", new String[]{"emblemas", "insignias"}, getLocale(PT).getString("cmd_tags"), PARTNER));
+					"tags", new String[]{"emblemas", "insignias"}, getLocale(PT).getString("cmd_tags"), PARTNER
+			));
 			add(new MyTagsCommand(
-					"eu", new String[]{"meusemblemas", "mytags"}, getLocale(PT).getString("cmd_my-tags"), PARTNER));
+					"eu", new String[]{"meusemblemas", "mytags"}, getLocale(PT).getString("cmd_my-tags"), PARTNER
+			));
 
 			//MODERATION
 			add(new RemoveAnswerCommand(
-					"nãofale", getLocale(PT).getString("req_id"), getLocale(PT).getString("cmd_dont-say"), MODERACAO));
+					"nãofale", getLocale(PT).getString("req_id"), getLocale(PT).getString("cmd_dont-say"), MODERACAO
+			));
 			add(new SettingsCommand(
-					"settings", new String[]{"definicoes", "parametros", "configs"}, getLocale(PT).getString("req_parameter"), getLocale(PT).getString("cmd_settings"), MODERACAO));
+					"settings", new String[]{"definicoes", "parametros", "configs"}, getLocale(PT).getString("req_parameter"), getLocale(PT).getString("cmd_settings"), MODERACAO
+			));
 			add(new AllowCommunityCommand(
-					"ouçatodos", getLocale(PT).getString("cmd_allow-community"), MODERACAO));
+					"ouçatodos", getLocale(PT).getString("cmd_allow-community"), MODERACAO
+			));
 			add(new KickMemberCommand(
-					"kick", new String[]{"expulsar", "remover"}, getLocale(PT).getString(REQ_MENTION_REASON), getLocale(PT).getString("cmd_kick"), MODERACAO));
+					"kick", new String[]{"expulsar", "remover"}, getLocale(PT).getString(REQ_MENTION_REASON), getLocale(PT).getString("cmd_kick"), MODERACAO
+			));
 			add(new BanMemberCommand(
-					"ban", new String[]{"banir"}, getLocale(PT).getString(REQ_MENTION_REASON), getLocale(PT).getString("cmd_ban"), MODERACAO));
+					"ban", new String[]{"banir"}, getLocale(PT).getString(REQ_MENTION_REASON), getLocale(PT).getString("cmd_ban"), MODERACAO
+			));
 			add(new NoLinkCommand(
-					"semlink", new String[]{"nolink", "blocklink"}, getLocale(PT).getString("cmd_no-link"), MODERACAO));
+					"semlink", new String[]{"nolink", "blocklink"}, getLocale(PT).getString("cmd_no-link"), MODERACAO
+			));
 			add(new AntispamCommand(
-					"semspam", new String[]{"nospam", "antispam"}, getLocale(PT).getString("req_spam-type"), getLocale(PT).getString("cmd_no-spam"), MODERACAO));
+					"semspam", new String[]{"nospam", "antispam"}, getLocale(PT).getString("req_spam-type"), getLocale(PT).getString("cmd_no-spam"), MODERACAO
+			));
 			add(new AntiraidCommand(
-					"semraid", new String[]{"noraid", "antiraid"}, getLocale(PT).getString("cmd_no-raid"), MODERACAO));
+					"semraid", new String[]{"noraid", "antiraid"}, getLocale(PT).getString("cmd_no-raid"), MODERACAO
+			));
 			add(new MakeLogCommand(
-					"logchannel", new String[]{"makelog"}, getLocale(PT).getString("cmd_make-log"), MODERACAO));
+					"logchannel", new String[]{"makelog"}, getLocale(PT).getString("cmd_make-log"), MODERACAO
+			));
 			add(new PruneCommand(
-					"prune", new String[]{"clean", "limpar"}, getLocale(PT).getString("req_qtd-all"), getLocale(PT).getString("cmd_prune"), MODERACAO));
+					"prune", new String[]{"clean", "limpar"}, getLocale(PT).getString("req_qtd-all"), getLocale(PT).getString("cmd_prune"), MODERACAO
+			));
 			add(new LiteModeCommand(
-					"litemode", new String[]{"lite"}, getLocale(PT).getString("cmd_lite-mode"), MODERACAO));
+					"litemode", new String[]{"lite"}, getLocale(PT).getString("cmd_lite-mode"), MODERACAO
+			));
 			add(new AllowImgCommand(
-					"allowimg", new String[]{"aimg"}, getLocale(PT).getString("cmd_allow-images"), MODERACAO));
+					"allowimg", new String[]{"aimg"}, getLocale(PT).getString("cmd_allow-images"), MODERACAO
+			));
 			add(new RoleChooserCommand(
-					"botaocargo", new String[]{"rolebutton", "bc", "rb"}, getLocale(PT).getString("req_role-button"), getLocale(PT).getString("cmd_role-button"), MODERACAO));
+					"botaocargo", new String[]{"rolebutton", "bc", "rb"}, getLocale(PT).getString("req_role-button"), getLocale(PT).getString("cmd_role-button"), MODERACAO
+			));
 			add(new GatekeeperCommand(
-					"porteiro", new String[]{"gatekeeper", "gk"}, getLocale(PT).getString("req_id-role"), getLocale(PT).getString("cmd_gatekeeper"), MODERACAO));
+					"porteiro", new String[]{"gatekeeper", "gk"}, getLocale(PT).getString("req_id-role"), getLocale(PT).getString("cmd_gatekeeper"), MODERACAO
+			));
 			add(new BackupCommand(
-					"backup", new String[]{"dados"}, getLocale(PT).getString("req_save-restore"), getLocale(PT).getString("cmd_backup"), MODERACAO));
+					"backup", new String[]{"dados"}, getLocale(PT).getString("req_save-restore"), getLocale(PT).getString("cmd_backup"), MODERACAO
+			));
 			add(new RegenRulesCommand(
-					"rrules", new String[]{"makerules"}, getLocale(PT).getString("cmd_regen-rules"), MODERACAO));
+					"rrules", new String[]{"makerules"}, getLocale(PT).getString("cmd_regen-rules"), MODERACAO
+			));
 			add(new PermissionCommand(
-					"permissões", new String[]{"perms", "permisions"}, getLocale(PT).getString("cmd_permission"), MODERACAO));
+					"permissões", new String[]{"perms", "permisions"}, getLocale(PT).getString("cmd_permission"), MODERACAO
+			));
 			add(new AddColorRoleCommand(
-					"cargocor", new String[]{"rolecolor"}, getLocale(PT).getString("req_name-color"), getLocale(PT).getString("cmd_add-color-role"), MODERACAO));
+					"cargocor", new String[]{"rolecolor"}, getLocale(PT).getString("req_name-color"), getLocale(PT).getString("cmd_add-color-role"), MODERACAO
+			));
 
 			//INFORMATION
 			add(new ComandosCommand(
-					"comandos", new String[]{"cmds", "cmd", "comando", "ajuda", "help"}, getLocale(PT).getString("req_command"), getLocale(PT).getString("cmd_help"), INFO));
+					"comandos", new String[]{"cmds", "cmd", "comando", "ajuda", "help"}, getLocale(PT).getString("req_command"), getLocale(PT).getString("cmd_help"), INFO
+			));
 			add(new ProfileCommand(
-					"perfil", new String[]{"xp", "profile", "pf"}, getLocale(PT).getString("cmd_profile"), INFO));
+					"perfil", new String[]{"xp", "profile", "pf"}, getLocale(PT).getString("cmd_profile"), INFO
+			));
 			add(new ReportBugCommand(
-					"bug", new String[]{"sendbug", "feedback"}, getLocale(PT).getString(REQ_MESSAGE), getLocale(PT).getString("cmd_bug"), INFO));
+					"bug", new String[]{"sendbug", "feedback"}, getLocale(PT).getString(REQ_MESSAGE), getLocale(PT).getString("cmd_bug"), INFO
+			));
 			add(new ReportUserCommand(
-					"report", new String[]{"reportar"}, getLocale(PT).getString("req_user-reason"), getLocale(PT).getString("cmd_report"), INFO));
+					"report", new String[]{"reportar"}, getLocale(PT).getString("req_user-reason"), getLocale(PT).getString("cmd_report"), INFO
+			));
 			add(new BotInfoCommand(
-					"info", new String[]{"botinfo", "bot"}, getLocale(PT).getString("cmd_info"), INFO));
+					"info", new String[]{"botinfo", "bot"}, getLocale(PT).getString("cmd_info"), INFO
+			));
 			add(new URankCommand(
-					"rank", new String[]{"ranking", "top10"}, getLocale(PT).getString("req_global"), getLocale(PT).getString("cmd_rank"), INFO));
+					"rank", new String[]{"ranking", "top10"}, getLocale(PT).getString("req_global"), getLocale(PT).getString("cmd_rank"), INFO
+			));
 			add(new IDCommand(
-					"id", getLocale(PT).getString(REQ_NAME), getLocale(PT).getString("cmd_id"), INFO));
+					"id", getLocale(PT).getString(REQ_NAME), getLocale(PT).getString("cmd_id"), INFO
+			));
 			add(new ColorTesterCommand(
-					"quecor", new String[]{"tcolor", "testcolor"}, getLocale(PT).getString("req_color"), getLocale(PT).getString("cmd_color"), INFO));
+					"quecor", new String[]{"tcolor", "testcolor"}, getLocale(PT).getString("req_color"), getLocale(PT).getString("cmd_color"), INFO
+			));
 			add(new LocalEmoteListCommand(
-					"emotes", getLocale(PT).getString(REQ_NAME), getLocale(PT).getString("cmd_emotes"), INFO));
+					"emotes", getLocale(PT).getString(REQ_NAME), getLocale(PT).getString("cmd_emotes"), INFO
+			));
 			add(new ShiroEmoteListCommand(
-					"semotes", getLocale(PT).getString(REQ_NAME), getLocale(PT).getString("cmd_s-emotes"), INFO));
+					"semotes", getLocale(PT).getString(REQ_NAME), getLocale(PT).getString("cmd_s-emotes"), INFO
+			));
 			add(new WalletCommand(
-					"carteira", new String[]{"banco", "bank", "money", "wallet", "atm"}, getLocale(PT).getString("cmd_wallet"), INFO));
+					"carteira", new String[]{"banco", "bank", "money", "wallet", "atm"}, getLocale(PT).getString("cmd_wallet"), INFO
+			));
 			add(new PingCommand(
-					"ping", getLocale(PT).getString("cmd_ping"), INFO));
+					"ping", getLocale(PT).getString("cmd_ping"), INFO
+			));
 			add(new UptimeCommand(
-					"uptime", getLocale(PT).getString("cmd_uptime"), INFO));
+					"uptime", getLocale(PT).getString("cmd_uptime"), INFO
+			));
 			add(new ListScoreCommand(
-					"notas", new String[]{"scores"}, getLocale(PT).getString("cmd_score"), INFO));
+					"notas", new String[]{"scores"}, getLocale(PT).getString("cmd_score"), INFO
+			));
 
 			//MISC
 			add(new BackgroundCommand(
-					"background", new String[]{"fundo", "bg"}, getLocale(PT).getString(REQ_LINK), getLocale(PT).getString("cmd_background"), MISC));
+					"background", new String[]{"fundo", "bg"}, getLocale(PT).getString(REQ_LINK), getLocale(PT).getString("cmd_background"), MISC
+			));
 			add(new BiographyCommand(
-					"bio", new String[]{"story", "desc"}, getLocale(PT).getString(REQ_MESSAGE), getLocale(PT).getString("cmd_biography"), MISC));
+					"bio", new String[]{"story", "desc"}, getLocale(PT).getString(REQ_MESSAGE), getLocale(PT).getString("cmd_biography"), MISC
+			));
 			add(new AsciiCommand(
 					"ascii", getLocale(PT).getString(REQ_TEXT), getLocale(PT).getString("cmd_ascii"), MISC
 			));
@@ -249,43 +306,46 @@ public class CommandManager {
 					"tristemasverdade", new String[]{"tmv", "sadbuttrue", "sbt"}, getLocale(PT).getString("req_truth"), getLocale(PT).getString("cmd_sad-but-true"), FUN
 			));
 			add(new HardDecisionCommand(
-					"doisbotoes", new String[]{"tb", "twobuttons", "buttons"}, getLocale(PT).getString(REQ_TWO_OPTIONS), getLocale(PT).getString("cmd_two-buttons"), Category.FUN
+					"doisbotoes", new String[]{"tb", "twobuttons", "buttons"}, getLocale(PT).getString(REQ_TWO_OPTIONS), getLocale(PT).getString("cmd_two-buttons"), FUN
 			));
 			add(new ExpandingBrainCommand(
-					"menteexpandida", new String[]{"eb", "expandingbrain", "brain"}, getLocale(PT).getString("req_four-options"), getLocale(PT).getString("cmd_expanded-brain"), Category.FUN
+					"menteexpandida", new String[]{"eb", "expandingbrain", "brain"}, getLocale(PT).getString("req_four-options"), getLocale(PT).getString("cmd_expanded-brain"), FUN
 			));
 			add(new PPTCommand(
-					"jankenpon", new String[]{"ppt", "rps", "jokenpo", "janken"}, getLocale(PT).getString("req_jakenpon"), getLocale(PT).getString("cmd_jankenpon"), Category.FUN
+					"jankenpon", new String[]{"ppt", "rps", "jokenpo", "janken"}, getLocale(PT).getString("req_jakenpon"), getLocale(PT).getString("cmd_jankenpon"), FUN
 			));
 			add(new ShipCommand(
-					"ship", new String[]{"shippar"}, getLocale(PT).getString("req_two-mentions"), getLocale(PT).getString("cmd_ship"), Category.FUN
+					"ship", new String[]{"shippar"}, getLocale(PT).getString("req_two-mentions"), getLocale(PT).getString("cmd_ship"), FUN
 			));
 			add(new MarryCommand(
-					"casar", new String[]{"declarar", "marry"}, getLocale(PT).getString(REQ_MENTION), getLocale(PT).getString("cmd_marry"), Category.FUN
+					"casar", new String[]{"declarar", "marry"}, getLocale(PT).getString(REQ_MENTION), getLocale(PT).getString("cmd_marry"), FUN
 			));
 			add(new StonksCommand(
-					"stonks", new String[]{"stks"}, getLocale(PT).getString(REQ_TEXT), getLocale(PT).getString("cmd_stonks"), Category.FUN
+					"stonks", new String[]{"stks"}, getLocale(PT).getString(REQ_TEXT), getLocale(PT).getString("cmd_stonks"), FUN
 			));
 			add(new StinksCommand(
-					"stinks", new String[]{"notstks"}, getLocale(PT).getString(REQ_TEXT), getLocale(PT).getString("cmd_stinks"), Category.FUN
+					"stinks", new String[]{"notstks"}, getLocale(PT).getString(REQ_TEXT), getLocale(PT).getString("cmd_stinks"), FUN
 			));
 			add(new DrakeCommand(
-					"drake", new String[]{"drk"}, getLocale(PT).getString(REQ_TWO_OPTIONS), getLocale(PT).getString("cmd_drake"), Category.FUN
+					"drake", new String[]{"drk"}, getLocale(PT).getString(REQ_TWO_OPTIONS), getLocale(PT).getString("cmd_drake"), FUN
 			));
 			add(new SpiderManCommand(
-					"homemaranha", new String[]{"spiderman", "spoda", "miranha"}, getLocale(PT).getString(REQ_TEXT), getLocale(PT).getString("cmd_spider-man"), Category.FUN
+					"homemaranha", new String[]{"spiderman", "spoda", "miranha"}, getLocale(PT).getString(REQ_TEXT), getLocale(PT).getString("cmd_spider-man"), FUN
+			));
+			add(new TomCruiseCommand(
+					"tomcruise", new String[]{"vainessa", "iludido", "noyoullnot"}, getLocale(PT).getString(REQ_TEXT), getLocale(PT).getString("cmd_tom-cruise"), FUN
 			));
 			add(new PixelCanvasCommand(
-					"canvas", new String[]{"pixel", "pixelcanvas"}, getLocale(PT).getString("req_x-y-color"), getLocale(PT).getString("cmd_canvas"), Category.FUN
+					"canvas", new String[]{"pixel", "pixelcanvas"}, getLocale(PT).getString("req_x-y-color"), getLocale(PT).getString("cmd_canvas"), FUN
 			));
 			add(new PixelChunkCommand(
-					"chunk", new String[]{"zone", "pixelchunk"}, getLocale(PT).getString("req_zone-x-y-color"), getLocale(PT).getString("cmd_canvas-chunk"), Category.FUN
+					"chunk", new String[]{"zone", "pixelchunk"}, getLocale(PT).getString("req_zone-x-y-color"), getLocale(PT).getString("cmd_canvas-chunk"), FUN
 			));
 			add(new DivorceCommand(
-					"divorciar", new String[]{"separar", "divorce"}, getLocale(PT).getString("cmd_divorce"), Category.FUN
+					"divorciar", new String[]{"separar", "divorce"}, getLocale(PT).getString("cmd_divorce"), FUN
 			));
 			add(new SlotsCommand(
-					"slots", new String[]{"roleta"}, getLocale(PT).getString("req_bet"), getLocale(PT).getString("cmd_slots"), Category.MISC
+					"slots", new String[]{"roleta"}, getLocale(PT).getString("req_bet"), getLocale(PT).getString("cmd_slots"), MISC
 			));
 			add(new HugReaction(
 					"abraçar", new String[]{"abracar", "hug", "vemca"}, getLocale(PT).getString("cmd_hug"), true, "hug"
@@ -332,17 +392,22 @@ public class CommandManager {
 
 			//MUSICA
 			add(new ControlCommand(
-					"controle", new String[]{"control", "c"}, getLocale(PT).getString("cmd_control"), MUSICA));
+					"controle", new String[]{"control", "c"}, getLocale(PT).getString("cmd_control"), MUSICA
+			));
 			add(new YoutubeCommand(
-					"play", new String[]{"yt", "youtube"}, getLocale(PT).getString(REQ_NAME), getLocale(PT).getString("cmd_play"), MUSICA));
+					"play", new String[]{"yt", "youtube"}, getLocale(PT).getString(REQ_NAME), getLocale(PT).getString("cmd_play"), MUSICA
+			));
 			add(new VideoCommand(
-					"video", new String[]{"vid"}, getLocale(PT).getString(REQ_NAME), getLocale(PT).getString("cmd_video"), MUSICA));
+					"video", new String[]{"vid"}, getLocale(PT).getString(REQ_NAME), getLocale(PT).getString("cmd_video"), MUSICA
+			));
 
 			//EXCEED
 			add(new ExceedRankCommand(
-					"exceedrank", new String[]{"exrank", "topexceed", "topex"}, getLocale(PT).getString("cmd_exceed-rank"), EXCEED));
+					"exceedrank", new String[]{"exrank", "topexceed", "topex"}, getLocale(PT).getString("cmd_exceed-rank"), EXCEED
+			));
 			add(new ExceedSelectCommand(
-					"exceedselect", new String[]{"exselect", "sou"}, getLocale(PT).getString("cmd_exceed"), EXCEED));
+					"exceedselect", new String[]{"exselect", "sou"}, getLocale(PT).getString("cmd_exceed"), EXCEED
+			));
 		}};
 	}
 

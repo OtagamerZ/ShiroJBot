@@ -19,66 +19,51 @@ package com.kuuhaku.command.commands.fun;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Objects;
 
-public class DrakeCommand extends Command {
+public class TomCruiseCommand extends Command {
 
-	public DrakeCommand(String name, String description, Category category) {
+	public TomCruiseCommand(String name, String description, Category category) {
 		super(name, description, category);
 	}
 
-	public DrakeCommand(String name, String[] aliases, String description, Category category) {
+	public TomCruiseCommand(String name, String[] aliases, String description, Category category) {
 		super(name, aliases, description, category);
 	}
 
-	public DrakeCommand(String name, String usage, String description, Category category) {
+	public TomCruiseCommand(String name, String usage, String description, Category category) {
 		super(name, usage, description, category);
 	}
 
-	public DrakeCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
+	public TomCruiseCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
 		super(name, aliases, usage, description, category);
 	}
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-
 		if (args.length < 1) {
 			channel.sendMessage(":x: | Você tem que escrever a mensagem que deseja que apareca no meme.").queue();
-			return;
-		} else if (String.join(" ", args).split(";").length < 2) {
-			channel.sendMessage(":x: | Você precisa escrever duas opções para o meme (separados por ponto-e-vírgula).").queue();
 			return;
 		}
 
 		try {
-			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("drake.jpg")));
-			Graphics2D g2d = bi.createGraphics();
-			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			String text = String.join(" ", args);
+			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("tomcruise.jpg")));
 
-			g2d.setColor(Color.BLACK);
-			g2d.setFont(new Font("Arial", Font.BOLD, 40));
-			Profile.drawStringMultiLineNO(g2d, String.join(" ", args).split(";")[0], 313, 362, 55);
-			Profile.drawStringMultiLineNO(g2d, String.join(" ", args).split(";")[1], 313, 362, 337);
+			ByteArrayOutputStream baos = Helper.renderMeme(text, bi);
 
-			g2d.dispose();
-
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write(bi, "png", baos);
-
-			channel.sendMessage("Aqui está seu meme " + author.getAsMention() + "!").addFile(baos.toByteArray(), "drake.jpg").queue();
+			channel.sendMessage("Aqui está seu meme " + author.getAsMention() + "!").addFile(baos.toByteArray(), "tomcruise.jpg").queue();
+			baos.close();
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 	}
-
 }
