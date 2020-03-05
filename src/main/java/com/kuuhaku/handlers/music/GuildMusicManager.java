@@ -19,6 +19,7 @@ package com.kuuhaku.handlers.music;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
+import net.dv8tion.jda.api.entities.TextChannel;
 
 public class GuildMusicManager {
 	/**
@@ -30,8 +31,11 @@ public class GuildMusicManager {
 	 */
 	public final TrackScheduler scheduler;
 
+	public TextChannel currentChannel;
+
 	/**
 	 * Creates a player and a track scheduler.
+	 *
 	 * @param manager Audio player manager to use for creating the player.
 	 */
 	public GuildMusicManager(AudioPlayerManager manager) {

@@ -50,10 +50,10 @@ public class MapRegisterHandler extends ListenerAdapter {
 	private final TextChannel chn;
 	private final boolean[] complete = new boolean[]{false, false};
 
-	private static final String PREVIOUS = "\u25C0";
-	private static final String CANCEL = "\u274E";
-	private static final String NEXT = "\u25B6";
-	private static final String ACCEPT = "\u2705";
+	private static final String PREVIOUS = "◀";
+	private static final String CANCEL = "❎";
+	private static final String NEXT = "▶";
+	private static final String ACCEPT = "✅";
 
 	public MapRegisterHandler(TextChannel channel, JDA jda, User user) {
 		this.channel = channel;

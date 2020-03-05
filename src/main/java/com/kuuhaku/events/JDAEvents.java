@@ -25,13 +25,12 @@ import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.persistent.AppUser;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.Music;
 import com.kuuhaku.utils.ShiroInfo;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.ReadyEvent;
+import net.dv8tion.jda.api.events.channel.voice.GenericVoiceChannelEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
@@ -89,6 +88,11 @@ public class JDAEvents extends ListenerAdapter {
 	}
 
 	@Override
+	public void onGenericVoiceChannel(@Nonnull GenericVoiceChannelEvent event) {
+		System.out.println("aaaaaaaaaaaa");
+	}
+
+	@Override
 	public void onMessageReactionAdd(MessageReactionAddEvent event) {
 		if (Objects.requireNonNull(event.getUser()).isBot()) return;
 
@@ -100,15 +104,8 @@ public class JDAEvents extends ListenerAdapter {
 					Main.getInfo().getPolls().get(message.getId())[0]++;
 				else if (event.getReactionEmote().getName().equals("\uD83D\uDC4E"))
 					Main.getInfo().getPolls().get(message.getId())[1]++;
-				else if (event.getReactionEmote().getName().equals("\u274C") && Objects.requireNonNull(message.getEmbeds().get(0).getTitle()).equals(":notepad_spiral: Enquete criada por " + Objects.requireNonNull(event.getMember()).getEffectiveName())) {
+				else if (event.getReactionEmote().getName().equals("❌") && Objects.requireNonNull(message.getEmbeds().get(0).getTitle()).equals(":notepad_spiral: Enquete criada por " + Objects.requireNonNull(event.getMember()).getEffectiveName())) {
 					Main.getInfo().getPolls().remove(message.getId());
-					message.delete().queue();
-				}
-			}
-
-			if (message.getAuthor() == Main.getInfo().getSelfUser() && message.getEmbeds().size() > 0 && Objects.requireNonNull(Objects.requireNonNull(message.getEmbeds().get(0).getFooter()).getText()).startsWith("Link: https://www.youtube.com/watch?v=") && event.getReactionEmote().getName().equals(Helper.ACCEPT)) {
-				Music.loadAndPlay(event.getMember(), event.getTextChannel(), message.getEmbeds().get(0).getUrl());
-				if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) {
 					message.delete().queue();
 				}
 			}
