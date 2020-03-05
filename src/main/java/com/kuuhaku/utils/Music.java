@@ -30,9 +30,10 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class Music {
-	private static void play(VoiceChannel vc, Guild guild, GuildMusicManager musicManager, AudioTrack track) {
+	private static void play(VoiceChannel vc, TextChannel channel, Guild guild, GuildMusicManager musicManager, AudioTrack track) {
 		if (!guild.getAudioManager().isConnected()) guild.getAudioManager().openAudioConnection(vc);
 
+		musicManager.currentChannel = channel;
 		musicManager.scheduler.queue(track);
 	}
 
@@ -146,7 +147,7 @@ public class Music {
 
 				if (Objects.requireNonNull(m.getVoiceState()).inVoiceChannel()) {
 					track.setUserData(m.getUser());
-					play(m.getVoiceState().getChannel(), channel.getGuild(), musicManager, track);
+					play(m.getVoiceState().getChannel(), channel, channel.getGuild(), musicManager, track);
 				} else channel.sendMessage(":x: | Você não está conectado em um canal de voz.").queue();
 			}
 
@@ -158,11 +159,11 @@ public class Music {
 					firstTrack = playlist.getTracks().get(0);
 				}
 
-				channel.sendMessage("Musíca adicionada com sucesso à fila: " + playlist.getName()).queue();
+				channel.sendMessage("Playlist adicionada com sucesso à fila: " + playlist.getName()).queue();
 
 				if (Objects.requireNonNull(m.getVoiceState()).inVoiceChannel()) {
 					firstTrack.setUserData(m.getUser());
-					play(m.getVoiceState().getChannel(), channel.getGuild(), musicManager, firstTrack);
+					play(m.getVoiceState().getChannel(), channel, channel.getGuild(), musicManager, firstTrack);
 				} else channel.sendMessage(":x: | Você não está conectado em um canal de voz.").queue();
 			}
 

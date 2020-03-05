@@ -77,7 +77,7 @@ public class PollCommand extends Command {
 			channel.sendMessage(eb.build()).queue(m -> {
 				m.addReaction("\uD83D\uDC4D").queue();
 				m.addReaction("\uD83D\uDC4E").queue();
-                m.addReaction("\u274C").queue();
+				m.addReaction("❌").queue();
 				Main.getInfo().getPolls().put(m.getId(), new Integer[]{0, 0});
 				Main.getInfo().getScheduler().schedule(() -> showResult(m, member, eb), gc.getPollTime(), TimeUnit.SECONDS);
 			});
@@ -86,7 +86,7 @@ public class PollCommand extends Command {
 				Objects.requireNonNull(guild.getTextChannelById(gc.getCanalSUG())).sendMessage(eb.build()).queue(m -> {
 					m.addReaction("\uD83D\uDC4D").queue();
 					m.addReaction("\uD83D\uDC4E").queue();
-                    m.addReaction("\u274C").queue();
+					m.addReaction("❌").queue();
 					Main.getInfo().getPolls().put(m.getId(), new Integer[]{0, 0});
 					Main.getInfo().getScheduler().schedule(() -> showResult(m, member, eb), gc.getPollTime(), TimeUnit.SECONDS);
 				});
