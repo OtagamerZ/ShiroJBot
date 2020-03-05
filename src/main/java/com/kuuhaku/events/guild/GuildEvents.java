@@ -73,7 +73,7 @@ public class GuildEvents extends ListenerAdapter {
 				}
 			} else prefix = Main.getInfo().getDefaultPrefix();
 
-			if (rawMessage.startsWith(";")) {
+			if (rawMessage.startsWith(";") && rawMessage.length() > 1 && StringUtils.isAlpha(String.valueOf(rawMessage.charAt(1)))) {
 				try {
 					if (rawMessage.replace(";", "").length() == 0) {
 						channel.sendFile(message.getAttachments().get(0).downloadToFile().get()).queue();
