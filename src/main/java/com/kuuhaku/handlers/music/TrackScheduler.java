@@ -88,14 +88,13 @@ public class TrackScheduler extends AudioEventAdapter {
 				AudioTrackInfo ati = player.getPlayingTrack().getInfo();
 
 				eb.setColor(Helper.getRandomColor());
-				eb.setTitle("Tocando agora: " + ati.title + " (" + String.valueOf(Helper.round((ati.length / 1000f) / 60f, 2)).replace(".", ":") + ")");
+				eb.setDescription("Tocando agora: [" + ati.title + "](" + ati.uri + ") (" + String.valueOf(Helper.round((ati.length / 1000f) / 60f, 2)).replace(".", ":") + " minutos)");
 				eb.setFooter("Autor: " + ati.author + ". Requisitado por: " + ((User) player.getPlayingTrack().getUserData()).getAsTag());
 
 				channel.sendMessage(eb.build()).queue(null, Helper::doNothing);
 			} catch (Exception e) {
 				eb.setColor(Helper.getRandomColor());
-				eb.setTitle("Fila de músicas encerrada, obrigado por mais um ouvinte da Shiro FM!");
-				eb.setFooter("Se gostou das minhas funções, não deixe de votar em https://top.gg/bot/572413282653306901");
+				eb.setDescription("Fila de músicas encerrada, obrigado por mais um ouvinte da rádio Shiro FM!\nSe gostou das minhas funções, não deixe de votar na [minha página](https://top.gg/bot/572413282653306901).");
 
 				channel.sendMessage(eb.build()).queue(s -> {
 					channel.getGuild().getAudioManager().closeAudioConnection();
