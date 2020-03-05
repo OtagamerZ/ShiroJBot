@@ -31,16 +31,14 @@ public class GuildMusicManager {
 	 */
 	public final TrackScheduler scheduler;
 
-	public TextChannel currentChannel;
-
 	/**
 	 * Creates a player and a track scheduler.
 	 *
 	 * @param manager Audio player manager to use for creating the player.
 	 */
-	public GuildMusicManager(AudioPlayerManager manager) {
+	public GuildMusicManager(AudioPlayerManager manager, TextChannel channel) {
 		player = manager.createPlayer();
-		scheduler = new TrackScheduler(player);
+		scheduler = new TrackScheduler(player, channel);
 		player.addListener(scheduler);
 	}
 
