@@ -61,7 +61,7 @@ public class Youtube {
 
 		JSONObject resposta = new JSONObject(IOUtils.toString(con.getInputStream(), StandardCharsets.UTF_8));
 
-		Helper.logger(Tradutor.class).debug(resposta);
+		Helper.logger(Tradutor.class).info(resposta);
 		return resposta.getJSONArray("items");
 	}
 
