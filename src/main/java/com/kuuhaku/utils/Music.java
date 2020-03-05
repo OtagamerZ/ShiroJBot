@@ -18,9 +18,7 @@
 package com.kuuhaku.utils;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.Youtube;
 import com.kuuhaku.handlers.music.GuildMusicManager;
-import com.kuuhaku.model.common.YoutubeVideo;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
@@ -92,15 +90,16 @@ public class Music {
 		}
 
 		try {
-			YoutubeVideo yv = Youtube.getSingleData("allintitle:\"" + musicManager.player.getPlayingTrack().getInfo().title + "\"");
+			AudioTrack at = musicManager.player.getPlayingTrack();
 
 			EmbedBuilder eb = new EmbedBuilder();
 
-			eb.setTitle(musicManager.player.getPlayingTrack().getInfo().title, yv.getUrl());
-			eb.setImage(yv.getThumb());
-			eb.setColor(Helper.colorThief(yv.getThumb()));
-			eb.addField("Postado por:", musicManager.player.getPlayingTrack().getInfo().author, true);
-			eb.addField("Duração:", String.valueOf(Helper.round(((double) musicManager.player.getPlayingTrack().getDuration() / 1000) / 60, 2)).replace(".", ":"), true);
+			String thumb = "https://img.youtube.com/vi/" + at.getInfo().uri.substring(at.getInfo().uri.indexOf("v=")).replace("v=", "") + "/maxresdefault.jpg";
+			eb.setTitle(musicManager.player.getPlayingTrack().getInfo().title, at.getInfo().uri);
+			eb.setImage(thumb);
+			eb.setColor(Helper.colorThief(thumb));
+			eb.addField("Postado por:", at.getInfo().author, true);
+			eb.addField("Duração:", String.valueOf(Helper.round(((double) at.getDuration() / 1000) / 60, 2)).replace(".", ":"), true);
 
 			channel.sendMessage(eb.build()).queue();
 		} catch (IOException e) {
