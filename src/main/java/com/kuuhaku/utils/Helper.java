@@ -665,7 +665,7 @@ public class Helper {
 		if (Objects.requireNonNull(member.getVoiceState()).inVoiceChannel()) {
 			Pages.buttonize(Main.getInfo().getAPI(), msg, Collections.singletonMap(ACCEPT, (mb, ms) -> {
 				Music.loadAndPlay(member, channel, msg.getEmbeds().get(0).getUrl());
-				if (hasPermission(guild.getSelfMember(), Permission.MESSAGE_MANAGE, channel)) {
+				if (guild.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) {
 					message.delete().queue();
 				}
 			}), true, 60, TimeUnit.SECONDS);
