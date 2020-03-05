@@ -661,14 +661,19 @@ public class Helper {
 		return Collections.singletonMap(String.join(" ", newWords), aVoid -> queue.forEach(q -> q.accept(null)));
 	}
 
-	public static void playAudio(Member member, Message message, TextChannel channel, Guild guild, Message msg) {
+	public static void playAudio(Member member, Message message, TextChannel channel, Message msg) {
 		if (Objects.requireNonNull(member.getVoiceState()).inVoiceChannel()) {
 			Pages.buttonize(Main.getInfo().getAPI(), msg, Collections.singletonMap(ACCEPT, (mb, ms) -> {
 				Music.loadAndPlay(member, channel, msg.getEmbeds().get(0).getUrl());
-				if (guild.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) {
-					message.delete().queue();
-				}
+				message.delete().queue(null, Helper::doNothing);
 			}), true, 60, TimeUnit.SECONDS);
+		}
+	}
+
+	public static void doNothing(Throwable t) {
+		try {
+			throw t;
+		} catch (Throwable ignore) {
 		}
 	}
 }
