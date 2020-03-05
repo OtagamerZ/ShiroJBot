@@ -72,14 +72,13 @@ public class VideoCommand extends Command {
 						eb.setColor(Helper.colorThief(v.getThumb()));
 						eb.setFooter("Link: " + v.getUrl(), null);
 						channel.sendMessage(eb.build()).queue(msg -> {
-							Pages.buttonize(Main.getInfo().getAPI(), msg, Collections.singletonMap("▶", (mb, ms) -> {
-								Music.loadAndPlay(member, (TextChannel) channel, msg.getEmbeds().get(0).getUrl());
-								if (Helper.hasPermission(guild.getSelfMember(), Permission.MESSAGE_MANAGE, (TextChannel) channel)) {
-									message.delete().queue();
-								}
-							}), true, 60, TimeUnit.SECONDS);
 							if (Objects.requireNonNull(member.getVoiceState()).inVoiceChannel())
-								msg.addReaction("▶").queue();
+								Pages.buttonize(Main.getInfo().getAPI(), msg, Collections.singletonMap("✅", (mb, ms) -> {
+									Music.loadAndPlay(member, (TextChannel) channel, msg.getEmbeds().get(0).getUrl());
+									if (Helper.hasPermission(guild.getSelfMember(), Permission.MESSAGE_MANAGE, (TextChannel) channel)) {
+										message.delete().queue();
+									}
+								}), true, 60, TimeUnit.SECONDS);
 						});
 					} catch (IOException e) {
 						m.editMessage(":x: | Nenhum vídeo encontrado.").queue();
