@@ -94,7 +94,8 @@ public class TrackScheduler extends AudioEventAdapter {
 				channel.sendMessage(eb.build()).queue(null, Helper::doNothing);
 			} catch (Exception e) {
 				eb.setColor(Helper.getRandomColor());
-				eb.setDescription("Fila de músicas encerrada, obrigado por mais um ouvinte da rádio Shiro FM!\nSe gostou das minhas funções, não deixe de votar na [minha página](https://top.gg/bot/572413282653306901).");
+				eb.setTitle("Fila de músicas encerrada, obrigado por mais um ouvinte da rádio Shiro FM!");
+				eb.setDescription("Se gostou das minhas funções, não deixe de votar na [minha página](https://top.gg/bot/572413282653306901).");
 
 				channel.sendMessage(eb.build()).queue(s -> {
 					channel.getGuild().getAudioManager().closeAudioConnection();
