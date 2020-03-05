@@ -82,7 +82,7 @@ public class YoutubeCommand extends Command {
 
                             channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(msg -> {
                                 Pages.paginate(Main.getInfo().getAPI(), msg, pages, 60, TimeUnit.SECONDS);
-                                Helper.playAudio(member, message, (TextChannel) channel, msg);
+                                Helper.playAudio(member, msg, (TextChannel) channel, msg);
                             });
                         } else m.editMessage(":x: | Nenhum vídeo encontrado").queue();
                     }catch (IOException e) {
