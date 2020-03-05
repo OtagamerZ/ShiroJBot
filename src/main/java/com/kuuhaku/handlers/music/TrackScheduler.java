@@ -89,7 +89,7 @@ public class TrackScheduler extends AudioEventAdapter {
 
 				eb.setColor(Helper.getRandomColor());
 				eb.setTitle("Tocando agora: " + ati.title + " (" + String.valueOf(Helper.round((ati.length / 1000f) / 60f, 2)).replace(".", ":") + ")");
-				eb.setFooter("Autor: " + ati.author + "Requisitado por: " + ((User) player.getPlayingTrack().getUserData()).getAsTag());
+				eb.setFooter("Autor: " + ati.author + ". Requisitado por: " + ((User) player.getPlayingTrack().getUserData()).getAsTag());
 
 				channel.sendMessage(eb.build()).queue(null, Helper::doNothing);
 			} catch (Exception e) {
@@ -99,9 +99,10 @@ public class TrackScheduler extends AudioEventAdapter {
 				eb.setTitle("Fila de músicas encerrada, obrigado por mais um ouvinte da Shiro FM!");
 				eb.setFooter("Se gostou das minhas funções, não deixe de votar em https://top.gg/bot/572413282653306901");
 
-				channel.sendMessage(eb.build()).queue(null, Helper::doNothing);
-				clear();
-				player.destroy();
+				channel.sendMessage(eb.build()).queue(s -> {
+					clear();
+					player.destroy();
+				}, Helper::doNothing);
 			}
 		}
 	}
