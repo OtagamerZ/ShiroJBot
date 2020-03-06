@@ -593,10 +593,25 @@ public class Helper {
 		return String.join(" ", args);
 	}
 
-	public static void drawString(Graphics2D g, String text, int x, int y) {
-		String[] words = text.split("\\r?\\n");
-		for (int i = 0; i < words.length; i++) {
-			g.drawString(words[i], x, y + (g.getFontMetrics().getHeight() * i));
+	public static void drawString(Graphics2D g, String text, int x, int y, int width) {
+		StringBuilder sb = new StringBuilder();
+		List<String> lines = new ArrayList<>();
+		for (String word : text.split(" ")) {
+			sb.append(word);
+			if (g.getFontMetrics().stringWidth(sb.toString()) > width) {
+				lines.add(sb.toString());
+				sb.setLength(0);
+			}
+		}
+		if (lines.size() == 0) lines.add(text);
+
+		int l = 0;
+		for (String s : lines) {
+			String[] words = s.split("\\r?\\n");
+			for (String word : words) {
+				g.drawString(word, x, y + (g.getFontMetrics().getHeight() * l));
+				l++;
+			}
 		}
 	}
 
@@ -610,7 +625,7 @@ public class Helper {
 
 		g2d.setColor(Color.BLACK);
 		g2d.setFont(new Font("Arial", Font.BOLD, 30));
-		drawString(g2d, text, 25, 45);
+		drawString(g2d, text, 25, 45, bi.getWidth() - 50);
 		g2d.drawImage(bi, 0, canvas.getHeight() - bi.getHeight(), null);
 
 		g2d.dispose();
