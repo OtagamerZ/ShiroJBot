@@ -39,7 +39,11 @@ public class AudioHandler implements AudioSendHandler {
 
 	@Override
 	public ByteBuffer provide20MsAudio() {
-		return ByteBuffer.wrap(lastFrame.getData());
+		try {
+			return ByteBuffer.wrap(lastFrame.getData());
+		} catch (NullPointerException e) {
+			return ByteBuffer.wrap(new byte[0]);
+		}
 	}
 
 	@Override
