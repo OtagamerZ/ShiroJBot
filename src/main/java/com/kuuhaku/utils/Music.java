@@ -119,7 +119,7 @@ public class Music {
 		EmbedBuilder eb = new EmbedBuilder();
 
 		eb.setTitle("Fila de músicas:");
-		musicManager.scheduler.queue().forEach(t -> eb.addField(t.getPosition() + t.getInfo().title, "Requisitado por " + ((User) t.getUserData()).getAsMention(), false));
+		musicManager.scheduler.queue().forEach(t -> eb.addField(t.getPosition() + t.getInfo().title, " - Requisitado por " + ((User) t.getUserData()).getAsMention(), false));
 		eb.setFooter("Tempo estimado da fila: " + String.valueOf(Helper.round((musicManager.scheduler.queue().stream().mapToDouble(AudioTrack::getDuration).sum() / 1000) / 60, 2)).replace(".", ":"), null);
 
 		channel.sendMessage(eb.build()).queue();
