@@ -597,13 +597,15 @@ public class Helper {
 		StringBuilder sb = new StringBuilder();
 		List<String> lines = new ArrayList<>();
 		for (String word : text.split(" ")) {
-			sb.append(word);
+			sb.append(word).append(" ");
 			if (g.getFontMetrics().stringWidth(sb.toString()) > width) {
-				lines.add(sb.toString());
+				lines.add(sb.toString().trim());
+				System.out.println(g.getFontMetrics().stringWidth(sb.toString()));
 				System.out.println(sb);
 				sb.setLength(0);
 			}
 		}
+		System.out.println(Arrays.toString(lines.toArray()));
 		if (lines.size() == 0) lines.add(text);
 
 		int l = 0;
