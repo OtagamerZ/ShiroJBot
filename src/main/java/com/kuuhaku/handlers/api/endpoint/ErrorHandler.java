@@ -19,6 +19,7 @@ package com.kuuhaku.handlers.api.endpoint;
 
 import com.kuuhaku.handlers.api.exception.Exception;
 import com.kuuhaku.handlers.api.exception.InvalidTokenException;
+import com.kuuhaku.handlers.api.exception.NotEnoughArgsException;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
@@ -32,25 +33,31 @@ public class ErrorHandler implements ErrorController {
 	@RequestMapping("/error")
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public Exception error() {
-		return new Exception(500, "Erro interno do servidor");
+		return new Exception(500, "Internal server error");
 	}
 
 	@ExceptionHandler(InvalidTokenException.class)
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
 	public Exception invalidToken() {
-		return new Exception(403, "Token inválido");
+		return new Exception(403, "Invalid token");
 	}
 
 	@ExceptionHandler(NoResultException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public Exception noResult() {
-		return new Exception(404, "Nenhuma entidade com o ID informado encontrada");
+		return new Exception(404, "No entity found with that ID");
 	}
 
 	@ExceptionHandler(UnauthorizedException.class)
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
 	public Exception unauthorized() {
-		return new Exception(403, "Login não autorizado");
+		return new Exception(403, "Access not authorized");
+	}
+
+	@ExceptionHandler(NotEnoughArgsException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public Exception notEnoughArgs() {
+		return new Exception(400, "Not enough arguments were given to this request");
 	}
 
 	@Override
