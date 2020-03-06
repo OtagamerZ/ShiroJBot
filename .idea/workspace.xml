@@ -7,10 +7,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_ygimenez_PaginationUtils_44635793d3.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_ygimenez_PaginationUtils_852f6d3ba9.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.main.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/music/VideoCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/music/VideoCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/music/YoutubeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/music/YoutubeCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -257,14 +259,8 @@
       <workItem from="1583340498714" duration="11085000" />
       <workItem from="1583410394110" duration="14110000" />
       <workItem from="1583440321395" duration="851000" />
-      <workItem from="1583441232858" duration="260000" />
-    </task>
-    <task id="LOCAL-00717" summary="Começo da implementação do i18n">
-      <created>1582901921160</created>
-      <option name="number" value="00717" />
-      <option name="presentableId" value="LOCAL-00717" />
-      <option name="project" value="LOCAL" />
-      <updated>1582901921160</updated>
+      <workItem from="1583441232858" duration="453000" />
+      <workItem from="1583496814454" duration="277000" />
     </task>
     <task id="LOCAL-00718" summary="Começo da implementação do i18n">
       <created>1582906467269</created>
@@ -602,7 +598,14 @@
       <option name="project" value="LOCAL" />
       <updated>1583441125482</updated>
     </task>
-    <option name="localTasksCounter" value="766" />
+    <task id="LOCAL-00766" summary="Continuação da implementação do i18n">
+      <created>1583441535341</created>
+      <option name="number" value="00766" />
+      <option name="presentableId" value="LOCAL-00766" />
+      <option name="project" value="LOCAL" />
+      <updated>1583441535342</updated>
+    </task>
+    <option name="localTasksCounter" value="767" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -793,11 +796,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1583441126752">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1583441537981">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1582604543626" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1583441126752" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1583441537981" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -828,11 +831,11 @@
     </state>
     <state x="682" y="113" key="extract.method.dialog/0.0.1366.768@0.0.1366.768" timestamp="1582605093359" />
     <state x="448" y="274" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1583427178699" />
-    <state x="445" y="176" width="790" height="658" key="find.popup" timestamp="1583427409223">
+    <state x="445" y="176" width="790" height="658" key="find.popup" timestamp="1583497079349">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="362" y="134" width="774" height="562" key="find.popup/0.0.1366.768@0.0.1366.768" timestamp="1579836143729" />
-    <state x="445" y="176" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1583427409223" />
+    <state x="445" y="176" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1583497079349" />
     <state x="605" y="219" key="git4idea.branch.GitSmartOperationDialog" timestamp="1579030853134">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
