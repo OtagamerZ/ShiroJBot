@@ -613,19 +613,17 @@ public class Helper {
 
 	public static ByteArrayOutputStream renderMeme(String text, BufferedImage bi) throws IOException {
 		String[] lines = text.split("\\r?\\n");
-		int canvasSize = 0;
+		int canvasSize = 2;
 
 		BufferedImage canvas = new BufferedImage(1, 1, BufferedImage.TYPE_BYTE_BINARY);
 		Graphics2D g2d = canvas.createGraphics();
 
 		g2d.setFont(new Font("Arial", Font.BOLD, 30));
-		System.out.println(Arrays.toString(lines));
 		for (String line : lines) {
 			canvasSize += g2d.getFontMetrics().stringWidth(line) > bi.getWidth() ? 1 : 0;
 		}
-		System.out.println(canvasSize);
 
-		canvas = new BufferedImage(bi.getWidth(), (30 * (lines.length + canvasSize) + (6 * lines.length)) + 15 + bi.getHeight(), BufferedImage.TYPE_INT_RGB);
+		canvas = new BufferedImage(bi.getWidth(), (30 * ((lines.length - 1) + canvasSize) + (6 * lines.length)) + 15 + bi.getHeight(), BufferedImage.TYPE_INT_RGB);
 		g2d = canvas.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
