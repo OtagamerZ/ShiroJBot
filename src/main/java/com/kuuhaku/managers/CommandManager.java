@@ -29,7 +29,6 @@ import com.kuuhaku.command.commands.information.*;
 import com.kuuhaku.command.commands.misc.*;
 import com.kuuhaku.command.commands.moderation.*;
 import com.kuuhaku.command.commands.music.ControlCommand;
-import com.kuuhaku.command.commands.music.VideoCommand;
 import com.kuuhaku.command.commands.music.YoutubeCommand;
 import com.kuuhaku.command.commands.partner.*;
 import com.kuuhaku.command.commands.reactions.*;
@@ -396,9 +395,6 @@ public class CommandManager {
 			));
 			add(new YoutubeCommand(
 					"play", new String[]{"yt", "youtube"}, getLocale(PT).getString(REQ_NAME), getLocale(PT).getString("cmd_play"), MUSICA
-			));
-			add(new VideoCommand(
-					"video", new String[]{"vid"}, getLocale(PT).getString(REQ_NAME), getLocale(PT).getString("cmd_video"), MUSICA
 			));
 
 			//EXCEED
