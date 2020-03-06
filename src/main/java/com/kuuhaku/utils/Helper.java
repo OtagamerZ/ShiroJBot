@@ -601,6 +601,7 @@ public class Helper {
 			if (g.getFontMetrics().stringWidth(sb.toString()) > width) {
 				lines.add(sb.toString().trim());
 				System.out.println(g.getFontMetrics().stringWidth(sb.toString()));
+				System.out.println(width);
 				System.out.println(sb);
 				sb.setLength(0);
 			}
