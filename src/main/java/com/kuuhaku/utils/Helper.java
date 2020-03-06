@@ -597,7 +597,7 @@ public class Helper {
 		StringBuilder sb = new StringBuilder();
 		List<String> lines = new ArrayList<>();
 		for (String word : text.split(" ")) {
-			if (g.getFontMetrics().stringWidth(sb.toString()) > width) {
+			if (g.getFontMetrics().stringWidth(sb.toString() + word) > width) {
 				lines.add(sb.toString().trim());
 				sb.setLength(0);
 			}
