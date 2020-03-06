@@ -61,6 +61,6 @@ public class ChooseCommand extends Command {
 
 		int choice = new Random(seed).nextInt(opts.length);
 
-		channel.sendMessage(":question: | Eu escolho a opção " + choice + ": " + opts[choice] + "!").queue();
+		channel.sendMessage(":question: | Eu escolho a opção " + (choice + 1) + ": **" + opts[choice] + "**!").queue();
 	}
 }
