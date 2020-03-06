@@ -56,6 +56,6 @@ public class TokenCommand extends Command {
 		byte[] randomSpace = new byte[48 - nameSpace.length];
 		sr.nextBytes(randomSpace);
 
-		channel.sendMessage("Token de acesso do usuário " + args[0] + ": `" + Base64.getEncoder().encodeToString(ArrayUtils.addAll(nameSpace, randomSpace)) + "`\n\n__**Este token é aleatório, ele precisa ser ativado antes de poder ser usado (caso contrário é apenas uma String sem valor algum)**__").queue();
+		channel.sendMessage("Token de acesso gerado com a seed *" + args[0] + "*: `" + Base64.getEncoder().encodeToString(ArrayUtils.addAll(nameSpace, randomSpace)) + "`\n\n__**Este token é aleatório, ele precisa ser ativado antes de poder ser usado (caso contrário é apenas uma String sem valor algum)**__").queue();
 	}
 }
