@@ -18,6 +18,7 @@
 package com.kuuhaku.handlers.api.endpoint;
 
 import com.kuuhaku.controller.mysql.TokenDAO;
+import com.kuuhaku.handlers.api.ImageResponse;
 import com.kuuhaku.handlers.api.exception.InternalErrorException;
 import com.kuuhaku.handlers.api.exception.NotEnoughArgsException;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
@@ -30,15 +31,16 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.Objects;
 
 @RestController
 public class MemeRequest {
 	@RequestMapping(value = "/meme/twobuttons", method = RequestMethod.POST)
 	public @ResponseBody
-	byte[] getTwoButtonsMeme(@RequestHeader(value = "token") String token,
-							 @RequestHeader(value = "field-a") String fieldA,
-							 @RequestHeader(value = "field-b") String fieldB) {
+	ImageResponse getTwoButtonsMeme(@RequestHeader(value = "token") String token,
+									@RequestHeader(value = "field-a") String fieldA,
+									@RequestHeader(value = "field-b") String fieldB) {
 		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
 		else if (Helper.isEmpty(fieldA, fieldB)) {
 			throw new NotEnoughArgsException();
@@ -62,7 +64,7 @@ public class MemeRequest {
 			g2d.dispose();
 
 			ImageIO.write(bi, "png", baos);
-			return baos.toByteArray();
+			return new ImageResponse(200, Base64.getEncoder().encodeToString(baos.toByteArray()));
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			throw new InternalErrorException();
@@ -71,11 +73,11 @@ public class MemeRequest {
 
 	@RequestMapping(value = "/meme/expandingbrain", method = RequestMethod.POST)
 	public @ResponseBody
-	byte[] getExpandingBrainMeme(@RequestHeader(value = "token") String token,
-								 @RequestHeader(value = "field-a") String fieldA,
-								 @RequestHeader(value = "field-b") String fieldB,
-								 @RequestHeader(value = "field-c") String fieldC,
-								 @RequestHeader(value = "field-d") String fieldD) {
+	ImageResponse getExpandingBrainMeme(@RequestHeader(value = "token") String token,
+										@RequestHeader(value = "field-a") String fieldA,
+										@RequestHeader(value = "field-b") String fieldB,
+										@RequestHeader(value = "field-c") String fieldC,
+										@RequestHeader(value = "field-d") String fieldD) {
 		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
 		else if (Helper.isEmpty(fieldA, fieldB, fieldC, fieldD)) {
 			throw new NotEnoughArgsException();
@@ -96,7 +98,7 @@ public class MemeRequest {
 			g2d.dispose();
 
 			ImageIO.write(bi, "png", baos);
-			return baos.toByteArray();
+			return new ImageResponse(200, Base64.getEncoder().encodeToString(baos.toByteArray()));
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			throw new InternalErrorException();
@@ -105,9 +107,9 @@ public class MemeRequest {
 
 	@RequestMapping(value = "/meme/drake", method = RequestMethod.POST)
 	public @ResponseBody
-	byte[] getDrakeMeme(@RequestHeader(value = "token") String token,
-						@RequestHeader(value = "field-a") String fieldA,
-						@RequestHeader(value = "field-b") String fieldB) {
+	ImageResponse getDrakeMeme(@RequestHeader(value = "token") String token,
+							   @RequestHeader(value = "field-a") String fieldA,
+							   @RequestHeader(value = "field-b") String fieldB) {
 		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
 		else if (Helper.isEmpty(fieldA, fieldB)) {
 			throw new NotEnoughArgsException();
@@ -126,7 +128,7 @@ public class MemeRequest {
 			g2d.dispose();
 
 			ImageIO.write(bi, "png", baos);
-			return baos.toByteArray();
+			return new ImageResponse(200, Base64.getEncoder().encodeToString(baos.toByteArray()));
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			throw new InternalErrorException();
@@ -135,8 +137,8 @@ public class MemeRequest {
 
 	@RequestMapping(value = "/meme/sadreality", method = RequestMethod.POST)
 	public @ResponseBody
-	byte[] getSadRealityMeme(@RequestHeader(value = "token") String token,
-							 @RequestHeader(value = "field-a") String fieldA) {
+	ImageResponse getSadRealityMeme(@RequestHeader(value = "token") String token,
+									@RequestHeader(value = "field-a") String fieldA) {
 		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
 		else if (Helper.isEmpty(fieldA)) {
 			throw new NotEnoughArgsException();
@@ -158,7 +160,7 @@ public class MemeRequest {
 			g2d.dispose();
 
 			ImageIO.write(bi, "png", baos);
-			return baos.toByteArray();
+			return new ImageResponse(200, Base64.getEncoder().encodeToString(baos.toByteArray()));
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			throw new InternalErrorException();
@@ -167,8 +169,8 @@ public class MemeRequest {
 
 	@RequestMapping(value = "/meme/stonks", method = RequestMethod.POST)
 	public @ResponseBody
-	byte[] getStonksMeme(@RequestHeader(value = "token") String token,
-						 @RequestHeader(value = "field-a") String fieldA) {
+	ImageResponse getStonksMeme(@RequestHeader(value = "token") String token,
+								@RequestHeader(value = "field-a") String fieldA) {
 		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
 		else if (Helper.isEmpty(fieldA)) {
 			throw new NotEnoughArgsException();
@@ -179,8 +181,10 @@ public class MemeRequest {
 
 			ByteArrayOutputStream baos = Helper.renderMeme(fieldA, bi);
 
+			ImageResponse img = new ImageResponse(200, Base64.getEncoder().encodeToString(baos.toByteArray()));
 			baos.close();
-			return baos.toByteArray();
+
+			return img;
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			throw new InternalErrorException();
@@ -189,8 +193,8 @@ public class MemeRequest {
 
 	@RequestMapping(value = "/meme/stinks", method = RequestMethod.POST)
 	public @ResponseBody
-	byte[] getStinksMeme(@RequestHeader(value = "token") String token,
-						 @RequestHeader(value = "field-a") String fieldA) {
+	ImageResponse getStinksMeme(@RequestHeader(value = "token") String token,
+								@RequestHeader(value = "field-a") String fieldA) {
 		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
 		else if (Helper.isEmpty(fieldA)) {
 			throw new NotEnoughArgsException();
@@ -201,8 +205,10 @@ public class MemeRequest {
 
 			ByteArrayOutputStream baos = Helper.renderMeme(fieldA, bi);
 
+			ImageResponse img = new ImageResponse(200, Base64.getEncoder().encodeToString(baos.toByteArray()));
 			baos.close();
-			return baos.toByteArray();
+
+			return img;
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			throw new InternalErrorException();
@@ -211,8 +217,8 @@ public class MemeRequest {
 
 	@RequestMapping(value = "/meme/spiderman", method = RequestMethod.POST)
 	public @ResponseBody
-	byte[] getSpidermanMeme(@RequestHeader(value = "token") String token,
-							@RequestHeader(value = "field-a") String fieldA) {
+	ImageResponse getSpidermanMeme(@RequestHeader(value = "token") String token,
+								   @RequestHeader(value = "field-a") String fieldA) {
 		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
 		else if (Helper.isEmpty(fieldA)) {
 			throw new NotEnoughArgsException();
@@ -223,8 +229,10 @@ public class MemeRequest {
 
 			ByteArrayOutputStream baos = Helper.renderMeme(fieldA, bi);
 
+			ImageResponse img = new ImageResponse(200, Base64.getEncoder().encodeToString(baos.toByteArray()));
 			baos.close();
-			return baos.toByteArray();
+
+			return img;
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			throw new InternalErrorException();
@@ -233,8 +241,8 @@ public class MemeRequest {
 
 	@RequestMapping(value = "/meme/tomcruise", method = RequestMethod.POST)
 	public @ResponseBody
-	byte[] getTomCruiseMeme(@RequestHeader(value = "token") String token,
-							@RequestHeader(value = "field-a") String fieldA) {
+	ImageResponse getTomCruiseMeme(@RequestHeader(value = "token") String token,
+								   @RequestHeader(value = "field-a") String fieldA) {
 		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
 		else if (Helper.isEmpty(fieldA)) {
 			throw new NotEnoughArgsException();
@@ -245,8 +253,10 @@ public class MemeRequest {
 
 			ByteArrayOutputStream baos = Helper.renderMeme(fieldA, bi);
 
+			ImageResponse img = new ImageResponse(200, Base64.getEncoder().encodeToString(baos.toByteArray()));
 			baos.close();
-			return baos.toByteArray();
+
+			return img;
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			throw new InternalErrorException();
