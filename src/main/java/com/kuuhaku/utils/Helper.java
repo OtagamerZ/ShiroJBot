@@ -600,6 +600,7 @@ public class Helper {
 			sb.append(word);
 			if (g.getFontMetrics().stringWidth(sb.toString()) > width) {
 				lines.add(sb.toString());
+				System.out.println(sb);
 				sb.setLength(0);
 			}
 		}
@@ -611,7 +612,9 @@ public class Helper {
 			for (String word : words) {
 				g.drawString(word, x, y + (g.getFontMetrics().getHeight() * l));
 				l++;
+				System.out.println(l);
 			}
+			System.out.println(Arrays.toString(words));
 		}
 	}
 
