@@ -28,6 +28,7 @@ import com.kuuhaku.model.common.YoutubeVideo;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.Music;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
@@ -79,7 +80,7 @@ public class YoutubeCommand extends Command {
                                 eb.setDescription(v.getDesc());
                                 eb.setThumbnail(v.getThumb());
                                 eb.setColor(Helper.colorThief(v.getThumb()));
-                                eb.setFooter("Link: " + v.getUrl(), null);
+                                eb.setFooter("Link: " + v.getUrl(), v.getUrl());
                                 pages.add(new Page(PageType.EMBED, eb.build()));
                             }
 
@@ -87,8 +88,9 @@ public class YoutubeCommand extends Command {
                                 Pages.paginate(Main.getInfo().getAPI(), msg, pages, 60, TimeUnit.SECONDS);
                                 if (Objects.requireNonNull(member.getVoiceState()).inVoiceChannel()) {
                                     Pages.buttonize(Main.getInfo().getAPI(), msg, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
-                                        Music.loadAndPlay(member, (TextChannel) channel, msg.getEmbeds().get(0).getFooter().getIconUrl());
-                                        message.delete().queue(null, Helper::doNothing);
+                                        Music.loadAndPlay(member, (TextChannel) channel, Objects.requireNonNull(msg.getEmbeds().get(0).getFooter()).getIconUrl());
+                                        if (Helper.hasPermission(guild.getSelfMember(), Permission.MESSAGE_MANAGE, (TextChannel) channel))
+                                            message.delete().queue();
                                     }), true, 60, TimeUnit.SECONDS);
                                 }
                             });
