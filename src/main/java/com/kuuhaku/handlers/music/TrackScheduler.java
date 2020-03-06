@@ -91,7 +91,7 @@ public class TrackScheduler extends AudioEventAdapter {
 				eb.setDescription("Tocando agora: [" + ati.title + "](" + ati.uri + ") (" + String.valueOf(Helper.round((ati.length / 1000f) / 60f, 2)).replace(".", ":") + " minutos)");
 				eb.setFooter("Autor: " + ati.author + ". Requisitado por: " + ((User) player.getPlayingTrack().getUserData()).getAsTag());
 
-				channel.sendMessage(eb.build()).queue(null, Helper::doNothing);
+				channel.sendMessage(eb.build()).queue(null);
 			} catch (Exception e) {
 				eb.setColor(Helper.getRandomColor());
 				eb.setTitle("Fila de músicas encerrada, obrigado por mais um ouvinte da rádio Shiro FM!");
@@ -101,7 +101,7 @@ public class TrackScheduler extends AudioEventAdapter {
 					channel.getGuild().getAudioManager().closeAudioConnection();
 					clear();
 					player.destroy();
-				}, Helper::doNothing);
+				});
 			}
 		}
 	}
