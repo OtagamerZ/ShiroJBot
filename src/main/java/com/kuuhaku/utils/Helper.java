@@ -597,28 +597,32 @@ public class Helper {
 		StringBuilder sb = new StringBuilder();
 		List<String> lines = new ArrayList<>();
 		for (String word : text.split(" ")) {
-			sb.append(word).append(" ");
 			if (g.getFontMetrics().stringWidth(sb.toString()) > width) {
 				lines.add(sb.toString().trim());
 				sb.setLength(0);
 			}
+			sb.append(word).append(" ");
 		}
 		if (sb.length() > 0) lines.add(sb.toString());
 		if (lines.size() == 0) lines.add(text);
 
-		int l = 0;
-		for (String s : lines) {
-			String[] words = s.split("\\r?\\n");
-			for (String word : words) {
-				g.drawString(word, x, y + (g.getFontMetrics().getHeight() * l));
-				l++;
-			}
+		for (int i = 0; i < lines.size(); i++) {
+			g.drawString(lines.get(i), x, y + (g.getFontMetrics().getHeight() * i));
 		}
 	}
 
 	public static ByteArrayOutputStream renderMeme(String text, BufferedImage bi) throws IOException {
-		BufferedImage canvas = new BufferedImage(bi.getWidth(), (30 * (text.split("\\r?\\n").length + 1) + (6 * text.split("\\r?\\n").length)) + 15 + bi.getHeight(), BufferedImage.TYPE_INT_RGB);
+		String[] lines = text.split("\\r?\\n");
+		int canvasSize = 1;
+
+		BufferedImage canvas = new BufferedImage(1, 1, BufferedImage.TYPE_BYTE_BINARY);
 		Graphics2D g2d = canvas.createGraphics();
+
+		g2d.setFont(new Font("Arial", Font.BOLD, 30));
+		for (String line : lines) canvasSize += g2d.getFontMetrics().stringWidth(line) % bi.getWidth();
+
+		canvas = new BufferedImage(bi.getWidth(), (30 * (lines.length + canvasSize) + (6 * lines.length)) + 15 + bi.getHeight(), BufferedImage.TYPE_INT_RGB);
+		g2d = canvas.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 		g2d.setColor(Color.WHITE);
@@ -626,7 +630,7 @@ public class Helper {
 
 		g2d.setColor(Color.BLACK);
 		g2d.setFont(new Font("Arial", Font.BOLD, 30));
-		drawString(g2d, text, 25, 45, bi.getWidth() - 50);
+		for (int i = 0; i < lines.length; i++) drawString(g2d, lines[i], 25, 45 + (45 * i), bi.getWidth() - 50);
 		g2d.drawImage(bi, 0, canvas.getHeight() - bi.getHeight(), null);
 
 		g2d.dispose();
