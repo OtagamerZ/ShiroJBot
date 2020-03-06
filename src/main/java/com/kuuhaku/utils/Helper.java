@@ -661,6 +661,14 @@ public class Helper {
 		return Collections.singletonMap(String.join(" ", newWords), aVoid -> queue.forEach(q -> q.accept(null)));
 	}
 
+	public static boolean isEmpty(String... values) {
+		boolean empty = false;
+		for (String s : values) {
+			if (s.isEmpty()) empty = true;
+		}
+		return empty;
+	}
+
 	public static void doNothing(Throwable t) {
 		try {
 			throw t;
