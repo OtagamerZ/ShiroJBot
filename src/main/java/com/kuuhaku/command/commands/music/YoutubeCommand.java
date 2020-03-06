@@ -85,7 +85,7 @@ public class YoutubeCommand extends Command {
                                 Helper.playAudio(member, msg, (TextChannel) channel, msg);
                             });
                         } else m.editMessage(":x: | Nenhum vídeo encontrado").queue();
-                    }catch (IOException e) {
+                    } catch (IOException e) {
                         m.editMessage(":x: | Erro ao buscar vídeos, meus developers já foram notificados.").queue();
                         Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
                     }
