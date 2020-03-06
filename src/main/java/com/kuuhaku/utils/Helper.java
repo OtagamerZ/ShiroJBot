@@ -619,9 +619,11 @@ public class Helper {
 		Graphics2D g2d = canvas.createGraphics();
 
 		g2d.setFont(new Font("Arial", Font.BOLD, 30));
+		System.out.println(Arrays.toString(lines));
 		for (String line : lines) {
-			canvasSize += g2d.getFontMetrics().stringWidth(line) / bi.getWidth();
+			canvasSize += g2d.getFontMetrics().stringWidth(line) > bi.getWidth() ? 1 : 0;
 		}
+		System.out.println(canvasSize);
 
 		canvas = new BufferedImage(bi.getWidth(), (30 * (lines.length + canvasSize) + (6 * lines.length)) + 15 + bi.getHeight(), BufferedImage.TYPE_INT_RGB);
 		g2d = canvas.createGraphics();
