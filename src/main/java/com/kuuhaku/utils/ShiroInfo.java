@@ -35,6 +35,7 @@ import org.discordbots.api.client.DiscordBotListAPI;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -59,7 +60,7 @@ public class ShiroInfo {
 	private static final String YoutubeToken = System.getenv("YOUTUBE_TOKEN");
 	private static final String DBLToken;
 	private static final String name = "Shiro";
-	private static final String version = VersionDAO.getBuildVersion(3);
+	private static final String version = VersionDAO.getBuildVersion(Version.V3);
 	private static final String supportServer = "Shiro Support";
 	private static final String supportServerID = "421495229594730496";
 	private static final String default_prefix = DEV ? "dev!" : "s!";
@@ -169,7 +170,7 @@ public class ShiroInfo {
 	}
 
 	public String getFullName() {
-		return name + " v" + version;
+		return MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_version"), name, version);
 	}
 
 	public String getVersion() {

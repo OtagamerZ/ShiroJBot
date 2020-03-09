@@ -60,8 +60,9 @@ public class BotInfoCommand extends Command {
 		eb.addField(":handshake: Apoiada por:", TagDAO.getPartnerAmount() + " servidores", true);
 		eb.addField(":earth_americas: Estou em:", Main.getInfo().getAPI().getGuilds().size() + " servidores", true);
 		eb.addField(":speech_balloon: Conheço:", Main.getInfo().getAPI().getUsers().size() + " usuários (" + MemberDAO.getAllMembers().size() + " cadastrados)", true);
+		eb.addField(":dividers: Versão:", Main.getInfo().getVersion(), true);
 		eb.addField(":envelope: Link de convite:", "https://top.gg/bot/572413282653306901", true);
-		eb.setThumbnail("https://discordbots.org/api/widget/572413282653306901.png?usernamecolor=b463ff&topcolor=000000&middlecolor=1a1d23&datacolor=b463ff");
+		eb.setImage("https://discordbots.org/api/widget/572413282653306901.png?usernamecolor=b463ff&topcolor=000000&middlecolor=1a1d23&datacolor=b463ff");
 
 		channel.sendMessage(eb.build()).queue();
 	}
