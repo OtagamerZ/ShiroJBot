@@ -44,7 +44,7 @@ public abstract class Reaction extends Command {
 	private User[] interaction;
 
 	public Reaction(@NonNls String name, @NonNls String[] aliases, String description, boolean answerable, @NonNls String type) {
-		super(name, aliases, description, Category.FUN);
+		super(name, aliases, description, Category.FUN, false);
 		this.answerable = answerable;
 		this.type = type;
 	}
@@ -58,7 +58,7 @@ public abstract class Reaction extends Command {
 	}
 
 	public String getReaction() {
-		return reaction.length == 0 ? "SEM RESPOSTA SETADA" : reaction[Helper.rng(reaction.length)];
+		return reaction.length == 0 ? "SEM RESPOSTA DEFINIDA" : reaction[Helper.rng(reaction.length)];
 	}
 
 	public boolean isAnswerable() {
@@ -74,7 +74,7 @@ public abstract class Reaction extends Command {
 	}
 
 	public String getSelfTarget() {
-		return selfTarget.length == 0 ? "SEM RESPOSTA SETADA" : selfTarget[Helper.rng(selfTarget.length)];
+		return selfTarget.length == 0 ? "SEM RESPOSTA DEFINIDA" : selfTarget[Helper.rng(selfTarget.length)];
 	}
 
 	public void setSelfTarget(String[] selfTarget) {

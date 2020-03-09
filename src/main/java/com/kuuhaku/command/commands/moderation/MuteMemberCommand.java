@@ -26,13 +26,26 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
+import org.jetbrains.annotations.NonNls;
 
 import java.util.Objects;
 
-public class PunishMemberCommand extends Command {
+public class MuteMemberCommand extends Command {
 
-	public PunishMemberCommand() {
-		super("punish", new String[]{"punir", "mutar", "silenciar"}, "<membro>", "Pune o membro especificado.", Category.MODERACAO);
+	public MuteMemberCommand(String name, String description, Category category, boolean requiresMM) {
+		super(name, description, category, requiresMM);
+	}
+
+	public MuteMemberCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
+		super(name, aliases, description, category, requiresMM);
+	}
+
+	public MuteMemberCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+		super(name, usage, description, category, requiresMM);
+	}
+
+	public MuteMemberCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+		super(name, aliases, usage, description, category, requiresMM);
 	}
 
 	@Override

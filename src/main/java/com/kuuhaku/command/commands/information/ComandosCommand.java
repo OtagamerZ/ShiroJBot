@@ -29,6 +29,7 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
@@ -42,20 +43,20 @@ import java.util.concurrent.TimeUnit;
 
 public class ComandosCommand extends Command {
 
-	public ComandosCommand(String name, String description, Category category) {
-		super(name, description, category);
+	public ComandosCommand(String name, String description, Category category, boolean requiresMM) {
+		super(name, description, category, requiresMM);
 	}
 
-	public ComandosCommand(String name, String[] aliases, String description, Category category) {
-		super(name, aliases, description, category);
+	public ComandosCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
+		super(name, aliases, description, category, requiresMM);
 	}
 
-	public ComandosCommand(String name, String usage, String description, Category category) {
-		super(name, usage, description, category);
+	public ComandosCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+		super(name, usage, description, category, requiresMM);
 	}
 
-	public ComandosCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
-		super(name, aliases, usage, description, category);
+	public ComandosCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+		super(name, aliases, usage, description, category, requiresMM);
 	}
 
 	@Override
@@ -65,22 +66,22 @@ public class ComandosCommand extends Command {
 		Map<String, Page> pages = new LinkedHashMap<>();
 
 		EmbedBuilder eb = new EmbedBuilder();
-		eb.setTitle(ShiroInfo.getLocale(I18n.PT).getString("str_command-list-title"));
-		eb.setDescription(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_command-list-description"), prefix, Arrays.stream(Category.values()).filter(c -> c.isEnabled(gc, guild, author)).count(), Main.getCommandManager().getCommands().stream().filter(c -> c.getCategory().isEnabled(gc, guild, author)).count()));
-		for (Category cat : Category.values()) {
-			if (cat.isEnabled(gc, guild, author))
-				eb.addField(cat.getEmote() + " | " + cat.getName(), Helper.VOID, true);
-		}
 
-		eb.addField("<:tips:684039810079522846> | Dicas", Helper.VOID, true);
+		if (Helper.hasPermission(guild.getSelfMember(), Permission.MESSAGE_MANAGE, (TextChannel) channel) && args.length == 0) {
+			eb.setTitle(ShiroInfo.getLocale(I18n.PT).getString("str_command-list-title"));
+			eb.setDescription(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_command-list-description"), prefix, Arrays.stream(Category.values()).filter(c -> c.isEnabled(gc, guild, author)).count(), Main.getCommandManager().getCommands().stream().filter(c -> c.getCategory().isEnabled(gc, guild, author)).count()));
+			for (Category cat : Category.values()) {
+				if (cat.isEnabled(gc, guild, author))
+					eb.addField(cat.getEmote() + " | " + cat.getName(), Helper.VOID, true);
+			}
 
-		eb.setColor(Color.PINK);
-		eb.setFooter(Main.getInfo().getFullName(), null);
-		eb.setThumbnail(Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById(Helper.HOME)).getImageUrl());
+			eb.addField("<:tips:684039810079522846> | Dicas", Helper.VOID, true);
 
-		pages.put(Helper.HOME, new Page(PageType.EMBED, eb.build()));
+			eb.setColor(Color.PINK);
+			eb.setFooter(Main.getInfo().getFullName(), null);
+			eb.setThumbnail(Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById(Helper.HOME)).getImageUrl());
 
-		if (args.length == 0) {
+			pages.put(Helper.HOME, new Page(PageType.EMBED, eb.build()));
 
 			for (Category cat : Category.values()) {
 				EmbedBuilder ceb = new EmbedBuilder();
@@ -124,6 +125,27 @@ public class ComandosCommand extends Command {
 			pages.put("684039810079522846", new Page(PageType.EMBED, ceb.build()));
 
 			channel.sendMessage(eb.build()).queue(s -> Pages.categorize(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
+			return;
+		} else if (args.length == 0) {
+			eb.setTitle(ShiroInfo.getLocale(I18n.PT).getString("str_command-list-title"));
+			eb.setDescription(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_command-list-description"), prefix, Arrays.stream(Category.values()).filter(c -> c.isEnabled(gc, guild, author)).count(), Main.getCommandManager().getCommands().stream().filter(c -> c.getCategory().isEnabled(gc, guild, author)).count()));
+			eb.appendDescription(ShiroInfo.getLocale(I18n.PT).getString("str_command-list-alert"));
+			StringBuilder sb = new StringBuilder();
+			for (Category cat : Category.values()) {
+				if (cat.isEnabled(gc, guild, author)) {
+					sb.setLength(0);
+					for (Command c : cat.getCmds()) {
+						sb.append("`").append(c.getName()).append("`  ");
+					}
+					eb.addField(cat.getEmote() + " | " + cat.getName(), sb.toString(), true);
+				}
+			}
+
+			eb.setColor(Color.PINK);
+			eb.setFooter(Main.getInfo().getFullName(), null);
+			eb.setThumbnail(Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById(Helper.HOME)).getImageUrl());
+
+			channel.sendMessage(eb.build()).queue();
 			return;
 		}
 

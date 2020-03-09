@@ -28,20 +28,20 @@ import javax.persistence.NoResultException;
 
 public class TheAnswerCommand extends Command {
 
-	public TheAnswerCommand(String name, String description, Category category) {
-		super(name, description, category);
+	public TheAnswerCommand(String name, String description, Category category, boolean requiresMM) {
+		super(name, description, category, requiresMM);
 	}
 
-	public TheAnswerCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
-		super(name, aliases, description, category);
+	public TheAnswerCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
+		super(name, aliases, description, category, requiresMM);
 	}
 
-	public TheAnswerCommand(String name, String usage, String description, Category category) {
-		super(name, usage, description, category);
+	public TheAnswerCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+		super(name, usage, description, category, requiresMM);
 	}
 
-	public TheAnswerCommand(String name, String[] aliases, String usage, String description, Category category) {
-		super(name, aliases, usage, description, category);
+	public TheAnswerCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+		super(name, aliases, usage, description, category, requiresMM);
 	}
 
 	@Override

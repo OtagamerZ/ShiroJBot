@@ -26,25 +26,25 @@ import org.jetbrains.annotations.NonNls;
 
 public class RestartCommand extends Command {
 
-	public RestartCommand(String name, String description, Category category) {
-		super(name, description, category);
+	public RestartCommand(String name, String description, Category category, boolean requiresMM) {
+		super(name, description, category, requiresMM);
 	}
 
-	public RestartCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
-		super(name, aliases, description, category);
+	public RestartCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
+		super(name, aliases, description, category, requiresMM);
 	}
 
-	public RestartCommand(String name, String usage, String description, Category category) {
-		super(name, usage, description, category);
+	public RestartCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+		super(name, usage, description, category, requiresMM);
 	}
 
-	public RestartCommand(String name, String[] aliases, String usage, String description, Category category) {
-		super(name, aliases, usage, description, category);
+	public RestartCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+		super(name, aliases, usage, description, category, requiresMM);
 	}
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		if(author.getId().equals(Main.getInfo().getNiiChan())) {
+		if (author.getId().equals(Main.getInfo().getNiiChan())) {
 			channel.sendMessage("Matane, Nii-chan! <3").queue();
 		} else {
 			channel.sendMessage("Iniciando o protocolo de reinicialização...").queue();

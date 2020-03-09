@@ -28,6 +28,9 @@ public class Version {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int minor = 0;
 
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int build = 0;
+
 	public Version(int major) {
 		this.major = major;
 	}
@@ -40,7 +43,11 @@ public class Version {
 	}
 
 	public int getMinor() {
-		this.minor++;
 		return minor;
+	}
+
+	public int getBuild() {
+		this.build++;
+		return build;
 	}
 }

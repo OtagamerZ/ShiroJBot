@@ -30,21 +30,22 @@ import java.time.LocalDateTime;
 
 public class BackupCommand extends Command {
 
-	public BackupCommand(String name, String description, Category category) {
-		super(name, description, category);
+	public BackupCommand(String name, String description, Category category, boolean requiresMM) {
+		super(name, description, category, requiresMM);
 	}
 
-	public BackupCommand(String name, String[] aliases, String description, Category category) {
-		super(name, aliases, description, category);
+	public BackupCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
+		super(name, aliases, description, category, requiresMM);
 	}
 
-	public BackupCommand(String name, String usage, String description, Category category) {
-		super(name, usage, description, category);
+	public BackupCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+		super(name, usage, description, category, requiresMM);
 	}
 
-	public BackupCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
-		super(name, aliases, usage, description, category);
+	public BackupCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+		super(name, aliases, usage, description, category, requiresMM);
 	}
+
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
