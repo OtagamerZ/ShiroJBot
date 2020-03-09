@@ -100,7 +100,7 @@ public class CommandManager {
 					"pedirvoto", new String[]{"requestvote", "howwasi"}, getLocale(PT).getString("cmd_rating"), DEV, false
 			));
 			add(new MMLockCommand(
-					"mmlock", getLocale(PT).getString("cmd_mm-lock"), DEV, true
+					"mmlock", getLocale(PT).getString("cmd_mm-lock"), DEV, false
 			));
 
 			//SHERIFF
