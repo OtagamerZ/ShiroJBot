@@ -15,30 +15,27 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.controller.mysql;
+package com.kuuhaku.utils;
 
-import com.kuuhaku.model.persistent.Version;
+public enum Version {
+	V1("Mongoose", 1),
+	V2("Butterfly", 2),
+	V3("Capybara", 3),
+	V4("Dolphin", 4);
 
-import javax.persistence.EntityManager;
+	private final String codename;
+	private final int version;
 
-public class VersionDAO {
-	public static String getBuildVersion(com.kuuhaku.utils.Version version) {
-		EntityManager em = Manager.getEntityManager();
+	Version(String codename, int version) {
+		this.codename = codename;
+		this.version = version;
+	}
 
-		Version v = em.find(Version.class, version.getVersion());
+	public String getCodename() {
+		return codename;
+	}
 
-		try {
-			if (v == null) {
-				v = new Version(version.getVersion());
-			}
-
-			return version.getCodename() + " " + v.getMajor() + "." + v.getMinor() + "." + v.getBuild();
-		} finally {
-			em.getTransaction().begin();
-			em.merge(v);
-			em.getTransaction().commit();
-
-			em.close();
-		}
+	public int getVersion() {
+		return version;
 	}
 }
