@@ -29,20 +29,20 @@ import java.util.Objects;
 
 public class MakeLogCommand extends Command {
 
-	public MakeLogCommand(String name, String description, Category category) {
-		super(name, description, category);
+	public MakeLogCommand(String name, String description, Category category, boolean requiresMM) {
+		super(name, description, category, requiresMM);
 	}
 
-	public MakeLogCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
-		super(name, aliases, description, category);
+	public MakeLogCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
+		super(name, aliases, description, category, requiresMM);
 	}
 
-	public MakeLogCommand(String name, String usage, String description, Category category) {
-		super(name, usage, description, category);
+	public MakeLogCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+		super(name, usage, description, category, requiresMM);
 	}
 
-	public MakeLogCommand(String name, String[] aliases, String usage, String description, Category category) {
-		super(name, aliases, usage, description, category);
+	public MakeLogCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+		super(name, aliases, usage, description, category, requiresMM);
 	}
 
 	@Override

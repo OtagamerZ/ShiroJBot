@@ -41,20 +41,20 @@ import static com.kuuhaku.model.common.Profile.*;
 
 public class ExceedRankCommand extends Command {
 
-	public ExceedRankCommand(String name, String description, Category category) {
-		super(name, description, category);
+	public ExceedRankCommand(String name, String description, Category category, boolean requiresMM) {
+		super(name, description, category, requiresMM);
 	}
 
-	public ExceedRankCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
-		super(name, aliases, description, category);
+	public ExceedRankCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
+		super(name, aliases, description, category, requiresMM);
 	}
 
-	public ExceedRankCommand(String name, String usage, String description, Category category) {
-		super(name, usage, description, category);
+	public ExceedRankCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+		super(name, usage, description, category, requiresMM);
 	}
 
-	public ExceedRankCommand(String name, String[] aliases, String usage, String description, Category category) {
-		super(name, aliases, usage, description, category);
+	public ExceedRankCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+		super(name, aliases, usage, description, category, requiresMM);
 	}
 
 	@Override

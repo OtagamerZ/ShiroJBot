@@ -25,20 +25,20 @@ import org.jetbrains.annotations.NonNls;
 
 public class BiographyCommand extends Command {
 
-	public BiographyCommand(String name, String description, Category category) {
-		super(name, description, category);
+	public BiographyCommand(String name, String description, Category category, boolean requiresMM) {
+		super(name, description, category, requiresMM);
 	}
 
-	public BiographyCommand(String name, String[] aliases, String description, Category category) {
-		super(name, aliases, description, category);
+	public BiographyCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
+		super(name, aliases, description, category, requiresMM);
 	}
 
-	public BiographyCommand(String name, String usage, String description, Category category) {
-		super(name, usage, description, category);
+	public BiographyCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+		super(name, usage, description, category, requiresMM);
 	}
 
-	public BiographyCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
-		super(name, aliases, usage, description, category);
+	public BiographyCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+		super(name, aliases, usage, description, category, requiresMM);
 	}
 
 	@Override
@@ -50,13 +50,16 @@ public class BiographyCommand extends Command {
 
 		for (String s : args)
 			if (s.length() > 29) {
-            channel.sendMessage(":x: | A biografia possui uma ou mais falavras MUITO grandes (limite de 29 caractéres por palavra).").queue();
-            return;
-        }
+				channel.sendMessage(":x: | A biografia possui uma ou mais falavras MUITO grandes (limite de 29 caractéres por palavra).").queue();
+				return;
+			}
 
-        com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(author.getId() + guild.getId());
-        m.setBio(String.join(" ", args));
-        MemberDAO.updateMemberConfigs(m);
-        channel.sendMessage("Biografia definida com sucesso!").queue();
-    }
+		String text = String.join(" ", args);
+
+		com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(author.getId() + guild.getId());
+		m.setBio(text);
+		MemberDAO.updateMemberConfigs(m);
+		if (text.length() > 0) channel.sendMessage("Biografia definida com sucesso!").queue();
+		else channel.sendMessage("Biografia limpa com sucesso!").queue();
+	}
 }
