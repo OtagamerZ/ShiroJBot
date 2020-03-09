@@ -31,20 +31,20 @@ import java.util.List;
 
 public class ExceedSelectCommand extends Command {
 
-	public ExceedSelectCommand(String name, String description, Category category) {
-		super(name, description, category);
+	public ExceedSelectCommand(String name, String description, Category category, boolean requiresMM) {
+		super(name, description, category, requiresMM);
 	}
 
-	public ExceedSelectCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
-		super(name, aliases, description, category);
+	public ExceedSelectCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
+		super(name, aliases, description, category, requiresMM);
 	}
 
-	public ExceedSelectCommand(String name, String usage, String description, Category category) {
-		super(name, usage, description, category);
+	public ExceedSelectCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+		super(name, usage, description, category, requiresMM);
 	}
 
-	public ExceedSelectCommand(String name, String[] aliases, String usage, String description, Category category) {
-		super(name, aliases, usage, description, category);
+	public ExceedSelectCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+		super(name, aliases, usage, description, category, requiresMM);
 	}
 
 	@Override

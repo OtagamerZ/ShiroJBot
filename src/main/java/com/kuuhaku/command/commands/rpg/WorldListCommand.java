@@ -25,20 +25,20 @@ import org.jetbrains.annotations.NonNls;
 
 public class WorldListCommand extends Command {
 
-	public WorldListCommand(String name, String description, Category category) {
-		super(name, description, category);
+	public WorldListCommand(String name, String description, Category category, boolean requiresMM) {
+		super(name, description, category, requiresMM);
 	}
 
-	public WorldListCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
-		super(name, aliases, description, category);
+	public WorldListCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
+		super(name, aliases, description, category, requiresMM);
 	}
 
-	public WorldListCommand(String name, String usage, String description, Category category) {
-		super(name, usage, description, category);
+	public WorldListCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+		super(name, usage, description, category, requiresMM);
 	}
 
-	public WorldListCommand(String name, String[] aliases, String usage, String description, Category category) {
-		super(name, aliases, usage, description, category);
+	public WorldListCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+		super(name, aliases, usage, description, category, requiresMM);
 	}
 
 	@Override

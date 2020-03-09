@@ -182,7 +182,7 @@ public class GuildEvents extends ListenerAdapter {
 					if (author == Main.getInfo().getSelfUser() && command.getCategory().isBotBlocked()) {
 						channel.sendMessage(":x: | Não posso executar este comando, apenas usuários humanos podem usar ele.").queue();
 						return;
-					} else if (!Helper.hasPermission(guild.getSelfMember(), Permission.MESSAGE_MANAGE, (TextChannel) channel) && GuildDAO.getGuildById(guild.getId()).isServerMMLocked() && !command.getName().equalsIgnoreCase("mmlock")) {
+					} else if (!Helper.hasPermission(guild.getSelfMember(), Permission.MESSAGE_MANAGE, (TextChannel) channel) && GuildDAO.getGuildById(guild.getId()).isServerMMLocked() && command.requiresMM()) {
 						channel.sendMessage(":x: | Para que meus comandos funcionem corretamente, preciso da permissão de gerenciar mensagens.\nPor favor contate um moderador ou administrador desse servidor para que me dê essa permissão.").queue();
 						return;
 					}

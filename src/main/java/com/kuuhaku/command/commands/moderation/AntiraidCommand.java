@@ -26,20 +26,20 @@ import org.jetbrains.annotations.NonNls;
 
 public class AntiraidCommand extends Command {
 
-	public AntiraidCommand(String name, String description, Category category) {
-		super(name, description, category);
+	public AntiraidCommand(String name, String description, Category category, boolean requiresMM) {
+		super(name, description, category, requiresMM);
 	}
 
-	public AntiraidCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
-		super(name, aliases, description, category);
+	public AntiraidCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
+		super(name, aliases, description, category, requiresMM);
 	}
 
-	public AntiraidCommand(String name, String usage, String description, Category category) {
-		super(name, usage, description, category);
+	public AntiraidCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+		super(name, usage, description, category, requiresMM);
 	}
 
-	public AntiraidCommand(String name, String[] aliases, String usage, String description, Category category) {
-		super(name, aliases, usage, description, category);
+	public AntiraidCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+		super(name, aliases, usage, description, category, requiresMM);
 	}
 
 	@Override

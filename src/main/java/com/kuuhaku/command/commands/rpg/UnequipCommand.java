@@ -26,20 +26,20 @@ import org.jetbrains.annotations.NonNls;
 
 public class UnequipCommand extends Command {
 
-	public UnequipCommand(String name, String description, Category category) {
-		super(name, description, category);
+	public UnequipCommand(String name, String description, Category category, boolean requiresMM) {
+		super(name, description, category, requiresMM);
 	}
 
-	public UnequipCommand(String name, String[] aliases, String description, Category category) {
-		super(name, aliases, description, category);
+	public UnequipCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
+		super(name, aliases, description, category, requiresMM);
 	}
 
-	public UnequipCommand(String name, String usage, String description, Category category) {
-		super(name, usage, description, category);
+	public UnequipCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+		super(name, usage, description, category, requiresMM);
 	}
 
-	public UnequipCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
-		super(name, aliases, usage, description, category);
+	public UnequipCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+		super(name, aliases, usage, description, category, requiresMM);
 	}
 
 	@Override

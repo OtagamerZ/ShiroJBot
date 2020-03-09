@@ -35,20 +35,20 @@ import java.util.stream.Collectors;
 
 public class ShiroEmoteListCommand extends Command {
 
-	public ShiroEmoteListCommand(String name, String description, Category category) {
-		super(name, description, category);
+	public ShiroEmoteListCommand(String name, String description, Category category, boolean requiresMM) {
+		super(name, description, category, requiresMM);
 	}
 
-	public ShiroEmoteListCommand(String name, String[] aliases, String description, Category category) {
-		super(name, aliases, description, category);
+	public ShiroEmoteListCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
+		super(name, aliases, description, category, requiresMM);
 	}
 
-	public ShiroEmoteListCommand(@NonNls String name, String usage, String description, Category category) {
-		super(name, usage, description, category);
+	public ShiroEmoteListCommand(@NonNls String name, String usage, String description, Category category, boolean requiresMM) {
+		super(name, usage, description, category, requiresMM);
 	}
 
-	public ShiroEmoteListCommand(String name, String[] aliases, String usage, String description, Category category) {
-		super(name, aliases, usage, description, category);
+	public ShiroEmoteListCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+		super(name, aliases, usage, description, category, requiresMM);
 	}
 
 	@Override
