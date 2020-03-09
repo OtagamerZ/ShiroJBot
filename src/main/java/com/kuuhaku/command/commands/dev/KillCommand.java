@@ -25,20 +25,20 @@ import org.jetbrains.annotations.NonNls;
 
 public class KillCommand extends Command {
 
-	public KillCommand(String name, String description, Category category) {
-		super(name, description, category);
+	public KillCommand(String name, String description, Category category, boolean requiresMM) {
+		super(name, description, category, requiresMM);
 	}
 
-	public KillCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
-		super(name, aliases, description, category);
+	public KillCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
+		super(name, aliases, description, category, requiresMM);
 	}
 
-	public KillCommand(String name, String usage, String description, Category category) {
-		super(name, usage, description, category);
+	public KillCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+		super(name, usage, description, category, requiresMM);
 	}
 
-	public KillCommand(String name, String[] aliases, String usage, String description, Category category) {
-		super(name, aliases, usage, description, category);
+	public KillCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+		super(name, aliases, usage, description, category, requiresMM);
 	}
 
 	@Override

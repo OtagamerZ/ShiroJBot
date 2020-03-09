@@ -36,20 +36,20 @@ import java.util.concurrent.TimeoutException;
 
 public class CompileCommand extends Command {
 
-	public CompileCommand(String name, String description, Category category) {
-		super(name, description, category);
+	public CompileCommand(String name, String description, Category category, boolean requiresMM) {
+		super(name, description, category, requiresMM);
 	}
 
-	public CompileCommand(String name, String[] aliases, String description, Category category) {
-		super(name, aliases, description, category);
+	public CompileCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
+		super(name, aliases, description, category, requiresMM);
 	}
 
-	public CompileCommand(String name, String usage, String description, Category category) {
-		super(name, usage, description, category);
+	public CompileCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+		super(name, usage, description, category, requiresMM);
 	}
 
-	public CompileCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
-		super(name, aliases, usage, description, category);
+	public CompileCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+		super(name, aliases, usage, description, category, requiresMM);
 	}
 
 	@Override

@@ -22,7 +22,7 @@ import com.kuuhaku.model.persistent.Version;
 import javax.persistence.EntityManager;
 
 public class VersionDAO {
-	public static String getMinorVersion(int major) {
+	public static String getBuildVersion(int major) {
 		EntityManager em = Manager.getEntityManager();
 
 		Version v = em.find(Version.class, major);
@@ -32,7 +32,7 @@ public class VersionDAO {
 				v = new Version(major);
 			}
 
-			return major + "." + v.getMinor();
+			return v.getMajor() + "." + v.getMinor() + "." + v.getBuild();
 		} finally {
 			em.getTransaction().begin();
 			em.merge(v);

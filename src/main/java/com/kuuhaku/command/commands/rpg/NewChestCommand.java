@@ -26,20 +26,20 @@ import org.jetbrains.annotations.NonNls;
 
 public class NewChestCommand extends Command {
 
-	public NewChestCommand(String name, String description, Category category) {
-		super(name, description, category);
+	public NewChestCommand(String name, String description, Category category, boolean requiresMM) {
+		super(name, description, category, requiresMM);
 	}
 
-	public NewChestCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
-		super(name, aliases, description, category);
+	public NewChestCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
+		super(name, aliases, description, category, requiresMM);
 	}
 
-	public NewChestCommand(String name, String usage, String description, Category category) {
-		super(name, usage, description, category);
+	public NewChestCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+		super(name, usage, description, category, requiresMM);
 	}
 
-	public NewChestCommand(String name, String[] aliases, String usage, String description, Category category) {
-		super(name, aliases, usage, description, category);
+	public NewChestCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+		super(name, aliases, usage, description, category, requiresMM);
 	}
 
 	@Override

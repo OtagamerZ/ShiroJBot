@@ -36,79 +36,79 @@ public class RPGCommandManager {
     public RPGCommandManager() {
         commands = new ArrayList<Command>() {{
             add(new NewCampaignCommand(
-                    "rnovacampanha", new String[]{"rnewcampaign", "rnewgame"}, getLocale(PT).getString("rpg_new-campaign"), Category.RPG
+                    "rnovacampanha", new String[]{"rnewcampaign", "rnewgame"}, getLocale(PT).getString("rpg_new-campaign"), Category.RPG, false
             ));
             add(new EndCampaignCommand(
-                    "rfimdejogo", new String[]{"rendcampaign", "rgameover"}, getLocale(PT).getString("rpg_end-campaign"), Category.RPG
+                    "rfimdejogo", new String[]{"rendcampaign", "rgameover"}, getLocale(PT).getString("rpg_end-campaign"), Category.RPG, false
             ));
             add(new AttackCommand(
-                    "ratacar", new String[]{"rattack", "rdamage", "rdmg"}, getLocale(PT).getString(REQ_MENTION), getLocale(PT).getString("rpg_cure"), Category.RPG
+                    "ratacar", new String[]{"rattack", "rdamage", "rdmg"}, getLocale(PT).getString(REQ_MENTION), getLocale(PT).getString("rpg_cure"), Category.RPG, false
             ));
             add(new BagCommand(
-                    "rbolsa", new String[]{"rbag"}, getLocale(PT).getString("rpg_bag"), Category.RPG
+                    "rbolsa", new String[]{"rbag"}, getLocale(PT).getString("rpg_bag"), Category.RPG, false
             ));
             add(new EquipCommand(
-                    "requipar", new String[]{"requip"}, getLocale(PT).getString(REQ_ITEM), getLocale(PT).getString("rpg_equip"), Category.RPG
+                    "requipar", new String[]{"requip"}, getLocale(PT).getString(REQ_ITEM), getLocale(PT).getString("rpg_equip"), Category.RPG, false
             ));
             add(new EquippedCommand(
-                    "requipados", new String[]{"requipped"}, getLocale(PT).getString("rpg_gear"), Category.RPG
+                    "requipados", new String[]{"requipped"}, getLocale(PT).getString("rpg_gear"), Category.RPG, false
             ));
             add(new GiveCommand(
-                    "rdar", new String[]{"rgive"}, getLocale(PT).getString("req_mention-item-gold-xp-qtd"), getLocale(PT).getString("rpg_give"), Category.RPG
+                    "rdar", new String[]{"rgive"}, getLocale(PT).getString("req_mention-item-gold-xp-qtd"), getLocale(PT).getString("rpg_give"), Category.RPG, false
             ));
             add(new MapCommand(
-                    "rmapa", new String[]{"rmap"}, getLocale(PT).getString("rpg_map"), Category.RPG
+                    "rmapa", new String[]{"rmap"}, getLocale(PT).getString("rpg_map"), Category.RPG, false
             ));
             add(new MoveCommand(
-                    "rmover", new String[]{"rmove"}, getLocale(PT).getString("req_x-y"), getLocale(PT).getString("rpg_move"), Category.RPG
+                    "rmover", new String[]{"rmove"}, getLocale(PT).getString("req_x-y"), getLocale(PT).getString("rpg_move"), Category.RPG, false
             ));
             add(new NewItemCommand(
-                    "rnovoitem", new String[]{"rnewitem"}, getLocale(PT).getString("rpg_new-item"), Category.RPG
+                    "rnovoitem", new String[]{"rnewitem"}, getLocale(PT).getString("rpg_new-item"), Category.RPG, true
             ));
             add(new NewMapCommand(
-                    "rnovomapa", new String[]{"rnewmap"}, getLocale(PT).getString("rpg_new-map"), Category.RPG
+                    "rnovomapa", new String[]{"rnewmap"}, getLocale(PT).getString("rpg_new-map"), Category.RPG, true
             ));
             add(new NewMobCommand(
-                    "rnovomonstro", new String[]{"rnewmob"}, getLocale(PT).getString("rpg_new-mob"), Category.RPG
+                    "rnovomonstro", new String[]{"rnewmob"}, getLocale(PT).getString("rpg_new-mob"), Category.RPG, true
             ));
             add(new NewPlayerCommand(
-                    "rnovo", new String[]{"rnew"}, getLocale(PT).getString("rpg_new-player"), Category.RPG
+                    "rnovo", new String[]{"rnew"}, getLocale(PT).getString("rpg_new-player"), Category.RPG, true
             ));
             add(new RemoveCommand(
-                    "rremover", new String[]{"rremove"}, getLocale(PT).getString("req_type-mention-name"), getLocale(PT).getString("rpg_remove-entity"), Category.RPG
+                    "rremover", new String[]{"rremove"}, getLocale(PT).getString("req_type-mention-name"), getLocale(PT).getString("rpg_remove-entity"), Category.RPG, false
             ));
             add(new RollCommand(
-                    "rrolar", new String[]{"rdado"}, getLocale(PT).getString("req_dice"), getLocale(PT).getString("rpg_dice"), Category.RPG
+                    "rrolar", new String[]{"rdado"}, getLocale(PT).getString("req_dice"), getLocale(PT).getString("rpg_dice"), Category.RPG, false
             ));
             add(new StatusCommand(
-                    "rperfil", new String[]{"rprofile", "rstatus"}, getLocale(PT).getString("rpg_profile"), Category.RPG
+                    "rperfil", new String[]{"rprofile", "rstatus"}, getLocale(PT).getString("rpg_profile"), Category.RPG, false
             ));
             add(new SwitchMapCommand(
-                    "raomapa", new String[]{"rtrocarmapa", "rtomap"}, getLocale(PT).getString("req_index"), getLocale(PT).getString("rpg_change-map"), Category.RPG
+                    "raomapa", new String[]{"rtrocarmapa", "rtomap"}, getLocale(PT).getString("req_index"), getLocale(PT).getString("rpg_change-map"), Category.RPG, false
             ));
             add(new TakeCommand(
-                    "rtirar", new String[]{"rpegar"}, getLocale(PT).getString("req_mention-item-gold-qtd"), getLocale(PT).getString("rpg_take"), Category.RPG
+                    "rtirar", new String[]{"rpegar"}, getLocale(PT).getString("req_mention-item-gold-qtd"), getLocale(PT).getString("rpg_take"), Category.RPG, false
             ));
             add(new UnequipCommand(
-                    "rdesequipar", new String[]{"runequip"}, getLocale(PT).getString(REQ_ITEM), getLocale(PT).getString("rpg_unequip"), Category.RPG
+                    "rdesequipar", new String[]{"runequip"}, getLocale(PT).getString(REQ_ITEM), getLocale(PT).getString("rpg_unequip"), Category.RPG, false
             ));
             add(new ViewCommand(
-                    "rver", new String[]{"rinfo"}, getLocale(PT).getString(REQ_ITEM), getLocale(PT).getString("rpg_info"), Category.RPG
+                    "rver", new String[]{"rinfo"}, getLocale(PT).getString(REQ_ITEM), getLocale(PT).getString("rpg_info"), Category.RPG, false
             ));
             add(new WorldListCommand(
-                    "rlista", new String[]{"rlist"}, getLocale(PT).getString("rpg_list"), Category.RPG
+                    "rlista", new String[]{"rlist"}, getLocale(PT).getString("rpg_list"), Category.RPG, false
             ));
             add(new ChestCommand(
-                    "rloot", new String[]{"rchest"}, getLocale(PT).getString("req_mention-chest"), getLocale(PT).getString("rpg_chest"), Category.RPG
+                    "rloot", new String[]{"rchest"}, getLocale(PT).getString("req_mention-chest"), getLocale(PT).getString("rpg_chest"), Category.RPG, false
             ));
             add(new NewChestCommand(
-                    "rnovobau", new String[]{"rnewchest"}, getLocale(PT).getString("rpg_new-chest"), Category.RPG
+                    "rnovobau", new String[]{"rnewchest"}, getLocale(PT).getString("rpg_new-chest"), Category.RPG, true
             ));
             add(new UseCommand(
-                    "rusar", new String[]{"ruse"}, getLocale(PT).getString("req_item-gold-qtd"), getLocale(PT).getString("rpg_use"), Category.RPG
+                    "rusar", new String[]{"ruse"}, getLocale(PT).getString("req_item-gold-qtd"), getLocale(PT).getString("rpg_use"), Category.RPG, false
             ));
             add(new SetMaxPointsCommand(
-                    "rmaxpts", getLocale(PT).getString("req_qtd"), getLocale(PT).getString("rpg_max-points"), Category.RPG
+                    "rmaxpts", getLocale(PT).getString("req_qtd"), getLocale(PT).getString("rpg_max-points"), Category.RPG, false
             ));
         }};
     }

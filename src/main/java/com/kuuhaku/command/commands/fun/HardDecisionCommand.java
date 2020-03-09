@@ -33,20 +33,20 @@ import java.util.Objects;
 
 public class HardDecisionCommand extends Command {
 
-	public HardDecisionCommand(String name, String description, Category category) {
-		super(name, description, category);
+	public HardDecisionCommand(String name, String description, Category category, boolean requiresMM) {
+		super(name, description, category, requiresMM);
 	}
 
-	public HardDecisionCommand(String name, String[] aliases, String description, Category category) {
-		super(name, aliases, description, category);
+	public HardDecisionCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
+		super(name, aliases, description, category, requiresMM);
 	}
 
-	public HardDecisionCommand(String name, String usage, String description, Category category) {
-		super(name, usage, description, category);
+	public HardDecisionCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+		super(name, usage, description, category, requiresMM);
 	}
 
-	public HardDecisionCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
-		super(name, aliases, usage, description, category);
+	public HardDecisionCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+		super(name, aliases, usage, description, category, requiresMM);
 	}
 
 	@Override

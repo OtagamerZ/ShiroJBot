@@ -27,41 +27,46 @@ public abstract class Command {
 	private final String usage;
 	private final String description;
 	private final Category category;
+	private final boolean requiresMM;
 
-	protected Command(@NonNls String name, String description, Category category) {
+	protected Command(@NonNls String name, String description, Category category, boolean requiresMM) {
 		this.name = name;
 		this.aliases = new String[]{};
 		this.usage = null;
 		this.description = description;
 		this.category = category;
 		this.category.addCommand(this);
+		this.requiresMM = requiresMM;
 	}
 
-	protected Command(@NonNls String name, @NonNls String[] aliases, String description, Category category) {
+	protected Command(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
 		this.name = name;
 		this.aliases = aliases;
 		this.usage = null;
 		this.description = description;
 		this.category = category;
 		this.category.addCommand(this);
+		this.requiresMM = requiresMM;
 	}
 
-	protected Command(@NonNls String name, String usage, String description, Category category) {
+	protected Command(@NonNls String name, String usage, String description, Category category, boolean requiresMM) {
 		this.name = name;
 		this.aliases = new String[]{};
 		this.usage = usage;
 		this.description = description;
 		this.category = category;
 		this.category.addCommand(this);
+		this.requiresMM = requiresMM;
 	}
 
-	protected Command(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category) {
+	protected Command(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
 		this.name = name;
 		this.aliases = aliases;
 		this.usage = usage;
 		this.description = description;
 		this.category = category;
 		this.category.addCommand(this);
+		this.requiresMM = requiresMM;
 	}
 
 	public String getName() {
@@ -79,11 +84,15 @@ public abstract class Command {
 	public String getDescription() {
 		return description;
 	}
-	
+
 	public Category getCategory() {
 		return category;
 	}
 
+	public boolean requiresMM() {
+		return requiresMM;
+	}
+
 	public abstract void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix);
-	
+
 }
