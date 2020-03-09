@@ -59,7 +59,7 @@ public class ShiroInfo {
 	private static final String YandexToken = System.getenv("YANDEX_TOKEN");
 	private static final String YoutubeToken = System.getenv("YOUTUBE_TOKEN");
 	private static final String DBLToken;
-	private static final String name = "Shiro";
+	private static final String name = "Shiro J. Bot";
 	private static final String version = VersionDAO.getBuildVersion(Version.V3);
 	private static final String supportServer = "Shiro Support";
 	private static final String supportServerID = "421495229594730496";
