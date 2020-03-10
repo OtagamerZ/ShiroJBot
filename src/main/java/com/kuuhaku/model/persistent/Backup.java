@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent;
 import com.kuuhaku.model.common.backup.GuildCategory;
 import com.kuuhaku.model.common.backup.GuildData;
 import com.kuuhaku.model.common.backup.GuildRole;
+import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.requests.RestAction;
@@ -94,7 +95,12 @@ public class Backup {
 
 		Executors.newSingleThreadExecutor().execute(() -> {
 			while (!queue.isEmpty()) {
-				queue.poll().complete();
+				try {
+					queue.poll().complete();
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				}
 			}
 		});
 	}
