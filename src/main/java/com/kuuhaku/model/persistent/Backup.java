@@ -95,6 +95,11 @@ public class Backup {
 			}
 		});
 
+		gdata.getCategories().forEach(gc -> {
+			queue.offer(g.createCategory(gc.getName()));
+			oldCategories.offer(gc);
+		});
+
 		gdata.getRoles().forEach(gr -> {
 			queue.offer(g.createRole()
 					.setName(gr.getName())
@@ -104,20 +109,17 @@ public class Backup {
 			oldIDs.offer(gr.getOldId());
 		});
 
-		gdata.getCategories().forEach(gc -> {
-			queue.offer(g.createCategory(gc.getName()));
-			oldCategories.offer(gc);
-		});
-
 
 		Executors.newSingleThreadExecutor().execute(() -> {
 			while (!queue.isEmpty()) {
 				try {
 					Object act = queue.poll();
-					if (act instanceof RoleAction) newRoles.put(oldIDs.poll(), ((RoleAction) act).complete());
+					if (act instanceof RoleAction)
+						newRoles.put(oldIDs.poll(), ((RoleAction) act).complete());
 					else if (act instanceof ChannelAction)
 						newCategories.put(oldCategories.poll(), ((ChannelAction<Category>) act).complete());
-					else ((AuditableRestAction<Void>) act).complete();
+					else
+						((AuditableRestAction<Void>) act).complete();
 
 					Thread.sleep(500);
 				} catch (InterruptedException e) {
