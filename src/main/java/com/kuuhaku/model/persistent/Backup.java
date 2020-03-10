@@ -89,9 +89,9 @@ public class Backup {
 		});
 
 		gdata.getRoles().forEach(gr -> queue.offer(g.createRole()
-				.setName(gr.getName())
-				//.setColor(gr.getColor())
-				.setPermissions(gr.getPermission())
+						.setName(gr.getName())
+						.setColor(gr.getColor())
+				//.setPermissions(gr.getPermission())
 		));
 
 		gdata.getCategories().forEach(gc -> queue.offer(g.createCategory(gc.getName())));
