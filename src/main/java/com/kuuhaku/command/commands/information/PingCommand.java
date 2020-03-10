@@ -15,34 +15,39 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.misc;
+package com.kuuhaku.command.commands.information;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.mysql.VotesDAO;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
-public class ListScoreCommand extends Command {
+public class PingCommand extends Command {
 
-	public ListScoreCommand(String name, String description, Category category, boolean requiresMM) {
+	public PingCommand(@NonNls String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
 	}
 
-	public ListScoreCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
+	public PingCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
 		super(name, aliases, description, category, requiresMM);
 	}
 
-	public ListScoreCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+	public PingCommand(String name, String usage, String description, Category category, boolean requiresMM) {
 		super(name, usage, description, category, requiresMM);
 	}
 
-	public ListScoreCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+	public PingCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
 		super(name, aliases, usage, description, category, requiresMM);
 	}
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		VotesDAO.getVotes(guild, message.getTextChannel());
+		int fp = (int) ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024);
+		channel.sendMessage(":ping_pong: Pong! ")
+				.flatMap(m -> m.editMessage(m.getContentRaw() + " " + Main.getInfo().getPing() + " ms!"))
+				.flatMap(m -> m.editMessage(m.getContentRaw() + "\n:floppy_disk: " + fp + " MB!"))
+				.flatMap(m -> m.editMessage(m.getContentRaw() + "\n:telephone: " + Main.getInfo().getAPI().getEventManager().getRegisteredListeners().size() + " listeners!"))
+				.queue();
 	}
 }
