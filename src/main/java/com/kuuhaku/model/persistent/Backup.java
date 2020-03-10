@@ -23,7 +23,7 @@ import com.kuuhaku.model.common.backup.GuildRole;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.requests.RestAction;
+import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 import net.dv8tion.jda.api.requests.restaction.ChannelAction;
 import net.dv8tion.jda.api.requests.restaction.RoleAction;
 
@@ -74,11 +74,23 @@ public class Backup {
 		lastRestored = Timestamp.from(Instant.now());
 		class request {
 			int type;
-			RestAction action;
+			AuditableRestAction<Void> clearAct;
+			ChannelAction<Category> catAct;
+			RoleAction roleAct;
 
-			request(int type, RestAction action) {
+			public request(int type, AuditableRestAction<Void> clearAct) {
 				this.type = type;
-				this.action = action;
+				this.clearAct = clearAct;
+			}
+
+			public request(int type, ChannelAction<Category> catAct) {
+				this.type = type;
+				this.catAct = catAct;
+			}
+
+			public request(int type, RoleAction roleAct) {
+				this.type = type;
+				this.roleAct = roleAct;
 			}
 		}
 
@@ -125,13 +137,13 @@ public class Backup {
 					request act = queue.poll();
 					switch (act.type) {
 						case 0:
-							act.action.complete();
+							act.clearAct.complete();
 							break;
 						case 1:
-							newCategories.put(oldCategories.poll(), ((ChannelAction<Category>) act.action).complete());
+							newCategories.put(oldCategories.poll(), act.catAct.complete());
 							break;
 						case 2:
-							newRoles.put(oldIDs.poll(), ((RoleAction) act.action).complete());
+							newRoles.put(oldIDs.poll(), act.roleAct.complete());
 							break;
 					}
 
