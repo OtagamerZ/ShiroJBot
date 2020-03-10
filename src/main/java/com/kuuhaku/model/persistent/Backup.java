@@ -23,6 +23,8 @@ import com.kuuhaku.model.common.backup.GuildRole;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.requests.RestAction;
+import net.dv8tion.jda.api.requests.restaction.ChannelAction;
 import net.dv8tion.jda.api.requests.restaction.RoleAction;
 
 import javax.persistence.*;
@@ -73,9 +75,9 @@ public class Backup {
 
 		GuildData gdata = ShiroInfo.getJSONFactory().create().fromJson(serverData, GuildData.class);
 
-		LinkedList<RoleAction> queue = new LinkedList<>();
+		LinkedList<RestAction> queue = new LinkedList<>();
 
-		/*g.getChannels().forEach(chn -> {
+		g.getChannels().forEach(chn -> {
 			try {
 				queue.offer(chn.delete());
 			} catch (Exception ignore) {
@@ -86,7 +88,7 @@ public class Backup {
 				queue.offer(r.delete());
 			} catch (Exception ignore) {
 			}
-		});*/
+		});
 
 		gdata.getRoles().forEach(gr -> queue.offer(g.createRole()
 				.setName(gr.getName())
@@ -94,7 +96,7 @@ public class Backup {
 				.setPermissions(gr.getPermission())
 		));
 
-		//gdata.getCategories().forEach(gc -> queue.offer(g.createCategory(gc.getName())));
+		gdata.getCategories().forEach(gc -> queue.offer(g.createCategory(gc.getName())));
 
 		LinkedList<Role> newRoles = new LinkedList<>();
 		LinkedList<Category> newCategories = new LinkedList<>();
@@ -102,9 +104,15 @@ public class Backup {
 		Executors.newSingleThreadExecutor().execute(() -> {
 			while (!queue.isEmpty()) {
 				try {
-					Object obj = queue.poll().complete();
-					if (obj instanceof Role) newRoles.offer((Role) obj);
-					else if (obj instanceof Category) newCategories.offer((Category) obj);
+					RestAction act = queue.poll();
+					if (act instanceof RoleAction) {
+						Role r = ((RoleAction) act).complete();
+						newRoles.offer(r);
+					} else if (act instanceof ChannelAction) {
+						@SuppressWarnings("unchecked")
+						Category c = ((ChannelAction<Category>) act).complete();
+						newCategories.offer(c);
+					}
 
 					Thread.sleep(500);
 				} catch (InterruptedException e) {
