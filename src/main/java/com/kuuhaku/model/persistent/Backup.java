@@ -21,16 +21,14 @@ import com.kuuhaku.model.common.backup.GuildCategory;
 import com.kuuhaku.model.common.backup.GuildData;
 import com.kuuhaku.model.common.backup.GuildRole;
 import com.kuuhaku.utils.ShiroInfo;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.requests.RestAction;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @Entity
@@ -72,7 +70,33 @@ public class Backup {
 
 		lastRestored = Timestamp.from(Instant.now());
 
+		GuildData gdata = ShiroInfo.getJSONFactory().create().fromJson(serverData, GuildData.class);
 
+		LinkedList<RestAction> queue = new LinkedList<>();
+
+		g.getChannels().forEach(chn -> queue.offer(chn.delete()));
+		g.getRoles().forEach(r -> queue.offer(r.delete()));
+
+		Map<Long, Role> newRoles = new HashMap<>();
+
+		gdata.getRoles().forEach(gr -> queue.offer(g.createRole()
+				.setName(gr.getName())
+				.setColor(gr.getColor())
+				.setPermissions(gr.getPermission())
+				.map(r -> newRoles.put(gr.getOldId(), r))
+		));
+
+		Map<Category, GuildCategory> newCategories = new HashMap<>();
+
+		gdata.getCategories().forEach(gc -> queue.offer(g.createCategory(gc.getName())
+				.map(c -> newCategories.put(c, gc))
+		));
+
+		Executors.newSingleThreadExecutor().execute(() -> {
+			while (!queue.isEmpty()) {
+				queue.poll().complete();
+			}
+		});
 	}
 
 	public void saveServerData(Guild g) {
@@ -80,7 +104,7 @@ public class Backup {
 
 		List<GuildCategory> gcats = new ArrayList<>();
 		List<GuildRole> groles = g.getRoles().stream().map(r -> new GuildRole(r.getName(), r.getColorRaw(), r.getPermissionsRaw(), r.getIdLong())).collect(Collectors.toList());
-		List<String> gmembers = g.getMembers().stream().map(Member::getId).collect(Collectors.toList());
+		List<String> gmembers = g.getMembers().stream().map(m -> m.getUser().getAsTag()).collect(Collectors.toList());
 
 		g.getCategories().forEach(cat -> {
 			List<com.kuuhaku.model.common.backup.GuildChannel> channels = new ArrayList<>();
