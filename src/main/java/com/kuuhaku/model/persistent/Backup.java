@@ -125,13 +125,13 @@ public class Backup {
 					request act = queue.poll();
 					switch (act.type) {
 						case 0:
-							newRoles.put(oldIDs.poll(), ((RoleAction) act.action).complete());
+							act.action.complete();
 							break;
 						case 1:
 							newCategories.put(oldCategories.poll(), ((ChannelAction<Category>) act.action).complete());
 							break;
 						case 2:
-							act.action.complete();
+							newRoles.put(oldIDs.poll(), ((RoleAction) act.action).complete());
 							break;
 					}
 
