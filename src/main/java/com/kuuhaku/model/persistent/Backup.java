@@ -115,9 +115,11 @@ public class Backup {
 				try {
 					RestAction act = queue.poll();
 					if (act instanceof RoleAction) {
-						newRoles.put(oldIDs.poll(), ((RoleAction) act).complete());
+						Role r = ((RoleAction) act).complete();
+						newRoles.put(oldIDs.poll(), r);
 					} else if (act instanceof ChannelAction) {
-						newCategories.put(oldCategories.poll(), ((ChannelAction<Category>) act).complete());
+						Category c = ((ChannelAction<Category>) act).complete();
+						newCategories.put(oldCategories.poll(), c);
 					} else {
 						act.complete();
 					}
