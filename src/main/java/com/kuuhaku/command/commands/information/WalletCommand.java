@@ -22,9 +22,13 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.mysql.AccountDAO;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
+
+import java.text.MessageFormat;
 
 public class WalletCommand extends Command {
 
@@ -49,8 +53,8 @@ public class WalletCommand extends Command {
 		Account acc = AccountDAO.getAccount(author.getId());
 		EmbedBuilder eb = new EmbedBuilder();
 
-		eb.setTitle("Saldo de " + author.getName());
-		eb.addField(":moneybag: | " + acc.getBalance() + " créditos", "Ultimo voto em: " + (acc.getLastVoted() == null ? "Nunca" : acc.getLastVoted()), true);
+		eb.setTitle(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_balance-title"), author.getName()));
+		eb.addField(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_balance-field-title"), acc.getBalance()), MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_balance-field-value"), acc.getLastVoted()), true);
 		eb.setColor(Helper.getRandomColor());
 		eb.setThumbnail("https://lh3.googleusercontent.com/proxy/HPc-AN89uCegIfGS69Ii7Q-g2NhPzRxX1sJMrX_A80c8S7luf9LgFVt4vIsGiwgYRb77UVvyVAmhDlW4HQ7e5YUc-QWMqr8vAImtD1yADcP21MIHHfvDFAKJMD-Tf0ifrMCF23Y");
 

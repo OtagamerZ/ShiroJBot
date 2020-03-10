@@ -20,6 +20,8 @@ package com.kuuhaku.command.commands.information;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
@@ -29,6 +31,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.MessageFormat;
 
 public class ColorTesterCommand extends Command {
 
@@ -68,7 +71,7 @@ public class ColorTesterCommand extends Command {
 
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setColor(Color.decode(args[0]));
-			eb.setTitle("Cor " + args[0]);
+			eb.setTitle(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_color"), args[0]));
 			eb.setThumbnail("attachment://color.png");
 
 			channel.sendMessage(eb.build()).addFile(baos.toByteArray(), "color.png").queue();

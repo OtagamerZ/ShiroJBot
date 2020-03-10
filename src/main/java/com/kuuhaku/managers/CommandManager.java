@@ -33,6 +33,8 @@ import com.kuuhaku.command.commands.music.YoutubeCommand;
 import com.kuuhaku.command.commands.partner.*;
 import com.kuuhaku.command.commands.reactions.*;
 import com.kuuhaku.command.commands.reactions.answerable.*;
+import com.kuuhaku.command.commands.sheriff.BlockCommand;
+import com.kuuhaku.command.commands.sheriff.IDCommand;
 
 import java.util.ArrayList;
 import java.util.List;
