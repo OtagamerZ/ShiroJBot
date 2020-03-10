@@ -124,8 +124,8 @@ public class Backup {
 		gdata.getRoles().forEach(gr -> {
 			queue.offer(new request(2, g.createRole()
 					.setName(gr.getName())
-					.setColor(gr.getColor())
-					.setPermissions(gr.getPermission())
+					/*.setColor(gr.getColor())
+					.setPermissions(gr.getPermission())*/
 			));
 			oldIDs.offer(gr.getOldId());
 		});
