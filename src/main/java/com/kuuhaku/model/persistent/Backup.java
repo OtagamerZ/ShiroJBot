@@ -23,7 +23,7 @@ import com.kuuhaku.model.common.backup.GuildRole;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.requests.RestAction;
+import net.dv8tion.jda.api.requests.restaction.RoleAction;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -73,9 +73,9 @@ public class Backup {
 
 		GuildData gdata = ShiroInfo.getJSONFactory().create().fromJson(serverData, GuildData.class);
 
-		LinkedList<RestAction> queue = new LinkedList<>();
+		LinkedList<RoleAction> queue = new LinkedList<>();
 
-		g.getChannels().forEach(chn -> {
+		/*g.getChannels().forEach(chn -> {
 			try {
 				queue.offer(chn.delete());
 			} catch (Exception ignore) {
@@ -86,15 +86,15 @@ public class Backup {
 				queue.offer(r.delete());
 			} catch (Exception ignore) {
 			}
-		});
+		});*/
 
 		gdata.getRoles().forEach(gr -> queue.offer(g.createRole()
-						.setName(gr.getName())
-						.setColor(gr.getColor())
-				//.setPermissions(gr.getPermission())
+				.setName(gr.getName())
+				.setColor(gr.getColor())
+				.setPermissions(gr.getPermission())
 		));
 
-		gdata.getCategories().forEach(gc -> queue.offer(g.createCategory(gc.getName())));
+		//gdata.getCategories().forEach(gc -> queue.offer(g.createCategory(gc.getName())));
 
 		LinkedList<Role> newRoles = new LinkedList<>();
 		LinkedList<Category> newCategories = new LinkedList<>();
