@@ -90,7 +90,7 @@ public class Backup {
 
 		gdata.getRoles().forEach(gr -> queue.offer(g.createRole()
 				.setName(gr.getName())
-				.setColor(gr.getColor())
+				//.setColor(gr.getColor())
 				.setPermissions(gr.getPermission())
 		));
 
@@ -100,12 +100,9 @@ public class Backup {
 		LinkedList<Category> newCategories = new LinkedList<>();
 
 		Executors.newSingleThreadExecutor().execute(() -> {
-			int i = 0;
 			while (!queue.isEmpty()) {
 				try {
-					System.out.println(i);
 					Object obj = queue.poll().complete();
-					System.out.println("success");
 					if (obj instanceof Role) newRoles.offer((Role) obj);
 					else if (obj instanceof Category) newCategories.offer((Category) obj);
 
@@ -119,7 +116,6 @@ public class Backup {
 
 	public void saveServerData(Guild g) {
 		lastBackup = Timestamp.from(Instant.now());
-
 		List<GuildCategory> gcats = new ArrayList<>();
 		List<GuildRole> groles = g.getRoles().stream().filter(r -> !r.isPublicRole()).map(r -> new GuildRole(r.getName(), r.getColorRaw(), r.getPermissionsRaw(), r.getIdLong())).collect(Collectors.toList());
 		List<String> gmembers = g.getMembers().stream().map(m -> m.getUser().getAsTag()).collect(Collectors.toList());
