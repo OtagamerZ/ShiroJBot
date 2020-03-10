@@ -17,7 +17,6 @@
 
 package com.kuuhaku.model.persistent;
 
-import com.google.gson.Gson;
 import com.kuuhaku.model.common.backup.GuildCategory;
 import com.kuuhaku.model.common.backup.GuildData;
 import com.kuuhaku.model.common.backup.GuildRole;
@@ -89,27 +88,24 @@ public class Backup {
 			}
 		});
 
-		Map<Long, Role> newRoles = new HashMap<>();
-
 		gdata.getRoles().forEach(gr -> queue.offer(g.createRole()
-						.setName(gr.getName())
-						.setColor(gr.getColor())
-						.setPermissions(gr.getPermission())
-				//.map(r -> newRoles.put(gr.getOldId(), r))
+				.setName(gr.getName())
+				.setColor(gr.getColor())
+				.setPermissions(gr.getPermission())
 		));
 
-		Map<Category, GuildCategory> newCategories = new HashMap<>();
+		gdata.getCategories().forEach(gc -> queue.offer(g.createCategory(gc.getName())));
 
-		gdata.getCategories().forEach(gc -> queue.offer(g.createCategory(gc.getName())
-				//.map(c -> newCategories.put(c, gc))
-		));
+		LinkedList<Role> newRoles = new LinkedList<>();
+		LinkedList<Category> newCategories = new LinkedList<>();
 
 		Executors.newSingleThreadExecutor().execute(() -> {
-			Gson json = ShiroInfo.getJSONFactory().create();
 			while (!queue.isEmpty()) {
 				try {
-					System.out.println(json.toJson(queue.peek()));
-					queue.poll().complete();
+					Object obj = queue.poll().complete();
+					if (obj instanceof Role) newRoles.offer((Role) obj);
+					else if (obj instanceof Category) newCategories.offer((Category) obj);
+
 					Thread.sleep(500);
 				} catch (InterruptedException e) {
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
