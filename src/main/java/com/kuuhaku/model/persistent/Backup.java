@@ -23,7 +23,6 @@ import com.kuuhaku.model.common.backup.GuildRole;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 import net.dv8tion.jda.api.requests.restaction.ChannelAction;
 import net.dv8tion.jda.api.requests.restaction.RoleAction;
@@ -192,8 +191,6 @@ public class Backup {
 						}
 					} catch (InterruptedException e) {
 						Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-					} catch (ErrorResponseException e) {
-						e.printStackTrace();
 					}
 				});
 			});
