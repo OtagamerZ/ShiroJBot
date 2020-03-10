@@ -98,7 +98,7 @@ public class Backup {
 				try {
 					queue.poll().complete();
 					Thread.sleep(500);
-				} catch (InterruptedException e) {
+				} catch (Exception e) {
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
 			}
