@@ -261,21 +261,7 @@
       <workItem from="1583441232858" duration="453000" />
       <workItem from="1583496814454" duration="22291000" />
       <workItem from="1583756935868" duration="10137000" />
-      <workItem from="1583841907484" duration="20956000" />
-    </task>
-    <task id="LOCAL-00779" summary="Continuação da implementação do i18n">
-      <created>1583505988743</created>
-      <option name="number" value="00779" />
-      <option name="presentableId" value="LOCAL-00779" />
-      <option name="project" value="LOCAL" />
-      <updated>1583505988743</updated>
-    </task>
-    <task id="LOCAL-00780" summary="Continuação da implementação do i18n">
-      <created>1583511314796</created>
-      <option name="number" value="00780" />
-      <option name="presentableId" value="LOCAL-00780" />
-      <option name="project" value="LOCAL" />
-      <updated>1583511314797</updated>
+      <workItem from="1583841907484" duration="21452000" />
     </task>
     <task id="LOCAL-00781" summary="Continuação da implementação do i18n">
       <created>1583511553723</created>
@@ -606,7 +592,21 @@
       <option name="project" value="LOCAL" />
       <updated>1583871894992</updated>
     </task>
-    <option name="localTasksCounter" value="828" />
+    <task id="LOCAL-00828" summary="Melhorias no backup de servidores">
+      <created>1583872157766</created>
+      <option name="number" value="00828" />
+      <option name="presentableId" value="LOCAL-00828" />
+      <option name="project" value="LOCAL" />
+      <updated>1583872157767</updated>
+    </task>
+    <task id="LOCAL-00829" summary="Melhorias no backup de servidores">
+      <created>1583872245404</created>
+      <option name="number" value="00829" />
+      <option name="presentableId" value="LOCAL-00829" />
+      <option name="project" value="LOCAL" />
+      <updated>1583872245404</updated>
+    </task>
+    <option name="localTasksCounter" value="830" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -696,11 +696,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="585" y="309" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1580395607218" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1583851510149">
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1583872520894">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="488" y="71" key="#com.intellij.ide.util.MemberChooser/0.0.1366.768@0.0.1366.768" timestamp="1581391062510" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1583851510149" />
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1583872520894" />
     <state x="509" y="169" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1578969843084">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -738,11 +738,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1583775520216" />
-    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1583872242775">
+    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1583872701295">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1582604510538" />
-    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1583872242775" />
+    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1583872701295" />
     <state x="160" y="89" width="1344" height="834" key="DiffContextDialog" timestamp="1580842925618">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -801,11 +801,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1583872158710">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1583872246541">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1582604543626" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1583872158710" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1583872246541" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
