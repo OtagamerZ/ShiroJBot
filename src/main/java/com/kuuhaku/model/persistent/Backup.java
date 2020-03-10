@@ -92,16 +92,16 @@ public class Backup {
 		Map<Long, Role> newRoles = new HashMap<>();
 
 		gdata.getRoles().forEach(gr -> queue.offer(g.createRole()
-				.setName(gr.getName())
-				.setColor(gr.getColor())
-				.setPermissions(gr.getPermission())
-				.map(r -> newRoles.put(gr.getOldId(), r))
+						.setName(gr.getName())
+						.setColor(gr.getColor())
+						.setPermissions(gr.getPermission())
+				//.map(r -> newRoles.put(gr.getOldId(), r))
 		));
 
 		Map<Category, GuildCategory> newCategories = new HashMap<>();
 
 		gdata.getCategories().forEach(gc -> queue.offer(g.createCategory(gc.getName())
-				.map(c -> newCategories.put(c, gc))
+				//.map(c -> newCategories.put(c, gc))
 		));
 
 		Executors.newSingleThreadExecutor().execute(() -> {
