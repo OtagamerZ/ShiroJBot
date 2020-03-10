@@ -100,9 +100,12 @@ public class Backup {
 		LinkedList<Category> newCategories = new LinkedList<>();
 
 		Executors.newSingleThreadExecutor().execute(() -> {
+			int i = 0;
 			while (!queue.isEmpty()) {
 				try {
+					System.out.println(i);
 					Object obj = queue.poll().complete();
+					System.out.println("success");
 					if (obj instanceof Role) newRoles.offer((Role) obj);
 					else if (obj instanceof Category) newCategories.offer((Category) obj);
 
