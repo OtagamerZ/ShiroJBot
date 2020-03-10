@@ -25,15 +25,23 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class URankCommand extends Command {
+
+	private static final String STR_LEVEL = "str_level";
+	private static final String SRT_USER_RANKING_TITLE = "str_user-ranking-title";
+	private static final String STR_GLOBAL = "str_global";
+	private static final String STR_LOCAL = "str_local";
 
 	public URankCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
@@ -71,7 +79,7 @@ public class URankCommand extends Command {
 					.append(" - ")
 					.append((global ? checkGuild(sub9.get(i)) : ""))
 					.append(checkUser(sub9.get(i)))
-					.append(" (Level ")
+					.append(ShiroInfo.getLocale(I18n.PT).getString(STR_LEVEL))
 					.append(sub9.get(i).getLevel())
 					.append(")")
 					.append("\n");
@@ -81,12 +89,7 @@ public class URankCommand extends Command {
 		StringBuilder next10 = new StringBuilder();
 		EmbedBuilder eb = new EmbedBuilder();
 
-		eb.setTitle("Ranking de usuários (" + (global ? "GLOBAL" : "LOCAL") + ")");
-		eb.addField(champ, sub9Formatted.toString(), false);
-		eb.setThumbnail("http://www.marquishoa.com/wp-content/uploads/2018/01/Ranking-icon.png");
-		eb.setColor(Helper.getRandomColor());
-
-		pages.add(new Page(PageType.EMBED, eb.build()));
+		makeEmbed(global, pages, sub9Formatted, eb, champ);
 
 		for (int x = 1; x < Math.ceil(mbs.size() / 10f); x++) {
 			eb.clear();
@@ -97,28 +100,32 @@ public class URankCommand extends Command {
 						.append(" - ")
 						.append((global ? checkGuild(mbs.get(i)) : ""))
 						.append(checkUser(mbs.get(i)))
-						.append(" (Level ")
+						.append(ShiroInfo.getLocale(I18n.PT).getString(STR_LEVEL))
 						.append(mbs.get(i).getLevel())
 						.append(")")
 						.append("\n");
 			}
 
-			eb.setTitle("Ranking de usuários (" + (global ? "GLOBAL" : "LOCAL") + ")");
-			eb.addField(Helper.VOID, next10.toString(), false);
-			eb.setThumbnail("http://www.marquishoa.com/wp-content/uploads/2018/01/Ranking-icon.png");
-			eb.setColor(Helper.getRandomColor());
-
-			pages.add(new Page(PageType.EMBED, eb.build()));
+			makeEmbed(global, pages, next10, eb, Helper.VOID);
 		}
 
 		channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
+	}
+
+	private void makeEmbed(boolean global, List<Page> pages, StringBuilder next10, EmbedBuilder eb, String aVoid) {
+		eb.setTitle(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(SRT_USER_RANKING_TITLE), global ? ShiroInfo.getLocale(I18n.PT).getString(STR_GLOBAL) : ShiroInfo.getLocale(I18n.PT).getString(STR_LOCAL)));
+		eb.addField(aVoid, next10.toString(), false);
+		eb.setThumbnail("http://www.marquishoa.com/wp-content/uploads/2018/01/Ranking-icon.png");
+		eb.setColor(Helper.getRandomColor());
+
+		pages.add(new Page(PageType.EMBED, eb.build()));
 	}
 
 	private static String checkUser(com.kuuhaku.model.persistent.Member m) {
 		try {
 			return Main.getInfo().getUserByID(m.getMid()).getAsTag();
 		} catch (Exception e) {
-			return "`Usuário inválido`";
+			return ShiroInfo.getLocale(I18n.PT).getString("str_invalid-user");
 		}
 	}
 

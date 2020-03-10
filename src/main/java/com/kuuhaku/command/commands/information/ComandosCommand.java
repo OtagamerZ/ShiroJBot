@@ -43,6 +43,9 @@ import java.util.concurrent.TimeUnit;
 
 public class ComandosCommand extends Command {
 
+	private static final String STR_COMMAND_LIST_TITLE = "str_command-list-title";
+	private static final String STR_COMMAND_LIST_DESCRIPTION = "str_command-list-description";
+
 	public ComandosCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
 	}
@@ -68,14 +71,14 @@ public class ComandosCommand extends Command {
 		EmbedBuilder eb = new EmbedBuilder();
 
 		if (Helper.hasPermission(guild.getSelfMember(), Permission.MESSAGE_MANAGE, (TextChannel) channel) && args.length == 0) {
-			eb.setTitle(ShiroInfo.getLocale(I18n.PT).getString("str_command-list-title"));
-			eb.setDescription(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_command-list-description"), prefix, Arrays.stream(Category.values()).filter(c -> c.isEnabled(gc, guild, author)).count(), Main.getCommandManager().getCommands().stream().filter(c -> c.getCategory().isEnabled(gc, guild, author)).count()));
+			eb.setTitle(ShiroInfo.getLocale(I18n.PT).getString(STR_COMMAND_LIST_TITLE));
+			eb.setDescription(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_COMMAND_LIST_DESCRIPTION), prefix, Arrays.stream(Category.values()).filter(c -> c.isEnabled(gc, guild, author)).count(), Main.getCommandManager().getCommands().stream().filter(c -> c.getCategory().isEnabled(gc, guild, author)).count()));
 			for (Category cat : Category.values()) {
 				if (cat.isEnabled(gc, guild, author))
 					eb.addField(cat.getEmote() + " | " + cat.getName(), Helper.VOID, true);
 			}
 
-			eb.addField("<:tips:684039810079522846> | Dicas", Helper.VOID, true);
+			eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_tips"), Helper.VOID, true);
 
 			eb.setColor(Color.PINK);
 			eb.setFooter(Main.getInfo().getFullName(), null);
@@ -90,13 +93,12 @@ public class ComandosCommand extends Command {
 				ceb.setFooter(Main.getInfo().getFullName(), null);
 				ceb.setThumbnail(Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById(cat.getEmoteId())).getImageUrl());
 
-				ceb.setDescription("Prefixo: `" + prefix + "`\n"
-						+ cat.getCmds().size() + " comandos encontrados nesta categoria!");
+				ceb.setDescription(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_prefix"), prefix, cat.getCmds().size()));
 
 				if (!cat.isEnabled(gc, guild, author))
 					continue;
 				if (cat.getCmds().size() == 0) {
-					ceb.addField(Helper.VOID, cat.getDescription() + "\n*Ainda não existem comandos nesta categoria.*", false);
+					ceb.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_empty-category"), cat.getDescription()), false);
 					continue;
 				}
 
@@ -107,28 +109,28 @@ public class ComandosCommand extends Command {
 				}
 
 				ceb.addField(Helper.VOID, cat.getDescription() + "\n" + cmds.toString().trim(), false);
-				ceb.addField(Helper.VOID, "Para informações sobre um comando em especifico digite `" + prefix + "cmds [comando]`.", false);
+				ceb.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_command-list-single-help-tip"), prefix), false);
 				pages.put(cat.getEmoteId(), new Page(PageType.EMBED, ceb.build()));
 			}
 
 			EmbedBuilder ceb = new EmbedBuilder();
-			ceb.setTitle("Dicas e Curiosidades");
+			ceb.setTitle(ShiroInfo.getLocale(I18n.PT).getString("str_tips-and-tricks"));
 			ceb.setColor(Color.PINK);
 			ceb.setFooter(Main.getInfo().getFullName(), null);
 			ceb.setThumbnail(Objects.requireNonNull(Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById("684039810079522846")).getImageUrl()));
 
-			ceb.addField(Helper.VOID, "Você pode usar emotes de qualquer servidor que a Shiro participe, basta digitar `e:` antes da mensagem, e `&` antes do nome do emote.", false);
-			ceb.addField(Helper.VOID, "Os botões que aparecem em alguns comandos, como estes abaixo, são feitos usando uma biblioteca aberta de paginação escrita pelo meu Nii-chan. Você pode usá-la se quiser!", false);
-			ceb.addField(Helper.VOID, "Membros que tenham uma waifu (usando o comando `" + prefix + "marry`) recebem 25% mais experiência quando no mesmo servidor que a/o waifu. Cada divórcio reduz permanentemente esse bônus!", false);
-			ceb.addField(Helper.VOID, "Todo começo de mês, os membros do exceed vitorioso recebem 2x mais experiência por uma semana.", false);
+			ceb.addField(Helper.VOID, ShiroInfo.getLocale(I18n.PT).getString("str_quick-emote-tip"), false);
+			ceb.addField(Helper.VOID, ShiroInfo.getLocale(I18n.PT).getString("str_pagination-tip"), false);
+			ceb.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_waifu-tip"), prefix), false);
+			ceb.addField(Helper.VOID, ShiroInfo.getLocale(I18n.PT).getString("str_exceed-tip"), false);
 
 			pages.put("684039810079522846", new Page(PageType.EMBED, ceb.build()));
 
 			channel.sendMessage(eb.build()).queue(s -> Pages.categorize(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
 			return;
 		} else if (args.length == 0) {
-			eb.setTitle(ShiroInfo.getLocale(I18n.PT).getString("str_command-list-title"));
-			eb.setDescription(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_command-list-description"), prefix, Arrays.stream(Category.values()).filter(c -> c.isEnabled(gc, guild, author)).count(), Main.getCommandManager().getCommands().stream().filter(c -> c.getCategory().isEnabled(gc, guild, author)).count()));
+			eb.setTitle(ShiroInfo.getLocale(I18n.PT).getString(STR_COMMAND_LIST_TITLE));
+			eb.setDescription(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_COMMAND_LIST_DESCRIPTION), prefix, Arrays.stream(Category.values()).filter(c -> c.isEnabled(gc, guild, author)).count(), Main.getCommandManager().getCommands().stream().filter(c -> c.getCategory().isEnabled(gc, guild, author)).count()));
 			eb.appendDescription(ShiroInfo.getLocale(I18n.PT).getString("str_command-list-alert"));
 			StringBuilder sb = new StringBuilder();
 			for (Category cat : Category.values()) {
@@ -191,16 +193,13 @@ public class ComandosCommand extends Command {
 
 		eb.setTitle(cmd.getName() + (cmd.getUsage() != null ? " " + cmd.getUsage() : ""));
 
-		StringBuilder aliases = new StringBuilder("**Aliases**: ");
+		StringBuilder aliases = new StringBuilder(ShiroInfo.getLocale(I18n.PT).getString("str_aliases"));
 
 		for (String al : cmd.getAliases()) {
 			aliases.append("`").append(al).append("`  ");
 		}
 
-		eb.setDescription(cmd.getDescription() + "\n"
-				+ (cmd.getAliases().length != 0 ? aliases.toString().trim() + "\n" : "")
-				+ "**Categoria**: " + cmd.getCategory().getName()
-				+ "\n");
+		eb.setDescription(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_command-list-category"), cmd.getDescription(), cmd.getAliases().length != 0 ? aliases.toString().trim() + "\n" : "", cmd.getCategory().getName()));
 
 		channel.sendMessage(eb.build()).queue();
 

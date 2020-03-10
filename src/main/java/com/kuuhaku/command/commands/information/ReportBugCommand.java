@@ -20,6 +20,8 @@ package com.kuuhaku.command.commands.information;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
@@ -62,7 +64,7 @@ public class ReportBugCommand extends Command {
         eb.addField("Enviado em:", df.format(message.getTimeCreated()), true);
         eb.addField("Relatório:", "```" + mensagem + "```", false);
 
-        Main.getInfo().getDevelopers().forEach(dev -> Main.getInfo().getUserByID(dev).openPrivateChannel().queue(m -> m.sendMessage(eb.build()).queue()));
-        channel.sendMessage("✅ | Bug reportado com sucesso.").queue();
+		Main.getInfo().getDevelopers().forEach(dev -> Main.getInfo().getUserByID(dev).openPrivateChannel().queue(m -> m.sendMessage(eb.build()).queue()));
+		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-reported-bug")).queue();
     }
 }
