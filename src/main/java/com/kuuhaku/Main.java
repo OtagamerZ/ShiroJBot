@@ -245,6 +245,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		if (e.getClass().getCanonicalName().equals(ContextException.class.getCanonicalName())) {
 			return;
 		}
+		e.printStackTrace();
 		Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 	}
 }
