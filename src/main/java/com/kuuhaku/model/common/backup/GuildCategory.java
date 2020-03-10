@@ -23,9 +23,9 @@ import java.util.Map;
 public class GuildCategory {
 	private final String name;
 	private final List<GuildChannel> channels;
-	private final Map<GuildRole, long[]> permission;
+	private final Map<Long, long[]> permission;
 
-	public GuildCategory(String name, List<GuildChannel> channels, Map<GuildRole, long[]> permission) {
+	public GuildCategory(String name, List<GuildChannel> channels, Map<Long, long[]> permission) {
 		this.name = name;
 		this.channels = channels;
 		this.permission = permission;
@@ -39,7 +39,7 @@ public class GuildCategory {
 		return channels;
 	}
 
-	public Map<GuildRole, long[]> getPermission() {
+	public Map<Long, long[]> getPermission() {
 		return permission;
 	}
 }
