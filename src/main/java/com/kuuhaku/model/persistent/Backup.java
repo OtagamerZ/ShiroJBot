@@ -76,8 +76,11 @@ public class Backup {
 		GuildData gdata = ShiroInfo.getJSONFactory().create().fromJson(serverData, GuildData.class);
 
 		LinkedList<RestAction> queue = new LinkedList<>();
-		Map<Long, Role> newRoles = new HashMap<>();
-		Map<Category, GuildCategory> newCategories = new HashMap<>();
+		Map<Long, Role> newRoles = new LinkedHashMap<>();
+		Map<GuildCategory, Category> newCategories = new LinkedHashMap<>();
+
+		LinkedList<Long> oldRoleIDs = new LinkedList<>();
+		LinkedList<GuildCategory> oldCategories = new LinkedList<>();
 
 		g.getChannels().forEach(chn -> {
 			try {
@@ -92,16 +95,19 @@ public class Backup {
 			}
 		});
 
-		gdata.getRoles().forEach(gr -> queue.offer(g.createRole()
-				.setName(gr.getName())
-				.setColor(gr.getColor())
-				.setPermissions(gr.getPermission())
-				.map(r -> newRoles.put(gr.getOldId(), r))
-		));
+		gdata.getRoles().forEach(gr -> {
+			queue.offer(g.createRole()
+					.setName(gr.getName())
+					.setColor(gr.getColor())
+					.setPermissions(gr.getPermission())
+			);
+			oldRoleIDs.offer(gr.getOldId());
+		});
 
-		gdata.getCategories().forEach(gc -> queue.offer(g.createCategory(gc.getName())
-				.map(c -> newCategories.put(c, gc))
-		));
+		gdata.getCategories().forEach(gc -> {
+			queue.offer(g.createCategory(gc.getName()));
+			oldCategories.offer(gc);
+		});
 
 
 		Executors.newSingleThreadExecutor().execute(() -> {
@@ -109,9 +115,9 @@ public class Backup {
 				try {
 					RestAction act = queue.poll();
 					if (act instanceof RoleAction) {
-						((RoleAction) act).complete();
+						newRoles.put(oldRoleIDs.poll(), ((RoleAction) act).complete());
 					} else if (act instanceof ChannelAction) {
-						((ChannelAction<Category>) act).complete();
+						newCategories.put(oldCategories.poll(), ((ChannelAction<Category>) act).complete());
 					} else {
 						act.complete();
 					}
@@ -122,7 +128,7 @@ public class Backup {
 				}
 			}
 
-			newCategories.forEach((c, gc) -> {
+			newCategories.forEach((gc, c) -> {
 				gc.getPermission().forEach((k, v) -> c.putPermissionOverride(newRoles.get(k))
 						.setAllow(v[0])
 						.setDeny(v[1])
