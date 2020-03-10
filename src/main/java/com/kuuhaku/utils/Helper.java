@@ -25,10 +25,12 @@ import com.google.common.collect.Lists;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.reactions.Reaction;
+import com.kuuhaku.controller.mysql.LogDAO;
 import com.kuuhaku.controller.mysql.TagDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.Extensions;
 import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.Log;
 import com.kuuhaku.model.persistent.Tags;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -696,5 +698,19 @@ public class Helper {
 			throw t;
 		} catch (Throwable ignore) {
 		}
+	}
+
+	public static boolean showMMError(User author, MessageChannel channel, Guild guild, String rawMessage, Command command) {
+		if (author == Main.getInfo().getSelfUser() && command.getCategory().isBotBlocked()) {
+			channel.sendMessage(":x: | Não posso executar este comando, apenas usuários humanos podem usar ele.").queue();
+			return true;
+		} else if (!hasPermission(guild.getSelfMember(), Permission.MESSAGE_MANAGE, (TextChannel) channel) && GuildDAO.getGuildById(guild.getId()).isServerMMLocked() && command.requiresMM()) {
+			channel.sendMessage(":x: | Para que meus comandos funcionem corretamente, preciso da permissão de gerenciar mensagens.\nPor favor contate um moderador ou administrador desse servidor para que me dê essa permissão.").queue();
+			return true;
+		}
+
+		LogDAO.saveLog(new Log().setGuild(guild.getName()).setUser(author.getAsTag()).setCommand(rawMessage));
+		logToChannel(author, true, command, "Um comando foi usado no canal " + ((TextChannel) channel).getAsMention(), guild);
+		return false;
 	}
 }

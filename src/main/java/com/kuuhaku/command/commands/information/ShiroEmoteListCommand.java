@@ -23,6 +23,8 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -66,7 +68,7 @@ public class ShiroEmoteListCommand extends Command {
 				List<MessageEmbed.Field> subF = f.subList(-10 + (10 * (i + 1)), Math.min(10 * (i + 1), f.size()));
 				subF.forEach(eb::addField);
 
-				eb.setTitle("<a:SmugDance:598842924725305344> Emotes disponíveis para a Shiro:");
+				eb.setTitle(ShiroInfo.getLocale(I18n.PT).getString("str_available-shiro-emotes"));
 				Helper.finishEmbed(guild, pages, f, eb, i);
 			}
 

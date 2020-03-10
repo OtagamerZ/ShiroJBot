@@ -24,10 +24,8 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.rpg.NewCampaignCommand;
 import com.kuuhaku.command.commands.rpg.NewPlayerCommand;
-import com.kuuhaku.controller.mysql.LogDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.handlers.games.rpg.actors.Actor;
-import com.kuuhaku.model.persistent.Log;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -169,16 +167,7 @@ public class TetEvents extends ListenerAdapter {
 				found = JDAEvents.isFound(GuildDAO.getGuildById(guild.getId()), guild, commandName, found, command, author);
 
 				if (found) {
-					if (author == Main.getInfo().getSelfUser() && command.getCategory().isBotBlocked()) {
-						channel.sendMessage(":x: | Não posso executar este comando, apenas usuários humanos podem usar ele.").queue();
-						return;
-					} else if (!Helper.hasPermission(guild.getSelfMember(), Permission.MESSAGE_MANAGE, (TextChannel) channel) && GuildDAO.getGuildById(guild.getId()).isServerMMLocked() && command.requiresMM()) {
-						channel.sendMessage(":x: | Para que meus comandos funcionem corretamente, preciso da permissão de gerenciar mensagens.\nPor favor contate um moderador ou administrador desse servidor para que me dê essa permissão.").queue();
-						return;
-					}
-
-					LogDAO.saveLog(new Log().setGuild(guild.getName()).setUser(author.getAsTag()).setCommand(rawMessage));
-					Helper.logToChannel(author, true, command, "Um comando foi usado no canal " + ((TextChannel) channel).getAsMention(), guild);
+					if (Helper.showMMError(author, channel, guild, rawMessage, command)) return;
 					if (Main.getInfo().getGames().get(guild.getId()) == null) {
 						if (command.getClass() == NewCampaignCommand.class) {
 							if (JDAEvents.checkPermissions(author, member, message, channel, guild, prefix, rawMsgNoPrefix, args, command))

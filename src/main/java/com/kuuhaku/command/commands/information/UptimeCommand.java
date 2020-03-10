@@ -17,45 +17,49 @@
 
 package com.kuuhaku.command.commands.information;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.model.common.Profile;
-import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
-import java.io.IOException;
 import java.text.MessageFormat;
+import java.time.Instant;
+import java.util.concurrent.TimeUnit;
 
-public class ProfileCommand extends Command {
+public class UptimeCommand extends Command {
 
-	public ProfileCommand(String name, String description, Category category, boolean requiresMM) {
+	public UptimeCommand(@NonNls String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
 	}
 
-	public ProfileCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
+	public UptimeCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
 		super(name, aliases, description, category, requiresMM);
 	}
 
-	public ProfileCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+	public UptimeCommand(String name, String usage, String description, Category category, boolean requiresMM) {
 		super(name, usage, description, category, requiresMM);
 	}
 
-	public ProfileCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+	public UptimeCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
 		super(name, aliases, usage, description, category, requiresMM);
 	}
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_generating-profile")).queue(m -> {
-			try {
-				channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_profile"), author.getAsMention())).addFile(Profile.makeProfile(member, guild).toByteArray(), "perfil.png").queue(s -> m.delete().queue());
-			} catch (IOException e) {
-				m.editMessage(":x: | Epa, teve um errinho aqui enquanto eu gerava o perfil, meus criadores já foram notificados!").queue();
-				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-			}
-		});
+
+		long uptimeSec = Instant.now().getEpochSecond() - Main.getInfo().getStartTime();
+
+		int dias = (int) TimeUnit.SECONDS.toDays(uptimeSec);
+		long horas = TimeUnit.SECONDS.toHours(uptimeSec) - (dias * 24);
+		long minutos = TimeUnit.SECONDS.toMinutes(uptimeSec) - (TimeUnit.SECONDS.toHours(uptimeSec) * 60);
+		long segundos = TimeUnit.SECONDS.toSeconds(uptimeSec) - (TimeUnit.SECONDS.toMinutes(uptimeSec) * 60);
+
+		String uptime = MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_uptime"), dias, horas, minutos, segundos);
+
+		channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_uptime-message"), uptime)).queue();
 	}
+
 }
