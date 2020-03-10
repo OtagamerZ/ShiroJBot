@@ -23,7 +23,6 @@ import com.kuuhaku.model.common.backup.GuildRole;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 import net.dv8tion.jda.api.requests.restaction.ChannelAction;
 import net.dv8tion.jda.api.requests.restaction.RoleAction;
@@ -76,7 +75,7 @@ public class Backup {
 
 		GuildData gdata = ShiroInfo.getJSONFactory().create().fromJson(serverData, GuildData.class);
 
-		LinkedList<RestAction> queue = new LinkedList<>();
+		LinkedList<Object> queue = new LinkedList<>();
 		Map<Long, Role> newRoles = new HashMap<>();
 		Map<GuildCategory, Category> newCategories = new HashMap<>();
 
@@ -114,16 +113,11 @@ public class Backup {
 		Executors.newSingleThreadExecutor().execute(() -> {
 			while (!queue.isEmpty()) {
 				try {
-					RestAction act = queue.poll();
-					if (act instanceof RoleAction) {
-						Role r = ((RoleAction) act).complete();
-						newRoles.put(oldIDs.poll(), r);
-					} else if (act instanceof ChannelAction) {
-						Category c = ((ChannelAction<Category>) act).complete();
-						newCategories.put(oldCategories.poll(), c);
-					} else if (act instanceof AuditableRestAction) {
-						act.complete();
-					}
+					Object act = queue.poll();
+					if (act instanceof RoleAction) newRoles.put(oldIDs.poll(), ((RoleAction) act).complete());
+					else if (act instanceof ChannelAction)
+						newCategories.put(oldCategories.poll(), ((ChannelAction<Category>) act).complete());
+					else ((AuditableRestAction<Void>) act).complete();
 
 					Thread.sleep(500);
 				} catch (InterruptedException e) {
