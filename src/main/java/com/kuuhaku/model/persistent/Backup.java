@@ -119,7 +119,7 @@ public class Backup {
 		lastBackup = Timestamp.from(Instant.now());
 
 		List<GuildCategory> gcats = new ArrayList<>();
-		List<GuildRole> groles = g.getRoles().stream().map(r -> new GuildRole(r.getName(), r.getColorRaw(), r.getPermissionsRaw(), r.getIdLong())).collect(Collectors.toList());
+		List<GuildRole> groles = g.getRoles().stream().filter(r -> !r.isPublicRole()).map(r -> new GuildRole(r.getName(), r.getColorRaw(), r.getPermissionsRaw(), r.getIdLong())).collect(Collectors.toList());
 		List<String> gmembers = g.getMembers().stream().map(m -> m.getUser().getAsTag()).collect(Collectors.toList());
 
 		g.getCategories().forEach(cat -> {
