@@ -17,6 +17,7 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.google.gson.Gson;
 import com.kuuhaku.model.common.backup.GuildCategory;
 import com.kuuhaku.model.common.backup.GuildData;
 import com.kuuhaku.model.common.backup.GuildRole;
@@ -104,8 +105,10 @@ public class Backup {
 		));
 
 		Executors.newSingleThreadExecutor().execute(() -> {
+			Gson json = ShiroInfo.getJSONFactory().create();
 			while (!queue.isEmpty()) {
 				try {
+					System.out.println(json.toJson(queue.peek()));
 					queue.poll().complete();
 					Thread.sleep(500);
 				} catch (InterruptedException e) {
