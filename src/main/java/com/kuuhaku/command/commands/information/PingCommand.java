@@ -20,6 +20,8 @@ package com.kuuhaku.command.commands.information;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
@@ -47,7 +49,7 @@ public class PingCommand extends Command {
 		channel.sendMessage(":ping_pong: Pong! ")
 				.flatMap(m -> m.editMessage(m.getContentRaw() + " " + Main.getInfo().getPing() + " ms!"))
 				.flatMap(m -> m.editMessage(m.getContentRaw() + "\n:floppy_disk: " + fp + " MB!"))
-				.flatMap(m -> m.editMessage(m.getContentRaw() + "\n:telephone: " + Main.getInfo().getAPI().getEventManager().getRegisteredListeners().size() + " listeners!"))
+				.flatMap(m -> m.editMessage(m.getContentRaw() + "\n:telephone: " + Main.getInfo().getAPI().getEventManager().getRegisteredListeners().size() + ShiroInfo.getLocale(I18n.PT).getString("str_listeners")))
 				.queue();
 	}
 }
