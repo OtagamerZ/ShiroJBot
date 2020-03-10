@@ -23,7 +23,7 @@ import com.kuuhaku.model.common.backup.GuildRole;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
+import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.ChannelAction;
 import net.dv8tion.jda.api.requests.restaction.RoleAction;
 
@@ -72,10 +72,19 @@ public class Backup {
 		if (serverData == null || serverData.isEmpty()) return;
 
 		lastRestored = Timestamp.from(Instant.now());
+		class request {
+			int type;
+			RestAction action;
+
+			request(int type, RestAction action) {
+				this.type = type;
+				this.action = action;
+			}
+		}
 
 		GuildData gdata = ShiroInfo.getJSONFactory().create().fromJson(serverData, GuildData.class);
 
-		LinkedList<Object> queue = new LinkedList<>();
+		LinkedList<request> queue = new LinkedList<>();
 		Map<Long, Role> newRoles = new HashMap<>();
 		Map<GuildCategory, Category> newCategories = new HashMap<>();
 
@@ -84,28 +93,28 @@ public class Backup {
 
 		g.getChannels().forEach(chn -> {
 			try {
-				queue.offer(chn.delete());
+				queue.offer(new request(0, chn.delete()));
 			} catch (Exception ignore) {
 			}
 		});
 		g.getRoles().forEach(r -> {
 			try {
-				queue.offer(r.delete());
+				queue.offer(new request(0, r.delete()));
 			} catch (Exception ignore) {
 			}
 		});
 
 		gdata.getCategories().forEach(gc -> {
-			queue.offer(g.createCategory(gc.getName()));
+			queue.offer(new request(1, g.createCategory(gc.getName())));
 			oldCategories.offer(gc);
 		});
 
 		gdata.getRoles().forEach(gr -> {
-			queue.offer(g.createRole()
+			queue.offer(new request(2, g.createRole()
 					.setName(gr.getName())
 					.setColor(gr.getColor())
 					.setPermissions(gr.getPermission())
-			);
+			));
 			oldIDs.offer(gr.getOldId());
 		});
 
@@ -113,13 +122,18 @@ public class Backup {
 		Executors.newSingleThreadExecutor().execute(() -> {
 			while (!queue.isEmpty()) {
 				try {
-					Object act = queue.poll();
-					if (act instanceof RoleAction)
-						newRoles.put(oldIDs.poll(), ((RoleAction) act).complete());
-					else if (act instanceof ChannelAction)
-						newCategories.put(oldCategories.poll(), ((ChannelAction<Category>) act).complete());
-					else
-						((AuditableRestAction<Void>) act).complete();
+					request act = queue.poll();
+					switch (act.type) {
+						case 0:
+							newRoles.put(oldIDs.poll(), ((RoleAction) act.action).complete());
+							break;
+						case 1:
+							newCategories.put(oldCategories.poll(), ((ChannelAction<Category>) act.action).complete());
+							break;
+						case 2:
+							act.action.complete();
+							break;
+					}
 
 					Thread.sleep(500);
 				} catch (InterruptedException e) {
