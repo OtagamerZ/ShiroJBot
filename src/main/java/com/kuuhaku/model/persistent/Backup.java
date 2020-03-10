@@ -24,8 +24,6 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.requests.RestAction;
-import net.dv8tion.jda.api.requests.restaction.ChannelAction;
-import net.dv8tion.jda.api.requests.restaction.RoleAction;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -75,12 +73,10 @@ public class Backup {
 
 		GuildData gdata = ShiroInfo.getJSONFactory().create().fromJson(serverData, GuildData.class);
 
-		LinkedList<RestAction> queue = new LinkedList<>();
-		Map<Long, Role> newRoles = new LinkedHashMap<>();
-		Map<GuildCategory, Category> newCategories = new LinkedHashMap<>();
+		LinkedList<RestAction<Void>> queue = new LinkedList<>();
 
-		LinkedList<Long> oldRoleIDs = new LinkedList<>();
-		LinkedList<GuildCategory> oldCategories = new LinkedList<>();
+		Map<Long, Role> newRoles = new HashMap<>();
+		Map<Category, GuildCategory> newCategories = new HashMap<>();
 
 		g.getChannels().forEach(chn -> {
 			try {
@@ -95,80 +91,75 @@ public class Backup {
 			}
 		});
 
-		gdata.getRoles().forEach(gr -> {
-			queue.offer(g.createRole()
-					.setName(gr.getName())
-					.setColor(gr.getColor())
-					.setPermissions(gr.getPermission())
-			);
-			oldRoleIDs.offer(gr.getOldId());
-		});
+		gdata.getRoles().forEach(gr -> queue.offer(g.createRole()
+				.setName(gr.getName())
+				.setColor(gr.getColor())
+				.setPermissions(gr.getPermission())
+				.map(r -> {
+					newRoles.put(gr.getOldId(), r);
+					return null;
+				})
+		));
 
-		gdata.getCategories().forEach(gc -> {
-			queue.offer(g.createCategory(gc.getName()));
-			oldCategories.offer(gc);
-		});
+		gdata.getCategories().forEach(gc -> queue.offer(g.createCategory(gc.getName())
+				.map(c -> {
+					newCategories.put(c, gc);
+					return null;
+				})
+		));
 
 
 		Executors.newSingleThreadExecutor().execute(() -> {
-			while (!queue.isEmpty()) {
-				try {
-					RestAction act = queue.poll();
-					if (act instanceof RoleAction) {
-						newRoles.put(oldRoleIDs.poll(), ((RoleAction) act).complete());
-					} else if (act instanceof ChannelAction) {
-						newCategories.put(oldCategories.poll(), ((ChannelAction<Category>) act).complete());
-					} else {
-						act.complete();
-					}
-
+			try {
+				while (!queue.isEmpty()) {
+					queue.poll().complete();
 					Thread.sleep(500);
-				} catch (InterruptedException e) {
-					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
-			}
 
-			newCategories.forEach((gc, c) -> {
-				gc.getPermission().forEach((k, v) -> c.putPermissionOverride(newRoles.get(k))
-						.setAllow(v[0])
-						.setDeny(v[1])
-						.complete()
-				);
+				newCategories.forEach((c, gc) -> {
+					gc.getPermission().forEach((k, v) -> c.putPermissionOverride(newRoles.get(k))
+							.setAllow(v[0])
+							.setDeny(v[1])
+							.complete()
+					);
 
-				gc.getChannels().forEach(chn -> {
-					try {
-						if (chn.isText()) {
-							TextChannel tchn = g.createTextChannel(chn.getName())
-									.setNSFW(chn.isNsfw())
-									.setTopic(chn.getTopic())
-									.complete();
+					gc.getChannels().forEach(chn -> {
+						try {
+							if (chn.isText()) {
+								TextChannel tchn = g.createTextChannel(chn.getName())
+										.setNSFW(chn.isNsfw())
+										.setTopic(chn.getTopic())
+										.complete();
 
-							chn.getPermission().forEach((k, v) -> tchn.putPermissionOverride(newRoles.get(k))
-									.setAllow(v[0])
-									.setDeny(v[1])
-									.complete()
-							);
+								chn.getPermission().forEach((k, v) -> tchn.putPermissionOverride(newRoles.get(k))
+										.setAllow(v[0])
+										.setDeny(v[1])
+										.complete()
+								);
 
-							Thread.sleep(500);
-						} else {
-							VoiceChannel vchn = g.createVoiceChannel(chn.getName())
-									.setBitrate(chn.getBitrate())
-									.setUserlimit(chn.getUserLimit())
-									.complete();
+								Thread.sleep(500);
+							} else {
+								VoiceChannel vchn = g.createVoiceChannel(chn.getName())
+										.setBitrate(chn.getBitrate())
+										.setUserlimit(chn.getUserLimit())
+										.complete();
 
-							chn.getPermission().forEach((k, v) -> vchn.putPermissionOverride(newRoles.get(k))
-									.setAllow(v[0])
-									.setDeny(v[1])
-									.complete()
-							);
+								chn.getPermission().forEach((k, v) -> vchn.putPermissionOverride(newRoles.get(k))
+										.setAllow(v[0])
+										.setDeny(v[1])
+										.complete()
+								);
 
-							Thread.sleep(500);
+								Thread.sleep(500);
+							}
+						} catch (InterruptedException e) {
+							Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 						}
-					} catch (InterruptedException e) {
-						Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-					}
+					});
 				});
-			});
+			} catch (InterruptedException e) {
+				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			}
 		});
 	}
 
