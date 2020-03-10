@@ -84,22 +84,22 @@ public class Backup {
 
 		g.getCategories().forEach(cat -> {
 			List<com.kuuhaku.model.common.backup.GuildChannel> channels = new ArrayList<>();
-			Map<GuildRole, long[]> catperms = new HashMap<>();
+			Map<Long, long[]> catperms = new HashMap<>();
 
 			cat.getPermissionOverrides().forEach(ovr -> {
 				if (ovr.isRoleOverride()) {
 					Role r = ovr.getRole();
 					assert r != null;
-					catperms.put(groles.stream().filter(gr -> gr.getOldId() == r.getIdLong()).findFirst().orElse(null), new long[]{ovr.getAllowedRaw(), ovr.getDeniedRaw()});
+					catperms.put(r.getIdLong(), new long[]{ovr.getAllowedRaw(), ovr.getDeniedRaw()});
 				}
 			});
 			cat.getChannels().forEach(chn -> {
-				Map<GuildRole, long[]> chnperms = new HashMap<>();
+				Map<Long, long[]> chnperms = new HashMap<>();
 				chn.getPermissionOverrides().forEach(ovr -> {
 					if (ovr.isRoleOverride()) {
 						Role r = ovr.getRole();
 						assert r != null;
-						chnperms.put(groles.stream().filter(gr -> gr.getOldId() == r.getIdLong()).findFirst().orElse(null), new long[]{ovr.getAllowedRaw(), ovr.getDeniedRaw()});
+						chnperms.put(r.getIdLong(), new long[]{ovr.getAllowedRaw(), ovr.getDeniedRaw()});
 					}
 				});
 				switch (chn.getType()) {
