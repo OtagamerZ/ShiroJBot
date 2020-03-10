@@ -17,18 +17,21 @@
 
 package com.kuuhaku.model.persistent;
 
-import net.dv8tion.jda.api.entities.ChannelType;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.GuildChannel;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.exceptions.ErrorResponseException;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.kuuhaku.model.common.backup.GuildCategory;
+import com.kuuhaku.model.common.backup.GuildData;
+import com.kuuhaku.model.common.backup.GuildRole;
+import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.*;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Entity
 public class Backup {
@@ -67,143 +70,53 @@ public class Backup {
 	public void restore(Guild g) {
 		if (serverData == null || serverData.isEmpty()) return;
 
-		JSONObject data = new JSONObject(serverData);
-
-		if (data.isEmpty()) return;
-
 		lastRestored = Timestamp.from(Instant.now());
 
-		g.getChannels().forEach(c -> {
-			try {
-				c.delete().complete();
-			} catch (ErrorResponseException ignore) {
-			}
-		});
-		g.getCategories().forEach(c -> {
-			try {
-				c.delete().complete();
-			} catch (ErrorResponseException ignore) {
-			}
-		});
-		g.getRoles().forEach(c -> {
-			try {
-				if (!c.getName().equalsIgnoreCase("Shiro") && !c.isPublicRole()) c.delete().complete();
-			} catch (ErrorResponseException ignore) {
-			}
-		});
 
-		JSONArray categories = data.getJSONArray("categories");
-		JSONArray roles = data.getJSONArray("roles");
-
-		categories.forEach(c -> {
-			JSONObject cat = (JSONObject) c;
-
-			g.createCategory(cat.getString("name"))
-					.setPosition(cat.getInt("index"))
-					.queue(s -> {
-
-						JSONArray channels = cat.getJSONArray("channels");
-
-						channels.forEach(ch -> {
-							JSONObject chn = (JSONObject) ch;
-
-							if (chn.getString("type").equals("text")) {
-								s.createTextChannel(chn.getString("name"))
-										.setTopic(chn.has("topic") ? chn.getString("topic") : null)
-										.setParent(s)
-										.setPosition(chn.getInt("index"))
-										.setNSFW(chn.has("nsfw") && chn.getBoolean("nsfw"))
-										.queue();
-							} else {
-								s.createVoiceChannel(chn.getString("name")).queue();
-							}
-						});
-					});
-		});
-
-		roles.forEach(r -> {
-			JSONObject role = (JSONObject) r;
-
-			g.createRole()
-					.setName(role.getString("name"))
-					.setColor(role.has("color") ? (Integer) role.get("color") : null)
-					.setPermissions(role.getLong("permissions"))
-					.queue();
-		});
 	}
 
 	public void saveServerData(Guild g) {
-		JSONObject data = new JSONObject();
-
-		JSONArray categories = new JSONArray();
-
 		lastBackup = Timestamp.from(Instant.now());
 
+		List<GuildCategory> gcats = new ArrayList<>();
+		List<GuildRole> groles = g.getRoles().stream().map(r -> new GuildRole(r.getName(), r.getColorRaw(), r.getPermissionsRaw(), r.getIdLong())).collect(Collectors.toList());
+		List<String> gmembers = g.getMembers().stream().map(Member::getId).collect(Collectors.toList());
+
 		g.getCategories().forEach(cat -> {
-			JSONObject category = new JSONObject();
+			List<com.kuuhaku.model.common.backup.GuildChannel> channels = new ArrayList<>();
+			Map<GuildRole, long[]> catperms = new HashMap<>();
 
-			category.put("name", cat.getName());
-			category.put("index", cat.getPosition());
-
-			JSONArray channels = new JSONArray();
-
-			cat.getChannels().forEach(channel -> {
-				JSONObject channelData = new JSONObject();
-
-				channelData.put("name", channel.getName());
-				channelData.put("index", channel.getPosition());
-				channelData.put("topic", channel.getType() == ChannelType.TEXT ? ((TextChannel) channel).getTopic() : null);
-				channelData.put("type", channel.getType() == ChannelType.TEXT ? "text" : "voice");
-				channelData.put("nsfw", channel.getType() == ChannelType.TEXT && ((TextChannel) channel).isNSFW());
-
-				getPermissions(channel, channelData);
-
-				channels.put(channelData);
+			cat.getPermissionOverrides().forEach(ovr -> {
+				if (ovr.isRoleOverride()) {
+					Role r = ovr.getRole();
+					assert r != null;
+					catperms.put(groles.stream().filter(gr -> gr.getOldId() == r.getIdLong()).findFirst().orElse(null), new long[]{ovr.getAllowedRaw(), ovr.getDeniedRaw()});
+				}
 			});
-
-			getPermissions(cat, category);
-			category.put("channels", channels);
-
-			categories.put(category);
+			cat.getChannels().forEach(chn -> {
+				Map<GuildRole, long[]> chnperms = new HashMap<>();
+				chn.getPermissionOverrides().forEach(ovr -> {
+					if (ovr.isRoleOverride()) {
+						Role r = ovr.getRole();
+						assert r != null;
+						chnperms.put(groles.stream().filter(gr -> gr.getOldId() == r.getIdLong()).findFirst().orElse(null), new long[]{ovr.getAllowedRaw(), ovr.getDeniedRaw()});
+					}
+				});
+				switch (chn.getType()) {
+					case TEXT:
+						TextChannel tchannel = (TextChannel) chn;
+						channels.add(new com.kuuhaku.model.common.backup.GuildChannel(tchannel.getName(), tchannel.getTopic(), chnperms, tchannel.isNSFW()));
+						break;
+					case VOICE:
+						VoiceChannel vchannel = (VoiceChannel) chn;
+						channels.add(new com.kuuhaku.model.common.backup.GuildChannel(vchannel.getName(), chnperms, vchannel.getUserLimit(), vchannel.getBitrate()));
+						break;
+				}
+			});
+			gcats.add(new GuildCategory(cat.getName(), channels, catperms));
 		});
 
-		JSONArray roles = new JSONArray();
-
-		g.getRoles().forEach(r -> {
-			if (!r.getName().equalsIgnoreCase("Shiro") && !r.isPublicRole()) {
-				JSONObject role = new JSONObject();
-
-				role.put("name", r.getName());
-				role.put("color", r.getColor() == null ? null : r.getColor().getRGB());
-
-				role.put("permissions", r.getPermissionsRaw());
-
-				roles.put(role);
-			}
-		});
-
-		data.put("categories", categories);
-		data.put("roles", roles);
-
-		this.serverData = data.toString();
-	}
-
-	private void getPermissions(GuildChannel channel, JSONObject channelData) {
-		JSONArray permissions = new JSONArray();
-
-		channel.getPermissionOverrides().forEach(o -> {
-			if (o.isRoleOverride()) {
-				JSONObject permission = new JSONObject();
-
-				permission.put("name", Objects.requireNonNull(o.getRole()).getName());
-				permission.put("allowed", o.getAllowedRaw());
-				permission.put("denied", o.getDeniedRaw());
-
-				permissions.put(permission);
-			}
-		});
-
-		channelData.put("permissions", permissions);
+		this.serverData = ShiroInfo.getJSONFactory().create().toJson(new GuildData(gcats, groles, gmembers));
 	}
 
 	public Timestamp getLastRestored() {
