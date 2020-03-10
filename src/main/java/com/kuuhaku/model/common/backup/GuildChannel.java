@@ -22,13 +22,13 @@ import java.util.Map;
 public class GuildChannel {
 	private final String name;
 	private final String topic;
-	private final Map<GuildRole, long[]> permission;
+	private final Map<Long, long[]> permission;
 	private final int userLimit;
 	private final int bitrate;
 	private final boolean text;
 	private final boolean nsfw;
 
-	public GuildChannel(String name, String topic, Map<GuildRole, long[]> permission, boolean nsfw) {
+	public GuildChannel(String name, String topic, Map<Long, long[]> permission, boolean nsfw) {
 		this.name = name;
 		this.topic = topic;
 		this.permission = permission;
@@ -38,7 +38,7 @@ public class GuildChannel {
 		this.nsfw = nsfw;
 	}
 
-	public GuildChannel(String name, Map<GuildRole, long[]> permission, int userLimit, int bitrate) {
+	public GuildChannel(String name, Map<Long, long[]> permission, int userLimit, int bitrate) {
 		this.name = name;
 		this.topic = "";
 		this.permission = permission;
@@ -56,7 +56,7 @@ public class GuildChannel {
 		return topic;
 	}
 
-	public Map<GuildRole, long[]> getPermission() {
+	public Map<Long, long[]> getPermission() {
 		return permission;
 	}
 
