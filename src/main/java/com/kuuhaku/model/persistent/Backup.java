@@ -75,8 +75,18 @@ public class Backup {
 
 		LinkedList<RestAction> queue = new LinkedList<>();
 
-		g.getChannels().forEach(chn -> queue.offer(chn.delete()));
-		g.getRoles().forEach(r -> queue.offer(r.delete()));
+		g.getChannels().forEach(chn -> {
+			try {
+				queue.offer(chn.delete());
+			} catch (Exception ignore) {
+			}
+		});
+		g.getRoles().forEach(r -> {
+			try {
+				queue.offer(r.delete());
+			} catch (Exception ignore) {
+			}
+		});
 
 		Map<Long, Role> newRoles = new HashMap<>();
 
@@ -98,7 +108,7 @@ public class Backup {
 				try {
 					queue.poll().complete();
 					Thread.sleep(500);
-				} catch (Exception e) {
+				} catch (InterruptedException e) {
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
 			}
