@@ -22,12 +22,14 @@ public class GuildRole {
 	private final int color;
 	private final long permission;
 	private final long oldId;
+	private final boolean publicRole;
 
-	public GuildRole(String name, int color, long permission, long oldId) {
+	public GuildRole(String name, int color, long permission, long oldId, boolean publicRole) {
 		this.name = name;
 		this.color = color;
 		this.permission = permission;
 		this.oldId = oldId;
+		this.publicRole = publicRole;
 	}
 
 	public String getName() {
@@ -44,5 +46,9 @@ public class GuildRole {
 
 	public long getOldId() {
 		return oldId;
+	}
+
+	public boolean isPublicRole() {
+		return publicRole;
 	}
 }
