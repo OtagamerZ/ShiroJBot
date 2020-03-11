@@ -129,10 +129,7 @@ public class Backup {
 		Executors.newSingleThreadExecutor().execute(() -> {
 			while (!queue.isEmpty()) {
 				try {
-					RestAction<?> act = queue.poll();
-					if (act instanceof RoleAction) act.complete();
-					else if (act instanceof ChannelAction) act.complete();
-					else act.complete();
+					queue.poll().complete();
 
 					Thread.sleep(500);
 				} catch (InterruptedException e) {
