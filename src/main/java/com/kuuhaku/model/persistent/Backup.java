@@ -118,12 +118,19 @@ public class Backup {
 		gdata.getCategories().forEach(gc -> queue.offer(g.createCategory(gc.getName())
 				.map(c -> newCategories.put(gc, c))));
 
-		gdata.getRoles().forEach(gr -> queue.offer(g.createRole()
-				.setName(gr.getName())
-				.setColor(gr.getColor())
-				.setPermissions(gr.getPermission())
-				.map(r -> newRoles.put(gr.getOldId(), r))
-		));
+		gdata.getRoles().forEach(gr -> {
+			if (gr.isPublicRole()) queue.offer(g.getPublicRole()
+					.getManager()
+					.setPermissions(gr.getPermission())
+					.map(r -> newRoles.put(gr.getOldId(), g.getPublicRole()))
+			);
+			else queue.offer(g.createRole()
+					.setName(gr.getName())
+					.setColor(gr.getColor())
+					.setPermissions(gr.getPermission())
+					.map(r -> newRoles.put(gr.getOldId(), r))
+			);
+		});
 
 
 		Executors.newSingleThreadExecutor().execute(() -> {
@@ -138,14 +145,10 @@ public class Backup {
 			}
 
 			newCategories.forEach((gc, c) -> {
-				gc.getPermission().forEach((k, v) -> {
-							System.out.println(k);
-							System.out.println(Arrays.toString(newRoles.keySet().toArray()));
-							c.putPermissionOverride(newRoles.get(k))
-									.setAllow(v[0])
-									.setDeny(v[1])
-									.complete();
-						}
+				gc.getPermission().forEach((k, v) -> c.putPermissionOverride(newRoles.get(k))
+						.setAllow(v[0])
+						.setDeny(v[1])
+						.complete()
 				);
 
 				gc.getChannels().forEach(chn -> {
@@ -188,7 +191,7 @@ public class Backup {
 	public void saveServerData(Guild g) {
 		lastBackup = Timestamp.from(Instant.now());
 		List<GuildCategory> gcats = new ArrayList<>();
-		List<GuildRole> groles = g.getRoles().stream().filter(r -> !r.isPublicRole()).map(r -> new GuildRole(r.getName(), r.getColorRaw(), r.getPermissionsRaw(), r.getIdLong())).collect(Collectors.toList());
+		List<GuildRole> groles = g.getRoles().stream().map(r -> new GuildRole(r.getName(), r.getColorRaw(), r.getPermissionsRaw(), r.getIdLong(), r.isPublicRole())).collect(Collectors.toList());
 		List<String> gmembers = g.getMembers().stream().map(m -> m.getUser().getAsTag()).collect(Collectors.toList());
 
 		g.getCategories().forEach(cat -> {
