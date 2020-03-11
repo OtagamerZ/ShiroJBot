@@ -176,7 +176,7 @@ public class Backup {
 
 			long duration = lastRestored.toLocalDateTime().until(LocalDateTime.now(), ChronoUnit.MILLIS);
 
-			progress.sendMessage("Backup restaurado com sucesso! (Tempo de execução - " + DurationFormatUtils.formatDurationHMS(duration) + ").").queue();
+			progress.sendMessage("@everyone Backup restaurado com sucesso! (Tempo de execução - " + DurationFormatUtils.formatDurationHMS(duration) + ").").queue();
 		});
 	}
 
