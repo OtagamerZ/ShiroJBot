@@ -96,7 +96,7 @@ public class Backup {
 
 		TextChannel progress = g.createTextChannel("progresso").complete();
 
-		progress.sendMessage("Preparando backup.").queue();
+		progress.sendMessage("Preparando backup, isso pode demorar vários minutos, aguarde...").queue();
 
 		gdata.getCategories().forEach(gc -> queue.offer(g.createCategory(gc.getName())
 				.map(c -> newCategories.put(gc, c))));
@@ -121,7 +121,7 @@ public class Backup {
 				try {
 					queue.poll().complete();
 
-					Thread.sleep(1000);
+					Thread.sleep(5000);
 				} catch (InterruptedException e) {
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
@@ -151,7 +151,7 @@ public class Backup {
 									.complete()
 							);
 
-							Thread.sleep(1000);
+							Thread.sleep(5000);
 						} else {
 							VoiceChannel vchn = g.createVoiceChannel(chn.getName())
 									.setBitrate(chn.getBitrate())
@@ -165,7 +165,7 @@ public class Backup {
 									.complete()
 							);
 
-							Thread.sleep(1000);
+							Thread.sleep(5000);
 						}
 					} catch (InterruptedException e) {
 						Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
