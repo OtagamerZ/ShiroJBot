@@ -121,7 +121,7 @@ public class Backup {
 				try {
 					queue.poll().complete();
 
-					Thread.sleep(500);
+					Thread.sleep(5000);
 				} catch (Exception e) {
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
@@ -151,7 +151,7 @@ public class Backup {
 									.complete()
 							);
 
-							Thread.sleep(500);
+							Thread.sleep(5000);
 						} else {
 							VoiceChannel vchn = g.createVoiceChannel(chn.getName())
 									.setBitrate(chn.getBitrate())
@@ -165,7 +165,7 @@ public class Backup {
 									.complete()
 							);
 
-							Thread.sleep(500);
+							Thread.sleep(5000);
 						}
 					} catch (InterruptedException e) {
 						Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
