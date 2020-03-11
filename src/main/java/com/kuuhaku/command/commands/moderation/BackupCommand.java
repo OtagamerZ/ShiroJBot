@@ -29,6 +29,7 @@ import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
@@ -69,8 +70,8 @@ public class BackupCommand extends Command {
 			channel.sendMessage("Backup feito com sucesso, utilize `" + prefix + "backup recuperar` para recuperar para este estado do servidor. (ISSO IRÁ REESCREVER O SERVIDOR, TODAS AS MENSAGENS SERÃO PERDIDAS)").queue();
 		} else if (data.getGuild() == null || data.getGuild().isEmpty()) {
 			channel.sendMessage(":x: | Nenhum backup foi feito ainda, utilize o comando `" + prefix + "backup salvar` para criar um backup.").queue();
-		} else if (data.getLastRestored().toLocalDateTime().plusDays(7).compareTo(LocalDateTime.now()) > 0) {
-			channel.sendMessage(":x: | Você precisa aguardar 1 semana antes de restaurar o backup de canais novamente.").queue();
+		} else if (data.getLastRestored().toLocalDateTime().plusDays(7).until(LocalDateTime.now(), ChronoUnit.DAYS) < 7) {
+			channel.sendMessage(":x: | Você precisa aguardar " + (7 - data.getLastRestored().toLocalDateTime().plusDays(7).until(LocalDateTime.now(), ChronoUnit.DAYS)) + " antes de restaurar o backup de canais novamente.").queue();
 		} else {
 			channel.sendMessage("**Restaurar um backup irá limpar todas as mensagens do servidor, inclusive aquelas fixadas**\n\nPor favor, confirme esta operação clicando no botão abaixo.").queue(s ->
 					Pages.buttonize(Main.getInfo().getAPI(), s, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> data.restore(guild)), true, 30, TimeUnit.SECONDS));
