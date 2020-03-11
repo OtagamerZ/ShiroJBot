@@ -103,7 +103,7 @@ public class Backup {
 		LinkedList<Long> oldIDs = new LinkedList<>();
 		LinkedList<GuildCategory> oldCategories = new LinkedList<>();
 
-		g.getChannels().forEach(chn -> {
+		/*g.getChannels().forEach(chn -> {
 			try {
 				queue.offer(new request(0, chn.delete()));
 			} catch (Exception ignore) {
@@ -119,7 +119,7 @@ public class Backup {
 		gdata.getCategories().forEach(gc -> {
 			queue.offer(new request(1, g.createCategory(gc.getName())));
 			oldCategories.offer(gc);
-		});
+		});*/
 
 		gdata.getRoles().forEach(gr -> {
 			queue.offer(new request(2, g.createRole()
@@ -134,7 +134,8 @@ public class Backup {
 		Executors.newSingleThreadExecutor().execute(() -> {
 			while (!queue.isEmpty()) {
 				try {
-					request act = queue.poll();
+					queue.poll().roleAct.complete();
+					/*request act = queue.poll();
 					switch (act.type) {
 						case 0:
 							act.clearAct.complete();
@@ -145,7 +146,7 @@ public class Backup {
 						case 2:
 							newRoles.put(oldIDs.poll(), act.roleAct.complete());
 							break;
-					}
+					}*/
 
 					Thread.sleep(500);
 				} catch (InterruptedException e) {
@@ -153,7 +154,7 @@ public class Backup {
 				}
 			}
 
-			newCategories.forEach((gc, c) -> {
+			/*newCategories.forEach((gc, c) -> {
 				gc.getPermission().forEach((k, v) -> c.putPermissionOverride(newRoles.get(k))
 						.setAllow(v[0])
 						.setDeny(v[1])
@@ -193,7 +194,7 @@ public class Backup {
 						Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 					}
 				});
-			});
+			});*/
 		});
 	}
 
