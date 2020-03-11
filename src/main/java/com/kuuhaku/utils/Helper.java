@@ -713,4 +713,8 @@ public class Helper {
 		logToChannel(author, true, command, "Um comando foi usado no canal " + ((TextChannel) channel).getAsMention(), guild);
 		return false;
 	}
+
+	public static float prcnt(float value, float max) {
+		return (value * 100) / max;
+	}
 }
