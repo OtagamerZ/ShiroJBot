@@ -94,9 +94,9 @@ public class Backup {
 			}
 		});
 
-		TextChannel progress = g.createTextChannel("PROGRESSO").complete();
+		TextChannel progress = g.createTextChannel("progresso").complete();
 
-		progress.sendMessage("Limpeza do servidor concluída.\nCalculando operações...").queue();
+		progress.sendMessage("Preparando backup.").queue();
 
 		gdata.getCategories().forEach(gc -> queue.offer(g.createCategory(gc.getName())
 				.map(c -> newCategories.put(gc, c))));
@@ -127,7 +127,7 @@ public class Backup {
 				}
 			}
 
-			progress.sendMessage("Criação dos cargos concluída.\nCriando canais...").queue();
+			progress.sendMessage("Preparação do backup conclúida.\nCriando canais...").queue();
 
 			newCategories.forEach((gc, c) -> {
 				gc.getPermission().forEach((k, v) -> c.putPermissionOverride(newRoles.get(k))
@@ -171,12 +171,12 @@ public class Backup {
 						Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 					}
 				});
-				progress.sendMessage("Categoria " + c.getName() + " criada.").queue();
+				progress.sendMessage("Categoria `" + c.getName() + "` concluída.").queue();
 			});
 
 			long duration = lastRestored.toLocalDateTime().until(LocalDateTime.now(), ChronoUnit.MILLIS);
 
-			progress.sendMessage("@everyone Backup restaurado com sucesso! (Tempo de execução - " + DurationFormatUtils.formatDurationHMS(duration) + ").").queue();
+			progress.sendMessage("@everyone | Backup restaurado com sucesso! (Tempo de execução - " + DurationFormatUtils.formatDuration(duration, "d 'dias,' HH 'horas,' mm 'min,' ss 'seg'") + ").").queue();
 		});
 	}
 
