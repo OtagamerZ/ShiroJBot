@@ -47,7 +47,7 @@ public class PingCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		int fp = (int) ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024);
 		channel.sendMessage(":ping_pong: Pong! ")
-				.flatMap(m -> m.editMessage(m.getContentRaw() + " " + Main.getInfo().getPing() + " ms!"))
+				.flatMap(m -> m.editMessage(m.getContentRaw() + " " + Main.getInfo().getAPI().getRestPing() + " ms!"))
 				.flatMap(m -> m.editMessage(m.getContentRaw() + "\n:floppy_disk: " + fp + " MB!"))
 				.flatMap(m -> m.editMessage(m.getContentRaw() + "\n:telephone: " + Main.getInfo().getAPI().getEventManager().getRegisteredListeners().size() + ShiroInfo.getLocale(I18n.PT).getString("str_listeners")))
 				.queue();
