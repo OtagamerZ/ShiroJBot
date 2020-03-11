@@ -23,6 +23,7 @@ import com.kuuhaku.model.common.backup.GuildRole;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 import net.dv8tion.jda.api.requests.restaction.ChannelAction;
 import net.dv8tion.jda.api.requests.restaction.RoleAction;
@@ -96,57 +97,42 @@ public class Backup {
 
 		GuildData gdata = ShiroInfo.getJSONFactory().create().fromJson(serverData, GuildData.class);
 
-		LinkedList<request> queue = new LinkedList<>();
+		LinkedList<RestAction<?>> queue = new LinkedList<>();
 		Map<Long, Role> newRoles = new HashMap<>();
 		Map<GuildCategory, Category> newCategories = new HashMap<>();
 
-		LinkedList<Long> oldIDs = new LinkedList<>();
-		LinkedList<GuildCategory> oldCategories = new LinkedList<>();
-
 		g.getChannels().forEach(chn -> {
 			try {
-				queue.offer(new request(0, chn.delete()));
+				queue.offer(chn.delete());
 			} catch (Exception ignore) {
 			}
 		});
 
 		g.getRoles().forEach(r -> {
 			try {
-				if (!r.isPublicRole()) queue.offer(new request(0, r.delete()));
+				if (!r.isPublicRole()) queue.offer(r.delete());
 			} catch (Exception ignore) {
 			}
 		});
 
-		gdata.getCategories().forEach(gc -> {
-			queue.offer(new request(1, g.createCategory(gc.getName())));
-			oldCategories.offer(gc);
-		});
+		gdata.getCategories().forEach(gc -> queue.offer(g.createCategory(gc.getName())
+				.map(c -> newCategories.put(gc, c))));
 
-		gdata.getRoles().forEach(gr -> {
-			queue.offer(new request(2, g.createRole()
-					.setName(gr.getName())
-					.setColor(gr.getColor())
-					.setPermissions(gr.getPermission())
-			));
-			oldIDs.offer(gr.getOldId());
-		});
+		gdata.getRoles().forEach(gr -> queue.offer(g.createRole()
+				.setName(gr.getName())
+				.setColor(gr.getColor())
+				.setPermissions(gr.getPermission())
+				.map(r -> newRoles.put(gr.getOldId(), r))
+		));
 
 
 		Executors.newSingleThreadExecutor().execute(() -> {
 			while (!queue.isEmpty()) {
 				try {
-					request act = queue.poll();
-					switch (act.type) {
-						case 0:
-							act.clearAct.complete();
-							break;
-						case 1:
-							newCategories.put(oldCategories.poll(), act.catAct.complete());
-							break;
-						case 2:
-							newRoles.put(oldIDs.poll(), act.roleAct.complete());
-							break;
-					}
+					RestAction<?> act = queue.poll();
+					if (act instanceof RoleAction) act.complete();
+					else if (act instanceof ChannelAction) act.complete();
+					else act.complete();
 
 					Thread.sleep(500);
 				} catch (InterruptedException e) {
@@ -154,7 +140,7 @@ public class Backup {
 				}
 			}
 
-			/*newCategories.forEach((gc, c) -> {
+			newCategories.forEach((gc, c) -> {
 				gc.getPermission().forEach((k, v) -> c.putPermissionOverride(newRoles.get(k))
 						.setAllow(v[0])
 						.setDeny(v[1])
@@ -194,7 +180,7 @@ public class Backup {
 						Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 					}
 				});
-			});*/
+			});
 		});
 	}
 
