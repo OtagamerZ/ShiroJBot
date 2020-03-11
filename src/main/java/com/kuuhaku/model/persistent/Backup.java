@@ -152,10 +152,14 @@ public class Backup {
 									.setTopic(chn.getTopic())
 									.complete();
 
-							chn.getPermission().forEach((k, v) -> tchn.putPermissionOverride(newRoles.get(k))
-									.setAllow(v[0])
-									.setDeny(v[1])
-									.complete()
+							chn.getPermission().forEach((k, v) -> {
+										System.out.println(k);
+										System.out.println(Arrays.toString(newRoles.keySet().toArray()));
+										tchn.putPermissionOverride(newRoles.get(k))
+												.setAllow(v[0])
+												.setDeny(v[1])
+												.complete();
+									}
 							);
 
 							Thread.sleep(500);
