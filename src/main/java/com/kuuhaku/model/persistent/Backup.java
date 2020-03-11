@@ -118,7 +118,7 @@ public class Backup {
 			}
 		});
 
-		TextChannel progress = g.createTextChannel("PROGRESSO: 0% (0/" + queue.size() + ")").complete();
+		TextChannel progress = g.createTextChannel("PROGRESSO:_0%_(0/" + queue.size() + ")").complete();
 
 		int ops = queue.size();
 		progress.sendMessage("Limpeza do servidor concluída.\nCalculando progresso...").queue();
@@ -146,7 +146,7 @@ public class Backup {
 				try {
 					queue.poll().complete();
 
-					progress.getManager().setName("PROGRESSO: " + Helper.prcnt(ops - queue.size(), ops) + "% (" + (ops - queue.size()) + "/" + ops + ")").queue();
+					progress.getManager().setName("PROGRESSO:_" + Helper.prcnt(ops - queue.size(), ops) + "%_(" + (ops - queue.size()) + "/" + ops + ")").queue();
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
@@ -177,7 +177,7 @@ public class Backup {
 									.complete()
 							);
 
-							progress.getManager().setName("PROGRESSO: " + Helper.prcnt(ops - queue.size(), ops) + "% (" + (ops - queue.size()) + "/" + ops + ")").queue();
+							progress.getManager().setName("PROGRESSO:_" + Helper.prcnt(ops - queue.size(), ops) + "%_(" + (ops - queue.size()) + "/" + ops + ")").queue();
 							Thread.sleep(1000);
 						} else {
 							VoiceChannel vchn = g.createVoiceChannel(chn.getName())
@@ -192,7 +192,7 @@ public class Backup {
 									.complete()
 							);
 
-							progress.getManager().setName("PROGRESSO: " + Helper.prcnt(ops - queue.size(), ops) + "% (" + (ops - queue.size()) + "/" + ops + ")").queue();
+							progress.getManager().setName("PROGRESSO:_" + Helper.prcnt(ops - queue.size(), ops) + "%_(" + (ops - queue.size()) + "/" + ops + ")").queue();
 							Thread.sleep(1000);
 						}
 					} catch (InterruptedException e) {
