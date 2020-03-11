@@ -242,10 +242,6 @@ public class ShiroInfo {
 		return api.getSelfUser();
 	}
 
-	public long getPing() {
-		return api.getGatewayPing();
-	}
-
 	public long getStartTime() {
 		return startTime;
 	}
