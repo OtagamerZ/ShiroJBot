@@ -17,6 +17,8 @@
 
 package com.kuuhaku.command.commands.moderation;
 
+import com.github.ygimenez.method.Pages;
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.mysql.BackupDAO;
@@ -27,6 +29,8 @@ import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.concurrent.TimeUnit;
 
 public class BackupCommand extends Command {
 
@@ -62,14 +66,14 @@ public class BackupCommand extends Command {
 		if (args[0].equalsIgnoreCase("salvar")) {
 			data.setGuild(guild.getId());
 			data.saveServerData(guild);
-			BackupDAO.saveBackup(data);
 			channel.sendMessage("Backup feito com sucesso, utilize `" + prefix + "backup recuperar` para recuperar para este estado do servidor. (ISSO IRÁ REESCREVER O SERVIDOR, TODAS AS MENSAGENS SERÃO PERDIDAS)").queue();
 		} else if (data.getGuild() == null || data.getGuild().isEmpty()) {
 			channel.sendMessage(":x: | Nenhum backup foi feito ainda, utilize o comando `" + prefix + "backup salvar` para criar um backup.").queue();
 		} else if (data.getLastRestored().toLocalDateTime().plusDays(7).compareTo(LocalDateTime.now()) > 0) {
 			channel.sendMessage(":x: | Você precisa aguardar 1 semana antes de restaurar o backup de canais novamente.").queue();
 		} else {
-			data.restore(guild);
+			channel.sendMessage("**Restaurar um backup irá limpar todas as mensagens do servidor, inclusive aquelas fixadas**\n\nPor favor, confirme esta operação clicando no botão abaixo.").queue(s ->
+					Pages.buttonize(Main.getInfo().getAPI(), s, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> data.restore(guild)), true, 30, TimeUnit.SECONDS));
 		}
 	}
 }

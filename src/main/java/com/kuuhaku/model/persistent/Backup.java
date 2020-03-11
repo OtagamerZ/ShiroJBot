@@ -17,6 +17,7 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.controller.mysql.BackupDAO;
 import com.kuuhaku.model.common.backup.GuildCategory;
 import com.kuuhaku.model.common.backup.GuildData;
 import com.kuuhaku.model.common.backup.GuildRole;
@@ -114,7 +115,7 @@ public class Backup {
 					.map(r -> newRoles.put(gr.getOldId(), r))
 			);
 		});
-		
+
 		Executors.newSingleThreadExecutor().execute(() -> {
 			while (!queue.isEmpty()) {
 				try {
@@ -177,6 +178,8 @@ public class Backup {
 
 			progress.sendMessage("@everyone | Backup restaurado com sucesso! (Tempo de execução - " + DurationFormatUtils.formatDuration(duration, "d 'dias,' HH 'horas,' mm 'min,' ss 'seg'") + ").").queue();
 		});
+
+		BackupDAO.saveBackup(this);
 	}
 
 	public void saveServerData(Guild g) {
@@ -220,6 +223,7 @@ public class Backup {
 		});
 
 		this.serverData = ShiroInfo.getJSONFactory().create().toJson(new GuildData(gcats, groles, gmembers));
+		BackupDAO.saveBackup(this);
 	}
 
 	public Timestamp getLastRestored() {
