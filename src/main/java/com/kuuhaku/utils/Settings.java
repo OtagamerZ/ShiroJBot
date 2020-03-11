@@ -142,6 +142,9 @@ public class Settings {
 		if (newPrefix.length() > 5) {
 			message.getTextChannel().sendMessage(":x: | O prefixo `" + newPrefix + "` contem mais de 5 carateres, não pode.").queue();
 			return;
+		} else if (newPrefix.length() < 2) {
+			message.getTextChannel().sendMessage(":x: | O prefixo `" + newPrefix + "` contem menos de 2 carateres, também não pode.").queue();
+			return;
 		}
 
 		gc.setPrefix(newPrefix);
