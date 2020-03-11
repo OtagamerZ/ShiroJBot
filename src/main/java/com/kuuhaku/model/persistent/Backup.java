@@ -27,10 +27,13 @@ import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 import net.dv8tion.jda.api.requests.restaction.ChannelAction;
 import net.dv8tion.jda.api.requests.restaction.RoleAction;
+import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
@@ -115,6 +118,11 @@ public class Backup {
 			}
 		});
 
+		TextChannel progress = g.createTextChannel("PROGRESSO: 0% (0/" + queue.size() + ")").complete();
+
+		int ops = queue.size();
+		progress.sendMessage("Limpeza do servidor concluída.\nCalculando progresso...").queue();
+
 		gdata.getCategories().forEach(gc -> queue.offer(g.createCategory(gc.getName())
 				.map(c -> newCategories.put(gc, c))));
 
@@ -138,11 +146,14 @@ public class Backup {
 				try {
 					queue.poll().complete();
 
-					Thread.sleep(500);
+					progress.getManager().setName("PROGRESSO: " + Helper.prcnt(ops - queue.size(), ops) + "% (" + (ops - queue.size()) + "/" + ops + ")").queue();
+					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
 			}
+
+			progress.sendMessage("Criação dos cargos concluída.\nCriando canais...").queue();
 
 			newCategories.forEach((gc, c) -> {
 				gc.getPermission().forEach((k, v) -> c.putPermissionOverride(newRoles.get(k))
@@ -157,6 +168,7 @@ public class Backup {
 							TextChannel tchn = g.createTextChannel(chn.getName())
 									.setNSFW(chn.isNsfw())
 									.setTopic(chn.getTopic())
+									.setParent(c)
 									.complete();
 
 							chn.getPermission().forEach((k, v) -> tchn.putPermissionOverride(newRoles.get(k))
@@ -165,11 +177,13 @@ public class Backup {
 									.complete()
 							);
 
-							Thread.sleep(500);
+							progress.getManager().setName("PROGRESSO: " + Helper.prcnt(ops - queue.size(), ops) + "% (" + (ops - queue.size()) + "/" + ops + ")").queue();
+							Thread.sleep(1000);
 						} else {
 							VoiceChannel vchn = g.createVoiceChannel(chn.getName())
 									.setBitrate(chn.getBitrate())
 									.setUserlimit(chn.getUserLimit())
+									.setParent(c)
 									.complete();
 
 							chn.getPermission().forEach((k, v) -> vchn.putPermissionOverride(newRoles.get(k))
@@ -178,13 +192,20 @@ public class Backup {
 									.complete()
 							);
 
-							Thread.sleep(500);
+							progress.getManager().setName("PROGRESSO: " + Helper.prcnt(ops - queue.size(), ops) + "% (" + (ops - queue.size()) + "/" + ops + ")").queue();
+							Thread.sleep(1000);
 						}
 					} catch (InterruptedException e) {
 						Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 					}
+
+					progress.sendMessage("Categoria " + c.getName() + " criada.").queue();
 				});
 			});
+
+			long duration = lastRestored.toLocalDateTime().until(LocalDateTime.now(), ChronoUnit.MILLIS);
+
+			progress.sendMessage("Backup restaurado com sucesso! (Tempo de execução - " + DurationFormatUtils.formatDurationHMS(duration) + ").").queue();
 		});
 	}
 
