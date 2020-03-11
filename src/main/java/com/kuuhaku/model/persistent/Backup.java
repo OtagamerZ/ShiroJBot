@@ -114,8 +114,7 @@ public class Backup {
 					.map(r -> newRoles.put(gr.getOldId(), r))
 			);
 		});
-
-
+		
 		Executors.newSingleThreadExecutor().execute(() -> {
 			while (!queue.isEmpty()) {
 				try {
