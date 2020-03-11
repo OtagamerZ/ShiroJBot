@@ -24,9 +24,6 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.requests.RestAction;
-import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
-import net.dv8tion.jda.api.requests.restaction.ChannelAction;
-import net.dv8tion.jda.api.requests.restaction.RoleAction;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import javax.persistence.*;
@@ -76,27 +73,6 @@ public class Backup {
 		if (serverData == null || serverData.isEmpty()) return;
 
 		lastRestored = Timestamp.from(Instant.now());
-		class request {
-			int type;
-			AuditableRestAction<Void> clearAct;
-			ChannelAction<Category> catAct;
-			RoleAction roleAct;
-
-			public request(int type, AuditableRestAction<Void> clearAct) {
-				this.type = type;
-				this.clearAct = clearAct;
-			}
-
-			public request(int type, ChannelAction<Category> catAct) {
-				this.type = type;
-				this.catAct = catAct;
-			}
-
-			public request(int type, RoleAction roleAct) {
-				this.type = type;
-				this.roleAct = roleAct;
-			}
-		}
 
 		GuildData gdata = ShiroInfo.getJSONFactory().create().fromJson(serverData, GuildData.class);
 
@@ -118,10 +94,9 @@ public class Backup {
 			}
 		});
 
-		TextChannel progress = g.createTextChannel("PROGRESSO:_0%_(0/" + queue.size() + ")").complete();
+		TextChannel progress = g.createTextChannel("PROGRESSO").complete();
 
-		int ops = queue.size();
-		progress.sendMessage("Limpeza do servidor concluída.\nCalculando progresso...").queue();
+		progress.sendMessage("Limpeza do servidor concluída.\nCalculando operações...").queue();
 
 		gdata.getCategories().forEach(gc -> queue.offer(g.createCategory(gc.getName())
 				.map(c -> newCategories.put(gc, c))));
@@ -146,7 +121,6 @@ public class Backup {
 				try {
 					queue.poll().complete();
 
-					progress.getManager().setName("PROGRESSO:_" + Helper.prcnt(ops - queue.size(), ops) + "%_(" + (ops - queue.size()) + "/" + ops + ")").queue();
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
@@ -177,7 +151,6 @@ public class Backup {
 									.complete()
 							);
 
-							progress.getManager().setName("PROGRESSO:_" + Helper.prcnt(ops - queue.size(), ops) + "%_(" + (ops - queue.size()) + "/" + ops + ")").queue();
 							Thread.sleep(1000);
 						} else {
 							VoiceChannel vchn = g.createVoiceChannel(chn.getName())
@@ -192,15 +165,13 @@ public class Backup {
 									.complete()
 							);
 
-							progress.getManager().setName("PROGRESSO:_" + Helper.prcnt(ops - queue.size(), ops) + "%_(" + (ops - queue.size()) + "/" + ops + ")").queue();
 							Thread.sleep(1000);
 						}
 					} catch (InterruptedException e) {
 						Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 					}
-
-					progress.sendMessage("Categoria " + c.getName() + " criada.").queue();
 				});
+				progress.sendMessage("Categoria " + c.getName() + " criada.").queue();
 			});
 
 			long duration = lastRestored.toLocalDateTime().until(LocalDateTime.now(), ChronoUnit.MILLIS);
