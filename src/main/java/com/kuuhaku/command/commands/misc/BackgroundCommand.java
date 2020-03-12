@@ -55,18 +55,18 @@ public class BackgroundCommand extends Command {
 		}
 
 		try {
-            HttpURLConnection con = (HttpURLConnection) new URL(args[0]).openConnection();
-            con.setRequestProperty("User-Agent", "Mozilla/5.0");
-            BufferedImage bi = ImageIO.read(con.getInputStream());
-            con.disconnect();
-            bi.flush();
+			HttpURLConnection con = (HttpURLConnection) new URL(args[0]).openConnection();
+			con.setRequestProperty("User-Agent", "Mozilla/5.0");
+			BufferedImage bi = ImageIO.read(con.getInputStream());
+			con.disconnect();
+			bi.flush();
 
-            com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(author.getId() + guild.getId());
-            m.setBg(args[0]);
-            MemberDAO.updateMemberConfigs(m);
-            channel.sendMessage("Imagem de fundo trocada com sucesso!").queue();
-        } catch (IOException e) {
-            channel.sendMessage(":x: | O link da imagem não me parece correto.").queue();
-        }
+			com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(author.getId() + guild.getId());
+			m.setBg(args[0]);
+			MemberDAO.updateMemberConfigs(m);
+			channel.sendMessage("Imagem de fundo trocada com sucesso!").queue();
+		} catch (IOException | NullPointerException e) {
+			channel.sendMessage(":x: | O link da imagem não me parece correto.").queue();
+		}
     }
 }
