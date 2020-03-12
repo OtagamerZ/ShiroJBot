@@ -252,6 +252,31 @@ public class Helper {
 		}
 	}
 
+	public static void logToChannel(User u, boolean isCommand, Command c, String msg, Guild g, String args) {
+		GuildConfig gc = GuildDAO.getGuildById(g.getId());
+		if (gc.getCanalLog() == null || gc.getCanalLog().isEmpty()) return;
+		else if (g.getTextChannelById(gc.getCanalLog()) == null) gc.setCanalLog("");
+		try {
+			EmbedBuilder eb = new EmbedBuilder();
+
+			eb.setAuthor("Relatório de log");
+			eb.setDescription(msg);
+			eb.addField("Referente:", u.getAsMention(), true);
+			if (isCommand) {
+				eb.addField("Comando:", gc.getPrefix() + c.getName(), true);
+				eb.addField("Argumentos:", args, true);
+			}
+			eb.setFooter("Data: " + OffsetDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), null);
+
+			Objects.requireNonNull(g.getTextChannelById(gc.getCanalLog())).sendMessage(eb.build()).queue();
+		} catch (NullPointerException ignore) {
+		} catch (Exception e) {
+			gc.setCanalLog("");
+			GuildDAO.updateGuildSettings(gc);
+			logger(Helper.class).warn(e + " | " + e.getStackTrace()[0]);
+		}
+	}
+
 	public static String getRandomHexColor() {
 		String[] colorTable = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"};
 		StringBuilder sb = new StringBuilder();
@@ -711,7 +736,7 @@ public class Helper {
 		}
 
 		LogDAO.saveLog(new Log().setGuild(guild.getName()).setUser(author.getAsTag()).setCommand(rawMessage));
-		logToChannel(author, true, command, "Um comando foi usado no canal " + ((TextChannel) channel).getAsMention(), guild);
+		logToChannel(author, true, command, "Um comando foi usado no canal " + ((TextChannel) channel).getAsMention(), guild, rawMessage);
 		return false;
 	}
 

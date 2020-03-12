@@ -98,6 +98,7 @@ public class MuteMemberCommand extends Command {
 			MemberDAO.saveMutedMember(m);
 
 			guild.modifyMemberRoles(mb, guild.getRoleById(gc.getCargoWarn())).complete();
+			Helper.logToChannel(author, false, null, mb.getAsMention() + " foi silenciado com a seguinte razão: `" + reason + "`", guild);
 			channel.sendMessage("Usuário silenciado com sucesso!\nMotivo: `" + reason + "`").queue();
 		} catch (InsufficientPermissionException e) {
 			channel.sendMessage(":x: | Não possuo a permissão para silenciar membros.").queue();
