@@ -280,12 +280,12 @@ public class Settings {
 		int antigoWarnTime = gc.getWarnTime();
 
 		if (args.length < 2) {
-			message.getTextChannel().sendMessage("O tempo de punições atual do servidor é " + antigoWarnTime + " segundos.").queue();
+			message.getTextChannel().sendMessage("O tempo de punições atual do servidor é " + antigoWarnTime + " minutos.").queue();
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setWarnTime(60);
 			GuildDAO.updateGuildSettings(gc);
-			message.getTextChannel().sendMessage("✅ | O tempo de punições do servidor foi resetado para 60 segundos com sucesso.").queue();
+			message.getTextChannel().sendMessage("✅ | O tempo de punições do servidor foi resetado para 60 minutos com sucesso.").queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[1])) {
 			message.getTextChannel().sendMessage(":x: | O tempo inserido é inválido, ele deve ser um valor inteiro.").queue();
@@ -296,7 +296,7 @@ public class Settings {
 
 		gc.setWarnTime(newWarnTime);
 		GuildDAO.updateGuildSettings(gc);
-		message.getTextChannel().sendMessage("✅ | O tempo de punições do servidor foi trocado para " + newWarnTime + " segundos com sucesso.").queue();
+		message.getTextChannel().sendMessage("✅ | O tempo de punições do servidor foi trocado para " + newWarnTime + " minutos com sucesso.").queue();
 	}
 
 	public static void updatePollTime(String[] args, Message message, GuildConfig gc) {
