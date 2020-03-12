@@ -7,12 +7,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_hibernate_dialect_sqlite_dialect_0_1_0.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_gwenn_sqlite_dialect_master_SNAPSHOT.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_gwenn_sqlite_dialect_master_SNAPSHOT.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_gwenn_sqlite_dialect_master_SNAPSHOT.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_hibernate_dialect_sqlite_dialect_0_1_0.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.main.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -269,14 +268,7 @@
       <workItem from="1583928888665" duration="15639000" />
       <workItem from="1584017273291" duration="62000" />
       <workItem from="1584017562500" duration="75000" />
-      <workItem from="1584018506368" duration="3121000" />
-    </task>
-    <task id="LOCAL-00812" summary="Melhorias no backup de servidores">
-      <created>1583863738030</created>
-      <option name="number" value="00812" />
-      <option name="presentableId" value="LOCAL-00812" />
-      <option name="project" value="LOCAL" />
-      <updated>1583863738030</updated>
+      <workItem from="1584018506368" duration="3140000" />
     </task>
     <task id="LOCAL-00813" summary="Melhorias no backup de servidores">
       <created>1583864041427</created>
@@ -614,7 +606,14 @@
       <option name="project" value="LOCAL" />
       <updated>1584023075745</updated>
     </task>
-    <option name="localTasksCounter" value="861" />
+    <task id="LOCAL-00861" summary="Melhorias no backup de servidores">
+      <created>1584023241620</created>
+      <option name="number" value="00861" />
+      <option name="presentableId" value="LOCAL-00861" />
+      <option name="project" value="LOCAL" />
+      <updated>1584023241620</updated>
+    </task>
+    <option name="localTasksCounter" value="862" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -809,11 +808,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1584023077172">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1584023244892">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1582604543626" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1584023077172" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1584023244892" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
