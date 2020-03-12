@@ -23,6 +23,7 @@ import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
 import com.google.common.collect.Lists;
 import com.kuuhaku.Main;
+import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.reactions.Reaction;
 import com.kuuhaku.controller.mysql.LogDAO;
@@ -716,5 +717,29 @@ public class Helper {
 
 	public static float prcnt(float value, float max) {
 		return (value * 100) / max;
+	}
+
+	public static boolean checkPermissions(User author, Member member, Message message, MessageChannel channel, Guild guild, String prefix, String rawMsgNoPrefix, String[] args, Command command) {
+		if (command.getCategory() == Category.NSFW && !((TextChannel) channel).isNSFW()) {
+			try {
+				channel.sendMessage(":x: | Este comando está categorizado como NSFW, por favor use-o em um canal apropriado!").queue();
+				spawnAd(channel);
+				return true;
+			} catch (InsufficientPermissionException ignore) {
+			}
+			return false;
+		} else if (!hasPermission(member, command.getCategory().getPrivilegeLevel())) {
+			try {
+				channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
+				spawnAd(channel);
+				return true;
+			} catch (InsufficientPermissionException ignore) {
+			}
+			return false;
+		}
+
+		command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, prefix);
+		spawnAd(channel);
+		return true;
 	}
 }

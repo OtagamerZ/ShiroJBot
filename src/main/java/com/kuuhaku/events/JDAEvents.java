@@ -28,7 +28,10 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
@@ -290,22 +293,6 @@ public class JDAEvents extends ListenerAdapter {
 			Main.getInfo().getDevelopers().forEach(d ->
 					Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> c.sendMessage(event.getMessage()).embed(eb.build()).queue()));
 		}
-	}
-
-	public static boolean checkPermissions(User author, Member member, Message message, MessageChannel channel, Guild guild, String prefix, String rawMsgNoPrefix, String[] args, Command command) {
-		if (Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
-			command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, prefix);
-			Helper.spawnAd(channel);
-			return true;
-		}
-
-		try {
-			channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
-			Helper.spawnAd(channel);
-			return true;
-		} catch (InsufficientPermissionException ignore) {
-		}
-		return false;
 	}
 
 	public static boolean isFound(GuildConfig gc, Guild g, String commandName, boolean found, Command command, User u) {
