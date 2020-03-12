@@ -16,25 +16,21 @@
     <content url="file://$MODULE_DIR$/../../src/test" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="shiro-j-bot.main" />
-    <orderEntry type="library" name="Gradle: com.github.ygimenez:PaginationUtils:dd0fb434e2" level="project" />
-    <orderEntry type="library" name="Gradle: net.dv8tion:JDA:4.1.1_108" level="project" />
-    <orderEntry type="library" name="Gradle: club.minnced:discord-webhooks:0.1.7" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.SvenWoltmann:color-thief-java:master-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Gradle: com.enigmabridge:hibernate4-sqlite-dialect:0.1.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.hibernate.dialect:sqlite-dialect:0.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.xmlunit:xmlunit-core:2.6.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup.okio:okio:1.17.2" level="project" />
     <orderEntry type="library" name="Gradle: com.google.apis:google-api-services-youtube:v3-rev212-1.25.0" level="project" />
     <orderEntry type="library" name="Gradle: com.rollbar:rollbar-java:1.6.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.liheyuan:simple-emoji-4j:f26d3b39be" level="project" />
-    <orderEntry type="library" name="Gradle: org.discordbots:DBL-Java-Library:2.0.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.commons:commons-collections4:4.1" level="project" />
+    <orderEntry type="library" name="Gradle: net.sf.trove4j:trove4j:3.0.3" level="project" />
     <orderEntry type="library" name="Gradle: com.fatboyindustrial.gson-javatime-serialisers:gson-javatime-serialisers:1.1.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.8.6" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-data-jpa:2.1.6.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-web:2.1.6.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: io.socket:socket.io-client:1.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.sedmelluq:lavaplayer:1.3.32" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.gwenn:sqlite-dialect:master-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Gradle: org.hibernate:hibernate-c3p0:5.4.2.Final" level="project" />
-    <orderEntry type="library" name="Gradle: org.hibernate:hibernate-core:5.4.2.Final" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-test:2.1.6.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-aop:2.1.6.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: mysql:mysql-connector-java:8.0.16" level="project" />
     <orderEntry type="library" name="Gradle: postgresql:postgresql:9.1-901-1.jdbc4" level="project" />
     <orderEntry type="library" name="Gradle: org.quartz-scheduler:quartz:2.3.1" level="project" />
@@ -49,8 +45,8 @@
     <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-core:2.11.2" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-jcl:2.11.2" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-jul:2.11.2" level="project" />
-    <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-test:2.1.6.RELEASE" level="project" />
-    <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-aop:2.1.6.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: org.hibernate:hibernate-c3p0:5.4.2.Final" level="project" />
+    <orderEntry type="library" name="Gradle: org.hibernate:hibernate-core:5.4.2.Final" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-jdbc:2.1.6.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-json:2.1.6.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter:2.1.6.RELEASE" level="project" />
@@ -81,8 +77,8 @@
     <orderEntry type="library" name="Gradle: io.socket:engine.io-client:1.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp:3.13.0" level="project" />
     <orderEntry type="library" name="Gradle: club.minnced:opus-java:pom:1.0.4" level="project" />
-    <orderEntry type="library" name="Gradle: org.apache.commons:commons-collections4:4.1" level="project" />
-    <orderEntry type="library" name="Gradle: net.sf.trove4j:trove4j:3.0.3" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.liheyuan:simple-emoji-4j:f26d3b39be" level="project" />
+    <orderEntry type="library" name="Gradle: org.discordbots:DBL-Java-Library:2.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.9.9" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.9" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.module:jackson-module-parameter-names:2.9.9" level="project" />
@@ -145,8 +141,8 @@
     <orderEntry type="library" name="Gradle: org.springframework:spring-aop:5.1.8.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-beans:5.1.8.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-core:5.1.8.RELEASE" level="project" />
-    <orderEntry type="library" name="Gradle: org.xmlunit:xmlunit-core:2.6.2" level="project" />
-    <orderEntry type="library" name="Gradle: com.squareup.okio:okio:1.17.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.SvenWoltmann:color-thief-java:master-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.enigmabridge:hibernate4-sqlite-dialect:0.1.2" level="project" />
     <orderEntry type="library" name="Gradle: club.minnced:opus-java-api:1.0.4" level="project" />
     <orderEntry type="library" name="Gradle: club.minnced:opus-java-natives:1.0.4" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.9.0" level="project" />
@@ -173,6 +169,10 @@
     <orderEntry type="library" name="Gradle: net.minidev:accessors-smart:1.2" level="project" />
     <orderEntry type="library" name="Gradle: com.google.j2objc:j2objc-annotations:1.1" level="project" />
     <orderEntry type="library" name="Gradle: ch.qos.logback:logback-core:1.2.3" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.ygimenez:PaginationUtils:dd0fb434e2" level="project" />
+    <orderEntry type="library" name="Gradle: net.dv8tion:JDA:4.1.1_108" level="project" />
+    <orderEntry type="library" name="Gradle: club.minnced:discord-webhooks:0.1.7" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.gwenn:sqlite-dialect:master-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Gradle: org.ow2.asm:asm:5.0.4" level="project" />
   </component>
   <component name="TestModuleProperties" production-module="shiro-j-bot.main" />
