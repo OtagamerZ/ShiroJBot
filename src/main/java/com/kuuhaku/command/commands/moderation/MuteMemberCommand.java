@@ -20,15 +20,19 @@ package com.kuuhaku.command.commands.moderation;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.mysql.MemberDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.MutedMember;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
+import org.json.JSONArray;
 
-import java.util.Objects;
+import java.util.Arrays;
 
 public class MuteMemberCommand extends Command {
 
@@ -50,11 +54,19 @@ public class MuteMemberCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+
 		if (message.getMentionedUsers().size() == 0) {
 			channel.sendMessage(":x: | Você precisa mencionar um membro.").queue();
 			return;
-		} else if (message.getMentionedUsers().size() > 1) {
-			channel.sendMessage(":x: | Você mencionou membros demais.").queue();
+		} else if (args.length < 2) {
+			channel.sendMessage(":x: | Você precisa informar um tempo (em minutos).").queue();
+			return;
+		} else if (!StringUtils.isNumeric(args[1])) {
+			channel.sendMessage(":x: | O tempo de punição deve um valor inteiro.").queue();
+			return;
+		} else if (args.length < 3) {
+			channel.sendMessage(":x: | Você precisa informar um motivo.").queue();
 			return;
 		} else if (!member.hasPermission(Permission.MESSAGE_MANAGE)) {
 			channel.sendMessage(":x: | Você não possui permissão para punir membros.").queue();
@@ -65,18 +77,29 @@ public class MuteMemberCommand extends Command {
 		} else if (Main.getInfo().getDevelopers().contains(message.getMentionedUsers().get(0).getId())) {
 			channel.sendMessage(":x: | Não posso punir meus desenvolvedores, faça isso manualmente.").queue();
 			return;
-		} else if (message.getMentionedMembers().get(0).getRoles().stream().anyMatch(r -> r.getId().equals(GuildDAO.getGuildById(guild.getId()).getCargoWarn()))) {
-			channel.sendMessage(":x: | Este membro já está com uma punição ativa.").queue();
+		} else if (gc.getCargoWarn() == null || gc.getCargoWarn().isEmpty()) {
+			channel.sendMessage(":x: | Nenhum cargo de punição configurado neste servidor.").queue();
+			return;
+		} else if (MemberDAO.getMutedMemberById(message.getMentionedMembers().get(0).getId()) != null && MemberDAO.getMutedMemberById(message.getMentionedUsers().get(0).getId()).isMuted()) {
+			channel.sendMessage(":x: | Este membro já está silenciado.").queue();
 			return;
 		}
 
+		String reason = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
+
 		try {
-			guild.addRoleToMember(message.getMentionedMembers().get(0), Objects.requireNonNull(guild.getRoleById(GuildDAO.getGuildById(guild.getId()).getCargoWarn()))).queue();
-			channel.sendMessage("Punição aplicada com sucesso!").queue();
-		} catch (NullPointerException | ErrorResponseException e) {
-            channel.sendMessage(":x: | Cargo de punição não encontrado.").queue();
+			Member mb = message.getMentionedMembers().get(0);
+			MutedMember m = Helper.getOr(MemberDAO.getMutedMemberById(mb.getId()), new MutedMember(mb.getId(), guild.getId()));
+
+			m.setReason(reason);
+			m.setRoles(new JSONArray(mb.getRoles().stream().map(Role::getId).toArray(String[]::new)));
+			m.mute(Integer.parseInt(args[1]));
+
+			MemberDAO.saveMutedMember(m);
+
+			channel.sendMessage("Usuário silenciado com sucesso!\nMotivo: `" + reason + "`").queue();
 		} catch (InsufficientPermissionException e) {
-			channel.sendMessage(":x: | Não possuo a permissão para punir membros.").queue();
+			channel.sendMessage(":x: | Não possuo a permissão para silenciar membros.").queue();
 		}
 	}
 }
