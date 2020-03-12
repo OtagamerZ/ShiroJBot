@@ -61,6 +61,12 @@ public class AddColorRoleCommand extends Command {
 
 		try {
 			String name = StringUtils.capitalize(args[0].toLowerCase());
+
+			if (name.length() > 20) {
+				channel.sendMessage(":x: | Nome muito longo, escolha um nome menor para a cor.").queue();
+				return;
+			}
+
 			JSONObject jo = gc.getColorRoles();
 
 			if (jo.has(name) && guild.getRoleById(jo.getJSONObject(name).getString("role")) != null) {
