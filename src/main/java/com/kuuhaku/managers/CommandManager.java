@@ -412,7 +412,7 @@ public class CommandManager {
 
 			//NSFW
 			add(new ImageCommand(
-					"image", new String[]{"imagem", "img"}, getLocale(PT).getString("req_tags"), getLocale(PT).getString("cmd_image"), INFO, false
+					"image", new String[]{"imagem", "img"}, getLocale(PT).getString("req_tags"), getLocale(PT).getString("cmd_image"), NSFW, false
 			));
 		}};
 	}
