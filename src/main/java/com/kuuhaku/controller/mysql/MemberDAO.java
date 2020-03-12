@@ -81,7 +81,9 @@ public class MemberDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		em.remove(m);
+		Query q = em.createQuery("DELETE FROM MutedMember m WHERE m.id LIKE :id");
+		q.setParameter("id", m.getUid());
+		q.executeUpdate();
 		em.getTransaction().commit();
 
 		em.close();
