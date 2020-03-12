@@ -19,8 +19,9 @@ package com.kuuhaku.model.persistent;
 
 import org.json.JSONArray;
 
-import javax.persistence.*;
-import java.sql.Timestamp;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -37,8 +38,8 @@ public class MutedMember {
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String reason = "";
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Timestamp mutedUntil;
+	@Column(columnDefinition = "TIMESTAMP")
+	private LocalDateTime mutedUntil;
 
 	@Column(columnDefinition = "TEXT")
 	private String roles = "[]";
@@ -76,11 +77,11 @@ public class MutedMember {
 	}
 
 	public void mute(int time) {
-		this.mutedUntil = Timestamp.from(Instant.now().plus(time, ChronoUnit.MINUTES));
+		this.mutedUntil = LocalDateTime.from(Instant.now().plus(time, ChronoUnit.MINUTES));
 	}
 
 	public boolean isMuted() {
-		return LocalDateTime.now().until(this.mutedUntil.toLocalDateTime(), ChronoUnit.MILLIS) > 0;
+		return LocalDateTime.now().until(this.mutedUntil, ChronoUnit.MILLIS) > 0;
 	}
 
 	public JSONArray getRoles() {
