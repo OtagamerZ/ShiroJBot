@@ -22,7 +22,6 @@ import org.json.JSONArray;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -77,7 +76,7 @@ public class MutedMember {
 	}
 
 	public void mute(int time) {
-		this.mutedUntil = LocalDateTime.from(Instant.now().plus(time, ChronoUnit.MINUTES));
+		this.mutedUntil = LocalDateTime.from(LocalDateTime.now().plusMinutes(time));
 	}
 
 	public boolean isMuted() {
