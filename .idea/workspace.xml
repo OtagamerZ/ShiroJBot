@@ -7,7 +7,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_gwenn_sqlite_dialect_master_SNAPSHOT.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_gwenn_sqlite_dialect_master_SNAPSHOT.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/Category.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/Category.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/misc/ImageCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/nsfw/ImageCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/JDAEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/JDAEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/TetEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/TetEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/guild/GuildEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/guild/GuildEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -150,10 +162,12 @@
       <recent name="com.kuuhaku.managers.RPGCommandManager" />
       <recent name="com.kuuhaku.managers.CommandManager" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
+    <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
+      <recent name="C:\Users\yagog\ShiroJBot\src\main\resources" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games\kawaigotchi" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.kuuhaku.handlers.api.exception" />
@@ -162,12 +176,10 @@
       <recent name="com.kuuhaku.command.commands.misc" />
       <recent name="com.kuuhaku.command.commands.moderation" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
+    <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
-      <recent name="C:\Users\yagog\ShiroJBot\src\main\resources" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games\kawaigotchi" />
     </key>
   </component>
   <component name="ServiceViewManager">
@@ -261,14 +273,10 @@
       <workItem from="1583496814454" duration="22291000" />
       <workItem from="1583756935868" duration="10137000" />
       <workItem from="1583841907484" duration="22344000" />
-      <workItem from="1583928888665" duration="13123000" />
-    </task>
-    <task id="LOCAL-00807" summary="Melhorias no backup de servidores">
-      <created>1583852157861</created>
-      <option name="number" value="00807" />
-      <option name="presentableId" value="LOCAL-00807" />
-      <option name="project" value="LOCAL" />
-      <updated>1583852157861</updated>
+      <workItem from="1583928888665" duration="15639000" />
+      <workItem from="1584017273291" duration="62000" />
+      <workItem from="1584017562500" duration="75000" />
+      <workItem from="1584018506368" duration="2258000" />
     </task>
     <task id="LOCAL-00808" summary="Melhorias no backup de servidores">
       <created>1583862470453</created>
@@ -606,7 +614,14 @@
       <option name="project" value="LOCAL" />
       <updated>1583944680727</updated>
     </task>
-    <option name="localTasksCounter" value="856" />
+    <task id="LOCAL-00856" summary="Melhorias no backup de servidores">
+      <created>1583953437984</created>
+      <option name="number" value="00856" />
+      <option name="presentableId" value="LOCAL-00856" />
+      <option name="project" value="LOCAL" />
+      <updated>1583953437984</updated>
+    </task>
+    <option name="localTasksCounter" value="857" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -684,10 +699,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="432" y="164" key="#SQL_Resolution_Scopes/0.0.1680.1010@0.0.1680.1010" timestamp="1581000411417" />
-    <state x="679" y="329" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog" timestamp="1583849471233">
+    <state x="679" y="329" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog" timestamp="1584019066482">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="679" y="329" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1583849471233" />
+    <state x="679" y="329" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1584019066482" />
     <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1583778401218">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -696,11 +711,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="585" y="309" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1580395607218" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1583932754951">
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1584018893269">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="488" y="71" key="#com.intellij.ide.util.MemberChooser/0.0.1366.768@0.0.1366.768" timestamp="1581391062510" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1583932754951" />
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1584018893269" />
     <state x="509" y="169" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1578969843084">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -721,11 +736,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="620" y="336" key="#com.intellij.refactoring.move.moveInstanceMethod.MoveInstanceMethodDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1578419740782" />
-    <state x="934" y="185" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog" timestamp="1583845008112">
+    <state x="934" y="185" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog" timestamp="1584019158545">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="452" y="144" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog/0.0.1366.768@0.0.1366.768" timestamp="1582605115940" />
-    <state x="934" y="185" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1583845008112" />
+    <state x="934" y="185" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1584019158545" />
     <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1583773218465">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -801,11 +816,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1583944683345">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1583953450460">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1582604543626" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1583944683345" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1583953450460" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>

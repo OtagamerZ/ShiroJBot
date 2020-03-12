@@ -30,6 +30,7 @@ import com.kuuhaku.command.commands.misc.*;
 import com.kuuhaku.command.commands.moderation.*;
 import com.kuuhaku.command.commands.music.ControlCommand;
 import com.kuuhaku.command.commands.music.YoutubeCommand;
+import com.kuuhaku.command.commands.nsfw.ImageCommand;
 import com.kuuhaku.command.commands.partner.*;
 import com.kuuhaku.command.commands.reactions.*;
 import com.kuuhaku.command.commands.reactions.answerable.*;
@@ -270,9 +271,6 @@ public class CommandManager {
 			add(new AnimeCommand(
 					"anime", new String[]{"desenho", "cartoon"}, getLocale(PT).getString(REQ_NAME), getLocale(PT).getString("cmd_anime"), INFO, false
 			));
-			add(new ImageCommand(
-					"image", new String[]{"imagem", "img"}, getLocale(PT).getString("req_tags"), getLocale(PT).getString("cmd_image"), INFO, false
-			));
 			add(new ValidateGIFCommand(
 					"validate", new String[]{"testgif", "tgif"}, getLocale(PT).getString(REQ_LINK), getLocale(PT).getString("cmd_dimension-test"), MISC, false
 			));
@@ -410,6 +408,11 @@ public class CommandManager {
 			));
 			add(new ExceedSelectCommand(
 					"exceedselect", new String[]{"exselect", "sou"}, getLocale(PT).getString("cmd_exceed"), EXCEED, false
+			));
+
+			//NSFW
+			add(new ImageCommand(
+					"image", new String[]{"imagem", "img"}, getLocale(PT).getString("req_tags"), getLocale(PT).getString("cmd_image"), INFO, false
 			));
 		}};
 	}

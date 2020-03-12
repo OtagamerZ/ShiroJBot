@@ -20,6 +20,7 @@ package com.kuuhaku.command;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.mysql.TagDAO;
 import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.PrivilegeLevel;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Guild;
@@ -30,16 +31,17 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public enum Category {
-	DEV("Dev", "<:dev:674261700333142046>", "674261700333142046", "Comandos dedicados aos devs do bot.", PrivilegeLevel.DEV),
-	SHERIFFS("Sheriffs", "<:sheriff:674261700538662913>", "674261700538662913", "Comandos de moderação global.", PrivilegeLevel.SHERIFF),
-	MODERACAO("Moderação", "<:mod:674261700844716082>", "674261700844716082", "Comandos dedicados à staff do servidor.", PrivilegeLevel.MOD),
-	PARTNER("Parceiros", "<:partner:674261701109219328>", "674261701109219328", "Comandos exclusivos para parceiros", PrivilegeLevel.USER),
-	FUN("Diversão", "<:fun:674261700941185035>", "674261700941185035", "Comandos para diversão.", PrivilegeLevel.USER),
-	MISC("Diversos", "<:misc:674261700354113536>", "674261700354113536", "Comandos diversos.", PrivilegeLevel.USER),
-	INFO("Informação", "<:info:674261700643651645>", "674261700643651645", "Comandos de informação", PrivilegeLevel.USER),
-	RPG("RPG", "<:rpg:674261700962418688>", "674261700962418688", "Comandos de RPG (Módulo Tet).", PrivilegeLevel.USER),
-	MUSICA("Música", "<:music:674261701507678220>", "674261701507678220", "Comandos de música.", PrivilegeLevel.DJ),
-	EXCEED("Exceed", "<:exceed:674261700312170496>", "674261700312170496", "Comandos de exceed", PrivilegeLevel.EXCEED);
+	DEV(ShiroInfo.getLocale(I18n.PT).getString("cat_dev-name"), "<:dev:674261700333142046>", "674261700333142046", ShiroInfo.getLocale(I18n.PT).getString("cat_dev-description"), PrivilegeLevel.DEV),
+	SHERIFFS(ShiroInfo.getLocale(I18n.PT).getString("cat_sheriff-name"), "<:sheriff:674261700538662913>", "674261700538662913", ShiroInfo.getLocale(I18n.PT).getString("cat_sheriff-description"), PrivilegeLevel.SHERIFF),
+	MODERACAO(ShiroInfo.getLocale(I18n.PT).getString("cat_moderation-name"), "<:mod:674261700844716082>", "674261700844716082", ShiroInfo.getLocale(I18n.PT).getString("cat_moderation-description"), PrivilegeLevel.MOD),
+	PARTNER(ShiroInfo.getLocale(I18n.PT).getString("cat_partner-name"), "<:partner:674261701109219328>", "674261701109219328", ShiroInfo.getLocale(I18n.PT).getString("cat_partner-description"), PrivilegeLevel.USER),
+	FUN(ShiroInfo.getLocale(I18n.PT).getString("cat_fun-name"), "<:fun:674261700941185035>", "674261700941185035", ShiroInfo.getLocale(I18n.PT).getString("cat_fun-description"), PrivilegeLevel.USER),
+	MISC(ShiroInfo.getLocale(I18n.PT).getString("cat_misc-name"), "<:misc:674261700354113536>", "674261700354113536", ShiroInfo.getLocale(I18n.PT).getString("cat_misc-description"), PrivilegeLevel.USER),
+	INFO(ShiroInfo.getLocale(I18n.PT).getString("cat_info-name"), "<:info:674261700643651645>", "674261700643651645", ShiroInfo.getLocale(I18n.PT).getString("cat_info-description"), PrivilegeLevel.USER),
+	RPG(ShiroInfo.getLocale(I18n.PT).getString("cat_rpg-name"), "<:rpg:674261700962418688>", "674261700962418688", ShiroInfo.getLocale(I18n.PT).getString("cat_rpg-description"), PrivilegeLevel.USER),
+	MUSICA(ShiroInfo.getLocale(I18n.PT).getString("cat_music-name"), "<:music:674261701507678220>", "674261701507678220", ShiroInfo.getLocale(I18n.PT).getString("cat_music-description"), PrivilegeLevel.DJ),
+	EXCEED(ShiroInfo.getLocale(I18n.PT).getString("cat_exceed-name"), "<:exceed:674261700312170496>", "674261700312170496", ShiroInfo.getLocale(I18n.PT).getString("cat_exceed-description"), PrivilegeLevel.EXCEED),
+	NSFW(ShiroInfo.getLocale(I18n.PT).getString("cat_nsfw-name"), "<:nsfw:687649035204558894>", "687649035204558894", ShiroInfo.getLocale(I18n.PT).getString("cat_nsfw-description"), PrivilegeLevel.USER);
 
 	private final String name;
 	private final String emote;
@@ -75,6 +77,7 @@ public enum Category {
 			case EXCEED:
 			case MUSICA:
 			case MODERACAO:
+			case NSFW:
 			case SHERIFFS:
 				return true;
 			default:
