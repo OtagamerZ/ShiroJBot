@@ -33,7 +33,6 @@ import org.jetbrains.annotations.NonNls;
 import org.json.JSONArray;
 
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class MuteMemberCommand extends Command {
 
@@ -93,7 +92,7 @@ public class MuteMemberCommand extends Command {
 			MutedMember m = Helper.getOr(MemberDAO.getMutedMemberById(mb.getId()), new MutedMember(mb.getId(), guild.getId()));
 
 			m.setReason(reason);
-			m.setRoles(new JSONArray(mb.getRoles().stream().map(Role::getId).collect(Collectors.toList())));
+			m.setRoles(new JSONArray(mb.getRoles().stream().map(Role::getId).toArray(String[]::new)));
 			m.mute(Integer.parseInt(args[1]));
 
 			MemberDAO.saveMutedMember(m);

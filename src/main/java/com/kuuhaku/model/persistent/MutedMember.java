@@ -89,6 +89,6 @@ public class MutedMember {
 	}
 
 	public void setRoles(JSONArray roles) {
-		this.roles = new JSONArray(roles).toString();
+		this.roles = roles.toString();
 	}
 }
