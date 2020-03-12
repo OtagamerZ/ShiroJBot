@@ -330,6 +330,9 @@ public class CommandManager {
 			add(new StinksCommand(
 					"stinks", new String[]{"notstks"}, getLocale(PT).getString(REQ_TEXT), getLocale(PT).getString("cmd_stinks"), FUN, false
 			));
+			add(new GuessIllDieCommand(
+					"guessilldie", new String[]{"gid", "achoquevoumorrer", "meh"}, getLocale(PT).getString(REQ_TEXT), getLocale(PT).getString("cmd_guess-ill-die"), FUN, false
+			));
 			add(new DrakeCommand(
 					"drake", new String[]{"drk"}, getLocale(PT).getString(REQ_TWO_OPTIONS), getLocale(PT).getString("cmd_drake"), FUN, false
 			));
