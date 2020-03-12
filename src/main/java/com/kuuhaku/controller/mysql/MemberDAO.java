@@ -18,6 +18,7 @@
 package com.kuuhaku.controller.mysql;
 
 import com.kuuhaku.model.persistent.Member;
+import com.kuuhaku.model.persistent.MutedMember;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -35,11 +36,52 @@ public class MemberDAO {
 		return members;
 	}
 
+	@SuppressWarnings("unchecked")
+	public static List<MutedMember> getMutedMembers() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT m FROM MutedMember m", MutedMember.class);
+		List<MutedMember> members = q.getResultList();
+		em.close();
+
+		return members;
+	}
+
+	public static MutedMember getMutedMemberById(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		try {
+			return em.find(MutedMember.class, id);
+		} finally {
+			em.close();
+		}
+	}
+
 	public static void saveMemberToBD(Member m) {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
 		em.merge(m);
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
+	public static void saveMutedMember(MutedMember m) {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		em.merge(m);
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
+	public static void removeMutedMember(MutedMember m) {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		em.remove(m);
 		em.getTransaction().commit();
 
 		em.close();

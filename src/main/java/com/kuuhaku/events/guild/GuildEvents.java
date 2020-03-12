@@ -28,6 +28,7 @@ import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.model.persistent.CustomAnswers;
 import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.MutedMember;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
@@ -121,8 +122,9 @@ public class GuildEvents extends ListenerAdapter {
 			}
 
 			try {
-				if (member.getRoles().stream().anyMatch(r -> r.getId().equals(GuildDAO.getGuildById(guild.getId()).getCargoWarn()))) {
-					message.delete().complete();
+				MutedMember mm = com.kuuhaku.controller.mysql.MemberDAO.getMutedMemberById(author.getId());
+				if (mm != null && mm.isMuted()) {
+					message.delete().queue();
 					return;
 				}
 			} catch (InsufficientPermissionException ignore) {
@@ -263,8 +265,11 @@ public class GuildEvents extends ListenerAdapter {
 			h.forEach(m -> channel.deleteMessageById(m.getId()).complete());
 			channel.sendMessage(":warning: | Opa, sem spam meu amigo!").queue();
 			try {
-				member.getRoles().add(guild.getRoleById(GuildDAO.getGuildById(guild.getId()).getCargoWarn()));
-				Main.getInfo().getScheduler().schedule(() -> member.getRoles().remove(guild.getRoleById(GuildDAO.getGuildById(guild.getId()).getCargoWarn())), GuildDAO.getGuildById(guild.getId()).getWarnTime(), TimeUnit.SECONDS);
+				Role r = guild.getRoleById(GuildDAO.getGuildById(guild.getId()).getCargoWarn());
+				if (r != null) guild.addRoleToMember(member, r)
+						.delay(GuildDAO.getGuildById(guild.getId()).getWarnTime(), TimeUnit.MINUTES)
+						.flatMap(s -> guild.removeRoleFromMember(member, r))
+						.queue();
 			} catch (Exception ignore) {
 			}
 		}
