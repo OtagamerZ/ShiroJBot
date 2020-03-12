@@ -178,7 +178,8 @@ public class GuildEvents extends ListenerAdapter {
 
 				if (found) {
 					if (Helper.showMMError(author, channel, guild, rawMessage, command)) return;
-					if (JDAEvents.checkPermissions(author, member, message, channel, guild, prefix, rawMsgNoPrefix, args, command))
+
+					if (Helper.checkPermissions(author, member, message, channel, guild, prefix, rawMsgNoPrefix, args, command))
 						break;
 				}
 			}
