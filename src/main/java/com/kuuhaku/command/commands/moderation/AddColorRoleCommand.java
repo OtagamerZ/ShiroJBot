@@ -62,7 +62,7 @@ public class AddColorRoleCommand extends Command {
 		try {
 			String name = StringUtils.capitalize(args[0].toLowerCase());
 
-			if (name.length() > 20) {
+			if (name.length() > 15) {
 				channel.sendMessage(":x: | Nome muito longo, escolha um nome menor para a cor.").queue();
 				return;
 			}
