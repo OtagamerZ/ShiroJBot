@@ -327,8 +327,8 @@ public class CommandManager {
 			add(new StonksCommand(
 					"stonks", new String[]{"stks"}, getLocale(PT).getString(REQ_TEXT), getLocale(PT).getString("cmd_stonks"), FUN, false
 			));
-			add(new StinksCommand(
-					"stinks", new String[]{"notstks"}, getLocale(PT).getString(REQ_TEXT), getLocale(PT).getString("cmd_stinks"), FUN, false
+			add(new NotStonksCommand(
+					"notstonks", new String[]{"notstks", "stinks"}, getLocale(PT).getString(REQ_TEXT), getLocale(PT).getString("cmd_stinks"), FUN, false
 			));
 			add(new GuessIllDieCommand(
 					"guessilldie", new String[]{"gid", "achoquevoumorrer", "meh"}, getLocale(PT).getString(REQ_TEXT), getLocale(PT).getString("cmd_guess-ill-die"), FUN, false
