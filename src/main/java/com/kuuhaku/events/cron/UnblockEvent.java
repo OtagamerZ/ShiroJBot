@@ -30,10 +30,10 @@ import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class UnblockEvent implements Job {
@@ -56,7 +56,8 @@ public class UnblockEvent implements Job {
 							.map(inv -> {
 								Member m = g.getMember(inv.getInviter());
 								assert m != null;
-								if (inv.getUses() / LocalDate.now().getDayOfMonth() > 1) return g.addRoleToMember(m, r);
+								if (inv.getUses() / (TimeUnit.DAYS.convert(inv.getTimeCreated().toEpochSecond(), TimeUnit.SECONDS)) > 1)
+									return g.addRoleToMember(m, r);
 								else return g.removeRoleFromMember(m, r);
 							}).collect(Collectors.toList())
 							.forEach(AuditableRestAction::queue));
