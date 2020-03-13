@@ -267,21 +267,7 @@
       <workItem from="1584017562500" duration="75000" />
       <workItem from="1584018506368" duration="4490000" />
       <workItem from="1584030455951" duration="9882000" />
-      <workItem from="1584108725877" duration="3902000" />
-    </task>
-    <task id="LOCAL-00833" summary="Melhorias no backup de servidores">
-      <created>1583873231037</created>
-      <option name="number" value="00833" />
-      <option name="presentableId" value="LOCAL-00833" />
-      <option name="project" value="LOCAL" />
-      <updated>1583873231037</updated>
-    </task>
-    <task id="LOCAL-00834" summary="Melhorias no backup de servidores">
-      <created>1583873388984</created>
-      <option name="number" value="00834" />
-      <option name="presentableId" value="LOCAL-00834" />
-      <option name="project" value="LOCAL" />
-      <updated>1583873388984</updated>
+      <workItem from="1584108725877" duration="4949000" />
     </task>
     <task id="LOCAL-00835" summary="Melhorias no backup de servidores">
       <created>1583873491483</created>
@@ -612,7 +598,21 @@
       <option name="project" value="LOCAL" />
       <updated>1584117041199</updated>
     </task>
-    <option name="localTasksCounter" value="882" />
+    <task id="LOCAL-00882" summary="Melhorias no backup de servidores">
+      <created>1584117232555</created>
+      <option name="number" value="00882" />
+      <option name="presentableId" value="LOCAL-00882" />
+      <option name="project" value="LOCAL" />
+      <updated>1584117232555</updated>
+    </task>
+    <task id="LOCAL-00883" summary="Melhorias no backup de servidores">
+      <created>1584117442171</created>
+      <option name="number" value="00883" />
+      <option name="presentableId" value="LOCAL-00883" />
+      <option name="project" value="LOCAL" />
+      <updated>1584117442171</updated>
+    </task>
+    <option name="localTasksCounter" value="884" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -807,11 +807,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1584117257958">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1584117461978">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1582604543626" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1584117257958" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1584117461978" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
