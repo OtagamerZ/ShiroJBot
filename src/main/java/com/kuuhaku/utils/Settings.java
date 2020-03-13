@@ -82,6 +82,7 @@ public class Settings {
 			if (!canalRelay.equals("Não definido.")) canalRelay = "<#" + canalRelay + ">";
 
 			String cargoWarnID = Helper.getOr(gc.getCargoWarn(), "Não definido.");
+			String cargoVipID = Helper.getOr(gc.getCargoVip(), "Não definido.");
 			int warnTime = gc.getWarnTime();
 
 			EmbedBuilder eb = new EmbedBuilder();
@@ -115,6 +116,17 @@ public class Settings {
 				}
 			} else {
 				eb.addField("\uD83D\uDCD1 » Cargo de punição", cargoWarnID, true);
+			}
+
+			if (!cargoVipID.equals("Não definido.")) {
+				try {
+					eb.addField("\uD83D\uDCD1 » Cargo VIP", Main.getInfo().getRoleByID(cargoVipID).getAsMention(), true);
+				} catch (NullPointerException e) {
+					gc.setCargoVip(null);
+					GuildDAO.updateGuildSettings(gc);
+				}
+			} else {
+				eb.addField("\uD83D\uDCD1 » Cargo VIP", cargoVipID, true);
 			}
 
 			eb.addField("⏲ » Tempo de punição", String.valueOf(warnTime), true);
@@ -327,9 +339,9 @@ public class Settings {
 
 		if (args.length < 2) {
 			if (antigoCargoWarn.equals("Não definido.")) {
-				message.getTextChannel().sendMessage("O cargo de warns atual do servidor ainda não foi definido.").queue();
+				message.getTextChannel().sendMessage("O cargo de punição atual do servidor ainda não foi definido.").queue();
 			} else {
-				message.getTextChannel().sendMessage("O cargo de warns atual do servidor é `" + antigoCargoWarn + "`.").queue();
+				message.getTextChannel().sendMessage("O cargo de punição atual do servidor é `" + antigoCargoWarn + "`.").queue();
 			}
 			return;
 		}
@@ -339,7 +351,7 @@ public class Settings {
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setCargoWarn(null);
 			GuildDAO.updateGuildSettings(gc);
-			message.getTextChannel().sendMessage("✅ | O cargo de warns do servidor foi resetado com sucesso.").queue();
+			message.getTextChannel().sendMessage("✅ | O cargo de punição do servidor foi resetado com sucesso.").queue();
 			return;
 		}
 
@@ -348,6 +360,34 @@ public class Settings {
 		gc.setCargoWarn(newRoleWarns.getId());
 		GuildDAO.updateGuildSettings(gc);
 		message.getTextChannel().sendMessage("✅ | O cargo de punição do servidor foi trocado para " + newRoleWarns.getAsMention() + " com sucesso.").queue();
+	}
+
+	public static void updateCargoVip(String[] args, Message message, GuildConfig gc) {
+		String antigoCargoVip = gc.getCargoVip();
+
+		if (args.length < 2) {
+			if (antigoCargoVip.equals("Não definido.")) {
+				message.getTextChannel().sendMessage("O cargo VIP atual do servidor ainda não foi definido.").queue();
+			} else {
+				message.getTextChannel().sendMessage("O cargo VIP atual do servidor é `" + antigoCargoVip + "`.").queue();
+			}
+			return;
+		}
+		if (message.getMentionedRoles().size() > 1) {
+			message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 cargo.").queue();
+			return;
+		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
+			gc.setCargoVip(null);
+			GuildDAO.updateGuildSettings(gc);
+			message.getTextChannel().sendMessage("✅ | O cargo VIP do servidor foi resetado com sucesso.").queue();
+			return;
+		}
+
+		Role newRoleVip = message.getMentionedRoles().get(0);
+
+		gc.setCargoVip(newRoleVip.getId());
+		GuildDAO.updateGuildSettings(gc);
+		message.getTextChannel().sendMessage("✅ | O cargo VIP do servidor foi trocado para " + newRoleVip.getAsMention() + " com sucesso.").queue();
 	}
 
 	public static void updateLevelNotif(String[] args, Message message, GuildConfig gc) {

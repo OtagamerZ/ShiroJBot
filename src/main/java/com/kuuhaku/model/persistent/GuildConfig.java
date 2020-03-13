@@ -48,6 +48,9 @@ public class GuildConfig {
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
 	private String cargowarn = "";
 
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String cargovip = "";
+
 	//CHANNELS
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
 	private String canalbv = "";
@@ -192,6 +195,14 @@ public class GuildConfig {
 
 	public void setCargoWarn(String cargowarn) {
 		this.cargowarn = cargowarn;
+	}
+
+	public String getCargoVip() {
+		return cargovip;
+	}
+
+	public void setCargoVip(String cargovip) {
+		this.cargovip = cargovip;
 	}
 
 	public String getCanalSUG() {
