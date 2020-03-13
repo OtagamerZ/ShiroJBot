@@ -21,14 +21,15 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.mysql.MemberDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.RelayBlockList;
-import com.kuuhaku.model.persistent.MutedMember;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,14 +42,31 @@ public class UnblockEvent implements Job {
 		if (LocalDateTime.now().getHour() % 12 == 0) {
 			RelayBlockList.clearBlockedThumbs();
 			RelayBlockList.refresh();
+
+			GuildDAO.getAllGuilds().forEach(gc -> {
+				if (gc.getCargoVip() != null && !gc.getCargoVip().isEmpty()) {
+					Guild g = Main.getInfo().getGuildByID(gc.getGuildID());
+					Role r = g.getRoleById(GuildDAO.getGuildById(g.getId()).getCargoVip());
+					assert r != null;
+					g.retrieveInvites().queue(i -> i.stream()
+							.filter(inv -> inv.getInviter() != null)
+							.map(inv -> {
+								Member m = g.getMember(inv.getInviter());
+								assert m != null;
+								if (inv.getUses() / LocalDate.now().getDayOfMonth() > 1) return g.addRoleToMember(m, r);
+								else return g.removeRoleFromMember(m, r);
+							}).collect(Collectors.toList())
+							.forEach(AuditableRestAction::queue));
+				}
+			});
 		}
 
-		List<MutedMember> mts = MemberDAO.getMutedMembers();
-		mts.forEach(m -> {
+		MemberDAO.getMutedMembers().forEach(m -> {
 			Guild g = Main.getInfo().getGuildByID(m.getGuild());
 			Member mb = g.getMemberById(m.getUid());
 			Role r = g.getRoleById(GuildDAO.getGuildById(g.getId()).getCargoWarn());
 			assert r != null;
+			assert mb != null;
 			if (mb.getRoles().stream().filter(rol -> !rol.isPublicRole()).anyMatch(rol -> !rol.getId().equals(r.getId())) && m.isMuted()) {
 				g.modifyMemberRoles(mb, r).complete();
 			} else if (!m.isMuted()) {
