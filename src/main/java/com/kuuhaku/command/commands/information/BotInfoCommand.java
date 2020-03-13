@@ -22,6 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.mysql.TagDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -66,8 +67,9 @@ public class BotInfoCommand extends Command {
 		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-5"), MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_BOT_INFO_SERVERS), Main.getInfo().getAPI().getGuilds().size()), true);
 		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-6"), MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-registered-users"), Main.getInfo().getAPI().getUsers().size(), MemberDAO.getAllMembers().size()), true);
 		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-7"), Main.getInfo().getVersion(), true);
-		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-8"), "https://top.gg/bot/572413282653306901", true);
-		eb.setImage(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-9"));
+		eb.addField(Helper.VOID, "[" + ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-8") + "](https://top.gg/bot/572413282653306901)", true);
+		eb.addField(Helper.VOID, "[" + ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-9") + "](https://discordapp.com/invite/9sgkzna)", true);
+		eb.setImage(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-10"));
 
 		channel.sendMessage(eb.build()).queue();
 	}
