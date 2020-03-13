@@ -109,6 +109,10 @@ public class SettingsCommand extends Command {
 			case "rolewarn":
 				Settings.updateCargoWarn(args, message, gc);
 				break;
+			case "rvip":
+			case "rolevip":
+				Settings.updateCargoVip(args, message, gc);
+				break;
 			case "ln":
 			case "levelnotif":
 				Settings.updateLevelNotif(args, message, gc);
