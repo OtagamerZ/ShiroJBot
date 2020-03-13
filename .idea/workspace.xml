@@ -8,12 +8,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/BotInfoCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/BotInfoCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/backup/GuildData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/backup/GuildData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Backup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Backup.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_en.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_en.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_es.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_es.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Slots.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Slots.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -273,14 +268,7 @@
       <workItem from="1584018506368" duration="4490000" />
       <workItem from="1584030455951" duration="9882000" />
       <workItem from="1584108725877" duration="7123000" />
-      <workItem from="1584124598011" duration="759000" />
-    </task>
-    <task id="LOCAL-00836" summary="Melhorias no backup de servidores">
-      <created>1583929050708</created>
-      <option name="number" value="00836" />
-      <option name="presentableId" value="LOCAL-00836" />
-      <option name="project" value="LOCAL" />
-      <updated>1583929050708</updated>
+      <workItem from="1584124598011" duration="1570000" />
     </task>
     <task id="LOCAL-00837" summary="Melhorias no backup de servidores">
       <created>1583930327589</created>
@@ -618,7 +606,14 @@
       <option name="project" value="LOCAL" />
       <updated>1584118919954</updated>
     </task>
-    <option name="localTasksCounter" value="885" />
+    <task id="LOCAL-00885" summary="Melhorias no backup de servidores">
+      <created>1584125438633</created>
+      <option name="number" value="00885" />
+      <option name="presentableId" value="LOCAL-00885" />
+      <option name="project" value="LOCAL" />
+      <updated>1584125438634</updated>
+    </task>
+    <option name="localTasksCounter" value="886" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -750,11 +745,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1583775520216" />
-    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1584118916432">
+    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1584126178783">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1582604510538" />
-    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1584118916432" />
+    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1584126178783" />
     <state x="160" y="89" width="1344" height="834" key="DiffContextDialog" timestamp="1580842925618">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -813,11 +808,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1584118923283">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1584125511874">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1582604543626" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1584118923283" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1584125511874" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
