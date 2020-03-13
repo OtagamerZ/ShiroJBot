@@ -397,7 +397,7 @@ public class Helper {
 
 		ja.keySet().forEach(k -> {
 			JSONObject jo = ja.getJSONObject(k);
-			Map<String, BiConsumer<Member, Message>> buttons = new HashMap<>();
+			Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 
 			TextChannel channel = g.getTextChannelById(jo.getString("canalId"));
 
