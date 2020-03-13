@@ -21,6 +21,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.mysql.MemberDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.RelayBlockList;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -47,6 +48,7 @@ public class UnblockEvent implements Job {
 			GuildDAO.getAllGuilds().forEach(gc -> {
 				if (gc.getCargoVip() != null && !gc.getCargoVip().isEmpty()) {
 					Guild g = Main.getInfo().getGuildByID(gc.getGuildID());
+					if (!g.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) return;
 					Role r = g.getRoleById(GuildDAO.getGuildById(g.getId()).getCargoVip());
 					assert r != null;
 					g.retrieveInvites().queue(i -> i.stream()
@@ -64,6 +66,7 @@ public class UnblockEvent implements Job {
 
 		MemberDAO.getMutedMembers().forEach(m -> {
 			Guild g = Main.getInfo().getGuildByID(m.getGuild());
+			if (!g.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) return;
 			Member mb = g.getMemberById(m.getUid());
 			Role r = g.getRoleById(GuildDAO.getGuildById(g.getId()).getCargoWarn());
 			assert r != null;
