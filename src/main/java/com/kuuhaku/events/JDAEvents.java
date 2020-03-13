@@ -74,8 +74,8 @@ public class JDAEvents extends ListenerAdapter {
 
 	@Override
 	public void onMessageReactionRemove(MessageReactionRemoveEvent event) {
-		if (Objects.requireNonNull(event.getMember()).getUser().isBot()) return;
-		
+		if (event.getUser() == null || event.getUser().isBot()) return;
+
 		try {
 			Message message = event.getChannel().retrieveMessageById(event.getMessageId()).complete();
 			if (Main.getInfo().getPolls().containsKey(message.getId())) {
@@ -91,7 +91,7 @@ public class JDAEvents extends ListenerAdapter {
 
 	@Override
 	public void onMessageReactionAdd(MessageReactionAddEvent event) {
-		if (Objects.requireNonNull(event.getUser()).isBot()) return;
+		if (event.getUser() == null || event.getUser().isBot()) return;
 
 		try {
 			Message message = event.getChannel().retrieveMessageById(event.getMessageId()).complete();
