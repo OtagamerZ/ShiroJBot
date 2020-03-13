@@ -29,21 +29,21 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Objects;
 
-public class StinksCommand extends Command {
+public class NotStonksCommand extends Command {
 
-	public StinksCommand(String name, String description, Category category, boolean requiresMM) {
+	public NotStonksCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
 	}
 
-	public StinksCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
+	public NotStonksCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
 		super(name, aliases, description, category, requiresMM);
 	}
 
-	public StinksCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+	public NotStonksCommand(String name, String usage, String description, Category category, boolean requiresMM) {
 		super(name, usage, description, category, requiresMM);
 	}
 
-	public StinksCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+	public NotStonksCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
 		super(name, aliases, usage, description, category, requiresMM);
 	}
 
@@ -56,7 +56,7 @@ public class StinksCommand extends Command {
 
 		try {
 			String text = String.join(" ", args);
-			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("stinks.jpg")));
+			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("notstonks.jpg")));
 
 			ByteArrayOutputStream baos = Helper.renderMeme(text, bi);
 
