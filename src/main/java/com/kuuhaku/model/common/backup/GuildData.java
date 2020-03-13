@@ -17,17 +17,21 @@
 
 package com.kuuhaku.model.common.backup;
 
+import net.dv8tion.jda.api.entities.Guild;
+
 import java.util.List;
 
 public class GuildData {
 	private final List<GuildCategory> categories;
 	private final List<GuildRole> roles;
 	private final List<String> members;
+	private final List<Guild.Ban> banList;
 
-	public GuildData(List<GuildCategory> categories, List<GuildRole> roles, List<String> members) {
+	public GuildData(List<GuildCategory> categories, List<GuildRole> roles, List<String> members, List<Guild.Ban> banList) {
 		this.categories = categories;
 		this.roles = roles;
 		this.members = members;
+		this.banList = banList;
 	}
 
 	public List<GuildCategory> getCategories() {
@@ -40,5 +44,9 @@ public class GuildData {
 
 	public List<String> getMembers() {
 		return members;
+	}
+
+	public List<Guild.Ban> getBanList() {
+		return banList;
 	}
 }
