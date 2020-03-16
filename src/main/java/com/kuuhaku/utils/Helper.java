@@ -78,7 +78,7 @@ public class Helper {
 	public static final String VOID = "\u200B";
 	public static final String CANCEL = "❎";
 	public static final String ACCEPT = "✅";
-	public static final int CANVAS_SIZE = 1024;
+	public static final int CANVAS_SIZE = 1025;
 	public static final DateTimeFormatter dateformat = DateTimeFormatter.ofPattern("dd/MMM/yyyy | HH:mm:ss (z)");
 	public static final String HOME = "674261700366827539";
 
