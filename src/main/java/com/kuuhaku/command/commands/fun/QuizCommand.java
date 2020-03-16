@@ -83,12 +83,14 @@ public class QuizCommand extends Command {
 			AtomicInteger i = new AtomicInteger(0);
 			q.getOptions().forEach(o -> {
 				buttons.put(OPTS[i.get()], (mb, ms) -> {
-					acc.addCredit(q.getPrize());
 					eb.clear();
 					eb.setThumbnail("https://lh3.googleusercontent.com/proxy/ZvixvksWEH9fKXQXNtDTQYMRNxvRQDCrCDmMiC2g5tkotFwRPcSp9L8c4doZAcR31p5n5sXYmSSyNnQltoPOuRAUPh6fQtyf_PoeDLIUFJINbX0");
 
 					if (mb.getId().equals(author.getId())) {
 						if (values.get(String.valueOf(o)) == q.getCorrect()) {
+							acc.addCredit(q.getPrize());
+							AccountDAO.saveAccount(acc);
+
 							eb.setTitle("Resposta correta!");
 							eb.setDescription("Seu prêmio é de " + q.getPrize() + " créditos!");
 							eb.setColor(Color.green);
