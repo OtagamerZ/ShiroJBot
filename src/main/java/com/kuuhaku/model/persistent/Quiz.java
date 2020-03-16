@@ -24,7 +24,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "quiz")
 public class Quiz {
-	public static final String[] OPTS = {"\uD83C\uDDE6\n", "\uD83C\uDDE7\n", "\uD83C\uDDE8\n", "\uD83C\uDDE9"};
+	public static final String[] OPTS = {"\uD83C\uDDE6", "\uD83C\uDDE7", "\uD83C\uDDE8", "\uD83C\uDDE9"};
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

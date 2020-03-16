@@ -33,6 +33,7 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -63,6 +64,11 @@ public class QuizCommand extends Command {
 		Account acc = AccountDAO.getAccount(author.getId());
 		HashMap<String, String> opts = IntStream.range(0, q.getOptions().length()).boxed().collect(Collectors.toMap(k -> OPTS[k], v -> String.valueOf(q.getOptions().get(v)), (k, v) -> k, LinkedHashMap::new));
 
+		HashMap<String, Integer> values = new HashMap<>();
+
+		for (int i = 0; i < OPTS.length; i++) {
+			values.put(q.getOptions().getString(i), i + 1);
+		}
 
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setThumbnail("https://lh3.googleusercontent.com/proxy/ZvixvksWEH9fKXQXNtDTQYMRNxvRQDCrCDmMiC2g5tkotFwRPcSp9L8c4doZAcR31p5n5sXYmSSyNnQltoPOuRAUPh6fQtyf_PoeDLIUFJINbX0");
@@ -74,14 +80,15 @@ public class QuizCommand extends Command {
 		channel.sendMessage(eb.build()).queue(s -> {
 			HashMap<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 
-			for (int i = 0; i < OPTS.length; i++) {
-				int finalI = i;
-				buttons.put(OPTS[i], (mb, ms) -> {
+			AtomicInteger i = new AtomicInteger(0);
+			q.getOptions().forEach(o -> {
+				buttons.put(OPTS[i.get()], (mb, ms) -> {
 					acc.addCredit(q.getPrize());
 					eb.clear();
 					eb.setThumbnail("https://lh3.googleusercontent.com/proxy/ZvixvksWEH9fKXQXNtDTQYMRNxvRQDCrCDmMiC2g5tkotFwRPcSp9L8c4doZAcR31p5n5sXYmSSyNnQltoPOuRAUPh6fQtyf_PoeDLIUFJINbX0");
+
 					if (mb.getId().equals(author.getId())) {
-						if (finalI == q.getCorrect()) {
+						if (values.get(String.valueOf(o)) == q.getCorrect()) {
 							eb.setTitle("Resposta correta!");
 							eb.setDescription("Seu prêmio é de " + q.getPrize() + " créditos!");
 							eb.setColor(Color.green);
@@ -95,7 +102,9 @@ public class QuizCommand extends Command {
 
 					s.editMessage(eb.build()).queue();
 				});
-			}
+
+				i.getAndIncrement();
+			});
 
 			Pages.buttonize(Main.getInfo().getAPI(), s, buttons, false, 60, TimeUnit.SECONDS);
 		});
