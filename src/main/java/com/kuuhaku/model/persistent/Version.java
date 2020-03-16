@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "version")
 public class Version {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

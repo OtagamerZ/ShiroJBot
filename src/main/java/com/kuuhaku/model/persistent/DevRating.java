@@ -20,8 +20,10 @@ package com.kuuhaku.model.persistent;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "devrating")
 public class DevRating {
 	@Id
 	@Column(columnDefinition = "VARCHAR(191)")

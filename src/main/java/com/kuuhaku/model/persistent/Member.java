@@ -26,9 +26,11 @@ import net.dv8tion.jda.api.entities.User;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.stream.Collectors;
 
 @Entity
+@Table(name = "member")
 public class Member {
 	@Id
 	@Column(columnDefinition = "VARCHAR(191)")

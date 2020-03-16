@@ -29,6 +29,7 @@ import java.util.Objects;
 import java.util.Random;
 
 @Entity
+@Table(name = "kawaigotchi")
 public class Kawaigotchi {
 	//FOOD | ENERGY | MOOD
 	private enum rate {
