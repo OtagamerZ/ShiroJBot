@@ -72,7 +72,7 @@ public class PollCommand extends Command {
 		eb.setColor(Color.decode("#2195f2"));
 
 		if (gc.getCanalSUG() == null || gc.getCanalSUG().isEmpty()) {
-			gc.setCanalSUG("Não definido");
+			gc.setCanalSUG(null);
 			GuildDAO.updateGuildSettings(gc);
 			channel.sendMessage(eb.build()).queue(m -> {
 				m.addReaction("\uD83D\uDC4D").queue();
@@ -91,7 +91,10 @@ public class PollCommand extends Command {
 					Main.getInfo().getScheduler().schedule(() -> showResult(m, member, eb), gc.getPollTime(), TimeUnit.SECONDS);
 				});
 			} catch (Exception e) {
-				channel.sendMessage(":x: | Não possuo permissões suficientes para mandar embeds no canal " + Objects.requireNonNull(guild.getTextChannelById(gc.getCanalSUG())).getAsMention() + ".").queue();
+				if (gc.getCanalSUG() == null || gc.getCanalSUG().isEmpty())
+					channel.sendMessage(":x: | Não possuo permissões suficientes para mandar embeds neste canal.").queue();
+				else
+					channel.sendMessage(":x: | Não possuo permissões suficientes para mandar embeds no canal " + Objects.requireNonNull(guild.getTextChannelById(gc.getCanalSUG())).getAsMention() + ".").queue();
 				return;
 			}
 		}
