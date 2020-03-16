@@ -54,7 +54,7 @@
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
 
             <!--  propriedades do hibernate -->
-            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL10Dialect"/>
             <property name="hibernate.format_sql" value="true"/>
 
             <!--  propriedade do C3P0 -->
