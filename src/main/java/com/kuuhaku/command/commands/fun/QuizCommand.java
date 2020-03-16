@@ -69,7 +69,7 @@ public class QuizCommand extends Command {
 		eb.setThumbnail("https://lh3.googleusercontent.com/proxy/ZvixvksWEH9fKXQXNtDTQYMRNxvRQDCrCDmMiC2g5tkotFwRPcSp9L8c4doZAcR31p5n5sXYmSSyNnQltoPOuRAUPh6fQtyf_PoeDLIUFJINbX0");
 		eb.setTitle("Hora do quiz!");
 		eb.setDescription(q.getQuestion());
-		eb.setColor(Color.yellow);
+		eb.setColor(Color.decode("#2195f2"));
 		opts.forEach((k, v) -> eb.addField(k + " | " + v, Helper.VOID, false));
 
 		channel.sendMessage(eb.build()).queue(s -> {
