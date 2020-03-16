@@ -24,14 +24,14 @@ import java.time.OffsetDateTime;
 import java.time.ZoneId;
 
 @Entity
-@Table(name = "log")
+@Table(name = "logs")
 public class Log {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
-	private String user = "";
+	private String usr = "";
 
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
 	private String guild = "";
@@ -51,11 +51,11 @@ public class Log {
 	}
 
 	public String getUser() {
-		return user;
+		return usr;
 	}
 
 	public Log setUser(String user) {
-		this.user = user;
+		this.usr = user;
 		return this;
 	}
 
