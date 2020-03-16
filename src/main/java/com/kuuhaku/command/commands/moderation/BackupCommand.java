@@ -56,7 +56,10 @@ public class BackupCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		Backup data = BackupDAO.getGuildBackup(guild);
 
-		if (!Helper.containsAny(args[0], "salvar", "recuperar")) {
+		if (args.length < 1) {
+			channel.sendMessage(":x: | Você deve informar o tipo de operação (salvar ou recuperar).").queue();
+			return;
+		} else if (!Helper.containsAny(args[0], "salvar", "recuperar")) {
 			channel.sendMessage(":x: | O primeiro argumento deve ser salvar ou recuperar.").queue();
 			return;
 		} else if (!guild.getSelfMember().hasPermission(Permission.ADMINISTRATOR)) {
