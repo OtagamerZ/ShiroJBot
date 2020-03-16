@@ -32,11 +32,11 @@ public class Manager {
 		Map<String, String> props = new HashMap<>();
 		props.put("javax.persistence.jdbc.user", System.getenv("DB_LOGIN"));
 		props.put("javax.persistence.jdbc.password", System.getenv("DB_PASS"));
-		props.put("javax.persistence.jdbc.url", "jdbc:postgresql://" + System.getenv("SERVER_URL") + "/Shiro?serverTimezone=EST5EDT&autoReconnect=true&useUnicode=yes&characterEncoding=UTF-8&interactiveClient=true");
+		props.put("javax.persistence.jdbc.url", "jdbc:postgresql://" + System.getenv("SERVER_URL") + ":5432/Shiro?serverTimezone=EST5EDT&autoReconnect=true&useUnicode=yes&characterEncoding=UTF-8&interactiveClient=true");
 
 		if (emf == null) {
 			emf = Persistence.createEntityManagerFactory("shiro_remote", props);
-			Helper.logger(Manager.class).info("✅ | Ligação à base de dados MySQL estabelecida.");
+			Helper.logger(Manager.class).info("✅ | Ligação à base de dados PostgreSQL estabelecida.");
 		}
 
 		emf.getCache().evictAll();
