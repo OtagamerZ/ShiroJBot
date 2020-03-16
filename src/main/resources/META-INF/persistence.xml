@@ -48,14 +48,13 @@
         <class>com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi</class>
         <class>com.kuuhaku.model.persistent.Version</class>
         <class>com.kuuhaku.model.persistent.MutedMember</class>
-        <class>java.lang.String</class>
 
         <properties>
             <!-- dados da conexao -->
-            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
 
             <!--  propriedades do hibernate -->
-            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL10Dialect"/>
             <property name="hibernate.format_sql" value="true"/>
 
             <!--  propriedade do C3P0 -->

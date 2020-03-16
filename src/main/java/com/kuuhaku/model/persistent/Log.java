@@ -24,6 +24,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneId;
 
 @Entity
+@Table(name = "log")
 public class Log {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

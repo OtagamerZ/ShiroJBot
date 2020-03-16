@@ -20,8 +20,10 @@ package com.kuuhaku.model.persistent;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "customanswers")
 public class CustomAnswers {
     @Id
     @Column(columnDefinition = "BIGINT")

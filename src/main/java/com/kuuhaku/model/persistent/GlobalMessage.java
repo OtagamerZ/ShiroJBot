@@ -22,6 +22,7 @@ import org.json.JSONObject;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "globalmessage")
 public class GlobalMessage {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
