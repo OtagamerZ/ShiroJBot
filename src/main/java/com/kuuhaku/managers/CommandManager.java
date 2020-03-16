@@ -105,6 +105,9 @@ public class CommandManager {
 			add(new MMLockCommand(
 					"mmlock", getLocale(PT).getString("cmd_mm-lock"), DEV, false
 			));
+			add(new AddQuizCommand(
+					"addquiz", new String[]{"addq", "novoquiz"}, getLocale(PT).getString("req_question-opts-correct-prize"), getLocale(PT).getString("cmd_add-quiz"), DEV, false
+			));
 
 			//SHERIFF
 			add(new BlockCommand(
