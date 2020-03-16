@@ -22,10 +22,12 @@ import org.json.JSONArray;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 @Entity
+@Table(name = "mutedmember")
 public class MutedMember {
 	@Id
 	@Column(columnDefinition = "VARCHAR(191)")

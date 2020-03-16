@@ -23,6 +23,7 @@ import com.kuuhaku.utils.Helper;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "slots")
 public class Slots {
 	public static final String SLOT = "<a:slots:680448443692744956>";
 	public static final String JACKPOT = "<:7_s:680405919057969155>";

@@ -23,6 +23,7 @@ import net.dv8tion.jda.api.entities.User;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "votes")
 public class Votes {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

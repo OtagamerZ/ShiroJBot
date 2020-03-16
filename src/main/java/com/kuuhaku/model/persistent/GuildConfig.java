@@ -28,12 +28,14 @@ import org.json.JSONObject;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 @Entity
+@Table(name = "guildconfig")
 public class GuildConfig {
 	@Id
 	@Column(columnDefinition = "VARCHAR(191)")

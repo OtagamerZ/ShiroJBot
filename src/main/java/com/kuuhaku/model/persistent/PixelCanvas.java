@@ -34,6 +34,7 @@ import static com.kuuhaku.utils.Helper.CANVAS_SIZE;
 
 @SuppressWarnings("rawtypes")
 @Entity
+@Table(name = "pixelcanvas")
 public class PixelCanvas {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

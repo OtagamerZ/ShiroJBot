@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "token")
 public class Token {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
