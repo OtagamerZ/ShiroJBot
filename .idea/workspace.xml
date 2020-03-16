@@ -6,14 +6,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Melhorias no backup de servidores">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/AddQuizCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/QuizCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/mysql/QuizDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Quiz.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1922b6bb-e9cb-42d9-8f93-e283b3e8e488.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1922b6bb-e9cb-42d9-8f93-e283b3e8e488/storage_v2/_src_/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.main.iml" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
@@ -253,14 +246,7 @@
       <workItem from="1584108725877" duration="7123000" />
       <workItem from="1584124598011" duration="2872000" />
       <workItem from="1584362149637" duration="7102000" />
-      <workItem from="1584385197931" duration="2780000" />
-    </task>
-    <task id="LOCAL-00850" summary="Melhorias no backup de servidores">
-      <created>1583936375627</created>
-      <option name="number" value="00850" />
-      <option name="presentableId" value="LOCAL-00850" />
-      <option name="project" value="LOCAL" />
-      <updated>1583936375627</updated>
+      <workItem from="1584385197931" duration="3046000" />
     </task>
     <task id="LOCAL-00851" summary="Melhorias no backup de servidores">
       <created>1583938621937</created>
@@ -598,7 +584,14 @@
       <option name="project" value="LOCAL" />
       <updated>1584380362742</updated>
     </task>
-    <option name="localTasksCounter" value="899" />
+    <task id="LOCAL-00899" summary="Melhorias no backup de servidores">
+      <created>1584388006568</created>
+      <option name="number" value="00899" />
+      <option name="presentableId" value="LOCAL-00899" />
+      <option name="project" value="LOCAL" />
+      <updated>1584388006569</updated>
+    </task>
+    <option name="localTasksCounter" value="900" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -793,11 +786,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1584380365150">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1584388018697">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1582604543626" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1584380365150" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1584388018697" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
