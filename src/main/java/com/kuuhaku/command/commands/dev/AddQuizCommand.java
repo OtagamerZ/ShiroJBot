@@ -22,6 +22,7 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.mysql.QuizDAO;
 import com.kuuhaku.model.persistent.Quiz;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 import org.json.JSONArray;
 
@@ -59,9 +60,19 @@ public class AddQuizCommand extends Command {
 		} else if (opts.length() != 4) {
 			channel.sendMessage(":x: | Cada quiz deve conter 4 alternativas.").queue();
 			return;
+		} else if (!StringUtils.isNumeric(quizArgs[2])) {
+			channel.sendMessage(":x: | A alternativa correta deve ser um valor inteiro entre 1 e 4.").queue();
+			return;
 		}
 
-		Quiz q = new Quiz(quizArgs[0], opts, Integer.parseInt(quizArgs[2]), Integer.parseInt(quizArgs[3]));
+		int o = Integer.parseInt(quizArgs[2]);
+
+		if (o < 1 || o > 4) {
+			channel.sendMessage(":x: | A alternativa correta deve ser um valor numérico entre 1 e 4.").queue();
+			return;
+		}
+
+		Quiz q = new Quiz(quizArgs[0], opts, o - 1, Integer.parseInt(quizArgs[3]));
 		QuizDAO.saveQuiz(q);
 
 		channel.sendMessage("Quiz adicionado com sucesso!").queue();
