@@ -25,7 +25,6 @@ import com.kuuhaku.controller.mysql.AccountDAO;
 import com.kuuhaku.controller.mysql.QuizDAO;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Quiz;
-import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
@@ -70,7 +69,7 @@ public class QuizCommand extends Command {
 		eb.setTitle("Hora do quiz!");
 		eb.setDescription(q.getQuestion());
 		eb.setColor(Color.decode("#2195f2"));
-		opts.forEach((k, v) -> eb.addField(k + " | " + v, Helper.VOID, false));
+		opts.forEach((k, v) -> eb.addField("Alternativa " + k, v, false));
 
 		channel.sendMessage(eb.build()).queue(s -> {
 			HashMap<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
@@ -79,6 +78,7 @@ public class QuizCommand extends Command {
 				int finalI = i;
 				buttons.put(OPTS[i], (mb, ms) -> {
 					acc.addCredit(q.getPrize());
+					eb.clear();
 					eb.setThumbnail("https://lh3.googleusercontent.com/proxy/ZvixvksWEH9fKXQXNtDTQYMRNxvRQDCrCDmMiC2g5tkotFwRPcSp9L8c4doZAcR31p5n5sXYmSSyNnQltoPOuRAUPh6fQtyf_PoeDLIUFJINbX0");
 					if (mb.getId().equals(author.getId())) {
 						if (finalI == q.getCorrect()) {
@@ -90,6 +90,7 @@ public class QuizCommand extends Command {
 							eb.setDescription("Você errou. Tente novamente!");
 							eb.setColor(Color.red);
 						}
+						s.clearReactions().queue();
 					}
 
 					s.editMessage(eb.build()).queue();
