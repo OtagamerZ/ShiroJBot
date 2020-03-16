@@ -37,6 +37,7 @@ import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @Entity
+@Table(name = "backup")
 public class Backup {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
