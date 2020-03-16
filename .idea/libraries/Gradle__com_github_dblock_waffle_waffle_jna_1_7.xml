@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.dblock.waffle:waffle-jna:1.7">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.dblock.waffle/waffle-jna/1.7/8f86f0fa926570bed44a61382f9ad2368f57613a/waffle-jna-1.7.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.dblock.waffle/waffle-jna/1.7/791d1d5eb2bf53c0194e0432939feb63b2f2170f/waffle-jna-1.7-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
