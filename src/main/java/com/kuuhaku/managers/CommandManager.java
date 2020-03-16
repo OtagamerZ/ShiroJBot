@@ -358,7 +358,7 @@ public class CommandManager {
 					"slots", new String[]{"roleta"}, getLocale(PT).getString("req_bet"), getLocale(PT).getString("cmd_slots"), FUN, false
 			));
 			add(new QuizCommand(
-					"quiz", new String[]{"qna", "per"}, getLocale(PT).getString("cmd_quiz"), FUN, false
+					"quiz", new String[]{"qna", "per"}, getLocale(PT).getString("cmd_quiz"), FUN, true
 			));
 			add(new HugReaction(
 					"abraçar", new String[]{"abracar", "hug", "vemca"}, getLocale(PT).getString("cmd_hug"), true, "hug"
