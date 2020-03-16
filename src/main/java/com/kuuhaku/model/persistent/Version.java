@@ -23,7 +23,7 @@ import javax.persistence.*;
 @Table(name = "version")
 public class Version {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = VIP.IDENTITY)
 	private int major;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
