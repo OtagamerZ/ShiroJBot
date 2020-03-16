@@ -106,31 +106,31 @@ public class SlotsCommand extends Command {
 				msg = "Eita, parece que você não teve sorte hoje!";
 				win = true;
 			} else if (watermelon >= 3) {
-				bet.set(Math.round(bet.get() * 1.35f));
+				bet.set(Math.round(bet.get() * 1.5f));
 				msg = "E temos três melancias!";
 				win = true;
 			} else if (cherry >= 3) {
-				bet.set(Math.round(bet.get() * 1.5f));
+				bet.set(bet.get() * 2);
 				msg = "Três cerejas no bolo!";
 				win = true;
 			} else if (heart >= 3) {
-				bet.set(Math.round(bet.get() * 1.75f));
+				bet.set(Math.round(bet.get() * 2.75f));
 				msg = "Três corações apaixonados!";
 				win = true;
 			} else if (bell >= 3) {
-				bet.set(Math.round(bet.get() * 2.25f));
+				bet.set(bet.get() * 4);
 				msg = "Toquem os sinos!";
 				win = true;
 			} else if (bar >= 3) {
-				bet.updateAndGet(v -> v * 3);
+				bet.updateAndGet(v -> v * 9);
 				msg = "Chamem a polícia, temos um sortudo!";
 				win = true;
 			} else if (horseshoe >= 3) {
-				bet.updateAndGet(v -> v * 5);
+				bet.updateAndGet(v -> v * 35);
 				msg = "Alguem sequestrou um doente, três ferraduras de ouro!";
 				win = true;
 			} else if (diamond >= 3) {
-				bet.updateAndGet(v -> v * 10);
+				bet.updateAndGet(v -> v * 50);
 				msg = "Assalto ao banco da sorte, temos três diamantes!";
 				win = true;
 			}
@@ -193,13 +193,13 @@ public class SlotsCommand extends Command {
 
 	private String prizeTable() {
 		return Slots.LEMON + Slots.LEMON + Slots.LEMON + " -> x0.8\n" +
-				Slots.WATERMELON + Slots.WATERMELON + Slots.WATERMELON + " -> x1.35\n" +
-				Slots.CHERRY + Slots.CHERRY + Slots.CHERRY + " -> x1.5\n" +
-				Slots.HEART + Slots.HEART + Slots.HEART + " -> x1.75\n" +
-				Slots.BELL + Slots.BELL + Slots.BELL + " -> x2.25\n" +
-				Slots.BAR + Slots.BAR + Slots.BAR + " -> x3\n" +
-				Slots.HORSESHOE + Slots.HORSESHOE + Slots.HORSESHOE + " -> x5\n" +
-				Slots.DIAMOND + Slots.DIAMOND + Slots.DIAMOND + " -> x10\n" +
+				Slots.WATERMELON + Slots.WATERMELON + Slots.WATERMELON + " -> x1.5\n" +
+				Slots.CHERRY + Slots.CHERRY + Slots.CHERRY + " -> x2\n" +
+				Slots.HEART + Slots.HEART + Slots.HEART + " -> x2.75\n" +
+				Slots.BELL + Slots.BELL + Slots.BELL + " -> x4\n" +
+				Slots.BAR + Slots.BAR + Slots.BAR + " -> x9\n" +
+				Slots.HORSESHOE + Slots.HORSESHOE + Slots.HORSESHOE + " -> x35\n" +
+				Slots.DIAMOND + Slots.DIAMOND + Slots.DIAMOND + " -> x50\n" +
 				Slots.JACKPOT + Slots.JACKPOT + Slots.JACKPOT + " -> JACKPOT!\n";
 	}
 }
