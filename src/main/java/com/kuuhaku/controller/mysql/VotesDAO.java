@@ -27,7 +27,10 @@ import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.model.persistent.Votes;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -109,7 +112,7 @@ public class VotesDAO {
 			pages.add(new Page(PageType.TEXT, eb.build()));
 		}
 
-		channel.sendMessage((Message) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
+		channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
 	}
 
 	public static DevRating getRating(String id) {
