@@ -48,6 +48,7 @@
         <class>com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi</class>
         <class>com.kuuhaku.model.persistent.Version</class>
         <class>com.kuuhaku.model.persistent.MutedMember</class>
+        <class>com.kuuhaku.model.persistent.Quiz</class>
 
         <properties>
             <!-- dados da conexao -->
