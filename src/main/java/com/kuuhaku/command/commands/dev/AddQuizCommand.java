@@ -72,7 +72,7 @@ public class AddQuizCommand extends Command {
 			return;
 		}
 
-		Quiz q = new Quiz(quizArgs[0], opts, o - 1, Integer.parseInt(quizArgs[3]));
+		Quiz q = new Quiz(quizArgs[0], opts, o, Integer.parseInt(quizArgs[3]));
 		QuizDAO.saveQuiz(q);
 
 		channel.sendMessage("Quiz adicionado com sucesso!").queue();
