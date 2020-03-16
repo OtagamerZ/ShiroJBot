@@ -355,7 +355,10 @@ public class CommandManager {
 					"divorciar", new String[]{"separar", "divorce"}, getLocale(PT).getString("cmd_divorce"), FUN, false
 			));
 			add(new SlotsCommand(
-					"slots", new String[]{"roleta"}, getLocale(PT).getString("req_bet"), getLocale(PT).getString("cmd_slots"), MISC, false
+					"slots", new String[]{"roleta"}, getLocale(PT).getString("req_bet"), getLocale(PT).getString("cmd_slots"), FUN, false
+			));
+			add(new SlotsCommand(
+					"quiz", new String[]{"qna", "per"}, getLocale(PT).getString("cmd_quiz"), FUN, false
 			));
 			add(new HugReaction(
 					"abraçar", new String[]{"abracar", "hug", "vemca"}, getLocale(PT).getString("cmd_hug"), true, "hug"
