@@ -7,15 +7,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_postgresql_postgresql_42_2_11_jre7.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_dblock_waffle_waffle_jna_1_7.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__net_java_dev_jna_jna_platform_4_5_2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_postgresql_postgresql_9_4_1200_jdbc41.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_slf4j_slf4j_simple_1_7_26.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.test.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/Kawaigotchi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/Kawaigotchi.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -252,14 +245,8 @@
       <workItem from="1584108725877" duration="7123000" />
       <workItem from="1584124598011" duration="2872000" />
       <workItem from="1584362149637" duration="7102000" />
-      <workItem from="1584385197931" duration="5409000" />
-    </task>
-    <task id="LOCAL-00859" summary="Melhorias no backup de servidores">
-      <created>1584022896724</created>
-      <option name="number" value="00859" />
-      <option name="presentableId" value="LOCAL-00859" />
-      <option name="project" value="LOCAL" />
-      <updated>1584022896724</updated>
+      <workItem from="1584385197931" duration="6328000" />
+      <workItem from="1584446942009" duration="7874000" />
     </task>
     <task id="LOCAL-00860" summary="Melhorias no backup de servidores">
       <created>1584023075744</created>
@@ -597,7 +584,14 @@
       <option name="project" value="LOCAL" />
       <updated>1584390135120</updated>
     </task>
-    <option name="localTasksCounter" value="908" />
+    <task id="LOCAL-00908" summary="Melhorias no backup de servidores">
+      <created>1584390728529</created>
+      <option name="number" value="00908" />
+      <option name="presentableId" value="LOCAL-00908" />
+      <option name="project" value="LOCAL" />
+      <updated>1584390728529</updated>
+    </task>
+    <option name="localTasksCounter" value="909" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -733,11 +727,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1583775520216" />
-    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1584390724838">
+    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1584474785599">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1582604510538" />
-    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1584390724838" />
+    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1584474785599" />
     <state x="160" y="89" width="1344" height="834" key="DiffContextDialog" timestamp="1580842925618">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -796,11 +790,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1584390137319">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1584390731941">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1582604543626" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1584390137319" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1584390731941" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -821,11 +815,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="544" y="399" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD/0.0.1680.1010@0.0.1680.1010" timestamp="1579615180701" />
-    <state x="600" y="391" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1583511440081">
+    <state x="600" y="391" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1584474674549">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="488" y="297" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1366.768@0.0.1366.768" timestamp="1580267810034" />
-    <state x="600" y="391" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1680.1010@0.0.1680.1010" timestamp="1583511440081" />
+    <state x="600" y="391" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1680.1010@0.0.1680.1010" timestamp="1584474674549" />
     <state x="448" y="274" key="extract.method.dialog" timestamp="1583844988091">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>

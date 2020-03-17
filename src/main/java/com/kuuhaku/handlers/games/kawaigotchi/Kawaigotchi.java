@@ -180,7 +180,7 @@ public class Kawaigotchi {
 			warned = false;
 		}
 
-		if (hunger > 80 && mood < 80) mood += (rate.MOOD.fac + ((100 - hunger) * 0.01f / 20)) * nature.getKindness();
+		if (hunger > 60 && mood < 80) mood += (rate.MOOD.fac + ((100 - hunger) * 0.01f / 20)) * nature.getKindness();
 		else mood -= rate.MOOD.fac / nature.getKindness();
 
 		hunger -= rate.FOOD.fac;
