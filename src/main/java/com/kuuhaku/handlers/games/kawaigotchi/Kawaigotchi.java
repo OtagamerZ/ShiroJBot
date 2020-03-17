@@ -33,7 +33,7 @@ import java.util.Random;
 public class Kawaigotchi {
 	//FOOD | ENERGY | MOOD
 	private enum rate {
-		FOOD(0.015f),
+		FOOD(0.008f),
 		ENERGY(0.01f),
 		MOOD(0.02f),
 		HEALTH(0.01f);
