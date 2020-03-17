@@ -25,6 +25,7 @@ import com.kuuhaku.controller.mysql.AccountDAO;
 import com.kuuhaku.controller.mysql.QuizDAO;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Quiz;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
@@ -88,11 +89,12 @@ public class QuizCommand extends Command {
 
 					if (mb.getId().equals(author.getId())) {
 						if (values.get(String.valueOf(o)) == q.getCorrect()) {
-							acc.addCredit(q.getPrize());
+							int p = Helper.rng(q.getPrize());
+							acc.addCredit(p);
 							AccountDAO.saveAccount(acc);
 
 							eb.setTitle("Resposta correta!");
-							eb.setDescription("Seu prêmio é de " + q.getPrize() + " créditos!");
+							eb.setDescription("Seu prêmio é de " + p + " créditos!");
 							eb.setColor(Color.green);
 						} else {
 							eb.setTitle("Resposta incorreta.");
