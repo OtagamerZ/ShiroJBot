@@ -38,7 +38,7 @@ public class LogDAO {
 	public static List<Object[]> getUsage() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createNativeQuery("SELECT * FROM shiro.'GetUsage'");
+		Query q = em.createNativeQuery("SELECT * FROM shiro.\"GetUsage\"");
 
 		return q.getResultList();
 	}
