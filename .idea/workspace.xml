@@ -7,8 +7,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,12 +31,7 @@
     <option name="HIDDEN_KINDS">
       <set />
     </option>
-    <expand>
-      <path>
-        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="PostgreSQL" type="feb32156:DbDataSourceImpl" />
-      </path>
-    </expand>
+    <expand />
     <select />
   </component>
   <component name="ExternalProjectsData">
@@ -248,14 +245,7 @@
       <workItem from="1584362149637" duration="7102000" />
       <workItem from="1584385197931" duration="6328000" />
       <workItem from="1584446942009" duration="10557000" />
-      <workItem from="1584549328022" duration="7539000" />
-    </task>
-    <task id="LOCAL-00867" summary="Melhorias no backup de servidores">
-      <created>1584035643718</created>
-      <option name="number" value="00867" />
-      <option name="presentableId" value="LOCAL-00867" />
-      <option name="project" value="LOCAL" />
-      <updated>1584035643718</updated>
+      <workItem from="1584549328022" duration="9024000" />
     </task>
     <task id="LOCAL-00868" summary="Melhorias no backup de servidores">
       <created>1584035761466</created>
@@ -593,7 +583,14 @@
       <option name="project" value="LOCAL" />
       <updated>1584559861739</updated>
     </task>
-    <option name="localTasksCounter" value="916" />
+    <task id="LOCAL-00916" summary="Melhorias no backup de servidores">
+      <created>1584560002431</created>
+      <option name="number" value="00916" />
+      <option name="presentableId" value="LOCAL-00916" />
+      <option name="project" value="LOCAL" />
+      <updated>1584560002431</updated>
+    </task>
+    <option name="localTasksCounter" value="917" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -675,10 +672,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="679" y="329" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1584019066482" />
-    <state x="265" y="43" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1584559980723">
+    <state x="265" y="43" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1584560681507">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="265" y="43" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1584559980723" />
+    <state x="265" y="43" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1584560681507" />
     <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1584385334376" />
     <state x="585" y="309" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1580395607218">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -730,10 +727,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1583775520216" />
-    <state x="94" y="0" key="CommitChangelistDialog2" timestamp="1584559858197">
+    <state x="94" y="0" key="CommitChangelistDialog2" timestamp="1584559999033">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1584559858197" />
+    <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1584559999033" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1582604510538" />
     <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1584474785599" />
     <state x="160" y="89" width="1344" height="834" key="DiffContextDialog" timestamp="1580842925618">
@@ -794,10 +791,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="182" y="133" key="Vcs.Push.Dialog.v2" timestamp="1584559889552">
+    <state x="182" y="133" key="Vcs.Push.Dialog.v2" timestamp="1584560003822">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1584559889552" />
+    <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1584560003822" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1582604543626" />
     <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1584474809151" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
