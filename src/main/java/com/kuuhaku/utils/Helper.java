@@ -175,7 +175,9 @@ public class Helper {
 		con.setRequestProperty("User-Agent", "Mozilla/5.0");
 		BufferedImage icon = ImageIO.read(con.getInputStream());
 
-		return new Color(ColorThief.getColor(icon)[0], ColorThief.getColor(icon)[1], ColorThief.getColor(icon)[2]);
+		if (icon != null)
+			return new Color(ColorThief.getColor(icon)[0], ColorThief.getColor(icon)[1], ColorThief.getColor(icon)[2]);
+		else return getRandomColor();
 	}
 
 	public static void spawnAd(MessageChannel channel) {
