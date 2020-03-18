@@ -70,7 +70,7 @@ public class URankCommand extends Command {
 			mbs = MemberDAO.getMemberRank(guild.getId(), false);
 		}
 
-		String champ = "1 - " + (global ? "(" + Main.getInfo().getGuildByID(mbs.get(0).getId().replace(mbs.get(0).getMid(), "")).getName() + ") " : "") + Main.getInfo().getUserByID(mbs.get(0).getMid()).getAsTag() + " (Level " + mbs.get(0).getLevel() + ")";
+		String champ = "1 - " + (global ? "(" + Main.getInfo().getGuildByID(mbs.get(0).getId().replace(mbs.get(0).getMid(), "")).getName() + ") " : "") + Main.getInfo().getUserByID(mbs.get(0).getMid()).getName() + " (Level " + mbs.get(0).getLevel() + ")";
 		List<com.kuuhaku.model.persistent.Member> sub9 = mbs.subList(1, Math.min(mbs.size(), 10));
 		StringBuilder sub9Formatted = new StringBuilder();
 		for (int i = 0; i < sub9.size(); i++) {
@@ -123,7 +123,7 @@ public class URankCommand extends Command {
 
 	private static String checkUser(com.kuuhaku.model.persistent.Member m) {
 		try {
-			return Main.getInfo().getUserByID(m.getMid()).getAsTag();
+			return Main.getInfo().getUserByID(m.getMid()).getName();
 		} catch (Exception e) {
 			return ShiroInfo.getLocale(I18n.PT).getString("str_invalid-user");
 		}
