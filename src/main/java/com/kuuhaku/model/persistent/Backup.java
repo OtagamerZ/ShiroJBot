@@ -50,10 +50,10 @@ public class Backup {
 	private String serverData = "";
 
 	@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-	private Timestamp lastRestored;
+	private Timestamp lastRestored = Timestamp.from(Instant.now());
 
 	@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-	private Timestamp lastBackup;
+	private Timestamp lastBackup = Timestamp.from(Instant.now());
 
 	public int getId() {
 		return id;
