@@ -117,8 +117,6 @@ public class Backup {
 			);
 		});
 
-		g.retrieveBanList().complete().forEach(b -> queue.offer(g.unban(b.getUser())));
-
 		Executors.newSingleThreadExecutor().execute(() -> {
 			while (!queue.isEmpty()) {
 				try {
@@ -129,8 +127,6 @@ public class Backup {
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
 			}
-
-			gdata.getBanList().forEach(b -> g.ban(b.getUser(), 0, b.getReason()).queue());
 
 			progress.sendMessage("Preparação do backup conclúida.\nCriando canais...").queue();
 
@@ -227,7 +223,7 @@ public class Backup {
 			gcats.add(new GuildCategory(cat.getName(), channels, catperms));
 		});
 
-		this.serverData = ShiroInfo.getJSONFactory().create().toJson(new GuildData(gcats, groles, gmembers, g.retrieveBanList().complete()));
+		this.serverData = ShiroInfo.getJSONFactory().create().toJson(new GuildData(gcats, groles, gmembers));
 		BackupDAO.saveBackup(this);
 	}
 
