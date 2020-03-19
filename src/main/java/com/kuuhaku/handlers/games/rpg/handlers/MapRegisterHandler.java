@@ -74,6 +74,7 @@ public class MapRegisterHandler extends ListenerAdapter {
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		if (event.getAuthor().isBot() || event.getAuthor() != user || event.getChannel() != chn) return;
 		try {
+			System.out.println(page);
 			switch (page) {
 				case 0:
 					msg.addReaction(NEXT).queue();
@@ -81,18 +82,15 @@ public class MapRegisterHandler extends ListenerAdapter {
 					break;
 				case 1:
 					try {
-						System.out.println("connecting");
 						HttpURLConnection con = (HttpURLConnection) new URL(event.getMessage().getContentRaw()).openConnection();
 						con.setRequestProperty("User-Agent", "Mozilla/5.0");
 						BufferedImage map = ImageIO.read(con.getInputStream());
 
 						Dimension dim = Helper.getScaledDimension(new Dimension(map.getWidth(), map.getHeight()), new Dimension(1664, 1664));
 
-						System.out.println("scaling");
 						Image img = map.getScaledInstance(dim.width, dim.height, Image.SCALE_DEFAULT);
 						map = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_RGB);
 
-						System.out.println("graphing");
 						Graphics2D g2d = map.createGraphics();
 						g2d.drawImage(img, 0, 0, null);
 						g2d.dispose();
