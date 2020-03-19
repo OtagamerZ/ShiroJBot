@@ -73,6 +73,8 @@ public class MapRegisterHandler extends ListenerAdapter {
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		if (event.getAuthor().isBot() || event.getAuthor() != user || event.getChannel() != chn) return;
+		System.out.println(Arrays.toString(complete));
+		System.out.println(page);
 		try {
 			switch (page) {
 				case 0:
@@ -94,6 +96,7 @@ public class MapRegisterHandler extends ListenerAdapter {
 						g2d.drawImage(img, 0, 0, null);
 						g2d.dispose();
 
+						System.out.println("encoding");
 						image = Utils.encodeToBase64(map);
 
 						event.getChannel().sendMessage("Mapa trocado com sucesso!").queue();
@@ -101,8 +104,6 @@ public class MapRegisterHandler extends ListenerAdapter {
 						render(msg);
 					} catch (IOException e) {
 						event.getChannel().sendMessage(":x: | Imagem inválida, veja se pegou o link corretamente.").queue();
-					} catch (Exception e) {
-						e.printStackTrace();
 					}
 					break;
 				case 2:
@@ -179,7 +180,8 @@ public class MapRegisterHandler extends ListenerAdapter {
 			} else {
 				msg.editMessage(eb.build()).queue();
 			}
-		} catch (InterruptedException ignore) {
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 }
