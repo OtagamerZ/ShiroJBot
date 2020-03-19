@@ -27,9 +27,10 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.guild.react.GenericGuildMessageReactionEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -119,9 +120,8 @@ public class MapRegisterHandler extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGenericGuildMessageReaction(GenericGuildMessageReactionEvent event) {
+	public void onGuildMessageReactionAdd(@Nonnull GuildMessageReactionAddEvent event) {
 		if (event.getUser().isBot() || event.getUser() != user || event.getChannel() != chn) return;
-		System.out.println(event.getReactionEmote().getName());
 		switch (event.getReactionEmote().getName()) {
 			case CANCEL:
 				channel.sendMessage("Registro abortado!").queue();
@@ -145,7 +145,6 @@ public class MapRegisterHandler extends ListenerAdapter {
 				break;
 			case NEXT:
 				page++;
-				System.out.println("page++" + page);
 				render(msg);
 				break;
 		}

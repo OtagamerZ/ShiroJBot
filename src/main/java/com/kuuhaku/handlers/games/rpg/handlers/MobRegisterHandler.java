@@ -30,9 +30,10 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.guild.react.GenericGuildMessageReactionEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -173,7 +174,7 @@ public class MobRegisterHandler extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGenericGuildMessageReaction(GenericGuildMessageReactionEvent event) {
+	public void onGuildMessageReactionAdd(@Nonnull GuildMessageReactionAddEvent event) {
 		if (event.getUser().isBot() || event.getUser() != user || event.getChannel() != chn) return;
 		switch (event.getReactionEmote().getName()) {
 			case CANCEL:
