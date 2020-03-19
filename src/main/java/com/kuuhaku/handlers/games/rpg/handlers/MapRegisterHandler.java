@@ -98,10 +98,11 @@ public class MapRegisterHandler extends ListenerAdapter {
 
 						event.getChannel().sendMessage("Mapa trocado com sucesso!").queue();
 						complete[0] = true;
-						System.out.println(Arrays.toString(complete));
 						render(msg);
 					} catch (IOException e) {
 						event.getChannel().sendMessage(":x: | Imagem inválida, veja se pegou o link corretamente.").queue();
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
 					break;
 				case 2:
