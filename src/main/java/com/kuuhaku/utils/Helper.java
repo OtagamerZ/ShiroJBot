@@ -49,7 +49,6 @@ import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
-import javax.net.ssl.HttpsURLConnection;
 import javax.persistence.NoResultException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -192,7 +191,7 @@ public class Helper {
 	}
 
 	public static InputStream getImage(String url) throws IOException {
-		HttpsURLConnection con = (HttpsURLConnection) new URL(url).openConnection();
+		HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
 		con.addRequestProperty("User-Agent", "Mozilla/5.0");
 		return con.getInputStream();
 	}
