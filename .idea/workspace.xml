@@ -245,14 +245,7 @@
       <workItem from="1584446942009" duration="10557000" />
       <workItem from="1584549328022" duration="9024000" />
       <workItem from="1584565011587" duration="38000" />
-      <workItem from="1584619935739" duration="8235000" />
-    </task>
-    <task id="LOCAL-00872" summary="Melhorias no backup de servidores">
-      <created>1584037842574</created>
-      <option name="number" value="00872" />
-      <option name="presentableId" value="LOCAL-00872" />
-      <option name="project" value="LOCAL" />
-      <updated>1584037842574</updated>
+      <workItem from="1584619935739" duration="9027000" />
     </task>
     <task id="LOCAL-00873" summary="Melhorias no backup de servidores">
       <created>1584038364909</created>
@@ -590,7 +583,14 @@
       <option name="project" value="LOCAL" />
       <updated>1584648464546</updated>
     </task>
-    <option name="localTasksCounter" value="921" />
+    <task id="LOCAL-00921" summary="Melhorias no backup de servidores">
+      <created>1584648892172</created>
+      <option name="number" value="00921" />
+      <option name="presentableId" value="LOCAL-00921" />
+      <option name="project" value="LOCAL" />
+      <updated>1584648892172</updated>
+    </task>
+    <option name="localTasksCounter" value="922" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -791,10 +791,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="182" y="133" key="Vcs.Push.Dialog.v2" timestamp="1584648542148">
+    <state x="182" y="133" key="Vcs.Push.Dialog.v2" timestamp="1584648930604">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1584648542148" />
+    <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1584648930604" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1582604543626" />
     <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1584474809151" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
