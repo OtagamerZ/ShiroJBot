@@ -98,6 +98,7 @@ public class MapRegisterHandler extends ListenerAdapter {
 
 						event.getChannel().sendMessage("Mapa trocado com sucesso!").queue();
 						complete[0] = true;
+						System.out.println(Arrays.toString(complete));
 						render(msg);
 					} catch (IOException e) {
 						event.getChannel().sendMessage(":x: | Imagem inválida, veja se pegou o link corretamente.").queue();
@@ -115,7 +116,7 @@ public class MapRegisterHandler extends ListenerAdapter {
 		} catch (NumberFormatException e) {
 			channel.sendMessage(":x: | As coordenadas devem ser números inteiros.").queue();
 		}
-		event.getMessage().delete().queue();
+		event.getMessage().delete().queue(null, Helper::doNothing);
 	}
 
 	@Override
@@ -158,7 +159,7 @@ public class MapRegisterHandler extends ListenerAdapter {
 			switch (page) {
 				case 0:
 				case 1:
-					eb.setDescription("Escolha uma imagem de mapa (deve possuir altura e largura menor que 1664px)");
+					eb.setDescription("Escolha uma imagem (link) para usar como mapa (deve possuir altura e largura menor que 1664px)");
 					msg.addReaction(CANCEL).queue(s -> {
 						if (complete[0]) msg.addReaction(NEXT).queue();
 					});
