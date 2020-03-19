@@ -96,6 +96,7 @@ public class ExceedRankCommand extends Command {
 				Graphics2D g2d = (Graphics2D) bi.getGraphics();
 				g2d.setFont(FONT.deriveFont(Font.PLAIN, 30));
 				g2d.drawImage(bg, null, 0, 0);
+				g2d.drawImage(fg, null, 0, 0);
 
 				long total = exceeds.stream().mapToLong(Exceed::getExp).sum();
 
@@ -107,7 +108,6 @@ public class ExceedRankCommand extends Command {
 					g2d.setClip(null);
 				}
 
-				g2d.drawImage(fg, null, 0, 0);
 				g2d.dispose();
 
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
