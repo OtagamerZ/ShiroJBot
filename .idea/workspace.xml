@@ -245,14 +245,7 @@
       <workItem from="1584446942009" duration="10557000" />
       <workItem from="1584549328022" duration="9024000" />
       <workItem from="1584565011587" duration="38000" />
-      <workItem from="1584619935739" duration="9639000" />
-    </task>
-    <task id="LOCAL-00875" summary="Melhorias no backup de servidores">
-      <created>1584040409260</created>
-      <option name="number" value="00875" />
-      <option name="presentableId" value="LOCAL-00875" />
-      <option name="project" value="LOCAL" />
-      <updated>1584040409260</updated>
+      <workItem from="1584619935739" duration="9881000" />
     </task>
     <task id="LOCAL-00876" summary="Melhorias no backup de servidores">
       <created>1584046386169</created>
@@ -590,7 +583,14 @@
       <option name="project" value="LOCAL" />
       <updated>1584649861661</updated>
     </task>
-    <option name="localTasksCounter" value="924" />
+    <task id="LOCAL-00924" summary="Melhorias no backup de servidores">
+      <created>1584650278385</created>
+      <option name="number" value="00924" />
+      <option name="presentableId" value="LOCAL-00924" />
+      <option name="project" value="LOCAL" />
+      <updated>1584650278385</updated>
+    </task>
+    <option name="localTasksCounter" value="925" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -727,10 +727,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1583775520216" />
-    <state x="94" y="0" key="CommitChangelistDialog2" timestamp="1584649858225">
+    <state x="94" y="0" key="CommitChangelistDialog2" timestamp="1584650530643">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1584649858225" />
+    <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1584650530643" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1582604510538" />
     <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1584474785599" />
     <state x="160" y="89" width="1344" height="834" key="DiffContextDialog" timestamp="1580842925618">
@@ -791,10 +791,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="182" y="133" key="Vcs.Push.Dialog.v2" timestamp="1584649877939">
+    <state x="182" y="133" key="Vcs.Push.Dialog.v2" timestamp="1584650279880">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1584649877939" />
+    <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1584650279880" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1582604543626" />
     <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1584474809151" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
