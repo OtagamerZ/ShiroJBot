@@ -74,7 +74,6 @@ public class MapRegisterHandler extends ListenerAdapter {
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		if (event.getAuthor().isBot() || event.getAuthor() != user || event.getChannel() != chn) return;
 		try {
-			System.out.println(page);
 			switch (page) {
 				case 0:
 					msg.addReaction(NEXT).queue();
@@ -122,6 +121,7 @@ public class MapRegisterHandler extends ListenerAdapter {
 	@Override
 	public void onGenericGuildMessageReaction(GenericGuildMessageReactionEvent event) {
 		if (event.getUser().isBot() || event.getUser() != user || event.getChannel() != chn) return;
+		System.out.println(event.getReactionEmote().getName());
 		switch (event.getReactionEmote().getName()) {
 			case CANCEL:
 				channel.sendMessage("Registro abortado!").queue();
@@ -145,6 +145,7 @@ public class MapRegisterHandler extends ListenerAdapter {
 				break;
 			case NEXT:
 				page++;
+				System.out.println("page++" + page);
 				render(msg);
 				break;
 		}
