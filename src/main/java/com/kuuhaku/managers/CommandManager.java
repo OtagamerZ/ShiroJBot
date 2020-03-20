@@ -30,7 +30,6 @@ import com.kuuhaku.command.commands.misc.*;
 import com.kuuhaku.command.commands.moderation.*;
 import com.kuuhaku.command.commands.music.ControlCommand;
 import com.kuuhaku.command.commands.music.YoutubeCommand;
-import com.kuuhaku.command.commands.nsfw.ImageCommand;
 import com.kuuhaku.command.commands.partner.*;
 import com.kuuhaku.command.commands.reactions.*;
 import com.kuuhaku.command.commands.reactions.answerable.*;
@@ -307,6 +306,9 @@ public class CommandManager {
 			add(new ColorRoleCommand(
 					"cor", new String[]{"color"}, getLocale(PT).getString(REQ_NAME), getLocale(PT).getString("cmd_color-role"), MISC, false
 			));
+			add(new ImageCommand(
+					"image", new String[]{"imagem", "img"}, getLocale(PT).getString("req_tags"), getLocale(PT).getString("cmd_image"), MISC, false
+			));
 
 			//FUN
 			add(new SadButTrueCommand(
@@ -420,9 +422,7 @@ public class CommandManager {
 			));
 
 			//NSFW
-			add(new ImageCommand(
-					"image", new String[]{"imagem", "img"}, getLocale(PT).getString("req_tags"), getLocale(PT).getString("cmd_image"), NSFW, false
-			));
+
 		}};
 	}
 
