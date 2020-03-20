@@ -80,13 +80,13 @@ public class GuessTheNumberCommand extends Command {
 				String hint;
 
 				if (diff < -100) {
-					hint = "muito menor que";
-				} else if (diff < -50) {
-					hint = "menor que";
-				} else if (diff > 100) {
 					hint = "muito maior que";
-				} else if (diff > 50) {
+				} else if (diff < -50) {
 					hint = "maior que";
+				} else if (diff > 100) {
+					hint = "muito menor que";
+				} else if (diff > 50) {
+					hint = "menor que";
 				} else {
 					hint = "próximo ao";
 				}
