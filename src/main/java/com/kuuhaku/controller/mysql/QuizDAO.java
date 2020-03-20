@@ -17,6 +17,7 @@
 
 package com.kuuhaku.controller.mysql;
 
+import com.kuuhaku.model.persistent.AnsweredQuizzes;
 import com.kuuhaku.model.persistent.Quiz;
 import com.kuuhaku.utils.Helper;
 
@@ -45,5 +46,35 @@ public class QuizDAO {
 		em.close();
 
 		return quizzes.get(Helper.rng(quizzes.size()));
+	}
+
+	public static AnsweredQuizzes getUserState(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		try {
+			return Helper.getOr(em.find(AnsweredQuizzes.class, id), new AnsweredQuizzes(id));
+		} finally {
+			em.close();
+		}
+	}
+
+	public static void saveUserState(AnsweredQuizzes aq) {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		em.merge(aq);
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
+	public static void resetUserStates() {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		em.createQuery("DELETE FROM AnsweredQuizzes").executeUpdate();
+		em.getTransaction().commit();
+
+		em.close();
 	}
 }
