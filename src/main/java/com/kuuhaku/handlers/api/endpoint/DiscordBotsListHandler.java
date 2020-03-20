@@ -43,9 +43,6 @@ public class DiscordBotsListHandler {
 		Account acc = AccountDAO.getAccount(body.getString("user"));
 
 		if (!body.getString("type").equals("test")) acc.addCredit(credit + (25 * acc.getStreak()));
-		acc.voted();
-
-		AccountDAO.saveAccount(acc);
 
 		try {
 			MessageChannel chn = Main.getInfo().getUserByID(body.getString("user")).openPrivateChannel().complete();
@@ -53,7 +50,7 @@ public class DiscordBotsListHandler {
 			EmbedBuilder eb = new EmbedBuilder();
 
 			eb.setThumbnail("https://i.imgur.com/A0jXqpe.png");
-			eb.setTitle("Opa, obrigada por votar em mim!");
+			eb.setTitle("Opa, obrigada por votar em mim! (combo " + acc.getStreak() + "/7 -> bônus " + 25 * acc.getStreak() + "c)");
 			eb.setDescription("Como agradecimento, aqui estão " + credit + (body.getBoolean("isWeekend") ? " (bônus x2)" : "") + " créditos para serem utilizados nos módulos que utilizam o sistema de dinheiro.");
 			eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
 			eb.setColor(Color.cyan);
@@ -61,5 +58,9 @@ public class DiscordBotsListHandler {
 			chn.sendMessage(eb.build()).queue();
 		} catch (RuntimeException ignore) {
 		}
+
+		acc.voted();
+
+		AccountDAO.saveAccount(acc);
 	}
 }
