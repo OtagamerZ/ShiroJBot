@@ -110,7 +110,7 @@ public class QuizCommand extends Command {
 				i.getAndIncrement();
 			});
 
-			Pages.buttonize(Main.getInfo().getAPI(), s, buttons, false, 60, TimeUnit.SECONDS);
+			s.editMessage(eb.build()).queue(ns -> Pages.buttonize(Main.getInfo().getAPI(), ns, buttons, false, 60, TimeUnit.SECONDS));
 		});
 	}
 }
