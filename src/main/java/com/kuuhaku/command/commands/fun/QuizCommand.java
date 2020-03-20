@@ -63,9 +63,9 @@ public class QuizCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		Quiz q = QuizDAO.getRandomQuiz();
 		Account acc = AccountDAO.getAccount(author.getId());
-		HashMap<String, String> opts = IntStream.range(0, q.getOptions().length()).boxed().collect(Collectors.toMap(k -> OPTS[k], v -> String.valueOf(q.getOptions().get(v)), (k, v) -> k, LinkedHashMap::new));
 
 		HashMap<String, Integer> values = new HashMap<>();
+		HashMap<String, String> opts = IntStream.range(0, q.getOptions().length()).boxed().collect(Collectors.toMap(k -> OPTS[k], v -> String.valueOf(q.getOptions().get(v)), (k, v) -> k, LinkedHashMap::new));
 
 		for (int i = 0; i < OPTS.length; i++) {
 			values.put(q.getOptions().getString(i), i + 1);
@@ -76,7 +76,6 @@ public class QuizCommand extends Command {
 		eb.setTitle("Hora do quiz!");
 		eb.setDescription(q.getQuestion());
 		eb.setColor(Color.decode("#2195f2"));
-		opts.forEach((k, v) -> eb.addField("Alternativa " + k, v, false));
 
 		channel.sendMessage(eb.build()).queue(s -> {
 			HashMap<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
@@ -113,10 +112,11 @@ public class QuizCommand extends Command {
 				i.getAndIncrement();
 			});
 
-
 			buttons = finalButtons.entrySet().stream()
 					.sorted(Map.Entry.comparingByKey())
 					.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (k, v) -> k, LinkedHashMap::new));
+
+			buttons.keySet().forEach(k -> eb.addField("Alternativa " + k, opts.get(k), false));
 			Pages.buttonize(Main.getInfo().getAPI(), s, buttons, false, 60, TimeUnit.SECONDS);
 		});
 	}
