@@ -76,13 +76,13 @@ public class QuizCommand extends Command {
 
 		List<String> shuffledOpts = Arrays.asList(OPTS);
 		Collections.shuffle(shuffledOpts);
+		List<MessageEmbed.Field> fields = new ArrayList<>();
 
 		channel.sendMessage(eb.build()).queue(s -> {
 			TreeMap<String, BiConsumer<Member, Message>> buttons = new TreeMap<>();
 
 			AtomicInteger i = new AtomicInteger(0);
 			q.getOptions().forEach(o -> {
-				eb.addField("Alternativa " + shuffledOpts.get(i.get()), String.valueOf(o), false);
 				buttons.put(shuffledOpts.get(i.get()), (mb, ms) -> {
 					eb.clear();
 					eb.setThumbnail("https://lh3.googleusercontent.com/proxy/ZvixvksWEH9fKXQXNtDTQYMRNxvRQDCrCDmMiC2g5tkotFwRPcSp9L8c4doZAcR31p5n5sXYmSSyNnQltoPOuRAUPh6fQtyf_PoeDLIUFJINbX0");
@@ -107,9 +107,12 @@ public class QuizCommand extends Command {
 					s.editMessage(eb.build()).queue();
 				});
 
+				fields.add(new MessageEmbed.Field("Alternativa " + shuffledOpts.get(i.get()), String.valueOf(o), false));
 				i.getAndIncrement();
 			});
 
+			fields.sort(Comparator.comparing(MessageEmbed.Field::getName));
+			fields.forEach(eb::addField);
 			s.editMessage(eb.build()).queue(ns -> Pages.buttonize(Main.getInfo().getAPI(), ns, buttons, false, 60, TimeUnit.SECONDS));
 		});
 	}
