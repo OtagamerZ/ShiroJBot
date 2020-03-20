@@ -89,7 +89,7 @@ public class QuizCommand extends Command {
 
 					if (mb.getId().equals(author.getId())) {
 						if (values.get(String.valueOf(o)) == q.getCorrect()) {
-							int p = Helper.rng(q.getPrize());
+							int p = Helper.clamp(Helper.rng(q.getPrize()), q.getPrize() / 5, q.getPrize());
 							acc.addCredit(p);
 							AccountDAO.saveAccount(acc);
 
