@@ -18,6 +18,7 @@
 package com.kuuhaku.handlers.games.kawaigotchi;
 
 import com.kuuhaku.handlers.games.kawaigotchi.enums.Stance;
+import com.kuuhaku.utils.Helper;
 
 import javax.swing.*;
 import java.util.HashMap;
@@ -31,24 +32,29 @@ public class FoodMenu {
 		//RATION
 		put("racao", new Food(RATION, "Ração", "racao", -5, 3, 1, 15));
 		put("poritos", new Food(RATION, "Poritos", "poritos", 5, 5, 5, 50));
+		put("kawaiskas", new Food(RATION, "Kawaiskas Sachê", "kawaiskas", 10, 10, 10, 100));
 
 		//MEAT
 		put("almondega", new Food(MEAT, "Almondega", "almondega", 7, 10, 2, 35));
 		put("parmigiana", new Food(MEAT, "Parmigiana", "parmigiana", 15, 12, 4, 80));
+		put("presunto", new Food(MEAT, "Presunto", "presunto", 10, 8, 4, 70));
 
 		//PLANT
 		put("aspargo", new Food(PLANT, "Aspargo", "aspargo", -2, 5, 6, 20));
 		put("tomate", new Food(PLANT, "Tomate", "tomate", 2, 8, 12, 45));
+		put("baunilha", new Food(PLANT, "Baunilha", "baunilha", 4, 2, 8, 35));
 
 		//SWEET
 		put("marshmallow", new Food(SWEET, "Marshmallow", "marshmallow", 10, 2, -2, 30));
 		put("caramelo", new Food(SWEET, "Caramelo", "caramelo", 15, 3, -5, 60));
+		put("mel", new Food(SWEET, "Mel", "mel", 12, 2, 0, 80));
 
 		//SPECIAL
 		put("energetico", new Food(SPECIAL, "Energético", "energetico", 0, 0, -25, 125, k -> k.setEnergy(100f), "Recupera toda a energia do Kawaigotchi, mas faz mal à saúde.", "está a todo vapor!", new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("energyUp.png"))).getImage()));
 		put("resserum", new Food(SPECIAL, "Serum da Ressureição", "resserum", 0, 0, 0, 3000, Kawaigotchi::resurrect, "Ressuscita o Kawaigotchi, ao custo de metade da experiência atual.", "foi ressuscitado!", new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("ressurrected.png"))).getImage()));
 		put("sonifero", new Food(SPECIAL, "Sonifero", "sonifero", 0, 0, 0, 50, k -> k.setStance(Stance.SLEEPING), "Coloca o Kawaigotchi para dormir, ele irá acordar assim que sua energia chegar a 100% novamente.", "foi sedado!", new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("sleeping.png"))).getImage()));
 		put("vacina", new Food(SPECIAL, "Vacina", "vacina", -25, 0, 50, 150, Kawaigotchi::doNothing, "Vacina seu Kawaigotchi, recuperando 50% de saúde, porém ele não ficará muito feliz com uma agulhada.", "foi vacinado!", new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("healthUp.png"))).getImage()));
+		put("faixademobius", new Food(SPECIAL, "Faixa de Möbius", "faixademobius", Helper.rng(150) - 75, Helper.rng(150) - 75, Helper.rng(150) - 75, 1337, k -> k.setSkin(1 + Helper.rng(5)), "Troca seu Kawaigotchi com uma versão dele de outra dimensão.", "viajou ao multiverso!", new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("mobius.png"))).getImage()));
 	}};
 
 	public static Food getFood(String name) {
