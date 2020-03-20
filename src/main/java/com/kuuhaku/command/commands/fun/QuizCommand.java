@@ -24,6 +24,7 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.mysql.AccountDAO;
 import com.kuuhaku.controller.mysql.QuizDAO;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.AnsweredQuizzes;
 import com.kuuhaku.model.persistent.Quiz;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -31,6 +32,7 @@ import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
 import java.awt.*;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -59,8 +61,17 @@ public class QuizCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		AnsweredQuizzes aq = QuizDAO.getUserState(author.getId());
+
+		if (aq.getTimes() == 10) {
+			channel.sendMessage(":x: | Você já jogou muitas vezes, aguarde " + (6 - (LocalDateTime.now().getHour() % 6)) + " horas para jogar novamente!").queue();
+			return;
+		}
+
 		Quiz q = QuizDAO.getRandomQuiz();
 		Account acc = AccountDAO.getAccount(author.getId());
+		aq.played();
+		QuizDAO.saveUserState(aq);
 
 		HashMap<String, Integer> values = new HashMap<>();
 
