@@ -33,16 +33,16 @@ public class Account {
 	@Id
 	private String userId;
 
-	@Column(columnDefinition = "INT DEFAULT 0")
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int balance;
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT 'Never'")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT 'Never'")
 	private String lastVoted;
 
 	@Column(columnDefinition = "TIMESTAMP DEFAULT NULL")
 	private LocalDateTime lastVotedNoFormat;
 
-	@Column(columnDefinition = "INT DEFAULT 0")
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int streak;
 
 	public String getUserId() {

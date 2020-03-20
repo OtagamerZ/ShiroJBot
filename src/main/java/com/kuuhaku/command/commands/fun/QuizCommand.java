@@ -89,42 +89,39 @@ public class QuizCommand extends Command {
 		Collections.shuffle(shuffledOpts);
 		List<MessageEmbed.Field> fields = new ArrayList<>();
 
-		channel.sendMessage(eb.build()).queue(s -> {
-			TreeMap<String, BiConsumer<Member, Message>> buttons = new TreeMap<>();
+		TreeMap<String, BiConsumer<Member, Message>> buttons = new TreeMap<>();
 
-			AtomicInteger i = new AtomicInteger(0);
-			q.getOptions().forEach(o -> {
-				buttons.put(shuffledOpts.get(i.get()), (mb, ms) -> {
-					eb.clear();
-					eb.setThumbnail("https://lh3.googleusercontent.com/proxy/ZvixvksWEH9fKXQXNtDTQYMRNxvRQDCrCDmMiC2g5tkotFwRPcSp9L8c4doZAcR31p5n5sXYmSSyNnQltoPOuRAUPh6fQtyf_PoeDLIUFJINbX0");
+		AtomicInteger i = new AtomicInteger(0);
+		q.getOptions().forEach(o -> {
+			buttons.put(shuffledOpts.get(i.get()), (mb, ms) -> {
+				eb.clear();
+				eb.setThumbnail("https://lh3.googleusercontent.com/proxy/ZvixvksWEH9fKXQXNtDTQYMRNxvRQDCrCDmMiC2g5tkotFwRPcSp9L8c4doZAcR31p5n5sXYmSSyNnQltoPOuRAUPh6fQtyf_PoeDLIUFJINbX0");
 
-					if (mb.getId().equals(author.getId())) {
-						if (values.get(String.valueOf(o)) == q.getCorrect()) {
-							int p = Helper.clamp(Helper.rng(q.getPrize()), q.getPrize() / 5, q.getPrize());
-							acc.addCredit(p);
-							AccountDAO.saveAccount(acc);
+				if (mb.getId().equals(author.getId())) {
+					if (values.get(String.valueOf(o)) == q.getCorrect()) {
+						int p = Helper.clamp(Helper.rng(q.getPrize()), q.getPrize() / 5, q.getPrize());
+						acc.addCredit(p);
+						AccountDAO.saveAccount(acc);
 
-							eb.setTitle("Resposta correta!");
-							eb.setDescription("Seu prêmio é de " + p + " créditos!");
-							eb.setColor(Color.green);
-						} else {
-							eb.setTitle("Resposta incorreta.");
-							eb.setDescription("Você errou. Tente novamente!");
-							eb.setColor(Color.red);
-						}
-						s.clearReactions().queue();
+						eb.setTitle("Resposta correta!");
+						eb.setDescription("Seu prêmio é de " + p + " créditos!");
+						eb.setColor(Color.green);
+					} else {
+						eb.setTitle("Resposta incorreta.");
+						eb.setDescription("Você errou. Tente novamente!");
+						eb.setColor(Color.red);
 					}
 
-					s.editMessage(eb.build()).queue();
-				});
-
-				fields.add(new MessageEmbed.Field("Alternativa " + shuffledOpts.get(i.get()), String.valueOf(o), false));
-				i.getAndIncrement();
+					ms.clearReactions().queue();
+				}
 			});
 
-			fields.sort(Comparator.comparing(MessageEmbed.Field::getName));
-			fields.forEach(eb::addField);
-			s.editMessage(eb.build()).queue(ns -> Pages.buttonize(Main.getInfo().getAPI(), ns, buttons, false, 60, TimeUnit.SECONDS));
+			fields.add(new MessageEmbed.Field("Alternativa " + shuffledOpts.get(i.get()), String.valueOf(o), false));
+			i.getAndIncrement();
 		});
+
+		fields.sort(Comparator.comparing(MessageEmbed.Field::getName));
+		fields.forEach(eb::addField);
+		channel.sendMessage(eb.build()).queue(s -> Pages.buttonize(Main.getInfo().getAPI(), s, buttons, false, 60, TimeUnit.SECONDS));
 	}
 }
