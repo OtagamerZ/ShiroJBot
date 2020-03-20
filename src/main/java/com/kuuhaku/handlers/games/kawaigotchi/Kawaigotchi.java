@@ -166,11 +166,11 @@ public class Kawaigotchi {
 				}
 				alerted = true;
 			}
-		} else if (mood > 75) {
+		} else if (mood > 66) {
 			stance = Stance.HAPPY;
 			alerted = false;
 			warned = false;
-		} else if (mood < 25) {
+		} else if (mood < 33) {
 			stance = Stance.ANGRY;
 			alerted = false;
 			warned = false;
