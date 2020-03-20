@@ -132,7 +132,7 @@ public class PPTCommand extends Command {
 							m.editMessage(m.getContentRaw() + "\nVocê perdeu!").queue();
 							break;
 						case 1:
-							int crd = Helper.rng(10);
+							int crd = Helper.rng(25);
 							acc.addCredit(crd);
 							AccountDAO.saveAccount(acc);
 							m.editMessage(m.getContentRaw() + "\nVocê ganhou! Aqui, " + crd + " créditos por ter jogado comigo!").queue();
