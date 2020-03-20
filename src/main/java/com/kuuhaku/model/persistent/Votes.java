@@ -39,7 +39,7 @@ public class Votes {
 	private String votedUserID = "";
 
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
-	private String user = "";
+	private String usr = "";
 
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
 	private String userID = "";
@@ -51,7 +51,7 @@ public class Votes {
 		this.guildID = guild.getId();
 		this.votedUser = target.getAsTag();
 		this.votedUserID = target.getId();
-		this.user = user.getAsTag();
+		this.usr = user.getAsTag();
 		this.userID = user.getId();
 		this.vote = positive ? 1 : -1;
 	}
@@ -69,7 +69,7 @@ public class Votes {
 	}
 
 	public String getUser() {
-		return user;
+		return usr;
 	}
 
 	public String getUserID() {

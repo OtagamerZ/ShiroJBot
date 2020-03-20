@@ -31,8 +31,8 @@ import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
 import java.awt.*;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
@@ -80,10 +80,13 @@ public class QuizCommand extends Command {
 
 		channel.sendMessage(eb.build()).queue(s -> {
 			HashMap<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
+			List<String> btns = Arrays.asList(OPTS);
+			Collections.shuffle(btns);
 
 			AtomicInteger i = new AtomicInteger(0);
+			HashMap<String, BiConsumer<Member, Message>> finalButtons = buttons;
 			q.getOptions().forEach(o -> {
-				buttons.put(OPTS[i.get()], (mb, ms) -> {
+				finalButtons.put(btns.get(i.get()), (mb, ms) -> {
 					eb.clear();
 					eb.setThumbnail("https://lh3.googleusercontent.com/proxy/ZvixvksWEH9fKXQXNtDTQYMRNxvRQDCrCDmMiC2g5tkotFwRPcSp9L8c4doZAcR31p5n5sXYmSSyNnQltoPOuRAUPh6fQtyf_PoeDLIUFJINbX0");
 
@@ -110,6 +113,10 @@ public class QuizCommand extends Command {
 				i.getAndIncrement();
 			});
 
+
+			buttons = buttons.entrySet().stream()
+					.sorted(Map.Entry.comparingByKey())
+					.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (k, v) -> k, LinkedHashMap::new));
 			Pages.buttonize(Main.getInfo().getAPI(), s, buttons, false, 60, TimeUnit.SECONDS);
 		});
 	}
