@@ -29,7 +29,6 @@ import com.kuuhaku.handlers.games.kawaigotchi.Food;
 import com.kuuhaku.handlers.games.kawaigotchi.FoodMenu;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.handlers.games.kawaigotchi.enums.FoodType;
-import com.kuuhaku.handlers.games.kawaigotchi.enums.Stance;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -131,7 +130,7 @@ public class KGotchiCommand extends Command {
 						eb.setColor(Color.yellow);
 						break;
 					case SUCCESS:
-						bi = k.getRace().extract(Stance.HAPPY, k.getSkin());
+						bi = k.getRace().extract(k.getStance(), k.getSkin());
 						g2d = bi.createGraphics();
 						if (f.getType() == FoodType.SPECIAL)
 							g2d.drawImage(f.getSpecialIcon(), bi.getWidth() - 64, 0, 64, 64, null);
@@ -153,7 +152,7 @@ public class KGotchiCommand extends Command {
 								res = "gostou, e é bem saudável!";
 								break;
 							case SPECIAL:
-								res = f.getSpecialDesc();
+								res = f.getSpecialQuote();
 								break;
 						}
 
@@ -196,7 +195,7 @@ public class KGotchiCommand extends Command {
 					eb.setColor(Color.yellow);
 					break;
 				case SUCCESS:
-					bi = k.getRace().extract(Stance.HAPPY, k.getSkin());
+					bi = k.getRace().extract(k.getStance(), k.getSkin());
 					g2d = bi.createGraphics();
 					g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("moodUp.png"))).getImage(), bi.getWidth() - 64, 0, 64, 64, null);
 
@@ -236,7 +235,7 @@ public class KGotchiCommand extends Command {
 					eb.setColor(Color.yellow);
 					break;
 				case SUCCESS:
-					bi = k.getRace().extract(Stance.HAPPY, k.getSkin());
+					bi = k.getRace().extract(k.getStance(), k.getSkin());
 					g2d = bi.createGraphics();
 					g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("xpUp.png"))).getImage(), bi.getWidth() - 64, 0, 64, 64, null);
 
