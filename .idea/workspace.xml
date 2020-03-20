@@ -7,8 +7,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/AnsweredQuizzes.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Slots.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Slots.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/QuizCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/QuizCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/mysql/QuizDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/mysql/QuizDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/UnblockEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/UnblockEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -246,13 +250,6 @@
       <workItem from="1584549328022" duration="9024000" />
       <workItem from="1584565011587" duration="38000" />
       <workItem from="1584619935739" duration="10693000" />
-    </task>
-    <task id="LOCAL-00883" summary="Melhorias no backup de servidores">
-      <created>1584117442171</created>
-      <option name="number" value="00883" />
-      <option name="presentableId" value="LOCAL-00883" />
-      <option name="project" value="LOCAL" />
-      <updated>1584117442171</updated>
     </task>
     <task id="LOCAL-00884" summary="Melhorias no backup de servidores">
       <created>1584118919953</created>
@@ -590,7 +587,14 @@
       <option name="project" value="LOCAL" />
       <updated>1584712922214</updated>
     </task>
-    <option name="localTasksCounter" value="932" />
+    <task id="LOCAL-00932" summary="Melhorias no backup de servidores">
+      <created>1584713262909</created>
+      <option name="number" value="00932" />
+      <option name="presentableId" value="LOCAL-00932" />
+      <option name="project" value="LOCAL" />
+      <updated>1584713262909</updated>
+    </task>
+    <option name="localTasksCounter" value="933" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -681,9 +685,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="585" y="309" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1580395607218" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1584389605493">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="488" y="67" key="#com.intellij.ide.util.MemberChooser" timestamp="1584713605176">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
+    <state x="488" y="67" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1584713605176" />
     <state x="488" y="71" key="#com.intellij.ide.util.MemberChooser/0.0.1366.768@0.0.1366.768" timestamp="1581391062510" />
     <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1584389605493" />
     <state x="509" y="169" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1578969843084">
@@ -727,10 +732,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1583775520216" />
-    <state x="94" y="0" key="CommitChangelistDialog2" timestamp="1584712919583">
+    <state x="94" y="0" key="CommitChangelistDialog2" timestamp="1584713260063">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1584712919583" />
+    <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1584713260063" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1584674398742" />
     <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1584474785599" />
     <state x="160" y="89" width="1344" height="834" key="DiffContextDialog" timestamp="1580842925618">
@@ -791,10 +796,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="182" y="133" key="Vcs.Push.Dialog.v2" timestamp="1584712924918">
+    <state x="182" y="133" key="Vcs.Push.Dialog.v2" timestamp="1584713278902">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1584712924918" />
+    <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1584713278902" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1584674409309" />
     <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1584474809151" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">

@@ -49,6 +49,7 @@
         <class>com.kuuhaku.model.persistent.Version</class>
         <class>com.kuuhaku.model.persistent.MutedMember</class>
         <class>com.kuuhaku.model.persistent.Quiz</class>
+        <class>com.kuuhaku.model.persistent.AnsweredQuizzes</class>
 
         <properties>
             <!-- dados da conexao -->

@@ -19,6 +19,7 @@ package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.mysql.MemberDAO;
+import com.kuuhaku.controller.mysql.QuizDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.RelayBlockList;
 import net.dv8tion.jda.api.Permission;
@@ -63,6 +64,8 @@ public class UnblockEvent implements Job {
 							.forEach(AuditableRestAction::queue));
 				}
 			});
+		} else if (LocalDateTime.now().getHour() % 6 == 0) {
+			QuizDAO.resetUserStates();
 		}
 
 		MemberDAO.getMutedMembers().forEach(m -> {
