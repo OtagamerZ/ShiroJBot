@@ -114,6 +114,8 @@ public class QuizCommand extends Command {
 
 					ms.clearReactions().queue();
 				}
+
+				ms.editMessage(eb.build()).queue();
 			});
 
 			fields.add(new MessageEmbed.Field("Alternativa " + shuffledOpts.get(i.get()), String.valueOf(o), false));
