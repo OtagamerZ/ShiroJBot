@@ -80,11 +80,11 @@ public class GuessTheNumberCommand extends Command {
 				String hint;
 
 				if (diff > 150) {
-					hint = "muito menor que ";
+					hint = "muito longe d";
 				} else if (diff > 75) {
-					hint = "menor que ";
+					hint = "longe d";
 				} else if (diff > 25) {
-					hint = "um pouco menor que ";
+					hint = "um pouco próximo d";
 				} else {
 					hint = "próximo a";
 				}
@@ -97,7 +97,7 @@ public class GuessTheNumberCommand extends Command {
 					AccountDAO.saveAccount(acc);
 				} else {
 					if (chances > 0) {
-						channel.sendMessage("(" + chances + " chances restantes) | Você errou, esse valor é " + hint + "o número escolhido por mim.").queue();
+						channel.sendMessage("(" + chances + " chances restantes) | Você errou, esse valor está " + hint + "o número escolhido por mim.").queue();
 						chances--;
 					} else {
 						channel.sendMessage("Acabaram suas chances, o valor escolhido por mim era **" + theValue + "**.").queue();
