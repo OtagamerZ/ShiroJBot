@@ -114,7 +114,7 @@ public class QuizCommand extends Command {
 			});
 
 
-			buttons = buttons.entrySet().stream()
+			buttons = finalButtons.entrySet().stream()
 					.sorted(Map.Entry.comparingByKey())
 					.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (k, v) -> k, LinkedHashMap::new));
 			Pages.buttonize(Main.getInfo().getAPI(), s, buttons, false, 60, TimeUnit.SECONDS);
