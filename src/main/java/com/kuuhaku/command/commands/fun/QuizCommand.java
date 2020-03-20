@@ -36,8 +36,6 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static com.kuuhaku.model.persistent.Quiz.OPTS;
 
@@ -65,7 +63,6 @@ public class QuizCommand extends Command {
 		Account acc = AccountDAO.getAccount(author.getId());
 
 		HashMap<String, Integer> values = new HashMap<>();
-		HashMap<String, String> opts = IntStream.range(0, q.getOptions().length()).boxed().collect(Collectors.toMap(k -> OPTS[k], v -> String.valueOf(q.getOptions().get(v)), (k, v) -> k, LinkedHashMap::new));
 
 		for (int i = 0; i < OPTS.length; i++) {
 			values.put(q.getOptions().getString(i), i + 1);
@@ -77,15 +74,16 @@ public class QuizCommand extends Command {
 		eb.setDescription(q.getQuestion());
 		eb.setColor(Color.decode("#2195f2"));
 
+		List<String> shuffledOpts = Arrays.asList(OPTS);
+		Collections.shuffle(shuffledOpts);
+
 		channel.sendMessage(eb.build()).queue(s -> {
-			HashMap<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
-			List<String> btns = Arrays.asList(OPTS);
-			Collections.shuffle(btns);
+			TreeMap<String, BiConsumer<Member, Message>> buttons = new TreeMap<>();
 
 			AtomicInteger i = new AtomicInteger(0);
-			HashMap<String, BiConsumer<Member, Message>> finalButtons = buttons;
 			q.getOptions().forEach(o -> {
-				finalButtons.put(btns.get(i.get()), (mb, ms) -> {
+				eb.addField("Alternativa " + shuffledOpts.get(i.get()), String.valueOf(o), false);
+				buttons.put(shuffledOpts.get(i.get()), (mb, ms) -> {
 					eb.clear();
 					eb.setThumbnail("https://lh3.googleusercontent.com/proxy/ZvixvksWEH9fKXQXNtDTQYMRNxvRQDCrCDmMiC2g5tkotFwRPcSp9L8c4doZAcR31p5n5sXYmSSyNnQltoPOuRAUPh6fQtyf_PoeDLIUFJINbX0");
 
@@ -112,11 +110,6 @@ public class QuizCommand extends Command {
 				i.getAndIncrement();
 			});
 
-			buttons = finalButtons.entrySet().stream()
-					.sorted(Map.Entry.comparingByKey())
-					.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (k, v) -> k, LinkedHashMap::new));
-
-			buttons.keySet().forEach(k -> eb.addField("Alternativa " + k, opts.get(k), false));
 			Pages.buttonize(Main.getInfo().getAPI(), s, buttons, false, 60, TimeUnit.SECONDS);
 		});
 	}
