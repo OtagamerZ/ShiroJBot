@@ -76,17 +76,15 @@ public class GuessTheNumberCommand extends Command {
 				}
 
 				int guess = Integer.parseInt(value);
-				int diff = theValue - guess;
+				int diff = Math.abs(theValue - guess);
 				String hint;
 
-				if (diff < -100) {
-					hint = "muito maior que ";
-				} else if (diff < -25) {
-					hint = "maior que ";
-				} else if (diff > 100) {
+				if (diff > 150) {
 					hint = "muito menor que ";
-				} else if (diff > 25) {
+				} else if (diff > 75) {
 					hint = "menor que ";
+				} else if (diff > 25) {
+					hint = "um pouco menor que ";
 				} else {
 					hint = "próximo a";
 				}
