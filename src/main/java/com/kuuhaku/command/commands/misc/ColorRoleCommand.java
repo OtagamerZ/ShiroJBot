@@ -69,7 +69,7 @@ public class ColorRoleCommand extends Command {
 				channel.sendMessage(":x: | Nenhuma cor cadastrada ainda.").queue();
 				return;
 			}
-			BufferedImage bi = new BufferedImage(900, 30 * jo.keySet().size(), BufferedImage.TYPE_INT_ARGB);
+			BufferedImage bi = new BufferedImage(900, 30 + 30 * (jo.keySet().size() / 3), BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g2d = bi.createGraphics();
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
