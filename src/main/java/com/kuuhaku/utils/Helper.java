@@ -123,6 +123,7 @@ public class Helper {
 		final Pattern urlPattern = Pattern.compile(
 				".*?(?:^|[\\W])((ht|f)tp(s?)://|www\\.)(([\\w\\-]+\\.)+?([\\w\\-.~]+/?)*[\\p{Alnum}.,%_=?&#\\-+()\\[\\]*$~@!:/{};']*?)",
 				Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+		text = StringUtils.deleteWhitespace(text);
 		text = (Extensions.checkExtension(text) ? "http://" : "") + text;
 		text = text.replace("1", "i").replace("!", "i");
 		text = text.replace("3", "e");
@@ -130,7 +131,6 @@ public class Helper {
 		text = text.replace("5", "s");
 		text = text.replace("7", "t");
 		text = text.replace("0", "o");
-		text = text.replace(" ", "");
 		text = text.replace("#", ".").replace("%", ".").replace("$", ".").replace("@", ".").replace("*", ".").replace("#", ".").replace("&", ".");
 
 		final Matcher msg = urlPattern.matcher(text.toLowerCase());
