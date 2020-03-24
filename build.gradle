@@ -31,13 +31,6 @@ plugins {
     id "org.springframework.boot" version "2.1.6.RELEASE"
 }
 
-idea {
-    module {
-        downloadJavadoc = true
-        downloadSources = true
-    }
-}
-
 application {
     mainClassName = 'com.kuuhaku/Main'
 }
@@ -112,7 +105,6 @@ dependencies {
 apply plugin: "com.github.johnrengelman.shadow"
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
-apply plugin: 'idea'
 
 shadowJar {
     //noinspection GroovyAssignabilityCheck
