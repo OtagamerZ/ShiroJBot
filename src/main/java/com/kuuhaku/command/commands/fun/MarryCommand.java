@@ -92,7 +92,7 @@ public class MarryCommand extends Command {
 
 			Main.getInfo().getAPI().addEventListener(new WaifuListener() {
 				private final Consumer<Void> success = s -> Main.getInfo().getAPI().removeEventListener(this);
-				private Future<?> timeout = channel.sendMessage("Visto que " + author.getAsMention() + " foi deixado no vácuo, vou me retirar e esperar um outro pedido.").queueAfter(10, TimeUnit.MINUTES, msg -> success.accept(null));
+				private Future<?> timeout = channel.sendMessage("Visto que " + author.getAsMention() + " foi deixado no vácuo, vou me retirar e esperar um outro pedido.").queueAfter(5, TimeUnit.MINUTES, msg -> success.accept(null));
 
 				@Override
 				public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {

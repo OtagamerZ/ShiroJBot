@@ -94,6 +94,7 @@ public class QuizCommand extends Command {
 		AtomicInteger i = new AtomicInteger(0);
 		q.getOptions().forEach(o -> {
 			buttons.put(shuffledOpts.get(i.get()), (mb, ms) -> {
+				if (!mb.getId().equals(author.getId())) return;
 				eb.clear();
 				eb.setThumbnail("https://lh3.googleusercontent.com/proxy/ZvixvksWEH9fKXQXNtDTQYMRNxvRQDCrCDmMiC2g5tkotFwRPcSp9L8c4doZAcR31p5n5sXYmSSyNnQltoPOuRAUPh6fQtyf_PoeDLIUFJINbX0");
 
