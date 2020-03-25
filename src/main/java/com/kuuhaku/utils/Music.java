@@ -27,169 +27,175 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 public class Music {
-	private static void play(VoiceChannel vc, TextChannel channel, Guild guild, GuildMusicManager musicManager, AudioTrack track) {
-		if (!guild.getAudioManager().isConnected()) guild.getAudioManager().openAudioConnection(vc);
+    private static void play(VoiceChannel vc, TextChannel channel, Guild guild, GuildMusicManager musicManager, AudioTrack track) {
+        if (!guild.getAudioManager().isConnected()) guild.getAudioManager().openAudioConnection(vc);
 
-		musicManager.scheduler.channel = channel;
-		musicManager.scheduler.queue(track);
-	}
+        musicManager.scheduler.channel = channel;
+        musicManager.scheduler.queue(track);
+    }
 
-	public static void skipTrack(TextChannel channel) {
-		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild(), channel);
-		musicManager.scheduler.nextTrack();
+    public static void skipTrack(TextChannel channel) {
+        GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild(), channel);
+        musicManager.scheduler.nextTrack();
 
-		if (musicManager.player.getPlayingTrack() == null) {
-			channel.sendMessage("A fila de músicas foi terminada").queue();
-			return;
-		}
-		channel.sendMessage("Música pulada. Tocando agora: " + musicManager.player.getPlayingTrack().getInfo().title).queue();
-	}
+        if (musicManager.player.getPlayingTrack() == null) {
+            channel.sendMessage("A fila de músicas foi terminada").queue();
+            return;
+        }
+        channel.sendMessage("Música pulada. Tocando agora: " + musicManager.player.getPlayingTrack().getInfo().title).queue();
+    }
 
-	public static void pauseTrack(TextChannel channel) {
-		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild(), channel);
+    public static void pauseTrack(TextChannel channel) {
+        GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild(), channel);
 
-		if (musicManager.player.isPaused()) {
-			channel.sendMessage(":x: | A música já está pausada.").queue();
-			return;
-		}
-		musicManager.scheduler.pauseTrack();
+        if (musicManager.player.isPaused()) {
+            channel.sendMessage(":x: | A música já está pausada.").queue();
+            return;
+        }
+        musicManager.scheduler.pauseTrack();
 
-		channel.sendMessage("Música pausada.").queue();
-	}
+        channel.sendMessage("Música pausada.").queue();
+    }
 
-	public static void resumeTrack(TextChannel channel) {
-		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild(), channel);
+    public static void resumeTrack(TextChannel channel) {
+        GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild(), channel);
 
-		if (!musicManager.player.isPaused()) {
-			channel.sendMessage(":x: | A música não está pausada.").queue();
-			return;
-		}
-		musicManager.scheduler.resumeTrack();
+        if (!musicManager.player.isPaused()) {
+            channel.sendMessage(":x: | A música não está pausada.").queue();
+            return;
+        }
+        musicManager.scheduler.resumeTrack();
 
-		channel.sendMessage("Música despausada.").queue();
-	}
+        channel.sendMessage("Música despausada.").queue();
+    }
 
-	public static void clearQueue(TextChannel channel) {
-		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild(), channel);
+    public static void clearQueue(TextChannel channel) {
+        GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild(), channel);
 
-		musicManager.scheduler.clear();
-		musicManager.player.destroy();
-		channel.getGuild().getAudioManager().closeAudioConnection();
+        musicManager.scheduler.clear();
+        musicManager.player.destroy();
+        channel.getGuild().getAudioManager().closeAudioConnection();
 
-		channel.sendMessage("Fila limpa com sucesso.").queue(s -> Helper.spawnAd(channel));
-	}
+        channel.sendMessage("Fila limpa com sucesso.").queue(s -> Helper.spawnAd(channel));
+    }
 
-	public static void trackInfo(TextChannel channel) {
-		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild(), channel);
+    public static void trackInfo(TextChannel channel) {
+        GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild(), channel);
 
-		if (musicManager.player.getPlayingTrack() == null) {
-			channel.sendMessage(":x: | Não há nenhuma musica tocando no momento.").queue();
-			return;
-		}
+        if (musicManager.player.getPlayingTrack() == null) {
+            channel.sendMessage(":x: | Não há nenhuma musica tocando no momento.").queue();
+            return;
+        }
 
-		try {
-			AudioTrack at = musicManager.player.getPlayingTrack();
+        try {
+            AudioTrack at = musicManager.player.getPlayingTrack();
 
-			EmbedBuilder eb = new EmbedBuilder();
+            EmbedBuilder eb = new EmbedBuilder();
 
-			String thumb = "https://img.youtube.com/vi/" + at.getInfo().uri.substring(at.getInfo().uri.indexOf("v=")).replace("v=", "") + "/maxresdefault.jpg";
-			eb.setTitle(musicManager.player.getPlayingTrack().getInfo().title, at.getInfo().uri);
-			eb.setImage(thumb);
-			eb.setColor(Helper.colorThief(thumb));
-			eb.addField("Postado por:", at.getInfo().author, true);
-			eb.addField("Duração:", String.valueOf(Helper.round(((double) at.getDuration() / 1000) / 60, 2)).replace(".", ":"), true);
+            String thumb = "https://img.youtube.com/vi/" + at.getInfo().uri.substring(at.getInfo().uri.indexOf("v=")).replace("v=", "") + "/maxresdefault.jpg";
+            eb.setTitle(musicManager.player.getPlayingTrack().getInfo().title, at.getInfo().uri);
+            eb.setImage(thumb);
+            eb.setColor(Helper.colorThief(thumb));
+            eb.addField("Postado por:", at.getInfo().author, true);
+            eb.addField("Duração:", String.valueOf(Helper.round(((double) at.getDuration() / 1000) / 60, 2)).replace(".", ":"), true);
 
-			channel.sendMessage(eb.build()).queue();
-		} catch (IOException e) {
-			channel.sendMessage(":x: | Erro ao recuperar dados da música.").queue();
-		}
-	}
+            channel.sendMessage(eb.build()).queue();
+        } catch (IOException e) {
+            channel.sendMessage(":x: | Erro ao recuperar dados da música.").queue();
+        }
+    }
 
-	public static void queueInfo(TextChannel channel) {
-		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild(), channel);
+    public static void queueInfo(TextChannel channel) {
+        GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild(), channel);
 
-		if (musicManager.player.getPlayingTrack() == null) {
-			channel.sendMessage(":x: | Não há nenhuma musica na fila no momento.").queue();
-			return;
-		}
+        if (musicManager.player.getPlayingTrack() == null) {
+            channel.sendMessage(":x: | Não há nenhuma musica na fila no momento.").queue();
+            return;
+        }
 
-		EmbedBuilder eb = new EmbedBuilder();
+        EmbedBuilder eb = new EmbedBuilder();
 
-		eb.setTitle("Fila de músicas:");
-		musicManager.scheduler.queue().forEach(t -> eb.addField(t.getPosition() + t.getInfo().title, " - Requisitado por " + ((User) t.getUserData()).getAsMention(), false));
-		eb.setFooter("Tempo estimado da fila: " + String.valueOf(Helper.round((musicManager.scheduler.queue().stream().mapToDouble(AudioTrack::getDuration).sum() / 1000) / 60, 2)).replace(".", ":"), null);
+        LinkedList<AudioTrack> queue = new LinkedList<>(musicManager.scheduler.queue());
+        queue.addFirst(musicManager.player.getPlayingTrack());
 
-		channel.sendMessage(eb.build()).queue();
-	}
+        eb.setTitle("Fila de músicas:");
+        queue.forEach(t -> eb.addField(t.getPosition() + t.getInfo().title, " - Requisitado por " + ((User) t.getUserData()).getAsMention(), false));
+        eb.setFooter("Tempo estimado da fila: " + String.valueOf(Helper.round((musicManager.scheduler.queue().stream().mapToDouble(AudioTrack::getDuration).sum() / 1000) / 60, 2)).replace(".", ":"), null);
 
-	public static void setVolume(TextChannel channel, int volume) {
-		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild(), channel);
+        channel.sendMessage(eb.build()).queue();
+    }
 
-		if (volume <= 100 && volume > 0) musicManager.player.setVolume(volume);
-		else {
-			channel.sendMessage(":x: | O volume deve ser um valor inteiro entre 0 e 100").queue();
-			return;
-		}
+    public static void setVolume(TextChannel channel, int volume) {
+        GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild(), channel);
 
-		channel.sendMessage("Volume trocado para " + volume + "%.").queue();
-	}
+        if (volume <= 100 && volume > 0) musicManager.player.setVolume(volume);
+        else {
+            channel.sendMessage(":x: | O volume deve ser um valor inteiro entre 0 e 100").queue();
+            return;
+        }
 
-	public static void loadAndPlay(final Member m, final TextChannel channel, final String trackUrl) {
-		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild(), channel);
+        channel.sendMessage("Volume trocado para " + volume + "%.").queue();
+    }
 
-		Main.getInfo().getApm().loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
-			@Override
-			public void trackLoaded(AudioTrack track) {
-				channel.sendMessage("Musíca adicionada com sucesso à fila: " + track.getInfo().title).queue();
+    public static void loadAndPlay(final Member m, final TextChannel channel, final String trackUrl) {
+        GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild(), channel);
 
-				if (Objects.requireNonNull(m.getVoiceState()).inVoiceChannel()) {
-					track.setUserData(m.getUser());
-					play(m.getVoiceState().getChannel(), channel, channel.getGuild(), musicManager, track);
-				} else channel.sendMessage(":x: | Você não está conectado em um canal de voz.").queue();
-			}
+        Main.getInfo().getApm().loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
+            @Override
+            public void trackLoaded(AudioTrack track) {
+                if (Objects.requireNonNull(m.getVoiceState()).inVoiceChannel()) {
+                    channel.sendMessage("Musíca adicionada com sucesso à fila: " + track.getInfo().title).queue();
 
-			@Override
-			public void playlistLoaded(AudioPlaylist playlist) {
-				AudioTrack firstTrack = playlist.getSelectedTrack();
+                    track.setUserData(m.getUser());
+                    play(m.getVoiceState().getChannel(), channel, channel.getGuild(), musicManager, track);
+                } else channel.sendMessage(":x: | Você não está conectado em um canal de voz.").queue();
+            }
 
-				if (firstTrack == null) {
-					firstTrack = playlist.getTracks().get(0);
-				}
+            @Override
+            public void playlistLoaded(AudioPlaylist playlist) {
+                if (Objects.requireNonNull(m.getVoiceState()).inVoiceChannel()) {
+                    List<AudioTrack> tracks = playlist.getTracks();
+                    Collections.shuffle(tracks);
+                    tracks = tracks.subList(0, Math.min(tracks.size(), 10));
 
-				channel.sendMessage("Playlist adicionada com sucesso à fila: " + playlist.getName()).queue();
+                    tracks.forEach(p -> {
+                        p.setUserData(m.getUser());
+                        play(m.getVoiceState().getChannel(), channel, channel.getGuild(), musicManager, p);
+                    });
 
-				if (Objects.requireNonNull(m.getVoiceState()).inVoiceChannel()) {
-					firstTrack.setUserData(m.getUser());
-					play(m.getVoiceState().getChannel(), channel, channel.getGuild(), musicManager, firstTrack);
-				} else channel.sendMessage(":x: | Você não está conectado em um canal de voz.").queue();
-			}
+                    channel.sendMessage("Playlist adicionada com sucesso à fila (max. 10 músicas por playlist, escolhidas aleatoriamente): " + playlist.getName()).queue();
+                } else channel.sendMessage(":x: | Você não está conectado em um canal de voz.").queue();
+            }
 
-			@Override
-			public void noMatches() {
-				channel.sendMessage(":x: | Nenhuma música encontrada com o link " + trackUrl).queue();
-			}
+            @Override
+            public void noMatches() {
+                channel.sendMessage(":x: | Nenhuma música encontrada com o link " + trackUrl).queue();
+            }
 
-			@Override
-			public void loadFailed(FriendlyException exception) {
-				channel.sendMessage(":x: | Erro ao tocar a música: " + exception.getMessage()).queue();
-			}
-		});
-	}
+            @Override
+            public void loadFailed(FriendlyException exception) {
+                channel.sendMessage(":x: | Erro ao tocar a música: " + exception.getMessage()).queue();
+            }
+        });
+    }
 
-	public static synchronized GuildMusicManager getGuildAudioPlayer(Guild guild, TextChannel channel) {
-		long guildId = guild.getIdLong();
-		GuildMusicManager musicManager = Main.getInfo().getGmms().get(guildId);
+    public static synchronized GuildMusicManager getGuildAudioPlayer(Guild guild, TextChannel channel) {
+        long guildId = guild.getIdLong();
+        GuildMusicManager musicManager = Main.getInfo().getGmms().get(guildId);
 
-		if (musicManager == null) {
-			musicManager = new GuildMusicManager(Main.getInfo().getApm(), channel);
-			Main.getInfo().addGmm(guildId, musicManager);
-		}
+        if (musicManager == null) {
+            musicManager = new GuildMusicManager(Main.getInfo().getApm(), channel);
+            Main.getInfo().addGmm(guildId, musicManager);
+        }
 
-		guild.getAudioManager().setSendingHandler(musicManager.getSendHandler());
+        guild.getAudioManager().setSendingHandler(musicManager.getSendHandler());
 
-		return musicManager;
-	}
+        return musicManager;
+    }
 }
