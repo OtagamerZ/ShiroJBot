@@ -69,7 +69,7 @@ public class YoutubeCommand extends Command {
 
                 m.editMessage(":mag: Resultados da busca").queue(s -> {
                     try {
-                        if (videos.stream().findFirst().isPresent()) {
+                        if (videos.size() > 0) {
                             List<Page> pages = new ArrayList<>();
 
                             for (YoutubeVideo v : videos) {
