@@ -130,7 +130,7 @@ public class Music {
 
         for (int i = 0; i < queue.size(); i++) {
             if (i > 0)
-                f.add(new MessageEmbed.Field(i + " - " + queue.get(i).getInfo().title, "Requisitado por " + ((User) queue.get(i).getUserData()).getAsMention(), false));
+                f.add(new MessageEmbed.Field((i + 1) + " - " + queue.get(i).getInfo().title, "Requisitado por " + ((User) queue.get(i).getUserData()).getAsMention(), false));
             else
                 f.add(new MessageEmbed.Field("Tocando agora - " + queue.get(i).getInfo().title, "Requisitado por " + ((User) queue.get(i).getUserData()).getAsMention(), false));
         }
