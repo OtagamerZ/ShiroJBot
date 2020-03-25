@@ -19,7 +19,9 @@ package com.kuuhaku.command.commands.music;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.Music;
+import com.kuuhaku.utils.PrivilegeLevel;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -60,6 +62,15 @@ public class ControlCommand extends Command {
 			channel.sendMessage(eb.build()).queue();
 			return;
 		}
+
+		if (member.getVoiceState().getChannel() == null || !member.getVoiceState().getChannel().getMembers().contains(guild.getSelfMember())) {
+			channel.sendMessage(":x: | Este comando só pode ser usado se estiver em um canal de voz com a Shiro.").queue();
+			return;
+		} else if (!Helper.hasPermission(member, PrivilegeLevel.MOD) && !((User) Music.getGuildAudioPlayer(guild, (TextChannel) channel).player.getPlayingTrack().getUserData()).getId().equals(author.getId())) {
+			channel.sendMessage(":x: | Apenas quem adicionou esta música pode controlá-la (exceto moderadores).").queue();
+			return;
+		}
+
 		switch (args[0]) {
 			case "resume":
 				Music.resumeTrack((TextChannel) channel);
@@ -74,8 +85,9 @@ public class ControlCommand extends Command {
 				Music.skipTrack((TextChannel) channel);
 				break;
 			case "volume":
-				if (args.length > 1 && StringUtils.isNumeric(args[1])) Music.setVolume((TextChannel) channel, Integer.parseInt(args[1]));
-				else channel.sendMessage(":x: | O volume deve ser um valor inteiro entre 0 e 100").queue();
+				if (args.length > 1 && StringUtils.isNumeric(args[1]))
+					Music.setVolume((TextChannel) channel, Integer.parseInt(args[1]));
+				else channel.sendMessage(":x: | O volume deve ser um valor inteiro entre 0 e 100.").queue();
 				break;
 			case "info":
 				Music.trackInfo((TextChannel) channel);
