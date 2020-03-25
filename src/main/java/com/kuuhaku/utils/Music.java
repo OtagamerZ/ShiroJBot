@@ -17,6 +17,9 @@
 
 package com.kuuhaku.utils;
 
+import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.Page;
+import com.github.ygimenez.type.PageType;
 import com.kuuhaku.Main;
 import com.kuuhaku.handlers.music.GuildMusicManager;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
@@ -27,10 +30,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class Music {
     private static void play(VoiceChannel vc, TextChannel channel, Guild guild, GuildMusicManager musicManager, AudioTrack track) {
@@ -119,21 +120,34 @@ public class Music {
             return;
         }
 
+        List<Page> pages = new ArrayList<>();
+        List<MessageEmbed.Field> f = new ArrayList<>();
+
         EmbedBuilder eb = new EmbedBuilder();
 
         LinkedList<AudioTrack> queue = new LinkedList<>(musicManager.scheduler.queue());
         queue.addFirst(musicManager.player.getPlayingTrack());
 
-        eb.setTitle("Fila de músicas:");
         for (int i = 0; i < queue.size() && i < 10; i++) {
             if (i > 0)
-                eb.addField("Tocando agora - " + queue.get(i).getInfo().title, "Requisitado por " + ((User) queue.get(i).getUserData()).getAsMention(), false);
+                f.add(new MessageEmbed.Field(i + " - " + queue.get(i).getInfo().title, "Requisitado por " + ((User) queue.get(i).getUserData()).getAsMention(), false));
             else
-                eb.addField(i + " - " + queue.get(i).getInfo().title, "Requisitado por " + ((User) queue.get(i).getUserData()).getAsMention(), false);
+                f.add(new MessageEmbed.Field("Tocando agora - " + queue.get(i).getInfo().title, "Requisitado por " + ((User) queue.get(i).getUserData()).getAsMention(), false));
         }
-        eb.setFooter("Tempo estimado da fila: " + String.valueOf(Helper.round((musicManager.scheduler.queue().stream().mapToDouble(AudioTrack::getDuration).sum() / 1000) / 60, 2)).replace(".", ":"), null);
 
-        channel.sendMessage(eb.build()).queue();
+        for (int i = 0; i < Math.ceil(f.size() / 10f); i++) {
+            eb.clear();
+            List<MessageEmbed.Field> subF = f.subList(-10 + (10 * (i + 1)), Math.min(10 * (i + 1), f.size()));
+            subF.forEach(eb::addField);
+
+            eb.setTitle("Fila de músicas:");
+            eb.setFooter("Tempo estimado da fila: " + String.valueOf(Helper.round((musicManager.scheduler.queue().stream().mapToDouble(AudioTrack::getDuration).sum() / 1000) / 60, 2)).replace(".", ":"), null);
+            eb.setColor(Helper.getRandomColor());
+
+            pages.add(new Page(PageType.EMBED, eb.build()));
+        }
+
+        channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
     }
 
     public static void setVolume(TextChannel channel, int volume) {
