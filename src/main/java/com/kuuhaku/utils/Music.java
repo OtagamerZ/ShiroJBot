@@ -125,7 +125,12 @@ public class Music {
         queue.addFirst(musicManager.player.getPlayingTrack());
 
         eb.setTitle("Fila de músicas:");
-        queue.forEach(t -> eb.addField(t.getPosition() + t.getInfo().title, " - Requisitado por " + ((User) t.getUserData()).getAsMention(), false));
+        for (int i = 0; i < queue.size() && i < 10; i++) {
+            if (i > 0)
+                eb.addField("Tocando agora - " + queue.get(i).getInfo().title, "Requisitado por " + ((User) queue.get(i).getUserData()).getAsMention(), false);
+            else
+                eb.addField(i + " - " + queue.get(i).getInfo().title, "Requisitado por " + ((User) queue.get(i).getUserData()).getAsMention(), false);
+        }
         eb.setFooter("Tempo estimado da fila: " + String.valueOf(Helper.round((musicManager.scheduler.queue().stream().mapToDouble(AudioTrack::getDuration).sum() / 1000) / 60, 2)).replace(".", ":"), null);
 
         channel.sendMessage(eb.build()).queue();
