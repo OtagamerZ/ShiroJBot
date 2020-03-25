@@ -24,6 +24,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.Youtube;
+import com.kuuhaku.controller.mysql.TagDAO;
 import com.kuuhaku.model.common.YoutubeVideo;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.Music;
@@ -87,7 +88,13 @@ public class YoutubeCommand extends Command {
                                 Pages.paginate(Main.getInfo().getAPI(), msg, pages, 60, TimeUnit.SECONDS);
                                 if (Objects.requireNonNull(member.getVoiceState()).inVoiceChannel()) {
                                     Pages.buttonize(Main.getInfo().getAPI(), msg, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
-                                        Music.loadAndPlay(member, (TextChannel) channel, Objects.requireNonNull(channel.retrieveMessageById(msg.getId()).complete().getEmbeds().get(0).getFooter()).getIconUrl());
+                                        String url = Objects.requireNonNull(channel.retrieveMessageById(msg.getId()).complete().getEmbeds().get(0).getFooter()).getIconUrl();
+                                        if (url.startsWith("https://www.youtube.com/playlist?list=") && !TagDAO.getTagById(author.getId()).isVerified()) {
+                                            channel.sendMessage(":x: | Você precisa ser um usuário verificado para poder adicionar playlists.").queue();
+                                            msg.delete().queue();
+                                            return;
+                                        }
+                                        Music.loadAndPlay(member, (TextChannel) channel, url);
                                         msg.delete().queue();
                                     }), true, 60, TimeUnit.SECONDS);
                                 }
