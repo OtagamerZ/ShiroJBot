@@ -128,7 +128,7 @@ public class Music {
         LinkedList<AudioTrack> queue = new LinkedList<>(musicManager.scheduler.queue());
         queue.addFirst(musicManager.player.getPlayingTrack());
 
-        for (int i = 0; i < queue.size() && i < 10; i++) {
+        for (int i = 0; i < queue.size(); i++) {
             if (i > 0)
                 f.add(new MessageEmbed.Field(i + " - " + queue.get(i).getInfo().title, "Requisitado por " + ((User) queue.get(i).getUserData()).getAsMention(), false));
             else
