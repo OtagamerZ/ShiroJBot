@@ -8,7 +8,9 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/music/YoutubeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/music/YoutubeCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Youtube.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Youtube.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -248,14 +250,8 @@
       <workItem from="1584619935739" duration="10693000" />
       <workItem from="1584966310209" duration="303000" />
       <workItem from="1585071419010" duration="3528000" />
-      <workItem from="1585075624627" duration="119000" />
-    </task>
-    <task id="LOCAL-00897" summary="Melhorias no backup de servidores">
-      <created>1584379302386</created>
-      <option name="number" value="00897" />
-      <option name="presentableId" value="LOCAL-00897" />
-      <option name="project" value="LOCAL" />
-      <updated>1584379302386</updated>
+      <workItem from="1585075624627" duration="137000" />
+      <workItem from="1585104008615" duration="1118000" />
     </task>
     <task id="LOCAL-00898" summary="Melhorias no backup de servidores">
       <created>1584380362742</created>
@@ -593,7 +589,14 @@
       <option name="project" value="LOCAL" />
       <updated>1585075005000</updated>
     </task>
-    <option name="localTasksCounter" value="946" />
+    <task id="LOCAL-00946" summary="Melhorias no backup de servidores">
+      <created>1585075861039</created>
+      <option name="number" value="00946" />
+      <option name="presentableId" value="LOCAL-00946" />
+      <option name="project" value="LOCAL" />
+      <updated>1585075861043</updated>
+    </task>
+    <option name="localTasksCounter" value="947" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -797,11 +800,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="351" y="182" key="Vcs.Push.Dialog.v2" timestamp="1585075007592">
+    <state x="351" y="182" key="Vcs.Push.Dialog.v2" timestamp="1585075863827">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1584736929228" />
-    <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1585075007592" />
+    <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1585075863827" />
     <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1584474809151" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -855,10 +858,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="581" y="116" key="refactoring.ChangeSignatureDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1583774041973" />
-    <state x="496" y="233" width="672" height="677" key="run.anything.popup" timestamp="1582825658960">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="403" y="177" key="run.anything.popup" timestamp="1585105034445">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state x="403" y="177" key="run.anything.popup/0.0.1366.768@0.0.1366.768" timestamp="1580268172098" />
+    <state x="403" y="177" key="run.anything.popup/0.0.1366.768@0.0.1366.768" timestamp="1585105034445" />
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1582825658960" />
     <state x="409" y="156" width="672" height="489" key="search.everywhere.popup" timestamp="1584556389053">
       <screen x="0" y="0" width="1366" height="728" />
