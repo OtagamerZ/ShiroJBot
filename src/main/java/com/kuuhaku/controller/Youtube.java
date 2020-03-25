@@ -47,7 +47,7 @@ public class Youtube {
 			String desc = jsnippet.getString("description");
 			String thumb = jsnippet.getJSONObject("thumbnails").getJSONObject("medium").getString("url");
 			String channel = jsnippet.getString("channelTitle");
-			videos.add(new YoutubeVideo(id, title, desc, thumb, channel));
+			videos.add(new YoutubeVideo(id, title, desc, thumb, channel, jid.has("playlistId")));
 		}
 		return videos;
 	}
@@ -77,6 +77,6 @@ public class Youtube {
 		String thumb = jsnippet.getJSONObject("thumbnails").getJSONObject("medium").getString("url");
 		String channel = jsnippet.getString("channelTitle");
 
-		return new YoutubeVideo(id, title, desc, thumb, channel);
+		return new YoutubeVideo(id, title, desc, thumb, channel, jid.has("playlistId"));
 	}
 }
