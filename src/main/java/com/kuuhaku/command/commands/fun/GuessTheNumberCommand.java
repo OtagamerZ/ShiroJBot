@@ -58,7 +58,7 @@ public class GuessTheNumberCommand extends Command {
         channel.sendMessage("Já escolhi um número de 0 a 100, você tem 5 chances para tentar adivinhar!").queue();
 
         Main.getInfo().getAPI().addEventListener(new ListenerAdapter() {
-            int chances = 5;
+            int chances = 4;
 
             @Override
             public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
