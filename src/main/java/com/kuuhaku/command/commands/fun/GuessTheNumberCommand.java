@@ -51,51 +51,51 @@ public class GuessTheNumberCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		Account acc = AccountDAO.getAccount(author.getId());
+        Account acc = AccountDAO.getAccount(author.getId());
 
-		int theValue = Helper.rng(1000);
+        int theValue = Helper.rng(100);
 
-		channel.sendMessage("Já escolhi um número de 0 a 1000, você tem 5 chances para tentar adivinhar!").queue();
+        channel.sendMessage("Já escolhi um número de 0 a 100, você tem 5 chances para tentar adivinhar!").queue();
 
-		Main.getInfo().getAPI().addEventListener(new ListenerAdapter() {
-			int chances = 5;
+        Main.getInfo().getAPI().addEventListener(new ListenerAdapter() {
+            int chances = 5;
 
-			@Override
-			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
-				if (!event.getAuthor().getId().equals(author.getId()) || !event.getChannel().getId().equals(channel.getId()))
-					return;
+            @Override
+            public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
+                if (!event.getAuthor().getId().equals(author.getId()) || !event.getChannel().getId().equals(channel.getId()))
+                    return;
 
-				String value = event.getMessage().getContentRaw();
-				if (value.equalsIgnoreCase("desistir")) {
-					channel.sendMessage("Você desistiu, o valor escolhido por mim era **" + theValue + "**.").queue();
-					Main.getInfo().getAPI().removeEventListener(this);
-					return;
-				} else if (!StringUtils.isNumeric(value) || Integer.parseInt(value) < 0 || Integer.parseInt(value) > 1000) {
-					channel.sendMessage(":x: | Você precisa escolher um número inteiro entre 0 e 1000, ou digitar `desistir` para sair.").queue();
-					return;
-				}
+                String value = event.getMessage().getContentRaw();
+                if (value.equalsIgnoreCase("desistir")) {
+                    channel.sendMessage("Você desistiu, o valor escolhido por mim era **" + theValue + "**.").queue();
+                    Main.getInfo().getAPI().removeEventListener(this);
+                    return;
+                } else if (!StringUtils.isNumeric(value) || Integer.parseInt(value) < 0 || Integer.parseInt(value) > 100) {
+                    channel.sendMessage(":x: | Você precisa escolher um número inteiro entre 0 e 100, ou digitar `desistir` para sair.").queue();
+                    return;
+                }
 
-				int guess = Integer.parseInt(value);
-				int diff = Math.abs(theValue - guess);
-				String hint;
+                int guess = Integer.parseInt(value);
+                int diff = Math.abs(theValue - guess);
+                String hint;
 
-				if (diff > 150) {
-					hint = "muito longe d";
-				} else if (diff > 75) {
-					hint = "longe d";
-				} else if (diff > 25) {
-					hint = "um pouco próximo d";
-				} else {
-					hint = "próximo a";
-				}
+                if (diff > 50) {
+                    hint = "muito longe d";
+                } else if (diff > 25) {
+                    hint = "longe d";
+                } else if (diff > 10) {
+                    hint = "um pouco próximo d";
+                } else {
+                    hint = "próximo a";
+                }
 
 
 				if (guess == theValue) {
-					int prize = Helper.clamp(Helper.rng(1000), 150, 1000);
-					channel.sendMessage("Você acertou! Como prêmio você receberá **" + prize + "**.").queue();
-					acc.addCredit(prize);
-					AccountDAO.saveAccount(acc);
-				} else {
+                    int prize = Helper.clamp(Helper.rng(100), 25, 150);
+                    channel.sendMessage("Você acertou! Como prêmio você receberá **" + prize + "**.").queue();
+                    acc.addCredit(prize);
+                    AccountDAO.saveAccount(acc);
+                } else {
 					if (chances > 0) {
 						channel.sendMessage("(" + chances + " chances restantes) | Você errou, esse valor está " + hint + "o número escolhido por mim.").queue();
 						chances--;
