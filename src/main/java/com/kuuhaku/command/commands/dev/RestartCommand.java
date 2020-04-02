@@ -24,6 +24,9 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
+import java.io.File;
+import java.lang.management.ManagementFactory;
+
 public class RestartCommand extends Command {
 
 	public RestartCommand(String name, String description, Category category, boolean requiresMM) {
@@ -51,9 +54,18 @@ public class RestartCommand extends Command {
 		}
 
 		try {
-			Main.getJibril().shutdown();
-			Main.getInfo().getAPI().shutdown();
-			Main.main(Main.getArgs());
+			StringBuilder cmd = new StringBuilder();
+			cmd.append(System.getProperty("java.home")).append(File.separator).append("bin").append(File.separator).append("java ");
+			for (String jvmArg : ManagementFactory.getRuntimeMXBean().getInputArguments()) {
+				cmd.append(jvmArg).append(" ");
+			}
+			cmd.append("-cp ").append(ManagementFactory.getRuntimeMXBean().getClassPath()).append(" ");
+			cmd.append(Main.class.getName()).append(" ");
+			for (String arg : args) {
+				cmd.append(arg).append(" ");
+			}
+			Runtime.getRuntime().exec(cmd.toString());
+			System.exit(0);
 		} catch (Exception e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
