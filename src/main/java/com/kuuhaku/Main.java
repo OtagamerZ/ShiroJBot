@@ -65,7 +65,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	private static JDA api;
 	private static JDA jbr;
 	private static JDA tet;
-	private static String[] arguments;
 	public static String[] kill = new String[2];
 
 	public static void main(String[] args) throws Exception {
@@ -141,7 +140,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		}
 
 		finishStartUp();
-		arguments = args;
 	}
 
 	private static void finishStartUp() {
@@ -183,10 +181,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 	public static ShiroInfo getInfo() {
 		return info;
-	}
-
-	public static String[] getArgs() {
-		return arguments;
 	}
 
 	public static CommandManager getCommandManager() {
