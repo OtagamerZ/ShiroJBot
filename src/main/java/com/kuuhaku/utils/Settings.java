@@ -478,7 +478,7 @@ public class Settings {
 		List<Integer> lvls = antigoCargoLvl.keySet().stream().map(Integer::parseInt).sorted().collect(Collectors.toList());
 		StringBuilder cargosLvl = new StringBuilder();
 		for (int i : lvls) {
-			cargosLvl.append(i).append(" - ").append(Objects.requireNonNull(message.getGuild().getRoleById((String) antigoCargoLvl.get(String.valueOf(i)))).getAsMention()).append("\n");
+			cargosLvl.append(i).append(" - ").append(Objects.requireNonNull(message.getGuild().getRoleById((String) antigoCargoLvl.get(String.valueOf(i)))).getName()).append("\n");
 		}
 
 		if (args.length < 3) {
