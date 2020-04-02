@@ -113,10 +113,10 @@ public class QuizCommand extends Command {
 						eb.setColor(Color.red);
 					}
 
-					ms.clearReactions().queue();
+					ms.delete().queue();
 				}
 
-				ms.editMessage(eb.build()).queue();
+				channel.sendMessage(eb.build()).queue();
 			});
 
 			fields.add(new MessageEmbed.Field("Alternativa " + shuffledOpts.get(i.get()), String.valueOf(o), false));
