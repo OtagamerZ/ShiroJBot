@@ -738,7 +738,7 @@ public class Helper {
             return true;
         }
 
-        LogDAO.saveLog(new Log().setGuild(guild.getName()).setUser(author.getAsTag()).setCommand(rawMessage));
+        LogDAO.saveLog(new Log().setGuildId(guild.getId()).setGuild(guild.getName()).setUser(author.getAsTag()).setCommand(rawMessage));
         logToChannel(author, true, command, "Um comando foi usado no canal " + ((TextChannel) channel).getAsMention(), guild, rawMessage);
         return false;
     }
