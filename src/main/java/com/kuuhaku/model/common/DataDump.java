@@ -17,7 +17,7 @@
 
 package com.kuuhaku.model.common;
 
-import com.kuuhaku.controller.mysql.MemberDAO;
+import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.model.persistent.AppUser;
 import com.kuuhaku.model.persistent.CustomAnswers;

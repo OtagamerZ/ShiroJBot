@@ -20,7 +20,7 @@ package com.kuuhaku.command.commands.fun;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.mysql.CanvasDAO;
+import com.kuuhaku.controller.postgresql.CanvasDAO;
 import com.kuuhaku.model.persistent.PixelCanvas;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;

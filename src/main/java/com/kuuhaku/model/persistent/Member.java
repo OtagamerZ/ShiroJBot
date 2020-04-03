@@ -18,7 +18,7 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.mysql.AccountDAO;
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;

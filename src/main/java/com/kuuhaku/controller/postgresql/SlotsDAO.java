@@ -15,31 +15,34 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.controller.mysql;
+package com.kuuhaku.controller.postgresql;
 
-import com.kuuhaku.model.persistent.Log;
+import com.kuuhaku.model.persistent.Slots;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import java.util.List;
+import javax.persistence.NoResultException;
 
-public class LogDAO {
-	public static void saveLog(Log log) {
+public class SlotsDAO {
+	public static Slots getSlots() {
+		EntityManager em = Manager.getEntityManager();
+
+		try {
+			return em.find(Slots.class, 1);
+		} catch (NoResultException e) {
+			saveSlots(new Slots());
+			return getSlots();
+		} finally {
+			em.close();
+		}
+	}
+
+	public static void saveSlots(Slots s) {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		em.merge(log);
+		em.merge(s);
 		em.getTransaction().commit();
 
 		em.close();
-	}
-
-	@SuppressWarnings("unchecked")
-	public static List<Object[]> getUsage() {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createNativeQuery("SELECT * FROM shiro.\"GetUsage\"");
-
-		return q.getResultList();
 	}
 }

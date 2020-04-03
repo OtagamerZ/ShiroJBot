@@ -15,37 +15,39 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.controller.mysql;
+package com.kuuhaku.controller.postgresql;
 
-import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
+import com.kuuhaku.model.persistent.PermaBlock;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import java.util.ArrayList;
+import java.util.List;
 
-public class KGotchiDAO {
-	public static Kawaigotchi getKawaigotchi(String id) {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createQuery("SELECT k FROM Kawaigotchi k WHERE userId LIKE :id", Kawaigotchi.class);
-		q.setParameter("id", id);
-
-		try {
-			return (Kawaigotchi) q.getSingleResult();
-		} catch (NoResultException e) {
-			return null;
-		} finally {
-			em.close();
-		}
-	}
-
-	public static void saveKawaigotchi(Kawaigotchi k) {
+public class RelayDAO {
+	public static void permaBlock(PermaBlock p) {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		em.merge(k);
+		em.merge(p);
 		em.getTransaction().commit();
 
 		em.close();
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<String> blockedList() {
+		EntityManager em = Manager.getEntityManager();
+
+		try {
+			Query q = em.createQuery("SELECT p.id FROM PermaBlock p", String.class);
+			List<String> blocks = q.getResultList();
+			em.close();
+			return blocks;
+		} catch (NoResultException e) {
+			em.close();
+			return new ArrayList<>();
+		}
 	}
 }

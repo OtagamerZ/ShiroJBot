@@ -19,7 +19,7 @@ package com.kuuhaku.command.commands.fun;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.mysql.WaifuDAO;
+import com.kuuhaku.controller.postgresql.WaifuDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;

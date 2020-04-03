@@ -15,34 +15,34 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.controller.mysql;
+package com.kuuhaku.controller.postgresql;
 
-import com.kuuhaku.model.persistent.Slots;
+import com.kuuhaku.model.persistent.Token;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
 
-public class SlotsDAO {
-	public static Slots getSlots() {
+public class TokenDAO {
+	public static boolean validateToken(String token) {
 		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT t FROM Token t WHERE token LIKE :token", Token.class);
+		q.setParameter("token", token);
+		q.setMaxResults(1);
 
 		try {
-			return em.find(Slots.class, 1);
-		} catch (NoResultException e) {
-			saveSlots(new Slots());
-			return getSlots();
-		} finally {
+			Token t = (Token) q.getSingleResult();
+
+			em.getTransaction().begin();
+			em.merge(t.addCall());
+			em.getTransaction().commit();
+
 			em.close();
+
+			return true;
+		} catch (NoResultException e) {
+			return false;
 		}
-	}
-
-	public static void saveSlots(Slots s) {
-		EntityManager em = Manager.getEntityManager();
-
-		em.getTransaction().begin();
-		em.merge(s);
-		em.getTransaction().commit();
-
-		em.close();
 	}
 }

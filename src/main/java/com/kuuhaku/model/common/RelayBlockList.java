@@ -18,7 +18,7 @@
 package com.kuuhaku.model.common;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.mysql.RelayDAO;
+import com.kuuhaku.controller.postgresql.RelayDAO;
 import com.kuuhaku.model.persistent.PermaBlock;
 import net.dv8tion.jda.api.EmbedBuilder;
 

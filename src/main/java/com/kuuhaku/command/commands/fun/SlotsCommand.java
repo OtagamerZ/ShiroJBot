@@ -19,8 +19,8 @@ package com.kuuhaku.command.commands.fun;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.mysql.AccountDAO;
-import com.kuuhaku.controller.mysql.SlotsDAO;
+import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.SlotsDAO;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Slots;
 import com.kuuhaku.utils.Helper;

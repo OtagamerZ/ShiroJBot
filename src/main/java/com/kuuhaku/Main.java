@@ -19,9 +19,9 @@ package com.kuuhaku;
 
 import com.kuuhaku.controller.Relay;
 import com.kuuhaku.controller.Sweeper;
-import com.kuuhaku.controller.mysql.BackupDAO;
-import com.kuuhaku.controller.mysql.CampaignDAO;
-import com.kuuhaku.controller.mysql.ExceedDAO;
+import com.kuuhaku.controller.postgresql.BackupDAO;
+import com.kuuhaku.controller.postgresql.CampaignDAO;
+import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.Manager;
 import com.kuuhaku.events.JibrilEvents;
