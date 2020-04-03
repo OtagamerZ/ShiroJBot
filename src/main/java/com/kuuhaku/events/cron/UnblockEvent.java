@@ -26,7 +26,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
+import net.dv8tion.jda.api.requests.RestAction;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
@@ -53,15 +53,15 @@ public class UnblockEvent implements Job {
 					Role r = g.getRoleById(GuildDAO.getGuildById(g.getId()).getCargoVip());
 					assert r != null;
 					g.retrieveInvites().queue(i -> i.stream()
-							.filter(inv -> inv.getInviter() != null && inv.getInviter() != Objects.requireNonNull(g.getOwner()).getUser())
+							.filter(inv -> inv.getInviter() != null && inv.getInviter() != Objects.requireNonNull(g.getOwner()).getUser() && !inv.getInviter().isFake() && !inv.getInviter().isBot())
 							.map(inv -> {
 								Member m = g.getMember(inv.getInviter());
 								assert m != null;
-								if (inv.getUses() / (TimeUnit.DAYS.convert(inv.getTimeCreated().toEpochSecond(), TimeUnit.SECONDS)) > 1)
+								if (inv.getUses() / TimeUnit.DAYS.convert(m.getTimeJoined().toEpochSecond(), TimeUnit.SECONDS) > 1)
 									return g.addRoleToMember(m, r);
 								else return g.removeRoleFromMember(m, r);
 							}).collect(Collectors.toList())
-							.forEach(AuditableRestAction::queue));
+							.forEach(RestAction::queue));
 				}
 			});
 		} else if (LocalDateTime.now().getHour() % 6 == 0) {
