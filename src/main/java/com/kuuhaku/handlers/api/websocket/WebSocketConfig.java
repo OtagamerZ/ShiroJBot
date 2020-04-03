@@ -20,7 +20,7 @@ package com.kuuhaku.handlers.api.websocket;
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.mysql.GlobalMessageDAO;
+import com.kuuhaku.controller.postgresql.GlobalMessageDAO;
 import com.kuuhaku.model.persistent.GlobalMessage;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;

@@ -15,38 +15,39 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.controller.mysql;
+package com.kuuhaku.controller.postgresql;
 
-import com.kuuhaku.model.persistent.PixelCanvas;
+import com.kuuhaku.model.persistent.Account;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
-public class CanvasDAO {
-	public static PixelCanvas getCanvas() {
+public class AccountDAO {
+
+	public static Account getAccount(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM PixelCanvas c WHERE c.shelved = false", PixelCanvas.class);
-		q.setMaxResults(1);
+		Query q = em.createQuery("SELECT a FROM Account a WHERE userId LIKE :id", Account.class);
+		q.setParameter("id", id);
 
 		try {
-			PixelCanvas p = (PixelCanvas) q.getSingleResult();
-			em.close();
-
-			return p;
+			return (Account) q.getSingleResult();
 		} catch (NoResultException e) {
+			Account acc = new Account();
+			acc.setUserId(id);
+			saveAccount(acc);
+			return acc;
+		} finally {
 			em.close();
-
-			return new PixelCanvas();
 		}
 	}
 
-	public static void saveCanvas(PixelCanvas canvas) {
+	public static void saveAccount(Account acc) {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		em.merge(canvas);
+		em.merge(acc);
 		em.getTransaction().commit();
 
 		em.close();

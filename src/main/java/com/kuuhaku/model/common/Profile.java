@@ -18,7 +18,7 @@
 package com.kuuhaku.model.common;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.mysql.TagDAO;
+import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.utils.ExceedEnums;

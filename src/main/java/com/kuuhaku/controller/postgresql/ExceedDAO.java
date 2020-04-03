@@ -15,7 +15,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.controller.mysql;
+package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.common.Exceed;
 import com.kuuhaku.model.persistent.Member;

@@ -20,7 +20,7 @@ package com.kuuhaku.command.commands.moderation;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.mysql.MemberDAO;
+import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.MutedMember;

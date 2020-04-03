@@ -19,7 +19,7 @@ package com.kuuhaku.utils;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
-import com.kuuhaku.controller.mysql.TagDAO;
+import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.persistent.GuildConfig;
 import net.dv8tion.jda.api.EmbedBuilder;

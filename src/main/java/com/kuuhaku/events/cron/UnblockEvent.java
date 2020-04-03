@@ -18,8 +18,8 @@
 package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.mysql.MemberDAO;
-import com.kuuhaku.controller.mysql.QuizDAO;
+import com.kuuhaku.controller.postgresql.MemberDAO;
+import com.kuuhaku.controller.postgresql.QuizDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.RelayBlockList;
 import net.dv8tion.jda.api.Permission;

@@ -19,7 +19,7 @@ package com.kuuhaku.command.commands.dev;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.mysql.QuizDAO;
+import com.kuuhaku.controller.postgresql.QuizDAO;
 import com.kuuhaku.model.persistent.Quiz;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;

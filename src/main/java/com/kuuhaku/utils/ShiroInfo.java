@@ -18,8 +18,8 @@
 package com.kuuhaku.utils;
 
 import com.google.gson.GsonBuilder;
-import com.kuuhaku.controller.mysql.CanvasDAO;
-import com.kuuhaku.controller.mysql.VersionDAO;
+import com.kuuhaku.controller.postgresql.CanvasDAO;
+import com.kuuhaku.controller.postgresql.VersionDAO;
 import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
 import com.kuuhaku.handlers.games.rpg.world.World;

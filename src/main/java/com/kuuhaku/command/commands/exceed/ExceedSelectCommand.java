@@ -20,7 +20,7 @@ package com.kuuhaku.command.commands.exceed;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.mysql.ExceedDAO;
+import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.TagIcons;

@@ -24,7 +24,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.Youtube;
-import com.kuuhaku.controller.mysql.TagDAO;
+import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.model.common.YoutubeVideo;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.Music;
