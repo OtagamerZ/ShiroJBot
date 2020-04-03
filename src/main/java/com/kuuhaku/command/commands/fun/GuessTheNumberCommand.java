@@ -91,11 +91,11 @@ public class GuessTheNumberCommand extends Command {
 
 
 				if (guess == theValue) {
-                    int prize = Helper.clamp(Helper.rng(100), 25, 150);
-                    channel.sendMessage("Você acertou! Como prêmio você receberá **" + prize + "**.").queue();
-                    acc.addCredit(prize);
-                    AccountDAO.saveAccount(acc);
-                } else {
+					int prize = Helper.clamp(Helper.rng(1000), 250, 1000);
+					channel.sendMessage("Você acertou! Como prêmio você receberá **" + prize + "** créditos.").queue();
+					acc.addCredit(prize);
+					AccountDAO.saveAccount(acc);
+				} else {
 					if (chances > 0) {
 						channel.sendMessage("(" + chances + " chances restantes) | Você errou, esse valor está " + hint + "o número escolhido por mim.").queue();
 						chances--;
