@@ -57,8 +57,9 @@ public class Log {
 		return guildId;
 	}
 
-	public void setGuildId(String guildId) {
+	public Log setGuildId(String guildId) {
 		this.guildId = guildId;
+		return this;
 	}
 
 	public String getUser() {
