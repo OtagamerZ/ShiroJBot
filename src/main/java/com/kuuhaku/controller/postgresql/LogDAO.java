@@ -31,6 +31,11 @@ public class LogDAO {
 		em.merge(log);
 		em.getTransaction().commit();
 
+		em.getTransaction().begin();
+		//noinspection JpaQlInspection
+		em.createQuery("DELETE FROM shiro.logs WHERE guildid NOT IN (SELECT guildid FROM shiro.guildconfig)").executeUpdate();
+		em.getTransaction().commit();
+
 		em.close();
 	}
 
