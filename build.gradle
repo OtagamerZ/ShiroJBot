@@ -68,7 +68,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.6'
     compile 'org.discordbots:DBL-Java-Library:2.0.1'
     compile 'com.github.gwenn:sqlite-dialect:0.1.0'
-    compile 'org.postgresql:postgresql:42.2.11.jre7'
+    compile 'org.postgresql:postgresql:42.2.12'
     compile ('org.springframework.boot:spring-boot-starter-data-jpa') {
         exclude module : 'spring-boot-starter-logging'
     }

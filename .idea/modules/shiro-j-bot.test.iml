@@ -29,7 +29,7 @@
     <orderEntry type="library" name="Gradle: com.fatboyindustrial.gson-javatime-serialisers:gson-javatime-serialisers:1.1.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.8.6" level="project" />
     <orderEntry type="library" name="Gradle: com.github.gwenn:sqlite-dialect:0.1.0" level="project" />
-    <orderEntry type="library" name="Gradle: org.postgresql:postgresql:42.2.11.jre7" level="project" />
+    <orderEntry type="library" name="Gradle: org.postgresql:postgresql:42.2.12" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-data-jpa:2.1.6.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-web:2.1.6.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: io.socket:socket.io-client:1.0.0" level="project" />
