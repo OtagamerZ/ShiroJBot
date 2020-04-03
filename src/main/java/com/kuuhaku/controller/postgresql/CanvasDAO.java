@@ -15,51 +15,40 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.controller.mysql;
+package com.kuuhaku.controller.postgresql;
 
-import com.kuuhaku.model.persistent.Member;
-import net.dv8tion.jda.api.entities.User;
+import com.kuuhaku.model.persistent.PixelCanvas;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
-public class WaifuDAO {
-	public static void saveMemberWaifu(Member m, User u) {
+public class CanvasDAO {
+	public static PixelCanvas getCanvas() {
 		EntityManager em = Manager.getEntityManager();
 
-		m.marry(u);
+		Query q = em.createQuery("SELECT c FROM PixelCanvas c WHERE c.shelved = false", PixelCanvas.class);
+		q.setMaxResults(1);
+
+		try {
+			PixelCanvas p = (PixelCanvas) q.getSingleResult();
+			em.close();
+
+			return p;
+		} catch (NoResultException e) {
+			em.close();
+
+			return new PixelCanvas();
+		}
+	}
+
+	public static void saveCanvas(PixelCanvas canvas) {
+		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		em.merge(m);
+		em.merge(canvas);
 		em.getTransaction().commit();
 
 		em.close();
-	}
-
-	public static void removeMemberWaifu(Member m) {
-		EntityManager em = Manager.getEntityManager();
-
-		m.divorce();
-
-		em.getTransaction().begin();
-		em.merge(m);
-		em.getTransaction().commit();
-
-		em.close();
-	}
-
-	public static boolean isWaifued(String id) {
-		EntityManager em = Manager.getEntityManager();
-
-		boolean married = false;
-
-		Query q = em.createQuery("SELECT m FROM Member m WHERE mid LIKE :id AND waifu IS NOT NULL AND waifu NOT LIKE ''");
-		q.setParameter("id", id);
-
-		married = q.getResultList().size() > 0;
-
-		em.close();
-
-		return married;
 	}
 }

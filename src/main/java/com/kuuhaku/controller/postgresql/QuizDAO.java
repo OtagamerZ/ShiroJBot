@@ -15,75 +15,64 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.controller.mysql;
+package com.kuuhaku.controller.postgresql;
 
-import com.kuuhaku.model.persistent.Member;
-import com.kuuhaku.model.persistent.MutedMember;
+import com.kuuhaku.model.persistent.AnsweredQuizzes;
+import com.kuuhaku.model.persistent.Quiz;
+import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
 
-public class MemberDAO {
-	@SuppressWarnings("unchecked")
-	public static List<Member> getMembers() {
+public class QuizDAO {
+	public static void saveQuiz(Quiz q) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT m FROM Member m", Member.class);
-		List<Member> members = q.getResultList();
-		em.close();
+		em.getTransaction().begin();
+		em.merge(q);
+		em.getTransaction().commit();
 
-		return members;
+		em.close();
 	}
 
 	@SuppressWarnings("unchecked")
-	public static List<MutedMember> getMutedMembers() {
+	public static Quiz getRandomQuiz() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT m FROM MutedMember m", MutedMember.class);
-		List<MutedMember> members = q.getResultList();
+		Query q = em.createQuery("SELECT q FROM Quiz q", Quiz.class);
+		List<Quiz> quizzes = (List<Quiz>) q.getResultList();
+
 		em.close();
 
-		return members;
+		return quizzes.get(Helper.rng(quizzes.size()));
 	}
 
-	public static MutedMember getMutedMemberById(String id) {
+	public static AnsweredQuizzes getUserState(String id) {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
-			return em.find(MutedMember.class, id);
+			return Helper.getOr(em.find(AnsweredQuizzes.class, id), new AnsweredQuizzes(id));
 		} finally {
 			em.close();
 		}
 	}
 
-	public static void saveMemberToBD(Member m) {
+	public static void saveUserState(AnsweredQuizzes aq) {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		em.merge(m);
+		em.merge(aq);
 		em.getTransaction().commit();
 
 		em.close();
 	}
 
-	public static void saveMutedMember(MutedMember m) {
+	public static void resetUserStates() {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		em.merge(m);
-		em.getTransaction().commit();
-
-		em.close();
-	}
-
-	public static void removeMutedMember(MutedMember m) {
-		EntityManager em = Manager.getEntityManager();
-
-		em.getTransaction().begin();
-		Query q = em.createQuery("DELETE FROM MutedMember m WHERE m.id LIKE :id");
-		q.setParameter("id", m.getUid());
-		q.executeUpdate();
+		em.createQuery("DELETE FROM AnsweredQuizzes").executeUpdate();
 		em.getTransaction().commit();
 
 		em.close();

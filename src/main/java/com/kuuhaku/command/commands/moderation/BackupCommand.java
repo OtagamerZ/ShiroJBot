@@ -21,7 +21,7 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.mysql.BackupDAO;
+import com.kuuhaku.controller.postgresql.BackupDAO;
 import com.kuuhaku.model.persistent.Backup;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;

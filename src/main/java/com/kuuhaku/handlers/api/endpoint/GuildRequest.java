@@ -18,7 +18,7 @@
 package com.kuuhaku.handlers.api.endpoint;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kuuhaku.controller.mysql.TokenDAO;
+import com.kuuhaku.controller.postgresql.TokenDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.handlers.api.exception.InvalidTokenException;
 import com.kuuhaku.model.persistent.GuildConfig;

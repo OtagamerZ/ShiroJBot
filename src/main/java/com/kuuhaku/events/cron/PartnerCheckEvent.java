@@ -18,7 +18,7 @@
 package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.mysql.TagDAO;
+import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Guild;
 import org.quartz.Job;

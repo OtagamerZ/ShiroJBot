@@ -122,7 +122,7 @@ public class GuildEvents extends ListenerAdapter {
 			}
 
 			try {
-				MutedMember mm = com.kuuhaku.controller.mysql.MemberDAO.getMutedMemberById(author.getId());
+				MutedMember mm = com.kuuhaku.controller.postgresql.MemberDAO.getMutedMemberById(author.getId());
 				if (mm != null && mm.isMuted()) {
 					message.delete().queue();
 					return;

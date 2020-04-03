@@ -18,7 +18,7 @@
 package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.mysql.ExceedDAO;
+import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import org.quartz.Job;

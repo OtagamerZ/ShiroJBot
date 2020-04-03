@@ -18,7 +18,7 @@
 package com.kuuhaku.controller;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.mysql.Manager;
+import com.kuuhaku.controller.postgresql.Manager;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.persistent.GuildConfig;
