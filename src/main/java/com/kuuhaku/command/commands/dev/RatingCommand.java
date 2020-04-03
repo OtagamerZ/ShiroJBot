@@ -21,7 +21,7 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.mysql.VotesDAO;
+import com.kuuhaku.controller.postgresql.VotesDAO;
 import com.kuuhaku.model.persistent.DevRating;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;

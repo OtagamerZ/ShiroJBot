@@ -17,7 +17,7 @@
 
 package com.kuuhaku.handlers.api.endpoint;
 
-import com.kuuhaku.controller.mysql.TokenDAO;
+import com.kuuhaku.controller.postgresql.TokenDAO;
 import com.kuuhaku.handlers.api.exception.InternalErrorException;
 import com.kuuhaku.handlers.api.exception.NotEnoughArgsException;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;

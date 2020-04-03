@@ -18,8 +18,8 @@
 package com.kuuhaku.events;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.mysql.MemberDAO;
-import com.kuuhaku.controller.mysql.TagDAO;
+import com.kuuhaku.controller.postgresql.MemberDAO;
+import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.RelayBlockList;
 import com.kuuhaku.model.persistent.Member;

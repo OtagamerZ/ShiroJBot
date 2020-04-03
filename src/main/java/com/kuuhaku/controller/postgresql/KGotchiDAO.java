@@ -15,30 +15,37 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.controller.mysql;
+package com.kuuhaku.controller.postgresql;
 
-import com.kuuhaku.model.persistent.Version;
+import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
 
-public class VersionDAO {
-	public static String getBuildVersion(com.kuuhaku.utils.Version version) {
+public class KGotchiDAO {
+	public static Kawaigotchi getKawaigotchi(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Version v = em.find(Version.class, version.getVersion());
+		Query q = em.createQuery("SELECT k FROM Kawaigotchi k WHERE userId LIKE :id", Kawaigotchi.class);
+		q.setParameter("id", id);
 
 		try {
-			if (v == null) {
-				v = new Version(version.getVersion());
-			}
-
-			return version.getCodename() + " " + v.getMajor() + "." + v.getMinor() + "." + v.getBuild();
+			return (Kawaigotchi) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
 		} finally {
-			em.getTransaction().begin();
-			em.merge(v);
-			em.getTransaction().commit();
-
 			em.close();
 		}
+	}
+
+	public static void saveKawaigotchi(Kawaigotchi k) {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		em.merge(k);
+		em.getTransaction().commit();
+
+		em.close();
 	}
 }

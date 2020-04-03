@@ -18,8 +18,8 @@
 package com.kuuhaku.handlers.api.endpoint;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.mysql.AccountDAO;
-import com.kuuhaku.controller.mysql.TokenDAO;
+import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.TokenDAO;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.model.persistent.Account;
 import net.dv8tion.jda.api.EmbedBuilder;

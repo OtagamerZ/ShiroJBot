@@ -18,7 +18,7 @@
 package com.kuuhaku.command;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.mysql.TagDAO;
+import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.PrivilegeLevel;

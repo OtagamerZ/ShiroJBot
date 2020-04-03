@@ -15,34 +15,30 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.controller.mysql;
+package com.kuuhaku.controller.postgresql;
 
-import com.kuuhaku.model.persistent.Token;
+import com.kuuhaku.model.persistent.Version;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
 
-public class TokenDAO {
-	public static boolean validateToken(String token) {
+public class VersionDAO {
+	public static String getBuildVersion(com.kuuhaku.utils.Version version) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT t FROM Token t WHERE token LIKE :token", Token.class);
-		q.setParameter("token", token);
-		q.setMaxResults(1);
+		Version v = em.find(Version.class, version.getVersion());
 
 		try {
-			Token t = (Token) q.getSingleResult();
+			if (v == null) {
+				v = new Version(version.getVersion());
+			}
 
+			return version.getCodename() + " " + v.getMajor() + "." + v.getMinor() + "." + v.getBuild();
+		} finally {
 			em.getTransaction().begin();
-			em.merge(t.addCall());
+			em.merge(v);
 			em.getTransaction().commit();
 
 			em.close();
-
-			return true;
-		} catch (NoResultException e) {
-			return false;
 		}
 	}
 }

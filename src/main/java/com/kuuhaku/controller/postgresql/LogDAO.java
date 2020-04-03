@@ -15,41 +15,31 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.controller.mysql;
+package com.kuuhaku.controller.postgresql;
 
-import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Log;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import java.util.List;
 
-public class AccountDAO {
-
-	public static Account getAccount(String id) {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createQuery("SELECT a FROM Account a WHERE userId LIKE :id", Account.class);
-		q.setParameter("id", id);
-
-		try {
-			return (Account) q.getSingleResult();
-		} catch (NoResultException e) {
-			Account acc = new Account();
-			acc.setUserId(id);
-			saveAccount(acc);
-			return acc;
-		} finally {
-			em.close();
-		}
-	}
-
-	public static void saveAccount(Account acc) {
+public class LogDAO {
+	public static void saveLog(Log log) {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		em.merge(acc);
+		em.merge(log);
 		em.getTransaction().commit();
 
 		em.close();
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Object[]> getUsage() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createNativeQuery("SELECT * FROM shiro.\"GetUsage\"");
+
+		return q.getResultList();
 	}
 }

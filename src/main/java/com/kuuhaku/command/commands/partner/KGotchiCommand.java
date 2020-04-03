@@ -23,7 +23,7 @@ import com.github.ygimenez.type.PageType;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.mysql.AccountDAO;
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.sqlite.KGotchiDAO;
 import com.kuuhaku.handlers.games.kawaigotchi.Food;
 import com.kuuhaku.handlers.games.kawaigotchi.FoodMenu;

@@ -15,39 +15,51 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.controller.mysql;
+package com.kuuhaku.controller.postgresql;
 
-import com.kuuhaku.model.persistent.GlobalMessage;
+import com.kuuhaku.model.persistent.Member;
+import net.dv8tion.jda.api.entities.User;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import java.util.ArrayList;
-import java.util.List;
 
-public class GlobalMessageDAO {
-	@SuppressWarnings("unchecked")
-	public static List<GlobalMessage> getMessages() {
+public class WaifuDAO {
+	public static void saveMemberWaifu(Member m, User u) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT m FROM GlobalMessage m", GlobalMessage.class);
-
-		try {
-			return (List<GlobalMessage>) q.getResultList();
-		} catch (NoResultException e) {
-			return new ArrayList<>();
-		} finally {
-			em.close();
-		}
-	}
-
-	public static void saveMessage(GlobalMessage gm) {
-		EntityManager em = Manager.getEntityManager();
+		m.marry(u);
 
 		em.getTransaction().begin();
-		em.merge(gm);
+		em.merge(m);
 		em.getTransaction().commit();
 
 		em.close();
+	}
+
+	public static void removeMemberWaifu(Member m) {
+		EntityManager em = Manager.getEntityManager();
+
+		m.divorce();
+
+		em.getTransaction().begin();
+		em.merge(m);
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
+	public static boolean isWaifued(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		boolean married = false;
+
+		Query q = em.createQuery("SELECT m FROM Member m WHERE mid LIKE :id AND waifu IS NOT NULL AND waifu NOT LIKE ''");
+		q.setParameter("id", id);
+
+		married = q.getResultList().size() > 0;
+
+		em.close();
+
+		return married;
 	}
 }

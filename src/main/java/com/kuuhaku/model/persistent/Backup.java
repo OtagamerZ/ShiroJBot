@@ -17,7 +17,7 @@
 
 package com.kuuhaku.model.persistent;
 
-import com.kuuhaku.controller.mysql.BackupDAO;
+import com.kuuhaku.controller.postgresql.BackupDAO;
 import com.kuuhaku.model.common.backup.GuildCategory;
 import com.kuuhaku.model.common.backup.GuildData;
 import com.kuuhaku.model.common.backup.GuildRole;

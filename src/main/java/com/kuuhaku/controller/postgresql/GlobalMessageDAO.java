@@ -15,9 +15,9 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.controller.mysql;
+package com.kuuhaku.controller.postgresql;
 
-import com.kuuhaku.model.persistent.PermaBlock;
+import com.kuuhaku.model.persistent.GlobalMessage;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -25,29 +25,29 @@ import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RelayDAO {
-	public static void permaBlock(PermaBlock p) {
+public class GlobalMessageDAO {
+	@SuppressWarnings("unchecked")
+	public static List<GlobalMessage> getMessages() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT m FROM GlobalMessage m", GlobalMessage.class);
+
+		try {
+			return (List<GlobalMessage>) q.getResultList();
+		} catch (NoResultException e) {
+			return new ArrayList<>();
+		} finally {
+			em.close();
+		}
+	}
+
+	public static void saveMessage(GlobalMessage gm) {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		em.merge(p);
+		em.merge(gm);
 		em.getTransaction().commit();
 
 		em.close();
-	}
-
-	@SuppressWarnings("unchecked")
-	public static List<String> blockedList() {
-		EntityManager em = Manager.getEntityManager();
-
-		try {
-			Query q = em.createQuery("SELECT p.id FROM PermaBlock p", String.class);
-			List<String> blocks = q.getResultList();
-			em.close();
-			return blocks;
-		} catch (NoResultException e) {
-			em.close();
-			return new ArrayList<>();
-		}
 	}
 }

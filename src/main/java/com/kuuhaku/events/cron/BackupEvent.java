@@ -19,8 +19,8 @@ package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.Sweeper;
-import com.kuuhaku.controller.mysql.BackupDAO;
-import com.kuuhaku.controller.mysql.CampaignDAO;
+import com.kuuhaku.controller.postgresql.BackupDAO;
+import com.kuuhaku.controller.postgresql.CampaignDAO;
 import com.kuuhaku.model.common.DataDump;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Activity;
