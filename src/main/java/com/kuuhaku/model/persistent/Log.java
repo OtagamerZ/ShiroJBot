@@ -31,6 +31,9 @@ public class Log {
 	private int id;
 
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String guildId = "";
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
 	private String usr = "";
 
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
@@ -48,6 +51,14 @@ public class Log {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public String getGuildId() {
+		return guildId;
+	}
+
+	public void setGuildId(String guildId) {
+		this.guildId = guildId;
 	}
 
 	public String getUser() {
