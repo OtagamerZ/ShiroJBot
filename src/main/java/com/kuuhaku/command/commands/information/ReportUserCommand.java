@@ -21,7 +21,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.TicketDAO;
-import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -74,7 +73,6 @@ public class ReportUserCommand extends Command {
 		eb.addField("Enviado em:", df.format(message.getTimeCreated()), true);
 		eb.addField("Usuário reportado:", message.getMentionedUsers().get(0).getAsTag(), true);
 		eb.addField("Relatório:", "```" + mensagem + "```", false);
-		eb.setFooter(Helper.VOID, String.valueOf(number));
 		eb.setColor(Color.red);
 
 		Map<String, String> ids = new HashMap<>();
