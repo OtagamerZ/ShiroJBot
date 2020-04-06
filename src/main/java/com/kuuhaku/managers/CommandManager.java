@@ -217,6 +217,9 @@ public class CommandManager {
 			add(new ReportUserCommand(
 					"report", new String[]{"reportar"}, getLocale(PT).getString("req_user-reason"), getLocale(PT).getString("cmd_report"), INFO, false
 			));
+			add(new ReportBugCommand(
+					"suporte", new String[]{"support", "assist"}, getLocale(PT).getString("cmd_request-assist"), INFO, false
+			));
 			add(new BotInfoCommand(
 					"info", new String[]{"botinfo", "bot"}, getLocale(PT).getString("cmd_info"), INFO, false
 			));
