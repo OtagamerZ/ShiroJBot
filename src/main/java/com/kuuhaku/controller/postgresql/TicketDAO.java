@@ -60,6 +60,7 @@ public class TicketDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT t FROM Ticket t ORDER BY id DESC", Ticket.class);
+		q.setMaxResults(1);
 
 		try {
 			return ((Ticket) q.getSingleResult()).getNumber();
