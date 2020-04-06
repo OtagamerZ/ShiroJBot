@@ -59,8 +59,7 @@ public class ReportBugCommand extends Command {
 		}
 
 		String mensagem = String.join(" ", args).trim();
-		TicketDAO.openTicket();
-		int number = TicketDAO.getNumber();
+		int number = TicketDAO.openTicket();
 		DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm");
 
 		EmbedBuilder eb = new EmbedBuilder();
