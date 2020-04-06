@@ -32,43 +32,34 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ReportBugCommand extends Command {
+public class RequestAssistCommand extends Command {
 
-	public ReportBugCommand(String name, String description, Category category, boolean requiresMM) {
+	public RequestAssistCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
 	}
 
-	public ReportBugCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
+	public RequestAssistCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
 		super(name, aliases, description, category, requiresMM);
 	}
 
-	public ReportBugCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+	public RequestAssistCommand(String name, String usage, String description, Category category, boolean requiresMM) {
 		super(name, usage, description, category, requiresMM);
 	}
 
-	public ReportBugCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+	public RequestAssistCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
 		super(name, aliases, usage, description, category, requiresMM);
 	}
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-
-		if (args.length == 0) {
-			channel.sendMessage(":x: | Você precisa definir uma mensagem.").queue();
-			return;
-		}
-
-		String mensagem = String.join(" ", args).trim();
 		int number = TicketDAO.getNumber();
-
 		EmbedBuilder eb = new EmbedBuilder();
 
-		eb.setTitle("Relatório de bug (Ticket Nº " + number + ")");
-		eb.addField("Enviador por:", author.getAsTag() + " (" + guild.getName() + " | " + channel.getName() + ")", true);
-		eb.addField("Enviado em:", Helper.dateformat.format(message.getTimeCreated()), true);
-		eb.addField("Relatório:", "```" + mensagem + "```", false);
+		eb.setTitle("Requisição de auxílio (Ticket Nº " + number + ")");
+		eb.addField("Requisitado por:", author.getAsTag() + " (" + guild.getName() + " | " + channel.getName() + ")", true);
+		eb.addField("Requisitado em:", Helper.dateformat.format(message.getTimeCreated()), true);
 		eb.setFooter(Helper.VOID, String.valueOf(number));
-		eb.setColor(Color.yellow);
+		eb.setColor(Color.cyan);
 
 		Map<String, String> ids = new HashMap<>();
 
@@ -82,6 +73,6 @@ public class ReportBugCommand extends Command {
 		);
 
 		TicketDAO.setIds(number, ids);
-		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-reported-bug")).queue();
+		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-requested-assist")).queue();
 	}
 }

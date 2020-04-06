@@ -50,6 +50,7 @@
         <class>com.kuuhaku.model.persistent.MutedMember</class>
         <class>com.kuuhaku.model.persistent.Quiz</class>
         <class>com.kuuhaku.model.persistent.AnsweredQuizzes</class>
+        <class>com.kuuhaku.model.persistent.Ticket</class>
 
         <properties>
             <!-- dados da conexao -->
