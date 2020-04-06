@@ -38,7 +38,7 @@ public class RequestAssistCommand extends Command {
 		super(name, description, category, requiresMM);
 	}
 
-	public RequestAssistCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
+	public RequestAssistCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
 		super(name, aliases, description, category, requiresMM);
 	}
 
