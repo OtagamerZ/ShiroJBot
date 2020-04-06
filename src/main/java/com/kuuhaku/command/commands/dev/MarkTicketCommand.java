@@ -92,6 +92,6 @@ public class MarkTicketCommand extends Command {
 		);
 
 		TicketDAO.updateTicket(t);
-		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-requested-assist")).queue();
+		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-solved-ticket")).queue();
 	}
 }
