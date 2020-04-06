@@ -44,7 +44,7 @@ public class TicketDAO {
 		em.close();
 	}
 
-	public static void openTicket() {
+	public static int openTicket() {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
@@ -52,15 +52,17 @@ public class TicketDAO {
 		em.merge(t);
 		em.getTransaction().commit();
 		em.close();
+
+		return getNumber();
 	}
 
-	public static int getNumber() {
+	private static int getNumber() {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT t FROM Ticket t ORDER BY id DESC", Ticket.class);
 
 		try {
-			return q.getFirstResult();
+			return ((Ticket) q.getSingleResult()).getNumber();
 		} finally {
 			em.close();
 		}
