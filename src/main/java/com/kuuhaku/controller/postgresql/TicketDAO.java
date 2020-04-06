@@ -20,6 +20,7 @@ package com.kuuhaku.controller.postgresql;
 import com.kuuhaku.model.persistent.Ticket;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.Map;
 
 public class TicketDAO {
@@ -43,16 +44,23 @@ public class TicketDAO {
 		em.close();
 	}
 
-	public static int getNumber() {
+	public static void openTicket() {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
 		Ticket t = new Ticket();
 		em.merge(t);
 		em.getTransaction().commit();
+		em.close();
+	}
+
+	public static int getNumber() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT t FROM Ticket t ORDER BY id DESC", Ticket.class);
 
 		try {
-			return t.getNumber();
+			return q.getFirstResult();
 		} finally {
 			em.close();
 		}
