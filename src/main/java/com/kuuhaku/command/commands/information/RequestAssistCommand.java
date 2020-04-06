@@ -57,6 +57,7 @@ public class RequestAssistCommand extends Command {
 		EmbedBuilder eb = new EmbedBuilder();
 
 		eb.setTitle("Requisição de auxílio (Ticket Nº " + number + ")");
+		eb.addField("ID do servidor:", guild.getId(), true);
 		eb.addField("Requisitado por:", author.getAsTag() + " (" + guild.getName() + " | " + channel.getName() + ")", true);
 		eb.addField("Requisitado em:", df.format(message.getTimeCreated()), true);
 		eb.setColor(Color.cyan);
