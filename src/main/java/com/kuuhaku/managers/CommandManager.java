@@ -107,6 +107,9 @@ public class CommandManager {
 			add(new AddQuizCommand(
 					"addquiz", new String[]{"addq", "novoquiz"}, getLocale(PT).getString("req_question-opts-correct-prize"), getLocale(PT).getString("cmd_add-quiz"), DEV, false
 			));
+			add(new MarkTicketCommand(
+					"mark", new String[]{"solved", "resolvido"}, getLocale(PT).getString("req_id"), getLocale(PT).getString("cmd_mark-ticket"), DEV, false
+			));
 
 			//SHERIFF
 			add(new BlockCommand(
@@ -217,7 +220,7 @@ public class CommandManager {
 			add(new ReportUserCommand(
 					"report", new String[]{"reportar"}, getLocale(PT).getString("req_user-reason"), getLocale(PT).getString("cmd_report"), INFO, false
 			));
-			add(new ReportBugCommand(
+			add(new RequestAssistCommand(
 					"suporte", new String[]{"support", "assist"}, getLocale(PT).getString("cmd_request-assist"), INFO, false
 			));
 			add(new BotInfoCommand(
