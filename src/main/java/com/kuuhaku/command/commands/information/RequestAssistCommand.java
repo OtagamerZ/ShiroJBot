@@ -52,8 +52,7 @@ public class RequestAssistCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		TicketDAO.openTicket();
-		int number = TicketDAO.getNumber();
+		int number = TicketDAO.openTicket();
 		DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm");
 		EmbedBuilder eb = new EmbedBuilder();
 
