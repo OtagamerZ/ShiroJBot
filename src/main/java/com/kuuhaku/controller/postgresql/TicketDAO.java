@@ -51,9 +51,13 @@ public class TicketDAO {
 		em.merge(t);
 		em.getTransaction().commit();
 
-		em.close();
+		em.flush();
 
-		return t.getNumber();
+		try {
+			return t.getNumber();
+		} finally {
+			em.close();
+		}
 	}
 
 	public static void setIds(int id, Map<String, String> msgs) {
