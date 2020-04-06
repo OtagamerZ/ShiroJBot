@@ -21,7 +21,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.TicketDAO;
-import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -60,7 +59,6 @@ public class RequestAssistCommand extends Command {
 		eb.setTitle("Requisição de auxílio (Ticket Nº " + number + ")");
 		eb.addField("Requisitado por:", author.getAsTag() + " (" + guild.getName() + " | " + channel.getName() + ")", true);
 		eb.addField("Requisitado em:", df.format(message.getTimeCreated()), true);
-		eb.setFooter(Helper.VOID, String.valueOf(number));
 		eb.setColor(Color.cyan);
 
 		Map<String, String> ids = new HashMap<>();
