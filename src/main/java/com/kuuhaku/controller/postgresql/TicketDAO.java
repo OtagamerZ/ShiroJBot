@@ -51,8 +51,6 @@ public class TicketDAO {
 		em.merge(t);
 		em.getTransaction().commit();
 
-		em.flush();
-
 		try {
 			return t.getNumber();
 		} finally {
