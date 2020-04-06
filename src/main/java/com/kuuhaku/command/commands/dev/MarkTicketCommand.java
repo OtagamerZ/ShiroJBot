@@ -80,17 +80,18 @@ public class MarkTicketCommand extends Command {
 		eb.addField("Fechado em:", df.format(LocalDateTime.now()), true);
 		eb.setColor(Color.green);
 
-		Main.getInfo().getDevelopers().forEach(dev -> Main.getInfo().getUserByID(dev).openPrivateChannel()
-				.flatMap(m -> m.sendMessage(eb.build()))
-				.queue(s -> {
-					s.getChannel().retrieveMessageById(String.valueOf(t.getMsgIds().get(dev)))
+		Main.getInfo().getDevelopers().forEach(dev -> {
+					Message msg = Main.getInfo().getUserByID(dev).openPrivateChannel()
+							.flatMap(m -> m.sendMessage(eb.build()))
+							.complete();
+					msg.getChannel().retrieveMessageById(String.valueOf(t.getMsgIds().get(dev)))
 							.flatMap(Message::delete)
 							.queue();
 					t.solved();
-					TicketDAO.updateTicket(t);
-				})
+				}
 		);
 
+		TicketDAO.updateTicket(t);
 		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-requested-assist")).queue();
 	}
 }
