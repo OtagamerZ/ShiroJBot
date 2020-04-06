@@ -29,6 +29,7 @@ import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
 import java.awt.*;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,11 +54,12 @@ public class RequestAssistCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		int number = TicketDAO.getNumber();
+		DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm");
 		EmbedBuilder eb = new EmbedBuilder();
 
 		eb.setTitle("Requisição de auxílio (Ticket Nº " + number + ")");
 		eb.addField("Requisitado por:", author.getAsTag() + " (" + guild.getName() + " | " + channel.getName() + ")", true);
-		eb.addField("Requisitado em:", Helper.dateformat.format(message.getTimeCreated()), true);
+		eb.addField("Requisitado em:", df.format(message.getTimeCreated()), true);
 		eb.setFooter(Helper.VOID, String.valueOf(number));
 		eb.setColor(Color.cyan);
 
