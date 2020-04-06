@@ -20,14 +20,18 @@ package com.kuuhaku.command.commands.information;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.postgresql.TicketDAO;
+import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
-import java.time.format.DateTimeFormatter;
+import java.awt.*;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ReportUserCommand extends Command {
 
@@ -55,21 +59,34 @@ public class ReportUserCommand extends Command {
 			return;
 		} else if (args.length < 2) {
 			channel.sendMessage(":x: | Você precisa dizer o motivo do report.").queue();
-            return;
-        }
+			return;
+		}
 
-        String mensagem = String.join(" ", Arrays.copyOfRange(args, 1, args.length)).trim();
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy - hh:mm");
+		String mensagem = String.join(" ", Arrays.copyOfRange(args, 1, args.length)).trim();
+		int number = TicketDAO.getNumber();
 
-        EmbedBuilder eb = new EmbedBuilder();
+		EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setTitle("Relatório de report");
-        eb.addField("Enviador por:", author.getAsTag() + " (" + guild.getName() + " | " + channel.getName() + ")", true);
-        eb.addField("Enviado em:", df.format(message.getTimeCreated()), true);
+		eb.setTitle("Relatório de report (Ticket Nº " + number + ")");
+		eb.addField("Enviador por:", author.getAsTag() + " (" + guild.getName() + " | " + channel.getName() + ")", true);
+		eb.addField("Enviado em:", Helper.dateformat.format(message.getTimeCreated()), true);
 		eb.addField("Usuário reportado:", message.getMentionedUsers().get(0).getAsTag(), true);
 		eb.addField("Relatório:", "```" + mensagem + "```", false);
+		eb.setFooter(Helper.VOID, String.valueOf(number));
+		eb.setColor(Color.red);
 
-		Main.getInfo().getDevelopers().forEach(dev -> Main.getInfo().getUserByID(dev).openPrivateChannel().queue(m -> m.sendMessage(eb.build()).queue()));
+		Map<String, String> ids = new HashMap<>();
+
+		Main.getInfo().getDevelopers().forEach(dev -> Main.getInfo().getUserByID(dev).openPrivateChannel()
+				.flatMap(m -> m.sendMessage(eb.build()))
+				.flatMap(m -> {
+					ids.put(dev, m.getId());
+					return m.pin();
+				})
+				.queue()
+		);
+
+		TicketDAO.setIds(number, ids);
 		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-reported-user")).queue();
-    }
+	}
 }
