@@ -78,7 +78,7 @@ public class MarkTicketCommand extends Command {
 		eb.setTitle("Resolução de ticket Nº " + args[0]);
 		eb.addField("Resolvido por:", author.getAsTag(), true);
 		eb.addField("Fechado em:", df.format(LocalDateTime.now()), true);
-		eb.setColor(Color.cyan);
+		eb.setColor(Color.green);
 
 		Main.getInfo().getDevelopers().forEach(dev -> Main.getInfo().getUserByID(dev).openPrivateChannel()
 				.flatMap(m -> m.sendMessage(eb.build()))
@@ -87,10 +87,10 @@ public class MarkTicketCommand extends Command {
 							.flatMap(Message::delete)
 							.queue();
 					t.solved();
+					TicketDAO.updateTicket(t);
 				})
 		);
 
-		TicketDAO.updateTicket(t);
 		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-requested-assist")).queue();
 	}
 }

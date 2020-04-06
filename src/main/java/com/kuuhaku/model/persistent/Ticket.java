@@ -30,7 +30,7 @@ public class Ticket {
 	private int number;
 
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT '[]'")
-	private String msgId = "[]";
+	private String msgId = "{}";
 
 	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
 	private boolean solved = false;
