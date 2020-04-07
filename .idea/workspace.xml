@@ -7,8 +7,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/pathetic.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/PatheticCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/MemeRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/MemeRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,7 +112,7 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="UPDATE_TYPE" value="MERGE" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="IgnoredFileRootStore">
     <option name="generatedRoots">
@@ -116,6 +120,15 @@
         <option value="C:\Users\DEV202\IdeaProjects\ShiroJBot\.idea" />
       </set>
     </option>
+  </component>
+  <component name="InvalidFacetManager">
+    <ignored-facets>
+      <facet id="shiro-j-bot.main/invalid/JPA" />
+      <facet id="shiro-j-bot.main/invalid/Spring" />
+      <facet id="shiro-j-bot.main/invalid/Web" />
+      <facet id="shiro-j-bot.test/invalid/Spring" />
+      <facet id="shiro-j-bot.test/invalid/Web" />
+    </ignored-facets>
   </component>
   <component name="ProjectId" id="1W4mCBhJx2V4Iv1OVHtn8NLtKvt" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -142,7 +155,7 @@
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="TEXT" />
     <property name="extract.method.default.visibility" value="private" />
     <property name="last.edited.regexp" value="aaaa&#10;aaa" />
-    <property name="last_opened_file_path" value="$APPLICATION_CONFIG_DIR$/jdbc-drivers/PostgreSQL/42.2.5/postgresql-42.2.12.jar" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="SDKs" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -187,7 +200,12 @@
       <list>
         <serviceView>
           <treeState>
-            <expand />
+            <expand>
+              <path>
+                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
+                <item name="root:ShiroDB" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+              </path>
+            </expand>
             <select />
           </treeState>
         </serviceView>
@@ -293,8 +311,30 @@
       <workItem from="1585107824769" duration="630000" />
       <workItem from="1585278211817" duration="1532000" />
       <workItem from="1585915783231" duration="6990000" />
-      <workItem from="1586183708100" duration="11652000" />
-      <workItem from="1586268320659" duration="684000" />
+      <workItem from="1586183708100" duration="8812000" />
+      <workItem from="1586212106796" duration="737000" />
+      <workItem from="1586269371581" duration="1688000" />
+    </task>
+    <task id="LOCAL-00925" summary="Melhorias no backup de servidores">
+      <created>1584650534130</created>
+      <option name="number" value="00925" />
+      <option name="presentableId" value="LOCAL-00925" />
+      <option name="project" value="LOCAL" />
+      <updated>1584650534131</updated>
+    </task>
+    <task id="LOCAL-00926" summary="Melhorias no backup de servidores">
+      <created>1584708597479</created>
+      <option name="number" value="00926" />
+      <option name="presentableId" value="LOCAL-00926" />
+      <option name="project" value="LOCAL" />
+      <updated>1584708597480</updated>
+    </task>
+    <task id="LOCAL-00927" summary="Melhorias no backup de servidores">
+      <created>1584709048965</created>
+      <option name="number" value="00927" />
+      <option name="presentableId" value="LOCAL-00927" />
+      <option name="project" value="LOCAL" />
+      <updated>1584709048965</updated>
     </task>
     <task id="LOCAL-00928" summary="Melhorias no backup de servidores">
       <created>1584710003750</created>
@@ -618,28 +658,7 @@
       <option name="project" value="LOCAL" />
       <updated>1586199844835</updated>
     </task>
-    <task id="LOCAL-00974" summary="Pequenas correções">
-      <created>1586200530674</created>
-      <option name="number" value="00974" />
-      <option name="presentableId" value="LOCAL-00974" />
-      <option name="project" value="LOCAL" />
-      <updated>1586200530674</updated>
-    </task>
-    <task id="LOCAL-00975" summary="Pequenas correções">
-      <created>1586203462248</created>
-      <option name="number" value="00975" />
-      <option name="presentableId" value="LOCAL-00975" />
-      <option name="project" value="LOCAL" />
-      <updated>1586203462248</updated>
-    </task>
-    <task id="LOCAL-00976" summary="Adicionado Sunny à lista de devs">
-      <created>1586268556580</created>
-      <option name="number" value="00976" />
-      <option name="presentableId" value="LOCAL-00976" />
-      <option name="project" value="LOCAL" />
-      <updated>1586268556581</updated>
-    </task>
-    <option name="localTasksCounter" value="977" />
+    <option name="localTasksCounter" value="974" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -658,6 +677,7 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="Melhorias na API" />
     <MESSAGE value="Persistencia das campanhas de RPG" />
     <MESSAGE value="Correções no Settings" />
     <MESSAGE value="Comando Use e correções gerais nos comandos de RPG" />
@@ -682,8 +702,7 @@
     <MESSAGE value="Correções na busca por playlists" />
     <MESSAGE value="Correção no comando Quiz (flood de listeners)" />
     <MESSAGE value="Pequenas correções" />
-    <MESSAGE value="Adicionado Sunny à lista de devs" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adicionado Sunny à lista de devs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Pequenas correções" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -746,11 +765,12 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="296" key="#com.intellij.ide.util.TreeFileChooserDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1583261031135" />
-    <state x="559" y="300" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1585071611621">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state x="687" y="410" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1586206152051">
+      <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="559" y="300" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1366.768@0.0.1366.768" timestamp="1585071611621" />
     <state x="688" y="395" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1578417184444" />
+    <state x="687" y="410" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1586206152051" />
     <state x="616" y="391" width="510" height="237" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1583774604653">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -780,12 +800,13 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1583775520216" />
-    <state x="234" y="57" key="CommitChangelistDialog2" timestamp="1586269022440">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="117" y="25" key="CommitChangelistDialog2" timestamp="1586271322542">
+      <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1585282385190" />
-    <state x="234" y="57" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1586269022440" />
+    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1586200528024" />
+    <state x="117" y="25" key="CommitChangelistDialog2/0.0.1680.1050@0.0.1680.1050" timestamp="1586271322542" />
     <state x="160" y="89" width="1344" height="834" key="DiffContextDialog" timestamp="1580842925618">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -825,10 +846,11 @@
     </state>
     <state width="196" height="330" key="HiddenNamespacesPopup/0.0.1366.728@0.0.1366.728" timestamp="1585944685981" />
     <state width="196" height="457" key="HiddenNamespacesPopup/0.0.1680.1010@0.0.1680.1010" timestamp="1584385262057" />
-    <state x="552" y="222" key="MultipleFileMergeDialog" timestamp="1579695600813">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="552" y="231" key="MultipleFileMergeDialog" timestamp="1586269461103">
+      <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="552" y="222" key="MultipleFileMergeDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1579695600813" />
+    <state x="552" y="231" key="MultipleFileMergeDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1586269461103" />
     <state x="505" y="205" key="NewModule_or_Project.wizard" timestamp="1579026622636">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -852,12 +874,12 @@
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1586268558157">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1586199849232">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1585282392405" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1586268558157" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1586199849232" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -894,11 +916,12 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="544" y="399" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD/0.0.1680.1010@0.0.1680.1010" timestamp="1579615180701" />
-    <state x="600" y="391" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1586203136233">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="600" y="406" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1586269410486">
+      <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="488" y="297" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1366.768@0.0.1366.768" timestamp="1580267810034" />
-    <state x="600" y="391" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1680.1010@0.0.1680.1010" timestamp="1586203136233" />
+    <state x="600" y="391" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1680.1010@0.0.1680.1010" timestamp="1584474674549" />
+    <state x="600" y="406" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1680.1050@0.0.1680.1050" timestamp="1586269410486" />
     <state x="448" y="274" key="extract.method.dialog" timestamp="1583844988091">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
