@@ -1,6 +1,7 @@
 .gradle
 .log
 .bkp
+.idea
 /build/
 /out/
 /target/
