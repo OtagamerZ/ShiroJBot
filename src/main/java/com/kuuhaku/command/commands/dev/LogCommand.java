@@ -54,8 +54,6 @@ public class LogCommand extends Command {
 			HttpURLConnection hastebin = (HttpURLConnection) new URL("https://hastebin.com/documents").openConnection();
 			hastebin.setRequestMethod("POST");
 			hastebin.setRequestProperty("User-Agent", "Mozilla/5.0");
-			hastebin.setRequestProperty("Content-Type", "application/json; utf-8");
-			hastebin.setRequestProperty("Accept", "application/json");
 			hastebin.setDoOutput(true);
 			hastebin.connect();
 
