@@ -69,7 +69,7 @@ public class ShiroInfo {
 	private static final ArrayList<String> developers = new ArrayList<String>() {{
 		add(niichan); //KuuHaKu
 		add("321665807988031495"); //Reydux
-		add("694652893571055746"); //Sunny
+		add("694652893571055746"); //HeyCarlosz
 	}};
 	private static final ArrayList<String> editors = new ArrayList<String>() {{
 
