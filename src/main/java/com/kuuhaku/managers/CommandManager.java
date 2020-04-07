@@ -344,6 +344,9 @@ public class CommandManager {
 			add(new GuessIllDieCommand(
 					"guessilldie", new String[]{"gid", "achoquevoumorrer", "meh"}, getLocale(PT).getString(REQ_TEXT), getLocale(PT).getString("cmd_guess-ill-die"), FUN, false
 			));
+			add(new PatheticCommand(
+					"patetico", new String[]{"pathetic"}, getLocale(PT).getString(REQ_TEXT), getLocale(PT).getString("cmd_pathetic"), FUN, false
+			));
 			add(new DrakeCommand(
 					"drake", new String[]{"drk"}, getLocale(PT).getString(REQ_TWO_OPTIONS), getLocale(PT).getString("cmd_drake"), FUN, false
 			));
