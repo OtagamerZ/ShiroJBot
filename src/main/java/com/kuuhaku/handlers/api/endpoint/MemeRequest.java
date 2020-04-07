@@ -189,25 +189,32 @@ public class MemeRequest {
 	@RequestMapping(value = "/meme/tomcruise", method = RequestMethod.POST)
 	public @ResponseBody
 	byte[] getTomCruiseMeme(@RequestHeader(value = "token") String token,
-							@RequestHeader(value = "field-a") String fieldA) {
-		return genericMeme(token, fieldA, "tomcruise.jpg");
-	}
+                            @RequestHeader(value = "field-a") String fieldA) {
+        return genericMeme(token, fieldA, "tomcruise.jpg");
+    }
 
-	@RequestMapping(value = "/meme/guessilldie", method = RequestMethod.POST)
-	public @ResponseBody
-	byte[] getGuessIllDieMeme(@RequestHeader(value = "token") String token,
-							  @RequestHeader(value = "field-a") String fieldA) {
-		return genericMeme(token, fieldA, "guessilldie.jpg");
-	}
+    @RequestMapping(value = "/meme/guessilldie", method = RequestMethod.POST)
+    public @ResponseBody
+    byte[] getGuessIllDieMeme(@RequestHeader(value = "token") String token,
+                              @RequestHeader(value = "field-a") String fieldA) {
+        return genericMeme(token, fieldA, "guessilldie.jpg");
+    }
 
-	private byte[] genericMeme(String token, String fieldA, String memeName) {
-		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
-		else if (Helper.isEmpty(fieldA)) {
-			throw new NotEnoughArgsException();
-		}
+    @RequestMapping(value = "/meme/pathetic", method = RequestMethod.POST)
+    public @ResponseBody
+    byte[] getPatheticMeme(@RequestHeader(value = "token") String token,
+                           @RequestHeader(value = "field-a") String fieldA) {
+        return genericMeme(token, fieldA, "pathetic.jpg");
+    }
 
-		try {
-			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream(memeName)));
+    private byte[] genericMeme(String token, String fieldA, String memeName) {
+        if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
+        else if (Helper.isEmpty(fieldA)) {
+            throw new NotEnoughArgsException();
+        }
+
+        try {
+            BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream(memeName)));
 
 			ByteArrayOutputStream baos = Helper.renderMeme(fieldA, bi);
 
