@@ -22,12 +22,15 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.MessageFormat;
 import java.time.format.DateTimeFormatter;
 
@@ -71,8 +74,15 @@ public class BotInfoCommand extends Command {
 						"[" + ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-link-2") + "](https://discordapp.com/invite/9sgkzna) | " +
 						"[Github](https://github.com/OtagamerZ/ShiroJBot)"
 				, true);
-		eb.setImage("https://discordbots.org/api/widget/572413282653306901.png?usernamecolor=b463ff&topcolor=000000&middlecolor=1a1d23&datacolor=b463ff");
 
-		channel.sendMessage(eb.build()).queue();
+		try {
+			InputStream info = Helper.getImage("https://discordbots.org/api/widget/572413282653306901.png?usernamecolor=b463ff&topcolor=000000&middlecolor=1a1d23&datacolor=b463ff");
+
+			eb.setImage("attachment://info.png");
+			channel.sendMessage(eb.build()).addFile(info, "info.png").queue();
+		} catch (IOException e) {
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			channel.sendMessage(eb.build()).queue();
+		}
 	}
 }
