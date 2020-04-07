@@ -26,7 +26,6 @@ import com.kuuhaku.model.persistent.DevRating;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.exceptions.PermissionException;
 import org.jetbrains.annotations.NonNls;
 
 import java.io.File;
@@ -154,9 +153,6 @@ public class RatingCommand extends Command {
 						.queue();
 			});
 		}};
-		try {
-			Pages.buttonize(Main.getInfo().getAPI(), msg, buttons, false);
-		} catch (PermissionException ignore) {
-		}
+		Pages.buttonize(Main.getInfo().getAPI(), msg, buttons, false);
 	}
 }

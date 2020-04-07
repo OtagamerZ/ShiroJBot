@@ -6,8 +6,13 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adicionada pasta .idea no gitignore">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_ygimenez_PaginationUtils_54856c4e16.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/RatingCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/RatingCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -190,16 +195,6 @@
                 <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
                 <item name="root:ShiroDB" type="7427dc5b:ServiceModel$ServiceGroupNode" />
               </path>
-              <path>
-                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-                <item name="root:ShiroDB" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-                <item name="com.intellij.database.console.session.MessageBusSession@5f161f67" type="9fbbdea:ServiceModel$ServiceNode" />
-              </path>
-              <path>
-                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-                <item name="root:ShiroDB" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-                <item name="com.intellij.database.console.session.MessageBusSession@4dce85af" type="9fbbdea:ServiceModel$ServiceNode" />
-              </path>
             </expand>
             <select />
           </treeState>
@@ -308,20 +303,7 @@
       <workItem from="1585915783231" duration="6990000" />
       <workItem from="1586183708100" duration="11652000" />
       <workItem from="1586268320659" duration="7064000" />
-    </task>
-    <task id="LOCAL-00931" summary="Melhorias no backup de servidores">
-      <created>1584712922214</created>
-      <option name="number" value="00931" />
-      <option name="presentableId" value="LOCAL-00931" />
-      <option name="project" value="LOCAL" />
-      <updated>1584712922214</updated>
-    </task>
-    <task id="LOCAL-00932" summary="Melhorias no backup de servidores">
-      <created>1584713262909</created>
-      <option name="number" value="00932" />
-      <option name="presentableId" value="LOCAL-00932" />
-      <option name="project" value="LOCAL" />
-      <updated>1584713262909</updated>
+      <workItem from="1586288301309" duration="332000" />
     </task>
     <task id="LOCAL-00933" summary="Melhorias no backup de servidores">
       <created>1584714153722</created>
@@ -652,7 +634,21 @@
       <option name="project" value="LOCAL" />
       <updated>1586281627546</updated>
     </task>
-    <option name="localTasksCounter" value="980" />
+    <task id="LOCAL-00980" summary="Unificada branch development na branch master">
+      <created>1586286467139</created>
+      <option name="number" value="00980" />
+      <option name="presentableId" value="LOCAL-00980" />
+      <option name="project" value="LOCAL" />
+      <updated>1586286467139</updated>
+    </task>
+    <task id="LOCAL-00981" summary="Adicionada pasta .idea no gitignore">
+      <created>1586286561411</created>
+      <option name="number" value="00981" />
+      <option name="presentableId" value="LOCAL-00981" />
+      <option name="project" value="LOCAL" />
+      <updated>1586286561411</updated>
+    </task>
+    <option name="localTasksCounter" value="982" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -671,8 +667,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Correções no Settings" />
-    <MESSAGE value="Comando Use e correções gerais nos comandos de RPG" />
     <MESSAGE value="Melhoria no Help" />
     <MESSAGE value="Comando para definir o máximo de pontos de atributo" />
     <MESSAGE value="Dois novos compiladores embutidos no comando compile: Python (Jython) e Javascript (Nashorn)" />
@@ -696,7 +690,9 @@
     <MESSAGE value="Pequenas correções" />
     <MESSAGE value="Adicionado Sunny à lista de devs" />
     <MESSAGE value="Adicionada imagem de meme &quot;Pathetic&quot;" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adicionada imagem de meme &quot;Pathetic&quot;" />
+    <MESSAGE value="Unificada branch development na branch master" />
+    <MESSAGE value="Adicionada pasta .idea no gitignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adicionada pasta .idea no gitignore" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -732,10 +728,10 @@
     </state>
     <state x="351" y="47" key="#SQL_Resolution_Scopes/0.0.1366.728@0.0.1366.728" timestamp="1585946066821" />
     <state x="432" y="164" key="#SQL_Resolution_Scopes/0.0.1680.1010@0.0.1680.1010" timestamp="1581000411417" />
-    <state x="679" y="329" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog" timestamp="1584019066482">
+    <state x="578" y="282" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog" timestamp="1586288633009">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="679" y="329" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1584019066482" />
+    <state x="578" y="282" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1586288633009" />
     <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1586192367452">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -793,12 +789,12 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1583775520216" />
-    <state x="234" y="57" key="CommitChangelistDialog2" timestamp="1586286528143">
+    <state x="234" y="57" key="CommitChangelistDialog2" timestamp="1586286745418">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1585282385190" />
-    <state x="234" y="57" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1586286528143" />
+    <state x="234" y="57" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1586286745418" />
     <state x="160" y="89" width="1344" height="834" key="DiffContextDialog" timestamp="1580842925618">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -865,12 +861,12 @@
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1586286483524">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1586286564777">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1585282392405" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1586286483524" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1586286564777" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -907,22 +903,22 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="544" y="399" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD/0.0.1680.1010@0.0.1680.1010" timestamp="1579615180701" />
-    <state x="600" y="391" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1586286323944">
+    <state x="600" y="391" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1586286617058">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="488" y="297" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1366.768@0.0.1366.768" timestamp="1580267810034" />
-    <state x="600" y="391" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1680.1010@0.0.1680.1010" timestamp="1586286323944" />
+    <state x="600" y="391" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1680.1010@0.0.1680.1010" timestamp="1586286617058" />
     <state x="448" y="274" key="extract.method.dialog" timestamp="1583844988091">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="682" y="113" key="extract.method.dialog/0.0.1366.768@0.0.1366.768" timestamp="1582605093359" />
     <state x="448" y="274" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1583844988091" />
-    <state x="362" y="127" width="643" height="536" key="find.popup" timestamp="1585937546544">
-      <screen x="0" y="0" width="1366" height="728" />
+    <state x="445" y="176" width="790" height="658" key="find.popup" timestamp="1586288634141">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="362" y="127" width="643" height="536" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1585937546544" />
     <state x="362" y="134" width="774" height="562" key="find.popup/0.0.1366.768@0.0.1366.768" timestamp="1579836143729" />
-    <state x="445" y="176" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1584378351766" />
+    <state x="445" y="176" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1586288634141" />
     <state x="605" y="219" key="git4idea.branch.GitSmartOperationDialog" timestamp="1579030853134">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
