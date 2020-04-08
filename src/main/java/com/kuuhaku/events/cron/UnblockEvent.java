@@ -22,11 +22,11 @@ import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.controller.postgresql.QuizDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.RelayBlockList;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.requests.RestAction;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
@@ -61,7 +61,7 @@ public class UnblockEvent implements Job {
 									return g.addRoleToMember(m, r);
 								else return g.removeRoleFromMember(m, r);
 							}).collect(Collectors.toList())
-							.forEach(RestAction::queue));
+							.forEach(rst -> rst.queue(null, Helper::doNothing)));
 				}
 			});
 		} else if (LocalDateTime.now().getHour() % 6 == 0) {
