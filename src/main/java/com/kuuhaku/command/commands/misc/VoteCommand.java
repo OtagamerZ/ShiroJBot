@@ -21,6 +21,8 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.VotesDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.jetbrains.annotations.NonNls;
@@ -46,13 +48,13 @@ public class VoteCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 2 || message.getMentionedUsers().size() < 1) {
-			channel.sendMessage(":x: | É necessário mencionar um usuário e o tipo de voto (positivo/negativo).").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-user")).queue();
 			return;
 		} else if (!MemberDAO.getMemberByMid(author.getId()).get(0).canVote()) {
-			channel.sendMessage(":x: | Você já votou hoje, cada usuário possui apenas um voto por dia.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_confirmed-vote")).queue();
 			return;
 		} else if (message.getMentionedUsers().get(0) == author) {
-			channel.sendMessage(":x: | Você não pode votar em si mesmo.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_vote-invalid-argument")).queue();
 			return;
 		}
 
