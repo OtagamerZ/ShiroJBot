@@ -21,6 +21,8 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.QuizDAO;
 import com.kuuhaku.model.persistent.Quiz;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
@@ -47,7 +49,7 @@ public class AddQuizCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
-			channel.sendMessage(":x: | Você precisa informar os argumentos necessários para a construção do quiz (pergunta;[alternativas];alt. correta;prêmio).").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_addquiz-invalid-arguments")).queue();
 			return;
 		}
 
@@ -55,20 +57,20 @@ public class AddQuizCommand extends Command {
 		JSONArray opts = new JSONArray(quizArgs[1]);
 
 		if (quizArgs.length < 4) {
-			channel.sendMessage(":x: | Você precisa informar os argumentos necessários para a construção do quiz (pergunta;[alternativas];alt. correta;prêmio).").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_addquiz-invalid-arguments")).queue();
 			return;
 		} else if (opts.length() != 4) {
-			channel.sendMessage(":x: | Cada quiz deve conter 4 alternativas.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_addquiz-invalid-number")).queue();
 			return;
 		} else if (!StringUtils.isNumeric(quizArgs[2])) {
-			channel.sendMessage(":x: | A alternativa correta deve ser um valor inteiro entre 1 e 4.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_addquiz-error-in-the-correct-alternative")).queue();
 			return;
 		}
 
 		int o = Integer.parseInt(quizArgs[2]);
 
 		if (o < 1 || o > 4) {
-			channel.sendMessage(":x: | A alternativa correta deve ser um valor numérico entre 1 e 4.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_addquiz-correct-alternative-error")).queue();
 			return;
 		}
 

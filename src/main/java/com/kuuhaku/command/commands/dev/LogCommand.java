@@ -19,6 +19,8 @@ package com.kuuhaku.command.commands.dev;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
@@ -47,7 +49,7 @@ public class LogCommand extends Command {
 		File log = new File("logs/stacktrace.log");
 		try {
 			if (log.exists()) channel.sendMessage("Aqui está!").addFile(log).queue();
-			else channel.sendMessage(":x: | Arquivo de log não encontrado.").queue();
+			else channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_log-invalid-file")).queue();
 		} catch (Exception e) {
 			channel.sendMessage("Arquivo de log muito grande, por favor faça a leitura diretamente no VPS.").queue();
 		}
