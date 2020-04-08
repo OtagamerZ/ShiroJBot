@@ -120,9 +120,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		AudioSourceManagers.registerRemoteSources(getInfo().getApm());
 		AudioSourceManagers.registerLocalSource(getInfo().getApm());
 
-		Thread apiThread = new Thread(() -> SpringApplication.run(Application.class, args));
-		apiThread.setName("api");
-		Executors.newSingleThreadExecutor().execute(apiThread);
+		SpringApplication.run(Application.class, args);
 
 		boolean apiOnline = false;
 		int tries = 1;
