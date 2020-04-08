@@ -31,12 +31,19 @@ public class RateLimitingMap<K, V> extends HashMap<K, Map<V, Long>> {
 	}
 
 	public V getAuthorIfNotExpired(K key, int time, TimeUnit unit) {
-		Entry<V, Long> entry = super.get(key).entrySet().iterator().next();
-		return expired(entry.getValue(), time, unit) ? null : entry.getKey();
+		try {
+			Entry<V, Long> entry = super.get(key).entrySet().iterator().next();
+			return expired(entry.getValue(), time, unit) ? null : entry.getKey();
+		} catch (NullPointerException e) {
+			return null;
+		}
 	}
 
 	public void clearExpired(int time, TimeUnit unit) {
 		Object[] entries = super.entrySet().stream().filter(e -> expired(e.getValue().entrySet().iterator().next().getValue(), time, unit)).map(Entry::getKey).toArray(Object[]::new);
+		for (Object entry : entries) {
+			super.remove(entry);
+		}
 	}
 
 	private boolean expired(long timestamp, int time, TimeUnit unit) {
