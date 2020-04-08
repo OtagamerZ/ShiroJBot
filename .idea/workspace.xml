@@ -6,8 +6,8 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/RateLimitingMap.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="O log agora é retornado usando a API do HasteBin">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
@@ -776,10 +776,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="296" key="#com.intellij.ide.util.TreeFileChooserDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1583261031135" />
-    <state x="687" y="410" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1586206152051">
-      <screen x="0" y="0" width="1680" height="1050" />
+    <state x="559" y="300" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1586381966473">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state x="559" y="300" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1366.768@0.0.1366.768" timestamp="1585071611621" />
+    <state x="559" y="300" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1366.768@0.0.1366.768" timestamp="1586381966473" />
     <state x="688" y="395" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1578417184444" />
     <state x="687" y="410" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1586206152051" />
     <state x="616" y="391" width="510" height="237" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1583774604653">
@@ -873,10 +873,10 @@
     </state>
     <state x="501" y="23" key="RollbackChangesDialog/0.0.1366.768@0.0.1366.768" timestamp="1578969825199" />
     <state x="616" y="30" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1583778436946" />
-    <state x="320" y="80" key="SettingsEditor" timestamp="1586377050330">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="260" y="0" key="SettingsEditor" timestamp="1586382033334">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1585106542874" />
+    <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1586382033334" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1586377050330" />
     <state width="200" height="318" key="SqlResolveConfigurable" timestamp="1585946065407">
       <screen x="0" y="0" width="1366" height="728" />
