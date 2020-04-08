@@ -8,26 +8,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Pequenas correções">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/AddQuizCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/AddQuizCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/BroadcastCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/BroadcastCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/InviteCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/InviteCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/LeaveCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/LeaveCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/LogCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/LogCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/MarkTicketCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/MarkTicketCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/PartnerTagCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/PartnerTagCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/RatingCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/RatingCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/TokenCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/TokenCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/ToxicTagCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/ToxicTagCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/VerifiedTagCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/VerifiedTagCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/DrakeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/DrakeCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/GuessIllDieCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/GuessIllDieCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/MarryCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/MarryCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/misc/AnimeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/misc/AnimeCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/misc/AvatarCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/misc/AvatarCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/misc/VoteCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/misc/VoteCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/PixelCanvas.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/PixelCanvas.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -336,114 +317,11 @@
       <workItem from="1585107824769" duration="630000" />
       <workItem from="1585278211817" duration="1532000" />
       <workItem from="1585915783231" duration="6990000" />
-      <workItem from="1586183708100" duration="8812000" />
-      <workItem from="1586212106796" duration="737000" />
-      <workItem from="1586269371581" duration="1688000" />
-    </task>
-    <task id="LOCAL-00925" summary="Melhorias no backup de servidores">
-      <created>1584650534130</created>
-      <option name="number" value="00925" />
-      <option name="presentableId" value="LOCAL-00925" />
-      <option name="project" value="LOCAL" />
-      <updated>1584650534131</updated>
-    </task>
-    <task id="LOCAL-00926" summary="Melhorias no backup de servidores">
-      <created>1584708597479</created>
-      <option name="number" value="00926" />
-      <option name="presentableId" value="LOCAL-00926" />
-      <option name="project" value="LOCAL" />
-      <updated>1584708597480</updated>
-    </task>
-    <task id="LOCAL-00927" summary="Melhorias no backup de servidores">
-      <created>1584709048965</created>
-      <option name="number" value="00927" />
-      <option name="presentableId" value="LOCAL-00927" />
-      <option name="project" value="LOCAL" />
-      <updated>1584709048965</updated>
-    </task>
-    <task id="LOCAL-00928" summary="Melhorias no backup de servidores">
-      <created>1584710003750</created>
-      <option name="number" value="00928" />
-      <option name="presentableId" value="LOCAL-00928" />
-      <option name="project" value="LOCAL" />
-      <updated>1584710003750</updated>
-    </task>
-    <task id="LOCAL-00929" summary="Melhorias no backup de servidores">
-      <created>1584710814054</created>
-      <option name="number" value="00929" />
-      <option name="presentableId" value="LOCAL-00929" />
-      <option name="project" value="LOCAL" />
-      <updated>1584710814054</updated>
-    </task>
-    <task id="LOCAL-00930" summary="Melhorias no backup de servidores">
-      <created>1584712162635</created>
-      <option name="number" value="00930" />
-      <option name="presentableId" value="LOCAL-00930" />
-      <option name="project" value="LOCAL" />
-      <updated>1584712162635</updated>
-    </task>
-    <task id="LOCAL-00931" summary="Melhorias no backup de servidores">
-      <created>1584712922214</created>
-      <option name="number" value="00931" />
-      <option name="presentableId" value="LOCAL-00931" />
-      <option name="project" value="LOCAL" />
-      <updated>1584712922214</updated>
-    </task>
-    <task id="LOCAL-00932" summary="Melhorias no backup de servidores">
-      <created>1584713262909</created>
-      <option name="number" value="00932" />
-      <option name="presentableId" value="LOCAL-00932" />
-      <option name="project" value="LOCAL" />
-      <updated>1584713262909</updated>
-    </task>
-    <task id="LOCAL-00933" summary="Melhorias no backup de servidores">
-      <created>1584714153722</created>
-      <option name="number" value="00933" />
-      <option name="presentableId" value="LOCAL-00933" />
-      <option name="project" value="LOCAL" />
-      <updated>1584714153722</updated>
-    </task>
-    <task id="LOCAL-00934" summary="Melhorias no backup de servidores">
-      <created>1584714221622</created>
-      <option name="number" value="00934" />
-      <option name="presentableId" value="LOCAL-00934" />
-      <option name="project" value="LOCAL" />
-      <updated>1584714221623</updated>
-    </task>
-    <task id="LOCAL-00935" summary="Melhorias no backup de servidores">
-      <created>1584716410272</created>
-      <option name="number" value="00935" />
-      <option name="presentableId" value="LOCAL-00935" />
-      <option name="project" value="LOCAL" />
-      <updated>1584716410272</updated>
-    </task>
-    <task id="LOCAL-00936" summary="Melhorias no backup de servidores">
-      <created>1584720131133</created>
-      <option name="number" value="00936" />
-      <option name="presentableId" value="LOCAL-00936" />
-      <option name="project" value="LOCAL" />
-      <updated>1584720131133</updated>
-    </task>
-    <task id="LOCAL-00937" summary="Melhorias no backup de servidores">
-      <created>1584725085219</created>
-      <option name="number" value="00937" />
-      <option name="presentableId" value="LOCAL-00937" />
-      <option name="project" value="LOCAL" />
-      <updated>1584725085219</updated>
-    </task>
-    <task id="LOCAL-00938" summary="Melhorias no backup de servidores">
-      <created>1584725596136</created>
-      <option name="number" value="00938" />
-      <option name="presentableId" value="LOCAL-00938" />
-      <option name="project" value="LOCAL" />
-      <updated>1584725596136</updated>
-    </task>
-    <task id="LOCAL-00939" summary="Melhorias no backup de servidores">
-      <created>1584726264997</created>
-      <option name="number" value="00939" />
-      <option name="presentableId" value="LOCAL-00939" />
-      <option name="project" value="LOCAL" />
-      <updated>1584726264997</updated>
+      <workItem from="1586183708100" duration="11652000" />
+      <workItem from="1586268320659" duration="7064000" />
+      <workItem from="1586288301309" duration="4418000" />
+      <workItem from="1586350922217" duration="1203000" />
+      <workItem from="1586356809077" duration="3027000" />
     </task>
     <task id="LOCAL-00940" summary="Melhorias no backup de servidores">
       <created>1584732506503</created>
@@ -683,7 +561,112 @@
       <option name="project" value="LOCAL" />
       <updated>1586199844835</updated>
     </task>
-    <option name="localTasksCounter" value="974" />
+    <task id="LOCAL-00974" summary="Pequenas correções">
+      <created>1586200530674</created>
+      <option name="number" value="00974" />
+      <option name="presentableId" value="LOCAL-00974" />
+      <option name="project" value="LOCAL" />
+      <updated>1586200530674</updated>
+    </task>
+    <task id="LOCAL-00975" summary="Pequenas correções">
+      <created>1586203462248</created>
+      <option name="number" value="00975" />
+      <option name="presentableId" value="LOCAL-00975" />
+      <option name="project" value="LOCAL" />
+      <updated>1586203462248</updated>
+    </task>
+    <task id="LOCAL-00976" summary="Adicionado Sunny à lista de devs">
+      <created>1586268556580</created>
+      <option name="number" value="00976" />
+      <option name="presentableId" value="LOCAL-00976" />
+      <option name="project" value="LOCAL" />
+      <updated>1586268556581</updated>
+    </task>
+    <task id="LOCAL-00977" summary="Adicionada imagem de meme &quot;Pathetic&quot;">
+      <created>1586269025245</created>
+      <option name="number" value="00977" />
+      <option name="presentableId" value="LOCAL-00977" />
+      <option name="project" value="LOCAL" />
+      <updated>1586269025245</updated>
+    </task>
+    <task id="LOCAL-00978" summary="Adicionada imagem de meme &quot;Pathetic&quot;">
+      <created>1586280753469</created>
+      <option name="number" value="00978" />
+      <option name="presentableId" value="LOCAL-00978" />
+      <option name="project" value="LOCAL" />
+      <updated>1586280753469</updated>
+    </task>
+    <task id="LOCAL-00979" summary="Adicionada imagem de meme &quot;Pathetic&quot;">
+      <created>1586281627545</created>
+      <option name="number" value="00979" />
+      <option name="presentableId" value="LOCAL-00979" />
+      <option name="project" value="LOCAL" />
+      <updated>1586281627546</updated>
+    </task>
+    <task id="LOCAL-00980" summary="Unificada branch development na branch master">
+      <created>1586286467139</created>
+      <option name="number" value="00980" />
+      <option name="presentableId" value="LOCAL-00980" />
+      <option name="project" value="LOCAL" />
+      <updated>1586286467139</updated>
+    </task>
+    <task id="LOCAL-00981" summary="Adicionada pasta .idea no gitignore">
+      <created>1586286561411</created>
+      <option name="number" value="00981" />
+      <option name="presentableId" value="LOCAL-00981" />
+      <option name="project" value="LOCAL" />
+      <updated>1586286561411</updated>
+    </task>
+    <task id="LOCAL-00982" summary="Adicionada pasta .idea no gitignore">
+      <created>1586288651812</created>
+      <option name="number" value="00982" />
+      <option name="presentableId" value="LOCAL-00982" />
+      <option name="project" value="LOCAL" />
+      <updated>1586288651812</updated>
+    </task>
+    <task id="LOCAL-00983" summary="Adicionada pasta .idea no gitignore">
+      <created>1586289023179</created>
+      <option name="number" value="00983" />
+      <option name="presentableId" value="LOCAL-00983" />
+      <option name="project" value="LOCAL" />
+      <updated>1586289023179</updated>
+    </task>
+    <task id="LOCAL-00984" summary="O log agora é retornado usando a API do HasteBin">
+      <created>1586291247092</created>
+      <option name="number" value="00984" />
+      <option name="presentableId" value="LOCAL-00984" />
+      <option name="project" value="LOCAL" />
+      <updated>1586291247092</updated>
+    </task>
+    <task id="LOCAL-00985" summary="O log agora é retornado usando a API do HasteBin">
+      <created>1586292047237</created>
+      <option name="number" value="00985" />
+      <option name="presentableId" value="LOCAL-00985" />
+      <option name="project" value="LOCAL" />
+      <updated>1586292047237</updated>
+    </task>
+    <task id="LOCAL-00986" summary="O log agora é retornado usando a API do HasteBin">
+      <created>1586292484683</created>
+      <option name="number" value="00986" />
+      <option name="presentableId" value="LOCAL-00986" />
+      <option name="project" value="LOCAL" />
+      <updated>1586292484684</updated>
+    </task>
+    <task id="LOCAL-00987" summary="O log agora é retornado usando a API do HasteBin">
+      <created>1586292811767</created>
+      <option name="number" value="00987" />
+      <option name="presentableId" value="LOCAL-00987" />
+      <option name="project" value="LOCAL" />
+      <updated>1586292811767</updated>
+    </task>
+    <task id="LOCAL-00988" summary="Reduzida a quantidade de conexões criadas pela API">
+      <created>1586367768730</created>
+      <option name="number" value="00988" />
+      <option name="presentableId" value="LOCAL-00988" />
+      <option name="project" value="LOCAL" />
+      <updated>1586367768730</updated>
+    </task>
+    <option name="localTasksCounter" value="989" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -702,12 +685,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Melhorias na API" />
-    <MESSAGE value="Persistencia das campanhas de RPG" />
-    <MESSAGE value="Correções no Settings" />
-    <MESSAGE value="Comando Use e correções gerais nos comandos de RPG" />
-    <MESSAGE value="Melhoria no Help" />
-    <MESSAGE value="Comando para definir o máximo de pontos de atributo" />
     <MESSAGE value="Dois novos compiladores embutidos no comando compile: Python (Jython) e Javascript (Nashorn)" />
     <MESSAGE value="Comandos de 8Ball e Escolha" />
     <MESSAGE value="Melhoria na resposta de reações" />
@@ -727,7 +704,13 @@
     <MESSAGE value="Correções na busca por playlists" />
     <MESSAGE value="Correção no comando Quiz (flood de listeners)" />
     <MESSAGE value="Pequenas correções" />
-    <option name="LAST_COMMIT_MESSAGE" value="Pequenas correções" />
+    <MESSAGE value="Adicionado Sunny à lista de devs" />
+    <MESSAGE value="Adicionada imagem de meme &quot;Pathetic&quot;" />
+    <MESSAGE value="Unificada branch development na branch master" />
+    <MESSAGE value="Adicionada pasta .idea no gitignore" />
+    <MESSAGE value="O log agora é retornado usando a API do HasteBin" />
+    <MESSAGE value="Reduzida a quantidade de conexões criadas pela API" />
+    <option name="LAST_COMMIT_MESSAGE" value="Reduzida a quantidade de conexões criadas pela API" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -742,10 +725,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="432" y="164" key="#Docker/0.0.1680.1010@0.0.1680.1010" timestamp="1583419530615" />
-    <state x="416" y="111" key="#Edit_File_Template" timestamp="1583843518882">
+    <state x="416" y="111" key="#Edit_File_Template" timestamp="1586351391851">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="416" y="111" key="#Edit_File_Template/0.0.1680.1010@0.0.1680.1010" timestamp="1583843518882" />
+    <state x="416" y="111" key="#Edit_File_Template/0.0.1680.1010@0.0.1680.1010" timestamp="1586351391851" />
     <state x="411" y="96" key="#Google_App_Engine_Dev_Server" timestamp="1583419630494">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -763,15 +746,15 @@
     </state>
     <state x="351" y="47" key="#SQL_Resolution_Scopes/0.0.1366.728@0.0.1366.728" timestamp="1585946066821" />
     <state x="432" y="164" key="#SQL_Resolution_Scopes/0.0.1680.1010@0.0.1680.1010" timestamp="1581000411417" />
-    <state x="679" y="329" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog" timestamp="1584019066482">
+    <state x="578" y="282" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog" timestamp="1586351392670">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="679" y="329" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1584019066482" />
-    <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1586192367452">
+    <state x="578" y="282" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1586351392670" />
+    <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1586357112937">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="248" y="33" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1585944592238" />
-    <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1586192367452" />
+    <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1586357112937" />
     <state x="585" y="309" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1580395607218">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -825,13 +808,12 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1583775520216" />
-    <state x="116" y="63" key="CommitChangelistDialog2" timestamp="1586370076777">
+    <state x="234" y="57" key="CommitChangelistDialog2" timestamp="1586367765985">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1585282385190" />
-    <state x="116" y="63" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1586370076777" />
-    <state x="117" y="25" key="CommitChangelistDialog2/0.0.1680.1050@0.0.1680.1050" timestamp="1586271322542" />
+    <state x="234" y="57" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1586367765985" />
     <state x="160" y="89" width="1344" height="834" key="DiffContextDialog" timestamp="1580842925618">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -846,36 +828,35 @@
     <state x="504" y="188" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1585946052476" />
     <state x="504" y="198" key="FileChooserDialogImpl/0.0.1366.768@0.0.1366.768" timestamp="1585071666306" />
     <state x="620" y="261" key="FileChooserDialogImpl/0.0.1680.1010@0.0.1680.1010" timestamp="1583419273830" />
-    <state width="1125" height="152" key="GridCell.Tab.0.bottom" timestamp="1586199790014">
+    <state width="1125" height="152" key="GridCell.Tab.0.bottom" timestamp="1586367378658">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="179" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1585946331158" />
-    <state width="1125" height="152" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1586199790014" />
-    <state width="1125" height="152" key="GridCell.Tab.0.center" timestamp="1586199790014">
+    <state width="1125" height="152" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1586367378658" />
+    <state width="1125" height="152" key="GridCell.Tab.0.center" timestamp="1586367378657">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="179" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1585946331158" />
-    <state width="1125" height="152" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1586199790014" />
-    <state width="1125" height="152" key="GridCell.Tab.0.left" timestamp="1586199790014">
+    <state width="1125" height="152" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1586367378657" />
+    <state width="1125" height="152" key="GridCell.Tab.0.left" timestamp="1586367378657">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="179" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1585946331158" />
-    <state width="1125" height="152" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1586199790014" />
-    <state width="1125" height="152" key="GridCell.Tab.0.right" timestamp="1586199790014">
+    <state width="1125" height="152" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1586367378657" />
+    <state width="1125" height="152" key="GridCell.Tab.0.right" timestamp="1586367378658">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="179" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1585946331158" />
-    <state width="1125" height="152" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1586199790014" />
-    <state width="196" height="330" key="HiddenNamespacesPopup" timestamp="1585944685981">
-      <screen x="0" y="0" width="1366" height="728" />
+    <state width="1125" height="152" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1586367378658" />
+    <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1586280065013">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="196" height="330" key="HiddenNamespacesPopup/0.0.1366.728@0.0.1366.728" timestamp="1585944685981" />
-    <state width="196" height="457" key="HiddenNamespacesPopup/0.0.1680.1010@0.0.1680.1010" timestamp="1584385262057" />
-    <state x="552" y="231" key="MultipleFileMergeDialog" timestamp="1586269461103">
-      <screen x="0" y="0" width="1680" height="1050" />
+    <state width="196" height="457" key="HiddenNamespacesPopup/0.0.1680.1010@0.0.1680.1010" timestamp="1586280065013" />
+    <state x="552" y="222" key="MultipleFileMergeDialog" timestamp="1586367866268">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="552" y="222" key="MultipleFileMergeDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1579695600813" />
-    <state x="552" y="231" key="MultipleFileMergeDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1586269461103" />
+    <state x="552" y="222" key="MultipleFileMergeDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1586367866268" />
     <state x="505" y="205" key="NewModule_or_Project.wizard" timestamp="1579026622636">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -899,12 +880,12 @@
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1586199849232">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1586367892560">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1585282392405" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1586199849232" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1586367892560" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -917,6 +898,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="579" y="255" width="326" height="234" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/0.0.1366.728@0.0.1366.728" timestamp="1585945829108" />
+    <state x="594" y="260" key="com.intellij.database.run.ParametersPanel.Standalone" timestamp="1586357438084">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="594" y="260" key="com.intellij.database.run.ParametersPanel.Standalone/0.0.1680.1010@0.0.1680.1010" timestamp="1586357438084" />
     <state x="312" y="66" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1583773210853">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -941,23 +926,22 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="544" y="399" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD/0.0.1680.1010@0.0.1680.1010" timestamp="1579615180701" />
-    <state x="600" y="406" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1586269410486">
-      <screen x="0" y="0" width="1680" height="1050" />
+    <state x="600" y="391" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1586367882990">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="488" y="297" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1366.768@0.0.1366.768" timestamp="1580267810034" />
-    <state x="600" y="391" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1680.1010@0.0.1680.1010" timestamp="1584474674549" />
-    <state x="600" y="406" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1680.1050@0.0.1680.1050" timestamp="1586269410486" />
+    <state x="600" y="391" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1680.1010@0.0.1680.1010" timestamp="1586367882990" />
     <state x="448" y="274" key="extract.method.dialog" timestamp="1583844988091">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="682" y="113" key="extract.method.dialog/0.0.1366.768@0.0.1366.768" timestamp="1582605093359" />
     <state x="448" y="274" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1583844988091" />
-    <state x="362" y="127" width="643" height="536" key="find.popup" timestamp="1585937546544">
-      <screen x="0" y="0" width="1366" height="728" />
+    <state x="445" y="176" width="790" height="658" key="find.popup" timestamp="1586291093277">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="362" y="127" width="643" height="536" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1585937546544" />
     <state x="362" y="134" width="774" height="562" key="find.popup/0.0.1366.768@0.0.1366.768" timestamp="1579836143729" />
-    <state x="445" y="176" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1584378351766" />
+    <state x="445" y="176" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1586291093277" />
     <state x="605" y="219" key="git4idea.branch.GitSmartOperationDialog" timestamp="1579030853134">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -971,11 +955,11 @@
     </state>
     <state x="472" y="17" key="refactoring.ChangeSignatureDialog/0.0.1366.768@0.0.1366.768" timestamp="1585107291304" />
     <state x="581" y="116" key="refactoring.ChangeSignatureDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1583774041973" />
-    <state x="403" y="177" key="run.anything.popup" timestamp="1585105034445">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state x="496" y="233" width="672" height="677" key="run.anything.popup" timestamp="1586290620745">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="403" y="177" key="run.anything.popup/0.0.1366.768@0.0.1366.768" timestamp="1585105034445" />
-    <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1582825658960" />
+    <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1586290620745" />
     <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1586199819215">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
