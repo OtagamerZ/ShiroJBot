@@ -70,17 +70,17 @@ public class RatingCommand extends Command {
 						c.sendMessage(questions()[0])
 								.queue(m -> {
 									addRates(author, m, (dev, i) -> dev.setInteraction(dev.getInteraction() == 0 ? i : (dev.getInteraction() + i) / 2f));
-									m.delete().queueAfter(5, TimeUnit.MINUTES);
+									m.delete().queueAfter(5, TimeUnit.MINUTES, null, Helper::doNothing);
 								});
 						c.sendMessage(questions()[1])
 								.queue(m -> {
 									addRates(author, m, (dev, i) -> dev.setSolution(dev.getSolution() == 0 ? i : (dev.getSolution() + i) / 2f));
-									m.delete().queueAfter(5, TimeUnit.MINUTES);
+									m.delete().queueAfter(5, TimeUnit.MINUTES, null, Helper::doNothing);
 								});
 						c.sendMessage(questions()[2])
 								.queue(m -> {
 									addRates(author, m, (dev, i) -> dev.setKnowledge(dev.getKnowledge() == 0 ? i : (dev.getKnowledge() + i) / 2f));
-									m.delete().queueAfter(5, TimeUnit.MINUTES);
+									m.delete().queueAfter(5, TimeUnit.MINUTES, null, Helper::doNothing);
 								});
 					});
 				},
