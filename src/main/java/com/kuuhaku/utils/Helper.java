@@ -83,8 +83,8 @@ public class Helper {
     public static final String HOME = "674261700366827539";
     private static final RateLimitingMap<User, Boolean> ratelimiter = new RateLimitingMap<>();
 
-    public static boolean isRatelimited(Member m) {
-        return ratelimit.contains(m.getUser()) && !TagDAO.getTagById(m.getId()).isVerified() /*&& !hasPermission(m, PrivilegeLevel.SHERIFF)*/;
+    public static boolean isRatelimited(User u) {
+        return ratelimiter.getAuthorIfNotExpired(u, 2, TimeUnit.SECONDS);
     }
 
     private static PrivilegeLevel getPrivilegeLevel(Member member) {
@@ -767,14 +767,15 @@ public class Helper {
             } catch (InsufficientPermissionException ignore) {
             }
             return false;
-        } else if (Helper.isRatelimited(member)) {
+        } else if (Helper.isRatelimited(author)) {
             channel.sendMessage(":x: | Você está usando comandos muito rápido, tente novamente em alguns segundos!").queue();
             return false;
         }
 
         command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, prefix);
         spawnAd(channel);
-        ratelimit.offer(author);
+        if (!TagDAO.getTagById(member.getId()).isVerified() /*&& !hasPermission(member, PrivilegeLevel.SHERIFF)*/)
+            ratelimiter.ratelimit(author, true);
         return true;
     }
 }
