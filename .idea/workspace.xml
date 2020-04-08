@@ -68,6 +68,11 @@
         <item name="shiro: schema" type="983ebcf7:PgImplModel$Schema" />
         <item name="tables" type="d4e8921:DatabaseStructure$FamilyGroup" />
       </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="ShiroDB" type="feb32156:DbDataSourceImpl" />
+        <item name="roles" type="d4e8921:DatabaseStructure$FamilyGroup" />
+      </path>
     </expand>
     <select />
   </component>
@@ -190,6 +195,11 @@
                 <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
                 <item name="root:ShiroDB" type="7427dc5b:ServiceModel$ServiceGroupNode" />
               </path>
+              <path>
+                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
+                <item name="root:ShiroDB" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+                <item name="com.intellij.database.console.session.MessageBusSession@9c63d9c" type="9fbbdea:ServiceModel$ServiceNode" />
+              </path>
             </expand>
             <select />
           </treeState>
@@ -298,14 +308,9 @@
       <workItem from="1585915783231" duration="6990000" />
       <workItem from="1586183708100" duration="11652000" />
       <workItem from="1586268320659" duration="7064000" />
-      <workItem from="1586288301309" duration="4078000" />
-    </task>
-    <task id="LOCAL-00938" summary="Melhorias no backup de servidores">
-      <created>1584725596136</created>
-      <option name="number" value="00938" />
-      <option name="presentableId" value="LOCAL-00938" />
-      <option name="project" value="LOCAL" />
-      <updated>1584725596136</updated>
+      <workItem from="1586288301309" duration="4418000" />
+      <workItem from="1586350922217" duration="1203000" />
+      <workItem from="1586356809077" duration="2241000" />
     </task>
     <task id="LOCAL-00939" summary="Melhorias no backup de servidores">
       <created>1584726264997</created>
@@ -643,7 +648,14 @@
       <option name="project" value="LOCAL" />
       <updated>1586292484684</updated>
     </task>
-    <option name="localTasksCounter" value="987" />
+    <task id="LOCAL-00987" summary="O log agora é retornado usando a API do HasteBin">
+      <created>1586292811767</created>
+      <option name="number" value="00987" />
+      <option name="presentableId" value="LOCAL-00987" />
+      <option name="project" value="LOCAL" />
+      <updated>1586292811767</updated>
+    </task>
+    <option name="localTasksCounter" value="988" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -702,10 +714,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="432" y="164" key="#Docker/0.0.1680.1010@0.0.1680.1010" timestamp="1583419530615" />
-    <state x="416" y="111" key="#Edit_File_Template" timestamp="1583843518882">
+    <state x="416" y="111" key="#Edit_File_Template" timestamp="1586351391851">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="416" y="111" key="#Edit_File_Template/0.0.1680.1010@0.0.1680.1010" timestamp="1583843518882" />
+    <state x="416" y="111" key="#Edit_File_Template/0.0.1680.1010@0.0.1680.1010" timestamp="1586351391851" />
     <state x="411" y="96" key="#Google_App_Engine_Dev_Server" timestamp="1583419630494">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -723,15 +735,15 @@
     </state>
     <state x="351" y="47" key="#SQL_Resolution_Scopes/0.0.1366.728@0.0.1366.728" timestamp="1585946066821" />
     <state x="432" y="164" key="#SQL_Resolution_Scopes/0.0.1680.1010@0.0.1680.1010" timestamp="1581000411417" />
-    <state x="578" y="282" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog" timestamp="1586288633009">
+    <state x="578" y="282" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog" timestamp="1586351392670">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="578" y="282" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1586288633009" />
-    <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1586192367452">
+    <state x="578" y="282" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1586351392670" />
+    <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1586357112937">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="248" y="33" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1585944592238" />
-    <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1586192367452" />
+    <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1586357112937" />
     <state x="585" y="309" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1580395607218">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -804,26 +816,26 @@
     <state x="504" y="188" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1585946052476" />
     <state x="504" y="198" key="FileChooserDialogImpl/0.0.1366.768@0.0.1366.768" timestamp="1585071666306" />
     <state x="620" y="261" key="FileChooserDialogImpl/0.0.1680.1010@0.0.1680.1010" timestamp="1583419273830" />
-    <state width="552" height="152" key="GridCell.Tab.0.bottom" timestamp="1586280758576">
+    <state width="1125" height="152" key="GridCell.Tab.0.bottom" timestamp="1586367378658">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="179" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1585946331158" />
-    <state width="552" height="152" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1586280758576" />
-    <state width="552" height="152" key="GridCell.Tab.0.center" timestamp="1586280758575">
+    <state width="1125" height="152" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1586367378658" />
+    <state width="1125" height="152" key="GridCell.Tab.0.center" timestamp="1586367378657">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="179" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1585946331158" />
-    <state width="552" height="152" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1586280758575" />
-    <state width="552" height="152" key="GridCell.Tab.0.left" timestamp="1586280758575">
+    <state width="1125" height="152" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1586367378657" />
+    <state width="1125" height="152" key="GridCell.Tab.0.left" timestamp="1586367378657">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="179" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1585946331158" />
-    <state width="552" height="152" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1586280758575" />
-    <state width="552" height="152" key="GridCell.Tab.0.right" timestamp="1586280758576">
+    <state width="1125" height="152" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1586367378657" />
+    <state width="1125" height="152" key="GridCell.Tab.0.right" timestamp="1586367378658">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="179" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1585946331158" />
-    <state width="552" height="152" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1586280758576" />
+    <state width="1125" height="152" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1586367378658" />
     <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1586280065013">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -856,12 +868,12 @@
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1586292496246">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1586292824481">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1585282392405" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1586292496246" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1586292824481" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -874,6 +886,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="579" y="255" width="326" height="234" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/0.0.1366.728@0.0.1366.728" timestamp="1585945829108" />
+    <state x="594" y="260" key="com.intellij.database.run.ParametersPanel.Standalone" timestamp="1586357438084">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="594" y="260" key="com.intellij.database.run.ParametersPanel.Standalone/0.0.1680.1010@0.0.1680.1010" timestamp="1586357438084" />
     <state x="312" y="66" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1583773210853">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
