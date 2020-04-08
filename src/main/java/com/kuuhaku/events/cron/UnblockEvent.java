@@ -32,8 +32,6 @@ import org.quartz.JobExecutionContext;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class UnblockEvent implements Job {
@@ -45,7 +43,7 @@ public class UnblockEvent implements Job {
 			RelayBlockList.clearBlockedThumbs();
 			RelayBlockList.refresh();
 
-			GuildDAO.getAllGuilds().forEach(gc -> {
+			/*GuildDAO.getAllGuilds().forEach(gc -> {
 				if (gc.getCargoVip() != null && !gc.getCargoVip().isEmpty()) {
 					Guild g = Main.getInfo().getGuildByID(gc.getGuildID());
 					if (!g.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) return;
@@ -67,7 +65,7 @@ public class UnblockEvent implements Job {
 								}
 							});
 				}
-			});
+			});*/
 		} else if (LocalDateTime.now().getHour() % 6 == 0) {
 			QuizDAO.resetUserStates();
 		}
