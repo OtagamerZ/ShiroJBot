@@ -21,7 +21,6 @@ import com.coder4.emoji.EmojiUtils;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
-import com.google.common.collect.Lists;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
@@ -47,6 +46,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
+import org.python.google.common.collect.Lists;
 
 import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
@@ -64,6 +64,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
@@ -80,7 +81,25 @@ public class Helper {
     public static final int CANVAS_SIZE = 1025;
     public static final DateTimeFormatter dateformat = DateTimeFormatter.ofPattern("dd/MMM/yyyy | HH:mm:ss (z)");
     public static final String HOME = "674261700366827539";
+    private static final LinkedList<User> ratelimit = new LinkedList<>();
+    private static final Thread ratelimitThread = new Thread(() -> {
+        while (true) {
+            try {
+                if (ratelimit.size() > 0) ratelimit.poll();
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
+            }
+        }
+    });
 
+    static {
+        Executors.newSingleThreadExecutor().execute(ratelimitThread);
+    }
+
+    public static boolean isRatelimited(Member m) {
+        return ratelimit.contains(m.getUser()) && !TagDAO.getTagById(m.getId()).isVerified() /*&& !hasPermission(m, PrivilegeLevel.SHERIFF)*/;
+    }
 
     private static PrivilegeLevel getPrivilegeLevel(Member member) {
         if (Main.getInfo().getNiiChan().equals(member.getId()))
@@ -751,7 +770,6 @@ public class Helper {
         if (command.getCategory() == Category.NSFW && !((TextChannel) channel).isNSFW()) {
             try {
                 channel.sendMessage(":x: | Este comando está categorizado como NSFW, por favor use-o em um canal apropriado!").queue();
-                spawnAd(channel);
                 return true;
             } catch (InsufficientPermissionException ignore) {
             }
@@ -759,15 +777,18 @@ public class Helper {
         } else if (!hasPermission(member, command.getCategory().getPrivilegeLevel())) {
             try {
                 channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
-                spawnAd(channel);
                 return true;
             } catch (InsufficientPermissionException ignore) {
             }
+            return false;
+        } else if (Helper.isRatelimited(member)) {
+            channel.sendMessage(":x: | Você está usando comandos muito rápido, tente novamente em alguns segundos!").queue();
             return false;
         }
 
         command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, prefix);
         spawnAd(channel);
+        ratelimit.offer(author);
         return true;
     }
 }
