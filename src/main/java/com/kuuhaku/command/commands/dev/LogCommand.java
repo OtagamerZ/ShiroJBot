@@ -49,7 +49,7 @@ public class LogCommand extends Command {
 		File log = new File("logs/stacktrace.log");
 		try {
 			if (log.exists()) channel.sendMessage("Aqui está!").addFile(log).queue();
-			else channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_log-invalid-file")).queue();
+			else channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_log-not-found")).queue();
 		} catch (Exception e) {
 			channel.sendMessage("Arquivo de log muito grande, por favor faça a leitura diretamente no VPS.").queue();
 		}

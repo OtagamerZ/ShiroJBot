@@ -58,7 +58,7 @@ public class PartnerTagCommand extends Command {
                     resolvePartnerByMention(message, channel);
                 }
             } else {
-                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_partner-invalid-mention")).queue();
+                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_too-many-users-nv")).queue();
             }
         } else {
             try {
@@ -71,7 +71,7 @@ public class PartnerTagCommand extends Command {
                     }
                 }
             } catch (ArrayIndexOutOfBoundsException e) {
-                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_partner-mention-a-user")).queue();
+                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user-nv")).queue();
             }
         }
     }

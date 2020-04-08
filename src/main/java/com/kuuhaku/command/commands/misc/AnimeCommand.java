@@ -52,7 +52,7 @@ public class AnimeCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_anime-invalid-name")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_anime-no-name")).queue();
 			return;
 		}
 
@@ -150,7 +150,7 @@ public class AnimeCommand extends Command {
 				m.delete().queue();
 				channel.sendMessage(eb.build()).queue();
 			} catch (IOException e) {
-				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_anime-search-error")).queue();
+				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_anime-not-found")).queue();
 				Helper.logger(this.getClass()).debug(e + " | " + e.getStackTrace()[0]);
 			}
 		});

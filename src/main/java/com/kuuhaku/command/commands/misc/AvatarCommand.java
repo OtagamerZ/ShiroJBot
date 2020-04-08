@@ -51,7 +51,7 @@ public class AvatarCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 
 		if (message.getMentionedUsers().size() > 1) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_avatar-invalid-mention")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_avatar-too-many-mentions")).queue();
 			return;
 		}
 
@@ -63,7 +63,7 @@ public class AvatarCommand extends Command {
 			if (args.length > 0) {
 				if (args[0].trim().equalsIgnoreCase("guild")) {
 					if (guild.getIconUrl() == null) {
-						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_avatar-invalid-icon")).queue();
+						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_avatar-no-icon")).queue();
 						return;
 					}
 					eb.setTitle("Ícone do servidor");
