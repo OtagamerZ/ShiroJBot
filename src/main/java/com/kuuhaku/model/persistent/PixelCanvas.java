@@ -133,7 +133,7 @@ public class PixelCanvas {
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
-		return channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_canvas-in-chunk"));
+		return channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_canvas-chunk"));
 	}
 
 	public RestAction addPixel(TextChannel channel, int[] coords, Color color) {

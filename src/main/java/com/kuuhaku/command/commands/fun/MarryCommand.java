@@ -58,19 +58,19 @@ public class MarryCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		try {
 			if (message.getMentionedUsers().size() < 1) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_marry-mention-a-user")).queue();
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
 				return;
 			} else if (message.getMentionedUsers().get(0) == author) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_marry-mention-another-user")).queue();
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-marry-yourself")).queue();
 				return;
 			} else if (message.getMentionedUsers().get(0) == Main.getInfo().getAPI().getSelfUser() && !author.getId().equals(Main.getInfo().getNiiChan())) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_marry-find-another-user")).queue();
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-marry-shiro")).queue();
 				return;
 			} else if (message.getMentionedUsers().get(0) == Main.getJibril().getSelfUser() && !author.getId().equals(Main.getInfo().getNiiChan())) {
 				try {
 					TextChannel chn = Main.getJibril().getTextChannelById(channel.getId());
 					assert chn != null;
-					chn.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_marry-i-do-not-want-you")).queue();
+					chn.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-marry-jibril")).queue();
 				} catch (InsufficientPermissionException e) {
 					channel.sendMessage(":x: | Ela não não tem como responder aqui, mas disse que não!").queue();
 				}

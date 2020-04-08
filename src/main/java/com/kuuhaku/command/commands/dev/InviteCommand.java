@@ -81,7 +81,7 @@ public class InviteCommand extends Command {
 		} catch (ArrayIndexOutOfBoundsException e) {
 			channel.sendMessage("Escolha o servidor que devo criar um convite!\n").embed((MessageEmbed) pages.get(0).getContent()).queue(m -> Pages.paginate(Main.getInfo().getAPI(), m, pages, 60, TimeUnit.SECONDS));
 		} catch (NullPointerException ex) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invite-server-not-found")).embed((MessageEmbed) pages.get(0).getContent()).queue(m -> Pages.paginate(Main.getInfo().getAPI(), m, pages, 60, TimeUnit.SECONDS));
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-server")).embed((MessageEmbed) pages.get(0).getContent()).queue(m -> Pages.paginate(Main.getInfo().getAPI(), m, pages, 60, TimeUnit.SECONDS));
 		}
 	}
 }

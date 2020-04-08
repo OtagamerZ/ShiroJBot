@@ -57,10 +57,10 @@ public class BroadcastCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_bc-invalid-arguments")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_broadcast-no-type")).queue();
 			return;
 		} else if (args.length < 2) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_bc-invalid-message")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_broadcast-no-message")).queue();
 			return;
 		}
 
@@ -130,7 +130,7 @@ public class BroadcastCommand extends Command {
 				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
 				break;
 			default:
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_bc-invalid-types")).queue();
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_broadcast-invalid-type")).queue();
 		}
 	}
 
