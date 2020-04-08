@@ -122,7 +122,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 		Thread apiThread = new Thread(() -> SpringApplication.run(Application.class, args));
 		apiThread.setName("api");
-		apiThread.start();
+		Executors.newSingleThreadExecutor().execute(apiThread);
 
 		boolean apiOnline = false;
 		int tries = 1;
