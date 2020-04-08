@@ -48,13 +48,13 @@ public class VoteCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 2 || message.getMentionedUsers().size() < 1) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-user")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-vote")).queue();
 			return;
 		} else if (!MemberDAO.getMemberByMid(author.getId()).get(0).canVote()) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_confirmed-vote")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_already-voted")).queue();
 			return;
 		} else if (message.getMentionedUsers().get(0) == author) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_vote-invalid-argument")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-vote-yourself")).queue();
 			return;
 		}
 
