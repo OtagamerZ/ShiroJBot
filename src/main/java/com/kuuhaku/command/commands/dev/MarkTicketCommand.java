@@ -54,10 +54,10 @@ public class MarkTicketCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_mark-invalid-ticket-id")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-ticket-id")).queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[0])) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_mark-invalid-id")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-ticket-id")).queue();
 			return;
 		}
 
@@ -66,10 +66,10 @@ public class MarkTicketCommand extends Command {
 		Ticket t = TicketDAO.getTicket(Integer.parseInt(args[0]));
 
 		if (t == null) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_mark-invalid-ticket")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-ticket")).queue();
 			return;
 		} else if (t.isSolved()) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_mark-ticket-fix")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_ticket-already-solved")).queue();
 			return;
 		}
 

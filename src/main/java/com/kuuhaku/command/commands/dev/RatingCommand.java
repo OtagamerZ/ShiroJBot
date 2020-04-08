@@ -58,7 +58,7 @@ public class RatingCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_rating-invalid-id")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_rating-no-id")).queue();
 			return;
 		}
 
@@ -84,7 +84,7 @@ public class RatingCommand extends Command {
 								});
 					});
 				},
-				ex -> channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_rating-error-sending") + ex).queue()
+				ex -> channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-request-rating") + ex).queue()
 		);
 	}
 

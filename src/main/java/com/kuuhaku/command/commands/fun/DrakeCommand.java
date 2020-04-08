@@ -55,10 +55,10 @@ public class DrakeCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 
 		if (args.length < 1) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_drake-invalid-message")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_drake-no-message")).queue();
 			return;
 		} else if (String.join(" ", args).split(";").length < 2) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_drake-invalid-arguments-for-the-message")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_drake-not-enough-args")).queue();
 			return;
 		}
 
