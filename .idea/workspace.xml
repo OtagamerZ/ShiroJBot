@@ -6,8 +6,9 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="O log agora é retornado usando a API do HasteBin">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/LogCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/LogCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -710,6 +711,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="411" y="96" key="#Google_App_Engine_Dev_Server/0.0.1680.1010@0.0.1680.1010" timestamp="1583419630494" />
+    <state x="275" y="0" key="#Java" timestamp="1586315515421">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="275" y="0" key="#Java/0.0.1366.768@0.0.1366.768" timestamp="1586315515421" />
     <state x="432" y="164" key="#Project_Structure" timestamp="1581620143573">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -750,10 +755,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="296" key="#com.intellij.ide.util.TreeFileChooserDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1583261031135" />
-    <state x="688" y="395" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1586286381767">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="559" y="300" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1586315490636">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state x="559" y="300" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1366.768@0.0.1366.768" timestamp="1585071611621" />
+    <state x="559" y="300" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1366.768@0.0.1366.768" timestamp="1586315490636" />
     <state x="688" y="395" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1586286381767" />
     <state x="616" y="391" width="510" height="237" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1583774604653">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -784,11 +789,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1583775520216" />
-    <state x="234" y="57" key="CommitChangelistDialog2" timestamp="1586292808968">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="203" y="0" key="CommitChangelistDialog2" timestamp="1586315622227">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
-    <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1585282385190" />
+    <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1586315622227" />
     <state x="234" y="57" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1586292808968" />
     <state x="160" y="89" width="1344" height="834" key="DiffContextDialog" timestamp="1580842925618">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -908,11 +913,11 @@
     </state>
     <state x="682" y="113" key="extract.method.dialog/0.0.1366.768@0.0.1366.768" timestamp="1582605093359" />
     <state x="448" y="274" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1583844988091" />
-    <state x="445" y="176" width="790" height="658" key="find.popup" timestamp="1586291093277">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="362" y="134" width="774" height="568" key="find.popup" timestamp="1586315593559">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="362" y="127" width="643" height="536" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1585937546544" />
-    <state x="362" y="134" width="774" height="562" key="find.popup/0.0.1366.768@0.0.1366.768" timestamp="1579836143729" />
+    <state x="362" y="134" width="774" height="568" key="find.popup/0.0.1366.768@0.0.1366.768" timestamp="1586315593559" />
     <state x="445" y="176" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1586291093277" />
     <state x="605" y="219" key="git4idea.branch.GitSmartOperationDialog" timestamp="1579030853134">
       <screen x="0" y="0" width="1680" height="1010" />
