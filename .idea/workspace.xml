@@ -6,7 +6,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Pequenas correções">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
     </list>
@@ -109,11 +109,11 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="nightly" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="UPDATE_TYPE" value="MERGE" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="IgnoredFileRootStore">
     <option name="generatedRoots">
@@ -121,6 +121,15 @@
         <option value="C:\Users\DEV202\IdeaProjects\ShiroJBot\.idea" />
       </set>
     </option>
+  </component>
+  <component name="InvalidFacetManager">
+    <ignored-facets>
+      <facet id="shiro-j-bot.main/invalid/JPA" />
+      <facet id="shiro-j-bot.main/invalid/Spring" />
+      <facet id="shiro-j-bot.main/invalid/Web" />
+      <facet id="shiro-j-bot.test/invalid/Spring" />
+      <facet id="shiro-j-bot.test/invalid/Web" />
+    </ignored-facets>
   </component>
   <component name="ProjectId" id="1W4mCBhJx2V4Iv1OVHtn8NLtKvt" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -141,12 +150,13 @@
     <property name="Repository.Attach.JavaDocs" value="false" />
     <property name="Repository.Attach.Sources" value="false" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="TEXT" />
     <property name="extract.method.default.visibility" value="private" />
     <property name="last.edited.regexp" value="aaaa&#10;aaa" />
-    <property name="last_opened_file_path" value="$APPLICATION_CONFIG_DIR$/jdbc-drivers/PostgreSQL/42.2.5/postgresql-42.2.12.jar" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="SDKs" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -763,11 +773,12 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="296" key="#com.intellij.ide.util.TreeFileChooserDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1583261031135" />
-    <state x="688" y="395" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1586286381767">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="687" y="410" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1586206152051">
+      <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="559" y="300" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1366.768@0.0.1366.768" timestamp="1585071611621" />
-    <state x="688" y="395" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1586286381767" />
+    <state x="688" y="395" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1578417184444" />
+    <state x="687" y="410" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1586206152051" />
     <state x="616" y="391" width="510" height="237" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1583774604653">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -859,11 +870,11 @@
     </state>
     <state x="501" y="23" key="RollbackChangesDialog/0.0.1366.768@0.0.1366.768" timestamp="1578969825199" />
     <state x="616" y="30" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1583778436946" />
-    <state x="320" y="80" key="SettingsEditor" timestamp="1586286400459">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="260" y="0" key="SettingsEditor" timestamp="1585106542874">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1585106542874" />
-    <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1586286400459" />
+    <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1583419666153" />
     <state width="200" height="318" key="SqlResolveConfigurable" timestamp="1585946065407">
       <screen x="0" y="0" width="1366" height="728" />
     </state>

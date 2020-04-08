@@ -18,6 +18,8 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.requests.RestAction;
 
@@ -73,7 +75,7 @@ public class PixelCanvas {
 		} catch (IOException | IllegalArgumentException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
-		return channel.sendMessage(":x: | Erro ao recuperar o canvas, estamos resolvendo isso.");
+		return channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_canvas"));
 	}
 
 	public RestAction viewSection(TextChannel channel, int number) {
@@ -107,7 +109,7 @@ public class PixelCanvas {
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
-		return channel.sendMessage(":x: | Erro ao recuperar o canvas, estamos resolvendo isso.");
+		return channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_canvas"));
 	}
 
 	public RestAction viewChunk(TextChannel channel, int[] coords, int zoom, boolean section) {
@@ -131,7 +133,7 @@ public class PixelCanvas {
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
-		return channel.sendMessage(":x: | Erro ao recuperar o chunk, estamos resolvendo isso.");
+		return channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_canvas-chunk"));
 	}
 
 	public RestAction addPixel(TextChannel channel, int[] coords, Color color) {

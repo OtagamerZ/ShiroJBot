@@ -23,6 +23,8 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.WaifuDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.events.WaifuListener;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
@@ -56,19 +58,19 @@ public class MarryCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		try {
 			if (message.getMentionedUsers().size() < 1) {
-				channel.sendMessage(":x: | Você precisa mencionar um usuário!").queue();
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
 				return;
 			} else if (message.getMentionedUsers().get(0) == author) {
-				channel.sendMessage(":x: | Por mais que eu respeite seu lado otaku, você não pode se casar com sí mesmo!").queue();
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-marry-yourself")).queue();
 				return;
 			} else if (message.getMentionedUsers().get(0) == Main.getInfo().getAPI().getSelfUser() && !author.getId().equals(Main.getInfo().getNiiChan())) {
-				channel.sendMessage(":x: | Eu...já tenho alguém que estou de olho!").queue();
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-marry-shiro")).queue();
 				return;
 			} else if (message.getMentionedUsers().get(0) == Main.getJibril().getSelfUser() && !author.getId().equals(Main.getInfo().getNiiChan())) {
 				try {
 					TextChannel chn = Main.getJibril().getTextChannelById(channel.getId());
 					assert chn != null;
-					chn.sendMessage(":x: | Não tenho interesse em meros mortais!").queue();
+					chn.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-marry-jibril")).queue();
 				} catch (InsufficientPermissionException e) {
 					channel.sendMessage(":x: | Ela não não tem como responder aqui, mas disse que não!").queue();
 				}

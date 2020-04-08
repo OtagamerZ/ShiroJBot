@@ -24,6 +24,8 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.VotesDAO;
 import com.kuuhaku.model.persistent.DevRating;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
@@ -56,7 +58,7 @@ public class RatingCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
-			channel.sendMessage(":x: | Preciso do ID do usuário para requisitar a avaliação").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_rating-no-id")).queue();
 			return;
 		}
 
@@ -82,7 +84,7 @@ public class RatingCommand extends Command {
 								});
 					});
 				},
-				ex -> channel.sendMessage(":x: | Não foi possível enviar a avaliação ao usuário. Razão: " + ex).queue()
+				ex -> channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-request-rating") + ex).queue()
 		);
 	}
 

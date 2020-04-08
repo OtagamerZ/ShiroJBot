@@ -54,10 +54,10 @@ public class MarkTicketCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
-			channel.sendMessage(":x: | É necessário informar o ID do ticket que foi resolvido.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-ticket-id")).queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[0])) {
-			channel.sendMessage(":x: | O ID do ticket deve ser numérico.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-ticket-id")).queue();
 			return;
 		}
 
@@ -66,10 +66,10 @@ public class MarkTicketCommand extends Command {
 		Ticket t = TicketDAO.getTicket(Integer.parseInt(args[0]));
 
 		if (t == null) {
-			channel.sendMessage(":x: | Ticket inexistente.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-ticket")).queue();
 			return;
 		} else if (t.isSolved()) {
-			channel.sendMessage(":x: | Ticket já resolvido.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_ticket-already-solved")).queue();
 			return;
 		}
 
