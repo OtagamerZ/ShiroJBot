@@ -20,14 +20,14 @@ package com.kuuhaku.model.common;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class RateLimitingMap<K, V> extends HashMap<K, Map<V, Long>> {
 
 	public V ratelimit(K key, V value) {
 		Map<V, Long> timeout = Collections.singletonMap(value, System.currentTimeMillis());
-		return Objects.requireNonNull(super.put(key, timeout)).keySet().iterator().next();
+		super.put(key, timeout);
+		return value;
 	}
 
 	public V getAuthorIfNotExpired(K key, int time, TimeUnit unit) {
