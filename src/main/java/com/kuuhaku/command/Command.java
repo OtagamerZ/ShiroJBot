@@ -94,5 +94,4 @@ public abstract class Command {
 	}
 
 	public abstract void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix);
-
 }
