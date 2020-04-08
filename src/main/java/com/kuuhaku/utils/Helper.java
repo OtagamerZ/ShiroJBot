@@ -29,6 +29,7 @@ import com.kuuhaku.controller.postgresql.LogDAO;
 import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.Extensions;
+import com.kuuhaku.model.common.RateLimitingMap;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Log;
 import com.kuuhaku.model.persistent.Tags;
@@ -64,7 +65,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
@@ -81,21 +81,7 @@ public class Helper {
     public static final int CANVAS_SIZE = 1025;
     public static final DateTimeFormatter dateformat = DateTimeFormatter.ofPattern("dd/MMM/yyyy | HH:mm:ss (z)");
     public static final String HOME = "674261700366827539";
-    private static final LinkedList<User> ratelimit = new LinkedList<>();
-    private static final Thread ratelimitThread = new Thread(() -> {
-        while (true) {
-            try {
-                if (ratelimit.size() > 0) ratelimit.poll();
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
-            }
-        }
-    });
-
-    static {
-        Executors.newSingleThreadExecutor().execute(ratelimitThread);
-    }
+    private static final RateLimitingMap<User, Boolean> ratelimiter = new RateLimitingMap<>();
 
     public static boolean isRatelimited(Member m) {
         return ratelimit.contains(m.getUser()) && !TagDAO.getTagById(m.getId()).isVerified() /*&& !hasPermission(m, PrivilegeLevel.SHERIFF)*/;
