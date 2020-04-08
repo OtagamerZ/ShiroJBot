@@ -22,7 +22,6 @@ import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.controller.postgresql.QuizDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.RelayBlockList;
-import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -52,7 +51,7 @@ public class UnblockEvent implements Job {
 					if (!g.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) return;
 					Role r = g.getRoleById(GuildDAO.getGuildById(g.getId()).getCargoVip());
 					assert r != null;
-					g.retrieveInvites().queue(i -> i.stream()
+					g.retrieveInvites().complete().stream()
 							.filter(inv -> inv.getInviter() != null && inv.getInviter() != Objects.requireNonNull(g.getOwner()).getUser() && !inv.getInviter().isFake() && !inv.getInviter().isBot())
 							.map(inv -> {
 								Member m = g.getMember(inv.getInviter());
@@ -61,7 +60,12 @@ public class UnblockEvent implements Job {
 									return g.addRoleToMember(m, r);
 								else return g.removeRoleFromMember(m, r);
 							}).collect(Collectors.toList())
-							.forEach(rst -> rst.queue(null, Helper::doNothing)));
+							.forEach(rst -> {
+								try {
+									rst.complete();
+								} catch (NullPointerException ignore) {
+								}
+							});
 				}
 			});
 		} else if (LocalDateTime.now().getHour() % 6 == 0) {

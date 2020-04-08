@@ -98,7 +98,7 @@ public class Helper {
     }
 
     public static boolean isRatelimited(User u) {
-        return ratelimiter.getAuthorIfNotExpired(u, 2, TimeUnit.SECONDS);
+        return ratelimiter.getAuthorIfNotExpired(u, 2, TimeUnit.SECONDS) != null;
     }
 
     private static PrivilegeLevel getPrivilegeLevel(Member member) {
