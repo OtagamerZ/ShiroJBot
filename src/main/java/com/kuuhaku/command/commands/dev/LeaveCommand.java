@@ -24,6 +24,8 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
@@ -77,7 +79,7 @@ public class LeaveCommand extends Command {
 		} catch (ArrayIndexOutOfBoundsException e) {
 			channel.sendMessage("Escolha o servidor que devo sair!\n").embed((MessageEmbed) pages.get(0).getContent()).queue(m -> Pages.paginate(Main.getInfo().getAPI(), m, pages, 60, TimeUnit.SECONDS));
 		} catch (NullPointerException ex) {
-			channel.sendMessage(":x: | Servidor não encontrado!\n").embed((MessageEmbed) pages.get(0).getContent()).queue(m -> Pages.paginate(Main.getInfo().getAPI(), m, pages, 60, TimeUnit.SECONDS));
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invite-server-not-found")).embed((MessageEmbed) pages.get(0).getContent()).queue(m -> Pages.paginate(Main.getInfo().getAPI(), m, pages, 60, TimeUnit.SECONDS));
 		}
 	}
 
