@@ -120,7 +120,9 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		AudioSourceManagers.registerRemoteSources(getInfo().getApm());
 		AudioSourceManagers.registerLocalSource(getInfo().getApm());
 
-		SpringApplication.run(Application.class, args);
+		Thread apiThread = new Thread(() -> SpringApplication.run(Application.class, args));
+		apiThread.setName("api");
+		apiThread.start();
 
 		boolean apiOnline = false;
 		int tries = 1;
@@ -132,7 +134,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 			} catch (URISyntaxException | BindException e) {
 				Helper.logger(Main.class).error("Erro ao conectar client: " + e + " | " + e.getStackTrace()[0]);
 				try {
-					Thread.sleep(1000 * (long) Math.pow(2, tries));
+					Thread.sleep(4000);
 					tries++;
 				} catch (InterruptedException ignore) {
 				}
