@@ -19,6 +19,8 @@ package com.kuuhaku.command.commands.dev;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -82,7 +84,7 @@ public class LogCommand extends Command {
 			}
 
 			if (log.exists()) channel.sendMessage("Aqui está!\n" + "https://hastebin.com/" + key).queue();
-			else channel.sendMessage(":x: | Arquivo de log não encontrado.").queue();
+			else channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_log-not-found")).queue();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

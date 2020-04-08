@@ -26,6 +26,8 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.model.persistent.Tags;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
@@ -55,10 +57,10 @@ public class BroadcastCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
-			channel.sendMessage(":x: | É necessário informar um tipo de broadcast (geral/parceiros).").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_broadcast-no-type")).queue();
 			return;
 		} else if (args.length < 2) {
-			channel.sendMessage(":x: | É necessário informar uma mensagem para enviar.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_broadcast-no-message")).queue();
 			return;
 		}
 
@@ -128,7 +130,7 @@ public class BroadcastCommand extends Command {
 				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
 				break;
 			default:
-				channel.sendMessage(":x: | Tipo desconhecido, os tipos válidos são **geral** ou **parceiros**").queue();
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_broadcast-invalid-type")).queue();
 		}
 	}
 

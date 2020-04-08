@@ -23,6 +23,8 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -71,9 +73,9 @@ public class GuessTheNumberCommand extends Command {
                     Main.getInfo().getAPI().removeEventListener(this);
                     return;
                 } else if (!StringUtils.isNumeric(value) || Integer.parseInt(value) < 0 || Integer.parseInt(value) > 100) {
-                    channel.sendMessage(":x: | Você precisa escolher um número inteiro entre 0 e 100, ou digitar `desistir` para sair.").queue();
-                    return;
-                }
+					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-number")).queue();
+					return;
+				}
 
                 int guess = Integer.parseInt(value);
                 int diff = Math.abs(theValue - guess);

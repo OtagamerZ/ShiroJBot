@@ -22,6 +22,8 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.Tradutor;
 import com.kuuhaku.model.common.Anime;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
@@ -50,7 +52,7 @@ public class AnimeCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
-			channel.sendMessage(":x: | Você precisa digitar um nome para pesquisar.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_anime-no-name")).queue();
 			return;
 		}
 
@@ -148,7 +150,7 @@ public class AnimeCommand extends Command {
 				m.delete().queue();
 				channel.sendMessage(eb.build()).queue();
 			} catch (IOException e) {
-				m.editMessage(":x: | Humm...não achei nenhum anime com esse nome, talvez você tenha escrito algo errado?").queue();
+				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_anime-not-found")).queue();
 				Helper.logger(this.getClass()).debug(e + " | " + e.getStackTrace()[0]);
 			}
 		});

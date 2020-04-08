@@ -24,6 +24,8 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -73,7 +75,7 @@ public class JibrilEmoteListCommand extends Command {
 
 			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
 		} catch (IndexOutOfBoundsException e) {
-			channel.sendMessage(":x: | Nenhum emote encontrado com esse nome.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_emote-not-found")).queue();
 		}
 	}
 }
