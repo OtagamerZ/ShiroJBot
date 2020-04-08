@@ -32,6 +32,14 @@ public class RateLimitingMap<K, V> extends HashMap<K, Map<V, Long>> {
 
 	public V getAuthorIfNotExpired(K key, int time, TimeUnit unit) {
 		Entry<V, Long> entry = super.get(key).entrySet().iterator().next();
-		return unit.convert(entry.getValue() - unit.toMillis(time), TimeUnit.MILLISECONDS) > time ? entry.getKey() : null;
+		return expired(entry.getValue(), time, unit) ? null : entry.getKey();
+	}
+
+	public void clearExpired(int time, TimeUnit unit) {
+		Object[] entries = super.entrySet().stream().filter(e -> expired(e.getValue().entrySet().iterator().next().getValue(), time, unit)).map(Entry::getKey).toArray(Object[]::new);
+	}
+
+	private boolean expired(long timestamp, int time, TimeUnit unit) {
+		return unit.convert(timestamp - unit.toMillis(time), TimeUnit.MILLISECONDS) > time;
 	}
 }
