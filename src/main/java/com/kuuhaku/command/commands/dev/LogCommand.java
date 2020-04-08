@@ -21,6 +21,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 import org.json.JSONObject;
 
@@ -59,7 +60,12 @@ public class LogCommand extends Command {
 
 			try (OutputStream os = hastebin.getOutputStream()) {
 				//noinspection ImplicitDefaultCharsetUsage
-				os.write(IOUtils.toString(new FileReader(log)).getBytes(StandardCharsets.UTF_8));
+				String stringLog = IOUtils.toString(new FileReader(log));
+
+				stringLog = StringUtils.reverse(stringLog).substring(0, Math.min(stringLog.length(), 500000));
+				stringLog = StringUtils.reverse(stringLog);
+
+				os.write(stringLog.getBytes(StandardCharsets.UTF_8));
 			}
 
 			String key;
