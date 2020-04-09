@@ -21,6 +21,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.TicketDAO;
+import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -28,7 +29,7 @@ import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
 import java.awt.*;
-import java.time.format.DateTimeFormatter;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -64,13 +65,12 @@ public class ReportUserCommand extends Command {
 
 		String mensagem = String.join(" ", Arrays.copyOfRange(args, 1, args.length)).trim();
 		int number = TicketDAO.openTicket();
-		DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm");
 
 		EmbedBuilder eb = new EmbedBuilder();
 
 		eb.setTitle("Relatório de report (Ticket Nº " + number + ")");
 		eb.addField("Enviador por:", author.getAsTag() + " (" + guild.getName() + " | " + channel.getName() + ")", true);
-		eb.addField("Enviado em:", df.format(message.getTimeCreated()), true);
+		eb.addField("Enviado em:", Helper.dateformat.format(message.getTimeCreated().atZoneSameInstant(ZoneId.of("GMT-3"))), true);
 		eb.addField("Usuário reportado:", message.getMentionedUsers().get(0).getAsTag(), true);
 		eb.addField("Relatório:", "```" + mensagem + "```", false);
 		eb.setColor(Color.red);
