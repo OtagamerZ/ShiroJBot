@@ -761,9 +761,13 @@ public class Helper {
             } catch (InsufficientPermissionException ignore) {
             }
             return false;
+        } else if (ShiroInfo.getRatelimit().getIfPresent(author) == null) {
+            channel.sendMessage(":x: | Você está usando comandos muito rápido, tente novamente em alguns segundos!").queue();
+            return true;
         }
 
         command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, prefix);
+        ShiroInfo.getRatelimit().put(author, true);
         spawnAd(channel);
         return true;
     }
