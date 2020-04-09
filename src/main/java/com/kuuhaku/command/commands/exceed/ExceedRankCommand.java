@@ -59,7 +59,7 @@ public class ExceedRankCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		channel.sendMessage("<a:Loading:598500653215645697> Gerando placares...").queue(m -> {
+		channel.sendMessage("<a:loading:697879726630502401> Gerando placares...").queue(m -> {
 			if (MemberDAO.getMemberByMid(author.getId()).get(0).getExceed().isEmpty()) {
 				m.editMessage(":x: | Você não escolheu um exceed ainda, então não poderá ver o placar").queue();
 				return;
