@@ -761,8 +761,8 @@ public class Helper {
             } catch (InsufficientPermissionException ignore) {
             }
             return false;
-        } else if (ShiroInfo.getRatelimit().getIfPresent(author) == null) {
-            channel.sendMessage(":x: | Você está usando comandos muito rápido, tente novamente em alguns segundos!").queue();
+        } else if (ShiroInfo.getRatelimit().getIfPresent(author) != null) {
+            channel.sendMessage(":x: | Você está usando comandos muito rapidamente, tente novamente em alguns segundos!").queue();
             return true;
         }
 
