@@ -82,13 +82,13 @@ public class Helper {
     public static final int CANVAS_SIZE = 1025;
     public static final DateTimeFormatter dateformat = DateTimeFormatter.ofPattern("dd/MMM/yyyy | HH:mm:ss (z)");
     public static final String HOME = "674261700366827539";
-    private static final RateLimitingMap<User, Boolean> ratelimiter = new RateLimitingMap<>();
+    private static final RateLimitingMap<User> ratelimiter = new RateLimitingMap<>();
 
     static {
         Executors.newSingleThreadExecutor().execute(() -> {
             while (true) {
                 try {
-                    ratelimiter.clearExpired(2, TimeUnit.SECONDS);
+                    if (ratelimiter.size() > 0) ratelimiter.clearExpired(2, TimeUnit.SECONDS);
                     Thread.sleep(60000);
                 } catch (InterruptedException e) {
                     logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
@@ -98,7 +98,7 @@ public class Helper {
     }
 
     public static boolean isRatelimited(User u) {
-        return ratelimiter.getAuthorIfNotExpired(u, 2, TimeUnit.SECONDS) != null;
+        return ratelimiter.getAuthorIfNotExpired(u, 2, TimeUnit.SECONDS);
     }
 
     private static PrivilegeLevel getPrivilegeLevel(Member member) {
@@ -788,8 +788,8 @@ public class Helper {
 
         command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, prefix);
         spawnAd(channel);
-        if (!TagDAO.getTagById(member.getId()).isVerified() && !hasPermission(member, PrivilegeLevel.SHERIFF))
-            ratelimiter.ratelimit(author, true);
+        //if (!TagDAO.getTagById(member.getId()).isVerified() && !hasPermission(member, PrivilegeLevel.SHERIFF))
+        ratelimiter.ratelimit(author);
         return true;
     }
 }

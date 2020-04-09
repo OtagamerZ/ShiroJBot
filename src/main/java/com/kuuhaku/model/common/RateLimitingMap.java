@@ -22,21 +22,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class RateLimitingMap<K, V> extends HashMap<K, Map<V, Long>> {
+public class RateLimitingMap<K> extends HashMap<K, Map<Boolean, Long>> {
 
-	public V ratelimit(K key, V value) {
-		Map<V, Long> timeout = Collections.singletonMap(value, System.currentTimeMillis());
+	public boolean ratelimit(K key) {
+		Map<Boolean, Long> timeout = Collections.singletonMap(true, System.currentTimeMillis());
 		super.put(key, timeout);
-		return value;
+		return true;
 	}
 
-	public V getAuthorIfNotExpired(K key, int time, TimeUnit unit) {
-		try {
-			Entry<V, Long> entry = super.get(key).entrySet().iterator().next();
-			return expired(entry.getValue(), time, unit) ? null : entry.getKey();
-		} catch (NullPointerException e) {
-			return null;
-		}
+	public boolean getAuthorIfNotExpired(K key, int time, TimeUnit unit) {
+		if (super.get(key) == null) return false;
+		Entry<Boolean, Long> entry = super.get(key).entrySet().iterator().next();
+		return expired(entry.getValue(), time, unit) ? true : entry.getKey();
 	}
 
 	public void clearExpired(int time, TimeUnit unit) {
