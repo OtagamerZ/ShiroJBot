@@ -17,6 +17,9 @@
 
 package com.kuuhaku.utils;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.gson.GsonBuilder;
 import com.kuuhaku.controller.postgresql.CanvasDAO;
 import com.kuuhaku.controller.postgresql.VersionDAO;
@@ -32,6 +35,7 @@ import io.socket.client.Socket;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
 import org.discordbots.api.client.DiscordBotListAPI;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
@@ -84,6 +88,14 @@ public class ShiroInfo {
 	private static final JDAEvents shiroEvents = new JDAEvents();
 	private static final Map<String, KittyCache<String, Message>> messageCache = new HashMap<>();
 	private static final GsonBuilder JSONFactory = new GsonBuilder();
+	private static final LoadingCache<User, Boolean> ratelimit = CacheBuilder.newBuilder().expireAfterWrite(2, TimeUnit.SECONDS).build(
+			new CacheLoader<User, Boolean>() {
+				@Override
+				public Boolean load(@NotNull User key) {
+					return false;
+				}
+			}
+	);
 
 	//STATIC CONSTRUCTOR
 	static {
@@ -228,6 +240,10 @@ public class ShiroInfo {
 
 	public JDAEvents getShiroEvents() {
 		return shiroEvents;
+	}
+
+	public static LoadingCache<User, Boolean> getRatelimit() {
+		return ratelimit;
 	}
 
 	//VARIABLES
