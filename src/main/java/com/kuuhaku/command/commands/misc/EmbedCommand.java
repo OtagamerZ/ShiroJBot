@@ -47,7 +47,7 @@ public class EmbedCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		channel.sendMessage("<a:Loading:598500653215645697> Construindo embed...").queue(m -> {
+		channel.sendMessage("<a:loading:697879726630502401> Construindo embed...").queue(m -> {
 			try {
 				JSONObject json = new JSONObject(String.join(" ", args));
 

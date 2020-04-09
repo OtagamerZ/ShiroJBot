@@ -54,7 +54,7 @@ public class CompileCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		channel.sendMessage("<a:Loading:598500653215645697> | Compilando...").queue(m -> {
+		channel.sendMessage("<a:loading:697879726630502401> | Compilando...").queue(m -> {
 			try {
 				Future<?> execute = Main.getInfo().getPool().submit(() -> {
 					final long start = System.currentTimeMillis();
@@ -70,7 +70,7 @@ public class CompileCommand extends Command {
 							i.set("msg", message);
 							i.eval(code);
 							Object out = i.get("out");
-							m.getChannel().sendMessage("<a:Loading:598500653215645697> | Executando...").queue(d ->
+							m.getChannel().sendMessage("<a:loading:697879726630502401> | Executando...").queue(d ->
 									d.editMessage("-> " + out.toString()).queue());
 							message.delete().queue();
 							m.editMessage("<:Verified:591425071772467211> | Tempo de execução: " + (System.currentTimeMillis() - start) + " ms").queue();
@@ -79,7 +79,7 @@ public class CompileCommand extends Command {
 							PythonInterpreter pi = new PythonInterpreter();
 							pi.exec(code);
 							Object out = pi.get("out", Object.class);
-							m.getChannel().sendMessage("<a:Loading:598500653215645697> | Executando...").queue(d ->
+							m.getChannel().sendMessage("<a:loading:697879726630502401> | Executando...").queue(d ->
 									d.editMessage("-> " + out.toString()).queue());
 							message.delete().queue();
 							m.editMessage("<:Verified:591425071772467211> | Tempo de execução: " + (System.currentTimeMillis() - start) + " ms").queue();
@@ -88,7 +88,7 @@ public class CompileCommand extends Command {
 							ScriptEngine se = new ScriptEngineManager().getEngineByName("nashorn");
 							se.eval(code);
 							Object out = se.get("out");
-							m.getChannel().sendMessage("<a:Loading:598500653215645697> | Executando...").queue(d ->
+							m.getChannel().sendMessage("<a:loading:697879726630502401> | Executando...").queue(d ->
 									d.editMessage("-> " + out.toString()).queue());
 							message.delete().queue();
 							m.editMessage("<:Verified:591425071772467211> | Tempo de execução: " + (System.currentTimeMillis() - start) + " ms").queue();

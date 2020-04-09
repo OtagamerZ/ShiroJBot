@@ -63,7 +63,7 @@ public class ImageCommand extends Command {
 
 		String query = String.join(" ", args);
 
-		channel.sendMessage("<a:Loading:598500653215645697> Buscando imagem...").queue(m -> {
+		channel.sendMessage("<a:loading:697879726630502401> Buscando imagem...").queue(m -> {
 			try {
 				URL link = new URL("https://www.googleapis.com/customsearch/v1?key=" + System.getenv("GOOGLE_TOKEN") + "&cx=" + System.getenv("GOOGLE_SEARCH") + "&searchType=image&q=" + URLEncoder.encode(query, "UTF-8"));
 				HttpsURLConnection con = (HttpsURLConnection) link.openConnection();
