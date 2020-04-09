@@ -64,7 +64,7 @@ public class LogCommand extends Command {
 				//noinspection ImplicitDefaultCharsetUsage
 				String stringLog = IOUtils.toString(new FileReader(log));
 
-				stringLog = StringUtils.reverse(stringLog).substring(0, Math.min(stringLog.length(), 500000));
+				stringLog = StringUtils.reverse(stringLog).substring(0, Math.min(stringLog.length(), 100000));
 				stringLog = StringUtils.reverse(stringLog);
 
 				os.write(stringLog.getBytes(StandardCharsets.UTF_8));
