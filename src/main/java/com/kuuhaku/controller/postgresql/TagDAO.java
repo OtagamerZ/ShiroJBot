@@ -37,6 +37,18 @@ public class TagDAO {
 		return ts;
 	}
 
+	@SuppressWarnings("unchecked")
+	public static List<Tags> getAllTags() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT t FROM Tags t", Tags.class);
+		List<Tags> ts = (List<Tags>) q.getResultList();
+
+		em.close();
+
+		return ts;
+	}
+
 	public static Tags getTagById(String id) {
 		EntityManager em = Manager.getEntityManager();
 		Tags m;
