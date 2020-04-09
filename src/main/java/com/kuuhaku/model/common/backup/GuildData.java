@@ -22,12 +22,10 @@ import java.util.List;
 public class GuildData {
 	private final List<GuildCategory> categories;
 	private final List<GuildRole> roles;
-	private final List<String> members;
 
-	public GuildData(List<GuildCategory> categories, List<GuildRole> roles, List<String> members) {
+	public GuildData(List<GuildCategory> categories, List<GuildRole> roles) {
 		this.categories = categories;
 		this.roles = roles;
-		this.members = members;
 	}
 
 	public List<GuildCategory> getCategories() {
@@ -36,9 +34,5 @@ public class GuildData {
 
 	public List<GuildRole> getRoles() {
 		return roles;
-	}
-
-	public List<String> getMembers() {
-		return members;
 	}
 }

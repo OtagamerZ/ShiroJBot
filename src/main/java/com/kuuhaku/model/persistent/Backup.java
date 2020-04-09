@@ -187,7 +187,6 @@ public class Backup {
 		lastBackup = Timestamp.from(Instant.now());
 		List<GuildCategory> gcats = new ArrayList<>();
 		List<GuildRole> groles = g.getRoles().stream().map(r -> new GuildRole(r.getName(), r.getColorRaw(), r.getPermissionsRaw(), r.getIdLong(), r.isPublicRole())).collect(Collectors.toList());
-		List<String> gmembers = g.getMembers().stream().map(m -> m.getUser().getAsTag()).collect(Collectors.toList());
 
 		g.getCategories().forEach(cat -> {
 			List<com.kuuhaku.model.common.backup.GuildChannel> channels = new ArrayList<>();
@@ -223,7 +222,7 @@ public class Backup {
 			gcats.add(new GuildCategory(cat.getName(), channels, catperms));
 		});
 
-		this.serverData = ShiroInfo.getJSONFactory().create().toJson(new GuildData(gcats, groles, gmembers));
+		this.serverData = ShiroInfo.getJSONFactory().create().toJson(new GuildData(gcats, groles));
 		BackupDAO.saveBackup(this);
 	}
 
