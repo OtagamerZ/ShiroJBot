@@ -124,13 +124,13 @@ public class Relay {
 		}
 
 		if (m.getUser().getId().equals(Main.getInfo().getNiiChan())) {
-			badges.append("<:niichan:623841337610862602>");
+			badges.append("<:niichan:697879726018003115>");
 		} else {
 			if (m.getUser().getId().equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(m.getUser().getId()))
 				badges.append(TagIcons.getTag(TagIcons.DEV));
 
 			if (Main.getInfo().getSupports().contains(m.getUser().getId())) {
-				badges.append(TagIcons.getTag(TagIcons.SHERIFF));
+				badges.append(TagIcons.getTag(TagIcons.SUPPORT));
 			}
 
 			if (Main.getInfo().getEditors().contains(m.getUser().getId()))

@@ -69,13 +69,13 @@ public class MyTagsCommand extends Command {
         }
 
         if (author.getId().equals(Main.getInfo().getNiiChan())) {
-            badges.append("<:niichan:623841337610862602>");
+            badges.append("<:niichan:697879726018003115>");
         } else {
             if (author.getId().equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(author.getId()))
                 badges.append(TagIcons.getTag(TagIcons.DEV));
 
             if (Main.getInfo().getSupports().contains(author.getId())) {
-				badges.append(TagIcons.getTag(TagIcons.SHERIFF));
+				badges.append(TagIcons.getTag(TagIcons.SUPPORT));
 			}
 
             if (Main.getInfo().getEditors().contains(author.getId()))
