@@ -33,8 +33,7 @@ import com.kuuhaku.command.commands.music.YoutubeCommand;
 import com.kuuhaku.command.commands.partner.*;
 import com.kuuhaku.command.commands.reactions.*;
 import com.kuuhaku.command.commands.reactions.answerable.*;
-import com.kuuhaku.command.commands.sheriff.BlockCommand;
-import com.kuuhaku.command.commands.sheriff.IDCommand;
+import com.kuuhaku.command.commands.support.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,17 +88,11 @@ public class CommandManager {
 			add(new BroadcastCommand(
 					"transmitir", new String[]{"broadcast", "bc"}, getLocale(PT).getString("req_type-message"), getLocale(PT).getString("cmd_broadcast"), DEV, false
 			));
-			add(new InviteCommand(
-					"convite", new String[]{"invite"}, getLocale(PT).getString(REQ_SERVER_ID), getLocale(PT).getString("cmd_invite"), DEV, true
-			));
 			add(new UsageCommand(
 					"usos", new String[]{"uses", "usage"}, getLocale(PT).getString("cmd_usage"), DEV, true
 			));
 			add(new SimpleWHMCommand(
 					"wh", getLocale(PT).getString(REQ_MESSAGE), getLocale(PT).getString("cmd_simple-wh"), DEV, false
-			));
-			add(new RatingCommand(
-					"pedirvoto", new String[]{"requestvote", "howwasi"}, getLocale(PT).getString("cmd_rating"), DEV, false
 			));
 			add(new MMLockCommand(
 					"mmlock", getLocale(PT).getString("cmd_mm-lock"), DEV, false
@@ -107,16 +100,22 @@ public class CommandManager {
 			add(new AddQuizCommand(
 					"addquiz", new String[]{"addq", "novoquiz"}, getLocale(PT).getString("req_question-opts-correct-prize"), getLocale(PT).getString("cmd_add-quiz"), DEV, false
 			));
-			add(new MarkTicketCommand(
-					"mark", new String[]{"solved", "resolvido"}, getLocale(PT).getString("req_id"), getLocale(PT).getString("cmd_mark-ticket"), DEV, false
-			));
 
-			//SHERIFF
+			//SUPPORT
 			add(new BlockCommand(
-					"bloquear", new String[]{"block"}, getLocale(PT).getString("req_type-id-reason"), getLocale(PT).getString("cmd_block"), SHERIFFS, false
+					"bloquear", new String[]{"block"}, getLocale(PT).getString("req_type-id-reason"), getLocale(PT).getString("cmd_block"), SUPPORT, false
 			));
 			add(new IDCommand(
-					"id", getLocale(PT).getString(REQ_NAME), getLocale(PT).getString("cmd_id"), SHERIFFS, false
+					"id", getLocale(PT).getString(REQ_NAME), getLocale(PT).getString("cmd_id"), SUPPORT, false
+			));
+			add(new InviteCommand(
+					"convite", new String[]{"invite"}, getLocale(PT).getString(REQ_SERVER_ID), getLocale(PT).getString("cmd_invite"), SUPPORT, true
+			));
+			add(new RatingCommand(
+					"pedirvoto", new String[]{"requestvote", "howwasi"}, getLocale(PT).getString("cmd_rating"), SUPPORT, false
+			));
+			add(new MarkTicketCommand(
+					"mark", new String[]{"solved", "resolvido"}, getLocale(PT).getString("req_id"), getLocale(PT).getString("cmd_mark-ticket"), SUPPORT, false
 			));
 
 			//PARTNER
