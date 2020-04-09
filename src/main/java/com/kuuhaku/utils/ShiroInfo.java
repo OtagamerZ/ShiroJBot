@@ -78,7 +78,7 @@ public class ShiroInfo {
 	private static final ArrayList<String> editors = new ArrayList<String>() {{
 
 	}};
-	private static final ArrayList<String> sheriffs = new ArrayList<String>() {{
+	private static final ArrayList<String> supports = new ArrayList<String>() {{
 
 	}};
 	private static final Map<String, Integer[]> polls = new HashMap<>();
@@ -210,8 +210,8 @@ public class ShiroInfo {
 		return editors;
 	}
 
-	public ArrayList<String> getSheriffs() {
-		return sheriffs;
+	public ArrayList<String> getSupports() {
+		return supports;
 	}
 
 	public Map<String, Integer[]> getPolls() {

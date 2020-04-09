@@ -89,6 +89,7 @@ public class YoutubeCommand extends Command {
                                 if (Objects.requireNonNull(member.getVoiceState()).inVoiceChannel()) {
                                     Pages.buttonize(Main.getInfo().getAPI(), msg, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
                                         String url = Objects.requireNonNull(channel.retrieveMessageById(msg.getId()).complete().getEmbeds().get(0).getFooter()).getIconUrl();
+                                        assert url != null;
                                         if (url.startsWith("https://www.youtube.com/playlist?list=") && !TagDAO.getTagById(author.getId()).isVerified()) {
                                             channel.sendMessage(":x: | Você precisa ser um usuário verificado para poder adicionar playlists.").queue();
                                             msg.delete().queue();

@@ -59,6 +59,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Objects;
 
 public class JDAEvents extends ListenerAdapter {
@@ -248,7 +249,9 @@ public class JDAEvents extends ListenerAdapter {
 	@Override
 	public void onPrivateMessageReceived(PrivateMessageReceivedEvent event) {
 		if (event.getAuthor().isBot()) return;
-		if (Main.getInfo().getDevelopers().contains(event.getAuthor().getId())) {
+		List<String> staffIds = Main.getInfo().getDevelopers();
+		staffIds.addAll(Main.getInfo().getSupports());
+		if (staffIds.contains(event.getAuthor().getId())) {
 			String msg = event.getMessage().getContentRaw();
 			String[] args = msg.split(" ");
 			if (args.length < 2) return;
@@ -260,7 +263,7 @@ public class JDAEvents extends ListenerAdapter {
 					Main.getInfo().getUserByID(args[1]).openPrivateChannel().queue(c ->
 							c.sendMessage(event.getAuthor().getName() + " respondeu:\n>>> " + msgNoArgs).queue());
 
-					Main.getInfo().getDevelopers().forEach(d -> {
+					staffIds.forEach(d -> {
 						if (!d.equals(event.getAuthor().getId())) {
 							Main.getInfo().getUserByID(d).openPrivateChannel().queue(c ->
 									c.sendMessage(event.getAuthor().getName() + " respondeu:\n>>> " + msgNoArgs).queue());
@@ -280,7 +283,7 @@ public class JDAEvents extends ListenerAdapter {
 
 			eb.setAuthor(event.getAuthor().getAsTag(), event.getAuthor().getAvatarUrl());
 			eb.setFooter(event.getAuthor().getId() + " - " + LocalDateTime.now().atOffset(ZoneOffset.ofHours(-3)).format(DateTimeFormatter.ofPattern("HH:mm | dd/MMM/yyyy")), null);
-			Main.getInfo().getDevelopers().forEach(d ->
+			staffIds.forEach(d ->
 					Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> c.sendMessage(event.getMessage()).embed(eb.build()).queue()));
 		}
 	}
