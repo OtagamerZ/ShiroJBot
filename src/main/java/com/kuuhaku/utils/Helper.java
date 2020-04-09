@@ -87,7 +87,7 @@ public class Helper {
         else if (Main.getInfo().getDevelopers().contains(member.getId()))
             return PrivilegeLevel.DEV;
         else if (Main.getInfo().getSheriffs().contains(member.getId()))
-            return PrivilegeLevel.SHERIFF;
+            return PrivilegeLevel.SUPPORT;
         else if (member.hasPermission(Permission.MESSAGE_MANAGE))
             return PrivilegeLevel.MOD;
         else if (TagDAO.getTagById(member.getGuild().getOwnerId()).isPartner())
@@ -767,7 +767,8 @@ public class Helper {
         }
 
         command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, prefix);
-        ShiroInfo.getRatelimit().put(author, true);
+        if (TagDAO.getTagById(author.getId()).isPartner() || Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
+            ShiroInfo.getRatelimit().put(author, true);
         spawnAd(channel);
         return true;
     }
