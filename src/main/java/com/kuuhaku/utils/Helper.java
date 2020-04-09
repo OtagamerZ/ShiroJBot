@@ -29,7 +29,6 @@ import com.kuuhaku.controller.postgresql.LogDAO;
 import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.Extensions;
-import com.kuuhaku.model.common.RateLimitingMap;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Log;
 import com.kuuhaku.model.persistent.Tags;
@@ -81,11 +80,6 @@ public class Helper {
     public static final int CANVAS_SIZE = 1025;
     public static final DateTimeFormatter dateformat = DateTimeFormatter.ofPattern("dd/MMM/yyyy | HH:mm:ss (z)");
     public static final String HOME = "674261700366827539";
-    public static final RateLimitingMap<User> ratelimiter = new RateLimitingMap<>();
-
-    public static boolean isRatelimited(User u) {
-        return ratelimiter.getAuthorIfNotExpired(u, 2, TimeUnit.SECONDS);
-    }
 
     private static PrivilegeLevel getPrivilegeLevel(Member member) {
         if (Main.getInfo().getNiiChan().equals(member.getId()))
@@ -767,15 +761,10 @@ public class Helper {
             } catch (InsufficientPermissionException ignore) {
             }
             return false;
-        } else if (Helper.isRatelimited(author)) {
-            channel.sendMessage(":x: | Você está usando comandos muito rápido, tente novamente em alguns segundos!").queue();
-            return false;
         }
 
         command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, prefix);
         spawnAd(channel);
-        //if (!TagDAO.getTagById(member.getId()).isVerified() && !hasPermission(member, PrivilegeLevel.SHERIFF))
-        ratelimiter.ratelimit(author);
         return true;
     }
 }
