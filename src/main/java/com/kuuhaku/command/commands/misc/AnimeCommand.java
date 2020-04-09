@@ -56,7 +56,7 @@ public class AnimeCommand extends Command {
 			return;
 		}
 
-		channel.sendMessage("<a:Loading:598500653215645697> Buscando anime...").queue(m -> {
+		channel.sendMessage("<a:loading:697879726630502401> Buscando anime...").queue(m -> {
 			try {
 				String query = "{\n" +
 						"Media(search: \\\"" + String.join(" ", args) + "\\\", type: ANIME) {\n" +

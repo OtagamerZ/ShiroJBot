@@ -63,7 +63,7 @@ public class YoutubeCommand extends Command {
             channel.sendMessage(":x: | Você precisa digitar um nome para pesquisar.").queue();
             return;
         }
-        channel.sendMessage("<a:Loading:598500653215645697> Buscando videos...").queue(m -> {
+        channel.sendMessage("<a:loading:697879726630502401> Buscando videos...").queue(m -> {
             try {
                 List<YoutubeVideo> videos = Youtube.getData(String.join(" ", args));
                 EmbedBuilder eb = new EmbedBuilder();

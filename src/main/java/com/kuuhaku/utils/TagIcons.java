@@ -18,38 +18,38 @@
 package com.kuuhaku.utils;
 
 public enum TagIcons {
-	DEV, SHERIFF, EDITOR, READER, MODERATOR, LVL20, LVL30, LVL40, LVL50, LVL60, LVL70, VERIFIED, TOXIC, MARRIED;
+	DEV, SUPPORT, EDITOR, READER, MODERATOR, LVL20, LVL30, LVL40, LVL50, LVL60, LVL70, VERIFIED, TOXIC, MARRIED;
 
 	public static String getTag(TagIcons t) {
 		switch (t) {
 			case DEV:
-				return "<:Dev:589103373354270760> ";
-			case SHERIFF:
-				return "<:sheriff:613934507619385374>";
+				return "<:developer:697879725925990466>";
+			case SUPPORT:
+				return "<:support:697879726047625216>";
 			case EDITOR:
-				return "<:Editor:589120809428058123> ";
+				return "<:writer:697879725497909310>";
 			case READER:
-				return "<:reader:616680618037870642> ";
+				return "<:reader:697879726148288542>";
 			case MODERATOR:
-				return "<:Moderator:589121447314587744> ";
+				return "<:moderator:697879725628194878>";
 			case LVL20:
-				return "<:lvl_20:611156384909623296> ";
+				return "<:lvl_20:697879725972127885>";
 			case LVL30:
-				return "<:lvl_30:611156385157349385> ";
+				return "<:lvl_30:697879725951156294>";
 			case LVL40:
-				return "<:lvl_40:611156385291305001> ";
+				return "<:lvl_40:697879726043299942>";
 			case LVL50:
-				return "<:lvl_50:611156384935051274> ";
+				return "<:lvl_50:697879725862944899>";
 			case LVL60:
-				return "<:lvl_60:611156384989577241> ";
+				return "<:lvl_60:697879725984710777>";
 			case LVL70:
-				return "<:lvl_70:616680678804815927> ";
+				return "<:lvl_70:697879726009745458> ";
 			case VERIFIED:
-				return "<:Verified:591425071772467211> ";
+				return "<:verified:697879725887979621>";
 			case TOXIC:
-				return "<:Toxic:589103372926451713> ";
+				return "<:toxic:697879725816676442>";
 			case MARRIED:
-				return "<:Married:598908829769400320>";
+				return "<:married:697879725888241684>";
 		}
 		return null;
 	}
@@ -57,17 +57,17 @@ public enum TagIcons {
 	public static String getExceed(ExceedEnums t) {
 		switch (t) {
 			case IMANITY:
-				return "<:imanity:613741198288617474>";
+				return "<:imanity:697879725690847324>";
 			case SEIREN:
-				return "<:seiren:613741198334754827>";
+				return "<:seiren:697879725640515685>";
 			case WEREBEAST:
-				return "<:werebeast:613741197680312321>";
+				return "<:werebeast:697879725934379178>";
 			case ELF:
-				return "<:lumamana:613741197764067358>";
+				return "<:elf:697879725661749300>";
 			case EXMACHINA:
-				return "<:exmachina:613741197231390720>";
+				return "<:exmachina:697879725988904971>";
 			case FLUGEL:
-				return "<:flugel:613741197726318592>";
+				return "<:flugel:697879725967933440>";
 		}
 		return null;
 	}
