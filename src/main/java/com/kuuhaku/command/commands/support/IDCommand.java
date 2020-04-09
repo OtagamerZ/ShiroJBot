@@ -15,7 +15,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.sheriff;
+package com.kuuhaku.command.commands.support;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;

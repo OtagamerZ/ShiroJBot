@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 
 public enum Category {
 	DEV(ShiroInfo.getLocale(I18n.PT).getString("cat_dev-name"), "<:dev:674261700333142046>", "674261700333142046", ShiroInfo.getLocale(I18n.PT).getString("cat_dev-description"), PrivilegeLevel.DEV),
-	SHERIFFS(ShiroInfo.getLocale(I18n.PT).getString("cat_sheriff-name"), "<:sheriff:674261700538662913>", "674261700538662913", ShiroInfo.getLocale(I18n.PT).getString("cat_sheriff-description"), PrivilegeLevel.SHERIFF),
+	SUPPORT(ShiroInfo.getLocale(I18n.PT).getString("cat_support-name"), "<:sheriff:674261700538662913>", "674261700538662913", ShiroInfo.getLocale(I18n.PT).getString("cat_support-description"), PrivilegeLevel.SUPPORT),
 	MODERACAO(ShiroInfo.getLocale(I18n.PT).getString("cat_moderation-name"), "<:mod:674261700844716082>", "674261700844716082", ShiroInfo.getLocale(I18n.PT).getString("cat_moderation-description"), PrivilegeLevel.MOD),
 	PARTNER(ShiroInfo.getLocale(I18n.PT).getString("cat_partner-name"), "<:partner:674261701109219328>", "674261701109219328", ShiroInfo.getLocale(I18n.PT).getString("cat_partner-description"), PrivilegeLevel.USER),
 	FUN(ShiroInfo.getLocale(I18n.PT).getString("cat_fun-name"), "<:fun:674261700941185035>", "674261700941185035", ShiroInfo.getLocale(I18n.PT).getString("cat_fun-description"), PrivilegeLevel.USER),
@@ -78,7 +78,7 @@ public enum Category {
 			case MUSICA:
 			case MODERACAO:
 			case NSFW:
-			case SHERIFFS:
+			case SUPPORT:
 				return true;
 			default:
 				return false;

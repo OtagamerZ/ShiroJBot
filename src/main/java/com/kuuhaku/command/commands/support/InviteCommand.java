@@ -15,7 +15,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.dev;
+package com.kuuhaku.command.commands.support;
 
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
