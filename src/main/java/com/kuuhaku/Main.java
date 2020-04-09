@@ -55,6 +55,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class Main implements Thread.UncaughtExceptionHandler {
 
@@ -143,6 +144,17 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	}
 
 	private static void finishStartUp() {
+		Executors.newSingleThreadExecutor().execute(() -> {
+			while (true) {
+				try {
+					if (Helper.ratelimiter.size() > 0) Helper.ratelimiter.clearExpired(2, TimeUnit.SECONDS);
+					Thread.sleep(60000);
+				} catch (InterruptedException e) {
+					Helper.logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
+				}
+			}
+		});
+
 		api.getPresence().setActivity(getRandomActivity());
 		jbr.getPresence().setActivity(Activity.listening("as mensagens de " + relay.getRelayMap().size() + " servidores!"));
 		tet.getPresence().setActivity(Activity.playing(" em diversos mundos espalhados em " + tet.getGuilds().size() + " servidores!"));

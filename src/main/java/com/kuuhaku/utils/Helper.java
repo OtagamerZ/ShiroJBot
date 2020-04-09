@@ -65,7 +65,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
@@ -82,20 +81,7 @@ public class Helper {
     public static final int CANVAS_SIZE = 1025;
     public static final DateTimeFormatter dateformat = DateTimeFormatter.ofPattern("dd/MMM/yyyy | HH:mm:ss (z)");
     public static final String HOME = "674261700366827539";
-    private static final RateLimitingMap<User> ratelimiter = new RateLimitingMap<>();
-
-    static {
-        Executors.newSingleThreadExecutor().execute(() -> {
-            while (true) {
-                try {
-                    if (ratelimiter.size() > 0) ratelimiter.clearExpired(2, TimeUnit.SECONDS);
-                    Thread.sleep(60000);
-                } catch (InterruptedException e) {
-                    logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
-                }
-            }
-        });
-    }
+    public static final RateLimitingMap<User> ratelimiter = new RateLimitingMap<>();
 
     public static boolean isRatelimited(User u) {
         return ratelimiter.getAuthorIfNotExpired(u, 2, TimeUnit.SECONDS);
