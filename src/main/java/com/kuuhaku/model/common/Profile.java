@@ -211,7 +211,7 @@ public class Profile {
 			} else {
 				if (m.getUser().getId().equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(m.getUser().getId()))
 					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/dev.png"))));
-				if (Main.getInfo().getSheriffs().contains(m.getUser().getId())) {
+				if (Main.getInfo().getSupports().contains(m.getUser().getId())) {
 					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/sheriff.png"))));
 				}
 				if (Main.getInfo().getEditors().contains(m.getUser().getId()))

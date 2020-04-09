@@ -52,6 +52,7 @@ public class TrackScheduler extends AudioEventAdapter {
 	public void queue(AudioTrack track) {
 		if (!player.startTrack(track, true)) {
 			queue.offer(track);
+			System.out.println(track.getInfo().uri);
 		}
 	}
 

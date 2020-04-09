@@ -129,7 +129,7 @@ public class Relay {
 			if (m.getUser().getId().equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(m.getUser().getId()))
 				badges.append(TagIcons.getTag(TagIcons.DEV));
 
-			if (Main.getInfo().getSheriffs().contains(m.getUser().getId())) {
+			if (Main.getInfo().getSupports().contains(m.getUser().getId())) {
 				badges.append(TagIcons.getTag(TagIcons.SHERIFF));
 			}
 

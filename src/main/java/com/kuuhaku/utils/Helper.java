@@ -86,7 +86,7 @@ public class Helper {
             return PrivilegeLevel.NIICHAN;
         else if (Main.getInfo().getDevelopers().contains(member.getId()))
             return PrivilegeLevel.DEV;
-        else if (Main.getInfo().getSheriffs().contains(member.getId()))
+        else if (Main.getInfo().getSupports().contains(member.getId()))
             return PrivilegeLevel.SUPPORT;
         else if (member.hasPermission(Permission.MESSAGE_MANAGE))
             return PrivilegeLevel.MOD;
