@@ -21,6 +21,8 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -52,20 +54,20 @@ public class AddColorRoleCommand extends Command {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (!guild.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) {
-			channel.sendMessage(":x: | Eu preciso da permissão de gerenciar cargos para que possa criar as cores.").queue();
-			return;
-		} else if (args.length < 1) {
-			channel.sendMessage(":x: | É necessário informar um nome e uma cor em formato hexadecimal (`#RRGGBB`). Caso você informe apenas o nome da cor, ela será removida da lista.").queue();
-			return;
-		}
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_addcolor-insufficient-permissions")).queue();
+            return;
+        } else if (args.length < 1) {
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_addcolor-invalid-argument")).queue();
+            return;
+        }
 
 		try {
 			String name = StringUtils.capitalize(args[0].toLowerCase());
 
 			if (name.length() > 15) {
-				channel.sendMessage(":x: | Nome muito longo, escolha um nome menor para a cor.").queue();
-				return;
-			}
+                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_addcolor-big-name")).queue();
+                return;
+            }
 
 			JSONObject jo = gc.getColorRoles();
 
@@ -93,8 +95,8 @@ public class AddColorRoleCommand extends Command {
 
 			channel.sendMessage("Cor adicionada com sucesso!").queue();
 		} catch (NumberFormatException e) {
-			channel.sendMessage(":x: | Cor inválida, verifique se digitou no formato `#RRGGBB`.").queue();
-		} catch (ArrayIndexOutOfBoundsException e) {
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_addcolor-invalid-color")).queue();
+        } catch (ArrayIndexOutOfBoundsException e) {
 			String name = StringUtils.capitalize(args[0].toLowerCase());
 			if (!gc.getColorRoles().has(name)) {
 				channel.sendMessage("Essa cor não existe!").queue();
