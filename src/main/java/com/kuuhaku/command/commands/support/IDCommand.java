@@ -21,6 +21,8 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
@@ -69,13 +71,13 @@ public class IDCommand extends Command {
 
 				channel.sendMessage(eb.build()).queue();
 			} catch (InsufficientPermissionException ex) {
-				channel.sendMessage(":x: | Não consigo mandar embeds aqui.").queue();
-			} catch (Exception e) {
-				channel.sendMessage(":x: | Nenhum usuário encontrado.").queue();
-			}
+                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_id-insufficient-permissions-to-embed")).queue();
+            } catch (Exception e) {
+                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_id-user-not-found")).queue();
+            }
 		} else {
-			channel.sendMessage(":x: | É necessário especificar o nome a ser pesquisado.").queue();
-		}
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_id-invalid-name")).queue();
+        }
 	}
 
 }
