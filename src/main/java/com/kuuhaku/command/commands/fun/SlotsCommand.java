@@ -24,6 +24,8 @@ import com.kuuhaku.controller.postgresql.SlotsDAO;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Slots;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -66,7 +68,7 @@ public class SlotsCommand extends Command {
 			channel.sendMessage(eb.build()).queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[0]) || Integer.parseInt(args[0]) < 25) {
-			channel.sendMessage(":x: | A aposta deve ser um valor numérico maior ou igual a 25.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_slots-invalid-number")).queue();
 			return;
 		}
 
@@ -74,7 +76,7 @@ public class SlotsCommand extends Command {
 		AtomicInteger bet = new AtomicInteger(Integer.parseInt(args[0]));
 
 		if (acc.getBalance() < bet.get()) {
-			channel.sendMessage(":x: | Você não tem créditos suficientes.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_slots-insufficient-credit")).queue();
 			return;
 		}
 
