@@ -28,7 +28,9 @@ import com.kuuhaku.controller.sqlite.CustomAnswerDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.persistent.CustomAnswers;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.PrivilegeLevel;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -59,10 +61,10 @@ public class CustomAnswerCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (!Helper.hasPermission(member, PrivilegeLevel.MOD) && GuildDAO.getGuildById(guild.getId()).isNotAnyTell()) {
-			channel.sendMessage(":x: | Este servidor não está configurado para permitir respostas customizadas da comunidade.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-invalid-arguments")).queue();
 			return;
 		} else if (args.length == 0) {
-			channel.sendMessage(":x: | Você precisa definir um gatilho e uma mensagem.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-undefined-message")).queue();
 			return;
 		} else if (args[0].equals("lista")) {
 			List<Page> pages = new ArrayList<>();
@@ -92,7 +94,7 @@ public class CustomAnswerCommand extends Command {
 			List<CustomAnswers> ca = BackupDAO.getCADump();
 			ca.removeIf(a -> !String.valueOf(a.getId()).equals(args[0]) || !a.getGuildID().equals(guild.getId()));
 			if (ca.size() == 0) {
-				channel.sendMessage(":x: | Esta resposta não existe!").queue();
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-answer-does-not-exist")).queue();
 				return;
 			}
 			CustomAnswers c = ca.get(0);
@@ -115,13 +117,13 @@ public class CustomAnswerCommand extends Command {
 					CustomAnswerDAO.addCAtoDB(guild, txt.split(";")[0], txt.replace(txt.split(";")[0] + ";", ""));
 					channel.sendMessage("Agora quando alguém disser `" + txt.split(";")[0] + "` irei responder `" + txt.replace(txt.split(";")[0] + ";", "") + "`.").queue();
 				} else {
-					channel.sendMessage(":x: | Woah, essa resposta é muito longa, não consigo decorar isso tudo!").queue();
+					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-very-long-answer")).queue();
 				}
 			} else {
-				channel.sendMessage(":x: | Hum, esse gatilho é grande demais para eu lembrar, digite um gatilho melhor por favor!").queue();
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-too-big-trigger")).queue();
 			}
 		} else {
-			channel.sendMessage(":x: | O gatilho e a resposta devem estar separados por ponto e virgula (`;`).").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-invalid-trigger-arguments")).queue();
 		}
 	}
 }
