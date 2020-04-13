@@ -35,6 +35,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class ItemRegisterHandler extends ListenerAdapter {
 	private final TextChannel channel;
@@ -160,6 +162,8 @@ public class ItemRegisterHandler extends ListenerAdapter {
 			}
 		} catch (NumberFormatException e) {
 			event.getChannel().sendMessage(":x: | Os atributos devem ser números inteiros, separados por ponto e vírgula \";\".").queue();
+		} catch (IllegalArgumentException e) {
+			event.getChannel().sendMessage(":x: | O tipo do item deve ser um dos tipos exibidos na lista.").queue();
 		}
 		event.getMessage().delete().queue();
 	}
@@ -251,20 +255,21 @@ public class ItemRegisterHandler extends ListenerAdapter {
 					break;
 				case 4:
 					eb.setDescription("Escolha um tipo");
+					eb.addField("Tipos:", Arrays.stream(Equipment.values()).map(e -> "`" + e.getName() + "`  ").collect(Collectors.joining()), false);
 					msg.addReaction(PREVIOUS).queue(s ->
 							msg.addReaction(CANCEL).queue(s1 -> {
 								if (complete[3]) msg.addReaction(NEXT).queue();
 							}));
 					break;
 				case 5:
-					eb.setDescription("Escolha um preço");
+					eb.setDescription("Escolha um preço (valor inteiro)");
 					msg.addReaction(PREVIOUS).queue(s ->
 							msg.addReaction(CANCEL).queue(s1 -> {
 								if (complete[4]) msg.addReaction(NEXT).queue();
 							}));
 					break;
 				case 6:
-					eb.setDescription("Distribua os atributos do item");
+					eb.setDescription("Distribua os atributos do item neste formato `A;B;C;...`");
 					switch (type) {
 						case HEAD:
 							eb.addField("Defesa: " + attrib1, "", true);

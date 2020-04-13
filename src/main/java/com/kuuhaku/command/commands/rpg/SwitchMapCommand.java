@@ -51,6 +51,7 @@ public class SwitchMapCommand extends Command {
 
 			try {
 				Main.getInfo().getGames().get(guild.getId()).switchMap(Integer.parseInt(args[0]));
+				channel.sendMessage("Mapa trocado com sucesso.").queue();
 			} catch (IndexOutOfBoundsException | NumberFormatException e) {
 				channel.sendMessage(":x: | Índice inválido, existem " + Main.getInfo().getGames().get(guild.getId()).getMaps().size() + " mapas cadastrados. (primeiro = 0)").queue();
 			}
