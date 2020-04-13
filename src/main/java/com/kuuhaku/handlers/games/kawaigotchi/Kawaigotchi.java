@@ -49,7 +49,7 @@ public class Kawaigotchi {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''", unique = true)
 	private String userId;
 
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
