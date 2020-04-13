@@ -57,7 +57,7 @@ public class LogCommand extends Command {
 			String stringLog = IOUtils.toString(new FileReader(log));
 
 			stringLog = StringUtils.reverse(stringLog)/*.substring(0, Math.min(stringLog.length(), 5242880))*/;
-			stringLog = StringUtils.reverse(stringLog);
+			/*stringLog = StringUtils.reverse(stringLog);*/
 
 			File croppedLog = File.createTempFile("log_" + System.currentTimeMillis(), ".txt");
 
