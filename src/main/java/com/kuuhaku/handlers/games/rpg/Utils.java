@@ -20,7 +20,6 @@ package com.kuuhaku.handlers.games.rpg;
 import com.kuuhaku.handlers.games.rpg.entities.Character;
 import com.kuuhaku.handlers.games.rpg.entities.Item;
 import com.kuuhaku.handlers.games.rpg.entities.LootItem;
-import com.kuuhaku.handlers.games.rpg.entities.Status;
 import com.kuuhaku.handlers.games.rpg.enums.Rarity;
 import com.kuuhaku.handlers.games.rpg.exceptions.BadLuckException;
 import com.kuuhaku.handlers.games.rpg.world.World;
@@ -122,7 +121,7 @@ public class Utils {
 		g2d.dispose();
 	}
 
-	public static String rollDice(String arg, Status status) {
+	public static String rollDice(String arg, Character chr) throws NumberFormatException {
 		String[] rawDices = arg.split(" ");
 		List<String> dices = new ArrayList<>();
 		List<String> steps = new ArrayList<>();
@@ -135,35 +134,43 @@ public class Utils {
 					String dice;
 					switch (rawDice.split("d")[1]) {
 						case "s":
-							if (status != null) dice = String.valueOf(status.getStrength());
+							if (chr.getStatus() != null)
+								dice = String.valueOf(chr.getStatus().getStrength() + chr.getInventory().getStatModifiers()[1]);
 							else dice = "1";
 							break;
 						case "p":
-							if (status != null) dice = String.valueOf(status.getPerception());
+							if (chr.getStatus() != null)
+								dice = String.valueOf(chr.getStatus().getPerception() + chr.getInventory().getStatModifiers()[2]);
 							else dice = "1";
 							break;
 						case "e":
-							if (status != null) dice = String.valueOf(status.getEndurance());
+							if (chr.getStatus() != null)
+								dice = String.valueOf(chr.getStatus().getEndurance() + chr.getInventory().getStatModifiers()[3]);
 							else dice = "1";
 							break;
 						case "c":
-							if (status != null) dice = String.valueOf(status.getCharisma());
+							if (chr.getStatus() != null)
+								dice = String.valueOf(chr.getStatus().getCharisma() + chr.getInventory().getStatModifiers()[4]);
 							else dice = "1";
 							break;
 						case "i":
-							if (status != null) dice = String.valueOf(status.getIntelligence());
+							if (chr.getStatus() != null)
+								dice = String.valueOf(chr.getStatus().getIntelligence() + chr.getInventory().getStatModifiers()[5]);
 							else dice = "1";
 							break;
 						case "a":
-							if (status != null) dice = String.valueOf(status.getAgility());
+							if (chr.getStatus() != null)
+								dice = String.valueOf(chr.getStatus().getAgility() + chr.getInventory().getStatModifiers()[6]);
 							else dice = "1";
 							break;
 						case "l":
-							if (status != null) dice = String.valueOf(status.getLuck());
+							if (chr.getStatus() != null)
+								dice = String.valueOf(chr.getStatus().getLuck() + chr.getInventory().getStatModifiers()[7]);
 							else dice = "1";
 							break;
 						case "r":
-							if (status != null) dice = String.valueOf(status.getDefense());
+							if (chr.getStatus() != null)
+								dice = String.valueOf(chr.getStatus().getDefense() + chr.getInventory().getStatModifiers()[0]);
 							else dice = "1";
 							break;
 						default:

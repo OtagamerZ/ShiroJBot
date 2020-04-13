@@ -40,7 +40,7 @@ public abstract class Actor {
 	private Map atMap;
 	private final String pin;
 
-	private Actor(User user, Map map) throws IOException {
+	private Actor(User user, Map map, String avatar) throws IOException {
 		this.id = user.getIdLong();
 		this.pin = makePlayerPin(user);
 		this.atMap = map;
@@ -55,7 +55,7 @@ public abstract class Actor {
 		private final Character character;
 
 		public Player(Map map, User user, Character character) throws IOException {
-			super(user, map);
+			super(user, map, character.getImage());
 			this.character = character;
 		}
 

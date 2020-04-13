@@ -165,7 +165,7 @@ public class MapRegisterHandler extends ListenerAdapter {
 					});
 					break;
 				case 2:
-					eb.setDescription("Digite a posição inicial dos jogadores no seguinte formato `X;Y`");
+					eb.setDescription("Digite a posição inicial dos jogadores neste formato `X;Y`");
 
 					msg.addReaction(PREVIOUS).queue(s ->
 							msg.addReaction(CANCEL).queue(s1 -> {
