@@ -8,13 +8,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/rpg/RollCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/rpg/RollCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/rpg/SwitchMapCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/rpg/SwitchMapCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/rpg/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/rpg/Utils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/rpg/actors/Actor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/rpg/actors/Actor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/rpg/handlers/Action.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/rpg/handlers/ItemRegisterHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/rpg/handlers/ItemRegisterHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/rpg/handlers/MapRegisterHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/rpg/handlers/MapRegisterHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/RPGCommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/RPGCommandManager.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -328,14 +322,7 @@
       <workItem from="1586384323362" duration="1279000" />
       <workItem from="1586452277678" duration="6975000" />
       <workItem from="1586795699947" duration="1518000" />
-      <workItem from="1586797906253" duration="984000" />
-    </task>
-    <task id="LOCAL-00973" summary="Pequenas correções">
-      <created>1586199844835</created>
-      <option name="number" value="00973" />
-      <option name="presentableId" value="LOCAL-00973" />
-      <option name="project" value="LOCAL" />
-      <updated>1586199844835</updated>
+      <workItem from="1586797906253" duration="1678000" />
     </task>
     <task id="LOCAL-00974" summary="Pequenas correções">
       <created>1586200530674</created>
@@ -673,7 +660,14 @@
       <option name="project" value="LOCAL" />
       <updated>1586789706219</updated>
     </task>
-    <option name="localTasksCounter" value="1022" />
+    <task id="LOCAL-01022" summary="Mais alertas nos comandos de RPG">
+      <created>1586798943059</created>
+      <option name="number" value="01022" />
+      <option name="presentableId" value="LOCAL-01022" />
+      <option name="project" value="LOCAL" />
+      <updated>1586798943060</updated>
+    </task>
+    <option name="localTasksCounter" value="1023" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -692,7 +686,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Votos agora lhe dão créditos" />
     <MESSAGE value="Comandos de Kawaigotchi implementados" />
     <MESSAGE value="Correção nos comandos de reação" />
     <MESSAGE value="Correção na pesquisa de anime" />
@@ -717,7 +710,8 @@
     <MESSAGE value="Melhorado o sistema de ratelimits" />
     <MESSAGE value="Correção no comando de logs" />
     <MESSAGE value="Melhoria no sistema de tickets" />
-    <option name="LAST_COMMIT_MESSAGE" value="Melhoria no sistema de tickets" />
+    <MESSAGE value="Mais alertas nos comandos de RPG" />
+    <option name="LAST_COMMIT_MESSAGE" value="Mais alertas nos comandos de RPG" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -897,12 +891,12 @@
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1586789716313">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1586798962984">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1586748978558" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1586789716313" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1586798962984" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
