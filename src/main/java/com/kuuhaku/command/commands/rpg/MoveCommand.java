@@ -59,15 +59,15 @@ public class MoveCommand extends Command {
 					return;
 				}
 
-				char[] coords = {args[0].charAt(0), args[0].charAt(1)};
-				Integer[] numCoords = Utils.coordToArray(coords[0], coords[1]);
-
-				if (numCoords[0] + numCoords[1] > 2) {
-					channel.sendMessage(":x: | Você só pode andar uma casa por vez.").queue();
-					return;
-				}
-
 				try {
+					char[] coords = {args[0].charAt(0), args[0].charAt(1)};
+					Integer[] numCoords = Utils.coordToArray(coords[0], coords[1]);
+
+					if (numCoords[0] + numCoords[1] > 2) {
+						channel.sendMessage(":x: | Você só pode andar uma casa por vez.").queue();
+						return;
+					}
+
 					Actor.Player p = Main.getInfo().getGames().get(guild.getId()).getPlayers().get(author.getId());
 					channel.sendMessage("_**" + p.getCharacter().getName() + " move-se para " + Arrays.toString(coords) + "**_").queue();
 					p.move(Main.getInfo().getGames().get(guild.getId()).getCurrentMap(), Utils.coordToArray(coords[0], coords[1]));

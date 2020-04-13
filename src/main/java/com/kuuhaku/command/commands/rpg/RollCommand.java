@@ -49,9 +49,9 @@ public class RollCommand extends Command {
 		if (Main.getInfo().getGames().get(guild.getId()).getPlayers().containsKey(author.getId())) {
 			try {
 				Actor.Player p = Main.getInfo().getGames().get(guild.getId()).getPlayers().get(author.getId());
-				channel.sendMessage("_**" + p.getCharacter().getName() + " rolou os dados:**_ \nTotal: " + Utils.rollDice(String.join(" ", args), Main.getInfo().getGames().get(guild.getId()).getPlayers().get(author.getId()).getCharacter().getStatus())).queue();
-			} catch (Exception e) {
-				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				channel.sendMessage("_**" + p.getCharacter().getName() + " rolou os dados:**_ \nTotal: " + Utils.rollDice(String.join(" ", args), Main.getInfo().getGames().get(guild.getId()).getPlayers().get(author.getId()).getCharacter())).queue();
+			} catch (NumberFormatException e) {
+				channel.sendMessage(":x: | O valor do dado deve ser inteiro ou um dos atributos do personagem (`s`, `p`, `e`, `c`, `i`, `a`, `l`, `r`)").queue();
 			}
 		} else if (Main.getInfo().getGames().get(guild.getId()).getMaster().equals(author.getId())) {
 			try {
