@@ -885,11 +885,11 @@
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1586457610436">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="351" y="182" key="Vcs.Push.Dialog.v2" timestamp="1586743047490">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
-    <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1586386172395" />
+    <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1586743047490" />
     <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1586457610436" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -951,6 +951,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="605" y="219" key="git4idea.branch.GitSmartOperationDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1579030853134" />
+    <state x="409" y="157" key="git4idea.merge.GitPullDialog" timestamp="1586743041255">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="409" y="157" key="git4idea.merge.GitPullDialog/0.0.1366.768@0.0.1366.768" timestamp="1586743041255" />
     <state x="239" y="152" key="new project wizard" timestamp="1583152080469">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
