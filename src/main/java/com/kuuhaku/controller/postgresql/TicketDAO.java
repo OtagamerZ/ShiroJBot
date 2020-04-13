@@ -18,6 +18,7 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.persistent.Ticket;
+import net.dv8tion.jda.api.entities.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -44,11 +45,11 @@ public class TicketDAO {
 		em.close();
 	}
 
-	public static int openTicket() {
+	public static int openTicket(String subject, User u) {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		Ticket t = new Ticket();
+		Ticket t = new Ticket(subject, u.getId());
 		em.merge(t);
 		em.getTransaction().commit();
 		em.close();

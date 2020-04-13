@@ -76,16 +76,18 @@ public class MarkTicketCommand extends Command {
 		EmbedBuilder eb = new EmbedBuilder();
 
 		eb.setTitle("Resolução de ticket Nº " + args[0]);
+		eb.setDescription(t.getSubject());
+		eb.addField("Aberto por:", Main.getInfo().getUserByID(t.getRequestedBy()).getAsTag(), true);
 		eb.addField("Resolvido por:", author.getAsTag(), true);
 		eb.addField("Fechado em:", df.format(LocalDateTime.now()), true);
 		eb.setColor(Color.green);
 
 		Main.getInfo().getDevelopers().forEach(dev -> {
-					Message msg = Main.getInfo().getUserByID(dev).openPrivateChannel()
-							.flatMap(m -> m.sendMessage(eb.build()))
-							.complete();
-					msg.getChannel().retrieveMessageById(String.valueOf(t.getMsgIds().get(dev)))
-							.flatMap(Message::delete)
+			Message msg = Main.getInfo().getUserByID(dev).openPrivateChannel()
+					.flatMap(m -> m.sendMessage(eb.build()))
+					.complete();
+			msg.getChannel().retrieveMessageById(String.valueOf(t.getMsgIds().get(dev)))
+					.flatMap(Message::delete)
 							.queue();
 					t.solved();
 				}
