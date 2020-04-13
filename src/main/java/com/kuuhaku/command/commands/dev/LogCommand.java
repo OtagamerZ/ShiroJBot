@@ -59,13 +59,13 @@ public class LogCommand extends Command {
 
 			stringLog = StringUtils.right(stringLog, 5242880);
 
-			File croppedLog = File.createTempFile("log_" + System.currentTimeMillis(), ".txt");
+			File croppedLog = File.createTempFile("log_" + System.currentTimeMillis(), ".log");
 			croppedLog.deleteOnExit();
 
 			FileUtils.writeStringToFile(croppedLog, stringLog, StandardCharsets.UTF_8);
 
 			if (log.exists())
-				channel.sendMessage("Aqui está!").addFile(croppedLog, "stacktrace.txt").queue();
+				channel.sendMessage("Aqui está!").addFile(croppedLog, "stacktrace.log").queue();
 			else channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_log-not-found")).queue();
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
