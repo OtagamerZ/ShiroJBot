@@ -22,7 +22,6 @@ import com.kuuhaku.controller.Sweeper;
 import com.kuuhaku.controller.postgresql.BackupDAO;
 import com.kuuhaku.model.common.DataDump;
 import com.kuuhaku.utils.Helper;
-import net.dv8tion.jda.api.entities.Activity;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
@@ -33,7 +32,6 @@ public class BackupEvent implements Job {
 	@Override
 	public void execute(JobExecutionContext context) {
 		Main.getInfo().getAPI().getPresence().setActivity(Main.getRandomActivity());
-		Main.getTet().getPresence().setActivity(Activity.playing(" em diversos mundos espalhados em " + Main.getTet().getGuilds().size() + " servidores!"));
 
 		Helper.logger(this.getClass()).info(Sweeper.mark() + " entradas dispensáveis encontradas!");
 
@@ -41,8 +39,6 @@ public class BackupEvent implements Job {
 		Helper.logger(this.getClass()).info("Respostas/Guilds/Usuários/Kawaigotchis salvos com sucesso!");
 		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump()));
 		Helper.logger(this.getClass()).info("Membros salvos com sucesso!");
-		/*CampaignDAO.saveCampaigns(Main.getInfo().getGames());
-		Helper.logger(this.getClass()).info("Campanhas salvas com sucesso!");*/
 
 		Sweeper.sweep();
 	}

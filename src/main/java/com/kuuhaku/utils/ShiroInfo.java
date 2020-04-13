@@ -83,7 +83,6 @@ public class ShiroInfo {
 	private static final Map<String, Integer[]> polls = new HashMap<>();
 	private static final Map<Long, GuildMusicManager> gmms = new HashMap<>();
 	private static final AudioPlayerManager apm = new DefaultAudioPlayerManager();
-	//private static final Map<String, World> games = new HashMap<>();
 	private static final JDAEvents shiroEvents = new JDAEvents();
 	private static final Map<String, KittyCache<String, Message>> messageCache = new HashMap<>();
 	private static final GsonBuilder JSONFactory = new GsonBuilder();
@@ -224,10 +223,6 @@ public class ShiroInfo {
 	public AudioPlayerManager getApm() {
 		return apm;
 	}
-
-	/*public Map<String, World> getGames() {
-		return games;
-	}*/
 
 	Map<Long, GuildMusicManager> getGmms() {
 		return gmms;
