@@ -107,7 +107,7 @@ public class BackupDAO {
 	public static List<Kawaigotchi> getKawaigotchiDump() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT u FROM Kawaigotchi u", Kawaigotchi.class);
+		Query q = em.createQuery("SELECT k FROM Kawaigotchi k", Kawaigotchi.class);
 
 		try {
 			return q.getResultList();

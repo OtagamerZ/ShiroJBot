@@ -46,10 +46,7 @@ public class Kawaigotchi {
 	}
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''", unique = true)
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
 	private String userId;
 
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
@@ -360,14 +357,6 @@ public class Kawaigotchi {
 		g2d.draw(shape);
 		g2d.setColor(Color.white);
 		g2d.fill(shape);
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	public String getUserId() {
