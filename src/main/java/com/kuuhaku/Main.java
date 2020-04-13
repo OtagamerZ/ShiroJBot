@@ -30,7 +30,6 @@ import com.kuuhaku.events.guild.GuildUpdateEvents;
 import com.kuuhaku.handlers.api.Application;
 import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
 import com.kuuhaku.managers.CommandManager;
-import com.kuuhaku.managers.RPGCommandManager;
 import com.kuuhaku.model.common.DataDump;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
@@ -59,10 +58,8 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	private static ShiroInfo info;
 	private static Relay relay;
 	private static CommandManager cmdManager;
-	private static RPGCommandManager rpgCmdManager;
 	private static JDA api;
 	private static JDA jbr;
-	private static JDA tet;
 	public static String[] kill = new String[2];
 
 	public static void main(String[] args) throws Exception {
@@ -71,7 +68,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		relay = new Relay();
 
 		cmdManager = new CommandManager();
-		rpgCmdManager = new RPGCommandManager();
 
 		JDA api = new JDABuilder(AccountType.BOT)
 				.setToken(info.getBotToken())
@@ -85,19 +81,12 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				.build()
 				.awaitReady();
 
-		/*JDA tet = new JDABuilder(AccountType.BOT)
-				.setToken(System.getenv("TET_TOKEN"))
-				.setChunkingFilter(ChunkingFilter.NONE)
-				.build()
-				.awaitReady();*/
 		info.setAPI(api);
 		Main.api = api;
 		Main.jbr = jbr;
-		//Main.tet = tet;
 
 		api.getPresence().setActivity(Activity.playing("Iniciando..."));
 		jbr.getPresence().setActivity(Activity.playing("Iniciando..."));
-		//tet.getPresence().setActivity(Activity.playing("Iniciando..."));
 
 		info.setStartTime(Instant.now().getEpochSecond());
 		Helper.logger(Main.class).info("Criada pool de compilação: " + info.getPool().getCorePoolSize() + " espaços alocados");
@@ -110,7 +99,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 			return;
 		}
 
-		//Main.getInfo().getGames().putAll(CampaignDAO.getCampaigns());
 		Helper.logger(Main.class).info("Campanhas recuperadas com sucesso!");
 
 		Executors.newSingleThreadExecutor().execute(ScheduledEvents::new);
@@ -143,7 +131,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	private static void finishStartUp() {
 		api.getPresence().setActivity(getRandomActivity());
 		jbr.getPresence().setActivity(Activity.listening("as mensagens de " + relay.getRelayMap().size() + " servidores!"));
-		//tet.getPresence().setActivity(Activity.playing(" em diversos mundos espalhados em " + tet.getGuilds().size() + " servidores!"));
 		getInfo().setWinner(ExceedDAO.getWinner());
 		api.getGuilds().forEach(g -> {
 			try {
@@ -157,7 +144,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		api.addEventListener(new GuildEvents());
 		api.addEventListener(new GuildUpdateEvents());
 		jbr.addEventListener(new JibrilEvents());
-		//tet.addEventListener(new TetEvents());
 
 		GuildDAO.getAllGuilds().forEach(Helper::refreshButtons);
 
@@ -185,10 +171,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		return cmdManager;
 	}
 
-	public static RPGCommandManager getRPGCommandManager() {
-		return rpgCmdManager;
-	}
-
 	public static void shutdown() {
 		int sweeper = Sweeper.mark();
 		TextChannel chn = api.getTextChannelById(kill[0]);
@@ -206,13 +188,8 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		Helper.logger(Main.class).info("Membros salvos com sucesso!");
 		msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> Membros salvos com sucesso!").queue();
 
-		/*CampaignDAO.saveCampaigns(Main.getInfo().getGames());
-		Helper.logger(Main.class).info("Campanhas salvas com sucesso!");
-		msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> Campanhas salvas com sucesso!").queue();*/
-
 		Sweeper.sweep();
 		Manager.disconnect();
-		//tet.shutdown();
 		jbr.shutdown();
 		msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> Fui desligada!").queue();
 
@@ -226,10 +203,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 	public static JDA getJibril() {
 		return jbr;
-	}
-
-	public static JDA getTet() {
-		return tet;
 	}
 
 	@Override
