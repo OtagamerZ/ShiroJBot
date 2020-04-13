@@ -20,7 +20,6 @@ package com.kuuhaku;
 import com.kuuhaku.controller.Relay;
 import com.kuuhaku.controller.Sweeper;
 import com.kuuhaku.controller.postgresql.BackupDAO;
-import com.kuuhaku.controller.postgresql.CampaignDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.Manager;
@@ -111,7 +110,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 			return;
 		}
 
-		Main.getInfo().getGames().putAll(CampaignDAO.getCampaigns());
+		//Main.getInfo().getGames().putAll(CampaignDAO.getCampaigns());
 		Helper.logger(Main.class).info("Campanhas recuperadas com sucesso!");
 
 		Executors.newSingleThreadExecutor().execute(ScheduledEvents::new);
@@ -207,9 +206,9 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		Helper.logger(Main.class).info("Membros salvos com sucesso!");
 		msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> Membros salvos com sucesso!").queue();
 
-		CampaignDAO.saveCampaigns(Main.getInfo().getGames());
+		/*CampaignDAO.saveCampaigns(Main.getInfo().getGames());
 		Helper.logger(Main.class).info("Campanhas salvas com sucesso!");
-		msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> Campanhas salvas com sucesso!").queue();
+		msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> Campanhas salvas com sucesso!").queue();*/
 
 		Sweeper.sweep();
 		Manager.disconnect();
