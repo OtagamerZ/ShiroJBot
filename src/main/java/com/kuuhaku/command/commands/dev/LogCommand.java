@@ -62,8 +62,9 @@ public class LogCommand extends Command {
 
 			PrintWriter writer = new PrintWriter(croppedLog);
 			writer.print(stringLog);
+
 			if (log.exists())
-				channel.sendMessage("Aqui está!").addFile(log, "stacktrace.log").queue(s -> croppedLog.delete());
+				channel.sendMessage("Aqui está!").addFile(croppedLog, "stacktrace.log").queue(s -> croppedLog.delete());
 			else channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_log-not-found")).queue();
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
