@@ -60,7 +60,7 @@ public class ReportBugCommand extends Command {
 		}
 
 		String mensagem = String.join(" ", args).trim();
-		int number = TicketDAO.openTicket();
+		int number = TicketDAO.openTicket(mensagem, author);
 
 		EmbedBuilder eb = new EmbedBuilder();
 
