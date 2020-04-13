@@ -76,7 +76,7 @@ public class MarkTicketCommand extends Command {
 		EmbedBuilder eb = new EmbedBuilder();
 
 		eb.setTitle("Resolução de ticket Nº " + args[0]);
-		eb.setDescription(t.getSubject());
+		eb.setDescription("Assunto:```" + t.getSubject() + "```");
 		eb.addField("Aberto por:", Main.getInfo().getUserByID(t.getRequestedBy()).getAsTag(), true);
 		eb.addField("Resolvido por:", author.getAsTag(), true);
 		eb.addField("Fechado em:", df.format(LocalDateTime.now()), true);
