@@ -20,8 +20,6 @@ package com.kuuhaku.command.commands.dev;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.I18n;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -53,20 +51,17 @@ public class LogCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		File log = new File("logs/stacktrace.log");
-		try (FileInputStream fis = new FileInputStream(log)) {
-			String stringLog = IOUtils.toString(fis, StandardCharsets.UTF_8);
+		try (FileInputStream fis = new FileInputStream("logs/stacktrace.log")) {
+			String log = IOUtils.toString(fis, StandardCharsets.UTF_8);
 
-			stringLog = StringUtils.right(stringLog, 5242880);
+			log = StringUtils.right(log, 5242880).trim();
 
-			File croppedLog = File.createTempFile("log_" + System.currentTimeMillis(), ".log");
-			croppedLog.deleteOnExit();
+			File tempLog = File.createTempFile("log_" + System.currentTimeMillis(), ".txt");
+			tempLog.deleteOnExit();
 
-			FileUtils.writeStringToFile(croppedLog, stringLog, StandardCharsets.UTF_8);
+			FileUtils.writeStringToFile(tempLog, log, StandardCharsets.UTF_8);
 
-			if (log.exists())
-				channel.sendMessage("Aqui está!").addFile(croppedLog, "stacktrace.log").queue();
-			else channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_log-not-found")).queue();
+			channel.sendMessage("Aqui está!").addFile(tempLog, "stacktrace.txt").queue();
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
