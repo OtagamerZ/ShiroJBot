@@ -59,7 +59,7 @@ public class LogCommand extends Command {
 			stringLog = StringUtils.reverse(stringLog).substring(0, Math.min(stringLog.length(), 5242880));
 			stringLog = StringUtils.reverse(stringLog);
 
-			File croppedLog = File.createTempFile("log_" + System.currentTimeMillis(), ".log");
+			File croppedLog = File.createTempFile("log_" + System.currentTimeMillis(), ".txt");
 
 			PrintWriter writer = new PrintWriter(croppedLog);
 			writer.print(stringLog);
