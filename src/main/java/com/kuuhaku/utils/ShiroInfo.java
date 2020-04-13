@@ -25,7 +25,6 @@ import com.kuuhaku.controller.postgresql.CanvasDAO;
 import com.kuuhaku.controller.postgresql.VersionDAO;
 import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
-import com.kuuhaku.handlers.games.rpg.world.World;
 import com.kuuhaku.handlers.music.GuildMusicManager;
 import com.kuuhaku.model.persistent.PixelCanvas;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
@@ -84,7 +83,7 @@ public class ShiroInfo {
 	private static final Map<String, Integer[]> polls = new HashMap<>();
 	private static final Map<Long, GuildMusicManager> gmms = new HashMap<>();
 	private static final AudioPlayerManager apm = new DefaultAudioPlayerManager();
-	private static final Map<String, World> games = new HashMap<>();
+	//private static final Map<String, World> games = new HashMap<>();
 	private static final JDAEvents shiroEvents = new JDAEvents();
 	private static final Map<String, KittyCache<String, Message>> messageCache = new HashMap<>();
 	private static final GsonBuilder JSONFactory = new GsonBuilder();
@@ -226,9 +225,9 @@ public class ShiroInfo {
 		return apm;
 	}
 
-	public Map<String, World> getGames() {
+	/*public Map<String, World> getGames() {
 		return games;
-	}
+	}*/
 
 	Map<Long, GuildMusicManager> getGmms() {
 		return gmms;
