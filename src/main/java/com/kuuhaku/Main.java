@@ -26,7 +26,6 @@ import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.Manager;
 import com.kuuhaku.events.JibrilEvents;
 import com.kuuhaku.events.ScheduledEvents;
-import com.kuuhaku.events.TetEvents;
 import com.kuuhaku.events.guild.GuildEvents;
 import com.kuuhaku.events.guild.GuildUpdateEvents;
 import com.kuuhaku.handlers.api.Application;
@@ -87,19 +86,19 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				.build()
 				.awaitReady();
 
-		JDA tet = new JDABuilder(AccountType.BOT)
+		/*JDA tet = new JDABuilder(AccountType.BOT)
 				.setToken(System.getenv("TET_TOKEN"))
 				.setChunkingFilter(ChunkingFilter.NONE)
 				.build()
-				.awaitReady();
+				.awaitReady();*/
 		info.setAPI(api);
 		Main.api = api;
 		Main.jbr = jbr;
-		Main.tet = tet;
+		//Main.tet = tet;
 
 		api.getPresence().setActivity(Activity.playing("Iniciando..."));
 		jbr.getPresence().setActivity(Activity.playing("Iniciando..."));
-		tet.getPresence().setActivity(Activity.playing("Iniciando..."));
+		//tet.getPresence().setActivity(Activity.playing("Iniciando..."));
 
 		info.setStartTime(Instant.now().getEpochSecond());
 		Helper.logger(Main.class).info("Criada pool de compilação: " + info.getPool().getCorePoolSize() + " espaços alocados");
@@ -145,7 +144,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	private static void finishStartUp() {
 		api.getPresence().setActivity(getRandomActivity());
 		jbr.getPresence().setActivity(Activity.listening("as mensagens de " + relay.getRelayMap().size() + " servidores!"));
-		tet.getPresence().setActivity(Activity.playing(" em diversos mundos espalhados em " + tet.getGuilds().size() + " servidores!"));
+		//tet.getPresence().setActivity(Activity.playing(" em diversos mundos espalhados em " + tet.getGuilds().size() + " servidores!"));
 		getInfo().setWinner(ExceedDAO.getWinner());
 		api.getGuilds().forEach(g -> {
 			try {
@@ -159,7 +158,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		api.addEventListener(new GuildEvents());
 		api.addEventListener(new GuildUpdateEvents());
 		jbr.addEventListener(new JibrilEvents());
-		tet.addEventListener(new TetEvents());
+		//tet.addEventListener(new TetEvents());
 
 		GuildDAO.getAllGuilds().forEach(Helper::refreshButtons);
 
@@ -214,7 +213,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 		Sweeper.sweep();
 		Manager.disconnect();
-		tet.shutdown();
+		//tet.shutdown();
 		jbr.shutdown();
 		msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> Fui desligada!").queue();
 
