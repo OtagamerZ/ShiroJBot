@@ -19,18 +19,12 @@ package com.kuuhaku.command.commands.dev;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
 
 public class LogCommand extends Command {
 
@@ -53,22 +47,22 @@ public class LogCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		File log = new File("logs/stacktrace.log");
-		try {
-			String stringLog = IOUtils.toString(new FileReader(log));
+		//try {
+			/*String stringLog = IOUtils.toString(new FileReader(log));
 
+			stringLog = StringUtils.reverse(stringLog).substring(0, Math.min(stringLog.length(), 5242880));
 			stringLog = StringUtils.reverse(stringLog);
-			stringLog = StringUtils.reverse(stringLog.substring(0, Math.min(stringLog.length(), 5242880)));
 
 			File croppedLog = File.createTempFile("log_" + System.currentTimeMillis(), ".txt");
 
 			PrintWriter writer = new PrintWriter(croppedLog);
 			writer.print(stringLog);
-
-			if (log.exists())
-				channel.sendMessage("Aqui está!").addFile(croppedLog, "stacktrace.txt").queue(s -> croppedLog.delete());
-			else channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_log-not-found")).queue();
-		} catch (IOException e) {
+			*/
+		if (log.exists())
+			channel.sendMessage("Aqui está!").addFile(log, "stacktrace.log").queue(/*s -> croppedLog.delete()*/);
+		else channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_log-not-found")).queue();
+		/*} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-		}
+		}*/
 	}
 }
