@@ -51,7 +51,7 @@ public class LogCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		try (FileInputStream fis = new FileInputStream("logs/stacktrace.log")) {
+		try (FileInputStream fis = new FileInputStream(new File("logs/stacktrace.log").getAbsoluteFile())) {
 			String log = IOUtils.toString(fis, StandardCharsets.UTF_8);
 
 			log = StringUtils.right(log, 5242880).trim();
