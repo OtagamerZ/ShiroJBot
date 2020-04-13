@@ -99,8 +99,8 @@ public class RPGCommandManager {
                     "rlista", new String[]{"rlist"}, getLocale(PT).getString("rpg_list"), Category.RPG, false
             ));
             add(new ChestCommand(
-                    "rloot", new String[]{"rchest"}, getLocale(PT).getString("req_mention-chest"), getLocale(PT).getString("rpg_chest"), Category.RPG, false
-            ));
+					"rbau", new String[]{"rchest"}, getLocale(PT).getString("req_mention-chest"), getLocale(PT).getString("rpg_chest"), Category.RPG, false
+			));
             add(new NewChestCommand(
                     "rnovobau", new String[]{"rnewchest"}, getLocale(PT).getString("rpg_new-chest"), Category.RPG, true
             ));
