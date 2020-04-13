@@ -75,18 +75,6 @@ public class MarryCommand extends Command {
 					channel.sendMessage(":x: | Ela não não tem como responder aqui, mas disse que não!").queue();
 				}
 				return;
-			} else if (message.getMentionedUsers().get(0) == Main.getTet().getSelfUser()) {
-				try {
-					TextChannel chn = Main.getTet().getTextChannelById(channel.getId());
-					assert chn != null;
-					chn.sendMessage(":x: | Nah, meus interesses são outros!").queue();
-				} catch (InsufficientPermissionException e) {
-					channel.sendMessage(":x: | Ele pediu pra dizer que não!").queue();
-				}
-				return;
-			} else if (WaifuDAO.isWaifued(author.getId()) || WaifuDAO.isWaifued(message.getMentionedUsers().get(0).getId())) {
-				channel.sendMessage(":x: | Essa pessoa já está casada, hora de passar pra frente!").queue();
-				return;
 			}
 
 			channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + ", deseja casar-se com " + author.getAsMention() + ", por toda eternidade (ou não) em troca de um bônus de XP?" +
