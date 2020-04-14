@@ -8,8 +8,9 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/snugget_sheet.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/snugget_sheet.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/KGotchiCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/KGotchiCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/Kawaigotchi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/Kawaigotchi.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -157,7 +158,7 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="copyright.profiles" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
     <key name="MoveMembersDialog.RECENTS_KEY">
@@ -326,14 +327,9 @@
       <workItem from="1586797906253" duration="1950000" />
       <workItem from="1586799987215" duration="493000" />
       <workItem from="1586800524688" duration="52000" />
-      <workItem from="1586865628044" duration="252000" />
-    </task>
-    <task id="LOCAL-00979" summary="Adicionada imagem de meme &quot;Pathetic&quot;">
-      <created>1586281627545</created>
-      <option name="number" value="00979" />
-      <option name="presentableId" value="LOCAL-00979" />
-      <option name="project" value="LOCAL" />
-      <updated>1586281627546</updated>
+      <workItem from="1586865628044" duration="936000" />
+      <workItem from="1586892079440" duration="145000" />
+      <workItem from="1586895271606" duration="1190000" />
     </task>
     <task id="LOCAL-00980" summary="Unificada branch development na branch master">
       <created>1586286467139</created>
@@ -671,7 +667,14 @@
       <option name="project" value="LOCAL" />
       <updated>1586800562070</updated>
     </task>
-    <option name="localTasksCounter" value="1028" />
+    <task id="LOCAL-01028" summary="Remoção completa do módulo Tet para reformulação">
+      <created>1586865902530</created>
+      <option name="number" value="01028" />
+      <option name="presentableId" value="LOCAL-01028" />
+      <option name="project" value="LOCAL" />
+      <updated>1586865902530</updated>
+    </task>
+    <option name="localTasksCounter" value="1029" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -885,22 +888,22 @@
     </state>
     <state x="501" y="23" key="RollbackChangesDialog/0.0.1366.768@0.0.1366.768" timestamp="1578969825199" />
     <state x="616" y="30" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1583778436946" />
-    <state x="260" y="0" key="SettingsEditor" timestamp="1586382033334">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state x="320" y="80" key="SettingsEditor" timestamp="1586892127296">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1586382033334" />
-    <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1586377050330" />
+    <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1586892127296" />
     <state width="200" height="318" key="SqlResolveConfigurable" timestamp="1585946065407">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1586800564202">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1586865904865">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1586748978558" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1586800564202" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1586865904865" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -948,11 +951,11 @@
     </state>
     <state x="488" y="297" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1366.768@0.0.1366.768" timestamp="1580267810034" />
     <state x="600" y="391" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1680.1010@0.0.1680.1010" timestamp="1586367882990" />
-    <state x="448" y="274" key="extract.method.dialog" timestamp="1583844988091">
+    <state x="448" y="274" key="extract.method.dialog" timestamp="1586896266138">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="682" y="113" key="extract.method.dialog/0.0.1366.768@0.0.1366.768" timestamp="1582605093359" />
-    <state x="448" y="274" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1583844988091" />
+    <state x="448" y="274" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1586896266138" />
     <state x="445" y="176" width="790" height="658" key="find.popup" timestamp="1586786834165">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -967,10 +970,10 @@
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="409" y="157" key="git4idea.merge.GitPullDialog/0.0.1366.768@0.0.1366.768" timestamp="1586743041255" />
-    <state x="239" y="152" key="new project wizard" timestamp="1583152080469">
+    <state x="239" y="152" key="new project wizard" timestamp="1586892225040">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="239" y="152" key="new project wizard/0.0.1680.1010@0.0.1680.1010" timestamp="1583152080469" />
+    <state x="239" y="152" key="new project wizard/0.0.1680.1010@0.0.1680.1010" timestamp="1586892225040" />
     <state x="472" y="17" key="refactoring.ChangeSignatureDialog" timestamp="1585107291304">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
