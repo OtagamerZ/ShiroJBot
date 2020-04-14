@@ -202,12 +202,7 @@ public class KGotchiCommand extends Command {
 					eb.setTitle("Sucesso!");
 					eb.setDescription("Vocês brincaram por bastante tempo, " + k.getName() + " está mais feliz agora!");
 					eb.setColor(Color.green);
-					int rng = Helper.rng(100);
-					if (rng > 90) {
-						acc.addCredit(50 * (100 - rng));
-						AccountDAO.saveAccount(acc);
-						channel.sendMessage("Opa, o que é isso? Parece que " + k.getName() + " encontrou " + (50 * (100 - rng)) + " créditos!").queue();
-					}
+					getPrize(channel, acc, k);
 					break;
 				case UNABLE:
 					if (k.getStance().isResting())
@@ -242,7 +237,7 @@ public class KGotchiCommand extends Command {
 					eb.setTitle("Sucesso!");
 					eb.setDescription(k.getName() + " treinou muito, tá ficando monstrão!");
 					eb.setColor(Color.green);
-					eb.setFooter("+");
+					getPrize(channel, acc, k);
 					break;
 				case UNABLE:
 					if (k.getStance().isResting())
@@ -317,19 +312,28 @@ public class KGotchiCommand extends Command {
 					acc.removeCredit(f.getPrice() * Integer.parseInt(args[2]));
 
 					channel.sendMessage("Você comprou " + args[2] + " unidades de " + f.getName().toLowerCase() + " por " + (f.getPrice() * Integer.parseInt(args[2])) + " créditos.").queue();
-
 				}
-				KGotchiDAO.saveKawaigotchi(k);
+
 				AccountDAO.saveAccount(acc);
 			}
 		}
 	}
 
-	public void sendEmbed(MessageChannel channel, Kawaigotchi k, BufferedImage bi, EmbedBuilder eb) {
-		int xp = k.getLastXpRoll();
-		int mood = k.getLastMoodRoll();
-		int resource = k.getLastResourceRoll(true);
+	private void getPrize(MessageChannel channel, Account acc, Kawaigotchi k) {
+		int rng = Helper.rng(100);
+		if (rng > 50 && rng <= 75) {
+			acc.addCredit(2 * rng);
+			AccountDAO.saveAccount(acc);
+			channel.sendMessage("Opa, o que é isso? Parece que " + k.getName() + " encontrou " + (2 * rng) + " créditos!").queue();
+		} else if (rng > 75) {
+			int amount = (rng - 70) / 5;
+			Food randFood = (Food) FoodMenu.getMenu().values().toArray()[Helper.rng(FoodMenu.getMenu().size())];
+			k.addToBag(randFood);
+			channel.sendMessage("Opa, o que é isso? Parece que " + k.getName() + " encontrou " + amount + " unidades de " + randFood.getName() + ", que sorte!!").queue();
+		}
+	}
 
+	public void sendEmbed(MessageChannel channel, Kawaigotchi k, BufferedImage bi, EmbedBuilder eb) {
 		eb.setFooter(k.getTier().toString() + " -> " + k.getTier().next() + ": " + Math.round(k.getXp()) + "/" + k.getTier().next().getRequiredXp() + " xp");
 		eb.setThumbnail("attachment://img.png");
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
