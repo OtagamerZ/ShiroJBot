@@ -503,6 +503,7 @@ public class Kawaigotchi {
 		jo.put(f.getIdentifier(), qtd + 1);
 
 		bag = jo.toString();
+		KGotchiDAO.saveKawaigotchi(this);
 	}
 
 	public void addToBag(Food f, int qtd) {
@@ -513,6 +514,7 @@ public class Kawaigotchi {
 		jo.put(f.getIdentifier(), qtdAtual + qtd);
 
 		bag = jo.toString();
+		KGotchiDAO.saveKawaigotchi(this);
 	}
 
 	private void useFromBag(Food f) {
@@ -523,31 +525,6 @@ public class Kawaigotchi {
 		jo.put(f.getIdentifier(), jo.getInt(f.getIdentifier()) - 1);
 
 		bag = jo.toString();
-	}
-
-	public int getLastMoodRoll() {
-		try {
-			return (int) (Helper.clamp(lastRoll * 100 / 10, 3, 10) * nature.getKindness());
-		} finally {
-			lastRoll = 0;
-		}
-	}
-
-	public int getLastResourceRoll(boolean train) {
-		try {
-			if (train) return (int) (Helper.clamp(lastRoll * 100 / 6, 1, 5) / 3f);
-			else return (int) (Helper.clamp(lastRoll * 100 / 6, 1, 5) / 2f);
-		} finally {
-			lastRoll = 0;
-		}
-	}
-
-	public int getLastXpRoll() {
-		try {
-			return (int) (Helper.clamp(lastRoll * 100 / 6, 1, 5) * tier.getTrainability());
-		} finally {
-			lastRoll = 0;
-		}
 	}
 
 	public void doNothing() {
