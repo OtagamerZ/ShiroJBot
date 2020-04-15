@@ -73,7 +73,7 @@ public class JibrilEmoteListCommand extends Command {
 				pages.add(new Page(PageType.EMBED, eb.build()));
 			}
 
-			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
+			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 60, TimeUnit.SECONDS));
 		} catch (IndexOutOfBoundsException e) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_emote-not-found")).queue();
 		}

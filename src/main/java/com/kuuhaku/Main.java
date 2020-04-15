@@ -17,6 +17,7 @@
 
 package com.kuuhaku;
 
+import com.github.ygimenez.method.Pages;
 import com.kuuhaku.controller.Relay;
 import com.kuuhaku.controller.Sweeper;
 import com.kuuhaku.controller.postgresql.BackupDAO;
@@ -144,6 +145,8 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		api.addEventListener(new GuildEvents());
 		api.addEventListener(new GuildUpdateEvents());
 		jbr.addEventListener(new JibrilEvents());
+
+		Pages.activate(api);
 
 		GuildDAO.getAllGuilds().forEach(Helper::refreshButtons);
 

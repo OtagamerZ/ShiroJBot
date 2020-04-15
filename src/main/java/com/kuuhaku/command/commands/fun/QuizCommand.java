@@ -18,7 +18,6 @@
 package com.kuuhaku.command.commands.fun;
 
 import com.github.ygimenez.method.Pages;
-import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
@@ -125,6 +124,6 @@ public class QuizCommand extends Command {
 
 		fields.sort(Comparator.comparing(MessageEmbed.Field::getName));
 		fields.forEach(eb::addField);
-		channel.sendMessage(eb.build()).queue(s -> Pages.buttonize(Main.getInfo().getAPI(), s, buttons, false, 60, TimeUnit.SECONDS));
+		channel.sendMessage(eb.build()).queue(s -> Pages.buttonize(s, buttons, false, 60, TimeUnit.SECONDS));
 	}
 }
