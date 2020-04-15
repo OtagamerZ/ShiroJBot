@@ -22,6 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.TicketDAO;
 import com.kuuhaku.model.persistent.Ticket;
+import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -31,7 +32,7 @@ import org.jetbrains.annotations.NonNls;
 
 import java.awt.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.ZoneId;
 
 public class MarkTicketCommand extends Command {
 
@@ -61,8 +62,6 @@ public class MarkTicketCommand extends Command {
 			return;
 		}
 
-		DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm");
-
 		Ticket t = TicketDAO.getTicket(Integer.parseInt(args[0]));
 
 		if (t == null) {
@@ -76,18 +75,20 @@ public class MarkTicketCommand extends Command {
 		EmbedBuilder eb = new EmbedBuilder();
 
 		eb.setTitle("Resolução de ticket Nº " + args[0]);
+		eb.setDescription("Assunto:```" + t.getSubject() + "```");
+		eb.addField("Aberto por:", Main.getInfo().getUserByID(t.getRequestedBy()).getAsTag(), true);
 		eb.addField("Resolvido por:", author.getAsTag(), true);
-		eb.addField("Fechado em:", df.format(LocalDateTime.now()), true);
+		eb.addField("Fechado em:", Helper.dateformat.format(LocalDateTime.now().atZone(ZoneId.of("GMT-3"))), true);
 		eb.setColor(Color.green);
 
 		Main.getInfo().getDevelopers().forEach(dev -> {
-					Message msg = Main.getInfo().getUserByID(dev).openPrivateChannel()
-							.flatMap(m -> m.sendMessage(eb.build()))
-							.complete();
-					msg.getChannel().retrieveMessageById(String.valueOf(t.getMsgIds().get(dev)))
-							.flatMap(Message::delete)
-							.queue();
-					t.solved();
+			Message msg = Main.getInfo().getUserByID(dev).openPrivateChannel()
+					.flatMap(m -> m.sendMessage(eb.build()))
+					.complete();
+			msg.getChannel().retrieveMessageById(String.valueOf(t.getMsgIds().get(dev)))
+					.flatMap(Message::delete)
+					.queue();
+			t.solved();
 				}
 		);
 

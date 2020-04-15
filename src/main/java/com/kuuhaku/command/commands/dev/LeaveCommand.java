@@ -77,9 +77,9 @@ public class LeaveCommand extends Command {
 			guildToLeave.leave().queue();
 			channel.sendMessage("Ok, acabei de sair desse servidor!").queue();
 		} catch (ArrayIndexOutOfBoundsException e) {
-			channel.sendMessage("Escolha o servidor que devo sair!\n").embed((MessageEmbed) pages.get(0).getContent()).queue(m -> Pages.paginate(Main.getInfo().getAPI(), m, pages, 60, TimeUnit.SECONDS));
+			channel.sendMessage("Escolha o servidor que devo sair!\n").embed((MessageEmbed) pages.get(0).getContent()).queue(m -> Pages.paginate(m, pages, 60, TimeUnit.SECONDS));
 		} catch (NullPointerException ex) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-server")).embed((MessageEmbed) pages.get(0).getContent()).queue(m -> Pages.paginate(Main.getInfo().getAPI(), m, pages, 60, TimeUnit.SECONDS));
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-server")).embed((MessageEmbed) pages.get(0).getContent()).queue(m -> Pages.paginate(m, pages, 60, TimeUnit.SECONDS));
 		}
 	}
 

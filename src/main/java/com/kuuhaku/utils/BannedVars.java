@@ -37,7 +37,7 @@ public class BannedVars {
 			"Double.NEGATIVE_INFINITY",
 			"Double.POSITIVE_INFINITY",
 			"SQLite",
-			"MySQL",
+			"PostgreSQL",
 			"FileIO",
 			"list",
 			"renameTo",

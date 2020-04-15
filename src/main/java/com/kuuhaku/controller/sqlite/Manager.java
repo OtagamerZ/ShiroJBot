@@ -17,13 +17,13 @@
 
 package com.kuuhaku.controller.sqlite;
 
-import com.kuuhaku.Main;
 import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,13 +31,9 @@ public class Manager {
 
 	private static EntityManagerFactory emf;
 
-	public static void connect() {
-
-		File DBfile = new File(Main.getInfo().getDBFileName());
-		if (!DBfile.exists()) {
-			Helper.logger(Manager.class).fatal("A base de dados não foi encontrada. Entre no servidor discord oficial da Shiro para obter ajuda.");
-			System.exit(1);
-		}
+	public static void connect() throws IOException {
+		File DBfile = File.createTempFile("shiro", ".db");
+		DBfile.deleteOnExit();
 
 		Map<String, String> props = new HashMap<>();
 		props.put("javax.persistence.jdbc.url", "jdbc:sqlite:" + DBfile.getPath());
@@ -48,8 +44,14 @@ public class Manager {
 	}
 
 	public static EntityManager getEntityManager() {
-		if (emf == null) connect();
-		return emf.createEntityManager();
+		try {
+			if (emf == null) connect();
+			return emf.createEntityManager();
+		} catch (IOException e) {
+			Helper.logger(Manager.class).fatal("Não foi possível gerar o banco de dados local. Por favor contate um dos desenvolvedores.");
+			System.exit(1);
+			return null;
+		}
 	}
 
 	public static void disconnect() {
