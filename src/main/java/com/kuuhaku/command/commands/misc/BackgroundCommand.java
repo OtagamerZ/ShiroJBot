@@ -20,6 +20,8 @@ package com.kuuhaku.command.commands.misc;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
@@ -50,7 +52,7 @@ public class BackgroundCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length == 0) {
-			channel.sendMessage(":x: | Você precisa definir uma imagem.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_backgroud-invalid-image")).queue();
 			return;
 		}
 
@@ -66,7 +68,7 @@ public class BackgroundCommand extends Command {
 			MemberDAO.updateMemberConfigs(m);
 			channel.sendMessage("Imagem de fundo trocada com sucesso!").queue();
 		} catch (IOException | NullPointerException e) {
-			channel.sendMessage(":x: | O link da imagem não me parece correto.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_backgroud-invalid-link")).queue();
 		}
     }
 }

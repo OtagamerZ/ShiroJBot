@@ -21,6 +21,8 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.WaifuDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
@@ -49,7 +51,7 @@ public class DivorceCommand extends Command {
 		try {
 			com.kuuhaku.model.persistent.Member mb = MemberDAO.getMemberById(author.getId() + guild.getId());
 			if (mb.getWaifu() == null || mb.getWaifu().equals("")) {
-				channel.sendMessage(":x: | Você não possui uma waifu!").queue();
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_divorce-user-unavailable")).queue();
 				return;
 			}
 

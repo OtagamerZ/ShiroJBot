@@ -19,6 +19,8 @@ package com.kuuhaku.command.commands.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
@@ -56,7 +58,7 @@ public class BinaryCommand extends Command {
 			}
 			channel.sendMessage(":1234: `" + binary.toString() + "`").queue();
 		} catch (IllegalStateException | IllegalArgumentException e) {
-			channel.sendMessage(":x: | Mensagem muito grande (Max: 2000 | Lembre-se que cada caractére vale por 8, incluindo espaços).").queue();
-		}
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_binary-very-big-message")).queue();
+        }
 	}
 }

@@ -22,6 +22,8 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -61,14 +63,14 @@ public class ColorRoleCommand extends Command {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (!guild.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) {
-			channel.sendMessage(":x: | Eu preciso da permissão de gerenciar cargos para que possa dar cargos.").queue();
-			return;
-		} else if (args.length < 1) {
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_color-insufficient-permissions")).queue();
+            return;
+        } else if (args.length < 1) {
 			JSONObject jo = gc.getColorRoles();
 			if (jo.keySet().size() == 0) {
-				channel.sendMessage(":x: | Nenhuma cor cadastrada ainda.").queue();
-				return;
-			}
+                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_color-not-found")).queue();
+                return;
+            }
 			BufferedImage bi = new BufferedImage(900, 30 + 30 * (jo.keySet().size() / 3), BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g2d = bi.createGraphics();
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -108,9 +110,9 @@ public class ColorRoleCommand extends Command {
 		String name = StringUtils.capitalize(args[0].toLowerCase());
 
 		if (!jo.has(name)) {
-			channel.sendMessage(":x: | Essa cor ainda não foi cadastrada neste servidor.").queue();
-			return;
-		}
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_color-not-registered")).queue();
+            return;
+        }
 
 		Role r = guild.getRoleById(jo.getJSONObject(name).getString("role"));
 
