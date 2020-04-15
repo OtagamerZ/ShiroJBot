@@ -112,7 +112,7 @@ public class ExceedRankCommand extends Command {
 
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				ImageIO.write(Profile.clipRoundEdges(bi), "png", baos);
-				channel.sendFile(baos.toByteArray(), "ranking.png").queue(s -> s.delete().queueAfter(2, TimeUnit.MINUTES));
+				channel.sendFile(baos.toByteArray(), "ranking.png").queue(s -> s.delete().queueAfter(1, TimeUnit.MINUTES));
 				m.delete().queue();
 			} catch (Exception e) {
 				m.editMessage(":x: | Epa, teve um erro ao gerar o placar, meus criadores já foram notificados!").queue();
