@@ -41,7 +41,6 @@
         <class>com.kuuhaku.model.persistent.Token</class>
         <class>com.kuuhaku.model.persistent.GlobalMessage</class>
         <class>com.kuuhaku.model.persistent.AppUser</class>
-        <class>com.kuuhaku.model.persistent.Campaign</class>
         <class>com.kuuhaku.model.persistent.Account</class>
         <class>com.kuuhaku.model.persistent.Slots</class>
         <class>com.kuuhaku.model.persistent.DevRating</class>

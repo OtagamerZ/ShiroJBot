@@ -19,7 +19,6 @@ package com.kuuhaku.command.commands.partner;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
@@ -43,6 +42,7 @@ public class TetCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		Helper.nonPartnerAlert(author, member, channel, "Para chamar o Tet para seu servidor, utilize este link:\n", "TET_LINK");
+		channel.sendMessage(":warning: | O módulo de RPG (Tet) está temporariamente desabilitado, por favor aguarde o pronunciamento oficial de lançamento do Tet 2.0.").queue();
+		//Helper.nonPartnerAlert(author, member, channel, "Para chamar o Tet para seu servidor, utilize este link:\n", "TET_LINK");
 	}
 }

@@ -20,7 +20,6 @@ package com.kuuhaku.command.commands.music;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
-import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.Youtube;
@@ -85,9 +84,9 @@ public class YoutubeCommand extends Command {
                             }
 
                             channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(msg -> {
-                                Pages.paginate(Main.getInfo().getAPI(), msg, pages, 60, TimeUnit.SECONDS);
+                                Pages.paginate(msg, pages, 60, TimeUnit.SECONDS);
                                 if (Objects.requireNonNull(member.getVoiceState()).inVoiceChannel()) {
-                                    Pages.buttonize(Main.getInfo().getAPI(), msg, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
+                                    Pages.buttonize(msg, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
                                         String url = Objects.requireNonNull(channel.retrieveMessageById(msg.getId()).complete().getEmbeds().get(0).getFooter()).getIconUrl();
                                         assert url != null;
                                         if (url.startsWith("https://www.youtube.com/playlist?list=") && !TagDAO.getTagById(author.getId()).isVerified()) {

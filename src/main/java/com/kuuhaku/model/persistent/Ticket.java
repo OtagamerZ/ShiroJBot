@@ -29,17 +29,36 @@ public class Ticket {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int number;
 
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String subject = "";
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String requestedBy = "";
+
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT '[]'")
 	private String msgId = "{}";
 
 	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
 	private boolean solved = false;
 
+	public Ticket(String subject, String requestedBy) {
+		this.subject = subject;
+		this.requestedBy = requestedBy;
+	}
+
 	public Ticket() {
 	}
 
 	public int getNumber() {
 		return number;
+	}
+
+	public String getSubject() {
+		return subject;
+	}
+
+	public String getRequestedBy() {
+		return requestedBy;
 	}
 
 	public void setMsgIds(Map<String, String> msgIds) {

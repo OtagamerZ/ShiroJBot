@@ -64,7 +64,7 @@ public class ReportUserCommand extends Command {
 		}
 
 		String mensagem = String.join(" ", Arrays.copyOfRange(args, 1, args.length)).trim();
-		int number = TicketDAO.openTicket();
+		int number = TicketDAO.openTicket(mensagem, author);
 
 		EmbedBuilder eb = new EmbedBuilder();
 
