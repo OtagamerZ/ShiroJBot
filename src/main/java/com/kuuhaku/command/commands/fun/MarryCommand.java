@@ -72,9 +72,13 @@ public class MarryCommand extends Command {
 					assert chn != null;
 					chn.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-marry-jibril")).queue();
 				} catch (InsufficientPermissionException e) {
-					channel.sendMessage(":x: | Ela não não tem como responder aqui, mas disse que não!").queue();
-				}
+                    channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_marry-the-answer-is-no")).queue();
+                }
 				return;
+			} else if (WaifuDAO.isWaifued(author.getId()) || WaifuDAO.isWaifued(message.getMentionedUsers().get(0).getId())) {
+                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_marry-look-for-another-one-to-get-married")).queue();
+                return;
+            }
 			}
 
 			channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + ", deseja casar-se com " + author.getAsMention() + ", por toda eternidade (ou não) em troca de um bônus de XP?" +
