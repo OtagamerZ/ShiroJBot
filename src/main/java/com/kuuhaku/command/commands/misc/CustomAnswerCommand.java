@@ -60,10 +60,10 @@ public class CustomAnswerCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (!Helper.hasPermission(member, PrivilegeLevel.MOD) && GuildDAO.getGuildById(guild.getId()).isNotAnyTell()) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-invalid-arguments")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-answer-community-disabled")).queue();
 			return;
 		} else if (args.length == 0) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-undefined-message")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-answer-not-enough-args")).queue();
 			return;
 		} else if (args[0].equals("lista")) {
 			List<Page> pages = new ArrayList<>();
@@ -93,7 +93,7 @@ public class CustomAnswerCommand extends Command {
 			List<CustomAnswers> ca = BackupDAO.getCADump();
 			ca.removeIf(a -> !String.valueOf(a.getId()).equals(args[0]) || !a.getGuildID().equals(guild.getId()));
 			if (ca.size() == 0) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-answer-does-not-exist")).queue();
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-answer-not-found")).queue();
 				return;
 			}
 			CustomAnswers c = ca.get(0);
@@ -116,13 +116,13 @@ public class CustomAnswerCommand extends Command {
 					CustomAnswerDAO.addCAtoDB(guild, txt.split(";")[0], txt.replace(txt.split(";")[0] + ";", ""));
 					channel.sendMessage("Agora quando alguém disser `" + txt.split(";")[0] + "` irei responder `" + txt.replace(txt.split(";")[0] + ";", "") + "`.").queue();
 				} else {
-					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-very-long-answer")).queue();
+					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-answer-reply-too-long")).queue();
 				}
 			} else {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-too-big-trigger")).queue();
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-answer-trigger-too-long")).queue();
 			}
 		} else {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-invalid-trigger-arguments")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_custom-answer-invalid-arguments")).queue();
 		}
 	}
 }

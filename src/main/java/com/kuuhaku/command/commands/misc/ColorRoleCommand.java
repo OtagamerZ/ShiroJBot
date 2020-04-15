@@ -63,7 +63,7 @@ public class ColorRoleCommand extends Command {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (!guild.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_color-insufficient-permissions")).queue();
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_manage-roles")).queue();
             return;
         } else if (args.length < 1) {
 			JSONObject jo = gc.getColorRoles();

@@ -54,10 +54,10 @@ public class AddColorRoleCommand extends Command {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (!guild.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_addcolor-insufficient-permissions")).queue();
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_color-missing-permissions")).queue();
             return;
         } else if (args.length < 1) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_addcolor-invalid-argument")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_color-not-enough-arguments")).queue();
             return;
         }
 
@@ -65,7 +65,7 @@ public class AddColorRoleCommand extends Command {
 			String name = StringUtils.capitalize(args[0].toLowerCase());
 
 			if (name.length() > 15) {
-                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_addcolor-big-name")).queue();
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_color-name-too-long")).queue();
                 return;
             }
 
@@ -95,7 +95,7 @@ public class AddColorRoleCommand extends Command {
 
 			channel.sendMessage("Cor adicionada com sucesso!").queue();
 		} catch (NumberFormatException e) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_addcolor-invalid-color")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-color")).queue();
         } catch (ArrayIndexOutOfBoundsException e) {
 			String name = StringUtils.capitalize(args[0].toLowerCase());
 			if (!gc.getColorRoles().has(name)) {

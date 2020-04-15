@@ -49,7 +49,7 @@ public class AddQuizCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_add-quiz-invalid-arguments")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_quiz-invalid-arguments")).queue();
 			return;
 		}
 
@@ -57,20 +57,20 @@ public class AddQuizCommand extends Command {
 		JSONArray opts = new JSONArray(quizArgs[1]);
 
 		if (quizArgs.length < 4) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_add-quiz-invalid-arguments")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_quiz-invalid-arguments")).queue();
 			return;
 		} else if (opts.length() != 4) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_add-quiz-not-enough-options")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_quiz-not-enough-options")).queue();
 			return;
 		} else if (!StringUtils.isNumeric(quizArgs[2])) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_add-quiz-invalid-correct-alternative")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_quiz-invalid-index")).queue();
 			return;
 		}
 
 		int o = Integer.parseInt(quizArgs[2]);
 
 		if (o < 1 || o > 4) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_add-quiz-correct-alternative-error")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_quiz-invalid-answer")).queue();
 			return;
 		}
 
