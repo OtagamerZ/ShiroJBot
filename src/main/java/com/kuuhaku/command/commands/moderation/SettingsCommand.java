@@ -138,6 +138,10 @@ public class SettingsCommand extends Command {
 			case "cat:":
 				Settings.updateModules(args, message, gc);
 				break;
+			case "help":
+			case "ajuda":
+				Settings.settingsHelp(args, message, gc);
+				break;
 			default:
 				Settings.embedConfig(message);
 		}

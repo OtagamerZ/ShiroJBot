@@ -263,7 +263,9 @@ public class GuildEvents extends ListenerAdapter {
 	private void countSpam(Member member, MessageChannel channel, Guild guild, List<Message> h) {
 		if (h.size() >= GuildDAO.getGuildById(guild.getId()).getNoSpamAmount()) {
 			h.forEach(m -> channel.deleteMessageById(m.getId()).complete());
-			channel.sendMessage(":warning: | Opa, sem spam meu amigo!").queue();
+			channel.sendMessage(":warning: | Opa, sem spam meu amigo!").queue(
+					msg -> msg.delete().queueAfter(20, TimeUnit.SECONDS)
+			);
 			try {
 				Role r = guild.getRoleById(GuildDAO.getGuildById(guild.getId()).getCargoWarn());
 				if (r != null) guild.addRoleToMember(member, r)
