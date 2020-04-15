@@ -20,7 +20,6 @@ package com.kuuhaku.controller.postgresql;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
-import com.kuuhaku.Main;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.persistent.DevRating;
 import com.kuuhaku.model.persistent.Member;
@@ -112,7 +111,7 @@ public class VotesDAO {
 			pages.add(new Page(PageType.TEXT, eb.build()));
 		}
 
-		channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
+		channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 60, TimeUnit.SECONDS));
 	}
 
 	public static DevRating getRating(String id) {

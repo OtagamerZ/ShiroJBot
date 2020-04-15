@@ -7,10 +7,32 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_ygimenez_PaginationUtils_a8180ccd26.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_ygimenez_PaginationUtils_6ca94c3a35.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/BroadcastCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/BroadcastCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/LeaveCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/LeaveCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/UsageCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/UsageCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/QuizCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/QuizCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/ComandosCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/ComandosCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/LocalEmoteListCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/LocalEmoteListCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/ShiroEmoteListCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/ShiroEmoteListCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/URankCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/URankCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/misc/CustomAnswerCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/misc/CustomAnswerCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/moderation/BackupCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/moderation/BackupCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/music/YoutubeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/music/YoutubeCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/JibrilEmoteListCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/JibrilEmoteListCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/KGotchiCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/KGotchiCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/Kawaigotchi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/Kawaigotchi.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/PurchaceKGotchiCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/PurchaceKGotchiCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/support/InviteCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/support/InviteCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/support/RatingCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/support/RatingCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/VotesDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/VotesDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Music.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Music.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,6 +122,7 @@
         <option value="XML Properties File" />
         <option value="Enum" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -330,6 +353,7 @@
       <workItem from="1586865628044" duration="936000" />
       <workItem from="1586892079440" duration="145000" />
       <workItem from="1586895271606" duration="1190000" />
+      <workItem from="1586968151038" duration="419000" />
     </task>
     <task id="LOCAL-00980" summary="Unificada branch development na branch master">
       <created>1586286467139</created>
@@ -768,12 +792,12 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="585" y="309" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1580395607218" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1586788170895">
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1586960339941">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="488" y="67" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1585945441171" />
     <state x="488" y="71" key="#com.intellij.ide.util.MemberChooser/0.0.1366.768@0.0.1366.768" timestamp="1581391062510" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1586788170895" />
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1586960339941" />
     <state x="509" y="169" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1578969843084">
       <screen x="0" y="0" width="1366" height="768" />
     </state>

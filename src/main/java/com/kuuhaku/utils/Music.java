@@ -147,7 +147,7 @@ public class Music {
             pages.add(new Page(PageType.EMBED, eb.build()));
         }
 
-        channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
+        channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 60, TimeUnit.SECONDS));
     }
 
     public static void setVolume(TextChannel channel, int volume) {

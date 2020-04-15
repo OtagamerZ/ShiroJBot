@@ -109,7 +109,7 @@ public class URankCommand extends Command {
 			makeEmbed(global, pages, next10, eb, Helper.VOID);
 		}
 
-		channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
+		channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 60, TimeUnit.SECONDS));
 	}
 
 	private void makeEmbed(boolean global, List<Page> pages, StringBuilder next10, EmbedBuilder eb, String aVoid) {
