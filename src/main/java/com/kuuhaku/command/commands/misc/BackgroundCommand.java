@@ -52,7 +52,7 @@ public class BackgroundCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length == 0) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_backgroud-invalid-image")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-image")).queue();
 			return;
 		}
 
@@ -68,7 +68,7 @@ public class BackgroundCommand extends Command {
 			MemberDAO.updateMemberConfigs(m);
 			channel.sendMessage("Imagem de fundo trocada com sucesso!").queue();
 		} catch (IOException | NullPointerException e) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_backgroud-invalid-link")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-image")).queue();
 		}
     }
 }

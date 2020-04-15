@@ -51,7 +51,7 @@ public class DivorceCommand extends Command {
 		try {
 			com.kuuhaku.model.persistent.Member mb = MemberDAO.getMemberById(author.getId() + guild.getId());
 			if (mb.getWaifu() == null || mb.getWaifu().equals("")) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_divorce-user-unavailable")).queue();
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_divorce-no-waifu")).queue();
 				return;
 			}
 

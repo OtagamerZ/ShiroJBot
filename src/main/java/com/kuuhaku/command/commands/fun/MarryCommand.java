@@ -76,9 +76,8 @@ public class MarryCommand extends Command {
                 }
 				return;
 			} else if (WaifuDAO.isWaifued(author.getId()) || WaifuDAO.isWaifued(message.getMentionedUsers().get(0).getId())) {
-                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_marry-look-for-another-one-to-get-married")).queue();
+                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_already-married")).queue();
                 return;
-            }
 			}
 
 			channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + ", deseja casar-se com " + author.getAsMention() + ", por toda eternidade (ou não) em troca de um bônus de XP?" +
