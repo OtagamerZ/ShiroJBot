@@ -98,7 +98,7 @@ public class BroadcastCommand extends Command {
 					showResult(result, sb, pages, eb);
 				}
 
-				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
+				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 60, TimeUnit.SECONDS));
 				break;
 			case "parceiros":
 				List<Tags> ps = TagDAO.getAllPartners();
@@ -127,7 +127,7 @@ public class BroadcastCommand extends Command {
 					showResult(result, sb, pages, eb);
 				}
 
-				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
+				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 60, TimeUnit.SECONDS));
 				break;
 			default:
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_broadcast-invalid-type")).queue();

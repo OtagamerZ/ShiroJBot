@@ -53,7 +53,7 @@ public class RequestAssistCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		int number = TicketDAO.openTicket();
+		int number = TicketDAO.openTicket("Requisição de suporte presencial.", author);
 		EmbedBuilder eb = new EmbedBuilder();
 
 		eb.setTitle("Requisição de auxílio (Ticket Nº " + number + ")");

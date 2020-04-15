@@ -18,7 +18,6 @@
 package com.kuuhaku.command.commands.moderation;
 
 import com.github.ygimenez.method.Pages;
-import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.BackupDAO;
@@ -77,7 +76,7 @@ public class BackupCommand extends Command {
 			channel.sendMessage(":x: | Você precisa aguardar " + (7 - data.getLastRestored().toLocalDateTime().plusDays(7).until(LocalDateTime.now(), ChronoUnit.DAYS)) + " antes de restaurar o backup de canais novamente.").queue();
 		} else {
 			channel.sendMessage("**Restaurar um backup irá limpar todas as mensagens do servidor, inclusive aquelas fixadas**\n\nPor favor, confirme esta operação clicando no botão abaixo.").queue(s ->
-					Pages.buttonize(Main.getInfo().getAPI(), s, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> data.restore(guild)), true, 30, TimeUnit.SECONDS));
+					Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> data.restore(guild)), true, 30, TimeUnit.SECONDS));
 		}
 	}
 }

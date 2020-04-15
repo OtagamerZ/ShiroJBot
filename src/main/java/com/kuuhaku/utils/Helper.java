@@ -153,7 +153,7 @@ public class Helper {
     public static Consumer<MessageAction> sendReaction(Reaction r, String imageURL, MessageChannel channel, boolean allowReact) throws IllegalAccessException {
         try {
             if (r.isAnswerable() && allowReact) {
-                return act -> act.queue(m -> Pages.buttonize(Main.getInfo().getAPI(), m, Collections.singletonMap("↪", (mb, msg) -> r.answer((TextChannel) channel)), false, 60, TimeUnit.SECONDS));
+                return act -> act.queue(m -> Pages.buttonize(m, Collections.singletonMap("↪", (mb, msg) -> r.answer((TextChannel) channel)), false, 60, TimeUnit.SECONDS));
             } else
                 return RestAction::queue;
         } catch (Exception e) {
@@ -416,7 +416,7 @@ public class Helper {
                         }
                     });
 
-                    Pages.buttonize(Main.getInfo().getAPI(), msg, buttons, false);
+                    Pages.buttonize(msg, buttons, false);
 
                 } else {
                     Message msg = channel.retrieveMessageById(jo.getString("msgId")).submit().get();
@@ -432,7 +432,7 @@ public class Helper {
                         }
                     });
 
-                    Pages.buttonize(Main.getInfo().getAPI(), msg, buttons, true);
+                    Pages.buttonize(msg, buttons, true);
                 }
             } catch (NullPointerException | ErrorResponseException | InterruptedException | ExecutionException e) {
                 Helper.logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
@@ -489,7 +489,7 @@ public class Helper {
                     }
                 });
 
-                Pages.buttonize(Main.getInfo().getAPI(), msg, buttons, false);
+                Pages.buttonize(msg, buttons, false);
             });
         });
     }
@@ -647,7 +647,7 @@ public class Helper {
 
         g2d.setFont(new Font("Arial", Font.BOLD, 30));
         for (String line : lines) {
-            canvasSize += g2d.getFontMetrics().stringWidth(line) > bi.getWidth() ? 1 : 0;
+            canvasSize += g2d.getFontMetrics().stringWidth(line) > bi.getWidth() - 50 ? 1 : 0;
         }
 
         canvas = new BufferedImage(bi.getWidth(), (30 * ((lines.length - 1) + canvasSize) + (6 * lines.length)) + 15 + bi.getHeight(), BufferedImage.TYPE_INT_RGB);

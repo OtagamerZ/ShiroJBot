@@ -34,7 +34,6 @@ public class PartnerCheckEvent implements Job {
 	@Override
 	public void execute(JobExecutionContext context) {
 		Main.getJibril().getGuilds().forEach(PartnerCheckEvent::notif);
-		Main.getTet().getGuilds().forEach(PartnerCheckEvent::notif);
 	}
 
 	private static void notif(Guild g) {
