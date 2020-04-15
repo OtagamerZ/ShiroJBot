@@ -76,7 +76,7 @@ public class AntispamCommand extends Command {
 		for (String s : args) {
 			if (StringUtils.isNumeric(s)) {
 				if (Integer.parseInt(s) < 5) {
-					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_antispam-invalid-arguments")).queue();
+					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-message-threshold")).queue();
 					return;
 				}
 				gc.setNoSpamAmount(Integer.parseInt(s));

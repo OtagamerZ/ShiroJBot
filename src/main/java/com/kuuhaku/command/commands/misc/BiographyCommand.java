@@ -46,15 +46,15 @@ public class BiographyCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (String.join(" ", args).length() > 140) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_biography-big-message")).queue();
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_biography-too-long")).queue();
             return;
         }
 
 		for (String s : args)
 			if (s.length() > 29) {
-                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_biography-very-big-words")).queue();
-                return;
-            }
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_biography-big-words")).queue();
+				return;
+			}
 
 		String text = String.join(" ", args);
 
