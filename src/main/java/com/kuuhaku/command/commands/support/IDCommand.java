@@ -71,12 +71,12 @@ public class IDCommand extends Command {
 
 				channel.sendMessage(eb.build()).queue();
 			} catch (InsufficientPermissionException ex) {
-                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_id-insufficient-permissions-to-embed")).queue();
+                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_send-embed")).queue();
             } catch (Exception e) {
-                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_id-user-not-found")).queue();
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-not-found")).queue();
             }
 		} else {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_id-invalid-name")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-name")).queue();
         }
 	}
 

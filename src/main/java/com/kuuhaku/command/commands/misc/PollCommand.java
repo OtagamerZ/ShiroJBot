@@ -30,6 +30,7 @@ import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
 import java.awt.*;
+import java.text.MessageFormat;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -54,13 +55,13 @@ public class PollCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_poll-invalid-message")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_poll-no-question")).queue();
 			return;
 		} else if (String.join(" ", args).length() < 10) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_poll-very-short-question")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_poll-too-short")).queue();
 			return;
 		} else if (String.join(" ", args).length() > 2000) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_poll-very-long-question")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_poll-too-long")).queue();
 			return;
 		}
 
@@ -94,9 +95,9 @@ public class PollCommand extends Command {
 				});
 			} catch (Exception e) {
 				if (gc.getCanalSUG() == null || gc.getCanalSUG().isEmpty())
-					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_poll-insufficient-permissions")).queue();
+					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_send-embed")).queue();
 				else
-					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_poll-insufficient-permissions-to-embed") + Objects.requireNonNull(guild.getTextChannelById(gc.getCanalSUG())).getAsMention() + ".").queue();
+					channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_send-embed-in-channel"), Objects.requireNonNull(guild.getTextChannelById(gc.getCanalSUG())).getAsMention())).queue();
 				return;
 			}
 		}

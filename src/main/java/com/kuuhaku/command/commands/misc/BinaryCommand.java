@@ -58,7 +58,7 @@ public class BinaryCommand extends Command {
 			}
 			channel.sendMessage(":1234: `" + binary.toString() + "`").queue();
 		} catch (IllegalStateException | IllegalArgumentException e) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_binary-very-big-message")).queue();
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_message-too-long")).queue();
         }
 	}
 }
