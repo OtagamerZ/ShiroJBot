@@ -19,7 +19,6 @@ package com.kuuhaku.command.commands.information;
 
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
-import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
@@ -72,7 +71,7 @@ public class LocalEmoteListCommand extends Command {
 				Helper.finishEmbed(guild, pages, f, eb, i);
 			}
 
-			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(Main.getInfo().getAPI(), s, pages, 60, TimeUnit.SECONDS));
+			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 60, TimeUnit.SECONDS));
 		} catch (IndexOutOfBoundsException e) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_emote-not-found")).queue();
 		}

@@ -20,7 +20,6 @@ package com.kuuhaku.command.commands.partner;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
-import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
@@ -115,7 +114,7 @@ public class PurchaceKGotchiCommand extends Command {
 						pages.add(new Page(PageType.EMBED, eb.build()));
 					}
 
-					channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(m -> Pages.paginate(Main.getInfo().getAPI(), m, pages, 60, TimeUnit.SECONDS));
+					channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(m -> Pages.paginate(m, pages, 60, TimeUnit.SECONDS));
 					return;
 				} else if (args.length < 3) {
 					channel.sendMessage(":x: | Você precisa dar um nome ao seu Kawaigotchi!").queue();
