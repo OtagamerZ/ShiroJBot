@@ -23,6 +23,8 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
@@ -52,13 +54,13 @@ public class PollCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
-			channel.sendMessage(":x: | Você precisa digitar uma pergunta para a enquete.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_poll-invalid-message")).queue();
 			return;
 		} else if (String.join(" ", args).length() < 10) {
-			channel.sendMessage(":x: | Pergunta muito curta, tente complementá-la mais!").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_poll-very-short-question")).queue();
 			return;
 		} else if (String.join(" ", args).length() > 2000) {
-			channel.sendMessage(":x: | Pergunta muito longa, tente simplificá-la mais!").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_poll-very-long-question")).queue();
 			return;
 		}
 
@@ -92,9 +94,9 @@ public class PollCommand extends Command {
 				});
 			} catch (Exception e) {
 				if (gc.getCanalSUG() == null || gc.getCanalSUG().isEmpty())
-					channel.sendMessage(":x: | Não possuo permissões suficientes para mandar embeds neste canal.").queue();
+					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_poll-insufficient-permissions")).queue();
 				else
-					channel.sendMessage(":x: | Não possuo permissões suficientes para mandar embeds no canal " + Objects.requireNonNull(guild.getTextChannelById(gc.getCanalSUG())).getAsMention() + ".").queue();
+					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_poll-insufficient-permissions-to-embed") + Objects.requireNonNull(guild.getTextChannelById(gc.getCanalSUG())).getAsMention() + ".").queue();
 				return;
 			}
 		}

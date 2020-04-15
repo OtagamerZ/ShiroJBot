@@ -20,6 +20,8 @@ package com.kuuhaku.command.commands.misc;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
@@ -44,15 +46,15 @@ public class BiographyCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (String.join(" ", args).length() > 140) {
-			channel.sendMessage(":x: | A biografia é muito grande, o tamanho máximo é 140 caractéres.").queue();
-			return;
-		}
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_biography-big-message")).queue();
+            return;
+        }
 
 		for (String s : args)
 			if (s.length() > 29) {
-				channel.sendMessage(":x: | A biografia possui uma ou mais falavras MUITO grandes (limite de 29 caractéres por palavra).").queue();
-				return;
-			}
+                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_biography-very-big-words")).queue();
+                return;
+            }
 
 		String text = String.join(" ", args);
 

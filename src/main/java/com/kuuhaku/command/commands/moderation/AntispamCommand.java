@@ -21,6 +21,8 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
@@ -74,7 +76,7 @@ public class AntispamCommand extends Command {
 		for (String s : args) {
 			if (StringUtils.isNumeric(s)) {
 				if (Integer.parseInt(s) < 5) {
-					channel.sendMessage(":x: | Quantidade de mensagens muito baixa, escolha um valor acima de 5").queue();
+					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_antispam-invalid-arguments")).queue();
 					return;
 				}
 				gc.setNoSpamAmount(Integer.parseInt(s));
