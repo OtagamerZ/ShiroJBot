@@ -63,7 +63,8 @@ public class QuizCommand extends Command {
 		AnsweredQuizzes aq = QuizDAO.getUserState(author.getId());
 
 		if (aq.getTimes() == 10) {
-			channel.sendMessage(":x: | Você já jogou muitas vezes, aguarde " + (6 - (LocalDateTime.now().getHour() % 6)) + " horas para jogar novamente!").queue();
+			int time = (6 - (LocalDateTime.now().getHour() % 6));
+			channel.sendMessage(":x: | Você já jogou muitas vezes, aguarde " + time + " hora" + (time == 1 ? "" : "s") + " para jogar novamente!").queue();
 			return;
 		}
 
@@ -98,7 +99,7 @@ public class QuizCommand extends Command {
 				eb.setThumbnail("https://lh3.googleusercontent.com/proxy/ZvixvksWEH9fKXQXNtDTQYMRNxvRQDCrCDmMiC2g5tkotFwRPcSp9L8c4doZAcR31p5n5sXYmSSyNnQltoPOuRAUPh6fQtyf_PoeDLIUFJINbX0");
 
 				if (mb.getId().equals(author.getId())) {
-					if (values.get(String.valueOf(o)) == q.getCorrect()) {
+					if (values.get(String.valueOf(o)) == 1) {
 						int p = Helper.clamp(Helper.rng(q.getPrize()), q.getPrize() / 5, q.getPrize());
 						acc.addCredit(p);
 						AccountDAO.saveAccount(acc);

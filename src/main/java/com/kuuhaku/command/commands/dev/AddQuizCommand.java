@@ -56,25 +56,18 @@ public class AddQuizCommand extends Command {
 		String[] quizArgs = String.join(" ", args).split(";");
 		JSONArray opts = new JSONArray(quizArgs[1]);
 
-		if (quizArgs.length < 4) {
+		if (quizArgs.length < 3) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_quiz-invalid-arguments")).queue();
 			return;
 		} else if (opts.length() != 4) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_quiz-not-enough-options")).queue();
 			return;
 		} else if (!StringUtils.isNumeric(quizArgs[2])) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_quiz-invalid-index")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_quiz-invalid-prize")).queue();
 			return;
 		}
 
-		int o = Integer.parseInt(quizArgs[2]);
-
-		if (o < 1 || o > 4) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_quiz-invalid-answer")).queue();
-			return;
-		}
-
-		Quiz q = new Quiz(quizArgs[0], opts, o, Integer.parseInt(quizArgs[3]));
+		Quiz q = new Quiz(quizArgs[0], opts, Integer.parseInt(quizArgs[2]));
 		QuizDAO.saveQuiz(q);
 
 		channel.sendMessage("Quiz adicionado com sucesso!").queue();
