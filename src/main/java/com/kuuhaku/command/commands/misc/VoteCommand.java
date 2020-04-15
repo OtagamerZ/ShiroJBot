@@ -61,14 +61,15 @@ public class VoteCommand extends Command {
 		switch (args[1]) {
 			case "positivo":
 			case "pos":
-			case ":thumbsup:":
 				VotesDAO.voteUser(guild, author, message.getMentionedUsers().get(0), true);
 				break;
 			case "negativo":
 			case "neg":
-			case ":thumbsdown:":
 				VotesDAO.voteUser(guild, author, message.getMentionedUsers().get(0), false);
 				break;
+			default:
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_wrong-vote")).queue();
+				return;
 		}
 
 		try {

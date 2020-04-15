@@ -48,9 +48,7 @@ public class GamblePool {
 	public String[] getPool() {
 		List<String> pool = new ArrayList<>();
 		for (Gamble gamble : g) {
-			for (int x = gamble.getWeight(); x > 0; x--) {
-				pool.add(gamble.getSlot());
-			}
+			pool.add(gamble.getSlot());
 		}
 
 		return pool.toArray(new String[0]);
