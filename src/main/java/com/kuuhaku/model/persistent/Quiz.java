@@ -37,15 +37,11 @@ public class Quiz {
 	private String options = "[]";
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-	private int correct = 0;
-
-	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int prize = 0;
 
-	public Quiz(String question, JSONArray options, int correct, int prize) {
+	public Quiz(String question, JSONArray options, int prize) {
 		this.question = question;
 		this.options = options.toString();
-		this.correct = correct;
 		this.prize = prize;
 	}
 
@@ -62,10 +58,6 @@ public class Quiz {
 
 	public JSONArray getOptions() {
 		return new JSONArray(options);
-	}
-
-	public int getCorrect() {
-		return correct;
 	}
 
 	public int getPrize() {
