@@ -155,6 +155,6 @@ public class RatingCommand extends Command {
 						.queue();
 			});
 		}};
-		Pages.buttonize(Main.getInfo().getAPI(), msg, buttons, false);
+		Pages.buttonize(msg, buttons, false);
 	}
 }
