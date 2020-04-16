@@ -26,6 +26,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.exceptions.HierarchyException;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
@@ -77,12 +78,15 @@ public class UnblockEvent implements Job {
 			Role r = g.getRoleById(GuildDAO.getGuildById(g.getId()).getCargoWarn());
 			assert r != null;
 			assert mb != null;
-			if (mb.getRoles().stream().filter(rol -> !rol.isPublicRole()).anyMatch(rol -> !rol.getId().equals(r.getId())) && m.isMuted()) {
-				g.modifyMemberRoles(mb, r).complete();
-			} else if (!m.isMuted()) {
-				List<Role> roles = m.getRoles().toList().stream().map(rol -> g.getRoleById((String) rol)).collect(Collectors.toList());
-				g.modifyMemberRoles(mb, roles).complete();
-				MemberDAO.removeMutedMember(m);
+			try {
+				if (mb.getRoles().stream().filter(rol -> !rol.isPublicRole()).anyMatch(rol -> !rol.getId().equals(r.getId())) && m.isMuted()) {
+					g.modifyMemberRoles(mb, r).complete();
+				} else if (!m.isMuted()) {
+					List<Role> roles = m.getRoles().toList().stream().map(rol -> g.getRoleById((String) rol)).collect(Collectors.toList());
+					g.modifyMemberRoles(mb, roles).complete();
+					MemberDAO.removeMutedMember(m);
+				}
+			} catch (HierarchyException ignore) {
 			}
 		});
 	}
