@@ -333,13 +333,6 @@
       <workItem from="1586970574654" duration="5940000" />
       <workItem from="1587006589853" duration="230000" />
     </task>
-    <task id="LOCAL-00997" summary="Melhorado o sistema de ratelimits">
-      <created>1586452948322</created>
-      <option name="number" value="00997" />
-      <option name="presentableId" value="LOCAL-00997" />
-      <option name="project" value="LOCAL" />
-      <updated>1586452948322</updated>
-    </task>
     <task id="LOCAL-00998" summary="Melhorado o sistema de ratelimits">
       <created>1586453039412</created>
       <option name="number" value="00998" />
@@ -676,7 +669,14 @@
       <option name="project" value="LOCAL" />
       <updated>1587066879389</updated>
     </task>
-    <option name="localTasksCounter" value="1046" />
+    <task id="LOCAL-01046" summary="Remoção do comando Snipe">
+      <created>1587067120567</created>
+      <option name="number" value="01046" />
+      <option name="presentableId" value="LOCAL-01046" />
+      <option name="project" value="LOCAL" />
+      <updated>1587067120567</updated>
+    </task>
+    <option name="localTasksCounter" value="1047" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -815,12 +815,12 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1587064862754" />
-    <state x="234" y="57" key="CommitChangelistDialog2" timestamp="1587066876603">
+    <state x="234" y="57" key="CommitChangelistDialog2" timestamp="1587067849681">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1587006942641" />
-    <state x="234" y="57" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1587066876603" />
+    <state x="234" y="57" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1587067849681" />
     <state width="247" height="195" key="DatabaseViewActions_Filter" timestamp="1586747901902">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -896,12 +896,12 @@
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1587066884046">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1587067123399">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1586748978558" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1587066884046" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1587067123399" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
