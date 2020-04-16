@@ -34,6 +34,7 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.role.RoleDeleteEvent;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -41,6 +42,7 @@ import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import javax.persistence.NoResultException;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -268,6 +270,16 @@ public class GuildEvents extends ListenerAdapter {
 		} catch (ErrorResponseException e) {
 			Helper.logger(this.getClass()).error(e.getErrorCode() + ": " + e + " | " + e.getStackTrace()[0]);
 		}
+	}
+
+	@Override
+	public void onRoleDelete(@Nonnull RoleDeleteEvent event) {
+		GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
+		Map<String, Object> jo = gc.getCargoslvl();
+
+		jo.entrySet().removeIf(e -> String.valueOf(e.getValue()).equals(event.getRole().getId()));
+
+		GuildDAO.updateGuildSettings(gc);
 	}
 
 	private void countSpam(Member member, MessageChannel channel, Guild guild, List<Message> h) {
