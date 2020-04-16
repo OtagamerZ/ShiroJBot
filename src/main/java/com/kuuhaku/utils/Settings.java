@@ -432,6 +432,9 @@ public class Settings {
 		if (message.getMentionedChannels().size() > 1) {
 			message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 canal.").queue();
 			return;
+		} else if (message.getMentionedChannels().size() < 1) {
+			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
+			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setCanalLvl(null);
 			GuildDAO.updateGuildSettings(gc);
