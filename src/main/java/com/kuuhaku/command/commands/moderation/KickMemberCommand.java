@@ -55,13 +55,13 @@ public class KickMemberCommand extends Command {
         } else if (!member.hasPermission(Permission.KICK_MEMBERS)) {
 			channel.sendMessage(":x: | Você não possui permissão para expulsar membros.").queue();
 			return;
-		} else if (Helper.hasRoleHigherThan(member, message.getMentionedMembers().get(0))) {
-            channel.sendMessage(":x: | Você não pode expulsar membros que possuem o mesmo cargo ou maior.").queue();
-            return;
-        } else if (Main.getInfo().getDevelopers().contains(message.getMentionedUsers().get(0).getId())) {
-            channel.sendMessage(":x: | Não posso expulsar meus desenvolvedores, faça isso manualmente.").queue();
-            return;
-        }
+		} else if (!Helper.hasRoleHigherThan(member, message.getMentionedMembers().get(0))) {
+			channel.sendMessage(":x: | Você não pode expulsar membros que possuem o mesmo cargo ou maior.").queue();
+			return;
+		} else if (Main.getInfo().getDevelopers().contains(message.getMentionedUsers().get(0).getId())) {
+			channel.sendMessage(":x: | Não posso expulsar meus desenvolvedores, faça isso manualmente.").queue();
+			return;
+		}
 
         try {
             if (args.length < 2) {
