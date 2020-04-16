@@ -39,6 +39,7 @@ import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -171,6 +172,7 @@ public class GuildEvents extends ListenerAdapter {
 			String[] args = new String[]{};
 			if (hasArgs) {
 				args = Arrays.copyOfRange(rawMsgNoPrefix.split(" "), 1, rawMsgNoPrefix.split(" ").length);
+				args = ArrayUtils.removeAllOccurences(args, "");
 			}
 
 			boolean found = false;
