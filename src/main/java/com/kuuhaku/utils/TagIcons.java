@@ -23,33 +23,33 @@ public enum TagIcons {
 	public static String getTag(TagIcons t) {
 		switch (t) {
 			case DEV:
-				return "<:developer:697879725925990466>";
+				return "<:developer:697879725925990466> ";
 			case SUPPORT:
-				return "<:support:697879726047625216>";
+				return "<:support:697879726047625216> ";
 			case EDITOR:
-				return "<:writer:697879725497909310>";
+				return "<:writer:697879725497909310> ";
 			case READER:
-				return "<:reader:697879726148288542>";
+				return "<:reader:697879726148288542> ";
 			case MODERATOR:
-				return "<:moderator:697879725628194878>";
+				return "<:moderator:697879725628194878> ";
 			case LVL20:
-				return "<:lvl_20:697879725972127885>";
+				return "<:lvl_20:697879725972127885> ";
 			case LVL30:
-				return "<:lvl_30:697879725951156294>";
+				return "<:lvl_30:697879725951156294> ";
 			case LVL40:
-				return "<:lvl_40:697879726043299942>";
+				return "<:lvl_40:697879726043299942> ";
 			case LVL50:
-				return "<:lvl_50:697879725862944899>";
+				return "<:lvl_50:697879725862944899> ";
 			case LVL60:
-				return "<:lvl_60:697879725984710777>";
+				return "<:lvl_60:697879725984710777> ";
 			case LVL70:
-				return "<:lvl_70:697879726009745458> ";
+				return "<:lvl_70:697879726009745458>  ";
 			case VERIFIED:
-				return "<:verified:697879725887979621>";
+				return "<:verified:697879725887979621> ";
 			case TOXIC:
-				return "<:toxic:697879725816676442>";
+				return "<:toxic:697879725816676442> ";
 			case MARRIED:
-				return "<:married:697879725888241684>";
+				return "<:married:697879725888241684> ";
 		}
 		return null;
 	}
@@ -57,17 +57,17 @@ public enum TagIcons {
 	public static String getExceed(ExceedEnums t) {
 		switch (t) {
 			case IMANITY:
-				return "<:imanity:697879725690847324>";
+				return "<:imanity:697879725690847324> ";
 			case SEIREN:
-				return "<:seiren:697879725640515685>";
+				return "<:seiren:697879725640515685> ";
 			case WEREBEAST:
-				return "<:werebeast:697879725934379178>";
+				return "<:werebeast:697879725934379178> ";
 			case ELF:
-				return "<:elf:697879725661749300>";
+				return "<:elf:697879725661749300> ";
 			case EXMACHINA:
-				return "<:exmachina:697879725988904971>";
+				return "<:exmachina:697879725988904971> ";
 			case FLUGEL:
-				return "<:flugel:697879725967933440>";
+				return "<:flugel:697879725967933440> ";
 		}
 		return null;
 	}

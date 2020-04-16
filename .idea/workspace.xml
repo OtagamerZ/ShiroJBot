@@ -8,7 +8,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/SnipeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/SnipeCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -332,20 +331,6 @@
       <workItem from="1586968151038" duration="1066000" />
       <workItem from="1586970574654" duration="5940000" />
       <workItem from="1587006589853" duration="230000" />
-    </task>
-    <task id="LOCAL-00984" summary="O log agora é retornado usando a API do HasteBin">
-      <created>1586291247092</created>
-      <option name="number" value="00984" />
-      <option name="presentableId" value="LOCAL-00984" />
-      <option name="project" value="LOCAL" />
-      <updated>1586291247092</updated>
-    </task>
-    <task id="LOCAL-00985" summary="O log agora é retornado usando a API do HasteBin">
-      <created>1586292047237</created>
-      <option name="number" value="00985" />
-      <option name="presentableId" value="LOCAL-00985" />
-      <option name="project" value="LOCAL" />
-      <updated>1586292047237</updated>
     </task>
     <task id="LOCAL-00986" summary="O log agora é retornado usando a API do HasteBin">
       <created>1586292484683</created>
@@ -676,7 +661,21 @@
       <option name="project" value="LOCAL" />
       <updated>1586974747004</updated>
     </task>
-    <option name="localTasksCounter" value="1033" />
+    <task id="LOCAL-01033" summary="Novo comando Snipe">
+      <created>1587061592882</created>
+      <option name="number" value="01033" />
+      <option name="presentableId" value="LOCAL-01033" />
+      <option name="project" value="LOCAL" />
+      <updated>1587061592882</updated>
+    </task>
+    <task id="LOCAL-01034" summary="Novo comando Snipe">
+      <created>1587061783164</created>
+      <option name="number" value="01034" />
+      <option name="presentableId" value="LOCAL-01034" />
+      <option name="project" value="LOCAL" />
+      <updated>1587061783165</updated>
+    </task>
+    <option name="localTasksCounter" value="1035" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -695,7 +694,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Meme do Drake" />
     <MESSAGE value="Começo da implementação do i18n" />
     <MESSAGE value="Continuação da implementação do i18n" />
     <MESSAGE value="Melhorias no backup de servidores" />
@@ -720,7 +718,8 @@
     <MESSAGE value="Correção nos nomes de erro" />
     <MESSAGE value="Correção nos nomes de erros" />
     <MESSAGE value="Correções no comando Quiz" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correções no comando Quiz" />
+    <MESSAGE value="Novo comando Snipe" />
+    <option name="LAST_COMMIT_MESSAGE" value="Novo comando Snipe" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -815,12 +814,12 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1586974460200" />
-    <state x="234" y="57" key="CommitChangelistDialog2" timestamp="1587061590226">
+    <state x="234" y="57" key="CommitChangelistDialog2" timestamp="1587061937889">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1587006942641" />
-    <state x="234" y="57" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1587061590226" />
+    <state x="234" y="57" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1587061937889" />
     <state width="247" height="195" key="DatabaseViewActions_Filter" timestamp="1586747901902">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -896,12 +895,12 @@
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1587061604748">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1587061784180">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1586748978558" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1587061604748" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1587061784180" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -954,12 +953,12 @@
     </state>
     <state x="682" y="113" key="extract.method.dialog/0.0.1366.768@0.0.1366.768" timestamp="1582605093359" />
     <state x="448" y="274" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1586896266138" />
-    <state x="445" y="176" width="790" height="658" key="find.popup" timestamp="1586786834165">
+    <state x="445" y="176" width="790" height="658" key="find.popup" timestamp="1587062027286">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="362" y="127" width="643" height="536" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1585937546544" />
     <state x="362" y="134" width="774" height="562" key="find.popup/0.0.1366.768@0.0.1366.768" timestamp="1579836143729" />
-    <state x="445" y="176" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1586786834165" />
+    <state x="445" y="176" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1587062027286" />
     <state x="605" y="219" key="git4idea.branch.GitSmartOperationDialog" timestamp="1579030853134">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
