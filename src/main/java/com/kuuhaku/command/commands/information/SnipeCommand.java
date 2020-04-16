@@ -66,13 +66,17 @@ public class SnipeCommand extends Command {
 			keys.add(String.valueOf(i));
 		}
 
-		eb.setTitle("Ultimas 5 mensagens deletadas no canal " + chn.getName());
-		List<Message> msgs = cache.getAll(keys).values().stream().filter(m -> m.getChannel().getId().equals(chn.getId())).collect(Collectors.toList());
-		msgs.sort(Comparator.comparing(Message::getTimeCreated).reversed());
+		try {
+			eb.setTitle("Ultimas 5 mensagens deletadas no canal " + chn.getName());
+			List<Message> msgs = cache.getAll(keys).values().stream().filter(m -> m.getChannel().getId().equals(chn.getId())).collect(Collectors.toList());
+			msgs.sort(Comparator.comparing(Message::getTimeCreated).reversed());
 
-		msgs.subList(0, Math.min(msgs.size(), 5)).forEach(m -> eb.addField("Enviada por " + m.getAuthor().getAsMention(), m.getContentRaw(), false));
-		eb.setColor(Helper.getRandomColor());
+			msgs.subList(0, Math.min(msgs.size(), 5)).forEach(m -> eb.addField("Enviada por " + m.getAuthor().getAsMention(), m.getContentRaw(), false));
+			eb.setColor(Helper.getRandomColor());
 
-		channel.sendMessage(eb.build()).queue();
+			channel.sendMessage(eb.build()).queue();
+		} catch (NullPointerException e) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no_cache")).queue();
+		}
 	}
 }
