@@ -29,6 +29,13 @@ public class PermaBlock {
 	@Column(columnDefinition = "VARCHAR(191)")
 	private String id;
 
+	public PermaBlock(String id) {
+		this.id = id;
+	}
+
+	public PermaBlock() {
+	}
+
 	public void block(String id) {
 		this.id = id;
 	}
