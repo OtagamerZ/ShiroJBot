@@ -124,7 +124,11 @@ public class ShiroInfo {
 	}
 
 	public static Message retrieveCachedMessage(Guild guild, String id) {
-		return messageCache.getOrDefault(guild.getId(), new KittyCache<>(64)).removeAndGet(id);
+		return messageCache.getOrDefault(guild.getId(), new KittyCache<>(64)).get(id);
+	}
+
+	public static KittyCache<String, Message> retrieveCache(Guild guild) {
+		return messageCache.getOrDefault(guild.getId(), new KittyCache<>(64));
 	}
 
 	public static String getSupportServer() {
