@@ -91,6 +91,9 @@ public class Kawaigotchi {
 	@Column(columnDefinition = "TEXT")
 	private String bag = "{\"almondega\":5}";
 
+	@Column(columnDefinition = "TEXT")
+	private String vanity = "{}";
+
 	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
 	private boolean alerted;
 
@@ -500,6 +503,14 @@ public class Kawaigotchi {
 		this.bag = bag;
 	}
 
+	public String getVanity() {
+		return vanity;
+	}
+
+	public void setVanity(String vanity) {
+		this.vanity = vanity;
+	}
+
 	public boolean isAlerted() {
 		return alerted;
 	}
@@ -546,6 +557,15 @@ public class Kawaigotchi {
 		jo.put(f.getIdentifier(), jo.getInt(f.getIdentifier()) - 1);
 
 		bag = jo.toString();
+	}
+
+	public void addVanity(Vanity v) {
+		JSONObject jo = new JSONObject(vanity);
+
+		jo.put(v.getType().toString(), v.getIdentifier());
+
+		vanity = jo.toString();
+		KGotchiDAO.saveKawaigotchi(this);
 	}
 
 	public void doNothing() {
