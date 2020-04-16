@@ -53,7 +53,7 @@ public class SnipeCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (message.getMentionedChannels().size() < 1 || message.getMentionedChannels().get(0).getType() != ChannelType.TEXT) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no_channel")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
 			return;
 		}
 
@@ -76,7 +76,7 @@ public class SnipeCommand extends Command {
 
 			channel.sendMessage(eb.build()).queue();
 		} catch (NullPointerException e) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no_cache")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-cache")).queue();
 		}
 	}
 }
