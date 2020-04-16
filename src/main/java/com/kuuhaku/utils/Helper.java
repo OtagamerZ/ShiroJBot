@@ -337,10 +337,10 @@ public class Helper {
     }
 
     public static boolean hasRoleHigherThan(Member user, Member target) {
-        List<Role> usrRoles = user.getRoles().stream().sorted(Comparator.comparingInt(Role::getPosition)).collect(Collectors.toList());
-        List<Role> tgtRoles = target.getRoles().stream().sorted(Comparator.comparingInt(Role::getPosition)).collect(Collectors.toList());
+        List<Role> usrRoles = user.getRoles();
+        List<Role> tgtRoles = target.getRoles();
 
-        return usrRoles.get(0).getPosition() < tgtRoles.get(0).getPosition();
+        return usrRoles.get(0).getPosition() > tgtRoles.get(0).getPosition();
     }
 
     public static <T> List<List<T>> chunkify(List<T> list, int chunkSize) {
@@ -623,6 +623,7 @@ public class Helper {
     public static void drawString(Graphics2D g, String text, int x, int y, int width) {
         StringBuilder sb = new StringBuilder();
         List<String> lines = new ArrayList<>();
+
         for (String word : text.split(" ")) {
             if (g.getFontMetrics().stringWidth(sb.toString() + word) > width) {
                 lines.add(sb.toString().trim());
@@ -647,7 +648,7 @@ public class Helper {
 
         g2d.setFont(new Font("Arial", Font.BOLD, 30));
         for (String line : lines) {
-            canvasSize += g2d.getFontMetrics().stringWidth(line) > bi.getWidth() - 50 ? 1 : 0;
+            canvasSize += g2d.getFontMetrics().stringWidth(line) > bi.getWidth() - 50 ? (bi.getWidth() - 50) / g2d.getFontMetrics().stringWidth(line) : 0;
         }
 
         canvas = new BufferedImage(bi.getWidth(), (30 * ((lines.length - 1) + canvasSize) + (6 * lines.length)) + 15 + bi.getHeight(), BufferedImage.TYPE_INT_RGB);
