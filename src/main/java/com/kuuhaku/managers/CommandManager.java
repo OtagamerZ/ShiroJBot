@@ -249,9 +249,6 @@ public class CommandManager {
 			add(new ListScoreCommand(
 					"notas", new String[]{"scores"}, getLocale(PT).getString("cmd_score"), INFO, true
 			));
-			add(new SnipeCommand(
-					"deletadas", new String[]{"snipe"}, getLocale(PT).getString("req_channel"), getLocale(PT).getString("cmd_snipe"), INFO, true
-			));
 
 			//MISC
 			add(new BackgroundCommand(
