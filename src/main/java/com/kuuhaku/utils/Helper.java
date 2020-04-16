@@ -648,7 +648,7 @@ public class Helper {
 
         g2d.setFont(new Font("Arial", Font.BOLD, 30));
         for (String line : lines) {
-            canvasSize += g2d.getFontMetrics().stringWidth(line) > bi.getWidth() - 50 ? (bi.getWidth() - 50) / g2d.getFontMetrics().stringWidth(line) : 0;
+            canvasSize += g2d.getFontMetrics().stringWidth(line) / (bi.getWidth() - 50);
         }
 
         canvas = new BufferedImage(bi.getWidth(), (30 * ((lines.length - 1) + canvasSize) + (6 * lines.length)) + 15 + bi.getHeight(), BufferedImage.TYPE_INT_RGB);
