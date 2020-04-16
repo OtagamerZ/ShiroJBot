@@ -660,7 +660,7 @@ public class Helper {
 
         g2d.setColor(Color.BLACK);
         g2d.setFont(new Font("Arial", Font.BOLD, 30));
-        for (int i = 0; i < lines.length; i++) drawString(g2d, lines[i], 25, 45 + (45 * i), bi.getWidth() - 50);
+        for (int i = 0; i < canvasSize; i++) drawString(g2d, lines[i], 25, 45 + (45 * i), bi.getWidth() - 50);
         g2d.drawImage(bi, 0, canvas.getHeight() - bi.getHeight(), null);
 
         g2d.dispose();
