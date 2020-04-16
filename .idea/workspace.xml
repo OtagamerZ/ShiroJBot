@@ -6,9 +6,11 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção no comando de logs">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/exceed/ExceedRankCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/exceed/ExceedRankCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Youtube.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Youtube.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -331,6 +333,7 @@
       <workItem from="1586895271606" duration="1190000" />
       <workItem from="1586968151038" duration="1066000" />
       <workItem from="1586970574654" duration="5940000" />
+      <workItem from="1587006589853" duration="230000" />
     </task>
     <task id="LOCAL-00984" summary="O log agora é retornado usando a API do HasteBin">
       <created>1586291247092</created>
@@ -818,11 +821,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1586974460200" />
-    <state x="234" y="57" key="CommitChangelistDialog2" timestamp="1586983395456">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="203" y="0" key="CommitChangelistDialog2" timestamp="1587006942641">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
-    <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1586748974279" />
+    <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1587006942641" />
     <state x="234" y="57" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1586983395456" />
     <state width="247" height="195" key="DatabaseViewActions_Filter" timestamp="1586747901902">
       <screen x="0" y="0" width="1366" height="768" />
