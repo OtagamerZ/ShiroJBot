@@ -112,12 +112,6 @@ public class Kawaigotchi {
 	public void update(Member m) {
 		if (m.getOnlineStatus() == OnlineStatus.OFFLINE || m.getOnlineStatus() == OnlineStatus.UNKNOWN) return;
 
-		//CLAMPS
-		health = Helper.clamp(health, 0, 100);
-		hunger = Helper.clamp(hunger, 0, 100);
-		mood = Helper.clamp(mood, 0, 100);
-		energy = Helper.clamp(energy, 0, 100);
-
 		if (!alive) stance = Stance.DEAD;
 
 		if (health <= 0) {
@@ -184,6 +178,13 @@ public class Kawaigotchi {
 		energy -= rate.ENERGY.fac / nature.getEnergy();
 
 		xp += 0.1f * tier.getTrainability();
+
+		//CLAMPS
+		health = Helper.clamp(health, 0, 100);
+		hunger = Helper.clamp(hunger, 0, 100);
+		mood = Helper.clamp(mood, 0, 100);
+		energy = Helper.clamp(energy, 0, 100);
+
 		KGotchiDAO.saveKawaigotchi(this);
 	}
 
