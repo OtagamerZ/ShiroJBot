@@ -19,6 +19,7 @@ package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.sqlite.KGotchiDAO;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
@@ -27,6 +28,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Entity
@@ -80,9 +82,16 @@ public class Member {
 	}
 
 	public boolean addXp(Guild g) {
-		if (g.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).collect(Collectors.toList()).contains(waifu)) {
-			xp += (Main.getInfo().getWinner().equals(this.exceed) ? 30 : 15) * waifuMult;
-		} else xp += (Main.getInfo().getWinner().equals(this.exceed) ? 30 : 15);
+		float mult = 1;
+
+		if (Main.getInfo().getWinner().equals(this.exceed))
+			mult *= 2;
+		if (g.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).collect(Collectors.toList()).contains(waifu))
+			mult *= waifuMult;
+		if (KGotchiDAO.getKawaigotchi(mid) != null && Objects.requireNonNull(KGotchiDAO.getKawaigotchi(mid)).isAlive())
+			mult *= Objects.requireNonNull(KGotchiDAO.getKawaigotchi(mid)).getTier().getUserXpMult();
+
+		xp += 15 * mult;
 
 		if (xp >= (int) Math.pow(level, 2) * 100) {
 			level++;
