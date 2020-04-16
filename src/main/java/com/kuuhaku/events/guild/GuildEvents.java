@@ -223,7 +223,17 @@ public class GuildEvents extends ListenerAdapter {
 						}
 						rawLvls.remove(String.valueOf(i));
 						List<Role> list = new ArrayList<>();
-						rawLvls.forEach((k, v) -> list.add(guild.getRoleById((String) v)));
+						rawLvls.forEach((k, v) -> {
+							Role r = guild.getRoleById((String) v);
+
+							if (r != null) list.add(r);
+							else {
+								GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+								Map<String, Object> cl = gc.getCargoslvl();
+								cl.remove(String.valueOf(i));
+								GuildDAO.updateGuildSettings(gc);
+							}
+						});
 						guild.modifyMemberRoles(member, null, list).complete();
 					});
 				} catch (InsufficientPermissionException ignore) {
