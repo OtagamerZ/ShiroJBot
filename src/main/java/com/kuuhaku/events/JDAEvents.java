@@ -19,12 +19,15 @@ package com.kuuhaku.events;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.postgresql.RelayDAO;
 import com.kuuhaku.controller.sqlite.DashboardDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.persistent.AppUser;
 import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.PermaBlock;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -270,11 +273,24 @@ public class JDAEvents extends ListenerAdapter {
 						}
 					});
 					break;
+				case "block":
+				case "b":
+					RelayDAO.permaBlock(new PermaBlock(args[1]));
+					staffIds.forEach(d -> {
+						if (!d.equals(event.getAuthor().getId())) {
+							Main.getInfo().getUserByID(d).openPrivateChannel().queue(c ->
+									c.sendMessage(event.getAuthor().getName() + " bloqueou o usuário " + Main.getInfo().getUserByID(args[0]) + ". Razão: \n>>> " + msgNoArgs).queue());
+						}
+					});
+					break;
 			}
 		} else {
 			try {
-				event.getAuthor().openPrivateChannel().queue(c ->
-						c.sendMessage("Mensagem enviada, aguardando resposta...").queue());
+				event.getAuthor().openPrivateChannel().queue(c -> {
+					if (RelayDAO.blockedList().contains(event.getAuthor().getId()))
+						c.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-blocked")).queue();
+					else c.sendMessage("Mensagem enviada, aguardando resposta...").queue();
+				});
 			} catch (Exception e) {
 				return;
 			}

@@ -6,9 +6,10 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Novo comando Snipe">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/guild/GuildEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/guild/GuildEvents.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/JDAEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/JDAEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/PermaBlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/PermaBlock.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -332,13 +333,6 @@
       <workItem from="1586968151038" duration="1066000" />
       <workItem from="1586970574654" duration="5940000" />
       <workItem from="1587006589853" duration="230000" />
-    </task>
-    <task id="LOCAL-00987" summary="O log agora é retornado usando a API do HasteBin">
-      <created>1586292811767</created>
-      <option name="number" value="00987" />
-      <option name="presentableId" value="LOCAL-00987" />
-      <option name="project" value="LOCAL" />
-      <updated>1586292811767</updated>
     </task>
     <task id="LOCAL-00988" summary="Reduzida a quantidade de conexões criadas pela API">
       <created>1586367768730</created>
@@ -676,7 +670,14 @@
       <option name="project" value="LOCAL" />
       <updated>1587062159632</updated>
     </task>
-    <option name="localTasksCounter" value="1036" />
+    <task id="LOCAL-01036" summary="Correções nos cargos por nível">
+      <created>1587062734086</created>
+      <option name="number" value="01036" />
+      <option name="presentableId" value="LOCAL-01036" />
+      <option name="project" value="LOCAL" />
+      <updated>1587062734086</updated>
+    </task>
+    <option name="localTasksCounter" value="1037" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -695,7 +696,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Começo da implementação do i18n" />
     <MESSAGE value="Continuação da implementação do i18n" />
     <MESSAGE value="Melhorias no backup de servidores" />
     <MESSAGE value="Correções na busca por playlists" />
@@ -720,7 +720,8 @@
     <MESSAGE value="Correção nos nomes de erros" />
     <MESSAGE value="Correções no comando Quiz" />
     <MESSAGE value="Novo comando Snipe" />
-    <option name="LAST_COMMIT_MESSAGE" value="Novo comando Snipe" />
+    <MESSAGE value="Correções nos cargos por nível" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções nos cargos por nível" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -756,10 +757,10 @@
     </state>
     <state x="351" y="47" key="#SQL_Resolution_Scopes/0.0.1366.728@0.0.1366.728" timestamp="1585946066821" />
     <state x="432" y="164" key="#SQL_Resolution_Scopes/0.0.1680.1010@0.0.1680.1010" timestamp="1581000411417" />
-    <state x="578" y="282" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog" timestamp="1587061730840">
+    <state x="578" y="282" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog" timestamp="1587063228198">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="578" y="282" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1587061730840" />
+    <state x="578" y="282" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1587063228198" />
     <state x="239" y="85" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1586747743291">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -815,12 +816,12 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1586974460200" />
-    <state x="234" y="57" key="CommitChangelistDialog2" timestamp="1587062465157">
+    <state x="234" y="57" key="CommitChangelistDialog2" timestamp="1587062731331">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1587006942641" />
-    <state x="234" y="57" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1587062465157" />
+    <state x="234" y="57" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1587062731331" />
     <state width="247" height="195" key="DatabaseViewActions_Filter" timestamp="1586747901902">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -896,12 +897,12 @@
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1587062172780">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1587062736881">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1586748978558" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1587062172780" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1587062736881" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
