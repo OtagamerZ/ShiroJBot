@@ -23,6 +23,7 @@ import com.kuuhaku.model.common.YoutubeVideo;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -38,18 +39,23 @@ public class Youtube {
 		URL url = new URL(YouTube.DEFAULT_BASE_URL + "search?key=" + Main.getInfo().getYoutubeToken() + "&part=snippet&q=" + URLEncoder.encode(query, StandardCharsets.UTF_8.toString()) + "&maxResults=5");
 		JSONArray ja = requestVideoData(url);
 		List<YoutubeVideo> videos = new ArrayList<>();
-		for (Object j : ja) {
-			JSONObject jid = ((JSONObject) j).getJSONObject("id");
-			JSONObject jsnippet = ((JSONObject) j).getJSONObject("snippet");
+		try {
+			for (Object j : ja) {
+				JSONObject jid = ((JSONObject) j).getJSONObject("id");
+				JSONObject jsnippet = ((JSONObject) j).getJSONObject("snippet");
 
-			String id = jid.getString(jid.has("videoId") ? "videoId" : "playlistId");
-			String title = jsnippet.getString("title");
-			String desc = jsnippet.getString("description");
-			String thumb = jsnippet.getJSONObject("thumbnails").getJSONObject("medium").getString("url");
-			String channel = jsnippet.getString("channelTitle");
-			videos.add(new YoutubeVideo(id, title, desc, thumb, channel, jid.has("playlistId")));
+				String id = jid.getString(jid.has("videoId") ? "videoId" : "playlistId");
+				String title = jsnippet.getString("title");
+				String desc = jsnippet.getString("description");
+				String thumb = jsnippet.getJSONObject("thumbnails").getJSONObject("medium").getString("url");
+				String channel = jsnippet.getString("channelTitle");
+				videos.add(new YoutubeVideo(id, title, desc, thumb, channel, jid.has("playlistId")));
+			}
+			return videos;
+		} catch (JSONException e) {
+			Helper.logger(Youtube.class).error("Erro ao recuperar vídeo. Payload de dados: " + ja);
+			throw new IOException();
 		}
-		return videos;
 	}
 
 	private static JSONArray requestVideoData(URL url) throws IOException {
