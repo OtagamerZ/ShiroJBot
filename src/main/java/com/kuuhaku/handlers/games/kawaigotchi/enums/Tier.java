@@ -18,16 +18,18 @@
 package com.kuuhaku.handlers.games.kawaigotchi.enums;
 
 public enum Tier {
-	CHILD(1, 0),
-	TEEN(0.5f, 5000),
-	ADULT(0, 15000);
+	CHILD(1, 0, 1),
+	TEEN(0.5f, 5000, 1.25f),
+	ADULT(0, 15000, 1.5f);
 
 	private final float trainability;
 	private final int requiredXp;
+	private final float userXpMult;
 
-	Tier(float trainability, int requiredXp) {
+	Tier(float trainability, int requiredXp, float userXpMult) {
 		this.trainability = trainability;
 		this.requiredXp = requiredXp;
+		this.userXpMult = userXpMult;
 	}
 
 	public float getTrainability() {
@@ -36,6 +38,10 @@ public enum Tier {
 
 	public int getRequiredXp() {
 		return requiredXp;
+	}
+
+	public float getUserXpMult() {
+		return userXpMult;
 	}
 
 	public Tier next() {
