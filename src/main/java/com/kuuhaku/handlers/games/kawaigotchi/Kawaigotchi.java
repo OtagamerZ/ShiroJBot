@@ -337,16 +337,16 @@ public class Kawaigotchi {
 
 		switch (tier) {
 			case CHILD:
-				height = pet.getHeight(null) / 2;
-				width = pet.getWidth(null) / 2;
+				height = (int) (pet.getHeight(null) * 0.5);
+				width = (int) (pet.getWidth(null) * 0.5);
 				break;
 			case TEEN:
-				height = pet.getHeight(null);
-				width = pet.getWidth(null);
+				height = (int) (pet.getHeight(null) * 0.75);
+				width = (int) (pet.getWidth(null) * 0.75);
 				break;
 			case ADULT:
-				height = (int) (pet.getHeight(null) * 1.5);
-				width = (int) (pet.getWidth(null) * 1.5);
+				height = pet.getHeight(null);
+				width = pet.getWidth(null);
 				break;
 			default:
 				height = 0;
