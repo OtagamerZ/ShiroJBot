@@ -631,6 +631,7 @@ public class Helper {
         StringBuilder sb = new StringBuilder();
 
         for (String line : lines) {
+            sb.setLength(0);
             for (String word : line.split(" ")) {
                 if (g2d.getFontMetrics().stringWidth(sb.toString() + word) > bi.getWidth() - 50) {
                     wrappedLines.add(sb.toString().trim());
