@@ -630,12 +630,14 @@ public class Helper {
 
         StringBuilder sb = new StringBuilder();
 
-        for (String word : text.split(" ")) {
-            if (g2d.getFontMetrics().stringWidth(sb.toString() + word) > bi.getWidth() - 50) {
-                wrappedLines.add(sb.toString().trim());
-                sb.setLength(0);
+        for (String line : lines) {
+            for (String word : line.split(" ")) {
+                if (g2d.getFontMetrics().stringWidth(sb.toString() + word) > bi.getWidth() - 50) {
+                    wrappedLines.add(sb.toString().trim());
+                    sb.setLength(0);
+                }
+                sb.append(word).append(" ");
             }
-            sb.append(word).append(" ");
         }
         if (sb.length() > 0) wrappedLines.add(sb.toString());
         if (wrappedLines.size() == 0) wrappedLines.add(text);
