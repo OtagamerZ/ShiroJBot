@@ -638,8 +638,8 @@ public class Helper {
                 }
                 sb.append(word).append(" ");
             }
+            if (sb.length() > 0) wrappedLines.add(sb.toString());
         }
-        if (sb.length() > 0) wrappedLines.add(sb.toString());
         if (wrappedLines.size() == 0) wrappedLines.add(text);
 
         canvas = new BufferedImage(bi.getWidth(), (30 * ((lines.length - 1) + wrappedLines.size()) + (6 * lines.length)) + 15 + bi.getHeight(), BufferedImage.TYPE_INT_RGB);
