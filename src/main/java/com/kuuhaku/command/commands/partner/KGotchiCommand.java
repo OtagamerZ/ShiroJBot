@@ -324,10 +324,10 @@ public class KGotchiCommand extends Command {
 			acc.addCredit(2 * rng);
 			AccountDAO.saveAccount(acc);
 			channel.sendMessage("Opa, o que é isso? Parece que " + k.getName() + " encontrou " + (2 * rng) + " créditos!").queue();
-		} else if (rng > 75) {
-			int amount = (rng - 70) / 5;
+		} else if (rng > 85) {
+			int amount = (rng - 80) / 5;
 			Food randFood = (Food) FoodMenu.getMenu().values().toArray()[Helper.rng(FoodMenu.getMenu().size())];
-			k.addToBag(randFood);
+			k.addToBag(randFood, amount);
 			channel.sendMessage("Opa, o que é isso? Parece que " + k.getName() + " encontrou " + amount + " unidades de " + randFood.getName() + ", que sorte!!").queue();
 		}
 	}
