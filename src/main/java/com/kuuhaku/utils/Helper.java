@@ -643,7 +643,7 @@ public class Helper {
         }
         if (wrappedLines.size() == 0) wrappedLines.add(text);
 
-        canvas = new BufferedImage(bi.getWidth(), g2d.getFontMetrics().getHeight() * wrappedLines.size() + bi.getHeight(), BufferedImage.TYPE_INT_RGB);
+        canvas = new BufferedImage(bi.getWidth(), g2d.getFontMetrics().getHeight() * wrappedLines.size() + (45 + (45 * wrappedLines.size())) + bi.getHeight(), BufferedImage.TYPE_INT_RGB);
         g2d = canvas.createGraphics();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
