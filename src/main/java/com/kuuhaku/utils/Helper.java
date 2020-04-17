@@ -620,38 +620,27 @@ public class Helper {
         return String.join(" ", args);
     }
 
-    public static void drawString(Graphics2D g, String text, int x, int y, int width) {
+    public static ByteArrayOutputStream renderMeme(String text, BufferedImage bi) throws IOException {
+        String[] lines = text.split("\\r?\\n");
+        List<String> wrappedLines = new ArrayList<>();
+
+        BufferedImage canvas = new BufferedImage(1, 1, BufferedImage.TYPE_BYTE_BINARY);
+        Graphics2D g2d = canvas.createGraphics();
+        g2d.setFont(new Font("Arial", Font.BOLD, 30));
+
         StringBuilder sb = new StringBuilder();
-        List<String> lines = new ArrayList<>();
 
         for (String word : text.split(" ")) {
-            if (g.getFontMetrics().stringWidth(sb.toString() + word) > width) {
-                lines.add(sb.toString().trim());
+            if (g2d.getFontMetrics().stringWidth(sb.toString() + word) > bi.getWidth() - 50) {
+                wrappedLines.add(sb.toString().trim());
                 sb.setLength(0);
             }
             sb.append(word).append(" ");
         }
-        if (sb.length() > 0) lines.add(sb.toString());
-        if (lines.size() == 0) lines.add(text);
+        if (sb.length() > 0) wrappedLines.add(sb.toString());
+        if (wrappedLines.size() == 0) wrappedLines.add(text);
 
-        for (int i = 0; i < lines.size(); i++) {
-            g.drawString(lines.get(i), x, y + (g.getFontMetrics().getHeight() * i));
-        }
-    }
-
-    public static ByteArrayOutputStream renderMeme(String text, BufferedImage bi) throws IOException {
-        String[] lines = text.split("\\r?\\n");
-        int canvasSize = 2;
-
-        BufferedImage canvas = new BufferedImage(1, 1, BufferedImage.TYPE_BYTE_BINARY);
-        Graphics2D g2d = canvas.createGraphics();
-
-        g2d.setFont(new Font("Arial", Font.BOLD, 30));
-        for (String line : lines) {
-            canvasSize += g2d.getFontMetrics().stringWidth(line) / (bi.getWidth() - 50);
-        }
-
-        canvas = new BufferedImage(bi.getWidth(), (30 * ((lines.length - 1) + canvasSize) + (6 * lines.length)) + 15 + bi.getHeight(), BufferedImage.TYPE_INT_RGB);
+        canvas = new BufferedImage(bi.getWidth(), (30 * ((lines.length - 1) + wrappedLines.size()) + (6 * lines.length)) + 15 + bi.getHeight(), BufferedImage.TYPE_INT_RGB);
         g2d = canvas.createGraphics();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -660,7 +649,7 @@ public class Helper {
 
         g2d.setColor(Color.BLACK);
         g2d.setFont(new Font("Arial", Font.BOLD, 30));
-        for (int i = 0; i < canvasSize; i++) drawString(g2d, lines[i], 25, 45 + (45 * i), bi.getWidth() - 50);
+        for (int i = 0; i < wrappedLines.size(); i++) g2d.drawString(wrappedLines.get(i), 25, 45 + (45 * i));
         g2d.drawImage(bi, 0, canvas.getHeight() - bi.getHeight(), null);
 
         g2d.dispose();
