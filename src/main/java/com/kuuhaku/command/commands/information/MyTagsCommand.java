@@ -15,7 +15,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.partner;
+package com.kuuhaku.command.commands.information;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
@@ -55,26 +55,26 @@ public class MyTagsCommand extends Command {
 		EmbedBuilder eb = new EmbedBuilder();
 		String exceed = MemberDAO.getMemberByMid(author.getId()).get(0).getExceed();
 
-		eb.setTitle(":label: Emblemas de " + author.getName());
+		eb.setTitle(":label: Seus emblemas");
 		try {
 			eb.setColor(Helper.colorThief(author.getAvatarUrl()));
-        } catch (IOException e) {
-            eb.setColor(Helper.getRandomColor());
-        }
+		} catch (IOException e) {
+			eb.setColor(Helper.getRandomColor());
+		}
 
-        StringBuilder badges = new StringBuilder();
+		StringBuilder badges = new StringBuilder();
 
-        if (!exceed.isEmpty()) {
-            badges.append(TagIcons.getExceed(ExceedEnums.getByName(exceed)));
-        }
+		if (!exceed.isEmpty()) {
+			badges.append(TagIcons.getExceed(ExceedEnums.getByName(exceed)));
+		}
 
-        if (author.getId().equals(Main.getInfo().getNiiChan())) {
-            badges.append("<:niichan:697879726018003115>");
-        } else {
-            if (author.getId().equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(author.getId()))
-                badges.append(TagIcons.getTag(TagIcons.DEV));
+		if (author.getId().equals(Main.getInfo().getNiiChan())) {
+			badges.append("<:niichan:697879726018003115>");
+		} else {
+			if (author.getId().equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(author.getId()))
+				badges.append(TagIcons.getTag(TagIcons.DEV));
 
-            if (Main.getInfo().getSupports().contains(author.getId())) {
+			if (Main.getInfo().getSupports().contains(author.getId())) {
 				badges.append(TagIcons.getTag(TagIcons.SUPPORT));
 			}
 

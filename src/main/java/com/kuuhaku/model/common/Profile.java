@@ -311,6 +311,7 @@ public class Profile {
 	}
 
 	private static void makeOutline(String s, Graphics2D g2d) {
+		s = s.isEmpty() ? "Não definido" : s;
 		g2d.setColor(Color.black);
 		FontRenderContext frc = g2d.getFontRenderContext();
 		TextLayout tl = new TextLayout(s, g2d.getFont(), frc);
