@@ -88,7 +88,9 @@ public class Member {
 			mult *= 2;
 		if (g.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).collect(Collectors.toList()).contains(waifu))
 			mult *= waifuMult;
-		if (KGotchiDAO.getKawaigotchi(mid) != null && Objects.requireNonNull(KGotchiDAO.getKawaigotchi(mid)).isAlive())
+		if (KGotchiDAO.getKawaigotchi(mid) != null && !Objects.requireNonNull(KGotchiDAO.getKawaigotchi(mid)).isAlive())
+			mult *= 0.8;
+		else if (KGotchiDAO.getKawaigotchi(mid) != null)
 			mult *= Objects.requireNonNull(KGotchiDAO.getKawaigotchi(mid)).getTier().getUserXpMult();
 
 		xp += 15 * mult;
