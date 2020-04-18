@@ -51,7 +51,7 @@ public class MyBuffsCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(guild.getId() + author.getId());
+		com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(author.getId() + guild.getId());
 		Kawaigotchi kg = KGotchiDAO.getKawaigotchi(author.getId());
 
 		EmbedBuilder eb = new EmbedBuilder();
