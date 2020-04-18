@@ -3,9 +3,7 @@
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation,
-either version 3 of the License,
-or
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
  * Shiro J Bot is distributed in the hope that it will be useful,
@@ -14,8 +12,7 @@ or
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Shiro J Bot.  If not,
-see <https://www.gnu.org/licenses/>
+ * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
 package com.kuuhaku.managers;
@@ -140,12 +137,6 @@ public class CommandManager {
 			add(new RelayCommand(
 					"relay", new String[]{"relinfo", "relcon"}, getLocale(PT).getString("cmd_relay"), PARTNER, false
 			));
-			add(new TagsCommand(
-					"tags", new String[]{"emblemas", "insignias"}, getLocale(PT).getString("cmd_tags"), PARTNER, false
-			));
-			add(new MyTagsCommand(
-					"eu", new String[]{"meusemblemas", "mytags"}, getLocale(PT).getString("cmd_my-tags"), PARTNER, false
-			));
 
 			//MODERATION
 			add(new RemoveAnswerCommand(
@@ -248,6 +239,15 @@ public class CommandManager {
 			));
 			add(new ListScoreCommand(
 					"notas", new String[]{"scores"}, getLocale(PT).getString("cmd_score"), INFO, true
+			));
+			add(new TagsCommand(
+					"tags", new String[]{"emblemas", "insignias"}, getLocale(PT).getString("cmd_tags"), INFO, false
+			));
+			add(new MyTagsCommand(
+					"eu", new String[]{"meusemblemas", "mytags"}, getLocale(PT).getString("cmd_my-tags"), INFO, false
+			));
+			add(new MyBuffsCommand(
+					"buffs", new String[]{"meusbuffs", "xpmodifiers", "xpmodifs"}, getLocale(PT).getString("cmd_my-buffs"), INFO, false
 			));
 
 			//MISC
