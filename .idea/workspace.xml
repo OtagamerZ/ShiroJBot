@@ -7,13 +7,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/MyBuffsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/MyTagsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/MyTagsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/TagsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/TagsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/MyBuffsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/MyBuffsCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -337,14 +331,7 @@
       <workItem from="1586968151038" duration="1066000" />
       <workItem from="1586970574654" duration="5940000" />
       <workItem from="1587006589853" duration="1013000" />
-      <workItem from="1587180832217" duration="1989000" />
-    </task>
-    <task id="LOCAL-00985" summary="O log agora é retornado usando a API do HasteBin">
-      <created>1586292047237</created>
-      <option name="number" value="00985" />
-      <option name="presentableId" value="LOCAL-00985" />
-      <option name="project" value="LOCAL" />
-      <updated>1586292047237</updated>
+      <workItem from="1587180832217" duration="2288000" />
     </task>
     <task id="LOCAL-00986" summary="O log agora é retornado usando a API do HasteBin">
       <created>1586292484683</created>
@@ -682,7 +669,14 @@
       <option name="project" value="LOCAL" />
       <updated>1587006945881</updated>
     </task>
-    <option name="localTasksCounter" value="1034" />
+    <task id="LOCAL-01034" summary="Comando para ver modificadores de xp ativos">
+      <created>1587183204853</created>
+      <option name="number" value="01034" />
+      <option name="presentableId" value="LOCAL-01034" />
+      <option name="project" value="LOCAL" />
+      <updated>1587183204860</updated>
+    </task>
+    <option name="localTasksCounter" value="1035" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -704,7 +698,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Meme do Drake" />
     <MESSAGE value="Começo da implementação do i18n" />
     <MESSAGE value="Continuação da implementação do i18n" />
     <MESSAGE value="Melhorias no backup de servidores" />
@@ -729,7 +722,8 @@
     <MESSAGE value="Correções no comando Quiz" />
     <MESSAGE value="Correção no comando de logs" />
     <MESSAGE value="Atualização da biblioteca de paginação" />
-    <option name="LAST_COMMIT_MESSAGE" value="Atualização da biblioteca de paginação" />
+    <MESSAGE value="Comando para ver modificadores de xp ativos" />
+    <option name="LAST_COMMIT_MESSAGE" value="Comando para ver modificadores de xp ativos" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -823,11 +817,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1586974460200" />
-    <state x="203" y="0" key="CommitChangelistDialog2" timestamp="1587183091628">
+    <state x="203" y="0" key="CommitChangelistDialog2" timestamp="1587183202124">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
-    <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1587183091628" />
+    <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1587183202124" />
     <state x="234" y="57" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1586983395456" />
     <state width="247" height="195" key="DatabaseViewActions_Filter" timestamp="1586747901902">
       <screen x="0" y="0" width="1366" height="768" />
@@ -905,11 +899,11 @@
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="351" y="182" key="Vcs.Push.Dialog.v2" timestamp="1587006947316">
+    <state x="351" y="182" key="Vcs.Push.Dialog.v2" timestamp="1587183217814">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
-    <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1587006947316" />
+    <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1587183217814" />
     <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1586974748757" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
