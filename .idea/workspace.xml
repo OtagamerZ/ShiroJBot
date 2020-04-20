@@ -787,11 +787,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="296" key="#com.intellij.ide.util.TreeFileChooserDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1583261031135" />
-    <state x="559" y="300" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1587180982274">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state x="688" y="395" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1587384563331">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="559" y="300" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1366.768@0.0.1366.768" timestamp="1587180982274" />
-    <state x="688" y="395" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1586779562743" />
+    <state x="688" y="395" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1587384563331" />
     <state x="687" y="410" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1586206152051" />
     <state x="616" y="391" width="510" height="237" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1583774604653">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -819,12 +819,12 @@
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1586974460200" />
-    <state x="203" y="0" key="CommitChangelistDialog2" timestamp="1587183352149">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state x="234" y="57" key="CommitChangelistDialog2" timestamp="1587384614982">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1587183352149" />
-    <state x="234" y="57" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1586983395456" />
+    <state x="234" y="57" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1587384614982" />
     <state width="247" height="195" key="DatabaseViewActions_Filter" timestamp="1586747901902">
       <screen x="0" y="0" width="1366" height="768" />
     </state>

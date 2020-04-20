@@ -19,24 +19,12 @@
 package com.kuuhaku.managers;
 
 import com.kuuhaku.command.Command;
-import com.kuuhaku.command.commands.dev.*;
-import com.kuuhaku.command.commands.exceed.ExceedRankCommand;
-import com.kuuhaku.command.commands.exceed.ExceedSelectCommand;
-import com.kuuhaku.command.commands.fun.*;
-import com.kuuhaku.command.commands.information.*;
-import com.kuuhaku.command.commands.misc.*;
-import com.kuuhaku.command.commands.moderation.*;
-import com.kuuhaku.command.commands.music.ControlCommand;
-import com.kuuhaku.command.commands.music.YoutubeCommand;
-import com.kuuhaku.command.commands.partner.*;
-import com.kuuhaku.command.commands.reactions.*;
-import com.kuuhaku.command.commands.reactions.answerable.*;
-import com.kuuhaku.command.commands.support.*;
+import com.kuuhaku.command.commands.information.PingCommand;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.kuuhaku.command.Category.*;
+import static com.kuuhaku.command.Category.INFO;
 import static com.kuuhaku.utils.I18n.PT;
 import static com.kuuhaku.utils.ShiroInfo.getLocale;
 
@@ -55,7 +43,7 @@ public class CommandManager {
 
 	public CommandManager() {
 		commands = new ArrayList<Command>() {{
-			//DEV
+			/*//DEV
 			add(new KillCommand(
 					"desligar", new String[]{"kill"}, getLocale(PT).getString("cmd_kill"), DEV, false
 			));
@@ -231,11 +219,11 @@ public class CommandManager {
 			));
 			add(new WalletCommand(
 					"carteira", new String[]{"banco", "bank", "money", "wallet", "atm"}, getLocale(PT).getString("cmd_wallet"), INFO, false
-			));
+			));*/
 			add(new PingCommand(
 					"ping", getLocale(PT).getString("cmd_ping"), INFO, false
 			));
-			add(new UptimeCommand(
+			/*add(new UptimeCommand(
 					"uptime", getLocale(PT).getString("cmd_uptime"), INFO, false
 			));
 			add(new ListScoreCommand(
@@ -431,7 +419,7 @@ public class CommandManager {
 			));
 			add(new ExceedSelectCommand(
 					"exceedselect", new String[]{"exselect", "sou"}, getLocale(PT).getString("cmd_exceed"), EXCEED, false
-			));
+			));*/
 
 			//NSFW
 
