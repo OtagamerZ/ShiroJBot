@@ -58,7 +58,7 @@ public class HttpCatCommand extends Command {
 		}
 
 		try {
-			channel.sendFile(Helper.getImage("http://http.cat/" + args[0]), "httpcat.png").queue();
+			channel.sendFile(Helper.getImage("https://http.cat/" + args[0]), "httpcat.png").queue();
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
