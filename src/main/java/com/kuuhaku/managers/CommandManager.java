@@ -250,6 +250,9 @@ public class CommandManager {
 			add(new MyBuffsCommand(
 					"buffs", new String[]{"meusbuffs", "xpmodifiers", "xpmodifs"}, getLocale(PT).getString("cmd_my-buffs"), INFO, false
 			));
+			add(new HttpCatCommand(
+					"catnet", new String[]{"httpcat"}, getLocale(PT).getString("cmd_http-cat"), INFO, false
+			));
 
 			//MISC
 			add(new BackgroundCommand(
