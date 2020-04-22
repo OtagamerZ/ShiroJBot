@@ -6,9 +6,13 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Comando para ver modificadores de xp ativos">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/HttpCatCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -153,7 +157,7 @@
     <property name="extract.method.default.visibility" value="private" />
     <property name="last.edited.regexp" value="aaaa&#10;aaa" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
@@ -172,10 +176,12 @@
       <recent name="com.kuuhaku.managers.RPGCommandManager" />
       <recent name="com.kuuhaku.managers.CommandManager" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
+    <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
+      <recent name="C:\Users\yagog\ShiroJBot\src\main\resources" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games\kawaigotchi" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.kuuhaku.command.commands.information" />
@@ -184,12 +190,10 @@
       <recent name="com.kuuhaku.command.commands.fun" />
       <recent name="com.kuuhaku.model.common.backup" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
+    <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
-      <recent name="C:\Users\yagog\ShiroJBot\src\main\resources" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games\kawaigotchi" />
     </key>
   </component>
   <component name="ServiceViewManager">
@@ -334,13 +338,9 @@
       <workItem from="1587006589853" duration="1013000" />
       <workItem from="1587180832217" duration="2407000" />
       <workItem from="1587355061790" duration="193000" />
-    </task>
-    <task id="LOCAL-00988" summary="Reduzida a quantidade de conexões criadas pela API">
-      <created>1586367768730</created>
-      <option name="number" value="00988" />
-      <option name="presentableId" value="LOCAL-00988" />
-      <option name="project" value="LOCAL" />
-      <updated>1586367768730</updated>
+      <workItem from="1587393247025" duration="599000" />
+      <workItem from="1587398749936" duration="1158000" />
+      <workItem from="1587557104116" duration="831000" />
     </task>
     <task id="LOCAL-00989" summary="Reduzida a quantidade de conexões criadas pela API">
       <created>1586370684874</created>
@@ -678,7 +678,14 @@
       <option name="project" value="LOCAL" />
       <updated>1587384617794</updated>
     </task>
-    <option name="localTasksCounter" value="1037" />
+    <task id="LOCAL-01037" summary="Comando para ver modificadores de xp ativos">
+      <created>1587384749094</created>
+      <option name="number" value="01037" />
+      <option name="presentableId" value="LOCAL-01037" />
+      <option name="project" value="LOCAL" />
+      <updated>1587384749094</updated>
+    </task>
+    <option name="localTasksCounter" value="1038" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -760,10 +767,10 @@
     </state>
     <state x="351" y="47" key="#SQL_Resolution_Scopes/0.0.1366.728@0.0.1366.728" timestamp="1585946066821" />
     <state x="432" y="164" key="#SQL_Resolution_Scopes/0.0.1680.1010@0.0.1680.1010" timestamp="1581000411417" />
-    <state x="578" y="282" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog" timestamp="1586973717467">
+    <state x="578" y="282" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog" timestamp="1587558101678">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="578" y="282" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1586973717467" />
+    <state x="578" y="282" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1587558101678" />
     <state x="239" y="85" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1586747743291">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -820,12 +827,12 @@
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1586974460200" />
-    <state x="234" y="57" key="CommitChangelistDialog2" timestamp="1587384731632">
+    <state x="234" y="57" key="CommitChangelistDialog2" timestamp="1587384746081">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1587183352149" />
-    <state x="234" y="57" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1587384731632" />
+    <state x="234" y="57" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1587384746081" />
     <state width="247" height="195" key="DatabaseViewActions_Filter" timestamp="1586747901902">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -838,12 +845,12 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="574" y="268" key="EnvironmentVariablesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1583778259002" />
-    <state x="504" y="188" key="FileChooserDialogImpl" timestamp="1585946052476">
-      <screen x="0" y="0" width="1366" height="728" />
+    <state x="620" y="261" key="FileChooserDialogImpl" timestamp="1587400046831">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="504" y="188" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1585946052476" />
     <state x="504" y="198" key="FileChooserDialogImpl/0.0.1366.768@0.0.1366.768" timestamp="1585071666306" />
-    <state x="620" y="261" key="FileChooserDialogImpl/0.0.1680.1010@0.0.1680.1010" timestamp="1583419273830" />
+    <state x="620" y="261" key="FileChooserDialogImpl/0.0.1680.1010@0.0.1680.1010" timestamp="1587400046831" />
     <state width="905" height="171" key="GridCell.Tab.0.bottom" timestamp="1586748317235">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -892,22 +899,22 @@
     </state>
     <state x="501" y="23" key="RollbackChangesDialog/0.0.1366.768@0.0.1366.768" timestamp="1578969825199" />
     <state x="616" y="30" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1583778436946" />
-    <state x="260" y="0" key="SettingsEditor" timestamp="1587355256824">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state x="320" y="80" key="SettingsEditor" timestamp="1587385026345">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1587355256824" />
-    <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1586892127296" />
+    <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1587385026345" />
     <state width="200" height="318" key="SqlResolveConfigurable" timestamp="1585946065407">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1587384621528">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1587384750397">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1587183355931" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1587384621528" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1587384750397" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -974,10 +981,10 @@
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="409" y="157" key="git4idea.merge.GitPullDialog/0.0.1366.768@0.0.1366.768" timestamp="1586743041255" />
-    <state x="239" y="152" key="new project wizard" timestamp="1586892225040">
+    <state x="239" y="152" key="new project wizard" timestamp="1587399286121">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="239" y="152" key="new project wizard/0.0.1680.1010@0.0.1680.1010" timestamp="1586892225040" />
+    <state x="239" y="152" key="new project wizard/0.0.1680.1010@0.0.1680.1010" timestamp="1587399286121" />
     <state x="472" y="17" key="refactoring.ChangeSignatureDialog" timestamp="1585107291304">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
