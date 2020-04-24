@@ -568,31 +568,31 @@ public class Settings {
     }
 
     public static void settingsHelp(String[] args, Message message, GuildConfig gc) {
-        String prefix = Helper.getOr(gc.getPrefix(), "s!");
+		String prefix = Helper.getOr(gc.getPrefix(), "s!");
 
-        EmbedBuilder eb = new EmbedBuilder();
+		EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setColor(2);
-        if (message.getGuild().getIconUrl() != null) eb.setThumbnail(message.getGuild().getIconUrl());
-        eb.setTitle("⚙ | Settings ajuda");
-        eb.setDescription("Utilize os comandos a baixo para estabelecer suas configurações.");
-        eb.addField(prefix + "prefix", "Altera o prefixo da Shiro no seu servidor.", false);
-        eb.addField(prefix + "canalbv", "Define o canal onde a Shiro ira mandar as mensagens de boas-vindas.", false);
-        eb.addField(prefix + "mensagembv", "Defina uma mensagem de boas-vindas em seu servidor.", false);
-        eb.addField(prefix + "canaladeus", "Define o canal onde a Shiro ira mandar as mensagens de saída.", false);
-        eb.addField(prefix + "mensagemadeus", "Defina uma mensagem de saída em seu servidor.", false);
-        eb.addField(prefix + "tempowarn", "Define o tempo de punições em seu servidor.", false);
-        eb.addField(prefix + "tempopoll", "Define o tempo de enquetes em seu servidor.", false);
-        eb.addField(prefix + "canalsug", "Define o canal de sugestões em seu servidor.", false);
-        eb.addField(prefix + "rolewarn", "Define o cargo de punição em seu servidor.", false);
-        eb.addField(prefix + "rolevip", "Define o cargo VIP em seu servidor.", false);
-        eb.addField(prefix + "levelnotif", "Define as mensagens quando alguém sobe de nível.", false);
-        eb.addField(prefix + "canallevelup", "Define o canal de level up em seu servidor.", false);
-        eb.addField(prefix + "canalrelay", "Define o canal de relay em seu servidor.", false);
-        eb.addField(prefix + "cargolevel", "Define os cargos por level em seu servidor.\n\nParâmetros:\n", false);
-        eb.addField("%guild%", "Para dizer o nome do server.", false);
-        eb.addField("%user%", "Para dizer o nome do usuário.", false);
+		eb.setColor(Helper.getRandomColor());
+		if (message.getGuild().getIconUrl() != null) eb.setThumbnail(message.getGuild().getIconUrl());
+		eb.setTitle("⚙ | Painel de ajuda");
+		eb.setDescription("Utilize os comandos a baixo para estabelecer suas configurações.");
+		eb.addField(prefix + "settings prefix", "Altera o prefixo da Shiro no seu servidor.", false);
+		eb.addField(prefix + "settings canalbv", "Define o canal onde a Shiro ira mandar as mensagens de boas-vindas.", false);
+		eb.addField(prefix + "settings mensagembv", "Defina uma mensagem de boas-vindas em seu servidor.", false);
+		eb.addField(prefix + "settings canaladeus", "Define o canal onde a Shiro ira mandar as mensagens de saída.", false);
+		eb.addField(prefix + "settings mensagemadeus", "Defina uma mensagem de saída em seu servidor.", false);
+		eb.addField(prefix + "settings tempowarn", "Define o tempo de punições em seu servidor.", false);
+		eb.addField(prefix + "settings tempopoll", "Define o tempo de enquetes em seu servidor.", false);
+		eb.addField(prefix + "settings canalsug", "Define o canal de sugestões em seu servidor.", false);
+		eb.addField(prefix + "settings rolewarn", "Define o cargo de punição em seu servidor.", false);
+		eb.addField(prefix + "settings rolevip", "Define o cargo VIP em seu servidor.", false);
+		eb.addField(prefix + "settings levelnotif", "Define as mensagens quando alguém sobe de nível.", false);
+		eb.addField(prefix + "settings canallevelup", "Define o canal de level up em seu servidor.", false);
+		eb.addField(prefix + "settings canalrelay", "Define o canal de relay em seu servidor.", false);
+		eb.addField(prefix + "settings cargolevel", "Define os cargos por level em seu servidor.\n\nParâmetros:\n", false);
+		eb.addField("%guild%", "Para dizer o nome do server.", false);
+		eb.addField("%user%", "Para dizer o nome do usuário.", false);
 
-        message.getTextChannel().sendMessage(eb.build()).queue();
-    }
+		message.getTextChannel().sendMessage(eb.build()).queue();
+	}
 }
