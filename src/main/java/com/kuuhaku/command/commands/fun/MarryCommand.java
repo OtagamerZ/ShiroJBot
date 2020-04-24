@@ -77,8 +77,14 @@ public class MarryCommand extends Command {
                 }
 				return;
 			} else if (WaifuDAO.isWaifued(author.getId()) || WaifuDAO.isWaifued(message.getMentionedUsers().get(0).getId())) {
-                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_already-married")).queue();
-                return;
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_already-married")).queue();
+				return;
+			} else if (author.getId().equals("572413282653306901")) {
+				channel.sendMessage("Ei, o que você acha que está fazendo ao me forçar a me casar? :rage:").queue();
+				return;
+			} else if (author.isBot()) {
+				channel.sendMessage("Isso é um bot, não acho que dê pra se casar com um!").queue();
+				return;
 			}
 
 			channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + ", deseja casar-se com " + author.getAsMention() + ", por toda eternidade (ou não) em troca de um bônus de XP?" +
