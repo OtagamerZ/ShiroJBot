@@ -23,6 +23,8 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.CanvasDAO;
 import com.kuuhaku.model.persistent.PixelCanvas;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
@@ -52,7 +54,7 @@ public class PixelChunkCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
-			channel.sendMessage(":x: | É necessário ao menos especificar o número do chunk").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_pixelchunk-specify-a-number")).queue();
 			return;
 		}
 
@@ -61,7 +63,7 @@ public class PixelChunkCommand extends Command {
 
 		assert StringUtils.isNumeric(args[0]);
 		if (Integer.parseInt(args[0]) < 1 || Integer.parseInt(args[0]) > 4) {
-			channel.sendMessage(":x: | O número do chunk deve ser de 1 à 4").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_pixelchunk-invalid-number")).queue();
 			return;
 		}
 
