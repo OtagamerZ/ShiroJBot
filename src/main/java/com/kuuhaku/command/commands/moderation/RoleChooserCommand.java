@@ -24,6 +24,8 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import org.apache.commons.lang3.StringUtils;
@@ -56,19 +58,19 @@ public class RoleChooserCommand extends Command {
 			channel.sendMessage("Botões atualizados com sucesso!").queue();
 			return;
 		} else if (args.length < 3) {
-			channel.sendMessage(":x: | É necessário informar o ID da mensagem, o emote do botão e o cargo a ser dado ao usuário que clicar nele.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_rolechooser-invalid-arguments")).queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[0])) {
-			channel.sendMessage(":x: | O ID da mensagem deve ser numérico.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_rolechooser-invalid-message-id")).queue();
 			return;
 		} else if (message.getMentionedRoles().size() == 0) {
-			channel.sendMessage(":x: | É necessário informar o cargo a ser dado ao clicar no botão.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_rolechooser-invalid-role")).queue();
 			return;
 		} else if (args[1].equals(Helper.CANCEL)) {
-			channel.sendMessage(":x: | Não é possível atribuir um cargo ao emote " + Helper.CANCEL + ".").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_rolechooser-it-was-not-possible") + Helper.CANCEL + ".").queue();
 			return;
 		} else if (!EmojiUtils.containsEmoji(args[1]) && message.getEmotes().size() == 0) {
-			channel.sendMessage(":x: | Emote inválido, verifique se você colocou o emote na posição correta (após o ID, separado por espaço).").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_rolechooser-invalid emote")).queue();
 			return;
 		}
 
@@ -77,9 +79,9 @@ public class RoleChooserCommand extends Command {
 
 			channel.sendMessage("Botão adicionado com sucesso!").queue(s -> Helper.refreshButtons(gc));
 		} catch (IllegalArgumentException e) {
-			channel.sendMessage(":x: | Erro em um dos argumentos: " + e).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_rolechooser-error-in-an-argument") + e).queue();
 		} catch (ErrorResponseException e) {
-			channel.sendMessage(":x: | Este comando deve ser enviado no mesmo canal onde se encontra a mensagem a receber o botão.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_rolechooser-invalid-usage-mode")).queue();
 		}
 	}
 }

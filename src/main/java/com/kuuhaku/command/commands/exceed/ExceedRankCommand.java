@@ -26,6 +26,8 @@ import com.kuuhaku.model.common.Exceed;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
@@ -62,7 +64,7 @@ public class ExceedRankCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		channel.sendMessage("<a:loading:697879726630502401> Gerando placares...").queue(m -> {
 			if (MemberDAO.getMemberByMid(author.getId()).get(0).getExceed().isEmpty()) {
-				m.editMessage(":x: | Você não escolheu um exceed ainda, então não poderá ver o placar").queue();
+				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_exceedrank-you-didn't-choose")).queue();
 				return;
 			}
 
@@ -116,7 +118,7 @@ public class ExceedRankCommand extends Command {
 				channel.sendFile(baos.toByteArray(), "ranking.png").queue(s -> s.delete().queueAfter(1, TimeUnit.MINUTES));
 				m.delete().queue();
 			} catch (Exception e) {
-				m.editMessage(":x: | Epa, teve um erro ao gerar o placar, meus criadores já foram notificados!").queue();
+				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_exceedrank-an-error-has-occurred")).queue();
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
 		});
