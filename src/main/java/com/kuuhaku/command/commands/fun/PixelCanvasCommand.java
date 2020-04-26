@@ -23,6 +23,8 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.CanvasDAO;
 import com.kuuhaku.model.persistent.PixelCanvas;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
@@ -60,25 +62,25 @@ public class PixelCanvasCommand extends Command {
 
 		try {
 			if (opts.length == 1) {
-				channel.sendMessage(":x: | É preciso especificar a coordenada e a cor neste formato: `X;Y;#cor`.\nPara dar zoom, digite apenas as coordenadas X e Y e o nível do zoom.").queue();
-				return;
-			} else if (Integer.parseInt(opts[0]) > CANVAS_SIZE / 2 || Integer.parseInt(opts[0]) < -CANVAS_SIZE / 2 || Integer.parseInt(opts[1]) > CANVAS_SIZE / 2 || Integer.parseInt(opts[1]) < -CANVAS_SIZE / 2) {
-				channel.sendMessage(":x: | As coordenadas não podem ser menores que -" + (CANVAS_SIZE / 2) + "px ou maiores que " + (CANVAS_SIZE / 2) + "px.").queue();
-				return;
-			}
+                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_pixelcanvas-invalid-arguments")).queue();
+                return;
+            } else if (Integer.parseInt(opts[0]) > CANVAS_SIZE / 2 || Integer.parseInt(opts[0]) < -CANVAS_SIZE / 2 || Integer.parseInt(opts[1]) > CANVAS_SIZE / 2 || Integer.parseInt(opts[1]) < -CANVAS_SIZE / 2) {
+                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_pixelcanvas-invalid-coordinates") + (CANVAS_SIZE / 2) + "px ou maiores que " + (CANVAS_SIZE / 2) + "px.").queue();
+                return;
+            }
 		} catch (NumberFormatException e) {
-			channel.sendMessage(":x: | As coordenadas devem ser numéricas.").queue();
-			return;
-		}
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_pixelcanvas-define-the-coordinates")).queue();
+            return;
+        }
 
 		try {
 			int[] coords = new int[]{Integer.parseInt(opts[0]), Integer.parseInt(opts[1])};
 
 			if (StringUtils.isNumeric(opts[2])) {
 				if (Integer.parseInt(opts[2]) <= 0 || Integer.parseInt(opts[2]) > 10) {
-					channel.sendMessage(":x: | O zoom não pode ser menor ou igual à 0, nem maior que 10").queue();
-					return;
-				}
+                    channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_pixelcanvas-invalid-zoom")).queue();
+                    return;
+                }
 				Main.getInfo().getCanvas().viewChunk(message.getTextChannel(), coords, Integer.parseInt(opts[2]), false).queue();
 				return;
 			}
@@ -90,7 +92,7 @@ public class PixelCanvasCommand extends Command {
 
 			CanvasDAO.saveCanvas(canvas);
 		} catch (NumberFormatException e) {
-			channel.sendMessage(":x: | Cor no formato incorreto, ela deve seguir o padrão hexadecimal (#RRGGBB).").queue();
-		}
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_pixelcanvas-incorrect-color")).queue();
+        }
 	}
 }
