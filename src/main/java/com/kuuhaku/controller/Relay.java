@@ -331,11 +331,12 @@ public class Relay {
 	private void updateRelays() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT g FROM GuildConfig g", GuildConfig.class);
+		Query q = em.createQuery("SELECT g FROM GuildConfig g WHERE canalrelay NOT LIKE '' AND canalrelay IS NOT NULL", GuildConfig.class);
 
 		List<GuildConfig> gc = q.getResultList();
-		gc.removeIf(g -> g.getCanalRelay() == null || Main.getJibril().getGuildById(g.getGuildID()) == null);
-
+		gc.removeIf(g -> Main.getJibril().getGuildById(g.getGuildID()) == null);
 		gc.forEach(g -> relays.put(g.getGuildID(), g.getCanalRelay()));
+
+		em.close();
 	}
 }
