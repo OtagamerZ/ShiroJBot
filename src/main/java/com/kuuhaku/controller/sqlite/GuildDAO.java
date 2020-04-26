@@ -27,15 +27,12 @@ import java.util.List;
 public class GuildDAO {
 	public static GuildConfig getGuildById(String id) {
 		EntityManager em = Manager.getEntityManager();
-		GuildConfig gc;
 
-		Query q = em.createQuery("SELECT g FROM GuildConfig g WHERE guildID = ?1", GuildConfig.class);
-		q.setParameter(1, id);
-		gc = (GuildConfig) q.getSingleResult();
-
-		em.close();
-
-		return gc;
+		try {
+			return em.find(GuildConfig.class, id);
+		} finally {
+			em.close();
+		}
 	}
 
 
