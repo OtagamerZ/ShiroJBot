@@ -7,7 +7,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_rollbar_rollbar_api_1_7_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_rollbar_rollbar_java_1_7_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/sshConfigs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_rollbar_rollbar_java_1_7_0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/shiro-j-bot.test.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/Category.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/Category.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/GuildDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/GuildDAO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,60 +28,6 @@
   </component>
   <component name="CodeInsightWorkspaceSettings">
     <option name="optimizeImportsOnTheFly" value="true" />
-  </component>
-  <component name="DatabaseView">
-    <option name="SHOW_INTERMEDIATE" value="true" />
-    <option name="GROUP_DATA_SOURCES" value="true" />
-    <option name="GROUP_SCHEMA" value="true" />
-    <option name="GROUP_CONTENTS" value="false" />
-    <option name="SORT_POSITIONED" value="false" />
-    <option name="SHOW_EMPTY_GROUPS" value="false" />
-    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
-    <option name="HIDDEN_KINDS">
-      <set />
-    </option>
-    <expand>
-      <path>
-        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="ShiroDB" type="feb32156:DbDataSourceImpl" />
-      </path>
-      <path>
-        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="ShiroDB" type="feb32156:DbDataSourceImpl" />
-        <item name="databases" type="d4e8921:DatabaseStructure$FamilyGroup" />
-      </path>
-      <path>
-        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="ShiroDB" type="feb32156:DbDataSourceImpl" />
-        <item name="databases" type="d4e8921:DatabaseStructure$FamilyGroup" />
-        <item name="Shiro: database" type="162271b6:PgImplModel$Database" />
-      </path>
-      <path>
-        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="ShiroDB" type="feb32156:DbDataSourceImpl" />
-        <item name="databases" type="d4e8921:DatabaseStructure$FamilyGroup" />
-        <item name="Shiro: database" type="162271b6:PgImplModel$Database" />
-        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
-      </path>
-      <path>
-        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="ShiroDB" type="feb32156:DbDataSourceImpl" />
-        <item name="databases" type="d4e8921:DatabaseStructure$FamilyGroup" />
-        <item name="Shiro: database" type="162271b6:PgImplModel$Database" />
-        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
-        <item name="shiro: schema" type="983ebcf7:PgImplModel$Schema" />
-      </path>
-      <path>
-        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="ShiroDB" type="feb32156:DbDataSourceImpl" />
-        <item name="databases" type="d4e8921:DatabaseStructure$FamilyGroup" />
-        <item name="Shiro: database" type="162271b6:PgImplModel$Database" />
-        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
-        <item name="shiro: schema" type="983ebcf7:PgImplModel$Schema" />
-        <item name="tables" type="d4e8921:DatabaseStructure$FamilyGroup" />
-      </path>
-    </expand>
-    <select />
   </component>
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
@@ -110,13 +68,6 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="UPDATE_TYPE" value="MERGE" />
   </component>
-  <component name="IgnoredFileRootStore">
-    <option name="generatedRoots">
-      <set>
-        <option value="C:\Users\DEV202\IdeaProjects\ShiroJBot\.idea" />
-      </set>
-    </option>
-  </component>
   <component name="InvalidFacetManager">
     <ignored-facets>
       <facet id="shiro-j-bot.main/invalid/JPA" />
@@ -132,7 +83,6 @@
   </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
@@ -191,27 +141,16 @@
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
     </key>
   </component>
-  <component name="ServiceViewManager">
-    <option name="viewStates">
-      <list>
-        <serviceView>
-          <treeState>
-            <expand>
-              <path>
-                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-                <item name="ShiroDB: root" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-              </path>
-              <path>
-                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-                <item name="ShiroDB: root" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-                <item name="com.intellij.database.console.session.MessageBusSession@4e323b17" type="9fbbdea:ServiceModel$ServiceNode" />
-              </path>
-            </expand>
-            <select />
-          </treeState>
-        </serviceView>
-      </list>
-    </option>
+  <component name="RunManager">
+    <configuration default="true" type="Remote">
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" />
+      <option name="HOST" />
+      <option name="PORT" value="5005" />
+      <option name="AUTO_RESTART" value="false" />
+      <method v="2" />
+    </configuration>
   </component>
   <component name="SpringBeansView">
     <option name="beanDetailsProportion" value="0.3" />
@@ -336,6 +275,7 @@
       <workItem from="1587393247025" duration="599000" />
       <workItem from="1587398749936" duration="1158000" />
       <workItem from="1587557104116" duration="1538000" />
+      <workItem from="1587919775428" duration="1492000" />
     </task>
     <task id="LOCAL-00990" summary="Reduzida a quantidade de conexões criadas pela API">
       <created>1586370769319</created>
@@ -684,7 +624,7 @@
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
+    <option name="version" value="2" />
   </component>
   <component name="UpdateCopyrightCheckinHandler">
     <option name="UPDATE_COPYRIGHT" value="true" />
@@ -749,14 +689,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="411" y="96" key="#Google_App_Engine_Dev_Server/0.0.1680.1010@0.0.1680.1010" timestamp="1583419630494" />
-    <state x="432" y="164" key="#Project_Structure" timestamp="1581620143573">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="326" y="0" key="#Project_Structure" timestamp="1587919870656">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
+    <state x="326" y="0" key="#Project_Structure/0.0.1366.768@0.0.1366.768" timestamp="1587919870656" />
     <state x="432" y="164" key="#Project_Structure/0.0.1680.1010@0.0.1680.1010" timestamp="1581620143573" />
-    <state x="432" y="164" key="#SQL_Dialects" timestamp="1579196244431">
-      <screen x="0" y="0" width="1680" height="1010" />
-    </state>
-    <state x="432" y="164" key="#SQL_Dialects/0.0.1680.1010@0.0.1680.1010" timestamp="1579196244431" />
     <state x="351" y="47" key="#SQL_Resolution_Scopes" timestamp="1585946066821">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -766,11 +703,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="578" y="282" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1587558101678" />
-    <state x="239" y="85" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1586747743291">
+    <state x="239" y="78" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1587921282730">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="248" y="33" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1585944592238" />
-    <state x="239" y="85" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.768@0.0.1366.768" timestamp="1586747743291" />
+    <state x="239" y="78" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.768@0.0.1366.768" timestamp="1587921282730" />
     <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1586357112937" />
     <state x="585" y="309" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1580395607218">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -782,10 +719,6 @@
     <state x="488" y="67" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1585945441171" />
     <state x="488" y="71" key="#com.intellij.ide.util.MemberChooser/0.0.1366.768@0.0.1366.768" timestamp="1581391062510" />
     <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1586960339941" />
-    <state x="509" y="169" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1578969843084">
-      <screen x="0" y="0" width="1366" height="768" />
-    </state>
-    <state x="509" y="169" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1366.768@0.0.1366.768" timestamp="1578969843084" />
     <state x="569" y="296" key="#com.intellij.ide.util.TreeFileChooserDialog" timestamp="1583261031135">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -846,30 +779,46 @@
     <state x="504" y="188" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1585946052476" />
     <state x="504" y="198" key="FileChooserDialogImpl/0.0.1366.768@0.0.1366.768" timestamp="1585071666306" />
     <state x="620" y="261" key="FileChooserDialogImpl/0.0.1680.1010@0.0.1680.1010" timestamp="1587400046831" />
-    <state width="905" height="171" key="GridCell.Tab.0.bottom" timestamp="1586748317235">
+    <state width="1323" height="230" key="GridCell.Tab.0.bottom" timestamp="1587921168186">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state width="905" height="179" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1585946331158" />
-    <state width="905" height="171" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1586748317235" />
+    <state width="1323" height="230" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1587921168186" />
     <state width="1125" height="152" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1586367378658" />
-    <state width="905" height="171" key="GridCell.Tab.0.center" timestamp="1586748317235">
+    <state width="1323" height="230" key="GridCell.Tab.0.center" timestamp="1587921168186">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state width="905" height="179" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1585946331158" />
-    <state width="905" height="171" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1586748317235" />
+    <state width="1323" height="230" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1587921168186" />
     <state width="1125" height="152" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1586367378657" />
-    <state width="905" height="171" key="GridCell.Tab.0.left" timestamp="1586748317235">
+    <state width="1323" height="230" key="GridCell.Tab.0.left" timestamp="1587921168185">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state width="905" height="179" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1585946331158" />
-    <state width="905" height="171" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1586748317235" />
+    <state width="1323" height="230" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1587921168185" />
     <state width="1125" height="152" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1586367378657" />
-    <state width="905" height="171" key="GridCell.Tab.0.right" timestamp="1586748317235">
+    <state width="1323" height="230" key="GridCell.Tab.0.right" timestamp="1587921168186">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state width="905" height="179" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1585946331158" />
-    <state width="905" height="171" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1586748317235" />
+    <state width="1323" height="230" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1587921168186" />
     <state width="1125" height="152" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1586367378658" />
+    <state width="1323" height="230" key="GridCell.Tab.1.bottom" timestamp="1587921166852">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state width="1323" height="230" key="GridCell.Tab.1.bottom/0.0.1366.768@0.0.1366.768" timestamp="1587921166852" />
+    <state width="1323" height="230" key="GridCell.Tab.1.center" timestamp="1587921166852">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state width="1323" height="230" key="GridCell.Tab.1.center/0.0.1366.768@0.0.1366.768" timestamp="1587921166852" />
+    <state width="1323" height="230" key="GridCell.Tab.1.left" timestamp="1587921166852">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state width="1323" height="230" key="GridCell.Tab.1.left/0.0.1366.768@0.0.1366.768" timestamp="1587921166852" />
+    <state width="1323" height="230" key="GridCell.Tab.1.right" timestamp="1587921166852">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state width="1323" height="230" key="GridCell.Tab.1.right/0.0.1366.768@0.0.1366.768" timestamp="1587921166852" />
     <state width="196" height="348" key="HiddenNamespacesPopup" timestamp="1586747747703">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -881,10 +830,6 @@
     </state>
     <state x="449" y="169" key="MultipleFileMergeDialog/0.0.1366.768@0.0.1366.768" timestamp="1587180868895" />
     <state x="552" y="222" key="MultipleFileMergeDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1586367866268" />
-    <state x="505" y="205" key="NewModule_or_Project.wizard" timestamp="1579026622636">
-      <screen x="0" y="0" width="1680" height="1010" />
-    </state>
-    <state x="505" y="205" key="NewModule_or_Project.wizard/0.0.1680.1010@0.0.1680.1010" timestamp="1579026622636" />
     <state x="454" y="171" key="Registry" timestamp="1583417958203">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -892,7 +837,6 @@
     <state x="616" y="30" key="RollbackChangesDialog" timestamp="1583778436946">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="501" y="23" key="RollbackChangesDialog/0.0.1366.768@0.0.1366.768" timestamp="1578969825199" />
     <state x="616" y="30" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1583778436946" />
     <state x="320" y="80" key="SettingsEditor" timestamp="1587385026345">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -952,10 +896,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="544" y="399" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD/0.0.1680.1010@0.0.1680.1010" timestamp="1579615180701" />
-    <state x="488" y="297" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1587355067915">
+    <state x="488" y="297" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1587919957135">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state x="488" y="297" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1366.768@0.0.1366.768" timestamp="1587355067915" />
+    <state x="488" y="297" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1366.768@0.0.1366.768" timestamp="1587919957135" />
     <state x="600" y="391" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1680.1010@0.0.1680.1010" timestamp="1586972141357" />
     <state x="448" y="274" key="extract.method.dialog" timestamp="1586896266138">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -968,10 +912,6 @@
     <state x="362" y="127" width="643" height="536" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1585937546544" />
     <state x="362" y="134" width="774" height="562" key="find.popup/0.0.1366.768@0.0.1366.768" timestamp="1579836143729" />
     <state x="445" y="176" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1586786834165" />
-    <state x="605" y="219" key="git4idea.branch.GitSmartOperationDialog" timestamp="1579030853134">
-      <screen x="0" y="0" width="1680" height="1010" />
-    </state>
-    <state x="605" y="219" key="git4idea.branch.GitSmartOperationDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1579030853134" />
     <state x="409" y="157" key="git4idea.merge.GitPullDialog" timestamp="1586743041255">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -1003,6 +943,11 @@
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/reactions/answerable/BiteReaction.java</url>
           <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Relay.java</url>
+          <line>188</line>
+          <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
