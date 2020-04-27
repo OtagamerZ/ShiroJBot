@@ -67,7 +67,7 @@ public class Profile {
 			con.setRequestProperty("User-Agent", "Mozilla/5.0");
 			avatar = scaleImage(ImageIO.read(con.getInputStream()), 200, 200);
 		} catch (NullPointerException | IOException e) {
-			con = (HttpURLConnection) new URL("https://institutogoldenprana.com.br/wp-content/uploads/2015/08/no-avatar-25359d55aa3c93ab3466622fd2ce712d1.jpg").openConnection();
+			con = (HttpURLConnection) new URL("http://institutogoldenprana.com.br/wp-content/uploads/2015/08/no-avatar-25359d55aa3c93ab3466622fd2ce712d1.jpg").openConnection();
 			con.setRequestProperty("User-Agent", "Mozilla/5.0");
 			avatar = scaleImage(ImageIO.read(con.getInputStream()), 200, 200);
 		}
@@ -82,7 +82,7 @@ public class Profile {
 			con.setRequestProperty("User-Agent", "Mozilla/5.0");
 			g2d.drawImage(scaleImage(ImageIO.read(con.getInputStream()), bi.getWidth(), bi.getHeight()), null, 0, 0);
 		} catch (IOException e) {
-			con = (HttpURLConnection) new URL("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg").openConnection();
+			con = (HttpURLConnection) new URL("http://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg").openConnection();
 			con.setRequestProperty("User-Agent", "Mozilla/5.0");
 			g2d.drawImage(scaleImage(ImageIO.read(con.getInputStream()), bi.getWidth(), bi.getHeight()), null, 0, 0);
 		}
