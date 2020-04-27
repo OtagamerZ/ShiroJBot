@@ -200,12 +200,6 @@ public class Kawaigotchi {
 
 		xp += 0.1f * tier.getTrainability();
 
-		//CLAMPS
-		health = Helper.clamp(health, 0, 100);
-		hunger = Helper.clamp(hunger, 0, 100);
-		mood = Helper.clamp(mood, 0, 100);
-		energy = Helper.clamp(energy, 0, 100);
-
 		KGotchiDAO.saveKawaigotchi(this);
 	}
 
