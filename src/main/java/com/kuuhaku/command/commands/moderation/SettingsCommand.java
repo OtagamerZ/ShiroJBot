@@ -141,7 +141,7 @@ public class SettingsCommand extends Command {
 				break;
 			case "help":
 			case "ajuda":
-				Settings.settingsHelp(args, message, gc);
+				Settings.settingsHelp(message, gc);
 				break;
 			default:
 				Settings.embedConfig(message);
