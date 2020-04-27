@@ -51,6 +51,7 @@
         <class>com.kuuhaku.model.persistent.Quiz</class>
         <class>com.kuuhaku.model.persistent.AnsweredQuizzes</class>
         <class>com.kuuhaku.model.persistent.Ticket</class>
+        <class>com.kuuhaku.model.persistent.ExceedMember</class>
 
         <properties>
             <!-- dados da conexao -->
