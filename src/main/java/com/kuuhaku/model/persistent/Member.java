@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.sqlite.KGotchiDAO;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Guild;
@@ -47,9 +48,6 @@ public class Member {
 
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
 	private String waifu = "";
-
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
-	private String exceed = "";
 
 	//TEXTS
 	@Column(columnDefinition = "TEXT")
@@ -85,7 +83,7 @@ public class Member {
 	public boolean addXp(Guild g) {
 		float mult = 1;
 
-		if (Main.getInfo().getWinner().equals(this.exceed))
+		if (ExceedDAO.hasExceed(this.mid) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(this.mid)))
 			mult *= 2;
 		if (g.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).collect(Collectors.toList()).contains(waifu))
 			mult *= waifuMult;
@@ -175,11 +173,7 @@ public class Member {
 	}
 
 	public String getExceed() {
-		return exceed;
-	}
-
-	public void setExceed(String exceed) {
-		this.exceed = exceed;
+		return ExceedDAO.getExceed(this.mid);
 	}
 
 	public boolean isRulesSent() {

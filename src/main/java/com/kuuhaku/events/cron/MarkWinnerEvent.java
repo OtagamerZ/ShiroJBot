@@ -36,7 +36,7 @@ public class MarkWinnerEvent implements Job {
 
 		String ex = ExceedDAO.getWinner();
 		ExceedDAO.getExceedMembers(ExceedEnums.getByName(ex)).forEach(em ->
-				Main.getInfo().getUserByID(em.getMid()).openPrivateChannel().queue(c -> {
+				Main.getInfo().getUserByID(em.getId()).openPrivateChannel().queue(c -> {
 					try {
 						c.sendMessage("O seu exceed foi campeão neste mês, parabéns!\n" +
 								"Todos da " + ex + " ganharão experiência em dobro durante 1 semana.").queue();
