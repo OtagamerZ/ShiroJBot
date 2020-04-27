@@ -95,7 +95,7 @@ public abstract class Reaction extends Command {
 	public void sendReaction(String type, TextChannel chn, String message, boolean allowReact) {
 		Message msg = chn.sendMessage("Conectando à API...").addFile(new File(Objects.requireNonNull(this.getClass().getClassLoader().getResource("loading.gif")).getPath())).complete();
 		try {
-			HttpURLConnection con = (HttpURLConnection) new URL("http://shiro-api.herokuapp.com/reaction?type=" + type).openConnection();
+			HttpURLConnection con = (HttpURLConnection) new URL("https://shiro-api.herokuapp.com/reaction?type=" + type).openConnection();
 			con.setRequestProperty("User-Agent", "Mozilla/5.0");
 			con.setRequestMethod("GET");
 			con.setRequestProperty("Accept", "application/json");
