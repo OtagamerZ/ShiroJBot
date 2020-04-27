@@ -31,6 +31,8 @@ import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 
+import java.text.MessageFormat;
+
 public class RoleChooserCommand extends Command {
 
 	public RoleChooserCommand(String name, String description, Category category, boolean requiresMM) {
@@ -67,7 +69,7 @@ public class RoleChooserCommand extends Command {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_role-chooser-invalid-role")).queue();
 			return;
 		} else if (args[1].equals(Helper.CANCEL)) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_role-chooser-cannot-assign-role") + Helper.CANCEL + ".").queue();
+			channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_role-chooser-cannot-assign-role"), Helper.CANCEL)).queue();
 			return;
 		} else if (!EmojiUtils.containsEmoji(args[1]) && message.getEmotes().size() == 0) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_role-chooser-invalid emote")).queue();
@@ -79,7 +81,7 @@ public class RoleChooserCommand extends Command {
 
 			channel.sendMessage("Botão adicionado com sucesso!").queue(s -> Helper.refreshButtons(gc));
 		} catch (IllegalArgumentException e) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_role-chooser-argument-error") + e).queue();
+			channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_role-chooser-argument-error"), e)).queue();
 		} catch (ErrorResponseException e) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_role-chooser-invalid-channel")).queue();
 		}
