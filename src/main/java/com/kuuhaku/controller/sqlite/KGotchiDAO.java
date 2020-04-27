@@ -19,6 +19,7 @@
 package com.kuuhaku.controller.sqlite;
 
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
+import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -59,6 +60,11 @@ public class KGotchiDAO {
 
 	public static void saveKawaigotchi(Kawaigotchi k) {
 		EntityManager em = Manager.getEntityManager();
+
+		k.setHealth(Helper.clamp(k.getHealth(), 0, 100));
+		k.setHunger(Helper.clamp(k.getHunger(), 0, 100));
+		k.setMood(Helper.clamp(k.getMood(), 0, 100));
+		k.setEnergy(Helper.clamp(k.getEnergy(), 0, 100));
 
 		em.getTransaction().begin();
 		em.merge(k);
