@@ -58,19 +58,19 @@ public class RoleChooserCommand extends Command {
 			channel.sendMessage("Botões atualizados com sucesso!").queue();
 			return;
 		} else if (args.length < 3) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_rolechooser-invalid-arguments")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_role-chooser-invalid-arguments")).queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[0])) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_rolechooser-invalid-message-id")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-message-id")).queue();
 			return;
 		} else if (message.getMentionedRoles().size() == 0) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_rolechooser-invalid-role")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_role-chooser-invalid-role")).queue();
 			return;
 		} else if (args[1].equals(Helper.CANCEL)) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_rolechooser-it-was-not-possible") + Helper.CANCEL + ".").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_role-chooser-cannot-assign-role") + Helper.CANCEL + ".").queue();
 			return;
 		} else if (!EmojiUtils.containsEmoji(args[1]) && message.getEmotes().size() == 0) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_rolechooser-invalid emote")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_role-chooser-invalid emote")).queue();
 			return;
 		}
 
@@ -79,9 +79,9 @@ public class RoleChooserCommand extends Command {
 
 			channel.sendMessage("Botão adicionado com sucesso!").queue(s -> Helper.refreshButtons(gc));
 		} catch (IllegalArgumentException e) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_rolechooser-error-in-an-argument") + e).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_role-chooser-argument-error") + e).queue();
 		} catch (ErrorResponseException e) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_rolechooser-invalid-usage-mode")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_role-chooser-invalid-channel")).queue();
 		}
 	}
 }
