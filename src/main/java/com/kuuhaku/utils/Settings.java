@@ -31,6 +31,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 
 import javax.persistence.NoResultException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -567,12 +568,16 @@ public class Settings {
         }
     }
 
-    public static void settingsHelp(String[] args, Message message, GuildConfig gc) {
+	public static void settingsHelp(Message message, GuildConfig gc) {
 		String prefix = Helper.getOr(gc.getPrefix(), "s!");
 
 		EmbedBuilder eb = new EmbedBuilder();
 
-		eb.setColor(Helper.getRandomColor());
+		try {
+			eb.setColor(message.getGuild().getIconUrl() == null ? Helper.getRandomColor() : Helper.colorThief(message.getGuild().getIconUrl()));
+		} catch (IOException e) {
+			Helper.logger(Settings.class).error(e + " | " + e.getStackTrace()[0]);
+		}
 		if (message.getGuild().getIconUrl() != null) eb.setThumbnail(message.getGuild().getIconUrl());
 		eb.setTitle("⚙ | Painel de ajuda");
 		eb.setDescription("Utilize os comandos a baixo para estabelecer suas configurações.");
