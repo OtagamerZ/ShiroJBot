@@ -92,8 +92,8 @@ public class ExceedSelectCommand extends Command {
 				}
 				u.forEach(MemberDAO::updateMemberConfigs);
 				channel.sendMessage("Exceed escolhido com sucesso, você agora pertence à **" + u.get(0).getExceed() + "**.").queue();
-				ExceedDAO.getExceedMembers(ExceedEnums.getByName(u.get(0).getExceed())).forEach(em ->
-						Main.getInfo().getUserByID(em.getMid()).openPrivateChannel().queue(c -> {
+				ExceedDAO.getExceedMembers(ExceedEnums.getByName(u.get(0).getExceed())).stream().map(com.kuuhaku.model.persistent.Member::getMid).distinct().forEach(em ->
+						Main.getInfo().getUserByID(em).openPrivateChannel().queue(c -> {
 							try {
 								c.sendMessage(author.getAsTag() + " juntou-se à " + u.get(0).getExceed() + ", dê-o(a) as boas-vindas!").queue();
 							} catch (Exception ignore) {

@@ -64,7 +64,7 @@ public class ExceedRankCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		channel.sendMessage("<a:loading:697879726630502401> Gerando placares...").queue(m -> {
 			if (MemberDAO.getMemberByMid(author.getId()).get(0).getExceed().isEmpty()) {
-				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_exceedrank-you-didn't-choose")).queue();
+				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_exceed-rank-no-exceed")).queue();
 				return;
 			}
 
@@ -118,7 +118,7 @@ public class ExceedRankCommand extends Command {
 				channel.sendFile(baos.toByteArray(), "ranking.png").queue(s -> s.delete().queueAfter(1, TimeUnit.MINUTES));
 				m.delete().queue();
 			} catch (Exception e) {
-				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_exceedrank-an-error-has-occurred")).queue();
+				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_exceed-rank")).queue();
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
 		});

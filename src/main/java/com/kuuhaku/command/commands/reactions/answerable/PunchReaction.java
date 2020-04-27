@@ -21,6 +21,8 @@ package com.kuuhaku.command.commands.reactions.answerable;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.commands.reactions.Reaction;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
@@ -32,6 +34,10 @@ public class PunchReaction extends Reaction {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		if (message.getMentionedUsers().size() == 0) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
+			return;
+		}
 		setInteraction(new User[]{author, message.getMentionedUsers().get(0)});
 
 		if (message.getMentionedUsers().size() > 0) {

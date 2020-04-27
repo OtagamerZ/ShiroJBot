@@ -111,7 +111,7 @@ public class CustomAnswerCommand extends Command {
 
 		String txt = String.join(" ", args);
 
-		if (txt.contains(";")) {
+		if (txt.contains(";") && txt.split(";").length == 2) {
 			if (txt.split(";")[0].length() <= 200) {
 				if (txt.split(";")[1].length() <= 200) {
 					CustomAnswerDAO.addCAtoDB(guild, txt.split(";")[0], txt.replace(txt.split(";")[0] + ";", ""));

@@ -26,6 +26,8 @@ import com.kuuhaku.model.persistent.DevRating;
 import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.model.persistent.Votes;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -112,7 +114,9 @@ public class VotesDAO {
 			pages.add(new Page(PageType.TEXT, eb.build()));
 		}
 
-		channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 60, TimeUnit.SECONDS));
+		if (pages.size() > 0)
+			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 60, TimeUnit.SECONDS));
+		else channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-votes")).queue();
 	}
 
 	public static DevRating getRating(String id) {
