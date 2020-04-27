@@ -62,25 +62,25 @@ public class PixelCanvasCommand extends Command {
 
 		try {
 			if (opts.length == 1) {
-                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_pixelcanvas-invalid-arguments")).queue();
+                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_canvas-invalid-arguments")).queue();
                 return;
             } else if (Integer.parseInt(opts[0]) > CANVAS_SIZE / 2 || Integer.parseInt(opts[0]) < -CANVAS_SIZE / 2 || Integer.parseInt(opts[1]) > CANVAS_SIZE / 2 || Integer.parseInt(opts[1]) < -CANVAS_SIZE / 2) {
-                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_pixelcanvas-invalid-coordinates") + (CANVAS_SIZE / 2) + "px ou maiores que " + (CANVAS_SIZE / 2) + "px.").queue();
-                return;
-            }
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_canvas-coordinates-out-of-bounds") + (CANVAS_SIZE / 2) + "px ou maiores que " + (CANVAS_SIZE / 2) + "px.").queue();
+				return;
+			}
 		} catch (NumberFormatException e) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_pixelcanvas-define-the-coordinates")).queue();
-            return;
-        }
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_canvas-invalid-coordinates")).queue();
+			return;
+		}
 
 		try {
 			int[] coords = new int[]{Integer.parseInt(opts[0]), Integer.parseInt(opts[1])};
 
 			if (StringUtils.isNumeric(opts[2])) {
 				if (Integer.parseInt(opts[2]) <= 0 || Integer.parseInt(opts[2]) > 10) {
-                    channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_pixelcanvas-invalid-zoom")).queue();
-                    return;
-                }
+					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_canvas-invalid-zoom")).queue();
+					return;
+				}
 				Main.getInfo().getCanvas().viewChunk(message.getTextChannel(), coords, Integer.parseInt(opts[2]), false).queue();
 				return;
 			}
@@ -92,7 +92,7 @@ public class PixelCanvasCommand extends Command {
 
 			CanvasDAO.saveCanvas(canvas);
 		} catch (NumberFormatException e) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_pixelcanvas-incorrect-color")).queue();
-        }
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-color")).queue();
+		}
 	}
 }
