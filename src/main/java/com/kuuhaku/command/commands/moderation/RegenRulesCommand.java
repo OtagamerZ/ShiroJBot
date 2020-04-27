@@ -50,10 +50,10 @@ public class RegenRulesCommand extends Command {
 		message.delete().queue(s -> {
 			try {
 				if (guild.getId().equals(ShiroInfo.getSupportServerID()))
-					channel.sendFile(Helper.getImage("http://i.imgur.com/JQ3LvGK.png"), "title.png").queue();
-				channel.sendFile(Helper.getImage("http://i.imgur.com/9dfpeel.png"), "welcome.png").queue();
+					channel.sendFile(Helper.getImage("https://i.imgur.com/JQ3LvGK.png"), "title.png").queue();
+				channel.sendFile(Helper.getImage("https://i.imgur.com/9dfpeel.png"), "welcome.png").queue();
 				channel.sendMessage(guild.getId().equals(ShiroInfo.getSupportServerID()) ? "Seja bem-vindo(a) ao meu servidor oficial de suporte, qualquer duvida que tenha sobre como me utilizar será esclarecida por um de nossos membros, fique à vontade e lembre-se de sempre relatar quando achar algo suspeito" : "Seja bem-vindo(a) ao servidor " + guild.getName() + ", fique à vontade e lembre-se de sempre relatar quando achar algo suspeito").queue();
-				channel.sendFile(Helper.getImage("http://i.imgur.com/aCYUW1G.png"), "rules.png").queue();
+				channel.sendFile(Helper.getImage("https://i.imgur.com/aCYUW1G.png"), "rules.png").queue();
 				channel.sendMessage("**1 - É proibido qualquer ato de SPAM, flood ou bullying**\n" +
 						"Por razões obvias, tais coisas poluem o servidor e prejudicam a comunidade e é considerado um ato grave para medidas de punição.\n" +
 						"Infratores serão punidos de acordo com seus atos.\n\n" +
@@ -68,7 +68,7 @@ public class RegenRulesCommand extends Command {
 								"Infratores serão `_______ __ ______ ___ ____ ____`\n\n" +
 								"É proibido compartilhar qual é a resposta, se não não teria graça!" : "Caso precise de ajuda, ou queira ajudar no meu desenvolvimento, venha para nosso servidor de suporte: https://discord.gg/9sgkzna")).queue();
 				if (Helper.getSponsors().length() > 0) {
-					channel.sendFile(Helper.getImage("http://i.imgur.com/U9lTSWD.png"), "partners.png").queue();
+					channel.sendFile(Helper.getImage("https://i.imgur.com/U9lTSWD.png"), "partners.png").queue();
 					channel.sendMessage(Helper.getSponsors()).queue();
 				}
 			} catch (IOException e) {

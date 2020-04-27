@@ -77,7 +77,7 @@ public class BotInfoCommand extends Command {
 				, true);
 
 		try {
-			InputStream info = Helper.getImage("http://discordbots.org/api/widget/572413282653306901.png?usernamecolor=b463ff&topcolor=000000&middlecolor=1a1d23&datacolor=b463ff");
+			InputStream info = Helper.getImage("https://discordbots.org/api/widget/572413282653306901.png?usernamecolor=b463ff&topcolor=000000&middlecolor=1a1d23&datacolor=b463ff");
 
 			eb.setImage("attachment://info.png");
 			channel.sendMessage(eb.build()).addFile(info, "info.png").queue();
