@@ -19,6 +19,7 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.common.Exceed;
+import com.kuuhaku.model.persistent.ExceedMember;
 import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.model.persistent.MonthWinner;
 import com.kuuhaku.utils.ExceedEnums;
@@ -30,14 +31,44 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class ExceedDAO {
-	@SuppressWarnings("unchecked")
-	public static List<Member> getExceedMembers(ExceedEnums ex) {
+	public static boolean hasExceed(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT m FROM Member m WHERE exceed LIKE ?1", Member.class);
+		try {
+			return em.find(ExceedMember.class, id) != null;
+		} finally {
+			em.close();
+		}
+	}
+
+	public static String getExceed(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		try {
+			return em.find(ExceedMember.class, id).getExceed();
+		} finally {
+			em.close();
+		}
+	}
+
+	public static void joinExceed(ExceedMember ex) {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		em.merge(ex);
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<ExceedMember> getExceedMembers(ExceedEnums ex) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT ex FROM ExceedMember ex WHERE ex.exceed LIKE ?1", ExceedMember.class);
 		q.setParameter(1, ex.getName());
 
-		List<Member> members = (List<Member>) q.getResultList();
+		List<ExceedMember> members = (List<ExceedMember>) q.getResultList();
 		em.close();
 
 		return members;
@@ -47,7 +78,7 @@ public class ExceedDAO {
 	public static Exceed getExceed(ExceedEnums ex) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT m FROM Member m WHERE exceed LIKE ?1", Member.class);
+		Query q = em.createQuery("SELECT m FROM Member m INNER JOIN ExceedMember ex ON m.mid = ex.id WHERE ex.exceed LIKE ?1", Member.class);
 		q.setParameter(1, ex.getName());
 
 		List<Member> members = (List<Member>) q.getResultList();
@@ -59,7 +90,7 @@ public class ExceedDAO {
 	public static ExceedEnums findWinner() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT exceed FROM Member m WHERE exceed NOT LIKE '' GROUP BY exceed ORDER BY xp DESC", String.class);
+		Query q = em.createQuery("SELECT ex.exceed FROM Member m INNER JOIN ExceedMember ex ON ex.id = m.mid GROUP BY ex.exceed ORDER BY SUM(m.xp) DESC", String.class);
 		q.setMaxResults(1);
 
 		String winner = (String) q.getSingleResult();
