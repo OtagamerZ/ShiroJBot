@@ -111,7 +111,8 @@ public class Anime {
         status = media.getString("status").equals("FINISHED") ? "Completo" : "Transmitindo";
         duration = String.valueOf(String.valueOf(media.get("episodes")).equals("null") ? Integer.toString(media.getJSONObject("nextAiringEpisode").getInt("episode")) : media.get("episodes"));
         genres = media.getJSONArray("genres").toList();
-        score = media.getInt("averageScore");
+        if (media.has("averageScore")) score = media.getInt("averageScore");
+        else score = -1;
         popularity = media.getInt("popularity");
         description = media.getString("description");
     }

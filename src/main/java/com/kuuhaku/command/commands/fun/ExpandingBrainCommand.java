@@ -56,12 +56,12 @@ public class ExpandingBrainCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 
 		if (args.length < 1) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_expandingbrain-set-a-message")).queue();
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_meme-no-message")).queue();
             return;
         } else if (String.join(" ", args).split(";").length < 4) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_expandingbrain-invalid-message")).queue();
-            return;
-        }
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_meme-require-four")).queue();
+			return;
+		}
 
 		try {
 			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("Expanding-Brain.png")));
