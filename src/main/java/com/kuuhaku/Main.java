@@ -65,11 +65,12 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	public static String[] kill = new String[2];
 
 	public static void main(String[] args) throws Exception {
-		Helper.logger(Main.class).info("Shiro J. Bot  Copyright (C) 2020 Yago Gimenez (KuuHaKu)\n" +
+		Helper.logger(Main.class).info("\nShiro J. Bot  Copyright (C) 2020 Yago Gimenez (KuuHaKu)\n" +
 				"This program comes with ABSOLUTELY NO WARRANTY\n" +
 				"This is free software, and you are welcome to redistribute it under certain conditions\n" +
 				"See license for more information regarding redistribution conditions");
 		Thread.setDefaultUncaughtExceptionHandler(new Main());
+		System.setProperty("file.encoding", "UTF-8");
 		info = new ShiroInfo();
 		relay = new Relay();
 
