@@ -70,7 +70,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				"This is free software, and you are welcome to redistribute it under certain conditions\n" +
 				"See license for more information regarding redistribution conditions");
 		Thread.setDefaultUncaughtExceptionHandler(new Main());
-		System.setProperty("file.encoding", "UTF-8");
 		info = new ShiroInfo();
 		relay = new Relay();
 
