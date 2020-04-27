@@ -81,6 +81,7 @@ public class URankCommand extends Command {
 					.append((global ? checkGuild(sub9.get(i)) : ""))
 					.append(checkUser(sub9.get(i)))
 					.append(ShiroInfo.getLocale(I18n.PT).getString(STR_LEVEL))
+					.append(" ")
 					.append(sub9.get(i).getLevel())
 					.append(")")
 					.append("\n");
@@ -102,6 +103,7 @@ public class URankCommand extends Command {
 						.append((global ? checkGuild(mbs.get(i)) : ""))
 						.append(checkUser(mbs.get(i)))
 						.append(ShiroInfo.getLocale(I18n.PT).getString(STR_LEVEL))
+						.append(" ")
 						.append(mbs.get(i).getLevel())
 						.append(")")
 						.append("\n");

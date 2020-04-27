@@ -194,7 +194,7 @@ public class ComandosCommand extends Command {
 
 		eb.setTitle(cmd.getName() + (cmd.getUsage() != null ? " " + cmd.getUsage() : ""));
 
-		StringBuilder aliases = new StringBuilder(ShiroInfo.getLocale(I18n.PT).getString("str_aliases"));
+		StringBuilder aliases = new StringBuilder(ShiroInfo.getLocale(I18n.PT).getString("str_aliases")).append(" ");
 
 		for (String al : cmd.getAliases()) {
 			aliases.append("`").append(al).append("`  ");

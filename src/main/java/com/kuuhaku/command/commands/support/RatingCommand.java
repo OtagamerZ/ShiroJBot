@@ -32,6 +32,7 @@ import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
 import java.io.File;
+import java.text.MessageFormat;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -85,7 +86,7 @@ public class RatingCommand extends Command {
 								});
 					});
 				},
-				ex -> channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-request-rating") + ex).queue()
+				ex -> channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-request-rating"), ex)).queue()
 		);
 	}
 
