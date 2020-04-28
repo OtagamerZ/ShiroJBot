@@ -42,5 +42,7 @@ public class BackupEvent implements Job {
 		Helper.logger(this.getClass()).info("Membros salvos com sucesso!");
 
 		Sweeper.sweep();
+
+		System.gc();
 	}
 }
