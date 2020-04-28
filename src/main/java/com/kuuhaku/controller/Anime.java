@@ -45,7 +45,7 @@ public class Anime {
 		oStream.write(json.getBytes(StandardCharsets.UTF_8));
 		oStream.close();
 
-		OutputStreamWriter osw = new OutputStreamWriter(con.getOutputStream());
+		OutputStreamWriter osw = new OutputStreamWriter(con.getOutputStream(), StandardCharsets.UTF_8);
 		osw.write(Main.getInfo().getAnilistToken());
 		osw.flush();
 
