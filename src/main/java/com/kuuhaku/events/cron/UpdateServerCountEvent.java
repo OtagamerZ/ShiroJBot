@@ -34,13 +34,13 @@ public class UpdateServerCountEvent implements Job {
 	public void execute(JobExecutionContext context) {
 		int size = Main.getInfo().getAPI().getGuilds().size();
 		Main.getInfo().getDblApi().setStats(size);
-		try {
+		if (System.getenv().containsKey("DBL_TOKEN")) try {
 			JSONObject jo = new JSONObject();
 
 			jo.put("shardCount", 1);
 			jo.put("guildCount", size);
 
-			Helper.post("https://discord.bots.gg/api/v1/bots/" + Main.getInfo().getAPI().getSelfUser().getId() + "/stats", jo);
+			Helper.post("https://discord.bots.gg/api/v1/bots/" + Main.getInfo().getAPI().getSelfUser().getId() + "/stats", jo, System.getenv("DBL_TOKEN"));
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
