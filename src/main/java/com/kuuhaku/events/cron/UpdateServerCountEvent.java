@@ -40,7 +40,8 @@ public class UpdateServerCountEvent implements Job {
 			jo.put("shardCount", 1);
 			jo.put("guildCount", size);
 
-			Helper.post("https://discord.bots.gg/api/v1/bots/" + Main.getInfo().getAPI().getSelfUser().getId() + "/stats", jo, System.getenv("DBL_TOKEN"));
+			String response = Helper.post("https://discord.bots.gg/api/v1/bots/" + Main.getInfo().getAPI().getSelfUser().getId() + "/stats", jo, System.getenv("DBL_TOKEN")).toString();
+			Helper.logger(this.getClass()).info(response);
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
