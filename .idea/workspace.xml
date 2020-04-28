@@ -24,9 +24,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções básicas">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções básicas" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -288,13 +286,7 @@
       <workItem from="1588028096925" duration="646000" />
       <workItem from="1588040473506" duration="45000" />
       <workItem from="1588042300230" duration="1193000" />
-    </task>
-    <task id="LOCAL-00998" summary="Melhorado o sistema de ratelimits">
-      <created>1586453039412</created>
-      <option name="number" value="00998" />
-      <option name="presentableId" value="LOCAL-00998" />
-      <option name="project" value="LOCAL" />
-      <updated>1586453039412</updated>
+      <workItem from="1588043867501" duration="280000" />
     </task>
     <task id="LOCAL-00999" summary="Melhorado o sistema de ratelimits">
       <created>1586453492234</created>
@@ -632,7 +624,14 @@
       <option name="project" value="LOCAL" />
       <updated>1588043171697</updated>
     </task>
-    <option name="localTasksCounter" value="1047" />
+    <task id="LOCAL-01047" summary="Correções básicas">
+      <created>1588044132884</created>
+      <option name="number" value="01047" />
+      <option name="presentableId" value="LOCAL-01047" />
+      <option name="project" value="LOCAL" />
+      <updated>1588044132884</updated>
+    </task>
+    <option name="localTasksCounter" value="1048" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -875,11 +874,11 @@
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="351" y="182" key="Vcs.Push.Dialog.v2" timestamp="1588043277103">
+    <state x="351" y="182" key="Vcs.Push.Dialog.v2" timestamp="1588044136057">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
-    <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1588043277103" />
+    <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1588044136057" />
     <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1588015140612" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -933,11 +932,11 @@
     </state>
     <state x="682" y="113" key="extract.method.dialog/0.0.1366.768@0.0.1366.768" timestamp="1582605093359" />
     <state x="448" y="274" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1586896266138" />
-    <state x="362" y="134" width="774" height="562" key="find.popup" timestamp="1588042579332">
+    <state x="362" y="134" width="774" height="562" key="find.popup" timestamp="1588044108124">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="362" y="127" width="643" height="536" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1585937546544" />
-    <state x="362" y="134" width="774" height="562" key="find.popup/0.0.1366.768@0.0.1366.768" timestamp="1588042579332" />
+    <state x="362" y="134" width="774" height="562" key="find.popup/0.0.1366.768@0.0.1366.768" timestamp="1588044108124" />
     <state x="445" y="176" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1588015183660" />
     <state x="409" y="157" key="git4idea.merge.GitPullDialog" timestamp="1586743041255">
       <screen x="0" y="0" width="1366" height="768" />
