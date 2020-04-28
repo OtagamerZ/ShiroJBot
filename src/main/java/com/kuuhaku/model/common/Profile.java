@@ -250,10 +250,10 @@ public class Profile {
 				} catch (Exception ignore) {
 				}
 				try {
-					if (!MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getWaifu().isEmpty()) {
+					if (!Member.getWaifu(m.getUser()).isEmpty()) {
 						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/married.png"))));
 						g2d.setFont(FONT.deriveFont(Font.PLAIN, 30));
-						drawOutlinedText("Casado(a) com: " + Main.getInfo().getUserByID(MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getWaifu()).getName(), 270, 298, g2d);
+						drawOutlinedText("Casado(a) com: " + Main.getInfo().getUserByID(Member.getWaifu(m.getUser())).getName(), 270, 298, g2d);
 					}
 				} catch (Exception ignore) {
 				}

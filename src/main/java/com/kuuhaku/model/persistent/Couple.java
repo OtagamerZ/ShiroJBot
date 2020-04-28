@@ -18,53 +18,46 @@
 
 package com.kuuhaku.model.persistent;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "exceedmember")
-public class ExceedMember {
+@Table(name = "couple")
+public class Couple {
 	@Id
-	@Column(columnDefinition = "VARCHAR(191)")
-	private String id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
-	private String exceed = "";
+	private String husbando = "";
 
-	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
-	private boolean victorious = false;
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
+	private String waifu = "";
 
-	public ExceedMember(String id, String ex) {
-		this.id = id;
-		this.exceed = ex;
+	public Couple(String husbando, String waifu) {
+		this.husbando = husbando;
+		this.waifu = waifu;
 	}
 
-	public ExceedMember() {
+	public Couple() {
 	}
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public String getHusbando() {
+		return husbando;
 	}
 
-	public String getExceed() {
-		return exceed;
+	public void setHusbando(String husbando) {
+		this.husbando = husbando;
 	}
 
-	public void setExceed(String exceed) {
-		this.exceed = exceed;
+	public String getWaifu() {
+		return waifu;
 	}
 
-	public boolean isVictorious() {
-		return victorious;
-	}
-
-	public void setVictorious(boolean victorious) {
-		this.victorious = victorious;
+	public void setWaifu(String waifu) {
+		this.waifu = waifu;
 	}
 }

@@ -53,8 +53,8 @@ public class StareReaction extends Reaction {
 					"???"
 			});
 
-			if (message.getMentionedUsers().get(0) == Main.getInfo().getAPI().getSelfUser()) {
-				sendReaction(getType(), (TextChannel) channel, getInteraction()[0].getAsMention() + " encarou a " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget(), false);
+			if (message.getMentionedUsers().get(0) == Main.getInfo().getSelfUser()) {
+				sendReaction(getType(), (TextChannel) channel, getInteraction()[0].getAsMention() + " encarou a " + Main.getInfo().getSelfUser().getAsMention() + " - " + this.getSelfTarget(), false);
 				return;
 			}
 

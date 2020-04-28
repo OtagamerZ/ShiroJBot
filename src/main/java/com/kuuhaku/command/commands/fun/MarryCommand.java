@@ -22,7 +22,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.WaifuDAO;
-import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.events.WaifuListener;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
@@ -64,7 +63,7 @@ public class MarryCommand extends Command {
 			} else if (message.getMentionedUsers().get(0) == author) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-marry-yourself")).queue();
 				return;
-			} else if (message.getMentionedUsers().get(0) == Main.getInfo().getAPI().getSelfUser() && !author.getId().equals(Main.getInfo().getNiiChan())) {
+			} else if (message.getMentionedUsers().get(0) == Main.getInfo().getSelfUser() && !author.getId().equals(Main.getInfo().getNiiChan())) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-marry-shiro")).queue();
 				return;
 			} else if (message.getMentionedUsers().get(0) == Main.getJibril().getSelfUser() && !author.getId().equals(Main.getInfo().getNiiChan())) {
@@ -73,13 +72,13 @@ public class MarryCommand extends Command {
 					assert chn != null;
 					chn.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-marry-jibril")).queue();
 				} catch (InsufficientPermissionException e) {
-                    channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_marry-the-answer-is-no")).queue();
-                }
+					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_marry-the-answer-is-no")).queue();
+				}
 				return;
-			} else if (WaifuDAO.isWaifued(author.getId()) || WaifuDAO.isWaifued(message.getMentionedUsers().get(0).getId())) {
+			} else if (WaifuDAO.isWaifued(author) || WaifuDAO.isWaifued(message.getMentionedUsers().get(0))) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_already-married")).queue();
 				return;
-			} else if (author.getId().equals("572413282653306901")) {
+			} else if (author.getId().equals(Main.getInfo().getSelfUser().getId())) {
 				channel.sendMessage("Ei, o que você acha que está fazendo ao me forçar a me casar? :rage:").queue();
 				return;
 			} else if (author.isBot()) {
@@ -103,17 +102,9 @@ public class MarryCommand extends Command {
 					switch (msg.getContentRaw().toLowerCase()) {
 						case "sim":
 							channel.sendMessage("Eu os declaro husbando e waifu!").queue();
-							com.kuuhaku.model.persistent.Member h = MemberDAO.getMemberById(author.getId() + guild.getId());
-							com.kuuhaku.model.persistent.Member w = MemberDAO.getMemberById(message.getMentionedUsers().get(0).getId() + guild.getId());
 
-							WaifuDAO.saveMemberWaifu(h, message.getMentionedUsers().get(0));
-							h.marry(message.getMentionedUsers().get(0));
+							WaifuDAO.saveCouple(author, message.getMentionedUsers().get(0));
 
-							WaifuDAO.saveMemberWaifu(w, author);
-							w.marry(author);
-
-							MemberDAO.updateMemberConfigs(h);
-							MemberDAO.updateMemberConfigs(w);
 							success.accept(null);
 							timeout.cancel(true);
 							timeout = null;
