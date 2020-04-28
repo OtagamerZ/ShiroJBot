@@ -21,6 +21,7 @@ package com.kuuhaku.command.commands.information;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.WaifuDAO;
 import com.kuuhaku.controller.sqlite.KGotchiDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
@@ -58,7 +59,7 @@ public class MyBuffsCommand extends Command {
 
 		EmbedBuilder eb = new EmbedBuilder();
 
-		boolean exceed = Main.getInfo().getWinner().equals(m.getExceed());
+		boolean exceed = Main.getInfo().getWinner().equals(ExceedDAO.getExceed(author.getId()));
 		boolean waifu = guild.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).collect(Collectors.toList()).contains(com.kuuhaku.model.persistent.Member.getWaifu(author));
 		boolean kgotchi = kg != null;
 

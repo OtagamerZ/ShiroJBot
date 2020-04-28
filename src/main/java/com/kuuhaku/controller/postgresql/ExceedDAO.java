@@ -46,6 +46,8 @@ public class ExceedDAO {
 
 		try {
 			return em.find(ExceedMember.class, id).getExceed();
+		} catch (NullPointerException e) {
+			return null;
 		} finally {
 			em.close();
 		}

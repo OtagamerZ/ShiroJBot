@@ -21,6 +21,7 @@ package com.kuuhaku.command.commands.information;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.utils.ExceedEnums;
@@ -54,7 +55,7 @@ public class MyTagsCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		EmbedBuilder eb = new EmbedBuilder();
-		String exceed = MemberDAO.getMemberByMid(author.getId()).get(0).getExceed();
+		String exceed = ExceedDAO.getExceed(author.getId());
 
 		eb.setTitle(":label: Seus emblemas");
 		try {

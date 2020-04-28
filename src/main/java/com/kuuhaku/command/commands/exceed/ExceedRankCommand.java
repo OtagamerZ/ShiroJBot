@@ -21,7 +21,6 @@ package com.kuuhaku.command.commands.exceed;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
-import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.common.Exceed;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.utils.ExceedEnums;
@@ -63,7 +62,7 @@ public class ExceedRankCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		channel.sendMessage("<a:loading:697879726630502401> Gerando placares...").queue(m -> {
-			if (MemberDAO.getMemberByMid(author.getId()).get(0).getExceed().isEmpty()) {
+			if (ExceedDAO.hasExceed(author.getId())) {
 				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_exceed-rank-no-exceed")).queue();
 				return;
 			}
