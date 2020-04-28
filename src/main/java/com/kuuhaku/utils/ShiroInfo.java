@@ -98,7 +98,7 @@ public class ShiroInfo {
 
 	//STATIC CONSTRUCTOR
 	static {
-		if (System.getenv().containsKey("DBL_TOKEN")) DBLToken = System.getenv("DBL_TOKEN");
+		if (System.getenv().containsKey("TOPGG_TOKEN")) DBLToken = System.getenv("TOPGG_TOKEN");
 		else DBLToken = null;
 	}
 
@@ -107,7 +107,7 @@ public class ShiroInfo {
 	private String winner = "";
 	private WebSocketConfig server;
 	private Socket client = null;
-	private DiscordBotListAPI dblApi = DBLToken == null ? null : new DiscordBotListAPI.Builder()
+	private final DiscordBotListAPI dblApi = DBLToken == null ? null : new DiscordBotListAPI.Builder()
 			.token(DBLToken)
 			.botId("572413282653306901")
 			.build();
