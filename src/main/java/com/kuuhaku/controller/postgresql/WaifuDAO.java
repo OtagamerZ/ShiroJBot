@@ -18,49 +18,84 @@
 
 package com.kuuhaku.controller.postgresql;
 
-import com.kuuhaku.model.persistent.Member;
+import com.kuuhaku.model.persistent.Couple;
+import com.kuuhaku.model.persistent.CoupleMultiplier;
 import net.dv8tion.jda.api.entities.User;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 public class WaifuDAO {
-	public static void saveMemberWaifu(Member m, User u) {
+	public static void saveCouple(User h, User w) {
 		EntityManager em = Manager.getEntityManager();
 
-		m.marry(u);
-
 		em.getTransaction().begin();
-		em.merge(m);
+		em.merge(new Couple(h.getId(), w.getId()));
+		if (em.find(CoupleMultiplier.class, h.getId()) == null) em.merge(new CoupleMultiplier(h.getId()));
+		if (em.find(CoupleMultiplier.class, w.getId()) == null) em.merge(new CoupleMultiplier(w.getId()));
 		em.getTransaction().commit();
 
 		em.close();
 	}
 
-	public static void removeMemberWaifu(Member m) {
+	public static void removeCouple(User u) {
 		EntityManager em = Manager.getEntityManager();
 
-		m.divorce();
+		Query q = em.createQuery("SELECT c FROM Couple c WHERE husbando LIKE :id OR waifu LIKE :id");
+		q.setParameter("id", u.getId());
+
+		CoupleMultiplier cm = getMultiplier(u);
 
 		em.getTransaction().begin();
-		em.merge(m);
+		em.remove(q.getSingleResult());
+		if (cm != null) {
+			cm.decrease();
+			em.merge(cm);
+		}
 		em.getTransaction().commit();
 
 		em.close();
 	}
 
-	public static boolean isWaifued(String id) {
+	public static Couple getCouple(User u) {
 		EntityManager em = Manager.getEntityManager();
 
-		boolean married = false;
+		Query q = em.createQuery("SELECT c FROM Couple c WHERE husbando LIKE :id OR waifu LIKE :id");
+		q.setParameter("id", u.getId());
 
-		Query q = em.createQuery("SELECT m FROM Member m WHERE mid LIKE :id AND waifu IS NOT NULL AND waifu NOT LIKE ''");
-		q.setParameter("id", id);
+		try {
+			return (Couple) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
 
-		married = q.getResultList().size() > 0;
+	public static boolean isWaifued(User u) {
+		EntityManager em = Manager.getEntityManager();
 
-		em.close();
+		Query q = em.createQuery("SELECT c FROM Couple c WHERE husbando LIKE :id OR waifu LIKE :id");
+		q.setParameter("id", u.getId());
 
-		return married;
+		try {
+			q.getSingleResult();
+			return true;
+		} catch (NoResultException e) {
+			return false;
+		} finally {
+			em.close();
+		}
+	}
+
+	public static CoupleMultiplier getMultiplier(User u) {
+		EntityManager em = Manager.getEntityManager();
+
+		try {
+			return em.find(CoupleMultiplier.class, u.getId());
+		} finally {
+			em.close();
+		}
 	}
 }

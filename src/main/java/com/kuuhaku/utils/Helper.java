@@ -533,7 +533,7 @@ public class Helper {
         for (Guild g : spGuilds) {
             AtomicReference<Invite> i = new AtomicReference<>();
             g.retrieveInvites().queue(invs -> invs.forEach(inv -> {
-                if (inv.getInviter() == Main.getInfo().getAPI().getSelfUser()) {
+                if (inv.getInviter() == Main.getInfo().getSelfUser()) {
                     i.set(inv);
                 }
             }));

@@ -21,8 +21,8 @@ package com.kuuhaku.model.persistent;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
+import com.kuuhaku.controller.postgresql.WaifuDAO;
 import com.kuuhaku.controller.sqlite.KGotchiDAO;
-import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 
@@ -46,9 +46,6 @@ public class Member {
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
 	private String sid = "";
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
-	private String waifu = "";
-
 	//TEXTS
 	@Column(columnDefinition = "TEXT")
 	private String bg = "https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg";
@@ -62,9 +59,6 @@ public class Member {
 
 	@Column(columnDefinition = "INT DEFAULT 0")
 	private int xp = 0;
-
-	@Column(columnDefinition = "FLOAT DEFAULT 1.25")
-	private float waifuMult = 1.25f;
 
 	@Column(columnDefinition = "BIGINT DEFAULT 0")
 	private long lastVoted = 0;
@@ -81,12 +75,13 @@ public class Member {
 	}
 
 	public boolean addXp(Guild g) {
+		User u = Main.getInfo().getUserByID(this.mid);
 		float mult = 1;
 
 		if (ExceedDAO.hasExceed(this.mid) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(this.mid)))
 			mult *= 2;
-		if (g.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).collect(Collectors.toList()).contains(waifu))
-			mult *= waifuMult;
+		if (g.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).collect(Collectors.toList()).contains(Member.getWaifu(u)))
+			mult *= WaifuDAO.getMultiplier(u).getMult();
 		if (KGotchiDAO.getKawaigotchi(mid) != null && !Objects.requireNonNull(KGotchiDAO.getKawaigotchi(mid)).isAlive())
 			mult *= 0.8;
 		else if (KGotchiDAO.getKawaigotchi(mid) != null)
@@ -157,19 +152,10 @@ public class Member {
 		this.mid = mid;
 	}
 
-	public String getWaifu() {
-		if (waifu == null) waifu = "";
-		return waifu;
-	}
-
-	public void marry(User waifu) {
-		this.waifu = waifu.getId();
-	}
-
-	public void divorce() {
-		this.waifu = "";
-		this.waifuMult *= 0.99f;
-		Helper.clamp(this.waifuMult, 1.05f, 1.25f);
+	public static String getWaifu(User u) {
+		Couple c = WaifuDAO.getCouple(u);
+		if (c == null) return "";
+		return c.getHusbando().equals(u.getId()) ? c.getWaifu() : c.getHusbando();
 	}
 
 	public String getExceed() {
@@ -198,13 +184,5 @@ public class Member {
 
 	public void setSid(String sid) {
 		this.sid = sid;
-	}
-
-	public float getWaifuMult() {
-		return waifuMult;
-	}
-
-	public long getLastVoted() {
-		return lastVoted;
 	}
 }

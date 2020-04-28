@@ -51,8 +51,8 @@ public class KissReaction extends Reaction {
 				"Temos um lolicon-sama aqui!"
 		});
 
-		if (message.getMentionedUsers().get(0) == Main.getInfo().getAPI().getSelfUser()) {
-			sendReaction(getType(), (TextChannel) channel, getInteraction()[0].getAsMention() + " tentou beijar a " + Main.getInfo().getAPI().getSelfUser().getAsMention() + " - " + this.getSelfTarget(), false);
+		if (message.getMentionedUsers().get(0) == Main.getInfo().getSelfUser()) {
+			sendReaction(getType(), (TextChannel) channel, getInteraction()[0].getAsMention() + " tentou beijar a " + Main.getInfo().getSelfUser().getAsMention() + " - " + this.getSelfTarget(), false);
 			return;
 		}
 
