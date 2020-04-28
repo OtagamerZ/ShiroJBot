@@ -26,8 +26,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções básicas">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/UpdateServerCountEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/UpdateServerCountEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -289,14 +287,7 @@
       <workItem from="1587956393058" duration="1051000" />
       <workItem from="1588028096925" duration="646000" />
       <workItem from="1588040473506" duration="45000" />
-      <workItem from="1588042300230" duration="649000" />
-    </task>
-    <task id="LOCAL-00997" summary="Melhorado o sistema de ratelimits">
-      <created>1586452948322</created>
-      <option name="number" value="00997" />
-      <option name="presentableId" value="LOCAL-00997" />
-      <option name="project" value="LOCAL" />
-      <updated>1586452948322</updated>
+      <workItem from="1588042300230" duration="1193000" />
     </task>
     <task id="LOCAL-00998" summary="Melhorado o sistema de ratelimits">
       <created>1586453039412</created>
@@ -634,7 +625,14 @@
       <option name="project" value="LOCAL" />
       <updated>1588025889150</updated>
     </task>
-    <option name="localTasksCounter" value="1046" />
+    <task id="LOCAL-01046" summary="Correções básicas">
+      <created>1588043171696</created>
+      <option name="number" value="01046" />
+      <option name="presentableId" value="LOCAL-01046" />
+      <option name="project" value="LOCAL" />
+      <updated>1588043171697</updated>
+    </task>
+    <option name="localTasksCounter" value="1047" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -654,6 +652,15 @@
     </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
@@ -868,11 +875,11 @@
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="351" y="182" key="Vcs.Push.Dialog.v2" timestamp="1588027617886">
+    <state x="351" y="182" key="Vcs.Push.Dialog.v2" timestamp="1588043277103">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
-    <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1588027617886" />
+    <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1588043277103" />
     <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1588015140612" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -950,11 +957,11 @@
     </state>
     <state x="403" y="177" key="run.anything.popup/0.0.1366.768@0.0.1366.768" timestamp="1585105034445" />
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1586290620745" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1588007193605">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="409" y="165" width="672" height="516" key="search.everywhere.popup" timestamp="1588043037032">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="409" y="156" width="672" height="489" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1585945932162" />
-    <state x="409" y="165" width="672" height="516" key="search.everywhere.popup/0.0.1366.768@0.0.1366.768" timestamp="1585282096381" />
+    <state x="409" y="165" width="672" height="516" key="search.everywhere.popup/0.0.1366.768@0.0.1366.768" timestamp="1588043037032" />
     <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1588007193605" />
   </component>
   <component name="XDebuggerManager">

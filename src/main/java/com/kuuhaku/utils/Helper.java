@@ -767,7 +767,7 @@ public class Helper {
         return true;
     }
 
-    public static JSONObject post(String endpoint, JSONObject payload) throws IOException {
+    public static JSONObject post(String endpoint, JSONObject payload, String token) throws IOException {
         String json = payload.toString();
         URL url = new URL(endpoint);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -775,6 +775,7 @@ public class Helper {
         con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
         con.addRequestProperty("Accept", "application/json");
         con.addRequestProperty("User-Agent", "Mozilla/5.0");
+        con.addRequestProperty("Authorization", token);
         con.setDoOutput(true);
         con.setDoInput(true);
         con.setRequestMethod("POST");
