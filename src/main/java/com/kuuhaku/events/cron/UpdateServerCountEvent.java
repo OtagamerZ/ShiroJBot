@@ -19,15 +19,30 @@
 package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.utils.Helper;
+import org.json.JSONObject;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
+
+import java.io.IOException;
 
 public class UpdateServerCountEvent implements Job {
 	public static JobDetail updateServerCount;
 
 	@Override
 	public void execute(JobExecutionContext context) {
-		Main.getInfo().getDblApi().setStats(Main.getInfo().getAPI().getGuilds().size());
+		int size = Main.getInfo().getAPI().getGuilds().size();
+		Main.getInfo().getDblApi().setStats(size);
+		try {
+			JSONObject jo = new JSONObject();
+
+			jo.put("shardCount", 1);
+			jo.put("guildCount", size);
+
+			Helper.post("https://discord.bots.gg/api/v1/bots/" + Main.getInfo().getAPI().getSelfUser().getId() + "/stats", jo);
+		} catch (IOException e) {
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+		}
 	}
 }
