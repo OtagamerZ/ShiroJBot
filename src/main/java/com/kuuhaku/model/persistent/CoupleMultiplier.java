@@ -18,53 +18,39 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.utils.Helper;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "exceedmember")
-public class ExceedMember {
+@Table(name = "couplemultiplier")
+public class CoupleMultiplier {
 	@Id
-	@Column(columnDefinition = "VARCHAR(191)")
 	private String id;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
-	private String exceed = "";
+	@Column(columnDefinition = "FLOAT DEFAULT 1.25")
+	private float mult;
 
-	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
-	private boolean victorious = false;
-
-	public ExceedMember(String id, String ex) {
+	public CoupleMultiplier(String id) {
 		this.id = id;
-		this.exceed = ex;
 	}
 
-	public ExceedMember() {
+	public CoupleMultiplier() {
 	}
 
 	public String getId() {
 		return id;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public float getMult() {
+		return mult;
 	}
 
-	public String getExceed() {
-		return exceed;
-	}
-
-	public void setExceed(String exceed) {
-		this.exceed = exceed;
-	}
-
-	public boolean isVictorious() {
-		return victorious;
-	}
-
-	public void setVictorious(boolean victorious) {
-		this.victorious = victorious;
+	public void decrease() {
+		this.mult *= 0.99f;
+		Helper.clamp(this.mult, 1.05f, 1.25f);
 	}
 }

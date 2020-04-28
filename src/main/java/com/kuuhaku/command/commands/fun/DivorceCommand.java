@@ -21,7 +21,6 @@ package com.kuuhaku.command.commands.fun;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.WaifuDAO;
-import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
@@ -50,14 +49,13 @@ public class DivorceCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		try {
-			com.kuuhaku.model.persistent.Member mb = MemberDAO.getMemberById(author.getId() + guild.getId());
-			if (mb.getWaifu() == null || mb.getWaifu().equals("")) {
+			if (!WaifuDAO.isWaifued(author)) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_divorce-no-waifu")).queue();
 				return;
 			}
 
 			channel.sendMessage("Que pena, eu achava que iam durar por mais tempo!").queue();
-			WaifuDAO.removeMemberWaifu(mb);
+			WaifuDAO.removeCouple(author);
 		} catch (NoResultException ignore) {
 		}
 	}
