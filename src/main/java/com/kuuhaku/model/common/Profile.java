@@ -19,6 +19,7 @@
 package com.kuuhaku.model.common;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.persistent.Member;
@@ -185,8 +186,8 @@ public class Profile {
 
 	private static void drawBadges(net.dv8tion.jda.api.entities.Member m, Guild s, Graphics2D g2d) throws IOException {
 		List<BufferedImage> badges = new ArrayList<BufferedImage>() {{
-			if (!MemberDAO.getMemberByMid(m.getUser().getId()).get(0).getExceed().isEmpty()) {
-				switch (ExceedEnums.getByName(MemberDAO.getMemberByMid(m.getUser().getId()).get(0).getExceed())) {
+			if (ExceedDAO.hasExceed(m.getId())) {
+				switch (ExceedEnums.getByName(ExceedDAO.getExceed(m.getId()))) {
 					case IMANITY:
 						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/imanity.png"))));
 						break;
