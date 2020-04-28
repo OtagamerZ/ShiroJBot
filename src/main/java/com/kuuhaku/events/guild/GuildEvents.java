@@ -134,22 +134,18 @@ public class GuildEvents extends ListenerAdapter {
 			} catch (InsufficientPermissionException ignore) {
 			}
 
-			try {
-				if (GuildDAO.getGuildById(guild.getId()).getNoSpamChannels().contains(channel.getId()) && author != Main.getInfo().getSelfUser()) {
-					if (GuildDAO.getGuildById(guild.getId()).isHardAntispam()) {
-						List<Message> h = channel.getHistory().retrievePast(20).complete();
-						h.removeIf(m -> ChronoUnit.MILLIS.between(m.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author);
+			if (GuildDAO.getGuildById(guild.getId()).getNoSpamChannels().contains(channel.getId()) && author != Main.getInfo().getSelfUser()) {
+				if (GuildDAO.getGuildById(guild.getId()).isHardAntispam()) {
+					List<Message> h = channel.getHistory().retrievePast(20).complete();
+					h.removeIf(m -> ChronoUnit.MILLIS.between(m.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author);
 
-						countSpam(member, channel, guild, h);
-					} else {
-						List<Message> h = channel.getHistory().retrievePast(20).complete();
-						h.removeIf(m -> ChronoUnit.MILLIS.between(m.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author && StringUtils.containsIgnoreCase(m.getContentRaw(), rawMessage));
+					countSpam(member, channel, guild, h);
+				} else {
+					List<Message> h = channel.getHistory().retrievePast(20).complete();
+					h.removeIf(m -> ChronoUnit.MILLIS.between(m.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author && StringUtils.containsIgnoreCase(m.getContentRaw(), rawMessage));
 
-						countSpam(member, channel, guild, h);
-					}
+					countSpam(member, channel, guild, h);
 				}
-			} catch (NullPointerException e) {
-				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
 
 			if (rawMessage.trim().equals("<@" + Main.getInfo().getSelfUser().getId() + ">") || rawMessage.trim().equals("<@!" + Main.getInfo().getSelfUser().getId() + ">")) {

@@ -18,6 +18,7 @@
 
 package com.kuuhaku.controller.sqlite;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.model.persistent.GuildConfig;
 
 import javax.persistence.EntityManager;
@@ -29,7 +30,12 @@ public class GuildDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
-			return em.find(GuildConfig.class, id);
+			GuildConfig gc = em.find(GuildConfig.class, id);
+			if (gc != null) return gc;
+			else {
+				addGuildToDB(Main.getInfo().getGuildByID(id));
+				return getGuildById(id);
+			}
 		} finally {
 			em.close();
 		}
