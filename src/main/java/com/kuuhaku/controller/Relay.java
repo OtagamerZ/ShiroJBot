@@ -175,7 +175,7 @@ public class Relay {
 			}
 
 			try {
-				if (!MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getWaifu().isEmpty())
+				if (!com.kuuhaku.model.persistent.Member.getWaifu(m.getUser()).isEmpty())
 					badges.append(TagIcons.getTag(TagIcons.MARRIED));
 			} catch (Exception ignore) {
 			}

@@ -21,6 +21,7 @@ package com.kuuhaku.command.commands.information;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.postgresql.WaifuDAO;
 import com.kuuhaku.controller.sqlite.KGotchiDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
@@ -58,14 +59,14 @@ public class MyBuffsCommand extends Command {
 		EmbedBuilder eb = new EmbedBuilder();
 
 		boolean exceed = Main.getInfo().getWinner().equals(m.getExceed());
-		boolean waifu = guild.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).collect(Collectors.toList()).contains(m.getWaifu());
+		boolean waifu = guild.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).collect(Collectors.toList()).contains(com.kuuhaku.model.persistent.Member.getWaifu(author));
 		boolean kgotchi = kg != null;
 
 		eb.setTitle(":level_slider: Seus modificadores de XP");
 
 		if (exceed) eb.addField("Seu exceed foi vitorioso", "+200% XP ganho", false);
 		if (waifu)
-			eb.addField("Você está no mesmo servidor que sua waifu/husbando", "+" + (int) (m.getWaifuMult() * 100) + "% XP ganho", false);
+			eb.addField("Você está no mesmo servidor que sua waifu/husbando", "+" + (int) (WaifuDAO.getMultiplier(author).getMult() * 100) + "% XP ganho", false);
 		if (kgotchi)
 			if (kg.isAlive() && kg.getTier() != Tier.CHILD)
 				eb.addField("Seu kawaigotchi é um " + kg.getTier().toString().toLowerCase(), "+" + (int) (kg.getTier().getUserXpMult() * 100) + "% XP ganho", false);

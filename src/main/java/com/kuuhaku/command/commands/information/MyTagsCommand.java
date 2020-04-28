@@ -120,9 +120,9 @@ public class MyTagsCommand extends Command {
             }
 
             try {
-                if (!MemberDAO.getMemberById(author.getId() + guild.getId()).getWaifu().isEmpty())
-                    badges.append(TagIcons.getTag(TagIcons.MARRIED));
-            } catch (Exception ignore) {
+				if (!com.kuuhaku.model.persistent.Member.getWaifu(author).isEmpty())
+					badges.append(TagIcons.getTag(TagIcons.MARRIED));
+			} catch (Exception ignore) {
             }
         }
 

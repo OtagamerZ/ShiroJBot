@@ -60,7 +60,7 @@ public class BotInfoCommand extends Command {
 		EmbedBuilder eb = new EmbedBuilder();
 
 		eb.setTitle(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-title"));
-		eb.setThumbnail(Main.getInfo().getAPI().getSelfUser().getAvatarUrl());
+		eb.setThumbnail(Main.getInfo().getSelfUser().getAvatarUrl());
 		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-1"), Main.getInfo().getUserByID(Main.getInfo().getNiiChan()).getAsTag(), true);
 		StringBuilder sb = new StringBuilder();
 		Main.getInfo().getDevelopers().forEach(d -> sb.append("`").append(Main.getInfo().getUserByID(d).getAsTag()).append("`  "));
