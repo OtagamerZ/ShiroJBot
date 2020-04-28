@@ -158,10 +158,6 @@ public class Member {
 		return c.getHusbando().equals(u.getId()) ? c.getWaifu() : c.getHusbando();
 	}
 
-	public String getExceed() {
-		return ExceedDAO.getExceed(this.mid);
-	}
-
 	public boolean isRulesSent() {
 		return rulesSent;
 	}

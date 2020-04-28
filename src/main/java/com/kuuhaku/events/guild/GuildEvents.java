@@ -256,6 +256,7 @@ public class GuildEvents extends ListenerAdapter {
 						m.setSid(guild.getId());
 						MemberDAO.updateMemberConfigs(m);
 					}
+
 					boolean lvlUp = m.addXp(guild);
 					if (lvlUp && GuildDAO.getGuildById(guild.getId()).isLvlNotif()) {
 						if (lvlChannel != null) {
