@@ -43,6 +43,7 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.InviteAction;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -53,13 +54,12 @@ import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -765,5 +765,29 @@ public class Helper {
             ShiroInfo.getRatelimit().put(author, true);
         spawnAd(channel);
         return true;
+    }
+
+    public static JSONObject post(String endpoint, JSONObject payload) throws IOException {
+        String json = payload.toString();
+        URL url = new URL(endpoint);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setConnectTimeout(5000);
+        con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+        con.addRequestProperty("Accept", "application/json");
+        con.addRequestProperty("User-Agent", "Mozilla/5.0");
+        con.setDoOutput(true);
+        con.setDoInput(true);
+        con.setRequestMethod("POST");
+
+        try (OutputStream oStream = con.getOutputStream()) {
+            oStream.write(json.getBytes(StandardCharsets.UTF_8));
+        }
+
+        try (InputStream iStream = new BufferedInputStream(con.getInputStream())) {
+            String data = IOUtils.toString(iStream, StandardCharsets.UTF_8);
+            return new JSONObject(data);
+        } finally {
+            con.disconnect();
+        }
     }
 }
