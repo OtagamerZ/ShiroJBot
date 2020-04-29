@@ -79,9 +79,9 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		cmdManager = new CommandManager();
 
 		EnumSet<GatewayIntent> intents = GatewayIntent.getIntents(GatewayIntent.DEFAULT);
-		intents.add(GatewayIntent.GUILD_MEMBERS);
 
 		JDA api = JDABuilder.create(intents)
+				.enableIntents(GatewayIntent.GUILD_MEMBERS)
 				.setToken(info.getBotToken())
 				.setChunkingFilter(ChunkingFilter.ALL)
 				.setMemberCachePolicy(MemberCachePolicy.ALL)
@@ -90,7 +90,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				.build()
 				.awaitReady();
 
-		JDA jbr = JDABuilder.create(GatewayIntent.getIntents(GatewayIntent.DEFAULT))
+		JDA jbr = JDABuilder.create(intents)
 				.setToken(System.getenv("JIBRIL_TOKEN"))
 				.setChunkingFilter(ChunkingFilter.NONE)
 				.setMemberCachePolicy(MemberCachePolicy.NONE)
