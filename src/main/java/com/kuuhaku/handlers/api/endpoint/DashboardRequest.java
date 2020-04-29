@@ -18,6 +18,7 @@
 
 package com.kuuhaku.handlers.api.endpoint;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.GlobalMessageDAO;
 import com.kuuhaku.controller.postgresql.TokenDAO;
 import com.kuuhaku.controller.sqlite.DashboardDAO;
@@ -25,16 +26,29 @@ import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.model.persistent.GlobalMessage;
 import com.kuuhaku.model.persistent.Member;
+import com.kuuhaku.utils.Helper;
+import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
 public class DashboardRequest {
 
-	@RequestMapping(value = "/api/auth", method = RequestMethod.POST)
-	public String validateAccount(@RequestBody String payload) {
-		return payload;
+	@RequestMapping(value = "/api/auth", method = RequestMethod.GET)
+	public String validateAccount(@RequestParam(value = "code") String code) throws IOException {
+		JSONObject jo = new JSONObject();
+
+		jo.put("client_id", Main.getInfo().getSelfUser().getId());
+		jo.put("client_secret", System.getenv("CLIENT_SECRET"));
+		jo.put("grant_type", "authorization_code");
+		jo.put("code", code);
+		jo.put("redirect_uri", "http://" + System.getenv("SERVER_URL") + "/api/auth");
+		jo.put("scope", "identify");
+
+		return Helper.post("https://discordapp.com/api/v6/users/@me", jo, Collections.singletonMap("Content-Type", "application/x-www-form-urlencoded"), "").toString();
 	}
 
 	@RequestMapping(value = "/app/messages", method = RequestMethod.POST)
