@@ -772,10 +772,32 @@ public class Helper {
         URL url = new URL(endpoint);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setConnectTimeout(5000);
-        con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+        con.addRequestProperty("Content-Type", "application/json; charset=UTF-8");
         con.addRequestProperty("Accept", "application/json");
         con.addRequestProperty("User-Agent", "Mozilla/5.0");
         con.addRequestProperty("Authorization", token);
+        con.setDoOutput(true);
+        con.setDoInput(true);
+        con.setRequestMethod("POST");
+
+        try (OutputStream oStream = con.getOutputStream()) {
+            oStream.write(json.getBytes(StandardCharsets.UTF_8));
+        }
+
+        try (InputStream iStream = new BufferedInputStream(con.getInputStream())) {
+            String data = IOUtils.toString(iStream, StandardCharsets.UTF_8);
+            return new JSONObject(data);
+        } finally {
+            con.disconnect();
+        }
+    }
+
+    public static JSONObject post(String endpoint, JSONObject payload, Map<String, String> headers, String token) throws IOException {
+        String json = payload.toString();
+        URL url = new URL(endpoint);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setConnectTimeout(5000);
+        headers.entrySet().forEach(e -> con.addRequestProperty(e.getKey(), e.getValue()));
         con.setDoOutput(true);
         con.setDoInput(true);
         con.setRequestMethod("POST");
