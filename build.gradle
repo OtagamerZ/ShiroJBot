@@ -59,7 +59,7 @@ stage.dependsOn(copyToLib)
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.1.6.RELEASE'
-    compile 'net.dv8tion:JDA:4.1.1_108'
+    compile 'net.dv8tion:JDA:4.1.1_140'
     compile 'club.minnced:discord-webhooks:0.1.7'
     compile 'com.github.SvenWoltmann:color-thief-java:master-SNAPSHOT'
     compile 'com.enigmabridge:hibernate4-sqlite-dialect:0.1.2'
@@ -99,6 +99,7 @@ dependencies {
     compile group: 'com.github.treeder', name: 'kitty-cache', version: '065b8d34e2'
     compile group: 'com.corundumstudio.socketio', name: 'netty-socketio', version: '1.7.17'
     compile group: 'org.python', name: 'jython-standalone', version: '2.7.1'
+    compile 'com.sedmelluq:jda-nas:1.1.0'
     implementation 'com.graphql-java:graphql-java:2019-05-08T02-56-27-cca4316'
 }
 
