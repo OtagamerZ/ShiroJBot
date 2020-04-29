@@ -35,15 +35,16 @@ import com.kuuhaku.managers.CommandManager;
 import com.kuuhaku.model.common.DataDump;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import io.socket.client.IO;
-import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.exceptions.ContextException;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import org.springframework.boot.SpringApplication;
 
@@ -52,6 +53,7 @@ import java.net.BindException;
 import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.Executors;
 
@@ -74,16 +76,22 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		relay = new Relay();
 
 		cmdManager = new CommandManager();
+		EnumSet<GatewayIntent> intents = GatewayIntent.getIntents(GatewayIntent.DEFAULT);
 
-		JDA api = new JDABuilder(AccountType.BOT)
-				.setToken(info.getBotToken())
+		JDA jbr = JDABuilder.create(intents)
+				.setToken(System.getenv("JIBRIL_TOKEN"))
 				.setChunkingFilter(ChunkingFilter.NONE)
+				.setBulkDeleteSplittingEnabled(false)
 				.build()
 				.awaitReady();
 
-		JDA jbr = new JDABuilder(AccountType.BOT)
-				.setToken(System.getenv("JIBRIL_TOKEN"))
-				.setChunkingFilter(ChunkingFilter.NONE)
+		intents.add(GatewayIntent.GUILD_MEMBERS);
+
+		JDA api = JDABuilder.create(intents)
+				.setToken(info.getBotToken())
+				.setChunkingFilter(ChunkingFilter.ALL)
+				.setBulkDeleteSplittingEnabled(false)
+				.setAudioSendFactory(new NativeAudioSendFactory())
 				.build()
 				.awaitReady();
 

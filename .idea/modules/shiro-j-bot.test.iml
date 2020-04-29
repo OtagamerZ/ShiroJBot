@@ -18,7 +18,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="shiro-j-bot.main" />
     <orderEntry type="library" name="Gradle: com.github.ygimenez:PaginationUtils:90dac54185" level="project" />
-    <orderEntry type="library" name="Gradle: net.dv8tion:JDA:4.1.1_108" level="project" />
+    <orderEntry type="library" name="Gradle: net.dv8tion:JDA:4.1.1_140" level="project" />
     <orderEntry type="library" name="Gradle: club.minnced:discord-webhooks:0.1.7" level="project" />
     <orderEntry type="library" name="Gradle: com.github.SvenWoltmann:color-thief-java:master-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Gradle: com.enigmabridge:hibernate4-sqlite-dialect:0.1.2" level="project" />
@@ -38,6 +38,9 @@
     <orderEntry type="library" name="Gradle: org.hibernate:hibernate-core:5.4.2.Final" level="project" />
     <orderEntry type="library" name="Gradle: org.quartz-scheduler:quartz:2.3.1" level="project" />
     <orderEntry type="library" name="Gradle: com.sedmelluq:lava-common:1.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.sedmelluq:jda-nas:1.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.sedmelluq:udp-queue:1.0.8" level="project" />
+    <orderEntry type="library" name="Gradle: com.sedmelluq:lavaplayer-common:1.0.6" level="project" />
     <orderEntry type="library" name="Gradle: commons-io:commons-io:2.6" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.commons:commons-lang3:3.8.1" level="project" />
     <orderEntry type="library" name="Gradle: com.mchange:c3p0:0.9.5.4" level="project" />
