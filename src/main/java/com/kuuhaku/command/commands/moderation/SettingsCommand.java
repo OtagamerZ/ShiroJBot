@@ -51,7 +51,7 @@ public class SettingsCommand extends Command {
 		if (args.length == 0) {
 			Settings.embedConfig(message);
 			return;
-		} else if (args.length == 1) {
+		} else if (args.length == 1 && !(args[0].toLowerCase().equals("ajuda") || args[0].toLowerCase().equals("help"))) {
 			channel.sendMessage(":x: | Nenhum argumento informado para a configuração `" + args[0] + "`.").queue();
 			return;
 		}
