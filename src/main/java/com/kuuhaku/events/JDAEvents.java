@@ -40,7 +40,7 @@ import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
-import net.dv8tion.jda.api.events.guild.member.GuildMemberLeaveEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageUpdateEvent;
@@ -202,7 +202,7 @@ public class JDAEvents extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildMemberLeave(@NotNull GuildMemberLeaveEvent event) {
+	public void onGuildMemberRemove(@Nonnull GuildMemberRemoveEvent event) {
 		try {
 			GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
 
