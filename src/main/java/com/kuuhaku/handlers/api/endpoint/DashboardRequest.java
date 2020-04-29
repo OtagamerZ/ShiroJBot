@@ -25,15 +25,17 @@ import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.model.persistent.GlobalMessage;
 import com.kuuhaku.model.persistent.Member;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 public class DashboardRequest {
+
+	@RequestMapping(value = "/api/auth", method = RequestMethod.POST)
+	public String validateAccount(@RequestBody String payload) {
+		return payload;
+	}
 
 	@RequestMapping(value = "/app/messages", method = RequestMethod.POST)
 	public List<GlobalMessage> retrieveMessageCache(@RequestHeader(value = "token") String token) {
