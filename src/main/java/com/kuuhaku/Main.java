@@ -46,6 +46,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.exceptions.ContextException;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.springframework.boot.SpringApplication;
 
 import javax.persistence.NoResultException;
@@ -76,22 +77,24 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		relay = new Relay();
 
 		cmdManager = new CommandManager();
+
 		EnumSet<GatewayIntent> intents = GatewayIntent.getIntents(GatewayIntent.DEFAULT);
-
-		JDA jbr = JDABuilder.create(intents)
-				.setToken(System.getenv("JIBRIL_TOKEN"))
-				.setChunkingFilter(ChunkingFilter.NONE)
-				.setBulkDeleteSplittingEnabled(false)
-				.build()
-				.awaitReady();
-
 		intents.add(GatewayIntent.GUILD_MEMBERS);
 
 		JDA api = JDABuilder.create(intents)
 				.setToken(info.getBotToken())
 				.setChunkingFilter(ChunkingFilter.ALL)
+				.setMemberCachePolicy(MemberCachePolicy.ALL)
 				.setBulkDeleteSplittingEnabled(false)
 				.setAudioSendFactory(new NativeAudioSendFactory())
+				.build()
+				.awaitReady();
+
+		JDA jbr = JDABuilder.create(GatewayIntent.getIntents(GatewayIntent.DEFAULT))
+				.setToken(System.getenv("JIBRIL_TOKEN"))
+				.setChunkingFilter(ChunkingFilter.NONE)
+				.setMemberCachePolicy(MemberCachePolicy.NONE)
+				.setBulkDeleteSplittingEnabled(false)
 				.build()
 				.awaitReady();
 
