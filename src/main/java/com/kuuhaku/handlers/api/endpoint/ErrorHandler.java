@@ -18,23 +18,12 @@
 
 package com.kuuhaku.handlers.api.endpoint;
 
-import com.kuuhaku.handlers.api.exception.Exception;
-import com.kuuhaku.handlers.api.exception.InvalidTokenException;
-import com.kuuhaku.handlers.api.exception.NotEnoughArgsException;
-import com.kuuhaku.handlers.api.exception.UnauthorizedException;
-import org.springframework.boot.web.servlet.error.ErrorController;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
-import javax.persistence.NoResultException;
-
-@RestController
+/*@RestController
 @ControllerAdvice
 public class ErrorHandler implements ErrorController {
 	@RequestMapping("/error")
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	public Exception error(java.lang.Exception t) {
-		t.printStackTrace();
+	public Exception error() {
 		return new Exception(500, "Internal server error");
 	}
 
@@ -66,4 +55,4 @@ public class ErrorHandler implements ErrorController {
 	public String getErrorPath() {
 		return "/error";
 	}
-}
+}*/
