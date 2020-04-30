@@ -32,8 +32,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 
@@ -48,11 +46,11 @@ public class DashboardRequest {
 		jo.put("client_secret", System.getenv("BOT_SECRET"));
 		jo.put("grant_type", "authorization_code");
 		jo.put("code", code);
-		jo.put("redirect_uri", URLEncoder.encode("http://" + System.getenv("SERVER_URL") + "/api/auth", StandardCharsets.UTF_8));
+		jo.put("redirect_uri", "http://" + System.getenv("SERVER_URL") + "/api/auth");
 		jo.put("scope", "identify");
 
 		/*JSONObject res =*/
-		return Helper.post("https://webhook.site/c2963a5b-119f-4502-ae78-70a54064842a", jo, Collections.emptyMap(), "").toString();
+		return Helper.post("https://https://discordapp.com/api/v6/oauth2/token", jo, Collections.emptyMap(), "").toString();
 
 		/*return res.getString("access_token");*/
 	}
