@@ -34,6 +34,7 @@ public class ErrorHandler implements ErrorController {
 	@RequestMapping("/error")
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public Exception error(Throwable t) {
+		System.out.println(t.toString());
 		t.printStackTrace();
 		return new Exception(500, "Internal server error");
 	}
