@@ -50,7 +50,7 @@ public class DashboardRequest {
 		jo.put("scope", "identify");
 
 		/*JSONObject res =*/
-		return Helper.post("https://https://discordapp.com/api/v6/oauth2/token", jo, Collections.emptyMap(), "").toString();
+		return Helper.post("https://discordapp.com/api/v6/oauth2/token", jo, Collections.emptyMap(), "").toString();
 
 		/*return res.getString("access_token");*/
 	}

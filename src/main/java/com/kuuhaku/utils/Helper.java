@@ -52,6 +52,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.python.google.common.collect.Lists;
 
@@ -803,7 +804,11 @@ public class Helper {
         post.setHeader("Authorization", token);
         headers.forEach(post::setHeader);
         post.setEntity(new StringEntity(payload.toString(), ContentType.APPLICATION_FORM_URLENCODED));
-        return new JSONObject(IOUtils.toString(ShiroInfo.getHttpBuilder().build().execute(post).getEntity().getContent(), StandardCharsets.UTF_8));
+        try {
+            return new JSONObject(IOUtils.toString(ShiroInfo.getHttpBuilder().build().execute(post).getEntity().getContent(), StandardCharsets.UTF_8));
+        } catch (JSONException e) {
+            return new JSONObject();
+        }
     }
 
     public static JSONObject get(String endpoint, JSONObject payload, Map<String, String> headers, String token) throws IOException, URISyntaxException {
@@ -813,7 +818,10 @@ public class Helper {
         HttpGet get = new HttpGet();
         get.setHeader("Authorization", token);
         headers.forEach(get::setHeader);
-
-        return new JSONObject(IOUtils.toString(ShiroInfo.getHttpBuilder().build().execute(get).getEntity().getContent(), StandardCharsets.UTF_8));
+        try {
+            return new JSONObject(IOUtils.toString(ShiroInfo.getHttpBuilder().build().execute(get).getEntity().getContent(), StandardCharsets.UTF_8));
+        } catch (JSONException e) {
+            return new JSONObject();
+        }
     }
 }
