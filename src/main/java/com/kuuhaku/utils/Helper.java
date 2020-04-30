@@ -803,7 +803,6 @@ public class Helper {
         post.setHeader("Authorization", token);
         headers.forEach(post::setHeader);
         post.setEntity(new StringEntity(payload.toString(), ContentType.APPLICATION_FORM_URLENCODED));
-
         return new JSONObject(IOUtils.toString(ShiroInfo.getHttpBuilder().build().execute(post).getEntity().getContent(), StandardCharsets.UTF_8));
     }
 
