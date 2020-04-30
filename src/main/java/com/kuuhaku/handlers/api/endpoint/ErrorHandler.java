@@ -33,8 +33,7 @@ import javax.persistence.NoResultException;
 public class ErrorHandler implements ErrorController {
 	@RequestMapping("/error")
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	public Exception error(Throwable t) {
-		System.out.println(t.toString());
+	public Exception error(java.lang.Exception t) {
 		t.printStackTrace();
 		return new Exception(500, "Internal server error");
 	}
