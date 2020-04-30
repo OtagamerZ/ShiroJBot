@@ -34,6 +34,7 @@ import com.spaceprogram.kittycache.KittyCache;
 import io.socket.client.Socket;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.discordbots.api.client.DiscordBotListAPI;
 import org.jetbrains.annotations.NotNull;
 
@@ -95,6 +96,7 @@ public class ShiroInfo {
 				}
 			}
 	);
+	private static final HttpClientBuilder httpBuilder = HttpClientBuilder.create();
 
 	//STATIC CONSTRUCTOR
 	static {
@@ -142,6 +144,10 @@ public class ShiroInfo {
 
 	public static String getSupportServerID() {
 		return supportServerID;
+	}
+
+	public static HttpClientBuilder getHttpBuilder() {
+		return httpBuilder;
 	}
 
 	//NON-STATIC
