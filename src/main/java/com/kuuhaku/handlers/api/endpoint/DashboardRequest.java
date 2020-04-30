@@ -32,6 +32,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 
@@ -42,15 +44,15 @@ public class DashboardRequest {
 	public String validateAccount(@RequestParam(value = "code") String code) throws IOException, URISyntaxException {
 		JSONObject jo = new JSONObject();
 
-		jo.put("client_id", Main.getInfo().getSelfUser().getId());
-		jo.put("client_secret", System.getenv("CLIENT_SECRET"));
+		jo.put("grant_type", "authorization_code");
 		jo.put("code", code);
+		jo.put("redirect_uri", URLEncoder.encode("http://" + System.getenv("SERVER_URL") + "/api/auth", StandardCharsets.UTF_8));
 		jo.put("scope", "identify");
 
 		/*JSONObject res =*/
 		return Helper.post(
-				"https://discordapp.com/api/oauth2/token?grant_type=authorization_code&code=" + code + "&redirect_uri=http://" + System.getenv("SERVER_URL") + "/api/auth",
-				new JSONObject(), Collections.emptyMap(),
+				"https://discordapp.com/api/oauth2/token",
+				jo, Collections.emptyMap(),
 				"Basic " + Main.getInfo().getSelfUser().getId() + ":" + System.getenv("BOT_SECRET")
 		).toString();
 
