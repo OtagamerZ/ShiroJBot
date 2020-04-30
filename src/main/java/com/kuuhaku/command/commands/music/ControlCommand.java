@@ -64,7 +64,10 @@ public class ControlCommand extends Command {
 			return;
 		}
 
-		if (member.getVoiceState().getChannel() == null || !member.getVoiceState().getChannel().getMembers().contains(guild.getSelfMember())) {
+		if (Music.getGuildAudioPlayer(guild, (TextChannel) channel).player.getPlayingTrack() == null) {
+			channel.sendMessage(":x: | Não há nenhuma música tocando no momento.").queue();
+			return;
+		} else if (member.getVoiceState().getChannel() == null || !member.getVoiceState().getChannel().getMembers().contains(guild.getSelfMember())) {
 			channel.sendMessage(":x: | Este comando só pode ser usado se estiver em um canal de voz com a Shiro.").queue();
 			return;
 		} else if (!Helper.hasPermission(member, PrivilegeLevel.MOD) && !((User) Music.getGuildAudioPlayer(guild, (TextChannel) channel).player.getPlayingTrack().getUserData()).getId().equals(author.getId())) {
