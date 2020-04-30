@@ -49,7 +49,7 @@ public class DashboardRequest {
 		jo.put("scope", "identify");
 
 		try {
-			return Helper.post("https://discordapp.com/api/v6/users/@me", jo, Collections.singletonMap("Content-Type", "application/x-www-form-urlencoded"), "").toString();
+			return Helper.post("https://discordapp.com/api/oauth2/token", jo, Collections.emptyMap(), "").toString();
 		} catch (IOException e) {
 			return e.toString();
 		}
