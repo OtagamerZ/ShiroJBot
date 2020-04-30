@@ -45,7 +45,9 @@ import net.dv8tion.jda.api.requests.restaction.InviteAction;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.logging.log4j.LogManager;
@@ -61,6 +63,7 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.HttpURLConnection;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
@@ -802,5 +805,16 @@ public class Helper {
         post.setEntity(new StringEntity(payload.toString(), ContentType.APPLICATION_FORM_URLENCODED));
 
         return new JSONObject(IOUtils.toString(ShiroInfo.getHttpBuilder().build().execute(post).getEntity().getContent(), StandardCharsets.UTF_8));
+    }
+
+    public static JSONObject get(String endpoint, JSONObject payload, Map<String, String> headers, String token) throws IOException, URISyntaxException {
+        URIBuilder ub = new URIBuilder(endpoint);
+        payload.toMap().forEach((k, v) -> ub.addParameter(k, String.valueOf(v)));
+
+        HttpGet get = new HttpGet();
+        get.setHeader("Authorization", token);
+        headers.forEach(get::setHeader);
+
+        return new JSONObject(IOUtils.toString(ShiroInfo.getHttpBuilder().build().execute(get).getEntity().getContent(), StandardCharsets.UTF_8));
     }
 }
