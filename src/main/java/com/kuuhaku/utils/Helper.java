@@ -48,7 +48,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
@@ -797,13 +796,11 @@ public class Helper {
     }
 
     public static JSONObject post(String endpoint, JSONObject payload, Map<String, String> headers, String token) throws IOException {
-        HttpClientBuilder httpBuilder = HttpClientBuilder.create();
-
         HttpPost post = new HttpPost(endpoint);
         post.setHeader("Authorization", token);
         headers.forEach(post::setHeader);
         post.setEntity(new StringEntity(payload.toString(), ContentType.APPLICATION_FORM_URLENCODED));
 
-        return new JSONObject(httpBuilder.build().execute(post).getEntity());
+        return new JSONObject(IOUtils.toString(ShiroInfo.getHttpBuilder().build().execute(post).getEntity().getContent(), StandardCharsets.UTF_8));
     }
 }
