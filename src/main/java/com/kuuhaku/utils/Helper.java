@@ -45,6 +45,10 @@ import net.dv8tion.jda.api.requests.restaction.InviteAction;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
@@ -793,24 +797,13 @@ public class Helper {
     }
 
     public static JSONObject post(String endpoint, JSONObject payload, Map<String, String> headers, String token) throws IOException {
-        String json = payload.toString();
-        URL url = new URL(endpoint);
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setConnectTimeout(5000);
-        headers.entrySet().forEach(e -> con.addRequestProperty(e.getKey(), e.getValue()));
-        con.setDoOutput(true);
-        con.setDoInput(true);
-        con.setRequestMethod("POST");
+        HttpClientBuilder httpBuilder = HttpClientBuilder.create();
 
-        try (OutputStream oStream = con.getOutputStream()) {
-            oStream.write(json.getBytes(StandardCharsets.UTF_8));
-        }
+        HttpPost post = new HttpPost(endpoint);
+        post.setHeader("Authorization", token);
+        headers.forEach(post::setHeader);
+        post.setEntity(new StringEntity(payload.toString(), ContentType.APPLICATION_FORM_URLENCODED));
 
-        try (InputStream iStream = new BufferedInputStream(con.getInputStream())) {
-            String data = IOUtils.toString(iStream, StandardCharsets.UTF_8);
-            return new JSONObject(data);
-        } finally {
-            con.disconnect();
-        }
+        return new JSONObject(httpBuilder.build().execute(post).getEntity());
     }
 }
