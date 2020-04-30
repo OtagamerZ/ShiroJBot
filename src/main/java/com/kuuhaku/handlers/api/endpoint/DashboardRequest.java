@@ -39,7 +39,7 @@ import java.util.List;
 public class DashboardRequest {
 
 	@RequestMapping(value = "/api/auth", method = RequestMethod.GET)
-	public String validateAccount(@RequestParam(value = "code", defaultValue = "") String code) throws IOException, URISyntaxException {
+	public String validateAccount(@RequestParam(value = "code") String code) throws IOException, URISyntaxException {
 		JSONObject jo = new JSONObject();
 
 		jo.put("client_id", Main.getInfo().getSelfUser().getId());
@@ -47,13 +47,14 @@ public class DashboardRequest {
 		jo.put("code", code);
 		jo.put("scope", "identify");
 
-		JSONObject res = Helper.post(
+		/*JSONObject res =*/
+		return Helper.post(
 				"https://discordapp.com/api/oauth2/token?grant_type=authorization_code&code=" + code + "&redirect_uri=http://" + System.getenv("SERVER_URL") + "/api/auth",
 				new JSONObject(), Collections.emptyMap(),
 				"Basic " + Main.getInfo().getSelfUser().getId() + ":" + System.getenv("BOT_SECRET")
-		);
+		).toString();
 
-		return res.getString("access_token");
+		/*return res.getString("access_token");*/
 	}
 
 	@RequestMapping(value = "/app/messages", method = RequestMethod.POST)
