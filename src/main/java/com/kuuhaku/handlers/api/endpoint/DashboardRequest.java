@@ -49,7 +49,7 @@ public class DashboardRequest {
 
 		JSONObject res = Helper.post(
 				"https://discordapp.com/api/oauth2/token?grant_type=authorization_code&code=" + code + "&redirect_uri=http://" + System.getenv("SERVER_URL") + "/api/auth",
-				jo, Collections.emptyMap(),
+				new JSONObject(), Collections.emptyMap(),
 				"Basic " + Main.getInfo().getSelfUser().getId() + ":" + System.getenv("BOT_SECRET")
 		);
 
