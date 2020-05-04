@@ -773,7 +773,7 @@ public class Helper {
 		return true;
 	}
 
-	public static JSONObject post(String endpoint, JSONObject payload, String token) throws IOException {
+	public static JSONObject post(String endpoint, JSONObject payload, String token) {
 		HttpRequest req = HttpRequest.post(endpoint)
 				.header("Content-Type", "application/json; charset=UTF-8")
 				.header("Accept", "application/json")
@@ -784,11 +784,20 @@ public class Helper {
 		return new JSONObject(req.body());
 	}
 
-	public static JSONObject post(String endpoint, JSONObject payload, Map<String, String> headers, String token) throws IOException {
+	public static JSONObject post(String endpoint, JSONObject payload, Map<String, String> headers, String token) {
 		HttpRequest req = HttpRequest.post(endpoint)
 				.headers(headers)
 				.header("Authorization", token)
 				.send(payload.toString());
+
+		return new JSONObject(req.body());
+	}
+
+	public static JSONObject post(String endpoint, String payload, Map<String, String> headers, String token) {
+		HttpRequest req = HttpRequest.post(endpoint)
+				.headers(headers)
+				.header("Authorization", token)
+				.send(payload);
 
 		return new JSONObject(req.body());
 	}
@@ -799,5 +808,11 @@ public class Helper {
 				.header("Authorization", token);
 
 		return new JSONObject(req.body());
+	}
+
+	public static String urlEncode(JSONObject payload) {
+		String[] params = payload.toMap().entrySet().stream().map(e -> e.getKey() + "=" + e.getValue()).toArray(String[]::new);
+
+		return String.join("&", params);
 	}
 }
