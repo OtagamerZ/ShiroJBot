@@ -409,21 +409,7 @@
       <workItem from="1588247986423" duration="14371000" />
       <workItem from="1588270348140" duration="24000" />
       <workItem from="1588608134288" duration="1231000" />
-      <workItem from="1588614144905" duration="2825000" />
-    </task>
-    <task id="LOCAL-01037" summary="Comando para ver modificadores de xp ativos">
-      <created>1587384749094</created>
-      <option name="number" value="01037" />
-      <option name="presentableId" value="LOCAL-01037" />
-      <option name="project" value="LOCAL" />
-      <updated>1587384749094</updated>
-    </task>
-    <task id="LOCAL-01038" summary="Adicionado comando HTTPCat">
-      <created>1587558172418</created>
-      <option name="number" value="01038" />
-      <option name="presentableId" value="LOCAL-01038" />
-      <option name="project" value="LOCAL" />
-      <updated>1587558172419</updated>
+      <workItem from="1588614144905" duration="3368000" />
     </task>
     <task id="LOCAL-01039" summary="Correções básicas">
       <created>1587921459921</created>
@@ -754,7 +740,21 @@
       <option name="project" value="LOCAL" />
       <updated>1588616723365</updated>
     </task>
-    <option name="localTasksCounter" value="1086" />
+    <task id="LOCAL-01086" summary="Criação da API de autenticação para o dashboard">
+      <created>1588616981217</created>
+      <option name="number" value="01086" />
+      <option name="presentableId" value="LOCAL-01086" />
+      <option name="project" value="LOCAL" />
+      <updated>1588616981217</updated>
+    </task>
+    <task id="LOCAL-01087" summary="Criação da API de autenticação para o dashboard">
+      <created>1588617205191</created>
+      <option name="number" value="01087" />
+      <option name="presentableId" value="LOCAL-01087" />
+      <option name="project" value="LOCAL" />
+      <updated>1588617205191</updated>
+    </task>
+    <option name="localTasksCounter" value="1088" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -998,12 +998,12 @@
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1588617003550">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1588617209949">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1588044529527" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1588617003550" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1588617209949" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
