@@ -92,7 +92,7 @@ public abstract class Reaction extends Command {
 
 	public abstract void answer(TextChannel chn);
 
-	public void sendReaction(String type, TextChannel chn, String message, boolean allowReact) {
+	public void sendReaction(String type, TextChannel chn, User target, String message, boolean allowReact) {
 		Message msg = chn.sendMessage("Conectando à API...").addFile(new File(Objects.requireNonNull(this.getClass().getClassLoader().getResource("loading.gif")).getPath())).complete();
 		try {
 			HttpURLConnection con = (HttpURLConnection) new URL("https://shiro-api.herokuapp.com/reaction?type=" + type).openConnection();
@@ -110,7 +110,7 @@ public abstract class Reaction extends Command {
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setImage(url);
 
-			Helper.sendReaction(this, url, chn, allowReact).accept(chn.sendMessage(message).embed(eb.build()));
+			Helper.sendReaction(this, url, target, chn, allowReact).accept(chn.sendMessage(message).embed(eb.build()));
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error("Erro ao recuperar API: " + e.getStackTrace()[0]);
 		} catch (IllegalAccessException e) {
