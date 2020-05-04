@@ -35,7 +35,7 @@ public class NopeReaction extends Reaction {
 				"Ha ah, errou!"
 		});
 
-		sendReaction(getType(), (TextChannel) channel, author.getAsMention() + " esquivou! - " + this.getReaction(), false);
+		sendReaction(getType(), (TextChannel) channel, null, author.getAsMention() + " esquivou! - " + this.getReaction(), false);
 	}
 
 	@Override

@@ -35,7 +35,7 @@ public class RunReaction extends Reaction {
 				"Foge geral!"
 		});
 
-		sendReaction(getType(), (TextChannel) channel, author.getAsMention() + " está fugindo! - " + this.getReaction(), false);
+		sendReaction(getType(), (TextChannel) channel, null, author.getAsMention() + " está fugindo! - " + this.getReaction(), false);
 	}
 
 	@Override

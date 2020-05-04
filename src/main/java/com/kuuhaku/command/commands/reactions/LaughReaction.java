@@ -35,7 +35,7 @@ public class LaughReaction extends Reaction {
 				"Asdjasdnlad."
 		});
 
-		sendReaction(getType(), (TextChannel) channel, author.getAsMention() + " está rindo! - " + this.getReaction(), false);
+		sendReaction(getType(), (TextChannel) channel, null, author.getAsMention() + " está rindo! - " + this.getReaction(), false);
 	}
 
 	@Override
