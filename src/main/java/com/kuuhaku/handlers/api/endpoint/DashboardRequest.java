@@ -50,7 +50,7 @@ public class DashboardRequest {
 		jo.put("scope", "identify");
 
 		/*JSONObject res =*/
-		return Helper.post("https://webhook.site/6b4b4be3-e216-4122-b547-42e1e93fbdc6", Helper.urlEncode(jo), Collections.singletonMap("Content-Type", "x-www-form-urlencoded"), "").toString();
+		return Helper.post("https://discordapp.com/api/v6/oauth2/token", Helper.urlEncode(jo), Collections.singletonMap("Content-Type", "application/x-www-form-urlencoded"), "").toString();
 
 		/*return res.getString("access_token");*/
 	}
