@@ -54,11 +54,11 @@ public class SlapReaction extends Reaction {
 			});
 
 			if (message.getMentionedUsers().get(0) == Main.getInfo().getSelfUser()) {
-				sendReaction(getType(), (TextChannel) channel, getInteraction()[0].getAsMention() + " tentou estapear a " + Main.getInfo().getSelfUser().getAsMention() + " - " + this.getSelfTarget(), false);
+				sendReaction(getType(), (TextChannel) channel, getInteraction()[1], getInteraction()[0].getAsMention() + " tentou estapear a " + Main.getInfo().getSelfUser().getAsMention() + " - " + this.getSelfTarget(), false);
 				return;
 			}
 
-			sendReaction(getType(), (TextChannel) channel, getInteraction()[0].getAsMention() + " estapeou " + getInteraction()[1].getAsMention() + " - " + this.getReaction(), true);
+			sendReaction(getType(), (TextChannel) channel, getInteraction()[1], getInteraction()[0].getAsMention() + " estapeou " + getInteraction()[1].getAsMention() + " - " + this.getReaction(), true);
 		} else {
 			Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para dar um tapa!");
 		}
@@ -66,6 +66,6 @@ public class SlapReaction extends Reaction {
 
 	@Override
 	public void answer(TextChannel chn) {
-		sendReaction(getType(), chn, getInteraction()[1].getAsMention() + " devolveu o tapa de " + getInteraction()[0].getAsMention() + " - " + this.getReaction(), false);
+		sendReaction(getType(), chn, null, getInteraction()[1].getAsMention() + " devolveu o tapa de " + getInteraction()[0].getAsMention() + " - " + this.getReaction(), false);
 	}
 }
