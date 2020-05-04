@@ -35,7 +35,7 @@ public class CryReaction extends Reaction {
                 "Me deixa sozinho(a)."
         });
 
-        sendReaction(getType(), (TextChannel) channel, author.getAsMention() + " está chorando! - " + this.getReaction(), false);
+        sendReaction(getType(), (TextChannel) channel, null, author.getAsMention() + " está chorando! - " + this.getReaction(), false);
     }
 
     @Override
