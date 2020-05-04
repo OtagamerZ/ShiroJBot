@@ -35,7 +35,7 @@ public class FacedeskReaction extends Reaction {
                 "Meeeeee."
         });
 
-        sendReaction(getType(), (TextChannel) channel, author.getAsMention() + " não ta acreditando nisso! - " + this.getReaction(), false);
+        sendReaction(getType(), (TextChannel) channel, null, author.getAsMention() + " não ta acreditando nisso! - " + this.getReaction(), false);
     }
 
     @Override

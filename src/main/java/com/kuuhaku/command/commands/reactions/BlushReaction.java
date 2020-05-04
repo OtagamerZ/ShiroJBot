@@ -35,7 +35,7 @@ public class BlushReaction extends Reaction {
 				"N-N-Nani?!"
 		});
 
-		sendReaction(getType(), (TextChannel) channel, author.getAsMention() + " está envergonhado(a)! - " + this.getReaction(), false);
+		sendReaction(getType(), (TextChannel) channel, null, author.getAsMention() + " está envergonhado(a)! - " + this.getReaction(), false);
 	}
 
 	@Override

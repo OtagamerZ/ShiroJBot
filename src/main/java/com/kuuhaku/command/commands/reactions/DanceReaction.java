@@ -35,7 +35,7 @@ public class DanceReaction extends Reaction {
 				"Duas palavras: DANCE BABY!"
 		});
 
-		sendReaction(getType(), (TextChannel) channel, author.getAsMention() + " está dançando! - " + this.getReaction(), false);
+		sendReaction(getType(), (TextChannel) channel, null, author.getAsMention() + " está dançando! - " + this.getReaction(), false);
 	}
 
 	@Override
