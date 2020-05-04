@@ -51,15 +51,15 @@ public class HugReaction extends Reaction {
 		});
 
 		if (getInteraction()[1] == Main.getInfo().getSelfUser()) {
-			sendReaction(getType(), (TextChannel) channel, getInteraction()[0].getAsMention() + " tentou abraçar a " + Main.getInfo().getSelfUser().getAsMention() + " - " + this.getSelfTarget(), false);
+			sendReaction(getType(), (TextChannel) channel, getInteraction()[1], getInteraction()[0].getAsMention() + " tentou abraçar a " + Main.getInfo().getSelfUser().getAsMention() + " - " + this.getSelfTarget(), false);
 			return;
 		}
 
-		sendReaction(getType(), (TextChannel) channel, getInteraction()[0].getAsMention() + " abraçou " + getInteraction()[1].getAsMention() + " - " + this.getReaction(), true);
+		sendReaction(getType(), (TextChannel) channel, getInteraction()[1], getInteraction()[0].getAsMention() + " abraçou " + getInteraction()[1].getAsMention() + " - " + this.getReaction(), true);
 	}
 
 	@Override
 	public void answer(TextChannel chn) {
-		sendReaction(getType(), chn, getInteraction()[1].getAsMention() + " devolveu o abraço de " + getInteraction()[0].getAsMention() + " - " + this.getReaction(), false);
+		sendReaction(getType(), chn, null, getInteraction()[1].getAsMention() + " devolveu o abraço de " + getInteraction()[0].getAsMention() + " - " + this.getReaction(), false);
 	}
 }
