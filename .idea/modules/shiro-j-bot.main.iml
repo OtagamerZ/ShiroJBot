@@ -26,7 +26,7 @@
       </configuration>
     </facet>
   </component>
-  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_11">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_10">
     <output url="file://$MODULE_DIR$/../../build/classes/java/main" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../src/main">
@@ -82,6 +82,7 @@
     <orderEntry type="library" name="Gradle: org.beanshell:bsh:2.0b5" level="project" />
     <orderEntry type="library" name="Gradle: com.github.treeder:kitty-cache:065b8d34e2" level="project" />
     <orderEntry type="library" name="Gradle: org.python:jython-standalone:2.7.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.kevinsawicki:http-request:6.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.api-client:google-api-client:1.25.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.oauth-client:google-oauth-client:1.25.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.http-client:google-http-client-jackson2:1.25.0" level="project" />
