@@ -41,7 +41,9 @@ public class GamblePool {
 	}
 
 	public void addGamble(Gamble gamble) {
-		g.add(gamble);
+		for (int i = 0; i < gamble.getWeight(); i++) {
+			g.add(gamble);
+		}
 	}
 
 	private static final List<Gamble> g = new ArrayList<>();
