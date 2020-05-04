@@ -30,6 +30,7 @@ import com.kuuhaku.utils.Helper;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.List;
 
@@ -37,7 +38,7 @@ import java.util.List;
 public class DashboardRequest {
 
 	@RequestMapping(value = "/api/auth", method = RequestMethod.GET)
-	public String validateAccount(@RequestParam(value = "code") String code) {
+	public void validateAccount(HttpServletResponse http, @RequestParam(value = "code") String code) {
 		JSONObject jo = new JSONObject();
 
 		jo.put("client_id", Main.getInfo().getSelfUser().getId());
@@ -48,7 +49,8 @@ public class DashboardRequest {
 		jo.put("scope", "identify");
 
 		Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth", Helper.post("https://discord.com/api/v6/oauth2/token", Helper.urlEncode(jo), Collections.singletonMap("Content-Type", "application/x-www-form-urlencoded"), "").toString());
-		return "redirect:http://www.github.com";
+		http.setHeader("Location", "https://www.github.com");
+		http.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
 	}
 
 	@RequestMapping(value = "/app/messages", method = RequestMethod.POST)
