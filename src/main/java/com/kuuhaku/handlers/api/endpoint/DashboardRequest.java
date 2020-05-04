@@ -47,9 +47,7 @@ public class DashboardRequest {
 		jo.put("redirect_uri", "http://" + System.getenv("SERVER_URL") + "/api/auth");
 		jo.put("scope", "identify");
 
-		JSONObject res = Helper.post("https://discordapp.com/api/v6/oauth2/token", Helper.urlEncode(jo), Collections.singletonMap("Content-Type", "application/x-www-form-urlencoded"), "");
-
-		return Helper.get("https://discordapp.com/api/v6/users/@me", new JSONObject(), Collections.emptyMap(), res.getString("token_type") + " " + res.getString("access_token")).toString();
+		return Helper.post("https://discordapp.com/api/v6/oauth2/token", Helper.urlEncode(jo), Collections.singletonMap("Content-Type", "application/x-www-form-urlencoded"), "").toString();
 	}
 
 	@RequestMapping(value = "/app/messages", method = RequestMethod.POST)
