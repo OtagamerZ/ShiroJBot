@@ -30,8 +30,6 @@ import com.kuuhaku.utils.Helper;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.List;
 
@@ -39,7 +37,7 @@ import java.util.List;
 public class DashboardRequest {
 
 	@RequestMapping(value = "/api/auth", method = RequestMethod.GET)
-	public String validateAccount(@RequestParam(value = "code") String code) throws IOException, URISyntaxException {
+	public String validateAccount(@RequestParam(value = "code") String code) {
 		JSONObject jo = new JSONObject();
 
 		jo.put("client_id", Main.getInfo().getSelfUser().getId());
@@ -49,10 +47,9 @@ public class DashboardRequest {
 		jo.put("redirect_uri", "http://" + System.getenv("SERVER_URL") + "/api/auth");
 		jo.put("scope", "identify");
 
-		/*JSONObject res =*/
-		return Helper.post("https://discordapp.com/api/v6/oauth2/token", Helper.urlEncode(jo), Collections.singletonMap("Content-Type", "application/x-www-form-urlencoded"), "").toString();
+		JSONObject res = Helper.post("https://discordapp.com/api/v6/oauth2/token", Helper.urlEncode(jo), Collections.singletonMap("Content-Type", "application/x-www-form-urlencoded"), "");
 
-		/*return res.getString("access_token");*/
+		return Helper.get("https://discordapp.com/api/v6/users/@me", new JSONObject(), Collections.emptyMap(), res.getString("token_type") + " " + res.getString("access_token")).toString();
 	}
 
 	@RequestMapping(value = "/app/messages", method = RequestMethod.POST)
