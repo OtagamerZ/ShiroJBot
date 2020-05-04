@@ -158,10 +158,13 @@ public class Helper {
         channel.sendTyping().queue(tm -> channel.sendMessage(Helper.makeEmoteFromMention(message.split(" "))).queueAfter(message.length() * 25 > 10000 ? 10000 : message.length() + 500, TimeUnit.MILLISECONDS));
     }
 
-    public static Consumer<MessageAction> sendReaction(Reaction r, String imageURL, MessageChannel channel, boolean allowReact) throws IllegalAccessException {
+    public static Consumer<MessageAction> sendReaction(Reaction r, String imageURL, User target, MessageChannel channel, boolean allowReact) throws IllegalAccessException {
         try {
             if (r.isAnswerable() && allowReact) {
-                return act -> act.queue(m -> Pages.buttonize(m, Collections.singletonMap("↪", (mb, msg) -> r.answer((TextChannel) channel)), false, 60, TimeUnit.SECONDS));
+                return act -> act.queue(m -> Pages.buttonize(m, Collections.singletonMap("↪", (mb, msg) -> {
+                    if (mb.getId().equals(target.getId())) r.answer((TextChannel) channel);
+                    msg.clearReactions().queue();
+                }), false, 60, TimeUnit.SECONDS));
             } else
                 return RestAction::queue;
         } catch (Exception e) {
