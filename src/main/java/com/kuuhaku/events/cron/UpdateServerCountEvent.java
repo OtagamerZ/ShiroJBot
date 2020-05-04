@@ -25,8 +25,6 @@ import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 
-import java.io.IOException;
-
 public class UpdateServerCountEvent implements Job {
 	public static JobDetail updateServerCount;
 
@@ -34,15 +32,13 @@ public class UpdateServerCountEvent implements Job {
 	public void execute(JobExecutionContext context) {
 		int size = Main.getInfo().getAPI().getGuilds().size();
 		Main.getInfo().getDblApi().setStats(size);
-		if (System.getenv().containsKey("DBL_TOKEN")) try {
+		if (System.getenv().containsKey("DBL_TOKEN")) {
 			JSONObject jo = new JSONObject();
 
 			jo.put("guildCount", size);
 
 			String response = Helper.post("https://discord.bots.gg/api/v1/bots/" + Main.getInfo().getSelfUser().getId() + "/stats", jo, System.getenv("DBL_TOKEN")).toString();
 			Helper.logger(this.getClass()).debug(response);
-		} catch (IOException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 	}
 }
