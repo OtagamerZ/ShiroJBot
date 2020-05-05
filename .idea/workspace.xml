@@ -27,6 +27,7 @@
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DashboardRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DashboardRequest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -390,13 +391,6 @@
       <workItem from="1588614144905" duration="6455000" />
       <workItem from="1588631927787" duration="784000" />
     </task>
-    <task id="LOCAL-01052" summary="Correções básicas">
-      <created>1588082418655</created>
-      <option name="number" value="01052" />
-      <option name="presentableId" value="LOCAL-01052" />
-      <option name="project" value="LOCAL" />
-      <updated>1588082418655</updated>
-    </task>
     <task id="LOCAL-01053" summary="Correções básicas">
       <created>1588082451220</created>
       <option name="number" value="01053" />
@@ -733,7 +727,14 @@
       <option name="project" value="LOCAL" />
       <updated>1588687712538</updated>
     </task>
-    <option name="localTasksCounter" value="1101" />
+    <task id="LOCAL-01101" summary="Criação da API de autenticação para o dashboard">
+      <created>1588689125551</created>
+      <option name="number" value="01101" />
+      <option name="presentableId" value="LOCAL-01101" />
+      <option name="project" value="LOCAL" />
+      <updated>1588689125551</updated>
+    </task>
+    <option name="localTasksCounter" value="1102" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -977,12 +978,12 @@
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1588687713543">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1588689147347">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1588632287059" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1588687713543" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1588689147347" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
