@@ -24,6 +24,7 @@ import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.TokenDAO;
 import com.kuuhaku.controller.postgresql.WaifuDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.model.persistent.CoupleMultiplier;
 import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.model.persistent.Tags;
 import com.kuuhaku.utils.Helper;
@@ -75,12 +76,13 @@ public class DashboardRequest {
 			http.setHeader("Location", "http://localhost:19006/Loading");
 			http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 			String w = Member.getWaifu(u);
+			CoupleMultiplier cm = WaifuDAO.getMultiplier(u);
 
 			Executors.newSingleThreadExecutor().execute(() -> {
 				try {
 					user.put("token", t);
 					user.put("waifu", w.isEmpty() ? "" : Helper.getOr(Main.getInfo().getUserByID(w), ""));
-					user.put("waifuMult", Helper.getOr(WaifuDAO.getMultiplier(u).getMult(), 1.25f));
+					user.put("waifuMult", cm == null ? 1.25f : cm.getMult());
 					user.put("profiles", MemberDAO.getMemberByMid(u.getId()));
 					user.put("exceed", ExceedDAO.getExceedState(ExceedDAO.getExceed(u.getId())));
 					user.put("credits", AccountDAO.getAccount(u.getId()));
