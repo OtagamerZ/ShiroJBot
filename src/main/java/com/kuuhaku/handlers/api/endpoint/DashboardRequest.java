@@ -46,6 +46,7 @@ public class DashboardRequest {
 		jo.put("scope", "identify");
 
 		JSONObject res = Helper.post("https://discord.com/api/v6/oauth2/token", Helper.urlEncode(jo), Collections.singletonMap("Content-Type", "application/x-www-form-urlencoded"), "");
+		Helper.logger(this.getClass()).info(res.toString());
 
 		if (Main.getInfo().getUserByID(res.getString("id")) != null) {
 			if (!TokenDAO.verifyToken(res.getString("id"))) {
