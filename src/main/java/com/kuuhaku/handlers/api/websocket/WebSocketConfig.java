@@ -57,6 +57,7 @@ public class WebSocketConfig {
 
 			Main.getInfo().getClient().emit("chat", gm.toString());
 		});
+		socket.addEventListener("auth", JSONObject.class, ((client, data, ackSender) -> Helper.logger(this.getClass()).info("Requisição de autenticação: " + data)));
 		socket.start();
 	}
 
