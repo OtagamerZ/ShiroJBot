@@ -44,13 +44,47 @@ public enum TagIcons {
 			case LVL60:
 				return "<:lvl_60:697879725984710777> ";
 			case LVL70:
-				return "<:lvl_70:697879726009745458>  ";
+				return "<:lvl_70:697879726009745458> ";
 			case VERIFIED:
 				return "<:verified:697879725887979621> ";
 			case TOXIC:
 				return "<:toxic:697879725816676442> ";
 			case MARRIED:
 				return "<:married:697879725888241684> ";
+		}
+		return null;
+	}
+
+	public static String getId(TagIcons t) {
+		switch (t) {
+			case DEV:
+				return "697879725925990466";
+			case SUPPORT:
+				return "697879726047625216";
+			case EDITOR:
+				return "697879725497909310";
+			case READER:
+				return "697879726148288542";
+			case MODERATOR:
+				return "697879725628194878";
+			case LVL20:
+				return "697879725972127885";
+			case LVL30:
+				return "697879725951156294";
+			case LVL40:
+				return "697879726043299942";
+			case LVL50:
+				return "697879725862944899";
+			case LVL60:
+				return "697879725984710777";
+			case LVL70:
+				return "697879726009745458";
+			case VERIFIED:
+				return "697879725887979621";
+			case TOXIC:
+				return "697879725816676442";
+			case MARRIED:
+				return "697879725888241684";
 		}
 		return null;
 	}
@@ -69,6 +103,24 @@ public enum TagIcons {
 				return "<:exmachina:697879725988904971> ";
 			case FLUGEL:
 				return "<:flugel:697879725967933440> ";
+		}
+		return null;
+	}
+
+	public static String getExceedId(ExceedEnums t) {
+		switch (t) {
+			case IMANITY:
+				return "697879725690847324";
+			case SEIREN:
+				return "697879725640515685";
+			case WEREBEAST:
+				return "697879725934379178";
+			case ELF:
+				return "697879725661749300";
+			case EXMACHINA:
+				return "697879725988904971";
+			case FLUGEL:
+				return "697879725967933440";
 		}
 		return null;
 	}

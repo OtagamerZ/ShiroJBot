@@ -18,10 +18,22 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.Main;
+import com.kuuhaku.controller.postgresql.ExceedDAO;
+import com.kuuhaku.controller.postgresql.TagDAO;
+import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.utils.ExceedEnums;
+import com.kuuhaku.utils.TagIcons;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "tags")
@@ -44,6 +56,74 @@ public class Tags {
 
     @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean Sponsor = false;
+
+    public static List<String> getUserBadges(String id) {
+        String template = "https://cdn.discordapp.com/emojis/{1}.png?v=1";
+        String exceed = ExceedDAO.getExceed(id);
+        Member mb = MemberDAO.getMemberByMid(id).stream().sorted(Comparator.comparingLong(Member::getLevel).reversed()).collect(Collectors.toList()).get(0);
+
+        List<String> badges = new ArrayList<>();
+
+        if (!exceed.isEmpty()) {
+            badges.add(TagIcons.getExceedId(ExceedEnums.getByName(exceed)));
+        }
+
+        if (id.equals(Main.getInfo().getNiiChan())) {
+            badges.add(MessageFormat.format(template, "697879726018003115"));
+        } else {
+            if (id.equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(id))
+                badges.add(MessageFormat.format(template, TagIcons.getId(TagIcons.DEV)));
+
+            if (Main.getInfo().getSupports().contains(id)) {
+                badges.add(MessageFormat.format(template, TagIcons.getId(TagIcons.SUPPORT)));
+            }
+
+            if (Main.getInfo().getEditors().contains(id))
+                badges.add(MessageFormat.format(template, TagIcons.getId(TagIcons.EDITOR)));
+
+            try {
+                if (TagDAO.getTagById(id).isReader())
+                    badges.add(MessageFormat.format(template, TagIcons.getId(TagIcons.READER)));
+            } catch (Exception ignore) {
+            }
+
+            try {
+                if (mb.getLevel() >= 70)
+                    badges.add(MessageFormat.format(template, TagIcons.getId(TagIcons.LVL70)));
+                else if (mb.getLevel() >= 60)
+                    badges.add(MessageFormat.format(template, TagIcons.getId(TagIcons.LVL60)));
+                else if (mb.getLevel() >= 50)
+                    badges.add(MessageFormat.format(template, TagIcons.getId(TagIcons.LVL50)));
+                else if (mb.getLevel() >= 40)
+                    badges.add(MessageFormat.format(template, TagIcons.getId(TagIcons.LVL40)));
+                else if (mb.getLevel() >= 30)
+                    badges.add(MessageFormat.format(template, TagIcons.getId(TagIcons.LVL30)));
+                else if (mb.getLevel() >= 20)
+                    badges.add(MessageFormat.format(template, TagIcons.getId(TagIcons.LVL20)));
+            } catch (Exception ignore) {
+            }
+
+            try {
+                if (TagDAO.getTagById(id).isVerified())
+                    badges.add(MessageFormat.format(template, TagIcons.getId(TagIcons.VERIFIED)));
+            } catch (Exception ignore) {
+            }
+
+            try {
+                if (TagDAO.getTagById(id).isToxic())
+                    badges.add(MessageFormat.format(template, TagIcons.getId(TagIcons.TOXIC)));
+            } catch (Exception ignore) {
+            }
+
+            try {
+                if (!com.kuuhaku.model.persistent.Member.getWaifu(Main.getInfo().getUserByID(id)).isEmpty())
+                    badges.add(MessageFormat.format(template, TagIcons.getId(TagIcons.MARRIED)));
+            } catch (Exception ignore) {
+            }
+        }
+
+        return badges;
+    }
 
     public String getId() {
         return id;
