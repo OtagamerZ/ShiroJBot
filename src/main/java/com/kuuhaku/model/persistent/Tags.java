@@ -64,7 +64,7 @@ public class Tags {
         List<String> badges = new ArrayList<>();
 
         if (!exceed.isEmpty()) {
-            badges.add(TagIcons.getExceedId(ExceedEnums.getByName(exceed)));
+            badges.add(pattern.replace("{id}", TagIcons.getExceedId(ExceedEnums.getByName(exceed))));
         }
 
         if (id.equals(Main.getInfo().getNiiChan())) {
