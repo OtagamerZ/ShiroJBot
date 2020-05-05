@@ -52,7 +52,7 @@ public class SayCommand extends Command {
 		}
 
 		channel.sendMessage(Helper.makeEmoteFromMention(args)).queue();
-		if (guild.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) message.delete().queue();
+		if (guild.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE))
+			message.delete().queue(null, Helper::doNothing);
 	}
-
 }
