@@ -35,7 +35,7 @@ import java.util.List;
 public class DashboardRequest {
 
 	@RequestMapping(value = "/api/auth", method = RequestMethod.GET)
-	public void validateAccount(HttpServletResponse http, @RequestParam(value = "code") String code) {
+	public void validateAccount(HttpServletResponse http, @RequestParam(value = "code") String code) throws InterruptedException {
 		JSONObject jo = new JSONObject();
 
 		jo.put("client_id", Main.getInfo().getSelfUser().getId());
@@ -45,9 +45,18 @@ public class DashboardRequest {
 		jo.put("redirect_uri", "http://" + System.getenv("SERVER_URL") + "/api/auth");
 		jo.put("scope", "identify");
 
-		JSONObject token = Helper.post("https://discord.com/api/v6/oauth2/token", Helper.urlEncode(jo), Collections.singletonMap("Content-Type", "application/x-www-form-urlencoded"), "");
+
+		JSONObject token = null;
+
+		boolean granted = false;
+		while (!granted) {
+			token = Helper.post("https://discord.com/api/v6/oauth2/token", Helper.urlEncode(jo), Collections.singletonMap("Content-Type", "application/x-www-form-urlencoded"), "");
+			if (token.has("retry_after")) {
+				Thread.sleep(token.getInt("retry_after"));
+			} else granted = true;
+		}
+
 		JSONObject user = Helper.get("https://discord.com/api/v6/users/@me", new JSONObject(), Collections.emptyMap(), token.getString("token_type") + " " + token.getString("access_token"));
-		Helper.logger(this.getClass()).info(user.toString());
 
 		if (Main.getInfo().getUserByID(user.getString("id")) != null) {
 			if (!TokenDAO.verifyToken(user.getString("id"))) {
