@@ -72,7 +72,7 @@ public class DashboardRequest {
 				try {
 					user.put("token", t);
 					Thread.sleep(5000);
-					Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth", user);
+					Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth", user.toString());
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
