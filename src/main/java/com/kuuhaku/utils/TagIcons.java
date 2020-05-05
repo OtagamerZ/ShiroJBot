@@ -52,7 +52,7 @@ public enum TagIcons {
 			case MARRIED:
 				return "<:married:697879725888241684> ";
 		}
-		return null;
+		throw new IllegalStateException();
 	}
 
 	public static String getId(TagIcons t) {
@@ -104,7 +104,7 @@ public enum TagIcons {
 			case FLUGEL:
 				return "<:flugel:697879725967933440> ";
 		}
-		return null;
+		throw new IllegalStateException();
 	}
 
 	public static String getExceedId(ExceedEnums t) {
@@ -122,6 +122,6 @@ public enum TagIcons {
 			case FLUGEL:
 				return "697879725967933440";
 		}
-		return null;
+		throw new IllegalStateException();
 	}
 }
