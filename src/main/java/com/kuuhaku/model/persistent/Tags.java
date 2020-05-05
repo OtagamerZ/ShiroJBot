@@ -29,7 +29,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -58,7 +57,7 @@ public class Tags {
     private boolean Sponsor = false;
 
     public static List<String> getUserBadges(String id) {
-        MessageFormat mf = new MessageFormat("https://cdn.discordapp.com/emojis/{1}.png?v=1");
+        String pattern = "https://cdn.discordapp.com/emojis/{id}.png?v=1";
         String exceed = ExceedDAO.getExceed(id);
         Member mb = MemberDAO.getMemberByMid(id).stream().sorted(Comparator.comparingLong(Member::getLevel).reversed()).collect(Collectors.toList()).get(0);
 
@@ -69,55 +68,55 @@ public class Tags {
         }
 
         if (id.equals(Main.getInfo().getNiiChan())) {
-            badges.add(mf.format("697879726018003115"));
+            badges.add(pattern.replace("{id}", "697879726018003115"));
         } else {
             if (id.equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(id))
-                badges.add(mf.format(TagIcons.getId(TagIcons.DEV)));
+                badges.add(pattern.replace("{id}", TagIcons.getId(TagIcons.DEV)));
 
             if (Main.getInfo().getSupports().contains(id)) {
-                badges.add(mf.format(TagIcons.getId(TagIcons.SUPPORT)));
+                badges.add(pattern.replace("{id}", TagIcons.getId(TagIcons.SUPPORT)));
             }
 
             if (Main.getInfo().getEditors().contains(id))
-                badges.add(mf.format(TagIcons.getId(TagIcons.EDITOR)));
+                badges.add(pattern.replace("{id}", TagIcons.getId(TagIcons.EDITOR)));
 
             try {
                 if (TagDAO.getTagById(id).isReader())
-                    badges.add(mf.format(TagIcons.getId(TagIcons.READER)));
+                    badges.add(pattern.replace("{id}", TagIcons.getId(TagIcons.READER)));
             } catch (Exception ignore) {
             }
 
             try {
                 if (mb.getLevel() >= 70)
-                    badges.add(mf.format(TagIcons.getId(TagIcons.LVL70)));
+                    badges.add(pattern.replace("{id}", TagIcons.getId(TagIcons.LVL70)));
                 else if (mb.getLevel() >= 60)
-                    badges.add(mf.format(TagIcons.getId(TagIcons.LVL60)));
+                    badges.add(pattern.replace("{id}", TagIcons.getId(TagIcons.LVL60)));
                 else if (mb.getLevel() >= 50)
-                    badges.add(mf.format(TagIcons.getId(TagIcons.LVL50)));
+                    badges.add(pattern.replace("{id}", TagIcons.getId(TagIcons.LVL50)));
                 else if (mb.getLevel() >= 40)
-                    badges.add(mf.format(TagIcons.getId(TagIcons.LVL40)));
+                    badges.add(pattern.replace("{id}", TagIcons.getId(TagIcons.LVL40)));
                 else if (mb.getLevel() >= 30)
-                    badges.add(mf.format(TagIcons.getId(TagIcons.LVL30)));
+                    badges.add(pattern.replace("{id}", TagIcons.getId(TagIcons.LVL30)));
                 else if (mb.getLevel() >= 20)
-                    badges.add(mf.format(TagIcons.getId(TagIcons.LVL20)));
+                    badges.add(pattern.replace("{id}", TagIcons.getId(TagIcons.LVL20)));
             } catch (Exception ignore) {
             }
 
             try {
                 if (TagDAO.getTagById(id).isVerified())
-                    badges.add(mf.format(TagIcons.getId(TagIcons.VERIFIED)));
+                    badges.add(pattern.replace("{id}", TagIcons.getId(TagIcons.VERIFIED)));
             } catch (Exception ignore) {
             }
 
             try {
                 if (TagDAO.getTagById(id).isToxic())
-                    badges.add(mf.format(TagIcons.getId(TagIcons.TOXIC)));
+                    badges.add(pattern.replace("{id}", TagIcons.getId(TagIcons.TOXIC)));
             } catch (Exception ignore) {
             }
 
             try {
                 if (!com.kuuhaku.model.persistent.Member.getWaifu(Main.getInfo().getUserByID(id)).isEmpty())
-                    badges.add(mf.format(TagIcons.getId(TagIcons.MARRIED)));
+                    badges.add(pattern.replace("{id}", TagIcons.getId(TagIcons.MARRIED)));
             } catch (Exception ignore) {
             }
         }
