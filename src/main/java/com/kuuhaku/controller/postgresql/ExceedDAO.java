@@ -57,7 +57,7 @@ public class ExceedDAO {
 		}
 	}
 
-	public static Object getExceedState(String exceed) {
+	public static ExceedState getExceedState(String exceed) {
 		@SuppressWarnings("SuspiciousMethodCalls")
 		int pos = Arrays.stream(ExceedEnums.values())
 				.map(ExceedDAO::getExceed)
@@ -65,7 +65,7 @@ public class ExceedDAO {
 				.collect(Collectors.toList())
 				.indexOf(ExceedEnums.getByName(exceed)) + 1;
 
-		return new ExceedState(exceed, pos);
+		return new ExceedState(ExceedEnums.getByName(exceed).ordinal(), exceed, pos);
 	}
 
 	public static void joinExceed(ExceedMember ex) {
