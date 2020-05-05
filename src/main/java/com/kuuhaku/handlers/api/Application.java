@@ -20,19 +20,10 @@ package com.kuuhaku.handlers.api;
 
 import com.kuuhaku.utils.Helper;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication(scanBasePackages = {"com.kuuhaku.handlers.api"})
-@Configuration
-public class Application implements WebMvcConfigurer {
+public class Application {
 	public Application() {
 		Helper.logger(this.getClass()).info("API inicializada.");
-	}
-
-	@Override
-	public void addCorsMappings(CorsRegistry registry) {
-		registry.addMapping("/**").allowedMethods("*");
 	}
 }
