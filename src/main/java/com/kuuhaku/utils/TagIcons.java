@@ -86,7 +86,7 @@ public enum TagIcons {
 			case MARRIED:
 				return "697879725888241684";
 		}
-		return null;
+		throw new IllegalStateException();
 	}
 
 	public static String getExceed(ExceedEnums t) {
