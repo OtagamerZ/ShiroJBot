@@ -45,15 +45,16 @@ public class DashboardRequest {
 		jo.put("redirect_uri", "http://" + System.getenv("SERVER_URL") + "/api/auth");
 		jo.put("scope", "identify");
 
-		JSONObject res = Helper.post("https://discord.com/api/v6/oauth2/token", Helper.urlEncode(jo), Collections.singletonMap("Content-Type", "application/x-www-form-urlencoded"), "");
-		Helper.logger(this.getClass()).info(res.toString());
+		JSONObject token = Helper.post("https://discord.com/api/v6/oauth2/token", Helper.urlEncode(jo), Collections.singletonMap("Content-Type", "application/x-www-form-urlencoded"), "");
+		JSONObject user = Helper.get("https://discord.com/api/v6/users/@me", new JSONObject(), Collections.emptyMap(), token.getString("token_type") + " " + token.getString("access_token"));
+		Helper.logger(this.getClass()).info(user.toString());
 
-		if (Main.getInfo().getUserByID(res.getString("id")) != null) {
-			if (!TokenDAO.verifyToken(res.getString("id"))) {
+		if (Main.getInfo().getUserByID(user.getString("id")) != null) {
+			if (!TokenDAO.verifyToken(user.getString("id"))) {
 				http.setHeader("Location", "http://localhost:19006");
 				http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 			}
-			Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth", res.toString());
+			Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth", user.toString());
 			http.setHeader("Location", "http://localhost:19006/Loading");
 			http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 		}
