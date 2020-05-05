@@ -129,11 +129,11 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		SpringApplication.run(Application.class, args);
 
 		boolean apiOnline = false;
-		int tries = 1;
+		int tries = 0;
 		while (!apiOnline) {
 			try {
-				info.setServer(new WebSocketConfig(7999 + tries));
-				info.setClient(IO.socket("http://" + System.getenv("SOCKET_URL") + "/")).connect();
+				info.setServer(new WebSocketConfig(8000 + tries));
+				info.setClient(IO.socket("http://localhost/")).connect();
 				apiOnline = true;
 			} catch (URISyntaxException | BindException e) {
 				Helper.logger(Main.class).error("Erro ao conectar client: " + e + " | " + e.getStackTrace()[0]);

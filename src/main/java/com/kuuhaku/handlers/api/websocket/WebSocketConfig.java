@@ -28,6 +28,7 @@ import net.dv8tion.jda.api.entities.User;
 import org.json.JSONObject;
 
 import java.net.BindException;
+import java.util.Arrays;
 
 public class WebSocketConfig {
 
@@ -35,7 +36,7 @@ public class WebSocketConfig {
 
 	public WebSocketConfig(int port) throws BindException {
 		Configuration config = new Configuration();
-		config.setHostname("localhost");
+		config.setHostname("127.0.0.1");
 		config.setPort(port);
 
 		socket = new SocketIOServer(config);
@@ -59,6 +60,8 @@ public class WebSocketConfig {
 		});
 		socket.addEventListener("auth", JSONObject.class, ((client, data, ackSender) -> Helper.logger(this.getClass()).info("Requisição de autenticação: " + data)));
 		socket.start();
+
+		Main.getInfo().getClient().on("auth", args -> Helper.logger(this.getClass()).info("Requisição de autenticação: " + Arrays.toString(args)));
 	}
 
 	public SocketIOServer getSocket() {

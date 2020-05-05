@@ -64,7 +64,7 @@ public class DashboardRequest {
 				http.setHeader("Location", "http://localhost:19006");
 				http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 			}
-			http.setHeader("Location", "https://localhost:19006/Loading");
+			http.setHeader("Location", "http://localhost:19006/Loading");
 			http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 
 			Executors.newSingleThreadExecutor().execute(() -> {
