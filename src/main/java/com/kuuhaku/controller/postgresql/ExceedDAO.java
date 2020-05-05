@@ -65,8 +65,16 @@ public class ExceedDAO {
 				.indexOf(ExceedEnums.getByName(exceed)) + 1;
 
 		return new Object() {
-			String name = exceed;
-			int ranking = pos;
+			private String name = exceed;
+			private int ranking = pos;
+
+			public String getName() {
+				return name;
+			}
+
+			public int getRanking() {
+				return ranking;
+			}
 		};
 	}
 
