@@ -23,6 +23,7 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.WaifuDAO;
 import com.kuuhaku.controller.sqlite.KGotchiDAO;
+import com.kuuhaku.handlers.api.endpoint.Bonus;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 
@@ -78,30 +79,6 @@ public class Member {
 
 	public static List<Object> getBonuses(User u) {
 		List<Object> bonuses = new ArrayList<>();
-
-		class Bonus {
-			private final int id;
-			private final String name;
-			private final float value;
-
-			public Bonus(int id, String name, float value) {
-				this.id = id;
-				this.name = name;
-				this.value = value;
-			}
-
-			public int getId() {
-				return id;
-			}
-
-			public String getName() {
-				return name;
-			}
-
-			public float getValue() {
-				return value;
-			}
-		}
 
 		if (ExceedDAO.hasExceed(u.getId()) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(u.getId())))
 			bonuses.add(new Bonus(0, "Exceed Vitorioso", 2));
