@@ -56,7 +56,10 @@ public class SettingsCommand extends Command {
 			return;
 		}
 
-		final String msg = String.join(" ", args).replace(args[0], "").replace(args[1], "").trim();
+		final String msg;
+
+		if (args.length == 1) msg = "";
+		else msg = String.join(" ", args).replace(args[0], "").replace(args[1], "").trim();
 
 		switch (args[0].toLowerCase()) {
 			case "prefix":
