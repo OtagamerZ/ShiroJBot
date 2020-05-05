@@ -79,31 +79,38 @@ public class Member {
 	public static List<Object> getBonuses(User u) {
 		List<Object> bonuses = new ArrayList<>();
 
-		if (ExceedDAO.hasExceed(u.getId()) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(u.getId())))
-			bonuses.add(new Object() {
-				public final int id = 0;
-				public String name = "Exceed Vitorioso";
-				public float value = 2;
-			});
-		if (!getWaifu(u).isEmpty())
-			bonuses.add(new Object() {
-				public final int id = 1;
-				public String name = "Waifu";
-				public float value = WaifuDAO.getMultiplier(u).getMult();
-			});
+		class Bonus {
+			private final int id;
+			private final String name;
+			private final float value;
 
+			public Bonus(int id, String name, float value) {
+				this.id = id;
+				this.name = name;
+				this.value = value;
+			}
+
+			public int getId() {
+				return id;
+			}
+
+			public String getName() {
+				return name;
+			}
+
+			public float getValue() {
+				return value;
+			}
+		}
+
+		if (ExceedDAO.hasExceed(u.getId()) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(u.getId())))
+			bonuses.add(new Bonus(0, "Exceed Vitorioso", 2));
+		if (!getWaifu(u).isEmpty())
+			bonuses.add(new Bonus(1, "Waifu", WaifuDAO.getMultiplier(u).getMult()));
 		if (KGotchiDAO.getKawaigotchi(u.getId()) != null && !Objects.requireNonNull(KGotchiDAO.getKawaigotchi(u.getId())).isAlive())
-			bonuses.add(new Object() {
-				public final int id = 2;
-				public String name = "Kawaigotchi";
-				public float value = Objects.requireNonNull(KGotchiDAO.getKawaigotchi(u.getId())).getTier().getUserXpMult();
-			});
+			bonuses.add(new Bonus(2, "Kawaigotchi", Objects.requireNonNull(KGotchiDAO.getKawaigotchi(u.getId())).getTier().getUserXpMult()));
 		else if (KGotchiDAO.getKawaigotchi(u.getId()) != null)
-			bonuses.add(new Object() {
-				public final int id = 3;
-				public String name = "Kawaigotchi Morto";
-				public float value = 0.8f;
-			});
+			bonuses.add(new Bonus(3, "Kawaigotchi Morto", 0.8f));
 
 		return bonuses;
 	}
