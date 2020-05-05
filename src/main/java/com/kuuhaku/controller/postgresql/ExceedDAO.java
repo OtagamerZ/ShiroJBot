@@ -28,7 +28,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ExceedDAO {
 	public static boolean hasExceed(String id) {
@@ -51,6 +54,20 @@ public class ExceedDAO {
 		} finally {
 			em.close();
 		}
+	}
+
+	public static Object getExceedState(String exceed) {
+		@SuppressWarnings("SuspiciousMethodCalls")
+		int pos = Arrays.stream(ExceedEnums.values())
+				.map(ExceedDAO::getExceed)
+				.sorted(Comparator.comparingLong(Exceed::getExp).reversed())
+				.collect(Collectors.toList())
+				.indexOf(ExceedEnums.getByName(exceed)) + 1;
+
+		return new Object() {
+			String name = exceed;
+			int ranking = pos;
+		};
 	}
 
 	public static void joinExceed(ExceedMember ex) {
