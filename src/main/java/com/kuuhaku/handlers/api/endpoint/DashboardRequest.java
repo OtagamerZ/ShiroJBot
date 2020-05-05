@@ -67,7 +67,7 @@ public class DashboardRequest {
 			http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 
 			Thread.sleep(5000);
-			Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth", user.toString());
+			Main.getInfo().getClient().emit("auth", user.toString());
 		}
 	}
 
