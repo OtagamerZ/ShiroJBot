@@ -79,7 +79,7 @@ public class TokenDAO {
 	public static boolean validateToken(String token) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT t FROM Token t WHERE token LIKE :token AND NOT disabled", Token.class);
+		Query q = em.createQuery("SELECT t FROM Token t WHERE token LIKE :token AND disabled = FALSE", Token.class);
 		q.setParameter("token", token);
 		q.setMaxResults(1);
 
