@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Executors;
 
 @RestController
 public class DashboardRequest {
@@ -66,8 +67,14 @@ public class DashboardRequest {
 			http.setHeader("Location", "https://localhost:19006/Loading");
 			http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 
-			Thread.sleep(5000);
-			Main.getInfo().getClient().emit("auth", user.toString());
+			Executors.newSingleThreadExecutor().execute(() -> {
+				try {
+					Thread.sleep(5000);
+					Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth", user.toString());
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			});
 		}
 	}
 
