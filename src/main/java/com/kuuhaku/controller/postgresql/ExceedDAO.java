@@ -18,6 +18,7 @@
 
 package com.kuuhaku.controller.postgresql;
 
+import com.kuuhaku.handlers.api.endpoint.ExceedState;
 import com.kuuhaku.model.common.Exceed;
 import com.kuuhaku.model.persistent.ExceedMember;
 import com.kuuhaku.model.persistent.Member;
@@ -64,18 +65,7 @@ public class ExceedDAO {
 				.collect(Collectors.toList())
 				.indexOf(ExceedEnums.getByName(exceed)) + 1;
 
-		return new Object() {
-			private String name = exceed;
-			private int ranking = pos;
-
-			public String getName() {
-				return name;
-			}
-
-			public int getRanking() {
-				return ranking;
-			}
-		};
+		return new ExceedState(exceed, pos);
 	}
 
 	public static void joinExceed(ExceedMember ex) {
