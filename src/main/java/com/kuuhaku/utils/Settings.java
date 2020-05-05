@@ -176,9 +176,11 @@ public class Settings {
 				message.getTextChannel().sendMessage("O canal de boas-vindas atual do servidor é <#" + antigoCanalBVID + ">.").queue();
 			}
 			return;
-		}
-		if (message.getMentionedChannels().size() > 1) {
+		} else if (message.getMentionedChannels().size() > 1) {
 			message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 canal.").queue();
+			return;
+		} else if (message.getMentionedChannels().size() < 1) {
+			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setCanalBV(null);
@@ -224,9 +226,11 @@ public class Settings {
 				message.getTextChannel().sendMessage("O canal de adeus atual do servidor é <#" + antigoCanalAdeusID + ">.").queue();
 			}
 			return;
-		}
-		if (message.getMentionedChannels().size() > 1) {
+		} else if (message.getMentionedChannels().size() > 1) {
 			message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 canal.").queue();
+			return;
+		} else if (message.getMentionedChannels().size() < 1) {
+			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setCanalAdeus(null);
@@ -272,9 +276,11 @@ public class Settings {
 				message.getTextChannel().sendMessage("O canal de sugestões atual do servidor é <#" + antigoCanalSUGID + ">.").queue();
 			}
 			return;
-		}
-		if (message.getMentionedChannels().size() > 1) {
+		} else if (message.getMentionedChannels().size() > 1) {
 			message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 canal.").queue();
+			return;
+		} else if (message.getMentionedChannels().size() < 1) {
+			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setCanalSUG(null);
@@ -430,8 +436,7 @@ public class Settings {
 				message.getTextChannel().sendMessage("O canal de level up atual do servidor é <#" + antigoCanalLvlUpID + ">.").queue();
 			}
 			return;
-		}
-		if (message.getMentionedChannels().size() > 1) {
+		} else if (message.getMentionedChannels().size() > 1) {
 			message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 canal.").queue();
 			return;
 		} else if (message.getMentionedChannels().size() < 1) {
@@ -461,9 +466,11 @@ public class Settings {
 				message.getTextChannel().sendMessage("O canal relay atual do servidor é <#" + antigoCanalRelayID + ">.").queue();
 			}
 			return;
-		}
-		if (message.getMentionedChannels().size() > 1) {
+		} else if (message.getMentionedChannels().size() > 1) {
 			message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 canal.").queue();
+			return;
+		} else if (message.getMentionedChannels().size() < 1) {
+			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setCanalRelay(null);
