@@ -30,6 +30,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -74,11 +76,45 @@ public class Member {
 
 	}
 
+	public static List<Object> getBonuses(User u) {
+		List<Object> bonuses = new ArrayList<>();
+
+		if (ExceedDAO.hasExceed(u.getId()) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(u.getId())))
+			bonuses.add(new Object() {
+				public String name = "Exceed Vitorioso";
+				public float value = 2;
+			});
+		if (!getWaifu(u).isEmpty())
+			bonuses.add(new Object() {
+				public String name = "Waifu";
+				public float value = WaifuDAO.getMultiplier(u).getMult();
+			});
+
+		if (KGotchiDAO.getKawaigotchi(u.getId()) != null && !Objects.requireNonNull(KGotchiDAO.getKawaigotchi(u.getId())).isAlive())
+			bonuses.add(new Object() {
+				public String name = "Kawaigotchi";
+				public float value = Objects.requireNonNull(KGotchiDAO.getKawaigotchi(u.getId())).getTier().getUserXpMult();
+			});
+		else if (KGotchiDAO.getKawaigotchi(u.getId()) != null)
+			bonuses.add(new Object() {
+				public String name = "Kawaigotchi Morto";
+				public float value = 0.8f;
+			});
+
+		return bonuses;
+	}
+
+	public static String getWaifu(User u) {
+		Couple c = WaifuDAO.getCouple(u);
+		if (c == null) return "";
+		return c.getHusbando().equals(u.getId()) ? c.getWaifu() : c.getHusbando();
+	}
+
 	public boolean addXp(Guild g) {
-		User u = Main.getInfo().getUserByID(this.mid);
+		User u = Main.getInfo().getUserByID(mid);
 		float mult = 1;
 
-		if (ExceedDAO.hasExceed(this.mid) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(this.mid)))
+		if (ExceedDAO.hasExceed(mid) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(mid)))
 			mult *= 2;
 		if (g.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).collect(Collectors.toList()).contains(Member.getWaifu(u)))
 			mult *= WaifuDAO.getMultiplier(u).getMult();
@@ -150,12 +186,6 @@ public class Member {
 
 	public void setMid(String mid) {
 		this.mid = mid;
-	}
-
-	public static String getWaifu(User u) {
-		Couple c = WaifuDAO.getCouple(u);
-		if (c == null) return "";
-		return c.getHusbando().equals(u.getId()) ? c.getWaifu() : c.getHusbando();
 	}
 
 	public boolean isRulesSent() {

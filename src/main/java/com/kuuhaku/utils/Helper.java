@@ -340,7 +340,11 @@ public class Helper {
 	}
 
 	public static <T> T getOr(T get, T or) {
-		return get == null || (get instanceof String && ((String) get).isEmpty()) ? or : get;
+		try {
+			return get == null || (get instanceof String && ((String) get).isEmpty()) ? or : get;
+		} catch (Exception e) {
+			return or;
+		}
 	}
 
 	public static boolean hasRoleHigherThan(Member user, Member target) {

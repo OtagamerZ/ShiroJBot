@@ -19,17 +19,23 @@
 package com.kuuhaku.handlers.api.endpoint;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.TokenDAO;
+import com.kuuhaku.controller.postgresql.WaifuDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
-import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.model.persistent.Member;
+import com.kuuhaku.model.persistent.Tags;
 import com.kuuhaku.utils.Helper;
+import net.dv8tion.jda.api.entities.User;
 import org.json.JSONObject;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.Executors;
 
 @RestController
@@ -58,8 +64,9 @@ public class DashboardRequest {
 		}
 
 		JSONObject user = Helper.get("https://discord.com/api/v6/users/@me", new JSONObject(), Collections.emptyMap(), token.getString("token_type") + " " + token.getString("access_token"));
+		User u = Main.getInfo().getUserByID(user.getString("id"));
 
-		if (Main.getInfo().getUserByID(user.getString("id")) != null) {
+		if (u != null) {
 			String t = TokenDAO.verifyToken(user.getString("id"));
 			if (t == null) {
 				http.setHeader("Location", "http://localhost:19006");
@@ -71,6 +78,14 @@ public class DashboardRequest {
 			Executors.newSingleThreadExecutor().execute(() -> {
 				try {
 					user.put("token", t);
+					user.put("waifu", Helper.getOr(Main.getInfo().getUserByID(Member.getWaifu(u)), ""));
+					user.put("waifuMult", Helper.getOr(WaifuDAO.getMultiplier(u).getMult(), 1.25f));
+					user.put("profiles", MemberDAO.getMemberByMid(u.getId()));
+					user.put("exceed", ExceedDAO.getExceedState(ExceedDAO.getExceed(u.getId())));
+					user.put("credits", AccountDAO.getAccount(u.getId()));
+					user.put("bonuses", Member.getBonuses(u));
+					user.put("badges", Tags.getUserBadges(u.getId()));
+
 					Thread.sleep(5000);
 					Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth", user.toString());
 				} catch (InterruptedException e) {
@@ -78,11 +93,5 @@ public class DashboardRequest {
 				}
 			});
 		}
-	}
-
-	@RequestMapping(value = "/api/profiles", method = RequestMethod.POST)
-	public List<Member> retrieveMessageCache(@RequestHeader(value = "token") String token, @RequestHeader(value = "id") String id) {
-		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
-		return MemberDAO.getMemberByMid(id);
 	}
 }
