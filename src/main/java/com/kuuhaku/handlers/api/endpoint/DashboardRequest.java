@@ -35,7 +35,7 @@ import java.util.concurrent.Executors;
 @RestController
 public class DashboardRequest {
 
-	@RequestMapping(value = "/auth", method = RequestMethod.GET)
+	@RequestMapping(value = "/api/auth", method = RequestMethod.GET)
 	public void validateAccount(HttpServletResponse http, @RequestParam(value = "code") String code) throws InterruptedException {
 		JSONObject jo = new JSONObject();
 
@@ -80,7 +80,7 @@ public class DashboardRequest {
 		}
 	}
 
-	@RequestMapping(value = "/profiles", method = RequestMethod.POST)
+	@RequestMapping(value = "/api/profiles", method = RequestMethod.POST)
 	public List<Member> retrieveMessageCache(@RequestHeader(value = "token") String token, @RequestHeader(value = "id") String id) {
 		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
 		return MemberDAO.getMemberByMid(id);
