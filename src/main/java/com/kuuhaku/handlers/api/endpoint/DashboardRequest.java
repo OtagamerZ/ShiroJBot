@@ -63,9 +63,11 @@ public class DashboardRequest {
 				http.setHeader("Location", "http://localhost:19006");
 				http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 			}
-			Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth", user.toString());
 			http.setHeader("Location", "https://localhost:19006/Loading");
 			http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+
+			Thread.sleep(5000);
+			Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth", user.toString());
 		}
 	}
 
