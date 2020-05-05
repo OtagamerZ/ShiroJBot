@@ -55,7 +55,6 @@ import java.net.BindException;
 import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -145,8 +144,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				}
 			}
 		}
-
-		Main.getInfo().getClient().on("auth", d -> Helper.logger(Main.class).info("Requisição de autenticação: " + Arrays.toString(d)));
 		finishStartUp();
 	}
 
