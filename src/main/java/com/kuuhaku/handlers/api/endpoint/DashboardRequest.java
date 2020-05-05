@@ -74,11 +74,12 @@ public class DashboardRequest {
 			}
 			http.setHeader("Location", "http://localhost:19006/Loading");
 			http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+			String w = Member.getWaifu(u);
 
 			Executors.newSingleThreadExecutor().execute(() -> {
 				try {
 					user.put("token", t);
-					user.put("waifu", Helper.getOr(Main.getInfo().getUserByID(Member.getWaifu(u)), ""));
+					user.put("waifu", w.isEmpty() ? "" : Helper.getOr(Main.getInfo().getUserByID(w), ""));
 					user.put("waifuMult", Helper.getOr(WaifuDAO.getMultiplier(u).getMult(), 1.25f));
 					user.put("profiles", MemberDAO.getMemberByMid(u.getId()));
 					user.put("exceed", ExceedDAO.getExceedState(ExceedDAO.getExceed(u.getId())));

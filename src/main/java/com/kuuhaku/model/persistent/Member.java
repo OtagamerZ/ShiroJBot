@@ -81,22 +81,26 @@ public class Member {
 
 		if (ExceedDAO.hasExceed(u.getId()) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(u.getId())))
 			bonuses.add(new Object() {
+				public final int id = 0;
 				public String name = "Exceed Vitorioso";
 				public float value = 2;
 			});
 		if (!getWaifu(u).isEmpty())
 			bonuses.add(new Object() {
+				public final int id = 1;
 				public String name = "Waifu";
 				public float value = WaifuDAO.getMultiplier(u).getMult();
 			});
 
 		if (KGotchiDAO.getKawaigotchi(u.getId()) != null && !Objects.requireNonNull(KGotchiDAO.getKawaigotchi(u.getId())).isAlive())
 			bonuses.add(new Object() {
+				public final int id = 2;
 				public String name = "Kawaigotchi";
 				public float value = Objects.requireNonNull(KGotchiDAO.getKawaigotchi(u.getId())).getTier().getUserXpMult();
 			});
 		else if (KGotchiDAO.getKawaigotchi(u.getId()) != null)
 			bonuses.add(new Object() {
+				public final int id = 3;
 				public String name = "Kawaigotchi Morto";
 				public float value = 0.8f;
 			});
