@@ -55,7 +55,7 @@ public class WebSocketConfig {
 
 			Main.getRelay().relayMessage(gm);
 
-			socket.getBroadcastOperations().sendEvent("chat", gm.toString());
+			Main.getInfo().getClient().emit("chat", gm.toString());
 		});
 		socket.start();
 	}
