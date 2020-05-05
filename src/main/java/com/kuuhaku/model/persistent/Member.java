@@ -77,8 +77,8 @@ public class Member {
 
 	}
 
-	public static List<Object> getBonuses(User u) {
-		List<Object> bonuses = new ArrayList<>();
+	public static List<Bonus> getBonuses(User u) {
+		List<Bonus> bonuses = new ArrayList<>();
 
 		if (ExceedDAO.hasExceed(u.getId()) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(u.getId())))
 			bonuses.add(new Bonus(0, "Exceed Vitorioso", 2));
