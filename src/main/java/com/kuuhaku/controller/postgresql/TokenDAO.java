@@ -30,7 +30,7 @@ import java.security.SecureRandom;
 import java.util.Base64;
 
 public class TokenDAO {
-	public static void registerToken(String id) {
+	public static Token registerToken(String id) {
 		EntityManager em = Manager.getEntityManager();
 
 		SecureRandom sr = new SecureRandom();
@@ -45,9 +45,11 @@ public class TokenDAO {
 		em.getTransaction().commit();
 
 		em.close();
+
+		return t;
 	}
 
-	public static boolean verifyToken(String id) {
+	public static String verifyToken(String id) {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT t FROM Token t WHERE uid LIKE :uid", Token.class);
@@ -58,7 +60,7 @@ public class TokenDAO {
 			Token t = (Token) q.getSingleResult();
 
 			if (t.isDisabled()) {
-				return false;
+				return null;
 			}
 
 			em.getTransaction().begin();
@@ -67,10 +69,10 @@ public class TokenDAO {
 
 			em.close();
 
-			return true;
+			return t.getToken();
 		} catch (NoResultException e) {
-			registerToken(id);
-			return true;
+			Token t = registerToken(id);
+			return t.getToken();
 		}
 	}
 

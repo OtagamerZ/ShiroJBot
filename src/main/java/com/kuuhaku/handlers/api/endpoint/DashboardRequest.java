@@ -19,10 +19,10 @@
 package com.kuuhaku.handlers.api.endpoint;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.GlobalMessageDAO;
 import com.kuuhaku.controller.postgresql.TokenDAO;
+import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
-import com.kuuhaku.model.persistent.GlobalMessage;
+import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.utils.Helper;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
@@ -60,7 +60,8 @@ public class DashboardRequest {
 		JSONObject user = Helper.get("https://discord.com/api/v6/users/@me", new JSONObject(), Collections.emptyMap(), token.getString("token_type") + " " + token.getString("access_token"));
 
 		if (Main.getInfo().getUserByID(user.getString("id")) != null) {
-			if (!TokenDAO.verifyToken(user.getString("id"))) {
+			String t = TokenDAO.verifyToken(user.getString("id"));
+			if (t == null) {
 				http.setHeader("Location", "http://localhost:19006");
 				http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 			}
@@ -69,8 +70,9 @@ public class DashboardRequest {
 
 			Executors.newSingleThreadExecutor().execute(() -> {
 				try {
+					user.put("token", t);
 					Thread.sleep(5000);
-					Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth", user.toString());
+					Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth", user);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -78,9 +80,9 @@ public class DashboardRequest {
 		}
 	}
 
-	@RequestMapping(value = "/api/", method = RequestMethod.POST)
-	public List<GlobalMessage> retrieveMessageCache(@RequestHeader(value = "token") String token) {
+	@RequestMapping(value = "/api/profiles", method = RequestMethod.POST)
+	public List<Member> retrieveMessageCache(@RequestHeader(value = "token") String token, @RequestHeader(value = "id") String id) {
 		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
-		return GlobalMessageDAO.getMessages();
+		return MemberDAO.getMemberByMid(id);
 	}
 }
