@@ -28,6 +28,7 @@ import com.kuuhaku.model.persistent.CoupleMultiplier;
 import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.model.persistent.Tags;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.User;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -84,8 +85,8 @@ public class DashboardRequest {
 					user.put("waifu", w.isEmpty() ? "" : Helper.getOr(Main.getInfo().getUserByID(w), ""));
 					user.put("waifuMult", cm == null ? 1.25f : cm.getMult());
 					user.put("profiles", MemberDAO.getMemberByMid(u.getId()));
-					user.put("exceed", ExceedDAO.getExceedState(ExceedDAO.getExceed(u.getId())));
-					user.put("credits", AccountDAO.getAccount(u.getId()));
+					user.put("exceed", ShiroInfo.getJSONFactory().create().toJson(ExceedDAO.getExceedState(ExceedDAO.getExceed(u.getId()))));
+					user.put("credits", AccountDAO.getAccount(u.getId()).getBalance());
 					user.put("bonuses", Member.getBonuses(u));
 					user.put("badges", Tags.getUserBadges(u.getId()));
 
