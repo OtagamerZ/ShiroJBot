@@ -49,8 +49,8 @@ public class DashboardRequest {
 		jo.put("scope", "identify");
 
 		Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth", Helper.post("https://discord.com/api/v6/oauth2/token", Helper.urlEncode(jo), Collections.singletonMap("Content-Type", "application/x-www-form-urlencoded"), "").toString());
-		http.setHeader("Location", "https://www.github.com");
-		http.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
+		http.setHeader("Location", "http://localhost:19006/Dashboard");
+		http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 	}
 
 	@RequestMapping(value = "/app/messages", method = RequestMethod.POST)
