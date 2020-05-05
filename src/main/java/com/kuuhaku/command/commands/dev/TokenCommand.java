@@ -26,6 +26,7 @@ import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NonNls;
 
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Base64;
 
@@ -55,7 +56,7 @@ public class TokenCommand extends Command {
 		}
 
 		SecureRandom sr = new SecureRandom();
-		byte[] nameSpace = args[0].getBytes();
+		byte[] nameSpace = args[0].getBytes(StandardCharsets.UTF_8);
 		byte[] randomSpace = new byte[48 - nameSpace.length];
 		sr.nextBytes(randomSpace);
 

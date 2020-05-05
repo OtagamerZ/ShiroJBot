@@ -28,6 +28,9 @@ public class Token {
 	private int id;
 
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String uid = "";
+
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
 	private String token = "";
 
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
@@ -35,6 +38,18 @@ public class Token {
 
 	@Column(columnDefinition = "INT DEFAULT 0")
 	private int calls = 0;
+
+	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	private boolean disabled = false;
+
+	public Token(String token, String holder, String uid) {
+		this.token = token;
+		this.holder = holder;
+		this.uid = uid;
+	}
+
+	public Token() {
+	}
 
 	public String getToken() {
 		return token;
@@ -47,5 +62,9 @@ public class Token {
 	public Token addCall() {
 		calls++;
 		return this;
+	}
+
+	public boolean isDisabled() {
+		return disabled;
 	}
 }

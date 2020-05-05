@@ -21,11 +21,8 @@ package com.kuuhaku.handlers.api.endpoint;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.GlobalMessageDAO;
 import com.kuuhaku.controller.postgresql.TokenDAO;
-import com.kuuhaku.controller.sqlite.DashboardDAO;
-import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.model.persistent.GlobalMessage;
-import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.utils.Helper;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
@@ -48,32 +45,22 @@ public class DashboardRequest {
 		jo.put("redirect_uri", "http://" + System.getenv("SERVER_URL") + "/api/auth");
 		jo.put("scope", "identify");
 
-		Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth", Helper.post("https://discord.com/api/v6/oauth2/token", Helper.urlEncode(jo), Collections.singletonMap("Content-Type", "application/x-www-form-urlencoded"), "").toString());
-		http.setHeader("Location", "http://localhost:19006/Dashboard");
-		http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+		JSONObject res = Helper.post("https://discord.com/api/v6/oauth2/token", Helper.urlEncode(jo), Collections.singletonMap("Content-Type", "application/x-www-form-urlencoded"), "");
+
+		if (Main.getInfo().getUserByID(res.getString("id")) != null) {
+			if (!TokenDAO.verifyToken(res.getString("id"))) {
+				http.setHeader("Location", "http://localhost:19006");
+				http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+			}
+			Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth", res.toString());
+			http.setHeader("Location", "http://localhost:19006/Loading");
+			http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+		}
 	}
 
-	@RequestMapping(value = "/app/messages", method = RequestMethod.POST)
+	@RequestMapping(value = "/api/", method = RequestMethod.POST)
 	public List<GlobalMessage> retrieveMessageCache(@RequestHeader(value = "token") String token) {
 		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
 		return GlobalMessageDAO.getMessages();
-	}
-
-	@RequestMapping(value = "/app/auth", method = RequestMethod.POST)
-	public String validateAccount(@RequestHeader(value = "login") String login, @RequestHeader(value = "password") String pass, @RequestHeader(value = "token") String token) {
-		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
-		return DashboardDAO.auth(login, pass);
-	}
-
-	@RequestMapping(value = "/app/data", method = RequestMethod.POST)
-	public String retrieveData(@RequestHeader(value = "uid") String uid, @RequestHeader(value = "token") String token) {
-		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
-		return DashboardDAO.getData(uid).toString();
-	}
-
-	@RequestMapping(value = "/app/profile", method = RequestMethod.POST)
-	public Member retrieveProfiles(@RequestHeader(value = "id") String id, @RequestHeader(value = "token") String token) {
-		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
-		return MemberDAO.getMemberById(id);
 	}
 }
