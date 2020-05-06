@@ -108,15 +108,15 @@ public class DashboardRequest {
 					g.forEach(gd -> {
 						JSONObject guild = new JSONObject();
 
-						guild.put("guildID", gd.getIdLong());
+						guild.put("guildID", gd.getId());
 						guild.put("name", gd.getName());
 						guild.put("moderator", Helper.hasPermission(gd.getMember(u), PrivilegeLevel.MOD));
 						guild.put("channels", gd.getTextChannels().stream().map(tc -> new JSONObject() {{
-							put("id", tc.getIdLong());
+							put("id", tc.getId());
 							put("name", tc.getName());
 						}}).collect(Collectors.toList()));
 						guild.put("roles", gd.getRoles().stream().map(r -> new JSONObject() {{
-							put("id", r.getIdLong());
+							put("id", r.getId());
 							put("name", r.getName());
 						}}).collect(Collectors.toList()));
 						guild.put("configs", new ExportableGuildConfig(GuildDAO.getGuildById(gd.getId())).getGuildConfig());
