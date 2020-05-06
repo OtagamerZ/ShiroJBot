@@ -108,15 +108,15 @@ public class DashboardRequest {
 						guild.put("guildID", gd.getIdLong());
 						guild.put("name", gd.getName());
 						guild.put("moderator", Helper.hasPermission(gd.getMember(u), PrivilegeLevel.MOD));
-						guild.put("channels", gd.getTextChannels().stream().map(tc -> new Object() {
-							long id = tc.getIdLong();
-							String name = tc.getName();
-						}).collect(Collectors.toList()));
-						guild.put("roles", gd.getRoles().stream().map(r -> new Object() {
-							long id = r.getIdLong();
-							String name = r.getName();
-						}).collect(Collectors.toList()));
-						guild.put("configs", new ExportableGuildConfig(GuildDAO.getGuildById(gd.getId())));
+						guild.put("channels", gd.getTextChannels().stream().map(tc -> new JSONObject() {{
+							put("id", tc.getIdLong());
+							put("name", tc.getName());
+						}}).collect(Collectors.toList()));
+						guild.put("roles", gd.getRoles().stream().map(r -> new JSONObject() {{
+							put("id", r.getIdLong());
+							put("name", r.getName());
+						}}).collect(Collectors.toList()));
+						guild.put("configs", new ExportableGuildConfig(GuildDAO.getGuildById(gd.getId())).getGuildConfig());
 
 						guilds.put(guild);
 					});
