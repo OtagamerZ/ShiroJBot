@@ -23,6 +23,7 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.WaifuDAO;
 import com.kuuhaku.controller.sqlite.KGotchiDAO;
+import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.endpoint.Bonus;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
@@ -198,5 +199,31 @@ public class Member {
 
 	public void setSid(String sid) {
 		this.sid = sid;
+	}
+
+	public int getLocalRank() {
+		List<Member> mbs = MemberDAO.getMemberRank(sid, false);
+		int pos = 0;
+		for (int i = 0; i < mbs.size(); i++) {
+			if (mbs.get(i).getId().equals(id)) {
+				pos = i + 1;
+				break;
+			}
+		}
+
+		return pos;
+	}
+
+	public int getGlobalRank() {
+		List<Member> mbs = MemberDAO.getMemberRank(sid, true);
+		int posG = 0;
+		for (int i = 0; i < mbs.size(); i++) {
+			if (mbs.get(i).getId().equals(id)) {
+				posG = i + 1;
+				break;
+			}
+		}
+
+		return posG;
 	}
 }
