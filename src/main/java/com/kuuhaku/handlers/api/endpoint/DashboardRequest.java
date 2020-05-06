@@ -25,10 +25,7 @@ import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.model.common.ExportableGuildConfig;
 import com.kuuhaku.model.common.Profile;
-import com.kuuhaku.model.persistent.CoupleMultiplier;
-import com.kuuhaku.model.persistent.Member;
-import com.kuuhaku.model.persistent.Tags;
-import com.kuuhaku.model.persistent.Token;
+import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.PrivilegeLevel;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -146,7 +143,50 @@ public class DashboardRequest {
 	@RequestMapping(value = "/api/update", method = RequestMethod.POST)
 	public void updateData(@RequestHeader(value = "token") String token, @RequestBody String payload) {
 		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
-		JSONObject data = new JSONObject(payload);
+		JSONArray guildData = new JSONObject(payload).getJSONArray("guildData");
+
+		guildData.forEach(gd -> {
+			JSONObject guild = new JSONObject(gd);
+
+			GuildConfig gc = GuildDAO.getGuildById(guild.getString("guildID"));
+
+			JSONObject c = guild.getJSONObject("configs");
+
+			gc.setPrefix(c.getString("prefix"));
+			gc.setCargoWarn(c.getJSONObject("muteRole").getString("id"));
+
+			gc.setWarnTime(c.getInt("muteTime"));
+			gc.setPollTime(c.getInt("pollTime"));
+
+			gc.setCargoWarn(c.getJSONObject("muteRole").getString("id"));
+
+			gc.setMsgBoasVindas(c.getString("welcomeMessage"));
+			gc.setMsgAdeus(c.getString("goodbyeMessage"));
+
+			gc.setCanalBV(c.getJSONObject("welcomeChannel").getString("id"));
+			gc.setCanalAdeus(c.getJSONObject("goodbyeChannel").getString("id"));
+			gc.setCanalAdeus(c.getJSONObject("suggestionChannel").getString("id"));
+			gc.setCanalRelay(c.getJSONObject("relayChannel").getString("id"));
+
+			JSONObject lr = new JSONObject();
+			c.getJSONArray("levelRoles").forEach(o -> {
+				lr.put(((JSONObject) o).getString("level"), ((JSONObject) o).getString("id"));
+			});
+
+			gc.setCargosLvl(lr);
+		});
+
+		JSONArray profileData = new JSONObject(payload).getJSONArray("profileData");
+
+		profileData.forEach(pd -> {
+			JSONObject data = (JSONObject) pd;
+			Member mb = MemberDAO.getMemberById(data.getString("id"));
+
+			mb.setBg(data.getString("bg"));
+			mb.setBio(data.getString("bio"));
+
+			MemberDAO.updateMemberConfigs(mb);
+		});
 	}
 
 	@RequestMapping(value = "/api/ticket", method = RequestMethod.POST)
@@ -167,7 +207,7 @@ public class DashboardRequest {
 		eb.addField("Enviado em:", Helper.dateformat.format(OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3"))), true);
 		eb.addField("Assunto", data.getString("subject"), false);
 		eb.addField("Mensagem:", "```" + data.getString("message") + "```", false);
-		eb.setColor(Color.white);
+		eb.setColor(Color.decode("#fefefe"));
 
 		Map<String, String> ids = new HashMap<>();
 
