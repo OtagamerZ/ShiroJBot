@@ -106,7 +106,7 @@ public class GuildEvents extends ListenerAdapter {
 					message.delete().queue();
 					return;
 				}
-			} catch (InsufficientPermissionException ignore) {
+			} catch (InsufficientPermissionException | ErrorResponseException ignore) {
 			}
 
 			if (GuildDAO.getGuildById(guild.getId()).getNoSpamChannels().contains(channel.getId()) && author != Main.getInfo().getSelfUser()) {
@@ -219,12 +219,12 @@ public class GuildEvents extends ListenerAdapter {
 				} catch (InsufficientPermissionException ignore) {
 				}
 
-				if (GuildDAO.getGuildById(guild.getId()).getNoLinkChannels().contains(channel.getId()) && Helper.findURL(rawMessage)) {
-					message.delete().reason("Mensagem possui um URL").complete();
-					channel.sendMessage(member.getAsMention() + ", é proibido postar links neste canal!").queue();
-				}
-
 				try {
+					if (GuildDAO.getGuildById(guild.getId()).getNoLinkChannels().contains(channel.getId()) && Helper.findURL(rawMessage)) {
+						message.delete().reason("Mensagem possui um URL").complete();
+						channel.sendMessage(member.getAsMention() + ", é proibido postar links neste canal!").queue();
+					}
+
 					com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(member.getUser().getId() + member.getGuild().getId());
 					if (m.getMid() == null) {
 						m.setMid(author.getId());
@@ -242,7 +242,8 @@ public class GuildEvents extends ListenerAdapter {
 					MemberDAO.updateMemberConfigs(m);
 				} catch (NoResultException e) {
 					MemberDAO.addMemberToDB(member);
-				}
+				} catch (ErrorResponseException ignore) {
+				} 
 			}
 		} catch (InsufficientPermissionException ignore) {
 		} catch (ErrorResponseException e) {
