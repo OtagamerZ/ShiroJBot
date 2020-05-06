@@ -32,6 +32,22 @@ import java.security.SecureRandom;
 import java.util.Base64;
 
 public class TokenDAO {
+	public static Token getToken(String token) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT t FROM Token t WHERE token LIKE :token", Token.class);
+		q.setParameter("token", token);
+		q.setMaxResults(1);
+
+		try {
+			return (Token) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
+
 	public static Token registerToken(String id) {
 		EntityManager em = Manager.getEntityManager();
 
