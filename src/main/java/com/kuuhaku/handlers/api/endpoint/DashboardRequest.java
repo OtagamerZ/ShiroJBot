@@ -88,10 +88,12 @@ public class DashboardRequest {
 
 			Executors.newSingleThreadExecutor().execute(() -> {
 				try {
+					List<Member> profiles = MemberDAO.getMemberByMid(u.getId());
+
 					user.put("token", t);
 					user.put("waifu", w.isEmpty() ? "" : Helper.getOr(Main.getInfo().getUserByID(w), ""));
 					user.put("waifuMult", cm == null ? 1.25f : cm.getMult());
-					user.put("profiles", MemberDAO.getMemberByMid(u.getId()));
+					user.put("profiles", profiles);
 					user.put("exceed", new JSONObject(ExceedDAO.getExceedState(ExceedDAO.getExceed(u.getId()))));
 					user.put("credits", AccountDAO.getAccount(u.getId()).getBalance());
 					user.put("bonuses", Member.getBonuses(u));
@@ -132,10 +134,11 @@ public class DashboardRequest {
 	}
 
 	@RequestMapping(value = "/api/card", method = RequestMethod.POST)
-	public String requestCard(@RequestHeader(value = "id") String id) throws IOException {
+	public String requestCard(@RequestHeader(value = "id") String id, @RequestHeader(value = "guild") String guild) throws IOException {
 		if (TokenDAO.verifyToken(id) == null) throw new UnauthorizedException();
 
-		net.dv8tion.jda.api.entities.Member mb = Main.getInfo().getMemberByID(id);
+		net.dv8tion.jda.api.entities.Member mb = Main.getInfo().getGuildByID(guild).getMemberById(id);
+		assert mb != null;
 		return Base64.getEncoder().encodeToString(Profile.makeProfile(mb, mb.getGuild()).toByteArray());
 	}
 }
