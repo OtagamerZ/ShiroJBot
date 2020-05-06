@@ -59,6 +59,10 @@ public class Token {
 		return holder;
 	}
 
+	public String getUid() {
+		return uid;
+	}
+
 	public Token addCall() {
 		calls++;
 		return this;
