@@ -19,10 +19,7 @@
 package com.kuuhaku.handlers.api.endpoint;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.ExceedDAO;
-import com.kuuhaku.controller.postgresql.TokenDAO;
-import com.kuuhaku.controller.postgresql.WaifuDAO;
+import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
@@ -31,8 +28,10 @@ import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.persistent.CoupleMultiplier;
 import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.model.persistent.Tags;
+import com.kuuhaku.model.persistent.Token;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.PrivilegeLevel;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import org.json.JSONArray;
@@ -40,10 +39,12 @@ import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
 import java.io.IOException;
-import java.util.Base64;
-import java.util.Collections;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.List;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
@@ -140,5 +141,45 @@ public class DashboardRequest {
 		net.dv8tion.jda.api.entities.Member mb = Main.getInfo().getGuildByID(guild).getMemberById(id);
 		assert mb != null;
 		return Base64.getEncoder().encodeToString(Profile.makeProfile(mb, mb.getGuild()).toByteArray());
+	}
+
+	@RequestMapping(value = "/api/update", method = RequestMethod.POST)
+	public void updateData(@RequestHeader(value = "token") String token, @RequestBody String payload) {
+		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
+		JSONObject data = new JSONObject(payload);
+	}
+
+	@RequestMapping(value = "/api/ticket", method = RequestMethod.POST)
+	public void sendTicket(@RequestHeader(value = "token") String token, @RequestBody String payload) {
+		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
+		JSONObject data = new JSONObject(payload);
+
+		Token t = TokenDAO.getToken(token);
+
+		if (t == null) return;
+
+		int number = TicketDAO.openTicket(data.getString("message"), Main.getInfo().getUserByID(t.getUid()));
+
+		EmbedBuilder eb = new EmbedBuilder();
+
+		eb.setTitle("Feedback via site (Ticket Nº " + number + ")");
+		eb.addField("Enviador por:", t.getHolder(), true);
+		eb.addField("Enviado em:", Helper.dateformat.format(OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3"))), true);
+		eb.addField("Assunto", data.getString("subject"), false);
+		eb.addField("Mensagem:", "```" + data.getString("message") + "```", false);
+		eb.setColor(Color.white);
+
+		Map<String, String> ids = new HashMap<>();
+
+		Main.getInfo().getDevelopers().forEach(dev -> Main.getInfo().getUserByID(dev).openPrivateChannel()
+				.flatMap(m -> m.sendMessage(eb.build()))
+				.flatMap(m -> {
+					ids.put(dev, m.getId());
+					return m.pin();
+				})
+				.complete()
+		);
+
+		TicketDAO.setIds(number, ids);
 	}
 }
