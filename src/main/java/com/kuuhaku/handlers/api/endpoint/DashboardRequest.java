@@ -157,6 +157,9 @@ public class DashboardRequest {
 			try {
 				List<Member> profiles = MemberDAO.getMemberByMid(u.getId());
 
+				user.put("id", u.getId());
+				user.put("username", u.getName());
+				user.put("avatar", u.getEffectiveAvatarUrl());
 				user.put("token", t.getToken());
 				user.put("waifu", w.isEmpty() ? "" : Helper.getOr(Main.getInfo().getUserByID(w), ""));
 				user.put("waifuMult", cm == null ? 1.25f : cm.getMult());
