@@ -23,12 +23,17 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.TokenDAO;
 import com.kuuhaku.controller.postgresql.WaifuDAO;
+import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.model.common.ExportableGuildConfig;
 import com.kuuhaku.model.persistent.CoupleMultiplier;
 import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.model.persistent.Tags;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.PrivilegeLevel;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,7 +42,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 @RestController
 public class DashboardRequest {
@@ -89,8 +96,33 @@ public class DashboardRequest {
 					user.put("bonuses", Member.getBonuses(u));
 					user.put("badges", Tags.getUserBadges(u.getId()));
 
-					Thread.sleep(5000);
-					Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth", user.toString());
+					Thread.sleep(2500);
+					Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth_user", user.toString());
+
+					List<Guild> g = u.getMutualGuilds();
+
+					JSONArray guilds = new JSONArray();
+					g.forEach(gd -> {
+						JSONObject guild = new JSONObject();
+
+						guild.put("guildID", gd.getIdLong());
+						guild.put("name", gd.getName());
+						guild.put("moderator", Helper.hasPermission(gd.getMember(u), PrivilegeLevel.MOD));
+						guild.put("channels", gd.getTextChannels().stream().map(tc -> new Object() {
+							long id = tc.getIdLong();
+							String name = tc.getName();
+						}).collect(Collectors.toList()));
+						guild.put("roles", gd.getRoles().stream().map(r -> new Object() {
+							long id = r.getIdLong();
+							String name = r.getName();
+						}).collect(Collectors.toList()));
+						guild.put("configs", new ExportableGuildConfig(GuildDAO.getGuildById(gd.getId())));
+
+						guilds.put(guild);
+					});
+
+					Thread.sleep(2500);
+					Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth_guild", guilds.toString());
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
