@@ -33,21 +33,36 @@ public class ExportableGuildConfig {
 		gc.put("welcomeChannel", new JSONObject() {{
 			put("id", g.getCanalBV());
 
-			TextChannel bv = Main.getInfo().getAPI().getTextChannelById(g.getCanalBV());
+			TextChannel bv;
+			try {
+				bv = Main.getInfo().getAPI().getTextChannelById(g.getCanalBV());
+			} catch (IllegalArgumentException e) {
+				bv = null;
+			}
 			if (bv != null) put("name", bv.getName());
 		}});
 		gc.put("welcomeMessage", g.getMsgBoasVindas());
 		gc.put("goodbyeChannel", new JSONObject() {{
 			put("id", g.getCanalAdeus());
 
-			TextChannel ad = Main.getInfo().getAPI().getTextChannelById(g.getCanalAdeus());
+			TextChannel ad;
+			try {
+				ad = Main.getInfo().getAPI().getTextChannelById(g.getCanalAdeus());
+			} catch (IllegalArgumentException e) {
+				ad = null;
+			}
 			if (ad != null) put("name", ad.getName());
 		}});
 		gc.put("goodbyeMessage", g.getMsgAdeus());
 		gc.put("suggestionChannel", new JSONObject() {{
 			put("id", g.getCanalSUG());
 
-			TextChannel sg = Main.getInfo().getAPI().getTextChannelById(g.getCanalSUG());
+			TextChannel sg;
+			try {
+				sg = Main.getInfo().getAPI().getTextChannelById(g.getCanalSUG());
+			} catch (IllegalArgumentException e) {
+				sg = null;
+			}
 			if (sg != null) put("name", sg.getName());
 		}});
 		gc.put("pollTime", g.getPollTime());
@@ -55,20 +70,35 @@ public class ExportableGuildConfig {
 		gc.put("muteRole", new JSONObject() {{
 			put("id", g.getCargoWarn());
 
-			Role r = Main.getInfo().getRoleByID(g.getCargoWarn());
+			Role r;
+			try {
+				r = Main.getInfo().getRoleByID(g.getCargoWarn());
+			} catch (IllegalArgumentException e) {
+				r = null;
+			}
 			if (r != null) put("name", r.getName());
 		}});
 		gc.put("levelUpChannel", new JSONObject() {{
 			put("id", g.getCanalLvl());
 
-			TextChannel lvl = Main.getInfo().getAPI().getTextChannelById(g.getCanalLvl());
+			TextChannel lvl;
+			try {
+				lvl = Main.getInfo().getAPI().getTextChannelById(g.getCanalLvl());
+			} catch (IllegalArgumentException e) {
+				lvl = null;
+			}
 			if (lvl != null) put("name", lvl.getName());
 		}});
 		gc.put("levelRoles", new JSONArray() {{
 			g.getCargoslvl().forEach((key, value) -> put(new JSONObject() {{
 				put("id", String.valueOf(value));
 
-				Role r = Main.getInfo().getRoleByID(String.valueOf(value));
+				Role r;
+				try {
+					r = Main.getInfo().getRoleByID(String.valueOf(value));
+				} catch (IllegalArgumentException e) {
+					r = null;
+				}
 				if (r != null) {
 					put("name", r.getName());
 					put("level", key);
@@ -78,7 +108,12 @@ public class ExportableGuildConfig {
 		gc.put("relayChannel", new JSONObject() {{
 			put("id", g.getCanalRelay());
 
-			TextChannel rl = Main.getInfo().getAPI().getTextChannelById(g.getCanalRelay());
+			TextChannel rl;
+			try {
+				rl = Main.getInfo().getAPI().getTextChannelById(g.getCanalRelay());
+			} catch (IllegalArgumentException e) {
+				rl = null;
+			}
 			if (rl != null) put("name", rl.getName());
 		}});
 	}
