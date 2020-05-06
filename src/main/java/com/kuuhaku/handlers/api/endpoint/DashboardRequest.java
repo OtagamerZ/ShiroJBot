@@ -159,7 +159,7 @@ public class DashboardRequest {
 
 				user.put("id", u.getId());
 				user.put("username", u.getName());
-				user.put("avatar", u.getEffectiveAvatarUrl());
+				user.put("avatar", u.getAvatarId());
 				user.put("token", t.getToken());
 				user.put("waifu", w.isEmpty() ? "" : Helper.getOr(Main.getInfo().getUserByID(w), ""));
 				user.put("waifuMult", cm == null ? 1.25f : cm.getMult());
