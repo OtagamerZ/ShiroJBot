@@ -140,6 +140,65 @@ public class DashboardRequest {
 		return Base64.getEncoder().encodeToString(Profile.makeProfile(mb, mb.getGuild()).toByteArray());
 	}
 
+	@RequestMapping(value = "/api/flush", method = RequestMethod.POST)
+	public void updateData(@RequestHeader(value = "token") String token) {
+		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
+		Token t = TokenDAO.getToken(token);
+
+		if (t == null) return;
+
+		User u = Main.getInfo().getUserByID(t.getUid());
+
+		String w = Member.getWaifu(u);
+		CoupleMultiplier cm = WaifuDAO.getMultiplier(u);
+		JSONObject user = new JSONObject();
+
+		Executors.newSingleThreadExecutor().execute(() -> {
+			try {
+				List<Member> profiles = MemberDAO.getMemberByMid(u.getId());
+
+				user.put("token", t.getToken());
+				user.put("waifu", w.isEmpty() ? "" : Helper.getOr(Main.getInfo().getUserByID(w), ""));
+				user.put("waifuMult", cm == null ? 1.25f : cm.getMult());
+				user.put("profiles", profiles);
+				user.put("exceed", new JSONObject(ExceedDAO.getExceedState(ExceedDAO.getExceed(u.getId()))));
+				user.put("credits", AccountDAO.getAccount(u.getId()).getBalance());
+				user.put("bonuses", Member.getBonuses(u));
+				user.put("badges", Tags.getUserBadges(u.getId()));
+
+				Thread.sleep(2500);
+				Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("flush_user", user.toString());
+
+				List<Guild> g = u.getMutualGuilds();
+
+				JSONArray guilds = new JSONArray();
+				g.forEach(gd -> {
+					JSONObject guild = new JSONObject();
+
+					guild.put("guildID", gd.getId());
+					guild.put("name", gd.getName());
+					guild.put("moderator", Helper.hasPermission(gd.getMember(u), PrivilegeLevel.MOD));
+					guild.put("channels", gd.getTextChannels().stream().map(tc -> new JSONObject() {{
+						put("id", tc.getId());
+						put("name", tc.getName());
+					}}).collect(Collectors.toList()));
+					guild.put("roles", gd.getRoles().stream().map(r -> new JSONObject() {{
+						put("id", r.getId());
+						put("name", r.getName());
+					}}).collect(Collectors.toList()));
+					guild.put("configs", new ExportableGuildConfig(GuildDAO.getGuildById(gd.getId())).getGuildConfig());
+
+					guilds.put(guild);
+				});
+
+				Thread.sleep(2500);
+				Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("flush_guild", guilds.toString());
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		});
+	}
+
 	@RequestMapping(value = "/api/update", method = RequestMethod.POST)
 	public void updateData(@RequestHeader(value = "token") String token, @RequestBody String payload) {
 		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
