@@ -143,10 +143,10 @@ public class DashboardRequest {
 	@RequestMapping(value = "/api/update", method = RequestMethod.POST)
 	public void updateData(@RequestHeader(value = "token") String token, @RequestBody String payload) {
 		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
-		JSONArray guildData = new JSONObject(payload).getJSONArray("guildData");
+		JSONObject cluster = new JSONObject(payload);
 
-		guildData.forEach(gd -> {
-			JSONObject guild = new JSONObject(gd);
+		if (cluster.has("guildData")) {
+			JSONObject guild = cluster.getJSONObject("guildData");
 
 			GuildConfig gc = GuildDAO.getGuildById(guild.getString("guildID"));
 
@@ -174,19 +174,21 @@ public class DashboardRequest {
 			});
 
 			gc.setCargosLvl(lr);
-		});
 
-		JSONArray profileData = new JSONObject(payload).getJSONArray("profileData");
+			GuildDAO.updateGuildSettings(gc);
+		}
 
-		profileData.forEach(pd -> {
-			JSONObject data = (JSONObject) pd;
+		if (cluster.has("profileData")) {
+			JSONObject pd = cluster.getJSONObject("profileData");
+
+			JSONObject data = pd;
 			Member mb = MemberDAO.getMemberById(data.getString("id"));
 
 			mb.setBg(data.getString("bg"));
 			mb.setBio(data.getString("bio"));
 
 			MemberDAO.updateMemberConfigs(mb);
-		});
+		}
 	}
 
 	@RequestMapping(value = "/api/ticket", method = RequestMethod.POST)
