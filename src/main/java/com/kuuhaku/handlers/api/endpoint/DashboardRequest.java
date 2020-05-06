@@ -25,7 +25,9 @@ import com.kuuhaku.controller.postgresql.TokenDAO;
 import com.kuuhaku.controller.postgresql.WaifuDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.model.common.ExportableGuildConfig;
+import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.persistent.CoupleMultiplier;
 import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.model.persistent.Tags;
@@ -35,12 +37,10 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -128,5 +128,13 @@ public class DashboardRequest {
 				}
 			});
 		}
+	}
+
+	@RequestMapping(value = "/api/card", method = RequestMethod.POST)
+	public byte[] requestCard(@RequestHeader(value = "id") String id) throws IOException {
+		if (TokenDAO.verifyToken(id) == null) throw new UnauthorizedException();
+
+		net.dv8tion.jda.api.entities.Member mb = Main.getInfo().getMemberByID(id);
+		return Profile.makeProfile(mb, mb.getGuild()).toByteArray();
 	}
 }
