@@ -273,7 +273,7 @@ public class GuildEvents extends ListenerAdapter {
 					guild.addRoleToMember(member, r)
 							.delay(GuildDAO.getGuildById(guild.getId()).getWarnTime(), TimeUnit.MINUTES)
 							.flatMap(s -> guild.removeRoleFromMember(member, r))
-							.queue();
+							.complete();
 					MutedMember mm = Helper.getOr(com.kuuhaku.controller.postgresql.MemberDAO.getMutedMemberById(member.getId()), new MutedMember(member.getId(), guild.getId()));
 					mm.mute(GuildDAO.getGuildById(guild.getId()).getWarnTime());
 
