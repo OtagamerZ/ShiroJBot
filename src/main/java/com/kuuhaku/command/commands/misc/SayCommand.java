@@ -18,12 +18,22 @@
 
 package com.kuuhaku.command.commands.misc;
 
+import club.minnced.discord.webhook.WebhookClient;
+import club.minnced.discord.webhook.WebhookClientBuilder;
+import club.minnced.discord.webhook.send.WebhookMessageBuilder;
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
+import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.jetbrains.annotations.NonNls;
+
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
 public class SayCommand extends Command {
 
@@ -51,8 +61,30 @@ public class SayCommand extends Command {
 			return;
 		}
 
-		channel.sendMessage(Helper.makeEmoteFromMention(args)).queue();
-		if (guild.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE))
-			message.delete().queue(null, Helper::doNothing);
+		MessageBuilder mb = new MessageBuilder();
+		mb.append(Helper.makeEmoteFromMention(args)).stripMentions(guild);
+
+		try {
+			Webhook wh = Helper.getOrCreateWebhook((TextChannel) channel, "Shiro", Main.getInfo().getAPI());
+			Map<String, Consumer<Void>> s = Helper.sendEmotifiedString(guild, mb.toString());
+
+			WebhookMessageBuilder wmb = new WebhookMessageBuilder();
+			wmb.setContent(String.valueOf(s.keySet().toArray()[0]));
+			wmb.setAvatarUrl(author.getAvatarUrl());
+			wmb.setUsername(author.getName());
+
+			assert wh != null;
+			WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
+			try {
+				message.delete().queue();
+				wc.send(wmb.build()).thenAccept(rm -> s.get(String.valueOf(s.keySet().toArray()[0])).accept(null)).get();
+			} catch (InterruptedException | ExecutionException e) {
+				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			}
+		} catch (IndexOutOfBoundsException | InsufficientPermissionException ignore) {
+			channel.sendMessage(mb.build()).queue();
+			if (guild.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE))
+				message.delete().queue(null, Helper::doNothing);
+		}
 	}
 }
