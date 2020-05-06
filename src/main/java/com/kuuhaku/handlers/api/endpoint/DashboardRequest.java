@@ -91,7 +91,7 @@ public class DashboardRequest {
 					user.put("waifu", w.isEmpty() ? "" : Helper.getOr(Main.getInfo().getUserByID(w), ""));
 					user.put("waifuMult", cm == null ? 1.25f : cm.getMult());
 					user.put("profiles", MemberDAO.getMemberByMid(u.getId()));
-					user.put("exceed", ExceedDAO.getExceedState(ExceedDAO.getExceed(u.getId())));
+					user.put("exceed", new JSONObject(ExceedDAO.getExceedState(ExceedDAO.getExceed(u.getId()))));
 					user.put("credits", AccountDAO.getAccount(u.getId()).getBalance());
 					user.put("bonuses", Member.getBonuses(u));
 					user.put("badges", Tags.getUserBadges(u.getId()));
