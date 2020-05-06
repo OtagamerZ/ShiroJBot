@@ -20,6 +20,8 @@ package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.model.persistent.Token;
+import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.PrivilegeLevel;
 import org.apache.commons.lang3.ArrayUtils;
 
 import javax.persistence.EntityManager;
@@ -69,7 +71,8 @@ public class TokenDAO {
 
 			em.close();
 
-			return t.getToken();
+			if (!Helper.hasPermission(Main.getInfo().getMemberByID(t.getUid()), PrivilegeLevel.PARTNER)) return null;
+			else return t.getToken();
 		} catch (NoResultException e) {
 			Token t = registerToken(id);
 			return t.getToken();
