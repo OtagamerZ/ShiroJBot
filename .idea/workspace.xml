@@ -25,9 +25,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/ExportableGuildConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DashboardRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DashboardRequest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -393,20 +391,6 @@
       <workItem from="1588697516904" duration="11002000" />
       <workItem from="1588710901542" duration="1202000" />
     </task>
-    <task id="LOCAL-01074" summary="Correções básicas">
-      <created>1588258304948</created>
-      <option name="number" value="01074" />
-      <option name="presentableId" value="LOCAL-01074" />
-      <option name="project" value="LOCAL" />
-      <updated>1588258304948</updated>
-    </task>
-    <task id="LOCAL-01075" summary="Correções básicas">
-      <created>1588258550782</created>
-      <option name="number" value="01075" />
-      <option name="presentableId" value="LOCAL-01075" />
-      <option name="project" value="LOCAL" />
-      <updated>1588258550782</updated>
-    </task>
     <task id="LOCAL-01076" summary="Correções básicas">
       <created>1588258876395</created>
       <option name="number" value="01076" />
@@ -736,7 +720,21 @@
       <option name="project" value="LOCAL" />
       <updated>1588711823656</updated>
     </task>
-    <option name="localTasksCounter" value="1123" />
+    <task id="LOCAL-01123" summary="Criação da API de autenticação para o dashboard">
+      <created>1588769851322</created>
+      <option name="number" value="01123" />
+      <option name="presentableId" value="LOCAL-01123" />
+      <option name="project" value="LOCAL" />
+      <updated>1588769851322</updated>
+    </task>
+    <task id="LOCAL-01124" summary="Criação da API de autenticação para o dashboard">
+      <created>1588769927268</created>
+      <option name="number" value="01124" />
+      <option name="presentableId" value="LOCAL-01124" />
+      <option name="project" value="LOCAL" />
+      <updated>1588769927268</updated>
+    </task>
+    <option name="localTasksCounter" value="1125" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -980,12 +978,12 @@
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1588769867075">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1588769953591">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1588632287059" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1588769867075" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1588769953591" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
