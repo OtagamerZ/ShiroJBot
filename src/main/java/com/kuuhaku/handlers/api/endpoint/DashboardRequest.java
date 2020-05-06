@@ -41,6 +41,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -131,10 +132,10 @@ public class DashboardRequest {
 	}
 
 	@RequestMapping(value = "/api/card", method = RequestMethod.POST)
-	public byte[] requestCard(@RequestHeader(value = "id") String id) throws IOException {
+	public String requestCard(@RequestHeader(value = "id") String id) throws IOException {
 		if (TokenDAO.verifyToken(id) == null) throw new UnauthorizedException();
 
 		net.dv8tion.jda.api.entities.Member mb = Main.getInfo().getMemberByID(id);
-		return Profile.makeProfile(mb, mb.getGuild()).toByteArray();
+		return Base64.getEncoder().encodeToString(Profile.makeProfile(mb, mb.getGuild()).toByteArray());
 	}
 }
