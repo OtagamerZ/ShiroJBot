@@ -28,6 +28,7 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.jetbrains.annotations.NonNls;
 
@@ -81,7 +82,7 @@ public class SayCommand extends Command {
 			} catch (InterruptedException | ExecutionException e) {
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
-		} catch (IndexOutOfBoundsException | InsufficientPermissionException ignore) {
+		} catch (IndexOutOfBoundsException | InsufficientPermissionException | ErrorResponseException ignore) {
 			channel.sendMessage(mb.build()).queue();
 			if (guild.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE))
 				message.delete().queue(null, Helper::doNothing);
