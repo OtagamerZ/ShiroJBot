@@ -49,10 +49,10 @@ public class GuildConfig {
 	private String prefix = Main.getInfo().getDefaultPrefix();
 
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
-	private String cargowarn = "";
+	private String cargoWarn = "";
 
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
-	private String cargovip = "";
+	private String cargoVip = "";
 
 	//CHANNELS
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
@@ -165,7 +165,8 @@ public class GuildConfig {
 	}
 
 	public void setCanalBV(String canalbv) {
-		this.canalbv = canalbv;
+		if (canalbv.equals("-1")) this.canalbv = "";
+		else this.canalbv = canalbv;
 	}
 
 	public String getMsgBoasVindas() {
@@ -182,7 +183,8 @@ public class GuildConfig {
 	}
 
 	public void setCanalAdeus(String canaladeus) {
-		this.canaladeus = canaladeus;
+		if (canaladeus.equals("-1")) this.canaladeus = "";
+		else this.canaladeus = canaladeus;
 	}
 
 	public String getMsgAdeus() {
@@ -195,19 +197,21 @@ public class GuildConfig {
 	}
 
 	public String getCargoWarn() {
-		return cargowarn;
+		return cargoWarn;
 	}
 
-	public void setCargoWarn(String cargowarn) {
-		this.cargowarn = cargowarn;
+	public void setCargoWarn(String cargoWarn) {
+		if (cargoWarn.equals("-1")) this.cargoWarn = "";
+		else this.cargoWarn = cargoWarn;
 	}
 
 	public String getCargoVip() {
-		return cargovip;
+		return cargoVip;
 	}
 
-	public void setCargoVip(String cargovip) {
-		this.cargovip = cargovip;
+	public void setCargoVip(String cargoVip) {
+		if (cargoVip.equals("-1")) this.cargoVip = "";
+		else this.cargoVip = cargoVip;
 	}
 
 	public String getCanalSUG() {
@@ -215,7 +219,8 @@ public class GuildConfig {
 	}
 
 	public void setCanalSUG(String canalsug) {
-		this.canalsug = canalsug;
+		if (canalsug.equals("-1")) this.canalsug = "";
+		else this.canalsug = canalsug;
 	}
 
 	public String getCanalLvl() {
@@ -223,7 +228,8 @@ public class GuildConfig {
 	}
 
 	public void setCanalLvl(String canallvl) {
-		this.canallvl = canallvl;
+		if (canallvl.equals("-1")) this.canallvl = "";
+		else this.canallvl = canallvl;
 	}
 
 	public Map<String, Object> getCargoslvl() {
@@ -263,7 +269,8 @@ public class GuildConfig {
 	}
 
 	public void setCanalRelay(String canalrelay) {
-		this.canalrelay = canalrelay;
+		if (canalrelay.equals("-1")) this.canalrelay = "";
+		else this.canalrelay = canalrelay;
 	}
 
 	public String getGuildID() {
@@ -357,8 +364,9 @@ public class GuildConfig {
 		return canalLog;
 	}
 
-	public void setCanalLog(String id) {
-		this.canalLog = id;
+	public void setCanalLog(String canalLog) {
+		if (canalLog.equals("-1")) this.canalLog = "";
+		else this.canalLog = canalLog;
 	}
 
 	public boolean isLiteMode() {
