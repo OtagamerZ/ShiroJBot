@@ -173,7 +173,8 @@ public class GuildConfig {
 	}
 
 	public void setMsgBoasVindas(String msgBoasVindas) {
-		this.msgBoasVindas = msgBoasVindas;
+		if (msgBoasVindas.isBlank()) this.msgBoasVindas = "Seja bem-vindo(a) ao %guild%, %user%!";
+		else this.msgBoasVindas = msgBoasVindas;
 	}
 
 	public String getCanalAdeus() {
@@ -189,7 +190,8 @@ public class GuildConfig {
 	}
 
 	public void setMsgAdeus(String msgAdeus) {
-		this.msgAdeus = msgAdeus;
+		if (msgAdeus.isBlank()) this.msgAdeus = "Ahh...%user% deixou este servidor!";
+		else this.msgAdeus = msgAdeus;
 	}
 
 	public String getCargoWarn() {

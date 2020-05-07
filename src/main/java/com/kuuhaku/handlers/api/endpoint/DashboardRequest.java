@@ -215,25 +215,26 @@ public class DashboardRequest {
 			JSONObject c = guild.getJSONObject("configs");
 
 			gc.setPrefix(c.getString("prefix"));
-			gc.setCargoWarn(c.getJSONObject("muteRole").getString("id"));
 
 			gc.setWarnTime(c.getInt("muteTime"));
 			gc.setPollTime(c.getInt("pollTime"));
 
-			gc.setCargoWarn(c.getJSONObject("muteRole").getString("id"));
+			if (!c.getJSONObject("muteRole").isEmpty()) gc.setCargoWarn(c.getJSONObject("muteRole").getString("id"));
 
 			gc.setMsgBoasVindas(c.getString("welcomeMessage"));
 			gc.setMsgAdeus(c.getString("goodbyeMessage"));
 
-			gc.setCanalBV(c.getJSONObject("welcomeChannel").getString("id"));
-			gc.setCanalAdeus(c.getJSONObject("goodbyeChannel").getString("id"));
-			gc.setCanalAdeus(c.getJSONObject("suggestionChannel").getString("id"));
-			gc.setCanalRelay(c.getJSONObject("relayChannel").getString("id"));
+			if (!c.getJSONObject("welcomeChannel").isEmpty())
+				gc.setCanalBV(c.getJSONObject("welcomeChannel").getString("id"));
+			if (!c.getJSONObject("goodbyeChannel").isEmpty())
+				gc.setCanalAdeus(c.getJSONObject("goodbyeChannel").getString("id"));
+			if (!c.getJSONObject("suggestionChannel").isEmpty())
+				gc.setCanalAdeus(c.getJSONObject("suggestionChannel").getString("id"));
+			if (!c.getJSONObject("relayChannel").isEmpty())
+				gc.setCanalRelay(c.getJSONObject("relayChannel").getString("id"));
 
 			JSONObject lr = new JSONObject();
-			c.getJSONArray("levelRoles").forEach(o -> {
-				lr.put(((JSONObject) o).getString("level"), ((JSONObject) o).getString("id"));
-			});
+			c.getJSONArray("levelRoles").forEach(o -> lr.put(((JSONObject) o).getString("level"), ((JSONObject) o).getString("id")));
 
 			gc.setCargosLvl(lr);
 
