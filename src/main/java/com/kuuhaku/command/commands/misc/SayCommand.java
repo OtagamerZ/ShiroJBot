@@ -82,7 +82,7 @@ public class SayCommand extends Command {
 			} catch (InterruptedException | ExecutionException e) {
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
-		} catch (IndexOutOfBoundsException | InsufficientPermissionException | ErrorResponseException ignore) {
+		} catch (IndexOutOfBoundsException | InsufficientPermissionException | ErrorResponseException | NullPointerException e) {
 			channel.sendMessage(mb.build()).queue();
 			if (guild.getSelfMember().hasPermission(Permission.MESSAGE_MANAGE))
 				message.delete().queue(null, Helper::doNothing);
