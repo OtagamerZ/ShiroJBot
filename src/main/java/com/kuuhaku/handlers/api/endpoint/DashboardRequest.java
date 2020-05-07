@@ -76,10 +76,10 @@ public class DashboardRequest {
 		if (u != null) {
 			String t = TokenDAO.verifyToken(user.getString("id"));
 			if (t == null) {
-				http.setHeader("Location", "http://localhost:19006");
+				http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + "/panel");
 				http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 			}
-			http.setHeader("Location", "http://localhost:19006/Loading");
+			http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + "/panel/Loading");
 			http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 			String w = Member.getWaifu(u);
 			CoupleMultiplier cm = WaifuDAO.getMultiplier(u);
