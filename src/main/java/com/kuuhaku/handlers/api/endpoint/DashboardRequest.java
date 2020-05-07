@@ -233,7 +233,10 @@ public class DashboardRequest {
 			if (!c.getJSONObject("relayChannel").isEmpty())
 				gc.setCanalRelay(c.getJSONObject("relayChannel").getString("id"));
 
-			gc.setCargosLvl(c.getJSONObject("levelRoles"));
+			JSONObject lr = new JSONObject();
+			c.getJSONArray("levelRoles").forEach(o -> lr.put(((JSONObject) o).getString("level"), ((JSONObject) o).getString("id")));
+
+			gc.setCargosLvl(lr);
 
 			GuildDAO.updateGuildSettings(gc);
 		}
