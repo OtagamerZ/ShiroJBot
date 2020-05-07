@@ -979,12 +979,12 @@
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1588875095751">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1588875649270">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1588632287059" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1588875095751" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1588875649270" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1033,12 +1033,12 @@
     </state>
     <state x="682" y="113" key="extract.method.dialog/0.0.1366.768@0.0.1366.768" timestamp="1582605093359" />
     <state x="448" y="274" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1586896266138" />
-    <state x="445" y="176" width="790" height="658" key="find.popup" timestamp="1588612417587">
+    <state x="445" y="176" width="790" height="658" key="find.popup" timestamp="1588875741976">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="362" y="127" width="643" height="536" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1585937546544" />
     <state x="362" y="134" width="774" height="562" key="find.popup/0.0.1366.768@0.0.1366.768" timestamp="1588044108124" />
-    <state x="445" y="176" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1588612417587" />
+    <state x="445" y="176" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1588875741976" />
     <state x="409" y="157" key="git4idea.merge.GitPullDialog" timestamp="1586743041255">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
