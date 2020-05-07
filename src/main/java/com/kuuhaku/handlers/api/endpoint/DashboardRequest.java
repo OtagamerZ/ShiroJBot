@@ -229,9 +229,11 @@ public class DashboardRequest {
 			if (!c.getJSONObject("goodbyeChannel").isEmpty())
 				gc.setCanalAdeus(c.getJSONObject("goodbyeChannel").getString("id"));
 			if (!c.getJSONObject("suggestionChannel").isEmpty())
-				gc.setCanalAdeus(c.getJSONObject("suggestionChannel").getString("id"));
+				gc.setCanalSUG(c.getJSONObject("suggestionChannel").getString("id"));
 			if (!c.getJSONObject("relayChannel").isEmpty())
 				gc.setCanalRelay(c.getJSONObject("relayChannel").getString("id"));
+			if (!c.getJSONObject("levelUpChannel").isEmpty())
+				gc.setCanalLvl(c.getJSONObject("levelUpChannel").getString("id"));
 
 			JSONObject lr = new JSONObject();
 			c.getJSONArray("levelRoles").forEach(o -> lr.put(((JSONObject) o).getString("level"), ((JSONObject) o).getString("id")));
