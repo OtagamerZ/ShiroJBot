@@ -103,7 +103,7 @@ public class GuildEvents extends ListenerAdapter {
 			try {
 				MutedMember mm = com.kuuhaku.controller.postgresql.MemberDAO.getMutedMemberById(author.getId());
 				if (mm != null && mm.isMuted()) {
-					message.delete().queue();
+					message.delete().complete();
 					return;
 				}
 			} catch (InsufficientPermissionException | ErrorResponseException ignore) {
@@ -247,7 +247,7 @@ public class GuildEvents extends ListenerAdapter {
 			}
 		} catch (InsufficientPermissionException ignore) {
 		} catch (ErrorResponseException e) {
-			Helper.logger(this.getClass()).error(e.getErrorCode() + ": " + e + " | " + Arrays.toString(e.getStackTrace()));
+			Helper.logger(this.getClass()).error(e.getErrorCode() + ": " + e + " | " + e.getStackTrace()[0]);
 		}
 	}
 
