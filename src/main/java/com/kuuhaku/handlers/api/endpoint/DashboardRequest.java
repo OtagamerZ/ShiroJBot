@@ -76,8 +76,7 @@ public class DashboardRequest {
 		if (u != null) {
 			String t = TokenDAO.verifyToken(user.getString("id"));
 			if (t == null) {
-				http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + "/ShiroJBot");
-				http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+				throw new UnauthorizedException();
 			}
 			http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + "/ShiroJBot/Loading");
 			http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
