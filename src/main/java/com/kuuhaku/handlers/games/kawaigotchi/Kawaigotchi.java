@@ -151,8 +151,8 @@ public class Kawaigotchi {
 
 		if (stance.isResting()) {
 			if (!Time.inRange(Time.NIGHT, currTime) && energy >= 100) stance = Stance.IDLE;
-			energy += rate.ENERGY.fac * 2 * nature.getEnergy();
-			health += rate.HEALTH.fac * (hunger / 50);
+			energy += rate.ENERGY.fac * 2 * nature.getEnergy() * (getVanity().has(VanityType.HOUSE.toString()) ? VanityMenu.getVanity(getVanity().getString(VanityType.HOUSE.toString())).getModifier() : 1);
+			health += rate.HEALTH.fac * (hunger / 50) * (getVanity().has(VanityType.HOUSE.toString()) ? VanityMenu.getVanity(getVanity().getString(VanityType.HOUSE.toString())).getModifier() : 1);
 			KGotchiDAO.saveKawaigotchi(this);
 			return;
 		} else if (Time.inRange(Time.NIGHT, currTime) || energy < 5) {
@@ -193,12 +193,13 @@ public class Kawaigotchi {
 		}
 
 		if (hunger > 60 && mood < 80) mood += (rate.MOOD.fac + ((100 - hunger) * 0.01f / 20)) * nature.getKindness();
-		else mood -= rate.MOOD.fac / nature.getKindness();
+		else
+			mood -= rate.MOOD.fac / nature.getKindness() / (getVanity().has(VanityType.FENCE.toString()) ? VanityMenu.getVanity(getVanity().getString(VanityType.FENCE.toString())).getModifier() : 1);
 
 		hunger -= rate.FOOD.fac;
 		energy -= rate.ENERGY.fac / nature.getEnergy();
 
-		xp += 0.1f * tier.getTrainability();
+		xp += 0.1f * tier.getTrainability() * (getVanity().has(VanityType.FENCE.toString()) ? VanityMenu.getVanity(getVanity().getString(VanityType.FENCE.toString())).getModifier() : 1);
 
 		KGotchiDAO.saveKawaigotchi(this);
 	}
@@ -207,9 +208,9 @@ public class Kawaigotchi {
 		alive = true;
 		health = 100;
 		hunger = 100;
-		mood = (int) (50 * nature.getKindness());
+		mood = (int) (50 * nature.getKindness() * (getVanity().has(VanityType.HOUSE.toString()) ? VanityMenu.getVanity(getVanity().getString(VanityType.HOUSE.toString())).getModifier() : 1));
 		energy = 100;
-		xp /= 2;
+		xp /= 2 / (getVanity().has(VanityType.HOUSE.toString()) ? VanityMenu.getVanity(getVanity().getString(VanityType.HOUSE.toString())).getModifier() : 1);
 		KGotchiDAO.saveKawaigotchi(this);
 	}
 
@@ -225,9 +226,9 @@ public class Kawaigotchi {
 	public Action useFood(Food food) {
 		try {
 			useFromBag(food);
-			hunger += food.getNutrition();
-			health += food.getHealthiness();
-			mood += food.getMoodBoost();
+			hunger += food.getNutrition() * (getVanity().has(VanityType.BOWL.toString()) ? VanityMenu.getVanity(getVanity().getString(VanityType.BOWL.toString())).getModifier() : 1);
+			health += food.getHealthiness() * (getVanity().has(VanityType.BOWL.toString()) ? VanityMenu.getVanity(getVanity().getString(VanityType.BOWL.toString())).getModifier() : 1);
+			mood += food.getMoodBoost() * (getVanity().has(VanityType.BOWL.toString()) ? VanityMenu.getVanity(getVanity().getString(VanityType.BOWL.toString())).getModifier() : 1);
 			if (food.getType() == FoodType.SPECIAL) food.getSpecial().accept(this);
 			KGotchiDAO.saveKawaigotchi(this);
 			return Action.SUCCESS;
@@ -242,7 +243,7 @@ public class Kawaigotchi {
 			lastRoll = Helper.rng(100);
 
 			if (lastRoll >= threshold) {
-				mood += Helper.clamp(Helper.rng(10), 3, 10) * nature.getKindness();
+				mood += Helper.clamp(Helper.rng(10), 3, 10) * nature.getKindness() * (getVanity().has(VanityType.FENCE.toString()) ? VanityMenu.getVanity(getVanity().getString(VanityType.FENCE.toString())).getModifier() : 1);
 				energy -= Helper.clamp(Helper.rng(6), 1, 6);
 				hunger -= Helper.clamp(Helper.rng(6), 1, 6);
 
@@ -264,7 +265,7 @@ public class Kawaigotchi {
 			lastRoll = Helper.rng(100);
 
 			if (lastRoll >= threshold) {
-				xp += Helper.clamp(Helper.rng(6), 1, 6) * tier.getTrainability();
+				xp += Helper.clamp(Helper.rng(6), 1, 6) * tier.getTrainability() * (getVanity().has(VanityType.FENCE.toString()) ? VanityMenu.getVanity(getVanity().getString(VanityType.FENCE.toString())).getModifier() : 1);
 				energy -= Helper.clamp(Helper.rng(10), 3, 10);
 				hunger -= Helper.clamp(Helper.rng(10), 3, 10);
 
@@ -298,6 +299,12 @@ public class Kawaigotchi {
 		g2d.drawImage(Time.getParallax()[0], 0, 0, null);
 		g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("kawaigotchi/environment/bg.png"))).getImage(), 0, 0, null);
 		g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("kawaigotchi/environment/ground.png"))).getImage(), 0, 0, null);
+		if (getVanity().has(VanityType.FENCE.toString()))
+			g2d.drawImage(VanityMenu.getVanity(getVanity().getString(VanityType.FENCE.toString())).getImage(), 0, 0, null);
+		if (getVanity().has(VanityType.HOUSE.toString()))
+			g2d.drawImage(VanityMenu.getVanity(getVanity().getString(VanityType.HOUSE.toString())).getImage(), 0, 0, null);
+		if (getVanity().has(VanityType.BOWL.toString()))
+			g2d.drawImage(VanityMenu.getVanity(getVanity().getString(VanityType.BOWL.toString())).getImage(), 0, 0, null);
 		g2d.drawImage(Time.getParallax()[1], 0, 0, null);
 
 		String desc = name + " | " + tier.toString() + " " + race.toString().toLowerCase() + " " + nature.toString().toLowerCase();
@@ -516,12 +523,12 @@ public class Kawaigotchi {
 		this.bag = bag;
 	}
 
-	public String getVanity() {
-		return vanity;
+	public JSONObject getVanity() {
+		return new JSONObject(vanity);
 	}
 
-	public void setVanity(String vanity) {
-		this.vanity = vanity;
+	public void setVanity(JSONObject vanity) {
+		this.vanity = vanity.toString();
 	}
 
 	public boolean isAlerted() {

@@ -28,18 +28,18 @@ import static com.kuuhaku.handlers.games.kawaigotchi.enums.VanityType.FENCE;
 public class VanityMenu {
 	private static Map<String, Vanity> menu = new HashMap<>() {{
 		//CERCA
-		put("cercademadeira", new Vanity(FENCE, "Cerca de Madeira", "cercademadeira", 500, getAsset("kawaigotchi/decoration/fence_wood.png").getImage()));
-		put("cercafloral", new Vanity(FENCE, "Cerca Floral", "cercafloral", 500, getAsset("kawaigotchi/decoration/fence_floral.png").getImage()));
-		put("parededepedra", new Vanity(FENCE, "Parede de Pedra", "parededepedra", 500, getAsset("kawaigotchi/decoration/fence_stone.png").getImage()));
-		put("cercadeaco", new Vanity(FENCE, "Cerca de Aço", "cercadeaco", 500, getAsset("kawaigotchi/decoration/fence_iron.png").getImage()));
+		put("cercademadeira", new Vanity(FENCE, "Cerca de Madeira", "cercademadeira", 500, getAsset("kawaigotchi/decoration/fence_wood.png").getImage(), 1.05f));
+		put("cercafloral", new Vanity(FENCE, "Cerca Floral", "cercafloral", 1250, getAsset("kawaigotchi/decoration/fence_floral.png").getImage(), 1.15f));
+		put("parededepedra", new Vanity(FENCE, "Parede de Pedra", "parededepedra", 2000, getAsset("kawaigotchi/decoration/fence_stone.png").getImage(), 1.25f));
+		put("cercadeaco", new Vanity(FENCE, "Cerca de Aço", "cercadeaco", 3000, getAsset("kawaigotchi/decoration/fence_iron.png").getImage(), 1.5f));
 
 		//DECORAÇÃO
-		put("arvore", new Vanity(FENCE, "Árvore", "arvore", 500, getAsset("kawaigotchi/decoration/deco_tree.png").getImage()));
-		put("tenda", new Vanity(FENCE, "Tenda", "tenda", 500, getAsset("kawaigotchi/decoration/deco_tree.png").getImage()));
-		put("casa", new Vanity(FENCE, "Árvore", "casa", 500, getAsset("kawaigotchi/decoration/deco_tree.png").getImage()));
+		put("arvore", new Vanity(FENCE, "Árvore", "arvore", 750, getAsset("kawaigotchi/decoration/deco_tree.png").getImage(), 1.1f));
+		put("tenda", new Vanity(FENCE, "Tenda", "tenda", 2250, getAsset("kawaigotchi/decoration/deco_tent.png").getImage(), 1.25f));
+		put("casinha", new Vanity(FENCE, "Casinha", "casinha", 5000, getAsset("kawaigotchi/decoration/deco_house.png").getImage(), 1.50f));
 
 		//MISC
-
+		put("tigela", new Vanity(FENCE, "Tigela", "tigela", 1000, getAsset("kawaigotchi/decoration/misc_bowl.png").getImage(), 1.25f));
 	}};
 
 	public static Vanity getVanity(String name) {
