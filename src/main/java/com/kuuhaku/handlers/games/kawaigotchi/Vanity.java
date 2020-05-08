@@ -28,13 +28,15 @@ public class Vanity {
 	private final String identifier;
 	private final int price;
 	private final Image image;
+	private final float modifier;
 
-	public Vanity(VanityType type, String name, String identifier, int price, Image image) {
+	public Vanity(VanityType type, String name, String identifier, int price, Image image, float modifier) {
 		this.type = type;
 		this.name = name;
 		this.identifier = identifier;
 		this.price = price;
 		this.image = image;
+		this.modifier = modifier;
 	}
 
 	public VanityType getType() {
@@ -55,5 +57,9 @@ public class Vanity {
 
 	public Image getImage() {
 		return image;
+	}
+
+	public float getModifier() {
+		return modifier;
 	}
 }
