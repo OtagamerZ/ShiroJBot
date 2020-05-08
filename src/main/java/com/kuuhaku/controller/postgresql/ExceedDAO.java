@@ -58,6 +58,8 @@ public class ExceedDAO {
 	}
 
 	public static ExceedState getExceedState(String exceed) {
+		if (exceed.isBlank()) return new ExceedState(-1, "", 0);
+
 		@SuppressWarnings("SuspiciousMethodCalls")
 		int pos = Arrays.stream(ExceedEnums.values())
 				.map(ExceedDAO::getExceed)
