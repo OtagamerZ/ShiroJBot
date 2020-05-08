@@ -25,10 +25,9 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.sqlite.KGotchiDAO;
-import com.kuuhaku.handlers.games.kawaigotchi.Food;
-import com.kuuhaku.handlers.games.kawaigotchi.FoodMenu;
-import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
+import com.kuuhaku.handlers.games.kawaigotchi.*;
 import com.kuuhaku.handlers.games.kawaigotchi.enums.FoodType;
+import com.kuuhaku.handlers.games.kawaigotchi.enums.VanityType;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -257,67 +256,120 @@ public class KGotchiCommand extends Command {
 			g2d.dispose();
 			sendEmbed(channel, k, bi, eb);
 		} else if (Helper.containsAny(args[0], "comprar", "buy")) {
-			if (args.length < 2) {
-				EmbedBuilder eb = new EmbedBuilder();
+			if (args.length > 1 && Helper.containsAny(args[1], "extra", "comida")) {
+				switch (args[1].toLowerCase()) {
+					case "extra":
+						if (args.length < 3) {
+							EmbedBuilder eb = new EmbedBuilder();
 
-				Map<FoodType, List<MessageEmbed.Field>> fields = new HashMap<>();
+							Map<VanityType, List<MessageEmbed.Field>> fields = new HashMap<>();
 
-				FoodMenu.getMenu().forEach((n, food) -> {
-					List<MessageEmbed.Field> field = fields.getOrDefault(food.getType(), new ArrayList<>());
-					field.add(new MessageEmbed.Field(food.getName() + " - " + food.getPrice() + " créditos\n(`" + prefix + "kgotchi comprar " + n + "`)", food.getType() == FoodType.SPECIAL ? food.getSpecialDesc() : "Bônus de humor: " + food.getMoodBoost() + "\nNutrição: " + food.getNutrition() + "\nSaúde: " + food.getHealthiness(), true));
-					fields.put(food.getType(), field);
-				});
+							VanityMenu.getMenu().forEach((n, vanity) -> {
+								List<MessageEmbed.Field> field = fields.getOrDefault(vanity.getType(), new ArrayList<>());
+								field.add(new MessageEmbed.Field(vanity.getName() + " - " + vanity.getPrice() + " créditos\n(`" + prefix + "kgotchi comprar extra " + n + "`)", "Bônus de " + vanity.getType().getBonus().toLowerCase() + ": " + (int) (vanity.getModifier() * 100) + "%", true));
+								fields.put(vanity.getType(), field);
+							});
 
-				Map<String, Page> pages = new HashMap<>();
+							Map<String, Page> pages = new HashMap<>();
 
-				fields.forEach((t, f) -> {
-					eb.clear();
-					eb.setTitle("Setor de " + t.toStrings().toLowerCase());
-					f.forEach(eb::addField);
-					eb.setThumbnail(t.getIcon());
-					eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
-					eb.setColor(Helper.getRandomColor());
+							fields.forEach((t, v) -> {
+								eb.clear();
+								eb.setTitle("Setor de " + t.toStrings().toLowerCase());
+								v.forEach(eb::addField);
+								eb.setThumbnail(t.getIcon());
+								eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
+								eb.setColor(Helper.getRandomColor());
 
-					pages.put(t.getButton(), new Page(PageType.EMBED, eb.build()));
-				});
+								pages.put(t.getButton(), new Page(PageType.EMBED, eb.build()));
+							});
 
-				channel.sendMessage((MessageEmbed) pages.get(FoodType.MEAT.getButton()).getContent()).queue(m -> Pages.categorize(m, pages, 60, TimeUnit.SECONDS));
+							channel.sendMessage((MessageEmbed) pages.get(VanityType.HOUSE.getButton()).getContent()).queue(m -> Pages.categorize(m, pages, 60, TimeUnit.SECONDS));
+						} else {
+							Vanity v = VanityMenu.getVanity(args[2].toLowerCase());
+
+							if (v == null) {
+								channel.sendMessage(":x: | Decoração inválida, você não quis dizer **" + Helper.didYouMean(args[2], VanityMenu.getMenu().keySet().toArray(new String[0])) + "**?").queue();
+								return;
+							} else if (acc.getBalance() < v.getPrice()) {
+								channel.sendMessage(":x: | Você não tem créditos suficientes.").queue();
+								return;
+							}
+
+							k.addVanity(v);
+							acc.removeCredit(v.getPrice());
+
+							channel.sendMessage("Você comprou uma " + v.getName().toLowerCase() + " por " + v.getPrice() + " créditos.").queue();
+
+							AccountDAO.saveAccount(acc);
+						}
+						break;
+					case "comida":
+						if (args.length < 3) {
+							EmbedBuilder eb = new EmbedBuilder();
+
+							Map<FoodType, List<MessageEmbed.Field>> fields = new HashMap<>();
+
+							FoodMenu.getMenu().forEach((n, food) -> {
+								List<MessageEmbed.Field> field = fields.getOrDefault(food.getType(), new ArrayList<>());
+								field.add(new MessageEmbed.Field(food.getName() + " - " + food.getPrice() + " créditos\n(`" + prefix + "kgotchi comprar comida " + n + "`)", food.getType() == FoodType.SPECIAL ? food.getSpecialDesc() : "Bônus de humor: " + food.getMoodBoost() + "\nNutrição: " + food.getNutrition() + "\nSaúde: " + food.getHealthiness(), true));
+								fields.put(food.getType(), field);
+							});
+
+							Map<String, Page> pages = new HashMap<>();
+
+							fields.forEach((t, f) -> {
+								eb.clear();
+								eb.setTitle("Setor de " + t.toStrings().toLowerCase());
+								f.forEach(eb::addField);
+								eb.setThumbnail(t.getIcon());
+								eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
+								eb.setColor(Helper.getRandomColor());
+
+								pages.put(t.getButton(), new Page(PageType.EMBED, eb.build()));
+							});
+
+							channel.sendMessage((MessageEmbed) pages.get(FoodType.MEAT.getButton()).getContent()).queue(m -> Pages.categorize(m, pages, 60, TimeUnit.SECONDS));
+						} else {
+							Food f = FoodMenu.getFood(args[2].toLowerCase());
+
+							if (f == null) {
+								channel.sendMessage(":x: | Comida inválida, você não quis dizer **" + Helper.didYouMean(args[2], FoodMenu.getMenu().keySet().toArray(new String[0])) + "**?").queue();
+								return;
+							} else if (acc.getBalance() < f.getPrice()) {
+								channel.sendMessage(":x: | Você não tem créditos suficientes.").queue();
+								return;
+							}
+
+							if (args.length < 4) {
+								k.addToBag(f);
+								acc.removeCredit(f.getPrice());
+
+								channel.sendMessage("Você comprou 1 unidade de " + f.getName().toLowerCase() + " por " + f.getPrice() + " créditos.").queue();
+
+							} else {
+								if (!StringUtils.isNumeric(args[3])) {
+									channel.sendMessage(":x: | A quantidade deve ser numérica.").queue();
+									return;
+								} else if (Integer.parseInt(args[3]) <= 0) {
+									channel.sendMessage(":x: | A quantidade deve ser maior que zero.").queue();
+									return;
+								} else if (acc.getBalance() < f.getPrice() * Integer.parseInt(args[3])) {
+									channel.sendMessage(":x: | Você não tem créditos suficientes.").queue();
+									return;
+								}
+
+								k.addToBag(f, Integer.parseInt(args[3]));
+								acc.removeCredit(f.getPrice() * Integer.parseInt(args[3]));
+
+								channel.sendMessage("Você comprou " + args[3] + " unidades de " + f.getName().toLowerCase() + " por " + (f.getPrice() * Integer.parseInt(args[3])) + " créditos.").queue();
+							}
+
+							AccountDAO.saveAccount(acc);
+						}
+						break;
+				}
 			} else {
-				Food f = FoodMenu.getFood(args[1].toLowerCase());
-
-				if (f == null) {
-					channel.sendMessage(":x: | Comida inválida, você não quis dizer **" + Helper.didYouMean(args[1], FoodMenu.getMenu().keySet().toArray(new String[0])) + "**?").queue();
-					return;
-				} else if (acc.getBalance() < f.getPrice()) {
-					channel.sendMessage(":x: | Você não tem créditos suficientes.").queue();
-					return;
-				}
-
-				if (args.length < 3) {
-					k.addToBag(f);
-					acc.removeCredit(f.getPrice());
-
-					channel.sendMessage("Você comprou 1 unidade de " + f.getName().toLowerCase() + " por " + f.getPrice() + " créditos.").queue();
-
-				} else {
-					if (!StringUtils.isNumeric(args[2])) {
-						channel.sendMessage(":x: | A quantidade deve ser numérica.").queue();
-						return;
-					} else if (Integer.parseInt(args[2]) <= 0) {
-						channel.sendMessage(":x: | A quantidade deve ser maior que zero.").queue();
-						return;
-					} else if (acc.getBalance() < f.getPrice() * Integer.parseInt(args[2])) {
-						channel.sendMessage(":x: | Você não tem créditos suficientes.").queue();
-						return;
-					}
-
-					k.addToBag(f, Integer.parseInt(args[2]));
-					acc.removeCredit(f.getPrice() * Integer.parseInt(args[2]));
-
-					channel.sendMessage("Você comprou " + args[2] + " unidades de " + f.getName().toLowerCase() + " por " + (f.getPrice() * Integer.parseInt(args[2])) + " créditos.").queue();
-				}
-
-				AccountDAO.saveAccount(acc);
+				channel.sendMessage(":x: | Por favor informe um tipo de loja (`extra` ou `comida`).").queue();
 			}
 		}
 	}

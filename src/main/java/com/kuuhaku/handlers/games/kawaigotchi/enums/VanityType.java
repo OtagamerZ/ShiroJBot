@@ -19,10 +19,63 @@
 package com.kuuhaku.handlers.games.kawaigotchi.enums;
 
 public enum VanityType {
-	DECORATION, FENCE, MISC;
+	HOUSE("https://i.imgur.com/8EH9Pyu.png", "\uD83C\uDFE1"),
+	FENCE("https://i.imgur.com/G1Fj9Zo.png", "\uD83E\uDDF1"),
+	BOWL("https://i.imgur.com/VsrI9rW.png", "\uD83E\uDD63");
+
+	private final String icon;
+	private final String button;
+
+	VanityType(String icon, String button) {
+		this.icon = icon;
+		this.button = button;
+	}
+
+	public String getIcon() {
+		return icon;
+	}
+
+	public String getButton() {
+		return button;
+	}
 
 	@Override
 	public String toString() {
-		return this.name();
+		switch (this) {
+			case HOUSE:
+				return "Casa";
+			case FENCE:
+				return "Cerca";
+			case BOWL:
+				return "Tigela";
+			default:
+				throw new RuntimeException();
+		}
+	}
+
+	public String toStrings() {
+		switch (this) {
+			case HOUSE:
+				return "Casas";
+			case FENCE:
+				return "Cercas";
+			case BOWL:
+				return "Tigelas";
+			default:
+				throw new RuntimeException();
+		}
+	}
+
+	public String getBonus() {
+		switch (this) {
+			case HOUSE:
+				return "Conforto";
+			case FENCE:
+				return "Segurança";
+			case BOWL:
+				return "Satisfação";
+			default:
+				throw new RuntimeException();
+		}
 	}
 }
