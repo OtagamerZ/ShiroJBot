@@ -295,9 +295,10 @@ public class Kawaigotchi {
 
 		Graphics2D g2d = scn.createGraphics();
 
+		g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("kawaigotchi/environment/bg.png"))).getImage(), 0, 0, null);
+		g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("kawaigotchi/environment/ground.png"))).getImage(), 0, 0, null);
 		g2d.drawImage(Time.getParallax()[0], 0, 0, null);
 		g2d.drawImage(Time.getParallax()[1], 0, 0, null);
-		g2d.drawImage(Time.getParallax()[2], 0, 0, null);
 
 		String desc = name + " | " + tier.toString() + " " + race.toString().toLowerCase() + " " + nature.toString().toLowerCase();
 
@@ -329,10 +330,10 @@ public class Kawaigotchi {
 		g2d.drawRoundRect(5, 70, g2d.getFontMetrics().stringWidth(stance.toString()) + 15, 50, 25, 25);
 		g2d.drawRoundRect(g2d.getFontMetrics().stringWidth(stance.toString()) + 25, 70, g2d.getFontMetrics().stringWidth(currTime + "h") + 15, 50, 25, 25);
 
-		g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("health.png"))).getImage(), 1225, 15, null);
-		g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("food.png"))).getImage(), 1225, 70, null);
-		g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("energy.png"))).getImage(), 1225, 125, null);
-		g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("mood.png"))).getImage(), 1225, 180, null);
+		g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("kawaigotchi/interface/health.png"))).getImage(), 1225, 15, null);
+		g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("kawaigotchi/interface/food.png"))).getImage(), 1225, 70, null);
+		g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("kawaigotchi/interface/energy.png"))).getImage(), 1225, 125, null);
+		g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("kawaigotchi/interface/mood.png"))).getImage(), 1225, 180, null);
 
 		g2d.drawRoundRect(1070, 30, 150, 20, 15, 15);
 		g2d.drawRoundRect(1070, 85, 150, 20, 15, 15);

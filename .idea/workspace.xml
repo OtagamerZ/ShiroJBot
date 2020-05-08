@@ -25,9 +25,102 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/enums/Status.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/feedback.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/loading.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaigotchi/decoration/deco_house.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaigotchi/decoration/deco_tent.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaigotchi/decoration/deco_tree.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaigotchi/decoration/fence_floral.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaigotchi/decoration/fence_metal.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaigotchi/decoration/fence_stone.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaigotchi/decoration/fence_wood.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaigotchi/decoration/misc_bowl.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaigotchi/environment/bg.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaigotchi/environment/bg_no_overlay.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaigotchi/environment/bg_overlay.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaigotchi/environment/ground.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaigotchi/environment/sky_day.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaigotchi/environment/sky_night.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaigotchi/interface/energy.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaigotchi/interface/food.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaigotchi/interface/health.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaigotchi/interface/mood.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaigotchi/sheet/snugget_sheet.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaigotchi/status/energyUp.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaigotchi/status/foodUp.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaigotchi/status/healthUp.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaigotchi/status/mobius.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaigotchi/status/moodUp.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaigotchi/status/ressurrected.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaigotchi/status/sleeping.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaigotchi/status/troubled.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaigotchi/status/xpUp.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/memes/drake.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/memes/expandingbrain.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/memes/guessilldie.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/memes/miranha.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/memes/notstonks.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/memes/pathetic.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/memes/sadbuttrue.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/memes/stonks.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/memes/tomcruise.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/memes/twobuttons.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/guild/GuildEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/guild/GuildEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/WebSocketConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/WebSocketConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/DrakeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/DrakeCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/ExpandingBrainCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/ExpandingBrainCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/GuessIllDieCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/GuessIllDieCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/HardDecisionCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/HardDecisionCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/NotStonksCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/NotStonksCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/PatheticCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/PatheticCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/SadButTrueCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/SadButTrueCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/SpiderManCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/SpiderManCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/StonksCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/StonksCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/TomCruiseCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/TomCruiseCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/KGotchiCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/KGotchiCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/reactions/Reaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/reactions/Reaction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/support/RatingCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/support/RatingCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/MemeRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/MemeRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/FoodMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/FoodMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/Kawaigotchi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/Kawaigotchi.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/enums/Race.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/enums/Race.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/enums/Time.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/enums/Time.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Expanding-Brain.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Two-Buttons.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/allypin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/coords.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/drake.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/enemypin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/energy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/energyUp.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/feedback.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/food.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/foodUp.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/ground_day.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/ground_night.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/guessilldie.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/health.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/healthUp.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/loading.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/miranha.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/mobius.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/mood.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/moodUp.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/notstonks.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/parallax_back_day.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/parallax_back_night.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/parallax_day.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/parallax_night.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/pathetic.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/pin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/ressurrected.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/sadbuttrue.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/sleeping.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/snugget_sheet.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/stonks.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/tomcruise.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/troubled.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/xpUp.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -396,14 +489,8 @@
       <workItem from="1588878221628" duration="108000" />
       <workItem from="1588878385130" duration="102000" />
       <workItem from="1588879666046" duration="14000" />
-      <workItem from="1588943310607" duration="807000" />
-    </task>
-    <task id="LOCAL-01104" summary="Criação da API de autenticação para o dashboard">
-      <created>1588689894260</created>
-      <option name="number" value="01104" />
-      <option name="presentableId" value="LOCAL-01104" />
-      <option name="project" value="LOCAL" />
-      <updated>1588689894260</updated>
+      <workItem from="1588943310607" duration="1518000" />
+      <workItem from="1588959347476" duration="2077000" />
     </task>
     <task id="LOCAL-01105" summary="Criação da API de autenticação para o dashboard">
       <created>1588690157229</created>
@@ -741,7 +828,14 @@
       <option name="project" value="LOCAL" />
       <updated>1588943900426</updated>
     </task>
-    <option name="localTasksCounter" value="1153" />
+    <task id="LOCAL-01153" summary="Criação da API de autenticação para o dashboard">
+      <created>1588944165399</created>
+      <option name="number" value="01153" />
+      <option name="presentableId" value="LOCAL-01153" />
+      <option name="project" value="LOCAL" />
+      <updated>1588944165399</updated>
+    </task>
+    <option name="localTasksCounter" value="1154" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -850,12 +944,12 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="585" y="309" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1580395607218" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1588790996457">
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1588961055470">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="488" y="67" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1585945441171" />
     <state x="488" y="71" key="#com.intellij.ide.util.MemberChooser/0.0.1366.768@0.0.1366.768" timestamp="1581391062510" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1588790996457" />
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1588961055470" />
     <state x="569" y="296" key="#com.intellij.ide.util.TreeFileChooserDialog" timestamp="1583261031135">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -892,12 +986,12 @@
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1586974460200" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1588944162634">
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1588961506918">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1588632175383" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1588944162634" />
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1588961506918" />
     <state width="247" height="195" key="DatabaseViewActions_Filter" timestamp="1586747901902">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -985,12 +1079,12 @@
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1588943906026">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1588944181318">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1588632287059" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1588943906026" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1588944181318" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1039,12 +1133,12 @@
     </state>
     <state x="682" y="113" key="extract.method.dialog/0.0.1366.768@0.0.1366.768" timestamp="1582605093359" />
     <state x="448" y="274" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1586896266138" />
-    <state x="445" y="176" width="790" height="658" key="find.popup" timestamp="1588875741976">
+    <state x="501" y="182" width="790" height="658" key="find.popup" timestamp="1588960855088">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="362" y="127" width="643" height="536" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1585937546544" />
     <state x="362" y="134" width="774" height="562" key="find.popup/0.0.1366.768@0.0.1366.768" timestamp="1588044108124" />
-    <state x="445" y="176" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1588875741976" />
+    <state x="501" y="182" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1588960855088" />
     <state x="409" y="157" key="git4idea.merge.GitPullDialog" timestamp="1586743041255">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -1063,12 +1157,12 @@
     </state>
     <state x="403" y="177" key="run.anything.popup/0.0.1366.768@0.0.1366.768" timestamp="1585105034445" />
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1588686880500" />
-    <state x="409" y="165" width="672" height="516" key="search.everywhere.popup" timestamp="1588043037032">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1588960273697">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="409" y="156" width="672" height="489" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1585945932162" />
     <state x="409" y="165" width="672" height="516" key="search.everywhere.popup/0.0.1366.768@0.0.1366.768" timestamp="1588043037032" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1588007193605" />
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1588960273697" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -57,7 +57,7 @@ public class StonksCommand extends Command {
 
 		try {
 			String text = String.join(" ", args);
-			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("stonks.jpg")));
+			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("memes/stonks.jpg")));
 
 			ByteArrayOutputStream baos = Helper.renderMeme(text, bi);
 

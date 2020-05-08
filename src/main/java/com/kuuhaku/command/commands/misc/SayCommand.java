@@ -67,7 +67,7 @@ public class SayCommand extends Command {
 
 		try {
 			Webhook wh = Helper.getOrCreateWebhook((TextChannel) channel, "Shiro", Main.getInfo().getAPI());
-			Map<String, Consumer<Void>> s = Helper.sendEmotifiedString(guild, mb.build().getContentDisplay());
+			Map<String, Consumer<Void>> s = Helper.sendEmotifiedString(guild, mb.getStringBuilder().toString());
 
 			WebhookMessageBuilder wmb = new WebhookMessageBuilder();
 			wmb.setContent(String.valueOf(s.keySet().toArray()[0]));
