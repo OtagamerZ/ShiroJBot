@@ -76,11 +76,11 @@ public class DashboardRequest {
 		if (u != null) {
 			String t = TokenDAO.verifyToken(user.getString("id"));
 			if (t == null) {
-				http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + "/ShiroJBot");
+				http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + ":19006/ShiroJBot");
 				http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 				return;
 			}
-			http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + "/ShiroJBot/Loading");
+			http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + ":19006/ShiroJBot/Loading");
 			http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 			String w = Member.getWaifu(u);
 			CoupleMultiplier cm = WaifuDAO.getMultiplier(u);
