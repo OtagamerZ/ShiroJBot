@@ -35,7 +35,7 @@ public class WebSocketConfig {
 
 	public WebSocketConfig(int port) throws BindException {
 		Configuration config = new Configuration();
-		config.setHostname("0.0.0.0");
+		config.setHostname("127.0.0.1");
 		config.setPort(port);
 
 		socket = new SocketIOServer(config);
