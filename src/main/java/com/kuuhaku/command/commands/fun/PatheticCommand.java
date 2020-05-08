@@ -59,7 +59,7 @@ public class PatheticCommand extends Command {
 
         try {
             String text = String.join(" ", args);
-            BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("pathetic.jpg")));
+            BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("memes/pathetic.jpg")));
 
             ByteArrayOutputStream baos = Helper.renderMeme(text, bi);
 

@@ -57,7 +57,7 @@ public class SpiderManCommand extends Command {
 
 		try {
 			String text = String.join(" ", args);
-			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("miranha.jpg")));
+			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("memes/miranha.jpg")));
 
 			ByteArrayOutputStream baos = Helper.renderMeme(text, bi);
 

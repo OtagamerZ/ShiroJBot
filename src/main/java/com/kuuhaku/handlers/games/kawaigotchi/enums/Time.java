@@ -27,15 +27,13 @@ import java.util.Objects;
 
 public enum Time {
 	DAY(new Image[]{
-			new ImageIcon(Objects.requireNonNull(Time.class.getClassLoader().getResource("parallax_day.jpg"))).getImage(),
-			new ImageIcon(Objects.requireNonNull(Time.class.getClassLoader().getResource("parallax_back_day.png"))).getImage(),
-			new ImageIcon(Objects.requireNonNull(Time.class.getClassLoader().getResource("ground_day.png"))).getImage()
+			new ImageIcon(Objects.requireNonNull(Time.class.getClassLoader().getResource("sky_day.jpg"))).getImage(),
+			new ImageIcon(Objects.requireNonNull(Time.class.getClassLoader().getResource("gb_no_overlay.png"))).getImage()
 	}, 9, 18),
 	//18 -> 22 lerp
 	NIGHT(new Image[]{
-			new ImageIcon(Objects.requireNonNull(Time.class.getClassLoader().getResource("parallax_night.jpg"))).getImage(),
-			new ImageIcon(Objects.requireNonNull(Time.class.getClassLoader().getResource("parallax_back_night.png"))).getImage(),
-			new ImageIcon(Objects.requireNonNull(Time.class.getClassLoader().getResource("ground_night.png"))).getImage()
+			new ImageIcon(Objects.requireNonNull(Time.class.getClassLoader().getResource("sky_night.jpg"))).getImage(),
+			new ImageIcon(Objects.requireNonNull(Time.class.getClassLoader().getResource("gb_overlay.png"))).getImage()
 	}, 22, 29);
 	//5 -> 9 lerp
 
@@ -59,14 +57,12 @@ public enum Time {
 		} else if (time >= 18 && time < 22) {
 			return new Image[]{
 					interpolate(DAY.parallax[0], NIGHT.parallax[0], (time - 18) / (float) 4),
-					interpolate(DAY.parallax[1], NIGHT.parallax[1], (time - 18) / (float) 4),
-					interpolate(DAY.parallax[2], NIGHT.parallax[2], (time - 18) / (float) 4)
+					interpolate(DAY.parallax[1], NIGHT.parallax[1], (time - 18) / (float) 4)
 			};
 		} else if (time >= 5 && time < 9) {
 			return new Image[]{
 					interpolate(NIGHT.parallax[0], DAY.parallax[0], (time - 5) / (float) 4),
-					interpolate(NIGHT.parallax[1], DAY.parallax[1], (time - 5) / (float) 4),
-					interpolate(NIGHT.parallax[2], DAY.parallax[2], (time - 5) / (float) 4)
+					interpolate(NIGHT.parallax[1], DAY.parallax[1], (time - 5) / (float) 4)
 			};
 		} else throw new RuntimeException();
 	}

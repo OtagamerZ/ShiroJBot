@@ -59,7 +59,7 @@ public class GuessIllDieCommand extends Command {
 
 		try {
 			String text = String.join(" ", args);
-			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("guessilldie.jpg")));
+			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("memes/guessilldie.jpg")));
 
 			ByteArrayOutputStream baos = Helper.renderMeme(text, bi);
 
