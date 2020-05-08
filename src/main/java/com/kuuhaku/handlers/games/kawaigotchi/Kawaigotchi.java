@@ -74,7 +74,7 @@ public class Kawaigotchi {
 	private Nature nature = Nature.randNature();
 
 	@Column(columnDefinition = "INT")
-	private int skin = 1 + Helper.rng(5);
+	private int skin = 1 + Helper.rng(6);
 
 	@Enumerated(EnumType.ORDINAL)
 	private Stance stance = Stance.IDLE;
