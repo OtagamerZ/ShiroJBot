@@ -295,9 +295,9 @@ public class Kawaigotchi {
 
 		Graphics2D g2d = scn.createGraphics();
 
+		g2d.drawImage(Time.getParallax()[0], 0, 0, null);
 		g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("kawaigotchi/environment/bg.png"))).getImage(), 0, 0, null);
 		g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("kawaigotchi/environment/ground.png"))).getImage(), 0, 0, null);
-		g2d.drawImage(Time.getParallax()[0], 0, 0, null);
 		g2d.drawImage(Time.getParallax()[1], 0, 0, null);
 
 		String desc = name + " | " + tier.toString() + " " + race.toString().toLowerCase() + " " + nature.toString().toLowerCase();
