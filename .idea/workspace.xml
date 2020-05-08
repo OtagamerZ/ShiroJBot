@@ -26,6 +26,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/VanityMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/VanityMenu.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -395,14 +396,7 @@
       <workItem from="1588878385130" duration="102000" />
       <workItem from="1588879666046" duration="14000" />
       <workItem from="1588943310607" duration="1518000" />
-      <workItem from="1588959347476" duration="5931000" />
-    </task>
-    <task id="LOCAL-01113" summary="Criação da API de autenticação para o dashboard">
-      <created>1588701534612</created>
-      <option name="number" value="01113" />
-      <option name="presentableId" value="LOCAL-01113" />
-      <option name="project" value="LOCAL" />
-      <updated>1588701534612</updated>
+      <workItem from="1588959347476" duration="6686000" />
     </task>
     <task id="LOCAL-01114" summary="Criação da API de autenticação para o dashboard">
       <created>1588702640723</created>
@@ -740,7 +734,14 @@
       <option name="project" value="LOCAL" />
       <updated>1588965013166</updated>
     </task>
-    <option name="localTasksCounter" value="1162" />
+    <task id="LOCAL-01162" summary="Adição de decorações para os Kawaigotchis!">
+      <created>1588965421804</created>
+      <option name="number" value="01162" />
+      <option name="presentableId" value="LOCAL-01162" />
+      <option name="project" value="LOCAL" />
+      <updated>1588965421804</updated>
+    </task>
+    <option name="localTasksCounter" value="1163" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -839,12 +840,12 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="578" y="282" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1588015526738" />
-    <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1588702448421">
+    <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1588965558966">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="248" y="33" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1585944592238" />
     <state x="239" y="78" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.768@0.0.1366.768" timestamp="1587921282730" />
-    <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1588702448421" />
+    <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1588965558966" />
     <state x="585" y="309" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1580395607218">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -891,12 +892,12 @@
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1586974460200" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1588965418845">
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1588966055871">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1588632175383" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1588965418845" />
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1588966055871" />
     <state width="247" height="195" key="DatabaseViewActions_Filter" timestamp="1586747901902">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -984,12 +985,12 @@
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1588965017557">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1588965433161">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1588632287059" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1588965017557" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1588965433161" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
