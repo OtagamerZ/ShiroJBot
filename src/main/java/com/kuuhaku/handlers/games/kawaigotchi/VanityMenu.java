@@ -27,8 +27,9 @@ import static com.kuuhaku.handlers.games.kawaigotchi.enums.VanityType.FENCE;
 
 public class VanityMenu {
 	private static Map<String, Vanity> menu = new HashMap<>() {{
-		put("cercademadeira", new Vanity(FENCE, "Cerca de Madeira", "cercademadeira", 500, getAsset("decoration/fence_wood.png").getImage()));
-		put("cercafloral", new Vanity(FENCE, "Cerca Floral", "cercafloral", 500, getAsset("decoration/fence_floral.png").getImage()));
+		put("cercademadeira", new Vanity(FENCE, "Cerca de Madeira", "cercademadeira", 500, getAsset("kawaigotchi/decoration/fence_wood.png").getImage()));
+		put("cercafloral", new Vanity(FENCE, "Cerca Floral", "cercafloral", 500, getAsset("kawaigotchi/decoration/fence_floral.png").getImage()));
+		put("parededepedra", new Vanity(FENCE, "Parede de Pedra", "parededepedra", 500, getAsset("kawaigotchi/decoration/fence_stone.png").getImage()));
 
 	}};
 
