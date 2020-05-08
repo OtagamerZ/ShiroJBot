@@ -56,7 +56,7 @@ public class FoodMenu {
 		put("sonifero", new Food(SPECIAL, "Sonifero", "sonifero", 0, 0, 0, 50, k -> k.setStance(Stance.SLEEPING), "Coloca o Kawaigotchi para dormir, ele irá acordar assim que sua energia chegar a 100% novamente.", "foi sedado!", SLEEPING.getIcon().getImage()));
 		put("vacina", new Food(SPECIAL, "Vacina", "vacina", -25, 0, 50, 150, Kawaigotchi::doNothing, "Vacina seu Kawaigotchi, recuperando 50% de saúde, porém ele não ficará muito feliz com uma agulhada.", "foi vacinado!", HEALTH_UP.getIcon().getImage()));
 		put("faixademobius", new Food(SPECIAL, "Faixa de Möbius", "faixademobius", Helper.rng(150) - 75, Helper.rng(150) - 75, Helper.rng(150) - 75, 1337, k -> {
-			k.setSkin(1 + Helper.rng(5));
+			k.setSkin(1 + Helper.rng(6));
 			k.setNature(Nature.randNature());
 		}, "Troca seu Kawaigotchi com uma versão dele de outra dimensão.", "viajou ao multiverso!", MOBIUS.getIcon().getImage()));
 	}};
