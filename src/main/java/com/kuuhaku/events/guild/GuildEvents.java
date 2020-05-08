@@ -124,7 +124,7 @@ public class GuildEvents extends ListenerAdapter {
 			}
 
 			if (rawMessage.trim().equals("<@" + Main.getInfo().getSelfUser().getId() + ">") || rawMessage.trim().equals("<@!" + Main.getInfo().getSelfUser().getId() + ">")) {
-				channel.sendMessage("Quer saber como pode usar meus comandos? Digite `" + prefix + "ajuda` para ver todos eles ordenados por categoria!").queue();
+				channel.sendMessage("Quer saber como pode usar meus comandos? Digite `" + prefix + "ajuda` para ver todos eles ordenados por categoria!").complete();
 				return;
 			}
 
@@ -185,12 +185,12 @@ public class GuildEvents extends ListenerAdapter {
 								if (finalLvlChannel != null) {
 									List<Message> m = finalLvlChannel.getHistory().retrievePast(5).complete();
 									if (m.stream().noneMatch(c -> c.getContentRaw().equals(content))) {
-										finalLvlChannel.sendMessage(content).queue();
+										finalLvlChannel.sendMessage(content).complete();
 									}
 								} else {
 									List<Message> m = channel.getHistory().retrievePast(5).complete();
 									if (m.stream().noneMatch(c -> c.getContentRaw().equals(content))) {
-										channel.sendMessage(content).queue();
+										channel.sendMessage(content).complete();
 									}
 								}
 							} catch (IllegalArgumentException e) {
@@ -222,7 +222,7 @@ public class GuildEvents extends ListenerAdapter {
 				try {
 					if (GuildDAO.getGuildById(guild.getId()).getNoLinkChannels().contains(channel.getId()) && Helper.findURL(rawMessage)) {
 						message.delete().reason("Mensagem possui um URL").complete();
-						channel.sendMessage(member.getAsMention() + ", é proibido postar links neste canal!").queue();
+						channel.sendMessage(member.getAsMention() + ", é proibido postar links neste canal!").complete();
 					}
 
 					com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(member.getUser().getId() + member.getGuild().getId());
@@ -235,9 +235,9 @@ public class GuildEvents extends ListenerAdapter {
 					boolean lvlUp = m.addXp(guild);
 					if (lvlUp && GuildDAO.getGuildById(guild.getId()).isLvlNotif()) {
 						if (lvlChannel != null) {
-							lvlChannel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
+							lvlChannel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").complete();
 						} else
-							channel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
+							channel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").complete();
 					}
 					MemberDAO.updateMemberConfigs(m);
 				} catch (NoResultException e) {
