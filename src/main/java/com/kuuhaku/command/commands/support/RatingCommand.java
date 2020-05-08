@@ -65,7 +65,7 @@ public class RatingCommand extends Command {
 		}
 
 		Main.getInfo().getUserByID(args[0]).openPrivateChannel().queue(c -> {
-					c.sendFile(new File(Objects.requireNonNull(this.getClass().getClassLoader().getResource("feedback.png")).getPath()))
+					c.sendFile(new File(Objects.requireNonNull(this.getClass().getClassLoader().getResource("assets/feedback.png")).getPath()))
 							.queue(s -> s.delete().queueAfter(5, TimeUnit.MINUTES));
 					c.sendMessage(eval(author)).queue(s -> {
 						s.delete().queueAfter(5, TimeUnit.MINUTES);

@@ -24,9 +24,9 @@ import java.awt.image.BufferedImage;
 import java.util.Objects;
 
 public enum Race {
-	PORO(new ImageIcon(Objects.requireNonNull(Race.class.getClassLoader().getResource("snugget_sheet.png"))).getImage(), new int[]{128, 116}),
-	AKITA(new ImageIcon(Objects.requireNonNull(Race.class.getClassLoader().getResource("snugget_sheet.png"))).getImage(), new int[]{128, 116}),
-	SNUGGET(new ImageIcon(Objects.requireNonNull(Race.class.getClassLoader().getResource("snugget_sheet.png"))).getImage(), new int[]{132, 120});
+	PORO(getAsset("kawaigotchi/sheet/snugget_sheet.png").getImage(), new int[]{128, 116}),
+	AKITA(getAsset("kawaigotchi/sheet/snugget_sheet.png").getImage(), new int[]{128, 116}),
+	SNUGGET(getAsset("kawaigotchi/sheet/snugget_sheet.png").getImage(), new int[]{132, 120});
 
 	private final Image sheet;
 	private final int[] size;
@@ -76,5 +76,9 @@ public enum Race {
 			default:
 				throw new RuntimeException();
 		}
+	}
+
+	private static ImageIcon getAsset(String path) {
+		return new ImageIcon(Objects.requireNonNull(Race.class.getClassLoader().getResource(path)));
 	}
 }
