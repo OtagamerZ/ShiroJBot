@@ -27,13 +27,13 @@ import java.util.Objects;
 
 public enum Time {
 	DAY(new Image[]{
-			new ImageIcon(Objects.requireNonNull(Time.class.getClassLoader().getResource("environment/sky_day.jpg"))).getImage(),
-			new ImageIcon(Objects.requireNonNull(Time.class.getClassLoader().getResource("environment/gb_no_overlay.png"))).getImage()
+			new ImageIcon(Objects.requireNonNull(Time.class.getClassLoader().getResource("kawaigotchi/environment/sky_day.jpg"))).getImage(),
+			new ImageIcon(Objects.requireNonNull(Time.class.getClassLoader().getResource("kawaigotchi/environment/gb_no_overlay.png"))).getImage()
 	}, 9, 18),
 	//18 -> 22 lerp
 	NIGHT(new Image[]{
-			new ImageIcon(Objects.requireNonNull(Time.class.getClassLoader().getResource("environment/sky_night.jpg"))).getImage(),
-			new ImageIcon(Objects.requireNonNull(Time.class.getClassLoader().getResource("environment/gb_overlay.png"))).getImage()
+			new ImageIcon(Objects.requireNonNull(Time.class.getClassLoader().getResource("kawaigotchi/environment/sky_night.jpg"))).getImage(),
+			new ImageIcon(Objects.requireNonNull(Time.class.getClassLoader().getResource("kawaigotchi/environment/gb_overlay.png"))).getImage()
 	}, 22, 29);
 	//5 -> 9 lerp
 
