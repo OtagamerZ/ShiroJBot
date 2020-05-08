@@ -396,21 +396,7 @@
       <workItem from="1588878385130" duration="102000" />
       <workItem from="1588879666046" duration="14000" />
       <workItem from="1588943310607" duration="1518000" />
-      <workItem from="1588959347476" duration="2842000" />
-    </task>
-    <task id="LOCAL-01109" summary="Criação da API de autenticação para o dashboard">
-      <created>1588699678127</created>
-      <option name="number" value="01109" />
-      <option name="presentableId" value="LOCAL-01109" />
-      <option name="project" value="LOCAL" />
-      <updated>1588699678127</updated>
-    </task>
-    <task id="LOCAL-01110" summary="Criação da API de autenticação para o dashboard">
-      <created>1588700686386</created>
-      <option name="number" value="01110" />
-      <option name="presentableId" value="LOCAL-01110" />
-      <option name="project" value="LOCAL" />
-      <updated>1588700686386</updated>
+      <workItem from="1588959347476" duration="3093000" />
     </task>
     <task id="LOCAL-01111" summary="Criação da API de autenticação para o dashboard">
       <created>1588701033688</created>
@@ -741,7 +727,21 @@
       <option name="project" value="LOCAL" />
       <updated>1588962147091</updated>
     </task>
-    <option name="localTasksCounter" value="1158" />
+    <task id="LOCAL-01158" summary="Criação da API de autenticação para o dashboard">
+      <created>1588962251522</created>
+      <option name="number" value="01158" />
+      <option name="presentableId" value="LOCAL-01158" />
+      <option name="project" value="LOCAL" />
+      <updated>1588962251522</updated>
+    </task>
+    <task id="LOCAL-01159" summary="Criação da API de autenticação para o dashboard">
+      <created>1588962378279</created>
+      <option name="number" value="01159" />
+      <option name="presentableId" value="LOCAL-01159" />
+      <option name="project" value="LOCAL" />
+      <updated>1588962378280</updated>
+    </task>
+    <option name="localTasksCounter" value="1160" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -985,12 +985,12 @@
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1588962260376">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1588962380344">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1588632287059" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1588962260376" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1588962380344" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
