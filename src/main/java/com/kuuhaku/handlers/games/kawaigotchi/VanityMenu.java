@@ -30,6 +30,7 @@ public class VanityMenu {
 		put("cercademadeira", new Vanity(FENCE, "Cerca de Madeira", "cercademadeira", 500, getAsset("kawaigotchi/decoration/fence_wood.png").getImage()));
 		put("cercafloral", new Vanity(FENCE, "Cerca Floral", "cercafloral", 500, getAsset("kawaigotchi/decoration/fence_floral.png").getImage()));
 		put("parededepedra", new Vanity(FENCE, "Parede de Pedra", "parededepedra", 500, getAsset("kawaigotchi/decoration/fence_stone.png").getImage()));
+		put("cercadeaco", new Vanity(FENCE, "Cerca de Aço", "cercadeaco", 500, getAsset("kawaigotchi/decoration/fence_iron.png").getImage()));
 
 	}};
 
