@@ -57,7 +57,7 @@ public class TomCruiseCommand extends Command {
 
 		try {
 			String text = String.join(" ", args);
-			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("tomcruise.jpg")));
+			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("memes/tomcruise.jpg")));
 
 			ByteArrayOutputStream baos = Helper.renderMeme(text, bi);
 
