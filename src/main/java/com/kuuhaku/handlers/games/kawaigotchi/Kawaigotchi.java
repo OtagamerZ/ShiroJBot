@@ -298,9 +298,9 @@ public class Kawaigotchi {
 
 		g2d.drawImage(Time.getParallax()[0], 0, 0, null);
 		g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("kawaigotchi/environment/bg.png"))).getImage(), 0, 0, null);
-		g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("kawaigotchi/environment/ground.png"))).getImage(), 0, 0, null);
 		if (getVanity().has(VanityType.FENCE.toString()))
 			g2d.drawImage(VanityMenu.getVanity(getVanity().getString(VanityType.FENCE.toString())).getImage(), 0, 0, null);
+		g2d.drawImage(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("kawaigotchi/environment/ground.png"))).getImage(), 0, 0, null);
 		if (getVanity().has(VanityType.HOUSE.toString()))
 			g2d.drawImage(VanityMenu.getVanity(getVanity().getString(VanityType.HOUSE.toString())).getImage(), 0, 0, null);
 		if (getVanity().has(VanityType.BOWL.toString()))
