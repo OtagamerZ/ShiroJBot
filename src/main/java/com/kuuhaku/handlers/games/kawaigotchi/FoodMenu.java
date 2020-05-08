@@ -29,7 +29,7 @@ import static com.kuuhaku.handlers.games.kawaigotchi.enums.FoodType.*;
 import static com.kuuhaku.handlers.games.kawaigotchi.enums.Status.*;
 
 public class FoodMenu {
-	private static Map<String, Food> menu = new HashMap<String, Food>() {{
+	private static Map<String, Food> menu = new HashMap<>() {{
 		//RATION
 		put("racao", new Food(RATION, "Ração", "racao", -5, 3, 1, 15));
 		put("poritos", new Food(RATION, "Poritos", "poritos", 5, 5, 5, 50));
