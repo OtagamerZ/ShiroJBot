@@ -19,7 +19,7 @@
 package com.kuuhaku.handlers.games.kawaigotchi.enums;
 
 public enum VanityType {
-	HOUSE, FENCE, BACKGROUND, FLOOR, SKY;
+	DECORATION, FENCE, MISC;
 
 	@Override
 	public String toString() {
