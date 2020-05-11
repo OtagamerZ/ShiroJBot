@@ -162,7 +162,7 @@ public class DashboardRequest {
 				user.put("username", u.getName());
 				user.put("avatar", u.getAvatarId());
 				user.put("token", t.getToken());
-				user.put("waifu", w.isEmpty() ? "" : Helper.getOr(Main.getInfo().getUserByID(w), ""));
+				user.put("waifu", w);
 				user.put("waifuMult", cm == null ? 1.25f : cm.getMult());
 				user.put("profiles", profiles);
 				user.put("exceed", new JSONObject(ExceedDAO.getExceedState(ExceedDAO.getExceed(u.getId()))));
