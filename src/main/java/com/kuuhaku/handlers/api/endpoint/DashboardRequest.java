@@ -124,6 +124,7 @@ public class DashboardRequest {
 					guilds.put(guild);
 				});
 
+				Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth", "authorized");
 				Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth_guild", guilds.toString());
 			});
 		} else {
