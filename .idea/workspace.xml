@@ -24,9 +24,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -407,13 +405,7 @@
       <workItem from="1589307595512" duration="1079000" />
       <workItem from="1589311713709" duration="68000" />
       <workItem from="1589313244962" duration="301000" />
-    </task>
-    <task id="LOCAL-01125" summary="Criação da API de autenticação para o dashboard">
-      <created>1588770397312</created>
-      <option name="number" value="01125" />
-      <option name="presentableId" value="LOCAL-01125" />
-      <option name="project" value="LOCAL" />
-      <updated>1588770397312</updated>
+      <workItem from="1589315945247" duration="71000" />
     </task>
     <task id="LOCAL-01126" summary="Criação da API de autenticação para o dashboard">
       <created>1588771001548</created>
@@ -751,7 +743,14 @@
       <option name="project" value="LOCAL" />
       <updated>1589313473148</updated>
     </task>
-    <option name="localTasksCounter" value="1174" />
+    <task id="LOCAL-01174" summary="Atualizada biblioteca de paginação">
+      <created>1589315999062</created>
+      <option name="number" value="01174" />
+      <option name="presentableId" value="LOCAL-01174" />
+      <option name="project" value="LOCAL" />
+      <updated>1589315999063</updated>
+    </task>
+    <option name="localTasksCounter" value="1175" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -789,7 +788,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção no comando Quiz (flood de listeners)" />
     <MESSAGE value="Pequenas correções" />
     <MESSAGE value="Adicionado Sunny à lista de devs" />
     <MESSAGE value="Adicionada imagem de meme &quot;Pathetic&quot;" />
@@ -814,7 +812,8 @@
     <MESSAGE value="Correções básicas" />
     <MESSAGE value="Criação da API de autenticação para o dashboard" />
     <MESSAGE value="Adição de decorações para os Kawaigotchis!" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição de decorações para os Kawaigotchis!" />
+    <MESSAGE value="Atualizada biblioteca de paginação" />
+    <option name="LAST_COMMIT_MESSAGE" value="Atualizada biblioteca de paginação" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -991,12 +990,12 @@
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1589313491704">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1589316005912">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1588632287059" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1589313491704" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1589316005912" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1045,12 +1044,12 @@
     </state>
     <state x="682" y="113" key="extract.method.dialog/0.0.1366.768@0.0.1366.768" timestamp="1582605093359" />
     <state x="448" y="274" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1586896266138" />
-    <state x="501" y="182" width="790" height="658" key="find.popup" timestamp="1588968195170">
+    <state x="501" y="182" width="790" height="658" key="find.popup" timestamp="1589316125655">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="362" y="127" width="643" height="536" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1585937546544" />
     <state x="362" y="134" width="774" height="562" key="find.popup/0.0.1366.768@0.0.1366.768" timestamp="1588044108124" />
-    <state x="501" y="182" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1588968195170" />
+    <state x="501" y="182" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1589316125655" />
     <state x="409" y="157" key="git4idea.merge.GitPullDialog" timestamp="1586743041255">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
