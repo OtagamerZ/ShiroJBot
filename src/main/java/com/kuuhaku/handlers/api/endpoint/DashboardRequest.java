@@ -74,6 +74,7 @@ public class DashboardRequest {
 
 		JSONObject user = Helper.get("https://discord.com/api/v6/users/@me", new JSONObject(), Collections.emptyMap(), token.getString("token_type") + " " + token.getString("access_token"));
 		User u = Main.getInfo().getUserByID(user.getString("id"));
+		System.out.println(u);
 
 		if (u != null) {
 			String t = TokenDAO.verifyToken(user.getString("id"));
