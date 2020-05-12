@@ -80,6 +80,7 @@ public class DashboardRequest {
 			if (t == null) {
 				http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + ":19006");
 				http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+				Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth", "unauthorized");
 				return;
 			}
 			http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + ":19006/Loading");
@@ -88,49 +89,47 @@ public class DashboardRequest {
 			CoupleMultiplier cm = WaifuDAO.getMultiplier(u);
 
 			Executors.newSingleThreadExecutor().execute(() -> {
-				try {
-					List<Member> profiles = MemberDAO.getMemberByMid(u.getId());
+				List<Member> profiles = MemberDAO.getMemberByMid(u.getId());
 
-					user.put("token", t);
-					user.put("waifu", w.isEmpty() ? "" : Helper.getOr(Main.getInfo().getUserByID(w), ""));
-					user.put("waifuMult", cm == null ? 1.25f : cm.getMult());
-					user.put("profiles", profiles);
-					user.put("exceed", new JSONObject(ExceedDAO.getExceedState(ExceedDAO.getExceed(u.getId()))));
-					user.put("credits", AccountDAO.getAccount(u.getId()).getBalance());
-					user.put("bonuses", Member.getBonuses(u));
-					user.put("badges", Tags.getUserBadges(u.getId()));
+				user.put("token", t);
+				user.put("waifu", w.isEmpty() ? "" : Helper.getOr(Main.getInfo().getUserByID(w), ""));
+				user.put("waifuMult", cm == null ? 1.25f : cm.getMult());
+				user.put("profiles", profiles);
+				user.put("exceed", new JSONObject(ExceedDAO.getExceedState(ExceedDAO.getExceed(u.getId()))));
+				user.put("credits", AccountDAO.getAccount(u.getId()).getBalance());
+				user.put("bonuses", Member.getBonuses(u));
+				user.put("badges", Tags.getUserBadges(u.getId()));
 
-					Thread.sleep(2500);
-					Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth_user", user.toString());
+				Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth_user", user.toString());
 
-					List<Guild> g = u.getMutualGuilds();
+				List<Guild> g = u.getMutualGuilds();
 
-					JSONArray guilds = new JSONArray();
-					g.forEach(gd -> {
-						JSONObject guild = new JSONObject();
+				JSONArray guilds = new JSONArray();
+				g.forEach(gd -> {
+					JSONObject guild = new JSONObject();
 
-						guild.put("guildID", gd.getId());
-						guild.put("name", gd.getName());
-						guild.put("moderator", Helper.hasPermission(gd.getMember(u), PrivilegeLevel.MOD));
-						guild.put("channels", gd.getTextChannels().stream().map(tc -> new JSONObject() {{
-							put("id", tc.getId());
-							put("name", tc.getName());
-						}}).collect(Collectors.toList()));
-						guild.put("roles", gd.getRoles().stream().map(r -> new JSONObject() {{
-							put("id", r.getId());
-							put("name", r.getName());
-						}}).collect(Collectors.toList()));
-						guild.put("configs", new ExportableGuildConfig(GuildDAO.getGuildById(gd.getId())).getGuildConfig());
+					guild.put("guildID", gd.getId());
+					guild.put("name", gd.getName());
+					guild.put("moderator", Helper.hasPermission(gd.getMember(u), PrivilegeLevel.MOD));
+					guild.put("channels", gd.getTextChannels().stream().map(tc -> new JSONObject() {{
+						put("id", tc.getId());
+						put("name", tc.getName());
+					}}).collect(Collectors.toList()));
+					guild.put("roles", gd.getRoles().stream().map(r -> new JSONObject() {{
+						put("id", r.getId());
+						put("name", r.getName());
+					}}).collect(Collectors.toList()));
+					guild.put("configs", new ExportableGuildConfig(GuildDAO.getGuildById(gd.getId())).getGuildConfig());
 
-						guilds.put(guild);
-					});
+					guilds.put(guild);
+				});
 
-					Thread.sleep(2500);
-					Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth_guild", guilds.toString());
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth_guild", guilds.toString());
 			});
+		} else {
+			http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + ":19006");
+			http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+			Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth", "unauthorized");
 		}
 	}
 
