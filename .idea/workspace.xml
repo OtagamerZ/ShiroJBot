@@ -24,7 +24,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de decorações para os Kawaigotchis!">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -403,14 +403,9 @@
       <workItem from="1589303549076" duration="200000" />
       <workItem from="1589304583697" duration="413000" />
       <workItem from="1589305066803" duration="643000" />
-      <workItem from="1589305968531" duration="718000" />
-    </task>
-    <task id="LOCAL-01123" summary="Criação da API de autenticação para o dashboard">
-      <created>1588769851322</created>
-      <option name="number" value="01123" />
-      <option name="presentableId" value="LOCAL-01123" />
-      <option name="project" value="LOCAL" />
-      <updated>1588769851322</updated>
+      <workItem from="1589305968531" duration="848000" />
+      <workItem from="1589307595512" duration="1079000" />
+      <workItem from="1589311713709" duration="68000" />
     </task>
     <task id="LOCAL-01124" summary="Criação da API de autenticação para o dashboard">
       <created>1588769927268</created>
@@ -748,7 +743,14 @@
       <option name="project" value="LOCAL" />
       <updated>1589305411573</updated>
     </task>
-    <option name="localTasksCounter" value="1172" />
+    <task id="LOCAL-01172" summary="Adição de decorações para os Kawaigotchis!">
+      <created>1589306763100</created>
+      <option name="number" value="01172" />
+      <option name="presentableId" value="LOCAL-01172" />
+      <option name="project" value="LOCAL" />
+      <updated>1589306763100</updated>
+    </task>
+    <option name="localTasksCounter" value="1173" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -988,12 +990,12 @@
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1589305428305">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1589306764109">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1588632287059" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1589305428305" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1589306764109" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
