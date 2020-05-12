@@ -115,7 +115,7 @@ public class PurchaceKGotchiCommand extends Command {
 						pages.add(new Page(PageType.EMBED, eb.build()));
 					}
 
-					channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(m -> Pages.paginate(m, pages, 60, TimeUnit.SECONDS));
+					channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(m -> Pages.paginate(m, pages, 60, TimeUnit.SECONDS, 5));
 					return;
 				} else if (args.length < 3) {
 					channel.sendMessage(":x: | Você precisa dar um nome ao seu Kawaigotchi!").queue();
