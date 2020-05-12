@@ -78,10 +78,8 @@ public class DashboardRequest {
 		if (u != null) {
 			String t = TokenDAO.verifyToken(user.getString("id"));
 			if (t == null) {
-				http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + ":19006/Loading");
+				http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + ":19006/Unauthorized");
 				http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-				Thread.sleep(1500);
-				Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth", "unauthorized");
 				return;
 			}
 			http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + ":19006/Loading");
@@ -128,17 +126,14 @@ public class DashboardRequest {
 					});
 
 					Thread.sleep(1500);
-					Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth", "authorized");
 					Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth_guild", guilds.toString());
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			});
 		} else {
-			http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + ":19006/Loading");
+			http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + ":19006/Unauthorized");
 			http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-			Thread.sleep(1500);
-			Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth", "unauthorized");
 		}
 	}
 
