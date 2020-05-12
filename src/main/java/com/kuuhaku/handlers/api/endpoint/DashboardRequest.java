@@ -78,7 +78,7 @@ public class DashboardRequest {
 		if (u != null) {
 			String t = TokenDAO.verifyToken(user.getString("id"));
 			if (t == null) {
-				http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + ":19006");
+				http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + ":19006/Loading");
 				http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 				Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth", "unauthorized");
 				return;
@@ -128,7 +128,7 @@ public class DashboardRequest {
 				Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth_guild", guilds.toString());
 			});
 		} else {
-			http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + ":19006");
+			http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + ":19006/Loading");
 			http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 			Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth", "unauthorized");
 		}
