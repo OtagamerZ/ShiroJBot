@@ -85,7 +85,7 @@ public class YoutubeCommand extends Command {
                             }
 
                             channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(msg -> {
-                                Pages.paginate(msg, pages, 60, TimeUnit.SECONDS);
+                                Pages.paginate(msg, pages, 60, TimeUnit.SECONDS, 5);
                                 if (Objects.requireNonNull(member.getVoiceState()).inVoiceChannel()) {
                                     Pages.buttonize(msg, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
                                         String url = Objects.requireNonNull(channel.retrieveMessageById(msg.getId()).complete().getEmbeds().get(0).getFooter()).getIconUrl();

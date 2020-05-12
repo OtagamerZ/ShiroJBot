@@ -115,7 +115,7 @@ public class VotesDAO {
 		}
 
 		if (pages.size() > 0)
-			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 60, TimeUnit.SECONDS));
+			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 60, TimeUnit.SECONDS, 5));
 		else channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-votes")).queue();
 	}
 

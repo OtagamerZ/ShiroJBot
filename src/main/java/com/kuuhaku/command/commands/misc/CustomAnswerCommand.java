@@ -88,7 +88,7 @@ public class CustomAnswerCommand extends Command {
 				return;
 			}
 
-			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 60, TimeUnit.SECONDS));
+			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 60, TimeUnit.SECONDS, 5));
 			return;
 		} else if (StringUtils.isNumeric(args[0]) && !args[0].contains(";")) {
 			List<CustomAnswers> ca = BackupDAO.getCADump();
