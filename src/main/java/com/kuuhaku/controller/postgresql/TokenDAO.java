@@ -87,8 +87,6 @@ public class TokenDAO {
 
 			em.close();
 
-			System.out.println(Helper.hasPermission(Main.getInfo().getMemberByID(t.getUid()), PrivilegeLevel.PARTNER));
-			System.out.println(TagDAO.getTagById(Main.getInfo().getMemberByID(t.getUid()).getGuild().getOwnerId()).isPartner());
 			if (!Helper.hasPermission(Main.getInfo().getMemberByID(t.getUid()), PrivilegeLevel.PARTNER)) return null;
 			else return t.getToken();
 		} catch (NoResultException e) {
