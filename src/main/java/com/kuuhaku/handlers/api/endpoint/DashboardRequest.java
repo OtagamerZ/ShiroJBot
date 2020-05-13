@@ -40,6 +40,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.List;
@@ -76,7 +78,7 @@ public class DashboardRequest {
 		User u = Main.getInfo().getUserByID(user.getString("id"));
 
 		if (u != null) {
-			String session = Helper.generateToken(u.getId(), 16);
+			String session = URLEncoder.encode(Helper.generateToken(u.getId(), 16), StandardCharsets.UTF_8);
 			String t = TokenDAO.verifyToken(user.getString("id"));
 			if (t == null) {
 				http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + ":19006/Unauthorized");
