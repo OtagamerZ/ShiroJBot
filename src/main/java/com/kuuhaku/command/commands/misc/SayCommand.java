@@ -77,7 +77,7 @@ public class SayCommand extends Command {
 			assert wh != null;
 			WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
 			try {
-				message.delete().queue();
+				message.delete().queue(null, Helper::doNothing);
 				wc.send(wmb.build()).thenAccept(rm -> s.get(String.valueOf(s.keySet().toArray()[0])).accept(null)).get();
 			} catch (InterruptedException | ExecutionException e) {
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
