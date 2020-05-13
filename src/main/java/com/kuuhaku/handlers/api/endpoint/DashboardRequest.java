@@ -76,13 +76,14 @@ public class DashboardRequest {
 		User u = Main.getInfo().getUserByID(user.getString("id"));
 
 		if (u != null) {
+			String session = Helper.generateToken(u.getId(), 16);
 			String t = TokenDAO.verifyToken(user.getString("id"));
 			if (t == null) {
 				http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + ":19006/Unauthorized");
 				http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 				return;
 			}
-			http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + ":19006/Loading");
+			http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + ":19006/Loading?s=" + session);
 			http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 			String w = Member.getWaifu(u);
 			CoupleMultiplier cm = WaifuDAO.getMultiplier(u);
@@ -101,7 +102,7 @@ public class DashboardRequest {
 					user.put("badges", Tags.getUserBadges(u.getId()));
 
 					Thread.sleep(1500);
-					Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth_user", user.toString());
+					Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth_user_" + session, user.toString());
 
 					List<Guild> g = u.getMutualGuilds();
 
@@ -126,7 +127,7 @@ public class DashboardRequest {
 					});
 
 					Thread.sleep(1500);
-					Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth_guild", guilds.toString());
+					Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth_guild_" + session, guilds.toString());
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

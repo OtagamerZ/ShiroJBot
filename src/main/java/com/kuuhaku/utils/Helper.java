@@ -44,6 +44,7 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.InviteAction;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -61,6 +62,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -818,5 +821,14 @@ public class Helper {
 		String[] params = payload.toMap().entrySet().stream().map(e -> e.getKey() + "=" + e.getValue()).toArray(String[]::new);
 
 		return String.join("&", params);
+	}
+
+	public static String generateToken(String seed, int length) {
+		SecureRandom sr = new SecureRandom();
+		byte[] nameSpace = seed.substring(0, Math.min(seed.length(), length / 2)).getBytes(StandardCharsets.UTF_8);
+		byte[] randomSpace = new byte[length - nameSpace.length];
+		sr.nextBytes(randomSpace);
+
+		return Base64.getEncoder().encodeToString(ArrayUtils.addAll(nameSpace, randomSpace));
 	}
 }

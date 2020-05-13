@@ -20,15 +20,11 @@ package com.kuuhaku.command.commands.dev;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
-import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NonNls;
-
-import java.nio.charset.StandardCharsets;
-import java.security.SecureRandom;
-import java.util.Base64;
 
 public class TokenCommand extends Command {
 
@@ -55,11 +51,6 @@ public class TokenCommand extends Command {
 			return;
 		}
 
-		SecureRandom sr = new SecureRandom();
-		byte[] nameSpace = args[0].getBytes(StandardCharsets.UTF_8);
-		byte[] randomSpace = new byte[48 - nameSpace.length];
-		sr.nextBytes(randomSpace);
-
-		channel.sendMessage("Token de acesso gerado com a seed *" + args[0] + "*: `" + Base64.getEncoder().encodeToString(ArrayUtils.addAll(nameSpace, randomSpace)) + "`\n\n__**Este token é aleatório, ele precisa ser ativado antes de poder ser usado (caso contrário é apenas uma String sem valor algum)**__").queue();
+		channel.sendMessage("Token de acesso gerado com a seed *" + args[0] + "*: `" + Helper.generateToken(args[0], 48) + "`\n\n__**Este token é aleatório, ele precisa ser ativado antes de poder ser usado (caso contrário é apenas uma String sem valor algum)**__").queue();
 	}
 }
