@@ -22,14 +22,10 @@ import com.kuuhaku.Main;
 import com.kuuhaku.model.persistent.Token;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.PrivilegeLevel;
-import org.apache.commons.lang3.ArrayUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import java.nio.charset.StandardCharsets;
-import java.security.SecureRandom;
-import java.util.Base64;
 
 public class TokenDAO {
 	public static Token getToken(String token) {
@@ -51,12 +47,7 @@ public class TokenDAO {
 	public static Token registerToken(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		SecureRandom sr = new SecureRandom();
-		byte[] nameSpace = id.getBytes(StandardCharsets.UTF_8);
-		byte[] randomSpace = new byte[48 - nameSpace.length];
-		sr.nextBytes(randomSpace);
-
-		Token t = new Token(Base64.getEncoder().encodeToString(ArrayUtils.addAll(nameSpace, randomSpace)), Main.getInfo().getUserByID(id).getAsTag(), id);
+		Token t = new Token(Helper.generateToken(id, 48), Main.getInfo().getUserByID(id).getAsTag(), id);
 
 		em.getTransaction().begin();
 		em.merge(t);
