@@ -77,7 +77,7 @@ public class SlotsCommand extends Command {
 		AtomicInteger bet = new AtomicInteger(Integer.parseInt(args[0]));
 
 		if (acc.getBalance() < bet.get()) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_slots-insufficient-credit")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits")).queue();
 			return;
 		}
 
