@@ -32,7 +32,7 @@ public class CoupleMultiplier {
 	private String id;
 
 	@Column(columnDefinition = "FLOAT DEFAULT 1.25")
-	private float mult;
+	private float mult = 1.25f;
 
 	public CoupleMultiplier(String id) {
 		this.id = id;

@@ -28,7 +28,7 @@ public class AnsweredQuizzes {
 	private String id;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-	private int times;
+	private int times = 0;
 
 	public AnsweredQuizzes(String id) {
 		this.id = id;
