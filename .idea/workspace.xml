@@ -26,6 +26,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DashboardRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DashboardRequest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -412,13 +413,8 @@
       <workItem from="1589387669068" duration="2292000" />
       <workItem from="1589395148504" duration="296000" />
       <workItem from="1589458114607" duration="3391000" />
-    </task>
-    <task id="LOCAL-01137" summary="Criação da API de autenticação para o dashboard">
-      <created>1588798104254</created>
-      <option name="number" value="01137" />
-      <option name="presentableId" value="LOCAL-01137" />
-      <option name="project" value="LOCAL" />
-      <updated>1588798104254</updated>
+      <workItem from="1589463055019" duration="131000" />
+      <workItem from="1589463694694" duration="383000" />
     </task>
     <task id="LOCAL-01138" summary="Criação da API de autenticação para o dashboard">
       <created>1588798572058</created>
@@ -756,7 +752,14 @@
       <option name="project" value="LOCAL" />
       <updated>1589462324824</updated>
     </task>
-    <option name="localTasksCounter" value="1186" />
+    <task id="LOCAL-01186" summary="Correção na API">
+      <created>1589463149896</created>
+      <option name="number" value="01186" />
+      <option name="presentableId" value="LOCAL-01186" />
+      <option name="project" value="LOCAL" />
+      <updated>1589463149896</updated>
+    </task>
+    <option name="localTasksCounter" value="1187" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -903,12 +906,12 @@
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1586974460200" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1589462322195">
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1589463147300">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1588632175383" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1589462322195" />
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1589463147300" />
     <state width="247" height="195" key="DatabaseViewActions_Filter" timestamp="1586747901902">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -996,12 +999,12 @@
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
     <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1589462327938">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1589463155107">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1588632287059" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1589462327938" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1589463155107" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
