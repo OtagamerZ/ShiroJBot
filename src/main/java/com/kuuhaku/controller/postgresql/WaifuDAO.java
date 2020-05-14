@@ -63,6 +63,7 @@ public class WaifuDAO {
 
 		Query q = em.createQuery("SELECT c FROM Couple c WHERE husbando LIKE :id OR waifu LIKE :id");
 		q.setParameter("id", u.getId());
+		q.setMaxResults(1);
 
 		try {
 			return (Couple) q.getSingleResult();
