@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@SpringBootApplication(scanBasePackages = {"com.kuuhaku.handlers.api"})
+@SpringBootApplication
 @Configuration
 public class Application implements WebMvcConfigurer {
 	public Application() {
