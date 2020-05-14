@@ -88,7 +88,7 @@ public class DashboardRequest {
 			}
 			http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + ":19006/Loading?s=" + session);
 			http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-			String w = Member.getWaifu(u);
+			User w = Main.getInfo().getUserByID(Member.getWaifu(u));
 			CoupleMultiplier cm = WaifuDAO.getMultiplier(u);
 
 			Executors.newSingleThreadExecutor().execute(() -> {
@@ -96,7 +96,7 @@ public class DashboardRequest {
 					List<Member> profiles = MemberDAO.getMemberByMid(u.getId());
 
 					user.put("token", t);
-					user.put("waifu", w.isEmpty() ? "" : Helper.getOr(Main.getInfo().getUserByID(w), ""));
+					user.put("waifu", w == null ? "" : w.getAsTag());
 					user.put("waifuMult", cm == null ? 1.25f : cm.getMult());
 					user.put("profiles", profiles);
 					user.put("exceed", new JSONObject(ExceedDAO.getExceedState(ExceedDAO.getExceed(u.getId()))));
@@ -111,20 +111,20 @@ public class DashboardRequest {
 
 					JSONArray guilds = new JSONArray();
 					g.forEach(gd -> {
-						JSONObject guild = new JSONObject();
-
-						guild.put("guildID", gd.getId());
-						guild.put("name", gd.getName());
-						guild.put("moderator", Helper.hasPermission(gd.getMember(u), PrivilegeLevel.MOD));
-						guild.put("channels", gd.getTextChannels().stream().map(tc -> new JSONObject() {{
-							put("id", tc.getId());
-							put("name", tc.getName());
-						}}).collect(Collectors.toList()));
-						guild.put("roles", gd.getRoles().stream().map(r -> new JSONObject() {{
-							put("id", r.getId());
-							put("name", r.getName());
-						}}).collect(Collectors.toList()));
-						guild.put("configs", new ExportableGuildConfig(GuildDAO.getGuildById(gd.getId())).getGuildConfig());
+						JSONObject guild = new JSONObject() {{
+							put("guildID", gd.getId());
+							put("name", gd.getName());
+							put("moderator", Helper.hasPermission(gd.getMember(u), PrivilegeLevel.MOD));
+							put("channels", gd.getTextChannels().stream().map(tc -> new JSONObject() {{
+								put("id", tc.getId());
+								put("name", tc.getName());
+							}}).collect(Collectors.toList()));
+							put("roles", gd.getRoles().stream().map(r -> new JSONObject() {{
+								put("id", r.getId());
+								put("name", r.getName());
+							}}).collect(Collectors.toList()));
+							put("configs", new ExportableGuildConfig(GuildDAO.getGuildById(gd.getId())).getGuildConfig());
+						}};
 
 						guilds.put(guild);
 					});
@@ -144,7 +144,51 @@ public class DashboardRequest {
 	@RequestMapping(value = "/api/validate", method = RequestMethod.POST)
 	public Exception requestCard(@RequestHeader(value = "token") String token) {
 		boolean valid = TokenDAO.validateToken(token);
-		return new Exception(valid ? 200 : 403, valid ? "Ok" : "Unauthorized");
+		if (!valid) return new Exception(403, "Unauthorized");
+
+		Token t = TokenDAO.getToken(token);
+		assert t != null;
+		User u = Main.getInfo().getUserByID(t.getUid());
+		User w = Main.getInfo().getUserByID(Member.getWaifu(u));
+		CoupleMultiplier cm = WaifuDAO.getMultiplier(u);
+
+		List<Member> profiles = MemberDAO.getMemberByMid(u.getId());
+		JSONObject user = new JSONObject() {{
+			put("waifu", w == null ? "" : w.getAsTag());
+			put("waifuMult", cm == null ? 1.25f : cm.getMult());
+			put("profiles", profiles);
+			put("exceed", new JSONObject(ExceedDAO.getExceedState(ExceedDAO.getExceed(u.getId()))));
+			put("credits", AccountDAO.getAccount(u.getId()).getBalance());
+			put("bonuses", Member.getBonuses(u));
+			put("badges", Tags.getUserBadges(u.getId()));
+		}};
+
+		List<Guild> g = u.getMutualGuilds();
+
+		JSONArray guilds = new JSONArray();
+		g.forEach(gd -> {
+			JSONObject guild = new JSONObject() {{
+				put("guildID", gd.getId());
+				put("name", gd.getName());
+				put("moderator", Helper.hasPermission(gd.getMember(u), PrivilegeLevel.MOD));
+				put("channels", gd.getTextChannels().stream().map(tc -> new JSONObject() {{
+					put("id", tc.getId());
+					put("name", tc.getName());
+				}}).collect(Collectors.toList()));
+				put("roles", gd.getRoles().stream().map(r -> new JSONObject() {{
+					put("id", r.getId());
+					put("name", r.getName());
+				}}).collect(Collectors.toList()));
+				put("configs", new ExportableGuildConfig(GuildDAO.getGuildById(gd.getId())).getGuildConfig());
+			}};
+
+			guilds.put(guild);
+		});
+
+		return new Exception(200, new JSONObject() {{
+			put("userData", user);
+			put("serverData", guilds);
+		}}.toString());
 	}
 
 	@RequestMapping(value = "/api/card", method = RequestMethod.POST)
