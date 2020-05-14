@@ -22,6 +22,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.handlers.api.exception.Exception;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.model.common.ExportableGuildConfig;
 import com.kuuhaku.model.common.Profile;
@@ -138,6 +139,12 @@ public class DashboardRequest {
 			http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + ":19006/Unauthorized");
 			http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 		}
+	}
+
+	@RequestMapping(value = "/api/validate", method = RequestMethod.POST)
+	public Exception requestCard(@RequestHeader(value = "token") String token) {
+		boolean valid = TokenDAO.validateToken(token);
+		return new Exception(valid ? 200 : 403, valid ? "Ok" : "Unauthorized");
 	}
 
 	@RequestMapping(value = "/api/card", method = RequestMethod.POST)
