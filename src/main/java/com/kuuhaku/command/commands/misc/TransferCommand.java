@@ -48,11 +48,14 @@ public class TransferCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		if (message.getMentionedUsers().size() == 0) {
+		if (args.length < 2) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_transfer-no-amount")).queue();
+			return;
+		} else if (message.getMentionedUsers().size() == 0) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
 			return;
-		} else if (args.length < 2) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_transfer-no-amount")).queue();
+		} else if (message.getMentionedUsers().get(0).getId().equals(author.getId())) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-transfer-to-yourself")).queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[0])) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_amount-not-valid")).queue();
@@ -66,6 +69,9 @@ public class TransferCommand extends Command {
 
 		if (from.getBalance() < amount) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits")).queue();
+			return;
+		} else if (amount <= 0) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-transfer-negative-or-zero")).queue();
 			return;
 		}
 
