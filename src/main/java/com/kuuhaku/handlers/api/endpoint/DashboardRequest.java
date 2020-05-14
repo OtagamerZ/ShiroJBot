@@ -88,7 +88,7 @@ public class DashboardRequest {
 			}
 			http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + ":19006/Loading?s=" + session);
 			http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-			User w = Main.getInfo().getUserByID(Member.getWaifu(u));
+			User w = Member.getWaifu(u).isBlank() ? null : Main.getInfo().getUserByID(Member.getWaifu(u));
 			CoupleMultiplier cm = WaifuDAO.getMultiplier(u);
 
 			Executors.newSingleThreadExecutor().execute(() -> {
