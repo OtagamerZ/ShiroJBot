@@ -88,49 +88,13 @@ public class DashboardRequest {
 			}
 			http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + ":19006/Loading?s=" + session);
 			http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-			User w = Member.getWaifu(u).isBlank() ? null : Main.getInfo().getUserByID(Member.getWaifu(u));
-			CoupleMultiplier cm = WaifuDAO.getMultiplier(u);
 
 			Executors.newSingleThreadExecutor().execute(() -> {
 				try {
-					List<Member> profiles = MemberDAO.getMemberByMid(u.getId());
-
 					user.put("token", t);
-					user.put("waifu", w == null ? "" : w.getAsTag());
-					user.put("waifuMult", cm == null ? 1.25f : cm.getMult());
-					user.put("profiles", profiles);
-					user.put("exceed", new JSONObject(ExceedDAO.getExceedState(ExceedDAO.getExceed(u.getId()))));
-					user.put("credits", AccountDAO.getAccount(u.getId()).getBalance());
-					user.put("bonuses", Member.getBonuses(u));
-					user.put("badges", Tags.getUserBadges(u.getId()));
 
 					Thread.sleep(1500);
-					Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth_user_" + session, user.toString());
-
-					List<Guild> g = u.getMutualGuilds();
-
-					JSONArray guilds = new JSONArray();
-					g.forEach(gd -> {
-						JSONObject guild = new JSONObject() {{
-							put("guildID", gd.getId());
-							put("name", gd.getName());
-							put("moderator", Helper.hasPermission(gd.getMember(u), PrivilegeLevel.MOD));
-							put("channels", gd.getTextChannels().stream().map(tc -> new JSONObject() {{
-								put("id", tc.getId());
-								put("name", tc.getName());
-							}}).collect(Collectors.toList()));
-							put("roles", gd.getRoles().stream().map(r -> new JSONObject() {{
-								put("id", r.getId());
-								put("name", r.getName());
-							}}).collect(Collectors.toList()));
-							put("configs", new ExportableGuildConfig(GuildDAO.getGuildById(gd.getId())).getGuildConfig());
-						}};
-
-						guilds.put(guild);
-					});
-
-					Thread.sleep(1500);
-					Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth_guild_" + session, guilds.toString());
+					Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth_" + session, user.toString());
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
