@@ -35,7 +35,7 @@ import java.util.Objects;
 
 @RestController
 public class MemeRequest {
-	@RequestMapping(value = "/meme/twobuttons", method = RequestMethod.POST)
+	@RequestMapping(value = "/api/meme/twobuttons", method = RequestMethod.POST)
 	public @ResponseBody
 	byte[] getTwoButtonsMeme(@RequestHeader(value = "token") String token,
 							 @RequestHeader(value = "field-a") String fieldA,
@@ -70,7 +70,7 @@ public class MemeRequest {
 		}
 	}
 
-	@RequestMapping(value = "/meme/expandingbrain", method = RequestMethod.POST)
+	@RequestMapping(value = "/api/meme/expandingbrain", method = RequestMethod.POST)
 	public @ResponseBody
 	byte[] getExpandingBrainMeme(@RequestHeader(value = "token") String token,
 								 @RequestHeader(value = "field-a") String fieldA,
@@ -104,7 +104,7 @@ public class MemeRequest {
 		}
 	}
 
-	@RequestMapping(value = "/meme/drake", method = RequestMethod.POST)
+	@RequestMapping(value = "/api/meme/drake", method = RequestMethod.POST)
 	public @ResponseBody
 	byte[] getDrakeMeme(@RequestHeader(value = "token") String token,
 						@RequestHeader(value = "field-a") String fieldA,
@@ -134,7 +134,7 @@ public class MemeRequest {
 		}
 	}
 
-	@RequestMapping(value = "/meme/sadreality", method = RequestMethod.POST)
+	@RequestMapping(value = "/api/meme/sadreality", method = RequestMethod.POST)
 	public @ResponseBody
 	byte[] getSadRealityMeme(@RequestHeader(value = "token") String token,
 							 @RequestHeader(value = "field-a") String fieldA) {
@@ -166,42 +166,42 @@ public class MemeRequest {
 		}
 	}
 
-	@RequestMapping(value = "/meme/stonks", method = RequestMethod.POST)
+	@RequestMapping(value = "/api/meme/stonks", method = RequestMethod.POST)
 	public @ResponseBody
 	byte[] getStonksMeme(@RequestHeader(value = "token") String token,
 						 @RequestHeader(value = "field-a") String fieldA) {
 		return genericMeme(token, fieldA, "stonks.jpg");
 	}
 
-	@RequestMapping(value = "/meme/notstonks", method = RequestMethod.POST)
+	@RequestMapping(value = "/api/meme/notstonks", method = RequestMethod.POST)
 	public @ResponseBody
 	byte[] getStinksMeme(@RequestHeader(value = "token") String token,
 						 @RequestHeader(value = "field-a") String fieldA) {
 		return genericMeme(token, fieldA, "notstonks.jpg");
 	}
 
-	@RequestMapping(value = "/meme/spiderman", method = RequestMethod.POST)
+	@RequestMapping(value = "/api/meme/spiderman", method = RequestMethod.POST)
 	public @ResponseBody
 	byte[] getSpidermanMeme(@RequestHeader(value = "token") String token,
 							@RequestHeader(value = "field-a") String fieldA) {
 		return genericMeme(token, fieldA, "miranha.jpg");
 	}
 
-	@RequestMapping(value = "/meme/tomcruise", method = RequestMethod.POST)
+	@RequestMapping(value = "/api/meme/tomcruise", method = RequestMethod.POST)
 	public @ResponseBody
 	byte[] getTomCruiseMeme(@RequestHeader(value = "token") String token,
-                            @RequestHeader(value = "field-a") String fieldA) {
-        return genericMeme(token, fieldA, "tomcruise.jpg");
-    }
+							@RequestHeader(value = "field-a") String fieldA) {
+		return genericMeme(token, fieldA, "tomcruise.jpg");
+	}
 
-    @RequestMapping(value = "/meme/guessilldie", method = RequestMethod.POST)
-    public @ResponseBody
-    byte[] getGuessIllDieMeme(@RequestHeader(value = "token") String token,
-                              @RequestHeader(value = "field-a") String fieldA) {
+	@RequestMapping(value = "/api/meme/guessilldie", method = RequestMethod.POST)
+	public @ResponseBody
+	byte[] getGuessIllDieMeme(@RequestHeader(value = "token") String token,
+							  @RequestHeader(value = "field-a") String fieldA) {
         return genericMeme(token, fieldA, "guessilldie.jpg");
     }
 
-    @RequestMapping(value = "/meme/pathetic", method = RequestMethod.POST)
+	@RequestMapping(value = "/api/meme/pathetic", method = RequestMethod.POST)
     public @ResponseBody
     byte[] getPatheticMeme(@RequestHeader(value = "token") String token,
                            @RequestHeader(value = "field-a") String fieldA) {

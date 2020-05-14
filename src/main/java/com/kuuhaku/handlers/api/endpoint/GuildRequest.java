@@ -39,7 +39,7 @@ public class GuildRequest {
 		return GuildDAO.getGuildById(id);
 	}
 
-	@RequestMapping(value = "/guild/update", method = RequestMethod.POST)
+	@RequestMapping(value = "/api/guild/update", method = RequestMethod.POST)
 	public void updateGuild(@RequestParam(value = "guild") String guild, @RequestParam(value = "token") String token) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
