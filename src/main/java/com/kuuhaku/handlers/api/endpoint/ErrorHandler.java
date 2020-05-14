@@ -18,7 +18,17 @@
 
 package com.kuuhaku.handlers.api.endpoint;
 
-/*@RestController
+import com.kuuhaku.handlers.api.exception.Exception;
+import com.kuuhaku.handlers.api.exception.InvalidTokenException;
+import com.kuuhaku.handlers.api.exception.NotEnoughArgsException;
+import com.kuuhaku.handlers.api.exception.UnauthorizedException;
+import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import javax.persistence.NoResultException;
+
+@RestController
 @ControllerAdvice
 public class ErrorHandler implements ErrorController {
 	@RequestMapping("/error")
@@ -55,4 +65,4 @@ public class ErrorHandler implements ErrorController {
 	public String getErrorPath() {
 		return "/error";
 	}
-}*/
+}
