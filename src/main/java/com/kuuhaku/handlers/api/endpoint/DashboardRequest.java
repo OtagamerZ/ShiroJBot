@@ -149,7 +149,7 @@ public class DashboardRequest {
 		Token t = TokenDAO.getToken(token);
 		assert t != null;
 		User u = Main.getInfo().getUserByID(t.getUid());
-		User w = Main.getInfo().getUserByID(Member.getWaifu(u));
+		User w = Member.getWaifu(u).isBlank() ? null : Main.getInfo().getUserByID(Member.getWaifu(u));
 		CoupleMultiplier cm = WaifuDAO.getMultiplier(u);
 
 		List<Member> profiles = MemberDAO.getMemberByMid(u.getId());
