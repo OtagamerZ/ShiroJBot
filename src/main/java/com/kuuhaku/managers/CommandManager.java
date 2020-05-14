@@ -318,6 +318,9 @@ public class CommandManager {
 			add(new ImageCommand(
 					"image", new String[]{"imagem", "img"}, getLocale(PT).getString("req_tags"), getLocale(PT).getString("cmd_image"), MISC, false
 			));
+			add(new TransferCommand(
+					"transferir", new String[]{"transfer", "tr"}, getLocale(PT).getString("req_amount-user"), getLocale(PT).getString("cmd_transfer"), MISC, false
+			));
 
 			//FUN
 			add(new SadButTrueCommand(
