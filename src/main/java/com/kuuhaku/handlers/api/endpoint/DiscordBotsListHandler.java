@@ -23,8 +23,10 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.TokenDAO;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.User;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,7 +48,9 @@ public class DiscordBotsListHandler {
 		if (!body.getString("type").equals("test")) acc.addCredit(credit + (25 * acc.getStreak()));
 
 		try {
-			MessageChannel chn = Main.getInfo().getUserByID(body.getString("user")).openPrivateChannel().complete();
+			User u = Main.getInfo().getUserByID(body.getString("user"));
+			MessageChannel chn = u.openPrivateChannel().complete();
+			Helper.logger(this.getClass()).info(u.getName() + " acabou de votar!");
 
 			EmbedBuilder eb = new EmbedBuilder();
 
