@@ -34,7 +34,7 @@ import java.io.IOException;
 @RestController
 public class GuildRequest {
 
-	@RequestMapping(value = "/guild/get", method = RequestMethod.GET)
+	@RequestMapping(value = "/api/guild/get", method = RequestMethod.GET)
 	public GuildConfig requestGuild(@RequestParam(value = "id") String id) {
 		return GuildDAO.getGuildById(id);
 	}
