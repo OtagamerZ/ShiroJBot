@@ -22,15 +22,18 @@ import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.GlobalMessageDAO;
+import com.kuuhaku.handlers.api.endpoint.ReadyData;
 import com.kuuhaku.model.persistent.GlobalMessage;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
 import org.json.JSONObject;
 
 import java.net.BindException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WebSocketConfig {
-
+	private final List<ReadyData> authQueue = new ArrayList<>();
 	private final SocketIOServer socket;
 
 	public WebSocketConfig(int port) throws BindException {
@@ -57,10 +60,19 @@ public class WebSocketConfig {
 
 			socket.getBroadcastOperations().sendEvent("chat", gm.toString());
 		});
+		socket.addEventListener("require", String.class, (client, data, ackSender) ->
+				authQueue.stream().filter(rd -> rd.getSessionId().equalsIgnoreCase(data)).findFirst().ifPresent(rd -> {
+					Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth_" + data, rd.getData().toString());
+					authQueue.remove(rd);
+				}));
 		socket.start();
 	}
 
 	public SocketIOServer getSocket() {
 		return socket;
+	}
+
+	public void queue(ReadyData data) {
+		this.authQueue.add(data);
 	}
 }
