@@ -47,7 +47,6 @@ import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @RestController
@@ -89,16 +88,8 @@ public class DashboardRequest {
 			http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + ":19006/Loading?s=" + session);
 			http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 
-			Executors.newSingleThreadExecutor().execute(() -> {
-				try {
-					user.put("token", t);
-
-					Thread.sleep(1500);
-					Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth_" + session, user.toString());
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			});
+			user.put("token", t);
+			Main.getInfo().getServer().queue(new ReadyData(user, session));
 		} else {
 			http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + ":19006/Unauthorized");
 			http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
