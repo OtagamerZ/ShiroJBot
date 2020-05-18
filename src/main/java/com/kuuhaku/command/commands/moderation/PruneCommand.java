@@ -20,6 +20,8 @@ package com.kuuhaku.command.commands.moderation;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.apache.commons.lang3.StringUtils;
@@ -62,11 +64,11 @@ public class PruneCommand extends Command {
 					((GuildChannel) channel).delete().queue();
 					s.sendMessage("Canal limpo com sucesso!").queue();
 				} catch (InsufficientPermissionException e) {
-					channel.sendMessage(":x: | Preciso de permissão para gerenciar canais para limpar o canal todo.").queue();
-				}
+                    channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_prune-i-dont-have-permission")).queue();
+                }
 			});
 		} else {
-			channel.sendMessage(":x: | Valor inválido, a quantidade deve ser um valor inteiro.").queue();
-		}
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_prune-invalid-value")).queue();
+        }
 	}
 }
