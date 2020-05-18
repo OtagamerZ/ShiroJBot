@@ -24,6 +24,8 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.BackupDAO;
 import com.kuuhaku.model.persistent.Backup;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
@@ -57,13 +59,13 @@ public class BackupCommand extends Command {
 		Backup data = BackupDAO.getGuildBackup(guild);
 
 		if (args.length < 1) {
-			channel.sendMessage(":x: | Você deve informar o tipo de operação (salvar ou recuperar).").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_backup-invalid-arguments")).queue();
 			return;
 		} else if (!Helper.containsAny(args[0], "salvar", "recuperar")) {
-			channel.sendMessage(":x: | O primeiro argumento deve ser salvar ou recuperar.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_backup-first-invalid-argument")).queue();
 			return;
 		} else if (!guild.getSelfMember().hasPermission(Permission.ADMINISTRATOR)) {
-			channel.sendMessage(":x: | Preciso da permissão de administradora para efetuar operações de backup.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_backup-you-do-not-have-permission")).queue();
 			return;
 		}
 

@@ -54,9 +54,9 @@ public class ProfileCommand extends Command {
 			try {
 				channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_profile"), author.getAsMention())).addFile(Profile.makeProfile(member, guild).toByteArray(), "perfil.png").queue(s -> m.delete().queue());
 			} catch (IOException e) {
-				m.editMessage(":x: | Epa, teve um errinho aqui enquanto eu gerava o perfil, meus criadores já foram notificados!").queue();
-				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-			}
+                m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_profile-an-error-has-occurred")).queue();
+                Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+            }
 		});
 	}
 }
