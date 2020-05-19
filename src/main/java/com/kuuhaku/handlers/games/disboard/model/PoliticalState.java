@@ -22,6 +22,7 @@ import com.kuuhaku.controller.sqlite.PStateDAO;
 import com.kuuhaku.handlers.games.disboard.enums.Country;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
+import org.json.JSONArray;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -37,8 +38,8 @@ public class PoliticalState {
 	@Enumerated(EnumType.STRING)
 	private ExceedEnums exceed;
 
-	@ElementCollection
-	private Set<Country> countries = EnumSet.noneOf(Country.class);
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT '[]'")
+	private String countries = "[]";
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int influence = 0;
@@ -60,15 +61,29 @@ public class PoliticalState {
 	}
 
 	public Set<Country> getCountries() {
-		return countries;
+		Set<Country> cs = EnumSet.noneOf(Country.class);
+		new JSONArray(countries).forEach(c -> Country.valueOf(String.valueOf(c)));
+		return cs;
 	}
 
 	public void addCountry(Country country) {
-		this.countries.add(country);
+		List<String> cs = new ArrayList<>();
+		for (Country c : getCountries()) {
+			cs.add(c.name());
+		}
+
+		cs.add(country.name());
+		this.countries = cs.toString();
 	}
 
 	public void removeCountry(Country country) {
-		this.countries.remove(country);
+		List<String> cs = new ArrayList<>();
+		for (Country c : getCountries()) {
+			cs.add(c.name());
+		}
+
+		cs.remove(country.name());
+		this.countries = cs.toString();
 	}
 
 	public int getInfluence() {
@@ -76,7 +91,7 @@ public class PoliticalState {
 	}
 
 	public int getLandValue() {
-		return countries.parallelStream().mapToInt(Country::getSize).sum();
+		return getCountries().parallelStream().mapToInt(Country::getSize).sum();
 	}
 
 	public void modifyInfluence(boolean won) {

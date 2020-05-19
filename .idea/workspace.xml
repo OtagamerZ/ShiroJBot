@@ -26,6 +26,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/disboard/enums/Country.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/disboard/enums/Country.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/disboard/model/PoliticalState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/disboard/model/PoliticalState.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -443,14 +444,7 @@
       <workItem from="1589545101315" duration="601000" />
       <workItem from="1589573481218" duration="830000" />
       <workItem from="1589827552748" duration="1868000" />
-      <workItem from="1589912636997" duration="6726000" />
-    </task>
-    <task id="LOCAL-01162" summary="Adição de decorações para os Kawaigotchis!">
-      <created>1588965421804</created>
-      <option name="number" value="01162" />
-      <option name="presentableId" value="LOCAL-01162" />
-      <option name="project" value="LOCAL" />
-      <updated>1588965421804</updated>
+      <workItem from="1589912636997" duration="8155000" />
     </task>
     <task id="LOCAL-01163" summary="Adição de decorações para os Kawaigotchis!">
       <created>1588966058709</created>
@@ -788,7 +782,14 @@
       <option name="project" value="LOCAL" />
       <updated>1589919234479</updated>
     </task>
-    <option name="localTasksCounter" value="1211" />
+    <task id="LOCAL-01211" summary="Implementação inicial do módulo de dominação territorial">
+      <created>1589919466092</created>
+      <option name="number" value="01211" />
+      <option name="presentableId" value="LOCAL-01211" />
+      <option name="project" value="LOCAL" />
+      <updated>1589919466092</updated>
+    </task>
+    <option name="localTasksCounter" value="1212" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -934,12 +935,12 @@
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1589919231743">
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1589919463224">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1588632175383" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1589919231743" />
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1589919463224" />
     <state width="247" height="195" key="DatabaseViewActions_Filter" timestamp="1586747901902">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -1022,12 +1023,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1589919235962">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1589919467350">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1588632287059" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1589919235962" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1589919467350" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1036,11 +1037,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="695" y="627" width="383" height="267" key="XPathView.InputDialog.DIMENSION_SERVICE_KEY.SIMPLE/0.0.1680.1010@0.0.1680.1010" timestamp="1583260599414" />
-    <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1586781463323">
+    <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1589920657360">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="579" y="255" width="326" height="234" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/0.0.1366.728@0.0.1366.728" timestamp="1585945829108" />
-    <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/0.0.1680.1010@0.0.1680.1010" timestamp="1586781463323" />
+    <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589920657360" />
     <state x="594" y="260" key="com.intellij.database.run.ParametersPanel.Standalone" timestamp="1589483126209">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
