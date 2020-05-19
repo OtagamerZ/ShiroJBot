@@ -8,7 +8,7 @@
         <datasource-mapping>
           <factory-entry name="entityManagerFactory" />
           <factory-entry name="shiro_local" />
-          <factory-entry name="shiro_remote" />
+          <factory-entry name="shiro_remote" value="53f6dc79-49f3-415d-8d11-c5f83610185f" />
         </datasource-mapping>
         <naming-strategy-map />
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/../../src/main/resources/META-INF/persistence.xml" />
