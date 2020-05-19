@@ -201,8 +201,8 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		Helper.logger(Main.class).info(sweeper + " entradas dispensáveis encontradas!");
 		msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> " + sweeper + " entradas dispensáveis encontradas!").queue();
 
-		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getCADump(), com.kuuhaku.controller.sqlite.BackupDAO.getGuildDump(), com.kuuhaku.controller.sqlite.BackupDAO.getAppUserDump(), com.kuuhaku.controller.sqlite.BackupDAO.getKawaigotchiDump()));
-		Helper.logger(Main.class).info("Respostas/Guilds/Usuários salvos com sucesso!");
+		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getCADump(), com.kuuhaku.controller.sqlite.BackupDAO.getGuildDump(), com.kuuhaku.controller.sqlite.BackupDAO.getAppUserDump(), com.kuuhaku.controller.sqlite.BackupDAO.getKawaigotchiDump(), com.kuuhaku.controller.sqlite.BackupDAO.getPoliticalStateDump()));
+		Helper.logger(Main.class).info("Respostas/Guilds/Usuários/Kawaigotchis/Exceeds salvos com sucesso!");
 		msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> Respostas/Guilds/Usuários/Kawaigotchis salvos com sucesso!").queue();
 
 		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump()));

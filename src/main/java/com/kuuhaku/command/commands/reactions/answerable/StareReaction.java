@@ -60,7 +60,7 @@ public class StareReaction extends Reaction {
 
 			sendReaction(getType(), (TextChannel) channel, getInteraction()[1], getInteraction()[0].getAsMention() + " encarou " + getInteraction()[1].getAsMention() + " - " + this.getReaction(), true);
 		} else {
-			Helper.typeMessage(channel, ShiroInfo.getLocale(I18n.PT).getString("REV-err_starereaction-invalid-arguments"));
+			Helper.typeMessage(channel, ShiroInfo.getLocale(I18n.PT).getString("err_no-user-to-stare"));
 		}
 	}
 
