@@ -26,6 +26,7 @@ import java.awt.image.DataBufferByte;
 import java.io.IOException;
 import java.util.Objects;
 
+
 public enum Country {
 	AFLAR("Aflar", new Point(3792, 374)),
 	AFLIL("Aflil", new Point(1004, 1196)),
