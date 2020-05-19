@@ -64,11 +64,11 @@ public class PruneCommand extends Command {
 					((GuildChannel) channel).delete().queue();
 					s.sendMessage("Canal limpo com sucesso!").queue();
 				} catch (InsufficientPermissionException e) {
-                    channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_prune-i-dont-have-permission")).queue();
+                    channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_prune-permission-required")).queue();
                 }
 			});
 		} else {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_prune-invalid-value")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_amount-not-valid")).queue();
         }
 	}
 }

@@ -19,6 +19,7 @@
 package com.kuuhaku.model.common;
 
 import com.kuuhaku.controller.postgresql.MemberDAO;
+import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.model.persistent.AppUser;
 import com.kuuhaku.model.persistent.CustomAnswers;
@@ -34,34 +35,38 @@ public class DataDump {
 	private final List<GuildConfig> gcDump;
 	private final List<AppUser> auDump;
 	private final List<Kawaigotchi> kgDump;
+	private final List<PoliticalState> psDump;
 
-	public DataDump(List<CustomAnswers> caDump, List<Member> mDump, List<GuildConfig> gcDump, List<AppUser> auDump, List<Kawaigotchi> kgDump) {
+	public DataDump(List<CustomAnswers> caDump, List<Member> mDump, List<GuildConfig> gcDump, List<AppUser> auDump, List<Kawaigotchi> kgDump, List<PoliticalState> psDump) {
 		this.caDump = caDump;
 		this.gcDump = gcDump;
 		this.auDump = auDump;
 		this.mDump = mDump;
 		this.kgDump = kgDump;
+		this.psDump = psDump;
 	}
 
-	public DataDump(List<CustomAnswers> caDump, List<GuildConfig> gcDump, List<AppUser> auDump, List<Kawaigotchi> kgDump) {
+	public DataDump(List<CustomAnswers> caDump, List<GuildConfig> gcDump, List<AppUser> auDump, List<Kawaigotchi> kgDump, List<PoliticalState> psDump) {
 		this.caDump = caDump;
 		this.gcDump = gcDump;
 		this.auDump = auDump;
 		this.kgDump = kgDump;
+		this.psDump = psDump;
 		this.mDump = new ArrayList<>();
 	}
 
-    public DataDump(List<Member> mDump) {
-        this.caDump = new ArrayList<>();
-        this.gcDump = new ArrayList<>();
+	public DataDump(List<Member> mDump) {
+		this.caDump = new ArrayList<>();
+		this.gcDump = new ArrayList<>();
 		this.auDump = new ArrayList<>();
 		this.kgDump = new ArrayList<>();
+		this.psDump = new ArrayList<>();
 
-        List<Member> oldMembers = MemberDAO.getMembers();
-        mDump.removeAll(oldMembers);
+		List<Member> oldMembers = MemberDAO.getMembers();
+		mDump.removeAll(oldMembers);
 
-        this.mDump = mDump;
-    }
+		this.mDump = mDump;
+	}
 
     public List<CustomAnswers> getCaDump() {
         return caDump;
@@ -81,5 +86,9 @@ public class DataDump {
 
 	public List<Kawaigotchi> getKgDump() {
 		return kgDump;
+	}
+
+	public List<PoliticalState> getPsDump() {
+		return psDump;
 	}
 }

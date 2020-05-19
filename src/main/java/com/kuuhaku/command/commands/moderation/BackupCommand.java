@@ -60,13 +60,13 @@ public class BackupCommand extends Command {
 		Backup data = BackupDAO.getGuildBackup(guild);
 
 		if (args.length < 1) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_backup-invalid-arguments")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_backup-no-mode")).queue();
 			return;
 		} else if (!Helper.containsAny(args[0], "salvar", "recuperar")) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_backup-first-invalid-argument")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_backup-invalid-mode")).queue();
 			return;
 		} else if (!guild.getSelfMember().hasPermission(Permission.ADMINISTRATOR)) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_backup-you-do-not-have-permission")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_backup-permission-required")).queue();
 			return;
 		}
 
@@ -75,9 +75,9 @@ public class BackupCommand extends Command {
 			data.saveServerData(guild);
 			channel.sendMessage("Backup feito com sucesso, utilize `" + prefix + "backup recuperar` para recuperar para este estado do servidor. (ISSO IRÁ REESCREVER O SERVIDOR, TODAS AS MENSAGENS SERÃO PERDIDAS)").queue();
 		} else if (data.getGuild() == null || data.getGuild().isEmpty()) {
-			channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("REV-err_backup-it-was-not-possible-to-proceed"), prefix)).queue();
+			channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_backup-not-exists"), prefix)).queue();
 		} else if (data.getLastRestored().toLocalDateTime().plusDays(7).until(LocalDateTime.now(), ChronoUnit.DAYS) < 7) {
-			channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("REV-err_backup-wait-a-few-seconds"), 7 - data.getLastRestored().toLocalDateTime().plusDays(7).until(LocalDateTime.now(), ChronoUnit.DAYS))).queue();
+			channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_backup-ratelimit"), 7 - data.getLastRestored().toLocalDateTime().plusDays(7).until(LocalDateTime.now(), ChronoUnit.DAYS))).queue();
 		} else {
 			channel.sendMessage("**Restaurar um backup irá limpar todas as mensagens do servidor, inclusive aquelas fixadas**\n\nPor favor, confirme esta operação clicando no botão abaixo.").queue(s ->
 					Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> data.restore(guild)), true, 30, TimeUnit.SECONDS));

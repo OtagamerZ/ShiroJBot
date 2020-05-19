@@ -54,6 +54,7 @@
         <class>com.kuuhaku.model.persistent.ExceedMember</class>
         <class>com.kuuhaku.model.persistent.Couple</class>
         <class>com.kuuhaku.model.persistent.CoupleMultiplier</class>
+        <class>com.kuuhaku.handlers.games.disboard.model.PoliticalState</class>
 
         <properties>
             <!-- dados da conexao -->
@@ -91,6 +92,7 @@
         <class>com.kuuhaku.model.persistent.PermaBlock</class>
         <class>com.kuuhaku.model.persistent.AppUser</class>
         <class>com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi</class>
+        <class>com.kuuhaku.handlers.games.disboard.model.PoliticalState</class>
 
         <properties>
             <!-- dados da conexao -->

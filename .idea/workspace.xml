@@ -25,10 +25,82 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/ReadyData.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/exceed/DisboardCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/PStateDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/PStateDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/disboard/enums/Country.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/disboard/model/Disboard.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/disboard/model/PoliticalState.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/aflar.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/aflil.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/ascen.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/ascye.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/ashait.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/ashea.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/astra.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/aswen.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/aswia.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/claeze.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/clou_fla.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/destait.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/elchea.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/elven_gard.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/esha.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/eshain.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/estya.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/eswain.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/faflye.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/flioh_tristan.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/floyrus.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/fluycia.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/friyca.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/greyburg.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/harden_fell.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/hedrya.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/kosten.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/lushen.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/plul_cresh.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/prieland.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/proiles.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/sciah_strela.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/scoi_stad.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/shabia.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/shier_cron.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/shiosau.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/spuyi_shijan.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/staidal.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/staubia.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/steyles.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/countries/stuii_shuwa.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/layers/oceando.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/layers/outline.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DashboardRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DashboardRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/WebSocketConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/WebSocketConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/NotStonksCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/NotStonksCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/PPTCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/PPTCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/QuizCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/QuizCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/SadButTrueCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/SadButTrueCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/SlotsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/SlotsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/ProfileCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/ProfileCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/moderation/BackupCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/moderation/BackupCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/moderation/BanMemberCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/moderation/BanMemberCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/moderation/GatekeeperCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/moderation/GatekeeperCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/moderation/PruneCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/moderation/PruneCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/reactions/answerable/StareReaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/reactions/answerable/StareReaction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/BackupDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/BackupDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/KGotchiDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/KGotchiDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/BackupDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/BackupDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/KGotchiDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/KGotchiDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/BackupEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/BackupEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DiscordBotsListHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DiscordBotsListHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/DataDump.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/DataDump.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ExceedEnums.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ExceedEnums.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -169,7 +241,7 @@
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="TEXT" />
     <property name="extract.method.default.visibility" value="private" />
     <property name="last.edited.regexp" value="aaaa&#10;aaa" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -189,24 +261,24 @@
       <recent name="com.kuuhaku.managers.RPGCommandManager" />
       <recent name="com.kuuhaku.managers.CommandManager" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.kuuhaku.command.commands.misc" />
-      <recent name="com.kuuhaku.handlers.games.kawaigotchi" />
-      <recent name="com.kuuhaku.command.commands.information" />
-      <recent name="com.kuuhaku.controller.postgresql" />
-      <recent name="com.kuuhaku.command.commands.dev" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
       <recent name="C:\Users\yagog\ShiroJBot\src\main\resources" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games\kawaigotchi" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.command.commands.exceed" />
+      <recent name="com.kuuhaku.controller.postgresql" />
+      <recent name="com.kuuhaku.command.commands.misc" />
+      <recent name="com.kuuhaku.handlers.games.kawaigotchi" />
+      <recent name="com.kuuhaku.command.commands.information" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -443,14 +515,9 @@
       <workItem from="1589488148087" duration="179000" />
       <workItem from="1589489691375" duration="30000" />
       <workItem from="1589545101315" duration="601000" />
-      <workItem from="1589573481218" duration="667000" />
-    </task>
-    <task id="LOCAL-01146" summary="Criação da API de autenticação para o dashboard">
-      <created>1588875807318</created>
-      <option name="number" value="01146" />
-      <option name="presentableId" value="LOCAL-01146" />
-      <option name="project" value="LOCAL" />
-      <updated>1588875807319</updated>
+      <workItem from="1589573481218" duration="830000" />
+      <workItem from="1589827552748" duration="1868000" />
+      <workItem from="1589912636997" duration="4286000" />
     </task>
     <task id="LOCAL-01147" summary="Criação da API de autenticação para o dashboard">
       <created>1588876206903</created>
@@ -788,7 +855,14 @@
       <option name="project" value="LOCAL" />
       <updated>1589488305362</updated>
     </task>
-    <option name="localTasksCounter" value="1195" />
+    <task id="LOCAL-01195" summary="Correção na API">
+      <created>1589574296547</created>
+      <option name="number" value="01195" />
+      <option name="presentableId" value="LOCAL-01195" />
+      <option name="project" value="LOCAL" />
+      <updated>1589574296547</updated>
+    </task>
+    <option name="localTasksCounter" value="1196" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -882,7 +956,6 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="351" y="47" key="#SQL_Resolution_Scopes/0.0.1366.728@0.0.1366.728" timestamp="1585946066821" />
-    <state x="432" y="164" key="#SQL_Resolution_Scopes/0.0.1680.1010@0.0.1680.1010" timestamp="1581000411417" />
     <state x="578" y="282" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog" timestamp="1589488286833">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -893,12 +966,12 @@
     <state x="248" y="33" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1585944592238" />
     <state x="239" y="78" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.768@0.0.1366.768" timestamp="1587921282730" />
     <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1588965558966" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1589574018307">
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1589913358708">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="488" y="67" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1585945441171" />
     <state x="488" y="71" key="#com.intellij.ide.util.MemberChooser/0.0.1366.768@0.0.1366.768" timestamp="1581391062510" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1589574018307" />
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1589913358708" />
     <state x="569" y="296" key="#com.intellij.ide.util.TreeFileChooserDialog" timestamp="1583261031135">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1023,13 +1096,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state width="82" height="441" key="SqlResolveConfigurable/0.0.1680.1010@0.0.1680.1010" timestamp="1581000410448" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1589488309138">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1589574301878">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1588632287059" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1589488309138" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1589574301878" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1078,12 +1150,12 @@
     </state>
     <state x="682" y="113" key="extract.method.dialog/0.0.1366.768@0.0.1366.768" timestamp="1582605093359" />
     <state x="448" y="274" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1586896266138" />
-    <state x="501" y="182" width="790" height="658" key="find.popup" timestamp="1589392521850">
+    <state x="501" y="182" width="790" height="658" key="find.popup" timestamp="1589915098131">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="362" y="127" width="643" height="536" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1585937546544" />
     <state x="362" y="134" width="774" height="562" key="find.popup/0.0.1366.768@0.0.1366.768" timestamp="1588044108124" />
-    <state x="501" y="182" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1589392521850" />
+    <state x="501" y="182" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1589915098131" />
     <state x="409" y="157" key="git4idea.merge.GitPullDialog" timestamp="1586743041255">
       <screen x="0" y="0" width="1366" height="768" />
     </state>

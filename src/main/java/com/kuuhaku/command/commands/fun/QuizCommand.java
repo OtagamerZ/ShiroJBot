@@ -22,10 +22,14 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.QuizDAO;
+import com.kuuhaku.controller.sqlite.PStateDAO;
+import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.AnsweredQuizzes;
 import com.kuuhaku.model.persistent.Quiz;
+import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -108,10 +112,22 @@ public class QuizCommand extends Command {
 						eb.setTitle("Resposta correta!");
 						eb.setDescription("Seu prêmio é de " + p + " créditos!");
 						eb.setColor(Color.green);
+
+						if (ExceedDAO.hasExceed(author.getId())) {
+							PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
+							ps.modifyInfluence(true);
+							PStateDAO.savePoliticalState(ps);
+						}
 					} else {
 						eb.setTitle("Resposta incorreta.");
 						eb.setDescription("Você errou. Tente novamente!");
 						eb.setColor(Color.red);
+
+						if (ExceedDAO.hasExceed(author.getId())) {
+							PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
+							ps.modifyInfluence(false);
+							PStateDAO.savePoliticalState(ps);
+						}
 					}
 
 					ms.delete().queue();
