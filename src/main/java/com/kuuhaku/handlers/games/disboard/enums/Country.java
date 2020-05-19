@@ -92,7 +92,6 @@ public enum Country {
 	public int getSize() {
 		int size = 0;
 		try {
-
 			BufferedImage bi = scale(ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResource("countries/" + getFilepath()))), 0.1);
 			byte[] pixels = ((DataBufferByte) bi.getAlphaRaster().getDataBuffer()).getData();
 			for (byte pixel : pixels) {
