@@ -24,6 +24,7 @@ import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -48,7 +49,7 @@ public class PoliticalState {
 		Set<Country> available = EnumSet.allOf(Country.class);
 		countries.forEach(available::removeAll);
 
-		countries.add(available.stream().collect(Collectors.toList()).get(Helper.rng(available.size())));
+		countries.add(new ArrayList<>(available).get(Helper.rng(available.size())));
 	}
 
 	public PoliticalState() {
