@@ -24,6 +24,7 @@ import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -45,10 +46,10 @@ public class PoliticalState {
 	public PoliticalState(ExceedEnums exceed) {
 		this.exceed = exceed;
 		List<Set<Country>> countries = PStateDAO.getAllPoliticalState().stream().map(PoliticalState::getCountries).collect(Collectors.toList());
-		List<Country> available = List.of(Country.values());
+		Set<Country> available = EnumSet.allOf(Country.class);
 		countries.forEach(available::removeAll);
 
-		countries.add(available.get(Helper.rng(available.size())));
+		countries.add(EnumSet.of(new ArrayList<>(available).get(Helper.rng(available.size()))));
 	}
 
 	public PoliticalState() {
