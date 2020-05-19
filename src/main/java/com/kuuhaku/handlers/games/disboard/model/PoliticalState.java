@@ -52,7 +52,7 @@ public class PoliticalState {
 
 		this.countries = new ArrayList<String>() {{
 			add(String.valueOf(countries.get(Helper.rng(countries.size()))));
-		}};
+		}}.toString();
 	}
 
 	public PoliticalState() {
