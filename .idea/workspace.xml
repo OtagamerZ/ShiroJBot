@@ -25,8 +25,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/disboard/enums/Country.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/disboard/enums/Country.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/disboard/model/Disboard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/disboard/model/Disboard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/disboard/model/PoliticalState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/disboard/model/PoliticalState.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -443,21 +443,7 @@
       <workItem from="1589545101315" duration="601000" />
       <workItem from="1589573481218" duration="830000" />
       <workItem from="1589827552748" duration="1868000" />
-      <workItem from="1589912636997" duration="5277000" />
-    </task>
-    <task id="LOCAL-01152" summary="Criação da API de autenticação para o dashboard">
-      <created>1588943900426</created>
-      <option name="number" value="01152" />
-      <option name="presentableId" value="LOCAL-01152" />
-      <option name="project" value="LOCAL" />
-      <updated>1588943900426</updated>
-    </task>
-    <task id="LOCAL-01153" summary="Criação da API de autenticação para o dashboard">
-      <created>1588944165399</created>
-      <option name="number" value="01153" />
-      <option name="presentableId" value="LOCAL-01153" />
-      <option name="project" value="LOCAL" />
-      <updated>1588944165399</updated>
+      <workItem from="1589912636997" duration="5784000" />
     </task>
     <task id="LOCAL-01154" summary="Criação da API de autenticação para o dashboard">
       <created>1588961568462</created>
@@ -788,7 +774,21 @@
       <option name="project" value="LOCAL" />
       <updated>1589917830865</updated>
     </task>
-    <option name="localTasksCounter" value="1201" />
+    <task id="LOCAL-01201" summary="Implementação inicial do módulo de dominação territorial">
+      <created>1589917930540</created>
+      <option name="number" value="01201" />
+      <option name="presentableId" value="LOCAL-01201" />
+      <option name="project" value="LOCAL" />
+      <updated>1589917930541</updated>
+    </task>
+    <task id="LOCAL-01202" summary="Implementação inicial do módulo de dominação territorial">
+      <created>1589917949765</created>
+      <option name="number" value="01202" />
+      <option name="presentableId" value="LOCAL-01202" />
+      <option name="project" value="LOCAL" />
+      <updated>1589917949765</updated>
+    </task>
+    <option name="localTasksCounter" value="1203" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -929,17 +929,17 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1584390087569" />
-    <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1587355282784">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1589918441111">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
-    <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1586974460200" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1589917927649">
+    <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1589917946903">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1588632175383" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1589917927649" />
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1589917946903" />
     <state width="247" height="195" key="DatabaseViewActions_Filter" timestamp="1586747901902">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -1022,12 +1022,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1589917932286">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1589917951837">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1588632287059" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1589917932286" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1589917951837" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1100,12 +1100,12 @@
     </state>
     <state x="403" y="177" key="run.anything.popup/0.0.1366.768@0.0.1366.768" timestamp="1585105034445" />
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1588686880500" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1589487039749">
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1589918026473">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="409" y="156" width="672" height="489" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1585945932162" />
     <state x="409" y="165" width="672" height="516" key="search.everywhere.popup/0.0.1366.768@0.0.1366.768" timestamp="1588043037032" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1589487039749" />
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1589918026473" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

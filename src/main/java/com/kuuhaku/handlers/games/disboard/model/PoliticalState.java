@@ -18,13 +18,13 @@
 
 package com.kuuhaku.handlers.games.disboard.model;
 
+import com.kuuhaku.controller.sqlite.PStateDAO;
 import com.kuuhaku.handlers.games.disboard.enums.Country;
 import com.kuuhaku.utils.ExceedEnums;
 
 import javax.persistence.*;
-import java.util.EnumSet;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "politicalstate")
@@ -41,7 +41,11 @@ public class PoliticalState {
 
 	public PoliticalState(ExceedEnums exceed) {
 		this.exceed = exceed;
-		countries.add(Country.values()[new Random().nextInt(Country.values().length)]);
+		List<Set<Country>> countries = PStateDAO.getAllPoliticalState().stream().map(PoliticalState::getCountries).collect(Collectors.toList());
+		Set<Country> available = EnumSet.allOf(Country.class);
+		countries.forEach(available::removeAll);
+
+		countries.add(new ArrayList<Country>(available).get(new Random().nextInt(available.size())));
 	}
 
 	public PoliticalState() {
