@@ -22,11 +22,14 @@ import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.model.common.DataDump;
 import com.kuuhaku.model.persistent.*;
+import com.kuuhaku.utils.ExceedEnums;
 import net.dv8tion.jda.api.entities.Guild;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BackupDAO {
 	public static void dumpData(DataDump data) {
@@ -124,8 +127,13 @@ public class BackupDAO {
 		Query gc = em.createQuery("SELECT g FROM GuildConfig g", GuildConfig.class);
 		Query au = em.createQuery("SELECT u FROM AppUser u", AppUser.class);
 		Query kg = em.createQuery("SELECT k FROM Kawaigotchi k", Kawaigotchi.class);
-		Query ps = em.createQuery("SELECT p FROM PoliticalState p", PoliticalState.class);
-		DataDump dump = new DataDump(ca.getResultList(), m.getResultList(), gc.getResultList(), au.getResultList(), kg.getResultList(), ps.getResultList());
+		List<PoliticalState> ps = new ArrayList<>();
+
+		for (ExceedEnums ex : ExceedEnums.values()) {
+			ps.add(PStateDAO.getPoliticalState(ex));
+		}
+
+		DataDump dump = new DataDump(ca.getResultList(), m.getResultList(), gc.getResultList(), au.getResultList(), kg.getResultList(), ps);
 		em.close();
 
 		return dump;
