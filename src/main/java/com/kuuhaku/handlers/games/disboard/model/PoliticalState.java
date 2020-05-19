@@ -21,9 +21,13 @@ package com.kuuhaku.handlers.games.disboard.model;
 import com.kuuhaku.controller.sqlite.PStateDAO;
 import com.kuuhaku.handlers.games.disboard.enums.Country;
 import com.kuuhaku.utils.ExceedEnums;
+import com.kuuhaku.utils.Helper;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
@@ -45,7 +49,7 @@ public class PoliticalState {
 		Set<Country> available = EnumSet.allOf(Country.class);
 		countries.forEach(available::removeAll);
 
-		countries.add(new ArrayList<Country>(available).get(new Random().nextInt(available.size())));
+		countries.add(new ArrayList<Country>(available).get(Helper.rng(available.size())));
 	}
 
 	public PoliticalState() {
