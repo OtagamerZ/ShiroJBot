@@ -49,7 +49,6 @@ public class PoliticalState {
 	}
 
 	public PoliticalState() {
-		countries.add(Country.values()[new Random().nextInt(Country.values().length)]);
 	}
 
 	public ExceedEnums getExceed() {
