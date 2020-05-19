@@ -22,6 +22,8 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
@@ -48,21 +50,21 @@ public class BanMemberCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (message.getMentionedUsers().size() == 0) {
-			channel.sendMessage(":x: | Você precisa mencionar um membro.").queue();
-			return;
-		} else if (message.getMentionedUsers().size() > 1) {
-			channel.sendMessage(":x: | Você mencionou membros demais.").queue();
-			return;
-		} else if (!member.hasPermission(Permission.BAN_MEMBERS)) {
-			channel.sendMessage(":x: | Você não possui permissão para banir membros.").queue();
-			return;
-		} else if (!Helper.hasRoleHigherThan(member, message.getMentionedMembers().get(0)) || !Helper.hasRoleHigherThan(guild.getSelfMember(), message.getMentionedMembers().get(0))) {
-			channel.sendMessage(":x: | Você não pode banir membros que possuem o mesmo cargo ou maior.").queue();
-			return;
-		} else if (Main.getInfo().getDevelopers().contains(message.getMentionedUsers().get(0).getId())) {
-			channel.sendMessage(":x: | Não posso banir meus desenvolvedores, faça isso manualmente.").queue();
-			return;
-		}
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_ban-mention-a-user")).queue();
+            return;
+        } else if (message.getMentionedUsers().size() > 1) {
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_ban-mention-a-single-user")).queue();
+            return;
+        } else if (!member.hasPermission(Permission.BAN_MEMBERS)) {
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_ban-you-do-not-have-permission")).queue();
+            return;
+        } else if (!Helper.hasRoleHigherThan(member, message.getMentionedMembers().get(0)) || !Helper.hasRoleHigherThan(guild.getSelfMember(), message.getMentionedMembers().get(0))) {
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_ban-i-cant-ban-this-user")).queue();
+            return;
+        } else if (Main.getInfo().getDevelopers().contains(message.getMentionedUsers().get(0).getId())) {
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_ban-i-cant-continue")).queue();
+            return;
+        }
 
 		try {
 			if (args.length < 2) {
@@ -73,7 +75,7 @@ public class BanMemberCommand extends Command {
 				channel.sendMessage("Membro banido com sucesso!\nRazão:```" + String.join(" ", args).replace(args[0], "").trim() + "```").queue();
 			}
 		} catch (InsufficientPermissionException e) {
-			channel.sendMessage(":x: | Não possuo a permissão para banir membros.").queue();
-		}
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_ban-i-dont-have-permission")).queue();
+        }
 	}
 }

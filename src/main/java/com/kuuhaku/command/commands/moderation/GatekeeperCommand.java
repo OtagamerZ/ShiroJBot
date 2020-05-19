@@ -23,6 +23,8 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import org.apache.commons.lang3.StringUtils;
@@ -51,15 +53,15 @@ public class GatekeeperCommand extends Command {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (args.length < 2) {
-			channel.sendMessage(":x: | É necessário informar o ID da mensagem e um cargo para ser atribuido a quem aceitar as regras.").queue();
-			return;
-		} else if (!StringUtils.isNumeric(args[0])) {
-			channel.sendMessage(":x: | O ID da mensagem deve ser numérico.").queue();
-			return;
-		} else if (message.getMentionedRoles().size() == 0) {
-			channel.sendMessage(":x: | É necessário informar o cargo a ser dado ao aceitar as regras.").queue();
-			return;
-		}
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_gatekeeper-enter-the-id")).queue();
+            return;
+        } else if (!StringUtils.isNumeric(args[0])) {
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_gatekeeper-invalid-id")).queue();
+            return;
+        } else if (message.getMentionedRoles().size() == 0) {
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_gatekeeper-inform-the-role")).queue();
+            return;
+        }
 
 		try {
 			Helper.addButton(args, message, channel, gc, "☑", true);
@@ -68,7 +70,7 @@ public class GatekeeperCommand extends Command {
 		} catch (IllegalArgumentException e) {
 			channel.sendMessage(":x: | Erro em um dos argumentos: " + e).queue();
 		} catch (ErrorResponseException e) {
-			channel.sendMessage(":x: | Este comando deve ser enviado no mesmo canal onde se encontra a mensagem a receber o botão.").queue();
-		}
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_role-chooser-invalid-channel")).queue();
+        }
 	}
 }
