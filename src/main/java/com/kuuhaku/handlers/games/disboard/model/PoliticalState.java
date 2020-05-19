@@ -26,9 +26,8 @@ import org.json.JSONArray;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.EnumSet;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
@@ -46,13 +45,14 @@ public class PoliticalState {
 
 	public PoliticalState(ExceedEnums exceed) {
 		this.exceed = exceed;
-		List<Set<Country>> countries = PStateDAO.getAllPoliticalState().stream().map(PoliticalState::getCountries).collect(Collectors.toList());
-		Set<Country> available = EnumSet.allOf(Country.class);
-		countries.forEach(available::removeAll);
 
-		List<String> cs = new ArrayList<>();
-		cs.add(new ArrayList<>(available).get(Helper.rng(available.size())).name());
-		this.countries = cs.toString();
+		List<String> states = PStateDAO.getAllPoliticalState().stream().map(PoliticalState::getCountries).map(String::valueOf).collect(Collectors.toList());
+		List<String> countries = Arrays.stream(Country.values()).map(Country::name).collect(Collectors.toList());
+		countries.removeIf(states::contains);
+
+		this.countries = new ArrayList<String>() {{
+			add(String.valueOf(countries.get(Helper.rng(countries.size()))));
+		}};
 	}
 
 	public PoliticalState() {
@@ -62,17 +62,14 @@ public class PoliticalState {
 		return exceed;
 	}
 
-	public Set<Country> getCountries() {
-		Set<Country> cs = EnumSet.noneOf(Country.class);
-		new JSONArray(countries).forEach(c -> Country.valueOf(String.valueOf(c)));
-		return cs;
+	public List<Object> getCountries() {
+		return new JSONArray(countries).toList();
 	}
 
 	public void addCountry(Country country) {
 		List<String> cs = new ArrayList<>();
-		for (Country c : getCountries()) {
-			cs.add(c.name());
-		}
+		List<Country> current = getCountries().stream().map(c -> Country.valueOf(Country.class, String.valueOf(c))).collect(Collectors.toList());
+		current.forEach(c -> cs.add(c.name()));
 
 		cs.add(country.name());
 		this.countries = cs.toString();
@@ -80,9 +77,8 @@ public class PoliticalState {
 
 	public void removeCountry(Country country) {
 		List<String> cs = new ArrayList<>();
-		for (Country c : getCountries()) {
-			cs.add(c.name());
-		}
+		List<Country> current = getCountries().stream().map(c -> Country.valueOf(Country.class, String.valueOf(c))).collect(Collectors.toList());
+		current.forEach(c -> cs.add(c.name()));
 
 		cs.remove(country.name());
 		this.countries = cs.toString();
@@ -93,7 +89,7 @@ public class PoliticalState {
 	}
 
 	public int getLandValue() {
-		return getCountries().parallelStream().mapToInt(Country::getSize).sum();
+		return getCountries().parallelStream().mapToInt(c -> Country.valueOf(Country.class, String.valueOf(c)).getSize()).sum();
 	}
 
 	public void modifyInfluence(boolean won) {

@@ -68,7 +68,7 @@ public class Disboard {
 		BufferedImage country = getImage("countries/" + c.getFilepath());
 		Graphics2D g2d = country.createGraphics();
 		state.stream()
-				.filter(ps -> ps.getCountries().contains(c))
+				.filter(ps -> ps.getCountries().contains(c.name()))
 				.findFirst()
 				.ifPresent(ps -> {
 					g2d.setColor(ps.getExceed().getPalette());
