@@ -50,7 +50,9 @@ public class PoliticalState {
 		Set<Country> available = EnumSet.allOf(Country.class);
 		countries.forEach(available::removeAll);
 
-		countries.add(EnumSet.of(new ArrayList<>(available).get(Helper.rng(available.size()))));
+		List<String> cs = new ArrayList<>();
+		cs.add(new ArrayList<>(available).get(Helper.rng(available.size())).name());
+		this.countries = cs.toString();
 	}
 
 	public PoliticalState() {
