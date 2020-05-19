@@ -26,7 +26,8 @@ import java.util.EnumSet;
 import java.util.Random;
 import java.util.Set;
 
-@Entity(name = "politicalstate")
+@Entity
+@Table(name = "politicalstate")
 public class PoliticalState {
 	@Id
 	@Enumerated(EnumType.STRING)
