@@ -42,6 +42,7 @@ public class Disboard {
 
 				Graphics2D g2d = ocean.createGraphics();
 				for (Country c : Country.values()) {
+					System.out.println(c.getName());
 					g2d.drawImage(paintRuler(c, state), c.getCoords().x, c.getCoords().y, null);
 				}
 
