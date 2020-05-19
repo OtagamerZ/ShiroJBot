@@ -46,7 +46,7 @@ public class KGotchiDAO {
 	public static Kawaigotchi getKawaigotchi(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT k FROM Kawaigotchi k WHERE userId LIKE :id", Kawaigotchi.class);
+		Query q = em.createQuery("SELECT k FROM Kawaigotchi k WHERE k.userId LIKE :id", Kawaigotchi.class);
 		q.setParameter("id", id);
 
 		try {

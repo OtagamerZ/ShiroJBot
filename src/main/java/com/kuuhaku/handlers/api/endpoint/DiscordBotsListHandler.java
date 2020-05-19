@@ -20,9 +20,13 @@ package com.kuuhaku.handlers.api.endpoint;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.TokenDAO;
+import com.kuuhaku.controller.sqlite.PStateDAO;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
+import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageChannel;
@@ -59,6 +63,14 @@ public class DiscordBotsListHandler {
 			eb.setDescription("Como agradecimento, aqui estão " + credit + (body.getBoolean("isWeekend") ? " (bônus x2)" : "") + " créditos para serem utilizados nos módulos que utilizam o sistema de dinheiro.");
 			eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
 			eb.setColor(Color.cyan);
+
+			if (ExceedDAO.hasExceed(u.getId())) {
+				PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(u.getId())));
+				ps.modifyInfluence(5);
+				PStateDAO.savePoliticalState(ps);
+
+				eb.addField("Bonus ao seu Exceed", "Adicionalmente, seu Exceed recebeu 5 pontos de influência adicionais!", false);
+			}
 
 			chn.sendMessage(eb.build()).queue();
 		} catch (RuntimeException ignore) {

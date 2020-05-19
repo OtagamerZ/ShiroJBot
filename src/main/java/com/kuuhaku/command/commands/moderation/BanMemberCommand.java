@@ -50,19 +50,19 @@ public class BanMemberCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (message.getMentionedUsers().size() == 0) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_ban-mention-a-user")).queue();
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-member-to-ban")).queue();
             return;
         } else if (message.getMentionedUsers().size() > 1) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_ban-mention-a-single-user")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_too-many-mentions")).queue();
             return;
         } else if (!member.hasPermission(Permission.BAN_MEMBERS)) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_ban-you-do-not-have-permission")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_ban-not-allowed")).queue();
             return;
         } else if (!Helper.hasRoleHigherThan(member, message.getMentionedMembers().get(0)) || !Helper.hasRoleHigherThan(guild.getSelfMember(), message.getMentionedMembers().get(0))) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_ban-i-cant-ban-this-user")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cant-ban-high-role")).queue();
             return;
         } else if (Main.getInfo().getDevelopers().contains(message.getMentionedUsers().get(0).getId())) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_ban-i-cant-continue")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cant-ban-dev")).queue();
             return;
         }
 
@@ -75,7 +75,7 @@ public class BanMemberCommand extends Command {
 				channel.sendMessage("Membro banido com sucesso!\nRazão:```" + String.join(" ", args).replace(args[0], "").trim() + "```").queue();
 			}
 		} catch (InsufficientPermissionException e) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_ban-i-dont-have-permission")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cant-ban-no-permission")).queue();
         }
 	}
 }

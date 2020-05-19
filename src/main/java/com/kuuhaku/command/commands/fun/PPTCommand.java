@@ -21,7 +21,11 @@ package com.kuuhaku.command.commands.fun;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.ExceedDAO;
+import com.kuuhaku.controller.sqlite.PStateDAO;
+import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
@@ -52,9 +56,9 @@ public class PPTCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 
 		if (args.length < 1) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_ppt-invalid-arguments")).queue();
-            return;
-        }
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_rock-paper-scissors-invalid-arguments")).queue();
+			return;
+		}
 
 		Account acc = AccountDAO.getAccount(author.getId());
 
@@ -86,19 +90,19 @@ public class PPTCommand extends Command {
 				break;
 			case "tesoura":
 			case ":v:":
-                switch (pcOption) {
-                    case 0:
-                        win = 0;
-                        break;
-                    case 1:
-                        win = 1;
-                        break;
-                }
-                break;
-            default:
-                channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_ppt-invalid-arguments")).queue();
-                return;
-        }
+				switch (pcOption) {
+					case 0:
+						win = 0;
+						break;
+					case 1:
+						win = 1;
+						break;
+				}
+				break;
+			default:
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_rock-paper-scissors-invalid-arguments")).queue();
+				return;
+		}
 
 		String pcChoice = "";
 
@@ -133,12 +137,24 @@ public class PPTCommand extends Command {
 					switch (finalWin) {
 						case 0:
 							m.editMessage(m.getContentRaw() + "\nVocê perdeu!").queue();
+
+							if (ExceedDAO.hasExceed(author.getId())) {
+								PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
+								ps.modifyInfluence(false);
+								PStateDAO.savePoliticalState(ps);
+							}
 							break;
 						case 1:
 							int crd = Helper.rng(25);
 							acc.addCredit(crd);
 							AccountDAO.saveAccount(acc);
 							m.editMessage(m.getContentRaw() + "\nVocê ganhou! Aqui, " + crd + " créditos por ter jogado comigo!").queue();
+
+							if (ExceedDAO.hasExceed(author.getId())) {
+								PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
+								ps.modifyInfluence(2);
+								PStateDAO.savePoliticalState(ps);
+							}
 							break;
 						case 2:
 							m.editMessage(m.getContentRaw() + "\nEmpate!").queue();
