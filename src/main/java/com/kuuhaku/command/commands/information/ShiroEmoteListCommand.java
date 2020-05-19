@@ -75,7 +75,7 @@ public class ShiroEmoteListCommand extends Command {
 
 			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 60, TimeUnit.SECONDS, 5));
 		} catch (IndexOutOfBoundsException e) {
-			channel.sendMessage(":x: | Nenhum emote encontrado com esse nome.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_emote-not-found")).queue();
 		}
 	}
 
