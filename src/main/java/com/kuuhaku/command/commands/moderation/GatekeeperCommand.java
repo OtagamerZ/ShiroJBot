@@ -53,13 +53,13 @@ public class GatekeeperCommand extends Command {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (args.length < 2) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_gatekeeper-enter-the-id")).queue();
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_gatekeeper-no-id")).queue();
             return;
         } else if (!StringUtils.isNumeric(args[0])) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_gatekeeper-invalid-id")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_gatekeeper-invalid-id")).queue();
             return;
         } else if (message.getMentionedRoles().size() == 0) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("REV-err_gatekeeper-inform-the-role")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_gatekeeper-no-role")).queue();
             return;
         }
 

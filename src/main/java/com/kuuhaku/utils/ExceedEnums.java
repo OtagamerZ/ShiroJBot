@@ -18,16 +18,24 @@
 
 package com.kuuhaku.utils;
 
+import java.awt.*;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public enum ExceedEnums {
-	IMANITY("Imanity"), SEIREN("Seiren"), WEREBEAST("Werebeast"), ELF("Elf"), EXMACHINA("Ex-Machina"), FLUGEL("Flügel");
+	IMANITY("Imanity", Color.MAGENTA),
+	SEIREN("Seiren", Color.CYAN),
+	WEREBEAST("Werebeast", Color.YELLOW),
+	ELF("Elf", Color.PINK),
+	EXMACHINA("Ex-Machina", Color.GREEN),
+	FLUGEL("Flügel", Color.ORANGE);
 
 	private final String name;
+	private final Color palette;
 
-	ExceedEnums(String name) {
+	ExceedEnums(String name, Color palette) {
 		this.name = name;
+		this.palette = palette;
 	}
 
 	public String getName() {
@@ -36,5 +44,9 @@ public enum ExceedEnums {
 
 	public static ExceedEnums getByName(String name) {
 		return Arrays.stream(ExceedEnums.values()).filter(e -> e.getName().equalsIgnoreCase(name)).collect(Collectors.toList()).get(0);
+	}
+
+	public Color getPalette() {
+		return palette;
 	}
 }

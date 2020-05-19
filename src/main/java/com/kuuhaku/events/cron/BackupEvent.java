@@ -36,8 +36,8 @@ public class BackupEvent implements Job {
 
 		Helper.logger(this.getClass()).info(Sweeper.mark() + " entradas dispensáveis encontradas!");
 
-		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getCADump(), com.kuuhaku.controller.sqlite.BackupDAO.getGuildDump(), com.kuuhaku.controller.sqlite.BackupDAO.getAppUserDump(), com.kuuhaku.controller.sqlite.BackupDAO.getKawaigotchiDump()));
-		Helper.logger(this.getClass()).info("Respostas/Guilds/Usuários/Kawaigotchis salvos com sucesso!");
+		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getCADump(), com.kuuhaku.controller.sqlite.BackupDAO.getGuildDump(), com.kuuhaku.controller.sqlite.BackupDAO.getAppUserDump(), com.kuuhaku.controller.sqlite.BackupDAO.getKawaigotchiDump(), com.kuuhaku.controller.sqlite.BackupDAO.getPoliticalStateDump()));
+		Helper.logger(this.getClass()).info("Respostas/Guilds/Usuários/Kawaigotchis/Exceeds salvos com sucesso!");
 		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump()));
 		Helper.logger(this.getClass()).info("Membros salvos com sucesso!");
 
