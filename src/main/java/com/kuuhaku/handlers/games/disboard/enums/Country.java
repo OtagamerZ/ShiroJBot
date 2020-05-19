@@ -86,7 +86,7 @@ public enum Country {
 	}
 
 	public String getFilepath() {
-		return this.name() + ".png";
+		return this.name().toLowerCase() + ".png";
 	}
 
 	public int getSize() {
