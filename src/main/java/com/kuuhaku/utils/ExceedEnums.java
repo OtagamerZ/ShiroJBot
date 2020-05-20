@@ -18,8 +18,12 @@
 
 package com.kuuhaku.utils;
 
+import com.kuuhaku.Main;
+
 import java.awt.*;
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public enum ExceedEnums {
@@ -47,6 +51,11 @@ public enum ExceedEnums {
 	}
 
 	public Color getPalette() {
-		return palette;
+		try {
+			return Helper.colorThief(Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById(TagIcons.getExceedId(this))).getImageUrl());
+		} catch (IOException | NullPointerException e) {
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			return null;
+		}
 	}
 }
