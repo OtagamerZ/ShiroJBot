@@ -34,7 +34,7 @@ public class PoliticalState {
 	@Enumerated(EnumType.STRING)
 	private ExceedEnums exceed;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT '[]'")
+	@Column(columnDefinition = "TEXT NOT NULL DEFAULT '[]'")
 	private String countries = "[]";
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
