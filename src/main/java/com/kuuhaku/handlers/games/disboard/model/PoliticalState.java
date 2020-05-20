@@ -47,8 +47,7 @@ public class PoliticalState {
 		this.exceed = exceed;
 
 		List<String> states = PStateDAO.getAllPoliticalState().stream().map(PoliticalState::getCountries).map(String::valueOf).collect(Collectors.toList());
-		List<String> countries = Arrays.stream(Country.values()).map(Country::name).collect(Collectors.toList());
-		countries.removeIf(states::contains);
+		List<String> countries = Arrays.stream(Country.values()).map(Country::name).filter(c -> !states.contains(c)).collect(Collectors.toList());
 
 		this.countries = new ArrayList<String>() {{
 			for (int i = 0; i < 8; i++) add(String.valueOf(countries.get(Helper.rng(countries.size()))));
