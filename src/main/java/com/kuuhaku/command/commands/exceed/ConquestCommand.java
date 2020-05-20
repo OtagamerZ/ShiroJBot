@@ -30,6 +30,7 @@ import com.kuuhaku.handlers.games.disboard.enums.Country;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.utils.*;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
@@ -42,21 +43,21 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-public class AschenteCommand extends Command {
+public class ConquestCommand extends Command {
 
-	public AschenteCommand(String name, String description, Category category, boolean requiresMM) {
+	public ConquestCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
 	}
 
-	public AschenteCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
+	public ConquestCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
 		super(name, aliases, description, category, requiresMM);
 	}
 
-	public AschenteCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+	public ConquestCommand(String name, String usage, String description, Category category, boolean requiresMM) {
 		super(name, usage, description, category, requiresMM);
 	}
 
-	public AschenteCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+	public ConquestCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
 		super(name, aliases, usage, description, category, requiresMM);
 	}
 
@@ -89,7 +90,7 @@ public class AschenteCommand extends Command {
 			dominions.forEach((k, v) -> {
 				Emote e = Main.getInfo().getAPI().getEmoteById(TagIcons.getExceedId(k));
 				eb.clear();
-				eb.setTitle("Domínios de " + k.getName());
+				eb.setTitle("Domínios de " + k.getName() + " (pontos de influência: " + PStateDAO.getPoliticalState(k).getInfluence() + ")");
 				try {
 					assert e != null;
 					eb.setColor(Helper.colorThief(e.getImageUrl()));
@@ -108,5 +109,39 @@ public class AschenteCommand extends Command {
 			);
 			return;
 		}
+
+		if (state.getInfluence() < 100) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_exceed-not-enough-influence")).queue();
+			return;
+		}
+
+		String country = String.join("_", args).toUpperCase();
+
+		try {
+			Country.valueOf(country);
+		} catch (IllegalArgumentException e) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_exceed-invalid-country")).queue();
+			return;
+		}
+
+		PoliticalState enemy = PStateDAO.getAllPoliticalState().stream().filter(ps -> ps.getCountries().contains(country)).collect(Collectors.toList()).get(0);
+
+		if (enemy.getExceed() == ex) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_exceed-already-owns-country")).queue();
+			return;
+		}
+
+		Member enemyLeader = Main.getInfo().getMemberByID(ExceedDAO.getLeader(enemy.getExceed()));
+
+		if (enemyLeader.getOnlineStatus() != OnlineStatus.ONLINE || guild.getMemberById(enemyLeader.getId()) == null) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_exceed-leader-not-ready")).queue();
+			return;
+		}
+
+		/*channel.sendMessage(enemyLeader.getAsMention() + ", como líder atual da " + enemy.getExceed().getName() + " você foi desafiado a um desafio de sorte.\n" +
+				"Quanto mais pontos de influência maior a chance de ganhar. Se deseja aceitar digite o nome de ").queue();
+		Helper.awaitMessage(enemyLeader.getUser(), channel, () -> {
+
+		});*/
 	}
 }

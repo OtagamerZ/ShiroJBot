@@ -71,6 +71,7 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
@@ -835,13 +836,15 @@ public class Helper {
 		return Base64.getEncoder().encodeToString(ArrayUtils.addAll(nameSpace, randomSpace));
 	}
 
-	public static void awaitMessage(User u, TextChannel chn, Runnable r) {
+	public static void awaitMessage(User u, TextChannel chn, Callable<Boolean> act) {
 		Main.getInfo().getAPI().addEventListener(new ListenerAdapter() {
 			@Override
 			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
 				if (event.getChannel().getId().equals(chn.getId()) && event.getAuthor().getId().equals(u.getId())) {
-					Main.getInfo().getAPI().removeEventListener(this);
-					r.run();
+					try {
+						if (act.call()) Main.getInfo().getAPI().removeEventListener(this);
+					} catch (Exception ignore) {
+					}
 				}
 			}
 		});
