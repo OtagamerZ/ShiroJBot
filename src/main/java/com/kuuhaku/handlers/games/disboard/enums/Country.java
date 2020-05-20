@@ -128,7 +128,7 @@ public enum Country {
 	public static List<Country> getStartingCountries() {
 		List<Country> out = new ArrayList<>();
 
-		for (int i = 0; i <= 7; i++) {
+		for (int i = 0; i < 7; i++) {
 			int index = Helper.rng(availableCountries.size());
 
 			out.add(availableCountries.get(index));
