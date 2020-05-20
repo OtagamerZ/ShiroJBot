@@ -43,7 +43,7 @@ public class PoliticalState {
 	public PoliticalState(ExceedEnums exceed) {
 		this.exceed = exceed;
 		this.countries = new ArrayList<String>() {{
-			addAll(Country.availableCountries.stream().map(Country::name).collect(Collectors.toList()));
+			addAll(Country.getStartingCountries().stream().map(Country::name).collect(Collectors.toList()));
 		}}.toString();
 	}
 

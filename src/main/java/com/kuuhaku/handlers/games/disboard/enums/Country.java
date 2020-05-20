@@ -124,7 +124,7 @@ public enum Country {
 		return bi;
 	}
 
-	public static java.util.List<Country> getStartingCountries() {
+	public static List<Country> getStartingCountries() {
 		List<Country> out = new ArrayList<>();
 
 		for (int i = 0; i <= 7; i++) {
