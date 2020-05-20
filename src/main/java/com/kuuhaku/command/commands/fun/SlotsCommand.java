@@ -91,6 +91,7 @@ public class SlotsCommand extends Command {
 		acc.removeCredit(bet.get());
 		slt.addToPot(bet.get());
 
+		loseStreak++;
 		rollSlots();
 
 		Runnable r = () -> {
