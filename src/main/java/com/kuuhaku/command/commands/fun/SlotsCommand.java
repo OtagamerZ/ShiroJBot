@@ -270,7 +270,7 @@ public class SlotsCommand extends Command {
 
 	private void rollSlots() {
 		rolled.clear();
-		for (int tries = 0; tries <= loseStreak; tries++) {
+		for (int tries = -1; tries < loseStreak; tries++) {
 			for (int i = 0; i < 5; i++) {
 				rolled.add(Slots.getSlot());
 			}
