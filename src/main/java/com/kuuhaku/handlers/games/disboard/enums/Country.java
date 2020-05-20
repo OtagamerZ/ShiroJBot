@@ -27,7 +27,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -79,7 +78,7 @@ public enum Country {
 	private final String name;
 	private final Point coords;
 	public static final List<Country> availableCountries = new ArrayList<>() {{
-		this.addAll(Arrays.asList(values()));
+		addAll(List.of(values()));
 	}};
 
 	Country(String name, Point coords) {
