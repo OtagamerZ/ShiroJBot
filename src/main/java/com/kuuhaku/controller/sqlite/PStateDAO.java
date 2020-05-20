@@ -56,6 +56,8 @@ public class PStateDAO {
 	public static void savePoliticalState(PoliticalState p) {
 		EntityManager em = Manager.getEntityManager();
 
+		if (p.getInfluence() < 0) p.modifyInfluence(-p.getInfluence());
+
 		em.getTransaction().begin();
 		em.merge(p);
 		em.getTransaction().commit();
