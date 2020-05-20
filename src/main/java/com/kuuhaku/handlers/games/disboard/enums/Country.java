@@ -78,7 +78,9 @@ public enum Country {
 
 	private final String name;
 	private final Point coords;
-	public static final List<Country> availableCountries = Arrays.asList(values());
+	public static final List<Country> availableCountries = new ArrayList<>() {{
+		this.addAll(Arrays.asList(values()));
+	}};
 
 	Country(String name, Point coords) {
 		this.name = name;
