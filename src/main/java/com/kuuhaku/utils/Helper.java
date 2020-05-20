@@ -846,4 +846,18 @@ public class Helper {
 			}
 		});
 	}
+
+	public static <T> List<T> getRandomN(List<T> array, int elements) {
+		List<T> aux = new ArrayList<>(array);
+		List<T> out = new ArrayList<>();
+
+		for (int i = 0; i <= elements; i++) {
+			int index = rng(aux.size());
+
+			out.add(aux.get(index));
+			aux.remove(index);
+		}
+
+		return out;
+	}
 }
