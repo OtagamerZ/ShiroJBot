@@ -18,7 +18,6 @@
 
 package com.kuuhaku.handlers.games.disboard.model;
 
-import com.kuuhaku.controller.sqlite.PStateDAO;
 import com.kuuhaku.handlers.games.disboard.enums.Country;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
@@ -26,7 +25,6 @@ import org.json.JSONArray;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,12 +43,8 @@ public class PoliticalState {
 
 	public PoliticalState(ExceedEnums exceed) {
 		this.exceed = exceed;
-
-		List<String> states = PStateDAO.getAllPoliticalState().stream().map(PoliticalState::getCountries).map(String::valueOf).collect(Collectors.toList());
-		List<String> countries = Arrays.stream(Country.values()).map(Country::name).filter(c -> !states.contains(c)).collect(Collectors.toList());
-
 		this.countries = new ArrayList<String>() {{
-			addAll(Helper.getRandomN(countries, 7));
+			addAll(Helper.getRandomNDirect(Helper.availableCountries, 7).stream().map(Country::name).collect(Collectors.toList()));
 		}}.toString();
 	}
 
