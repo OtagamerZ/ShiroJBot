@@ -150,4 +150,20 @@ public class ExceedDAO {
 			return "none";
 		}
 	}
+
+	public static String getLeader(ExceedEnums ex) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT m.mid FROM Member m WHERE m.mid IN (SELECT em.id FROM ExceedMember em WHERE em.exceed LIKE :exceed) GROUP BY m.mid ORDER BY SUM(m.xp) DESC", String.class);
+		q.setParameter("exceed", ex.getName());
+		q.setMaxResults(1);
+
+		try {
+			return String.valueOf(q.getSingleResult());
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
 }
