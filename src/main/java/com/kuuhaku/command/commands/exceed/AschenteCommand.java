@@ -103,7 +103,7 @@ public class AschenteCommand extends Command {
 				pages.put(TagIcons.getExceedId(k), new Page(PageType.EMBED, eb.build()));
 			});
 
-			channel.sendMessage("Informe um país para desafiar o líder do Exceed em questão").queue(s ->
+			channel.sendMessage("Informe um país para desafiar o líder do Exceed em questão").embed((MessageEmbed) pages.get(TagIcons.getExceedId(ex)).getContent()).queue(s ->
 					Pages.categorize(s, pages, 60, TimeUnit.SECONDS)
 			);
 			return;
