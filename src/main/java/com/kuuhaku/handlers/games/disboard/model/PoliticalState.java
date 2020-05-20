@@ -20,7 +20,6 @@ package com.kuuhaku.handlers.games.disboard.model;
 
 import com.kuuhaku.handlers.games.disboard.enums.Country;
 import com.kuuhaku.utils.ExceedEnums;
-import com.kuuhaku.utils.Helper;
 import org.json.JSONArray;
 
 import javax.persistence.*;
@@ -43,9 +42,9 @@ public class PoliticalState {
 
 	public PoliticalState(ExceedEnums exceed) {
 		this.exceed = exceed;
-		this.countries = new ArrayList<String>() {{
+		/*this.countries = new ArrayList<String>() {{
 			addAll(Helper.getRandomNDirect(Helper.availableCountries, 7).stream().map(Country::name).collect(Collectors.toList()));
-		}}.toString();
+		}}.toString();*/
 	}
 
 	public PoliticalState() {
