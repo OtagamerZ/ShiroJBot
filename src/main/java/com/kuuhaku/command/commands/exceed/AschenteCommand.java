@@ -27,7 +27,6 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.sqlite.PStateDAO;
 import com.kuuhaku.handlers.games.disboard.enums.Country;
-import com.kuuhaku.handlers.games.disboard.model.Disboard;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.utils.*;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -101,14 +100,13 @@ public class AschenteCommand extends Command {
 				String countries = v.stream().map(Country::getName).collect(Collectors.joining("\n"));
 				eb.addField("Países:", countries, false);
 
-				pages.put(TagIcons.getExceed(k), new Page(PageType.EMBED, eb.build()));
+				pages.put(TagIcons.getExceedId(k), new Page(PageType.EMBED, eb.build()));
 			});
 
-			channel.sendMessage("Informe um país para desafiar o líder do Exceed em questão").queue(s -> {
-				Pages.categorize(s, pages, 60, TimeUnit.SECONDS);
-			});
+			channel.sendMessage("Informe um país para desafiar o líder do Exceed em questão").queue(s ->
+					Pages.categorize(s, pages, 60, TimeUnit.SECONDS)
+			);
+			return;
 		}
-
-		Disboard.view((TextChannel) channel);
 	}
 }
