@@ -105,7 +105,8 @@ public enum Category {
 	}
 
 	public boolean isEnabled(GuildConfig gc, Guild g, User u) {
-		if ((this == DEV || this == SUPPORT) && (!g.getId().equals(ShiroInfo.getSupportServerID()) && !Main.getInfo().getDevelopers().contains(u.getId()))) {
+		if (this == NSFW) return false;
+		else if ((this == DEV || this == SUPPORT) && (!g.getId().equals(ShiroInfo.getSupportServerID()) && !Main.getInfo().getDevelopers().contains(u.getId()))) {
 			return false;
 		} else if (this == PARTNER && (!TagDAO.getTagById(g.getOwnerId()).isPartner() && !Main.getInfo().getDevelopers().contains(u.getId()))) {
 			return false;
