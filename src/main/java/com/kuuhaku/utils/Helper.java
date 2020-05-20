@@ -39,8 +39,10 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.InviteAction;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
@@ -51,6 +53,7 @@ import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 import org.python.google.common.collect.Lists;
 
+import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
 import java.awt.*;
@@ -830,5 +833,17 @@ public class Helper {
 		sr.nextBytes(randomSpace);
 
 		return Base64.getEncoder().encodeToString(ArrayUtils.addAll(nameSpace, randomSpace));
+	}
+
+	public static void awaitMessage(User u, TextChannel chn, Runnable r) {
+		Main.getInfo().getAPI().addEventListener(new ListenerAdapter() {
+			@Override
+			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
+				if (event.getChannel().getId().equals(chn.getId()) && event.getAuthor().getId().equals(u.getId())) {
+					Main.getInfo().getAPI().removeEventListener(this);
+					r.run();
+				}
+			}
+		});
 	}
 }
