@@ -30,7 +30,6 @@ import com.kuuhaku.command.commands.reactions.Reaction;
 import com.kuuhaku.controller.postgresql.LogDAO;
 import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
-import com.kuuhaku.handlers.games.disboard.enums.Country;
 import com.kuuhaku.model.common.Extensions;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Log;
@@ -89,7 +88,6 @@ public class Helper {
 	public static final int CANVAS_SIZE = 1025;
 	public static final DateTimeFormatter dateformat = DateTimeFormatter.ofPattern("dd/MMM/yyyy | HH:mm:ss (z)");
 	public static final String HOME = "674261700366827539";
-	public static final List<Country> availableCountries = List.of(Country.values());
 
 	private static PrivilegeLevel getPrivilegeLevel(Member member) {
 		if (Main.getInfo().getNiiChan().equals(member.getId()))
@@ -858,19 +856,6 @@ public class Helper {
 
 			out.add(aux.get(index));
 			aux.remove(index);
-		}
-
-		return out;
-	}
-
-	public static <T> List<T> getRandomNDirect(List<T> array, int elements) {
-		List<T> out = new ArrayList<>();
-
-		for (int i = 0; i <= elements; i++) {
-			int index = rng(array.size());
-
-			out.add(array.get(index));
-			array.remove(index);
 		}
 
 		return out;

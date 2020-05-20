@@ -18,12 +18,17 @@
 
 package com.kuuhaku.handlers.games.disboard.enums;
 
+import com.kuuhaku.utils.Helper;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -73,6 +78,7 @@ public enum Country {
 
 	private final String name;
 	private final Point coords;
+	public static final List<Country> availableCountries = Arrays.asList(values());
 
 	Country(String name, Point coords) {
 		this.name = name;
@@ -116,5 +122,18 @@ public enum Country {
 		g2d.drawRenderedImage(source, at);
 		g2d.dispose();
 		return bi;
+	}
+
+	public static java.util.List<Country> getStartingCountries() {
+		List<Country> out = new ArrayList<>();
+
+		for (int i = 0; i <= 7; i++) {
+			int index = Helper.rng(availableCountries.size());
+
+			out.add(availableCountries.get(index));
+			availableCountries.remove(index);
+		}
+
+		return out;
 	}
 }
