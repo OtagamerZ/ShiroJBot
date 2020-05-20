@@ -50,7 +50,7 @@ public class PoliticalState {
 		List<String> countries = Arrays.stream(Country.values()).map(Country::name).filter(c -> !states.contains(c)).collect(Collectors.toList());
 
 		this.countries = new ArrayList<String>() {{
-			for (int i = 0; i < 8; i++) add(String.valueOf(countries.get(Helper.rng(countries.size()))));
+			addAll(Helper.getRandomN(countries, 7));
 		}}.toString();
 	}
 
