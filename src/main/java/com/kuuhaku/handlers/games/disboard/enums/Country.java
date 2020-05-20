@@ -53,7 +53,7 @@ public enum Country {
 	FAFLYE("Faflye", new Point(1108, 1378)),
 	FLIOH_TRISTAN("Flioh Tristan", new Point(1962, 750)),
 	FLOYRUS("Floyrus", new Point(2012, 817)),
-	FLUYCIA("Fluycia", new Point(1731, 953)),
+	FLUYCIA("Fluycia", new Point(1731, 954)),
 	FRIYCA("Friyca", new Point(1858, 580)),
 	GREYBURG("Greyburg", new Point(1376, 0)),
 	HARDEN_FELL("Harden Fell", new Point(2136, 112)),
