@@ -51,7 +51,7 @@ public class PoliticalState {
 		countries.removeIf(states::contains);
 
 		this.countries = new ArrayList<String>() {{
-			for (int i = 0; i < 7; i++) add(String.valueOf(countries.get(Helper.rng(countries.size()))));
+			for (int i = 0; i < 8; i++) add(String.valueOf(countries.get(Helper.rng(countries.size()))));
 		}}.toString();
 	}
 
