@@ -147,7 +147,8 @@ public class PollCommand extends Command {
 				else
 					Objects.requireNonNull(guild.getTextChannelById(gc.getCanalSUG())).sendMessage(eb.build()).queue(sendSimple);
 			} catch (Exception e) {
-				if (gc.getCanalSUG() == null || gc.getCanalSUG().isEmpty())
+				e.printStackTrace();
+				if (gc.getCanalSUG() == null)
 					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_send-embed")).queue();
 				else
 					channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_send-embed-in-channel"), Objects.requireNonNull(guild.getTextChannelById(gc.getCanalSUG())).getAsMention())).queue();

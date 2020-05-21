@@ -243,11 +243,9 @@ public class GuildEvents extends ListenerAdapter {
 				} catch (NoResultException e) {
 					MemberDAO.addMemberToDB(member);
 				} catch (ErrorResponseException ignore) {
-				} 
+				}
 			}
-		} catch (InsufficientPermissionException ignore) {
-		} catch (ErrorResponseException e) {
-			Helper.logger(this.getClass()).error(e.getErrorCode() + ": " + e + " | " + Arrays.toString(e.getStackTrace()));
+		} catch (InsufficientPermissionException | ErrorResponseException ignore) {
 		}
 	}
 
