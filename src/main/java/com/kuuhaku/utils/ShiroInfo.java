@@ -82,7 +82,7 @@ public class ShiroInfo {
 	private static final ArrayList<String> supports = new ArrayList<String>() {{
 
 	}};
-	private static final Map<String, Integer[]> polls = new HashMap<>();
+	private static final Map<String, Map<String, String>> polls = new HashMap<>();
 	private static final Map<Long, GuildMusicManager> gmms = new HashMap<>();
 	private static final AudioPlayerManager apm = new DefaultAudioPlayerManager();
 	private static final JDAEvents shiroEvents = new JDAEvents();
@@ -223,7 +223,7 @@ public class ShiroInfo {
 		return supports;
 	}
 
-	public Map<String, Integer[]> getPolls() {
+	public Map<String, Map<String, String>> getPolls() {
 		return polls;
 	}
 

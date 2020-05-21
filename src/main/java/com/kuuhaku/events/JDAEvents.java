@@ -45,10 +45,6 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageUpdateEvent;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
-import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
-import net.dv8tion.jda.api.exceptions.ErrorResponseException;
-import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
@@ -74,44 +70,6 @@ public class JDAEvents extends ListenerAdapter {
 			Helper.logger(this.getClass()).info("Estou pronta!");
 		} catch (Exception e) {
 			Helper.logger(this.getClass()).error("Erro ao inicializar bot: " + e);
-		}
-	}
-
-	@Override
-	public void onMessageReactionRemove(MessageReactionRemoveEvent event) {
-		if (event.getUser() == null || event.getUser().isBot()) return;
-
-		try {
-			Message message = event.getChannel().retrieveMessageById(event.getMessageId()).complete();
-			if (Main.getInfo().getPolls().containsKey(message.getId())) {
-
-				if (event.getReactionEmote().getName().equals("\uD83D\uDC4D"))
-					Main.getInfo().getPolls().get(message.getId())[0]--;
-				else if (event.getReactionEmote().getName().equals("\uD83D\uDC4E"))
-					Main.getInfo().getPolls().get(message.getId())[1]--;
-			}
-		} catch (NullPointerException | ErrorResponseException | InsufficientPermissionException ignore) {
-		}
-	}
-
-	@Override
-	public void onMessageReactionAdd(MessageReactionAddEvent event) {
-		if (event.getUser() == null || event.getUser().isBot()) return;
-
-		try {
-			Message message = event.getChannel().retrieveMessageById(event.getMessageId()).complete();
-			if (Main.getInfo().getPolls().containsKey(message.getId())) {
-
-				if (event.getReactionEmote().getName().equals("\uD83D\uDC4D"))
-					Main.getInfo().getPolls().get(message.getId())[0]++;
-				else if (event.getReactionEmote().getName().equals("\uD83D\uDC4E"))
-					Main.getInfo().getPolls().get(message.getId())[1]++;
-				else if (event.getReactionEmote().getName().equals("❌") && Objects.requireNonNull(message.getEmbeds().get(0).getTitle()).equals(":notepad_spiral: Enquete criada por " + Objects.requireNonNull(event.getMember()).getEffectiveName())) {
-					Main.getInfo().getPolls().remove(message.getId());
-					message.delete().queue();
-				}
-			}
-		} catch (NullPointerException | ErrorResponseException | InsufficientPermissionException ignore) {
 		}
 	}
 
