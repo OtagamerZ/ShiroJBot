@@ -43,6 +43,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class PollCommand extends Command {
 
@@ -92,19 +93,24 @@ public class PollCommand extends Command {
 			}
 		}
 
-		Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
+		Function<Message, Map<String, BiConsumer<Member, Message>>> opts = null;
 		if (options != null && options.length() > 10) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_poll-too-many-options")).queue();
 			return;
 		} else if (options != null) {
-			for (int i = 0; i < options.length(); i++) {
-				String emote = new String(new char[]{"\uD83C\uDDE6".toCharArray()[0], (char) ("\uD83C\uDDE6".toCharArray()[1] + i)});
-				buttons.put(emote, (mb, msg) -> Main.getInfo().getPolls().get(message.getId()).put(mb.getId(), emote));
-			}
-			buttons.put("❌", (mb, msg) -> {
-				if (mb.getId().equals(author.getId())) msg.delete().queue();
-				Main.getInfo().getPolls().remove(msg.getId());
-			});
+			JSONArray finalOptions = options;
+			opts = m -> {
+				Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
+				for (int i = 0; i < finalOptions.length(); i++) {
+					String emote = new String(new char[]{"\uD83C\uDDE6".toCharArray()[0], (char) ("\uD83C\uDDE6".toCharArray()[1] + i)});
+					buttons.put(emote, (mb, msg) -> Main.getInfo().getPolls().get(m.getId()).put(mb.getId(), emote));
+				}
+				buttons.put("❌", (mb, msg) -> {
+					if (mb.getId().equals(author.getId())) msg.delete().queue();
+					Main.getInfo().getPolls().remove(msg.getId());
+				});
+				return buttons;
+			};
 		}
 
 		EmbedBuilder eb = new EmbedBuilder();
@@ -133,8 +139,10 @@ public class PollCommand extends Command {
 			Main.getInfo().getScheduler().schedule(() -> showResult(m, member, eb), gc.getPollTime(), TimeUnit.SECONDS);
 		};
 
+		Function<Message, Map<String, BiConsumer<Member, Message>>> finalOpts = opts;
 		Consumer<Message> sendOptions = m -> {
-			Pages.buttonize(m, buttons, false, gc.getPollTime(), TimeUnit.SECONDS);
+			assert finalOpts != null;
+			Pages.buttonize(m, finalOpts.apply(m), false, gc.getPollTime(), TimeUnit.SECONDS);
 			Main.getInfo().getPolls().put(m.getId(), new HashMap<>());
 			Main.getInfo().getScheduler().schedule(() -> showResultOP(m, member, eb), gc.getPollTime(), TimeUnit.SECONDS);
 		};
@@ -164,7 +172,6 @@ public class PollCommand extends Command {
 	}
 
 	private static void showResult(Message msg, Member member, EmbedBuilder eb) {
-		System.out.println(new JSONObject(Main.getInfo().getPolls()).toString());
 		int pos = (int) Main.getInfo().getPolls().get(msg.getId()).entrySet().stream().filter(e -> e.getValue().equals("\uD83D\uDC4D")).count();
 		int neg = (int) Main.getInfo().getPolls().get(msg.getId()).entrySet().stream().filter(e -> e.getValue().equals("\uD83D\uDC4E")).count();
 		Main.getInfo().getPolls().remove(msg.getId());
