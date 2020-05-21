@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.commands.misc;
 
+import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
@@ -29,11 +30,18 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.awt.*;
 import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class PollCommand extends Command {
 
@@ -58,42 +66,86 @@ public class PollCommand extends Command {
 		if (args.length < 1) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_poll-no-question")).queue();
 			return;
-		} else if (String.join(" ", args).length() < 10) {
+		}
+
+		String text = String.join(" ", args);
+
+		if (String.join(" ", args).length() < 10) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_poll-too-short")).queue();
 			return;
-		} else if (String.join(" ", args).length() > 2000) {
+		} else if (text.length() > 2000 && !Helper.containsAll(text, ";", "[", "]")) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_poll-too-long")).queue();
 			return;
 		}
 
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
+		JSONArray options = null;
+		if (Helper.containsAll(text, ";", "[", "]")) {
+			String[] s = text.split(";");
+
+			try {
+				options = new JSONArray(s[1]);
+				text = s[0];
+			} catch (JSONException ignore) {
+			}
+		}
+
+		Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
+		if (options != null && options.length() > 10) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_poll-too-many-options")).queue();
+			return;
+		} else if (options != null) {
+			for (int i = 0; i < options.length(); i++) {
+				String emote = new String(new char[]{"\uD83C\uDDE6".toCharArray()[0], (char) ("\uD83C\uDDE6".toCharArray()[1] + i)});
+				buttons.put(emote, (mb, msg) -> Main.getInfo().getPolls().get(message.getId()).put(mb.getId(), emote));
+			}
+			buttons.put("❌", (mb, msg) -> {
+				if (mb.getId().equals(author.getId())) msg.delete().queue();
+			});
+		}
+
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setTitle(":notepad_spiral: Enquete criada por " + member.getEffectiveName());
 		eb.setThumbnail("https://www.kalkoken.org/apps/easypoll/resources/poll-logo.png");
-		eb.setDescription(String.join(" ", args));
+		eb.setDescription(text);
 		eb.setFooter("Clique nas reações abaixo para votar", null);
 		eb.setColor(Color.decode("#2195f2"));
+		if (options != null) {
+			for (int i = 0; i < options.length(); i++)
+				eb.addField(new String(new char[]{"\uD83C\uDDE6".toCharArray()[0], (char) ("\uD83C\uDDE6".toCharArray()[1] + i)}) + " | " + options.getString(i), Helper.VOID, true);
+		}
 
-		if (gc.getCanalSUG() == null || gc.getCanalSUG().isEmpty()) {
-			gc.setCanalSUG(null);
+		Consumer<Message> sendSimple = m -> {
+			Pages.buttonize(m, Map.of(
+					"\uD83D\uDC4D", (mb, msg) -> Main.getInfo().getPolls().get(message.getId()).put(mb.getId(), "\uD83D\uDC4D"),
+					"\uD83D\uDC4E", (mb, msg) -> Main.getInfo().getPolls().get(message.getId()).put(mb.getId(), "\uD83D\uDC4E"),
+					"❌", (mb, msg) -> {
+						if (mb.getId().equals(author.getId())) msg.delete().queue();
+					}
+			), false, gc.getPollTime(), TimeUnit.SECONDS);
+			Main.getInfo().getPolls().put(m.getId(), new HashMap<>());
+			Main.getInfo().getScheduler().schedule(() -> showResult(m, member, eb), gc.getPollTime(), TimeUnit.SECONDS);
+		};
+
+		Consumer<Message> sendOptions = m -> {
+			Pages.buttonize(m, buttons, false, gc.getPollTime(), TimeUnit.SECONDS);
+			Main.getInfo().getPolls().put(m.getId(), new HashMap<>());
+			Main.getInfo().getScheduler().schedule(() -> showResultOP(m, member, eb), gc.getPollTime(), TimeUnit.SECONDS);
+		};
+
+		if (gc.getCanalSUG() == null) {
+			gc.setCanalSUG("");
 			GuildDAO.updateGuildSettings(gc);
-			channel.sendMessage(eb.build()).queue(m -> {
-				m.addReaction("\uD83D\uDC4D").queue();
-				m.addReaction("\uD83D\uDC4E").queue();
-				m.addReaction("❌").queue();
-				Main.getInfo().getPolls().put(m.getId(), new Integer[]{0, 0});
-				Main.getInfo().getScheduler().schedule(() -> showResult(m, member, eb), gc.getPollTime(), TimeUnit.SECONDS);
-			});
+
+			if (options != null) channel.sendMessage(eb.build()).queue(sendOptions);
+			else channel.sendMessage(eb.build()).queue(sendSimple);
 		} else {
 			try {
-				Objects.requireNonNull(guild.getTextChannelById(gc.getCanalSUG())).sendMessage(eb.build()).queue(m -> {
-					m.addReaction("\uD83D\uDC4D").queue();
-					m.addReaction("\uD83D\uDC4E").queue();
-					m.addReaction("❌").queue();
-					Main.getInfo().getPolls().put(m.getId(), new Integer[]{0, 0});
-					Main.getInfo().getScheduler().schedule(() -> showResult(m, member, eb), gc.getPollTime(), TimeUnit.SECONDS);
-				});
+				if (options != null)
+					Objects.requireNonNull(guild.getTextChannelById(gc.getCanalSUG())).sendMessage(eb.build()).queue(sendOptions);
+				else
+					Objects.requireNonNull(guild.getTextChannelById(gc.getCanalSUG())).sendMessage(eb.build()).queue(sendSimple);
 			} catch (Exception e) {
 				if (gc.getCanalSUG() == null || gc.getCanalSUG().isEmpty())
 					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_send-embed")).queue();
@@ -107,21 +159,45 @@ public class PollCommand extends Command {
 	}
 
 	private static void showResult(Message msg, Member member, EmbedBuilder eb) {
-		int pos = Main.getInfo().getPolls().get(msg.getId())[0];
-		int neg = Main.getInfo().getPolls().get(msg.getId())[1];
+		int pos = (int) Main.getInfo().getPolls().get(msg.getId()).entrySet().stream().filter(e -> e.getValue().equals("\uD83D\uDC4D")).count();
+		int neg = (int) Main.getInfo().getPolls().get(msg.getId()).entrySet().stream().filter(e -> e.getValue().equals("\uD83D\uDC4E")).count();
 		Main.getInfo().getPolls().remove(msg.getId());
 		boolean NOVOTE = false;
 
 		if (pos == 0 && neg == 0) {
-			pos = 1;
-			neg = 1;
 			NOVOTE = true;
 		}
 
 		eb.setAuthor("A enquete feita por " + member.getEffectiveName() + " foi encerrada!");
 		eb.setTitle("Enquete: (" + (NOVOTE ? "nenhum voto" : (pos + neg) + " votos") + ")");
-		eb.addField("Aprovação: ", NOVOTE ? "0.0%" : Helper.round((((float) pos * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
-		eb.addField("Reprovação: ", NOVOTE ? "0.0%" : Helper.round((((float) neg * 100f) / ((float) pos + (float) neg)), 1) + "%", true);
+		eb.addField("Aprovação: ", NOVOTE ? "0.0%" : Helper.round(((float) pos * 100f) / ((float) pos + (float) neg), 1) + "%", true);
+		eb.addField("Reprovação: ", NOVOTE ? "0.0%" : Helper.round(((float) neg * 100f) / ((float) pos + (float) neg), 1) + "%", true);
+
+		msg.editMessage(eb.build()).queue();
+		member.getUser().openPrivateChannel().queue(c -> c.sendMessage(eb.setAuthor("Sua enquete foi encerrada!").build()).queue());
+		msg.clearReactions().queue();
+	}
+
+	private static void showResultOP(Message msg, Member member, EmbedBuilder eb) {
+		Map<String, Integer> votes = new HashMap<>();
+		Main.getInfo()
+				.getPolls()
+				.get(msg.getId())
+				.forEach((k, v) -> votes.put(k, (int) Main.getInfo().getPolls().get(msg.getId()).entrySet().stream().filter(e -> e.getValue().equals(k)).count()));
+
+		Main.getInfo().getPolls().remove(msg.getId());
+		boolean NOVOTE = false;
+		int totalVotes = votes.values().stream().mapToInt(Integer::intValue).sum();
+
+		if (totalVotes == 0) {
+			NOVOTE = true;
+		}
+
+		eb.setAuthor("A enquete feita por " + member.getEffectiveName() + " foi encerrada!");
+		eb.setTitle("Enquete: (" + (NOVOTE ? "nenhum voto" : totalVotes + " votos") + ")");
+
+		boolean finalNOVOTE = NOVOTE;
+		votes.forEach((k, v) -> eb.addField(k, finalNOVOTE ? "0.0%" : Helper.round(((float) v * 100f) / totalVotes, 1) + "%", true));
 
 		msg.editMessage(eb.build()).queue();
 		member.getUser().openPrivateChannel().queue(c -> c.sendMessage(eb.setAuthor("Sua enquete foi encerrada!").build()).queue());
