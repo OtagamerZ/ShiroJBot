@@ -445,14 +445,7 @@
       <workItem from="1589827552748" duration="1868000" />
       <workItem from="1589912636997" duration="9415000" />
       <workItem from="1589978847102" duration="24566000" />
-      <workItem from="1590069445751" duration="8983000" />
-    </task>
-    <task id="LOCAL-01194" summary="Correção na API">
-      <created>1589488305361</created>
-      <option name="number" value="01194" />
-      <option name="presentableId" value="LOCAL-01194" />
-      <option name="project" value="LOCAL" />
-      <updated>1589488305362</updated>
+      <workItem from="1590069445751" duration="9255000" />
     </task>
     <task id="LOCAL-01195" summary="Correção na API">
       <created>1589574296547</created>
@@ -790,7 +783,14 @@
       <option name="project" value="LOCAL" />
       <updated>1590082784561</updated>
     </task>
-    <option name="localTasksCounter" value="1243" />
+    <task id="LOCAL-01243" summary="Implementação inicial do módulo de dominação territorial">
+      <created>1590083162025</created>
+      <option name="number" value="01243" />
+      <option name="presentableId" value="LOCAL-01243" />
+      <option name="project" value="LOCAL" />
+      <updated>1590083162025</updated>
+    </task>
+    <option name="localTasksCounter" value="1244" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1023,12 +1023,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1590082820332">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1590083164296">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1588632287059" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1590082820332" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1590083164296" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>

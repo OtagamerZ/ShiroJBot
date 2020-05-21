@@ -184,7 +184,7 @@ public class PollCommand extends Command {
 	}
 
 	private static void showResultOP(Message msg, Member member, EmbedBuilder eb) {
-		System.out.println(new JSONObject(Main.getInfo().getPolls().get(msg.getId())).toString());
+		System.out.println(new JSONObject(Main.getInfo().getPolls()).toString());
 		Map<String, Integer> votes = new HashMap<>();
 		Main.getInfo()
 				.getPolls()
