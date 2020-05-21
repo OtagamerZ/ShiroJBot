@@ -41,6 +41,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.Objects;
@@ -118,6 +119,9 @@ public class Kawaigotchi {
 	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
 	private boolean warned;
 
+	@Column(columnDefinition = "TIMESTAMP")
+	private LocalDateTime diedAt = null;
+
 	private transient int lastRoll;
 
 	public Kawaigotchi() {
@@ -131,9 +135,13 @@ public class Kawaigotchi {
 	}
 
 	public void update(Member m) {
-		if (m.getOnlineStatus() == OnlineStatus.OFFLINE || m.getOnlineStatus() == OnlineStatus.UNKNOWN) return;
+		if (!alive) {
+			stance = Stance.DEAD;
+			harvest();
+			return;
+		}
 
-		if (!alive) stance = Stance.DEAD;
+		if (m.getOnlineStatus() == OnlineStatus.OFFLINE || m.getOnlineStatus() == OnlineStatus.UNKNOWN) return;
 
 		if (health <= 0) {
 			alive = false;
@@ -589,5 +597,11 @@ public class Kawaigotchi {
 	}
 
 	public void doNothing() {
+	}
+
+	public void harvest() {
+		if (diedAt.plusMonths(1).isBefore(LocalDateTime.now())) {
+			KGotchiDAO.deleteKawaigotchi(this);
+		}
 	}
 }
