@@ -72,4 +72,16 @@ public class KGotchiDAO {
 
 		em.close();
 	}
+
+	public static void deleteKawaigotchi(Kawaigotchi k) {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		em.remove(k);
+		em.getTransaction().commit();
+
+		em.close();
+
+		com.kuuhaku.controller.postgresql.KGotchiDAO.deleteKawaigotchi(k);
+	}
 }
