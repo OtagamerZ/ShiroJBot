@@ -145,6 +145,7 @@ public class Kawaigotchi {
 
 		if (health <= 0) {
 			alive = false;
+			diedAt = LocalDateTime.now();
 			KGotchiDAO.saveKawaigotchi(this);
 			return;
 		} else if (hunger <= 0) {
