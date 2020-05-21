@@ -283,7 +283,7 @@ public class Settings {
 			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
-			gc.setCanalSUG(null);
+			gc.setCanalSUG("");
 			GuildDAO.updateGuildSettings(gc);
 			message.getTextChannel().sendMessage("✅ | O canal de sugestões do servidor foi resetado com sucesso.").queue();
 			return;
