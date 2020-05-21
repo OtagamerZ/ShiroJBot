@@ -196,7 +196,7 @@ public class PollCommand extends Command {
 		Main.getInfo()
 				.getPolls()
 				.get(msg.getId())
-				.forEach((k, v) -> votes.put(v, (int) Main.getInfo().getPolls().get(msg.getId()).entrySet().stream().filter(e -> e.getValue().equals(k)).count()));
+				.forEach((k, v) -> votes.put(v, (int) Main.getInfo().getPolls().get(msg.getId()).entrySet().stream().filter(e -> e.getValue().equals(v)).count()));
 
 		Main.getInfo().getPolls().remove(msg.getId());
 		boolean NOVOTE = false;
