@@ -98,10 +98,17 @@ public class PollCommand extends Command {
 		} else if (options != null) {
 			for (int i = 0; i < options.length(); i++) {
 				String emote = new String(new char[]{"\uD83C\uDDE6".toCharArray()[0], (char) ("\uD83C\uDDE6".toCharArray()[1] + i)});
-				buttons.put(emote, (mb, msg) -> Main.getInfo().getPolls().get(message.getId()).put(mb.getId(), emote));
+				buttons.put(emote, (mb, msg) -> {
+					Map<String, String> vote = Map.of(mb.getId(), emote);
+					Main.getInfo().getPolls().put(message.getId(), new HashMap<>() {{
+						putAll(Main.getInfo().getPolls().get(message.getId()));
+						putAll(vote);
+					}});
+				});
 			}
 			buttons.put("❌", (mb, msg) -> {
 				if (mb.getId().equals(author.getId())) msg.delete().queue();
+				Main.getInfo().getPolls().remove(msg.getId());
 			});
 		}
 
@@ -118,10 +125,25 @@ public class PollCommand extends Command {
 
 		Consumer<Message> sendSimple = m -> {
 			Pages.buttonize(m, new LinkedHashMap<>() {{
-				put("\uD83D\uDC4D", (mb, msg) -> Main.getInfo().getPolls().get(message.getId()).put(mb.getId(), "\uD83D\uDC4D"));
-				put("\uD83D\uDC4E", (mb, msg) -> Main.getInfo().getPolls().get(message.getId()).put(mb.getId(), "\uD83D\uDC4E"));
+				put("\uD83D\uDC4D", (mb, msg) -> {
+					Map<String, String> vote = Map.of(mb.getId(), "\uD83D\uDC4D");
+					Main.getInfo().getPolls().put(message.getId(), new HashMap<>() {{
+						putAll(Main.getInfo().getPolls().get(message.getId()));
+						putAll(vote);
+					}});
+				});
+				put("\uD83D\uDC4E", (mb, msg) -> {
+					Map<String, String> vote = Map.of(mb.getId(), "\uD83D\uDC4E");
+					Main.getInfo().getPolls().put(message.getId(), new HashMap<>() {{
+						putAll(Main.getInfo().getPolls().get(message.getId()));
+						putAll(vote);
+					}});
+				});
 				put("❌", (mb, msg) -> {
-					if (mb.getId().equals(author.getId())) msg.delete().queue();
+					if (mb.getId().equals(author.getId())) {
+						msg.delete().queue();
+						Main.getInfo().getPolls().remove(msg.getId());
+					}
 				});
 			}}, false, gc.getPollTime(), TimeUnit.SECONDS);
 			Main.getInfo().getPolls().put(m.getId(), new HashMap<>());
