@@ -32,6 +32,7 @@ import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.awt.*;
 import java.text.MessageFormat;
@@ -98,13 +99,7 @@ public class PollCommand extends Command {
 		} else if (options != null) {
 			for (int i = 0; i < options.length(); i++) {
 				String emote = new String(new char[]{"\uD83C\uDDE6".toCharArray()[0], (char) ("\uD83C\uDDE6".toCharArray()[1] + i)});
-				buttons.put(emote, (mb, msg) -> {
-					Map<String, String> vote = Map.of(mb.getId(), emote);
-					Main.getInfo().getPolls().put(message.getId(), new HashMap<>() {{
-						putAll(Main.getInfo().getPolls().get(message.getId()));
-						putAll(vote);
-					}});
-				});
+				buttons.put(emote, (mb, msg) -> Main.getInfo().getPolls().get(message.getId()).put(mb.getId(), emote));
 			}
 			buttons.put("❌", (mb, msg) -> {
 				if (mb.getId().equals(author.getId())) msg.delete().queue();
@@ -125,20 +120,8 @@ public class PollCommand extends Command {
 
 		Consumer<Message> sendSimple = m -> {
 			Pages.buttonize(m, new LinkedHashMap<>() {{
-				put("\uD83D\uDC4D", (mb, msg) -> {
-					Map<String, String> vote = Map.of(mb.getId(), "\uD83D\uDC4D");
-					Main.getInfo().getPolls().put(message.getId(), new HashMap<>() {{
-						putAll(Main.getInfo().getPolls().get(message.getId()));
-						putAll(vote);
-					}});
-				});
-				put("\uD83D\uDC4E", (mb, msg) -> {
-					Map<String, String> vote = Map.of(mb.getId(), "\uD83D\uDC4E");
-					Main.getInfo().getPolls().put(message.getId(), new HashMap<>() {{
-						putAll(Main.getInfo().getPolls().get(message.getId()));
-						putAll(vote);
-					}});
-				});
+				put("\uD83D\uDC4D", (mb, msg) -> Main.getInfo().getPolls().get(message.getId()).put(mb.getId(), "\uD83D\uDC4D"));
+				put("\uD83D\uDC4E", (mb, msg) -> Main.getInfo().getPolls().get(message.getId()).put(mb.getId(), "\uD83D\uDC4E"));
 				put("❌", (mb, msg) -> {
 					if (mb.getId().equals(author.getId())) {
 						msg.delete().queue();
@@ -201,6 +184,7 @@ public class PollCommand extends Command {
 	}
 
 	private static void showResultOP(Message msg, Member member, EmbedBuilder eb) {
+		System.out.println(new JSONObject(Main.getInfo().getPolls().get(msg.getId())).toString());
 		Map<String, Integer> votes = new HashMap<>();
 		Main.getInfo()
 				.getPolls()
