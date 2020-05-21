@@ -32,7 +32,6 @@ import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.awt.*;
 import java.text.MessageFormat;
@@ -192,12 +191,11 @@ public class PollCommand extends Command {
 	}
 
 	private static void showResultOP(Message msg, Member member, EmbedBuilder eb) {
-		System.out.println(new JSONObject(Main.getInfo().getPolls()).toString());
 		Map<String, Integer> votes = new HashMap<>();
 		Main.getInfo()
 				.getPolls()
 				.get(msg.getId())
-				.forEach((k, v) -> votes.put(k, (int) Main.getInfo().getPolls().get(msg.getId()).entrySet().stream().filter(e -> e.getValue().equals(k)).count()));
+				.forEach((k, v) -> votes.put(v, (int) Main.getInfo().getPolls().get(msg.getId()).entrySet().stream().filter(e -> e.getValue().equals(k)).count()));
 
 		Main.getInfo().getPolls().remove(msg.getId());
 		boolean NOVOTE = false;
@@ -209,9 +207,10 @@ public class PollCommand extends Command {
 
 		eb.setAuthor("A enquete feita por " + member.getEffectiveName() + " foi encerrada!");
 		eb.setTitle("Enquete: (" + (NOVOTE ? "nenhum voto" : totalVotes + " votos") + ")");
+		eb.addBlankField(false);
 
 		boolean finalNOVOTE = NOVOTE;
-		votes.forEach((k, v) -> eb.addField(k, finalNOVOTE ? "0.0%" : Helper.round(((float) v * 100f) / totalVotes, 1) + "%", true));
+		votes.forEach((k, v) -> eb.addField(k + " | " + (finalNOVOTE ? "0.0%" : Helper.round(((float) v * 100f) / totalVotes, 1) + "%"), Helper.VOID, true));
 
 		msg.editMessage(eb.build()).queue();
 		member.getUser().openPrivateChannel().queue(c -> c.sendMessage(eb.setAuthor("Sua enquete foi encerrada!").build()).queue());
