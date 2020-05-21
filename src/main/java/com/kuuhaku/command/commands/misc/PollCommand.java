@@ -135,7 +135,7 @@ public class PollCommand extends Command {
 		};
 
 		if (gc.getCanalSUG() == null || gc.getCanalSUG().isBlank()) {
-			gc.setCanalSUG(null);
+			gc.setCanalSUG("");
 			GuildDAO.updateGuildSettings(gc);
 
 			if (options != null) channel.sendMessage(eb.build()).queue(sendOptions);
