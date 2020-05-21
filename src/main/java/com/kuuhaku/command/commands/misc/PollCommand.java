@@ -120,8 +120,8 @@ public class PollCommand extends Command {
 
 		Consumer<Message> sendSimple = m -> {
 			Pages.buttonize(m, new LinkedHashMap<>() {{
-				put("\uD83D\uDC4D", (mb, msg) -> Main.getInfo().getPolls().get(message.getId()).put(mb.getId(), "\uD83D\uDC4D"));
-				put("\uD83D\uDC4E", (mb, msg) -> Main.getInfo().getPolls().get(message.getId()).put(mb.getId(), "\uD83D\uDC4E"));
+				put("\uD83D\uDC4D", (mb, msg) -> Main.getInfo().getPolls().get(m.getId()).put(mb.getId(), "\uD83D\uDC4D"));
+				put("\uD83D\uDC4E", (mb, msg) -> Main.getInfo().getPolls().get(m.getId()).put(mb.getId(), "\uD83D\uDC4E"));
 				put("❌", (mb, msg) -> {
 					if (mb.getId().equals(author.getId())) {
 						msg.delete().queue();
@@ -164,6 +164,7 @@ public class PollCommand extends Command {
 	}
 
 	private static void showResult(Message msg, Member member, EmbedBuilder eb) {
+		System.out.println(new JSONObject(Main.getInfo().getPolls()).toString());
 		int pos = (int) Main.getInfo().getPolls().get(msg.getId()).entrySet().stream().filter(e -> e.getValue().equals("\uD83D\uDC4D")).count();
 		int neg = (int) Main.getInfo().getPolls().get(msg.getId()).entrySet().stream().filter(e -> e.getValue().equals("\uD83D\uDC4E")).count();
 		Main.getInfo().getPolls().remove(msg.getId());
