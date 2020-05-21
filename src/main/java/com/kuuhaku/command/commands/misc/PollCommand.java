@@ -117,13 +117,13 @@ public class PollCommand extends Command {
 		}
 
 		Consumer<Message> sendSimple = m -> {
-			Pages.buttonize(m, Map.of(
-					"\uD83D\uDC4D", (mb, msg) -> Main.getInfo().getPolls().get(message.getId()).put(mb.getId(), "\uD83D\uDC4D"),
-					"\uD83D\uDC4E", (mb, msg) -> Main.getInfo().getPolls().get(message.getId()).put(mb.getId(), "\uD83D\uDC4E"),
-					"❌", (mb, msg) -> {
-						if (mb.getId().equals(author.getId())) msg.delete().queue();
-					}
-			), false, gc.getPollTime(), TimeUnit.SECONDS);
+			Pages.buttonize(m, new LinkedHashMap<>() {{
+				put("\uD83D\uDC4D", (mb, msg) -> Main.getInfo().getPolls().get(message.getId()).put(mb.getId(), "\uD83D\uDC4D"));
+				put("\uD83D\uDC4E", (mb, msg) -> Main.getInfo().getPolls().get(message.getId()).put(mb.getId(), "\uD83D\uDC4E"));
+				put("❌", (mb, msg) -> {
+					if (mb.getId().equals(author.getId())) msg.delete().queue();
+				});
+			}}, false, gc.getPollTime(), TimeUnit.SECONDS);
 			Main.getInfo().getPolls().put(m.getId(), new HashMap<>());
 			Main.getInfo().getScheduler().schedule(() -> showResult(m, member, eb), gc.getPollTime(), TimeUnit.SECONDS);
 		};
@@ -134,8 +134,8 @@ public class PollCommand extends Command {
 			Main.getInfo().getScheduler().schedule(() -> showResultOP(m, member, eb), gc.getPollTime(), TimeUnit.SECONDS);
 		};
 
-		if (gc.getCanalSUG() == null) {
-			gc.setCanalSUG("");
+		if (gc.getCanalSUG() == null || gc.getCanalSUG().isBlank()) {
+			gc.setCanalSUG(null);
 			GuildDAO.updateGuildSettings(gc);
 
 			if (options != null) channel.sendMessage(eb.build()).queue(sendOptions);
@@ -147,8 +147,7 @@ public class PollCommand extends Command {
 				else
 					Objects.requireNonNull(guild.getTextChannelById(gc.getCanalSUG())).sendMessage(eb.build()).queue(sendSimple);
 			} catch (Exception e) {
-				e.printStackTrace();
-				if (gc.getCanalSUG() == null)
+				if (gc.getCanalSUG() == null || gc.getCanalSUG().isBlank())
 					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_send-embed")).queue();
 				else
 					channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_send-embed-in-channel"), Objects.requireNonNull(guild.getTextChannelById(gc.getCanalSUG())).getAsMention())).queue();
