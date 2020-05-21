@@ -26,9 +26,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/KGotchiDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/KGotchiDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/KGotchiDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/KGotchiDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/Kawaigotchi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/Kawaigotchi.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -448,14 +445,7 @@
       <workItem from="1589912636997" duration="9415000" />
       <workItem from="1589978847102" duration="24566000" />
       <workItem from="1590069445751" duration="12595000" />
-      <workItem from="1590093233076" duration="596000" />
-    </task>
-    <task id="LOCAL-01202" summary="Implementação inicial do módulo de dominação territorial">
-      <created>1589917949765</created>
-      <option name="number" value="01202" />
-      <option name="presentableId" value="LOCAL-01202" />
-      <option name="project" value="LOCAL" />
-      <updated>1589917949765</updated>
+      <workItem from="1590093233076" duration="981000" />
     </task>
     <task id="LOCAL-01203" summary="Implementação inicial do módulo de dominação territorial">
       <created>1589918459227</created>
@@ -793,7 +783,14 @@
       <option name="project" value="LOCAL" />
       <updated>1590089980335</updated>
     </task>
-    <option name="localTasksCounter" value="1251" />
+    <task id="LOCAL-01251" summary="Implementação inicial do módulo de dominação territorial">
+      <created>1590093904183</created>
+      <option name="number" value="01251" />
+      <option name="presentableId" value="LOCAL-01251" />
+      <option name="project" value="LOCAL" />
+      <updated>1590093904184</updated>
+    </task>
+    <option name="localTasksCounter" value="1252" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1026,12 +1023,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1590089983210">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1590093961266">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1588632287059" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1590089983210" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1590093961266" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
