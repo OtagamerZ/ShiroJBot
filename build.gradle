@@ -61,7 +61,7 @@ dependencies {
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.1.6.RELEASE'
     compile group: 'net.dv8tion', name: 'JDA', version: '4.1.1_140'
     compile group: 'club.minnced', name: 'discord-webhooks', version: '0.1.7'
-    compile group: 'com.github.SvenWoltmann', name: 'color-thief-java', version: 'master-SNAPSHOT'
+    compile group: 'com.github.SvenWoltmann', name: 'color-thief-java', version: 'v1.1.2'
     compile group: 'com.enigmabridge', name: 'hibernate4-sqlite-dialect', version: '0.1.2'
     compile group: 'com.google.apis', name: 'google-api-services-youtube', version: 'v3-rev212-1.25.0'
     compile group: 'com.rollbar', name: 'rollbar-java', version: '1.+'
