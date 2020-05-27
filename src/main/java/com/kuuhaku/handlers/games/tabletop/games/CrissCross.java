@@ -82,7 +82,7 @@ public class CrissCross extends Tabletop {
 				TextChannel chn = event.getChannel();
 				Message m = event.getMessage();
 
-				if (chn.getId().equals(getTable().getId()) && u.getId().equals(turn[0].getId()) && m.getContentRaw().length() == 2) {
+				if (chn.getId().equals(getTable().getId()) && u.getId().equals(turn[0].getId()) && (m.getContentRaw().length() == 2 || Helper.containsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender"))) {
 					try {
 						if (message != null) message.delete().queue();
 
