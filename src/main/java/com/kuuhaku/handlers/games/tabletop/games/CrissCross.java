@@ -70,7 +70,7 @@ public class CrissCross extends Tabletop {
 
 		Main.getInfo().getAPI().addEventListener(new ListenerAdapter() {
 			{
-				timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra seção.").queueAfter(180, TimeUnit.SECONDS, ms -> {
+				timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
 					Main.getInfo().getAPI().removeEventListener(this);
 					ShiroInfo.getGames().remove(getId());
 					timeout = null;
@@ -129,7 +129,7 @@ public class CrissCross extends Tabletop {
 							} else {
 								turn[0] = getPlayers().nextTurn();
 								message = getTable().sendMessage("Turno de " + turn[0].getAsMention()).addFile(baos.toByteArray(), "board.jpg").complete();
-								timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra seção.").queueAfter(180, TimeUnit.SECONDS, ms -> {
+								timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
 									Main.getInfo().getAPI().removeEventListener(this);
 									ShiroInfo.getGames().remove(getId());
 									timeout = null;
