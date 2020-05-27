@@ -26,6 +26,7 @@ import com.kuuhaku.controller.postgresql.CanvasDAO;
 import com.kuuhaku.controller.postgresql.VersionDAO;
 import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
+import com.kuuhaku.handlers.games.tabletop.entity.Tabletop;
 import com.kuuhaku.handlers.music.GuildMusicManager;
 import com.kuuhaku.model.persistent.PixelCanvas;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
@@ -49,6 +50,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 @SuppressWarnings("localvariable")
 public class ShiroInfo {
@@ -97,6 +99,7 @@ public class ShiroInfo {
 			}
 	);
 	private static final HttpClientBuilder httpBuilder = HttpClientBuilder.create();
+	private static final Map<String, Tabletop> games = new HashMap<>();
 
 	//STATIC CONSTRUCTOR
 	static {
@@ -148,6 +151,14 @@ public class ShiroInfo {
 
 	public static HttpClientBuilder getHttpBuilder() {
 		return httpBuilder;
+	}
+
+	public static Map<String, Tabletop> getGames() {
+		return games;
+	}
+
+	public static boolean gameInProgress(String id) {
+		return games.keySet().stream().anyMatch(s -> Helper.containsAny(id, s.split(Pattern.quote("."))));
 	}
 
 	//NON-STATIC

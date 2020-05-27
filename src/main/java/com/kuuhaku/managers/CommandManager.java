@@ -380,6 +380,9 @@ public class CommandManager {
 			add(new GuessTheNumberCommand(
 					"adivinheonumero", new String[]{"aon", "guessthenumber", "gtn"}, getLocale(PT).getString("cmd_guess-the-number"), FUN, true
 			));
+			add(new CrissCrossCommand(
+					"jogodavelha", new String[]{"jdv", "crisscross", "cc"}, getLocale(PT).getString("cmd_criss-cross"), FUN, true
+			));
 			add(new HugReaction(
 					"abraçar", new String[]{"abracar", "hug", "vemca"}, getLocale(PT).getString("cmd_hug"), true, "hug"
 			));
