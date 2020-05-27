@@ -25,7 +25,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/CrissCrossCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/entity/Piece.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/entity/Player.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/entity/Players.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/entity/Spot.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/entity/Tabletop.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/enums/Board.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/enums/PieceIcon.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/CrissCross.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/interfaces/GameListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/pieces/Circle.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/pieces/Cross.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/pieces/circle.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/pieces/cross.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -166,7 +183,7 @@
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="TEXT" />
     <property name="extract.method.default.visibility" value="private" />
     <property name="last.edited.regexp" value="aaaa&#10;aaa" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -186,24 +203,24 @@
       <recent name="com.kuuhaku.managers.RPGCommandManager" />
       <recent name="com.kuuhaku.managers.CommandManager" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.command.commands.fun" />
       <recent name="com.kuuhaku.handlers.games.tabletop" />
       <recent name="com.kuuhaku.command.commands.exceed" />
       <recent name="com.kuuhaku.controller.postgresql" />
       <recent name="com.kuuhaku.command.commands.misc" />
-      <recent name="com.kuuhaku.handlers.games.kawaigotchi" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games" />
+    <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
-      <recent name="C:\Users\yagog\ShiroJBot\src\main\resources" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -446,13 +463,9 @@
       <workItem from="1589978847102" duration="24566000" />
       <workItem from="1590069445751" duration="12595000" />
       <workItem from="1590093233076" duration="1037000" />
-    </task>
-    <task id="LOCAL-01204" summary="Implementação inicial do módulo de dominação territorial">
-      <created>1589918614841</created>
-      <option name="number" value="01204" />
-      <option name="presentableId" value="LOCAL-01204" />
-      <option name="project" value="LOCAL" />
-      <updated>1589918614841</updated>
+      <workItem from="1590094474287" duration="64000" />
+      <workItem from="1590148858959" duration="122000" />
+      <workItem from="1590584044377" duration="1933000" />
     </task>
     <task id="LOCAL-01205" summary="Implementação inicial do módulo de dominação territorial">
       <created>1589918702234</created>
@@ -790,7 +803,14 @@
       <option name="project" value="LOCAL" />
       <updated>1590094222512</updated>
     </task>
-    <option name="localTasksCounter" value="1253" />
+    <task id="LOCAL-01253" summary="Implementação inicial do módulo de dominação territorial">
+      <created>1590094525563</created>
+      <option name="number" value="01253" />
+      <option name="presentableId" value="LOCAL-01253" />
+      <option name="project" value="LOCAL" />
+      <updated>1590094525563</updated>
+    </task>
+    <option name="localTasksCounter" value="1254" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -879,7 +899,6 @@
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="326" y="0" key="#Project_Structure/0.0.1366.768@0.0.1366.768" timestamp="1587919870656" />
-    <state x="432" y="164" key="#Project_Structure/0.0.1680.1010@0.0.1680.1010" timestamp="1581620143573" />
     <state x="351" y="47" key="#SQL_Resolution_Scopes" timestamp="1585946066821">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -894,11 +913,11 @@
     <state x="248" y="33" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1585944592238" />
     <state x="239" y="78" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.768@0.0.1366.768" timestamp="1587921282730" />
     <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1588965558966" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1590093409672">
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1590585003929">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="488" y="67" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1585945441171" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1590093409672" />
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1590585003929" />
     <state x="569" y="296" key="#com.intellij.ide.util.TreeFileChooserDialog" timestamp="1583261031135">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -935,12 +954,12 @@
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1590094521760">
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1590586013820">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1588632175383" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1590094521760" />
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1590586013820" />
     <state width="247" height="195" key="DatabaseViewActions_Filter" timestamp="1586747901902">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -949,36 +968,36 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="574" y="268" key="EnvironmentVariablesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1583778259002" />
-    <state x="620" y="261" key="FileChooserDialogImpl" timestamp="1587400046831">
+    <state x="620" y="261" key="FileChooserDialogImpl" timestamp="1590148932552">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="504" y="188" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1585946052476" />
     <state x="504" y="198" key="FileChooserDialogImpl/0.0.1366.768@0.0.1366.768" timestamp="1585071666306" />
-    <state x="620" y="261" key="FileChooserDialogImpl/0.0.1680.1010@0.0.1680.1010" timestamp="1587400046831" />
-    <state width="1125" height="289" key="GridCell.Tab.0.bottom" timestamp="1589985217640">
+    <state x="620" y="261" key="FileChooserDialogImpl/0.0.1680.1010@0.0.1680.1010" timestamp="1590148932552" />
+    <state width="1637" height="279" key="GridCell.Tab.0.bottom" timestamp="1590584761617">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="179" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1585946331158" />
     <state width="1323" height="230" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1587921284819" />
-    <state width="1125" height="289" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1589985217640" />
-    <state width="1125" height="289" key="GridCell.Tab.0.center" timestamp="1589985217640">
+    <state width="1637" height="279" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1590584761617" />
+    <state width="1637" height="279" key="GridCell.Tab.0.center" timestamp="1590584761617">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="179" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1585946331158" />
     <state width="1323" height="230" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1587921284819" />
-    <state width="1125" height="289" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1589985217640" />
-    <state width="1125" height="289" key="GridCell.Tab.0.left" timestamp="1589985217640">
+    <state width="1637" height="279" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1590584761617" />
+    <state width="1637" height="279" key="GridCell.Tab.0.left" timestamp="1590584761617">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="179" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1585946331158" />
     <state width="1323" height="230" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1587921284819" />
-    <state width="1125" height="289" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1589985217640" />
-    <state width="1125" height="289" key="GridCell.Tab.0.right" timestamp="1589985217640">
+    <state width="1637" height="279" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1590584761617" />
+    <state width="1637" height="279" key="GridCell.Tab.0.right" timestamp="1590584761617">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="179" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1585946331158" />
     <state width="1323" height="230" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1587921284819" />
-    <state width="1125" height="289" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1589985217640" />
+    <state width="1637" height="279" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1590584761617" />
     <state width="1323" height="230" key="GridCell.Tab.1.bottom" timestamp="1587921284835">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -1006,6 +1025,10 @@
     </state>
     <state x="449" y="169" key="MultipleFileMergeDialog/0.0.1366.768@0.0.1366.768" timestamp="1587180868895" />
     <state x="601" y="208" key="MultipleFileMergeDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1589980606709" />
+    <state x="505" y="205" key="NewModule_or_Project.wizard" timestamp="1590148977508">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="505" y="205" key="NewModule_or_Project.wizard/0.0.1680.1010@0.0.1680.1010" timestamp="1590148977508" />
     <state x="454" y="171" key="Registry" timestamp="1583417958203">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1023,12 +1046,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1590094224073">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1590094527604">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1588632287059" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1590094224073" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1590094527604" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
