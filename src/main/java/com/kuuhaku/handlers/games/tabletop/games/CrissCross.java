@@ -73,6 +73,7 @@ public class CrissCross extends Tabletop {
 				timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
 					Main.getInfo().getAPI().removeEventListener(this);
 					ShiroInfo.getGames().remove(getId());
+					timeout.cancel(true);
 					timeout = null;
 				}, Helper::doNothing);
 			}
@@ -121,17 +122,20 @@ public class CrissCross extends Tabletop {
 								ShiroInfo.getGames().remove(getId());
 								getTable().sendMessage(turn[0].getAsMention() + " venceu!").addFile(baos.toByteArray(), "board.jpg").complete();
 								if (timeout != null) timeout.cancel(true);
+								timeout = null;
 							} else if (fullRows == 3) {
 								Main.getInfo().getAPI().removeEventListener(this);
 								ShiroInfo.getGames().remove(getId());
 								getTable().sendMessage("Temos um empate!").addFile(baos.toByteArray(), "board.jpg").queue();
 								if (timeout != null) timeout.cancel(true);
+								timeout = null;
 							} else {
 								turn[0] = getPlayers().nextTurn();
 								message = getTable().sendMessage("Turno de " + turn[0].getAsMention()).addFile(baos.toByteArray(), "board.jpg").complete();
 								timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
 									Main.getInfo().getAPI().removeEventListener(this);
 									ShiroInfo.getGames().remove(getId());
+									timeout.cancel(true);
 									timeout = null;
 								}, Helper::doNothing);
 							}
