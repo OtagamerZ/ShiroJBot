@@ -55,7 +55,10 @@ public class CrissCrossCommand extends Command {
 		String id = author.getId() + "." + message.getMentionedUsers().get(0).getId() + "." + guild.getId();
 
 		if (ShiroInfo.gameInProgress(author.getId())) {
-			channel.sendMessage(":x: | Você já está em um jogo neste servidor, por favor finalize-o antes de iniciar outro.").queue();
+			channel.sendMessage(":x: | Você já está em um jogo, por favor finalize-o antes de iniciar outro.").queue();
+			return;
+		} else if (ShiroInfo.gameInProgress(message.getMentionedUsers().get(0).getId())) {
+			channel.sendMessage(":x: | Este usuário já está em um jogo, aguarde-o finalizar antes de iniciar outro.").queue();
 			return;
 		}
 
