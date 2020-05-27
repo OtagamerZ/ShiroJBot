@@ -24,14 +24,19 @@ import com.kuuhaku.handlers.games.tabletop.entity.Spot;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public enum Board {
-	SIZE_3X3(new Piece[3][3]),
-	SIZE_8X8(new Piece[8][8]);
-
+public class Board {
 	private final Piece[][] board;
 
 	Board(Piece[][] board) {
 		this.board = board;
+	}
+
+	public static Board SIZE_3X3() {
+		return new Board(new Piece[3][3]);
+	}
+
+	public static Board SIZE_8X8() {
+		return new Board(new Piece[8][8]);
 	}
 
 	public Piece[][] getLayout() {
