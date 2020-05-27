@@ -50,7 +50,7 @@ public class CrissCross extends Tabletop {
 	private Message message = null;
 
 	public CrissCross(TextChannel table, String id, User... players) {
-		super(table, Board.SIZE_3X3, id, players);
+		super(table, Board.SIZE_3X3(), id, players);
 		pieces = Map.of(
 				players[0], new Cross(new Player(players[0], false)),
 				players[1], new Circle(new Player(players[1], true))
@@ -59,10 +59,6 @@ public class CrissCross extends Tabletop {
 
 	@Override
 	public void execute() {
-		timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra seção.").queueAfter(180, TimeUnit.SECONDS, ms -> {
-			Main.getInfo().getAPI().removeEventListener(this);
-			ShiroInfo.getGames().remove(getId());
-		}, Helper::doNothing);
 		final User[] turn = {getPlayers().nextTurn()};
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			ImageIO.write(getBoard().render(), "jpg", baos);
@@ -73,6 +69,14 @@ public class CrissCross extends Tabletop {
 		}
 
 		Main.getInfo().getAPI().addEventListener(new ListenerAdapter() {
+			{
+				timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra seção.").queueAfter(180, TimeUnit.SECONDS, ms -> {
+					Main.getInfo().getAPI().removeEventListener(this);
+					ShiroInfo.getGames().remove(getId());
+					timeout = null;
+				}, Helper::doNothing);
+			}
+
 			@Override
 			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
 				User u = event.getAuthor();
@@ -128,6 +132,7 @@ public class CrissCross extends Tabletop {
 								timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra seção.").queueAfter(180, TimeUnit.SECONDS, ms -> {
 									Main.getInfo().getAPI().removeEventListener(this);
 									ShiroInfo.getGames().remove(getId());
+									timeout = null;
 								}, Helper::doNothing);
 							}
 						} catch (IOException e) {
