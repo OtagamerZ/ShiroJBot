@@ -86,7 +86,7 @@ public class Board {
 				if (p != null) {
 					g2d.drawImage(p.getIcon().render(p.getOwner().isWhite()), 64 * x, 64 * y, null);
 				} else {
-					g2d.drawString(String.valueOf(Spot.getAlphabet().toUpperCase().charAt(x)) + (y + 1), 64 * x + 16, 64 * y + 42);
+					g2d.drawString(String.valueOf(Spot.getAlphabet().toUpperCase().charAt(x)) + (y + 1), 64 * x + 13, 64 * y + 44);
 				}
 			}
 		}
