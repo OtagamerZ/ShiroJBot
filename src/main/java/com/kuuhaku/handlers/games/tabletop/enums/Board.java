@@ -44,45 +44,41 @@ public class Board {
 	}
 
 	public Piece[] getColumn(int index) {
-		Piece[] column = new Piece[this.board.length];
-		for (int i = 0; i < this.board.length; i++) {
-			column[i] = this.board[i][index];
+		Piece[] column = new Piece[board.length];
+		for (int i = 0; i < board.length; i++) {
+			column[i] = board[i][index];
 		}
 		return column;
 	}
 
 	public Piece[] getRow(int index) {
-		return this.board[index];
+		return board[index];
 	}
 
 	public Piece[] getCrossSection(boolean toRight) {
-		Piece[] cross = new Piece[this.board.length];
+		Piece[] cross = new Piece[board.length];
 		if (toRight)
-			for (int i = 0; i < this.board.length; i++) {
-				cross[i] = this.board[i][i];
+			for (int i = 0; i < board.length; i++) {
+				cross[i] = board[i][i];
 			}
 		else
-			for (int i = 0; i < this.board.length; i++) {
-				cross[i] = this.board[i][(this.board.length - 1) - i];
+			for (int i = 0; i < board.length; i++) {
+				cross[i] = board[i][(board.length - 1) - i];
 			}
 		return cross;
 	}
 
-	public boolean valid(Spot s) {
-		return (s.getX() < board.length && s.getX() >= 0) && (s.getY() < board.length && s.getY() >= 0);
-	}
-
 	public BufferedImage render() {
-		BufferedImage bi = new BufferedImage(64 * this.board.length, 64 * this.board.length, BufferedImage.TYPE_BYTE_GRAY);
+		BufferedImage bi = new BufferedImage(64 * board.length, 64 * board.length, BufferedImage.TYPE_BYTE_GRAY);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setFont(new Font(Font.MONOSPACED, Font.BOLD, 32));
-		for (int y = 0; y < this.board.length; y++) {
-			for (int x = 0; x < this.board.length; x++) {
-				g2d.setColor((y + x) % 2 == 0 ? Color.WHITE : Color.BLACK);
+		for (int y = 0; y < board.length; y++) {
+			for (int x = 0; x < board.length; x++) {
+				g2d.setColor((y + x) % 2 == 0 ? Color.WHITE : Color.DARK_GRAY);
 				g2d.fillRect(64 * x, 64 * y, 64, 64);
-				g2d.setColor((y + x) % 2 == 0 ? Color.BLACK : Color.WHITE);
-				Piece p = this.board[y][x];
+				g2d.setColor((y + x) % 2 == 0 ? Color.DARK_GRAY : Color.WHITE);
+				Piece p = board[y][x];
 				if (p != null) {
 					g2d.drawImage(p.getIcon().render(p.getOwner().isWhite()), 64 * x, 64 * y, null);
 				} else {
