@@ -65,6 +65,9 @@ public class CrissCrossCommand extends Command {
 		} else if (ShiroInfo.gameInProgress(message.getMentionedUsers().get(0).getId())) {
 			channel.sendMessage(":x: | Este usuário já está em um jogo, aguarde-o finalizar antes de iniciar outro.").queue();
 			return;
+		} else if (message.getMentionedUsers().get(0).getId().equals(author.getId())) {
+			channel.sendMessage(":x: | Você não pode jogar com você mesmo!").queue();
+			return;
 		}
 
 		Tabletop t = new CrissCross((TextChannel) channel, id, message.getMentionedUsers().get(0), author);
