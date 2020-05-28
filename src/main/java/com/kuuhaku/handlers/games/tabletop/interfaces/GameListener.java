@@ -18,6 +18,10 @@
 
 package com.kuuhaku.handlers.games.tabletop.interfaces;
 
+import com.kuuhaku.handlers.games.tabletop.entity.Spot;
+
 public interface GameListener {
 	void execute();
+
+	boolean validateMove(Spot from, Spot to);
 }
