@@ -18,14 +18,19 @@
 
 package com.kuuhaku.command.commands.fun;
 
+import com.github.ygimenez.method.Pages;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.handlers.games.tabletop.entity.Tabletop;
 import com.kuuhaku.handlers.games.tabletop.games.CrissCross;
+import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
+
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class CrissCrossCommand extends Command {
 
@@ -64,6 +69,9 @@ public class CrissCrossCommand extends Command {
 
 		Tabletop t = new CrissCross((TextChannel) channel, id, message.getMentionedUsers().get(0), author);
 		ShiroInfo.getGames().put(id, t);
-		t.execute();
+		channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Jogo da Velha, deseja aceitar?")
+				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+					if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) t.execute();
+				}), false, 60, TimeUnit.SECONDS));
 	}
 }
