@@ -75,9 +75,9 @@ public class Board {
 		g2d.setFont(new Font(Font.MONOSPACED, Font.BOLD, 32));
 		for (int y = 0; y < board.length; y++) {
 			for (int x = 0; x < board.length; x++) {
-				g2d.setColor((y + x) % 2 == 0 ? Color.WHITE : Color.DARK_GRAY);
+				g2d.setColor((y + x) % 2 == 0 ? Color.decode("#bbbbbb") : Color.decode("#333333"));
 				g2d.fillRect(64 * x, 64 * y, 64, 64);
-				g2d.setColor((y + x) % 2 == 0 ? Color.DARK_GRAY : Color.WHITE);
+				g2d.setColor((y + x) % 2 == 0 ? Color.decode("#333333") : Color.decode("#bbbbbb"));
 				Piece p = board[y][x];
 				if (p != null) {
 					g2d.drawImage(p.getIcon().render(p.getOwner().isWhite()), 64 * x, 64 * y, null);
