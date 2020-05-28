@@ -144,4 +144,9 @@ public class CrissCross extends Tabletop {
 			}
 		});
 	}
+
+	@Override
+	public boolean validateMove(Spot from, Spot to) {
+		return true;
+	}
 }
