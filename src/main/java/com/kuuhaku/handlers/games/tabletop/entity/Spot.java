@@ -18,11 +18,22 @@
 
 package com.kuuhaku.handlers.games.tabletop.entity;
 
+import java.util.Objects;
+
 public class Spot {
 	private final int x;
 	private final int y;
 
 	private static final String alphabet = "abcdefghijklmnopqrstuvwxyz";
+
+	public static final int[] UPPER_LEFT = {-1, -1};
+	public static final int[] UP = {0, -1};
+	public static final int[] UPPER_RIGHT = {1, -1};
+	public static final int[] MIDDLE_LEFT = {-1, 0};
+	public static final int[] MIDDLE_RIGHT = {1, 0};
+	public static final int[] LOWER_LEFT = {-1, 1};
+	public static final int[] DOWN = {0, 1};
+	public static final int[] LOWER_RIGHT = {1, 1};
 
 	public Spot(int x, int y) {
 		this.x = x;
@@ -47,5 +58,22 @@ public class Spot {
 
 	public static String getAlphabet() {
 		return alphabet;
+	}
+
+	public Spot getNextSpot(int[] spot) {
+		return Spot.of(x + spot[0], y + spot[1]);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Spot spot = (Spot) o;
+		return x == spot.x && y == spot.y;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(x, y);
 	}
 }

@@ -26,6 +26,7 @@ import java.awt.image.BufferedImage;
 
 public class Board {
 	private final Piece[][] board;
+	private int round = 1;
 
 	Board(Piece[][] board) {
 		this.board = board;
@@ -43,6 +44,26 @@ public class Board {
 		return board;
 	}
 
+	public Piece getSpot(Spot spot) {
+		return board[spot.getY()][spot.getX()];
+	}
+
+	public void setSpot(Piece p, Spot spot) {
+		board[spot.getY()][spot.getX()] = p;
+	}
+
+	public int getRound() {
+		return round;
+	}
+
+	public void nextRound() {
+		this.round++;
+	}
+
+	public void setPattern(Piece[][] pattern) {
+		System.arraycopy(pattern, 0, board, 0, pattern.length);
+	}
+
 	public Piece[] getColumn(int index) {
 		Piece[] column = new Piece[board.length];
 		for (int i = 0; i < board.length; i++) {
@@ -55,15 +76,28 @@ public class Board {
 		return board[index];
 	}
 
-	public Piece[] getCrossSection(boolean toRight) {
+	public Piece[] getCrossSection(boolean descend) {
 		Piece[] cross = new Piece[board.length];
-		if (toRight)
+		if (descend)
 			for (int i = 0; i < board.length; i++) {
 				cross[i] = board[i][i];
 			}
 		else
 			for (int i = 0; i < board.length; i++) {
-				cross[i] = board[i][(board.length - 1) - i];
+				cross[i] = board[(board.length - 1) - i][i];
+			}
+		return cross;
+	}
+
+	public Piece[] getCrossSection(int column, boolean descend) {
+		Piece[] cross = new Piece[board.length];
+		if (descend)
+			for (int i = 0; i < board.length && i + column < board.length; i++) {
+				cross[i] = board[i][i + column];
+			}
+		else
+			for (int i = 0; i < board.length && i + column < board.length; i++) {
+				cross[i] = board[(board.length - 1) - i][i + column];
 			}
 		return cross;
 	}

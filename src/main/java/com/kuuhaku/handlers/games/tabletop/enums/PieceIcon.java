@@ -25,7 +25,15 @@ import java.util.Objects;
 
 public enum PieceIcon {
 	CROSS(new ImageIcon(Objects.requireNonNull(PieceIcon.class.getClassLoader().getResource("pieces/cross.png")))),
-	CIRCLE(new ImageIcon(Objects.requireNonNull(PieceIcon.class.getClassLoader().getResource("pieces/circle.png"))));
+	CIRCLE(new ImageIcon(Objects.requireNonNull(PieceIcon.class.getClassLoader().getResource("pieces/circle.png")))),
+	MAN(new ImageIcon(Objects.requireNonNull(PieceIcon.class.getClassLoader().getResource("pieces/man.png")))),
+	CROWN(new ImageIcon(Objects.requireNonNull(PieceIcon.class.getClassLoader().getResource("pieces/crown.png")))),
+	PAWN(new ImageIcon(Objects.requireNonNull(PieceIcon.class.getClassLoader().getResource("pieces/pawn.png")))),
+	ROOK(new ImageIcon(Objects.requireNonNull(PieceIcon.class.getClassLoader().getResource("pieces/rook.png")))),
+	KNIGHT(new ImageIcon(Objects.requireNonNull(PieceIcon.class.getClassLoader().getResource("pieces/knight.png")))),
+	BISHOP(new ImageIcon(Objects.requireNonNull(PieceIcon.class.getClassLoader().getResource("pieces/bishop.png")))),
+	QUEEN(new ImageIcon(Objects.requireNonNull(PieceIcon.class.getClassLoader().getResource("pieces/queen.png")))),
+	KING(new ImageIcon(Objects.requireNonNull(PieceIcon.class.getClassLoader().getResource("pieces/king.png"))));
 
 	private final ImageIcon icon;
 

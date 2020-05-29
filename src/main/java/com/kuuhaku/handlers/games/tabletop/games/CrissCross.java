@@ -65,7 +65,7 @@ public class CrissCross extends Tabletop {
 
 			message = getTable().sendMessage("Turno de " + turn[0].getAsMention()).addFile(baos.toByteArray(), "board.jpg").complete();
 		} catch (IOException e) {
-			e.printStackTrace();
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 
 		Main.getInfo().getAPI().addEventListener(new ListenerAdapter() {
@@ -134,7 +134,7 @@ public class CrissCross extends Tabletop {
 								}, Helper::doNothing);
 							}
 						} catch (IOException e) {
-							e.printStackTrace();
+							Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 						}
 					} catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
 						getTable().sendMessage(":x: | Coordenada inválida.").queue();
@@ -142,10 +142,5 @@ public class CrissCross extends Tabletop {
 				}
 			}
 		});
-	}
-
-	@Override
-	public boolean validateMove(Spot from, Spot to) {
-		return true;
 	}
 }
