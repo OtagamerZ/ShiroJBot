@@ -75,6 +75,7 @@ public class CrissCrossCommand extends Command {
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 					if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
 						ShiroInfo.getGames().put(id, t);
+						ms.delete().queue();
 						t.execute();
 					}
 				}), false, 60, TimeUnit.SECONDS));
