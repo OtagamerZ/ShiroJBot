@@ -25,7 +25,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/ChessCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/Chess.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/pieces/Bishop.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/pieces/King.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/pieces/Knight.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/pieces/Pawn.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/pieces/Queen.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/pieces/Rook.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/pieces/bishop.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/pieces/crown.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/pieces/king.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/pieces/knight.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/pieces/pawn.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/pieces/queen.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/pieces/rook.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/entity/Piece.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/entity/Piece.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/entity/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/entity/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/entity/Spot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/entity/Spot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/enums/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/enums/Board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/enums/PieceIcon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/enums/PieceIcon.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/CrissCross.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/CrissCross.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/interfaces/GameListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/interfaces/GameListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/pieces/Circle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/pieces/Circle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/pieces/Cross.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/pieces/Cross.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -166,7 +192,7 @@
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="TEXT" />
     <property name="extract.method.default.visibility" value="private" />
     <property name="last.edited.regexp" value="aaaa&#10;aaa" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/pieces" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -186,24 +212,24 @@
       <recent name="com.kuuhaku.managers.RPGCommandManager" />
       <recent name="com.kuuhaku.managers.CommandManager" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers" />
+    <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.kuuhaku.command.commands.fun" />
+      <recent name="com.kuuhaku.handlers.games.tabletop.games" />
       <recent name="com.kuuhaku.handlers.games.tabletop" />
       <recent name="com.kuuhaku.command.commands.exceed" />
       <recent name="com.kuuhaku.controller.postgresql" />
-      <recent name="com.kuuhaku.command.commands.misc" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\pieces" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games\tabletop\pieces" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -452,21 +478,8 @@
       <workItem from="1590595322049" duration="2811000" />
       <workItem from="1590605381458" duration="593000" />
       <workItem from="1590698792410" duration="646000" />
-      <workItem from="1590757450107" duration="1370000" />
-    </task>
-    <task id="LOCAL-01217" summary="Implementação inicial do módulo de dominação territorial">
-      <created>1589980572501</created>
-      <option name="number" value="01217" />
-      <option name="presentableId" value="LOCAL-01217" />
-      <option name="project" value="LOCAL" />
-      <updated>1589980572502</updated>
-    </task>
-    <task id="LOCAL-01218" summary="Implementação inicial do módulo de dominação territorial">
-      <created>1589980642105</created>
-      <option name="number" value="01218" />
-      <option name="presentableId" value="LOCAL-01218" />
-      <option name="project" value="LOCAL" />
-      <updated>1589980642105</updated>
+      <workItem from="1590757450107" duration="2400000" />
+      <workItem from="1590778908365" duration="826000" />
     </task>
     <task id="LOCAL-01219" summary="Implementação inicial do módulo de dominação territorial">
       <created>1589981042459</created>
@@ -797,7 +810,21 @@
       <option name="project" value="LOCAL" />
       <updated>1590771867958</updated>
     </task>
-    <option name="localTasksCounter" value="1266" />
+    <task id="LOCAL-01266" summary="Implementação do framework de jogos;&#10;Adição do jogo &quot;jogo da velha&quot;;">
+      <created>1590772078388</created>
+      <option name="number" value="01266" />
+      <option name="presentableId" value="LOCAL-01266" />
+      <option name="project" value="LOCAL" />
+      <updated>1590772078388</updated>
+    </task>
+    <task id="LOCAL-01267" summary="Implementação do framework de jogos;&#10;Adição do jogo &quot;jogo da velha&quot;;">
+      <created>1590772129252</created>
+      <option name="number" value="01267" />
+      <option name="presentableId" value="LOCAL-01267" />
+      <option name="project" value="LOCAL" />
+      <updated>1590772129252</updated>
+    </task>
+    <option name="localTasksCounter" value="1268" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1033,12 +1060,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1590772091322">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1590772143641">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1588632287059" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1590772091322" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1590772143641" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>

@@ -20,10 +20,17 @@ package com.kuuhaku.handlers.games.tabletop.pieces;
 
 import com.kuuhaku.handlers.games.tabletop.entity.Piece;
 import com.kuuhaku.handlers.games.tabletop.entity.Player;
+import com.kuuhaku.handlers.games.tabletop.entity.Spot;
+import com.kuuhaku.handlers.games.tabletop.enums.Board;
 import com.kuuhaku.handlers.games.tabletop.enums.PieceIcon;
 
 public class Cross extends Piece {
 	public Cross(Player owner) {
 		super(owner, PieceIcon.CROSS);
+	}
+
+	@Override
+	public boolean validate(Board b, Spot to) {
+		return false;
 	}
 }

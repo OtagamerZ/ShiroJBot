@@ -383,6 +383,9 @@ public class CommandManager {
 			add(new CrissCrossCommand(
 					"jogodavelha", new String[]{"jdv", "crisscross", "cc"}, getLocale(PT).getString("cmd_criss-cross"), FUN, true
 			));
+			add(new ChessCommand(
+					"xadrez", new String[]{"chess"}, getLocale(PT).getString("cmd_chess"), FUN, true
+			));
 			add(new HugReaction(
 					"abraçar", new String[]{"abracar", "hug", "vemca"}, getLocale(PT).getString("cmd_hug"), true, "hug"
 			));
