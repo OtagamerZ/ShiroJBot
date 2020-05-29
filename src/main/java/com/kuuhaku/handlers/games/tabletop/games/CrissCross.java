@@ -84,8 +84,6 @@ public class CrissCross extends Tabletop {
 
 				if (chn.getId().equals(getTable().getId()) && u.getId().equals(turn[0].getId()) && (m.getContentRaw().length() == 2 || Helper.containsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender"))) {
 					try {
-						if (message != null) message.delete().queue();
-
 						Spot s = Spot.of(m.getContentRaw());
 
 						if (getBoard().getLayout()[s.getY()][s.getX()] == null)
@@ -127,6 +125,7 @@ public class CrissCross extends Tabletop {
 								timeout.cancel(true);
 							} else {
 								turn[0] = getPlayers().nextTurn();
+								if (message != null) message.delete().queue();
 								message = getTable().sendMessage("Turno de " + turn[0].getAsMention()).addFile(baos.toByteArray(), "board.jpg").complete();
 								timeout.cancel(true);
 								timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
