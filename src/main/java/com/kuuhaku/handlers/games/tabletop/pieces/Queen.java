@@ -16,39 +16,27 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.handlers.games.tabletop.entity;
+package com.kuuhaku.handlers.games.tabletop.pieces;
 
-import net.dv8tion.jda.api.entities.User;
+import com.kuuhaku.handlers.games.tabletop.entity.Piece;
+import com.kuuhaku.handlers.games.tabletop.entity.Player;
+import com.kuuhaku.handlers.games.tabletop.entity.Spot;
+import com.kuuhaku.handlers.games.tabletop.enums.Board;
+import com.kuuhaku.handlers.games.tabletop.enums.PieceIcon;
 
-import java.util.Objects;
-
-public class Player {
-	private final User user;
-	private final boolean white;
-
-	public Player(User user, boolean white) {
-		this.user = user;
-		this.white = white;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public boolean isWhite() {
-		return white;
+public class Queen extends Piece {
+	public Queen(Player owner) {
+		super(owner, PieceIcon.QUEEN);
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		Player player = (Player) o;
-		return white == player.white;
-	}
+	public boolean validate(Board b, Spot to) {
+		Piece rk = new Rook(getOwner());
+		Piece bs = new Bishop(getOwner());
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(white);
+		rk.setSpot(getSpot());
+		bs.setSpot(getSpot());
+
+		return rk.validate(b, to) || bs.validate(b, to);
 	}
 }

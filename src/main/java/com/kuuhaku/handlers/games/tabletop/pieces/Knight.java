@@ -24,13 +24,21 @@ import com.kuuhaku.handlers.games.tabletop.entity.Spot;
 import com.kuuhaku.handlers.games.tabletop.enums.Board;
 import com.kuuhaku.handlers.games.tabletop.enums.PieceIcon;
 
-public class Circle extends Piece {
-	public Circle(Player owner) {
-		super(owner, PieceIcon.CIRCLE);
+public class Knight extends Piece {
+	public Knight(Player owner) {
+		super(owner, PieceIcon.KNIGHT);
 	}
 
 	@Override
 	public boolean validate(Board b, Spot to) {
+		for (int[] pos : new int[][]{{-1, -2}, {-2, -1}, {1, -2}, {2, -1}, {-1, 2}, {-2, 1}, {1, 2}, {2, 1}}) {
+			try {
+				Piece p = b.getSpot(getSpot().getNextSpot(pos));
+				if (to.equals(getSpot().getNextSpot(pos)) && (p == null || !p.getOwner().equals(getOwner())))
+					return true;
+			} catch (ArrayIndexOutOfBoundsException ignore) {
+			}
+		}
 		return false;
 	}
 }

@@ -24,13 +24,47 @@ import com.kuuhaku.handlers.games.tabletop.entity.Spot;
 import com.kuuhaku.handlers.games.tabletop.enums.Board;
 import com.kuuhaku.handlers.games.tabletop.enums.PieceIcon;
 
-public class Circle extends Piece {
-	public Circle(Player owner) {
-		super(owner, PieceIcon.CIRCLE);
+public class Rook extends Piece {
+	public Rook(Player owner) {
+		super(owner, PieceIcon.ROOK);
 	}
 
 	@Override
 	public boolean validate(Board b, Spot to) {
-		return false;
+		boolean blocked = false;
+
+		if (to.getX() - getSpot().getX() != 0 && to.getY() - getSpot().getY() == 0) {
+			for (int i = getSpot().getX(); to.getX() > getSpot().getX() ? i < to.getX() : i > to.getX(); ) {
+				if (i != getSpot().getX()) {
+					Piece p = b.getSpot(Spot.of(i, getSpot().getY()));
+
+					if (i == to.getX()) blocked = p != null && p.getOwner().equals(getOwner());
+					else blocked = p != null;
+				}
+
+				if (to.getX() > getSpot().getX()) {
+					i++;
+				} else {
+					i--;
+				}
+			}
+		} else if (to.getX() - getSpot().getX() == 0 && to.getY() - getSpot().getY() != 0) {
+			for (int i = getSpot().getY(); to.getY() > getSpot().getY() ? i < to.getY() : i > to.getY(); ) {
+				if (i != getSpot().getX()) {
+					Piece p = b.getSpot(Spot.of(getSpot().getX(), i));
+
+					if (i == to.getY()) blocked = p != null && p.getOwner().equals(getOwner());
+					else blocked = p != null;
+				}
+
+				if (to.getY() > getSpot().getY()) {
+					i++;
+				} else {
+					i--;
+				}
+			}
+		} else return false;
+
+		return !blocked;
 	}
 }
