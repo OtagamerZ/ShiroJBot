@@ -452,21 +452,7 @@
       <workItem from="1590595322049" duration="2811000" />
       <workItem from="1590605381458" duration="593000" />
       <workItem from="1590698792410" duration="646000" />
-      <workItem from="1590757450107" duration="1128000" />
-    </task>
-    <task id="LOCAL-01215" summary="Implementação inicial do módulo de dominação territorial">
-      <created>1589922024065</created>
-      <option name="number" value="01215" />
-      <option name="presentableId" value="LOCAL-01215" />
-      <option name="project" value="LOCAL" />
-      <updated>1589922024065</updated>
-    </task>
-    <task id="LOCAL-01216" summary="Implementação inicial do módulo de dominação territorial">
-      <created>1589922050462</created>
-      <option name="number" value="01216" />
-      <option name="presentableId" value="LOCAL-01216" />
-      <option name="project" value="LOCAL" />
-      <updated>1589922050463</updated>
+      <workItem from="1590757450107" duration="1370000" />
     </task>
     <task id="LOCAL-01217" summary="Implementação inicial do módulo de dominação territorial">
       <created>1589980572501</created>
@@ -797,7 +783,21 @@
       <option name="project" value="LOCAL" />
       <updated>1590757908910</updated>
     </task>
-    <option name="localTasksCounter" value="1264" />
+    <task id="LOCAL-01264" summary="Implementação do framework de jogos;&#10;Adição do jogo &quot;jogo da velha&quot;;">
+      <created>1590771758320</created>
+      <option name="number" value="01264" />
+      <option name="presentableId" value="LOCAL-01264" />
+      <option name="project" value="LOCAL" />
+      <updated>1590771758320</updated>
+    </task>
+    <task id="LOCAL-01265" summary="Implementação do framework de jogos;&#10;Adição do jogo &quot;jogo da velha&quot;;">
+      <created>1590771867958</created>
+      <option name="number" value="01265" />
+      <option name="presentableId" value="LOCAL-01265" />
+      <option name="project" value="LOCAL" />
+      <updated>1590771867958</updated>
+    </task>
+    <option name="localTasksCounter" value="1266" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -941,12 +941,12 @@
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1590771865037">
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1590772075718">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1588632175383" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1590771865037" />
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1590772075718" />
     <state width="247" height="195" key="DatabaseViewActions_Filter" timestamp="1586747901902">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -1033,12 +1033,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1590771761218">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1590771872403">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1588632287059" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1590771761218" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1590771872403" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
