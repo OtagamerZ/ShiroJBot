@@ -83,6 +83,13 @@ public class CrissCross extends Tabletop {
 				Message m = event.getMessage();
 
 				if (chn.getId().equals(getTable().getId()) && u.getId().equals(turn[0].getId()) && (m.getContentRaw().length() == 2 || Helper.containsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender"))) {
+					if (Helper.containsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender")) {
+						Main.getInfo().getAPI().removeEventListener(this);
+						ShiroInfo.getGames().remove(getId());
+						getTable().sendMessage(turn[0].getAsMention() + " venceu!").queue();
+						timeout.cancel(true);
+						return;
+					}
 					try {
 						Spot s = Spot.of(m.getContentRaw());
 
@@ -116,7 +123,7 @@ public class CrissCross extends Tabletop {
 							if (getPlayers().getWinner() != null) {
 								Main.getInfo().getAPI().removeEventListener(this);
 								ShiroInfo.getGames().remove(getId());
-								getTable().sendMessage(turn[0].getAsMention() + " venceu!").addFile(baos.toByteArray(), "board.jpg").complete();
+								getTable().sendMessage(turn[0].getAsMention() + " venceu!").addFile(baos.toByteArray(), "board.jpg").queue();
 								timeout.cancel(true);
 							} else if (fullRows == 3) {
 								Main.getInfo().getAPI().removeEventListener(this);

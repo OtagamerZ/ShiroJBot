@@ -134,7 +134,14 @@ public class Chess extends Tabletop {
 				TextChannel chn = event.getChannel();
 				Message m = event.getMessage();
 
-				if (chn.getId().equals(getTable().getId()) && u.getId().equals(turn[0].getId()) && m.getContentRaw().length() == 5) {
+				if (chn.getId().equals(getTable().getId()) && u.getId().equals(turn[0].getId()) && m.getContentRaw().length() == 5 || Helper.containsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender")) {
+					if (Helper.containsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender")) {
+						Main.getInfo().getAPI().removeEventListener(this);
+						ShiroInfo.getGames().remove(getId());
+						getTable().sendMessage(turn[0].getAsMention() + " venceu, CHECKMATE!! (" + getBoard().getRound() + " turnos)").queue();
+						timeout.cancel(true);
+						return;
+					}
 					try {
 						String[] coords = m.getContentRaw().split(" ");
 
@@ -177,7 +184,7 @@ public class Chess extends Tabletop {
 							if (getPlayers().getWinner() != null) {
 								Main.getInfo().getAPI().removeEventListener(this);
 								ShiroInfo.getGames().remove(getId());
-								getTable().sendMessage(turn[0].getAsMention() + " venceu, CHECKMATE!! (" + getBoard().getRound() + " turnos)").addFile(baos.toByteArray(), "board.jpg").complete();
+								getTable().sendMessage(turn[0].getAsMention() + " venceu, CHECKMATE!! (" + getBoard().getRound() + " turnos)").addFile(baos.toByteArray(), "board.jpg").queue();
 								timeout.cancel(true);
 							} else {
 								turn[0] = getPlayers().nextTurn();
