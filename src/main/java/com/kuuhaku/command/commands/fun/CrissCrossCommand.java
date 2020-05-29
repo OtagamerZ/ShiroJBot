@@ -71,10 +71,12 @@ public class CrissCrossCommand extends Command {
 		}
 
 		Tabletop t = new CrissCross((TextChannel) channel, id, message.getMentionedUsers().get(0), author);
-		ShiroInfo.getGames().put(id, t);
 		channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Jogo da Velha, deseja aceitar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-					if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) t.execute();
+					if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
+						ShiroInfo.getGames().put(id, t);
+						t.execute();
+					}
 				}), false, 60, TimeUnit.SECONDS));
 	}
 }
