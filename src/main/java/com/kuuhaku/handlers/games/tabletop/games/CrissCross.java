@@ -86,7 +86,7 @@ public class CrissCross extends Tabletop {
 					if (Helper.containsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender")) {
 						Main.getInfo().getAPI().removeEventListener(this);
 						ShiroInfo.getGames().remove(getId());
-						getTable().sendMessage(turn[0].getAsMention() + " venceu!").queue();
+						getTable().sendMessage(turn[0].getAsMention() + " desistiu!").queue();
 						timeout.cancel(true);
 						return;
 					}

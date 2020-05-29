@@ -138,7 +138,7 @@ public class Chess extends Tabletop {
 					if (Helper.containsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender")) {
 						Main.getInfo().getAPI().removeEventListener(this);
 						ShiroInfo.getGames().remove(getId());
-						getTable().sendMessage(turn[0].getAsMention() + " venceu, CHECKMATE!! (" + getBoard().getRound() + " turnos)").queue();
+						getTable().sendMessage(turn[0].getAsMention() + " desistiu! (" + getBoard().getRound() + " turnos)").queue();
 						timeout.cancel(true);
 						return;
 					}
