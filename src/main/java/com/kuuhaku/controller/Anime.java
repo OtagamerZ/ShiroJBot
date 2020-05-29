@@ -73,8 +73,13 @@ public class Anime {
 			return getDAData(redir.replace("/anime-info/", ""));
 		}
 
-		JSONObject resposta = new JSONObject(IOUtils.toString(con.getInputStream(), StandardCharsets.UTF_8));
-		if (con.getResponseCode() == HttpURLConnection.HTTP_OK) resposta.put("url", con.getURL().toString());
+		JSONObject resposta = new JSONObject();
+
+		try {
+			resposta = new JSONObject(IOUtils.toString(con.getInputStream(), StandardCharsets.UTF_8));
+			if (con.getResponseCode() == HttpURLConnection.HTTP_OK) resposta.put("url", con.getURL().toString());
+		} catch (IOException ignore) {
+		}
 
 		con.disconnect();
 
