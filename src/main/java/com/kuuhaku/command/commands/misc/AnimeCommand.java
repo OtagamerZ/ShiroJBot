@@ -31,7 +31,6 @@ import org.jetbrains.annotations.NonNls;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 public class AnimeCommand extends Command {
 
@@ -153,7 +152,7 @@ public class AnimeCommand extends Command {
 				channel.sendMessage(eb.build()).queue();
 			} catch (IOException e) {
 				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_anime-not-found")).queue();
-				Helper.logger(this.getClass()).error(e + " | " + Arrays.toString(e.getStackTrace()));
+				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
 		});
 	}
