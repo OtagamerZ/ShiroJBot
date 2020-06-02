@@ -31,6 +31,7 @@ import org.json.JSONObject;
 import java.net.BindException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class WebSocketConfig {
 	private final List<ReadyData> authQueue = new ArrayList<>();
@@ -73,6 +74,10 @@ public class WebSocketConfig {
 	}
 
 	public void queue(ReadyData data) {
-		this.authQueue.add(data);
+		authQueue.add(data);
+	}
+
+	public void sweep() {
+		authQueue.removeIf(r -> TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis()) - TimeUnit.MILLISECONDS.toMinutes(r.getCreatedAt()) >= 5);
 	}
 }
