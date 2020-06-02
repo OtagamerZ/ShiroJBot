@@ -73,15 +73,15 @@ public class ShiroInfo {
 	private static final String default_prefix = DEV ? "dev!" : "s!";
 	private static final String nomeDB = "shiro.sqlite";
 	private static final String niichan = "350836145921327115"; //KuuHaKu
-	private static final ArrayList<String> developers = new ArrayList<String>() {{
+	private static final ArrayList<String> developers = new ArrayList<>() {{
 		add(niichan); //KuuHaKu
 		add("321665807988031495"); //Reydux
 		add("694652893571055746"); //HeyCarlosz
 	}};
-	private static final ArrayList<String> editors = new ArrayList<String>() {{
+	private static final ArrayList<String> editors = new ArrayList<>() {{
 
 	}};
-	private static final ArrayList<String> supports = new ArrayList<String>() {{
+	private static final ArrayList<String> supports = new ArrayList<>() {{
 
 	}};
 	private static final Map<String, Map<String, String>> polls = new HashMap<>();
@@ -91,7 +91,7 @@ public class ShiroInfo {
 	private static final Map<String, KittyCache<String, Message>> messageCache = new HashMap<>();
 	private static final GsonBuilder JSONFactory = new GsonBuilder();
 	private static final LoadingCache<User, Boolean> ratelimit = CacheBuilder.newBuilder().expireAfterWrite(2, TimeUnit.SECONDS).build(
-			new CacheLoader<User, Boolean>() {
+			new CacheLoader<>() {
 				@Override
 				public Boolean load(@NotNull User key) {
 					return false;

@@ -81,17 +81,18 @@ public class DashboardRequest {
 			String session = URLEncoder.encode(Helper.generateToken(u.getId(), 16), StandardCharsets.UTF_8);
 			String t = TokenDAO.verifyToken(user.getString("id"));
 			if (t == null) {
-				http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + ":19006/Unauthorized");
+				http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + ":8200/Unauthorized");
 				http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 				return;
 			}
-			http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + ":19006/Loading?s=" + session);
+			http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + ":8200/Loading?s=" + session);
 			http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 
 			user.put("token", t);
 			Main.getInfo().getServer().queue(new ReadyData(user, session));
+			Main.getInfo().getServer().sweep();
 		} else {
-			http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + ":19006/Unauthorized");
+			http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + ":8200/Unauthorized");
 			http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 		}
 	}
