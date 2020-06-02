@@ -22,6 +22,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.TokenDAO;
+import com.kuuhaku.controller.postgresql.UpvoteDAO;
 import com.kuuhaku.controller.sqlite.PStateDAO;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
@@ -72,6 +73,7 @@ public class DiscordBotsListHandler {
 				eb.addField("Bonus ao seu Exceed", "Adicionalmente, seu Exceed recebeu 5 pontos de influência adicionais!", false);
 			}
 
+			UpvoteDAO.voted(u);
 			chn.sendMessage(eb.build()).queue();
 		} catch (RuntimeException ignore) {
 		}

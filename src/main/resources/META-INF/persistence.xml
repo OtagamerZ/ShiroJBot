@@ -55,6 +55,7 @@
         <class>com.kuuhaku.model.persistent.Couple</class>
         <class>com.kuuhaku.model.persistent.CoupleMultiplier</class>
         <class>com.kuuhaku.handlers.games.disboard.model.PoliticalState</class>
+        <class>com.kuuhaku.controller.postgresql.UpvoteDAO</class>
 
         <properties>
             <!-- dados da conexao -->
