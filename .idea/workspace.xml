@@ -25,13 +25,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_sedmelluq_jda_nas_1_1_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_sedmelluq_lavaplayer_common_1_0_6.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_sedmelluq_udp_queue_1_0_8.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_sedmelluq_jda_nas_1_1_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_sedmelluq_lavaplayer_1_3_49.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_sedmelluq_lavaplayer_common_1_0_6.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_sedmelluq_udp_queue_1_0_8.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/DrawRaffleCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/UpvoteDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Upvote.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_sedmelluq_lavaplayer_1_3_46.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DiscordBotsListHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DiscordBotsListHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -192,24 +198,24 @@
       <recent name="com.kuuhaku.managers.RPGCommandManager" />
       <recent name="com.kuuhaku.managers.CommandManager" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.kuuhaku.command.commands.fun" />
-      <recent name="com.kuuhaku.handlers.games.tabletop.games" />
-      <recent name="com.kuuhaku.handlers.games.tabletop" />
-      <recent name="com.kuuhaku.command.commands.exceed" />
-      <recent name="com.kuuhaku.controller.postgresql" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\pieces" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games\tabletop\pieces" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.controller.postgresql" />
+      <recent name="com.kuuhaku.command.commands.dev" />
+      <recent name="com.kuuhaku.command.commands.fun" />
+      <recent name="com.kuuhaku.handlers.games.tabletop.games" />
+      <recent name="com.kuuhaku.handlers.games.tabletop" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -462,14 +468,8 @@
       <workItem from="1590778908365" duration="3422000" />
       <workItem from="1591027688005" duration="1721000" />
       <workItem from="1591101182340" duration="674000" />
-      <workItem from="1591101864498" duration="1292000" />
-    </task>
-    <task id="LOCAL-01226" summary="Implementação inicial do módulo de dominação territorial">
-      <created>1589985403286</created>
-      <option name="number" value="01226" />
-      <option name="presentableId" value="LOCAL-01226" />
-      <option name="project" value="LOCAL" />
-      <updated>1589985403286</updated>
+      <workItem from="1591101864498" duration="2738000" />
+      <workItem from="1591129922532" duration="1347000" />
     </task>
     <task id="LOCAL-01227" summary="Implementação inicial do módulo de dominação territorial">
       <created>1589985583381</created>
@@ -807,7 +807,14 @@
       <option name="project" value="LOCAL" />
       <updated>1591103041630</updated>
     </task>
-    <option name="localTasksCounter" value="1275" />
+    <task id="LOCAL-01275" summary="Correção de leak na api de autenticação">
+      <created>1591103158904</created>
+      <option name="number" value="01275" />
+      <option name="presentableId" value="LOCAL-01275" />
+      <option name="project" value="LOCAL" />
+      <updated>1591103158904</updated>
+    </task>
+    <option name="localTasksCounter" value="1276" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -900,21 +907,21 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="351" y="47" key="#SQL_Resolution_Scopes/0.0.1366.728@0.0.1366.728" timestamp="1585946066821" />
-    <state x="578" y="282" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog" timestamp="1590070863569">
+    <state x="578" y="282" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog" timestamp="1591130719076">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="578" y="282" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1590070863569" />
+    <state x="578" y="282" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1591130719076" />
     <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1588965558966">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="248" y="33" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1585944592238" />
     <state x="239" y="78" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.768@0.0.1366.768" timestamp="1587921282730" />
     <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1588965558966" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1591102319829">
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1591130263053">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="488" y="67" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1585945441171" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1591102319829" />
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1591130263053" />
     <state x="569" y="296" key="#com.intellij.ide.util.TreeFileChooserDialog" timestamp="1583261031135">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1043,12 +1050,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1591103042806">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1591103192161">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1588632287059" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1591103042806" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1591103192161" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1093,12 +1100,12 @@
     </state>
     <state x="682" y="113" key="extract.method.dialog/0.0.1366.768@0.0.1366.768" timestamp="1582605093359" />
     <state x="448" y="274" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1586896266138" />
-    <state x="501" y="182" width="790" height="658" key="find.popup" timestamp="1591027776268">
+    <state x="501" y="182" width="790" height="658" key="find.popup" timestamp="1591130201835">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="362" y="127" width="643" height="536" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1585937546544" />
     <state x="362" y="134" width="774" height="562" key="find.popup/0.0.1366.768@0.0.1366.768" timestamp="1588044108124" />
-    <state x="501" y="182" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1591027776268" />
+    <state x="501" y="182" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1591130201835" />
     <state x="409" y="157" key="git4idea.merge.GitPullDialog" timestamp="1586743041255">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
