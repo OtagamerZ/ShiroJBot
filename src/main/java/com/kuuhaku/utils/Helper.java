@@ -828,8 +828,8 @@ public class Helper {
 
 	public static String generateToken(String seed, int length) {
 		SecureRandom sr = new SecureRandom();
-		byte[] nameSpace = seed.substring(0, Math.min(seed.length(), length / 2)).getBytes(StandardCharsets.UTF_8);
-		byte[] randomSpace = new byte[length - nameSpace.length];
+		byte[] nameSpace = seed.getBytes(StandardCharsets.UTF_8);
+		byte[] randomSpace = new byte[length];
 		sr.nextBytes(randomSpace);
 
 		return Base64.getEncoder().encodeToString(nameSpace) + "." + Base64.getEncoder().encodeToString(randomSpace);
