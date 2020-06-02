@@ -46,7 +46,6 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.InviteAction;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -833,7 +832,7 @@ public class Helper {
 		byte[] randomSpace = new byte[length - nameSpace.length];
 		sr.nextBytes(randomSpace);
 
-		return Base64.getEncoder().encodeToString(ArrayUtils.addAll(nameSpace, randomSpace));
+		return Base64.getEncoder().encodeToString(nameSpace) + "." + Base64.getEncoder().encodeToString(randomSpace);
 	}
 
 	public static void awaitMessage(User u, TextChannel chn, Callable<Boolean> act) {
