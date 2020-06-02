@@ -24,11 +24,20 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição do jogo &quot;xadrez&quot;">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_SvenWoltmann_color_thief_java_v1_1_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_rollbar_rollbar_api_1_7_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_rollbar_rollbar_java_1_7_2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_SvenWoltmann_color_thief_java_master_SNAPSHOT.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_rollbar_rollbar_api_1_7_1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_rollbar_rollbar_java_1_7_1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/ChessCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/ChessCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/CrissCrossCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/CrissCrossCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/Chess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/Chess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DashboardRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DashboardRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/ReadyData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/ReadyData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/WebSocketConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/WebSocketConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -170,7 +179,7 @@
     <property name="extract.method.default.visibility" value="private" />
     <property name="last.edited.regexp" value="aaaa&#10;aaa" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/pieces" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
@@ -456,21 +465,10 @@
       <workItem from="1590605381458" duration="593000" />
       <workItem from="1590698792410" duration="646000" />
       <workItem from="1590757450107" duration="2400000" />
-      <workItem from="1590778908365" duration="1886000" />
-    </task>
-    <task id="LOCAL-01222" summary="Implementação inicial do módulo de dominação territorial">
-      <created>1589984241413</created>
-      <option name="number" value="01222" />
-      <option name="presentableId" value="LOCAL-01222" />
-      <option name="project" value="LOCAL" />
-      <updated>1589984241414</updated>
-    </task>
-    <task id="LOCAL-01223" summary="Implementação inicial do módulo de dominação territorial">
-      <created>1589984716552</created>
-      <option name="number" value="01223" />
-      <option name="presentableId" value="LOCAL-01223" />
-      <option name="project" value="LOCAL" />
-      <updated>1589984716552</updated>
+      <workItem from="1590778908365" duration="3422000" />
+      <workItem from="1591027688005" duration="1721000" />
+      <workItem from="1591101182340" duration="674000" />
+      <workItem from="1591101864498" duration="978000" />
     </task>
     <task id="LOCAL-01224" summary="Implementação inicial do módulo de dominação territorial">
       <created>1589985104182</created>
@@ -801,7 +799,21 @@
       <option name="project" value="LOCAL" />
       <updated>1590780638310</updated>
     </task>
-    <option name="localTasksCounter" value="1271" />
+    <task id="LOCAL-01271" summary="Adição do jogo &quot;xadrez&quot;">
+      <created>1590780809174</created>
+      <option name="number" value="01271" />
+      <option name="presentableId" value="LOCAL-01271" />
+      <option name="project" value="LOCAL" />
+      <updated>1590780809174</updated>
+    </task>
+    <task id="LOCAL-01272" summary="Adição do jogo &quot;xadrez&quot;">
+      <created>1590780957239</created>
+      <option name="number" value="01272" />
+      <option name="presentableId" value="LOCAL-01272" />
+      <option name="project" value="LOCAL" />
+      <updated>1590780957239</updated>
+    </task>
+    <option name="localTasksCounter" value="1273" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -904,11 +916,11 @@
     <state x="248" y="33" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1585944592238" />
     <state x="239" y="78" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.768@0.0.1366.768" timestamp="1587921282730" />
     <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1588965558966" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1590597862151">
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1591102319829">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="488" y="67" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1585945441171" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1590597862151" />
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1591102319829" />
     <state x="569" y="296" key="#com.intellij.ide.util.TreeFileChooserDialog" timestamp="1583261031135">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -945,12 +957,12 @@
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1590780943363">
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1591102867381">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1588632175383" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1590780943363" />
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1591102867381" />
     <state width="247" height="195" key="DatabaseViewActions_Filter" timestamp="1586747901902">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -965,30 +977,30 @@
     <state x="504" y="188" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1585946052476" />
     <state x="504" y="198" key="FileChooserDialogImpl/0.0.1366.768@0.0.1366.768" timestamp="1585071666306" />
     <state x="620" y="261" key="FileChooserDialogImpl/0.0.1680.1010@0.0.1680.1010" timestamp="1590148932552" />
-    <state width="1637" height="279" key="GridCell.Tab.0.bottom" timestamp="1590591628356">
+    <state width="1637" height="279" key="GridCell.Tab.0.bottom" timestamp="1591101856467">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="179" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1585946331158" />
     <state width="1323" height="230" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1587921284819" />
-    <state width="1637" height="279" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1590591628356" />
-    <state width="1637" height="279" key="GridCell.Tab.0.center" timestamp="1590591628356">
+    <state width="1637" height="279" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1591101856467" />
+    <state width="1637" height="279" key="GridCell.Tab.0.center" timestamp="1591101856467">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="179" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1585946331158" />
     <state width="1323" height="230" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1587921284819" />
-    <state width="1637" height="279" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1590591628356" />
-    <state width="1637" height="279" key="GridCell.Tab.0.left" timestamp="1590591628355">
+    <state width="1637" height="279" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1591101856467" />
+    <state width="1637" height="279" key="GridCell.Tab.0.left" timestamp="1591101856467">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="179" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1585946331158" />
     <state width="1323" height="230" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1587921284819" />
-    <state width="1637" height="279" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1590591628355" />
-    <state width="1637" height="279" key="GridCell.Tab.0.right" timestamp="1590591628356">
+    <state width="1637" height="279" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1591101856467" />
+    <state width="1637" height="279" key="GridCell.Tab.0.right" timestamp="1591101856467">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="179" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1585946331158" />
     <state width="1323" height="230" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1587921284819" />
-    <state width="1637" height="279" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1590591628356" />
+    <state width="1637" height="279" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1591101856467" />
     <state width="1323" height="230" key="GridCell.Tab.1.bottom" timestamp="1587921284835">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -1028,21 +1040,21 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="616" y="30" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1583778436946" />
-    <state x="320" y="80" key="SettingsEditor" timestamp="1588258822798">
+    <state x="320" y="80" key="SettingsEditor" timestamp="1591101742023">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1587956411634" />
-    <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1588258822797" />
+    <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1591101742023" />
     <state width="200" height="318" key="SqlResolveConfigurable" timestamp="1585946065407">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1590780811697">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1590780958809">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1588632287059" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1590780811697" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1590780958809" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1087,12 +1099,12 @@
     </state>
     <state x="682" y="113" key="extract.method.dialog/0.0.1366.768@0.0.1366.768" timestamp="1582605093359" />
     <state x="448" y="274" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1586896266138" />
-    <state x="501" y="182" width="790" height="658" key="find.popup" timestamp="1589984531847">
+    <state x="501" y="182" width="790" height="658" key="find.popup" timestamp="1591027776268">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="362" y="127" width="643" height="536" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1585937546544" />
     <state x="362" y="134" width="774" height="562" key="find.popup/0.0.1366.768@0.0.1366.768" timestamp="1588044108124" />
-    <state x="501" y="182" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1589984531847" />
+    <state x="501" y="182" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1591027776268" />
     <state x="409" y="157" key="git4idea.merge.GitPullDialog" timestamp="1586743041255">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -1106,11 +1118,11 @@
     </state>
     <state x="472" y="17" key="refactoring.ChangeSignatureDialog/0.0.1366.768@0.0.1366.768" timestamp="1585107291304" />
     <state x="581" y="116" key="refactoring.ChangeSignatureDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1583774041973" />
-    <state x="496" y="233" width="672" height="677" key="run.anything.popup" timestamp="1590699091533">
+    <state x="496" y="233" width="672" height="677" key="run.anything.popup" timestamp="1591101456693">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="403" y="177" key="run.anything.popup/0.0.1366.768@0.0.1366.768" timestamp="1585105034445" />
-    <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1590699091533" />
+    <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1591101456693" />
     <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1590080445703">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
