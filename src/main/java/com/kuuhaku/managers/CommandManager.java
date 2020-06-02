@@ -98,6 +98,9 @@ public class CommandManager {
 			add(new AddQuizCommand(
 					"addquiz", new String[]{"addq", "novoquiz"}, getLocale(PT).getString("req_question-opts-correct-prize"), getLocale(PT).getString("cmd_add-quiz"), DEV, false
 			));
+			add(new DrawRaffleCommand(
+					"rifa", new String[]{"raffle"}, getLocale(PT).getString("req_period"), getLocale(PT).getString("cmd_draw-raffle"), DEV, false
+			));
 
 			//SUPPORT
 			add(new BlockCommand(
