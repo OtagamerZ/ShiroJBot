@@ -141,6 +141,9 @@ public class CommandManager {
 			add(new RelayCommand(
 					"relay", new String[]{"relinfo", "relcon"}, getLocale(PT).getString("cmd_relay"), PARTNER, false
 			));
+			add(new EncryptCommand(
+					"criptografar", new String[]{"crypt", "crpt"}, getLocale(PT).getString("req_key-file"), getLocale(PT).getString("cmd_encrypt"), PARTNER, false
+			));
 
 			//MODERATION
 			add(new RemoveAnswerCommand(
