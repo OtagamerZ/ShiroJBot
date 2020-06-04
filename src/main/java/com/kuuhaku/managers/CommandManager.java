@@ -144,6 +144,9 @@ public class CommandManager {
 			add(new EncryptCommand(
 					"criptografar", new String[]{"crypt", "crpt"}, getLocale(PT).getString("req_key-file"), getLocale(PT).getString("cmd_encrypt"), PARTNER, false
 			));
+			add(new DecryptCommand(
+					"descriptografar", new String[]{"decrypt", "dcrpt"}, getLocale(PT).getString("req_key-file"), getLocale(PT).getString("cmd_decrypt"), PARTNER, false
+			));
 
 			//MODERATION
 			add(new RemoveAnswerCommand(
