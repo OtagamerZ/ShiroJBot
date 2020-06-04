@@ -102,7 +102,7 @@ public class Relay {
 		gm.setAvatar(m.getUser().getAvatarUrl());
 		gm.setContent(msg);
 
-		Main.getInfo().getSockets().getSocket().getBroadcastOperations().sendEvent("chat", gm.toString());
+		Main.getInfo().getSockets().getChat().onMessage(gm.toString(), m.getId());
 		GlobalMessageDAO.saveMessage(gm);
 
 		String exceed = ExceedDAO.getExceed(m.getId());
