@@ -26,8 +26,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/ChatSocket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/ChatSocket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/DashboardSocket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/DashboardSocket.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -460,14 +458,7 @@
       <workItem from="1591101182340" duration="674000" />
       <workItem from="1591101864498" duration="2738000" />
       <workItem from="1591129922532" duration="1403000" />
-      <workItem from="1591276787030" duration="5811000" />
-    </task>
-    <task id="LOCAL-01232" summary="Implementação inicial do módulo de dominação territorial">
-      <created>1589991357417</created>
-      <option name="number" value="01232" />
-      <option name="presentableId" value="LOCAL-01232" />
-      <option name="project" value="LOCAL" />
-      <updated>1589991357417</updated>
+      <workItem from="1591276787030" duration="6453000" />
     </task>
     <task id="LOCAL-01233" summary="Implementação inicial do módulo de dominação territorial">
       <created>1589991395769</created>
@@ -805,7 +796,14 @@
       <option name="project" value="LOCAL" />
       <updated>1591282791701</updated>
     </task>
-    <option name="localTasksCounter" value="1281" />
+    <task id="LOCAL-01281" summary="Migração do Socket.io para websocket puro">
+      <created>1591286913574</created>
+      <option name="number" value="01281" />
+      <option name="presentableId" value="LOCAL-01281" />
+      <option name="project" value="LOCAL" />
+      <updated>1591286913574</updated>
+    </task>
+    <option name="localTasksCounter" value="1282" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1040,12 +1038,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1591282792868">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1591286938255">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1588632287059" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1591282792868" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1591286938255" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
