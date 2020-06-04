@@ -102,7 +102,7 @@ public class Relay {
 		gm.setAvatar(m.getUser().getAvatarUrl());
 		gm.setContent(msg);
 
-		Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("chat", gm.toString());
+		Main.getInfo().getSockets().getSocket().getBroadcastOperations().sendEvent("chat", gm.toString());
 		GlobalMessageDAO.saveMessage(gm);
 
 		String exceed = ExceedDAO.getExceed(m.getId());
@@ -258,7 +258,7 @@ public class Relay {
 			eb.setColor(Helper.getRandomColor());
 		}
 
-		eb.addField("Enviado via aplicativo", "", false);
+		eb.addField("Enviado via dashboard", "", false);
 
 		MessageBuilder mb = new MessageBuilder();
 		mb.setEmbed(eb.build());
