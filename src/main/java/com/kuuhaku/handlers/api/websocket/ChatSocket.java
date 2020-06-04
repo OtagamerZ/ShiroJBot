@@ -29,11 +29,11 @@ import org.java_websocket.server.WebSocketServer;
 import org.json.JSONObject;
 
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ChatSocket extends WebSocketServer {
-	private final List<WebSocket> clients = new ArrayList<>();
+	private final Set<WebSocket> clients = new HashSet<>();
 
 	public ChatSocket(InetSocketAddress address) {
 		super(address);
