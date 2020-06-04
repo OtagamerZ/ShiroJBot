@@ -9,24 +9,12 @@ def decrypt(target, key):
     fb = open(target, "rb").read()
     return f.decrypt(fb)
 
-if len(sys.argv) < 2:
-    print("É necessário informar o arquivo para ser encriptado")
-    exit()
-    
-target = sys.argv[1]
-key = ""
-
 if not os.path.exists(target):
     print("Arquivo não encontrado, verifique se digitou o nome corretamente")
     exit()
 elif not target.endswith(".sbd"):
     print("Arquivo inválido, verifique se digitou o nome do arquivo completo, incluido a extensão (ex: arquivo.txt.sbd)")
     exit()
-
-if os.path.exists("key.sbk"):
-    key = open("key.sbk", "r").read()
-else:
-    print("Arquivo de chave não encontrado, por favor contate KuuHaKu")
 
 if os.path.exists(target.replace("sbd", "hash")):
     hashKey = open(target.replace("sbd", "hash")).read()
