@@ -71,6 +71,7 @@ public class EncryptCommand extends Command {
 					PythonInterpreter py = new PythonInterpreter();
 
 					py.execfile(encode);
+					py.setOut(System.out);
 
 					String encodedContent = py.get("encFile", String.class);
 					String hash = py.get("hashFile", String.class);
