@@ -20,8 +20,18 @@ package com.kuuhaku.command.commands.partner;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NonNls;
+import org.python.util.PythonInterpreter;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.Objects;
 
 public class EncryptCommand extends Command {
 
@@ -43,12 +53,42 @@ public class EncryptCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		/*if (message.getAttachments().size() < 1) {
-
+		if (message.getAttachments().size() < 1) {
+			channel.sendMessage(":x: | Você precisa adicionar um arquivo para criptografar.").queue();
+			return;
+		} else if (args.length < 1) {
+			channel.sendMessage(":x: | Você precisa digitar uma chave para ser usada na criptografia do arquivo.").queue();
+			return;
 		}
 
-		PythonInterpreter py = new PythonInterpreter();
-		py.*/
+		try {
+			File file = File.createTempFile(Base64.getEncoder().encodeToString(author.getId().getBytes(StandardCharsets.UTF_8)), "shr");
+			Message.Attachment att = message.getAttachments().get(0);
+			att.downloadToFile(file).thenAcceptAsync(f -> {
+				try {
+					File encode = new File(Objects.requireNonNull(this.getClass().getClassLoader().getResource("shirocryptor/encrypt.py")).toURI());
+					String fileContent = FileUtils.readFileToString(f, StandardCharsets.UTF_8);
+					PythonInterpreter py = new PythonInterpreter();
+
+					py.set("target", fileContent);
+					py.set("key", args[0]);
+
+					py.exec(FileUtils.readFileToString(encode, StandardCharsets.UTF_8));
+					String encodedContent = py.get("encFile", String.class);
+					String hash = py.get("hashFile", String.class);
+
+					channel.sendMessage("")
+							.addFile(encodedContent.getBytes(StandardCharsets.UTF_8), att.getFileName() + att.getFileExtension() + ".sbd")
+							.addFile(hash.getBytes(StandardCharsets.UTF_8), att.getFileName() + att.getFileExtension() + ".hash")
+							.queue();
+				} catch (IOException | URISyntaxException e) {
+					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				}
+
+			});
+		} catch (IOException e) {
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+		}
 	}
 
 }
