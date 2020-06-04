@@ -23,6 +23,8 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.io.FileUtils;
+import org.jasypt.exceptions.EncryptionInitializationException;
+import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
 import org.jasypt.util.text.StrongTextEncryptor;
 import org.jetbrains.annotations.NonNls;
 
@@ -77,6 +79,8 @@ public class DecryptCommand extends Command {
 							.queue(null, Helper::doNothing);
 				} catch (IOException e) {
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				} catch (EncryptionOperationNotPossibleException | EncryptionInitializationException e) {
+					channel.sendMessage(":x: | Esta não foi a senha usada pra criptografar este arquivo!").queue();
 				}
 			});
 		} catch (IOException e) {
