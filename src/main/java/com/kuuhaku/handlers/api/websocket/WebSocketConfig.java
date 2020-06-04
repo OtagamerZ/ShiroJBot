@@ -18,40 +18,15 @@
 
 package com.kuuhaku.handlers.api.websocket;
 
-import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 
 public class WebSocketConfig {
 	private final ChatSocket chat;
 	private final DashboardSocket dashboard = new DashboardSocket();
-	private final Map<Integer, Boolean> ports = new HashMap<>() {{
-		put(8001, false);
-		put(8002, false);
-		put(8003, false);
-		put(8004, false);
-	}};
 
 	public WebSocketConfig() {
-		LinkedList<Integer> available = ports.keySet().stream().filter(p -> {
-			try {
-				new Socket("127.0.0.1", p);
-				System.out.println("porta " + p + " livre");
-				return true;
-			} catch (IOException ex) {
-				ex.printStackTrace();
-				System.out.println("porta " + p + " ocupada");
-				return false;
-			}
-		}).collect(Collectors.toCollection(LinkedList::new));
-
-		this.chat = new ChatSocket(new InetSocketAddress(available.poll()));
-		Executors.newSingleThreadExecutor().execute(chat::start);
+		this.chat = new ChatSocket(new InetSocketAddress(8001));
+		chat.start();
 	}
 
 	public ChatSocket getChat() {
