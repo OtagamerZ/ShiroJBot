@@ -19,6 +19,7 @@
 package com.kuuhaku.handlers.api.websocket;
 
 import com.kuuhaku.handlers.api.endpoint.ReadyData;
+import com.kuuhaku.utils.Helper;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -57,6 +58,7 @@ public class DashboardSocket extends WebSocketServer {
 
 	@Override
 	public void onStart() {
+		Helper.logger(this.getClass()).info("WebSocket \"dashboard\" iniciado na porta " + this.getPort());
 	}
 
 	public void queue(ReadyData data) {
