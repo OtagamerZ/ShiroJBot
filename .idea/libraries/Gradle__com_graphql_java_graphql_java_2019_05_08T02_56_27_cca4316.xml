@@ -3,7 +3,9 @@
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.graphql-java/graphql-java/2019-05-08T02-56-27-cca4316/856a8bb96d1ac0af0dbfb1fc30aa365c6d83df54/graphql-java-2019-05-08T02-56-27-cca4316.jar!/" />
     </CLASSES>
-    <JAVADOC />
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.graphql-java/graphql-java/2019-05-08T02-56-27-cca4316/3013c3a1cad716ad1a623ad315ca813aa9505eb2/graphql-java-2019-05-08T02-56-27-cca4316-javadoc.jar!/" />
+    </JAVADOC>
     <SOURCES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.graphql-java/graphql-java/2019-05-08T02-56-27-cca4316/a7f00b8cfd1443e7330c71793f5f0b7d21ebd289/graphql-java-2019-05-08T02-56-27-cca4316-sources.jar!/" />
     </SOURCES>

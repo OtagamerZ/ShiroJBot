@@ -3,7 +3,9 @@
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.apis/google-api-services-youtube/v3-rev212-1.25.0/c437ba2ce8aed704f3c672dbc80721f7117ecf61/google-api-services-youtube-v3-rev212-1.25.0.jar!/" />
     </CLASSES>
-    <JAVADOC />
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.apis/google-api-services-youtube/v3-rev212-1.25.0/a6466573aed794cc4201048133cfafbea38936a3/google-api-services-youtube-v3-rev212-1.25.0-javadoc.jar!/" />
+    </JAVADOC>
     <SOURCES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.apis/google-api-services-youtube/v3-rev212-1.25.0/c082d807f5313f8f110a166a67e332aeebec731/google-api-services-youtube-v3-rev212-1.25.0-sources.jar!/" />
     </SOURCES>

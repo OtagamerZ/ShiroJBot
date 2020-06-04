@@ -23,7 +23,7 @@
     <orderEntry type="library" name="Gradle: com.github.SvenWoltmann:color-thief-java:v1.1.2" level="project" />
     <orderEntry type="library" name="Gradle: com.enigmabridge:hibernate4-sqlite-dialect:0.1.2" level="project" />
     <orderEntry type="library" name="Gradle: com.google.apis:google-api-services-youtube:v3-rev212-1.25.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.rollbar:rollbar-java:1.7.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.rollbar:rollbar-java:1.7.3" level="project" />
     <orderEntry type="library" name="Gradle: com.github.liheyuan:simple-emoji-4j:f26d3b39be" level="project" />
     <orderEntry type="library" name="Gradle: org.discordbots:DBL-Java-Library:2.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.fatboyindustrial.gson-javatime-serialisers:gson-javatime-serialisers:1.1.1" level="project" />
@@ -73,6 +73,7 @@
     <orderEntry type="library" name="Gradle: com.github.treeder:kitty-cache:065b8d34e2" level="project" />
     <orderEntry type="library" name="Gradle: org.python:jython-standalone:2.7.1" level="project" />
     <orderEntry type="library" name="Gradle: com.github.kevinsawicki:http-request:6.0" level="project" />
+    <orderEntry type="library" name="Gradle: javax.websocket:javax.websocket-api:1.1" level="project" />
     <orderEntry type="library" name="Gradle: junit:junit:4.12" level="project" />
     <orderEntry type="library" name="Gradle: com.google.api-client:google-api-client:1.25.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.oauth-client:google-oauth-client:1.25.0" level="project" />
@@ -91,7 +92,7 @@
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.module:jackson-module-parameter-names:2.9.9" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.9.9" level="project" />
     <orderEntry type="library" name="Gradle: org.json:json:20180813" level="project" />
-    <orderEntry type="library" name="Gradle: com.rollbar:rollbar-api:1.7.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.rollbar:rollbar-api:1.7.3" level="project" />
     <orderEntry type="library" name="Gradle: javax.transaction:javax.transaction-api:1.3" level="project" />
     <orderEntry type="library" name="Gradle: org.glassfish.jaxb:jaxb-runtime:2.3.1" level="project" />
     <orderEntry type="library" name="Gradle: javax.xml.bind:jaxb-api:2.3.1" level="project" />
