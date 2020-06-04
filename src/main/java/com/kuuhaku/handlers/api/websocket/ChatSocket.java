@@ -40,6 +40,7 @@ public class ChatSocket {
 
 	@OnOpen
 	public void onOpen(Session session) {
+		Helper.logger(this.getClass()).info("Novo client conectado");
 		clients.add(session);
 	}
 
