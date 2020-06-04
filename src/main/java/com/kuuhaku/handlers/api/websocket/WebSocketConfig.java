@@ -44,6 +44,7 @@ public class WebSocketConfig {
 				System.out.println("porta " + p + " livre");
 				return true;
 			} catch (IOException ex) {
+				ex.printStackTrace();
 				System.out.println("porta " + p + " ocupada");
 				return false;
 			}
