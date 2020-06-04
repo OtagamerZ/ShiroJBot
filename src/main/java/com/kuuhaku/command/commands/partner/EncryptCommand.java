@@ -29,6 +29,8 @@ import org.jetbrains.annotations.NonNls;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 public class EncryptCommand extends Command {
@@ -60,10 +62,11 @@ public class EncryptCommand extends Command {
 		}
 
 		StrongTextEncryptor ste = new StrongTextEncryptor();
-		ste.setPassword(args[0]);
 		Message.Attachment att = message.getAttachments().get(0);
 
 		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			ste.setPassword(new String(md.digest(args[0].getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8));
 			att.downloadToFile(File.createTempFile(Base64.getEncoder().encodeToString(author.getId().getBytes(StandardCharsets.UTF_8)), "shr")).thenAcceptAsync(f -> {
 				try {
 					String data = FileUtils.readFileToString(f, StandardCharsets.UTF_8);
@@ -76,7 +79,7 @@ public class EncryptCommand extends Command {
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
 			});
-		} catch (IOException e) {
+		} catch (IOException | NoSuchAlgorithmException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 	}
