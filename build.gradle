@@ -98,7 +98,6 @@ dependencies {
     compile group: 'org.beanshell', name: 'bsh', version: '2.0b5'
     compile group: 'com.github.ygimenez', name: 'PaginationUtils', version: '1.2.0'
     compile group: 'com.github.treeder', name: 'kitty-cache', version: '065b8d34e2'
-    compile group: 'com.corundumstudio.socketio', name: 'netty-socketio', version: '1.7.17'
     compile group: 'org.python', name: 'jython-standalone', version: '2.7.1'
     compile group: 'com.github.kevinsawicki', name: 'http-request', version: '6.0'
     compile group: 'com.sedmelluq', name: 'jda-nas', version: '1.1.0'
