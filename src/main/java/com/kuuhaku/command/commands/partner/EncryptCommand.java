@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.concurrent.Executors;
 
@@ -68,7 +69,7 @@ public class EncryptCommand extends Command {
 		Executors.newSingleThreadExecutor().execute(() -> {
 			try {
 				MessageDigest md = MessageDigest.getInstance("MD5");
-				ste.setPassword(new String(md.digest(args[0].getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8));
+				ste.setPassword(Arrays.toString(md.digest(args[0].getBytes(StandardCharsets.UTF_8))));
 				att.downloadToFile(File.createTempFile(Base64.getEncoder().encodeToString(author.getId().getBytes(StandardCharsets.UTF_8)), "shr")).thenAcceptAsync(f -> {
 					try {
 						String data = FileUtils.readFileToString(f, StandardCharsets.UTF_8);
