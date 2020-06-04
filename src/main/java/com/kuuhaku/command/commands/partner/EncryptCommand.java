@@ -28,7 +28,6 @@ import org.python.util.PythonInterpreter;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Objects;
@@ -66,22 +65,24 @@ public class EncryptCommand extends Command {
 			Message.Attachment att = message.getAttachments().get(0);
 			att.downloadToFile(file).thenAcceptAsync(f -> {
 				try {
-					File encode = new File(Objects.requireNonNull(this.getClass().getClassLoader().getResource("shirocryptor/encrypt.py")).toURI());
+					System.out.println(FileUtils.readFileToString(f, StandardCharsets.UTF_8));
+					File encode = new File(Objects.requireNonNull(this.getClass().getClassLoader().getResource("shirocryptor/encrypt.py")).getPath());
 					String fileContent = FileUtils.readFileToString(f, StandardCharsets.UTF_8);
 					PythonInterpreter py = new PythonInterpreter();
 
 					py.set("target", fileContent);
 					py.set("key", args[0]);
+					System.out.println(FileUtils.readFileToString(encode, StandardCharsets.UTF_8));
 
 					py.exec(FileUtils.readFileToString(encode, StandardCharsets.UTF_8));
 					String encodedContent = py.get("encFile", String.class);
 					String hash = py.get("hashFile", String.class);
 
-					channel.sendMessage("")
+					channel.sendMessage("Aqui está seu arquivo criptografado com a chave `" + args[0] + "` (não perca ela, é a única forma de descriptografar o arquivo).")
 							.addFile(encodedContent.getBytes(StandardCharsets.UTF_8), att.getFileName() + att.getFileExtension() + ".sbd")
 							.addFile(hash.getBytes(StandardCharsets.UTF_8), att.getFileName() + att.getFileExtension() + ".hash")
 							.queue();
-				} catch (IOException | URISyntaxException e) {
+				} catch (IOException e) {
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
 
