@@ -31,31 +31,34 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-public class EncryptCommand extends Command {
+public class DecryptCommand extends Command {
 
-	public EncryptCommand(@NonNls String name, String description, Category category, boolean requiresMM) {
+	public DecryptCommand(@NonNls String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
 	}
 
-	public EncryptCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
+	public DecryptCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
 		super(name, aliases, description, category, requiresMM);
 	}
 
-	public EncryptCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+	public DecryptCommand(String name, String usage, String description, Category category, boolean requiresMM) {
 		super(name, usage, description, category, requiresMM);
 	}
 
-	public EncryptCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+	public DecryptCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
 		super(name, aliases, usage, description, category, requiresMM);
 	}
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (message.getAttachments().size() < 1) {
-			channel.sendMessage(":x: | Você precisa adicionar um arquivo para criptografar.").queue();
+			channel.sendMessage(":x: | Você precisa adicionar um arquivo para descriptografado.").queue();
 			return;
 		} else if (args.length < 1) {
-			channel.sendMessage(":x: | Você precisa digitar uma chave para ser usada na criptografia do arquivo.").queue();
+			channel.sendMessage(":x: | Você precisa digitar uma chave para descriptografar o arquivo.").queue();
+			return;
+		} else if (!message.getAttachments().get(0).getFileExtension().equals("shr")) {
+			channel.sendMessage(":x: | Este não é um arquivo que foi criptografado por mim!").queue();
 			return;
 		}
 
@@ -67,9 +70,9 @@ public class EncryptCommand extends Command {
 			att.downloadToFile(File.createTempFile(Base64.getEncoder().encodeToString(author.getId().getBytes(StandardCharsets.UTF_8)), "shr")).thenAcceptAsync(f -> {
 				try {
 					String data = FileUtils.readFileToString(f, StandardCharsets.UTF_8);
-					byte[] encData = ste.encrypt(data).getBytes(StandardCharsets.UTF_8);
+					byte[] encData = ste.decrypt(data).getBytes(StandardCharsets.UTF_8);
 
-					channel.sendMessage("Aqui está seu arquivo criptografado com a chave `" + args[0] + "`")
+					channel.sendMessage("Aqui está seu arquivo descriptografado com a chave `" + args[0] + "`")
 							.addFile(encData, att.getFileName() + "." + att.getFileExtension() + ".shr")
 							.queue(null, Helper::doNothing);
 				} catch (IOException e) {
