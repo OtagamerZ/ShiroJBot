@@ -28,9 +28,9 @@ import org.python.util.PythonInterpreter;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.Objects;
 
 public class EncryptCommand extends Command {
 
@@ -65,20 +65,15 @@ public class EncryptCommand extends Command {
 			Message.Attachment att = message.getAttachments().get(0);
 			att.downloadToFile(file).thenAcceptAsync(f -> {
 				try {
-					File encode = new File(Objects.requireNonNull(this.getClass().getClassLoader().getResource("shirocryptor/encrypt.py")).getPath());
+					InputStream encode = this.getClass().getClassLoader().getResourceAsStream("shirocryptor/encrypt.py");
 					String fileContent = FileUtils.readFileToString(f, StandardCharsets.UTF_8);
+					PythonInterpreter.initialize(System.getProperties(), System.getProperties(), new String[]{fileContent, args[0]});
 					PythonInterpreter py = new PythonInterpreter();
 
-					py.set("target", fileContent);
-					py.set("key", args[0]);
-
-					py.exec(FileUtils.readFileToString(encode, StandardCharsets.UTF_8));
+					py.execfile(encode);
 
 					String encodedContent = py.get("encFile", String.class);
 					String hash = py.get("hashFile", String.class);
-
-					System.out.println(encodedContent);
-					System.out.println(hash);
 
 					channel.sendMessage("Aqui está seu arquivo criptografado com a chave `" + args[0] + "` (não perca ela, é a única forma de descriptografar o arquivo).")
 							.addFile(encodedContent.getBytes(StandardCharsets.UTF_8), att.getFileName() + att.getFileExtension() + ".sbd")
