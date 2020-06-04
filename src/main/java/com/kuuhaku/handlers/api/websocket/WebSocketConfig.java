@@ -27,6 +27,7 @@ public class WebSocketConfig {
 	public WebSocketConfig() {
 		this.chat = new ChatSocket(new InetSocketAddress(8001));
 		this.dashboard = new DashboardSocket(new InetSocketAddress(8002));
+
 		chat.start();
 		dashboard.start();
 	}
