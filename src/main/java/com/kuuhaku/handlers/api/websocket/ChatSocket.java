@@ -23,36 +23,37 @@ import com.kuuhaku.controller.postgresql.GlobalMessageDAO;
 import com.kuuhaku.model.persistent.GlobalMessage;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
+import org.java_websocket.WebSocket;
+import org.java_websocket.handshake.ClientHandshake;
+import org.java_websocket.server.WebSocketServer;
 import org.json.JSONObject;
 
-import javax.websocket.OnClose;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
-import javax.websocket.server.PathParam;
-import javax.websocket.server.ServerEndpoint;
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 
-@ServerEndpoint("/chat/{uid}")
-public class ChatSocket {
-	List<Session> clients = new ArrayList<>();
+public class ChatSocket extends WebSocketServer {
+	private final List<WebSocket> clients = new ArrayList<>();
 
-	@OnOpen
-	public void onOpen(Session session) {
+	public ChatSocket(InetSocketAddress address) {
+		super(address);
+	}
+
+	@Override
+	public void onOpen(WebSocket conn, ClientHandshake handshake) {
 		Helper.logger(this.getClass()).info("Novo client conectado");
-		clients.add(session);
+		clients.add(conn);
 	}
 
-	@OnClose
-	public void onClose(Session session) {
-		clients.remove(session);
+	@Override
+	public void onClose(WebSocket conn, int code, String reason, boolean remote) {
+		clients.remove(conn);
 	}
 
-	@OnMessage
-	public void onMessage(String payload, @PathParam("uid") String uid) {
+	@Override
+	public void onMessage(WebSocket conn, String payload) {
 		JSONObject data = new JSONObject(payload);
-		User u = Main.getInfo().getUserByID(uid);
+		User u = Main.getInfo().getUserByID(data.getString("uid"));
 
 		Helper.logger(this.getClass()).debug("Mensagem enviada por " + u.getName() + ": " + data.getString("content"));
 
@@ -67,6 +68,16 @@ public class ChatSocket {
 
 		Main.getRelay().relayMessage(gm);
 
-		clients.forEach(s -> s.getAsyncRemote().sendText(payload));
+		clients.forEach(s -> s.send(payload));
+	}
+
+	@Override
+	public void onError(WebSocket conn, Exception ex) {
+
+	}
+
+	@Override
+	public void onStart() {
+		Helper.logger(this.getClass()).info("WebSocket \"chat\" iniciado na porta " + this.getPort());
 	}
 }
