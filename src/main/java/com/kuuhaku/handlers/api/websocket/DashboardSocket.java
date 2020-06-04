@@ -19,30 +19,44 @@
 package com.kuuhaku.handlers.api.websocket;
 
 import com.kuuhaku.handlers.api.endpoint.ReadyData;
-import com.kuuhaku.utils.Helper;
+import org.java_websocket.WebSocket;
+import org.java_websocket.handshake.ClientHandshake;
+import org.java_websocket.server.WebSocketServer;
 
-import javax.websocket.OnMessage;
-import javax.websocket.Session;
-import javax.websocket.server.ServerEndpoint;
-import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-@ServerEndpoint("/socket/require")
-public class DashboardSocket {
+public class DashboardSocket extends WebSocketServer {
 	private final List<ReadyData> authQueue = new ArrayList<>();
 
-	@OnMessage
-	public void onMessage(String message, Session session) {
+	public DashboardSocket(InetSocketAddress address) {
+		super(address);
+	}
+
+	@Override
+	public void onOpen(WebSocket conn, ClientHandshake handshake) {
+	}
+
+	@Override
+	public void onClose(WebSocket conn, int code, String reason, boolean remote) {
+	}
+
+	@Override
+	public void onMessage(WebSocket conn, String message) {
 		authQueue.stream().filter(rd -> rd.getSessionId().equalsIgnoreCase(message)).findFirst().ifPresent(rd -> {
-			try {
-				session.getBasicRemote().sendText(rd.getData().toString());
-				authQueue.remove(rd);
-			} catch (IOException e) {
-				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-			}
+			conn.send(rd.getData().toString());
+			authQueue.remove(rd);
 		});
+	}
+
+	@Override
+	public void onError(WebSocket conn, Exception ex) {
+	}
+
+	@Override
+	public void onStart() {
 	}
 
 	public void queue(ReadyData data) {
