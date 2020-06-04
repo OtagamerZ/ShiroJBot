@@ -34,7 +34,7 @@ import javax.websocket.server.ServerEndpoint;
 import java.util.ArrayList;
 import java.util.List;
 
-@ServerEndpoint("/ws/chat/{uid}")
+@ServerEndpoint("/chat/{uid}")
 public class ChatSocket {
 	List<Session> clients = new ArrayList<>();
 
