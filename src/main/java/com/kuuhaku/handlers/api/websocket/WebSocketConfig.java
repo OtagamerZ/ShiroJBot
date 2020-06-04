@@ -38,7 +38,7 @@ public class WebSocketConfig {
 	);
 
 	public WebSocketConfig() {
-		ports.entrySet().forEach(e -> {
+		ports.entrySet().iterator().forEachRemaining(e -> {
 			try {
 				new Socket("localhost", e.getKey());
 				e.setValue(true);
