@@ -65,7 +65,7 @@ public class ChatSocket extends WebSocketServer {
 
 		GlobalMessageDAO.saveMessage(gm);
 
-		Main.getRelay().relayMessage(gm);
+		if (conn != null) Main.getRelay().relayMessage(gm);
 
 		clients.forEach(s -> s.send(payload));
 	}
