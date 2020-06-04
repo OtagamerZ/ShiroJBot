@@ -23,12 +23,11 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.io.FileUtils;
+import org.jasypt.util.text.StrongTextEncryptor;
 import org.jetbrains.annotations.NonNls;
-import org.python.util.PythonInterpreter;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
@@ -60,30 +59,22 @@ public class EncryptCommand extends Command {
 			return;
 		}
 
+		StrongTextEncryptor ste = new StrongTextEncryptor();
+		ste.setPassword(args[0]);
+		Message.Attachment att = message.getAttachments().get(0);
+
 		try {
-			File file = File.createTempFile(Base64.getEncoder().encodeToString(author.getId().getBytes(StandardCharsets.UTF_8)), "shr");
-			Message.Attachment att = message.getAttachments().get(0);
-			att.downloadToFile(file).thenAcceptAsync(f -> {
+			att.downloadToFile(File.createTempFile(Base64.getEncoder().encodeToString(author.getId().getBytes(StandardCharsets.UTF_8)), "shr")).thenAcceptAsync(f -> {
 				try {
-					InputStream encode = this.getClass().getClassLoader().getResourceAsStream("shirocryptor/encrypt.py");
-					String fileContent = FileUtils.readFileToString(f, StandardCharsets.UTF_8);
-					PythonInterpreter.initialize(System.getProperties(), System.getProperties(), new String[]{fileContent, args[0]});
-					PythonInterpreter py = new PythonInterpreter();
+					String data = FileUtils.readFileToString(f, StandardCharsets.UTF_8);
+					byte[] encData = ste.encrypt(data).getBytes(StandardCharsets.UTF_8);
 
-					py.execfile(encode);
-					py.setOut(System.out);
-
-					String encodedContent = py.get("encFile", String.class);
-					String hash = py.get("hashFile", String.class);
-
-					channel.sendMessage("Aqui está seu arquivo criptografado com a chave `" + args[0] + "` (não perca ela, é a única forma de descriptografar o arquivo).")
-							.addFile(encodedContent.getBytes(StandardCharsets.UTF_8), att.getFileName() + att.getFileExtension() + ".sbd")
-							.addFile(hash.getBytes(StandardCharsets.UTF_8), att.getFileName() + att.getFileExtension() + ".hash")
+					channel.sendMessage("Aqui está seu arquivo criptografado com a chave `" + args[0] + "`")
+							.addFile(encData, att.getFileName() + "." + att.getFileExtension() + ".shr")
 							.queue();
 				} catch (IOException e) {
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
-
 			});
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
