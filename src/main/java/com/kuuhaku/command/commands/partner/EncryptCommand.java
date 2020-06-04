@@ -70,7 +70,7 @@ public class EncryptCommand extends Command {
 					byte[] encData = ste.encrypt(data).getBytes(StandardCharsets.UTF_8);
 
 					channel.sendMessage("Aqui está seu arquivo criptografado com a chave `" + args[0] + "`")
-							.addFile(encData, att.getFileName() + "." + att.getFileExtension() + ".shr")
+							.addFile(encData, att.getFileName() + ".shr")
 							.queue(null, Helper::doNothing);
 				} catch (IOException e) {
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);

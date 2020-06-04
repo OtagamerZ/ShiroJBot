@@ -25,9 +25,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/DecryptCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/EncryptCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/EncryptCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -460,14 +458,7 @@
       <workItem from="1591101182340" duration="674000" />
       <workItem from="1591101864498" duration="2738000" />
       <workItem from="1591129922532" duration="1403000" />
-      <workItem from="1591276787030" duration="18804000" />
-    </task>
-    <task id="LOCAL-01258" summary="Implementação do framework de jogos;&#10;Adição do jogo &quot;jogo da velha&quot;;">
-      <created>1590595617018</created>
-      <option name="number" value="01258" />
-      <option name="presentableId" value="LOCAL-01258" />
-      <option name="project" value="LOCAL" />
-      <updated>1590595617018</updated>
+      <workItem from="1591276787030" duration="19164000" />
     </task>
     <task id="LOCAL-01259" summary="Implementação do framework de jogos;&#10;Adição do jogo &quot;jogo da velha&quot;;">
       <created>1590597659515</created>
@@ -805,7 +796,14 @@
       <option name="project" value="LOCAL" />
       <updated>1591300438153</updated>
     </task>
-    <option name="localTasksCounter" value="1307" />
+    <task id="LOCAL-01307" summary="Remoção do ShiroCryptor;&#10;Adição de outro encriptador;">
+      <created>1591300950177</created>
+      <option name="number" value="01307" />
+      <option name="presentableId" value="LOCAL-01307" />
+      <option name="project" value="LOCAL" />
+      <updated>1591300950177</updated>
+    </task>
+    <option name="localTasksCounter" value="1308" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1040,12 +1038,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1591300485649">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1591300951687">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1588632287059" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1591300485649" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1591300951687" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
