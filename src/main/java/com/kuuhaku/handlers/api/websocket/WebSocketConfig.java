@@ -18,66 +18,15 @@
 
 package com.kuuhaku.handlers.api.websocket;
 
-import com.corundumstudio.socketio.Configuration;
-import com.corundumstudio.socketio.SocketIOServer;
-import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.GlobalMessageDAO;
-import com.kuuhaku.handlers.api.endpoint.ReadyData;
-import com.kuuhaku.model.persistent.GlobalMessage;
-import com.kuuhaku.utils.Helper;
-import net.dv8tion.jda.api.entities.User;
-import org.json.JSONObject;
-
-import java.net.BindException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 public class WebSocketConfig {
-	private final List<ReadyData> authQueue = new ArrayList<>();
-	private final SocketIOServer socket;
+	private final ChatSocket chat = new ChatSocket();
+	private final DashboardSocket dashboard = new DashboardSocket();
 
-	public WebSocketConfig(int port) throws BindException {
-		Configuration config = new Configuration();
-		config.setHostname("127.0.0.1");
-		config.setPort(port);
-
-		socket = new SocketIOServer(config);
-		socket.addEventListener("chatevent", JSONObject.class, (client, data, ackSender) -> {
-			User u = Main.getInfo().getUserByID(data.getString("userID"));
-
-			Helper.logger(this.getClass()).info("Mensagem enviada por " + u.getName() + ": " + data.getString("content"));
-
-			GlobalMessage gm = new GlobalMessage();
-
-			gm.setUserId(u.getId());
-			gm.setName(u.getName());
-			gm.setAvatar(u.getAvatarUrl());
-			gm.setContent(data.getString("content"));
-
-			GlobalMessageDAO.saveMessage(gm);
-
-			Main.getRelay().relayMessage(gm);
-
-			socket.getBroadcastOperations().sendEvent("chat", gm.toString());
-		});
-		socket.addEventListener("require", String.class, (client, data, ackSender) ->
-				authQueue.stream().filter(rd -> rd.getSessionId().equalsIgnoreCase(data)).findFirst().ifPresent(rd -> {
-					Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("auth_" + data, rd.getData().toString());
-					authQueue.remove(rd);
-				}));
-		socket.start();
+	public ChatSocket getChat() {
+		return chat;
 	}
 
-	public SocketIOServer getSocket() {
-		return socket;
-	}
-
-	public void queue(ReadyData data) {
-		authQueue.add(data);
-	}
-
-	public void sweep() {
-		authQueue.removeIf(r -> TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis()) - TimeUnit.MILLISECONDS.toMinutes(r.getCreatedAt()) >= 5);
+	public DashboardSocket getDashboard() {
+		return dashboard;
 	}
 }

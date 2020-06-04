@@ -32,7 +32,6 @@ import com.kuuhaku.model.persistent.PixelCanvas;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.spaceprogram.kittycache.KittyCache;
-import io.socket.client.Socket;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -110,8 +109,7 @@ public class ShiroInfo {
 	private JDA api = null;
 	private long startTime = 0;
 	private String winner = "";
-	private WebSocketConfig server;
-	private Socket client = null;
+	private WebSocketConfig sockets;
 	private final DiscordBotListAPI dblApi = DBLToken == null ? null : new DiscordBotListAPI.Builder()
 			.token(DBLToken)
 			.botId("572413282653306901")
@@ -312,20 +310,11 @@ public class ShiroInfo {
 		return CanvasDAO.getCanvas();
 	}
 
-	public WebSocketConfig getServer() {
-		return server;
+	public WebSocketConfig getSockets() {
+		return sockets;
 	}
 
-	public void setServer(WebSocketConfig server) {
-		this.server = server;
-	}
-
-	public Socket getClient() {
-		return client;
-	}
-
-	public Socket setClient(Socket client) {
-		this.client = client;
-		return this.client;
+	public void setSockets(WebSocketConfig server) {
+		this.sockets = server;
 	}
 }

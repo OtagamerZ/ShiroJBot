@@ -27,6 +27,7 @@ buildscript {
 
 plugins {
     id 'java'
+    id 'idea'
     id 'application'
     id "com.github.johnrengelman.shadow" version "4.0.2"
     id "org.springframework.boot" version "2.1.6.RELEASE"
@@ -101,6 +102,7 @@ dependencies {
     compile group: 'org.python', name: 'jython-standalone', version: '2.7.1'
     compile group: 'com.github.kevinsawicki', name: 'http-request', version: '6.0'
     compile group: 'com.sedmelluq', name: 'jda-nas', version: '1.1.0'
+    compile group: 'javax.websocket', name: 'javax.websocket-api', version: '1.1'
     implementation 'com.graphql-java:graphql-java:2019-05-08T02-56-27-cca4316'
 }
 
@@ -112,6 +114,13 @@ shadowJar {
     //noinspection GroovyAssignabilityCheck
     manifest {
         attributes 'Main-Class': 'Main'
+    }
+}
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
     }
 }
 
