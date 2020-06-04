@@ -41,7 +41,6 @@ public class ChatSocket extends WebSocketServer {
 
 	@Override
 	public void onOpen(WebSocket conn, ClientHandshake handshake) {
-		Helper.logger(this.getClass()).info("Novo client conectado");
 		clients.add(conn);
 	}
 
