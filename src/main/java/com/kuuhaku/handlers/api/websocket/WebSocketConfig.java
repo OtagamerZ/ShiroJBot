@@ -21,6 +21,7 @@ package com.kuuhaku.handlers.api.websocket;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Objects;
@@ -30,20 +31,20 @@ import java.util.stream.Collectors;
 public class WebSocketConfig {
 	private final ChatSocket chat;
 	private final DashboardSocket dashboard = new DashboardSocket();
-	private final Map<Integer, Boolean> ports = Map.of(
-			8001, false,
-			8002, false,
-			8003, false,
-			8004, false
-	);
+	private final Map<Integer, Boolean> ports = new HashMap<>() {{
+		put(8001, false);
+		put(8002, false);
+		put(8003, false);
+		put(8004, false);
+	}};
 
 	public WebSocketConfig() {
 		for (Map.Entry<Integer, Boolean> e : ports.entrySet()) {
 			try {
 				new Socket("localhost", e.getKey());
-				e.setValue(true);
+				ports.put(e.getKey(), true);
 			} catch (IOException ex) {
-				e.setValue(false);
+				ports.put(e.getKey(), false);
 			}
 		}
 
