@@ -24,7 +24,6 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
@@ -39,18 +38,18 @@ public class WebSocketConfig {
 	}};
 
 	public WebSocketConfig() {
-		for (Map.Entry<Integer, Boolean> e : ports.entrySet()) {
+		LinkedList<Integer> available = ports.keySet().stream().filter(p -> {
 			try {
-				new Socket("localhost", e.getKey());
-				ports.put(e.getKey(), true);
+				new Socket("localhost", p);
+				System.out.println("porta " + p + " livre");
+				return true;
 			} catch (IOException ex) {
-				ports.put(e.getKey(), false);
+				System.out.println("porta " + p + " ocupada");
+				return false;
 			}
-		}
+		}).collect(Collectors.toCollection(LinkedList::new));
 
-		LinkedList<Integer> available = ports.entrySet().stream().filter(Map.Entry::getValue).map(Map.Entry::getKey).collect(Collectors.toCollection(LinkedList::new));
-
-		this.chat = new ChatSocket(new InetSocketAddress(Objects.requireNonNull(available.poll())));
+		this.chat = new ChatSocket(new InetSocketAddress(available.poll()));
 		Executors.newSingleThreadExecutor().execute(chat::start);
 	}
 
