@@ -73,7 +73,7 @@ public class DecryptCommand extends Command {
 					byte[] encData = ste.decrypt(data).getBytes(StandardCharsets.UTF_8);
 
 					channel.sendMessage("Aqui está seu arquivo descriptografado com a chave `" + args[0] + "`")
-							.addFile(encData, att.getFileName() + "." + att.getFileExtension() + ".shr")
+							.addFile(encData, att.getFileName().replace(".shr", ""))
 							.queue(null, Helper::doNothing);
 				} catch (IOException e) {
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
