@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-@ServerEndpoint("/ws/require")
+@ServerEndpoint("/require")
 public class DashboardSocket {
 	private final List<ReadyData> authQueue = new ArrayList<>();
 
