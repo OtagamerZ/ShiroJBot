@@ -37,7 +37,6 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
-import io.socket.client.IO;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -51,8 +50,6 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.springframework.boot.SpringApplication;
 
 import javax.persistence.NoResultException;
-import java.net.BindException;
-import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -127,23 +124,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		AudioSourceManagers.registerLocalSource(getInfo().getApm());
 
 		SpringApplication.run(Application.class, args);
-
-		boolean apiOnline = false;
-		int tries = 0;
-		while (!apiOnline) {
-			try {
-				info.setServer(new WebSocketConfig(8000 + tries));
-				info.setClient(IO.socket("http://localhost/")).connect();
-				apiOnline = true;
-			} catch (URISyntaxException | BindException e) {
-				Helper.logger(Main.class).error("Erro ao conectar client: " + e + " | " + e.getStackTrace()[0]);
-				try {
-					Thread.sleep(4000);
-					tries++;
-				} catch (InterruptedException ignore) {
-				}
-			}
-		}
+		info.setSockets(new WebSocketConfig());
 		finishStartUp();
 	}
 

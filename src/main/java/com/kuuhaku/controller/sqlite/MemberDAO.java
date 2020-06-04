@@ -83,7 +83,7 @@ public class MemberDAO {
 
 		em.close();
 
-		Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("update", "{\"uid\": \"" + u.getId() + "\", \"gid\": \"" + u.getGuild().getId() + "\"}");
+		Main.getInfo().getSockets().getSocket().getBroadcastOperations().sendEvent("update", "{\"uid\": \"" + u.getId() + "\", \"gid\": \"" + u.getGuild().getId() + "\"}");
 	}
 
 	public static void updateMemberConfigs(Member m) {
@@ -95,7 +95,7 @@ public class MemberDAO {
 
 		em.close();
 
-		Main.getInfo().getServer().getSocket().getBroadcastOperations().sendEvent("update", "{\"uid\": \"" + m.getMid() + "\", \"gid\": \"" + m.getSid() + "\"}");
+		Main.getInfo().getSockets().getSocket().getBroadcastOperations().sendEvent("update", "{\"uid\": \"" + m.getMid() + "\", \"gid\": \"" + m.getSid() + "\"}");
 	}
 
 	@SuppressWarnings("unchecked")
