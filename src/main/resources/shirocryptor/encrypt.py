@@ -9,5 +9,5 @@ def encrypt(t, k):
     fb = t.encode("UTF-8")
     return f.encrypt(fb)
 
-encFile = encrypt(sys.argv[0], sys.argv[1]).decode("UTF-8")
-hashFile = hashlib.md5(content).hexdigest()
+encFile = encrypt(target, key).decode("UTF-8")
+hashFile = hashlib.md5(encFile).hexdigest()
