@@ -40,7 +40,7 @@ public class WebSocketConfig {
 	public WebSocketConfig() {
 		LinkedList<Integer> available = ports.keySet().stream().filter(p -> {
 			try {
-				new Socket("localhost", p);
+				new Socket("127.0.0.1", p);
 				System.out.println("porta " + p + " livre");
 				return true;
 			} catch (IOException ex) {
