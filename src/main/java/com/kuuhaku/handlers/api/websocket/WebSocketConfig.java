@@ -38,14 +38,14 @@ public class WebSocketConfig {
 	);
 
 	public WebSocketConfig() {
-		ports.entrySet().iterator().forEachRemaining(e -> {
+		for (Map.Entry<Integer, Boolean> e : ports.entrySet()) {
 			try {
 				new Socket("localhost", e.getKey());
 				e.setValue(true);
 			} catch (IOException ex) {
 				e.setValue(false);
 			}
-		});
+		}
 
 		LinkedList<Integer> available = ports.entrySet().stream().filter(Map.Entry::getValue).map(Map.Entry::getKey).collect(Collectors.toCollection(LinkedList::new));
 
