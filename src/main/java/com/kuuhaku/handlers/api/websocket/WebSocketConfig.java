@@ -22,11 +22,13 @@ import java.net.InetSocketAddress;
 
 public class WebSocketConfig {
 	private final ChatSocket chat;
-	private final DashboardSocket dashboard = new DashboardSocket();
+	private final DashboardSocket dashboard;
 
 	public WebSocketConfig() {
 		this.chat = new ChatSocket(new InetSocketAddress(8001));
+		this.dashboard = new DashboardSocket(new InetSocketAddress(8002));
 		chat.start();
+		dashboard.start();
 	}
 
 	public ChatSocket getChat() {
