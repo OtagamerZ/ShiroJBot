@@ -36,20 +36,20 @@ public enum Tag {
 	NIICHAN("icons/niichan.png", TagIcons.NIICHAN, "Desenvolvedor inicial da Shiro, nominalmente KuuHaKu.",
 			(user, member) -> Helper.hasPermission(member, PrivilegeLevel.NIICHAN)),
 
-	SUPORTE("icons/support.png", TagIcons.SUPPORT, "Equipe de suporte da Shiro.",
-			(user, member) -> Helper.hasPermission(member, PrivilegeLevel.SUPPORT)),
-
 	DESENVOLVEDOR("icons/dev.png", TagIcons.DEV, "Equipe de desenvolvimento da Shiro.",
 			(user, member) -> Helper.hasPermission(member, PrivilegeLevel.DEV)),
+
+	SUPORTE("icons/support.png", TagIcons.SUPPORT, "Equipe de suporte da Shiro.",
+			(user, member) -> Helper.hasPermission(member, PrivilegeLevel.SUPPORT)),
 
 	REDATOR("icons/writer.png", TagIcons.EDITOR, "Equipe de redação da Shiro.",
 			(user, member) -> false),
 
-	LEITOR("icons/reader.png", TagIcons.READER, "Você leu as regras, que bom!",
-			(user, member) -> TagDAO.getTagById(user.getId()).isReader()),
-
 	MODERADOR("icons/mod.png", TagIcons.MODERATOR, "Equipe de moderação desse servidor.",
 			(user, member) -> Helper.hasPermission(member, PrivilegeLevel.MOD)),
+
+	LEITOR("icons/reader.png", TagIcons.READER, "Você leu as regras, que bom!",
+			(user, member) -> TagDAO.getTagById(user.getId()).isReader()),
 
 	VERIFICADO("icons/verified.png", TagIcons.VERIFIED, "Usuário com conduta exemplar e identidade verificada.",
 			(user, member) -> TagDAO.getTagById(user.getId()).isVerified()),
