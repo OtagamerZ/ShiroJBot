@@ -27,6 +27,7 @@ import java.util.List;
 public class Players {
 	private final LinkedList<User> turn;
 	private User winner = null;
+	private User loser = null;
 
 	public Players(User... players) {
 		this.turn = new LinkedList<>(Arrays.asList(players));
@@ -46,8 +47,13 @@ public class Players {
 		return winner;
 	}
 
+	public User getLoser() {
+		return loser;
+	}
+
 	public void setWinner(User winner) {
 		this.winner = winner;
+		this.loser = turn.getFirst() == winner ? turn.getFirst() : turn.getLast();
 	}
 
 	public List<User> getUsers() {

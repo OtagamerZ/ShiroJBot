@@ -25,9 +25,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Tag.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/icons/half_millionaire.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/icons/millionaire.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/DecryptCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/DecryptCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/EncryptCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/EncryptCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/CrissCrossCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/CrissCrossCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/SlotsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/SlotsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/MyTagsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/MyTagsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/TagsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/TagsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/misc/TransferCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/misc/TransferCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/CompileCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/CompileCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Relay.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Relay.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/entity/Players.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/entity/Players.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/Chess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/Chess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/CrissCross.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/CrissCross.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/interfaces/GameListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/interfaces/GameListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Tags.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Tags.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/TagIcons.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/TagIcons.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -168,7 +183,7 @@
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="TEXT" />
     <property name="extract.method.default.visibility" value="private" />
     <property name="last.edited.regexp" value="aaaa&#10;aaa" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/shirocryptor" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/icons" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -188,10 +203,12 @@
       <recent name="com.kuuhaku.managers.RPGCommandManager" />
       <recent name="com.kuuhaku.managers.CommandManager" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\icons" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shirocryptor" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\pieces" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games\tabletop\pieces" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.kuuhaku.command.commands.partner" />
@@ -200,12 +217,10 @@
       <recent name="com.kuuhaku.command.commands.fun" />
       <recent name="com.kuuhaku.handlers.games.tabletop.games" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shirocryptor" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\pieces" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games\tabletop\pieces" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers" />
+    <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -460,21 +475,8 @@
       <workItem from="1591101182340" duration="674000" />
       <workItem from="1591101864498" duration="2738000" />
       <workItem from="1591129922532" duration="1403000" />
-      <workItem from="1591276787030" duration="20418000" />
-    </task>
-    <task id="LOCAL-01262" summary="Implementação do framework de jogos;&#10;Adição do jogo &quot;jogo da velha&quot;;">
-      <created>1590699207331</created>
-      <option name="number" value="01262" />
-      <option name="presentableId" value="LOCAL-01262" />
-      <option name="project" value="LOCAL" />
-      <updated>1590699207331</updated>
-    </task>
-    <task id="LOCAL-01263" summary="Implementação do framework de jogos;&#10;Adição do jogo &quot;jogo da velha&quot;;">
-      <created>1590757908909</created>
-      <option name="number" value="01263" />
-      <option name="presentableId" value="LOCAL-01263" />
-      <option name="project" value="LOCAL" />
-      <updated>1590757908910</updated>
+      <workItem from="1591276787030" duration="21424000" />
+      <workItem from="1591358587150" duration="6415000" />
     </task>
     <task id="LOCAL-01264" summary="Implementação do framework de jogos;&#10;Adição do jogo &quot;jogo da velha&quot;;">
       <created>1590771758320</created>
@@ -805,7 +807,21 @@
       <option name="project" value="LOCAL" />
       <updated>1591302349680</updated>
     </task>
-    <option name="localTasksCounter" value="1311" />
+    <task id="LOCAL-01311" summary="Remoção do ShiroCryptor;&#10;Adição de outro encriptador;">
+      <created>1591302435362</created>
+      <option name="number" value="01311" />
+      <option name="presentableId" value="LOCAL-01311" />
+      <option name="project" value="LOCAL" />
+      <updated>1591302435362</updated>
+    </task>
+    <task id="LOCAL-01312" summary="Remoção do ShiroCryptor;&#10;Adição de outro encriptador;">
+      <created>1591302696348</created>
+      <option name="number" value="01312" />
+      <option name="presentableId" value="LOCAL-01312" />
+      <option name="project" value="LOCAL" />
+      <updated>1591302696348</updated>
+    </task>
+    <option name="localTasksCounter" value="1313" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -908,11 +924,11 @@
     <state x="248" y="33" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1585944592238" />
     <state x="239" y="78" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.768@0.0.1366.768" timestamp="1587921282730" />
     <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1588965558966" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1591300302300">
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1591365715544">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="488" y="67" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1585945441171" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1591300302300" />
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1591365715544" />
     <state x="569" y="296" key="#com.intellij.ide.util.TreeFileChooserDialog" timestamp="1583261031135">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -948,12 +964,12 @@
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1591302432576">
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1591302674878">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1588632175383" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1591302432576" />
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1591302674878" />
     <state width="247" height="195" key="DatabaseViewActions_Filter" timestamp="1586747901902">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -1040,12 +1056,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1591302436573">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1591302700972">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1588632287059" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1591302436573" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1591302700972" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
