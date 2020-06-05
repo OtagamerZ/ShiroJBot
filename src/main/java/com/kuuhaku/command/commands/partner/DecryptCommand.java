@@ -25,7 +25,7 @@ import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.io.FileUtils;
 import org.jasypt.exceptions.EncryptionInitializationException;
 import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
-import org.jasypt.util.text.StrongTextEncryptor;
+import org.jasypt.util.binary.StrongBinaryEncryptor;
 import org.jetbrains.annotations.NonNls;
 
 import java.io.File;
@@ -68,7 +68,7 @@ public class DecryptCommand extends Command {
 			return;
 		}
 
-		StrongTextEncryptor ste = new StrongTextEncryptor();
+		StrongBinaryEncryptor ste = new StrongBinaryEncryptor();
 		Message.Attachment att = message.getAttachments().get(0);
 
 		Executors.newSingleThreadExecutor().execute(() -> {
@@ -78,7 +78,7 @@ public class DecryptCommand extends Command {
 				att.downloadToFile(File.createTempFile(Base64.getEncoder().encodeToString(author.getId().getBytes(StandardCharsets.UTF_8)), "shr")).thenAcceptAsync(f -> {
 					try {
 						byte[] data = FileUtils.readFileToByteArray(f);
-						byte[] encData = ste.decrypt(new String(data, StandardCharsets.UTF_8)).getBytes(StandardCharsets.UTF_8);
+						byte[] encData = ste.decrypt(data);
 
 						channel.sendMessage("Aqui está seu arquivo descriptografado com a chave `" + args[0] + "`")
 								.addFile(encData, att.getFileName().replace(".shr", ""))
