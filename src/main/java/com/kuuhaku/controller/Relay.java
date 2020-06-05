@@ -25,7 +25,6 @@ import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.GlobalMessageDAO;
-import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.Manager;
 import com.kuuhaku.controller.sqlite.MemberDAO;
@@ -34,6 +33,7 @@ import com.kuuhaku.model.persistent.GlobalMessage;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.Tag;
 import com.kuuhaku.utils.TagIcons;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
@@ -120,67 +120,14 @@ public class Relay {
 		}
 
 		StringBuilder badges = new StringBuilder();
+		Set<Tag> tags = Tag.getTags(m.getUser(), m);
+		com.kuuhaku.model.persistent.Member mbr = MemberDAO.getMemberById(m.getId() + s.getId());
 
 		if (!exceed.isEmpty()) {
 			badges.append(TagIcons.getExceed(ExceedEnums.getByName(exceed)));
 		}
 
-		if (m.getUser().getId().equals(Main.getInfo().getNiiChan())) {
-			badges.append("<:niichan:697879726018003115>");
-		} else {
-			if (m.getUser().getId().equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(m.getUser().getId()))
-				badges.append(TagIcons.getTag(TagIcons.DEV));
-
-			if (Main.getInfo().getSupports().contains(m.getUser().getId())) {
-				badges.append(TagIcons.getTag(TagIcons.SUPPORT));
-			}
-
-			if (Main.getInfo().getEditors().contains(m.getUser().getId()))
-				badges.append(TagIcons.getTag(TagIcons.EDITOR));
-
-			try {
-				if (TagDAO.getTagById(m.getUser().getId()).isReader())
-					badges.append(TagIcons.getTag(TagIcons.READER));
-			} catch (Exception ignore) {
-			}
-
-			if (m.hasPermission(Permission.MANAGE_CHANNEL))
-				badges.append(TagIcons.getTag(TagIcons.MODERATOR));
-
-			try {
-				if (MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 70)
-					badges.append(TagIcons.getTag(TagIcons.LVL70));
-				else if (MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 60)
-					badges.append(TagIcons.getTag(TagIcons.LVL60));
-				else if (MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 50)
-					badges.append(TagIcons.getTag(TagIcons.LVL50));
-				else if (MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 40)
-					badges.append(TagIcons.getTag(TagIcons.LVL40));
-				else if (MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 30)
-					badges.append(TagIcons.getTag(TagIcons.LVL30));
-				else if (MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 20)
-					badges.append(TagIcons.getTag(TagIcons.LVL20));
-			} catch (Exception ignore) {
-			}
-
-			try {
-				if (TagDAO.getTagById(m.getUser().getId()).isVerified())
-					badges.append(TagIcons.getTag(TagIcons.VERIFIED));
-			} catch (Exception ignore) {
-			}
-
-			try {
-				if (TagDAO.getTagById(m.getUser().getId()).isToxic())
-					badges.append(TagIcons.getTag(TagIcons.TOXIC));
-			} catch (Exception ignore) {
-			}
-
-			try {
-				if (!com.kuuhaku.model.persistent.Member.getWaifu(m.getUser()).isEmpty())
-					badges.append(TagIcons.getTag(TagIcons.MARRIED));
-			} catch (Exception ignore) {
-			}
-		}
+		tags.forEach(t -> badges.append(t.getEmote(mbr) == null ? "" : t.getEmote(mbr).getTag()));
 
 		eb.addField("Emblemas:", badges.toString(), false);
 

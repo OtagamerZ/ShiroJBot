@@ -19,6 +19,7 @@
 package com.kuuhaku.handlers.games.tabletop.games;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.handlers.games.tabletop.entity.Piece;
 import com.kuuhaku.handlers.games.tabletop.entity.Player;
 import com.kuuhaku.handlers.games.tabletop.entity.Spot;
@@ -26,6 +27,7 @@ import com.kuuhaku.handlers.games.tabletop.entity.Tabletop;
 import com.kuuhaku.handlers.games.tabletop.enums.Board;
 import com.kuuhaku.handlers.games.tabletop.pieces.Circle;
 import com.kuuhaku.handlers.games.tabletop.pieces.Cross;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Message;
@@ -58,7 +60,7 @@ public class CrissCross extends Tabletop {
 	}
 
 	@Override
-	public void execute() {
+	public void execute(int bet) {
 		final User[] turn = {getPlayers().nextTurn()};
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			ImageIO.write(getBoard().render(), "jpg", baos);
@@ -125,6 +127,17 @@ public class CrissCross extends Tabletop {
 								ShiroInfo.getGames().remove(getId());
 								getTable().sendMessage(turn[0].getAsMention() + " venceu!").addFile(baos.toByteArray(), "board.jpg").queue();
 								timeout.cancel(true);
+
+								if (bet > 0) {
+									Account uacc = AccountDAO.getAccount(getPlayers().getWinner().getId());
+									Account tacc = AccountDAO.getAccount(getPlayers().getLoser().getId());
+
+									uacc.addCredit(bet);
+									tacc.removeCredit(bet);
+
+									AccountDAO.saveAccount(uacc);
+									AccountDAO.saveAccount(tacc);
+								}
 							} else if (fullRows == 3) {
 								Main.getInfo().getAPI().removeEventListener(this);
 								ShiroInfo.getGames().remove(getId());

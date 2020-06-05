@@ -19,10 +19,12 @@
 package com.kuuhaku.utils;
 
 public enum TagIcons {
-	DEV, SUPPORT, EDITOR, READER, MODERATOR, LVL20, LVL30, LVL40, LVL50, LVL60, LVL70, VERIFIED, TOXIC, MARRIED;
+	NIICHAN, DEV, SUPPORT, EDITOR, READER, MODERATOR, LVL20, LVL30, LVL40, LVL50, LVL60, LVL70, VERIFIED, TOXIC, MARRIED, MILLION, HALFMILLION;
 
-	public static String getTag(TagIcons t) {
-		switch (t) {
+	public String getTag() {
+		switch (this) {
+			case NIICHAN:
+				return "<:niichan:697879726018003115>";
 			case DEV:
 				return "<:developer:697879725925990466> ";
 			case SUPPORT:
@@ -51,12 +53,18 @@ public enum TagIcons {
 				return "<:toxic:697879725816676442> ";
 			case MARRIED:
 				return "<:married:697879725888241684> ";
+			case MILLION:
+				return "<:millionaire:718447753944105012>";
+			case HALFMILLION:
+				return "<:half_millionaire:718447743747620865>";
 		}
 		throw new IllegalStateException();
 	}
 
-	public static String getId(TagIcons t) {
-		switch (t) {
+	public String getId() {
+		switch (this) {
+			case NIICHAN:
+				return "697879726018003115";
 			case DEV:
 				return "697879725925990466";
 			case SUPPORT:
@@ -85,6 +93,10 @@ public enum TagIcons {
 				return "697879725816676442";
 			case MARRIED:
 				return "697879725888241684";
+			case MILLION:
+				return "718447753944105012";
+			case HALFMILLION:
+				return "718447743747620865";
 		}
 		throw new IllegalStateException();
 	}

@@ -19,6 +19,6 @@
 package com.kuuhaku.handlers.games.tabletop.interfaces;
 
 public interface GameListener {
-	void execute();
+	void execute(int bet);
 }
 

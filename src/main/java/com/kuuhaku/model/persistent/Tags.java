@@ -20,9 +20,9 @@ package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
-import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.utils.ExceedEnums;
+import com.kuuhaku.utils.Tag;
 import com.kuuhaku.utils.TagIcons;
 
 import javax.persistence.Column;
@@ -32,6 +32,7 @@ import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
@@ -67,59 +68,8 @@ public class Tags {
             badges.add(pattern.replace("{id}", TagIcons.getExceedId(ExceedEnums.getByName(exceed))));
         }
 
-        if (id.equals(Main.getInfo().getNiiChan())) {
-            badges.add(pattern.replace("{id}", "697879726018003115"));
-        } else {
-            if (id.equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(id))
-                badges.add(pattern.replace("{id}", TagIcons.getId(TagIcons.DEV)));
-
-            if (Main.getInfo().getSupports().contains(id)) {
-                badges.add(pattern.replace("{id}", TagIcons.getId(TagIcons.SUPPORT)));
-            }
-
-            if (Main.getInfo().getEditors().contains(id))
-                badges.add(pattern.replace("{id}", TagIcons.getId(TagIcons.EDITOR)));
-
-            try {
-                if (TagDAO.getTagById(id).isReader())
-                    badges.add(pattern.replace("{id}", TagIcons.getId(TagIcons.READER)));
-            } catch (Exception ignore) {
-            }
-
-            try {
-                if (mb.getLevel() >= 70)
-                    badges.add(pattern.replace("{id}", TagIcons.getId(TagIcons.LVL70)));
-                else if (mb.getLevel() >= 60)
-                    badges.add(pattern.replace("{id}", TagIcons.getId(TagIcons.LVL60)));
-                else if (mb.getLevel() >= 50)
-                    badges.add(pattern.replace("{id}", TagIcons.getId(TagIcons.LVL50)));
-                else if (mb.getLevel() >= 40)
-                    badges.add(pattern.replace("{id}", TagIcons.getId(TagIcons.LVL40)));
-                else if (mb.getLevel() >= 30)
-                    badges.add(pattern.replace("{id}", TagIcons.getId(TagIcons.LVL30)));
-                else if (mb.getLevel() >= 20)
-                    badges.add(pattern.replace("{id}", TagIcons.getId(TagIcons.LVL20)));
-            } catch (Exception ignore) {
-            }
-
-            try {
-                if (TagDAO.getTagById(id).isVerified())
-                    badges.add(pattern.replace("{id}", TagIcons.getId(TagIcons.VERIFIED)));
-            } catch (Exception ignore) {
-            }
-
-            try {
-                if (TagDAO.getTagById(id).isToxic())
-                    badges.add(pattern.replace("{id}", TagIcons.getId(TagIcons.TOXIC)));
-            } catch (Exception ignore) {
-            }
-
-            try {
-                if (!com.kuuhaku.model.persistent.Member.getWaifu(Main.getInfo().getUserByID(id)).isEmpty())
-                    badges.add(pattern.replace("{id}", TagIcons.getId(TagIcons.MARRIED)));
-            } catch (Exception ignore) {
-            }
-        }
+        Set<Tag> tags = Tag.getTags(Main.getInfo().getUserByID(mb.getMid()), Main.getInfo().getGuildByID(mb.getSid()).getMemberById(mb.getMid()));
+        tags.forEach(t -> badges.add(t.getEmote(mb) == null ? "" : pattern.replace("{id}", t.getEmote(mb).getId())));
 
         return badges;
     }
