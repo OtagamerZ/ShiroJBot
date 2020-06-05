@@ -77,8 +77,8 @@ public class DecryptCommand extends Command {
 				ste.setPassword(Arrays.toString(md.digest(args[0].getBytes(StandardCharsets.UTF_8))));
 				att.downloadToFile(File.createTempFile(Base64.getEncoder().encodeToString(author.getId().getBytes(StandardCharsets.UTF_8)), "shr")).thenAcceptAsync(f -> {
 					try {
-						String data = FileUtils.readFileToString(f, StandardCharsets.UTF_8);
-						byte[] encData = ste.decrypt(data).getBytes(StandardCharsets.UTF_8);
+						byte[] data = FileUtils.readFileToByteArray(f);
+						byte[] encData = ste.decrypt(new String(data, StandardCharsets.UTF_8)).getBytes(StandardCharsets.UTF_8);
 
 						channel.sendMessage("Aqui está seu arquivo descriptografado com a chave `" + args[0] + "`")
 								.addFile(encData, att.getFileName().replace(".shr", ""))
