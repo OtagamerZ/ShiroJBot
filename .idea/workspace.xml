@@ -26,7 +26,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/TagIcons.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/TagIcons.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -460,21 +459,7 @@
       <workItem from="1591101864498" duration="2738000" />
       <workItem from="1591129922532" duration="1403000" />
       <workItem from="1591276787030" duration="21424000" />
-      <workItem from="1591358587150" duration="7162000" />
-    </task>
-    <task id="LOCAL-01267" summary="Implementação do framework de jogos;&#10;Adição do jogo &quot;jogo da velha&quot;;">
-      <created>1590772129252</created>
-      <option name="number" value="01267" />
-      <option name="presentableId" value="LOCAL-01267" />
-      <option name="project" value="LOCAL" />
-      <updated>1590772129252</updated>
-    </task>
-    <task id="LOCAL-01268" summary="Adição do jogo &quot;xadrez&quot;">
-      <created>1590779764827</created>
-      <option name="number" value="01268" />
-      <option name="presentableId" value="LOCAL-01268" />
-      <option name="project" value="LOCAL" />
-      <updated>1590779764827</updated>
+      <workItem from="1591358587150" duration="8007000" />
     </task>
     <task id="LOCAL-01269" summary="Adição do jogo &quot;xadrez&quot;">
       <created>1590780069150</created>
@@ -805,7 +790,21 @@
       <option name="project" value="LOCAL" />
       <updated>1591366532502</updated>
     </task>
-    <option name="localTasksCounter" value="1316" />
+    <task id="LOCAL-01316" summary="Otimização do cálculo de tags;&#10;Implementação de apostas no jogo da velha;">
+      <created>1591366675190</created>
+      <option name="number" value="01316" />
+      <option name="presentableId" value="LOCAL-01316" />
+      <option name="project" value="LOCAL" />
+      <updated>1591366675191</updated>
+    </task>
+    <task id="LOCAL-01317" summary="Otimização do cálculo de tags;&#10;Implementação de apostas no jogo da velha;">
+      <created>1591366879806</created>
+      <option name="number" value="01317" />
+      <option name="presentableId" value="LOCAL-01317" />
+      <option name="project" value="LOCAL" />
+      <updated>1591366879806</updated>
+    </task>
+    <option name="localTasksCounter" value="1318" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -948,12 +947,12 @@
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1591366672508">
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1591367925489">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1588632175383" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1591366672508" />
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1591367925489" />
     <state width="247" height="195" key="DatabaseViewActions_Filter" timestamp="1586747901902">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -1040,12 +1039,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1591366676547">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1591366881025">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1588632287059" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1591366676547" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1591366881025" />
     <state x="522" y="323" width="635" height="364" key="XPathView.FindDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1582733593337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
