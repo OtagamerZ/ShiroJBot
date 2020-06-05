@@ -18,6 +18,8 @@
 
 package com.kuuhaku.handlers.api.websocket;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.kuuhaku.handlers.api.endpoint.ReadyData;
 import com.kuuhaku.utils.Helper;
 import org.java_websocket.WebSocket;
@@ -28,9 +30,11 @@ import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 public class DashboardSocket extends WebSocketServer {
 	private final List<ReadyData> authQueue = new ArrayList<>();
+	private final Cache<String, Consumer<ReadyData>> requests = CacheBuilder.newBuilder().expireAfterWrite(5, TimeUnit.MINUTES).build();
 
 	public DashboardSocket(InetSocketAddress address) {
 		super(address);
@@ -46,10 +50,8 @@ public class DashboardSocket extends WebSocketServer {
 
 	@Override
 	public void onMessage(WebSocket conn, String message) {
-		authQueue.stream().filter(rd -> rd.getSessionId().equalsIgnoreCase(message)).findFirst().ifPresent(rd -> {
-			conn.send(rd.getData().toString());
-			authQueue.remove(rd);
-		});
+		requests.put(message, readyData -> conn.send(readyData.getData().toString()));
+		requests.invalidate(message);
 	}
 
 	@Override
@@ -63,9 +65,5 @@ public class DashboardSocket extends WebSocketServer {
 
 	public void queue(ReadyData data) {
 		authQueue.add(data);
-	}
-
-	public void sweep() {
-		authQueue.removeIf(r -> TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis()) - TimeUnit.MILLISECONDS.toMinutes(r.getCreatedAt()) >= 5);
 	}
 }
