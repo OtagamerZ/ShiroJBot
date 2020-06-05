@@ -103,6 +103,10 @@ public enum Tag {
 		return emote;
 	}
 
+	public TagIcons getEmote() {
+		return emote;
+	}
+
 	public String getDescription() {
 		return description;
 	}
@@ -117,6 +121,6 @@ public enum Tag {
 
 	@Override
 	public String toString() {
-		return StringUtils.capitalize(name().replace("_", " "));
+		return StringUtils.capitalize(name().toLowerCase().replace("_", " "));
 	}
 }
