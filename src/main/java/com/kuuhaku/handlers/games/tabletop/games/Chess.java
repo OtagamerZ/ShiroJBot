@@ -103,7 +103,7 @@ public class Chess extends Tabletop {
 	}
 
 	@Override
-	public void execute() {
+	public void execute(int bet) {
 		for (int y = 0; y < getBoard().getLayout().length; y++) {
 			for (int x = 0; x < getBoard().getLayout().length; x++) {
 				Spot pos = Spot.of(x, y);

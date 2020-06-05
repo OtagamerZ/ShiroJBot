@@ -68,7 +68,7 @@ public class TransferCommand extends Command {
 		int amount = Integer.parseInt(args[0]);
 
 		if (from.getBalance() < amount) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 			return;
 		} else if (amount <= 0) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-transfer-negative-or-zero")).queue();
