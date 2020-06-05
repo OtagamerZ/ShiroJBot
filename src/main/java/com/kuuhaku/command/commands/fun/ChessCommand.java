@@ -21,12 +21,15 @@ package com.kuuhaku.command.commands.fun;
 import com.github.ygimenez.method.Pages;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.handlers.games.tabletop.entity.Tabletop;
 import com.kuuhaku.handlers.games.tabletop.games.Chess;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.Map;
@@ -57,6 +60,23 @@ public class ChessCommand extends Command {
 			return;
 		}
 
+		Account uacc = AccountDAO.getAccount(author.getId());
+		Account tacc = AccountDAO.getAccount(message.getMentionedUsers().get(0).getId());
+		int bet = 0;
+		if (args.length > 1 && StringUtils.isNumeric(args[1])) {
+			bet = Integer.parseInt(args[1]);
+			if (bet < 0) {
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-credit-amount")).queue();
+				return;
+			} else if (uacc.getBalance() < bet) {
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
+				return;
+			} else if (tacc.getBalance() < bet) {
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-target")).queue();
+				return;
+			}
+		}
+
 		String id = author.getId() + "." + message.getMentionedUsers().get(0).getId() + "." + guild.getId();
 
 		if (ShiroInfo.gameInProgress(author.getId())) {
@@ -71,12 +91,13 @@ public class ChessCommand extends Command {
 		}
 
 		Tabletop t = new Chess((TextChannel) channel, id, message.getMentionedUsers().get(0), author);
+		int finalBet = bet;
 		channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Xadrez, deseja aceitar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 					if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
 						ShiroInfo.getGames().put(id, t);
 						ms.delete().queue();
-						t.execute();
+						t.execute(finalBet);
 					}
 				}), false, 60, TimeUnit.SECONDS));
 	}
