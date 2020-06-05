@@ -66,6 +66,11 @@ public class DrawRaffleCommand extends Command {
 		List<String> votes = UpvoteDAO.getVotes().stream().filter(u -> u.getVotedAt().isAfter(LocalDateTime.now().minusDays(days)) && Main.getInfo().getUserByID(u.getUid()) != null).map(Upvote::getUid).collect(Collectors.toList());
 		Collections.shuffle(votes);
 
+		if (votes.size() == 0) {
+			channel.sendMessage(":x: | Não houve nenhum voto neste período.").queue();
+			return;
+		}
+
 		channel.sendMessage("E o vencedor do sorteio é")
 				.delay(2, TimeUnit.SECONDS)
 				.flatMap(s -> s.editMessage(s.getContentRaw() + "."))
@@ -76,7 +81,7 @@ public class DrawRaffleCommand extends Command {
 				.delay(2, TimeUnit.SECONDS)
 				.flatMap(s -> s.editMessage(s.getContentRaw() + "."))
 				.delay(2, TimeUnit.SECONDS)
-				.flatMap(s -> s.editMessage(s.getContentRaw() + Main.getInfo().getUserByID(votes.get(Helper.rng(votes.size()))) + ", parabéns!\nUm desenvolvedor entrará em contato para discutir sobre a premiação."))
+				.flatMap(s -> s.editMessage(s.getContentRaw() + Main.getInfo().getUserByID(votes.get(Helper.rng(votes.size()))).getAsMention() + ", parabéns!\nUm desenvolvedor entrará em contato para discutir sobre a premiação."))
 				.queue();
 	}
 }
