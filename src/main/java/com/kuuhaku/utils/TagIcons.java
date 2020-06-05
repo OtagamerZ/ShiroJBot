@@ -54,9 +54,9 @@ public enum TagIcons {
 			case MARRIED:
 				return "<:married:697879725888241684> ";
 			case MILLION:
-				return "<:millionaire:718447753944105012>";
+				return "<:millionaire:718447753944105012> ";
 			case HALFMILLION:
-				return "<:half_millionaire:718447743747620865>";
+				return "<:half_millionaire:718447743747620865> ";
 		}
 		throw new IllegalStateException();
 	}
