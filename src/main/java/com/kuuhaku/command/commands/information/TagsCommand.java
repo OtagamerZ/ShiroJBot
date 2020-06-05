@@ -58,7 +58,7 @@ public class TagsCommand extends Command {
 						TagIcons.LVL60.getTag() +
 						TagIcons.LVL70.getTag() + t.toString(), t.getDescription(), false);
 			} else {
-				eb.addField(t.toString(), t.getDescription(), false);
+				eb.addField(t.getEmote().getTag() + t.toString(), t.getDescription(), false);
 			}
 		}
 
