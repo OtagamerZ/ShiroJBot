@@ -20,6 +20,7 @@ package com.kuuhaku.command.commands.moderation;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
@@ -58,14 +59,19 @@ public class PruneCommand extends Command {
 			List<Message> msgs = channel.getHistory().retrievePast(Integer.parseInt(args[0]) == 100 ? 100 : Integer.parseInt(args[0]) + 1).complete();
 			channel.purgeMessages(msgs);
 			channel.sendMessage(msgs.size() + " mensage" + (msgs.size() == 1 ? "m limpa." : "ns limpas.")).queue();
-		} else if (args[0].equalsIgnoreCase("all")) {
+		} else if (Helper.containsAny(args[0], "user", "usuarios")) {
+			List<Message> msgs = channel.getHistory().retrievePast(100).complete();
+			msgs.removeIf(m -> m.getAuthor().isBot());
+			channel.purgeMessages(msgs);
+			channel.sendMessage(msgs.size() + " mensage" + (msgs.size() == 1 ? "m de usuário limpa." : "ns de usuários limpas.")).queue();
+		} else if (Helper.containsAny(args[0], "all", "tudo")) {
 			((TextChannel) channel).createCopy().queue(s -> {
 				try {
 					((GuildChannel) channel).delete().queue();
 					s.sendMessage("Canal limpo com sucesso!").queue();
 				} catch (InsufficientPermissionException e) {
-                    channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_prune-permission-required")).queue();
-                }
+					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_prune-permission-required")).queue();
+				}
 			});
 		} else {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_amount-not-valid")).queue();
