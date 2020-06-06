@@ -4,6 +4,7 @@
     <bytecodeTargetLevel>
       <module name="com.kuuhaku.shiro-j-bot.main" target="11" />
       <module name="com.kuuhaku.shiro-j-bot.test" target="11" />
+      <module name="shiro-j-bot" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

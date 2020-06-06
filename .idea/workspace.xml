@@ -25,8 +25,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__javax_websocket_javax_websocket_api_1_1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/DashboardSocket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/DashboardSocket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/misc/VoteCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/misc/RateCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -247,28 +252,6 @@
       </list>
     </recent_temporary>
   </component>
-  <component name="ServiceViewManager">
-    <option name="viewStates">
-      <list>
-        <serviceView>
-          <treeState>
-            <expand>
-              <path>
-                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-                <item name="root:ShiroDB" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-              </path>
-              <path>
-                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-                <item name="root:ShiroDB" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-                <item name="com.intellij.database.console.session.MessageBusSession@64d9a657" type="9fbbdea:ServiceModel$ServiceNode" />
-              </path>
-            </expand>
-            <select />
-          </treeState>
-        </serviceView>
-      </list>
-    </option>
-  </component>
   <component name="SpringBeansView">
     <option name="beanDetailsProportion" value="0.3" />
   </component>
@@ -463,13 +446,6 @@
       <workItem from="1591358587150" duration="13578000" />
       <workItem from="1591386493640" duration="67000" />
       <workItem from="1591390168472" duration="388000" />
-    </task>
-    <task id="LOCAL-01273" summary="Correção de leak na api de autenticação">
-      <created>1591102990285</created>
-      <option name="number" value="01273" />
-      <option name="presentableId" value="LOCAL-01273" />
-      <option name="project" value="LOCAL" />
-      <updated>1591102990285</updated>
     </task>
     <task id="LOCAL-01274" summary="Correção de leak na api de autenticação">
       <created>1591103041630</created>
@@ -807,7 +783,14 @@
       <option name="project" value="LOCAL" />
       <updated>1591373915562</updated>
     </task>
-    <option name="localTasksCounter" value="1322" />
+    <task id="LOCAL-01322" summary="Correção no mapeamento da classe Upvote">
+      <created>1591411188155</created>
+      <option name="number" value="01322" />
+      <option name="presentableId" value="LOCAL-01322" />
+      <option name="project" value="LOCAL" />
+      <updated>1591411188156</updated>
+    </task>
+    <option name="localTasksCounter" value="1323" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -831,13 +814,12 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="COLUMN_ORDER" />
-            </State>
+            <State />
           </value>
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
@@ -950,11 +932,11 @@
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1591390769381">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="203" y="0" width="805" height="934" key="CommitChangelistDialog2" timestamp="1591411186710">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
-    <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1588632175383" />
+    <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1591411186710" />
     <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1591390769381" />
     <state width="247" height="195" key="DatabaseViewActions_Filter" timestamp="1586747901902">
       <screen x="0" y="0" width="1366" height="768" />
@@ -1042,11 +1024,11 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1591373918274">
-      <screen x="0" y="0" width="1680" height="1010" />
+    <state x="351" y="182" key="Vcs.Push.Dialog.v2" timestamp="1591411228449">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
-    <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1588632287059" />
+    <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1591411228449" />
     <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1591373918274" />
     <state x="695" y="627" width="383" height="267" key="XPathView.InputDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1583260599414">
       <screen x="0" y="0" width="1680" height="1010" />
