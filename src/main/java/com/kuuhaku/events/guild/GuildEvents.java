@@ -100,14 +100,14 @@ public class GuildEvents extends ListenerAdapter {
 				MemberDAO.addMemberToDB(member);
 			}
 
-			try {
+			/*try {
 				MutedMember mm = com.kuuhaku.controller.postgresql.MemberDAO.getMutedMemberById(author.getId());
 				if (mm != null && mm.isMuted()) {
 					message.delete().complete();
 					return;
 				}
 			} catch (InsufficientPermissionException | ErrorResponseException ignore) {
-			}
+			}*/
 
 			if (GuildDAO.getGuildById(guild.getId()).getNoSpamChannels().contains(channel.getId()) && author != Main.getInfo().getSelfUser()) {
 				if (GuildDAO.getGuildById(guild.getId()).isHardAntispam()) {
