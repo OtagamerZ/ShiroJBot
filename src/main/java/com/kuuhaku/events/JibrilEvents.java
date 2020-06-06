@@ -110,7 +110,7 @@ public class JibrilEvents extends ListenerAdapter {
 											finalMb.setRulesSent(true);
 											com.kuuhaku.controller.sqlite.MemberDAO.updateMemberConfigs(finalMb);
 											MemberDAO.saveMemberToBD(finalMb);
-										}))));
+										}))), Helper::doNothing);
 					} catch (ErrorResponseException ignore) {
 					}
 				if (RelayBlockList.check(event.getAuthor().getId())) {
