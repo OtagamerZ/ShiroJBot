@@ -24,6 +24,7 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.model.persistent.ExceedMember;
 import com.kuuhaku.utils.ExceedEnums;
+import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.TagIcons;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
@@ -118,7 +119,7 @@ public class ExceedSelectCommand extends Command {
 				ExceedDAO.getExceedMembers(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId()))).stream().map(ExceedMember::getId).forEach(em ->
 						Main.getInfo().getUserByID(em).openPrivateChannel().queue(c -> {
 							try {
-								c.sendMessage(author.getAsTag() + " juntou-se à " + ex + ", dê-o(a) as boas-vindas!").queue();
+								c.sendMessage(author.getAsTag() + " juntou-se à " + ex + ", dê-o(a) as boas-vindas!").queue(null, Helper::doNothing);
 							} catch (Exception ignore) {
 							}
 						}));
