@@ -89,8 +89,7 @@ public class DashboardRequest {
 			http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 
 			user.put("token", t);
-			Main.getInfo().getSockets().getDashboard().queue(new ReadyData(user, session));
-			Main.getInfo().getSockets().getDashboard().sweep();
+			//Main.getInfo().getSockets().getDashboard().queue(new ReadyData(user, session));
 		} else {
 			http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + ":8200/Unauthorized");
 			http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
