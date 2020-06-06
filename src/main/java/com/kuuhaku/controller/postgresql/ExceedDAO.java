@@ -170,8 +170,8 @@ public class ExceedDAO {
 	public static float getPercentage(ExceedEnums ex) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query exceed = em.createQuery("SELECT COUNT(e) FROM ExceedMember e WHERE e.exceed LIKE :ex", Long.class);
-		Query total = em.createQuery("SELECT COUNT(e) FROM ExceedMember e", Long.class);
+		Query exceed = em.createQuery("SELECT CAST(COUNT(e) AS FLOAT) FROM ExceedMember e WHERE e.exceed LIKE :ex", Float.class);
+		Query total = em.createQuery("SELECT CAST(COUNT(e) AS FLOAT) FROM ExceedMember e", Float.class);
 		exceed.setParameter("ex", ex.getName());
 
 		return ((float) exceed.getSingleResult()) / ((float) total.getSingleResult());
