@@ -32,8 +32,6 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
-import java.util.concurrent.TimeUnit;
-
 public class PPTCommand extends Command {
 
 	public PPTCommand(String name, String description, Category category, boolean requiresMM) {
@@ -120,19 +118,7 @@ public class PPTCommand extends Command {
 
 		int finalWin = win;
 		String finalPcChoice = pcChoice;
-		channel.sendMessage("Sai")
-				.delay(333, TimeUnit.MILLISECONDS)
-				.flatMap(m -> m.editMessage(m.getContentRaw() + "sho"))
-				.delay(333, TimeUnit.MILLISECONDS)
-				.flatMap(m -> m.editMessage(m.getContentRaw() + " wa"))
-				.delay(333, TimeUnit.MILLISECONDS)
-				.flatMap(m -> m.editMessage(m.getContentRaw() + " guu!"))
-				.delay(1, TimeUnit.SECONDS)
-				.flatMap(m -> m.editMessage(m.getContentRaw() + "\nJan..."))
-				.delay(1, TimeUnit.SECONDS)
-				.flatMap(m -> m.editMessage(m.getContentRaw() + "Ken..."))
-				.delay(1, TimeUnit.SECONDS)
-				.flatMap(m -> m.editMessage(m.getContentRaw() + "Pon! " + finalPcChoice))
+		channel.sendMessage("Saisho wa guu!\nJan...Ken...Pon! " + finalPcChoice)
 				.queue(m -> {
 					switch (finalWin) {
 						case 0:
