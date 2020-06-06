@@ -63,23 +63,48 @@ public class ExceedSelectCommand extends Command {
 					m.delete().queue();
 					return;
 				}
+
 				switch (args[0].toLowerCase()) {
 					case "imanity":
+						if (ExceedDAO.getPercentage(ExceedEnums.IMANITY) >= 0.5f) {
+							channel.sendMessage(":x: | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
+							return;
+						}
 						ExceedDAO.joinExceed(new ExceedMember(author.getId(), ExceedEnums.IMANITY.getName()));
 						break;
 					case "seiren":
+						if (ExceedDAO.getPercentage(ExceedEnums.SEIREN) >= 0.5f) {
+							channel.sendMessage(":x: | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
+							return;
+						}
 						ExceedDAO.joinExceed(new ExceedMember(author.getId(), ExceedEnums.SEIREN.getName()));
 						break;
 					case "werebeast":
+						if (ExceedDAO.getPercentage(ExceedEnums.WEREBEAST) >= 0.5f) {
+							channel.sendMessage(":x: | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
+							return;
+						}
 						ExceedDAO.joinExceed(new ExceedMember(author.getId(), ExceedEnums.WEREBEAST.getName()));
 						break;
 					case "elf":
+						if (ExceedDAO.getPercentage(ExceedEnums.ELF) >= 0.5f) {
+							channel.sendMessage(":x: | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
+							return;
+						}
 						ExceedDAO.joinExceed(new ExceedMember(author.getId(), ExceedEnums.ELF.getName()));
 						break;
 					case "ex-machina":
+						if (ExceedDAO.getPercentage(ExceedEnums.EXMACHINA) >= 0.5f) {
+							channel.sendMessage(":x: | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
+							return;
+						}
 						ExceedDAO.joinExceed(new ExceedMember(author.getId(), ExceedEnums.EXMACHINA.getName()));
 						break;
 					case "flügel":
+						if (ExceedDAO.getPercentage(ExceedEnums.FLUGEL) >= 0.5f) {
+							channel.sendMessage(":x: | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
+							return;
+						}
 						ExceedDAO.joinExceed(new ExceedMember(author.getId(), ExceedEnums.FLUGEL.getName()));
 						break;
 					default:
