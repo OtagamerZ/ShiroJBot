@@ -33,7 +33,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class DashboardSocket extends WebSocketServer {
-	private final List<ReadyData> authQueue = new ArrayList<>();
 	private final Cache<String, Consumer<ReadyData>> requests = CacheBuilder.newBuilder().expireAfterWrite(5, TimeUnit.MINUTES).build();
 
 	public DashboardSocket(InetSocketAddress address) {
@@ -61,9 +60,5 @@ public class DashboardSocket extends WebSocketServer {
 	@Override
 	public void onStart() {
 		Helper.logger(this.getClass()).info("WebSocket \"dashboard\" iniciado na porta " + this.getPort());
-	}
-
-	public void queue(ReadyData data) {
-		authQueue.add(data);
 	}
 }
