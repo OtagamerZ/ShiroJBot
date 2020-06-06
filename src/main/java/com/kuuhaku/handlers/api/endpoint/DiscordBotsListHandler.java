@@ -74,7 +74,7 @@ public class DiscordBotsListHandler {
 			}
 
 			UpvoteDAO.voted(u);
-			chn.sendMessage(eb.build()).queue();
+			chn.sendMessage(eb.build()).queue(null, Helper::doNothing);
 		} catch (RuntimeException ignore) {
 		}
 
