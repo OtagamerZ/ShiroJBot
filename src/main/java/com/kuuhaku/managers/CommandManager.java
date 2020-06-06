@@ -309,8 +309,8 @@ public class CommandManager {
 			add(new LinkTesterCommand(
 					"link", new String[]{"try"}, getLocale(PT).getString(REQ_LINK), getLocale(PT).getString("cmd_link-test"), MISC, false
 			));
-			add(new VoteCommand(
-					"votar", new String[]{"vote"}, getLocale(PT).getString("req_mention-positive-negative"), getLocale(PT).getString("cmd_vote"), MISC, false
+			add(new RateCommand(
+					"avaliar", new String[]{"rate"}, getLocale(PT).getString("req_mention-positive-negative"), getLocale(PT).getString("cmd_vote"), MISC, false
 			));
 			add(new TranslateCommand(
 					"traduzir", new String[]{"translate", "traduza", "trad"}, getLocale(PT).getString("req_from-to-text"), getLocale(PT).getString("cmd_translate"), MISC, false
