@@ -126,18 +126,22 @@ public class Helper {
 	}
 
 	public static boolean findURL(String text) {
+		Map<String, String> leetSpeak = Map.of(
+				"(1|!)", "i",
+				"3", "e",
+				"4", "a",
+				"5", "s",
+				"7", "t",
+				"0", "o",
+				"(@|#|$|%|&|*)", "."
+		);
+
 		final Pattern urlPattern = Pattern.compile(
 				".*?(?:^|[\\W])((ht|f)tp(s?)://|www\\.)(([\\w\\-]+\\.)+?([\\w\\-.~]+/?)*[\\p{Alnum}.,%_=?&#\\-+()\\[\\]*$~@!:/{};']*?)",
 				Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
 		text = StringUtils.deleteWhitespace(text);
+		text = replaceWith(text, leetSpeak);
 		text = (Extensions.checkExtension(text) ? "http://" : "") + text;
-		text = text.replace("1", "i").replace("!", "i");
-		text = text.replace("3", "e");
-		text = text.replace("4", "a");
-		text = text.replace("5", "s");
-		text = text.replace("7", "t");
-		text = text.replace("0", "o");
-		text = text.replace("#", ".").replace("%", ".").replace("$", ".").replace("@", ".").replace("*", ".").replace("#", ".").replace("&", ".");
 
 		final Matcher msg = urlPattern.matcher(text.toLowerCase());
 		return msg.matches();
@@ -861,5 +865,11 @@ public class Helper {
 		}
 
 		return out;
+	}
+
+	public static String replaceWith(String source, Map<String, String> replaces) {
+		AtomicReference<String> toChange = new AtomicReference<>();
+		replaces.forEach((k, v) -> toChange.set(source.replace(k, v)));
+		return toChange.get();
 	}
 }
