@@ -28,21 +28,21 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.jetbrains.annotations.NonNls;
 
-public class VoteCommand extends Command {
+public class RateCommand extends Command {
 
-	public VoteCommand(String name, String description, Category category, boolean requiresMM) {
+	public RateCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
 	}
 
-	public VoteCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
+	public RateCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
 		super(name, aliases, description, category, requiresMM);
 	}
 
-	public VoteCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+	public RateCommand(String name, String usage, String description, Category category, boolean requiresMM) {
 		super(name, usage, description, category, requiresMM);
 	}
 
-	public VoteCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+	public RateCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
 		super(name, aliases, usage, description, category, requiresMM);
 	}
 
