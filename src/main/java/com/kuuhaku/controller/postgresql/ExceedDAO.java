@@ -171,9 +171,8 @@ public class ExceedDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query exceed = em.createQuery("SELECT COUNT(e) FROM ExceedMember e WHERE e.exceed LIKE :ex", Integer.class);
-		Query total = em.createQuery("SELECT COUNT(e) FROM ExceedMember e WHERE e.exceed NOT LIKE :ex", Integer.class);
+		Query total = em.createQuery("SELECT COUNT(e) FROM ExceedMember e", Integer.class);
 		exceed.setParameter("ex", ex.getName());
-		total.setParameter("ex", ex.getName());
 
 		return ((float) exceed.getSingleResult()) / ((float) total.getSingleResult());
 	}
