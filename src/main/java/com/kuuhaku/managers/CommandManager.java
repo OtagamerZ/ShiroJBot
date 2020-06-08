@@ -20,6 +20,7 @@ package com.kuuhaku.managers;
 
 import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.dev.*;
+import com.kuuhaku.command.commands.exceed.ExceedPaletteCommand;
 import com.kuuhaku.command.commands.exceed.ExceedRankCommand;
 import com.kuuhaku.command.commands.exceed.ExceedSelectCommand;
 import com.kuuhaku.command.commands.fun.*;
@@ -451,7 +452,10 @@ public class CommandManager {
 					"exceedrank", new String[]{"exrank", "topexceed", "topex"}, getLocale(PT).getString("cmd_exceed-rank"), EXCEED, false
 			));
 			add(new ExceedSelectCommand(
-					"exceedselect", new String[]{"exselect", "sou"}, getLocale(PT).getString("cmd_exceed"), EXCEED, false
+					"exceedselect", new String[]{"exselect", "souex"}, getLocale(PT).getString("cmd_exceed"), EXCEED, false
+			));
+			add(new ExceedPaletteCommand(
+					"exceedpalette", new String[]{"expalette", "paletaex"}, getLocale(PT).getString("cmd_exceed-palette"), EXCEED, false
 			));
 			/*add(new DisboardCommand(
 					"disboard", new String[]{"exmap", "mapa"}, getLocale(PT).getString("cmd_disboard"), EXCEED, false
