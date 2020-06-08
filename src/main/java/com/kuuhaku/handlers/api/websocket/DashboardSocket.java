@@ -94,10 +94,8 @@ public class DashboardSocket extends WebSocketServer {
 
 		switch (jo.getString("type")) {
 			case "update":
-				JSONObject cluster = new JSONObject(payload);
-
-				if (cluster.has("guildData")) {
-					JSONObject guild = cluster.getJSONObject("guildData");
+				if (payload.has("guildData")) {
+					JSONObject guild = payload.getJSONObject("guildData");
 
 					GuildConfig gc = GuildDAO.getGuildById(guild.getString("guildID"));
 
@@ -133,8 +131,8 @@ public class DashboardSocket extends WebSocketServer {
 					GuildDAO.updateGuildSettings(gc);
 				}
 
-				if (cluster.has("profileData")) {
-					JSONObject data = cluster.getJSONObject("profileData");
+				if (payload.has("profileData")) {
+					JSONObject data = payload.getJSONObject("profileData");
 					Member mb = MemberDAO.getMemberById(data.getString("id"));
 
 					mb.setBg(data.getString("bg"));
