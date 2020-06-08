@@ -71,20 +71,6 @@ public enum Category {
 		return Arrays.stream(Category.values()).filter(c -> c.name.equalsIgnoreCase(name)).collect(Collectors.toList()).get(0);
 	}
 
-	public boolean isBotBlocked() {
-		switch (this) {
-			case DEV:
-			case EXCEED:
-			case MUSICA:
-			case MODERACAO:
-			case NSFW:
-			case SUPPORT:
-				return true;
-			default:
-				return false;
-		}
-	}
-
 	public String getDescription() {
 		return description;
 	}
