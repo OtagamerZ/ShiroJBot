@@ -26,8 +26,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/DecryptCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/DecryptCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/EncryptCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/EncryptCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -173,7 +171,7 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Java" />
   </component>
   <component name="RecentsManager">
     <key name="MoveMembersDialog.RECENTS_KEY">
@@ -443,14 +441,9 @@
       <workItem from="1591386493640" duration="67000" />
       <workItem from="1591390168472" duration="388000" />
       <workItem from="1591622101786" duration="7379000" />
-      <workItem from="1591636495949" duration="4224000" />
-    </task>
-    <task id="LOCAL-01299" summary="Implementação do ShiroCryptor">
-      <created>1591297023126</created>
-      <option name="number" value="01299" />
-      <option name="presentableId" value="LOCAL-01299" />
-      <option name="project" value="LOCAL" />
-      <updated>1591297023126</updated>
+      <workItem from="1591636495949" duration="4763000" />
+      <workItem from="1591643146423" duration="13000" />
+      <workItem from="1591643243222" duration="103000" />
     </task>
     <task id="LOCAL-01300" summary="Implementação do ShiroCryptor">
       <created>1591297224902</created>
@@ -788,7 +781,14 @@
       <option name="project" value="LOCAL" />
       <updated>1591640652159</updated>
     </task>
-    <option name="localTasksCounter" value="1348" />
+    <task id="LOCAL-01348" summary="Implementação de BiContract para requisições do site">
+      <created>1591641154946</created>
+      <option name="number" value="01348" />
+      <option name="presentableId" value="LOCAL-01348" />
+      <option name="project" value="LOCAL" />
+      <updated>1591641154946</updated>
+    </task>
+    <option name="localTasksCounter" value="1349" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1014,21 +1014,21 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="616" y="30" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1583778436946" />
-    <state x="320" y="80" key="SettingsEditor" timestamp="1591101742023">
+    <state x="320" y="80" key="SettingsEditor" timestamp="1591643325927">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1587956411634" />
-    <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1591101742023" />
+    <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1591643325927" />
     <state width="200" height="318" key="SqlResolveConfigurable" timestamp="1585946065407">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1591640660162">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1591641164873">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1591419318874" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1591640660162" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1591641164873" />
     <state x="695" y="627" width="383" height="267" key="XPathView.InputDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1583260599414">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1068,12 +1068,12 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="448" y="274" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1586896266138" />
-    <state x="501" y="182" width="790" height="658" key="find.popup" timestamp="1591382588346">
+    <state x="501" y="182" width="790" height="658" key="find.popup" timestamp="1591644183598">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="362" y="127" width="643" height="536" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1585937546544" />
     <state x="362" y="134" width="774" height="562" key="find.popup/0.0.1366.768@0.0.1366.768" timestamp="1588044108124" />
-    <state x="501" y="182" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1591382588346" />
+    <state x="501" y="182" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1591644183598" />
     <state x="409" y="157" key="git4idea.merge.GitPullDialog" timestamp="1586743041255">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
