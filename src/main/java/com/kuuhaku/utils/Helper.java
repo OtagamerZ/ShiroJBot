@@ -743,7 +743,7 @@ public class Helper {
 	}
 
 	public static boolean showMMError(User author, MessageChannel channel, Guild guild, String rawMessage, Command command) {
-		if (author == Main.getInfo().getSelfUser() && command.getCategory().isBotBlocked()) {
+		if (author == Main.getInfo().getSelfUser()) {
 			channel.sendMessage(":x: | Não posso executar este comando, apenas usuários humanos podem usar ele.").queue();
 			return true;
 		} else if (!hasPermission(guild.getSelfMember(), Permission.MESSAGE_MANAGE, (TextChannel) channel) && GuildDAO.getGuildById(guild.getId()).isServerMMLocked() && command.requiresMM()) {
