@@ -25,7 +25,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/Category.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/Category.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -441,14 +443,7 @@
       <workItem from="1591386493640" duration="67000" />
       <workItem from="1591390168472" duration="388000" />
       <workItem from="1591622101786" duration="7379000" />
-      <workItem from="1591636495949" duration="2547000" />
-    </task>
-    <task id="LOCAL-01294" summary="Migração do Socket.io para websocket puro">
-      <created>1591292378535</created>
-      <option name="number" value="01294" />
-      <option name="presentableId" value="LOCAL-01294" />
-      <option name="project" value="LOCAL" />
-      <updated>1591292378535</updated>
+      <workItem from="1591636495949" duration="3182000" />
     </task>
     <task id="LOCAL-01295" summary="Migração do Socket.io para websocket puro">
       <created>1591292554019</created>
@@ -786,7 +781,14 @@
       <option name="project" value="LOCAL" />
       <updated>1591639343331</updated>
     </task>
-    <option name="localTasksCounter" value="1343" />
+    <task id="LOCAL-01343" summary="Implementação de BiContract para requisições do site">
+      <created>1591639472452</created>
+      <option name="number" value="01343" />
+      <option name="presentableId" value="LOCAL-01343" />
+      <option name="project" value="LOCAL" />
+      <updated>1591639472452</updated>
+    </task>
+    <option name="localTasksCounter" value="1344" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1021,12 +1023,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1591639443569">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1591639475720">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1591419318874" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1591639443569" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1591639475720" />
     <state x="695" y="627" width="383" height="267" key="XPathView.InputDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1583260599414">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
