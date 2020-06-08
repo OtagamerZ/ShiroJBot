@@ -83,6 +83,7 @@ public class DashboardSocket extends WebSocketServer {
 				put("type", jo.getString("type"));
 				put("code", HttpURLConnection.HTTP_UNAUTHORIZED);
 			}}.toString());
+			return;
 		}
 		Token t = TokenDAO.getToken(payload.getString("token"));
 		if (t == null) {
@@ -90,6 +91,7 @@ public class DashboardSocket extends WebSocketServer {
 				put("type", jo.getString("type"));
 				put("code", HttpURLConnection.HTTP_UNAUTHORIZED);
 			}}.toString());
+			return;
 		}
 
 		switch (jo.getString("type")) {
@@ -142,17 +144,15 @@ public class DashboardSocket extends WebSocketServer {
 				}
 				break;
 			case "ticket":
-				JSONObject data = new JSONObject(payload);
-
-				int number = TicketDAO.openTicket(data.getString("message"), Main.getInfo().getUserByID(t.getUid()));
+				int number = TicketDAO.openTicket(payload.getString("message"), Main.getInfo().getUserByID(t.getUid()));
 
 				EmbedBuilder eb = new EmbedBuilder();
 
 				eb.setTitle("Feedback via site (Ticket Nº " + number + ")");
 				eb.addField("Enviador por:", t.getHolder(), true);
 				eb.addField("Enviado em:", Helper.dateformat.format(OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3"))), true);
-				eb.addField("Assunto", data.getString("subject"), false);
-				eb.addField("Mensagem:", "```" + data.getString("message") + "```", false);
+				eb.addField("Assunto", payload.getString("subject"), false);
+				eb.addField("Mensagem:", "```" + payload.getString("message") + "```", false);
 				eb.setColor(Color.decode("#fefefe"));
 
 				Map<String, String> ids = new HashMap<>();
