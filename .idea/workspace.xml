@@ -25,12 +25,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/BiContract.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/DecryptCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/DecryptCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/EncryptCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/EncryptCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DashboardRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DashboardRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/DashboardSocket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/DashboardSocket.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -446,13 +441,6 @@
       <workItem from="1591386493640" duration="67000" />
       <workItem from="1591390168472" duration="388000" />
     </task>
-    <task id="LOCAL-01286" summary="Migração do Socket.io para websocket puro">
-      <created>1591290096462</created>
-      <option name="number" value="01286" />
-      <option name="presentableId" value="LOCAL-01286" />
-      <option name="project" value="LOCAL" />
-      <updated>1591290096462</updated>
-    </task>
     <task id="LOCAL-01287" summary="Migração do Socket.io para websocket puro">
       <created>1591290289175</created>
       <option name="number" value="01287" />
@@ -789,7 +777,14 @@
       <option name="project" value="LOCAL" />
       <updated>1591419312257</updated>
     </task>
-    <option name="localTasksCounter" value="1335" />
+    <task id="LOCAL-01335" summary="Implementação de BiContract para requisições do site">
+      <created>1591621173131</created>
+      <option name="number" value="01335" />
+      <option name="presentableId" value="LOCAL-01335" />
+      <option name="project" value="LOCAL" />
+      <updated>1591621173132</updated>
+    </task>
+    <option name="localTasksCounter" value="1336" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -827,7 +822,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção nos nomes em locale_pt.properties" />
     <MESSAGE value="Correção nos nomes de erro" />
     <MESSAGE value="Correção nos nomes de erros" />
     <MESSAGE value="Correções no comando Quiz" />
@@ -852,7 +846,8 @@
     <MESSAGE value="Correção no mapeamento da classe Upvote" />
     <MESSAGE value="Melhorias no algoritmo de detecção de links" />
     <MESSAGE value="Limite de 50% de popularidade para Exceeds" />
-    <option name="LAST_COMMIT_MESSAGE" value="Limite de 50% de popularidade para Exceeds" />
+    <MESSAGE value="Implementação de BiContract para requisições do site" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implementação de BiContract para requisições do site" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -932,12 +927,12 @@
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="203" y="0" width="805" height="934" key="CommitChangelistDialog2" timestamp="1591419311134">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1591621170245">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1591419311134" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1591390769381" />
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1591621170245" />
     <state width="247" height="195" key="DatabaseViewActions_Filter" timestamp="1591416926427">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -1024,12 +1019,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="351" y="182" key="Vcs.Push.Dialog.v2" timestamp="1591419318874">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1591621175214">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1591419318874" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1591373918274" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1591621175214" />
     <state x="695" y="627" width="383" height="267" key="XPathView.InputDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1583260599414">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
