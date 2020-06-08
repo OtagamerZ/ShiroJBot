@@ -46,6 +46,7 @@ public class BiContract<A, B> {
 
 	public void setSignatureA(A signatureA) {
 		this.signatureA = signatureA;
+		checkContract();
 	}
 
 	public B getSignatureB() {
@@ -54,6 +55,7 @@ public class BiContract<A, B> {
 
 	public void setSignatureB(B signatureB) {
 		this.signatureB = signatureB;
+		checkContract();
 	}
 
 	private void checkContract() {
