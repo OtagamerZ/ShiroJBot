@@ -82,6 +82,7 @@ public class DecryptCommand extends Command {
 
 						channel.sendMessage("Aqui está seu arquivo descriptografado com a chave `" + args[0] + "`")
 								.addFile(encData, att.getFileName().replace(".shr", ""))
+								.flatMap(s -> message.delete())
 								.queue(null, Helper::doNothing);
 					} catch (IOException e) {
 						Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);

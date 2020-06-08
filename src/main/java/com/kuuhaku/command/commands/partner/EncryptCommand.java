@@ -77,7 +77,9 @@ public class EncryptCommand extends Command {
 
 						channel.sendMessage("Aqui está seu arquivo criptografado com a chave `" + args[0] + "`")
 								.addFile(encData, att.getFileName() + ".shr")
+								.flatMap(s -> message.delete())
 								.queue(null, Helper::doNothing);
+						message.delete().queue(null, Helper::doNothing);
 					} catch (IOException e) {
 						Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 					}
