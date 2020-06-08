@@ -165,7 +165,7 @@ public class GuildConfig {
 	}
 
 	public void setCanalBV(String canalbv) {
-		if (canalbv.equals("-1")) this.canalbv = "";
+		if (canalbv == null || canalbv.equals("-1")) this.canalbv = "";
 		else this.canalbv = canalbv;
 	}
 
@@ -183,7 +183,7 @@ public class GuildConfig {
 	}
 
 	public void setCanalAdeus(String canaladeus) {
-		if (canaladeus.equals("-1")) this.canaladeus = "";
+		if (canaladeus == null || canaladeus.equals("-1")) this.canaladeus = "";
 		else this.canaladeus = canaladeus;
 	}
 
@@ -201,7 +201,7 @@ public class GuildConfig {
 	}
 
 	public void setCargoWarn(String cargoWarn) {
-		if (cargoWarn.equals("-1")) this.cargoWarn = "";
+		if (cargoWarn == null || cargoWarn.equals("-1")) this.cargoWarn = "";
 		else this.cargoWarn = cargoWarn;
 	}
 
@@ -210,7 +210,7 @@ public class GuildConfig {
 	}
 
 	public void setCargoVip(String cargoVip) {
-		if (cargoVip.equals("-1")) this.cargoVip = "";
+		if (cargoVip == null || cargoVip.equals("-1")) this.cargoVip = "";
 		else this.cargoVip = cargoVip;
 	}
 
@@ -219,7 +219,7 @@ public class GuildConfig {
 	}
 
 	public void setCanalSUG(String canalsug) {
-		if (canalsug.equals("-1")) this.canalsug = "";
+		if (canalsug == null || canalsug.equals("-1")) this.canalsug = "";
 		else this.canalsug = canalsug;
 	}
 
@@ -228,7 +228,7 @@ public class GuildConfig {
 	}
 
 	public void setCanalLvl(String canallvl) {
-		if (canallvl.equals("-1")) this.canallvl = "";
+		if (canallvl == null || canallvl.equals("-1")) this.canallvl = "";
 		else this.canallvl = canallvl;
 	}
 
@@ -269,7 +269,7 @@ public class GuildConfig {
 	}
 
 	public void setCanalRelay(String canalrelay) {
-		if (canalrelay.equals("-1")) this.canalrelay = "";
+		if (canalrelay == null || canalrelay.equals("-1")) this.canalrelay = "";
 		else this.canalrelay = canalrelay;
 	}
 
@@ -365,7 +365,7 @@ public class GuildConfig {
 	}
 
 	public void setCanalLog(String canalLog) {
-		if (canalLog.equals("-1")) this.canalLog = "";
+		if (canalLog == null || canalLog.equals("-1")) this.canalLog = "";
 		else this.canalLog = canalLog;
 	}
 
