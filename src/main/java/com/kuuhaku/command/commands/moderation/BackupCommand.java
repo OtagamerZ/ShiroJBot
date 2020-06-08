@@ -68,6 +68,9 @@ public class BackupCommand extends Command {
 		} else if (!guild.getSelfMember().hasPermission(Permission.ADMINISTRATOR)) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_backup-permission-required")).queue();
 			return;
+		} else if (!member.hasPermission(Permission.ADMINISTRATOR) && !member.isOwner()) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_backup-role-not-high-enough")).queue();
+			return;
 		}
 
 		if (args[0].equalsIgnoreCase("salvar")) {
