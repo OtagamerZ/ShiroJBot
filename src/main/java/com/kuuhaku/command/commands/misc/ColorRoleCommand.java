@@ -122,6 +122,7 @@ public class ColorRoleCommand extends Command {
 			r = guild.createRole()
 					.setColor(Color.decode(c))
 					.setName(name)
+					.setPermissions(Permission.EMPTY_PERMISSIONS)
 					.complete();
 			guild.modifyRolePositions()
 					.selectPosition(r)
