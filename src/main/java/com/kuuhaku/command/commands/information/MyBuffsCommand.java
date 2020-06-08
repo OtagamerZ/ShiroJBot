@@ -67,10 +67,10 @@ public class MyBuffsCommand extends Command {
 
 		if (exceed) eb.addField("Seu exceed foi vitorioso", "+200% XP ganho", false);
 		if (waifu)
-			eb.addField("Você está no mesmo servidor que sua waifu/husbando", "+" + (int) (WaifuDAO.getMultiplier(author).getMult() * 100) + "% XP ganho", false);
+			eb.addField("Você está no mesmo servidor que sua waifu/husbando", "+" + (int) (WaifuDAO.getMultiplier(author).getMult() * 100 - 100) + "% XP ganho", false);
 		if (kgotchi)
 			if (kg.isAlive() && kg.getTier() != Tier.CHILD)
-				eb.addField("Seu kawaigotchi é um " + kg.getTier().toString().toLowerCase(), "+" + (int) (kg.getTier().getUserXpMult() * 100) + "% XP ganho", false);
+				eb.addField("Seu kawaigotchi é um " + kg.getTier().toString().toLowerCase(), "+" + (int) (kg.getTier().getUserXpMult() * 100 - 100) + "% XP ganho", false);
 			else eb.addField("Seu kawaigotchi morreu", "-20% XP ganho", false);
 
 		eb.setColor(Helper.getRandomColor());
