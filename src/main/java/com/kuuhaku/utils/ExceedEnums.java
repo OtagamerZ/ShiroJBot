@@ -55,7 +55,7 @@ public enum ExceedEnums {
 			return Helper.colorThief(Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById(TagIcons.getExceedId(this))).getImageUrl());
 		} catch (IOException | NullPointerException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-			return null;
+			return Helper.getRandomColor();
 		}
 	}
 }
