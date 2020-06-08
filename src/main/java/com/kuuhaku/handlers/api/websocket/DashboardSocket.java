@@ -25,15 +25,13 @@ import com.kuuhaku.utils.Helper;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
+import org.json.JSONObject;
 
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 
 public class DashboardSocket extends WebSocketServer {
-	private final Cache<String, Consumer<ReadyData>> requests = CacheBuilder.newBuilder().expireAfterWrite(5, TimeUnit.MINUTES).build();
+	private final Cache<String, BiContract<WebSocket, ReadyData>> requests = CacheBuilder.newBuilder().expireAfterWrite(5, TimeUnit.MINUTES).build();
 
 	public DashboardSocket(InetSocketAddress address) {
 		super(address);
@@ -49,8 +47,13 @@ public class DashboardSocket extends WebSocketServer {
 
 	@Override
 	public void onMessage(WebSocket conn, String message) {
-		requests.put(message, readyData -> conn.send(readyData.getData().toString()));
-		requests.invalidate(message);
+		JSONObject jo = new JSONObject(message);
+		if (!jo.has("type") || !jo.getString("type").equals("login")) return;
+
+		BiContract<WebSocket, ReadyData> request = requests.getIfPresent(jo.getString("data"));
+		if (request == null) request = new BiContract<>((ws, data) -> ws.send(data.getData().toString()));
+		request.setSignatureA(conn);
+		requests.put(jo.getString("data"), request);
 	}
 
 	@Override
@@ -60,5 +63,16 @@ public class DashboardSocket extends WebSocketServer {
 	@Override
 	public void onStart() {
 		Helper.logger(this.getClass()).info("WebSocket \"dashboard\" iniciado na porta " + this.getPort());
+	}
+
+	public void addReadyData(ReadyData rdata, String session) {
+		BiContract<WebSocket, ReadyData> request = requests.getIfPresent(session);
+		if (request == null) request = new BiContract<>((ws, data) -> ws.send(data.getData().toString()));
+		request.setSignatureB(rdata);
+		requests.put(session, request);
+	}
+
+	public Cache<String, BiContract<WebSocket, ReadyData>> getRequests() {
+		return requests;
 	}
 }
