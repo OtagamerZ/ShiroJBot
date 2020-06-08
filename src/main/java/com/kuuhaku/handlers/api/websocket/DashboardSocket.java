@@ -20,15 +20,34 @@ package com.kuuhaku.handlers.api.websocket;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.kuuhaku.Main;
+import com.kuuhaku.controller.postgresql.*;
+import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.endpoint.ReadyData;
+import com.kuuhaku.model.common.ExportableGuildConfig;
+import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.PrivilegeLevel;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.User;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.awt.*;
+import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class DashboardSocket extends WebSocketServer {
 	private final Cache<String, BiContract<WebSocket, ReadyData>> requests = CacheBuilder.newBuilder().expireAfterWrite(5, TimeUnit.MINUTES).build();
@@ -48,16 +67,162 @@ public class DashboardSocket extends WebSocketServer {
 	@Override
 	public void onMessage(WebSocket conn, String message) {
 		JSONObject jo = new JSONObject(message);
-		if (!jo.has("type") || !jo.getString("type").equals("login")) return;
+		if (!jo.has("type")) return;
 
-		BiContract<WebSocket, ReadyData> request = requests.getIfPresent(jo.getString("data"));
-		if (request == null) request = new BiContract<>((ws, data) -> ws.send(data.getData().toString()));
-		request.setSignatureA(conn);
-		requests.put(jo.getString("data"), request);
+		if (jo.getString("type").equals("login")) {
+			BiContract<WebSocket, ReadyData> request = requests.getIfPresent(jo.getString("data"));
+			if (request == null) request = new BiContract<>((ws, data) -> ws.send(data.getData().toString()));
+			request.setSignatureA(conn);
+			requests.put(jo.getString("data"), request);
+			return;
+		}
+
+		JSONObject payload = jo.getJSONObject("data");
+		if (!payload.has("token") || !validate(payload.getString("token"), conn)) {
+			conn.send(new JSONObject() {{
+				put("type", jo.getString("type"));
+				put("code", HttpURLConnection.HTTP_UNAUTHORIZED);
+			}}.toString());
+		}
+		Token t = TokenDAO.getToken(payload.getString("token"));
+		if (t == null) {
+			conn.send(new JSONObject() {{
+				put("type", jo.getString("type"));
+				put("code", HttpURLConnection.HTTP_UNAUTHORIZED);
+			}}.toString());
+		}
+
+		switch (jo.getString("type")) {
+			case "update":
+				JSONObject cluster = new JSONObject(payload);
+
+				if (cluster.has("guildData")) {
+					JSONObject guild = cluster.getJSONObject("guildData");
+
+					GuildConfig gc = GuildDAO.getGuildById(guild.getString("guildID"));
+
+					JSONObject c = guild.getJSONObject("configs");
+
+					gc.setPrefix(c.getString("prefix"));
+
+					gc.setWarnTime(c.getInt("muteTime"));
+					gc.setPollTime(c.getInt("pollTime"));
+
+					if (!c.getJSONObject("muteRole").isEmpty())
+						gc.setCargoWarn(c.getJSONObject("muteRole").getString("id"));
+
+					gc.setMsgBoasVindas(c.getString("welcomeMessage"));
+					gc.setMsgAdeus(c.getString("goodbyeMessage"));
+
+					if (!c.getJSONObject("welcomeChannel").isEmpty())
+						gc.setCanalBV(c.getJSONObject("welcomeChannel").getString("id"));
+					if (!c.getJSONObject("goodbyeChannel").isEmpty())
+						gc.setCanalAdeus(c.getJSONObject("goodbyeChannel").getString("id"));
+					if (!c.getJSONObject("suggestionChannel").isEmpty())
+						gc.setCanalSUG(c.getJSONObject("suggestionChannel").getString("id"));
+					if (!c.getJSONObject("relayChannel").isEmpty())
+						gc.setCanalRelay(c.getJSONObject("relayChannel").getString("id"));
+					if (!c.getJSONObject("levelUpChannel").isEmpty())
+						gc.setCanalLvl(c.getJSONObject("levelUpChannel").getString("id"));
+
+					JSONObject lr = new JSONObject();
+					c.getJSONArray("levelRoles").forEach(o -> lr.put(((JSONObject) o).getString("level"), ((JSONObject) o).getString("id")));
+
+					gc.setCargosLvl(lr);
+
+					GuildDAO.updateGuildSettings(gc);
+				}
+
+				if (cluster.has("profileData")) {
+					JSONObject data = cluster.getJSONObject("profileData");
+					Member mb = MemberDAO.getMemberById(data.getString("id"));
+
+					mb.setBg(data.getString("bg"));
+					mb.setBio(data.getString("bio"));
+
+					MemberDAO.updateMemberConfigs(mb);
+				}
+				break;
+			case "ticket":
+				JSONObject data = new JSONObject(payload);
+
+				int number = TicketDAO.openTicket(data.getString("message"), Main.getInfo().getUserByID(t.getUid()));
+
+				EmbedBuilder eb = new EmbedBuilder();
+
+				eb.setTitle("Feedback via site (Ticket Nº " + number + ")");
+				eb.addField("Enviador por:", t.getHolder(), true);
+				eb.addField("Enviado em:", Helper.dateformat.format(OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3"))), true);
+				eb.addField("Assunto", data.getString("subject"), false);
+				eb.addField("Mensagem:", "```" + data.getString("message") + "```", false);
+				eb.setColor(Color.decode("#fefefe"));
+
+				Map<String, String> ids = new HashMap<>();
+
+				Main.getInfo().getDevelopers().forEach(dev -> Main.getInfo().getUserByID(dev).openPrivateChannel()
+						.flatMap(m -> m.sendMessage(eb.build()))
+						.flatMap(m -> {
+							ids.put(dev, m.getId());
+							return m.pin();
+						})
+						.complete()
+				);
+
+				TicketDAO.setIds(number, ids);
+				break;
+			case "validate":
+				User u = Main.getInfo().getUserByID(t.getUid());
+				User w = Member.getWaifu(u).isBlank() ? null : Main.getInfo().getUserByID(Member.getWaifu(u));
+				CoupleMultiplier cm = WaifuDAO.getMultiplier(u);
+
+				java.util.List<Member> profiles = MemberDAO.getMemberByMid(u.getId());
+				JSONObject user = new JSONObject() {{
+					put("waifu", w == null ? "" : w.getAsTag());
+					put("waifuMult", cm == null ? 1.25f : cm.getMult());
+					put("profiles", profiles);
+					put("exceed", new JSONObject(ExceedDAO.getExceedState(ExceedDAO.getExceed(u.getId()))));
+					put("credits", AccountDAO.getAccount(u.getId()).getBalance());
+					put("bonuses", Member.getBonuses(u));
+					put("badges", Tags.getUserBadges(u.getId()));
+				}};
+
+				List<Guild> g = u.getMutualGuilds();
+
+				JSONArray guilds = new JSONArray();
+				g.forEach(gd -> {
+					JSONObject guild = new JSONObject() {{
+						put("guildID", gd.getId());
+						put("name", gd.getName());
+						put("moderator", Helper.hasPermission(gd.getMember(u), PrivilegeLevel.MOD));
+						put("channels", gd.getTextChannels().stream().map(tc -> new JSONObject() {{
+							put("id", tc.getId());
+							put("name", tc.getName());
+						}}).collect(Collectors.toList()));
+						put("roles", gd.getRoles().stream().map(r -> new JSONObject() {{
+							put("id", r.getId());
+							put("name", r.getName());
+						}}).collect(Collectors.toList()));
+						put("configs", new ExportableGuildConfig(GuildDAO.getGuildById(gd.getId())).getGuildConfig());
+					}};
+
+					guilds.put(guild);
+				});
+
+				conn.send(new JSONObject() {{
+					put("type", "validate");
+					put("code", HttpURLConnection.HTTP_OK);
+					put("data", new JSONObject() {{
+						put("userData", user);
+						put("serverData", guilds);
+					}});
+				}}.toString());
+				break;
+		}
 	}
 
 	@Override
 	public void onError(WebSocket conn, Exception ex) {
+
 	}
 
 	@Override
@@ -74,5 +239,16 @@ public class DashboardSocket extends WebSocketServer {
 
 	public Cache<String, BiContract<WebSocket, ReadyData>> getRequests() {
 		return requests;
+	}
+
+	private boolean validate(String token, WebSocket conn) {
+		if (!TokenDAO.validateToken(token)) {
+			conn.send(new JSONObject() {{
+				put("code", HttpURLConnection.HTTP_UNAUTHORIZED);
+				put("reason", "Provided token is not valid");
+			}}.toString());
+			return false;
+		}
+		return true;
 	}
 }
