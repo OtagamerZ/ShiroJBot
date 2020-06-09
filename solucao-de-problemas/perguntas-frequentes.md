@@ -13,6 +13,7 @@ Para o pleno funcionamento da Shiro ela precisa de certas permissões, que são:
 * Gerenciar canais
 * Expulsar membros
 * Banir membros
+* Criar convites instantâneos
 * Gerenciar webhooks
 * Ler mensagens
 * Enviar mensagens
