@@ -444,13 +444,7 @@
       <workItem from="1591636495949" duration="4763000" />
       <workItem from="1591643146423" duration="13000" />
       <workItem from="1591643243222" duration="103000" />
-    </task>
-    <task id="LOCAL-01300" summary="Implementação do ShiroCryptor">
-      <created>1591297224902</created>
-      <option name="number" value="01300" />
-      <option name="presentableId" value="LOCAL-01300" />
-      <option name="project" value="LOCAL" />
-      <updated>1591297224902</updated>
+      <workItem from="1591644126367" duration="1236000" />
     </task>
     <task id="LOCAL-01301" summary="Implementação do ShiroCryptor">
       <created>1591297678240</created>
@@ -788,7 +782,14 @@
       <option name="project" value="LOCAL" />
       <updated>1591641154946</updated>
     </task>
-    <option name="localTasksCounter" value="1349" />
+    <task id="LOCAL-01349" summary="Implementação de BiContract para requisições do site">
+      <created>1591644199849</created>
+      <option name="number" value="01349" />
+      <option name="presentableId" value="LOCAL-01349" />
+      <option name="project" value="LOCAL" />
+      <updated>1591644199850</updated>
+    </task>
+    <option name="localTasksCounter" value="1350" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -931,12 +932,12 @@
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1591641152261">
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1591644196940">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1591419311134" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1591641152261" />
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1591644196940" />
     <state width="247" height="195" key="DatabaseViewActions_Filter" timestamp="1591416926427">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -1023,12 +1024,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1591641164873">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1591644202158">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1591419318874" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1591641164873" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1591644202158" />
     <state x="695" y="627" width="383" height="267" key="XPathView.InputDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1583260599414">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
