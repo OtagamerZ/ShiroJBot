@@ -2,7 +2,7 @@
 description: Vamos apresentar a Shiro!
 ---
 
-# Página inicial
+# Página Inicial
 
 Precisa de um bot de reações? Talvez um bot de moderação de servidor? Ou até mesmo quem sabe um compilador Java para testar seus códigos? Seja o que for, Shiro pode complementar seu servidor com mais de 90 comandos dos mais diversos tipos!
 
@@ -18,11 +18,11 @@ Pela Shiro estar em desenvolvimento constante, foram criados dois bots adicionai
 
 ### Para ser um parceiro
 
-* Convidar um dos desenvolvedores para participar do servidor, a fim de monitorar o uso da Shiro
-* Ter uma administração ativa, com pelo menos regras de comportamento
-* Ter ao menos 20 membros ativos \(exceto bots e contas fake\)
-* Utilizar a Shiro ativamente \(não deixar ela apenas como "mais um bot"\)
-* Informar os desenvolvedores caso ocorram erros no uso da Shiro
+* [ ] Convidar um dos desenvolvedores para participar do servidor, a fim de monitorar o uso da Shiro
+* [ ] Ter uma administração ativa, com pelo menos regras de comportamento
+* [ ] Ter ao menos 20 membros ativos \(exceto bots e contas fake\)
+* [ ] Utilizar a Shiro ativamente \(não deixar ela apenas como "mais um bot"\)
+* [ ] Informar os desenvolvedores caso ocorram erros no uso da Shiro
 
 ### Para informar erros
 
