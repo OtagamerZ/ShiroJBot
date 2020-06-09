@@ -6,7 +6,11 @@
 
 * [Meus Comandos](guia/meus-comandos/README.md)
   * [Informação](guia/meus-comandos/informacao/README.md)
-    * [O Comando Help](guia/meus-comandos/informacao/untitled-1.md)
+    * [Ajuda](guia/meus-comandos/informacao/untitled-1.md)
+
+## Solução de problemas
+
+* [Perguntas Frequentes](solucao-de-problemas/perguntas-frequentes.md)
 
 ## Links úteis
 
