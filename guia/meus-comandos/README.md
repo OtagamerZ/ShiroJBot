@@ -19,9 +19,13 @@ Quais tipos de usuários podem usar este comando.
 
 Quais permissões são necessárias para o uso deste comando. Não irei listar as permissões básicas como ler/enviar mensagens ou inserir links, pois essas são padrão para o uso da Shiro de qualquer forma.
 
-* [ ] Permissão 1
-* [ ] Permissão 2 \(opcional\)
-* [ ] Permissão 3
+* Permissão 1
+* Permissão 2 \(opcional\)
+* Permissão 3
+
+### Aliases
+
+* De que outras formas este comando pode ser escrito.
 
 ### Descrição
 

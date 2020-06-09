@@ -10,7 +10,15 @@ description: Ficou perdido? Com o help não mais!
 
 ### Permissões necessárias
 
-* [ ] Gerenciar mensagens \(opcional\)
+* Gerenciar mensagens \(opcional\)
+
+### Aliases
+
+* help
+* cmd
+* cmds
+* comando
+* comandos
 
 ### Descrição
 
