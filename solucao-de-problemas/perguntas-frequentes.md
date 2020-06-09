@@ -8,24 +8,24 @@ description: Será que a sua não está aqui?
 
 Para o pleno funcionamento da Shiro ela precisa de certas permissões, que são:
 
-* [ ] Gerenciar servidor
-* [ ] Gerenciar cargos
-* [ ] Gerenciar canais
-* [ ] Expulsar membros
-* [ ] Banir membros
-* [ ] Gerenciar webhooks
-* [ ] Ler mensagens
-* [ ] Enviar mensagens
-* [ ] Gerenciar mensagens
-* [ ] Inserir links
-* [ ] Enviar arquivos
-* [ ] Ler histórico de mensagens
-* [ ] Usar emojis externos
-* [ ] Adicionar reações
-* [ ] Ver canais
-* [ ] Conectar
-* [ ] Falar
-* [ ] Usar atividade de voz
+* Gerenciar servidor
+* Gerenciar cargos
+* Gerenciar canais
+* Expulsar membros
+* Banir membros
+* Gerenciar webhooks
+* Ler mensagens
+* Enviar mensagens
+* Gerenciar mensagens
+* Inserir links
+* Enviar arquivos
+* Ler histórico de mensagens
+* Usar emojis externos
+* Adicionar reações
+* Ver canais
+* Conectar
+* Falar
+* Usar atividade de voz
 
 Verifique se todas as permissões acima foram dadas e que nenhuma permissão do canal esteja sobrescrevendo estas.
 
@@ -33,7 +33,7 @@ Verifique se todas as permissões acima foram dadas e que nenhuma permissão do 
 
 Excelente! Você possui em mãos uma ótima forma de ajudar no desenvolvimento da Shiro!
 
-Para reportar um bug/sugestão é bem simples, basta utilizar o comando bug e todos os desenvolvedores serão notificados do seu achado/sugestão.
+Para reportar um bug/sugestão é bem simples, basta utilizar o comando [bug ](../guia/meus-comandos/informacao/bug.md)e todos os desenvolvedores serão notificados do seu achado/sugestão.
 
 **Exemplo:** `s!bug Achei bug XYZ` ou `s!bug Tenho uma sugestão XYZ`
 
@@ -41,7 +41,7 @@ Para reportar um bug/sugestão é bem simples, basta utilizar o comando bug e to
 
 Uh oh, isso não é legal! 
 
-Se alguém começar a utilizar a Shiro para fins maléficos, você pode reportar o usuário para análise da equipe administrativa usando o comando report. Se for um motivo válido, esse usuário poderá ser impedido de usar a Shiro por tempo indeterminado.
+Se alguém começar a utilizar a Shiro para fins maléficos, você pode reportar o usuário para análise da equipe administrativa usando o comando [report](../guia/meus-comandos/informacao/report.md). Se for um motivo válido, esse usuário poderá ser impedido de usar a Shiro por tempo indeterminado.
 
 **Exemplo:** `s!report @Fulano Está usando a Shiro para o mal`
 
@@ -53,5 +53,5 @@ Porém isso não significa acesso ao token ou coisa do tipo, a Shiro possui vár
 
 ## Quero ser um parceiro, como eu faço?
 
-[Leia isso](https://app.gitbook.com/@yagogimenez1/s/shiro-j-bot/#seja-um-parceiro).
+[Leia isso](../#seja-um-parceiro).
 
