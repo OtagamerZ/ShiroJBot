@@ -5,9 +5,11 @@
 ## Guia
 
 * [Meus Comandos](guia/meus-comandos/README.md)
-  * [Untitled](guia/meus-comandos/untitled.md)
+  * [Informação](guia/meus-comandos/informacao/README.md)
+    * [O Comando Help](guia/meus-comandos/informacao/untitled-1.md)
 
 ## Links úteis
 
+* [JDA](https://github.com/DV8FromTheWorld/JDA)
 * [Pagination Utils](https://github.com/ygimenez/Pagination-Utils)
 
