@@ -4,8 +4,6 @@ description: Seu cartão de perfil!
 
 # Perfil
 
-
-
 {% hint style="success" %}
 ### Nível de permissão: `Usuário`
 {% endhint %}
@@ -29,5 +27,5 @@ Além disso, no perfil você também pode ver as tags \(até 9\) que você conqu
 ### Exemplos
 
 * `s!perfil`
-  * Irá mostrar seu perfil.
+  * Mostrará seu perfil.
 

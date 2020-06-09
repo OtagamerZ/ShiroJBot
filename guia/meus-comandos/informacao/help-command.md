@@ -31,10 +31,10 @@ Quando tiver dúvidas, sempre consulte o comando ajuda!
 ### Exemplos
 
 * `s!ajuda`
-  * Irá mostrar a lista de comandos, agrupados por categoria.
+  * Mostrará a lista de comandos, agrupados por categoria.
   * Caso a Shiro não possua a permissão de gerenciar mensagens, será mostrada uma lista completa de todos os comandos.
 * `s!ajuda ping`
-  * Irá mostrar a descrição de uso do comando ping.
+  * Mostrará a descrição de uso do comando ping.
 * `s!ajuda rir`
-  * Ira mostrar a descrição de uso do comando rir.
+  * Mostrará a descrição de uso do comando rir.
 
