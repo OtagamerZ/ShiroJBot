@@ -6,7 +6,25 @@
 
 * [Meus Comandos](guia/meus-comandos/README.md)
   * [Informação](guia/meus-comandos/informacao/README.md)
-    * [Ajuda](guia/meus-comandos/informacao/untitled-1.md)
+    * [Ajuda](guia/meus-comandos/informacao/help-command.md)
+    * [Perfil](guia/meus-comandos/informacao/perfil.md)
+    * [Bug](guia/meus-comandos/informacao/bug.md)
+    * [Report](guia/meus-comandos/informacao/report.md)
+    * [Untitled](guia/meus-comandos/informacao/untitled-4.md)
+    * [Untitled](guia/meus-comandos/informacao/untitled-18.md)
+    * [Untitled](guia/meus-comandos/informacao/untitled-17.md)
+    * [Untitled](guia/meus-comandos/informacao/untitled-16.md)
+    * [Untitled](guia/meus-comandos/informacao/untitled-15.md)
+    * [Untitled](guia/meus-comandos/informacao/untitled-14.md)
+    * [Untitled](guia/meus-comandos/informacao/untitled-13.md)
+    * [Untitled](guia/meus-comandos/informacao/untitled-12.md)
+    * [Untitled](guia/meus-comandos/informacao/untitled-11.md)
+    * [Untitled](guia/meus-comandos/informacao/untitled-10.md)
+    * [Untitled](guia/meus-comandos/informacao/untitled-9.md)
+    * [Untitled](guia/meus-comandos/informacao/untitled-8.md)
+    * [Untitled](guia/meus-comandos/informacao/untitled-7.md)
+    * [Untitled](guia/meus-comandos/informacao/untitled-6.md)
+    * [Untitled](guia/meus-comandos/informacao/untitled-5.md)
 
 ## Solução de problemas
 
