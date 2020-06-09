@@ -63,11 +63,8 @@ public enum Tag {
 	LEVEL("icons/lvl_{0}.png", null, "Usuário que atingiu um dos marcos de level.",
 			(user, member) -> true),
 
-	MILIONARIO("icons/millionaire.png", TagIcons.MILLION, "Usuário que possui 1 milhão de créditos.",
-			(user, member) -> AccountDAO.getAccount(user.getId()).getBalance() > 1000000),
-
-	MEIO_MILIONARIO("icons/half_millionaire.png", TagIcons.HALFMILLION, "Usuário que possui meio milhão de créditos.",
-			(user, member) -> AccountDAO.getAccount(user.getId()).getBalance() > 500000);
+	RICO("icons/rich.png", TagIcons.MILLION, "Usuário que possui 100 mil de créditos.",
+			(user, member) -> AccountDAO.getAccount(user.getId()).getBalance() > 100000);
 
 	private final String path;
 	private final TagIcons emote;
