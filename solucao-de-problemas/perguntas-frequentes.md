@@ -51,3 +51,7 @@ Mas é claro! A equipe está sempre de braços abertos para novos ajudantes!
 
 Porém isso não significa acesso ao token ou coisa do tipo, a Shiro possui vários setores que estão precisando de mais ajuda, incluindo ajudar a equipe de moderação do [servidor de suporte](https://discord.gg/9sgkzna).
 
+## Quero ser um parceiro, como eu faço?
+
+[Leia isso](https://app.gitbook.com/@yagogimenez1/s/shiro-j-bot/#seja-um-parceiro).
+
