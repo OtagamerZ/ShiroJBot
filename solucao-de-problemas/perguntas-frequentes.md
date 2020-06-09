@@ -52,6 +52,12 @@ Mas é claro! A equipe está sempre de braços abertos para novos ajudantes!
 
 Porém isso não significa acesso ao token ou coisa do tipo, a Shiro possui vários setores que estão precisando de mais ajuda, incluindo ajudar a equipe de moderação do [servidor de suporte](https://discord.gg/9sgkzna).
 
+## Fui bloqueado de usar a Shiro, e agora?
+
+Você pode enviar uma solicitação de desbloqueio para a equipe administrativa da Shiro \(via PM\), porém se o motivo de bloqueio foi válido não há o que fazer.
+
+Melhor repensar suas atitudes!
+
 ## Quero ser um parceiro, como eu faço?
 
 [Leia isso](../#seja-um-parceiro).
