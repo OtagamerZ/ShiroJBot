@@ -66,3 +66,9 @@ Melhor repensar suas atitudes!
 
 Shiromote é a notação usada para descrever emotes para serem usados no chat global ou no comando say. Basta copiar o shiromote e colar em um dos dois que ele será convertido automaticamente para o emote original.
 
+## Socorro, a Shiro não está respondendo!
+
+Sempre que isso ocorrer, verifique se o status dela não está marcado "Iniciando...". Se estiver, isso significa que ela está sendo atualizada e que logo estará online novamente.
+
+Se não estiver iniciando, contate um desenvolvedor da Shiro ou [envie-nos um e-mail](mailto:contato.otagamerz@gmail.com?subject=%5BERRO%5D+-+Shiro+Offline) avisando sobre a queda.
+
