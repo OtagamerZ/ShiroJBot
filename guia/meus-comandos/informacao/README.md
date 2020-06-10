@@ -23,6 +23,6 @@ description: Comandos que mostram dados ou descrições de.....coisas!
 * [Tags](tags.md)
 * [Suas Tags](suas-tags.md)
 * [Seus Buffs](seus-buffs.md)
-* CatNet
-* Anime
+* [CatNet](catnet.md)
+* [Anime](anime.md)
 
