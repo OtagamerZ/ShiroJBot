@@ -14,6 +14,7 @@ description: Seu cartão de perfil!
 
 ### Aliases
 
+* perfil
 * xp
 * pf
 * profile
