@@ -42,7 +42,7 @@ Para reportar um bug/sugestão é bem simples, basta utilizar o comando [bug ](.
 
 Uh oh, isso não é legal! 
 
-Se alguém começar a utilizar a Shiro para fins maléficos, você pode reportar o usuário para análise da equipe administrativa usando o comando [report](../guia/meus-comandos/informacao/report.md). Se for um motivo válido, esse usuário poderá ser impedido de usar a Shiro por tempo indeterminado.
+Se alguém começar a utilizar a Shiro para fins maléficos, você pode reportar o usuário para análise da equipe administrativa usando o comando [report](../guia/meus-comandos/informacao/reportar.md). Se for um motivo válido, esse usuário poderá ser impedido de usar a Shiro por tempo indeterminado.
 
 **Exemplo:** `s!report @Fulano Está usando a Shiro para o mal`
 
@@ -61,4 +61,8 @@ Melhor repensar suas atitudes!
 ## Quero ser um parceiro, como eu faço?
 
 [Leia isso](../#seja-um-parceiro).
+
+## O que é um "shiromote"?
+
+Shiromote é a notação usada para descrever emotes para serem usados no chat global ou no comando say. Basta copiar o shiromote e colar em um dos dois que ele será convertido automaticamente para o emote original.
 

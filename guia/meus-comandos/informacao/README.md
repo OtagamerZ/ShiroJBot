@@ -9,20 +9,20 @@ description: Comandos que mostram dados ou descrições de.....coisas!
 * [Ajuda](help-command.md)
 * [Perfil](perfil.md)
 * [Bug](bug.md)
-* [Report](report.md)
-* Suporte
-* Info
-* Rank
-* Que cor
-* Emotes Locais
-* Emotes da Shiro
-* Carteira
-* Ping
-* Uptime
-* Notas
-* Tags
-* Suas Tags
-* Seus Buffs
+* [Reportar](reportar.md)
+* [Suporte](suporte.md)
+* [Info](info.md)
+* [Rank](rank.md)
+* [Que cor](que-cor.md)
+* [Emotes Locais](emotes-locais.md)
+* [Emotes da Shiro](emotes-da-shiro.md)
+* [Carteira](carteira.md)
+* [Ping](ping.md)
+* [Uptime](uptime.md)
+* [Notas](notas.md)
+* [Tags](tags.md)
+* [Suas Tags](suas-tags.md)
+* [Seus Buffs](seus-buffs.md)
 * CatNet
 * Anime
 

@@ -36,5 +36,7 @@ Uma breve descrição sobre para o quê serve este comando.
 * Alguns exemplos de como usar este comando
 {% endhint %}
 
+**Note que o prefixo padrão da Shiro é `s!`.**
+
 Então sem mais delongas, vamos à parte interessante!
 
