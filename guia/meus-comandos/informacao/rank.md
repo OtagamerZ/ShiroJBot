@@ -14,6 +14,7 @@ description: Pronto para umas ranqueadas?
 
 ### Aliases
 
+* rank
 * ranking
 * top10
 

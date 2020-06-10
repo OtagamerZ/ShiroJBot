@@ -14,6 +14,7 @@ description: 'Minhas informações, quando serão os parabéns?'
 
 ### Aliases
 
+* info
 * botinfo
 * bot
 

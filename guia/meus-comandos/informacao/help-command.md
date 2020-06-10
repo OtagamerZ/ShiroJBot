@@ -14,6 +14,7 @@ description: Ficou perdido? Com o help não mais!
 
 ### Aliases
 
+* ajuda
 * help
 * cmd
 * cmds

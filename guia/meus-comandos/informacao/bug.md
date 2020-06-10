@@ -14,6 +14,7 @@ description: 'Opa, achei um bug!'
 
 ### Aliases
 
+* bug
 * sendbug
 * feedback
 

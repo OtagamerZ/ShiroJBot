@@ -2,7 +2,7 @@
 description: 'Ora ora, parece que alguém não ganhará presentes do Papai Noel!'
 ---
 
-# Report
+# Reportar
 
 {% hint style="success" %}
 ### Nível de permissão: `Usuário`
@@ -15,6 +15,7 @@ description: 'Ora ora, parece que alguém não ganhará presentes do Papai Noel!
 ### Aliases
 
 * reportar
+* report
 
 ### Descrição
 
@@ -24,6 +25,6 @@ Claro que, abusar deste comando ou reportar sem motivo algum poderá fazer com q
 
 ### Exemplos
 
-* `s!report @Fulano Está agindo igual uma marmota`
+* `s!reportar @Fulano Está agindo igual uma marmota`
   * Enviará um relatório de report aos administradores da Shiro contendo o texto "Está agindo igual uma marmota".
 
