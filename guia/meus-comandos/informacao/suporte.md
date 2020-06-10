@@ -14,6 +14,7 @@ description: 'Mayday, mayday, precisamos de ajuda!'
 
 ### Aliases
 
+* suporte
 * support
 * assist
 
