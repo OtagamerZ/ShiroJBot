@@ -25,7 +25,7 @@ Quais permissões são necessárias para o uso deste comando. Não irei listar a
 
 ### Aliases
 
-* De que outras formas este comando pode ser escrito.
+* De quais formas este comando pode ser escrito.
 
 ### Descrição
 
