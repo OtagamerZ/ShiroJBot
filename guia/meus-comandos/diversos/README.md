@@ -6,9 +6,9 @@ description: Comandos que não entram em nenhuma outra categoria!
 
 ## Nesta categoria
 
-* Fundo
-* Biografia
-* ASCII
+* [Fundo](fundo.md)
+* [Biografia](biografia.md)
+* [ASCII](ascii.md)
 * Avatar
 * Cara ou Coroa
 * Inverter
