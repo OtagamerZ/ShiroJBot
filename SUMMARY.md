@@ -56,4 +56,5 @@
 
 * [JDA](https://github.com/DV8FromTheWorld/JDA)
 * [Pagination Utils](https://github.com/ygimenez/Pagination-Utils)
+* [Status do Discord](https://status.discord.com/)
 
