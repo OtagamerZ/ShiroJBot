@@ -24,6 +24,8 @@ import com.kuuhaku.command.Command;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
+import java.util.concurrent.Executors;
+
 public class KillCommand extends Command {
 
 	public KillCommand(String name, String description, Category category, boolean requiresMM) {
@@ -50,7 +52,9 @@ public class KillCommand extends Command {
 			channel.sendMessage("Iniciando o protocolo de encerramento...").queue(m -> Main.kill = new String[]{channel.getId(), m.getId()});
 		}
 
-		Main.shutdown();
-		System.exit(0);
+		Executors.newSingleThreadExecutor().execute(() -> {
+			Main.shutdown();
+			System.exit(0);
+		});
 	}
 }
