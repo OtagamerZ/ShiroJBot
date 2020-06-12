@@ -60,9 +60,6 @@ public class CommandManager {
 			add(new KillCommand(
 					"desligar", new String[]{"kill"}, getLocale(PT).getString("cmd_kill"), DEV, false
 			));
-			add(new RestartCommand(
-					"reiniciar", new String[]{"restart"}, getLocale(PT).getString("cmd_restart"), DEV, false
-			));
 			add(new LeaveCommand(
 					"sair", new String[]{"leave"}, getLocale(PT).getString(REQ_SERVER_ID), getLocale(PT).getString("cmd_leave"), DEV, true
 			));

@@ -18,6 +18,7 @@
 
 package com.kuuhaku.controller.postgresql;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.model.common.DataDump;
@@ -50,26 +51,31 @@ public class BackupDAO {
 			em.merge(data.getCaDump().get(i));
 			saveChunk(em, i, caDump.size(), "respostas");
 		}
+		Helper.logger(Main.class).info("Respostas salvas com sucesso!");
 
 		for (int i = 0; i < gcDump.size(); i++) {
 			em.merge(data.getGcDump().get(i));
 			saveChunk(em, i, gcDump.size(), "configurações");
 		}
+		Helper.logger(Main.class).info("Configurações salvas com sucesso!");
 
 		for (int i = 0; i < mDump.size(); i++) {
 			em.merge(data.getmDump().get(i));
 			saveChunk(em, i, mDump.size(), "membros");
 		}
+		Helper.logger(Main.class).info("Membros salvos com sucesso!");
 
 		for (int i = 0; i < kgDump.size(); i++) {
 			em.merge(data.getKgDump().get(i));
 			saveChunk(em, i, kgDump.size(), "kgotchis");
 		}
+		Helper.logger(Main.class).info("Kawaigotchis salvos com sucesso!");
 
 		for (int i = 0; i < psDump.size(); i++) {
 			em.merge(data.getPsDump().get(i));
 			saveChunk(em, i, psDump.size(), "estados");
 		}
+		Helper.logger(Main.class).info("Estados salvos com sucesso!");
 
 		em.getTransaction().commit();
 		em.close();
@@ -84,7 +90,7 @@ public class BackupDAO {
 			em.getTransaction().commit();
 			em.clear();
 			em.getTransaction().begin();
-			Helper.logger(BackupDAO.class).info("Salvo chunk de " + name + " (" + (i / 1000) + "/" + (size / 1000) + ")");
+			Helper.logger(BackupDAO.class).debug("Salvo chunk de " + name + " (" + (i / 1000) + "/" + (size / 1000) + ")");
 		}
 	}
 
