@@ -24,6 +24,7 @@ import com.kuuhaku.handlers.games.tabletop.entity.Spot;
 import com.kuuhaku.handlers.games.tabletop.enums.Board;
 import com.kuuhaku.handlers.games.tabletop.enums.PieceIcon;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class King extends Piece {
 		if (b.getSpot(to) != null && b.getSpot(to).getOwner().equals(getOwner())) return false;
 
 		if (Arrays.stream(new int[][]{UPPER_LEFT, UP, UPPER_RIGHT, MIDDLE_LEFT, MIDDLE_RIGHT, LOWER_LEFT, DOWN, LOWER_RIGHT}).anyMatch(i -> getSpot().getNextSpot(i).equals(to))) {
-			return true;//!check(b, to);
+			return !check(b, to);
 		}
 
 		if (isFirstMove()) {
@@ -57,36 +58,11 @@ public class King extends Piece {
 	}
 
 	public boolean check(Board b, Spot spot) {
-		boolean hCheck = false;
-		boolean vCheck = false;
-		boolean dCheck = false;
-		boolean kCheck = false;
-		boolean pCheck = false;
-
-		if (Arrays.stream(b.getRow(spot.getY())).anyMatch(p -> p != null && !p.getOwner().equals(getOwner()) && p.anyMatch(Rook.class, Queen.class)))
-			hCheck = true;
-		else if (Arrays.stream(b.getColumn(spot.getX())).anyMatch(p -> p != null && !p.getOwner().equals(getOwner()) && p.anyMatch(Rook.class, Queen.class)))
-			vCheck = true;
-		else if (Arrays.stream(b.getCrossSection(spot.getX(), true)).anyMatch(p -> p != null && !p.getOwner().equals(getOwner()) && p.anyMatch(Bishop.class, Queen.class)))
-			dCheck = true;
-		else if (Arrays.stream(b.getCrossSection(spot.getX(), false)).anyMatch(p -> p != null && !p.getOwner().equals(getOwner()) && p.anyMatch(Bishop.class, Queen.class)))
-			dCheck = true;
-		else {
-			if (getOwner().isWhite()) for (int[] pos : new int[][]{UPPER_LEFT, UPPER_RIGHT}) {
-				Piece p = b.getSpot(spot.getNextSpot(pos));
-				pCheck = p instanceof Pawn && !p.getOwner().equals(getOwner());
-			}
-			else for (int[] pos : new int[][]{LOWER_LEFT, LOWER_RIGHT}) {
-				Piece p = b.getSpot(spot.getNextSpot(pos));
-				pCheck = p instanceof Pawn && !p.getOwner().equals(getOwner());
-			}
-
-			for (int[] pos : new int[][]{{-1, -2}, {-2, -1}, {1, -2}, {2, -1}, {-1, 2}, {-2, 1}, {1, 2}, {2, 1}}) {
-				Piece p = b.getSpot(spot.getNextSpot(pos));
-				kCheck = p instanceof Knight && !p.getOwner().equals(getOwner());
-			}
+		List<Piece> threats = new ArrayList<>();
+		for (Piece[] ps : b.getLayout()) {
+			threats.addAll(List.of(ps));
 		}
 
-		return Arrays.stream(new Boolean[]{hCheck, vCheck, dCheck, kCheck, pCheck}).anyMatch(bo -> bo);
+		return threats.stream().filter(p -> !p.getOwner().equals(getOwner())).anyMatch(p -> p.validate(b, spot));
 	}
 }

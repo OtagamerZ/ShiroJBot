@@ -19,10 +19,15 @@
 package com.kuuhaku.handlers.games.tabletop.enums;
 
 import com.kuuhaku.handlers.games.tabletop.entity.Piece;
+import com.kuuhaku.handlers.games.tabletop.entity.Player;
 import com.kuuhaku.handlers.games.tabletop.entity.Spot;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Board {
 	private final Piece[][] board;
@@ -87,6 +92,14 @@ public class Board {
 				cross[i] = board[(board.length - 1) - i][i];
 			}
 		return cross;
+	}
+
+	public <T extends Piece> List<T> getPieceByType(Class<T> type, Player player) {
+		List<T> pieces = new ArrayList<>();
+		for (Piece[] ps : board) {
+			pieces.addAll(Arrays.stream(ps).filter(p -> p.getClass().equals(type) && p.getOwner().equals(player)).map(p -> (T) p).collect(Collectors.toList()));
+		}
+		return pieces;
 	}
 
 	public Piece[] getCrossSection(int column, boolean descend) {

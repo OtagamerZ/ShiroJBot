@@ -33,6 +33,13 @@ public class Bishop extends Piece {
 	public boolean validate(Board b, Spot to) {
 		boolean blocked = false;
 
+		try {
+			King k = b.getPieceByType(King.class, getOwner()).get(0);
+			if (k.check(b, k.getSpot())) return false;
+		} catch (IndexOutOfBoundsException e) {
+			return false;
+		}
+
 		if (Math.abs(to.getX() - getSpot().getX()) == Math.abs(to.getY() - getSpot().getY())) {
 			for (int x = getSpot().getX(), y = getSpot().getY();
 				 to.getX() > getSpot().getX() ? x < to.getX() : x > to.getX() && to.getY() > getSpot().getY() ? y < to.getY() : y > to.getY();
