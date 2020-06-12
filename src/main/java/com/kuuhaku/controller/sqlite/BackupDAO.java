@@ -21,7 +21,6 @@ package com.kuuhaku.controller.sqlite;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.model.common.DataDump;
-import com.kuuhaku.model.persistent.AppUser;
 import com.kuuhaku.model.persistent.CustomAnswers;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Member;
@@ -40,7 +39,6 @@ public class BackupDAO {
 			data.getCaDump().forEach(em::merge);
 			data.getmDump().forEach(em::merge);
 			data.getGcDump().forEach(em::merge);
-			data.getAuDump().forEach(em::merge);
 			data.getKgDump().forEach(em::merge);
 			data.getPsDump().forEach(em::merge);
 			em.getTransaction().commit();
@@ -85,19 +83,6 @@ public class BackupDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT g FROM GuildConfig g", GuildConfig.class);
-
-		try {
-			return q.getResultList();
-		} finally {
-			em.close();
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public static List<AppUser> getAppUserDump() {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createQuery("SELECT u FROM AppUser u", AppUser.class);
 
 		try {
 			return q.getResultList();
