@@ -25,8 +25,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/KillCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/KillCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,7 +105,23 @@
         </task>
         <projects_view>
           <tree_state>
-            <expand />
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="shiro-j-bot" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="shiro-j-bot" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="shiro-j-bot" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="shadow" type="c8890929:TasksNode$1" />
+              </path>
+            </expand>
             <select />
           </tree_state>
         </projects_view>
@@ -212,7 +230,7 @@
       <command value="gradle :javadoc" />
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Gradle.ShiroJBot [shadowJar]">
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -232,6 +250,25 @@
       <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
       <method v="2" />
     </configuration>
+    <configuration name="ShiroJBot [shadowJar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="shadowJar" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -243,6 +280,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.ShiroJBot [shadowJar]" />
         <item itemvalue="Gradle.ShiroJBot [:javadoc]" />
       </list>
     </recent_temporary>
@@ -449,14 +487,8 @@
       <workItem from="1591704306739" duration="491000" />
       <workItem from="1591723048574" duration="168000" />
       <workItem from="1591812877517" duration="1300000" />
-      <workItem from="1591966052372" duration="4080000" />
-    </task>
-    <task id="LOCAL-01305" summary="Implementação do ShiroCryptor">
-      <created>1591298303870</created>
-      <option name="number" value="01305" />
-      <option name="presentableId" value="LOCAL-01305" />
-      <option name="project" value="LOCAL" />
-      <updated>1591298303870</updated>
+      <workItem from="1591966052372" duration="5515000" />
+      <workItem from="1591978648088" duration="977000" />
     </task>
     <task id="LOCAL-01306" summary="Remoção do ShiroCryptor;&#10;Adição de outro encriptador;">
       <created>1591300438153</created>
@@ -794,7 +826,14 @@
       <option name="project" value="LOCAL" />
       <updated>1591972355044</updated>
     </task>
-    <option name="localTasksCounter" value="1354" />
+    <task id="LOCAL-01354" summary="Otimização no processo de sincronização com o banco remoto">
+      <created>1591972663730</created>
+      <option name="number" value="01354" />
+      <option name="presentableId" value="LOCAL-01354" />
+      <option name="project" value="LOCAL" />
+      <updated>1591972663730</updated>
+    </task>
+    <option name="localTasksCounter" value="1355" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -953,30 +992,30 @@
     <state x="504" y="188" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1585946052476" />
     <state x="504" y="198" key="FileChooserDialogImpl/0.0.1366.768@0.0.1366.768" timestamp="1585071666306" />
     <state x="620" y="261" key="FileChooserDialogImpl/0.0.1680.1010@0.0.1680.1010" timestamp="1590148932552" />
-    <state width="905" height="270" key="GridCell.Tab.0.bottom" timestamp="1591418019145">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state width="1637" height="279" key="GridCell.Tab.0.bottom" timestamp="1591978611473">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="179" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1585946331158" />
     <state width="905" height="270" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1637" height="279" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1591101856467" />
-    <state width="905" height="270" key="GridCell.Tab.0.center" timestamp="1591418019145">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state width="1637" height="279" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1591978611473" />
+    <state width="1637" height="279" key="GridCell.Tab.0.center" timestamp="1591978611473">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="179" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1585946331158" />
     <state width="905" height="270" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1637" height="279" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1591101856467" />
-    <state width="905" height="270" key="GridCell.Tab.0.left" timestamp="1591418019145">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state width="1637" height="279" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1591978611473" />
+    <state width="1637" height="279" key="GridCell.Tab.0.left" timestamp="1591978611472">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="179" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1585946331158" />
     <state width="905" height="270" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1637" height="279" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1591101856467" />
-    <state width="905" height="270" key="GridCell.Tab.0.right" timestamp="1591418019145">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state width="1637" height="279" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1591978611472" />
+    <state width="1637" height="279" key="GridCell.Tab.0.right" timestamp="1591978611473">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="179" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1585946331158" />
     <state width="905" height="270" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1637" height="279" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1591101856467" />
+    <state width="1637" height="279" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1591978611473" />
     <state width="1323" height="230" key="GridCell.Tab.1.bottom" timestamp="1587921284835">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -1025,12 +1064,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1591972379975">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1591972668135">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1591419318874" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1591972379975" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1591972668135" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1589991335906">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
