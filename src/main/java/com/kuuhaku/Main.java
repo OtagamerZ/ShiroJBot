@@ -50,6 +50,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import javax.persistence.NoResultException;
 import java.io.File;
+import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -68,8 +69,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	public static final File lock = new File("shiro.lock");
 
 	public static void main(String[] args) throws Exception {
-		while (!lock.createNewFile()) Thread.sleep(2000);
-		lock.deleteOnExit();
 		Helper.logger(Main.class).info("\nShiro J. Bot  Copyright (C) 2020 Yago Gimenez (KuuHaKu)\n" +
 				"This program comes with ABSOLUTELY NO WARRANTY\n" +
 				"This is free software, and you are welcome to redistribute it under certain conditions\n" +
@@ -132,7 +131,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		finishStartUp();
 	}
 
-	private static void finishStartUp() {
+	private static void finishStartUp() throws IOException, InterruptedException {
 		api.getPresence().setActivity(getRandomActivity());
 		jbr.getPresence().setActivity(Activity.listening("as mensagens de " + relay.getRelayMap().size() + " servidores!"));
 		getInfo().setWinner(ExceedDAO.getWinner());
@@ -144,6 +143,10 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				Helper.logger(Main.class).info("Guild adicionada ao banco: " + g.getName());
 			}
 		});
+
+		while (!lock.createNewFile()) Thread.sleep(2000);
+		lock.deleteOnExit();
+
 		api.addEventListener(Main.getInfo().getShiroEvents());
 		api.addEventListener(new GuildEvents());
 		api.addEventListener(new GuildUpdateEvents());
