@@ -99,6 +99,9 @@ public class CommandManager {
 			add(new DrawRaffleCommand(
 					"rifa", new String[]{"raffle"}, getLocale(PT).getString("req_period"), getLocale(PT).getString("cmd_draw-raffle"), DEV, false
 			));
+			add(new GarbageCollectorCommand(
+					"coletarlixo", new String[]{"gc"}, getLocale(PT).getString("cmd_garbage-collector"), DEV, false
+			));
 
 			//SUPPORT
 			add(new BlockCommand(
