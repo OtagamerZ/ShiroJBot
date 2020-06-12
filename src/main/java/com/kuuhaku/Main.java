@@ -48,6 +48,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.springframework.boot.SpringApplication;
 
 import javax.persistence.NoResultException;
+import java.io.File;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -62,8 +63,11 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	private static JDA api;
 	private static JDA jbr;
 	public static boolean exiting = false;
+	public static final File lock = new File("shiro.lock");
 
 	public static void main(String[] args) throws Exception {
+		while (!lock.createNewFile()) Thread.sleep(2000);
+		lock.deleteOnExit();
 		Helper.logger(Main.class).info("\nShiro J. Bot  Copyright (C) 2020 Yago Gimenez (KuuHaKu)\n" +
 				"This program comes with ABSOLUTELY NO WARRANTY\n" +
 				"This is free software, and you are welcome to redistribute it under certain conditions\n" +
@@ -174,8 +178,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	public static boolean shutdown() {
 		if (exiting) return false;
 		exiting = true;
-		jbr.shutdown();
-		api.shutdown();
 		int sweeper = Sweeper.mark();
 
 		Helper.logger(Main.class).info(sweeper + " entradas dispensáveis encontradas!");
@@ -190,6 +192,9 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		Manager.disconnect();
 
 		Helper.logger(Main.class).info("Fui desligada.");
+		jbr.shutdownNow();
+		api.shutdownNow();
+		lock.delete();
 		return true;
 	}
 
