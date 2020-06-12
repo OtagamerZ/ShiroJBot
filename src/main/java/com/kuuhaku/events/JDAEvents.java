@@ -21,10 +21,8 @@ package com.kuuhaku.events;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.RelayDAO;
-import com.kuuhaku.controller.sqlite.DashboardDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
-import com.kuuhaku.model.persistent.AppUser;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.PermaBlock;
 import com.kuuhaku.utils.Helper;
@@ -42,7 +40,6 @@ import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageUpdateEvent;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -296,14 +293,5 @@ public class JDAEvents extends ListenerAdapter {
 
 		if (msg != null)
 			Helper.logToChannel(event.getAuthor(), false, null, "Uma mensagem foi editada no canal " + event.getChannel().getAsMention() + ":```diff\n- " + msg.getContentRaw() + "\n+ " + event.getMessage().getContentRaw() + "```", msg.getGuild());
-	}
-
-	@Override
-	public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
-		if (DashboardDAO.isRegistered(event.getAuthor().getId())) {
-			AppUser u = DashboardDAO.getData(event.getAuthor().getId());
-			u.update(event.getAuthor().getId(), event.getAuthor().getName(), event.getAuthor().getAvatarUrl());
-			DashboardDAO.saveData(u);
-		}
 	}
 }
