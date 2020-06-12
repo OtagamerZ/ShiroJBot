@@ -47,14 +47,13 @@ public class KillCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (author.getId().equals(Main.getInfo().getNiiChan())) {
-			channel.sendMessage("Sayonara, Nii-chan! <3").queue(m -> Main.kill = new String[]{channel.getId(), m.getId()});
+			channel.sendMessage("Sayonara, Nii-chan! <3").queue();
 		} else {
-			channel.sendMessage("Iniciando o protocolo de encerramento...").queue(m -> Main.kill = new String[]{channel.getId(), m.getId()});
+			channel.sendMessage("Iniciando o protocolo de encerramento...").queue();
 		}
 
 		Executors.newSingleThreadExecutor().execute(() -> {
-			Main.shutdown();
-			System.exit(0);
+			if (Main.shutdown()) System.exit(0);
 		});
 	}
 }

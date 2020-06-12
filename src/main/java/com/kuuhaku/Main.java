@@ -40,8 +40,6 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.exceptions.ContextException;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
@@ -63,7 +61,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	private static CommandManager cmdManager;
 	private static JDA api;
 	private static JDA jbr;
-	public static String[] kill = new String[2];
+	public static boolean exiting = false;
 
 	public static void main(String[] args) throws Exception {
 		Helper.logger(Main.class).info("\nShiro J. Bot  Copyright (C) 2020 Yago Gimenez (KuuHaKu)\n" +
@@ -173,30 +171,26 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		return cmdManager;
 	}
 
-	public static void shutdown() {
+	public static boolean shutdown() {
+		if (exiting) return false;
+		exiting = true;
+		jbr.shutdown();
+		api.shutdown();
 		int sweeper = Sweeper.mark();
-		TextChannel chn = api.getTextChannelById(kill[0]);
-		assert chn != null;
-		Message msg = chn.retrieveMessageById(kill[1]).complete();
 
 		Helper.logger(Main.class).info(sweeper + " entradas dispensáveis encontradas!");
-		msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> " + sweeper + " entradas dispensáveis encontradas!").queue();
 
 		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getCADump(), com.kuuhaku.controller.sqlite.BackupDAO.getGuildDump(), com.kuuhaku.controller.sqlite.BackupDAO.getKawaigotchiDump(), com.kuuhaku.controller.sqlite.BackupDAO.getPoliticalStateDump()));
 		Helper.logger(Main.class).info("Respostas/Guilds/Usuários/Kawaigotchis/Exceeds salvos com sucesso!");
-		msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> Respostas/Guilds/Usuários/Kawaigotchis salvos com sucesso!").queue();
 
 		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump()));
 		Helper.logger(Main.class).info("Membros salvos com sucesso!");
-		msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> Membros salvos com sucesso!").queue();
 
 		Sweeper.sweep();
 		Manager.disconnect();
-		jbr.shutdown();
-		msg.editMessage(msg.getContentRaw() + "\n:white_check_mark: -> Fui desligada!").queue();
 
-		api.shutdown();
 		Helper.logger(Main.class).info("Fui desligada.");
+		return true;
 	}
 
 	public static Relay getRelay() {
