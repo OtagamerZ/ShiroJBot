@@ -46,6 +46,7 @@ import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.springframework.boot.SpringApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import javax.persistence.NoResultException;
 import java.io.File;
@@ -63,6 +64,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	private static JDA api;
 	private static JDA jbr;
 	public static boolean exiting = false;
+	public static ConfigurableApplicationContext spring;
 	public static final File lock = new File("shiro.lock");
 
 	public static void main(String[] args) throws Exception {
@@ -125,7 +127,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		AudioSourceManagers.registerRemoteSources(getInfo().getApm());
 		AudioSourceManagers.registerLocalSource(getInfo().getApm());
 
-		SpringApplication.run(Application.class, args);
+		spring = SpringApplication.run(Application.class, args);
 		info.setSockets(new WebSocketConfig());
 		finishStartUp();
 	}
@@ -178,6 +180,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	public static boolean shutdown() {
 		if (exiting) return false;
 		exiting = true;
+		SpringApplication.exit(spring);
 		int sweeper = Sweeper.mark();
 
 		Helper.logger(Main.class).info(sweeper + " entradas dispensáveis encontradas!");
