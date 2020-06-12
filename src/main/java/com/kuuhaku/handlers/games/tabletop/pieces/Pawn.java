@@ -34,6 +34,13 @@ public class Pawn extends Piece {
 
 	@Override
 	public boolean validate(Board b, Spot to) {
+		try {
+			King k = b.getPieceByType(King.class, getOwner()).get(0);
+			if (k.check(b, k.getSpot())) return false;
+		} catch (IndexOutOfBoundsException e) {
+			return false;
+		}
+
 		if (getOwner().isWhite()) {
 			if (to.equals(getSpot().getNextSpot(UPPER_LEFT)) || to.equals(getSpot().getNextSpot(UPPER_RIGHT))) {
 				Piece p = b.getSpot(to.getNextSpot(DOWN));

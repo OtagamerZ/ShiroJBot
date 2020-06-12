@@ -26,6 +26,9 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/enums/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/enums/Board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/pieces/Bishop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/pieces/Bishop.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/pieces/King.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/pieces/King.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -446,13 +449,9 @@
       <workItem from="1591643243222" duration="103000" />
       <workItem from="1591644126367" duration="1236000" />
       <workItem from="1591704306739" duration="491000" />
-    </task>
-    <task id="LOCAL-01302" summary="Implementação do ShiroCryptor">
-      <created>1591297887428</created>
-      <option name="number" value="01302" />
-      <option name="presentableId" value="LOCAL-01302" />
-      <option name="project" value="LOCAL" />
-      <updated>1591297887428</updated>
+      <workItem from="1591723048574" duration="168000" />
+      <workItem from="1591812877517" duration="1300000" />
+      <workItem from="1591966052372" duration="1357000" />
     </task>
     <task id="LOCAL-01303" summary="Implementação do ShiroCryptor">
       <created>1591297912127</created>
@@ -790,7 +789,14 @@
       <option name="project" value="LOCAL" />
       <updated>1591704566799</updated>
     </task>
-    <option name="localTasksCounter" value="1351" />
+    <task id="LOCAL-01351" summary="Adição do link para a página da Shiro no Bots Para Discord">
+      <created>1591723184626</created>
+      <option name="number" value="01351" />
+      <option name="presentableId" value="LOCAL-01351" />
+      <option name="project" value="LOCAL" />
+      <updated>1591723184627</updated>
+    </task>
+    <option name="localTasksCounter" value="1352" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -828,7 +834,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção nos nomes de erros" />
     <MESSAGE value="Correções no comando Quiz" />
     <MESSAGE value="Correção no comando de logs" />
     <MESSAGE value="Atualização da biblioteca de paginação" />
@@ -853,7 +858,8 @@
     <MESSAGE value="Limite de 50% de popularidade para Exceeds" />
     <MESSAGE value="Implementação de BiContract para requisições do site" />
     <MESSAGE value="Correção de algumas coisas" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção de algumas coisas" />
+    <MESSAGE value="Adição do link para a página da Shiro no Bots Para Discord" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição do link para a página da Shiro no Bots Para Discord" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -933,12 +939,12 @@
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1591704563335">
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1591723181571">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1591419311134" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1591704563335" />
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1591723181571" />
     <state width="247" height="195" key="DatabaseViewActions_Filter" timestamp="1591416926427">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -1025,12 +1031,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1591704568026">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1591723186383">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1591419318874" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1591704568026" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1591723186383" />
     <state x="695" y="627" width="383" height="267" key="XPathView.InputDialog.DIMENSION_SERVICE_KEY.SIMPLE" timestamp="1583260599414">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
