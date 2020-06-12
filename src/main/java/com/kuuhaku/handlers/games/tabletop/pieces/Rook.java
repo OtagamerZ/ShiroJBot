@@ -33,6 +33,13 @@ public class Rook extends Piece {
 	public boolean validate(Board b, Spot to) {
 		boolean blocked = false;
 
+		try {
+			King k = b.getPieceByType(King.class, getOwner()).get(0);
+			if (k.check(b, k.getSpot())) return false;
+		} catch (IndexOutOfBoundsException e) {
+			return false;
+		}
+
 		if (to.getX() - getSpot().getX() != 0 && to.getY() - getSpot().getY() == 0) {
 			for (int i = getSpot().getX(); to.getX() > getSpot().getX() ? i < to.getX() : i > to.getX(); ) {
 				if (i != getSpot().getX()) {
