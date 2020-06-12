@@ -52,7 +52,7 @@ public class RestartCommand extends Command {
 		}
 
 		try {
-			Runtime.getRuntime().exec("run");
+			Runtime.getRuntime().exec("/home/ShiroJBot/start");
 			if (Main.shutdown()) System.exit(0);
 		} catch (Exception e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
