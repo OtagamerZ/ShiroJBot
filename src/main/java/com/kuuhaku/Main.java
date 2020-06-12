@@ -161,7 +161,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	}
 
 	public static Activity getRandomActivity() {
-		List<Activity> activities = new ArrayList<Activity>() {{
+		List<Activity> activities = new ArrayList<>() {{
 			add(Activity.playing("Digite " + info.getDefaultPrefix() + "ajuda para ver meus comandos!"));
 			add(Activity.streaming("Na conta do meu Nii-chan sem ele saber!", "https://twitch.tv/kuuhaku_otgmz"));
 			add(Activity.playing("Nico nico nii!!"));
@@ -183,24 +183,20 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	public static boolean shutdown() {
 		if (exiting) return false;
 		exiting = true;
-		SpringApplication.exit(spring);
 		int sweeper = Sweeper.mark();
 
 		Helper.logger(Main.class).info(sweeper + " entradas dispensáveis encontradas!");
 
 		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getCADump(), com.kuuhaku.controller.sqlite.BackupDAO.getGuildDump(), com.kuuhaku.controller.sqlite.BackupDAO.getKawaigotchiDump(), com.kuuhaku.controller.sqlite.BackupDAO.getPoliticalStateDump()));
-		Helper.logger(Main.class).info("Respostas/Guilds/Usuários/Kawaigotchis/Exceeds salvos com sucesso!");
-
 		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump()));
-		Helper.logger(Main.class).info("Membros salvos com sucesso!");
 
 		Sweeper.sweep();
 		Manager.disconnect();
 
 		Helper.logger(Main.class).info("Fui desligada.");
-		jbr.shutdownNow();
-		api.shutdownNow();
-		lock.delete();
+		SpringApplication.exit(spring);
+		jbr.shutdown();
+		api.shutdown();
 		return true;
 	}
 

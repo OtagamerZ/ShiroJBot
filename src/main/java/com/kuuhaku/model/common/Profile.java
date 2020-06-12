@@ -81,7 +81,15 @@ public class Profile {
 		try {
 			con = (HttpURLConnection) new URL(MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getBg()).openConnection();
 			con.setRequestProperty("User-Agent", "Mozilla/5.0");
-			g2d.drawImage(scaleImage(ImageIO.read(con.getInputStream()), bi.getWidth(), bi.getHeight()), null, 0, 0);
+			BufferedImage bg = scaleImage(ImageIO.read(con.getInputStream()), bi.getWidth(), bi.getHeight());
+
+			int xOffset = 0;
+			int yOffset = 0;
+
+			if (bg.getWidth() > bi.getWidth()) xOffset = -(bg.getWidth() - bi.getWidth()) / 2;
+			if (bg.getHeight() > bi.getHeight()) yOffset = -(bg.getHeight() - bi.getHeight()) / 2;
+
+			g2d.drawImage(bg, xOffset, yOffset, null);
 		} catch (IOException e) {
 			con = (HttpURLConnection) new URL("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg").openConnection();
 			con.setRequestProperty("User-Agent", "Mozilla/5.0");
