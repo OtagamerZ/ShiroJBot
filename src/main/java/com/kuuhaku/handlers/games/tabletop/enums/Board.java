@@ -97,7 +97,7 @@ public class Board {
 	public <T extends Piece> List<T> getPieceByType(Class<T> type, Player player) {
 		List<T> pieces = new ArrayList<>();
 		for (Piece[] ps : board) {
-			pieces.addAll(Arrays.stream(ps).filter(p -> p.getClass().equals(type) && p.getOwner().equals(player)).map(p -> (T) p).collect(Collectors.toList()));
+			pieces.addAll(Arrays.stream(ps).filter(p -> p.getClass().equals(type) && p.getOwner().equals(player)).map(type::cast).collect(Collectors.toList()));
 		}
 		return pieces;
 	}
