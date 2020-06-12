@@ -26,7 +26,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -482,20 +481,6 @@
       <workItem from="1591966052372" duration="5515000" />
       <workItem from="1591978648088" duration="1402000" />
     </task>
-    <task id="LOCAL-01310" summary="Remoção do ShiroCryptor;&#10;Adição de outro encriptador;">
-      <created>1591302349680</created>
-      <option name="number" value="01310" />
-      <option name="presentableId" value="LOCAL-01310" />
-      <option name="project" value="LOCAL" />
-      <updated>1591302349680</updated>
-    </task>
-    <task id="LOCAL-01311" summary="Remoção do ShiroCryptor;&#10;Adição de outro encriptador;">
-      <created>1591302435362</created>
-      <option name="number" value="01311" />
-      <option name="presentableId" value="LOCAL-01311" />
-      <option name="project" value="LOCAL" />
-      <updated>1591302435362</updated>
-    </task>
     <task id="LOCAL-01312" summary="Remoção do ShiroCryptor;&#10;Adição de outro encriptador;">
       <created>1591302696348</created>
       <option name="number" value="01312" />
@@ -825,7 +810,21 @@
       <option name="project" value="LOCAL" />
       <updated>1591989809428</updated>
     </task>
-    <option name="localTasksCounter" value="1359" />
+    <task id="LOCAL-01359" summary="Tentativa 2 de implementar hot-swap">
+      <created>1591990528256</created>
+      <option name="number" value="01359" />
+      <option name="presentableId" value="LOCAL-01359" />
+      <option name="project" value="LOCAL" />
+      <updated>1591990528256</updated>
+    </task>
+    <task id="LOCAL-01360" summary="Tentativa 2 de implementar hot-swap">
+      <created>1591990736559</created>
+      <option name="number" value="01360" />
+      <option name="presentableId" value="LOCAL-01360" />
+      <option name="project" value="LOCAL" />
+      <updated>1591990736559</updated>
+    </task>
+    <option name="localTasksCounter" value="1361" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -964,12 +963,12 @@
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1591990525491">
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1591990733659">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1591419311134" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1591990525491" />
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1591990733659" />
     <state width="247" height="195" key="DatabaseViewActions_Filter" timestamp="1591416926427">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -1056,12 +1055,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1591990529620">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1591990737612">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1591419318874" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1591990529620" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1591990737612" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1589991335906">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
