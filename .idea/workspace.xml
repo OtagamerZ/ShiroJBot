@@ -25,11 +25,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/GarbageCollectorCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/RestartCommand.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -200,24 +200,24 @@
       <recent name="com.kuuhaku.managers.RPGCommandManager" />
       <recent name="com.kuuhaku.managers.CommandManager" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.kuuhaku.command.commands.exceed" />
-      <recent name="com.kuuhaku.command.commands.partner" />
-      <recent name="com.kuuhaku.controller.postgresql" />
-      <recent name="com.kuuhaku.command.commands.dev" />
-      <recent name="com.kuuhaku.command.commands.fun" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\icons" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shirocryptor" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\pieces" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games\tabletop\pieces" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.command.commands.dev" />
+      <recent name="com.kuuhaku.command.commands.exceed" />
+      <recent name="com.kuuhaku.command.commands.partner" />
+      <recent name="com.kuuhaku.controller.postgresql" />
+      <recent name="com.kuuhaku.command.commands.fun" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -484,13 +484,6 @@
       <workItem from="1591812877517" duration="1300000" />
       <workItem from="1591966052372" duration="5515000" />
       <workItem from="1591978648088" duration="1402000" />
-    </task>
-    <task id="LOCAL-01314" summary="Otimização do cálculo de tags;&#10;Implementação de apostas no jogo da velha;">
-      <created>1591366177296</created>
-      <option name="number" value="01314" />
-      <option name="presentableId" value="LOCAL-01314" />
-      <option name="project" value="LOCAL" />
-      <updated>1591366177296</updated>
     </task>
     <task id="LOCAL-01315" summary="Otimização do cálculo de tags;&#10;Implementação de apostas no jogo da velha;">
       <created>1591366532502</created>
@@ -828,7 +821,14 @@
       <option name="project" value="LOCAL" />
       <updated>1591991117794</updated>
     </task>
-    <option name="localTasksCounter" value="1363" />
+    <task id="LOCAL-01363" summary="Correção no posicionamento do background de perfil">
+      <created>1591993227947</created>
+      <option name="number" value="01363" />
+      <option name="presentableId" value="LOCAL-01363" />
+      <option name="project" value="LOCAL" />
+      <updated>1591993227947</updated>
+    </task>
+    <option name="localTasksCounter" value="1364" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -866,7 +866,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Comando para ver modificadores de xp ativos" />
     <MESSAGE value="Adicionado comando HTTPCat" />
     <MESSAGE value="Correções básicas" />
     <MESSAGE value="Criação da API de autenticação para o dashboard" />
@@ -891,7 +890,8 @@
     <MESSAGE value="Implementação de checagem de checkmate no xadrez" />
     <MESSAGE value="Otimização no processo de sincronização com o banco remoto" />
     <MESSAGE value="Tentativa 2 de implementar hot-swap" />
-    <option name="LAST_COMMIT_MESSAGE" value="Tentativa 2 de implementar hot-swap" />
+    <MESSAGE value="Correção no posicionamento do background de perfil" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção no posicionamento do background de perfil" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1059,12 +1059,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1591991120124">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1591993229027">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1591419318874" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1591991120124" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1591993229027" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1589991335906">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
