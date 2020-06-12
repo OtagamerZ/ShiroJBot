@@ -21,7 +21,6 @@ package com.kuuhaku.model.common;
 import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
-import com.kuuhaku.model.persistent.AppUser;
 import com.kuuhaku.model.persistent.CustomAnswers;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Member;
@@ -33,23 +32,20 @@ public class DataDump {
 	private final List<CustomAnswers> caDump;
 	private final List<Member> mDump;
 	private final List<GuildConfig> gcDump;
-	private final List<AppUser> auDump;
 	private final List<Kawaigotchi> kgDump;
 	private final List<PoliticalState> psDump;
 
-	public DataDump(List<CustomAnswers> caDump, List<Member> mDump, List<GuildConfig> gcDump, List<AppUser> auDump, List<Kawaigotchi> kgDump, List<PoliticalState> psDump) {
+	public DataDump(List<CustomAnswers> caDump, List<Member> mDump, List<GuildConfig> gcDump, List<Kawaigotchi> kgDump, List<PoliticalState> psDump) {
 		this.caDump = caDump;
 		this.gcDump = gcDump;
-		this.auDump = auDump;
 		this.mDump = mDump;
 		this.kgDump = kgDump;
 		this.psDump = psDump;
 	}
 
-	public DataDump(List<CustomAnswers> caDump, List<GuildConfig> gcDump, List<AppUser> auDump, List<Kawaigotchi> kgDump, List<PoliticalState> psDump) {
+	public DataDump(List<CustomAnswers> caDump, List<GuildConfig> gcDump, List<Kawaigotchi> kgDump, List<PoliticalState> psDump) {
 		this.caDump = caDump;
 		this.gcDump = gcDump;
-		this.auDump = auDump;
 		this.kgDump = kgDump;
 		this.psDump = psDump;
 		this.mDump = new ArrayList<>();
@@ -58,7 +54,6 @@ public class DataDump {
 	public DataDump(List<Member> mDump) {
 		this.caDump = new ArrayList<>();
 		this.gcDump = new ArrayList<>();
-		this.auDump = new ArrayList<>();
 		this.kgDump = new ArrayList<>();
 		this.psDump = new ArrayList<>();
 
@@ -78,10 +73,6 @@ public class DataDump {
 
 	public List<GuildConfig> getGcDump() {
 		return gcDump;
-	}
-
-	public List<AppUser> getAuDump() {
-		return auDump;
 	}
 
 	public List<Kawaigotchi> getKgDump() {
