@@ -49,7 +49,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import javax.persistence.NoResultException;
-import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -66,7 +65,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	private static JDA jbr;
 	public static boolean exiting = false;
 	public static ConfigurableApplicationContext spring;
-	public static final File lock = new File("shiro.lock");
 
 	public static void main(String[] args) throws Exception {
 		Helper.logger(Main.class).info("\nShiro J. Bot  Copyright (C) 2020 Yago Gimenez (KuuHaKu)\n" +
@@ -143,9 +141,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				Helper.logger(Main.class).info("Guild adicionada ao banco: " + g.getName());
 			}
 		});
-
-		while (!lock.createNewFile()) Thread.sleep(2000);
-		lock.deleteOnExit();
 
 		api.addEventListener(Main.getInfo().getShiroEvents());
 		api.addEventListener(new GuildEvents());
