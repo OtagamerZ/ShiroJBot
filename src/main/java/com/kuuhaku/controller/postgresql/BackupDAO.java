@@ -21,8 +21,12 @@ package com.kuuhaku.controller.postgresql;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.model.common.DataDump;
-import com.kuuhaku.model.persistent.*;
+import com.kuuhaku.model.persistent.Backup;
+import com.kuuhaku.model.persistent.CustomAnswers;
+import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.utils.ExceedEnums;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Guild;
 
 import javax.persistence.EntityManager;
@@ -36,86 +40,52 @@ public class BackupDAO {
 		EntityManager em = Manager.getEntityManager();
 		em.getTransaction().begin();
 
-		for (int i = 0; i < data.getCaDump().size(); i++) {
+		List<CustomAnswers> caDump = data.getCaDump();
+		List<GuildConfig> gcDump = data.getGcDump();
+		List<Member> mDump = data.getmDump();
+		List<Kawaigotchi> kgDump = data.getKgDump();
+		List<PoliticalState> psDump = data.getPsDump();
+
+		for (int i = 0; i < caDump.size(); i++) {
 			em.merge(data.getCaDump().get(i));
-			if (i % 20 == 0) {
-				em.flush();
-				em.clear();
-			}
-			if (i % 1000 == 0) {
-				em.getTransaction().commit();
-				em.clear();
-				em.getTransaction().begin();
-			}
+			saveChunk(em, i, caDump.size(), "respostas");
 		}
 
-		for (int i = 0; i < data.getGcDump().size(); i++) {
+		for (int i = 0; i < gcDump.size(); i++) {
 			em.merge(data.getGcDump().get(i));
-			if (i % 20 == 0) {
-				em.flush();
-				em.clear();
-			}
-			if (i % 1000 == 0) {
-				em.getTransaction().commit();
-				em.clear();
-				em.getTransaction().begin();
-			}
+			saveChunk(em, i, gcDump.size(), "configurações");
 		}
 
-		for (int i = 0; i < data.getmDump().size(); i++) {
+		for (int i = 0; i < mDump.size(); i++) {
 			em.merge(data.getmDump().get(i));
-			if (i % 20 == 0) {
-				em.flush();
-				em.clear();
-			}
-			if (i % 1000 == 0) {
-				em.getTransaction().commit();
-				em.clear();
-				em.getTransaction().begin();
-			}
+			saveChunk(em, i, mDump.size(), "membros");
 		}
 
-		for (int i = 0; i < data.getAuDump().size(); i++) {
-			em.merge(data.getAuDump().get(i));
-			if (i % 20 == 0) {
-				em.flush();
-				em.clear();
-			}
-			if (i % 1000 == 0) {
-				em.getTransaction().commit();
-				em.clear();
-				em.getTransaction().begin();
-			}
-		}
-
-		for (int i = 0; i < data.getKgDump().size(); i++) {
+		for (int i = 0; i < kgDump.size(); i++) {
 			em.merge(data.getKgDump().get(i));
-			if (i % 20 == 0) {
-				em.flush();
-				em.clear();
-			}
-			if (i % 1000 == 0) {
-				em.getTransaction().commit();
-				em.clear();
-				em.getTransaction().begin();
-			}
+			saveChunk(em, i, kgDump.size(), "kgotchis");
 		}
 
-		for (int i = 0; i < data.getPsDump().size(); i++) {
+		for (int i = 0; i < psDump.size(); i++) {
 			em.merge(data.getPsDump().get(i));
-			if (i % 20 == 0) {
-				em.flush();
-				em.clear();
-			}
-			if (i % 1000 == 0) {
-				em.getTransaction().commit();
-				em.clear();
-				em.getTransaction().begin();
-			}
+			saveChunk(em, i, psDump.size(), "estados");
 		}
 
 		em.getTransaction().commit();
 		em.close();
+	}
+
+	private static void saveChunk(EntityManager em, int i, int size, String name) {
+		if (i % 20 == 0) {
+			em.flush();
+			em.clear();
+		}
+		if (i % 1000 == 0) {
+			em.getTransaction().commit();
+			em.clear();
+			em.getTransaction().begin();
+			Helper.logger(BackupDAO.class).info("Salvo chunk de " + name + " (" + (i / 1000) + "/" + (size / 1000) + ")");
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -125,7 +95,6 @@ public class BackupDAO {
 		Query ca = em.createQuery("SELECT c FROM CustomAnswers c", CustomAnswers.class);
 		Query m = em.createQuery("SELECT m FROM Member m", Member.class);
 		Query gc = em.createQuery("SELECT g FROM GuildConfig g", GuildConfig.class);
-		Query au = em.createQuery("SELECT u FROM AppUser u", AppUser.class);
 		Query kg = em.createQuery("SELECT k FROM Kawaigotchi k", Kawaigotchi.class);
 		List<PoliticalState> ps = new ArrayList<>();
 
@@ -133,7 +102,7 @@ public class BackupDAO {
 			ps.add(PStateDAO.getPoliticalState(ex));
 		}
 
-		DataDump dump = new DataDump(ca.getResultList(), m.getResultList(), gc.getResultList(), au.getResultList(), kg.getResultList(), ps);
+		DataDump dump = new DataDump(ca.getResultList(), m.getResultList(), gc.getResultList(), kg.getResultList(), ps);
 		em.close();
 
 		return dump;
