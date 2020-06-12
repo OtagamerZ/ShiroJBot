@@ -25,6 +25,8 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
+import java.io.IOException;
+
 public class RestartCommand extends Command {
 
 	public RestartCommand(String name, String description, Category category, boolean requiresMM) {
@@ -56,7 +58,13 @@ public class RestartCommand extends Command {
 					.inheritIO()
 					.start();
 
-			Runtime.getRuntime().addShutdownHook(new Thread(p::destroy));
+			Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+				try {
+					Runtime.getRuntime().exec("kill -9 " + p.pid());
+				} catch (IOException e) {
+					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				}
+			}));
 			if (Main.shutdown()) System.exit(0);
 		} catch (Exception e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
