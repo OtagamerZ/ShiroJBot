@@ -49,7 +49,7 @@ public class EncryptCommand extends Command {
 		super(name, usage, description, category, requiresMM);
 	}
 
-	public EncryptCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+	public EncryptCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
 		super(name, aliases, usage, description, category, requiresMM);
 	}
 

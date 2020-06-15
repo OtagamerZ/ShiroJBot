@@ -41,7 +41,6 @@
         <class>com.kuuhaku.model.persistent.Backup</class>
         <class>com.kuuhaku.model.persistent.Token</class>
         <class>com.kuuhaku.model.persistent.GlobalMessage</class>
-        <class>com.kuuhaku.model.persistent.AppUser</class>
         <class>com.kuuhaku.model.persistent.Account</class>
         <class>com.kuuhaku.model.persistent.Slots</class>
         <class>com.kuuhaku.model.persistent.DevRating</class>
@@ -56,6 +55,7 @@
         <class>com.kuuhaku.model.persistent.CoupleMultiplier</class>
         <class>com.kuuhaku.handlers.games.disboard.model.PoliticalState</class>
         <class>com.kuuhaku.model.persistent.Upvote</class>
+        <class>com.kuuhaku.model.persistent.Blacklist</class>
 
         <properties>
             <!-- dados da conexao -->
@@ -91,9 +91,9 @@
         <class>com.kuuhaku.model.persistent.CustomAnswers</class>
         <class>com.kuuhaku.model.persistent.Tags</class>
         <class>com.kuuhaku.model.persistent.PermaBlock</class>
-        <class>com.kuuhaku.model.persistent.AppUser</class>
         <class>com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi</class>
         <class>com.kuuhaku.handlers.games.disboard.model.PoliticalState</class>
+        <class>com.kuuhaku.model.persistent.Blacklist</class>
 
         <properties>
             <!-- dados da conexao -->

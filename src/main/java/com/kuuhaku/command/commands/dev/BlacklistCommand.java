@@ -16,51 +16,54 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.information;
+package com.kuuhaku.command.commands.dev;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.utils.Helper;
+import com.kuuhaku.controller.postgresql.BlacklistDAO;
+import com.kuuhaku.model.persistent.Blacklist;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 
-import java.io.IOException;
+public class BlacklistCommand extends Command {
 
-public class HttpCatCommand extends Command {
-
-	public HttpCatCommand(@NonNls String name, String description, Category category, boolean requiresMM) {
+	public BlacklistCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
 	}
 
-	public HttpCatCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
+	public BlacklistCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
 		super(name, aliases, description, category, requiresMM);
 	}
 
-	public HttpCatCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+	public BlacklistCommand(String name, String usage, String description, Category category, boolean requiresMM) {
 		super(name, usage, description, category, requiresMM);
 	}
 
-	public HttpCatCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+	public BlacklistCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
 		super(name, aliases, usage, description, category, requiresMM);
 	}
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		if (args.length < 1) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_http-cat-not-enough-args")).queue();
-			return;
-		} else if (!StringUtils.isNumeric(args[0])) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-http-code")).queue();
+		if (args.length == 0) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_blacklist-no-id")).queue();
 			return;
 		}
 
-		try {
-			channel.sendFile(Helper.getImage("https://http.cat/" + args[0]), "httpcat.png").queue();
-		} catch (IOException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+		User u = Main.getInfo().getUserByID(args[0]);
+
+		if (u == null) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-id")).queue();
+			return;
 		}
+
+		Blacklist bl = new Blacklist(u.getId(), author.getName());
+		BlacklistDAO.blacklist(bl);
+		com.kuuhaku.controller.sqlite.BlacklistDAO.blacklist(bl);
+
+		channel.sendMessage("Usuário adicionado à lista negra com sucesso!").queue();
 	}
 }

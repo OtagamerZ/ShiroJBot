@@ -24,16 +24,20 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "permablock")
-public class PermaBlock {
+@Table(name = "blacklist")
+public class Blacklist {
 	@Id
 	@Column(columnDefinition = "VARCHAR(191)")
 	private String id;
 
-	public PermaBlock(String id) {
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String blockedBy = "";
+
+	public Blacklist(String id, String by) {
 		this.id = id;
+		this.blockedBy = by;
 	}
 
-	public PermaBlock() {
+	public Blacklist() {
 	}
 }
