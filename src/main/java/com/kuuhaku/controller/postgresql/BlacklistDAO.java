@@ -16,24 +16,20 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent;
+package com.kuuhaku.controller.postgresql;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.kuuhaku.model.persistent.Blacklist;
 
-@Entity
-@Table(name = "permablock")
-public class PermaBlock {
-	@Id
-	@Column(columnDefinition = "VARCHAR(191)")
-	private String id;
+import javax.persistence.EntityManager;
 
-	public PermaBlock(String id) {
-		this.id = id;
-	}
+public class BlacklistDAO {
+	public static void blacklist(Blacklist bl) {
+		EntityManager em = Manager.getEntityManager();
 
-	public PermaBlock() {
+		em.getTransaction().begin();
+		em.merge(bl);
+		em.getTransaction().commit();
+
+		em.close();
 	}
 }
