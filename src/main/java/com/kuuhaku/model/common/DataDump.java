@@ -21,6 +21,7 @@ package com.kuuhaku.model.common;
 import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
+import com.kuuhaku.model.persistent.Blacklist;
 import com.kuuhaku.model.persistent.CustomAnswers;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Member;
@@ -34,13 +35,15 @@ public class DataDump {
 	private final List<GuildConfig> gcDump;
 	private final List<Kawaigotchi> kgDump;
 	private final List<PoliticalState> psDump;
+	private final List<Blacklist> blDump;
 
-	public DataDump(List<CustomAnswers> caDump, List<Member> mDump, List<GuildConfig> gcDump, List<Kawaigotchi> kgDump, List<PoliticalState> psDump) {
+	public DataDump(List<CustomAnswers> caDump, List<Member> mDump, List<GuildConfig> gcDump, List<Kawaigotchi> kgDump, List<PoliticalState> psDump, List<Blacklist> blDump) {
 		this.caDump = caDump;
 		this.gcDump = gcDump;
 		this.mDump = mDump;
 		this.kgDump = kgDump;
 		this.psDump = psDump;
+		this.blDump = blDump;
 	}
 
 	public DataDump(List<CustomAnswers> caDump, List<GuildConfig> gcDump, List<Kawaigotchi> kgDump, List<PoliticalState> psDump) {
@@ -48,6 +51,7 @@ public class DataDump {
 		this.gcDump = gcDump;
 		this.kgDump = kgDump;
 		this.psDump = psDump;
+		this.blDump = new ArrayList<>();
 		this.mDump = new ArrayList<>();
 	}
 
@@ -56,6 +60,7 @@ public class DataDump {
 		this.gcDump = new ArrayList<>();
 		this.kgDump = new ArrayList<>();
 		this.psDump = new ArrayList<>();
+		this.blDump = new ArrayList<>();
 
 		List<Member> oldMembers = MemberDAO.getMembers();
 		mDump.removeAll(oldMembers);
@@ -81,5 +86,9 @@ public class DataDump {
 
 	public List<PoliticalState> getPsDump() {
 		return psDump;
+	}
+
+	public List<Blacklist> getBlDump() {
+		return blDump;
 	}
 }

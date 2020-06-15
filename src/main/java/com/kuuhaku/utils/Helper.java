@@ -29,6 +29,7 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.reactions.Reaction;
 import com.kuuhaku.controller.postgresql.LogDAO;
 import com.kuuhaku.controller.postgresql.TagDAO;
+import com.kuuhaku.controller.sqlite.BlacklistDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.Extensions;
 import com.kuuhaku.model.persistent.GuildConfig;
@@ -744,10 +745,10 @@ public class Helper {
 
 	public static boolean showMMError(User author, MessageChannel channel, Guild guild, String rawMessage, Command command) {
 		if (author == Main.getInfo().getSelfUser()) {
-			channel.sendMessage(":x: | Não posso executar este comando, apenas usuários humanos podem usar ele.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_human-command")).queue();
 			return true;
 		} else if (!hasPermission(guild.getSelfMember(), Permission.MESSAGE_MANAGE, (TextChannel) channel) && GuildDAO.getGuildById(guild.getId()).isServerMMLocked() && command.requiresMM()) {
-			channel.sendMessage(":x: | Para que meus comandos funcionem corretamente, preciso da permissão de gerenciar mensagens.\nPor favor contate um moderador ou administrador desse servidor para que me dê essa permissão.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-message-manage-permission")).queue();
 			return true;
 		}
 
@@ -763,20 +764,23 @@ public class Helper {
 	public static boolean checkPermissions(User author, Member member, Message message, MessageChannel channel, Guild guild, String prefix, String rawMsgNoPrefix, String[] args, Command command) {
 		if (command.getCategory() == Category.NSFW && !((TextChannel) channel).isNSFW()) {
 			try {
-				channel.sendMessage(":x: | Este comando está categorizado como NSFW, por favor use-o em um canal apropriado!").queue();
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_nsfw-in-non-nsfw-channel")).queue();
 				return true;
 			} catch (InsufficientPermissionException ignore) {
 			}
 			return false;
 		} else if (!hasPermission(member, command.getCategory().getPrivilegeLevel())) {
 			try {
-				channel.sendMessage(":x: | Você não tem permissão para executar este comando!").queue();
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_not-enough-permission")).queue();
 				return true;
 			} catch (InsufficientPermissionException ignore) {
 			}
 			return false;
+		} else if (BlacklistDAO.isBlacklisted(author.getId())) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-blacklisted")).queue();
+			return true;
 		} else if (ShiroInfo.getRatelimit().getIfPresent(author) != null) {
-			channel.sendMessage(":x: | Você está usando comandos muito rapidamente, tente novamente em alguns segundos!").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-ratelimited")).queue();
 			return true;
 		}
 

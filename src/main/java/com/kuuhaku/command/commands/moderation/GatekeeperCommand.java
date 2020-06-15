@@ -56,9 +56,9 @@ public class GatekeeperCommand extends Command {
             channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_gatekeeper-no-id")).queue();
             return;
         } else if (!StringUtils.isNumeric(args[0])) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_gatekeeper-invalid-id")).queue();
-            return;
-        } else if (message.getMentionedRoles().size() == 0) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-message-id")).queue();
+			return;
+		} else if (message.getMentionedRoles().size() == 0) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_gatekeeper-no-role")).queue();
             return;
         }

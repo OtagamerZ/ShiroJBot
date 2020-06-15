@@ -48,7 +48,7 @@ public class DrawRaffleCommand extends Command {
 		super(name, usage, description, category, requiresMM);
 	}
 
-	public DrawRaffleCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+	public DrawRaffleCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
 		super(name, aliases, usage, description, category, requiresMM);
 	}
 

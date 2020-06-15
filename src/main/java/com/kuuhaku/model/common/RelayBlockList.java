@@ -51,9 +51,7 @@ public class RelayBlockList {
 		EmbedBuilder eb = new EmbedBuilder();
 		blockedIDs.add(id);
 
-		PermaBlock pb = new PermaBlock();
-		pb.block(id);
-		RelayDAO.permaBlock(pb);
+		RelayDAO.permaBlock(new PermaBlock(id));
 
 		eb.setTitle("Você foi bloqueado permanentemente de utilizar o chat global");
 		eb.setDescription("Este bloqueio **NÃO** será removido em momento algum, por melhor que seja a explicação para isto ter ocorrido!\n\nRazão: " + reason);
