@@ -22,10 +22,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.model.common.DataDump;
-import com.kuuhaku.model.persistent.Backup;
-import com.kuuhaku.model.persistent.CustomAnswers;
-import com.kuuhaku.model.persistent.GuildConfig;
-import com.kuuhaku.model.persistent.Member;
+import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Guild;
@@ -102,13 +99,14 @@ public class BackupDAO {
 		Query m = em.createQuery("SELECT m FROM Member m", Member.class);
 		Query gc = em.createQuery("SELECT g FROM GuildConfig g", GuildConfig.class);
 		Query kg = em.createQuery("SELECT k FROM Kawaigotchi k", Kawaigotchi.class);
+		Query bl = em.createQuery("SELECT b FROM Blacklist b", Blacklist.class);
 		List<PoliticalState> ps = new ArrayList<>();
 
 		for (ExceedEnums ex : ExceedEnums.values()) {
 			ps.add(PStateDAO.getPoliticalState(ex));
 		}
 
-		DataDump dump = new DataDump(ca.getResultList(), m.getResultList(), gc.getResultList(), kg.getResultList(), ps);
+		DataDump dump = new DataDump(ca.getResultList(), m.getResultList(), gc.getResultList(), kg.getResultList(), ps, bl.getResultList());
 		em.close();
 
 		return dump;

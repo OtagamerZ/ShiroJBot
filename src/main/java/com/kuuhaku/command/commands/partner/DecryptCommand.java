@@ -51,7 +51,7 @@ public class DecryptCommand extends Command {
 		super(name, usage, description, category, requiresMM);
 	}
 
-	public DecryptCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+	public DecryptCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
 		super(name, aliases, usage, description, category, requiresMM);
 	}
 
