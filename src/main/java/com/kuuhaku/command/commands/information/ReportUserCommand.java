@@ -84,7 +84,7 @@ public class ReportUserCommand extends Command {
 					ids.put(dev, m.getId());
 					return m.pin();
 				})
-				.complete()
+				.queue(null, Helper::doNothing)
 		);
 
 		TicketDAO.setIds(number, ids);
