@@ -104,6 +104,9 @@ public class CommandManager {
 			add(new GarbageCollectorCommand(
 					"coletarlixo", new String[]{"gc"}, getLocale(PT).getString("cmd_garbage-collector"), DEV, false
 			));
+			add(new BlacklistCommand(
+					"listanegra", new String[]{"bl", "blacklist"}, getLocale(PT).getString("cmd_blacklist"), DEV, false
+			));
 
 			//SUPPORT
 			add(new BlockCommand(

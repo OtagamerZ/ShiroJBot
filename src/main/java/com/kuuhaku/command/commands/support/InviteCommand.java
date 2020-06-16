@@ -75,6 +75,12 @@ public class InviteCommand extends Command {
 		}
 
 		try {
+			if (!ShiroInfo.getRequests().contains(guild.getId())) {
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_assist-not-requested")).queue();
+				return;
+			}
+
+			ShiroInfo.getRequests().remove(guild.getId());
 			Guild guildToInvite = Main.getInfo().getGuildByID(rawCmd.split(" ")[1]);
 			assert guildToInvite.getDefaultChannel() != null;
 			String invite = Helper.createInvite(guildToInvite).setMaxAge((long) 30, TimeUnit.SECONDS).complete().getUrl();
