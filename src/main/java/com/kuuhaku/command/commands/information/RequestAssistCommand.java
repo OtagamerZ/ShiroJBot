@@ -71,9 +71,10 @@ public class RequestAssistCommand extends Command {
 					ids.put(dev, m.getId());
 					return m.pin();
 				})
-				.complete()
+				.queue(null, Helper::doNothing)
 		);
 
+		ShiroInfo.getRequests().add(guild.getId());
 		TicketDAO.setIds(number, ids);
 		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-requested-assist")).queue();
 	}
