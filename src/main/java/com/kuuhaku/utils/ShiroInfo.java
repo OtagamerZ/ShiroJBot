@@ -41,10 +41,7 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -99,6 +96,7 @@ public class ShiroInfo {
 	);
 	private static final HttpClientBuilder httpBuilder = HttpClientBuilder.create();
 	private static final Map<String, Tabletop> games = new HashMap<>();
+	private static final Set<String> requests = new HashSet<>();
 
 	//STATIC CONSTRUCTOR
 	static {
@@ -157,6 +155,10 @@ public class ShiroInfo {
 
 	public static boolean gameInProgress(String id) {
 		return games.keySet().stream().anyMatch(s -> Helper.containsAny(id, s.split(Pattern.quote("."))));
+	}
+
+	public static Set<String> getRequests() {
+		return requests;
 	}
 
 	//NON-STATIC

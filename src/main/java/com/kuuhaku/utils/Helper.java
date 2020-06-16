@@ -731,7 +731,10 @@ public class Helper {
 	public static boolean isEmpty(String... values) {
 		boolean empty = false;
 		for (String s : values) {
-			if (s.isEmpty()) empty = true;
+			if (s.isEmpty()) {
+				empty = true;
+				break;
+			}
 		}
 		return empty;
 	}
