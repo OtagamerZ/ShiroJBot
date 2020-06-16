@@ -63,7 +63,7 @@ public enum Tag {
 	LEVEL("icons/lvl_{0}.png", null, "Usuário que atingiu um dos marcos de level.",
 			(user, member) -> true),
 
-	RICO("icons/rich.png", TagIcons.MILLION, "Usuário que possui 100 mil de créditos.",
+	RICO("icons/rich.png", TagIcons.MILLION, "Usuário que possui 100 mil créditos.",
 			(user, member) -> AccountDAO.getAccount(user.getId()).getBalance() > 100000);
 
 	private final String path;
