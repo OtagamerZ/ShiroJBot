@@ -24,7 +24,7 @@ public enum TagIcons {
 	public String getTag() {
 		switch (this) {
 			case NIICHAN:
-				return "<:niichan:697879726018003115>";
+				return "<:niichan:697879726018003115> ";
 			case DEV:
 				return "<:developer:697879725925990466> ";
 			case SUPPORT:
@@ -54,9 +54,7 @@ public enum TagIcons {
 			case MARRIED:
 				return "<:married:697879725888241684> ";
 			case MILLION:
-				return "<:millionaire:718447753944105012> ";
-			case HALFMILLION:
-				return "<:half_millionaire:718447743747620865> ";
+				return "<:rich:718447753944105012> ";
 		}
 		throw new IllegalStateException();
 	}
@@ -95,8 +93,6 @@ public enum TagIcons {
 				return "697879725888241684";
 			case MILLION:
 				return "718447753944105012";
-			case HALFMILLION:
-				return "718447743747620865";
 		}
 		throw new IllegalStateException();
 	}
