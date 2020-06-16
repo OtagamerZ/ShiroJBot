@@ -232,6 +232,9 @@ public class JDAEvents extends ListenerAdapter {
 				case "block":
 				case "b":
 					RelayDAO.permaBlock(new PermaBlock(args[1]));
+					Main.getInfo().getUserByID(args[1]).openPrivateChannel().queue(c ->
+							c.sendMessage("Você foi bloqueado dos canais de comunicação da Shiro pela seguinte razão: `" + msgNoArgs + "`").queue());
+
 					staffIds.forEach(d -> {
 						if (!d.equals(event.getAuthor().getId())) {
 							Main.getInfo().getUserByID(d).openPrivateChannel().queue(c ->
@@ -243,20 +246,19 @@ public class JDAEvents extends ListenerAdapter {
 		} else {
 			try {
 				event.getAuthor().openPrivateChannel().queue(c -> {
-					if (RelayDAO.blockedList().contains(event.getAuthor().getId()))
+					if (RelayDAO.blockedList().contains(event.getAuthor().getId())) {
 						c.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-blocked")).queue();
-					else c.sendMessage("Mensagem enviada, aguardando resposta...").queue();
+					} else c.sendMessage("Mensagem enviada, aguardando resposta...").queue(s -> {
+						EmbedBuilder eb = new EmbedBuilder();
+
+						eb.setAuthor(event.getAuthor().getAsTag(), event.getAuthor().getAvatarUrl());
+						eb.setFooter(event.getAuthor().getId() + " - " + LocalDateTime.now().atOffset(ZoneOffset.ofHours(-3)).format(DateTimeFormatter.ofPattern("HH:mm | dd/MMM/yyyy")), null);
+						staffIds.forEach(d ->
+								Main.getInfo().getUserByID(d).openPrivateChannel().queue(ch -> ch.sendMessage(event.getMessage()).embed(eb.build()).queue()));
+					});
 				});
-			} catch (Exception e) {
-				return;
+			} catch (Exception ignored) {
 			}
-
-			EmbedBuilder eb = new EmbedBuilder();
-
-			eb.setAuthor(event.getAuthor().getAsTag(), event.getAuthor().getAvatarUrl());
-			eb.setFooter(event.getAuthor().getId() + " - " + LocalDateTime.now().atOffset(ZoneOffset.ofHours(-3)).format(DateTimeFormatter.ofPattern("HH:mm | dd/MMM/yyyy")), null);
-			staffIds.forEach(d ->
-					Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> c.sendMessage(event.getMessage()).embed(eb.build()).queue()));
 		}
 	}
 
