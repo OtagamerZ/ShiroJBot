@@ -24,9 +24,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de trava na criação de convites de suporte">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/JDAEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/JDAEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/UnblockEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/UnblockEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/guild/GuildEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/guild/GuildEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/MutedMember.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/MutedMember.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -487,14 +489,8 @@
       <workItem from="1592325182520" duration="126000" />
       <workItem from="1592329546610" duration="1018000" />
       <workItem from="1592399479439" duration="132000" />
-      <workItem from="1592414974673" duration="294000" />
-    </task>
-    <task id="LOCAL-01321" summary="Correção no mapeamento da classe Upvote">
-      <created>1591373915562</created>
-      <option name="number" value="01321" />
-      <option name="presentableId" value="LOCAL-01321" />
-      <option name="project" value="LOCAL" />
-      <updated>1591373915562</updated>
+      <workItem from="1592414974673" duration="343000" />
+      <workItem from="1592426644036" duration="882000" />
     </task>
     <task id="LOCAL-01322" summary="Correção no mapeamento da classe Upvote">
       <created>1591411188155</created>
@@ -832,7 +828,14 @@
       <option name="project" value="LOCAL" />
       <updated>1592399588921</updated>
     </task>
-    <option name="localTasksCounter" value="1370" />
+    <task id="LOCAL-01370" summary="Adição de trava na criação de convites de suporte">
+      <created>1592415306113</created>
+      <option name="number" value="01370" />
+      <option name="presentableId" value="LOCAL-01370" />
+      <option name="project" value="LOCAL" />
+      <updated>1592415306113</updated>
+    </task>
+    <option name="localTasksCounter" value="1371" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -938,18 +941,10 @@
     <state x="559" y="300" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1366.768@0.0.1366.768" timestamp="1587180982274" />
     <state x="688" y="395" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1588076307944" />
     <state x="687" y="410" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1586206152051" />
-    <state x="616" y="391" width="510" height="237" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1583774604653">
-      <screen x="0" y="0" width="1680" height="1010" />
-    </state>
-    <state x="616" y="391" width="510" height="237" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/0.0.1680.1010@0.0.1680.1010" timestamp="1583774604653" />
     <state x="934" y="185" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog" timestamp="1584019158545">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="934" y="185" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1584019158545" />
-    <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1583773218465">
-      <screen x="0" y="0" width="1680" height="1010" />
-    </state>
-    <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1583773218465" />
     <state x="570" y="253" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1591971961189">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -963,20 +958,16 @@
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1592399585802">
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1592426881342">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1591419311134" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1592399585802" />
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1592426881342" />
     <state width="247" height="195" key="DatabaseViewActions_Filter" timestamp="1591416926427">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state width="247" height="195" key="DatabaseViewActions_Filter/0.0.1366.768@0.0.1366.768" timestamp="1591416926427" />
-    <state x="574" y="268" key="EnvironmentVariablesDialog" timestamp="1583778259002">
-      <screen x="0" y="0" width="1680" height="1010" />
-    </state>
-    <state x="574" y="268" key="EnvironmentVariablesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1583778259002" />
     <state x="620" y="261" key="FileChooserDialogImpl" timestamp="1590148932552">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1038,10 +1029,6 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="505" y="205" key="NewModule_or_Project.wizard/0.0.1680.1010@0.0.1680.1010" timestamp="1590148977508" />
-    <state x="616" y="30" key="RollbackChangesDialog" timestamp="1583778436946">
-      <screen x="0" y="0" width="1680" height="1010" />
-    </state>
-    <state x="616" y="30" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1583778436946" />
     <state x="320" y="80" key="SettingsEditor" timestamp="1591643325927">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1051,12 +1038,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1592399590405">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1592415308187">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1591419318874" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1592399590405" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1592415308187" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1589991335906">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1110,7 +1097,6 @@
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="472" y="17" key="refactoring.ChangeSignatureDialog/0.0.1366.768@0.0.1366.768" timestamp="1585107291304" />
-    <state x="581" y="116" key="refactoring.ChangeSignatureDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1583774041973" />
     <state x="496" y="233" width="672" height="677" key="run.anything.popup" timestamp="1591101456693">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
