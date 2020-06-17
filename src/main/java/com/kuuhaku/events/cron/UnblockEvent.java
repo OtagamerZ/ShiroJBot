@@ -23,6 +23,7 @@ import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.controller.postgresql.QuizDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.RelayBlockList;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -81,10 +82,10 @@ public class UnblockEvent implements Job {
 			assert mb != null;
 			try {
 				if (mb.getRoles().stream().filter(rol -> !rol.isPublicRole()).anyMatch(rol -> !rol.getId().equals(r.getId())) && m.isMuted()) {
-					g.modifyMemberRoles(mb, r).complete();
+					g.modifyMemberRoles(mb, r).queue(null, Helper::doNothing);
 				} else if (!m.isMuted()) {
 					List<Role> roles = m.getRoles().toList().stream().map(rol -> g.getRoleById((String) rol)).collect(Collectors.toList());
-					g.modifyMemberRoles(mb, roles).complete();
+					g.modifyMemberRoles(mb, roles).queue(null, Helper::doNothing);
 					MemberDAO.removeMutedMember(m);
 				}
 			} catch (HierarchyException ignore) {
