@@ -214,7 +214,7 @@ public class JDAEvents extends ListenerAdapter {
 			String msg = event.getMessage().getContentRaw();
 			String[] args = msg.split(" ");
 			if (args.length < 2) return;
-			String msgNoArgs = msg.replaceFirst(args[0] + " " + args[1], "");
+			String msgNoArgs = msg.replaceFirst(args[0] + " " + args[1], "").trim();
 
 			switch (args[0].toLowerCase()) {
 				case "send":
