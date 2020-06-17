@@ -40,6 +40,7 @@ import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 
 import javax.annotation.Nonnull;
 import javax.persistence.NoResultException;
@@ -261,18 +262,16 @@ public class GuildEvents extends ListenerAdapter {
 
 	private void countSpam(Member member, MessageChannel channel, Guild guild, List<Message> h) {
 		if (h.size() >= GuildDAO.getGuildById(guild.getId()).getNoSpamAmount() && Helper.hasRoleHigherThan(guild.getSelfMember(), member)) {
-			h.forEach(m -> channel.deleteMessageById(m.getId()).complete());
+			((TextChannel) channel).deleteMessagesByIds(h.stream().map(Message::getId).collect(Collectors.toList())).queue(null, Helper::doNothing);
 			channel.sendMessage(":warning: | Opa, sem spam meu amigo!").queue(
 					msg -> msg.delete().queueAfter(20, TimeUnit.SECONDS)
 			);
 			try {
 				Role r = guild.getRoleById(GuildDAO.getGuildById(guild.getId()).getCargoWarn());
 				if (r != null) {
-					guild.addRoleToMember(member, r)
-							.delay(GuildDAO.getGuildById(guild.getId()).getWarnTime(), TimeUnit.MINUTES)
-							.flatMap(s -> guild.removeRoleFromMember(member, r))
-							.complete();
-					MutedMember mm = Helper.getOr(com.kuuhaku.controller.postgresql.MemberDAO.getMutedMemberById(member.getId()), new MutedMember(member.getId(), guild.getId()));
+					JSONArray roles = new JSONArray(member.getRoles().stream().map(Role::getId).collect(Collectors.toList()));
+					guild.modifyMemberRoles(member, r).queue(null, Helper::doNothing);
+					MutedMember mm = Helper.getOr(com.kuuhaku.controller.postgresql.MemberDAO.getMutedMemberById(member.getId()), new MutedMember(member.getId(), guild.getId(), roles));
 					mm.mute(GuildDAO.getGuildById(guild.getId()).getWarnTime());
 
 					com.kuuhaku.controller.postgresql.MemberDAO.saveMutedMember(mm);

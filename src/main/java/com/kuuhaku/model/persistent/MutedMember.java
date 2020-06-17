@@ -46,9 +46,10 @@ public class MutedMember {
 	@Column(columnDefinition = "TEXT")
 	private String roles = "[]";
 
-	public MutedMember(String id, String guild) {
+	public MutedMember(String id, String guild, JSONArray roles) {
 		this.uid = id;
 		this.guild = guild;
+		this.roles = roles.toString();
 	}
 
 	public MutedMember() {
