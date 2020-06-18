@@ -49,7 +49,7 @@ public enum KawaiponRarity {
 			case ULTRA_RARE:
 				return "Ultra Rara";
 			case LEGENDARY:
-				return "Legendária";
+				return "Lendária";
 			default:
 				throw new InvalidStateException();
 		}
