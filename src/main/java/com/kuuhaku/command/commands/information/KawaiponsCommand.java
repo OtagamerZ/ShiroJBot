@@ -49,7 +49,7 @@ public class KawaiponsCommand extends Command {
 		super(name, usage, description, category, requiresMM);
 	}
 
-	public KawaiponsCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+	public KawaiponsCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
 		super(name, aliases, usage, description, category, requiresMM);
 	}
 
