@@ -54,7 +54,7 @@ public class KawaiponBook {
 		cards.sort(Comparator.comparingInt(k -> k.getRarity().getIndex()));
 		List<List<KawaiponCard>> chunks = new ArrayList<>();
 
-		int pageCount = cards.size() / 12;
+		int pageCount = (int) Math.ceil(cards.size() / 12f);
 		for (int i = 0; i < pageCount; i++) {
 			ArrayList<KawaiponCard> chunk = new ArrayList<>();
 			for (int p = 12 * i; p < cards.size(); p++) {
