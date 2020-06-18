@@ -34,6 +34,7 @@ import org.jetbrains.annotations.NonNls;
 import org.json.JSONArray;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class MuteMemberCommand extends Command {
 
@@ -90,7 +91,8 @@ public class MuteMemberCommand extends Command {
 
 		try {
 			Member mb = message.getMentionedMembers().get(0);
-			MutedMember m = Helper.getOr(MemberDAO.getMutedMemberById(mb.getId()), new MutedMember(mb.getId(), guild.getId()));
+			JSONArray roles = new JSONArray(mb.getRoles().stream().map(Role::getId).collect(Collectors.toList()));
+			MutedMember m = Helper.getOr(MemberDAO.getMutedMemberById(mb.getId()), new MutedMember(mb.getId(), guild.getId(), roles));
 
 			m.setReason(reason);
 			m.setRoles(new JSONArray(mb.getRoles().stream().map(Role::getId).toArray(String[]::new)));
