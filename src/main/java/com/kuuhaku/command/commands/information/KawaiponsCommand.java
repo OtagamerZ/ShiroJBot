@@ -74,10 +74,10 @@ public class KawaiponsCommand extends Command {
 
 				KawaiponBook kb = new KawaiponBook(kp.getCards());
 				List<BufferedImage> cards = kb.view();
-				int page = Integer.parseInt(args[0]);
+				int page = Integer.parseInt(args[0]) - 1;
 
 				if (page >= cards.size() || page < 0) {
-					m.editMessage(":x: | A página precisa ser um valor entre 0 e " + (cards.size() - 1) + ".").queue();
+					m.editMessage(":x: | A página precisa ser um valor entre 1 e " + cards.size() + ".").queue();
 					return;
 				}
 
