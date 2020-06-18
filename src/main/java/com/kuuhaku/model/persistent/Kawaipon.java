@@ -21,8 +21,9 @@ package com.kuuhaku.model.persistent;
 import com.kuuhaku.utils.KawaiponCard;
 
 import javax.persistence.*;
-import java.util.EnumSet;
+import java.util.Comparator;
 import java.util.Set;
+import java.util.TreeSet;
 
 @Entity
 @Table(name = "kawaipon")
@@ -36,7 +37,7 @@ public class Kawaipon {
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Enumerated(EnumType.STRING)
-	private Set<KawaiponCard> cards = EnumSet.noneOf(KawaiponCard.class);
+	private Set<KawaiponCard> cards = new TreeSet<>(Comparator.comparing(Enum::name));
 
 	public String getUid() {
 		return uid;

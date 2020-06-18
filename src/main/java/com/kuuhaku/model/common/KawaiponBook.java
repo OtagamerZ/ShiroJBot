@@ -73,7 +73,7 @@ public class KawaiponBook {
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 			for (int i = 0; i < chunk.size(); i++) {
-				g2d.drawImage(chunk.get(i).getCard(), slots[i].x, slots[i].y, null);
+				g2d.drawImage(chunk.get(i).getCard(), slots[i].x, slots[i].y, 167, 260, null);
 			}
 
 			g2d.dispose();
