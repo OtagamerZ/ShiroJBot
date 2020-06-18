@@ -901,7 +901,13 @@ public class Helper {
 			eb.setColor(getRandomColor());
 			eb.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + ((6 - kc.getRarity().getIndex()) * 250) + " créditos).", null);
 
-			channel.sendMessage(eb.build()).addFile(getBytes(kc.getCard()), "kawaipon.jpg").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+			try {
+				Objects.requireNonNull(channel.getGuild().getTextChannelById(gc.getCanalKawaipon())).sendMessage(eb.build()).addFile(getBytes(kc.getCard()), "kawaipon.jpg").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+			} catch (RuntimeException e) {
+				gc.setCanalKawaipon(null);
+				GuildDAO.updateGuildSettings(gc);
+				channel.sendMessage(eb.build()).addFile(getBytes(kc.getCard()), "kawaipon.jpg").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+			}
 			ShiroInfo.getCurrentCard().put(channel.getGuild().getId(), kc);
 		}
 	}
