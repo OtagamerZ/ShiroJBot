@@ -168,6 +168,10 @@ public class GuildEvents extends ListenerAdapter {
 			}
 
 			if (!found && !author.isBot()) {
+				GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+
+				if (gc.isKawaiponEnabled()) Helper.spawnKawaipon(gc, (TextChannel) channel);
+
 				MessageChannel lvlChannel = null;
 				try {
 					lvlChannel = guild.getTextChannelById(GuildDAO.getGuildById(guild.getId()).getCanalLvl());
@@ -195,7 +199,6 @@ public class GuildEvents extends ListenerAdapter {
 									}
 								}
 							} catch (IllegalArgumentException e) {
-								GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 								Map<String, Object> cl = gc.getCargoslvl();
 								cl.remove(String.valueOf(i));
 								GuildDAO.updateGuildSettings(gc);
@@ -209,7 +212,6 @@ public class GuildEvents extends ListenerAdapter {
 
 							if (r != null) list.add(r);
 							else {
-								GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 								Map<String, Object> cl = gc.getCargoslvl();
 								cl.remove(String.valueOf(i));
 								GuildDAO.updateGuildSettings(gc);
