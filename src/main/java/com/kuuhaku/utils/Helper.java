@@ -791,10 +791,6 @@ public class Helper {
 		if (!TagDAO.getTagById(author.getId()).isPartner() || hasPermission(member, PrivilegeLevel.SUPPORT))
 			ShiroInfo.getRatelimit().put(author, true);
 		spawnAd(channel);
-
-		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
-
-		if (gc.isKawaiponEnabled()) spawnKawaipon(gc, (TextChannel) channel);
 		return true;
 	}
 
