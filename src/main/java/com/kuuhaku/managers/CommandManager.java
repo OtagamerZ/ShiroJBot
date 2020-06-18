@@ -212,6 +212,9 @@ public class CommandManager {
 			add(new MuteMemberCommand(
 					"mute", new String[]{"mutar", "silenciar", "silence"}, getLocale(PT).getString("req_member"), getLocale(PT).getString("cmd_mute"), MODERACAO, false
 			));
+			add(new AllowKawaiponCommand(
+					"habilitarkp", new String[]{"enablekp", "hkp", "ekp"}, getLocale(PT).getString("cmd_allow-kawaipon"), MODERACAO, false
+			));
 
 			//INFORMATION
 			add(new ComandosCommand(
@@ -267,6 +270,9 @@ public class CommandManager {
 			));
 			add(new HttpCatCommand(
 					"catnet", new String[]{"httpcat"}, getLocale(PT).getString("cmd_http-cat"), INFO, false
+			));
+			add(new KawaiponsCommand(
+					"kawaipons", new String[]{"kps"}, getLocale(PT).getString("req_page"), getLocale(PT).getString("cmd_kawaipons"), INFO, false
 			));
 
 			//MISC
@@ -400,6 +406,9 @@ public class CommandManager {
 			));
 			add(new ChessCommand(
 					"xadrez", new String[]{"chess"}, REQ_MENTION, getLocale(PT).getString("cmd_chess"), FUN, true
+			));
+			add(new CatchKawaiponCommand(
+					"coletar", new String[]{"collect"}, getLocale(PT).getString("cmd_catch-kawaipon"), FUN, false
 			));
 			add(new HugReaction(
 					"abraçar", new String[]{"abracar", "hug", "vemca"}, getLocale(PT).getString("cmd_hug"), true, "hug"

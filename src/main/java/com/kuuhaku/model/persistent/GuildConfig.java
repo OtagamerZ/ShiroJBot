@@ -137,6 +137,9 @@ public class GuildConfig {
 	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
 	private boolean markForDelete = false;
 
+	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	private boolean kawaiponEnabled = false;
+
 	public GuildConfig() {
 	}
 
@@ -387,6 +390,14 @@ public class GuildConfig {
 
 	public boolean isMarkForDelete() {
 		return markForDelete;
+	}
+
+	public void toggleKawaipon() {
+		kawaiponEnabled = !kawaiponEnabled;
+	}
+
+	public boolean isKawaiponEnabled() {
+		return kawaiponEnabled;
 	}
 
 	public List<Category> getDisabledModules() {

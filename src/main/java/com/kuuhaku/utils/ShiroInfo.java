@@ -18,6 +18,7 @@
 
 package com.kuuhaku.utils;
 
+import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -97,6 +98,7 @@ public class ShiroInfo {
 	private static final HttpClientBuilder httpBuilder = HttpClientBuilder.create();
 	private static final Map<String, Tabletop> games = new HashMap<>();
 	private static final Set<String> requests = new HashSet<>();
+	private static final Cache<String, KawaiponCard> currentCard = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).expireAfterAccess(0, TimeUnit.MILLISECONDS).build();
 
 	//STATIC CONSTRUCTOR
 	static {
@@ -159,6 +161,10 @@ public class ShiroInfo {
 
 	public static Set<String> getRequests() {
 		return requests;
+	}
+
+	public static Cache<String, KawaiponCard> getCurrentCard() {
+		return currentCard;
 	}
 
 	//NON-STATIC
