@@ -47,12 +47,26 @@ public class AllowKawaiponCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
-		if (gc.isKawaiponEnabled()) {
-			gc.toggleKawaipon();
-			channel.sendMessage("Não aparecerão mais cartas Kawaipon.").queue();
+		if (message.getMentionedChannels().size() < 1) {
+			if (gc.isKawaiponEnabled()) {
+				gc.toggleKawaipon();
+				gc.setCanalKawaipon(null);
+				channel.sendMessage("Não aparecerão mais cartas Kawaipon.").queue();
+			} else {
+				gc.toggleKawaipon();
+				gc.setCanalKawaipon(null);
+				channel.sendMessage("Agora aparecerão cartas Kawaipon neste servidor.").queue();
+			}
 		} else {
-			gc.toggleKawaipon();
-			channel.sendMessage("Agora aparecerão cartas Kawaipon neste servidor.").queue();
+			if (gc.isKawaiponEnabled()) {
+				gc.toggleKawaipon();
+				gc.setCanalKawaipon(null);
+				channel.sendMessage("Não aparecerão mais cartas Kawaipon.").queue();
+			} else {
+				gc.toggleKawaipon();
+				gc.setCanalKawaipon(message.getMentionedChannels().get(0).getId());
+				channel.sendMessage("Agora aparecerão cartas Kawaipon no canal " + message.getMentionedChannels().get(0).getAsMention() + ".").queue();
+			}
 		}
 
 		GuildDAO.updateGuildSettings(gc);
