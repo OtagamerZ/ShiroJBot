@@ -897,7 +897,7 @@ public class Helper {
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setImage("attachment://kawaipon.jpg");
 			eb.setAuthor("Uma carta " + kc.getRarity().toString().toUpperCase() + " Kawaipon apareceu neste servidor!");
-			eb.setTitle(kc.getName() + "(" + kc.getAnime() + ")");
+			eb.setTitle(kc.getName() + " (" + kc.getAnime() + ")");
 			eb.setColor(getRandomColor());
 			eb.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + ((6 - kc.getRarity().getIndex()) * 250) + " créditos).", null);
 

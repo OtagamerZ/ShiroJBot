@@ -66,13 +66,23 @@ public class CatchKawaiponCommand extends Command {
 			return;
 		}
 
-		acc.removeCredit(cost);
-		if (kp == null) kp = new Kawaipon();
+		if (kp == null) {
+			kp = new Kawaipon();
+			kp.setUid(author.getId());
+		}
+
+		if (kp.getCards().contains(kc)) {
+			channel.sendMessage(":x: | Você já possui esta carta.").queue();
+			return;
+		}
 
 		ShiroInfo.getCurrentCard().invalidate(guild.getId());
 		kp.addCard(kc);
+		acc.removeCredit(cost);
 
 		KawaiponDAO.saveKawaipon(kp);
 		AccountDAO.saveAccount(acc);
+
+		channel.sendMessage("Você adquiriu a carta `" + kc.getName() + "` com sucesso!").queue();
 	}
 }
