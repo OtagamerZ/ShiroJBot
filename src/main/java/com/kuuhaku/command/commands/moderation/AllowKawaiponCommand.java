@@ -39,7 +39,7 @@ public class AllowKawaiponCommand extends Command {
 		super(name, usage, description, category, requiresMM);
 	}
 
-	public AllowKawaiponCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+	public AllowKawaiponCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
 		super(name, aliases, usage, description, category, requiresMM);
 	}
 
