@@ -895,7 +895,7 @@ public class Helper {
 	}
 
 	public static void spawnKawaipon(GuildConfig gc, TextChannel channel) {
-		if (Helper.rng(5000) > 4990 - (channel.getGuild().getMemberCount() * 490 / 5000)) {
+		if (Helper.rng(2500) > 2490 - (channel.getGuild().getMemberCount() * 490 / 5000)) {
 			KawaiponCard kc = KawaiponCard.values()[Helper.rng(KawaiponCard.values().length)];
 
 			EmbedBuilder eb = new EmbedBuilder();
