@@ -27,6 +27,7 @@
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/KawaiponsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/KawaiponsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Kawaipon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Kawaipon.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -492,14 +493,7 @@
       <workItem from="1592482486931" duration="1151000" />
       <workItem from="1592487460666" duration="122000" />
       <workItem from="1592490083462" duration="13300000" />
-      <workItem from="1592508830700" duration="770000" />
-    </task>
-    <task id="LOCAL-01335" summary="Implementação de BiContract para requisições do site">
-      <created>1591621173131</created>
-      <option name="number" value="01335" />
-      <option name="presentableId" value="LOCAL-01335" />
-      <option name="project" value="LOCAL" />
-      <updated>1591621173132</updated>
+      <workItem from="1592508830700" duration="1262000" />
     </task>
     <task id="LOCAL-01336" summary="Implementação de BiContract para requisições do site">
       <created>1591622126811</created>
@@ -837,7 +831,14 @@
       <option name="project" value="LOCAL" />
       <updated>1592509440102</updated>
     </task>
-    <option name="localTasksCounter" value="1384" />
+    <task id="LOCAL-01384" summary="Correção no comando Ship">
+      <created>1592509716436</created>
+      <option name="number" value="01384" />
+      <option name="presentableId" value="LOCAL-01384" />
+      <option name="project" value="LOCAL" />
+      <updated>1592509716436</updated>
+    </task>
+    <option name="localTasksCounter" value="1385" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1044,12 +1045,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1592509442753">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1592509722337">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1591419318874" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1592509442753" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1592509722337" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1589991335906">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
