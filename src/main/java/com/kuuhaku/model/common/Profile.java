@@ -39,8 +39,6 @@ import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -60,17 +58,12 @@ public class Profile {
 
 	public static ByteArrayOutputStream makeProfile(net.dv8tion.jda.api.entities.Member m, Guild g) throws IOException {
 		int w = WIDTH;
-		HttpURLConnection con;
 		BufferedImage avatar;
 
 		try {
-			con = (HttpURLConnection) new URL(Objects.requireNonNull(m.getUser().getAvatarUrl())).openConnection();
-			con.setRequestProperty("User-Agent", "Mozilla/5.0");
-			avatar = scaleImage(ImageIO.read(con.getInputStream()), 200, 200);
+			avatar = scaleImage(ImageIO.read(Helper.getImage(m.getUser().getEffectiveAvatarUrl())), 200, 200);
 		} catch (NullPointerException | IOException e) {
-			con = (HttpURLConnection) new URL("https://institutogoldenprana.com.br/wp-content/uploads/2015/08/no-avatar-25359d55aa3c93ab3466622fd2ce712d1.jpg").openConnection();
-			con.setRequestProperty("User-Agent", "Mozilla/5.0");
-			avatar = scaleImage(ImageIO.read(con.getInputStream()), 200, 200);
+			avatar = scaleImage(ImageIO.read(Helper.getImage("https://institutogoldenprana.com.br/wp-content/uploads/2015/08/no-avatar-25359d55aa3c93ab3466622fd2ce712d1.jpg")), 200, 200);
 		}
 
 		BufferedImage bi = new BufferedImage(w, HEIGTH, BufferedImage.TYPE_INT_RGB);
@@ -78,22 +71,23 @@ public class Profile {
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-		try {
-			con = (HttpURLConnection) new URL(MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getBg()).openConnection();
-			con.setRequestProperty("User-Agent", "Mozilla/5.0");
-			BufferedImage bg = scaleImage(ImageIO.read(con.getInputStream()), bi.getWidth(), bi.getHeight());
+		int xOffset = 0;
+		int yOffset = 0;
 
-			int xOffset = 0;
-			int yOffset = 0;
+		try {
+			BufferedImage bg = scaleImage(ImageIO.read(Helper.getImage(MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getBg())), bi.getWidth(), bi.getHeight());
 
 			if (bg.getWidth() > bi.getWidth()) xOffset = -(bg.getWidth() - bi.getWidth()) / 2;
 			if (bg.getHeight() > bi.getHeight()) yOffset = -(bg.getHeight() - bi.getHeight()) / 2;
 
 			g2d.drawImage(bg, xOffset, yOffset, null);
 		} catch (IOException e) {
-			con = (HttpURLConnection) new URL("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg").openConnection();
-			con.setRequestProperty("User-Agent", "Mozilla/5.0");
-			g2d.drawImage(scaleImage(ImageIO.read(con.getInputStream()), bi.getWidth(), bi.getHeight()), null, 0, 0);
+			BufferedImage bg = scaleImage(ImageIO.read(Helper.getImage("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg")), bi.getWidth(), bi.getHeight());
+
+			if (bg.getWidth() > bi.getWidth()) xOffset = -(bg.getWidth() - bi.getWidth()) / 2;
+			if (bg.getHeight() > bi.getHeight()) yOffset = -(bg.getHeight() - bi.getHeight()) / 2;
+
+			g2d.drawImage(bg, xOffset, yOffset, null);
 		}
 
 		Color main = Helper.reverseColor(Helper.colorThief(MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getBg()));
