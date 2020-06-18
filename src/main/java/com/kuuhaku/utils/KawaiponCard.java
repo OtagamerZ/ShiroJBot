@@ -28,27 +28,45 @@ import static com.kuuhaku.utils.KawaiponRarity.*;
 
 public enum KawaiponCard {
 	//FIXME LEGENDARY
-	/*NGNL*/ SORA("Sora", "No Game No Life", LEGENDARY),
-	/*NGNL*/ SHIRO("Shiro", "No Game No Life", LEGENDARY),
+	SORA("Sora", "No Game No Life", LEGENDARY),
+	SHIRO("Shiro", "No Game No Life", LEGENDARY),
+	AKAME("Akame", "Akame Ga Kill", LEGENDARY),
+	ESDEATH("Esdeath", "Akame Ga Kill", LEGENDARY),
 
 	//FIXME ULTRA
-	/*NGNL*/ SCHWI("Schwi Dola", "No Game No Life", ULTRA_RARE),
-	/*NGNL*/ RIKU("Riku Dola", "No Game No Life", ULTRA_RARE),
-	/*NGNL*/ IZUNA("Izuna Hatsuse", "No Game No Life", ULTRA_RARE),
+	SCHWI("Schwi Dola", "No Game No Life", ULTRA_RARE),
+	RIKU("Riku Dola", "No Game No Life", ULTRA_RARE),
+	IZUNA("Izuna Hatsuse", "No Game No Life", ULTRA_RARE),
+	NAJENDA("Najenda", "Akame Ga Kill", ULTRA_RARE),
+	TATSUMI("Tatsumi", "Akame Ga Kill", ULTRA_RARE),
+	KUROME("Kurome", "Akame Ga Kill", ULTRA_RARE),
 
 	//FIXME RARE
-	/*NGNL*/ STEPH("Stephanie Dola", "No Game No Life", RARE),
-	/*NGNL*/ TET("Tet", "No Game No Life", RARE),
-	/*NGNL*/ JIBRIL("Jibril", "No Game No Life", RARE),
+	STEPH("Stephanie Dola", "No Game No Life", RARE),
+	TET("Tet", "No Game No Life", RARE),
+	JIBRIL("Jibril", "No Game No Life", RARE),
+	MINE("Mine", "Akame Ga Kill", RARE),
+	SHEELE("Sheele", "Akame Ga Kill", RARE),
+	LEONE("Leone", "Akame Ga Kill", RARE),
+	HONEST("Honest", "Akame Ga Kill", RARE),
 
 	//FIXME UNCOMMON
-	/*NGNL*/ FEEL("Feel Nirvalen", "No Game No Life", UNCOMMON),
-	/*NGNL*/ CHLAMMY("Chlammy Zell", "No Game No Life", UNCOMMON),
+	FEEL("Feel Nirvalen", "No Game No Life", UNCOMMON),
+	CHLAMMY("Chlammy Zell", "No Game No Life", UNCOMMON),
+	LUBBOCK("Lubbock", "Akame Ga Kill", UNCOMMON),
+	BULAT("Bulat", "Akame Ga Kill", UNCOMMON),
+	SUSANOO("Susanoo", "Akame Ga Kill", UNCOMMON),
 
 	//FIXME COMMON
-	/*NGNL*/ MAKOTO("Makoto Dola", "No Game No Life", COMMON),
-	/*NGNL*/ INO("Ino Hatsuse", "No Game No Life", COMMON),
-	/*NGNL*/ MIKO("Miko", "No Game No Life", COMMON),
+	MAKOTO("Makoto Dola", "No Game No Life", COMMON),
+	INO("Ino Hatsuse", "No Game No Life", COMMON),
+	MIKO("Miko", "No Game No Life", COMMON),
+	CHELSEA("Chelsea", "Akame Ga Kill", COMMON),
+	ZANK("Zank", "Akame Ga Kill", COMMON),
+	DAIDARA("Daidara", "Akame Ga Kill", COMMON),
+	NYAU("Nyau", "Akame Ga Kill", COMMON),
+	LIVER("Liver", "Akame Ga Kill", COMMON),
+
 
 	;
 	private final String name;
