@@ -98,7 +98,7 @@ public class ShiroInfo {
 	private static final HttpClientBuilder httpBuilder = HttpClientBuilder.create();
 	private static final Map<String, Tabletop> games = new HashMap<>();
 	private static final Set<String> requests = new HashSet<>();
-	private static final Cache<String, KawaiponCard> currentCard = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).expireAfterAccess(0, TimeUnit.MILLISECONDS).build();
+	private static final Cache<String, KawaiponCard> currentCard = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
 
 	//STATIC CONSTRUCTOR
 	static {
