@@ -25,28 +25,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/cards/akame.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/cards/bulat.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/cards/chelsea.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/cards/daidara.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/cards/esdeath.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/cards/honest.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/cards/kurome.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/cards/leone.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/cards/liver.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/cards/lubbock.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/cards/mine.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/cards/najenda.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/cards/nyau.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/cards/sheele.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/cards/susanoo.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/cards/tatsumi.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/cards/zank.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/moderation/AllowKawaiponCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/moderation/AllowKawaiponCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/GuildConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/GuildConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/KawaiponCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/KawaiponCard.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -512,14 +491,7 @@
       <workItem from="1592482486931" duration="1151000" />
       <workItem from="1592487460666" duration="122000" />
       <workItem from="1592490083462" duration="13300000" />
-      <workItem from="1592508830700" duration="2847000" />
-    </task>
-    <task id="LOCAL-01337" summary="Implementação de BiContract para requisições do site">
-      <created>1591626652044</created>
-      <option name="number" value="01337" />
-      <option name="presentableId" value="LOCAL-01337" />
-      <option name="project" value="LOCAL" />
-      <updated>1591626652044</updated>
+      <workItem from="1592508830700" duration="3724000" />
     </task>
     <task id="LOCAL-01338" summary="Implementação de BiContract para requisições do site">
       <created>1591626877157</created>
@@ -857,7 +829,14 @@
       <option name="project" value="LOCAL" />
       <updated>1592510177037</updated>
     </task>
-    <option name="localTasksCounter" value="1386" />
+    <task id="LOCAL-01386" summary="Adicionados mais Kawaipons (Akame Ga Kill)">
+      <created>1592511878198</created>
+      <option name="number" value="01386" />
+      <option name="presentableId" value="LOCAL-01386" />
+      <option name="project" value="LOCAL" />
+      <updated>1592511878198</updated>
+    </task>
+    <option name="localTasksCounter" value="1387" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -895,7 +874,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Implementação do framework de jogos;&#10;Adição do jogo &quot;jogo da velha&quot;;" />
     <MESSAGE value="Adição do jogo &quot;xadrez&quot;" />
     <MESSAGE value="Correção de leak na api de autenticação" />
     <MESSAGE value="Comando de sorteio (apenas devs por enquanto)" />
@@ -920,7 +898,8 @@
     <MESSAGE value="Criação do módulo de cartas Kawaipon" />
     <MESSAGE value="Correção no comando Ship" />
     <MESSAGE value="Correção no tamanho das cartas no livro de cartas" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção no tamanho das cartas no livro de cartas" />
+    <MESSAGE value="Adicionados mais Kawaipons (Akame Ga Kill)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adicionados mais Kawaipons (Akame Ga Kill)" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1064,12 +1043,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1592510178242">
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2" timestamp="1592511879612">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1591419318874" />
-    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1592510178242" />
+    <state x="224" y="185" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1592511879612" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1589991335906">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
