@@ -18,40 +18,43 @@
 
 package com.kuuhaku.model.persistent;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.kuuhaku.utils.KawaiponCard;
+
+import javax.persistence.*;
+import java.util.EnumSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "answeredquizzes")
-public class AnsweredQuizzes {
+@Table(name = "kawaipon")
+public class Kawaipon {
 	@Id
-	private String id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 
-	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-	private int times = 0;
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String uid = "";
 
-	public AnsweredQuizzes(String id) {
-		this.id = id;
+	@ElementCollection(fetch = FetchType.LAZY)
+	@Enumerated(EnumType.STRING)
+	private Set<KawaiponCard> cards = EnumSet.noneOf(KawaiponCard.class);
+
+	public String getUid() {
+		return uid;
 	}
 
-	public AnsweredQuizzes() {
+	public void setUid(String uid) {
+		this.uid = uid;
 	}
 
-	public String getId() {
-		return id;
+	public Set<KawaiponCard> getCards() {
+		return cards;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void addCard(KawaiponCard card) {
+		this.cards.add(card);
 	}
 
-	public int getTimes() {
-		return times;
-	}
-
-	public void played() {
-		times++;
+	public void removeCard(KawaiponCard card) {
+		this.cards.remove(card);
 	}
 }

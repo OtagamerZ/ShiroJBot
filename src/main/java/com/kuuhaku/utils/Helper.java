@@ -791,6 +791,10 @@ public class Helper {
 		if (!TagDAO.getTagById(author.getId()).isPartner() || hasPermission(member, PrivilegeLevel.SUPPORT))
 			ShiroInfo.getRatelimit().put(author, true);
 		spawnAd(channel);
+
+		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+
+		if (gc.isKawaiponEnabled()) spawnKawaipon(gc, (TextChannel) channel);
 		return true;
 	}
 
@@ -878,5 +882,31 @@ public class Helper {
 		AtomicReference<String> toChange = new AtomicReference<>();
 		replaces.forEach((k, v) -> toChange.set(source.replace(k, v)));
 		return toChange.get();
+	}
+
+	public static byte[] getBytes(BufferedImage image) {
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+			ImageIO.write(image, "jpg", baos);
+			return baos.toByteArray();
+		} catch (IOException e) {
+			logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
+			return new byte[0];
+		}
+	}
+
+	public static void spawnKawaipon(GuildConfig gc, TextChannel channel) {
+		if (Helper.rng(1000) > 990 - (channel.getGuild().getMemberCount() * 140 / 5000)) {
+			KawaiponCard kc = KawaiponCard.values()[Helper.rng(KawaiponCard.values().length)];
+
+			EmbedBuilder eb = new EmbedBuilder();
+			eb.setImage("attachment://kawaipon.jpg");
+			eb.setAuthor("Uma carta " + kc.getRarity().toString().toUpperCase() + " Kawaipon apareceu neste servidor!");
+			eb.setTitle(kc.getName() + "(" + kc.getAnime() + ")");
+			eb.setColor(getRandomColor());
+			eb.setFooter("Digite `" + gc.getPrefix() + "capturar` para adquirir esta carta (necessário: " + ((6 - kc.getRarity().getIndex()) * 250) + " créditos).", null);
+
+			channel.sendMessage(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+			ShiroInfo.getCurrentCard().put(channel.getGuild().getId(), kc);
+		}
 	}
 }

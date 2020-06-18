@@ -16,42 +16,42 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent;
+package com.kuuhaku.utils;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.github.ygimenez.exception.InvalidStateException;
 
-@Entity
-@Table(name = "answeredquizzes")
-public class AnsweredQuizzes {
-	@Id
-	private String id;
+public enum KawaiponRarity {
+	COMMON(5),
+	UNCOMMON(4),
+	RARE(3),
+	ULTRA_RARE(2),
+	LEGENDARY(1);
 
-	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-	private int times = 0;
+	private final int index;
 
-	public AnsweredQuizzes(String id) {
-		this.id = id;
+	KawaiponRarity(int index) {
+		this.index = index;
 	}
 
-	public AnsweredQuizzes() {
+	public int getIndex() {
+		return index;
 	}
 
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public int getTimes() {
-		return times;
-	}
-
-	public void played() {
-		times++;
+	@Override
+	public String toString() {
+		switch (this) {
+			case COMMON:
+				return "Comum";
+			case UNCOMMON:
+				return "Incomum";
+			case RARE:
+				return "Rara";
+			case ULTRA_RARE:
+				return "Ultra Rara";
+			case LEGENDARY:
+				return "Legendária";
+			default:
+				throw new InvalidStateException();
+		}
 	}
 }
