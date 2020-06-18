@@ -74,8 +74,8 @@ public class ShipCommand extends Command {
 
 			doneMeter = Arrays.toString(meter).replace(",", "").replace(" ", "");
 
-			g2d.drawImage(ImageIO.read(Helper.getImage(message.getMentionedUsers().get(0).getAvatarUrl())), null, 0, 0);
-			g2d.drawImage(ImageIO.read(Helper.getImage(message.getMentionedUsers().get(1).getAvatarUrl())), null, 129, 0);
+			g2d.drawImage(ImageIO.read(Helper.getImage(message.getMentionedUsers().get(0).getEffectiveAvatarUrl())), null, 0, 0);
+			g2d.drawImage(ImageIO.read(Helper.getImage(message.getMentionedUsers().get(1).getEffectiveAvatarUrl())), null, 129, 0);
 
 			g2d.dispose();
 
