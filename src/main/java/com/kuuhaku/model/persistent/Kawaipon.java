@@ -34,7 +34,7 @@ public class Kawaipon {
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
 	private String uid = "";
 
-	@ElementCollection(fetch = FetchType.LAZY)
+	@ElementCollection(fetch = FetchType.EAGER)
 	@Enumerated(EnumType.STRING)
 	private Set<KawaiponCard> cards = EnumSet.noneOf(KawaiponCard.class);
 
