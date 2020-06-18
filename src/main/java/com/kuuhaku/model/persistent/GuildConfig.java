@@ -62,10 +62,10 @@ public class GuildConfig {
 	private String canaladeus = "";
 
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
-	private String canalsug = "";
+	private String canalSug = "";
 
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
-	private String canallvl = "";
+	private String canalLvl = "";
 
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
 	private String canalrelay = "";
@@ -111,6 +111,9 @@ public class GuildConfig {
 
 	@Column(columnDefinition = "TEXT")
 	private String noSpamChannels = "";
+
+	@Column(columnDefinition = "TEXT")
+	private String canalKawaipon = "";
 
 	//SWITCHES
 	@Column(columnDefinition = "BOOLEAN DEFAULT TRUE")
@@ -218,21 +221,30 @@ public class GuildConfig {
 	}
 
 	public String getCanalSUG() {
-		return canalsug;
+		return canalSug;
 	}
 
 	public void setCanalSUG(String canalsug) {
-		if (canalsug == null || canalsug.equals("-1")) this.canalsug = "";
-		else this.canalsug = canalsug;
+		if (canalsug == null || canalsug.equals("-1")) this.canalSug = "";
+		else this.canalSug = canalsug;
 	}
 
 	public String getCanalLvl() {
-		return canallvl;
+		return canalLvl;
 	}
 
 	public void setCanalLvl(String canallvl) {
-		if (canallvl == null || canallvl.equals("-1")) this.canallvl = "";
-		else this.canallvl = canallvl;
+		if (canallvl == null || canallvl.equals("-1")) this.canalLvl = "";
+		else this.canalLvl = canallvl;
+	}
+
+	public String getCanalKawaipon() {
+		return canalKawaipon;
+	}
+
+	public void setCanalKawaipon(String kawaiponChannel) {
+		if (canalKawaipon == null || canalKawaipon.equals("-1")) this.canalKawaipon = "";
+		this.canalKawaipon = kawaiponChannel;
 	}
 
 	public Map<String, Object> getCargoslvl() {
