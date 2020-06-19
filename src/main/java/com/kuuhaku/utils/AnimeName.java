@@ -21,7 +21,7 @@ package com.kuuhaku.utils;
 import org.apache.commons.text.WordUtils;
 
 public enum AnimeName {
-	NO_GAME_NO_LIFE, AKAME_GA_KILL;
+	NO_GAME_NO_LIFE, AKAME_GA_KILL, BLEACH;
 
 	@Override
 	public String toString() {
