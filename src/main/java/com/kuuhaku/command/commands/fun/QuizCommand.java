@@ -67,7 +67,7 @@ public class QuizCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		AnsweredQuizzes aq = QuizDAO.getUserState(author.getId());
 
-		if (aq.getTimes() == 10) {
+		if (aq.getTimes() == 6) {
 			int time = (6 - (LocalDateTime.now().getHour() % 6));
 			channel.sendMessage(":x: | Você já jogou muitas vezes, aguarde " + time + " hora" + (time == 1 ? "" : "s") + " para jogar novamente!").queue();
 			return;
