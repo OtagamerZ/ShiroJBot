@@ -55,14 +55,6 @@ public class KawaiponsCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		if (args.length < 1) {
-			channel.sendMessage(":x: | Você precisa informar uma página (o limite de arquivos não me permite usar a paginação).").queue();
-			return;
-		} else if (!StringUtils.isNumeric(args[0])) {
-			channel.sendMessage(":x: | A página precisa ser um valor inteiro.").queue();
-			return;
-		}
-
 		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_generating-collection")).queue(m -> {
 			try {
 				Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
@@ -74,7 +66,16 @@ public class KawaiponsCommand extends Command {
 
 				KawaiponBook kb = new KawaiponBook(kp.getCards());
 				List<BufferedImage> cards = kb.view();
-				int page = Integer.parseInt(args[0]) - 1;
+				int page;
+				if (args.length < 1) page = 0;
+				else {
+					if (!StringUtils.isNumeric(args[0])) {
+						channel.sendMessage(":x: | A página precisa ser um valor inteiro.").queue();
+						return;
+					}
+
+					page = Integer.parseInt(args[0]) - 1;
+				}
 
 				if (page >= cards.size() || page < 0) {
 					m.editMessage(":x: | A página precisa ser um valor entre 1 e " + cards.size() + ".").queue();
@@ -83,7 +84,7 @@ public class KawaiponsCommand extends Command {
 
 				EmbedBuilder eb = new EmbedBuilder();
 
-				eb.setTitle("Kawaipons de " + author.getName() + " (página " + args[0] + ")");
+				eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName() + " (página " + args[0] + ")");
 				eb.setImage("attachment://page.jpg");
 				eb.setFooter("Total de Kawaipons: " + kp.getCards().size());
 
