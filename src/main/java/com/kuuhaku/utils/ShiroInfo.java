@@ -99,6 +99,7 @@ public class ShiroInfo {
 	private static final Map<String, Tabletop> games = new HashMap<>();
 	private static final Set<String> requests = new HashSet<>();
 	private static final Cache<String, KawaiponCard> currentCard = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
+	private static final Cache<String, byte[]> cardCache = CacheBuilder.newBuilder().expireAfterWrite(60, TimeUnit.MINUTES).build();
 
 	//STATIC CONSTRUCTOR
 	static {
@@ -165,6 +166,10 @@ public class ShiroInfo {
 
 	public static Cache<String, KawaiponCard> getCurrentCard() {
 		return currentCard;
+	}
+
+	public static Cache<String, byte[]> getCardCache() {
+		return cardCache;
 	}
 
 	//NON-STATIC

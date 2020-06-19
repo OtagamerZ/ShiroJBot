@@ -18,8 +18,6 @@
 
 package com.kuuhaku.model.persistent;
 
-import com.kuuhaku.utils.KawaiponCard;
-
 import javax.persistence.*;
 import java.util.Comparator;
 import java.util.Set;
@@ -35,9 +33,8 @@ public class Kawaipon {
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
 	private String uid = "";
 
-	@ElementCollection(fetch = FetchType.EAGER)
-	@Enumerated(EnumType.STRING)
-	private Set<KawaiponCard> cards = new TreeSet<>(Comparator.comparing(Enum::name));
+	@ManyToMany(fetch = FetchType.EAGER)
+	private Set<Card> cards = new TreeSet<>(Comparator.comparing(Card::getName));
 
 	public String getUid() {
 		return uid;
@@ -47,15 +44,15 @@ public class Kawaipon {
 		this.uid = uid;
 	}
 
-	public Set<KawaiponCard> getCards() {
+	public Set<Card> getCards() {
 		return cards;
 	}
 
-	public void addCard(KawaiponCard card) {
+	public void addCard(Card card) {
 		this.cards.add(card);
 	}
 
-	public void removeCard(KawaiponCard card) {
+	public void removeCard(Card card) {
 		this.cards.remove(card);
 	}
 }
