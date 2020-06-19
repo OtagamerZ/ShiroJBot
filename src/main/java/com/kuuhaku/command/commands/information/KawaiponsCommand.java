@@ -84,7 +84,7 @@ public class KawaiponsCommand extends Command {
 
 				EmbedBuilder eb = new EmbedBuilder();
 
-				eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName() + " (página " + page + ")");
+				eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName() + " (página " + (page + 1) + ")");
 				eb.setImage("attachment://page.jpg");
 				eb.setFooter("Total de Kawaipons: " + kp.getCards().size());
 

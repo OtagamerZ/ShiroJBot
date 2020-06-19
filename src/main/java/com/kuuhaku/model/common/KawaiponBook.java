@@ -71,7 +71,7 @@ public class KawaiponBook {
 			Graphics2D g2d = back.createGraphics();
 			g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g2d.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 40));
+			g2d.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));
 
 			for (int i = 0; i < chunk.size(); i++) {
 				switch (chunk.get(i).getRarity()) {
@@ -93,9 +93,9 @@ public class KawaiponBook {
 				}
 				g2d.drawImage(chunk.get(i).getCard(), slots[i].x, slots[i].y, 187, 280, null);
 				if (slots[i].y == 134)
-					Profile.printCenteredString(chunk.get(i).getName(), 187, slots[i].x, slots[i].y - 40, g2d);
+					Profile.printCenteredString(chunk.get(i).getName(), 187, slots[i].x, slots[i].y - 15, g2d);
 				else
-					Profile.printCenteredString(chunk.get(i).getName(), 187, slots[i].x, slots[i].y + 60, g2d);
+					Profile.printCenteredString(chunk.get(i).getName(), 187, slots[i].x, slots[i].y + 45, g2d);
 			}
 
 			g2d.dispose();
