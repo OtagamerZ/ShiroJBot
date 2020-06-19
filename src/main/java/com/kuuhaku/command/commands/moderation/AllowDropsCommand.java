@@ -28,21 +28,21 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
-public class AllowKawaiponCommand extends Command {
+public class AllowDropsCommand extends Command {
 
-	public AllowKawaiponCommand(String name, String description, Category category, boolean requiresMM) {
+	public AllowDropsCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
 	}
 
-	public AllowKawaiponCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
+	public AllowDropsCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
 		super(name, aliases, description, category, requiresMM);
 	}
 
-	public AllowKawaiponCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+	public AllowDropsCommand(String name, String usage, String description, Category category, boolean requiresMM) {
 		super(name, usage, description, category, requiresMM);
 	}
 
-	public AllowKawaiponCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+	public AllowDropsCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
 		super(name, aliases, usage, description, category, requiresMM);
 	}
 
@@ -57,23 +57,23 @@ public class AllowKawaiponCommand extends Command {
 
 		if (message.getMentionedChannels().size() < 1) {
 			if (gc.isKawaiponEnabled()) {
-				gc.toggleKawaipon();
-				gc.setCanalKawaipon(null);
-				channel.sendMessage("Não aparecerão mais cartas Kawaipon.").queue();
+				gc.toggleDrop();
+				gc.setCanalDrop(null);
+				channel.sendMessage("Não aparecerão mais drops.").queue();
 			} else {
-				gc.toggleKawaipon();
-				gc.setCanalKawaipon(null);
-				channel.sendMessage("Agora aparecerão cartas Kawaipon neste servidor.").queue();
+				gc.toggleDrop();
+				gc.setCanalDrop(null);
+				channel.sendMessage("Agora aparecerão drops neste servidor.").queue();
 			}
 		} else {
 			if (gc.isKawaiponEnabled()) {
-				gc.toggleKawaipon();
-				gc.setCanalKawaipon(null);
-				channel.sendMessage("Não aparecerão mais cartas Kawaipon.").queue();
+				gc.toggleDrop();
+				gc.setCanalDrop(null);
+				channel.sendMessage("Não aparecerão mais drops.").queue();
 			} else {
-				gc.toggleKawaipon();
-				gc.setCanalKawaipon(message.getMentionedChannels().get(0).getId());
-				channel.sendMessage("Agora aparecerão cartas Kawaipon no canal " + message.getMentionedChannels().get(0).getAsMention() + ".").queue();
+				gc.toggleDrop();
+				gc.setCanalDrop(message.getMentionedChannels().get(0).getId());
+				channel.sendMessage("Agora aparecerão drops no canal " + message.getMentionedChannels().get(0).getAsMention() + ".").queue();
 			}
 		}
 

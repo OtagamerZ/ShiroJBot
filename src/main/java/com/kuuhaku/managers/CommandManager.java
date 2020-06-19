@@ -215,6 +215,9 @@ public class CommandManager {
 			add(new AllowKawaiponCommand(
 					"habilitarkp", new String[]{"enablekp", "hkp", "ekp"}, getLocale(PT).getString("req_channel"), getLocale(PT).getString("cmd_allow-kawaipon"), MODERACAO, false
 			));
+			add(new AllowDropsCommand(
+					"habilitardp", new String[]{"enabledp", "hdp", "edp"}, getLocale(PT).getString("req_channel"), getLocale(PT).getString("cmd_allow-drops"), MODERACAO, false
+			));
 
 			//INFORMATION
 			add(new ComandosCommand(
@@ -409,6 +412,9 @@ public class CommandManager {
 			));
 			add(new CatchKawaiponCommand(
 					"coletar", new String[]{"collect"}, getLocale(PT).getString("cmd_catch-kawaipon"), FUN, false
+			));
+			add(new CatchDropCommand(
+					"abrir", new String[]{"open"}, getLocale(PT).getString("cmd_catch-drop"), FUN, false
 			));
 			add(new HugReaction(
 					"abraçar", new String[]{"abracar", "hug", "vemca"}, getLocale(PT).getString("cmd_hug"), true, "hug"
