@@ -68,6 +68,7 @@ public class Profile {
 
 		BufferedImage bi = new BufferedImage(w, HEIGTH, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2d = bi.createGraphics();
+		g2d.setBackground(Color.black);
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -319,7 +320,7 @@ public class Profile {
 	private static void makeOutline(String s, Graphics2D g2d) {
 		Color c = g2d.getColor();
 		s = s.isEmpty() ? "Não definido" : s;
-		g2d.setColor(Color.black);
+		g2d.setColor(g2d.getBackground());
 		FontRenderContext frc = g2d.getFontRenderContext();
 		TextLayout tl = new TextLayout(s, g2d.getFont(), frc);
 		Shape shape = tl.getOutline(null);
