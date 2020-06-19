@@ -54,6 +54,7 @@ public class CommandManager {
 	private static final String REQ_TWO_OPTIONS = getLocale(PT).getString("req_two-options");
 	private static final String REQ_ID = getLocale(PT).getString("req_id");
 	private static final String REQ_KEY_FILE = getLocale(PT).getString("req_key-file");
+	private static final String REQ_CHANNEL = getLocale(PT).getString("req_channel");
 	private final List<Command> commands;
 
 	public CommandManager() {
@@ -213,10 +214,10 @@ public class CommandManager {
 					"mute", new String[]{"mutar", "silenciar", "silence"}, getLocale(PT).getString("req_member"), getLocale(PT).getString("cmd_mute"), MODERACAO, false
 			));
 			add(new AllowKawaiponCommand(
-					"habilitarkp", new String[]{"enablekp", "hkp", "ekp"}, getLocale(PT).getString("req_channel"), getLocale(PT).getString("cmd_allow-kawaipon"), MODERACAO, false
+					"habilitarkp", new String[]{"enablekp", "hkp", "ekp"}, getLocale(PT).getString(REQ_CHANNEL), getLocale(PT).getString("cmd_allow-kawaipon"), MODERACAO, false
 			));
 			add(new AllowDropsCommand(
-					"habilitardp", new String[]{"enabledp", "hdp", "edp"}, getLocale(PT).getString("req_channel"), getLocale(PT).getString("cmd_allow-drops"), MODERACAO, false
+					"habilitardp", new String[]{"enabledp", "hdp", "edp"}, getLocale(PT).getString(REQ_CHANNEL), getLocale(PT).getString("cmd_allow-drops"), MODERACAO, false
 			));
 
 			//INFORMATION
