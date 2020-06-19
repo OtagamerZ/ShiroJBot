@@ -19,6 +19,7 @@
 package com.kuuhaku.model.common.drop;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.persistent.Account;
@@ -39,22 +40,19 @@ import java.util.function.Function;
 import static java.util.Collections.singletonMap;
 
 public class CreditDrop implements Prize {
+	private final AnimeName anime = AnimeName.values()[Helper.rng(AnimeName.values().length)];
 	private final int[] values = {
-			Helper.rng(5),
+			Helper.rng((int) CardDAO.animeCount(anime)),
 			Helper.rng(7),
-			Helper.rng(10),
-			Helper.rng(20),
-			Helper.rng(AnimeName.values().length)
+			Helper.rng((int) CardDAO.totalCards()),
+			Helper.rng(20)
 	};
 	private final int amount = Helper.clamp(Helper.rng(1000), 250, 1000);
 	private final List<Map<String, Function<User, Boolean>>> requirement = new ArrayList<>() {{
 		add(singletonMap("Ter " + values[2] + " Kawaipons ou mais.", u ->
 				Helper.getOr(KawaiponDAO.getKawaipon(u.getId()), new Kawaipon()).getCards().size() >= values[2]));
 
-		add(singletonMap("Ter " + values[0] + " Kawaipons de " + AnimeName.values()[values[4]].toString() + ".", u -> {
-			AnimeName an = AnimeName.values()[values[4]];
-			return Helper.getOr(KawaiponDAO.getKawaipon(u.getId()), new Kawaipon()).getCards().stream().filter(k -> k.getAnime().equals(an)).count() >= values[0];
-		}));
+		add(singletonMap("Ter " + values[0] + " Kawaipons de " + anime.toString() + ".", u -> Helper.getOr(KawaiponDAO.getKawaipon(u.getId()), new Kawaipon()).getCards().stream().filter(k -> k.getAnime().equals(anime)).count() >= values[0]));
 
 		add(singletonMap("Ser level " + values[3] + " ou maior.", u ->
 				MemberDAO.getMemberByMid(u.getId()).stream().anyMatch(m -> m.getLevel() >= values[3])));
