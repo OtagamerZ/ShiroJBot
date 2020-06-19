@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.common;
 
-import com.kuuhaku.utils.KawaiponCard;
+import com.kuuhaku.model.persistent.Card;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.*;
 
 public class KawaiponBook {
-	private final Set<KawaiponCard> cards;
+	private final Set<Card> cards;
 	private static final Point[] slots = {
 			new Point(180, 134),
 			new Point(400, 134),
@@ -45,18 +45,18 @@ public class KawaiponBook {
 			new Point(1280, 412)
 	};
 
-	public KawaiponBook(Set<KawaiponCard> cards) {
+	public KawaiponBook(Set<Card> cards) {
 		this.cards = cards;
 	}
 
 	public List<BufferedImage> view() throws IOException {
-		List<KawaiponCard> cards = new ArrayList<>(this.cards);
+		List<Card> cards = new ArrayList<>(this.cards);
 		cards.sort(Comparator.comparingInt(k -> k.getRarity().getIndex()));
-		List<List<KawaiponCard>> chunks = new ArrayList<>();
+		List<List<Card>> chunks = new ArrayList<>();
 
 		int pageCount = (int) Math.ceil(cards.size() / 12f);
 		for (int i = 0; i < pageCount; i++) {
-			ArrayList<KawaiponCard> chunk = new ArrayList<>();
+			ArrayList<Card> chunk = new ArrayList<>();
 			for (int p = 12 * i; p < cards.size(); p++) {
 				chunk.add(cards.get(p));
 			}
@@ -66,7 +66,7 @@ public class KawaiponBook {
 		List<BufferedImage> pages = new ArrayList<>();
 		final BufferedImage bg = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/background.jpg")));
 
-		for (List<KawaiponCard> chunk : chunks) {
+		for (List<Card> chunk : chunks) {
 			BufferedImage back = bg.getSubimage(0, 0, bg.getWidth(), bg.getHeight());
 			Graphics2D g2d = back.createGraphics();
 			g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
