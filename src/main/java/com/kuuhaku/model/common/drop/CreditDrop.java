@@ -22,7 +22,6 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.AnimeName;
 import com.kuuhaku.utils.Helper;
@@ -50,7 +49,7 @@ public class CreditDrop implements Prize {
 
 		add(singletonMap("Ter " + values[0] + " Kawaipons de " + AnimeName.values()[values[4]].toString() + ".", u -> {
 			AnimeName an = AnimeName.values()[values[4]];
-			return Helper.getOr(KawaiponDAO.getKawaipon(u.getId()), new Kawaipon()).getCards().stream().map(Card::getAnime).filter(an::equals).count() >= values[0];
+			return Helper.getOr(KawaiponDAO.getKawaipon(u.getId()), new Kawaipon()).getCards().stream().filter(k -> k.getAnime().equals(an)).count() >= values[0];
 		}));
 
 		add(singletonMap("Ser level " + values[3] + " ou maior.", u ->
