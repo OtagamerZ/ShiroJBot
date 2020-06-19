@@ -25,6 +25,6 @@ public enum AnimeName {
 
 	@Override
 	public String toString() {
-		return WordUtils.capitalize(name().replace("_", " "));
+		return WordUtils.capitalize(name().toLowerCase().replace("_", " "));
 	}
 }
