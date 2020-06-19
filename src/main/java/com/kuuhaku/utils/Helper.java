@@ -924,6 +924,7 @@ public class Helper {
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setThumbnail("https://i.pinimg.com/originals/86/c0/f4/86c0f4d0f020c3f819a532873ef33704.png");
 			eb.setTitle("Um drop apareceu neste servidor!");
+			eb.addField("Conteúdo:", drop.prize() + " créditos", false);
 			eb.setColor(getRandomColor());
 			eb.setFooter("Digite `" + gc.getPrefix() + "abrir` para receber o prêmio (requisitos: " + drop.getRequirement().getKey() + ").", null);
 

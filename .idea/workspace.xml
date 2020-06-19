@@ -24,11 +24,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Aumento nos prêmios;&#10;Aumento no cooldown também;">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/PPTCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/PPTCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/QuizCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/QuizCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DiscordBotsListHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DiscordBotsListHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/CreditDrop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/CreditDrop.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/Prize.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/Prize.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/AnimeName.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/AnimeName.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -498,14 +499,7 @@
       <workItem from="1592512669797" duration="85000" />
       <workItem from="1592513086956" duration="304000" />
       <workItem from="1592568248696" duration="8495000" />
-      <workItem from="1592582599775" duration="7878000" />
-    </task>
-    <task id="LOCAL-01367" summary="Adição de trava na criação de convites de suporte">
-      <created>1592325276984</created>
-      <option name="number" value="01367" />
-      <option name="presentableId" value="LOCAL-01367" />
-      <option name="project" value="LOCAL" />
-      <updated>1592325276986</updated>
+      <workItem from="1592582599775" duration="9451000" />
     </task>
     <task id="LOCAL-01368" summary="Adição de trava na criação de convites de suporte">
       <created>1592329962635</created>
@@ -843,7 +837,14 @@
       <option name="project" value="LOCAL" />
       <updated>1592590507499</updated>
     </task>
-    <option name="localTasksCounter" value="1416" />
+    <task id="LOCAL-01416" summary="Aumento nos prêmios;&#10;Aumento no cooldown também;">
+      <created>1592590910679</created>
+      <option name="number" value="01416" />
+      <option name="presentableId" value="LOCAL-01416" />
+      <option name="project" value="LOCAL" />
+      <updated>1592590910679</updated>
+    </task>
+    <option name="localTasksCounter" value="1417" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -881,7 +882,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Implementação do ShiroCryptor" />
     <MESSAGE value="Remoção do ShiroCryptor;&#10;Adição de outro encriptador;" />
     <MESSAGE value="Otimização do cálculo de tags;&#10;Implementação de apostas no jogo da velha;" />
     <MESSAGE value="Correção no mapeamento da classe Upvote" />
@@ -906,7 +906,8 @@
     <MESSAGE value="Melhorias nos efeitos das bordas de cartas" />
     <MESSAGE value="Transferência das cartas para o banco" />
     <MESSAGE value="Criação do módulo de drops" />
-    <option name="LAST_COMMIT_MESSAGE" value="Criação do módulo de drops" />
+    <MESSAGE value="Aumento nos prêmios;&#10;Aumento no cooldown também;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Aumento nos prêmios;&#10;Aumento no cooldown também;" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -938,11 +939,11 @@
     <state x="248" y="33" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1585944592238" />
     <state x="239" y="78" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.768@0.0.1366.768" timestamp="1591416974252" />
     <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1588965558966" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1592587047745">
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1592591652711">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="488" y="67" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1585945441171" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1592587047745" />
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1592591652711" />
     <state x="688" y="395" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1588076307944">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1050,12 +1051,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="212" y="177" key="Vcs.Push.Dialog.v2" timestamp="1592590508565">
+    <state x="212" y="177" key="Vcs.Push.Dialog.v2" timestamp="1592590912969">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1591419318874" />
-    <state x="212" y="177" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1592590508565" />
+    <state x="212" y="177" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1592590912969" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1592584283643">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
