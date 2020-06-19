@@ -29,6 +29,7 @@ import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
 import com.kuuhaku.handlers.games.tabletop.entity.Tabletop;
 import com.kuuhaku.handlers.music.GuildMusicManager;
+import com.kuuhaku.model.common.drop.Prize;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.PixelCanvas;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
@@ -100,6 +101,7 @@ public class ShiroInfo {
 	private static final Map<String, Tabletop> games = new HashMap<>();
 	private static final Set<String> requests = new HashSet<>();
 	private static final Cache<String, Card> currentCard = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
+	private static final Cache<String, Prize> currentDrop = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
 	private static final Cache<String, byte[]> cardCache = CacheBuilder.newBuilder().expireAfterWrite(60, TimeUnit.MINUTES).build();
 
 	//STATIC CONSTRUCTOR
@@ -167,6 +169,10 @@ public class ShiroInfo {
 
 	public static Cache<String, Card> getCurrentCard() {
 		return currentCard;
+	}
+
+	public static Cache<String, Prize> getCurrentDrop() {
+		return currentDrop;
 	}
 
 	public static Cache<String, byte[]> getCardCache() {
