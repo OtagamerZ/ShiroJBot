@@ -56,7 +56,7 @@ public class AllowDropsCommand extends Command {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (message.getMentionedChannels().size() < 1) {
-			if (gc.isKawaiponEnabled()) {
+			if (gc.isDropEnabled()) {
 				gc.toggleDrop();
 				gc.setCanalDrop(null);
 				channel.sendMessage("Não aparecerão mais drops.").queue();
@@ -66,7 +66,7 @@ public class AllowDropsCommand extends Command {
 				channel.sendMessage("Agora aparecerão drops neste servidor.").queue();
 			}
 		} else {
-			if (gc.isKawaiponEnabled()) {
+			if (gc.isDropEnabled()) {
 				gc.toggleDrop();
 				gc.setCanalDrop(null);
 				channel.sendMessage("Não aparecerão mais drops.").queue();
