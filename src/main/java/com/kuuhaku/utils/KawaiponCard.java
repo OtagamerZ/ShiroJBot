@@ -18,6 +18,8 @@
 
 package com.kuuhaku.utils;
 
+import org.jetbrains.annotations.NonNls;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -28,44 +30,44 @@ import static com.kuuhaku.utils.KawaiponRarity.*;
 
 public enum KawaiponCard {
 	//FIXME LEGENDARY
-	SORA("Sora", "No Game No Life", LEGENDARY),
-	SHIRO("Shiro", "No Game No Life", LEGENDARY),
-	AKAME("Akame", "Akame Ga Kill", LEGENDARY),
-	ESDEATH("Esdeath", "Akame Ga Kill", LEGENDARY),
+	@NonNls SORA("Sora", Constants.NO_GAME_NO_LIFE, LEGENDARY),
+	@NonNls SHIRO("Shiro", Constants.NO_GAME_NO_LIFE, LEGENDARY),
+	@NonNls AKAME("Akame", Constants.AKAME_GA_KILL, LEGENDARY),
+	@NonNls ESDEATH("Esdeath", Constants.AKAME_GA_KILL, LEGENDARY),
 
 	//FIXME ULTRA
-	SCHWI("Schwi Dola", "No Game No Life", ULTRA_RARE),
-	RIKU("Riku Dola", "No Game No Life", ULTRA_RARE),
-	IZUNA("Izuna Hatsuse", "No Game No Life", ULTRA_RARE),
-	NAJENDA("Najenda", "Akame Ga Kill", ULTRA_RARE),
-	TATSUMI("Tatsumi", "Akame Ga Kill", ULTRA_RARE),
-	KUROME("Kurome", "Akame Ga Kill", ULTRA_RARE),
+	@NonNls SCHWI("Schwi Dola", Constants.NO_GAME_NO_LIFE, ULTRA_RARE),
+	@NonNls RIKU("Riku Dola", Constants.NO_GAME_NO_LIFE, ULTRA_RARE),
+	@NonNls IZUNA("Izuna Hatsuse", Constants.NO_GAME_NO_LIFE, ULTRA_RARE),
+	@NonNls NAJENDA("Najenda", Constants.AKAME_GA_KILL, ULTRA_RARE),
+	@NonNls TATSUMI("Tatsumi", Constants.AKAME_GA_KILL, ULTRA_RARE),
+	@NonNls KUROME("Kurome", Constants.AKAME_GA_KILL, ULTRA_RARE),
 
 	//FIXME RARE
-	STEPH("Stephanie Dola", "No Game No Life", RARE),
-	TET("Tet", "No Game No Life", RARE),
-	JIBRIL("Jibril", "No Game No Life", RARE),
-	MINE("Mine", "Akame Ga Kill", RARE),
-	SHEELE("Sheele", "Akame Ga Kill", RARE),
-	LEONE("Leone", "Akame Ga Kill", RARE),
-	HONEST("Honest", "Akame Ga Kill", RARE),
+	@NonNls STEPH("Stephanie Dola", Constants.NO_GAME_NO_LIFE, RARE),
+	@NonNls TET("Tet", Constants.NO_GAME_NO_LIFE, RARE),
+	@NonNls JIBRIL("Jibril", Constants.NO_GAME_NO_LIFE, RARE),
+	@NonNls MINE("Mine", Constants.AKAME_GA_KILL, RARE),
+	@NonNls SHEELE("Sheele", Constants.AKAME_GA_KILL, RARE),
+	@NonNls LEONE("Leone", Constants.AKAME_GA_KILL, RARE),
+	@NonNls HONEST("Honest", Constants.AKAME_GA_KILL, RARE),
 
 	//FIXME UNCOMMON
-	FEEL("Feel Nirvalen", "No Game No Life", UNCOMMON),
-	CHLAMMY("Chlammy Zell", "No Game No Life", UNCOMMON),
-	LUBBOCK("Lubbock", "Akame Ga Kill", UNCOMMON),
-	BULAT("Bulat", "Akame Ga Kill", UNCOMMON),
-	SUSANOO("Susanoo", "Akame Ga Kill", UNCOMMON),
+	@NonNls FEEL("Feel Nirvalen", Constants.NO_GAME_NO_LIFE, UNCOMMON),
+	@NonNls CHLAMMY("Chlammy Zell", Constants.NO_GAME_NO_LIFE, UNCOMMON),
+	@NonNls LUBBOCK("Lubbock", Constants.AKAME_GA_KILL, UNCOMMON),
+	@NonNls BULAT("Bulat", Constants.AKAME_GA_KILL, UNCOMMON),
+	@NonNls SUSANOO("Susanoo", Constants.AKAME_GA_KILL, UNCOMMON),
 
 	//FIXME COMMON
-	MAKOTO("Makoto Dola", "No Game No Life", COMMON),
-	INO("Ino Hatsuse", "No Game No Life", COMMON),
-	MIKO("Miko", "No Game No Life", COMMON),
-	CHELSEA("Chelsea", "Akame Ga Kill", COMMON),
-	ZANK("Zank", "Akame Ga Kill", COMMON),
-	DAIDARA("Daidara", "Akame Ga Kill", COMMON),
-	NYAU("Nyau", "Akame Ga Kill", COMMON),
-	LIVER("Liver", "Akame Ga Kill", COMMON),
+	@NonNls MAKOTO("Makoto Dola", Constants.NO_GAME_NO_LIFE, COMMON),
+	@NonNls INO("Ino Hatsuse", Constants.NO_GAME_NO_LIFE, COMMON),
+	@NonNls MIKO("Miko", Constants.NO_GAME_NO_LIFE, COMMON),
+	@NonNls CHELSEA("Chelsea", Constants.AKAME_GA_KILL, COMMON),
+	@NonNls ZANK("Zank", Constants.AKAME_GA_KILL, COMMON),
+	@NonNls DAIDARA("Daidara", Constants.AKAME_GA_KILL, COMMON),
+	@NonNls NYAU("Nyau", Constants.AKAME_GA_KILL, COMMON),
+	@NonNls LIVER("Liver", Constants.AKAME_GA_KILL, COMMON),
 
 
 	;
@@ -107,5 +109,12 @@ public enum KawaiponCard {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			return null;
 		}
+	}
+
+	private static class Constants {
+		@NonNls
+		private static final String NO_GAME_NO_LIFE = "No Game No Life";
+		@NonNls
+		private static final String AKAME_GA_KILL = "Akame Ga Kill";
 	}
 }
