@@ -53,7 +53,7 @@ public class CatchDropCommand extends Command {
 			return;
 		}
 
-		if (p.getRequirement().getValue().apply(author)) {
+		if (!p.getRequirement().getValue().apply(author)) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_requirements-not-fulfilled")).queue();
 			return;
 		} else if (args.length < 1) {
