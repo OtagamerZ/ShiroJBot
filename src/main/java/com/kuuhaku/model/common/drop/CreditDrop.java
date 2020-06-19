@@ -52,7 +52,8 @@ public class CreditDrop implements Prize {
 		add(singletonMap("Ter " + values[2] + " Kawaipons ou mais.", u ->
 				Helper.getOr(KawaiponDAO.getKawaipon(u.getId()), new Kawaipon()).getCards().size() >= values[2]));
 
-		add(singletonMap("Ter " + values[0] + " Kawaipons de " + anime.toString() + ".", u -> Helper.getOr(KawaiponDAO.getKawaipon(u.getId()), new Kawaipon()).getCards().stream().filter(k -> k.getAnime().equals(anime)).count() >= values[0]));
+		add(singletonMap("Ter " + values[0] + " Kawaipons de " + anime.toString() + ".", u ->
+				Helper.getOr(KawaiponDAO.getKawaipon(u.getId()), new Kawaipon()).getCards().stream().filter(k -> k.getAnime().equals(anime)).count() >= values[0]));
 
 		add(singletonMap("Ser level " + values[3] + " ou maior.", u ->
 				MemberDAO.getMemberByMid(u.getId()).stream().anyMatch(m -> m.getLevel() >= values[3])));
@@ -68,7 +69,7 @@ public class CreditDrop implements Prize {
 	@Override
 	public String getCaptcha() {
 		try {
-			return Hex.encodeHexString(MessageDigest.getInstance("SHA-1").digest(ByteBuffer.allocate(4).putInt(hashCode()).array()));
+			return Hex.encodeHexString(MessageDigest.getInstance("SHA-1").digest(ByteBuffer.allocate(4).putInt(hashCode()).array())).substring(0, 5);
 		} catch (NoSuchAlgorithmException e) {
 			return String.valueOf(System.currentTimeMillis());
 		}
