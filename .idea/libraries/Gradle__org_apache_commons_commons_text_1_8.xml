@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: org.apache.commons:commons-text:1.8">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-text/1.8/879a6bde4c0537a25504c72ec7a94ba4099f469c/commons-text-1.8.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-text/1.8/37a3806e2aedebeebcc20d17fc20f318a99b8b7b/commons-text-1.8-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-text/1.8/79ddc6e7b5ea247f5553f4e948863708dbdd5316/commons-text-1.8-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -20,6 +20,7 @@ package com.kuuhaku.events.guild;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.controller.sqlite.CustomAnswerDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
@@ -170,7 +171,10 @@ public class GuildEvents extends ListenerAdapter {
 			if (!found && !author.isBot()) {
 				GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
-				if (gc.isKawaiponEnabled()) Helper.spawnKawaipon(gc, (TextChannel) channel);
+				if (!TagDAO.getTagById(guild.getOwnerId()).isToxic()) {
+					if (gc.isKawaiponEnabled()) Helper.spawnKawaipon(gc, (TextChannel) channel);
+					if (gc.isDropEnabled()) Helper.spawnDrop(gc, (TextChannel) channel);
+				}
 
 				MessageChannel lvlChannel = null;
 				try {
