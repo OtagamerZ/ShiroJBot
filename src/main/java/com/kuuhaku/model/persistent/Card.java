@@ -69,7 +69,7 @@ public class Card {
 				BufferedImage card = ImageIO.read(bais);
 				BufferedImage frame = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/frames/" + rarity.name().toLowerCase() + ".png")));
 
-				Graphics2D g2d = frame.createGraphics();
+				Graphics2D g2d = frame.getSubimage(0, 0, frame.getWidth(), frame.getHeight()).getSubimage(0, 0, frame.getWidth(), frame.getHeight()).createGraphics();
 				g2d.drawImage(card, 10, 10, null);
 				g2d.drawImage(frame, 0, 0, null);
 
