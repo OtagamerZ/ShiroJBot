@@ -894,7 +894,8 @@ public class Helper {
 
 	public static void spawnKawaipon(GuildConfig gc, TextChannel channel) {
 		if (Helper.rng(200) > 195 - (channel.getGuild().getMemberCount() * 15 / 5000)) {
-			Card kc = CardDAO.getCards().get(Helper.rng(KawaiponCard.values().length));
+			List<Card> cards = CardDAO.getCards();
+			Card kc = cards.get(Helper.rng(cards.size()));
 
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setImage("attachment://kawaipon.jpg");
