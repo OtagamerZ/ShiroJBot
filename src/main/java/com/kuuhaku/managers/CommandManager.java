@@ -415,7 +415,7 @@ public class CommandManager {
 					"coletar", new String[]{"collect"}, getLocale(PT).getString("cmd_catch-kawaipon"), FUN, false
 			));
 			add(new CatchDropCommand(
-					"abrir", new String[]{"open"}, getLocale(PT).getString("cmd_catch-drop"), FUN, false
+					"abrir", new String[]{"open"}, getLocale(PT).getString("req_captcha"), getLocale(PT).getString("cmd_catch-drop"), FUN, false
 			));
 			add(new HugReaction(
 					"abraçar", new String[]{"abracar", "hug", "vemca"}, getLocale(PT).getString("cmd_hug"), true, "hug"

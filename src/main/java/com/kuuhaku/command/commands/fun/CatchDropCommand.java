@@ -56,6 +56,12 @@ public class CatchDropCommand extends Command {
 		if (p.getRequirement().getValue().apply(author)) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_requirements-not-fulfilled")).queue();
 			return;
+		} else if (args.length < 1) {
+			channel.sendMessage(":x: | É necessário digitar o código captcha.").queue();
+			return;
+		} else if (!p.getCaptcha().equals(args[0])) {
+			channel.sendMessage(":x: | Código captcha incorreto, veja se digitou corretamente.").queue();
+			return;
 		}
 
 		ShiroInfo.getCurrentDrop().invalidate(guild.getId());

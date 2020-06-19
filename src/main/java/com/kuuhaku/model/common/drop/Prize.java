@@ -24,9 +24,11 @@ import java.util.Map;
 import java.util.function.Function;
 
 public interface Prize {
+	String getCaptcha();
+
 	void award(User u);
 
-	int prize();
+	int getPrize();
 
 	Map.Entry<String, Function<User, Boolean>> getRequirement();
 }

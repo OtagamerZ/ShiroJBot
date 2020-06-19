@@ -26,7 +26,11 @@ import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.AnimeName;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
+import org.apache.commons.codec.binary.Hex;
 
+import java.nio.ByteBuffer;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -64,6 +68,15 @@ public class CreditDrop implements Prize {
 	private final Map<String, Function<User, Boolean>> chosen = requirement.get(Helper.rng(requirement.size()));
 
 	@Override
+	public String getCaptcha() {
+		try {
+			return Hex.encodeHexString(MessageDigest.getInstance("SHA-1").digest(ByteBuffer.allocate(4).putInt(hashCode()).array()));
+		} catch (NoSuchAlgorithmException e) {
+			return String.valueOf(System.currentTimeMillis());
+		}
+	}
+
+	@Override
 	public void award(User u) {
 		Account acc = AccountDAO.getAccount(u.getId());
 		acc.addCredit(amount);
@@ -71,7 +84,7 @@ public class CreditDrop implements Prize {
 	}
 
 	@Override
-	public int prize() {
+	public int getPrize() {
 		return amount;
 	}
 
