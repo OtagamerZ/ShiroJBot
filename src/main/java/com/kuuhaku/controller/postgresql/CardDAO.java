@@ -19,6 +19,7 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.persistent.Card;
+import com.kuuhaku.utils.AnimeName;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -35,5 +36,30 @@ public class CardDAO {
 		em.close();
 
 		return c;
+	}
+
+	public static long totalCards() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT COUNT(c) FROM Card c", Long.class);
+
+		try {
+			return (long) q.getSingleResult();
+		} finally {
+			em.close();
+		}
+	}
+
+	public static long animeCount(AnimeName anime) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE anime = :anime", Long.class);
+		q.setParameter("anime", anime);
+
+		try {
+			return (long) q.getSingleResult();
+		} finally {
+			em.close();
+		}
 	}
 }
