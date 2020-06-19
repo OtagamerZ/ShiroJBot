@@ -27,11 +27,13 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.reactions.Reaction;
+import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.LogDAO;
 import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.controller.sqlite.BlacklistDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.Extensions;
+import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Log;
 import com.kuuhaku.model.persistent.Tags;
@@ -892,7 +894,7 @@ public class Helper {
 
 	public static void spawnKawaipon(GuildConfig gc, TextChannel channel) {
 		if (Helper.rng(200) > 195 - (channel.getGuild().getMemberCount() * 15 / 5000)) {
-			KawaiponCard kc = KawaiponCard.values()[Helper.rng(KawaiponCard.values().length)];
+			Card kc = CardDAO.getCards().get(Helper.rng(KawaiponCard.values().length));
 
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setImage("attachment://kawaipon.jpg");
