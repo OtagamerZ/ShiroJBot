@@ -26,5 +26,7 @@ import java.util.function.Function;
 public interface Prize {
 	void award(User u);
 
+	int prize();
+
 	Map.Entry<String, Function<User, Boolean>> getRequirement();
 }

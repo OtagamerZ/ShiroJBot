@@ -22,6 +22,7 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.AnimeName;
 import com.kuuhaku.utils.Helper;
@@ -30,29 +31,36 @@ import net.dv8tion.jda.api.entities.User;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.function.Function;
 
 import static java.util.Collections.singletonMap;
 
 public class CreditDrop implements Prize {
-	private final Random rng = new Random(System.currentTimeMillis());
+	private final int[] values = {
+			Helper.rng(5),
+			Helper.rng(7),
+			Helper.rng(10),
+			Helper.rng(20),
+			Helper.rng(AnimeName.values().length)
+	};
 	private final int amount = Helper.clamp(Helper.rng(1000), 250, 1000);
 	private final List<Map<String, Function<User, Boolean>>> requirement = new ArrayList<>() {{
-		add(singletonMap("Ter " + rng.nextInt(10) + " Kawaipons ou mais.", u ->
-				Helper.getOr(KawaiponDAO.getKawaipon(u.getId()), new Kawaipon()).getCards().size() >= rng.nextInt(10)));
+		add(singletonMap("Ter " + values[2] + " Kawaipons ou mais.", u ->
+				Helper.getOr(KawaiponDAO.getKawaipon(u.getId()), new Kawaipon()).getCards().size() >= values[2]));
 
-		add(singletonMap("Ter " + rng.nextInt(5) + " Kawaipons de " + AnimeName.values()[rng.nextInt(AnimeName.values().length)].toString() + ".", u ->
-				Helper.getOr(KawaiponDAO.getKawaipon(u.getId()), new Kawaipon()).getCards().stream().filter(k -> k.getAnime().equals(AnimeName.values()[rng.nextInt(AnimeName.values().length)])).count() >= rng.nextInt(5)));
+		add(singletonMap("Ter " + values[0] + " Kawaipons de " + AnimeName.values()[values[4]].toString() + ".", u -> {
+			AnimeName an = AnimeName.values()[values[4]];
+			return Helper.getOr(KawaiponDAO.getKawaipon(u.getId()), new Kawaipon()).getCards().stream().map(Card::getAnime).filter(an::equals).count() >= values[0];
+		}));
 
-		add(singletonMap("Ser level " + rng.nextInt(20) + " ou maior.", u ->
-				MemberDAO.getMemberByMid(u.getId()).stream().anyMatch(m -> m.getLevel() >= rng.nextInt(20))));
+		add(singletonMap("Ser level " + values[3] + " ou maior.", u ->
+				MemberDAO.getMemberByMid(u.getId()).stream().anyMatch(m -> m.getLevel() >= values[3])));
 
 		add(singletonMap("Ter menos que 500 créditos.", u ->
 				AccountDAO.getAccount(u.getId()).getBalance() < 500));
 
-		add(singletonMap("Ter votado " + rng.nextInt(7) + " vezes seguidas.", u ->
-				AccountDAO.getAccount(u.getId()).getStreak() >= rng.nextInt(7)));
+		add(singletonMap("Ter votado " + values[1] + " vezes seguidas.", u ->
+				AccountDAO.getAccount(u.getId()).getStreak() >= values[1]));
 	}};
 
 	@Override
@@ -63,7 +71,12 @@ public class CreditDrop implements Prize {
 	}
 
 	@Override
+	public int prize() {
+		return amount;
+	}
+
+	@Override
 	public Map.Entry<String, Function<User, Boolean>> getRequirement() {
-		return requirement.get(rng.nextInt(requirement.size())).entrySet().iterator().next();
+		return requirement.get(Helper.rng(requirement.size())).entrySet().iterator().next();
 	}
 }
