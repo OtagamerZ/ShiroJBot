@@ -68,15 +68,14 @@ public class Card {
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
 				BufferedImage card = ImageIO.read(bais);
 				BufferedImage frame = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/frames/" + rarity.name().toLowerCase() + ".png")));
-				BufferedImage canvas = new BufferedImage(frame.getWidth(), frame.getHeight(), frame.getType());
 
-				Graphics2D g2d = canvas.createGraphics();
-				//g2d.drawImage(card, 10, 10, null);
+				Graphics2D g2d = frame.getSubimage(0, 0, frame.getWidth(), frame.getHeight()).createGraphics();
+				g2d.drawImage(card, 10, 10, null);
 				g2d.drawImage(frame, 0, 0, null);
 
 				g2d.dispose();
 
-				return card;
+				return frame;
 			}
 		} catch (IOException | ExecutionException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
