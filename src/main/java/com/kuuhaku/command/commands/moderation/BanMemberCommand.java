@@ -68,10 +68,10 @@ public class BanMemberCommand extends Command {
 
 		try {
 			if (args.length < 2) {
-				guild.ban(message.getMentionedMembers().get(0), 30).queue();
+				guild.ban(message.getMentionedMembers().get(0), 7).queue();
 				channel.sendMessage("Membro banido com sucesso!").queue();
 			} else {
-				guild.ban(message.getMentionedMembers().get(0), 30, String.join(" ", args).replace(args[0], "").trim()).queue();
+				guild.ban(message.getMentionedMembers().get(0), 7, String.join(" ", args).replace(args[0], "").trim()).queue();
 				channel.sendMessage("Membro banido com sucesso!\nRazão:```" + String.join(" ", args).replace(args[0], "").trim() + "```").queue();
 			}
 		} catch (InsufficientPermissionException e) {
