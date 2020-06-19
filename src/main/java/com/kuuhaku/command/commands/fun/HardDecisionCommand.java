@@ -72,6 +72,7 @@ public class HardDecisionCommand extends Command {
 				Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[0], 215, 55, 135);
 				Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[1], 215, 255, 100);
 			} else {
+				g2d.setColor(Color.WHITE);
 				Profile.printCenteredString(String.join(" ", args).split(";")[0], 215, 55, 135, g2d);
 				Profile.printCenteredString(String.join(" ", args).split(";")[1], 215, 255, 100, g2d);
 			}
