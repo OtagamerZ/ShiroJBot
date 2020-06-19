@@ -30,19 +30,19 @@ import java.util.*;
 public class KawaiponBook {
 	private final Set<KawaiponCard> cards;
 	private static final Point[] slots = {
-			new Point(190, 144),
-			new Point(410, 144),
-			new Point(630, 144),
-			new Point(850, 144),
-			new Point(1070, 144),
-			new Point(1290, 144),
+			new Point(180, 134),
+			new Point(400, 134),
+			new Point(620, 134),
+			new Point(840, 134),
+			new Point(1060, 134),
+			new Point(1280, 134),
 
-			new Point(190, 422),
-			new Point(410, 422),
-			new Point(630, 422),
-			new Point(850, 422),
-			new Point(1070, 422),
-			new Point(1290, 422)
+			new Point(180, 412),
+			new Point(400, 412),
+			new Point(620, 412),
+			new Point(840, 412),
+			new Point(1060, 412),
+			new Point(1280, 412)
 	};
 
 	public KawaiponBook(Set<KawaiponCard> cards) {
@@ -73,7 +73,7 @@ public class KawaiponBook {
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 			for (int i = 0; i < chunk.size(); i++) {
-				g2d.drawImage(chunk.get(i).getCard(), slots[i].x, slots[i].y, 167, 260, null);
+				g2d.drawImage(chunk.get(i).getCard(), slots[i].x, slots[i].y, 187, 280, null);
 			}
 
 			g2d.dispose();
