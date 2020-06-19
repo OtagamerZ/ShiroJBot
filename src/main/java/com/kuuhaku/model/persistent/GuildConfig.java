@@ -115,6 +115,9 @@ public class GuildConfig {
 	@Column(columnDefinition = "TEXT")
 	private String canalKawaipon = "";
 
+	@Column(columnDefinition = "TEXT")
+	private String canalDrop = "";
+
 	//SWITCHES
 	@Column(columnDefinition = "BOOLEAN DEFAULT TRUE")
 	private boolean lvlNotif = false;
@@ -142,6 +145,9 @@ public class GuildConfig {
 
 	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
 	private boolean kawaiponEnabled = false;
+
+	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	private boolean dropEnabled = false;
 
 	public GuildConfig() {
 	}
@@ -242,9 +248,18 @@ public class GuildConfig {
 		return canalKawaipon;
 	}
 
-	public void setCanalKawaipon(String kawaiponChannel) {
+	public void setCanalKawaipon(String canalKawaipon) {
 		if (canalKawaipon == null || canalKawaipon.equals("-1")) this.canalKawaipon = "";
-		this.canalKawaipon = kawaiponChannel;
+		this.canalKawaipon = canalKawaipon;
+	}
+
+	public String getCanalDrop() {
+		return canalDrop;
+	}
+
+	public void setCanalDrop(String canalDrop) {
+		if (canalDrop == null || canalDrop.equals("-1")) this.canalDrop = "";
+		this.canalDrop = canalDrop;
 	}
 
 	public Map<String, Object> getCargoslvl() {
@@ -408,8 +423,16 @@ public class GuildConfig {
 		kawaiponEnabled = !kawaiponEnabled;
 	}
 
+	public void toggleDrop() {
+		dropEnabled = !dropEnabled;
+	}
+
 	public boolean isKawaiponEnabled() {
 		return kawaiponEnabled;
+	}
+
+	public boolean isDropEnabled() {
+		return dropEnabled;
 	}
 
 	public List<Category> getDisabledModules() {

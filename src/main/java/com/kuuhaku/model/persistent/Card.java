@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.utils.AnimeName;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.KawaiponRarity;
 import com.kuuhaku.utils.ShiroInfo;
@@ -41,8 +42,8 @@ public class Card {
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
 	private String name = "";
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
-	private String anime = "";
+	@Enumerated(EnumType.STRING)
+	private AnimeName anime;
 
 	@Enumerated(EnumType.STRING)
 	private KawaiponRarity rarity = KawaiponRarity.COMMON;
@@ -54,7 +55,7 @@ public class Card {
 		return name;
 	}
 
-	public String getAnime() {
+	public AnimeName getAnime() {
 		return anime;
 	}
 

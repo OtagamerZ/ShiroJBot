@@ -33,6 +33,8 @@ import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.controller.sqlite.BlacklistDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.Extensions;
+import com.kuuhaku.model.common.drop.CreditDrop;
+import com.kuuhaku.model.common.drop.Prize;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Log;
@@ -900,7 +902,7 @@ public class Helper {
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setImage("attachment://kawaipon.jpg");
 			eb.setAuthor("Uma carta " + kc.getRarity().toString().toUpperCase() + " Kawaipon apareceu neste servidor!");
-			eb.setTitle(kc.getName() + " (" + kc.getAnime() + ")");
+			eb.setTitle(kc.getName() + " (" + kc.getAnime().toString() + ")");
 			eb.setColor(getRandomColor());
 			eb.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + ((6 - kc.getRarity().getIndex()) * 250) + " créditos).", null);
 
@@ -912,6 +914,27 @@ public class Helper {
 				channel.sendMessage(eb.build()).addFile(getBytes(kc.getCard()), "kawaipon.jpg").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
 			}
 			ShiroInfo.getCurrentCard().put(channel.getGuild().getId(), kc);
+		}
+	}
+
+	public static void spawnDrop(GuildConfig gc, TextChannel channel) {
+		if (Helper.rng(200) > 195 - (channel.getGuild().getMemberCount() * 15 / 5000)) {
+			Prize drop = new CreditDrop();
+
+			EmbedBuilder eb = new EmbedBuilder();
+			eb.setThumbnail("https://i.pinimg.com/originals/86/c0/f4/86c0f4d0f020c3f819a532873ef33704.png");
+			eb.setTitle("Um drop apareceu neste servidor!");
+			eb.setColor(getRandomColor());
+			eb.setFooter("Digite `" + gc.getPrefix() + "abrir` para receber o prêmio (requisitos: " + drop.getRequirement().getKey() + ").", null);
+
+			try {
+				Objects.requireNonNull(channel.getGuild().getTextChannelById(gc.getCanalDrop())).sendMessage(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+			} catch (RuntimeException e) {
+				gc.setCanalDrop(null);
+				GuildDAO.updateGuildSettings(gc);
+				channel.sendMessage(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+			}
+			ShiroInfo.getCurrentDrop().put(channel.getGuild().getId(), drop);
 		}
 	}
 }
