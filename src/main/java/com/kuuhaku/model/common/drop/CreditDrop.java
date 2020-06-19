@@ -22,13 +22,14 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.AnimeName;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 import static java.util.Collections.singletonMap;
@@ -48,8 +49,6 @@ public class CreditDrop implements Prize {
 
 		add(singletonMap("Ter " + values[0] + " Kawaipons de " + AnimeName.values()[values[4]].toString() + ".", u -> {
 			AnimeName an = AnimeName.values()[values[4]];
-			System.out.println(an);
-			System.out.println(Arrays.toString(Objects.requireNonNull(KawaiponDAO.getKawaipon(u.getId())).getCards().stream().map(Card::getAnime).toArray()));
 			return Helper.getOr(KawaiponDAO.getKawaipon(u.getId()), new Kawaipon()).getCards().stream().filter(k -> k.getAnime().equals(an)).count() >= values[0];
 		}));
 
@@ -62,6 +61,7 @@ public class CreditDrop implements Prize {
 		add(singletonMap("Ter votado " + values[1] + " vezes seguidas.", u ->
 				AccountDAO.getAccount(u.getId()).getStreak() >= values[1]));
 	}};
+	private final Map<String, Function<User, Boolean>> chosen = requirement.get(Helper.rng(requirement.size()));
 
 	@Override
 	public void award(User u) {
@@ -77,6 +77,6 @@ public class CreditDrop implements Prize {
 
 	@Override
 	public Map.Entry<String, Function<User, Boolean>> getRequirement() {
-		return requirement.get(Helper.rng(requirement.size())).entrySet().iterator().next();
+		return chosen.entrySet().iterator().next();
 	}
 }
