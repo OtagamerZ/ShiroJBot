@@ -315,6 +315,7 @@ public class Profile {
 	}
 
 	private static void makeOutline(String s, Graphics2D g2d) {
+		Color c = g2d.getColor();
 		s = s.isEmpty() ? "Não definido" : s;
 		g2d.setColor(Color.black);
 		FontRenderContext frc = g2d.getFontRenderContext();
@@ -322,7 +323,7 @@ public class Profile {
 		Shape shape = tl.getOutline(null);
 		g2d.setStroke(new BasicStroke(4));
 		g2d.draw(shape);
-		g2d.setColor(Color.white);
+		g2d.setColor(c);
 		g2d.fill(shape);
 	}
 
