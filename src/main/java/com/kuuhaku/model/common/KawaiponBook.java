@@ -69,6 +69,7 @@ public class KawaiponBook {
 		for (List<Card> chunk : chunks) {
 			BufferedImage back = bg.getSubimage(0, 0, bg.getWidth(), bg.getHeight());
 			Graphics2D g2d = back.createGraphics();
+			g2d.setBackground(Color.black);
 			g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, 30));
