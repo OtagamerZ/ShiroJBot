@@ -96,7 +96,8 @@ public enum KawaiponCard {
 			BufferedImage card = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/cards/" + name().toLowerCase() + ".jpg")));
 			BufferedImage frame = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/frames/" + rarity.name().toLowerCase() + ".png")));
 
-			Graphics2D g2d = card.createGraphics();
+			Graphics2D g2d = frame.createGraphics();
+			g2d.drawImage(card, 10, 10, null);
 			g2d.drawImage(frame, 0, 0, null);
 
 			g2d.dispose();
