@@ -214,10 +214,10 @@ public class CommandManager {
 					"mute", new String[]{"mutar", "silenciar", "silence"}, getLocale(PT).getString("req_member"), getLocale(PT).getString("cmd_mute"), MODERACAO, false
 			));
 			add(new AllowKawaiponCommand(
-					"habilitarkp", new String[]{"enablekp", "hkp", "ekp"}, getLocale(PT).getString(REQ_CHANNEL), getLocale(PT).getString("cmd_allow-kawaipon"), MODERACAO, false
+					"habilitarkp", new String[]{"enablekp", "hkp", "ekp"}, REQ_CHANNEL, getLocale(PT).getString("cmd_allow-kawaipon"), MODERACAO, false
 			));
 			add(new AllowDropsCommand(
-					"habilitardp", new String[]{"enabledp", "hdp", "edp"}, getLocale(PT).getString(REQ_CHANNEL), getLocale(PT).getString("cmd_allow-drops"), MODERACAO, false
+					"habilitardp", new String[]{"enabledp", "hdp", "edp"}, REQ_CHANNEL, getLocale(PT).getString("cmd_allow-drops"), MODERACAO, false
 			));
 
 			//INFORMATION
