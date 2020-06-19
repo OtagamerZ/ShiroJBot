@@ -57,6 +57,7 @@
         <class>com.kuuhaku.model.persistent.Upvote</class>
         <class>com.kuuhaku.model.persistent.Blacklist</class>
         <class>com.kuuhaku.model.persistent.Kawaipon</class>
+        <class>com.kuuhaku.model.persistent.Card</class>
 
         <properties>
             <!-- dados da conexao -->
