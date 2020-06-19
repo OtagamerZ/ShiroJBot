@@ -71,9 +71,31 @@ public class KawaiponBook {
 			Graphics2D g2d = back.createGraphics();
 			g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g2d.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
 
 			for (int i = 0; i < chunk.size(); i++) {
+				switch (chunk.get(i).getRarity()) {
+					case COMMON:
+						g2d.setColor(Color.decode("#FFFFFF"));
+						break;
+					case UNCOMMON:
+						g2d.setColor(Color.decode("#03BB85"));
+						break;
+					case RARE:
+						g2d.setColor(Color.decode("#70D1F4"));
+						break;
+					case ULTRA_RARE:
+						g2d.setColor(Color.decode("#9966CC"));
+						break;
+					case LEGENDARY:
+						g2d.setColor(Color.decode("#DC9018"));
+						break;
+				}
 				g2d.drawImage(chunk.get(i).getCard(), slots[i].x, slots[i].y, 187, 280, null);
+				if (slots[i].y == 134)
+					g2d.drawString(chunk.get(i).getName(), (slots[i].x + chunk.get(i).getCard().getWidth() / 2) - (g2d.getFontMetrics().stringWidth(chunk.get(i).getName()) / 2), slots[i].y - 20);
+				else
+					g2d.drawString(chunk.get(i).getName(), (slots[i].x + chunk.get(i).getCard().getWidth() / 2) - (g2d.getFontMetrics().stringWidth(chunk.get(i).getName()) / 2), slots[i].y + 40);
 			}
 
 			g2d.dispose();
