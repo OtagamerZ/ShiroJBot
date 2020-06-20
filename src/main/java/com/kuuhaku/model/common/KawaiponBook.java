@@ -57,18 +57,16 @@ public class KawaiponBook {
 		int pageCount = (int) Math.ceil(cards.size() / 12f);
 		for (int i = 0; i < pageCount; i++) {
 			ArrayList<Card> chunk = new ArrayList<>();
-			for (int p = 12 * i; p < cards.size(); p++) {
+			for (int p = 12 * i; p < cards.size() && p < 12 * (i + 1); p++) {
 				chunk.add(cards.get(p));
 			}
 			chunks.add(chunk);
 		}
-		System.out.println(pageCount);
 
 		List<BufferedImage> pages = new ArrayList<>();
 		final BufferedImage bg = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/background.jpg")));
 
 		for (List<Card> chunk : chunks) {
-			System.out.println(chunk.size());
 			BufferedImage back = bg.getSubimage(0, 0, bg.getWidth(), bg.getHeight());
 			Graphics2D g2d = back.createGraphics();
 			g2d.setBackground(Color.black);
