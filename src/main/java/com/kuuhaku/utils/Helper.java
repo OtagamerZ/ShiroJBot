@@ -900,7 +900,7 @@ public class Helper {
 			Card kc = cards.get(Helper.rng(cards.size()));
 
 			EmbedBuilder eb = new EmbedBuilder();
-			eb.setImage("attachment://kawaipon.jpg");
+			//eb.setImage("attachment://kawaipon.jpg");
 			eb.setAuthor("Uma carta " + kc.getRarity().toString().toUpperCase() + " Kawaipon apareceu neste servidor!");
 			eb.setTitle(kc.getName() + " (" + kc.getAnime().toString() + ")");
 			eb.setColor(getRandomColor());
