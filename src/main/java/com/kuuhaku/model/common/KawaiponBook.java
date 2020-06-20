@@ -74,7 +74,7 @@ public class KawaiponBook {
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, 25));
 
-			for (int i = 0; i < chunk.size(); i++) {
+			for (int i = 0; i < chunk.size() - 1; i++) {
 				switch (chunk.get(i).getRarity()) {
 					case COMMON:
 						g2d.setColor(Color.decode("#FFFFFF"));
