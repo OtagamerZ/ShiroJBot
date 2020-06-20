@@ -896,14 +896,19 @@ public class Helper {
 			eb.setTitle(kc.getName() + " (" + kc.getAnime().toString() + ")");
 			eb.setColor(getRandomColor());
 			eb.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + ((6 - kc.getRarity().getIndex()) * 250) + " créditos).", null);
-
-			try {
-				Objects.requireNonNull(channel.getGuild().getTextChannelById(gc.getCanalKawaipon())).sendMessage(eb.build()).addFile(IOUtils.toByteArray(kc.getCard()), "kawaipon.jpg").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
-			} catch (RuntimeException e) {
-				gc.setCanalKawaipon(null);
-				GuildDAO.updateGuildSettings(gc);
-				channel.sendMessage(eb.build()).addFile(IOUtils.toByteArray(kc.getCard()), "kawaipon.jpg").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
-			}
+			
+			try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+				ImageIO.write(kc.getCard());
+				try {
+					Objects.requireNonNull(channel.getGuild().getTextChannelById(gc.getCanalKawaipon())).sendMessage(eb.build()).addFile(baos.toArray(), "kawaipon.jpg").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+				} catch (RuntimeException e) {
+					gc.setCanalKawaipon(null);
+					GuildDAO.updateGuildSettings(gc);
+					channel.sendMessage(eb.build()).addFile(IOUtils.toByteArray(kc.getCard()), "kawaipon.jpg").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+				}
+			} catch (IOException e) {
+				logger(Helper.class).error(e + " |" + e.getStackTrace()[0]);
+			} 
 			ShiroInfo.getCurrentCard().put(channel.getGuild().getId(), kc);
 		}
 	}
