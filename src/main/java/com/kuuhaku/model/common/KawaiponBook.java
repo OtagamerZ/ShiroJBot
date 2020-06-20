@@ -62,11 +62,13 @@ public class KawaiponBook {
 			}
 			chunks.add(chunk);
 		}
+		System.out.println(pageCount);
 
 		List<BufferedImage> pages = new ArrayList<>();
 		final BufferedImage bg = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/background.jpg")));
 
 		for (List<Card> chunk : chunks) {
+			System.out.println(chunk.size());
 			BufferedImage back = bg.getSubimage(0, 0, bg.getWidth(), bg.getHeight());
 			Graphics2D g2d = back.createGraphics();
 			g2d.setBackground(Color.black);
@@ -74,7 +76,7 @@ public class KawaiponBook {
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, 25));
 
-			for (int i = 0; i < chunk.size() - 1; i++) {
+			for (int i = 0; i < chunk.size(); i++) {
 				switch (chunk.get(i).getRarity()) {
 					case COMMON:
 						g2d.setColor(Color.decode("#FFFFFF"));
