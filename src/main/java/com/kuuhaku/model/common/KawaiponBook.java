@@ -67,13 +67,14 @@ public class KawaiponBook {
 		final BufferedImage bg = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/background.jpg")));
 
 		for (List<Card> chunk : chunks) {
-			BufferedImage back = bg.getSubimage(0, 0, bg.getWidth(), bg.getHeight());
+			BufferedImage back = new BufferedImage(bg.getWidth, bg.getHeight(), bg.getType());
 			Graphics2D g2d = back.createGraphics();
 			g2d.setBackground(Color.black);
 			g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, 25));
 
+			g2d.drawImage(bg, 0, 0, null);
 			for (int i = 0; i < chunk.size(); i++) {
 				switch (chunk.get(i).getRarity()) {
 					case COMMON:
