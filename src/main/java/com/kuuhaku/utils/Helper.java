@@ -894,24 +894,34 @@ public class Helper {
 		}
 	}
 
+	public static byte[] getBytes(BufferedImage image, String encode) {
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+			ImageIO.write(image, encode, baos);
+			return baos.toByteArray();
+		} catch (IOException e) {
+			logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
+			return new byte[0];
+		}
+	}
+
 	public static void spawnKawaipon(GuildConfig gc, TextChannel channel) {
 		if (Helper.rng(200) > 195 - (channel.getGuild().getMemberCount() * 15 / 5000)) {
 			List<Card> cards = CardDAO.getCards();
 			Card kc = cards.get(Helper.rng(cards.size()));
 
 			EmbedBuilder eb = new EmbedBuilder();
-			eb.setImage("attachment://kawaipon.jpg");
+			eb.setImage("attachment://kawaipon.png");
 			eb.setAuthor("Uma carta " + kc.getRarity().toString().toUpperCase() + " Kawaipon apareceu neste servidor!");
 			eb.setTitle(kc.getName() + " (" + kc.getAnime().toString() + ")");
 			eb.setColor(getRandomColor());
 			eb.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + ((6 - kc.getRarity().getIndex()) * 250) + " créditos).", null);
 
 			try {
-				Objects.requireNonNull(channel.getGuild().getTextChannelById(gc.getCanalKawaipon())).sendMessage(eb.build()).addFile(getBytes(kc.getCard()), "kawaipon.jpg").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+				Objects.requireNonNull(channel.getGuild().getTextChannelById(gc.getCanalKawaipon())).sendMessage(eb.build()).addFile(getBytes(kc.getCard(), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
 			} catch (RuntimeException e) {
 				gc.setCanalKawaipon(null);
 				GuildDAO.updateGuildSettings(gc);
-				channel.sendMessage(eb.build()).addFile(getBytes(kc.getCard()), "kawaipon.jpg").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+				channel.sendMessage(eb.build()).addFile(getBytes(kc.getCard(), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
 			}
 			ShiroInfo.getCurrentCard().put(channel.getGuild().getId(), kc);
 		}
