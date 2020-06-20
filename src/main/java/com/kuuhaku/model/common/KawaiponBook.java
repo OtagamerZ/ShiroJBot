@@ -67,7 +67,7 @@ public class KawaiponBook {
 		final BufferedImage bg = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/background.jpg")));
 
 		for (List<Card> chunk : chunks) {
-			BufferedImage back = new BufferedImage(bg.getWidth, bg.getHeight(), bg.getType());
+			BufferedImage back = new BufferedImage(bg.getWidth(), bg.getHeight(), bg.getType());
 			Graphics2D g2d = back.createGraphics();
 			g2d.setBackground(Color.black);
 			g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
