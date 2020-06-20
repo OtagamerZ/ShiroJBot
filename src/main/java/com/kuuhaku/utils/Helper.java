@@ -56,7 +56,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 import org.python.google.common.collect.Lists;
-import org.apache.commons.io.IOUtils;
 
 import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
@@ -885,6 +884,16 @@ public class Helper {
 		return toChange.get();
 	}
 
+	public static byte[] getBytes(BufferedImage image) {
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+			ImageIO.write(image, "jpg", baos);
+			return baos.toByteArray();
+		} catch (IOException e) {
+			logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
+			return new byte[0];
+		}
+	}
+
 	public static void spawnKawaipon(GuildConfig gc, TextChannel channel) {
 		if (Helper.rng(200) > 195 - (channel.getGuild().getMemberCount() * 15 / 5000)) {
 			List<Card> cards = CardDAO.getCards();
@@ -896,19 +905,14 @@ public class Helper {
 			eb.setTitle(kc.getName() + " (" + kc.getAnime().toString() + ")");
 			eb.setColor(getRandomColor());
 			eb.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + ((6 - kc.getRarity().getIndex()) * 250) + " créditos).", null);
-			
-			try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-				ImageIO.write(kc.getCard(), "jpg", baos);
-				try {
-					Objects.requireNonNull(channel.getGuild().getTextChannelById(gc.getCanalKawaipon())).sendMessage(eb.build()).addFile(baos.toArray(), "kawaipon.jpg").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
-				} catch (RuntimeException e) {
-					gc.setCanalKawaipon(null);
-					GuildDAO.updateGuildSettings(gc);
-					channel.sendMessage(eb.build()).addFile(IOUtils.toByteArray(kc.getCard()), "kawaipon.jpg").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
-				}
-			} catch (IOException e) {
-				logger(Helper.class).error(e + " |" + e.getStackTrace()[0]);
-			} 
+
+			try {
+				Objects.requireNonNull(channel.getGuild().getTextChannelById(gc.getCanalKawaipon())).sendMessage(eb.build()).addFile(getBytes(kc.getCard()), "kawaipon.jpg").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+			} catch (RuntimeException e) {
+				gc.setCanalKawaipon(null);
+				GuildDAO.updateGuildSettings(gc);
+				channel.sendMessage(eb.build()).addFile(getBytes(kc.getCard()), "kawaipon.jpg").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+			}
 			ShiroInfo.getCurrentCard().put(channel.getGuild().getId(), kc);
 		}
 	}
