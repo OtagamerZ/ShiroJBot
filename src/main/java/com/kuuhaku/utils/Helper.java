@@ -898,7 +898,7 @@ public class Helper {
 			eb.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + ((6 - kc.getRarity().getIndex()) * 250) + " créditos).", null);
 			
 			try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-				ImageIO.write(kc.getCard());
+				ImageIO.write(kc.getCard(), "jpg", baos);
 				try {
 					Objects.requireNonNull(channel.getGuild().getTextChannelById(gc.getCanalKawaipon())).sendMessage(eb.build()).addFile(baos.toArray(), "kawaipon.jpg").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
 				} catch (RuntimeException e) {
