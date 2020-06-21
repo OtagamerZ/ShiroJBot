@@ -72,7 +72,7 @@ public class Account {
 
 	public int voted() {
 		this.lastVoted = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.dateformat);
-		if (lastVotedNoFormat != null && LocalDateTime.now().isBefore(lastVotedNoFormat.plusHours(12))) streak++;
+		if (lastVotedNoFormat != null && LocalDateTime.now().isBefore(lastVotedNoFormat.plusHours(24))) streak++;
 		else streak = 0;
 
 		if (streak > 7) streak = 7;
