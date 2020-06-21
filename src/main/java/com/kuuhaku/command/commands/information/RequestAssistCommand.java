@@ -71,7 +71,7 @@ public class RequestAssistCommand extends Command {
 					ids.put(dev, m.getId());
 					return m.pin();
 				})
-				.queue(null, Helper::doNothing)
+				.complete()
 		);
 
 		ShiroInfo.getRequests().add(guild.getId());
