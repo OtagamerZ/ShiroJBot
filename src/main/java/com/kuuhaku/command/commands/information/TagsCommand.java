@@ -57,7 +57,7 @@ public class TagsCommand extends Command {
 						TagIcons.LVL50.getTag() +
 						TagIcons.LVL60.getTag() +
 						TagIcons.LVL70.getTag() + t.toString(), t.getDescription(), false);
-			} else if (t.toString().contains("COLETADO")) {
+			} else if (t.toString().contains("Coletado")) {
 				eb.addField(t.getEmote().getTag() + t.toString() + "%", t.getDescription(), false);
 			} else {
 				eb.addField(t.getEmote().getTag() + t.toString(), t.getDescription(), false);
