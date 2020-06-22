@@ -28,16 +28,14 @@ import com.kuuhaku.utils.AnimeName;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
-
-import static java.util.Collections.singletonMap;
 
 public class CreditDrop implements Prize {
 	private final AnimeName anime = AnimeName.values()[Helper.rng(AnimeName.values().length)];
@@ -45,26 +43,26 @@ public class CreditDrop implements Prize {
 			Helper.rng((int) CardDAO.animeCount(anime)),
 			Helper.rng(7),
 			Helper.rng((int) CardDAO.totalCards()),
-			Helper.rng(20)
+			Helper.rng((int) MemberDAO.getHighestLevel())
 	};
 	private final int amount = Helper.clamp(Helper.rng(1000), 250, 1000);
-	private final List<Map<String, Function<User, Boolean>>> requirement = new ArrayList<>() {{
-		add(singletonMap("Ter " + values[2] + " Kawaipons ou mais.", u ->
+	private final List<Pair<String, Function<User, Boolean>>> requirement = new ArrayList<>() {{
+		add(Pair.of("Ter " + values[2] + " Kawaipons ou mais.", u ->
 				Helper.getOr(KawaiponDAO.getKawaipon(u.getId()), new Kawaipon()).getCards().size() >= values[2]));
 
-		add(singletonMap("Ter " + values[0] + " Kawaipons de " + anime.toString() + ".", u ->
+		add(Pair.of("Ter " + values[0] + " Kawaipons de " + anime.toString() + ".", u ->
 				Helper.getOr(KawaiponDAO.getKawaipon(u.getId()), new Kawaipon()).getCards().stream().filter(k -> k.getAnime().equals(anime)).count() >= values[0]));
 
-		add(singletonMap("Ser level " + values[3] + " ou maior.", u ->
+		add(Pair.of("Ser level " + values[3] + " ou maior.", u ->
 				MemberDAO.getMemberByMid(u.getId()).stream().anyMatch(m -> m.getLevel() >= values[3])));
 
-		add(singletonMap("Ter menos que 500 créditos.", u ->
-				AccountDAO.getAccount(u.getId()).getBalance() < 500));
+		add(Pair.of("Ter menos até 500 créditos.", u ->
+				AccountDAO.getAccount(u.getId()).getBalance() <= 500));
 
-		add(singletonMap("Ter votado " + values[1] + " vezes seguidas.", u ->
+		add(Pair.of("Ter votado " + values[1] + " vezes seguidas.", u ->
 				AccountDAO.getAccount(u.getId()).getStreak() >= values[1]));
 	}};
-	private final Map<String, Function<User, Boolean>> chosen = requirement.get(Helper.rng(requirement.size()));
+	private final Pair<String, Function<User, Boolean>> chosen = requirement.get(Helper.rng(requirement.size()));
 
 	@Override
 	public String getCaptcha() {
@@ -88,7 +86,7 @@ public class CreditDrop implements Prize {
 	}
 
 	@Override
-	public Map.Entry<String, Function<User, Boolean>> getRequirement() {
-		return chosen.entrySet().iterator().next();
+	public Pair<String, Function<User, Boolean>> getRequirement() {
+		return chosen;
 	}
 }

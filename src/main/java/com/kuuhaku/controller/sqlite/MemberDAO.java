@@ -68,6 +68,18 @@ public class MemberDAO {
 		return m;
 	}
 
+	public static long getHighestLevel() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT MAX(level) FROM Member m", Long.class);
+
+		try {
+			return (long) q.getSingleResult();
+		} finally {
+			em.close();
+		}
+	}
+
 	public static void addMemberToDB(net.dv8tion.jda.api.entities.Member u) {
 		EntityManager em = Manager.getEntityManager();
 
