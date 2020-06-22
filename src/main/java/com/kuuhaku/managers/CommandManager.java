@@ -346,6 +346,9 @@ public class CommandManager {
 			add(new TransferCommand(
 					"transferir", new String[]{"transfer", "tr"}, getLocale(PT).getString("req_amount-user"), getLocale(PT).getString("cmd_transfer"), MISC, false
 			));
+			add(new TradeCardCommand(
+					"trocar", new String[]{"trade"}, getLocale(PT).getString("req_user-card-amount"), getLocale(PT).getString("cmd_trade-card"), MISC, true
+			));
 
 			//FUN
 			add(new SadButTrueCommand(

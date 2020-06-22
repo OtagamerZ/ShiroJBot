@@ -66,11 +66,6 @@ public class CatchKawaiponCommand extends Command {
 			return;
 		}
 
-		if (kp == null) {
-			kp = new Kawaipon();
-			kp.setUid(author.getId());
-		}
-
 		if (kp.getCards().contains(kc)) {
 			channel.sendMessage(":x: | Você já possui esta carta.").queue();
 			return;

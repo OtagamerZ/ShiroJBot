@@ -65,16 +65,16 @@ public enum Tag {
 			(user, member) -> AccountDAO.getAccount(user.getId()).getBalance() > 100000),
 
 	COLETADO_25("icons/collection_25.png", TagIcons.COLLECTION25, "Usuário que completou 25% da coleção de Kawaipons.",
-			(user, member) -> Objects.requireNonNull(KawaiponDAO.getKawaipon(user.getId())).getCards().size() * 100 / CardDAO.totalCards() >= 25),
+			(user, member) -> KawaiponDAO.getKawaipon(user.getId()).getCards().size() * 100 / CardDAO.totalCards() >= 25),
 
 	COLETADO_50("icons/collection_50.png", TagIcons.COLLECTION50, "Usuário que completou 50% da coleção de Kawaipons.",
-			(user, member) -> Objects.requireNonNull(KawaiponDAO.getKawaipon(user.getId())).getCards().size() * 100 / CardDAO.totalCards() >= 50),
+			(user, member) -> KawaiponDAO.getKawaipon(user.getId()).getCards().size() * 100 / CardDAO.totalCards() >= 50),
 
 	COLETADO_75("icons/collection_75.png", TagIcons.COLLECTION75, "Usuário que completou 75% da coleção de Kawaipons.",
-			(user, member) -> Objects.requireNonNull(KawaiponDAO.getKawaipon(user.getId())).getCards().size() * 100 / CardDAO.totalCards() >= 75),
+			(user, member) -> KawaiponDAO.getKawaipon(user.getId()).getCards().size() * 100 / CardDAO.totalCards() >= 75),
 
 	COLETADO_100("icons/collection_100.png", TagIcons.COLLECTION100, "Usuário que completou 100% da coleção de Kawaipons.",
-			(user, member) -> Objects.requireNonNull(KawaiponDAO.getKawaipon(user.getId())).getCards().size() * 100 / CardDAO.totalCards() >= 100);
+			(user, member) -> KawaiponDAO.getKawaipon(user.getId()).getCards().size() * 100 / CardDAO.totalCards() >= 100);
 
 	private final String path;
 	private final TagIcons emote;
