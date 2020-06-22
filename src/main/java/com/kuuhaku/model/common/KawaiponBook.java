@@ -24,8 +24,10 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.*;
+import java.util.Objects;
+import java.util.Set;
 
 public class KawaiponBook {
 	private final Set<Card> cards;
@@ -51,7 +53,6 @@ public class KawaiponBook {
 
 	public List<BufferedImage> view() throws IOException {
 		List<Card> cards = new ArrayList<>(this.cards);
-		cards.sort(Comparator.comparingInt(k -> k.getRarity().getIndex()));
 		List<List<Card>> chunks = new ArrayList<>();
 
 		int pageCount = (int) Math.ceil(cards.size() / 12f);
