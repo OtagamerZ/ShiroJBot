@@ -72,7 +72,7 @@ public class TradeCardCommand extends Command {
 			Card tc = CardDAO.getCard(args[2]);
 			int min = (5 - tc.getRarity().getIndex()) * 125;
 
-			if (price <= min) {
+			if (price < min) {
 				channel.sendMessage(":x: | Você não pode oferecer menos que " + min + " créditos por essa carta.").queue();
 				return;
 			} 
