@@ -70,6 +70,13 @@ public class TradeCardCommand extends Command {
 		if (StringUtils.isNumeric(args[1])) {
 			int price = Integer.parseInt(args[1]);
 			Card tc = CardDAO.getCard(args[2]);
+			int min = (5 - tc.getRarity().getIndex()) * 125;
+
+			if (price <= min) {
+				channel.sendMessage(":x: | Você não pode oferecer menos que " + min + " créditos por essa carta.").queue();
+				return;
+			} 
+
 			Account acc = AccountDAO.getAccount(author.getId());
 			Account tacc = AccountDAO.getAccount(other.getId());
 
