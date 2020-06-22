@@ -61,7 +61,7 @@ public class TradeCardCommand extends Command {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
 			return;
 		} else if (args.length < 3) {
-			channel.sendMessage(":x: | Você precisa mencionar uma quantia de créditos ou uma carta para realizar a troca e qual carta você deseja.").queue();
+			channel.sendMessage(":x: | Você precisa mencionar uma quantia de créditos ou uma carta e qual carta você deseja para realizar a troca.").queue();
 			return;
 		}
 
