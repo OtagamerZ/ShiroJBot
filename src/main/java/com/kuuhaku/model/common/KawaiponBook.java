@@ -101,9 +101,9 @@ public class KawaiponBook {
 				}
 				g2d.drawImage(chunk.get(i).getCard(), slots[i].x, slots[i].y, 187, 280, null);
 				if (slots[i].y == 134)
-					Profile.printCenteredString(chunk.get(i).getName(), 187, slots[i].x, 107, g2d);
+					Profile.printCenteredString(chunk.get(i).getName(), 187, slots[i].x, 105, g2d);
 				else
-					Profile.printCenteredString(chunk.get(i).getName(), 187, slots[i].x, 746, g2d);
+					Profile.printCenteredString(chunk.get(i).getName(), 187, slots[i].x, 744, g2d);
 			}
 
 			g2d.dispose();
