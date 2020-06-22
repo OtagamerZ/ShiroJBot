@@ -43,7 +43,7 @@ public class CreditDrop implements Prize {
 			Helper.rng((int) CardDAO.animeCount(anime)),
 			Helper.rng(7),
 			Helper.rng((int) CardDAO.totalCards()),
-			Helper.rng((int) MemberDAO.getHighestLevel() / 2)
+			Helper.rng(MemberDAO.getHighestLevel() / 2)
 	};
 	private final int amount = Helper.clamp(Helper.rng(1000), 250, 1000);
 	private final List<Pair<String, Function<User, Boolean>>> requirement = new ArrayList<>() {{
