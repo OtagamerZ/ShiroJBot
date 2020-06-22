@@ -22,10 +22,26 @@ import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.utils.AnimeName;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.List;
 
 public class CardDAO {
+	public static Card getCard(String name) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT c FROM Card c WHERE id LIKE UPPER(:name)", Card.class);
+		q.setParameter("name", name);
+
+		try {
+			return (Card) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	public static List<Card> getCards() {
 		EntityManager em = Manager.getEntityManager();
