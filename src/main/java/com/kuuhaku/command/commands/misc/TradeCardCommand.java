@@ -64,14 +64,16 @@ public class TradeCardCommand extends Command {
 			return;
 		}
 
+		User other = message.getMentionedUsers().get(0);
+
 		if (StringUtils.isNumeric(args[1])) {
 			int price = Integer.parseInt(args[1]);
 			Card tc = CardDAO.getCard(args[2]);
 			Account acc = AccountDAO.getAccount(author.getId());
-			Account tacc = AccountDAO.getAccount(message.getMentionedUsers().get(0).getId());
+			Account tacc = AccountDAO.getAccount(other.getId());
 
 			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-			Kawaipon target = KawaiponDAO.getKawaipon(message.getMentionedUsers().get(0).getId());
+			Kawaipon target = KawaiponDAO.getKawaipon(other.getId());
 
 			if (tc == null) {
 				channel.sendMessage(":x: | Essa carta não existe.").queue();
@@ -87,7 +89,7 @@ public class TradeCardCommand extends Command {
 				return;
 			}
 
-			channel.sendMessage(author.getAsMention() + " deseja comprar sua carta `" + tc.getName() + "` por " + price + " créditos, você aceita essa transação?")
+			channel.sendMessage(other.getAsMention() + ", " + author.getAsMention() + " deseja comprar sua carta `" + tc.getName() + "` por " + price + " créditos, você aceita essa transação?")
 					.queue(s -> Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (member1, message1) -> {
 						acc.removeCredit(price);
 						target.removeCard(tc);
@@ -99,13 +101,13 @@ public class TradeCardCommand extends Command {
 						AccountDAO.saveAccount(acc);
 						AccountDAO.saveAccount(tacc);
 
-						s.editMessage("Troca concluída com sucesso!").queue();
+						s.delete().flatMap(n -> channel.sendMessage("Troca concluída com sucesso!")).queue();
 					}), false));
 		} else {
 			Card c = CardDAO.getCard(args[1]);
 			Card tc = CardDAO.getCard(args[2]);
 			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-			Kawaipon target = KawaiponDAO.getKawaipon(message.getMentionedUsers().get(0).getId());
+			Kawaipon target = KawaiponDAO.getKawaipon(other.getId());
 
 			if (c == null || tc == null) {
 				channel.sendMessage(":x: | Essa carta não existe.").queue();
@@ -124,7 +126,7 @@ public class TradeCardCommand extends Command {
 				return;
 			}
 
-			channel.sendMessage(author.getAsMention() + " deseja trocar a carta `" + c.getName() + "` pela sua carta `" + tc.getName() + "`, você aceita essa transação?")
+			channel.sendMessage(other.getAsMention() + ", " + author.getAsMention() + " deseja trocar a carta `" + c.getName() + "` pela sua carta `" + tc.getName() + "`, você aceita essa transação?")
 					.queue(s -> Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (member1, message1) -> {
 						kp.removeCard(c);
 						target.removeCard(tc);
@@ -134,7 +136,7 @@ public class TradeCardCommand extends Command {
 						KawaiponDAO.saveKawaipon(kp);
 						KawaiponDAO.saveKawaipon(target);
 
-						s.editMessage("Troca concluída com sucesso!").queue();
+						s.delete().flatMap(n -> channel.sendMessage("Troca concluída com sucesso!")).queue();
 					}), false));
 		}
 	}
