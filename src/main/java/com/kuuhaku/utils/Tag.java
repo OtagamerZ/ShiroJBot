@@ -18,9 +18,7 @@
 
 package com.kuuhaku.utils;
 
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.TagDAO;
-import com.kuuhaku.controller.postgresql.WaifuDAO;
+import com.kuuhaku.controller.postgresql.*;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.StringUtils;
@@ -63,8 +61,20 @@ public enum Tag {
 	LEVEL("icons/lvl_{0}.png", null, "Usuário que atingiu um dos marcos de level.",
 			(user, member) -> true),
 
-	RICO("icons/rich.png", TagIcons.MILLION, "Usuário que possui 100 mil créditos.",
-			(user, member) -> AccountDAO.getAccount(user.getId()).getBalance() > 100000);
+	RICO("icons/rich.png", TagIcons.RICH, "Usuário que possui 100 mil créditos.",
+			(user, member) -> AccountDAO.getAccount(user.getId()).getBalance() > 100000),
+
+	COLETADO_25("icons/collection_25.png", TagIcons.COLLECTION25, "Usuário que completou 25% da coleção de Kawaipons.",
+			(user, member) -> Objects.requireNonNull(KawaiponDAO.getKawaipon(user.getId())).getCards().size() * 100 / CardDAO.totalCards() >= 25),
+
+	COLETADO_50("icons/collection_50.png", TagIcons.COLLECTION50, "Usuário que completou 50% da coleção de Kawaipons.",
+			(user, member) -> Objects.requireNonNull(KawaiponDAO.getKawaipon(user.getId())).getCards().size() * 100 / CardDAO.totalCards() >= 50),
+
+	COLETADO_75("icons/collection_75.png", TagIcons.COLLECTION75, "Usuário que completou 75% da coleção de Kawaipons.",
+			(user, member) -> Objects.requireNonNull(KawaiponDAO.getKawaipon(user.getId())).getCards().size() * 100 / CardDAO.totalCards() >= 75),
+
+	COLETADO_100("icons/collection_100.png", TagIcons.COLLECTION100, "Usuário que completou 100% da coleção de Kawaipons.",
+			(user, member) -> Objects.requireNonNull(KawaiponDAO.getKawaipon(user.getId())).getCards().size() * 100 / CardDAO.totalCards() >= 100);
 
 	private final String path;
 	private final TagIcons emote;
