@@ -75,6 +75,7 @@ public class Profile {
 		int xOffset = 0;
 		int yOffset = 0;
 
+		Color main;
 		try {
 			BufferedImage bg = scaleImage(ImageIO.read(Helper.getImage(MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getBg())), bi.getWidth(), bi.getHeight());
 
@@ -82,6 +83,7 @@ public class Profile {
 			if (bg.getHeight() > bi.getHeight()) yOffset = -(bg.getHeight() - bi.getHeight()) / 2;
 
 			g2d.drawImage(bg, xOffset, yOffset, null);
+			main = Helper.reverseColor(Helper.colorThief(MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getBg()));
 		} catch (IOException e) {
 			BufferedImage bg = scaleImage(ImageIO.read(Helper.getImage("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg")), bi.getWidth(), bi.getHeight());
 
@@ -89,9 +91,8 @@ public class Profile {
 			if (bg.getHeight() > bi.getHeight()) yOffset = -(bg.getHeight() - bi.getHeight()) / 2;
 
 			g2d.drawImage(bg, xOffset, yOffset, null);
+			main = Helper.reverseColor(Helper.colorThief("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg"));
 		}
-
-		Color main = Helper.reverseColor(Helper.colorThief(MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getBg()));
 
 
 		g2d.setColor(new Color(main.getRed(), main.getGreen(), main.getBlue(), 100));

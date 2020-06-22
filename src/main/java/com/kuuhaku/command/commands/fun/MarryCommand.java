@@ -98,23 +98,30 @@ public class MarryCommand extends Command {
 					if (event.getAuthor().isBot() || event.getAuthor() != message.getMentionedUsers().get(0) || event.getChannel() != channel)
 						return;
 
-					Message msg = channel.retrieveMessageById(event.getMessageId()).complete();
-					switch (msg.getContentRaw().toLowerCase()) {
-						case "sim":
-							channel.sendMessage("Eu os declaro husbando e waifu!").queue();
+					try {
+						Message msg = channel.retrieveMessageById(event.getMessageId()).complete();
+						switch (msg.getContentRaw().toLowerCase()) {
+							case "sim":
+								channel.sendMessage("Eu os declaro husbando e waifu!").queue();
 
-							WaifuDAO.saveCouple(author, message.getMentionedUsers().get(0));
+								WaifuDAO.saveCouple(author, message.getMentionedUsers().get(0));
 
-							success.accept(null);
-							timeout.cancel(true);
-							timeout = null;
-							break;
-						case "não":
-							channel.sendMessage("Pois é, hoje não tivemos um casamento, que pena.").queue();
-							success.accept(null);
-							timeout.cancel(true);
-							timeout = null;
-							break;
+								success.accept(null);
+								timeout.cancel(true);
+								timeout = null;
+								break;
+							case "não":
+								channel.sendMessage("Pois é, hoje não tivemos um casamento, que pena.").queue();
+								success.accept(null);
+								timeout.cancel(true);
+								timeout = null;
+								break;
+						}
+					} catch (InsufficientPermissionException e) {
+						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-message-history-permission")).queue();
+						success.accept(null);
+						timeout.cancel(true);
+						timeout = null;
 					}
 				}
 			});
