@@ -78,6 +78,9 @@ public class TransferCommand extends Command {
 		to.addCredit(amount);
 		from.removeCredit(amount);
 
+		AccountDAO.saveAccount(to);
+		AccountDAO.saveAccount(from);
+
 		channel.sendMessage(":white_check_mark: | Créditos transferidos com sucesso!").queue();
 	}
 }
