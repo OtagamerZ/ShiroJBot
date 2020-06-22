@@ -18,6 +18,9 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.utils.AnimeName;
+import com.kuuhaku.utils.KawaiponRarity;
+
 import javax.persistence.*;
 import java.util.Comparator;
 import java.util.Set;
@@ -34,7 +37,10 @@ public class Kawaipon {
 	private String uid = "";
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	private Set<Card> cards = new TreeSet<>(Comparator.comparing(Card::getName));
+	private Set<Card> cards = new TreeSet<>(Comparator.comparing(Card::getRarity, Comparator.comparingInt(KawaiponRarity::getIndex))
+			.thenComparing(Card::getAnime, Comparator.comparing(AnimeName::toString, String.CASE_INSENSITIVE_ORDER))
+			.thenComparing(Card::getName, String.CASE_INSENSITIVE_ORDER)
+	);
 
 	public String getUid() {
 		return uid;
