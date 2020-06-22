@@ -23,7 +23,6 @@ import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.AnimeName;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
@@ -48,10 +47,10 @@ public class CreditDrop implements Prize {
 	private final int amount = Helper.clamp(Helper.rng(1000), 250, 1000);
 	private final List<Pair<String, Function<User, Boolean>>> requirement = new ArrayList<>() {{
 		add(Pair.of("Ter " + values[2] + " Kawaipons ou mais.", u ->
-				Helper.getOr(KawaiponDAO.getKawaipon(u.getId()), new Kawaipon()).getCards().size() >= values[2]));
+				KawaiponDAO.getKawaipon(u.getId()).getCards().size() >= values[2]));
 
 		add(Pair.of("Ter " + values[0] + " Kawaipons de " + anime.toString() + ".", u ->
-				Helper.getOr(KawaiponDAO.getKawaipon(u.getId()), new Kawaipon()).getCards().stream().filter(k -> k.getAnime().equals(anime)).count() >= values[0]));
+				KawaiponDAO.getKawaipon(u.getId()).getCards().stream().filter(k -> k.getAnime().equals(anime)).count() >= values[0]));
 
 		add(Pair.of("Ser level " + values[3] + " ou maior.", u ->
 				MemberDAO.getMemberByMid(u.getId()).stream().anyMatch(m -> m.getLevel() >= values[3])));

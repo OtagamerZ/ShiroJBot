@@ -59,7 +59,7 @@ public class KawaiponsCommand extends Command {
 			try {
 				Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
-				if (kp == null) {
+				if (kp.getCards().size() == 0) {
 					m.editMessage(":x: | Você ainda não coletou nenhum Kawaipon.").queue();
 					return;
 				}
