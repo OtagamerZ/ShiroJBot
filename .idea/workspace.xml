@@ -24,18 +24,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções gerais">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/icons/collection_100.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/icons/collection_25.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/icons/collection_50.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/icons/collection_75.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/MyTagsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/MyTagsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/TagsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/TagsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Tag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Tag.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/TagIcons.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/TagIcons.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -511,21 +501,7 @@
       <workItem from="1592834297053" duration="320000" />
       <workItem from="1592835021260" duration="799000" />
       <workItem from="1592835955585" duration="86000" />
-      <workItem from="1592836341645" duration="1474000" />
-    </task>
-    <task id="LOCAL-01378" summary="Correção no comando Ship">
-      <created>1592506849330</created>
-      <option name="number" value="01378" />
-      <option name="presentableId" value="LOCAL-01378" />
-      <option name="project" value="LOCAL" />
-      <updated>1592506849330</updated>
-    </task>
-    <task id="LOCAL-01379" summary="Correção no comando Ship">
-      <created>1592507270383</created>
-      <option name="number" value="01379" />
-      <option name="presentableId" value="LOCAL-01379" />
-      <option name="project" value="LOCAL" />
-      <updated>1592507270383</updated>
+      <workItem from="1592836341645" duration="1762000" />
     </task>
     <task id="LOCAL-01380" summary="Correção no comando Ship">
       <created>1592507799731</created>
@@ -856,7 +832,21 @@
       <option name="project" value="LOCAL" />
       <updated>1592830996545</updated>
     </task>
-    <option name="localTasksCounter" value="1427" />
+    <task id="LOCAL-01427" summary="Correções gerais">
+      <created>1592844150749</created>
+      <option name="number" value="01427" />
+      <option name="presentableId" value="LOCAL-01427" />
+      <option name="project" value="LOCAL" />
+      <updated>1592844150750</updated>
+    </task>
+    <task id="LOCAL-01428" summary="Correções gerais">
+      <created>1592844279518</created>
+      <option name="number" value="01428" />
+      <option name="presentableId" value="LOCAL-01428" />
+      <option name="project" value="LOCAL" />
+      <updated>1592844279518</updated>
+    </task>
+    <option name="localTasksCounter" value="1429" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1059,12 +1049,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="212" y="177" key="Vcs.Push.Dialog.v2" timestamp="1592844153489">
+    <state x="212" y="177" key="Vcs.Push.Dialog.v2" timestamp="1592844289218">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1591419318874" />
-    <state x="212" y="177" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1592844153489" />
+    <state x="212" y="177" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1592844289218" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1592584283643">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
