@@ -35,6 +35,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.Collections;
+import java.util.concurrent.TimeUnit;
 
 public class TradeCardCommand extends Command {
 
@@ -137,7 +138,7 @@ public class TradeCardCommand extends Command {
 						KawaiponDAO.saveKawaipon(target);
 
 						s.delete().flatMap(n -> channel.sendMessage("Troca concluída com sucesso!")).queue();
-					}), false));
+					}), false, 1, TimeUnit.MINUTES));
 		}
 	}
 }
