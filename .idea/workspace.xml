@@ -26,8 +26,8 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/MarryCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/MarryCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/MemberDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/sqlite/MemberDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/CreditDrop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/CreditDrop.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -501,13 +501,6 @@
       <workItem from="1592599066219" duration="851000" />
       <workItem from="1592605543811" duration="204000" />
     </task>
-    <task id="LOCAL-01375" summary="Criação do módulo de cartas Kawaipon">
-      <created>1592506295545</created>
-      <option name="number" value="01375" />
-      <option name="presentableId" value="LOCAL-01375" />
-      <option name="project" value="LOCAL" />
-      <updated>1592506295546</updated>
-    </task>
     <task id="LOCAL-01376" summary="Criação do módulo de cartas Kawaipon">
       <created>1592506365504</created>
       <option name="number" value="01376" />
@@ -844,7 +837,14 @@
       <option name="project" value="LOCAL" />
       <updated>1592598110320</updated>
     </task>
-    <option name="localTasksCounter" value="1424" />
+    <task id="LOCAL-01424" summary="Correções gerais">
+      <created>1592829132594</created>
+      <option name="number" value="01424" />
+      <option name="presentableId" value="LOCAL-01424" />
+      <option name="project" value="LOCAL" />
+      <updated>1592829132595</updated>
+    </task>
+    <option name="localTasksCounter" value="1425" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -882,7 +882,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Otimização do cálculo de tags;&#10;Implementação de apostas no jogo da velha;" />
     <MESSAGE value="Correção no mapeamento da classe Upvote" />
     <MESSAGE value="Melhorias no algoritmo de detecção de links" />
     <MESSAGE value="Limite de 50% de popularidade para Exceeds" />
@@ -907,7 +906,8 @@
     <MESSAGE value="Criação do módulo de drops" />
     <MESSAGE value="Aumento nos prêmios;&#10;Aumento no cooldown também;" />
     <MESSAGE value="Aumento nos prêmios;&#10;Aumento nos cooldowns também;" />
-    <option name="LAST_COMMIT_MESSAGE" value="Aumento nos prêmios;&#10;Aumento nos cooldowns também;" />
+    <MESSAGE value="Correções gerais" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções gerais" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -967,12 +967,12 @@
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1592829048250">
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1592829880076">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1591419311134" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1592829048250" />
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1592829880076" />
     <state width="247" height="195" key="DatabaseViewActions_Filter" timestamp="1591416926427">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -1047,12 +1047,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="212" y="177" key="Vcs.Push.Dialog.v2" timestamp="1592598111576">
+    <state x="212" y="177" key="Vcs.Push.Dialog.v2" timestamp="1592829134896">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1591419318874" />
-    <state x="212" y="177" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1592598111576" />
+    <state x="212" y="177" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1592829134896" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1592584283643">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1062,11 +1062,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="594" y="260" key="com.intellij.database.run.ParametersPanel.Standalone/0.0.1680.1010@0.0.1680.1010" timestamp="1589981895332" />
-    <state x="312" y="0" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1591280149486">
+    <state x="312" y="0" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1592829851971">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="254" y="43" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1366.768@0.0.1366.768" timestamp="1586748175890" />
-    <state x="312" y="0" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1591280149486" />
+    <state x="312" y="0" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1592829851971" />
     <state x="415" y="97" key="com.intellij.database.view.ui.DatabasePreviewDialog" timestamp="1585945195522">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -1111,12 +1111,12 @@
     </state>
     <state x="403" y="177" key="run.anything.popup/0.0.1366.768@0.0.1366.768" timestamp="1585105034445" />
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1591101456693" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1592587131107">
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1592829720401">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="409" y="156" width="672" height="489" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1585945932162" />
     <state x="409" y="165" width="672" height="516" key="search.everywhere.popup/0.0.1366.768@0.0.1366.768" timestamp="1588043037032" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1592587131107" />
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1592829720401" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

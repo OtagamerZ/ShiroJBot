@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.utils.Helper;
 
 import javax.persistence.Column;
@@ -70,7 +71,7 @@ public class Account {
 		return lastVoted;
 	}
 
-	public int voted() {
+	public void voted() {
 		this.lastVoted = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.dateformat);
 		if (lastVotedNoFormat != null && LocalDateTime.now().isBefore(lastVotedNoFormat.plusHours(24))) streak++;
 		else streak = 0;
@@ -79,7 +80,7 @@ public class Account {
 
 		lastVotedNoFormat = LocalDateTime.now();
 
-		return streak;
+		AccountDAO.saveAccount(this);
 	}
 
 	public int getStreak() {

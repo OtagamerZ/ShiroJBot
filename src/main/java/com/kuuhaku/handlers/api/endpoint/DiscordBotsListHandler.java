@@ -80,7 +80,5 @@ public class DiscordBotsListHandler {
 		}
 
 		acc.voted();
-
-		AccountDAO.saveAccount(acc);
 	}
 }
