@@ -56,13 +56,13 @@ public enum TagIcons {
 			case RICH:
 				return "<:rich:718447753944105012> ";
 			case COLLECTION25:
-				return "<:collection_25:724662152366915636>";
+				return "<:collection_25:724662152366915636> ";
 			case COLLECTION50:
-				return "<:collection_50:724662153570812446>";
+				return "<:collection_50:724662153570812446> ";
 			case COLLECTION75:
-				return "<:collection_75:724662152602058762>";
+				return "<:collection_75:724662152602058762> ";
 			case COLLECTION100:
-				return "<:collection_100:724662152824225862>";
+				return "<:collection_100:724662152824225862> ";
 		}
 		throw new IllegalStateException();
 	}
