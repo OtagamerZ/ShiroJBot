@@ -34,7 +34,10 @@ public class KawaiponDAO {
 		try {
 			return (Kawaipon) q.getSingleResult();
 		} catch (NoResultException e) {
-			return null;
+			Kawaipon kp = new Kawaipon();
+			kp.setUid(id);
+			saveKawaipon(kp);
+			return getKawaipon(id);
 		} finally {
 			em.close();
 		}
