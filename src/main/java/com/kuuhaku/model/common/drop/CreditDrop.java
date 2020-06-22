@@ -43,7 +43,7 @@ public class CreditDrop implements Prize {
 			Helper.rng((int) CardDAO.animeCount(anime)),
 			Helper.rng(7),
 			Helper.rng((int) CardDAO.totalCards()),
-			Helper.rng((int) MemberDAO.getHighestLevel())
+			Helper.rng((int) MemberDAO.getHighestLevel() / 2)
 	};
 	private final int amount = Helper.clamp(Helper.rng(1000), 250, 1000);
 	private final List<Pair<String, Function<User, Boolean>>> requirement = new ArrayList<>() {{
@@ -56,8 +56,8 @@ public class CreditDrop implements Prize {
 		add(Pair.of("Ser level " + values[3] + " ou maior.", u ->
 				MemberDAO.getMemberByMid(u.getId()).stream().anyMatch(m -> m.getLevel() >= values[3])));
 
-		add(Pair.of("Ter menos até 500 créditos.", u ->
-				AccountDAO.getAccount(u.getId()).getBalance() <= 500));
+		add(Pair.of("Ter até 1000 créditos.", u ->
+				AccountDAO.getAccount(u.getId()).getBalance() <= 1000));
 
 		add(Pair.of("Ter votado " + values[1] + " vezes seguidas.", u ->
 				AccountDAO.getAccount(u.getId()).getStreak() >= values[1]));
@@ -67,7 +67,7 @@ public class CreditDrop implements Prize {
 	@Override
 	public String getCaptcha() {
 		try {
-			return Hex.encodeHexString(MessageDigest.getInstance("SHA-1").digest(ByteBuffer.allocate(4).putInt(hashCode()).array())).substring(0, 5);
+			return Hex.encodeHexString(MessageDigest.getInstance("MD5").digest(ByteBuffer.allocate(4).putInt(hashCode()).array())).substring(0, 5);
 		} catch (NoSuchAlgorithmException e) {
 			return String.valueOf(System.currentTimeMillis());
 		}
