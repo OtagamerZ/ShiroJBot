@@ -19,15 +19,15 @@
 package com.kuuhaku.model.common;
 
 import com.kuuhaku.model.persistent.Card;
+import com.kuuhaku.utils.AnimeName;
+import com.kuuhaku.utils.KawaiponRarity;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class KawaiponBook {
 	private final Set<Card> cards;
@@ -53,6 +53,11 @@ public class KawaiponBook {
 
 	public List<BufferedImage> view() throws IOException {
 		List<Card> cards = new ArrayList<>(this.cards);
+		cards.sort(Comparator
+				.comparing(Card::getRarity, Comparator.comparingInt(KawaiponRarity::getIndex))
+				.thenComparing(Card::getAnime, Comparator.comparing(AnimeName::toString, String.CASE_INSENSITIVE_ORDER))
+				.thenComparing(Card::getName, String.CASE_INSENSITIVE_ORDER)
+		);
 		List<List<Card>> chunks = new ArrayList<>();
 
 		int pageCount = (int) Math.ceil(cards.size() / 12f);
