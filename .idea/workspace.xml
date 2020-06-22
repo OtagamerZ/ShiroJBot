@@ -26,6 +26,8 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/CreditDrop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/CreditDrop.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Kawaipon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Kawaipon.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -501,28 +503,7 @@
       <workItem from="1592834297053" duration="320000" />
       <workItem from="1592835021260" duration="799000" />
       <workItem from="1592835955585" duration="86000" />
-      <workItem from="1592836341645" duration="1762000" />
-    </task>
-    <task id="LOCAL-01380" summary="Correção no comando Ship">
-      <created>1592507799731</created>
-      <option name="number" value="01380" />
-      <option name="presentableId" value="LOCAL-01380" />
-      <option name="project" value="LOCAL" />
-      <updated>1592507799731</updated>
-    </task>
-    <task id="LOCAL-01381" summary="Correção no comando Ship">
-      <created>1592508871368</created>
-      <option name="number" value="01381" />
-      <option name="presentableId" value="LOCAL-01381" />
-      <option name="project" value="LOCAL" />
-      <updated>1592508871369</updated>
-    </task>
-    <task id="LOCAL-01382" summary="Correção no comando Ship">
-      <created>1592509419159</created>
-      <option name="number" value="01382" />
-      <option name="presentableId" value="LOCAL-01382" />
-      <option name="project" value="LOCAL" />
-      <updated>1592509419159</updated>
+      <workItem from="1592836341645" duration="2855000" />
     </task>
     <task id="LOCAL-01383" summary="Correção no comando Ship">
       <created>1592509440102</created>
@@ -846,7 +827,28 @@
       <option name="project" value="LOCAL" />
       <updated>1592844279518</updated>
     </task>
-    <option name="localTasksCounter" value="1429" />
+    <task id="LOCAL-01429" summary="Correções gerais">
+      <created>1592844456308</created>
+      <option name="number" value="01429" />
+      <option name="presentableId" value="LOCAL-01429" />
+      <option name="project" value="LOCAL" />
+      <updated>1592844456308</updated>
+    </task>
+    <task id="LOCAL-01430" summary="Correções gerais">
+      <created>1592844573131</created>
+      <option name="number" value="01430" />
+      <option name="presentableId" value="LOCAL-01430" />
+      <option name="project" value="LOCAL" />
+      <updated>1592844573131</updated>
+    </task>
+    <task id="LOCAL-01431" summary="Correções gerais">
+      <created>1592844626245</created>
+      <option name="number" value="01431" />
+      <option name="presentableId" value="LOCAL-01431" />
+      <option name="project" value="LOCAL" />
+      <updated>1592844626245</updated>
+    </task>
+    <option name="localTasksCounter" value="1432" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1049,12 +1051,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="212" y="177" key="Vcs.Push.Dialog.v2" timestamp="1592844577826">
+    <state x="212" y="177" key="Vcs.Push.Dialog.v2" timestamp="1592844628857">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1591419318874" />
-    <state x="212" y="177" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1592844577826" />
+    <state x="212" y="177" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1592844628857" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1592584283643">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1113,12 +1115,12 @@
     </state>
     <state x="403" y="177" key="run.anything.popup/0.0.1366.768@0.0.1366.768" timestamp="1585105034445" />
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1591101456693" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1592829720401">
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1592845108712">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="409" y="156" width="672" height="489" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1585945932162" />
     <state x="409" y="165" width="672" height="516" key="search.everywhere.popup/0.0.1366.768@0.0.1366.768" timestamp="1588043037032" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1592829720401" />
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1592845108712" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
