@@ -19,7 +19,7 @@
 package com.kuuhaku.utils;
 
 public enum TagIcons {
-	NIICHAN, DEV, SUPPORT, EDITOR, READER, MODERATOR, LVL20, LVL30, LVL40, LVL50, LVL60, LVL70, VERIFIED, TOXIC, MARRIED, MILLION, HALFMILLION;
+	NIICHAN, DEV, SUPPORT, EDITOR, READER, MODERATOR, LVL20, LVL30, LVL40, LVL50, LVL60, LVL70, VERIFIED, TOXIC, MARRIED, RICH, COLLECTION25, COLLECTION50, COLLECTION75, COLLECTION100;
 
 	public String getTag() {
 		switch (this) {
@@ -53,8 +53,16 @@ public enum TagIcons {
 				return "<:toxic:697879725816676442> ";
 			case MARRIED:
 				return "<:married:697879725888241684> ";
-			case MILLION:
+			case RICH:
 				return "<:rich:718447753944105012> ";
+			case COLLECTION25:
+				return "<:collection_25:724662152366915636>";
+			case COLLECTION50:
+				return "<:collection_50:724662153570812446>";
+			case COLLECTION75:
+				return "<:collection_75:724662152602058762>";
+			case COLLECTION100:
+				return "<:collection_100:724662152824225862>";
 		}
 		throw new IllegalStateException();
 	}
@@ -91,8 +99,16 @@ public enum TagIcons {
 				return "697879725816676442";
 			case MARRIED:
 				return "697879725888241684";
-			case MILLION:
+			case RICH:
 				return "718447753944105012";
+			case COLLECTION25:
+				return "724662152366915636";
+			case COLLECTION50:
+				return "724662153570812446";
+			case COLLECTION75:
+				return "724662152602058762";
+			case COLLECTION100:
+				return "724662152824225862";
 		}
 		throw new IllegalStateException();
 	}

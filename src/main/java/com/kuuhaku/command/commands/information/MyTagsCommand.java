@@ -31,6 +31,7 @@ import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Set;
 
 public class MyTagsCommand extends Command {
@@ -71,7 +72,7 @@ public class MyTagsCommand extends Command {
 			badges.append(TagIcons.getExceed(ExceedEnums.getByName(exceed)));
 		}
 
-		tags.forEach(t -> badges.append(t.getEmote(mb) == null ? "" : t.getEmote(mb).getTag()));
+		tags.forEach(t -> badges.append(t.getEmote(mb) == null ? "" : Objects.requireNonNull(t.getEmote(mb)).getTag()));
 
 		eb.addField("Emblemas:", badges.toString(), false);
 
