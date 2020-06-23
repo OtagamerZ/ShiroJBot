@@ -24,10 +24,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de bônus de XP para coleções grandes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/MyBuffsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/MyBuffsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/Kawaigotchi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/Kawaigotchi.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/AnimeName.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/AnimeName.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -508,20 +507,6 @@
       <workItem from="1592856335574" duration="8000" />
       <workItem from="1592856527943" duration="1833000" />
     </task>
-    <task id="LOCAL-01398" summary="Transferência das cartas para o banco">
-      <created>1592577846430</created>
-      <option name="number" value="01398" />
-      <option name="presentableId" value="LOCAL-01398" />
-      <option name="project" value="LOCAL" />
-      <updated>1592577846430</updated>
-    </task>
-    <task id="LOCAL-01399" summary="Transferência das cartas para o banco">
-      <created>1592578050712</created>
-      <option name="number" value="01399" />
-      <option name="presentableId" value="LOCAL-01399" />
-      <option name="project" value="LOCAL" />
-      <updated>1592578050712</updated>
-    </task>
     <task id="LOCAL-01400" summary="Transferência das cartas para o banco">
       <created>1592578127590</created>
       <option name="number" value="01400" />
@@ -851,7 +836,21 @@
       <option name="project" value="LOCAL" />
       <updated>1592919957525</updated>
     </task>
-    <option name="localTasksCounter" value="1447" />
+    <task id="LOCAL-01447" summary="Adição de bônus de XP para coleções grandes">
+      <created>1592937732015</created>
+      <option name="number" value="01447" />
+      <option name="presentableId" value="LOCAL-01447" />
+      <option name="project" value="LOCAL" />
+      <updated>1592937732016</updated>
+    </task>
+    <task id="LOCAL-01448" summary="Adição de bônus de XP para coleções grandes">
+      <created>1592937899929</created>
+      <option name="number" value="01448" />
+      <option name="presentableId" value="LOCAL-01448" />
+      <option name="project" value="LOCAL" />
+      <updated>1592937899929</updated>
+    </task>
+    <option name="localTasksCounter" value="1449" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -889,7 +888,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Melhorias no algoritmo de detecção de links" />
     <MESSAGE value="Limite de 50% de popularidade para Exceeds" />
     <MESSAGE value="Implementação de BiContract para requisições do site" />
     <MESSAGE value="Correção de algumas coisas" />
@@ -914,7 +912,8 @@
     <MESSAGE value="Aumento nos prêmios;&#10;Aumento nos cooldowns também;" />
     <MESSAGE value="Correções gerais" />
     <MESSAGE value="Adição do comando de troca de cartas" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição do comando de troca de cartas" />
+    <MESSAGE value="Adição de bônus de XP para coleções grandes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição de bônus de XP para coleções grandes" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -978,12 +977,12 @@
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1592937896527">
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1592938480393">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1591419311134" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1592937896527" />
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1592938480393" />
     <state width="247" height="195" key="DatabaseViewActions_Filter" timestamp="1591416926427">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -1062,12 +1061,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="212" y="177" key="Vcs.Push.Dialog.v2" timestamp="1592937745301">
+    <state x="212" y="177" key="Vcs.Push.Dialog.v2" timestamp="1592937902257">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1591419318874" />
-    <state x="212" y="177" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1592937745301" />
+    <state x="212" y="177" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1592937902257" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1592584283643">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
