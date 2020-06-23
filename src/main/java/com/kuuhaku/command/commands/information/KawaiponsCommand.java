@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.commands.information;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
@@ -65,7 +66,7 @@ public class KawaiponsCommand extends Command {
 				}
 
 				KawaiponBook kb = new KawaiponBook(kp.getCards());
-				List<BufferedImage> cards = kb.view();
+				List<BufferedImage> cards = kb.view(author.getId().equals(Main.getInfo().getNiiChan()));
 				int page;
 				if (args.length < 1) page = 0;
 				else {
