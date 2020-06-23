@@ -26,12 +26,10 @@ import org.apache.commons.io.IOUtils;
 
 import javax.imageio.ImageIO;
 import javax.persistence.*;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
@@ -67,17 +65,15 @@ public class Card {
 
 	public BufferedImage getCard() {
 		try {
-			byte[] cardBytes = new byte[0];
-			if (rarity != KawaiponRarity.ULTIMATE)
-				cardBytes = ShiroInfo.getCardCache().get(imgurId, () -> IOUtils.toByteArray(Helper.getImage("https://i.imgur.com/" + imgurId + ".jpg")));
+			byte[] cardBytes = ShiroInfo.getCardCache().get(imgurId, () -> IOUtils.toByteArray(Helper.getImage("https://i.imgur.com/" + imgurId + ".jpg")));
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
-				Image card = rarity != KawaiponRarity.ULTIMATE ? new ImageIcon(IOUtils.toByteArray(bais)).getImage() : new ImageIcon(new URL("https://i.imgur.com/" + imgurId + ".gif")).getImage();
+				BufferedImage card = ImageIO.read(bais);
 				BufferedImage frame = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/frames/" + rarity.name().toLowerCase() + ".png")));
 				BufferedImage canvas = new BufferedImage(frame.getWidth(), frame.getHeight(), frame.getType());
 
 				Graphics2D g2d = canvas.createGraphics();
 				g2d.drawImage(card, 10, 10, 225, 350, null);
-				//g2d.drawImage(frame, 0, 0, null);
+				g2d.drawImage(frame, 0, 0, null);
 
 				g2d.dispose();
 
