@@ -54,7 +54,7 @@ public class KawaiponBook {
 	public List<BufferedImage> view() throws IOException {
 		List<Card> cards = new ArrayList<>(this.cards);
 		cards.sort(Comparator
-				.comparing(Card::getRarity, Comparator.comparingInt(KawaiponRarity::getIndex))
+				.comparing(Card::getRarity, Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
 				.thenComparing(Card::getAnime, Comparator.comparing(AnimeName::toString, String.CASE_INSENSITIVE_ORDER))
 				.thenComparing(Card::getName, String.CASE_INSENSITIVE_ORDER)
 		);
@@ -97,6 +97,9 @@ public class KawaiponBook {
 						break;
 					case LEGENDARY:
 						g2d.setColor(Color.decode("#DC9018"));
+						break;
+					case ULTIMATE:
+						g2d.setPaint(new LinearGradientPaint(0, 0, 1, 1, new float[]{0.5f, 0.5f}, new Color[]{Color.decode("#FF0000"), Color.decode("#0000FF")}));
 						break;
 				}
 				g2d.drawImage(chunk.get(i).getCard(), slots[i].x, slots[i].y, 187, 280, null);
