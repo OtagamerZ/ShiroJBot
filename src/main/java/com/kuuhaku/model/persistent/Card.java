@@ -77,7 +77,7 @@ public class Card {
 
 				Graphics2D g2d = canvas.createGraphics();
 				g2d.drawImage(card, 10, 10, 225, 350, null);
-				g2d.drawImage(frame, 0, 0, null);
+				//g2d.drawImage(frame, 0, 0, null);
 
 				g2d.dispose();
 
