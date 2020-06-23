@@ -85,11 +85,11 @@ public class KawaiponsCommand extends Command {
 				EmbedBuilder eb = new EmbedBuilder();
 
 				eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName() + " (página " + (page + 1) + ")");
-				eb.setImage("attachment://page.jpg");
+				eb.setImage("attachment://page.gif");
 				eb.setFooter("Total de Kawaipons: " + kp.getCards().size());
 
 				m.delete().queue();
-				channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards.get(page)), "page.jpg").queue();
+				channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards.get(page), "gif"), "page.gif").queue();
 			} catch (IOException e) {
 				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_collection-generation-error")).queue();
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);

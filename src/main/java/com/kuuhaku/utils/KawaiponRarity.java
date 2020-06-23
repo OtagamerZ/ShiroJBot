@@ -21,11 +21,12 @@ package com.kuuhaku.utils;
 import com.github.ygimenez.exception.InvalidStateException;
 
 public enum KawaiponRarity {
-	COMMON(5),
-	UNCOMMON(4),
+	COMMON(1),
+	UNCOMMON(2),
 	RARE(3),
-	ULTRA_RARE(2),
-	LEGENDARY(1);
+	ULTRA_RARE(4),
+	LEGENDARY(5),
+	ULTIMATE(10);
 
 	private final int index;
 
@@ -50,6 +51,8 @@ public enum KawaiponRarity {
 				return "Ultra Rara";
 			case LEGENDARY:
 				return "Lendária";
+			case ULTIMATE:
+				return "Ultimate";
 			default:
 				throw new InvalidStateException();
 		}
