@@ -122,6 +122,9 @@ public class Kawaigotchi {
 	@Column(columnDefinition = "TIMESTAMP")
 	private LocalDateTime diedAt = null;
 
+	@Column(columnDefinition = "TIMESTAMP")
+	private LocalDateTime offSince = null;
+
 	private transient int lastRoll;
 
 	public Kawaigotchi() {
@@ -141,8 +144,13 @@ public class Kawaigotchi {
 			return;
 		}
 
-		if (m.getOnlineStatus() == OnlineStatus.OFFLINE || m.getOnlineStatus() == OnlineStatus.UNKNOWN) return;
+		if (m.getOnlineStatus() == OnlineStatus.OFFLINE || m.getOnlineStatus() == OnlineStatus.UNKNOWN) {
+			if (offSince == null) offSince = LocalDateTime.now();
+			harvest();
+			return;
+		}
 
+		if (offSince != null) offSince = null;
 		if (health <= 0) {
 			alive = false;
 			diedAt = LocalDateTime.now();
@@ -601,8 +609,7 @@ public class Kawaigotchi {
 	}
 
 	public void harvest() {
-		if (diedAt.plusMonths(1).isBefore(LocalDateTime.now())) {
+		if (diedAt.plusMonths(1).isBefore(LocalDateTime.now()) || offSince.plusMonths(1).isBefore(LocalDateTime.now()))
 			KGotchiDAO.deleteKawaigotchi(this);
-		}
 	}
 }
