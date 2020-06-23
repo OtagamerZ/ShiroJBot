@@ -21,12 +21,15 @@ package com.kuuhaku.command.commands.information;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
+import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.WaifuDAO;
 import com.kuuhaku.controller.sqlite.KGotchiDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.handlers.games.kawaigotchi.enums.Tier;
+import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -72,6 +75,17 @@ public class MyBuffsCommand extends Command {
 			if (kg.isAlive() && kg.getTier() != Tier.CHILD)
 				eb.addField("Seu kawaigotchi é um " + kg.getTier().toString().toLowerCase(), "+" + (int) (kg.getTier().getUserXpMult() * 100 - 100) + "% XP ganho", false);
 			else eb.addField("Seu kawaigotchi morreu", "-20% XP ganho", false);
+
+		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		if (kp.getCards().size() / (float) CardDAO.totalCards() >= 1)
+			eb.addField("Coleção de cartas (100%)", "+50% XP ganho", false);
+		else if (kp.getCards().size() / (float) CardDAO.totalCards() >= 0.75)
+			eb.addField("Coleção de cartas (75%)", "+37% XP ganho", false);
+		else if (kp.getCards().size() / (float) CardDAO.totalCards() >= 0.5)
+			eb.addField("Coleção de cartas (50%)", "+25% XP ganho", false);
+		else if (kp.getCards().size() / (float) CardDAO.totalCards() >= 0.25)
+			eb.addField("Coleção de cartas (25%)", "+12% XP ganho", false);
+
 
 		eb.setColor(Helper.getRandomColor());
 
