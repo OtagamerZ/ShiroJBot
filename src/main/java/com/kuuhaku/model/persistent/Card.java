@@ -94,7 +94,7 @@ public class Card {
 				BufferedImage card = ImageIO.read(bais);
 
 				BufferedImage frame = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/frames/" + rarity.name().toLowerCase() + ".png")));
-				BufferedImage canvas = new BufferedImage(frame.getWidth(), frame.getHeight(), frame.getType());
+				BufferedImage canvas = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
 				Graphics2D g2d = canvas.createGraphics();
 				g2d.drawImage(card, 10, 10, 225, 350, null);
@@ -121,7 +121,7 @@ public class Card {
 		for (int x = 0; x < bi.getWidth(); x++) {
 			for (int y = 0; y < bi.getHeight(); y++) {
 				int rgb = bi.getRGB(x, y);
-				Color col = new Color(rgb, false);
+				Color col = new Color(rgb);
 				col = new Color(255 - col.getRed(), 255 - col.getGreen(), 255 - col.getBlue());
 				out.setRGB(x, y, col.getRGB());
 			}
