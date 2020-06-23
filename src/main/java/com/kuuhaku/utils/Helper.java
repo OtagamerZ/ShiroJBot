@@ -914,7 +914,7 @@ public class Helper {
 			eb.setAuthor("Uma carta " + kc.getRarity().toString().toUpperCase() + " Kawaipon apareceu neste servidor!");
 			eb.setTitle(kc.getName() + " (" + kc.getAnime().toString() + ")");
 			eb.setColor(getRandomColor());
-			eb.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + ((6 - kc.getRarity().getIndex()) * 250) + " créditos).", null);
+			eb.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + (kc.getRarity().getIndex() * 250) + " créditos).", null);
 
 			try {
 				Objects.requireNonNull(channel.getGuild().getTextChannelById(gc.getCanalKawaipon())).sendMessage(eb.build()).addFile(getBytes(kc.getCard(), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
