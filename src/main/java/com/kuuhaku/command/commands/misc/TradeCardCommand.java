@@ -99,6 +99,7 @@ public class TradeCardCommand extends Command {
 
 			channel.sendMessage(other.getAsMention() + ", " + author.getAsMention() + " deseja comprar sua carta `" + tc.getName() + "` por " + price + " créditos, você aceita essa transação?")
 					.queue(s -> Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (member1, message1) -> {
+						if (!member1.getId().equals(other.getId())) return;
 						acc.removeCredit(price);
 						target.removeCard(tc);
 						kp.addCard(tc);
@@ -136,6 +137,7 @@ public class TradeCardCommand extends Command {
 
 			channel.sendMessage(other.getAsMention() + ", " + author.getAsMention() + " deseja trocar a carta `" + c.getName() + "` pela sua carta `" + tc.getName() + "`, você aceita essa transação?")
 					.queue(s -> Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (member1, message1) -> {
+						if (!member1.getId().equals(other.getId())) return;
 						kp.removeCard(c);
 						target.removeCard(tc);
 						kp.addCard(tc);
