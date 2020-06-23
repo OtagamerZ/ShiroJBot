@@ -61,7 +61,7 @@ public class TradeCardCommand extends Command {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
 			return;
 		} else if (args.length < 3) {
-			channel.sendMessage(":x: | Você precisa mencionar uma quantia de créditos ou uma carta para realizar a troca e qual carta você deseja.").queue();
+			channel.sendMessage(":x: | Você precisa mencionar uma quantia de créditos ou uma carta e qual carta você deseja para realizar a troca.").queue();
 			return;
 		}
 
@@ -70,6 +70,13 @@ public class TradeCardCommand extends Command {
 		if (StringUtils.isNumeric(args[1])) {
 			int price = Integer.parseInt(args[1]);
 			Card tc = CardDAO.getCard(args[2]);
+			int min = (5 - tc.getRarity().getIndex()) * 125;
+
+			if (price < min) {
+				channel.sendMessage(":x: | Você não pode oferecer menos que " + min + " créditos por essa carta.").queue();
+				return;
+			} 
+
 			Account acc = AccountDAO.getAccount(author.getId());
 			Account tacc = AccountDAO.getAccount(other.getId());
 
@@ -92,6 +99,7 @@ public class TradeCardCommand extends Command {
 
 			channel.sendMessage(other.getAsMention() + ", " + author.getAsMention() + " deseja comprar sua carta `" + tc.getName() + "` por " + price + " créditos, você aceita essa transação?")
 					.queue(s -> Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (member1, message1) -> {
+						if (!member1.getId().equals(other.getId())) return;
 						acc.removeCredit(price);
 						target.removeCard(tc);
 						kp.addCard(tc);
@@ -129,6 +137,7 @@ public class TradeCardCommand extends Command {
 
 			channel.sendMessage(other.getAsMention() + ", " + author.getAsMention() + " deseja trocar a carta `" + c.getName() + "` pela sua carta `" + tc.getName() + "`, você aceita essa transação?")
 					.queue(s -> Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (member1, message1) -> {
+						if (!member1.getId().equals(other.getId())) return;
 						kp.removeCard(c);
 						target.removeCard(tc);
 						kp.addCard(tc);
