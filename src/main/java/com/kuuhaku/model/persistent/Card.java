@@ -94,12 +94,12 @@ public class Card {
 				BufferedImage card = ImageIO.read(bais);
 
 				BufferedImage frame = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/frames/" + rarity.name().toLowerCase() + ".png")));
-				BufferedImage canvas = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
+				BufferedImage canvas = new BufferedImage(frame.getWidth(), frame.getHeight(), frame.getType());
 
 				Graphics2D g2d = canvas.createGraphics();
 				g2d.drawImage(card, 10, 10, 225, 350, null);
 				g2d.setComposite(BlendComposite.Hue);
-				g2d.drawImage(invert(card), 10, 10, 225, 350, null);
+				g2d.drawImage(invert(card, frame.getType()), 10, 10, 225, 350, null);
 				g2d.dispose();
 
 				g2d = canvas.createGraphics();
@@ -115,8 +115,8 @@ public class Card {
 		}
 	}
 
-	private BufferedImage invert(BufferedImage bi) {
-		BufferedImage out = new BufferedImage(bi.getWidth(), bi.getHeight(), bi.getType());
+	private BufferedImage invert(BufferedImage bi, int type) {
+		BufferedImage out = new BufferedImage(bi.getWidth(), bi.getHeight(), type);
 
 		for (int x = 0; x < bi.getWidth(); x++) {
 			for (int y = 0; y < bi.getHeight(); y++) {
