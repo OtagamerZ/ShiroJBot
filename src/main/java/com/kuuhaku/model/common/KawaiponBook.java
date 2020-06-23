@@ -99,7 +99,7 @@ public class KawaiponBook {
 						g2d.setColor(Color.decode("#DC9018"));
 						break;
 					case ULTIMATE:
-						g2d.setPaint(new LinearGradientPaint(0, 0, 1, 1, new float[]{0.5f, 0.5f}, new Color[]{Color.decode("#FF0000"), Color.decode("#0000FF")}));
+						g2d.setPaint(new LinearGradientPaint(0, 0, 1, 1, new float[]{0.5f, 1}, new Color[]{Color.decode("#FF0000"), Color.decode("#0000FF")}));
 						break;
 				}
 				g2d.drawImage(chunk.get(i).getCard(), slots[i].x, slots[i].y, 187, 280, null);
