@@ -36,6 +36,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 public class ImageCommand extends Command {
 
@@ -66,7 +67,7 @@ public class ImageCommand extends Command {
 
 		channel.sendMessage("<a:loading:697879726630502401> Buscando imagem...").queue(m -> {
 			try {
-				URL link = new URL("https://www.googleapis.com/customsearch/v1?key=" + System.getenv("GOOGLE_TOKEN") + "&cx=" + System.getenv("GOOGLE_SEARCH") + "&searchType=image&q=" + URLEncoder.encode(query, "UTF-8"));
+				URL link = new URL("https://www.googleapis.com/customsearch/v1?key=" + System.getenv("GOOGLE_TOKEN") + "&cx=" + System.getenv("GOOGLE_SEARCH") + "&searchType=image&q=" + URLEncoder.encode(query, StandardCharsets.UTF_8));
 				HttpsURLConnection con = (HttpsURLConnection) link.openConnection();
 				con.setRequestMethod("GET");
 				con.setRequestProperty("User-Agent", "Mozilla/5.0");
@@ -100,7 +101,6 @@ public class ImageCommand extends Command {
 				channel.sendMessage(eb.build()).queue();
 			} catch (IOException | JSONException e) {
 				m.editMessage(":x: | Humm...não achei nenhuma imagem com esses termos, talvez você tenha escrito algo errado?").queue();
-				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
 		});
 	}
