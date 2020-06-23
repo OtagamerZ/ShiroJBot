@@ -366,7 +366,9 @@ public class Helper {
 		List<Role> usrRoles = user.getRoles();
 		List<Role> tgtRoles = target.getRoles();
 
-		return usrRoles.get(0).getPosition() > tgtRoles.get(0).getPosition();
+		if (usrRoles.size() == 0) return false;
+		else if (tgtRoles.size() == 0) return true;
+		else return usrRoles.get(0).getPosition() > tgtRoles.get(0).getPosition();
 	}
 
 	public static <T> List<List<T>> chunkify(List<T> list, int chunkSize) {
