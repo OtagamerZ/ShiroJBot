@@ -19,9 +19,7 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.ExceedDAO;
-import com.kuuhaku.controller.postgresql.WaifuDAO;
+import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.controller.sqlite.KGotchiDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.endpoint.Bonus;
@@ -90,6 +88,16 @@ public class Member {
 		else if (KGotchiDAO.getKawaigotchi(u.getId()) != null)
 			bonuses.add(new Bonus(3, "Kawaigotchi Morto", 0.8f));
 
+		Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
+		if (kp.getCards().size() / (float) CardDAO.totalCards() >= 1)
+			bonuses.add(new Bonus(4, "Coleção de cartas (100%)", 2));
+		else if (kp.getCards().size() / (float) CardDAO.totalCards() >= 0.75)
+			bonuses.add(new Bonus(4, "Coleção de cartas (75%)", 1.75f));
+		else if (kp.getCards().size() / (float) CardDAO.totalCards() >= 0.5)
+			bonuses.add(new Bonus(4, "Coleção de cartas (50%)", 1.5f));
+		else if (kp.getCards().size() / (float) CardDAO.totalCards() >= 0.25)
+			bonuses.add(new Bonus(4, "Coleção de cartas (25%)", 1.25f));
+
 		return bonuses;
 	}
 
@@ -111,6 +119,16 @@ public class Member {
 			mult *= 0.8;
 		else if (KGotchiDAO.getKawaigotchi(mid) != null)
 			mult *= Objects.requireNonNull(KGotchiDAO.getKawaigotchi(mid)).getTier().getUserXpMult();
+
+		Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
+		if (kp.getCards().size() / (float) CardDAO.totalCards() >= 1)
+			mult *= 1.5f;
+		else if (kp.getCards().size() / (float) CardDAO.totalCards() >= 0.75)
+			mult *= 1.37f;
+		else if (kp.getCards().size() / (float) CardDAO.totalCards() >= 0.5)
+			mult *= 1.25f;
+		else if (kp.getCards().size() / (float) CardDAO.totalCards() >= 0.25)
+			mult *= 1.12f;
 
 		xp += 15 * mult;
 
