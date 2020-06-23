@@ -533,13 +533,6 @@
       <workItem from="1592856335574" duration="8000" />
       <workItem from="1592856527943" duration="1833000" />
     </task>
-    <task id="LOCAL-01405" summary="Criação do módulo de drops">
-      <created>1592588182374</created>
-      <option name="number" value="01405" />
-      <option name="presentableId" value="LOCAL-01405" />
-      <option name="project" value="LOCAL" />
-      <updated>1592588182374</updated>
-    </task>
     <task id="LOCAL-01406" summary="Criação do módulo de drops">
       <created>1592588299913</created>
       <option name="number" value="01406" />
@@ -876,7 +869,14 @@
       <option name="project" value="LOCAL" />
       <updated>1592943894570</updated>
     </task>
-    <option name="localTasksCounter" value="1454" />
+    <task id="LOCAL-01454" summary="Adição de bônus de XP para coleções grandes">
+      <created>1592944068799</created>
+      <option name="number" value="01454" />
+      <option name="presentableId" value="LOCAL-01454" />
+      <option name="project" value="LOCAL" />
+      <updated>1592944068799</updated>
+    </task>
+    <option name="localTasksCounter" value="1455" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1087,12 +1087,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="212" y="177" key="Vcs.Push.Dialog.v2" timestamp="1592943895728">
+    <state x="212" y="177" key="Vcs.Push.Dialog.v2" timestamp="1592944070958">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1591419318874" />
-    <state x="212" y="177" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1592943895728" />
+    <state x="212" y="177" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1592944070958" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1592584283643">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
