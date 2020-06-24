@@ -22,6 +22,7 @@ import javax.persistence.*;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "kawaipon")
@@ -33,8 +34,8 @@ public class Kawaipon {
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
 	private String uid = "";
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	private Set<Card> cards = new TreeSet<>(Comparator.comparing(Card::getName, String.CASE_INSENSITIVE_ORDER));
+	@OneToMany(mappedBy = "kawaipon", fetch = FetchType.EAGER, orphanRemoval = true)
+	private Set<KawaiponCard> cards = new TreeSet<>(Comparator.comparing(k -> k.getCard().getName(), String.CASE_INSENSITIVE_ORDER));
 
 	public int getId() {
 		return id;
@@ -53,14 +54,18 @@ public class Kawaipon {
 	}
 
 	public Set<Card> getCards() {
-		return cards;
+		return cards.stream().map(KawaiponCard::getCard).collect(Collectors.toSet());
 	}
 
 	public void addCard(Card card) {
-		this.cards.add(card);
+		this.cards.add(new KawaiponCard(this, card, false));
+	}
+
+	public void addCard(Card card, boolean foil) {
+		this.cards.add(new KawaiponCard(this, card, foil));
 	}
 
 	public void removeCard(Card card) {
-		this.cards.remove(card);
+		this.cards.removeIf(k -> k.getCard().equals(card));
 	}
 }
