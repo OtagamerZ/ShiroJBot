@@ -56,7 +56,8 @@ public class KawaiponBook {
 		cards.sort(Comparator
 				.<KawaiponCard, KawaiponRarity>comparing(k -> k.getCard().getRarity(), Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
 				.thenComparing(k -> k.getCard().getAnime(), Comparator.comparing(AnimeName::toString, String.CASE_INSENSITIVE_ORDER))
-				.thenComparing(KawaiponCard::getName, String.CASE_INSENSITIVE_ORDER)
+				.thenComparing(KawaiponCard::isFoil)
+				.thenComparing(k -> k.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
 		);
 		List<List<KawaiponCard>> chunks = new ArrayList<>();
 
