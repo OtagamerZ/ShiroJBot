@@ -40,6 +40,7 @@ public class CardDAO {
 				return new KawaiponCard(null, (Card) q.getSingleResult(), foil);
 			else return null;
 		} catch (NoResultException e) {
+			System.out.println("Not found");
 			return null;
 		} finally {
 			em.close();
