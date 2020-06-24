@@ -79,7 +79,7 @@ public class KawaiponCard {
 	}
 
 	public String getName() {
-		return (foil ? "* " : "") + card.getName() + (foil ? " *" : "");
+		return (foil ? "× " : "") + card.getName() + (foil ? " ×" : "");
 	}
 
 	@Override
