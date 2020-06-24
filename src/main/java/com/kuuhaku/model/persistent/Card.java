@@ -40,6 +40,7 @@ import java.util.concurrent.ExecutionException;
 @Table(name = "card")
 public class Card {
 	@Id
+	@Column(name = "card_id")
 	private String id;
 
 	@Column(columnDefinition = "VARCHAR(18) DEFAULT ''")
