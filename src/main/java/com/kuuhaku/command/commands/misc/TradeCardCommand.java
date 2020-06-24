@@ -72,7 +72,7 @@ public class TradeCardCommand extends Command {
 			Kawaipon target = KawaiponDAO.getKawaipon(other.getId());
 
 			int price = Integer.parseInt(args[1]);
-			KawaiponCard tc = CardDAO.getCard(target.getUid(), args[2], args[3].equalsIgnoreCase("C"));
+			KawaiponCard tc = CardDAO.getCard(target, args[2], args[3].equalsIgnoreCase("C"));
 
 			Account acc = AccountDAO.getAccount(author.getId());
 			Account tacc = AccountDAO.getAccount(other.getId());
@@ -122,8 +122,8 @@ public class TradeCardCommand extends Command {
 			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 			Kawaipon target = KawaiponDAO.getKawaipon(other.getId());
 
-			KawaiponCard c = CardDAO.getCard(kp.getUid(), args[1], args[2].equalsIgnoreCase("C"));
-			KawaiponCard tc = CardDAO.getCard(target.getUid(), args[3], args[4].equalsIgnoreCase("C"));
+			KawaiponCard c = CardDAO.getCard(kp, args[1], args[2].equalsIgnoreCase("C"));
+			KawaiponCard tc = CardDAO.getCard(target, args[3], args[4].equalsIgnoreCase("C"));
 
 			if (c == null || tc == null) {
 				channel.sendMessage(":x: | Essa carta não existe.").queue();
