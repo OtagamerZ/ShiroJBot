@@ -518,6 +518,10 @@ public class GuildConfig {
 	}
 
 	public List<ServerBuff> getBuffs() {
+		if (buffs == null) {
+			setBuffs(new ArrayList<>());
+			return new ArrayList<>();
+		}
 		List<ServerBuff> sb = new JSONArray(buffs).toList().stream().map(b -> ShiroInfo.getJSONFactory().create().fromJson((String) b, ServerBuff.class)).collect(Collectors.toList());
 		sb.removeIf(b -> TimeUnit.MILLISECONDS.toDays(b.getAcquiredAt()) > b.getTime());
 		setBuffs(sb);
