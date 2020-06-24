@@ -55,40 +55,20 @@ public class Card {
 		return id;
 	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
-
 	public String getName() {
 		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public AnimeName getAnime() {
 		return anime;
 	}
 
-	public void setAnime(AnimeName anime) {
-		this.anime = anime;
-	}
-
 	public KawaiponRarity getRarity() {
 		return rarity;
 	}
 
-	public void setRarity(KawaiponRarity rarity) {
-		this.rarity = rarity;
-	}
-
 	public String getImgurId() {
 		return imgurId;
-	}
-
-	public void setImgurId(String imgurId) {
-		this.imgurId = imgurId;
 	}
 
 	public BufferedImage getCard() {
