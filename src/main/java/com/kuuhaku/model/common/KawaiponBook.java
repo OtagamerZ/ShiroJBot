@@ -51,7 +51,7 @@ public class KawaiponBook {
 		this.cards = cards;
 	}
 
-	public List<BufferedImage> view(boolean test) throws IOException {
+	public List<BufferedImage> view() throws IOException {
 		List<KawaiponCard> cards = new ArrayList<>(this.cards);
 		cards.sort(Comparator
 				.<KawaiponCard, KawaiponRarity>comparing(k -> k.getCard().getRarity(), Comparator.comparingInt(KawaiponRarity::getIndex).reversed())

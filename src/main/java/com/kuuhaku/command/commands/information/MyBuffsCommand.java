@@ -25,10 +25,11 @@ import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.WaifuDAO;
+import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.KGotchiDAO;
-import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.handlers.games.kawaigotchi.enums.Tier;
+import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -57,7 +58,6 @@ public class MyBuffsCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(author.getId() + guild.getId());
 		Kawaigotchi kg = KGotchiDAO.getKawaigotchi(author.getId());
 
 		EmbedBuilder eb = new EmbedBuilder();
@@ -86,6 +86,21 @@ public class MyBuffsCommand extends Command {
 		else if (kp.getCards().size() / (float) CardDAO.totalCards() >= 0.25)
 			eb.addField("Coleção de cartas (25%)", "+12% XP ganho", false);
 
+		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+		if (gc.getBuffs().size() > 0) {
+			gc.getBuffs().forEach(b -> {
+				switch (b.getId()) {
+					case 1:
+						eb.addField("", "+" + (100 - (b.getMult() * 100)) + "% XP ganho (" + b.getTime() + " dias)", false);
+					case 2:
+						eb.addField("", "+" + (100 - (b.getMult() * 100)) + "% chance de spawn de cartas (" + b.getTime() + " dias)", false);
+					case 3:
+						eb.addField("", "+" + (100 - (b.getMult() * 100)) + "% chance de spawn de drops (" + b.getTime() + " dias)", false);
+					case 4:
+						eb.addField("", "+" + (100 - (b.getMult() * 100)) + "% chance de spawn de cartas cromadas (" + b.getTime() + " dias)", false);
+				}
+			});
+		}
 
 		eb.setColor(Helper.getRandomColor());
 
