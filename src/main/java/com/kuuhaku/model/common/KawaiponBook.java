@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.common;
 
-import com.kuuhaku.model.persistent.Card;
+import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.AnimeName;
 import com.kuuhaku.utils.KawaiponRarity;
 
@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.*;
 
 public class KawaiponBook {
-	private final Set<Card> cards;
+	private final Set<KawaiponCard> cards;
 	private static final Point[] slots = {
 			new Point(180, 134),
 			new Point(400, 134),
@@ -47,22 +47,22 @@ public class KawaiponBook {
 			new Point(1280, 412)
 	};
 
-	public KawaiponBook(Set<Card> cards) {
+	public KawaiponBook(Set<KawaiponCard> cards) {
 		this.cards = cards;
 	}
 
 	public List<BufferedImage> view() throws IOException {
-		List<Card> cards = new ArrayList<>(this.cards);
+		List<KawaiponCard> cards = new ArrayList<>(this.cards);
 		cards.sort(Comparator
-				.comparing(Card::getRarity, Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
-				.thenComparing(Card::getAnime, Comparator.comparing(AnimeName::toString, String.CASE_INSENSITIVE_ORDER))
-				.thenComparing(Card::getName, String.CASE_INSENSITIVE_ORDER)
+				.<KawaiponCard, KawaiponRarity>comparing(k -> k.getCard().getRarity(), Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
+				.thenComparing(k -> k.getCard().getAnime(), Comparator.comparing(AnimeName::toString, String.CASE_INSENSITIVE_ORDER))
+				.thenComparing(k -> k.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
 		);
-		List<List<Card>> chunks = new ArrayList<>();
+		List<List<KawaiponCard>> chunks = new ArrayList<>();
 
 		int pageCount = (int) Math.ceil(cards.size() / 12f);
 		for (int i = 0; i < pageCount; i++) {
-			ArrayList<Card> chunk = new ArrayList<>();
+			ArrayList<KawaiponCard> chunk = new ArrayList<>();
 			for (int p = 12 * i; p < cards.size() && p < 12 * (i + 1); p++) {
 				chunk.add(cards.get(p));
 			}
@@ -72,7 +72,7 @@ public class KawaiponBook {
 		List<BufferedImage> pages = new ArrayList<>();
 		final BufferedImage bg = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/background.jpg")));
 
-		for (List<Card> chunk : chunks) {
+		for (List<KawaiponCard> chunk : chunks) {
 			BufferedImage back = new BufferedImage(bg.getWidth(), bg.getHeight(), bg.getType());
 			Graphics2D g2d = back.createGraphics();
 			g2d.setBackground(Color.black);
@@ -82,7 +82,7 @@ public class KawaiponBook {
 
 			g2d.drawImage(bg, 0, 0, null);
 			for (int i = 0; i < chunk.size(); i++) {
-				switch (chunk.get(i).getRarity()) {
+				switch (chunk.get(i).getCard().getRarity()) {
 					case COMMON:
 						g2d.setColor(Color.decode("#FFFFFF"));
 						break;
@@ -99,11 +99,11 @@ public class KawaiponBook {
 						g2d.setColor(Color.decode("#DC9018"));
 						break;
 				}
-				g2d.drawImage(chunk.get(i).getCard(), slots[i].x, slots[i].y, 187, 280, null);
+				g2d.drawImage(chunk.get(i).getCard().drawCard(chunk.get(i).isFoil()), slots[i].x, slots[i].y, 187, 280, null);
 				if (slots[i].y == 134)
-					Profile.printCenteredString(chunk.get(i).getName(), 187, slots[i].x, 105, g2d);
+					Profile.printCenteredString(chunk.get(i).getCard().getName(), 187, slots[i].x, 105, g2d);
 				else
-					Profile.printCenteredString(chunk.get(i).getName(), 187, slots[i].x, 744, g2d);
+					Profile.printCenteredString(chunk.get(i).getCard().getName(), 187, slots[i].x, 744, g2d);
 			}
 
 			g2d.dispose();
