@@ -41,6 +41,7 @@ public class KawaiponCard {
 	private boolean foil;
 
 	public KawaiponCard(Kawaipon k, Card c, boolean foil) {
+		this.kawaipon = k;
 		this.card = c;
 		this.foil = foil;
 	}
