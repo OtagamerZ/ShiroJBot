@@ -19,7 +19,6 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.persistent.Card;
-import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.AnimeName;
 
@@ -29,11 +28,11 @@ import javax.persistence.Query;
 import java.util.List;
 
 public class CardDAO {
-	public static KawaiponCard getCard(Kawaipon kp, String name, boolean foil) {
+	public static KawaiponCard getCard(String user, String name, boolean foil) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT k FROM KawaiponCard k WHERE kawaipon = :kp AND card.name LIKE UPPER(:name) AND foil = :foil", KawaiponCard.class);
-		q.setParameter("kp", kp);
+		Query q = em.createQuery("SELECT k FROM KawaiponCard k WHERE kawaipon.uid = :user AND card.name LIKE UPPER(:name) AND foil = :foil", KawaiponCard.class);
+		q.setParameter("user", user);
 		q.setParameter("name", name);
 		q.setParameter("foil", foil);
 
