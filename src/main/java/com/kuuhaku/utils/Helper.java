@@ -35,14 +35,12 @@ import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.Extensions;
 import com.kuuhaku.model.common.drop.CreditDrop;
 import com.kuuhaku.model.common.drop.Prize;
-import com.kuuhaku.model.persistent.Card;
-import com.kuuhaku.model.persistent.GuildConfig;
-import com.kuuhaku.model.persistent.Log;
-import com.kuuhaku.model.persistent.Tags;
+import com.kuuhaku.model.persistent.*;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
@@ -910,6 +908,7 @@ public class Helper {
 		if (Helper.rng(200) > 195 - (channel.getGuild().getMemberCount() * 15 / 5000)) {
 			List<Card> cards = CardDAO.getCards();
 			Card kc = cards.get(Helper.rng(cards.size()));
+			boolean foil = Helper.rng(1000) <= 5;
 
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setImage("attachment://kawaipon.png");
@@ -919,13 +918,13 @@ public class Helper {
 			eb.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + (kc.getRarity().getIndex() * 250) + " créditos).", null);
 
 			try {
-				Objects.requireNonNull(channel.getGuild().getTextChannelById(gc.getCanalKawaipon())).sendMessage(eb.build()).addFile(getBytes(kc.getCard(), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+				Objects.requireNonNull(channel.getGuild().getTextChannelById(gc.getCanalKawaipon())).sendMessage(eb.build()).addFile(getBytes(kc.drawCard(foil), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
 			} catch (RuntimeException e) {
 				gc.setCanalKawaipon(null);
 				GuildDAO.updateGuildSettings(gc);
-				channel.sendMessage(eb.build()).addFile(getBytes(kc.getCard(), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+				channel.sendMessage(eb.build()).addFile(getBytes(kc.drawCard(foil), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
 			}
-			ShiroInfo.getCurrentCard().put(channel.getGuild().getId(), kc);
+			ShiroInfo.getCurrentCard().put(channel.getGuild().getId(), new KawaiponCard(kc, foil));
 		}
 	}
 
