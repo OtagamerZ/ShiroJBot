@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.*;
+import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.KGotchiDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.endpoint.Bonus;
@@ -33,6 +34,7 @@ import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Entity
@@ -109,28 +111,31 @@ public class Member {
 
 	public boolean addXp(Guild g) {
 		User u = Main.getInfo().getUserByID(mid);
-		float mult = 1;
+		AtomicReference<Float> mult = new AtomicReference<>(1f);
 
 		if (ExceedDAO.hasExceed(mid) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(mid)))
-			mult *= 2;
+			mult.updateAndGet(v -> v * 2);
 		if (g.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).collect(Collectors.toList()).contains(Member.getWaifu(u)))
-			mult *= WaifuDAO.getMultiplier(u).getMult();
+			mult.updateAndGet(v -> v * WaifuDAO.getMultiplier(u).getMult());
 		if (KGotchiDAO.getKawaigotchi(mid) != null && !Objects.requireNonNull(KGotchiDAO.getKawaigotchi(mid)).isAlive())
-			mult *= 0.8;
+			mult.updateAndGet(v -> v * 0.8f);
 		else if (KGotchiDAO.getKawaigotchi(mid) != null)
-			mult *= Objects.requireNonNull(KGotchiDAO.getKawaigotchi(mid)).getTier().getUserXpMult();
+			mult.updateAndGet(v -> v * Objects.requireNonNull(KGotchiDAO.getKawaigotchi(mid)).getTier().getUserXpMult());
 
 		Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
-		if (kp.getCards().size() / (float) CardDAO.totalCards() >= 1)
-			mult *= 1.5f;
-		else if (kp.getCards().size() / (float) CardDAO.totalCards() >= 0.75)
-			mult *= 1.37f;
+		if (kp.getCards().size() / (float) CardDAO.totalCards() >= 1) {
+			mult.updateAndGet(v -> v * 1.5f);
+		} else if (kp.getCards().size() / (float) CardDAO.totalCards() >= 0.75)
+			mult.updateAndGet(v -> v * 1.37f);
 		else if (kp.getCards().size() / (float) CardDAO.totalCards() >= 0.5)
-			mult *= 1.25f;
+			mult.updateAndGet(v -> v * 1.25f);
 		else if (kp.getCards().size() / (float) CardDAO.totalCards() >= 0.25)
-			mult *= 1.12f;
+			mult.updateAndGet(v -> v * 1.12f);
 
-		xp += 15 * mult;
+		GuildConfig gc = GuildDAO.getGuildById(g.getId());
+		gc.getBuffs().stream().filter(b -> b.getId() == 1).findAny().ifPresent(b -> mult.updateAndGet(v -> v * b.getMult()));
+
+		xp += 15 * mult.get();
 
 		if (xp >= (int) Math.pow(level, 2) * 100) {
 			level++;
