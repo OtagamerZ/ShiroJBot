@@ -29,12 +29,12 @@ public class KawaiponCard {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@MapsId("kawaipon_id")
-	@JoinColumn(name = "kawaipon_id", insertable = false, updatable = false)
+	@JoinColumn(name = "kawaipon_id")
 	private Kawaipon kawaipon;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@MapsId("card_id")
-	@JoinColumn(name = "kawaipon_id", insertable = false, updatable = false)
+	@JoinColumn(name = "card_id")
 	private Card card;
 
 	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
