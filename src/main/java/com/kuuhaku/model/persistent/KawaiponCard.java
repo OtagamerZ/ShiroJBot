@@ -78,6 +78,10 @@ public class KawaiponCard {
 		this.foil = foil;
 	}
 
+	public String getName() {
+		return (foil ? "✦ " : "") + card.getName() + (foil ? " ✦" : "");
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
