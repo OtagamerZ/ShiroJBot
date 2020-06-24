@@ -30,13 +30,12 @@ public class CardDAO {
 	public static Card getCard(String name) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Card c WHERE name LIKE UPPER(:name)", Card.class);
+		Query q = em.createQuery("SELECT c FROM Card c WHERE id LIKE UPPER(:name)", Card.class);
 		q.setParameter("name", name);
 
 		try {
 			return (Card) q.getSingleResult();
 		} catch (NoResultException e) {
-			System.out.println("Not found");
 			return null;
 		} finally {
 			em.close();
