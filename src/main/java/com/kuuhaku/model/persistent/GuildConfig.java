@@ -518,7 +518,7 @@ public class GuildConfig {
 	}
 
 	public List<ServerBuff> getBuffs() {
-		if (buffs == null) {
+		if (buffs == null || buffs.isBlank()) {
 			setBuffs(new ArrayList<>());
 			return new ArrayList<>();
 		}
