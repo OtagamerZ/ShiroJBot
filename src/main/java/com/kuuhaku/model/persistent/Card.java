@@ -31,8 +31,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
@@ -40,7 +38,6 @@ import java.util.concurrent.ExecutionException;
 @Table(name = "card")
 public class Card {
 	@Id
-	@Column(columnDefinition = "VARCHAR(191)")
 	private String id;
 
 	@Column(columnDefinition = "VARCHAR(18) DEFAULT ''")
@@ -55,13 +52,6 @@ public class Card {
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
 	private String imgurId = "";
 
-	@OneToMany(mappedBy = "card", fetch = FetchType.EAGER)
-	private List<KawaiponCard> kawaipons = new ArrayList<>();
-
-	public String getId() {
-		return id;
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -74,11 +64,30 @@ public class Card {
 		return rarity;
 	}
 
-	public String getImgurId() {
-		return imgurId;
+	public BufferedImage getCard() {
+		try {
+			byte[] cardBytes = ShiroInfo.getCardCache().get(imgurId, () -> IOUtils.toByteArray(Helper.getImage("https://i.imgur.com/" + imgurId + ".jpg")));
+			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
+				BufferedImage card = ImageIO.read(bais);
+
+				BufferedImage frame = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/frames/" + rarity.name().toLowerCase() + ".png")));
+				BufferedImage canvas = new BufferedImage(frame.getWidth(), frame.getHeight(), frame.getType());
+
+				Graphics2D g2d = canvas.createGraphics();
+				g2d.drawImage(card, 10, 10, 225, 350, null);
+				g2d.drawImage(frame, 0, 0, null);
+
+				g2d.dispose();
+
+				return canvas;
+			}
+		} catch (IOException | ExecutionException e) {
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			return null;
+		}
 	}
 
-	public BufferedImage drawCard(boolean foil) {
+	public BufferedImage getCard(boolean test) {
 		try {
 			byte[] cardBytes = ShiroInfo.getCardCache().get(imgurId, () -> IOUtils.toByteArray(Helper.getImage("https://i.imgur.com/" + imgurId + ".jpg")));
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
@@ -89,15 +98,11 @@ public class Card {
 
 				Graphics2D g2d = canvas.createGraphics();
 				g2d.drawImage(card, 10, 10, 225, 350, null);
+				g2d.setComposite(BlendComposite.Hue);
+				g2d.drawImage(invert(card), 10, 10, 225, 350, null);
+				g2d.dispose();
 
-				if (foil) {
-					g2d.setComposite(BlendComposite.Hue);
-					g2d.drawImage(invert(card), 10, 10, 225, 350, null);
-					g2d.dispose();
-
-					g2d = canvas.createGraphics();
-				}
-
+				g2d = canvas.createGraphics();
 				g2d.drawImage(frame, 0, 0, null);
 
 				g2d.dispose();

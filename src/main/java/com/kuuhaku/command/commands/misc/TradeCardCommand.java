@@ -27,7 +27,6 @@ import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Kawaipon;
-import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
@@ -61,27 +60,22 @@ public class TradeCardCommand extends Command {
 		if (message.getMentionedUsers().size() < 1) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
 			return;
-		} else if (message.getMentionedUsers().get(0).getId().equals(author.getId())) {
-			channel.sendMessage(":x: | Você não pode trocar cartas com você mesmo.").queue();
-			return;
-		} else if (args.length < 4) {
-			channel.sendMessage(":x: | Você precisa mencionar uma quantia de créditos ou uma carta, qual carta você deseja e o tipo dela (`N` = normal, `C` = cromada) para realizar a troca.").queue();
+		} else if (args.length < 3) {
+			channel.sendMessage(":x: | Você precisa mencionar uma quantia de créditos ou uma carta e qual carta você deseja para realizar a troca.").queue();
 			return;
 		}
 
 		User other = message.getMentionedUsers().get(0);
 
 		if (StringUtils.isNumeric(args[1])) {
-			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-			Kawaipon target = KawaiponDAO.getKawaipon(other.getId());
-
 			int price = Integer.parseInt(args[1]);
 			Card tc = CardDAO.getCard(args[2]);
 
 			Account acc = AccountDAO.getAccount(author.getId());
 			Account tacc = AccountDAO.getAccount(other.getId());
 
-			boolean foil = args[3].equalsIgnoreCase("C");
+			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+			Kawaipon target = KawaiponDAO.getKawaipon(other.getId());
 
 			if (tc == null) {
 				channel.sendMessage(":x: | Essa carta não existe.").queue();
@@ -89,28 +83,27 @@ public class TradeCardCommand extends Command {
 			} else if (acc.getBalance() < price) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 				return;
-			} else if (kp.getCards().stream().anyMatch(k -> k.getCard().equals(tc) && k.isFoil() == foil)) {
+			} else if (kp.getCards().contains(tc)) {
 				channel.sendMessage(":x: | Parece que você já possui essa carta!").queue();
 				return;
-			} else if (target.getCards().stream().noneMatch(k -> k.getCard().equals(tc) && k.isFoil() == foil)) {
+			} else if (!target.getCards().contains(tc)) {
 				channel.sendMessage(":x: | Ele/ela não possui essa carta!").queue();
 				return;
 			}
 
-			int min = (5 - tc.getRarity().getIndex()) * 125 * (foil ? 2 : 1);
+			int min = (5 - tc.getRarity().getIndex()) * 125;
 
 			if (price < min) {
 				channel.sendMessage(":x: | Você não pode oferecer menos que " + min + " créditos por essa carta.").queue();
 				return;
 			}
 
-			KawaiponCard kc = new KawaiponCard(null, tc, foil);
-			channel.sendMessage(other.getAsMention() + ", " + author.getAsMention() + " deseja comprar sua carta `" + kc.getName() + "` por " + price + " créditos, você aceita essa transação?")
+			channel.sendMessage(other.getAsMention() + ", " + author.getAsMention() + " deseja comprar sua carta `" + tc.getName() + "` por " + price + " créditos, você aceita essa transação?")
 					.queue(s -> Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (member1, message1) -> {
 						if (!member1.getId().equals(other.getId())) return;
 						acc.removeCredit(price);
-						target.removeCard(kc);
-						kp.addCard(tc, foil);
+						target.removeCard(tc);
+						kp.addCard(tc);
 						tacc.addCredit(price);
 
 						KawaiponDAO.saveKawaipon(kp);
@@ -121,46 +114,35 @@ public class TradeCardCommand extends Command {
 						s.delete().flatMap(n -> channel.sendMessage("Troca concluída com sucesso!")).queue();
 					}), false));
 		} else {
-			if (args.length < 5) {
-				channel.sendMessage(":x: | Você precisa mencionar uma carta que quer oferecer, o tipo, qual carta você deseja e o tipo dela (`N` = normal, `C` = cromada) para realizar a troca.").queue();
-				return;
-			}
-
+			Card c = CardDAO.getCard(args[1]);
+			Card tc = CardDAO.getCard(args[2]);
 			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 			Kawaipon target = KawaiponDAO.getKawaipon(other.getId());
-
-			Card c = CardDAO.getCard(args[1]);
-			Card tc = CardDAO.getCard(args[3]);
-
-			boolean ufoil = args[2].equalsIgnoreCase("C");
-			boolean tfoil = args[4].equalsIgnoreCase("C");
 
 			if (c == null || tc == null) {
 				channel.sendMessage(":x: | Essa carta não existe.").queue();
 				return;
-			} else if (kp.getCards().stream().noneMatch(k -> k.getCard().equals(c) && k.isFoil() == ufoil)) {
+			} else if (!kp.getCards().contains(c)) {
 				channel.sendMessage(":x: | Você não pode trocar uma carta que não possui!").queue();
 				return;
-			} else if (target.getCards().stream().anyMatch(k -> k.getCard().equals(c) && k.isFoil() == ufoil)) {
+			} else if (target.getCards().contains(c)) {
 				channel.sendMessage(":x: | Eu acho que ele já possui essa carta!").queue();
 				return;
-			} else if (kp.getCards().stream().anyMatch(k -> k.getCard().equals(tc) && k.isFoil() == tfoil)) {
+			} else if (kp.getCards().contains(tc)) {
 				channel.sendMessage(":x: | Parece que você já possui essa carta!").queue();
 				return;
-			} else if (target.getCards().stream().noneMatch(k -> k.getCard().equals(tc) && k.isFoil() == tfoil)) {
+			} else if (!target.getCards().contains(tc)) {
 				channel.sendMessage(":x: | Ele/ela não possui essa carta!").queue();
 				return;
 			}
 
-			KawaiponCard ukc = new KawaiponCard(null, c, ufoil);
-			KawaiponCard tkc = new KawaiponCard(null, tc, tfoil);
-			channel.sendMessage(other.getAsMention() + ", " + author.getAsMention() + " deseja trocar a carta `" + ukc.getName() + "` pela sua carta `" + tkc.getName() + "`, você aceita essa transação?")
+			channel.sendMessage(other.getAsMention() + ", " + author.getAsMention() + " deseja trocar a carta `" + c.getName() + "` pela sua carta `" + tc.getName() + "`, você aceita essa transação?")
 					.queue(s -> Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (member1, message1) -> {
 						if (!member1.getId().equals(other.getId())) return;
-						kp.removeCard(ukc);
-						target.removeCard(tkc);
-						kp.addCard(tc, ufoil);
-						target.addCard(c, tfoil);
+						kp.removeCard(c);
+						target.removeCard(tc);
+						kp.addCard(tc);
+						target.addCard(c);
 
 						KawaiponDAO.saveKawaipon(kp);
 						KawaiponDAO.saveKawaipon(target);
