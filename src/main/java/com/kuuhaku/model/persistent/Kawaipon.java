@@ -28,13 +28,12 @@ import java.util.TreeSet;
 public class Kawaipon {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "kawaipon_id")
 	private int id;
 
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
 	private String uid = "";
 
-	@OneToMany(mappedBy = "kawaipon", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	@OneToMany(mappedBy = "kawaipon")
 	private Set<KawaiponCard> cards = new TreeSet<>(Comparator.comparing(KawaiponCard::getName, String.CASE_INSENSITIVE_ORDER));
 
 	public int getId() {

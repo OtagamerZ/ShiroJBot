@@ -26,25 +26,25 @@ import java.util.Objects;
 @Embeddable
 public class KawaiponCardId implements Serializable {
 	@Column(name = "kawaipon_id")
-	private int kawaipon;
+	private int kawaipon_id;
 
 	@Column(name = "card_id")
-	private String card;
+	private String card_id;
 
 	public int getKawaipon() {
-		return kawaipon;
+		return kawaipon_id;
 	}
 
 	public void setKawaipon(int kawaipon) {
-		this.kawaipon = kawaipon;
+		this.kawaipon_id = kawaipon;
 	}
 
 	public String getCard() {
-		return card;
+		return card_id;
 	}
 
 	public void setCard(String card) {
-		this.card = card;
+		this.card_id = card;
 	}
 
 	@Override
@@ -52,12 +52,12 @@ public class KawaiponCardId implements Serializable {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		KawaiponCardId that = (KawaiponCardId) o;
-		return kawaipon == that.kawaipon &&
-				Objects.equals(card, that.card);
+		return kawaipon_id == that.kawaipon_id &&
+				Objects.equals(card_id, that.card_id);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(kawaipon, card);
+		return Objects.hash(kawaipon_id, card_id);
 	}
 }
