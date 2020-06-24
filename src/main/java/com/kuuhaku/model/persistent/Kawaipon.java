@@ -36,6 +36,14 @@ public class Kawaipon {
 	@ManyToMany(fetch = FetchType.EAGER)
 	private Set<Card> cards = new TreeSet<>(Comparator.comparing(Card::getName, String.CASE_INSENSITIVE_ORDER));
 
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public String getUid() {
 		return uid;
 	}
