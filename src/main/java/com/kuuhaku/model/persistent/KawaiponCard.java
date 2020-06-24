@@ -19,40 +19,45 @@
 package com.kuuhaku.model.persistent;
 
 import javax.persistence.*;
-import java.util.Comparator;
-import java.util.Set;
-import java.util.TreeSet;
 
 @Entity
-@Table(name = "kawaipon")
-public class Kawaipon {
+@Table(name = "kawaipon_card")
+@IdClass(KawaiponCardId.class)
+public class KawaiponCard {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	@ManyToOne
+	@JoinColumn(name = "kawaipon_id", referencedColumnName = "id")
+	private Kawaipon kawaipon;
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
-	private String uid = "";
+	@Id
+	@ManyToOne
+	@JoinColumn(name = "cards_id", referencedColumnName = "id")
+	private Card cards;
 
-	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "cards")
-	private Set<KawaiponCard> cards = new TreeSet<>(Comparator.comparing(c -> c.getCard().getName(), String.CASE_INSENSITIVE_ORDER));
+	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	private boolean foil;
 
-	public String getUid() {
-		return uid;
+	public Kawaipon getKawaipon() {
+		return kawaipon;
 	}
 
-	public void setUid(String uid) {
-		this.uid = uid;
+	public void setKawaipon(Kawaipon kawaipon) {
+		this.kawaipon = kawaipon;
 	}
 
-	public Set<KawaiponCard> getCards() {
+	public Card getCard() {
 		return cards;
 	}
 
-	public void addCard(KawaiponCard card) {
-		this.cards.add(card);
+	public void setCard(Card card) {
+		this.cards = card;
 	}
 
-	public void removeCard(Card card) {
-		this.cards.remove(card);
+	public boolean isFoil() {
+		return foil;
+	}
+
+	public void setFoil(boolean foil) {
+		this.foil = foil;
 	}
 }

@@ -18,41 +18,45 @@
 
 package com.kuuhaku.model.persistent;
 
-import javax.persistence.*;
-import java.util.Comparator;
-import java.util.Set;
-import java.util.TreeSet;
+import javax.persistence.Embeddable;
+import javax.persistence.Table;
+import java.io.Serializable;
+import java.util.Objects;
 
-@Entity
-@Table(name = "kawaipon")
-public class Kawaipon {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+@Embeddable
+@Table(name = "kawaipon_card_id")
+public class KawaiponCardId implements Serializable {
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
-	private String uid = "";
+	private int kawaipon;
+	private String cards;
 
-	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "cards")
-	private Set<KawaiponCard> cards = new TreeSet<>(Comparator.comparing(c -> c.getCard().getName(), String.CASE_INSENSITIVE_ORDER));
-
-	public String getUid() {
-		return uid;
+	public int getKawaipon() {
+		return kawaipon;
 	}
 
-	public void setUid(String uid) {
-		this.uid = uid;
+	public void setKawaipon(int kawaipon) {
+		this.kawaipon = kawaipon;
 	}
 
-	public Set<KawaiponCard> getCards() {
+	public String getCard() {
 		return cards;
 	}
 
-	public void addCard(KawaiponCard card) {
-		this.cards.add(card);
+	public void setCard(String cards) {
+		this.cards = cards;
 	}
 
-	public void removeCard(Card card) {
-		this.cards.remove(card);
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		KawaiponCardId that = (KawaiponCardId) o;
+		return kawaipon == that.kawaipon &&
+				Objects.equals(cards, that.cards);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(kawaipon, cards);
 	}
 }
