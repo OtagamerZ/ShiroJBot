@@ -65,6 +65,6 @@ public class Kawaipon {
 	}
 
 	public void removeCard(KawaiponCard card) {
-		this.cards.remove(card);
+		this.cards.removeIf(k -> k.getCard().getName().equals(card.getCard().getName()) && k.isFoil() == card.isFoil());
 	}
 }
