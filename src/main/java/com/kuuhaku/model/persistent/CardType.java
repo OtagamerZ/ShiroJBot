@@ -18,14 +18,12 @@
 
 package com.kuuhaku.model.persistent;
 
-import com.kuuhaku.utils.AnimeName;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.KawaiponRarity;
 import com.kuuhaku.utils.ShiroInfo;
 import org.apache.commons.io.IOUtils;
+import org.jdesktop.swingx.graphics.BlendComposite;
 
 import javax.imageio.ImageIO;
-import javax.persistence.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -33,75 +31,37 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
-@Entity
-@Table(name = "card")
-public class Card {
-	@Id
-	private String id;
+public class CardType extends Card {
+	private boolean foil;
 
-	@Column(columnDefinition = "VARCHAR(18) DEFAULT ''")
-	private String name = "";
-
-	@Enumerated(EnumType.STRING)
-	private AnimeName anime;
-
-	@Enumerated(EnumType.STRING)
-	private KawaiponRarity rarity = KawaiponRarity.COMMON;
-
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
-	private String imgurId = "";
-
-	public String getId() {
-		return id;
+	public boolean isFoil() {
+		return foil;
 	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public AnimeName getAnime() {
-		return anime;
-	}
-
-	public void setAnime(AnimeName anime) {
-		this.anime = anime;
-	}
-
-	public KawaiponRarity getRarity() {
-		return rarity;
-	}
-
-	public void setRarity(KawaiponRarity rarity) {
-		this.rarity = rarity;
-	}
-
-	public String getImgurId() {
-		return imgurId;
-	}
-
-	public void setImgurId(String imgurId) {
-		this.imgurId = imgurId;
+	public void setFoil(boolean foil) {
+		this.foil = foil;
 	}
 
 	public BufferedImage getCard() {
 		try {
-			byte[] cardBytes = ShiroInfo.getCardCache().get(imgurId, () -> IOUtils.toByteArray(Helper.getImage("https://i.imgur.com/" + imgurId + ".jpg")));
+			byte[] cardBytes = ShiroInfo.getCardCache().get(getImgurId(), () -> IOUtils.toByteArray(Helper.getImage("https://i.imgur.com/" + getImgurId() + ".jpg")));
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
 				BufferedImage card = ImageIO.read(bais);
 
-				BufferedImage frame = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/frames/" + rarity.name().toLowerCase() + ".png")));
-				BufferedImage canvas = new BufferedImage(frame.getWidth(), frame.getHeight(), frame.getType());
+				BufferedImage frame = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/frames/" + getRarity().name().toLowerCase() + ".png")));
+				BufferedImage canvas = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
 				Graphics2D g2d = canvas.createGraphics();
 				g2d.drawImage(card, 10, 10, 225, 350, null);
+
+				if (foil) {
+					g2d.setComposite(BlendComposite.Hue);
+					g2d.drawImage(invert(card), 10, 10, 225, 350, null);
+					g2d.dispose();
+
+					g2d = canvas.createGraphics();
+				}
+
 				g2d.drawImage(frame, 0, 0, null);
 
 				g2d.dispose();
@@ -114,16 +74,31 @@ public class Card {
 		}
 	}
 
+	private BufferedImage invert(BufferedImage bi) {
+		BufferedImage out = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_ARGB);
+
+		for (int x = 0; x < bi.getWidth(); x++) {
+			for (int y = 0; y < bi.getHeight(); y++) {
+				int rgb = bi.getRGB(x, y);
+				Color col = new Color(rgb);
+				col = new Color(255 - col.getRed(), 255 - col.getGreen(), 255 - col.getBlue());
+				out.setRGB(x, y, col.getRGB());
+			}
+		}
+
+		return out;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		Card card = (Card) o;
-		return Objects.equals(id, card.id);
+		CardType card = (CardType) o;
+		return Objects.equals(getId(), card.getId());
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(getId());
 	}
 }
