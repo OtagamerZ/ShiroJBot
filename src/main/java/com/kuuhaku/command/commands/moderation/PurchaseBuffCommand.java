@@ -58,22 +58,22 @@ public class PurchaseBuffCommand extends Command {
 
 			eb.setTitle(":level_slider: | Melhorias de servidor");
 			eb.setDescription("Melhorias são aplicadas a todos os membros do servidor por um certo período, use-as para oferecer vantagens aos seus membros.");
-			eb.addField("Melhoria de XP",
+			eb.addField("Melhoria de XP (" + prefix + "up xp)",
 					"**Tier 1 (1500 créditos):** `+50% XP ganho`\n" +
 							"**Tier 2 (4000 créditos):** `+100% XP ganho`\n" +
 							"**Tier 3 (10000 créditos)**: `+200% XP ganho`",
 					false);
-			eb.addField("Melhoria de cartas",
+			eb.addField("Melhoria de cartas (" + prefix + "up carta)",
 					"**Tier 1 (1000 créditos):** `+20% chance de aparecer cartas`\n" +
 							"**Tier 2 (3000 créditos):** `+30% chance de aparecer cartas`\n" +
 							"**Tier 3 (5000 créditos):** `+40% chance de aparecer cartas`",
 					false);
-			eb.addField("Melhoria de drops",
+			eb.addField("Melhoria de drops (" + prefix + "up drop)",
 					"**Tier 1 (1250 créditos):** `+20% chance de aparecer drops`\n" +
 							"**Tier 2 (2750 créditos):** `+30% chance de aparecer drops`\n" +
 							"**Tier 3 (6000 créditos):** `+40% chance de aparecer drops`",
 					false);
-			eb.addField("Melhoria de cartas cromadas",
+			eb.addField("Melhoria de cartas cromadas (" + prefix + "up cromo)",
 					"**Tier 1 (5000 créditos):** `+20% chance de aparecer cartas cromadas`\n" +
 							"**Tier 2 (8000 créditos):** `+50% chance de aparecer cartas cromadas`\n" +
 							"**Tier 3 (12000 créditos)**: `+100% chance de aparecer cartas cromadas`",
@@ -81,8 +81,8 @@ public class PurchaseBuffCommand extends Command {
 
 			channel.sendMessage(eb.build()).queue();
 			return;
-		} else if (!Helper.containsAny(args[0], "xp", "carta", "drop", "cromada")) {
-			channel.sendMessage(":x: | O tipo da melhoria deve ser um dos seguintes tipos: `xp`, `carta`, `drop` ou `cromada`.").queue();
+		} else if (!Helper.containsAny(args[0], "xp", "carta", "drop", "cromo")) {
+			channel.sendMessage(":x: | O tipo da melhoria deve ser um dos seguintes tipos: `xp`, `carta`, `drop` ou `cromo`.").queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[1])) {
 			channel.sendMessage(":x: | O tier da melhoria deve ser um valor entre 1 e 3.").queue();
