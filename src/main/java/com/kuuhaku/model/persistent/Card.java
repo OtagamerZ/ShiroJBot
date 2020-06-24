@@ -54,7 +54,7 @@ public class Card {
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
 	private String imgurId = "";
 
-	@OneToMany(mappedBy = "card", fetch = FetchType.EAGER, orphanRemoval = true)
+	@OneToMany(mappedBy = "card", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private List<KawaiponCard> kawaipons = new ArrayList<>();
 
 	public String getId() {
