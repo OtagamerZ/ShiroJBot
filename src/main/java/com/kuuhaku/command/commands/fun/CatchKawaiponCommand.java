@@ -23,8 +23,8 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Kawaipon;
-import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
@@ -53,14 +53,14 @@ public class CatchKawaiponCommand extends Command {
 		Account acc = AccountDAO.getAccount(author.getId());
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
-		KawaiponCard kc = ShiroInfo.getCurrentCard().getIfPresent(guild.getId());
+		Card kc = ShiroInfo.getCurrentCard().getIfPresent(guild.getId());
 
 		if (kc == null) {
 			channel.sendMessage(":x: | Não há nenhuma carta Kawaipon para coletar neste servidor.").queue();
 			return;
 		}
 
-		int cost = kc.getCard().getRarity().getIndex() * 250 * (kc.isFoil() ? 2 : 1);
+		int cost = kc.getRarity().getIndex() * 250;
 		if (acc.getBalance() < cost) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 			return;
@@ -72,7 +72,7 @@ public class CatchKawaiponCommand extends Command {
 		}
 
 		ShiroInfo.getCurrentCard().invalidate(guild.getId());
-		kp.addCard(kc.getCard(), kc.isFoil());
+		kp.addCard(kc);
 		acc.removeCredit(cost);
 
 		KawaiponDAO.saveKawaipon(kp);
