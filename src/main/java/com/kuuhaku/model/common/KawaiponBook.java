@@ -108,7 +108,7 @@ public class KawaiponBook {
 				if (slots[i].y == 134)
 					Profile.printCenteredString(chunk.get(i).getName(), 187, slots[i].x, 105, g2d);
 				else
-					Profile.printCenteredString(chunk.get(i).getName(), 187, slots[i].x, 746, g2d);
+					Profile.printCenteredString(chunk.get(i).getName(), 187, slots[i].x, 740, g2d);
 			}
 
 			g2d.dispose();
