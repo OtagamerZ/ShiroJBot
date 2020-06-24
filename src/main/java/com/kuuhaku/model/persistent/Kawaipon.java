@@ -33,7 +33,7 @@ public class Kawaipon {
 	private String uid = "";
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	private Set<Card> cards = new HashSet<>();
+	private Set<KawaiponCard> cards = new HashSet<>();
 
 	public String getUid() {
 		return uid;
@@ -43,15 +43,15 @@ public class Kawaipon {
 		this.uid = uid;
 	}
 
-	public Set<Card> getCards() {
+	public Set<KawaiponCard> getCards() {
 		return cards;
 	}
 
-	public void addCard(Card card) {
+	public void addCard(KawaiponCard card) {
 		this.cards.add(card);
 	}
 
-	public void removeCard(Card card) {
+	public void removeCard(KawaiponCard card) {
 		this.cards.remove(card);
 	}
 }

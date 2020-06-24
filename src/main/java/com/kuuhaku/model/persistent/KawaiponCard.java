@@ -22,47 +22,36 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "kawaipon_card")
+@Table(name = "kawaiponcard")
 public class KawaiponCard {
-	@EmbeddedId
-	private KawaiponCardId id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@MapsId("kawaipon_id")
-	@JoinColumn(name = "kawaipon_id")
-	private Kawaipon kawaipon;
-
-	@ManyToOne(fetch = FetchType.EAGER)
-	@MapsId("card_id")
-	@JoinColumn(name = "card_id")
 	private Card card;
 
 	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
-	private boolean foil;
+	private boolean foil = false;
 
-	public KawaiponCard(Kawaipon k, Card c, boolean foil) {
-		this.kawaipon = k;
-		this.card = c;
+	public KawaiponCard(Card card, boolean foil) {
+		this.card = card;
 		this.foil = foil;
 	}
 
 	public KawaiponCard() {
 	}
 
-	public KawaiponCardId getId() {
+	public String getName() {
+		return (foil ? "× " : "") + card.getName() + (foil ? " ×" : "");
+	}
+
+	public int getId() {
 		return id;
 	}
 
-	public void setId(KawaiponCardId id) {
+	public void setId(int id) {
 		this.id = id;
-	}
-
-	public Kawaipon getKawaipon() {
-		return kawaipon;
-	}
-
-	public void setKawaipon(Kawaipon kawaipon) {
-		this.kawaipon = kawaipon;
 	}
 
 	public Card getCard() {
@@ -79,10 +68,6 @@ public class KawaiponCard {
 
 	public void setFoil(boolean foil) {
 		this.foil = foil;
-	}
-
-	public String getName() {
-		return (foil ? "× " : "") + card.getName() + (foil ? " ×" : "");
 	}
 
 	@Override
