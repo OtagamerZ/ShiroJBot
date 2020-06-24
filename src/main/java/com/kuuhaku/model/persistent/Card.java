@@ -30,6 +30,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
@@ -50,6 +52,9 @@ public class Card {
 
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
 	private String imgurId = "";
+
+	@OneToMany(mappedBy = "card", fetch = FetchType.EAGER, orphanRemoval = true)
+	private List<KawaiponCard> kawaipons = new ArrayList<>();
 
 	public String getId() {
 		return id;
