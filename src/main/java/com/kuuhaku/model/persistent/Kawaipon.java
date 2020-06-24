@@ -34,7 +34,7 @@ public class Kawaipon {
 	private String uid = "";
 
 	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "cards")
-	private Set<KawaiponCard> cards = new TreeSet<>(Comparator.comparing(c -> c.getCard().getName(), String.CASE_INSENSITIVE_ORDER));
+	private Set<Card> cards = new TreeSet<>(Comparator.comparing(Card::getName, String.CASE_INSENSITIVE_ORDER));
 
 	public String getUid() {
 		return uid;
@@ -44,11 +44,11 @@ public class Kawaipon {
 		this.uid = uid;
 	}
 
-	public Set<KawaiponCard> getCards() {
+	public Set<Card> getCards() {
 		return cards;
 	}
 
-	public void addCard(KawaiponCard card) {
+	public void addCard(Card card) {
 		this.cards.add(card);
 	}
 
