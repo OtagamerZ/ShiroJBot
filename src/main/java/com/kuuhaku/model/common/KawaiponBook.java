@@ -51,7 +51,7 @@ public class KawaiponBook {
 		this.cards = cards;
 	}
 
-	public List<BufferedImage> view(boolean test) throws IOException {
+	public List<BufferedImage> view() throws IOException {
 		List<Card> cards = new ArrayList<>(this.cards);
 		cards.sort(Comparator
 				.comparing(Card::getRarity, Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
@@ -99,8 +99,7 @@ public class KawaiponBook {
 						g2d.setColor(Color.decode("#DC9018"));
 						break;
 				}
-				if (!test) g2d.drawImage(chunk.get(i).getCard(), slots[i].x, slots[i].y, 187, 280, null);
-				else g2d.drawImage(chunk.get(i).getCard(true), slots[i].x, slots[i].y, 187, 280, null);
+				g2d.drawImage(chunk.get(i).getCard(), slots[i].x, slots[i].y, 187, 280, null);
 				if (slots[i].y == 134)
 					Profile.printCenteredString(chunk.get(i).getName(), 187, slots[i].x, 105, g2d);
 				else
