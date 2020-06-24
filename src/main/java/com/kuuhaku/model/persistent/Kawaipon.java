@@ -28,7 +28,6 @@ import java.util.TreeSet;
 public class Kawaipon {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "kawaipon_id")
 	private int id;
 
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
