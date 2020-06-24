@@ -18,9 +18,9 @@
 
 package com.kuuhaku.command.commands.information;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.common.KawaiponBook;
 import com.kuuhaku.model.persistent.Kawaipon;
@@ -66,7 +66,7 @@ public class KawaiponsCommand extends Command {
 				}
 
 				KawaiponBook kb = new KawaiponBook(kp.getCards());
-				List<BufferedImage> cards = kb.view();
+				List<BufferedImage> cards = kb.view(author.getId().equals(Main.getInfo().getNiiChan()));
 				int page;
 				if (args.length < 1) page = 0;
 				else {
@@ -87,7 +87,7 @@ public class KawaiponsCommand extends Command {
 
 				eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName() + " (página " + (page + 1) + ")");
 				eb.setImage("attachment://page.jpg");
-				eb.setFooter("Coletado: " + kp.getCards().size() + " de " + CardDAO.totalCards());
+				eb.setFooter("Total de Kawaipons: " + kp.getCards().size());
 
 				m.delete().queue();
 				channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards.get(page)), "page.jpg").queue();
