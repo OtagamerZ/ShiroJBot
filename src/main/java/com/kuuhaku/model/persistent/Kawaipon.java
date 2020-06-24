@@ -32,7 +32,7 @@ public class Kawaipon {
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
 	private String uid = "";
 
-	@OneToMany(mappedBy = "kawaipon")
+	@OneToMany(mappedBy = "kawaipon", fetch = FetchType.EAGER)
 	private Set<KawaiponCard> cards = new HashSet<>();
 
 	public int getId() {
