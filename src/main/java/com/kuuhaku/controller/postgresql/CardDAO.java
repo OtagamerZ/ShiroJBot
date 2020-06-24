@@ -36,8 +36,8 @@ public class CardDAO {
 		q.setParameter("name", name);
 
 		try {
-			KawaiponCard kc = new KawaiponCard(kp, (Card) q.getSingleResult(), foil);
-			if (kp.getCards().contains(kc)) return kc;
+			if (kp.getCards().stream().anyMatch(k -> k.getCard().getId().equalsIgnoreCase(name) && k.isFoil() == foil))
+				return new KawaiponCard(null, (Card) q.getSingleResult(), foil);
 			else return null;
 		} catch (NoResultException e) {
 			return null;
