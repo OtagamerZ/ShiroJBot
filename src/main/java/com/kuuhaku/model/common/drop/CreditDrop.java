@@ -50,7 +50,7 @@ public class CreditDrop implements Prize {
 				KawaiponDAO.getKawaipon(u.getId()).getCards().size() >= values[2]));
 
 		add(Pair.of("Ter " + values[0] + " Kawaipons de " + anime.toString() + ".", u ->
-				KawaiponDAO.getKawaipon(u.getId()).getCards().stream().filter(k -> k.getAnime().equals(anime)).count() >= values[0]));
+				KawaiponDAO.getKawaipon(u.getId()).getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).count() >= values[0]));
 
 		add(Pair.of("Ser level " + values[3] + " ou maior.", u ->
 				MemberDAO.getMemberByMid(u.getId()).stream().anyMatch(m -> m.getLevel() >= values[3])));

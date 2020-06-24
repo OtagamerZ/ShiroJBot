@@ -23,6 +23,7 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.KawaiponRarity;
 import com.kuuhaku.utils.ShiroInfo;
 import org.apache.commons.io.IOUtils;
+import org.jdesktop.swingx.graphics.BlendComposite;
 
 import javax.imageio.ImageIO;
 import javax.persistence.*;
@@ -76,7 +77,7 @@ public class Card {
 		return imgurId;
 	}
 
-	public BufferedImage getCard() {
+	public BufferedImage drawCard(boolean foil) {
 		try {
 			byte[] cardBytes = ShiroInfo.getCardCache().get(imgurId, () -> IOUtils.toByteArray(Helper.getImage("https://i.imgur.com/" + imgurId + ".jpg")));
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
@@ -87,6 +88,15 @@ public class Card {
 
 				Graphics2D g2d = canvas.createGraphics();
 				g2d.drawImage(card, 10, 10, 225, 350, null);
+
+				if (foil) {
+					g2d.setComposite(BlendComposite.Hue);
+					g2d.drawImage(invert(card), 10, 10, 225, 350, null);
+					g2d.dispose();
+
+					g2d = canvas.createGraphics();
+				}
+
 				g2d.drawImage(frame, 0, 0, null);
 
 				g2d.dispose();
@@ -97,6 +107,21 @@ public class Card {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			return null;
 		}
+	}
+
+	private BufferedImage invert(BufferedImage bi) {
+		BufferedImage out = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_ARGB);
+
+		for (int x = 0; x < bi.getWidth(); x++) {
+			for (int y = 0; y < bi.getHeight(); y++) {
+				int rgb = bi.getRGB(x, y);
+				Color col = new Color(rgb);
+				col = new Color(255 - col.getRed(), 255 - col.getGreen(), 255 - col.getBlue());
+				out.setRGB(x, y, col.getRGB());
+			}
+		}
+
+		return out;
 	}
 
 	@Override
