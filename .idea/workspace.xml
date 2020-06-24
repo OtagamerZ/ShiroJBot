@@ -534,28 +534,7 @@
       <workItem from="1592856527943" duration="1833000" />
       <workItem from="1593000694102" duration="1002000" />
       <workItem from="1593014571951" duration="803000" />
-      <workItem from="1593019294505" duration="9310000" />
-    </task>
-    <task id="LOCAL-01448" summary="Adição de bônus de XP para coleções grandes">
-      <created>1592937899929</created>
-      <option name="number" value="01448" />
-      <option name="presentableId" value="LOCAL-01448" />
-      <option name="project" value="LOCAL" />
-      <updated>1592937899929</updated>
-    </task>
-    <task id="LOCAL-01449" summary="Adição de bônus de XP para coleções grandes">
-      <created>1592938494629</created>
-      <option name="number" value="01449" />
-      <option name="presentableId" value="LOCAL-01449" />
-      <option name="project" value="LOCAL" />
-      <updated>1592938494629</updated>
-    </task>
-    <task id="LOCAL-01450" summary="Adição de bônus de XP para coleções grandes">
-      <created>1592940824508</created>
-      <option name="number" value="01450" />
-      <option name="presentableId" value="LOCAL-01450" />
-      <option name="project" value="LOCAL" />
-      <updated>1592940824508</updated>
+      <workItem from="1593019294505" duration="9860000" />
     </task>
     <task id="LOCAL-01451" summary="Adição de bônus de XP para coleções grandes">
       <created>1592943493096</created>
@@ -879,7 +858,28 @@
       <option name="project" value="LOCAL" />
       <updated>1593028424739</updated>
     </task>
-    <option name="localTasksCounter" value="1497" />
+    <task id="LOCAL-01497" summary="Adição de buff de servidor">
+      <created>1593028619044</created>
+      <option name="number" value="01497" />
+      <option name="presentableId" value="LOCAL-01497" />
+      <option name="project" value="LOCAL" />
+      <updated>1593028619044</updated>
+    </task>
+    <task id="LOCAL-01498" summary="Adição de buff de servidor">
+      <created>1593028699220</created>
+      <option name="number" value="01498" />
+      <option name="presentableId" value="LOCAL-01498" />
+      <option name="project" value="LOCAL" />
+      <updated>1593028699220</updated>
+    </task>
+    <task id="LOCAL-01499" summary="Adição de buff de servidor">
+      <created>1593028828582</created>
+      <option name="number" value="01499" />
+      <option name="presentableId" value="LOCAL-01499" />
+      <option name="project" value="LOCAL" />
+      <updated>1593028828583</updated>
+    </task>
+    <option name="localTasksCounter" value="1500" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1094,12 +1094,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="212" y="177" key="Vcs.Push.Dialog.v2" timestamp="1593028703293">
+    <state x="212" y="177" key="Vcs.Push.Dialog.v2" timestamp="1593028831157">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1591419318874" />
-    <state x="212" y="177" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1593028703293" />
+    <state x="212" y="177" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1593028831157" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1593021538475">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
