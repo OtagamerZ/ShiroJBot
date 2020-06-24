@@ -56,7 +56,7 @@ public class KawaiponBook {
 		cards.sort(Comparator
 				.<KawaiponCard, KawaiponRarity>comparing(k -> k.getCard().getRarity(), Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
 				.thenComparing(k -> k.getCard().getAnime(), Comparator.comparing(AnimeName::toString, String.CASE_INSENSITIVE_ORDER))
-				.thenComparing(k -> k.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
+				.thenComparing(KawaiponCard::getName, String.CASE_INSENSITIVE_ORDER)
 		);
 		List<List<KawaiponCard>> chunks = new ArrayList<>();
 
@@ -84,26 +84,31 @@ public class KawaiponBook {
 			for (int i = 0; i < chunk.size(); i++) {
 				switch (chunk.get(i).getCard().getRarity()) {
 					case COMMON:
-						g2d.setColor(Color.decode("#FFFFFF"));
+						if (chunk.get(i).isFoil()) g2d.setColor(Color.decode("#FFFFFF").brighter());
+						else g2d.setColor(Color.decode("#FFFFFF"));
 						break;
 					case UNCOMMON:
-						g2d.setColor(Color.decode("#03BB85"));
+						if (chunk.get(i).isFoil()) g2d.setColor(Color.decode("#03BB85").brighter());
+						else g2d.setColor(Color.decode("#03BB85"));
 						break;
 					case RARE:
-						g2d.setColor(Color.decode("#70D1F4"));
+						if (chunk.get(i).isFoil()) g2d.setColor(Color.decode("#70D1F4").brighter());
+						else g2d.setColor(Color.decode("#70D1F4"));
 						break;
 					case ULTRA_RARE:
-						g2d.setColor(Color.decode("#9966CC"));
+						if (chunk.get(i).isFoil()) g2d.setColor(Color.decode("#9966CC").brighter());
+						else g2d.setColor(Color.decode("#9966CC"));
 						break;
 					case LEGENDARY:
-						g2d.setColor(Color.decode("#DC9018"));
+						if (chunk.get(i).isFoil()) g2d.setColor(Color.decode("#DC9018").brighter());
+						else g2d.setColor(Color.decode("#DC9018"));
 						break;
 				}
 				g2d.drawImage(chunk.get(i).getCard().drawCard(chunk.get(i).isFoil()), slots[i].x, slots[i].y, 187, 280, null);
 				if (slots[i].y == 134)
-					Profile.printCenteredString(chunk.get(i).getCard().getName(), 187, slots[i].x, 105, g2d);
+					Profile.printCenteredString(chunk.get(i).getName(), 187, slots[i].x, 105, g2d);
 				else
-					Profile.printCenteredString(chunk.get(i).getCard().getName(), 187, slots[i].x, 744, g2d);
+					Profile.printCenteredString(chunk.get(i).getName(), 187, slots[i].x, 744, g2d);
 			}
 
 			g2d.dispose();

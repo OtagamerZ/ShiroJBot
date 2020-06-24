@@ -34,7 +34,7 @@ public class Kawaipon {
 	private String uid = "";
 
 	@OneToMany(mappedBy = "kawaipon", fetch = FetchType.EAGER, orphanRemoval = true)
-	private Set<KawaiponCard> cards = new TreeSet<>(Comparator.comparing(k -> k.getCard().getName(), String.CASE_INSENSITIVE_ORDER));
+	private Set<KawaiponCard> cards = new TreeSet<>(Comparator.comparing(KawaiponCard::getName, String.CASE_INSENSITIVE_ORDER));
 
 	public int getId() {
 		return id;
