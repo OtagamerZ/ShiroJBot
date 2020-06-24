@@ -21,9 +21,12 @@ package com.kuuhaku.model.persistent;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ServerBuff;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.persistence.Column;
@@ -34,6 +37,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "guildconfig")
@@ -148,6 +153,10 @@ public class GuildConfig {
 
 	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
 	private boolean dropEnabled = false;
+
+	//COLLECTIONS
+	@Column(columnDefinition = "TEXT")
+	private String buffs = "";
 
 	public GuildConfig() {
 	}
@@ -506,5 +515,27 @@ public class GuildConfig {
 
 	public boolean isServerMMLocked() {
 		return mmPermissionLock;
+	}
+
+	public List<ServerBuff> getBuffs() {
+		List<ServerBuff> sb = new JSONArray(buffs).toList().stream().map(b -> ShiroInfo.getJSONFactory().create().fromJson((String) b, ServerBuff.class)).collect(Collectors.toList());
+		sb.removeIf(b -> TimeUnit.MILLISECONDS.toDays(b.getAcquiredAt()) > b.getTime());
+		setBuffs(sb);
+		return sb;
+	}
+
+	public boolean addBuff(ServerBuff buff) {
+		List<ServerBuff> sb = getBuffs();
+		boolean exist = sb.stream().anyMatch(buff::equals);
+		if (exist) return false;
+
+		sb.add(buff);
+		setBuffs(sb);
+		return true;
+	}
+
+	public void setBuffs(List<ServerBuff> buffs) {
+		List<String> sb = buffs.stream().map(b -> ShiroInfo.getJSONFactory().create().toJson(b)).collect(Collectors.toList());
+		this.buffs = new JSONArray(sb).toString();
 	}
 }

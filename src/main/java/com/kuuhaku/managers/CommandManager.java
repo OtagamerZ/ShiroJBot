@@ -219,6 +219,9 @@ public class CommandManager {
 			add(new AllowDropsCommand(
 					"habilitardp", new String[]{"enabledp", "hdp", "edp"}, REQ_CHANNEL, getLocale(PT).getString("cmd_allow-drops"), MODERACAO, false
 			));
+			add(new PurchaseBuffCommand(
+					"melhorar", new String[]{"upgrade", "up"}, getLocale(PT).getString("req_type-tier"), getLocale(PT).getString("cmd_purchase-buff"), MODERACAO, false
+			));
 
 			//INFORMATION
 			add(new ComandosCommand(
