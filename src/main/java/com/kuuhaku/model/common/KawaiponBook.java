@@ -78,7 +78,7 @@ public class KawaiponBook {
 			g2d.setBackground(Color.black);
 			g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, 25));
+			g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, 23));
 
 			g2d.drawImage(bg, 0, 0, null);
 			for (int i = 0; i < chunk.size(); i++) {
