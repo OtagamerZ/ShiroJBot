@@ -19,9 +19,8 @@
 package com.kuuhaku.model.persistent;
 
 import javax.persistence.*;
-import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 @Entity
 @Table(name = "kawaipon")
@@ -34,7 +33,7 @@ public class Kawaipon {
 	private String uid = "";
 
 	@OneToMany(mappedBy = "kawaipon")
-	private Set<KawaiponCard> cards = new TreeSet<>(Comparator.comparing(KawaiponCard::getName, String.CASE_INSENSITIVE_ORDER));
+	private Set<KawaiponCard> cards = new HashSet<>();
 
 	public int getId() {
 		return id;
