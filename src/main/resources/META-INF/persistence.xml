@@ -58,8 +58,6 @@
         <class>com.kuuhaku.model.persistent.Blacklist</class>
         <class>com.kuuhaku.model.persistent.Kawaipon</class>
         <class>com.kuuhaku.model.persistent.Card</class>
-        <class>com.kuuhaku.model.persistent.KawaiponCard</class>
-        <class>com.kuuhaku.model.persistent.KawaiponCardId</class>
 
         <properties>
             <!-- dados da conexao -->

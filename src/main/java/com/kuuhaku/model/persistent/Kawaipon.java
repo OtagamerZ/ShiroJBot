@@ -33,7 +33,7 @@ public class Kawaipon {
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
 	private String uid = "";
 
-	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "cards")
+	@ManyToMany(fetch = FetchType.EAGER)
 	private Set<Card> cards = new TreeSet<>(Comparator.comparing(Card::getName, String.CASE_INSENSITIVE_ORDER));
 
 	public String getUid() {
