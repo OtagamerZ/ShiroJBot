@@ -32,16 +32,8 @@ public class Kawaipon {
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
 	private String uid = "";
 
-	@OneToMany(mappedBy = "kawaipon", fetch = FetchType.EAGER)
-	private Set<KawaiponCard> cards = new HashSet<>();
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
+	@ManyToMany(fetch = FetchType.EAGER)
+	private Set<Card> cards = new HashSet<>();
 
 	public String getUid() {
 		return uid;
@@ -51,19 +43,15 @@ public class Kawaipon {
 		this.uid = uid;
 	}
 
-	public Set<KawaiponCard> getCards() {
+	public Set<Card> getCards() {
 		return cards;
 	}
 
 	public void addCard(Card card) {
-		this.cards.add(new KawaiponCard(this, card, false));
+		this.cards.add(card);
 	}
 
-	public void addCard(Card card, boolean foil) {
-		this.cards.add(new KawaiponCard(this, card, foil));
-	}
-
-	public void removeCard(KawaiponCard card) {
-		this.cards.removeIf(k -> k.getCard().getName().equals(card.getCard().getName()) && k.isFoil() == card.isFoil());
+	public void removeCard(Card card) {
+		this.cards.remove(card);
 	}
 }

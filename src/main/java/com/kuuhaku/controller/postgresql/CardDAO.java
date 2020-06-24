@@ -60,7 +60,7 @@ public class CardDAO {
 		Query q = em.createQuery("SELECT COUNT(c) FROM Card c", Long.class);
 
 		try {
-			return ((long) q.getSingleResult()) * 2;
+			return (long) q.getSingleResult();
 		} finally {
 			em.close();
 		}
@@ -73,7 +73,7 @@ public class CardDAO {
 		q.setParameter("anime", anime);
 
 		try {
-			return ((long) q.getSingleResult()) * 2;
+			return (long) q.getSingleResult();
 		} finally {
 			em.close();
 		}
