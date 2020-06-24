@@ -22,7 +22,6 @@ import javax.persistence.*;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "kawaipon")
@@ -53,8 +52,8 @@ public class Kawaipon {
 		this.uid = uid;
 	}
 
-	public Set<Card> getCards() {
-		return cards.stream().map(KawaiponCard::getCard).collect(Collectors.toSet());
+	public Set<KawaiponCard> getCards() {
+		return cards;
 	}
 
 	public void addCard(Card card) {
@@ -65,7 +64,7 @@ public class Kawaipon {
 		this.cards.add(new KawaiponCard(this, card, foil));
 	}
 
-	public void removeCard(Card card) {
-		this.cards.removeIf(k -> k.getCard().equals(card));
+	public void removeCard(KawaiponCard card) {
+		this.cards.remove(card);
 	}
 }

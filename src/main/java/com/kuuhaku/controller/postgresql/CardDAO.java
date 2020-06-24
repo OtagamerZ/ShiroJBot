@@ -19,6 +19,8 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.persistent.Card;
+import com.kuuhaku.model.persistent.Kawaipon;
+import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.AnimeName;
 
 import javax.persistence.EntityManager;
@@ -27,14 +29,16 @@ import javax.persistence.Query;
 import java.util.List;
 
 public class CardDAO {
-	public static Card getCard(String name) {
+	public static KawaiponCard getCard(Kawaipon kp, String name, boolean foil) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Card c WHERE id LIKE UPPER(:name)", Card.class);
+		Query q = em.createQuery("SELECT k FROM KawaiponCard k WHERE kawaipon = :kp AND card.name LIKE UPPER(:name) AND foil = :foil", KawaiponCard.class);
+		q.setParameter("kp", kp);
 		q.setParameter("name", name);
+		q.setParameter("foil", foil);
 
 		try {
-			return (Card) q.getSingleResult();
+			return (KawaiponCard) q.getSingleResult();
 		} catch (NoResultException e) {
 			return null;
 		} finally {
@@ -60,7 +64,7 @@ public class CardDAO {
 		Query q = em.createQuery("SELECT COUNT(c) FROM Card c", Long.class);
 
 		try {
-			return (long) q.getSingleResult();
+			return ((long) q.getSingleResult()) * 2;
 		} finally {
 			em.close();
 		}
@@ -73,7 +77,7 @@ public class CardDAO {
 		q.setParameter("anime", anime);
 
 		try {
-			return (long) q.getSingleResult();
+			return ((long) q.getSingleResult()) * 2;
 		} finally {
 			em.close();
 		}
