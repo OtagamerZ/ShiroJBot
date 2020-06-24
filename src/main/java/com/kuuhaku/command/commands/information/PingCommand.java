@@ -21,10 +21,6 @@ package com.kuuhaku.command.commands.information;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.postgresql.CardDAO;
-import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.model.persistent.CardType;
-import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
@@ -56,13 +52,5 @@ public class PingCommand extends Command {
 				.flatMap(m -> m.editMessage(m.getContentRaw() + "\n:floppy_disk: " + fp + " MB!"))
 				.flatMap(m -> m.editMessage(m.getContentRaw() + "\n:telephone: " + Main.getInfo().getAPI().getEventManager().getRegisteredListeners().size() + ShiroInfo.getLocale(I18n.PT).getString("str_listeners")))
 				.queue();
-
-		if (author.getId().equals("350836145921327115")) {
-			Kawaipon kp = KawaiponDAO.getKawaipon("350836145921327115");
-			CardType c = (CardType) CardDAO.getCard("ICHIGO_KUROSAKI");
-			assert c != null;
-			c.setFoil(true);
-			kp.addCard(c);
-		}
 	}
 }
