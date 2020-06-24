@@ -22,7 +22,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "kawaipon_card_b")
+@Table(name = "kawaipon_card")
 public class KawaiponCard {
 	@EmbeddedId
 	private KawaiponCardId id;
