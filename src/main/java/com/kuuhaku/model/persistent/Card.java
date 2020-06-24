@@ -40,7 +40,6 @@ import java.util.concurrent.ExecutionException;
 @Table(name = "card")
 public class Card {
 	@Id
-	@Column(name = "card_id")
 	private String id;
 
 	@Column(columnDefinition = "VARCHAR(18) DEFAULT ''")
@@ -55,7 +54,7 @@ public class Card {
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
 	private String imgurId = "";
 
-	@OneToMany(mappedBy = "card", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	@OneToMany(mappedBy = "card")
 	private List<KawaiponCard> kawaipons = new ArrayList<>();
 
 	public String getId() {
