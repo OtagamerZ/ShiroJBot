@@ -59,24 +59,24 @@ public class PurchaseBuffCommand extends Command {
 			eb.setTitle(":level_slider: | Melhorias de servidor");
 			eb.setDescription("Melhorias são aplicadas a todos os membros do servidor por um certo período, use-as para oferecer vantagens aos seus membros.");
 			eb.addField("Melhoria de XP (" + prefix + "up xp)",
-					"**Tier 1 (1500 créditos):** `+50% XP ganho`\n" +
-							"**Tier 2 (4000 créditos):** `+100% XP ganho`\n" +
-							"**Tier 3 (10000 créditos)**: `+200% XP ganho`",
+					"**Tier 1** (1500 créditos): `+50% XP ganho`\n" +
+							"**Tier 2** (4000 créditos): `+100% XP ganho`\n" +
+							"**Tier 3** (10000 créditos): `+200% XP ganho`",
 					false);
 			eb.addField("Melhoria de cartas (" + prefix + "up carta)",
-					"**Tier 1 (1000 créditos):** `+20% chance de aparecer cartas`\n" +
-							"**Tier 2 (3000 créditos):** `+30% chance de aparecer cartas`\n" +
-							"**Tier 3 (5000 créditos):** `+40% chance de aparecer cartas`",
+					"**Tier 1** (1000 créditos): `+20% chance de aparecer cartas`\n" +
+							"**Tier 2** (3000 créditos): `+30% chance de aparecer cartas`\n" +
+							"**Tier 3** (5000 créditos): `+40% chance de aparecer cartas`",
 					false);
 			eb.addField("Melhoria de drops (" + prefix + "up drop)",
-					"**Tier 1 (1250 créditos):** `+20% chance de aparecer drops`\n" +
-							"**Tier 2 (2750 créditos):** `+30% chance de aparecer drops`\n" +
-							"**Tier 3 (6000 créditos):** `+40% chance de aparecer drops`",
+					"**Tier 1** (1250 créditos): `+20% chance de aparecer drops`\n" +
+							"**Tier 2** (2750 créditos): `+30% chance de aparecer drops`\n" +
+							"**Tier 3** (6000 créditos): `+40% chance de aparecer drops`",
 					false);
 			eb.addField("Melhoria de cartas cromadas (" + prefix + "up cromo)",
-					"**Tier 1 (5000 créditos):** `+20% chance de aparecer cartas cromadas`\n" +
-							"**Tier 2 (8000 créditos):** `+50% chance de aparecer cartas cromadas`\n" +
-							"**Tier 3 (12000 créditos)**: `+100% chance de aparecer cartas cromadas`",
+					"**Tier 1** (5000 créditos): `+20% chance de aparecer cartas cromadas`\n" +
+							"**Tier 2** (8000 créditos): `+50% chance de aparecer cartas cromadas`\n" +
+							"**Tier 3** (12000 créditos): `+100% chance de aparecer cartas cromadas`",
 					false);
 
 			channel.sendMessage(eb.build()).queue();
