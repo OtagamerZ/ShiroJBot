@@ -22,7 +22,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "kawaipon_card")
+@Table(name = "kawaipon_card_b")
 public class KawaiponCard {
 	@EmbeddedId
 	private KawaiponCardId id;
@@ -39,7 +39,6 @@ public class KawaiponCard {
 	private boolean foil;
 
 	public KawaiponCard(Kawaipon k, Card c, boolean foil) {
-		this.kawaipon = k;
 		this.card = c;
 		this.foil = foil;
 	}
@@ -84,14 +83,11 @@ public class KawaiponCard {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		KawaiponCard that = (KawaiponCard) o;
-		return foil == that.foil &&
-				Objects.equals(id, that.id) &&
-				Objects.equals(kawaipon, that.kawaipon) &&
-				Objects.equals(card, that.card);
+		return foil == that.foil && Objects.equals(card, that.card);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, kawaipon, card, foil);
+		return Objects.hash(card, foil);
 	}
 }
