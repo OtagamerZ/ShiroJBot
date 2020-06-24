@@ -87,7 +87,8 @@ public class KawaiponCard {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		KawaiponCard that = (KawaiponCard) o;
-		return foil == that.foil && Objects.equals(card, that.card);
+		return foil == that.foil &&
+				Objects.equals(card, that.card);
 	}
 
 	@Override
