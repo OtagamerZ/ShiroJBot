@@ -30,7 +30,7 @@ public class CardDAO {
 	public static Card getCard(String name) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Card c WHERE id LIKE UPPER(:name)", Card.class);
+		Query q = em.createQuery("SELECT c FROM Card c WHERE id LIKE UPPER(:name) AND rarity <> 'ULTIMATE'", Card.class);
 		q.setParameter("name", name);
 
 		try {
@@ -42,11 +42,21 @@ public class CardDAO {
 		}
 	}
 
+	public static Card getUltimate(AnimeName anime) {
+		EntityManager em = Manager.getEntityManager();
+
+		try {
+			return em.find(Card.class, anime.name());
+		} finally {
+			em.close();
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	public static List<Card> getCards() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Card c", Card.class);
+		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity <> 'ULTIMATE'", Card.class);
 		List<Card> c = (List<Card>) q.getResultList();
 
 		em.close();
@@ -57,7 +67,7 @@ public class CardDAO {
 	public static long totalCards() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT COUNT(c) FROM Card c", Long.class);
+		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity <> 'ULTIMATE'", Long.class);
 
 		try {
 			return ((long) q.getSingleResult()) * 2;
@@ -69,7 +79,7 @@ public class CardDAO {
 	public static long animeCount(AnimeName anime) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE anime = :anime", Long.class);
+		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE anime = :anime AND rarity <> 'ULTIMATE'", Long.class);
 		q.setParameter("anime", anime);
 
 		try {
