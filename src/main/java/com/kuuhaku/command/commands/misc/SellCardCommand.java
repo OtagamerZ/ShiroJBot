@@ -73,9 +73,9 @@ public class SellCardCommand extends Command {
 			return;
 		}
 
-		KawaiponCard card = new KawaiponCard(c, foil);
+		KawaiponCard card = kp.getCard(c, foil);
 
-		if (!kp.getCards().contains(card)) {
+		if (card == null || !kp.getCards().contains(card)) {
 			channel.sendMessage(":x: | Você não pode trocar uma carta que não possui!").queue();
 			return;
 		}
