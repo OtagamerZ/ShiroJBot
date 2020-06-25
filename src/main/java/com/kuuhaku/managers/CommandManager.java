@@ -352,6 +352,12 @@ public class CommandManager {
 			add(new TradeCardCommand(
 					"trocar", new String[]{"trade"}, getLocale(PT).getString("req_user-card-amount"), getLocale(PT).getString("cmd_trade-card"), MISC, true
 			));
+			add(new BuyCardCommand(
+					"comprar", new String[]{"buy"}, getLocale(PT).getString("req_id"), getLocale(PT).getString("cmd_buy-card"), MISC, true
+			));
+			add(new SellCardCommand(
+					"anunciar", new String[]{"sell"}, getLocale(PT).getString("req_card-price-type"), getLocale(PT).getString("cmd_sell-card"), MISC, true
+			));
 
 			//FUN
 			add(new SadButTrueCommand(
