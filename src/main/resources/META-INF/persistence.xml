@@ -59,6 +59,7 @@
         <class>com.kuuhaku.model.persistent.Kawaipon</class>
         <class>com.kuuhaku.model.persistent.Card</class>
         <class>com.kuuhaku.model.persistent.KawaiponCard</class>
+        <class>com.kuuhaku.model.persistent.CardMarket</class>
 
         <properties>
             <!-- dados da conexao -->
