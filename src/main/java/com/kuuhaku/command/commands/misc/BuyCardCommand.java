@@ -92,7 +92,10 @@ public class BuyCardCommand extends Command {
 				pages.add(new Page(PageType.EMBED, eb.build()));
 			}
 
-			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5));
+			if (pages.size() == 0) {
+				channel.sendMessage("Ainda não há nenhuma carta anunciada.").queue();
+			} else
+				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5));
 			return;
 		} else if (!StringUtils.isNumeric(args[0])) {
 			channel.sendMessage(":x: | O ID precisa ser um valor inteiro.").queue();
