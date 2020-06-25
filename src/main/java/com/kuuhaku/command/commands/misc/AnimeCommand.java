@@ -152,7 +152,7 @@ public class AnimeCommand extends Command {
 				channel.sendMessage(eb.build()).queue();
 			} catch (IOException e) {
 				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_anime-not-found")).queue();
-				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				Helper.logger(this.getClass()).debug(e + " | " + e.getStackTrace()[0]);
 			}
 		});
 	}
