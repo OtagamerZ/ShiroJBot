@@ -43,6 +43,10 @@ public class Kawaipon {
 		this.uid = uid;
 	}
 
+	public KawaiponCard getCard(Card card, boolean foil) {
+		return cards.stream().filter(k -> k.getCard().equals(card) && k.isFoil() == foil).findFirst().orElse(null);
+	}
+
 	public Set<KawaiponCard> getCards() {
 		return cards;
 	}
