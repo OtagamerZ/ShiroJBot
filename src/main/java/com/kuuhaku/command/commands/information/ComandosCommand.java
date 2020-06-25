@@ -120,10 +120,11 @@ public class ComandosCommand extends Command {
 			ceb.setFooter(Main.getInfo().getFullName(), null);
 			ceb.setThumbnail(Objects.requireNonNull(Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById("684039810079522846")).getImageUrl()));
 
-			ceb.addField(Helper.VOID, ShiroInfo.getLocale(I18n.PT).getString("str_quick-emote-tip"), false);
+			ceb.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_quick-emote-tip"), prefix), false);
 			ceb.addField(Helper.VOID, ShiroInfo.getLocale(I18n.PT).getString("str_pagination-tip"), false);
 			ceb.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_waifu-tip"), prefix), false);
 			ceb.addField(Helper.VOID, ShiroInfo.getLocale(I18n.PT).getString("str_exceed-tip"), false);
+			ceb.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_kawaipon-tip"), prefix), false);
 
 			pages.put("684039810079522846", new Page(PageType.EMBED, ceb.build()));
 
