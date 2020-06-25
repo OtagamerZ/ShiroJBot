@@ -26,6 +26,12 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/KawaiponsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/KawaiponsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaipon/death_note.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaipon/download (1).gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaipon/elfen_lied.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaipon/no_game_no_life.jpg" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -196,12 +202,10 @@
       <recent name="com.kuuhaku.command.commands.information.ComandosCommand" />
       <recent name="com.kuuhaku.command.commands.information.BotInfoCommand" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\icons" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\kawaipon\cards" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\kawaipon" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\kawaipon\frames" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shirocryptor" />
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.kuuhaku.command.commands.moderation" />
@@ -210,10 +214,12 @@
       <recent name="com.kuuhaku.command.commands.fun" />
       <recent name="com.kuuhaku.controller.postgresql" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\kawaipon" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\icons" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\kawaipon\cards" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\kawaipon\frames" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shirocryptor" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -533,21 +539,8 @@
       <workItem from="1592856527943" duration="1833000" />
       <workItem from="1593000694102" duration="1002000" />
       <workItem from="1593014571951" duration="803000" />
-      <workItem from="1593019294505" duration="11767000" />
-    </task>
-    <task id="LOCAL-01453" summary="Adição de bônus de XP para coleções grandes">
-      <created>1592943894570</created>
-      <option name="number" value="01453" />
-      <option name="presentableId" value="LOCAL-01453" />
-      <option name="project" value="LOCAL" />
-      <updated>1592943894570</updated>
-    </task>
-    <task id="LOCAL-01454" summary="Adição de bônus de XP para coleções grandes">
-      <created>1592944068799</created>
-      <option name="number" value="01454" />
-      <option name="presentableId" value="LOCAL-01454" />
-      <option name="project" value="LOCAL" />
-      <updated>1592944068799</updated>
+      <workItem from="1593019294505" duration="11902000" />
+      <workItem from="1593086447294" duration="3592000" />
     </task>
     <task id="LOCAL-01455" summary="Adição de bônus de XP para coleções grandes">
       <created>1592944316219</created>
@@ -878,7 +871,21 @@
       <option name="project" value="LOCAL" />
       <updated>1593029287546</updated>
     </task>
-    <option name="localTasksCounter" value="1502" />
+    <task id="LOCAL-01502" summary="Adição de buff de servidor">
+      <created>1593031416436</created>
+      <option name="number" value="01502" />
+      <option name="presentableId" value="LOCAL-01502" />
+      <option name="project" value="LOCAL" />
+      <updated>1593031416436</updated>
+    </task>
+    <task id="LOCAL-01503" summary="Adição de buff de servidor">
+      <created>1593031508656</created>
+      <option name="number" value="01503" />
+      <option name="presentableId" value="LOCAL-01503" />
+      <option name="project" value="LOCAL" />
+      <updated>1593031508656</updated>
+    </task>
+    <option name="localTasksCounter" value="1504" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -996,21 +1003,17 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1591971961189" />
-    <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog" timestamp="1584390087569">
-      <screen x="0" y="0" width="1680" height="1010" />
-    </state>
-    <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1584390087569" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1589918441111">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1593031505344">
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1593091169923">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1591419311134" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1593031505344" />
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1593091169923" />
     <state width="247" height="195" key="DatabaseViewActions_Filter" timestamp="1591416926427">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -1093,12 +1096,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="212" y="177" key="Vcs.Push.Dialog.v2" timestamp="1593031420931">
+    <state x="212" y="177" key="Vcs.Push.Dialog.v2" timestamp="1593031509694">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1591419318874" />
-    <state x="212" y="177" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1593031420931" />
+    <state x="212" y="177" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1593031509694" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1593021538475">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1134,12 +1137,12 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="448" y="274" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1591972151389" />
-    <state x="512" y="178" width="790" height="658" key="find.popup" timestamp="1593022484917">
+    <state x="512" y="178" width="790" height="658" key="find.popup" timestamp="1593090520047">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="362" y="127" width="643" height="536" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1585937546544" />
     <state x="362" y="134" width="774" height="562" key="find.popup/0.0.1366.768@0.0.1366.768" timestamp="1588044108124" />
-    <state x="512" y="178" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1593022484917" />
+    <state x="512" y="178" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1593090520047" />
     <state x="409" y="157" key="git4idea.merge.GitPullDialog" timestamp="1586743041255">
       <screen x="0" y="0" width="1366" height="768" />
     </state>

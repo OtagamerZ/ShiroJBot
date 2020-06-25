@@ -24,6 +24,8 @@ import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.common.KawaiponBook;
 import com.kuuhaku.model.persistent.Kawaipon;
+import com.kuuhaku.model.persistent.KawaiponCard;
+import com.kuuhaku.utils.AnimeName;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
@@ -35,6 +37,7 @@ import org.jetbrains.annotations.NonNls;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 public class KawaiponsCommand extends Command {
 
@@ -65,7 +68,13 @@ public class KawaiponsCommand extends Command {
 					return;
 				}
 
-				KawaiponBook kb = new KawaiponBook(kp.getCards());
+				Set<KawaiponCard> collection = kp.getCards();
+				for (AnimeName anime : AnimeName.values()) {
+					if (CardDAO.animeCount(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).count())
+						collection.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
+				}
+
+				KawaiponBook kb = new KawaiponBook(collection);
 				List<BufferedImage> cards = kb.view();
 				int page;
 				if (args.length < 1) page = 0;
