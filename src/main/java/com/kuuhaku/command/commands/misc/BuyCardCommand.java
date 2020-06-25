@@ -135,6 +135,12 @@ public class BuyCardCommand extends Command {
 		cm.setBuyer(author.getId());
 		CardMarketDAO.saveCard(cm);
 
+		User sellerU = Main.getInfo().getUserByID(cm.getSeller());
+		User buyerU = Main.getInfo().getUserByID(cm.getBuyer());
+		if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
+						c.sendMessage(":white_check_mark: | Sua carta `" + cm.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + cm.getPrice() + " créditos.").queue(),
+				Helper::doNothing
+		);
 		channel.sendMessage(":white_check_mark: | Carta comprada com sucesso!").queue();
 	}
 }
