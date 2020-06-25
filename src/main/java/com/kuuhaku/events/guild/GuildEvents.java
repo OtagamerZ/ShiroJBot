@@ -270,7 +270,7 @@ public class GuildEvents extends ListenerAdapter {
 		if (h.size() >= GuildDAO.getGuildById(guild.getId()).getNoSpamAmount() && Helper.hasRoleHigherThan(guild.getSelfMember(), member)) {
 			((TextChannel) channel).deleteMessagesByIds(h.stream().map(Message::getId).collect(Collectors.toList())).queue(null, Helper::doNothing);
 			channel.sendMessage(":warning: | Opa, sem spam meu amigo!").queue(
-					msg -> msg.delete().queueAfter(20, TimeUnit.SECONDS)
+					msg -> msg.delete().queueAfter(20, TimeUnit.SECONDS, null, Helper::doNothing)
 			);
 			try {
 				Role r = guild.getRoleById(GuildDAO.getGuildById(guild.getId()).getCargoWarn());
