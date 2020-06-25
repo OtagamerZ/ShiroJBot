@@ -101,7 +101,7 @@ public class TradeCardCommand extends Command {
 				return;
 			}
 
-			int min = (5 - tc.getRarity().getIndex()) * 125 * (foil ? 2 : 1);
+			int min = tc.getRarity().getIndex() * 125 * (foil ? 2 : 1);
 
 			if (price < min) {
 				channel.sendMessage(":x: | Você não pode oferecer menos que " + min + " créditos por essa carta.").queue();
