@@ -182,8 +182,8 @@ public class PollCommand extends Command {
 
 		eb.setAuthor("A enquete feita por " + member.getEffectiveName() + " foi encerrada!");
 		eb.setTitle("Enquete: (" + (NOVOTE ? "nenhum voto" : (pos + neg) + " votos") + ")");
-		eb.addField("Aprovação: ", NOVOTE ? "0.0%" : Helper.round(Helper.prcnt(pos, (pos + neg)), 1) + "%", true);
-		eb.addField("Reprovação: ", NOVOTE ? "0.0%" : Helper.round(Helper.prcnt(neg, (pos + neg)), 1) + "%", true);
+		eb.addField("Aprovação: ", NOVOTE ? "0.0%" : Helper.round(Helper.prcnt(pos, (pos + neg), 0), 1) + "%", true);
+		eb.addField("Reprovação: ", NOVOTE ? "0.0%" : Helper.round(Helper.prcnt(neg, (pos + neg), 0), 1) + "%", true);
 
 		msg.editMessage(eb.build()).queue();
 		member.getUser().openPrivateChannel().queue(c -> c.sendMessage(eb.setAuthor("Sua enquete foi encerrada!").build()).queue());
@@ -210,7 +210,7 @@ public class PollCommand extends Command {
 		eb.addBlankField(false);
 
 		boolean finalNOVOTE = NOVOTE;
-		votes.forEach((k, v) -> eb.addField(k + " | " + (finalNOVOTE ? "0.0%" : Helper.round(Helper.prcnt(v, totalVotes), 1) + "%"), Helper.VOID, true));
+		votes.forEach((k, v) -> eb.addField(k + " | " + (finalNOVOTE ? "0.0%" : Helper.round(Helper.prcnt(v, totalVotes, 0), 1) + "%"), Helper.VOID, true));
 
 		msg.editMessage(eb.build()).queue();
 		member.getUser().openPrivateChannel().queue(c -> c.sendMessage(eb.setAuthor("Sua enquete foi encerrada!").build()).queue());
