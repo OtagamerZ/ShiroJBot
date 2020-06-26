@@ -64,6 +64,19 @@ public class CardDAO {
 		return c;
 	}
 
+	@SuppressWarnings("unchecked")
+	public static List<Card> getCardsByAnime(AnimeName anime) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity <> 'ULTIMATE' AND anime = :anime", Card.class);
+		q.setParameter("anime", anime);
+		List<Card> c = (List<Card>) q.getResultList();
+
+		em.close();
+
+		return c;
+	}
+
 	public static long totalCards() {
 		EntityManager em = Manager.getEntityManager();
 
