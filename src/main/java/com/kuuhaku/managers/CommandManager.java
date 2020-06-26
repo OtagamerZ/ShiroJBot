@@ -358,6 +358,12 @@ public class CommandManager {
 			add(new SellCardCommand(
 					"anunciar", new String[]{"sell"}, getLocale(PT).getString("req_card-price-type"), getLocale(PT).getString("cmd_sell-card"), MISC, true
 			));
+			add(new PseudoNameCommand(
+					"pseudonimo", new String[]{"pnome", "pname"}, getLocale(PT).getString("req_name"), getLocale(PT).getString("cmd_pseudo-name"), MISC, true
+			));
+			add(new PseudoAvatarCommand(
+					"pseudoavatar", new String[]{"pavatar"}, REQ_LINK, getLocale(PT).getString("cmd_pseudo-avatar"), MISC, true
+			));
 
 			//FUN
 			add(new SadButTrueCommand(
