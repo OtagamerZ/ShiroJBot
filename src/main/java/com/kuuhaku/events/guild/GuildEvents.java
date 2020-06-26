@@ -68,10 +68,10 @@ public class GuildEvents extends ListenerAdapter {
 			String prefix = "";
 			if (!Main.getInfo().isDev()) {
 				try {
-					prefix = GuildDAO.getGuildById(guild.getId()).getPrefix();
+					prefix = GuildDAO.getGuildById(guild.getId()).getPrefix().toLowerCase();
 				} catch (NoResultException | NullPointerException ignore) {
 				}
-			} else prefix = Main.getInfo().getDefaultPrefix();
+			} else prefix = Main.getInfo().getDefaultPrefix().toLowerCase();
 
 			if (rawMessage.startsWith(";") && Main.getInfo().getDevelopers().contains(author.getId())) {
 				try {
