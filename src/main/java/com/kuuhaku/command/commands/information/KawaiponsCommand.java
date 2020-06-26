@@ -93,10 +93,14 @@ public class KawaiponsCommand extends Command {
 				}
 
 				EmbedBuilder eb = new EmbedBuilder();
+				int foil = (int) kp.getCards().stream().filter(KawaiponCard::isFoil).count();
+				int common = kp.getCards().size() - foil;
 
 				eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName() + " (página " + (page + 1) + ")");
+				eb.addField(":red_envelope: | Cartas comuns:", common + " de " + CardDAO.totalCards() + " (" + (common * 100 / CardDAO.totalCards()) + "%)", true);
+				eb.addField(":star2: | Cartas cromadas:", foil + " de " + CardDAO.totalCards() + " (" + (foil * 100 / CardDAO.totalCards()) + "%)", true);
 				eb.setImage("attachment://page.jpg");
-				eb.setFooter("Coletado: " + kp.getCards().size() + " de " + CardDAO.totalCards());
+				eb.setFooter("Coletado: " + (kp.getCards().size() * 100 / (CardDAO.totalCards() * 2)) + "%");
 
 				m.delete().queue();
 				channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards.get(page)), "page.jpg").queue();
