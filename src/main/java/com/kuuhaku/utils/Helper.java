@@ -427,9 +427,10 @@ public class Helper {
 			TextChannel channel = g.getTextChannelById(jo.getString("canalId"));
 
 			if (channel == null) {
-				if (k.equals("gatekeeper")) ja.remove("gatekeeper");
-				else ja.remove(jo.getString("canalId"));
-				gc.setButtonConfigs(ja);
+				JSONObject newJa = new JSONObject(ja.toString());
+				if (k.equals("gatekeeper")) newJa.remove("gatekeeper");
+				else newJa.remove(jo.getString("canalId"));
+				gc.setButtonConfigs(newJa);
 				GuildDAO.updateGuildSettings(gc);
 			} else try {
 				Message msg = channel.retrieveMessageById(jo.getString("msgId")).submit().get();
@@ -453,9 +454,10 @@ public class Helper {
 					Pages.buttonize(msg, buttons, true);
 				}
 			} catch (NullPointerException | ErrorResponseException | InterruptedException | ExecutionException e) {
-				if (k.equals("gatekeeper")) ja.remove("gatekeeper");
-				else ja.remove(jo.getString("canalId"));
-				gc.setButtonConfigs(ja);
+				JSONObject newJa = new JSONObject(ja.toString());
+				if (k.equals("gatekeeper")) newJa.remove("gatekeeper");
+				else newJa.remove(jo.getString("canalId"));
+				gc.setButtonConfigs(newJa);
 				GuildDAO.updateGuildSettings(gc);
 			}
 		});
