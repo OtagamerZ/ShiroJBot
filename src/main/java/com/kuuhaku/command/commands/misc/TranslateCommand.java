@@ -61,7 +61,7 @@ public class TranslateCommand extends Command {
 		try {
 			channel.sendMessage("**Traduzido de " + fromTo[0] + " para " + fromTo[1] + "**\n" + Tradutor.translate(fromTo[0], fromTo[1], text)).queue();
 		} catch (IOException e) {
-			e.printStackTrace();
+			channel.sendMessage(":x: | Uma das duas linguagens é inválida, a lista completa de linguagens suportadas pode ser encontrada no link abaixo.\nhttps://tech.yandex.com/translate/doc/dg/concepts/api-overview-docpage/").queue();
 		}
 	}
 }
