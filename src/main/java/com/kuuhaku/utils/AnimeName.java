@@ -29,7 +29,8 @@ public enum AnimeName {
 	DEATH_NOTE,
 	ELFEN_LIED,
 	JOJO_BIZARRE_ADVENTURES,
-	PROJECT_VOCALOID;
+	PROJECT_VOCALOID,
+	ANGEL_BEATS;
 
 	@Override
 	public String toString() {
