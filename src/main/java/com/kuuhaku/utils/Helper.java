@@ -516,7 +516,7 @@ public class Helper {
 				});
 
 				Pages.buttonize(msg, buttons, false);
-			});
+			}, Helper::doNothing);
 		});
 	}
 
