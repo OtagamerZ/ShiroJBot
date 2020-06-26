@@ -543,14 +543,7 @@
       <workItem from="1593192549046" duration="1029000" />
       <workItem from="1593198022695" duration="2745000" />
       <workItem from="1593200831051" duration="79000" />
-      <workItem from="1593201140802" duration="2920000" />
-    </task>
-    <task id="LOCAL-01483" summary="Reversão de updates">
-      <created>1593019055023</created>
-      <option name="number" value="01483" />
-      <option name="presentableId" value="LOCAL-01483" />
-      <option name="project" value="LOCAL" />
-      <updated>1593019055023</updated>
+      <workItem from="1593201140802" duration="3288000" />
     </task>
     <task id="LOCAL-01484" summary="Reversão de updates">
       <created>1593019095173</created>
@@ -888,7 +881,14 @@
       <option name="project" value="LOCAL" />
       <updated>1593203932530</updated>
     </task>
-    <option name="localTasksCounter" value="1532" />
+    <task id="LOCAL-01532" summary="Adição do comando RemainingCardsCommand">
+      <created>1593204094004</created>
+      <option name="number" value="01532" />
+      <option name="presentableId" value="LOCAL-01532" />
+      <option name="project" value="LOCAL" />
+      <updated>1593204094004</updated>
+    </task>
+    <option name="localTasksCounter" value="1533" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1011,12 +1011,12 @@
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1593204072229">
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1593204091169">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1591419311134" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1593204072229" />
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1593204091169" />
     <state width="247" height="195" key="DatabaseViewActions_Filter" timestamp="1591416926427">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -1099,12 +1099,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="212" y="177" key="Vcs.Push.Dialog.v2" timestamp="1593203936102">
+    <state x="212" y="177" key="Vcs.Push.Dialog.v2" timestamp="1593204097969">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1591419318874" />
-    <state x="212" y="177" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1593203936102" />
+    <state x="212" y="177" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1593204097969" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1593021538475">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1140,12 +1140,12 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="448" y="274" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1591972151389" />
-    <state x="429" y="175" width="790" height="658" key="find.popup" timestamp="1593204063037">
+    <state x="429" y="175" width="790" height="658" key="find.popup" timestamp="1593204416284">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="362" y="127" width="643" height="536" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1585937546544" />
     <state x="362" y="134" width="774" height="562" key="find.popup/0.0.1366.768@0.0.1366.768" timestamp="1588044108124" />
-    <state x="429" y="175" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1593204063037" />
+    <state x="429" y="175" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1593204416284" />
     <state x="409" y="157" key="git4idea.merge.GitPullDialog" timestamp="1586743041255">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
