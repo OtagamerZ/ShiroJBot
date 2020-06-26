@@ -31,13 +31,13 @@ public class Log {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String guildId = "";
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String usr = "";
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String guild = "";
 
 	@Column(columnDefinition = "TEXT")

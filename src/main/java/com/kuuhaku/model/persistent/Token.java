@@ -27,19 +27,19 @@ public class Token {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String uid = "";
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String token = "";
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String holder = "";
 
-	@Column(columnDefinition = "INT DEFAULT 0")
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int calls = 0;
 
-	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean disabled = false;
 
 	public Token(String token, String holder, String uid) {

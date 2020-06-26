@@ -31,7 +31,7 @@ public class KawaiponCard {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Card card;
 
-	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean foil = false;
 
 	public KawaiponCard(Card card, boolean foil) {

@@ -427,21 +427,19 @@ public class Helper {
 			TextChannel channel = g.getTextChannelById(jo.getString("canalId"));
 
 			if (channel == null) {
-				ja.remove(jo.getString("canalId"));
+				if (k.equals("gatekeeper")) ja.remove("gatekeeper");
+				else ja.remove(jo.getString("canalId"));
 				gc.setButtonConfigs(ja);
 				GuildDAO.updateGuildSettings(gc);
 			} else try {
-				if (k.equals("gatekeeper")) {
-					Message msg = channel.retrieveMessageById(jo.getString("msgId")).submit().get();
-					resolveButton(g, jo, buttons);
+				Message msg = channel.retrieveMessageById(jo.getString("msgId")).submit().get();
+				resolveButton(g, jo, buttons);
 
+				if (k.equals("gatekeeper")) {
 					buttons.put("\uD83D\uDEAA", (m, v) -> m.kick("Não aceitou as regras.").queue(null, Helper::doNothing));
 
 					Pages.buttonize(msg, buttons, false);
 				} else {
-					Message msg = channel.retrieveMessageById(jo.getString("msgId")).submit().get();
-					resolveButton(g, jo, buttons);
-
 					buttons.put(CANCEL, (m, ms) -> {
 						if (m.getUser().getId().equals(jo.getString("author"))) {
 							JSONObject gcjo = gc.getButtonConfigs();
@@ -455,7 +453,10 @@ public class Helper {
 					Pages.buttonize(msg, buttons, true);
 				}
 			} catch (NullPointerException | ErrorResponseException | InterruptedException | ExecutionException e) {
-				Helper.logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
+				if (k.equals("gatekeeper")) ja.remove("gatekeeper");
+				else ja.remove(jo.getString("canalId"));
+				gc.setButtonConfigs(ja);
+				GuildDAO.updateGuildSettings(gc);
 			}
 		});
 	}
