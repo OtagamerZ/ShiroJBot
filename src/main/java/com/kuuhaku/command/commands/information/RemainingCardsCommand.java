@@ -82,7 +82,7 @@ public class RemainingCardsCommand extends Command {
 				sb.append(c.getRarity().getEmote()).append(" | ").append(c.getName()).append("\n");
 		});
 
-		eb.addField("Cartas:", sb.toString(), false);
+		eb.setDescription(sb.toString());
 		eb.setColor(Helper.getRandomColor());
 
 		channel.sendMessage(eb.build()).queue();
