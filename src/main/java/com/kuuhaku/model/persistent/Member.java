@@ -50,12 +50,19 @@ public class Member {
 	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
 	private String sid = "";
 
+	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	private String pseudoName = "";
+
+
 	//TEXTS
 	@Column(columnDefinition = "TEXT")
 	private String bg = "https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg";
 
 	@Column(columnDefinition = "TEXT")
 	private String bio = "";
+
+	@Column(columnDefinition = "TEXT")
+	private String pseudoAvatar = "";
 
 	//NUMBERS
 	@Column(columnDefinition = "INT DEFAULT 0")
@@ -222,6 +229,22 @@ public class Member {
 
 	public void setSid(String sid) {
 		this.sid = sid;
+	}
+
+	public String getPseudoName() {
+		return pseudoName;
+	}
+
+	public void setPseudoName(String pseudoName) {
+		this.pseudoName = pseudoName;
+	}
+
+	public String getPseudoAvatar() {
+		return pseudoAvatar;
+	}
+
+	public void setPseudoAvatar(String pseudoAvatar) {
+		this.pseudoAvatar = pseudoAvatar;
 	}
 
 	public int getLocalRank() {
