@@ -765,6 +765,10 @@ public class Helper {
 		return new BigDecimal((value * 100) / max).setScale(round, RoundingMode.HALF_EVEN).floatValue();
 	}
 
+	public static int prcntToInt(float value, float max) {
+		return Math.round((value * 100) / max);
+	}
+
 	public static boolean checkPermissions(User author, Member member, Message message, MessageChannel channel, Guild guild, String prefix, String rawMsgNoPrefix, String[] args, Command command) {
 		if (command.getCategory() == Category.NSFW && !((TextChannel) channel).isNSFW()) {
 			try {
