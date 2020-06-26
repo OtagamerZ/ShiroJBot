@@ -70,7 +70,7 @@ public class CardDAO {
 		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity <> 'ULTIMATE'", Long.class);
 
 		try {
-			return ((long) q.getSingleResult()) * 2;
+			return (long) q.getSingleResult();
 		} finally {
 			em.close();
 		}
