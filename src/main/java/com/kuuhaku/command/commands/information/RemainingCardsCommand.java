@@ -72,7 +72,7 @@ public class RemainingCardsCommand extends Command {
 		EmbedBuilder eb = new EmbedBuilder();
 
 		eb.setTitle(":flower_playing_cards: | Cartas coletadas de " + anime.toString());
-		eb.addField("Progresso:", collected.size() + " de " + cards.size() + " (" + (Helper.prcnt(collected.size(), cards.size(), 0)) + ")", false);
+		eb.addField("Progresso:", collected.size() + " de " + cards.size() + " (" + (Helper.prcntToInt(collected.size(), cards.size())) + "%)", false);
 
 		StringBuilder sb = new StringBuilder();
 		cards.forEach(c -> {
