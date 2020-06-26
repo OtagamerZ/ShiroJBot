@@ -30,16 +30,16 @@ public class CustomAnswers {
     @Column(columnDefinition = "BIGINT")
     private final long id = System.currentTimeMillis();
 
-    @Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+    @Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
     private String guildID = "";
 
-    @Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+    @Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
     private String gatilho = "";
 
     @Column(columnDefinition = "TEXT")
     private String answer = "";
 
-    @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+    @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
     private boolean markForDelete = false;
 
     public CustomAnswers() {

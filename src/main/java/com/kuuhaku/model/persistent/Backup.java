@@ -50,10 +50,10 @@ public class Backup {
 	@Column(columnDefinition = "LONGTEXT")
 	private String serverData = "";
 
-	@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
 	private Timestamp lastRestored = Timestamp.from(Instant.now());
 
-	@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
 	private Timestamp lastBackup = Timestamp.from(Instant.now());
 
 	public int getId() {

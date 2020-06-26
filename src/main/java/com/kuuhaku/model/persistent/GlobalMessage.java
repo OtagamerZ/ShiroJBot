@@ -29,13 +29,13 @@ public class GlobalMessage {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String userId = "";
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String name = "";
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String avatar = "";
 
 	@Column(columnDefinition = "TEXT")

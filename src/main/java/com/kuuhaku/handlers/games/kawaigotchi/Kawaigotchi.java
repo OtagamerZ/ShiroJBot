@@ -65,10 +65,10 @@ public class Kawaigotchi {
 	}
 
 	@Id
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String userId;
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String name;
 
 	@Enumerated(EnumType.ORDINAL)
@@ -86,25 +86,25 @@ public class Kawaigotchi {
 	@Enumerated(EnumType.ORDINAL)
 	private Tier tier = Tier.CHILD;
 
-	@Column(columnDefinition = "FLOAT DEFAULT 100")
+	@Column(columnDefinition = "FLOAT NOT NULL DEFAULT 100")
 	private float hunger = 100;
 
-	@Column(columnDefinition = "FLOAT DEFAULT 100")
+	@Column(columnDefinition = "FLOAT NOT NULL DEFAULT 100")
 	private float health = 100;
 
 	@Column(columnDefinition = "FLOAT")
 	private float mood = (int) (50 * nature.getKindness());
 
-	@Column(columnDefinition = "FLOAT DEFAULT 100")
+	@Column(columnDefinition = "FLOAT NOT NULL DEFAULT 100")
 	private float energy = 100;
 
-	@Column(columnDefinition = "FLOAT DEFAULT 0")
+	@Column(columnDefinition = "FLOAT NOT NULL DEFAULT 0")
 	private float xp = 0;
 
 	@Column(columnDefinition = "INT")
 	private int pos = new Random().nextInt(1024);
 
-	@Column(columnDefinition = "BOOLEAN DEFAULT TRUE")
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT TRUE")
 	private boolean alive = true;
 
 	@Column(columnDefinition = "TEXT")
@@ -113,10 +113,10 @@ public class Kawaigotchi {
 	@Column(columnDefinition = "TEXT")
 	private String vanity = "{}";
 
-	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean alerted;
 
-	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean warned;
 
 	@Column(columnDefinition = "TIMESTAMP")

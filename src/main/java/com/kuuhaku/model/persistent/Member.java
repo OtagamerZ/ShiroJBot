@@ -44,13 +44,13 @@ public class Member {
 	@Column(columnDefinition = "VARCHAR(191)")
 	private String id;
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String mid = "";
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String sid = "";
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String pseudoName = "";
 
 
@@ -65,20 +65,20 @@ public class Member {
 	private String pseudoAvatar = "";
 
 	//NUMBERS
-	@Column(columnDefinition = "INT DEFAULT 0")
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int level = 1;
 
-	@Column(columnDefinition = "INT DEFAULT 0")
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int xp = 0;
 
-	@Column(columnDefinition = "BIGINT DEFAULT 0")
+	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long lastVoted = 0;
 
 	//SWITCHES
-	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean markForDelete = false;
 
-	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean rulesSent = false;
 
 	public Member() {
