@@ -761,8 +761,8 @@ public class Helper {
 		return false;
 	}
 
-	public static float prcnt(float value, float max) {
-		return (value * 100) / max;
+	public static float prcnt(float value, float max, int round) {
+		return new BigDecimal((value * 100) / max).setScale(round, RoundingMode.HALF_EVEN).floatValue();
 	}
 
 	public static boolean checkPermissions(User author, Member member, Message message, MessageChannel channel, Guild guild, String prefix, String rawMsgNoPrefix, String[] args, Command command) {
