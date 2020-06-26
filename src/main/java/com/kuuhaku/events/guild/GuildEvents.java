@@ -62,7 +62,7 @@ public class GuildEvents extends ListenerAdapter {
 			Message message = event.getMessage();
 			MessageChannel channel = message.getChannel();
 			Guild guild = message.getGuild();
-			String rawMessage = message.getContentRaw();
+			String rawMessage = StringUtils.normalizeSpace(message.getContentRaw());
 			assert member != null;
 
 			String prefix = "";
