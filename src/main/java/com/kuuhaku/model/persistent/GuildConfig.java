@@ -50,7 +50,7 @@ public class GuildConfig {
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String name = "";
 
-	@Column(columnDefinition = "VARCHAR(191)")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT 's!'")
 	private String prefix = Main.getInfo().getDefaultPrefix();
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
