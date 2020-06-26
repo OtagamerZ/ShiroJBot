@@ -78,7 +78,8 @@ public class RemainingCardsCommand extends Command {
 		cards.forEach(c -> {
 			if (collected.contains(c))
 				sb.append("||").append(c.getRarity().getEmote()).append(" | ").append(c.getName()).append("||\n");
-			sb.append(c.getRarity().getEmote()).append(" | ").append(c.getName()).append("\n");
+			else
+				sb.append(c.getRarity().getEmote()).append(" | ").append(c.getName()).append("\n");
 		});
 
 		eb.addField("Cartas:", sb.toString(), false);
