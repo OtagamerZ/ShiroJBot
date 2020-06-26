@@ -76,8 +76,7 @@ public class BuyCardCommand extends Command {
 					.thenComparing(k -> k.getCard().getCard().getAnime(), Comparator.comparing(AnimeName::toString, String.CASE_INSENSITIVE_ORDER))
 					.thenComparing(k -> k.getCard().isFoil())
 					.thenComparing(k -> k.getCard().getCard().getName(), String.CASE_INSENSITIVE_ORDER));
-			int totalPages = (int) Math.ceil(cards.size() / 10f);
-			for (int i = 0; i < totalPages; i++) {
+			for (int i = 0; i < Math.ceil(cards.size() / 10f); i++) {
 				eb.clearFields();
 				eb.setColor(Helper.getRandomColor());
 				for (int p = i * 10; p < cards.size() && p < 10; p++) {

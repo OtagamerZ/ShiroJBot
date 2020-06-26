@@ -21,21 +21,27 @@ package com.kuuhaku.utils;
 import com.github.ygimenez.exception.InvalidStateException;
 
 public enum KawaiponRarity {
-	COMMON(1),
-	UNCOMMON(2),
-	RARE(3),
-	ULTRA_RARE(4),
-	LEGENDARY(5),
-	ULTIMATE(10);
+	COMMON(1, "<:common:726171819664736268> "),
+	UNCOMMON(2, "<:uncommon:726171819400232962> "),
+	RARE(3, "<:rare:726171819853480007> "),
+	ULTRA_RARE(4, "<:ultra_rare:726171819786240091> "),
+	LEGENDARY(5, "<:legendary:726171819945623682> "),
+	ULTIMATE(10, "");
 
 	private final int index;
+	private final String emote;
 
-	KawaiponRarity(int index) {
+	KawaiponRarity(int index, String emote) {
 		this.index = index;
+		this.emote = emote;
 	}
 
 	public int getIndex() {
 		return index;
+	}
+
+	public String getEmote() {
+		return emote;
 	}
 
 	@Override

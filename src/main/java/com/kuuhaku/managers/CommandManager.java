@@ -281,6 +281,9 @@ public class CommandManager {
 			add(new KawaiponsCommand(
 					"kawaipons", new String[]{"kps"}, getLocale(PT).getString("req_page"), getLocale(PT).getString("cmd_kawaipons"), INFO, false
 			));
+			add(new RemainingCardsCommand(
+					"cartasrestantes", new String[]{"remaining"}, getLocale(PT).getString("req_anime"), getLocale(PT).getString("cmd_remaining-cards"), INFO, false
+			));
 
 			//MISC
 			add(new BackgroundCommand(
