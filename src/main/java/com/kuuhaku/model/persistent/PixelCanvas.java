@@ -46,7 +46,7 @@ public class PixelCanvas {
 	@Column(columnDefinition = "TEXT")
 	private String canvas;
 
-	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean shelved = false;
 
 	private BufferedImage getCanvas() {

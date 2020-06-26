@@ -47,35 +47,35 @@ public class GuildConfig {
 	@Column(columnDefinition = "VARCHAR(191)")
 	private String guildID;
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String name = "";
 
 	@Column(columnDefinition = "VARCHAR(191)")
 	private String prefix = Main.getInfo().getDefaultPrefix();
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String cargoWarn = "";
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String cargoVip = "";
 
 	//CHANNELS
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String canalbv = "";
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String canaladeus = "";
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String canalSug = "";
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String canalLvl = "";
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String canalrelay = "";
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String canalLog = "";
 
 	//TEXTS
@@ -101,13 +101,13 @@ public class GuildConfig {
 	private String ambientSounds = "";
 
 	//NUMBERS
-	@Column(columnDefinition = "INT DEFAULT 60")
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 60")
 	private int pollTime = 60;
 
-	@Column(columnDefinition = "INT DEFAULT 60")
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 60")
 	private int warnTime = 60;
 
-	@Column(columnDefinition = "INT DEFAULT 5")
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 5")
 	private int noSpamAmount = 5;
 
 	//CHANNELS
@@ -124,34 +124,34 @@ public class GuildConfig {
 	private String canalDrop = "";
 
 	//SWITCHES
-	@Column(columnDefinition = "BOOLEAN DEFAULT TRUE")
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT TRUE")
 	private boolean lvlNotif = false;
 
-	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean anyTell = false;
 
-	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean hardAntispam = false;
 
-	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean antiRaid = false;
 
-	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean liteMode = false;
 
-	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean allowImg = false;
 
-	@Column(columnDefinition = "BOOLEAN DEFAULT TRUE")
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT TRUE")
 	private boolean mmPermissionLock = true;
 
-	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean markForDelete = false;
 
-	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean kawaiponEnabled = false;
 
-	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean dropEnabled = false;
 
 	//COLLECTIONS

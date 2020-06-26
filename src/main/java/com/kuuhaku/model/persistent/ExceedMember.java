@@ -33,7 +33,7 @@ public class ExceedMember {
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String exceed = "";
 
-	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean victorious = false;
 
 	public ExceedMember(String id, String ex) {

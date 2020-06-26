@@ -40,7 +40,7 @@ public class Card {
 	@Id
 	private String id;
 
-	@Column(columnDefinition = "VARCHAR(18) DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(18) NOT NULL DEFAULT ''")
 	private String name = "";
 
 	@Enumerated(EnumType.STRING)
@@ -49,7 +49,7 @@ public class Card {
 	@Enumerated(EnumType.STRING)
 	private KawaiponRarity rarity = KawaiponRarity.COMMON;
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String imgurId = "";
 
 	public String getName() {

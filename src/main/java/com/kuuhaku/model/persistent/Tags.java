@@ -42,19 +42,19 @@ public class Tags {
     @Column(columnDefinition = "VARCHAR(191)")
     private String id;
 
-    @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+    @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
     private boolean Partner = false;
 
-    @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+    @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
     private boolean Toxic = false;
 
-    @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+    @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
     private boolean Verified = false;
 
-    @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+    @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
     private boolean Reader = false;
 
-    @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+    @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
     private boolean Sponsor = false;
 
     public static List<String> getUserBadges(String id) {

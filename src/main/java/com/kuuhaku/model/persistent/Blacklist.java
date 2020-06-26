@@ -30,7 +30,7 @@ public class Blacklist {
 	@Column(columnDefinition = "VARCHAR(191)")
 	private String id;
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String blockedBy = "";
 
 	public Blacklist(String id, String by) {

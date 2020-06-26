@@ -30,16 +30,16 @@ public class Ticket {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int number;
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String subject = "";
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String requestedBy = "";
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT '[]'")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT '[]'")
 	private String msgId = "{}";
 
-	@Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean solved = false;
 
 	public Ticket(String subject, String requestedBy) {

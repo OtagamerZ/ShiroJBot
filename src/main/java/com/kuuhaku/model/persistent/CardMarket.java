@@ -29,7 +29,7 @@ public class CardMarket {
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL")
 	private String seller;
 
-	@Column(columnDefinition = "VARCHAR(191) DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String buyer = "";
 
 	@ManyToOne(fetch = FetchType.EAGER)
