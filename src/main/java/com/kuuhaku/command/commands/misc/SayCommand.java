@@ -74,9 +74,19 @@ public class SayCommand extends Command {
 			WebhookMessageBuilder wmb = new WebhookMessageBuilder();
 			wmb.setContent(String.valueOf(s.keySet().toArray()[0]));
 			if (m.getPseudoAvatar() == null || m.getPseudoAvatar().isBlank()) wmb.setAvatarUrl(author.getAvatarUrl());
-			else wmb.setAvatarUrl(m.getPseudoAvatar());
+			else try {
+				wmb.setAvatarUrl(m.getPseudoAvatar());
+			} catch (RuntimeException e) {
+				m.setPseudoAvatar("");
+				MemberDAO.updateMemberConfigs(m);
+			}
 			if (m.getPseudoName() == null || m.getPseudoName().isBlank()) wmb.setUsername(author.getName());
-			else wmb.setUsername(m.getPseudoName());
+			else try {
+				wmb.setUsername(m.getPseudoName());
+			} catch (RuntimeException e) {
+				m.setPseudoName("");
+				MemberDAO.updateMemberConfigs(m);
+			}
 
 			assert wh != null;
 			WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
