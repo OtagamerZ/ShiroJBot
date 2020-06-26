@@ -24,6 +24,7 @@ import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -62,6 +63,7 @@ public class SayCommand extends Command {
 			return;
 		}
 
+		com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(author.getId() + guild.getId());
 		MessageBuilder mb = new MessageBuilder();
 		mb.append(Helper.makeEmoteFromMention(args)).stripMentions(guild);
 
@@ -71,8 +73,10 @@ public class SayCommand extends Command {
 
 			WebhookMessageBuilder wmb = new WebhookMessageBuilder();
 			wmb.setContent(String.valueOf(s.keySet().toArray()[0]));
-			wmb.setAvatarUrl(author.getAvatarUrl());
-			wmb.setUsername(author.getName());
+			if (m.getPseudoAvatar() == null || m.getPseudoAvatar().isBlank()) wmb.setAvatarUrl(author.getAvatarUrl());
+			else wmb.setAvatarUrl(m.getPseudoAvatar());
+			if (m.getPseudoName() == null || m.getPseudoName().isBlank()) wmb.setUsername(author.getName());
+			else wmb.setUsername(m.getPseudoName());
 
 			assert wh != null;
 			WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
