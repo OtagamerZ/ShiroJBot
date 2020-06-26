@@ -97,10 +97,10 @@ public class KawaiponsCommand extends Command {
 				int common = kp.getCards().size() - foil;
 
 				eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName() + " (página " + (page + 1) + ")");
-				eb.addField(":red_envelope: | Cartas comuns:", common + " de " + CardDAO.totalCards() + " (" + (common * 100 / CardDAO.totalCards()) + "%)", true);
-				eb.addField(":star2: | Cartas cromadas:", foil + " de " + CardDAO.totalCards() + " (" + (foil * 100 / CardDAO.totalCards()) + "%)", true);
+				eb.addField(":red_envelope: | Cartas comuns:", common + " de " + CardDAO.totalCards() + " (" + Helper.prcnt(common, CardDAO.totalCards()) + "%)", true);
+				eb.addField(":star2: | Cartas cromadas:", foil + " de " + CardDAO.totalCards() + " (" + Helper.prcnt(foil, CardDAO.totalCards()) + "%)", true);
 				eb.setImage("attachment://page.jpg");
-				eb.setFooter("Coletado: " + (kp.getCards().size() * 100 / (CardDAO.totalCards() * 2)) + "%");
+				eb.setFooter("Coletado: " + Helper.prcnt(kp.getCards().size(), CardDAO.totalCards() * 2) + "%");
 
 				m.delete().queue();
 				channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards.get(page)), "page.jpg").queue();
