@@ -130,7 +130,7 @@ public class TradeCardCommand extends Command {
 			}
 
 			Card c = CardDAO.getCard(args[1]);
-			Card tc = CardDAO.getCard(args[2]);
+			Card tc = CardDAO.getCard(args[3]);
 			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 			Kawaipon target = KawaiponDAO.getKawaipon(other.getId());
 			boolean yourFoil = args[2].equalsIgnoreCase("C");
