@@ -142,7 +142,7 @@ public class TradeCardCommand extends Command {
 				return;
 			}
 
-			KawaiponCard yourCard = new KawaiponCard(tc, yourFoil);
+			KawaiponCard yourCard = new KawaiponCard(c, yourFoil);
 			KawaiponCard hisCard = new KawaiponCard(tc, hisFoil);
 
 			if (!kp.getCards().contains(yourCard)) {
