@@ -435,15 +435,9 @@ public class Helper {
 					Message msg = channel.retrieveMessageById(jo.getString("msgId")).submit().get();
 					resolveButton(g, jo, buttons);
 
-					buttons.put("\uD83D\uDEAA", (m, v) -> {
-						try {
-							m.kick("Não aceitou as regras.").queue();
-						} catch (InsufficientPermissionException ignore) {
-						}
-					});
+					buttons.put("\uD83D\uDEAA", (m, v) -> m.kick("Não aceitou as regras.").queue(null, Helper::doNothing));
 
 					Pages.buttonize(msg, buttons, false);
-
 				} else {
 					Message msg = channel.retrieveMessageById(jo.getString("msgId")).submit().get();
 					resolveButton(g, jo, buttons);
