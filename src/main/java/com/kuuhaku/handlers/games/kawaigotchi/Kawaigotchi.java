@@ -611,5 +611,6 @@ public class Kawaigotchi {
 	public void harvest() {
 		if (diedAt.plusMonths(1).isBefore(LocalDateTime.now()) || offSince.plusMonths(1).isBefore(LocalDateTime.now()))
 			KGotchiDAO.deleteKawaigotchi(this);
+		else KGotchiDAO.saveKawaigotchi(this);
 	}
 }
