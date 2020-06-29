@@ -24,7 +24,6 @@ import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.controller.sqlite.CustomAnswerDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
-import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.model.persistent.CustomAnswers;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.MutedMember;
@@ -157,14 +156,15 @@ public class GuildEvents extends ListenerAdapter {
 			if (!guild.getSelfMember().hasPermission(Permission.MESSAGE_WRITE)) {
 				return;
 			}
-			for (Command command : Main.getCommandManager().getCommands()) {
-				found = JDAEvents.isFound(GuildDAO.getGuildById(guild.getId()), guild, commandName, found, command, author);
+
+			Command command = Main.getCommandManager().getCommand(commandName);
+			if (command != null) {
+				found = command.getCategory().isEnabled(GuildDAO.getGuildById(guild.getId()), guild, author);
 
 				if (found) {
 					if (Helper.showMMError(author, channel, guild, rawMessage, command)) return;
 
-					if (Helper.checkPermissions(author, member, message, channel, guild, prefix, rawMsgNoPrefix, args, command))
-						break;
+					Helper.checkPermissions(author, member, message, channel, guild, prefix, rawMsgNoPrefix, args, command);
 				}
 			}
 

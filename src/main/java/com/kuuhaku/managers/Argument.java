@@ -16,13 +16,14 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command;
+package com.kuuhaku.managers;
 
-import net.dv8tion.jda.api.entities.*;
+import com.kuuhaku.command.Category;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import org.jetbrains.annotations.NonNls;
 
-public abstract class Command {
-
+public class Argument {
 	private final String name;
 	private final String[] aliases;
 	private final String usage;
@@ -30,25 +31,25 @@ public abstract class Command {
 	private final Category category;
 	private final boolean requiresMM;
 
-	protected Command(@NonNls String name, String description, Category category, boolean requiresMM) {
+	public Argument(@NonNls String name, @NonNls String description, Category category, boolean requiresMM) {
 		this.name = name;
 		this.aliases = new String[]{};
-		this.usage = null;
+		this.usage = "";
 		this.description = description;
 		this.category = category;
 		this.requiresMM = requiresMM;
 	}
 
-	protected Command(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
+	public Argument(@NonNls String name, @NonNls String[] aliases, @NonNls String description, Category category, boolean requiresMM) {
 		this.name = name;
 		this.aliases = aliases;
-		this.usage = null;
+		this.usage = "";
 		this.description = description;
 		this.category = category;
 		this.requiresMM = requiresMM;
 	}
 
-	protected Command(@NonNls String name, String usage, String description, Category category, boolean requiresMM) {
+	public Argument(@NonNls String name, @NonNls String usage, @NonNls String description, Category category, boolean requiresMM) {
 		this.name = name;
 		this.aliases = new String[]{};
 		this.usage = usage;
@@ -57,13 +58,24 @@ public abstract class Command {
 		this.requiresMM = requiresMM;
 	}
 
-	protected Command(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+	public Argument(@NonNls String name, @NonNls String[] aliases, @NonNls String usage, @NonNls String description, Category category, boolean requiresMM) {
 		this.name = name;
 		this.aliases = aliases;
 		this.usage = usage;
 		this.description = description;
 		this.category = category;
 		this.requiresMM = requiresMM;
+	}
+
+	public Object[] getArguments() {
+		return new Object[]{
+				name,
+				aliases,
+				usage.isBlank() ? "" : ShiroInfo.getLocale(I18n.PT).getString(usage),
+				ShiroInfo.getLocale(I18n.PT).getString(description),
+				category,
+				requiresMM
+		};
 	}
 
 	public String getName() {
@@ -73,7 +85,7 @@ public abstract class Command {
 	public String[] getAliases() {
 		return aliases;
 	}
-	
+
 	public String getUsage() {
 		return usage;
 	}
@@ -89,6 +101,4 @@ public abstract class Command {
 	public boolean requiresMM() {
 		return requiresMM;
 	}
-
-	public abstract void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix);
 }
