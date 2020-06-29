@@ -167,7 +167,7 @@ public class GuildEvents extends ListenerAdapter {
 				found = command.getCategory().isEnabled(GuildDAO.getGuildById(guild.getId()), guild, author);
 
 				if (found) {
-					if (Helper.showMMError(author, channel, guild, rawMessage, command)) return;
+					//if (Helper.showMMError(author, channel, guild, rawMessage, command)) return;
 
 					if (command.getCategory() == Category.NSFW && !((TextChannel) channel).isNSFW()) {
 						try {
