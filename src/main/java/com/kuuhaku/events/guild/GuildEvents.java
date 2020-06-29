@@ -165,6 +165,7 @@ public class GuildEvents extends ListenerAdapter {
 					if (Helper.showMMError(author, channel, guild, rawMessage, command)) return;
 
 					Helper.checkPermissions(author, member, message, channel, guild, prefix, rawMsgNoPrefix, args, command);
+					command.close();
 				}
 			}
 
