@@ -99,7 +99,7 @@ public class YoutubeCommand extends Command {
                                                 return;
                                             }
                                             Music.loadAndPlay(member, (TextChannel) channel, url);
-                                            msg.delete().queue();
+                                            msg.delete().queue(null, Helper::doNothing);
                                         } catch (ErrorResponseException ignore) {
                                         }
                                     }), true, 60, TimeUnit.SECONDS);
