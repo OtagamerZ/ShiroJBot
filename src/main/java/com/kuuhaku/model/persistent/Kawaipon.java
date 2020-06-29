@@ -46,7 +46,7 @@ public class Kawaipon {
 		return cards.stream().filter(k -> k.getCard().equals(card) && k.isFoil() == foil).findFirst().orElse(null);
 	}
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity = KawaiponCard.class)
 	public Set<KawaiponCard> getCards() {
 		return cards;
 	}
