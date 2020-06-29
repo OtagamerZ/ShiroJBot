@@ -147,6 +147,7 @@ public class Chess extends Tabletop {
 						return;
 					}
 					try {
+						if (m.getContentRaw().length() != 5) return;
 						String[] coords = m.getContentRaw().split(" ");
 
 						if (coords.length < 2) {
