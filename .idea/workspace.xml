@@ -26,7 +26,8 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/music/YoutubeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/music/YoutubeCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/MarryCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/MarryCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -543,14 +544,7 @@
       <workItem from="1593201140802" duration="3449000" />
       <workItem from="1593204667287" duration="552000" />
       <workItem from="1593434017878" duration="103000" />
-      <workItem from="1593434427332" duration="320000" />
-    </task>
-    <task id="LOCAL-01487" summary="Reversão de updates">
-      <created>1593019502671</created>
-      <option name="number" value="01487" />
-      <option name="presentableId" value="LOCAL-01487" />
-      <option name="project" value="LOCAL" />
-      <updated>1593019502671</updated>
+      <workItem from="1593434427332" duration="946000" />
     </task>
     <task id="LOCAL-01488" summary="Reversão de updates">
       <created>1593021069331</created>
@@ -888,7 +882,14 @@
       <option name="project" value="LOCAL" />
       <updated>1593434591275</updated>
     </task>
-    <option name="localTasksCounter" value="1536" />
+    <task id="LOCAL-01536" summary="Correção no comando de tocar música">
+      <created>1593434845925</created>
+      <option name="number" value="01536" />
+      <option name="presentableId" value="LOCAL-01536" />
+      <option name="project" value="LOCAL" />
+      <updated>1593434845925</updated>
+    </task>
+    <option name="localTasksCounter" value="1537" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -926,7 +927,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição da lista negra" />
     <MESSAGE value="Adição de trava na criação de convites de suporte" />
     <MESSAGE value="Correção no antispam" />
     <MESSAGE value="Correção na geração de perfil" />
@@ -951,7 +951,8 @@
     <MESSAGE value="Correções gerais" />
     <MESSAGE value="Adição do comando RemainingCardsCommand" />
     <MESSAGE value="Correção de bloco try-catch" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção de bloco try-catch" />
+    <MESSAGE value="Correção no comando de tocar música" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção no comando de tocar música" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1011,12 +1012,12 @@
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1593434588630">
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1593435401119">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1591419311134" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1593434588630" />
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1593435401119" />
     <state width="247" height="195" key="DatabaseViewActions_Filter" timestamp="1591416926427">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -1099,12 +1100,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="212" y="177" key="Vcs.Push.Dialog.v2" timestamp="1593434613081">
+    <state x="212" y="177" key="Vcs.Push.Dialog.v2" timestamp="1593434848119">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1591419318874" />
-    <state x="212" y="177" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1593434613081" />
+    <state x="212" y="177" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1593434848119" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1593021538475">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1140,12 +1141,12 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="448" y="274" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1591972151389" />
-    <state x="429" y="175" width="790" height="658" key="find.popup" timestamp="1593204416284">
+    <state x="429" y="175" width="790" height="658" key="find.popup" timestamp="1593434947878">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="362" y="127" width="643" height="536" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1585937546544" />
     <state x="362" y="134" width="774" height="562" key="find.popup/0.0.1366.768@0.0.1366.768" timestamp="1588044108124" />
-    <state x="429" y="175" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1593204416284" />
+    <state x="429" y="175" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1593434947878" />
     <state x="409" y="157" key="git4idea.merge.GitPullDialog" timestamp="1586743041255">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
