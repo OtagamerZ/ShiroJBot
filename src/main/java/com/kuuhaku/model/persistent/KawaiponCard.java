@@ -28,6 +28,7 @@ public class KawaiponCard {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Card card;
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
@@ -53,7 +54,6 @@ public class KawaiponCard {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
 	public Card getCard() {
 		return card;
 	}

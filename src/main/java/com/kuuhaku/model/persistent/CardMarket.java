@@ -32,6 +32,7 @@ public class CardMarket {
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String buyer = "";
 
+	@ManyToOne(fetch = FetchType.LAZY)
 	private KawaiponCard card;
 
 	@Column(columnDefinition = "INT NOT NULL")
@@ -69,8 +70,7 @@ public class CardMarket {
 	public void setBuyer(String buyer) {
 		this.buyer = buyer;
 	}
-
-	@ManyToOne(fetch = FetchType.LAZY)
+	
 	public KawaiponCard getCard() {
 		return card;
 	}
