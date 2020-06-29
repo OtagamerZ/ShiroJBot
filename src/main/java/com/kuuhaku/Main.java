@@ -31,7 +31,7 @@ import com.kuuhaku.events.guild.GuildEvents;
 import com.kuuhaku.events.guild.GuildUpdateEvents;
 import com.kuuhaku.handlers.api.Application;
 import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
-import com.kuuhaku.managers.CommandManager;
+import com.kuuhaku.managers.NewCommandManager;
 import com.kuuhaku.model.common.DataDump;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
@@ -60,7 +60,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 	private static ShiroInfo info;
 	private static Relay relay;
-	private static CommandManager cmdManager;
+	private static NewCommandManager cmdManager;
 	private static JDA api;
 	private static JDA jbr;
 	public static boolean exiting = false;
@@ -75,7 +75,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		info = new ShiroInfo();
 		relay = new Relay();
 
-		cmdManager = new CommandManager();
+		cmdManager = new NewCommandManager();
 
 		EnumSet<GatewayIntent> intents = GatewayIntent.getIntents(GatewayIntent.DEFAULT);
 
@@ -171,7 +171,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		return info;
 	}
 
-	public static CommandManager getCommandManager() {
+	public static NewCommandManager getCommandManager() {
 		return cmdManager;
 	}
 
