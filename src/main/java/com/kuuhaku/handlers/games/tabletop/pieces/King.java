@@ -36,10 +36,11 @@ public class King extends Piece {
 	}
 
 	@Override
-	public boolean validate(Board b, Spot to) {
+	public boolean validate(Board b, Spot to, boolean kingCheck) {
 		if (b.getSpot(to) != null && b.getSpot(to).getOwner().equals(getOwner())) return false;
 
 		if (Arrays.stream(new int[][]{UPPER_LEFT, UP, UPPER_RIGHT, MIDDLE_LEFT, MIDDLE_RIGHT, LOWER_LEFT, DOWN, LOWER_RIGHT}).anyMatch(i -> getSpot().getNextSpot(i).equals(to))) {
+			if (kingCheck) return true;
 			return !check(b, to);
 		}
 
@@ -58,20 +59,11 @@ public class King extends Piece {
 	}
 
 	public boolean check(Board b, Spot spot) {
-		boolean isCheck = false;
 		List<Piece> threats = new ArrayList<>();
 		for (Piece[] ps : b.getLayout()) {
 			threats.addAll(Arrays.asList(ps));
 		}
 
-		threats.removeIf(p -> p == null || p.getOwner().equals(getOwner()));
-		for (Piece p : threats) {
-			if (p.validate(b, spot)) {
-				isCheck = true;
-				break;
-			}
-		}
-
-		return isCheck;
+		return threats.stream().filter(p -> p != null && !p.getOwner().equals(getOwner())).anyMatch(p -> p.validate(b, spot, true));
 	}
 }

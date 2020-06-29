@@ -57,7 +57,7 @@ public abstract class Piece {
 
 	public boolean move(Board b, Spot to) {
 		if (getSpot() == null) setSpot(to);
-		else if (validate(b, to)) {
+		else if (validate(b, to, false)) {
 			if (b.getSpot(to) != null && b.getSpot(to).getOwner().equals(getOwner())) return false;
 
 			b.setSpot(null, getSpot());
@@ -107,7 +107,7 @@ public abstract class Piece {
 		return new int[]{to.getX() - spot.getX(), to.getY() - spot.getY()};
 	}
 
-	public abstract boolean validate(Board b, Spot to);
+	public abstract boolean validate(Board b, Spot to, boolean kingCheck);
 
 	public boolean isFirstMove() {
 		return firstMove;
