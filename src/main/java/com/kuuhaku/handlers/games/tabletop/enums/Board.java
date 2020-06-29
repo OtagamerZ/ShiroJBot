@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 public class Board {
 	private final Piece[][] board;
 	private int round = 1;
+	private Object aux;
 
 	Board(Piece[][] board) {
 		this.board = board;
@@ -55,6 +56,14 @@ public class Board {
 
 	public void setSpot(Piece p, Spot spot) {
 		board[spot.getY()][spot.getX()] = p;
+	}
+
+	public Object getAux() {
+		return aux;
+	}
+
+	public void setAux(Object aux) {
+		this.aux = aux;
 	}
 
 	public int getRound() {

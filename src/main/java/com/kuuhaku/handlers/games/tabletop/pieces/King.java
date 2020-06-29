@@ -64,6 +64,16 @@ public class King extends Piece {
 			threats.addAll(Arrays.asList(ps));
 		}
 
-		return threats.stream().filter(p -> p != null && !(p instanceof King) && !p.getOwner().equals(getOwner())).anyMatch(p -> p.validate(b, spot));
+		Piece t = threats.stream()
+				.filter(p -> p != null && !(p instanceof King) && !p.getOwner().equals(getOwner()))
+				.filter(p -> p.validate(b, spot))
+				.findFirst()
+				.orElse(null);
+
+		if (t == null) return false;
+		else {
+			b.setAux(t);
+			return true;
+		}
 	}
 }
