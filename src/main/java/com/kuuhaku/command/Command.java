@@ -18,13 +18,10 @@
 
 package com.kuuhaku.command;
 
-import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
-import java.io.Closeable;
-
-public abstract class Command implements Closeable {
+public abstract class Command {
 
 	private final String name;
 	private final String[] aliases;
@@ -94,13 +91,4 @@ public abstract class Command implements Closeable {
 	}
 
 	public abstract void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix);
-
-	@Override
-	public void close() {
-		try {
-			finalize();
-		} catch (Throwable e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-		}
-	}
 }
