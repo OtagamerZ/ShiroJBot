@@ -185,7 +185,6 @@ public class Chess extends Tabletop {
 
 						if (!foundKing) getPlayers().setWinner(turn[0]);
 						else {
-							assert pc instanceof King;
 							if (((King) pc).check(getBoard(), pc.getSpot())) {
 								Piece finalPc = pc;
 								if (Arrays.stream(new int[][]{UPPER_LEFT, UP, UPPER_RIGHT, MIDDLE_LEFT, MIDDLE_RIGHT, LOWER_LEFT, DOWN, LOWER_RIGHT})
