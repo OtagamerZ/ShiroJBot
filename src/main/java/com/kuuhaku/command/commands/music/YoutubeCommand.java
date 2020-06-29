@@ -64,6 +64,7 @@ public class YoutubeCommand extends Command {
             channel.sendMessage(":x: | Você precisa digitar um nome para pesquisar.").queue();
             return;
         }
+
         channel.sendMessage("<a:loading:697879726630502401> Buscando videos...").queue(m -> {
             try {
                 List<YoutubeVideo> videos = Youtube.getData(String.join(" ", args));
@@ -90,7 +91,7 @@ public class YoutubeCommand extends Command {
                                 if (Objects.requireNonNull(member.getVoiceState()).inVoiceChannel()) {
                                     Pages.buttonize(msg, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
                                         try {
-                                            String url = Objects.requireNonNull(channel.retrieveMessageById(msg.getId()).complete().getEmbeds().get(0).getFooter()).getIconUrl();
+                                            String url = Objects.requireNonNull(ms.getEmbeds().get(0).getFooter()).getIconUrl();
                                             assert url != null;
                                             if (url.startsWith("https://www.youtube.com/playlist?list=") && !TagDAO.getTagById(author.getId()).isVerified()) {
                                                 channel.sendMessage(":x: | Você precisa ser um usuário verificado para poder adicionar playlists.").queue();
