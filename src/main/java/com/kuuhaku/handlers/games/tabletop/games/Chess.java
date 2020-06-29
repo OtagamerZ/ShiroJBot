@@ -193,10 +193,16 @@ public class Chess extends Tabletop {
 								getBoard().nextRound();
 								message = getTable().sendMessage("Turno de " + turn[0].getAsMention()).addFile(baos.toByteArray(), "board.jpg").complete();
 								timeout.cancel(true);
-								timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
-									Main.getInfo().getAPI().removeEventListener(this);
-									ShiroInfo.getGames().remove(getId());
-								}, Helper::doNothing);
+								if (getBoard().getRound() > 2)
+									timeout = getTable().sendMessage(turn[0].getAsMention() + " perdeu por W.O.! (" + getBoard().getRound() + " turnos)").queueAfter(180, TimeUnit.SECONDS, ms -> {
+										Main.getInfo().getAPI().removeEventListener(this);
+										ShiroInfo.getGames().remove(getId());
+									}, Helper::doNothing);
+								else
+									timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
+										Main.getInfo().getAPI().removeEventListener(this);
+										ShiroInfo.getGames().remove(getId());
+									}, Helper::doNothing);
 							}
 						} catch (IOException e) {
 							Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
