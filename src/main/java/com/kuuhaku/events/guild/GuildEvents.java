@@ -19,8 +19,10 @@
 package com.kuuhaku.events.guild;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.TagDAO;
+import com.kuuhaku.controller.sqlite.BlacklistDAO;
 import com.kuuhaku.controller.sqlite.CustomAnswerDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
@@ -28,6 +30,8 @@ import com.kuuhaku.model.persistent.CustomAnswers;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.MutedMember;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.PrivilegeLevel;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -44,6 +48,7 @@ import org.json.JSONArray;
 
 import javax.annotation.Nonnull;
 import javax.persistence.NoResultException;
+import java.lang.ref.WeakReference;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
@@ -157,16 +162,40 @@ public class GuildEvents extends ListenerAdapter {
 				return;
 			}
 
-			Command command = Main.getCommandManager().getCommand(commandName);
-			if (command != null) {
-				found = command.getCategory().isEnabled(GuildDAO.getGuildById(guild.getId()), guild, author);
+			WeakReference<Command> reference = new WeakReference<>(Main.getCommandManager().getCommand(commandName));
+			try {
+				if (reference.get() != null) {
+					Command command = reference.get();
+					assert command != null;
+					found = command.getCategory().isEnabled(GuildDAO.getGuildById(guild.getId()), guild, author);
 
-				if (found) {
-					if (Helper.showMMError(author, channel, guild, rawMessage, command)) return;
+					if (found) {
+						if (Helper.showMMError(author, channel, guild, rawMessage, command)) return;
 
-					Helper.checkPermissions(author, member, message, channel, guild, prefix, rawMsgNoPrefix, args, command);
-					command.close();
+						if (command.getCategory() == Category.NSFW && !((TextChannel) channel).isNSFW()) {
+							try {
+								channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_nsfw-in-non-nsfw-channel")).queue();
+							} catch (InsufficientPermissionException ignore) {
+							}
+						} else if (!Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
+							try {
+								channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_not-enough-permission")).queue();
+							} catch (InsufficientPermissionException ignore) {
+							}
+						} else if (BlacklistDAO.isBlacklisted(author.getId())) {
+							channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-blacklisted")).queue();
+						} else if (ShiroInfo.getRatelimit().getIfPresent(author) != null) {
+							channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-ratelimited")).queue();
+						}
+
+						command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, prefix);
+						if (!TagDAO.getTagById(author.getId()).isPartner() || Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
+							ShiroInfo.getRatelimit().put(author, true);
+						Helper.spawnAd(channel);
+					}
 				}
+			} finally {
+				reference.clear();
 			}
 
 			if (!found && !author.isBot()) {
