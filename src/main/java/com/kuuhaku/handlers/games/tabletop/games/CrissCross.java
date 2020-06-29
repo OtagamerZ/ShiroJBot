@@ -104,6 +104,7 @@ public class CrissCross extends Tabletop {
 						return;
 					}
 					try {
+						if (m.getContentRaw().length() != 2) return;
 						Spot s = Spot.of(m.getContentRaw());
 
 						if (getBoard().getLayout()[s.getY()][s.getX()] == null)
