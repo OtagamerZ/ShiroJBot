@@ -114,9 +114,9 @@ public abstract class Reaction extends Command {
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error("Erro ao recuperar API: " + e.getStackTrace()[0]);
 		} catch (IllegalAccessException e) {
-			chn.sendMessage(":x: | Opa, deu uma errinho ao tentar pegar o GIF, tente novamente!").queue();
+			chn.sendMessage(":x: | Opa, deu uma errinho ao tentar pegar o GIF, tente novamente!").queue(null, Helper::doNothing);
 		} finally {
-			msg.delete().queue();
+			msg.delete().queue(null, Helper::doNothing);
 		}
 	}
 }
