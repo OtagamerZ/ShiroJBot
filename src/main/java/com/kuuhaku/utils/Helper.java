@@ -24,13 +24,11 @@ import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
 import com.kuuhaku.Main;
-import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.reactions.Reaction;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.LogDAO;
 import com.kuuhaku.controller.postgresql.TagDAO;
-import com.kuuhaku.controller.sqlite.BlacklistDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.Extensions;
 import com.kuuhaku.model.common.drop.CreditDrop;
@@ -773,36 +771,6 @@ public class Helper {
 
 	public static int prcntToInt(float value, float max) {
 		return Math.round((value * 100) / max);
-	}
-
-	public static boolean checkPermissions(User author, Member member, Message message, MessageChannel channel, Guild guild, String prefix, String rawMsgNoPrefix, String[] args, Command command) {
-		if (command.getCategory() == Category.NSFW && !((TextChannel) channel).isNSFW()) {
-			try {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_nsfw-in-non-nsfw-channel")).queue();
-				return true;
-			} catch (InsufficientPermissionException ignore) {
-			}
-			return false;
-		} else if (!hasPermission(member, command.getCategory().getPrivilegeLevel())) {
-			try {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_not-enough-permission")).queue();
-				return true;
-			} catch (InsufficientPermissionException ignore) {
-			}
-			return false;
-		} else if (BlacklistDAO.isBlacklisted(author.getId())) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-blacklisted")).queue();
-			return true;
-		} else if (ShiroInfo.getRatelimit().getIfPresent(author) != null) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-ratelimited")).queue();
-			return true;
-		}
-
-		command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, prefix);
-		if (!TagDAO.getTagById(author.getId()).isPartner() || hasPermission(member, PrivilegeLevel.SUPPORT))
-			ShiroInfo.getRatelimit().put(author, true);
-		spawnAd(channel);
-		return true;
 	}
 
 	public static JSONObject post(String endpoint, JSONObject payload, String token) {
