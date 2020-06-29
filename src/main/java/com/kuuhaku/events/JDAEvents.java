@@ -238,7 +238,7 @@ public class JDAEvents extends ListenerAdapter {
 					staffIds.forEach(d -> {
 						if (!d.equals(event.getAuthor().getId())) {
 							Main.getInfo().getUserByID(d).openPrivateChannel().queue(c ->
-									c.sendMessage(event.getAuthor().getName() + " bloqueou o usuário " + Main.getInfo().getUserByID(args[0]) + ". Razão: \n>>> " + msgNoArgs).queue());
+									c.sendMessage(event.getAuthor().getName() + " bloqueou o usuário " + Main.getInfo().getUserByID(args[1]) + ". Razão: \n>>> " + msgNoArgs).queue());
 						}
 					});
 					break;
