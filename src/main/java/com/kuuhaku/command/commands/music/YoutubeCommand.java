@@ -30,6 +30,7 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.Music;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import org.jetbrains.annotations.NonNls;
 
 import java.io.IOException;
@@ -88,26 +89,29 @@ public class YoutubeCommand extends Command {
                                 Pages.paginate(msg, pages, 60, TimeUnit.SECONDS, 5);
                                 if (Objects.requireNonNull(member.getVoiceState()).inVoiceChannel()) {
                                     Pages.buttonize(msg, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
-                                        String url = Objects.requireNonNull(channel.retrieveMessageById(msg.getId()).complete().getEmbeds().get(0).getFooter()).getIconUrl();
-                                        assert url != null;
-                                        if (url.startsWith("https://www.youtube.com/playlist?list=") && !TagDAO.getTagById(author.getId()).isVerified()) {
-                                            channel.sendMessage(":x: | Você precisa ser um usuário verificado para poder adicionar playlists.").queue();
+                                        try {
+                                            String url = Objects.requireNonNull(channel.retrieveMessageById(msg.getId()).complete().getEmbeds().get(0).getFooter()).getIconUrl();
+                                            assert url != null;
+                                            if (url.startsWith("https://www.youtube.com/playlist?list=") && !TagDAO.getTagById(author.getId()).isVerified()) {
+                                                channel.sendMessage(":x: | Você precisa ser um usuário verificado para poder adicionar playlists.").queue();
+                                                msg.delete().queue();
+                                                return;
+                                            }
+                                            Music.loadAndPlay(member, (TextChannel) channel, url);
                                             msg.delete().queue();
-                                            return;
+                                        } catch (ErrorResponseException ignore) {
                                         }
-                                        Music.loadAndPlay(member, (TextChannel) channel, url);
-                                        msg.delete().queue();
                                     }), true, 60, TimeUnit.SECONDS);
                                 }
                             });
                         } else m.editMessage(":x: | Nenhum vídeo encontrado").queue();
                     } catch (IOException e) {
-                        m.editMessage(":x: | Erro ao buscar vídeos, meus developers já foram notificados.").queue();
+                        m.editMessage(":x: | Erro ao buscar vídeos, meus desenvolvedores já foram notificados.").queue();
                         Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
                     }
                 });
             } catch (IOException e) {
-                m.editMessage(":x: | Erro ao buscar vídeos, meus developers já foram notificados.").queue();
+                m.editMessage(":x: | Erro ao buscar vídeos, meus desenvolvedores já foram notificados.").queue();
                 Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
             }
         });
