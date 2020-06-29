@@ -54,8 +54,8 @@ public class CrissCross extends Tabletop {
 	public CrissCross(TextChannel table, String id, User... players) {
 		super(table, Board.SIZE_3X3(), id, players);
 		pieces = Map.of(
-				players[0], new Cross(new Player(players[0], false)),
-				players[1], new Circle(new Player(players[1], true))
+				players[0], new Cross(new Player(players[0], true)),
+				players[1], new Circle(new Player(players[1], false))
 		);
 	}
 
