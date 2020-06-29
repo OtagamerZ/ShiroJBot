@@ -33,7 +33,8 @@ public class Bishop extends Piece {
 	public boolean validate(Board b, Spot to) {
 		boolean blocked = false;
 
-		try {
+		if (b.getSpot(to).getOwner().equals(getOwner())) return false;
+		else if (!(b.getSpot(to) instanceof King)) try {
 			King k = b.getPieceByType(King.class, getOwner()).get(0);
 			if (k.check(b, k.getSpot())) return false;
 		} catch (IndexOutOfBoundsException e) {
