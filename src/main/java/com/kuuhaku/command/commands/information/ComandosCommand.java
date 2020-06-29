@@ -25,6 +25,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.managers.Argument;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
@@ -73,7 +74,7 @@ public class ComandosCommand extends Command {
 
 		if (Helper.hasPermission(guild.getSelfMember(), Permission.MESSAGE_MANAGE, (TextChannel) channel) && args.length == 0) {
 			eb.setTitle(ShiroInfo.getLocale(I18n.PT).getString(STR_COMMAND_LIST_TITLE));
-			eb.setDescription(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_COMMAND_LIST_DESCRIPTION), prefix, Arrays.stream(Category.values()).filter(c -> c.isEnabled(gc, guild, author)).count(), Main.getCommandManager().getCommands().stream().filter(c -> c.getCategory().isEnabled(gc, guild, author)).count()));
+			eb.setDescription(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_COMMAND_LIST_DESCRIPTION), prefix, Arrays.stream(Category.values()).filter(c -> c.isEnabled(gc, guild, author)).count(), Main.getCommandManager().getCommands().values().stream().filter(c -> c.getCategory().isEnabled(gc, guild, author)).count()));
 			for (Category cat : Category.values()) {
 				if (cat.isEnabled(gc, guild, author))
 					eb.addField(cat.getEmote() + " | " + cat.getName(), Helper.VOID, true);
@@ -105,7 +106,7 @@ public class ComandosCommand extends Command {
 
 				StringBuilder cmds = new StringBuilder();
 
-				for (Command cmd : cat.getCmds()) {
+				for (Argument cmd : cat.getCmds()) {
 					cmds.append("`").append(cmd.getName()).append("`  ");
 				}
 
@@ -132,13 +133,13 @@ public class ComandosCommand extends Command {
 			return;
 		} else if (args.length == 0) {
 			eb.setTitle(ShiroInfo.getLocale(I18n.PT).getString(STR_COMMAND_LIST_TITLE));
-			eb.setDescription(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_COMMAND_LIST_DESCRIPTION), prefix, Arrays.stream(Category.values()).filter(c -> c.isEnabled(gc, guild, author)).count(), Main.getCommandManager().getCommands().stream().filter(c -> c.getCategory().isEnabled(gc, guild, author)).count()));
+			eb.setDescription(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_COMMAND_LIST_DESCRIPTION), prefix, Arrays.stream(Category.values()).filter(c -> c.isEnabled(gc, guild, author)).count(), Main.getCommandManager().getCommands().values().stream().filter(c -> c.getCategory().isEnabled(gc, guild, author)).count()));
 			eb.appendDescription(ShiroInfo.getLocale(I18n.PT).getString("str_command-list-alert"));
 			StringBuilder sb = new StringBuilder();
 			for (Category cat : Category.values()) {
 				if (cat.isEnabled(gc, guild, author)) {
 					sb.setLength(0);
-					for (Command c : cat.getCmds()) {
+					for (Argument c : cat.getCmds()) {
 						sb.append("`").append(c.getName()).append("`  ");
 					}
 					eb.addField(cat.getEmote() + " | " + cat.getName(), sb.toString(), true);
@@ -160,9 +161,9 @@ public class ComandosCommand extends Command {
 
 		String cmdName = args[0];
 
-		Command cmd = null;
+		Argument cmd = null;
 
-		for (Command cmmd : Main.getCommandManager().getCommands()) {
+		for (Argument cmmd : Main.getCommandManager().getCommands().values()) {
 			boolean found = false;
 
 			if (cmmd.getName().equalsIgnoreCase(cmdName) && cmmd.getCategory().isEnabled(gc, guild, author))
