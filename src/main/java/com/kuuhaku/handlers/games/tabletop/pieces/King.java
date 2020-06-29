@@ -58,12 +58,20 @@ public class King extends Piece {
 	}
 
 	public boolean check(Board b, Spot spot) {
+		boolean isCheck = false;
 		List<Piece> threats = new ArrayList<>();
 		for (Piece[] ps : b.getLayout()) {
 			threats.addAll(Arrays.asList(ps));
 		}
-		threats.removeIf(t -> t == null || t.getOwner().equals(getOwner()));
 
-		return threats.stream().anyMatch(p -> p.validate(b, spot));
+		threats.removeIf(p -> p == null || p.getOwner().equals(getOwner()));
+		for (Piece p : threats) {
+			if (p.validate(b, spot)) {
+				isCheck = true;
+				break;
+			}
+		}
+
+		return isCheck;
 	}
 }
