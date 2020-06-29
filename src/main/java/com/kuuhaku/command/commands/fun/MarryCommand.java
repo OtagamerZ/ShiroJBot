@@ -99,7 +99,7 @@ public class MarryCommand extends Command {
 						return;
 
 					try {
-						Message msg = channel.retrieveMessageById(event.getMessageId()).complete();
+						Message msg = event.getMessage();
 						switch (msg.getContentRaw().toLowerCase()) {
 							case "sim":
 								channel.sendMessage("Eu os declaro husbando e waifu!").queue();
