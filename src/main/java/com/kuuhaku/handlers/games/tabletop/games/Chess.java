@@ -52,53 +52,54 @@ public class Chess extends Tabletop {
 		super(table, Board.SIZE_8X8(), id, players);
 		pieces = Map.of(
 				players[0], new ArrayList<>() {{
-					add(new Pawn(new Player(players[0], false)));
-					add(new Pawn(new Player(players[0], false)));
-					add(new Pawn(new Player(players[0], false)));
-					add(new Pawn(new Player(players[0], false)));
-					add(new Pawn(new Player(players[0], false)));
-					add(new Pawn(new Player(players[0], false)));
-					add(new Pawn(new Player(players[0], false)));
-					add(new Pawn(new Player(players[0], false)));
+					add(new Pawn(new Player(players[0], true)));
+					add(new Pawn(new Player(players[0], true)));
+					add(new Pawn(new Player(players[0], true)));
+					add(new Pawn(new Player(players[0], true)));
+					add(new Pawn(new Player(players[0], true)));
+					add(new Pawn(new Player(players[0], true)));
+					add(new Pawn(new Player(players[0], true)));
+					add(new Pawn(new Player(players[0], true)));
 
-					add(new Rook(new Player(players[0], false)));
-					add(new Knight(new Player(players[0], false)));
-					add(new Bishop(new Player(players[0], false)));
-					add(new Queen(new Player(players[0], false)));
-					add(new King(new Player(players[0], false)));
-					add(new Bishop(new Player(players[0], false)));
-					add(new Knight(new Player(players[0], false)));
-					add(new Rook(new Player(players[0], false)));
+					add(new Rook(new Player(players[0], true)));
+					add(new Knight(new Player(players[0], true)));
+					add(new Bishop(new Player(players[0], true)));
+					add(new Queen(new Player(players[0], true)));
+					add(new King(new Player(players[0], true)));
+					add(new Bishop(new Player(players[0], true)));
+					add(new Knight(new Player(players[0], true)));
+					add(new Rook(new Player(players[0], true)));
 				}},
 				players[1], new ArrayList<>() {{
-					add(new Pawn(new Player(players[1], true)));
-					add(new Pawn(new Player(players[1], true)));
-					add(new Pawn(new Player(players[1], true)));
-					add(new Pawn(new Player(players[1], true)));
-					add(new Pawn(new Player(players[1], true)));
-					add(new Pawn(new Player(players[1], true)));
-					add(new Pawn(new Player(players[1], true)));
-					add(new Pawn(new Player(players[1], true)));
+					add(new Pawn(new Player(players[1], false)));
+					add(new Pawn(new Player(players[1], false)));
+					add(new Pawn(new Player(players[1], false)));
+					add(new Pawn(new Player(players[1], false)));
+					add(new Pawn(new Player(players[1], false)));
+					add(new Pawn(new Player(players[1], false)));
+					add(new Pawn(new Player(players[1], false)));
+					add(new Pawn(new Player(players[1], false)));
 
-					add(new Rook(new Player(players[1], true)));
-					add(new Knight(new Player(players[1], true)));
-					add(new Bishop(new Player(players[1], true)));
-					add(new Queen(new Player(players[1], true)));
-					add(new King(new Player(players[1], true)));
-					add(new Bishop(new Player(players[1], true)));
-					add(new Knight(new Player(players[1], true)));
-					add(new Rook(new Player(players[1], true)));
+					add(new Rook(new Player(players[1], false)));
+					add(new Knight(new Player(players[1], false)));
+					add(new Bishop(new Player(players[1], false)));
+					add(new Queen(new Player(players[1], false)));
+					add(new King(new Player(players[1], false)));
+					add(new Bishop(new Player(players[1], false)));
+					add(new Knight(new Player(players[1], false)));
+					add(new Rook(new Player(players[1], false)));
 				}}
 		);
 		getBoard().setPattern(new Piece[][]{
-				{pieces.get(players[0]).get(8), pieces.get(players[0]).get(9), pieces.get(players[0]).get(10), pieces.get(players[0]).get(11), pieces.get(players[0]).get(12), pieces.get(players[0]).get(13), pieces.get(players[0]).get(14), pieces.get(players[0]).get(15)},
-				{pieces.get(players[0]).get(0), pieces.get(players[0]).get(1), pieces.get(players[0]).get(2), pieces.get(players[0]).get(3), pieces.get(players[0]).get(4), pieces.get(players[0]).get(5), pieces.get(players[0]).get(6), pieces.get(players[0]).get(7)},
-				{/*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null},
-				{/*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null},
-				{/*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null},
-				{/*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null},
+				{pieces.get(players[1]).get(8), pieces.get(players[1]).get(9), pieces.get(players[1]).get(10), pieces.get(players[1]).get(11), pieces.get(players[1]).get(12), pieces.get(players[1]).get(13), pieces.get(players[1]).get(14), pieces.get(players[1]).get(15)},
 				{pieces.get(players[1]).get(0), pieces.get(players[1]).get(1), pieces.get(players[1]).get(2), pieces.get(players[1]).get(3), pieces.get(players[1]).get(4), pieces.get(players[1]).get(5), pieces.get(players[1]).get(6), pieces.get(players[1]).get(7)},
-				{pieces.get(players[1]).get(8), pieces.get(players[1]).get(9), pieces.get(players[1]).get(10), pieces.get(players[1]).get(11), pieces.get(players[1]).get(12), pieces.get(players[1]).get(13), pieces.get(players[1]).get(14), pieces.get(players[1]).get(15)}
+				{/*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null},
+				{/*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null},
+				{/*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null},
+				{/*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null},
+				{pieces.get(players[0]).get(0), pieces.get(players[0]).get(1), pieces.get(players[0]).get(2), pieces.get(players[0]).get(3), pieces.get(players[0]).get(4), pieces.get(players[0]).get(5), pieces.get(players[0]).get(6), pieces.get(players[0]).get(7)},
+				{pieces.get(players[0]).get(8), pieces.get(players[0]).get(9), pieces.get(players[0]).get(10), pieces.get(players[0]).get(11), pieces.get(players[0]).get(12), pieces.get(players[0]).get(13), pieces.get(players[0]).get(14), pieces.get(players[0]).get(15)}
+
 		});
 	}
 
