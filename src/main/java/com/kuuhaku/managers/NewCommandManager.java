@@ -35,6 +35,7 @@ import com.kuuhaku.command.commands.reactions.*;
 import com.kuuhaku.command.commands.reactions.answerable.*;
 import com.kuuhaku.command.commands.support.*;
 import com.kuuhaku.utils.Helper;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -517,7 +518,7 @@ public class NewCommandManager {
 	}
 
 	public Command getCommand(String name) {
-		Map.Entry<Class<? extends Command>, Argument> cmd = commands.entrySet().stream().filter(e -> e.getValue().getName().equalsIgnoreCase(name) || Helper.containsAny(name, e.getValue().getAliases())).findFirst().orElse(null);
+		Map.Entry<Class<? extends Command>, Argument> cmd = commands.entrySet().stream().filter(e -> e.getValue().getName().equalsIgnoreCase(name) || ArrayUtils.contains(e.getValue().getAliases(), name.toLowerCase())).findFirst().orElse(null);
 
 		if (cmd == null) return null;
 
