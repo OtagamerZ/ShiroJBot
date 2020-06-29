@@ -20,6 +20,7 @@ package com.kuuhaku.command;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.TagDAO;
+import com.kuuhaku.managers.Argument;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.PrivilegeLevel;
@@ -27,8 +28,8 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public enum Category {
@@ -55,8 +56,6 @@ public enum Category {
 		this.emoteId = emoteId;
 		this.description = description;
 		this.privilegeLevel = privilegeLevel;
-
-		cmds = new ArrayList<>();
 	}
 
 	public boolean equals(Category other) {
@@ -79,15 +78,8 @@ public enum Category {
 		return privilegeLevel;
 	}
 
-	private final ArrayList<Command> cmds;
-
-	void addCommand(Command cmd) {
-		if (cmd.getCategory() == this)
-			cmds.add(cmd);
-	}
-
-	public ArrayList<Command> getCmds() {
-		return cmds;
+	public List<Argument> getCmds() {
+		return Main.getCommandManager().getCommands().values().stream().filter(a -> a.getCategory().equals(this)).collect(Collectors.toList());
 	}
 
 	public boolean isEnabled(GuildConfig gc, Guild g, User u) {
