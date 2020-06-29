@@ -83,7 +83,7 @@ public class AvatarCommand extends Command {
 				}
 			}
 		} else if (message.getMentionedUsers().size() == 1) {
-			if(author.getId().equals(message.getMentionedUsers().get(0).getId())) {
+			if (author.getId().equals(message.getMentionedUsers().get(0).getId())) {
 				eb.setTitle("Seu avatar");
 				eb.setImage(author.getEffectiveAvatarUrl() + "?size=4096");
 			} else {
