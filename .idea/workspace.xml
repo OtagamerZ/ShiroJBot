@@ -554,14 +554,7 @@
       <workItem from="1593434427332" duration="1383000" />
       <workItem from="1593438566752" duration="4064000" />
       <workItem from="1593446610691" duration="10184000" />
-      <workItem from="1593458767930" duration="4696000" />
-    </task>
-    <task id="LOCAL-01516" summary="Adição de pseudônimos e pseudo-avatares">
-      <created>1593183427167</created>
-      <option name="number" value="01516" />
-      <option name="presentableId" value="LOCAL-01516" />
-      <option name="project" value="LOCAL" />
-      <updated>1593183427167</updated>
+      <workItem from="1593458767930" duration="5291000" />
     </task>
     <task id="LOCAL-01517" summary="Adição de pseudônimos e pseudo-avatares">
       <created>1593190526874</created>
@@ -899,7 +892,14 @@
       <option name="project" value="LOCAL" />
       <updated>1593463008710</updated>
     </task>
-    <option name="localTasksCounter" value="1565" />
+    <task id="LOCAL-01565" summary="Correção na checagem de checkmate">
+      <created>1593463598142</created>
+      <option name="number" value="01565" />
+      <option name="presentableId" value="LOCAL-01565" />
+      <option name="project" value="LOCAL" />
+      <updated>1593463598142</updated>
+    </task>
+    <option name="localTasksCounter" value="1566" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1110,12 +1110,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="212" y="177" key="Vcs.Push.Dialog.v2" timestamp="1593463009970">
+    <state x="212" y="177" key="Vcs.Push.Dialog.v2" timestamp="1593463600983">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1591419318874" />
-    <state x="212" y="177" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1593463009970" />
+    <state x="212" y="177" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1593463600983" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1593021538475">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
