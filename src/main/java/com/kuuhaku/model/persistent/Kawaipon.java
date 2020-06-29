@@ -32,6 +32,7 @@ public class Kawaipon {
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String uid = "";
 
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<KawaiponCard> cards = new HashSet<>();
 
 	public String getUid() {
@@ -46,7 +47,6 @@ public class Kawaipon {
 		return cards.stream().filter(k -> k.getCard().equals(card) && k.isFoil() == foil).findFirst().orElse(null);
 	}
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity = KawaiponCard.class)
 	public Set<KawaiponCard> getCards() {
 		return cards;
 	}
