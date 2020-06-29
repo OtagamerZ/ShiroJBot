@@ -24,7 +24,6 @@ import com.kuuhaku.handlers.games.tabletop.entity.Spot;
 import com.kuuhaku.handlers.games.tabletop.enums.Board;
 import com.kuuhaku.handlers.games.tabletop.enums.PieceIcon;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,11 +35,10 @@ public class King extends Piece {
 	}
 
 	@Override
-	public boolean validate(Board b, Spot to, boolean kingCheck) {
+	public boolean validate(Board b, Spot to) {
 		if (b.getSpot(to) != null && b.getSpot(to).getOwner().equals(getOwner())) return false;
 
 		if (Arrays.stream(new int[][]{UPPER_LEFT, UP, UPPER_RIGHT, MIDDLE_LEFT, MIDDLE_RIGHT, LOWER_LEFT, DOWN, LOWER_RIGHT}).anyMatch(i -> getSpot().getNextSpot(i).equals(to))) {
-			if (kingCheck) return true;
 			return !check(b, to);
 		}
 
@@ -59,11 +57,14 @@ public class King extends Piece {
 	}
 
 	public boolean check(Board b, Spot spot) {
+		/*
 		List<Piece> threats = new ArrayList<>();
 		for (Piece[] ps : b.getLayout()) {
 			threats.addAll(Arrays.asList(ps));
 		}
 
 		return threats.stream().filter(p -> p != null && !p.getOwner().equals(getOwner())).anyMatch(p -> p.validate(b, spot, true));
+		*/
+		return false;
 	}
 }
