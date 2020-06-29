@@ -21,7 +21,9 @@ package com.kuuhaku.command;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
-public abstract class Command {
+import java.io.Closeable;
+
+public abstract class Command implements Closeable {
 
 	private final String name;
 	private final String[] aliases;

@@ -48,7 +48,6 @@ import org.json.JSONArray;
 
 import javax.annotation.Nonnull;
 import javax.persistence.NoResultException;
-import java.lang.ref.WeakReference;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
@@ -162,40 +161,39 @@ public class GuildEvents extends ListenerAdapter {
 				return;
 			}
 
-			WeakReference<Command> reference = new WeakReference<>(Main.getCommandManager().getCommand(commandName));
-			try {
-				if (reference.get() != null) {
-					Command command = reference.get();
-					assert command != null;
-					found = command.getCategory().isEnabled(GuildDAO.getGuildById(guild.getId()), guild, author);
 
-					if (found) {
-						if (Helper.showMMError(author, channel, guild, rawMessage, command)) return;
+			Command command = Main.getCommandManager().getCommand(commandName);
+			if (command != null) {
+				found = command.getCategory().isEnabled(GuildDAO.getGuildById(guild.getId()), guild, author);
 
-						if (command.getCategory() == Category.NSFW && !((TextChannel) channel).isNSFW()) {
-							try {
-								channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_nsfw-in-non-nsfw-channel")).queue();
-							} catch (InsufficientPermissionException ignore) {
-							}
-						} else if (!Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
-							try {
-								channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_not-enough-permission")).queue();
-							} catch (InsufficientPermissionException ignore) {
-							}
-						} else if (BlacklistDAO.isBlacklisted(author.getId())) {
-							channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-blacklisted")).queue();
-						} else if (ShiroInfo.getRatelimit().getIfPresent(author) != null) {
-							channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-ratelimited")).queue();
+				if (found) {
+					if (Helper.showMMError(author, channel, guild, rawMessage, command)) return;
+
+					if (command.getCategory() == Category.NSFW && !((TextChannel) channel).isNSFW()) {
+						try {
+							channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_nsfw-in-non-nsfw-channel")).queue();
+						} catch (InsufficientPermissionException ignore) {
 						}
-
-						command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, prefix);
-						if (!TagDAO.getTagById(author.getId()).isPartner() || Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
-							ShiroInfo.getRatelimit().put(author, true);
-						Helper.spawnAd(channel);
+						return;
+					} else if (!Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
+						try {
+							channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_not-enough-permission")).queue();
+						} catch (InsufficientPermissionException ignore) {
+						}
+						return;
+					} else if (BlacklistDAO.isBlacklisted(author.getId())) {
+						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-blacklisted")).queue();
+						return;
+					} else if (ShiroInfo.getRatelimit().getIfPresent(author) != null) {
+						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-ratelimited")).queue();
+						return;
 					}
+
+					command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, prefix);
+					if (!TagDAO.getTagById(author.getId()).isPartner() || Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
+						ShiroInfo.getRatelimit().put(author, true);
+					Helper.spawnAd(channel);
 				}
-			} finally {
-				reference.clear();
 			}
 
 			if (!found && !author.isBot()) {
