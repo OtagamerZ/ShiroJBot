@@ -180,6 +180,7 @@ public class Chess extends Tabletop {
 									break;
 								}
 							}
+							if (foundKing) break;
 						}
 
 						if (!foundKing) getPlayers().setWinner(turn[0]);
