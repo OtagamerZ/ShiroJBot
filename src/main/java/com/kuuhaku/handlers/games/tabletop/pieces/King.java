@@ -60,7 +60,7 @@ public class King extends Piece {
 	public boolean check(Board b, Spot spot) {
 		List<Piece> threats = new ArrayList<>();
 		for (Piece[] ps : b.getLayout()) {
-			threats.addAll(List.of(ps));
+			threats.addAll(Arrays.asList(ps));
 		}
 
 		return threats.stream().filter(p -> !p.getOwner().equals(getOwner())).anyMatch(p -> p.validate(b, spot));
