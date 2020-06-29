@@ -27,6 +27,7 @@ import com.kuuhaku.handlers.games.tabletop.enums.PieceIcon;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static com.kuuhaku.handlers.games.tabletop.entity.Spot.*;
 
@@ -63,6 +64,9 @@ public class King extends Piece {
 			threats.addAll(Arrays.asList(ps));
 		}
 
-		return threats.stream().filter(p -> p != null && !p.getOwner().equals(getOwner())).anyMatch(p -> p.validate(b, spot));
+		return threats.stream()
+				.filter(Objects::nonNull)
+				.filter(p -> !p.getOwner().equals(getOwner()))
+				.anyMatch(p -> p.validate(b, spot));
 	}
 }
