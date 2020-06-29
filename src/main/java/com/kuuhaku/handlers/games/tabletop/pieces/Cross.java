@@ -30,7 +30,7 @@ public class Cross extends Piece {
 	}
 
 	@Override
-	public boolean validate(Board b, Spot to, boolean kingCheck) {
+	public boolean validate(Board b, Spot to) {
 		return false;
 	}
 }

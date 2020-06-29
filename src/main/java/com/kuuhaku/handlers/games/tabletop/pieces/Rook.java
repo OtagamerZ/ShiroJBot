@@ -30,10 +30,10 @@ public class Rook extends Piece {
 	}
 
 	@Override
-	public boolean validate(Board b, Spot to, boolean kingCheck) {
+	public boolean validate(Board b, Spot to) {
 		boolean blocked = false;
 
-		if (!kingCheck) try {
+		try {
 			King k = b.getPieceByType(King.class, getOwner()).get(0);
 			if (k.check(b, k.getSpot())) return false;
 		} catch (IndexOutOfBoundsException e) {
