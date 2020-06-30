@@ -38,13 +38,10 @@ import javax.imageio.ImageIO;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-
-import static com.kuuhaku.handlers.games.tabletop.entity.Spot.*;
 
 public class Chess extends Tabletop {
 	private final Map<User, List<Piece>> pieces;
@@ -184,14 +181,6 @@ public class Chess extends Tabletop {
 						}
 
 						if (!foundKing) getPlayers().setWinner(turn[0]);
-						else {
-							if (((King) pc).check(getBoard(), pc.getSpot())) {
-								Piece finalPc = pc;
-								if (Arrays.stream(new int[][]{UPPER_LEFT, UP, UPPER_RIGHT, MIDDLE_LEFT, MIDDLE_RIGHT, LOWER_LEFT, DOWN, LOWER_RIGHT})
-										.noneMatch(c -> finalPc.validate(getBoard(), Spot.of(c[0], c[1]))))
-									getPlayers().setWinner(turn[0]);
-							}
-						}
 
 						try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 							ImageIO.write(getBoard().render(), "jpg", baos);
