@@ -20,6 +20,7 @@ package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.utils.AnimeName;
+import org.apache.commons.lang3.ArrayUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -58,6 +59,7 @@ public class CardDAO {
 
 		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity <> 'ULTIMATE'", Card.class);
 		List<Card> c = (List<Card>) q.getResultList();
+		c.removeIf(cd -> !ArrayUtils.contains(AnimeName.values(), cd.getAnime()));
 
 		em.close();
 
