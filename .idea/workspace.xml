@@ -24,10 +24,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção na checagem de checkmate">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_swinglabs_swingx_swingx_graphics_1_6_5_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_swinglabs_swingx_swingx_graphics_1_6_5_1.xml" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/Kawaigotchi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/kawaigotchi/Kawaigotchi.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/AnimeName.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/AnimeName.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -558,14 +557,8 @@
       <workItem from="1593446610691" duration="10184000" />
       <workItem from="1593458767930" duration="5637000" />
       <workItem from="1593540488155" duration="3807000" />
-      <workItem from="1593544881733" duration="772000" />
-    </task>
-    <task id="LOCAL-01518" summary="Adição de pseudônimos e pseudo-avatares">
-      <created>1593190847312</created>
-      <option name="number" value="01518" />
-      <option name="presentableId" value="LOCAL-01518" />
-      <option name="project" value="LOCAL" />
-      <updated>1593190847312</updated>
+      <workItem from="1593544881733" duration="923000" />
+      <workItem from="1593549216923" duration="992000" />
     </task>
     <task id="LOCAL-01519" summary="Adição de pseudônimos e pseudo-avatares">
       <created>1593191064413</created>
@@ -903,7 +896,14 @@
       <option name="project" value="LOCAL" />
       <updated>1593464081301</updated>
     </task>
-    <option name="localTasksCounter" value="1567" />
+    <task id="LOCAL-01567" summary="Remoção da checagem de checkmate">
+      <created>1593545695136</created>
+      <option name="number" value="01567" />
+      <option name="presentableId" value="LOCAL-01567" />
+      <option name="project" value="LOCAL" />
+      <updated>1593545695137</updated>
+    </task>
+    <option name="localTasksCounter" value="1568" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -941,7 +941,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção no tamanho das cartas no livro de cartas" />
     <MESSAGE value="Adicionados mais Kawaipons (Akame Ga Kill)" />
     <MESSAGE value="Aumento do custo de cartas Kawaipon" />
     <MESSAGE value="Melhorias nos efeitos das bordas de cartas" />
@@ -966,7 +965,8 @@
     <MESSAGE value="Correção na ordem pas peças de xadrez" />
     <MESSAGE value="Correção na ordem das peças de xadrez" />
     <MESSAGE value="Correção na checagem de checkmate" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção na checagem de checkmate" />
+    <MESSAGE value="Remoção da checagem de checkmate" />
+    <option name="LAST_COMMIT_MESSAGE" value="Remoção da checagem de checkmate" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1026,12 +1026,12 @@
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1593545657641">
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1593545690692">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1591419311134" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1593545657641" />
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1593545690692" />
     <state width="247" height="195" key="DatabaseViewActions_Filter" timestamp="1591416926427">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -1114,12 +1114,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="212" y="177" key="Vcs.Push.Dialog.v2" timestamp="1593519105356">
+    <state x="212" y="177" key="Vcs.Push.Dialog.v2" timestamp="1593545696903">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1591419318874" />
-    <state x="212" y="177" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1593519105356" />
+    <state x="212" y="177" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1593545696903" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1593021538475">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
