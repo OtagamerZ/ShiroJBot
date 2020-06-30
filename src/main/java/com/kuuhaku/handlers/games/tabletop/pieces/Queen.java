@@ -31,15 +31,6 @@ public class Queen extends Piece {
 
 	@Override
 	public boolean validate(Board b, Spot to) {
-		if (b.getSpot(to) != null && b.getSpot(to).getOwner().equals(getOwner())) return false;
-		else if (!(b.getSpot(to) instanceof King)) try {
-			King k = b.getPieceByType(King.class, getOwner()).get(0);
-			if (b.getAux() != null && b.getSpot(to) == b.getAux()) return true;
-			else if (k.check(b, k.getSpot())) return false;
-		} catch (IndexOutOfBoundsException e) {
-			return false;
-		}
-
 		Piece rk = new Rook(getOwner());
 		Piece bs = new Bishop(getOwner());
 

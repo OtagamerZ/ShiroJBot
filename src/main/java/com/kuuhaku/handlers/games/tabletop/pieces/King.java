@@ -25,9 +25,7 @@ import com.kuuhaku.handlers.games.tabletop.enums.Board;
 import com.kuuhaku.handlers.games.tabletop.enums.PieceIcon;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static com.kuuhaku.handlers.games.tabletop.entity.Spot.*;
 
@@ -41,7 +39,7 @@ public class King extends Piece {
 		if (b.getSpot(to) != null && b.getSpot(to).getOwner().equals(getOwner())) return false;
 
 		if (Arrays.stream(new int[][]{UPPER_LEFT, UP, UPPER_RIGHT, MIDDLE_LEFT, MIDDLE_RIGHT, LOWER_LEFT, DOWN, LOWER_RIGHT}).anyMatch(i -> getSpot().getNextSpot(i).equals(to))) {
-			return !check(b, to);
+			return true;
 		}
 
 		if (isFirstMove()) {
@@ -56,24 +54,5 @@ public class King extends Piece {
 		}
 
 		return false;
-	}
-
-	public boolean check(Board b, Spot spot) {
-		Set<Piece> threats = new HashSet<>();
-		for (Piece[] ps : b.getLayout()) {
-			threats.addAll(Arrays.asList(ps));
-		}
-
-		Piece t = threats.stream()
-				.filter(p -> p != null && !(p instanceof King) && !p.getOwner().equals(getOwner()))
-				.filter(p -> p.validate(b, spot))
-				.findFirst()
-				.orElse(null);
-
-		if (t == null) return false;
-		else {
-			b.setAux(t);
-			return true;
-		}
 	}
 }
