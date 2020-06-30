@@ -142,15 +142,14 @@ public class Kawaigotchi {
 			stance = Stance.DEAD;
 			harvest();
 			return;
-		}
-
-		if (m.getOnlineStatus() == OnlineStatus.OFFLINE || m.getOnlineStatus() == OnlineStatus.UNKNOWN) {
+		} else if (m.getOnlineStatus() == OnlineStatus.OFFLINE || m.getOnlineStatus() == OnlineStatus.UNKNOWN) {
 			if (offSince == null) offSince = LocalDateTime.now();
 			harvest();
 			return;
 		}
 
-		if (offSince != null) offSince = null;
+		offSince = null;
+		diedAt = null;
 		if (health <= 0) {
 			alive = false;
 			diedAt = LocalDateTime.now();
