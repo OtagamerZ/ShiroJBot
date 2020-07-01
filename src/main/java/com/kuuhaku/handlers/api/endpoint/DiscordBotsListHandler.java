@@ -76,9 +76,11 @@ public class DiscordBotsListHandler {
 
 			UpvoteDAO.voted(u);
 			chn.sendMessage(eb.build()).queue(null, Helper::doNothing);
-		} catch (RuntimeException ignore) {
+		} catch (RuntimeException e) {
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+		} finally {
+			acc.voted();
+			AccountDAO.saveAccount(acc);
 		}
-
-		acc.voted();
 	}
 }
