@@ -83,6 +83,7 @@ public class KawaiponBook {
 
 			g2d.drawImage(bg, 0, 0, null);
 			for (int i = 0; i < chunk.size(); i++) {
+				g2d.setBackground(Color.black);
 				switch (chunk.get(i).getCard().getRarity()) {
 					case COMMON:
 						if (chunk.get(i).isFoil()) g2d.setColor(Color.decode("#FFFFFF").brighter());
@@ -103,6 +104,10 @@ public class KawaiponBook {
 					case LEGENDARY:
 						if (chunk.get(i).isFoil()) g2d.setColor(Color.decode("#DC9018").brighter());
 						else g2d.setColor(Color.decode("#DC9018"));
+						break;
+					case ULTIMATE:
+						g2d.setBackground(Color.cyan);
+						g2d.setColor(Color.decode("#2f3136"));
 						break;
 				}
 				g2d.drawImage(chunk.get(i).getCard().drawCard(chunk.get(i).isFoil()), slots[i].x, slots[i].y, 187, 280, null);
