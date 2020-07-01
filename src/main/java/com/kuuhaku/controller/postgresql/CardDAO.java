@@ -28,10 +28,12 @@ import javax.persistence.Query;
 import java.util.List;
 
 public class CardDAO {
-	public static Card getCard(String name) {
+	public static Card getCard(String name, boolean withUltimate) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Card c WHERE id LIKE UPPER(:name) AND rarity <> 'ULTIMATE'", Card.class);
+		Query q;
+		if (withUltimate) q = em.createQuery("SELECT c FROM Card c WHERE id LIKE UPPER(:name)", Card.class);
+		else q = em.createQuery("SELECT c FROM Card c WHERE id LIKE UPPER(:name) AND rarity <> 'ULTIMATE'", Card.class);
 		q.setParameter("name", name);
 
 		try {
