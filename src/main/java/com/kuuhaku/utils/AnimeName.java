@@ -31,7 +31,7 @@ public enum AnimeName {
 	JOJO_BIZARRE_ADVENTURES,
 	PROJECT_VOCALOID,
 	ANGEL_BEATS,
-	PANTY_AND_STOCKING_WITH_GARTERBELT;
+	PANTY_AND_STOCKING;
 
 	@Override
 	public String toString() {
