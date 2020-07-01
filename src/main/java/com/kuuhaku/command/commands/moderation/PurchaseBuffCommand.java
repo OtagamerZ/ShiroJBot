@@ -70,7 +70,7 @@ public class PurchaseBuffCommand extends Command {
 					false);
 			eb.addField("Melhoria de drops (" + prefix + "up drop)",
 					"**Tier 1** (1250 créditos): `+20% chance de aparecer drops` (30 dias)\n" +
-							"**Tier 2** (2750 créditos): `+30% chance de aparecer drops` (15 dias)\n" +
+							"**Tier 2** (3500 créditos): `+30% chance de aparecer drops` (15 dias)\n" +
 							"**Tier 3** (6000 créditos): `+40% chance de aparecer drops` (7 dias)",
 					false);
 			eb.addField("Melhoria de cartas cromadas (" + prefix + "up cromo)",
