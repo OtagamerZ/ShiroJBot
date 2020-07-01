@@ -74,7 +74,7 @@ public class TradeCardCommand extends Command {
 
 		if (StringUtils.isNumeric(args[1])) {
 			int price = Integer.parseInt(args[1]);
-			Card tc = CardDAO.getCard(args[2]);
+			Card tc = CardDAO.getCard(args[2], false);
 			boolean foil = args[3].equalsIgnoreCase("C");
 
 			Account acc = AccountDAO.getAccount(author.getId());
@@ -129,8 +129,8 @@ public class TradeCardCommand extends Command {
 				return;
 			}
 
-			Card c = CardDAO.getCard(args[1]);
-			Card tc = CardDAO.getCard(args[3]);
+			Card c = CardDAO.getCard(args[1], false);
+			Card tc = CardDAO.getCard(args[3], false);
 			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 			Kawaipon target = KawaiponDAO.getKawaipon(other.getId());
 			boolean yourFoil = args[2].equalsIgnoreCase("C");

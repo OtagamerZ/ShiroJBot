@@ -64,7 +64,7 @@ public class SellCardCommand extends Command {
 			return;
 		}
 
-		Card c = CardDAO.getCard(args[0]);
+		Card c = CardDAO.getCard(args[0], false);
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 		boolean foil = args[2].equalsIgnoreCase("C");
 
