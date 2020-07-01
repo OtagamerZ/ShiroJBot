@@ -100,7 +100,7 @@ public class KawaiponsCommand extends Command {
 				eb.addField(":red_envelope: | Cartas comuns:", common + " de " + CardDAO.totalCards() + " (" + Helper.prcntToInt(common, CardDAO.totalCards()) + "%)", true);
 				eb.addField(":star2: | Cartas cromadas:", foil + " de " + CardDAO.totalCards() + " (" + Helper.prcntToInt(foil, CardDAO.totalCards()) + "%)", true);
 				eb.setImage("attachment://page.jpg");
-				eb.setFooter("Coletado: " + Helper.prcntToInt(kp.getCards().size(), CardDAO.totalCards() * 2) + "%");
+				eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(kp.getCards().size(), CardDAO.totalCards() * 2) + "%");
 
 				m.delete().queue();
 				channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards.get(page)), "page.jpg").queue();
