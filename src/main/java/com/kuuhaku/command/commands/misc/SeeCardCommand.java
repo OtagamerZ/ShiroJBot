@@ -72,7 +72,7 @@ public class SeeCardCommand extends Command {
 			return;
 		}
 
-		boolean foil = args[1].equalsIgnoreCase("C") && tc.getRarity() != KawaiponRarity.ULTIMATE;
+		boolean foil = tc.getRarity() != KawaiponRarity.ULTIMATE && args[1].equalsIgnoreCase("C");
 		KawaiponCard card = new KawaiponCard(tc, foil);
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
