@@ -40,12 +40,26 @@ public class PartnerCheckEvent implements Job {
 	private static void notif(Guild g) {
 		try {
 			if (!TagDAO.getTagById(g.getOwnerId()).isPartner() && !Main.getInfo().getDevelopers().contains(g.getOwnerId())) {
-				g.leave().queue();
-				Helper.logger(PartnerCheckEvent.class).info("Saí do servidor " + g.getName() + " por " + Objects.requireNonNull(g.getOwner()).getUser().getAsTag() + " não estar na lista de parceiros.");
+				g.retrieveOwner().queue(o -> {
+							Helper.logger(PartnerCheckEvent.class).info("Saí do servidor " + g.getName() + " por " + Objects.requireNonNull(g.getOwner()).getUser().getAsTag() + " não estar na lista de parceiros.");
+							g.leave().queue();
+						}
+						, f -> {
+							Helper.logger(PartnerCheckEvent.class).info("Saí do servidor " + g.getName() + " por DESCONHECIDO não estar na lista de parceiros.");
+							g.leave().queue();
+						}
+				);
 			}
 		} catch (NoResultException e) {
-			g.leave().queue();
-			Helper.logger(PartnerCheckEvent.class).info("Saí do servidor " + g.getName() + " por " + Objects.requireNonNull(g.getOwner()).getUser().getAsTag() + " não possuir tags.");
+			g.retrieveOwner().queue(o -> {
+						Helper.logger(PartnerCheckEvent.class).info("Saí do servidor " + g.getName() + " por " + o.getUser().getAsTag() + " não possuir tags.");
+						g.leave().queue();
+					}
+					, f -> {
+						Helper.logger(PartnerCheckEvent.class).info("Saí do servidor " + g.getName() + " por DESCONHECIDO não possuir tags.");
+						g.leave().queue();
+					}
+			);
 		}
 	}
 }

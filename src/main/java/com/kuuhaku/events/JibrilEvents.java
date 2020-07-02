@@ -54,19 +54,23 @@ public class JibrilEvents extends ListenerAdapter {
 			}
 		}
 
-		Main.getInfo().getDevelopers().forEach(d -> Objects.requireNonNull(Main.getJibril().getUserById(d)).openPrivateChannel().queue(c -> {
-			String msg = "Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".";
-			c.sendMessage(msg).queue();
-		}));
+		Main.getInfo().getDevelopers().forEach(d -> Main.getJibril().retrieveUserById(d).queue(u ->
+				u.openPrivateChannel().queue(c -> {
+					String msg = "Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".";
+					c.sendMessage(msg).queue();
+				}))
+		);
 		Helper.logger(this.getClass()).info("Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".");
 	}
 
 	@Override
 	public void onGuildLeave(GuildLeaveEvent event) {
-		Main.getInfo().getDevelopers().forEach(d -> Objects.requireNonNull(Main.getJibril().getUserById(d)).openPrivateChannel().queue(c -> {
-			String msg = "Acabei de sair do servidor \"" + event.getGuild().getName() + "\".";
-			c.sendMessage(msg).queue();
-		}));
+		Main.getInfo().getDevelopers().forEach(d -> Main.getJibril().retrieveUserById(d).queue(u ->
+				u.openPrivateChannel().queue(c -> {
+					String msg = "Acabei de sair do servidor \"" + event.getGuild().getName() + "\".";
+					c.sendMessage(msg).queue();
+				}))
+		);
 		Helper.logger(this.getClass()).info("Acabei de sair do servidor \"" + event.getGuild().getName() + "\".");
 	}
 
