@@ -26,7 +26,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class RelayBlockList {
 	private static final List<String> blockedIDs = RelayDAO.blockedList();
@@ -41,10 +40,12 @@ public class RelayBlockList {
 		eb.setColor(Color.orange);
 		eb.setThumbnail("https://image.flaticon.com/icons/png/512/718/718672.png");
 		Main.getInfo().getUserByID(id).openPrivateChannel().queue(c -> c.sendMessage(eb.build()).queue());
-		Main.getInfo().getDevelopers().forEach(d -> Objects.requireNonNull(Main.getJibril().getUserById(d)).openPrivateChannel().queue(c -> {
-			String msg = "Usuário bloqueado do chat global.```Usuário: " + Main.getInfo().getUserByID(id).getAsTag() + "\n\nRazão: " + reason + "```";
-			c.sendMessage(msg).queue();
-		}));
+		Main.getInfo().getDevelopers().forEach(d -> Main.getJibril().retrieveUserById(d).queue(u ->
+				u.openPrivateChannel().queue(c -> {
+					String msg = "Usuário bloqueado do chat global.```Usuário: " + Main.getInfo().getUserByID(id).getAsTag() + "\n\nRazão: " + reason + "```";
+					c.sendMessage(msg).queue();
+				}))
+		);
 	}
 
 	public static void permaBlockID(String id, String reason) {
@@ -58,10 +59,12 @@ public class RelayBlockList {
 		eb.setColor(Color.red);
 		eb.setThumbnail("https://cdn.pixabay.com/photo/2013/07/12/12/40/abort-146072_640.png");
 		Main.getInfo().getUserByID(id).openPrivateChannel().queue(c -> c.sendMessage(eb.build()).queue());
-		Main.getInfo().getDevelopers().forEach(d -> Objects.requireNonNull(Main.getJibril().getUserById(d)).openPrivateChannel().queue(c -> {
-			String msg = "Usuário bloqueado permanentemente do chat global.```Usuário: " + Main.getInfo().getUserByID(id).getAsTag() + "\n\nRazão: " + reason + "```";
-			c.sendMessage(msg).queue();
-		}));
+		Main.getInfo().getDevelopers().forEach(d -> Main.getJibril().retrieveUserById(d).queue(u ->
+				u.openPrivateChannel().queue(c -> {
+					String msg = "Usuário bloqueado permanentemente do chat global.```Usuário: " + Main.getInfo().getUserByID(id).getAsTag() + "\n\nRazão: " + reason + "```";
+					c.sendMessage(msg).queue();
+				}))
+		);
 	}
 
 	public static void blockThumb(String id) {
