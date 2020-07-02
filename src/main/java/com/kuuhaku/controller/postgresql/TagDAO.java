@@ -197,4 +197,13 @@ public class TagDAO {
 
 		em.close();
 	}
+
+	public static void sweep() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("DELETE FROM Tags t WHERE NOT t.Sponsor AND NOT t.Partner AND NOT t.Reader AND NOT t.Toxic AND NOT t.Verified");
+		q.executeUpdate();
+
+		em.close();
+	}
 }
