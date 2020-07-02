@@ -260,7 +260,7 @@ public class Helper {
 			if (isCommand) eb.addField("Comando:", gc.getPrefix() + c.getName(), true);
 			eb.setFooter("Data: " + OffsetDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), null);
 
-			Objects.requireNonNull(g.getTextChannelById(gc.getCanalLog())).sendMessage(eb.build()).queue();
+			Objects.requireNonNull(g.getTextChannelById(gc.getCanalLog())).sendMessage(eb.build()).queue(null, Helper::doNothing);
 		} catch (NullPointerException ignore) {
 		} catch (Exception e) {
 			gc.setCanalLog("");
