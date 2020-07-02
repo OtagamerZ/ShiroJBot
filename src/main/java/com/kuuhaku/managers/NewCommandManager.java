@@ -368,7 +368,7 @@ public class NewCommandManager {
 					"pseudoavatar", new String[]{"pavatar"}, REQ_LINK, "cmd_pseudo-avatar", MISC, true
 			));
 			put(SeeCardCommand.class, new Argument(
-					"carta", new String[]{"card", "see", "olhar"}, "req_card_type", "cmd_see-card", MISC, false
+					"carta", new String[]{"card", "see", "olhar"}, "req_card-type", "cmd_see-card", MISC, false
 			));
 
 			//FUN
