@@ -20,7 +20,6 @@ package com.kuuhaku.controller;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.Manager;
-import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.persistent.GuildConfig;
@@ -62,8 +61,6 @@ public class Sweeper {
 		q = em.createQuery("DELETE FROM CustomAnswers WHERE markForDelete = TRUE");
 		q.executeUpdate();
 		em.getTransaction().commit();
-
-		TagDAO.sweep();
 
 		em.close();
 	}
