@@ -395,7 +395,7 @@ public class Helper {
 
 		EmbedBuilder eb = new EmbedBuilder();
 
-		eb.setThumbnail("https://www.pacific.edu/Images/library/Renovation%20Renderings/LogoMakr_2mPTly.png");
+		eb.setThumbnail("https://img.icons8.com/cotton/2x/checkmark.png");
 		eb.setTitle("Olá, obrigada por apoiar meu desenvolvimento!");
 		eb.setDescription(s + System.getenv(link));
 		eb.setColor(Color.green);

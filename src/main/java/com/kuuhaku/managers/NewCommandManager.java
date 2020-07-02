@@ -441,6 +441,9 @@ public class NewCommandManager {
 			put(CatchDropCommand.class, new Argument(
 					"abrir", new String[]{"open"}, "req_captcha", "cmd_catch-drop", FUN, false
 			));
+			put(LearnToSearchCommand.class, new Argument(
+					"pesquisar", new String[]{"search", "lts", "aap"}, "req_search", "cmd_learn-to-search", FUN, false
+			));
 
 			//MUSICA
 			put(ControlCommand.class, new Argument(

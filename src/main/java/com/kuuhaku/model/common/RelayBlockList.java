@@ -57,7 +57,7 @@ public class RelayBlockList {
 		eb.setTitle("Você foi bloqueado permanentemente de utilizar o chat global");
 		eb.setDescription("Este bloqueio **NÃO** será removido em momento algum, por melhor que seja a explicação para isto ter ocorrido!\n\nRazão: " + reason);
 		eb.setColor(Color.red);
-		eb.setThumbnail("https://cdn.pixabay.com/photo/2013/07/12/12/40/abort-146072_640.png");
+		eb.setThumbnail("https://cdn.icon-icons.com/icons2/1380/PNG/512/vcsconflicting_93497.png");
 		Main.getInfo().getUserByID(id).openPrivateChannel().queue(c -> c.sendMessage(eb.build()).queue());
 		Main.getInfo().getDevelopers().forEach(d -> Main.getJibril().retrieveUserById(d).queue(u ->
 				u.openPrivateChannel().queue(c -> {
