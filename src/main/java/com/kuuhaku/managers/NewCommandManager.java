@@ -282,7 +282,7 @@ public class NewCommandManager {
 					"kawaipons", new String[]{"kps"}, "req_page", "cmd_kawaipons", INFO, false
 			));
 			put(RemainingCardsCommand.class, new Argument(
-					"cartasrestantes", new String[]{"remaining"}, "req_anime", "cmd_remaining-cards", INFO, false
+					"cartasrestantes", new String[]{"restante", "remaining"}, "req_anime", "cmd_remaining-cards", INFO, false
 			));
 
 			//MISC
@@ -366,6 +366,9 @@ public class NewCommandManager {
 			));
 			put(PseudoAvatarCommand.class, new Argument(
 					"pseudoavatar", new String[]{"pavatar"}, REQ_LINK, "cmd_pseudo-avatar", MISC, true
+			));
+			put(SeeCardCommand.class, new Argument(
+					"carta", new String[]{"card", "see", "olhar"}, "req_card_type", "cmd_see-card", MISC, false
 			));
 
 			//FUN
