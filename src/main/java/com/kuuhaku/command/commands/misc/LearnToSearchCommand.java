@@ -16,48 +16,48 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.information;
+package com.kuuhaku.command.commands.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.I18n;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
-import java.text.MessageFormat;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
-public class WalletCommand extends Command {
 
-	public WalletCommand(String name, String description, Category category, boolean requiresMM) {
+public class LearnToSearchCommand extends Command {
+
+	public LearnToSearchCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
 	}
 
-	public WalletCommand(@NonNls String name, @NonNls String[] aliases, String description, Category category, boolean requiresMM) {
+	public LearnToSearchCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
 		super(name, aliases, description, category, requiresMM);
 	}
 
-	public WalletCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+	public LearnToSearchCommand(@NonNls String name, String usage, String description, Category category, boolean requiresMM) {
 		super(name, usage, description, category, requiresMM);
 	}
 
-	public WalletCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+	public LearnToSearchCommand(String name, String[] aliases, String usage, String description, Category category, boolean requiresMM) {
 		super(name, aliases, usage, description, category, requiresMM);
 	}
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		Account acc = AccountDAO.getAccount(author.getId());
+		if (args.length == 0) {
+			channel.sendMessage(":x: | Você precisa informar algo para pesquisar.").queue();
+			return;
+		}
+
 		EmbedBuilder eb = new EmbedBuilder();
 
-		eb.setTitle(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_balance-title"), author.getName()));
-		eb.addField(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_balance-field-title"), acc.getBalance()), MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_balance-field-value"), acc.getLastVoted()), true);
-		eb.setColor(Helper.getRandomColor());
-		eb.setThumbnail("https://imgur.com/nhWckfq");
+		eb.setTitle("Aqui está seu resultado!");
+		eb.setDescription("[Clique aqui para ver.](https://pt-br.lmgtfy.com/?q=" + URLEncoder.encode(String.join(" ", args), StandardCharsets.UTF_8) + "&iie=1)");
+		eb.setThumbnail("https://img.icons8.com/cotton/2x/checkmark.png");
 
 		channel.sendMessage(eb.build()).queue();
 	}
