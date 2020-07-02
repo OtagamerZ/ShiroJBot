@@ -87,7 +87,7 @@ public class SeeCardCommand extends Command {
 		eb.setTitle(card.getName());
 		eb.addField("Obtida:", cards.contains(card) ? "Sim" : "Não", true);
 		eb.addField("Raridade:", tc.getRarity().toString(), true);
-		eb.addField("Tipo:", card.isFoil() ? "Cromada" : "Normal", true);
+		eb.addField("Tipo:", tc.getRarity() == KawaiponRarity.ULTIMATE ? "Única" : (card.isFoil() ? "Cromada" : "Normal"), true);
 		eb.addField("Anime:", tc.getAnime().toString(), true);
 		eb.setImage("attachment://kawaipon." + (cards.contains(card) ? "png" : "jpg"));
 
