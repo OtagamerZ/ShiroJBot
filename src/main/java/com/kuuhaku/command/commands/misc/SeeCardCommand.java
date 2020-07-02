@@ -25,7 +25,9 @@ import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
+import com.kuuhaku.utils.AnimeName;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.KawaiponRarity;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
@@ -34,6 +36,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Set;
 
 public class SeeCardCommand extends Command {
 
@@ -55,33 +58,43 @@ public class SeeCardCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		if (args.length < 2) {
-			channel.sendMessage(":x: | Você precisa informar uma carta e o tipo dela (`N` = normal, `C` = cromada).").queue();
+		if (args.length < 1) {
+			channel.sendMessage(":x: | Você precisa informar uma carta.").queue();
 			return;
 		}
 
 		Card tc = CardDAO.getCard(args[0], true);
-		boolean foil = args[1].equalsIgnoreCase("C");
-		KawaiponCard card = new KawaiponCard(tc, foil);
-		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 		if (tc == null) {
 			channel.sendMessage(":x: | Essa carta não existe.").queue();
 			return;
+		} else if (args.length < 2 && tc.getRarity() != KawaiponRarity.ULTIMATE) {
+			channel.sendMessage(":x: | Você também precisa informar o tipo dela (`N` = normal, `C` = cromada).").queue();
+			return;
+		}
+
+		boolean foil = args[1].equalsIgnoreCase("C") && tc.getRarity() != KawaiponRarity.ULTIMATE;
+		KawaiponCard card = new KawaiponCard(tc, foil);
+		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+
+		Set<KawaiponCard> cards = kp.getCards();
+		for (AnimeName anime : AnimeName.values()) {
+			if (CardDAO.animeCount(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).count())
+				cards.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
 		}
 
 		EmbedBuilder eb = new EmbedBuilder();
 
 		eb.setTitle(card.getName());
-		eb.addField("Obtida:", kp.getCards().contains(card) ? "Sim" : "Não", true);
+		eb.addField("Obtida:", cards.contains(card) ? "Sim" : "Não", true);
 		eb.addField("Raridade:", tc.getRarity().toString(), true);
 		eb.addField("Tipo:", card.isFoil() ? "Cromada" : "Normal", true);
 		eb.addField("Anime:", tc.getAnime().toString(), true);
-		eb.setImage("attachment://kawaipon." + (kp.getCards().contains(card) ? "png" : "jpg"));
+		eb.setImage("attachment://kawaipon." + (cards.contains(card) ? "png" : "jpg"));
 
 		try {
 			BufferedImage bi = (ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/missing.jpg"))));
 
-			if (kp.getCards().contains(card))
+			if (cards.contains(card))
 				channel.sendMessage(eb.build()).addFile(Helper.getBytes(tc.drawCard(foil), "png"), "kawaipon.png").queue();
 			else
 				channel.sendMessage(eb.build()).addFile(Helper.getBytes(bi), "kawaipon.jpg").queue();
