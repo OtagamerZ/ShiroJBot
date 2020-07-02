@@ -85,7 +85,7 @@ public class QuizCommand extends Command {
 		}
 
 		EmbedBuilder eb = new EmbedBuilder();
-		eb.setThumbnail("https://lh3.googleusercontent.com/proxy/ZvixvksWEH9fKXQXNtDTQYMRNxvRQDCrCDmMiC2g5tkotFwRPcSp9L8c4doZAcR31p5n5sXYmSSyNnQltoPOuRAUPh6fQtyf_PoeDLIUFJINbX0");
+		eb.setThumbnail("https://images.vexels.com/media/users/3/152594/isolated/preview/d00d116b2c073ccf7f9fec677fec78e3---cone-de-ponto-de-interroga----o-quadrado-roxo-by-vexels.png");
 		eb.setTitle("Hora do quiz!");
 		eb.setDescription(q.getQuestion());
 		eb.setColor(Color.decode("#2195f2"));
@@ -101,7 +101,7 @@ public class QuizCommand extends Command {
 			buttons.put(shuffledOpts.get(i.get()), (mb, ms) -> {
 				if (!mb.getId().equals(author.getId())) return;
 				eb.clear();
-				eb.setThumbnail("https://lh3.googleusercontent.com/proxy/ZvixvksWEH9fKXQXNtDTQYMRNxvRQDCrCDmMiC2g5tkotFwRPcSp9L8c4doZAcR31p5n5sXYmSSyNnQltoPOuRAUPh6fQtyf_PoeDLIUFJINbX0");
+				eb.setThumbnail("https://images.vexels.com/media/users/3/152594/isolated/preview/d00d116b2c073ccf7f9fec677fec78e3---cone-de-ponto-de-interroga----o-quadrado-roxo-by-vexels.png");
 
 				if (mb.getId().equals(author.getId())) {
 					if (values.get(String.valueOf(o)) == 1) {
