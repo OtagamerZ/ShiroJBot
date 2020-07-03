@@ -101,37 +101,49 @@ public class PurchaseBuffCommand extends Command {
 				switch (tier) {
 					case 1:
 						sb = new ServerBuff(tier, ServerBuff.XP_TIER_1);
+						break;
 					case 2:
 						sb = new ServerBuff(tier, ServerBuff.XP_TIER_2);
+						break;
 					case 3:
 						sb = new ServerBuff(tier, ServerBuff.XP_TIER_3);
+						break;
 				}
 			case "CARTA":
 				switch (tier) {
 					case 1:
 						sb = new ServerBuff(tier, ServerBuff.CARD_TIER_1);
+						break;
 					case 2:
 						sb = new ServerBuff(tier, ServerBuff.CARD_TIER_2);
+						break;
 					case 3:
 						sb = new ServerBuff(tier, ServerBuff.CARD_TIER_3);
+						break;
 				}
 			case "DROP":
 				switch (tier) {
 					case 1:
 						sb = new ServerBuff(tier, ServerBuff.DROP_TIER_1);
+						break;
 					case 2:
 						sb = new ServerBuff(tier, ServerBuff.DROP_TIER_2);
+						break;
 					case 3:
 						sb = new ServerBuff(tier, ServerBuff.DROP_TIER_3);
+						break;
 				}
 			case "CROMADA":
 				switch (tier) {
 					case 1:
 						sb = new ServerBuff(tier, ServerBuff.FOIL_TIER_1);
+						break;
 					case 2:
 						sb = new ServerBuff(tier, ServerBuff.FOIL_TIER_2);
+						break;
 					case 3:
 						sb = new ServerBuff(tier, ServerBuff.FOIL_TIER_3);
+						break;
 				}
 		}
 

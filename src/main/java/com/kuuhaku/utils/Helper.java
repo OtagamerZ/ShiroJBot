@@ -202,11 +202,11 @@ public class Helper {
 		}
 	}
 
-	public static String callApi(String url) {
+	public static JSONObject callApi(String url) {
 		try {
 			HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
 			con.addRequestProperty("User-Agent", "Mozilla/5.0");
-			return IOUtils.toString(con.getInputStream(), StandardCharsets.UTF_8);
+			return new JSONObject(IOUtils.toString(con.getInputStream(), StandardCharsets.UTF_8));
 		} catch (IOException e) {
 			logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
 			return null;
