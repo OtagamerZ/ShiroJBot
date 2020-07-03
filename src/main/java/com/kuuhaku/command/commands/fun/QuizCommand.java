@@ -166,14 +166,13 @@ public class QuizCommand extends Command {
 
 			for (int i = 0; i < opts.size(); i++) {
 				int finalI = i;
-				int finalModif = modif;
 				buttons.put(opts.get(i), (mb, ms) -> {
 					if (!mb.getId().equals(author.getId())) return;
 					eb.clear();
 					eb.setThumbnail("https://images.vexels.com/media/users/3/152594/isolated/preview/d00d116b2c073ccf7f9fec677fec78e3---cone-de-ponto-de-interroga----o-quadrado-roxo-by-vexels.png");
 
 					if (shuffledOpts.get(finalI).equalsIgnoreCase(correct)) {
-						int p = Helper.clamp(Helper.rng(150 * finalModif), (150 * finalModif) / 3, 150 * finalModif);
+						int p = Helper.clamp(Helper.rng(100 * modif), (100 * modif) / 3, 100 * modif);
 						acc.addCredit(p);
 						AccountDAO.saveAccount(acc);
 
