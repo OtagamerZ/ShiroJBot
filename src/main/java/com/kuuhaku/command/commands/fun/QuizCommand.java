@@ -21,6 +21,7 @@ package com.kuuhaku.command.commands.fun;
 import com.github.ygimenez.method.Pages;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.Tradutor;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.QuizDAO;
@@ -28,22 +29,22 @@ import com.kuuhaku.controller.sqlite.PStateDAO;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.AnsweredQuizzes;
-import com.kuuhaku.model.persistent.Quiz;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
+import org.json.JSONObject;
 
 import java.awt.*;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
-
-import static com.kuuhaku.model.persistent.Quiz.OPTS;
+import java.util.stream.Collectors;
 
 public class QuizCommand extends Command {
 
@@ -67,45 +68,75 @@ public class QuizCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		AnsweredQuizzes aq = QuizDAO.getUserState(author.getId());
 
-		if (aq.getTimes() == 6) {
+		if (aq.getTimes() == 10) {
 			int time = (6 - (LocalDateTime.now().getHour() % 6));
 			channel.sendMessage(":x: | Você já jogou muitas vezes, aguarde " + time + " hora" + (time == 1 ? "" : "s") + " para jogar novamente!").queue();
 			return;
 		}
 
-		Quiz q = QuizDAO.getRandomQuiz();
+		String diff;
+		int modif;
+		switch (StringUtils.stripAccents(args[0].toLowerCase())) {
+			case "facil":
+			case "easy":
+				diff = "easy";
+				modif = 1;
+				break;
+			case "medio":
+			case "medium":
+				diff = "medium";
+				modif = 2;
+				break;
+			case "dificil":
+			case "hard":
+				diff = "hard";
+				modif = 3;
+				break;
+			default:
+				diff = null;
+				modif = 1;
+		}
+
+		JSONObject res = Helper.callApi("https://opentdb.com/api.php?amount=1&category=15" + (diff == null ? "" : "&difficulty=" + diff) + "&type=multiple&encode=url3986");
+		assert res != null;
+		String question = res.getJSONArray("results").getJSONObject(0).getString("question");
+		String correct = res.getJSONArray("results").getJSONObject(0).getString("correct_answer");
+		List<String> wrong = res.getJSONArray("results").getJSONObject(0).getJSONArray("incorrect_answers").toList().stream().map(String::valueOf).collect(Collectors.toList());
+
 		Account acc = AccountDAO.getAccount(author.getId());
 		aq.played();
 		QuizDAO.saveUserState(aq);
 
-		HashMap<String, Integer> values = new HashMap<>();
+		try {
+			EmbedBuilder eb = new EmbedBuilder();
+			eb.setThumbnail("https://images.vexels.com/media/users/3/152594/isolated/preview/d00d116b2c073ccf7f9fec677fec78e3---cone-de-ponto-de-interroga----o-quadrado-roxo-by-vexels.png");
+			eb.setTitle("Hora do quiz!");
+			eb.setDescription("**Traduzida:**\n" + Tradutor.translate("en", "pt", question) + "\n\n**Original:\n**" + question);
+			eb.addField("Dificuldade", diff, true);
+			eb.setColor(Color.decode("#2195f2"));
 
-		for (int i = 0; i < OPTS.length; i++) {
-			values.put(q.getOptions().getString(i), i + 1);
-		}
+			List<String> opts = List.of(
+					"\uD83C\uDDE6",
+					"\uD83C\uDDE7",
+					"\uD83C\uDDE8",
+					"\uD83C\uDDE9"
+			);
+			List<String> shuffledOpts = new ArrayList<>(wrong);
+			shuffledOpts.add(correct);
+			Collections.shuffle(shuffledOpts);
+			List<MessageEmbed.Field> fields = new ArrayList<>();
 
-		EmbedBuilder eb = new EmbedBuilder();
-		eb.setThumbnail("https://images.vexels.com/media/users/3/152594/isolated/preview/d00d116b2c073ccf7f9fec677fec78e3---cone-de-ponto-de-interroga----o-quadrado-roxo-by-vexels.png");
-		eb.setTitle("Hora do quiz!");
-		eb.setDescription(q.getQuestion());
-		eb.setColor(Color.decode("#2195f2"));
+			TreeMap<String, BiConsumer<Member, Message>> buttons = new TreeMap<>();
 
-		List<String> shuffledOpts = Arrays.asList(OPTS);
-		Collections.shuffle(shuffledOpts);
-		List<MessageEmbed.Field> fields = new ArrayList<>();
+			for (int i = 0; i < opts.size(); i++) {
+				int finalI = i;
+				buttons.put(opts.get(i), (mb, ms) -> {
+					if (!mb.getId().equals(author.getId())) return;
+					eb.clear();
+					eb.setThumbnail("https://images.vexels.com/media/users/3/152594/isolated/preview/d00d116b2c073ccf7f9fec677fec78e3---cone-de-ponto-de-interroga----o-quadrado-roxo-by-vexels.png");
 
-		TreeMap<String, BiConsumer<Member, Message>> buttons = new TreeMap<>();
-
-		AtomicInteger i = new AtomicInteger(0);
-		q.getOptions().forEach(o -> {
-			buttons.put(shuffledOpts.get(i.get()), (mb, ms) -> {
-				if (!mb.getId().equals(author.getId())) return;
-				eb.clear();
-				eb.setThumbnail("https://images.vexels.com/media/users/3/152594/isolated/preview/d00d116b2c073ccf7f9fec677fec78e3---cone-de-ponto-de-interroga----o-quadrado-roxo-by-vexels.png");
-
-				if (mb.getId().equals(author.getId())) {
-					if (values.get(String.valueOf(o)) == 1) {
-						int p = Helper.clamp(Helper.rng(q.getPrize()), q.getPrize() / 5, q.getPrize());
+					if (shuffledOpts.get(finalI).equalsIgnoreCase(correct)) {
+						int p = Helper.clamp(Helper.rng(150 * modif), (150 * modif) / 3, 150 * modif);
 						acc.addCredit(p);
 						AccountDAO.saveAccount(acc);
 
@@ -131,17 +162,18 @@ public class QuizCommand extends Command {
 					}
 
 					ms.delete().queue();
-				}
 
-				channel.sendMessage(eb.build()).queue();
-			});
+					channel.sendMessage(eb.build()).queue();
+				});
 
-			fields.add(new MessageEmbed.Field("Alternativa " + shuffledOpts.get(i.get()), String.valueOf(o), false));
-			i.getAndIncrement();
-		});
+				fields.add(new MessageEmbed.Field("Alternativa " + opts.get(i), shuffledOpts.get(i), false));
+			}
 
-		fields.sort(Comparator.comparing(MessageEmbed.Field::getName));
-		fields.forEach(eb::addField);
-		channel.sendMessage(eb.build()).queue(s -> Pages.buttonize(s, buttons, false, 60, TimeUnit.SECONDS));
+			fields.sort(Comparator.comparing(MessageEmbed.Field::getName));
+			fields.forEach(eb::addField);
+			channel.sendMessage(eb.build()).queue(s -> Pages.buttonize(s, buttons, false, 60, TimeUnit.SECONDS));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
