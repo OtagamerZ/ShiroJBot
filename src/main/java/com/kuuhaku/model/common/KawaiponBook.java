@@ -18,7 +18,9 @@
 
 package com.kuuhaku.model.common;
 
+import com.kuuhaku.controller.postgresql.RarityColorsDAO;
 import com.kuuhaku.model.persistent.KawaiponCard;
+import com.kuuhaku.model.persistent.RarityColors;
 import com.kuuhaku.utils.AnimeName;
 import com.kuuhaku.utils.KawaiponRarity;
 
@@ -83,33 +85,12 @@ public class KawaiponBook {
 
 			g2d.drawImage(bg, 0, 0, null);
 			for (int i = 0; i < chunk.size(); i++) {
-				g2d.setBackground(Color.black);
-				switch (chunk.get(i).getCard().getRarity()) {
-					case COMMON:
-						if (chunk.get(i).isFoil()) g2d.setColor(Color.decode("#FFFFFF").brighter());
-						else g2d.setColor(Color.decode("#FFFFFF"));
-						break;
-					case UNCOMMON:
-						if (chunk.get(i).isFoil()) g2d.setColor(Color.decode("#03BB85").brighter());
-						else g2d.setColor(Color.decode("#03BB85"));
-						break;
-					case RARE:
-						if (chunk.get(i).isFoil()) g2d.setColor(Color.decode("#70D1F4").brighter());
-						else g2d.setColor(Color.decode("#70D1F4"));
-						break;
-					case ULTRA_RARE:
-						if (chunk.get(i).isFoil()) g2d.setColor(Color.decode("#9966CC").brighter());
-						else g2d.setColor(Color.decode("#9966CC"));
-						break;
-					case LEGENDARY:
-						if (chunk.get(i).isFoil()) g2d.setColor(Color.decode("#DC9018").brighter());
-						else g2d.setColor(Color.decode("#DC9018"));
-						break;
-					case ULTIMATE:
-						g2d.setBackground(Color.decode("#FF006C"));
-						g2d.setColor(Color.decode("#410066"));
-						break;
-				}
+				RarityColors rc = RarityColorsDAO.getColor(chunk.get(i).getCard().getRarity());
+
+				g2d.setBackground(rc.getSecondary());
+				if (chunk.get(i).isFoil()) g2d.setColor(rc.getPrimary().brighter());
+				else g2d.setColor(rc.getPrimary());
+
 				g2d.drawImage(chunk.get(i).getCard().drawCard(chunk.get(i).isFoil()), slots[i].x, slots[i].y, 187, 280, null);
 				if (slots[i].y == 134)
 					Profile.printCenteredString(chunk.get(i).getName(), 187, slots[i].x, 105, g2d);
