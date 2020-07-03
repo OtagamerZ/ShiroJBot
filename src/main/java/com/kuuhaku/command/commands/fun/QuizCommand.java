@@ -95,8 +95,7 @@ public class QuizCommand extends Command {
 		else diff = null;
 
 		try {
-			JSONObject res = Helper.callApi("https://opentdb.com/api.php?amount=1&category=15" + (diff == null ? "" : "&difficulty=" + diff) + "&type=multiple&encode=url3986");
-			assert res != null;
+			JSONObject res = new JSONObject(Base64.getDecoder().decode(Objects.requireNonNull(Helper.callApi("https://opentdb.com/api.php?amount=1&category=15" + (diff == null ? "" : "&difficulty=" + diff) + "&type=multiple&encode=base64"))));
 			String question = res
 					.getJSONArray("results")
 					.getJSONObject(0)
@@ -198,7 +197,7 @@ public class QuizCommand extends Command {
 					channel.sendMessage(eb.build()).queue();
 				});
 
-				fields.add(new MessageEmbed.Field("Alternativa " + opts.get(i), shuffledOpts.get(i), false));
+				fields.add(new MessageEmbed.Field("Alternativa " + opts.get(i), shuffledOpts.get(i), true));
 			}
 
 			fields.sort(Comparator.comparing(MessageEmbed.Field::getName));

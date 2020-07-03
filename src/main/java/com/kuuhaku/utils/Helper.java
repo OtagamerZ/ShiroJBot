@@ -66,7 +66,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.time.OffsetDateTime;
@@ -203,11 +202,11 @@ public class Helper {
 		}
 	}
 
-	public static JSONObject callApi(String url) {
+	public static String callApi(String url) {
 		try {
 			HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
 			con.addRequestProperty("User-Agent", "Mozilla/5.0");
-			return new JSONObject(URLDecoder.decode(IOUtils.toString(con.getInputStream(), StandardCharsets.UTF_8), StandardCharsets.UTF_8));
+			return IOUtils.toString(con.getInputStream(), StandardCharsets.UTF_8);
 		} catch (IOException e) {
 			logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
 			return null;
