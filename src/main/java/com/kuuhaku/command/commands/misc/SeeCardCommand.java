@@ -85,7 +85,7 @@ public class SeeCardCommand extends Command {
 
 		EmbedBuilder eb = new EmbedBuilder();
 
-		eb.setTitle(card.getName());
+		eb.setTitle(":flower_playing_cards: | " + card.getName());
 		eb.setColor(RarityColorsDAO.getColor(tc.getRarity()).getPrimary());
 		eb.addField("Obtida:", cards.contains(card) ? "Sim" : "Não", true);
 		eb.addField("Raridade:", tc.getRarity().toString(), true);
