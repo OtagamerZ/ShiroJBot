@@ -26,8 +26,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/NewCommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/NewCommandManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -568,21 +566,7 @@
       <workItem from="1593636443396" duration="755000" />
       <workItem from="1593691296952" duration="3787000" />
       <workItem from="1593698693521" duration="8760000" />
-      <workItem from="1593777675266" duration="5222000" />
-    </task>
-    <task id="LOCAL-01544" summary="Melhoria na instanciação de comandos">
-      <created>1593450849172</created>
-      <option name="number" value="01544" />
-      <option name="presentableId" value="LOCAL-01544" />
-      <option name="project" value="LOCAL" />
-      <updated>1593450849172</updated>
-    </task>
-    <task id="LOCAL-01545" summary="Melhoria na instanciação de comandos">
-      <created>1593451031070</created>
-      <option name="number" value="01545" />
-      <option name="presentableId" value="LOCAL-01545" />
-      <option name="project" value="LOCAL" />
-      <updated>1593451031070</updated>
+      <workItem from="1593777675266" duration="5609000" />
     </task>
     <task id="LOCAL-01546" summary="Melhoria na instanciação de comandos">
       <created>1593451129879</created>
@@ -913,7 +897,21 @@
       <option name="project" value="LOCAL" />
       <updated>1593782646313</updated>
     </task>
-    <option name="localTasksCounter" value="1593" />
+    <task id="LOCAL-01593" summary="Troca para o uso de uma api para o banco de quizzes">
+      <created>1593782917850</created>
+      <option name="number" value="01593" />
+      <option name="presentableId" value="LOCAL-01593" />
+      <option name="project" value="LOCAL" />
+      <updated>1593782917850</updated>
+    </task>
+    <task id="LOCAL-01594" summary="Troca para o uso de uma api para o banco de quizzes">
+      <created>1593783038235</created>
+      <option name="number" value="01594" />
+      <option name="presentableId" value="LOCAL-01594" />
+      <option name="project" value="LOCAL" />
+      <updated>1593783038236</updated>
+    </task>
+    <option name="localTasksCounter" value="1595" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1123,12 +1121,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="212" y="177" key="Vcs.Push.Dialog.v2" timestamp="1593782919584">
+    <state x="212" y="177" key="Vcs.Push.Dialog.v2" timestamp="1593783039992">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1591419318874" />
-    <state x="212" y="177" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1593782919584" />
+    <state x="212" y="177" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1593783039992" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1593778452782">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
