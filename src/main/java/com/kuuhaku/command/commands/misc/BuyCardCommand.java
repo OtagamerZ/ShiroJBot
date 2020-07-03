@@ -80,7 +80,7 @@ public class BuyCardCommand extends Command {
 				eb.clearFields();
 				eb.setColor(Helper.getRandomColor());
 				for (int p = i * 10; p < cards.size() && p < 10; p++) {
-					CardMarket cm = cards.get(i);
+					CardMarket cm = cards.get(p);
 					User seller = Main.getInfo().getUserByID(cm.getSeller());
 					eb.addField(
 							"ID: " + cm.getId() + " | " + cm.getCard().getName() + " (" + cm.getCard().getCard().getRarity().toString() + ")",
