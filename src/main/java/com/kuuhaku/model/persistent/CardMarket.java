@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "cardmarket")
 public class CardMarket {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
