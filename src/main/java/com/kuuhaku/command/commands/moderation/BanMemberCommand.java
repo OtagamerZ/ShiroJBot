@@ -72,7 +72,7 @@ public class BanMemberCommand extends Command {
 				channel.sendMessage("Membro banido com sucesso!").queue();
 			} else {
 				guild.ban(message.getMentionedMembers().get(0), 7, String.join(" ", args).replace(args[0], "").trim()).queue();
-				channel.sendMessage("Membro banido com sucesso!\nRazão:```" + String.join(" ", args).replace(args[0], "").trim() + "```").queue();
+				channel.sendMessage("Membro banido com sucesso!\nMotivo: `" + String.join(" ", args).replace(args[0], "").trim() + "`").queue();
 			}
 		} catch (InsufficientPermissionException e) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cant-ban-no-permission")).queue();

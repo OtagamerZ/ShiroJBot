@@ -70,7 +70,7 @@ public class KickMemberCommand extends Command {
                 channel.sendMessage("Membro expulso com sucesso!").queue();
             } else {
                 guild.kick(message.getMentionedMembers().get(0), String.join(" ", args).replace(args[0], "").trim()).queue();
-                channel.sendMessage("Membro expulso com sucesso!\nRazão:```" + String.join(" ", args).replace(args[0], "").trim() + "```").queue();
+				channel.sendMessage("Membro expulso com sucesso!\nMotivo: `" + String.join(" ", args).replace(args[0], "").trim() + "`").queue();
             }
         } catch (InsufficientPermissionException e) {
             channel.sendMessage(":x: | Não possuo a permissão para expulsar membros.").queue();
