@@ -97,7 +97,7 @@ public class QuizCommand extends Command {
 		else diff = null;
 
 		try {
-			JSONObject res = Helper.callApi("https://opentdb.com/api.php?amount=1&category=" + (Helper.rng(1) == 0 ? 15 : 31) + (diff == null ? "" : "&difficulty=" + diff) + "&type=multiple&encode=url3986");
+			JSONObject res = Helper.callApi("https://opentdb.com/api.php?amount=1&category=" + (Math.random() > 0.5 ? 15 : 31) + (diff == null ? "" : "&difficulty=" + diff) + "&type=multiple&encode=url3986");
 			assert res != null;
 			String question = URLDecoder.decode(res
 					.getJSONArray("results")
@@ -172,7 +172,7 @@ public class QuizCommand extends Command {
 					eb.setThumbnail("https://images.vexels.com/media/users/3/152594/isolated/preview/d00d116b2c073ccf7f9fec677fec78e3---cone-de-ponto-de-interroga----o-quadrado-roxo-by-vexels.png");
 
 					if (shuffledOpts.get(finalI).equalsIgnoreCase(correct)) {
-						int p = Helper.clamp(Helper.rng(100 * modif), (100 * modif) / 3, 100 * modif);
+						int p = Helper.clamp(Helper.rng(150 * modif), (150 * modif) / 3, 150 * modif);
 						acc.addCredit(p);
 						AccountDAO.saveAccount(acc);
 
