@@ -57,16 +57,16 @@ public class SellCardCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 3) {
-			channel.sendMessage(":x: | Você precisa informar uma carta, o preço dela e o tipo (`N` = normal, `C` = cromada).").queue();
+			channel.sendMessage(":x: | Você precisa informar uma carta, o tipo (`N` = normal, `C` = cromada) e o preço dela.").queue();
 			return;
-		} else if (!StringUtils.isNumeric(args[1])) {
+		} else if (!StringUtils.isNumeric(args[2])) {
 			channel.sendMessage(":x: | O preço precisa ser um valor inteiro.").queue();
 			return;
 		}
 
 		Card c = CardDAO.getCard(args[0], false);
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-		boolean foil = args[2].equalsIgnoreCase("C");
+		boolean foil = args[1].equalsIgnoreCase("C");
 
 		if (c == null) {
 			channel.sendMessage(":x: | Essa carta não existe.").queue();
@@ -80,7 +80,7 @@ public class SellCardCommand extends Command {
 			return;
 		}
 
-		int price = Integer.parseInt(args[1]);
+		int price = Integer.parseInt(args[2]);
 		int min = c.getRarity().getIndex() * 125 * (foil ? 2 : 1);
 
 		if (price < min) {
