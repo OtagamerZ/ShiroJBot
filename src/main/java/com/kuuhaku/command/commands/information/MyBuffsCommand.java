@@ -92,12 +92,16 @@ public class MyBuffsCommand extends Command {
 				switch (b.getId()) {
 					case 1:
 						eb.addField("", "+" + (100 - (b.getMult() * 100)) + "% XP ganho (" + b.getTime() + " dias)", false);
+						break;
 					case 2:
 						eb.addField("", "+" + (100 - (b.getMult() * 100)) + "% chance de spawn de cartas (" + b.getTime() + " dias)", false);
+						break;
 					case 3:
 						eb.addField("", "+" + (100 - (b.getMult() * 100)) + "% chance de spawn de drops (" + b.getTime() + " dias)", false);
+						break;
 					case 4:
 						eb.addField("", "+" + (100 - (b.getMult() * 100)) + "% chance de spawn de cartas cromadas (" + b.getTime() + " dias)", false);
+						break;
 				}
 			});
 		}
