@@ -39,6 +39,8 @@ import org.json.JSONObject;
 
 import java.awt.*;
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.*;
@@ -95,16 +97,17 @@ public class QuizCommand extends Command {
 		else diff = null;
 
 		try {
-			JSONObject res = new JSONObject(Base64.getDecoder().decode(Objects.requireNonNull(Helper.callApi("https://opentdb.com/api.php?amount=1&category=15" + (diff == null ? "" : "&difficulty=" + diff) + "&type=multiple&encode=base64"))));
-			String question = res
+			JSONObject res = Helper.callApi("https://opentdb.com/api.php?amount=1&category=15" + (diff == null ? "" : "&difficulty=" + diff) + "&type=multiple&encode=base64");
+			assert res != null;
+			String question = URLDecoder.decode(res
 					.getJSONArray("results")
 					.getJSONObject(0)
-					.getString("question");
+					.getString("question"), StandardCharsets.UTF_8);
 
-			String correct = Tradutor.translate("en", "pt", res
+			String correct = Tradutor.translate("en", "pt", URLDecoder.decode(res
 					.getJSONArray("results")
 					.getJSONObject(0)
-					.getString("correct_answer"));
+					.getString("correct_answer"), StandardCharsets.UTF_8));
 
 			List<String> wrong = res
 					.getJSONArray("results")
@@ -114,7 +117,7 @@ public class QuizCommand extends Command {
 					.stream()
 					.map(o -> {
 						try {
-							return Tradutor.translate("en", "pt", String.valueOf(o));
+							return Tradutor.translate("en", "pt", URLDecoder.decode(String.valueOf(o), StandardCharsets.UTF_8));
 						} catch (IOException e) {
 							Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 							return "ERRO";
@@ -127,10 +130,13 @@ public class QuizCommand extends Command {
 			switch (res.getJSONArray("results").getJSONObject(0).getString("difficulty")) {
 				case "easy":
 					modif = 1;
+					break;
 				case "medium":
 					modif = 2;
+					break;
 				case "hard":
 					modif = 3;
+					break;
 				default:
 					modif = 0;
 			}
