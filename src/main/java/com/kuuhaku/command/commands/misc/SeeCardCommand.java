@@ -22,6 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.controller.postgresql.RarityColorsDAO;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
@@ -85,6 +86,7 @@ public class SeeCardCommand extends Command {
 		EmbedBuilder eb = new EmbedBuilder();
 
 		eb.setTitle(card.getName());
+		eb.setColor(RarityColorsDAO.getColor(tc.getRarity()).getPrimary());
 		eb.addField("Obtida:", cards.contains(card) ? "Sim" : "Não", true);
 		eb.addField("Raridade:", tc.getRarity().toString(), true);
 		eb.addField("Tipo:", tc.getRarity() == KawaiponRarity.ULTIMATE ? "Única" : (card.isFoil() ? "Cromada" : "Normal"), true);
