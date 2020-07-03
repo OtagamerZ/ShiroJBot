@@ -30,21 +30,21 @@ public class RarityColors {
 	@Enumerated(EnumType.STRING)
 	private KawaiponRarity rarity;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT 'FFFFFF'")
-	private String primary = "FFFFFF";
+	@Column(columnDefinition = "CHAR(6) NOT NULL DEFAULT 'FFFFFF'")
+	private String primaryColor = "FFFFFF";
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT '000000'")
-	private String secondary = "000000";
+	@Column(columnDefinition = "CHAR(6) NOT NULL DEFAULT '000000'")
+	private String secondaryColor = "000000";
 
 	public KawaiponRarity getRarity() {
 		return rarity;
 	}
 
 	public Color getPrimary() {
-		return Color.decode("#" + primary);
+		return Color.decode("#" + primaryColor);
 	}
 
 	public Color getSecondary() {
-		return Color.decode("#" + secondary);
+		return Color.decode("#" + secondaryColor);
 	}
 }
