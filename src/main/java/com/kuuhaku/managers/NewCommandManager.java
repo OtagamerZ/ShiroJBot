@@ -421,7 +421,7 @@ public class NewCommandManager {
 					"slots", new String[]{"roleta"}, "req_bet", "cmd_slots", FUN, false
 			));
 			put(QuizCommand.class, new Argument(
-					"quiz", new String[]{"qna", "per"}, "cmd_quiz", FUN, true
+					"quiz", new String[]{"qna", "per"}, "req_difficulty", "cmd_quiz", FUN, true
 			));
 			put(GuessTheNumberCommand.class, new Argument(
 					"adivinheonumero", new String[]{"aon", "guessthenumber", "gtn"}, "cmd_guess-the-number", FUN, true
