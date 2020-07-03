@@ -87,11 +87,11 @@ public class Argument {
 	}
 
 	public String getUsage() {
-		return usage;
+		return ShiroInfo.getLocale(I18n.PT).getString(usage);
 	}
 
 	public String getDescription() {
-		return description;
+		return ShiroInfo.getLocale(I18n.PT).getString(description);
 	}
 
 	public Category getCategory() {
