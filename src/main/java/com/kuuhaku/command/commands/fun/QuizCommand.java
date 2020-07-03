@@ -97,22 +97,44 @@ public class QuizCommand extends Command {
 				modif = 1;
 		}
 
-		JSONObject res = Helper.callApi("https://opentdb.com/api.php?amount=1&category=15" + (diff == null ? "" : "&difficulty=" + diff) + "&type=multiple&encode=url3986");
-		assert res != null;
-		String question = res.getJSONArray("results").getJSONObject(0).getString("question");
-		String correct = res.getJSONArray("results").getJSONObject(0).getString("correct_answer");
-		List<String> wrong = res.getJSONArray("results").getJSONObject(0).getJSONArray("incorrect_answers").toList().stream().map(String::valueOf).collect(Collectors.toList());
-
-		Account acc = AccountDAO.getAccount(author.getId());
-		aq.played();
-		QuizDAO.saveUserState(aq);
-
 		try {
+			JSONObject res = Helper.callApi("https://opentdb.com/api.php?amount=1&category=15" + (diff == null ? "" : "&difficulty=" + diff) + "&type=multiple&encode=url3986");
+			assert res != null;
+			String question = res
+					.getJSONArray("results")
+					.getJSONObject(0)
+					.getString("question");
+
+			String correct = Tradutor.translate("en", "pt", res
+					.getJSONArray("results")
+					.getJSONObject(0)
+					.getString("correct_answer"));
+
+			List<String> wrong = res
+					.getJSONArray("results")
+					.getJSONObject(0)
+					.getJSONArray("incorrect_answers")
+					.toList()
+					.stream()
+					.map(o -> {
+						try {
+							return Tradutor.translate("en", "pt", String.valueOf(o));
+						} catch (IOException e) {
+							Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+							return "ERRO";
+						}
+					})
+					.collect(Collectors.toList());
+			String difficulty = Tradutor.translate("en", "pt", res.getJSONArray("results").getJSONObject(0).getString("difficulty"));
+
+			Account acc = AccountDAO.getAccount(author.getId());
+			aq.played();
+			QuizDAO.saveUserState(aq);
+
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setThumbnail("https://images.vexels.com/media/users/3/152594/isolated/preview/d00d116b2c073ccf7f9fec677fec78e3---cone-de-ponto-de-interroga----o-quadrado-roxo-by-vexels.png");
-			eb.setTitle("Hora do quiz!");
+			eb.setTitle("Hora do quiz! (" + difficulty.toUpperCase() + ")");
 			eb.setDescription("**Traduzida:**\n" + Tradutor.translate("en", "pt", question) + "\n\n**Original:\n**" + question);
-			eb.addField("Dificuldade", diff, true);
 			eb.setColor(Color.decode("#2195f2"));
 
 			List<String> opts = List.of(
@@ -173,7 +195,7 @@ public class QuizCommand extends Command {
 			fields.forEach(eb::addField);
 			channel.sendMessage(eb.build()).queue(s -> Pages.buttonize(s, buttons, false, 60, TimeUnit.SECONDS));
 		} catch (IOException e) {
-			e.printStackTrace();
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 	}
 }
