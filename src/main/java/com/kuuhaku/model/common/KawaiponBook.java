@@ -106,8 +106,8 @@ public class KawaiponBook {
 						else g2d.setColor(Color.decode("#DC9018"));
 						break;
 					case ULTIMATE:
-						g2d.setBackground(Color.white);
-						g2d.setColor(Color.black);
+						g2d.setBackground(Color.decode("#FF006C"));
+						g2d.setColor(Color.decode("#410066"));
 						break;
 				}
 				g2d.drawImage(chunk.get(i).getCard().drawCard(chunk.get(i).isFoil()), slots[i].x, slots[i].y, 187, 280, null);
