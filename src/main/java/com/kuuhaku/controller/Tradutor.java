@@ -43,6 +43,6 @@ public class Tradutor {
         JSONObject resposta = new JSONObject(IOUtils.toString(con.getInputStream(), StandardCharsets.UTF_8));
 
         Helper.logger(Tradutor.class).debug(resposta);
-        return resposta.get("text").toString().replace("[", "").replace("]", "").replace("<br>", "\n").replace("\\n", "").replace("\"", "");
+        return resposta.get("text").toString().replace("[", "").replace("]", "").replace("<br>", "\n").replace("\\n", "").replace("\"", "").replace("\\", "\"");
     }
 }
