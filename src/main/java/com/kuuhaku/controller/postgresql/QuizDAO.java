@@ -19,36 +19,11 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.persistent.AnsweredQuizzes;
-import com.kuuhaku.model.persistent.Quiz;
 import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import java.util.List;
 
 public class QuizDAO {
-	public static void saveQuiz(Quiz q) {
-		EntityManager em = Manager.getEntityManager();
-
-		em.getTransaction().begin();
-		em.merge(q);
-		em.getTransaction().commit();
-
-		em.close();
-	}
-
-	@SuppressWarnings("unchecked")
-	public static Quiz getRandomQuiz() {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createQuery("SELECT q FROM Quiz q", Quiz.class);
-		List<Quiz> quizzes = (List<Quiz>) q.getResultList();
-
-		em.close();
-
-		return quizzes.get(Helper.rng(quizzes.size()));
-	}
-
 	public static AnsweredQuizzes getUserState(String id) {
 		EntityManager em = Manager.getEntityManager();
 

@@ -96,9 +96,6 @@ public class NewCommandManager {
 			put(MMLockCommand.class, new Argument(
 					"mmlock", "cmd_mm-lock", DEV, false
 			));
-			put(AddQuizCommand.class, new Argument(
-					"addquiz", new String[]{"addq", "novoquiz"}, "req_question-opts-correct-prize", "cmd_add-quiz", DEV, false
-			));
 			put(DrawRaffleCommand.class, new Argument(
 					"rifa", new String[]{"raffle"}, "req_period", "cmd_draw-raffle", DEV, false
 			));

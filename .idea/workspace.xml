@@ -26,6 +26,11 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/dev/AddQuizCommand.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/QuizCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/QuizCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Tradutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Tradutor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/QuizDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/QuizDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Quiz.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -566,14 +571,8 @@
       <workItem from="1593628604400" duration="1533000" />
       <workItem from="1593636443396" duration="755000" />
       <workItem from="1593691296952" duration="3787000" />
-      <workItem from="1593698693521" duration="7200000" />
-    </task>
-    <task id="LOCAL-01537" summary="Correção nos botões de cargo">
-      <created>1593435404271</created>
-      <option name="number" value="01537" />
-      <option name="presentableId" value="LOCAL-01537" />
-      <option name="project" value="LOCAL" />
-      <updated>1593435404271</updated>
+      <workItem from="1593698693521" duration="8760000" />
+      <workItem from="1593777675266" duration="2750000" />
     </task>
     <task id="LOCAL-01538" summary="Melhoria na instanciação de comandos">
       <created>1593442429104</created>
@@ -911,7 +910,14 @@
       <option name="project" value="LOCAL" />
       <updated>1593717274096</updated>
     </task>
-    <option name="localTasksCounter" value="1586" />
+    <task id="LOCAL-01586" summary="Adição do comando de &quot;pesquisa&quot;">
+      <created>1593717634445</created>
+      <option name="number" value="01586" />
+      <option name="presentableId" value="LOCAL-01586" />
+      <option name="project" value="LOCAL" />
+      <updated>1593717634445</updated>
+    </task>
+    <option name="localTasksCounter" value="1587" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1034,12 +1040,12 @@
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1593717630964">
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2" timestamp="1593780519869">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="94" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1585946492481" />
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1591419311134" />
-    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1593717630964" />
+    <state x="234" y="57" width="805" height="934" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1593780519869" />
     <state width="247" height="195" key="DatabaseViewActions_Filter" timestamp="1591416926427">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -1052,7 +1058,6 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="504" y="188" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1585946052476" />
-    <state x="504" y="198" key="FileChooserDialogImpl/0.0.1366.768@0.0.1366.768" timestamp="1585071666306" />
     <state x="620" y="261" key="FileChooserDialogImpl/0.0.1680.1010@0.0.1680.1010" timestamp="1593449288493" />
     <state width="1125" height="289" key="GridCell.Tab.0.bottom" timestamp="1593717224426">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1122,17 +1127,17 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="212" y="177" key="Vcs.Push.Dialog.v2" timestamp="1593717278560">
+    <state x="212" y="177" key="Vcs.Push.Dialog.v2" timestamp="1593717636425">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1591419318874" />
-    <state x="212" y="177" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1593717278560" />
-    <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1593021538475">
+    <state x="212" y="177" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1593717636425" />
+    <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1593778452782">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="579" y="255" width="326" height="234" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/0.0.1366.728@0.0.1366.728" timestamp="1585945829108" />
-    <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/0.0.1680.1010@0.0.1680.1010" timestamp="1593021538475" />
+    <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/0.0.1680.1010@0.0.1680.1010" timestamp="1593778452782" />
     <state x="594" y="260" key="com.intellij.database.run.ParametersPanel.Standalone" timestamp="1589981895332">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1151,10 +1156,6 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="541" y="111" key="com.intellij.database.view.ui.DbObjectDialog/0.0.1366.728@0.0.1366.728" timestamp="1585943075705" />
-    <state x="359" y="208" key="com.intellij.ide.util.TipDialog" timestamp="1585071449729">
-      <screen x="0" y="0" width="1366" height="768" />
-    </state>
-    <state x="359" y="208" key="com.intellij.ide.util.TipDialog/0.0.1366.768@0.0.1366.768" timestamp="1585071449729" />
     <state x="600" y="391" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1588015639891">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1164,12 +1165,12 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="448" y="274" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1591972151389" />
-    <state x="429" y="175" width="790" height="658" key="find.popup" timestamp="1593716743072">
+    <state x="429" y="175" width="790" height="658" key="find.popup" timestamp="1593778800583">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="362" y="127" width="643" height="536" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1585937546544" />
     <state x="362" y="134" width="774" height="562" key="find.popup/0.0.1366.768@0.0.1366.768" timestamp="1588044108124" />
-    <state x="429" y="175" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1593716743072" />
+    <state x="429" y="175" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1593778800583" />
     <state x="409" y="157" key="git4idea.merge.GitPullDialog" timestamp="1586743041255">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -1182,14 +1183,9 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="239" y="152" key="new project wizard/0.0.1680.1010@0.0.1680.1010" timestamp="1587399286121" />
-    <state x="472" y="17" key="refactoring.ChangeSignatureDialog" timestamp="1585107291304">
-      <screen x="0" y="0" width="1366" height="768" />
-    </state>
-    <state x="472" y="17" key="refactoring.ChangeSignatureDialog/0.0.1366.768@0.0.1366.768" timestamp="1585107291304" />
     <state x="496" y="233" width="672" height="677" key="run.anything.popup" timestamp="1592845737688">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="403" y="177" key="run.anything.popup/0.0.1366.768@0.0.1366.768" timestamp="1585105034445" />
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1592845737688" />
     <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1593699765276">
       <screen x="0" y="0" width="1680" height="1010" />

@@ -47,6 +47,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.InviteAction;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -65,6 +66,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.time.OffsetDateTime;
@@ -198,6 +200,17 @@ public class Helper {
 	public static void spawnAd(MessageChannel channel) {
 		if (Helper.rng(1000) > 990) {
 			channel.sendMessage("Opa, está gostando de me utilizar em seu servidor? Caso sim, se puder votar me ajudaria **MUITO** a me tornar cada vez mais popular e ser chamada para mais servidores!\nhttps://top.gg/bot/572413282653306901").queue();
+		}
+	}
+
+	public static JSONObject callApi(String url) {
+		try {
+			HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
+			con.addRequestProperty("User-Agent", "Mozilla/5.0");
+			return new JSONObject(URLDecoder.decode(IOUtils.toString(con.getInputStream(), StandardCharsets.UTF_8), StandardCharsets.UTF_8));
+		} catch (IOException e) {
+			logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
+			return null;
 		}
 	}
 
