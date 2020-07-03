@@ -30,11 +30,11 @@ public class RarityColors {
 	@Enumerated(EnumType.STRING)
 	private KawaiponRarity rarity;
 
-	@Column(columnDefinition = "CHAR(6) NOT NULL DEFAULT 'FFFFFF'")
-	private String primary;
+	@Column(columnDefinition = "VARCHAR(6) NOT NULL DEFAULT ''")
+	private String primary = "FFFFFF";
 
-	@Column(columnDefinition = "CHAR(6) NOT NULL DEFAULT 'FFFFFF'")
-	private String secondary;
+	@Column(columnDefinition = "VARCHAR(6) NOT NULL DEFAULT ''")
+	private String secondary = "000000";
 
 	public KawaiponRarity getRarity() {
 		return rarity;
