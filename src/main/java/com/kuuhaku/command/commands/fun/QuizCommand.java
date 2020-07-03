@@ -75,27 +75,24 @@ public class QuizCommand extends Command {
 		}
 
 		String diff;
-		int modif;
-		switch (StringUtils.stripAccents(args[0].toLowerCase())) {
+
+		if (args.length > 0) switch (StringUtils.stripAccents(args[0].toLowerCase())) {
 			case "facil":
 			case "easy":
 				diff = "easy";
-				modif = 1;
 				break;
 			case "medio":
 			case "medium":
 				diff = "medium";
-				modif = 2;
 				break;
 			case "dificil":
 			case "hard":
 				diff = "hard";
-				modif = 3;
 				break;
 			default:
 				diff = null;
-				modif = 1;
 		}
+		else diff = null;
 
 		try {
 			JSONObject res = Helper.callApi("https://opentdb.com/api.php?amount=1&category=15" + (diff == null ? "" : "&difficulty=" + diff) + "&type=multiple&encode=url3986");
@@ -127,6 +124,18 @@ public class QuizCommand extends Command {
 					.collect(Collectors.toList());
 			String difficulty = Tradutor.translate("en", "pt", res.getJSONArray("results").getJSONObject(0).getString("difficulty"));
 
+			int modif;
+			switch (res.getJSONArray("results").getJSONObject(0).getString("difficulty")) {
+				case "easy":
+					modif = 1;
+				case "medium":
+					modif = 2;
+				case "hard":
+					modif = 3;
+				default:
+					modif = 0;
+			}
+
 			Account acc = AccountDAO.getAccount(author.getId());
 			aq.played();
 			QuizDAO.saveUserState(aq);
@@ -152,13 +161,14 @@ public class QuizCommand extends Command {
 
 			for (int i = 0; i < opts.size(); i++) {
 				int finalI = i;
+				int finalModif = modif;
 				buttons.put(opts.get(i), (mb, ms) -> {
 					if (!mb.getId().equals(author.getId())) return;
 					eb.clear();
 					eb.setThumbnail("https://images.vexels.com/media/users/3/152594/isolated/preview/d00d116b2c073ccf7f9fec677fec78e3---cone-de-ponto-de-interroga----o-quadrado-roxo-by-vexels.png");
 
 					if (shuffledOpts.get(finalI).equalsIgnoreCase(correct)) {
-						int p = Helper.clamp(Helper.rng(150 * modif), (150 * modif) / 3, 150 * modif);
+						int p = Helper.clamp(Helper.rng(150 * finalModif), (150 * finalModif) / 3, 150 * finalModif);
 						acc.addCredit(p);
 						AccountDAO.saveAccount(acc);
 
