@@ -897,7 +897,7 @@ public class Helper {
 		if (Helper.rng(200) > (195 - (float) (channel.getGuild().getMemberCount() * 15 / 5000)) / (cardBuff != null ? cardBuff.getMult() : 1)) {
 			List<Card> cards = CardDAO.getCards();
 			Card kc = cards.get(Helper.rng(cards.size()));
-			boolean foil = Helper.rng(1000) <= 10 * (foilBuff != null ? foilBuff.getMult() : 1);
+			boolean foil = Helper.rng(1000) <= 5 * (foilBuff != null ? foilBuff.getMult() : 1);
 
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setImage("attachment://kawaipon.png");
