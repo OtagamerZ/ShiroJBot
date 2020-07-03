@@ -47,7 +47,7 @@
         <class>com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi</class>
         <class>com.kuuhaku.model.persistent.Version</class>
         <class>com.kuuhaku.model.persistent.MutedMember</class>
-        <class>com.kuuhaku.model.persistent.Quiz</class>
+        <class>com.kuuhaku.model.persistent.RarityColors</class>
         <class>com.kuuhaku.model.persistent.AnsweredQuizzes</class>
         <class>com.kuuhaku.model.persistent.Ticket</class>
         <class>com.kuuhaku.model.persistent.ExceedMember</class>
