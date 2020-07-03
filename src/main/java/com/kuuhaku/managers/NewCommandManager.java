@@ -208,7 +208,7 @@ public class NewCommandManager {
 					"cargocor", new String[]{"rolecolor"}, "req_name-color", "cmd_add-color-role", MODERACAO, false
 			));
 			put(MuteMemberCommand.class, new Argument(
-					"mute", new String[]{"mutar", "silenciar", "silence"}, "req_member", "cmd_mute", MODERACAO, false
+					"mute", new String[]{"mutar", "silenciar", "silence"}, "req_member-time-reason", "cmd_mute", MODERACAO, false
 			));
 			put(AllowKawaiponCommand.class, new Argument(
 					"habilitarkp", new String[]{"enablekp", "hkp", "ekp"}, REQ_CHANNEL, "cmd_allow-kawaipon", MODERACAO, false
