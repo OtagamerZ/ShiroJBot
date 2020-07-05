@@ -45,6 +45,13 @@ public class GuildBuff {
 		return id;
 	}
 
+	public GuildBuff(String id) {
+		this.id = id;
+	}
+
+	public GuildBuff() {
+	}
+
 	public void setId(String id) {
 		this.id = id;
 	}

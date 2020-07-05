@@ -28,7 +28,7 @@ public class GuildBuffDAO {
 
 		try {
 			GuildBuff gb = em.find(GuildBuff.class, guild);
-			if (gb == null) return new GuildBuff();
+			if (gb == null) return new GuildBuff(guild);
 			else return gb;
 		} finally {
 			em.close();
