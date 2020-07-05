@@ -158,6 +158,7 @@ public class PurchaseBuffCommand extends Command {
 			return;
 		}
 
+		acc.removeCredit(sb.getPrice());
 		GuildBuff gb = GuildBuffDAO.getBuffs(guild.getId());
 		if (!gb.addBuff(sb)) {
 			channel.sendMessage(":x: | Este servidor já possui uma melhoria dessa categoria.").queue();
@@ -165,6 +166,7 @@ public class PurchaseBuffCommand extends Command {
 		}
 
 		GuildBuffDAO.saveBuffs(gb);
+		AccountDAO.saveAccount(acc);
 		channel.sendMessage("Melhoria aplicada com sucesso! (" + sb.getTime() + " dias).").queue();
 	}
 }
