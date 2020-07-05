@@ -109,6 +109,7 @@ public class PurchaseBuffCommand extends Command {
 						sb = new ServerBuff(tier, ServerBuff.XP_TIER_3);
 						break;
 				}
+				break;
 			case "CARTA":
 				switch (tier) {
 					case 1:
@@ -121,6 +122,7 @@ public class PurchaseBuffCommand extends Command {
 						sb = new ServerBuff(tier, ServerBuff.CARD_TIER_3);
 						break;
 				}
+				break;
 			case "DROP":
 				switch (tier) {
 					case 1:
@@ -133,6 +135,7 @@ public class PurchaseBuffCommand extends Command {
 						sb = new ServerBuff(tier, ServerBuff.DROP_TIER_3);
 						break;
 				}
+				break;
 			case "CROMADA":
 				switch (tier) {
 					case 1:
@@ -145,6 +148,7 @@ public class PurchaseBuffCommand extends Command {
 						sb = new ServerBuff(tier, ServerBuff.FOIL_TIER_3);
 						break;
 				}
+				break;
 		}
 
 		assert sb != null;
