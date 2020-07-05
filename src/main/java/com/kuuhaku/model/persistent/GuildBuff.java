@@ -69,8 +69,7 @@ public class GuildBuff {
 
 	public boolean addBuff(ServerBuff buff) {
 		List<ServerBuff> sb = getBuffs();
-		boolean exist = sb.stream().anyMatch(buff::equals);
-		if (exist) return false;
+		if (sb.stream().anyMatch(b -> b.getId() == buff.getId())) return false;
 
 		sb.add(buff);
 		setBuffs(sb);
