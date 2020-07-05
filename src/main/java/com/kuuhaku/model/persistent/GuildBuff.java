@@ -62,14 +62,14 @@ public class GuildBuff {
 			return new ArrayList<>();
 		}
 		List<ServerBuff> sb = new JSONArray(buffs).toList().stream().map(b -> ShiroInfo.getJSONFactory().create().fromJson((String) b, ServerBuff.class)).collect(Collectors.toList());
-		sb.removeIf(b -> TimeUnit.MILLISECONDS.toDays(b.getAcquiredAt()) > b.getTime());
+		sb.removeIf(b -> TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - b.getAcquiredAt()) > b.getTime());
 		setBuffs(sb);
 		return sb;
 	}
 
 	public boolean addBuff(ServerBuff buff) {
 		List<ServerBuff> sb = getBuffs();
-		if (sb.stream().anyMatch(b -> b.getId() == buff.getId())) return false;
+		if (sb.stream().anyMatch(buff::equals)) return false;
 
 		sb.add(buff);
 		setBuffs(sb);
