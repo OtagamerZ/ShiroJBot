@@ -23,27 +23,27 @@ import org.apache.commons.lang3.tuple.Triple;
 import java.util.Objects;
 
 public class ServerBuff {
-	public static final Triple<Integer, Integer, Float> XP_TIER_1 = Triple.of(1, 1500, 1.5f);
-	public static final Triple<Integer, Integer, Float> XP_TIER_2 = Triple.of(1, 4000, 2f);
-	public static final Triple<Integer, Integer, Float> XP_TIER_3 = Triple.of(1, 10000, 3f);
-	public static final Triple<Integer, Integer, Float> CARD_TIER_1 = Triple.of(2, 1000, 0.8f);
-	public static final Triple<Integer, Integer, Float> CARD_TIER_2 = Triple.of(2, 3000, 0.7f);
-	public static final Triple<Integer, Integer, Float> CARD_TIER_3 = Triple.of(2, 5000, 0.6f);
-	public static final Triple<Integer, Integer, Float> DROP_TIER_1 = Triple.of(3, 1250, 0.8f);
-	public static final Triple<Integer, Integer, Float> DROP_TIER_2 = Triple.of(3, 3500, 0.7f);
-	public static final Triple<Integer, Integer, Float> DROP_TIER_3 = Triple.of(3, 6000, 0.6f);
-	public static final Triple<Integer, Integer, Float> FOIL_TIER_1 = Triple.of(4, 5000, 1.2f);
-	public static final Triple<Integer, Integer, Float> FOIL_TIER_2 = Triple.of(4, 8000, 1.5f);
-	public static final Triple<Integer, Integer, Float> FOIL_TIER_3 = Triple.of(4, 12000, 2f);
+	public static final Triple<Integer, Integer, Double> XP_TIER_1 = Triple.of(1, 1500, 1.5);
+	public static final Triple<Integer, Integer, Double> XP_TIER_2 = Triple.of(1, 4000, 2d);
+	public static final Triple<Integer, Integer, Double> XP_TIER_3 = Triple.of(1, 10000, 3d);
+	public static final Triple<Integer, Integer, Double> CARD_TIER_1 = Triple.of(2, 1000, 0.8);
+	public static final Triple<Integer, Integer, Double> CARD_TIER_2 = Triple.of(2, 3000, 0.7);
+	public static final Triple<Integer, Integer, Double> CARD_TIER_3 = Triple.of(2, 5000, 0.6);
+	public static final Triple<Integer, Integer, Double> DROP_TIER_1 = Triple.of(3, 1250, 0.8);
+	public static final Triple<Integer, Integer, Double> DROP_TIER_2 = Triple.of(3, 3500, 0.7);
+	public static final Triple<Integer, Integer, Double> DROP_TIER_3 = Triple.of(3, 6000, 0.6);
+	public static final Triple<Integer, Integer, Double> FOIL_TIER_1 = Triple.of(4, 5000, 1.2);
+	public static final Triple<Integer, Integer, Double> FOIL_TIER_2 = Triple.of(4, 8000, 1.5);
+	public static final Triple<Integer, Integer, Double> FOIL_TIER_3 = Triple.of(4, 12000, 2d);
 
 	private int tier;
 	private int id;
 	private int price;
 	private int time;
-	private float mult;
+	private double mult;
 	private long acquiredAt;
 
-	public ServerBuff(int tier, int id, int price, float mult) {
+	public ServerBuff(int tier, int id, int price, double mult) {
 		this.tier = tier;
 		this.id = id;
 		this.price = price;
@@ -52,7 +52,7 @@ public class ServerBuff {
 		this.acquiredAt = System.currentTimeMillis();
 	}
 
-	public ServerBuff(int tier, Triple<Integer, Integer, Float> values) {
+	public ServerBuff(int tier, Triple<Integer, Integer, Double> values) {
 		this.tier = tier;
 		this.id = values.getLeft();
 		this.price = values.getMiddle();
@@ -96,7 +96,7 @@ public class ServerBuff {
 		this.time = time;
 	}
 
-	public float getMult() {
+	public double getMult() {
 		return mult;
 	}
 
