@@ -149,10 +149,6 @@ public class GuildConfig {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean dropEnabled = false;
 
-	//COLLECTIONS
-	@Column(columnDefinition = "TEXT")
-	private final String buffs = "";
-
 	public GuildConfig() {
 	}
 
