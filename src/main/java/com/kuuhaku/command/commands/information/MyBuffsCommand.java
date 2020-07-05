@@ -87,16 +87,16 @@ public class MyBuffsCommand extends Command {
 			gb.getBuffs().forEach(b -> {
 				switch (b.getId()) {
 					case 1:
-						eb.addField("", "+" + (100 - (b.getMult() * 100)) + "% XP ganho (" + b.getTime() + " dias)", false);
+						eb.addField("Melhoria de servidor (XP)", "+" + (int) ((b.getMult() * 100) - 100) + "% XP ganho (" + b.getTime() + " dias)", false);
 						break;
 					case 2:
-						eb.addField("", "+" + (100 - (b.getMult() * 100)) + "% chance de spawn de cartas (" + b.getTime() + " dias)", false);
+						eb.addField("Melhoria de servidor (cartas)", "+" + (int) ((b.getMult() * 100) - 100) + "% chance de spawn de cartas (" + b.getTime() + " dias)", false);
 						break;
 					case 3:
-						eb.addField("", "+" + (100 - (b.getMult() * 100)) + "% chance de spawn de drops (" + b.getTime() + " dias)", false);
+						eb.addField("Melhoria de servidor (drops)", "+" + (int) ((b.getMult() * 100) - 100) + "% chance de spawn de drops (" + b.getTime() + " dias)", false);
 						break;
 					case 4:
-						eb.addField("", "+" + (100 - (b.getMult() * 100)) + "% chance de spawn de cartas cromadas (" + b.getTime() + " dias)", false);
+						eb.addField("Melhoria de servidor (cromadas)", "+" + (int) ((b.getMult() * 100) - 100) + "% chance de spawn de cartas cromadas (" + b.getTime() + " dias)", false);
 						break;
 				}
 			});
