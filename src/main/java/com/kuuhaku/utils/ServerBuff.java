@@ -113,6 +113,14 @@ public class ServerBuff {
 	}
 
 	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		ServerBuff that = (ServerBuff) o;
+		return id == that.id;
+	}
+
+	@Override
 	public int hashCode() {
 		return Objects.hash(id);
 	}
