@@ -117,7 +117,7 @@ public class Member {
 
 	public boolean addXp(Guild g) {
 		User u = Main.getInfo().getUserByID(mid);
-		AtomicReference<Float> mult = new AtomicReference<>(1f);
+		AtomicReference<Double> mult = new AtomicReference<>(1d);
 
 		if (ExceedDAO.hasExceed(mid) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(mid)))
 			mult.updateAndGet(v -> v * 2);
