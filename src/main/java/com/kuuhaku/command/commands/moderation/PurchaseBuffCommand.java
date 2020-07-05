@@ -21,9 +21,9 @@ package com.kuuhaku.command.commands.moderation;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.controller.postgresql.GuildBuffDAO;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.GuildBuff;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ServerBuff;
@@ -154,13 +154,13 @@ public class PurchaseBuffCommand extends Command {
 			return;
 		}
 
-		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
-		if (!gc.addBuff(sb)) {
+		GuildBuff gb = GuildBuffDAO.getBuffs(guild.getId());
+		if (!gb.addBuff(sb)) {
 			channel.sendMessage(":x: | Este servidor já possui uma melhoria dessa categoria.").queue();
 			return;
 		}
 
-		GuildDAO.updateGuildSettings(gc);
-		channel.sendMessage(":x: | melhoria aplicada com sucesso! (" + sb.getTime() + " dias).").queue();
+		GuildBuffDAO.saveBuffs(gb);
+		channel.sendMessage("Melhoria aplicada com sucesso! (" + sb.getTime() + " dias).").queue();
 	}
 }

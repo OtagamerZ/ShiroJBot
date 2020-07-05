@@ -21,15 +21,11 @@ package com.kuuhaku.command.commands.information;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.postgresql.CardDAO;
-import com.kuuhaku.controller.postgresql.ExceedDAO;
-import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.controller.postgresql.WaifuDAO;
-import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.controller.sqlite.KGotchiDAO;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.handlers.games.kawaigotchi.enums.Tier;
-import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.GuildBuff;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -86,9 +82,9 @@ public class MyBuffsCommand extends Command {
 		else if (kp.getCards().size() / (float) CardDAO.totalCards() >= 0.25)
 			eb.addField("Coleção de cartas (25%)", "+12% XP ganho", false);
 
-		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
-		if (gc.getBuffs().size() > 0) {
-			gc.getBuffs().forEach(b -> {
+		GuildBuff gb = GuildBuffDAO.getBuffs(guild.getId());
+		if (gb.getBuffs().size() > 0) {
+			gb.getBuffs().forEach(b -> {
 				switch (b.getId()) {
 					case 1:
 						eb.addField("", "+" + (100 - (b.getMult() * 100)) + "% XP ganho (" + b.getTime() + " dias)", false);
