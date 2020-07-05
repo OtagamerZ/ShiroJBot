@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.controller.postgresql.GuildBuffDAO;
 import com.kuuhaku.utils.ServerBuff;
 import com.kuuhaku.utils.ShiroInfo;
 import org.json.JSONArray;
@@ -62,8 +63,10 @@ public class GuildBuff {
 			return new ArrayList<>();
 		}
 		List<ServerBuff> sb = new JSONArray(buffs).toList().stream().map(b -> ShiroInfo.getJSONFactory().create().fromJson((String) b, ServerBuff.class)).collect(Collectors.toList());
-		sb.removeIf(b -> TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - b.getAcquiredAt()) > b.getTime());
+		List<ServerBuff> toRemove = sb.stream().filter(b -> TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - b.getAcquiredAt()) > b.getTime()).collect(Collectors.toList());
+		sb.removeAll(toRemove);
 		setBuffs(sb);
+		if (toRemove.size() > 0) GuildBuffDAO.saveBuffs(this);
 		return sb;
 	}
 
