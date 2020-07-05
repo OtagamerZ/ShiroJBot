@@ -60,6 +60,7 @@
         <class>com.kuuhaku.model.persistent.Card</class>
         <class>com.kuuhaku.model.persistent.KawaiponCard</class>
         <class>com.kuuhaku.model.persistent.CardMarket</class>
+        <class>com.kuuhaku.model.persistent.GuildBuff</class>
 
         <properties>
             <!-- dados da conexao -->
