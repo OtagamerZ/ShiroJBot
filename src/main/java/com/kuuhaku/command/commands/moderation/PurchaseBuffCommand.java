@@ -151,7 +151,11 @@ public class PurchaseBuffCommand extends Command {
 				break;
 		}
 
-		assert sb != null;
+		if (sb == null) {
+			channel.sendMessage(":x: | Melhoria inválida, use `" + prefix + "up` para ver a lista de melhorias.").queue();
+			return;
+		}
+
 		Account acc = AccountDAO.getAccount(author.getId());
 		if (acc.getBalance() < sb.getPrice()) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
