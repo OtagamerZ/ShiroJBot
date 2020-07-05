@@ -343,9 +343,9 @@ public class NewCommandManager {
 			put(ColorRoleCommand.class, new Argument(
 					"cor", new String[]{"color"}, REQ_NAME, "cmd_color-role", MISC, false
 			));
-			put(ImageCommand.class, new Argument(
-					"image", new String[]{"imagem", "img"}, "req_tags", "cmd_image", MISC, false
-			));
+			//put(ImageCommand.class, new Argument(
+			//		"image", new String[]{"imagem", "img"}, "req_tags", "cmd_image", MISC, false
+			//));
 			put(TransferCommand.class, new Argument(
 					"transferir", new String[]{"transfer", "tr"}, "req_amount-user", "cmd_transfer", MISC, false
 			));
