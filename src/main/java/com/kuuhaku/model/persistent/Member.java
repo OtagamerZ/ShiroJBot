@@ -20,7 +20,6 @@ package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.*;
-import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.KGotchiDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.endpoint.Bonus;
@@ -139,8 +138,8 @@ public class Member {
 		else if (kp.getCards().size() / (float) CardDAO.totalCards() >= 0.25)
 			mult.updateAndGet(v -> v * 1.12f);
 
-		GuildConfig gc = GuildDAO.getGuildById(g.getId());
-		gc.getBuffs().stream().filter(b -> b.getId() == 1).findAny().ifPresent(b -> mult.updateAndGet(v -> v * b.getMult()));
+		GuildBuff gb = GuildBuffDAO.getBuffs(g.getId());
+		gb.getBuffs().stream().filter(b -> b.getId() == 1).findAny().ifPresent(b -> mult.updateAndGet(v -> v * b.getMult()));
 
 		xp += 15 * mult.get();
 

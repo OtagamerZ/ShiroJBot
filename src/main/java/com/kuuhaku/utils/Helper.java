@@ -27,6 +27,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.reactions.Reaction;
 import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.postgresql.GuildBuffDAO;
 import com.kuuhaku.controller.postgresql.LogDAO;
 import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
@@ -892,8 +893,9 @@ public class Helper {
 	}
 
 	public static void spawnKawaipon(GuildConfig gc, TextChannel channel) {
-		ServerBuff cardBuff = gc.getBuffs().stream().filter(b -> b.getId() == 2).findFirst().orElse(null);
-		ServerBuff foilBuff = gc.getBuffs().stream().filter(b -> b.getId() == 4).findFirst().orElse(null);
+		GuildBuff gb = GuildBuffDAO.getBuffs(channel.getGuild().getId());
+		ServerBuff cardBuff = gb.getBuffs().stream().filter(b -> b.getId() == 2).findFirst().orElse(null);
+		ServerBuff foilBuff = gb.getBuffs().stream().filter(b -> b.getId() == 4).findFirst().orElse(null);
 		if (Helper.rng(200) > (195 - (float) (channel.getGuild().getMemberCount() * 15 / 5000)) / (cardBuff != null ? cardBuff.getMult() : 1)) {
 			List<Card> cards = CardDAO.getCards();
 			Card kc = cards.get(Helper.rng(cards.size()));
@@ -918,7 +920,8 @@ public class Helper {
 	}
 
 	public static void spawnDrop(GuildConfig gc, TextChannel channel) {
-		ServerBuff dropBuff = gc.getBuffs().stream().filter(b -> b.getId() == 3).findFirst().orElse(null);
+		GuildBuff gb = GuildBuffDAO.getBuffs(channel.getGuild().getId());
+		ServerBuff dropBuff = gb.getBuffs().stream().filter(b -> b.getId() == 3).findFirst().orElse(null);
 		if (Helper.rng(200) > (195 - (float) (channel.getGuild().getMemberCount() * 15 / 5000) / (dropBuff != null ? dropBuff.getMult() : 1))) {
 			Prize drop = new CreditDrop();
 
