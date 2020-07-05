@@ -16,36 +16,32 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.managers;
+package com.kuuhaku.controller.postgresql;
 
-import com.kuuhaku.command.Category;
-import org.jetbrains.annotations.NonNls;
+import com.kuuhaku.model.persistent.GuildBuff;
 
-public class ReactionArgument extends Argument {
-	private final boolean answerable;
-	private final String type;
+import javax.persistence.EntityManager;
 
-	public ReactionArgument(@NonNls String name, @NonNls String[] aliases, String description, boolean answerable, @NonNls String type) {
-		super(name, aliases, description, Category.FUN, false);
-		this.answerable = answerable;
-		this.type = type;
+public class GuildBuffDAO {
+	public static GuildBuff getBuffs(String guild) {
+		EntityManager em = Manager.getEntityManager();
+
+		try {
+			GuildBuff gb = em.find(GuildBuff.class, guild);
+			if (gb == null) return new GuildBuff();
+			else return gb;
+		} finally {
+			em.close();
+		}
 	}
 
-	public Object[] getArguments() {
-		return new Object[]{
-				getName(),
-				getAliases(),
-				getDescription(),
-				answerable,
-				type
-		};
-	}
+	public static void saveBuffs(GuildBuff gb) {
+		EntityManager em = Manager.getEntityManager();
 
-	public boolean isAnswerable() {
-		return answerable;
-	}
+		em.getTransaction().begin();
+		em.merge(gb);
+		em.getTransaction().commit();
 
-	public String getType() {
-		return type;
+		em.close();
 	}
 }
