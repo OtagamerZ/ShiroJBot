@@ -99,11 +99,6 @@ public class JibrilEvents extends ListenerAdapter {
 					com.kuuhaku.controller.sqlite.MemberDAO.addMemberToDB(event.getMember());
 					mb = com.kuuhaku.controller.sqlite.MemberDAO.getMemberById(event.getAuthor().getId() + event.getGuild().getId());
 				}
-				if (mb.getMid() == null) {
-					mb.setMid(event.getAuthor().getId());
-					mb.setSid(event.getGuild().getId());
-					com.kuuhaku.controller.sqlite.MemberDAO.updateMemberConfigs(mb);
-				}
 
 				if (!mb.isRulesSent())
 					try {

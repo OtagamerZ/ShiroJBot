@@ -24,12 +24,11 @@ import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Member;
-import net.dv8tion.jda.api.entities.Guild;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Sweeper {
@@ -69,10 +68,17 @@ public class Sweeper {
 		List<GuildConfig> gcs = GuildDAO.getAllGuilds();
 		List<Member> mbs = MemberDAO.getAllMembers();
 
-		Map<String, List<net.dv8tion.jda.api.entities.Member>> gs = Main.getInfo().getAPI().getGuilds().stream().collect(Collectors.toMap(Guild::getId, Guild::getMembers));
+		List<GuildConfig> safeGcs = gcs.stream()
+				.filter(g -> Main.getInfo().getGuildByID(g.getGuildID()) != null)
+				.collect(Collectors.toList());
 
-		List<GuildConfig> safeGcs = gcs.stream().filter(g -> gs.containsKey(g.getGuildID())).collect(Collectors.toList());
-		List<Member> safeMbs = mbs.stream().filter(m -> gs.containsKey(m.getSid()) && gs.get(m.getSid()).stream().anyMatch(mb -> mb.getId().equals(m.getMid()))).collect(Collectors.toList());
+		List<Member> safeMbs = new ArrayList<>();
+		for (GuildConfig gc : safeGcs) {
+			List<Member> found = safeMbs.stream()
+					.filter(m -> Main.getInfo().getGuildByID(gc.getGuildID()).getMemberById(m.getMid()) != null)
+					.collect(Collectors.toList());
+			safeMbs.addAll(found);
+		}
 
 		gcs.removeAll(safeGcs);
 		mbs.removeAll(safeMbs);
