@@ -45,24 +45,45 @@ public class Settings {
 			GuildConfig gc = GuildDAO.getGuildById(message.getGuild().getId());
 			String prefix = Helper.getOr(gc.getPrefix(), "s!");
 
+			//CANAIS
 			String canalBV = Helper.getOr(gc.getCanalBV(), "Não definido.");
 			if (!canalBV.equals("Não definido.")) canalBV = "<#" + canalBV + ">";
-			String msgBV = Helper.getOr(gc.getMsgBoasVindas(), "Não definido.");
-			if (!msgBV.equals("Não definido.")) msgBV = "`" + msgBV + "`";
 
 			String canalAdeus = Helper.getOr(gc.getCanalAdeus(), "Não definido.");
 			if (!canalAdeus.equals("Não definido.")) canalAdeus = "<#" + canalAdeus + ">";
-			String msgAdeus = Helper.getOr(gc.getMsgAdeus(), "Não definido.");
-			if (!msgAdeus.equals("Não definido.")) msgAdeus = "`" + msgAdeus + "`";
 
 			String canalSUG = Helper.getOr(gc.getCanalSUG(), "Não definido.");
 			if (!canalSUG.equals("Não definido.")) canalSUG = "<#" + canalSUG + ">";
 
-			int pollTime = gc.getPollTime();
-
 			String canalLvlUpNotif = Helper.getOr(gc.getCanalLvl(), "Não definido.");
 			if (!canalLvlUpNotif.equals("Não definido.")) canalLvlUpNotif = "<#" + canalLvlUpNotif + ">";
 
+			String canalRelay = Helper.getOr(gc.getCanalRelay(), "Não definido.");
+			if (!canalRelay.equals("Não definido.")) canalRelay = "<#" + canalRelay + ">";
+
+			String canalKawaipon = Helper.getOr(gc.getCanalKawaipon(), "Não definido.");
+			if (!canalKawaipon.equals("Não definido.")) canalKawaipon = "<#" + canalKawaipon + ">";
+
+			String canalDrop = Helper.getOr(gc.getCanalDrop(), "Não definido.");
+			if (!canalDrop.equals("Não definido.")) canalDrop = "<#" + canalDrop + ">";
+
+			String canalAvisos = Helper.getOr(gc.getCanalAvisos(), "Não definido.");
+			if (!canalAvisos.equals("Não definido.")) canalAvisos = "<#" + canalAvisos + ">";
+
+			//MENSAGENS
+			String msgBV = Helper.getOr(gc.getMsgBoasVindas(), "Não definido.");
+			if (!msgBV.equals("Não definido.")) msgBV = "```" + msgBV + "```";
+
+			String msgAdeus = Helper.getOr(gc.getMsgAdeus(), "Não definido.");
+			if (!msgAdeus.equals("Não definido.")) msgAdeus = "```" + msgAdeus + "```";
+
+			//TEMPOS
+			int pollTime = gc.getPollTime();
+			int warnTime = gc.getWarnTime();
+
+			//CARGOS
+			String cargoWarnID = Helper.getOr(gc.getCargoWarn(), "Não definido.");
+			//String cargoVipID = Helper.getOr(gc.getCargoVip(), "Não definido.");
 			StringBuilder cargosLvl = new StringBuilder();
 			if (gc.getCargoslvl() != null) {
 				List<Integer> lvls = gc.getCargoslvl().keySet().stream().map(Integer::parseInt).sorted().collect(Collectors.toList());
@@ -80,28 +101,30 @@ public class Settings {
 				}
 			}
 
-			String canalRelay = Helper.getOr(gc.getCanalRelay(), "Não definido.");
-			if (!canalRelay.equals("Não definido.")) canalRelay = "<#" + canalRelay + ">";
-
-			String cargoWarnID = Helper.getOr(gc.getCargoWarn(), "Não definido.");
-			String cargoVipID = Helper.getOr(gc.getCargoVip(), "Não definido.");
-			int warnTime = gc.getWarnTime();
-
 			EmbedBuilder eb = new EmbedBuilder();
 
 			eb.setColor(message.getGuild().getIconUrl() == null ? Helper.getRandomColor() : Helper.colorThief(message.getGuild().getIconUrl()));
 			if (message.getGuild().getIconUrl() != null) eb.setThumbnail(message.getGuild().getIconUrl());
 			eb.setTitle("⚙ | Configurações do servidor");
-			eb.setDescription(Helper.VOID);
 			eb.addField("\uD83D\uDD17 » Prefixo: __" + prefix + "__", Helper.VOID, false);
+
 			eb.addField("\uD83D\uDCD6 » Canal de Boas-vindas", canalBV, false);
 			eb.addField("\uD83D\uDCDD » Mensagem de Boas-vindas", msgBV, false);
-			eb.addField(Helper.VOID + "\n" + "\uD83D\uDCD6 » Canal de Adeus", canalAdeus, false);
+			eb.addField(Helper.VOID + "\n\uD83D\uDCD6 » Canal de Adeus", canalAdeus, false);
 			eb.addField("\uD83D\uDCDD » Mensagem de Adeus", msgAdeus, false);
-			eb.addBlankField(true);
-			eb.addBlankField(true);
-			eb.addField("\uD83D\uDCD6 » Canal de Sugestões", canalSUG, true);
+
+			eb.addBlankField(false);
+
 			eb.addField("⏲ » Tempo de enquetes", String.valueOf(pollTime), true);
+			eb.addField("⏲ » Tempo de punição", String.valueOf(warnTime), true);
+
+			eb.addBlankField(false);
+
+			eb.addField("\uD83D\uDCD6 » Canal de sugestões", canalSUG, true);
+			eb.addField("\uD83D\uDCD6 » Canal de notificação nível", canalLvlUpNotif, true);
+			eb.addField("\uD83D\uDCD6 » Canal de cartas Kawaipon", canalKawaipon, true);
+			eb.addField("\uD83D\uDCD6 » Canal de drops de créditos", canalDrop, true);
+			eb.addField("\uD83D\uDCD6 » Canal de avisos", canalAvisos, true);
 			try {
 				if (TagDAO.getTagById(Objects.requireNonNull(message.getGuild().getOwner()).getUser().getId()).isPartner()) {
 					eb.addField("\uD83D\uDCD6 » Canal Relay", canalRelay, true);
@@ -109,6 +132,9 @@ public class Settings {
 			} catch (NoResultException ignore) {
 			}
 
+			eb.addBlankField(false);
+
+			eb.addField("\uD83D\uDCD1 » Cargos de nível", cargosLvl.toString().isEmpty() ? "Nenhum" : cargosLvl.toString(), true);
 			if (!cargoWarnID.equals("Não definido.")) {
 				try {
 					eb.addField("\uD83D\uDCD1 » Cargo de punição", Main.getInfo().getRoleByID(cargoWarnID).getAsMention(), true);
@@ -120,7 +146,7 @@ public class Settings {
 				eb.addField("\uD83D\uDCD1 » Cargo de punição", cargoWarnID, true);
 			}
 
-			if (!cargoVipID.equals("Não definido.")) {
+			/*if (!cargoVipID.equals("Não definido.")) {
 				try {
 					eb.addField("\uD83D\uDCD1 » Cargo VIP", Main.getInfo().getRoleByID(cargoVipID).getAsMention(), true);
 				} catch (NullPointerException e) {
@@ -129,13 +155,7 @@ public class Settings {
 				}
 			} else {
 				eb.addField("\uD83D\uDCD1 » Cargo VIP", cargoVipID, true);
-			}
-
-			eb.addField("⏲ » Tempo de punição", String.valueOf(warnTime), true);
-
-			eb.addField("\uD83D\uDCD6 » Canal de notificação de level up", canalLvlUpNotif, true);
-			eb.addField("\uD83D\uDCD1 » Cargos de nível", cargosLvl.toString().isEmpty() ? "Nenhum" : cargosLvl.toString(), true);
-
+			}*/
 
 			eb.setFooter("Para obter ajuda sobre como configurar o seu servidor, use `" + gc.getPrefix() + "settings ajuda`", null);
 
@@ -485,6 +505,35 @@ public class Settings {
 		message.getTextChannel().sendMessage("✅ | O canal relay do servidor foi trocado para " + newCanalRelay.getAsMention() + " com sucesso.").queue();
 	}
 
+	public static void updateCanalAvisos(String[] args, Message message, GuildConfig gc) {
+		String antigoCanalAvisosID = gc.getCanalAvisos();
+
+		if (args.length < 2) {
+			if (antigoCanalAvisosID.equals("Não definido.")) {
+				message.getTextChannel().sendMessage("O canal de avisos atual do servidor ainda não foi definido.").queue();
+			} else {
+				message.getTextChannel().sendMessage("O canal de avisos atual do servidor é <#" + antigoCanalAvisosID + ">.").queue();
+			}
+			return;
+		} else if (message.getMentionedChannels().size() > 1) {
+			message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 canal.").queue();
+			return;
+		} else if (message.getMentionedChannels().size() < 1) {
+			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
+			return;
+		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
+			gc.setCanalAvisos(null);
+			message.getTextChannel().sendMessage("✅ | O canal avisos do servidor foi resetado com sucesso.").queue();
+			return;
+		}
+
+		TextChannel newCanalRelay = message.getMentionedChannels().get(0);
+
+		gc.setCanalRelay(newCanalRelay.getId());
+		GuildDAO.updateGuildSettings(gc);
+		message.getTextChannel().sendMessage("✅ | O canal relay do servidor foi trocado para " + newCanalRelay.getAsMention() + " com sucesso.").queue();
+	}
+
 	public static void updateCargoLvl(String[] args, Message message, GuildConfig gc) {
 		Map<String, Object> antigoCargoLvl = gc.getCargoslvl();
 		List<Integer> lvls = antigoCargoLvl.keySet().stream().map(Integer::parseInt).sorted().collect(Collectors.toList());
@@ -589,19 +638,26 @@ public class Settings {
 		eb.setTitle("⚙ | Painel de ajuda");
 		eb.setDescription("Utilize os comandos a baixo para estabelecer suas configurações.");
 		eb.addField(prefix + "settings prefix", "Altera o prefixo da Shiro no seu servidor.", false);
+
 		eb.addField(prefix + "settings canalbv", "Define o canal onde a Shiro ira mandar as mensagens de boas-vindas.", false);
 		eb.addField(prefix + "settings mensagembv", "Defina uma mensagem de boas-vindas em seu servidor.", false);
 		eb.addField(prefix + "settings canaladeus", "Define o canal onde a Shiro ira mandar as mensagens de saída.", false);
 		eb.addField(prefix + "settings mensagemadeus", "Defina uma mensagem de saída em seu servidor.", false);
-		eb.addField(prefix + "settings tempowarn", "Define o tempo de punições em seu servidor.", false);
-		eb.addField(prefix + "settings tempopoll", "Define o tempo de enquetes em seu servidor.", false);
+
 		eb.addField(prefix + "settings canalsug", "Define o canal de sugestões em seu servidor.", false);
-		eb.addField(prefix + "settings rolewarn", "Define o cargo de punição em seu servidor.", false);
-		eb.addField(prefix + "settings rolevip", "Define o cargo VIP em seu servidor.", false);
-		eb.addField(prefix + "settings levelnotif", "Define as mensagens quando alguém sobe de nível.", false);
 		eb.addField(prefix + "settings canallevelup", "Define o canal de level up em seu servidor.", false);
 		eb.addField(prefix + "settings canalrelay", "Define o canal de relay em seu servidor.", false);
+		eb.addField(prefix + "settings canalavisos", "Define o canal de avisos em seu servidor.", false);
+
+		eb.addField(prefix + "settings tempowarn", "Define o tempo de punições em seu servidor.", false);
+		eb.addField(prefix + "settings tempopoll", "Define o tempo de enquetes em seu servidor.", false);
+
+		eb.addField(prefix + "settings rolewarn", "Define o cargo de punição em seu servidor.", false);
+		//eb.addField(prefix + "settings rolevip", "Define o cargo VIP em seu servidor.", false);
 		eb.addField(prefix + "settings cargolevel", "Define os cargos por level em seu servidor.\n\nParâmetros:\n", false);
+
+		eb.addField(prefix + "settings levelnotif", "Habilita as notificações de nível.", false);
+
 		eb.addField("%guild%", "Para dizer o nome do server.", false);
 		eb.addField("%user%", "Para dizer o nome do usuário.", false);
 
