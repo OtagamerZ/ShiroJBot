@@ -113,10 +113,10 @@ public class SettingsCommand extends Command {
 			case "rolewarn":
 				Settings.updateCargoWarn(args, message, gc);
 				break;
-			case "rvip":
+			/*case "rvip":
 			case "rolevip":
 				Settings.updateCargoVip(args, message, gc);
-				break;
+				break;*/
 			case "ln":
 			case "levelnotif":
 				Settings.updateLevelNotif(args, message, gc);
@@ -130,6 +130,11 @@ public class SettingsCommand extends Command {
 			case "canalrly":
 			case "crelay":
 				Settings.updateCanalRelay(args, message, gc);
+				break;
+			case "canalavisos":
+			case "canalav":
+			case "cavisos":
+				Settings.updateCanalAvisos(args, message, gc);
 				break;
 			case "clvl":
 			case "cargolevel":

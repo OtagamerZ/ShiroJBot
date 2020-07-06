@@ -89,4 +89,16 @@ public class GuildDAO {
 
 		return gcs;
 	}
+
+	@SuppressWarnings("unchecked")
+	public static List<GuildConfig> getAlertChannels() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE COALESCE(canalAvisos,'') NOT LIKE ''", GuildConfig.class);
+		List<GuildConfig> gcs = (List<GuildConfig>) gc.getResultList();
+
+		em.close();
+
+		return gcs;
+	}
 }

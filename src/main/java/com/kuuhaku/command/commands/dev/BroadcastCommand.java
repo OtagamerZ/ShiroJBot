@@ -25,6 +25,8 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.TagDAO;
+import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Tags;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
@@ -73,24 +75,23 @@ public class BroadcastCommand extends Command {
 
 		switch (args[0].toLowerCase()) {
 			case "geral":
-				List<Guild> gcs = Main.getInfo().getAPI().getGuilds();
-				List<List<Guild>> gcPages = Helper.chunkify(gcs, 10);
+				List<GuildConfig> gcs = GuildDAO.getAlertChannels();
 
-				for (List<Guild> gs : gcPages) {
+				List<List<GuildConfig>> gcPages = Helper.chunkify(gcs, 10);
+
+				for (List<GuildConfig> gs : gcPages) {
 					result.clear();
 					eb.clear();
 					sb.setLength(0);
 
-					for (Guild g : gs) {
+					for (GuildConfig gc : gs) {
+						Guild g = Main.getInfo().getGuildByID(gc.getGuildID());
 						try {
-							result.put(g.getName(), false);
-							for (TextChannel c : g.getTextChannels()) {
-								if (c.canTalk()) {
-									c.sendMessage(msg).submit().get();
-									result.put(g.getName(), true);
-									break;
-								}
-							}
+							TextChannel c = g.getTextChannelById(gc.getCanalAvisos());
+							if (c != null && c.canTalk()) {
+								c.sendMessage(msg).submit().get();
+								result.put(g.getName(), true);
+							} else result.put(g.getName(), false);
 						} catch (Exception e) {
 							result.put(g.getName(), false);
 						}
