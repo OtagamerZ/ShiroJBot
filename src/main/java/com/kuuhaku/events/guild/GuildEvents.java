@@ -264,7 +264,6 @@ public class GuildEvents extends ListenerAdapter {
 					if (m.getMid() == null) {
 						m.setMid(author.getId());
 						m.setSid(guild.getId());
-						MemberDAO.updateMemberConfigs(m);
 					}
 
 					boolean lvlUp = m.addXp(guild);
@@ -274,6 +273,7 @@ public class GuildEvents extends ListenerAdapter {
 						} else
 							channel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").complete();
 					}
+
 					MemberDAO.updateMemberConfigs(m);
 				} catch (NoResultException e) {
 					MemberDAO.addMemberToDB(member);
