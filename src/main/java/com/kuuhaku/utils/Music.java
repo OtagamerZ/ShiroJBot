@@ -36,7 +36,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Music {
     private static void play(VoiceChannel vc, TextChannel channel, Guild guild, GuildMusicManager musicManager, AudioTrack track) {
-        if (!guild.getAudioManager().isConnected()) guild.getAudioManager().openAudioConnection(vc);
+        guild.getAudioManager().openAudioConnection(vc);
 
         musicManager.scheduler.channel = channel;
         musicManager.scheduler.queue(track);
