@@ -21,8 +21,23 @@ package com.kuuhaku.controller.postgresql;
 import com.kuuhaku.model.persistent.GuildBuff;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.util.List;
 
 public class GuildBuffDAO {
+	@SuppressWarnings("unchecked")
+	public static List<GuildBuff> getAllBuffs() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT gb FROM GuildBuff gb", GuildBuff.class);
+
+		try {
+			return (List<GuildBuff>) q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
 	public static GuildBuff getBuffs(String guild) {
 		EntityManager em = Manager.getEntityManager();
 

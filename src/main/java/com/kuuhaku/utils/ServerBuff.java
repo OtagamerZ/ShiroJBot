@@ -35,6 +35,9 @@ public class ServerBuff {
 	public static final Triple<Integer, Integer, Double> FOIL_TIER_1 = Triple.of(4, 5000, 1.2);
 	public static final Triple<Integer, Integer, Double> FOIL_TIER_2 = Triple.of(4, 8000, 1.5);
 	public static final Triple<Integer, Integer, Double> FOIL_TIER_3 = Triple.of(4, 12000, 2d);
+	public static final Triple<Integer, Integer, Double> MINER_TIER_1 = Triple.of(5, 10000, 500d);
+	public static final Triple<Integer, Integer, Double> MINER_TIER_2 = Triple.of(5, 20000, 1000d);
+	public static final Triple<Integer, Integer, Double> MINER_TIER_3 = Triple.of(5, 30000, 2000d);
 
 	private int tier;
 	private int id;
