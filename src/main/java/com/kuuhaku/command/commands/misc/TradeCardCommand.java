@@ -68,9 +68,6 @@ public class TradeCardCommand extends Command {
 		} else if (args.length < 4) {
 			channel.sendMessage(":x: | Você precisa mencionar uma quantia de créditos ou uma carta, qual carta você deseja e o tipo dela (`N` = normal, `C` = cromada) para realizar a troca.").queue();
 			return;
-		} else if (!Helper.equalsAny(args[3], "N", "C")) {
-			channel.sendMessage(":x: | Você precisa informar o tipo da carta (`N` = normal, `C` = cromada).").queue();
-			return;
 		}
 
 		User other = message.getMentionedUsers().get(0);
