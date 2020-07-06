@@ -49,7 +49,7 @@ public class PseudoNameCommand extends Command {
 		if (args.length == 0) {
 			channel.sendMessage(":x: | Você precisa digitar um nome ou `reset`.").queue();
 			return;
-		} else if (Helper.containsAny(args[0], "reset", "limpar")) {
+		} else if (Helper.equalsAny(args[0], "reset", "limpar")) {
 			mb.setPseudoName("");
 			MemberDAO.updateMemberConfigs(mb);
 			channel.sendMessage("Pseudônimo limpo com sucesso!").queue();

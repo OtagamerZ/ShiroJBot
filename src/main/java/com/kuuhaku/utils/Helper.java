@@ -332,6 +332,14 @@ public class Helper {
 		return Arrays.stream(compareWith).map(String::toLowerCase).anyMatch(string.toLowerCase()::contains);
 	}
 
+	public static boolean equalsAll(String string, String... compareWith) {
+		return Arrays.stream(compareWith).allMatch(string::equalsIgnoreCase);
+	}
+
+	public static boolean equalsAny(String string, String... compareWith) {
+		return Arrays.stream(compareWith).anyMatch(string::equalsIgnoreCase);
+	}
+
 	public static boolean hasPermission(Member m, Permission p, TextChannel c) {
 		boolean allowedPermInChannel = c.getRolePermissionOverrides().stream().anyMatch(po -> m.getRoles().contains(po.getRole()) && po.getAllowed().contains(p)) || c.getMemberPermissionOverrides().stream().anyMatch(po -> po.getMember() == m && po.getAllowed().contains(p));
 		boolean deniedPermInChannel = c.getRolePermissionOverrides().stream().anyMatch(po -> m.getRoles().contains(po.getRole()) && po.getDenied().contains(p)) || c.getMemberPermissionOverrides().stream().anyMatch(po -> po.getMember() == m && po.getDenied().contains(p));

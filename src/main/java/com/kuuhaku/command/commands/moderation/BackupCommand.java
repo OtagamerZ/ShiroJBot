@@ -62,7 +62,7 @@ public class BackupCommand extends Command {
 		if (args.length < 1) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_backup-no-mode")).queue();
 			return;
-		} else if (!Helper.containsAny(args[0], "salvar", "recuperar")) {
+		} else if (!Helper.equalsAny(args[0], "salvar", "recuperar")) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_backup-invalid-mode")).queue();
 			return;
 		} else if (!guild.getSelfMember().hasPermission(Permission.ADMINISTRATOR)) {

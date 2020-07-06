@@ -135,8 +135,8 @@ public class Chess extends Tabletop {
 				TextChannel chn = event.getChannel();
 				Message m = event.getMessage();
 
-				if (chn.getId().equals(getTable().getId()) && u.getId().equals(turn[0].getId()) && (m.getContentRaw().length() == 5 || Helper.containsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender"))) {
-					if (Helper.containsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender")) {
+				if (chn.getId().equals(getTable().getId()) && u.getId().equals(turn[0].getId()) && (m.getContentRaw().length() == 5 || Helper.equalsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender"))) {
+					if (Helper.equalsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender")) {
 						Main.getInfo().getAPI().removeEventListener(this);
 						ShiroInfo.getGames().remove(getId());
 						getTable().sendMessage(turn[0].getAsMention() + " desistiu! (" + getBoard().getRound() + " turnos)").queue();
