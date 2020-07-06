@@ -30,8 +30,6 @@ import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.audio.hooks.ConnectionListener;
-import net.dv8tion.jda.api.audio.hooks.ConnectionStatus;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -61,7 +59,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
 
-public class JDAEvents extends ListenerAdapter implements ConnectionListener {
+public class JDAEvents extends ListenerAdapter {
 
 	@Override
 	public void onReady(@NotNull ReadyEvent event) {
@@ -297,20 +295,5 @@ public class JDAEvents extends ListenerAdapter implements ConnectionListener {
 
 		if (msg != null)
 			Helper.logToChannel(event.getAuthor(), false, null, "Uma mensagem foi editada no canal " + event.getChannel().getAsMention() + ":```diff\n- " + msg.getContentRaw() + "\n+ " + event.getMessage().getContentRaw() + "```", msg.getGuild());
-	}
-
-	@Override
-	public void onPing(long ping) {
-
-	}
-
-	@Override
-	public void onStatusChange(@Nonnull ConnectionStatus status) {
-		System.out.println(status);
-	}
-
-	@Override
-	public void onUserSpeaking(@Nonnull User user, boolean speaking) {
-
 	}
 }
