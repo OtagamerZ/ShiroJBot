@@ -27,6 +27,7 @@ import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.AnimeName;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.KawaiponRarity;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
@@ -68,7 +69,10 @@ public class RemainingCardsCommand extends Command {
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 		List<Card> collected = kp.getCards().stream().map(KawaiponCard::getCard).filter(c -> c.getAnime().equals(anime)).collect(Collectors.toList());
 		List<Card> cards = CardDAO.getCardsByAnime(anime);
-		cards.sort(Comparator.<Card>comparingInt(c -> c.getRarity().getIndex()).reversed());
+		cards.sort(Comparator
+				.comparing(Card::getRarity, Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
+				.thenComparing(Card::getName, String.CASE_INSENSITIVE_ORDER)
+		);
 		EmbedBuilder eb = new EmbedBuilder();
 
 		eb.setTitle(":flower_playing_cards: | Cartas coletadas de " + anime.toString());
