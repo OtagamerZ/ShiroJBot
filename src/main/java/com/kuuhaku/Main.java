@@ -39,7 +39,10 @@ import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.audio.hooks.ConnectionListener;
+import net.dv8tion.jda.api.audio.hooks.ConnectionStatus;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.exceptions.ContextException;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
@@ -48,6 +51,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import javax.annotation.Nonnull;
 import javax.persistence.NoResultException;
 import java.io.IOException;
 import java.time.Instant;
@@ -146,6 +150,23 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		api.addEventListener(new GuildEvents());
 		api.addEventListener(new GuildUpdateEvents());
 		jbr.addEventListener(new JibrilEvents());
+
+		api.addEventListener(new ConnectionListener() {
+			@Override
+			public void onPing(long ping) {
+
+			}
+
+			@Override
+			public void onStatusChange(@Nonnull ConnectionStatus status) {
+				System.out.println(status);
+			}
+
+			@Override
+			public void onUserSpeaking(@Nonnull User user, boolean speaking) {
+
+			}
+		});
 
 		Pages.activate(api);
 
