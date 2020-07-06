@@ -896,10 +896,10 @@ public class Helper {
 		GuildBuff gb = GuildBuffDAO.getBuffs(channel.getGuild().getId());
 		ServerBuff cardBuff = gb.getBuffs().stream().filter(b -> b.getId() == 2).findFirst().orElse(null);
 		ServerBuff foilBuff = gb.getBuffs().stream().filter(b -> b.getId() == 4).findFirst().orElse(null);
-		if (Helper.rng(200) > (195 - (float) (channel.getGuild().getMemberCount() * 15 / 5000)) / (cardBuff != null ? cardBuff.getMult() : 1)) {
+		if (chance(2.5 + (channel.getGuild().getMemberCount() * 7.5 / 5000) * (cardBuff != null ? cardBuff.getMult() : 1))) {
 			List<Card> cards = CardDAO.getCards();
 			Card kc = cards.get(Helper.rng(cards.size()));
-			boolean foil = Helper.rng(1000) <= 5 * (foilBuff != null ? foilBuff.getMult() : 1);
+			boolean foil = chance(0.5 * (foilBuff != null ? foilBuff.getMult() : 1));
 
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setImage("attachment://kawaipon.png");
@@ -922,7 +922,7 @@ public class Helper {
 	public static void spawnDrop(GuildConfig gc, TextChannel channel) {
 		GuildBuff gb = GuildBuffDAO.getBuffs(channel.getGuild().getId());
 		ServerBuff dropBuff = gb.getBuffs().stream().filter(b -> b.getId() == 3).findFirst().orElse(null);
-		if (Helper.rng(200) > (195 - (float) (channel.getGuild().getMemberCount() * 15 / 5000) / (dropBuff != null ? dropBuff.getMult() : 1))) {
+		if (chance(2.5 + (channel.getGuild().getMemberCount() * 7.5 / 5000) * (dropBuff != null ? dropBuff.getMult() : 1))) {
 			Prize drop = new CreditDrop();
 
 			EmbedBuilder eb = new EmbedBuilder();
@@ -942,5 +942,9 @@ public class Helper {
 			}
 			ShiroInfo.getCurrentDrop().put(channel.getGuild().getId(), drop);
 		}
+	}
+
+	public static boolean chance(double percentage) {
+		return Math.random() * 100 < percentage;
 	}
 }
