@@ -81,7 +81,7 @@ public class PurchaseBuffCommand extends Command {
 
 			channel.sendMessage(eb.build()).queue();
 			return;
-		} else if (!Helper.containsAny(args[0], "xp", "carta", "drop", "cromo")) {
+		} else if (!Helper.equalsAny(args[0], "xp", "carta", "drop", "cromo")) {
 			channel.sendMessage(":x: | O tipo da melhoria deve ser um dos seguintes tipos: `xp`, `carta`, `drop` ou `cromo`.").queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[1])) {

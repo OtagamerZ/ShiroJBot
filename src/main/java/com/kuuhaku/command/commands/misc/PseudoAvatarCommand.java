@@ -57,7 +57,7 @@ public class PseudoAvatarCommand extends Command {
 		if (args.length == 0) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-image")).queue();
 			return;
-		} else if (Helper.containsAny(args[0], "reset", "limpar")) {
+		} else if (Helper.equalsAny(args[0], "reset", "limpar")) {
 			mb.setPseudoAvatar("");
 			MemberDAO.updateMemberConfigs(mb);
 			channel.sendMessage("Pseudo-avatar limpo com sucesso!").queue();

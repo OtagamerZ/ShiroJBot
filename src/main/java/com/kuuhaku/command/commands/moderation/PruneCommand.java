@@ -65,12 +65,12 @@ public class PruneCommand extends Command {
 			msgs.removeIf(m -> !m.getAuthor().getId().equals(target.getId()));
 			channel.purgeMessages(msgs);
 			channel.sendMessage(msgs.size() + " mensage" + (msgs.size() == 1 ? "m de " + target.getAsMention() + " limpa." : "ns de " + target.getAsMention() + " limpas.")).queue();
-		} else if (Helper.containsAny(args[0], "user", "usuarios")) {
+		} else if (Helper.equalsAny(args[0], "user", "usuarios")) {
 			List<Message> msgs = channel.getHistory().retrievePast(100).complete();
 			msgs.removeIf(m -> m.getAuthor().isBot());
 			channel.purgeMessages(msgs);
 			channel.sendMessage(msgs.size() + " mensage" + (msgs.size() == 1 ? "m de usuário limpa." : "ns de usuários limpas.")).queue();
-		} else if (Helper.containsAny(args[0], "all", "tudo")) {
+		} else if (Helper.equalsAny(args[0], "all", "tudo")) {
 			((TextChannel) channel).createCopy().queue(s -> {
 				try {
 					((GuildChannel) channel).delete().queue();

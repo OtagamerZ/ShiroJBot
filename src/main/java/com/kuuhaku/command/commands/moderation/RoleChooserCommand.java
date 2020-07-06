@@ -55,7 +55,7 @@ public class RoleChooserCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
-		if (args.length == 1 && Helper.containsAny(args[0], "reboot", "regen", "reset", "restart", "refresh")) {
+		if (args.length == 1 && Helper.equalsAny(args[0], "reboot", "regen", "reset", "restart", "refresh")) {
 			Helper.refreshButtons(gc);
 			channel.sendMessage("Botões atualizados com sucesso!").queue();
 			return;
