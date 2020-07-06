@@ -19,8 +19,10 @@
 package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.Sweeper;
 import com.kuuhaku.controller.postgresql.BackupDAO;
 import com.kuuhaku.model.common.DataDump;
+import com.kuuhaku.utils.Helper;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
@@ -32,8 +34,12 @@ public class BackupEvent implements Job {
 	public void execute(JobExecutionContext context) {
 		Main.getInfo().getAPI().getPresence().setActivity(Main.getRandomActivity());
 
+		Helper.logger(this.getClass()).info(Sweeper.mark() + " entradas dispensáveis encontradas!");
+
 		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getCADump(), com.kuuhaku.controller.sqlite.BackupDAO.getGuildDump(), com.kuuhaku.controller.sqlite.BackupDAO.getKawaigotchiDump(), com.kuuhaku.controller.sqlite.BackupDAO.getPoliticalStateDump()));
 		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump()));
+
+		Sweeper.sweep();
 
 		System.gc();
 	}
