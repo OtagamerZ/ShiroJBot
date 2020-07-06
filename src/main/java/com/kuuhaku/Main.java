@@ -20,7 +20,6 @@ package com.kuuhaku;
 
 import com.github.ygimenez.method.Pages;
 import com.kuuhaku.controller.Relay;
-import com.kuuhaku.controller.Sweeper;
 import com.kuuhaku.controller.postgresql.BackupDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
@@ -178,14 +177,10 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	public static boolean shutdown() {
 		if (exiting) return false;
 		exiting = true;
-		int sweeper = Sweeper.mark();
-
-		Helper.logger(Main.class).info(sweeper + " entradas dispensáveis encontradas!");
 
 		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getCADump(), com.kuuhaku.controller.sqlite.BackupDAO.getGuildDump(), com.kuuhaku.controller.sqlite.BackupDAO.getKawaigotchiDump(), com.kuuhaku.controller.sqlite.BackupDAO.getPoliticalStateDump()));
 		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump()));
 
-		Sweeper.sweep();
 		Manager.disconnect();
 
 		Helper.logger(Main.class).info("Fui desligada.");

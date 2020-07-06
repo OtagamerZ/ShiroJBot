@@ -35,6 +35,8 @@ public class ScheduledEvents implements JobListener {
 		schedCheck();
 		schedRefreshWinner();
 		schedMarkWinner();
+		schedMiner();
+
 		if (Main.getInfo().getDblApi() != null) schedUpdateServerCount();
 		schedUpdateKawaigotchi();
 	}
@@ -196,6 +198,26 @@ public class ScheduledEvents implements JobListener {
 			}
 		} catch (SchedulerException e) {
 			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma updateKawaigotchi: " + e);
+		}
+	}
+
+	private void schedMiner() {
+		try {
+			if (MinerEvent.miner == null) {
+				MinerEvent.miner = JobBuilder.newJob(MinerEvent.class).withIdentity("miner", "1").build();
+			}
+			Trigger cron = TriggerBuilder.newTrigger().withIdentity("miner", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 * * ? * * *")).build();
+			SchedulerFactory sf = new StdSchedulerFactory();
+			try {
+				sched = sf.getScheduler();
+				sched.scheduleJob(MinerEvent.miner, cron);
+			} catch (Exception ignore) {
+			} finally {
+				sched.start();
+				Helper.logger(this.getClass()).info("Cronograma inicializado com sucesso: miner");
+			}
+		} catch (SchedulerException e) {
+			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma miner: " + e);
 		}
 	}
 
