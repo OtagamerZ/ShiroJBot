@@ -56,10 +56,10 @@ public class GuildConfig {
 
 	//CHANNELS
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
-	private String canalbv = "";
+	private String canalBv = "";
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
-	private String canaladeus = "";
+	private String canalAdeus = "";
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String canalSug = "";
@@ -72,6 +72,9 @@ public class GuildConfig {
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String canalLog = "";
+
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
+	private String canalAvisos = "";
 
 	//TEXTS
 	@Column(columnDefinition = "TEXT")
@@ -173,12 +176,12 @@ public class GuildConfig {
 	}
 
 	public String getCanalBV() {
-		return canalbv;
+		return canalBv;
 	}
 
 	public void setCanalBV(String canalbv) {
-		if (canalbv == null || canalbv.equals("-1")) this.canalbv = "";
-		else this.canalbv = canalbv;
+		if (canalbv == null || canalbv.equals("-1")) this.canalBv = "";
+		else this.canalBv = canalbv;
 	}
 
 	public String getMsgBoasVindas() {
@@ -191,12 +194,12 @@ public class GuildConfig {
 	}
 
 	public String getCanalAdeus() {
-		return canaladeus;
+		return canalAdeus;
 	}
 
 	public void setCanalAdeus(String canaladeus) {
-		if (canaladeus == null || canaladeus.equals("-1")) this.canaladeus = "";
-		else this.canaladeus = canaladeus;
+		if (canaladeus == null || canaladeus.equals("-1")) this.canalAdeus = "";
+		else this.canalAdeus = canaladeus;
 	}
 
 	public String getMsgAdeus() {
@@ -250,7 +253,7 @@ public class GuildConfig {
 
 	public void setCanalKawaipon(String canalKawaipon) {
 		if (canalKawaipon == null || canalKawaipon.equals("-1")) this.canalKawaipon = "";
-		this.canalKawaipon = canalKawaipon;
+		else this.canalKawaipon = canalKawaipon;
 	}
 
 	public String getCanalDrop() {
@@ -259,7 +262,16 @@ public class GuildConfig {
 
 	public void setCanalDrop(String canalDrop) {
 		if (canalDrop == null || canalDrop.equals("-1")) this.canalDrop = "";
-		this.canalDrop = canalDrop;
+		else this.canalDrop = canalDrop;
+	}
+
+	public String getCanalAvisos() {
+		return canalAvisos;
+	}
+
+	public void setCanalAvisos(String canalAvisos) {
+		if (canalAvisos == null || canalAvisos.equals("-1")) this.canalAvisos = "";
+		else this.canalAvisos = canalAvisos;
 	}
 
 	public Map<String, Object> getCargoslvl() {
