@@ -160,7 +160,7 @@ public class ShiroInfo {
 	}
 
 	public static boolean gameInProgress(String id) {
-		return games.keySet().stream().anyMatch(s -> Helper.containsAny(id, s.split(Pattern.quote("."))));
+		return games.keySet().stream().anyMatch(s -> Helper.equalsAny(id, s.split(Pattern.quote("."))));
 	}
 
 	public static Set<String> getRequests() {

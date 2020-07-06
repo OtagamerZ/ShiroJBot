@@ -84,7 +84,7 @@ public class KGotchiCommand extends Command {
 			return;
 		}
 
-		if (Helper.containsAny(args[0], "alimentar", "feed", "darcomida", "givefood")) {
+		if (Helper.equalsAny(args[0], "alimentar", "feed", "darcomida", "givefood")) {
 			if (args.length < 2) {
 				JSONObject jo = new JSONObject(k.getBag());
 				EmbedBuilder eb = new EmbedBuilder();
@@ -185,7 +185,7 @@ public class KGotchiCommand extends Command {
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
 			}
-		} else if (Helper.containsAny(args[0], "brincar", "play")) {
+		} else if (Helper.equalsAny(args[0], "brincar", "play")) {
 			BufferedImage bi = k.getRace().extract(k.getStance(), k.getSkin());
 			EmbedBuilder eb = new EmbedBuilder();
 			Graphics2D g2d = bi.createGraphics();
@@ -220,7 +220,7 @@ public class KGotchiCommand extends Command {
 
 			g2d.dispose();
 			sendEmbed(channel, k, bi, eb);
-		} else if (Helper.containsAny(args[0], "treinar", "train")) {
+		} else if (Helper.equalsAny(args[0], "treinar", "train")) {
 			BufferedImage bi = k.getRace().extract(k.getStance(), k.getSkin());
 			EmbedBuilder eb = new EmbedBuilder();
 			Graphics2D g2d = bi.createGraphics();
@@ -255,8 +255,8 @@ public class KGotchiCommand extends Command {
 
 			g2d.dispose();
 			sendEmbed(channel, k, bi, eb);
-		} else if (Helper.containsAny(args[0], "comprar", "buy")) {
-			if (args.length > 1 && Helper.containsAny(args[1], "extra", "comida")) {
+		} else if (Helper.equalsAny(args[0], "comprar", "buy")) {
+			if (args.length > 1 && Helper.equalsAny(args[1], "extra", "comida")) {
 				switch (args[1].toLowerCase()) {
 					case "extra":
 						if (args.length < 3) {
