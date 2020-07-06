@@ -27,8 +27,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -57,13 +58,13 @@ public class GuildBuff {
 		this.id = id;
 	}
 
-	public List<ServerBuff> getBuffs() {
+	public Set<ServerBuff> getBuffs() {
 		if (buffs == null || buffs.isBlank()) {
-			setBuffs(new ArrayList<>());
-			return new ArrayList<>();
+			setBuffs(new HashSet<>());
+			return new HashSet<>();
 		}
-		List<ServerBuff> sb = new JSONArray(buffs).toList().stream().map(b -> ShiroInfo.getJSONFactory().create().fromJson((String) b, ServerBuff.class)).collect(Collectors.toList());
-		List<ServerBuff> toRemove = sb.stream().filter(b -> TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - b.getAcquiredAt()) > b.getTime()).collect(Collectors.toList());
+		HashSet<ServerBuff> sb = new JSONArray(buffs).toList().stream().map(b -> ShiroInfo.getJSONFactory().create().fromJson((String) b, ServerBuff.class)).collect(Collectors.toCollection(HashSet::new));
+		HashSet<ServerBuff> toRemove = sb.stream().filter(b -> TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - b.getAcquiredAt()) > b.getTime()).collect(Collectors.toCollection(HashSet::new));
 		sb.removeAll(toRemove);
 		setBuffs(sb);
 		if (toRemove.size() > 0) GuildBuffDAO.saveBuffs(this);
@@ -71,7 +72,7 @@ public class GuildBuff {
 	}
 
 	public boolean addBuff(ServerBuff buff) {
-		List<ServerBuff> sb = getBuffs();
+		Set<ServerBuff> sb = getBuffs();
 		if (sb.stream().anyMatch(buff::equals)) return false;
 
 		sb.add(buff);
@@ -79,7 +80,7 @@ public class GuildBuff {
 		return true;
 	}
 
-	public void setBuffs(List<ServerBuff> buffs) {
+	public void setBuffs(Set<ServerBuff> buffs) {
 		List<String> sb = buffs.stream().map(b -> ShiroInfo.getJSONFactory().create().toJson(b)).collect(Collectors.toList());
 		this.buffs = new JSONArray(sb).toString();
 	}
