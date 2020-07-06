@@ -114,6 +114,7 @@ public class PollCommand extends Command {
 
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setTitle(":notepad_spiral: Enquete criada por " + member.getEffectiveName());
+		eb.setDescription("Apenas 1 clique já contabiliza o voto (a quantidade de reações __**NÃO**__ ficará maior que 1).");
 		eb.setThumbnail("https://www.kalkoken.org/apps/easypoll/resources/poll-logo.png");
 		eb.setDescription(text);
 		eb.setFooter("Clique nas reações abaixo para votar", null);
@@ -121,6 +122,9 @@ public class PollCommand extends Command {
 		if (options != null) {
 			for (int i = 0; i < options.length(); i++)
 				eb.addField(new String(new char[]{"\uD83C\uDDE6".toCharArray()[0], (char) ("\uD83C\uDDE6".toCharArray()[1] + i)}) + " | " + options.getString(i), Helper.VOID, true);
+
+			for (int i = 0; i < 3 - eb.getFields().size() % 3; i++)
+				eb.addBlankField(true);
 		}
 
 		Consumer<Message> sendSimple = m -> {
