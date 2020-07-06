@@ -523,15 +523,15 @@ public class Settings {
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setCanalAvisos(null);
-			message.getTextChannel().sendMessage("✅ | O canal avisos do servidor foi resetado com sucesso.").queue();
+			message.getTextChannel().sendMessage("✅ | O canal de avisos do servidor foi resetado com sucesso.").queue();
 			return;
 		}
 
-		TextChannel newCanalRelay = message.getMentionedChannels().get(0);
+		TextChannel newCanalAvisos = message.getMentionedChannels().get(0);
 
-		gc.setCanalRelay(newCanalRelay.getId());
+		gc.setCanalAvisos(newCanalAvisos.getId());
 		GuildDAO.updateGuildSettings(gc);
-		message.getTextChannel().sendMessage("✅ | O canal relay do servidor foi trocado para " + newCanalRelay.getAsMention() + " com sucesso.").queue();
+		message.getTextChannel().sendMessage("✅ | O canal de avisos do servidor foi trocado para " + newCanalAvisos.getAsMention() + " com sucesso.").queue();
 	}
 
 	public static void updateCargoLvl(String[] args, Message message, GuildConfig gc) {
