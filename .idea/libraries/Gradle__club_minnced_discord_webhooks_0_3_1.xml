@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: club.minnced:discord-webhooks:0.3.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/club.minnced/discord-webhooks/0.3.1/ebe533e32f16a3b2e956e39807e7f54402231c8a/discord-webhooks-0.3.1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/club.minnced/discord-webhooks/0.3.1/e9d9f246ca9ed6523b7063f9956b6f17f2172bbd/discord-webhooks-0.3.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/club.minnced/discord-webhooks/0.3.1/cabedfa45babee5bbc4eb1c59850b88c22aaff44/discord-webhooks-0.3.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
