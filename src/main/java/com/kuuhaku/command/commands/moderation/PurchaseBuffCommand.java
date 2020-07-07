@@ -63,20 +63,26 @@ public class PurchaseBuffCommand extends Command {
 							"**Tier 2** (4000 créditos): `+100% XP ganho` (15 dias)\n" +
 							"**Tier 3** (10000 créditos): `+200% XP ganho` (7 dias)",
 					false);
+			eb.addBlankField(false);
 			eb.addField("Melhoria de cartas (" + prefix + "up carta)",
 					"**Tier 1** (1000 créditos): `+20% chance de aparecer cartas` (30 dias)\n" +
 							"**Tier 2** (3000 créditos): `+30% chance de aparecer cartas` (15 dias)\n" +
-							"**Tier 3** (5000 créditos): `+40% chance de aparecer cartas` (7 dias)",
+							"**Tier 3** (5000 créditos): `+40% chance de aparecer cartas` (7 dias)\n" +
+							"**:warning: Tier Ultimate** (50000 créditos): `Uma completa loucura, por 1 minuto TODAS as mensagens farão aparecer cartas`",
 					false);
+			eb.addBlankField(false);
 			eb.addField("Melhoria de drops (" + prefix + "up drop)",
 					"**Tier 1** (1250 créditos): `+20% chance de aparecer drops` (30 dias)\n" +
 							"**Tier 2** (3500 créditos): `+30% chance de aparecer drops` (15 dias)\n" +
-							"**Tier 3** (6000 créditos): `+40% chance de aparecer drops` (7 dias)",
+							"**Tier 3** (6000 créditos): `+40% chance de aparecer drops` (7 dias)\n" +
+							"**:warning: Tier Ultimate** (60000 créditos): `Uma completa loucura, por 1 minuto TODAS as mensagens farão aparecer drops`",
 					false);
+			eb.addBlankField(false);
 			eb.addField("Melhoria de cartas cromadas (" + prefix + "up cromo)",
 					"**Tier 1** (5000 créditos): `+20% chance de aparecer cartas cromadas` (30 dias)\n" +
 							"**Tier 2** (8000 créditos): `+50% chance de aparecer cartas cromadas` (15 dias)\n" +
-							"**Tier 3** (12000 créditos): `+100% chance de aparecer cartas cromadas` (7 dias)",
+							"**Tier 3** (12000 créditos): `+100% chance de aparecer cartas cromadas` (7 dias)\n" +
+							"**:warning: Tier Ultimate** (120000 créditos): `Uma completa loucura, por 1 minuto TODAS as cartas que aparecerem serão cromadas`",
 					false);
 
 			channel.sendMessage(eb.build()).queue();
@@ -89,9 +95,9 @@ public class PurchaseBuffCommand extends Command {
 			return;
 		}
 
-		int tier = Integer.parseInt(args[1]);
-		if (tier < 1 || tier > 3) {
-			channel.sendMessage(":x: | O tier da melhoria deve ser um valor entre 1 e 3.").queue();
+		int tier = args[1].equalsIgnoreCase("ultimate") ? 4 : Integer.parseInt(args[1]);
+		if (tier < 1 || tier > 4) {
+			channel.sendMessage(":x: | O tier da melhoria deve ser um valor entre 1 e 4.").queue();
 			return;
 		}
 
@@ -121,6 +127,9 @@ public class PurchaseBuffCommand extends Command {
 					case 3:
 						sb = new ServerBuff(tier, ServerBuff.CARD_TIER_3);
 						break;
+					case 4:
+						sb = new ServerBuff(tier, ServerBuff.CARD_TIER_U);
+						break;
 				}
 				break;
 			case "DROP":
@@ -134,6 +143,9 @@ public class PurchaseBuffCommand extends Command {
 					case 3:
 						sb = new ServerBuff(tier, ServerBuff.DROP_TIER_3);
 						break;
+					case 4:
+						sb = new ServerBuff(tier, ServerBuff.DROP_TIER_U);
+						break;
 				}
 				break;
 			case "CROMADA":
@@ -146,6 +158,9 @@ public class PurchaseBuffCommand extends Command {
 						break;
 					case 3:
 						sb = new ServerBuff(tier, ServerBuff.FOIL_TIER_3);
+						break;
+					case 4:
+						sb = new ServerBuff(tier, ServerBuff.FOIL_TIER_U);
 						break;
 				}
 				break;
@@ -171,6 +186,7 @@ public class PurchaseBuffCommand extends Command {
 
 		GuildBuffDAO.saveBuffs(gb);
 		AccountDAO.saveAccount(acc);
-		channel.sendMessage("Melhoria aplicada com sucesso! (" + sb.getTime() + " dias).").queue();
+		if (tier != 4) channel.sendMessage("Melhoria aplicada com sucesso! (" + sb.getTime() + " dias).").queue();
+		else channel.sendMessage("Melhoria aplicada com sucesso! (" + sb.getTime() + " minuto). CORRA!!!").queue();
 	}
 }
