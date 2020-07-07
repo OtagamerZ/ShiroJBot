@@ -152,11 +152,11 @@ public class KawaiponsCommand extends Command {
 				eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName() + " (" + anime.toString() + ")");
 				eb.addField(":red_envelope: | Cartas comuns:", common + " de " + CardDAO.getCardsByAnime(anime).size() + " (" + Helper.prcntToInt(common, CardDAO.getCardsByAnime(anime).size()) + "%)", true);
 				eb.addField(":star2: | Cartas cromadas:", foil + " de " + CardDAO.getCardsByAnime(anime).size() + " (" + Helper.prcntToInt(foil, CardDAO.getCardsByAnime(anime).size()) + "%)", true);
-				eb.setImage("attachment://cards.png");
+				eb.setImage("attachment://cards.jpg");
 				eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(kp.getCards().size(), CardDAO.getCardsByAnime(anime).size() * 2) + "%");
 
 				m.delete().queue();
-				channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "png"), "cards.png").queue();
+				channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards), "cards.jpg").queue();
 			} catch (IOException | InterruptedException e) {
 				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_collection-generation-error")).queue();
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
