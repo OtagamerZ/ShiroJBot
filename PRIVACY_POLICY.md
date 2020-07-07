@@ -15,6 +15,7 @@
 - **Cargos**: Conjunto de permissões dado a usuários pela equipe administrativa do servidor em questão;
 - **VPS**: Serviço digital de computação em núvem privado, equivalente a um computador físico;
 - ***Backup***: Arquivo contendo dados que podem ser posteriormente restaurados;
+- ***Open-source***: Projeto que possui seu código-fonte público e disponível para implementações pela comunidade;
 
 ## 2. Dados que coletamos
 
@@ -41,8 +42,7 @@ para oferecer uma maior seguraça contra falhas ou perda de dados.
 
 ## 4. Como coletamos
 
-Os dados são coletados automaticamente conforme necessário durante o uso da Shiro, podendo eventualmente precisar
-de interação dos usuários.
+Os dados são coletados automaticamente conforme necessário durante o uso da Shiro, podendo eventualmente precisar de interação dos usuários.
 
 Dados de usuários e servidores são mantidos no banco de dados local antes de serem transferidos ao banco de dados remoto.
 
@@ -51,6 +51,7 @@ Dados de usuários e servidores são mantidos no banco de dados local antes de s
 Para soliciar que seus dados sejam excluídos dos bancos de dados da Shiro, basta entrar em contato com KuuHaKu através do
 Discord ou [e-mail](mailto:yagogimenez1@hotmail.com?subject=Solicitação+de+Exclusão+de+Dados). 
 
-Note, porém, que isso lhe impedirá
-de utilizar a Shiro, visto que não é possível seu funcionamento correto sem os dados coletados.
+Note, porém, que isso lhe impedirá de utilizar a Shiro, visto que não é possível seu funcionamento correto sem os dados coletados.
+
+Visto que a Shiro é um projeto *open-source*, **não nos responsabilizamos por possíveis implementações de terceiros ou projetos derivados dela**.
 
