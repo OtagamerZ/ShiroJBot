@@ -69,7 +69,7 @@ public class NewKawaiponBook {
 			g2d.setBackground(Color.black);
 			g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, 50));
+			g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, 42));
 
 			for (int i = 0; i < chunk.size(); i++) {
 				if (chunk.get(i) != null) {
