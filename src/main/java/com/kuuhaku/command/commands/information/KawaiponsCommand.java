@@ -121,11 +121,13 @@ public class KawaiponsCommand extends Command {
 				}
 
 				AnimeName anime = AnimeName.valueOf(args[0].toUpperCase());
-				Set<KawaiponCard> collection = kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime) && k.isFoil() == args[1].equalsIgnoreCase("C")).collect(Collectors.toSet());
+				Set<KawaiponCard> collection = kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).collect(Collectors.toSet());
+				Set<KawaiponCard> toRender = collection.stream().filter(k -> k.isFoil() == args[1].equalsIgnoreCase("C")).collect(Collectors.toSet());
+
 				if (CardDAO.animeCount(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).count())
 					collection.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
 
-				NewKawaiponBook kb = new NewKawaiponBook(collection);
+				NewKawaiponBook kb = new NewKawaiponBook(toRender);
 				BufferedImage cards = kb.view(anime, args[1].equalsIgnoreCase("C"));
 
 				try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
@@ -146,14 +148,14 @@ public class KawaiponsCommand extends Command {
 				}
 
 				EmbedBuilder eb = new EmbedBuilder();
-				int foil = (int) kp.getCards().stream().filter(KawaiponCard::isFoil).count();
-				int common = kp.getCards().size() - foil;
+				int foil = (int) collection.stream().filter(KawaiponCard::isFoil).count();
+				int common = collection.size() - foil;
 
 				eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName() + " (" + anime.toString() + ")");
-				eb.addField(":red_envelope: | Cartas comuns:", common + " de " + CardDAO.getCardsByAnime(anime).size() + " (" + Helper.prcntToInt(common, CardDAO.getCardsByAnime(anime).size()) + "%)", true);
-				eb.addField(":star2: | Cartas cromadas:", foil + " de " + CardDAO.getCardsByAnime(anime).size() + " (" + Helper.prcntToInt(foil, CardDAO.getCardsByAnime(anime).size()) + "%)", true);
+				eb.addField(":red_envelope: | Cartas comuns:", common + " de " + CardDAO.totalCards(anime) + " (" + Helper.prcntToInt(common, CardDAO.totalCards(anime)) + "%)", true);
+				eb.addField(":star2: | Cartas cromadas:", foil + " de " + CardDAO.totalCards(anime) + " (" + Helper.prcntToInt(foil, CardDAO.totalCards(anime)) + "%)", true);
 				eb.setImage("attachment://cards.jpg");
-				eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(kp.getCards().size(), CardDAO.getCardsByAnime(anime).size() * 2) + "%");
+				eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(collection.size(), CardDAO.totalCards(anime) * 2) + "%");
 
 				m.delete().queue();
 				channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards), "cards.jpg").queue();
