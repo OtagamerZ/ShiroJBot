@@ -63,13 +63,18 @@ public class NewKawaiponBook {
 		final BufferedImage footer = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/footer.jpg")));
 		final BufferedImage slot = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/slot.png")));
 
+		Graphics2D g2d = header.createGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, 210));
+		Profile.printCenteredString(anime.toString(), 2100, 75, 417, g2d);
+
+		g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 42));
+
+		//2100 x 417 (75)
 		for (List<KawaiponCard> chunk : chunks) {
 			BufferedImage row = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/row.jpg")));
-			Graphics2D g2d = row.createGraphics();
-			g2d.setBackground(Color.black);
-			g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, 42));
+			g2d = row.createGraphics();
 
 			for (int i = 0; i < chunk.size(); i++) {
 				if (chunk.get(i) != null) {
@@ -86,7 +91,7 @@ public class NewKawaiponBook {
 					g2d.setColor(Color.white);
 
 					g2d.drawImage(slot, 117 + 420 * i, 65, 338, 526, null);
-					Profile.printCenteredString("???", 338, 117 + 420 * i, 656, g2d);
+					Profile.printCenteredString("???", 338, 117 + 420 * i, 635, g2d);
 				}
 			}
 
@@ -96,10 +101,7 @@ public class NewKawaiponBook {
 		}
 
 		BufferedImage bg = new BufferedImage(header.getWidth(), header.getHeight() + footer.getHeight() + (656 * rows.size()), BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = bg.createGraphics();
-		g2d.setBackground(Color.black);
-		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d = bg.createGraphics();
 
 		g2d.drawImage(header, 0, 0, null);
 
