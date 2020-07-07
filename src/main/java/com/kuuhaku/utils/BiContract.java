@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.handlers.api.websocket;
+package com.kuuhaku.utils;
 
 import java.util.function.BiConsumer;
 

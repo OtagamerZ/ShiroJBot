@@ -67,7 +67,7 @@ public class NewKawaiponBook {
 		Graphics2D g2d = header.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, Helper.clamp(210 / Helper.prcntToInt(anime.toString().length(), 12), 105, 210)));
+		g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, Helper.clamp(12 * 210 / anime.toString().length(), 105, 210)));
 		Profile.printCenteredString(anime.toString(), 2100, 75, 417, g2d);
 
 		g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 42));

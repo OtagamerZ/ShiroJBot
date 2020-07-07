@@ -27,6 +27,7 @@ import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.endpoint.ReadyData;
 import com.kuuhaku.model.common.ExportableGuildConfig;
 import com.kuuhaku.model.persistent.*;
+import com.kuuhaku.utils.BiContract;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.PrivilegeLevel;
 import net.dv8tion.jda.api.EmbedBuilder;
