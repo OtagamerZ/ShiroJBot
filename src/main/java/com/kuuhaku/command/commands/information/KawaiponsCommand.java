@@ -142,7 +142,7 @@ public class KawaiponsCommand extends Command {
 					ImageWriteParam param = writer.getDefaultWriteParam();
 					if (param.canWriteCompressed()) {
 						param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-						param.setCompressionQuality(0.25f);
+						param.setCompressionQuality(0.4f);
 					}
 
 					writer.write(null, new IIOImage(cards, null, null), param);
