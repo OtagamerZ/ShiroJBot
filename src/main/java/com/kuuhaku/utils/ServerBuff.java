@@ -29,12 +29,15 @@ public class ServerBuff {
 	public static final Triple<Integer, Integer, Double> CARD_TIER_1 = Triple.of(2, 1000, 1.2);
 	public static final Triple<Integer, Integer, Double> CARD_TIER_2 = Triple.of(2, 3000, 1.3);
 	public static final Triple<Integer, Integer, Double> CARD_TIER_3 = Triple.of(2, 5000, 1.4);
+	public static final Triple<Integer, Integer, Double> CARD_TIER_U = Triple.of(2, 50000, 0d);
 	public static final Triple<Integer, Integer, Double> DROP_TIER_1 = Triple.of(3, 1250, 1.2);
 	public static final Triple<Integer, Integer, Double> DROP_TIER_2 = Triple.of(3, 3500, 1.3);
 	public static final Triple<Integer, Integer, Double> DROP_TIER_3 = Triple.of(3, 6000, 1.4);
+	public static final Triple<Integer, Integer, Double> DROP_TIER_U = Triple.of(3, 60000, 0d);
 	public static final Triple<Integer, Integer, Double> FOIL_TIER_1 = Triple.of(4, 5000, 1.2);
 	public static final Triple<Integer, Integer, Double> FOIL_TIER_2 = Triple.of(4, 8000, 1.5);
 	public static final Triple<Integer, Integer, Double> FOIL_TIER_3 = Triple.of(4, 12000, 2d);
+	public static final Triple<Integer, Integer, Double> FOIL_TIER_U = Triple.of(4, 120000, 0d);
 
 	private int tier;
 	private int id;
@@ -47,7 +50,7 @@ public class ServerBuff {
 		this.tier = tier;
 		this.id = id;
 		this.price = price;
-		this.time = tier == 1 ? 30 : tier == 2 ? 15 : 7;
+		this.time = tier == 1 ? 30 : tier == 2 ? 15 : tier == 3 ? 7 : 1;
 		this.mult = mult;
 		this.acquiredAt = System.currentTimeMillis();
 	}
