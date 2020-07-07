@@ -92,12 +92,13 @@ public class KawaiponsCommand extends Command {
 						ImageWriteParam param = writer.getDefaultWriteParam();
 						if (param.canWriteCompressed()) {
 							param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-							param.setCompressionQuality(0.5f);
+							param.setCompressionQuality(0.25f);
 						}
 
 						writer.write(null, new IIOImage(cards, null, null), param);
 						ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
 						cards = ImageIO.read(bais);
+						bais.close();
 					}
 
 					EmbedBuilder eb = new EmbedBuilder();
@@ -135,12 +136,13 @@ public class KawaiponsCommand extends Command {
 					ImageWriteParam param = writer.getDefaultWriteParam();
 					if (param.canWriteCompressed()) {
 						param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-						param.setCompressionQuality(0.5f);
+						param.setCompressionQuality(0.25f);
 					}
 
 					writer.write(null, new IIOImage(cards, null, null), param);
 					ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
 					cards = ImageIO.read(bais);
+					bais.close();
 				}
 
 				EmbedBuilder eb = new EmbedBuilder();
