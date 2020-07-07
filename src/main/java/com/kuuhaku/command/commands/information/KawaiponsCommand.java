@@ -82,11 +82,11 @@ public class KawaiponsCommand extends Command {
 
 					eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName());
 					eb.addField(":red_envelope: | Coleções completas:", count + " de " + AnimeName.values().length + " (" + Helper.prcntToInt(count, AnimeName.values().length) + "%)", true);
-					eb.setImage("attachment://cards.png");
+					eb.setImage("attachment://cards.jpg");
 					eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(kp.getCards().size(), CardDAO.totalCards() * 2) + "%");
 
 					m.delete().queue();
-					channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "png"), "cards.png").queue();
+					channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards), "cards.jpg").queue();
 					return;
 				} else if (args.length < 2 || !Helper.equalsAny(args[1], "N", "C")) {
 					m.editMessage(":x: | Você precisa especificar o tipo da coleção (`N` = normal, `C` = cromada).").queue();
