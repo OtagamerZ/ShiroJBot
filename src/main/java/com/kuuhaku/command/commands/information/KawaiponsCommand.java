@@ -18,11 +18,13 @@
 
 package com.kuuhaku.command.commands.information;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.common.KawaiponBook;
+import com.kuuhaku.model.common.NewKawaiponBook;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.AnimeName;
@@ -36,8 +38,10 @@ import org.jetbrains.annotations.NonNls;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class KawaiponsCommand extends Command {
 
@@ -59,55 +63,95 @@ public class KawaiponsCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_generating-collection")).queue(m -> {
-			try {
-				Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		if (author.getId().equals(Main.getInfo().getNiiChan())) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_generating-collection")).queue(m -> {
+				try {
+					Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
-				if (kp.getCards().size() == 0) {
-					m.editMessage(":x: | Você ainda não coletou nenhum Kawaipon.").queue();
-					return;
-				}
-
-				Set<KawaiponCard> collection = kp.getCards();
-				for (AnimeName anime : AnimeName.values()) {
-					if (CardDAO.animeCount(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).count())
-						collection.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
-				}
-
-				KawaiponBook kb = new KawaiponBook(collection);
-				List<BufferedImage> cards = kb.view();
-				int page;
-				if (args.length < 1) page = 0;
-				else {
-					if (!StringUtils.isNumeric(args[0])) {
-						channel.sendMessage(":x: | A página precisa ser um valor inteiro.").queue();
+					if (kp.getCards().size() == 0) {
+						m.editMessage(":x: | Você ainda não coletou nenhum Kawaipon.").queue();
+						return;
+					} else if (Arrays.stream(AnimeName.values()).noneMatch(a -> a.name().equals(args[0].toUpperCase()))) {
+						channel.sendMessage(":x: | Anime inválido ou ainda não adicionado (colocar `_` no lugar de espaços).").queue();
 						return;
 					}
 
-					page = Integer.parseInt(args[0]) - 1;
+					AnimeName anime = AnimeName.valueOf(args[0].toUpperCase());
+					Set<KawaiponCard> collection = kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).collect(Collectors.toSet());
+					if (CardDAO.animeCount(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).count())
+						collection.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
+
+					NewKawaiponBook kb = new NewKawaiponBook(collection);
+					BufferedImage cards = kb.view(anime);
+
+					EmbedBuilder eb = new EmbedBuilder();
+					int foil = (int) kp.getCards().stream().filter(KawaiponCard::isFoil).count();
+					int common = kp.getCards().size() - foil;
+
+					eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName() + " (" + anime.toString() + ")");
+					eb.addField(":red_envelope: | Cartas comuns:", common + " de " + CardDAO.totalCards() + " (" + Helper.prcntToInt(common, CardDAO.totalCards()) + "%)", true);
+					eb.addField(":star2: | Cartas cromadas:", foil + " de " + CardDAO.totalCards() + " (" + Helper.prcntToInt(foil, CardDAO.totalCards()) + "%)", true);
+					eb.setImage("attachment://cards.jpg");
+					eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(kp.getCards().size(), CardDAO.totalCards() * 2) + "%");
+
+					m.delete().queue();
+					channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards), "cards.jpg").queue();
+				} catch (IOException e) {
+					m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_collection-generation-error")).queue();
+					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
+			});
+		} else {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_generating-collection")).queue(m -> {
+				try {
+					Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
-				if (page >= cards.size() || page < 0) {
-					m.editMessage(":x: | A página precisa ser um valor entre 1 e " + cards.size() + ".").queue();
-					return;
+					if (kp.getCards().size() == 0) {
+						m.editMessage(":x: | Você ainda não coletou nenhum Kawaipon.").queue();
+						return;
+					}
+
+					Set<KawaiponCard> collection = kp.getCards();
+					for (AnimeName anime : AnimeName.values()) {
+						if (CardDAO.animeCount(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).count())
+							collection.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
+					}
+
+					KawaiponBook kb = new KawaiponBook(collection);
+					List<BufferedImage> cards = kb.view();
+					int page;
+					if (args.length < 1) page = 0;
+					else {
+						if (!StringUtils.isNumeric(args[0])) {
+							channel.sendMessage(":x: | A página precisa ser um valor inteiro.").queue();
+							return;
+						}
+
+						page = Integer.parseInt(args[0]) - 1;
+					}
+
+					if (page >= cards.size() || page < 0) {
+						m.editMessage(":x: | A página precisa ser um valor entre 1 e " + cards.size() + ".").queue();
+						return;
+					}
+
+					EmbedBuilder eb = new EmbedBuilder();
+					int foil = (int) kp.getCards().stream().filter(KawaiponCard::isFoil).count();
+					int common = kp.getCards().size() - foil;
+
+					eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName() + " (página " + (page + 1) + ")");
+					eb.addField(":red_envelope: | Cartas comuns:", common + " de " + CardDAO.totalCards() + " (" + Helper.prcntToInt(common, CardDAO.totalCards()) + "%)", true);
+					eb.addField(":star2: | Cartas cromadas:", foil + " de " + CardDAO.totalCards() + " (" + Helper.prcntToInt(foil, CardDAO.totalCards()) + "%)", true);
+					eb.setImage("attachment://page.jpg");
+					eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(kp.getCards().size(), CardDAO.totalCards() * 2) + "%");
+
+					m.delete().queue();
+					channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards.get(page)), "page.jpg").queue();
+				} catch (IOException e) {
+					m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_collection-generation-error")).queue();
+					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
-
-				EmbedBuilder eb = new EmbedBuilder();
-				int foil = (int) kp.getCards().stream().filter(KawaiponCard::isFoil).count();
-				int common = kp.getCards().size() - foil;
-
-				eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName() + " (página " + (page + 1) + ")");
-				eb.addField(":red_envelope: | Cartas comuns:", common + " de " + CardDAO.totalCards() + " (" + Helper.prcntToInt(common, CardDAO.totalCards()) + "%)", true);
-				eb.addField(":star2: | Cartas cromadas:", foil + " de " + CardDAO.totalCards() + " (" + Helper.prcntToInt(foil, CardDAO.totalCards()) + "%)", true);
-				eb.setImage("attachment://page.jpg");
-				eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(kp.getCards().size(), CardDAO.totalCards() * 2) + "%");
-
-				m.delete().queue();
-				channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards.get(page)), "page.jpg").queue();
-			} catch (IOException e) {
-				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_collection-generation-error")).queue();
-				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-			}
-		});
+			});
+		}
 	}
 }
