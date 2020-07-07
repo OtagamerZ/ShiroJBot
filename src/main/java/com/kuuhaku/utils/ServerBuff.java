@@ -59,7 +59,7 @@ public class ServerBuff {
 		this.tier = tier;
 		this.id = values.getLeft();
 		this.price = values.getMiddle();
-		this.time = tier == 1 ? 30 : tier == 2 ? 15 : 7;
+		this.time = tier == 1 ? 30 : tier == 2 ? 15 : tier == 3 ? 7 : 1;
 		this.mult = values.getRight();
 		this.acquiredAt = System.currentTimeMillis();
 	}
