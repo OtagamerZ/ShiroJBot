@@ -25,6 +25,7 @@ import com.kuuhaku.model.persistent.RarityColors;
 import com.kuuhaku.utils.AnimeName;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.KawaiponRarity;
+import com.kuuhaku.utils.NContract;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -32,6 +33,9 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class NewKawaiponBook {
 	private final Set<KawaiponCard> cards;
@@ -40,7 +44,7 @@ public class NewKawaiponBook {
 		this.cards = cards;
 	}
 
-	public BufferedImage view(AnimeName anime) throws IOException {
+	public BufferedImage view(AnimeName anime) throws IOException, InterruptedException {
 		int totalCards = CardDAO.getCardsByAnime(anime).size();
 		List<KawaiponCard> cards = new ArrayList<>(this.cards);
 		cards.sort(Comparator
@@ -59,7 +63,6 @@ public class NewKawaiponBook {
 			chunks.add(chunk);
 		}
 
-		List<BufferedImage> rows = new ArrayList<>();
 		final BufferedImage header = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/header.jpg")));
 		final BufferedImage footer = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/footer.jpg")));
 		final BufferedImage slot = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/slot.png")));
@@ -68,51 +71,69 @@ public class NewKawaiponBook {
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, Helper.clamp(12 * 210 / anime.toString().length(), 105, 210)));
-		Profile.printCenteredString(anime.toString(), 2100, 75, 417, g2d);
+		Profile.printCenteredString(anime.toString(), 2100, 75, 400, g2d);
 
-		g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 42));
+		NContract<BufferedImage> act = new NContract<>(chunks.size());
+		act.setAction(imgs -> {
+			BufferedImage bg = new BufferedImage(header.getWidth(), header.getHeight() + footer.getHeight() + (656 * imgs.size()), BufferedImage.TYPE_INT_ARGB);
+			Graphics2D g = bg.createGraphics();
+			g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-		//2100 x 417 (75)
-		for (List<KawaiponCard> chunk : chunks) {
-			BufferedImage row = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/row.jpg")));
-			g2d = row.createGraphics();
+			g.drawImage(header, 0, 0, null);
 
-			for (int i = 0; i < chunk.size(); i++) {
-				if (chunk.get(i) != null) {
-					RarityColors rc = RarityColorsDAO.getColor(chunk.get(i).getCard().getRarity());
-
-					g2d.setBackground(rc.getSecondary());
-					if (chunk.get(i).isFoil()) g2d.setColor(rc.getPrimary().brighter());
-					else g2d.setColor(rc.getPrimary());
-
-					g2d.drawImage(chunk.get(i).getCard().drawCard(chunk.get(i).isFoil()), 117 + 420 * i, 65, 338, 526, null);
-					Profile.printCenteredString(chunk.get(i).getName(), 338, 117 + 420 * i, 635, g2d);
-				} else {
-					g2d.setBackground(Color.black);
-					g2d.setColor(Color.white);
-
-					g2d.drawImage(slot, 117 + 420 * i, 65, 338, 526, null);
-					Profile.printCenteredString("???", 338, 117 + 420 * i, 635, g2d);
-				}
+			for (int i = 0; i < imgs.size(); i++) {
+				g.drawImage(imgs.get(i), 0, header.getHeight() + 656 * i, null);
 			}
 
-			g2d.dispose();
+			g.drawImage(footer, 0, bg.getHeight() - footer.getHeight(), null);
+			g.dispose();
 
-			rows.add(row);
+			return bg;
+		});
+
+		AtomicReference<BufferedImage> result = new AtomicReference<>();
+		ExecutorService th = Executors.newCachedThreadPool();
+		for (List<KawaiponCard> chunk : chunks) {
+			th.execute(() -> {
+				try {
+					BufferedImage row = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/row.jpg")));
+					Graphics2D g = row.createGraphics();
+					g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+					g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+					g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 42));
+
+					for (int i = 0; i < chunk.size(); i++) {
+						if (chunk.get(i) != null) {
+							RarityColors rc = RarityColorsDAO.getColor(chunk.get(i).getCard().getRarity());
+
+							g.setBackground(rc.getSecondary());
+							if (chunk.get(i).isFoil()) g.setColor(rc.getPrimary().brighter());
+							else g.setColor(rc.getPrimary());
+
+							g.drawImage(chunk.get(i).getCard().drawCard(chunk.get(i).isFoil()), 117 + 420 * i, 65, 338, 526, null);
+							Profile.printCenteredString(chunk.get(i).getName(), 338, 117 + 420 * i, 635, g);
+						} else {
+							g.setBackground(Color.black);
+							g.setColor(Color.white);
+
+							g.drawImage(slot, 117 + 420 * i, 65, 338, 526, null);
+							Profile.printCenteredString("???", 338, 117 + 420 * i, 635, g);
+						}
+					}
+
+					g.dispose();
+
+					result.set(act.addSignature(row));
+				} catch (IOException ignore) {
+				}
+			});
 		}
 
-		BufferedImage bg = new BufferedImage(header.getWidth(), header.getHeight() + footer.getHeight() + (656 * rows.size()), BufferedImage.TYPE_INT_ARGB);
-		g2d = bg.createGraphics();
-
-		g2d.drawImage(header, 0, 0, null);
-
-		for (int i = 0; i < rows.size(); i++) {
-			g2d.drawImage(rows.get(i), 0, header.getHeight() + 656 * i, null);
+		while (result.get() == null) {
+			Thread.sleep(1000);
 		}
 
-		g2d.drawImage(footer, 0, bg.getHeight() - footer.getHeight(), null);
-		g2d.dispose();
-
-		return bg;
+		return result.get();
 	}
 }
