@@ -94,7 +94,8 @@ public class NewKawaiponBook {
 
 		AtomicReference<BufferedImage> result = new AtomicReference<>();
 		ExecutorService th = Executors.newCachedThreadPool();
-		for (List<KawaiponCard> chunk : chunks) {
+		for (int c = 0; c < chunks.size(); c++) {
+			int finalC = c;
 			th.execute(() -> {
 				try {
 					BufferedImage row = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/row.jpg")));
@@ -103,16 +104,16 @@ public class NewKawaiponBook {
 					g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 					g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 42));
 
-					for (int i = 0; i < chunk.size(); i++) {
-						if (chunk.get(i) != null) {
-							RarityColors rc = RarityColorsDAO.getColor(chunk.get(i).getCard().getRarity());
+					for (int i = 0; i < chunks.get(finalC).size(); i++) {
+						if (chunks.get(finalC).get(i) != null) {
+							RarityColors rc = RarityColorsDAO.getColor(chunks.get(finalC).get(i).getCard().getRarity());
 
 							g.setBackground(rc.getSecondary());
-							if (chunk.get(i).isFoil()) g.setColor(rc.getPrimary().brighter());
+							if (chunks.get(finalC).get(i).isFoil()) g.setColor(rc.getPrimary().brighter());
 							else g.setColor(rc.getPrimary());
 
-							g.drawImage(chunk.get(i).getCard().drawCard(chunk.get(i).isFoil()), 117 + 420 * i, 65, 338, 526, null);
-							Profile.printCenteredString(chunk.get(i).getName(), 338, 117 + 420 * i, 635, g);
+							g.drawImage(chunks.get(finalC).get(i).getCard().drawCard(chunks.get(finalC).get(i).isFoil()), 117 + 420 * i, 65, 338, 526, null);
+							Profile.printCenteredString(chunks.get(finalC).get(i).getName(), 338, 117 + 420 * i, 635, g);
 						} else {
 							g.setBackground(Color.black);
 							g.setColor(Color.white);
@@ -124,7 +125,7 @@ public class NewKawaiponBook {
 
 					g.dispose();
 
-					result.set(act.addSignature(row));
+					result.set(act.addSignature(finalC, row));
 				} catch (IOException ignore) {
 				}
 			});
