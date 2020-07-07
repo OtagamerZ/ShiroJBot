@@ -52,7 +52,7 @@ public class NewKawaiponBook {
 		for (int i = 0; i < rowCount; i++) {
 			ArrayList<KawaiponCard> chunk = new ArrayList<>();
 			for (int p = 5 * i; p < totalCards && p < 5 * (i + 1); p++) {
-				if (p < chunks.size()) chunk.add(cards.get(p));
+				if (p < cards.size()) chunk.add(cards.get(p));
 				else chunk.add(null);
 			}
 			chunks.add(chunk);
