@@ -20,14 +20,14 @@ package com.kuuhaku.utils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class NContract<A> {
 	private final int signers;
-	private Consumer<List<A>> action = null;
+	private Function<List<A>, A> action = null;
 	private final List<A> signatures = new ArrayList<>();
 
-	public NContract(int signers, Consumer<List<A>> action) {
+	public NContract(int signers, Function<List<A>, A> action) {
 		this.signers = signers;
 		this.action = action;
 	}
@@ -36,11 +36,11 @@ public class NContract<A> {
 		this.signers = signers;
 	}
 
-	public Consumer<List<A>> getAction() {
+	public Function<List<A>, A> getAction() {
 		return action;
 	}
 
-	public void setAction(Consumer<List<A>> action) {
+	public void setAction(Function<List<A>, A> action) {
 		this.action = action;
 	}
 
@@ -48,15 +48,17 @@ public class NContract<A> {
 		return signatures;
 	}
 
-	public void addSignature(A signature) {
+	public A addSignature(A signature) {
 		this.signatures.add(signature);
-		checkContract();
+		return checkContract();
 	}
 
-	private void checkContract() {
+	private A checkContract() {
 		if (this.signatures.size() == signers) {
-			action.accept(signatures);
+			A result = action.apply(signatures);
 			signatures.clear();
+			return result;
 		}
+		return null;
 	}
 }
