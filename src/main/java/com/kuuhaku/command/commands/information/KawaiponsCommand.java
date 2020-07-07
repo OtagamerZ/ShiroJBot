@@ -89,7 +89,7 @@ public class KawaiponsCommand extends Command {
 					int common = kp.getCards().size() - foil;
 
 					eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName() + " (" + anime.toString() + ")");
-					eb.addField(":red_envelope: | Cartas comuns:", common + " de " + CardDAO.totalCards() + " (" + Helper.prcntToInt(common, CardDAO.totalCards()) + "%)", true);
+					eb.addField(":red_envelope: | Cartas comuns:", common + " de " + CardDAO.getCardsByAnime(anime).size() + " (" + Helper.prcntToInt(common, CardDAO.getCardsByAnime(anime).size()) + "%)", true);
 					eb.addField(":star2: | Cartas cromadas:", foil + " de " + CardDAO.getCardsByAnime(anime).size() + " (" + Helper.prcntToInt(foil, CardDAO.getCardsByAnime(anime).size()) + "%)", true);
 					eb.setImage("attachment://cards.png");
 					eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(kp.getCards().size(), CardDAO.getCardsByAnime(anime).size() * 2) + "%");
