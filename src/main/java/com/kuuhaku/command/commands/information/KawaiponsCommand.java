@@ -92,7 +92,7 @@ public class KawaiponsCommand extends Command {
 						ImageWriteParam param = writer.getDefaultWriteParam();
 						if (param.canWriteCompressed()) {
 							param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-							param.setCompressionQuality(0.05f);
+							param.setCompressionQuality(0.5f);
 						}
 
 						writer.write(null, new IIOImage(cards, null, null), param);
@@ -126,6 +126,22 @@ public class KawaiponsCommand extends Command {
 
 				NewKawaiponBook kb = new NewKawaiponBook(collection);
 				BufferedImage cards = kb.view(anime, args[1].equalsIgnoreCase("C"));
+
+				try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+					ImageWriter writer = ImageIO.getImageWritersByFormatName("jpg").next();
+					ImageOutputStream ios = ImageIO.createImageOutputStream(baos);
+					writer.setOutput(ios);
+
+					ImageWriteParam param = writer.getDefaultWriteParam();
+					if (param.canWriteCompressed()) {
+						param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+						param.setCompressionQuality(0.5f);
+					}
+
+					writer.write(null, new IIOImage(cards, null, null), param);
+					ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+					cards = ImageIO.read(bais);
+				}
 
 				EmbedBuilder eb = new EmbedBuilder();
 				int foil = (int) kp.getCards().stream().filter(KawaiponCard::isFoil).count();
