@@ -90,14 +90,14 @@ public class PurchaseBuffCommand extends Command {
 		} else if (!Helper.equalsAny(args[0], "xp", "carta", "drop", "cromo")) {
 			channel.sendMessage(":x: | O tipo da melhoria deve ser um dos seguintes tipos: `xp`, `carta`, `drop` ou `cromo`.").queue();
 			return;
-		} else if (!StringUtils.isNumeric(args[1])) {
-			channel.sendMessage(":x: | O tier da melhoria deve ser um valor entre 1 e 3.").queue();
+		} else if (!StringUtils.isNumeric(args[1]) && !args[1].equalsIgnoreCase("ultimate")) {
+			channel.sendMessage(":x: | O tier da melhoria deve ser um valor entre 1 e 3 ou `ultimate`.").queue();
 			return;
 		}
 
 		int tier = args[1].equalsIgnoreCase("ultimate") ? 4 : Integer.parseInt(args[1]);
 		if (tier < 1 || tier > 4) {
-			channel.sendMessage(":x: | O tier da melhoria deve ser um valor entre 1 e 4.").queue();
+			channel.sendMessage(":x: | O tier da melhoria deve ser um valor entre 1 e 3 ou `ultimate`.").queue();
 			return;
 		}
 
