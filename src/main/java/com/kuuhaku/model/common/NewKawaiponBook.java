@@ -79,13 +79,11 @@ public class NewKawaiponBook {
 					if (chunk.get(i).isFoil()) g2d.setColor(rc.getPrimary().brighter());
 					else g2d.setColor(rc.getPrimary());
 
-					int offset = i > 0 ? 82 : 0;
-					g2d.drawImage(chunk.get(i).getCard().drawCard(chunk.get(i).isFoil()), 117 + offset + 338 * i, 65, 338, 526, null);
-					Profile.printCenteredString(chunk.get(i).getName(), 338, 117 + offset + 338 * i, 656, g2d);
+					g2d.drawImage(chunk.get(i).getCard().drawCard(chunk.get(i).isFoil()), 117 + 420 * i, 65, 338, 526, null);
+					Profile.printCenteredString(chunk.get(i).getName(), 338, 117 + 420 * i, 656, g2d);
 				} else {
-					int offset = i > 0 ? 82 : 0;
-					g2d.drawImage(slot, 117 + offset + 338 * i, 65, 338, 526, null);
-					Profile.printCenteredString("???", 338, 117 + offset + 338 * i, 656, g2d);
+					g2d.drawImage(slot, 117 + 420 * i, 65, 338, 526, null);
+					Profile.printCenteredString("???", 338, 117 + 420 * i, 656, g2d);
 				}
 			}
 
