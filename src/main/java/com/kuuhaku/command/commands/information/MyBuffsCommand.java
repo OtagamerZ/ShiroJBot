@@ -85,18 +85,28 @@ public class MyBuffsCommand extends Command {
 		GuildBuff gb = GuildBuffDAO.getBuffs(guild.getId());
 		if (gb.getBuffs().size() > 0) {
 			gb.getBuffs().forEach(b -> {
+				boolean isUltimate = b.getTier() == 4;
 				switch (b.getId()) {
 					case 1:
 						eb.addField("Melhoria de servidor (XP)", "+" + (int) ((b.getMult() * 100) - 100) + "% XP ganho (" + b.getTime() + " dias)", false);
 						break;
 					case 2:
-						eb.addField("Melhoria de servidor (cartas)", "+" + (int) ((b.getMult() * 100) - 100) + "% chance de spawn de cartas (" + b.getTime() + " dias)", false);
+						if (isUltimate)
+							eb.addField("Melhoria de servidor (cartas)", "Bônus ultimate, todas as mensagens tem 100% de chance de spawn de cartas (1 minuto)", false);
+						else
+							eb.addField("Melhoria de servidor (cartas)", "+" + (int) ((b.getMult() * 100) - 100) + "% chance de spawn de cartas (" + b.getTime() + " dias)", false);
 						break;
 					case 3:
-						eb.addField("Melhoria de servidor (drops)", "+" + (int) ((b.getMult() * 100) - 100) + "% chance de spawn de drops (" + b.getTime() + " dias)", false);
+						if (isUltimate)
+							eb.addField("Melhoria de servidor (drops)", "Bônus ultimate, todas as mensagens tem 100% de chance de spawn de drops (1 minuto)", false);
+						else
+							eb.addField("Melhoria de servidor (drops)", "+" + (int) ((b.getMult() * 100) - 100) + "% chance de spawn de drops (" + b.getTime() + " dias)", false);
 						break;
 					case 4:
-						eb.addField("Melhoria de servidor (cromadas)", "+" + (int) ((b.getMult() * 100) - 100) + "% chance de spawn de cartas cromadas (" + b.getTime() + " dias)", false);
+						if (isUltimate)
+							eb.addField("Melhoria de servidor (cromadas)", "Bônus ultimate, todas as cartas tem 100% de chance de serem cromadas (1 minuto)", false);
+						else
+							eb.addField("Melhoria de servidor (cromadas)", "+" + (int) ((b.getMult() * 100) - 100) + "% chance de spawn de cartas cromadas (" + b.getTime() + " dias)", false);
 						break;
 				}
 			});
