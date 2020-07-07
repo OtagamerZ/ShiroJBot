@@ -93,13 +93,16 @@ public class KawaiponsCommand extends Command {
 						m.delete().queue();
 						channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "png"), "cards.png").queue();
 						return;
+					} else if (args.length < 2 || !Helper.equalsAny(args[1], "N", "C")) {
+						channel.sendMessage(":x: | Você precisa especificar o tipo da coleção (`N` = normal, `C` = cromada).").queue();
+						return;
 					} else if (Arrays.stream(AnimeName.values()).noneMatch(a -> a.name().equals(args[0].toUpperCase()))) {
 						channel.sendMessage(":x: | Anime inválido ou ainda não adicionado (colocar `_` no lugar de espaços).").queue();
 						return;
 					}
 
 					AnimeName anime = AnimeName.valueOf(args[0].toUpperCase());
-					Set<KawaiponCard> collection = kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).collect(Collectors.toSet());
+					Set<KawaiponCard> collection = kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime) && k.isFoil() == args[1].equalsIgnoreCase("C")).collect(Collectors.toSet());
 					if (CardDAO.animeCount(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).count())
 						collection.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
 
