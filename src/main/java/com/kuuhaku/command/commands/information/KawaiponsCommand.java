@@ -96,7 +96,7 @@ public class KawaiponsCommand extends Command {
 
 					m.delete().queue();
 					channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "png"), "cards.png").queue();
-				} catch (IOException e) {
+				} catch (IOException | InterruptedException e) {
 					m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_collection-generation-error")).queue();
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
