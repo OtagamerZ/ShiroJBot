@@ -103,9 +103,13 @@ public class KawaiponsCommand extends Command {
 
 					EmbedBuilder eb = new EmbedBuilder();
 					int count = collection.size();
+					int foil = (int) kp.getCards().stream().filter(KawaiponCard::isFoil).count();
+					int common = kp.getCards().size() - foil;
 
 					eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName());
-					eb.addField(":red_envelope: | Coleções completas:", count + " de " + AnimeName.values().length + " (" + Helper.prcntToInt(count, AnimeName.values().length) + "%)", true);
+					eb.addField(":books: | Coleções completas:", count + " de " + AnimeName.values().length + " (" + Helper.prcntToInt(count, AnimeName.values().length) + "%)", true);
+					eb.addField(":red_envelope: | Total de cartas comuns:", common + " de " + CardDAO.totalCards() + " (" + Helper.prcntToInt(common, CardDAO.totalCards()) + "%)", true);
+					eb.addField(":star2: | Total de cartas cromadas:", foil + " de " + CardDAO.totalCards() + " (" + Helper.prcntToInt(foil, CardDAO.totalCards()) + "%)", true);
 					eb.setImage("attachment://cards.jpg");
 					eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(kp.getCards().size(), CardDAO.totalCards() * 2) + "%");
 
