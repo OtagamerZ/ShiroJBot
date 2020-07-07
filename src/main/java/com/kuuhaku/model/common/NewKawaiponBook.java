@@ -48,7 +48,7 @@ public class NewKawaiponBook {
 		);
 		List<List<KawaiponCard>> chunks = new ArrayList<>();
 
-		int rowCount = (int) Math.ceil(cards.size() / 5f);
+		int rowCount = (int) Math.ceil(totalCards / 5f);
 		for (int i = 0; i < rowCount; i++) {
 			ArrayList<KawaiponCard> chunk = new ArrayList<>();
 			for (int p = 5 * i; p < totalCards && p < 5 * (i + 1); p++) {
