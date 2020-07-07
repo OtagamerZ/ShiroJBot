@@ -64,7 +64,11 @@ public class GuildBuff {
 			return new HashSet<>();
 		}
 		HashSet<ServerBuff> sb = new JSONArray(buffs).toList().stream().map(b -> ShiroInfo.getJSONFactory().create().fromJson((String) b, ServerBuff.class)).collect(Collectors.toCollection(HashSet::new));
-		HashSet<ServerBuff> toRemove = sb.stream().filter(b -> TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - b.getAcquiredAt()) > b.getTime()).collect(Collectors.toCollection(HashSet::new));
+		HashSet<ServerBuff> toRemove = sb.stream().filter(b ->
+				b.getTier() == 4 ?
+						TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - b.getAcquiredAt()) > b.getTime() :
+						TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - b.getAcquiredAt()) > b.getTime())
+				.collect(Collectors.toCollection(HashSet::new));
 		sb.removeAll(toRemove);
 		setBuffs(sb);
 		if (toRemove.size() > 0) GuildBuffDAO.saveBuffs(this);
