@@ -103,10 +103,10 @@ public class NewKawaiponBook {
 		g2d.drawImage(header, 0, 0, null);
 
 		for (int i = 0; i < rows.size(); i++) {
-			g2d.drawImage(rows.get(i), 0, 656 * (i + 1), null);
+			g2d.drawImage(rows.get(i), 0, header.getHeight() + 656 * i, null);
 		}
 
-		g2d.drawImage(footer, bg.getHeight() - footer.getHeight(), 0, null);
+		g2d.drawImage(footer, 0, bg.getHeight() - footer.getHeight(), null);
 		g2d.dispose();
 
 		return bg;
