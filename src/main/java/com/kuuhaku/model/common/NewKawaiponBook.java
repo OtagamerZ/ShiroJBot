@@ -44,7 +44,7 @@ public class NewKawaiponBook {
 		this.cards = cards;
 	}
 
-	public BufferedImage view(AnimeName anime) throws IOException, InterruptedException {
+	public BufferedImage view(AnimeName anime, boolean foil) throws IOException, InterruptedException {
 		int totalCards = anime == null ? AnimeName.values().length : CardDAO.getCardsByAnime(anime).size();
 		List<KawaiponCard> cards = new ArrayList<>(this.cards);
 		cards.sort(Comparator
@@ -70,8 +70,9 @@ public class NewKawaiponBook {
 		Graphics2D g2d = header.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, Helper.clamp(12 * 210 / "Coleção Kawaipon".length(), 105, 210)));
-		Profile.printCenteredString("Coleção Kawaipon", 2100, 75, 400, g2d);
+		g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, Helper.clamp(12 * 210 / ((foil ? "« " : "") + (anime == null ? "Coleção Kawaipon" : anime.toString()) + (foil ? " »" : "")).length(), 105, 210)));
+		if (foil) g2d.setColor(Color.yellow);
+		Profile.printCenteredString((foil ? "« " : "") + (anime == null ? "Coleção Kawaipon" : anime.toString()) + (foil ? " »" : ""), 2100, 75, 400, g2d);
 
 		NContract<BufferedImage> act = new NContract<>(chunks.size());
 		act.setAction(imgs -> {
@@ -109,10 +110,10 @@ public class NewKawaiponBook {
 							RarityColors rc = RarityColorsDAO.getColor(chunks.get(finalC).get(i).getCard().getRarity());
 
 							g.setBackground(rc.getSecondary());
-							if (chunks.get(finalC).get(i).isFoil()) g.setColor(rc.getPrimary().brighter());
+							if (foil) g.setColor(rc.getPrimary().brighter());
 							else g.setColor(rc.getPrimary());
 
-							g.drawImage(chunks.get(finalC).get(i).getCard().drawCard(chunks.get(finalC).get(i).isFoil()), 117 + 420 * i, 65, 338, 526, null);
+							g.drawImage(chunks.get(finalC).get(i).getCard().drawCard(foil), 117 + 420 * i, 65, 338, 526, null);
 							Profile.printCenteredString(chunks.get(finalC).get(i).getName(), 338, 117 + 420 * i, 635, g);
 						} else {
 							g.setBackground(Color.black);
