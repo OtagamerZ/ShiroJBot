@@ -133,7 +133,7 @@ public class NewKawaiponBook {
 		}
 
 		while (result.get() == null) {
-			Thread.sleep(1000);
+			Thread.sleep(250);
 		}
 
 		return result.get();
