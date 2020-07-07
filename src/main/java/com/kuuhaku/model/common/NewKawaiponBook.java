@@ -76,7 +76,7 @@ public class NewKawaiponBook {
 
 		NContract<BufferedImage> act = new NContract<>(chunks.size());
 		act.setAction(imgs -> {
-			BufferedImage bg = new BufferedImage(header.getWidth(), header.getHeight() + footer.getHeight() + (656 * imgs.size()), BufferedImage.TYPE_INT_ARGB);
+			BufferedImage bg = new BufferedImage(header.getWidth(), header.getHeight() + footer.getHeight() + (656 * imgs.size()), BufferedImage.TYPE_INT_RGB);
 			Graphics2D g = bg.createGraphics();
 			g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
