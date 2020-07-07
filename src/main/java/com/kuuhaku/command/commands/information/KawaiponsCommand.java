@@ -39,6 +39,7 @@ import org.jetbrains.annotations.NonNls;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -71,7 +72,28 @@ public class KawaiponsCommand extends Command {
 					if (kp.getCards().size() == 0) {
 						m.editMessage(":x: | Você ainda não coletou nenhum Kawaipon.").queue();
 						return;
-					} else if (Arrays.stream(AnimeName.values()).noneMatch(a -> a.name().equals(args[0].toUpperCase()))) {
+					} else if (args.length == 0) {
+						Set<KawaiponCard> collection = new HashSet<>();
+						for (AnimeName anime : AnimeName.values()) {
+							if (CardDAO.animeCount(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).count())
+								collection.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
+						}
+
+						NewKawaiponBook kb = new NewKawaiponBook(collection);
+						BufferedImage cards = kb.view(null);
+
+						EmbedBuilder eb = new EmbedBuilder();
+						int count = collection.size();
+
+						eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName());
+						eb.addField(":red_envelope: | Coleções completas:", count + " de " + AnimeName.values().length + " (" + Helper.prcntToInt(count, AnimeName.values().length) + "%)", true);
+						eb.setImage("attachment://cards.png");
+						eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(kp.getCards().size(), CardDAO.totalCards() * 2) + "%");
+
+						m.delete().queue();
+						channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "png"), "cards.png").queue();
+					}
+					if (Arrays.stream(AnimeName.values()).noneMatch(a -> a.name().equals(args[0].toUpperCase()))) {
 						channel.sendMessage(":x: | Anime inválido ou ainda não adicionado (colocar `_` no lugar de espaços).").queue();
 						return;
 					}
