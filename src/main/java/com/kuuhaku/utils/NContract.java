@@ -19,13 +19,15 @@
 package com.kuuhaku.utils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 public class NContract<A> {
 	private final int signers;
 	private Function<List<A>, A> action = null;
-	private final List<A> signatures = new ArrayList<>();
+	private final Map<Integer, A> signatures = new HashMap<>();
 
 	public NContract(int signers, Function<List<A>, A> action) {
 		this.signers = signers;
@@ -44,18 +46,20 @@ public class NContract<A> {
 		this.action = action;
 	}
 
-	public List<A> getSignatures() {
+	public Map<Integer, A> getSignatures() {
 		return signatures;
 	}
 
-	public A addSignature(A signature) {
-		this.signatures.add(signature);
+	public A addSignature(int index, A signature) {
+		this.signatures.put(index, signature);
 		return checkContract();
 	}
 
 	private A checkContract() {
 		if (this.signatures.size() == signers) {
-			A result = action.apply(signatures);
+			List<A> ordered = new ArrayList<>(signers);
+			signatures.forEach(ordered::add);
+			A result = action.apply(ordered);
 			signatures.clear();
 			return result;
 		}
