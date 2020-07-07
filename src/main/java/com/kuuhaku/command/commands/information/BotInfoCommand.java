@@ -74,7 +74,7 @@ public class BotInfoCommand extends Command {
 				"[" + ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-link-1") + "](https://discordapp.com/invite/9sgkzna) | " +
 						"[DiscordBots List](https://top.gg/bot/572413282653306901) | " +
 						"[Bots Para Discord](https://botsparadiscord.com/bots/572413282653306901) | " +
-						"[Github](https://github.com/OtagamerZ/ShiroJBot)" +
+						"[Github](https://github.com/OtagamerZ/ShiroJBot) | " +
 						"[" + ShiroInfo.getLocale(I18n.PT).getString("str_privacy-policy") + "](https://github.com/OtagamerZ/ShiroJBot/blob/master/PRIVACY_POLICY.md)"
 				, true);
 
