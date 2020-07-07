@@ -45,7 +45,7 @@ public class NewKawaiponBook {
 	}
 
 	public BufferedImage view(AnimeName anime) throws IOException, InterruptedException {
-		int totalCards = CardDAO.getCardsByAnime(anime).size();
+		int totalCards = anime == null ? AnimeName.values().length : CardDAO.getCardsByAnime(anime).size();
 		List<KawaiponCard> cards = new ArrayList<>(this.cards);
 		cards.sort(Comparator
 				.<KawaiponCard, KawaiponRarity>comparing(k -> k.getCard().getRarity(), Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
@@ -70,8 +70,8 @@ public class NewKawaiponBook {
 		Graphics2D g2d = header.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, Helper.clamp(12 * 210 / anime.toString().length(), 105, 210)));
-		Profile.printCenteredString(anime.toString(), 2100, 75, 400, g2d);
+		g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, Helper.clamp(12 * 210 / "Coleção Kawaipon".length(), 105, 210)));
+		Profile.printCenteredString("Coleção Kawaipon", 2100, 75, 400, g2d);
 
 		NContract<BufferedImage> act = new NContract<>(chunks.size());
 		act.setAction(imgs -> {
