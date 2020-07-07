@@ -72,17 +72,21 @@ public class NewKawaiponBook {
 			g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, 23));
 
 			for (int i = 0; i < chunk.size(); i++) {
-				RarityColors rc = RarityColorsDAO.getColor(chunk.get(i).getCard().getRarity());
+				if (chunk.get(i) != null) {
+					RarityColors rc = RarityColorsDAO.getColor(chunk.get(i).getCard().getRarity());
 
-				g2d.setBackground(rc.getSecondary());
-				if (chunk.get(i).isFoil()) g2d.setColor(rc.getPrimary().brighter());
-				else g2d.setColor(rc.getPrimary());
+					g2d.setBackground(rc.getSecondary());
+					if (chunk.get(i).isFoil()) g2d.setColor(rc.getPrimary().brighter());
+					else g2d.setColor(rc.getPrimary());
 
-				int offset = i > 0 ? 82 : 0;
-				if (chunk.get(i) != null)
+					int offset = i > 0 ? 82 : 0;
 					g2d.drawImage(chunk.get(i).getCard().drawCard(chunk.get(i).isFoil()), 117 + offset + 338 * i, 65, 338, 526, null);
-				else g2d.drawImage(slot, 117 + offset + 338 * i, 65, 338, 526, null);
-				Profile.printCenteredString(chunk.get(i).getName(), 338, 117 + offset + 338 * i, 656, g2d);
+					Profile.printCenteredString(chunk.get(i).getName(), 338, 117 + offset + 338 * i, 656, g2d);
+				} else {
+					int offset = i > 0 ? 82 : 0;
+					g2d.drawImage(slot, 117 + offset + 338 * i, 65, 338, 526, null);
+					Profile.printCenteredString("Desconhecido", 338, 117 + offset + 338 * i, 656, g2d);
+				}
 			}
 
 			g2d.dispose();
