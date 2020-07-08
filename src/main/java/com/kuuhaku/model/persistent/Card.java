@@ -71,8 +71,10 @@ public class Card {
 				BufferedImage card = ImageIO.read(bais);
 
 				BufferedImage frame = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/frames/" + rarity.name().toLowerCase() + ".png")));
+				BufferedImage frameCanvas = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
-				Graphics2D g2d = frame.createGraphics();
+				Graphics2D g2d = frameCanvas.createGraphics();
+				g2d.drawImage(frame, 0, 0, null);
 
 				if (foil) {
 					g2d.setComposite(BlendComposite.Hue);
@@ -81,9 +83,9 @@ public class Card {
 
 				g2d.dispose();
 
-				BufferedImage canvas = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
+				BufferedImage cardCanvas = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
-				g2d = canvas.createGraphics();
+				g2d = cardCanvas.createGraphics();
 				g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 				g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 				g2d.drawImage(card, 10, 10, 225, 350, null);
@@ -93,13 +95,13 @@ public class Card {
 					g2d.drawImage(adjust(card), 10, 10, 225, 350, null);
 					g2d.dispose();
 
-					g2d = canvas.createGraphics();
+					g2d = cardCanvas.createGraphics();
 				}
-				g2d.drawImage(frame, 0, 0, null);
+				g2d.drawImage(frameCanvas, 0, 0, null);
 
 				g2d.dispose();
 
-				return canvas;
+				return cardCanvas;
 			}
 		} catch (IOException | ExecutionException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
