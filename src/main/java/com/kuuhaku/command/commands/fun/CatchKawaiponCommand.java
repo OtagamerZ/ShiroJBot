@@ -56,7 +56,7 @@ public class CatchKawaiponCommand extends Command {
 		KawaiponCard kc = ShiroInfo.getCurrentCard().getIfPresent(guild.getId());
 
 		if (kc == null) {
-			channel.sendMessage(":x: | Não há nenhuma carta Kawaipon para coletar neste servidor.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-catchkawaipon-there-are-no-cards")).queue();
 			return;
 		}
 
@@ -67,7 +67,7 @@ public class CatchKawaiponCommand extends Command {
 		}
 
 		if (kp.getCards().contains(kc)) {
-			channel.sendMessage(":x: | Você já possui esta carta.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-catchkawaipon-you-already-have")).queue();
 			return;
 		}
 

@@ -22,6 +22,8 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
@@ -54,10 +56,10 @@ public class HardDecisionCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 
 		if (args.length < 1) {
-			channel.sendMessage(":x: | Você tem que escrever a mensagem que deseja que apareca no meme.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_meme-no-message")).queue();
 			return;
 		} else if (String.join(" ", args).split(";").length < 2) {
-			channel.sendMessage(":x: | Você precisa escrever duas opções para o meme (separados por ponto-e-vírgula).").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_meme-require-two")).queue();
 			return;
 		}
 
