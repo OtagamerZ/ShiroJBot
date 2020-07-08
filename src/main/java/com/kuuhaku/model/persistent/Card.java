@@ -136,7 +136,7 @@ public class Card {
 				float[] hsv = ColorUtilities.RGBtoHSL(col);
 				hsv[0] = ((hsv[0] * 255 + 30) % 255) / 255;
 
-				out.setRGB(x, y, Color.HSBtoRGB(hsv[0], hsv[1], hsv[2]));
+				out.setRGB(x, y, ColorUtilities.HSLtoRGB(hsv[0], hsv[1], hsv[2]).getRGB());
 			}
 		}
 
