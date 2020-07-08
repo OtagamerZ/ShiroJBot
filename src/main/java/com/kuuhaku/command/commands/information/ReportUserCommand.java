@@ -74,6 +74,7 @@ public class ReportUserCommand extends Command {
 		eb.addField("Enviado em:", Helper.dateformat.format(message.getTimeCreated().atZoneSameInstant(ZoneId.of("GMT-3"))), true);
 		eb.addField("Usuário reportado:", message.getMentionedUsers().get(0).getAsTag(), true);
 		eb.addField("Relatório:", "```" + mensagem + "```", false);
+		eb.setFooter(author.getId());
 		eb.setColor(Color.red);
 
 		Map<String, String> ids = new HashMap<>();
