@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.controller.postgresql.FoilOffsetDAO;
 import com.kuuhaku.utils.AnimeName;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.KawaiponRarity;
@@ -31,6 +32,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
@@ -80,7 +82,7 @@ public class Card {
 
 				if (foil) {
 					g2d.setComposite(BlendComposite.Hue);
-					g2d.drawImage(invert(card), 10, 10, 225, 350, null);
+					g2d.drawImage(adjust(card), 10, 10, 225, 350, null);
 					g2d.dispose();
 
 					g2d = canvas.createGraphics();
@@ -97,14 +99,15 @@ public class Card {
 		}
 	}
 
-	private BufferedImage invert(BufferedImage bi) {
+	private BufferedImage adjust(BufferedImage bi) {
 		BufferedImage out = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Map<String, Integer> offsets = FoilOffsetDAO.getOffsets();
 
 		for (int x = 0; x < bi.getWidth(); x++) {
 			for (int y = 0; y < bi.getHeight(); y++) {
 				int rgb = bi.getRGB(x, y);
 				Color col = new Color(rgb);
-				col = new Color(255 - col.getRed(), 255 - col.getGreen(), 255 - col.getBlue());
+				col = new Color(offsets.get("red") - col.getRed(), offsets.get("green") - col.getGreen(), offsets.get("blue") - col.getBlue());
 				out.setRGB(x, y, col.getRGB());
 			}
 		}
