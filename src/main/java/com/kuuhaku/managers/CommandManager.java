@@ -43,7 +43,7 @@ import java.util.Map;
 
 import static com.kuuhaku.command.Category.*;
 
-public class NewCommandManager {
+public class CommandManager {
 
 	private static final String REQ_MENTION = "req_mention";
 	private static final String REQ_MESSAGE = "req_message";
