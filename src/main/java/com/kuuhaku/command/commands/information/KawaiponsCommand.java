@@ -22,7 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.model.common.NewKawaiponBook;
+import com.kuuhaku.model.common.KawaiponBook;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.AnimeName;
@@ -77,11 +77,11 @@ public class KawaiponsCommand extends Command {
 				} else if (args.length == 0) {
 					Set<KawaiponCard> collection = new HashSet<>();
 					for (AnimeName anime : AnimeName.values()) {
-						if (CardDAO.animeCount(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).count())
+						if (CardDAO.totalCards(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).count())
 							collection.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
 					}
 
-					NewKawaiponBook kb = new NewKawaiponBook(collection);
+					KawaiponBook kb = new KawaiponBook(collection);
 					BufferedImage cards = kb.view(null, false);
 
 					try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
@@ -128,10 +128,7 @@ public class KawaiponsCommand extends Command {
 				Set<KawaiponCard> collection = kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).collect(Collectors.toSet());
 				Set<KawaiponCard> toRender = collection.stream().filter(k -> k.isFoil() == args[1].equalsIgnoreCase("C")).collect(Collectors.toSet());
 
-				if (CardDAO.animeCount(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).count())
-					collection.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
-
-				NewKawaiponBook kb = new NewKawaiponBook(toRender);
+				KawaiponBook kb = new KawaiponBook(toRender);
 				BufferedImage cards = kb.view(anime, args[1].equalsIgnoreCase("C"));
 
 				try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
