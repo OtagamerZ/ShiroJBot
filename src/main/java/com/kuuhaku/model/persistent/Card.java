@@ -125,7 +125,7 @@ public class Card {
 			for (int y = 0; y < bi.getHeight(); y++) {
 				int rgb = bi.getRGB(x, y);
 				Color col = new Color(rgb);
-				col = new Color(col.getRed() * 0.75f, col.getBlue(), col.getGreen());
+				col = new Color(Math.round(col.getRed() * 0.75f), col.getBlue(), col.getGreen());
 				out.setRGB(x, y, col.getRGB());
 			}
 		}
