@@ -60,8 +60,8 @@ public class PunchReaction extends Reaction {
 
 			sendReaction(getType(), (TextChannel) channel, getInteraction()[1], getInteraction()[0].getAsMention() + " socou " + getInteraction()[1].getAsMention() + " - " + this.getReaction(), true);
 		} else {
-			Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para socar!");
-		}
+            Helper.typeMessage(channel, ShiroInfo.getLocale(I18n.PT).getString("err_REV-punch-mention-a-user"));
+        }
 	}
 
 	@Override
