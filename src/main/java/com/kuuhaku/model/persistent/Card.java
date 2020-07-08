@@ -24,6 +24,7 @@ import com.kuuhaku.utils.KawaiponRarity;
 import com.kuuhaku.utils.ShiroInfo;
 import org.apache.commons.io.IOUtils;
 import org.jdesktop.swingx.graphics.BlendComposite;
+import org.jdesktop.swingx.graphics.ColorUtilities;
 
 import javax.imageio.ImageIO;
 import javax.persistence.*;
@@ -132,9 +133,8 @@ public class Card {
 				int rgb = bi.getRGB(x, y);
 				Color col = new Color(rgb, true);
 				col = new Color(col.getRed(), col.getBlue(), col.getGreen());
-				float[] hsv = new float[3];
-				Color.RGBtoHSB(col.getRed(), col.getGreen(), col.getGreen(), hsv);
-				hsv[0] = ((hsv[0] * 255 + 30) / 255) % 1;
+				float[] hsv = ColorUtilities.RGBtoHSL(col);
+				hsv[0] = ((hsv[0] * 255 + 30) % 255) / 255;
 
 				out.setRGB(x, y, Color.HSBtoRGB(hsv[0], hsv[1], hsv[2]));
 			}
