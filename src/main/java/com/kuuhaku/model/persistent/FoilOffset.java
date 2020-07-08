@@ -31,13 +31,13 @@ public class FoilOffset {
 	private String channel;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 255")
-	private int offset = 255;
+	private int value = 255;
 
 	public String getChannel() {
 		return channel;
 	}
 
-	public int getOffset() {
-		return offset;
+	public int getValue() {
+		return value;
 	}
 }
