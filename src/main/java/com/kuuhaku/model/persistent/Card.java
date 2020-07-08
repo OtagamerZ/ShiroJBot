@@ -18,7 +18,6 @@
 
 package com.kuuhaku.model.persistent;
 
-import com.kuuhaku.controller.postgresql.FoilOffsetDAO;
 import com.kuuhaku.utils.AnimeName;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.KawaiponRarity;
@@ -32,7 +31,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
@@ -101,17 +99,12 @@ public class Card {
 
 	private BufferedImage adjust(BufferedImage bi) {
 		BufferedImage out = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		Map<String, Integer> offsets = FoilOffsetDAO.getOffsets();
 
 		for (int x = 0; x < bi.getWidth(); x++) {
 			for (int y = 0; y < bi.getHeight(); y++) {
 				int rgb = bi.getRGB(x, y);
 				Color col = new Color(rgb);
-				col = new Color(
-						Helper.clamp(col.getRed() - offsets.get("red"), 0, 255),
-						Helper.clamp(col.getGreen() - offsets.get("green"), 0, 255),
-						Helper.clamp(col.getBlue() - offsets.get("blue"), 0, 255)
-				);
+				col = new Color(255 - col.getRed(), 255 - col.getGreen(), 255 - col.getBlue());
 				out.setRGB(x, y, col.getRGB());
 			}
 		}
