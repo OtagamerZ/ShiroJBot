@@ -30,9 +30,9 @@ public class FoilOffsetDAO {
 
 		try {
 			return new HashMap<>() {{
-				put("red", em.find(FoilOffset.class, "red").getOffset());
-				put("green", em.find(FoilOffset.class, "green").getOffset());
-				put("blue", em.find(FoilOffset.class, "blue").getOffset());
+				put("red", em.find(FoilOffset.class, "red").getValue());
+				put("green", em.find(FoilOffset.class, "green").getValue());
+				put("blue", em.find(FoilOffset.class, "blue").getValue());
 			}};
 		} finally {
 			em.close();
