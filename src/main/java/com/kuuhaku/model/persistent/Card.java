@@ -101,7 +101,8 @@ public class Card {
 
 				g2d.dispose();
 
-				return hueRotate(cardCanvas);
+				if (foil) return hueRotate(cardCanvas);
+				else return cardCanvas;
 			}
 		} catch (IOException | ExecutionException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
@@ -130,7 +131,7 @@ public class Card {
 		for (int x = 0; x < bi.getWidth(); x++) {
 			for (int y = 0; y < bi.getHeight(); y++) {
 				int rgb = bi.getRGB(x, y);
-				Color col = new Color(rgb);
+				Color col = new Color(rgb, true);
 				col = new Color(col.getRed(), col.getBlue(), col.getGreen());
 				out.setRGB(x, y, col.getRGB());
 			}
