@@ -105,17 +105,4 @@ public class CardDAO {
 			em.close();
 		}
 	}
-
-	public static long animeCount(AnimeName anime) {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE anime = :anime AND rarity <> 'ULTIMATE'", Long.class);
-		q.setParameter("anime", anime);
-
-		try {
-			return (long) q.getSingleResult();
-		} finally {
-			em.close();
-		}
-	}
 }
