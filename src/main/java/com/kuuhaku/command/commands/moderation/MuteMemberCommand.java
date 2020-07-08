@@ -26,6 +26,8 @@ import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.MutedMember;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
@@ -59,7 +61,7 @@ public class MuteMemberCommand extends Command {
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (message.getMentionedUsers().size() == 0) {
-			channel.sendMessage(":x: | Você precisa mencionar um membro.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-member-to-ban")).queue();
 			return;
 		} else if (args.length < 2) {
 			channel.sendMessage(":x: | Você precisa informar um tempo (em minutos).").queue();
