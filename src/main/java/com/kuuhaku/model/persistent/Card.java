@@ -149,7 +149,7 @@ public class Card {
 				Color col = new Color(rgb);
 				float[] hsv = new float[3];
 				Color.RGBtoHSB(col.getRed(), col.getGreen(), col.getGreen(), hsv);
-				hsv[0] = (hsv[0] + 0.3f) % 1;
+				hsv[0] = ((hsv[0] * 255 + 30) / 255) % 1;
 				out.setRGB(x, y, Color.HSBtoRGB(hsv[0], hsv[1], hsv[2]));
 			}
 		}
