@@ -61,6 +61,7 @@ public class RequestAssistCommand extends Command {
 		eb.addField("ID do servidor:", guild.getId(), true);
 		eb.addField("Requisitado por:", author.getAsTag() + " (" + guild.getName() + " | " + channel.getName() + ")", true);
 		eb.addField("Requisitado em:", Helper.dateformat.format(message.getTimeCreated().atZoneSameInstant(ZoneId.of("GMT-3"))), true);
+		eb.setFooter(author.getId());
 		eb.setColor(Color.cyan);
 
 		Map<String, String> ids = new HashMap<>();
