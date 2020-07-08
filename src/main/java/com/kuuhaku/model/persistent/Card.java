@@ -108,9 +108,9 @@ public class Card {
 				int rgb = bi.getRGB(x, y);
 				Color col = new Color(rgb);
 				col = new Color(
-						Helper.clamp(offsets.get("red") - col.getRed(), 0, 255),
-						Helper.clamp(offsets.get("green") - col.getGreen(), 0, 255),
-						Helper.clamp(offsets.get("blue") - col.getBlue(), 0, 255)
+						Helper.clamp(col.getRed() - offsets.get("red"), 0, 255),
+						Helper.clamp(col.getGreen() - offsets.get("green"), 0, 255),
+						Helper.clamp(col.getBlue() - offsets.get("blue"), 0, 255)
 				);
 				out.setRGB(x, y, col.getRGB());
 			}
