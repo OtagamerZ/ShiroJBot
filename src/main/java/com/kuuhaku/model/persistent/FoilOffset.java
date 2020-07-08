@@ -24,7 +24,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "foilcolors")
+@Table(name = "foiloffset")
 public class FoilOffset {
 	@Id
 	@Column(columnDefinition = "VARCHAR(191)")
