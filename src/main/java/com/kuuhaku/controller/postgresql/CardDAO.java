@@ -49,7 +49,7 @@ public class CardDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
-			return em.find(Card.class, anime);
+			return em.find(Card.class, anime.name());
 		} finally {
 			em.close();
 		}
