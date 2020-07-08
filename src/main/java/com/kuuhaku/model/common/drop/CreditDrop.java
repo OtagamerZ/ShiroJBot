@@ -39,7 +39,7 @@ import java.util.function.Function;
 public class CreditDrop implements Prize {
 	private final AnimeName anime = AnimeName.values()[Helper.rng(AnimeName.values().length)];
 	private final int[] values = {
-			Helper.rng((int) CardDAO.animeCount(anime)),
+			Helper.rng((int) CardDAO.totalCards(anime)),
 			Helper.rng(7),
 			Helper.rng((int) CardDAO.totalCards()),
 			Helper.rng(MemberDAO.getHighestLevel() / 2)
