@@ -132,9 +132,11 @@ public class Card {
 				int rgb = bi.getRGB(x, y);
 				Color col = new Color(rgb);
 				float[] hsv = new float[3];
-				Color.RGBtoHSB(col.getRed(), col.getGreen(), col.getBlue(), hsv);
+				Color.RGBtoHSB(col.getRed(), col.getBlue(), col.getGreen(), hsv);
 
-				col = Color.getHSBColor((hsv[0] + 0.5f) % 1, hsv[1], hsv[2]);
+				Color temp = Color.getHSBColor((hsv[0] + 0.5f) % 1, hsv[1], hsv[2]);
+				col = new Color(col.getRed(), temp.getGreen(), temp.getBlue());
+
 				out.setRGB(x, y, col.getRGB());
 			}
 		}
