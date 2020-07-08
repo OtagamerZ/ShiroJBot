@@ -130,13 +130,8 @@ public class Card {
 		for (int x = 0; x < bi.getWidth(); x++) {
 			for (int y = 0; y < bi.getHeight(); y++) {
 				int rgb = bi.getRGB(x, y);
-				Color col = new Color(rgb, true);
-				col = new Color(col.getRed(), col.getGreen(), col.getBlue(), col.getBlue());
-				col = new Color(col.getRed(),
-						col.getAlpha() == 0 ? 0 : col.getGreen() / col.getAlpha(),
-						col.getAlpha() == 0 ? 0 : col.getBlue() / col.getAlpha(),
-						col.getAlpha() == 0 ? 0 : col.getBlue() / col.getAlpha()
-				);
+				Color col = new Color(rgb);
+				col = new Color(col.getRed(), col.getRed(), col.getGreen());
 				out.setRGB(x, y, col.getRGB());
 			}
 		}
