@@ -71,6 +71,7 @@ public class ReportBugCommand extends Command {
 		eb.addField("Enviador por:", author.getAsTag() + " (" + guild.getName() + " | " + channel.getName() + ")", true);
 		eb.addField("Enviado em:", Helper.dateformat.format(message.getTimeCreated().atZoneSameInstant(ZoneId.of("GMT-3"))), true);
 		eb.addField("Relatório:", "```" + mensagem + "```", false);
+		eb.setFooter(author.getId());
 		eb.setColor(Color.yellow);
 
 		Map<String, String> ids = new HashMap<>();
