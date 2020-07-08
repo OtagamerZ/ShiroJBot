@@ -107,7 +107,7 @@ public class Card {
 				Color col;
 
 				col = new Color(255 - orig.getRed(), 255 - orig.getGreen(), 255 - orig.getBlue());
-				if (col.getBlue() > col.getRed() && col.getBlue() > col.getGreen())
+				if (col.getBlue() - col.getRed() > 100 && col.getBlue() - col.getGreen() > 100)
 					col = new Color(orig.getRGB());
 				out.setRGB(x, y, col.getRGB());
 			}
