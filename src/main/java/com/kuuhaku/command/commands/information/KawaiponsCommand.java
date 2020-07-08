@@ -77,9 +77,8 @@ public class KawaiponsCommand extends Command {
 				} else if (args.length == 0) {
 					Set<KawaiponCard> collection = new HashSet<>();
 					for (AnimeName anime : AnimeName.values()) {
-						if (CardDAO.totalCards(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime) && !k.isFoil()).count()) {
+						if (CardDAO.totalCards(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime) && !k.isFoil()).count())
 							collection.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
-						}
 					}
 
 					KawaiponBook kb = new KawaiponBook(collection);
