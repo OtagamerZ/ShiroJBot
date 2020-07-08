@@ -87,6 +87,12 @@ public class Card {
 				}
 				g2d.drawImage(frame, 0, 0, null);
 
+				if (foil) {
+					g2d.setComposite(BlendComposite.Hue);
+					g2d.drawImage(adjust(frame), 10, 10, 225, 350, null);
+					g2d.dispose();
+				}
+
 				g2d.dispose();
 
 				return canvas;
