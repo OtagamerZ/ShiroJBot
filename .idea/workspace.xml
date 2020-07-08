@@ -563,21 +563,7 @@
       <workItem from="1594128033969" duration="4139000" />
       <workItem from="1594139629787" duration="12834000" />
       <workItem from="1594216903797" duration="1375000" />
-      <workItem from="1594224774572" duration="5081000" />
-    </task>
-    <task id="LOCAL-01654" summary="Mudança na geração de coleção">
-      <created>1594145439611</created>
-      <option name="number" value="01654" />
-      <option name="presentableId" value="LOCAL-01654" />
-      <option name="project" value="LOCAL" />
-      <updated>1594145439611</updated>
-    </task>
-    <task id="LOCAL-01655" summary="Mudança na geração de coleção">
-      <created>1594145839058</created>
-      <option name="number" value="01655" />
-      <option name="presentableId" value="LOCAL-01655" />
-      <option name="project" value="LOCAL" />
-      <updated>1594145839058</updated>
+      <workItem from="1594224774572" duration="5334000" />
     </task>
     <task id="LOCAL-01656" summary="Mudança na geração de coleção">
       <created>1594146077535</created>
@@ -908,7 +894,21 @@
       <option name="project" value="LOCAL" />
       <updated>1594229858543</updated>
     </task>
-    <option name="localTasksCounter" value="1703" />
+    <task id="LOCAL-01703" summary="Mudança de paleta no processamento das cartas cromadas">
+      <created>1594230018439</created>
+      <option name="number" value="01703" />
+      <option name="presentableId" value="LOCAL-01703" />
+      <option name="project" value="LOCAL" />
+      <updated>1594230018439</updated>
+    </task>
+    <task id="LOCAL-01704" summary="Mudança de paleta no processamento das cartas cromadas">
+      <created>1594230103520</created>
+      <option name="number" value="01704" />
+      <option name="presentableId" value="LOCAL-01704" />
+      <option name="project" value="LOCAL" />
+      <updated>1594230103520</updated>
+    </task>
+    <option name="localTasksCounter" value="1705" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1123,12 +1123,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="253" y="373" key="Vcs.Push.Dialog.v2" timestamp="1594230019518">
+    <state x="253" y="373" key="Vcs.Push.Dialog.v2" timestamp="1594230114118">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1593924633531" />
-    <state x="253" y="373" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1594230019518" />
+    <state x="253" y="373" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1594230114118" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1594227606158">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
