@@ -67,7 +67,11 @@ public class RemainingCardsCommand extends Command {
 
 		AnimeName anime = AnimeName.valueOf(args[0].toUpperCase());
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-		List<Card> collected = kp.getCards().stream().map(KawaiponCard::getCard).filter(c -> c.getAnime().equals(anime)).collect(Collectors.toList());
+		List<Card> collected = kp.getCards().stream()
+				.filter(c -> !c.isFoil())
+				.map(KawaiponCard::getCard)
+				.filter(c -> c.getAnime().equals(anime))
+				.collect(Collectors.toList());
 		List<Card> cards = CardDAO.getCardsByAnime(anime);
 		cards.sort(Comparator
 				.comparing(Card::getRarity, Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
