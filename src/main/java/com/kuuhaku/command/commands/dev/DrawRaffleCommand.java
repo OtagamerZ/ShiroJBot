@@ -24,6 +24,8 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.UpvoteDAO;
 import com.kuuhaku.model.persistent.Upvote;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
@@ -55,21 +57,21 @@ public class DrawRaffleCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
-			channel.sendMessage(":x: | Você precisa especificar um período (dias) para sortear.").queue();
-			return;
-		} else if (!StringUtils.isNumeric(args[0])) {
-			channel.sendMessage(":x: | O período precisa ser um valor inteiro.").queue();
-			return;
-		}
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-drawraffle-invalid-use")).queue();
+            return;
+        } else if (!StringUtils.isNumeric(args[0])) {
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-drawraffle-use-an-integer-value")).queue();
+            return;
+        }
 
 		int days = Integer.parseInt(args[0]);
 		List<String> votes = UpvoteDAO.getVotes().stream().filter(u -> u.getVotedAt().isAfter(LocalDateTime.now().minusDays(days)) && Main.getInfo().getUserByID(u.getUid()) != null).map(Upvote::getUid).collect(Collectors.toList());
 		Collections.shuffle(votes);
 
 		if (votes.size() == 0) {
-			channel.sendMessage(":x: | Não houve nenhum voto neste período.").queue();
-			return;
-		}
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV_drawraffle-i-found-nothing")).queue();
+            return;
+        }
 
 		channel.sendMessage("E o vencedor do sorteio é")
 				.delay(2, TimeUnit.SECONDS)

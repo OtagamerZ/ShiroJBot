@@ -98,7 +98,7 @@ public class PixelChunkCommand extends Command {
 				return;
 			}
 		} catch (NumberFormatException e) {
-			channel.sendMessage(":x: | As coordenadas devem ser numéricas.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_canvas-invalid-coordinates")).queue();
 			return;
 		}
 
@@ -107,7 +107,7 @@ public class PixelChunkCommand extends Command {
 
 			if (StringUtils.isNumeric(opts[2])) {
 				if (Integer.parseInt(opts[2]) <= 0 || Integer.parseInt(opts[2]) > 10) {
-					channel.sendMessage(":x: | O zoom não pode ser menor ou igual à 0, nem maior que 10").queue();
+					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_canvas-invalid-zoom")).queue();
 					return;
 				}
 				Main.getInfo().getCanvas().viewChunk(message.getTextChannel(), coords, Integer.parseInt(opts[2]), true).queue();
@@ -121,7 +121,7 @@ public class PixelChunkCommand extends Command {
 
 			CanvasDAO.saveCanvas(canvas);
 		} catch (NumberFormatException e) {
-			channel.sendMessage(":x: | Cor no formato incorreto, ela deve seguir o padrão hexadecimal (#RRGGBB).").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-colortester-invalid-color")).queue();
 		}
 	}
 }
