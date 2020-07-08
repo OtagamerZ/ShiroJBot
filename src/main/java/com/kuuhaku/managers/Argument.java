@@ -72,7 +72,7 @@ public class Argument {
 				name,
 				aliases,
 				usage.isBlank() ? "" : ShiroInfo.getLocale(I18n.PT).getString(usage),
-				ShiroInfo.getLocale(I18n.PT).getString(description),
+				description.isBlank() ? "" : ShiroInfo.getLocale(I18n.PT).getString(description),
 				category,
 				requiresMM
 		};
@@ -87,10 +87,12 @@ public class Argument {
 	}
 
 	public String getUsage() {
+		if (usage.isBlank()) return "";
 		return ShiroInfo.getLocale(I18n.PT).getString(usage);
 	}
 
 	public String getDescription() {
+		if (description.isBlank()) return "";
 		return ShiroInfo.getLocale(I18n.PT).getString(description);
 	}
 
