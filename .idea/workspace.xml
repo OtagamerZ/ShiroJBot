@@ -26,12 +26,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/KawaiponsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/KawaiponsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/misc/SeeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/misc/SeeCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/KawaiponBook.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/KawaiponBook.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/NewKawaiponBook.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/CreditDrop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/CreditDrop.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -571,14 +565,7 @@
       <workItem from="1594128033969" duration="4139000" />
       <workItem from="1594139629787" duration="12834000" />
       <workItem from="1594216903797" duration="1375000" />
-      <workItem from="1594224774572" duration="12074000" />
-    </task>
-    <task id="LOCAL-01684" summary="Mudança de paleta no processamento das cartas cromadas">
-      <created>1594224856322</created>
-      <option name="number" value="01684" />
-      <option name="presentableId" value="LOCAL-01684" />
-      <option name="project" value="LOCAL" />
-      <updated>1594224856323</updated>
+      <workItem from="1594224774572" duration="13161000" />
     </task>
     <task id="LOCAL-01685" summary="Mudança de paleta no processamento das cartas cromadas">
       <created>1594224939090</created>
@@ -916,7 +903,14 @@
       <option name="project" value="LOCAL" />
       <updated>1594235860577</updated>
     </task>
-    <option name="localTasksCounter" value="1733" />
+    <task id="LOCAL-01733" summary="Correções na coleção de cartas">
+      <created>1594237127778</created>
+      <option name="number" value="01733" />
+      <option name="presentableId" value="LOCAL-01733" />
+      <option name="project" value="LOCAL" />
+      <updated>1594237127778</updated>
+    </task>
+    <option name="localTasksCounter" value="1734" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -954,7 +948,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção nos botões de cargo" />
     <MESSAGE value="Melhoria na instanciação de comandos" />
     <MESSAGE value="Correção na ordem pas peças de xadrez" />
     <MESSAGE value="Correção na ordem das peças de xadrez" />
@@ -979,7 +972,8 @@
     <MESSAGE value="Criação da loucura" />
     <MESSAGE value="Correção de captura de strings do arquivo de localização" />
     <MESSAGE value="Mudança de paleta no processamento das cartas cromadas" />
-    <option name="LAST_COMMIT_MESSAGE" value="Mudança de paleta no processamento das cartas cromadas" />
+    <MESSAGE value="Correções na coleção de cartas" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções na coleção de cartas" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1063,30 +1057,30 @@
     </state>
     <state x="504" y="188" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1585946052476" />
     <state x="620" y="261" key="FileChooserDialogImpl/0.0.1680.1010@0.0.1680.1010" timestamp="1594057299069" />
-    <state width="1125" height="289" key="GridCell.Tab.0.bottom" timestamp="1594059005463">
+    <state width="0" height="0" key="GridCell.Tab.0.bottom" timestamp="1594238169414">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="179" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1585946331158" />
     <state width="905" height="270" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1125" height="289" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1594059005463" />
-    <state width="1125" height="289" key="GridCell.Tab.0.center" timestamp="1594059005462">
+    <state width="0" height="0" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1594238169414" />
+    <state width="0" height="0" key="GridCell.Tab.0.center" timestamp="1594238169413">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="179" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1585946331158" />
     <state width="905" height="270" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1125" height="289" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1594059005462" />
-    <state width="1125" height="289" key="GridCell.Tab.0.left" timestamp="1594059005462">
+    <state width="0" height="0" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1594238169413" />
+    <state width="0" height="0" key="GridCell.Tab.0.left" timestamp="1594238169413">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="179" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1585946331158" />
     <state width="905" height="270" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1125" height="289" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1594059005462" />
-    <state width="1125" height="289" key="GridCell.Tab.0.right" timestamp="1594059005462">
+    <state width="0" height="0" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1594238169413" />
+    <state width="0" height="0" key="GridCell.Tab.0.right" timestamp="1594238169413">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="179" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1585946331158" />
     <state width="905" height="270" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1125" height="289" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1594059005462" />
+    <state width="0" height="0" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1594238169413" />
     <state width="1323" height="230" key="GridCell.Tab.1.bottom" timestamp="1587921284835">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -1131,12 +1125,12 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="200" height="318" key="SqlResolveConfigurable/0.0.1366.728@0.0.1366.728" timestamp="1585946065407" />
-    <state x="253" y="373" key="Vcs.Push.Dialog.v2" timestamp="1594235870204">
+    <state x="253" y="373" key="Vcs.Push.Dialog.v2" timestamp="1594237217841">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="182" y="133" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1585946496989" />
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1593924633531" />
-    <state x="253" y="373" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1594235870204" />
+    <state x="253" y="373" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1594237217841" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1594227606158">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
