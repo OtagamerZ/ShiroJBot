@@ -78,7 +78,7 @@ public class ColorTesterCommand extends Command {
 			channel.sendMessage(eb.build()).addFile(baos.toByteArray(), "color.png").queue();
 
 		} catch (NumberFormatException e) {
-			channel.sendMessage(":x: | Cor no formato incorreto, ela deve seguir o padrão hexadecimal (#RRGGBB).").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-colortester-invalid-color")).queue();
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}

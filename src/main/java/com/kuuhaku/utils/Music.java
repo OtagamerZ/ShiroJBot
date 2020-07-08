@@ -57,7 +57,7 @@ public class Music {
         GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild(), channel);
 
         if (musicManager.player.isPaused()) {
-            channel.sendMessage(":x: | A música já está pausada.").queue();
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-music-is-paused")).queue();
             return;
         }
         musicManager.scheduler.pauseTrack();
@@ -69,7 +69,7 @@ public class Music {
         GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild(), channel);
 
         if (!musicManager.player.isPaused()) {
-            channel.sendMessage(":x: | A música não está pausada.").queue();
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-music-not-paused")).queue();
             return;
         }
         musicManager.scheduler.resumeTrack();
@@ -91,7 +91,7 @@ public class Music {
         GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild(), channel);
 
         if (musicManager.player.getPlayingTrack() == null) {
-            channel.sendMessage(":x: | Não há nenhuma musica tocando no momento.").queue();
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-music-not-playing")).queue();
             return;
         }
 
@@ -109,7 +109,7 @@ public class Music {
 
             channel.sendMessage(eb.build()).queue();
         } catch (IOException e) {
-            channel.sendMessage(":x: | Erro ao recuperar dados da música.").queue();
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-music-an-error-has-occurred")).queue();
         }
     }
 
@@ -117,7 +117,7 @@ public class Music {
         GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild(), channel);
 
         if (musicManager.player.getPlayingTrack() == null) {
-            channel.sendMessage(":x: | Não há nenhuma musica na fila no momento.").queue();
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-music-nothing-in-the-music-queue")).queue();
             return;
         }
 
@@ -156,7 +156,7 @@ public class Music {
 
         if (volume <= 100 && volume > 0) musicManager.player.setVolume(volume);
         else {
-            channel.sendMessage(":x: | O volume deve ser um valor inteiro entre 0 e 100").queue();
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-music-use-an-integer-value")).queue();
             return;
         }
 
@@ -174,7 +174,8 @@ public class Music {
 
                     track.setUserData(m.getUser());
                     play(m.getVoiceState().getChannel(), channel, channel.getGuild(), musicManager, track);
-                } else channel.sendMessage(":x: | Você não está conectado em um canal de voz.").queue();
+                } else
+                    channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-music-enter-a-voice-channel")).queue();
             }
 
             @Override
@@ -190,7 +191,8 @@ public class Music {
                     });
 
                     channel.sendMessage("Playlist adicionada com sucesso à fila (max. 10 músicas por playlist, escolhidas aleatoriamente): " + playlist.getName()).queue();
-                } else channel.sendMessage(":x: | Você não está conectado em um canal de voz.").queue();
+                } else
+                    channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-music-enter-a-voice-channel")).queue();
             }
 
             @Override
