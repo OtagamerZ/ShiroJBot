@@ -27,6 +27,7 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.sqlite.KGotchiDAO;
 import com.kuuhaku.handlers.games.kawaigotchi.*;
 import com.kuuhaku.handlers.games.kawaigotchi.enums.FoodType;
+import com.kuuhaku.handlers.games.kawaigotchi.enums.Stance;
 import com.kuuhaku.handlers.games.kawaigotchi.enums.VanityType;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
@@ -163,7 +164,7 @@ public class KGotchiCommand extends Command {
 						eb.setColor(Color.green);
 						break;
 					case UNABLE:
-						if (k.getStance().isResting())
+						if (k.getStance().equals(Stance.SLEEPING))
 							g2d.drawImage(SLEEPING.getIcon().getImage(), bi.getWidth() - 64, 0, 64, 64, null);
 						else
 							g2d.drawImage(TROUBLED.getIcon().getImage(), bi.getWidth() - 64, 0, 64, 64, null);
@@ -207,7 +208,7 @@ public class KGotchiCommand extends Command {
 					getPrize(channel, acc, k);
 					break;
 				case UNABLE:
-					if (k.getStance().isResting())
+					if (k.getStance().equals(Stance.SLEEPING))
 						g2d.drawImage(SLEEPING.getIcon().getImage(), bi.getWidth() - 64, 0, 64, 64, null);
 					else
 						g2d.drawImage(TROUBLED.getIcon().getImage(), bi.getWidth() - 64, 0, 64, 64, null);
@@ -242,7 +243,7 @@ public class KGotchiCommand extends Command {
 					getPrize(channel, acc, k);
 					break;
 				case UNABLE:
-					if (k.getStance().isResting())
+					if (k.getStance().equals(Stance.SLEEPING))
 						g2d.drawImage(SLEEPING.getIcon().getImage(), bi.getWidth() - 64, 0, 64, 64, null);
 					else
 						g2d.drawImage(TROUBLED.getIcon().getImage(), bi.getWidth() - 64, 0, 64, 64, null);
