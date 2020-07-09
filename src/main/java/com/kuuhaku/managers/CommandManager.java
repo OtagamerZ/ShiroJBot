@@ -85,7 +85,7 @@ public class CommandManager {
 					"chave", new String[]{"token"}, REQ_NAME, "cmd_token", DEV, false
 			));
 			put(BroadcastCommand.class, new Argument(
-					"transmitir", new String[]{"broadcast", "bc"}, "req_type-message", "cmd_broadcast", DEV, false
+					"transmitir", new String[]{"broadcast"}, "req_type-message", "cmd_broadcast", DEV, false
 			));
 			put(UsageCommand.class, new Argument(
 					"usos", new String[]{"uses", "usage"}, "cmd_usage", DEV, true
