@@ -19,23 +19,21 @@
 package com.kuuhaku.handlers.games.kawaigotchi.enums;
 
 public enum Stance {
-	IDLE(true, true, true, false),
-	SLEEPING(false, false, false, true),
-	HAPPY(true, true, true, false),
-	SAD(true, false, false, false),
-	ANGRY(true, false, true, false),
-	DEAD(false, false, false, false);
+	IDLE(true, true, true),
+	SLEEPING(false, false, false),
+	HAPPY(true, true, true),
+	SAD(true, false, false),
+	ANGRY(true, false, true),
+	DEAD(false, false, false);
 
 	private final boolean canEat;
 	private final boolean canPlay;
 	private final boolean canTrain;
-	private final boolean resting;
 
-	Stance(boolean canEat, boolean canPlay, boolean canTrain, boolean resting) {
+	Stance(boolean canEat, boolean canPlay, boolean canTrain) {
 		this.canEat = canEat;
 		this.canPlay = canPlay;
 		this.canTrain = canTrain;
-		this.resting = resting;
 	}
 
 	public boolean canEat() {
@@ -48,10 +46,6 @@ public enum Stance {
 
 	public boolean canTrain() {
 		return canTrain;
-	}
-
-	public boolean isResting() {
-		return resting;
 	}
 
 	@Override
