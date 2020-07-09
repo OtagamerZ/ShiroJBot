@@ -20,10 +20,30 @@ package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.utils.ExceedEnums;
+import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 public class PStateDAO {
+	public static double getInfluenceShare(ExceedEnums exceed) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT SUM(influence) FROM PoliticalState p", Long.class);
+
+		try {
+			float total = (long) q.getSingleResult();
+			PoliticalState p = em.find(PoliticalState.class, exceed);
+			if (p == null) {
+				savePoliticalState(new PoliticalState(exceed));
+				p = getPoliticalState(exceed);
+			}
+			return Helper.round(p.getInfluence() / total, 2);
+		} finally {
+			em.close();
+		}
+	}
+
 	public static PoliticalState getPoliticalState(ExceedEnums exceed) {
 		EntityManager em = Manager.getEntityManager();
 

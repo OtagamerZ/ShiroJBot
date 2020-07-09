@@ -124,6 +124,10 @@ public class Helper {
 		return Math.max(min, Math.min(val, max));
 	}
 
+	public static long clamp(long val, long min, long max) {
+		return Math.max(min, Math.min(val, max));
+	}
+
 	public static int clamp(int val, int min, int max) {
 		return Math.max(min, Math.min(val, max));
 	}

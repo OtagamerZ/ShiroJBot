@@ -161,7 +161,6 @@ public class GuildEvents extends ListenerAdapter {
 				return;
 			}
 
-
 			Command command = Main.getCommandManager().getCommand(commandName);
 			if (command != null) {
 				found = command.getCategory().isEnabled(GuildDAO.getGuildById(guild.getId()), guild, author);
