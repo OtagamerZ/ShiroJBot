@@ -201,6 +201,7 @@ public class PollCommand extends Command {
 		eb.setTitle("Enquete: (" + (NOVOTE ? "nenhum voto" : (pos + neg) + " votos") + ")");
 		eb.addField("Aprovação: ", NOVOTE ? "0.0%" : Helper.round(Helper.prcntToInt(pos, (pos + neg)), 1) + "%", true);
 		eb.addField("Reprovação: ", NOVOTE ? "0.0%" : Helper.round(Helper.prcntToInt(neg, (pos + neg)), 1) + "%", true);
+		eb.setFooter(null);
 
 		msg.editMessage(eb.build()).queue();
 		member.getUser().openPrivateChannel().queue(c -> c.sendMessage(eb.setAuthor("Sua enquete foi encerrada!").build()).queue());
@@ -224,6 +225,7 @@ public class PollCommand extends Command {
 
 		eb.setAuthor("A enquete feita por " + member.getEffectiveName() + " foi encerrada!");
 		eb.setTitle("Enquete: (" + (NOVOTE ? "nenhum voto" : totalVotes + " votos") + ")");
+		eb.setFooter(null);
 		eb.addBlankField(false);
 
 		boolean finalNOVOTE = NOVOTE;
