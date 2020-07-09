@@ -101,7 +101,7 @@ public class Profile {
 
 		g2d.setColor(new Color(0, 255, 0));
 		g2d.setClip(new Rectangle2D.Float(0, 100, w, 250));
-		g2d.fillArc(40, 190, avatar.getWidth() + 20, avatar.getHeight() + 20, 210, (MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getXp() * 240) / ((int) Math.pow(MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getLevel(), 2) * 100) * -1);
+		g2d.fillArc(40, 190, avatar.getWidth() + 20, avatar.getHeight() + 20, 210, (int) ((MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getXp() * 240) / ((int) Math.pow(MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getLevel(), 2) * 100) * -1));
 
 		g2d.setColor(main);
 		g2d.setClip(null);
