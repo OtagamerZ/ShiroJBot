@@ -62,12 +62,12 @@ public class LoanCommand extends Command {
 					"Não se preocupe, nós podemos resolver!\n\n" +
 					"Usando este comando você pode contratar um ~~agiota~~ empréstimo de créditos e ter a possibilidade de pagar o débito mais tarde.\n\n"
 			);
-			eb.addField("Plano Lite: `" + prefix + "emprestimo 1`", "1000 créditos (juros de " + (CreditLoan.LOAN_1.getInterest(ex) * 100) + "%)", false);
-			eb.addField("Plano Colecionador: `" + prefix + "emprestimo 2`", "2500 créditos (juros de " + (CreditLoan.LOAN_2.getInterest(ex) * 100) + "%)", false);
-			eb.addField("Plano Bate-papo: `" + prefix + "emprestimo 3`", "5000 créditos (juros de " + (CreditLoan.LOAN_3.getInterest(ex) * 100) + "%)", false);
-			eb.addField("Plano Animador de Chat: `" + prefix + "emprestimo 4`", "10000 créditos (juros de " + (CreditLoan.LOAN_4.getInterest(ex) * 100) + "%)", false);
-			eb.addField("Plano Ultimate: `" + prefix + "emprestimo 5`", "25000 créditos (juros de " + (CreditLoan.LOAN_5.getInterest(ex) * 100) + "%)", false);
-			eb.setFooter("||(Não cobrimos eventuais acidentes como, mas não exclusivo à: espancamento por taco de baseball, atropelamentos, perseguições, etc)||");
+			eb.addField("Plano Lite: `" + prefix + "emprestimo 1`", "1000 créditos (juros de " + (100 - CreditLoan.LOAN_1.getInterest(ex) * 100) + "%)", false);
+			eb.addField("Plano Colecionador: `" + prefix + "emprestimo 2`", "2500 créditos (juros de " + (100 - CreditLoan.LOAN_2.getInterest(ex) * 100) + "%)", false);
+			eb.addField("Plano Bate-papo: `" + prefix + "emprestimo 3`", "5000 créditos (juros de " + (100 - CreditLoan.LOAN_3.getInterest(ex) * 100) + "%)", false);
+			eb.addField("Plano Animador de Chat: `" + prefix + "emprestimo 4`", "10000 créditos (juros de " + (100 - CreditLoan.LOAN_4.getInterest(ex) * 100) + "%)", false);
+			eb.addField("Plano Ultimate: `" + prefix + "emprestimo 5`", "25000 créditos (juros de " + (100 - CreditLoan.LOAN_5.getInterest(ex) * 100) + "%)", false);
+			eb.setFooter("Não cobrimos eventuais acidentes como, mas não exclusivo à: espancamento por taco de baseball, atropelamentos, perseguições, etc");
 
 			channel.sendMessage(eb.build()).queue();
 			return;
