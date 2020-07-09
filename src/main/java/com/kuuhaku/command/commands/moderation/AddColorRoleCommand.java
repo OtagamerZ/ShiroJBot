@@ -58,9 +58,9 @@ public class AddColorRoleCommand extends Command {
             channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_color-missing-permissions")).queue();
             return;
         } else if (args.length < 1) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_color-not-enough-arguments")).queue();
-            return;
-        }
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_color-not-enough-args")).queue();
+			return;
+		}
 
 		try {
 			String name = StringUtils.capitalize(args[0].toLowerCase());

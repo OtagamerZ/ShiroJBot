@@ -93,6 +93,16 @@ public class ExceedDAO {
 		return members;
 	}
 
+	public static ExceedMember getExceedMember(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		try {
+			return em.find(ExceedMember.class, id);
+		} finally {
+			em.close();
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	public static Exceed getExceed(ExceedEnums ex) {
 		EntityManager em = Manager.getEntityManager();
