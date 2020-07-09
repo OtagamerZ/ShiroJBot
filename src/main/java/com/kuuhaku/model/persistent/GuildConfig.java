@@ -96,6 +96,9 @@ public class GuildConfig {
 	private String colorRoles = "";
 
 	@Column(columnDefinition = "TEXT")
+	private String paidRoles = "";
+
+	@Column(columnDefinition = "TEXT")
 	private String ambientSounds = "";
 
 	//NUMBERS
@@ -493,6 +496,27 @@ public class GuildConfig {
 		JSONObject jo = getColorRoles();
 		jo.remove(name);
 		this.colorRoles = jo.toString();
+	}
+
+	public JSONObject getPaidRoles() {
+		return new JSONObject(Helper.getOr(paidRoles, "[]"));
+	}
+
+	public void addPaidRole(String name, String color, Role role) {
+		JSONObject jo = getColorRoles();
+		JSONObject r = new JSONObject();
+
+		r.put("cost", color);
+		r.put("role", role.getId());
+
+		jo.put(role.getId(), r);
+		this.paidRoles = jo.toString();
+	}
+
+	public void removePaidRole(String name) {
+		JSONObject jo = getColorRoles();
+		jo.remove(name);
+		this.paidRoles = jo.toString();
 	}
 
 	public JSONObject getAmbientSounds() {

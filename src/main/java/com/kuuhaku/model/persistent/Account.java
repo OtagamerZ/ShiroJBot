@@ -18,6 +18,8 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.controller.postgresql.ExceedDAO;
+import com.kuuhaku.utils.CreditLoan;
 import com.kuuhaku.utils.Helper;
 
 import javax.persistence.Column;
@@ -34,8 +36,11 @@ public class Account {
 	@Id
 	private String userId;
 
-	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-	private int balance = 0;
+	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
+	private long balance = 0;
+
+	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
+	private long loan = 0;
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT 'Nunca'")
 	private String lastVoted = "Nunca";
@@ -54,15 +59,26 @@ public class Account {
 		this.userId = userId;
 	}
 
-	public int getBalance() {
+	public long getBalance() {
 		return balance;
 	}
 
-	public void addCredit(int credit) {
-		this.balance += credit;
+	public long getLoan() {
+		return loan;
 	}
 
-	public void removeCredit(int credit) {
+	public void signLoan(CreditLoan loan) {
+		ExceedMember ex = ExceedDAO.getExceedMember(userId);
+		this.addCredit(loan.getLoan());
+		this.loan = Math.round(loan.getLoan() * loan.getInterest(ex));
+	}
+
+	public void addCredit(long credit) {
+		if (this.loan > 0) loan = Helper.clamp(loan - credit, 0, loan);
+		else balance += credit;
+	}
+
+	public void removeCredit(long credit) {
 		this.balance -= credit;
 	}
 

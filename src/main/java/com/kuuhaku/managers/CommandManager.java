@@ -367,6 +367,9 @@ public class CommandManager {
 			put(SeeCardCommand.class, new Argument(
 					"carta", new String[]{"card", "see", "olhar"}, "req_card-type", "cmd_see-card", MISC, false
 			));
+			put(LoanCommand.class, new Argument(
+					"emprestimo", new String[]{"emp", "loan"}, "req_id", "cmd_loan", MISC, false
+			));
 
 			//FUN
 			put(SadButTrueCommand.class, new Argument(

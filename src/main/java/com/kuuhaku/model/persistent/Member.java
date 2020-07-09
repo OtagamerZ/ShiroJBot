@@ -67,8 +67,8 @@ public class Member {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int level = 1;
 
-	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-	private int xp = 0;
+	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
+	private long xp = 0;
 
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long lastVoted = 0;
@@ -166,7 +166,7 @@ public class Member {
 		return level;
 	}
 
-	public int getXp() {
+	public long getXp() {
 		return xp;
 	}
 
