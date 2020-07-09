@@ -74,11 +74,12 @@ public class CardDAO {
 
 		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity <> 'ULTIMATE' AND anime = :anime", Card.class);
 		q.setParameter("anime", anime);
-		List<Card> c = (List<Card>) q.getResultList();
 
-		em.close();
-
-		return c;
+		try {
+			return (List<Card>) q.getResultList();
+		} finally {
+			em.close();
+		}
 	}
 
 	public static long totalCards() {

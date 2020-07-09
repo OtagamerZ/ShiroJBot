@@ -32,7 +32,8 @@ public enum AnimeName {
 	PROJECT_VOCALOID,
 	ANGEL_BEATS,
 	PANTY_AND_STOCKING,
-	SAINT_SEIYA;
+	SAINT_SEIYA,
+	SWORD_ART_ONLINE;
 
 	@Override
 	public String toString() {
