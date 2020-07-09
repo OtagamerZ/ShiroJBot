@@ -104,9 +104,6 @@ public class Kawaigotchi {
 	@Column(columnDefinition = "INT")
 	private int pos = new Random().nextInt(1024);
 
-	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT TRUE")
-	private boolean alive = true;
-
 	@Column(columnDefinition = "TEXT")
 	private String bag = "{\"almondega\":5}";
 
@@ -138,90 +135,81 @@ public class Kawaigotchi {
 	}
 
 	public void update(Member m) {
-		if (!alive) {
-			stance = Stance.DEAD;
-			harvest();
-			return;
-		} else if (m.getOnlineStatus() == OnlineStatus.OFFLINE || m.getOnlineStatus() == OnlineStatus.UNKNOWN) {
-			if (offSince == null) offSince = LocalDateTime.now();
-			harvest();
-			return;
-		}
-
-		offSince = null;
-		diedAt = null;
-		if (health <= 0) {
-			alive = false;
-			diedAt = LocalDateTime.now();
-			KGotchiDAO.saveKawaigotchi(this);
-			return;
-		} else if (hunger <= 0) {
-			health -= rate.HEALTH.fac;
-			KGotchiDAO.saveKawaigotchi(this);
-			return;
-		}
-
+		int currTime = OffsetDateTime.now(ZoneId.of("GMT-3")).getHour();
 		tier = Tier.tierByXp(xp);
 
-		int currTime = OffsetDateTime.now(ZoneId.of("GMT-3")).getHour();
-
-		if (stance.isResting()) {
-			if (!Time.inRange(Time.NIGHT, currTime) && energy >= 100) stance = Stance.IDLE;
-			energy += rate.ENERGY.fac * 2 * nature.getEnergy() * (getVanity().has(VanityType.HOUSE.toString()) ? VanityMenu.getVanity(getVanity().getString(VanityType.HOUSE.toString())).getModifier() : 1);
-			health += rate.HEALTH.fac * (hunger / 50) * (getVanity().has(VanityType.HOUSE.toString()) ? VanityMenu.getVanity(getVanity().getString(VanityType.HOUSE.toString())).getModifier() : 1);
-			KGotchiDAO.saveKawaigotchi(this);
-			return;
+		if (stance.equals(Stance.DEAD) || (m.getOnlineStatus() == OnlineStatus.OFFLINE || m.getOnlineStatus() == OnlineStatus.UNKNOWN)) {
+			if (stance.equals(Stance.DEAD)) {
+				diedAt = diedAt == null ? LocalDateTime.now() : diedAt;
+			} else {
+				offSince = offSince == null ? LocalDateTime.now() : offSince;
+			}
+			harvest();
 		} else if (Time.inRange(Time.NIGHT, currTime) || energy < 5) {
 			stance = Stance.SLEEPING;
 			KGotchiDAO.saveKawaigotchi(this);
-			return;
-		}
-
-		if (hunger < 25 || health < 25) {
-			if (!warned) {
-				try {
-					m.getUser().openPrivateChannel().complete().sendMessage("Seu Kawaigotchi " + name + " está muito triste, corra ver o porquê!").queue();
-				} catch (RuntimeException ignore) {
-				}
-				warned = true;
-			}
-		} else if (hunger < 50 || health < 50) {
-			stance = Stance.SAD;
-			if (!alerted) {
-				try {
-					m.getUser().openPrivateChannel().complete().sendMessage("Seu Kawaigotchi " + name + " está triste, vá ver o porquê!").queue();
-				} catch (RuntimeException ignore) {
-				}
-				alerted = true;
-			}
-		} else if (mood >= 66) {
-			stance = Stance.HAPPY;
-			alerted = false;
-			warned = false;
-		} else if (mood <= 33) {
-			stance = Stance.ANGRY;
-			alerted = false;
-			warned = false;
 		} else {
-			stance = Stance.IDLE;
-			alerted = false;
-			warned = false;
+			offSince = null;
+			diedAt = null;
+			if (stance.equals(Stance.SLEEPING)) {
+				if (!Time.inRange(Time.NIGHT, currTime) && energy >= 100) {
+					stance = Stance.IDLE;
+				} else {
+					energy += rate.ENERGY.fac * 2 * nature.getEnergy() * (getVanity().has(VanityType.HOUSE.toString()) ? VanityMenu.getVanity(getVanity().getString(VanityType.HOUSE.toString())).getModifier() : 1);
+					health += rate.HEALTH.fac * (hunger / 50) * (getVanity().has(VanityType.HOUSE.toString()) ? VanityMenu.getVanity(getVanity().getString(VanityType.HOUSE.toString())).getModifier() : 1);
+					KGotchiDAO.saveKawaigotchi(this);
+					return;
+				}
+			}
+
+			if (hunger < 25 || health < 25) {
+				stance = Stance.SAD;
+				if (!warned) {
+					try {
+						m.getUser().openPrivateChannel().complete().sendMessage("Seu Kawaigotchi " + name + " está muito triste, corra ver o porquê!").queue();
+					} catch (RuntimeException ignore) {
+					}
+					warned = true;
+				}
+			} else if (hunger < 50 || health < 50) {
+				stance = Stance.SAD;
+				if (!alerted) {
+					try {
+						m.getUser().openPrivateChannel().complete().sendMessage("Seu Kawaigotchi " + name + " está triste, vá ver o porquê!").queue();
+					} catch (RuntimeException ignore) {
+					}
+					alerted = true;
+				}
+			} else if (mood >= 66) {
+				stance = Stance.HAPPY;
+				alerted = false;
+				warned = false;
+			} else if (mood <= 33) {
+				stance = Stance.ANGRY;
+				alerted = false;
+				warned = false;
+			} else {
+				stance = Stance.IDLE;
+				alerted = false;
+				warned = false;
+			}
+
+			if (hunger > 60 && mood < 80)
+				mood += (rate.MOOD.fac + ((100 - hunger) * 0.01f / 20)) * nature.getKindness();
+			else
+				mood -= rate.MOOD.fac / nature.getKindness() / (getVanity().has(VanityType.FENCE.toString()) ? VanityMenu.getVanity(getVanity().getString(VanityType.FENCE.toString())).getModifier() : 1);
+
+			hunger -= rate.FOOD.fac;
+			energy -= rate.ENERGY.fac / nature.getEnergy();
+
+			xp += 0.1f * tier.getTrainability() * (getVanity().has(VanityType.FENCE.toString()) ? VanityMenu.getVanity(getVanity().getString(VanityType.FENCE.toString())).getModifier() : 1);
+
+			KGotchiDAO.saveKawaigotchi(this);
 		}
-
-		if (hunger > 60 && mood < 80) mood += (rate.MOOD.fac + ((100 - hunger) * 0.01f / 20)) * nature.getKindness();
-		else
-			mood -= rate.MOOD.fac / nature.getKindness() / (getVanity().has(VanityType.FENCE.toString()) ? VanityMenu.getVanity(getVanity().getString(VanityType.FENCE.toString())).getModifier() : 1);
-
-		hunger -= rate.FOOD.fac;
-		energy -= rate.ENERGY.fac / nature.getEnergy();
-
-		xp += 0.1f * tier.getTrainability() * (getVanity().has(VanityType.FENCE.toString()) ? VanityMenu.getVanity(getVanity().getString(VanityType.FENCE.toString())).getModifier() : 1);
-
-		KGotchiDAO.saveKawaigotchi(this);
 	}
 
 	public void resurrect() {
-		alive = true;
+		stance = Stance.IDLE;
 		health = 100;
 		hunger = 100;
 		mood = (int) (50 * nature.getKindness() * (getVanity().has(VanityType.HOUSE.toString()) ? VanityMenu.getVanity(getVanity().getString(VanityType.HOUSE.toString())).getModifier() : 1));
@@ -524,11 +512,7 @@ public class Kawaigotchi {
 	}
 
 	public boolean isAlive() {
-		return alive;
-	}
-
-	public void setAlive(boolean alive) {
-		this.alive = alive;
+		return !stance.equals(Stance.DEAD);
 	}
 
 	public String getBag() {
@@ -610,6 +594,7 @@ public class Kawaigotchi {
 	public void harvest() {
 		if (diedAt.plusMonths(1).isBefore(LocalDateTime.now()) || offSince.plusMonths(1).isBefore(LocalDateTime.now()))
 			KGotchiDAO.deleteKawaigotchi(this);
-		else KGotchiDAO.saveKawaigotchi(this);
+		else
+			KGotchiDAO.saveKawaigotchi(this);
 	}
 }
