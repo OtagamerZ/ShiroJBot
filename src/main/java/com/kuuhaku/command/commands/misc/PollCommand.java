@@ -92,6 +92,14 @@ public class PollCommand extends Command {
 			}
 		}
 
+		EmbedBuilder eb = new EmbedBuilder();
+		eb.setTitle(":notepad_spiral: Enquete criada por " + member.getEffectiveName());
+		eb.setDescription("Apenas 1 clique já contabiliza o voto (a quantidade de reações __**NÃO**__ ficará maior que 1).");
+		eb.setThumbnail("https://www.kalkoken.org/apps/easypoll/resources/poll-logo.png");
+		eb.setDescription(text);
+		eb.setFooter("Clique nas reações abaixo para votar", null);
+		eb.setColor(Color.decode("#2195f2"));
+
 		Function<Message, Map<String, BiConsumer<Member, Message>>> opts = null;
 		if (options != null && options.length() > 10) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_poll-too-many-options")).queue();
@@ -102,7 +110,11 @@ public class PollCommand extends Command {
 				Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 				for (int i = 0; i < finalOptions.length(); i++) {
 					String emote = new String(new char[]{"\uD83C\uDDE6".toCharArray()[0], (char) ("\uD83C\uDDE6".toCharArray()[1] + i)});
-					buttons.put(emote, (mb, msg) -> Main.getInfo().getPolls().get(m.getId()).put(mb.getId(), emote));
+					buttons.put(emote, (mb, msg) -> {
+						Main.getInfo().getPolls().get(m.getId()).put(mb.getId(), emote);
+						eb.setFooter("Clique nas reações abaixo para votar (total de votos: " + Main.getInfo().getPolls().get(m.getId()).size() + ")");
+						m.editMessage(eb.build()).queue();
+					});
 				}
 				buttons.put("❌", (mb, msg) -> {
 					if (mb.getId().equals(author.getId())) msg.delete().queue();
@@ -112,13 +124,6 @@ public class PollCommand extends Command {
 			};
 		}
 
-		EmbedBuilder eb = new EmbedBuilder();
-		eb.setTitle(":notepad_spiral: Enquete criada por " + member.getEffectiveName());
-		eb.setDescription("Apenas 1 clique já contabiliza o voto (a quantidade de reações __**NÃO**__ ficará maior que 1).");
-		eb.setThumbnail("https://www.kalkoken.org/apps/easypoll/resources/poll-logo.png");
-		eb.setDescription(text);
-		eb.setFooter("Clique nas reações abaixo para votar", null);
-		eb.setColor(Color.decode("#2195f2"));
 		if (options != null) {
 			for (int i = 0; i < options.length(); i++)
 				eb.addField(new String(new char[]{"\uD83C\uDDE6".toCharArray()[0], (char) ("\uD83C\uDDE6".toCharArray()[1] + i)}) + " | " + options.getString(i), Helper.VOID, true);
@@ -129,8 +134,16 @@ public class PollCommand extends Command {
 
 		Consumer<Message> sendSimple = m -> {
 			Pages.buttonize(m, new LinkedHashMap<>() {{
-				put("\uD83D\uDC4D", (mb, msg) -> Main.getInfo().getPolls().get(m.getId()).put(mb.getId(), "\uD83D\uDC4D"));
-				put("\uD83D\uDC4E", (mb, msg) -> Main.getInfo().getPolls().get(m.getId()).put(mb.getId(), "\uD83D\uDC4E"));
+				put("\uD83D\uDC4D", (mb, msg) -> {
+					Main.getInfo().getPolls().get(m.getId()).put(mb.getId(), "\uD83D\uDC4D");
+					eb.setFooter("Clique nas reações abaixo para votar (total de votos: " + Main.getInfo().getPolls().get(m.getId()).size() + ")");
+					m.editMessage(eb.build()).queue();
+				});
+				put("\uD83D\uDC4E", (mb, msg) -> {
+					Main.getInfo().getPolls().get(m.getId()).put(mb.getId(), "\uD83D\uDC4E");
+					eb.setFooter("Clique nas reações abaixo para votar (total de votos: " + Main.getInfo().getPolls().get(m.getId()).size() + ")");
+					m.editMessage(eb.build()).queue();
+				});
 				put("❌", (mb, msg) -> {
 					if (mb.getId().equals(author.getId())) {
 						msg.delete().queue();
