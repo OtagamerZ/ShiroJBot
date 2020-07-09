@@ -151,7 +151,11 @@ public class Kawaigotchi {
 		} else {
 			offSince = null;
 			diedAt = null;
-			if (stance.equals(Stance.SLEEPING)) {
+			if (health <= 0) {
+				stance = Stance.DEAD;
+				KGotchiDAO.saveKawaigotchi(this);
+				return;
+			} else if (stance.equals(Stance.SLEEPING)) {
 				if (!Time.inRange(Time.NIGHT, currTime) && energy >= 100) {
 					stance = Stance.IDLE;
 				} else {
