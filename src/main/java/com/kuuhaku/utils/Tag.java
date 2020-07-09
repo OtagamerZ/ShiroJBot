@@ -18,12 +18,15 @@
 
 package com.kuuhaku.utils;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.*;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.StringUtils;
 import org.python.bouncycastle.util.Arrays;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.Set;
@@ -88,21 +91,14 @@ public enum Tag {
 		this.condition = condition;
 	}
 
-	public String getPath(com.kuuhaku.model.persistent.Member mb) {
-		if (this.equals(LEVEL)) {
-			final int[] levels = {2, 3, 4, 5, 6, 7};
-			int lvl = mb.getLevel() / 10;
-			if (Arrays.contains(levels, lvl)) {
-				return Objects.requireNonNull(getClass().getClassLoader().getResource(path)).getPath().replace("{0}", String.valueOf(lvl * 10));
-			} else return null;
-		}
-		return Objects.requireNonNull(getClass().getClassLoader().getResource(path)).getPath();
+	public InputStream getPath(com.kuuhaku.model.persistent.Member mb) throws IOException {
+		return Helper.getImage(Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById(Objects.requireNonNull(getEmote(mb)).getId())).getImageUrl());
 	}
 
 	public TagIcons getEmote(com.kuuhaku.model.persistent.Member mb) {
 		if (this.equals(LEVEL)) {
 			final int[] levels = {2, 3, 4, 5, 6, 7};
-			int lvl = mb.getLevel() / 10;
+			int lvl = Helper.clamp(mb.getLevel(), mb.getLevel(), 70) / 10;
 			if (Arrays.contains(levels, lvl)) {
 				return TagIcons.valueOf("LVL" + (lvl * 10));
 			} else return null;

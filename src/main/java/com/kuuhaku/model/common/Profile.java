@@ -20,12 +20,12 @@ package com.kuuhaku.model.common;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
-import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
-import net.dv8tion.jda.api.Permission;
+import com.kuuhaku.utils.Tag;
+import com.kuuhaku.utils.TagIcons;
 import net.dv8tion.jda.api.entities.Guild;
 
 import javax.imageio.ImageIO;
@@ -42,6 +42,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 public class Profile {
 	public static Font FONT;
@@ -191,80 +192,21 @@ public class Profile {
 	}
 
 	private static void drawBadges(net.dv8tion.jda.api.entities.Member m, Guild s, Graphics2D g2d) throws IOException {
-		List<BufferedImage> badges = new ArrayList<BufferedImage>() {{
-			if (ExceedDAO.hasExceed(m.getId())) {
-				switch (ExceedEnums.getByName(ExceedDAO.getExceed(m.getId()))) {
-					case IMANITY:
-						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/imanity.png"))));
-						break;
-					case SEIREN:
-						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/seiren.png"))));
-						break;
-					case WEREBEAST:
-						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/werebeast.png"))));
-						break;
-					case ELF:
-						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lumamana.png"))));
-						break;
-					case EXMACHINA:
-						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/exmachina.png"))));
-						break;
-					case FLUGEL:
-						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/flugel.png"))));
-						break;
-				}
+		List<BufferedImage> badges = new ArrayList<>() {{
+			String exceed = ExceedDAO.getExceed(m.getId());
+			if (!exceed.isEmpty()) {
+				add(ImageIO.read(Helper.getImage(Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById(TagIcons.getExceedId(ExceedEnums.getByName(exceed)))).getImageUrl())));
 			}
-			if (m.getUser().getId().equals(Main.getInfo().getNiiChan())) {
-				add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/niichan.png"))));
-			} else {
-				if (m.getUser().getId().equals(Main.getInfo().getNiiChan()) || Main.getInfo().getDevelopers().contains(m.getUser().getId()))
-					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/dev.png"))));
-				if (Main.getInfo().getSupports().contains(m.getUser().getId())) {
-					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/sheriff.png"))));
-				}
-				if (Main.getInfo().getEditors().contains(m.getUser().getId()))
-					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/writer.png"))));
+
+			Member mb = MemberDAO.getMemberById(m.getId() + m.getGuild().getId());
+			Set<Tag> tags = Tag.getTags(m.getUser(), m);
+			tags.forEach(t -> {
 				try {
-					if (TagDAO.getTagById(m.getUser().getId()).isReader())
-						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/reader.png"))));
-				} catch (Exception ignore) {
+					add(ImageIO.read(t.getPath(mb)));
+				} catch (IOException e) {
+					Helper.logger(Profile.class).error(e + " | " + e.getStackTrace()[0]);
 				}
-				if (m.hasPermission(Permission.MANAGE_CHANNEL))
-					add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/mod.png"))));
-				try {
-					if (MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 70)
-						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_70.png"))));
-					else if (MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 60)
-						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_60.png"))));
-					else if (MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 50)
-						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_50.png"))));
-					else if (MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 40)
-						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_40.png"))));
-					else if (MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 30)
-						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_30.png"))));
-					else if (MemberDAO.getMemberById(m.getUser().getId() + s.getId()).getLevel() >= 20)
-						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/lvl_20.png"))));
-				} catch (Exception ignore) {
-				}
-				try {
-					if (TagDAO.getTagById(m.getUser().getId()).isVerified())
-						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/verified.png"))));
-				} catch (Exception ignore) {
-				}
-				try {
-					if (TagDAO.getTagById(m.getUser().getId()).isToxic())
-						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/toxic.png"))));
-				} catch (Exception ignore) {
-				}
-				try {
-					if (!Member.getWaifu(m.getUser()).isEmpty()) {
-						add(ImageIO.read(Objects.requireNonNull(Profile.class.getClassLoader().getResource("icons/married.png"))));
-						g2d.setFont(FONT.deriveFont(Font.PLAIN, 30));
-						drawOutlinedText("Casado(a) com: " + Main.getInfo().getUserByID(Member.getWaifu(m.getUser())).getName(), 270, 298, g2d);
-					}
-				} catch (Exception ignore) {
-				}
-			}
+			});
 		}};
 
 		List<int[]> coords = new ArrayList<int[]>() {{
