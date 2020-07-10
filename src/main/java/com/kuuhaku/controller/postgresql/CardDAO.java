@@ -20,6 +20,7 @@ package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.utils.AnimeName;
+import com.kuuhaku.utils.KawaiponRarity;
 import org.apache.commons.lang3.ArrayUtils;
 
 import javax.persistence.EntityManager;
@@ -99,6 +100,19 @@ public class CardDAO {
 
 		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity <> 'ULTIMATE' AND anime = :anime", Long.class);
 		q.setParameter("anime", anime);
+
+		try {
+			return (long) q.getSingleResult();
+		} finally {
+			em.close();
+		}
+	}
+
+	public static long totalCards(KawaiponRarity rarity) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity = :rarity", Long.class);
+		q.setParameter("rarity", rarity.name());
 
 		try {
 			return (long) q.getSingleResult();
