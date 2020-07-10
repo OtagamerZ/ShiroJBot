@@ -145,7 +145,7 @@ public class Kawaigotchi {
 				offSince = offSince == null ? LocalDateTime.now() : offSince;
 			}
 			harvest();
-		} else if (Time.inRange(Time.NIGHT, currTime) || energy < 5) {
+		} else if (!stance.equals(Stance.SLEEPING) && (Time.inRange(Time.NIGHT, currTime) || energy < 5)) {
 			stance = Stance.SLEEPING;
 			KGotchiDAO.saveKawaigotchi(this);
 		} else {
