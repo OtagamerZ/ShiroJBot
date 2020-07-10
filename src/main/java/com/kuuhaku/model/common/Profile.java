@@ -205,6 +205,7 @@ public class Profile {
 					add(ImageIO.read(t.getPath(mb)));
 				} catch (IOException e) {
 					Helper.logger(Profile.class).error(e + " | " + e.getStackTrace()[0]);
+				} catch (NullPointerException ignore) {
 				}
 			});
 		}};
