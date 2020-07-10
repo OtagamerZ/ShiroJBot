@@ -64,7 +64,7 @@ public class VIPShopCommand extends Command {
 
 		if (args.length == 0) {
 			EmbedBuilder eb = new EmbedBuilder();
-			eb.setTitle(":tickets: | Loja VIP");
+			eb.setTitle(":gem: | Loja VIP");
 			eb.setDescription("Gemas podem ser obtidos ao resgatar um acúmulo de 7 votos seguidos. Para utilizar as gemas basta usar `" + prefix + "vip ID`!\n\n" +
 					"Muito obrigada por me apoiar!"
 			);
@@ -110,7 +110,8 @@ public class VIPShopCommand extends Command {
 					channel.sendMessage(":x: | Você precisa informar o tipo da carta que deseja rodar (`N` = normal, `C` = cromada).").queue();
 					return;
 				}
-				KawaiponCard card = kp.getCard(c, args[1].equalsIgnoreCase("C"));
+				KawaiponCard card = kp.getCard(c, args[2].equalsIgnoreCase("C"));
+				KawaiponCard oldCard = new KawaiponCard(c, args[2].equalsIgnoreCase("C"));
 
 				if (card == null) {
 					channel.sendMessage(":x: | Você não pode rodar uma carta que não possui!").queue();
@@ -121,7 +122,6 @@ public class VIPShopCommand extends Command {
 				Card chosen = cards.get(Helper.rng(cards.size()));
 
 				kp.removeCard(card);
-				KawaiponCard oldCard = card;
 				card.setCard(chosen);
 				kp.addCard(card);
 
@@ -137,6 +137,7 @@ public class VIPShopCommand extends Command {
 					return;
 				}
 				KawaiponCard card = kp.getCard(c, false);
+				KawaiponCard oldCard = new KawaiponCard(c, false);
 
 				if (card == null) {
 					channel.sendMessage(":x: | Você não pode cromar uma carta que não possui!").queue();
@@ -144,7 +145,6 @@ public class VIPShopCommand extends Command {
 				}
 
 				kp.removeCard(card);
-				KawaiponCard oldCard = card;
 				card.setFoil(true);
 				kp.addCard(card);
 
