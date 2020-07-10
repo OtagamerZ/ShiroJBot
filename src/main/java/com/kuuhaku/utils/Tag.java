@@ -91,7 +91,7 @@ public enum Tag {
 		this.condition = condition;
 	}
 
-	public InputStream getPath(com.kuuhaku.model.persistent.Member mb) throws IOException {
+	public InputStream getPath(com.kuuhaku.model.persistent.Member mb) throws IOException, NullPointerException {
 		return Helper.getImage(Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById(Objects.requireNonNull(getEmote(mb)).getId())).getImageUrl());
 	}
 
