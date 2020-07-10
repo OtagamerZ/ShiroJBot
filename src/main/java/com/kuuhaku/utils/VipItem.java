@@ -21,8 +21,8 @@ package com.kuuhaku.utils;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
 public enum VipItem {
-	CARD_ROLL(1, 1, new MessageEmbed.Field("1 - Rodar carta", "Troca a carta por outra aleatória que você não tenha", false)),
-	CARD_FOIL(2, 5, new MessageEmbed.Field("2 - Melhoria de carta", "Transforma uma carta em cromada", false)),
+	CARD_ROLL(1, 1, new MessageEmbed.Field("1 - Rodar carta (1 gema)", "Troca a carta por outra aleatória que você não tenha", false)),
+	CARD_FOIL(2, 5, new MessageEmbed.Field("2 - Melhoria de carta (5 gemas)", "Transforma uma carta em cromada", false)),
 	;
 
 	private final int id;
