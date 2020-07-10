@@ -177,7 +177,7 @@ public class Helper {
 						r.answer((TextChannel) channel);
 						msg.clearReactions().queue();
 					}
-				}), false, 60, TimeUnit.SECONDS));
+				}), false, 1, TimeUnit.MINUTES));
 			} else
 				return RestAction::queue;
 		} catch (Exception e) {

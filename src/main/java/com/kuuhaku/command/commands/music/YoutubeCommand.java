@@ -87,7 +87,7 @@ public class YoutubeCommand extends Command {
                             }
 
                             channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(msg -> {
-                                Pages.paginate(msg, pages, 60, TimeUnit.SECONDS, 5);
+                                Pages.paginate(msg, pages, 1, TimeUnit.MINUTES, 5);
                                 if (Objects.requireNonNull(member.getVoiceState()).inVoiceChannel()) {
                                     Pages.buttonize(msg, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
                                         try {
@@ -102,7 +102,7 @@ public class YoutubeCommand extends Command {
                                             msg.delete().queue(null, Helper::doNothing);
                                         } catch (ErrorResponseException ignore) {
                                         }
-                                    }), true, 60, TimeUnit.SECONDS);
+                                    }), true, 1, TimeUnit.MINUTES);
                                 }
                             });
                         } else m.editMessage(":x: | Nenhum vídeo encontrado").queue();

@@ -94,7 +94,7 @@ public class LoanCommand extends Command {
 
 		cl.sign(acc);
 
-		channel.sendMessage("Obrigado por ser mais um cliente do Shiro Empréstimos LTDA! Você não receberá mais créditos até que termine de pagar seu débito.").queue();
+		channel.sendMessage("Obrigada por ser mais um cliente do Shiro Empréstimos LTDA! Você não receberá mais créditos até que termine de pagar seu débito.").queue();
 	}
 
 }

@@ -71,6 +71,9 @@ public class SeeCardCommand extends Command {
 		} else if (args.length < 2 && tc.getRarity() != KawaiponRarity.ULTIMATE) {
 			channel.sendMessage(":x: | Você também precisa informar o tipo dela (`N` = normal, `C` = cromada).").queue();
 			return;
+		} else if (!Helper.equalsAny(args[1], "N", "C")) {
+			channel.sendMessage(":x: | Você precisa informar o tipo da carta que deseja ver (`N` = normal, `C` = cromada).").queue();
+			return;
 		}
 
 		boolean foil = tc.getRarity() != KawaiponRarity.ULTIMATE && args[1].equalsIgnoreCase("C");

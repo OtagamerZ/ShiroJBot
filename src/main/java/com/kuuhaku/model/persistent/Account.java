@@ -26,9 +26,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
 
 @Entity
 @Table(name = "account")
@@ -42,11 +43,11 @@ public class Account {
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long loan = 0;
 
+	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
+	private int gems = 0;
+
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT 'Nunca'")
 	private String lastVoted = "Nunca";
-
-	@Column(columnDefinition = "TIMESTAMP")
-	private LocalDateTime lastVotedNoFormat = null;
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int streak = 0;
@@ -87,15 +88,42 @@ public class Account {
 	}
 
 	public void voted() {
-		this.lastVoted = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.dateformat);
-		if (lastVotedNoFormat != null && LocalDateTime.now().isBefore(lastVotedNoFormat.plusHours(24)))
-			this.streak = Helper.clamp(streak + 1, 0, 7);
-		else this.streak = 0;
+		ZonedDateTime today = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3"));
+		try {
+			ZonedDateTime lastVote = ZonedDateTime.parse(lastVoted, Helper.dateformat);
 
-		this.lastVotedNoFormat = LocalDateTime.now();
+			if (today.isBefore(lastVote.plusHours(24))) streak = Helper.clamp(streak + 1, 0, 7);
+			else streak = 0;
+		} catch (DateTimeParseException e) {
+			lastVoted = today.format(Helper.dateformat);
+		}
 	}
 
 	public int getStreak() {
 		return streak;
+	}
+
+	public void setStreak(int streak) {
+		this.streak = streak;
+	}
+
+	public int getGems() {
+		return gems;
+	}
+
+	public void addGem() {
+		this.gems++;
+	}
+
+	public void addGem(int qtd) {
+		gems += qtd;
+	}
+
+	public void removeGem() {
+		this.gems--;
+	}
+
+	public void removeGem(int qtd) {
+		gems -= qtd;
 	}
 }

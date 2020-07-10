@@ -62,6 +62,9 @@ public class SellCardCommand extends Command {
 		} else if (!StringUtils.isNumeric(args[2])) {
 			channel.sendMessage(":x: | O preço precisa ser um valor inteiro.").queue();
 			return;
+		} else if (!Helper.equalsAny(args[1], "N", "C")) {
+			channel.sendMessage(":x: | Você precisa informar o tipo da carta que deseja vender (`N` = normal, `C` = cromada).").queue();
+			return;
 		}
 
 		Card c = CardDAO.getCard(args[0], false);
@@ -75,7 +78,7 @@ public class SellCardCommand extends Command {
 
 		KawaiponCard card = kp.getCard(c, foil);
 
-		if (card == null || !kp.getCards().contains(card)) {
+		if (card == null) {
 			channel.sendMessage(":x: | Você não pode trocar uma carta que não possui!").queue();
 			return;
 		}
