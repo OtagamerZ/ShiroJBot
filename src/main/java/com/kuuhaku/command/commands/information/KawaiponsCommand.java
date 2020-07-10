@@ -28,7 +28,6 @@ import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.*;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
-import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NonNls;
 
 import javax.imageio.IIOImage;
@@ -117,7 +116,7 @@ public class KawaiponsCommand extends Command {
 				} else if (args.length < 2 || !Helper.equalsAny(args[1], "N", "C")) {
 					m.editMessage(":x: | Você precisa especificar o tipo da coleção (`N` = normal, `C` = cromada).").queue();
 					return;
-				} else if (Arrays.stream(ArrayUtils.addAll(AnimeName.values(), KawaiponRarity.values())).noneMatch(a -> a.name().equals(args[0].toUpperCase()))) {
+				} else if (Arrays.stream(AnimeName.values()).noneMatch(a -> a.name().equals(args[0].toUpperCase())) && Arrays.stream(KawaiponRarity.values()).noneMatch(a -> a.name().equals(args[0].toUpperCase()))) {
 					m.editMessage(":x: | Anime ou raridade inválidos ou ainda não adicionados (colocar `_` no lugar de espaços).").queue();
 					return;
 				}
