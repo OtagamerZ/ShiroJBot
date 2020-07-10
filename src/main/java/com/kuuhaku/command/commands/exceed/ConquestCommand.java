@@ -105,7 +105,7 @@ public class ConquestCommand extends Command {
 			});
 
 			channel.sendMessage("Informe um país para desafiar o líder do Exceed em questão").embed((MessageEmbed) pages.get(TagIcons.getExceedId(ex)).getContent()).queue(s ->
-					Pages.categorize(s, pages, 60, TimeUnit.SECONDS)
+					Pages.categorize(s, pages, 1, TimeUnit.MINUTES)
 			);
 			return;
 		}

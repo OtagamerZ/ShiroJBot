@@ -99,6 +99,6 @@ public class ChessCommand extends Command {
 						ms.delete().queue();
 						t.execute(finalBet);
 					}
-				}), false, 60, TimeUnit.SECONDS));
+				}), false, 1, TimeUnit.MINUTES));
 	}
 }
