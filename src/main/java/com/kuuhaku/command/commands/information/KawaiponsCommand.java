@@ -116,14 +116,16 @@ public class KawaiponsCommand extends Command {
 				} else if (args.length < 2 || !Helper.equalsAny(args[1], "N", "C")) {
 					m.editMessage(":x: | Você precisa especificar o tipo da coleção (`N` = normal, `C` = cromada).").queue();
 					return;
-				} else if (Arrays.stream(AnimeName.values()).noneMatch(a -> a.name().equals(args[0].toUpperCase())) && Arrays.stream(KawaiponRarity.values()).noneMatch(a -> a.name().equals(args[0].toUpperCase()))) {
-					m.editMessage(":x: | Anime ou raridade inválidos ou ainda não adicionados (colocar `_` no lugar de espaços).").queue();
-					return;
 				}
 
 				KawaiponRarity rr = KawaiponRarity.getByName(args[0]);
 
 				if (rr == null) {
+					if (Arrays.stream(AnimeName.values()).noneMatch(a -> a.name().equals(args[0].toUpperCase()))) {
+						m.editMessage(":x: | Anime inválido ou ainda não adicionado (colocar `_` no lugar de espaços).").queue();
+						return;
+					}
+
 					AnimeName anime = AnimeName.valueOf(args[0].toUpperCase());
 					Set<KawaiponCard> collection = kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).collect(Collectors.toSet());
 					Set<KawaiponCard> toRender = collection.stream().filter(k -> k.isFoil() == args[1].equalsIgnoreCase("C")).collect(Collectors.toSet());
