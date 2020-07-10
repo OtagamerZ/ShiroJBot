@@ -112,7 +112,7 @@ public class CardDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity = :rarity", Long.class);
-		q.setParameter("rarity", rarity.name());
+		q.setParameter("rarity", rarity);
 
 		try {
 			return (long) q.getSingleResult();
