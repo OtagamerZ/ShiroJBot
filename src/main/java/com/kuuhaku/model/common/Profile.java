@@ -210,7 +210,7 @@ public class Profile {
 			});
 		}};
 
-		List<int[]> coords = new ArrayList<int[]>() {{
+		List<int[]> coords = new ArrayList<>() {{
 			for (int y = 0; y < 3; y++) {
 				for (int x = 0; x < 3; x++) {
 					add(new int[]{276 + (59 * x), 378 + (59 * y)});
