@@ -121,12 +121,16 @@ public class VIPShopCommand extends Command {
 				Card chosen = cards.get(Helper.rng(cards.size()));
 
 				kp.removeCard(card);
+				KawaiponCard oldCard = card;
 				card.setCard(chosen);
 				kp.addCard(card);
 
 				KawaiponDAO.saveKawaipon(kp);
 				acc.removeGem(1);
 				AccountDAO.saveAccount(acc);
+
+				channel.sendMessage("Você rodou a carta " + oldCard.getName() + " com sucesso e conseguiu....**" + card.getName() + " (" + card.getCard().getRarity().toString() + ")**!").queue();
+				return;
 			} else if (vi.equals(VipItem.CARD_FOIL)) {
 				if (acc.getGems() < vi.getGems()) {
 					channel.sendMessage(":x: | Você não possui gemas suficientes.").queue();
@@ -140,12 +144,16 @@ public class VIPShopCommand extends Command {
 				}
 
 				kp.removeCard(card);
+				KawaiponCard oldCard = card;
 				card.setFoil(true);
 				kp.addCard(card);
 
 				KawaiponDAO.saveKawaipon(kp);
 				acc.removeGem(5);
 				AccountDAO.saveAccount(acc);
+
+				channel.sendMessage("Você cromou a carta " + oldCard.getName() + " com sucesso!").queue();
+				return;
 			}
 		}
 	}
