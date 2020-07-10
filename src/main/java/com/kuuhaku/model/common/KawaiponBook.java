@@ -44,8 +44,19 @@ public class KawaiponBook {
 		this.cards = cards;
 	}
 
-	public BufferedImage view(AnimeName anime, boolean foil) throws IOException, InterruptedException {
-		int totalCards = anime == null ? AnimeName.values().length : CardDAO.getCardsByAnime(anime).size();
+	public BufferedImage view(AnimeName anime, KawaiponRarity rarity, boolean foil) throws IOException, InterruptedException {
+		int totalCards;
+		String text;
+		if (anime != null) {
+			totalCards = (int) CardDAO.totalCards(anime);
+			text = (foil ? "« " : "") + anime.toString() + (foil ? " »" : "");
+		} else if (rarity != null) {
+			totalCards = (int) CardDAO.totalCards(rarity);
+			text = (foil ? "« " : "") + rarity.toString() + (foil ? " »" : "");
+		} else {
+			totalCards = AnimeName.values().length;
+			text = (foil ? "« " : "") + "Coleção Kawaipon" + (foil ? " »" : "");
+		}
 		List<KawaiponCard> cards = new ArrayList<>(this.cards);
 		cards.sort(Comparator
 				.<KawaiponCard, KawaiponRarity>comparing(k -> k.getCard().getRarity(), Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
@@ -70,9 +81,9 @@ public class KawaiponBook {
 		Graphics2D g2d = header.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, Helper.clamp(12 * 210 / ((foil ? "« " : "") + (anime == null ? "Coleção Kawaipon" : anime.toString()) + (foil ? " »" : "")).length(), 105, 210)));
+		g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, Helper.clamp(12 * 210 / text.length(), 105, 210)));
 		if (foil) g2d.setColor(Color.yellow);
-		Profile.printCenteredString((foil ? "« " : "") + (anime == null ? "Coleção Kawaipon" : anime.toString()) + (foil ? " »" : ""), 2100, 75, 400, g2d);
+		Profile.printCenteredString(text, 2100, 75, 400, g2d);
 
 		NContract<BufferedImage> act = new NContract<>(chunks.size());
 		act.setAction(imgs -> {
