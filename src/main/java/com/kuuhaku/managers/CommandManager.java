@@ -370,6 +370,12 @@ public class CommandManager {
 			put(LoanCommand.class, new Argument(
 					"emprestimo", new String[]{"emp", "loan"}, "req_id", "cmd_loan", MISC, false
 			));
+			put(RedeemCommand.class, new Argument(
+					"trocargema", new String[]{"resgatar", "redeem"}, "cmd_redeem", MISC, true
+			));
+			put(VIPShopCommand.class, new Argument(
+					"vip", new String[]{"lojavip", "gemshop"}, "req_id", "cmd_vip", MISC, false
+			));
 
 			//FUN
 			put(SadButTrueCommand.class, new Argument(

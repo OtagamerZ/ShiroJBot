@@ -58,7 +58,7 @@ public class TheAnswerCommand extends Command {
 				if (!TagDAO.getTagById(author.getId()).isReader()) {
 					if (String.join(" ", args).replace(".", "").equalsIgnoreCase(System.getenv("SECRET"))) {
 						TagDAO.giveTagReader(author.getId());
-						channel.sendMessage("Obrigado por ler as regras!").queue();
+						channel.sendMessage("Obrigada por ler as regras!").queue();
 					} else {
 						channel.sendMessage(":x: | Resposta errada, leia as regras para achar a resposta.").queue();
 					}
