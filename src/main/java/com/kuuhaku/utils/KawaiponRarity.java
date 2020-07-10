@@ -19,6 +19,7 @@
 package com.kuuhaku.utils;
 
 import com.github.ygimenez.exception.InvalidStateException;
+import org.apache.commons.lang3.StringUtils;
 
 public enum KawaiponRarity {
 	COMMON(1, "<:common:726171819664736268> "),
@@ -61,6 +62,23 @@ public enum KawaiponRarity {
 				return "Ultimate";
 			default:
 				throw new InvalidStateException();
+		}
+	}
+
+	public static KawaiponRarity getByName(String name) {
+		switch (StringUtils.stripAccents(name.toLowerCase())) {
+			case "comum":
+				return COMMON;
+			case "incomum":
+				return UNCOMMON;
+			case "rara":
+				return RARE;
+			case "ultra_rara":
+				return ULTRA_RARE;
+			case "lendaria":
+				return LEGENDARY;
+			default:
+				return null;
 		}
 	}
 }
