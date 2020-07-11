@@ -20,6 +20,8 @@ package com.kuuhaku.command.commands.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -49,7 +51,7 @@ public class AsciiCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length == 0) {
-			channel.sendMessage(":x: | Você precisa informar um texto para converter em ASCII.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-ascii-text-not-found")).queue();
 			return;
 		}
 
@@ -66,7 +68,7 @@ public class AsciiCommand extends Command {
 			assert response.body() != null;
 			channel.sendMessage(":warning: | O texto ASCII pode parecer deformado devido ao tamanho do seu ecrã!\n```\n" + response.body().string() + "\n```").queue();
 		} catch (IOException e) {
-			channel.sendMessage(":x: | Ocorreu um erro ao contactar à API.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-ascii-an-error-has-occurred")).queue();
 		}
 	}
 }
