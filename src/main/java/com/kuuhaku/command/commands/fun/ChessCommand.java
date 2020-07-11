@@ -80,13 +80,13 @@ public class ChessCommand extends Command {
 		String id = author.getId() + "." + message.getMentionedUsers().get(0).getId() + "." + guild.getId();
 
 		if (ShiroInfo.gameInProgress(author.getId())) {
-			channel.sendMessage(":x: | Você já está em um jogo, por favor finalize-o antes de iniciar outro.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-chess-you-are-playing")).queue();
 			return;
 		} else if (ShiroInfo.gameInProgress(message.getMentionedUsers().get(0).getId())) {
-			channel.sendMessage(":x: | Este usuário já está em um jogo, aguarde-o finalizar antes de iniciar outro.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-chess-this-user-is-playing")).queue();
 			return;
 		} else if (message.getMentionedUsers().get(0).getId().equals(author.getId())) {
-			channel.sendMessage(":x: | Você não pode jogar com você mesmo!").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-chess-mention-another-user")).queue();
 			return;
 		}
 
