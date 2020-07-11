@@ -169,7 +169,7 @@ public class ComandosCommand extends Command {
 			if (cmmd.getName().equalsIgnoreCase(cmdName) && cmmd.getCategory().isEnabled(gc, guild, author))
 				found = true;
 			else if (cmmd.getName().equalsIgnoreCase(cmdName) && !cmmd.getCategory().isEnabled(gc, guild, author)) {
-				channel.sendMessage(":x: | Módulo desabilitado neste servidor!").queue();
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-commands-module-disabled")).queue();
 				return;
 			}
 
@@ -178,7 +178,7 @@ public class ComandosCommand extends Command {
 					found = true;
 					break;
 				} else if (alias.equalsIgnoreCase(cmdName) && !cmmd.getCategory().isEnabled(gc, guild, author)) {
-					channel.sendMessage(":x: | Módulo desabilitado neste servidor!").queue();
+					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-commands-module-disabled")).queue();
 					return;
 				}
 			}
@@ -190,7 +190,7 @@ public class ComandosCommand extends Command {
 		}
 
 		if (cmd == null) {
-			channel.sendMessage(":x: | Esse comando não foi encontrado!").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-commands-command-not-found")).queue();
 			return;
 		}
 

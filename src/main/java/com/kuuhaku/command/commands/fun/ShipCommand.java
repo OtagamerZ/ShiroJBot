@@ -21,6 +21,8 @@ package com.kuuhaku.command.commands.fun;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -56,7 +58,7 @@ public class ShipCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (message.getMentionedUsers().size() < 2) {
-			channel.sendMessage(":x: | Você precisa mencionar dois usuários!").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-ship-mention-two-users")).queue();
 			return;
 		}
 

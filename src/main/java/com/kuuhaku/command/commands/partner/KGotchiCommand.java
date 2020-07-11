@@ -31,6 +31,8 @@ import com.kuuhaku.handlers.games.kawaigotchi.enums.Stance;
 import com.kuuhaku.handlers.games.kawaigotchi.enums.VanityType;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -74,7 +76,7 @@ public class KGotchiCommand extends Command {
 		Kawaigotchi k = KGotchiDAO.getKawaigotchi(author.getId());
 
 		if (k == null) {
-			channel.sendMessage(":x: | Você não possui um Kawaigotchi.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-you-dont-have")).queue();
 			return;
 		} else if (args.length == 0) {
 			try {
@@ -292,7 +294,7 @@ public class KGotchiCommand extends Command {
 								channel.sendMessage(":x: | Decoração inválida, você não quis dizer **" + Helper.didYouMean(args[2], VanityMenu.getMenu().keySet().toArray(new String[0])) + "**?").queue();
 								return;
 							} else if (acc.getBalance() < v.getPrice()) {
-								channel.sendMessage(":x: | Você não tem créditos suficientes.").queue();
+								channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 								return;
 							}
 
@@ -337,7 +339,7 @@ public class KGotchiCommand extends Command {
 								channel.sendMessage(":x: | Comida inválida, você não quis dizer **" + Helper.didYouMean(args[2], FoodMenu.getMenu().keySet().toArray(new String[0])) + "**?").queue();
 								return;
 							} else if (acc.getBalance() < f.getPrice()) {
-								channel.sendMessage(":x: | Você não tem créditos suficientes.").queue();
+								channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 								return;
 							}
 
@@ -349,13 +351,13 @@ public class KGotchiCommand extends Command {
 
 							} else {
 								if (!StringUtils.isNumeric(args[3])) {
-									channel.sendMessage(":x: | A quantidade deve ser numérica.").queue();
+									channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-use-numbers")).queue();
 									return;
 								} else if (Integer.parseInt(args[3]) <= 0) {
-									channel.sendMessage(":x: | A quantidade deve ser maior que zero.").queue();
+									channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-incorrect-usage-mode")).queue();
 									return;
 								} else if (acc.getBalance() < f.getPrice() * Integer.parseInt(args[3])) {
-									channel.sendMessage(":x: | Você não tem créditos suficientes.").queue();
+									channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 									return;
 								}
 
@@ -370,7 +372,7 @@ public class KGotchiCommand extends Command {
 						break;
 				}
 			} else {
-				channel.sendMessage(":x: | Por favor informe um tipo de loja (`extra` ou `comida`).").queue();
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-enter-the-parameters")).queue();
 			}
 		}
 	}
