@@ -22,6 +22,8 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
@@ -48,19 +50,19 @@ public class KickMemberCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (message.getMentionedUsers().size() == 0) {
-			channel.sendMessage(":x: | Você precisa mencionar um membro.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-member-to-ban")).queue();
 			return;
 		} else if (message.getMentionedUsers().size() > 1) {
-			channel.sendMessage(":x: | Você mencionou membros demais.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_too-many-mentions")).queue();
 			return;
-        } else if (!member.hasPermission(Permission.KICK_MEMBERS)) {
-			channel.sendMessage(":x: | Você não possui permissão para expulsar membros.").queue();
+		} else if (!member.hasPermission(Permission.KICK_MEMBERS)) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-kick-you-do-not-have-permission")).queue();
 			return;
 		} else if (!Helper.hasRoleHigherThan(member, message.getMentionedMembers().get(0)) || !Helper.hasRoleHigherThan(guild.getSelfMember(), message.getMentionedMembers().get(0))) {
-			channel.sendMessage(":x: | Você não pode expulsar membros que possuem o mesmo cargo ou maior.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-kick-you-cant-kick-him-out")).queue();
 			return;
 		} else if (Main.getInfo().getDevelopers().contains(message.getMentionedUsers().get(0).getId())) {
-			channel.sendMessage(":x: | Não posso expulsar meus desenvolvedores, faça isso manualmente.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-kick-you-can-not-do-that")).queue();
 			return;
 		}
 
@@ -73,7 +75,7 @@ public class KickMemberCommand extends Command {
 				channel.sendMessage("Membro expulso com sucesso!\nMotivo: `" + String.join(" ", args).replace(args[0], "").trim() + "`").queue();
             }
         } catch (InsufficientPermissionException e) {
-            channel.sendMessage(":x: | Não possuo a permissão para expulsar membros.").queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-kick-not-permissions")).queue();
         }
     }
 }
