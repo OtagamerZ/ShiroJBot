@@ -28,6 +28,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -581,13 +582,6 @@
       <workItem from="1594413679427" duration="718000" />
       <workItem from="1594641799384" duration="781000" />
     </task>
-    <task id="LOCAL-01724" summary="Mudança de paleta no processamento das cartas cromadas">
-      <created>1594233666832</created>
-      <option name="number" value="01724" />
-      <option name="presentableId" value="LOCAL-01724" />
-      <option name="project" value="LOCAL" />
-      <updated>1594233666832</updated>
-    </task>
     <task id="LOCAL-01725" summary="Mudança de paleta no processamento das cartas cromadas">
       <created>1594234289474</created>
       <option name="number" value="01725" />
@@ -924,7 +918,14 @@
       <option name="project" value="LOCAL" />
       <updated>1594646131309</updated>
     </task>
-    <option name="localTasksCounter" value="1773" />
+    <task id="LOCAL-01773" summary="Implementação de hotswap (de novo)">
+      <created>1594646172410</created>
+      <option name="number" value="01773" />
+      <option name="presentableId" value="LOCAL-01773" />
+      <option name="project" value="LOCAL" />
+      <updated>1594646172410</updated>
+    </task>
+    <option name="localTasksCounter" value="1774" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1041,11 +1042,11 @@
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="234" y="57" width="805" height="924" key="CommitChangelistDialog2" timestamp="1594646128562">
+    <state x="234" y="57" width="805" height="924" key="CommitChangelistDialog2" timestamp="1594646169619">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1593924629204" />
-    <state x="234" y="57" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1594646128562" />
+    <state x="234" y="57" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1594646169619" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1121,11 +1122,11 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1587956411634" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1592942915575" />
-    <state x="253" y="373" key="Vcs.Push.Dialog.v2" timestamp="1594646133151">
+    <state x="253" y="373" key="Vcs.Push.Dialog.v2" timestamp="1594646173609">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1593924633531" />
-    <state x="253" y="373" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1594646133151" />
+    <state x="253" y="373" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1594646173609" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1594305494731">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
