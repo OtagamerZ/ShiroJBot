@@ -35,6 +35,7 @@ public enum AnimeName {
 	SAINT_SEIYA,
 	SWORD_ART_ONLINE,
 	KILL_LA_KILL,
+	ITADAKI_SEIEKI,
 	;
 
 	@Override
