@@ -32,7 +32,7 @@ public class CustomAnswerDAO {
 		EntityManager em = Manager.getEntityManager();
 		List<CustomAnswers> ca;
 
-		Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE LOWER(gatilho) LIKE ?1 AND guildID = ?2 AND markForDelete = FALSE", CustomAnswers.class);
+		Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE LOWER(gatilho) = ?1 AND guildID = ?2 AND markForDelete = FALSE", CustomAnswers.class);
 		q.setParameter(1, trigger.toLowerCase());
 		q.setParameter(2, guild);
 		ca = (List<CustomAnswers>) q.getResultList();

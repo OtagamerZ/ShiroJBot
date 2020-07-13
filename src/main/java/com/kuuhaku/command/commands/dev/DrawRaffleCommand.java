@@ -57,10 +57,10 @@ public class DrawRaffleCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-drawraffle-invalid-use")).queue();
+            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-period")).queue();
             return;
         } else if (!StringUtils.isNumeric(args[0])) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-drawraffle-use-an-integer-value")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-period")).queue();
             return;
         }
 
@@ -69,7 +69,7 @@ public class DrawRaffleCommand extends Command {
 		Collections.shuffle(votes);
 
 		if (votes.size() == 0) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV_drawraffle-i-found-nothing")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_raffle-no-votes")).queue();
             return;
         }
 
