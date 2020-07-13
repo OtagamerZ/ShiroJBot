@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: org.apache.openwebbeans:openwebbeans-el22:2.0.13">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.openwebbeans/openwebbeans-el22/2.0.13/ab1c2886b656f40b88ebd28ec878e38576f4ec49/openwebbeans-el22-2.0.13.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.openwebbeans/openwebbeans-el22/2.0.13/dc028ae83f080b7d8eab4b5e799f96738d365fce/openwebbeans-el22-2.0.13-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.openwebbeans/openwebbeans-el22/2.0.13/bda0401eeb20831c2516431ad60f76a0401669d4/openwebbeans-el22-2.0.13-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: org.apache.deltaspike.modules:deltaspike-jsf-module-api:1.9.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.deltaspike.modules/deltaspike-jsf-module-api/1.9.1/d384d1e0bb5e980c06fcb336bc22b4f11300a79e/deltaspike-jsf-module-api-1.9.1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.deltaspike.modules/deltaspike-jsf-module-api/1.9.1/a6e9b8f00bee7d2e467af1cc4c6db7c5f2c1325f/deltaspike-jsf-module-api-1.9.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.deltaspike.modules/deltaspike-jsf-module-api/1.9.1/33f3a7880e78bd7707145455c9267fccd9bf290e/deltaspike-jsf-module-api-1.9.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

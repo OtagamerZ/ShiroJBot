@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: org.apache.geronimo.specs:geronimo-interceptor_1.2_spec:1.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.geronimo.specs/geronimo-interceptor_1.2_spec/1.1/c27b5f3d64787e287a495880a2fedd7b8eb6774f/geronimo-interceptor_1.2_spec-1.1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.geronimo.specs/geronimo-interceptor_1.2_spec/1.1/d96e3b5d4a567bf9a8ef1d285c29aa23a50d890/geronimo-interceptor_1.2_spec-1.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.geronimo.specs/geronimo-interceptor_1.2_spec/1.1/790e17271b87d6f6a8725d21f216dbbac14d1e01/geronimo-interceptor_1.2_spec-1.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: org.apache.openwebbeans:openwebbeans-impl:2.0.13">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.openwebbeans/openwebbeans-impl/2.0.13/4cde6397a02f8d78bc204850461bc74a73b31e82/openwebbeans-impl-2.0.13.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.openwebbeans/openwebbeans-impl/2.0.13/ab060736f7dd652816e6272c594babe5000a17f5/openwebbeans-impl-2.0.13-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.openwebbeans/openwebbeans-impl/2.0.13/f6a0ea7f000ff7cb647a1192ea670e1766f5ddb0/openwebbeans-impl-2.0.13-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

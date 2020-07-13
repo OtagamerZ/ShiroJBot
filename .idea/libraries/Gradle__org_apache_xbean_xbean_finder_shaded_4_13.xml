@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.apache.xbean:xbean-finder-shaded:4.13">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.xbean/xbean-finder-shaded/4.13/8479cd061004b41cb83e3ca1adf66a9a58e31eb6/xbean-finder-shaded-4.13.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.xbean/xbean-finder-shaded/4.13/bbf735cea21fe73880a89b84adaab76c149f9f15/xbean-finder-shaded-4.13-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

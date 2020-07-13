@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: org.apache.geronimo.specs:geronimo-jcdi_2.0_spec:1.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.geronimo.specs/geronimo-jcdi_2.0_spec/1.1/402953960349a89a9a4b81048174e998c3092dc/geronimo-jcdi_2.0_spec-1.1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.geronimo.specs/geronimo-jcdi_2.0_spec/1.1/1eb7af28b260a204be7b26bf3391829a49904b76/geronimo-jcdi_2.0_spec-1.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.geronimo.specs/geronimo-jcdi_2.0_spec/1.1/cddbb8fab859b4cbbaeb4431345f7291e5c2e97/geronimo-jcdi_2.0_spec-1.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
