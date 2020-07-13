@@ -32,14 +32,13 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Gradle: com.github.ygimenez:PaginationUtils:1.2.0" level="project" />
-    <orderEntry type="library" name="Gradle: net.dv8tion:JDA:4.2.0_173" level="project" />
+    <orderEntry type="library" name="Gradle: org.hotswapagent:hotswap-agent-owb-plugin:1.4.2-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Gradle: club.minnced:discord-webhooks:0.3.1" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.SvenWoltmann:color-thief-java:v1.1.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.jvnet.staxex:stax-ex:1.8" level="project" />
     <orderEntry type="library" name="Gradle: com.enigmabridge:hibernate4-sqlite-dialect:0.1.2" level="project" />
     <orderEntry type="library" name="Gradle: com.google.apis:google-api-services-youtube:v3-rev212-1.25.0" level="project" />
     <orderEntry type="library" name="Gradle: com.rollbar:rollbar-java:1.7.3" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.liheyuan:simple-emoji-4j:f26d3b39be" level="project" />
+    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.9.9" level="project" />
     <orderEntry type="library" name="Gradle: org.discordbots:DBL-Java-Library:2.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.fatboyindustrial.gson-javatime-serialisers:gson-javatime-serialisers:1.1.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.8.6" level="project" />
@@ -47,7 +46,7 @@
     <orderEntry type="library" name="Gradle: org.postgresql:postgresql:42.2.12" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-data-jpa:2.1.6.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-web:2.1.6.RELEASE" level="project" />
-    <orderEntry type="library" name="Gradle: com.sedmelluq:lavaplayer:1.3.50" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-core:2.11.2" level="project" />
     <orderEntry type="library" name="Gradle: org.hibernate:hibernate-c3p0:5.4.2.Final" level="project" />
     <orderEntry type="library" name="Gradle: org.hibernate:hibernate-core:5.4.2.Final" level="project" />
     <orderEntry type="library" name="Gradle: org.quartz-scheduler:quartz:2.3.1" level="project" />
@@ -63,7 +62,7 @@
     <orderEntry type="library" name="Gradle: org.xerial:sqlite-jdbc:3.27.2.1" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-log4j2:2.1.6.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-slf4j-impl:2.11.2" level="project" />
-    <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-core:2.11.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.sedmelluq:lavaplayer:1.3.50" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-jcl:2.11.2" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-jul:2.11.2" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-api:2.11.2" level="project" />
@@ -95,7 +94,7 @@
     <orderEntry type="library" name="Gradle: org.apache.commons:commons-collections4:4.1" level="project" />
     <orderEntry type="library" name="Gradle: net.sf.trove4j:trove4j:3.0.3" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-json:2.1.6.RELEASE" level="project" />
-    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.9.9" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.liheyuan:simple-emoji-4j:f26d3b39be" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.9" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.module:jackson-module-parameter-names:2.9.9" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.9.9" level="project" />
@@ -159,10 +158,113 @@
     <orderEntry type="library" name="Gradle: commons-codec:commons-codec:1.11" level="project" />
     <orderEntry type="library" name="Gradle: org.glassfish.jaxb:txw2:2.3.1" level="project" />
     <orderEntry type="library" name="Gradle: com.sun.istack:istack-commons-runtime:3.0.7" level="project" />
-    <orderEntry type="library" name="Gradle: org.jvnet.staxex:stax-ex:1.8" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.SvenWoltmann:color-thief-java:v1.1.2" level="project" />
     <orderEntry type="library" name="Gradle: com.sun.xml.fastinfoset:FastInfoset:1.2.15" level="project" />
     <orderEntry type="library" name="Gradle: net.java.dev.jna:jna:4.5.2" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-jcl:5.1.8.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: com.google.j2objc:j2objc-annotations:1.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-plugins:pom:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: org.pegdown:pegdown:1.4.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-core:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-hibernate-plugin:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-hibernate3-plugin:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-spring-plugin:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-jersey1-plugin:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-jersey2-plugin:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-jetty-plugin:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-tomcat-plugin:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-zk-plugin:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-logback-plugin:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-log4j2-plugin:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-cdi-plugin:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-myfaces-plugin:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-mojarra-plugin:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-omnifaces-plugin:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-el-resolver-plugin:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-wildfly-el-plugin:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-osgiequinox-plugin:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-owb-plugin:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-proxy-plugin:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-webobjects-plugin:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-weld-plugin:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-jbossmodules-plugin:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-resteasy-registry-plugin:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-deltaspike-plugin:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-glassfish-plugin:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-vaadin-plugin:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-wicket-plugin:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-cxf-plugin:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-freemarker-plugin:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-undertow-plugin:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.HotswapProjects.HotswapAgent:hotswap-agent-mybatis-plugin:1.4.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: org.parboiled:parboiled-java:1.1.5" level="project" />
+    <orderEntry type="library" name="Gradle: org.hibernate:hibernate-entitymanager:5.3.10.Final" level="project" />
+    <orderEntry type="library" name="Gradle: javax.enterprise:cdi-api:2.0.SP1" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.myfaces.core:myfaces-api:2.2.12" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.myfaces.core:myfaces-impl:2.2.12" level="project" />
+    <orderEntry type="library" name="Gradle: com.sun.faces:jsf-api:2.2.16" level="project" />
+    <orderEntry type="library" name="Gradle: com.sun.faces:jsf-impl:2.2.16" level="project" />
+    <orderEntry type="library" name="Gradle: org.jboss.spec.javax.el:jboss-el-api_3.0_spec:2.0.0.Final" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.openwebbeans:openwebbeans-impl:2.0.13" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.openwebbeans:openwebbeans-web:2.0.13" level="project" />
+    <orderEntry type="library" name="Gradle: javax.servlet:javax.servlet-api:4.0.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.geronimo.specs:geronimo-jcdi_2.0_spec:1.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.geronimo.specs:geronimo-interceptor_1.2_spec:1.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.geronimo.specs:geronimo-annotation_1.3_spec:1.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.jboss.weld.se:weld-se-core:3.1.3.Final" level="project" />
+    <orderEntry type="library" name="Gradle: org.jboss.modules:jboss-modules:1.10.1.Final" level="project" />
+    <orderEntry type="library" name="Gradle: org.jboss.resteasy:resteasy-jaxrs:3.0.14.Final" level="project" />
+    <orderEntry type="library" name="Gradle: org.jboss.resteasy:async-http-servlet-3.0:3.0.14.Final" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.deltaspike.core:deltaspike-core-api:1.9.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.deltaspike.core:deltaspike-core-impl:1.9.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.deltaspike.modules:deltaspike-proxy-module-api:1.9.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.deltaspike.modules:deltaspike-partial-bean-module-api:1.9.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.deltaspike.modules:deltaspike-partial-bean-module-impl:1.9.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.deltaspike.modules:deltaspike-data-module-api:1.9.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.deltaspike.modules:deltaspike-data-module-impl:1.9.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.deltaspike.modules:deltaspike-jsf-module-api:1.9.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.deltaspike.modules:deltaspike-jsf-module-impl:1.9.1" level="project" />
+    <orderEntry type="library" name="Gradle: net.dv8tion:JDA:4.2.0_173" level="project" />
+    <orderEntry type="library" name="Gradle: io.undertow:undertow-core:2.0.21.Final" level="project" />
+    <orderEntry type="library" name="Gradle: org.mybatis:mybatis:3.5.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.parboiled:parboiled-core:1.1.5" level="project" />
+    <orderEntry type="library" name="Gradle: org.ow2.asm:asm:4.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.ow2.asm:asm-tree:4.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.ow2.asm:asm-analysis:4.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.ow2.asm:asm-util:4.1" level="project" />
+    <orderEntry type="library" name="Gradle: javax.el:javax.el-api:3.0.0" level="project" />
+    <orderEntry type="library" name="Gradle: javax.interceptor:javax.interceptor-api:1.2" level="project" />
+    <orderEntry type="library" name="Gradle: javax.inject:javax.inject:1" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.geronimo.specs:geronimo-atinject_1.0_spec:1.1" level="project" />
+    <orderEntry type="library" name="Gradle: commons-collections:commons-collections:3.2.2" level="project" />
+    <orderEntry type="library" name="Gradle: commons-beanutils:commons-beanutils:1.9.2" level="project" />
+    <orderEntry type="library" name="Gradle: commons-digester:commons-digester:1.8" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.xbean:xbean-finder-shaded:4.13" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.openwebbeans:openwebbeans-spi:2.0.13" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.openwebbeans:openwebbeans-el22:2.0.13" level="project" />
+    <orderEntry type="library" name="Gradle: org.jboss.weld.environment:weld-environment-common:3.1.3.Final" level="project" />
+    <orderEntry type="library" name="Gradle: org.jboss.weld.probe:weld-probe-core:3.1.3.Final" level="project" />
+    <orderEntry type="library" name="Gradle: org.jboss.spec.javax.ws.rs:jboss-jaxrs-api_2.0_spec:1.0.0.Final" level="project" />
+    <orderEntry type="library" name="Gradle: org.jboss.spec.javax.annotation:jboss-annotations-api_1.2_spec:1.0.0.Final" level="project" />
+    <orderEntry type="library" name="Gradle: javax.activation:activation:1.1.1" level="project" />
+    <orderEntry type="library" name="Gradle: net.jcip:jcip-annotations:1.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.deltaspike.modules:deltaspike-proxy-module-impl-asm:1.9.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.deltaspike.modules:deltaspike-jpa-module-api:1.9.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.deltaspike.modules:deltaspike-jpa-module-impl:1.9.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.deltaspike.modules:deltaspike-security-module-api:1.9.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.deltaspike.modules:deltaspike-security-module-impl:1.9.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.jboss.xnio:xnio-api:3.3.8.Final" level="project" />
+    <orderEntry type="library" name="Gradle: org.jboss.xnio:xnio-nio:3.3.8.Final" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.xbean:xbean-asm7-shaded:4.13" level="project" />
+    <orderEntry type="library" name="Gradle: org.jboss.weld:weld-core-impl:3.1.3.Final" level="project" />
+    <orderEntry type="library" name="Gradle: org.jboss.weld:weld-api:3.1.SP2" level="project" />
+    <orderEntry type="library" name="Gradle: org.jboss.weld:weld-spi:3.1.SP2" level="project" />
+    <orderEntry type="library" name="Gradle: org.jboss.classfilewriter:jboss-classfilewriter:1.2.4.Final" level="project" />
+    <orderEntry type="library" name="Gradle: org.jboss.spec.javax.annotation:jboss-annotations-api_1.3_spec:2.0.1.Final" level="project" />
+    <orderEntry type="library" name="Gradle: org.jboss.spec.javax.interceptor:jboss-interceptors-api_1.2_spec:2.0.0.Final" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.ygimenez:PaginationUtils:1.2.0" level="project" />
+    <orderEntry type="library" name="Gradle: jakarta.inject:jakarta.inject-api:1.0" level="project" />
+    <orderEntry type="library" name="Gradle: jakarta.enterprise:jakarta.enterprise.cdi-api:2.0.2" level="project" />
   </component>
 </module>
