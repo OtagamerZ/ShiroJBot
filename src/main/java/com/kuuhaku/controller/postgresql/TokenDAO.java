@@ -31,7 +31,7 @@ public class TokenDAO {
 	public static Token getToken(String token) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT t FROM Token t WHERE token LIKE :token", Token.class);
+		Query q = em.createQuery("SELECT t FROM Token t WHERE token = :token", Token.class);
 		q.setParameter("token", token);
 		q.setMaxResults(1);
 
@@ -61,7 +61,7 @@ public class TokenDAO {
 	public static String verifyToken(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT t FROM Token t WHERE uid LIKE :uid", Token.class);
+		Query q = em.createQuery("SELECT t FROM Token t WHERE uid = :uid", Token.class);
 		q.setParameter("uid", id);
 		q.setMaxResults(1);
 
@@ -89,7 +89,7 @@ public class TokenDAO {
 	public static boolean validateToken(String token) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT t FROM Token t WHERE token LIKE :token AND disabled = FALSE", Token.class);
+		Query q = em.createQuery("SELECT t FROM Token t WHERE token = :token AND disabled = FALSE", Token.class);
 		q.setParameter("token", token);
 		q.setMaxResults(1);
 
