@@ -49,7 +49,7 @@ public class CatchDropCommand extends Command {
 		Prize p = ShiroInfo.getCurrentDrop().getIfPresent(guild.getId());
 
 		if (p == null) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-catchdrop-there-are-no-drops")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-drop")).queue();
 			return;
 		}
 
@@ -57,10 +57,10 @@ public class CatchDropCommand extends Command {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_requirements-not-fulfilled")).queue();
 			return;
 		} else if (args.length < 1) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-catchdrop-invalid-use")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-captcha")).queue();
 			return;
 		} else if (!p.getCaptcha().equals(args[0])) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-catchdrop-invalid-code")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-captcha")).queue();
 			return;
 		}
 

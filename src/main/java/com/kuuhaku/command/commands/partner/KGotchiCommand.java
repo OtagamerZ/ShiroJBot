@@ -76,7 +76,7 @@ public class KGotchiCommand extends Command {
 		Kawaigotchi k = KGotchiDAO.getKawaigotchi(author.getId());
 
 		if (k == null) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-you-dont-have")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-kawaigotchi")).queue();
 			return;
 		} else if (args.length == 0) {
 			try {
@@ -351,10 +351,10 @@ public class KGotchiCommand extends Command {
 
 							} else {
 								if (!StringUtils.isNumeric(args[3])) {
-									channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-use-numbers")).queue();
+									channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-amount")).queue();
 									return;
 								} else if (Integer.parseInt(args[3]) <= 0) {
-									channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-incorrect-usage-mode")).queue();
+									channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_amount-too-low")).queue();
 									return;
 								} else if (acc.getBalance() < f.getPrice() * Integer.parseInt(args[3])) {
 									channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
@@ -372,7 +372,7 @@ public class KGotchiCommand extends Command {
 						break;
 				}
 			} else {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-enter-the-parameters")).queue();
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_shop-type-required")).queue();
 			}
 		}
 	}

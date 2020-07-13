@@ -51,7 +51,7 @@ public class AsciiCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length == 0) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-ascii-text-not-found")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_ascii-no-text")).queue();
 			return;
 		}
 
@@ -68,7 +68,7 @@ public class AsciiCommand extends Command {
 			assert response.body() != null;
 			channel.sendMessage(":warning: | O texto ASCII pode parecer deformado devido ao tamanho do seu ecrã!\n```\n" + response.body().string() + "\n```").queue();
 		} catch (IOException e) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-ascii-an-error-has-occurred")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_api-error")).queue();
 		}
 	}
 }
