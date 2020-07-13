@@ -132,6 +132,22 @@ public class Helper {
 		return Math.max(min, Math.min(val, max));
 	}
 
+	public static boolean between(int val, int from, int to) {
+		return val >= from && val < to;
+	}
+
+	public static boolean between(float val, float from, float to) {
+		return val >= from && val < to;
+	}
+
+	public static boolean between(long val, long from, long to) {
+		return val >= from && val < to;
+	}
+
+	public static boolean between(double val, double from, double to) {
+		return val >= from && val < to;
+	}
+
 	public static boolean findURL(String text) {
 		Map<String, String> leetSpeak = Map.of(
 				"(1|!)", "i",
