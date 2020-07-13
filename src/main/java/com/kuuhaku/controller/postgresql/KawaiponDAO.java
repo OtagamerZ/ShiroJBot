@@ -28,7 +28,7 @@ public class KawaiponDAO {
 	public static Kawaipon getKawaipon(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT k FROM Kawaipon k WHERE k.uid LIKE :id", Kawaipon.class);
+		Query q = em.createQuery("SELECT k FROM Kawaipon k WHERE k.uid = :id", Kawaipon.class);
 		q.setParameter("id", id);
 
 		try {

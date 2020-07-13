@@ -94,7 +94,7 @@ public class GuildDAO {
 	public static List<GuildConfig> getAlertChannels() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE COALESCE(canalAvisos,'') NOT LIKE ''", GuildConfig.class);
+		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE COALESCE(canalAvisos,'') <> ''", GuildConfig.class);
 		List<GuildConfig> gcs = (List<GuildConfig>) gc.getResultList();
 
 		em.close();

@@ -84,8 +84,8 @@ public class ExceedDAO {
 	public static List<ExceedMember> getExceedMembers(ExceedEnums ex) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT ex FROM ExceedMember ex WHERE ex.exceed LIKE ?1", ExceedMember.class);
-		q.setParameter(1, ex.getName());
+		Query q = em.createQuery("SELECT ex FROM ExceedMember ex WHERE ex.exceed = :exceed", ExceedMember.class);
+		q.setParameter("exceed", ex.getName());
 
 		List<ExceedMember> members = (List<ExceedMember>) q.getResultList();
 		em.close();
@@ -107,8 +107,8 @@ public class ExceedDAO {
 	public static Exceed getExceed(ExceedEnums ex) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT m FROM Member m INNER JOIN ExceedMember ex ON m.mid = ex.id WHERE ex.exceed LIKE ?1", Member.class);
-		q.setParameter(1, ex.getName());
+		Query q = em.createQuery("SELECT m FROM Member m INNER JOIN ExceedMember ex ON m.mid = ex.id WHERE ex.exceed = :exceed", Member.class);
+		q.setParameter("exceed", ex.getName());
 
 		List<Member> members = (List<Member>) q.getResultList();
 		em.close();
@@ -164,7 +164,7 @@ public class ExceedDAO {
 	public static String getLeader(ExceedEnums ex) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT m.mid FROM Member m WHERE m.mid IN (SELECT em.id FROM ExceedMember em WHERE em.exceed LIKE :exceed) GROUP BY m.mid ORDER BY SUM(m.xp) DESC", String.class);
+		Query q = em.createQuery("SELECT m.mid FROM Member m WHERE m.mid IN (SELECT em.id FROM ExceedMember em WHERE em.exceed = :exceed) GROUP BY m.mid ORDER BY SUM(m.xp) DESC", String.class);
 		q.setParameter("exceed", ex.getName());
 		q.setMaxResults(1);
 
@@ -180,7 +180,7 @@ public class ExceedDAO {
 	public static float getPercentage(ExceedEnums ex) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query exceed = em.createQuery("SELECT COUNT(e) FROM ExceedMember e WHERE e.exceed LIKE :ex", Long.class);
+		Query exceed = em.createQuery("SELECT COUNT(e) FROM ExceedMember e WHERE e.exceed = :ex", Long.class);
 		Query total = em.createQuery("SELECT COUNT(e) FROM ExceedMember e", Long.class);
 		exceed.setParameter("ex", ex.getName());
 
