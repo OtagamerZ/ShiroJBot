@@ -56,13 +56,13 @@ public class KickMemberCommand extends Command {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_too-many-mentions")).queue();
 			return;
 		} else if (!member.hasPermission(Permission.KICK_MEMBERS)) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-kick-you-do-not-have-permission")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-kick")).queue();
 			return;
 		} else if (!Helper.hasRoleHigherThan(member, message.getMentionedMembers().get(0)) || !Helper.hasRoleHigherThan(guild.getSelfMember(), message.getMentionedMembers().get(0))) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-kick-you-cant-kick-him-out")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-kick-higher-role")).queue();
 			return;
 		} else if (Main.getInfo().getDevelopers().contains(message.getMentionedUsers().get(0).getId())) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-kick-you-can-not-do-that")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-kick-developers")).queue();
 			return;
 		}
 
@@ -75,7 +75,7 @@ public class KickMemberCommand extends Command {
 				channel.sendMessage("Membro expulso com sucesso!\nMotivo: `" + String.join(" ", args).replace(args[0], "").trim() + "`").queue();
             }
         } catch (InsufficientPermissionException e) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-kick-not-permissions")).queue();
-        }
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_kick-permission")).queue();
+		}
     }
 }

@@ -121,7 +121,7 @@ public class PixelChunkCommand extends Command {
 
 			CanvasDAO.saveCanvas(canvas);
 		} catch (NumberFormatException e) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-colortester-invalid-color")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-color")).queue();
 		}
 	}
 }
