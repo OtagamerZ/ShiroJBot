@@ -39,7 +39,7 @@ public class BlacklistDAO {
 	public static boolean isBlacklisted(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT b FROM Blacklist b WHERE id LIKE :id", Blacklist.class);
+		Query q = em.createQuery("SELECT b FROM Blacklist b WHERE id = :id", Blacklist.class);
 		q.setParameter("id", id);
 
 		try {

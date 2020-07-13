@@ -33,8 +33,8 @@ public class CardDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q;
-		if (withUltimate) q = em.createQuery("SELECT c FROM Card c WHERE id LIKE UPPER(:name)", Card.class);
-		else q = em.createQuery("SELECT c FROM Card c WHERE id LIKE UPPER(:name) AND rarity <> 'ULTIMATE'", Card.class);
+		if (withUltimate) q = em.createQuery("SELECT c FROM Card c WHERE id = UPPER(:name)", Card.class);
+		else q = em.createQuery("SELECT c FROM Card c WHERE id = UPPER(:name) AND rarity <> 'ULTIMATE'", Card.class);
 		q.setParameter("name", name);
 
 		try {

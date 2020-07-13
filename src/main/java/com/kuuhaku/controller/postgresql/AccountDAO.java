@@ -29,7 +29,7 @@ public class AccountDAO {
 	public static Account getAccount(String id) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT a FROM Account a WHERE userId LIKE :id", Account.class);
+		Query q = em.createQuery("SELECT a FROM Account a WHERE userId = :id", Account.class);
 		q.setParameter("id", id);
 
 		try {

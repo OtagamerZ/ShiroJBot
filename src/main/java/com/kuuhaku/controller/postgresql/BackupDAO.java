@@ -115,7 +115,7 @@ public class BackupDAO {
 	public static Backup getGuildBackup(Guild g) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT b FROM Backup b WHERE b.guild LIKE :id", Backup.class);
+		Query q = em.createQuery("SELECT b FROM Backup b WHERE b.guild = :id", Backup.class);
 		q.setParameter("id", g.getId());
 
 		try {
