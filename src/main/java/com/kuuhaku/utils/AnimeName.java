@@ -25,7 +25,7 @@ public enum AnimeName {
 	AKAME_GA_KILL,
 	BLEACH,
 	BOKU_NO_PICO,
-	//HIGHSCHOOL_DXD,
+	HIGHSCHOOL_DXD,
 	DEATH_NOTE,
 	ELFEN_LIED,
 	JOJO_BIZARRE_ADVENTURES,
@@ -33,7 +33,9 @@ public enum AnimeName {
 	ANGEL_BEATS,
 	PANTY_AND_STOCKING,
 	SAINT_SEIYA,
-	SWORD_ART_ONLINE;
+	SWORD_ART_ONLINE,
+	//KILL_LA_KILL,
+	;
 
 	@Override
 	public String toString() {
