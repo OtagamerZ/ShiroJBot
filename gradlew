@@ -169,12 +169,4 @@ if [ "$(uname)" = "Darwin" ] && [ "$HOME" = "$PWD" ]; then
   cd "$(dirname "$0")"
 fi
 
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-source $DIR/local.properties 2>/dev/null
-
-if ! [ -z "$javaHome" ]
-then
-  JAVA_HOME=$javaHome
-fi
-
 exec "$JAVACMD" "$@"
