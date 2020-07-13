@@ -34,7 +34,7 @@ public enum AnimeName {
 	PANTY_AND_STOCKING,
 	SAINT_SEIYA,
 	SWORD_ART_ONLINE,
-	//KILL_LA_KILL,
+	KILL_LA_KILL,
 	;
 
 	@Override
