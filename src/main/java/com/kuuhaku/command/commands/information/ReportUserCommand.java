@@ -57,10 +57,10 @@ public class ReportUserCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 
 		if (message.getMentionedUsers().size() < 1) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-reportuser-mention-a-user")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_mention-required")).queue();
 			return;
 		} else if (args.length < 2) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_REV-reportuser-specify-a-reason")).queue();
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_report-reason-required")).queue();
 			return;
 		}
 
