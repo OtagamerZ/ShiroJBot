@@ -25,6 +25,7 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.jetbrains.annotations.NonNls;
 
 import java.io.IOException;
@@ -56,6 +57,8 @@ public class ProfileCommand extends Command {
 			} catch (IOException e) {
 				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_profile-generation-error")).queue();
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			} catch (InsufficientPermissionException e) {
+				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-attach-files-permission")).queue();
 			}
 		});
 	}
