@@ -21,7 +21,6 @@ package com.kuuhaku.command.commands.information;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Tag;
-import com.kuuhaku.utils.TagIcons;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
@@ -51,12 +50,7 @@ public class TagsCommand extends Command {
 		eb.setTitle(":label: Emblemas disponíveis");
 		for (Tag t : Tag.values()) {
 			if (t.equals(Tag.LEVEL)) {
-				eb.addField(TagIcons.LVL20.getTag() +
-						TagIcons.LVL30.getTag() +
-						TagIcons.LVL40.getTag() +
-						TagIcons.LVL50.getTag() +
-						TagIcons.LVL60.getTag() +
-						TagIcons.LVL70.getTag() + t.toString(), t.getDescription(), false);
+				eb.addField(":tada: " + t.toString(), t.getDescription(), false);
 			} else if (t.toString().contains("Coletado")) {
 				eb.addField(t.getEmote().getTag() + t.toString() + "%", t.getDescription(), false);
 			} else {
