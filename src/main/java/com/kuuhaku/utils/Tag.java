@@ -57,26 +57,26 @@ public enum Tag {
 	TOXICO(TagIcons.TOXIC, "Usuário com atitude tóxica.",
 			(user, member) -> TagDAO.getTagById(user.getId()).isToxic()),
 
-	CASADO(TagIcons.MARRIED, "Usuário que possui uma waifu/husbando UwU.",
-			(user, member) -> WaifuDAO.isWaifued(user)),
-
 	LEVEL(null, "Usuário que atingiu um dos marcos de level.",
 			(user, member) -> true),
+
+	CASADO(TagIcons.MARRIED, "Usuário que possui uma waifu/husbando UwU.",
+			(user, member) -> WaifuDAO.isWaifued(user)),
 
 	RICO(TagIcons.RICH, "Usuário que possui 100 mil créditos.",
 			(user, member) -> AccountDAO.getAccount(user.getId()).getBalance() > 100000),
 
 	COLETADO_25(TagIcons.COLLECTION25, "Usuário que completou 25% da coleção de Kawaipons.",
-			(user, member) -> KawaiponDAO.getKawaipon(user.getId()).getCards().size() * 100 / CardDAO.totalCards() >= 25),
+			(user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getCards().size() * 100 / CardDAO.totalCards(), 25, 50)),
 
 	COLETADO_50(TagIcons.COLLECTION50, "Usuário que completou 50% da coleção de Kawaipons.",
-			(user, member) -> KawaiponDAO.getKawaipon(user.getId()).getCards().size() * 100 / CardDAO.totalCards() >= 50),
+			(user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getCards().size() * 100 / CardDAO.totalCards(), 50, 75)),
 
 	COLETADO_75(TagIcons.COLLECTION75, "Usuário que completou 75% da coleção de Kawaipons.",
-			(user, member) -> KawaiponDAO.getKawaipon(user.getId()).getCards().size() * 100 / CardDAO.totalCards() >= 75),
+			(user, member) -> Helper.between(KawaiponDAO.getKawaipon(user.getId()).getCards().size() * 100 / CardDAO.totalCards(), 75, 100)),
 
 	COLETADO_100(TagIcons.COLLECTION100, "Usuário que completou 100% da coleção de Kawaipons.",
-			(user, member) -> KawaiponDAO.getKawaipon(user.getId()).getCards().size() * 100 / CardDAO.totalCards() >= 100);
+			(user, member) -> KawaiponDAO.getKawaipon(user.getId()).getCards().size() * 100 / CardDAO.totalCards() == 100);
 
 	private final TagIcons emote;
 	private final String description;
