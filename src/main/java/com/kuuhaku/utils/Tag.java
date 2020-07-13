@@ -23,7 +23,6 @@ import com.kuuhaku.controller.postgresql.*;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.StringUtils;
-import org.python.bouncycastle.util.Arrays;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,58 +33,56 @@ import java.util.TreeSet;
 import java.util.function.BiFunction;
 
 public enum Tag {
-	NIICHAN("icons/niichan.png", TagIcons.NIICHAN, "Desenvolvedor inicial da Shiro, nominalmente KuuHaKu.",
+	NIICHAN(TagIcons.NIICHAN, "Desenvolvedor inicial da Shiro, nominalmente KuuHaKu.",
 			(user, member) -> Helper.hasPermission(member, PrivilegeLevel.NIICHAN)),
 
-	DESENVOLVEDOR("icons/dev.png", TagIcons.DEV, "Equipe de desenvolvimento da Shiro.",
+	DESENVOLVEDOR(TagIcons.DEV, "Equipe de desenvolvimento da Shiro.",
 			(user, member) -> Helper.hasPermission(member, PrivilegeLevel.DEV)),
 
-	SUPORTE("icons/support.png", TagIcons.SUPPORT, "Equipe de suporte da Shiro.",
+	SUPORTE(TagIcons.SUPPORT, "Equipe de suporte da Shiro.",
 			(user, member) -> Helper.hasPermission(member, PrivilegeLevel.SUPPORT)),
 
-	REDATOR("icons/writer.png", TagIcons.EDITOR, "Equipe de redação da Shiro.",
+	REDATOR(TagIcons.EDITOR, "Equipe de redação da Shiro.",
 			(user, member) -> false),
 
-	MODERADOR("icons/mod.png", TagIcons.MODERATOR, "Equipe de moderação desse servidor.",
+	MODERADOR(TagIcons.MODERATOR, "Equipe de moderação desse servidor.",
 			(user, member) -> Helper.hasPermission(member, PrivilegeLevel.MOD)),
 
-	LEITOR("icons/reader.png", TagIcons.READER, "Você leu as regras, que bom!",
+	LEITOR(TagIcons.READER, "Você leu as regras, que bom!",
 			(user, member) -> TagDAO.getTagById(user.getId()).isReader()),
 
-	VERIFICADO("icons/verified.png", TagIcons.VERIFIED, "Usuário com conduta exemplar e identidade verificada.",
+	VERIFICADO(TagIcons.VERIFIED, "Usuário com conduta exemplar e identidade verificada.",
 			(user, member) -> TagDAO.getTagById(user.getId()).isVerified()),
 
-	TOXICO("icons/toxic.png", TagIcons.TOXIC, "Usuário com atitude tóxica.",
+	TOXICO(TagIcons.TOXIC, "Usuário com atitude tóxica.",
 			(user, member) -> TagDAO.getTagById(user.getId()).isToxic()),
 
-	CASADO("icons/married.png", TagIcons.MARRIED, "Usuário que possui uma waifu/husbando UwU.",
+	CASADO(TagIcons.MARRIED, "Usuário que possui uma waifu/husbando UwU.",
 			(user, member) -> WaifuDAO.isWaifued(user)),
 
-	LEVEL("icons/lvl_{0}.png", null, "Usuário que atingiu um dos marcos de level.",
+	LEVEL(null, "Usuário que atingiu um dos marcos de level.",
 			(user, member) -> true),
 
-	RICO("icons/rich.png", TagIcons.RICH, "Usuário que possui 100 mil créditos.",
+	RICO(TagIcons.RICH, "Usuário que possui 100 mil créditos.",
 			(user, member) -> AccountDAO.getAccount(user.getId()).getBalance() > 100000),
 
-	COLETADO_25("icons/collection_25.png", TagIcons.COLLECTION25, "Usuário que completou 25% da coleção de Kawaipons.",
+	COLETADO_25(TagIcons.COLLECTION25, "Usuário que completou 25% da coleção de Kawaipons.",
 			(user, member) -> KawaiponDAO.getKawaipon(user.getId()).getCards().size() * 100 / CardDAO.totalCards() >= 25),
 
-	COLETADO_50("icons/collection_50.png", TagIcons.COLLECTION50, "Usuário que completou 50% da coleção de Kawaipons.",
+	COLETADO_50(TagIcons.COLLECTION50, "Usuário que completou 50% da coleção de Kawaipons.",
 			(user, member) -> KawaiponDAO.getKawaipon(user.getId()).getCards().size() * 100 / CardDAO.totalCards() >= 50),
 
-	COLETADO_75("icons/collection_75.png", TagIcons.COLLECTION75, "Usuário que completou 75% da coleção de Kawaipons.",
+	COLETADO_75(TagIcons.COLLECTION75, "Usuário que completou 75% da coleção de Kawaipons.",
 			(user, member) -> KawaiponDAO.getKawaipon(user.getId()).getCards().size() * 100 / CardDAO.totalCards() >= 75),
 
-	COLETADO_100("icons/collection_100.png", TagIcons.COLLECTION100, "Usuário que completou 100% da coleção de Kawaipons.",
+	COLETADO_100(TagIcons.COLLECTION100, "Usuário que completou 100% da coleção de Kawaipons.",
 			(user, member) -> KawaiponDAO.getKawaipon(user.getId()).getCards().size() * 100 / CardDAO.totalCards() >= 100);
 
-	private final String path;
 	private final TagIcons emote;
 	private final String description;
 	private final BiFunction<User, Member, Boolean> condition;
 
-	Tag(String path, TagIcons emote, String description, BiFunction<User, Member, Boolean> condition) {
-		this.path = path;
+	Tag(TagIcons emote, String description, BiFunction<User, Member, Boolean> condition) {
 		this.emote = emote;
 		this.description = description;
 		this.condition = condition;
@@ -97,11 +94,13 @@ public enum Tag {
 
 	public TagIcons getEmote(com.kuuhaku.model.persistent.Member mb) {
 		if (this.equals(LEVEL)) {
-			final int[] levels = {2, 3, 4, 5, 6, 7};
-			int lvl = Helper.clamp(mb.getLevel(), mb.getLevel(), 70) / 10;
-			if (Arrays.contains(levels, lvl)) {
-				return TagIcons.valueOf("LVL" + (lvl * 10));
-			} else return null;
+			int lvl = -1;
+			for (int i = 5; true; i += 5) {
+				if (mb.getLevel() > i) lvl = i;
+				else break;
+			}
+			if (lvl != -1) return TagIcons.valueOf("LVL_" + lvl);
+			else return null;
 		}
 		return emote;
 	}
