@@ -42,7 +42,7 @@ public class WaifuDAO {
 	public static void removeCouple(User u) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Couple c WHERE husbando LIKE :id OR waifu LIKE :id");
+		Query q = em.createQuery("SELECT c FROM Couple c WHERE husbando = :id OR waifu = :id");
 		q.setParameter("id", u.getId());
 
 		CoupleMultiplier cm = getMultiplier(u);
@@ -61,7 +61,7 @@ public class WaifuDAO {
 	public static Couple getCouple(User u) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Couple c WHERE husbando LIKE :id OR waifu LIKE :id");
+		Query q = em.createQuery("SELECT c FROM Couple c WHERE husbando = :id OR waifu = :id");
 		q.setParameter("id", u.getId());
 		q.setMaxResults(1);
 
@@ -77,7 +77,7 @@ public class WaifuDAO {
 	public static boolean isWaifued(User u) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Couple c WHERE husbando LIKE :id OR waifu LIKE :id");
+		Query q = em.createQuery("SELECT c FROM Couple c WHERE husbando = :id OR waifu = :id");
 		q.setParameter("id", u.getId());
 
 		try {

@@ -29,7 +29,7 @@ public class CardMarketDAO {
 	public static List<CardMarket> getCards() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT cm FROM CardMarket cm WHERE buyer LIKE ''", CardMarket.class);
+		Query q = em.createQuery("SELECT cm FROM CardMarket cm WHERE buyer = ''", CardMarket.class);
 
 		try {
 			return (List<CardMarket>) q.getResultList();

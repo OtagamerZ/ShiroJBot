@@ -18,11 +18,9 @@
 
 package com.kuuhaku.controller.sqlite;
 
-import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.model.persistent.Member;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.List;
 
@@ -31,8 +29,8 @@ public class MemberDAO {
 		EntityManager em = Manager.getEntityManager();
 		Member m;
 
-		Query q = em.createQuery("SELECT m FROM Member m WHERE id LIKE ?1", Member.class);
-		q.setParameter(1, id);
+		Query q = em.createQuery("SELECT m FROM Member m WHERE id = :id", Member.class);
+		q.setParameter("id", id);
 		m = (Member) q.getSingleResult();
 
 		em.close();
@@ -45,8 +43,8 @@ public class MemberDAO {
 		EntityManager em = Manager.getEntityManager();
 		List<Member> m;
 
-		Query q = em.createQuery("SELECT m FROM Member m WHERE mid LIKE ?1", Member.class);
-		q.setParameter(1, id);
+		Query q = em.createQuery("SELECT m FROM Member m WHERE mid = :id", Member.class);
+		q.setParameter("id", id);
 		m = (List<Member>) q.getResultList();
 
 		em.close();
@@ -59,8 +57,8 @@ public class MemberDAO {
 		EntityManager em = Manager.getEntityManager();
 		List<Member> m;
 
-		Query q = em.createQuery("SELECT m FROM Member m WHERE sid LIKE ?1", Member.class);
-		q.setParameter(1, id);
+		Query q = em.createQuery("SELECT m FROM Member m WHERE sid = :id", Member.class);
+		q.setParameter("id", id);
 		m = (List<Member>) q.getResultList();
 
 		em.close();
@@ -114,8 +112,8 @@ public class MemberDAO {
 		if (global)
 			q = em.createQuery("SELECT m FROM Member m WHERE m.mid IS NOT NULL ORDER BY m.level DESC", Member.class);
 		else {
-			q = em.createQuery("SELECT m FROM Member m WHERE id LIKE ?1 AND m.mid IS NOT NULL ORDER BY m.level DESC", Member.class);
-			q.setParameter(1, "%" + gid);
+			q = em.createQuery("SELECT m FROM Member m WHERE id LIKE :id AND m.mid IS NOT NULL ORDER BY m.level DESC", Member.class);
+			q.setParameter("id", "%" + gid);
 		}
 
 		List<Member> mbs = (List<Member>) q.getResultList();
@@ -135,34 +133,5 @@ public class MemberDAO {
 		em.close();
 
 		return gcs;
-	}
-
-	public static String authMember(String login, String password) {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createNativeQuery("SELECT mid FROM Member WHERE mid LIKE (SELECT mid FROM Member u WHERE login LIKE ? AND password LIKE ?) GROUP BY mid");
-		q.setParameter(1, login);
-		q.setParameter(2, password);
-
-		try {
-			return (String) q.getSingleResult();
-		} catch (NoResultException e) {
-			throw new UnauthorizedException();
-		} finally {
-			em.close();
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public static List<Object> getRegisteredUsers() {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createNativeQuery("SELECT mid FROM Member WHERE mid LIKE (SELECT mid FROM Member u WHERE login IS NOT NULL AND password IS NOT NULL) GROUP BY mid");
-
-		try {
-			return q.getResultList();
-		} finally {
-			em.close();
-		}
 	}
 }
