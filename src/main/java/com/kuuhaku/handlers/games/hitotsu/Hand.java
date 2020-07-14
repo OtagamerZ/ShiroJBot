@@ -86,6 +86,9 @@ public class Hand {
 
 		g2d.dispose();
 
-		user.openPrivateChannel().complete().sendFile(Helper.getBytes(bi, "png"), "hand.png").queue();
+		user.openPrivateChannel().complete()
+				.sendMessage("Escolha uma carta que seja do mesmo anime ou raridade da ultima jogada no monte, ou digite `lista` no canal para ver detalhes sobre as cartas.")
+				.addFile(Helper.getBytes(bi, "png"), "hand.png")
+				.queue();
 	}
 }
