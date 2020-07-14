@@ -59,6 +59,7 @@ import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -979,5 +980,19 @@ public class Helper {
 
 	public static boolean chance(double percentage) {
 		return Math.random() * 100 < percentage;
+	}
+
+	public static void drawRotated(Graphics2D g2d, BufferedImage bi, int x, int y, double deg) {
+		AffineTransform old = g2d.getTransform();
+		g2d.rotate(Math.toRadians(deg), x, y);
+		g2d.drawImage(bi, 0, 0, null);
+		g2d.setTransform(old);
+	}
+
+	public static void writeRotated(Graphics2D g2d, String s, int x, int y, double deg) {
+		AffineTransform old = g2d.getTransform();
+		g2d.rotate(Math.toRadians(deg), x, y);
+		g2d.drawString(s, 0, -10);
+		g2d.setTransform(old);
 	}
 }
