@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.handlers.games.hitotsu.Hitotsu;
+package com.kuuhaku.handlers.games.hitotsu;
 
 import java.util.LinkedList;
 

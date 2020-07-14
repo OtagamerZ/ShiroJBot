@@ -59,4 +59,8 @@ public class Players {
 	public List<User> getUsers() {
 		return turn;
 	}
+
+	public LinkedList<User> getUserSequence() {
+		return turn;
+	}
 }
