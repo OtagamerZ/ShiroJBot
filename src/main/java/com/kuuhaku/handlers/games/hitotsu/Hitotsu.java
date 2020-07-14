@@ -126,7 +126,8 @@ public class Hitotsu extends Tabletop {
 										.append(cards.get(i).getCard().getAnime().toString())
 										.append(")")
 										.append(cards.get(i).getCard().getRarity().getEmote())
-										.append(cards.get(i).getName());
+										.append(cards.get(i).getName())
+										.append("\n");
 							}
 							eb.setDescription(sb.toString());
 
