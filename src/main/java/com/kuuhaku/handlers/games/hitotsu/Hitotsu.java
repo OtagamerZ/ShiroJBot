@@ -88,8 +88,45 @@ public class Hitotsu extends Tabletop {
 
 				if (chn.getId().equals(getTable().getId()) && u.getId().equals(getPlayers().getUserSequence().getFirst().getId())) {
 					try {
-						if (StringUtils.isNumeric(m.getContentRaw())) {
-							if (handle(Integer.parseInt(m.getContentRaw()))) {
+						if (m.getContentRaw().contains(" ")) {
+							String[] indexes = m.getContentRaw().split(" ");
+							boolean valid = true;
+							for (String i : indexes) {
+								if (!StringUtils.isNumeric(i)) {
+									valid = false;
+									break;
+								}
+							}
+
+							if (!valid) {
+								getTable().sendMessage(":x: | Corrente inválida, para usar uma corrente digite os índices das cartas __**separados por espaço**__ (apenas cartas do mesmo anime são válidas para corrente).").queue();
+								return;
+							}
+
+							Integer[] idx = Arrays.stream(indexes).map(Integer::parseInt).toArray(Integer[]::new);
+							valid = checkChain(idx);
+
+							if (!valid) {
+								getTable().sendMessage(":x: | Corrente inválida, para usar uma corrente digite os índices das cartas separados por espaço (apenas cartas do __**mesmo anime**__ são válidas para corrente).").queue();
+								return;
+							}
+
+							int chainMax = Collections.max(List.of(idx));
+							for (int i : idx) {
+								if (handle(i, chainMax)) {
+									Main.getInfo().getAPI().removeEventListener(this);
+									ShiroInfo.getGames().remove(getId());
+									getTable().sendMessage("Não restam mais cartas para " + getPlayers().getWinner().getAsMention() + ", temos um vencedor!!").queue();
+									timeout.cancel(true);
+								}
+							}
+							timeout.cancel(true);
+							timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
+								Main.getInfo().getAPI().removeEventListener(this);
+								ShiroInfo.getGames().remove(getId());
+							}, Helper::doNothing);
+						} else if (StringUtils.isNumeric(m.getContentRaw())) {
+							if (handle(Integer.parseInt(m.getContentRaw()), Integer.parseInt(m.getContentRaw()))) {
 								Main.getInfo().getAPI().removeEventListener(this);
 								ShiroInfo.getGames().remove(getId());
 								getTable().sendMessage("Não restam mais cartas para " + getPlayers().getWinner().getAsMention() + ", temos um vencedor!!").queue();
@@ -148,7 +185,7 @@ public class Hitotsu extends Tabletop {
 		});
 	}
 
-	public boolean handle(int card) throws IllegalCardException {
+	public boolean handle(int card, int chainMax) throws IllegalCardException {
 		Hand hand = hands.get(getPlayers().getUserSequence().getFirst());
 		KawaiponCard c = hand.getCards().get(card);
 		KawaiponCard lastest = played.peekLast();
@@ -164,12 +201,14 @@ public class Hitotsu extends Tabletop {
 		if (c.isFoil())
 			CardEffect.getEffect(c.getCard().getRarity()).accept(this, hands.get(getPlayers().getUserSequence().getLast()));
 
-		getPlayers().setWinner(hands.values().stream().filter(h -> h.getCards().size() == 0).map(Hand::getUser).findFirst().orElse(null));
-		if (getPlayers().getWinner() != null) return true;
+		if (card == chainMax) {
+			getPlayers().setWinner(hands.values().stream().filter(h -> h.getCards().size() == 0).map(Hand::getUser).findFirst().orElse(null));
+			if (getPlayers().getWinner() != null) return true;
 
-		if (deque.size() == 0) shuffle();
-		next();
-		putAndShow(c);
+			if (deque.size() == 0) shuffle();
+			next();
+			putAndShow(c);
+		}
 		return false;
 	}
 
@@ -199,6 +238,20 @@ public class Hitotsu extends Tabletop {
 		deque.remove(lastest);
 		Collections.shuffle(deque);
 		mount = new BufferedImage(500, 500, BufferedImage.TYPE_INT_ARGB);
+	}
+
+	private boolean checkChain(Integer[] cards) {
+		List<KawaiponCard> hand = getHands().get(getPlayers().getUserSequence().getFirst()).getCards();
+		KawaiponCard aux = hand.get(cards[0]);
+		boolean isValid = true;
+		for (int i : cards) {
+			if (!hand.get(i).getCard().getAnime().equals(aux.getCard().getAnime())) {
+				isValid = false;
+				break;
+			}
+		}
+
+		return isValid;
 	}
 
 	public Map<User, Hand> getHands() {
