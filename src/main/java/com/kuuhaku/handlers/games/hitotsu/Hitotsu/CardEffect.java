@@ -39,8 +39,8 @@ public enum CardEffect {
 		for (int i = 0; i < 4; i++) hand.draw(game.getDeque());
 	}),
 	SWAP_HANDS(KawaiponRarity.LEGENDARY, (game, hand) -> {
-		Hand p1 = game.getPlayers().getFirst();
-		Hand p2 = game.getPlayers().getLast();
+		Hand p1 = game.getHands().get(game.getPlayers().getUsers().get(0));
+		Hand p2 = game.getHands().get(game.getPlayers().getUsers().get(1));
 
 		List<KawaiponCard> aux = p1.getCards();
 		p1.setCards(p2.getCards());
