@@ -242,16 +242,8 @@ public class Hitotsu extends Tabletop {
 
 	private boolean checkChain(Integer[] cards) {
 		List<KawaiponCard> hand = getHands().get(getPlayers().getUserSequence().getFirst()).getCards();
-		KawaiponCard aux = hand.get(cards[0]);
-		boolean isValid = true;
-		for (int i : cards) {
-			if (!hand.get(i).getCard().getAnime().equals(aux.getCard().getAnime())) {
-				isValid = false;
-				break;
-			}
-		}
 
-		return isValid;
+		return hand.stream.allMatch(kc -> kc.getCard().getAnime().equals(hand.get(cards[0]).getCard().getAnime()));
 	}
 
 	public Map<User, Hand> getHands() {
