@@ -95,6 +95,11 @@ public class Hitotsu extends Tabletop {
 								getTable().sendMessage("Não restam mais cartas para " + getPlayers().getWinner().getAsMention() + ", temos um vencedor!!").queue();
 								timeout.cancel(true);
 							}
+							timeout.cancel(true);
+							timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
+								Main.getInfo().getAPI().removeEventListener(this);
+								ShiroInfo.getGames().remove(getId());
+							}, Helper::doNothing);
 						} else if (Helper.equalsAny(m.getContentRaw(), "comprar", "buy")) {
 							hands.get(getPlayers().getUserSequence().getFirst()).draw(getDeque());
 							if (message != null) message.delete().queue();
@@ -183,11 +188,6 @@ public class Hitotsu extends Tabletop {
 
 		if (message != null) message.delete().queue();
 		message = getTable().sendMessage(getPlayers().getUserSequence().getFirst().getAsMention() + " agora é sua vez.").addFile(Helper.getBytes(mount, "png"), "mount.png").complete();
-		timeout.cancel(true);
-		timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
-			Main.getInfo().getAPI().removeEventListener(this);
-			ShiroInfo.getGames().remove(getId());
-		}, Helper::doNothing);
 	}
 
 	public void shuffle() {
