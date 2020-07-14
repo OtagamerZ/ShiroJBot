@@ -26,7 +26,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/hitotsu/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/hitotsu/Hand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/hitotsu/Hitotsu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/hitotsu/Hitotsu.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -590,28 +590,7 @@
       <workItem from="1594742446159" duration="128000" />
       <workItem from="1594742735053" duration="580000" />
       <workItem from="1594747175802" duration="81000" />
-      <workItem from="1594747273765" duration="7446000" />
-    </task>
-    <task id="LOCAL-01745" summary="Adição de comando de empréstimo de créditos">
-      <created>1594324407149</created>
-      <option name="number" value="01745" />
-      <option name="presentableId" value="LOCAL-01745" />
-      <option name="project" value="LOCAL" />
-      <updated>1594324407149</updated>
-    </task>
-    <task id="LOCAL-01746" summary="Adição de comando de empréstimo de créditos">
-      <created>1594324760432</created>
-      <option name="number" value="01746" />
-      <option name="presentableId" value="LOCAL-01746" />
-      <option name="project" value="LOCAL" />
-      <updated>1594324760432</updated>
-    </task>
-    <task id="LOCAL-01747" summary="Adição de comando de empréstimo de créditos">
-      <created>1594325985045</created>
-      <option name="number" value="01747" />
-      <option name="presentableId" value="LOCAL-01747" />
-      <option name="project" value="LOCAL" />
-      <updated>1594325985045</updated>
+      <workItem from="1594747273765" duration="8096000" />
     </task>
     <task id="LOCAL-01748" summary="Adição de comando de empréstimo de créditos">
       <created>1594326259173</created>
@@ -935,7 +914,28 @@
       <option name="project" value="LOCAL" />
       <updated>1594754223964</updated>
     </task>
-    <option name="localTasksCounter" value="1794" />
+    <task id="LOCAL-01794" summary="Adição de novo jogo: Hitotsu (fase de testes)">
+      <created>1594754834872</created>
+      <option name="number" value="01794" />
+      <option name="presentableId" value="LOCAL-01794" />
+      <option name="project" value="LOCAL" />
+      <updated>1594754834872</updated>
+    </task>
+    <task id="LOCAL-01795" summary="Adição de novo jogo: Hitotsu (fase de testes)">
+      <created>1594754879353</created>
+      <option name="number" value="01795" />
+      <option name="presentableId" value="LOCAL-01795" />
+      <option name="project" value="LOCAL" />
+      <updated>1594754879353</updated>
+    </task>
+    <task id="LOCAL-01796" summary="Adição de novo jogo: Hitotsu (fase de testes)">
+      <created>1594754941558</created>
+      <option name="number" value="01796" />
+      <option name="presentableId" value="LOCAL-01796" />
+      <option name="project" value="LOCAL" />
+      <updated>1594754941558</updated>
+    </task>
+    <option name="localTasksCounter" value="1797" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1132,11 +1132,11 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1587956411634" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1592942915575" />
-    <state x="253" y="373" key="Vcs.Push.Dialog.v2" timestamp="1594754880908">
+    <state x="253" y="373" key="Vcs.Push.Dialog.v2" timestamp="1594754943806">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1593924633531" />
-    <state x="253" y="373" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1594754880908" />
+    <state x="253" y="373" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1594754943806" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1594305494731">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
