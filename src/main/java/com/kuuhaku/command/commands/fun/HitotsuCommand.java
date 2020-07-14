@@ -21,12 +21,17 @@ package com.kuuhaku.command.commands.fun;
 import com.github.ygimenez.method.Pages;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.hitotsu.Hitotsu;
 import com.kuuhaku.handlers.games.tabletop.entity.Tabletop;
+import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.Map;
@@ -57,7 +62,18 @@ public class HitotsuCommand extends Command {
 			return;
 		}
 
-		/*Account uacc = AccountDAO.getAccount(author.getId());
+		Kawaipon p1 = KawaiponDAO.getKawaipon(author.getId());
+		Kawaipon p2 = KawaiponDAO.getKawaipon(message.getMentionedUsers().get(0).getId());
+
+		if (p1.getCards().size() < 25) {
+			channel.sendMessage(":x: | É necessário ter ao menos 25 cartas para poder jogar Hitotsu.").queue();
+			return;
+		} else if (p2.getCards().size() < 25) {
+			channel.sendMessage(":x: | Esse usuário não possui cartas suficientes, é necessário ter ao menos 25 cartas para poder jogar Hitotsu.").queue();
+			return;
+		}
+
+		Account uacc = AccountDAO.getAccount(author.getId());
 		Account tacc = AccountDAO.getAccount(message.getMentionedUsers().get(0).getId());
 		int bet = 0;
 		if (args.length > 1 && StringUtils.isNumeric(args[1])) {
@@ -72,7 +88,7 @@ public class HitotsuCommand extends Command {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-target")).queue();
 				return;
 			}
-		}*/
+		}
 
 		String id = author.getId() + "." + message.getMentionedUsers().get(0).getId() + "." + guild.getId();
 
@@ -88,13 +104,13 @@ public class HitotsuCommand extends Command {
 		}
 
 		Tabletop t = new Hitotsu((TextChannel) channel, id, author, message.getMentionedUsers().get(0));
-		//int finalBet = bet;
+		int finalBet = bet;
 		channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Hitotsu, deseja aceitar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 					if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
 						ShiroInfo.getGames().put(id, t);
 						ms.delete().queue();
-						t.execute(0);
+						t.execute(finalBet);
 					}
 				}), false, 1, TimeUnit.MINUTES));
 	}
