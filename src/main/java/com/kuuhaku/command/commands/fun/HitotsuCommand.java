@@ -21,7 +21,7 @@ package com.kuuhaku.command.commands.fun;
 import com.github.ygimenez.method.Pages;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.handlers.games.hitotsu.Hitotsu.Hitotsu;
+import com.kuuhaku.handlers.games.hitotsu.Hitotsu;
 import com.kuuhaku.handlers.games.tabletop.entity.Tabletop;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
@@ -87,7 +87,7 @@ public class HitotsuCommand extends Command {
 			return;
 		}
 
-		Tabletop t = new Hitotsu((TextChannel) channel, id, message.getMentionedUsers().get(0), author);
+		Tabletop t = new Hitotsu((TextChannel) channel, id, author, message.getMentionedUsers().get(0));
 		//int finalBet = bet;
 		channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Hitotsu, deseja aceitar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
