@@ -98,10 +98,7 @@ public class Hitotsu extends Tabletop {
 								}
 							}
 
-							if (!valid) {
-								getTable().sendMessage(":x: | Corrente inválida, para usar uma corrente digite os índices das cartas __**separados por espaço**__ (apenas cartas do mesmo anime são válidas para corrente).").queue();
-								return;
-							}
+							if (!valid) return;
 
 							Integer[] idx = Arrays.stream(indexes).map(Integer::parseInt).toArray(Integer[]::new);
 							valid = checkChain(idx);
