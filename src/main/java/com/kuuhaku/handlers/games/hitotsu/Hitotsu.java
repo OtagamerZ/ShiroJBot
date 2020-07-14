@@ -25,6 +25,7 @@ import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -111,7 +112,25 @@ public class Hitotsu extends Tabletop {
 							ShiroInfo.getGames().remove(getId());
 							getTable().sendMessage(getPlayers().getUserSequence().getFirst().getAsMention() + " desistiu!").queue();
 							timeout.cancel(true);
-							return;
+						} else if (Helper.equalsAny(m.getContentRaw(), "lista", "cartas", "list", "cards")) {
+							EmbedBuilder eb = new EmbedBuilder();
+							StringBuilder sb = new StringBuilder();
+							List<KawaiponCard> cards = hands.get(getPlayers().getUserSequence().getFirst()).getCards();
+
+							eb.setTitle("Suas cartas");
+							for (int i = 0; i < cards.size(); i++) {
+								sb.append("**")
+										.append(i)
+										.append("** - ")
+										.append("(")
+										.append(cards.get(i).getCard().getAnime().toString())
+										.append(")")
+										.append(cards.get(i).getCard().getRarity().getEmote())
+										.append(cards.get(i).getName());
+							}
+							eb.setDescription(sb.toString());
+
+							getPlayers().getUserSequence().getFirst().openPrivateChannel().complete().sendMessage(eb.build()).queue();
 						}
 					} catch (IllegalCardException e) {
 						getTable().sendMessage(":x: | Você só pode jogar uma carta que seja do mesmo anime ou da mesma raridade.").queue();
