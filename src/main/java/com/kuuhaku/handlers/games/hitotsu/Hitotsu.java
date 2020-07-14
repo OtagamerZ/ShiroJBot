@@ -154,7 +154,7 @@ public class Hitotsu extends Tabletop {
 		if (lastest != null) {
 			boolean sameAnime = c.getCard().getAnime().equals(lastest.getCard().getAnime());
 			boolean sameRarity = c.getCard().getRarity().equals(lastest.getCard().getRarity());
-			System.out.println("Same anime: " + sameAnime + "\nSame rarity: " + sameRarity + "\nWill error? " + (!sameAnime && !sameRarity));
+			System.out.println("\nSame anime: " + sameAnime + "\nSame rarity: " + sameRarity + "\nWill error? " + (!sameAnime && !sameRarity));
 			if (!sameAnime && !sameRarity) throw new IllegalCardException();
 		}
 
