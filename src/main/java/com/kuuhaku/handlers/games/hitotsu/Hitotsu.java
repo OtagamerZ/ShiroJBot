@@ -146,6 +146,7 @@ public class Hitotsu extends Tabletop {
 	}
 
 	public void next() {
+		getPlayers().nextTurn();
 		hands.get(getPlayers().getUserSequence().getFirst()).showHand();
 	}
 
