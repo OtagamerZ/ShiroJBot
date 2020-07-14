@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.handlers.games.hitotsu.Hitotsu;
+package com.kuuhaku.handlers.games.hitotsu;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
@@ -51,8 +51,8 @@ public class Hitotsu extends Tabletop {
 
 	public Hitotsu(TextChannel table, String id, User... players) {
 		super(table, null, id, players);
-		Kawaipon kp1 = KawaiponDAO.getKawaipon(getPlayers().getUsers().get(0).getId());
-		Kawaipon kp2 = KawaiponDAO.getKawaipon(getPlayers().getUsers().get(1).getId());
+		Kawaipon kp1 = KawaiponDAO.getKawaipon(getPlayers().getUserSequence().getFirst().getId());
+		Kawaipon kp2 = KawaiponDAO.getKawaipon(getPlayers().getUserSequence().getLast().getId());
 
 		Set<KawaiponCard> uniques = new HashSet<>() {{
 			addAll(kp1.getCards());
@@ -63,14 +63,14 @@ public class Hitotsu extends Tabletop {
 
 		deque.addAll(available);
 
-		this.hands.put(getPlayers().getUsers().get(0), new Hand(getPlayers().getUsers().get(0), deque));
-		this.hands.put(getPlayers().getUsers().get(1), new Hand(getPlayers().getUsers().get(1), deque));
+		this.hands.put(getPlayers().getUserSequence().getFirst(), new Hand(getPlayers().getUserSequence().getFirst(), deque));
+		this.hands.put(getPlayers().getUserSequence().getLast(), new Hand(getPlayers().getUserSequence().getLast(), deque));
 	}
 
 	@Override
 	public void execute(int bet) {
 		next();
-		message = getTable().sendMessage(getPlayers().getUsers().get(0).getAsMention() + " você começa!").complete();
+		message = getTable().sendMessage(getPlayers().getUserSequence().getFirst().getAsMention() + " você começa!").complete();
 		Main.getInfo().getAPI().addEventListener(new ListenerAdapter() {
 			{
 				timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
@@ -85,7 +85,7 @@ public class Hitotsu extends Tabletop {
 				TextChannel chn = event.getChannel();
 				Message m = event.getMessage();
 
-				if (chn.getId().equals(getTable().getId()) && u.getId().equals(getPlayers().getUsers().get(0).getId()) && (m.getContentRaw().length() == 5 || Helper.equalsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender")))
+				if (chn.getId().equals(getTable().getId()) && u.getId().equals(getPlayers().getUserSequence().getFirst().getId()) && (m.getContentRaw().length() == 5 || Helper.equalsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender"))) {
 					try {
 						if (StringUtils.isNumeric(m.getContentRaw())) {
 							if (handle(Integer.parseInt(m.getContentRaw()))) {
@@ -93,11 +93,10 @@ public class Hitotsu extends Tabletop {
 								ShiroInfo.getGames().remove(getId());
 								getTable().sendMessage("Não restam mais cartas para " + getPlayers().getWinner().getAsMention() + ", temos um vencedor!!").queue();
 								timeout.cancel(true);
-								return;
 							}
 						} else if (Helper.equalsAny(m.getContentRaw(), "comprar", "buy")) {
-							hands.get(getPlayers().getUsers().get(0)).draw(getDeque());
-							message = getTable().sendMessage(getPlayers().getUsers().get(0).getAsMention() + " passou a vez, agora é você " + getPlayers().getUsers().get(1) + ".")
+							hands.get(getPlayers().getUserSequence().getFirst()).draw(getDeque());
+							message = getTable().sendMessage(getPlayers().getUserSequence().getFirst().getAsMention() + " passou a vez, agora é você " + getPlayers().getUserSequence().getLast() + ".")
 									.addFile(Helper.getBytes(mount, "png"), "mount.png")
 									.complete();
 							next();
@@ -110,12 +109,13 @@ public class Hitotsu extends Tabletop {
 					} catch (IllegalCardException e) {
 						getTable().sendMessage(":x: | Você só pode jogar uma carta que seja do mesmo anime ou da mesma raridade.").queue();
 					}
+				}
 			}
 		});
 	}
 
 	public boolean handle(int card) throws IllegalCardException {
-		Hand hand = hands.get(getPlayers().getUsers().get(0));
+		Hand hand = hands.get(getPlayers().getUserSequence().getFirst());
 		KawaiponCard c = hand.getCards().get(card);
 		KawaiponCard lastest = played.peekFirst();
 
@@ -128,7 +128,7 @@ public class Hitotsu extends Tabletop {
 		played.add(c);
 		hand.getCards().remove(card);
 		if (c.isFoil())
-			CardEffect.getEffect(c.getCard().getRarity()).accept(this, hands.get(getPlayers().getUsers().get(1)));
+			CardEffect.getEffect(c.getCard().getRarity()).accept(this, hands.get(getPlayers().getUserSequence().getLast()));
 
 		getPlayers().setWinner(hands.values().stream().filter(h -> h.getCards().size() == 0).map(Hand::getUser).findFirst().orElse(null));
 		if (getPlayers().getWinner() != null) return true;
@@ -153,7 +153,7 @@ public class Hitotsu extends Tabletop {
 		g2d.dispose();
 
 		if (message != null) message.delete().queue();
-		message = getTable().sendMessage(getPlayers().getUsers().get(0).getAsMention() + " agora é sua vez.").addFile(Helper.getBytes(mount, "png"), "mount.png").complete();
+		message = getTable().sendMessage(getPlayers().getUserSequence().getFirst().getAsMention() + " agora é sua vez.").addFile(Helper.getBytes(mount, "png"), "mount.png").complete();
 		timeout.cancel(true);
 		timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
 			Main.getInfo().getAPI().removeEventListener(this);

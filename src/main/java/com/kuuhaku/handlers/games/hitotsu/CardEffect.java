@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.handlers.games.hitotsu.Hitotsu;
+package com.kuuhaku.handlers.games.hitotsu;
 
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.KawaiponRarity;
@@ -39,8 +39,8 @@ public enum CardEffect {
 		for (int i = 0; i < 4; i++) hand.draw(game.getDeque());
 	}),
 	SWAP_HANDS(KawaiponRarity.LEGENDARY, (game, hand) -> {
-		Hand p1 = game.getHands().get(game.getPlayers().getUsers().get(0));
-		Hand p2 = game.getHands().get(game.getPlayers().getUsers().get(1));
+		Hand p1 = game.getHands().get(game.getPlayers().getUserSequence().getFirst());
+		Hand p2 = game.getHands().get(game.getPlayers().getUserSequence().getLast());
 
 		List<KawaiponCard> aux = p1.getCards();
 		p1.setCards(p2.getCards());
