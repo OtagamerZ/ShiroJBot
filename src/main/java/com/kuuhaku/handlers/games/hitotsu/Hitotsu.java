@@ -85,7 +85,7 @@ public class Hitotsu extends Tabletop {
 				TextChannel chn = event.getChannel();
 				Message m = event.getMessage();
 
-				if (chn.getId().equals(getTable().getId()) && u.getId().equals(getPlayers().getUserSequence().getFirst().getId()) && (m.getContentRaw().length() == 5 || Helper.equalsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender"))) {
+				if (chn.getId().equals(getTable().getId()) && u.getId().equals(getPlayers().getUserSequence().getFirst().getId())) {
 					try {
 						if (StringUtils.isNumeric(m.getContentRaw())) {
 							if (handle(Integer.parseInt(m.getContentRaw()))) {
@@ -105,6 +105,12 @@ public class Hitotsu extends Tabletop {
 								Main.getInfo().getAPI().removeEventListener(this);
 								ShiroInfo.getGames().remove(getId());
 							}, Helper::doNothing);
+						} else if (Helper.equalsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender")) {
+							Main.getInfo().getAPI().removeEventListener(this);
+							ShiroInfo.getGames().remove(getId());
+							getTable().sendMessage(getPlayers().getUserSequence().getFirst().getAsMention() + " desistiu!").queue();
+							timeout.cancel(true);
+							return;
 						}
 					} catch (IllegalCardException e) {
 						getTable().sendMessage(":x: | Você só pode jogar uma carta que seja do mesmo anime ou da mesma raridade.").queue();
@@ -140,7 +146,7 @@ public class Hitotsu extends Tabletop {
 	}
 
 	public void next() {
-		hands.get(getPlayers().nextTurn()).showHand();
+		hands.get(getPlayers().getUserSequence().getFirst()).showHand();
 	}
 
 	public void putAndShow(KawaiponCard c) {
