@@ -140,6 +140,8 @@ public class Hitotsu extends Tabletop {
 						}
 					} catch (IllegalCardException e) {
 						getTable().sendMessage(":x: | Você só pode jogar uma carta que seja do mesmo anime ou da mesma raridade.").queue();
+					} catch (IndexOutOfBoundsException e) {
+						getTable().sendMessage(":x: | Índice inválido, verifique a mensagem enviada por mim no privado para ver as cartas na sua mão..").queue();
 					}
 				}
 			}
