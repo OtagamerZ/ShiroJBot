@@ -151,14 +151,11 @@ public class Hitotsu extends Tabletop {
 	public boolean handle(int card) throws IllegalCardException {
 		Hand hand = hands.get(getPlayers().getUserSequence().getFirst());
 		KawaiponCard c = hand.getCards().get(card);
-		KawaiponCard lastest = played.peekFirst();
+		KawaiponCard lastest = played.peekLast();
 
 		if (lastest != null) {
 			boolean sameAnime = c.getCard().getAnime().equals(lastest.getCard().getAnime());
 			boolean sameRarity = c.getCard().getRarity().equals(lastest.getCard().getRarity());
-			System.out.println("Anime " + c.getCard().getAnime().toString() + " == " + lastest.getCard().getAnime().toString());
-			System.out.println("Rarity " + c.getCard().getRarity().toString() + " == " + lastest.getCard().getRarity().toString());
-			System.out.println(" ");
 			if (!sameAnime && !sameRarity) throw new IllegalCardException();
 		}
 
