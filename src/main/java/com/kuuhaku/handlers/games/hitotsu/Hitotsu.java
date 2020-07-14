@@ -96,7 +96,8 @@ public class Hitotsu extends Tabletop {
 							}
 						} else if (Helper.equalsAny(m.getContentRaw(), "comprar", "buy")) {
 							hands.get(getPlayers().getUserSequence().getFirst()).draw(getDeque());
-							message = getTable().sendMessage(getPlayers().getUserSequence().getFirst().getAsMention() + " passou a vez, agora é você " + getPlayers().getUserSequence().getLast() + ".")
+							if (message != null) message.delete().queue();
+							message = getTable().sendMessage(getPlayers().getUserSequence().getFirst().getAsMention() + " passou a vez, agora é você " + getPlayers().getUserSequence().getLast().getAsMention() + ".")
 									.addFile(Helper.getBytes(mount, "png"), "mount.png")
 									.complete();
 							next();
@@ -140,8 +141,8 @@ public class Hitotsu extends Tabletop {
 		if (getPlayers().getWinner() != null) return true;
 
 		if (deque.size() == 0) shuffle();
-		putAndShow(c);
 		next();
+		putAndShow(c);
 		return false;
 	}
 
