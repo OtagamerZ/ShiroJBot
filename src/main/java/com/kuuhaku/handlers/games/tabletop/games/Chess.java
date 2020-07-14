@@ -167,7 +167,7 @@ public class Chess extends Tabletop {
 							return;
 						}
 
-						Piece pc = null;
+						Piece pc;
 						boolean foundKing = false;
 						for (int y = 0; y < getBoard().getLayout().length; y++) {
 							for (int x = 0; x < getBoard().getLayout().length; x++) {
