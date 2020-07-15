@@ -22,7 +22,11 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.ExceedDAO;
+import com.kuuhaku.controller.sqlite.PStateDAO;
+import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
@@ -94,10 +98,16 @@ public class GuessTheNumberCommand extends Command {
 
 
 				if (guess == theValue) {
-					int prize = Helper.clamp(Helper.rng(1000), 250, 1000);
+					int prize = Helper.clamp(Helper.rng(1000), 500, 1500);
 					channel.sendMessage("Você acertou! Como prêmio você receberá **" + prize + "** créditos.").queue();
 					acc.addCredit(prize);
 					AccountDAO.saveAccount(acc);
+
+					if (ExceedDAO.hasExceed(author.getId())) {
+						PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
+						ps.modifyInfluence(10);
+						PStateDAO.savePoliticalState(ps);
+					}
 				} else {
 					if (chances > 0) {
 						channel.sendMessage("(" + chances + " chances restantes) | Você errou, esse valor está " + hint + "o número escolhido por mim.").queue();
