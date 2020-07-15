@@ -88,7 +88,21 @@ public class Hitotsu extends Tabletop {
 
 				if (chn.getId().equals(getTable().getId()) && u.getId().equals(getPlayers().getUserSequence().getFirst().getId())) {
 					try {
-						if (StringUtils.isNumeric(m.getContentRaw())) {
+						if (StringUtils.deleteWhitespace(m.getContentRaw()).split(",").length > 1) {
+							int[] digits = Arrays.stream(StringUtils.deleteWhitespace(m.getContentRaw()).split(",")).mapToInt(Integer::parseInt).toArray();
+
+							if (handleChain(digits)) {
+								Main.getInfo().getAPI().removeEventListener(this);
+								ShiroInfo.getGames().remove(getId());
+								getTable().sendMessage("Não restam mais cartas para " + getPlayers().getWinner().getAsMention() + ", temos um vencedor!!").queue();
+								timeout.cancel(true);
+							}
+							timeout.cancel(true);
+							timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
+								Main.getInfo().getAPI().removeEventListener(this);
+								ShiroInfo.getGames().remove(getId());
+							}, Helper::doNothing);
+						} else if (StringUtils.isNumeric(m.getContentRaw())) {
 							if (handle(Integer.parseInt(m.getContentRaw()))) {
 								Main.getInfo().getAPI().removeEventListener(this);
 								ShiroInfo.getGames().remove(getId());
@@ -142,6 +156,8 @@ public class Hitotsu extends Tabletop {
 						getTable().sendMessage(":x: | Você só pode jogar uma carta que seja do mesmo anime ou da mesma raridade.").queue();
 					} catch (IndexOutOfBoundsException e) {
 						getTable().sendMessage(":x: | Índice inválido, verifique a mensagem enviada por mim no privado para ver as cartas na sua mão..").queue();
+					} catch (NumberFormatException e) {
+						getTable().sendMessage(":x: | Para executar uma corrente você deve informar 2 ou mais índices de cartas do mesmo anime separados por vírgula.").queue();
 					}
 				}
 			}
@@ -173,6 +189,39 @@ public class Hitotsu extends Tabletop {
 		return false;
 	}
 
+	public boolean handleChain(int[] card) throws IllegalCardException {
+		Hand hand = hands.get(getPlayers().getUserSequence().getFirst());
+		List<KawaiponCard> c = new ArrayList<>() {{
+			for (int i : card) add(hand.getCards().get(i));
+		}};
+		KawaiponCard lastest = played.peekLast();
+
+		if (lastest != null) {
+			boolean sameAnime = c.get(0).getCard().getAnime().equals(lastest.getCard().getAnime());
+			boolean sameRarity = c.get(0).getCard().getRarity().equals(lastest.getCard().getRarity());
+			if (!sameAnime && !sameRarity) throw new IllegalCardException();
+		}
+
+		for (KawaiponCard cd : c)
+			if (c.get(0).getCard().getAnime().equals(cd.getCard().getAnime())) throw new IllegalChainException();
+
+		c.forEach(cd -> {
+			played.add(cd);
+			justPut(cd);
+			hand.getCards().remove(cd);
+			if (cd.isFoil())
+				CardEffect.getEffect(cd.getCard().getRarity()).accept(this, hands.get(getPlayers().getUserSequence().getLast()));
+		});
+
+		getPlayers().setWinner(hands.values().stream().filter(h -> h.getCards().size() == 0).map(Hand::getUser).findFirst().orElse(null));
+		if (getPlayers().getWinner() != null) return true;
+
+		if (deque.size() == 0) shuffle();
+		next();
+		justShow();
+		return false;
+	}
+
 	public void next() {
 		getPlayers().nextTurn();
 		hands.get(getPlayers().getUserSequence().getFirst()).showHand();
@@ -187,6 +236,21 @@ public class Hitotsu extends Tabletop {
 		Helper.drawRotated(g2d, card, card.getWidth() / 2, card.getHeight() / 2, Math.random() * 90 - 45);
 		g2d.dispose();
 
+		if (message != null) message.delete().queue();
+		message = getTable().sendMessage(getPlayers().getUserSequence().getFirst().getAsMention() + " agora é sua vez.").addFile(Helper.getBytes(mount, "png"), "mount.png").complete();
+	}
+
+	public void justPut(KawaiponCard c) {
+		BufferedImage card = c.getCard().drawCard(c.isFoil());
+		Graphics2D g2d = mount.createGraphics();
+		g2d.translate((mount.getWidth() / 2) - (card.getWidth() / 2), (mount.getHeight() / 2) - (card.getHeight() / 2));
+		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		Helper.drawRotated(g2d, card, card.getWidth() / 2, card.getHeight() / 2, Math.random() * 90 - 45);
+		g2d.dispose();
+	}
+
+	public void justShow() {
 		if (message != null) message.delete().queue();
 		message = getTable().sendMessage(getPlayers().getUserSequence().getFirst().getAsMention() + " agora é sua vez.").addFile(Helper.getBytes(mount, "png"), "mount.png").complete();
 	}
