@@ -62,7 +62,7 @@ public class MyBuffsCommand extends Command {
 		boolean waifu = guild.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).collect(Collectors.toList()).contains(com.kuuhaku.model.persistent.Member.getWaifu(author));
 		boolean kgotchi = kg != null;
 
-		eb.setTitle(":level_slider: Seus modificadores de XP");
+		eb.setTitle(":level_slider: Modificadores ativos");
 
 		if (exceed) eb.addField("Seu exceed foi vitorioso", "+200% XP ganho", false);
 		if (waifu)
