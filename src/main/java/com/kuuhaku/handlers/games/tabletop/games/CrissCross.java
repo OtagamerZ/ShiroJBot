@@ -20,6 +20,9 @@ package com.kuuhaku.handlers.games.tabletop.games;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.ExceedDAO;
+import com.kuuhaku.controller.sqlite.PStateDAO;
+import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.handlers.games.tabletop.entity.Piece;
 import com.kuuhaku.handlers.games.tabletop.entity.Player;
 import com.kuuhaku.handlers.games.tabletop.entity.Spot;
@@ -28,6 +31,7 @@ import com.kuuhaku.handlers.games.tabletop.enums.Board;
 import com.kuuhaku.handlers.games.tabletop.pieces.Circle;
 import com.kuuhaku.handlers.games.tabletop.pieces.Cross;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Message;
@@ -90,6 +94,7 @@ public class CrissCross extends Tabletop {
 						ShiroInfo.getGames().remove(getId());
 						getTable().sendMessage(turn[0].getAsMention() + " desistiu!").queue();
 						timeout.cancel(true);
+						getPlayers().setWinner(getPlayers().nextTurn());
 
 						if (bet > 0) {
 							Account uacc = AccountDAO.getAccount(getPlayers().getWinner().getId());
@@ -100,6 +105,17 @@ public class CrissCross extends Tabletop {
 
 							AccountDAO.saveAccount(uacc);
 							AccountDAO.saveAccount(tacc);
+
+							if (ExceedDAO.hasExceed(getPlayers().getWinner().getId())) {
+								PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(getPlayers().getWinner().getId())));
+								ps.modifyInfluence(5);
+								PStateDAO.savePoliticalState(ps);
+							}
+							if (ExceedDAO.hasExceed(getPlayers().getLoser().getId())) {
+								PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(getPlayers().getLoser().getId())));
+								ps.modifyInfluence(-5);
+								PStateDAO.savePoliticalState(ps);
+							}
 						}
 						return;
 					}
@@ -149,6 +165,17 @@ public class CrissCross extends Tabletop {
 
 									AccountDAO.saveAccount(uacc);
 									AccountDAO.saveAccount(tacc);
+
+									if (ExceedDAO.hasExceed(getPlayers().getWinner().getId())) {
+										PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(getPlayers().getWinner().getId())));
+										ps.modifyInfluence(5);
+										PStateDAO.savePoliticalState(ps);
+									}
+									if (ExceedDAO.hasExceed(getPlayers().getLoser().getId())) {
+										PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(getPlayers().getLoser().getId())));
+										ps.modifyInfluence(-5);
+										PStateDAO.savePoliticalState(ps);
+									}
 								}
 							} else if (fullRows == 3) {
 								Main.getInfo().getAPI().removeEventListener(this);
@@ -164,6 +191,7 @@ public class CrissCross extends Tabletop {
 									timeout = getTable().sendMessage(turn[0].getAsMention() + " perdeu por W.O.!").queueAfter(180, TimeUnit.SECONDS, ms -> {
 										Main.getInfo().getAPI().removeEventListener(this);
 										ShiroInfo.getGames().remove(getId());
+										getPlayers().setWinner(getPlayers().nextTurn());
 
 										if (bet > 0) {
 											Account uacc = AccountDAO.getAccount(getPlayers().getWinner().getId());
@@ -174,6 +202,17 @@ public class CrissCross extends Tabletop {
 
 											AccountDAO.saveAccount(uacc);
 											AccountDAO.saveAccount(tacc);
+
+											if (ExceedDAO.hasExceed(getPlayers().getWinner().getId())) {
+												PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(getPlayers().getWinner().getId())));
+												ps.modifyInfluence(5);
+												PStateDAO.savePoliticalState(ps);
+											}
+											if (ExceedDAO.hasExceed(getPlayers().getLoser().getId())) {
+												PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(getPlayers().getLoser().getId())));
+												ps.modifyInfluence(-5);
+												PStateDAO.savePoliticalState(ps);
+											}
 										}
 									}, Helper::doNothing);
 								else
