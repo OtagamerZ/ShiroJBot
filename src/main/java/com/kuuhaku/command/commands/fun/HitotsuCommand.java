@@ -65,13 +65,13 @@ public class HitotsuCommand extends Command {
 		Kawaipon p1 = KawaiponDAO.getKawaipon(author.getId());
 		Kawaipon p2 = KawaiponDAO.getKawaipon(message.getMentionedUsers().get(0).getId());
 
-		if (p1.getCards().size() < 25) {
+		/*if (p1.getCards().size() < 25) {
 			channel.sendMessage(":x: | É necessário ter ao menos 25 cartas para poder jogar Hitotsu.").queue();
 			return;
 		} else if (p2.getCards().size() < 25) {
 			channel.sendMessage(":x: | Esse usuário não possui cartas suficientes, é necessário ter ao menos 25 cartas para poder jogar Hitotsu.").queue();
 			return;
-		}
+		}*/
 
 		Account uacc = AccountDAO.getAccount(author.getId());
 		Account tacc = AccountDAO.getAccount(message.getMentionedUsers().get(0).getId());
