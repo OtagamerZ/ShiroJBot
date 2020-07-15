@@ -37,7 +37,7 @@ public enum AnimeName {
 	KILL_LA_KILL,
 	ITADAKI_SEIEKI,
 	OVERLORD,
-	//NICHIJOU,
+	NICHIJOU,
 	;
 
 	@Override
