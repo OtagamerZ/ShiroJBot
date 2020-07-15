@@ -999,7 +999,7 @@ public class Helper {
 	public static void darkenImage(BufferedImage image) {
 		for (int y = 0; y < image.getHeight(); y++) {
 			for (int x = 0; x < image.getHeight(); x++) {
-				Color rgb = new Color(image.getRGB(x, y));
+				Color rgb = new Color(image.getRGB(x, y), true);
 				rgb.darker();
 				image.setRGB(x, y, rgb.getRGB());
 			}
