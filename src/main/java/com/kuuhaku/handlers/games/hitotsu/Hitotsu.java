@@ -191,6 +191,16 @@ public class Hitotsu extends Tabletop {
 		message = getTable().sendMessage(getPlayers().getUserSequence().getFirst().getAsMention() + " agora é sua vez.").addFile(Helper.getBytes(mount, "png"), "mount.png").complete();
 	}
 
+	public void shuffle() {
+		KawaiponCard lastest = played.getLast();
+		played.clear();
+		played.add(lastest);
+		deque.addAll(available);
+		deque.remove(lastest);
+		Collections.shuffle(deque);
+		mount = new BufferedImage(500, 500, BufferedImage.TYPE_INT_ARGB);
+	}
+
 	public Map<User, Hand> getHands() {
 		return hands;
 	}
