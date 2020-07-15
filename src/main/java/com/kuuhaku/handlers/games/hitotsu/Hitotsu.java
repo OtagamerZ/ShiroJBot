@@ -156,7 +156,7 @@ public class Hitotsu extends Tabletop {
 						getTable().sendMessage(":x: | Você só pode jogar uma carta que seja do mesmo anime ou da mesma raridade.").queue();
 					} catch (IndexOutOfBoundsException e) {
 						getTable().sendMessage(":x: | Índice inválido, verifique a mensagem enviada por mim no privado para ver as cartas na sua mão..").queue();
-					} catch (NumberFormatException e) {
+					} catch (NumberFormatException | IllegalChainException e) {
 						getTable().sendMessage(":x: | Para executar uma corrente você deve informar 2 ou mais índices de cartas do mesmo anime separados por vírgula.").queue();
 					}
 				}
@@ -203,7 +203,7 @@ public class Hitotsu extends Tabletop {
 		}
 
 		for (KawaiponCard cd : c)
-			if (c.get(0).getCard().getAnime().equals(cd.getCard().getAnime())) throw new IllegalChainException();
+			if (!c.get(0).getCard().getAnime().equals(cd.getCard().getAnime())) throw new IllegalChainException();
 
 		c.forEach(cd -> {
 			played.add(cd);
