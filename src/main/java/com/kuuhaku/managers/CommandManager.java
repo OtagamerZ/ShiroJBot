@@ -57,6 +57,7 @@ public class CommandManager {
 	private static final String REQ_ID = "req_id";
 	private static final String REQ_KEY_FILE = "req_key-file";
 	private static final String REQ_CHANNEL = "req_channel";
+	private static final String REQ_MENTION_BET = "req_mention-bet";
 	private final HashMap<Class<? extends Command>, Argument> commands = new HashMap<>() {
 		{
 			//DEV
@@ -436,13 +437,13 @@ public class CommandManager {
 					"adivinheonumero", new String[]{"aon", "guessthenumber", "gtn"}, "cmd_guess-the-number", FUN, true
 			));
 			put(CrissCrossCommand.class, new Argument(
-					"jogodavelha", new String[]{"jdv", "crisscross", "cc"}, "req_mention-bet", "cmd_criss-cross", FUN, true
+					"jogodavelha", new String[]{"jdv", "crisscross", "cc"}, REQ_MENTION_BET, "cmd_criss-cross", FUN, true
 			));
 			put(ChessCommand.class, new Argument(
 					"xadrez", new String[]{"chess"}, REQ_MENTION, "cmd_chess", FUN, true
 			));
 			put(HitotsuCommand.class, new Argument(
-					"hitotsu", new String[]{"uno"}, REQ_MENTION, "cmd_hitotsu", FUN, true
+					"hitotsu", new String[]{"uno"}, REQ_MENTION_BET, "cmd_hitotsu", FUN, true
 			));
 			put(CatchKawaiponCommand.class, new Argument(
 					"coletar", new String[]{"collect"}, "cmd_catch-kawaipon", FUN, false
