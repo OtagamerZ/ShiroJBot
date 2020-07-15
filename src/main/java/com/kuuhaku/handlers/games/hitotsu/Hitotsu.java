@@ -116,7 +116,9 @@ public class Hitotsu extends Tabletop {
 									getTable().sendMessage("Não restam mais cartas para " + getPlayers().getWinner().getAsMention() + ", temos um vencedor!!").queue();
 									timeout.cancel(true);
 								}
+								hands.get(getPlayers().getUserSequence().getFirst()).getCards().add(i, null);
 							}
+							hands.get(getPlayers().getUserSequence().getFirst()).getCards().removeIf(c -> c == null);
 							timeout.cancel(true);
 							timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
 								Main.getInfo().getAPI().removeEventListener(this);
@@ -242,8 +244,6 @@ public class Hitotsu extends Tabletop {
 		KawaiponCard aux = hand.get(cards[0]);
 		boolean valid = true;
 		for (int i : cards) {
-			System.out.println(hand.get(i).getCard().getAnime().toString());
-			System.out.println(" ");
 			if (!hand.get(i).getCard().getAnime().equals(aux.getCard().getAnime())) {
 				valid = false;
 				break;
