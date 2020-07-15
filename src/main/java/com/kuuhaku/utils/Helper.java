@@ -996,12 +996,14 @@ public class Helper {
 		g2d.setTransform(old);
 	}
 
-	public static void darkenImage(BufferedImage image) {
+	public static void darkenImage(float fac, BufferedImage image) {
 		for (int y = 0; y < image.getHeight(); y++) {
 			for (int x = 0; x < image.getHeight(); x++) {
 				Color rgb = new Color(image.getRGB(x, y), true);
-				rgb.darker();
-				image.setRGB(x, y, rgb.getRGB());
+				float r = rgb.getRed() * fac;
+				float g = rgb.getGreen() * fac;
+				float b = rgb.getBlue() * fac;
+				image.setRGB(x, y, new Color(r, g, b, rgb.getAlpha()).getRGB());
 			}
 		}
 	}
