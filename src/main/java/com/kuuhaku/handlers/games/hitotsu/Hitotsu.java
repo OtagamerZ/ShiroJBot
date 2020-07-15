@@ -200,7 +200,7 @@ public class Hitotsu extends Tabletop {
 
 		hands.get(getPlayers().getUserSequence().getFirst()).getCards().add(card, null);
 		if (card == chainMax) {
-			hands.get(getPlayers().getUserSequence().getFirst()).getCards().removeIf(cd -> cd == null);
+			hands.forEach(hnd -> hnd.getCards().removeIf(cd -> cd == null));
 			getPlayers().setWinner(hands.values().stream().filter(h -> h.getCards().size() == 0).map(Hand::getUser).findFirst().orElse(null));
 			if (getPlayers().getWinner() != null) return true;
 
