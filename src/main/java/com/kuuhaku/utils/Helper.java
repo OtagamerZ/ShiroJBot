@@ -179,7 +179,7 @@ public class Helper {
 	}
 
 	public static void sendPM(User user, String message) {
-		user.openPrivateChannel().queue((channel) -> channel.sendMessage(message).queue());
+		user.openPrivateChannel().queue((channel) -> channel.sendMessage(message).queue(null, Helper::doNothing));
 	}
 
 	public static void typeMessage(MessageChannel channel, String message) {
