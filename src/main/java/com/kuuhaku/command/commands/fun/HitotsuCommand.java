@@ -65,13 +65,13 @@ public class HitotsuCommand extends Command {
 		Kawaipon p1 = KawaiponDAO.getKawaipon(author.getId());
 		Kawaipon p2 = KawaiponDAO.getKawaipon(message.getMentionedUsers().get(0).getId());
 
-		/*if (p1.getCards().size() < 25) {
+		if (p1.getCards().size() < 25) {
 			channel.sendMessage(":x: | É necessário ter ao menos 25 cartas para poder jogar Hitotsu.").queue();
 			return;
 		} else if (p2.getCards().size() < 25) {
 			channel.sendMessage(":x: | Esse usuário não possui cartas suficientes, é necessário ter ao menos 25 cartas para poder jogar Hitotsu.").queue();
 			return;
-		}*/
+		}
 
 		Account uacc = AccountDAO.getAccount(author.getId());
 		Account tacc = AccountDAO.getAccount(message.getMentionedUsers().get(0).getId());
@@ -108,6 +108,10 @@ public class HitotsuCommand extends Command {
 		channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Hitotsu, deseja aceitar?" + (bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 					if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
+						if (ShiroInfo.gameInProgress(message.getMentionedUsers().get(0).getId())) {
+							channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
+							return;
+						}
 						ShiroInfo.getGames().put(id, t);
 						ms.delete().queue();
 						t.execute(finalBet);
