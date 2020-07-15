@@ -115,10 +115,8 @@ public class Hitotsu extends Tabletop {
 									ShiroInfo.getGames().remove(getId());
 									getTable().sendMessage("Não restam mais cartas para " + getPlayers().getWinner().getAsMention() + ", temos um vencedor!!").queue();
 									timeout.cancel(true);
-								}
-								hands.get(getPlayers().getUserSequence().getFirst()).getCards().add(i, null);
+								} 
 							}
-							hands.get(getPlayers().getUserSequence().getFirst()).getCards().removeIf(c -> c == null);
 							timeout.cancel(true);
 							timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
 								Main.getInfo().getAPI().removeEventListener(this);
@@ -200,7 +198,9 @@ public class Hitotsu extends Tabletop {
 		if (c.isFoil())
 			CardEffect.getEffect(c.getCard().getRarity()).accept(this, hands.get(getPlayers().getUserSequence().getLast()));
 
+		hands.get(getPlayers().getUserSequence().getFirst()).getCards().add(i, null);
 		if (card == chainMax) {
+			hands.get(getPlayers().getUserSequence().getFirst()).getCards().removeIf(c -> c == null);
 			getPlayers().setWinner(hands.values().stream().filter(h -> h.getCards().size() == 0).map(Hand::getUser).findFirst().orElse(null));
 			if (getPlayers().getWinner() != null) return true;
 
