@@ -1000,9 +1000,9 @@ public class Helper {
 		for (int y = 0; y < image.getHeight(); y++) {
 			for (int x = 0; x < image.getHeight(); x++) {
 				Color rgb = new Color(image.getRGB(x, y), true);
-				float r = rgb.getRed() * fac;
-				float g = rgb.getGreen() * fac;
-				float b = rgb.getBlue() * fac;
+				int r = clamp(Math.round(rgb.getRed() * fac), 0, 255);
+				int g = clamp(Math.round(rgb.getGreen() * fac), 0, 255);
+				int b = clamp(Math.round(rgb.getBlue() * fac), 0, 255);
 				image.setRGB(x, y, new Color(r, g, b, rgb.getAlpha()).getRGB());
 			}
 		}
