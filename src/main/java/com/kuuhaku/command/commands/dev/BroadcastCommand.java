@@ -94,7 +94,7 @@ public class BroadcastCommand extends Command {
 						try {
 							TextChannel c = g.getTextChannelById(gc.getCanalAvisos());
 							if (c != null && c.canTalk()) {
-								Webhook wh = Helper.getOrCreateWebhook(c, "Shiro", Main.getInfo().getAPI());
+								Webhook wh = Helper.getOrCreateWebhook(c, "Notificações Shiro", Main.getInfo().getAPI());
 								if (wh == null) result.put(g.getName(), false);
 								else {
 									WebhookClientBuilder wcb = new WebhookClientBuilder(wh.getUrl());
@@ -112,8 +112,8 @@ public class BroadcastCommand extends Command {
 
 				WebhookMessageBuilder wmb = new WebhookMessageBuilder();
 
-				wmb.setUsername("Notificação Shiro");
-				wmb.setAvatarUrl(Main.getInfo().getSelfUser().getEffectiveAvatarUrl());
+				wmb.setUsername("Stephanie (Notificações Shiro)");
+				wmb.setAvatarUrl("https://avatarfiles.alphacoders.com/918/thumb-91865.png");
 				wmb.setContent(msg);
 
 				WebhookCluster cluster = new WebhookCluster(clients);
