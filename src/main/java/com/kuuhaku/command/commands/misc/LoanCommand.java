@@ -67,7 +67,7 @@ public class LoanCommand extends Command {
 			eb.addField("Plano Bate-papo: `" + prefix + "emprestimo 3`", "5000 créditos (juros de " + Helper.round(CreditLoan.LOAN_3.getInterest(ex) * 100 - 100, 1) + "%)", false);
 			eb.addField("Plano Animador de Chat: `" + prefix + "emprestimo 4`", "10000 créditos (juros de " + Helper.round(CreditLoan.LOAN_4.getInterest(ex) * 100 - 100, 1) + "%)", false);
 			eb.addField("Plano Ultimate: `" + prefix + "emprestimo 5`", "25000 créditos (juros de " + Helper.round(CreditLoan.LOAN_5.getInterest(ex) * 100 - 100, 1) + "%)", false);
-			eb.setFooter("Não cobrimos eventuais acidentes como, mas não exclusivo à: espancamento por taco de baseball, atropelamentos, perseguições, etc");
+			eb.setFooter("Não há prazo para debitar a dívida, todo crédito que você ganhar reduzirá a dívida.");
 
 			channel.sendMessage(eb.build()).queue();
 			return;

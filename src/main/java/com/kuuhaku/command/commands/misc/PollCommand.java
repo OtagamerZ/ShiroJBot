@@ -35,6 +35,7 @@ import org.json.JSONException;
 
 import java.awt.*;
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
@@ -226,9 +227,12 @@ public class PollCommand extends Command {
 		eb.addBlankField(false);
 
 		boolean finalNOVOTE = NOVOTE;
-		votes.forEach((k, v) -> eb.addField(k + " | " + (finalNOVOTE ? "0.0%" : Helper.round(Helper.prcntToInt(v, totalVotes), 1) + "%"), Helper.VOID, true));
+		List<MessageEmbed.Field> fields = new ArrayList<>();
+		votes.forEach((k, v) -> fields.add(new MessageEmbed.Field(k + " | " + (finalNOVOTE ? "0.0%" : Helper.round(Helper.prcntToInt(v, totalVotes), 1) + "%"), Helper.VOID, true)));
 
-		eb.getFields().sort(Comparator.comparing(MessageEmbed.Field::getName));
+		fields.sort(Comparator.comparing(MessageEmbed.Field::getName));
+
+		fields.forEach(eb::addField);
 		msg.editMessage(eb.build()).queue();
 		member.getUser().openPrivateChannel().queue(c -> c.sendMessage(eb.setAuthor("Sua enquete foi encerrada!").build()).queue());
 		msg.clearReactions().queue();
