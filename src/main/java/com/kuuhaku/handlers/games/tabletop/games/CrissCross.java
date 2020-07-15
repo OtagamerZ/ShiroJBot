@@ -185,6 +185,7 @@ public class CrissCross extends Tabletop {
 							} else {
 								turn[0] = getPlayers().nextTurn();
 								if (message != null) message.delete().queue();
+								getBoard().nextRound();
 								message = getTable().sendMessage("Turno de " + turn[0].getAsMention()).addFile(baos.toByteArray(), "board.jpg").complete();
 								timeout.cancel(true);
 								if (getBoard().getRound() > 2)
