@@ -200,14 +200,14 @@ public class Hitotsu extends Tabletop {
 
 		hands.get(getPlayers().getUserSequence().getFirst()).getCards().add(i, null);
 		if (card == chainMax) {
-			hands.get(getPlayers().getUserSequence().getFirst()).getCards().removeIf(c -> c == null);
+			hands.get(getPlayers().getUserSequence().getFirst()).getCards().removeIf(cd -> cd == null);
 			getPlayers().setWinner(hands.values().stream().filter(h -> h.getCards().size() == 0).map(Hand::getUser).findFirst().orElse(null));
 			if (getPlayers().getWinner() != null) return true;
 
 			if (deque.size() == 0) shuffle();
 			next();
 			putAndShow(c);
-		}
+		} else justPut(c);
 		return false;
 	}
 
@@ -227,6 +227,16 @@ public class Hitotsu extends Tabletop {
 
 		if (message != null) message.delete().queue();
 		message = getTable().sendMessage(getPlayers().getUserSequence().getFirst().getAsMention() + " agora é sua vez.").addFile(Helper.getBytes(mount, "png"), "mount.png").complete();
+	}
+
+	public void justPut(KawaiponCard c) {
+		BufferedImage card = c.getCard().drawCard(c.isFoil());
+		Graphics2D g2d = mount.createGraphics();
+		g2d.translate((mount.getWidth() / 2) - (card.getWidth() / 2), (mount.getHeight() / 2) - (card.getHeight() / 2));
+		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		Helper.drawRotated(g2d, card, card.getWidth() / 2, card.getHeight() / 2, Math.random() * 90 - 45);
+		g2d.dispose();
 	}
 
 	public void shuffle() {
