@@ -101,126 +101,33 @@ public class Hitotsu extends Tabletop {
 								declareWinner();
 								return;
 							}
-							getBoard().nextRound();
 							timeout.cancel(true);
-							if (getBoard().getRound() > 2)
-								timeout = getTable().sendMessage(getPlayers().getUserSequence().getFirst().getAsMention() + " perdeu por W.O.!").queueAfter(180, TimeUnit.SECONDS, ms -> {
-									Main.getInfo().getAPI().removeEventListener(this);
-									ShiroInfo.getGames().remove(getId());
-									getPlayers().nextTurn();
-									getPlayers().setWinner(getPlayers().getUserSequence().getFirst());
-
-									if (bet > 0) {
-										Account uacc = AccountDAO.getAccount(getPlayers().getWinner().getId());
-										Account tacc = AccountDAO.getAccount(getPlayers().getLoser().getId());
-
-										uacc.addCredit(bet);
-										tacc.removeCredit(bet);
-
-										AccountDAO.saveAccount(uacc);
-										AccountDAO.saveAccount(tacc);
-
-										if (ExceedDAO.hasExceed(getPlayers().getWinner().getId())) {
-											PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(getPlayers().getWinner().getId())));
-											ps.modifyInfluence(5);
-											PStateDAO.savePoliticalState(ps);
-										}
-										if (ExceedDAO.hasExceed(getPlayers().getLoser().getId())) {
-											PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(getPlayers().getLoser().getId())));
-											ps.modifyInfluence(-5);
-											PStateDAO.savePoliticalState(ps);
-										}
-									}
-								}, Helper::doNothing);
-							else
-								timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
-									Main.getInfo().getAPI().removeEventListener(this);
-									ShiroInfo.getGames().remove(getId());
-								}, Helper::doNothing);
+							timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
+								Main.getInfo().getAPI().removeEventListener(this);
+								ShiroInfo.getGames().remove(getId());
+							}, Helper::doNothing);
 						} else if (StringUtils.isNumeric(m.getContentRaw())) {
 							if (handle(Integer.parseInt(m.getContentRaw()))) {
 								declareWinner();
 								return;
 							}
-							getBoard().nextRound();
 							timeout.cancel(true);
-							if (getBoard().getRound() > 2)
-								timeout = getTable().sendMessage(getPlayers().getUserSequence().getFirst().getAsMention() + " perdeu por W.O.!").queueAfter(180, TimeUnit.SECONDS, ms -> {
-									Main.getInfo().getAPI().removeEventListener(this);
-									ShiroInfo.getGames().remove(getId());
-									getPlayers().nextTurn();
-									getPlayers().setWinner(getPlayers().getUserSequence().getFirst());
-
-									if (bet > 0) {
-										Account uacc = AccountDAO.getAccount(getPlayers().getWinner().getId());
-										Account tacc = AccountDAO.getAccount(getPlayers().getLoser().getId());
-
-										uacc.addCredit(bet);
-										tacc.removeCredit(bet);
-
-										AccountDAO.saveAccount(uacc);
-										AccountDAO.saveAccount(tacc);
-
-										if (ExceedDAO.hasExceed(getPlayers().getWinner().getId())) {
-											PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(getPlayers().getWinner().getId())));
-											ps.modifyInfluence(5);
-											PStateDAO.savePoliticalState(ps);
-										}
-										if (ExceedDAO.hasExceed(getPlayers().getLoser().getId())) {
-											PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(getPlayers().getLoser().getId())));
-											ps.modifyInfluence(-5);
-											PStateDAO.savePoliticalState(ps);
-										}
-									}
-								}, Helper::doNothing);
-							else
-								timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
-									Main.getInfo().getAPI().removeEventListener(this);
-									ShiroInfo.getGames().remove(getId());
-								}, Helper::doNothing);
+							timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
+								Main.getInfo().getAPI().removeEventListener(this);
+								ShiroInfo.getGames().remove(getId());
+							}, Helper::doNothing);
 						} else if (Helper.equalsAny(m.getContentRaw(), "comprar", "buy")) {
 							hands.get(getPlayers().getUserSequence().getFirst()).draw(getDeque());
 							if (message != null) message.delete().queue();
-							getBoard().nextRound();
 							message = getTable().sendMessage(getPlayers().getUserSequence().getFirst().getAsMention() + " passou a vez, agora é você " + getPlayers().getUserSequence().getLast().getAsMention() + ".")
 									.addFile(Helper.getBytes(mount, "png"), "mount.png")
 									.complete();
 							next();
 							timeout.cancel(true);
-							if (getBoard().getRound() > 2)
-								timeout = getTable().sendMessage(getPlayers().getUserSequence().getFirst().getAsMention() + " perdeu por W.O.!").queueAfter(180, TimeUnit.SECONDS, ms -> {
-									Main.getInfo().getAPI().removeEventListener(this);
-									ShiroInfo.getGames().remove(getId());
-									getPlayers().nextTurn();
-									getPlayers().setWinner(getPlayers().getUserSequence().getFirst());
-
-									if (bet > 0) {
-										Account uacc = AccountDAO.getAccount(getPlayers().getWinner().getId());
-										Account tacc = AccountDAO.getAccount(getPlayers().getLoser().getId());
-
-										uacc.addCredit(bet);
-										tacc.removeCredit(bet);
-
-										AccountDAO.saveAccount(uacc);
-										AccountDAO.saveAccount(tacc);
-
-										if (ExceedDAO.hasExceed(getPlayers().getWinner().getId())) {
-											PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(getPlayers().getWinner().getId())));
-											ps.modifyInfluence(5);
-											PStateDAO.savePoliticalState(ps);
-										}
-										if (ExceedDAO.hasExceed(getPlayers().getLoser().getId())) {
-											PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(getPlayers().getLoser().getId())));
-											ps.modifyInfluence(-5);
-											PStateDAO.savePoliticalState(ps);
-										}
-									}
-								}, Helper::doNothing);
-							else
-								timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
-									Main.getInfo().getAPI().removeEventListener(this);
-									ShiroInfo.getGames().remove(getId());
-								}, Helper::doNothing);
+							timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
+								Main.getInfo().getAPI().removeEventListener(this);
+								ShiroInfo.getGames().remove(getId());
+							}, Helper::doNothing);
 						} else if (Helper.equalsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender")) {
 							Main.getInfo().getAPI().removeEventListener(this);
 							ShiroInfo.getGames().remove(getId());
