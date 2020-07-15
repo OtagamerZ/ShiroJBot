@@ -995,4 +995,14 @@ public class Helper {
 		g2d.drawString(s, 0, -10);
 		g2d.setTransform(old);
 	}
+
+	public static void darkenImage(BufferedImage image) {
+		for (int y = 0; y < image.getHeight(); y++) {
+			for (int x = 0; x < image.getHeight(); x++) {
+				Color rgb = new Color(image.getRGB(x, y));
+				rgb.darker();
+				image.setRGB(x, y, rgb.getRGB());
+			}
+		}
+	}
 }
