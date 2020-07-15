@@ -95,6 +95,10 @@ public class ChessCommand extends Command {
 		channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Xadrez, deseja aceitar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 					if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
+						if (ShiroInfo.gameInProgress(message.getMentionedUsers().get(0).getId())) {
+							channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
+							return;
+						}
 						ShiroInfo.getGames().put(id, t);
 						ms.delete().queue();
 						t.execute(finalBet);
