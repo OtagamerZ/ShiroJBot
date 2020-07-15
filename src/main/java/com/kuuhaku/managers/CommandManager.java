@@ -442,7 +442,7 @@ public class CommandManager {
 					"xadrez", new String[]{"chess"}, REQ_MENTION, "cmd_chess", FUN, true
 			));
 			put(HitotsuCommand.class, new Argument(
-					"hitotsu", new String[]{"uno"}, REQ_MENTION, "cmd_hitotsu", PARTNER, true
+					"hitotsu", new String[]{"uno"}, REQ_MENTION, "cmd_hitotsu", FUN, true
 			));
 			put(CatchKawaiponCommand.class, new Argument(
 					"coletar", new String[]{"collect"}, "cmd_catch-kawaipon", FUN, false
