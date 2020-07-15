@@ -25,9 +25,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/hitotsu/IllegalChainException.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/RequestAssistCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/RequestAssistCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/support/InviteCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/support/InviteCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/hitotsu/Hitotsu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/hitotsu/Hitotsu.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -198,24 +198,24 @@
       <recent name="com.kuuhaku.command.commands.information.ComandosCommand" />
       <recent name="com.kuuhaku.command.commands.information.BotInfoCommand" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.kuuhaku.handlers.games.hitotsu.Hitotsu" />
-      <recent name="com.kuuhaku.command.commands.fun" />
-      <recent name="com.kuuhaku.command.commands.misc" />
-      <recent name="com.kuuhaku.model.persistent" />
-      <recent name="com.kuuhaku.command.commands.moderation" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games\hitotsu" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\kawaipon" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\icons" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\kawaipon\cards" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.handlers.games.hitotsu" />
+      <recent name="com.kuuhaku.handlers.games.hitotsu.Hitotsu" />
+      <recent name="com.kuuhaku.command.commands.fun" />
+      <recent name="com.kuuhaku.command.commands.misc" />
+      <recent name="com.kuuhaku.model.persistent" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -591,14 +591,8 @@
       <workItem from="1594742446159" duration="128000" />
       <workItem from="1594742735053" duration="580000" />
       <workItem from="1594747175802" duration="81000" />
-      <workItem from="1594747273765" duration="11933000" />
-    </task>
-    <task id="LOCAL-01751" summary="Adição de comando de empréstimo de créditos">
-      <created>1594326805801</created>
-      <option name="number" value="01751" />
-      <option name="presentableId" value="LOCAL-01751" />
-      <option name="project" value="LOCAL" />
-      <updated>1594326805802</updated>
+      <workItem from="1594747273765" duration="12223000" />
+      <workItem from="1594814249958" duration="829000" />
     </task>
     <task id="LOCAL-01752" summary="Adição de comando de empréstimo de créditos">
       <created>1594326982362</created>
@@ -936,7 +930,14 @@
       <option name="project" value="LOCAL" />
       <updated>1594759409119</updated>
     </task>
-    <option name="localTasksCounter" value="1800" />
+    <task id="LOCAL-01800" summary="Correção do comando de suporte presencial">
+      <created>1594759939731</created>
+      <option name="number" value="01800" />
+      <option name="presentableId" value="LOCAL-01800" />
+      <option name="project" value="LOCAL" />
+      <updated>1594759939731</updated>
+    </task>
+    <option name="localTasksCounter" value="1801" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -974,8 +975,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção no comando de trocar cartas" />
-    <MESSAGE value="Adição de novo anime: Saint Seiya" />
     <MESSAGE value="Adição da política de privacidade" />
     <MESSAGE value="Mudança na geração de coleção" />
     <MESSAGE value="Criação da loucura" />
@@ -999,7 +998,9 @@
     <MESSAGE value="Mudança nos ícones de level" />
     <MESSAGE value="Adição de novo jogo: Hitotsu (fase de testes)" />
     <MESSAGE value="Implementação da corrente de cartas (Hitotsu)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implementação da corrente de cartas (Hitotsu)" />
+    <MESSAGE value="Correção do comando de criar convites" />
+    <MESSAGE value="Correção do comando de suporte presencial" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção do comando de suporte presencial" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1053,11 +1054,11 @@
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="234" y="57" width="805" height="924" key="CommitChangelistDialog2" timestamp="1594759406441">
+    <state x="234" y="57" width="805" height="924" key="CommitChangelistDialog2" timestamp="1594759937059">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1593924629204" />
-    <state x="234" y="57" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1594759406441" />
+    <state x="234" y="57" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1594759937059" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1074,26 +1075,26 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="620" y="261" key="FileChooserDialogImpl/0.0.1680.1010@0.0.1680.1010" timestamp="1594057299069" />
-    <state width="1637" height="279" key="GridCell.Tab.0.bottom" timestamp="1594753485071">
+    <state width="1637" height="279" key="GridCell.Tab.0.bottom" timestamp="1594760198824">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="270" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1637" height="279" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1594753485071" />
-    <state width="1637" height="279" key="GridCell.Tab.0.center" timestamp="1594753485071">
+    <state width="1637" height="279" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1594760198824" />
+    <state width="1637" height="279" key="GridCell.Tab.0.center" timestamp="1594760198824">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="270" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1637" height="279" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1594753485071" />
-    <state width="1637" height="279" key="GridCell.Tab.0.left" timestamp="1594753485071">
+    <state width="1637" height="279" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1594760198824" />
+    <state width="1637" height="279" key="GridCell.Tab.0.left" timestamp="1594760198824">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="270" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1637" height="279" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1594753485071" />
-    <state width="1637" height="279" key="GridCell.Tab.0.right" timestamp="1594753485071">
+    <state width="1637" height="279" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1594760198824" />
+    <state width="1637" height="279" key="GridCell.Tab.0.right" timestamp="1594760198824">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="270" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1637" height="279" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1594753485071" />
+    <state width="1637" height="279" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1594760198824" />
     <state width="1323" height="230" key="GridCell.Tab.1.bottom" timestamp="1587921284835">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -1133,11 +1134,11 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1587956411634" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1592942915575" />
-    <state x="253" y="373" key="Vcs.Push.Dialog.v2" timestamp="1594759411211">
+    <state x="253" y="373" key="Vcs.Push.Dialog.v2" timestamp="1594759940809">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1593924633531" />
-    <state x="253" y="373" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1594759411211" />
+    <state x="253" y="373" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1594759940809" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1594305494731">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
