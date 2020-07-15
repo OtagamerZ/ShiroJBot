@@ -38,7 +38,6 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.apache.commons.lang3.StringUtils;
-import org.jdesktop.swingx.graphics.BlendComposite;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -284,14 +283,10 @@ public class Hitotsu extends Tabletop {
 	}
 
 	public void putAndShow(KawaiponCard c) {
+		Helper.darkenImage(mount);
+
 		BufferedImage card = c.getCard().drawCard(c.isFoil());
 		Graphics2D g2d = mount.createGraphics();
-
-		g2d.setComposite(BlendComposite.Multiply);
-		g2d.setColor(new Color(0, 0, 0, 50));
-		g2d.fillRect(0, 0, mount.getWidth(), mount.getHeight());
-		g2d.setComposite(AlphaComposite.SrcOver);
-
 		g2d.translate((mount.getWidth() / 2) - (card.getWidth() / 2), (mount.getHeight() / 2) - (card.getHeight() / 2));
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -303,14 +298,10 @@ public class Hitotsu extends Tabletop {
 	}
 
 	public void justPut(KawaiponCard c) {
+		Helper.darkenImage(mount);
+
 		BufferedImage card = c.getCard().drawCard(c.isFoil());
 		Graphics2D g2d = mount.createGraphics();
-
-		g2d.setComposite(BlendComposite.Multiply);
-		g2d.setColor(new Color(0, 0, 0, 50));
-		g2d.fillRect(0, 0, mount.getWidth(), mount.getHeight());
-		g2d.setComposite(AlphaComposite.SrcOver);
-
 		g2d.translate((mount.getWidth() / 2) - (card.getWidth() / 2), (mount.getHeight() / 2) - (card.getHeight() / 2));
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
