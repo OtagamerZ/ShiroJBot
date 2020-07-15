@@ -88,42 +88,8 @@ public class Hitotsu extends Tabletop {
 
 				if (chn.getId().equals(getTable().getId()) && u.getId().equals(getPlayers().getUserSequence().getFirst().getId())) {
 					try {
-						if (m.getContentRaw().split(" ").length > 1) {
-							String[] indexes = m.getContentRaw().split(" ");
-							boolean valid = true;
-							for (String i : indexes) {
-								if (!StringUtils.isNumeric(i)) {
-									valid = false;
-									break;
-								}
-							}
-
-							if (!valid) return;
-
-							Integer[] idx = Arrays.stream(indexes).map(Integer::parseInt).toArray(Integer[]::new);
-							valid = checkChain(idx);
-
-							if (!valid) {
-								getTable().sendMessage(":x: | Corrente inválida, para usar uma corrente digite os índices das cartas separados por espaço (apenas cartas do __**mesmo anime**__ são válidas para corrente).").queue();
-								return;
-							}
-
-							int chainMax = Collections.max(List.of(idx));
-							for (int i : idx) {
-								if (handle(i, chainMax)) {
-									Main.getInfo().getAPI().removeEventListener(this);
-									ShiroInfo.getGames().remove(getId());
-									getTable().sendMessage("Não restam mais cartas para " + getPlayers().getWinner().getAsMention() + ", temos um vencedor!!").queue();
-									timeout.cancel(true);
-								} 
-							}
-							timeout.cancel(true);
-							timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
-								Main.getInfo().getAPI().removeEventListener(this);
-								ShiroInfo.getGames().remove(getId());
-							}, Helper::doNothing);
-						} else if (StringUtils.isNumeric(m.getContentRaw())) {
-							if (handle(Integer.parseInt(m.getContentRaw()), Integer.parseInt(m.getContentRaw()))) {
+						if (StringUtils.isNumeric(m.getContentRaw())) {
+							if (handle(Integer.parseInt(m.getContentRaw()))) {
 								Main.getInfo().getAPI().removeEventListener(this);
 								ShiroInfo.getGames().remove(getId());
 								getTable().sendMessage("Não restam mais cartas para " + getPlayers().getWinner().getAsMention() + ", temos um vencedor!!").queue();
@@ -182,7 +148,7 @@ public class Hitotsu extends Tabletop {
 		});
 	}
 
-	public boolean handle(int card, int chainMax) throws IllegalCardException {
+	public boolean handle(int card) throws IllegalCardException {
 		Hand hand = hands.get(getPlayers().getUserSequence().getFirst());
 		KawaiponCard c = hand.getCards().get(card);
 		KawaiponCard lastest = played.peekLast();
@@ -198,16 +164,12 @@ public class Hitotsu extends Tabletop {
 		if (c.isFoil())
 			CardEffect.getEffect(c.getCard().getRarity()).accept(this, hands.get(getPlayers().getUserSequence().getLast()));
 
-		hands.get(getPlayers().getUserSequence().getFirst()).getCards().add(card, null);
-		if (card == chainMax) {
-			hands.forEach((usr, hnd) -> hnd.getCards().removeIf(cd -> cd == null));
-			getPlayers().setWinner(hands.values().stream().filter(h -> h.getCards().size() == 0).map(Hand::getUser).findFirst().orElse(null));
-			if (getPlayers().getWinner() != null) return true;
+		getPlayers().setWinner(hands.values().stream().filter(h -> h.getCards().size() == 0).map(Hand::getUser).findFirst().orElse(null));
+		if (getPlayers().getWinner() != null) return true;
 
-			if (deque.size() == 0) shuffle();
-			next();
-			putAndShow(c);
-		} else justPut(c);
+		if (deque.size() == 0) shuffle();
+		next();
+		putAndShow(c);
 		return false;
 	}
 
@@ -227,40 +189,6 @@ public class Hitotsu extends Tabletop {
 
 		if (message != null) message.delete().queue();
 		message = getTable().sendMessage(getPlayers().getUserSequence().getFirst().getAsMention() + " agora é sua vez.").addFile(Helper.getBytes(mount, "png"), "mount.png").complete();
-	}
-
-	public void justPut(KawaiponCard c) {
-		BufferedImage card = c.getCard().drawCard(c.isFoil());
-		Graphics2D g2d = mount.createGraphics();
-		g2d.translate((mount.getWidth() / 2) - (card.getWidth() / 2), (mount.getHeight() / 2) - (card.getHeight() / 2));
-		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		Helper.drawRotated(g2d, card, card.getWidth() / 2, card.getHeight() / 2, Math.random() * 90 - 45);
-		g2d.dispose();
-	}
-
-	public void shuffle() {
-		KawaiponCard lastest = played.getLast();
-		played.clear();
-		played.add(lastest);
-		deque.addAll(available);
-		deque.remove(lastest);
-		Collections.shuffle(deque);
-		mount = new BufferedImage(500, 500, BufferedImage.TYPE_INT_ARGB);
-	}
-
-	private boolean checkChain(Integer[] cards) {
-		List<KawaiponCard> hand = getHands().get(getPlayers().getUserSequence().getFirst()).getCards();
-		KawaiponCard aux = hand.get(cards[0]);
-		boolean valid = true;
-		for (int i : cards) {
-			if (!hand.get(i).getCard().getAnime().equals(aux.getCard().getAnime())) {
-				valid = false;
-				break;
-			} 
-		} 
-
-		return valid;
 	}
 
 	public Map<User, Hand> getHands() {
