@@ -18,6 +18,10 @@
 
 package com.kuuhaku.command.commands.dev;
 
+import club.minnced.discord.webhook.WebhookClient;
+import club.minnced.discord.webhook.WebhookClientBuilder;
+import club.minnced.discord.webhook.WebhookCluster;
+import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
@@ -75,6 +79,7 @@ public class BroadcastCommand extends Command {
 
 		switch (args[0].toLowerCase()) {
 			case "geral":
+				List<WebhookClient> clients = new ArrayList<>();
 				List<GuildConfig> gcs = GuildDAO.getAlertChannels();
 
 				List<List<GuildConfig>> gcPages = Helper.chunkify(gcs, 10);
@@ -89,8 +94,13 @@ public class BroadcastCommand extends Command {
 						try {
 							TextChannel c = g.getTextChannelById(gc.getCanalAvisos());
 							if (c != null && c.canTalk()) {
-								c.sendMessage(msg).submit().get();
-								result.put(g.getName(), true);
+								Webhook wh = Helper.getOrCreateWebhook(c, "Shiro", Main.getInfo().getAPI());
+								if (wh == null) result.put(g.getName(), false);
+								else {
+									WebhookClientBuilder wcb = new WebhookClientBuilder(wh.getUrl());
+									clients.add(wcb.build());
+									result.put(g.getName(), true);
+								}
 							} else result.put(g.getName(), false);
 						} catch (Exception e) {
 							result.put(g.getName(), false);
@@ -100,6 +110,14 @@ public class BroadcastCommand extends Command {
 					showResult(result, sb, pages, eb);
 				}
 
+				WebhookMessageBuilder wmb = new WebhookMessageBuilder();
+
+				wmb.setUsername("Notificação Shiro");
+				wmb.setAvatarUrl(Main.getInfo().getSelfUser().getEffectiveAvatarUrl());
+				wmb.setContent(msg);
+
+				WebhookCluster cluster = new WebhookCluster(clients);
+				cluster.broadcast(wmb.build());
 				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5));
 				break;
 			case "parceiros":
