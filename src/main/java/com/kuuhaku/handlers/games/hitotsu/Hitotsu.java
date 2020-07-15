@@ -198,7 +198,7 @@ public class Hitotsu extends Tabletop {
 		if (c.isFoil())
 			CardEffect.getEffect(c.getCard().getRarity()).accept(this, hands.get(getPlayers().getUserSequence().getLast()));
 
-		hands.get(getPlayers().getUserSequence().getFirst()).getCards().add(i, null);
+		hands.get(getPlayers().getUserSequence().getFirst()).getCards().add(card, null);
 		if (card == chainMax) {
 			hands.get(getPlayers().getUserSequence().getFirst()).getCards().removeIf(cd -> cd == null);
 			getPlayers().setWinner(hands.values().stream().filter(h -> h.getCards().size() == 0).map(Hand::getUser).findFirst().orElse(null));
