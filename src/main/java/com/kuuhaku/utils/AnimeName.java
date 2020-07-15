@@ -36,6 +36,8 @@ public enum AnimeName {
 	SWORD_ART_ONLINE,
 	KILL_LA_KILL,
 	ITADAKI_SEIEKI,
+	OVERLORD,
+	//NICHIJOU,
 	;
 
 	@Override
