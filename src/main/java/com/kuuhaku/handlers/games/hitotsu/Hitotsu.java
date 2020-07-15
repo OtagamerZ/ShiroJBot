@@ -88,7 +88,7 @@ public class Hitotsu extends Tabletop {
 
 				if (chn.getId().equals(getTable().getId()) && u.getId().equals(getPlayers().getUserSequence().getFirst().getId())) {
 					try {
-						if (m.getContentRaw().contains(" ")) {
+						if (m.getContentRaw().split(" ").length > 1) {
 							String[] indexes = m.getContentRaw().split(" ");
 							boolean valid = true;
 							for (String i : indexes) {
@@ -242,6 +242,8 @@ public class Hitotsu extends Tabletop {
 		KawaiponCard aux = hand.get(cards[0]);
 		boolean valid = true;
 		for (int i : cards) {
+			System.out.println(hand.get(i).getCard().getAnime().toString());
+			System.out.println(" ");
 			if (!hand.get(i).getCard().getAnime().equals(aux.getCard().getAnime())) {
 				valid = false;
 				break;
