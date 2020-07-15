@@ -283,7 +283,7 @@ public class Hitotsu extends Tabletop {
 	}
 
 	public void putAndShow(KawaiponCard c) {
-		Helper.darkenImage(mount);
+		Helper.darkenImage(0.5f, mount);
 
 		BufferedImage card = c.getCard().drawCard(c.isFoil());
 		Graphics2D g2d = mount.createGraphics();
@@ -298,7 +298,7 @@ public class Hitotsu extends Tabletop {
 	}
 
 	public void justPut(KawaiponCard c) {
-		Helper.darkenImage(mount);
+		Helper.darkenImage(0.5f, mount);
 
 		BufferedImage card = c.getCard().drawCard(c.isFoil());
 		Graphics2D g2d = mount.createGraphics();
