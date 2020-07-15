@@ -32,21 +32,21 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
-public class PPTCommand extends Command {
+public class RPSCommand extends Command {
 
-	public PPTCommand(String name, String description, Category category, boolean requiresMM) {
+	public RPSCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
 	}
 
-	public PPTCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
+	public RPSCommand(String name, String[] aliases, String description, Category category, boolean requiresMM) {
 		super(name, aliases, description, category, requiresMM);
 	}
 
-	public PPTCommand(String name, String usage, String description, Category category, boolean requiresMM) {
+	public RPSCommand(String name, String usage, String description, Category category, boolean requiresMM) {
 		super(name, usage, description, category, requiresMM);
 	}
 
-	public PPTCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
+	public RPSCommand(@NonNls String name, @NonNls String[] aliases, String usage, String description, Category category, boolean requiresMM) {
 		super(name, aliases, usage, description, category, requiresMM);
 	}
 

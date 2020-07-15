@@ -387,7 +387,7 @@ public class CommandManager {
 			put(ExpandingBrainCommand.class, new Argument(
 					"menteexpandida", new String[]{"eb", "expandingbrain", "brain"}, "req_four-options", "cmd_expanded-brain", FUN, false
 			));
-			put(PPTCommand.class, new Argument(
+			put(RPSCommand.class, new Argument(
 					"jankenpon", new String[]{"ppt", "rps", "jokenpo", "janken"}, "req_jakenpon", "cmd_jankenpon", FUN, false
 			));
 			put(ShipCommand.class, new Argument(
