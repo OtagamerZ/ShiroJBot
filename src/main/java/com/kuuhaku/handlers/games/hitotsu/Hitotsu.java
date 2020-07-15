@@ -239,6 +239,7 @@ public class Hitotsu extends Tabletop {
 
 	private boolean checkChain(Integer[] cards) {
 		List<KawaiponCard> hand = getHands().get(getPlayers().getUserSequence().getFirst()).getCards();
+		System.out.println(hand.stream().map(KawaiponCard::getName).collect(Collectors.toList()).toString());
 
 		return hand.stream().allMatch(kc -> kc.getCard().getAnime().equals(hand.get(cards[0]).getCard().getAnime()));
 	}
