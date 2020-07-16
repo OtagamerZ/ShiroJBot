@@ -38,6 +38,7 @@ public enum AnimeName {
 	ITADAKI_SEIEKI,
 	OVERLORD,
 	NICHIJOU,
+	DARLING_IN_THE_FRANXX,
 	;
 
 	@Override
