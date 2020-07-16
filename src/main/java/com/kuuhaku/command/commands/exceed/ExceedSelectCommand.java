@@ -122,7 +122,7 @@ public class ExceedSelectCommand extends Command {
 								c.sendMessage(author.getAsTag() + " juntou-se à " + ex + ", dê-o(a) as boas-vindas!").queue(null, Helper::doNothing);
 							} catch (Exception ignore) {
 							}
-						}));
+						}, Helper::doNothing));
 				m.delete().queue();
 			} else {
 				m.editMessage(":x: | Você já pertence à um exceed, não é possível trocá-lo.").queue();
