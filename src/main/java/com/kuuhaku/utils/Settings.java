@@ -654,9 +654,8 @@ public class Settings {
 
 		eb.addField(prefix + "settings rolewarn", "Define o cargo de punição em seu servidor.", false);
 		//eb.addField(prefix + "settings rolevip", "Define o cargo VIP em seu servidor.", false);
-		eb.addField(prefix + "settings cargolevel", "Define os cargos por level em seu servidor.\n\nParâmetros:\n", false);
-
-		eb.addField(prefix + "settings levelnotif", "Habilita as notificações de nível.", false);
+		eb.addField(prefix + "settings cargolevel", "Define os cargos por level em seu servidor.", false);
+		eb.addField(prefix + "settings levelnotif", "Habilita as notificações de nível.\n\nParâmetros:\n", false);
 
 		eb.addField("%guild%", "Para dizer o nome do server.", false);
 		eb.addField("%user%", "Para dizer o nome do usuário.", false);
