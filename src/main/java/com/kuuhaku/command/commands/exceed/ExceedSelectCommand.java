@@ -68,54 +68,54 @@ public class ExceedSelectCommand extends Command {
 				switch (args[0].toLowerCase()) {
 					case "imanity":
 						if (ExceedDAO.getPercentage(ExceedEnums.IMANITY) >= 0.5f) {
-							channel.sendMessage(":x: | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
+							m.editMessage(":x: | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
 							return;
 						}
 						ExceedDAO.joinExceed(new ExceedMember(author.getId(), ExceedEnums.IMANITY.getName()));
 						break;
 					case "seiren":
 						if (ExceedDAO.getPercentage(ExceedEnums.SEIREN) >= 0.5f) {
-							channel.sendMessage(":x: | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
+							m.editMessage(":x: | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
 							return;
 						}
 						ExceedDAO.joinExceed(new ExceedMember(author.getId(), ExceedEnums.SEIREN.getName()));
 						break;
 					case "werebeast":
 						if (ExceedDAO.getPercentage(ExceedEnums.WEREBEAST) >= 0.5f) {
-							channel.sendMessage(":x: | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
+							m.editMessage(":x: | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
 							return;
 						}
 						ExceedDAO.joinExceed(new ExceedMember(author.getId(), ExceedEnums.WEREBEAST.getName()));
 						break;
 					case "elf":
 						if (ExceedDAO.getPercentage(ExceedEnums.ELF) >= 0.5f) {
-							channel.sendMessage(":x: | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
+							m.editMessage(":x: | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
 							return;
 						}
 						ExceedDAO.joinExceed(new ExceedMember(author.getId(), ExceedEnums.ELF.getName()));
 						break;
 					case "ex-machina":
 						if (ExceedDAO.getPercentage(ExceedEnums.EXMACHINA) >= 0.5f) {
-							channel.sendMessage(":x: | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
+							m.editMessage(":x: | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
 							return;
 						}
 						ExceedDAO.joinExceed(new ExceedMember(author.getId(), ExceedEnums.EXMACHINA.getName()));
 						break;
 					case "flügel":
 						if (ExceedDAO.getPercentage(ExceedEnums.FLUGEL) >= 0.5f) {
-							channel.sendMessage(":x: | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
+							m.editMessage(":x: | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
 							return;
 						}
 						ExceedDAO.joinExceed(new ExceedMember(author.getId(), ExceedEnums.FLUGEL.getName()));
 						break;
 					default:
-						channel.sendMessage(":x: | Exceed inexistente.").queue();
+						m.editMessage(":x: | Exceed inexistente.").queue();
 						return;
 				}
 
 				String ex = ExceedDAO.getExceed(author.getId());
 
-				channel.sendMessage("Exceed escolhido com sucesso, você agora pertence à **" + ex + "**.").queue();
+				m.editMessage("Exceed escolhido com sucesso, você agora pertence à **" + ex + "**.").queue();
 				ExceedDAO.getExceedMembers(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId()))).stream().map(ExceedMember::getId).forEach(em ->
 						Main.getInfo().getUserByID(em).openPrivateChannel().queue(c -> {
 							try {
