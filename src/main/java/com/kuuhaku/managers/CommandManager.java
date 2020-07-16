@@ -106,6 +106,9 @@ public class CommandManager {
 			put(BlacklistCommand.class, new Argument(
 					"listanegra", new String[]{"bl", "blacklist"}, "cmd_blacklist", DEV, false
 			));
+			put(CompileCommand.class, new Argument(
+					"compilar", new String[]{"compile", "exec"}, "req_code", "cmd_compile", DEV, true
+			));
 
 			//SUPPORT
 			put(BlockCommand.class, new Argument(
@@ -130,9 +133,6 @@ public class CommandManager {
 			));
 			put(TetCommand.class, new Argument(
 					"tet", "cmd_tet", PARTNER, false
-			));
-			put(CompileCommand.class, new Argument(
-					"compilar", new String[]{"compile", "exec"}, "req_code", "cmd_compile", PARTNER, true
 			));
 			put(JibrilEmoteListCommand.class, new Argument(
 					"jemotes", REQ_NAME, "cmd_j-emotes", PARTNER, true
