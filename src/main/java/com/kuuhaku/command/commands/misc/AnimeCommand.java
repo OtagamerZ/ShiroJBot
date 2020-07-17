@@ -28,6 +28,7 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -150,7 +151,7 @@ public class AnimeCommand extends Command {
 
 				m.delete().queue();
 				channel.sendMessage(eb.build()).queue();
-			} catch (IOException e) {
+			} catch (IOException | JSONException e) {
 				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_anime-not-found")).queue();
 				Helper.logger(this.getClass()).debug(e + " | " + e.getStackTrace()[0]);
 			}

@@ -39,6 +39,7 @@ public enum AnimeName {
 	OVERLORD,
 	NICHIJOU,
 	DARLING_IN_THE_FRANXX,
+	ISHUZOKU_REVIEWERS,
 	;
 
 	@Override
