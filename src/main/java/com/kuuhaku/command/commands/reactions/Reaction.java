@@ -59,7 +59,7 @@ public abstract class Reaction extends Command {
 	}
 
 	public String getReaction() {
-		return reaction.length == 0 ? "SEM RESPOSTA DEFINIDA" : reaction[Helper.rng(reaction.length)];
+		return reaction.length == 0 ? "SEM RESPOSTA DEFINIDA" : reaction[Helper.rng(reaction.length, true)];
 	}
 
 	public boolean isAnswerable() {
@@ -75,7 +75,7 @@ public abstract class Reaction extends Command {
 	}
 
 	public String getSelfTarget() {
-		return selfTarget.length == 0 ? "SEM RESPOSTA DEFINIDA" : selfTarget[Helper.rng(selfTarget.length)];
+		return selfTarget.length == 0 ? "SEM RESPOSTA DEFINIDA" : selfTarget[Helper.rng(selfTarget.length, true)];
 	}
 
 	public void setSelfTarget(String[] selfTarget) {

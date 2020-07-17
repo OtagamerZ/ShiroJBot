@@ -204,8 +204,8 @@ public class Helper {
 		}
 	}
 
-	public static int rng(int maxValue) {
-		return Math.abs(new Random().nextInt(maxValue));
+	public static int rng(int maxValue, boolean exclusive) {
+		return Math.abs(new Random().nextInt(maxValue + (exclusive ? 0 : 1)));
 	}
 
 	public static Color colorThief(String url) throws IOException {
@@ -219,7 +219,7 @@ public class Helper {
 	}
 
 	public static void spawnAd(MessageChannel channel) {
-		if (Helper.rng(1000) > 990) {
+		if (Helper.rng(1000, false) > 990) {
 			channel.sendMessage("Opa, está gostando de me utilizar em seu servidor? Caso sim, se puder votar me ajudaria **MUITO** a me tornar cada vez mais popular e ser chamada para mais servidores!\nhttps://top.gg/bot/572413282653306901").queue();
 		}
 	}
@@ -338,7 +338,7 @@ public class Helper {
 	}
 
 	public static Color getRandomColor() {
-		return new Color(rng(255), rng(255), rng(255));
+		return new Color(rng(255, false), rng(255, false), rng(255, false));
 	}
 
 	public static boolean compareWithValues(int value, int... compareWith) {
@@ -682,7 +682,7 @@ public class Helper {
 		for (int i = 0; i < args.length; i++) {
 			if (args[i].startsWith(":") && args[i].endsWith(":")) {
 				List<Emote> emt = Main.getInfo().getAPI().getEmotesByName(args[i].replace(":", ""), true);
-				if (emt.size() > 0) args[i] = emt.get(Helper.rng(emt.size())).getAsMention();
+				if (emt.size() > 0) args[i] = emt.get(Helper.rng(emt.size(), true)).getAsMention();
 			}
 		}
 
@@ -886,7 +886,7 @@ public class Helper {
 		List<T> out = new ArrayList<>();
 
 		for (int i = 0; i <= elements; i++) {
-			int index = rng(aux.size());
+			int index = rng(aux.size(), true);
 
 			out.add(aux.get(index));
 			aux.remove(index);
@@ -930,7 +930,7 @@ public class Helper {
 
 		if (cbUltimate || chance(2.5 + (channel.getGuild().getMemberCount() * 2.5 / 5000) * (cardBuff != null ? cardBuff.getMult() : 1))) {
 			List<Card> cards = CardDAO.getCards();
-			Card kc = cards.get(Helper.rng(cards.size()));
+			Card kc = cards.get(Helper.rng(cards.size(), true));
 			boolean foil = fbUltimate || chance(0.5 * (foilBuff != null ? foilBuff.getMult() : 1));
 
 			EmbedBuilder eb = new EmbedBuilder();
