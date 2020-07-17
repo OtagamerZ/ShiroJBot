@@ -18,11 +18,10 @@
 
 package com.kuuhaku.model.common;
 
-import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.RarityColorsDAO;
+import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.model.persistent.RarityColors;
-import com.kuuhaku.utils.AnimeName;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.KawaiponRarity;
 import com.kuuhaku.utils.NContract;
@@ -44,19 +43,11 @@ public class KawaiponBook {
 		this.cards = cards;
 	}
 
-	public BufferedImage view(AnimeName anime, KawaiponRarity rarity, boolean foil) throws IOException, InterruptedException {
-		int totalCards;
+	public BufferedImage view(List<Card> cardList, String title, boolean foil) throws IOException, InterruptedException {
+		int totalCards = cardList.size();
 		String text;
-		if (anime != null) {
-			totalCards = (int) CardDAO.totalCards(anime);
-			text = (foil ? "« " : "") + anime.toString() + (foil ? " »" : "");
-		} else if (rarity != null) {
-			totalCards = (int) CardDAO.totalCards(rarity);
-			text = (foil ? "« " : "") + rarity.toString() + (foil ? " »" : "");
-		} else {
-			totalCards = AnimeName.values().length;
-			text = (foil ? "« " : "") + "Coleção Kawaipon" + (foil ? " »" : "");
-		}
+		if (foil) text = (foil ? "« " : "") + title + (foil ? " »" : "");
+		else text = title;
 		List<KawaiponCard> cards = new ArrayList<>(this.cards);
 		cards.sort(Comparator
 				.<KawaiponCard, KawaiponRarity>comparing(k -> k.getCard().getRarity(), Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
@@ -68,8 +59,7 @@ public class KawaiponBook {
 		for (int i = 0; i < rowCount; i++) {
 			ArrayList<KawaiponCard> chunk = new ArrayList<>();
 			for (int p = 5 * i; p < totalCards && p < 5 * (i + 1); p++) {
-				if (p < cards.size()) chunk.add(cards.get(p));
-				else chunk.add(null);
+				chunk.add(new KawaiponCard(cardList.get(p), foil));
 			}
 			chunks.add(chunk);
 		}
@@ -108,7 +98,6 @@ public class KawaiponBook {
 		ExecutorService th = Executors.newCachedThreadPool();
 		for (int c = 0; c < chunks.size(); c++) {
 			int finalC = c;
-			int finalC1 = c;
 			th.execute(() -> {
 				try {
 					BufferedImage row = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/row.jpg")));
@@ -117,7 +106,7 @@ public class KawaiponBook {
 					g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 					
 					for (int i = 0; i < chunks.get(finalC).size(); i++) {
-						if (chunks.get(finalC).get(i) != null) {
+						if (cards.contains(chunks.get(finalC).get(i)) || chunks.get(finalC).get(i).getCard().getRarity().equals(KawaiponRarity.ULTIMATE)) {
 							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, Helper.clamp(20 * 42 / chunks.get(finalC).get(i).getName().length(), 38, 42)));
 							RarityColors rc = RarityColorsDAO.getColor(chunks.get(finalC).get(i).getCard().getRarity());
 
@@ -127,13 +116,6 @@ public class KawaiponBook {
 
 							g.drawImage(chunks.get(finalC).get(i).getCard().drawCard(foil), 117 + 420 * i, 65, 338, 526, null);
 							Profile.printCenteredString(chunks.get(finalC).get(i).getName(), 338, 117 + 420 * i, 635, g);
-						} else if (anime == null && rarity == null) {
-							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, Helper.clamp(20 * 42 / AnimeName.values()[(5 * finalC1) + i].toString().length(), 38, 42)));
-							g.setBackground(Color.black);
-							g.setColor(Color.white);
-
-							g.drawImage(slot, 117 + 420 * i, 65, 338, 526, null);
-							Profile.printCenteredString(AnimeName.values()[(5 * finalC1) + i].toString(), 338, 117 + 420 * i, 635, g);
 						} else {
 							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 42));
 							g.setBackground(Color.black);

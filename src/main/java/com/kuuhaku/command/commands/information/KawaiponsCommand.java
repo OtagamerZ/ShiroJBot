@@ -79,7 +79,7 @@ public class KawaiponsCommand extends Command {
 					}
 
 					KawaiponBook kb = new KawaiponBook(collection);
-					BufferedImage cards = kb.view(null, null, false);
+					BufferedImage cards = kb.view(CardDAO.getCardsByRarity(KawaiponRarity.ULTIMATE), "Coleção Kawaipon", false);
 
 					try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 						ImageWriter writer = ImageIO.getImageWritersByFormatName("jpg").next();
@@ -131,7 +131,7 @@ public class KawaiponsCommand extends Command {
 					Set<KawaiponCard> toRender = collection.stream().filter(k -> k.isFoil() == args[1].equalsIgnoreCase("C")).collect(Collectors.toSet());
 
 					KawaiponBook kb = new KawaiponBook(toRender);
-					BufferedImage cards = kb.view(anime, null, args[1].equalsIgnoreCase("C"));
+					BufferedImage cards = kb.view(CardDAO.getCardsByAnime(anime), anime.toString(), args[1].equalsIgnoreCase("C"));
 
 					try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 						ImageWriter writer = ImageIO.getImageWritersByFormatName("jpg").next();
@@ -167,7 +167,7 @@ public class KawaiponsCommand extends Command {
 					Set<KawaiponCard> toRender = collection.stream().filter(k -> k.isFoil() == args[1].equalsIgnoreCase("C")).collect(Collectors.toSet());
 
 					KawaiponBook kb = new KawaiponBook(toRender);
-					BufferedImage cards = kb.view(null, rr, args[1].equalsIgnoreCase("C"));
+					BufferedImage cards = kb.view(CardDAO.getCardsByRarity(rr), rr.toString(), args[1].equalsIgnoreCase("C"));
 
 					try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 						ImageWriter writer = ImageIO.getImageWritersByFormatName("jpg").next();
