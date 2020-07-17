@@ -24,6 +24,7 @@ import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Member;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Guild;
 
 import javax.persistence.EntityManager;
@@ -86,14 +87,47 @@ public class Sweeper {
 		EntityManager em = com.kuuhaku.controller.sqlite.Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		gcs.forEach(em::merge);
-		mbs.forEach(em::merge);
-		safeGcs.forEach(em::merge);
-		safeMbs.forEach(em::merge);
+
+		for (int i = 0; i < gcs.size(); i++) {
+			em.merge(gcs.get(i));
+			saveChunk(em, i);
+		}
+		if (gcs.size() > 0) Helper.logger(Main.class).info("Servidores marcados com sucesso!");
+
+		for (int i = 0; i < mbs.size(); i++) {
+			em.merge(mbs.get(i));
+			saveChunk(em, i);
+		}
+		if (mbs.size() > 0) Helper.logger(Main.class).info("Membros marcados com sucesso!");
+
+		for (int i = 0; i < safeGcs.size(); i++) {
+			em.merge(safeGcs.get(i));
+			saveChunk(em, i);
+		}
+		if (safeGcs.size() > 0) Helper.logger(Main.class).info("Servidores desmarcados com sucesso!");
+
+		for (int i = 0; i < safeMbs.size(); i++) {
+			em.merge(safeMbs.get(i));
+			saveChunk(em, i);
+		}
+		if (safeMbs.size() > 0) Helper.logger(Main.class).info("Membros desmarcados com sucesso!");
+
 		em.getTransaction().commit();
 
 		em.close();
 
 		return gcs.size() + mbs.size();
+	}
+
+	private static void saveChunk(EntityManager em, int i) {
+		if (i % 20 == 0) {
+			em.flush();
+			em.clear();
+		}
+		if (i % 1000 == 0) {
+			em.getTransaction().commit();
+			em.clear();
+			em.getTransaction().begin();
+		}
 	}
 }
