@@ -191,6 +191,7 @@ public class Hitotsu extends Tabletop {
 			private void declareWinner() {
 				Main.getInfo().getAPI().removeEventListener(this);
 				ShiroInfo.getGames().remove(getId());
+				justShow();
 				getTable().sendMessage("Não restam mais cartas para " + getPlayers().getWinner().getAsMention() + ", temos um vencedor!!").queue();
 				timeout.cancel(true);
 
