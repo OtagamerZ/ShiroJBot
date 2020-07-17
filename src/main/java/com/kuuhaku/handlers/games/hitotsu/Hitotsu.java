@@ -322,6 +322,7 @@ public class Hitotsu extends Tabletop {
 		deque.remove(lastest);
 		Collections.shuffle(deque);
 		mount = new BufferedImage(500, 500, BufferedImage.TYPE_INT_ARGB);
+		putAndShow(lastest);
 	}
 
 	public Map<User, Hand> getHands() {
