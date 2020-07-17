@@ -175,6 +175,7 @@ public class Hitotsu extends Tabletop {
 										.append("\n");
 							}
 							eb.setDescription(sb.toString());
+							eb.setFooter("Carta atual: " + played.getLast().getName() + " (" + played.getLast().getCard().getAnime() + ")");
 
 							getPlayers().getUserSequence().getFirst().openPrivateChannel().complete().sendMessage(eb.build()).queue();
 						}

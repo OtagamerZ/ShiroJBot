@@ -20,10 +20,12 @@ package com.kuuhaku.model.common.drop;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.AnimeName;
+import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.codec.binary.Hex;
@@ -37,14 +39,15 @@ import java.util.List;
 import java.util.function.Function;
 
 public class CreditDrop implements Prize {
-	private final AnimeName anime = AnimeName.values()[Helper.rng(AnimeName.values().length)];
+	private final AnimeName anime = AnimeName.values()[Helper.rng(AnimeName.values().length, true)];
+	private final ExceedEnums exceed = ExceedEnums.values()[Helper.rng(ExceedEnums.values().length, true)];
 	private final int[] values = {
-			Helper.rng((int) CardDAO.totalCards(anime)),
-			Helper.rng(7),
-			Helper.rng((int) CardDAO.totalCards()),
-			Helper.rng(MemberDAO.getHighestLevel() / 2)
+			Helper.rng((int) CardDAO.totalCards(anime), false),
+			1 + Helper.rng(6, false),
+			Helper.rng((int) CardDAO.totalCards(), false),
+			Helper.rng(MemberDAO.getHighestLevel() / 2, false)
 	};
-	private final int amount = Helper.clamp(Helper.rng(1000), 250, 1000);
+	private final int amount = Helper.clamp(Helper.rng(1250, false), 250, 1250);
 	private final List<Pair<String, Function<User, Boolean>>> requirement = new ArrayList<>() {{
 		add(Pair.of("Ter " + values[2] + " Kawaipons ou mais.", u ->
 				KawaiponDAO.getKawaipon(u.getId()).getCards().size() >= values[2]));
@@ -58,10 +61,13 @@ public class CreditDrop implements Prize {
 		add(Pair.of("Ter até 1000 créditos.", u ->
 				AccountDAO.getAccount(u.getId()).getBalance() <= 1000));
 
-		add(Pair.of("Ter votado " + values[1] + " vezes seguidas.", u ->
+		add(Pair.of("Ter votado " + values[1] + " vezes seguidas ou mais.", u ->
 				AccountDAO.getAccount(u.getId()).getStreak() >= values[1]));
+
+		add(Pair.of("Ser membro da " + exceed.getName() + ".", u ->
+				ExceedDAO.getExceedMember(u.getId()).getExceed().equalsIgnoreCase(exceed.getName())));
 	}};
-	private final Pair<String, Function<User, Boolean>> chosen = requirement.get(Helper.rng(requirement.size()));
+	private final Pair<String, Function<User, Boolean>> chosen = requirement.get(Helper.rng(requirement.size(), true));
 
 	@Override
 	public String getCaptcha() {

@@ -129,7 +129,7 @@ public enum Country {
 		List<Country> out = new ArrayList<>();
 
 		for (int i = 0; i < 7; i++) {
-			int index = Helper.rng(availableCountries.size());
+			int index = Helper.rng(availableCountries.size(), true);
 
 			out.add(availableCountries.get(index));
 			availableCountries.remove(index);

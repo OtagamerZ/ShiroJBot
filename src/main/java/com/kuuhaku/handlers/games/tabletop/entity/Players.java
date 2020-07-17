@@ -52,6 +52,7 @@ public class Players {
 	}
 
 	public void setWinner(User winner) {
+		if (winner == null) return;
 		this.winner = winner;
 		this.loser = turn.stream().filter(u -> !u.getId().equals(winner.getId())).findFirst().orElseThrow();
 	}

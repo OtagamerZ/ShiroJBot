@@ -39,7 +39,7 @@ public class CustomAnswerDAO {
 
 		em.close();
 
-		return ca.size() > 0 ? ca.get(Helper.rng(ca.size())) : null;
+		return ca.size() > 0 ? ca.get(Helper.rng(ca.size(), true)) : null;
 	}
 
 	public static CustomAnswers getCAByID(Long id) {
