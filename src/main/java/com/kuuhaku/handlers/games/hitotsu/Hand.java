@@ -81,7 +81,7 @@ public class Hand {
 			if (kc.isFoil()) g2d.setColor(rc.getPrimary().brighter());
 			else g2d.setColor(rc.getPrimary());
 
-			Helper.writeRotated(g2d, kc.isFoil() ? "*" + i + "*" : String.valueOf(i), 154, 450, -45 + (90f / cards.size() * (i + 1)));
+			Helper.writeRotated(g2d, kc.isFoil() ? "*" + i + "*" : String.valueOf(i), 154, 450, -90 + (180f / (cards.size() + 1) * (i + 1)));
 		}
 
 		g2d.dispose();
