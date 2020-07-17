@@ -108,6 +108,7 @@ public class KawaiponBook {
 		ExecutorService th = Executors.newCachedThreadPool();
 		for (int c = 0; c < chunks.size(); c++) {
 			int finalC = c;
+			int finalC1 = c;
 			th.execute(() -> {
 				try {
 					BufferedImage row = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/row.jpg")));
@@ -126,6 +127,12 @@ public class KawaiponBook {
 
 							g.drawImage(chunks.get(finalC).get(i).getCard().drawCard(foil), 117 + 420 * i, 65, 338, 526, null);
 							Profile.printCenteredString(chunks.get(finalC).get(i).getName(), 338, 117 + 420 * i, 635, g);
+						} else if (anime == null && rarity == null) {
+							g.setBackground(Color.black);
+							g.setColor(Color.white);
+
+							g.drawImage(slot, 117 + 420 * i, 65, 338, 526, null);
+							Profile.printCenteredString(AnimeName.values()[(5 * finalC1) + i].toString(), 338, 117 + 420 * i, 635, g);
 						} else {
 							g.setBackground(Color.black);
 							g.setColor(Color.white);
