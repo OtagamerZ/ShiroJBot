@@ -156,10 +156,6 @@ public class CrissCross extends Tabletop {
 								getTable().sendMessage(turn[0].getAsMention() + " venceu!").addFile(baos.toByteArray(), "board.jpg").queue();
 								timeout.cancel(true);
 
-								System.out.println(turn[0].getName());
-								System.out.println(getPlayers().getWinner().getName());
-								System.out.println(getPlayers().getLoser().getName());
-
 								if (bet > 0) {
 									Account uacc = AccountDAO.getAccount(getPlayers().getWinner().getId());
 									Account tacc = AccountDAO.getAccount(getPlayers().getLoser().getId());
