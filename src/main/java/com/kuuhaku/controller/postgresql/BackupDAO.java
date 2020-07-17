@@ -25,6 +25,7 @@ import com.kuuhaku.model.common.DataDump;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.NContract;
 import net.dv8tion.jda.api.entities.Guild;
 
 import javax.persistence.EntityManager;
@@ -32,8 +33,12 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class BackupDAO {
+	private static ExecutorService backupQueue = Executors.newCachedThreadPool();
+
 	public static void dumpData(DataDump data) {
 		EntityManager em = Manager.getEntityManager();
 		em.getTransaction().begin();
@@ -44,38 +49,56 @@ public class BackupDAO {
 		List<Kawaigotchi> kgDump = data.getKgDump();
 		List<PoliticalState> psDump = data.getPsDump();
 
-		for (int i = 0; i < caDump.size(); i++) {
-			em.merge(data.getCaDump().get(i));
-			saveChunk(em, i, caDump.size(), "respostas");
-		}
-		if (caDump.size() > 0) Helper.logger(Main.class).info("Respostas salvas com sucesso!");
+		NContract<Void> backup = new NContract<>(5, voids -> {
+			em.getTransaction().commit();
+			em.close();
+			return null;
+		});
 
-		for (int i = 0; i < gcDump.size(); i++) {
-			em.merge(data.getGcDump().get(i));
-			saveChunk(em, i, gcDump.size(), "configurações");
-		}
-		if (gcDump.size() > 0) Helper.logger(Main.class).info("Configurações salvas com sucesso!");
+		backupQueue.execute(() -> {
+			for (int i = 0; i < caDump.size(); i++) {
+				em.merge(data.getCaDump().get(i));
+				saveChunk(em, i, caDump.size(), "respostas");
+			}
+			if (caDump.size() > 0) Helper.logger(Main.class).info("Respostas salvas com sucesso!");
+			backup.addSignature(0, null);
+		});
 
-		for (int i = 0; i < mDump.size(); i++) {
-			em.merge(data.getmDump().get(i));
-			saveChunk(em, i, mDump.size(), "membros");
-		}
-		if (mDump.size() > 0) Helper.logger(Main.class).info("Membros salvos com sucesso!");
+		backupQueue.execute(() -> {
+			for (int i = 0; i < gcDump.size(); i++) {
+				em.merge(data.getGcDump().get(i));
+				saveChunk(em, i, gcDump.size(), "configurações");
+			}
+			if (gcDump.size() > 0) Helper.logger(Main.class).info("Configurações salvas com sucesso!");
+			backup.addSignature(1, null);
+		});
 
-		for (int i = 0; i < kgDump.size(); i++) {
-			em.merge(data.getKgDump().get(i));
-			saveChunk(em, i, kgDump.size(), "kgotchis");
-		}
-		if (kgDump.size() > 0) Helper.logger(Main.class).info("Kawaigotchis salvos com sucesso!");
+		backupQueue.execute(() -> {
+			for (int i = 0; i < mDump.size(); i++) {
+				em.merge(data.getmDump().get(i));
+				saveChunk(em, i, mDump.size(), "membros");
+			}
+			if (mDump.size() > 0) Helper.logger(Main.class).info("Membros salvos com sucesso!");
+			backup.addSignature(2, null);
+		});
 
-		for (int i = 0; i < psDump.size(); i++) {
-			em.merge(data.getPsDump().get(i));
-			saveChunk(em, i, psDump.size(), "estados");
-		}
-		if (psDump.size() > 0) Helper.logger(Main.class).info("Estados salvos com sucesso!");
+		backupQueue.execute(() -> {
+			for (int i = 0; i < kgDump.size(); i++) {
+				em.merge(data.getKgDump().get(i));
+				saveChunk(em, i, kgDump.size(), "kgotchis");
+			}
+			if (kgDump.size() > 0) Helper.logger(Main.class).info("Kawaigotchis salvos com sucesso!");
+			backup.addSignature(3, null);
+		});
 
-		em.getTransaction().commit();
-		em.close();
+		backupQueue.execute(() -> {
+			for (int i = 0; i < psDump.size(); i++) {
+				em.merge(data.getPsDump().get(i));
+				saveChunk(em, i, psDump.size(), "estados");
+			}
+			if (psDump.size() > 0) Helper.logger(Main.class).info("Estados salvos com sucesso!");
+			backup.addSignature(4, null);
+		});
 	}
 
 	private static void saveChunk(EntityManager em, int i, int size, String name) {
