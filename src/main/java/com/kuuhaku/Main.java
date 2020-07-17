@@ -164,7 +164,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 			add(Activity.watching("No Game No Life pela 13ª vez, e ainda não enjoei de ver como eu atuo bem!"));
 		}};
 
-		return activities.get(Helper.rng(activities.size()));
+		return activities.get(Helper.rng(activities.size(), true));
 	}
 
 	public static ShiroInfo getInfo() {

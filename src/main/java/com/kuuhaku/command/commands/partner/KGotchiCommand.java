@@ -378,14 +378,14 @@ public class KGotchiCommand extends Command {
 	}
 
 	private void getPrize(MessageChannel channel, Account acc, Kawaigotchi k) {
-		int rng = Helper.rng(100);
+		int rng = Helper.rng(100, false);
 		if (rng > 50 && rng <= 75) {
 			acc.addCredit(2 * rng);
 			AccountDAO.saveAccount(acc);
 			channel.sendMessage("Opa, o que é isso? Parece que " + k.getName() + " encontrou " + (2 * rng) + " créditos!").queue();
 		} else if (rng > 85) {
 			int amount = (rng - 80) / 5;
-			Food randFood = (Food) FoodMenu.getMenu().values().toArray()[Helper.rng(FoodMenu.getMenu().size())];
+			Food randFood = (Food) FoodMenu.getMenu().values().toArray()[Helper.rng(FoodMenu.getMenu().size(), true)];
 			k.addToBag(randFood, amount);
 			channel.sendMessage("Opa, o que é isso? Parece que " + k.getName() + " encontrou " + amount + " unidades de " + randFood.getName() + ", que sorte!!").queue();
 		}

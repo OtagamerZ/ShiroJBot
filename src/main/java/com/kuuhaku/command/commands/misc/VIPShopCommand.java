@@ -119,7 +119,7 @@ public class VIPShopCommand extends Command {
 				}
 
 				List<Card> cards = CardDAO.getCards().stream().filter(cd -> kp.getCard(cd, args[1].equalsIgnoreCase("C")) == null).collect(Collectors.toList());
-				Card chosen = cards.get(Helper.rng(cards.size()));
+				Card chosen = cards.get(Helper.rng(cards.size(), true));
 
 				kp.removeCard(card);
 				card.setCard(chosen);

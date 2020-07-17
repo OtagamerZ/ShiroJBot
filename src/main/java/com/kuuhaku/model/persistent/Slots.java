@@ -69,6 +69,6 @@ public class Slots {
 	}
 
 	public static String getSlot() {
-		return slots[Helper.rng(slots.length)];
+		return slots[Helper.rng(slots.length, true)];
 	}
 }

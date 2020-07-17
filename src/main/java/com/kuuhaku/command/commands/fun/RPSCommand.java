@@ -60,7 +60,7 @@ public class RPSCommand extends Command {
 
 		Account acc = AccountDAO.getAccount(author.getId());
 
-		int pcOption = Helper.rng(3);
+		int pcOption = Helper.rng(2, false);
 		int win = 2;
 
 		switch (args[0].toLowerCase()) {
@@ -131,7 +131,7 @@ public class RPSCommand extends Command {
 							}
 							break;
 						case 1:
-							int crd = Helper.rng(50);
+							int crd = Helper.rng(50, false);
 							acc.addCredit(crd);
 							AccountDAO.saveAccount(acc);
 							m.editMessage(m.getContentRaw() + "\nVocê ganhou! Aqui, " + crd + " créditos por ter jogado comigo!").queue();
