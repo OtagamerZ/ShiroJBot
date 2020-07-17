@@ -26,8 +26,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Sweeper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Sweeper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/BackupDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/BackupDAO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -602,14 +600,7 @@
       <workItem from="1594992340978" duration="2750000" />
       <workItem from="1594996453946" duration="252000" />
       <workItem from="1594997388326" duration="4020000" />
-      <workItem from="1595010214743" duration="7833000" />
-    </task>
-    <task id="LOCAL-01791" summary="Adição de novo jogo: Hitotsu (fase de testes)">
-      <created>1594754063312</created>
-      <option name="number" value="01791" />
-      <option name="presentableId" value="LOCAL-01791" />
-      <option name="project" value="LOCAL" />
-      <updated>1594754063312</updated>
+      <workItem from="1595010214743" duration="8294000" />
     </task>
     <task id="LOCAL-01792" summary="Adição de novo jogo: Hitotsu (fase de testes)">
       <created>1594754195160</created>
@@ -947,7 +938,14 @@
       <option name="project" value="LOCAL" />
       <updated>1595017625180</updated>
     </task>
-    <option name="localTasksCounter" value="1840" />
+    <task id="LOCAL-01840" summary="O comando kawaipons sem argumentos agora mostra o nome dos animes">
+      <created>1595018086960</created>
+      <option name="number" value="01840" />
+      <option name="presentableId" value="LOCAL-01840" />
+      <option name="project" value="LOCAL" />
+      <updated>1595018086960</updated>
+    </task>
+    <option name="localTasksCounter" value="1841" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1063,11 +1061,11 @@
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="234" y="57" width="805" height="924" key="CommitChangelistDialog2" timestamp="1595017622531">
+    <state x="234" y="57" width="805" height="924" key="CommitChangelistDialog2" timestamp="1595018069531">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1593924629204" />
-    <state x="234" y="57" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1595017622531" />
+    <state x="234" y="57" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1595018069531" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1143,11 +1141,11 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1587956411634" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1592942915575" />
-    <state x="253" y="373" key="Vcs.Push.Dialog.v2" timestamp="1595017626653">
+    <state x="253" y="373" key="Vcs.Push.Dialog.v2" timestamp="1595018087975">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1593924633531" />
-    <state x="253" y="373" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1595017626653" />
+    <state x="253" y="373" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1595018087975" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1594305494731">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
