@@ -105,7 +105,7 @@ public class KawaiponsCommand extends Command {
 
 					eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName());
 					eb.addField(":books: | Coleções completas:", count + " de " + AnimeName.values().length + " (" + Helper.prcntToInt(count, AnimeName.values().length) + "%)", true);
-					eb.addField(":red_envelope: | Total de cartas comuns:", common + " de " + CardDAO.totalCards() + " (" + Helper.prcntToInt(common, CardDAO.totalCards()) + "%)", true);
+					eb.addField(":red_envelope: | Total de cartas normais:", common + " de " + CardDAO.totalCards() + " (" + Helper.prcntToInt(common, CardDAO.totalCards()) + "%)", true);
 					eb.addField(":star2: | Total de cartas cromadas:", foil + " de " + CardDAO.totalCards() + " (" + Helper.prcntToInt(foil, CardDAO.totalCards()) + "%)", true);
 					eb.setImage("attachment://cards.jpg");
 					eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(kp.getCards().size(), CardDAO.totalCards() * 2) + "%");
@@ -155,7 +155,7 @@ public class KawaiponsCommand extends Command {
 					int common = collection.size() - foil;
 
 					eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName() + " (" + anime.toString() + ")");
-					eb.addField(":red_envelope: | Cartas comuns:", common + " de " + CardDAO.totalCards(anime) + " (" + Helper.prcntToInt(common, CardDAO.totalCards(anime)) + "%)", true);
+					eb.addField(":red_envelope: | Cartas normais:", common + " de " + CardDAO.totalCards(anime) + " (" + Helper.prcntToInt(common, CardDAO.totalCards(anime)) + "%)", true);
 					eb.addField(":star2: | Cartas cromadas:", foil + " de " + CardDAO.totalCards(anime) + " (" + Helper.prcntToInt(foil, CardDAO.totalCards(anime)) + "%)", true);
 					eb.setImage("attachment://cards.jpg");
 					eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(collection.size(), CardDAO.totalCards(anime) * 2) + "%");
@@ -191,7 +191,7 @@ public class KawaiponsCommand extends Command {
 					int common = collection.size() - foil;
 
 					eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName() + " (" + rr.toString() + ")");
-					eb.addField(":red_envelope: | Cartas comuns:", common + " de " + CardDAO.totalCards(rr) + " (" + Helper.prcntToInt(common, CardDAO.totalCards(rr)) + "%)", true);
+					eb.addField(":red_envelope: | Cartas normais:", common + " de " + CardDAO.totalCards(rr) + " (" + Helper.prcntToInt(common, CardDAO.totalCards(rr)) + "%)", true);
 					eb.addField(":star2: | Cartas cromadas:", foil + " de " + CardDAO.totalCards(rr) + " (" + Helper.prcntToInt(foil, CardDAO.totalCards(rr)) + "%)", true);
 					eb.setImage("attachment://cards.jpg");
 					eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(collection.size(), CardDAO.totalCards(rr) * 2) + "%");
