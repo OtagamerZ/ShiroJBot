@@ -25,7 +25,6 @@ import com.kuuhaku.model.common.DataDump;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.NContract;
 import net.dv8tion.jda.api.entities.Guild;
 
 import javax.persistence.EntityManager;
@@ -46,8 +45,6 @@ public class BackupDAO {
 		List<Kawaigotchi> kgDump = data.getKgDump();
 		List<PoliticalState> psDump = data.getPsDump();
 
-		NContract<Void> backup = new NContract<>(5, voids -> null);
-
 		backupQueue.execute(() -> {
 			EntityManager em = Manager.getEntityManager();
 			em.getTransaction().begin();
@@ -57,7 +54,6 @@ public class BackupDAO {
 				saveChunk(em, i, caDump.size(), "respostas");
 			}
 			if (caDump.size() > 0) Helper.logger(Main.class).info("Respostas salvas com sucesso!");
-			backup.addSignature(0, null);
 
 			em.getTransaction().commit();
 			em.close();
@@ -72,7 +68,6 @@ public class BackupDAO {
 				saveChunk(em, i, gcDump.size(), "configurações");
 			}
 			if (gcDump.size() > 0) Helper.logger(Main.class).info("Configurações salvas com sucesso!");
-			backup.addSignature(1, null);
 
 			em.getTransaction().commit();
 			em.close();
@@ -87,7 +82,6 @@ public class BackupDAO {
 				saveChunk(em, i, mDump.size(), "membros");
 			}
 			if (mDump.size() > 0) Helper.logger(Main.class).info("Membros salvos com sucesso!");
-			backup.addSignature(2, null);
 
 			em.getTransaction().commit();
 			em.close();
@@ -102,7 +96,6 @@ public class BackupDAO {
 				saveChunk(em, i, kgDump.size(), "kgotchis");
 			}
 			if (kgDump.size() > 0) Helper.logger(Main.class).info("Kawaigotchis salvos com sucesso!");
-			backup.addSignature(3, null);
 
 			em.getTransaction().commit();
 			em.close();
@@ -117,7 +110,6 @@ public class BackupDAO {
 				saveChunk(em, i, psDump.size(), "estados");
 			}
 			if (psDump.size() > 0) Helper.logger(Main.class).info("Estados salvos com sucesso!");
-			backup.addSignature(4, null);
 
 			em.getTransaction().commit();
 			em.close();
