@@ -106,7 +106,7 @@ public class KawaiponBook {
 					g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 					
 					for (int i = 0; i < chunks.get(finalC).size(); i++) {
-						if (cards.contains(chunks.get(finalC).get(i)) || chunks.get(finalC).get(i).getCard().getRarity().equals(KawaiponRarity.ULTIMATE)) {
+						if (cards.contains(chunks.get(finalC).get(i))) {
 							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, Helper.clamp(20 * 42 / chunks.get(finalC).get(i).getName().length(), 38, 42)));
 							RarityColors rc = RarityColorsDAO.getColor(chunks.get(finalC).get(i).getCard().getRarity());
 
@@ -115,6 +115,13 @@ public class KawaiponBook {
 							else g.setColor(rc.getPrimary());
 
 							g.drawImage(chunks.get(finalC).get(i).getCard().drawCard(foil), 117 + 420 * i, 65, 338, 526, null);
+							Profile.printCenteredString(chunks.get(finalC).get(i).getName(), 338, 117 + 420 * i, 635, g);
+						} else if (chunks.get(finalC).get(i).getCard().getRarity().equals(KawaiponRarity.ULTIMATE)) {
+							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 42));
+							g.setBackground(Color.black);
+							g.setColor(Color.white);
+
+							g.drawImage(slot, 117 + 420 * i, 65, 338, 526, null);
 							Profile.printCenteredString(chunks.get(finalC).get(i).getName(), 338, 117 + 420 * i, 635, g);
 						} else {
 							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 42));
