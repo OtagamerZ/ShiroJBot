@@ -40,64 +40,87 @@ public class BackupDAO {
 	private static ExecutorService backupQueue = Executors.newCachedThreadPool();
 
 	public static void dumpData(DataDump data) {
-		EntityManager em = Manager.getEntityManager();
-		em.getTransaction().begin();
-
 		List<CustomAnswers> caDump = data.getCaDump();
 		List<GuildConfig> gcDump = data.getGcDump();
 		List<Member> mDump = data.getmDump();
 		List<Kawaigotchi> kgDump = data.getKgDump();
 		List<PoliticalState> psDump = data.getPsDump();
 
-		NContract<Void> backup = new NContract<>(5, voids -> {
-			em.getTransaction().commit();
-			em.close();
-			return null;
-		});
+		NContract<Void> backup = new NContract<>(5, voids -> null);
 
 		backupQueue.execute(() -> {
+			EntityManager em = Manager.getEntityManager();
+			em.getTransaction().begin();
+
 			for (int i = 0; i < caDump.size(); i++) {
 				em.merge(data.getCaDump().get(i));
 				saveChunk(em, i, caDump.size(), "respostas");
 			}
 			if (caDump.size() > 0) Helper.logger(Main.class).info("Respostas salvas com sucesso!");
 			backup.addSignature(0, null);
+
+			em.getTransaction().commit();
+			em.close();
 		});
 
 		backupQueue.execute(() -> {
+			EntityManager em = Manager.getEntityManager();
+			em.getTransaction().begin();
+
 			for (int i = 0; i < gcDump.size(); i++) {
 				em.merge(data.getGcDump().get(i));
 				saveChunk(em, i, gcDump.size(), "configurações");
 			}
 			if (gcDump.size() > 0) Helper.logger(Main.class).info("Configurações salvas com sucesso!");
 			backup.addSignature(1, null);
+
+			em.getTransaction().commit();
+			em.close();
 		});
 
 		backupQueue.execute(() -> {
+			EntityManager em = Manager.getEntityManager();
+			em.getTransaction().begin();
+
 			for (int i = 0; i < mDump.size(); i++) {
 				em.merge(data.getmDump().get(i));
 				saveChunk(em, i, mDump.size(), "membros");
 			}
 			if (mDump.size() > 0) Helper.logger(Main.class).info("Membros salvos com sucesso!");
 			backup.addSignature(2, null);
+
+			em.getTransaction().commit();
+			em.close();
 		});
 
 		backupQueue.execute(() -> {
+			EntityManager em = Manager.getEntityManager();
+			em.getTransaction().begin();
+
 			for (int i = 0; i < kgDump.size(); i++) {
 				em.merge(data.getKgDump().get(i));
 				saveChunk(em, i, kgDump.size(), "kgotchis");
 			}
 			if (kgDump.size() > 0) Helper.logger(Main.class).info("Kawaigotchis salvos com sucesso!");
 			backup.addSignature(3, null);
+
+			em.getTransaction().commit();
+			em.close();
 		});
 
 		backupQueue.execute(() -> {
+			EntityManager em = Manager.getEntityManager();
+			em.getTransaction().begin();
+
 			for (int i = 0; i < psDump.size(); i++) {
 				em.merge(data.getPsDump().get(i));
 				saveChunk(em, i, psDump.size(), "estados");
 			}
 			if (psDump.size() > 0) Helper.logger(Main.class).info("Estados salvos com sucesso!");
 			backup.addSignature(4, null);
+
+			em.getTransaction().commit();
+			em.close();
 		});
 	}
 
