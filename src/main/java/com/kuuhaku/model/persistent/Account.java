@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.utils.CreditLoan;
 import com.kuuhaku.utils.Helper;
@@ -96,6 +97,8 @@ public class Account {
 			else streak = 0;
 		} catch (DateTimeParseException e) {
 			lastVoted = today.format(Helper.dateformat);
+		} finally {
+			AccountDAO.saveAccount(this);
 		}
 	}
 
