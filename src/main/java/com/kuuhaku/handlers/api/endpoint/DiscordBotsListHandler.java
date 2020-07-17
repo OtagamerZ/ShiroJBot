@@ -80,7 +80,6 @@ public class DiscordBotsListHandler {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		} finally {
 			acc.voted();
-			AccountDAO.saveAccount(acc);
 		}
 	}
 }
