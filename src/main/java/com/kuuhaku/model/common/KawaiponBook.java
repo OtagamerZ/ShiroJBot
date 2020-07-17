@@ -49,9 +49,9 @@ public class KawaiponBook {
 		if (foil) text = (foil ? "« " : "") + title + (foil ? " »" : "");
 		else text = title;
 		List<KawaiponCard> cards = new ArrayList<>(this.cards);
-		cards.sort(Comparator
-				.<KawaiponCard, KawaiponRarity>comparing(k -> k.getCard().getRarity(), Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
-				.thenComparing(k -> k.getCard().getName(), String.CASE_INSENSITIVE_ORDER)
+		cardList.sort(Comparator
+				.comparing(Card::getRarity, Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
+				.thenComparing(Card::getName, String.CASE_INSENSITIVE_ORDER)
 		);
 		List<List<KawaiponCard>> chunks = new ArrayList<>();
 
