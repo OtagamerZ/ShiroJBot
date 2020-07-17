@@ -83,6 +83,20 @@ public class CardDAO {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public static List<Card> getCardsByRarity(KawaiponRarity rarity) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity = :rarity", Card.class);
+		q.setParameter("rarity", rarity);
+
+		try {
+			return (List<Card>) q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
 	public static long totalCards() {
 		EntityManager em = Manager.getEntityManager();
 
