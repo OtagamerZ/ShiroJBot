@@ -60,7 +60,7 @@ public class GuessTheNumberCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
         Account acc = AccountDAO.getAccount(author.getId());
 
-        int theValue = Helper.rng(100);
+        int theValue = Helper.rng(100, false);
 
         channel.sendMessage("Já escolhi um número de 0 a 100, você tem 5 chances para tentar adivinhar!").queue();
 
@@ -98,7 +98,7 @@ public class GuessTheNumberCommand extends Command {
 
 
 				if (guess == theValue) {
-					int prize = Helper.clamp(Helper.rng(1000), 500, 1500);
+					int prize = Helper.clamp(Helper.rng(1000, false), 500, 1500);
 					channel.sendMessage("Você acertou! Como prêmio você receberá **" + prize + "** créditos.").queue();
 					acc.addCredit(prize);
 					AccountDAO.saveAccount(acc);

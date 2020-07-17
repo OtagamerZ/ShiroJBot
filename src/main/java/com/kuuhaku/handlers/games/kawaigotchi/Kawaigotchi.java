@@ -75,7 +75,7 @@ public class Kawaigotchi {
 	private Nature nature = Nature.randNature();
 
 	@Column(columnDefinition = "INT")
-	private int skin = 1 + Helper.rng(6);
+	private int skin = 1 + Helper.rng(5, false);
 
 	@Enumerated(EnumType.ORDINAL)
 	private Stance stance = Stance.IDLE;
@@ -248,18 +248,18 @@ public class Kawaigotchi {
 	public Action play() {
 		if (stance.canPlay()) {
 			int threshold = (int) ((Helper.clamp(100 - (int) health, 10, 40)) / nature.getKindness());
-			lastRoll = Helper.rng(100);
+			lastRoll = Helper.rng(100, false);
 
 			if (lastRoll >= threshold) {
-				mood += Helper.clamp(Helper.rng(10), 3, 10) * nature.getKindness() * (getVanity().has(VanityType.FENCE.toString()) ? VanityMenu.getVanity(getVanity().getString(VanityType.FENCE.toString())).getModifier() : 1);
-				energy -= Helper.clamp(Helper.rng(6), 1, 6);
-				hunger -= Helper.clamp(Helper.rng(6), 1, 6);
+				mood += Helper.clamp(Helper.rng(10, false), 3, 10) * nature.getKindness() * (getVanity().has(VanityType.FENCE.toString()) ? VanityMenu.getVanity(getVanity().getString(VanityType.FENCE.toString())).getModifier() : 1);
+				energy -= Helper.clamp(Helper.rng(6, false), 1, 6);
+				hunger -= Helper.clamp(Helper.rng(6, false), 1, 6);
 
 				KGotchiDAO.saveKawaigotchi(this);
 				return Action.SUCCESS;
 			} else {
-				energy -= Helper.clamp(Helper.rng(6), 1, 6);
-				hunger -= Helper.clamp(Helper.rng(6), 1, 6);
+				energy -= Helper.clamp(Helper.rng(6, false), 1, 6);
+				hunger -= Helper.clamp(Helper.rng(6, false), 1, 6);
 
 				KGotchiDAO.saveKawaigotchi(this);
 				return Action.FAILED;
@@ -270,18 +270,18 @@ public class Kawaigotchi {
 	public Action train() {
 		if (stance.canTrain()) {
 			int threshold = (int) ((Helper.clamp(100 - (int) mood, 10, 40)) / nature.getTrainability());
-			lastRoll = Helper.rng(100);
+			lastRoll = Helper.rng(100, false);
 
 			if (lastRoll >= threshold) {
-				xp += Helper.clamp(Helper.rng(6), 1, 6) * tier.getTrainability() * (getVanity().has(VanityType.FENCE.toString()) ? VanityMenu.getVanity(getVanity().getString(VanityType.FENCE.toString())).getModifier() : 1);
-				energy -= Helper.clamp(Helper.rng(10), 3, 10);
-				hunger -= Helper.clamp(Helper.rng(10), 3, 10);
+				xp += Helper.clamp(Helper.rng(6, false), 1, 6) * tier.getTrainability() * (getVanity().has(VanityType.FENCE.toString()) ? VanityMenu.getVanity(getVanity().getString(VanityType.FENCE.toString())).getModifier() : 1);
+				energy -= Helper.clamp(Helper.rng(10, false), 3, 10);
+				hunger -= Helper.clamp(Helper.rng(10, false), 3, 10);
 
 				KGotchiDAO.saveKawaigotchi(this);
 				return Action.SUCCESS;
 			} else {
-				energy -= Helper.clamp(Helper.rng(10), 3, 10);
-				hunger -= Helper.clamp(Helper.rng(10), 3, 10);
+				energy -= Helper.clamp(Helper.rng(10, false), 3, 10);
+				hunger -= Helper.clamp(Helper.rng(10, false), 3, 10);
 
 				KGotchiDAO.saveKawaigotchi(this);
 				return Action.FAILED;

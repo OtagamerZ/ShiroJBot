@@ -85,7 +85,7 @@ public class ImageCommand extends Command {
 				Helper.logger(this.getClass()).debug(resposta.toString());
 				JSONObject jo = new JSONObject(resposta.toString());
 				JSONArray items = jo.getJSONArray("items");
-				JSONObject item = items.getJSONObject(Helper.rng(items.length()));
+				JSONObject item = items.getJSONObject(Helper.rng(items.length(), true));
 				JSONObject image = item.getJSONObject("image");
 
 				EmbedBuilder eb = new EmbedBuilder();

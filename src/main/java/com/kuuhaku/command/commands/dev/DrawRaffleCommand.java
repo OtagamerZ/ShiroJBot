@@ -83,7 +83,7 @@ public class DrawRaffleCommand extends Command {
 				.delay(2, TimeUnit.SECONDS)
 				.flatMap(s -> s.editMessage(s.getContentRaw() + "."))
 				.delay(2, TimeUnit.SECONDS)
-				.flatMap(s -> s.editMessage(s.getContentRaw() + Main.getInfo().getUserByID(votes.get(Helper.rng(votes.size()))).getAsMention() + ", parabéns!\nUm desenvolvedor entrará em contato para discutir sobre a premiação."))
+				.flatMap(s -> s.editMessage(s.getContentRaw() + Main.getInfo().getUserByID(votes.get(Helper.rng(votes.size(), true))).getAsMention() + ", parabéns!\nUm desenvolvedor entrará em contato para discutir sobre a premiação."))
 				.queue();
 	}
 }
