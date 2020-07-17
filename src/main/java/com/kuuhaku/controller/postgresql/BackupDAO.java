@@ -50,7 +50,7 @@ public class BackupDAO {
 			em.getTransaction().begin();
 
 			for (int i = 0; i < caDump.size(); i++) {
-				em.merge(data.getCaDump().get(i));
+				em.merge(caDump.get(i));
 				saveChunk(em, i, caDump.size(), "respostas");
 			}
 			if (caDump.size() > 0) Helper.logger(Main.class).info("Respostas salvas com sucesso!");
@@ -64,7 +64,7 @@ public class BackupDAO {
 			em.getTransaction().begin();
 
 			for (int i = 0; i < gcDump.size(); i++) {
-				em.merge(data.getGcDump().get(i));
+				em.merge(gcDump.get(i));
 				saveChunk(em, i, gcDump.size(), "configurações");
 			}
 			if (gcDump.size() > 0) Helper.logger(Main.class).info("Configurações salvas com sucesso!");
@@ -78,7 +78,7 @@ public class BackupDAO {
 			em.getTransaction().begin();
 
 			for (int i = 0; i < mDump.size(); i++) {
-				em.merge(data.getmDump().get(i));
+				em.merge(mDump.get(i));
 				saveChunk(em, i, mDump.size(), "membros");
 			}
 			if (mDump.size() > 0) Helper.logger(Main.class).info("Membros salvos com sucesso!");
@@ -92,7 +92,7 @@ public class BackupDAO {
 			em.getTransaction().begin();
 
 			for (int i = 0; i < kgDump.size(); i++) {
-				em.merge(data.getKgDump().get(i));
+				em.merge(kgDump.get(i));
 				saveChunk(em, i, kgDump.size(), "kgotchis");
 			}
 			if (kgDump.size() > 0) Helper.logger(Main.class).info("Kawaigotchis salvos com sucesso!");
@@ -106,7 +106,7 @@ public class BackupDAO {
 			em.getTransaction().begin();
 
 			for (int i = 0; i < psDump.size(); i++) {
-				em.merge(data.getPsDump().get(i));
+				em.merge(psDump.get(i));
 				saveChunk(em, i, psDump.size(), "estados");
 			}
 			if (psDump.size() > 0) Helper.logger(Main.class).info("Estados salvos com sucesso!");
