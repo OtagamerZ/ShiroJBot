@@ -93,6 +93,12 @@ public class Account {
 		try {
 			ZonedDateTime lastVote = ZonedDateTime.parse(lastVoted, Helper.dateformat);
 
+			Helper.logger(this.getClass()).info(
+					"Voto anterior: " + lastVote.format(Helper.dateformat) +
+							"\nHoje: " + today.format(Helper.dateformat) +
+							"\nAcumula? " + today.isBefore(lastVote.plusHours(24))
+			);
+
 			if (today.isBefore(lastVote.plusHours(24))) streak = Helper.clamp(streak + 1, 0, 7);
 			else streak = 0;
 		} catch (DateTimeParseException e) {
