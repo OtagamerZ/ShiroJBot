@@ -67,6 +67,6 @@ public class CatchDropCommand extends Command {
 		ShiroInfo.getCurrentDrop().invalidate(guild.getId());
 		p.award(author);
 
-		channel.sendMessage("Você coletou o drop com sucesso!").queue();
+		channel.sendMessage(author.getAsMention() + " coletou o drop com sucesso!").queue();
 	}
 }
