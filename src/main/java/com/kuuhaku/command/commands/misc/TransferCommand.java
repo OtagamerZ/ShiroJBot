@@ -73,6 +73,9 @@ public class TransferCommand extends Command {
 		} else if (amount <= 0) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-transfer-negative-or-zero")).queue();
 			return;
+		} else if (from.getLoan() > 0) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-transfer-with-loan")).queue();
+			return;
 		}
 
 		to.addCredit(amount);
