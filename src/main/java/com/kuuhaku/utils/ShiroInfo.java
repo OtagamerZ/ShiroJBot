@@ -89,7 +89,7 @@ public class ShiroInfo {
 	private static final JDAEvents shiroEvents = new JDAEvents();
 	private static final Map<String, KittyCache<String, Message>> messageCache = new HashMap<>();
 	private static final GsonBuilder JSONFactory = new GsonBuilder();
-	private static final LoadingCache<User, Boolean> ratelimit = CacheBuilder.newBuilder().expireAfterWrite(2, TimeUnit.SECONDS).build(
+	private static final LoadingCache<User, Boolean> ratelimit = CacheBuilder.newBuilder().expireAfterWrite(3, TimeUnit.SECONDS).build(
 			new CacheLoader<>() {
 				@Override
 				public Boolean load(@NotNull User key) {
