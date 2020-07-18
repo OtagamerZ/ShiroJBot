@@ -65,7 +65,7 @@ public class CreditDrop implements Prize {
 				AccountDAO.getAccount(u.getId()).getStreak() >= values[1]));
 
 		add(Pair.of("Ser membro da " + exceed.getName() + ".", u ->
-				ExceedDAO.getExceedMember(u.getId()).getExceed().equalsIgnoreCase(exceed.getName())));
+				ExceedDAO.hasExceed(u.getId()) && ExceedDAO.getExceedMember(u.getId()).getExceed().equalsIgnoreCase(exceed.getName())));
 	}};
 	private final Pair<String, Function<User, Boolean>> chosen = requirement.get(Helper.rng(requirement.size(), true));
 

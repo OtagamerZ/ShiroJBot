@@ -525,14 +525,7 @@
       <workItem from="1594996453946" duration="252000" />
       <workItem from="1594997388326" duration="4020000" />
       <workItem from="1595010214743" duration="8294000" />
-      <workItem from="1595094379507" duration="5026000" />
-    </task>
-    <task id="LOCAL-01798" summary="Adição de novo jogo: Hitotsu (fase de testes)">
-      <created>1594755898578</created>
-      <option name="number" value="01798" />
-      <option name="presentableId" value="LOCAL-01798" />
-      <option name="project" value="LOCAL" />
-      <updated>1594755898578</updated>
+      <workItem from="1595094379507" duration="5814000" />
     </task>
     <task id="LOCAL-01799" summary="Implementação da corrente de cartas (Hitotsu)">
       <created>1594759409118</created>
@@ -870,7 +863,14 @@
       <option name="project" value="LOCAL" />
       <updated>1595094599014</updated>
     </task>
-    <option name="localTasksCounter" value="1847" />
+    <task id="LOCAL-01847" summary="Correção no footer da lista">
+      <created>1595106118117</created>
+      <option name="number" value="01847" />
+      <option name="presentableId" value="LOCAL-01847" />
+      <option name="project" value="LOCAL" />
+      <updated>1595106118117</updated>
+    </task>
+    <option name="localTasksCounter" value="1848" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -907,7 +907,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Novas cartas: Fenyx para de espiar" />
     <MESSAGE value="Mudança nos ícones de level" />
     <MESSAGE value="Adição de novo jogo: Hitotsu (fase de testes)" />
     <MESSAGE value="Implementação da corrente de cartas (Hitotsu)" />
@@ -932,7 +931,8 @@
     <MESSAGE value="O comando kawaipons sem argumentos agora mostra o nome dos animes" />
     <MESSAGE value="Correção na renderização da coleção" />
     <MESSAGE value="Correção nos streaks de voto" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção nos streaks de voto" />
+    <MESSAGE value="Correção no footer da lista" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção no footer da lista" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -985,10 +985,10 @@
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="203" y="0" width="805" height="924" key="CommitChangelistDialog2" timestamp="1595094594284">
+    <state x="203" y="0" width="805" height="924" key="CommitChangelistDialog2" timestamp="1595106114528">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595094594284" />
+    <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595106114528" />
     <state x="234" y="57" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1595018069531" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1065,10 +1065,10 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1587956411634" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1592942915575" />
-    <state x="351" y="182" key="Vcs.Push.Dialog.v2" timestamp="1595094603418">
+    <state x="351" y="182" key="Vcs.Push.Dialog.v2" timestamp="1595106123682">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595094603418" />
+    <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595106123682" />
     <state x="253" y="373" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1595018087975" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1594305494731">
       <screen x="0" y="0" width="1680" height="1010" />
