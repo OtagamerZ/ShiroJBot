@@ -99,11 +99,11 @@ public class Account {
 							"\nAcumula? " + today.isBefore(lastVote.plusHours(24))
 			);
 
-			if (today.isBefore(lastVote.plusHours(24))) streak = Helper.clamp(streak + 1, 0, 7);
+			if (today.isBefore(lastVote.plusHours(24)) || streak == 0) streak = Helper.clamp(streak + 1, 0, 7);
 			else streak = 0;
-		} catch (DateTimeParseException e) {
-			lastVoted = today.format(Helper.dateformat);
+		} catch (DateTimeParseException ignore) {
 		} finally {
+			lastVoted = today.format(Helper.dateformat);
 			AccountDAO.saveAccount(this);
 		}
 	}

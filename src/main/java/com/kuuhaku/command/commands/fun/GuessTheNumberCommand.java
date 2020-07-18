@@ -108,6 +108,8 @@ public class GuessTheNumberCommand extends Command {
 						ps.modifyInfluence(10);
 						PStateDAO.savePoliticalState(ps);
 					}
+
+					Main.getInfo().getAPI().removeEventListener(this);
 				} else {
 					if (chances > 0) {
 						channel.sendMessage("(" + chances + " chances restantes) | Você errou, esse valor está " + hint + "o número escolhido por mim.").queue();
@@ -117,7 +119,6 @@ public class GuessTheNumberCommand extends Command {
 						Main.getInfo().getAPI().removeEventListener(this);
 					}
 				}
-				return;
 			}
 		});
 	}
