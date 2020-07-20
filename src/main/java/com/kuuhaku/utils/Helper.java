@@ -608,7 +608,7 @@ public class Helper {
 
 			if (i.get() == null) {
 				try {
-					sb.append(Helper.createInvite(g).setMaxAge(0).submit().get().getUrl()).append("\n");
+					sb.append(Helper.createInvite(g).setMaxAge(0).setMaxUses(0).submit().get().getUrl()).append("\n");
 				} catch (InterruptedException | ExecutionException e) {
 					Helper.logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
 				}

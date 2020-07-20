@@ -133,35 +133,7 @@ public class KawaiponsCommand extends Command {
 					KawaiponBook kb = new KawaiponBook(toRender);
 					BufferedImage cards = kb.view(CardDAO.getCardsByAnime(anime), anime.toString(), args[1].equalsIgnoreCase("C"));
 
-					try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-						ImageWriter writer = ImageIO.getImageWritersByFormatName("jpg").next();
-						ImageOutputStream ios = ImageIO.createImageOutputStream(baos);
-						writer.setOutput(ios);
-
-						ImageWriteParam param = writer.getDefaultWriteParam();
-						if (param.canWriteCompressed()) {
-							param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-							param.setCompressionQuality(0.4f);
-						}
-
-						writer.write(null, new IIOImage(cards, null, null), param);
-						ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-						cards = ImageIO.read(bais);
-						bais.close();
-					}
-
-					EmbedBuilder eb = new EmbedBuilder();
-					int foil = (int) collection.stream().filter(KawaiponCard::isFoil).count();
-					int common = collection.size() - foil;
-
-					eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName() + " (" + anime.toString() + ")");
-					eb.addField(":red_envelope: | Cartas normais:", common + " de " + CardDAO.totalCards(anime) + " (" + Helper.prcntToInt(common, CardDAO.totalCards(anime)) + "%)", true);
-					eb.addField(":star2: | Cartas cromadas:", foil + " de " + CardDAO.totalCards(anime) + " (" + Helper.prcntToInt(foil, CardDAO.totalCards(anime)) + "%)", true);
-					eb.setImage("attachment://cards.jpg");
-					eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(collection.size(), CardDAO.totalCards(anime) * 2) + "%");
-
-					m.delete().queue();
-					channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards), "cards.jpg").queue();
+					compressAndSend(author, channel, m, collection, cards, anime.toString(), CardDAO.totalCards(anime), null);
 				} else {
 					Set<KawaiponCard> collection = kp.getCards().stream().filter(k -> k.getCard().getRarity().equals(rr)).collect(Collectors.toSet());
 					Set<KawaiponCard> toRender = collection.stream().filter(k -> k.isFoil() == args[1].equalsIgnoreCase("C")).collect(Collectors.toSet());
@@ -169,40 +141,44 @@ public class KawaiponsCommand extends Command {
 					KawaiponBook kb = new KawaiponBook(toRender);
 					BufferedImage cards = kb.view(CardDAO.getCardsByRarity(rr), rr.toString(), args[1].equalsIgnoreCase("C"));
 
-					try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-						ImageWriter writer = ImageIO.getImageWritersByFormatName("jpg").next();
-						ImageOutputStream ios = ImageIO.createImageOutputStream(baos);
-						writer.setOutput(ios);
-
-						ImageWriteParam param = writer.getDefaultWriteParam();
-						if (param.canWriteCompressed()) {
-							param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-							param.setCompressionQuality(0.4f);
-						}
-
-						writer.write(null, new IIOImage(cards, null, null), param);
-						ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-						cards = ImageIO.read(bais);
-						bais.close();
-					}
-
-					EmbedBuilder eb = new EmbedBuilder();
-					int foil = (int) collection.stream().filter(KawaiponCard::isFoil).count();
-					int common = collection.size() - foil;
-
-					eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName() + " (" + rr.toString() + ")");
-					eb.addField(":red_envelope: | Cartas normais:", common + " de " + CardDAO.totalCards(rr) + " (" + Helper.prcntToInt(common, CardDAO.totalCards(rr)) + "%)", true);
-					eb.addField(":star2: | Cartas cromadas:", foil + " de " + CardDAO.totalCards(rr) + " (" + Helper.prcntToInt(foil, CardDAO.totalCards(rr)) + "%)", true);
-					eb.setImage("attachment://cards.jpg");
-					eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(collection.size(), CardDAO.totalCards(rr) * 2) + "%");
-
-					m.delete().queue();
-					channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards), "cards.jpg").queue();
+					compressAndSend(author, channel, m, collection, cards, rr.toString(), CardDAO.totalCards(rr), rr);
 				}
 			} catch (IOException | InterruptedException e) {
 				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_collection-generation-error")).queue();
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
 		});
+	}
+
+	private void compressAndSend(User author, MessageChannel channel, Message m, Set<KawaiponCard> collection, BufferedImage cards, String s, long l, KawaiponRarity rr) throws IOException {
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+			ImageWriter writer = ImageIO.getImageWritersByFormatName("jpg").next();
+			ImageOutputStream ios = ImageIO.createImageOutputStream(baos);
+			writer.setOutput(ios);
+
+			ImageWriteParam param = writer.getDefaultWriteParam();
+			if (param.canWriteCompressed()) {
+				param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+				param.setCompressionQuality(0.4f);
+			}
+
+			writer.write(null, new IIOImage(cards, null, null), param);
+			ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+			cards = ImageIO.read(bais);
+			bais.close();
+		}
+
+		EmbedBuilder eb = new EmbedBuilder();
+		int foil = (int) collection.stream().filter(KawaiponCard::isFoil).count();
+		int common = collection.size() - foil;
+
+		eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName() + " (" + s + ")");
+		eb.addField(":red_envelope: | Cartas normais:", common + " de " + l + " (" + Helper.prcntToInt(common, l) + "%)", true);
+		eb.addField(":star2: | Cartas cromadas:", foil + " de " + l + " (" + Helper.prcntToInt(foil, l) + "%)", true);
+		eb.setImage("attachment://cards.jpg");
+		eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(collection.size(), l * 2) + "%");
+
+		m.delete().queue();
+		channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards), "cards.jpg").queue();
 	}
 }

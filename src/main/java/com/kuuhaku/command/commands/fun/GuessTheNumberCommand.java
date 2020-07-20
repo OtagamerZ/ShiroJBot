@@ -58,19 +58,25 @@ public class GuessTheNumberCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-        Account acc = AccountDAO.getAccount(author.getId());
+		if (ShiroInfo.gameInProgress(author.getId())) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+			return;
+		}
 
-        int theValue = Helper.rng(100, false);
+		Account acc = AccountDAO.getAccount(author.getId());
 
-        channel.sendMessage("Já escolhi um número de 0 a 100, você tem 5 chances para tentar adivinhar!").queue();
+		int theValue = Helper.rng(100, false);
 
-        Main.getInfo().getAPI().addEventListener(new ListenerAdapter() {
-            int chances = 4;
+		ShiroInfo.getGameLock().add(author.getId());
+		channel.sendMessage("Já escolhi um número de 0 a 100, você tem 5 chances para tentar adivinhar!").queue();
 
-            @Override
-            public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
-                if (!event.getAuthor().getId().equals(author.getId()) || !event.getChannel().getId().equals(channel.getId()))
-                    return;
+		Main.getInfo().getAPI().addEventListener(new ListenerAdapter() {
+			int chances = 4;
+
+			@Override
+			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
+				if (!event.getAuthor().getId().equals(author.getId()) || !event.getChannel().getId().equals(channel.getId()))
+					return;
 
                 String value = event.getMessage().getContentRaw();
                 if (value.equalsIgnoreCase("desistir")) {
@@ -109,6 +115,7 @@ public class GuessTheNumberCommand extends Command {
 						PStateDAO.savePoliticalState(ps);
 					}
 
+					ShiroInfo.getGameLock().remove(author.getId());
 					Main.getInfo().getAPI().removeEventListener(this);
 				} else {
 					if (chances > 0) {
@@ -116,6 +123,7 @@ public class GuessTheNumberCommand extends Command {
 						chances--;
 					} else {
 						channel.sendMessage("Acabaram suas chances, o valor escolhido por mim era **" + theValue + "**.").queue();
+						ShiroInfo.getGameLock().remove(author.getId());
 						Main.getInfo().getAPI().removeEventListener(this);
 					}
 				}
