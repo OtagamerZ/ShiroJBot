@@ -1007,4 +1007,27 @@ public class Helper {
 			}
 		}
 	}
+
+	public static BufferedImage scaleImage(BufferedImage image, int w, int h) {
+
+		// Make sure the aspect ratio is maintained, so the image is not distorted
+		double thumbRatio = (double) w / (double) h;
+		int imageWidth = image.getWidth();
+		int imageHeight = image.getHeight();
+		double aspectRatio = (double) imageWidth / (double) imageHeight;
+
+		if (thumbRatio > aspectRatio) {
+			h = (int) (w / aspectRatio);
+		} else {
+			w = (int) (h * aspectRatio);
+		}
+
+		// Draw the scaled image
+		BufferedImage newImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D graphics2D = newImage.createGraphics();
+		graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		graphics2D.drawImage(image, 0, 0, w, h, null);
+
+		return newImage;
+	}
 }
