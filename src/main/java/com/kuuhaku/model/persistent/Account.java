@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
+import com.kuuhaku.controller.postgresql.TransactionDAO;
 import com.kuuhaku.utils.CreditLoan;
 import com.kuuhaku.utils.Helper;
 
@@ -78,10 +79,13 @@ public class Account {
 	public void addCredit(long credit) {
 		if (this.loan > 0) loan = Helper.clamp(loan - credit, 0, loan);
 		else balance += credit;
+
+		TransactionDAO.register(userId, credit);
 	}
 
 	public void removeCredit(long credit) {
 		this.balance -= credit;
+		TransactionDAO.register(userId, -credit);
 	}
 
 	public String getLastVoted() {

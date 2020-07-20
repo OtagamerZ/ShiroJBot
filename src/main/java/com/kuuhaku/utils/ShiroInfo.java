@@ -103,6 +103,7 @@ public class ShiroInfo {
 	private static final Cache<String, KawaiponCard> currentCard = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
 	private static final Cache<String, Prize> currentDrop = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
 	private static final Cache<String, byte[]> cardCache = CacheBuilder.newBuilder().expireAfterWrite(60, TimeUnit.MINUTES).build();
+	private static final Set<String> gameLock = new HashSet<>();
 
 	//STATIC CONSTRUCTOR
 	static {
@@ -160,7 +161,7 @@ public class ShiroInfo {
 	}
 
 	public static boolean gameInProgress(String id) {
-		return games.keySet().stream().anyMatch(s -> Helper.equalsAny(id, s.split(Pattern.quote("."))));
+		return gameLock.stream().anyMatch(s -> Helper.equalsAny(id, s.split(Pattern.quote(".")))) || games.keySet().stream().anyMatch(s -> Helper.equalsAny(id, s.split(Pattern.quote("."))));
 	}
 
 	public static Set<String> getRequests() {
@@ -177,6 +178,10 @@ public class ShiroInfo {
 
 	public static Cache<String, byte[]> getCardCache() {
 		return cardCache;
+	}
+
+	public static Set<String> getGameLock() {
+		return gameLock;
 	}
 
 	//NON-STATIC
