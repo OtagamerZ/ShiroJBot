@@ -49,10 +49,10 @@ public class CreditDrop implements Prize {
 	};
 	private final int amount = Helper.clamp(Helper.rng(1250, false), 250, 1250);
 	private final List<Pair<String, Function<User, Boolean>>> requirement = new ArrayList<>() {{
-		add(Pair.of("Ter " + values[2] + " Kawaipons ou mais.", u ->
+		add(Pair.of("Ter " + values[2] + " carta" + (values[2] != 1 ? "s" : "") + " ou mais.", u ->
 				KawaiponDAO.getKawaipon(u.getId()).getCards().size() >= values[2]));
 
-		add(Pair.of("Ter " + values[0] + " Kawaipons de " + anime.toString() + ".", u ->
+		add(Pair.of("Ter " + values[0] + " carta" + (values[0] != 1 ? "s" : "") + " de " + anime.toString() + ".", u ->
 				KawaiponDAO.getKawaipon(u.getId()).getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).count() >= values[0]));
 
 		add(Pair.of("Ser level " + values[3] + " ou maior.", u ->
@@ -61,7 +61,7 @@ public class CreditDrop implements Prize {
 		add(Pair.of("Ter até 1000 créditos.", u ->
 				AccountDAO.getAccount(u.getId()).getBalance() <= 1000));
 
-		add(Pair.of("Ter votado " + values[1] + " vezes seguidas ou mais.", u ->
+		add(Pair.of("Ter votado " + values[1] + " vez" + (values[1] != 1 ? "es" : "") + " seguidas ou mais.", u ->
 				AccountDAO.getAccount(u.getId()).getStreak() >= values[1]));
 
 		add(Pair.of("Ser membro da " + exceed.getName() + ".", u ->

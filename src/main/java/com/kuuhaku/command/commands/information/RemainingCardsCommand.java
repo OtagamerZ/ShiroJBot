@@ -18,6 +18,9 @@
 
 package com.kuuhaku.command.commands.information;
 
+import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.Page;
+import com.github.ygimenez.type.PageType;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.CardDAO;
@@ -32,9 +35,11 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class RemainingCardsCommand extends Command {
@@ -67,6 +72,7 @@ public class RemainingCardsCommand extends Command {
 
 		AnimeName anime = AnimeName.valueOf(args[0].toUpperCase());
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+		List<Page> pages = new ArrayList<>();
 		List<Card> collected = kp.getCards().stream()
 				.filter(c -> !c.isFoil())
 				.map(KawaiponCard::getCard)
@@ -81,18 +87,22 @@ public class RemainingCardsCommand extends Command {
 
 		eb.setTitle(":flower_playing_cards: | Cartas coletadas de " + anime.toString());
 		eb.addField("Progresso:", collected.size() + " de " + cards.size() + " (" + (Helper.prcntToInt(collected.size(), cards.size())) + "%)", false);
-
-		StringBuilder sb = new StringBuilder();
-		cards.forEach(c -> {
-			if (collected.contains(c))
-				sb.append("||").append(c.getRarity().getEmote()).append(" | ").append(c.getName()).append("||\n");
-			else
-				sb.append(c.getRarity().getEmote()).append(" | ").append(c.getName()).append("\n");
-		});
-
-		eb.setDescription(sb.toString());
 		eb.setColor(Helper.getRandomColor());
 
-		channel.sendMessage(eb.build()).queue();
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < cards.size(); i++) {
+			if (i % 30 == 0 && i > 0) {
+				eb.setDescription(sb.toString());
+				sb.setLength(0);
+				pages.add(new Page(PageType.EMBED, eb.build()));
+			}
+			if (collected.contains(cards.get(i)))
+				sb.append("||").append(cards.get(i).getRarity().getEmote()).append(" | ").append(cards.get(i).getName()).append("||\n");
+			else
+				sb.append(cards.get(i).getRarity().getEmote()).append(" | ").append(cards.get(i).getName()).append("\n");
+		}
+
+
+		channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES));
 	}
 }
