@@ -40,7 +40,7 @@ public enum AnimeName {
 	NICHIJOU,
 	DARLING_IN_THE_FRANXX,
 	ISHUZOKU_REVIEWERS,
-	;
+	HELLSING;
 
 	@Override
 	public String toString() {
