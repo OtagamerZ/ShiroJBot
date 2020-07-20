@@ -73,7 +73,7 @@ public class CatchKawaiponCommand extends Command {
 
 		ShiroInfo.getCurrentCard().invalidate(guild.getId());
 		kp.addCard(kc);
-		acc.removeCredit(cost);
+		acc.removeCredit(cost, this.getClass());
 
 		KawaiponDAO.saveKawaipon(kp);
 		AccountDAO.saveAccount(acc);

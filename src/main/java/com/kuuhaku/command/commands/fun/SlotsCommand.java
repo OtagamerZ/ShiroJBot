@@ -91,7 +91,7 @@ public class SlotsCommand extends Command {
 
 		boolean highbet = bet.get() >= 100;
 		Slots slt = SlotsDAO.getSlots();
-		acc.removeCredit(bet.get());
+		acc.removeCredit(bet.get(), this.getClass());
 		slt.addToPot(bet.get());
 
 		rollSlots();
@@ -237,7 +237,7 @@ public class SlotsCommand extends Command {
 
 			ShiroInfo.getGameLock().remove(author.getId());
 			channel.sendMessage(msg).queue();
-			acc.addCredit(bet.get());
+			acc.addCredit(bet.get(), this.getClass());
 			AccountDAO.saveAccount(acc);
 			SlotsDAO.saveSlots(slt);
 		};

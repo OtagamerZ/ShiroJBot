@@ -146,7 +146,7 @@ public class Member {
 		if (xp >= (int) Math.pow(level, 2) * 100) {
 			level++;
 			Account acc = AccountDAO.getAccount(mid);
-			acc.addCredit(75 + (10 * level));
+			acc.addCredit(75 + (10 * level), this.getClass());
 			AccountDAO.saveAccount(acc);
 			return true;
 		}

@@ -140,8 +140,8 @@ public class Hitotsu extends Tabletop {
 								Account uacc = AccountDAO.getAccount(getPlayers().getWinner().getId());
 								Account tacc = AccountDAO.getAccount(getPlayers().getLoser().getId());
 
-								uacc.addCredit(bet);
-								tacc.removeCredit(bet);
+								uacc.addCredit(bet, this.getClass());
+								tacc.removeCredit(bet, this.getClass());
 
 								AccountDAO.saveAccount(uacc);
 								AccountDAO.saveAccount(tacc);
@@ -201,8 +201,8 @@ public class Hitotsu extends Tabletop {
 					Account uacc = AccountDAO.getAccount(getPlayers().getWinner().getId());
 					Account tacc = AccountDAO.getAccount(getPlayers().getLoser().getId());
 
-					uacc.addCredit(bet);
-					tacc.removeCredit(bet);
+					uacc.addCredit(bet, this.getClass());
+					tacc.removeCredit(bet, this.getClass());
 
 					AccountDAO.saveAccount(uacc);
 					AccountDAO.saveAccount(tacc);
