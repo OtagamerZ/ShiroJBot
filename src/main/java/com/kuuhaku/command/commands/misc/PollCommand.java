@@ -133,11 +133,13 @@ public class PollCommand extends Command {
 		Consumer<Message> sendSimple = m -> {
 			Pages.buttonize(m, new LinkedHashMap<>() {{
 				put("\uD83D\uDC4D", (mb, msg) -> {
+					if (Main.getInfo().getPolls().get(m.getId()).containsKey(mb.getId())) return;
 					Main.getInfo().getPolls().get(m.getId()).put(mb.getId(), "\uD83D\uDC4D");
 					eb.setFooter("Clique nas reações abaixo para votar (total de votos: " + Main.getInfo().getPolls().get(m.getId()).size() + ")");
 					m.editMessage(eb.build()).queue();
 				});
 				put("\uD83D\uDC4E", (mb, msg) -> {
+					if (Main.getInfo().getPolls().get(m.getId()).containsKey(mb.getId())) return;
 					Main.getInfo().getPolls().get(m.getId()).put(mb.getId(), "\uD83D\uDC4E");
 					eb.setFooter("Clique nas reações abaixo para votar (total de votos: " + Main.getInfo().getPolls().get(m.getId()).size() + ")");
 					m.editMessage(eb.build()).queue();
