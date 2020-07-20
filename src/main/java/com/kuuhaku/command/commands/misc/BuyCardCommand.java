@@ -93,7 +93,7 @@ public class BuyCardCommand extends Command {
 						channel.sendMessage(":x: | Anime inválido, verifique se digitou-o corretamente.").queue();
 						return;
 					}
-					byAnime.set(AnimeName.valueOf(anime.toUpperCase()));
+					byAnime.set(AnimeName.valueOf(anime.substring(2).toUpperCase()));
 				}
 			}
 			EmbedBuilder eb = new EmbedBuilder();
