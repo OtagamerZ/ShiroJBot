@@ -299,7 +299,7 @@ public class KGotchiCommand extends Command {
 							}
 
 							k.addVanity(v);
-							acc.removeCredit(v.getPrice());
+							acc.removeCredit(v.getPrice(), this.getClass());
 
 							channel.sendMessage("Você comprou uma " + v.getName().toLowerCase() + " por " + v.getPrice() + " créditos.").queue();
 
@@ -345,7 +345,7 @@ public class KGotchiCommand extends Command {
 
 							if (args.length < 4) {
 								k.addToBag(f);
-								acc.removeCredit(f.getPrice());
+								acc.removeCredit(f.getPrice(), this.getClass());
 
 								channel.sendMessage("Você comprou 1 unidade de " + f.getName().toLowerCase() + " por " + f.getPrice() + " créditos.").queue();
 
@@ -362,7 +362,7 @@ public class KGotchiCommand extends Command {
 								}
 
 								k.addToBag(f, Integer.parseInt(args[3]));
-								acc.removeCredit(f.getPrice() * Integer.parseInt(args[3]));
+								acc.removeCredit(f.getPrice() * Integer.parseInt(args[3]), this.getClass());
 
 								channel.sendMessage("Você comprou " + args[3] + " unidades de " + f.getName().toLowerCase() + " por " + (f.getPrice() * Integer.parseInt(args[3])) + " créditos.").queue();
 							}
@@ -380,7 +380,7 @@ public class KGotchiCommand extends Command {
 	private void getPrize(MessageChannel channel, Account acc, Kawaigotchi k) {
 		int rng = Helper.rng(100, false);
 		if (rng > 50 && rng <= 75) {
-			acc.addCredit(2 * rng);
+			acc.addCredit(2 * rng, this.getClass());
 			AccountDAO.saveAccount(acc);
 			channel.sendMessage("Opa, o que é isso? Parece que " + k.getName() + " encontrou " + (2 * rng) + " créditos!").queue();
 		} else if (rng > 85) {

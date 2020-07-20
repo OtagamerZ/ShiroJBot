@@ -81,7 +81,7 @@ public class CreditDrop implements Prize {
 	@Override
 	public void award(User u) {
 		Account acc = AccountDAO.getAccount(u.getId());
-		acc.addCredit(amount);
+		acc.addCredit(amount, this.getClass());
 		AccountDAO.saveAccount(acc);
 	}
 

@@ -131,7 +131,7 @@ public class PurchaceKGotchiCommand extends Command {
 
 				switch (args[1].toLowerCase()) {
 					case "snugget":
-						acc.removeCredit(2500);
+						acc.removeCredit(2500, this.getClass());
 						Kawaigotchi k = new Kawaigotchi(author.getId(), name, Race.SNUGGET);
 
 						KGotchiDAO.saveKawaigotchi(k);
@@ -160,7 +160,7 @@ public class PurchaceKGotchiCommand extends Command {
 					return;
 				}
 
-				acc.removeCredit(500);
+				acc.removeCredit(500, this.getClass());
 				Kawaigotchi k = new Kawaigotchi(author.getId(), nome, Race.SNUGGET/*Race.values()[Helper.rng(2)]*/);
 
 				KGotchiDAO.saveKawaigotchi(k);
