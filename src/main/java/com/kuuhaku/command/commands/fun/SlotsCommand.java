@@ -76,6 +76,9 @@ public class SlotsCommand extends Command {
 		} else if (!StringUtils.isNumeric(args[0]) || Integer.parseInt(args[0]) < 25) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_slots-invalid-number")).queue();
 			return;
+		} else if (ShiroInfo.gameInProgress(author.getId())) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+			return;
 		}
 
 		Account acc = AccountDAO.getAccount(author.getId());
@@ -232,12 +235,14 @@ public class SlotsCommand extends Command {
 				}
 			}
 
+			ShiroInfo.getGameLock().remove(author.getId());
 			channel.sendMessage(msg).queue();
 			acc.addCredit(bet.get());
 			AccountDAO.saveAccount(acc);
 			SlotsDAO.saveSlots(slt);
 		};
 
+		ShiroInfo.getGameLock().add(author.getId());
 		channel.sendMessage(":white_flower: | **Aposta de " + author.getAsMention() + ": __" + args[0] + "__**").queue(s -> {
 			s.editMessage(s.getContentRaw() + "\n\n" + "**Prêmio acumulado: __" + slt.getPot() + "__**\n" + (highbet ? "     ⇩       ⇩      ⇩       ⇩      ⇩" : "              ⇩       ⇩       ⇩") + "\n┌──┬──┬──┬──┬──┐\n" + showSlots(0) + "\n└──┴──┴──┴──┴──┘\n" + (highbet ? "     ⇧       ⇧      ⇧       ⇧      ⇧" : "              ⇧       ⇧       ⇧")).queue();
 			for (int i = 1; i < 6; i++) {
