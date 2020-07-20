@@ -35,7 +35,7 @@ public class Transaction {
 	private String uid = "";
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
-	private String from = "";
+	private String fromClass = "";
 
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long value = 0;
@@ -45,7 +45,7 @@ public class Transaction {
 
 	public Transaction(String id, String from, long value) {
 		this.uid = id;
-		this.from = from;
+		this.fromClass = from;
 		this.value = value;
 	}
 
@@ -61,7 +61,7 @@ public class Transaction {
 	}
 
 	public String getFrom() {
-		return from;
+		return fromClass;
 	}
 
 	public long getValue() {
