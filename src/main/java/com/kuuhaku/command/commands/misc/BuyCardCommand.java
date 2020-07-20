@@ -125,8 +125,8 @@ public class BuyCardCommand extends Command {
 		kp.addCard(cm.getCard());
 		KawaiponDAO.saveKawaipon(kp);
 
-		seller.addCredit(cm.getPrice());
-		buyer.removeCredit(cm.getPrice());
+		seller.addCredit(cm.getPrice(), this.getClass());
+		buyer.removeCredit(cm.getPrice(), this.getClass());
 
 		AccountDAO.saveAccount(seller);
 		AccountDAO.saveAccount(buyer);
