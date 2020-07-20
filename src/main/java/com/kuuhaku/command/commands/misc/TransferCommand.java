@@ -78,8 +78,8 @@ public class TransferCommand extends Command {
 			return;
 		}
 
-		to.addCredit(amount);
-		from.removeCredit(amount);
+		to.addCredit(amount, this.getClass());
+		from.removeCredit(amount, this.getClass());
 
 		AccountDAO.saveAccount(to);
 		AccountDAO.saveAccount(from);

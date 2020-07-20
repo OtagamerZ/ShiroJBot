@@ -72,20 +72,20 @@ public class Account {
 
 	public void signLoan(CreditLoan loan) {
 		ExceedMember ex = ExceedDAO.getExceedMember(userId);
-		this.addCredit(loan.getLoan());
+		this.addCredit(loan.getLoan(), this.getClass());
 		this.loan = Math.round(loan.getLoan() * loan.getInterest(ex));
 	}
 
-	public void addCredit(long credit) {
+	public void addCredit(long credit, Class<?> from) {
 		if (this.loan > 0) loan = Helper.clamp(loan - credit, 0, loan);
 		else balance += credit;
 
-		if (credit != 0) TransactionDAO.register(userId, credit);
+		if (credit != 0) TransactionDAO.register(userId, from, credit);
 	}
 
-	public void removeCredit(long credit) {
+	public void removeCredit(long credit, Class<?> from) {
 		this.balance -= credit;
-		if (credit != 0) TransactionDAO.register(userId, -credit);
+		if (credit != 0) TransactionDAO.register(userId, from, -credit);
 	}
 
 	public String getLastVoted() {

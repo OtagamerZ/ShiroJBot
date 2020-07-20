@@ -177,7 +177,7 @@ public class PurchaseBuffCommand extends Command {
 			return;
 		}
 
-		acc.removeCredit(sb.getPrice());
+		acc.removeCredit(sb.getPrice(), this.getClass());
 		GuildBuff gb = GuildBuffDAO.getBuffs(guild.getId());
 		if (!gb.addBuff(sb)) {
 			channel.sendMessage(":x: | Este servidor já possui uma melhoria dessa categoria.").queue();

@@ -131,7 +131,7 @@ public class RPSCommand extends Command {
 							break;
 						case 1:
 							int crd = Helper.rng(50, false);
-							acc.addCredit(crd);
+							acc.addCredit(crd, this.getClass());
 							AccountDAO.saveAccount(acc);
 							m.editMessage(m.getContentRaw() + "\nVocê ganhou! Aqui, " + crd + " créditos por ter jogado comigo!").queue();
 

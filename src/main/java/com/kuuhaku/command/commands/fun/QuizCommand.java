@@ -180,7 +180,7 @@ public class QuizCommand extends Command {
 
 					if (shuffledOpts.get(finalI).equalsIgnoreCase(correct)) {
 						int p = Helper.clamp(Helper.rng(150 * modif, false), (150 * modif) / 3, 150 * modif);
-						acc.addCredit(p);
+						acc.addCredit(p, this.getClass());
 						AccountDAO.saveAccount(acc);
 
 						eb.setTitle("Resposta correta!");

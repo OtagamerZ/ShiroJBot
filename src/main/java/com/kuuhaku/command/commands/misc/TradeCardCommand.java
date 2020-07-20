@@ -111,10 +111,10 @@ public class TradeCardCommand extends Command {
 			channel.sendMessage(other.getAsMention() + ", " + author.getAsMention() + " deseja comprar sua carta `" + card.getName() + "` por " + price + " créditos, você aceita essa transação?")
 					.queue(s -> Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (member1, message1) -> {
 						if (!member1.getId().equals(other.getId())) return;
-						acc.removeCredit(price);
+						acc.removeCredit(price, this.getClass());
 						target.removeCard(card);
 						kp.addCard(card);
-						tacc.addCredit(price);
+						tacc.addCredit(price, this.getClass());
 
 						KawaiponDAO.saveKawaipon(kp);
 						KawaiponDAO.saveKawaipon(target);
