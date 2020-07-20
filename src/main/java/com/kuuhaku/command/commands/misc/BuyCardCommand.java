@@ -72,14 +72,14 @@ public class BuyCardCommand extends Command {
 			List<Page> pages = new ArrayList<>();
 			List<CardMarket> cards = CardMarketDAO.getCards();
 			cards.sort(Comparator
-					.<CardMarket, KawaiponRarity>comparing(k -> k.getCard().getCard().getRarity(), Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
+					.<CardMarket, Boolean>comparing(k -> k.getCard().isFoil())
+					.thenComparing(k -> k.getCard().getCard().getRarity(), Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
 					.thenComparing(k -> k.getCard().getCard().getAnime(), Comparator.comparing(AnimeName::toString, String.CASE_INSENSITIVE_ORDER))
-					.thenComparing(k -> k.getCard().isFoil())
 					.thenComparing(k -> k.getCard().getCard().getName(), String.CASE_INSENSITIVE_ORDER));
 			for (int i = 0; i < Math.ceil(cards.size() / 10f); i++) {
 				eb.clearFields();
 				eb.setColor(Helper.getRandomColor());
-				for (int p = i * 10; p < cards.size() && p < 10; p++) {
+				for (int p = i * 10; p < cards.size() && p < 10 * (i + 1); p++) {
 					CardMarket cm = cards.get(p);
 					User seller = Main.getInfo().getUserByID(cm.getSeller());
 					eb.addField(
