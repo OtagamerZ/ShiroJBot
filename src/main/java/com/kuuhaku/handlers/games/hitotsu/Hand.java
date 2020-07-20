@@ -74,7 +74,7 @@ public class Hand {
 		for (int i = 0; i < cards.size(); i++) {
 			KawaiponCard kc = cards.get(i);
 
-			Helper.drawRotated(g2d, kc.getCard().drawCard(kc.isFoil()), 154, 450, -45 + (90f / (cards.size() + 1) * (i + 1)));
+			Helper.drawRotated(g2d, kc.getCard().drawCard(kc.isFoil()), 154, 450, -90 + (180f / (cards.size() + 1) * (i + 1)));
 
 			RarityColors rc = RarityColorsDAO.getColor(kc.getCard().getRarity());
 
