@@ -109,6 +109,7 @@ public class PollCommand extends Command {
 				for (int i = 0; i < finalOptions.length(); i++) {
 					String emote = new String(new char[]{"\uD83C\uDDE6".toCharArray()[0], (char) ("\uD83C\uDDE6".toCharArray()[1] + i)});
 					buttons.put(emote, (mb, msg) -> {
+						if (Main.getInfo().getPolls().get(m.getId()).containsKey(mb.getId())) return;
 						Main.getInfo().getPolls().get(m.getId()).put(mb.getId(), emote);
 						eb.setFooter("Clique nas reações abaixo para votar (total de votos: " + Main.getInfo().getPolls().get(m.getId()).size() + ")");
 						m.editMessage(eb.build()).queue();
