@@ -66,7 +66,7 @@ public class BuyCardCommand extends Command {
 			EmbedBuilder eb = new EmbedBuilder();
 
 			eb.setTitle(":scales: | Mercado de cartas");
-			eb.setDescription("User `" + prefix + "comprar ID` para comprar uma carta.");
+			eb.setDescription("Use `" + prefix + "comprar ID` para comprar uma carta.");
 			eb.setFooter("Seus créditos: " + buyer.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
 
 			List<Page> pages = new ArrayList<>();
@@ -83,7 +83,7 @@ public class BuyCardCommand extends Command {
 					CardMarket cm = cards.get(p);
 					User seller = Main.getInfo().getUserByID(cm.getSeller());
 					eb.addField(
-							"ID: " + cm.getId() + " | " + cm.getCard().getName() + " (" + cm.getCard().getCard().getRarity().toString() + ")",
+							"`ID: " + cm.getId() + "` | " + cm.getCard().getName() + " (" + cm.getCard().getCard().getRarity().toString() + ")",
 							"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: **" + cm.getPrice() + "** créditos",
 							false
 					);
