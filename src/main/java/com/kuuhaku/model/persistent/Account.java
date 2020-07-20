@@ -98,7 +98,7 @@ public class Account {
 			ZonedDateTime lastVote = ZonedDateTime.parse(lastVoted, Helper.dateformat);
 
 			Helper.logger(this.getClass()).info(
-					"Voto anterior: " + lastVote.format(Helper.dateformat) +
+					"\nVoto anterior: " + lastVote.format(Helper.dateformat) +
 							"\nHoje: " + today.format(Helper.dateformat) +
 							"\nAcumula? " + today.isBefore(lastVote.plusHours(24))
 			);
