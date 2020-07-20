@@ -26,10 +26,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/exceed/ExceedRankCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/exceed/ExceedRankCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/KawaiponsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/KawaiponsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/guild/GuildEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/guild/GuildEvents.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -585,14 +582,7 @@
       <workItem from="1595010214743" duration="8294000" />
       <workItem from="1595094379507" duration="5814000" />
       <workItem from="1595113117068" duration="792000" />
-      <workItem from="1595255234943" duration="12787000" />
-    </task>
-    <task id="LOCAL-01826" summary="Correção na seleção de exceeds">
-      <created>1594923227682</created>
-      <option name="number" value="01826" />
-      <option name="presentableId" value="LOCAL-01826" />
-      <option name="project" value="LOCAL" />
-      <updated>1594923227683</updated>
+      <workItem from="1595255234943" duration="13812000" />
     </task>
     <task id="LOCAL-01827" summary="Mudança de emotes de level">
       <created>1594924286794</created>
@@ -930,7 +920,14 @@
       <option name="project" value="LOCAL" />
       <updated>1595276331309</updated>
     </task>
-    <option name="localTasksCounter" value="1875" />
+    <task id="LOCAL-01875" summary="Tentativa 2 de implementar lista completa de cartas obtidas">
+      <created>1595277026989</created>
+      <option name="number" value="01875" />
+      <option name="presentableId" value="LOCAL-01875" />
+      <option name="project" value="LOCAL" />
+      <updated>1595277026989</updated>
+    </task>
+    <option name="localTasksCounter" value="1876" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -968,7 +965,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Redução no spawn de cartas e drops para servidores grandes" />
     <MESSAGE value="Novas cartas: Darling In The Franxx" />
     <MESSAGE value="Correção na seleção de exceeds" />
     <MESSAGE value="Mudança de emotes de level" />
@@ -993,7 +989,8 @@
     <MESSAGE value="Parâmetros de pesquisa na loja de cartas" />
     <MESSAGE value="Lista completa de cartas obtidas" />
     <MESSAGE value="Correção: sem lista completa de cartas" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção: sem lista completa de cartas" />
+    <MESSAGE value="Tentativa 2 de implementar lista completa de cartas obtidas" />
+    <option name="LAST_COMMIT_MESSAGE" value="Tentativa 2 de implementar lista completa de cartas obtidas" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1121,20 +1118,20 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="505" y="205" key="NewModule_or_Project.wizard/0.0.1680.1010@0.0.1680.1010" timestamp="1590148977508" />
-    <state x="548" y="228" key="RollbackChangesDialog" timestamp="1594153984630">
+    <state x="548" y="228" key="RollbackChangesDialog" timestamp="1595278137642">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="548" y="228" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1594153984630" />
+    <state x="548" y="228" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595278137642" />
     <state x="320" y="80" key="SettingsEditor" timestamp="1592942915575">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1587956411634" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1592942915575" />
-    <state x="358" y="292" key="Vcs.Push.Dialog.v2" timestamp="1595276334398">
+    <state x="358" y="292" key="Vcs.Push.Dialog.v2" timestamp="1595277029755">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1595276334398" />
+    <state x="358" y="292" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1595277029755" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1594305494731">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1165,11 +1162,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="465" y="286" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595246935580" />
-    <state x="341" y="138" width="790" height="658" key="find.popup" timestamp="1595249126182">
+    <state x="220" y="76" width="957" height="784" key="find.popup" timestamp="1595278608164">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="362" y="134" width="774" height="562" key="find.popup/0.0.1366.768@0.0.1366.768" timestamp="1588044108124" />
-    <state x="341" y="138" width="790" height="658" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1595249126182" />
+    <state x="220" y="76" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1595278608164" />
     <state x="409" y="157" key="git4idea.merge.GitPullDialog" timestamp="1586743041255">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
