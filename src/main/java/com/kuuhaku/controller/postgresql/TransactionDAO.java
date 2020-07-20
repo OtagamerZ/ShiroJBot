@@ -27,7 +27,7 @@ public class TransactionDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		em.merge(new Transaction(user, from.getCanonicalName(), value));
+		em.merge(new Transaction(user, from.getSimpleName(), value));
 		em.getTransaction().commit();
 
 		em.close();
