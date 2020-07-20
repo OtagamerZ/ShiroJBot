@@ -77,8 +77,13 @@ public class Account {
 	}
 
 	public void addCredit(long credit, Class<?> from) {
-		if (this.loan > 0) loan = Helper.clamp(loan - credit, 0, loan);
+		if (this.loan > 0) loan = loan - credit;
 		else balance += credit;
+
+		if (loan < 0) {
+			balance += loan * -1;
+			loan = 0;
+		}
 
 		if (credit != 0) TransactionDAO.register(userId, from, credit);
 	}
