@@ -91,15 +91,15 @@ public class RemainingCardsCommand extends Command {
 
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < cards.size(); i++) {
+			if (collected.contains(cards.get(i)))
+				sb.append("||").append(cards.get(i).getRarity().getEmote()).append(" | ").append(cards.get(i).getName()).append("||\n");
+			else
+				sb.append(cards.get(i).getRarity().getEmote()).append(" | ").append(cards.get(i).getName()).append("\n");
 			if (i % 30 == 0 && i > 0 || i == cards.size() - 1) {
 				eb.setDescription(sb.toString());
 				sb.setLength(0);
 				pages.add(new Page(PageType.EMBED, eb.build()));
 			}
-			if (collected.contains(cards.get(i)))
-				sb.append("||").append(cards.get(i).getRarity().getEmote()).append(" | ").append(cards.get(i).getName()).append("||\n");
-			else
-				sb.append(cards.get(i).getRarity().getEmote()).append(" | ").append(cards.get(i).getName()).append("\n");
 		}
 
 
