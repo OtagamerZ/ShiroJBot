@@ -72,7 +72,7 @@ public class BuyCardCommand extends Command {
 			List<Page> pages = new ArrayList<>();
 			List<CardMarket> cards = CardMarketDAO.getCards();
 			cards.sort(Comparator
-					.<CardMarket, Boolean>comparing(k -> k.getCard().isFoil())
+					.<CardMarket, Boolean>comparing(k -> k.getCard().isFoil(), Comparator.reverseOrder())
 					.thenComparing(k -> k.getCard().getCard().getRarity(), Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
 					.thenComparing(k -> k.getCard().getCard().getAnime(), Comparator.comparing(AnimeName::toString, String.CASE_INSENSITIVE_ORDER))
 					.thenComparing(k -> k.getCard().getCard().getName(), String.CASE_INSENSITIVE_ORDER));
