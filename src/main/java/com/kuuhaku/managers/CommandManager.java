@@ -354,7 +354,7 @@ public class CommandManager {
 					"trocar", new String[]{"trade"}, "req_user-card-amount", "cmd_trade-card", MISC, true
 			));
 			put(BuyCardCommand.class, new Argument(
-					"comprar", new String[]{"buy"}, "req_id", "cmd_buy-card", MISC, true
+					"comprar", new String[]{"buy"}, "req_id-params", "cmd_buy-card", MISC, true
 			));
 			put(SellCardCommand.class, new Argument(
 					"anunciar", new String[]{"sell"}, "req_card-price-type", "cmd_sell-card", MISC, true
