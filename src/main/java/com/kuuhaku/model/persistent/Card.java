@@ -75,12 +75,10 @@ public class Card {
 				BufferedImage frameCanvas = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
 				Graphics2D g2d = frameCanvas.createGraphics();
-				g2d.drawImage(frame, 0, 0, null);
-
 				if (foil) {
-					g2d.setComposite(BlendComposite.Hue);
 					g2d.drawImage(invert(frame), 0, 0, null);
-					g2d.setComposite(AlphaComposite.SrcOver);
+				} else {
+					g2d.drawImage(frame, 0, 0, null);
 				}
 
 				g2d.dispose();
