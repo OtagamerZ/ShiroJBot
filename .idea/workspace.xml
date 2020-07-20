@@ -25,18 +25,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/TransactionDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Transaction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/GuessTheNumberCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/GuessTheNumberCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/QuizCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/QuizCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/RPSCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/RPSCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/SlotsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/SlotsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/KawaiponsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/KawaiponsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/KawaiponBook.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/KawaiponBook.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -207,24 +196,24 @@
       <recent name="com.kuuhaku.command.commands.information.ComandosCommand" />
       <recent name="com.kuuhaku.command.commands.information.BotInfoCommand" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.controller.postgresql" />
+      <recent name="com.kuuhaku.handlers.games.hitotsu" />
+      <recent name="com.kuuhaku.handlers.games.hitotsu.Hitotsu" />
+      <recent name="com.kuuhaku.command.commands.fun" />
+      <recent name="com.kuuhaku.command.commands.misc" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games\hitotsu" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\kawaipon" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\icons" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\kawaipon\cards" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.kuuhaku.handlers.games.hitotsu" />
-      <recent name="com.kuuhaku.handlers.games.hitotsu.Hitotsu" />
-      <recent name="com.kuuhaku.command.commands.fun" />
-      <recent name="com.kuuhaku.command.commands.misc" />
-      <recent name="com.kuuhaku.model.persistent" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -593,13 +582,6 @@
       <workItem from="1595094379507" duration="5814000" />
       <workItem from="1595113117068" duration="792000" />
     </task>
-    <task id="LOCAL-01800" summary="Correção do comando de suporte presencial">
-      <created>1594759939731</created>
-      <option name="number" value="01800" />
-      <option name="presentableId" value="LOCAL-01800" />
-      <option name="project" value="LOCAL" />
-      <updated>1594759939731</updated>
-    </task>
     <task id="LOCAL-01801" summary="Correção na corrente de cartas">
       <created>1594815103873</created>
       <option name="number" value="01801" />
@@ -936,7 +918,14 @@
       <option name="project" value="LOCAL" />
       <updated>1595113289129</updated>
     </task>
-    <option name="localTasksCounter" value="1849" />
+    <task id="LOCAL-01849" summary="Adição de auditoria de transações de créditos;&#10;Criação de trava de jogos;">
+      <created>1595248559171</created>
+      <option name="number" value="01849" />
+      <option name="presentableId" value="LOCAL-01849" />
+      <option name="project" value="LOCAL" />
+      <updated>1595248559171</updated>
+    </task>
+    <option name="localTasksCounter" value="1850" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -974,7 +963,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição de novo jogo: Hitotsu (fase de testes)" />
     <MESSAGE value="Implementação da corrente de cartas (Hitotsu)" />
     <MESSAGE value="Correção do comando de criar convites" />
     <MESSAGE value="Correção do comando de suporte presencial" />
@@ -999,7 +987,8 @@
     <MESSAGE value="Correção nos streaks de voto" />
     <MESSAGE value="Correção no footer da lista" />
     <MESSAGE value="Correção nos drops de crédito" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção nos drops de crédito" />
+    <MESSAGE value="Adição de auditoria de transações de créditos;&#10;Criação de trava de jogos;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição de auditoria de transações de créditos;&#10;Criação de trava de jogos;" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1052,11 +1041,11 @@
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="203" y="0" width="805" height="924" key="CommitChangelistDialog2" timestamp="1595113285036">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state x="234" y="57" width="805" height="924" key="CommitChangelistDialog2" timestamp="1595248556278">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="234" y="57" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1595018069531" />
+    <state x="234" y="57" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1595248556278" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1132,11 +1121,11 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1587956411634" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1592942915575" />
-    <state x="351" y="182" key="Vcs.Push.Dialog.v2" timestamp="1595113293247">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state x="253" y="373" key="Vcs.Push.Dialog.v2" timestamp="1595248562430">
+      <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="253" y="373" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1595018087975" />
+    <state x="253" y="373" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1595248562430" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1594305494731">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
