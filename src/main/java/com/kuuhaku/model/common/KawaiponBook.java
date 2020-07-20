@@ -46,7 +46,7 @@ public class KawaiponBook {
 	public BufferedImage view(List<Card> cardList, String title, boolean foil) throws IOException, InterruptedException {
 		int totalCards = cardList.size();
 		String text;
-		if (foil) text = (foil ? "« " : "") + title + (foil ? " »" : "");
+		if (foil) text = "« " + title + " »";
 		else text = title;
 		List<KawaiponCard> cards = new ArrayList<>(this.cards);
 		cardList.sort(Comparator

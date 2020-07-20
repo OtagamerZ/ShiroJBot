@@ -31,6 +31,8 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.AnsweredQuizzes;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
@@ -68,6 +70,11 @@ public class QuizCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		if (ShiroInfo.gameInProgress(author.getId())) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+			return;
+		}
+
 		AnsweredQuizzes aq = QuizDAO.getUserState(author.getId());
 
 		if (aq.getTimes() == 10) {
@@ -200,6 +207,7 @@ public class QuizCommand extends Command {
 					ms.delete().queue();
 
 					channel.sendMessage(eb.build()).queue();
+					ShiroInfo.getGameLock().remove(author.getId());
 				});
 
 				fields.add(new MessageEmbed.Field("Alternativa " + opts.get(i), shuffledOpts.get(i), true));
@@ -207,6 +215,7 @@ public class QuizCommand extends Command {
 
 			fields.sort(Comparator.comparing(MessageEmbed.Field::getName));
 			fields.forEach(eb::addField);
+			ShiroInfo.getGameLock().add(author.getId());
 			channel.sendMessage(eb.build()).queue(s -> Pages.buttonize(s, buttons, false, 1, TimeUnit.MINUTES));
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
