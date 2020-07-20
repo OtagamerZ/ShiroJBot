@@ -37,9 +37,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class BuyCardCommand extends Command {
 
@@ -62,7 +65,36 @@ public class BuyCardCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		Account buyer = AccountDAO.getAccount(author.getId());
-		if (args.length < 1) {
+		if (args.length < 1 || !StringUtils.isNumeric(args[0])) {
+			AtomicReference<String> byName = new AtomicReference<>(null);
+			AtomicReference<KawaiponRarity> byRarity = new AtomicReference<>(null);
+			AtomicBoolean onlyFoil = new AtomicBoolean();
+			AtomicReference<AnimeName> byAnime = new AtomicReference<>(null);
+
+			if (args.length > 0) {
+				List<String> params = List.of(args);
+				byName.set(params.stream().filter(s -> s.startsWith("-n") && s.length() > 2).findFirst().orElse(""));
+
+				String rarity = params.stream().filter(s -> s.startsWith("-r") && s.length() > 2).findFirst().orElse(null);
+				if (rarity != null) {
+					byRarity.set(KawaiponRarity.getByName(rarity.substring(2)));
+					if (byRarity.get() == null) {
+						channel.sendMessage(":x: | Raridade inválida, verifique se digitou-a corretamente.").queue();
+						return;
+					}
+				}
+
+				onlyFoil.set(params.stream().anyMatch("-c"::equalsIgnoreCase));
+
+				String anime = params.stream().filter(s -> s.startsWith("-a") && s.length() > 2).findFirst().orElse(null);
+				if (anime != null) {
+					if (Arrays.stream(AnimeName.values()).noneMatch(a -> a.name().equals(anime.substring(2).toUpperCase()))) {
+						channel.sendMessage(":x: | Anime inválido, verifique se digitou-o corretamente.").queue();
+						return;
+					}
+					byAnime.set(AnimeName.valueOf(anime.toUpperCase()));
+				}
+			}
 			EmbedBuilder eb = new EmbedBuilder();
 
 			eb.setTitle(":scales: | Mercado de cartas");
@@ -71,6 +103,14 @@ public class BuyCardCommand extends Command {
 
 			List<Page> pages = new ArrayList<>();
 			List<CardMarket> cards = CardMarketDAO.getCards();
+			cards.removeIf(cm -> {
+				boolean nameMatch = byName.get() == null || StringUtils.containsIgnoreCase(cm.getCard().getName(), byName.get().substring(2));
+				boolean rarityMatch = byRarity.get() == null || cm.getCard().getCard().getRarity().equals(byRarity.get());
+				boolean foilMatch = !onlyFoil.get() || cm.getCard().isFoil();
+				boolean animeMatch = byAnime.get() == null || cm.getCard().getCard().getAnime().equals(byAnime.get());
+
+				return nameMatch && rarityMatch && foilMatch && animeMatch;
+			});
 			cards.sort(Comparator
 					.<CardMarket, Boolean>comparing(k -> k.getCard().isFoil(), Comparator.reverseOrder())
 					.thenComparing(k -> k.getCard().getCard().getRarity(), Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
@@ -95,9 +135,6 @@ public class BuyCardCommand extends Command {
 				channel.sendMessage("Ainda não há nenhuma carta anunciada.").queue();
 			} else
 				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5));
-			return;
-		} else if (!StringUtils.isNumeric(args[0])) {
-			channel.sendMessage(":x: | O ID precisa ser um valor inteiro.").queue();
 			return;
 		}
 
