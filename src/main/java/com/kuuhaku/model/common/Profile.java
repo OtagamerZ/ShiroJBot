@@ -62,9 +62,9 @@ public class Profile {
 		BufferedImage avatar;
 
 		try {
-			avatar = scaleImage(ImageIO.read(Helper.getImage(m.getUser().getEffectiveAvatarUrl())), 200, 200);
+			avatar = Helper.scaleImage(ImageIO.read(Helper.getImage(m.getUser().getEffectiveAvatarUrl())), 200, 200);
 		} catch (NullPointerException | IOException e) {
-			avatar = scaleImage(ImageIO.read(Helper.getImage("https://institutogoldenprana.com.br/wp-content/uploads/2015/08/no-avatar-25359d55aa3c93ab3466622fd2ce712d1.jpg")), 200, 200);
+			avatar = Helper.scaleImage(ImageIO.read(Helper.getImage("https://institutogoldenprana.com.br/wp-content/uploads/2015/08/no-avatar-25359d55aa3c93ab3466622fd2ce712d1.jpg")), 200, 200);
 		}
 
 		BufferedImage bi = new BufferedImage(w, HEIGTH, BufferedImage.TYPE_INT_RGB);
@@ -78,7 +78,7 @@ public class Profile {
 
 		Color main;
 		try {
-			BufferedImage bg = scaleImage(ImageIO.read(Helper.getImage(MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getBg())), bi.getWidth(), bi.getHeight());
+			BufferedImage bg = Helper.scaleImage(ImageIO.read(Helper.getImage(MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getBg())), bi.getWidth(), bi.getHeight());
 
 			if (bg.getWidth() > bi.getWidth()) xOffset = -(bg.getWidth() - bi.getWidth()) / 2;
 			if (bg.getHeight() > bi.getHeight()) yOffset = -(bg.getHeight() - bi.getHeight()) / 2;
@@ -86,7 +86,7 @@ public class Profile {
 			g2d.drawImage(bg, xOffset, yOffset, null);
 			main = Helper.reverseColor(Helper.colorThief(MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getBg()));
 		} catch (IOException e) {
-			BufferedImage bg = scaleImage(ImageIO.read(Helper.getImage("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg")), bi.getWidth(), bi.getHeight());
+			BufferedImage bg = Helper.scaleImage(ImageIO.read(Helper.getImage("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg")), bi.getWidth(), bi.getHeight());
 
 			if (bg.getWidth() > bi.getWidth()) xOffset = -(bg.getWidth() - bi.getWidth()) / 2;
 			if (bg.getHeight() > bi.getHeight()) yOffset = -(bg.getHeight() - bi.getHeight()) / 2;
@@ -219,31 +219,8 @@ public class Profile {
 		}};
 
 		for (int i = 0; i < badges.size(); i++) {
-			g2d.drawImage(scaleImage(badges.get(i), 44, 44), null, coords.get(i)[0], coords.get(i)[1]);
+			g2d.drawImage(Helper.scaleImage(badges.get(i), 44, 44), null, coords.get(i)[0], coords.get(i)[1]);
 		}
-	}
-
-	public static BufferedImage scaleImage(BufferedImage image, int w, int h) {
-
-		// Make sure the aspect ratio is maintained, so the image is not distorted
-		double thumbRatio = (double) w / (double) h;
-		int imageWidth = image.getWidth();
-		int imageHeight = image.getHeight();
-		double aspectRatio = (double) imageWidth / (double) imageHeight;
-
-		if (thumbRatio > aspectRatio) {
-			h = (int) (w / aspectRatio);
-		} else {
-			w = (int) (h * aspectRatio);
-		}
-
-		// Draw the scaled image
-		BufferedImage newImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D graphics2D = newImage.createGraphics();
-		graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-		graphics2D.drawImage(image, 0, 0, w, h, null);
-
-		return newImage;
 	}
 
 	public static void printCenteredString(String s, int width, int XPos, int YPos, Graphics2D g2d) {

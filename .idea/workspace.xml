@@ -26,6 +26,10 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/exceed/ExceedRankCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/exceed/ExceedRankCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/KawaiponsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/KawaiponsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -196,10 +200,12 @@
       <recent name="com.kuuhaku.command.commands.information.ComandosCommand" />
       <recent name="com.kuuhaku.command.commands.information.BotInfoCommand" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games\hitotsu" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\kawaipon" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\icons" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\kawaipon\cards" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.kuuhaku.controller.postgresql" />
@@ -208,12 +214,10 @@
       <recent name="com.kuuhaku.command.commands.fun" />
       <recent name="com.kuuhaku.command.commands.misc" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games\hitotsu" />
+    <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\kawaipon" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\icons" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\kawaipon\cards" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -581,14 +585,7 @@
       <workItem from="1595010214743" duration="8294000" />
       <workItem from="1595094379507" duration="5814000" />
       <workItem from="1595113117068" duration="792000" />
-      <workItem from="1595255234943" duration="12085000" />
-    </task>
-    <task id="LOCAL-01825" summary="Novas cartas: Darling In The Franxx">
-      <created>1594920645800</created>
-      <option name="number" value="01825" />
-      <option name="presentableId" value="LOCAL-01825" />
-      <option name="project" value="LOCAL" />
-      <updated>1594920645801</updated>
+      <workItem from="1595255234943" duration="12787000" />
     </task>
     <task id="LOCAL-01826" summary="Correção na seleção de exceeds">
       <created>1594923227682</created>
@@ -926,7 +923,14 @@
       <option name="project" value="LOCAL" />
       <updated>1595276067506</updated>
     </task>
-    <option name="localTasksCounter" value="1874" />
+    <task id="LOCAL-01874" summary="Correção: sem lista completa de cartas">
+      <created>1595276331309</created>
+      <option name="number" value="01874" />
+      <option name="presentableId" value="LOCAL-01874" />
+      <option name="project" value="LOCAL" />
+      <updated>1595276331309</updated>
+    </task>
+    <option name="localTasksCounter" value="1875" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -964,7 +968,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção geral" />
     <MESSAGE value="Redução no spawn de cartas e drops para servidores grandes" />
     <MESSAGE value="Novas cartas: Darling In The Franxx" />
     <MESSAGE value="Correção na seleção de exceeds" />
@@ -989,7 +992,8 @@
     <MESSAGE value="Correções na lista de cartas à venda" />
     <MESSAGE value="Parâmetros de pesquisa na loja de cartas" />
     <MESSAGE value="Lista completa de cartas obtidas" />
-    <option name="LAST_COMMIT_MESSAGE" value="Lista completa de cartas obtidas" />
+    <MESSAGE value="Correção: sem lista completa de cartas" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção: sem lista completa de cartas" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1029,6 +1033,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="636" y="391" width="408" height="237" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/0.0.1680.1010@0.0.1680.1010" timestamp="1592937778763" />
+    <state x="551" y="215" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog" timestamp="1595276691052">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="551" y="215" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595276691052" />
     <state x="553" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1594408973025">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1042,11 +1050,11 @@
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2" timestamp="1595276328429">
+    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2" timestamp="1595277023846">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1595276328429" />
+    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1595277023846" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1122,11 +1130,11 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1587956411634" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1592942915575" />
-    <state x="358" y="292" key="Vcs.Push.Dialog.v2" timestamp="1595276072702">
+    <state x="358" y="292" key="Vcs.Push.Dialog.v2" timestamp="1595276334398">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1595276072702" />
+    <state x="358" y="292" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1595276334398" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1594305494731">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
