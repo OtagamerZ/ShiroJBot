@@ -91,7 +91,7 @@ public class RemainingCardsCommand extends Command {
 
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < cards.size(); i++) {
-			if (i % 30 == 0 && i > 0) {
+			if (i % 30 == 0 && i > 0 || i == cards.size() - 1) {
 				eb.setDescription(sb.toString());
 				sb.setLength(0);
 				pages.add(new Page(PageType.EMBED, eb.build()));
