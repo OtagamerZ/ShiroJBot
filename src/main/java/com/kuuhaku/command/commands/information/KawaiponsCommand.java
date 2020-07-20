@@ -121,7 +121,15 @@ public class KawaiponsCommand extends Command {
 				KawaiponRarity rr = KawaiponRarity.getByName(args[0]);
 
 				if (rr == null) {
-					if (Arrays.stream(AnimeName.values()).noneMatch(a -> a.name().equals(args[0].toUpperCase()))) {
+					if (args[0].equalsIgnoreCase("total")) {
+						Set<KawaiponCard> collection = kp.getCards();
+						Set<KawaiponCard> toRender = collection.stream().filter(k -> k.isFoil() == args[1].equalsIgnoreCase("C")).collect(Collectors.toSet());
+
+						KawaiponBook kb = new KawaiponBook(toRender);
+						BufferedImage cards = kb.view(CardDAO.getCards(), "Todas as cartas", args[1].equalsIgnoreCase("C"));
+
+						compressAndSend(author, channel, m, collection, cards, "Todas as cartas", CardDAO.totalCards(), null);
+					} else if (Arrays.stream(AnimeName.values()).noneMatch(a -> a.name().equals(args[0].toUpperCase()))) {
 						m.editMessage(":x: | Anime inválido ou ainda não adicionado (colocar `_` no lugar de espaços).").queue();
 						return;
 					}
@@ -151,6 +159,9 @@ public class KawaiponsCommand extends Command {
 	}
 
 	private void compressAndSend(User author, MessageChannel channel, Message m, Set<KawaiponCard> collection, BufferedImage cards, String s, long l, KawaiponRarity rr) throws IOException {
+		double fac = cards.getWidth() / 518d;
+		BufferedImage rescaled = Helper.scaleImage(cards, 518, (int) (cards.getHeight() * fac));
+
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			ImageWriter writer = ImageIO.getImageWritersByFormatName("jpg").next();
 			ImageOutputStream ios = ImageIO.createImageOutputStream(baos);
@@ -159,12 +170,12 @@ public class KawaiponsCommand extends Command {
 			ImageWriteParam param = writer.getDefaultWriteParam();
 			if (param.canWriteCompressed()) {
 				param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-				param.setCompressionQuality(0.4f);
+				param.setCompressionQuality(0.5f);
 			}
 
-			writer.write(null, new IIOImage(cards, null, null), param);
+			writer.write(null, new IIOImage(rescaled, null, null), param);
 			ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-			cards = ImageIO.read(bais);
+			rescaled = ImageIO.read(bais);
 			bais.close();
 		}
 
@@ -179,6 +190,6 @@ public class KawaiponsCommand extends Command {
 		eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(collection.size(), l * 2) + "%");
 
 		m.delete().queue();
-		channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards), "cards.jpg").queue();
+		channel.sendMessage(eb.build()).addFile(Helper.getBytes(rescaled), "cards.jpg").queue();
 	}
 }
