@@ -65,13 +65,18 @@ public class SeeCardCommand extends Command {
 		}
 
 		Card tc = CardDAO.getCard(args[0], true);
-		if (tc == null) {
-			channel.sendMessage(":x: | Essa carta não existe.").queue();
-			return;
-		} else if (args.length < 2 && tc.getRarity() != KawaiponRarity.ULTIMATE) {
-			channel.sendMessage(":x: | Você também precisa informar o tipo dela (`N` = normal, `C` = cromada).").queue();
-			return;
-		} else if (!Helper.equalsAny(args[1], "N", "C")) {
+		try {
+			if (tc == null) {
+				channel.sendMessage(":x: | Essa carta não existe.").queue();
+				return;
+			} else if (args.length < 2 && tc.getRarity() != KawaiponRarity.ULTIMATE) {
+				channel.sendMessage(":x: | Você também precisa informar o tipo dela (`N` = normal, `C` = cromada).").queue();
+				return;
+			} else if (!Helper.equalsAny(args[1], "N", "C")) {
+				channel.sendMessage(":x: | Você precisa informar o tipo da carta que deseja ver (`N` = normal, `C` = cromada).").queue();
+				return;
+			}
+		} catch (ArrayIndexOutOfBoundsException e) {
 			channel.sendMessage(":x: | Você precisa informar o tipo da carta que deseja ver (`N` = normal, `C` = cromada).").queue();
 			return;
 		}
