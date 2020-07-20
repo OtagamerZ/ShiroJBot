@@ -80,12 +80,12 @@ public class Account {
 		if (this.loan > 0) loan = Helper.clamp(loan - credit, 0, loan);
 		else balance += credit;
 
-		TransactionDAO.register(userId, credit);
+		if (credit != 0) TransactionDAO.register(userId, credit);
 	}
 
 	public void removeCredit(long credit) {
 		this.balance -= credit;
-		TransactionDAO.register(userId, -credit);
+		if (credit != 0) TransactionDAO.register(userId, -credit);
 	}
 
 	public String getLastVoted() {
