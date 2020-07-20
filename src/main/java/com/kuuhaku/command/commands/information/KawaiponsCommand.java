@@ -121,7 +121,16 @@ public class KawaiponsCommand extends Command {
 				KawaiponRarity rr = KawaiponRarity.getByName(args[0]);
 
 				if (rr == null) {
-					if (Arrays.stream(AnimeName.values()).noneMatch(a -> a.name().equals(args[0].toUpperCase()))) {
+					if (Helper.equalsAny(args[0], "total")) {
+						Set<KawaiponCard> collection = kp.getCards();
+						Set<KawaiponCard> toRender = collection.stream().filter(k -> k.isFoil() == args[1].equalsIgnoreCase("C")).collect(Collectors.toSet());
+
+						KawaiponBook kb = new KawaiponBook(toRender);
+						BufferedImage cards = kb.view(CardDAO.getCards(), "Todas as cartas", args[1].equalsIgnoreCase("C"));
+
+						compressAndSend(author, channel, m, collection, cards, "Todas as cartas", CardDAO.totalCards(), null);
+						return;
+					} else if (Arrays.stream(AnimeName.values()).noneMatch(a -> a.name().equals(args[0].toUpperCase()))) {
 						m.editMessage(":x: | Anime inválido ou ainda não adicionado (colocar `_` no lugar de espaços).").queue();
 						return;
 					}
