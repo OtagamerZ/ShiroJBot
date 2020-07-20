@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 public class BuyCardCommand extends Command {
 
@@ -73,7 +74,7 @@ public class BuyCardCommand extends Command {
 
 			if (args.length > 0) {
 				List<String> params = List.of(args);
-				byName.set(params.stream().filter(s -> s.startsWith("-n") && s.length() > 2).findFirst().orElse(""));
+				byName.set(params.stream().filter(s -> s.startsWith("-n") && s.length() > 2).findFirst().orElse(null));
 
 				String rarity = params.stream().filter(s -> s.startsWith("-r") && s.length() > 2).findFirst().orElse(null);
 				if (rarity != null) {
@@ -102,20 +103,17 @@ public class BuyCardCommand extends Command {
 			eb.setFooter("Seus créditos: " + buyer.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
 
 			List<Page> pages = new ArrayList<>();
-			List<CardMarket> cards = CardMarketDAO.getCards();
-			cards.removeIf(cm -> {
-				boolean nameMatch = byName.get() == null || StringUtils.containsIgnoreCase(cm.getCard().getName(), byName.get().substring(2));
-				boolean rarityMatch = byRarity.get() == null || cm.getCard().getCard().getRarity().equals(byRarity.get());
-				boolean foilMatch = !onlyFoil.get() || cm.getCard().isFoil();
-				boolean animeMatch = byAnime.get() == null || cm.getCard().getCard().getAnime().equals(byAnime.get());
-
-				return nameMatch && rarityMatch && foilMatch && animeMatch;
-			});
-			cards.sort(Comparator
-					.<CardMarket, Boolean>comparing(k -> k.getCard().isFoil(), Comparator.reverseOrder())
-					.thenComparing(k -> k.getCard().getCard().getRarity(), Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
-					.thenComparing(k -> k.getCard().getCard().getAnime(), Comparator.comparing(AnimeName::toString, String.CASE_INSENSITIVE_ORDER))
-					.thenComparing(k -> k.getCard().getCard().getName(), String.CASE_INSENSITIVE_ORDER));
+			List<CardMarket> cards = CardMarketDAO.getCards().stream()
+					.filter(cm -> byName.get() == null || StringUtils.containsIgnoreCase(cm.getCard().getName(), byName.get().substring(2)))
+					.filter(cm -> byRarity.get() == null || byRarity.get().equals(cm.getCard().getCard().getRarity()))
+					.filter(cm -> !onlyFoil.get() || cm.getCard().isFoil())
+					.filter(cm -> byAnime.get() == null || byAnime.get().equals(cm.getCard().getCard().getAnime()))
+					.sorted(Comparator
+							.<CardMarket, Boolean>comparing(k -> k.getCard().isFoil(), Comparator.reverseOrder())
+							.thenComparing(k -> k.getCard().getCard().getRarity(), Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
+							.thenComparing(k -> k.getCard().getCard().getAnime(), Comparator.comparing(AnimeName::toString, String.CASE_INSENSITIVE_ORDER))
+							.thenComparing(k -> k.getCard().getCard().getName(), String.CASE_INSENSITIVE_ORDER))
+					.collect(Collectors.toList());
 			for (int i = 0; i < Math.ceil(cards.size() / 10f); i++) {
 				eb.clearFields();
 				eb.setColor(Helper.getRandomColor());
