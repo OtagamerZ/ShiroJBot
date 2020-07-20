@@ -42,9 +42,9 @@ public class CreditDrop implements Prize {
 	private final AnimeName anime = AnimeName.values()[Helper.rng(AnimeName.values().length, true)];
 	private final ExceedEnums exceed = ExceedEnums.values()[Helper.rng(ExceedEnums.values().length, true)];
 	private final int[] values = {
-			Helper.rng((int) CardDAO.totalCards(anime), false),
+			1 + Helper.rng((int) CardDAO.totalCards(anime) - 1, false),
 			1 + Helper.rng(6, false),
-			Helper.rng((int) CardDAO.totalCards(), false),
+			1 + Helper.rng((int) CardDAO.totalCards() - 1, false),
 			Helper.rng(MemberDAO.getHighestLevel() / 2, false)
 	};
 	private final int amount = Helper.clamp(Helper.rng(1250, false), 250, 1250);
@@ -52,7 +52,7 @@ public class CreditDrop implements Prize {
 		add(Pair.of("Ter " + values[2] + " carta" + (values[2] != 1 ? "s" : "") + " ou mais.", u ->
 				KawaiponDAO.getKawaipon(u.getId()).getCards().size() >= values[2]));
 
-		add(Pair.of("Ter " + values[0] + " carta" + (values[0] != 1 ? "s" : "") + " de " + anime.toString() + ".", u ->
+		add(Pair.of("Ter " + values[0] + " carta" + (values[0] != 1 ? "s" : "") + " de " + anime.toString() + " ou mais.", u ->
 				KawaiponDAO.getKawaipon(u.getId()).getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).count() >= values[0]));
 
 		add(Pair.of("Ser level " + values[3] + " ou maior.", u ->
