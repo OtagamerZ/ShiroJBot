@@ -110,6 +110,7 @@ public class KawaiponsCommand extends Command {
 						f.deleteOnExit();
 						ImageIO.write(cards, "png", f);
 
+						System.out.println(f.length());
 						send(author, channel, m, collection, f, "Todas as cartas", CardDAO.totalCards());
 						if (f.exists()) f.delete();
 					} else if (Arrays.stream(AnimeName.values()).noneMatch(a -> a.name().equals(args[0].toUpperCase()))) {
