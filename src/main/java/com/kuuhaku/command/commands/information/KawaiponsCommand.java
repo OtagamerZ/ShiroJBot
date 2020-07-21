@@ -100,11 +100,11 @@ public class KawaiponsCommand extends Command {
 					eb.addField(":books: | Coleções completas:", count + " de " + AnimeName.values().length + " (" + Helper.prcntToInt(count, AnimeName.values().length) + "%)", true);
 					eb.addField(":red_envelope: | Total de cartas normais:", common + " de " + CardDAO.totalCards() + " (" + Helper.prcntToInt(common, CardDAO.totalCards()) + "%)", true);
 					eb.addField(":star2: | Total de cartas cromadas:", foil + " de " + CardDAO.totalCards() + " (" + Helper.prcntToInt(foil, CardDAO.totalCards()) + "%)", true);
-					eb.setImage("attachment://cards.jpg");
+					eb.setImage("attachment://cards.png");
 					eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(kp.getCards().size(), CardDAO.totalCards() * 2) + "%");
 
 					m.delete().queue();
-					channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards), "cards.jpg").queue();
+					channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "png"), "cards.png").queue();
 					return;
 				} else if (args.length < 2 || !Helper.equalsAny(args[1], "N", "C")) {
 					m.editMessage(":x: | Você precisa especificar o tipo da coleção (`N` = normal, `C` = cromada).").queue();
@@ -171,10 +171,10 @@ public class KawaiponsCommand extends Command {
 		eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName() + " (" + s + ")");
 		eb.addField(":red_envelope: | Cartas normais:", common + " de " + l + " (" + Helper.prcntToInt(common, l) + "%)", true);
 		eb.addField(":star2: | Cartas cromadas:", foil + " de " + l + " (" + Helper.prcntToInt(foil, l) + "%)", true);
-		eb.setImage("attachment://cards.jpg");
+		eb.setImage("attachment://cards.png");
 		eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(collection.size(), l * 2) + "%");
 
 		m.delete().queue();
-		channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards), "cards.jpg").queue();
+		channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "png"), "cards.png").queue();
 	}
 }
