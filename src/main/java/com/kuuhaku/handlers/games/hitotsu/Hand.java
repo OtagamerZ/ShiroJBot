@@ -69,20 +69,20 @@ public class Hand {
 		g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 50));
 
 		List<KawaiponCard> cards = new ArrayList<>(getCards());
-		g2d.translate(bi.getWidth() / 2f - 124, 75);
+		g2d.translate(bi.getWidth() / 2f - 204, 75);
 
 		for (int i = 0; i < cards.size(); i++) {
 			KawaiponCard kc = cards.get(i);
 			BufferedImage card = kc.getCard().drawCard(kc.isFoil());
 
-			Helper.drawRotated(g2d, card, 154 - card.getWidth() / 2, 450, -90 + (180f / (cards.size() + 1) * (i + 1)));
+			Helper.drawRotated(g2d, card, 129, 450, -90 + (180f / (cards.size() + 1) * (i + 1)));
 
 			RarityColors rc = RarityColorsDAO.getColor(kc.getCard().getRarity());
 
 			if (kc.isFoil()) g2d.setColor(rc.getPrimary().brighter());
 			else g2d.setColor(rc.getPrimary());
 
-			Helper.writeRotated(g2d, kc.isFoil() ? "*" + i + "*" : String.valueOf(i), 154 - card.getWidth() / 2, 450, -90 + (180f / (cards.size() + 1) * (i + 1)));
+			Helper.writeRotated(g2d, kc.isFoil() ? "*" + i + "*" : String.valueOf(i), 129, 450, -90 + (180f / (cards.size() + 1) * (i + 1)));
 		}
 
 		g2d.dispose();
