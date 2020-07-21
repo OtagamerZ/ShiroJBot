@@ -34,9 +34,7 @@ import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -121,7 +119,7 @@ public class HitotsuCommand extends Command {
 		players.add(author);
 		Tabletop t = new Hitotsu((TextChannel) channel, id, players.toArray(User[]::new));
 		int finalBet = bet;
-		if (message.getMentionedUsers().size() == 1)
+		if (players.size() <= 2)
 			channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Hitotsu, deseja aceitar?" + (bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 						if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
@@ -135,11 +133,17 @@ public class HitotsuCommand extends Command {
 						}
 					}), false, 1, TimeUnit.MINUTES));
 		else
-			channel.sendMessage(players.stream().map(User::getAsMention).map(s -> s + ", ").collect(Collectors.joining()) + " vocês foram desafiados a uma partida de Hitotsu, desejam aceitar?" + (bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
+			channel.sendMessage(message.getMentionedUsers().stream().map(User::getAsMention).map(s -> s + ", ").collect(Collectors.joining()) + " vocês foram desafiados a uma partida de Hitotsu, desejam aceitar?" + (bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-						int accepted = 1;
-						if (players.contains(mb.getUser())) accepted++;
-						if (accepted == players.size()) {
+						Set<String> accepted = new HashSet<>(Set.of(author.getId()));
+						if (players.contains(mb.getUser())) {
+							accepted.add(mb.getId());
+							if (ShiroInfo.gameInProgress(mb.getId())) {
+								channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+								return;
+							}
+						}
+						if (accepted.size() == players.size()) {
 							if (ShiroInfo.gameInProgress(author.getId())) {
 								channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
 								return;
