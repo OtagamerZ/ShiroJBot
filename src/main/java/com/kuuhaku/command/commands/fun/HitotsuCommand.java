@@ -118,6 +118,7 @@ public class HitotsuCommand extends Command {
 		List<User> players = new ArrayList<>(message.getMentionedUsers());
 		players.add(author);
 		Tabletop t = new Hitotsu((TextChannel) channel, id, players.toArray(User[]::new));
+		Set<String> accepted = new HashSet<>(Set.of(author.getId()));
 		int finalBet = bet;
 		if (players.size() <= 2)
 			channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Hitotsu, deseja aceitar?" + (bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
@@ -135,7 +136,6 @@ public class HitotsuCommand extends Command {
 		else
 			channel.sendMessage(message.getMentionedUsers().stream().map(User::getAsMention).map(s -> s + ", ").collect(Collectors.joining()) + " vocês foram desafiados a uma partida de Hitotsu, desejam aceitar?" + (bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-						Set<String> accepted = new HashSet<>(Set.of(author.getId()));
 						if (players.contains(mb.getUser())) {
 							accepted.add(mb.getId());
 							if (ShiroInfo.gameInProgress(mb.getId())) {
