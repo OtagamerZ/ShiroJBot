@@ -19,19 +19,13 @@
 package com.kuuhaku.handlers.games.tabletop.games;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.ExceedDAO;
-import com.kuuhaku.controller.sqlite.PStateDAO;
-import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
+import com.kuuhaku.handlers.games.framework.Tabletop;
 import com.kuuhaku.handlers.games.tabletop.entity.Piece;
 import com.kuuhaku.handlers.games.tabletop.entity.Player;
 import com.kuuhaku.handlers.games.tabletop.entity.Spot;
-import com.kuuhaku.handlers.games.tabletop.entity.Tabletop;
 import com.kuuhaku.handlers.games.tabletop.enums.Board;
 import com.kuuhaku.handlers.games.tabletop.pieces.Circle;
 import com.kuuhaku.handlers.games.tabletop.pieces.Cross;
-import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Message;
@@ -41,9 +35,6 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
-import javax.imageio.ImageIO;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -58,21 +49,15 @@ public class CrissCross extends Tabletop {
 	public CrissCross(TextChannel table, String id, User... players) {
 		super(table, Board.SIZE_3X3(), id, players);
 		pieces = Map.of(
-				players[0], new Cross(new Player(players[0], true)),
-				players[1], new Circle(new Player(players[1], false))
+				players[0], new Circle(new Player(players[0], false)),
+				players[1], new Cross(new Player(players[1], true))
 		);
 	}
 
 	@Override
 	public void execute(int bet) {
-		final User[] turn = {getPlayers().nextTurn()};
-		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-			ImageIO.write(getBoard().render(), "jpg", baos);
-
-			message = getTable().sendMessage("Turno de " + turn[0].getAsMention()).addFile(baos.toByteArray(), "board.jpg").complete();
-		} catch (IOException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-		}
+		getPlayers().lastOneStarts();
+		message = getTable().sendMessage("Turno de " + getPlayers().getCurrent().getAsMention()).addFile(Helper.getBytes(getBoard().render()), "board.jpg").complete();
 
 		Main.getInfo().getAPI().addEventListener(new ListenerAdapter() {
 			{
@@ -88,35 +73,15 @@ public class CrissCross extends Tabletop {
 				TextChannel chn = event.getChannel();
 				Message m = event.getMessage();
 
-				if (chn.getId().equals(getTable().getId()) && u.getId().equals(turn[0].getId()) && (m.getContentRaw().length() == 2 || Helper.equalsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender"))) {
+				if (chn.getId().equals(getTable().getId()) && u.getId().equals(getPlayers().getCurrent().getId()) && (m.getContentRaw().length() == 2 || Helper.equalsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender"))) {
 					if (Helper.equalsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender")) {
 						Main.getInfo().getAPI().removeEventListener(this);
 						ShiroInfo.getGames().remove(getId());
-						getTable().sendMessage(turn[0].getAsMention() + " desistiu!").queue();
+						getTable().sendMessage(getPlayers().getCurrent().getAsMention() + " desistiu!").queue();
+						getPlayers().nextTurn();
+						getPlayers().setWinner();
+						awardWinner(bet);
 						timeout.cancel(true);
-						getPlayers().setWinner(getPlayers().nextTurn());
-
-						if (bet > 0) {
-							Account uacc = AccountDAO.getAccount(getPlayers().getWinner().getId());
-							Account tacc = AccountDAO.getAccount(getPlayers().getLoser().getId());
-
-							uacc.addCredit(bet, this.getClass());
-							tacc.removeCredit(bet, this.getClass());
-
-							AccountDAO.saveAccount(uacc);
-							AccountDAO.saveAccount(tacc);
-
-							if (ExceedDAO.hasExceed(getPlayers().getWinner().getId())) {
-								PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(getPlayers().getWinner().getId())));
-								ps.modifyInfluence(5);
-								PStateDAO.savePoliticalState(ps);
-							}
-							if (ExceedDAO.hasExceed(getPlayers().getLoser().getId())) {
-								PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(getPlayers().getLoser().getId())));
-								ps.modifyInfluence(-5);
-								PStateDAO.savePoliticalState(ps);
-							}
-						}
 						return;
 					}
 					try {
@@ -132,98 +97,48 @@ public class CrissCross extends Tabletop {
 
 						int fullRows = 0;
 						for (int i = 0; i < getBoard().getLayout().length; i++) {
-							if (Collections.frequency(Arrays.asList(getBoard().getColumn(i)), pieces.get(turn[0])) == 3) {
-								getPlayers().setWinner(turn[0]);
-							} else if (Collections.frequency(Arrays.asList(getBoard().getRow(i)), pieces.get(turn[0])) == 3) {
-								getPlayers().setWinner(turn[0]);
+							if (Collections.frequency(Arrays.asList(getBoard().getColumn(i)), pieces.get(getPlayers().getCurrent())) == 3) {
+								getPlayers().setWinner(getPlayers().getCurrent());
+							} else if (Collections.frequency(Arrays.asList(getBoard().getRow(i)), pieces.get(getPlayers().getCurrent())) == 3) {
+								getPlayers().setWinner(getPlayers().getCurrent());
 							} else if (Collections.frequency(Arrays.asList(getBoard().getRow(i)), null) == 0) {
 								fullRows++;
 							}
 						}
 
-						if (Collections.frequency(Arrays.asList(getBoard().getCrossSection(true)), pieces.get(turn[0])) == 3) {
-							getPlayers().setWinner(turn[0]);
-						} else if (Collections.frequency(Arrays.asList(getBoard().getCrossSection(false)), pieces.get(turn[0])) == 3) {
-							getPlayers().setWinner(turn[0]);
+						if (Collections.frequency(Arrays.asList(getBoard().getCrossSection(true)), pieces.get(getPlayers().getCurrent())) == 3) {
+							getPlayers().setWinner();
+						} else if (Collections.frequency(Arrays.asList(getBoard().getCrossSection(false)), pieces.get(getPlayers().getCurrent())) == 3) {
+							getPlayers().setWinner();
 						}
 
-						try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-							ImageIO.write(getBoard().render(), "jpg", baos);
+						if (getPlayers().getWinner() != null) {
+							Main.getInfo().getAPI().removeEventListener(this);
+							ShiroInfo.getGames().remove(getId());
+							getTable().sendMessage(getPlayers().getCurrent().getAsMention() + " venceu!").addFile(Helper.getBytes(getBoard().render()), "board.jpg").queue();
+							timeout.cancel(true);
 
-							if (getPlayers().getWinner() != null) {
-								Main.getInfo().getAPI().removeEventListener(this);
-								ShiroInfo.getGames().remove(getId());
-								getTable().sendMessage(turn[0].getAsMention() + " venceu!").addFile(baos.toByteArray(), "board.jpg").queue();
-								timeout.cancel(true);
+							awardWinner(bet);
+						} else if (fullRows == 3) {
+							Main.getInfo().getAPI().removeEventListener(this);
+							ShiroInfo.getGames().remove(getId());
+							getTable().sendMessage("Temos um empate!").addFile(Helper.getBytes(getBoard().render()), "board.jpg").queue();
+							timeout.cancel(true);
+						} else {
+							getPlayers().nextTurn();
+							getBoard().nextRound();
+							if (message != null) message.delete().queue();
+							message = getTable().sendMessage("Turno de " + getPlayers().getCurrent().getAsMention()).addFile(Helper.getBytes(getBoard().render()), "board.jpg").complete();
+							timeout.cancel(true);
+							if (getBoard().getRound() > 2)
+								timeout = getTable().sendMessage(getPlayers().getCurrent().getAsMention() + " perdeu por W.O.!").queueAfter(180, TimeUnit.SECONDS, ms -> {
+									Main.getInfo().getAPI().removeEventListener(this);
+									ShiroInfo.getGames().remove(getId());
+									getPlayers().setWinner(getPlayers().nextTurn());
 
-								if (bet > 0) {
-									Account uacc = AccountDAO.getAccount(getPlayers().getWinner().getId());
-									Account tacc = AccountDAO.getAccount(getPlayers().getLoser().getId());
-
-									uacc.addCredit(bet, this.getClass());
-									tacc.removeCredit(bet, this.getClass());
-
-									AccountDAO.saveAccount(uacc);
-									AccountDAO.saveAccount(tacc);
-
-									if (ExceedDAO.hasExceed(getPlayers().getWinner().getId())) {
-										PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(getPlayers().getWinner().getId())));
-										ps.modifyInfluence(5);
-										PStateDAO.savePoliticalState(ps);
-									}
-									if (ExceedDAO.hasExceed(getPlayers().getLoser().getId())) {
-										PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(getPlayers().getLoser().getId())));
-										ps.modifyInfluence(-5);
-										PStateDAO.savePoliticalState(ps);
-									}
-								}
-							} else if (fullRows == 3) {
-								Main.getInfo().getAPI().removeEventListener(this);
-								ShiroInfo.getGames().remove(getId());
-								getTable().sendMessage("Temos um empate!").addFile(baos.toByteArray(), "board.jpg").queue();
-								timeout.cancel(true);
-							} else {
-								turn[0] = getPlayers().nextTurn();
-								if (message != null) message.delete().queue();
-								getBoard().nextRound();
-								message = getTable().sendMessage("Turno de " + turn[0].getAsMention()).addFile(baos.toByteArray(), "board.jpg").complete();
-								timeout.cancel(true);
-								if (getBoard().getRound() > 2)
-									timeout = getTable().sendMessage(turn[0].getAsMention() + " perdeu por W.O.!").queueAfter(180, TimeUnit.SECONDS, ms -> {
-										Main.getInfo().getAPI().removeEventListener(this);
-										ShiroInfo.getGames().remove(getId());
-										getPlayers().setWinner(getPlayers().nextTurn());
-
-										if (bet > 0) {
-											Account uacc = AccountDAO.getAccount(getPlayers().getWinner().getId());
-											Account tacc = AccountDAO.getAccount(getPlayers().getLoser().getId());
-
-											uacc.addCredit(bet, this.getClass());
-											tacc.removeCredit(bet, this.getClass());
-
-											AccountDAO.saveAccount(uacc);
-											AccountDAO.saveAccount(tacc);
-
-											if (ExceedDAO.hasExceed(getPlayers().getWinner().getId())) {
-												PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(getPlayers().getWinner().getId())));
-												ps.modifyInfluence(5);
-												PStateDAO.savePoliticalState(ps);
-											}
-											if (ExceedDAO.hasExceed(getPlayers().getLoser().getId())) {
-												PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(getPlayers().getLoser().getId())));
-												ps.modifyInfluence(-5);
-												PStateDAO.savePoliticalState(ps);
-											}
-										}
-									}, Helper::doNothing);
-								else
-									timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
-										Main.getInfo().getAPI().removeEventListener(this);
-										ShiroInfo.getGames().remove(getId());
-									}, Helper::doNothing);
-							}
-						} catch (IOException e) {
-							Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+									awardWinner(bet);
+								}, Helper::doNothing);
+							else refresh();
 						}
 					} catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
 						getTable().sendMessage(":x: | Coordenada inválida.").queue();
@@ -231,5 +146,13 @@ public class CrissCross extends Tabletop {
 				}
 			}
 		});
+	}
+
+	private void refresh() {
+		if (timeout != null && !timeout.isCancelled()) timeout.cancel(true);
+		timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
+			Main.getInfo().getAPI().removeEventListener(this);
+			ShiroInfo.getGames().remove(getId());
+		}, Helper::doNothing);
 	}
 }

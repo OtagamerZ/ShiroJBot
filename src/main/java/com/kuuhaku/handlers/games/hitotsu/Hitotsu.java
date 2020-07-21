@@ -19,16 +19,10 @@
 package com.kuuhaku.handlers.games.hitotsu;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.controller.sqlite.PStateDAO;
-import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
-import com.kuuhaku.handlers.games.tabletop.entity.Tabletop;
-import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.handlers.games.framework.Tabletop;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
-import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -48,7 +42,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 public class Hitotsu extends Tabletop {
-	private final Map<User, Hand> hands = new HashMap<>();
+	private final Seats seats = new Seats();
 	private final List<KawaiponCard> available = new ArrayList<>();
 	private final LinkedList<KawaiponCard> played = new LinkedList<>();
 	private final GameDeque<KawaiponCard> deque = new GameDeque<>(this);
@@ -58,32 +52,26 @@ public class Hitotsu extends Tabletop {
 
 	public Hitotsu(TextChannel table, String id, User... players) {
 		super(table, null, id, players);
-		Kawaipon kp1 = KawaiponDAO.getKawaipon(getPlayers().getUserSequence().getFirst().getId());
-		Kawaipon kp2 = KawaiponDAO.getKawaipon(getPlayers().getUserSequence().getLast().getId());
+		for (User u : players) {
+			Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
+			available.addAll(kp.getCards());
+		}
 
-		Set<KawaiponCard> uniques = new HashSet<>() {{
-			addAll(kp1.getCards());
-			addAll(kp2.getCards());
-		}};
-		available.addAll(uniques);
 		Collections.shuffle(available);
-
 		deque.addAll(available);
 
-		this.hands.put(getPlayers().getUserSequence().getFirst(), new Hand(getPlayers().getUserSequence().getFirst(), deque));
-		this.hands.put(getPlayers().getUserSequence().getLast(), new Hand(getPlayers().getUserSequence().getLast(), deque));
+		for (User u : players) {
+			seats.put(new Hand(u, deque));
+		}
 	}
 
 	@Override
 	public void execute(int bet) {
-		next();
-		message = getTable().sendMessage(getPlayers().getUserSequence().getFirst().getAsMention() + " você começa!").complete();
+		getPlayers().lastOneStarts();
+		message = getTable().sendMessage(getPlayers().getCurrent().getAsMention() + " você começa!").complete();
 		Main.getInfo().getAPI().addEventListener(new ListenerAdapter() {
 			{
-				timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
-					Main.getInfo().getAPI().removeEventListener(this);
-					ShiroInfo.getGames().remove(getId());
-				}, Helper::doNothing);
+				refresh();
 			}
 
 			@Override
@@ -92,7 +80,7 @@ public class Hitotsu extends Tabletop {
 				TextChannel chn = event.getChannel();
 				Message m = event.getMessage();
 
-				if (chn.getId().equals(getTable().getId()) && u.getId().equals(getPlayers().getUserSequence().getFirst().getId())) {
+				if (chn.getId().equals(getTable().getId()) && u.getId().equals(getPlayers().getCurrent().getId())) {
 					try {
 						if (StringUtils.deleteWhitespace(m.getContentRaw()).split(",").length > 1) {
 							int[] digits = Arrays.stream(StringUtils.deleteWhitespace(m.getContentRaw()).split(",")).mapToInt(Integer::parseInt).toArray();
@@ -101,66 +89,42 @@ public class Hitotsu extends Tabletop {
 								declareWinner();
 								return;
 							}
-							timeout.cancel(true);
-							timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
-								Main.getInfo().getAPI().removeEventListener(this);
-								ShiroInfo.getGames().remove(getId());
-							}, Helper::doNothing);
+							refresh();
 						} else if (StringUtils.isNumeric(m.getContentRaw())) {
 							if (handle(Integer.parseInt(m.getContentRaw()))) {
 								declareWinner();
 								return;
 							}
-							timeout.cancel(true);
-							timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
-								Main.getInfo().getAPI().removeEventListener(this);
-								ShiroInfo.getGames().remove(getId());
-							}, Helper::doNothing);
+							refresh();
 						} else if (Helper.equalsAny(m.getContentRaw(), "comprar", "buy")) {
-							hands.get(getPlayers().getUserSequence().getFirst()).draw(getDeque());
+							seats.get(getPlayers().getCurrent().getId()).draw(getDeque());
+
 							if (message != null) message.delete().queue();
-							message = getTable().sendMessage(getPlayers().getUserSequence().getFirst().getAsMention() + " passou a vez, agora é você " + getPlayers().getUserSequence().getLast().getAsMention() + ".")
+							message = getTable().sendMessage(getPlayers().getCurrent().getAsMention() + " passou a vez, agora é você " + getPlayers().nextTurn().getAsMention() + ".")
 									.addFile(Helper.getBytes(mount, "png"), "mount.png")
 									.complete();
-							next();
-							timeout.cancel(true);
-							timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
+
+							refresh();
+						} else if (Helper.equalsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender")) {
+							getTable().sendMessage(getPlayers().getCurrent().getAsMention() + " desistiu!").queue();
+							getPlayers().setLoser();
+							getPlayers().nextTurn();
+
+							if (getPlayers().getPlayers().size() == 1) {
 								Main.getInfo().getAPI().removeEventListener(this);
 								ShiroInfo.getGames().remove(getId());
-							}, Helper::doNothing);
-						} else if (Helper.equalsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender")) {
-							Main.getInfo().getAPI().removeEventListener(this);
-							ShiroInfo.getGames().remove(getId());
-							getTable().sendMessage(getPlayers().getUserSequence().getFirst().getAsMention() + " desistiu!").queue();
-							timeout.cancel(true);
-							getPlayers().nextTurn();
-							getPlayers().setWinner(getPlayers().getUserSequence().getFirst());
-
-							if (bet > 0) {
-								Account uacc = AccountDAO.getAccount(getPlayers().getWinner().getId());
-								Account tacc = AccountDAO.getAccount(getPlayers().getLoser().getId());
-
-								uacc.addCredit(bet, this.getClass());
-								tacc.removeCredit(bet, this.getClass());
-
-								AccountDAO.saveAccount(uacc);
-								AccountDAO.saveAccount(tacc);
-
-								if (ExceedDAO.hasExceed(getPlayers().getWinner().getId())) {
-									PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(getPlayers().getWinner().getId())));
-									ps.modifyInfluence(5);
-									PStateDAO.savePoliticalState(ps);
-								}
-								if (ExceedDAO.hasExceed(getPlayers().getLoser().getId())) {
-									PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(getPlayers().getLoser().getId())));
-									ps.modifyInfluence(-5);
-									PStateDAO.savePoliticalState(ps);
-								}
+								getPlayers().setWinner();
+								awardWinner(bet);
+								getTable().sendMessage(getPlayers().getCurrent().getAsMention() + " é o último jogador na mesa, temos um vencedor!!").queue();
+								timeout.cancel(true);
+							} else {
+								message = getTable().sendMessage(getPlayers().getCurrent().getAsMention() + " agora é sua vez.").complete();
+								seats.get(getPlayers().getCurrent().getId()).showHand();
 							}
 						} else if (Helper.equalsAny(m.getContentRaw(), "lista", "cartas", "list", "cards")) {
 							EmbedBuilder eb = new EmbedBuilder();
 							StringBuilder sb = new StringBuilder();
-							List<KawaiponCard> cards = hands.get(getPlayers().getUserSequence().getFirst()).getCards();
+							List<KawaiponCard> cards = seats.get(getPlayers().getCurrent()).getCards();
 
 							eb.setTitle("Suas cartas");
 							for (int i = 0; i < cards.size(); i++) {
@@ -178,7 +142,7 @@ public class Hitotsu extends Tabletop {
 							if (played.size() > 0)
 								eb.setFooter("Carta atual: " + played.getLast().getName() + " (" + played.getLast().getCard().getAnime() + ")");
 
-							getPlayers().getUserSequence().getFirst().openPrivateChannel().complete().sendMessage(eb.build()).queue();
+							getPlayers().getCurrent().openPrivateChannel().complete().sendMessage(eb.build()).queue();
 						}
 					} catch (IllegalCardException e) {
 						getTable().sendMessage(":x: | Você só pode jogar uma carta que seja do mesmo anime ou da mesma raridade.").queue();
@@ -196,34 +160,13 @@ public class Hitotsu extends Tabletop {
 				justShow();
 				getTable().sendMessage("Não restam mais cartas para " + getPlayers().getWinner().getAsMention() + ", temos um vencedor!!").queue();
 				timeout.cancel(true);
-
-				if (bet > 0) {
-					Account uacc = AccountDAO.getAccount(getPlayers().getWinner().getId());
-					Account tacc = AccountDAO.getAccount(getPlayers().getLoser().getId());
-
-					uacc.addCredit(bet, this.getClass());
-					tacc.removeCredit(bet, this.getClass());
-
-					AccountDAO.saveAccount(uacc);
-					AccountDAO.saveAccount(tacc);
-
-					if (ExceedDAO.hasExceed(getPlayers().getWinner().getId())) {
-						PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(getPlayers().getWinner().getId())));
-						ps.modifyInfluence(5);
-						PStateDAO.savePoliticalState(ps);
-					}
-					if (ExceedDAO.hasExceed(getPlayers().getLoser().getId())) {
-						PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(getPlayers().getLoser().getId())));
-						ps.modifyInfluence(-5);
-						PStateDAO.savePoliticalState(ps);
-					}
-				}
+				awardWinner(bet);
 			}
 		});
 	}
 
 	public boolean handle(int card) throws IllegalCardException {
-		Hand hand = hands.get(getPlayers().getUserSequence().getFirst());
+		Hand hand = seats.get(getPlayers().getCurrent().getId());
 		KawaiponCard c = hand.getCards().get(card);
 		KawaiponCard lastest = played.peekLast();
 
@@ -236,19 +179,20 @@ public class Hitotsu extends Tabletop {
 		played.add(c);
 		hand.getCards().remove(card);
 		if (c.isFoil())
-			CardEffect.getEffect(c.getCard().getRarity()).accept(this, hands.get(getPlayers().getUserSequence().getLast()));
+			CardEffect.getEffect(c.getCard().getRarity()).accept(this, seats.get(getPlayers().peekNext().getId()));
 
-		getPlayers().setWinner(hands.values().stream().filter(h -> h.getCards().size() == 0).map(Hand::getUser).findFirst().orElse(null));
+		getPlayers().setWinner(seats.values().stream().filter(h -> h.getCards().size() == 0).map(Hand::getUser).findFirst().orElse(null));
 		if (getPlayers().getWinner() != null) return true;
 
 		if (deque.size() == 0) shuffle();
-		next();
+		getPlayers().nextTurn();
+		seats.get(getPlayers().getCurrent().getId()).showHand();
 		putAndShow(c);
 		return false;
 	}
 
 	public boolean handleChain(int[] card) throws IllegalCardException {
-		Hand hand = hands.get(getPlayers().getUserSequence().getFirst());
+		Hand hand = seats.get(getPlayers().getCurrent().getId());
 		List<KawaiponCard> c = new ArrayList<>() {{
 			for (int i : card) add(hand.getCards().get(i));
 		}};
@@ -268,21 +212,17 @@ public class Hitotsu extends Tabletop {
 			justPut(cd);
 			hand.getCards().remove(cd);
 			if (cd.isFoil())
-				CardEffect.getEffect(cd.getCard().getRarity()).accept(this, hands.get(getPlayers().getUserSequence().getLast()));
+				CardEffect.getEffect(cd.getCard().getRarity()).accept(this, seats.get(getPlayers().peekNext().getId()));
 		});
 
-		getPlayers().setWinner(hands.values().stream().filter(h -> h.getCards().size() == 0).map(Hand::getUser).findFirst().orElse(null));
+		getPlayers().setWinner(seats.values().stream().filter(h -> h.getCards().size() == 0).map(Hand::getUser).findFirst().orElse(null));
 		if (getPlayers().getWinner() != null) return true;
 
 		if (deque.size() == 0) shuffle();
-		next();
+		getPlayers().nextTurn();
+		seats.get(getPlayers().getCurrent().getId()).showHand();
 		justShow();
 		return false;
-	}
-
-	public void next() {
-		getPlayers().nextTurn();
-		hands.get(getPlayers().getUserSequence().getFirst()).showHand();
 	}
 
 	public void putAndShow(KawaiponCard c) {
@@ -297,7 +237,7 @@ public class Hitotsu extends Tabletop {
 		g2d.dispose();
 
 		if (message != null) message.delete().queue();
-		message = getTable().sendMessage(getPlayers().getUserSequence().getFirst().getAsMention() + " agora é sua vez.").addFile(Helper.getBytes(mount, "png"), "mount.png").complete();
+		message = getTable().sendMessage(getPlayers().getCurrent().getAsMention() + " agora é sua vez.").addFile(Helper.getBytes(mount, "png"), "mount.png").complete();
 	}
 
 	public void justPut(KawaiponCard c) {
@@ -314,7 +254,7 @@ public class Hitotsu extends Tabletop {
 
 	public void justShow() {
 		if (message != null) message.delete().queue();
-		message = getTable().sendMessage(getPlayers().getUserSequence().getFirst().getAsMention() + " agora é sua vez.").addFile(Helper.getBytes(mount, "png"), "mount.png").complete();
+		message = getTable().sendMessage(getPlayers().getCurrent().getAsMention() + " agora é sua vez.").addFile(Helper.getBytes(mount, "png"), "mount.png").complete();
 	}
 
 	public void shuffle() {
@@ -327,8 +267,16 @@ public class Hitotsu extends Tabletop {
 		mount = new BufferedImage(500, 500, BufferedImage.TYPE_INT_ARGB);
 	}
 
-	public Map<User, Hand> getHands() {
-		return hands;
+	private void refresh() {
+		if (timeout != null && !timeout.isCancelled()) timeout.cancel(true);
+		timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
+			Main.getInfo().getAPI().removeEventListener(this);
+			ShiroInfo.getGames().remove(getId());
+		}, Helper::doNothing);
+	}
+
+	public Seats getSeats() {
+		return seats;
 	}
 
 	public List<KawaiponCard> getAvailable() {
