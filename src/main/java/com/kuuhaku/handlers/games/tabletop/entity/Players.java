@@ -27,7 +27,7 @@ import java.util.List;
 public class Players {
 	private final LinkedList<User> turn;
 	private User winner = null;
-	private User loser = null;
+	private List<User> losers = null;
 
 	public Players(User... players) {
 		this.turn = new LinkedList<>(Arrays.asList(players));
@@ -48,13 +48,18 @@ public class Players {
 	}
 
 	public User getLoser() {
-		return loser;
+		return losers.get(0);
+	}
+
+	public List<User> getLosers() {
+		return losers;
 	}
 
 	public void setWinner(User winner) {
 		if (winner == null) return;
 		this.winner = winner;
-		this.loser = turn.stream().filter(u -> !u.getId().equals(winner.getId())).findFirst().orElseThrow();
+		turn.remove(winner);
+		this.losers = turn;
 	}
 
 	public List<User> getUsers() {
