@@ -100,14 +100,14 @@ public class Profile {
 		g2d.fillRect(0, 300, w, 300);
 		g2d.fillRect(0, 350, w, 250);
 
-		g2d.setColor(new Color(0, 255, 0));
-		g2d.setClip(new Rectangle2D.Float(0, 100, w, 250));
-		g2d.fillArc(40, 190, avatar.getWidth() + 20, avatar.getHeight() + 20, 210, (int) ((MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getXp() * 240) / ((int) Math.pow(MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getLevel(), 2) * 100) * -1));
-
 		g2d.setColor(Color.black);
 		g2d.setClip(null);
 		g2d.fillOval(38, 188, avatar.getWidth() + 24, avatar.getHeight() + 24);
 		g2d.fillRect(50, 348, 200, 204);
+
+		g2d.setColor(new Color(0, 255, 0));
+		g2d.setClip(new Rectangle2D.Float(0, 100, w, 250));
+		g2d.fillArc(40, 190, avatar.getWidth() + 20, avatar.getHeight() + 20, 210, (int) ((MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getXp() * 240) / ((int) Math.pow(MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getLevel(), 2) * 100) * -1));
 
 		g2d.setColor(main);
 		g2d.fillRect(52, 350, 196, 200);
