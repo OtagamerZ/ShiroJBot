@@ -108,7 +108,7 @@ public class KawaiponsCommand extends Command {
 						BufferedImage cards = kb.view(CardDAO.getCards(), "Todas as cartas", args[1].equalsIgnoreCase("C"));
 						File f = File.createTempFile("cards_" + System.currentTimeMillis(), ".png");
 						f.deleteOnExit();
-						byte[] bytes = Helper.getBytes(Helper.scaleImage(cards, cards.getWidth() / 2, cards.getHeight() / 2), "png", 0.0f);
+						byte[] bytes = Helper.getBytes(Helper.scaleImage(cards, cards.getWidth() / 3, cards.getHeight() / 3), "png", 0.0f);
 						try (FileOutputStream fos = new FileOutputStream(f)) {
 							fos.write(bytes);
 						}
