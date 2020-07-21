@@ -31,9 +31,9 @@ import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NonNls;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -108,7 +108,10 @@ public class KawaiponsCommand extends Command {
 						BufferedImage cards = kb.view(CardDAO.getCards(), "Todas as cartas", args[1].equalsIgnoreCase("C"));
 						File f = File.createTempFile("cards_" + System.currentTimeMillis(), ".png");
 						f.deleteOnExit();
-						ImageIO.write(cards, "png", f);
+						byte[] bytes = Helper.getBytes(cards, "png", 0.0f);
+						try (FileOutputStream fos = new FileOutputStream(f)) {
+							fos.write(bytes);
+						}
 
 						System.out.println(f.length());
 						send(author, channel, m, collection, f, "Todas as cartas", CardDAO.totalCards());
