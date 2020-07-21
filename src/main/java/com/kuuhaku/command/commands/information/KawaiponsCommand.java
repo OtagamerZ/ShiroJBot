@@ -146,6 +146,6 @@ public class KawaiponsCommand extends Command {
 		eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(collection.size(), l * 2) + "%");
 
 		m.delete().queue();
-		channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "png", 0.5f), "cards.png").queue();
+		channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "png", 0.0f), "cards.png").queue();
 	}
 }
