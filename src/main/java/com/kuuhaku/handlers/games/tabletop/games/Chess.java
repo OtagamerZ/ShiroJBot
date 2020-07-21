@@ -19,12 +19,12 @@
 package com.kuuhaku.handlers.games.tabletop.games;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.handlers.games.framework.Tabletop;
 import com.kuuhaku.handlers.games.tabletop.entity.Piece;
-import com.kuuhaku.handlers.games.tabletop.entity.Player;
+import com.kuuhaku.handlers.games.tabletop.entity.PieceBox;
 import com.kuuhaku.handlers.games.tabletop.entity.Spot;
-import com.kuuhaku.handlers.games.tabletop.entity.Tabletop;
 import com.kuuhaku.handlers.games.tabletop.enums.Board;
-import com.kuuhaku.handlers.games.tabletop.pieces.*;
+import com.kuuhaku.handlers.games.tabletop.pieces.King;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Message;
@@ -34,10 +34,6 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
-import javax.imageio.ImageIO;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
@@ -51,54 +47,18 @@ public class Chess extends Tabletop {
 	public Chess(TextChannel table, String id, User... players) {
 		super(table, Board.SIZE_8X8(), id, players);
 		pieces = Map.of(
-				players[0], new ArrayList<>() {{
-					add(new Pawn(new Player(players[0], true)));
-					add(new Pawn(new Player(players[0], true)));
-					add(new Pawn(new Player(players[0], true)));
-					add(new Pawn(new Player(players[0], true)));
-					add(new Pawn(new Player(players[0], true)));
-					add(new Pawn(new Player(players[0], true)));
-					add(new Pawn(new Player(players[0], true)));
-					add(new Pawn(new Player(players[0], true)));
-
-					add(new Rook(new Player(players[0], true)));
-					add(new Knight(new Player(players[0], true)));
-					add(new Bishop(new Player(players[0], true)));
-					add(new Queen(new Player(players[0], true)));
-					add(new King(new Player(players[0], true)));
-					add(new Bishop(new Player(players[0], true)));
-					add(new Knight(new Player(players[0], true)));
-					add(new Rook(new Player(players[0], true)));
-				}},
-				players[1], new ArrayList<>() {{
-					add(new Pawn(new Player(players[1], false)));
-					add(new Pawn(new Player(players[1], false)));
-					add(new Pawn(new Player(players[1], false)));
-					add(new Pawn(new Player(players[1], false)));
-					add(new Pawn(new Player(players[1], false)));
-					add(new Pawn(new Player(players[1], false)));
-					add(new Pawn(new Player(players[1], false)));
-					add(new Pawn(new Player(players[1], false)));
-
-					add(new Rook(new Player(players[1], false)));
-					add(new Knight(new Player(players[1], false)));
-					add(new Bishop(new Player(players[1], false)));
-					add(new Queen(new Player(players[1], false)));
-					add(new King(new Player(players[1], false)));
-					add(new Bishop(new Player(players[1], false)));
-					add(new Knight(new Player(players[1], false)));
-					add(new Rook(new Player(players[1], false)));
-				}}
+				players[0], new PieceBox(players[0], false).getPieces(),
+				players[1], new PieceBox(players[1], true).getPieces()
 		);
 		getBoard().setPattern(new Piece[][]{
-				{pieces.get(players[1]).get(8), pieces.get(players[1]).get(9), pieces.get(players[1]).get(10), pieces.get(players[1]).get(11), pieces.get(players[1]).get(12), pieces.get(players[1]).get(13), pieces.get(players[1]).get(14), pieces.get(players[1]).get(15)},
-				{pieces.get(players[1]).get(0), pieces.get(players[1]).get(1), pieces.get(players[1]).get(2), pieces.get(players[1]).get(3), pieces.get(players[1]).get(4), pieces.get(players[1]).get(5), pieces.get(players[1]).get(6), pieces.get(players[1]).get(7)},
-				{/*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null},
-				{/*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null},
-				{/*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null},
-				{/*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null},
+				{pieces.get(players[0]).get(8), pieces.get(players[0]).get(9), pieces.get(players[0]).get(10), pieces.get(players[0]).get(11), pieces.get(players[0]).get(12), pieces.get(players[0]).get(13), pieces.get(players[0]).get(14), pieces.get(players[0]).get(15)},
 				{pieces.get(players[0]).get(0), pieces.get(players[0]).get(1), pieces.get(players[0]).get(2), pieces.get(players[0]).get(3), pieces.get(players[0]).get(4), pieces.get(players[0]).get(5), pieces.get(players[0]).get(6), pieces.get(players[0]).get(7)},
-				{pieces.get(players[0]).get(8), pieces.get(players[0]).get(9), pieces.get(players[0]).get(10), pieces.get(players[0]).get(11), pieces.get(players[0]).get(12), pieces.get(players[0]).get(13), pieces.get(players[0]).get(14), pieces.get(players[0]).get(15)}
+				{/*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null},
+				{/*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null},
+				{/*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null},
+				{/*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null},
+				{pieces.get(players[1]).get(0), pieces.get(players[1]).get(1), pieces.get(players[1]).get(2), pieces.get(players[1]).get(3), pieces.get(players[1]).get(4), pieces.get(players[1]).get(5), pieces.get(players[1]).get(6), pieces.get(players[1]).get(7)},
+				{pieces.get(players[1]).get(8), pieces.get(players[1]).get(9), pieces.get(players[1]).get(10), pieces.get(players[1]).get(11), pieces.get(players[1]).get(12), pieces.get(players[1]).get(13), pieces.get(players[1]).get(14), pieces.get(players[1]).get(15)}
 
 		});
 	}
@@ -112,21 +72,12 @@ public class Chess extends Tabletop {
 				if (p != null) p.move(getBoard(), pos);
 			}
 		}
-		final User[] turn = {getPlayers().nextTurn()};
-		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-			ImageIO.write(getBoard().render(), "jpg", baos);
 
-			message = getTable().sendMessage("Turno de " + turn[0].getAsMention()).addFile(baos.toByteArray(), "board.jpg").complete();
-		} catch (IOException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-		}
-
+		getPlayers().lastOneStarts();
+		message = getTable().sendMessage("Turno de " + getPlayers().getCurrent().getAsMention()).addFile(Helper.getBytes(getBoard().render()), "board.jpg").complete();
 		Main.getInfo().getAPI().addEventListener(new ListenerAdapter() {
 			{
-				timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
-					Main.getInfo().getAPI().removeEventListener(this);
-					ShiroInfo.getGames().remove(getId());
-				}, Helper::doNothing);
+				refresh();
 			}
 
 			@Override
@@ -135,11 +86,14 @@ public class Chess extends Tabletop {
 				TextChannel chn = event.getChannel();
 				Message m = event.getMessage();
 
-				if (chn.getId().equals(getTable().getId()) && u.getId().equals(turn[0].getId()) && (m.getContentRaw().length() == 5 || Helper.equalsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender"))) {
+				if (chn.getId().equals(getTable().getId()) && u.getId().equals(getPlayers().getCurrent().getId()) && (m.getContentRaw().length() == 5 || Helper.equalsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender"))) {
 					if (Helper.equalsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender")) {
 						Main.getInfo().getAPI().removeEventListener(this);
 						ShiroInfo.getGames().remove(getId());
-						getTable().sendMessage(turn[0].getAsMention() + " desistiu! (" + getBoard().getRound() + " turnos)").queue();
+						getTable().sendMessage(getPlayers().getCurrent().getAsMention() + " desistiu! (" + getBoard().getRound() + " turnos)").queue();
+						getPlayers().nextTurn();
+						getPlayers().setWinner();
+						//awardWinner(bet);
 						timeout.cancel(true);
 						return;
 					}
@@ -159,7 +113,7 @@ public class Chess extends Tabletop {
 						if (p == null) {
 							getTable().sendMessage(":x: | Não há nenhuma peça nessa coordenada!").queue();
 							return;
-						} else if (!p.getOwner().getUser().getId().equals(turn[0].getId())) {
+						} else if (!p.getOwner().getUser().getId().equals(getPlayers().getCurrent().getId())) {
 							getTable().sendMessage(":x: | Essa peça não é sua!").queue();
 							return;
 						} else if (!p.move(getBoard(), to)) {
@@ -180,35 +134,25 @@ public class Chess extends Tabletop {
 							if (foundKing) break;
 						}
 
-						if (!foundKing) getPlayers().setWinner(turn[0]);
+						if (!foundKing) getPlayers().setWinner();
 
-						try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-							ImageIO.write(getBoard().render(), "jpg", baos);
-
-							if (getPlayers().getWinner() != null) {
-								Main.getInfo().getAPI().removeEventListener(this);
-								ShiroInfo.getGames().remove(getId());
-								getTable().sendMessage(turn[0].getAsMention() + " venceu, CHECKMATE!! (" + getBoard().getRound() + " turnos)").addFile(baos.toByteArray(), "board.jpg").queue();
-								timeout.cancel(true);
-							} else {
-								turn[0] = getPlayers().nextTurn();
-								if (message != null) message.delete().queue();
-								getBoard().nextRound();
-								message = getTable().sendMessage("Turno de " + turn[0].getAsMention()).addFile(baos.toByteArray(), "board.jpg").complete();
-								timeout.cancel(true);
-								if (getBoard().getRound() > 2)
-									timeout = getTable().sendMessage(turn[0].getAsMention() + " perdeu por W.O.! (" + getBoard().getRound() + " turnos)").queueAfter(180, TimeUnit.SECONDS, ms -> {
-										Main.getInfo().getAPI().removeEventListener(this);
-										ShiroInfo.getGames().remove(getId());
-									}, Helper::doNothing);
-								else
-									timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
-										Main.getInfo().getAPI().removeEventListener(this);
-										ShiroInfo.getGames().remove(getId());
-									}, Helper::doNothing);
-							}
-						} catch (IOException e) {
-							Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+						if (getPlayers().getWinner() != null) {
+							Main.getInfo().getAPI().removeEventListener(this);
+							ShiroInfo.getGames().remove(getId());
+							getTable().sendMessage(getPlayers().getCurrent().getAsMention() + " venceu, CHECKMATE!! (" + getBoard().getRound() + " turnos)").addFile(Helper.getBytes(getBoard().render()), "board.jpg").queue();
+							timeout.cancel(true);
+						} else {
+							getPlayers().nextTurn();
+							getBoard().nextRound();
+							if (message != null) message.delete().queue();
+							message = getTable().sendMessage("Turno de " + getPlayers().getCurrent().getAsMention()).addFile(Helper.getBytes(getBoard().render()), "board.jpg").complete();
+							timeout.cancel(true);
+							if (getBoard().getRound() > 2)
+								timeout = getTable().sendMessage(getPlayers().getCurrent().getAsMention() + " perdeu por W.O.! (" + getBoard().getRound() + " turnos)").queueAfter(180, TimeUnit.SECONDS, ms -> {
+									Main.getInfo().getAPI().removeEventListener(this);
+									ShiroInfo.getGames().remove(getId());
+								}, Helper::doNothing);
+							else refresh();
 						}
 					} catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
 						getTable().sendMessage(":x: | Movimento inválido.").queue();
@@ -216,5 +160,13 @@ public class Chess extends Tabletop {
 				}
 			}
 		});
+	}
+
+	private void refresh() {
+		if (timeout != null && !timeout.isCancelled()) timeout.cancel(true);
+		timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
+			Main.getInfo().getAPI().removeEventListener(this);
+			ShiroInfo.getGames().remove(getId());
+		}, Helper::doNothing);
 	}
 }

@@ -31,14 +31,15 @@ public enum CardEffect {
 		game.shuffle();
 	}),
 	BLOCK(KawaiponRarity.RARE, (game, hand) -> {
-		game.getTable().sendMessage(game.getPlayers().getUserSequence().getFirst().getAsMention() + " pulou a vez de " + hand.getUser().getAsMention()).queue();
-		game.next();
+		game.getTable().sendMessage(game.getPlayers().getCurrent().getAsMention() + " pulou a vez de " + hand.getUser().getAsMention()).queue();
+		game.getPlayers().nextTurn();
+		game.getSeats().get(game.getPlayers().getCurrent().getId()).showHand();
 	}),
 	BUY_4(KawaiponRarity.ULTRA_RARE, (game, hand) -> {
 		for (int i = 0; i < 4; i++) hand.draw(game.getDeque());
 	}),
 	SWAP_HANDS(KawaiponRarity.LEGENDARY, (game, hand) -> {
-		for (Hand h : game.getHands().values())
+		for (Hand h : game.getSeats().values())
 			for (int i = 0; i < 4; i++)
 				h.draw(game.getDeque());
 	});
