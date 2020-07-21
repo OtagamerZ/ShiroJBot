@@ -144,37 +144,53 @@ public class BuyCardCommand extends Command {
 		}
 
 		Account seller = AccountDAO.getAccount(cm.getSeller());
+		if (!seller.getUserId().equals(author.getId())) {
+			if (buyer.getBalance() < cm.getPrice()) {
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
+				return;
+			}
 
-		if (buyer.getBalance() < cm.getPrice()) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
-			return;
+			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+
+			if (kp.getCards().contains(cm.getCard())) {
+				channel.sendMessage(":x: | Parece que você já possui essa carta!").queue();
+				return;
+			}
+
+			kp.addCard(cm.getCard());
+			KawaiponDAO.saveKawaipon(kp);
+
+			seller.addCredit(cm.getPrice(), this.getClass());
+			buyer.removeCredit(cm.getPrice(), this.getClass());
+
+			AccountDAO.saveAccount(seller);
+			AccountDAO.saveAccount(buyer);
+
+			cm.setBuyer(author.getId());
+			CardMarketDAO.saveCard(cm);
+
+			User sellerU = Main.getInfo().getUserByID(cm.getSeller());
+			User buyerU = Main.getInfo().getUserByID(cm.getBuyer());
+			if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
+							c.sendMessage(":white_check_mark: | Sua carta `" + cm.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + cm.getPrice() + " créditos.").queue(),
+					Helper::doNothing
+			);
+			channel.sendMessage(":white_check_mark: | Carta comprada com sucesso!").queue();
+		} else {
+			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+
+			if (kp.getCards().contains(cm.getCard())) {
+				channel.sendMessage(":x: | Parece que você já possui essa carta!").queue();
+				return;
+			}
+
+			kp.addCard(cm.getCard());
+			KawaiponDAO.saveKawaipon(kp);
+
+			cm.setBuyer(author.getId());
+			CardMarketDAO.saveCard(cm);
+
+			channel.sendMessage(":white_check_mark: | Carta retirada com sucesso!").queue();
 		}
-
-		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-
-		if (kp.getCards().contains(cm.getCard())) {
-			channel.sendMessage(":x: | Parece que você já possui essa carta!").queue();
-			return;
-		}
-
-		kp.addCard(cm.getCard());
-		KawaiponDAO.saveKawaipon(kp);
-
-		seller.addCredit(cm.getPrice(), this.getClass());
-		buyer.removeCredit(cm.getPrice(), this.getClass());
-
-		AccountDAO.saveAccount(seller);
-		AccountDAO.saveAccount(buyer);
-
-		cm.setBuyer(author.getId());
-		CardMarketDAO.saveCard(cm);
-
-		User sellerU = Main.getInfo().getUserByID(cm.getSeller());
-		User buyerU = Main.getInfo().getUserByID(cm.getBuyer());
-		if (sellerU != null) sellerU.openPrivateChannel().queue(c ->
-						c.sendMessage(":white_check_mark: | Sua carta `" + cm.getCard().getName() + "` foi comprada por " + buyerU.getName() + " por " + cm.getPrice() + " créditos.").queue(),
-				Helper::doNothing
-		);
-		channel.sendMessage(":white_check_mark: | Carta comprada com sucesso!").queue();
 	}
 }
