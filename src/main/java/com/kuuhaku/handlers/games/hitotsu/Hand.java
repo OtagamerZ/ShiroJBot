@@ -62,7 +62,7 @@ public class Hand {
 	}
 
 	public void showHand() {
-		BufferedImage bi = new BufferedImage(785 + 5 * cards.size(), 550 + 2 * cards.size(), BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bi = new BufferedImage(800, 400, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -73,15 +73,16 @@ public class Hand {
 
 		for (int i = 0; i < cards.size(); i++) {
 			KawaiponCard kc = cards.get(i);
+			BufferedImage card = kc.getCard().drawCard(kc.isFoil());
 
-			Helper.drawRotated(g2d, kc.getCard().drawCard(kc.isFoil()), 154, 450, -90 + (180f / (cards.size() + 1) * (i + 1)));
+			Helper.drawRotated(g2d, card, 154 - (card.getWidth() / 2), 450, -90 + (180f / (cards.size() + 1) * (i + 1)));
 
 			RarityColors rc = RarityColorsDAO.getColor(kc.getCard().getRarity());
 
 			if (kc.isFoil()) g2d.setColor(rc.getPrimary().brighter());
 			else g2d.setColor(rc.getPrimary());
 
-			Helper.writeRotated(g2d, kc.isFoil() ? "*" + i + "*" : String.valueOf(i), 154, 450, -90 + (180f / (cards.size() + 1) * (i + 1)));
+			Helper.writeRotated(g2d, kc.isFoil() ? "*" + i + "*" : String.valueOf(i), 154 - (card.getWidth() / 2), 450, -90 + (180f / (cards.size() + 1) * (i + 1)));
 		}
 
 		g2d.dispose();
