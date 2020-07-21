@@ -582,14 +582,7 @@
       <workItem from="1595094379507" duration="5814000" />
       <workItem from="1595113117068" duration="792000" />
       <workItem from="1595255234943" duration="14179000" />
-      <workItem from="1595332917291" duration="5559000" />
-    </task>
-    <task id="LOCAL-01842" summary="Correção na renderização da coleção">
-      <created>1595023285048</created>
-      <option name="number" value="01842" />
-      <option name="presentableId" value="LOCAL-01842" />
-      <option name="project" value="LOCAL" />
-      <updated>1595023285048</updated>
+      <workItem from="1595332917291" duration="5842000" />
     </task>
     <task id="LOCAL-01843" summary="Correção na renderização da coleção">
       <created>1595023696795</created>
@@ -927,7 +920,14 @@
       <option name="project" value="LOCAL" />
       <updated>1595338468688</updated>
     </task>
-    <option name="localTasksCounter" value="1891" />
+    <task id="LOCAL-01891" summary="Otimização da lista de cartas">
+      <created>1595338701259</created>
+      <option name="number" value="01891" />
+      <option name="presentableId" value="LOCAL-01891" />
+      <option name="project" value="LOCAL" />
+      <updated>1595338701259</updated>
+    </task>
+    <option name="localTasksCounter" value="1892" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1047,11 +1047,11 @@
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2" timestamp="1595338698148">
+    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2" timestamp="1595338950377">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1595338698148" />
+    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1595338950377" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1127,11 +1127,11 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1587956411634" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1592942915575" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1595338472680">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1595338706016">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1595338472680" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1595338706016" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1594305494731">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
