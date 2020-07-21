@@ -129,6 +129,11 @@ public class Profile {
 			name = m.getEffectiveName().substring(0, 21).concat("...");
 		drawOutlinedText(name, 270, 342, g2d);
 
+		if (!Member.getWaifu(m.getUser()).isEmpty()) {
+			g2d.setFont(FONT.deriveFont(Font.PLAIN, 30));
+			drawOutlinedText("Casado(a) com: " + Main.getInfo().getUserByID(Member.getWaifu(m.getUser())).getName(), 270, 298, g2d);
+		}
+
 		g2d.setFont(FONT.deriveFont(Font.BOLD, 85));
 		printCenteredString(String.valueOf(MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getLevel()), 196, 52, 515, g2d);
 
