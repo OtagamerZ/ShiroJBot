@@ -107,7 +107,7 @@ public class KawaiponBook {
 
 					for (int i = 0; i < chunks.get(finalC).size(); i++) {
 						if (cards.contains(chunks.get(finalC).get(i))) {
-							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, Helper.clamp(20 * 12 / chunks.get(finalC).get(i).getName().length(), 10, 12)));
+							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, Helper.clamp(20 * 20 / chunks.get(finalC).get(i).getName().length(), 16, 20)));
 							RarityColors rc = RarityColorsDAO.getColor(chunks.get(finalC).get(i).getCard().getRarity());
 
 							g.setBackground(rc.getSecondary());
@@ -117,14 +117,14 @@ public class KawaiponBook {
 							g.drawImage(chunks.get(finalC).get(i).getCard().drawCard(foil), 52 + 190 * i, 24, 160, 250, null);
 							Profile.printCenteredString(chunks.get(finalC).get(i).getName(), 160, 52 + 190 * i, 298, g);
 						} else if (chunks.get(finalC).get(i).getCard().getRarity().equals(KawaiponRarity.ULTIMATE)) {
-							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, Helper.clamp(20 * 12 / chunks.get(finalC).get(i).getName().length(), 10, 12)));
+							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, Helper.clamp(20 * 20 / chunks.get(finalC).get(i).getName().length(), 16, 20)));
 							g.setBackground(Color.black);
 							g.setColor(Color.white);
 
 							g.drawImage(slot, 52 + 190 * i, 24, 160, 250, null);
 							Profile.printCenteredString(chunks.get(finalC).get(i).getName(), 160, 52 + 190 * i, 298, g);
 						} else {
-							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 12));
+							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
 							g.setBackground(Color.black);
 							g.setColor(Color.white);
 
