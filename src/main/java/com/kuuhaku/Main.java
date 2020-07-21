@@ -40,10 +40,8 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.exceptions.ContextException;
 import net.dv8tion.jda.api.requests.GatewayIntent;
-import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
@@ -101,8 +99,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				.build()
 				.awaitReady();
 
-		EnumSet<Message.MentionType> denied = EnumSet.of(Message.MentionType.EVERYONE, Message.MentionType.HERE);
-		MessageAction.setDefaultMentions(EnumSet.complementOf(denied));
 		info.setAPI(api);
 		Main.api = api;
 		Main.jbr = jbr;
