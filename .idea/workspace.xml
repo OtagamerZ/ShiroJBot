@@ -26,7 +26,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/enums/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/enums/Board.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -583,14 +582,7 @@
       <workItem from="1595094379507" duration="5814000" />
       <workItem from="1595113117068" duration="792000" />
       <workItem from="1595255234943" duration="14179000" />
-      <workItem from="1595332917291" duration="9872000" />
-    </task>
-    <task id="LOCAL-01857" summary="Novas cartas: Naruto">
-      <created>1595260923281</created>
-      <option name="number" value="01857" />
-      <option name="presentableId" value="LOCAL-01857" />
-      <option name="project" value="LOCAL" />
-      <updated>1595260923282</updated>
+      <workItem from="1595332917291" duration="10133000" />
     </task>
     <task id="LOCAL-01858" summary="Correção de drop">
       <created>1595261919658</created>
@@ -928,7 +920,14 @@
       <option name="project" value="LOCAL" />
       <updated>1595342645414</updated>
     </task>
-    <option name="localTasksCounter" value="1906" />
+    <task id="LOCAL-01906" summary="Otimização da lista de cartas">
+      <created>1595342913967</created>
+      <option name="number" value="01906" />
+      <option name="presentableId" value="LOCAL-01906" />
+      <option name="project" value="LOCAL" />
+      <updated>1595342913968</updated>
+    </task>
+    <option name="localTasksCounter" value="1907" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1128,11 +1127,11 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1587956411634" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1592942915575" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1595342649660">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1595342916099">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1595342649660" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1595342916099" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1594305494731">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
