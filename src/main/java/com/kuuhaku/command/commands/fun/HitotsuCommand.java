@@ -124,7 +124,10 @@ public class HitotsuCommand extends Command {
 			channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Hitotsu, deseja aceitar?" + (bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 						if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
-							if (ShiroInfo.gameInProgress(message.getMentionedUsers().get(0).getId())) {
+							if (ShiroInfo.gameInProgress(mb.getId())) {
+								channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+								return;
+							} else if (ShiroInfo.gameInProgress(message.getMentionedUsers().get(0).getId())) {
 								channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
 								return;
 							}
@@ -140,6 +143,9 @@ public class HitotsuCommand extends Command {
 							accepted.add(mb.getId());
 							if (ShiroInfo.gameInProgress(mb.getId())) {
 								channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+								return;
+							} else if (ShiroInfo.gameInProgress(author.getId())) {
+								channel.sendMessage(String.format(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game"), author.getAsMention())).queue();
 								return;
 							} else {
 								channel.sendMessage(mb.getAsMention() + " aceitou a partida.").queue();
