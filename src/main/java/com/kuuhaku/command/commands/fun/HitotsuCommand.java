@@ -136,11 +136,13 @@ public class HitotsuCommand extends Command {
 		else
 			channel.sendMessage(message.getMentionedUsers().stream().map(User::getAsMention).map(s -> s + ", ").collect(Collectors.joining()) + " vocês foram desafiados a uma partida de Hitotsu, desejam aceitar?" + (bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-						if (players.contains(mb.getUser())) {
+						if (players.contains(mb.getUser()) && !accepted.contains(mb.getId())) {
 							accepted.add(mb.getId());
 							if (ShiroInfo.gameInProgress(mb.getId())) {
 								channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
 								return;
+							} else {
+								channel.sendMessage(mb.getAsMention() + " aceitou a partida.").queue();
 							}
 						}
 						if (accepted.size() == players.size()) {
