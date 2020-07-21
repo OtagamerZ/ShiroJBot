@@ -125,7 +125,7 @@ public class Board {
 	}
 
 	public BufferedImage render() {
-		BufferedImage bi = new BufferedImage(64 * board.length, 64 * board.length, BufferedImage.TYPE_BYTE_GRAY);
+		BufferedImage bi = new BufferedImage(64 * board.length, 64 * board.length, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setFont(new Font(Font.MONOSPACED, Font.BOLD, 32));
