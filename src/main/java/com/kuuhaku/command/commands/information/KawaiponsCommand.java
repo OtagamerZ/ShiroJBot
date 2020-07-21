@@ -108,12 +108,11 @@ public class KawaiponsCommand extends Command {
 						BufferedImage cards = kb.view(CardDAO.getCards(), "Todas as cartas", args[1].equalsIgnoreCase("C"));
 						File f = File.createTempFile("cards_" + System.currentTimeMillis(), ".png");
 						f.deleteOnExit();
-						byte[] bytes = Helper.getBytes(cards, "png", 0.0f);
+						byte[] bytes = Helper.getBytes(Helper.scaleImage(cards, cards.getWidth() / 2, cards.getHeight() / 2), "png", 0.0f);
 						try (FileOutputStream fos = new FileOutputStream(f)) {
 							fos.write(bytes);
 						}
 
-						System.out.println(f.length());
 						send(author, channel, m, collection, f, "Todas as cartas", CardDAO.totalCards());
 						if (f.exists()) f.delete();
 					} else if (Arrays.stream(AnimeName.values()).noneMatch(a -> a.name().equals(args[0].toUpperCase()))) {
