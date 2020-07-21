@@ -282,7 +282,7 @@ public class Helper {
 				chkdSrc[i] = source[i].replace("{", "<").replace("}", ">").replace("&", ":");
 			else chkdSrc[i] = source[i];
 		}
-		return String.join(" ", chkdSrc).trim();
+		return String.join(" ", chkdSrc).trim().replace("@everyone", "everyone").replace("@here", "here");
 	}
 
 	public static void logToChannel(User u, boolean isCommand, Command c, String msg, Guild g) {
