@@ -30,14 +30,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
-import javax.imageio.IIOImage;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageWriteParam;
-import javax.imageio.ImageWriter;
-import javax.imageio.stream.ImageOutputStream;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -81,7 +74,7 @@ public class KawaiponsCommand extends Command {
 					KawaiponBook kb = new KawaiponBook(collection);
 					BufferedImage cards = kb.view(CardDAO.getCardsByRarity(KawaiponRarity.ULTIMATE), "Coleção Kawaipon", false);
 
-					try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+					/*try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 						ImageWriter writer = ImageIO.getImageWritersByFormatName("jpg").next();
 						ImageOutputStream ios = ImageIO.createImageOutputStream(baos);
 						writer.setOutput(ios);
@@ -96,7 +89,7 @@ public class KawaiponsCommand extends Command {
 						ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
 						cards = ImageIO.read(bais);
 						bais.close();
-					}
+					}*/
 
 					EmbedBuilder eb = new EmbedBuilder();
 					int count = collection.size();
