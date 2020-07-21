@@ -34,8 +34,10 @@ import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class HitotsuCommand extends Command {
 
@@ -90,7 +92,7 @@ public class HitotsuCommand extends Command {
 			}
 		}
 
-		String id = author.getId() + "." + message.getMentionedUsers().get(0).getId() + "." + guild.getId();
+		String id = author.getId() + "." + message.getMentionedUsers().stream().map(User::getAsMention).map(s -> s + ".").collect(Collectors.joining()) + "." + guild.getId();
 
 		if (ShiroInfo.gameInProgress(author.getId())) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
@@ -103,19 +105,37 @@ public class HitotsuCommand extends Command {
 			return;
 		}
 
-		Tabletop t = new Hitotsu((TextChannel) channel, id, author, message.getMentionedUsers().get(0));
+		List<User> players = message.getMentionedUsers();
+		players.add(author);
+		Tabletop t = new Hitotsu((TextChannel) channel, id, players.toArray(User[]::new));
 		int finalBet = bet;
-		channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Hitotsu, deseja aceitar?" + (bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
-				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-					if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
-						if (ShiroInfo.gameInProgress(message.getMentionedUsers().get(0).getId())) {
-							channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
-							return;
+		if (message.getMentionedUsers().size() == 1)
+			channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Hitotsu, deseja aceitar?" + (bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
+					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+						if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
+							if (ShiroInfo.gameInProgress(message.getMentionedUsers().get(0).getId())) {
+								channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
+								return;
+							}
+							ShiroInfo.getGames().put(id, t);
+							ms.delete().queue();
+							t.execute(finalBet);
 						}
-						ShiroInfo.getGames().put(id, t);
-						ms.delete().queue();
-						t.execute(finalBet);
-					}
-				}), false, 1, TimeUnit.MINUTES));
+					}), false, 1, TimeUnit.MINUTES));
+		else
+			channel.sendMessage(players.stream().map(User::getAsMention).map(s -> s + ", ").collect(Collectors.joining()) + " vocês foram desafiados a uma partida de Hitotsu, desejam aceitar?" + (bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
+					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+						int accepted = 1;
+						if (players.contains(mb.getUser())) accepted++;
+						if (accepted == players.size()) {
+							if (ShiroInfo.gameInProgress(author.getId())) {
+								channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
+								return;
+							}
+							ShiroInfo.getGames().put(id, t);
+							ms.delete().queue();
+							t.execute(finalBet);
+						}
+					}), false, 1, TimeUnit.MINUTES));
 	}
 }

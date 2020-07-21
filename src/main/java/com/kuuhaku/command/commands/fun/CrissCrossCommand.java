@@ -95,7 +95,7 @@ public class CrissCrossCommand extends Command {
 		channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Jogo da Velha, deseja aceitar?" + (bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 					if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
-						if (ShiroInfo.gameInProgress(message.getMentionedUsers().get(0).getId())) {
+						if (ShiroInfo.gameInProgress(author.getId())) {
 							channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
 							return;
 						}
