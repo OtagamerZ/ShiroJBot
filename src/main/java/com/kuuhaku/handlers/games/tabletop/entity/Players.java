@@ -20,6 +20,7 @@ package com.kuuhaku.handlers.games.tabletop.entity;
 
 import net.dv8tion.jda.api.entities.User;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,7 +28,7 @@ import java.util.List;
 public class Players {
 	private final LinkedList<User> turn;
 	private User winner = null;
-	private List<User> losers = null;
+	private List<User> losers = new ArrayList<>();
 
 	public Players(User... players) {
 		this.turn = new LinkedList<>(Arrays.asList(players));
