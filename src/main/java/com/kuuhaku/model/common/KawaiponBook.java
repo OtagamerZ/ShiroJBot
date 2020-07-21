@@ -107,29 +107,29 @@ public class KawaiponBook {
 
 					for (int i = 0; i < chunks.get(finalC).size(); i++) {
 						if (cards.contains(chunks.get(finalC).get(i))) {
-							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, Helper.clamp(20 * 42 / chunks.get(finalC).get(i).getName().length(), 38, 42)));
+							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, Helper.clamp(20 * 16 / chunks.get(finalC).get(i).getName().length(), 14, 16)));
 							RarityColors rc = RarityColorsDAO.getColor(chunks.get(finalC).get(i).getCard().getRarity());
 
 							g.setBackground(rc.getSecondary());
 							if (foil) g.setColor(rc.getPrimary().brighter());
 							else g.setColor(rc.getPrimary());
 
-							g.drawImage(chunks.get(finalC).get(i).getCard().drawCard(foil), 27 + 97 * i, 65, 78, 121, null);
-							Profile.printCenteredString(chunks.get(finalC).get(i).getName(), 78, 27 + 97 * i, 136, g);
+							g.drawImage(chunks.get(finalC).get(i).getCard().drawCard(foil), 27 + 97 * i, 14, 78, 121, null);
+							Profile.printCenteredString(chunks.get(finalC).get(i).getName(), 78, 27 + 97 * i, 150, g);
 						} else if (chunks.get(finalC).get(i).getCard().getRarity().equals(KawaiponRarity.ULTIMATE)) {
 							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 42));
 							g.setBackground(Color.black);
 							g.setColor(Color.white);
 
-							g.drawImage(slot, 27 + 97 * i, 65, 78, 121, null);
-							Profile.printCenteredString(chunks.get(finalC).get(i).getName(), 78, 27 + 97 * i, 136, g);
+							g.drawImage(slot, 27 + 97 * i, 14, 78, 121, null);
+							Profile.printCenteredString(chunks.get(finalC).get(i).getName(), 78, 27 + 97 * i, 150, g);
 						} else {
 							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 42));
 							g.setBackground(Color.black);
 							g.setColor(Color.white);
 
-							g.drawImage(slot, 27 + 97 * i, 65, 78, 121, null);
-							Profile.printCenteredString("???", 78, 27 + 97 * i, 136, g);
+							g.drawImage(slot, 27 + 97 * i, 14, 78, 121, null);
+							Profile.printCenteredString("???", 78, 27 + 97 * i, 150, g);
 						}
 					}
 
