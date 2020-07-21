@@ -120,13 +120,15 @@ public class Hitotsu extends Tabletop {
 								ShiroInfo.getGames().remove(getId());
 							}, Helper::doNothing);
 						} else if (Helper.equalsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender")) {
-							Main.getInfo().getAPI().removeEventListener(this);
-							ShiroInfo.getGames().remove(getId());
 							getTable().sendMessage(getPlayers().getUserSequence().getFirst().getAsMention() + " desistiu!").queue();
 							timeout.cancel(true);
 							getPlayers().remove(event.getAuthor());
+							getPlayers().getLosers().add(event.getAuthor());
 
 							if (getPlayers().getUsers().size() == 1) {
+								Main.getInfo().getAPI().removeEventListener(this);
+								ShiroInfo.getGames().remove(getId());
+								getTable().sendMessage("Apenas " + getPlayers().getWinner().getAsMention() + " permanece no jogo, temos um vencedor!!").queue();
 								getPlayers().setWinner(getPlayers().getUserSequence().getFirst());
 
 								if (bet > 0) awardWinner(bet);
