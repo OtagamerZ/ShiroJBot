@@ -1057,4 +1057,13 @@ public class Helper {
 
 		return newImage;
 	}
+
+	public static BufferedImage removeAlpha(BufferedImage input) {
+		BufferedImage bi = new BufferedImage(input.getWidth(), input.getHeight(), BufferedImage.TYPE_INT_RGB);
+		Graphics2D g2d = bi.createGraphics();
+		g2d.drawImage(input, 0, 0, null);
+		g2d.dispose();
+
+		return bi;
+	}
 }
