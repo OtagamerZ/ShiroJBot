@@ -73,7 +73,7 @@ public class KawaiponBook {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, Helper.clamp(12 * 90 / text.length(), 70, 90)));
 		if (foil) g2d.setColor(Color.yellow);
-		Profile.printCenteredString(text, 952, 36, 188, g2d);
+		Profile.printCenteredString(text, 952, 36, 168, g2d);
 
 		NContract<BufferedImage> act = new NContract<>(chunks.size());
 		act.setAction(imgs -> {
