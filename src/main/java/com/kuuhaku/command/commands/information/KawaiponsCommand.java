@@ -115,6 +115,7 @@ public class KawaiponsCommand extends Command {
 
 						send(author, channel, m, collection, f, "Todas as cartas", CardDAO.totalCards());
 						if (f.exists()) f.delete();
+						return;
 					} else if (Arrays.stream(AnimeName.values()).noneMatch(a -> a.name().equals(args[0].toUpperCase()))) {
 						m.editMessage(":x: | Anime inválido ou ainda não adicionado (colocar `_` no lugar de espaços).").queue();
 						return;
