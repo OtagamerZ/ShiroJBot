@@ -122,8 +122,8 @@ public class Hitotsu extends Tabletop {
 						} else if (Helper.equalsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender")) {
 							getTable().sendMessage(getPlayers().getUserSequence().getFirst().getAsMention() + " desistiu!").queue();
 							timeout.cancel(true);
-							getPlayers().remove(event.getAuthor());
-							getPlayers().getLosers().add(event.getAuthor());
+							getPlayers().remove(u);
+							getPlayers().getLosers().add(u);
 
 							if (getPlayers().getUsers().size() == 1) {
 								Main.getInfo().getAPI().removeEventListener(this);
@@ -143,7 +143,7 @@ public class Hitotsu extends Tabletop {
 						} else if (Helper.equalsAny(m.getContentRaw(), "lista", "cartas", "list", "cards")) {
 							EmbedBuilder eb = new EmbedBuilder();
 							StringBuilder sb = new StringBuilder();
-							List<KawaiponCard> cards = hands.get(getPlayers().getUserSequence().getFirst()).getCards();
+							List<KawaiponCard> cards = hands.get(u).getCards();
 
 							eb.setTitle("Suas cartas");
 							for (int i = 0; i < cards.size(); i++) {
