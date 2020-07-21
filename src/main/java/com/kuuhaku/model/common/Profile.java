@@ -112,7 +112,6 @@ public class Profile {
 		g2d.fillRect(0, 350, w, 250);
 
 		g2d.setColor(Color.black);
-		g2d.setClip(null);
 		g2d.fillOval(38, 188, avatar.getWidth() + 24, avatar.getHeight() + 24);
 		g2d.fillRect(50, 348, 200, 204);
 
@@ -121,6 +120,7 @@ public class Profile {
 		g2d.fillArc(40, 190, avatar.getWidth() + 20, avatar.getHeight() + 20, 210, (int) ((mb.getXp() * 240) / ((int) Math.pow(mb.getLevel(), 2) * 100) * -1));
 
 		g2d.setColor(main);
+		g2d.setClip(null);
 		g2d.fillRect(52, 350, 196, 200);
 
 		g2d.setColor(new Color(100, 100, 100, 150));
