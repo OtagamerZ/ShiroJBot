@@ -71,7 +71,7 @@ public class KawaiponBook {
 		Graphics2D g2d = header.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, Helper.clamp(12 * 210 / text.length(), 105, 210)));
+		g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, Helper.clamp(12 * 80 / text.length(), 60, 80)));
 		if (foil) g2d.setColor(Color.yellow);
 		Profile.printCenteredString(text, 482, 18, 94, g2d);
 
@@ -107,7 +107,7 @@ public class KawaiponBook {
 
 					for (int i = 0; i < chunks.get(finalC).size(); i++) {
 						if (cards.contains(chunks.get(finalC).get(i))) {
-							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, Helper.clamp(20 * 16 / chunks.get(finalC).get(i).getName().length(), 14, 16)));
+							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, Helper.clamp(20 * 14 / chunks.get(finalC).get(i).getName().length(), 12, 14)));
 							RarityColors rc = RarityColorsDAO.getColor(chunks.get(finalC).get(i).getCard().getRarity());
 
 							g.setBackground(rc.getSecondary());
@@ -117,14 +117,14 @@ public class KawaiponBook {
 							g.drawImage(chunks.get(finalC).get(i).getCard().drawCard(foil), 27 + 97 * i, 14, 78, 121, null);
 							Profile.printCenteredString(chunks.get(finalC).get(i).getName(), 78, 27 + 97 * i, 150, g);
 						} else if (chunks.get(finalC).get(i).getCard().getRarity().equals(KawaiponRarity.ULTIMATE)) {
-							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 42));
+							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, Helper.clamp(20 * 14 / chunks.get(finalC).get(i).getName().length(), 12, 14)));
 							g.setBackground(Color.black);
 							g.setColor(Color.white);
 
 							g.drawImage(slot, 27 + 97 * i, 14, 78, 121, null);
 							Profile.printCenteredString(chunks.get(finalC).get(i).getName(), 78, 27 + 97 * i, 150, g);
 						} else {
-							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 42));
+							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 14));
 							g.setBackground(Color.black);
 							g.setColor(Color.white);
 
