@@ -34,6 +34,7 @@ import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -64,19 +65,21 @@ public class HitotsuCommand extends Command {
 			return;
 		}
 
-		Kawaipon p1 = KawaiponDAO.getKawaipon(author.getId());
-		Kawaipon p2 = KawaiponDAO.getKawaipon(message.getMentionedUsers().get(0).getId());
+		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
-		if (p1.getCards().size() < 25) {
+		if (kp.getCards().size() < 25) {
 			channel.sendMessage(":x: | É necessário ter ao menos 25 cartas para poder jogar Hitotsu.").queue();
-			return;
-		} else if (p2.getCards().size() < 25) {
-			channel.sendMessage(":x: | Esse usuário não possui cartas suficientes, é necessário ter ao menos 25 cartas para poder jogar Hitotsu.").queue();
 			return;
 		}
 
+		for (User u : message.getMentionedUsers()) {
+			if (KawaiponDAO.getKawaipon(message.getMentionedUsers().get(0).getId()).getCards().size() < 25) {
+				channel.sendMessage(":x: | " + u.getAsMention() + " não possui cartas suficientes, é necessário ter ao menos 25 cartas para poder jogar Hitotsu.").queue();
+				return;
+			}
+		}
+
 		Account uacc = AccountDAO.getAccount(author.getId());
-		Account tacc = AccountDAO.getAccount(message.getMentionedUsers().get(0).getId());
 		int bet = 0;
 		if (args.length > 1 && StringUtils.isNumeric(args[1])) {
 			bet = Integer.parseInt(args[1]);
@@ -86,9 +89,14 @@ public class HitotsuCommand extends Command {
 			} else if (uacc.getBalance() < bet) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 				return;
-			} else if (tacc.getBalance() < bet) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-target")).queue();
-				return;
+			}
+
+			for (User u : message.getMentionedUsers()) {
+				Account tacc = AccountDAO.getAccount(u.getId());
+				if (tacc.getBalance() < bet) {
+					channel.sendMessage(String.format(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-mention"), u.getAsMention())).queue();
+					return;
+				}
 			}
 		}
 
@@ -97,15 +105,19 @@ public class HitotsuCommand extends Command {
 		if (ShiroInfo.gameInProgress(author.getId())) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
 			return;
-		} else if (ShiroInfo.gameInProgress(message.getMentionedUsers().get(0).getId())) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
-			return;
-		} else if (message.getMentionedUsers().get(0).getId().equals(author.getId())) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-play-with-yourself")).queue();
-			return;
 		}
 
-		List<User> players = message.getMentionedUsers();
+		for (User u : message.getMentionedUsers()) {
+			if (ShiroInfo.gameInProgress(u.getId())) {
+				channel.sendMessage(String.format(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game"), u.getAsMention())).queue();
+				return;
+			} else if (u.getId().equals(author.getId())) {
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-play-with-yourself")).queue();
+				return;
+			}
+		}
+
+		List<User> players = new ArrayList<>(message.getMentionedUsers());
 		players.add(author);
 		Tabletop t = new Hitotsu((TextChannel) channel, id, players.toArray(User[]::new));
 		int finalBet = bet;

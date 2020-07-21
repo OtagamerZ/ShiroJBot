@@ -61,6 +61,7 @@ public class CrissCrossCommand extends Command {
 		}
 
 		Account uacc = AccountDAO.getAccount(author.getId());
+		Account tacc = AccountDAO.getAccount(message.getMentionedUsers().get(0).getId());
 		int bet = 0;
 		if (args.length > 1 && StringUtils.isNumeric(args[1])) {
 			bet = Integer.parseInt(args[1]);
@@ -70,14 +71,9 @@ public class CrissCrossCommand extends Command {
 			} else if (uacc.getBalance() < bet) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 				return;
-			}
-
-			for (User u : message.getMentionedUsers()) {
-				Account tacc = AccountDAO.getAccount(u.getId());
-				if (tacc.getBalance() < bet) {
-					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-target")).queue();
-					return;
-				}
+			} else if (tacc.getBalance() < bet) {
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-target")).queue();
+				return;
 			}
 		}
 
@@ -86,16 +82,12 @@ public class CrissCrossCommand extends Command {
 		if (ShiroInfo.gameInProgress(author.getId())) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
 			return;
-		}
-
-		for (User u : message.getMentionedUsers()) {
-			if (ShiroInfo.gameInProgress(u.getId())) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
-				return;
-			} else if (u.getId().equals(author.getId())) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-play-with-yourself")).queue();
-				return;
-			}
+		} else if (ShiroInfo.gameInProgress(message.getMentionedUsers().get(0).getId())) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
+			return;
+		} else if (message.getMentionedUsers().get(0).getId().equals(author.getId())) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-play-with-yourself")).queue();
+			return;
 		}
 
 		Tabletop t = new CrissCross((TextChannel) channel, id, message.getMentionedUsers().get(0), author);
