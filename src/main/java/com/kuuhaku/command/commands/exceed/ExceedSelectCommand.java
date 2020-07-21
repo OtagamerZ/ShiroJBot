@@ -115,17 +115,17 @@ public class ExceedSelectCommand extends Command {
 
 				String ex = ExceedDAO.getExceed(author.getId());
 
-				m.editMessage("Exceed escolhido com sucesso, você agora pertence à **" + ex + "**.").queue();
+				m.editMessage("Exceed escolhido com sucesso, você agora pertence à **" + ex + "**.").queue(null, Helper::doNothing);
 				ExceedDAO.getExceedMembers(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId()))).stream().map(ExceedMember::getId).forEach(em -> {
-							User u = Main.getInfo().getUserByID(em);
-							if (u != null) {
-								u.openPrivateChannel().queue(c -> {
-									try {
-										c.sendMessage(author.getAsTag() + " juntou-se à " + ex + ", dê-o(a) as boas-vindas!").queue(null, Helper::doNothing);
-									} catch (Exception ignore) {
-									}
-								}, Helper::doNothing);
+					User u = Main.getInfo().getUserByID(em);
+					if (u != null) {
+						u.openPrivateChannel().queue(c -> {
+							try {
+								c.sendMessage(author.getAsTag() + " juntou-se à " + ex + ", dê-o(a) as boas-vindas!").queue(null, Helper::doNothing);
+							} catch (Exception ignore) {
 							}
+						}, Helper::doNothing);
+					}
 						}
 				);
 				m.delete().queue();
