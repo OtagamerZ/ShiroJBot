@@ -73,7 +73,7 @@ public class KawaiponBook {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, Helper.clamp(12 * 60 / text.length(), 40, 60)));
 		if (foil) g2d.setColor(Color.yellow);
-		Profile.printCenteredString(text, 482, 18, 94, g2d);
+		Profile.printCenteredString(text, 952, 36, 188, g2d);
 
 		NContract<BufferedImage> act = new NContract<>(chunks.size());
 		act.setAction(imgs -> {
@@ -107,29 +107,29 @@ public class KawaiponBook {
 
 					for (int i = 0; i < chunks.get(finalC).size(); i++) {
 						if (cards.contains(chunks.get(finalC).get(i))) {
-							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, Helper.clamp(20 * 14 / chunks.get(finalC).get(i).getName().length(), 10, 12)));
+							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, Helper.clamp(20 * 12 / chunks.get(finalC).get(i).getName().length(), 10, 12)));
 							RarityColors rc = RarityColorsDAO.getColor(chunks.get(finalC).get(i).getCard().getRarity());
 
 							g.setBackground(rc.getSecondary());
 							if (foil) g.setColor(rc.getPrimary().brighter());
 							else g.setColor(rc.getPrimary());
 
-							g.drawImage(chunks.get(finalC).get(i).getCard().drawCard(foil), 27 + 97 * i, 14, 78, 121, null);
-							Profile.printCenteredString(chunks.get(finalC).get(i).getName(), 78, 27 + 97 * i, 150, g);
+							g.drawImage(chunks.get(finalC).get(i).getCard().drawCard(foil), 52 + 190 * i, 24, 160, 250, null);
+							Profile.printCenteredString(chunks.get(finalC).get(i).getName(), 160, 52 + 190 * i, 298, g);
 						} else if (chunks.get(finalC).get(i).getCard().getRarity().equals(KawaiponRarity.ULTIMATE)) {
-							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, Helper.clamp(20 * 14 / chunks.get(finalC).get(i).getName().length(), 10, 12)));
+							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, Helper.clamp(20 * 12 / chunks.get(finalC).get(i).getName().length(), 10, 12)));
 							g.setBackground(Color.black);
 							g.setColor(Color.white);
 
-							g.drawImage(slot, 27 + 97 * i, 14, 78, 121, null);
-							Profile.printCenteredString(chunks.get(finalC).get(i).getName(), 78, 27 + 97 * i, 150, g);
+							g.drawImage(slot, 52 + 190 * i, 24, 160, 250, null);
+							Profile.printCenteredString(chunks.get(finalC).get(i).getName(), 160, 52 + 190 * i, 298, g);
 						} else {
 							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 12));
 							g.setBackground(Color.black);
 							g.setColor(Color.white);
 
-							g.drawImage(slot, 27 + 97 * i, 14, 78, 121, null);
-							Profile.printCenteredString("???", 78, 27 + 97 * i, 150, g);
+							g.drawImage(slot, 52 + 190 * i, 24, 160, 250, null);
+							Profile.printCenteredString("???", 160, 52 + 190 * i, 298, g);
 						}
 					}
 
