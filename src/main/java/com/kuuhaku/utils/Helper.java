@@ -56,7 +56,11 @@ import org.json.JSONObject;
 import org.python.google.common.collect.Lists;
 
 import javax.annotation.Nonnull;
+import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
 import javax.persistence.NoResultException;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -919,6 +923,29 @@ public class Helper {
 			logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
 			return new byte[0];
 		}
+	}
+
+	public static byte[] getBytes(BufferedImage image, String encode, float compression) {
+		byte[] bytes;
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+			ImageWriter writer = ImageIO.getImageWritersByFormatName("png").next();
+			ImageOutputStream ios = ImageIO.createImageOutputStream(baos);
+			writer.setOutput(ios);
+
+			ImageWriteParam param = writer.getDefaultWriteParam();
+			if (param.canWriteCompressed()) {
+				param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+				param.setCompressionQuality(compression);
+			}
+
+			writer.write(null, new IIOImage(image, null, null), param);
+			bytes = baos.toByteArray();
+		} catch (IOException e) {
+			logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
+			bytes = new byte[0];
+		}
+
+		return bytes;
 	}
 
 	public static void spawnKawaipon(GuildConfig gc, TextChannel channel) {
