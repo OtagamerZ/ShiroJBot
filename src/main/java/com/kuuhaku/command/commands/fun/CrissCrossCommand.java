@@ -22,7 +22,7 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.handlers.games.tabletop.entity.Tabletop;
+import com.kuuhaku.handlers.games.framework.Tabletop;
 import com.kuuhaku.handlers.games.tabletop.games.CrissCross;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;

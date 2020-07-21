@@ -16,9 +16,12 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.handlers.games.tabletop.interfaces;
+package com.kuuhaku.handlers.games.hitotsu;
 
-public interface GameListener {
-	void execute(int bet);
+import java.util.HashMap;
+
+public class Seats extends HashMap<String, Hand> {
+	public void put(Hand hand) {
+		super.put(hand.getUser().getId(), hand);
+	}
 }
-

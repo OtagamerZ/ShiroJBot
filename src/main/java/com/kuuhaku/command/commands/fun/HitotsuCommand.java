@@ -23,8 +23,8 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.handlers.games.framework.Tabletop;
 import com.kuuhaku.handlers.games.hitotsu.Hitotsu;
-import com.kuuhaku.handlers.games.tabletop.entity.Tabletop;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
@@ -34,8 +34,10 @@ import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 
-import java.util.Map;
+import java.text.MessageFormat;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class HitotsuCommand extends Command {
 
@@ -62,35 +64,44 @@ public class HitotsuCommand extends Command {
 			return;
 		}
 
-		Kawaipon p1 = KawaiponDAO.getKawaipon(author.getId());
-		Kawaipon p2 = KawaiponDAO.getKawaipon(message.getMentionedUsers().get(0).getId());
+		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
-		if (p1.getCards().size() < 25) {
+		if (kp.getCards().size() < 25) {
 			channel.sendMessage(":x: | É necessário ter ao menos 25 cartas para poder jogar Hitotsu.").queue();
-			return;
-		} else if (p2.getCards().size() < 25) {
-			channel.sendMessage(":x: | Esse usuário não possui cartas suficientes, é necessário ter ao menos 25 cartas para poder jogar Hitotsu.").queue();
 			return;
 		}
 
-		Account uacc = AccountDAO.getAccount(author.getId());
-		Account tacc = AccountDAO.getAccount(message.getMentionedUsers().get(0).getId());
+		for (User u : message.getMentionedUsers()) {
+			Kawaipon k = KawaiponDAO.getKawaipon(u.getId());
+			if (k.getCards().size() < 25) {
+				channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_not-enough-cards-mention"), u.getAsMention())).queue();
+				return;
+			}
+		}
+
+		Account acc = AccountDAO.getAccount(author.getId());
+
 		int bet = 0;
 		if (args.length > 1 && StringUtils.isNumeric(args[1])) {
 			bet = Integer.parseInt(args[1]);
 			if (bet < 0) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-credit-amount")).queue();
 				return;
-			} else if (uacc.getBalance() < bet) {
+			} else if (acc.getBalance() < bet) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 				return;
-			} else if (tacc.getBalance() < bet) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-target")).queue();
-				return;
+			}
+
+			for (User u : message.getMentionedUsers()) {
+				Account a = AccountDAO.getAccount(author.getId());
+				if (a.getBalance() < bet) {
+					channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-mention"), u.getAsMention())).queue();
+					return;
+				}
 			}
 		}
 
-		String id = author.getId() + "." + message.getMentionedUsers().get(0).getId() + "." + guild.getId();
+		String id = author.getId() + "." + message.getMentionedUsers().stream().map(User::getId).map(s -> s + ".").collect(Collectors.joining()) + guild.getId();
 
 		if (ShiroInfo.gameInProgress(author.getId())) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
@@ -103,19 +114,48 @@ public class HitotsuCommand extends Command {
 			return;
 		}
 
-		Tabletop t = new Hitotsu((TextChannel) channel, id, author, message.getMentionedUsers().get(0));
+		List<User> players = new ArrayList<>() {{
+			add(author);
+			addAll(message.getMentionedUsers());
+		}};
+		Set<User> accepted = new HashSet<>();
+		Tabletop t = new Hitotsu((TextChannel) channel, id, players.toArray(User[]::new));
 		int finalBet = bet;
-		channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Hitotsu, deseja aceitar?" + (bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
-				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
-					if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
-						if (ShiroInfo.gameInProgress(message.getMentionedUsers().get(0).getId())) {
-							channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
-							return;
+		if (players.size() <= 2)
+			channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Hitotsu, deseja aceitar?" + (bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
+					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+						if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
+							if (ShiroInfo.gameInProgress(mb.getId())) {
+								channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+								return;
+							} else if (ShiroInfo.gameInProgress(author.getId())) {
+								channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
+								return;
+							}
+
+							ShiroInfo.getGames().put(id, t);
+							ms.delete().queue();
+							t.execute(finalBet);
 						}
-						ShiroInfo.getGames().put(id, t);
-						ms.delete().queue();
-						t.execute(finalBet);
-					}
-				}), false, 1, TimeUnit.MINUTES));
+					}), false, 1, TimeUnit.MINUTES));
+		else
+			channel.sendMessage(message.getMentionedUsers().stream().map(User::getAsMention).map(s -> s + ", ").collect(Collectors.joining()) + " vocês foram desafiados a uma partida de Hitotsu, desejam aceitar?" + (bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
+					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+						if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
+							if (ShiroInfo.gameInProgress(mb.getId())) {
+								channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
+								return;
+							} else if (ShiroInfo.gameInProgress(author.getId())) {
+								channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
+								return;
+							}
+
+							if (!accepted.contains(mb.getUser()) && players.contains(mb.getUser()))
+
+								ShiroInfo.getGames().put(id, t);
+							ms.delete().queue();
+							t.execute(finalBet);
+						}
+					}), false, 1, TimeUnit.MINUTES));
 	}
 }

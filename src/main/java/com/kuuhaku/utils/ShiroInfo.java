@@ -27,7 +27,7 @@ import com.kuuhaku.controller.postgresql.CanvasDAO;
 import com.kuuhaku.controller.postgresql.VersionDAO;
 import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
-import com.kuuhaku.handlers.games.tabletop.entity.Tabletop;
+import com.kuuhaku.handlers.games.framework.Tabletop;
 import com.kuuhaku.handlers.music.GuildMusicManager;
 import com.kuuhaku.model.common.drop.Prize;
 import com.kuuhaku.model.persistent.KawaiponCard;
