@@ -65,7 +65,7 @@ public class SayCommand extends Command {
 
 		com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(author.getId() + guild.getId());
 		MessageBuilder mb = new MessageBuilder();
-		mb.append(Helper.makeEmoteFromMention(args)).setAllowedMentions(null);
+		mb.append(Helper.makeEmoteFromMention(args)).setAllowedMentions(Helper.mentionFilter);
 
 		try {
 			Webhook wh = Helper.getOrCreateWebhook((TextChannel) channel, "Shiro", Main.getInfo().getAPI());

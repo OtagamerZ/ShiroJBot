@@ -26,7 +26,9 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/KawaiponsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/KawaiponsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/misc/SayCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/misc/SayCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -584,14 +586,7 @@
       <workItem from="1595113117068" duration="792000" />
       <workItem from="1595255234943" duration="14179000" />
       <workItem from="1595332917291" duration="10714000" />
-      <workItem from="1595347542359" duration="2291000" />
-    </task>
-    <task id="LOCAL-01866" summary="Correções na lista de cartas à venda">
-      <created>1595271815711</created>
-      <option name="number" value="01866" />
-      <option name="presentableId" value="LOCAL-01866" />
-      <option name="project" value="LOCAL" />
-      <updated>1595271815711</updated>
+      <workItem from="1595347542359" duration="2590000" />
     </task>
     <task id="LOCAL-01867" summary="Correções na lista de cartas à venda">
       <created>1595272425903</created>
@@ -929,7 +924,14 @@
       <option name="project" value="LOCAL" />
       <updated>1595349599919</updated>
     </task>
-    <option name="localTasksCounter" value="1915" />
+    <task id="LOCAL-01915" summary="Correção no uso de comidas">
+      <created>1595349838661</created>
+      <option name="number" value="01915" />
+      <option name="presentableId" value="LOCAL-01915" />
+      <option name="project" value="LOCAL" />
+      <updated>1595349838661</updated>
+    </task>
+    <option name="localTasksCounter" value="1916" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1129,11 +1131,11 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1587956411634" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1592942915575" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1595349606877">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1595349840353">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1595349606877" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1595349840353" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1594305494731">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1164,11 +1166,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="465" y="286" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595246935580" />
-    <state x="220" y="76" width="957" height="784" key="find.popup" timestamp="1595337226139">
+    <state x="220" y="76" width="957" height="784" key="find.popup" timestamp="1595350134215">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="362" y="134" width="774" height="562" key="find.popup/0.0.1366.768@0.0.1366.768" timestamp="1588044108124" />
-    <state x="220" y="76" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1595337226139" />
+    <state x="220" y="76" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1595350134215" />
     <state x="409" y="157" key="git4idea.merge.GitPullDialog" timestamp="1586743041255">
       <screen x="0" y="0" width="1366" height="768" />
     </state>

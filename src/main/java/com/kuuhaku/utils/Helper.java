@@ -96,6 +96,7 @@ public class Helper {
 	public static final int CANVAS_SIZE = 1025;
 	public static final DateTimeFormatter dateformat = DateTimeFormatter.ofPattern("dd/MMM/yyyy | HH:mm:ss (z)");
 	public static final String HOME = "674261700366827539";
+	public static final EnumSet<Message.MentionType> mentionFilter = EnumSet.complementOf(EnumSet.of(Message.MentionType.EVERYONE, Message.MentionType.HERE));
 
 	private static PrivilegeLevel getPrivilegeLevel(Member member) {
 		if (Main.getInfo().getNiiChan().equals(member.getId()))
