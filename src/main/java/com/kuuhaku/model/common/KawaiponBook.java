@@ -64,14 +64,14 @@ public class KawaiponBook {
 			chunks.add(chunk);
 		}
 
-		final BufferedImage header = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/header_ls.jpg")));
-		final BufferedImage footer = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/footer_ls.jpg")));
+		final BufferedImage header = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/header_ls.png")));
+		final BufferedImage footer = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/footer_ls.png")));
 		final BufferedImage slot = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/slot.png")));
 
 		Graphics2D g2d = header.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, Helper.clamp(12 * 80 / text.length(), 60, 80)));
+		g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, Helper.clamp(12 * 60 / text.length(), 40, 60)));
 		if (foil) g2d.setColor(Color.yellow);
 		Profile.printCenteredString(text, 482, 18, 94, g2d);
 
@@ -100,14 +100,14 @@ public class KawaiponBook {
 			int finalC = c;
 			th.execute(() -> {
 				try {
-					BufferedImage row = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/row_ls.jpg")));
+					BufferedImage row = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/row_ls.png")));
 					Graphics2D g = row.createGraphics();
 					g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 					g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 					for (int i = 0; i < chunks.get(finalC).size(); i++) {
 						if (cards.contains(chunks.get(finalC).get(i))) {
-							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, Helper.clamp(20 * 14 / chunks.get(finalC).get(i).getName().length(), 12, 14)));
+							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, Helper.clamp(20 * 14 / chunks.get(finalC).get(i).getName().length(), 10, 12)));
 							RarityColors rc = RarityColorsDAO.getColor(chunks.get(finalC).get(i).getCard().getRarity());
 
 							g.setBackground(rc.getSecondary());
@@ -117,14 +117,14 @@ public class KawaiponBook {
 							g.drawImage(chunks.get(finalC).get(i).getCard().drawCard(foil), 27 + 97 * i, 14, 78, 121, null);
 							Profile.printCenteredString(chunks.get(finalC).get(i).getName(), 78, 27 + 97 * i, 150, g);
 						} else if (chunks.get(finalC).get(i).getCard().getRarity().equals(KawaiponRarity.ULTIMATE)) {
-							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, Helper.clamp(20 * 14 / chunks.get(finalC).get(i).getName().length(), 12, 14)));
+							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, Helper.clamp(20 * 14 / chunks.get(finalC).get(i).getName().length(), 10, 12)));
 							g.setBackground(Color.black);
 							g.setColor(Color.white);
 
 							g.drawImage(slot, 27 + 97 * i, 14, 78, 121, null);
 							Profile.printCenteredString(chunks.get(finalC).get(i).getName(), 78, 27 + 97 * i, 150, g);
 						} else {
-							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 14));
+							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 12));
 							g.setBackground(Color.black);
 							g.setColor(Color.white);
 
