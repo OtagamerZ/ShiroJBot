@@ -60,6 +60,7 @@ public class Profile {
 	public static ByteArrayOutputStream makeProfile(net.dv8tion.jda.api.entities.Member m, Guild g) throws IOException {
 		int w = WIDTH;
 		BufferedImage avatar;
+		Member mb = MemberDAO.getMemberById(m.getUser().getId() + g.getId());
 
 		try {
 			avatar = Helper.scaleImage(ImageIO.read(Helper.getImage(m.getUser().getEffectiveAvatarUrl())), 200, 200);
@@ -78,13 +79,13 @@ public class Profile {
 
 		Color main;
 		try {
-			BufferedImage bg = Helper.scaleImage(ImageIO.read(Helper.getImage(MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getBg())), bi.getWidth(), bi.getHeight());
+			BufferedImage bg = Helper.scaleImage(ImageIO.read(Helper.getImage(mb.getBg())), bi.getWidth(), bi.getHeight());
 
 			if (bg.getWidth() > bi.getWidth()) xOffset = -(bg.getWidth() - bi.getWidth()) / 2;
 			if (bg.getHeight() > bi.getHeight()) yOffset = -(bg.getHeight() - bi.getHeight()) / 2;
 
 			g2d.drawImage(bg, xOffset, yOffset, null);
-			main = Helper.reverseColor(Helper.colorThief(MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getBg()));
+			main = Helper.reverseColor(Helper.colorThief(mb.getBg()));
 		} catch (IOException e) {
 			BufferedImage bg = Helper.scaleImage(ImageIO.read(Helper.getImage("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg")), bi.getWidth(), bi.getHeight());
 
@@ -95,6 +96,16 @@ public class Profile {
 			main = Helper.reverseColor(Helper.colorThief("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg"));
 		}
 
+		Color lvlBar;
+		if (Helper.between(mb.getLevel(), 0, 35)) {
+			lvlBar = Color.decode("#552911");
+		} else if (Helper.between(mb.getLevel(), 35, 65)) {
+			lvlBar = Color.decode("#b3b3b3");
+		} else if (Helper.between(mb.getLevel(), 65, 90)) {
+			lvlBar = Color.decode("#cf9401");
+		} else {
+			lvlBar = Color.decode("#00d3d3");
+		}
 
 		g2d.setColor(new Color(main.getRed(), main.getGreen(), main.getBlue(), 100));
 		g2d.fillRect(0, 300, w, 300);
@@ -105,9 +116,9 @@ public class Profile {
 		g2d.fillOval(38, 188, avatar.getWidth() + 24, avatar.getHeight() + 24);
 		g2d.fillRect(50, 348, 200, 204);
 
-		g2d.setColor(new Color(0, 255, 0));
+		g2d.setColor(lvlBar);
 		g2d.setClip(new Rectangle2D.Float(0, 100, w, 250));
-		g2d.fillArc(40, 190, avatar.getWidth() + 20, avatar.getHeight() + 20, 210, (int) ((MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getXp() * 240) / ((int) Math.pow(MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getLevel(), 2) * 100) * -1));
+		g2d.fillArc(40, 190, avatar.getWidth() + 20, avatar.getHeight() + 20, 210, (int) ((mb.getXp() * 240) / ((int) Math.pow(mb.getLevel(), 2) * 100) * -1));
 
 		g2d.setColor(main);
 		g2d.fillRect(52, 350, 196, 200);
@@ -139,10 +150,10 @@ public class Profile {
 		}
 
 		g2d.setFont(FONT.deriveFont(Font.BOLD, 85));
-		printCenteredString(String.valueOf(MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getLevel()), 196, 52, 515, g2d);
+		printCenteredString(String.valueOf(mb.getLevel()), 196, 52, 515, g2d);
 
 		g2d.setFont(FONT.deriveFont(Font.PLAIN, 25));
-		printCenteredString(MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getXp() + "/" + ((int) Math.pow(MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getLevel(), 2) * 100), 196, 52, 538, g2d);
+		printCenteredString(mb.getXp() + "/" + ((int) Math.pow(mb.getLevel(), 2) * 100), 196, 52, 538, g2d);
 
 		List<Member> mbs = MemberDAO.getMemberRank(g.getId(), false);
 		int pos = 0;
@@ -172,10 +183,10 @@ public class Profile {
 
 
 		g2d.setFont(new Font("DejaVu Sans", Font.BOLD, 25));
-		String s = MemberDAO.getMemberById(m.getUser().getId() + g.getId()).getBio();
+		String s = mb.getBio();
 		drawStringMultiLine(g2d, s.isEmpty() ? "Sem biografia" : s, 440, 474, 403);
 
-		drawBadges(m, g, g2d);
+		drawBadges(m, mb, g, g2d);
 
 		g2d.setClip(new Ellipse2D.Float(50, 200, avatar.getWidth(), avatar.getHeight()));
 		g2d.fillOval(50, 200, avatar.getWidth(), avatar.getHeight());
@@ -200,14 +211,13 @@ public class Profile {
 		return bi;
 	}
 
-	private static void drawBadges(net.dv8tion.jda.api.entities.Member m, Guild s, Graphics2D g2d) throws IOException {
+	private static void drawBadges(net.dv8tion.jda.api.entities.Member m, Member mb, Guild s, Graphics2D g2d) throws IOException {
 		List<BufferedImage> badges = new ArrayList<>() {{
 			String exceed = ExceedDAO.getExceed(m.getId());
 			if (!exceed.isEmpty()) {
 				add(ImageIO.read(Helper.getImage(Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById(TagIcons.getExceedId(ExceedEnums.getByName(exceed)))).getImageUrl())));
 			}
 
-			Member mb = MemberDAO.getMemberById(m.getId() + m.getGuild().getId());
 			Set<Tag> tags = Tag.getTags(m.getUser(), m);
 			tags.forEach(t -> {
 				try {
