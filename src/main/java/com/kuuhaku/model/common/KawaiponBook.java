@@ -73,11 +73,11 @@ public class KawaiponBook {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, Helper.clamp(12 * 210 / text.length(), 105, 210)));
 		if (foil) g2d.setColor(Color.yellow);
-		Profile.printCenteredString(text, 2100, 75, 400, g2d);
+		Profile.printCenteredString(text, 482, 18, 94, g2d);
 
 		NContract<BufferedImage> act = new NContract<>(chunks.size());
 		act.setAction(imgs -> {
-			BufferedImage bg = new BufferedImage(header.getWidth(), header.getHeight() + footer.getHeight() + (656 * imgs.size()), BufferedImage.TYPE_INT_RGB);
+			BufferedImage bg = new BufferedImage(header.getWidth(), header.getHeight() + footer.getHeight() + (151 * imgs.size()), BufferedImage.TYPE_INT_RGB);
 			Graphics2D g = bg.createGraphics();
 			g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -85,7 +85,7 @@ public class KawaiponBook {
 			g.drawImage(header, 0, 0, null);
 
 			for (int i = 0; i < imgs.size(); i++) {
-				g.drawImage(imgs.get(i), 0, header.getHeight() + 656 * i, null);
+				g.drawImage(imgs.get(i), 0, header.getHeight() + 151 * i, null);
 			}
 
 			g.drawImage(footer, 0, bg.getHeight() - footer.getHeight(), null);
@@ -95,7 +95,7 @@ public class KawaiponBook {
 		});
 
 		AtomicReference<BufferedImage> result = new AtomicReference<>();
-		ExecutorService th = Executors.newCachedThreadPool();
+		ExecutorService th = Executors.newFixedThreadPool(10);
 		for (int c = 0; c < chunks.size(); c++) {
 			int finalC = c;
 			th.execute(() -> {
@@ -104,7 +104,7 @@ public class KawaiponBook {
 					Graphics2D g = row.createGraphics();
 					g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 					g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-					
+
 					for (int i = 0; i < chunks.get(finalC).size(); i++) {
 						if (cards.contains(chunks.get(finalC).get(i))) {
 							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, Helper.clamp(20 * 42 / chunks.get(finalC).get(i).getName().length(), 38, 42)));
@@ -114,22 +114,22 @@ public class KawaiponBook {
 							if (foil) g.setColor(rc.getPrimary().brighter());
 							else g.setColor(rc.getPrimary());
 
-							g.drawImage(chunks.get(finalC).get(i).getCard().drawCard(foil), 117 + 420 * i, 65, 338, 526, null);
-							Profile.printCenteredString(chunks.get(finalC).get(i).getName(), 338, 117 + 420 * i, 635, g);
+							g.drawImage(chunks.get(finalC).get(i).getCard().drawCard(foil), 27 + 97 * i, 65, 78, 121, null);
+							Profile.printCenteredString(chunks.get(finalC).get(i).getName(), 78, 27 + 97 * i, 136, g);
 						} else if (chunks.get(finalC).get(i).getCard().getRarity().equals(KawaiponRarity.ULTIMATE)) {
 							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 42));
 							g.setBackground(Color.black);
 							g.setColor(Color.white);
 
-							g.drawImage(slot, 117 + 420 * i, 65, 338, 526, null);
-							Profile.printCenteredString(chunks.get(finalC).get(i).getName(), 338, 117 + 420 * i, 635, g);
+							g.drawImage(slot, 27 + 97 * i, 65, 78, 121, null);
+							Profile.printCenteredString(chunks.get(finalC).get(i).getName(), 78, 27 + 97 * i, 136, g);
 						} else {
 							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 42));
 							g.setBackground(Color.black);
 							g.setColor(Color.white);
 
-							g.drawImage(slot, 117 + 420 * i, 65, 338, 526, null);
-							Profile.printCenteredString("???", 338, 117 + 420 * i, 635, g);
+							g.drawImage(slot, 27 + 97 * i, 65, 78, 121, null);
+							Profile.printCenteredString("???", 78, 27 + 97 * i, 136, g);
 						}
 					}
 
