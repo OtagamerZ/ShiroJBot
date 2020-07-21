@@ -928,7 +928,7 @@ public class Helper {
 	public static byte[] getBytes(BufferedImage image, String encode, float compression) {
 		byte[] bytes;
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-			ImageWriter writer = ImageIO.getImageWritersByFormatName("png").next();
+			ImageWriter writer = ImageIO.getImageWritersByFormatName(encode).next();
 			ImageOutputStream ios = ImageIO.createImageOutputStream(baos);
 			writer.setOutput(ios);
 
