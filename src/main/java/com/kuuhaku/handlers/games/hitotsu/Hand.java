@@ -69,7 +69,7 @@ public class Hand {
 		g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 50));
 
 		List<KawaiponCard> cards = new ArrayList<>(getCards());
-		g2d.translate(bi.getWidth() / 2f, bi.getHeight() / 2f);
+		g2d.translate(bi.getWidth() / 2f - 164, 75);
 
 		for (int i = 0; i < cards.size(); i++) {
 			KawaiponCard kc = cards.get(i);
