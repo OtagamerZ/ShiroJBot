@@ -71,13 +71,13 @@ public class KawaiponBook {
 		Graphics2D g2d = header.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, Helper.clamp(12 * 60 / text.length(), 40, 60)));
+		g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, Helper.clamp(12 * 90 / text.length(), 70, 90)));
 		if (foil) g2d.setColor(Color.yellow);
 		Profile.printCenteredString(text, 952, 36, 188, g2d);
 
 		NContract<BufferedImage> act = new NContract<>(chunks.size());
 		act.setAction(imgs -> {
-			BufferedImage bg = new BufferedImage(header.getWidth(), header.getHeight() + footer.getHeight() + (151 * imgs.size()), BufferedImage.TYPE_INT_RGB);
+			BufferedImage bg = new BufferedImage(header.getWidth(), header.getHeight() + footer.getHeight() + (299 * imgs.size()), BufferedImage.TYPE_INT_RGB);
 			Graphics2D g = bg.createGraphics();
 			g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -85,7 +85,7 @@ public class KawaiponBook {
 			g.drawImage(header, 0, 0, null);
 
 			for (int i = 0; i < imgs.size(); i++) {
-				g.drawImage(imgs.get(i), 0, header.getHeight() + 151 * i, null);
+				g.drawImage(imgs.get(i), 0, header.getHeight() + 299 * i, null);
 			}
 
 			g.drawImage(footer, 0, bg.getHeight() - footer.getHeight(), null);
