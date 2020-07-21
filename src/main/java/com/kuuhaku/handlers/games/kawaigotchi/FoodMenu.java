@@ -62,7 +62,7 @@ public class FoodMenu {
 	}};
 
 	public static Food getFood(String name) {
-		return menu.getOrDefault(name, null);
+		return menu.getOrDefault(name.toLowerCase(), null);
 	}
 
 	public static Map<String, Food> getMenu() {
