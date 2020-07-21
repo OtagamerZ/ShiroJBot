@@ -18,11 +18,9 @@
 
 package com.kuuhaku.handlers.games.hitotsu;
 
-import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.KawaiponRarity;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.function.BiConsumer;
 
 public enum CardEffect {
@@ -40,12 +38,9 @@ public enum CardEffect {
 		for (int i = 0; i < 4; i++) hand.draw(game.getDeque());
 	}),
 	SWAP_HANDS(KawaiponRarity.LEGENDARY, (game, hand) -> {
-		Hand p1 = game.getHands().get(game.getPlayers().getUserSequence().getFirst());
-		Hand p2 = game.getHands().get(game.getPlayers().getUserSequence().getLast());
-
-		List<KawaiponCard> aux = p1.getCards();
-		p1.setCards(p2.getCards());
-		p2.setCards(aux);
+		for (Hand h : game.getHands().values())
+			for (int i = 0; i < 4; i++)
+				h.draw(game.getDeque());
 	});
 
 	private final KawaiponRarity rarity;
