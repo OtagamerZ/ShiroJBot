@@ -134,7 +134,7 @@ public class KawaiponsCommand extends Command {
 		});
 	}
 
-	private void compressAndSend(User author, MessageChannel channel, Message m, Set<KawaiponCard> collection, BufferedImage cards, String s, long l, KawaiponRarity rr) throws IOException {
+	private void compressAndSend(User author, MessageChannel channel, Message m, Set<KawaiponCard> collection, BufferedImage cards, String s, long l, KawaiponRarity rr) {
 		EmbedBuilder eb = new EmbedBuilder();
 		int foil = (int) collection.stream().filter(KawaiponCard::isFoil).count();
 		int common = collection.size() - foil;
@@ -146,6 +146,6 @@ public class KawaiponsCommand extends Command {
 		eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(collection.size(), l * 2) + "%");
 
 		m.delete().queue();
-		channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "png"), "cards.png").queue();
+		channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "png", 0.5f), "cards.png").queue();
 	}
 }
