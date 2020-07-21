@@ -159,7 +159,7 @@ public class KawaiponsCommand extends Command {
 	}
 
 	private void compressAndSend(User author, MessageChannel channel, Message m, Set<KawaiponCard> collection, BufferedImage cards, String s, long l, KawaiponRarity rr) throws IOException {
-		double fac = cards.getWidth() / 518d;
+		/*double fac = cards.getWidth() / 518d;
 		BufferedImage rescaled = Helper.scaleImage(cards, 518, (int) (cards.getHeight() * fac));
 
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
@@ -177,7 +177,7 @@ public class KawaiponsCommand extends Command {
 			ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
 			rescaled = ImageIO.read(bais);
 			bais.close();
-		}
+		}*/
 
 		EmbedBuilder eb = new EmbedBuilder();
 		int foil = (int) collection.stream().filter(KawaiponCard::isFoil).count();
@@ -190,6 +190,6 @@ public class KawaiponsCommand extends Command {
 		eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(collection.size(), l * 2) + "%");
 
 		m.delete().queue();
-		channel.sendMessage(eb.build()).addFile(Helper.getBytes(rescaled), "cards.jpg").queue();
+		channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards), "cards.jpg").queue();
 	}
 }
