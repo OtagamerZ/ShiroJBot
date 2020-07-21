@@ -18,18 +18,10 @@
 
 package com.kuuhaku.handlers.games.tabletop.entity;
 
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.ExceedDAO;
-import com.kuuhaku.controller.sqlite.PStateDAO;
-import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.handlers.games.tabletop.enums.Board;
 import com.kuuhaku.handlers.games.tabletop.interfaces.GameListener;
-import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.ExceedEnums;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
-
-import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class Tabletop implements GameListener {
 	private final TextChannel table;
@@ -58,33 +50,5 @@ public abstract class Tabletop implements GameListener {
 
 	public String getId() {
 		return id;
-	}
-
-	public void awardWinner(int bet) {
-		Account acc = AccountDAO.getAccount(getPlayers().getWinner().getId());
-		acc.addCredit(bet * getPlayers().getLosers().size(), this.getClass());
-		AccountDAO.saveAccount(acc);
-
-		String exwinner = ExceedDAO.getExceed(getPlayers().getWinner().getId());
-		AtomicInteger won = new AtomicInteger();
-		getPlayers().getLosers().forEach(loser -> {
-			Account lacc = AccountDAO.getAccount(loser.getId());
-			lacc.removeCredit(bet, this.getClass());
-			AccountDAO.saveAccount(lacc);
-
-			String ex = ExceedDAO.getExceed(loser.getId());
-			if (!ex.isBlank() && !ex.equalsIgnoreCase(exwinner)) {
-				PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(loser.getId())));
-				ps.modifyInfluence(-5);
-				PStateDAO.savePoliticalState(ps);
-				won.getAndIncrement();
-			}
-		});
-
-		if (!exwinner.isBlank()) {
-			PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(exwinner));
-			ps.modifyInfluence(5 * won.get());
-			PStateDAO.savePoliticalState(ps);
-		}
 	}
 }
