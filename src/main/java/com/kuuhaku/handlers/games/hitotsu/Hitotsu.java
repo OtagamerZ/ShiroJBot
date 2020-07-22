@@ -105,6 +105,7 @@ public class Hitotsu extends Tabletop {
 									.addFile(Helper.getBytes(mount, "png"), "mount.png")
 									.complete();
 
+							seats.get(getPlayers().getCurrent().getId()).showHand();
 							refresh(this);
 						} else if (Helper.equalsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender")) {
 							getTable().sendMessage(getPlayers().getCurrent().getAsMention() + " desistiu!").queue();
