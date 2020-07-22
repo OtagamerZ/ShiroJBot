@@ -72,7 +72,7 @@ public class Hitotsu extends Tabletop {
 		message = getTable().sendMessage(getPlayers().getCurrent().getAsMention() + " você começa!").complete();
 		Main.getInfo().getAPI().addEventListener(new ListenerAdapter() {
 			{
-				refresh();
+				refresh(this);
 			}
 
 			@Override
@@ -90,13 +90,13 @@ public class Hitotsu extends Tabletop {
 								declareWinner();
 								return;
 							}
-							refresh();
+							refresh(this);
 						} else if (StringUtils.isNumeric(m.getContentRaw())) {
 							if (handle(Integer.parseInt(m.getContentRaw()))) {
 								declareWinner();
 								return;
 							}
-							refresh();
+							refresh(this);
 						} else if (Helper.equalsAny(m.getContentRaw(), "comprar", "buy")) {
 							seats.get(getPlayers().getCurrent().getId()).draw(getDeque());
 
@@ -105,7 +105,7 @@ public class Hitotsu extends Tabletop {
 									.addFile(Helper.getBytes(mount, "png"), "mount.png")
 									.complete();
 
-							refresh();
+							refresh(this);
 						} else if (Helper.equalsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender")) {
 							getTable().sendMessage(getPlayers().getCurrent().getAsMention() + " desistiu!").queue();
 							getPlayers().setLoser();
@@ -268,10 +268,10 @@ public class Hitotsu extends Tabletop {
 		mount = new BufferedImage(500, 500, BufferedImage.TYPE_INT_ARGB);
 	}
 
-	private void refresh() {
+	private void refresh(Object listener) {
 		if (timeout != null && !timeout.isCancelled()) timeout.cancel(true);
 		timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
-			Main.getInfo().getAPI().removeEventListener(this);
+			Main.getInfo().getAPI().removeEventListener(listener);
 			ShiroInfo.getGames().remove(getId());
 		}, Helper::doNothing);
 	}

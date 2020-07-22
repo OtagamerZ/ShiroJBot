@@ -68,6 +68,7 @@ public class Card {
 	public BufferedImage drawCard(boolean foil) {
 		try {
 			byte[] cardBytes = ShiroInfo.getCardCache().get(imgurId, () -> IOUtils.toByteArray(Helper.getImage("https://i.imgur.com/" + imgurId + ".jpg")));
+			System.out.println("https://i.imgur.com/" + imgurId + ".jpg");
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
 				BufferedImage card = ImageIO.read(bais);
 
