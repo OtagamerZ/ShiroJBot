@@ -388,6 +388,9 @@ public class CommandManager {
 			put(ExpandingBrainCommand.class, new Argument(
 					"menteexpandida", new String[]{"eb", "expandingbrain", "brain"}, "req_four-options", "cmd_expanded-brain", FUN, false
 			));
+			put(JojoCommand.class, new Argument(
+					"jojo", new String[]{"jj", "kickhim", "chutaele"}, "req_two-mentions-message", "cmd_jojo", FUN, false
+			));
 			put(RPSCommand.class, new Argument(
 					"jankenpon", new String[]{"ppt", "rps", "jokenpo", "janken"}, "req_jakenpon", "cmd_jankenpon", FUN, false
 			));
