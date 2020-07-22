@@ -46,7 +46,10 @@ public class Players {
 
 	public User peekNext() {
 		int next = current + 1;
-		if (next >= players.size()) next = 0;
+		while (!players.containsKey(next)) {
+			next++;
+			if (next >= players.size()) next = 0;
+		}
 		return players.get(next);
 	}
 
