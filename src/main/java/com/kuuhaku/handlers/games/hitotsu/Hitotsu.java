@@ -81,6 +81,10 @@ public class Hitotsu extends Tabletop {
 				TextChannel chn = event.getChannel();
 				Message m = event.getMessage();
 
+				System.out.println(
+						"\nCHN: " + chn + " | Table: " + getTable() +
+								"\nU: " + u + " | Current: " + getPlayers().getCurrent()
+				);
 				if (chn.getId().equals(getTable().getId()) && u.getId().equals(getPlayers().getCurrent().getId())) {
 					try {
 						if (StringUtils.deleteWhitespace(m.getContentRaw()).split(",").length > 1) {
