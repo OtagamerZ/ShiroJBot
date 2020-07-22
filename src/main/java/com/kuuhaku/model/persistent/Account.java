@@ -77,14 +77,22 @@ public class Account {
 	}
 
 	public void addCredit(long credit, Class<?> from) {
-		long liquid = credit - loan;
-		long toPay = credit - liquid;
-		if (this.loan > 0) loan = Helper.clamp(loan - credit, 0, loan);
+		if (this.loan > 0) loan = loan - credit;
+		else balance += credit;
 
-		balance += liquid;
+		long valuePaid;
+		if (loan < 0) {
+			valuePaid = credit + loan;
+			balance += loan * -1;
+			loan = 0;
+		} else if (loan > 0) {
+			valuePaid = credit;
+		} else {
+			valuePaid = 0;
+		}
 
-		if (liquid != 0) TransactionDAO.register(userId, from, liquid);
-		if (toPay != 0) TransactionDAO.register(userId, from, -toPay);
+		if (valuePaid != 0) TransactionDAO.register(userId, from, -valuePaid);
+		if (credit != 0) TransactionDAO.register(userId, from, credit);
 	}
 
 	public void removeCredit(long credit, Class<?> from) {
