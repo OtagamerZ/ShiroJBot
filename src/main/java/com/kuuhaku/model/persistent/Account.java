@@ -77,22 +77,20 @@ public class Account {
 	}
 
 	public void addCredit(long credit, Class<?> from) {
-		if (this.loan > 0) loan = loan - credit;
-		else balance += credit;
-
-		long valuePaid;
-		if (loan < 0) {
-			valuePaid = credit + loan;
-			balance += loan * -1;
-			loan = 0;
-		} else if (loan > 0) {
-			valuePaid = credit;
+		if (credit == 0) return;
+		else if (this.loan > 0) {
+			TransactionDAO.register(userId, from, -credit);
+			loan = loan - credit;
 		} else {
-			valuePaid = 0;
+			TransactionDAO.register(userId, from, credit);
+			balance += credit;
 		}
 
-		if (valuePaid != 0) TransactionDAO.register(userId, from, -valuePaid);
-		if (credit - valuePaid != 0) TransactionDAO.register(userId, from, credit - valuePaid);
+		if (loan < 0) {
+			balance += loan * -1;
+			TransactionDAO.register(userId, from, loan * -1);
+			loan = 0;
+		}
 	}
 
 	public void removeCredit(long credit, Class<?> from) {
