@@ -26,7 +26,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/hitotsu/Hitotsu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/hitotsu/Hitotsu.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -607,14 +606,7 @@
       <workItem from="1595255234943" duration="14179000" />
       <workItem from="1595332917291" duration="10714000" />
       <workItem from="1595347542359" duration="17501000" />
-      <workItem from="1595419228077" duration="9439000" />
-    </task>
-    <task id="LOCAL-01900" summary="Otimização da lista de cartas">
-      <created>1595341545246</created>
-      <option name="number" value="01900" />
-      <option name="presentableId" value="LOCAL-01900" />
-      <option name="project" value="LOCAL" />
-      <updated>1595341545246</updated>
+      <workItem from="1595419228077" duration="9863000" />
     </task>
     <task id="LOCAL-01901" summary="Otimização da lista de cartas">
       <created>1595341666204</created>
@@ -952,7 +944,14 @@
       <option name="project" value="LOCAL" />
       <updated>1595436298633</updated>
     </task>
-    <option name="localTasksCounter" value="1949" />
+    <task id="LOCAL-01949" summary="Correção no hitotsu">
+      <created>1595436919036</created>
+      <option name="number" value="01949" />
+      <option name="presentableId" value="LOCAL-01949" />
+      <option name="project" value="LOCAL" />
+      <updated>1595436919036</updated>
+    </task>
+    <option name="localTasksCounter" value="1950" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1156,11 +1155,11 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1587956411634" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1592942915575" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1595436300927">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1595436922290">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1595436300927" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1595436922290" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1594305494731">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
