@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Players {
 	private final Map<Integer, User> players = new HashMap<>();
@@ -81,6 +82,9 @@ public class Players {
 				winner = entry.getKey();
 				break;
 			}
+		}
+		if (winner != -1) {
+			losers.addAll(players.entrySet().stream().filter(e -> e.getKey() != winner).map(Map.Entry::getValue).collect(Collectors.toList()));
 		}
 	}
 
