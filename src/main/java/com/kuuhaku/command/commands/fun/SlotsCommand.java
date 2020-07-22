@@ -197,7 +197,7 @@ public class SlotsCommand extends Command {
 			if (jackpot >= 3) {
 				bet.set(slt.jackpot());
 				pot = true;
-				msg = "Impossível! " + guild.getPublicRole().getAsMention() + " " + author.getAsMention() + " detonou a loteria, **JACKPOT**!!!";
+				msg = "Impossível, " + author.getAsMention() + " detonou a loteria, **JACKPOT**!!!";
 				win = true;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
