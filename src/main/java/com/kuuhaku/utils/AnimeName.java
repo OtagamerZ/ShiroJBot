@@ -41,7 +41,8 @@ public enum AnimeName {
 	DARLING_IN_THE_FRANXX,
 	ISHUZOKU_REVIEWERS,
 	HELLSING,
-	NARUTO;
+	NARUTO,
+	MIRAI_NIKKI;
 
 	@Override
 	public String toString() {
