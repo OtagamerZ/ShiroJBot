@@ -983,7 +983,7 @@ public class Helper {
 		ServerBuff dropBuff = gb.getBuffs().stream().filter(b -> b.getId() == 3).findFirst().orElse(null);
 		boolean dbUltimate = dropBuff != null && dropBuff.getTier() == 4;
 
-		if (dbUltimate || chance(1.5 + (channel.getGuild().getMemberCount() * 1.5 / 5000) * (dropBuff != null ? dropBuff.getMult() : 1))) {
+		if (dbUltimate || chance(2 + (channel.getGuild().getMemberCount() * 1d / 5000) * (dropBuff != null ? dropBuff.getMult() : 1))) {
 			Prize drop = new CreditDrop();
 
 			EmbedBuilder eb = new EmbedBuilder();
