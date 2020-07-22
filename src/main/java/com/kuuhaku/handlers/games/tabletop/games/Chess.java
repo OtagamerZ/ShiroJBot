@@ -77,7 +77,7 @@ public class Chess extends Tabletop {
 		message = getTable().sendMessage("Turno de " + getPlayers().getCurrent().getAsMention()).addFile(Helper.getBytes(getBoard().render()), "board.jpg").complete();
 		Main.getInfo().getAPI().addEventListener(new ListenerAdapter() {
 			{
-				refresh();
+				refresh(this);
 			}
 
 			@Override
@@ -152,7 +152,7 @@ public class Chess extends Tabletop {
 									Main.getInfo().getAPI().removeEventListener(this);
 									ShiroInfo.getGames().remove(getId());
 								}, Helper::doNothing);
-							else refresh();
+							else refresh(this);
 						}
 					} catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
 						getTable().sendMessage(":x: | Movimento inválido.").queue();
@@ -162,10 +162,10 @@ public class Chess extends Tabletop {
 		});
 	}
 
-	private void refresh() {
+	private void refresh(Object listener) {
 		if (timeout != null && !timeout.isCancelled()) timeout.cancel(true);
 		timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
-			Main.getInfo().getAPI().removeEventListener(this);
+			Main.getInfo().getAPI().removeEventListener(listener);
 			ShiroInfo.getGames().remove(getId());
 		}, Helper::doNothing);
 	}
