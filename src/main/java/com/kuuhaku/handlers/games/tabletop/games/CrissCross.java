@@ -138,7 +138,7 @@ public class CrissCross extends Tabletop {
 
 									awardWinner(bet);
 								}, Helper::doNothing);
-							else refresh();
+							else refresh(this);
 						}
 					} catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
 						getTable().sendMessage(":x: | Coordenada inválida.").queue();
@@ -148,10 +148,10 @@ public class CrissCross extends Tabletop {
 		});
 	}
 
-	private void refresh() {
+	private void refresh(Object listener) {
 		if (timeout != null && !timeout.isCancelled()) timeout.cancel(true);
 		timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
-			Main.getInfo().getAPI().removeEventListener(this);
+			Main.getInfo().getAPI().removeEventListener(listener);
 			ShiroInfo.getGames().remove(getId());
 		}, Helper::doNothing);
 	}

@@ -65,6 +65,7 @@ public class Players {
 	}
 
 	public void setWinner(User u) {
+		if (u == null) return;
 		for (Map.Entry<Integer, User> entry : players.entrySet()) {
 			if (entry.getValue().getId().equals(u.getId())) {
 				winner = entry.getKey();
