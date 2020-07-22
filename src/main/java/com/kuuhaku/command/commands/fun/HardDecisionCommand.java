@@ -72,6 +72,7 @@ public class HardDecisionCommand extends Command {
 			g2d.setColor(Color.BLACK);
 			g2d.setFont(new Font("Arial", Font.BOLD, 25));
 			if (g2d.getFontMetrics().stringWidth(String.join(" ", args)) > 270) {
+				g2d.setColor(Color.WHITE);
 				Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[0], 215, 55, 135);
 				Profile.drawStringMultiLine(g2d, String.join(" ", args).split(";")[1], 215, 255, 100);
 			} else {
