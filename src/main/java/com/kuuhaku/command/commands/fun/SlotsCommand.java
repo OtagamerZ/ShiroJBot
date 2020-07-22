@@ -44,7 +44,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class SlotsCommand extends Command {
 	private List<String> rolled = new ArrayList<>();
-	private int loseStreak = 0;
 
 	public SlotsCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
@@ -116,7 +115,6 @@ public class SlotsCommand extends Command {
 				bet.set(Math.round(bet.get() * 0.8f));
 				msg = "Eita, parece que você não teve sorte hoje!";
 				win = true;
-				loseStreak = 0;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
 					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
@@ -127,7 +125,6 @@ public class SlotsCommand extends Command {
 				bet.set(Math.round(bet.get() * 1.5f));
 				msg = "E temos três melancias!";
 				win = true;
-				loseStreak = 0;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
 					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
@@ -138,7 +135,6 @@ public class SlotsCommand extends Command {
 				bet.set(bet.get() * 2);
 				msg = "Três cerejas no bolo!";
 				win = true;
-				loseStreak = 0;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
 					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
@@ -149,7 +145,6 @@ public class SlotsCommand extends Command {
 				bet.set(Math.round(bet.get() * 2.75f));
 				msg = "Três corações apaixonados!";
 				win = true;
-				loseStreak = 0;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
 					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
@@ -160,7 +155,6 @@ public class SlotsCommand extends Command {
 				bet.set(bet.get() * 4);
 				msg = "Toquem os sinos!";
 				win = true;
-				loseStreak = 0;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
 					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
@@ -171,7 +165,6 @@ public class SlotsCommand extends Command {
 				bet.set(bet.get() * 9);
 				msg = "Chamem a polícia, temos um sortudo!";
 				win = true;
-				loseStreak = 0;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
 					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
@@ -182,7 +175,6 @@ public class SlotsCommand extends Command {
 				bet.set(bet.get() * 35);
 				msg = "Alguem sequestrou um doente, três ferraduras de ouro!";
 				win = true;
-				loseStreak = 0;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
 					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
@@ -193,7 +185,6 @@ public class SlotsCommand extends Command {
 				bet.set(bet.get() * 50);
 				msg = "Assalto ao banco da sorte, temos três diamantes!";
 				win = true;
-				loseStreak = 0;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
 					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
@@ -208,7 +199,6 @@ public class SlotsCommand extends Command {
 				pot = true;
 				msg = "Impossível! " + guild.getPublicRole().getAsMention() + " " + author.getAsMention() + " detonou a loteria, **JACKPOT**!!!";
 				win = true;
-				loseStreak = 0;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
 					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
@@ -226,7 +216,6 @@ public class SlotsCommand extends Command {
 			} else {
 				bet.set(0);
 				msg += "Poxa, parece que você não teve sorte hoje. Volte sempre!";
-				loseStreak++;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
 					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
@@ -274,14 +263,9 @@ public class SlotsCommand extends Command {
 	}
 
 	private void rollSlots() {
-		for (int tries = 0; tries <= loseStreak; tries++) {
-			rolled.clear();
-			for (int i = 0; i < 5; i++) {
-				rolled.add(Slots.getSlot());
-			}
-			if (anyCombination()) {
-				break;
-			}
+		rolled.clear();
+		for (int i = 0; i < 5; i++) {
+			rolled.add(Slots.getSlot());
 		}
 	}
 
