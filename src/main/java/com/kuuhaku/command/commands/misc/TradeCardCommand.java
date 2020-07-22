@@ -89,9 +89,6 @@ public class TradeCardCommand extends Command {
 			} else if (acc.getBalance() < price) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 				return;
-			} else if (acc.getLoan() > 0) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-transfer-with-loan")).queue();
-				return;
 			}
 
 			KawaiponCard card = new KawaiponCard(tc, foil);

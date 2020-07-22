@@ -26,9 +26,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/misc/TradeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/misc/TradeCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -609,14 +606,7 @@
       <workItem from="1595255234943" duration="14179000" />
       <workItem from="1595332917291" duration="10714000" />
       <workItem from="1595347542359" duration="17501000" />
-      <workItem from="1595419228077" duration="20278000" />
-    </task>
-    <task id="LOCAL-01914" summary="Correção no uso de comidas">
-      <created>1595349599919</created>
-      <option name="number" value="01914" />
-      <option name="presentableId" value="LOCAL-01914" />
-      <option name="project" value="LOCAL" />
-      <updated>1595349599919</updated>
+      <workItem from="1595419228077" duration="20624000" />
     </task>
     <task id="LOCAL-01915" summary="Correção no uso de comidas">
       <created>1595349838661</created>
@@ -954,7 +944,14 @@
       <option name="project" value="LOCAL" />
       <updated>1595448813942</updated>
     </task>
-    <option name="localTasksCounter" value="1963" />
+    <task id="LOCAL-01963" summary="Novo meme: JoJo">
+      <created>1595449618304</created>
+      <option name="number" value="01963" />
+      <option name="presentableId" value="LOCAL-01963" />
+      <option name="project" value="LOCAL" />
+      <updated>1595449618304</updated>
+    </task>
+    <option name="localTasksCounter" value="1964" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1158,11 +1155,11 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1587956411634" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1592942915575" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1595448835888">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1595449620661">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1595448835888" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1595449620661" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1594305494731">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
