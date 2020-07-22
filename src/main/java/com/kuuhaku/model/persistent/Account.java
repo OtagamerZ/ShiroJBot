@@ -92,7 +92,7 @@ public class Account {
 		}
 
 		if (valuePaid != 0) TransactionDAO.register(userId, from, -valuePaid);
-		if (credit != 0) TransactionDAO.register(userId, from, credit);
+		if (credit - valuePaid != 0) TransactionDAO.register(userId, from, credit - valuePaid);
 	}
 
 	public void removeCredit(long credit, Class<?> from) {
