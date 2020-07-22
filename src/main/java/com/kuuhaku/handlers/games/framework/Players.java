@@ -30,17 +30,19 @@ public class Players {
 	private int current = 0;
 	private int winner = -1;
 	private Set<User> losers = new HashSet<>();
+	private int maxPlayers = 0;
 
 	public Players(User... players) {
 		for (int i = 0; i < players.length; i++)
 			this.players.put(i, players[i]);
+		maxPlayers = players.length;
 	}
 
 	public User nextTurn() {
 		current++;
 		while (!players.containsKey(current)) {
 			current++;
-			if (current >= players.size()) current = 0;
+			if (current >= maxPlayers) current = 0;
 		}
 
 		return players.get(current);
@@ -50,7 +52,7 @@ public class Players {
 		int next = current + 1;
 		while (!players.containsKey(next)) {
 			next++;
-			if (next >= players.size()) next = 0;
+			if (next >= maxPlayers) next = 0;
 		}
 
 		return players.get(next);
