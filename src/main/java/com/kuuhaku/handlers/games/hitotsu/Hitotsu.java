@@ -68,6 +68,7 @@ public class Hitotsu extends Tabletop {
 	@Override
 	public void execute(int bet) {
 		getPlayers().lastOneStarts();
+		seats.get(getPlayers().getCurrent().getId()).showHand();
 		message = getTable().sendMessage(getPlayers().getCurrent().getAsMention() + " você começa!").complete();
 		Main.getInfo().getAPI().addEventListener(new ListenerAdapter() {
 			{
