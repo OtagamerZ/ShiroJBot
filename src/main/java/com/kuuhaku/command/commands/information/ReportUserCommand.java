@@ -65,6 +65,12 @@ public class ReportUserCommand extends Command {
 		}
 
 		String mensagem = String.join(" ", Arrays.copyOfRange(args, 1, args.length)).trim();
+
+		if (mensagem.length() > 191) {
+			channel.sendMessage(":x: | Mensagem muito longa, por favor tente ser mais breve.").queue();
+			return;
+		}
+
 		int number = TicketDAO.openTicket(mensagem, author);
 
 		EmbedBuilder eb = new EmbedBuilder();

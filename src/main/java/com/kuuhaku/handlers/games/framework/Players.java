@@ -38,13 +38,13 @@ public class Players {
 
 	public User nextTurn() {
 		current++;
-		if (current == players.size()) current = 0;
+		if (current >= players.size()) current = 0;
 		return players.get(current);
 	}
 
 	public User peekNext() {
 		int next = current + 1;
-		if (next == players.size()) next = 0;
+		if (next >= players.size()) next = 0;
 		return players.get(next);
 	}
 

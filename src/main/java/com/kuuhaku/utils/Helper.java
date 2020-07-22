@@ -750,11 +750,11 @@ public class Helper {
 			Emote e;
 			try {
 				e = g.getEmotesByName(oldWords[i].replace("&", ""), true).get(0);
-			} catch (IndexOutOfBoundsException ex) {
+			} catch (IndexOutOfBoundsException | IllegalArgumentException ex) {
 				try {
 					e = Main.getInfo().getAPI().getEmotesByName(oldWords[i].replace("&", ""), true).get(0);
 					makenew = true;
-				} catch (IndexOutOfBoundsException exc) {
+				} catch (IndexOutOfBoundsException | IllegalArgumentException exc) {
 					e = null;
 				}
 			}
