@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.controller.postgresql.SlotsDAO;
 import com.kuuhaku.model.common.GamblePool;
 import com.kuuhaku.utils.Helper;
 
@@ -41,8 +42,8 @@ public class Slots {
 	static {
 		GamblePool gp = new GamblePool();
 		String[] icon = {LEMON, WATERMELON, CHERRY, HEART, BELL, BAR, HORSESHOE, DIAMOND, JACKPOT};
-		for (String s : icon) {
-			gp.addGamble(new GamblePool.Gamble(s, 1));
+		for (int i = 0; i < icon.length; i++) {
+			gp.addGamble(new GamblePool.Gamble(icon[i], icon.length - i));
 		}
 		slots = gp.getPool();
 	}
@@ -51,21 +52,21 @@ public class Slots {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-	private int pot;
+	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
+	private long pot;
 
-	public int getPot() {
+	public long getPot() {
 		return pot;
 	}
 
-	public int jackpot() {
-		int prize = pot;
+	public long jackpot() {
+		long prize = pot;
 		this.pot = 0;
-		//SlotsDAO.saveSlots(this);
+		SlotsDAO.saveSlots(this);
 		return prize;
 	}
 
-	public void addToPot(int value) {
+	public void addToPot(long value) {
 		this.pot += value;
 	}
 

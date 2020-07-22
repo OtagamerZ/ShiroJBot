@@ -51,11 +51,11 @@ public class FoodMenu {
 		put("mel", new Food(SWEET, "Mel", "mel", 12, 2, 0, 80));
 
 		//SPECIAL
-		put("energetico", new Food(SPECIAL, "Energético", "energetico", 0, 0, -25, 125, k -> k.setEnergy(100f), "Recupera toda a energia do Kawaigotchi, mas faz mal à saúde.", "está a todo vapor!", ENERGY_UP.getIcon().getImage()));
-		put("resserum", new Food(SPECIAL, "Serum da Ressureição", "resserum", 0, 0, 0, 3000, Kawaigotchi::resurrect, "Ressuscita o Kawaigotchi, ao custo de metade da experiência atual.", "foi ressuscitado!", RESSURRECTED.getIcon().getImage()));
-		put("sonifero", new Food(SPECIAL, "Sonifero", "sonifero", 0, 0, 0, 50, k -> k.setStance(Stance.SLEEPING), "Coloca o Kawaigotchi para dormir, ele irá acordar assim que sua energia chegar a 100% novamente.", "foi sedado!", SLEEPING.getIcon().getImage()));
-		put("vacina", new Food(SPECIAL, "Vacina", "vacina", -25, 0, 50, 150, Kawaigotchi::doNothing, "Vacina seu Kawaigotchi, recuperando 50% de saúde, porém ele não ficará muito feliz com uma agulhada.", "foi vacinado!", HEALTH_UP.getIcon().getImage()));
-		put("faixademobius", new Food(SPECIAL, "Faixa de Möbius", "faixademobius", Helper.rng(150, false) - 75, Helper.rng(150, false) - 75, Helper.rng(150, false) - 75, 1337, k -> {
+		put("energetico", new Food(SPECIAL, "Energético", "energetico", 0, 0, -25, 250, k -> k.setEnergy(100f), "Recupera toda a energia do Kawaigotchi, mas faz mal à saúde.", "está a todo vapor!", ENERGY_UP.getIcon().getImage()));
+		put("resserum", new Food(SPECIAL, "Serum da Ressureição", "resserum", 0, 0, 0, 5000, Kawaigotchi::resurrect, "Ressuscita o Kawaigotchi, ao custo de metade da experiência atual.", "foi ressuscitado!", RESSURRECTED.getIcon().getImage()));
+		put("sonifero", new Food(SPECIAL, "Sonifero", "sonifero", 0, 0, 0, 150, k -> k.setStance(Stance.SLEEPING), "Coloca o Kawaigotchi para dormir, ele irá acordar assim que sua energia chegar a 100% novamente.", "foi sedado!", SLEEPING.getIcon().getImage()));
+		put("vacina", new Food(SPECIAL, "Vacina", "vacina", -25, 0, 50, 500, Kawaigotchi::doNothing, "Vacina seu Kawaigotchi, recuperando 50% de saúde, porém ele não ficará muito feliz com uma agulhada.", "foi vacinado!", HEALTH_UP.getIcon().getImage()));
+		put("faixademobius", new Food(SPECIAL, "Faixa de Möbius", "faixademobius", Helper.rng(150, false) - 75, Helper.rng(150, false) - 75, Helper.rng(150, false) - 75, 10000, k -> {
 			k.setSkin(1 + Helper.rng(5, false));
 			k.setNature(Nature.randNature());
 		}, "Troca seu Kawaigotchi com uma versão dele de outra dimensão.", "viajou ao multiverso!", MOBIUS.getIcon().getImage()));
