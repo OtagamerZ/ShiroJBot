@@ -25,7 +25,7 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
-import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 
 import javax.imageio.ImageIO;
@@ -67,7 +67,9 @@ public class JojoCommand extends Command {
 
 		List<User> usrs = new ArrayList<>(message.getMentionedUsers());
 
-		String msg = String.join(" ", ArrayUtils.subarray(args, 2, args.length));
+		String msg = StringUtils.normalizeSpace(String.join(" ", args)
+				.replace(usrs.get(0).getAsMention(), "")
+				.replace(usrs.get(1).getAsMention(), ""));
 		try {
 			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("memes/jojo.jpg")));
 			Graphics2D g2d = bi.createGraphics();
