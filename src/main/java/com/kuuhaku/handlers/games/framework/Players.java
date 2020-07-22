@@ -18,7 +18,6 @@
 
 package com.kuuhaku.handlers.games.framework;
 
-import com.kuuhaku.utils.RoundList;
 import net.dv8tion.jda.api.entities.User;
 
 import java.util.HashMap;
@@ -38,18 +37,23 @@ public class Players {
 	}
 
 	public User nextTurn() {
-		RoundList<Integer> i = new RoundList<>(players.keySet());
-		i.sort(Integer::compareTo);
-		current = i.next();
+		current++;
+		while (!players.containsKey(current)) {
+			current++;
+			if (current >= players.size()) current = 0;
+		}
 
 		return players.get(current);
 	}
 
 	public User peekNext() {
-		RoundList<Integer> i = new RoundList<>(players.keySet());
-		i.sort(Integer::compareTo);
+		int next = current + 1;
+		while (!players.containsKey(next)) {
+			next++;
+			if (next >= players.size()) next = 0;
+		}
 
-		return players.get(i.next());
+		return players.get(next);
 	}
 
 	public void lastOneStarts() {
