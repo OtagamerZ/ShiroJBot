@@ -37,10 +37,10 @@ public class Players {
 	}
 
 	public User nextTurn() {
-		while (!players.containsKey(current)) {
+		do {
 			current++;
 			if (current >= players.size()) current = 0;
-		}
+		} while (!players.containsKey(current));
 		return players.get(current);
 	}
 
