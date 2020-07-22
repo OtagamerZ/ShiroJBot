@@ -61,6 +61,7 @@ public class Slots {
 	public int jackpot() {
 		int prize = pot;
 		this.pot = 0;
+		SlotsDAO.saveSlots(this);
 		return prize;
 	}
 
