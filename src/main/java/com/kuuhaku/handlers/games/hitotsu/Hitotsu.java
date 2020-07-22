@@ -126,7 +126,7 @@ public class Hitotsu extends Tabletop {
 						} else if (Helper.equalsAny(m.getContentRaw(), "lista", "cartas", "list", "cards")) {
 							EmbedBuilder eb = new EmbedBuilder();
 							StringBuilder sb = new StringBuilder();
-							List<KawaiponCard> cards = seats.get(getPlayers().getCurrent()).getCards();
+							List<KawaiponCard> cards = seats.get(getPlayers().getCurrent().getId()).getCards();
 
 							eb.setTitle("Suas cartas");
 							for (int i = 0; i < cards.size(); i++) {
