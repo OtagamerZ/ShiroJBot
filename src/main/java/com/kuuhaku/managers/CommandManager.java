@@ -427,9 +427,9 @@ public class CommandManager {
 			put(DivorceCommand.class, new Argument(
 					"divorciar", new String[]{"separar", "divorce"}, "cmd_divorce", FUN, false
 			));
-			put(SlotsCommand.class, new Argument(
-					"slots", new String[]{"roleta"}, "req_bet", "cmd_slots", FUN, false
-			));
+			//put(SlotsCommand.class, new Argument(
+			//		"slots", new String[]{"roleta"}, "req_bet", "cmd_slots", FUN, false
+			//));
 			put(QuizCommand.class, new Argument(
 					"quiz", new String[]{"qna", "per"}, "req_difficulty", "cmd_quiz", FUN, true
 			));
