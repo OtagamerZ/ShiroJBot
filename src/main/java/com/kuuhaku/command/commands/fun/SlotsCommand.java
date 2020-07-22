@@ -40,7 +40,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class SlotsCommand extends Command {
 	private List<String> rolled = new ArrayList<>();
@@ -68,7 +68,7 @@ public class SlotsCommand extends Command {
 			eb.setColor(Helper.getRandomColor());
 			eb.setDescription(prizeTable());
 			eb.setTitle("Tabela de prêmios");
-			eb.setFooter("Use `" + prefix + "slots VALOR` para jogar (valor mínimo: 25 créditos)");
+			eb.setFooter("Use `" + prefix + "slots VALOR` para jogar (Valor mínimo: 25 créditos. Para utilizar as 5 casas da roleta, aposte 500 créditos ou mais)");
 
 			channel.sendMessage(eb.build()).queue();
 			return;
@@ -81,14 +81,14 @@ public class SlotsCommand extends Command {
 		}
 
 		Account acc = AccountDAO.getAccount(author.getId());
-		AtomicInteger bet = new AtomicInteger(Integer.parseInt(args[0]));
+		AtomicLong bet = new AtomicLong(Long.parseLong(args[0]));
 
 		if (acc.getBalance() < bet.get()) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 			return;
 		}
 
-		boolean highbet = bet.get() >= 100;
+		boolean highbet = bet.get() >= 500;
 		Slots slt = SlotsDAO.getSlots();
 		acc.removeCredit(bet.get(), this.getClass());
 		slt.addToPot(bet.get());
@@ -113,7 +113,7 @@ public class SlotsCommand extends Command {
 			boolean win = false;
 			if (lemon >= 3) {
 				bet.set(Math.round(bet.get() * 0.8f));
-				msg = "Eita, parece que você não teve sorte hoje!";
+				msg = "Eita, parece que você está azedo hoje!";
 				win = true;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
@@ -162,7 +162,7 @@ public class SlotsCommand extends Command {
 					PStateDAO.savePoliticalState(ps);
 				}
 			} else if (bar >= 3) {
-				bet.set(bet.get() * 9);
+				bet.set(bet.get() * 7);
 				msg = "Chamem a polícia, temos um sortudo!";
 				win = true;
 
@@ -172,8 +172,8 @@ public class SlotsCommand extends Command {
 					PStateDAO.savePoliticalState(ps);
 				}
 			} else if (horseshoe >= 3) {
-				bet.set(bet.get() * 35);
-				msg = "Alguem sequestrou um doente, três ferraduras de ouro!";
+				bet.set(bet.get() * 12);
+				msg = "Alguem sequestrou um duende, três ferraduras de ouro!";
 				win = true;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
@@ -182,13 +182,13 @@ public class SlotsCommand extends Command {
 					PStateDAO.savePoliticalState(ps);
 				}
 			} else if (diamond >= 3) {
-				bet.set(bet.get() * 50);
+				bet.set(bet.get() * 20);
 				msg = "Assalto ao banco da sorte, temos três diamantes!";
 				win = true;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
 					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
-					ps.modifyInfluence(100);
+					ps.modifyInfluence(80);
 					PStateDAO.savePoliticalState(ps);
 				}
 			}
@@ -197,19 +197,19 @@ public class SlotsCommand extends Command {
 			if (jackpot >= 3) {
 				bet.set(slt.jackpot());
 				pot = true;
-				msg = "Impossível, " + author.getAsMention() + " detonou a loteria, **JACKPOT**!!!";
+				msg = "Impossível, " + author.getAsMention() + " detonou a loteria. **JACKPOT**!!!";
 				win = true;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
 					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
-					ps.modifyInfluence(500);
+					ps.modifyInfluence(150);
 					PStateDAO.savePoliticalState(ps);
 				}
 			}
 
 			if (win) {
 				if (pot)
-					msg += "\n\n<a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503>\n\n";
+					msg += "\n\n<a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503>\n";
 				msg += "\nSeu prêmio é de __**" + bet + " créditos.**__";
 				if (pot)
 					msg += "\n\n<a:YellowArrowRight:680461983342264360><a:YellowArrowLeft:680461765863145503><a:YellowArrowLeft:680461765863145503><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360><a:YellowArrowRight:680461983342264360>";
@@ -233,12 +233,12 @@ public class SlotsCommand extends Command {
 
 		ShiroInfo.getGameLock().add(author.getId());
 		channel.sendMessage(":white_flower: | **Aposta de " + author.getAsMention() + ": __" + args[0] + "__**").queue(s -> {
-			s.editMessage(s.getContentRaw() + "\n\n" + "**Prêmio acumulado: __" + slt.getPot() + "__**\n" + (highbet ? "     ⇩       ⇩      ⇩       ⇩      ⇩" : "              ⇩       ⇩       ⇩") + "\n┌──┬──┬──┬──┬──┐\n" + showSlots(0) + "\n└──┴──┴──┴──┴──┘\n" + (highbet ? "     ⇧       ⇧      ⇧       ⇧      ⇧" : "              ⇧       ⇧       ⇧")).queue();
+			s.editMessage(s.getContentRaw() + "\n\n" + "**Prêmio acumulado: __" + slt.getPot() + "__**\n" + (highbet ? "     ⇩       ⇩      ⇩       ⇩      ⇩" : "              ⇩       ⇩       ⇩") + "\n┌──┬──┬──┬──┬──┐\n" + showSlots(0) + "\n└──┴──┴──┴──┴──┘\n" + (highbet ? "     ⇧       ⇧      ⇧       ⇧      ⇧" : "              ⇧       ⇧       ⇧")).queue(null, Helper::doNothing);
 			for (int i = 1; i < 6; i++) {
 				if (i != 5)
-					s.editMessage(s.getContentRaw() + "\n\n" + "**Prêmio acumulado: __" + slt.getPot() + "__**\n" + (highbet ? "     ⇩       ⇩      ⇩       ⇩      ⇩" : "              ⇩       ⇩       ⇩") + "\n┌──┬──┬──┬──┬──┐\n" + showSlots(i) + "\n└──┴──┴──┴──┴──┘\n" + (highbet ? "     ⇧       ⇧      ⇧       ⇧      ⇧" : "              ⇧       ⇧       ⇧")).queueAfter(3 + (3 * i), TimeUnit.SECONDS);
+					s.editMessage(s.getContentRaw() + "\n\n" + "**Prêmio acumulado: __" + slt.getPot() + "__**\n" + (highbet ? "     ⇩       ⇩      ⇩       ⇩      ⇩" : "              ⇩       ⇩       ⇩") + "\n┌──┬──┬──┬──┬──┐\n" + showSlots(i) + "\n└──┴──┴──┴──┴──┘\n" + (highbet ? "     ⇧       ⇧      ⇧       ⇧      ⇧" : "              ⇧       ⇧       ⇧")).queueAfter(3 + (3 * i), TimeUnit.SECONDS, null, Helper::doNothing);
 				else
-					s.editMessage(s.getContentRaw() + "\n\n" + "**Prêmio acumulado: __" + slt.getPot() + "__**\n" + (highbet ? "     ⇩       ⇩      ⇩       ⇩      ⇩" : "              ⇩       ⇩       ⇩") + "\n┌──┬──┬──┬──┬──┐\n" + showSlots(i) + "\n└──┴──┴──┴──┴──┘\n" + (highbet ? "     ⇧       ⇧      ⇧       ⇧      ⇧" : "              ⇧       ⇧       ⇧")).queueAfter(3 + (3 * i), TimeUnit.SECONDS, f -> r.run());
+					s.editMessage(s.getContentRaw() + "\n\n" + "**Prêmio acumulado: __" + slt.getPot() + "__**\n" + (highbet ? "     ⇩       ⇩      ⇩       ⇩      ⇩" : "              ⇩       ⇩       ⇩") + "\n┌──┬──┬──┬──┬──┐\n" + showSlots(i) + "\n└──┴──┴──┴──┴──┘\n" + (highbet ? "     ⇧       ⇧      ⇧       ⇧      ⇧" : "              ⇧       ⇧       ⇧")).queueAfter(3 + (3 * i), TimeUnit.SECONDS, f -> r.run(), Helper::doNothing);
 			}
 		});
 	}
@@ -275,21 +275,9 @@ public class SlotsCommand extends Command {
 				Slots.CHERRY + Slots.CHERRY + Slots.CHERRY + " -> x2\n" +
 				Slots.HEART + Slots.HEART + Slots.HEART + " -> x2.75\n" +
 				Slots.BELL + Slots.BELL + Slots.BELL + " -> x4\n" +
-				Slots.BAR + Slots.BAR + Slots.BAR + " -> x9\n" +
-				Slots.HORSESHOE + Slots.HORSESHOE + Slots.HORSESHOE + " -> x35\n" +
-				Slots.DIAMOND + Slots.DIAMOND + Slots.DIAMOND + " -> x50\n" +
+				Slots.BAR + Slots.BAR + Slots.BAR + " -> x7\n" +
+				Slots.HORSESHOE + Slots.HORSESHOE + Slots.HORSESHOE + " -> x12\n" +
+				Slots.DIAMOND + Slots.DIAMOND + Slots.DIAMOND + " -> x20\n" +
 				Slots.JACKPOT + Slots.JACKPOT + Slots.JACKPOT + " -> JACKPOT!\n";
-	}
-
-	private boolean anyCombination() {
-		if (Collections.frequency(rolled, Slots.LEMON) >= 3) return true;
-		else if (Collections.frequency(rolled, Slots.WATERMELON) >= 3) return true;
-		else if (Collections.frequency(rolled, Slots.CHERRY) >= 3) return true;
-		else if (Collections.frequency(rolled, Slots.HEART) >= 3) return true;
-		else if (Collections.frequency(rolled, Slots.BELL) >= 3) return true;
-		else if (Collections.frequency(rolled, Slots.BAR) >= 3) return true;
-		else if (Collections.frequency(rolled, Slots.HORSESHOE) >= 3) return true;
-		else if (Collections.frequency(rolled, Slots.DIAMOND) >= 3) return true;
-		else return Collections.frequency(rolled, Slots.JACKPOT) >= 3;
 	}
 }
