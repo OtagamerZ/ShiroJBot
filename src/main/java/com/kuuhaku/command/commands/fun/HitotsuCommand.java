@@ -82,7 +82,7 @@ public class HitotsuCommand extends Command {
 		Account acc = AccountDAO.getAccount(author.getId());
 
 		int bet = 0;
-		if (args.length > 1 && StringUtils.isNumeric(args[1])) {
+		if (args.length > 1 && StringUtils.isNumeric(args[0])) {
 			bet = Integer.parseInt(args[1]);
 			if (bet < 0) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-credit-amount")).queue();
