@@ -53,7 +53,7 @@ public class ExceedSelectCommand extends Command {
 			ExceedMember em = ExceedDAO.getExceedMember(author.getId());
 			if (em == null || em.getExceed().isBlank()) {
 				if (em != null && em.isBlocked()) {
-					channel.sendMessage(":x: | Você não pode entrar em nenhum Exceed até o mês que vem.").queue();
+					m.editMessage(":x: | Você não pode entrar em nenhum Exceed até o mês que vem.").queue();
 					return;
 				} else if (args.length == 0) {
 					channel.sendMessage("Exceed é um sistema global de clãs, onde todo mês o clã vencedor ira receber experiência em dobro por uma semana. A pontuação é dada pela soma da experiência de todos os membros do clã, **independente do servidor**.\n\n" +
