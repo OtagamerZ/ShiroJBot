@@ -102,7 +102,7 @@ public class ExceedRankCommand extends Command {
 
 				long total = exceeds.stream().mapToLong(Exceed::getExp).sum();
 
-				for (int i = 0; i < 6; i++) {
+				for (int i = 5; i >= 0; i--) {
 					int h = (int) (10 + ((exceeds.get(i).getExp() * 100 / total) * 90 / 100)) * 358 / 100 * 2;
 					g2d.setBackground(Color.black);
 					Profile.drawRotate(g2d, 186 + (113 * i), 577 - h, -45, names.get(i));
