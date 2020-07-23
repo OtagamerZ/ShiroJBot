@@ -42,7 +42,8 @@ public enum AnimeName {
 	ISHUZOKU_REVIEWERS,
 	HELLSING,
 	NARUTO,
-	MIRAI_NIKKI;
+	MIRAI_NIKKI,
+	DR_STONE;
 
 	@Override
 	public String toString() {
