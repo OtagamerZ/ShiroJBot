@@ -21,6 +21,7 @@ package com.kuuhaku.managers;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.dev.*;
+import com.kuuhaku.command.commands.exceed.ExceedLeaveCommand;
 import com.kuuhaku.command.commands.exceed.ExceedPaletteCommand;
 import com.kuuhaku.command.commands.exceed.ExceedRankCommand;
 import com.kuuhaku.command.commands.exceed.ExceedSelectCommand;
@@ -478,6 +479,9 @@ public class CommandManager {
 			));
 			put(ExceedPaletteCommand.class, new Argument(
 					"exceedpalette", new String[]{"expalette", "paletaex"}, "cmd_exceed-palette", EXCEED, false
+			));
+			put(ExceedLeaveCommand.class, new Argument(
+					"exceedsair", new String[]{"exleave", "sairex"}, "cmd_exceed-leave", EXCEED, true
 			));
 			/*
 			put(DisboardCommand.class, new Arguments(
