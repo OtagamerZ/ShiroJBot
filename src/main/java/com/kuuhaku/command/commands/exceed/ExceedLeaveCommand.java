@@ -53,6 +53,7 @@ public class ExceedLeaveCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		ExceedMember em = ExceedDAO.getExceedMember(author.getId());
+
 		if (em == null) {
 			channel.sendMessage(":x: | Você não faz parte de nenhum Exceed atualmente.").queue();
 			return;
