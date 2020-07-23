@@ -377,6 +377,9 @@ public class CommandManager {
 			put(VIPShopCommand.class, new Argument(
 					"vip", new String[]{"lojavip", "gemshop"}, "req_id", "cmd_vip", MISC, false
 			));
+			put(PayLoanCommand.class, new Argument(
+					"pagar", new String[]{"pay", "payloan"}, "cmd_pay-loan", MISC, false
+			));
 
 			//FUN
 			put(SadButTrueCommand.class, new Argument(
