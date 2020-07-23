@@ -162,7 +162,6 @@ public class ExceedSelectCommand extends Command {
 							}
 						}
 				);
-				m.delete().queue();
 			} else {
 				m.editMessage(":x: | Você já pertence à um exceed, não é possível trocá-lo.").queue();
 			}
