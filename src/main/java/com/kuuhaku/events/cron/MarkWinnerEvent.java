@@ -43,5 +43,7 @@ public class MarkWinnerEvent implements Job {
 					} catch (Exception ignore) {
 					}
 				}));
+
+		ExceedDAO.unblock();
 	}
 }
