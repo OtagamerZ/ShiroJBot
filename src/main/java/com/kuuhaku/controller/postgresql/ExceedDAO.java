@@ -35,6 +35,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ExceedDAO {
+	public static void unblock() {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		em.createQuery("UPDATE ExceedMember em SET em.blocked = false WHERE em.blocked = true").executeUpdate();
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
 	public static boolean hasExceed(String id) {
 		EntityManager em = Manager.getEntityManager();
 
