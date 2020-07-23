@@ -154,7 +154,7 @@ public class Member {
 	}
 
 	public void recalculateLevel() {
-		System.out.println(Math.sqrt(xp) / 100);
+		System.out.println(Math.sqrt(xp / 100f));
 	}
 
 	public void resetXp() {
