@@ -36,6 +36,9 @@ public class ExceedMember {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean victorious = false;
 
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean blocked = false;
+
 	public ExceedMember(String id, String ex) {
 		this.id = id;
 		this.exceed = ex;
@@ -66,5 +69,13 @@ public class ExceedMember {
 
 	public void setVictorious(boolean victorious) {
 		this.victorious = victorious;
+	}
+
+	public boolean isBlocked() {
+		return blocked;
+	}
+
+	public void setBlocked(boolean blocked) {
+		this.blocked = blocked;
 	}
 }
