@@ -24,10 +24,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/misc/PayLoanCommand.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/framework/Players.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/framework/Players.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -609,14 +607,7 @@
       <workItem from="1595332917291" duration="10714000" />
       <workItem from="1595347542359" duration="17501000" />
       <workItem from="1595419228077" duration="22237000" />
-      <workItem from="1595505589308" duration="1147000" />
-    </task>
-    <task id="LOCAL-01917" summary="Filtragem de menções">
-      <created>1595350514506</created>
-      <option name="number" value="01917" />
-      <option name="presentableId" value="LOCAL-01917" />
-      <option name="project" value="LOCAL" />
-      <updated>1595350514507</updated>
+      <workItem from="1595505589308" duration="1692000" />
     </task>
     <task id="LOCAL-01918" summary="Filtragem de menções">
       <created>1595350696691</created>
@@ -954,7 +945,14 @@
       <option name="project" value="LOCAL" />
       <updated>1595451528635</updated>
     </task>
-    <option name="localTasksCounter" value="1966" />
+    <task id="LOCAL-01966" summary="Correção geral">
+      <created>1595506851596</created>
+      <option name="number" value="01966" />
+      <option name="presentableId" value="LOCAL-01966" />
+      <option name="project" value="LOCAL" />
+      <updated>1595506851597</updated>
+    </task>
+    <option name="localTasksCounter" value="1967" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -992,7 +990,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção nos drops de crédito" />
     <MESSAGE value="Adição de auditoria de transações de créditos;&#10;Criação de trava de jogos;" />
     <MESSAGE value="Novas cartas: Hellsing" />
     <MESSAGE value="Correção na auditoria de transações" />
@@ -1017,7 +1014,8 @@
     <MESSAGE value="Novas cartas: Mirai Nikki" />
     <MESSAGE value="Correção no hitotsu" />
     <MESSAGE value="Novo meme: JoJo" />
-    <option name="LAST_COMMIT_MESSAGE" value="Novo meme: JoJo" />
+    <MESSAGE value="Correção geral" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção geral" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1158,11 +1156,11 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1587956411634" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1592942915575" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1595451560860">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1595506853083">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1595451560860" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1595506853083" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1594305494731">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
