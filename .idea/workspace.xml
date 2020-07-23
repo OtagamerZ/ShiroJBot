@@ -25,12 +25,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_ygimenez_Pagination_Utils_1_2_1b.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_ygimenez_Pagination_Utils_1_2_1c.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/exceed/ExceedLeaveCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/AnimeName.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/AnimeName.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/ChessCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/ChessCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/CrissCrossCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/CrissCrossCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/HitotsuCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/HitotsuCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/ExceedMember.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/ExceedMember.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -201,24 +204,24 @@
       <recent name="com.kuuhaku.command.commands.information.ComandosCommand" />
       <recent name="com.kuuhaku.command.commands.information.BotInfoCommand" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.command.commands.exceed" />
+      <recent name="com.kuuhaku.command.commands.misc" />
+      <recent name="com.kuuhaku.command.commands.fun" />
+      <recent name="com.kuuhaku.controller.postgresql" />
+      <recent name="com.kuuhaku.handlers.games.hitotsu" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\memes" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games\hitotsu" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\kawaipon" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\icons" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.kuuhaku.command.commands.misc" />
-      <recent name="com.kuuhaku.command.commands.fun" />
-      <recent name="com.kuuhaku.controller.postgresql" />
-      <recent name="com.kuuhaku.handlers.games.hitotsu" />
-      <recent name="com.kuuhaku.handlers.games.hitotsu.Hitotsu" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -612,14 +615,10 @@
       <workItem from="1595332917291" duration="10714000" />
       <workItem from="1595347542359" duration="17501000" />
       <workItem from="1595419228077" duration="22237000" />
-      <workItem from="1595505589308" duration="3079000" />
-    </task>
-    <task id="LOCAL-01919" summary="Filtragem de menções">
-      <created>1595350867354</created>
-      <option name="number" value="01919" />
-      <option name="presentableId" value="LOCAL-01919" />
-      <option name="project" value="LOCAL" />
-      <updated>1595350867354</updated>
+      <workItem from="1595505589308" duration="3461000" />
+      <workItem from="1595512521893" duration="62000" />
+      <workItem from="1595515650952" duration="599000" />
+      <workItem from="1595520563055" duration="957000" />
     </task>
     <task id="LOCAL-01920" summary="Filtragem de menções">
       <created>1595351221341</created>
@@ -957,7 +956,14 @@
       <option name="project" value="LOCAL" />
       <updated>1595507348173</updated>
     </task>
-    <option name="localTasksCounter" value="1968" />
+    <task id="LOCAL-01968" summary="Novas cartas: Dr. Stone">
+      <created>1595509950188</created>
+      <option name="number" value="01968" />
+      <option name="presentableId" value="LOCAL-01968" />
+      <option name="project" value="LOCAL" />
+      <updated>1595509950188</updated>
+    </task>
+    <option name="localTasksCounter" value="1969" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -995,7 +1001,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição de auditoria de transações de créditos;&#10;Criação de trava de jogos;" />
     <MESSAGE value="Novas cartas: Hellsing" />
     <MESSAGE value="Correção na auditoria de transações" />
     <MESSAGE value="Novas cartas: Naruto" />
@@ -1020,7 +1025,8 @@
     <MESSAGE value="Correção no hitotsu" />
     <MESSAGE value="Novo meme: JoJo" />
     <MESSAGE value="Correção geral" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção geral" />
+    <MESSAGE value="Novas cartas: Dr. Stone" />
+    <option name="LAST_COMMIT_MESSAGE" value="Novas cartas: Dr. Stone" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1046,11 +1052,11 @@
     </state>
     <state x="239" y="78" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.768@0.0.1366.768" timestamp="1591416974252" />
     <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1594058063826" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1595439154321">
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1595521171229">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="488" y="71" key="#com.intellij.ide.util.MemberChooser/0.0.1366.768@0.0.1366.768" timestamp="1593920634856" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1595439154321" />
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1595521171229" />
     <state x="688" y="395" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1588076307944">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1161,11 +1167,11 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1587956411634" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1592942915575" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1595507349456">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1595510041114">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1595507349456" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1595510041114" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1594305494731">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1205,10 +1211,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="645" y="400" key="git4idea.ui.GitResetDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1593018818159" />
-    <state x="239" y="152" key="new project wizard" timestamp="1587399286121">
+    <state x="239" y="152" key="new project wizard" timestamp="1595512583095">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="239" y="152" key="new project wizard/0.0.1680.1010@0.0.1680.1010" timestamp="1587399286121" />
+    <state x="239" y="152" key="new project wizard/0.0.1680.1010@0.0.1680.1010" timestamp="1595512583095" />
     <state x="496" y="233" width="672" height="677" key="run.anything.popup" timestamp="1594321736017">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
