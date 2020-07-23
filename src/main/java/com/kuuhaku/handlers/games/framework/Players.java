@@ -73,6 +73,9 @@ public class Players {
 
 	public void setWinner() {
 		winner = current;
+		if (winner != -1) {
+			losers.addAll(players.entrySet().stream().filter(e -> e.getKey() != winner).map(Map.Entry::getValue).collect(Collectors.toList()));
+		}
 	}
 
 	public void setWinner(User u) {
