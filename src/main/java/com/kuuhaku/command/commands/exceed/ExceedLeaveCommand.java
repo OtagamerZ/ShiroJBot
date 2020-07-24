@@ -72,7 +72,7 @@ public class ExceedLeaveCommand extends Command {
 						ExceedDAO.joinExceed(em);
 						ms.delete().queue(null, Helper::doNothing);
 					}
-				}), true, 1, TimeUnit.MINUTES)
+				}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 		);
 	}
 }

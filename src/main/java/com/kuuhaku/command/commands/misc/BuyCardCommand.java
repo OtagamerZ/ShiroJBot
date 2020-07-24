@@ -132,7 +132,7 @@ public class BuyCardCommand extends Command {
 			if (pages.size() == 0) {
 				channel.sendMessage("Ainda não há nenhuma carta anunciada.").queue();
 			} else
-				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5));
+				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
 			return;
 		}
 
