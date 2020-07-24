@@ -102,7 +102,7 @@ public class SellCardCommand extends Command {
 
 					s.delete().flatMap(d -> channel.sendMessage(":white_check_mark: | Carta anunciada com sucesso!")).queue();
 				}
-			}), true, 1, TimeUnit.MINUTES);
+			}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()));
 		});
 	}
 }

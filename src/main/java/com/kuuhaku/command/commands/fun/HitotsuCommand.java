@@ -153,6 +153,6 @@ public class HitotsuCommand extends Command {
 							t.execute(finalBet);
 						}
 					}
-				}), true, 1, TimeUnit.MINUTES));
+				}), false, 1, TimeUnit.MINUTES));
 	}
 }
