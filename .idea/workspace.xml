@@ -26,6 +26,8 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/ColorTesterCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/ColorTesterCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/misc/ProfileColorCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/misc/ProfileColorCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -614,14 +616,7 @@
       <workItem from="1595533608033" duration="836000" />
       <workItem from="1595535036372" duration="220000" />
       <workItem from="1595592272896" duration="9542000" />
-      <workItem from="1595607555585" duration="8758000" />
-    </task>
-    <task id="LOCAL-01954" summary="Correção no hitotsu">
-      <created>1595439655035</created>
-      <option name="number" value="01954" />
-      <option name="presentableId" value="LOCAL-01954" />
-      <option name="project" value="LOCAL" />
-      <updated>1595439655035</updated>
+      <workItem from="1595607555585" duration="9777000" />
     </task>
     <task id="LOCAL-01955" summary="Correção no hitotsu">
       <created>1595440019838</created>
@@ -959,7 +954,14 @@
       <option name="project" value="LOCAL" />
       <updated>1595616262686</updated>
     </task>
-    <option name="localTasksCounter" value="2003" />
+    <task id="LOCAL-02003" summary="Correção no comando slots">
+      <created>1595617217376</created>
+      <option name="number" value="02003" />
+      <option name="presentableId" value="LOCAL-02003" />
+      <option name="project" value="LOCAL" />
+      <updated>1595617217376</updated>
+    </task>
+    <option name="localTasksCounter" value="2004" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -997,7 +999,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Atualização da biblioteca de paginação" />
     <MESSAGE value="Correções na lista de cartas à venda" />
     <MESSAGE value="Parâmetros de pesquisa na loja de cartas" />
     <MESSAGE value="Lista completa de cartas obtidas" />
@@ -1022,7 +1023,8 @@
     <MESSAGE value="Correção no comando de convite" />
     <MESSAGE value="Correções gerais" />
     <MESSAGE value="Adição do comando para mudar a cor do perfil" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição do comando para mudar a cor do perfil" />
+    <MESSAGE value="Correção no comando slots" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção no comando slots" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1083,11 +1085,11 @@
     </state>
     <state x="463" y="274" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.768@0.0.1366.768" timestamp="1587355282784" />
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2" timestamp="1595616259801">
+    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2" timestamp="1595617214520">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1595616259801" />
+    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1595617214520" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1163,11 +1165,11 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1587956411634" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1592942915575" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1595616265384">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1595617224154">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1595616265384" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1595617224154" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1594305494731">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
