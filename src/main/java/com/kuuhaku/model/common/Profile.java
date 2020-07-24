@@ -127,7 +127,7 @@ public class Profile {
 		g2d.fillRect(268, 370, 177, 177);
 		g2d.fillRect(466, 370, 455, 177);
 
-		g2d.setColor(new Color(50, 50, 50));
+		g2d.setColor(new Color(0, 0, 0));
 		g2d.setStroke(new BasicStroke(3));
 		g2d.drawRect(268, 370, 177, 177);
 		g2d.drawRect(466, 370, 455, 177);
