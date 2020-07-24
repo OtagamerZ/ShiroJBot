@@ -59,12 +59,14 @@ public class RedeemCommand extends Command {
 
 		channel.sendMessage("Deseja realmente trocar seu acúmulo de 7 votos por uma gema?").queue(s ->
 				Pages.buttonize(s, Map.of(Helper.ACCEPT, (m, ms) -> {
-					acc.setStreak(0);
-					acc.addGem();
-					AccountDAO.saveAccount(acc);
+					if (m.getId().equals(author.getId())) {
+						acc.setStreak(0);
+						acc.addGem();
+						AccountDAO.saveAccount(acc);
 
-					s.delete().queue();
-					channel.sendMessage("Gema adquirida com sucesso! Use `" + prefix + "vip` para ver a loja de gemas.").queue();
+						s.delete().queue();
+						channel.sendMessage("Gema adquirida com sucesso! Use `" + prefix + "vip` para ver a loja de gemas.").queue();
+					}
 				}), true, 1, TimeUnit.MINUTES)
 		);
 	}
