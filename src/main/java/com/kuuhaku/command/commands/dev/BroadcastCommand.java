@@ -118,7 +118,7 @@ public class BroadcastCommand extends Command {
 
 				WebhookCluster cluster = new WebhookCluster(clients);
 				cluster.broadcast(wmb.build());
-				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5));
+				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
 				break;
 			case "parceiros":
 				List<Tags> ps = TagDAO.getAllPartners();
@@ -147,7 +147,7 @@ public class BroadcastCommand extends Command {
 					showResult(result, sb, pages, eb);
 				}
 
-				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5));
+				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
 				break;
 			default:
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_broadcast-invalid-type")).queue();

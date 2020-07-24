@@ -70,6 +70,6 @@ public class UsageCommand extends Command {
 			pages.add(new Page(PageType.EMBED, eb.build()));
 		}
 
-		channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5));
+		channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
 	}
 }

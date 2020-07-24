@@ -67,7 +67,7 @@ public class RedeemCommand extends Command {
 						s.delete().queue();
 						channel.sendMessage("Gema adquirida com sucesso! Use `" + prefix + "vip` para ver a loja de gemas.").queue();
 					}
-				}), true, 1, TimeUnit.MINUTES)
+				}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 		);
 	}
 }
