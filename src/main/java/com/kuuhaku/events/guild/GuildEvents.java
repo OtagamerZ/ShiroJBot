@@ -218,6 +218,7 @@ public class GuildEvents extends ListenerAdapter {
 					sortedLvls.keySet().stream().max(Integer::compare).ifPresent(i -> {
 						if (GuildDAO.getGuildById(guild.getId()).isLvlNotif() && !member.getRoles().contains(sortedLvls.get(i))) {
 							try {
+								if (!guild.getSelfMember().getRoles().get(0).canInteract(sortedLvls.get(i))) return;
 								guild.addRoleToMember(member, sortedLvls.get(i)).queue(s -> {
 									String content = author.getAsMention() + " ganhou o cargo " + sortedLvls.get(i).getAsMention() + "! :tada:";
 									if (finalLvlChannel != null) {
@@ -233,16 +234,7 @@ public class GuildEvents extends ListenerAdapter {
 											}
 										}, Helper::doNothing);
 									}
-								}, ex -> {
-									try {
-										throw ex;
-									} catch (IllegalArgumentException e) {
-										Map<String, Object> cl = gc.getCargoslvl();
-										cl.remove(String.valueOf(i));
-										GuildDAO.updateGuildSettings(gc);
-									} catch (Throwable ignore) {
-									}
-								});
+								}, Helper::doNothing);
 							} catch (IllegalArgumentException e) {
 								Map<String, Object> cl = gc.getCargoslvl();
 								cl.remove(String.valueOf(i));
