@@ -77,23 +77,31 @@ public class Profile {
 		int xOffset = 0;
 		int yOffset = 0;
 
-		Color main;
-		try {
-			BufferedImage bg = Helper.scaleImage(ImageIO.read(Helper.getImage(mb.getBg())), bi.getWidth(), bi.getHeight());
+		Color main = null;
+		if (!mb.getProfileColor().isBlank()) {
+			try {
+				main = Color.decode(mb.getProfileColor());
+			} catch (NumberFormatException ignore) {
+			}
+		}
+		if (main == null) {
+			try {
+				BufferedImage bg = Helper.scaleImage(ImageIO.read(Helper.getImage(mb.getBg())), bi.getWidth(), bi.getHeight());
 
-			if (bg.getWidth() > bi.getWidth()) xOffset = -(bg.getWidth() - bi.getWidth()) / 2;
-			if (bg.getHeight() > bi.getHeight()) yOffset = -(bg.getHeight() - bi.getHeight()) / 2;
+				if (bg.getWidth() > bi.getWidth()) xOffset = -(bg.getWidth() - bi.getWidth()) / 2;
+				if (bg.getHeight() > bi.getHeight()) yOffset = -(bg.getHeight() - bi.getHeight()) / 2;
 
-			g2d.drawImage(bg, xOffset, yOffset, null);
-			main = Helper.reverseColor(Helper.colorThief(mb.getBg()));
-		} catch (IOException e) {
-			BufferedImage bg = Helper.scaleImage(ImageIO.read(Helper.getImage("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg")), bi.getWidth(), bi.getHeight());
+				g2d.drawImage(bg, xOffset, yOffset, null);
+				main = Helper.reverseColor(Helper.colorThief(mb.getBg()));
+			} catch (IOException e) {
+				BufferedImage bg = Helper.scaleImage(ImageIO.read(Helper.getImage("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg")), bi.getWidth(), bi.getHeight());
 
-			if (bg.getWidth() > bi.getWidth()) xOffset = -(bg.getWidth() - bi.getWidth()) / 2;
-			if (bg.getHeight() > bi.getHeight()) yOffset = -(bg.getHeight() - bi.getHeight()) / 2;
+				if (bg.getWidth() > bi.getWidth()) xOffset = -(bg.getWidth() - bi.getWidth()) / 2;
+				if (bg.getHeight() > bi.getHeight()) yOffset = -(bg.getHeight() - bi.getHeight()) / 2;
 
-			g2d.drawImage(bg, xOffset, yOffset, null);
-			main = Helper.reverseColor(Helper.colorThief("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg"));
+				g2d.drawImage(bg, xOffset, yOffset, null);
+				main = Helper.reverseColor(Helper.colorThief("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg"));
+			}
 		}
 
 		Color lvlBar;

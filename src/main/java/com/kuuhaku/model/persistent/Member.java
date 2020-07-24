@@ -52,6 +52,9 @@ public class Member {
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String pseudoName = "";
 
+	@Column(columnDefinition = "VARCHAR(7) NOT NULL DEFAULT ''")
+	private String profileColor = "";
+
 
 	//TEXTS
 	@Column(columnDefinition = "TEXT")
@@ -169,6 +172,14 @@ public class Member {
 	public void resetXp() {
 		level = 1;
 		xp = 0;
+	}
+
+	public String getProfileColor() {
+		return profileColor;
+	}
+
+	public void setProfileColor(String profileColor) {
+		this.profileColor = profileColor;
 	}
 
 	public String getId() {

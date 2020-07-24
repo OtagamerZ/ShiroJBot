@@ -59,6 +59,7 @@ public class CommandManager {
 	private static final String REQ_KEY_FILE = "req_key-file";
 	private static final String REQ_CHANNEL = "req_channel";
 	private static final String REQ_MENTION_BET = "req_mention-bet";
+	private static final String REQ_COLOR = "req_color";
 	private final HashMap<Class<? extends Command>, Argument> commands = new HashMap<>() {
 		{
 			//DEV
@@ -245,7 +246,7 @@ public class CommandManager {
 					"rank", new String[]{"ranking", "top10"}, "req_global", "cmd_rank", INFO, true
 			));
 			put(ColorTesterCommand.class, new Argument(
-					"quecor", new String[]{"tcolor", "testcolor"}, "req_color", "cmd_color", INFO, false
+					"quecor", new String[]{"tcolor", "testcolor"}, REQ_COLOR, "cmd_color", INFO, false
 			));
 			put(LocalEmoteListCommand.class, new Argument(
 					"emotes", REQ_NAME, "cmd_emotes", INFO, true
@@ -290,6 +291,9 @@ public class CommandManager {
 			));
 			put(BiographyCommand.class, new Argument(
 					"bio", new String[]{"story", "desc"}, REQ_MESSAGE, "cmd_biography", MISC, false
+			));
+			put(ProfileColorCommand.class, new Argument(
+					"cordoperfil", new String[]{"profilecolor", "cp", "cd"}, REQ_COLOR, "cmd_profile-color", MISC, false
 			));
 			put(AsciiCommand.class, new Argument(
 					"ascii", REQ_TEXT, "cmd_ascii", MISC, false
