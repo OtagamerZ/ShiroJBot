@@ -114,7 +114,7 @@ public class KGotchiCommand extends Command {
 					pages.put(t.getButton(), new Page(PageType.EMBED, eb.build()));
 				});
 
-				channel.sendMessage((MessageEmbed) pages.get(FoodType.MEAT.getButton()).getContent()).queue(m -> Pages.categorize(m, pages, 1, TimeUnit.MINUTES));
+				channel.sendMessage((MessageEmbed) pages.get(FoodType.MEAT.getButton()).getContent()).queue(m -> Pages.categorize(m, pages, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId())));
 			} else {
 				Food f = FoodMenu.getFood(args[1].toLowerCase());
 				JSONObject bag = new JSONObject(k.getBag());
@@ -286,7 +286,7 @@ public class KGotchiCommand extends Command {
 								pages.put(t.getButton(), new Page(PageType.EMBED, eb.build()));
 							});
 
-							channel.sendMessage((MessageEmbed) pages.get(VanityType.HOUSE.getButton()).getContent()).queue(m -> Pages.categorize(m, pages, 1, TimeUnit.MINUTES));
+							channel.sendMessage((MessageEmbed) pages.get(VanityType.HOUSE.getButton()).getContent()).queue(m -> Pages.categorize(m, pages, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId())));
 						} else {
 							Vanity v = VanityMenu.getVanity(args[2].toLowerCase());
 
@@ -331,7 +331,7 @@ public class KGotchiCommand extends Command {
 								pages.put(t.getButton(), new Page(PageType.EMBED, eb.build()));
 							});
 
-							channel.sendMessage((MessageEmbed) pages.get(FoodType.MEAT.getButton()).getContent()).queue(m -> Pages.categorize(m, pages, 1, TimeUnit.MINUTES));
+							channel.sendMessage((MessageEmbed) pages.get(FoodType.MEAT.getButton()).getContent()).queue(m -> Pages.categorize(m, pages, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId())));
 						} else {
 							Food f = FoodMenu.getFood(args[2].toLowerCase());
 

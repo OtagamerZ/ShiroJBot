@@ -216,7 +216,7 @@ public class QuizCommand extends Command {
 			fields.sort(Comparator.comparing(MessageEmbed.Field::getName));
 			fields.forEach(eb::addField);
 			ShiroInfo.getGameLock().add(author.getId());
-			channel.sendMessage(eb.build()).queue(s -> Pages.buttonize(s, buttons, false, 1, TimeUnit.MINUTES));
+			channel.sendMessage(eb.build()).queue(s -> Pages.buttonize(s, buttons, false, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId())));
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}

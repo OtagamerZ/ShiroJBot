@@ -122,7 +122,7 @@ public class TradeCardCommand extends Command {
 						AccountDAO.saveAccount(tacc);
 
 						s.delete().flatMap(n -> channel.sendMessage("Troca concluída com sucesso!")).queue(null, Helper::doNothing);
-					}), true, 1, TimeUnit.MINUTES));
+					}), true, 1, TimeUnit.MINUTES, u -> Helper.equalsAny(u.getId(), author.getId(), other.getId())));
 		} else {
 			if (args.length < 5) {
 				channel.sendMessage(":x: | Você precisa mencionar uma carta, o tipo, qual carta você deseja e o tipo dela (`N` = normal, `C` = cromada) para realizar a troca.").queue();
@@ -177,7 +177,7 @@ public class TradeCardCommand extends Command {
 						KawaiponDAO.saveKawaipon(target);
 
 						s.delete().flatMap(n -> channel.sendMessage("Troca concluída com sucesso!")).queue(null, Helper::doNothing);
-					}), true, 1, TimeUnit.MINUTES));
+					}), true, 1, TimeUnit.MINUTES, u -> Helper.equalsAny(u.getId(), author.getId(), other.getId())));
 		}
 	}
 }
