@@ -123,7 +123,7 @@ public class Profile {
 		g2d.setClip(null);
 		g2d.fillRect(52, 350, 196, 200);
 
-		g2d.setColor(new Color(0, 0, 0, 150));
+		g2d.setColor(new Color(100, 100, 100, 150));
 		g2d.fillRect(268, 370, 177, 177);
 		g2d.fillRect(466, 370, 455, 177);
 
