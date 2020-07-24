@@ -216,7 +216,7 @@ public class Helper {
 		BufferedImage icon = ImageIO.read(con.getInputStream());
 
 		if (icon != null)
-			return new Color(ColorThief.getColor(icon)[0], ColorThief.getColor(icon)[1], ColorThief.getColor(icon)[2]);
+			return new Color(ColorThief.getColor(icon, 6, false)[0], ColorThief.getColor(icon, 6, false)[1], ColorThief.getColor(icon, 6, false)[2]);
 		else return getRandomColor();
 	}
 
