@@ -54,10 +54,10 @@ public class ColorTesterCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		if (args.length < 1) {
-            channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-color")).queue();
-            return;
-        }
+		if (args.length < 1 || !args[0].contains("#")) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-color")).queue();
+			return;
+		}
 
 		try {
 			BufferedImage bi = new BufferedImage(128, 128, BufferedImage.TYPE_INT_RGB);
