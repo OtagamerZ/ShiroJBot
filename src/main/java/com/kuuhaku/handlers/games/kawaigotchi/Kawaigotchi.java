@@ -203,6 +203,10 @@ public class Kawaigotchi {
 			else
 				mood -= rate.MOOD.fac / nature.getKindness() / (getVanity().has(VanityType.FENCE.toString()) ? VanityMenu.getVanity(getVanity().getString(VanityType.FENCE.toString())).getModifier() : 1);
 
+			if (hunger <= 0)
+				health -= rate.HEALTH.fac * 2;
+			else
+				health += rate.HEALTH.fac * (hunger / 100);
 			hunger -= rate.FOOD.fac;
 			energy -= rate.ENERGY.fac / nature.getEnergy();
 
