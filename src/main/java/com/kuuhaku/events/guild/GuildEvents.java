@@ -84,13 +84,19 @@ public class GuildEvents extends ListenerAdapter {
 			if (rawMessage.startsWith(";") && Main.getInfo().getDevelopers().contains(author.getId())) {
 				if (rawMessage.equals(";downloadfiles")) {
 					List<Card> cards = CardDAO.getCards();
+					Helper.logger(this.getClass()).info("Size: " + cards.size() + " images");
 					File imgDir = new File("/imgs");
 					imgDir.mkdirs();
 					for (Card c : cards) {
-						try {
-							File image = new File(imgDir, c.getId() + ".jpg");
-							ImageIO.write(ImageIO.read(Helper.getImage("https://i.imgur.com/" + c.getImgurId() + ".jpg")), "jpg", image);
-						} catch (IOException ignore) {
+						boolean success = false;
+						while (!success) {
+							try {
+								File image = new File(imgDir, c.getId() + ".jpg");
+								ImageIO.write(ImageIO.read(Helper.getImage("https://i.imgur.com/" + c.getImgurId() + ".jpg")), "jpg", image);
+								success = true;
+							} catch (IOException e) {
+								Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+							}
 						}
 					}
 					return;
