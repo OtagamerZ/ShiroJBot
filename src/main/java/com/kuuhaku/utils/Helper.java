@@ -108,8 +108,6 @@ public class Helper {
 			return PrivilegeLevel.MOD;
 		else if (TagDAO.getTagById(member.getGuild().getOwnerId()).isPartner() || TagDAO.getTagById(member.getId()).isPartner())
 			return PrivilegeLevel.PARTNER;
-		else if (member.getRoles().stream().anyMatch(r -> StringUtils.containsIgnoreCase(r.getName(), "dj")))
-			return PrivilegeLevel.DJ;
 		return PrivilegeLevel.USER;
 	}
 
