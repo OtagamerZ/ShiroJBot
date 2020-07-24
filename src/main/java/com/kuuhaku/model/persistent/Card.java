@@ -51,15 +51,8 @@ public class Card {
 	@Enumerated(EnumType.STRING)
 	private KawaiponRarity rarity = KawaiponRarity.COMMON;
 
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
-	private String imgurId = "";
-
 	public String getId() {
 		return id;
-	}
-
-	public String getImgurId() {
-		return imgurId;
 	}
 
 	public String getName() {
