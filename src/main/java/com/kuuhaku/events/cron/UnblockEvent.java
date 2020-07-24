@@ -42,9 +42,12 @@ public class UnblockEvent implements Job {
 
 	@Override
 	public void execute(JobExecutionContext context) {
-		if (LocalDateTime.now().getHour() % 12 == 0) {
-			RelayBlockList.clearBlockedThumbs();
-			RelayBlockList.refresh();
+		if (LocalDateTime.now().getHour() % 6 == 0) {
+			QuizDAO.resetUserStates();
+
+			if (LocalDateTime.now().getHour() % 12 == 0) {
+				RelayBlockList.clearBlockedThumbs();
+				RelayBlockList.refresh();
 
 			/*GuildDAO.getAllGuilds().forEach(gc -> {
 				if (gc.getCargoVip() != null && !gc.getCargoVip().isEmpty()) {
@@ -69,8 +72,7 @@ public class UnblockEvent implements Job {
 							});
 				}
 			});*/
-		} else if (LocalDateTime.now().getHour() % 6 == 0) {
-			QuizDAO.resetUserStates();
+			}
 		}
 
 		MemberDAO.getMutedMembers().forEach(m -> {

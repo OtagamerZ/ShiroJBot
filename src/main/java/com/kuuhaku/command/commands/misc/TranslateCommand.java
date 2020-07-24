@@ -48,7 +48,7 @@ public class TranslateCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 2) {
-			channel.sendMessage(":x: | Você precisa especificar de qual idioma e para qual idioma devo traduzir o texto.").queue();
+			channel.sendMessage(":x: | Você precisa especificar de qual idioma e para qual idioma devo traduzir o texto (`de>para`).").queue();
 			return;
 		} else if (!args[0].contains(">")) {
 			channel.sendMessage(":x: | O primeiro argumento deve ser de qual e para qual idioma devo traduzir (`de>para`).").queue();
@@ -57,6 +57,11 @@ public class TranslateCommand extends Command {
 
 		String text = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 		String[] fromTo = args[0].split(">");
+
+		if (fromTo.length < 2) {
+			channel.sendMessage(":x: | Você precisa especificar de qual idioma e para qual idioma devo traduzir o texto (`de>para`).").queue();
+			return;
+		}
 
 		try {
 			channel.sendMessage("**Traduzido de " + fromTo[0] + " para " + fromTo[1] + "**\n" + Tradutor.translate(fromTo[0], fromTo[1], text)).queue();
