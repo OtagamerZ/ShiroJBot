@@ -51,6 +51,8 @@ public class DiscordBotsListHandler {
 
 		Account acc = AccountDAO.getAccount(body.getString("user"));
 
+		acc.voted();
+
 		if (!body.getString("type").equals("test")) acc.addCredit(credit + (50 * acc.getStreak()), this.getClass());
 
 		try {
@@ -64,7 +66,7 @@ public class DiscordBotsListHandler {
 			eb.setTitle("Opa, obrigada por votar em mim! (combo " + acc.getStreak() + "/7 -> bônus " + 50 * acc.getStreak() + "c)");
 			eb.setDescription("Como agradecimento, aqui estão " + credit + (body.getBoolean("isWeekend") ? " (bônus x2)" : "") + " créditos para serem utilizados nos módulos que utilizam o sistema de dinheiro.");
 			eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
-			eb.addField("Pode resgatar uma gema?", acc.getStreak() + 1 >= 7 ? "SIM!!" : "Não", true);
+			eb.addField("Pode resgatar uma gema?", acc.getStreak() == 7 ? "SIM!!" : "Não", true);
 			eb.setColor(Color.cyan);
 
 			if (ExceedDAO.hasExceed(u.getId())) {
@@ -79,8 +81,6 @@ public class DiscordBotsListHandler {
 			chn.sendMessage(eb.build()).queue(null, Helper::doNothing);
 		} catch (RuntimeException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-		} finally {
-			acc.voted();
 		}
 	}
 }
