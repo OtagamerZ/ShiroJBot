@@ -49,7 +49,8 @@ public class ExceedDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
-			return em.find(ExceedMember.class, id) != null;
+			ExceedMember ex = em.find(ExceedMember.class, id);
+			return ex != null && !ex.getExceed().isBlank();
 		} finally {
 			em.close();
 		}
