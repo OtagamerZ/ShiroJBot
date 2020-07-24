@@ -97,7 +97,7 @@ public class KGotchiCommand extends Command {
 				jo.toMap().forEach((f, v) -> {
 					Food food = FoodMenu.getFood(f);
 					List<MessageEmbed.Field> field = fields.getOrDefault(food.getType(), new ArrayList<>());
-					field.add(new MessageEmbed.Field(food.getName() + " - " + v + " unidades\n(`" + prefix + "kgotchi alimentar " + f + "`)", "Bônus de humor: " + food.getMoodBoost() + "\nNutrição: " + food.getNutrition() + "\nSaúde: " + food.getHealthiness(), true));
+					field.add(new MessageEmbed.Field(food.getName() + " - " + v + " unidades\n(`" + prefix + "kgotchi alimentar " + f + "`)", food.getType() == FoodType.SPECIAL ? food.getSpecialDesc() : "Bônus de humor: " + food.getMoodBoost() + "\nNutrição: " + food.getNutrition() + "\nSaúde: " + food.getHealthiness(), true));
 					fields.put(food.getType(), field);
 				});
 
