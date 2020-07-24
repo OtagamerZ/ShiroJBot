@@ -21,11 +21,13 @@ package com.kuuhaku.events.guild;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.controller.sqlite.BlacklistDAO;
 import com.kuuhaku.controller.sqlite.CustomAnswerDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.CustomAnswers;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.MutedMember;
@@ -47,7 +49,10 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 
 import javax.annotation.Nonnull;
+import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
+import java.io.File;
+import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
@@ -77,6 +82,19 @@ public class GuildEvents extends ListenerAdapter {
 			} else prefix = Main.getInfo().getDefaultPrefix().toLowerCase();
 
 			if (rawMessage.startsWith(";") && Main.getInfo().getDevelopers().contains(author.getId())) {
+				if (rawMessage.equals(";downloadfiles")) {
+					List<Card> cards = CardDAO.getCards();
+					File imgDir = new File("/imgs");
+					imgDir.mkdirs();
+					for (Card c : cards) {
+						try {
+							File image = new File(imgDir, c.getId() + ".jpg");
+							ImageIO.write(ImageIO.read(Helper.getImage("https://i.imgur.com/" + c.getImgurId() + ".jpg")), "jpg", image);
+						} catch (IOException ignore) {
+						}
+					}
+					return;
+				}
 				try {
 					if (rawMessage.replace(";", "").length() == 0) {
 						channel.sendFile(message.getAttachments().get(0).downloadToFile().get()).queue();
