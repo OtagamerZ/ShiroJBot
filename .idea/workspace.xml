@@ -615,14 +615,7 @@
       <workItem from="1595533608033" duration="836000" />
       <workItem from="1595535036372" duration="220000" />
       <workItem from="1595592272896" duration="9542000" />
-      <workItem from="1595607555585" duration="5816000" />
-    </task>
-    <task id="LOCAL-01949" summary="Correção no hitotsu">
-      <created>1595436919036</created>
-      <option name="number" value="01949" />
-      <option name="presentableId" value="LOCAL-01949" />
-      <option name="project" value="LOCAL" />
-      <updated>1595436919036</updated>
+      <workItem from="1595607555585" duration="6566000" />
     </task>
     <task id="LOCAL-01950" summary="Correção no hitotsu">
       <created>1595437389119</created>
@@ -960,7 +953,14 @@
       <option name="project" value="LOCAL" />
       <updated>1595613791143</updated>
     </task>
-    <option name="localTasksCounter" value="1998" />
+    <task id="LOCAL-01998" summary="Correções gerais">
+      <created>1595613960637</created>
+      <option name="number" value="01998" />
+      <option name="presentableId" value="LOCAL-01998" />
+      <option name="project" value="LOCAL" />
+      <updated>1595613960637</updated>
+    </task>
+    <option name="localTasksCounter" value="1999" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1164,11 +1164,11 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1587956411634" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1592942915575" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1595613797540">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1595613965707">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1595613797540" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1595613965707" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1594305494731">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
