@@ -266,11 +266,7 @@ public class Helper {
 	}
 
 	public static Color reverseColor(Color c) {
-		float[] hsv = new float[3];
-		Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), hsv);
-		hsv[2] = (hsv[2] + 180) % 360;
-
-		return Color.getHSBColor(hsv[0], hsv[1], hsv[2]);
+		return new Color(255 - c.getRed(), 255 - c.getGreen(), 255 - c.getBlue());
 	}
 
 	public static String makeEmoteFromMention(String[] source) {
