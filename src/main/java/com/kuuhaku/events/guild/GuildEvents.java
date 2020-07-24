@@ -83,7 +83,7 @@ public class GuildEvents extends ListenerAdapter {
 
 			if (rawMessage.startsWith(";") && Main.getInfo().getDevelopers().contains(author.getId())) {
 				if (rawMessage.equals(";downloadfiles")) {
-					List<Card> cards = CardDAO.getCards();
+					List<Card> cards = CardDAO.getAllCards();
 					Helper.logger(this.getClass()).info("Size: " + cards.size() + " images");
 					File imgDir = new File("/imgs");
 					imgDir.mkdirs();
