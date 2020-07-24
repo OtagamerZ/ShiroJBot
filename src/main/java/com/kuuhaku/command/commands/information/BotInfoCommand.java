@@ -61,22 +61,22 @@ public class BotInfoCommand extends Command {
 
 		eb.setTitle(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-title"));
 		eb.setThumbnail(Main.getInfo().getSelfUser().getAvatarUrl());
-		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-1"), Main.getInfo().getUserByID(Main.getInfo().getNiiChan()).getAsTag(), true);
+		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-1"), Main.getInfo().getUserByID(Main.getInfo().getNiiChan()).getAsTag(), false);
 		StringBuilder sb = new StringBuilder();
 		Main.getInfo().getDevelopers().forEach(d -> sb.append("`").append(Main.getInfo().getUserByID(d).getAsTag()).append("`  "));
-		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-2"), sb.toString(), true);
-		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-3"), Main.getInfo().getSelfUser().getTimeCreated().format(DateTimeFormatter.ofPattern(ShiroInfo.getLocale(I18n.PT).getString("date-format"))), true);
-		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-4"), MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_BOT_INFO_SERVERS), TagDAO.getPartnerAmount()), true);
-		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-5"), MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_BOT_INFO_SERVERS), Main.getInfo().getAPI().getGuilds().size()), true);
-		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-6"), MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-registered-users"), MemberDAO.getAllMembers().size()), true);
-		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-7"), Main.getInfo().getVersion(), true);
+		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-2"), sb.toString(), false);
+		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-3"), Main.getInfo().getSelfUser().getTimeCreated().format(DateTimeFormatter.ofPattern(ShiroInfo.getLocale(I18n.PT).getString("date-format"))), false);
+		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-4"), MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_BOT_INFO_SERVERS), TagDAO.getPartnerAmount()), false);
+		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-5"), MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_BOT_INFO_SERVERS), Main.getInfo().getAPI().getGuilds().size()), false);
+		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-6"), MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-registered-users"), MemberDAO.getAllMembers().size()), false);
+		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-7"), Main.getInfo().getVersion(), false);
 		eb.addField("Links:",
 				"[" + ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-link-1") + "](https://discordapp.com/invite/9sgkzna) | " +
 						"[DiscordBots List](https://top.gg/bot/572413282653306901) | " +
 						"[Bots Para Discord](https://botsparadiscord.com/bots/572413282653306901) | " +
 						"[Github](https://github.com/OtagamerZ/ShiroJBot) | " +
 						"[" + ShiroInfo.getLocale(I18n.PT).getString("str_privacy-policy") + "](https://github.com/OtagamerZ/ShiroJBot/blob/master/PRIVACY_POLICY.md)"
-				, true);
+				, false);
 
 		try {
 			InputStream info = Helper.getImage("https://discordbots.org/api/widget/572413282653306901.png?usernamecolor=b463ff&topcolor=000000&middlecolor=1a1d23&datacolor=b463ff");
