@@ -33,6 +33,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -66,10 +67,16 @@ public class JojoCommand extends Command {
 		}
 
 		List<User> usrs = new ArrayList<>(message.getMentionedUsers());
+		String mention = "<@!{0}>";
+		String oldMention = "<@{0}>";
 
 		String msg = StringUtils.normalizeSpace(String.join(" ", args)
-				.replace(usrs.get(0).getAsMention(), "")
-				.replace(usrs.get(1).getAsMention(), ""));
+				.replace(MessageFormat.format(mention, usrs.get(0).getId()), "")
+				.replace(MessageFormat.format(oldMention, usrs.get(0).getId()), "")
+				.replace(MessageFormat.format(mention, usrs.get(1).getId()), "")
+				.replace(MessageFormat.format(oldMention, usrs.get(1).getId()), "")
+		);
+
 		try {
 			BufferedImage bi = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("memes/jojo.jpg")));
 			Graphics2D g2d = bi.createGraphics();
