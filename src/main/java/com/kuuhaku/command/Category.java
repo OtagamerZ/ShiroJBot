@@ -40,8 +40,8 @@ public enum Category {
 	FUN(ShiroInfo.getLocale(I18n.PT).getString("cat_fun-name"), "<:fun:674261700941185035>", "674261700941185035", ShiroInfo.getLocale(I18n.PT).getString("cat_fun-description"), PrivilegeLevel.USER),
 	MISC(ShiroInfo.getLocale(I18n.PT).getString("cat_misc-name"), "<:misc:674261700354113536>", "674261700354113536", ShiroInfo.getLocale(I18n.PT).getString("cat_misc-description"), PrivilegeLevel.USER),
 	INFO(ShiroInfo.getLocale(I18n.PT).getString("cat_info-name"), "<:info:674261700643651645>", "674261700643651645", ShiroInfo.getLocale(I18n.PT).getString("cat_info-description"), PrivilegeLevel.USER),
-	MUSICA(ShiroInfo.getLocale(I18n.PT).getString("cat_music-name"), "<:music:674261701507678220>", "674261701507678220", ShiroInfo.getLocale(I18n.PT).getString("cat_music-description"), PrivilegeLevel.DJ),
-	EXCEED(ShiroInfo.getLocale(I18n.PT).getString("cat_exceed-name"), "<:exceed:674261700312170496>", "674261700312170496", ShiroInfo.getLocale(I18n.PT).getString("cat_exceed-description"), PrivilegeLevel.EXCEED),
+	MUSICA(ShiroInfo.getLocale(I18n.PT).getString("cat_music-name"), "<:music:674261701507678220>", "674261701507678220", ShiroInfo.getLocale(I18n.PT).getString("cat_music-description"), PrivilegeLevel.USER),
+	EXCEED(ShiroInfo.getLocale(I18n.PT).getString("cat_exceed-name"), "<:exceed:674261700312170496>", "674261700312170496", ShiroInfo.getLocale(I18n.PT).getString("cat_exceed-description"), PrivilegeLevel.USER),
 	NSFW(ShiroInfo.getLocale(I18n.PT).getString("cat_nsfw-name"), "<:nsfw:687649035204558894>", "687649035204558894", ShiroInfo.getLocale(I18n.PT).getString("cat_nsfw-description"), PrivilegeLevel.USER);
 
 	private final String name;
