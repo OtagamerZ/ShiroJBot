@@ -22,7 +22,7 @@ import com.kuuhaku.utils.AnimeName;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.KawaiponRarity;
 import com.kuuhaku.utils.ShiroInfo;
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.FileUtils;
 import org.jdesktop.swingx.graphics.BlendComposite;
 import org.jdesktop.swingx.graphics.ColorUtilities;
 
@@ -31,6 +31,7 @@ import javax.persistence.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
@@ -75,7 +76,7 @@ public class Card {
 
 	public BufferedImage drawCard(boolean foil) {
 		try {
-			byte[] cardBytes = ShiroInfo.getCardCache().get(imgurId, () -> IOUtils.toByteArray(Helper.getImage("https://i.imgur.com/" + imgurId + ".jpg")));
+			byte[] cardBytes = ShiroInfo.getCardCache().get(id, () -> FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH"), id + ".jpg")));
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
 				BufferedImage card = ImageIO.read(bais);
 
