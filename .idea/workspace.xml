@@ -26,8 +26,8 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/BotInfoCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/BotInfoCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/misc/VIPShopCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/misc/VIPShopCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/JojoCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/fun/JojoCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/KGotchiCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/partner/KGotchiCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DiscordBotsListHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/DiscordBotsListHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -616,21 +616,8 @@
       <workItem from="1595520563055" duration="5202000" />
       <workItem from="1595533608033" duration="836000" />
       <workItem from="1595535036372" duration="220000" />
-      <workItem from="1595592272896" duration="9273000" />
-    </task>
-    <task id="LOCAL-01937" summary="Reformulação do sistema de jogos">
-      <created>1595365055990</created>
-      <option name="number" value="01937" />
-      <option name="presentableId" value="LOCAL-01937" />
-      <option name="project" value="LOCAL" />
-      <updated>1595365055990</updated>
-    </task>
-    <task id="LOCAL-01938" summary="Balanceamento do slots">
-      <created>1595423437889</created>
-      <option name="number" value="01938" />
-      <option name="presentableId" value="LOCAL-01938" />
-      <option name="project" value="LOCAL" />
-      <updated>1595423437889</updated>
+      <workItem from="1595592272896" duration="9542000" />
+      <workItem from="1595607555585" duration="532000" />
     </task>
     <task id="LOCAL-01939" summary="Balanceamento do slots">
       <created>1595423870353</created>
@@ -961,7 +948,21 @@
       <option name="project" value="LOCAL" />
       <updated>1595600685725</updated>
     </task>
-    <option name="localTasksCounter" value="1986" />
+    <task id="LOCAL-01986" summary="Correções gerais">
+      <created>1595602563694</created>
+      <option name="number" value="01986" />
+      <option name="presentableId" value="LOCAL-01986" />
+      <option name="project" value="LOCAL" />
+      <updated>1595602563694</updated>
+    </task>
+    <task id="LOCAL-01987" summary="Correções gerais">
+      <created>1595602744136</created>
+      <option name="number" value="01987" />
+      <option name="presentableId" value="LOCAL-01987" />
+      <option name="project" value="LOCAL" />
+      <updated>1595602744136</updated>
+    </task>
+    <option name="localTasksCounter" value="1988" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1165,11 +1166,11 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1587956411634" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1592942915575" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1595602565198">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1595602759746">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1595602565198" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1595602759746" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1594305494731">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1200,11 +1201,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="465" y="286" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595246935580" />
-    <state x="220" y="76" width="957" height="784" key="find.popup" timestamp="1595600518096">
+    <state x="220" y="76" width="957" height="784" key="find.popup" timestamp="1595608155143">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="362" y="134" width="774" height="562" key="find.popup/0.0.1366.768@0.0.1366.768" timestamp="1588044108124" />
-    <state x="220" y="76" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1595600518096" />
+    <state x="220" y="76" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1595608155143" />
     <state x="645" y="400" key="git4idea.ui.GitResetDialog" timestamp="1593018818159">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1213,10 +1214,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="239" y="152" key="new project wizard/0.0.1680.1010@0.0.1680.1010" timestamp="1595512583095" />
-    <state x="496" y="233" width="672" height="677" key="run.anything.popup" timestamp="1594321736017">
+    <state x="496" y="233" width="672" height="677" key="run.anything.popup" timestamp="1595608170951">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1594321736017" />
+    <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1595608170951" />
     <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1595506204536">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
