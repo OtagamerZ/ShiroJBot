@@ -155,7 +155,7 @@ public class ExceedSelectCommand extends Command {
 							if (u != null) {
 								u.openPrivateChannel().queue(c -> {
 									try {
-										c.sendMessage(author.getAsTag() + " juntou-se à " + ex + ", dê-o(a) as boas-vindas!").queue(null, Helper::doNothing);
+										c.sendMessage(author.getAsTag() + " juntou-se à " + ex + ", hooray!! :tada:").queue(null, Helper::doNothing);
 									} catch (Exception ignore) {
 									}
 								}, Helper::doNothing);
