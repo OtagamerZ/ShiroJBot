@@ -293,7 +293,7 @@ public class CommandManager {
 					"bio", new String[]{"story", "desc"}, REQ_MESSAGE, "cmd_biography", MISC, false
 			));
 			put(ProfileColorCommand.class, new Argument(
-					"cordoperfil", new String[]{"profilecolor", "cp", "cd"}, REQ_COLOR, "cmd_profile-color", MISC, false
+					"cordoperfil", new String[]{"profilecolor", "pc", "cp"}, REQ_COLOR, "cmd_profile-color", MISC, false
 			));
 			put(AsciiCommand.class, new Argument(
 					"ascii", REQ_TEXT, "cmd_ascii", MISC, false
