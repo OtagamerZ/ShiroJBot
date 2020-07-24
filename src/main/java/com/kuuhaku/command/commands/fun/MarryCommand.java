@@ -98,6 +98,11 @@ public class MarryCommand extends Command {
 					if (event.getAuthor().isBot() || event.getAuthor() != message.getMentionedUsers().get(0) || event.getChannel() != channel)
 						return;
 
+					if (WaifuDAO.isWaifued(author) || WaifuDAO.isWaifued(message.getMentionedUsers().get(0))) {
+						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_already-married")).queue();
+						return;
+					}
+
 					try {
 						Message msg = event.getMessage();
 						switch (msg.getContentRaw().toLowerCase()) {
