@@ -217,7 +217,7 @@ public class Helper {
 
 		try {
 			if (icon != null)
-				return new Color(ColorThief.getColor(icon, 5, true)[0], ColorThief.getColor(icon, 5, true)[1], ColorThief.getColor(icon, 5, true)[2]);
+				return new Color(ColorThief.getColor(icon)[0], ColorThief.getColor(icon)[1], ColorThief.getColor(icon)[2]);
 			else return getRandomColor();
 		} catch (NullPointerException e) {
 			return getRandomColor();
@@ -270,7 +270,11 @@ public class Helper {
 	}
 
 	public static Color reverseColor(Color c) {
-		return new Color(255 - c.getRed(), 255 - c.getGreen(), 255 - c.getBlue());
+		float[] hsv = new float[3];
+		Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), hsv);
+		hsv[2] = (hsv[2] + 180) % 360;
+
+		return Color.getHSBColor(hsv[0], hsv[1], hsv[2]);
 	}
 
 	public static String makeEmoteFromMention(String[] source) {
