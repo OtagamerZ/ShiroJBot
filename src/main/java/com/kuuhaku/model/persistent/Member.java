@@ -162,6 +162,10 @@ public class Member {
 		recalculateLevel();
 	}
 
+	public void halfXpKeepLevel() {
+		xp /= 2;
+	}
+
 	public void resetXp() {
 		level = 1;
 		xp = 0;
