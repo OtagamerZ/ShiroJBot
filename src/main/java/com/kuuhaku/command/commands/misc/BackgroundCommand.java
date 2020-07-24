@@ -67,9 +67,13 @@ public class BackgroundCommand extends Command {
 			com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(author.getId() + guild.getId());
 			m.setBg(args[0]);
 			MemberDAO.updateMemberConfigs(m);
-			channel.sendMessage("Imagem de fundo trocada com sucesso!").queue();
+			if (args[0].contains("discordapp"))
+				channel.sendMessage(":warning: | Imagens que utilizam o CDN do Discord (postadas no Discord) correm o risco de serem apagadas com o tempo, mas de todo modo: Imagem de fundo trocada com sucesso!").queue();
+			else channel.sendMessage("Imagem de fundo trocada com sucesso!").queue();
 		} catch (IOException | NullPointerException e) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-image")).queue();
+			if (args[0].contains("google"))
+				channel.sendMessage(":x: | Você pegou o link da **pesquisa do Google** bobo!").queue();
+			else channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-image")).queue();
 		}
     }
 }
