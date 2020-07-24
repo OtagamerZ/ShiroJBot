@@ -64,7 +64,7 @@ public class ExceedLeaveCommand extends Command {
 					if (mb.getId().equals(author.getId())) {
 						List<com.kuuhaku.model.persistent.Member> mbs = MemberDAO.getMemberByMid(mb.getId());
 						mbs.forEach(m -> {
-							m.halfXp();
+							m.halfXpKeepLevel();
 							com.kuuhaku.controller.postgresql.MemberDAO.saveMemberToBD(m);
 						});
 						em.setBlocked(true);
