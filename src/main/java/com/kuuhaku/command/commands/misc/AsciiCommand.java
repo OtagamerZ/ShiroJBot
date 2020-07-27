@@ -83,7 +83,7 @@ public class AsciiCommand extends Command {
 			Response response = caller.newCall(request).execute();
 			assert response.body() != null;
 			channel.sendMessage(":warning: | O texto ASCII pode parecer deformado devido ao tamanho do seu ecrã!\n```\n" + response.body().string() + "\n```").queue();
-		} catch (IOException e) {
+		} catch (IOException | IllegalArgumentException e) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_api-error")).queue();
 		}
 	}
