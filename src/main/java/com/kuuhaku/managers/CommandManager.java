@@ -296,7 +296,7 @@ public class CommandManager {
 					"cordoperfil", new String[]{"profilecolor", "pc", "cp"}, REQ_COLOR, "cmd_profile-color", MISC, false
 			));
 			put(AsciiCommand.class, new Argument(
-					"ascii", REQ_TEXT, "cmd_ascii", MISC, false
+					"ascii", "req_text-image", "cmd_ascii", MISC, false
 			));
 			put(AvatarCommand.class, new Argument(
 					"avatar", "req_mention-guild", "cmd_avatar", MISC, false
