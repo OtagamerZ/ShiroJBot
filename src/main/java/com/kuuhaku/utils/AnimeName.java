@@ -43,7 +43,8 @@ public enum AnimeName {
 	HELLSING,
 	NARUTO,
 	MIRAI_NIKKI,
-	DR_STONE;
+	DR_STONE,
+	KIMETSU_NO_YAIBA;
 
 	@Override
 	public String toString() {

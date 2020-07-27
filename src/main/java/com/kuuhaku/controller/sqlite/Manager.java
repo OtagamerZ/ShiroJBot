@@ -29,12 +29,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Manager {
-
 	private static EntityManagerFactory emf;
+	private static File DBfile = null;
 
 	public static void connect() throws IOException {
-		File DBfile = File.createTempFile("shiro", ".db");
-		DBfile.deleteOnExit();
+		DBfile = File.createTempFile("shiro", ".db");
 
 		Map<String, String> props = new HashMap<>();
 		props.put("javax.persistence.jdbc.url", "jdbc:sqlite:" + DBfile.getPath());
@@ -59,6 +58,7 @@ public class Manager {
 		if (emf != null) {
 			emf.close();
 			Helper.logger(Manager.class).info("Ligação à base de dados desfeita.");
+			DBfile.delete();
 		}
 	}
 }
