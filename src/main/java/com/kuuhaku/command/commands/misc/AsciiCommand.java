@@ -90,6 +90,7 @@ public class AsciiCommand extends Command {
 
 	private String asciify(BufferedImage bi) {
 		final char base = '\u2800';
+		final int threshold = 127;
 
 		BufferedImage in = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2d = in.createGraphics();
@@ -99,12 +100,6 @@ public class AsciiCommand extends Command {
 		RescaleOp ro = new RescaleOp(1, -50, null);
 		in = ro.filter(in, in);
 
-		int threshold = getGrayScale(in.getRGB(0, 0));
-		for (int y = 0; y < in.getHeight(); y++) {
-			for (int x = 0; x < in.getWidth(); x++) {
-				threshold = (threshold + getGrayScale(in.getRGB(x, y))) / 2;
-			}
-		}
 
 		StringBuilder sb = new StringBuilder();
 		for (int y = 0; y < in.getHeight(); y += 4) {
