@@ -21,11 +21,14 @@ package com.kuuhaku.command.commands.moderation;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.CustomAnswerDAO;
+import com.kuuhaku.model.persistent.CustomAnswers;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 
 import javax.persistence.NoResultException;
+import java.util.List;
 
 public class RemoveAnswerCommand extends Command {
 
@@ -50,10 +53,15 @@ public class RemoveAnswerCommand extends Command {
 		if (args.length == 0) {
 			channel.sendMessage(":x: | Você precisa especificar um ID.").queue();
 			return;
+		} else if (Helper.equalsAny(args[0], "nada", "nothing")) {
+			List<CustomAnswers> cas = CustomAnswerDAO.getCAByGuild(guild.getId());
+			cas.forEach(CustomAnswerDAO::removeCAFromDB);
+			channel.sendMessage("Não vou mais responder nenhuma mensagem customizada configurada até este momento.").queue();
+			return;
 		} else if (!StringUtils.isNumeric(args[0])) {
 			channel.sendMessage(":x: | O ID deve ser um valor numérico informado na lista de respostas (`" + prefix + "fale lista`).").queue();
 			return;
-        }
+		}
 
         try {
             CustomAnswerDAO.removeCAFromDB(CustomAnswerDAO.getCAByID(Long.parseLong(args[0])));

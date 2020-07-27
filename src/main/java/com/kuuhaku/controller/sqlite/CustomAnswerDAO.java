@@ -55,6 +55,21 @@ public class CustomAnswerDAO {
 		return ca;
 	}
 
+	@SuppressWarnings("unchecked")
+	public static List<CustomAnswers> getCAByGuild(String id) {
+		EntityManager em = Manager.getEntityManager();
+		CustomAnswers ca;
+
+		Query q = em.createQuery("SELECT c FROM CustomAnswers c WHERE guildID = ?1 AND markForDelete = FALSE", CustomAnswers.class);
+		q.setParameter(1, id);
+
+		try {
+			return (List<CustomAnswers>) q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
 	public static void addCAtoDB(Guild g, String trigger, String answer) {
 		EntityManager em = Manager.getEntityManager();
 
