@@ -99,7 +99,13 @@ public class AsciiCommand extends Command {
 		RescaleOp ro = new RescaleOp(1, -50, null);
 		in = ro.filter(in, in);
 
-		int threshold = 75;
+		int threshold = getGrayScale(in.getRGB(0, 0));
+		for (int y = 0; y < in.getHeight(); y++) {
+			for (int x = 0; x < in.getWidth(); x++) {
+				if (in.getRGB(x, y) == Color.BLACK.getRGB() || in.getRGB(x, y) == Color.WHITE.getRGB()) continue;
+				threshold = (threshold + getGrayScale(in.getRGB(x, y))) / 2;
+			}
+		}
 
 		StringBuilder sb = new StringBuilder();
 		for (int y = 0; y < in.getHeight(); y += 4) {
