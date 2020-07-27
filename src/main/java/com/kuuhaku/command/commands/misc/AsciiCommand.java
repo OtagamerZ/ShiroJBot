@@ -90,9 +90,8 @@ public class AsciiCommand extends Command {
 
 	private String asciify(BufferedImage bi) {
 		final char base = '\u2800';
-		final int threshold = Color.GRAY.getRGB();
 
-		BufferedImage in = new BufferedImage(100, 100, BufferedImage.TYPE_BYTE_GRAY);
+		BufferedImage in = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2d = in.createGraphics();
 		g2d.drawImage(bi, 0, 0, 100, 100, null);
 		g2d.dispose();
@@ -100,22 +99,23 @@ public class AsciiCommand extends Command {
 		RescaleOp ro = new RescaleOp(1, -50, null);
 		in = ro.filter(in, in);
 
+		int threshold = 75;
 
 		StringBuilder sb = new StringBuilder();
 		for (int y = 0; y < in.getHeight(); y += 4) {
 			for (int x = 0; x < in.getWidth(); x += 2) {
 				int bytes = 0;
 
-				if (in.getRGB(x, y) >= threshold) bytes += 1;
-				if (in.getRGB(x, y + 1) >= threshold) bytes += 2;
-				if (in.getRGB(x, y + 2) >= threshold) bytes += 4;
+				if (getGrayScale(in.getRGB(x, y)) >= threshold) bytes += 1;
+				if (getGrayScale(in.getRGB(x, y + 1)) >= threshold) bytes += 2;
+				if (getGrayScale(in.getRGB(x, y + 2)) >= threshold) bytes += 4;
 
-				if (in.getRGB(x + 1, y) >= threshold) bytes += 8;
-				if (in.getRGB(x + 1, y + 1) >= threshold) bytes += 16;
-				if (in.getRGB(x + 1, y + 2) >= threshold) bytes += 32;
+				if (getGrayScale(in.getRGB(x + 1, y)) >= threshold) bytes += 8;
+				if (getGrayScale(in.getRGB(x + 1, y + 1)) >= threshold) bytes += 16;
+				if (getGrayScale(in.getRGB(x + 1, y + 2)) >= threshold) bytes += 32;
 
-				if (in.getRGB(x, y + 3) >= threshold) bytes += 64;
-				if (in.getRGB(x + 1, y + 3) >= threshold) bytes += 128;
+				if (getGrayScale(in.getRGB(x, y + 3)) >= threshold) bytes += 64;
+				if (getGrayScale(in.getRGB(x + 1, y + 3)) >= threshold) bytes += 128;
 
 				if (bytes > 0) sb.append(Character.toString(base + bytes));
 				else sb.append("⡀");
@@ -124,5 +124,13 @@ public class AsciiCommand extends Command {
 		}
 
 		return sb.toString();
+	}
+
+	public int getGrayScale(int rgb) {
+		int r = (rgb >> 16) & 0xff;
+		int g = (rgb >> 8) & 0xff;
+		int b = (rgb) & 0xff;
+
+		return (int) (0.2126 * r + 0.7152 * g + 0.0722 * b);
 	}
 }
