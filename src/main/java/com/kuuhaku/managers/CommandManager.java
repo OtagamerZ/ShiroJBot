@@ -157,7 +157,7 @@ public class CommandManager {
 
 			//MODERATION
 			put(RemoveAnswerCommand.class, new Argument(
-					"nãofale", REQ_ID, "cmd_dont-say", MODERACAO, false
+					"nãofale", "req_id-nothing", "cmd_dont-say", MODERACAO, false
 			));
 			put(SettingsCommand.class, new Argument(
 					"settings", new String[]{"definicoes", "parametros", "configs"}, "req_parameter", "cmd_settings", MODERACAO, false
@@ -365,7 +365,7 @@ public class CommandManager {
 					"anunciar", new String[]{"sell"}, "req_card-price-type", "cmd_sell-card", MISC, true
 			));
 			put(PseudoNameCommand.class, new Argument(
-					"pseudonimo", new String[]{"pnome", "pname"}, "req_name", "cmd_pseudo-name", MISC, true
+					"pseudonimo", new String[]{"pnome", "pname"}, REQ_NAME, "cmd_pseudo-name", MISC, true
 			));
 			put(PseudoAvatarCommand.class, new Argument(
 					"pseudoavatar", new String[]{"pavatar"}, REQ_LINK, "cmd_pseudo-avatar", MISC, true
@@ -374,13 +374,13 @@ public class CommandManager {
 					"carta", new String[]{"card", "see", "olhar"}, "req_card-type", "cmd_see-card", MISC, false
 			));
 			put(LoanCommand.class, new Argument(
-					"emprestimo", new String[]{"emp", "loan"}, "req_id", "cmd_loan", MISC, false
+					"emprestimo", new String[]{"emp", "loan"}, REQ_ID, "cmd_loan", MISC, false
 			));
 			put(RedeemCommand.class, new Argument(
 					"trocargema", new String[]{"resgatar", "redeem"}, "cmd_redeem", MISC, true
 			));
 			put(VIPShopCommand.class, new Argument(
-					"vip", new String[]{"lojavip", "gemshop"}, "req_id", "cmd_vip", MISC, false
+					"vip", new String[]{"lojavip", "gemshop"}, REQ_ID, "cmd_vip", MISC, false
 			));
 			put(PayLoanCommand.class, new Argument(
 					"pagar", new String[]{"pay", "payloan"}, "cmd_pay-loan", MISC, false
