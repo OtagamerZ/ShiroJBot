@@ -82,7 +82,6 @@
     <orderEntry type="library" name="Gradle: com.github.kevinsawicki:http-request:6.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jasypt:jasypt:1.9.2" level="project" />
     <orderEntry type="library" name="Gradle: org.threeten:threetenbp:1.4.4" level="project" />
-    <orderEntry type="library" name="Gradle: org.swinglabs.swingx:swingx-graphics:1.6.5-1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.api-client:google-api-client:1.25.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.oauth-client:google-oauth-client:1.25.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.http-client:google-http-client-jackson2:1.25.0" level="project" />
@@ -129,7 +128,6 @@
     <orderEntry type="library" name="Gradle: org.dom4j:dom4j:2.1.1" level="project" />
     <orderEntry type="library" name="Gradle: com.mchange:mchange-commons-java:0.2.15" level="project" />
     <orderEntry type="library" name="Gradle: commons-logging:commons-logging:1.2" level="project" />
-    <orderEntry type="library" name="Gradle: org.swinglabs.swingx:swingx-common:1.6.5-1" level="project" />
     <orderEntry type="library" name="Gradle: org.antlr:antlr4-runtime:4.7.2" level="project" />
     <orderEntry type="library" name="Gradle: com.graphql-java:java-dataloader:2.1.1" level="project" />
     <orderEntry type="library" name="Gradle: org.reactivestreams:reactive-streams:1.0.2" level="project" />

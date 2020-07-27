@@ -32,7 +32,6 @@ import org.jetbrains.annotations.NonNls;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.RescaleOp;
 import java.io.IOException;
 
 public class AsciiCommand extends Command {
@@ -95,9 +94,6 @@ public class AsciiCommand extends Command {
 		Graphics2D g2d = in.createGraphics();
 		g2d.drawImage(bi, 0, 0, 100, 100, null);
 		g2d.dispose();
-
-		RescaleOp ro = new RescaleOp(1, -50, null);
-		in = ro.filter(in, in);
 
 		int threshold = getGrayScale(in.getRGB(0, 0));
 		for (int y = 0; y < in.getHeight(); y++) {
