@@ -66,6 +66,7 @@ public class ExceedLeaveCommand extends Command {
 						mbs.forEach(m -> {
 							m.halfXpKeepLevel();
 							com.kuuhaku.controller.postgresql.MemberDAO.saveMemberToBD(m);
+							MemberDAO.updateMemberConfigs(m);
 						});
 						em.setBlocked(true);
 						em.setExceed("");
