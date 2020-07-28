@@ -44,7 +44,10 @@ public enum AnimeName {
 	NARUTO,
 	MIRAI_NIKKI,
 	DR_STONE,
-	KIMETSU_NO_YAIBA;
+	KIMETSU_NO_YAIBA,
+	MONSTER_MUSUME,
+	GATE,
+	NANATSU_NO_TAIZAI;
 
 	@Override
 	public String toString() {
