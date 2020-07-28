@@ -21,7 +21,6 @@ package com.kuuhaku.controller.postgresql;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.utils.AnimeName;
 import com.kuuhaku.utils.KawaiponRarity;
-import org.apache.commons.lang3.ArrayUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -57,24 +56,12 @@ public class CardDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static List<Card> getAllCards() {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createQuery("SELECT c FROM Card c", Card.class);
-		List<Card> c = (List<Card>) q.getResultList();
-
-		em.close();
-
-		return c;
-	}
-
-	@SuppressWarnings("unchecked")
 	public static List<Card> getCards() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity <> 'ULTIMATE'", Card.class);
+		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity <> 'ULTIMATE' AND anime IN :animes", Card.class);
+		q.setParameter("animes", AnimeName.values());
 		List<Card> c = (List<Card>) q.getResultList();
-		c.removeIf(cd -> !ArrayUtils.contains(AnimeName.values(), cd.getAnime()));
 
 		em.close();
 
@@ -99,8 +86,9 @@ public class CardDAO {
 	public static List<Card> getCardsByRarity(KawaiponRarity rarity) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity = :rarity", Card.class);
+		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity = :rarity AND anime IN :animes", Card.class);
 		q.setParameter("rarity", rarity);
+		q.setParameter("animes", AnimeName.values());
 
 		try {
 			return (List<Card>) q.getResultList();
@@ -112,7 +100,8 @@ public class CardDAO {
 	public static long totalCards() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity <> 'ULTIMATE'", Long.class);
+		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity <> 'ULTIMATE' AND anime IN :animes", Long.class);
+		q.setParameter("animes", AnimeName.values());
 
 		try {
 			return (long) q.getSingleResult();
@@ -137,8 +126,9 @@ public class CardDAO {
 	public static long totalCards(KawaiponRarity rarity) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity = :rarity", Long.class);
+		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity = :rarity AND anime IN :animes", Long.class);
 		q.setParameter("rarity", rarity);
+		q.setParameter("animes", AnimeName.values());
 
 		try {
 			return (long) q.getSingleResult();
