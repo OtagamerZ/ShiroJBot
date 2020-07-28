@@ -18,11 +18,13 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.TransactionDAO;
 import com.kuuhaku.utils.CreditLoan;
 import com.kuuhaku.utils.Helper;
+import net.dv8tion.jda.api.EmbedBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -53,6 +55,12 @@ public class Account {
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int streak = 0;
+
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean remind = false;
+
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean notified = false;
 
 	public String getUserId() {
 		return userId;
@@ -118,7 +126,32 @@ public class Account {
 		} catch (DateTimeParseException ignore) {
 		} finally {
 			lastVoted = today.format(Helper.dateformat);
+			notified = false;
 			AccountDAO.saveAccount(this);
+		}
+	}
+
+	public void notifyVote() {
+		if (remind) {
+			ZonedDateTime today = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3"));
+			ZonedDateTime lastVote = ZonedDateTime.parse(lastVoted, Helper.dateformat);
+
+			if (today.isAfter(lastVote.plusHours(12))) {
+				try {
+					Main.getInfo().getUserByID(userId).openPrivateChannel().queue(c -> {
+						EmbedBuilder eb = new EmbedBuilder();
+						eb.setColor(Helper.getRandomColor());
+						eb.setTitle("Opa, você já pode votar novamente!");
+						eb.setDescription("Como você pediu, estou aqui para lhe avisar que você já pode [votar novamente](https://top.gg/bot/572413282653306901/vote) para ganhar mais um acúmulo de votos e uma quantia de créditos!");
+						eb.setFooter("Data do último voto: " + lastVoted);
+						c.sendMessage(eb.build()).queue(null, Helper::doNothing);
+					}, Helper::doNothing);
+				} catch (NullPointerException ignore) {
+				} finally {
+					notified = true;
+					AccountDAO.saveAccount(this);
+				}
+			}
 		}
 	}
 
@@ -148,5 +181,13 @@ public class Account {
 
 	public void removeGem(int qtd) {
 		gems -= qtd;
+	}
+
+	public boolean shouldRemind() {
+		return remind;
+	}
+
+	public void setRemind(boolean remind) {
+		this.remind = remind;
 	}
 }

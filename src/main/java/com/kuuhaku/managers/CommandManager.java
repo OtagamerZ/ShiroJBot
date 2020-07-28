@@ -284,6 +284,9 @@ public class CommandManager {
 			put(RemainingCardsCommand.class, new Argument(
 					"cartasrestantes", new String[]{"restante", "remaining"}, "req_anime", "cmd_remaining-cards", INFO, false
 			));
+			put(RemindMeCommand.class, new Argument(
+					"melembre", new String[]{"remindme", "notifyvote", "meavise"}, "cmd_remind-me", INFO, false
+			));
 
 			//MISC
 			put(BackgroundCommand.class, new Argument(
