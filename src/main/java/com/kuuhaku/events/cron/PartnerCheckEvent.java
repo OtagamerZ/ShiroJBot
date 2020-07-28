@@ -19,7 +19,9 @@
 package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.TagDAO;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Guild;
 import org.quartz.Job;
@@ -35,6 +37,7 @@ public class PartnerCheckEvent implements Job {
 	@Override
 	public void execute(JobExecutionContext context) {
 		Main.getJibril().getGuilds().forEach(PartnerCheckEvent::notif);
+		AccountDAO.getNotifiableAccounts().forEach(Account::notifyVote);
 	}
 
 	private static void notif(Guild g) {

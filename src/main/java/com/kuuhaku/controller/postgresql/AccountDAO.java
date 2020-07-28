@@ -23,8 +23,21 @@ import com.kuuhaku.model.persistent.Account;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import java.util.List;
 
 public class AccountDAO {
+	@SuppressWarnings("unchecked")
+	public static List<Account> getNotifiableAccounts() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT a FROM Account a WHERE remind = TRUE", Account.class);
+
+		try {
+			return (List<Account>) q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
 
 	public static Account getAccount(String id) {
 		EntityManager em = Manager.getEntityManager();
