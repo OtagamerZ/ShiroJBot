@@ -25,6 +25,7 @@ import com.kuuhaku.utils.KawaiponRarity;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import java.util.EnumSet;
 import java.util.List;
 
 public class CardDAO {
@@ -60,7 +61,7 @@ public class CardDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity <> 'ULTIMATE' AND anime IN :animes", Card.class);
-		q.setParameter("animes", AnimeName.values());
+		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
 		List<Card> c = (List<Card>) q.getResultList();
 
 		em.close();
@@ -88,7 +89,7 @@ public class CardDAO {
 
 		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity = :rarity AND anime IN :animes", Card.class);
 		q.setParameter("rarity", rarity);
-		q.setParameter("animes", AnimeName.values());
+		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
 
 		try {
 			return (List<Card>) q.getResultList();
@@ -101,7 +102,7 @@ public class CardDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity <> 'ULTIMATE' AND anime IN :animes", Long.class);
-		q.setParameter("animes", AnimeName.values());
+		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
 
 		try {
 			return (long) q.getSingleResult();
@@ -128,7 +129,7 @@ public class CardDAO {
 
 		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity = :rarity AND anime IN :animes", Long.class);
 		q.setParameter("rarity", rarity);
-		q.setParameter("animes", AnimeName.values());
+		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
 
 		try {
 			return (long) q.getSingleResult();
