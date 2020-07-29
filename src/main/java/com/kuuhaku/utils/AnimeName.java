@@ -47,7 +47,9 @@ public enum AnimeName {
 	KIMETSU_NO_YAIBA,
 	MONSTER_MUSUME,
 	GATE,
-	NANATSU_NO_TAIZAI;
+	NANATSU_NO_TAIZAI,
+	STEINS_GATE,
+	MOB_PSYCHO_100;
 
 	@Override
 	public String toString() {
