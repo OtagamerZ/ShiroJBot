@@ -126,8 +126,8 @@ public class Profile {
 		g2d.setClip(new Rectangle2D.Float(0, 100, w, 250));
 
 		long xpToNext = (long) ((Math.pow(mb.getLevel(), 2) * 100) - (Math.pow(mb.getLevel() - 1, 2) * 100));
-		long currentXp = (long) ((mb.getXp() * 240) - (Math.pow(mb.getLevel() - 1, 2) * 100));
-		g2d.fillArc(40, 190, avatar.getWidth() + 20, avatar.getHeight() + 20, 210, (int) -Math.max(0, currentXp * 240 / xpToNext));
+		long currentXp = (long) (mb.getXp() - (Math.pow(mb.getLevel() - 1, 2) * 100));
+		g2d.fillArc(40, 190, avatar.getWidth() + 20, avatar.getHeight() + 20, 210, (int) -Helper.clamp(currentXp * 240 / xpToNext, 0, 240));
 
 		g2d.setColor(main);
 		g2d.setClip(null);
