@@ -95,9 +95,9 @@ public class Card {
 				g2d.drawImage(card, 10, 10, 225, 350, null);
 
 				if (foil) {
-					g2d.setComposite(BlendComposite.Hue);
+					//g2d.setComposite(BlendComposite.Hue);
 					g2d.drawImage(adjust(card), 10, 10, 225, 350, null);
-					g2d.setComposite(AlphaComposite.SrcOver);
+					//g2d.setComposite(AlphaComposite.SrcOver);
 				}
 				g2d.drawImage(frameCanvas, 0, 0, null);
 
