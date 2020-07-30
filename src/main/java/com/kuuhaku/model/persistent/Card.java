@@ -136,7 +136,7 @@ public class Card {
 				Color col = new Color(rgb, true);
 				col = new Color(col.getRed(), col.getBlue(), col.getGreen());
 				float[] hsv = ColorUtilities.RGBtoHSL(col);
-				hsv[0] = ((hsv[0] * 255 + Integer.parseInt(DynamicParameterDAO.getParam("SHINY_CARD_OFFSET").getValue())) % 255) / 255;
+				hsv[0] = ((hsv[0] * 255 + Integer.parseInt(DynamicParameterDAO.getParam("FOIL_CARD_OFFSET").getValue())) % 255) / 255;
 
 				out.setRGB(x, y, ColorUtilities.HSLtoRGB(hsv[0], hsv[1], hsv[2]).getRGB());
 			}
