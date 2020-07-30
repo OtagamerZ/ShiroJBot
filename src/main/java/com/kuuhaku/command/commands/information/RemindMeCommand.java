@@ -47,10 +47,10 @@ public class RemindMeCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		Account acc = AccountDAO.getAccount(author.getId());
 		if (acc.shouldRemind()) {
-			channel.sendMessage(":vibration_mode: | Agora irei te avisar quando você puder votar novamente!").queue();
+			channel.sendMessage(":mobile_phone_off: | Não irei mais te avisar quando você puder votar novamente!").queue();
 			acc.setRemind(false);
 		} else {
-			channel.sendMessage(":mobile_phone_off: | Não irei mais te avisar quando você puder votar novamente!").queue();
+			channel.sendMessage(":vibration_mode: | Agora irei te avisar quando você puder votar novamente!").queue();
 			acc.setRemind(true);
 		}
 		AccountDAO.saveAccount(acc);
