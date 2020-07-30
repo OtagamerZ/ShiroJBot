@@ -62,6 +62,7 @@
         <class>com.kuuhaku.model.persistent.CardMarket</class>
         <class>com.kuuhaku.model.persistent.GuildBuff</class>
         <class>com.kuuhaku.model.persistent.Transaction</class>
+        <class>com.kuuhaku.model.persistent.DynamicParameter</class>
 
         <properties>
             <!-- dados da conexao -->
