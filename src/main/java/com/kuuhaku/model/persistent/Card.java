@@ -23,7 +23,6 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.KawaiponRarity;
 import com.kuuhaku.utils.ShiroInfo;
 import org.apache.commons.io.FileUtils;
-import org.jdesktop.swingx.graphics.BlendComposite;
 
 import javax.imageio.ImageIO;
 import javax.persistence.*;
@@ -73,30 +72,17 @@ public class Card {
 				BufferedImage card = ImageIO.read(bais);
 
 				BufferedImage frame = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/frames/" + rarity.name().toLowerCase() + ".png")));
-				BufferedImage frameCanvas = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
+				BufferedImage canvas = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
+				Graphics2D g2d = canvas.createGraphics();
 
-				Graphics2D g2d = frameCanvas.createGraphics();
-				g2d.drawImage(frame, 0, 0, null);
-
-				if (foil) {
-					g2d.setComposite(BlendComposite.Hue);
-					g2d.drawImage(invert(frame), 0, 0, null);
-					g2d.setComposite(AlphaComposite.SrcOver);
-				}
-
-				g2d.dispose();
-
-				BufferedImage cardCanvas = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
-
-				g2d = cardCanvas.createGraphics();
 				g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 				g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 				g2d.drawImage(foil ? adjust(card) : card, 10, 10, 225, 350, null);
-				g2d.drawImage(frameCanvas, 0, 0, null);
+				g2d.drawImage(foil ? adjust(frame) : frame, 0, 0, null);
 
 				g2d.dispose();
 
-				return cardCanvas;
+				return canvas;
 			}
 		} catch (IOException | ExecutionException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
@@ -104,28 +90,13 @@ public class Card {
 		}
 	}
 
-	private BufferedImage invert(BufferedImage bi) {
+	private BufferedImage adjust(BufferedImage bi) {
 		BufferedImage out = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
 		for (int x = 0; x < bi.getWidth(); x++) {
 			for (int y = 0; y < bi.getHeight(); y++) {
 				int rgb = bi.getRGB(x, y);
 				Color col = new Color(rgb, true);
-				col = new Color(255 - col.getBlue(), 255 - col.getGreen(), 255 - col.getRed(), col.getAlpha());
-				out.setRGB(x, y, col.getRGB());
-			}
-		}
-
-		return out;
-	}
-
-	private BufferedImage adjust(BufferedImage bi) {
-		BufferedImage out = new BufferedImage(bi.getWidth(), bi.getHeight(), bi.getType());
-
-		for (int x = 0; x < bi.getWidth(); x++) {
-			for (int y = 0; y < bi.getHeight(); y++) {
-				int rgb = bi.getRGB(x, y);
-				Color col = new Color(rgb);
 				float[] hsv = Color.RGBtoHSB(col.getRed(), col.getBlue(), col.getGreen(), null);
 				hsv[0] = ((hsv[0] * 255 + 30) % 255) / 255;
 
