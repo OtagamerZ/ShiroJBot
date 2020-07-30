@@ -120,13 +120,13 @@ public class Card {
 	}
 
 	private BufferedImage adjust(BufferedImage bi) {
-		BufferedImage out = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_RGB);
+		BufferedImage out = new BufferedImage(bi.getWidth(), bi.getHeight(), bi.getType());
 
 		for (int x = 0; x < bi.getWidth(); x++) {
 			for (int y = 0; y < bi.getHeight(); y++) {
 				int rgb = bi.getRGB(x, y);
 				Color col = new Color(rgb);
-				float[] hsv = Color.RGBtoHSB(col.getRed(), col.getBlue(), col.getGreen(), new float[3]);
+				float[] hsv = Color.RGBtoHSB(col.getRed(), col.getBlue(), col.getGreen(), null);
 				hsv[0] = ((hsv[0] * 255 + 30) % 255) / 255;
 
 				out.setRGB(x, y, Color.HSBtoRGB(hsv[0], hsv[1], hsv[2]));
