@@ -58,6 +58,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class JDAEvents extends ListenerAdapter {
 
@@ -248,14 +249,18 @@ public class JDAEvents extends ListenerAdapter {
 				event.getAuthor().openPrivateChannel().queue(c -> {
 					if (RelayDAO.blockedList().contains(event.getAuthor().getId())) {
 						c.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-blocked")).queue();
-					} else c.sendMessage("Mensagem enviada, aguardando resposta...").queue(s -> {
-						EmbedBuilder eb = new EmbedBuilder();
+					} else
+						c.sendMessage("Mensagem enviada, aguardando resposta...")
+								.delay(1, TimeUnit.MINUTES)
+								.flatMap(Message::delete)
+								.queue(s -> {
+									EmbedBuilder eb = new EmbedBuilder();
 
-						eb.setAuthor(event.getAuthor().getAsTag(), event.getAuthor().getAvatarUrl());
-						eb.setFooter(event.getAuthor().getId() + " - " + LocalDateTime.now().atOffset(ZoneOffset.ofHours(-3)).format(DateTimeFormatter.ofPattern("HH:mm | dd/MMM/yyyy")), null);
-						staffIds.forEach(d ->
-								Main.getInfo().getUserByID(d).openPrivateChannel().queue(ch -> ch.sendMessage(event.getMessage()).embed(eb.build()).queue()));
-					});
+									eb.setAuthor(event.getAuthor().getAsTag(), event.getAuthor().getAvatarUrl());
+									eb.setFooter(event.getAuthor().getId() + " - " + LocalDateTime.now().atOffset(ZoneOffset.ofHours(-3)).format(DateTimeFormatter.ofPattern("HH:mm | dd/MMM/yyyy")), null);
+									staffIds.forEach(d ->
+											Main.getInfo().getUserByID(d).openPrivateChannel().queue(ch -> ch.sendMessage(event.getMessage()).embed(eb.build()).queue()));
+								});
 				});
 			} catch (Exception ignored) {
 			}
