@@ -24,7 +24,6 @@ import com.kuuhaku.utils.KawaiponRarity;
 import com.kuuhaku.utils.ShiroInfo;
 import org.apache.commons.io.FileUtils;
 import org.jdesktop.swingx.graphics.BlendComposite;
-import org.jdesktop.swingx.graphics.ColorUtilities;
 
 import javax.imageio.ImageIO;
 import javax.persistence.*;
@@ -87,7 +86,7 @@ public class Card {
 
 				g2d.dispose();
 
-				BufferedImage cardCanvas = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_RGB);
+				BufferedImage cardCanvas = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
 				g2d = cardCanvas.createGraphics();
 				g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
@@ -127,11 +126,10 @@ public class Card {
 			for (int y = 0; y < bi.getHeight(); y++) {
 				int rgb = bi.getRGB(x, y);
 				Color col = new Color(rgb);
-				col = new Color(col.getRed(), col.getBlue(), col.getGreen());
-				float[] hsv = ColorUtilities.RGBtoHSL(col);
+				float[] hsv = Color.RGBtoHSB(col.getRed(), col.getBlue(), col.getGreen(), new float[3]);
 				hsv[0] = ((hsv[0] * 255 + 30) % 255) / 255;
 
-				out.setRGB(x, y, ColorUtilities.HSLtoRGB(hsv[0], hsv[1], hsv[2]).getRGB());
+				out.setRGB(x, y, Color.HSBtoRGB(hsv[0], hsv[1], hsv[2]));
 			}
 		}
 
