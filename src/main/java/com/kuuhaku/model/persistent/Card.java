@@ -87,18 +87,12 @@ public class Card {
 
 				g2d.dispose();
 
-				BufferedImage cardCanvas = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
+				BufferedImage cardCanvas = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_RGB);
 
 				g2d = cardCanvas.createGraphics();
 				g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 				g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				g2d.drawImage(card, 10, 10, 225, 350, null);
-
-				if (foil) {
-					//g2d.setComposite(BlendComposite.Hue);
-					g2d.drawImage(adjust(card), 10, 10, 225, 350, null);
-					//g2d.setComposite(AlphaComposite.SrcOver);
-				}
+				g2d.drawImage(foil ? adjust(card) : card, 10, 10, 225, 350, null);
 				g2d.drawImage(frameCanvas, 0, 0, null);
 
 				g2d.dispose();
@@ -127,7 +121,7 @@ public class Card {
 	}
 
 	private BufferedImage adjust(BufferedImage bi) {
-		BufferedImage out = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		BufferedImage out = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_RGB);
 
 		for (int x = 0; x < bi.getWidth(); x++) {
 			for (int y = 0; y < bi.getHeight(); y++) {
