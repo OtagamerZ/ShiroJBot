@@ -1178,11 +1178,11 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1587956411634" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1592942915575" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1596134764983">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1596135121093">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1596134764983" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1596135121093" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1594305494731">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1191,6 +1191,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="311" key="com.intellij.database.dbimport.ImportUtil.MyDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1594057250988" />
+    <state x="636" y="331" width="408" height="344" key="com.intellij.database.psi.DbRenamePsiElementProcessor.DbRenameDialog" timestamp="1596135204660">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="636" y="331" width="408" height="344" key="com.intellij.database.psi.DbRenamePsiElementProcessor.DbRenameDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1596135204660" />
     <state x="594" y="260" key="com.intellij.database.run.ParametersPanel.Standalone" timestamp="1589981895332">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>

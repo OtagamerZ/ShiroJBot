@@ -24,7 +24,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "dynamicparamete")
+@Table(name = "dynamicparameter")
 public class DynamicParameter {
 	@Id
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
