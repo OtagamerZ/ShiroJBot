@@ -97,10 +97,14 @@ public class Card {
 			for (int y = 0; y < bi.getHeight(); y++) {
 				int rgb = bi.getRGB(x, y);
 				Color col = new Color(rgb, true);
+				int alpha = col.getAlpha();
 				float[] hsv = Color.RGBtoHSB(col.getRed(), col.getBlue(), col.getGreen(), null);
 				hsv[0] = ((hsv[0] * 255 + 30) % 255) / 255;
 
-				out.setRGB(x, y, Color.HSBtoRGB(hsv[0], hsv[1], hsv[2]));
+				col = Color.getHSBColor(hsv[0], hsv[1], hsv[2]);
+				col = new Color(col.getRed(), col.getGreen(), col.getBlue(), alpha);
+
+				out.setRGB(x, y, col.getRGB());
 			}
 		}
 
