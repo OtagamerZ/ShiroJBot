@@ -272,7 +272,7 @@ public class Helper {
 	public static Color reverseColor(Color c) {
 		float[] hsv = new float[3];
 		Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), hsv);
-		hsv[0] = hsv[0] + 180;
+		hsv[0] = (hsv[0] * 360 + 180) / 360;
 
 		return Color.getHSBColor(hsv[0], hsv[1], hsv[2]);
 	}
