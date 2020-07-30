@@ -26,7 +26,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Card.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -629,14 +628,7 @@
       <workItem from="1595968824734" duration="1111000" />
       <workItem from="1596024102218" duration="3465000" />
       <workItem from="1596119638222" duration="1243000" />
-      <workItem from="1596132231601" duration="3364000" />
-    </task>
-    <task id="LOCAL-01988" summary="Correções gerais">
-      <created>1595608272830</created>
-      <option name="number" value="01988" />
-      <option name="presentableId" value="LOCAL-01988" />
-      <option name="project" value="LOCAL" />
-      <updated>1595608272831</updated>
+      <workItem from="1596132231601" duration="5438000" />
     </task>
     <task id="LOCAL-01989" summary="Correções gerais">
       <created>1595608499407</created>
@@ -974,7 +966,14 @@
       <option name="project" value="LOCAL" />
       <updated>1596135288599</updated>
     </task>
-    <option name="localTasksCounter" value="2037" />
+    <task id="LOCAL-02037" summary="Correções nas cartas cromadas e na cor padrão do perfil">
+      <created>1596135610176</created>
+      <option name="number" value="02037" />
+      <option name="presentableId" value="LOCAL-02037" />
+      <option name="project" value="LOCAL" />
+      <updated>1596135610176</updated>
+    </task>
+    <option name="localTasksCounter" value="2038" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1175,11 +1174,11 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1587956411634" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1592942915575" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1596135291123">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1596135611566">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1596135291123" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1596135611566" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1594305494731">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
