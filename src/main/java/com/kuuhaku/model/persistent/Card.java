@@ -134,7 +134,7 @@ public class Card {
 				Color col = new Color(rgb, true);
 				float[] hsv = new float[3];
 				Color.RGBtoHSB(col.getRed(), col.getGreen(), col.getBlue(), hsv);
-				hsv[0] = hsv[0] + 30;
+				hsv[0] = (hsv[0] * 360 + 30) / 360;
 
 				out.setRGB(x, y, Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
 			}
