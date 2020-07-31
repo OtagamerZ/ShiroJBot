@@ -20,6 +20,8 @@ package com.kuuhaku.handlers.games.disboard.model;
 
 import com.kuuhaku.handlers.games.disboard.enums.Country;
 import com.kuuhaku.utils.ExceedEnums;
+import org.hibernate.annotations.OptimisticLockType;
+import org.hibernate.annotations.OptimisticLocking;
 import org.json.JSONArray;
 
 import javax.persistence.*;
@@ -29,7 +31,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "politicalstate")
-//@OptimisticLocking(type = OptimisticLockType.VERSION)
+@OptimisticLocking(type = OptimisticLockType.VERSION)
 public class PoliticalState {
 	@Id
 	@Enumerated(EnumType.STRING)
