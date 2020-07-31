@@ -20,8 +20,6 @@ package com.kuuhaku.handlers.games.disboard.model;
 
 import com.kuuhaku.handlers.games.disboard.enums.Country;
 import com.kuuhaku.utils.ExceedEnums;
-import org.hibernate.annotations.OptimisticLockType;
-import org.hibernate.annotations.OptimisticLocking;
 import org.json.JSONArray;
 
 import javax.persistence.*;
@@ -31,7 +29,6 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "politicalstate")
-@OptimisticLocking(type = OptimisticLockType.VERSION)
 public class PoliticalState {
 	@Id
 	@Enumerated(EnumType.STRING)
@@ -42,10 +39,6 @@ public class PoliticalState {
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int influence = 0;
-
-	@Version
-	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
-	private long version = 0;
 
 	public PoliticalState(ExceedEnums exceed) {
 		this.exceed = exceed;

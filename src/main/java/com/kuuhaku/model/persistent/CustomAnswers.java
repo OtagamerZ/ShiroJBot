@@ -18,15 +18,13 @@
 
 package com.kuuhaku.model.persistent;
 
-import org.hibernate.annotations.OptimisticLockType;
-import org.hibernate.annotations.OptimisticLocking;
-
-import javax.persistence.Version;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "customanswers")
-@OptimisticLocking(type = OptimisticLockType.VERSION)
 public class CustomAnswers {
     @Id
     @Column(columnDefinition = "BIGINT")
@@ -43,10 +41,6 @@ public class CustomAnswers {
 
     @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
     private boolean markForDelete = false;
-
-    @Version
-    @Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
-    private long version = 0;
 
     public CustomAnswers() {
 
