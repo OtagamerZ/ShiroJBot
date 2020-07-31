@@ -18,6 +18,9 @@
 
 package com.kuuhaku.model.persistent;
 
+import org.hibernate.annotations.OptimisticLockType;
+import org.hibernate.annotations.OptimisticLocking;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -25,6 +28,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "blacklist")
+@OptimisticLocking(type = OptimisticLockType.VERSION)
 public class Blacklist {
 	@Id
 	@Column(columnDefinition = "VARCHAR(191)")
