@@ -43,6 +43,9 @@ public class PoliticalState {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int influence = 0;
 
+	@Version
+	private long version = 0;
+
 	public PoliticalState(ExceedEnums exceed) {
 		this.exceed = exceed;
 		this.countries = new ArrayList<String>() {{
