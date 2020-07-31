@@ -78,7 +78,7 @@ public class Card {
 				g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 				g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 				g2d.drawImage(foil ? adjust(card) : card, 10, 10, null);
-				g2d.drawImage(foil ? adjust(frame) : frame, 0, 0, null);
+				//g2d.drawImage(foil ? adjust(frame) : frame, 0, 0, null);
 
 				g2d.dispose();
 
