@@ -217,32 +217,35 @@ public class JDAEvents extends ListenerAdapter {
 			if (args.length < 2) return;
 			String msgNoArgs = msg.replaceFirst(args[0] + " " + args[1], "").trim();
 
-			switch (args[0].toLowerCase()) {
-				case "send":
-				case "s":
-					Main.getInfo().getUserByID(args[1]).openPrivateChannel().queue(c ->
-							c.sendMessage(event.getAuthor().getName() + " respondeu:\n>>> " + msgNoArgs).queue());
+			try {
+				switch (args[0].toLowerCase()) {
+					case "send":
+					case "s":
+						Main.getInfo().getUserByID(args[1]).openPrivateChannel().queue(c ->
+								c.sendMessage(event.getAuthor().getName() + " respondeu:\n>>> " + msgNoArgs).queue());
 
-					staffIds.forEach(d -> {
-						if (!d.equals(event.getAuthor().getId())) {
-							Main.getInfo().getUserByID(d).openPrivateChannel().queue(c ->
-									c.sendMessage(event.getAuthor().getName() + " respondeu:\n>>> " + msgNoArgs).queue());
-						}
-					});
-					break;
-				case "block":
-				case "b":
-					RelayDAO.permaBlock(new PermaBlock(args[1]));
-					Main.getInfo().getUserByID(args[1]).openPrivateChannel().queue(c ->
-							c.sendMessage("Você foi bloqueado dos canais de comunicação da Shiro pela seguinte razão: `" + msgNoArgs + "`").queue());
+						staffIds.forEach(d -> {
+							if (!d.equals(event.getAuthor().getId())) {
+								Main.getInfo().getUserByID(d).openPrivateChannel().queue(c ->
+										c.sendMessage(event.getAuthor().getName() + " respondeu:\n>>> " + msgNoArgs).queue());
+							}
+						});
+						break;
+					case "block":
+					case "b":
+						RelayDAO.permaBlock(new PermaBlock(args[1]));
+						Main.getInfo().getUserByID(args[1]).openPrivateChannel().queue(c ->
+								c.sendMessage("Você foi bloqueado dos canais de comunicação da Shiro pela seguinte razão: `" + msgNoArgs + "`").queue());
 
-					staffIds.forEach(d -> {
-						if (!d.equals(event.getAuthor().getId())) {
-							Main.getInfo().getUserByID(d).openPrivateChannel().queue(c ->
-									c.sendMessage(event.getAuthor().getName() + " bloqueou o usuário " + Main.getInfo().getUserByID(args[1]) + ". Razão: \n>>> " + msgNoArgs).queue());
-						}
-					});
-					break;
+						staffIds.forEach(d -> {
+							if (!d.equals(event.getAuthor().getId())) {
+								Main.getInfo().getUserByID(d).openPrivateChannel().queue(c ->
+										c.sendMessage(event.getAuthor().getName() + " bloqueou o usuário " + Main.getInfo().getUserByID(args[1]) + ". Razão: \n>>> " + msgNoArgs).queue());
+							}
+						});
+						break;
+				}
+			} catch (NullPointerException ignore) {
 			}
 		} else {
 			try {
