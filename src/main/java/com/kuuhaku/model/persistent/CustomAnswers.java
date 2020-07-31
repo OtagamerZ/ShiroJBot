@@ -21,10 +21,8 @@ package com.kuuhaku.model.persistent;
 import org.hibernate.annotations.OptimisticLockType;
 import org.hibernate.annotations.OptimisticLocking;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.Version;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "customanswers")
@@ -45,6 +43,9 @@ public class CustomAnswers {
 
     @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
     private boolean markForDelete = false;
+
+    @Version
+    private long version = 0;
 
     public CustomAnswers() {
 
