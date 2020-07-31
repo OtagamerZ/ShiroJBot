@@ -185,7 +185,7 @@ public class ScheduledEvents implements JobListener {
 			if (UpdateKawaigotchiEvent.updateKawaigotchi == null) {
 				UpdateKawaigotchiEvent.updateKawaigotchi = JobBuilder.newJob(UpdateKawaigotchiEvent.class).withIdentity("updateKawaigotchi", "1").build();
 			}
-			Trigger cron = TriggerBuilder.newTrigger().withIdentity("updateKawaigotchi", "1").withSchedule(CronScheduleBuilder.cronSchedule("* * * ? * * *")).build();
+			Trigger cron = TriggerBuilder.newTrigger().withIdentity("updateKawaigotchi", "1").withSchedule(CronScheduleBuilder.cronSchedule("0/2 * * ? * * *")).build();
 			SchedulerFactory sf = new StdSchedulerFactory();
 			try {
 				sched = sf.getScheduler();
