@@ -77,6 +77,8 @@ public class Card {
 
 				g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 				g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				g2d.setRenderingHint(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_DISABLE);
+				//g2d.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
 				g2d.drawImage(foil ? adjust(card) : card, 10, 10, 225, 350, null);
 				g2d.drawImage(foil ? adjust(frame) : frame, 0, 0, null);
 
