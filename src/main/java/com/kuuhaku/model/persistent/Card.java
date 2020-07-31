@@ -77,8 +77,7 @@ public class Card {
 
 				g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 				g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				g2d.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
-				g2d.drawImage(foil ? adjust(card) : card, 10, 10, 225, 350, null);
+				g2d.drawImage(foil ? adjust(card) : card, 10, 10, null);
 				g2d.drawImage(foil ? adjust(frame) : frame, 0, 0, null);
 
 				g2d.dispose();
@@ -94,13 +93,13 @@ public class Card {
 	private BufferedImage adjust(BufferedImage bi) {
 		BufferedImage out = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
-		for (int x = 0; x < bi.getWidth(); x++) {
-			for (int y = 0; y < bi.getHeight(); y++) {
+		for (int y = 0; y < bi.getHeight(); y++) {
+			for (int x = 0; x < bi.getWidth(); x++) {
 				int rgb = bi.getRGB(x, y);
 				Color col = new Color(rgb, true);
 				int alpha = col.getAlpha();
 				float[] hsv = Color.RGBtoHSB(col.getRed(), col.getBlue(), col.getGreen(), null);
-				hsv[0] = ((hsv[0] * 255 + 30) % 255) / 255;
+				hsv[0] = ((hsv[0] * 360 + 300) % 360) / 360;
 
 				col = Color.getHSBColor(hsv[0], hsv[1], hsv[2]);
 				col = new Color(col.getRed(), col.getGreen(), col.getBlue(), alpha);
