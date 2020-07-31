@@ -78,6 +78,7 @@ public class Member {
 	private long lastVoted = 0;
 
 	@Version
+	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long version = 0;
 
 	//SWITCHES
