@@ -33,9 +33,8 @@ public class Manager {
 	private static File DBfile = null;
 
 	public static void connect() throws IOException {
-		DBfile = new File("shiro.db");
-		if (!DBfile.exists())
-			DBfile.createNewFile();
+		DBfile = File.createTempFile("shiro", ".db");
+		DBfile.deleteOnExit();
 
 		Map<String, String> props = new HashMap<>();
 		props.put("javax.persistence.jdbc.url", "jdbc:sqlite:" + DBfile.getPath());

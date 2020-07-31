@@ -25,6 +25,8 @@ import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.endpoint.Bonus;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
+import org.hibernate.annotations.OptimisticLockType;
+import org.hibernate.annotations.OptimisticLocking;
 
 import javax.persistence.Version;
 import javax.persistence.*;
@@ -36,7 +38,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "member")
-//@OptimisticLocking(type = OptimisticLockType.VERSION)
+@OptimisticLocking(type = OptimisticLockType.VERSION)
 public class Member {
 	@Id
 	@Column(columnDefinition = "VARCHAR(191)")
