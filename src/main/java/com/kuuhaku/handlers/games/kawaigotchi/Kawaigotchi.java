@@ -125,6 +125,9 @@ public class Kawaigotchi {
 	@Column(columnDefinition = "TIMESTAMP")
 	private LocalDateTime offSince = null;
 
+	@Version
+	private long version = 0;
+
 	private transient int lastRoll;
 
 	public Kawaigotchi() {

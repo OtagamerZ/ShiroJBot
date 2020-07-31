@@ -21,10 +21,8 @@ package com.kuuhaku.model.persistent;
 import org.hibernate.annotations.OptimisticLockType;
 import org.hibernate.annotations.OptimisticLocking;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.Version;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "blacklist")
@@ -36,6 +34,9 @@ public class Blacklist {
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String blockedBy = "";
+
+	@Version
+	private long version = 0;
 
 	public Blacklist(String id, String by) {
 		this.id = id;
