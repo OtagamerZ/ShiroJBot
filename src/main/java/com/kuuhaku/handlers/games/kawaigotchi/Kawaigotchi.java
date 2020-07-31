@@ -28,8 +28,6 @@ import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
-import org.hibernate.annotations.OptimisticLockType;
-import org.hibernate.annotations.OptimisticLocking;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
@@ -51,7 +49,6 @@ import java.util.Random;
 
 @Entity
 @Table(name = "kawaigotchi")
-@OptimisticLocking(type = OptimisticLockType.VERSION)
 public class Kawaigotchi {
 	//FOOD | ENERGY | MOOD
 	private enum rate {
@@ -124,11 +121,6 @@ public class Kawaigotchi {
 
 	@Column(columnDefinition = "TIMESTAMP")
 	private LocalDateTime offSince = null;
-
-	@Version
-	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
-	private long version = 0;
-
 	private transient int lastRoll;
 
 	public Kawaigotchi() {

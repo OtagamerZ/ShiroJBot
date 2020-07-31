@@ -28,8 +28,10 @@ import org.hibernate.annotations.OptimisticLocking;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
-import javax.persistence.Version;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -111,10 +113,6 @@ public class GuildConfig {
 
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 5")
 	private int noSpamAmount = 5;
-
-	@Version
-	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
-	private long version = 0;
 
 	//CHANNELS
 	@Column(columnDefinition = "TEXT")
