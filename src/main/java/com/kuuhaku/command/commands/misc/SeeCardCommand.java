@@ -99,13 +99,13 @@ public class SeeCardCommand extends Command {
 		eb.addField("Raridade:", tc.getRarity().toString(), true);
 		eb.addField("Tipo:", tc.getRarity() == KawaiponRarity.ULTIMATE ? "Única" : (card.isFoil() ? "Cromada" : "Normal"), true);
 		eb.addField("Anime:", tc.getAnime().toString(), true);
-		eb.setImage("attachment://kawaipon.jpg");
+		eb.setImage("attachment://kawaipon." + (cards.contains(card) ? "png" : "jpg"));
 
 		try {
 			BufferedImage bi = (ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("kawaipon/missing.jpg"))));
 
 			if (cards.contains(card))
-				channel.sendMessage(eb.build()).addFile(Helper.getBytes(tc.drawCard(foil)), "kawaipon.jpg").queue();
+				channel.sendMessage(eb.build()).addFile(Helper.getBytes(tc.drawCard(foil), "png"), "kawaipon.png").queue();
 			else
 				channel.sendMessage(eb.build()).addFile(Helper.getBytes(bi), "kawaipon.jpg").queue();
 		} catch (IOException e) {
