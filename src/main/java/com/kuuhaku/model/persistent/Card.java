@@ -98,7 +98,7 @@ public class Card {
 				int rgb = bi.getRGB(x, y);
 				Color col = new Color(rgb, true);
 				int alpha = col.getAlpha();
-				float[] hsv = Color.RGBtoHSB(col.getRed(), col.getBlue(), col.getGreen(), null);
+				float[] hsv = Color.RGBtoHSB(col.getRed(), col.getGreen(), col.getBlue(), null);
 				hsv[0] = ((hsv[0] * 360 + 300) % 360) / 360;
 
 				col = Color.getHSBColor(hsv[0], hsv[1], hsv[2]);
