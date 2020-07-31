@@ -111,6 +111,9 @@ public class CommandManager {
 			put(CompileCommand.class, new Argument(
 					"compilar", new String[]{"compile", "exec"}, "req_code", "cmd_compile", DEV, true
 			));
+			put(SweepCommand.class, new Argument(
+					"sweep", new String[]{"limpar", "cleanse"}, "cmd_sweep", DEV, true
+			));
 
 			//SUPPORT
 			put(BlockCommand.class, new Argument(
