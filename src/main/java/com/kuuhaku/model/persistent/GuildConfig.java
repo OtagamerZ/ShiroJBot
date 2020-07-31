@@ -23,6 +23,8 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
+import org.hibernate.annotations.OptimisticLockType;
+import org.hibernate.annotations.OptimisticLocking;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
@@ -37,6 +39,7 @@ import java.util.Map;
 
 @Entity
 @Table(name = "guildconfig")
+@OptimisticLocking(type = OptimisticLockType.VERSION)
 public class GuildConfig {
 	@Id
 	@Column(columnDefinition = "VARCHAR(191)")
