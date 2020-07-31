@@ -637,20 +637,6 @@
       <workItem from="1596132231601" duration="9691000" />
       <workItem from="1596196972702" duration="1793000" />
     </task>
-    <task id="LOCAL-02013" summary="Comando de gerar ASCII agora também funciona com imagens">
-      <created>1595870351139</created>
-      <option name="number" value="02013" />
-      <option name="presentableId" value="LOCAL-02013" />
-      <option name="project" value="LOCAL" />
-      <updated>1595870351139</updated>
-    </task>
-    <task id="LOCAL-02014" summary="Comando de gerar ASCII agora também funciona com imagens">
-      <created>1595870506358</created>
-      <option name="number" value="02014" />
-      <option name="presentableId" value="LOCAL-02014" />
-      <option name="project" value="LOCAL" />
-      <updated>1595870506358</updated>
-    </task>
     <task id="LOCAL-02015" summary="Comando de gerar ASCII agora também funciona com imagens">
       <created>1595870761330</created>
       <option name="number" value="02015" />
@@ -980,7 +966,21 @@
       <option name="project" value="LOCAL" />
       <updated>1596206797005</updated>
     </task>
-    <option name="localTasksCounter" value="2062" />
+    <task id="LOCAL-02062" summary="Adição de versionamento de objetos">
+      <created>1596207020778</created>
+      <option name="number" value="02062" />
+      <option name="presentableId" value="LOCAL-02062" />
+      <option name="project" value="LOCAL" />
+      <updated>1596207020778</updated>
+    </task>
+    <task id="LOCAL-02063" summary="Adição de versionamento de objetos">
+      <created>1596207160221</created>
+      <option name="number" value="02063" />
+      <option name="presentableId" value="LOCAL-02063" />
+      <option name="project" value="LOCAL" />
+      <updated>1596207160222</updated>
+    </task>
+    <option name="localTasksCounter" value="2064" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1002,6 +1002,11 @@
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
+        <entry key="1">
+          <value>
+            <State />
+          </value>
+        </entry>
         <entry key="MAIN">
           <value>
             <State>
@@ -1102,11 +1107,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2" timestamp="1596207142849">
+    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2" timestamp="1596207157488">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1596207142849" />
+    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1596207157488" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1172,20 +1177,20 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="505" y="205" key="NewModule_or_Project.wizard/0.0.1680.1010@0.0.1680.1010" timestamp="1590148977508" />
-    <state x="548" y="228" key="RollbackChangesDialog" timestamp="1596200397043">
+    <state x="548" y="228" key="RollbackChangesDialog" timestamp="1596211387128">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="548" y="228" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1596200397043" />
+    <state x="548" y="228" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1596211387128" />
     <state x="320" y="80" key="SettingsEditor" timestamp="1592942915575">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1587956411634" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1592942915575" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1596207022076">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1596207161345">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1596207022076" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1596207161345" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1594305494731">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1220,11 +1225,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="465" y="286" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595246935580" />
-    <state x="287" y="103" width="957" height="784" key="find.popup" timestamp="1596207138349">
+    <state x="287" y="103" width="957" height="784" key="find.popup" timestamp="1596211441729">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="362" y="134" width="774" height="562" key="find.popup/0.0.1366.768@0.0.1366.768" timestamp="1588044108124" />
-    <state x="287" y="103" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1596207138349" />
+    <state x="287" y="103" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1596211441729" />
     <state x="645" y="400" key="git4idea.ui.GitResetDialog" timestamp="1593018818159">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
