@@ -36,6 +36,7 @@ public class Blacklist {
 	private String blockedBy = "";
 
 	@Version
+	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long version = 0;
 
 	public Blacklist(String id, String by) {

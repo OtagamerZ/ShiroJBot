@@ -113,6 +113,7 @@ public class GuildConfig {
 	private int noSpamAmount = 5;
 
 	@Version
+	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long version = 0;
 
 	//CHANNELS

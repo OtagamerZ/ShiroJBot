@@ -44,6 +44,7 @@ public class PoliticalState {
 	private int influence = 0;
 
 	@Version
+	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long version = 0;
 
 	public PoliticalState(ExceedEnums exceed) {

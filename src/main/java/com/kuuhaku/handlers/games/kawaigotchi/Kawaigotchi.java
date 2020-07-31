@@ -126,6 +126,7 @@ public class Kawaigotchi {
 	private LocalDateTime offSince = null;
 
 	@Version
+	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long version = 0;
 
 	private transient int lastRoll;

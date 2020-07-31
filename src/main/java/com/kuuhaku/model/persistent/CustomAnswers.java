@@ -45,6 +45,7 @@ public class CustomAnswers {
     private boolean markForDelete = false;
 
     @Version
+    @Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
     private long version = 0;
 
     public CustomAnswers() {
