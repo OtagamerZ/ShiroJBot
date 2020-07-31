@@ -26,7 +26,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -632,13 +631,6 @@
       <workItem from="1596132231601" duration="9691000" />
       <workItem from="1596196972702" duration="1793000" />
     </task>
-    <task id="LOCAL-02009" summary="Novas cartas: Kimetsu No Yaiba">
-      <created>1595856888448</created>
-      <option name="number" value="02009" />
-      <option name="presentableId" value="LOCAL-02009" />
-      <option name="project" value="LOCAL" />
-      <updated>1595856888448</updated>
-    </task>
     <task id="LOCAL-02010" summary="Novas cartas: Kimetsu No Yaiba">
       <created>1595857028103</created>
       <option name="number" value="02010" />
@@ -975,7 +967,14 @@
       <option name="project" value="LOCAL" />
       <updated>1596203855896</updated>
     </task>
-    <option name="localTasksCounter" value="2058" />
+    <task id="LOCAL-02058" summary="Adição de versionamento de objetos">
+      <created>1596206070361</created>
+      <option name="number" value="02058" />
+      <option name="presentableId" value="LOCAL-02058" />
+      <option name="project" value="LOCAL" />
+      <updated>1596206070361</updated>
+    </task>
+    <option name="localTasksCounter" value="2059" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1013,7 +1012,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Novo meme: JoJo" />
     <MESSAGE value="Correção geral" />
     <MESSAGE value="Novas cartas: Dr. Stone" />
     <MESSAGE value="Adição do comando para sair do Exceed atual" />
@@ -1038,7 +1036,8 @@
     <MESSAGE value="Correção no alerta de voto" />
     <MESSAGE value="Revert &quot;Correção no alerta de voto&quot;&#10;&#10;This reverts commit 1469e715cbba5d990726e5b7b5ba7b4b241499cd." />
     <MESSAGE value="Tentativa de correção no bug das cores" />
-    <option name="LAST_COMMIT_MESSAGE" value="Tentativa de correção no bug das cores" />
+    <MESSAGE value="Adição de versionamento de objetos" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição de versionamento de objetos" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1097,11 +1096,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2" timestamp="1596203853090">
+    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2" timestamp="1596206237740">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1596203853090" />
+    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1596206237740" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1176,11 +1175,11 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1587956411634" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1592942915575" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1596203857665">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1596206071597">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1596203857665" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1596206071597" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1594305494731">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1197,11 +1196,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="594" y="260" key="com.intellij.database.run.ParametersPanel.Standalone/0.0.1680.1010@0.0.1680.1010" timestamp="1589981895332" />
-    <state x="305" y="160" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1595600755091">
+    <state x="305" y="160" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1596206148128">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="254" y="43" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1366.768@0.0.1366.768" timestamp="1593921071276" />
-    <state x="305" y="160" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595600755091" />
+    <state x="305" y="160" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1596206148128" />
     <state x="510" y="135" key="com.intellij.database.view.ui.DatabasePreviewDialog" timestamp="1593706488306">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1215,11 +1214,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="465" y="286" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595246935580" />
-    <state x="220" y="76" width="957" height="784" key="find.popup" timestamp="1595621619539">
+    <state x="287" y="103" width="957" height="784" key="find.popup" timestamp="1596206223781">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="362" y="134" width="774" height="562" key="find.popup/0.0.1366.768@0.0.1366.768" timestamp="1588044108124" />
-    <state x="220" y="76" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1595621619539" />
+    <state x="287" y="103" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1596206223781" />
     <state x="645" y="400" key="git4idea.ui.GitResetDialog" timestamp="1593018818159">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>

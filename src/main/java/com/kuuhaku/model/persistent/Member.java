@@ -28,10 +28,8 @@ import net.dv8tion.jda.api.entities.User;
 import org.hibernate.annotations.OptimisticLockType;
 import org.hibernate.annotations.OptimisticLocking;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.Version;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -78,6 +76,9 @@ public class Member {
 
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long lastVoted = 0;
+
+	@Version
+	private long version = 0;
 
 	//SWITCHES
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
