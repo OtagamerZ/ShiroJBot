@@ -18,12 +18,15 @@
 
 package com.kuuhaku.model.persistent;
 
+import org.hibernate.annotations.OptimisticLockType;
+import org.hibernate.annotations.OptimisticLocking;
+
 import javax.persistence.Version;
 import javax.persistence.*;
 
 @Entity
 @Table(name = "customanswers")
-//@OptimisticLocking(type = OptimisticLockType.VERSION)
+@OptimisticLocking(type = OptimisticLockType.VERSION)
 public class CustomAnswers {
     @Id
     @Column(columnDefinition = "BIGINT")
