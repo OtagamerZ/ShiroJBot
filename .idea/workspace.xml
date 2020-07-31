@@ -631,20 +631,6 @@
       <workItem from="1596132231601" duration="9691000" />
       <workItem from="1596196972702" duration="1793000" />
     </task>
-    <task id="LOCAL-02010" summary="Novas cartas: Kimetsu No Yaiba">
-      <created>1595857028103</created>
-      <option name="number" value="02010" />
-      <option name="presentableId" value="LOCAL-02010" />
-      <option name="project" value="LOCAL" />
-      <updated>1595857028103</updated>
-    </task>
-    <task id="LOCAL-02011" summary="Comando de gerar ASCII agora também funciona com imagens">
-      <created>1595869915906</created>
-      <option name="number" value="02011" />
-      <option name="presentableId" value="LOCAL-02011" />
-      <option name="project" value="LOCAL" />
-      <updated>1595869915906</updated>
-    </task>
     <task id="LOCAL-02012" summary="Comando de gerar ASCII agora também funciona com imagens">
       <created>1595870200529</created>
       <option name="number" value="02012" />
@@ -974,7 +960,21 @@
       <option name="project" value="LOCAL" />
       <updated>1596206070361</updated>
     </task>
-    <option name="localTasksCounter" value="2059" />
+    <task id="LOCAL-02059" summary="Adição de versionamento de objetos">
+      <created>1596206240634</created>
+      <option name="number" value="02059" />
+      <option name="presentableId" value="LOCAL-02059" />
+      <option name="project" value="LOCAL" />
+      <updated>1596206240634</updated>
+    </task>
+    <task id="LOCAL-02060" summary="Adição de versionamento de objetos">
+      <created>1596206377031</created>
+      <option name="number" value="02060" />
+      <option name="presentableId" value="LOCAL-02060" />
+      <option name="project" value="LOCAL" />
+      <updated>1596206377031</updated>
+    </task>
+    <option name="localTasksCounter" value="2061" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1175,11 +1175,11 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1587956411634" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1592942915575" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1596206249073">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1596206378552">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1596206249073" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1596206378552" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1594305494731">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>

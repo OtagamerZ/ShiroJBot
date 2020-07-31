@@ -151,6 +151,12 @@ public class Member {
 
 		xp += 15 * mult.get();
 
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
 		if (xp >= (int) Math.pow(level, 2) * 100) {
 			level++;
 			Account acc = AccountDAO.getAccount(mid);
