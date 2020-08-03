@@ -20,8 +20,6 @@ package com.kuuhaku.utils;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import com.google.gson.GsonBuilder;
 import com.kuuhaku.controller.postgresql.CanvasDAO;
 import com.kuuhaku.controller.postgresql.VersionDAO;
@@ -39,7 +37,6 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.discordbots.api.client.DiscordBotListAPI;
-import org.jetbrains.annotations.NotNull;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
@@ -89,14 +86,7 @@ public class ShiroInfo {
 	private static final JDAEvents shiroEvents = new JDAEvents();
 	private static final Map<String, KittyCache<String, Message>> messageCache = new HashMap<>();
 	private static final GsonBuilder JSONFactory = new GsonBuilder();
-	private static final LoadingCache<User, Boolean> ratelimit = CacheBuilder.newBuilder().expireAfterWrite(3, TimeUnit.SECONDS).build(
-			new CacheLoader<>() {
-				@Override
-				public Boolean load(@NotNull User key) {
-					return false;
-				}
-			}
-	);
+	private static final Cache<User, Boolean> ratelimit = CacheBuilder.newBuilder().expireAfterWrite(3, TimeUnit.SECONDS).build();
 	private static final HttpClientBuilder httpBuilder = HttpClientBuilder.create();
 	private static final Map<String, Tabletop> games = new HashMap<>();
 	private static final Set<String> requests = new HashSet<>();
@@ -281,7 +271,7 @@ public class ShiroInfo {
 		return shiroEvents;
 	}
 
-	public static LoadingCache<User, Boolean> getRatelimit() {
+	public static Cache<User, Boolean> getRatelimit() {
 		return ratelimit;
 	}
 

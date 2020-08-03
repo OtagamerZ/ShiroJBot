@@ -16,33 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.handlers.api.websocket;
+package com.kuuhaku.handlers.api.exception;
 
-import java.net.InetSocketAddress;
-
-public class WebSocketConfig {
-	private final ChatSocket chat;
-	private final DashboardSocket dashboard;
-	private final CanvasSocket canvas;
-
-	public WebSocketConfig() {
-		this.chat = new ChatSocket(new InetSocketAddress(8001));
-		this.dashboard = new DashboardSocket(new InetSocketAddress(8002));
-		this.canvas = new CanvasSocket(new InetSocketAddress(8003));
-
-		chat.start();
-		dashboard.start();
-	}
-
-	public ChatSocket getChat() {
-		return chat;
-	}
-
-	public DashboardSocket getDashboard() {
-		return dashboard;
-	}
-
-	public CanvasSocket getCanvas() {
-		return canvas;
-	}
+public class RatelimitException extends RuntimeException {
 }

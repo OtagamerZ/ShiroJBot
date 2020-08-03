@@ -18,10 +18,15 @@
 
 package com.kuuhaku.handlers.api.endpoint;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.postgresql.CanvasDAO;
 import com.kuuhaku.controller.postgresql.TokenDAO;
+import com.kuuhaku.handlers.api.exception.RatelimitException;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.model.common.Profile;
+import com.kuuhaku.model.persistent.PixelCanvas;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
 import org.json.JSONObject;
@@ -29,15 +34,18 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Collections;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 public class DashboardRequest {
+	private final Cache<String, Boolean> ratelimit = CacheBuilder.newBuilder().expireAfterWrite(5, TimeUnit.SECONDS).build();
 
 	@RequestMapping(value = "/api/auth", method = RequestMethod.GET)
 	public void validateAccount(HttpServletResponse http, @RequestParam(value = "code") String code) throws InterruptedException {
@@ -100,5 +108,22 @@ public class DashboardRequest {
 		} catch (IOException e) {
 			return new JSONObject().put("valid", false).toString();
 		}
+	}
+
+	@RequestMapping(value = "/api/canvas", method = RequestMethod.POST)
+	public String checkImage(@RequestHeader(value = "token") String token, @RequestHeader(value = "pos-x") int x, @RequestHeader(value = "pos-y") int y, @RequestHeader(value = "color") String color) throws IllegalArgumentException {
+		if (!Helper.between(x, 0, Helper.CANVAS_SIZE) || !Helper.between(y, 0, Helper.CANVAS_SIZE))
+			throw new IllegalArgumentException();
+		else if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
+		else if (ratelimit.getIfPresent(token) != null) throw new RatelimitException();
+
+		PixelCanvas canvas = Main.getInfo().getCanvas();
+		canvas.addPixel(null, new int[]{x, y}, Color.decode(color));
+
+		CanvasDAO.saveCanvas(canvas);
+
+		Main.getInfo().getSockets().getCanvas().notifyUpdate();
+		ratelimit.put(token, false);
+		return "Ok! (time for next request: 5 seconds)";
 	}
 }
