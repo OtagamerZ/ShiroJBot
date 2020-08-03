@@ -44,6 +44,7 @@ import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -174,7 +175,7 @@ public class DashboardSocket extends WebSocketServer {
 				User w = Member.getWaifu(u).isBlank() ? null : Main.getInfo().getUserByID(Member.getWaifu(u));
 				CoupleMultiplier cm = WaifuDAO.getMultiplier(u);
 
-				java.util.List<Member> profiles = MemberDAO.getMemberByMid(u.getId());
+				List<Member> profiles = MemberDAO.getMemberByMid(u.getId());
 				JSONObject user = new JSONObject() {{
 					put("waifu", w == null ? "" : w.getAsTag());
 					put("waifuMult", cm == null ? 1.25f : cm.getMult());
@@ -185,7 +186,11 @@ public class DashboardSocket extends WebSocketServer {
 					put("badges", Tags.getUserBadges(u.getId()));
 				}};
 
-				List<Guild> g = u.getMutualGuilds();
+				List<Guild> g = new ArrayList<>();
+				profiles.forEach(p -> {
+					Guild gd = Main.getInfo().getGuildByID(p.getSid());
+					if (gd != null) g.add(gd);
+				});
 
 				JSONArray guilds = new JSONArray();
 				g.forEach(gd -> {
@@ -206,6 +211,9 @@ public class DashboardSocket extends WebSocketServer {
 
 					guilds.put(guild);
 				});
+
+				profiles.removeIf(p -> g.stream().map(Guild::getId).noneMatch(p.getSid()::equals));
+				g.removeIf(gd -> profiles.stream().map(Member::getSid).noneMatch(gd.getId()::equals));
 
 				conn.send(new JSONObject() {{
 					put("type", "validate");
