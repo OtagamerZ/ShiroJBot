@@ -89,7 +89,7 @@ public class DashboardRequest {
 
 		net.dv8tion.jda.api.entities.Member mb = Main.getInfo().getGuildByID(guild).getMemberById(id);
 		assert mb != null;
-		return Base64.getEncoder().encodeToString(Profile.makeProfile(mb, mb.getGuild()).toByteArray());
+		return Base64.getEncoder().encodeToString(Helper.getBytes(Profile.makeProfile(mb, mb.getGuild())));
 	}
 
 	@RequestMapping(value = "/api/checkImage", method = RequestMethod.POST)
