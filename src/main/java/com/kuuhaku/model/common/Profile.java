@@ -87,25 +87,23 @@ public class Profile {
 			} catch (NumberFormatException ignore) {
 			}
 		}
-		if (!acc.hasAnimatedBg()) {
-			try {
-				BufferedImage bg = Helper.scaleImage(ImageIO.read(Helper.getImage(mb.getBg())), bi.getWidth(), bi.getHeight());
+		try {
+			BufferedImage bg = Helper.scaleImage(ImageIO.read(Helper.getImage(mb.getBg())), bi.getWidth(), bi.getHeight());
 
-				if (bg.getWidth() > bi.getWidth()) xOffset = -(bg.getWidth() - bi.getWidth()) / 2;
-				if (bg.getHeight() > bi.getHeight()) yOffset = -(bg.getHeight() - bi.getHeight()) / 2;
+			if (bg.getWidth() > bi.getWidth()) xOffset = -(bg.getWidth() - bi.getWidth()) / 2;
+			if (bg.getHeight() > bi.getHeight()) yOffset = -(bg.getHeight() - bi.getHeight()) / 2;
 
-				g2d.drawImage(bg, xOffset, yOffset, null);
-				if (main == null) main = Helper.reverseColor(Helper.colorThief(mb.getBg()));
-			} catch (IOException e) {
-				BufferedImage bg = Helper.scaleImage(ImageIO.read(Helper.getImage("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg")), bi.getWidth(), bi.getHeight());
+			if (!acc.hasAnimatedBg()) g2d.drawImage(bg, xOffset, yOffset, null);
+			if (main == null) main = Helper.reverseColor(Helper.colorThief(mb.getBg()));
+		} catch (IOException e) {
+			BufferedImage bg = Helper.scaleImage(ImageIO.read(Helper.getImage("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg")), bi.getWidth(), bi.getHeight());
 
-				if (bg.getWidth() > bi.getWidth()) xOffset = -(bg.getWidth() - bi.getWidth()) / 2;
-				if (bg.getHeight() > bi.getHeight()) yOffset = -(bg.getHeight() - bi.getHeight()) / 2;
+			if (bg.getWidth() > bi.getWidth()) xOffset = -(bg.getWidth() - bi.getWidth()) / 2;
+			if (bg.getHeight() > bi.getHeight()) yOffset = -(bg.getHeight() - bi.getHeight()) / 2;
 
-				g2d.drawImage(bg, xOffset, yOffset, null);
-				if (main == null)
-					main = Helper.reverseColor(Helper.colorThief("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg"));
-			}
+			if (!acc.hasAnimatedBg()) g2d.drawImage(bg, xOffset, yOffset, null);
+			if (main == null)
+				main = Helper.reverseColor(Helper.colorThief("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg"));
 		}
 
 		Color lvlBar;
