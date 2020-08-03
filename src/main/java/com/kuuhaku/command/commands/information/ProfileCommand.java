@@ -58,6 +58,7 @@ public class ProfileCommand extends Command {
 		Account acc = AccountDAO.getAccount(author.getId());
 		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_generating-profile")).queue(m -> {
 			try {
+				System.out.println(Helper.getFileType(MemberDAO.getMemberById(author.getId() + guild.getId()).getBg()));
 				if (acc.hasAnimatedBg()) {
 					File pf = Profile.applyAnimatedBackground(MemberDAO.getMemberById(author.getId() + guild.getId()), Profile.makeProfile(member, guild));
 					channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_profile"), author.getAsMention())).addFile(pf, "perfil.gif").queue(s -> m.delete().queue());
