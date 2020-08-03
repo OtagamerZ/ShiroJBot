@@ -19,7 +19,7 @@
 package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.BackupDAO;
+import com.kuuhaku.controller.sqlite.BackupDAO;
 import com.kuuhaku.model.common.DataDump;
 import org.quartz.Job;
 import org.quartz.JobDetail;
@@ -32,8 +32,16 @@ public class BackupEvent implements Job {
 	public void execute(JobExecutionContext context) {
 		Main.getInfo().getAPI().getPresence().setActivity(Main.getRandomActivity());
 
-		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getCADump(), com.kuuhaku.controller.sqlite.BackupDAO.getGuildDump(), com.kuuhaku.controller.sqlite.BackupDAO.getKawaigotchiDump(), com.kuuhaku.controller.sqlite.BackupDAO.getPoliticalStateDump()));
-		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump()));
+		com.kuuhaku.controller.postgresql.BackupDAO.dumpData(
+				new DataDump(
+						BackupDAO.getCADump(),
+						BackupDAO.getMemberDump(),
+						BackupDAO.getGuildDump(),
+						BackupDAO.getKawaigotchiDump(),
+						BackupDAO.getPoliticalStateDump(),
+						null
+				)
+		);
 
 		System.gc();
 	}
