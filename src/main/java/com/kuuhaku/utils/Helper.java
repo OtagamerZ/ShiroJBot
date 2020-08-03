@@ -1099,7 +1099,9 @@ public class Helper {
 
 	public static String getFileType(String url) throws IOException {
 		HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
+		con.setRequestMethod("HEAD");
 		con.addRequestProperty("User-Agent", "Mozilla/5.0");
-		return con.getRequestProperty("Content-Type");
+		con.connect();
+		return con.getContentType();
 	}
 }
