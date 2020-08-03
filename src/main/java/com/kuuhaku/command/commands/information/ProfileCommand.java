@@ -60,10 +60,7 @@ public class ProfileCommand extends Command {
 			try {
 				if (acc.hasAnimatedBg()) {
 					File pf = Profile.applyAnimatedBackground(MemberDAO.getMemberById(author.getId() + guild.getId()), Profile.makeProfile(member, guild));
-					if (pf != null)
-						channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_profile"), author.getAsMention())).addFile(pf, "perfil.gif").queue(s -> m.delete().queue());
-					else
-						channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_profile"), author.getAsMention())).addFile(Helper.getBytes(Profile.makeProfile(member, guild), "png"), "perfil.png").queue(s -> m.delete().queue());
+					channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_profile"), author.getAsMention())).addFile(pf, "perfil.gif").queue(s -> m.delete().queue());
 				} else
 					channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_profile"), author.getAsMention())).addFile(Helper.getBytes(Profile.makeProfile(member, guild), "png"), "perfil.png").queue(s -> m.delete().queue());
 			} catch (IOException e) {

@@ -51,7 +51,7 @@ import net.dv8tion.jda.api.requests.restaction.InviteAction;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
@@ -1054,6 +1054,7 @@ public class Helper {
 		// Draw the scaled image
 		BufferedImage newImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D graphics2D = newImage.createGraphics();
+		graphics2D.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		graphics2D.drawImage(image, 0, 0, w, h, null);
 
@@ -1070,8 +1071,8 @@ public class Helper {
 		return bi;
 	}
 
-	public static List<Pair<Integer, BufferedImage>> readGIF(String url) throws IOException {
-		List<Pair<Integer, BufferedImage>> frms = new ArrayList<>();
+	public static List<Triple<Integer, Integer, BufferedImage>> readGIF(String url) throws IOException {
+		List<Triple<Integer, Integer, BufferedImage>> frms = new ArrayList<>();
 		ImageReader ir = ImageIO.getImageReadersByFormatName("gif").next();
 		ImageInputStream iis = ImageIO.createImageInputStream(getImage(url));
 		ir.setInput(iis);
@@ -1090,7 +1091,7 @@ public class Helper {
 			BufferedImage master = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 			master.getGraphics().drawImage(image, metadata.getInt("imageLeftPosition"), metadata.getInt("imageTopPosition"), null);
 
-			frms.add(Pair.of(metadata.getInt("disposalMethod"), master));
+			frms.add(Triple.of(metadata.getInt("disposalMethod"), metadata.getInt("delayTime"), master));
 		}
 
 		return frms;
