@@ -49,7 +49,7 @@ public class PixelCanvas {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private final boolean shelved = false;
 
-	private BufferedImage getCanvas() {
+	public BufferedImage getCanvas() {
 		if (canvas != null) {
 			try {
 				byte[] bytes = Base64.getDecoder().decode(canvas);
@@ -66,6 +66,10 @@ public class PixelCanvas {
 		g2d.dispose();
 
 		return bi;
+	}
+
+	public String getRawCanvas() {
+		return canvas;
 	}
 
 	public RestAction viewCanvas(TextChannel channel) {
