@@ -62,6 +62,9 @@ public class Account {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean notified = false;
 
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean animatedBg = false;
+
 	public String getUserId() {
 		return userId;
 	}
@@ -189,5 +192,13 @@ public class Account {
 
 	public void setRemind(boolean remind) {
 		this.remind = remind;
+	}
+
+	public boolean hasAnimatedBg() {
+		return animatedBg;
+	}
+
+	public void setAnimatedBg(boolean animatedBg) {
+		this.animatedBg = animatedBg;
 	}
 }
