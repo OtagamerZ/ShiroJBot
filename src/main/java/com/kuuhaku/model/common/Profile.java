@@ -258,6 +258,7 @@ public class Profile {
 			File out = File.createTempFile("profile_", ".gif");
 			try (ImageOutputStream ios = new FileImageOutputStream(out)) {
 				List<Pair<Integer, BufferedImage>> frames = Helper.readGIF(mb.getBg());
+				List<Pair<Integer, BufferedImage>> toDraw = new ArrayList<>();
 				AtomicInteger xOffset = new AtomicInteger();
 				AtomicInteger yOffset = new AtomicInteger();
 				frames.forEach(p -> {
@@ -273,11 +274,11 @@ public class Profile {
 					g2d.drawImage(overlay, 0, 0, null);
 
 					g2d.dispose();
-					p.setValue(canvas);
+					toDraw.add(Pair.of(p.getLeft(), canvas));
 				});
 
 				GifSequenceWriter writer = new GifSequenceWriter(ios, BufferedImage.TYPE_INT_ARGB);
-				frames.forEach(p -> {
+				toDraw.forEach(p -> {
 					try {
 						writer.writeToSequence(p.getRight(), p.getLeft(), 10, true);
 					} catch (IOException e) {
