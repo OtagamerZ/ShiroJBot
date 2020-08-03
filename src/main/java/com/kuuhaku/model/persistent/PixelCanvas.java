@@ -47,7 +47,7 @@ public class PixelCanvas {
 	private String canvas;
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-	private boolean shelved = false;
+	private final boolean shelved = false;
 
 	private BufferedImage getCanvas() {
 		if (canvas != null) {
@@ -142,7 +142,8 @@ public class PixelCanvas {
 		canvas.setRGB(coords[0] + CANVAS_SIZE / 2, CANVAS_SIZE / 2 - coords[1], color.getRGB());
 		saveCanvas(canvas);
 
-		return viewChunk(channel, coords, 3, false);
+		if (channel != null) return viewChunk(channel, coords, 3, false);
+		else return null;
 	}
 
 	private void saveCanvas(BufferedImage canvas) {

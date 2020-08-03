@@ -61,6 +61,18 @@ public class ErrorHandler implements ErrorController {
 		return new Exception(400, "Not enough arguments were given to this request");
 	}
 
+	@ExceptionHandler(IllegalArgumentException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public Exception wrongArgs() {
+		return new Exception(400, "Wrong arguments in the request");
+	}
+
+	@ExceptionHandler(NotEnoughArgsException.class)
+	@ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
+	public Exception ratelimited() {
+		return new Exception(429, "You are being ratelimited");
+	}
+
 	@Override
 	public String getErrorPath() {
 		return "/error";
