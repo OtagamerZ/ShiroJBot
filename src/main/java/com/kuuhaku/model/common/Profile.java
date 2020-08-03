@@ -46,7 +46,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class Profile {
 	public static Font FONT;
@@ -258,29 +257,29 @@ public class Profile {
 		try {
 			File out = File.createTempFile("profile_", ".gif");
 			try (ImageOutputStream ios = new FileImageOutputStream(out)) {
-				List<Pair<BufferedImage, Integer>> frames = Helper.readGIF(mb.getBg());
-				AtomicReference<Graphics2D> g2d = new AtomicReference<>();
+				List<Pair<Integer, BufferedImage>> frames = Helper.readGIF(mb.getBg());
 				AtomicInteger xOffset = new AtomicInteger();
 				AtomicInteger yOffset = new AtomicInteger();
 				frames.forEach(p -> {
 					BufferedImage canvas = new BufferedImage(overlay.getWidth(), overlay.getHeight(), BufferedImage.TYPE_INT_ARGB);
+					Graphics2D g2d = canvas.createGraphics();
 
-					if (p.getLeft().getWidth() > canvas.getWidth())
-						xOffset.set(-(p.getLeft().getWidth() - canvas.getWidth()) / 2);
-					if (p.getLeft().getHeight() > canvas.getHeight())
-						yOffset.set(-(p.getLeft().getHeight() - canvas.getHeight()) / 2);
+					if (p.getRight().getWidth() > canvas.getWidth())
+						xOffset.set(-(p.getRight().getWidth() - canvas.getWidth()) / 2);
+					if (p.getRight().getHeight() > canvas.getHeight())
+						yOffset.set(-(p.getRight().getHeight() - canvas.getHeight()) / 2);
 
-					g2d.set(canvas.createGraphics());
-					g2d.get().drawImage(Helper.scaleImage(p.getLeft(), canvas.getWidth(), canvas.getHeight()), xOffset.get(), yOffset.get(), null);
-					g2d.get().drawImage(overlay, 0, 0, null);
+					g2d.drawImage(Helper.scaleImage(p.getRight(), canvas.getWidth(), canvas.getHeight()), xOffset.get(), yOffset.get(), null);
+					g2d.drawImage(overlay, 0, 0, null);
 
-					g2d.get().dispose();
+					g2d.dispose();
+					p.setValue(canvas);
 				});
 
 				GifSequenceWriter writer = new GifSequenceWriter(ios, BufferedImage.TYPE_INT_ARGB);
 				frames.forEach(p -> {
 					try {
-						writer.writeToSequence(p.getLeft(), p.getRight(), 4, true);
+						writer.writeToSequence(p.getRight(), p.getLeft(), 10, true);
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
