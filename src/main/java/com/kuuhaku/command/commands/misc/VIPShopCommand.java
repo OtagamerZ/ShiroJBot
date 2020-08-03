@@ -154,6 +154,18 @@ public class VIPShopCommand extends Command {
 
 				channel.sendMessage("Você cromou a carta " + oldCard.getName() + " com sucesso!").queue();
 				return;
+			} else if (vi.equals(VipItem.ANIMATED_BACKGROUND)) {
+				if (acc.getGems() < vi.getGems()) {
+					channel.sendMessage(":x: | Você não possui gemas suficientes.").queue();
+					return;
+				}
+
+				acc.setAnimatedBg(true);
+				acc.removeGem(10);
+				AccountDAO.saveAccount(acc);
+
+				channel.sendMessage("Fundo de perfil animado habilitado com sucesso!").queue();
+				return;
 			}
 		}
 	}

@@ -21,6 +21,7 @@ package com.kuuhaku.command.commands.misc;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
@@ -63,6 +64,11 @@ public class BackgroundCommand extends Command {
 			BufferedImage bi = ImageIO.read(con.getInputStream());
 			con.disconnect();
 			bi.flush();
+
+			if (Helper.getFileType(args[0]).contains("gif") && (bi.getWidth() < 400 || bi.getHeight() < 254)) {
+				channel.sendMessage(":x: | Fundos de perfil animados devem ter no mínimo 400px de largura e 254px de altura!").queue();
+				return;
+			}
 
 			com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(author.getId() + guild.getId());
 			m.setBg(args[0]);

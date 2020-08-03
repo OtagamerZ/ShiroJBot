@@ -23,6 +23,7 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 public enum VipItem {
 	CARD_ROLL(1, 1, new MessageEmbed.Field("1 - Rodar carta (1 gema)", "Troca a carta por outra aleatória que você não tenha", false)),
 	CARD_FOIL(2, 5, new MessageEmbed.Field("2 - Melhoria de carta (5 gemas)", "Transforma uma carta em cromada", false)),
+	ANIMATED_BACKGROUND(3, 10, new MessageEmbed.Field("3 - Fundo de perfil animado (10 gemas)", "Permite usar GIFs como fundo de perfil", false)),
 	;
 
 	private final int id;
@@ -53,6 +54,8 @@ public enum VipItem {
 				return CARD_ROLL;
 			case 2:
 				return CARD_FOIL;
+			case 3:
+				return ANIMATED_BACKGROUND;
 			default:
 				return null;
 		}
