@@ -25,10 +25,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/GifSequenceWriter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/ProfileCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/ProfileCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -635,21 +634,7 @@
       <workItem from="1596132231601" duration="9691000" />
       <workItem from="1596196972702" duration="1793000" />
       <workItem from="1596223931002" duration="625000" />
-      <workItem from="1596472266881" duration="291000" />
-    </task>
-    <task id="LOCAL-02019" summary="Correção no retorno de cartas">
-      <created>1595940494319</created>
-      <option name="number" value="02019" />
-      <option name="presentableId" value="LOCAL-02019" />
-      <option name="project" value="LOCAL" />
-      <updated>1595940494319</updated>
-    </task>
-    <task id="LOCAL-02020" summary="Novas cartas: Monster Musume, GATE e Nanatsu No Taizai">
-      <created>1595945069017</created>
-      <option name="number" value="02020" />
-      <option name="presentableId" value="LOCAL-02020" />
-      <option name="project" value="LOCAL" />
-      <updated>1595945069017</updated>
+      <workItem from="1596472266881" duration="1664000" />
     </task>
     <task id="LOCAL-02021" summary="Adição da função de lembrar quando puder votar novamente">
       <created>1595947917186</created>
@@ -980,7 +965,21 @@
       <option name="project" value="LOCAL" />
       <updated>1596224473974</updated>
     </task>
-    <option name="localTasksCounter" value="2068" />
+    <task id="LOCAL-02068" summary="Testes de nova funcionalidade">
+      <created>1596472596592</created>
+      <option name="number" value="02068" />
+      <option name="presentableId" value="LOCAL-02068" />
+      <option name="project" value="LOCAL" />
+      <updated>1596472596593</updated>
+    </task>
+    <task id="LOCAL-02069" summary="Testes de nova funcionalidade">
+      <created>1596472775616</created>
+      <option name="number" value="02069" />
+      <option name="presentableId" value="LOCAL-02069" />
+      <option name="project" value="LOCAL" />
+      <updated>1596472775616</updated>
+    </task>
+    <option name="localTasksCounter" value="2070" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1023,7 +1022,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção no comando de troca" />
     <MESSAGE value="Correção no comando de convite" />
     <MESSAGE value="Correções gerais" />
     <MESSAGE value="Adição do comando para mudar a cor do perfil" />
@@ -1048,7 +1046,8 @@
     <MESSAGE value="Remoção de versionamento de objetos" />
     <MESSAGE value="Remoção do sweeper" />
     <MESSAGE value="Adição do comando de sweep" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição do comando de sweep" />
+    <MESSAGE value="Testes de nova funcionalidade" />
+    <option name="LAST_COMMIT_MESSAGE" value="Testes de nova funcionalidade" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1186,11 +1185,11 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1587956411634" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1592942915575" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1596472598457">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1596472778375">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1596472598457" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1596472778375" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1594305494731">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>

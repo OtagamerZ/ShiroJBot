@@ -1070,7 +1070,7 @@ public class Helper {
 		return bi;
 	}
 
-	public List<Pair<BufferedImage, Integer>> readGIF(String url) throws IOException {
+	public static List<Pair<BufferedImage, Integer>> readGIF(String url) throws IOException {
 		List<Pair<BufferedImage, Integer>> frms = new ArrayList<>();
 		ImageReader ir = ImageIO.getImageReadersByFormatName("gif").next();
 		ImageInputStream iis = ImageIO.createImageInputStream(getImage(url));

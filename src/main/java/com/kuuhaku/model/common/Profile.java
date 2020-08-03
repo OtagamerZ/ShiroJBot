@@ -24,13 +24,13 @@ import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Member;
-import com.kuuhaku.utils.ExceedEnums;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.Tag;
-import com.kuuhaku.utils.TagIcons;
+import com.kuuhaku.utils.*;
 import net.dv8tion.jda.api.entities.Guild;
+import org.apache.commons.lang3.tuple.Pair;
 
 import javax.imageio.ImageIO;
+import javax.imageio.stream.FileImageOutputStream;
+import javax.imageio.stream.ImageOutputStream;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
@@ -39,12 +39,14 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Profile {
 	public static Font FONT;
@@ -59,7 +61,7 @@ public class Profile {
 		}
 	}
 
-	public static ByteArrayOutputStream makeProfile(net.dv8tion.jda.api.entities.Member m, Guild g) throws IOException {
+	public static BufferedImage makeProfile(net.dv8tion.jda.api.entities.Member m, Guild g) throws IOException {
 		int w = WIDTH;
 		BufferedImage avatar;
 		Member mb = MemberDAO.getMemberById(m.getUser().getId() + g.getId());
@@ -207,10 +209,7 @@ public class Profile {
 
 		g2d.dispose();
 
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		ImageIO.write(clipRoundEdges(bi), "png", baos);
-
-		return baos;
+		return clipRoundEdges(bi);
 	}
 
 	public static BufferedImage clipRoundEdges(BufferedImage image) {
@@ -252,6 +251,48 @@ public class Profile {
 
 		for (int i = 0; i < badges.size(); i++) {
 			g2d.drawImage(badges.get(i), coords.get(i)[0], coords.get(i)[1], 44, 44, null);
+		}
+	}
+
+	public static File applyAnimatedBackground(Member mb, BufferedImage overlay) {
+		try {
+			File out = File.createTempFile("profile_", ".gif");
+			try (ImageOutputStream ios = new FileImageOutputStream(out)) {
+				List<Pair<BufferedImage, Integer>> frames = Helper.readGIF(mb.getBg());
+				AtomicReference<Graphics2D> g2d = new AtomicReference<>();
+				AtomicInteger xOffset = new AtomicInteger();
+				AtomicInteger yOffset = new AtomicInteger();
+				frames.forEach(p -> {
+					BufferedImage canvas = new BufferedImage(overlay.getWidth(), overlay.getHeight(), BufferedImage.TYPE_INT_ARGB);
+
+					if (p.getLeft().getWidth() > canvas.getWidth())
+						xOffset.set(-(p.getLeft().getWidth() - canvas.getWidth()) / 2);
+					if (p.getLeft().getHeight() > canvas.getHeight())
+						yOffset.set(-(p.getLeft().getHeight() - canvas.getHeight()) / 2);
+
+					g2d.set(canvas.createGraphics());
+					g2d.get().drawImage(Helper.scaleImage(p.getLeft(), canvas.getWidth(), canvas.getHeight()), xOffset.get(), yOffset.get(), null);
+					g2d.get().drawImage(overlay, 0, 0, null);
+
+					g2d.get().dispose();
+				});
+
+				GifSequenceWriter writer = new GifSequenceWriter(ios, BufferedImage.TYPE_INT_ARGB);
+				frames.forEach(p -> {
+					try {
+						writer.writeToSequence(p.getLeft(), p.getRight(), 4, true);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				});
+
+				writer.close();
+			}
+
+			return out;
+		} catch (IOException e) {
+			Helper.logger(Profile.class).error(e + " | " + e.getStackTrace()[0]);
+			return null;
 		}
 	}
 
