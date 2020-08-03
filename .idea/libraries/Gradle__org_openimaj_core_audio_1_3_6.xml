@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: org.openimaj:core-audio:1.3.6">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.openimaj/core-audio/1.3.6/797a6f5ac275558c01e55a952bc7ae6e3be937a8/core-audio-1.3.6.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.openimaj/core-audio/1.3.6/2c74f5d623f1d87214d22baa72c445b073f9d387/core-audio-1.3.6-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.openimaj/core-audio/1.3.6/c98841d9a9b3e7e91b65b72474831924020ed5e3/core-audio-1.3.6-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

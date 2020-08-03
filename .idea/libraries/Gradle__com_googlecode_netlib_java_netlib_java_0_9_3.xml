@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: com.googlecode.netlib-java:netlib-java:0.9.3">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.googlecode.netlib-java/netlib-java/0.9.3/1d41b60e5180f6bcb7db15e7353dde7147cd3928/netlib-java-0.9.3.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.googlecode.netlib-java/netlib-java/0.9.3/9bde9f1d4c7a96eb6905f43ec0fb06e57cf2d613/netlib-java-0.9.3-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.googlecode.netlib-java/netlib-java/0.9.3/803f467476f9b6d311c4ea36416d8c73d5e8f312/netlib-java-0.9.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

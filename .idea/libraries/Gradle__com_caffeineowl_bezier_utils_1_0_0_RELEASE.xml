@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: com.caffeineowl:bezier-utils:1.0.0-RELEASE">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.caffeineowl/bezier-utils/1.0.0-RELEASE/277e1eb2688415c6cd0f64b166eed789591f586a/bezier-utils-1.0.0-RELEASE.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.caffeineowl/bezier-utils/1.0.0-RELEASE/a0f5d60cc440b111a9300af3791a705f131e75fc/bezier-utils-1.0.0-RELEASE-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.caffeineowl/bezier-utils/1.0.0-RELEASE/618f9ed6c801d8dc77c247c574ce17582953220b/bezier-utils-1.0.0-RELEASE-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

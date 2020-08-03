@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: org.jbibtex:jbibtex:1.0.2">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jbibtex/jbibtex/1.0.2/2f6426ee1bdcb3f8a11de6193613f38e08fd7be7/jbibtex-1.0.2.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jbibtex/jbibtex/1.0.2/2a3d75379dce60463797c17244e6973fda1afea6/jbibtex-1.0.2-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jbibtex/jbibtex/1.0.2/b404fa1e12f3b8d18973d58b82403e382fcf0bc2/jbibtex-1.0.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

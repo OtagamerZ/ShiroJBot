@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: commons-collections:commons-collections:2.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-collections/commons-collections/2.1/8e10f94f30ea064eee3cb94f864dc9c31e30e8af/commons-collections-2.1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-collections/commons-collections/2.1/38425bfb854dda4112e59b82da20e4e2165224c8/commons-collections-2.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-collections/commons-collections/2.1/fa4c407195e317251a176b3dd04d6704d9df3ca6/commons-collections-2.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

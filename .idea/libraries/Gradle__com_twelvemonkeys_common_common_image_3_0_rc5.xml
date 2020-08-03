@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: com.twelvemonkeys.common:common-image:3.0-rc5">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.twelvemonkeys.common/common-image/3.0-rc5/a23782df71c5fe4a8414181b2f4a90b90144c985/common-image-3.0-rc5.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.twelvemonkeys.common/common-image/3.0-rc5/db62bb07b17cfa72e28a625b8579f01207f678c2/common-image-3.0-rc5-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.twelvemonkeys.common/common-image/3.0-rc5/69c8b11c6e69e333869344637e2fc295aafcae88/common-image-3.0-rc5-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

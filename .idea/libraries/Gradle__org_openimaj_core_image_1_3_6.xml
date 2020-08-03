@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: org.openimaj:core-image:1.3.6">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.openimaj/core-image/1.3.6/ed4c06e88310a5fa0661523531ec5b1a24f40c40/core-image-1.3.6.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.openimaj/core-image/1.3.6/1b1f56abccc557e2f6685d6deb4f6b350a62e4c5/core-image-1.3.6-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.openimaj/core-image/1.3.6/c2af4dcef97f50123a141571d0b2d78d3a464dbb/core-image-1.3.6-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
