@@ -20,7 +20,10 @@ package com.kuuhaku.command.commands.information;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.common.Profile;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
@@ -28,6 +31,7 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import org.jetbrains.annotations.NonNls;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 
@@ -51,9 +55,17 @@ public class ProfileCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		Account acc = AccountDAO.getAccount(author.getId());
 		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_generating-profile")).queue(m -> {
 			try {
-				channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_profile"), author.getAsMention())).addFile(Profile.makeProfile(member, guild).toByteArray(), "perfil.png").queue(s -> m.delete().queue());
+				if (acc.hasAnimatedBg()) {
+					File pf = Profile.applyAnimatedBackground(MemberDAO.getMemberById(author.getId() + guild.getId()), Profile.makeProfile(member, guild));
+					if (pf != null)
+						channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_profile"), author.getAsMention())).addFile(pf, "perfil.gif").queue(s -> m.delete().queue());
+					else
+						channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_profile"), author.getAsMention())).addFile(Helper.getBytes(Profile.makeProfile(member, guild), "png"), "perfil.png").queue(s -> m.delete().queue());
+				} else
+					channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_profile"), author.getAsMention())).addFile(Helper.getBytes(Profile.makeProfile(member, guild), "png"), "perfil.png").queue(s -> m.delete().queue());
 			} catch (IOException e) {
 				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_profile-generation-error")).queue();
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
