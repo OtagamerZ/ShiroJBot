@@ -19,8 +19,10 @@
 package com.kuuhaku.model.common;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
@@ -61,6 +63,7 @@ public class Profile {
 		int w = WIDTH;
 		BufferedImage avatar;
 		Member mb = MemberDAO.getMemberById(m.getUser().getId() + g.getId());
+		Account acc = AccountDAO.getAccount(m.getId());
 
 		try {
 			avatar = Helper.scaleImage(ImageIO.read(Helper.getImage(m.getUser().getEffectiveAvatarUrl())), 200, 200);
@@ -68,7 +71,7 @@ public class Profile {
 			avatar = Helper.scaleImage(ImageIO.read(Helper.getImage("https://institutogoldenprana.com.br/wp-content/uploads/2015/08/no-avatar-25359d55aa3c93ab3466622fd2ce712d1.jpg")), 200, 200);
 		}
 
-		BufferedImage bi = new BufferedImage(w, HEIGTH, BufferedImage.TYPE_INT_RGB);
+		BufferedImage bi = new BufferedImage(w, HEIGTH, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setBackground(Color.black);
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
@@ -84,23 +87,25 @@ public class Profile {
 			} catch (NumberFormatException ignore) {
 			}
 		}
-		try {
-			BufferedImage bg = Helper.scaleImage(ImageIO.read(Helper.getImage(mb.getBg())), bi.getWidth(), bi.getHeight());
+		if (!acc.hasAnimatedBg()) {
+			try {
+				BufferedImage bg = Helper.scaleImage(ImageIO.read(Helper.getImage(mb.getBg())), bi.getWidth(), bi.getHeight());
 
-			if (bg.getWidth() > bi.getWidth()) xOffset = -(bg.getWidth() - bi.getWidth()) / 2;
-			if (bg.getHeight() > bi.getHeight()) yOffset = -(bg.getHeight() - bi.getHeight()) / 2;
+				if (bg.getWidth() > bi.getWidth()) xOffset = -(bg.getWidth() - bi.getWidth()) / 2;
+				if (bg.getHeight() > bi.getHeight()) yOffset = -(bg.getHeight() - bi.getHeight()) / 2;
 
-			g2d.drawImage(bg, xOffset, yOffset, null);
-			if (main == null) main = Helper.reverseColor(Helper.colorThief(mb.getBg()));
-		} catch (IOException e) {
-			BufferedImage bg = Helper.scaleImage(ImageIO.read(Helper.getImage("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg")), bi.getWidth(), bi.getHeight());
+				g2d.drawImage(bg, xOffset, yOffset, null);
+				if (main == null) main = Helper.reverseColor(Helper.colorThief(mb.getBg()));
+			} catch (IOException e) {
+				BufferedImage bg = Helper.scaleImage(ImageIO.read(Helper.getImage("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg")), bi.getWidth(), bi.getHeight());
 
-			if (bg.getWidth() > bi.getWidth()) xOffset = -(bg.getWidth() - bi.getWidth()) / 2;
-			if (bg.getHeight() > bi.getHeight()) yOffset = -(bg.getHeight() - bi.getHeight()) / 2;
+				if (bg.getWidth() > bi.getWidth()) xOffset = -(bg.getWidth() - bi.getWidth()) / 2;
+				if (bg.getHeight() > bi.getHeight()) yOffset = -(bg.getHeight() - bi.getHeight()) / 2;
 
-			g2d.drawImage(bg, xOffset, yOffset, null);
-			if (main == null)
-				main = Helper.reverseColor(Helper.colorThief("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg"));
+				g2d.drawImage(bg, xOffset, yOffset, null);
+				if (main == null)
+					main = Helper.reverseColor(Helper.colorThief("https://pm1.narvii.com/6429/7f50ee6d5a42723882c6c23a8420f24dfff60e4f_hq.jpg"));
+			}
 		}
 
 		Color lvlBar;

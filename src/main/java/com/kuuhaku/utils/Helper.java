@@ -23,6 +23,7 @@ import com.github.kevinsawicki.http.HttpRequest;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
+import com.google.gson.Gson;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.reactions.Reaction;
@@ -50,16 +51,15 @@ import net.dv8tion.jda.api.requests.restaction.InviteAction;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 import org.python.google.common.collect.Lists;
 
 import javax.annotation.Nonnull;
-import javax.imageio.IIOImage;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageWriteParam;
-import javax.imageio.ImageWriter;
+import javax.imageio.*;
+import javax.imageio.stream.ImageInputStream;
 import javax.imageio.stream.ImageOutputStream;
 import javax.persistence.NoResultException;
 import java.awt.*;
@@ -1068,5 +1068,31 @@ public class Helper {
 		g2d.dispose();
 
 		return bi;
+	}
+
+	public List<Pair<BufferedImage, Integer>> readGIF(String url) throws IOException {
+		List<Pair<BufferedImage, Integer>> frms = new ArrayList<>();
+		ImageReader ir = ImageIO.getImageReadersByFormatName("gif").next();
+		ImageInputStream iis = ImageIO.createImageInputStream(getImage(url));
+		ir.setInput(iis);
+
+		int w = 0;
+		int h = 0;
+		int frames = ir.getNumImages(true);
+		for (int i = 0; i < frames; i++) {
+			BufferedImage image = ir.read(i);
+			if (i == 0) {
+				w = image.getWidth();
+				h = image.getHeight();
+			}
+			JSONObject metadata = new JSONObject(new Gson().toJson(ir.getImageMetadata(i)));
+
+			BufferedImage master = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+			master.getGraphics().drawImage(image, metadata.getInt("imageLeftPosition"), metadata.getInt("imageTopPosition"), null);
+
+			frms.add(Pair.of(master, metadata.getInt("disposalMethod")));
+		}
+
+		return frms;
 	}
 }
