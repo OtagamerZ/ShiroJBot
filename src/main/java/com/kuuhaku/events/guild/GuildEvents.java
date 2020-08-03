@@ -38,6 +38,7 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.role.RoleDeleteEvent;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
+import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
@@ -256,7 +257,7 @@ public class GuildEvents extends ListenerAdapter {
 						});
 						guild.modifyMemberRoles(member, null, list).queue(null, Helper::doNothing);
 					});
-				} catch (InsufficientPermissionException ignore) {
+				} catch (HierarchyException | InsufficientPermissionException ignore) {
 				}
 
 				try {
