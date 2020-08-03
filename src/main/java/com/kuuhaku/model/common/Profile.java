@@ -260,17 +260,17 @@ public class Profile {
 			List<Triple<Integer, Integer, BufferedImage>> toDraw = new ArrayList<>();
 			AtomicInteger xOffset = new AtomicInteger();
 			AtomicInteger yOffset = new AtomicInteger();
+
 			frames.forEach(p -> {
 				BufferedImage canvas = new BufferedImage(overlay.getWidth(), overlay.getHeight(), BufferedImage.TYPE_INT_ARGB);
 				Graphics2D g2d = canvas.createGraphics();
 
-				BufferedImage bg = Helper.scaleImage(p.getRight(), canvas.getWidth(), canvas.getHeight());
-				if (bg.getWidth() > canvas.getWidth())
-					xOffset.set(-(bg.getWidth() - canvas.getWidth()) / 2);
-				if (bg.getHeight() > canvas.getHeight())
-					yOffset.set(-(bg.getHeight() - canvas.getHeight()) / 2);
+				if (p.getRight().getWidth() > canvas.getWidth())
+					xOffset.set(-(p.getRight().getWidth() - canvas.getWidth()) / 2);
+				if (p.getRight().getHeight() > canvas.getHeight())
+					yOffset.set(-(p.getRight().getHeight() - canvas.getHeight()) / 2);
 
-				g2d.drawImage(bg, xOffset.get(), yOffset.get(), null);
+				g2d.drawImage(p.getRight(), xOffset.get(), yOffset.get(), null);
 				g2d.drawImage(overlay, 0, 0, null);
 
 				g2d.dispose();
