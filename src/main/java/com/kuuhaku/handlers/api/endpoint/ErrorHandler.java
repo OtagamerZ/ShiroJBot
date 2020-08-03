@@ -19,9 +19,7 @@
 package com.kuuhaku.handlers.api.endpoint;
 
 import com.kuuhaku.handlers.api.exception.Exception;
-import com.kuuhaku.handlers.api.exception.InvalidTokenException;
-import com.kuuhaku.handlers.api.exception.NotEnoughArgsException;
-import com.kuuhaku.handlers.api.exception.UnauthorizedException;
+import com.kuuhaku.handlers.api.exception.*;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -67,7 +65,7 @@ public class ErrorHandler implements ErrorController {
 		return new Exception(400, "Wrong arguments in the request");
 	}
 
-	@ExceptionHandler(NotEnoughArgsException.class)
+	@ExceptionHandler(RatelimitException.class)
 	@ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
 	public Exception ratelimited() {
 		return new Exception(429, "You are being ratelimited");
