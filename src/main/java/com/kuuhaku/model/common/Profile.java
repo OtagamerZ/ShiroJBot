@@ -264,16 +264,17 @@ public class Profile {
 				BufferedImage canvas = new BufferedImage(overlay.getWidth(), overlay.getHeight(), BufferedImage.TYPE_INT_ARGB);
 				Graphics2D g2d = canvas.createGraphics();
 
-				if (p.getRight().getWidth() > canvas.getWidth())
-					xOffset.set(-(p.getRight().getWidth() - canvas.getWidth()) / 2);
-				if (p.getRight().getHeight() > canvas.getHeight())
-					yOffset.set(-(p.getRight().getHeight() - canvas.getHeight()) / 2);
+				BufferedImage bg = Helper.scaleImage(p.getRight(), canvas.getWidth(), canvas.getHeight());
+				if (bg.getWidth() > canvas.getWidth())
+					xOffset.set(-(bg.getWidth() - canvas.getWidth()) / 2);
+				if (bg.getHeight() > canvas.getHeight())
+					yOffset.set(-(bg.getHeight() - canvas.getHeight()) / 2);
 
-				g2d.drawImage(Helper.scaleImage(p.getRight(), canvas.getWidth(), canvas.getHeight()), xOffset.get(), yOffset.get(), null);
+				g2d.drawImage(bg, xOffset.get(), yOffset.get(), null);
 				g2d.drawImage(overlay, 0, 0, null);
 
 				g2d.dispose();
-				toDraw.add(Triple.of(p.getLeft(), p.getMiddle(), canvas));
+				toDraw.add(Triple.of(p.getLeft(), p.getMiddle(), clipRoundEdges(canvas)));
 			});
 
 			GifSequenceWriter writer = new GifSequenceWriter(ios, BufferedImage.TYPE_INT_ARGB);
