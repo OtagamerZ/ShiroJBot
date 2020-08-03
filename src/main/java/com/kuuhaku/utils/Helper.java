@@ -1070,8 +1070,8 @@ public class Helper {
 		return bi;
 	}
 
-	public static List<Pair<BufferedImage, Integer>> readGIF(String url) throws IOException {
-		List<Pair<BufferedImage, Integer>> frms = new ArrayList<>();
+	public static List<Pair<Integer, BufferedImage>> readGIF(String url) throws IOException {
+		List<Pair<Integer, BufferedImage>> frms = new ArrayList<>();
 		ImageReader ir = ImageIO.getImageReadersByFormatName("gif").next();
 		ImageInputStream iis = ImageIO.createImageInputStream(getImage(url));
 		ir.setInput(iis);
@@ -1090,7 +1090,7 @@ public class Helper {
 			BufferedImage master = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 			master.getGraphics().drawImage(image, metadata.getInt("imageLeftPosition"), metadata.getInt("imageTopPosition"), null);
 
-			frms.add(Pair.of(master, metadata.getInt("disposalMethod")));
+			frms.add(Pair.of(metadata.getInt("disposalMethod"), master));
 		}
 
 		return frms;
