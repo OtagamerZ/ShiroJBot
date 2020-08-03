@@ -18,13 +18,13 @@
 
 package com.kuuhaku.model.common;
 
-import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.model.persistent.Blacklist;
 import com.kuuhaku.model.persistent.CustomAnswers;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Member;
+import com.kuuhaku.utils.Helper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,29 +43,7 @@ public class DataDump {
 		this.mDump = mDump;
 		this.kgDump = kgDump;
 		this.psDump = psDump;
-		this.blDump = blDump;
-	}
-
-	public DataDump(List<CustomAnswers> caDump, List<GuildConfig> gcDump, List<Kawaigotchi> kgDump, List<PoliticalState> psDump) {
-		this.caDump = caDump;
-		this.gcDump = gcDump;
-		this.kgDump = kgDump;
-		this.psDump = psDump;
-		this.blDump = new ArrayList<>();
-		this.mDump = new ArrayList<>();
-	}
-
-	public DataDump(List<Member> mDump) {
-		this.caDump = new ArrayList<>();
-		this.gcDump = new ArrayList<>();
-		this.kgDump = new ArrayList<>();
-		this.psDump = new ArrayList<>();
-		this.blDump = new ArrayList<>();
-
-		List<Member> oldMembers = MemberDAO.getMembers();
-		mDump.removeAll(oldMembers);
-
-		this.mDump = mDump;
+		this.blDump = Helper.getOr(blDump, new ArrayList<>());
 	}
 
     public List<CustomAnswers> getCaDump() {
