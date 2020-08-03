@@ -58,8 +58,6 @@ public class DashboardRequest {
 		jo.put("redirect_uri", "http://" + System.getenv("SERVER_URL") + "/api/auth");
 		jo.put("scope", "identify");
 
-		System.out.println(jo);
-
 		JSONObject token = null;
 
 		boolean granted = false;
@@ -70,7 +68,7 @@ public class DashboardRequest {
 			} else granted = true;
 		}
 
-		JSONObject user = Helper.get("https://discord.com/api/v6/users/@me", new JSONObject(), Collections.emptyMap(), token.getString("token_type") + " " + token.getString("access_token"));
+		JSONObject user = Helper.get("https://discord.com/api/v6/users/@me", new JSONObject(), Collections.emptyMap(), "Bearer " + token.getString("access_token"));
 		User u = Main.getInfo().getUserByID(user.getString("id"));
 
 		if (u != null) {
