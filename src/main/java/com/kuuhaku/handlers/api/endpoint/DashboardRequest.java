@@ -110,8 +110,8 @@ public class DashboardRequest {
 		}
 	}
 
-	@RequestMapping(value = "/api/canvas", method = RequestMethod.POST)
-	public String checkImage(@RequestHeader(value = "token") String token, @RequestHeader(value = "pos-x") int x, @RequestHeader(value = "pos-y") int y, @RequestHeader(value = "color") String color) throws IllegalArgumentException {
+	@RequestMapping(value = "/api/canvas/add", method = RequestMethod.POST)
+	public String addPixel(@RequestHeader(value = "token") String token, @RequestHeader(value = "pos-x") int x, @RequestHeader(value = "pos-y") int y, @RequestHeader(value = "color") String color) throws IllegalArgumentException {
 		if (!Helper.between(x, 0, Helper.CANVAS_SIZE) || !Helper.between(y, 0, Helper.CANVAS_SIZE))
 			throw new IllegalArgumentException();
 		else if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
@@ -125,5 +125,12 @@ public class DashboardRequest {
 		Main.getInfo().getSockets().getCanvas().notifyUpdate();
 		ratelimit.put(token, false);
 		return "Ok! (time for next request: 5 seconds)";
+	}
+
+	@RequestMapping(value = "/api/canvas/view", method = RequestMethod.POST)
+	public String viewCanvas(@RequestHeader(value = "token") String token) {
+		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
+
+		return Main.getInfo().getCanvas().getRawCanvas();
 	}
 }
