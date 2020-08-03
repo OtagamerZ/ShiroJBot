@@ -58,6 +58,7 @@ public class DashboardRequest {
 		jo.put("redirect_uri", "http://" + System.getenv("SERVER_URL") + "/api/auth");
 		jo.put("scope", "identify");
 
+		System.out.println(jo);
 
 		JSONObject token = null;
 
