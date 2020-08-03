@@ -215,7 +215,7 @@ public class Profile {
 		BufferedImage bi = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 
-		g2d.setClip(new RoundRectangle2D.Float(0, 0, bi.getWidth(), bi.getHeight(), 80, 80));
+		g2d.setClip(new RoundRectangle2D.Float(0, 0, bi.getWidth(), bi.getHeight(), bi.getWidth() * 0.1f, bi.getWidth() * 0.1f));
 		g2d.drawImage(image, null, 0, 0);
 		g2d.dispose();
 
