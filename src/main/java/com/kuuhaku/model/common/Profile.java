@@ -208,7 +208,7 @@ public class Profile {
 
 		g2d.dispose();
 
-		return clipRoundEdges(bi);
+		return Helper.scaleImage(clipRoundEdges(bi), 400, 254);
 	}
 
 	public static BufferedImage clipRoundEdges(BufferedImage image) {
