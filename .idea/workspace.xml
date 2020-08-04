@@ -29,7 +29,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/DashboardSocket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/DashboardSocket.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -173,6 +172,17 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [shadowJar]">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -560,14 +570,8 @@
       <workItem from="1596223931002" duration="625000" />
       <workItem from="1596472266881" duration="10166000" />
       <workItem from="1596483130757" duration="1638000" />
-      <workItem from="1596484862962" duration="3425000" />
-    </task>
-    <task id="LOCAL-02044" summary="Correções nas cartas cromadas e na cor padrão do perfil">
-      <created>1596142076503</created>
-      <option name="number" value="02044" />
-      <option name="presentableId" value="LOCAL-02044" />
-      <option name="project" value="LOCAL" />
-      <updated>1596142076504</updated>
+      <workItem from="1596484862962" duration="3439000" />
+      <workItem from="1596542610403" duration="2044000" />
     </task>
     <task id="LOCAL-02045" summary="Correções nas cartas cromadas e na cor padrão do perfil">
       <created>1596142438663</created>
@@ -905,7 +909,14 @@
       <option name="project" value="LOCAL" />
       <updated>1596486299032</updated>
     </task>
-    <option name="localTasksCounter" value="2093" />
+    <task id="LOCAL-02093" summary="Endpoint de canvas está de volta">
+      <created>1596488295400</created>
+      <option name="number" value="02093" />
+      <option name="presentableId" value="LOCAL-02093" />
+      <option name="project" value="LOCAL" />
+      <updated>1596488295400</updated>
+    </task>
+    <option name="localTasksCounter" value="2094" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1114,11 +1125,11 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1587956411634" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1596483389799" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1596486322223">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1596488297232">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1596486322223" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1596488297232" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1594305494731">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
