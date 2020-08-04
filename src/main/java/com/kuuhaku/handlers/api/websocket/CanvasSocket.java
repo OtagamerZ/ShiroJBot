@@ -43,7 +43,7 @@ public class CanvasSocket extends WebSocketServer {
 	@Override
 	public void onOpen(WebSocket conn, ClientHandshake handshake) {
 		clients.add(conn);
-		conn.send(Main.getInfo().getCanvas().getAsCoordinates());
+		conn.send(Main.getInfo().getCanvas().getRawCanvas());
 	}
 
 	@Override
@@ -78,6 +78,6 @@ public class CanvasSocket extends WebSocketServer {
 	}
 
 	public void notifyUpdate() {
-		clients.forEach(s -> s.send(Main.getInfo().getCanvas().getAsCoordinates()));
+		clients.forEach(s -> s.send(Main.getInfo().getCanvas().getRawCanvas()));
 	}
 }
