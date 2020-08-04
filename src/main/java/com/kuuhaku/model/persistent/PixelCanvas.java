@@ -23,6 +23,8 @@ import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.requests.RestAction;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
 import javax.persistence.*;
@@ -70,6 +72,26 @@ public class PixelCanvas {
 
 	public String getRawCanvas() {
 		return canvas;
+	}
+
+	public String getAsCoordinates() {
+		JSONObject jo = new JSONObject();
+		jo.put("height", CANVAS_SIZE);
+		jo.put("width", CANVAS_SIZE);
+
+		BufferedImage bi = getCanvas();
+
+		for (int y = 0; y < bi.getHeight(); y++) {
+			JSONArray coords = new JSONArray();
+
+			for (int x = 0; x < bi.getWidth(); x++) {
+				coords.put(String.format("#%06X", bi.getRGB(x, y) & 0xFFFFFF));
+			}
+
+			jo.put(String.valueOf(y), coords);
+		}
+
+		return jo.toString();
 	}
 
 	public RestAction viewCanvas(TextChannel channel) {
