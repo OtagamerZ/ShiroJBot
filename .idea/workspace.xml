@@ -29,6 +29,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/CanvasSocket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/CanvasSocket.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -572,13 +573,7 @@
       <workItem from="1596483130757" duration="1638000" />
       <workItem from="1596484862962" duration="3439000" />
       <workItem from="1596542610403" duration="2044000" />
-    </task>
-    <task id="LOCAL-02045" summary="Correções nas cartas cromadas e na cor padrão do perfil">
-      <created>1596142438663</created>
-      <option name="number" value="02045" />
-      <option name="presentableId" value="LOCAL-02045" />
-      <option name="project" value="LOCAL" />
-      <updated>1596142438663</updated>
+      <workItem from="1596545262010" duration="702000" />
     </task>
     <task id="LOCAL-02046" summary="Correção no alerta de voto">
       <created>1596197080458</created>
@@ -916,7 +911,14 @@
       <option name="project" value="LOCAL" />
       <updated>1596488295400</updated>
     </task>
-    <option name="localTasksCounter" value="2094" />
+    <task id="LOCAL-02094" summary="Endpoint de canvas está de volta">
+      <created>1596545435428</created>
+      <option name="number" value="02094" />
+      <option name="presentableId" value="LOCAL-02094" />
+      <option name="project" value="LOCAL" />
+      <updated>1596545435429</updated>
+    </task>
+    <option name="localTasksCounter" value="2095" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1042,11 +1044,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2" timestamp="1596488292318">
+    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2" timestamp="1596545432233">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1596488292318" />
+    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1596545432233" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1125,11 +1127,11 @@
     </state>
     <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1587956411634" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1596483389799" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1596488297232">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1596545446837">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1596488297232" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1596545446837" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1594305494731">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1164,11 +1166,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="465" y="286" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595246935580" />
-    <state x="287" y="103" width="957" height="784" key="find.popup" timestamp="1596216189718">
+    <state x="287" y="103" width="957" height="784" key="find.popup" timestamp="1596545337432">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="362" y="134" width="774" height="562" key="find.popup/0.0.1366.768@0.0.1366.768" timestamp="1588044108124" />
-    <state x="287" y="103" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1596216189718" />
+    <state x="287" y="103" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1596545337432" />
     <state x="645" y="400" key="git4idea.ui.GitResetDialog" timestamp="1593018818159">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
