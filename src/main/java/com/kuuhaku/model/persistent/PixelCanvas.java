@@ -24,6 +24,7 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.requests.RestAction;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
 import javax.persistence.*;
@@ -80,7 +81,14 @@ public class PixelCanvas {
 
 		for (int y = 0; y < bi.getHeight(); y++) {
 			for (int x = 0; x < bi.getWidth(); x++) {
-				ja.put(String.format("#%06X", bi.getRGB(x, y) & 0xFFFFFF));
+				JSONObject jo = new JSONObject();
+
+				jo.put("id", (1024 * y) + x);
+				jo.put("x", x);
+				jo.put("y", y);
+				jo.put("color", String.format("#%06X", bi.getRGB(x, y) & 0xFFFFFF));
+
+				ja.put(jo);
 			}
 		}
 
