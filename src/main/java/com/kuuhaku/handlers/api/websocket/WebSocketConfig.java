@@ -26,12 +26,13 @@ public class WebSocketConfig {
 	private final CanvasSocket canvas;
 
 	public WebSocketConfig() {
-		this.chat = new ChatSocket(new InetSocketAddress(8001));
-		this.dashboard = new DashboardSocket(new InetSocketAddress(8002));
-		this.canvas = new CanvasSocket(new InetSocketAddress(8003));
+		chat = new ChatSocket(new InetSocketAddress(8001));
+		dashboard = new DashboardSocket(new InetSocketAddress(8002));
+		canvas = new CanvasSocket(new InetSocketAddress(8003));
 
 		chat.start();
 		dashboard.start();
+		canvas.start();
 	}
 
 	public ChatSocket getChat() {
