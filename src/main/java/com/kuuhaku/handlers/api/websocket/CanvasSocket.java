@@ -18,11 +18,17 @@
 
 package com.kuuhaku.handlers.api.websocket;
 
+import com.kuuhaku.Main;
+import com.kuuhaku.controller.postgresql.CanvasDAO;
+import com.kuuhaku.controller.postgresql.TokenDAO;
+import com.kuuhaku.model.persistent.PixelCanvas;
 import com.kuuhaku.utils.Helper;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
+import org.json.JSONObject;
 
+import java.awt.*;
 import java.net.InetSocketAddress;
 import java.util.HashSet;
 import java.util.Set;
@@ -46,6 +52,17 @@ public class CanvasSocket extends WebSocketServer {
 
 	@Override
 	public void onMessage(WebSocket conn, String payload) {
+		JSONObject jo = new JSONObject(payload);
+		if (!jo.has("pixel") || !jo.has("token")) return;
+		else if (!TokenDAO.validateToken(jo.getString("token"))) return;
+
+		JSONObject pixel = jo.getJSONObject("pixel");
+
+		PixelCanvas canvas = Main.getInfo().getCanvas();
+		canvas.addPixel(null, new int[]{pixel.getInt("x"), pixel.getInt("y")}, Color.decode(pixel.getString("color")));
+
+		CanvasDAO.saveCanvas(canvas);
+
 		notifyUpdate();
 	}
 
@@ -60,6 +77,6 @@ public class CanvasSocket extends WebSocketServer {
 	}
 
 	public void notifyUpdate() {
-		clients.forEach(s -> s.send("update"));
+		clients.forEach(s -> s.send(Main.getInfo().getCanvas().getRawCanvas()));
 	}
 }
