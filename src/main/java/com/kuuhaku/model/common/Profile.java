@@ -160,9 +160,12 @@ public class Profile {
 			name = m.getEffectiveName().substring(0, 21).concat("...");
 		drawOutlinedText(name, 270, 342, g2d);
 
-		if (!Member.getWaifu(m.getUser()).isEmpty()) {
-			g2d.setFont(FONT.deriveFont(Font.PLAIN, 30));
-			drawOutlinedText("Casado(a) com: " + Main.getInfo().getUserByID(Member.getWaifu(m.getUser())).getName(), 270, 298, g2d);
+		try {
+			if (!Member.getWaifu(m.getUser()).isEmpty()) {
+				g2d.setFont(FONT.deriveFont(Font.PLAIN, 30));
+				drawOutlinedText("Casado(a) com: " + Main.getInfo().getUserByID(Member.getWaifu(m.getUser())).getName(), 270, 298, g2d);
+			}
+		} catch (NullPointerException ignore) {
 		}
 
 		g2d.setFont(FONT.deriveFont(Font.BOLD, 85));
