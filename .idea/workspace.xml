@@ -127,6 +127,7 @@
     <property name="extract.method.default.visibility" value="private" />
     <property name="last.edited.regexp" value="aaaa&#10;aaa" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/memes" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -172,17 +173,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [shadowJar]">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -572,14 +562,9 @@
       <workItem from="1596483130757" duration="1638000" />
       <workItem from="1596484862962" duration="3439000" />
       <workItem from="1596542610403" duration="2044000" />
-      <workItem from="1596545262010" duration="5710000" />
-    </task>
-    <task id="LOCAL-02051" summary="Correção no alerta de voto">
-      <created>1596198200447</created>
-      <option name="number" value="02051" />
-      <option name="presentableId" value="LOCAL-02051" />
-      <option name="project" value="LOCAL" />
-      <updated>1596198200447</updated>
+      <workItem from="1596545262010" duration="7545000" />
+      <workItem from="1596628998347" duration="1294000" />
+      <workItem from="1596639327646" duration="311000" />
     </task>
     <task id="LOCAL-02052" summary="Correção no alerta de voto">
       <created>1596198232199</created>
@@ -917,7 +902,14 @@
       <option name="project" value="LOCAL" />
       <updated>1596549037804</updated>
     </task>
-    <option name="localTasksCounter" value="2100" />
+    <task id="LOCAL-02100" summary="Endpoint de canvas está de volta">
+      <created>1596560303905</created>
+      <option name="number" value="02100" />
+      <option name="presentableId" value="LOCAL-02100" />
+      <option name="project" value="LOCAL" />
+      <updated>1596560303905</updated>
+    </task>
+    <option name="localTasksCounter" value="2101" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -997,10 +989,6 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="416" y="111" key="#Edit_File_Template/0.0.1680.1010@0.0.1680.1010" timestamp="1593181346573" />
-    <state x="326" y="0" key="#Project_Structure" timestamp="1587919870656">
-      <screen x="0" y="0" width="1366" height="768" />
-    </state>
-    <state x="326" y="0" key="#Project_Structure/0.0.1366.768@0.0.1366.768" timestamp="1587919870656" />
     <state x="557" y="213" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog" timestamp="1595364612652">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1043,11 +1031,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2" timestamp="1596549035115">
+    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2" timestamp="1596560301023">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1596549035115" />
+    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1596560301023" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1084,31 +1072,15 @@
     </state>
     <state width="905" height="270" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
     <state width="1637" height="279" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1596482934341" />
-    <state width="1323" height="230" key="GridCell.Tab.1.bottom" timestamp="1587921284835">
-      <screen x="0" y="0" width="1366" height="768" />
-    </state>
-    <state width="1323" height="230" key="GridCell.Tab.1.bottom/0.0.1366.768@0.0.1366.768" timestamp="1587921284835" />
-    <state width="1323" height="230" key="GridCell.Tab.1.center" timestamp="1587921284835">
-      <screen x="0" y="0" width="1366" height="768" />
-    </state>
-    <state width="1323" height="230" key="GridCell.Tab.1.center/0.0.1366.768@0.0.1366.768" timestamp="1587921284835" />
-    <state width="1323" height="230" key="GridCell.Tab.1.left" timestamp="1587921284835">
-      <screen x="0" y="0" width="1366" height="768" />
-    </state>
-    <state width="1323" height="230" key="GridCell.Tab.1.left/0.0.1366.768@0.0.1366.768" timestamp="1587921284835" />
-    <state width="1323" height="230" key="GridCell.Tab.1.right" timestamp="1587921284835">
-      <screen x="0" y="0" width="1366" height="768" />
-    </state>
-    <state width="1323" height="230" key="GridCell.Tab.1.right/0.0.1366.768@0.0.1366.768" timestamp="1587921284835" />
     <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1594058079602">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="196" height="348" key="HiddenNamespacesPopup/0.0.1366.768@0.0.1366.768" timestamp="1591416990961" />
     <state width="196" height="457" key="HiddenNamespacesPopup/0.0.1680.1010@0.0.1680.1010" timestamp="1594058079602" />
-    <state x="420" y="240" key="IDE.errors.dialog" timestamp="1596484773352">
+    <state x="420" y="240" key="IDE.errors.dialog" timestamp="1596639332382">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="420" y="240" key="IDE.errors.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1596484773352" />
+    <state x="420" y="240" key="IDE.errors.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1596639332382" />
     <state x="601" y="208" key="MultipleFileMergeDialog" timestamp="1589980606709">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1124,13 +1096,12 @@
     <state x="320" y="80" key="SettingsEditor" timestamp="1596483389799">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="260" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1587956411634" />
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1596483389799" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1596549044758">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1596560304980">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1596549044758" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1596560304980" />
     <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1594305494731">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1159,7 +1130,6 @@
     <state x="600" y="391" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1588015639891">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="488" y="297" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1366.768@0.0.1366.768" timestamp="1587919957135" />
     <state x="600" y="391" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1680.1010@0.0.1680.1010" timestamp="1588015639891" />
     <state x="465" y="286" key="extract.method.dialog" timestamp="1595246935580">
       <screen x="0" y="0" width="1680" height="1010" />

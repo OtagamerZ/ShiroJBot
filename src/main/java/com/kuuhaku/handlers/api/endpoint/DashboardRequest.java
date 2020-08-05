@@ -117,7 +117,7 @@ public class DashboardRequest {
 		else if (ratelimit.getIfPresent(token) != null) throw new RatelimitException();
 
 		PixelCanvas canvas = Main.getInfo().getCanvas();
-		canvas.addPixel(null, new int[]{x, y}, Color.decode(color));
+		canvas.addPixel(new int[]{x, y}, Color.decode(color));
 
 		CanvasDAO.saveCanvas(canvas);
 

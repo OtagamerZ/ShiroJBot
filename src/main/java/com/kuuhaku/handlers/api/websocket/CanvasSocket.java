@@ -60,7 +60,7 @@ public class CanvasSocket extends WebSocketServer {
 		JSONObject pixel = jo.getJSONObject("pixel");
 
 		PixelCanvas canvas = Main.getInfo().getCanvas();
-		canvas.addPixel(null, new int[]{pixel.getInt("x"), pixel.getInt("y")}, Color.decode(pixel.getString("color")));
+		canvas.addPixel(new int[]{pixel.getInt("x"), pixel.getInt("y")}, Color.decode(pixel.getString("color")));
 
 		CanvasDAO.saveCanvas(canvas);
 
