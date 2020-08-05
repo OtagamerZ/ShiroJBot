@@ -169,8 +169,13 @@ public class PixelCanvas {
 		canvas.setRGB(coords[0] + CANVAS_SIZE / 2, CANVAS_SIZE / 2 - coords[1], color.getRGB());
 		saveCanvas(canvas);
 
-		if (channel != null) return viewChunk(channel, coords, 3, false);
-		else return null;
+		return viewChunk(channel, coords, 3, false);
+	}
+
+	public void addPixel(int[] coords, Color color) {
+		BufferedImage canvas = getCanvas();
+		canvas.setRGB(coords[0], coords[1], color.getRGB());
+		saveCanvas(canvas);
 	}
 
 	private void saveCanvas(BufferedImage canvas) {
