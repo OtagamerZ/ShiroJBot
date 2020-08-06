@@ -22,6 +22,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.model.persistent.Token;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.PrivilegeLevel;
+import net.dv8tion.jda.api.entities.Member;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -78,7 +79,15 @@ public class TokenDAO {
 
 			em.close();
 
-			if (!Helper.hasPermission(Main.getInfo().getMemberByID(t.getUid()), PrivilegeLevel.PARTNER)) return null;
+			boolean allowed = false;
+			for (Member m : Main.getInfo().getMembersByID(t.getUid())) {
+				if (Helper.hasPermission(m, PrivilegeLevel.PARTNER)) {
+					allowed = true;
+					break;
+				}
+			}
+
+			if (!allowed) return null;
 			else return t.getToken();
 		} catch (NoResultException e) {
 			Token t = registerToken(id);

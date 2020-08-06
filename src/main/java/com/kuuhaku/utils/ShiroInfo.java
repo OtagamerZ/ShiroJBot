@@ -47,6 +47,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("localvariable")
 public class ShiroInfo {
@@ -303,6 +304,11 @@ public class ShiroInfo {
 	public Member getMemberByID(String userID) {
 		User u = getUserByID(userID);
 		return u.getMutualGuilds().get(0).getMember(u);
+	}
+
+	public List<Member> getMembersByID(String userID) {
+		User u = getUserByID(userID);
+		return u.getMutualGuilds().stream().map(g -> g.getMemberById(userID)).collect(Collectors.toList());
 	}
 
 	public Role getRoleByID(String roleID) {
