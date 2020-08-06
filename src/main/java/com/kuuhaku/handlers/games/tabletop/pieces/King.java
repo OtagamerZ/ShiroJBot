@@ -44,7 +44,7 @@ public class King extends Piece {
 
 		if (isFirstMove()) {
 			List<Piece> pieces = Arrays.asList(b.getRow(getSpot().getY()));
-			if (to.equals(getSpot().getNextSpot(new int[]{-3, 0}))) {
+			if (to.equals(getSpot().getNextSpot(new int[]{-2, 0}))) {
 				boolean roqueL = pieces.subList(0, pieces.indexOf(this)).stream().noneMatch(p -> p != null && p.anyMatch(Knight.class, Bishop.class, Queen.class)) && (pieces.get(0) instanceof Rook && pieces.get(0).isFirstMove());
 				return roqueL && isFirstMove();
 			} else if (to.equals(getSpot().getNextSpot(new int[]{2, 0}))) {
