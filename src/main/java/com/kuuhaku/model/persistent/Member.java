@@ -52,7 +52,7 @@ public class Member {
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String pseudoName = "";
 
-	@Column(columnDefinition = "VARCHAR(7) NOT NULL DEFAULT ''")
+	@Column(columnDefinition = "CHAR(7) NOT NULL DEFAULT ''")
 	private String profileColor = "";
 
 
