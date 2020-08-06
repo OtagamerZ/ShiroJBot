@@ -43,7 +43,10 @@ public class CanvasSocket extends WebSocketServer {
 	@Override
 	public void onOpen(WebSocket conn, ClientHandshake handshake) {
 		clients.add(conn);
-		conn.send(Main.getInfo().getCanvas().getRawCanvas());
+		conn.send(new JSONObject() {{
+			put("type", "canvas");
+			put("content", Main.getInfo().getCanvas().getRawCanvas());
+		}}.toString());
 	}
 
 	@Override
