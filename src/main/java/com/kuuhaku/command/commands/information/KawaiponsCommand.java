@@ -106,15 +106,8 @@ public class KawaiponsCommand extends Command {
 
 						KawaiponBook kb = new KawaiponBook(toRender);
 						BufferedImage cards = kb.view(CardDAO.getCards(), "Todas as cartas", args[1].equalsIgnoreCase("C"));
-						File f = File.createTempFile("cards_" + System.currentTimeMillis(), ".jpg");
-						f.deleteOnExit();
-						byte[] bytes = Helper.getBytes(Helper.removeAlpha(cards), "jpg", 0.5f);
-						try (FileOutputStream fos = new FileOutputStream(f)) {
-							fos.write(bytes);
-						}
 
-						send(author, channel, m, collection, f, "Todas as cartas", CardDAO.totalCards());
-						if (f.exists()) f.delete();
+						send(author, channel, m, collection, cards, "Todas as cartas", CardDAO.totalCards());
 						return;
 					} else if (Arrays.stream(AnimeName.values()).noneMatch(a -> a.name().equals(args[0].toUpperCase()))) {
 						m.editMessage(":x: | Anime inválido ou ainda não adicionado (colocar `_` no lugar de espaços).").queue();
@@ -128,6 +121,7 @@ public class KawaiponsCommand extends Command {
 					KawaiponBook kb = new KawaiponBook(toRender);
 					BufferedImage cards = kb.view(CardDAO.getCardsByAnime(anime), anime.toString(), args[1].equalsIgnoreCase("C"));
 
+
 					send(author, channel, m, collection, cards, anime.toString(), CardDAO.totalCards(anime));
 				} else {
 					Set<KawaiponCard> collection = kp.getCards().stream().filter(k -> k.getCard().getRarity().equals(rr)).collect(Collectors.toSet());
@@ -135,6 +129,7 @@ public class KawaiponsCommand extends Command {
 
 					KawaiponBook kb = new KawaiponBook(toRender);
 					BufferedImage cards = kb.view(CardDAO.getCardsByRarity(rr), rr.toString(), args[1].equalsIgnoreCase("C"));
+
 
 					send(author, channel, m, collection, cards, rr.toString(), CardDAO.totalCards(rr));
 				}
@@ -145,22 +140,14 @@ public class KawaiponsCommand extends Command {
 		});
 	}
 
-	private void send(User author, MessageChannel channel, Message m, Set<KawaiponCard> collection, BufferedImage cards, String s, long l) {
-		EmbedBuilder eb = new EmbedBuilder();
-		int foil = (int) collection.stream().filter(KawaiponCard::isFoil).count();
-		int common = collection.size() - foil;
+	private void send(User author, MessageChannel channel, Message m, Set<KawaiponCard> collection, BufferedImage cards, String s, long l) throws IOException {
+		File f = File.createTempFile("cards_" + System.currentTimeMillis(), ".jpg");
+		f.deleteOnExit();
+		byte[] bytes = Helper.getBytes(Helper.removeAlpha(cards), "jpg", 0.5f);
+		try (FileOutputStream fos = new FileOutputStream(f)) {
+			fos.write(bytes);
+		}
 
-		eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName() + " (" + s + ")");
-		eb.addField(":red_envelope: | Cartas normais:", common + " de " + l + " (" + Helper.prcntToInt(common, l) + "%)", true);
-		eb.addField(":star2: | Cartas cromadas:", foil + " de " + l + " (" + Helper.prcntToInt(foil, l) + "%)", true);
-		eb.setImage("attachment://cards.png");
-		eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(collection.size(), l * 2) + "%");
-
-		m.delete().queue();
-		channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "png"), "cards.png").queue();
-	}
-
-	private void send(User author, MessageChannel channel, Message m, Set<KawaiponCard> collection, File cards, String s, long l) throws IOException {
 		EmbedBuilder eb = new EmbedBuilder();
 		int foil = (int) collection.stream().filter(KawaiponCard::isFoil).count();
 		int common = collection.size() - foil;
@@ -172,6 +159,7 @@ public class KawaiponsCommand extends Command {
 		eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(collection.size(), l * 2) + "%");
 
 		m.delete().queue();
-		channel.sendMessage(eb.build()).addFile(IOUtils.toByteArray(cards.toURI()), "cards.jpg").queue();
+		channel.sendMessage(eb.build()).addFile(IOUtils.toByteArray(f.toURI()), "cards.jpg").queue();
+		if (f.exists()) f.delete();
 	}
 }
