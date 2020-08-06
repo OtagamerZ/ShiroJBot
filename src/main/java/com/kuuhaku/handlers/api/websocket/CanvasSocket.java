@@ -69,7 +69,10 @@ public class CanvasSocket extends WebSocketServer {
 				notifyUpdate();
 				break;
 			case "chat":
-				clients.forEach(s -> s.send(jo.getJSONObject("content").toString()));
+				clients.forEach(s -> s.send(new JSONObject() {{
+					put("type", "chat");
+					put("content", jo.getJSONObject("content"));
+				}}.toString()));
 				break;
 		}
 	}
@@ -85,6 +88,9 @@ public class CanvasSocket extends WebSocketServer {
 	}
 
 	public void notifyUpdate() {
-		clients.forEach(s -> s.send(Main.getInfo().getCanvas().getRawCanvas()));
+		clients.forEach(s -> s.send(new JSONObject() {{
+			put("type", "canvas");
+			put("content", Main.getInfo().getCanvas().getRawCanvas());
+		}}.toString()));
 	}
 }
