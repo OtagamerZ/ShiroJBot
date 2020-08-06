@@ -27,6 +27,7 @@ import com.kuuhaku.handlers.api.exception.RatelimitException;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.persistent.PixelCanvas;
+import com.kuuhaku.model.persistent.PixelOperation;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
 import org.json.JSONObject;
@@ -42,6 +43,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 @RestController
 public class DashboardRequest {
@@ -115,6 +117,20 @@ public class DashboardRequest {
 			throw new IllegalArgumentException();
 		else if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
 		else if (ratelimit.getIfPresent(token) != null) throw new RatelimitException();
+
+		try {
+			PixelOperation op = new PixelOperation(
+					token,
+					Main.getInfo().getUserByID(new String(Base64.getDecoder().decode(token.split(Pattern.quote("."))[0]), StandardCharsets.UTF_8)).getName(),
+					x,
+					y,
+					color
+			);
+
+			CanvasDAO.saveOperation(op);
+		} catch (NullPointerException e) {
+			throw new UnauthorizedException();
+		}
 
 		PixelCanvas canvas = Main.getInfo().getCanvas();
 		canvas.addPixel(new int[]{x, y}, Color.decode(color));

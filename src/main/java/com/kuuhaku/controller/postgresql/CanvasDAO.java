@@ -19,6 +19,7 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.persistent.PixelCanvas;
+import com.kuuhaku.model.persistent.PixelOperation;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -48,6 +49,16 @@ public class CanvasDAO {
 
 		em.getTransaction().begin();
 		em.merge(canvas);
+		em.getTransaction().commit();
+
+		em.close();
+	}
+
+	public static void saveOperation(PixelOperation op) {
+		EntityManager em = Manager.getEntityManager();
+
+		em.getTransaction().begin();
+		em.merge(op);
 		em.getTransaction().commit();
 
 		em.close();
