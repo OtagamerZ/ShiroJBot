@@ -45,6 +45,22 @@ public class TokenDAO {
 		}
 	}
 
+	public static Token getTokenById(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT t FROM Token t WHERE uid = :id", Token.class);
+		q.setParameter("id", id);
+		q.setMaxResults(1);
+
+		try {
+			return (Token) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
+
 	public static Token registerToken(String id) {
 		EntityManager em = Manager.getEntityManager();
 
