@@ -22,7 +22,11 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.CanvasDAO;
+import com.kuuhaku.controller.postgresql.TokenDAO;
+import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.model.persistent.PixelCanvas;
+import com.kuuhaku.model.persistent.PixelOperation;
+import com.kuuhaku.model.persistent.Token;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
@@ -112,6 +116,27 @@ public class PixelChunkCommand extends Command {
 				}
 				Main.getInfo().getCanvas().viewChunk(message.getTextChannel(), coords, Integer.parseInt(opts[2]), true).queue();
 				return;
+			}
+
+			Token t = TokenDAO.getTokenById(author.getId());
+
+			if (t == null || t.isDisabled()) {
+				channel.sendMessage(":x: | Seu token foi proibido de interagir com o canvas.").queue();
+				return;
+			}
+
+			try {
+				PixelOperation op = new PixelOperation(
+						t.getToken(),
+						t.getHolder(),
+						coords[0],
+						coords[1],
+						opts[2]
+				);
+
+				CanvasDAO.saveOperation(op);
+			} catch (NullPointerException e) {
+				throw new UnauthorizedException();
 			}
 
 			Color color = Color.decode(opts[2]);

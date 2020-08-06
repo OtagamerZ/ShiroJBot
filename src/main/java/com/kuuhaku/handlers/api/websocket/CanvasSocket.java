@@ -23,6 +23,7 @@ import com.kuuhaku.controller.postgresql.CanvasDAO;
 import com.kuuhaku.controller.postgresql.TokenDAO;
 import com.kuuhaku.model.persistent.PixelCanvas;
 import com.kuuhaku.model.persistent.PixelOperation;
+import com.kuuhaku.model.persistent.Token;
 import com.kuuhaku.utils.Helper;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
@@ -31,11 +32,8 @@ import org.json.JSONObject;
 
 import java.awt.*;
 import java.net.InetSocketAddress;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 public class CanvasSocket extends WebSocketServer {
 	private final Set<WebSocket> clients = new HashSet<>();
@@ -68,10 +66,13 @@ public class CanvasSocket extends WebSocketServer {
 			case "canvas":
 				JSONObject pixel = jo.getJSONObject("content").getJSONObject("pixel");
 
+				Token t = TokenDAO.getToken(jo.getString("token"));
+				if (t == null) return;
+
 				try {
 					PixelOperation op = new PixelOperation(
 							jo.getString("token"),
-							Main.getInfo().getUserByID(new String(Base64.getDecoder().decode(jo.getString("token").split(Pattern.quote("."))[0]), StandardCharsets.UTF_8)).getName(),
+							t.getHolder(),
 							pixel.getInt("x"),
 							pixel.getInt("y"),
 							pixel.getString("color")
