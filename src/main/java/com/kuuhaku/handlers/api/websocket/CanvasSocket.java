@@ -22,6 +22,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.CanvasDAO;
 import com.kuuhaku.controller.postgresql.TokenDAO;
 import com.kuuhaku.model.persistent.PixelCanvas;
+import com.kuuhaku.model.persistent.PixelOperation;
 import com.kuuhaku.utils.Helper;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
@@ -30,8 +31,11 @@ import org.json.JSONObject;
 
 import java.awt.*;
 import java.net.InetSocketAddress;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 public class CanvasSocket extends WebSocketServer {
 	private final Set<WebSocket> clients = new HashSet<>();
@@ -63,6 +67,20 @@ public class CanvasSocket extends WebSocketServer {
 		switch (jo.getString("type")) {
 			case "canvas":
 				JSONObject pixel = jo.getJSONObject("content").getJSONObject("pixel");
+
+				try {
+					PixelOperation op = new PixelOperation(
+							jo.getString("token"),
+							Main.getInfo().getUserByID(new String(Base64.getDecoder().decode(jo.getString("token").split(Pattern.quote("."))[0]), StandardCharsets.UTF_8)).getName(),
+							pixel.getInt("x"),
+							pixel.getInt("y"),
+							pixel.getString("color")
+					);
+
+					CanvasDAO.saveOperation(op);
+				} catch (NullPointerException e) {
+					return;
+				}
 
 				PixelCanvas canvas = Main.getInfo().getCanvas();
 				canvas.addPixel(new int[]{pixel.getInt("x"), pixel.getInt("y")}, Color.decode(pixel.getString("color")));
