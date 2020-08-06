@@ -63,6 +63,7 @@
         <class>com.kuuhaku.model.persistent.GuildBuff</class>
         <class>com.kuuhaku.model.persistent.Transaction</class>
         <class>com.kuuhaku.model.persistent.DynamicParameter</class>
+        <class>com.kuuhaku.model.persistent.PixelOperation</class>
 
         <properties>
             <!-- dados da conexao -->
