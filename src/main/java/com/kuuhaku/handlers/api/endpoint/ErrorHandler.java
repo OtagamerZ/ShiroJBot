@@ -20,6 +20,7 @@ package com.kuuhaku.handlers.api.endpoint;
 
 import com.kuuhaku.handlers.api.exception.Exception;
 import com.kuuhaku.handlers.api.exception.*;
+import org.json.JSONException;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -59,7 +60,7 @@ public class ErrorHandler implements ErrorController {
 		return new Exception(400, "Not enough arguments were given to this request");
 	}
 
-	@ExceptionHandler(IllegalArgumentException.class)
+	@ExceptionHandler({IllegalArgumentException.class, NullPointerException.class, NumberFormatException.class, JSONException.class})
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public Exception wrongArgs() {
 		return new Exception(400, "Wrong arguments in the request");
