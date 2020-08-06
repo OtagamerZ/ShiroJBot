@@ -139,7 +139,11 @@ public class DashboardRequest {
 
 		Main.getInfo().getSockets().getCanvas().notifyUpdate();
 		ratelimit.put(token, false);
-		return "Ok! (time for next request: 5 seconds)";
+		return new JSONObject() {{
+			put("code", 200);
+			put("message", "Ok! (time for next request: 5 seconds)");
+			put("canvas", Main.getInfo().getCanvas().getRawCanvas());
+		}}.toString();
 	}
 
 	@RequestMapping(value = "/api/canvas/view", method = RequestMethod.POST)
