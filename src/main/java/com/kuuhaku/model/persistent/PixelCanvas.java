@@ -18,11 +18,15 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.Main;
+import com.kuuhaku.controller.postgresql.CanvasDAO;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.SelfRunningList;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.requests.RestAction;
+import org.apache.commons.lang3.tuple.Pair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -34,6 +38,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
+import java.util.concurrent.TimeUnit;
 
 import static com.kuuhaku.utils.Helper.CANVAS_SIZE;
 
@@ -50,6 +55,14 @@ public class PixelCanvas {
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private final boolean shelved = false;
+
+	private static final SelfRunningList<Pair<int[], Color>> queue = new SelfRunningList<>(p -> {
+		PixelCanvas.addPixel(p.getLeft(), p.getRight());
+	}, 500, TimeUnit.MILLISECONDS);
+
+	public static SelfRunningList<Pair<int[], Color>> getQueue() {
+		return queue;
+	}
 
 	public BufferedImage getCanvas() {
 		if (canvas != null) {
@@ -172,12 +185,6 @@ public class PixelCanvas {
 		return viewChunk(channel, coords, 3, false);
 	}
 
-	public void addPixel(int[] coords, Color color) {
-		BufferedImage canvas = getCanvas();
-		canvas.setRGB(coords[0], coords[1], color.getRGB());
-		saveCanvas(canvas);
-	}
-
 	private void saveCanvas(BufferedImage canvas) {
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			ImageIO.write(canvas, "png", baos);
@@ -185,5 +192,15 @@ public class PixelCanvas {
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
+	}
+
+	private static void addPixel(int[] coords, Color color) {
+		PixelCanvas pc = Main.getInfo().getCanvas();
+
+		BufferedImage canvas = pc.getCanvas();
+		canvas.setRGB(coords[0], coords[1], color.getRGB());
+		pc.saveCanvas(canvas);
+
+		CanvasDAO.saveCanvas(pc);
 	}
 }
