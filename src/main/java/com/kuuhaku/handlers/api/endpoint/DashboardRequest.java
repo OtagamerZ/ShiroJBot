@@ -31,6 +31,7 @@ import com.kuuhaku.model.persistent.PixelOperation;
 import com.kuuhaku.model.persistent.Token;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
+import org.apache.commons.lang3.tuple.Pair;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
@@ -135,10 +136,7 @@ public class DashboardRequest {
 			throw new UnauthorizedException();
 		}
 
-		PixelCanvas canvas = Main.getInfo().getCanvas();
-		canvas.addPixel(new int[]{x, y}, Color.decode(color));
-
-		CanvasDAO.saveCanvas(canvas);
+		PixelCanvas.getQueue().add(Pair.of(new int[]{x, y}, Color.decode(color)));
 
 		Main.getInfo().getSockets().getCanvas().notifyUpdate();
 		ratelimit.put(token, false);
