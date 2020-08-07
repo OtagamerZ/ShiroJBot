@@ -38,7 +38,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
-import java.util.concurrent.TimeUnit;
 
 import static com.kuuhaku.utils.Helper.CANVAS_SIZE;
 
@@ -58,7 +57,7 @@ public class PixelCanvas {
 
 	private static final SelfRunningList<Pair<int[], Color>> queue = new SelfRunningList<>(p -> {
 		PixelCanvas.addPixel(p.getLeft(), p.getRight());
-	}, 250, TimeUnit.MILLISECONDS);
+	});
 
 	public static SelfRunningList<Pair<int[], Color>> getQueue() {
 		return queue;
