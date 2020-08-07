@@ -25,7 +25,6 @@ import com.kuuhaku.model.persistent.PixelCanvas;
 import com.kuuhaku.model.persistent.PixelOperation;
 import com.kuuhaku.model.persistent.Token;
 import com.kuuhaku.utils.Helper;
-import org.apache.commons.lang3.tuple.Pair;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -84,7 +83,7 @@ public class CanvasSocket extends WebSocketServer {
 					return;
 				}
 
-				PixelCanvas.getQueue().add(Pair.of(new int[]{pixel.getInt("x"), pixel.getInt("y")}, Color.decode(pixel.getString("color"))));
+				PixelCanvas.addPixel(new int[]{pixel.getInt("x"), pixel.getInt("y")}, Color.decode(pixel.getString("color")));
 
 				notifyUpdate();
 				break;
