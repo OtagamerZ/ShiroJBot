@@ -22,11 +22,9 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.CanvasDAO;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
-import com.kuuhaku.utils.SelfRunningList;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.requests.RestAction;
-import org.apache.commons.lang3.tuple.Pair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -54,14 +52,6 @@ public class PixelCanvas {
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private final boolean shelved = false;
-
-	private static final SelfRunningList<Pair<int[], Color>> queue = new SelfRunningList<>(p -> {
-		PixelCanvas.addPixel(p.getLeft(), p.getRight());
-	});
-
-	public static SelfRunningList<Pair<int[], Color>> getQueue() {
-		return queue;
-	}
 
 	public BufferedImage getCanvas() {
 		if (canvas != null) {
@@ -193,7 +183,7 @@ public class PixelCanvas {
 		}
 	}
 
-	private static void addPixel(int[] coords, Color color) {
+	public static synchronized void addPixel(int[] coords, Color color) {
 		PixelCanvas pc = Main.getInfo().getCanvas();
 
 		BufferedImage canvas = pc.getCanvas();
