@@ -22,54 +22,30 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class SelfRunningList<T> extends LinkedList<T> {
 	private final Consumer<T> action;
-	private final long interval;
+	private final ExecutorService exec = Executors.newSingleThreadExecutor();
 
-	public SelfRunningList(Consumer<T> action, int interval, TimeUnit unit) {
+	public SelfRunningList(Consumer<T> action) {
 		this.action = action;
-		this.interval = unit.toMillis(interval);
-		Executors.newSingleThreadExecutor().execute(() -> {
-			//noinspection InfiniteLoopStatement
-			while (true) {
-				try {
-					if (size() > 0) action.accept(getFirst());
-					//noinspection BusyWait
-					Thread.sleep(this.interval);
-				} catch (InterruptedException e) {
-					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-				}
-			}
-		});
 	}
 
-	public SelfRunningList(@NotNull Collection<? extends T> c, Consumer<T> action, int interval, TimeUnit unit) {
+	public SelfRunningList(@NotNull Collection<? extends T> c, Consumer<T> action) {
 		super(c);
 		this.action = action;
-		this.interval = unit.toMillis(interval);
-		Executors.newSingleThreadExecutor().execute(() -> {
-			//noinspection InfiniteLoopStatement
-			while (true) {
-				try {
-					if (size() > 0) action.accept(getFirst());
-					//noinspection BusyWait
-					Thread.sleep(this.interval);
-				} catch (InterruptedException e) {
-					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-				}
-			}
-		});
+	}
+
+	@Override
+	public boolean add(T t) {
+		exec.execute(() -> action.accept(t));
+		return true;
 	}
 
 	public Consumer<T> getAction() {
 		return action;
-	}
-
-	public long getInterval() {
-		return interval;
 	}
 }
