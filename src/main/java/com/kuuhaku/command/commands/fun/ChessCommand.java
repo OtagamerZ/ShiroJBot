@@ -19,6 +19,7 @@
 package com.kuuhaku.command.commands.fun;
 
 import com.github.ygimenez.method.Pages;
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
@@ -92,6 +93,11 @@ public class ChessCommand extends Command {
 
 		Tabletop t = new Chess((TextChannel) channel, id, message.getMentionedUsers().get(0), author);
 		int finalBet = bet;
+		if (author.getId().equals(Main.getInfo().getNiiChan())) {
+			ShiroInfo.getGames().put(id, t);
+			t.execute(finalBet);
+			return;
+		}
 		channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Xadrez, deseja aceitar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 					if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
