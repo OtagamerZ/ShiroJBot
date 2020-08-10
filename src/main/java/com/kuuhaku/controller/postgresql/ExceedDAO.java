@@ -28,6 +28,7 @@ import com.kuuhaku.utils.ExceedEnums;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -127,7 +128,7 @@ public class ExceedDAO {
 		List<Member> members = (List<Member>) q.getResultList();
 
 		try {
-			return new Exceed(ex, members.size(), (Long) points.getSingleResult());
+			return new Exceed(ex, members.size(), ((BigDecimal) points.getSingleResult()).longValue());
 		} finally {
 			em.close();
 		}
