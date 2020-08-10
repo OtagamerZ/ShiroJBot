@@ -27,10 +27,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/entity/Piece.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/entity/Piece.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -573,21 +570,7 @@
       <workItem from="1596736435004" duration="10326000" />
       <workItem from="1596801804447" duration="1417000" />
       <workItem from="1596819916098" duration="57000" />
-      <workItem from="1597061341193" duration="2150000" />
-    </task>
-    <task id="LOCAL-02071" summary="Testes de nova funcionalidade">
-      <created>1596474083552</created>
-      <option name="number" value="02071" />
-      <option name="presentableId" value="LOCAL-02071" />
-      <option name="project" value="LOCAL" />
-      <updated>1596474083552</updated>
-    </task>
-    <task id="LOCAL-02072" summary="Testes de nova funcionalidade">
-      <created>1596474406095</created>
-      <option name="number" value="02072" />
-      <option name="presentableId" value="LOCAL-02072" />
-      <option name="project" value="LOCAL" />
-      <updated>1596474406095</updated>
+      <workItem from="1597061341193" duration="2453000" />
     </task>
     <task id="LOCAL-02073" summary="Testes de nova funcionalidade">
       <created>1596474618223</created>
@@ -918,7 +901,21 @@
       <option name="project" value="LOCAL" />
       <updated>1597062814776</updated>
     </task>
-    <option name="localTasksCounter" value="2120" />
+    <task id="LOCAL-02120" summary="Correção no xadrez">
+      <created>1597063520808</created>
+      <option name="number" value="02120" />
+      <option name="presentableId" value="LOCAL-02120" />
+      <option name="project" value="LOCAL" />
+      <updated>1597063520809</updated>
+    </task>
+    <task id="LOCAL-02121" summary="Correção no xadrez">
+      <created>1597063718952</created>
+      <option name="number" value="02121" />
+      <option name="presentableId" value="LOCAL-02121" />
+      <option name="project" value="LOCAL" />
+      <updated>1597063718952</updated>
+    </task>
+    <option name="localTasksCounter" value="2122" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
