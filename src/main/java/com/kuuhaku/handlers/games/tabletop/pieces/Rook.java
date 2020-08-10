@@ -34,7 +34,7 @@ public class Rook extends Piece {
 		boolean blocked = false;
 
 		if (to.getX() - getSpot().getX() != 0 && to.getY() - getSpot().getY() == 0) {
-			for (int i = getSpot().getX(); to.getX() > getSpot().getX() ? i < to.getX() : i > to.getX(); ) {
+			for (int i = getSpot().getX(); to.getX() > getSpot().getX() ? i <= to.getX() : i >= to.getX(); ) {
 				if (i != getSpot().getX()) {
 					Piece p = b.getSpot(Spot.of(i, getSpot().getY()));
 
@@ -49,7 +49,7 @@ public class Rook extends Piece {
 				}
 			}
 		} else if (to.getX() - getSpot().getX() == 0 && to.getY() - getSpot().getY() != 0) {
-			for (int i = getSpot().getY(); to.getY() > getSpot().getY() ? i < to.getY() : i > to.getY(); ) {
+			for (int i = getSpot().getY(); to.getY() > getSpot().getY() ? i <= to.getY() : i >= to.getY(); ) {
 				if (i != getSpot().getX()) {
 					Piece p = b.getSpot(Spot.of(getSpot().getX(), i));
 
