@@ -90,7 +90,7 @@ public class ChessCommand extends Command {
 			return;
 		}
 
-		Tabletop t = new Chess((TextChannel) channel, id, message.getMentionedUsers().get(0), author);
+		Tabletop t = new Chess((TextChannel) channel, id, author, message.getMentionedUsers().get(0));
 		int finalBet = bet;
 		channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Xadrez, deseja aceitar?")
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
