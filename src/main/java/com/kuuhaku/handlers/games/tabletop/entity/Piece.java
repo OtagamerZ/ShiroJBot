@@ -69,16 +69,18 @@ public abstract class Piece {
 				Piece p = Helper.getOr(b.getSpot(getSpot().getNextSpot(Spot.MIDDLE_LEFT)), b.getSpot(getSpot().getNextSpot(new int[]{-2, 0})));
 
 				if (p instanceof Rook && isFirstMove()) {
+					Spot sp = p.getSpot();
 					p.setSpot(getSpot().getNextSpot(Spot.MIDDLE_RIGHT));
 					b.setSpot(p, getSpot().getNextSpot(Spot.MIDDLE_RIGHT));
-					b.setSpot(null, getSpot().getNextSpot(Spot.MIDDLE_LEFT));
+					b.setSpot(null, sp);
 					p.firstMove = false;
 				} else {
 					p = Helper.getOr(b.getSpot(getSpot().getNextSpot(Spot.MIDDLE_RIGHT)), b.getSpot(getSpot().getNextSpot(new int[]{2, 0})));
 					if (p instanceof Rook && isFirstMove()) {
+						Spot sp = p.getSpot();
 						p.setSpot(getSpot().getNextSpot(Spot.MIDDLE_LEFT));
 						b.setSpot(p, getSpot().getNextSpot(Spot.MIDDLE_LEFT));
-						b.setSpot(null, getSpot().getNextSpot(Spot.MIDDLE_RIGHT));
+						b.setSpot(null, sp);
 						p.firstMove = false;
 					}
 				}
