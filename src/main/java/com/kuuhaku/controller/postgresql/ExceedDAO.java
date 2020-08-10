@@ -114,17 +114,23 @@ public class ExceedDAO {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "SqlResolve"})
 	public static Exceed getExceed(ExceedEnums ex) {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT m FROM Member m INNER JOIN ExceedMember ex ON m.mid = ex.id WHERE ex.exceed = :exceed", Member.class);
 		q.setParameter("exceed", ex.getName());
 
-		List<Member> members = (List<Member>) q.getResultList();
-		em.close();
+		Query points = em.createNativeQuery("SELECT points FROM shiro.\"GetExceedRanking\" WHERE exceed = :exceed", Long.class);
+		points.setParameter("exceed", ex.getName());
 
-		return new Exceed(ex, members.size(), members.stream().mapToLong(Member::getXp).sum());
+		List<Member> members = (List<Member>) q.getResultList();
+
+		try {
+			return new Exceed(ex, members.size(), (Long) points.getSingleResult());
+		} finally {
+			em.close();
+		}
 	}
 
 	public static ExceedEnums findWinner() {
