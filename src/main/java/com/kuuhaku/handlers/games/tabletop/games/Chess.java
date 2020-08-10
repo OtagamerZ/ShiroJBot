@@ -57,8 +57,8 @@ public class Chess extends Tabletop {
 				{/*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null},
 				{/*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null},
 				{/*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null, /*---------------------*/null},
-				{pieces.get(players[1]).get(0), pieces.get(players[1]).get(1), pieces.get(players[1]).get(2), null/*pieces.get(players[1]).get(3)*/, pieces.get(players[1]).get(4), pieces.get(players[1]).get(5), pieces.get(players[1]).get(6), pieces.get(players[1]).get(7)},
-				{pieces.get(players[1]).get(8), null, null,/*pieces.get(players[1]).get(9), pieces.get(players[1]).get(10),*/ pieces.get(players[1]).get(11), pieces.get(players[1]).get(12), null, null,/*pieces.get(players[1]).get(13), pieces.get(players[1]).get(14),*/ pieces.get(players[1]).get(15)}
+				{null/*pieces.get(players[1]).get(0)*/, pieces.get(players[1]).get(1), pieces.get(players[1]).get(2), null/*pieces.get(players[1]).get(3)*/, pieces.get(players[1]).get(4), pieces.get(players[1]).get(5), pieces.get(players[1]).get(6), pieces.get(players[1]).get(7)},
+				{pieces.get(players[1]).get(8), pieces.get(players[1]).get(9), pieces.get(players[1]).get(10), pieces.get(players[1]).get(11), pieces.get(players[1]).get(12), pieces.get(players[1]).get(13), pieces.get(players[1]).get(14), pieces.get(players[1]).get(15)}
 
 		});
 	}
