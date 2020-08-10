@@ -570,14 +570,7 @@
       <workItem from="1596736435004" duration="10326000" />
       <workItem from="1596801804447" duration="1417000" />
       <workItem from="1596819916098" duration="57000" />
-      <workItem from="1597061341193" duration="1047000" />
-    </task>
-    <task id="LOCAL-02069" summary="Testes de nova funcionalidade">
-      <created>1596472775616</created>
-      <option name="number" value="02069" />
-      <option name="presentableId" value="LOCAL-02069" />
-      <option name="project" value="LOCAL" />
-      <updated>1596472775616</updated>
+      <workItem from="1597061341193" duration="1400000" />
     </task>
     <task id="LOCAL-02070" summary="Testes de nova funcionalidade">
       <created>1596473985377</created>
@@ -915,7 +908,14 @@
       <option name="project" value="LOCAL" />
       <updated>1597062100604</updated>
     </task>
-    <option name="localTasksCounter" value="2118" />
+    <task id="LOCAL-02118" summary="Correção no xadrez">
+      <created>1597062667849</created>
+      <option name="number" value="02118" />
+      <option name="presentableId" value="LOCAL-02118" />
+      <option name="project" value="LOCAL" />
+      <updated>1597062667849</updated>
+    </task>
+    <option name="localTasksCounter" value="2119" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -957,7 +957,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Mudança na aparencia da parede de pedra" />
     <MESSAGE value="Correção no comando de sair do exceed" />
     <MESSAGE value="Correção na barra de XP" />
     <MESSAGE value="Cartas novas: Steins;Gate e Mob Psycho 100" />
@@ -982,7 +981,8 @@
     <MESSAGE value="Correção do roque longo" />
     <MESSAGE value="Logging de pixels adicionados" />
     <MESSAGE value="Adição de queue de pixels" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição de queue de pixels" />
+    <MESSAGE value="Correção no xadrez" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção no xadrez" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
