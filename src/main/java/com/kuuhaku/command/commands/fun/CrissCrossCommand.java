@@ -90,7 +90,7 @@ public class CrissCrossCommand extends Command {
 			return;
 		}
 
-		Tabletop t = new CrissCross((TextChannel) channel, id, message.getMentionedUsers().get(0), author);
+		Tabletop t = new CrissCross((TextChannel) channel, id, author, message.getMentionedUsers().get(0));
 		int finalBet = bet;
 		channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Jogo da Velha, deseja aceitar?" + (bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
