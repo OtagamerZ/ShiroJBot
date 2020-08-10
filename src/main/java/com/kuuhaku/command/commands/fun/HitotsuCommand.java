@@ -122,7 +122,9 @@ public class HitotsuCommand extends Command {
 			add(author);
 			addAll(message.getMentionedUsers());
 		}};
-		Set<User> accepted = new HashSet<>();
+		Set<User> accepted = new HashSet<>() {{
+			add(author);
+		}};
 		Tabletop t = new Hitotsu((TextChannel) channel, id, players.toArray(User[]::new));
 		int finalBet = bet;
 		String msg;
@@ -147,7 +149,7 @@ public class HitotsuCommand extends Command {
 							accepted.add(mb.getUser());
 						}
 
-						if (accepted.size() == players.size() - 1) {
+						if (accepted.size() == players.size()) {
 							ShiroInfo.getGames().put(id, t);
 							ms.delete().queue();
 							t.execute(finalBet);
