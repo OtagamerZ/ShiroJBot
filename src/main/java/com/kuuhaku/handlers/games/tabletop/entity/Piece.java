@@ -24,6 +24,7 @@ import com.kuuhaku.handlers.games.tabletop.pieces.King;
 import com.kuuhaku.handlers.games.tabletop.pieces.Pawn;
 import com.kuuhaku.handlers.games.tabletop.pieces.Queen;
 import com.kuuhaku.handlers.games.tabletop.pieces.Rook;
+import com.kuuhaku.utils.Helper;
 
 import java.util.Arrays;
 
@@ -65,7 +66,7 @@ public abstract class Piece {
 			setSpot(to);
 
 			if (this instanceof King) {
-				Piece p = b.getSpot(getSpot().getNextSpot(Spot.MIDDLE_LEFT));
+				Piece p = Helper.getOr(b.getSpot(getSpot().getNextSpot(Spot.MIDDLE_LEFT)), b.getSpot(getSpot().getNextSpot(new int[]{-2, 0})));
 
 				if (p instanceof Rook && isFirstMove()) {
 					p.setSpot(getSpot().getNextSpot(Spot.MIDDLE_RIGHT));
@@ -73,7 +74,7 @@ public abstract class Piece {
 					b.setSpot(null, getSpot().getNextSpot(Spot.MIDDLE_LEFT));
 					p.firstMove = false;
 				} else {
-					p = b.getSpot(getSpot().getNextSpot(Spot.MIDDLE_RIGHT));
+					p = Helper.getOr(b.getSpot(getSpot().getNextSpot(Spot.MIDDLE_RIGHT)), b.getSpot(getSpot().getNextSpot(new int[]{2, 0})));
 					if (p instanceof Rook && isFirstMove()) {
 						p.setSpot(getSpot().getNextSpot(Spot.MIDDLE_LEFT));
 						b.setSpot(p, getSpot().getNextSpot(Spot.MIDDLE_LEFT));
