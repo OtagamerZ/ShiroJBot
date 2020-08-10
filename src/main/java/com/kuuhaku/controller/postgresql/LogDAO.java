@@ -39,7 +39,7 @@ public class LogDAO {
 		em.close();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "SqlResolve"})
 	public static List<Object[]> getUsage() {
 		EntityManager em = Manager.getEntityManager();
 
