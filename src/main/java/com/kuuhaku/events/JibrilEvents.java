@@ -103,13 +103,15 @@ public class JibrilEvents extends ListenerAdapter {
 				if (!mb.isRulesSent())
 					try {
 						Member finalMb = mb;
-						event.getAuthor().openPrivateChannel().queue(c -> c.sendMessage(introMsg()).queue(s1 ->
-								c.sendMessage(rulesMsg()).queue(s2 ->
-										c.sendMessage(finalMsg()).queue(s3 -> {
-											finalMb.setRulesSent(true);
-											com.kuuhaku.controller.sqlite.MemberDAO.updateMemberConfigs(finalMb);
-											MemberDAO.saveMemberToBD(finalMb);
-										}))), Helper::doNothing);
+						event.getAuthor().openPrivateChannel()
+								.flatMap(c -> c.sendMessage(introMsg()))
+								.flatMap(s -> s.getChannel().sendMessage(rulesMsg()))
+								.flatMap(s -> s.getChannel().sendMessage(finalMsg()))
+								.queue(s -> {
+									finalMb.setRulesSent(true);
+									com.kuuhaku.controller.sqlite.MemberDAO.updateMemberConfigs(finalMb);
+									MemberDAO.saveMemberToBD(finalMb);
+								}, Helper::doNothing);
 					} catch (ErrorResponseException ignore) {
 					}
 				if (RelayBlockList.check(event.getAuthor().getId())) {
