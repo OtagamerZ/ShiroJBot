@@ -50,27 +50,30 @@ public class AvatarCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-
-		if (message.getMentionedUsers().size() > 1) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_too-many-users")).queue();
-			return;
-		}
-
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setColor(Helper.getRandomColor());
 
-
-		if (message.getMentionedUsers().size() == 0) {
-			if (args.length > 0) {
-				if (args[0].trim().equalsIgnoreCase("guild")) {
-					if (guild.getIconUrl() == null) {
-						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-icon")).queue();
-						return;
-					}
-					eb.setTitle("Ícone do servidor");
-					eb.setImage(guild.getIconUrl() + "?size=4096");
+		if (args.length > 0) {
+			if (Helper.equalsAny(args[0], "guild", "server", "servidor")) {
+				if (guild.getIconUrl() == null) {
+					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-icon")).queue();
+					return;
+				}
+				eb.setTitle("Ícone do servidor");
+				eb.setImage(guild.getIconUrl() + "?size=4096");
+				try {
+					eb.setColor(Helper.colorThief(guild.getIconUrl()));
+				} catch (IOException ignore) {
+				}
+			} else if (message.getMentionedUsers().size() > 0) {
+				if (author.getId().equals(message.getMentionedUsers().get(0).getId())) {
+					eb.setTitle("Seu avatar");
+					eb.setImage(author.getEffectiveAvatarUrl() + "?size=4096");
+				} else {
+					eb.setTitle("Avatar de: " + message.getMentionedUsers().get(0).getAsTag());
+					eb.setImage(message.getMentionedUsers().get(0).getEffectiveAvatarUrl() + "?size=4096");
 					try {
-						eb.setColor(Helper.colorThief(guild.getIconUrl()));
+						eb.setColor(Helper.colorThief(message.getMentionedUsers().get(0).getEffectiveAvatarUrl()));
 					} catch (IOException ignore) {
 					}
 				}
@@ -82,17 +85,12 @@ public class AvatarCommand extends Command {
 				} catch (IOException ignore) {
 				}
 			}
-		} else if (message.getMentionedUsers().size() == 1) {
-			if (author.getId().equals(message.getMentionedUsers().get(0).getId())) {
-				eb.setTitle("Seu avatar");
-				eb.setImage(author.getEffectiveAvatarUrl() + "?size=4096");
-			} else {
-				eb.setTitle("Avatar de: " + message.getMentionedUsers().get(0).getAsTag());
-				eb.setImage(message.getMentionedUsers().get(0).getEffectiveAvatarUrl() + "?size=4096");
-				try {
-					eb.setColor(Helper.colorThief(message.getMentionedUsers().get(0).getEffectiveAvatarUrl()));
-				} catch (IOException ignore) {
-				}
+		} else {
+			eb.setTitle("Seu avatar");
+			eb.setImage(author.getEffectiveAvatarUrl() + "?size=4096");
+			try {
+				eb.setColor(Helper.colorThief(author.getEffectiveAvatarUrl()));
+			} catch (IOException ignore) {
 			}
 		}
 		channel.sendMessage(eb.build()).queue();
