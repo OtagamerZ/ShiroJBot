@@ -41,13 +41,13 @@ public class Card {
 	private String id;
 
 	@Column(columnDefinition = "VARCHAR(18) NOT NULL DEFAULT ''")
-	private String name = "";
+	private final String name = "";
 
 	@Enumerated(EnumType.STRING)
 	private AnimeName anime;
 
 	@Enumerated(EnumType.STRING)
-	private KawaiponRarity rarity = KawaiponRarity.COMMON;
+	private final KawaiponRarity rarity = KawaiponRarity.COMMON;
 
 	public String getId() {
 		return id;
@@ -67,7 +67,7 @@ public class Card {
 
 	public BufferedImage drawCard(boolean foil) {
 		try {
-			byte[] cardBytes = ShiroInfo.getCardCache().get(id, () -> FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH"), id + ".jpg")));
+			byte[] cardBytes = ShiroInfo.getCardCache().get(id, () -> FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH"), id + ".png")));
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
 				BufferedImage card = ImageIO.read(bais);
 

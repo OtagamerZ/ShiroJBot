@@ -98,9 +98,9 @@ public class CrissCross extends Tabletop {
 						int fullRows = 0;
 						for (int i = 0; i < getBoard().getLayout().length; i++) {
 							if (Collections.frequency(Arrays.asList(getBoard().getColumn(i)), pieces.get(getPlayers().getCurrent())) == 3) {
-								getPlayers().setWinner(getPlayers().getCurrent());
+								getPlayers().setWinner();
 							} else if (Collections.frequency(Arrays.asList(getBoard().getRow(i)), pieces.get(getPlayers().getCurrent())) == 3) {
-								getPlayers().setWinner(getPlayers().getCurrent());
+								getPlayers().setWinner();
 							} else if (Collections.frequency(Arrays.asList(getBoard().getRow(i)), null) == 0) {
 								fullRows++;
 							}
