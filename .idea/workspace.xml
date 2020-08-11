@@ -29,11 +29,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/hitotsu/Hitotsu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/hitotsu/Hitotsu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/enums/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/enums/Board.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/CrissCross.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/CrissCross.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Card.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -595,14 +590,7 @@
       <workItem from="1597082400332" duration="5931000" />
       <workItem from="1597088517505" duration="74000" />
       <workItem from="1597147216494" duration="1251000" />
-      <workItem from="1597164452925" duration="4333000" />
-    </task>
-    <task id="LOCAL-02087" summary="Correção no backup">
-      <created>1596482696145</created>
-      <option name="number" value="02087" />
-      <option name="presentableId" value="LOCAL-02087" />
-      <option name="project" value="LOCAL" />
-      <updated>1596482696146</updated>
+      <workItem from="1597164452925" duration="6641000" />
     </task>
     <task id="LOCAL-02088" summary="Endpoint de canvas está de volta">
       <created>1596484770550</created>
@@ -940,7 +928,14 @@
       <option name="project" value="LOCAL" />
       <updated>1597165277762</updated>
     </task>
-    <option name="localTasksCounter" value="2136" />
+    <task id="LOCAL-02136" summary="Correção nas apostas do jogo da velha">
+      <created>1597175063268</created>
+      <option name="number" value="02136" />
+      <option name="presentableId" value="LOCAL-02136" />
+      <option name="project" value="LOCAL" />
+      <updated>1597175063268</updated>
+    </task>
+    <option name="localTasksCounter" value="2137" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -982,7 +977,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Revert &quot;Correção no alerta de voto&quot;&#10;&#10;This reverts commit 1469e715cbba5d990726e5b7b5ba7b4b241499cd." />
     <MESSAGE value="Tentativa de correção no bug das cores" />
     <MESSAGE value="Adição de versionamento de objetos" />
     <MESSAGE value="Remoção de versionamento de objetos" />
@@ -1007,7 +1001,8 @@
     <MESSAGE value="Atualização da biblioteca de paginação" />
     <MESSAGE value="Balanceamento da pontuação dos Exceeds" />
     <MESSAGE value="Correção nos buffs" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção nos buffs" />
+    <MESSAGE value="Correção nas apostas do jogo da velha" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção nas apostas do jogo da velha" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1058,11 +1053,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2" timestamp="1597165274644">
+    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2" timestamp="1597175060199">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1597165274644" />
+    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1597175060199" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1079,26 +1074,26 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="620" y="261" key="FileChooserDialogImpl/0.0.1680.1010@0.0.1680.1010" timestamp="1597149004659" />
-    <state width="1125" height="289" key="GridCell.Tab.0.bottom" timestamp="1597087142046">
+    <state width="1125" height="289" key="GridCell.Tab.0.bottom" timestamp="1597177146474">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="270" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1125" height="289" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1597087142046" />
-    <state width="1125" height="289" key="GridCell.Tab.0.center" timestamp="1597087142046">
+    <state width="1125" height="289" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1597177146474" />
+    <state width="1125" height="289" key="GridCell.Tab.0.center" timestamp="1597177146474">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="270" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1125" height="289" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1597087142046" />
-    <state width="1125" height="289" key="GridCell.Tab.0.left" timestamp="1597087142046">
+    <state width="1125" height="289" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1597177146474" />
+    <state width="1125" height="289" key="GridCell.Tab.0.left" timestamp="1597177146474">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="270" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1125" height="289" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1597087142046" />
-    <state width="1125" height="289" key="GridCell.Tab.0.right" timestamp="1597087142046">
+    <state width="1125" height="289" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1597177146474" />
+    <state width="1125" height="289" key="GridCell.Tab.0.right" timestamp="1597177146474">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="270" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1125" height="289" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1597087142046" />
+    <state width="1125" height="289" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1597177146474" />
     <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1594058079602">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1124,11 +1119,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1597086904112" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1597165280840">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1597175274907">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1597165280840" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1597175274907" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597086949993">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1158,6 +1153,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="510" y="135" key="com.intellij.database.view.ui.DatabasePreviewDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1593706488306" />
+    <state x="634" y="385" key="data.grid.dml.preview.dialog" timestamp="1597176288417">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="634" y="385" key="data.grid.dml.preview.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1597176288417" />
     <state x="465" y="286" key="extract.method.dialog" timestamp="1595246935580">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
