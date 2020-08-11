@@ -41,13 +41,13 @@ public class Card {
 	private String id;
 
 	@Column(columnDefinition = "VARCHAR(18) NOT NULL DEFAULT ''")
-	private final String name = "";
+	private String name = "";
 
 	@Enumerated(EnumType.STRING)
 	private AnimeName anime;
 
 	@Enumerated(EnumType.STRING)
-	private final KawaiponRarity rarity = KawaiponRarity.COMMON;
+	private KawaiponRarity rarity = KawaiponRarity.COMMON;
 
 	public String getId() {
 		return id;
