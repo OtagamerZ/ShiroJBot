@@ -21,6 +21,7 @@ package com.kuuhaku.handlers.games.hitotsu;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.framework.Tabletop;
+import com.kuuhaku.handlers.games.tabletop.enums.Board;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
@@ -51,7 +52,7 @@ public class Hitotsu extends Tabletop {
 	private Message message = null;
 
 	public Hitotsu(TextChannel table, String id, User... players) {
-		super(table, null, id, players);
+		super(table, Board.SIZE_NONE(), id, players);
 		for (User u : players) {
 			Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
 			available.addAll(kp.getCards());
