@@ -70,7 +70,8 @@ public class MyBuffsCommand extends Command {
 		if (kgotchi)
 			if (kg.isAlive() && kg.getTier() != Tier.CHILD)
 				eb.addField("Seu kawaigotchi é um " + kg.getTier().toString().toLowerCase(), "+" + (int) (kg.getTier().getUserXpMult() * 100 - 100) + "% XP ganho", false);
-			else eb.addField("Seu kawaigotchi morreu", "-20% XP ganho", false);
+			else if (!kg.isAlive())
+				eb.addField("Seu kawaigotchi morreu", "-20% XP ganho", false);
 
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 		if (kp.getCards().size() / (float) CardDAO.totalCards() >= 1)
