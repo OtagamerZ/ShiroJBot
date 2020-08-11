@@ -27,7 +27,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção nos buffs">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/MyBuffsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/information/MyBuffsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -124,7 +128,7 @@
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="TEXT" />
     <property name="extract.method.default.visibility" value="private" />
     <property name="last.edited.regexp" value="aaaa&#10;aaa" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/memes" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/Nova pasta/libras" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
@@ -585,28 +589,10 @@
       <workItem from="1597076170346" duration="1064000" />
       <workItem from="1597077831390" duration="461000" />
       <workItem from="1597078925286" duration="362000" />
-      <workItem from="1597082400332" duration="5266000" />
-    </task>
-    <task id="LOCAL-02083" summary="Testes de nova funcionalidade">
-      <created>1596478540345</created>
-      <option name="number" value="02083" />
-      <option name="presentableId" value="LOCAL-02083" />
-      <option name="project" value="LOCAL" />
-      <updated>1596478540345</updated>
-    </task>
-    <task id="LOCAL-02084" summary="Fundos de perfil animados!">
-      <created>1596478984328</created>
-      <option name="number" value="02084" />
-      <option name="presentableId" value="LOCAL-02084" />
-      <option name="project" value="LOCAL" />
-      <updated>1596478984329</updated>
-    </task>
-    <task id="LOCAL-02085" summary="Fundos de perfil animados!">
-      <created>1596479562993</created>
-      <option name="number" value="02085" />
-      <option name="presentableId" value="LOCAL-02085" />
-      <option name="project" value="LOCAL" />
-      <updated>1596479562993</updated>
+      <workItem from="1597082400332" duration="5931000" />
+      <workItem from="1597088517505" duration="74000" />
+      <workItem from="1597147216494" duration="1251000" />
+      <workItem from="1597164452925" duration="630000" />
     </task>
     <task id="LOCAL-02086" summary="Fundos de perfil animados!">
       <created>1596481842408</created>
@@ -930,7 +916,28 @@
       <option name="project" value="LOCAL" />
       <updated>1597087624862</updated>
     </task>
-    <option name="localTasksCounter" value="2132" />
+    <task id="LOCAL-02132" summary="Balanceamento da pontuação dos Exceeds">
+      <created>1597087714186</created>
+      <option name="number" value="02132" />
+      <option name="presentableId" value="LOCAL-02132" />
+      <option name="project" value="LOCAL" />
+      <updated>1597087714186</updated>
+    </task>
+    <task id="LOCAL-02133" summary="Balanceamento da pontuação dos Exceeds">
+      <created>1597087833947</created>
+      <option name="number" value="02133" />
+      <option name="presentableId" value="LOCAL-02133" />
+      <option name="project" value="LOCAL" />
+      <updated>1597087833947</updated>
+    </task>
+    <task id="LOCAL-02134" summary="Balanceamento da pontuação dos Exceeds">
+      <created>1597087940688</created>
+      <option name="number" value="02134" />
+      <option name="presentableId" value="LOCAL-02134" />
+      <option name="project" value="LOCAL" />
+      <updated>1597087940688</updated>
+    </task>
+    <option name="localTasksCounter" value="2135" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1048,11 +1055,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2" timestamp="1597087621989">
+    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2" timestamp="1597164887399">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1597087621989" />
+    <state x="294" y="66" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1597164887399" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1065,10 +1072,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1596200392405" />
-    <state x="620" y="261" key="FileChooserDialogImpl" timestamp="1594057299069">
+    <state x="620" y="261" key="FileChooserDialogImpl" timestamp="1597149004659">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="620" y="261" key="FileChooserDialogImpl/0.0.1680.1010@0.0.1680.1010" timestamp="1594057299069" />
+    <state x="620" y="261" key="FileChooserDialogImpl/0.0.1680.1010@0.0.1680.1010" timestamp="1597149004659" />
     <state width="1125" height="289" key="GridCell.Tab.0.bottom" timestamp="1597087142046">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1102,10 +1109,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="601" y="208" key="MultipleFileMergeDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1589980606709" />
-    <state x="505" y="205" key="NewModule_or_Project.wizard" timestamp="1590148977508">
+    <state x="505" y="205" key="NewModule_or_Project.wizard" timestamp="1597148986370">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="505" y="205" key="NewModule_or_Project.wizard/0.0.1680.1010@0.0.1680.1010" timestamp="1590148977508" />
+    <state x="505" y="205" key="NewModule_or_Project.wizard/0.0.1680.1010@0.0.1680.1010" timestamp="1597148986370" />
     <state x="548" y="228" key="RollbackChangesDialog" timestamp="1597077455100">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1114,11 +1121,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1597086904112" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1597087627337">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1597087964649">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1597087627337" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1597087964649" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597086949993">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1152,10 +1159,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="465" y="286" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595246935580" />
-    <state x="287" y="103" width="957" height="784" key="find.popup" timestamp="1597087247024">
+    <state x="287" y="103" width="957" height="784" key="find.popup" timestamp="1597165062899">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="287" y="103" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1597087247024" />
+    <state x="287" y="103" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1597165062899" />
     <state x="645" y="400" key="git4idea.ui.GitResetDialog" timestamp="1593018818159">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
