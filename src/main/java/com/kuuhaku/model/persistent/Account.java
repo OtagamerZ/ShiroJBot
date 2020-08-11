@@ -87,7 +87,7 @@ public class Account {
 		this.loan = Math.round(loan.getLoan() * loan.getInterest(ex));
 	}
 
-	public void addCredit(long credit, Class<?> from) {
+	public synchronized void addCredit(long credit, Class<?> from) {
 		if (credit == 0) return;
 		else if (this.loan > 0) {
 			TransactionDAO.register(userId, from, -credit);
@@ -104,7 +104,7 @@ public class Account {
 		}
 	}
 
-	public void removeCredit(long credit, Class<?> from) {
+	public synchronized void removeCredit(long credit, Class<?> from) {
 		this.balance -= credit;
 		if (credit != 0) TransactionDAO.register(userId, from, -credit);
 	}

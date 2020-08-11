@@ -46,6 +46,10 @@ public class Board {
 		return new Board(new Piece[8][8]);
 	}
 
+	public static Board SIZE_NONE() {
+		return new Board(new Piece[0][0]);
+	}
+
 	public Piece[][] getLayout() {
 		return board;
 	}
