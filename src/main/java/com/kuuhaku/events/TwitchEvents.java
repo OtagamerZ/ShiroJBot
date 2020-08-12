@@ -74,7 +74,6 @@ public class TwitchEvents {
 		if (command != null) {
 			if (command.requiresBinding() && acc == null) {
 				client.getChat().sendMessage(channel.getName(), ShiroInfo.getLocale(I18n.PT).getString("err_user-not-bound"));
-				System.out.println("teste");
 				return;
 			} else if (BlacklistDAO.isBlacklisted(author)) {
 				client.getChat().sendMessage(channel.getName(), ShiroInfo.getLocale(I18n.PT).getString("err_user-blacklisted"));
