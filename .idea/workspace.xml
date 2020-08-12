@@ -28,7 +28,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/TwitchEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/TwitchEvents.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -593,14 +594,7 @@
       <workItem from="1597164452925" duration="8226000" />
       <workItem from="1597235920384" duration="1067000" />
       <workItem from="1597237633104" duration="28000" />
-      <workItem from="1597238924225" duration="12234000" />
-    </task>
-    <task id="LOCAL-02109" summary="Correção do roque longo">
-      <created>1596736995110</created>
-      <option name="number" value="02109" />
-      <option name="presentableId" value="LOCAL-02109" />
-      <option name="project" value="LOCAL" />
-      <updated>1596736995110</updated>
+      <workItem from="1597238924225" duration="12541000" />
     </task>
     <task id="LOCAL-02110" summary="Logging de pixels adicionados">
       <created>1596739954760</created>
@@ -938,7 +932,14 @@
       <option name="project" value="LOCAL" />
       <updated>1597257766928</updated>
     </task>
-    <option name="localTasksCounter" value="2158" />
+    <task id="LOCAL-02158" summary="Implementação de integração com a twitch">
+      <created>1597259829144</created>
+      <option name="number" value="02158" />
+      <option name="presentableId" value="LOCAL-02158" />
+      <option name="project" value="LOCAL" />
+      <updated>1597259829144</updated>
+    </task>
+    <option name="localTasksCounter" value="2159" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1055,11 +1056,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1597257764148">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1597259826211">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1597257764148" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1597259826211" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1068,10 +1069,10 @@
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state width="247" height="195" key="DatabaseViewActions_Filter/0.0.1366.768@0.0.1366.768" timestamp="1591416926427" />
-    <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1597177683441">
+    <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1597260076291">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="92" y="92" width="1496" height="826" key="DiffContextDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1597177683441" />
+    <state x="92" y="92" width="1496" height="826" key="DiffContextDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1597260076291" />
     <state x="620" y="261" key="FileChooserDialogImpl" timestamp="1597149004659">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1121,11 +1122,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1597086904112" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1597257767895">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1597259830532">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1597257767895" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1597259830532" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597086949993">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
