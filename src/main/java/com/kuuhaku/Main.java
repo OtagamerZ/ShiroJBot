@@ -19,6 +19,7 @@
 package com.kuuhaku;
 
 import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
+import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.TwitchClientBuilder;
 import com.github.ygimenez.method.Pages;
 import com.kuuhaku.controller.Relay;
@@ -28,14 +29,12 @@ import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.Manager;
 import com.kuuhaku.events.JibrilEvents;
 import com.kuuhaku.events.ScheduledEvents;
-import com.kuuhaku.events.TwitchEvents;
 import com.kuuhaku.events.guild.GuildEvents;
 import com.kuuhaku.events.guild.GuildUpdateEvents;
 import com.kuuhaku.handlers.api.Application;
 import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
 import com.kuuhaku.managers.CommandManager;
 import com.kuuhaku.model.common.DataDump;
-import com.kuuhaku.model.common.TwitchClient;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
@@ -127,13 +126,11 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 		spring = SpringApplication.run(Application.class, args);
 
-		twitch = new TwitchClient(
-				TwitchClientBuilder.builder()
-						.withEnableHelix(true)
-						.withEnableChat(true)
-						.withChatAccount(new OAuth2Credential("twitch", System.getenv("TWITCH_TOKEN")))
-						.build()
-		);
+		twitch = TwitchClientBuilder.builder()
+				.withEnableHelix(true)
+				.withEnableChat(true)
+				.withDefaultAuthToken(new OAuth2Credential("twitch", System.getenv("TWITCH_TOKEN")))
+				.build();
 
 		info.setSockets(new WebSocketConfig());
 		finishStartUp();
@@ -161,10 +158,9 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 		GuildDAO.getAllGuilds().forEach(Helper::refreshButtons);
 
-		twitch.getClient().getChat().joinChannel("kuuhaku_otgmz");
-		twitch.getClient().getClientHelper().enableStreamEventListener("twitch4j");
-		twitch.getClient().getClientHelper().enableFollowEventListener("twitch4j");
-		twitch.addEventListener(new TwitchEvents());
+		twitch.getChat().joinChannel("kuuhaku_otgmz");
+		twitch.getClientHelper().enableStreamEventListener("kuuhaku_otgmz");
+		twitch.getClientHelper().enableFollowEventListener("kuuhaku_otgmz");
 
 		Helper.logger(Main.class).info("<----------END OF BOOT---------->");
 		Helper.logger(Main.class).info("Estou pronta!");
