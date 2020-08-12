@@ -42,7 +42,7 @@ public class Account {
 	private String userId;
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
-	private String twitchId;
+	private String twitchId = "";
 
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long balance = 0;
