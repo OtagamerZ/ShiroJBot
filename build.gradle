@@ -30,7 +30,6 @@ plugins {
     id 'idea'
     id 'application'
     id "org.springframework.boot" version "2.1.6.RELEASE"
-    kotlin("jvm") version "1.4.0-rc"
 }
 
 application {
