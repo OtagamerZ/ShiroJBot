@@ -71,10 +71,10 @@ public class TwitchEvents {
 		}
 
 		TwitchCommand command = Main.getTwitchCommandManager().getCommand(commandName);
+		client.getChat().sendMessage(channel.getName(), "abc");
 		if (command != null) {
 			if (command.requiresBinding() && acc == null) {
 				client.getChat().sendMessage(channel.getName(), ShiroInfo.getLocale(I18n.PT).getString("err_user-not-bound"));
-				System.out.println("Not bound");
 				return;
 			} else if (BlacklistDAO.isBlacklisted(author)) {
 				client.getChat().sendMessage(channel.getName(), ShiroInfo.getLocale(I18n.PT).getString("err_user-blacklisted"));
@@ -85,7 +85,6 @@ public class TwitchEvents {
 			}
 
 			command.execute(author, acc, rawMsgNoPrefix, args, message, channel, client.getChat(), message.getPermissions());
-			System.out.println("Sending command");
 			ShiroInfo.getRatelimit().put(author.getId(), true);
 
 			String ad = Helper.getAd();
