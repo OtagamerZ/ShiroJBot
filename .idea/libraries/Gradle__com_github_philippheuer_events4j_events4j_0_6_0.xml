@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.philippheuer.events4j:events4j:0.6.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.philippheuer.events4j/events4j/0.6.0/c32369f6a5090745adbe8e2038da5a345b9f2954/events4j-0.6.0.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.philippheuer.events4j/events4j/0.6.0/b281e7267f3a8ecb0a7f38c65b76badb18b42dee/events4j-0.6.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.philippheuer.events4j/events4j/0.6.0/7836d975f0d4f0012df98761b2f8453a0c8826c4/events4j-0.6.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

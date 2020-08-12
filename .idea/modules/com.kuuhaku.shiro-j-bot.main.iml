@@ -64,6 +64,7 @@
     <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-jcl:2.11.2" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-api:2.11.2" level="project" />
     <orderEntry type="library" name="Gradle: org.java-websocket:Java-WebSocket:1.5.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.philippheuer.events4j:events4j:0.6.0" level="project" />
     <orderEntry type="library" name="Gradle: com.graphql-java:graphql-java:2019-05-08T02-56-27-cca4316" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.25" level="project" />
     <orderEntry type="library" name="Gradle: org.beanshell:bsh:2.0b5" level="project" />
@@ -73,8 +74,9 @@
     <orderEntry type="library" name="Gradle: org.jasypt:jasypt:1.9.2" level="project" />
     <orderEntry type="library" name="Gradle: org.threeten:threetenbp:1.4.4" level="project" />
     <orderEntry type="library" name="Gradle: org.swinglabs.swingx:swingx-graphics:1.6.5-1" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.code.findbugs:jsr305:3.0.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.4.0-rc" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp:4.6.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.code.findbugs:jsr305:3.0.2" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains:annotations:18.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.neovisionaries:nv-websocket-client:2.9" level="project" />
     <orderEntry type="library" name="Gradle: club.minnced:opus-java:pom:1.0.4" level="project" />
@@ -130,12 +132,14 @@
     <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-jul:2.11.2" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:jul-to-slf4j:1.7.26" level="project" />
     <orderEntry type="library" name="Gradle: commons-logging:commons-logging:1.2" level="project" />
+    <orderEntry type="library" name="Gradle: io.projectreactor:reactor-core:3.2.10.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: io.micrometer:micrometer-core:1.1.5" level="project" />
     <orderEntry type="library" name="Gradle: org.antlr:antlr4-runtime:4.7.2" level="project" />
     <orderEntry type="library" name="Gradle: com.graphql-java:java-dataloader:2.1.1" level="project" />
     <orderEntry type="library" name="Gradle: org.reactivestreams:reactive-streams:1.0.2" level="project" />
     <orderEntry type="library" name="Gradle: org.swinglabs.swingx:swingx-common:1.6.5-1" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.4.0-rc" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okio:okio:2.6.0" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.2.71" level="project" />
     <orderEntry type="library" name="Gradle: club.minnced:opus-java-api:1.0.4" level="project" />
     <orderEntry type="library" name="Gradle: club.minnced:opus-java-natives:1.0.4" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.9.0" level="project" />
@@ -183,20 +187,18 @@
     <orderEntry type="library" name="Gradle: com.github.philippheuer.events4j:events4j-handler-simple:0.9.1" level="project" />
     <orderEntry type="library" name="Gradle: com.github.philippheuer.credentialmanager:credentialmanager:0.1.1" level="project" />
     <orderEntry type="library" name="Gradle: com.sedmelluq:lavaplayer-common:1.0.6" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.3.70" level="project" />
+    <orderEntry type="library" name="Gradle: org.hdrhistogram:HdrHistogram:2.1.9" level="project" />
+    <orderEntry type="library" name="Gradle: org.latencyutils:LatencyUtils:2.0.3" level="project" />
     <orderEntry type="library" name="Gradle: net.java.dev.jna:jna:4.5.2" level="project" />
     <orderEntry type="library" name="Gradle: com.google.http-client:google-http-client:1.25.0" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-jcl:5.1.8.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: com.netflix.archaius:archaius-core:0.7.6" level="project" />
     <orderEntry type="library" name="Gradle: io.reactivex:rxjava:1.3.8" level="project" />
-    <orderEntry type="library" name="Gradle: org.hdrhistogram:HdrHistogram:2.1.9" level="project" />
     <orderEntry type="library" name="Gradle: com.nytimes.android:cache:2.0.2" level="project" />
     <orderEntry type="library" name="Gradle: com.apollographql.apollo:apollo-api:1.2.2" level="project" />
     <orderEntry type="library" name="Gradle: io.github.openfeign:feign-core:11.0" level="project" />
     <orderEntry type="library" name="Gradle: commons-lang:commons-lang:2.6" level="project" />
     <orderEntry type="library" name="Gradle: com.github.philippheuer.events4j:events4j-api:0.9.1" level="project" />
-    <orderEntry type="library" name="Gradle: io.micrometer:micrometer-core:1.1.5" level="project" />
     <orderEntry type="library" name="Gradle: com.google.j2objc:j2objc-annotations:1.1" level="project" />
-    <orderEntry type="library" name="Gradle: org.latencyutils:LatencyUtils:2.0.3" level="project" />
   </component>
 </module>

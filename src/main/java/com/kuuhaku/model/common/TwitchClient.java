@@ -20,36 +20,21 @@ package com.kuuhaku.model.common;
 
 import com.github.philippheuer.events4j.core.EventManager;
 import com.github.philippheuer.events4j.simple.SimpleEventHandler;
-import com.github.twitch4j.chat.TwitchChat;
-import com.github.twitch4j.graphql.TwitchGraphQL;
-import com.github.twitch4j.helix.TwitchHelix;
-import com.github.twitch4j.kraken.TwitchKraken;
-import com.github.twitch4j.pubsub.TwitchPubSub;
-import com.github.twitch4j.tmi.TwitchMessagingInterface;
 
-import java.util.concurrent.ScheduledThreadPoolExecutor;
+public class TwitchClient {
+	private final EventManager events = new EventManager();
+	private final com.github.twitch4j.TwitchClient client;
 
-public class TwitchClient extends com.github.twitch4j.TwitchClient {
-	EventManager events = new EventManager();
-
-	/**
-	 * Constructor
-	 *
-	 * @param eventManager       EventManager
-	 * @param helix              TwitchHelix
-	 * @param kraken             TwitchKraken
-	 * @param messagingInterface TwitchMessagingInterface
-	 * @param chat               TwitchChat
-	 * @param pubsub             TwitchPubSub
-	 * @param graphql            TwitchGraphQL
-	 * @param threadPoolExecutor ScheduledThreadPoolExecutor
-	 */
-	public TwitchClient(EventManager eventManager, TwitchHelix helix, TwitchKraken kraken, TwitchMessagingInterface messagingInterface, TwitchChat chat, TwitchPubSub pubsub, TwitchGraphQL graphql, ScheduledThreadPoolExecutor threadPoolExecutor) {
-		super(eventManager, helix, kraken, messagingInterface, chat, pubsub, graphql, threadPoolExecutor);
+	public TwitchClient(com.github.twitch4j.TwitchClient client) {
+		this.client = client;
 		events.autoDiscovery();
 	}
 
 	public void addEventListener(Object listener) {
 		events.getEventHandler(SimpleEventHandler.class).registerListener(listener);
+	}
+
+	public com.github.twitch4j.TwitchClient getClient() {
+		return client;
 	}
 }
