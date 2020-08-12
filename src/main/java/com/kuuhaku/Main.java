@@ -29,6 +29,7 @@ import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.Manager;
 import com.kuuhaku.events.JibrilEvents;
 import com.kuuhaku.events.ScheduledEvents;
+import com.kuuhaku.events.TwitchEvents;
 import com.kuuhaku.events.guild.GuildEvents;
 import com.kuuhaku.events.guild.GuildUpdateEvents;
 import com.kuuhaku.handlers.api.Application;
@@ -66,6 +67,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	private static JDA api;
 	private static JDA jbr;
 	private static TwitchClient twitch;
+	private static TwitchEvents twitchManager;
 	public static boolean exiting = false;
 	public static ConfigurableApplicationContext spring;
 
@@ -131,6 +133,8 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				.withEnableChat(true)
 				.withDefaultAuthToken(new OAuth2Credential("twitch", System.getenv("TWITCH_TOKEN")))
 				.build();
+
+		twitchManager = new TwitchEvents(twitch);
 
 		info.setSockets(new WebSocketConfig());
 		finishStartUp();
