@@ -28,8 +28,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_twitch4j_twitch4j_1_1_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_twitch4j_twitch4j_1_1_0.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/log4j2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/log4j2.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -171,9 +171,10 @@
   <component name="RunAnythingCache">
     <option name="myCommands">
       <command value="gradle :javadoc" />
+      <command value="gradle clean" />
     </option>
   </component>
-  <component name="RunManager" selected="Gradle.ShiroJBot [shadowJar]">
+  <component name="RunManager" selected="Gradle.ShiroJBot [clean]">
     <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
@@ -197,6 +198,25 @@
         <option name="taskNames">
           <list>
             <option value=":javadoc" />
+          </list>
+        </option>
+        <option name="vmOptions" value="" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="ShiroJBot [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="clean" />
           </list>
         </option>
         <option name="vmOptions" value="" />
@@ -234,6 +254,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.ShiroJBot [clean]" />
         <item itemvalue="Gradle.ShiroJBot [shadowJar]" />
         <item itemvalue="Gradle.ShiroJBot [:javadoc]" />
       </list>
@@ -594,14 +615,7 @@
       <workItem from="1597164452925" duration="8226000" />
       <workItem from="1597235920384" duration="1067000" />
       <workItem from="1597237633104" duration="28000" />
-      <workItem from="1597238924225" duration="16661000" />
-    </task>
-    <task id="LOCAL-02117" summary="Adição de queue de pixels">
-      <created>1597062100603</created>
-      <option name="number" value="02117" />
-      <option name="presentableId" value="LOCAL-02117" />
-      <option name="project" value="LOCAL" />
-      <updated>1597062100604</updated>
+      <workItem from="1597238924225" duration="18242000" />
     </task>
     <task id="LOCAL-02118" summary="Correção no xadrez">
       <created>1597062667849</created>
@@ -939,7 +953,14 @@
       <option name="project" value="LOCAL" />
       <updated>1597263597173</updated>
     </task>
-    <option name="localTasksCounter" value="2166" />
+    <task id="LOCAL-02166" summary="Implementação de integração com a twitch">
+      <created>1597264216467</created>
+      <option name="number" value="02166" />
+      <option name="presentableId" value="LOCAL-02166" />
+      <option name="project" value="LOCAL" />
+      <updated>1597264216467</updated>
+    </task>
+    <option name="localTasksCounter" value="2167" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1056,11 +1077,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1597263594426">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1597264213865">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1597263594426" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1597264213865" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1069,34 +1090,34 @@
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state width="247" height="195" key="DatabaseViewActions_Filter/0.0.1366.768@0.0.1366.768" timestamp="1591416926427" />
-    <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1597260076291">
+    <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1597265463372">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="92" y="92" width="1496" height="826" key="DiffContextDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1597260076291" />
+    <state x="92" y="92" width="1496" height="826" key="DiffContextDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1597265463372" />
     <state x="620" y="261" key="FileChooserDialogImpl" timestamp="1597149004659">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="620" y="261" key="FileChooserDialogImpl/0.0.1680.1010@0.0.1680.1010" timestamp="1597149004659" />
-    <state width="1125" height="289" key="GridCell.Tab.0.bottom" timestamp="1597257722203">
+    <state width="1637" height="279" key="GridCell.Tab.0.bottom" timestamp="1597265529591">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="270" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1125" height="289" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1597257722203" />
-    <state width="1125" height="289" key="GridCell.Tab.0.center" timestamp="1597257722202">
+    <state width="1637" height="279" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1597265529591" />
+    <state width="1637" height="279" key="GridCell.Tab.0.center" timestamp="1597265529590">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="270" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1125" height="289" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1597257722202" />
-    <state width="1125" height="289" key="GridCell.Tab.0.left" timestamp="1597257722202">
+    <state width="1637" height="279" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1597265529590" />
+    <state width="1637" height="279" key="GridCell.Tab.0.left" timestamp="1597265529590">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="270" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1125" height="289" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1597257722202" />
-    <state width="1125" height="289" key="GridCell.Tab.0.right" timestamp="1597257722202">
+    <state width="1637" height="279" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1597265529590" />
+    <state width="1637" height="279" key="GridCell.Tab.0.right" timestamp="1597265529590">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="270" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1125" height="289" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1597257722202" />
+    <state width="1637" height="279" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1597265529590" />
     <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1594058079602">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1122,11 +1143,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1597086904112" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1597263598405">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1597264229443">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1597263598405" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1597264229443" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597086949993">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1176,10 +1197,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="239" y="152" key="new project wizard/0.0.1680.1010@0.0.1680.1010" timestamp="1595512583095" />
-    <state x="496" y="233" width="672" height="677" key="run.anything.popup" timestamp="1597250729744">
+    <state x="496" y="233" width="672" height="677" key="run.anything.popup" timestamp="1597265523511">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1597250729744" />
+    <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1597265523511" />
     <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1596736763077">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
