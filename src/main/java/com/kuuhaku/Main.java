@@ -162,6 +162,8 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		GuildDAO.getAllGuilds().forEach(Helper::refreshButtons);
 
 		twitch.getClient().getChat().joinChannel("kuuhaku_otgmz");
+		twitch.getClient().getClientHelper().enableStreamEventListener("twitch4j");
+		twitch.getClient().getClientHelper().enableFollowEventListener("twitch4j");
 		twitch.addEventListener(new TwitchEvents());
 
 		Helper.logger(Main.class).info("<----------END OF BOOT---------->");
