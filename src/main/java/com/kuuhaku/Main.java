@@ -127,11 +127,13 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 		spring = SpringApplication.run(Application.class, args);
 
-		twitch = (TwitchClient) TwitchClientBuilder.builder()
-				.withEnableHelix(true)
-				.withEnableChat(true)
-				.withChatAccount(new OAuth2Credential("twitch", System.getenv("TWITCH_TOKEN")))
-				.build();
+		twitch = new TwitchClient(
+				TwitchClientBuilder.builder()
+						.withEnableHelix(true)
+						.withEnableChat(true)
+						.withChatAccount(new OAuth2Credential("twitch", System.getenv("TWITCH_TOKEN")))
+						.build()
+		);
 
 		info.setSockets(new WebSocketConfig());
 		finishStartUp();
@@ -159,7 +161,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 		GuildDAO.getAllGuilds().forEach(Helper::refreshButtons);
 
-		twitch.getChat().joinChannel("kuuhaku_otgmz");
+		twitch.getClient().getChat().joinChannel("kuuhaku_otgmz");
 		twitch.addEventListener(new TwitchEvents());
 
 		Helper.logger(Main.class).info("<----------END OF BOOT---------->");
