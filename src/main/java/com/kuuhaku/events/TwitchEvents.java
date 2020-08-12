@@ -70,7 +70,6 @@ public class TwitchEvents {
 			args = ArrayUtils.removeAllOccurences(args, "");
 		}
 
-		System.out.println(channel.getName() + " | " + channel.getId());
 		TwitchCommand command = Main.getTwitchCommandManager().getCommand(commandName);
 		if (command != null) {
 			if (command.requiresBinding() && acc == null) {
