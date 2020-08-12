@@ -27,7 +27,15 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_philippheuer_events4j_events4j_0_6_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__io_projectreactor_reactor_core_3_2_10_RELEASE.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_philippheuer_events4j_events4j_0_9_0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -591,28 +599,7 @@
       <workItem from="1597164452925" duration="8226000" />
       <workItem from="1597235920384" duration="1067000" />
       <workItem from="1597237633104" duration="28000" />
-      <workItem from="1597238924225" duration="3567000" />
-    </task>
-    <task id="LOCAL-02094" summary="Endpoint de canvas está de volta">
-      <created>1596545435428</created>
-      <option name="number" value="02094" />
-      <option name="presentableId" value="LOCAL-02094" />
-      <option name="project" value="LOCAL" />
-      <updated>1596545435429</updated>
-    </task>
-    <task id="LOCAL-02095" summary="Endpoint de canvas está de volta">
-      <created>1596545994515</created>
-      <option name="number" value="02095" />
-      <option name="presentableId" value="LOCAL-02095" />
-      <option name="project" value="LOCAL" />
-      <updated>1596545994515</updated>
-    </task>
-    <task id="LOCAL-02096" summary="Endpoint de canvas está de volta">
-      <created>1596546058915</created>
-      <option name="number" value="02096" />
-      <option name="presentableId" value="LOCAL-02096" />
-      <option name="project" value="LOCAL" />
-      <updated>1596546058915</updated>
+      <workItem from="1597238924225" duration="3960000" />
     </task>
     <task id="LOCAL-02097" summary="Endpoint de canvas está de volta">
       <created>1596547173576</created>
@@ -936,7 +923,28 @@
       <option name="project" value="LOCAL" />
       <updated>1597249550214</updated>
     </task>
-    <option name="localTasksCounter" value="2143" />
+    <task id="LOCAL-02143" summary="Implementação de integração com a twitch">
+      <created>1597249673490</created>
+      <option name="number" value="02143" />
+      <option name="presentableId" value="LOCAL-02143" />
+      <option name="project" value="LOCAL" />
+      <updated>1597249673490</updated>
+    </task>
+    <task id="LOCAL-02144" summary="Implementação de integração com a twitch">
+      <created>1597249739282</created>
+      <option name="number" value="02144" />
+      <option name="presentableId" value="LOCAL-02144" />
+      <option name="project" value="LOCAL" />
+      <updated>1597249739282</updated>
+    </task>
+    <task id="LOCAL-02145" summary="Implementação de integração com a twitch">
+      <created>1597249830219</created>
+      <option name="number" value="02145" />
+      <option name="presentableId" value="LOCAL-02145" />
+      <option name="project" value="LOCAL" />
+      <updated>1597249830219</updated>
+    </task>
+    <option name="localTasksCounter" value="2146" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1053,11 +1061,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1597249547523">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1597249827591">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1597249547523" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1597249827591" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1119,11 +1127,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1597086904112" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1597249620580">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1597249831162">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1597249620580" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1597249831162" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597086949993">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>

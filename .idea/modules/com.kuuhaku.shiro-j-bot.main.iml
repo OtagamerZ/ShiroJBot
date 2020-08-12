@@ -198,6 +198,5 @@
     <orderEntry type="library" name="Gradle: io.micrometer:micrometer-core:1.1.5" level="project" />
     <orderEntry type="library" name="Gradle: com.google.j2objc:j2objc-annotations:1.1" level="project" />
     <orderEntry type="library" name="Gradle: org.latencyutils:LatencyUtils:2.0.3" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.philippheuer.events4j:events4j:0.9.0" level="project" />
   </component>
 </module>
