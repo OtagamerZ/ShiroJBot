@@ -41,6 +41,9 @@ public class Account {
 	@Id
 	private String userId;
 
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
+	private String twitchId;
+
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long balance = 0;
 
@@ -71,6 +74,14 @@ public class Account {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+
+	public String getTwitchId() {
+		return twitchId;
+	}
+
+	public void setTwitchId(String twitchId) {
+		this.twitchId = twitchId;
 	}
 
 	public long getBalance() {

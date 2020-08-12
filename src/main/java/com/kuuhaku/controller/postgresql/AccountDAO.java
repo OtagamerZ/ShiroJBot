@@ -57,6 +57,21 @@ public class AccountDAO {
 		}
 	}
 
+	public static Account getAccountByTwitchId(String id) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT a FROM Account a WHERE twitchId = :id", Account.class);
+		q.setParameter("id", id);
+
+		try {
+			return (Account) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
+
 	public static void saveAccount(Account acc) {
 		EntityManager em = Manager.getEntityManager();
 

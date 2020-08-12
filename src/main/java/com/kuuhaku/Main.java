@@ -35,6 +35,7 @@ import com.kuuhaku.events.guild.GuildUpdateEvents;
 import com.kuuhaku.handlers.api.Application;
 import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
 import com.kuuhaku.managers.CommandManager;
+import com.kuuhaku.managers.TwitchCommandManager;
 import com.kuuhaku.model.common.DataDump;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
@@ -64,6 +65,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	private static ShiroInfo info;
 	private static Relay relay;
 	private static CommandManager cmdManager;
+	private static TwitchCommandManager tCmdManager;
 	private static JDA api;
 	private static JDA jbr;
 	private static TwitchClient twitch;
@@ -188,6 +190,18 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 	public static CommandManager getCommandManager() {
 		return cmdManager;
+	}
+
+	public static TwitchCommandManager getTwitchCommandManager() {
+		return tCmdManager;
+	}
+
+	public static TwitchClient getTwitch() {
+		return twitch;
+	}
+
+	public static TwitchEvents getTwitchManager() {
+		return twitchManager;
 	}
 
 	public static boolean shutdown() {
