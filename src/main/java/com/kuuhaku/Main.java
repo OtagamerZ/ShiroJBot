@@ -82,6 +82,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		info = new ShiroInfo();
 		relay = new Relay();
 		cmdManager = new CommandManager();
+		tCmdManager = new TwitchCommandManager();
 
 		EnumSet<GatewayIntent> intents = GatewayIntent.getIntents(GatewayIntent.DEFAULT);
 
