@@ -22,11 +22,12 @@ import com.github.philippheuer.events4j.core.EventManager;
 import com.github.philippheuer.events4j.simple.SimpleEventHandler;
 
 public class TwitchClient {
-	private final EventManager events = new EventManager();
+	private final EventManager events;
 	private final com.github.twitch4j.TwitchClient client;
 
 	public TwitchClient(com.github.twitch4j.TwitchClient client) {
 		this.client = client;
+		this.events = client.getEventManager();
 		events.autoDiscovery();
 	}
 
