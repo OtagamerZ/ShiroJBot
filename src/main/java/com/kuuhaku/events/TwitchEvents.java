@@ -70,8 +70,10 @@ public class TwitchEvents {
 			args = ArrayUtils.removeAllOccurences(args, "");
 		}
 
+		System.out.println("Finding command");
 		TwitchCommand command = Main.getTwitchCommandManager().getCommand(commandName);
 		if (command != null) {
+			System.out.println("Command found");
 			if (command.requiresBinding() && acc == null) {
 				client.getChat().sendMessage(channel.getName(), ShiroInfo.getLocale(I18n.PT).getString("err_user-not-bound"));
 				return;
@@ -90,7 +92,7 @@ public class TwitchEvents {
 			if (ad != null) {
 				client.getChat().sendMessage(channel.getName(), ad);
 			}
-		}
+		} else System.out.println("Command not found");
 	}
 
 	private void onFollowEvent(FollowEvent evt) {
