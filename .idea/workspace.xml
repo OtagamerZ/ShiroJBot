@@ -28,7 +28,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/TwitchEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/TwitchEvents.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -594,28 +594,7 @@
       <workItem from="1597164452925" duration="8226000" />
       <workItem from="1597235920384" duration="1067000" />
       <workItem from="1597237633104" duration="28000" />
-      <workItem from="1597238924225" duration="12541000" />
-    </task>
-    <task id="LOCAL-02110" summary="Logging de pixels adicionados">
-      <created>1596739954760</created>
-      <option name="number" value="02110" />
-      <option name="presentableId" value="LOCAL-02110" />
-      <option name="project" value="LOCAL" />
-      <updated>1596739954760</updated>
-    </task>
-    <task id="LOCAL-02111" summary="Logging de pixels adicionados">
-      <created>1596740348340</created>
-      <option name="number" value="02111" />
-      <option name="presentableId" value="LOCAL-02111" />
-      <option name="project" value="LOCAL" />
-      <updated>1596740348340</updated>
-    </task>
-    <task id="LOCAL-02112" summary="Logging de pixels adicionados">
-      <created>1596741576860</created>
-      <option name="number" value="02112" />
-      <option name="presentableId" value="LOCAL-02112" />
-      <option name="project" value="LOCAL" />
-      <updated>1596741576860</updated>
+      <workItem from="1597238924225" duration="14374000" />
     </task>
     <task id="LOCAL-02113" summary="Adição de queue de pixels">
       <created>1596747082623</created>
@@ -939,7 +918,28 @@
       <option name="project" value="LOCAL" />
       <updated>1597259829144</updated>
     </task>
-    <option name="localTasksCounter" value="2159" />
+    <task id="LOCAL-02159" summary="Implementação de integração com a twitch">
+      <created>1597260086644</created>
+      <option name="number" value="02159" />
+      <option name="presentableId" value="LOCAL-02159" />
+      <option name="project" value="LOCAL" />
+      <updated>1597260086644</updated>
+    </task>
+    <task id="LOCAL-02160" summary="Implementação de integração com a twitch">
+      <created>1597260119461</created>
+      <option name="number" value="02160" />
+      <option name="presentableId" value="LOCAL-02160" />
+      <option name="project" value="LOCAL" />
+      <updated>1597260119461</updated>
+    </task>
+    <task id="LOCAL-02161" summary="Implementação de integração com a twitch">
+      <created>1597260382111</created>
+      <option name="number" value="02161" />
+      <option name="presentableId" value="LOCAL-02161" />
+      <option name="project" value="LOCAL" />
+      <updated>1597260382111</updated>
+    </task>
+    <option name="localTasksCounter" value="2162" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1056,11 +1056,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1597259826211">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1597260379295">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1597259826211" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1597260379295" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1122,11 +1122,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1597086904112" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1597259830532">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1597260384329">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1597259830532" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1597260384329" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597086949993">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
