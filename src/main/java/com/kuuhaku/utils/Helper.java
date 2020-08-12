@@ -26,7 +26,7 @@ import com.github.ygimenez.type.PageType;
 import com.google.gson.Gson;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.command.commands.reactions.Reaction;
+import com.kuuhaku.command.commands.discord.reactions.Reaction;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.GuildBuffDAO;
 import com.kuuhaku.controller.postgresql.LogDAO;

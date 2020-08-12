@@ -83,7 +83,7 @@ public class TwitchEvents {
 				return;
 			}
 
-			command.execute(author, acc, rawMsgNoPrefix, args, message, channel, message.getPermissions());
+			command.execute(author, acc, rawMsgNoPrefix, args, message, channel, client.getChat(), message.getPermissions());
 			ShiroInfo.getRatelimit().put(author.getId(), true);
 
 			String ad = Helper.getAd();

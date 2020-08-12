@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command;
 
+import com.github.twitch4j.chat.TwitchChat;
 import com.github.twitch4j.chat.events.channel.ChannelMessageEvent;
 import com.github.twitch4j.common.enums.CommandPermission;
 import com.github.twitch4j.common.events.domain.EventChannel;
@@ -87,5 +88,5 @@ public abstract class TwitchCommand {
 		return requiresBinding;
 	}
 
-	public abstract void execute(EventUser author, Account account, String rawCmd, String[] args, ChannelMessageEvent message, EventChannel channel, Set<CommandPermission> permissions);
+	public abstract void execute(EventUser author, Account account, String rawCmd, String[] args, ChannelMessageEvent message, EventChannel channel, TwitchChat chat, Set<CommandPermission> permissions);
 }
