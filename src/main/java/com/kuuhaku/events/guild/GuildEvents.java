@@ -183,17 +183,17 @@ public class GuildEvents extends ListenerAdapter {
 						} catch (InsufficientPermissionException ignore) {
 						}
 						return;
-					} else if (BlacklistDAO.isBlacklisted(author.getId())) {
+					} else if (BlacklistDAO.isBlacklisted(author)) {
 						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-blacklisted")).queue();
 						return;
-					} else if (ShiroInfo.getRatelimit().getIfPresent(author) != null) {
+					} else if (ShiroInfo.getRatelimit().getIfPresent(author.getId()) != null) {
 						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-ratelimited")).queue();
 						return;
 					}
 
 					command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, prefix);
 					if (!TagDAO.getTagById(author.getId()).isPartner() || Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
-						ShiroInfo.getRatelimit().put(author, true);
+						ShiroInfo.getRatelimit().put(author.getId(), true);
 					Helper.spawnAd(channel);
 				}
 			}

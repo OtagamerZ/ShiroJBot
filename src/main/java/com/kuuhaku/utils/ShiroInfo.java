@@ -87,7 +87,7 @@ public class ShiroInfo {
 	private static final JDAEvents shiroEvents = new JDAEvents();
 	private static final Map<String, KittyCache<String, Message>> messageCache = new HashMap<>();
 	private static final GsonBuilder JSONFactory = new GsonBuilder();
-	private static final Cache<User, Boolean> ratelimit = CacheBuilder.newBuilder().expireAfterWrite(3, TimeUnit.SECONDS).build();
+	private static final Cache<String, Boolean> ratelimit = CacheBuilder.newBuilder().expireAfterWrite(3, TimeUnit.SECONDS).build();
 	private static final HttpClientBuilder httpBuilder = HttpClientBuilder.create();
 	private static final Map<String, Tabletop> games = new HashMap<>();
 	private static final Set<String> requests = new HashSet<>();
@@ -272,7 +272,7 @@ public class ShiroInfo {
 		return shiroEvents;
 	}
 
-	public static Cache<User, Boolean> getRatelimit() {
+	public static Cache<String, Boolean> getRatelimit() {
 		return ratelimit;
 	}
 
