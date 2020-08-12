@@ -46,6 +46,7 @@ public class TwitchClient extends com.github.twitch4j.TwitchClient {
 	 */
 	public TwitchClient(EventManager eventManager, TwitchHelix helix, TwitchKraken kraken, TwitchMessagingInterface messagingInterface, TwitchChat chat, TwitchPubSub pubsub, TwitchGraphQL graphql, ScheduledThreadPoolExecutor threadPoolExecutor) {
 		super(eventManager, helix, kraken, messagingInterface, chat, pubsub, graphql, threadPoolExecutor);
+		events.autoDiscovery();
 	}
 
 	public void addEventListener(Object listener) {
