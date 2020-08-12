@@ -18,13 +18,35 @@
 
 package com.kuuhaku.events;
 
-import com.github.philippheuer.events4j.simple.domain.EventSubscriber;
+import com.github.philippheuer.events4j.simple.SimpleEventHandler;
+import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.chat.events.channel.ChannelMessageEvent;
+import com.github.twitch4j.chat.events.channel.FollowEvent;
+import com.github.twitch4j.events.ChannelGoLiveEvent;
 
 public class TwitchEvents {
+	private final SimpleEventHandler handler;
 
-	@EventSubscriber
-	public void onTwitchMessageReceived(ChannelMessageEvent event) {
-		System.out.println(event.getMessage());
+	public TwitchEvents(TwitchClient client) {
+		this.handler = client.getEventManager().getEventHandler(SimpleEventHandler.class);
+		handler.onEvent(ChannelMessageEvent.class, this::onChannelMessageEvent);
+		handler.onEvent(FollowEvent.class, this::onFollowEvent);
+		handler.onEvent(ChannelGoLiveEvent.class, this::onChannelGoLiveEvent);
+	}
+
+	private void onChannelMessageEvent(ChannelMessageEvent evt) {
+		System.out.println("Message received: " + evt.getMessage());
+	}
+
+	private void onFollowEvent(FollowEvent evt) {
+
+	}
+
+	private void onChannelGoLiveEvent(ChannelGoLiveEvent evt) {
+
+	}
+
+	public SimpleEventHandler getHandler() {
+		return handler;
 	}
 }
