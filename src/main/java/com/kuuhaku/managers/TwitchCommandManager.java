@@ -18,8 +18,8 @@
 
 package com.kuuhaku.managers;
 
-import com.kuuhaku.command.Category;
 import com.kuuhaku.command.TwitchCommand;
+import com.kuuhaku.command.commands.twitch.PingCommand;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -28,32 +28,28 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TwitchCommandManager {
-	private final HashMap<Class<? extends TwitchCommand>, Argument> commands = new HashMap<>() {
+	private final HashMap<Class<? extends TwitchCommand>, TwitchArgument> commands = new HashMap<>() {
 		{
-
+			put(PingCommand.class, new TwitchArgument(
+					"ping", "cmd_ping", true
+			));
 		}
 	};
 
-	public HashMap<Class<? extends TwitchCommand>, Argument> getCommands() {
+	public HashMap<Class<? extends TwitchCommand>, TwitchArgument> getCommands() {
 		return commands;
 	}
 
 	public TwitchCommand getCommand(String name) {
-		Map.Entry<Class<? extends TwitchCommand>, Argument> cmd = commands.entrySet().stream().filter(e -> e.getValue().getName().equalsIgnoreCase(name) || ArrayUtils.contains(e.getValue().getAliases(), name.toLowerCase())).findFirst().orElse(null);
+		Map.Entry<Class<? extends TwitchCommand>, TwitchArgument> cmd = commands.entrySet().stream().filter(e -> e.getValue().getName().equalsIgnoreCase(name) || ArrayUtils.contains(e.getValue().getAliases(), name.toLowerCase())).findFirst().orElse(null);
 
 		if (cmd == null) return null;
 
 		try {
-			if (cmd.getValue() instanceof ReactionArgument)
-				//noinspection JavaReflectionInvocation
-				return cmd.getKey()
-						.getConstructor(String.class, String[].class, String.class, boolean.class, String.class)
-						.newInstance(cmd.getValue().getArguments());
-			else
-				//noinspection JavaReflectionInvocation
-				return cmd.getKey()
-						.getConstructor(String.class, String[].class, String.class, String.class, Category.class, boolean.class)
-						.newInstance(cmd.getValue().getArguments());
+			//noinspection JavaReflectionInvocation
+			return cmd.getKey()
+					.getConstructor(String.class, String[].class, String.class, String.class, boolean.class)
+					.newInstance(cmd.getValue().getArguments());
 		} catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			return null;
