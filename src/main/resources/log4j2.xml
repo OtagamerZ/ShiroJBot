@@ -47,7 +47,7 @@
 
     <Loggers>
         <root level="debug">
-            <AppenderRef ref="Console" level="debug"/>
+            <AppenderRef ref="Console" level="info"/>
             <AppenderRef ref="Log" level="info"/>
 
             <AppenderRef ref="ErrorLog" level="error"/>
