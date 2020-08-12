@@ -131,10 +131,12 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 		spring = SpringApplication.run(Application.class, args);
 
+		OAuth2Credential cred = new OAuth2Credential("twitch", System.getenv("TWITCH_TOKEN"));
 		twitch = TwitchClientBuilder.builder()
 				.withEnableHelix(true)
 				.withEnableChat(true)
-				.withDefaultAuthToken(new OAuth2Credential("twitch", System.getenv("TWITCH_TOKEN")))
+				.withDefaultAuthToken(cred)
+				.withChatAccount(cred)
 				.build();
 
 		twitchManager = new TwitchEvents(twitch);
