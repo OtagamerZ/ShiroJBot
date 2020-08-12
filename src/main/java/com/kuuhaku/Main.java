@@ -73,12 +73,11 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		Thread.setDefaultUncaughtExceptionHandler(new Main());
 		info = new ShiroInfo();
 		relay = new Relay();
-
 		cmdManager = new CommandManager();
 
 		EnumSet<GatewayIntent> intents = GatewayIntent.getIntents(GatewayIntent.DEFAULT);
 
-		JDA api = JDABuilder.create(intents)
+		api = JDABuilder.create(intents)
 				.enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_PRESENCES)
 				.setToken(info.getBotToken())
 				.setChunkingFilter(ChunkingFilter.ALL)
@@ -89,7 +88,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				.build()
 				.awaitReady();
 
-		JDA jbr = JDABuilder.create(intents)
+		jbr = JDABuilder.create(intents)
 				.setToken(System.getenv("JIBRIL_TOKEN"))
 				.setChunkingFilter(ChunkingFilter.NONE)
 				.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS)
@@ -99,8 +98,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				.awaitReady();
 
 		info.setAPI(api);
-		Main.api = api;
-		Main.jbr = jbr;
 
 		api.getPresence().setActivity(Activity.playing("Iniciando..."));
 		jbr.getPresence().setActivity(Activity.playing("Iniciando..."));
