@@ -101,7 +101,7 @@ public class Chess extends Tabletop {
 						if (m.getContentRaw().length() != 5) return;
 						String[] coords = m.getContentRaw().split(" ");
 
-						if (coords.length < 2) {
+						if (coords.length < 2 || coords[0].length() < 2 || coords[1].length() < 2) {
 							getTable().sendMessage(":x: | Você precisa especificar duas coordenadas, uma para escolher a peça e outra pra definir o destino dela.").queue();
 							return;
 						}
