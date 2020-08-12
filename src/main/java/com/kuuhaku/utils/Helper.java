@@ -230,6 +230,12 @@ public class Helper {
 		}
 	}
 
+	public static String getAd() {
+		if (Helper.rng(1000, false) > 990) {
+			return "Opa, está gostando de me utilizar em seu servidor? Caso sim, se puder votar me ajudaria **MUITO** a me tornar cada vez mais popular e ser chamada para mais servidores!\nhttps://top.gg/bot/572413282653306901";
+		} else return null;
+	}
+
 	public static JSONObject callApi(String url) {
 		try {
 			HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
