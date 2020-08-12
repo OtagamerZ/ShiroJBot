@@ -71,7 +71,6 @@ public class TwitchEvents {
 		}
 
 		TwitchCommand command = Main.getTwitchCommandManager().getCommand(commandName);
-		client.getChat().sendMessage(channel.getName(), "abc");
 		if (command != null) {
 			if (command.requiresBinding() && acc == null) {
 				client.getChat().sendMessage(channel.getName(), ShiroInfo.getLocale(I18n.PT).getString("err_user-not-bound"));
