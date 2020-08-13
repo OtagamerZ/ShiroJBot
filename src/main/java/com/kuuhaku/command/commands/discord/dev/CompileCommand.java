@@ -98,7 +98,7 @@ public class CompileCommand extends Command {
 							throw new IllegalArgumentException("Bloco de código com começo incorreto");
 						}
 					} catch (Exception e) {
-						m.editMessage(":x: | Erro ao compilar: ```" + e.toString().replace("`", "´") + "```").queue();
+						m.editMessage("❌ | Erro ao compilar: ```" + e.toString().replace("`", "´") + "```").queue();
 					}
 					return null;
 				});
@@ -108,10 +108,10 @@ public class CompileCommand extends Command {
 					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				} catch (TimeoutException e) {
 					execute.cancel(true);
-					m.editMessage(":x: | Tempo limite de execução esgotado.").queue();
+					m.editMessage("❌ | Tempo limite de execução esgotado.").queue();
 				}
 			} catch (Exception e) {
-				m.editMessage(":x: | Erro ao compilar: ```" + e.toString().replace("`", "´") + "```").queue();
+				m.editMessage("❌ | Erro ao compilar: ```" + e.toString().replace("`", "´") + "```").queue();
 			}
 		});
 	}

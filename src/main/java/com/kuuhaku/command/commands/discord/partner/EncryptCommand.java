@@ -56,10 +56,10 @@ public class EncryptCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (message.getAttachments().size() < 1) {
-			channel.sendMessage(":x: | Você precisa adicionar um arquivo para criptografar.").queue();
+			channel.sendMessage("❌ | Você precisa adicionar um arquivo para criptografar.").queue();
 			return;
 		} else if (args.length < 1) {
-			channel.sendMessage(":x: | Você precisa digitar uma chave para ser usada na criptografia do arquivo.").queue();
+			channel.sendMessage("❌ | Você precisa digitar uma chave para ser usada na criptografia do arquivo.").queue();
 			return;
 		}
 

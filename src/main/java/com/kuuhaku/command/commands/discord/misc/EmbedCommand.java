@@ -72,9 +72,9 @@ public class EmbedCommand extends Command {
 				m.delete().queue();
 				channel.sendMessage(eb.build()).queue();
 			} catch (JSONException ex) {
-				m.editMessage(":x: | JSON em formato inválido, recomendo utilizar este site para checar se está tudo correto: https://jsonlint.com/.").queue();
+				m.editMessage("❌ | JSON em formato inválido, recomendo utilizar este site para checar se está tudo correto: https://jsonlint.com/.").queue();
 			} catch (Exception e) {
-				m.editMessage(":x: | Erro ao construir embed, talvez você não tenha passado nenhum argumento.").queue();
+				m.editMessage("❌ | Erro ao construir embed, talvez você não tenha passado nenhum argumento.").queue();
 			}
 		});
 	}

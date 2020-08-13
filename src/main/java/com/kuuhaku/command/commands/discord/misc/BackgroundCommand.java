@@ -66,7 +66,7 @@ public class BackgroundCommand extends Command {
 			bi.flush();
 
 			if (Helper.getFileType(args[0]).contains("gif") && (bi.getWidth() < 400 || bi.getHeight() < 254)) {
-				channel.sendMessage(":x: | Fundos de perfil animados devem ter no mínimo 400px de largura e 254px de altura!").queue();
+				channel.sendMessage("❌ | Fundos de perfil animados devem ter no mínimo 400px de largura e 254px de altura!").queue();
 				return;
 			}
 
@@ -78,7 +78,7 @@ public class BackgroundCommand extends Command {
 			else channel.sendMessage("Imagem de fundo trocada com sucesso!").queue();
 		} catch (IOException | NullPointerException e) {
 			if (args[0].contains("google"))
-				channel.sendMessage(":x: | Você pegou o link da **pesquisa do Google** bobo!").queue();
+				channel.sendMessage("❌ | Você pegou o link da **pesquisa do Google** bobo!").queue();
 			else channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-image")).queue();
 		}
     }

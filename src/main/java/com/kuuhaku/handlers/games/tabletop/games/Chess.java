@@ -101,7 +101,7 @@ public class Chess extends Tabletop {
 						String[] coords = m.getContentRaw().split(" ");
 
 						if (coords.length < 2 || coords[0].length() < 2 || coords[1].length() < 2) {
-							getTable().sendMessage(":x: | Você precisa especificar duas coordenadas, uma para escolher a peça e outra pra definir o destino dela.").queue();
+							getTable().sendMessage("❌ | Você precisa especificar duas coordenadas, uma para escolher a peça e outra pra definir o destino dela.").queue();
 							return;
 						}
 
@@ -110,13 +110,13 @@ public class Chess extends Tabletop {
 						Piece p = getBoard().getSpot(from);
 
 						if (p == null) {
-							getTable().sendMessage(":x: | Não há nenhuma peça nessa coordenada!").queue();
+							getTable().sendMessage("❌ | Não há nenhuma peça nessa coordenada!").queue();
 							return;
 						} else if (!p.getOwner().getUser().getId().equals(getPlayers().getCurrent().getId())) {
-							getTable().sendMessage(":x: | Essa peça não é sua!").queue();
+							getTable().sendMessage("❌ | Essa peça não é sua!").queue();
 							return;
 						} else if (!p.move(getBoard(), to)) {
-							getTable().sendMessage(":x: | Movimento inválido!").queue();
+							getTable().sendMessage("❌ | Movimento inválido!").queue();
 							return;
 						}
 
@@ -154,7 +154,7 @@ public class Chess extends Tabletop {
 							else refresh(this);
 						}
 					} catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
-						getTable().sendMessage(":x: | Movimento inválido.").queue();
+						getTable().sendMessage("❌ | Movimento inválido.").queue();
 					}
 				}
 			}
@@ -163,7 +163,7 @@ public class Chess extends Tabletop {
 
 	private void refresh(Object listener) {
 		if (timeout != null && !timeout.isCancelled()) timeout.cancel(true);
-		timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
+		timeout = getTable().sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
 			Main.getInfo().getAPI().removeEventListener(listener);
 			Main.getInfo().getGames().remove(getId());
 		}, Helper::doNothing);

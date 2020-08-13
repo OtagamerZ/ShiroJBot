@@ -68,7 +68,7 @@ public class GatekeeperCommand extends Command {
 
 			channel.sendMessage("Porteiro adicionado com sucesso!").queue(s -> Helper.gatekeep(gc));
 		} catch (IllegalArgumentException e) {
-			channel.sendMessage(":x: | Erro em um dos argumentos: " + e).queue();
+			channel.sendMessage("❌ | Erro em um dos argumentos: " + e).queue();
 		} catch (ErrorResponseException e) {
             channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_role-chooser-invalid-channel")).queue();
         }

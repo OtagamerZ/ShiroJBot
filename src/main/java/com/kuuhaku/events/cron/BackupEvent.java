@@ -30,7 +30,7 @@ public class BackupEvent implements Job {
 
 	@Override
 	public void execute(JobExecutionContext context) {
-		Main.getInfo().getAPI().getPresence().setActivity(Main.getRandomActivity());
+		if (!Main.getInfo().isLive()) Main.getInfo().getAPI().getPresence().setActivity(Main.getRandomActivity());
 
 		com.kuuhaku.controller.postgresql.BackupDAO.dumpData(
 				new DataDump(

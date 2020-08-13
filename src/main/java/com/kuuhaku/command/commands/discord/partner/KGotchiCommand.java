@@ -120,7 +120,7 @@ public class KGotchiCommand extends Command {
 				JSONObject bag = new JSONObject(k.getBag());
 
 				if (f == null || !bag.has(f.getIdentifier())) {
-					channel.sendMessage(":x: | Comida inválida, você não quis dizer **" + Helper.didYouMean(args[1], bag.keySet().toArray(new String[0])) + "**?").queue();
+					channel.sendMessage("❌ | Comida inválida, você não quis dizer **" + Helper.didYouMean(args[1], bag.keySet().toArray(new String[0])) + "**?").queue();
 					return;
 				}
 
@@ -291,7 +291,7 @@ public class KGotchiCommand extends Command {
 							Vanity v = VanityMenu.getVanity(args[2].toLowerCase());
 
 							if (v == null) {
-								channel.sendMessage(":x: | Decoração inválida, você não quis dizer **" + Helper.didYouMean(args[2], VanityMenu.getMenu().keySet().toArray(new String[0])) + "**?").queue();
+								channel.sendMessage("❌ | Decoração inválida, você não quis dizer **" + Helper.didYouMean(args[2], VanityMenu.getMenu().keySet().toArray(new String[0])) + "**?").queue();
 								return;
 							} else if (acc.getBalance() < v.getPrice()) {
 								channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
@@ -336,7 +336,7 @@ public class KGotchiCommand extends Command {
 							Food f = FoodMenu.getFood(args[2].toLowerCase());
 
 							if (f == null) {
-								channel.sendMessage(":x: | Comida inválida, você não quis dizer **" + Helper.didYouMean(args[2], FoodMenu.getMenu().keySet().toArray(new String[0])) + "**?").queue();
+								channel.sendMessage("❌ | Comida inválida, você não quis dizer **" + Helper.didYouMean(args[2], FoodMenu.getMenu().keySet().toArray(new String[0])) + "**?").queue();
 								return;
 							} else if (acc.getBalance() < f.getPrice()) {
 								channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();

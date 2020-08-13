@@ -72,21 +72,21 @@ public class LoanCommand extends Command {
 			channel.sendMessage(eb.build()).queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[0])) {
-			channel.sendMessage(":x: | O plano precisa ser um valor numérico de 1 à 5.").queue();
+			channel.sendMessage("❌ | O plano precisa ser um valor numérico de 1 à 5.").queue();
 			return;
 		}
 
 		int loan = Integer.parseInt(args[0]);
 
 		if (loan < 1 || loan > 5) {
-			channel.sendMessage(":x: | O plano precisa ser um valor numérico de 1 à 5.").queue();
+			channel.sendMessage("❌ | O plano precisa ser um valor numérico de 1 à 5.").queue();
 			return;
 		}
 
 		Account acc = AccountDAO.getAccount(author.getId());
 
 		if (acc.getLoan() > 0) {
-			channel.sendMessage(":x: | Você ainda não terminou de pagar seu último empréstimo.").queue();
+			channel.sendMessage("❌ | Você ainda não terminou de pagar seu último empréstimo.").queue();
 			return;
 		}
 

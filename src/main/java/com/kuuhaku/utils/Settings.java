@@ -161,7 +161,7 @@ public class Settings {
 
 			message.getTextChannel().sendMessage(eb.build()).queue();
 		} catch (Exception err) {
-			message.getChannel().sendMessage(":x: | Ocorreu um erro durante o processo, os meus developers já foram notificados.").queue();
+			message.getChannel().sendMessage("❌ | Ocorreu um erro durante o processo, os meus developers já foram notificados.").queue();
 			Helper.logger(Settings.class).error(err + " | " + err.getStackTrace()[0]);
 		}
 	}
@@ -174,10 +174,10 @@ public class Settings {
 
 		String newPrefix = args[1].trim();
 		if (newPrefix.length() > 5) {
-			message.getTextChannel().sendMessage(":x: | O prefixo `" + newPrefix + "` contem mais de 5 carateres, não pode.").queue();
+			message.getTextChannel().sendMessage("❌ | O prefixo `" + newPrefix + "` contem mais de 5 carateres, não pode.").queue();
 			return;
 		} else if (newPrefix.length() < 2) {
-			message.getTextChannel().sendMessage(":x: | O prefixo `" + newPrefix + "` contem menos de 2 carateres, também não pode.").queue();
+			message.getTextChannel().sendMessage("❌ | O prefixo `" + newPrefix + "` contem menos de 2 carateres, também não pode.").queue();
 			return;
 		}
 
@@ -197,7 +197,7 @@ public class Settings {
 			}
 			return;
 		} else if (message.getMentionedChannels().size() > 1) {
-			message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 canal.").queue();
+			message.getTextChannel().sendMessage("❌ | Você só pode mencionar 1 canal.").queue();
 			return;
 		} else if (message.getMentionedChannels().size() < 1) {
 			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
@@ -247,7 +247,7 @@ public class Settings {
 			}
 			return;
 		} else if (message.getMentionedChannels().size() > 1) {
-			message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 canal.").queue();
+			message.getTextChannel().sendMessage("❌ | Você só pode mencionar 1 canal.").queue();
 			return;
 		} else if (message.getMentionedChannels().size() < 1) {
 			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
@@ -297,7 +297,7 @@ public class Settings {
 			}
 			return;
 		} else if (message.getMentionedChannels().size() > 1) {
-			message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 canal.").queue();
+			message.getTextChannel().sendMessage("❌ | Você só pode mencionar 1 canal.").queue();
 			return;
 		} else if (message.getMentionedChannels().size() < 1) {
 			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
@@ -328,7 +328,7 @@ public class Settings {
 			message.getTextChannel().sendMessage("✅ | O tempo de punições do servidor foi resetado para 60 minutos com sucesso.").queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[1])) {
-			message.getTextChannel().sendMessage(":x: | O tempo inserido é inválido, ele deve ser um valor inteiro.").queue();
+			message.getTextChannel().sendMessage("❌ | O tempo inserido é inválido, ele deve ser um valor inteiro.").queue();
 			return;
 		}
 
@@ -351,7 +351,7 @@ public class Settings {
 			message.getTextChannel().sendMessage("✅ | O tempo de enquetes do servidor foi resetado para 60 segundos com sucesso.").queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[1])) {
-			message.getTextChannel().sendMessage(":x: | O tempo inserido é inválido, ele deve ser um valor inteiro.").queue();
+			message.getTextChannel().sendMessage("❌ | O tempo inserido é inválido, ele deve ser um valor inteiro.").queue();
 			return;
 		}
 
@@ -374,7 +374,7 @@ public class Settings {
 			return;
 		}
 		if (message.getMentionedRoles().size() > 1) {
-			message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 cargo.").queue();
+			message.getTextChannel().sendMessage("❌ | Você só pode mencionar 1 cargo.").queue();
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setCargoWarn(null);
@@ -402,7 +402,7 @@ public class Settings {
 			return;
 		}
 		if (message.getMentionedRoles().size() > 1) {
-			message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 cargo.").queue();
+			message.getTextChannel().sendMessage("❌ | Você só pode mencionar 1 cargo.").queue();
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setCargoVip(null);
@@ -430,7 +430,7 @@ public class Settings {
 			return;
 		}
 		if (message.getMentionedChannels().size() > 1) {
-			message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 canal.").queue();
+			message.getTextChannel().sendMessage("❌ | Você só pode mencionar 1 canal.").queue();
 			return;
 		}
 		if (args[1].equals("ativar") || args[1].equals("sim")) {
@@ -442,7 +442,7 @@ public class Settings {
 			GuildDAO.updateGuildSettings(gc);
 			message.getTextChannel().sendMessage("✅ | As mensagens quando alguém sobe de nível foram desativadas com sucesso.").queue();
 		} else {
-			message.getTextChannel().sendMessage(":x: | \"" + args[1] + "\" não é uma opção válida, por favor escolha \"ativar\" ou então \"desativar\".").queue();
+			message.getTextChannel().sendMessage("❌ | \"" + args[1] + "\" não é uma opção válida, por favor escolha \"ativar\" ou então \"desativar\".").queue();
 		}
 	}
 
@@ -457,7 +457,7 @@ public class Settings {
 			}
 			return;
 		} else if (message.getMentionedChannels().size() > 1) {
-			message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 canal.").queue();
+			message.getTextChannel().sendMessage("❌ | Você só pode mencionar 1 canal.").queue();
 			return;
 		} else if (message.getMentionedChannels().size() < 1) {
 			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
@@ -487,7 +487,7 @@ public class Settings {
 			}
 			return;
 		} else if (message.getMentionedChannels().size() > 1) {
-			message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 canal.").queue();
+			message.getTextChannel().sendMessage("❌ | Você só pode mencionar 1 canal.").queue();
 			return;
 		} else if (message.getMentionedChannels().size() < 1) {
 			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
@@ -516,7 +516,7 @@ public class Settings {
 			}
 			return;
 		} else if (message.getMentionedChannels().size() > 1) {
-			message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 canal.").queue();
+			message.getTextChannel().sendMessage("❌ | Você só pode mencionar 1 canal.").queue();
 			return;
 		} else if (message.getMentionedChannels().size() < 1) {
 			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
@@ -550,10 +550,10 @@ public class Settings {
 			}
 			return;
 		} else if (!StringUtils.isNumeric(args[2])) {
-			message.getTextChannel().sendMessage(":x: | O terceiro argumento deve ser uma valor inteiro").queue();
+			message.getTextChannel().sendMessage("❌ | O terceiro argumento deve ser uma valor inteiro").queue();
 			return;
 		} else if (message.getMentionedRoles().size() > 1) {
-			message.getTextChannel().sendMessage(":x: | Você só pode mencionar 1 cargo por vez.").queue();
+			message.getTextChannel().sendMessage("❌ | Você só pode mencionar 1 cargo por vez.").queue();
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			try {
@@ -564,7 +564,7 @@ public class Settings {
 				message.getTextChannel().sendMessage("✅ | O cargo dado no level " + args[2] + " do servidor foi resetado com sucesso.").queue();
 				return;
 			} catch (Exception e) {
-				message.getTextChannel().sendMessage(":x: | Este nível ainda não possui nenhum cargo.").queue();
+				message.getTextChannel().sendMessage("❌ | Este nível ainda não possui nenhum cargo.").queue();
 				return;
 			}
 		}
@@ -593,25 +593,25 @@ public class Settings {
 			}
 			return;
 		} else if (Helper.equalsAny(args[1].toLowerCase(), "moderação", "dev", "parceiros")) {
-			message.getTextChannel().sendMessage(":x: | É impossível desativar o módulo " + args[1].toLowerCase() + ".").queue();
+			message.getTextChannel().sendMessage("❌ | É impossível desativar o módulo " + args[1].toLowerCase() + ".").queue();
 			return;
 		}
 
 		try {
 			if (Helper.equalsAny(args[2].toLowerCase(), "ligado", "enabled", "on")) {
 				if (!antigoModulo.contains(Category.getByName(args[1]))) {
-					message.getTextChannel().sendMessage(":x: | Módulo já ativado.").queue();
+					message.getTextChannel().sendMessage("❌ | Módulo já ativado.").queue();
 				} else {
 					antigoModulo.remove(Category.getByName(args[1]));
 				}
 			} else if (Helper.equalsAny(args[2].toLowerCase(), "desligado", "disabled", "off")) {
 				if (antigoModulo.contains(Category.getByName(args[1]))) {
-					message.getTextChannel().sendMessage(":x: | Módulo já desativado.").queue();
+					message.getTextChannel().sendMessage("❌ | Módulo já desativado.").queue();
 				} else {
 					antigoModulo.add(Category.getByName(args[1]));
 				}
 			} else {
-				message.getTextChannel().sendMessage(":x: | O terceiro argumento deve ser ligado ou desligado").queue();
+				message.getTextChannel().sendMessage("❌ | O terceiro argumento deve ser ligado ou desligado").queue();
 				return;
 			}
 
@@ -619,9 +619,9 @@ public class Settings {
             GuildDAO.updateGuildSettings(gc);
             message.getTextChannel().sendMessage("✅ | Módulo " + args[1] + " " + (antigoModulo.contains(Category.getByName(args[1])) ? "desabilitado" : "habilitado") + " com sucesso.").queue();
         } catch (RuntimeException e) {
-            message.getTextChannel().sendMessage(":x: | Módulo inválido.").queue();
-            e.printStackTrace();
-        }
+			message.getTextChannel().sendMessage("❌ | Módulo inválido.").queue();
+			e.printStackTrace();
+		}
     }
 
 	public static void settingsHelp(Message message, GuildConfig gc) {

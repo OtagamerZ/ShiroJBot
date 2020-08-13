@@ -47,14 +47,14 @@ public class PseudoNameCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		com.kuuhaku.model.persistent.Member mb = MemberDAO.getMemberById(author.getId() + guild.getId());
 		if (args.length == 0) {
-			channel.sendMessage(":x: | Você precisa digitar um nome ou `reset`.").queue();
+			channel.sendMessage("❌ | Você precisa digitar um nome ou `reset`.").queue();
 			return;
 		} else if (Helper.equalsAny(args[0], "reset", "limpar")) {
 			mb.setPseudoName("");
 			MemberDAO.updateMemberConfigs(mb);
 			channel.sendMessage("Pseudônimo limpo com sucesso!").queue();
 		} else if (String.join(" ", args).length() > 32) {
-			channel.sendMessage(":x: | Por favor escolha um nome mais curto.").queue();
+			channel.sendMessage("❌ | Por favor escolha um nome mais curto.").queue();
 			return;
 		}
 

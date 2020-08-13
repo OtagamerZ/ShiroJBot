@@ -49,7 +49,7 @@ public class LearnToSearchCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length == 0) {
-			channel.sendMessage(":x: | Você precisa informar algo para pesquisar.").queue();
+			channel.sendMessage("❌ | Você precisa informar algo para pesquisar.").queue();
 			return;
 		}
 

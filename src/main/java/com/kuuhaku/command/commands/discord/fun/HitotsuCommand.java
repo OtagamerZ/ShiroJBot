@@ -68,7 +68,7 @@ public class HitotsuCommand extends Command {
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
 		if (kp.getCards().size() < 25) {
-			channel.sendMessage(":x: | É necessário ter ao menos 25 cartas para poder jogar Hitotsu.").queue();
+			channel.sendMessage("❌ | É necessário ter ao menos 25 cartas para poder jogar Hitotsu.").queue();
 			return;
 		}
 

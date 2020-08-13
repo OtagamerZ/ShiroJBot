@@ -80,7 +80,7 @@ public class QuizCommand extends Command {
 
 		if (aq.getTimes() == 10) {
 			int time = (6 - (LocalDateTime.now().getHour() % 6));
-			channel.sendMessage(":x: | Você já jogou muitas vezes, aguarde " + time + " hora" + (time == 1 ? "" : "s") + " para jogar novamente!").queue();
+			channel.sendMessage("❌ | Você já jogou muitas vezes, aguarde " + time + " hora" + (time == 1 ? "" : "s") + " para jogar novamente!").queue();
 			return;
 		}
 

@@ -67,7 +67,7 @@ public class BlockCommand extends Command {
 								RelayBlockList.permaBlockID(isMentioned ? message.getMentionedUsers().get(0).getId() : args[0], reason);
 								Main.getRelay().relayMessage(message, (isMentioned ? message.getMentionedUsers().get(0).getAsMention() : "<@" + args[0] + ">") + " banido permanentemente do chat global.\nRazão: " + reason, m, guild, null);
 							} else {
-								channel.sendMessage(":x: | Permissões insuficientes.").queue();
+								channel.sendMessage("❌ | Permissões insuficientes.").queue();
 							}
 							break;
 						case "thumb":
@@ -75,16 +75,16 @@ public class BlockCommand extends Command {
 							Main.getRelay().relayMessage(message, (isMentioned ? message.getMentionedUsers().get(0).getAsMention() : "Avatar de <@" + args[0] + ">") + " foi censurado do chat global.", m, guild, null);
 							break;
 						default:
-							channel.sendMessage(":x: | Tipo inválido, o tipo deve ser thumb, temp ou perma.").queue();
+							channel.sendMessage("❌ | Tipo inválido, o tipo deve ser thumb, temp ou perma.").queue();
 					}
 				} else {
-					channel.sendMessage(":x: | ID inválido, identificadores possuem apenas dígitos de 0 à 9.").queue();
+					channel.sendMessage("❌ | ID inválido, identificadores possuem apenas dígitos de 0 à 9.").queue();
 				}
 			} else {
-				channel.sendMessage(":x: | Você precisa passar o ID do usuário a ser bloqueado, o tipo de bloqueio (thumb/temp/perma) e a razão para o bloqueio.").queue();
+				channel.sendMessage("❌ | Você precisa passar o ID do usuário a ser bloqueado, o tipo de bloqueio (thumb/temp/perma) e a razão para o bloqueio.").queue();
 			}
 		} catch (NumberFormatException e) {
-			channel.sendMessage(":x: | ID de usuário incorreto.").queue();
+			channel.sendMessage("❌ | ID de usuário incorreto.").queue();
 		}
 	}
 }
