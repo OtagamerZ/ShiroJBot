@@ -54,7 +54,7 @@ public class PendingBindingDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		em.remove(pb);
+		em.remove(getPendingBinding(pb.getHash()));
 		em.getTransaction().commit();
 
 		em.close();
