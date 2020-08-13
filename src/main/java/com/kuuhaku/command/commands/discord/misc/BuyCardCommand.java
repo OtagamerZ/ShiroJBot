@@ -80,7 +80,7 @@ public class BuyCardCommand extends Command {
 				if (rarity != null) {
 					byRarity.set(KawaiponRarity.getByName(rarity.substring(2)));
 					if (byRarity.get() == null) {
-						channel.sendMessage(":x: | Raridade inválida, verifique se digitou-a corretamente.").queue();
+						channel.sendMessage("❌ | Raridade inválida, verifique se digitou-a corretamente.").queue();
 						return;
 					}
 				}
@@ -90,7 +90,7 @@ public class BuyCardCommand extends Command {
 				String anime = params.stream().filter(s -> s.startsWith("-a") && s.length() > 2).findFirst().orElse(null);
 				if (anime != null) {
 					if (Arrays.stream(AnimeName.values()).noneMatch(a -> a.name().equals(anime.substring(2).toUpperCase()))) {
-						channel.sendMessage(":x: | Anime inválido, verifique se digitou-o corretamente.").queue();
+						channel.sendMessage("❌ | Anime inválido, verifique se digitou-o corretamente.").queue();
 						return;
 					}
 					byAnime.set(AnimeName.valueOf(anime.substring(2).toUpperCase()));
@@ -139,7 +139,7 @@ public class BuyCardCommand extends Command {
 		CardMarket cm = CardMarketDAO.getCard(Integer.parseInt(args[0]));
 
 		if (cm == null) {
-			channel.sendMessage(":x: | ID inválido ou a carta já foi comprada por alguém.").queue();
+			channel.sendMessage("❌ | ID inválido ou a carta já foi comprada por alguém.").queue();
 			return;
 		}
 
@@ -153,7 +153,7 @@ public class BuyCardCommand extends Command {
 			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
 			if (kp.getCards().contains(cm.getCard())) {
-				channel.sendMessage(":x: | Parece que você já possui essa carta!").queue();
+				channel.sendMessage("❌ | Parece que você já possui essa carta!").queue();
 				return;
 			}
 
@@ -180,7 +180,7 @@ public class BuyCardCommand extends Command {
 			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
 			if (kp.getCards().contains(cm.getCard())) {
-				channel.sendMessage(":x: | Parece que você já possui essa carta!").queue();
+				channel.sendMessage("❌ | Parece que você já possui essa carta!").queue();
 				return;
 			}
 

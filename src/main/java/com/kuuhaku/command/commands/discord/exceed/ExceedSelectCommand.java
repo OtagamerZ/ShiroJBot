@@ -53,7 +53,7 @@ public class ExceedSelectCommand extends Command {
 			ExceedMember em = ExceedDAO.getExceedMember(author.getId());
 			if (em == null || em.getExceed().isBlank()) {
 				if (em != null && em.isBlocked()) {
-					m.editMessage(":x: | Você não pode entrar em nenhum Exceed até o mês que vem.").queue();
+					m.editMessage("❌ | Você não pode entrar em nenhum Exceed até o mês que vem.").queue();
 					return;
 				} else if (args.length == 0) {
 					channel.sendMessage("Exceed é um sistema global de clãs, onde todo mês o clã vencedor ira receber experiência em dobro por uma semana. A pontuação é dada pela soma da experiência de todos os membros do clã, **independente do servidor**.\n\n" +
@@ -72,7 +72,7 @@ public class ExceedSelectCommand extends Command {
 				switch (args[0].toLowerCase()) {
 					case "imanity":
 						if (ExceedDAO.getPercentage(ExceedEnums.IMANITY) >= 0.5f) {
-							m.editMessage(":x: | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
+							m.editMessage("❌ | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
 							return;
 						}
 						if (em == null)
@@ -84,7 +84,7 @@ public class ExceedSelectCommand extends Command {
 						break;
 					case "seiren":
 						if (ExceedDAO.getPercentage(ExceedEnums.SEIREN) >= 0.5f) {
-							m.editMessage(":x: | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
+							m.editMessage("❌ | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
 							return;
 						}
 						if (em == null)
@@ -96,7 +96,7 @@ public class ExceedSelectCommand extends Command {
 						break;
 					case "werebeast":
 						if (ExceedDAO.getPercentage(ExceedEnums.WEREBEAST) >= 0.5f) {
-							m.editMessage(":x: | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
+							m.editMessage("❌ | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
 							return;
 						}
 						if (em == null)
@@ -108,7 +108,7 @@ public class ExceedSelectCommand extends Command {
 						break;
 					case "elf":
 						if (ExceedDAO.getPercentage(ExceedEnums.ELF) >= 0.5f) {
-							m.editMessage(":x: | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
+							m.editMessage("❌ | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
 							return;
 						}
 						if (em == null)
@@ -120,7 +120,7 @@ public class ExceedSelectCommand extends Command {
 						break;
 					case "ex-machina":
 						if (ExceedDAO.getPercentage(ExceedEnums.EXMACHINA) >= 0.5f) {
-							m.editMessage(":x: | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
+							m.editMessage("❌ | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
 							return;
 						}
 						if (em == null)
@@ -132,7 +132,7 @@ public class ExceedSelectCommand extends Command {
 						break;
 					case "flügel":
 						if (ExceedDAO.getPercentage(ExceedEnums.FLUGEL) >= 0.5f) {
-							m.editMessage(":x: | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
+							m.editMessage("❌ | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
 							return;
 						}
 						if (em == null)
@@ -143,7 +143,7 @@ public class ExceedSelectCommand extends Command {
 						}
 						break;
 					default:
-						m.editMessage(":x: | Exceed inexistente.").queue();
+						m.editMessage("❌ | Exceed inexistente.").queue();
 						return;
 				}
 
@@ -163,7 +163,7 @@ public class ExceedSelectCommand extends Command {
 						}
 				);
 			} else {
-				m.editMessage(":x: | Você já pertence à um exceed, não é possível trocá-lo.").queue();
+				m.editMessage("❌ | Você já pertence à um exceed, não é possível trocá-lo.").queue();
 			}
 		});
 	}

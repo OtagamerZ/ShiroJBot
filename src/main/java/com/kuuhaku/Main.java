@@ -178,10 +178,9 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	public static Activity getRandomActivity() {
 		List<Activity> activities = new ArrayList<>() {{
 			add(Activity.playing("Digite " + info.getDefaultPrefix() + "ajuda para ver meus comandos!"));
-			add(Activity.streaming("Na conta do meu Nii-chan sem ele saber!", "https://twitch.tv/kuuhaku_otgmz"));
 			add(Activity.playing("Nico nico nii!!"));
 			add(Activity.listening(api.getGuilds().size() + " servidores, e isso ainda é só o começo!"));
-			add(Activity.watching("No Game No Life pela 13ª vez, e ainda não enjoei de ver como eu atuo bem!"));
+			add(Activity.watching("No Game No Life pela 30ª vez, e ainda não enjoei de ver como eu atuo bem!"));
 		}};
 
 		return activities.get(Helper.rng(activities.size(), true));

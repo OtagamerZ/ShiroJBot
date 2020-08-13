@@ -197,12 +197,12 @@ public class Music {
 
             @Override
             public void noMatches() {
-                channel.sendMessage(":x: | Nenhuma música encontrada com o link " + trackUrl).queue();
+                channel.sendMessage("❌ | Nenhuma música encontrada com o link " + trackUrl).queue();
             }
 
             @Override
             public void loadFailed(FriendlyException exception) {
-                channel.sendMessage(":x: | Erro ao tocar a música: " + exception.getMessage()).queue();
+                channel.sendMessage("❌ | Erro ao tocar a música: " + exception.getMessage()).queue();
             }
         });
     }

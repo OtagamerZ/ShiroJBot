@@ -58,13 +58,13 @@ public class DecryptCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (message.getAttachments().size() < 1) {
-			channel.sendMessage(":x: | Você precisa adicionar um arquivo para descriptografado.").queue();
+			channel.sendMessage("❌ | Você precisa adicionar um arquivo para descriptografado.").queue();
 			return;
 		} else if (args.length < 1) {
-			channel.sendMessage(":x: | Você precisa digitar uma chave para descriptografar o arquivo.").queue();
+			channel.sendMessage("❌ | Você precisa digitar uma chave para descriptografar o arquivo.").queue();
 			return;
 		} else if (!message.getAttachments().get(0).getFileExtension().equals("shr")) {
-			channel.sendMessage(":x: | Este não é um arquivo que foi criptografado por mim!").queue();
+			channel.sendMessage("❌ | Este não é um arquivo que foi criptografado por mim!").queue();
 			return;
 		}
 
@@ -87,7 +87,7 @@ public class DecryptCommand extends Command {
 					} catch (IOException e) {
 						Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 					} catch (EncryptionOperationNotPossibleException | EncryptionInitializationException e) {
-						channel.sendMessage(":x: | Esta não foi a senha usada pra criptografar este arquivo!").queue();
+						channel.sendMessage("❌ | Esta não foi a senha usada pra criptografar este arquivo!").queue();
 					}
 				});
 			} catch (IOException | NoSuchAlgorithmException e) {

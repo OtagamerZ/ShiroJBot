@@ -62,7 +62,7 @@ public class PurchaceKGotchiCommand extends Command {
 		Account acc = AccountDAO.getAccount(author.getId());
 
 		if (KGotchiDAO.getKawaigotchi(author.getId()) != null || com.kuuhaku.controller.sqlite.KGotchiDAO.getKawaigotchi(author.getId()) != null) {
-			channel.sendMessage(":x: | Você já possui um Kawaigotchi!").queue();
+			channel.sendMessage("❌ | Você já possui um Kawaigotchi!").queue();
 			return;
 		}
 
@@ -84,7 +84,7 @@ public class PurchaceKGotchiCommand extends Command {
 		switch (args[0]) {
 			case "escolher":
 				if (acc.getBalance() < 2500) {
-					channel.sendMessage(":x: | Você não possui créditos suficientes (seus créditos: " + acc.getBalance() + ")!").queue();
+					channel.sendMessage("❌ | Você não possui créditos suficientes (seus créditos: " + acc.getBalance() + ")!").queue();
 					return;
 				} else if (args.length == 2) {
 					String[] image = {
@@ -118,14 +118,14 @@ public class PurchaceKGotchiCommand extends Command {
 					channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(m -> Pages.paginate(m, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
 					return;
 				} else if (args.length < 3) {
-					channel.sendMessage(":x: | Você precisa dar um nome ao seu Kawaigotchi!").queue();
+					channel.sendMessage("❌ | Você precisa dar um nome ao seu Kawaigotchi!").queue();
 					return;
 				}
 
 				String name = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
 
 				if (name.length() > 15) {
-					channel.sendMessage(":x: | Nome muito longo, escolha um nome menor!").queue();
+					channel.sendMessage("❌ | Nome muito longo, escolha um nome menor!").queue();
 					return;
 				}
 
@@ -141,22 +141,22 @@ public class PurchaceKGotchiCommand extends Command {
 						channel.sendMessage("Seu mais novo Kawaigotchi é um...**Snugget**!").queue();
 						break;
 					default:
-						channel.sendMessage(":x: | Você precisa escolher uma raça válida para seu Kawaigotchi!").queue();
+						channel.sendMessage("❌ | Você precisa escolher uma raça válida para seu Kawaigotchi!").queue();
 				}
 				break;
 			case "aleatorio":
 				if (acc.getBalance() < 500) {
-					channel.sendMessage(":x: | Você não possui créditos suficientes (seus créditos: " + acc.getBalance() + ")!").queue();
+					channel.sendMessage("❌ | Você não possui créditos suficientes (seus créditos: " + acc.getBalance() + ")!").queue();
 					return;
 				} else if (args.length < 2) {
-					channel.sendMessage(":x: | Você precisa dar um nome ao seu Kawaigotchi!").queue();
+					channel.sendMessage("❌ | Você precisa dar um nome ao seu Kawaigotchi!").queue();
 					return;
 				}
 
 				String nome = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 
 				if (nome.length() > 15) {
-					channel.sendMessage(":x: | Nome muito longo, escolha um nome menor!").queue();
+					channel.sendMessage("❌ | Nome muito longo, escolha um nome menor!").queue();
 					return;
 				}
 

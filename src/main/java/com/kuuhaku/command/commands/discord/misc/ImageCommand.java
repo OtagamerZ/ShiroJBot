@@ -59,7 +59,7 @@ public class ImageCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
-			channel.sendMessage(":x: | Você precisa indicar o que devo pesquisar.").queue();
+			channel.sendMessage("❌ | Você precisa indicar o que devo pesquisar.").queue();
 			return;
 		}
 
@@ -100,7 +100,7 @@ public class ImageCommand extends Command {
 				m.delete().queue();
 				channel.sendMessage(eb.build()).queue();
 			} catch (IOException | JSONException e) {
-				m.editMessage(":x: | Humm...não achei nenhuma imagem com esses termos, talvez você tenha escrito algo errado?").queue();
+				m.editMessage("❌ | Humm...não achei nenhuma imagem com esses termos, talvez você tenha escrito algo errado?").queue();
 			}
 		});
 	}

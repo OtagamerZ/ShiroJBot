@@ -60,7 +60,7 @@ public class CrissCross extends Tabletop {
 
 		Main.getInfo().getAPI().addEventListener(new ListenerAdapter() {
 			{
-				timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
+				timeout = getTable().sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
 					Main.getInfo().getAPI().removeEventListener(this);
 					Main.getInfo().getGames().remove(getId());
 				}, Helper::doNothing);
@@ -90,7 +90,7 @@ public class CrissCross extends Tabletop {
 						if (getBoard().getLayout()[s.getY()][s.getX()] == null)
 							getBoard().getLayout()[s.getY()][s.getX()] = pieces.get(u);
 						else {
-							getTable().sendMessage(":x: | Esta casa já está ocupada!").queue();
+							getTable().sendMessage("❌ | Esta casa já está ocupada!").queue();
 							return;
 						}
 
@@ -140,7 +140,7 @@ public class CrissCross extends Tabletop {
 							else refresh(this);
 						}
 					} catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
-						getTable().sendMessage(":x: | Coordenada inválida.").queue();
+						getTable().sendMessage("❌ | Coordenada inválida.").queue();
 					}
 				}
 			}
@@ -149,7 +149,7 @@ public class CrissCross extends Tabletop {
 
 	private void refresh(Object listener) {
 		if (timeout != null && !timeout.isCancelled()) timeout.cancel(true);
-		timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
+		timeout = getTable().sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
 			Main.getInfo().getAPI().removeEventListener(listener);
 			Main.getInfo().getGames().remove(getId());
 		}, Helper::doNothing);

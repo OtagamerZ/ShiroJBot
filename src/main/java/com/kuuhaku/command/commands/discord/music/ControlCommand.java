@@ -65,13 +65,13 @@ public class ControlCommand extends Command {
 		}
 
 		if (Music.getGuildAudioPlayer(guild, (TextChannel) channel).player.getPlayingTrack() == null) {
-			channel.sendMessage(":x: | Não há nenhuma música tocando no momento.").queue();
+			channel.sendMessage("❌ | Não há nenhuma música tocando no momento.").queue();
 			return;
 		} else if (member.getVoiceState().getChannel() == null || !member.getVoiceState().getChannel().getMembers().contains(guild.getSelfMember())) {
-			channel.sendMessage(":x: | Este comando só pode ser usado se estiver em um canal de voz com a Shiro.").queue();
+			channel.sendMessage("❌ | Este comando só pode ser usado se estiver em um canal de voz com a Shiro.").queue();
 			return;
 		} else if (!Helper.hasPermission(member, PrivilegeLevel.MOD) && !((User) Music.getGuildAudioPlayer(guild, (TextChannel) channel).player.getPlayingTrack().getUserData()).getId().equals(author.getId())) {
-			channel.sendMessage(":x: | Apenas quem adicionou esta música pode controlá-la (exceto moderadores).").queue();
+			channel.sendMessage("❌ | Apenas quem adicionou esta música pode controlá-la (exceto moderadores).").queue();
 			return;
 		}
 
@@ -91,7 +91,7 @@ public class ControlCommand extends Command {
 			case "volume":
 				if (args.length > 1 && StringUtils.isNumeric(args[1]))
 					Music.setVolume((TextChannel) channel, Integer.parseInt(args[1]));
-				else channel.sendMessage(":x: | O volume deve ser um valor inteiro entre 0 e 100.").queue();
+				else channel.sendMessage("❌ | O volume deve ser um valor inteiro entre 0 e 100.").queue();
 				break;
 			case "info":
 				Music.trackInfo((TextChannel) channel);
@@ -100,7 +100,7 @@ public class ControlCommand extends Command {
 				Music.queueInfo((TextChannel) channel);
 				break;
 			default:
-				channel.sendMessage(":x: | Comando de música inválido.").queue();
+				channel.sendMessage("❌ | Comando de música inválido.").queue();
 		}
 	}
 }

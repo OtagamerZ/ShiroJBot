@@ -92,7 +92,7 @@ public class PixelCanvasCommand extends Command {
 			Token t = TokenDAO.getTokenById(author.getId());
 
 			if (t == null || t.isDisabled()) {
-				channel.sendMessage(":x: | Seu token foi proibido de interagir com o canvas.").queue();
+				channel.sendMessage("❌ | Seu token foi proibido de interagir com o canvas.").queue();
 				return;
 			}
 

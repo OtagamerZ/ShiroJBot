@@ -60,7 +60,7 @@ public class SlapReaction extends Reaction {
 
 			sendReaction(getType(), (TextChannel) channel, getInteraction()[1], getInteraction()[0].getAsMention() + " estapeou " + getInteraction()[1].getAsMention() + " - " + this.getReaction(), true);
 		} else {
-			Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para dar um tapa!");
+			Helper.typeMessage(channel, "❌ | Epa, você precisa mencionar alguém para dar um tapa!");
 		}
 	}
 

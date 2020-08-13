@@ -119,7 +119,7 @@ public class JibrilEvents extends ListenerAdapter {
 						event.getMessage().delete().queue();
 					event.getAuthor().openPrivateChannel().queue(c -> {
 						try {
-							String s = ":x: | Você não pode mandar mensagens no chat global (bloqueado).";
+							String s = "❌ | Você não pode mandar mensagens no chat global (bloqueado).";
 							c.getHistory().retrievePast(20).queue(h -> {
 								if (h.stream().noneMatch(m -> m.getContentRaw().equalsIgnoreCase(s)))
 									c.sendMessage(s).queue();

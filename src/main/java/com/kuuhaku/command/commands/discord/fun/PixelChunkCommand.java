@@ -95,10 +95,10 @@ public class PixelChunkCommand extends Command {
 
 		try {
 			if (opts.length == 2) {
-				channel.sendMessage(":x: | É preciso especificar a coordenada e a cor neste formato: `zona X;Y;#cor`.\nPara dar zoom, digite apenas o número do chunk, as coordenadas X e Y e o nível do zoom.").queue();
+				channel.sendMessage("❌ | É preciso especificar a coordenada e a cor neste formato: `zona X;Y;#cor`.\nPara dar zoom, digite apenas o número do chunk, as coordenadas X e Y e o nível do zoom.").queue();
 				return;
 			} else if (Integer.parseInt(opts[0]) > CANVAS_SIZE / 4 || Integer.parseInt(opts[0]) < -CANVAS_SIZE / 4 || Integer.parseInt(opts[1]) > CANVAS_SIZE / 4 || Integer.parseInt(opts[1]) < -CANVAS_SIZE / 4) {
-				channel.sendMessage(":x: | As coordenadas não podem ser menores que -" + (CANVAS_SIZE / 4) + "px ou maiores que " + (CANVAS_SIZE / 4) + "px.").queue();
+				channel.sendMessage("❌ | As coordenadas não podem ser menores que -" + (CANVAS_SIZE / 4) + "px ou maiores que " + (CANVAS_SIZE / 4) + "px.").queue();
 				return;
 			}
 		} catch (NumberFormatException e) {
@@ -121,7 +121,7 @@ public class PixelChunkCommand extends Command {
 			Token t = TokenDAO.getTokenById(author.getId());
 
 			if (t == null || t.isDisabled()) {
-				channel.sendMessage(":x: | Seu token foi proibido de interagir com o canvas.").queue();
+				channel.sendMessage("❌ | Seu token foi proibido de interagir com o canvas.").queue();
 				return;
 			}
 
