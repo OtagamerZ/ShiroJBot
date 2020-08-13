@@ -391,6 +391,9 @@ public class CommandManager {
 			put(PayLoanCommand.class, new Argument(
 					"pagar", new String[]{"pay", "payloan"}, "cmd_pay-loan", MISC, false
 			));
+			put(BindCommand.class, new Argument(
+					"vincular", new String[]{"bind"}, "cmd_bind", MISC, false
+			));
 
 			//FUN
 			put(SadButTrueCommand.class, new Argument(
