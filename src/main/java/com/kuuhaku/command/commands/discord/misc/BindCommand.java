@@ -53,9 +53,9 @@ public class BindCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		Account acc = AccountDAO.getAccountByTwitchId(author.getId());
+		Account acc = AccountDAO.getAccount(author.getId());
 
-		if (acc != null) {
+		if (!acc.getTwitchId().isBlank()) {
 			channel.sendMessage("❌ | Você já vinculou esta conta a um perfil da Twitch.").queue();
 			return;
 		}
