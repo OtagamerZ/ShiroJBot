@@ -27,7 +27,6 @@ import com.kuuhaku.handlers.games.tabletop.enums.Board;
 import com.kuuhaku.handlers.games.tabletop.pieces.Circle;
 import com.kuuhaku.handlers.games.tabletop.pieces.Cross;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -63,7 +62,7 @@ public class CrissCross extends Tabletop {
 			{
 				timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
 					Main.getInfo().getAPI().removeEventListener(this);
-					ShiroInfo.getGames().remove(getId());
+					Main.getInfo().getGames().remove(getId());
 				}, Helper::doNothing);
 			}
 
@@ -76,7 +75,7 @@ public class CrissCross extends Tabletop {
 				if (chn.getId().equals(getTable().getId()) && u.getId().equals(getPlayers().getCurrent().getId()) && (m.getContentRaw().length() == 2 || Helper.equalsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender"))) {
 					if (Helper.equalsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender")) {
 						Main.getInfo().getAPI().removeEventListener(this);
-						ShiroInfo.getGames().remove(getId());
+						Main.getInfo().getGames().remove(getId());
 						getTable().sendMessage(getPlayers().getCurrent().getAsMention() + " desistiu!").queue();
 						getPlayers().nextTurn();
 						getPlayers().setWinner();
@@ -114,14 +113,14 @@ public class CrissCross extends Tabletop {
 
 						if (getPlayers().getWinner() != null) {
 							Main.getInfo().getAPI().removeEventListener(this);
-							ShiroInfo.getGames().remove(getId());
+							Main.getInfo().getGames().remove(getId());
 							getTable().sendMessage(getPlayers().getCurrent().getAsMention() + " venceu!").addFile(Helper.getBytes(getBoard().render()), "board.jpg").queue();
 							timeout.cancel(true);
 
 							awardWinner(bet);
 						} else if (fullRows == 3) {
 							Main.getInfo().getAPI().removeEventListener(this);
-							ShiroInfo.getGames().remove(getId());
+							Main.getInfo().getGames().remove(getId());
 							getTable().sendMessage("Temos um empate!").addFile(Helper.getBytes(getBoard().render()), "board.jpg").queue();
 							timeout.cancel(true);
 						} else {
@@ -133,7 +132,7 @@ public class CrissCross extends Tabletop {
 							if (getBoard().getRound() > 2)
 								timeout = getTable().sendMessage(getPlayers().getCurrent().getAsMention() + " perdeu por W.O.!").queueAfter(180, TimeUnit.SECONDS, ms -> {
 									Main.getInfo().getAPI().removeEventListener(this);
-									ShiroInfo.getGames().remove(getId());
+									Main.getInfo().getGames().remove(getId());
 									getPlayers().setWinner(getPlayers().nextTurn());
 
 									awardWinner(bet);
@@ -152,7 +151,7 @@ public class CrissCross extends Tabletop {
 		if (timeout != null && !timeout.isCancelled()) timeout.cancel(true);
 		timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
 			Main.getInfo().getAPI().removeEventListener(listener);
-			ShiroInfo.getGames().remove(getId());
+			Main.getInfo().getGames().remove(getId());
 		}, Helper::doNothing);
 	}
 }

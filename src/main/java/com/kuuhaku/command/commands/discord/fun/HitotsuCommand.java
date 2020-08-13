@@ -19,6 +19,7 @@
 package com.kuuhaku.command.commands.discord.fun;
 
 import com.github.ygimenez.method.Pages;
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
@@ -103,13 +104,13 @@ public class HitotsuCommand extends Command {
 
 		String id = author.getId() + "." + message.getMentionedUsers().stream().map(User::getId).map(s -> s + ".").collect(Collectors.joining()) + guild.getId();
 
-		if (ShiroInfo.gameInProgress(author.getId())) {
+		if (Main.getInfo().gameInProgress(author.getId())) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
 			return;
 		}
 
 		for (User u : message.getMentionedUsers()) {
-			if (ShiroInfo.gameInProgress(u.getId())) {
+			if (Main.getInfo().gameInProgress(u.getId())) {
 				channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_mention-in-game"), u.getAsMention())).queue();
 				return;
 			} else if (u.getId().equals(author.getId())) {
@@ -136,10 +137,10 @@ public class HitotsuCommand extends Command {
 		channel.sendMessage(msg)
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 					if (players.contains(mb.getUser())) {
-						if (ShiroInfo.gameInProgress(mb.getId())) {
+						if (Main.getInfo().gameInProgress(mb.getId())) {
 							channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
 							return;
-						} else if (ShiroInfo.gameInProgress(author.getId())) {
+						} else if (Main.getInfo().gameInProgress(author.getId())) {
 							channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
 							return;
 						}
@@ -150,7 +151,7 @@ public class HitotsuCommand extends Command {
 						}
 
 						if (accepted.size() == players.size()) {
-							ShiroInfo.getGames().put(id, t);
+							Main.getInfo().getGames().put(id, t);
 							ms.delete().queue();
 							t.execute(finalBet);
 						}

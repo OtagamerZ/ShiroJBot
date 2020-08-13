@@ -26,7 +26,6 @@ import com.kuuhaku.handlers.games.tabletop.entity.Spot;
 import com.kuuhaku.handlers.games.tabletop.enums.Board;
 import com.kuuhaku.handlers.games.tabletop.pieces.King;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -89,7 +88,7 @@ public class Chess extends Tabletop {
 				if (chn.getId().equals(getTable().getId()) && u.getId().equals(getPlayers().getCurrent().getId()) && (m.getContentRaw().length() == 5 || Helper.equalsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender"))) {
 					if (Helper.equalsAny(m.getContentRaw(), "desistir", "forfeit", "ff", "surrender")) {
 						Main.getInfo().getAPI().removeEventListener(this);
-						ShiroInfo.getGames().remove(getId());
+						Main.getInfo().getGames().remove(getId());
 						getTable().sendMessage(getPlayers().getCurrent().getAsMention() + " desistiu! (" + getBoard().getRound() + " turnos)").queue();
 						getPlayers().nextTurn();
 						getPlayers().setWinner();
@@ -138,7 +137,7 @@ public class Chess extends Tabletop {
 
 						if (getPlayers().getWinner() != null) {
 							Main.getInfo().getAPI().removeEventListener(this);
-							ShiroInfo.getGames().remove(getId());
+							Main.getInfo().getGames().remove(getId());
 							getTable().sendMessage(getPlayers().getCurrent().getAsMention() + " venceu, CHECKMATE!! (" + getBoard().getRound() + " turnos)").addFile(Helper.getBytes(getBoard().render()), "board.jpg").queue();
 							timeout.cancel(true);
 						} else {
@@ -150,7 +149,7 @@ public class Chess extends Tabletop {
 							if (getBoard().getRound() > 2)
 								timeout = getTable().sendMessage(getPlayers().getCurrent().getAsMention() + " perdeu por W.O.! (" + getBoard().getRound() + " turnos)").queueAfter(180, TimeUnit.SECONDS, ms -> {
 									Main.getInfo().getAPI().removeEventListener(this);
-									ShiroInfo.getGames().remove(getId());
+									Main.getInfo().getGames().remove(getId());
 								}, Helper::doNothing);
 							else refresh(this);
 						}
@@ -166,7 +165,7 @@ public class Chess extends Tabletop {
 		if (timeout != null && !timeout.isCancelled()) timeout.cancel(true);
 		timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
 			Main.getInfo().getAPI().removeEventListener(listener);
-			ShiroInfo.getGames().remove(getId());
+			Main.getInfo().getGames().remove(getId());
 		}, Helper::doNothing);
 	}
 }

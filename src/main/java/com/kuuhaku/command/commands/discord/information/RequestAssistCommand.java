@@ -54,7 +54,7 @@ public class RequestAssistCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		if (ShiroInfo.getRequests().contains(guild.getId())) {
+		if (Main.getInfo().getRequests().contains(guild.getId())) {
 			channel.sendMessage(":x: | Este servidor já possui um pedido de auxílio em aberto, aguarde até que um membro da equipe de suporte feche-o.").queue();
 			return;
 		}
@@ -80,7 +80,7 @@ public class RequestAssistCommand extends Command {
 				.complete()
 		);
 
-		ShiroInfo.getRequests().add(guild.getId());
+		Main.getInfo().getRequests().add(guild.getId());
 		TicketDAO.setIds(number, ids);
 		channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("str_successfully-requested-assist")).queue();
 	}
