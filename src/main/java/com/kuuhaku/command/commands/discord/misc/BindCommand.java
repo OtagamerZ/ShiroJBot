@@ -24,8 +24,14 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.PendingBindingDAO;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.PendingBinding;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.codec.binary.Hex;
 import org.jetbrains.annotations.NonNls;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class BindCommand extends Command {
 
@@ -47,24 +53,29 @@ public class BindCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		if (args.length < 1) {
-			channel.sendMessage("❌ | Você precisa informar o código fornecido pelo comando `s!vincular` usado na Twitch.").queue();
+		Account acc = AccountDAO.getAccountByTwitchId(author.getId());
+
+		if (acc != null) {
+			channel.sendMessage("❌ | Você já vinculou esta conta a um perfil da Twitch.").queue();
 			return;
 		}
 
-		PendingBinding pb = PendingBindingDAO.getPendingBinding(args[0]);
+		try {
+			String code = Hex.encodeHexString(MessageDigest.getInstance("SHA-1").digest(author.getId().getBytes(StandardCharsets.UTF_8)));
 
-		if (pb == null) {
-			channel.sendMessage("❌ | Código inexistente, verifique se você digitou-o corretamente.").queue();
-			return;
+			if (PendingBindingDAO.getPendingBinding(code) != null) {
+				channel.sendMessage("❌ | Você já requisitou uma vinculação a esta conta, verifique suas mensagens privadas.").queue();
+				return;
+			}
+
+			PendingBinding pb = new PendingBinding(code, author.getId());
+			PendingBindingDAO.savePendingBinding(pb);
+
+			author.openPrivateChannel().queue(c -> {
+				c.sendMessage("Use este código no comando `s!vincular` no chat do canal `kuuhaku_otgmz` para vincular esta conta ao seu perfil da Twitch:\n\n`" + code + "`").queue(null, Helper::doNothing);
+			}, Helper::doNothing);
+		} catch (NoSuchAlgorithmException e) {
+			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
-
-		Account acc = AccountDAO.getAccount(author.getId());
-		acc.setTwitchId(pb.getUserId());
-		AccountDAO.saveAccount(acc);
-
-		PendingBindingDAO.removePendingBinding(pb);
-
-		channel.sendMessage("Conta vinculada com sucesso!").queue();
 	}
 }
