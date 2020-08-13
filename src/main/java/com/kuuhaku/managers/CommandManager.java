@@ -394,6 +394,9 @@ public class CommandManager {
 			put(BindCommand.class, new Argument(
 					"vincular", new String[]{"bind"}, "cmd_bind", MISC, false
 			));
+			put(UnbindCommand.class, new Argument(
+					"desvincular", new String[]{"unbind"}, "cmd_unbind", MISC, false
+			));
 
 			//FUN
 			put(SadButTrueCommand.class, new Argument(
