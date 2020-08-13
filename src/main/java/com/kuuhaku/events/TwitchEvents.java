@@ -28,14 +28,20 @@ import com.github.twitch4j.events.ChannelGoLiveEvent;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.TwitchCommand;
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.sqlite.BlacklistDAO;
+import com.kuuhaku.controller.sqlite.PStateDAO;
+import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.EmbedBuilder;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.awt.*;
 import java.util.Arrays;
 
 public class TwitchEvents {
@@ -94,7 +100,36 @@ public class TwitchEvents {
 	}
 
 	private void onFollowEvent(FollowEvent evt) {
+		Account acc = AccountDAO.getAccountByTwitchId(evt.getUser().getId());
 
+		if (acc == null || acc.isFollower()) return;
+
+		Main.getInfo().getUserByID(acc.getUserId()).openPrivateChannel().queue(c -> {
+			try {
+				EmbedBuilder eb = new EmbedBuilder();
+
+				eb.setThumbnail("https://i.imgur.com/A0jXqpe.png");
+				eb.setTitle("Opa, obrigada por seguir o canal do meu nii-chan!");
+				eb.setDescription("Como agradecimento, aqui estão 5000 créditos para serem utilizados nos módulos que utilizam o sistema de dinheiro.");
+				eb.setFooter("Seus créditos: " + (acc.getBalance() + 5000), "https://i.imgur.com/U0nPjLx.gif");
+				eb.setColor(Color.cyan);
+
+				if (ExceedDAO.hasExceed(c.getUser().getId())) {
+					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(c.getUser().getId())));
+					ps.modifyInfluence(50);
+					PStateDAO.savePoliticalState(ps);
+
+					eb.addField("Bonus ao seu Exceed", "Adicionalmente, seu Exceed recebeu 50 pontos de influência adicionais!", false);
+				}
+
+				acc.addCredit(5000, this.getClass());
+				acc.setFollower(true);
+				AccountDAO.saveAccount(acc);
+				c.sendMessage(eb.build()).queue(null, Helper::doNothing);
+			} catch (RuntimeException e) {
+				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			}
+		});
 	}
 
 	private void onChannelGoLiveEvent(ChannelGoLiveEvent evt) {
