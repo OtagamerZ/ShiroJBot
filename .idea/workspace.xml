@@ -27,18 +27,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Implementação de integração com a twitch">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BindCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/twitch/BindCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/twitch/UnbindCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/PendingBindingDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/PendingBinding.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/TwitchEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/TwitchEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/TwitchCommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/TwitchCommandManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/twitch/BindCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/twitch/BindCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -627,21 +619,7 @@
       <workItem from="1597235920384" duration="1067000" />
       <workItem from="1597237633104" duration="28000" />
       <workItem from="1597238924225" duration="18368000" />
-      <workItem from="1597320292860" duration="3235000" />
-    </task>
-    <task id="LOCAL-02119" summary="Correção no xadrez">
-      <created>1597062814776</created>
-      <option name="number" value="02119" />
-      <option name="presentableId" value="LOCAL-02119" />
-      <option name="project" value="LOCAL" />
-      <updated>1597062814776</updated>
-    </task>
-    <task id="LOCAL-02120" summary="Correção no xadrez">
-      <created>1597063520808</created>
-      <option name="number" value="02120" />
-      <option name="presentableId" value="LOCAL-02120" />
-      <option name="project" value="LOCAL" />
-      <updated>1597063520809</updated>
+      <workItem from="1597320292860" duration="3843000" />
     </task>
     <task id="LOCAL-02121" summary="Correção no xadrez">
       <created>1597063718952</created>
@@ -972,7 +950,21 @@
       <option name="project" value="LOCAL" />
       <updated>1597265905616</updated>
     </task>
-    <option name="localTasksCounter" value="2168" />
+    <task id="LOCAL-02168" summary="Implementação de integração com a twitch">
+      <created>1597323576393</created>
+      <option name="number" value="02168" />
+      <option name="presentableId" value="LOCAL-02168" />
+      <option name="project" value="LOCAL" />
+      <updated>1597323576394</updated>
+    </task>
+    <task id="LOCAL-02169" summary="Implementação de integração com a twitch">
+      <created>1597323724747</created>
+      <option name="number" value="02169" />
+      <option name="presentableId" value="LOCAL-02169" />
+      <option name="project" value="LOCAL" />
+      <updated>1597323724747</updated>
+    </task>
+    <option name="localTasksCounter" value="2170" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1089,11 +1081,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1597320814994">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1597323722090">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1597320814994" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1597323722090" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1155,11 +1147,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1597086904112" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1597265914745">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1597323725785">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1597265914745" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1597323725785" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597086949993">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
