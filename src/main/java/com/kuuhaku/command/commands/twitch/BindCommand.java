@@ -66,10 +66,15 @@ public class BindCommand extends TwitchCommand {
 		try {
 			String code = Hex.encodeHexString(MessageDigest.getInstance("SHA-1").digest(author.getName().getBytes(StandardCharsets.UTF_8)));
 
+			if (PendingBindingDAO.getPendingBinding(code) != null) {
+				chat.sendMessage(channel.getName(), "❌ | Você já requisitou uma vinculação a esta conta, verifique suas mensagens privadas.");
+				return;
+			}
+
 			PendingBinding pb = new PendingBinding(code, author.getId());
 			PendingBindingDAO.savePendingBinding(pb);
 
-			chat.sendPrivateMessage(author.getName(), "Use este código no comando \"vincular\" em um servidor que use a Shiro para vincular esta conta ao seu perfil do Discord.");
+			chat.sendPrivateMessage(author.getName().toLowerCase(), "Use este código no comando \"vincular\" em um servidor que use a Shiro para vincular esta conta ao seu perfil do Discord.");
 		} catch (NoSuchAlgorithmException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
