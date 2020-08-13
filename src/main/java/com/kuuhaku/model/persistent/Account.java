@@ -68,6 +68,9 @@ public class Account {
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean animatedBg = false;
 
+	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+	private boolean follower = false;
+
 	public String getUserId() {
 		return userId;
 	}
@@ -211,5 +214,13 @@ public class Account {
 
 	public void setAnimatedBg(boolean animatedBg) {
 		this.animatedBg = animatedBg;
+	}
+
+	public boolean isFollower() {
+		return follower;
+	}
+
+	public void setFollower(boolean follower) {
+		this.follower = follower;
 	}
 }

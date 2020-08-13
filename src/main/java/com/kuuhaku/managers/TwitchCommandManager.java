@@ -19,7 +19,9 @@
 package com.kuuhaku.managers;
 
 import com.kuuhaku.command.TwitchCommand;
+import com.kuuhaku.command.commands.twitch.BindCommand;
 import com.kuuhaku.command.commands.twitch.PingCommand;
+import com.kuuhaku.command.commands.twitch.UnbindCommand;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -32,6 +34,12 @@ public class TwitchCommandManager {
 		{
 			put(PingCommand.class, new TwitchArgument(
 					"ping", "cmd_ping", true
+			));
+			put(BindCommand.class, new TwitchArgument(
+					"vincular", new String[]{"bind"}, "cmd_bind", false
+			));
+			put(UnbindCommand.class, new TwitchArgument(
+					"desvincular", new String[]{"unbind"}, "cmd_unbind", true
 			));
 		}
 	};
