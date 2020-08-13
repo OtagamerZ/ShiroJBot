@@ -29,9 +29,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.kuuhaku.utils.I18n.PT;
-import static com.kuuhaku.utils.ShiroInfo.getLocale;
-
 public class TwitchCommandManager {
 	private final HashMap<Class<? extends TwitchCommand>, TwitchArgument> commands = new HashMap<>() {
 		{
@@ -39,7 +36,7 @@ public class TwitchCommandManager {
 					"ping", "cmd_ping", true
 			));
 			put(BindCommand.class, new TwitchArgument(
-					"vincular", new String[]{"bind"}, getLocale(PT).getString("req_hash-code"), "cmd_bind", false
+					"vincular", new String[]{"bind"}, "req_hash-code", "cmd_bind", false
 			));
 			put(UnbindCommand.class, new TwitchArgument(
 					"desvincular", new String[]{"unbind"}, "cmd_unbind", true
