@@ -129,7 +129,7 @@ public class TwitchEvents {
 			} catch (RuntimeException e) {
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
-		});
+		}, Helper::doNothing);
 	}
 
 	private void onChannelGoLiveEvent(ChannelGoLiveEvent evt) {
