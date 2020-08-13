@@ -95,6 +95,7 @@ public class ShiroInfo {
 	private static final Cache<String, Prize> currentDrop = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
 	private static final Cache<String, byte[]> cardCache = CacheBuilder.newBuilder().expireAfterWrite(60, TimeUnit.MINUTES).build();
 	private static final Set<String> gameLock = new HashSet<>();
+	private static final boolean isLive = false;
 
 	//STATIC CONSTRUCTOR
 	static {
