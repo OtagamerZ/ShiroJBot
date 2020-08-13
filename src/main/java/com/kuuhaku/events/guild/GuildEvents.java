@@ -202,7 +202,7 @@ public class GuildEvents extends ListenerAdapter {
 				GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 				if (channel.getId().equals(ShiroInfo.getTwitchChannelID())) {
-					Main.getTwitch().getChat().sendMessage("kuuhaku_otgmz", author.getName() + "disse: " + Helper.makeEmoteFromMention(rawMessage));
+					Main.getTwitch().getChat().sendMessage("kuuhaku_otgmz", author.getName() + " disse: " + Helper.makeEmoteFromMention(rawMessage));
 				}
 
 				if (!TagDAO.getTagById(guild.getOwnerId()).isToxic()) {
