@@ -136,7 +136,7 @@ public class GuildEvents extends ListenerAdapter {
 				return;
 			}
 
-			if (!author.isBot()) ShiroInfo.cache(guild, message);
+			if (!author.isBot()) Main.getInfo().cache(guild, message);
 
 			String rawMsgNoPrefix = rawMessage;
 			String commandName = "";
@@ -186,14 +186,14 @@ public class GuildEvents extends ListenerAdapter {
 					} else if (BlacklistDAO.isBlacklisted(author)) {
 						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-blacklisted")).queue();
 						return;
-					} else if (ShiroInfo.getRatelimit().getIfPresent(author.getId()) != null) {
+					} else if (Main.getInfo().getRatelimit().getIfPresent(author.getId()) != null) {
 						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-ratelimited")).queue();
 						return;
 					}
 
 					command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, prefix);
 					if (!TagDAO.getTagById(author.getId()).isPartner() || Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
-						ShiroInfo.getRatelimit().put(author.getId(), true);
+						Main.getInfo().getRatelimit().put(author.getId(), true);
 					Helper.spawnAd(channel);
 				}
 			}

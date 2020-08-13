@@ -58,7 +58,7 @@ public class GuessTheNumberCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		if (ShiroInfo.gameInProgress(author.getId())) {
+		if (Main.getInfo().gameInProgress(author.getId())) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
 			return;
 		}
@@ -67,7 +67,7 @@ public class GuessTheNumberCommand extends Command {
 
 		int theValue = Helper.rng(100, false);
 
-		ShiroInfo.getGameLock().add(author.getId());
+		Main.getInfo().getGameLock().add(author.getId());
 		channel.sendMessage("Já escolhi um número de 0 a 100, você tem 5 chances para tentar adivinhar!").queue();
 
 		Main.getInfo().getAPI().addEventListener(new ListenerAdapter() {
@@ -115,7 +115,7 @@ public class GuessTheNumberCommand extends Command {
 						PStateDAO.savePoliticalState(ps);
 					}
 
-					ShiroInfo.getGameLock().remove(author.getId());
+					Main.getInfo().getGameLock().remove(author.getId());
 					Main.getInfo().getAPI().removeEventListener(this);
 				} else {
 					if (chances > 0) {
@@ -123,7 +123,7 @@ public class GuessTheNumberCommand extends Command {
 						chances--;
 					} else {
 						channel.sendMessage("Acabaram suas chances, o valor escolhido por mim era **" + theValue + "**.").queue();
-						ShiroInfo.getGameLock().remove(author.getId());
+						Main.getInfo().getGameLock().remove(author.getId());
 						Main.getInfo().getAPI().removeEventListener(this);
 					}
 				}

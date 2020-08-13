@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.commands.discord.fun;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
@@ -53,7 +54,7 @@ public class CatchKawaiponCommand extends Command {
 		Account acc = AccountDAO.getAccount(author.getId());
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
-		KawaiponCard kc = ShiroInfo.getCurrentCard().getIfPresent(guild.getId());
+		KawaiponCard kc = Main.getInfo().getCurrentCard().getIfPresent(guild.getId());
 
 		if (kc == null) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-card")).queue();
@@ -71,7 +72,7 @@ public class CatchKawaiponCommand extends Command {
 			return;
 		}
 
-		ShiroInfo.getCurrentCard().invalidate(guild.getId());
+		Main.getInfo().getCurrentCard().invalidate(guild.getId());
 		kp.addCard(kc);
 		acc.removeCredit(cost, this.getClass());
 

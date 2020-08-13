@@ -982,7 +982,7 @@ public class Helper {
 				GuildDAO.updateGuildSettings(gc);
 				channel.sendMessage(eb.build()).addFile(getBytes(kc.drawCard(foil), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
 			}
-			ShiroInfo.getCurrentCard().put(channel.getGuild().getId(), new KawaiponCard(kc, foil));
+			Main.getInfo().getCurrentCard().put(channel.getGuild().getId(), new KawaiponCard(kc, foil));
 		}
 	}
 
@@ -1009,7 +1009,7 @@ public class Helper {
 				GuildDAO.updateGuildSettings(gc);
 				channel.sendMessage(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
 			}
-			ShiroInfo.getCurrentDrop().put(channel.getGuild().getId(), drop);
+			Main.getInfo().getCurrentDrop().put(channel.getGuild().getId(), drop);
 		}
 	}
 
