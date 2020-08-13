@@ -27,78 +27,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Implementação de integração com a twitch">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/twitch/CatchDropCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/twitch/CatchKawaiponCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/twitch/ChooseCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/twitch/EightBallCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/TwitchDrop.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/CompileCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/CompileCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/exceed/ExceedLeaveCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/exceed/ExceedLeaveCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/exceed/ExceedSelectCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/exceed/ExceedSelectCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/HitotsuCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/HitotsuCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/JojoCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/JojoCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/PixelCanvasCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/PixelCanvasCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/PixelChunkCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/PixelChunkCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/QuizCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/QuizCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/KawaiponsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/KawaiponsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/RemainingCardsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/RemainingCardsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/ReportBugCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/ReportBugCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/ReportUserCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/ReportUserCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/RequestAssistCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/RequestAssistCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BackgroundCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BackgroundCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ChooseCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ChooseCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/EightBallCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/EightBallCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/EmbedCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/EmbedCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ImageCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ImageCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/LearnToSearchCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/LearnToSearchCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/LinkTesterCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/LinkTesterCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/LoanCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/LoanCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/PseudoNameCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/PseudoNameCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/RedeemCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/RedeemCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ReverseCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ReverseCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SayCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SayCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SeeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SeeCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SellCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SellCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TheAnswerCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TheAnswerCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TranslateCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TranslateCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/VIPShopCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/VIPShopCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ValidateGIFCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ValidateGIFCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/GatekeeperCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/GatekeeperCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/MakeLogCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/MakeLogCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/MuteMemberCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/MuteMemberCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/PurchaseBuffCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/PurchaseBuffCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/RemoveAnswerCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/RemoveAnswerCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/SettingsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/SettingsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/music/ControlCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/music/ControlCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/music/YoutubeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/music/YoutubeCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/partner/DecryptCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/partner/DecryptCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/partner/EncryptCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/partner/EncryptCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/partner/KGotchiCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/partner/KGotchiCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/partner/PurchaceKGotchiCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/partner/PurchaceKGotchiCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/reactions/Reaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/reactions/Reaction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/reactions/answerable/PatReaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/reactions/answerable/PatReaction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/reactions/answerable/SlapReaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/reactions/answerable/SlapReaction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/support/BlockCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/support/BlockCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Relay.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Relay.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/JibrilEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/JibrilEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/TwitchEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/TwitchEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/BackupEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/BackupEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/guild/GuildEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/guild/GuildEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/hitotsu/Hitotsu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/hitotsu/Hitotsu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/Chess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/Chess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/CrissCross.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/CrissCross.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/TwitchCommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/TwitchCommandManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/CreditDrop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/CreditDrop.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/Prize.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/Prize.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Music.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Music.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Settings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Settings.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -244,19 +175,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [clean]">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -687,28 +605,10 @@
       <workItem from="1597235920384" duration="1067000" />
       <workItem from="1597237633104" duration="28000" />
       <workItem from="1597238924225" duration="18368000" />
-      <workItem from="1597320292860" duration="10228000" />
-    </task>
-    <task id="LOCAL-02129" summary="Atualização da biblioteca de paginação">
-      <created>1597079275368</created>
-      <option name="number" value="02129" />
-      <option name="presentableId" value="LOCAL-02129" />
-      <option name="project" value="LOCAL" />
-      <updated>1597079275368</updated>
-    </task>
-    <task id="LOCAL-02130" summary="Balanceamento da pontuação dos Exceeds">
-      <created>1597087398824</created>
-      <option name="number" value="02130" />
-      <option name="presentableId" value="LOCAL-02130" />
-      <option name="project" value="LOCAL" />
-      <updated>1597087398824</updated>
-    </task>
-    <task id="LOCAL-02131" summary="Balanceamento da pontuação dos Exceeds">
-      <created>1597087624862</created>
-      <option name="number" value="02131" />
-      <option name="presentableId" value="LOCAL-02131" />
-      <option name="project" value="LOCAL" />
-      <updated>1597087624862</updated>
+      <workItem from="1597320292860" duration="10515000" />
+      <workItem from="1597334992791" duration="1255000" />
+      <workItem from="1597340048933" duration="101000" />
+      <workItem from="1597350025366" duration="1172000" />
     </task>
     <task id="LOCAL-02132" summary="Balanceamento da pontuação dos Exceeds">
       <created>1597087714186</created>
@@ -1032,7 +932,28 @@
       <option name="project" value="LOCAL" />
       <updated>1597326707681</updated>
     </task>
-    <option name="localTasksCounter" value="2178" />
+    <task id="LOCAL-02178" summary="Implementação de integração com a twitch">
+      <created>1597330627773</created>
+      <option name="number" value="02178" />
+      <option name="presentableId" value="LOCAL-02178" />
+      <option name="project" value="LOCAL" />
+      <updated>1597330627773</updated>
+    </task>
+    <task id="LOCAL-02179" summary="Implementação de integração com a twitch">
+      <created>1597330727983</created>
+      <option name="number" value="02179" />
+      <option name="presentableId" value="LOCAL-02179" />
+      <option name="project" value="LOCAL" />
+      <updated>1597330727983</updated>
+    </task>
+    <task id="LOCAL-02180" summary="Implementação de integração com a twitch">
+      <created>1597330757639</created>
+      <option name="number" value="02180" />
+      <option name="presentableId" value="LOCAL-02180" />
+      <option name="project" value="LOCAL" />
+      <updated>1597330757639</updated>
+    </task>
+    <option name="localTasksCounter" value="2181" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1149,11 +1070,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1597330498269">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1597330754850">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1597330498269" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1597330754850" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1170,26 +1091,26 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="620" y="261" key="FileChooserDialogImpl/0.0.1680.1010@0.0.1680.1010" timestamp="1597149004659" />
-    <state width="1637" height="279" key="GridCell.Tab.0.bottom" timestamp="1597265923736">
+    <state width="1125" height="289" key="GridCell.Tab.0.bottom" timestamp="1597350513452">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="270" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1637" height="279" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1597265923736" />
-    <state width="1637" height="279" key="GridCell.Tab.0.center" timestamp="1597265923736">
+    <state width="1125" height="289" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1597350513452" />
+    <state width="1125" height="289" key="GridCell.Tab.0.center" timestamp="1597350513452">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="270" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1637" height="279" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1597265923736" />
-    <state width="1637" height="279" key="GridCell.Tab.0.left" timestamp="1597265923736">
+    <state width="1125" height="289" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1597350513452" />
+    <state width="1125" height="289" key="GridCell.Tab.0.left" timestamp="1597350513452">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="270" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1637" height="279" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1597265923736" />
-    <state width="1637" height="279" key="GridCell.Tab.0.right" timestamp="1597265923736">
+    <state width="1125" height="289" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1597350513452" />
+    <state width="1125" height="289" key="GridCell.Tab.0.right" timestamp="1597350513452">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="270" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1637" height="279" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1597265923736" />
+    <state width="1125" height="289" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1597350513452" />
     <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1594058079602">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1215,19 +1136,19 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1597086904112" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1597326708933">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1597330758724">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1597326708933" />
-    <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597086949993">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1597330758724" />
+    <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597351073016">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1/0.0.1680.1010@0.0.1680.1010" timestamp="1597086949993" />
-    <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1594305494731">
+    <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1/0.0.1680.1010@0.0.1680.1010" timestamp="1597351073016" />
+    <state x="712" y="354" width="326" height="244" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1597351012733">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="712" y="354" width="326" height="238" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/0.0.1680.1010@0.0.1680.1010" timestamp="1594305494731" />
+    <state x="712" y="354" width="326" height="244" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/0.0.1680.1010@0.0.1680.1010" timestamp="1597351012733" />
     <state x="570" y="311" key="com.intellij.database.dbimport.ImportUtil.MyDialog" timestamp="1594057250988">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
