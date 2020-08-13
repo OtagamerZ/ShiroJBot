@@ -64,6 +64,7 @@
         <class>com.kuuhaku.model.persistent.Transaction</class>
         <class>com.kuuhaku.model.persistent.DynamicParameter</class>
         <class>com.kuuhaku.model.persistent.PixelOperation</class>
+        <class>com.kuuhaku.model.persistent.PendingBinding</class>
 
         <properties>
             <!-- dados da conexao -->
