@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.commands.discord.fun;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.model.common.drop.Prize;
@@ -46,7 +47,7 @@ public class CatchDropCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		Prize p = ShiroInfo.getCurrentDrop().getIfPresent(guild.getId());
+		Prize p = Main.getInfo().getCurrentDrop().getIfPresent(guild.getId());
 
 		if (p == null) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-drop")).queue();
@@ -64,7 +65,7 @@ public class CatchDropCommand extends Command {
 			return;
 		}
 
-		ShiroInfo.getCurrentDrop().invalidate(guild.getId());
+		Main.getInfo().getCurrentDrop().invalidate(guild.getId());
 		p.award(author);
 
 		channel.sendMessage(author.getAsMention() + " coletou o drop com sucesso!").queue();

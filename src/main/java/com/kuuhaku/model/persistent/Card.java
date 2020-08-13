@@ -18,10 +18,10 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.utils.AnimeName;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.KawaiponRarity;
-import com.kuuhaku.utils.ShiroInfo;
 import org.apache.commons.io.FileUtils;
 
 import javax.imageio.ImageIO;
@@ -67,7 +67,7 @@ public class Card {
 
 	public BufferedImage drawCard(boolean foil) {
 		try {
-			byte[] cardBytes = ShiroInfo.getCardCache().get(id, () -> FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH"), id + ".png")));
+			byte[] cardBytes = Main.getInfo().getCardCache().get(id, () -> FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH"), id + ".png")));
 			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
 				BufferedImage card = ImageIO.read(bais);
 

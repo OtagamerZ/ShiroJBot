@@ -84,18 +84,21 @@ public class TwitchEvents {
 			} else if (BlacklistDAO.isBlacklisted(author)) {
 				client.getChat().sendMessage(channel.getName(), ShiroInfo.getLocale(I18n.PT).getString("err_user-blacklisted"));
 				return;
-			} else if (ShiroInfo.getRatelimit().getIfPresent(author.getId()) != null) {
+			} else if (Main.getInfo().getRatelimit().getIfPresent(author.getId()) != null) {
 				client.getChat().sendMessage(channel.getName(), ShiroInfo.getLocale(I18n.PT).getString("err_user-ratelimited"));
 				return;
 			}
 
 			command.execute(author, acc, rawMsgNoPrefix, args, message, channel, client.getChat(), message.getPermissions());
-			ShiroInfo.getRatelimit().put(author.getId(), true);
+			Main.getInfo().getRatelimit().put(author.getId(), true);
 
 			String ad = Helper.getAd();
 			if (ad != null) {
 				client.getChat().sendMessage(channel.getName(), ad);
 			}
+		} else if (acc != null && Main.getInfo().isLive()) {
+			acc.addCredit(5, this.getClass());
+			AccountDAO.saveAccount(acc);
 		}
 	}
 

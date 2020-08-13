@@ -85,17 +85,8 @@ public class ShiroInfo {
 	private static final Map<Long, GuildMusicManager> gmms = new HashMap<>();
 	private static final AudioPlayerManager apm = new DefaultAudioPlayerManager();
 	private static final JDAEvents shiroEvents = new JDAEvents();
-	private static final Map<String, KittyCache<String, Message>> messageCache = new HashMap<>();
 	private static final GsonBuilder JSONFactory = new GsonBuilder();
-	private static final Cache<String, Boolean> ratelimit = CacheBuilder.newBuilder().expireAfterWrite(3, TimeUnit.SECONDS).build();
 	private static final HttpClientBuilder httpBuilder = HttpClientBuilder.create();
-	private static final Map<String, Tabletop> games = new HashMap<>();
-	private static final Set<String> requests = new HashSet<>();
-	private static final Cache<String, KawaiponCard> currentCard = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
-	private static final Cache<String, Prize> currentDrop = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
-	private static final Cache<String, byte[]> cardCache = CacheBuilder.newBuilder().expireAfterWrite(60, TimeUnit.MINUTES).build();
-	private static final Set<String> gameLock = new HashSet<>();
-	private static final boolean isLive = false;
 
 	//STATIC CONSTRUCTOR
 	static {
@@ -111,25 +102,20 @@ public class ShiroInfo {
 			.token(DBLToken)
 			.botId("572413282653306901")
 			.build();
+	private final Map<String, KittyCache<String, Message>> messageCache = new HashMap<>();
+	private final Cache<String, Boolean> ratelimit = CacheBuilder.newBuilder().expireAfterWrite(3, TimeUnit.SECONDS).build();
+	private final Map<String, Tabletop> games = new HashMap<>();
+	private final Set<String> requests = new HashSet<>();
+	private final Cache<String, KawaiponCard> currentCard = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
+	private final Cache<String, Prize> currentDrop = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
+	private final Cache<String, byte[]> cardCache = CacheBuilder.newBuilder().expireAfterWrite(60, TimeUnit.MINUTES).build();
+	private final Set<String> gameLock = new HashSet<>();
+	private final boolean isLive = false;
 
 	//CONSTANTS
 	//STATIC
 	public static ResourceBundle getLocale(I18n lang) {
 		return ResourceBundle.getBundle("locale", lang.getLocale());
-	}
-
-	public static void cache(Guild guild, Message message) {
-		KittyCache<String, Message> cache = messageCache.getOrDefault(guild.getId(), new KittyCache<>(64));
-		cache.put(message.getId(), message, (int) TimeUnit.DAYS.toSeconds(1));
-		messageCache.put(guild.getId(), cache);
-	}
-
-	public static Message retrieveCachedMessage(Guild guild, String id) {
-		return messageCache.getOrDefault(guild.getId(), new KittyCache<>(64)).get(id);
-	}
-
-	public static KittyCache<String, Message> retrieveCache(Guild guild) {
-		return messageCache.getOrDefault(guild.getId(), new KittyCache<>(64));
 	}
 
 	public static String getSupportServer() {
@@ -148,32 +134,12 @@ public class ShiroInfo {
 		return httpBuilder;
 	}
 
-	public static Map<String, Tabletop> getGames() {
+	public Map<String, Tabletop> getGames() {
 		return games;
 	}
 
-	public static boolean gameInProgress(String id) {
+	public boolean gameInProgress(String id) {
 		return gameLock.stream().anyMatch(s -> Helper.equalsAny(id, s.split(Pattern.quote(".")))) || games.keySet().stream().anyMatch(s -> Helper.equalsAny(id, s.split(Pattern.quote("."))));
-	}
-
-	public static Set<String> getRequests() {
-		return requests;
-	}
-
-	public static Cache<String, KawaiponCard> getCurrentCard() {
-		return currentCard;
-	}
-
-	public static Cache<String, Prize> getCurrentDrop() {
-		return currentDrop;
-	}
-
-	public static Cache<String, byte[]> getCardCache() {
-		return cardCache;
-	}
-
-	public static Set<String> getGameLock() {
-		return gameLock;
 	}
 
 	//NON-STATIC
@@ -273,10 +239,6 @@ public class ShiroInfo {
 		return shiroEvents;
 	}
 
-	public static Cache<String, Boolean> getRatelimit() {
-		return ratelimit;
-	}
-
 	//VARIABLES
 	public JDA getAPI() {
 		return api;
@@ -338,5 +300,47 @@ public class ShiroInfo {
 
 	public void setSockets(WebSocketConfig server) {
 		this.sockets = server;
+	}
+
+	public void cache(Guild guild, Message message) {
+		KittyCache<String, Message> cache = messageCache.getOrDefault(guild.getId(), new KittyCache<>(64));
+		cache.put(message.getId(), message, (int) TimeUnit.DAYS.toSeconds(1));
+		messageCache.put(guild.getId(), cache);
+	}
+
+	public Message retrieveCachedMessage(Guild guild, String id) {
+		return messageCache.getOrDefault(guild.getId(), new KittyCache<>(64)).get(id);
+	}
+
+	public KittyCache<String, Message> retrieveCache(Guild guild) {
+		return messageCache.getOrDefault(guild.getId(), new KittyCache<>(64));
+	}
+
+	public Set<String> getRequests() {
+		return requests;
+	}
+
+	public Cache<String, KawaiponCard> getCurrentCard() {
+		return currentCard;
+	}
+
+	public Cache<String, Prize> getCurrentDrop() {
+		return currentDrop;
+	}
+
+	public Cache<String, byte[]> getCardCache() {
+		return cardCache;
+	}
+
+	public Cache<String, Boolean> getRatelimit() {
+		return ratelimit;
+	}
+
+	public Set<String> getGameLock() {
+		return gameLock;
+	}
+
+	public boolean isLive() {
+		return isLive;
 	}
 }
