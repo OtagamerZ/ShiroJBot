@@ -28,12 +28,7 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.PendingBindingDAO;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.PendingBinding;
-import com.kuuhaku.utils.Helper;
-import org.apache.commons.codec.binary.Hex;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Set;
 
 public class BindCommand extends TwitchCommand {
@@ -56,27 +51,24 @@ public class BindCommand extends TwitchCommand {
 
 	@Override
 	public void execute(EventUser author, Account account, String rawCmd, String[] args, ChannelMessageEvent message, EventChannel channel, TwitchChat chat, Set<CommandPermission> permissions) {
-		Account acc = AccountDAO.getAccountByTwitchId(author.getId());
-
-		if (acc != null) {
-			chat.sendMessage(channel.getName(), "❌ | Você já vinculou esta conta a um perfil do Discord.");
+		if (args.length < 1) {
+			chat.sendMessage(channel.getName(), "❌ | Você precisa informar o código fornecido pelo comando vincular usado no Discord.");
 			return;
 		}
 
-		try {
-			String code = Hex.encodeHexString(MessageDigest.getInstance("SHA-1").digest(author.getName().getBytes(StandardCharsets.UTF_8)));
+		PendingBinding pb = PendingBindingDAO.getPendingBinding(args[0]);
 
-			if (PendingBindingDAO.getPendingBinding(code) != null) {
-				chat.sendMessage(channel.getName(), "❌ | Você já requisitou uma vinculação a esta conta, verifique suas mensagens privadas.");
-				return;
-			}
-
-			PendingBinding pb = new PendingBinding(code, author.getId());
-			PendingBindingDAO.savePendingBinding(pb);
-
-			chat.sendPrivateMessage(author.getName().toLowerCase(), "Use este código no comando \"vincular\" em um servidor que use a Shiro para vincular esta conta ao seu perfil do Discord.");
-		} catch (NoSuchAlgorithmException e) {
-			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+		if (pb == null) {
+			chat.sendMessage(channel.getName(), "❌ | Código inexistente, verifique se você digitou-o corretamente.");
+			return;
 		}
+
+		Account acc = AccountDAO.getAccount(pb.getUserId());
+		acc.setTwitchId(author.getId());
+		AccountDAO.saveAccount(acc);
+
+		PendingBindingDAO.removePendingBinding(pb);
+
+		chat.sendMessage(channel.getName(), "Conta vinculada com sucesso!");
 	}
 }
