@@ -46,10 +46,10 @@ public class ChooseCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length == 0) {
-			channel.sendMessage(":x: | Você não me deu nenhuma opção.").queue();
+			channel.sendMessage("❌ | Você não me deu nenhuma opção.").queue();
 			return;
 		} else if (!args[0].contains(";")) {
-			channel.sendMessage(":x: | Você precisa me dar ao menos duas opções.").queue();
+			channel.sendMessage("❌ | Você precisa me dar ao menos duas opções.").queue();
 			return;
 		}
 

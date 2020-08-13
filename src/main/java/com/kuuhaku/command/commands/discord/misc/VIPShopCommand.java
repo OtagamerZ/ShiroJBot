@@ -87,7 +87,7 @@ public class VIPShopCommand extends Command {
 
 		if (vi.name().startsWith("CARD_")) {
 			if (args.length < 2) {
-				channel.sendMessage(":x: | Você precisa informar uma carta.").queue();
+				channel.sendMessage("❌ | Você precisa informar uma carta.").queue();
 				return;
 			}
 
@@ -95,26 +95,26 @@ public class VIPShopCommand extends Command {
 			Card c = CardDAO.getCard(args[1], false);
 
 			if (c == null) {
-				channel.sendMessage(":x: | Essa carta não existe.").queue();
+				channel.sendMessage("❌ | Essa carta não existe.").queue();
 				return;
 			}
 
 			if (vi.equals(VipItem.CARD_ROLL)) {
 				if (acc.getGems() < vi.getGems()) {
-					channel.sendMessage(":x: | Você não possui gemas suficientes.").queue();
+					channel.sendMessage("❌ | Você não possui gemas suficientes.").queue();
 					return;
 				} else if (args.length < 3) {
-					channel.sendMessage(":x: | Você precisa informar uma carta e o tipo (`N` = normal, `C` = cromada).").queue();
+					channel.sendMessage("❌ | Você precisa informar uma carta e o tipo (`N` = normal, `C` = cromada).").queue();
 					return;
 				} else if (!Helper.equalsAny(args[2], "N", "C")) {
-					channel.sendMessage(":x: | Você precisa informar o tipo da carta que deseja rodar (`N` = normal, `C` = cromada).").queue();
+					channel.sendMessage("❌ | Você precisa informar o tipo da carta que deseja rodar (`N` = normal, `C` = cromada).").queue();
 					return;
 				}
 				KawaiponCard card = kp.getCard(c, args[2].equalsIgnoreCase("C"));
 				KawaiponCard oldCard = new KawaiponCard(c, args[2].equalsIgnoreCase("C"));
 
 				if (card == null) {
-					channel.sendMessage(":x: | Você não pode rodar uma carta que não possui!").queue();
+					channel.sendMessage("❌ | Você não pode rodar uma carta que não possui!").queue();
 					return;
 				}
 
@@ -133,14 +133,14 @@ public class VIPShopCommand extends Command {
 				return;
 			} else if (vi.equals(VipItem.CARD_FOIL)) {
 				if (acc.getGems() < vi.getGems()) {
-					channel.sendMessage(":x: | Você não possui gemas suficientes.").queue();
+					channel.sendMessage("❌ | Você não possui gemas suficientes.").queue();
 					return;
 				}
 				KawaiponCard card = kp.getCard(c, false);
 				KawaiponCard oldCard = new KawaiponCard(c, false);
 
 				if (card == null) {
-					channel.sendMessage(":x: | Você não pode cromar uma carta que não possui!").queue();
+					channel.sendMessage("❌ | Você não pode cromar uma carta que não possui!").queue();
 					return;
 				}
 
@@ -156,7 +156,7 @@ public class VIPShopCommand extends Command {
 				return;
 			} else if (vi.equals(VipItem.ANIMATED_BACKGROUND)) {
 				if (acc.getGems() < vi.getGems()) {
-					channel.sendMessage(":x: | Você não possui gemas suficientes.").queue();
+					channel.sendMessage("❌ | Você não possui gemas suficientes.").queue();
 					return;
 				}
 

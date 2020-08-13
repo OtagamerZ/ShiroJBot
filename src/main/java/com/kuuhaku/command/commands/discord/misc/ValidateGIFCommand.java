@@ -49,7 +49,7 @@ public class ValidateGIFCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length == 0) {
-			channel.sendMessage(":x: | Você precisa definir uma imagem.").queue();
+			channel.sendMessage("❌ | Você precisa definir uma imagem.").queue();
 			return;
 		}
 
@@ -71,9 +71,9 @@ public class ValidateGIFCommand extends Command {
 
 			channel.sendMessage(s).queue();
 		} catch (IOException e) {
-			channel.sendMessage(":x: | O link da imagem não me parece correto.").queue();
+			channel.sendMessage("❌ | O link da imagem não me parece correto.").queue();
 		} catch (NullPointerException npe) {
-			channel.sendMessage(":x: | Houve um erro ao recuperar dados da imagem (O site Tenor costuma retornar este erro).").queue();
+			channel.sendMessage("❌ | Houve um erro ao recuperar dados da imagem (O site Tenor costuma retornar este erro).").queue();
 		}
 	}
 }

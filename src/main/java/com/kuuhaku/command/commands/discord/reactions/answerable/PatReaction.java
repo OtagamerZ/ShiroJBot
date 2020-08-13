@@ -60,7 +60,7 @@ public class PatReaction extends Reaction {
 
 			sendReaction(getType(), (TextChannel) channel, getInteraction()[1], getInteraction()[0].getAsMention() + " acariciou " + getInteraction()[1].getAsMention() + " - " + this.getReaction(), true);
 		} else {
-			Helper.typeMessage(channel, ":x: | Epa, você precisa mencionar alguém para fazer cafuné!");
+			Helper.typeMessage(channel, "❌ | Epa, você precisa mencionar alguém para fazer cafuné!");
 		}
 	}
 

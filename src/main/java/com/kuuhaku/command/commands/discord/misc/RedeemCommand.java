@@ -53,7 +53,7 @@ public class RedeemCommand extends Command {
 		Account acc = AccountDAO.getAccount(author.getId());
 
 		if (acc.getStreak() < 7) {
-			channel.sendMessage(":x: | Você não chegou no acúmulo máximo de votos ainda (" + acc.getStreak() + " de 7)").queue();
+			channel.sendMessage("❌ | Você não chegou no acúmulo máximo de votos ainda (" + acc.getStreak() + " de 7)").queue();
 			return;
 		}
 

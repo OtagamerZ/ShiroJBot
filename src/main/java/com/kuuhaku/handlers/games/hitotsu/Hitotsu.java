@@ -147,11 +147,11 @@ public class Hitotsu extends Tabletop {
 							getPlayers().getCurrent().openPrivateChannel().complete().sendMessage(eb.build()).queue();
 						}
 					} catch (IllegalCardException e) {
-						getTable().sendMessage(":x: | Você só pode jogar uma carta que seja do mesmo anime ou da mesma raridade.").queue();
+						getTable().sendMessage("❌ | Você só pode jogar uma carta que seja do mesmo anime ou da mesma raridade.").queue();
 					} catch (IndexOutOfBoundsException e) {
-						getTable().sendMessage(":x: | Índice inválido, verifique a mensagem enviada por mim no privado para ver as cartas na sua mão..").queue();
+						getTable().sendMessage("❌ | Índice inválido, verifique a mensagem enviada por mim no privado para ver as cartas na sua mão..").queue();
 					} catch (NumberFormatException | IllegalChainException e) {
-						getTable().sendMessage(":x: | Para executar uma corrente você deve informar 2 ou mais índices de cartas do mesmo anime separados por vírgula.").queue();
+						getTable().sendMessage("❌ | Para executar uma corrente você deve informar 2 ou mais índices de cartas do mesmo anime separados por vírgula.").queue();
 					}
 				}
 			}
@@ -271,7 +271,7 @@ public class Hitotsu extends Tabletop {
 
 	private void refresh(Object listener) {
 		if (timeout != null && !timeout.isCancelled()) timeout.cancel(true);
-		timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
+		timeout = getTable().sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
 			Main.getInfo().getAPI().removeEventListener(listener);
 			Main.getInfo().getGames().remove(getId());
 		}, Helper::doNothing);

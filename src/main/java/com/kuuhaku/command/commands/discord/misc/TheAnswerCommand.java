@@ -50,7 +50,7 @@ public class TheAnswerCommand extends Command {
 		if (guild.getId().equals("421495229594730496")) {
 			try {
 				if (TagDAO.getTagById(author.getId()).isReader())
-					channel.sendMessage(":x: | Você já descobriu a resposta, não precisa mais usar este comando.").queue();
+					channel.sendMessage("❌ | Você já descobriu a resposta, não precisa mais usar este comando.").queue();
 			} catch (NoResultException e) {
 				TagDAO.addUserTagsToDB(author.getId());
 			} finally {
@@ -60,11 +60,11 @@ public class TheAnswerCommand extends Command {
 						TagDAO.giveTagReader(author.getId());
 						channel.sendMessage("Obrigada por ler as regras!").queue();
 					} else {
-						channel.sendMessage(":x: | Resposta errada, leia as regras para achar a resposta.").queue();
+						channel.sendMessage("❌ | Resposta errada, leia as regras para achar a resposta.").queue();
 					}
 				}
 			}
 		} else
-			channel.sendMessage(":x: | Este comando só pode ser usado no servidor " + ShiroInfo.getSupportServer() + ".").queue();
+			channel.sendMessage("❌ | Este comando só pode ser usado no servidor " + ShiroInfo.getSupportServer() + ".").queue();
 	}
 }

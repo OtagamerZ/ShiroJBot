@@ -38,9 +38,10 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
-public class CreditDrop implements Prize {
+public class TwitchDrop implements Prize {
 	private final AnimeName anime = AnimeName.values()[Helper.rng(AnimeName.values().length, true)];
 	private final ExceedEnums exceed = ExceedEnums.values()[Helper.rng(ExceedEnums.values().length, true)];
 	private final int[] values = {
@@ -50,26 +51,46 @@ public class CreditDrop implements Prize {
 			Helper.rng(MemberDAO.getHighestLevel() / 2, false)
 	};
 	private final int amount = Helper.clamp(Helper.rng(1000, false), 150, 1000);
-	private final List<Pair<String, Function<User, Boolean>>> requirement = new ArrayList<>() {{
+	private final List<Pair<String, Function<EventUser, Boolean>>> requirement = new ArrayList<>() {{
 		add(Pair.of("Ter " + values[2] + " carta" + (values[2] != 1 ? "s" : "") + " ou mais.", u ->
-				KawaiponDAO.getKawaipon(u.getId()).getCards().size() >= values[2]));
+						KawaiponDAO
+								.getKawaipon(Objects.requireNonNull(AccountDAO.getAccountByTwitchId(u.getId())).getUserId())
+								.getCards()
+								.size() >= values[2]
+				)
+		);
 
 		add(Pair.of("Ter " + values[0] + " carta" + (values[0] != 1 ? "s" : "") + " de " + anime.toString() + " ou mais.", u ->
-				KawaiponDAO.getKawaipon(u.getId()).getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).count() >= values[0]));
+						KawaiponDAO
+								.getKawaipon(Objects.requireNonNull(AccountDAO.getAccountByTwitchId(u.getId())).getUserId())
+								.getCards()
+								.stream()
+								.filter(k -> k.getCard().getAnime().equals(anime))
+								.count() >= values[0]
+				)
+		);
 
 		add(Pair.of("Ser level " + values[3] + " ou maior.", u ->
-				MemberDAO.getMemberByMid(u.getId()).stream().anyMatch(m -> m.getLevel() >= values[3])));
+						MemberDAO
+								.getMemberByMid(Objects.requireNonNull(AccountDAO.getAccountByTwitchId(u.getId())).getUserId())
+								.stream()
+								.anyMatch(m -> m.getLevel() >= values[3])
+				)
+		);
 
 		add(Pair.of("Ter até 1000 créditos.", u ->
-				AccountDAO.getAccount(u.getId()).getBalance() <= 1000));
+				Objects.requireNonNull(AccountDAO.getAccountByTwitchId(u.getId())).getBalance() <= 1000));
 
 		add(Pair.of("Ter votado " + values[1] + " vez" + (values[1] != 1 ? "es" : "") + " seguidas ou mais.", u ->
-				AccountDAO.getAccount(u.getId()).getStreak() >= values[1]));
+				Objects.requireNonNull(AccountDAO.getAccountByTwitchId(u.getId())).getStreak() >= values[1]));
 
 		add(Pair.of("Ser membro da " + exceed.getName() + ".", u ->
-				ExceedDAO.hasExceed(u.getId()) && ExceedDAO.getExceedMember(u.getId()).getExceed().equalsIgnoreCase(exceed.getName())));
+						ExceedDAO.hasExceed(Objects.requireNonNull(AccountDAO.getAccountByTwitchId(u.getId())).getUserId()) &&
+								ExceedDAO.getExceedMember(u.getId()).getExceed().equalsIgnoreCase(exceed.getName())
+				)
+		);
 	}};
-	private final Pair<String, Function<User, Boolean>> chosen = requirement.get(Helper.rng(requirement.size(), true));
+	private final Pair<String, Function<EventUser, Boolean>> chosen = requirement.get(Helper.rng(requirement.size(), true));
 
 	@Override
 	public String getCaptcha() {
@@ -82,14 +103,15 @@ public class CreditDrop implements Prize {
 
 	@Override
 	public void award(User u) {
-		Account acc = AccountDAO.getAccount(u.getId());
-		acc.addCredit(amount, this.getClass());
-		AccountDAO.saveAccount(acc);
+
 	}
 
 	@Override
 	public void award(EventUser u) {
-
+		Account acc = AccountDAO.getAccountByTwitchId(u.getId());
+		assert acc != null;
+		acc.addCredit(amount, this.getClass());
+		AccountDAO.saveAccount(acc);
 	}
 
 	@Override
@@ -99,11 +121,11 @@ public class CreditDrop implements Prize {
 
 	@Override
 	public Pair<String, Function<User, Boolean>> getRequirement() {
-		return chosen;
+		return null;
 	}
 
 	@Override
 	public Map.Entry<String, Function<EventUser, Boolean>> getRequirementForTwitch() {
-		return null;
+		return chosen;
 	}
 }

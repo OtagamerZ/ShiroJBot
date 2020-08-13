@@ -63,10 +63,10 @@ public class RemainingCardsCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
-			channel.sendMessage(":x: | Você precisa especificar um anime para as cartas que faltam (colocar `_` no lugar de espaços).").queue();
+			channel.sendMessage("❌ | Você precisa especificar um anime para as cartas que faltam (colocar `_` no lugar de espaços).").queue();
 			return;
 		} else if (Arrays.stream(AnimeName.values()).noneMatch(a -> a.name().equals(args[0].toUpperCase()))) {
-			channel.sendMessage(":x: | Anime inválido ou ainda não adicionado (colocar `_` no lugar de espaços).").queue();
+			channel.sendMessage("❌ | Anime inválido ou ainda não adicionado (colocar `_` no lugar de espaços).").queue();
 			return;
 		}
 

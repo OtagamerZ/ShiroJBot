@@ -60,24 +60,24 @@ public class SeeCardCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
-			channel.sendMessage(":x: | Você precisa informar uma carta.").queue();
+			channel.sendMessage("❌ | Você precisa informar uma carta.").queue();
 			return;
 		}
 
 		Card tc = CardDAO.getCard(args[0], true);
 		try {
 			if (tc == null) {
-				channel.sendMessage(":x: | Essa carta não existe.").queue();
+				channel.sendMessage("❌ | Essa carta não existe.").queue();
 				return;
 			} else if (args.length < 2 && tc.getRarity() != KawaiponRarity.ULTIMATE) {
-				channel.sendMessage(":x: | Você também precisa informar o tipo dela (`N` = normal, `C` = cromada).").queue();
+				channel.sendMessage("❌ | Você também precisa informar o tipo dela (`N` = normal, `C` = cromada).").queue();
 				return;
 			} else if (!Helper.equalsAny(args[1], "N", "C")) {
-				channel.sendMessage(":x: | Você precisa informar o tipo da carta que deseja ver (`N` = normal, `C` = cromada).").queue();
+				channel.sendMessage("❌ | Você precisa informar o tipo da carta que deseja ver (`N` = normal, `C` = cromada).").queue();
 				return;
 			}
 		} catch (ArrayIndexOutOfBoundsException e) {
-			channel.sendMessage(":x: | Você precisa informar o tipo da carta que deseja ver (`N` = normal, `C` = cromada).").queue();
+			channel.sendMessage("❌ | Você precisa informar o tipo da carta que deseja ver (`N` = normal, `C` = cromada).").queue();
 			return;
 		}
 
@@ -109,7 +109,7 @@ public class SeeCardCommand extends Command {
 			else
 				channel.sendMessage(eb.build()).addFile(Helper.getBytes(bi), "kawaipon.jpg").queue();
 		} catch (IOException e) {
-			channel.sendMessage(":x: | Deu um pequeno erro aqui na hora de mostrar a carta, logo logo um dos meus desenvolvedores irá corrigi-lo!").queue();
+			channel.sendMessage("❌ | Deu um pequeno erro aqui na hora de mostrar a carta, logo logo um dos meus desenvolvedores irá corrigi-lo!").queue();
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 		}
 	}
