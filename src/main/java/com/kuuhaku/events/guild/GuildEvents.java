@@ -201,7 +201,7 @@ public class GuildEvents extends ListenerAdapter {
 			if (!found && !author.isBot()) {
 				GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
-				if (channel.getId().equals(ShiroInfo.getTwitchChannelID())) {
+				if (channel.getId().equals(ShiroInfo.getTwitchChannelID()) && Main.getInfo().isLive()) {
 					Main.getTwitch().getChat().sendMessage("kuuhaku_otgmz", author.getName() + " disse: " + Helper.makeEmoteFromMention(rawMessage));
 				}
 
