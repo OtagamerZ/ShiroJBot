@@ -67,6 +67,7 @@ public class ShiroInfo {
 	private static final String version = VersionDAO.getBuildVersion(Version.V3);
 	private static final String supportServer = "Shiro Support";
 	private static final String supportServerID = "421495229594730496";
+	private static final String twitchChannelID = "743479145618472960";
 	private static final String default_prefix = DEV ? "dev!" : "s!";
 	private static final String nomeDB = "shiro.sqlite";
 	private static final String niichan = "350836145921327115"; //KuuHaKu
@@ -110,7 +111,7 @@ public class ShiroInfo {
 	private final Cache<String, Prize> currentDrop = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
 	private final Cache<String, byte[]> cardCache = CacheBuilder.newBuilder().expireAfterWrite(60, TimeUnit.MINUTES).build();
 	private final Set<String> gameLock = new HashSet<>();
-	private final boolean isLive = false;
+	private boolean isLive = false;
 
 	//CONSTANTS
 	//STATIC
@@ -128,6 +129,10 @@ public class ShiroInfo {
 
 	public static String getSupportServerID() {
 		return supportServerID;
+	}
+
+	public static String getTwitchChannelID() {
+		return twitchChannelID;
 	}
 
 	public static HttpClientBuilder getHttpBuilder() {
@@ -342,5 +347,9 @@ public class ShiroInfo {
 
 	public boolean isLive() {
 		return isLive;
+	}
+
+	public void setLive(boolean live) {
+		this.isLive = live;
 	}
 }

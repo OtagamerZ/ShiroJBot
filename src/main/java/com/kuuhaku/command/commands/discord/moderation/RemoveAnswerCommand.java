@@ -51,7 +51,7 @@ public class RemoveAnswerCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length == 0) {
-			channel.sendMessage(":x: | Você precisa especificar um ID.").queue();
+			channel.sendMessage("❌ | Você precisa especificar um ID.").queue();
 			return;
 		} else if (Helper.equalsAny(args[0], "nada", "nothing")) {
 			List<CustomAnswers> cas = CustomAnswerDAO.getCAByGuild(guild.getId());
@@ -59,7 +59,7 @@ public class RemoveAnswerCommand extends Command {
 			channel.sendMessage("Não vou mais responder nenhuma mensagem customizada configurada até este momento.").queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[0])) {
-			channel.sendMessage(":x: | O ID deve ser um valor numérico informado na lista de respostas (`" + prefix + "fale lista`).").queue();
+			channel.sendMessage("❌ | O ID deve ser um valor numérico informado na lista de respostas (`" + prefix + "fale lista`).").queue();
 			return;
 		}
 
@@ -67,7 +67,7 @@ public class RemoveAnswerCommand extends Command {
             CustomAnswerDAO.removeCAFromDB(CustomAnswerDAO.getCAByID(Long.parseLong(args[0])));
             channel.sendMessage("Não vou mais responder com a resposta `" + args[0] + "`.").queue();
         } catch (NoResultException e) {
-            channel.sendMessage(":x: | ID de resposta inválido.").queue();
-        }
+			channel.sendMessage("❌ | ID de resposta inválido.").queue();
+		}
     }
 }

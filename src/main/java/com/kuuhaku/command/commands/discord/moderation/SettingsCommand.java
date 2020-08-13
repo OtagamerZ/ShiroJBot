@@ -52,7 +52,7 @@ public class SettingsCommand extends Command {
 			Settings.embedConfig(message);
 			return;
 		} else if (args.length == 1 && !(args[0].toLowerCase().equals("ajuda") || args[0].toLowerCase().equals("help"))) {
-			channel.sendMessage(":x: | Nenhum argumento informado para a configuração `" + args[0] + "`.").queue();
+			channel.sendMessage("❌ | Nenhum argumento informado para a configuração `" + args[0] + "`.").queue();
 			return;
 		}
 
@@ -65,7 +65,7 @@ public class SettingsCommand extends Command {
 			case "prefix":
 			case "prefixo":
 				if (msg.length() > 5) {
-					channel.sendMessage(":x: | Prefixo muito longo (Max. 5)").queue();
+					channel.sendMessage("❌ | Prefixo muito longo (Max. 5)").queue();
 					return;
 				}
 				Settings.updatePrefix(args, message, gc);
@@ -78,7 +78,7 @@ public class SettingsCommand extends Command {
 			case "mensagembv":
 			case "msgbv":
 				if (msg.length() > 2000) {
-					channel.sendMessage(":x: | Mensagem muito longa (Max. 2000 caractéres)").queue();
+					channel.sendMessage("❌ | Mensagem muito longa (Max. 2000 caractéres)").queue();
 					return;
 				}
 				Settings.updateMsgBV(args, message, gc);
@@ -91,7 +91,7 @@ public class SettingsCommand extends Command {
 			case "mensagema":
 			case "msgadeus":
 				if (msg.length() > 2000) {
-					channel.sendMessage(":x: | Mensagem muito longa (Max. 2000 caractéres)").queue();
+					channel.sendMessage("❌ | Mensagem muito longa (Max. 2000 caractéres)").queue();
 					return;
 				}
 				Settings.updateMsgAdeus(args, message, gc);

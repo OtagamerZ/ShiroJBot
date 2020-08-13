@@ -63,10 +63,10 @@ public class TradeCardCommand extends Command {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
 			return;
 		} else if (message.getMentionedUsers().get(0).getId().equals(author.getId())) {
-			channel.sendMessage(":x: | Você não pode trocar cartas com você mesmo.").queue();
+			channel.sendMessage("❌ | Você não pode trocar cartas com você mesmo.").queue();
 			return;
 		} else if (args.length < 4) {
-			channel.sendMessage(":x: | Você precisa mencionar uma quantia de créditos ou uma carta, qual carta você deseja e o tipo dela (`N` = normal, `C` = cromada) para realizar a troca.").queue();
+			channel.sendMessage("❌ | Você precisa mencionar uma quantia de créditos ou uma carta, qual carta você deseja e o tipo dela (`N` = normal, `C` = cromada) para realizar a troca.").queue();
 			return;
 		}
 
@@ -84,7 +84,7 @@ public class TradeCardCommand extends Command {
 			Kawaipon target = KawaiponDAO.getKawaipon(other.getId());
 
 			if (tc == null) {
-				channel.sendMessage(":x: | Essa carta não existe.").queue();
+				channel.sendMessage("❌ | Essa carta não existe.").queue();
 				return;
 			} else if (acc.getBalance() < price) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
@@ -94,17 +94,17 @@ public class TradeCardCommand extends Command {
 			KawaiponCard card = new KawaiponCard(tc, foil);
 
 			if (kp.getCards().contains(card)) {
-				channel.sendMessage(":x: | Parece que você já possui essa carta!").queue();
+				channel.sendMessage("❌ | Parece que você já possui essa carta!").queue();
 				return;
 			} else if (!target.getCards().contains(card)) {
-				channel.sendMessage(":x: | Ele/ela não possui essa carta!").queue();
+				channel.sendMessage("❌ | Ele/ela não possui essa carta!").queue();
 				return;
 			}
 
 			int min = tc.getRarity().getIndex() * 150 * (foil ? 2 : 1);
 
 			if (price < min) {
-				channel.sendMessage(":x: | Você não pode oferecer menos que " + min + " créditos por essa carta.").queue();
+				channel.sendMessage("❌ | Você não pode oferecer menos que " + min + " créditos por essa carta.").queue();
 				return;
 			}
 
@@ -125,13 +125,13 @@ public class TradeCardCommand extends Command {
 					}), true, 1, TimeUnit.MINUTES, u -> Helper.equalsAny(u.getId(), author.getId(), other.getId())));
 		} else {
 			if (args.length < 5) {
-				channel.sendMessage(":x: | Você precisa mencionar uma carta, o tipo, qual carta você deseja e o tipo dela (`N` = normal, `C` = cromada) para realizar a troca.").queue();
+				channel.sendMessage("❌ | Você precisa mencionar uma carta, o tipo, qual carta você deseja e o tipo dela (`N` = normal, `C` = cromada) para realizar a troca.").queue();
 				return;
 			} else if (!Helper.equalsAny(args[2], "N", "C")) {
-				channel.sendMessage(":x: | Você precisa informar o tipo da carta que deseja oferecer (`N` = normal, `C` = cromada).").queue();
+				channel.sendMessage("❌ | Você precisa informar o tipo da carta que deseja oferecer (`N` = normal, `C` = cromada).").queue();
 				return;
 			} else if (!Helper.equalsAny(args[4], "N", "C")) {
-				channel.sendMessage(":x: | Você precisa informar o tipo da carta que deseja obter (`N` = normal, `C` = cromada).").queue();
+				channel.sendMessage("❌ | Você precisa informar o tipo da carta que deseja obter (`N` = normal, `C` = cromada).").queue();
 				return;
 			}
 
@@ -144,7 +144,7 @@ public class TradeCardCommand extends Command {
 
 
 			if (c == null || tc == null) {
-				channel.sendMessage(":x: | Essa carta não existe.").queue();
+				channel.sendMessage("❌ | Essa carta não existe.").queue();
 				return;
 			}
 
@@ -152,16 +152,16 @@ public class TradeCardCommand extends Command {
 			KawaiponCard hisCard = new KawaiponCard(tc, hisFoil);
 
 			if (!kp.getCards().contains(yourCard)) {
-				channel.sendMessage(":x: | Você não pode trocar uma carta que não possui!").queue();
+				channel.sendMessage("❌ | Você não pode trocar uma carta que não possui!").queue();
 				return;
 			} else if (target.getCards().contains(yourCard)) {
-				channel.sendMessage(":x: | Eu acho que ele já possui essa carta!").queue();
+				channel.sendMessage("❌ | Eu acho que ele já possui essa carta!").queue();
 				return;
 			} else if (kp.getCards().contains(hisCard)) {
-				channel.sendMessage(":x: | Parece que você já possui essa carta!").queue();
+				channel.sendMessage("❌ | Parece que você já possui essa carta!").queue();
 				return;
 			} else if (!target.getCards().contains(hisCard)) {
-				channel.sendMessage(":x: | Ele/ela não possui essa carta!").queue();
+				channel.sendMessage("❌ | Ele/ela não possui essa carta!").queue();
 				return;
 			}
 

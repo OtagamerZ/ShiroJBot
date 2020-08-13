@@ -62,7 +62,7 @@ public class MakeLogCommand extends Command {
 				GuildDAO.updateGuildSettings(gc);
 			});
 		} catch (InsufficientPermissionException e) {
-			channel.sendMessage(":x: | Não tenho permissões sufficientes para criar um canal.").queue();
+			channel.sendMessage("❌ | Não tenho permissões sufficientes para criar um canal.").queue();
 		}
 	}
 }

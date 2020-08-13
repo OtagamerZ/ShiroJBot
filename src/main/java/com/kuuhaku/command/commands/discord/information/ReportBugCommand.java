@@ -58,14 +58,14 @@ public class ReportBugCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 
 		if (args.length == 0) {
-			channel.sendMessage(":x: | Você precisa definir uma mensagem.").queue();
+			channel.sendMessage("❌ | Você precisa definir uma mensagem.").queue();
 			return;
 		}
 
 		String mensagem = String.join(" ", args).trim();
 
 		if (mensagem.length() > 191) {
-			channel.sendMessage(":x: | Mensagem muito longa, por favor tente ser mais breve.").queue();
+			channel.sendMessage("❌ | Mensagem muito longa, por favor tente ser mais breve.").queue();
 			return;
 		}
 

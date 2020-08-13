@@ -45,7 +45,7 @@ public class LinkTesterCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length == 0) {
-			channel.sendMessage(":x: | É necessário informar um link").queue();
+			channel.sendMessage("❌ | É necessário informar um link").queue();
 			return;
 		}
 

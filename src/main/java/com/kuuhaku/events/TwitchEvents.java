@@ -18,6 +18,9 @@
 
 package com.kuuhaku.events;
 
+import club.minnced.discord.webhook.WebhookClient;
+import club.minnced.discord.webhook.WebhookClientBuilder;
+import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.github.philippheuer.events4j.simple.SimpleEventHandler;
 import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.chat.events.channel.ChannelMessageEvent;
@@ -25,6 +28,7 @@ import com.github.twitch4j.chat.events.channel.FollowEvent;
 import com.github.twitch4j.common.events.domain.EventChannel;
 import com.github.twitch4j.common.events.domain.EventUser;
 import com.github.twitch4j.events.ChannelGoLiveEvent;
+import com.github.twitch4j.events.ChannelGoOfflineEvent;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.TwitchCommand;
 import com.kuuhaku.controller.postgresql.AccountDAO;
@@ -38,11 +42,16 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.Webhook;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
 
 public class TwitchEvents {
 	private final SimpleEventHandler handler;
@@ -52,6 +61,7 @@ public class TwitchEvents {
 		handler.onEvent(ChannelMessageEvent.class, this::onChannelMessageEvent);
 		handler.onEvent(FollowEvent.class, this::onFollowEvent);
 		handler.onEvent(ChannelGoLiveEvent.class, this::onChannelGoLiveEvent);
+		handler.onEvent(ChannelGoOfflineEvent.class, this::onChannelGoOfflineEvent);
 	}
 
 	private void onChannelMessageEvent(ChannelMessageEvent message) {
@@ -61,6 +71,8 @@ public class TwitchEvents {
 		String rawMessage = StringUtils.normalizeSpace(message.getMessage());
 		String rawMsgNoPrefix = rawMessage;
 		String commandName = "";
+
+		if (message.getUser().getName().equalsIgnoreCase("shirojbot")) return;
 
 		Account acc = AccountDAO.getAccountByTwitchId(author.getId());
 
@@ -99,6 +111,30 @@ public class TwitchEvents {
 		} else if (acc != null && Main.getInfo().isLive()) {
 			acc.addCredit(5, this.getClass());
 			AccountDAO.saveAccount(acc);
+
+			Helper.spawnKawaipon(channel, client.getChat());
+			Helper.spawnDrop(channel, client.getChat());
+
+			try {
+				User u = Main.getInfo().getUserByID(acc.getUserId());
+				TextChannel tc = Main.getInfo()
+						.getGuildByID(ShiroInfo.getSupportServerID())
+						.getTextChannelById(ShiroInfo.getTwitchChannelID());
+				assert tc != null;
+				Webhook wh = Helper.getOrCreateWebhook(tc, "Shiro", Main.getInfo().getAPI());
+
+				WebhookMessageBuilder wmb = new WebhookMessageBuilder();
+				wmb.setContent(Helper.makeEmoteFromMention(rawMessage));
+				wmb.setUsername(u.getName());
+				wmb.setAvatarUrl(u.getAvatarUrl());
+
+				assert wh != null;
+				WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
+				wc.send(wmb.build()).get();
+			} catch (InterruptedException | ExecutionException e) {
+				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+			} catch (NullPointerException ignore) {
+			}
 		}
 	}
 
@@ -136,7 +172,13 @@ public class TwitchEvents {
 	}
 
 	private void onChannelGoLiveEvent(ChannelGoLiveEvent evt) {
+		Main.getInfo().setLive(true);
+		Main.getInfo().getAPI().getPresence().setActivity(Activity.streaming("Na conta do meu Nii-chan sem ele saber!", "https://twitch.tv/kuuhaku_otgmz"));
+	}
 
+	private void onChannelGoOfflineEvent(ChannelGoOfflineEvent evt) {
+		Main.getInfo().setLive(false);
+		Main.getInfo().getAPI().getPresence().setActivity(Main.getRandomActivity());
 	}
 
 	public SimpleEventHandler getHandler() {

@@ -88,16 +88,16 @@ public class PurchaseBuffCommand extends Command {
 			channel.sendMessage(eb.build()).queue();
 			return;
 		} else if (!Helper.equalsAny(args[0], "xp", "carta", "drop", "cromada")) {
-			channel.sendMessage(":x: | O tipo da melhoria deve ser um dos seguintes tipos: `xp`, `carta`, `drop` ou `cromada`.").queue();
+			channel.sendMessage("❌ | O tipo da melhoria deve ser um dos seguintes tipos: `xp`, `carta`, `drop` ou `cromada`.").queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[1]) && !args[1].equalsIgnoreCase("ultimate")) {
-			channel.sendMessage(":x: | O tier da melhoria deve ser um valor entre 1 e 3 ou `ultimate`.").queue();
+			channel.sendMessage("❌ | O tier da melhoria deve ser um valor entre 1 e 3 ou `ultimate`.").queue();
 			return;
 		}
 
 		int tier = args[1].equalsIgnoreCase("ultimate") ? 4 : Integer.parseInt(args[1]);
 		if (tier < 1 || tier > 4) {
-			channel.sendMessage(":x: | O tier da melhoria deve ser um valor entre 1 e 3 ou `ultimate`.").queue();
+			channel.sendMessage("❌ | O tier da melhoria deve ser um valor entre 1 e 3 ou `ultimate`.").queue();
 			return;
 		}
 
@@ -167,7 +167,7 @@ public class PurchaseBuffCommand extends Command {
 		}
 
 		if (sb == null) {
-			channel.sendMessage(":x: | Melhoria inválida, use `" + prefix + "up` para ver a lista de melhorias.").queue();
+			channel.sendMessage("❌ | Melhoria inválida, use `" + prefix + "up` para ver a lista de melhorias.").queue();
 			return;
 		}
 
@@ -180,7 +180,7 @@ public class PurchaseBuffCommand extends Command {
 		acc.removeCredit(sb.getPrice(), this.getClass());
 		GuildBuff gb = GuildBuffDAO.getBuffs(guild.getId());
 		if (!gb.addBuff(sb)) {
-			channel.sendMessage(":x: | Este servidor já possui uma melhoria dessa categoria.").queue();
+			channel.sendMessage("❌ | Este servidor já possui uma melhoria dessa categoria.").queue();
 			return;
 		}
 

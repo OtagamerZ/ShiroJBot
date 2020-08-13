@@ -57,13 +57,13 @@ public class SellCardCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 3) {
-			channel.sendMessage(":x: | Você precisa informar uma carta, o tipo (`N` = normal, `C` = cromada) e o preço dela.").queue();
+			channel.sendMessage("❌ | Você precisa informar uma carta, o tipo (`N` = normal, `C` = cromada) e o preço dela.").queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[2])) {
-			channel.sendMessage(":x: | O preço precisa ser um valor inteiro.").queue();
+			channel.sendMessage("❌ | O preço precisa ser um valor inteiro.").queue();
 			return;
 		} else if (!Helper.equalsAny(args[1], "N", "C")) {
-			channel.sendMessage(":x: | Você precisa informar o tipo da carta que deseja vender (`N` = normal, `C` = cromada).").queue();
+			channel.sendMessage("❌ | Você precisa informar o tipo da carta que deseja vender (`N` = normal, `C` = cromada).").queue();
 			return;
 		}
 
@@ -72,14 +72,14 @@ public class SellCardCommand extends Command {
 		boolean foil = args[1].equalsIgnoreCase("C");
 
 		if (c == null) {
-			channel.sendMessage(":x: | Essa carta não existe.").queue();
+			channel.sendMessage("❌ | Essa carta não existe.").queue();
 			return;
 		}
 
 		KawaiponCard card = kp.getCard(c, foil);
 
 		if (card == null) {
-			channel.sendMessage(":x: | Você não pode trocar uma carta que não possui!").queue();
+			channel.sendMessage("❌ | Você não pode trocar uma carta que não possui!").queue();
 			return;
 		}
 
@@ -87,7 +87,7 @@ public class SellCardCommand extends Command {
 		int min = c.getRarity().getIndex() * 150 * (foil ? 2 : 1);
 
 		if (price < min) {
-			channel.sendMessage(":x: | Você não pode vender essa carta por menos que " + min + " créditos.").queue();
+			channel.sendMessage("❌ | Você não pode vender essa carta por menos que " + min + " créditos.").queue();
 			return;
 		}
 

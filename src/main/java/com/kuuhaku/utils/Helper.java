@@ -20,6 +20,8 @@ package com.kuuhaku.utils;
 
 import com.coder4.emoji.EmojiUtils;
 import com.github.kevinsawicki.http.HttpRequest;
+import com.github.twitch4j.chat.TwitchChat;
+import com.github.twitch4j.common.events.domain.EventChannel;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
@@ -270,7 +272,7 @@ public class Helper {
 			if (webhook[0] == null) return chn.createWebhook(name).complete();
 			else return webhook[0];
 		} catch (InsufficientPermissionException | InterruptedException | ExecutionException e) {
-			sendPM(Objects.requireNonNull(chn.getGuild().getOwner()).getUser(), ":x: | " + name + " não possui permissão para criar um webhook em seu servidor no canal " + chn.getAsMention());
+			sendPM(Objects.requireNonNull(chn.getGuild().getOwner()).getUser(), "❌ | " + name + " não possui permissão para criar um webhook em seu servidor no canal " + chn.getAsMention());
 		}
 		return null;
 	}
@@ -284,6 +286,17 @@ public class Helper {
 	}
 
 	public static String makeEmoteFromMention(String[] source) {
+		String[] chkdSrc = new String[source.length];
+		for (int i = 0; i < source.length; i++) {
+			if (source[i].startsWith("{") && source[i].endsWith("}"))
+				chkdSrc[i] = source[i].replace("{", "<").replace("}", ">").replace("&", ":");
+			else chkdSrc[i] = source[i];
+		}
+		return String.join(" ", chkdSrc).trim().replace("@everyone", "everyone").replace("@here", "here");
+	}
+
+	public static String makeEmoteFromMention(String sourceNoSplit) {
+		String[] source = sourceNoSplit.split(" ");
 		String[] chkdSrc = new String[source.length];
 		for (int i = 0; i < source.length; i++) {
 			if (source[i].startsWith("{") && source[i].endsWith("}"))
@@ -437,11 +450,11 @@ public class Helper {
 	public static void nonPartnerAlert(User author, Member member, MessageChannel channel, String s, String link) {
 		try {
 			if (!TagDAO.getTagById(author.getId()).isPartner() && !hasPermission(member, PrivilegeLevel.DEV)) {
-				channel.sendMessage(":x: | Este comando é exlusivo para parceiros!").queue();
+				channel.sendMessage("❌ | Este comando é exlusivo para parceiros!").queue();
 				return;
 			}
 		} catch (NoResultException e) {
-			channel.sendMessage(":x: | Este comando é exlusivo para parceiros!").queue();
+			channel.sendMessage("❌ | Este comando é exlusivo para parceiros!").queue();
 			return;
 		}
 
@@ -965,24 +978,41 @@ public class Helper {
 
 		if (cbUltimate || chance(2.5 + (channel.getGuild().getMemberCount() * 1.5 / 5000) * (cardBuff != null ? cardBuff.getMult() : 1))) {
 			List<Card> cards = CardDAO.getCards();
-			Card kc = cards.get(Helper.rng(cards.size(), true));
+			Card c = cards.get(Helper.rng(cards.size(), true));
 			boolean foil = fbUltimate || chance(0.5 * (foilBuff != null ? foilBuff.getMult() : 1));
+			KawaiponCard kc = new KawaiponCard(c, foil);
 
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setImage("attachment://kawaipon.png");
-			eb.setAuthor("Uma carta " + kc.getRarity().toString().toUpperCase() + " Kawaipon apareceu neste servidor!");
-			eb.setTitle(kc.getName() + " (" + kc.getAnime().toString() + ")");
+			eb.setAuthor("Uma carta " + c.getRarity().toString().toUpperCase() + " Kawaipon apareceu neste servidor!");
+			eb.setTitle(kc.getName() + " (" + c.getAnime().toString() + ")");
 			eb.setColor(getRandomColor());
-			eb.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + (kc.getRarity().getIndex() * 300 * (foil ? 2 : 1)) + " créditos).", null);
+			eb.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + (c.getRarity().getIndex() * 300 * (foil ? 2 : 1)) + " créditos).", null);
 
 			try {
-				Objects.requireNonNull(channel.getGuild().getTextChannelById(gc.getCanalKawaipon())).sendMessage(eb.build()).addFile(getBytes(kc.drawCard(foil), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+				Objects.requireNonNull(channel.getGuild().getTextChannelById(gc.getCanalKawaipon())).sendMessage(eb.build()).addFile(getBytes(c.drawCard(foil), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
 			} catch (RuntimeException e) {
 				gc.setCanalKawaipon(null);
 				GuildDAO.updateGuildSettings(gc);
-				channel.sendMessage(eb.build()).addFile(getBytes(kc.drawCard(foil), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+				channel.sendMessage(eb.build()).addFile(getBytes(c.drawCard(foil), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
 			}
-			Main.getInfo().getCurrentCard().put(channel.getGuild().getId(), new KawaiponCard(kc, foil));
+			Main.getInfo().getCurrentCard().put(channel.getGuild().getId(), kc);
+		}
+	}
+
+	public static void spawnKawaipon(EventChannel channel, TwitchChat chat) {
+		if (chance(2.5)) {
+			List<Card> cards = CardDAO.getCards();
+			Card c = cards.get(Helper.rng(cards.size(), true));
+			boolean foil = chance(1);
+			KawaiponCard kc = new KawaiponCard(c, foil);
+
+			chat.sendMessage(channel.getName(),
+					"Uma carta " + c.getRarity().toString().toUpperCase() + " Kawaipon apareceu nesta live!\n" +
+							kc.getName() + " (" + c.getAnime().toString() + ")\n" +
+							"Digite \"s!coletar\" para adquirir esta carta (necessário: " + (c.getRarity().getIndex() * 300 * (foil ? 2 : 1)) + " créditos)."
+			);
+			Main.getInfo().getCurrentCard().put("twitch", kc);
 		}
 	}
 
@@ -1010,6 +1040,20 @@ public class Helper {
 				channel.sendMessage(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
 			}
 			Main.getInfo().getCurrentDrop().put(channel.getGuild().getId(), drop);
+		}
+	}
+
+	public static void spawnDrop(EventChannel channel, TwitchChat chat) {
+		if (chance(2)) {
+			Prize drop = new CreditDrop();
+
+			chat.sendMessage(channel.getName(),
+					"Um drop apareceu nesta live\n" +
+							"Conteúdo:" + drop.getPrize() + " créditos\n" +
+							"Código captcha:" + drop.getCaptcha() + "\n" +
+							"Digite \"s!abrir\" para receber o prêmio (requisitos: " + drop.getRequirement().getKey() + ")."
+			);
+			Main.getInfo().getCurrentDrop().put("twitch", drop);
 		}
 	}
 

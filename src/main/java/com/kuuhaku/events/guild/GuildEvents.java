@@ -201,6 +201,10 @@ public class GuildEvents extends ListenerAdapter {
 			if (!found && !author.isBot()) {
 				GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
+				if (channel.getId().equals(ShiroInfo.getTwitchChannelID())) {
+					Main.getTwitch().getChat().sendMessage("kuuhaku_otgmz", author.getName() + "disse: " + Helper.makeEmoteFromMention(rawMessage));
+				}
+
 				if (!TagDAO.getTagById(guild.getOwnerId()).isToxic()) {
 					if (gc.isKawaiponEnabled()) Helper.spawnKawaipon(gc, (TextChannel) channel);
 					if (gc.isDropEnabled()) Helper.spawnDrop(gc, (TextChannel) channel);

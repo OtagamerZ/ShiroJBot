@@ -64,28 +64,28 @@ public class MuteMemberCommand extends Command {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-member-to-ban")).queue();
 			return;
 		} else if (args.length < 2) {
-			channel.sendMessage(":x: | Você precisa informar um tempo (em minutos).").queue();
+			channel.sendMessage("❌ | Você precisa informar um tempo (em minutos).").queue();
 			return;
 		} else if (!StringUtils.isNumeric(args[1])) {
-			channel.sendMessage(":x: | O tempo de punição deve um valor inteiro.").queue();
+			channel.sendMessage("❌ | O tempo de punição deve um valor inteiro.").queue();
 			return;
 		} else if (args.length < 3) {
-			channel.sendMessage(":x: | Você precisa informar um motivo.").queue();
+			channel.sendMessage("❌ | Você precisa informar um motivo.").queue();
 			return;
 		} else if (!member.hasPermission(Permission.MESSAGE_MANAGE)) {
-			channel.sendMessage(":x: | Você não possui permissão para punir membros.").queue();
+			channel.sendMessage("❌ | Você não possui permissão para punir membros.").queue();
 			return;
 		} else if (!Helper.hasRoleHigherThan(member, message.getMentionedMembers().get(0))) {
-			channel.sendMessage(":x: | Você não pode punir membros que possuem o mesmo cargo ou maior.").queue();
+			channel.sendMessage("❌ | Você não pode punir membros que possuem o mesmo cargo ou maior.").queue();
 			return;
 		} else if (Main.getInfo().getDevelopers().contains(message.getMentionedUsers().get(0).getId())) {
-			channel.sendMessage(":x: | Não posso punir meus desenvolvedores, faça isso manualmente.").queue();
+			channel.sendMessage("❌ | Não posso punir meus desenvolvedores, faça isso manualmente.").queue();
 			return;
 		} else if (gc.getCargoWarn() == null || gc.getCargoWarn().isEmpty()) {
-			channel.sendMessage(":x: | Nenhum cargo de punição configurado neste servidor.").queue();
+			channel.sendMessage("❌ | Nenhum cargo de punição configurado neste servidor.").queue();
 			return;
 		} else if (MemberDAO.getMutedMemberById(message.getMentionedMembers().get(0).getId()) != null && MemberDAO.getMutedMemberById(message.getMentionedUsers().get(0).getId()).isMuted()) {
-			channel.sendMessage(":x: | Este membro já está silenciado.").queue();
+			channel.sendMessage("❌ | Este membro já está silenciado.").queue();
 			return;
 		}
 
@@ -107,7 +107,7 @@ public class MuteMemberCommand extends Command {
 			Helper.logToChannel(author, false, null, mb.getAsMention() + " foi silenciado pela seguinte razão: `" + reason + "`", guild);
 			channel.sendMessage("Usuário silenciado por " + time + " minutos com sucesso!\nMotivo: `" + reason + "`").queue();
 		} catch (InsufficientPermissionException e) {
-			channel.sendMessage(":x: | Não possuo a permissão para silenciar membros.").queue();
+			channel.sendMessage("❌ | Não possuo a permissão para silenciar membros.").queue();
 		}
 	}
 }

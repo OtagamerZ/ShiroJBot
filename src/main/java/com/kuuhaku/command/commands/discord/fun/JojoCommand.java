@@ -62,7 +62,7 @@ public class JojoCommand extends Command {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_meme-no-message")).queue();
 			return;
 		} else if (message.getMentionedUsers().size() < 2) {
-			channel.sendMessage(":x: | Você precisa mencionar 2 usuários antes da mensagem.").queue();
+			channel.sendMessage("❌ | Você precisa mencionar 2 usuários antes da mensagem.").queue();
 			return;
 		}
 

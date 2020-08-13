@@ -167,7 +167,7 @@ public class Relay {
 				Guild g = Main.getJibril().getGuildById(k);
 				assert g != null;
 				try {
-					Objects.requireNonNull(g.getOwner()).getUser().openPrivateChannel().queue(c -> c.sendMessage(":x: | Me faltam permissões para enviar mensagens globais no servidor " + g.getName() + ".\n\nPermissões que eu possuo:```" +
+					Objects.requireNonNull(g.getOwner()).getUser().openPrivateChannel().queue(c -> c.sendMessage("❌ | Me faltam permissões para enviar mensagens globais no servidor " + g.getName() + ".\n\nPermissões que eu possuo:```" +
 							(g.getSelfMember().hasPermission(Permission.MESSAGE_WRITE) ? "✅" : "❌") + " Ler/Enviar mensagens\n" +
 							(g.getSelfMember().hasPermission(Permission.MESSAGE_EMBED_LINKS) ? "✅" : "❌") + " Inserir links\n" +
 							(g.getSelfMember().hasPermission(Permission.MESSAGE_ATTACH_FILES) ? "✅" : "❌") + " Anexar arquivos\n" +
@@ -237,7 +237,7 @@ public class Relay {
 				Guild g = Main.getJibril().getGuildById(k);
 				assert g != null;
 				try {
-					Objects.requireNonNull(g.getOwner()).getUser().openPrivateChannel().queue(c -> c.sendMessage(":x: | Me faltam permissões para enviar mensagens globais no servidor " + g.getName() + ".\n\nPermissões que eu possuo:```" +
+					Objects.requireNonNull(g.getOwner()).getUser().openPrivateChannel().queue(c -> c.sendMessage("❌ | Me faltam permissões para enviar mensagens globais no servidor " + g.getName() + ".\n\nPermissões que eu possuo:```" +
 							(g.getSelfMember().hasPermission(Permission.MESSAGE_WRITE) ? "✅" : "❌") + " Ler/Enviar mensagens\n" +
 							(g.getSelfMember().hasPermission(Permission.MESSAGE_EMBED_LINKS) ? "✅" : "❌") + " Inserir links\n" +
 							(g.getSelfMember().hasPermission(Permission.MESSAGE_ATTACH_FILES) ? "✅" : "❌") + " Anexar arquivos\n" +

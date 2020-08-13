@@ -65,7 +65,7 @@ public class KawaiponsCommand extends Command {
 				Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
 				if (kp.getCards().size() == 0) {
-					m.editMessage(":x: | Você ainda não coletou nenhum Kawaipon.").queue();
+					m.editMessage("❌ | Você ainda não coletou nenhum Kawaipon.").queue();
 					return;
 				} else if (args.length == 0) {
 					Set<KawaiponCard> collection = new HashSet<>();
@@ -93,7 +93,7 @@ public class KawaiponsCommand extends Command {
 					channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "png"), "cards.png").queue();
 					return;
 				} else if (args.length < 2 || !Helper.equalsAny(args[1], "N", "C")) {
-					m.editMessage(":x: | Você precisa especificar o tipo da coleção (`N` = normal, `C` = cromada).").queue();
+					m.editMessage("❌ | Você precisa especificar o tipo da coleção (`N` = normal, `C` = cromada).").queue();
 					return;
 				}
 
@@ -110,7 +110,7 @@ public class KawaiponsCommand extends Command {
 						send(author, channel, m, collection, cards, "Todas as cartas", CardDAO.totalCards());
 						return;
 					} else if (Arrays.stream(AnimeName.values()).noneMatch(a -> a.name().equals(args[0].toUpperCase()))) {
-						m.editMessage(":x: | Anime inválido ou ainda não adicionado (colocar `_` no lugar de espaços).").queue();
+						m.editMessage("❌ | Anime inválido ou ainda não adicionado (colocar `_` no lugar de espaços).").queue();
 						return;
 					}
 
