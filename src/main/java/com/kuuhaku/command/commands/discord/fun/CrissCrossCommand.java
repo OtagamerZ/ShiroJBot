@@ -19,6 +19,7 @@
 package com.kuuhaku.command.commands.discord.fun;
 
 import com.github.ygimenez.method.Pages;
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
@@ -79,10 +80,10 @@ public class CrissCrossCommand extends Command {
 
 		String id = author.getId() + "." + message.getMentionedUsers().get(0).getId() + "." + guild.getId();
 
-		if (ShiroInfo.gameInProgress(author.getId())) {
+		if (Main.getInfo().gameInProgress(author.getId())) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();
 			return;
-		} else if (ShiroInfo.gameInProgress(message.getMentionedUsers().get(0).getId())) {
+		} else if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
 			return;
 		} else if (message.getMentionedUsers().get(0).getId().equals(author.getId())) {
@@ -95,11 +96,11 @@ public class CrissCrossCommand extends Command {
 		channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Jogo da Velha, deseja aceitar?" + (bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 					if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
-						if (ShiroInfo.gameInProgress(message.getMentionedUsers().get(0).getId())) {
+						if (Main.getInfo().gameInProgress(message.getMentionedUsers().get(0).getId())) {
 							channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
 							return;
 						}
-						ShiroInfo.getGames().put(id, t);
+						Main.getInfo().getGames().put(id, t);
 						ms.delete().queue();
 						t.execute(finalBet);
 					}

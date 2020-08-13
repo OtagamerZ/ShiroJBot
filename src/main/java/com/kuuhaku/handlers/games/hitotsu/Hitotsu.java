@@ -25,7 +25,6 @@ import com.kuuhaku.handlers.games.tabletop.enums.Board;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -115,7 +114,7 @@ public class Hitotsu extends Tabletop {
 
 							if (getPlayers().getPlayers().size() == 1) {
 								Main.getInfo().getAPI().removeEventListener(this);
-								ShiroInfo.getGames().remove(getId());
+								Main.getInfo().getGames().remove(getId());
 								getPlayers().setWinner();
 								awardWinner(bet);
 								getTable().sendMessage(getPlayers().getCurrent().getAsMention() + " é o último jogador na mesa, temos um vencedor!!").queue();
@@ -159,7 +158,7 @@ public class Hitotsu extends Tabletop {
 
 			private void declareWinner() {
 				Main.getInfo().getAPI().removeEventListener(this);
-				ShiroInfo.getGames().remove(getId());
+				Main.getInfo().getGames().remove(getId());
 				justShow();
 				getTable().sendMessage("Não restam mais cartas para " + getPlayers().getWinner().getAsMention() + ", temos um vencedor!!").queue();
 				timeout.cancel(true);
@@ -274,7 +273,7 @@ public class Hitotsu extends Tabletop {
 		if (timeout != null && !timeout.isCancelled()) timeout.cancel(true);
 		timeout = getTable().sendMessage(":x: | Tempo expirado, por favor inicie outra sessão.").queueAfter(180, TimeUnit.SECONDS, ms -> {
 			Main.getInfo().getAPI().removeEventListener(listener);
-			ShiroInfo.getGames().remove(getId());
+			Main.getInfo().getGames().remove(getId());
 		}, Helper::doNothing);
 	}
 

@@ -288,7 +288,7 @@ public class JDAEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildMessageDelete(@Nonnull GuildMessageDeleteEvent event) {
-		Message msg = ShiroInfo.retrieveCachedMessage(event.getGuild(), event.getMessageId());
+		Message msg = Main.getInfo().retrieveCachedMessage(event.getGuild(), event.getMessageId());
 
 		if (msg == null || msg.getAuthor().isBot()) return;
 
@@ -299,7 +299,7 @@ public class JDAEvents extends ListenerAdapter {
 	public void onGuildMessageUpdate(@Nonnull GuildMessageUpdateEvent event) {
 		if (event.getAuthor().isBot()) return;
 
-		Message msg = ShiroInfo.retrieveCachedMessage(event.getGuild(), event.getMessageId());
+		Message msg = Main.getInfo().retrieveCachedMessage(event.getGuild(), event.getMessageId());
 
 		if (msg != null)
 			Helper.logToChannel(event.getAuthor(), false, null, "Uma mensagem foi editada no canal " + event.getChannel().getAsMention() + ":```diff\n- " + msg.getContentRaw() + "\n+ " + event.getMessage().getContentRaw() + "```", msg.getGuild());
