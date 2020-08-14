@@ -56,32 +56,33 @@ public abstract class Piece {
 		return icon;
 	}
 
-	public boolean move(Board b, Spot to) {
+	public boolean move(Board board, Spot to) {
 		if (getSpot() == null) setSpot(to);
-		else if (validate(b, to)) {
-			if (b.getSpot(to) != null && b.getSpot(to).getOwner().equals(getOwner())) return false;
+		else if (validate(board, to)) {
+			if (board.getSpot(to) != null && board.getSpot(to).getOwner().equals(getOwner())) return false;
 
-			b.setSpot(null, getSpot());
-			b.setSpot(this, to);
+			board.setSpot(null, getSpot());
+			board.setSpot(this, to);
 			setSpot(to);
 
+			//|X|-|-|-|K|-|-|X|
 			if (this instanceof King) {
-				Piece p = Helper.getOr(b.getSpot(getSpot().getNextSpot(Spot.MIDDLE_LEFT)), b.getSpot(getSpot().getNextSpot(new int[]{-2, 0})));
+				Piece rook = Helper.getOr(board.getSpot(getSpot().getNextSpot(Spot.MIDDLE_LEFT)), board.getSpot(getSpot().getNextSpot(new int[]{-2, 0})));
 
-				if (p instanceof Rook && isFirstMove()) {
-					Spot sp = p.getSpot();
-					p.setSpot(getSpot().getNextSpot(Spot.MIDDLE_RIGHT));
-					b.setSpot(p, getSpot().getNextSpot(Spot.MIDDLE_RIGHT));
-					b.setSpot(null, sp);
-					p.firstMove = false;
+				if (rook instanceof Rook) {
+					Spot sp = rook.getSpot();
+					board.setSpot(null, sp);
+					board.setSpot(rook, getSpot().getNextSpot(Spot.MIDDLE_RIGHT));
+					rook.setSpot(getSpot().getNextSpot(Spot.MIDDLE_RIGHT));
+					rook.firstMove = false;
 				} else {
-					p = Helper.getOr(b.getSpot(getSpot().getNextSpot(Spot.MIDDLE_RIGHT)), b.getSpot(getSpot().getNextSpot(new int[]{2, 0})));
-					if (p instanceof Rook && isFirstMove()) {
-						Spot sp = p.getSpot();
-						p.setSpot(getSpot().getNextSpot(Spot.MIDDLE_LEFT));
-						b.setSpot(p, getSpot().getNextSpot(Spot.MIDDLE_LEFT));
-						b.setSpot(null, sp);
-						p.firstMove = false;
+					rook = Helper.getOr(board.getSpot(getSpot().getNextSpot(Spot.MIDDLE_RIGHT)), board.getSpot(getSpot().getNextSpot(new int[]{2, 0})));
+					if (rook instanceof Rook) {
+						Spot sp = rook.getSpot();
+						board.setSpot(null, sp);
+						board.setSpot(rook, getSpot().getNextSpot(Spot.MIDDLE_LEFT));
+						rook.setSpot(getSpot().getNextSpot(Spot.MIDDLE_LEFT));
+						rook.firstMove = false;
 					}
 				}
 			} else if (this instanceof Pawn) {
@@ -89,13 +90,13 @@ public abstract class Piece {
 					if (getSpot().getY() == 0) {
 						Piece p = new Queen(getOwner());
 						p.setSpot(getSpot());
-						b.setSpot(p, getSpot());
+						board.setSpot(p, getSpot());
 					}
 				} else {
 					if (getSpot().getY() == 7) {
 						Piece p = new Queen(getOwner());
 						p.setSpot(getSpot());
-						b.setSpot(p, getSpot());
+						board.setSpot(p, getSpot());
 					}
 				}
 			}
