@@ -306,6 +306,10 @@ public class Helper {
 		return String.join(" ", chkdSrc).trim().replace("@everyone", "everyone").replace("@here", "here");
 	}
 
+	public static String stripEmotesAndMentions(String source) {
+		return Helper.getOr(StringUtils.normalizeSpace(source.replaceAll("<\\S*>", "")).replace("@everyone", "everyone").replace("@here", "here"), "...");
+	}
+
 	public static void logToChannel(User u, boolean isCommand, Command c, String msg, Guild g) {
 		GuildConfig gc = GuildDAO.getGuildById(g.getId());
 		if (gc.getCanalLog() == null || gc.getCanalLog().isEmpty()) return;
@@ -419,7 +423,7 @@ public class Helper {
 
 	public static <T> T getOr(T get, T or) {
 		try {
-			return get == null || (get instanceof String && ((String) get).isEmpty()) ? or : get;
+			return get == null || (get instanceof String && ((String) get).isBlank()) ? or : get;
 		} catch (Exception e) {
 			return or;
 		}
@@ -1008,9 +1012,7 @@ public class Helper {
 			KawaiponCard kc = new KawaiponCard(c, foil);
 
 			chat.sendMessage(channel.getName(),
-					"Uma carta " + c.getRarity().toString().toUpperCase() + " Kawaipon apareceu nesta live!\n" +
-							kc.getName() + " (" + c.getAnime().toString() + ")\n" +
-							"Digite \"s!coletar\" para adquirir esta carta (necessário: " + (c.getRarity().getIndex() * 300 * (foil ? 2 : 1)) + " créditos)."
+					"FootYellow | " + kc.getName() + " (" + c.getRarity().toString() + " | " + c.getAnime().toString() + ") | Digite \"s!coletar\" para adquirir esta carta (necessário: " + (c.getRarity().getIndex() * 300 * (foil ? 2 : 1)) + " créditos)."
 			);
 			Main.getInfo().getCurrentCard().put("twitch", kc);
 		}
@@ -1048,10 +1050,7 @@ public class Helper {
 			Prize drop = new CreditDrop();
 
 			chat.sendMessage(channel.getName(),
-					"Um drop apareceu nesta live\n" +
-							"Conteúdo:" + drop.getPrize() + " créditos\n" +
-							"Código captcha:" + drop.getCaptcha() + "\n" +
-							"Digite \"s!abrir\" para receber o prêmio (requisitos: " + drop.getRequirement().getKey() + ")."
+					"HolidayPresent | Digite \"s!abrir " + drop.getCaptcha() + "\" para receber o prêmio (" + drop.getPrize() + " créditos | requisitos: " + drop.getRequirement().getKey() + ")."
 			);
 			Main.getInfo().getCurrentDrop().put("twitch", drop);
 		}

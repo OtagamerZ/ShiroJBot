@@ -29,7 +29,9 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/exceed/ExceedSelectCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/exceed/ExceedSelectCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/guild/GuildEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/guild/GuildEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/entity/Piece.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/entity/Piece.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -126,7 +128,7 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="TEXT" />
     <property name="extract.method.default.visibility" value="private" />
-    <property name="last.edited.regexp" value="aaaa&#10;aaa" />
+    <property name="last.edited.regexp" value="hello hi @everyone {}" />
     <property name="last_opened_file_path" value="$USER_HOME$/Desktop/Nova pasta/libras" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Project" />
@@ -608,14 +610,9 @@
       <workItem from="1597320292860" duration="10515000" />
       <workItem from="1597334992791" duration="1255000" />
       <workItem from="1597340048933" duration="101000" />
-      <workItem from="1597350025366" duration="1172000" />
-    </task>
-    <task id="LOCAL-02132" summary="Balanceamento da pontuação dos Exceeds">
-      <created>1597087714186</created>
-      <option name="number" value="02132" />
-      <option name="presentableId" value="LOCAL-02132" />
-      <option name="project" value="LOCAL" />
-      <updated>1597087714186</updated>
+      <workItem from="1597350025366" duration="1242000" />
+      <workItem from="1597351365782" duration="483000" />
+      <workItem from="1597407948142" duration="5011000" />
     </task>
     <task id="LOCAL-02133" summary="Balanceamento da pontuação dos Exceeds">
       <created>1597087833947</created>
@@ -953,7 +950,14 @@
       <option name="project" value="LOCAL" />
       <updated>1597330757639</updated>
     </task>
-    <option name="localTasksCounter" value="2181" />
+    <task id="LOCAL-02181" summary="Balanceamento na pontuação dos Exceeds">
+      <created>1597351226838</created>
+      <option name="number" value="02181" />
+      <option name="presentableId" value="LOCAL-02181" />
+      <option name="project" value="LOCAL" />
+      <updated>1597351226838</updated>
+    </task>
+    <option name="localTasksCounter" value="2182" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -994,7 +998,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Remoção de versionamento de objetos" />
     <MESSAGE value="Remoção do sweeper" />
     <MESSAGE value="Adição do comando de sweep" />
     <MESSAGE value="Testes de nova funcionalidade" />
@@ -1019,7 +1022,8 @@
     <MESSAGE value="Correção nas apostas do jogo da velha" />
     <MESSAGE value="Correções menores" />
     <MESSAGE value="Implementação de integração com a twitch" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implementação de integração com a twitch" />
+    <MESSAGE value="Balanceamento na pontuação dos Exceeds" />
+    <option name="LAST_COMMIT_MESSAGE" value="Balanceamento na pontuação dos Exceeds" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1070,11 +1074,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1597330754850">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1597351223949">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1597330754850" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1597351223949" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1091,26 +1095,26 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="620" y="261" key="FileChooserDialogImpl/0.0.1680.1010@0.0.1680.1010" timestamp="1597149004659" />
-    <state width="1125" height="289" key="GridCell.Tab.0.bottom" timestamp="1597350513452">
+    <state width="1125" height="289" key="GridCell.Tab.0.bottom" timestamp="1597407954960">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="270" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1125" height="289" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1597350513452" />
-    <state width="1125" height="289" key="GridCell.Tab.0.center" timestamp="1597350513452">
+    <state width="1125" height="289" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1597407954960" />
+    <state width="1125" height="289" key="GridCell.Tab.0.center" timestamp="1597407954960">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="270" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1125" height="289" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1597350513452" />
-    <state width="1125" height="289" key="GridCell.Tab.0.left" timestamp="1597350513452">
+    <state width="1125" height="289" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1597407954960" />
+    <state width="1125" height="289" key="GridCell.Tab.0.left" timestamp="1597407954960">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="270" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1125" height="289" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1597350513452" />
-    <state width="1125" height="289" key="GridCell.Tab.0.right" timestamp="1597350513452">
+    <state width="1125" height="289" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1597407954960" />
+    <state width="1125" height="289" key="GridCell.Tab.0.right" timestamp="1597407954960">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="270" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1125" height="289" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1597350513452" />
+    <state width="1125" height="289" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1597407954960" />
     <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1594058079602">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1136,11 +1140,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1597086904112" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1597330758724">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1597351228116">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1597330758724" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1597351228116" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597351073016">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1153,10 +1157,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="311" key="com.intellij.database.dbimport.ImportUtil.MyDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1594057250988" />
-    <state x="636" y="331" width="408" height="340" key="com.intellij.database.psi.DbRenamePsiElementProcessor.DbRenameDialog" timestamp="1597087017209">
+    <state x="636" y="331" width="408" height="336" key="com.intellij.database.psi.DbRenamePsiElementProcessor.DbRenameDialog" timestamp="1597351402650">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="636" y="331" width="408" height="340" key="com.intellij.database.psi.DbRenamePsiElementProcessor.DbRenameDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1597087017209" />
+    <state x="636" y="331" width="408" height="336" key="com.intellij.database.psi.DbRenamePsiElementProcessor.DbRenameDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1597351402650" />
     <state x="594" y="260" key="com.intellij.database.run.ParametersPanel.Standalone" timestamp="1589981895332">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1166,10 +1170,10 @@
     </state>
     <state x="254" y="43" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1366.768@0.0.1366.768" timestamp="1593921071276" />
     <state x="305" y="160" width="406" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1597257669339" />
-    <state x="510" y="135" key="com.intellij.database.view.ui.DatabasePreviewDialog" timestamp="1593706488306">
+    <state x="510" y="135" key="com.intellij.database.view.ui.DatabasePreviewDialog" timestamp="1597351739604">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="510" y="135" key="com.intellij.database.view.ui.DatabasePreviewDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1593706488306" />
+    <state x="510" y="135" key="com.intellij.database.view.ui.DatabasePreviewDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1597351739604" />
     <state x="634" y="385" key="data.grid.dml.preview.dialog" timestamp="1597176288417">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>

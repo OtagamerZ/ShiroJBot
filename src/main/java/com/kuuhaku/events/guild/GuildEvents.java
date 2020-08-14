@@ -21,11 +21,13 @@ package com.kuuhaku.events.guild;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.controller.sqlite.BlacklistDAO;
 import com.kuuhaku.controller.sqlite.CustomAnswerDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.CustomAnswers;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.MutedMember;
@@ -201,8 +203,9 @@ public class GuildEvents extends ListenerAdapter {
 			if (!found && !author.isBot()) {
 				GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
-				if (channel.getId().equals(ShiroInfo.getTwitchChannelID()) && Main.getInfo().isLive()) {
-					Main.getTwitch().getChat().sendMessage("kuuhaku_otgmz", author.getName() + " disse: " + Helper.makeEmoteFromMention(rawMessage));
+				Account acc = AccountDAO.getAccount(author.getId());
+				if (!acc.getTwitchId().isBlank() && channel.getId().equals(ShiroInfo.getTwitchChannelID()) && Main.getInfo().isLive()) {
+					Main.getTwitch().getChat().sendMessage("kuuhaku_otgmz", author.getName() + " disse: " + Helper.stripEmotesAndMentions(rawMessage));
 				}
 
 				if (!TagDAO.getTagById(guild.getOwnerId()).isToxic()) {
