@@ -72,7 +72,7 @@ public class MyTagsCommand extends Command {
 			badges.append(TagIcons.getExceed(ExceedEnums.getByName(exceed)));
 		}
 
-		tags.forEach(t -> badges.append(t.getEmote(mb) == null ? "" : Objects.requireNonNull(t.getEmote(mb)).getTag()));
+		tags.forEach(t -> badges.append(t.getEmote(mb) == null ? "" : Objects.requireNonNull(t.getEmote(mb)).getTag(mb.getLevel())));
 
 		eb.addField("Emblemas:", badges.toString(), false);
 

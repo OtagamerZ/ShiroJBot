@@ -63,7 +63,7 @@ public class BotInfoCommand extends Command {
 		eb.setThumbnail(Main.getInfo().getSelfUser().getAvatarUrl());
 		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-1"), Main.getInfo().getUserByID(Main.getInfo().getNiiChan()).getAsTag(), false);
 		StringBuilder sb = new StringBuilder();
-		Main.getInfo().getDevelopers().forEach(d -> sb.append("`").append(Main.getInfo().getUserByID(d).getAsTag()).append("`  "));
+		ShiroInfo.getDevelopers().forEach(d -> sb.append("`").append(Main.getInfo().getUserByID(d).getAsTag()).append("`  "));
 		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-2"), sb.toString(), false);
 		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-3"), Main.getInfo().getSelfUser().getTimeCreated().format(DateTimeFormatter.ofPattern(ShiroInfo.getLocale(I18n.PT).getString("date-format"))), false);
 		eb.addField(ShiroInfo.getLocale(I18n.PT).getString("str_bot-info-field-4"), MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(STR_BOT_INFO_SERVERS), TagDAO.getPartnerAmount()), false);

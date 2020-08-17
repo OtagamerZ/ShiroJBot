@@ -18,7 +18,6 @@
 
 package com.kuuhaku.command.commands.discord.moderation;
 
-import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
@@ -61,7 +60,7 @@ public class KickMemberCommand extends Command {
 		} else if (!Helper.hasRoleHigherThan(member, message.getMentionedMembers().get(0)) || !Helper.hasRoleHigherThan(guild.getSelfMember(), message.getMentionedMembers().get(0))) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-kick-higher-role")).queue();
 			return;
-		} else if (Main.getInfo().getDevelopers().contains(message.getMentionedUsers().get(0).getId())) {
+		} else if (ShiroInfo.getDevelopers().contains(message.getMentionedUsers().get(0).getId())) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-kick-developers")).queue();
 			return;
 		}

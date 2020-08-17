@@ -30,6 +30,7 @@ import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.BiContract;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.PrivilegeLevel;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
@@ -161,7 +162,7 @@ public class DashboardSocket extends WebSocketServer {
 
 					Map<String, String> ids = new HashMap<>();
 
-					Main.getInfo().getDevelopers().forEach(dev -> Main.getInfo().getUserByID(dev).openPrivateChannel()
+					ShiroInfo.getDevelopers().forEach(dev -> Main.getInfo().getUserByID(dev).openPrivateChannel()
 							.flatMap(m -> m.sendMessage(eb.build()))
 							.flatMap(m -> {
 								ids.put(dev, m.getId());

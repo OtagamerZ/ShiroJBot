@@ -85,7 +85,7 @@ public class JDAEvents extends ListenerAdapter {
 			}
 		}
 
-		Main.getInfo().getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
+		ShiroInfo.getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
 			String msg = "Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".";
 			c.sendMessage(msg).queue();
 		}));
@@ -94,7 +94,7 @@ public class JDAEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildLeave(GuildLeaveEvent event) {
-		Main.getInfo().getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
+		ShiroInfo.getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> {
 			GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
 			gc.setMarkForDelete(true);
 			GuildDAO.updateGuildSettings(gc);
@@ -209,8 +209,8 @@ public class JDAEvents extends ListenerAdapter {
 	@Override
 	public void onPrivateMessageReceived(PrivateMessageReceivedEvent event) {
 		if (event.getAuthor().isBot()) return;
-		List<String> staffIds = Main.getInfo().getDevelopers();
-		staffIds.addAll(Main.getInfo().getSupports());
+		List<String> staffIds = ShiroInfo.getDevelopers();
+		staffIds.addAll(ShiroInfo.getSupports());
 		if (staffIds.contains(event.getAuthor().getId())) {
 			String msg = event.getMessage().getContentRaw();
 			String[] args = msg.split(" ");
