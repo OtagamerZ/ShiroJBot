@@ -83,14 +83,14 @@ public class MarkTicketCommand extends Command {
 		eb.addField("Fechado em:", Helper.dateformat.format(LocalDateTime.now().atZone(ZoneId.of("GMT-3"))), true);
 		eb.setColor(Color.green);
 
-		Main.getInfo().getDevelopers().forEach(dev -> {
-			Message msg = Main.getInfo().getUserByID(dev).openPrivateChannel()
-					.flatMap(m -> m.sendMessage(eb.build()))
-					.complete();
-			msg.getChannel().retrieveMessageById(String.valueOf(t.getMsgIds().get(dev)))
-					.flatMap(Message::delete)
-					.queue();
-			t.solved();
+		ShiroInfo.getDevelopers().forEach(dev -> {
+					Message msg = Main.getInfo().getUserByID(dev).openPrivateChannel()
+							.flatMap(m -> m.sendMessage(eb.build()))
+							.complete();
+					msg.getChannel().retrieveMessageById(String.valueOf(t.getMsgIds().get(dev)))
+							.flatMap(Message::delete)
+							.queue();
+					t.solved();
 				}
 		);
 

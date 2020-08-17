@@ -25,6 +25,7 @@ import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.RelayBlockList;
 import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
@@ -54,7 +55,7 @@ public class JibrilEvents extends ListenerAdapter {
 			}
 		}
 
-		Main.getInfo().getDevelopers().forEach(d -> Main.getJibril().retrieveUserById(d).queue(u ->
+		ShiroInfo.getDevelopers().forEach(d -> Main.getJibril().retrieveUserById(d).queue(u ->
 				u.openPrivateChannel().queue(c -> {
 					String msg = "Acabei de entrar no servidor \"" + event.getGuild().getName() + "\".";
 					c.sendMessage(msg).queue();
@@ -65,7 +66,7 @@ public class JibrilEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildLeave(GuildLeaveEvent event) {
-		Main.getInfo().getDevelopers().forEach(d -> Main.getJibril().retrieveUserById(d).queue(u ->
+		ShiroInfo.getDevelopers().forEach(d -> Main.getJibril().retrieveUserById(d).queue(u ->
 				u.openPrivateChannel().queue(c -> {
 					String msg = "Acabei de sair do servidor \"" + event.getGuild().getName() + "\".";
 					c.sendMessage(msg).queue();

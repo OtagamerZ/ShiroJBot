@@ -24,6 +24,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.BannedVars;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import com.kuuhaku.utils.TagIcons;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
@@ -63,7 +64,7 @@ public class CompileCommand extends Command {
 					try {
 						String code = String.join(" ", args);
 						if (!code.contains("out")) throw new IllegalArgumentException("Código sem retorno.");
-						else if (Helper.containsAny(code, BannedVars.vars) && !Main.getInfo().getDevelopers().contains(author.getId()))
+						else if (Helper.containsAny(code, BannedVars.vars) && !ShiroInfo.getDevelopers().contains(author.getId()))
 							throw new IllegalAccessException("Código com variáveis ou métodos proibidos.");
 
 						if (code.startsWith("```java") && code.endsWith("```")) {
@@ -75,7 +76,7 @@ public class CompileCommand extends Command {
 							m.getChannel().sendMessage("<a:loading:697879726630502401> | Executando...").queue(d ->
 									d.editMessage("-> " + out.toString()).queue());
 							message.delete().queue();
-							m.editMessage(TagIcons.VERIFIED.getTag() + "| Tempo de execução: " + (System.currentTimeMillis() - start) + " ms").queue();
+							m.editMessage(TagIcons.VERIFIED.getTag(0) + "| Tempo de execução: " + (System.currentTimeMillis() - start) + " ms").queue();
 						} else if ((code.startsWith("```py") || code.startsWith("```python")) && code.endsWith("```")) {
 							code = code.replace("```py", "").replace("```python", "").replace("```", "");
 							PythonInterpreter pi = new PythonInterpreter();
@@ -84,7 +85,7 @@ public class CompileCommand extends Command {
 							m.getChannel().sendMessage("<a:loading:697879726630502401> | Executando...").queue(d ->
 									d.editMessage("-> " + out.toString()).queue());
 							message.delete().queue();
-							m.editMessage(TagIcons.VERIFIED.getTag() + "| Tempo de execução: " + (System.currentTimeMillis() - start) + " ms").queue();
+							m.editMessage(TagIcons.VERIFIED.getTag(0) + "| Tempo de execução: " + (System.currentTimeMillis() - start) + " ms").queue();
 						} else if ((code.startsWith("```js") || code.startsWith("```javascript")) && code.endsWith("```")) {
 							code = code.replace("```js", "").replace("```javascript", "").replace("```", "");
 							ScriptEngine se = new ScriptEngineManager().getEngineByName("nashorn");
@@ -93,7 +94,7 @@ public class CompileCommand extends Command {
 							m.getChannel().sendMessage("<a:loading:697879726630502401> | Executando...").queue(d ->
 									d.editMessage("-> " + out.toString()).queue());
 							message.delete().queue();
-							m.editMessage(TagIcons.VERIFIED.getTag() + "| Tempo de execução: " + (System.currentTimeMillis() - start) + " ms").queue();
+							m.editMessage(TagIcons.VERIFIED.getTag(0) + "| Tempo de execução: " + (System.currentTimeMillis() - start) + " ms").queue();
 						} else {
 							throw new IllegalArgumentException("Bloco de código com começo incorreto");
 						}

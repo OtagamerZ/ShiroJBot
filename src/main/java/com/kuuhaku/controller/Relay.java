@@ -127,7 +127,7 @@ public class Relay {
 			badges.append(TagIcons.getExceed(ExceedEnums.getByName(exceed)));
 		}
 
-		tags.forEach(t -> badges.append(t.getEmote(mbr) == null ? "" : t.getEmote(mbr).getTag()));
+		tags.forEach(t -> badges.append(t.getEmote(mbr) == null ? "" : t.getEmote(mbr).getTag(mbr.getLevel())));
 
 		eb.addField("Emblemas:", badges.toString(), false);
 

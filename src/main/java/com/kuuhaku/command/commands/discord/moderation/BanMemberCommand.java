@@ -18,7 +18,6 @@
 
 package com.kuuhaku.command.commands.discord.moderation;
 
-import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.utils.Helper;
@@ -60,11 +59,11 @@ public class BanMemberCommand extends Command {
             return;
         } else if (!Helper.hasRoleHigherThan(member, message.getMentionedMembers().get(0)) || !Helper.hasRoleHigherThan(guild.getSelfMember(), message.getMentionedMembers().get(0))) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cant-ban-high-role")).queue();
-            return;
-        } else if (Main.getInfo().getDevelopers().contains(message.getMentionedUsers().get(0).getId())) {
+			return;
+		} else if (ShiroInfo.getDevelopers().contains(message.getMentionedUsers().get(0).getId())) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cant-ban-dev")).queue();
-            return;
-        }
+			return;
+		}
 
 		try {
 			if (args.length < 2) {
