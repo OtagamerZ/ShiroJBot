@@ -99,8 +99,10 @@ public enum Tag {
 				if (mb.getLevel() > i) lvl = i;
 				else break;
 			}
-			if (lvl != -1) return TagIcons.valueOf("LVL_" + lvl);
-			else return null;
+			if (lvl != -1) {
+				if (lvl > 124) return TagIcons.valueOf("LVL_120");
+				else return TagIcons.valueOf("LVL_" + lvl);
+			} else return null;
 		}
 		return emote;
 	}
