@@ -18,7 +18,6 @@
 
 package com.kuuhaku.command.commands.discord.moderation;
 
-import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.MemberDAO;
@@ -78,7 +77,7 @@ public class MuteMemberCommand extends Command {
 		} else if (!Helper.hasRoleHigherThan(member, message.getMentionedMembers().get(0))) {
 			channel.sendMessage("❌ | Você não pode punir membros que possuem o mesmo cargo ou maior.").queue();
 			return;
-		} else if (Main.getInfo().getDevelopers().contains(message.getMentionedUsers().get(0).getId())) {
+		} else if (ShiroInfo.getDevelopers().contains(message.getMentionedUsers().get(0).getId())) {
 			channel.sendMessage("❌ | Não posso punir meus desenvolvedores, faça isso manualmente.").queue();
 			return;
 		} else if (gc.getCargoWarn() == null || gc.getCargoWarn().isEmpty()) {

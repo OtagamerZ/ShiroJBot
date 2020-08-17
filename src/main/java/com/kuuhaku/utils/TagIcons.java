@@ -18,6 +18,9 @@
 
 package com.kuuhaku.utils;
 
+import com.kuuhaku.Main;
+import net.dv8tion.jda.api.entities.Emote;
+
 public enum TagIcons {
 	NIICHAN,
 	DEV,
@@ -33,32 +36,9 @@ public enum TagIcons {
 	COLLECTION50,
 	COLLECTION75,
 	COLLECTION100,
-	LVL_5,
-	LVL_10,
-	LVL_15,
-	LVL_20,
-	LVL_25,
-	LVL_30,
-	LVL_35,
-	LVL_40,
-	LVL_45,
-	LVL_50,
-	LVL_55,
-	LVL_60,
-	LVL_65,
-	LVL_70,
-	LVL_75,
-	LVL_80,
-	LVL_85,
-	LVL_90,
-	LVL_95,
-	LVL_100,
-	LVL_105,
-	LVL_110,
-	LVL_115,
-	LVL_120;
+	LEVEL;
 
-	public String getTag() {
+	public String getTag(int lvl) {
 		switch (this) {
 			case NIICHAN:
 				return "<:niichan:697879726018003115> ";
@@ -88,59 +68,13 @@ public enum TagIcons {
 				return "<:collection_75:724662152602058762> ";
 			case COLLECTION100:
 				return "<:collection_100:724662152824225862> ";
-			case LVL_5:
-				return "<:lvl_5:733389827520725062> ";
-			case LVL_10:
-				return "<:lvl_10:733389827436838962> ";
-			case LVL_15:
-				return "<:lvl_15:733389827059220602> ";
-			case LVL_20:
-				return "<:lvl_20:733389827478782012> ";
-			case LVL_25:
-				return "<:lvl_25:733389827948675202> ";
-			case LVL_30:
-				return "<:lvl_30:733389827893887108> ";
-			case LVL_35:
-				return "<:lvl_35:733389827759931452> ";
-			case LVL_40:
-				return "<:lvl_40:733389828158259272> ";
-			case LVL_45:
-				return "<:lvl_45:733389828091019264> ";
-			case LVL_50:
-				return "<:lvl_50:733389828284219403> ";
-			case LVL_55:
-				return "<:lvl_55:733389829018091710> ";
-			case LVL_60:
-				return "<:lvl_60:733389828472700928> ";
-			case LVL_65:
-				return "<:lvl_65:733389827797549116> ";
-			case LVL_70:
-				return "<:lvl_70:733389827772252170> ";
-			case LVL_75:
-				return "<:lvl_75:733389828116316251> ";
-			case LVL_80:
-				return "<:lvl_80:733389828409917460> ";
-			case LVL_85:
-				return "<:lvl_85:733389828628021368> ";
-			case LVL_90:
-				return "<:lvl_90:733389828623826974> ";
-			case LVL_95:
-				return "<:lvl_95:733389827797549107> ";
-			case LVL_100:
-				return "<:lvl_100:733389828682547201> ";
-			case LVL_105:
-				return "<:lvl_105:733389827763994696> ";
-			case LVL_110:
-				return "<:lvl_110:733389828288282715> ";
-			case LVL_115:
-				return "<:lvl_115:733389828523163656> ";
-			case LVL_120:
-				return "<:lvl_120:733389828179099669> ";
+			case LEVEL:
+				return getLevelEmote(lvl).getAsMention() + " ";
 		}
 		throw new IllegalStateException();
 	}
 
-	public String getId() {
+	public String getId(int lvl) {
 		switch (this) {
 			case NIICHAN:
 				return "697879726018003115";
@@ -170,54 +104,8 @@ public enum TagIcons {
 				return "724662152602058762";
 			case COLLECTION100:
 				return "724662152824225862";
-			case LVL_5:
-				return "733389827520725062";
-			case LVL_10:
-				return "733389827436838962";
-			case LVL_15:
-				return "733389827059220602";
-			case LVL_20:
-				return "733389827478782012";
-			case LVL_25:
-				return "733389827948675202";
-			case LVL_30:
-				return "733389827893887108";
-			case LVL_35:
-				return "733389827759931452";
-			case LVL_40:
-				return "733389828158259272";
-			case LVL_45:
-				return "733389828091019264";
-			case LVL_50:
-				return "733389828284219403";
-			case LVL_55:
-				return "733389829018091710";
-			case LVL_60:
-				return "733389828472700928";
-			case LVL_65:
-				return "733389827797549116";
-			case LVL_70:
-				return "733389827772252170";
-			case LVL_75:
-				return "733389828116316251";
-			case LVL_80:
-				return "733389828409917460";
-			case LVL_85:
-				return "733389828628021368";
-			case LVL_90:
-				return "733389828623826974";
-			case LVL_95:
-				return "733389827797549107";
-			case LVL_100:
-				return "733389828682547201";
-			case LVL_105:
-				return "733389827763994696";
-			case LVL_110:
-				return "733389828288282715";
-			case LVL_115:
-				return "733389828523163656";
-			case LVL_120:
-				return "733389828179099669";
+			case LEVEL:
+				return getLevelEmote(lvl).getId();
 		}
 		throw new IllegalStateException();
 	}
@@ -256,5 +144,13 @@ public enum TagIcons {
 				return "697879725967933440";
 		}
 		throw new IllegalStateException();
+	}
+
+	public static Emote getLevelEmote(int lvl) {
+		return Main.getInfo().getAPI().getEmotesByName("lvl_" + Math.min(lvl, 120), true)
+				.stream()
+				.filter(e -> e.getGuild() != null && ShiroInfo.getEmoteRepo().contains(e.getGuild().getId()))
+				.findFirst()
+				.orElseThrow();
 	}
 }

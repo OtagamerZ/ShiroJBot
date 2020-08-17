@@ -71,17 +71,22 @@ public class ShiroInfo {
 	private static final String default_prefix = DEV ? "dev!" : "s!";
 	private static final String nomeDB = "shiro.sqlite";
 	private static final String niichan = "350836145921327115"; //KuuHaKu
-	private static final ArrayList<String> developers = new ArrayList<>() {{
-		add(niichan); //KuuHaKu
-		add("321665807988031495"); //Reydux
-		add("694652893571055746"); //HeyCarlosz
-	}};
-	private static final ArrayList<String> editors = new ArrayList<>() {{
+	private static final List<String> developers = List.of(
+			niichan, //KuuHaKu
+			"321665807988031495", //Reydux
+			"694652893571055746" //HeyCarlosz
+	);
+	private static final List<String> editors = List.of(
 
-	}};
-	private static final ArrayList<String> supports = new ArrayList<>() {{
+	);
+	private static final List<String> supports = List.of(
 
-	}};
+	);
+	private static final List<String> emoteRepo = List.of(
+			"666619034103447642",
+			"726171298044313694",
+			"732300321673576498"
+	);
 	private static final Map<String, Map<String, String>> polls = new HashMap<>();
 	private static final Map<Long, GuildMusicManager> gmms = new HashMap<>();
 	private static final AudioPlayerManager apm = new DefaultAudioPlayerManager();
@@ -208,16 +213,20 @@ public class ShiroInfo {
 		return niichan;
 	}
 
-	public ArrayList<String> getDevelopers() {
+	public static List<String> getDevelopers() {
 		return developers;
 	}
 
-	public ArrayList<String> getEditors() {
+	public static List<String> getEditors() {
 		return editors;
 	}
 
-	public ArrayList<String> getSupports() {
+	public static List<String> getSupports() {
 		return supports;
+	}
+
+	public static List<String> getEmoteRepo() {
+		return emoteRepo;
 	}
 
 	public Map<String, Map<String, String>> getPolls() {

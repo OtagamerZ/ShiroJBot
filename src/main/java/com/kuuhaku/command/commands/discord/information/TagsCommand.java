@@ -52,9 +52,9 @@ public class TagsCommand extends Command {
 			if (t.equals(Tag.LEVEL)) {
 				eb.addField(":tada: " + t.toString(), t.getDescription(), false);
 			} else if (t.toString().contains("Coletado")) {
-				eb.addField(t.getEmote().getTag() + t.toString() + "%", t.getDescription(), false);
+				eb.addField(t.getEmote().getTag(0) + t.toString() + "%", t.getDescription(), false);
 			} else {
-				eb.addField(t.getEmote().getTag() + t.toString(), t.getDescription(), false);
+				eb.addField(t.getEmote().getTag(0) + t.toString(), t.getDescription(), false);
 			}
 		}
 
