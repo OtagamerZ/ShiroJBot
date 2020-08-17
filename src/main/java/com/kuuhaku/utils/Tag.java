@@ -94,14 +94,8 @@ public enum Tag {
 
 	public TagIcons getEmote(com.kuuhaku.model.persistent.Member mb) {
 		if (this.equals(LEVEL)) {
-			int lvl = -1;
-			for (int i = 5; true; i += 5) {
-				if (mb.getLevel() > i) lvl = i;
-				else break;
-			}
-			if (lvl != -1) {
-				return TagIcons.LEVEL;
-			} else return null;
+			if (mb.getLevel() >= 5) return TagIcons.LEVEL;
+			else return null;
 		}
 		return emote;
 	}
