@@ -131,15 +131,20 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 		spring = SpringApplication.run(Application.class, args);
 
-		OAuth2Credential cred = new OAuth2Credential("twitch", System.getenv("TWITCH_TOKEN"));
-		twitch = TwitchClientBuilder.builder()
-				.withEnableHelix(true)
-				.withEnableChat(true)
-				.withDefaultAuthToken(cred)
-				.withChatAccount(cred)
-				.build();
+		if (System.getenv().containsKey("TWITCH_TOKEN")) {
+			OAuth2Credential cred = new OAuth2Credential("twitch", System.getenv("TWITCH_TOKEN"));
+			twitch = TwitchClientBuilder.builder()
+					.withEnableHelix(true)
+					.withEnableChat(true)
+					.withDefaultAuthToken(cred)
+					.withChatAccount(cred)
+					.build();
 
-		twitchManager = new TwitchEvents(twitch);
+			twitchManager = new TwitchEvents(twitch);
+			twitch.getChat().joinChannel("kuuhaku_otgmz");
+			twitch.getClientHelper().enableStreamEventListener("kuuhaku_otgmz");
+			twitch.getClientHelper().enableFollowEventListener("kuuhaku_otgmz");
+		}
 
 		info.setSockets(new WebSocketConfig());
 		finishStartUp();
@@ -166,10 +171,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		Pages.activate(api);
 
 		GuildDAO.getAllGuilds().forEach(Helper::refreshButtons);
-
-		twitch.getChat().joinChannel("kuuhaku_otgmz");
-		twitch.getClientHelper().enableStreamEventListener("kuuhaku_otgmz");
-		twitch.getClientHelper().enableFollowEventListener("kuuhaku_otgmz");
 
 		Helper.logger(Main.class).info("<----------END OF BOOT---------->");
 		Helper.logger(Main.class).info("Estou pronta!");

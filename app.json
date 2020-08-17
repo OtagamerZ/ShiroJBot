@@ -88,6 +88,10 @@
     "CARDS_PATH": {
       "description": "Caminho para a pasta onde encontram-se os arquivos de imagem das cartas Kawaipon.",
       "required": true
+    },
+    "TWITCH_TOKEN": {
+      "description": "Token de acesso à API da Twitch.",
+      "required": false
     }
   }
 }
