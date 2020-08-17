@@ -198,7 +198,7 @@ public class Helper {
 						r.answer((TextChannel) channel);
 						msg.clearReactions().queue();
 					}
-				}), false, 1, TimeUnit.MINUTES, u -> u.getId().equals(target.getId())));
+				}), false, 1, TimeUnit.MINUTES, u -> u.getId().equals(target.getId())), Helper::doNothing);
 			} else
 				return RestAction::queue;
 		} catch (Exception e) {
