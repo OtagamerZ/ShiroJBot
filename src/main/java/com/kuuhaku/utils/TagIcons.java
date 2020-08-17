@@ -147,7 +147,12 @@ public enum TagIcons {
 	}
 
 	public static Emote getLevelEmote(int lvl) {
-		return Main.getInfo().getAPI().getEmotesByName("lvl_" + Math.min(lvl, 120), true)
+		int l = -1;
+		for (int i = 5; true; i += 5) {
+			if (lvl > i) l = i;
+			else break;
+		}
+		return Main.getInfo().getAPI().getEmotesByName("lvl_" + Math.min(l, 120), true)
 				.stream()
 				.filter(e -> e.getGuild() != null && ShiroInfo.getEmoteRepo().contains(e.getGuild().getId()))
 				.findFirst()
