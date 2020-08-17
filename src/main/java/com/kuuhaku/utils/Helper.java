@@ -102,9 +102,9 @@ public class Helper {
 	private static PrivilegeLevel getPrivilegeLevel(Member member) {
 		if (Main.getInfo().getNiiChan().equals(member.getId()))
 			return PrivilegeLevel.NIICHAN;
-		else if (Main.getInfo().getDevelopers().contains(member.getId()))
+		else if (ShiroInfo.getDevelopers().contains(member.getId()))
 			return PrivilegeLevel.DEV;
-		else if (Main.getInfo().getSupports().contains(member.getId()))
+		else if (ShiroInfo.getSupports().contains(member.getId()))
 			return PrivilegeLevel.SUPPORT;
 		else if (member.hasPermission(Permission.MESSAGE_MANAGE))
 			return PrivilegeLevel.MOD;
@@ -202,7 +202,7 @@ public class Helper {
 			} else
 				return RestAction::queue;
 		} catch (Exception e) {
-			Main.getInfo().getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> c.sendMessage("GIF com erro: " + imageURL).queue()));
+			ShiroInfo.getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> c.sendMessage("GIF com erro: " + imageURL).queue()));
 			logger(Helper.class).error("Erro ao carregar a imagem: " + imageURL + " -> " + e + " | " + e.getStackTrace()[0]);
 			throw new IllegalAccessException();
 		}

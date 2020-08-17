@@ -23,6 +23,7 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.Guild;
 import org.quartz.Job;
 import org.quartz.JobDetail;
@@ -42,7 +43,7 @@ public class PartnerCheckEvent implements Job {
 
 	private static void notif(Guild g) {
 		try {
-			if (!TagDAO.getTagById(g.getOwnerId()).isPartner() && !Main.getInfo().getDevelopers().contains(g.getOwnerId())) {
+			if (!TagDAO.getTagById(g.getOwnerId()).isPartner() && !ShiroInfo.getDevelopers().contains(g.getOwnerId())) {
 				g.retrieveOwner().queue(o -> {
 							Helper.logger(PartnerCheckEvent.class).info("Saí do servidor " + g.getName() + " por " + Objects.requireNonNull(g.getOwner()).getUser().getAsTag() + " não estar na lista de parceiros.");
 							g.leave().queue();

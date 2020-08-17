@@ -69,7 +69,7 @@ public class Tags {
         }
 
         Set<Tag> tags = Tag.getTags(Main.getInfo().getUserByID(mb.getMid()), Main.getInfo().getGuildByID(mb.getSid()).getMemberById(mb.getMid()));
-        tags.forEach(t -> badges.add(t.getEmote(mb) == null ? "" : pattern.replace("{id}", t.getEmote(mb).getId())));
+        tags.forEach(t -> badges.add(t.getEmote(mb) == null ? "" : pattern.replace("{id}", t.getEmote(mb).getId(mb.getLevel()))));
 
         return badges;
     }

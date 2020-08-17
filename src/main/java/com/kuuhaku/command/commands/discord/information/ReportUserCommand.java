@@ -85,7 +85,7 @@ public class ReportUserCommand extends Command {
 
 		Map<String, String> ids = new HashMap<>();
 
-		Main.getInfo().getDevelopers().forEach(dev -> Main.getInfo().getUserByID(dev).openPrivateChannel()
+		ShiroInfo.getDevelopers().forEach(dev -> Main.getInfo().getUserByID(dev).openPrivateChannel()
 				.flatMap(m -> m.sendMessage(eb.build()))
 				.flatMap(m -> {
 					ids.put(dev, m.getId());
