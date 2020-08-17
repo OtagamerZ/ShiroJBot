@@ -149,7 +149,7 @@ public class Account {
 	}
 
 	public void notifyVote() {
-		if (!notified) {
+		if (!notified && !lastVoted.equalsIgnoreCase("Nunca")) {
 			ZonedDateTime today = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3"));
 			ZonedDateTime lastVote = ZonedDateTime.parse(lastVoted, Helper.dateformat);
 
