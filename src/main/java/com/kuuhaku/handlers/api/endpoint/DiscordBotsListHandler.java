@@ -41,7 +41,7 @@ import java.time.LocalDateTime;
 @RestController
 public class DiscordBotsListHandler {
 
-	@RequestMapping(value = "/api/webhook/dbl", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
+	@RequestMapping(value = "/webhook/dbl", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
 	public void handleVote(@RequestHeader(value = "Authorization") String token, @RequestBody String payload) {
 		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
 

@@ -34,12 +34,12 @@ import java.io.IOException;
 @RestController
 public class GuildRequest {
 
-	@RequestMapping(value = "/api/guild/get", method = RequestMethod.GET)
+	@RequestMapping(value = "/guild/get", method = RequestMethod.GET)
 	public GuildConfig requestGuild(@RequestParam(value = "id") String id) {
 		return GuildDAO.getGuildById(id);
 	}
 
-	@RequestMapping(value = "/api/guild/update", method = RequestMethod.POST)
+	@RequestMapping(value = "/guild/update", method = RequestMethod.POST)
 	public void updateGuild(@RequestParam(value = "guild") String guild, @RequestParam(value = "token") String token) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
