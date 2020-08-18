@@ -151,7 +151,7 @@ public enum TagIcons {
 	public static Emote getLevelEmote(int lvl) {
 		int l = -1;
 		for (int i = 5; true; i += 5) {
-			if (lvl > i) l = i;
+			if (lvl >= i) l = i;
 			else break;
 		}
 		return Main.getInfo().getAPI().getEmotesByName("lvl_" + Math.min(l, 120), true)
