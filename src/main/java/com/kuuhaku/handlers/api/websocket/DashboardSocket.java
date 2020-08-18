@@ -197,22 +197,25 @@ public class DashboardSocket extends WebSocketServer {
 
 					JSONArray guilds = new JSONArray();
 					g.forEach(gd -> {
-						JSONObject guild = new JSONObject() {{
-							put("guildID", gd.getId());
-							put("name", gd.getName());
-							put("moderator", Helper.hasPermission(gd.getMember(u), PrivilegeLevel.MOD));
-							put("channels", gd.getTextChannels().stream().map(tc -> new JSONObject() {{
-								put("id", tc.getId());
-								put("name", tc.getName());
-							}}).collect(Collectors.toList()));
-							put("roles", gd.getRoles().stream().map(r -> new JSONObject() {{
-								put("id", r.getId());
-								put("name", r.getName());
-							}}).collect(Collectors.toList()));
-							put("configs", new ExportableGuildConfig(GuildDAO.getGuildById(gd.getId())).getGuildConfig());
-						}};
+						net.dv8tion.jda.api.entities.Member mb = gd.getMember(u);
+						if (mb != null) {
+							JSONObject guild = new JSONObject() {{
+								put("guildID", gd.getId());
+								put("name", gd.getName());
+								put("moderator", Helper.hasPermission(mb, PrivilegeLevel.MOD));
+								put("channels", gd.getTextChannels().stream().map(tc -> new JSONObject() {{
+									put("id", tc.getId());
+									put("name", tc.getName());
+								}}).collect(Collectors.toList()));
+								put("roles", gd.getRoles().stream().map(r -> new JSONObject() {{
+									put("id", r.getId());
+									put("name", r.getName());
+								}}).collect(Collectors.toList()));
+								put("configs", new ExportableGuildConfig(GuildDAO.getGuildById(gd.getId())).getGuildConfig());
+							}};
 
-						guilds.put(guild);
+							guilds.put(guild);
+						}
 					});
 
 					profiles.removeIf(p -> g.stream().map(Guild::getId).noneMatch(p.getSid()::equals));
