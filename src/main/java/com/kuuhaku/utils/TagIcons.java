@@ -21,6 +21,8 @@ package com.kuuhaku.utils;
 import com.kuuhaku.Main;
 import net.dv8tion.jda.api.entities.Emote;
 
+import java.util.NoSuchElementException;
+
 public enum TagIcons {
 	NIICHAN,
 	DEV,
@@ -156,6 +158,6 @@ public enum TagIcons {
 				.stream()
 				.filter(e -> e.getGuild() != null && ShiroInfo.getEmoteRepo().contains(e.getGuild().getId()))
 				.findFirst()
-				.orElseThrow();
+				.orElseThrow(() -> new NoSuchElementException("Emblema inexistente para o level " + lvl));
 	}
 }
