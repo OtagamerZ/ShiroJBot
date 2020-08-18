@@ -28,17 +28,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MemberRequest {
 
-	@RequestMapping(value = "/api/member/get/byid", method = RequestMethod.GET)
+	@RequestMapping(value = "/member/get/byid", method = RequestMethod.GET)
 	public Member requestProfileById(@RequestParam(value = "id") String id) {
 		return MemberDAO.getMemberById(id);
 	}
 
-	@RequestMapping(value = "/api/member/get/bymid", method = RequestMethod.GET)
+	@RequestMapping(value = "/member/get/bymid", method = RequestMethod.GET)
 	public Member[] requestProfileByMid(@RequestParam(value = "id") String mid) {
 		return MemberDAO.getMemberByMid(mid).toArray(new Member[0]);
 	}
 
-	@RequestMapping(value = "/api/member/get/bysid", method = RequestMethod.GET)
+	@RequestMapping(value = "/member/get/bysid", method = RequestMethod.GET)
 	public Member[] requestProfileBySid(@RequestParam(value = "id") String sid) {
 		return MemberDAO.getMemberBySid(sid).toArray(new Member[0]);
 	}
