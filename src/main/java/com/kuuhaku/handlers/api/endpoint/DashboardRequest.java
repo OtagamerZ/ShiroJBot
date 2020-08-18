@@ -49,7 +49,7 @@ import java.util.concurrent.TimeUnit;
 public class DashboardRequest {
 	private final Cache<String, Boolean> ratelimit = CacheBuilder.newBuilder().expireAfterWrite(5, TimeUnit.SECONDS).build();
 
-	@RequestMapping(value = "/api/auth", method = RequestMethod.GET)
+	@RequestMapping(value = "/auth", method = RequestMethod.GET)
 	public void validateAccount(HttpServletResponse http, @RequestParam(value = "code") String code) throws InterruptedException {
 		JSONObject jo = new JSONObject();
 
@@ -92,7 +92,7 @@ public class DashboardRequest {
 		}
 	}
 
-	@RequestMapping(value = "/api/card", method = RequestMethod.POST)
+	@RequestMapping(value = "/card", method = RequestMethod.POST)
 	public String requestCard(@RequestHeader(value = "id") String id, @RequestHeader(value = "guild") String guild) throws IOException {
 		if (TokenDAO.verifyToken(id) == null) throw new UnauthorizedException();
 
@@ -101,7 +101,7 @@ public class DashboardRequest {
 		return Base64.getEncoder().encodeToString(Helper.getBytes(Profile.makeProfile(mb, mb.getGuild())));
 	}
 
-	@RequestMapping(value = "/api/checkImage", method = RequestMethod.POST)
+	@RequestMapping(value = "/checkImage", method = RequestMethod.POST)
 	public String checkImage(@RequestHeader(value = "imageUrl") String url) {
 		try {
 			ImageIO.read(new URL(url));
@@ -111,7 +111,7 @@ public class DashboardRequest {
 		}
 	}
 
-	@RequestMapping(value = "/api/canvas/add", method = RequestMethod.POST)
+	@RequestMapping(value = "/canvas/add", method = RequestMethod.POST)
 	public String addPixel(@RequestHeader(value = "token") String token, @RequestHeader(value = "pos-x") int x, @RequestHeader(value = "pos-y") int y, @RequestHeader(value = "color") String color) throws IllegalArgumentException {
 		if (!Helper.between(x, 0, Helper.CANVAS_SIZE) || !Helper.between(y, 0, Helper.CANVAS_SIZE))
 			throw new IllegalArgumentException();
@@ -146,7 +146,7 @@ public class DashboardRequest {
 		}}.toString();
 	}
 
-	@RequestMapping(value = "/api/canvas/view", method = RequestMethod.POST)
+	@RequestMapping(value = "/canvas/view", method = RequestMethod.POST)
 	public String viewCanvas(@RequestHeader(value = "token") String token) {
 		if (!TokenDAO.validateToken(token)) throw new UnauthorizedException();
 
