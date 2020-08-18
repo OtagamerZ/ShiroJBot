@@ -144,12 +144,24 @@ public class ShiroInfo {
 		return httpBuilder;
 	}
 
-	public Map<String, Tabletop> getGames() {
-		return games;
+	public static String getNiiChan() {
+		return niichan;
 	}
 
-	public boolean gameInProgress(String id) {
-		return gameLock.stream().anyMatch(s -> Helper.equalsAny(id, s.split(Pattern.quote(".")))) || games.keySet().stream().anyMatch(s -> Helper.equalsAny(id, s.split(Pattern.quote("."))));
+	public static List<String> getDevelopers() {
+		return developers;
+	}
+
+	public static List<String> getEditors() {
+		return editors;
+	}
+
+	public static List<String> getSupports() {
+		return supports;
+	}
+
+	public static List<String> getEmoteRepo() {
+		return emoteRepo;
 	}
 
 	//NON-STATIC
@@ -209,26 +221,6 @@ public class ShiroInfo {
 		return nomeDB;
 	}
 
-	public String getNiiChan() {
-		return niichan;
-	}
-
-	public static List<String> getDevelopers() {
-		return developers;
-	}
-
-	public static List<String> getEditors() {
-		return editors;
-	}
-
-	public static List<String> getSupports() {
-		return supports;
-	}
-
-	public static List<String> getEmoteRepo() {
-		return emoteRepo;
-	}
-
 	public Map<String, Map<String, String>> getPolls() {
 		return polls;
 	}
@@ -251,6 +243,14 @@ public class ShiroInfo {
 
 	public JDAEvents getShiroEvents() {
 		return shiroEvents;
+	}
+
+	public Map<String, Tabletop> getGames() {
+		return games;
+	}
+
+	public boolean gameInProgress(String id) {
+		return gameLock.stream().anyMatch(s -> Helper.equalsAny(id, s.split(Pattern.quote(".")))) || games.keySet().stream().anyMatch(s -> Helper.equalsAny(id, s.split(Pattern.quote("."))));
 	}
 
 	//VARIABLES

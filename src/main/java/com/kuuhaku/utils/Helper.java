@@ -100,7 +100,7 @@ public class Helper {
 	public static final String HOME = "674261700366827539";
 
 	private static PrivilegeLevel getPrivilegeLevel(Member member) {
-		if (Main.getInfo().getNiiChan().equals(member.getId()))
+		if (ShiroInfo.getNiiChan().equals(member.getId()))
 			return PrivilegeLevel.NIICHAN;
 		else if (ShiroInfo.getDevelopers().contains(member.getId()))
 			return PrivilegeLevel.DEV;
