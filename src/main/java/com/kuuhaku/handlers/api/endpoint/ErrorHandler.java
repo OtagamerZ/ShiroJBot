@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.handlers.api.endpoint;
+/*package com.kuuhaku.handlers.api.endpoint;
 
 import com.kuuhaku.handlers.api.exception.Exception;
 import com.kuuhaku.handlers.api.exception.*;
@@ -76,4 +76,4 @@ public class ErrorHandler implements ErrorController {
 	public String getErrorPath() {
 		return "/error";
 	}
-}
+}*/
