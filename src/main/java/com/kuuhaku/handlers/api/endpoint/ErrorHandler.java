@@ -23,17 +23,27 @@ import com.kuuhaku.handlers.api.exception.*;
 import org.json.JSONException;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.MethodNotAllowedException;
 
 import javax.persistence.NoResultException;
 
 @RestController
 @ControllerAdvice
 public class ErrorHandler implements ErrorController {
-	@RequestMapping("/error")
+	@ExceptionHandler(java.lang.Exception.class)
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	public Exception error() {
+	public Exception internalError() {
 		return new Exception(500, "Internal server error");
+	}
+
+	@ExceptionHandler(MethodNotAllowedException.class)
+	@ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+	public Exception methodNotAllowed() {
+		return new Exception(405, "Method not allowed");
 	}
 
 	@ExceptionHandler(InvalidTokenException.class)
