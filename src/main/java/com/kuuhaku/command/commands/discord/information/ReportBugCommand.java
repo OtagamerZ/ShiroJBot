@@ -31,10 +31,8 @@ import org.jetbrains.annotations.NonNls;
 
 import java.awt.*;
 import java.time.ZoneId;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Stream;
 
 public class ReportBugCommand extends Command {
 
@@ -82,7 +80,7 @@ public class ReportBugCommand extends Command {
 
 		Map<String, String> ids = new HashMap<>();
 
-		Stream.of(ShiroInfo.getDevelopers(), ShiroInfo.getSupports()).flatMap(Collection::stream).forEach(dev -> Main.getInfo().getUserByID(dev).openPrivateChannel()
+		ShiroInfo.getStaff().forEach(dev -> Main.getInfo().getUserByID(dev).openPrivateChannel()
 				.flatMap(m -> m.sendMessage(eb.build()))
 				.flatMap(m -> {
 					ids.put(dev, m.getId());
