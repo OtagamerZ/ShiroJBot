@@ -202,7 +202,7 @@ public class Helper {
 			} else
 				return RestAction::queue;
 		} catch (Exception e) {
-			ShiroInfo.getDevelopers().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> c.sendMessage("GIF com erro: " + imageURL).queue()));
+			ShiroInfo.getStaff().forEach(d -> Main.getInfo().getUserByID(d).openPrivateChannel().queue(c -> c.sendMessage("GIF com erro: " + imageURL).queue()));
 			logger(Helper.class).error("Erro ao carregar a imagem: " + imageURL + " -> " + e + " | " + e.getStackTrace()[0]);
 			throw new IllegalAccessException();
 		}

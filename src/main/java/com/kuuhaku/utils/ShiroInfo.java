@@ -48,6 +48,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @SuppressWarnings("localvariable")
 public class ShiroInfo {
@@ -162,6 +163,10 @@ public class ShiroInfo {
 
 	public static List<String> getEmoteRepo() {
 		return emoteRepo;
+	}
+
+	public static List<String> getStaff() {
+		return Stream.concat(developers.stream(), supports.stream()).distinct().collect(Collectors.toList());
 	}
 
 	//NON-STATIC
