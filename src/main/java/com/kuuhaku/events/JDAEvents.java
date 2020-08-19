@@ -209,8 +209,7 @@ public class JDAEvents extends ListenerAdapter {
 	@Override
 	public void onPrivateMessageReceived(PrivateMessageReceivedEvent event) {
 		if (event.getAuthor().isBot()) return;
-		List<String> staffIds = ShiroInfo.getDevelopers();
-		staffIds.addAll(ShiroInfo.getSupports());
+		List<String> staffIds = ShiroInfo.getStaff();
 		if (staffIds.contains(event.getAuthor().getId())) {
 			String msg = event.getMessage().getContentRaw();
 			String[] args = msg.split(" ");
