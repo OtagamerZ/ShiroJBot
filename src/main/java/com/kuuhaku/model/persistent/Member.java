@@ -27,6 +27,7 @@ import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.handlers.games.kawaigotchi.enums.Tier;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
+import org.json.JSONObject;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -299,6 +300,25 @@ public class Member {
 		}
 
 		return posG;
+	}
+
+	@Override
+	public String toString() {
+		return new JSONObject() {{
+			put("id", id);
+			put("mid", mid);
+			put("sid", sid);
+			put("pseudoName", pseudoName);
+			put("profileColor", profileColor);
+			put("bg", bg);
+			put("bio", bio);
+			put("pseudoAvatar", pseudoAvatar);
+			put("level", level);
+			put("xp", xp);
+			put("lastVoted", lastVoted);
+			put("markForDelete", markForDelete);
+			put("rulesSent", rulesSent);
+		}}.toString();
 	}
 
 	@Override
