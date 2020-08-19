@@ -218,7 +218,7 @@ public class DashboardSocket extends WebSocketServer {
 						put("anime", k.getCard().getAnime().toString());
 						put("rarity", k.getCard().getRarity().getIndex());
 						put("foil", k.isFoil());
-						put("card", Base64.getEncoder().encode(Helper.getBytes(k.getCard().drawCard(k.isFoil()))));
+						put("card", Base64.getEncoder().encodeToString(Helper.getBytes(k.getCard().drawCard(k.isFoil()))));
 					}}));
 
 					JSONObject cardData = new JSONObject() {{
