@@ -13,7 +13,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_ygimenez_Pagination_Utils_1_2_3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_ygimenez_Pagination_Utils_1_2_4.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/DashboardSocket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/websocket/DashboardSocket.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -603,14 +607,8 @@
       <workItem from="1597843280193" duration="1937000" />
       <workItem from="1597846953697" duration="131000" />
       <workItem from="1597847095224" duration="2113000" />
-      <workItem from="1597853014125" duration="3836000" />
-    </task>
-    <task id="LOCAL-02158" summary="Implementação de integração com a twitch">
-      <created>1597259829144</created>
-      <option name="number" value="02158" />
-      <option name="presentableId" value="LOCAL-02158" />
-      <option name="project" value="LOCAL" />
-      <updated>1597259829144</updated>
+      <workItem from="1597853014125" duration="4810000" />
+      <workItem from="1597868641822" duration="414000" />
     </task>
     <task id="LOCAL-02159" summary="Implementação de integração com a twitch">
       <created>1597260086644</created>
@@ -948,7 +946,14 @@
       <option name="project" value="LOCAL" />
       <updated>1597857852664</updated>
     </task>
-    <option name="localTasksCounter" value="2207" />
+    <task id="LOCAL-02207" summary="Adição de cartas no payload enviado">
+      <created>1597858055794</created>
+      <option name="number" value="02207" />
+      <option name="presentableId" value="LOCAL-02207" />
+      <option name="project" value="LOCAL" />
+      <updated>1597858055794</updated>
+    </task>
+    <option name="localTasksCounter" value="2208" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1090,11 +1095,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1597857849686">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1597858052913">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1597857849686" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1597858052913" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1160,11 +1165,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1597857853911">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1597858057642">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1597857853911" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1597858057642" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597351073016">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
