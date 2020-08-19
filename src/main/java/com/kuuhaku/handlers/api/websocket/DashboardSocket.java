@@ -25,11 +25,9 @@ import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.endpoint.ReadyData;
-import com.kuuhaku.model.common.ExportableGuildConfig;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.BiContract;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.PrivilegeLevel;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -51,7 +49,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 public class DashboardSocket extends WebSocketServer {
 	private final Cache<String, BiContract<WebSocket, ReadyData>> requests = CacheBuilder.newBuilder().expireAfterWrite(5, TimeUnit.MINUTES).build();
@@ -202,16 +199,6 @@ public class DashboardSocket extends WebSocketServer {
 							JSONObject guild = new JSONObject() {{
 								put("guildID", gd.getId());
 								put("name", gd.getName());
-								put("moderator", Helper.hasPermission(mb, PrivilegeLevel.MOD));
-								put("channels", gd.getTextChannels().stream().map(tc -> new JSONObject() {{
-									put("id", tc.getId());
-									put("name", tc.getName());
-								}}).collect(Collectors.toList()));
-								put("roles", gd.getRoles().stream().map(r -> new JSONObject() {{
-									put("id", r.getId());
-									put("name", r.getName());
-								}}).collect(Collectors.toList()));
-								put("configs", new ExportableGuildConfig(GuildDAO.getGuildById(gd.getId())).getGuildConfig());
 							}};
 
 							guilds.put(guild);

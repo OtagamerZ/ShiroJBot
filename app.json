@@ -13,6 +13,10 @@
       "description": "Parâmetros do Gradle.",
       "required": false
     },
+    "SERVER_IP": {
+      "description": "IP do servidor.",
+      "required": true
+    },
     "SERVER_URL": {
       "description": "URL do servidor.",
       "required": true
