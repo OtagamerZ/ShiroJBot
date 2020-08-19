@@ -302,8 +302,7 @@ public class Member {
 		return posG;
 	}
 
-	@Override
-	public String toString() {
+	public JSONObject toJson() {
 		return new JSONObject() {{
 			put("id", id);
 			put("mid", mid);
@@ -318,7 +317,7 @@ public class Member {
 			put("lastVoted", lastVoted);
 			put("markForDelete", markForDelete);
 			put("rulesSent", rulesSent);
-		}}.toString();
+		}};
 	}
 
 	@Override
