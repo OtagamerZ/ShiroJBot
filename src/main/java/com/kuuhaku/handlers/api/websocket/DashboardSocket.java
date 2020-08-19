@@ -205,7 +205,16 @@ public class DashboardSocket extends WebSocketServer {
 						}
 					});
 
-					Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
+					profiles.removeIf(p -> g.stream().map(Guild::getId).noneMatch(p.getSid()::equals));
+					g.removeIf(gd -> profiles.stream().map(Member::getSid).noneMatch(gd.getId()::equals));
+
+					conn.send(new JSONObject() {{
+						put("type", "validate");
+						put("code", HttpURLConnection.HTTP_OK);
+					}}.toString());
+					break;
+				case "cards":
+					Kawaipon kp = KawaiponDAO.getKawaipon(t.getUid());
 					List<JSONObject> data = new ArrayList<>();
 					Set<KawaiponCard> cards = kp.getCards();
 					for (AnimeName anime : AnimeName.values()) {
@@ -213,7 +222,7 @@ public class DashboardSocket extends WebSocketServer {
 							cards.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
 					}
 
-					CardDAO.getCards().forEach(k -> {
+					CardDAO.getAllCards().forEach(k -> {
 						boolean normal = cards.contains(new KawaiponCard(k, false));
 						boolean foil = cards.contains(new KawaiponCard(k, true));
 
@@ -233,19 +242,11 @@ public class DashboardSocket extends WebSocketServer {
 						put("cards", data);
 					}};
 
-					profiles.removeIf(p -> g.stream().map(Guild::getId).noneMatch(p.getSid()::equals));
-					g.removeIf(gd -> profiles.stream().map(Member::getSid).noneMatch(gd.getId()::equals));
-
 					conn.send(new JSONObject() {{
-						put("type", "validate");
-						put("code", HttpURLConnection.HTTP_OK);
 						put("data", new JSONObject() {{
-							put("userData", user);
-							put("serverData", guilds);
 							put("cardData", cardData);
 						}});
 					}}.toString());
-					break;
 			}
 		} catch (WebsocketNotConnectedException ignore) {
 		}
