@@ -219,7 +219,7 @@ public class DashboardSocket extends WebSocketServer {
 
 						data.add(new JSONObject() {{
 							put("id", k.getId());
-							put("anime", k.getAnime().toString());
+							put("anime", k.getAnime().name());
 							put("rarity", k.getRarity().getIndex());
 							put("hasNormal", normal);
 							put("hasFoil", foil);
