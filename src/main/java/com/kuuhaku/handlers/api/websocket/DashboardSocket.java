@@ -49,6 +49,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class DashboardSocket extends WebSocketServer {
 	private final Cache<String, BiContract<WebSocket, ReadyData>> requests = CacheBuilder.newBuilder().expireAfterWrite(5, TimeUnit.MINUTES).build();
@@ -178,33 +179,13 @@ public class DashboardSocket extends WebSocketServer {
 					//TODO Revisar esse payload
 					List<Member> profiles = MemberDAO.getMemberByMid(u.getId());
 					JSONObject user = new JSONObject() {{
-						long start = System.currentTimeMillis();
 						put("waifu", w == null ? "" : w.getAsTag());
-						System.out.println("1: " + (System.currentTimeMillis() - start));
-
-						start = System.currentTimeMillis();
 						put("waifuMult", cm == null ? 1.25f : cm.getMult());
-						System.out.println("2: " + (System.currentTimeMillis() - start));
-
-						start = System.currentTimeMillis();
-						put("profiles", profiles);
-						System.out.println("3: " + (System.currentTimeMillis() - start));
-
-						start = System.currentTimeMillis();
+						put("profiles", profiles.stream().map(Member::toString).collect(Collectors.toList()));
 						put("exceed", new JSONObject(ExceedDAO.getExceedState(ExceedDAO.getExceed(u.getId()))));
-						System.out.println("4: " + (System.currentTimeMillis() - start));
-
-						start = System.currentTimeMillis();
 						put("credits", AccountDAO.getAccount(u.getId()).getBalance());
-						System.out.println("5: " + (System.currentTimeMillis() - start));
-
-						start = System.currentTimeMillis();
 						put("bonuses", Member.getBonuses(u));
-						System.out.println("6: " + (System.currentTimeMillis() - start));
-
-						start = System.currentTimeMillis();
 						put("badges", Tags.getUserBadges(u.getId()));
-						System.out.println("7: " + (System.currentTimeMillis() - start));
 					}};
 
 					List<Guild> g = new ArrayList<>();
