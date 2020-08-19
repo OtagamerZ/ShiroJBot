@@ -171,10 +171,13 @@ public class DashboardSocket extends WebSocketServer {
 					TicketDAO.setIds(number, ids);
 					break;
 				case "validate":
+					long start = System.currentTimeMillis();
 					User u = Main.getInfo().getUserByID(t.getUid());
 					User w = Member.getWaifu(u).isBlank() ? null : Main.getInfo().getUserByID(Member.getWaifu(u));
 					CoupleMultiplier cm = WaifuDAO.getMultiplier(u);
+					System.out.println("Coleta de usuário, waifu e multiplicador: " + TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - start));
 
+					start = System.currentTimeMillis();
 					List<Member> profiles = MemberDAO.getMemberByMid(u.getId());
 					JSONObject user = new JSONObject() {{
 						put("waifu", w == null ? "" : w.getAsTag());
@@ -185,13 +188,17 @@ public class DashboardSocket extends WebSocketServer {
 						put("bonuses", Member.getBonuses(u));
 						put("badges", Tags.getUserBadges(u.getId()));
 					}};
+					System.out.println("Construção de payload de usuário: " + TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - start));
 
+					start = System.currentTimeMillis();
 					List<Guild> g = new ArrayList<>();
 					profiles.forEach(p -> {
 						Guild gd = Main.getInfo().getGuildByID(p.getSid());
 						if (gd != null) g.add(gd);
 					});
+					System.out.println("Coleta de guilds: " + TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - start));
 
+					start = System.currentTimeMillis();
 					JSONArray guilds = new JSONArray();
 					g.forEach(gd -> {
 						net.dv8tion.jda.api.entities.Member mb = gd.getMember(u);
@@ -204,9 +211,12 @@ public class DashboardSocket extends WebSocketServer {
 							guilds.put(guild);
 						}
 					});
+					System.out.println("Construção de payload de guilds: " + TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - start));
 
+					start = System.currentTimeMillis();
 					profiles.removeIf(p -> g.stream().map(Guild::getId).noneMatch(p.getSid()::equals));
 					g.removeIf(gd -> profiles.stream().map(Member::getSid).noneMatch(gd.getId()::equals));
+					System.out.println("Filtro de entradas existentes: " + TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - start));
 
 					conn.send(new JSONObject() {{
 						put("type", "validate");
