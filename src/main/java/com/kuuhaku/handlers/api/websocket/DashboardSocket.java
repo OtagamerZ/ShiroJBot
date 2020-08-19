@@ -213,13 +213,20 @@ public class DashboardSocket extends WebSocketServer {
 							cards.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
 					}
 
-					cards.forEach(k -> data.add(new JSONObject() {{
-						put("id", k.getCard().getId());
-						put("anime", k.getCard().getAnime().toString());
-						put("rarity", k.getCard().getRarity().getIndex());
-						put("foil", k.isFoil());
-						put("card", Base64.getEncoder().encodeToString(Helper.getBytes(k.getCard().drawCard(k.isFoil()), "png")));
-					}}));
+					CardDAO.getCards().forEach(k -> {
+						boolean normal = cards.contains(new KawaiponCard(k, false));
+						boolean foil = cards.contains(new KawaiponCard(k, true));
+
+						data.add(new JSONObject() {{
+							put("id", k.getId());
+							put("anime", k.getAnime().toString());
+							put("rarity", k.getRarity().getIndex());
+							put("hasNormal", normal);
+							put("hasFoil", foil);
+							put("cardNormal", normal ? Base64.getEncoder().encodeToString(Helper.getBytes(k.drawCard(false), "png")) : "");
+							put("cardNormal", foil ? Base64.getEncoder().encodeToString(Helper.getBytes(k.drawCard(true), "png")) : "");
+						}});
+					});
 
 					JSONObject cardData = new JSONObject() {{
 						put("animes", List.of(AnimeName.values()));
