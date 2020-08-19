@@ -42,15 +42,14 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.entities.Webhook;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.util.Arrays;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 public class TwitchEvents {
@@ -174,11 +173,25 @@ public class TwitchEvents {
 	private void onChannelGoLiveEvent(ChannelGoLiveEvent evt) {
 		Main.getInfo().setLive(true);
 		Main.getInfo().getAPI().getPresence().setActivity(Activity.streaming("Na conta do meu Nii-chan sem ele saber!", "https://twitch.tv/kuuhaku_otgmz"));
+		Guild sup = Main.getInfo().getGuildByID(ShiroInfo.getSupportServerID());
+		TextChannel tth = sup.getTextChannelById(ShiroInfo.getTwitchChannelID());
+
+		assert tth != null;
+		tth.getManager()
+				.putPermissionOverride(sup.getPublicRole(), Set.of(Permission.MESSAGE_WRITE), null)
+				.queue();
 	}
 
 	private void onChannelGoOfflineEvent(ChannelGoOfflineEvent evt) {
 		Main.getInfo().setLive(false);
 		Main.getInfo().getAPI().getPresence().setActivity(Main.getRandomActivity());
+		Guild sup = Main.getInfo().getGuildByID(ShiroInfo.getSupportServerID());
+		TextChannel tth = sup.getTextChannelById(ShiroInfo.getTwitchChannelID());
+
+		assert tth != null;
+		tth.getManager()
+				.putPermissionOverride(sup.getPublicRole(), null, Set.of(Permission.MESSAGE_WRITE))
+				.queue();
 	}
 
 	public SimpleEventHandler getHandler() {
