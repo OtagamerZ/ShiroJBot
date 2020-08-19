@@ -224,7 +224,7 @@ public class DashboardSocket extends WebSocketServer {
 							put("hasNormal", normal);
 							put("hasFoil", foil);
 							put("cardNormal", normal ? Base64.getEncoder().encodeToString(Helper.getBytes(k.drawCard(false), "png")) : "");
-							put("cardNormal", foil ? Base64.getEncoder().encodeToString(Helper.getBytes(k.drawCard(true), "png")) : "");
+							put("cardFoil", foil ? Base64.getEncoder().encodeToString(Helper.getBytes(k.drawCard(true), "png")) : "");
 						}});
 					});
 
