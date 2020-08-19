@@ -26,6 +26,7 @@ import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.endpoint.ReadyData;
 import com.kuuhaku.model.persistent.*;
+import com.kuuhaku.utils.AnimeName;
 import com.kuuhaku.utils.BiContract;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
@@ -44,10 +45,8 @@ import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -176,12 +175,11 @@ public class DashboardSocket extends WebSocketServer {
 					User w = Member.getWaifu(u).isBlank() ? null : Main.getInfo().getUserByID(Member.getWaifu(u));
 					CoupleMultiplier cm = WaifuDAO.getMultiplier(u);
 
-					//TODO Revisar esse payload
 					List<Member> profiles = MemberDAO.getMemberByMid(u.getId());
 					JSONObject user = new JSONObject() {{
 						put("waifu", w == null ? "" : w.getAsTag());
 						put("waifuMult", cm == null ? 1.25f : cm.getMult());
-						put("profiles", profiles.stream().map(Member::toString).collect(Collectors.toList()));
+						put("profiles", profiles.stream().map(Member::toJson).collect(Collectors.toList()));
 						put("exceed", new JSONObject(ExceedDAO.getExceedState(ExceedDAO.getExceed(u.getId()))));
 						put("credits", AccountDAO.getAccount(u.getId()).getBalance());
 						put("bonuses", Member.getBonuses(u));
@@ -207,6 +205,27 @@ public class DashboardSocket extends WebSocketServer {
 						}
 					});
 
+					Kawaipon kp = KawaiponDAO.getKawaipon(u.getId());
+					List<JSONObject> data = new ArrayList<>();
+					Set<KawaiponCard> cards = kp.getCards();
+					for (AnimeName anime : AnimeName.values()) {
+						if (CardDAO.totalCards(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime) && !k.isFoil()).count())
+							cards.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
+					}
+
+					cards.forEach(k -> data.add(new JSONObject() {{
+						put("id", k.getCard().getId());
+						put("anime", k.getCard().getAnime().toString());
+						put("rarity", k.getCard().getRarity().getIndex());
+						put("foil", k.isFoil());
+						put("card", Base64.getEncoder().encode(Helper.getBytes(k.getCard().drawCard(k.isFoil()))));
+					}}));
+
+					JSONObject cardData = new JSONObject() {{
+						put("animes", List.of(AnimeName.values()));
+						put("cards", data);
+					}};
+
 					profiles.removeIf(p -> g.stream().map(Guild::getId).noneMatch(p.getSid()::equals));
 					g.removeIf(gd -> profiles.stream().map(Member::getSid).noneMatch(gd.getId()::equals));
 
@@ -216,6 +235,7 @@ public class DashboardSocket extends WebSocketServer {
 						put("data", new JSONObject() {{
 							put("userData", user);
 							put("serverData", guilds);
+							put("cardData", cardData);
 						}});
 					}}.toString());
 					break;
