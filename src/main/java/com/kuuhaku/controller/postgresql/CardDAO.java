@@ -97,6 +97,20 @@ public class CardDAO {
 	}
 
 	@SuppressWarnings("unchecked")
+	public static List<Card> getAllCardsByAnime(AnimeName anime) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT c FROM Card c WHERE anime = :anime", Card.class);
+		q.setParameter("anime", anime);
+
+		try {
+			return (List<Card>) q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
 	public static List<Card> getCardsByRarity(KawaiponRarity rarity) {
 		EntityManager em = Manager.getEntityManager();
 
