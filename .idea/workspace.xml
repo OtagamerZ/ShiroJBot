@@ -13,7 +13,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -606,13 +609,8 @@
       <workItem from="1597853014125" duration="4810000" />
       <workItem from="1597868641822" duration="625000" />
       <workItem from="1597869464252" duration="1143000" />
-    </task>
-    <task id="LOCAL-02163" summary="Implementação de integração com a twitch">
-      <created>1597262345045</created>
-      <option name="number" value="02163" />
-      <option name="presentableId" value="LOCAL-02163" />
-      <option name="project" value="LOCAL" />
-      <updated>1597262345045</updated>
+      <workItem from="1597925228131" duration="3135000" />
+      <workItem from="1597934465832" duration="63000" />
     </task>
     <task id="LOCAL-02164" summary="Implementação de integração com a twitch">
       <created>1597263098473</created>
@@ -950,7 +948,14 @@
       <option name="project" value="LOCAL" />
       <updated>1597870587638</updated>
     </task>
-    <option name="localTasksCounter" value="2212" />
+    <task id="LOCAL-02212" summary="Adição de cartas no payload enviado">
+      <created>1597925530816</created>
+      <option name="number" value="02212" />
+      <option name="presentableId" value="LOCAL-02212" />
+      <option name="project" value="LOCAL" />
+      <updated>1597925530816</updated>
+    </task>
+    <option name="localTasksCounter" value="2213" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1058,11 +1063,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="557" y="213" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1597325294333" />
-    <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1597762428582">
+    <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1597927763665">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="239" y="78" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.768@0.0.1366.768" timestamp="1591416974252" />
-    <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1597762428582" />
+    <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1597927763665" />
     <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1597853821481">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1092,11 +1097,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1597870585006">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1597925526019">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1597870585006" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1597925526019" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1162,11 +1167,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1597870589300">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1597925532285">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1597870589300" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1597925532285" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597351073016">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>

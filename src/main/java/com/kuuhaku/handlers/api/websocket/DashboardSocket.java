@@ -226,33 +226,35 @@ public class DashboardSocket extends WebSocketServer {
 							cards.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
 					}
 
-					CardDAO.getAllCards().forEach(k -> {
-						boolean normal = cards.contains(new KawaiponCard(k, false));
-						boolean foil = cards.contains(new KawaiponCard(k, true));
+					for (AnimeName an : AnimeName.values()) {
+						CardDAO.getCardsByAnime(an).forEach(k -> {
+							boolean normal = cards.contains(new KawaiponCard(k, false));
+							boolean foil = cards.contains(new KawaiponCard(k, true));
 
-						data.add(new JSONObject() {{
-							put("id", k.getId());
-							put("anime", k.getAnime().name());
-							put("rarity", k.getRarity().getIndex());
-							put("hasNormal", normal);
-							put("hasFoil", foil);
-							put("cardNormal", normal ? Base64.getEncoder().encodeToString(Helper.getBytes(k.drawCard(false), "png")) : "");
-							put("cardFoil", foil ? Base64.getEncoder().encodeToString(Helper.getBytes(k.drawCard(true), "png")) : "");
-						}});
-					});
+							data.add(new JSONObject() {{
+								put("id", k.getId());
+								put("anime", k.getAnime());
+								put("rarity", k.getRarity().getIndex());
+								put("hasNormal", normal);
+								put("hasFoil", foil);
+								put("cardNormal", normal ? Base64.getEncoder().encodeToString(Helper.getBytes(k.drawCard(false), "png")) : "");
+								put("cardFoil", foil ? Base64.getEncoder().encodeToString(Helper.getBytes(k.drawCard(true), "png")) : "");
+							}});
+						});
 
-					JSONObject cardData = new JSONObject() {{
-						put("animes", List.of(AnimeName.values()));
-						put("cards", data);
-					}};
+						JSONObject animeCards = new JSONObject() {{
+							put("anime", data);
+						}};
 
-					conn.send(new JSONObject() {{
-						put("type", "cards");
-						put("code", HttpURLConnection.HTTP_OK);
-						put("data", new JSONObject() {{
-							put("cardData", cardData);
-						}});
-					}}.toString());
+						conn.send(new JSONObject() {{
+							put("type", "cards");
+							put("code", HttpURLConnection.HTTP_OK);
+							put("total", AnimeName.values().length);
+							put("data", new JSONObject() {{
+								put("cardData", animeCards);
+							}});
+						}}.toString());
+					}
 			}
 		} catch (WebsocketNotConnectedException ignore) {
 		}
