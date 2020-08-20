@@ -228,7 +228,7 @@ public class DashboardSocket extends WebSocketServer {
 					for (AnimeName an : AnimeName.values()) {
 						List<JSONObject> data = new ArrayList<>();
 
-						CardDAO.getCardsByAnime(an).forEach(k -> {
+						CardDAO.getAllCardsByAnime(an).forEach(k -> {
 							boolean normal = cards.contains(new KawaiponCard(k, false));
 							boolean foil = cards.contains(new KawaiponCard(k, true));
 
