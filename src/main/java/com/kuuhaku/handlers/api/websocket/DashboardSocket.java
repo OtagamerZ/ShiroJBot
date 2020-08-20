@@ -211,6 +211,10 @@ public class DashboardSocket extends WebSocketServer {
 					conn.send(new JSONObject() {{
 						put("type", "validate");
 						put("code", HttpURLConnection.HTTP_OK);
+						put("data", new JSONObject() {{
+							put("userData", user);
+							put("serverData", guilds);
+						}});
 					}}.toString());
 					break;
 				case "cards":
@@ -243,6 +247,8 @@ public class DashboardSocket extends WebSocketServer {
 					}};
 
 					conn.send(new JSONObject() {{
+						put("type", "cards");
+						put("code", HttpURLConnection.HTTP_OK);
 						put("data", new JSONObject() {{
 							put("cardData", cardData);
 						}});
