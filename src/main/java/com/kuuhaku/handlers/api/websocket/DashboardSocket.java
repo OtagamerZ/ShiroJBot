@@ -243,7 +243,7 @@ public class DashboardSocket extends WebSocketServer {
 						});
 
 						JSONObject animeCards = new JSONObject() {{
-							put("anime", data);
+							put(an.name(), data);
 						}};
 
 						conn.send(new JSONObject() {{
