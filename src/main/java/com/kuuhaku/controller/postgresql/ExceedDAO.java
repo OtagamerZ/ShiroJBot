@@ -166,7 +166,6 @@ public class ExceedDAO {
 		q.setMaxResults(1);
 		try {
 			MonthWinner winner = (MonthWinner) q.getSingleResult();
-			em.close();
 
 			if (LocalDate.now().isBefore(winner.getExpiry())) {
 				return winner.getExceed();
@@ -174,8 +173,26 @@ public class ExceedDAO {
 				return "none";
 			}
 		} catch (NoResultException | IndexOutOfBoundsException e) {
-			em.close();
 			return "none";
+		} finally {
+			em.close();
+		}
+	}
+
+	public static String getLatestRanking() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT w FROM MonthWinner w ORDER BY id DESC", MonthWinner.class);
+		q.setMaxResults(1);
+
+		try {
+			MonthWinner winner = (MonthWinner) q.getSingleResult();
+
+			return winner.getExceed();
+		} catch (NoResultException | IndexOutOfBoundsException e) {
+			return null;
+		} finally {
+			em.close();
 		}
 	}
 
@@ -202,6 +219,10 @@ public class ExceedDAO {
 		Query total = em.createQuery("SELECT COUNT(e) FROM ExceedMember e", Long.class);
 		exceed.setParameter("ex", ex.getName());
 
-		return ((Long) exceed.getSingleResult()).floatValue() / ((Long) total.getSingleResult()).floatValue();
+		try {
+			return ((Long) exceed.getSingleResult()).floatValue() / ((Long) total.getSingleResult()).floatValue();
+		} finally {
+			em.close();
+		}
 	}
 }
