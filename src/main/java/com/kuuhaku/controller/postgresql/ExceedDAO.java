@@ -127,8 +127,32 @@ public class ExceedDAO {
 
 		List<Member> members = (List<Member>) q.getResultList();
 
+		long offset = 0;
+		MonthWinner ranking = getLatestRanking();
+		if (ranking != null)
+			switch (ex) {
+				case IMANITY:
+					offset = ranking.getImanityPoints();
+					break;
+				case SEIREN:
+					offset = ranking.getSeirenPoints();
+					break;
+				case WEREBEAST:
+					offset = ranking.getWerebeastPoints();
+					break;
+				case ELF:
+					offset = ranking.getElfPoints();
+					break;
+				case EXMACHINA:
+					offset = ranking.getExmachinaPoints();
+					break;
+				case FLUGEL:
+					offset = ranking.getFlugelPoints();
+					break;
+			}
+
 		try {
-			return new Exceed(ex, members.size(), ((BigDecimal) points.getSingleResult()).longValue());
+			return new Exceed(ex, members.size(), ((BigDecimal) points.getSingleResult()).longValue() - offset);
 		} finally {
 			em.close();
 		}
@@ -179,7 +203,7 @@ public class ExceedDAO {
 		}
 	}
 
-	public static String getLatestRanking() {
+	public static MonthWinner getLatestRanking() {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT w FROM MonthWinner w ORDER BY id DESC", MonthWinner.class);
@@ -188,7 +212,7 @@ public class ExceedDAO {
 		try {
 			MonthWinner winner = (MonthWinner) q.getSingleResult();
 
-			return winner.getExceed();
+			return winner;
 		} catch (NoResultException | IndexOutOfBoundsException e) {
 			return null;
 		} finally {
