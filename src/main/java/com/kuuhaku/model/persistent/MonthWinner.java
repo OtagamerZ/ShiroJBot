@@ -34,6 +34,24 @@ public class MonthWinner {
 	@Column(columnDefinition = "DATE")
 	private final LocalDate expiry = LocalDate.now().plusWeeks(1);
 
+	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
+	private final long imanityPoints = 0;
+
+	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
+	private final long seirenPoints = 0;
+
+	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
+	private final long werebeastPoints = 0;
+
+	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
+	private final long elfPoints = 0;
+
+	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
+	private final long exmachinaPoints = 0;
+
+	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
+	private final long flugelPoints = 0;
+
 	public String getExceed() {
 		return exceed;
 	}
@@ -44,5 +62,29 @@ public class MonthWinner {
 
 	public LocalDate getExpiry() {
 		return expiry;
+	}
+
+	public long getImanityPoints() {
+		return imanityPoints;
+	}
+
+	public long getSeirenPoints() {
+		return seirenPoints;
+	}
+
+	public long getWerebeastPoints() {
+		return werebeastPoints;
+	}
+
+	public long getElfPoints() {
+		return elfPoints;
+	}
+
+	public long getExmachinaPoints() {
+		return exmachinaPoints;
+	}
+
+	public long getFlugelPoints() {
+		return flugelPoints;
 	}
 }
