@@ -50,7 +50,13 @@ public class DashboardRequest {
 	private final Cache<String, Boolean> ratelimit = CacheBuilder.newBuilder().expireAfterWrite(5, TimeUnit.SECONDS).build();
 
 	@RequestMapping(value = "/auth", method = RequestMethod.GET)
-	public void validateAccount(HttpServletResponse http, @RequestParam(value = "code") String code) throws InterruptedException {
+	public void validateAccount(HttpServletResponse http, @RequestParam(value = "code", defaultValue = "") String code, @RequestParam(value = "error", defaultValue = "") String error) throws InterruptedException {
+		if (!error.isBlank()) {
+			http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + "/");
+			http.setStatus(HttpServletResponse.SC_FOUND);
+			return;
+		}
+
 		JSONObject jo = new JSONObject();
 
 		jo.put("client_id", Main.getInfo().getSelfUser().getId());
@@ -61,7 +67,7 @@ public class DashboardRequest {
 		jo.put("scope", "identify");
 
 		JSONObject token = null;
-
+		//https://api.shirojbot.site/auth?error=access_denied&error_description=The+resource+owner+or+authorization+server+denied+the+request
 		boolean granted = false;
 		while (!granted) {
 			token = Helper.post("https://discord.com/api/v6/oauth2/token", Helper.urlEncode(jo), Collections.singletonMap("Content-Type", "application/x-www-form-urlencoded"), "");
@@ -78,17 +84,17 @@ public class DashboardRequest {
 			String t = TokenDAO.verifyToken(user.getString("id"));
 			if (t == null) {
 				http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + "/Unauthorized");
-				http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+				http.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 				return;
 			}
 			http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + "/Loading?s=" + session);
-			http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+			http.setStatus(HttpServletResponse.SC_FOUND);
 
 			user.put("token", t);
 			Main.getInfo().getSockets().getDashboard().addReadyData(new ReadyData(user, session), session);
 		} else {
 			http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + "/Unauthorized");
-			http.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+			http.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		}
 	}
 
