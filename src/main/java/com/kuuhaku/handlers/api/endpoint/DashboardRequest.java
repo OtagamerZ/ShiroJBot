@@ -67,7 +67,7 @@ public class DashboardRequest {
 		jo.put("scope", "identify");
 
 		JSONObject token = null;
-		//https://api.shirojbot.site/auth?error=access_denied&error_description=The+resource+owner+or+authorization+server+denied+the+request
+
 		boolean granted = false;
 		while (!granted) {
 			token = Helper.post("https://discord.com/api/v6/oauth2/token", Helper.urlEncode(jo), Collections.singletonMap("Content-Type", "application/x-www-form-urlencoded"), "");
