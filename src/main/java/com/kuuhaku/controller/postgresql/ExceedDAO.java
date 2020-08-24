@@ -30,9 +30,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ExceedDAO {
@@ -158,16 +156,45 @@ public class ExceedDAO {
 		}
 	}
 
+	@SuppressWarnings({"SqlResolve", "unchecked"})
 	public static ExceedEnums findWinner() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT ex.exceed FROM Member m INNER JOIN ExceedMember ex ON ex.id = m.mid GROUP BY ex.exceed ORDER BY SUM(m.xp) DESC", String.class);
-		q.setMaxResults(1);
+		Query q = em.createNativeQuery("SELECT substr(upper(er.exceed), 0, 3), er.points FROM shiro.\"GetExceedRanking\" er ORDER BY er.points DESC");
 
-		String winner = (String) q.getSingleResult();
+		List<Object[]> ex = (List<Object[]>) q.getResultList();
 		em.close();
 
-		return ExceedEnums.getByName(winner);
+		MonthWinner ranking = getLatestRanking();
+
+		Map<String, Long> exs = new HashMap<>();
+		assert ranking != null;
+		for (Object[] objects : ex) {
+			switch (String.valueOf(objects[0])) {
+				case "IM":
+					exs.put(String.valueOf(objects[0]), ((BigDecimal) objects[1]).longValue() - ranking.getImanityPoints());
+					break;
+				case "SE":
+					exs.put(String.valueOf(objects[0]), ((BigDecimal) objects[1]).longValue() - ranking.getSeirenPoints());
+					break;
+				case "WE":
+					exs.put(String.valueOf(objects[0]), ((BigDecimal) objects[1]).longValue() - ranking.getWerebeastPoints());
+					break;
+				case "EX":
+					exs.put(String.valueOf(objects[0]), ((BigDecimal) objects[1]).longValue() - ranking.getExmachinaPoints());
+					break;
+				case "EL":
+					exs.put(String.valueOf(objects[0]), ((BigDecimal) objects[1]).longValue() - ranking.getElfPoints());
+					break;
+				case "FL":
+					exs.put(String.valueOf(objects[0]), ((BigDecimal) objects[1]).longValue() - ranking.getFlugelPoints());
+					break;
+			}
+		}
+
+		Map.Entry<String, Long> winner = exs.entrySet().stream().max(Map.Entry.comparingByValue()).orElseThrow();
+
+		return Arrays.stream(ExceedEnums.values()).filter(e -> e.name().startsWith(winner.getKey())).findFirst().orElseThrow();
 	}
 
 	public static void markWinner(ExceedEnums ex) {
