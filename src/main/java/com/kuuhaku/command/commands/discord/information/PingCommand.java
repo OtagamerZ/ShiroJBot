@@ -21,7 +21,6 @@ package com.kuuhaku.command.commands.discord.information;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
@@ -53,8 +52,5 @@ public class PingCommand extends Command {
 				.flatMap(m -> m.editMessage(m.getContentRaw() + "\n:floppy_disk: " + fp + " MB!"))
 				.flatMap(m -> m.editMessage(m.getContentRaw() + "\n:telephone: " + Main.getInfo().getAPI().getEventManager().getRegisteredListeners().size() + ShiroInfo.getLocale(I18n.PT).getString("str_listeners")))
 				.queue();
-
-		if (author.getId().equals(ShiroInfo.getNiiChan()))
-			channel.sendMessage(ExceedDAO.findWinner().getName()).queue();
 	}
 }
