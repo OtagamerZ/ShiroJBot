@@ -18,47 +18,43 @@
 
 package com.kuuhaku.utils;
 
+import com.kuuhaku.controller.postgresql.CardDAO;
+
 public enum AnimeName {
-	AKAME_GA_KILL("Akame Ga Kill"),
-	ANGEL_BEATS("Angel Beats"),
-	BLEACH("Bleach"),
-	BOKU_NO_PICO("Boku No Pico"),
-	DANGANRONPA("Danganronpa"),
-	DARLING_IN_THE_FRANXX("Darling In The Franxx"),
-	DEATH_NOTE("Death Note"),
-	DR_STONE("Dr. Stone"),
-	ELFEN_LIED("Elfen Lied"),
-	GATE("GATE"),
-	HELLSING("Hellsing"),
-	HIGHSCHOOL_DXD("Highschool DxD"),
-	ISHUZOKU_REVIEWERS("Ishuzoku Reviewers"),
-	ITADAKI_SEIEKI("Itadaki! Seieki"),
-	JOJO_BIZARRE_ADVENTURES("JoJo Bizarre Adventures"),
-	KILL_LA_KILL("Kill La Kill"),
-	KIMETSU_NO_YAIBA("Kimetsu No Yaiba"),
-	MIRAI_NIKKI("Mirai Nikki"),
-	MOB_PSYCHO_100("Mob Psycho 100"),
-	MONSTER_MUSUME("Monster Musume"),
-	NANATSU_NO_TAIZAI("Nanatsu No Taizai"),
-	NARUTO("Naruto"),
-	NICHIJOU("Nichijou"),
-	NO_GAME_NO_LIFE("No Game No Life"),
-	OVERLORD("Overlord"),
-	PANTY_AND_STOCKING("Panty & Stocking"),
-	PROJECT_VOCALOID("Project Vocaloid"),
-	SAINT_SEIYA("Saint Seiya"),
-	SHINRYAKU_IKA_MUSUME("Shinryaku! Ika Musume"),
-	STEINS_GATE("Steins;Gate"),
-	SWORD_ART_ONLINE("Sword Art Online");
-
-	private final String name;
-
-	AnimeName(String name) {
-		this.name = name;
-	}
+	AKAME_GA_KILL,
+	ANGEL_BEATS,
+	BLEACH,
+	BOKU_NO_PICO,
+	DANGANRONPA,
+	DARLING_IN_THE_FRANXX,
+	DEATH_NOTE,
+	DR_STONE,
+	ELFEN_LIED,
+	GATE,
+	HELLSING,
+	HIGHSCHOOL_DXD,
+	ISHUZOKU_REVIEWERS,
+	ITADAKI_SEIEKI,
+	JOJO_BIZARRE_ADVENTURES,
+	KILL_LA_KILL,
+	KIMETSU_NO_YAIBA,
+	MIRAI_NIKKI,
+	MOB_PSYCHO_100,
+	MONSTER_MUSUME,
+	NANATSU_NO_TAIZAI,
+	NARUTO,
+	NICHIJOU,
+	NO_GAME_NO_LIFE,
+	OVERLORD,
+	PANTY_AND_STOCKING,
+	PROJECT_VOCALOID,
+	SAINT_SEIYA,
+	SHINRYAKU_IKA_MUSUME,
+	STEINS_GATE,
+	SWORD_ART_ONLINE;
 
 	@Override
 	public String toString() {
-		return name;
+		return CardDAO.getUltimate(this).getName();
 	}
 }
