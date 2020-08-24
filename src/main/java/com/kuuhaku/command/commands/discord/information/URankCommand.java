@@ -25,8 +25,10 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
@@ -43,6 +45,7 @@ public class URankCommand extends Command {
 
 	private static final String STR_LEVEL = "str_level";
 	private static final String STR_CREDIT = "str_credit";
+	private static final String STR_CARD = "str_card";
 	private static final String SRT_USER_RANKING_TITLE = "str_user-ranking-title";
 	private static final String STR_GLOBAL = "str_global";
 	private static final String STR_LOCAL = "str_local";
@@ -71,6 +74,8 @@ public class URankCommand extends Command {
 			getLevelRanking(pages, guild, true);
 		else if (args.length > 0 && Helper.equalsAny(args[0], "credit", "creditos", "créditos"))
 			getCreditRanking(pages);
+		else if (args.length > 0 && Helper.equalsAny(args[0], "card", "kawaipon", "cartas"))
+			getCardRanking(pages);
 		else
 			getLevelRanking(pages, guild, false);
 
@@ -168,6 +173,48 @@ public class URankCommand extends Command {
 		}
 	}
 
+	private void getCardRanking(List<Page> pages) {
+		List<Kawaipon> kps = KawaiponDAO.getCardRank();
+
+		String champ = "1 - " + Main.getInfo().getUserByID(kps.get(0).getUid()).getName() + " (Cartas: " + kps.get(0).getCards().size() + ")";
+		List<Kawaipon> sub9 = kps.subList(1, Math.min(kps.size(), 10));
+		StringBuilder sub9Formatted = new StringBuilder();
+		for (int i = 0; i < sub9.size(); i++) {
+			sub9Formatted
+					.append(i + 2)
+					.append(" - ")
+					.append(checkUser(sub9.get(i)))
+					.append(ShiroInfo.getLocale(I18n.PT).getString(STR_CARD))
+					.append(" ")
+					.append(sub9.get(i).getCards().size())
+					.append(")")
+					.append("\n");
+		}
+
+		StringBuilder next10 = new StringBuilder();
+		EmbedBuilder eb = new EmbedBuilder();
+
+		makeEmbed(true, pages, sub9Formatted, eb, champ);
+
+		for (int x = 1; x < Math.ceil(kps.size() / 10f); x++) {
+			eb.clear();
+			next10.setLength(0);
+			for (int i = 10 * x; i < kps.size() && i < (10 * x) + 10; i++) {
+				next10
+						.append(i + 1)
+						.append(" - ")
+						.append(checkUser(kps.get(i)))
+						.append(ShiroInfo.getLocale(I18n.PT).getString(STR_CARD))
+						.append(" ")
+						.append(kps.get(i).getCards().size())
+						.append(")")
+						.append("\n");
+			}
+
+			makeEmbed(true, pages, next10, eb, Helper.VOID);
+		}
+	}
+
 	private void makeEmbed(boolean global, List<Page> pages, StringBuilder next10, EmbedBuilder eb, String aVoid) {
 		eb.setTitle(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(SRT_USER_RANKING_TITLE), global ? ShiroInfo.getLocale(I18n.PT).getString(STR_GLOBAL) : ShiroInfo.getLocale(I18n.PT).getString(STR_LOCAL)));
 		eb.addField(aVoid, next10.toString(), false);
@@ -180,6 +227,14 @@ public class URankCommand extends Command {
 	private static String checkUser(com.kuuhaku.model.persistent.Member m) {
 		try {
 			return Main.getInfo().getUserByID(m.getMid()).getName();
+		} catch (Exception e) {
+			return ShiroInfo.getLocale(I18n.PT).getString("str_invalid-user");
+		}
+	}
+
+	private static String checkUser(Kawaipon kp) {
+		try {
+			return Main.getInfo().getUserByID(kp.getUid()).getName();
 		} catch (Exception e) {
 			return ShiroInfo.getLocale(I18n.PT).getString("str_invalid-user");
 		}
