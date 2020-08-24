@@ -84,7 +84,7 @@ public class AccountDAO {
 
 	@SuppressWarnings("unchecked")
 	public static List<Account> getAccountRank() {
-		EntityManager em = com.kuuhaku.controller.sqlite.Manager.getEntityManager();
+		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT a FROM Account a ORDER BY a.balance DESC", Account.class);
 
