@@ -58,7 +58,7 @@ public class KawaiponDAO {
 	public static List<Kawaipon> getCardRank() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT k FROM Kawaipon k ORDER BY k.cards.size DESC", Kawaipon.class);
+		Query q = em.createQuery("SELECT k FROM Kawaipon k ORDER BY SIZE(k.cards) DESC", Kawaipon.class);
 
 		List<Kawaipon> mbs = (List<Kawaipon>) q.getResultList();
 
