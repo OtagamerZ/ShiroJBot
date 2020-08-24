@@ -15,7 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/KawaiponsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/KawaiponsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/AnimeName.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/AnimeName.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -161,17 +161,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [clean]">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -628,21 +617,8 @@
       <workItem from="1598012473489" duration="15823000" />
       <workItem from="1598042663603" duration="883000" />
       <workItem from="1598271181602" duration="1175000" />
-      <workItem from="1598276925232" duration="3925000" />
-    </task>
-    <task id="LOCAL-02180" summary="Implementação de integração com a twitch">
-      <created>1597330757639</created>
-      <option name="number" value="02180" />
-      <option name="presentableId" value="LOCAL-02180" />
-      <option name="project" value="LOCAL" />
-      <updated>1597330757639</updated>
-    </task>
-    <task id="LOCAL-02181" summary="Balanceamento na pontuação dos Exceeds">
-      <created>1597351226838</created>
-      <option name="number" value="02181" />
-      <option name="presentableId" value="LOCAL-02181" />
-      <option name="project" value="LOCAL" />
-      <updated>1597351226838</updated>
+      <workItem from="1598276925232" duration="4142000" />
+      <workItem from="1598287907117" duration="931000" />
     </task>
     <task id="LOCAL-02182" summary="Correções no chat da Twitch">
       <created>1597413041549</created>
@@ -973,7 +949,21 @@
       <option name="project" value="LOCAL" />
       <updated>1598279990091</updated>
     </task>
-    <option name="localTasksCounter" value="2229" />
+    <task id="LOCAL-02229" summary="Correção na lista de cartas">
+      <created>1598281039734</created>
+      <option name="number" value="02229" />
+      <option name="presentableId" value="LOCAL-02229" />
+      <option name="project" value="LOCAL" />
+      <updated>1598281039734</updated>
+    </task>
+    <task id="LOCAL-02230" summary="Correção na lista de cartas">
+      <created>1598281163508</created>
+      <option name="number" value="02230" />
+      <option name="presentableId" value="LOCAL-02230" />
+      <option name="project" value="LOCAL" />
+      <updated>1598281163508</updated>
+    </task>
+    <option name="localTasksCounter" value="2231" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1115,11 +1105,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598279987421">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598281160797">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598279987421" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598281160797" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1185,11 +1175,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598279991665">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598281164790">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598279991665" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598281164790" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597351073016">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
