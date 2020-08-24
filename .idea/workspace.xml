@@ -13,11 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/URankCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/URankCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/AccountDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/AccountDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/KawaiponDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/KawaiponDAO.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -620,21 +616,7 @@
       <workItem from="1598271181602" duration="1175000" />
       <workItem from="1598276925232" duration="4142000" />
       <workItem from="1598287907117" duration="1711000" />
-      <workItem from="1598290708262" duration="6542000" />
-    </task>
-    <task id="LOCAL-02191" summary="Migração dos endpoints para o novo domínio">
-      <created>1597769513444</created>
-      <option name="number" value="02191" />
-      <option name="presentableId" value="LOCAL-02191" />
-      <option name="project" value="LOCAL" />
-      <updated>1597769513444</updated>
-    </task>
-    <task id="LOCAL-02192" summary="Migração dos endpoints para o novo domínio">
-      <created>1597770015763</created>
-      <option name="number" value="02192" />
-      <option name="presentableId" value="LOCAL-02192" />
-      <option name="project" value="LOCAL" />
-      <updated>1597770015764</updated>
+      <workItem from="1598290708262" duration="6870000" />
     </task>
     <task id="LOCAL-02193" summary="Migração dos endpoints para o novo domínio">
       <created>1597771718169</created>
@@ -965,7 +947,21 @@
       <option name="project" value="LOCAL" />
       <updated>1598297130713</updated>
     </task>
-    <option name="localTasksCounter" value="2240" />
+    <task id="LOCAL-02240" summary="Também ranking de cartas (agora deu)">
+      <created>1598297412545</created>
+      <option name="number" value="02240" />
+      <option name="presentableId" value="LOCAL-02240" />
+      <option name="project" value="LOCAL" />
+      <updated>1598297412545</updated>
+    </task>
+    <task id="LOCAL-02241" summary="Também ranking de cartas (agora deu)">
+      <created>1598297475954</created>
+      <option name="number" value="02241" />
+      <option name="presentableId" value="LOCAL-02241" />
+      <option name="project" value="LOCAL" />
+      <updated>1598297475954</updated>
+    </task>
+    <option name="localTasksCounter" value="2242" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1031,7 +1027,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Atualização da biblioteca de paginação" />
     <MESSAGE value="Balanceamento da pontuação dos Exceeds" />
     <MESSAGE value="Correção nos buffs" />
     <MESSAGE value="Correção nas apostas do jogo da velha" />
@@ -1056,7 +1051,8 @@
     <MESSAGE value="Cartas cromadas não são mais apenas por &quot;vaidade&quot;" />
     <MESSAGE value="Correções aqui e ali" />
     <MESSAGE value="Ranking de créditos (pronto, eu fiz)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Ranking de créditos (pronto, eu fiz)" />
+    <MESSAGE value="Também ranking de cartas (agora deu)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Também ranking de cartas (agora deu)" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1107,11 +1103,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598297128126">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598297473381">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598297128126" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598297473381" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1177,11 +1173,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598297131895">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598297479837">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598297131895" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598297479837" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597351073016">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
