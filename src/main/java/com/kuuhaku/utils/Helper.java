@@ -385,6 +385,22 @@ public class Helper {
 		return Arrays.stream(compareWith).map(String::toLowerCase).anyMatch(string.toLowerCase()::contains);
 	}
 
+	public static boolean containsAll(String[] string, String... compareWith) {
+		int matches = 0;
+		for (String compare : compareWith) {
+			matches += Arrays.stream(compareWith).map(String::toLowerCase).allMatch(compare.toLowerCase()::contains) ? 1 : 0;
+		}
+		return matches == compareWith.length;
+	}
+
+	public static boolean containsAny(String[] string, String... compareWith) {
+		for (String compare : compareWith) {
+			if (Arrays.stream(compareWith).map(String::toLowerCase).allMatch(compare.toLowerCase()::contains))
+				return true;
+		}
+		return false;
+	}
+
 	public static boolean equalsAll(String string, String... compareWith) {
 		return Arrays.stream(compareWith).allMatch(string::equalsIgnoreCase);
 	}
