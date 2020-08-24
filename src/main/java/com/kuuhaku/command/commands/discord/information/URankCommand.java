@@ -24,7 +24,9 @@ import com.github.ygimenez.type.PageType;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
@@ -40,6 +42,7 @@ import java.util.concurrent.TimeUnit;
 public class URankCommand extends Command {
 
 	private static final String STR_LEVEL = "str_level";
+	private static final String STR_CREDIT = "str_credit";
 	private static final String SRT_USER_RANKING_TITLE = "str_user-ranking-title";
 	private static final String STR_GLOBAL = "str_global";
 	private static final String STR_LOCAL = "str_local";
@@ -62,11 +65,22 @@ public class URankCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		ArrayList<Page> pages = new ArrayList<>();
+
+		if (args.length > 0 && args[0].equalsIgnoreCase("global"))
+			getLevelRanking(pages, guild, true);
+		else if (args.length > 0 && Helper.equalsAny(args[0], "credit", "creditos", "créditos"))
+			getCreditRanking(pages);
+		else
+			getLevelRanking(pages, guild, false);
+
+		channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
+	}
+
+	private void getLevelRanking(List<Page> pages, Guild guild, boolean global) {
 		List<com.kuuhaku.model.persistent.Member> mbs;
-		boolean global = false;
-		if (args.length > 0 && args[0].equals("global")) {
+		if (global) {
 			mbs = MemberDAO.getMemberRank(null, true);
-			global = true;
 		} else {
 			mbs = MemberDAO.getMemberRank(guild.getId(), false);
 		}
@@ -87,7 +101,6 @@ public class URankCommand extends Command {
 					.append("\n");
 		}
 
-		List<Page> pages = new ArrayList<>();
 		StringBuilder next10 = new StringBuilder();
 		EmbedBuilder eb = new EmbedBuilder();
 
@@ -111,8 +124,48 @@ public class URankCommand extends Command {
 
 			makeEmbed(global, pages, next10, eb, Helper.VOID);
 		}
+	}
 
-		channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
+	private void getCreditRanking(List<Page> pages) {
+		List<Account> accs = AccountDAO.getAccountRank();
+
+		String champ = "1 - " + Main.getInfo().getUserByID(accs.get(0).getUserId()).getName() + " (Créditos: " + accs.get(0).getBalance() + ")";
+		List<Account> sub9 = accs.subList(1, Math.min(accs.size(), 10));
+		StringBuilder sub9Formatted = new StringBuilder();
+		for (int i = 0; i < sub9.size(); i++) {
+			sub9Formatted
+					.append(i + 2)
+					.append(" - ")
+					.append(checkUser(sub9.get(i)))
+					.append(ShiroInfo.getLocale(I18n.PT).getString(STR_CREDIT))
+					.append(" ")
+					.append(sub9.get(i).getBalance())
+					.append(")")
+					.append("\n");
+		}
+
+		StringBuilder next10 = new StringBuilder();
+		EmbedBuilder eb = new EmbedBuilder();
+
+		makeEmbed(true, pages, sub9Formatted, eb, champ);
+
+		for (int x = 1; x < Math.ceil(accs.size() / 10f); x++) {
+			eb.clear();
+			next10.setLength(0);
+			for (int i = 10 * x; i < accs.size() && i < (10 * x) + 10; i++) {
+				next10
+						.append(i + 1)
+						.append(" - ")
+						.append(checkUser(accs.get(i)))
+						.append(ShiroInfo.getLocale(I18n.PT).getString(STR_CREDIT))
+						.append(" ")
+						.append(accs.get(i).getBalance())
+						.append(")")
+						.append("\n");
+			}
+
+			makeEmbed(true, pages, next10, eb, Helper.VOID);
+		}
 	}
 
 	private void makeEmbed(boolean global, List<Page> pages, StringBuilder next10, EmbedBuilder eb, String aVoid) {
@@ -127,6 +180,14 @@ public class URankCommand extends Command {
 	private static String checkUser(com.kuuhaku.model.persistent.Member m) {
 		try {
 			return Main.getInfo().getUserByID(m.getMid()).getName();
+		} catch (Exception e) {
+			return ShiroInfo.getLocale(I18n.PT).getString("str_invalid-user");
+		}
+	}
+
+	private static String checkUser(Account acc) {
+		try {
+			return Main.getInfo().getUserByID(acc.getUserId()).getName();
 		} catch (Exception e) {
 			return ShiroInfo.getLocale(I18n.PT).getString("str_invalid-user");
 		}
