@@ -22,6 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.handlers.api.endpoint.CommonRequest;
 import com.kuuhaku.model.common.KawaiponBook;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
@@ -155,11 +156,17 @@ public class KawaiponsCommand extends Command {
 		eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName() + " (" + s + ")");
 		eb.addField(":red_envelope: | Cartas normais:", common + " de " + l + " (" + Helper.prcntToInt(common, l) + "%)", true);
 		eb.addField(":star2: | Cartas cromadas:", foil + " de " + l + " (" + Helper.prcntToInt(foil, l) + "%)", true);
-		eb.setImage("attachment://cards.jpg");
 		eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(collection.size(), l * 2) + "%");
 
 		m.delete().queue();
-		channel.sendMessage(eb.build()).addFile(IOUtils.toByteArray(f.toURI()), "cards.jpg").queue();
+
+		byte[] data = IOUtils.toByteArray(f.toURI());
+		String id = Helper.hash(data, "MD5");
+		CommonRequest.getImageCache().put(id, data);
+
+		eb.setImage("https://api." + System.getenv("SERVER_URL") + "/cdn?img=" + id);
+
+		channel.sendMessage(eb.build()).queue();
 		if (f.exists()) f.delete();
 	}
 }

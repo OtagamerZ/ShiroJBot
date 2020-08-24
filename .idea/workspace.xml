@@ -14,9 +14,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/CommonRequest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/PingCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/PingCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/ExceedDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/ExceedDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/KawaiponsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/KawaiponsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -135,24 +136,24 @@
       <recent name="com.kuuhaku.command.commands.information.ComandosCommand" />
       <recent name="com.kuuhaku.command.commands.information.BotInfoCommand" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.handlers.api.endpoint" />
+      <recent name="com.kuuhaku.model.common.drop" />
+      <recent name="com.kuuhaku.command.commands.twitch" />
+      <recent name="com.kuuhaku.command.commands.discord.misc" />
+      <recent name="com.kuuhaku.controller.postgresql" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\memes" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games\hitotsu" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\kawaipon" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\icons" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.kuuhaku.model.common.drop" />
-      <recent name="com.kuuhaku.command.commands.twitch" />
-      <recent name="com.kuuhaku.command.commands.discord.misc" />
-      <recent name="com.kuuhaku.controller.postgresql" />
-      <recent name="com.kuuhaku.managers" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -618,13 +619,7 @@
       <workItem from="1598012473489" duration="15823000" />
       <workItem from="1598042663603" duration="883000" />
       <workItem from="1598271181602" duration="1175000" />
-    </task>
-    <task id="LOCAL-02173" summary="Implementação de integração com a twitch">
-      <created>1597325601764</created>
-      <option name="number" value="02173" />
-      <option name="presentableId" value="LOCAL-02173" />
-      <option name="project" value="LOCAL" />
-      <updated>1597325601764</updated>
+      <workItem from="1598276925232" duration="1156000" />
     </task>
     <task id="LOCAL-02174" summary="Implementação de integração com a twitch">
       <created>1597325738977</created>
@@ -962,7 +957,14 @@
       <option name="project" value="LOCAL" />
       <updated>1598042543454</updated>
     </task>
-    <option name="localTasksCounter" value="2222" />
+    <task id="LOCAL-02222" summary="Balanceamento do ranking de Exceeds">
+      <created>1598272721299</created>
+      <option name="number" value="02222" />
+      <option name="presentableId" value="LOCAL-02222" />
+      <option name="project" value="LOCAL" />
+      <updated>1598272721299</updated>
+    </task>
+    <option name="localTasksCounter" value="2223" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1075,11 +1077,11 @@
     </state>
     <state x="239" y="78" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.768@0.0.1366.768" timestamp="1591416974252" />
     <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1597927763665" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1598039332428">
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1598277717869">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="488" y="71" key="#com.intellij.ide.util.MemberChooser/0.0.1366.768@0.0.1366.768" timestamp="1593920634856" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1598039332428" />
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1598277717869" />
     <state x="636" y="391" width="408" height="237" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1592937778763">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1125,26 +1127,26 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="620" y="261" key="FileChooserDialogImpl/0.0.1680.1010@0.0.1680.1010" timestamp="1597149004659" />
-    <state width="1125" height="289" key="GridCell.Tab.0.bottom" timestamp="1598272337415">
+    <state width="1125" height="289" key="GridCell.Tab.0.bottom" timestamp="1598277479604">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="270" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1125" height="289" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1598272337415" />
-    <state width="1125" height="289" key="GridCell.Tab.0.center" timestamp="1598272337415">
+    <state width="1125" height="289" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1598277479604" />
+    <state width="1125" height="289" key="GridCell.Tab.0.center" timestamp="1598277479603">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="270" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1125" height="289" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1598272337415" />
-    <state width="1125" height="289" key="GridCell.Tab.0.left" timestamp="1598272337414">
+    <state width="1125" height="289" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1598277479603" />
+    <state width="1125" height="289" key="GridCell.Tab.0.left" timestamp="1598277479603">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="270" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1125" height="289" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1598272337414" />
-    <state width="1125" height="289" key="GridCell.Tab.0.right" timestamp="1598272337415">
+    <state width="1125" height="289" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1598277479603" />
+    <state width="1125" height="289" key="GridCell.Tab.0.right" timestamp="1598277479603">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="270" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1125" height="289" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1598272337415" />
+    <state width="1125" height="289" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1598277479603" />
     <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1594058079602">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1243,6 +1245,11 @@
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/reactions/answerable/BiteReaction.java</url>
           <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/KawaiponsCommand.java</url>
+          <line>130</line>
+          <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
