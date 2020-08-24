@@ -68,18 +68,20 @@ public class URankCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		ArrayList<Page> pages = new ArrayList<>();
+		channel.sendMessage("<a:loading:697879726630502401> Gerando placares...").queue(m -> {
+			ArrayList<Page> pages = new ArrayList<>();
 
-		if (args.length > 0 && args[0].equalsIgnoreCase("global"))
-			getLevelRanking(pages, guild, true);
-		else if (args.length > 0 && Helper.equalsAny(args[0], "credit", "creditos", "créditos"))
-			getCreditRanking(pages);
-		else if (args.length > 0 && Helper.equalsAny(args[0], "card", "kawaipon", "cartas"))
-			getCardRanking(pages);
-		else
-			getLevelRanking(pages, guild, false);
+			if (args.length > 0 && args[0].equalsIgnoreCase("global"))
+				getLevelRanking(pages, guild, true);
+			else if (args.length > 0 && Helper.equalsAny(args[0], "credit", "creditos", "créditos"))
+				getCreditRanking(pages);
+			else if (args.length > 0 && Helper.equalsAny(args[0], "card", "kawaipon", "cartas"))
+				getCardRanking(pages);
+			else
+				getLevelRanking(pages, guild, false);
 
-		channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
+			m.editMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
+		});
 	}
 
 	private void getLevelRanking(List<Page> pages, Guild guild, boolean global) {
