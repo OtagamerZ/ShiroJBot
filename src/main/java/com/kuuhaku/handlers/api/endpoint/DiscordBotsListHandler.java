@@ -50,10 +50,11 @@ public class DiscordBotsListHandler {
 		int credit = body.getBoolean("isWeekend") ? 375 : 187 + (LocalDateTime.now().getDayOfYear() % 2 == 0 ? 1 : 0);
 
 		Account acc = AccountDAO.getAccount(body.getString("user"));
-
-		acc.voted();
-
-		if (!body.getString("type").equals("test")) acc.addCredit(credit + (50 * acc.getStreak()), this.getClass());
+	
+		if (!body.getString("type").equals("test")) {
+			acc.addCredit(credit + (50 * (acc.getStreak() + 1)), this.getClass());
+			acc.voted();
+		}
 
 		try {
 			User u = Main.getInfo().getUserByID(body.getString("user"));
