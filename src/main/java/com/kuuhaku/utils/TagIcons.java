@@ -81,7 +81,7 @@ public enum TagIcons {
 			case FOIL75:
 				return "<:foil_75:747511886202798192> ";
 			case FOIL100:
-				return "<:foil_100:747511886307655770 ";
+				return "<:foil_100:747511886307655770> ";
 			case LEVEL:
 				return getLevelEmote(lvl).getAsMention() + " ";
 		}

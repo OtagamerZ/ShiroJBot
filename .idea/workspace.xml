@@ -13,11 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Tag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Tag.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/TagIcons.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/TagIcons.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -620,14 +616,7 @@
       <workItem from="1598271181602" duration="1175000" />
       <workItem from="1598276925232" duration="4142000" />
       <workItem from="1598287907117" duration="1711000" />
-      <workItem from="1598290708262" duration="1233000" />
-    </task>
-    <task id="LOCAL-02184" summary="Correções gerais">
-      <created>1597676077843</created>
-      <option name="number" value="02184" />
-      <option name="presentableId" value="LOCAL-02184" />
-      <option name="project" value="LOCAL" />
-      <updated>1597676077843</updated>
+      <workItem from="1598290708262" duration="1547000" />
     </task>
     <task id="LOCAL-02185" summary="Correções gerais">
       <created>1597676319401</created>
@@ -965,7 +954,14 @@
       <option name="project" value="LOCAL" />
       <updated>1598289755099</updated>
     </task>
-    <option name="localTasksCounter" value="2233" />
+    <task id="LOCAL-02233" summary="Cartas cromadas não são mais apenas por &quot;vaidade&quot;">
+      <created>1598292155684</created>
+      <option name="number" value="02233" />
+      <option name="presentableId" value="LOCAL-02233" />
+      <option name="project" value="LOCAL" />
+      <updated>1598292155684</updated>
+    </task>
+    <option name="localTasksCounter" value="2234" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1031,7 +1027,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção no hitotsu" />
     <MESSAGE value="Novas cartas: Danganronpa" />
     <MESSAGE value="Correção do comando de avatar" />
     <MESSAGE value="Atualização da biblioteca de paginação" />
@@ -1056,7 +1051,8 @@
     <MESSAGE value="Balanceamento do ranking de Exceeds" />
     <MESSAGE value="Correção na lista de cartas" />
     <MESSAGE value="Novas cartas: Shinryaku! Ika Musume" />
-    <option name="LAST_COMMIT_MESSAGE" value="Novas cartas: Shinryaku! Ika Musume" />
+    <MESSAGE value="Cartas cromadas não são mais apenas por &quot;vaidade&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Cartas cromadas não são mais apenas por &quot;vaidade&quot;" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
