@@ -51,6 +51,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.InviteAction;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
@@ -75,6 +76,8 @@ import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -1152,5 +1155,14 @@ public class Helper {
 		con.addRequestProperty("User-Agent", "Mozilla/5.0");
 		con.connect();
 		return con.getContentType();
+	}
+
+	public static String hash(byte[] bytes, String encoding) {
+		try {
+			return Hex.encodeHexString(MessageDigest.getInstance(encoding).digest(bytes));
+		} catch (NoSuchAlgorithmException e) {
+			logger(Helper.class).error(e + " | " + e.getStackTrace()[0]);
+			return "";
+		}
 	}
 }
