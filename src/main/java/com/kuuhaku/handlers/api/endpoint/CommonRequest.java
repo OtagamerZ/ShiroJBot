@@ -20,6 +20,7 @@ package com.kuuhaku.handlers.api.endpoint;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.concurrent.TimeUnit;
@@ -28,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 public class CommonRequest {
 	private final static Cache<String, byte[]> imageCache = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.HOURS).build();
 
-	@RequestMapping(value = "/cdn", method = RequestMethod.GET)
+	@RequestMapping(value = "/cdn", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
 	public @ResponseBody
 	byte[] serveImage(@RequestParam(value = "id", defaultValue = "") String code) {
 		return imageCache.getIfPresent(code);
