@@ -164,8 +164,7 @@ public class KawaiponsCommand extends Command {
 		String id = Helper.hash(data, "MD5");
 		CommonRequest.getImageCache().put(id, data);
 
-		eb.setImage("https://api." + System.getenv("SERVER_URL") + "/cdn?img=" + id);
-		System.out.println(id);
+		eb.setImage("https://api." + System.getenv("SERVER_URL") + "/cdn?id=" + id);
 
 		channel.sendMessage(eb.build()).queue();
 		if (f.exists()) f.delete();
