@@ -32,6 +32,7 @@ public class CommonRequest {
 	@RequestMapping(value = "/cdn", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
 	public @ResponseBody
 	byte[] serveImage(@RequestParam(value = "id", defaultValue = "") String code) {
+		System.out.println(code);
 		return imageCache.getIfPresent(code);
 	}
 
