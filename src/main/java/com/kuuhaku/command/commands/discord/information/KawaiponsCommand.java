@@ -165,6 +165,7 @@ public class KawaiponsCommand extends Command {
 		CommonRequest.getImageCache().put(id, data);
 
 		eb.setImage("https://api." + System.getenv("SERVER_URL") + "/cdn?img=" + id);
+		System.out.println(id);
 
 		channel.sendMessage(eb.build()).queue();
 		if (f.exists()) f.delete();
