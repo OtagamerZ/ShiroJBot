@@ -246,7 +246,7 @@ public class CommandManager {
 					"info", new String[]{"botinfo", "bot"}, "cmd_info", INFO, false
 			));
 			put(URankCommand.class, new Argument(
-					"rank", new String[]{"ranking", "top10"}, "req_global", "cmd_rank", INFO, true
+					"rank", new String[]{"ranking", "top10"}, "req_global-credit-card", "cmd_rank", INFO, true
 			));
 			put(ColorTesterCommand.class, new Argument(
 					"quecor", new String[]{"tcolor", "testcolor"}, REQ_COLOR, "cmd_color", INFO, false
