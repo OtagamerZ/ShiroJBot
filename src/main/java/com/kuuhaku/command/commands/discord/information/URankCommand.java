@@ -90,7 +90,7 @@ public class URankCommand extends Command {
 			mbs = MemberDAO.getMemberRank(guild.getId(), false);
 		}
 
-		String champ = "1 - " + (global ? "(" + Main.getInfo().getGuildByID(mbs.get(0).getId().replace(mbs.get(0).getMid(), "")).getName() + ") " : "") + Main.getInfo().getUserByID(mbs.get(0).getMid()).getName() + " (Level " + mbs.get(0).getLevel() + ")";
+		String champ = "1 - " + (global ? "(" + Main.getInfo().getGuildByID(mbs.get(0).getId().replace(mbs.get(0).getMid(), "")).getName() + ") " : "") + checkUser(mbs.get(0)) + " (Level " + mbs.get(0).getLevel() + ")";
 		List<com.kuuhaku.model.persistent.Member> sub9 = mbs.subList(1, Math.min(mbs.size(), 10));
 		StringBuilder sub9Formatted = new StringBuilder();
 		for (int i = 0; i < sub9.size(); i++) {
@@ -134,7 +134,7 @@ public class URankCommand extends Command {
 	private void getCreditRanking(List<Page> pages) {
 		List<Account> accs = AccountDAO.getAccountRank();
 
-		String champ = "1 - " + Main.getInfo().getUserByID(accs.get(0).getUserId()).getName() + " (Créditos: " + accs.get(0).getBalance() + ")";
+		String champ = "1 - " + checkUser(accs.get(0)) + " (Créditos: " + accs.get(0).getBalance() + ")";
 		List<Account> sub9 = accs.subList(1, Math.min(accs.size(), 10));
 		StringBuilder sub9Formatted = new StringBuilder();
 		for (int i = 0; i < sub9.size(); i++) {
@@ -176,7 +176,7 @@ public class URankCommand extends Command {
 	private void getCardRanking(List<Page> pages) {
 		List<Kawaipon> kps = KawaiponDAO.getCardRank();
 
-		String champ = "1 - " + Main.getInfo().getUserByID(kps.get(0).getUid()).getName() + " (Cartas: " + kps.get(0).getCards().size() + ")";
+		String champ = "1 - " + checkUser(kps.get(0)) + " (Cartas: " + kps.get(0).getCards().size() + ")";
 		List<Kawaipon> sub9 = kps.subList(1, Math.min(kps.size(), 10));
 		StringBuilder sub9Formatted = new StringBuilder();
 		for (int i = 0; i < sub9.size(); i++) {
