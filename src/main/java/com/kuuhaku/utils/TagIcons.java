@@ -38,6 +38,10 @@ public enum TagIcons {
 	COLLECTION50,
 	COLLECTION75,
 	COLLECTION100,
+	FOIL25,
+	FOIL50,
+	FOIL75,
+	FOIL100,
 	LEVEL;
 
 	public String getTag(int lvl) {
@@ -70,6 +74,14 @@ public enum TagIcons {
 				return "<:collection_75:724662152602058762> ";
 			case COLLECTION100:
 				return "<:collection_100:724662152824225862> ";
+			case FOIL25:
+				return "<:foil_25:747511886186151956> ";
+			case FOIL50:
+				return "<:foil_50:747511886035026092> ";
+			case FOIL75:
+				return "<:foil_75:747511886202798192> ";
+			case FOIL100:
+				return "<:foil_100:747511886307655770 ";
 			case LEVEL:
 				return getLevelEmote(lvl).getAsMention() + " ";
 		}
@@ -106,6 +118,14 @@ public enum TagIcons {
 				return "724662152602058762";
 			case COLLECTION100:
 				return "724662152824225862";
+			case FOIL25:
+				return "747511886186151956";
+			case FOIL50:
+				return "747511886035026092";
+			case FOIL75:
+				return "747511886202798192";
+			case FOIL100:
+				return "74751188630765577";
 			case LEVEL:
 				return getLevelEmote(lvl).getId();
 		}
