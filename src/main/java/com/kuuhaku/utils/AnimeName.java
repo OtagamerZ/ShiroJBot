@@ -18,42 +18,47 @@
 
 package com.kuuhaku.utils;
 
-import org.apache.commons.text.WordUtils;
-
 public enum AnimeName {
-	NO_GAME_NO_LIFE,
-	AKAME_GA_KILL,
-	BLEACH,
-	BOKU_NO_PICO,
-	HIGHSCHOOL_DXD,
-	DEATH_NOTE,
-	ELFEN_LIED,
-	JOJO_BIZARRE_ADVENTURES,
-	PROJECT_VOCALOID,
-	ANGEL_BEATS,
-	PANTY_AND_STOCKING,
-	SAINT_SEIYA,
-	SWORD_ART_ONLINE,
-	KILL_LA_KILL,
-	ITADAKI_SEIEKI,
-	OVERLORD,
-	NICHIJOU,
-	DARLING_IN_THE_FRANXX,
-	ISHUZOKU_REVIEWERS,
-	HELLSING,
-	NARUTO,
-	MIRAI_NIKKI,
-	DR_STONE,
-	KIMETSU_NO_YAIBA,
-	MONSTER_MUSUME,
-	GATE,
-	NANATSU_NO_TAIZAI,
-	STEINS_GATE,
-	MOB_PSYCHO_100,
-	DANGANRONPA;
+	AKAME_GA_KILL("Akame Ga Kill"),
+	ANGEL_BEATS("Angel Beats"),
+	BLEACH("Bleach"),
+	BOKU_NO_PICO("Boku No Pico"),
+	DANGANRONPA("Danganronpa"),
+	DARLING_IN_THE_FRANXX("Darling In The Franxx"),
+	DEATH_NOTE("Death Note"),
+	DR_STONE("Dr. Stone"),
+	ELFEN_LIED("Elfen Lied"),
+	GATE("GATE"),
+	HELLSING("Hellsing"),
+	HIGHSCHOOL_DXD("Highschool DxD"),
+	ISHUZOKU_REVIEWERS("Ishuzoku Reviewers"),
+	ITADAKI_SEIEKI("Itadaki! Seieki"),
+	JOJO_BIZARRE_ADVENTURES("JoJo Bizarre Adventures"),
+	KILL_LA_KILL("Kill La Kill"),
+	KIMETSU_NO_YAIBA("Kimetsu No Yaiba"),
+	MIRAI_NIKKI("Mirai Nikki"),
+	MOB_PSYCHO_100("Mob Psycho 100"),
+	MONSTER_MUSUME("Monster Musume"),
+	NANATSU_NO_TAIZAI("Nanatsu No Taizai"),
+	NARUTO("Naruto"),
+	NICHIJOU("Nichijou"),
+	NO_GAME_NO_LIFE("No Game No Life"),
+	OVERLORD("Overlord"),
+	PANTY_AND_STOCKING("Panty & Stocking"),
+	PROJECT_VOCALOID("Project Vocaloid"),
+	SAINT_SEIYA("Saint Seiya"),
+	SHINRYAKU_IKA_MUSUME("Shinryaku! Ika Musume"),
+	STEINS_GATE("Steins;Gate"),
+	SWORD_ART_ONLINE("Sword Art Online");
+
+	private final String name;
+
+	AnimeName(String name) {
+		this.name = name;
+	}
 
 	@Override
 	public String toString() {
-		return WordUtils.capitalize(name().toLowerCase().replace("_", " "));
+		return name;
 	}
 }
