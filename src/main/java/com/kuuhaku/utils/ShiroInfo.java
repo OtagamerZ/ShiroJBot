@@ -25,7 +25,7 @@ import com.kuuhaku.controller.postgresql.CanvasDAO;
 import com.kuuhaku.controller.postgresql.VersionDAO;
 import com.kuuhaku.events.JDAEvents;
 import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
-import com.kuuhaku.handlers.games.framework.Tabletop;
+import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.music.GuildMusicManager;
 import com.kuuhaku.model.common.drop.Prize;
 import com.kuuhaku.model.persistent.KawaiponCard;
@@ -111,7 +111,7 @@ public class ShiroInfo {
 			.build();
 	private final Map<String, KittyCache<String, Message>> messageCache = new HashMap<>();
 	private final Cache<String, Boolean> ratelimit = CacheBuilder.newBuilder().expireAfterWrite(3, TimeUnit.SECONDS).build();
-	private final Map<String, Tabletop> games = new HashMap<>();
+	private final Map<String, Game> games = new HashMap<>();
 	private final Set<String> requests = new HashSet<>();
 	private final Cache<String, KawaiponCard> currentCard = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
 	private final Cache<String, Prize> currentDrop = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
@@ -250,7 +250,7 @@ public class ShiroInfo {
 		return shiroEvents;
 	}
 
-	public Map<String, Tabletop> getGames() {
+	public Map<String, Game> getGames() {
 		return games;
 	}
 
