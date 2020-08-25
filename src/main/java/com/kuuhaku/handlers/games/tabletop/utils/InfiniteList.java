@@ -22,13 +22,13 @@ import java.util.LinkedList;
 
 public class InfiniteList<T> extends LinkedList<T> {
 	public T getNext() {
-		super.addLast(super.pollFirst());
-		return super.getFirst();
+		addLast(pollFirst());
+		return getFirst();
 	}
 
 	public T getPrevious() {
-		super.addFirst(super.pollLast());
-		return super.getLast();
+		addFirst(pollLast());
+		return getLast();
 	}
 
 	public T peekNext() {
