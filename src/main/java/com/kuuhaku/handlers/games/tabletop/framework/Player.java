@@ -21,7 +21,7 @@ package com.kuuhaku.handlers.games.tabletop.framework;
 public class Player {
 	private final String id;
 	private final int bet;
-	private boolean inGame;
+	private boolean inGame = true;
 
 	public Player(String id, int bet) {
 		this.id = id;
