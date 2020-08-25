@@ -15,7 +15,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Board.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Game.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java" afterDir="false" />
     </list>
@@ -142,11 +141,11 @@
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.handlers.games.tabletop.games.hitotsu" />
       <recent name="com.kuuhaku.handlers.api.endpoint" />
       <recent name="com.kuuhaku.model.common.drop" />
       <recent name="com.kuuhaku.command.commands.twitch" />
       <recent name="com.kuuhaku.command.commands.discord.misc" />
-      <recent name="com.kuuhaku.controller.postgresql" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\pieces" />
@@ -636,14 +635,7 @@
       <workItem from="1598354971559" duration="12000" />
       <workItem from="1598356266444" duration="19000" />
       <workItem from="1598356298287" duration="15000" />
-      <workItem from="1598379443755" duration="6189000" />
-    </task>
-    <task id="LOCAL-02202" summary="Remoção das configurações de servidor via site">
-      <created>1597853184760</created>
-      <option name="number" value="02202" />
-      <option name="presentableId" value="LOCAL-02202" />
-      <option name="project" value="LOCAL" />
-      <updated>1597853184761</updated>
+      <workItem from="1598379443755" duration="7138000" />
     </task>
     <task id="LOCAL-02203" summary="Otimização dos dados enviados ao site">
       <created>1597854024984</created>
@@ -981,7 +973,14 @@
       <option name="project" value="LOCAL" />
       <updated>1598385044999</updated>
     </task>
-    <option name="localTasksCounter" value="2251" />
+    <task id="LOCAL-02251" summary="Reescrita do módulo de jogos">
+      <created>1598385657770</created>
+      <option name="number" value="02251" />
+      <option name="presentableId" value="LOCAL-02251" />
+      <option name="project" value="LOCAL" />
+      <updated>1598385657770</updated>
+    </task>
+    <option name="localTasksCounter" value="2252" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1123,11 +1122,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598385042103">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598385654844">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598385042103" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598385654844" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1193,11 +1192,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598385046577">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598385659250">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598385046577" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598385659250" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597351073016">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
