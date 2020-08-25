@@ -151,7 +151,7 @@ public class HitotsuCommand extends Command {
 						}
 
 						if (accepted.size() == players.size()) {
-							Main.getInfo().getGames().put(id, t);
+							//Main.getInfo().getGames().put(id, t);
 							ms.delete().queue();
 							t.start();
 						}

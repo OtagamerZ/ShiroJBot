@@ -100,7 +100,7 @@ public class ChessCommand extends Command {
 							return;
 						}
 
-						Main.getInfo().getGames().put(id, t);
+						//Main.getInfo().getGames().put(id, t);
 						ms.delete().queue();
 						t.start();
 					}
