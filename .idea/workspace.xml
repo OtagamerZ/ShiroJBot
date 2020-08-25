@@ -631,14 +631,7 @@
       <workItem from="1598354971559" duration="12000" />
       <workItem from="1598356266444" duration="19000" />
       <workItem from="1598356298287" duration="15000" />
-      <workItem from="1598379443755" duration="7810000" />
-    </task>
-    <task id="LOCAL-02205" summary="Adição de cartas no payload enviado">
-      <created>1597856437254</created>
-      <option name="number" value="02205" />
-      <option name="presentableId" value="LOCAL-02205" />
-      <option name="project" value="LOCAL" />
-      <updated>1597856437254</updated>
+      <workItem from="1598379443755" duration="8119000" />
     </task>
     <task id="LOCAL-02206" summary="Adição de cartas no payload enviado">
       <created>1597857852663</created>
@@ -976,7 +969,14 @@
       <option name="project" value="LOCAL" />
       <updated>1598386973002</updated>
     </task>
-    <option name="localTasksCounter" value="2254" />
+    <task id="LOCAL-02254" summary="Reescrita do módulo de jogos">
+      <created>1598387353398</created>
+      <option name="number" value="02254" />
+      <option name="presentableId" value="LOCAL-02254" />
+      <option name="project" value="LOCAL" />
+      <updated>1598387353398</updated>
+    </task>
+    <option name="localTasksCounter" value="2255" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1118,11 +1118,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598386969722">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598387350628">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598386969722" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598387350628" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1188,11 +1188,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598386974118">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598387354777">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598386974118" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598387354777" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597351073016">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1246,10 +1246,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1598289364415" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1598383235593">
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1598387319900">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1598383235593" />
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1598387319900" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
