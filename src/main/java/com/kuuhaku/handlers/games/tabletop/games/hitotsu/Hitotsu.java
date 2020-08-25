@@ -91,7 +91,7 @@ public class Hitotsu extends Game {
 	@Override
 	public void start() {
 		lastOneStarts();
-		message = channel.sendMessage(getCurrent().getAsMention() + " você começa!").addFile(Helper.getBytes(getBoard().render()), "board.jpg").complete();
+		message = channel.sendMessage(getCurrent().getAsMention() + " você começa!").addFile(Helper.getBytes(mount, "png"), "mount.png").complete();
 		getHandler().addEventListener(listener);
 		seats.get(getCurrent().getId()).showHand();
 	}
