@@ -119,7 +119,10 @@ public class Board {
 	}
 
 	public void leaveGame() {
-		players.getFirst().setInGame(false);
+		Player p = players.pollFirst();
+		assert p != null;
+		p.setInGame(false);
+		players.addFirst(p);
 	}
 
 	public void awardWinner(Game game, String id) {
