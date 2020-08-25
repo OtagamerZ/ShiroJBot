@@ -65,8 +65,8 @@ public abstract class Game implements Closeable {
 		else timeout = channel.sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.")
 				.queueAfter(3, TimeUnit.MINUTES, onExpiration);
 		round++;
-		current = handler.getUserById(board.getInGamePlayers().getNext().getId());
-		System.out.println(current);
+		current = handler.getUserById(board.getInGamePlayers().peekNext().getId());
+		board.getPlayers().getNext();
 
 		for (int y = 0; y < board.getMatrix().length; y++) {
 			for (int x = 0; x < board.getMatrix().length; x++) {
@@ -85,7 +85,8 @@ public abstract class Game implements Closeable {
 		else timeout = channel.sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.")
 				.queueAfter(3, TimeUnit.MINUTES, onExpiration);
 		round++;
-		current = handler.getUserById(board.getInGamePlayers().getPrevious().getId());
+		current = handler.getUserById(board.getInGamePlayers().peekPrevious().getId());
+		board.getPlayers().getNext();
 
 		for (int y = 0; y < board.getMatrix().length; y++) {
 			for (int x = 0; x < board.getMatrix().length; x++) {
