@@ -91,7 +91,7 @@ public class Hitotsu extends Game {
 	@Override
 	public void start() {
 		lastOneStarts();
-		message = channel.sendMessage(getCurrent().getAsMention() + " você começa!").addFile(Helper.getBytes(mount, "png"), "mount.png").complete();
+		message = channel.sendMessage(getCurrent().getAsMention() + " você começa! (Olhe as mensagens privadas)").complete();
 		getHandler().addEventListener(listener);
 		seats.get(getCurrent().getId()).showHand();
 	}
@@ -206,7 +206,6 @@ public class Hitotsu extends Game {
 		}
 
 		if (deque.size() == 0) shuffle();
-		resetTimer();
 		seats.get(getCurrent().getId()).showHand();
 		putAndShow(c);
 		return false;
@@ -243,7 +242,6 @@ public class Hitotsu extends Game {
 		}
 
 		if (deque.size() == 0) shuffle();
-		resetTimer();
 		seats.get(getCurrent().getId()).showHand();
 		justShow();
 		return false;
@@ -260,6 +258,7 @@ public class Hitotsu extends Game {
 		Helper.drawRotated(g2d, card, card.getWidth() / 2, card.getHeight() / 2, Math.random() * 90 - 45);
 		g2d.dispose();
 
+		resetTimer();
 		if (message != null) message.delete().queue();
 		message = channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez.").addFile(Helper.getBytes(mount, "png"), "mount.png").complete();
 	}
@@ -277,6 +276,7 @@ public class Hitotsu extends Game {
 	}
 
 	public void justShow() {
+		resetTimer();
 		if (message != null) message.delete().queue();
 		message = channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez.").addFile(Helper.getBytes(mount, "png"), "mount.png").complete();
 	}
