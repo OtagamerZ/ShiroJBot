@@ -31,20 +31,20 @@ public class RarityColors {
 	private KawaiponRarity rarity;
 
 	@Column(columnDefinition = "CHAR(7) NOT NULL DEFAULT 'FFFFFF'")
-	private final String primaryColor = "#FFFFFF";
+	private final String primaryColor = "FFFFFF";
 
 	@Column(columnDefinition = "CHAR(7) NOT NULL DEFAULT '000000'")
-	private final String secondaryColor = "#000000";
+	private final String secondaryColor = "000000";
 
 	public KawaiponRarity getRarity() {
 		return rarity;
 	}
 
 	public Color getPrimary() {
-		return Color.decode(primaryColor);
+		return Color.decode("#" + primaryColor);
 	}
 
 	public Color getSecondary() {
-		return Color.decode(secondaryColor);
+		return Color.decode("#" + secondaryColor);
 	}
 }
