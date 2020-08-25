@@ -86,7 +86,7 @@ public abstract class Game implements Closeable {
 				.queueAfter(3, TimeUnit.MINUTES, onExpiration);
 		round++;
 		current = handler.getUserById(board.getInGamePlayers().peekPrevious().getId());
-		board.getPlayers().getNext();
+		board.getPlayers().getPrevious();
 
 		for (int y = 0; y < board.getMatrix().length; y++) {
 			for (int x = 0; x < board.getMatrix().length; x++) {
