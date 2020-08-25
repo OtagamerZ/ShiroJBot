@@ -232,14 +232,19 @@ public class SlotsCommand extends Command {
 			SlotsDAO.saveSlots(slt);
 		};
 
+		final String lowHeader = "<:blank:747876900860461118><:column_disabled_down:747875416567447592><:blank:747876900860461118><:column_enabled_down:747874903570514043><:blank:747876900860461118><:column_enabled_down:747874903570514043><:blank:747876900860461118><:column_enabled_down:747874903570514043><:blank:747876900860461118><:column_disabled_down:747875416567447592><:blank:747876900860461118>";
+		final String highHeader = "<:blank:747876900860461118><:column_enabled_down:747874903570514043><:blank:747876900860461118><:column_enabled_down:747874903570514043><:blank:747876900860461118><:column_enabled_down:747874903570514043><:blank:747876900860461118><:column_enabled_down:747874903570514043><:blank:747876900860461118><:column_enabled_down:747874903570514043><:blank:747876900860461118>";
+		final String top = "<:corner_down_right:747882840451973170><:horizontal_top:747882840351572020><:cross_down:747882840477138994><:horizontal_top:747882840351572020><:cross_down:747882840477138994><:horizontal_top:747882840351572020><:cross_down:747882840477138994><:horizontal_top:747882840351572020><:cross_down:747882840477138994><:horizontal_top:747882840351572020><:corner_down_left:747882840380932286>";
+		final String bottom = "<:corner_up_right:747882840439652522><:horizontal_bottom:747882840565350430><:cross_up:747882840489853000><:horizontal_bottom:747882840565350430><:cross_up:747882840489853000><:horizontal_bottom:747882840565350430><:cross_up:747882840489853000><:horizontal_bottom:747882840565350430><:cross_up:747882840489853000><:horizontal_bottom:747882840565350430><:corner_up_left:747882840326406246>";
+
 		Main.getInfo().getGameLock().add(author.getId());
 		channel.sendMessage(":white_flower: | **Aposta de " + author.getAsMention() + ": __" + args[0] + "__**").queue(s -> {
-			s.editMessage(s.getContentRaw() + "\n\n" + "**Prêmio acumulado: __" + slt.getPot() + "__**\n" + (highbet ? "     ⇩       ⇩      ⇩       ⇩      ⇩" : "              ⇩       ⇩       ⇩") + "\n┌──┬──┬──┬──┬──┐\n" + showSlots(0) + "\n└──┴──┴──┴──┴──┘\n" + (highbet ? "     ⇧       ⇧      ⇧       ⇧      ⇧" : "              ⇧       ⇧       ⇧")).queue(null, Helper::doNothing);
+			s.editMessage(s.getContentRaw() + "\n\n" + "**Prêmio acumulado: __" + slt.getPot() + "__**\n" + (highbet ? highHeader : lowHeader) + "\n" + top + "\n" + showSlots(0) + "\n" + bottom + "\n").queue(null, Helper::doNothing);
 			for (int i = 1; i < 6; i++) {
 				if (i != 5)
-					s.editMessage(s.getContentRaw() + "\n\n" + "**Prêmio acumulado: __" + slt.getPot() + "__**\n" + (highbet ? "     ⇩       ⇩      ⇩       ⇩      ⇩" : "              ⇩       ⇩       ⇩") + "\n┌──┬──┬──┬──┬──┐\n" + showSlots(i) + "\n└──┴──┴──┴──┴──┘\n" + (highbet ? "     ⇧       ⇧      ⇧       ⇧      ⇧" : "              ⇧       ⇧       ⇧")).queueAfter(3 + (3 * i), TimeUnit.SECONDS, null, Helper::doNothing);
+					s.editMessage(s.getContentRaw() + "\n\n" + "**Prêmio acumulado: __" + slt.getPot() + "__**\n" + (highbet ? highHeader : lowHeader) + "\n" + top + "\n" + showSlots(i) + "\n" + bottom + "\n").queueAfter(3 + (3 * i), TimeUnit.SECONDS, null, Helper::doNothing);
 				else
-					s.editMessage(s.getContentRaw() + "\n\n" + "**Prêmio acumulado: __" + slt.getPot() + "__**\n" + (highbet ? "     ⇩       ⇩      ⇩       ⇩      ⇩" : "              ⇩       ⇩       ⇩") + "\n┌──┬──┬──┬──┬──┐\n" + showSlots(i) + "\n└──┴──┴──┴──┴──┘\n" + (highbet ? "     ⇧       ⇧      ⇧       ⇧      ⇧" : "              ⇧       ⇧       ⇧")).queueAfter(3 + (3 * i), TimeUnit.SECONDS, f -> r.run(), Helper::doNothing);
+					s.editMessage(s.getContentRaw() + "\n\n" + "**Prêmio acumulado: __" + slt.getPot() + "__**\n" + (highbet ? highHeader : lowHeader) + "\n" + top + "\n" + showSlots(i) + "\n" + bottom + "\n").queueAfter(3 + (3 * i), TimeUnit.SECONDS, f -> r.run(), Helper::doNothing);
 			}
 		});
 	}
@@ -247,17 +252,17 @@ public class SlotsCommand extends Command {
 	private String showSlots(int phase) {
 		switch (phase) {
 			case 0:
-				return "│" + Slots.SLOT + " │" + Slots.SLOT + " │" + Slots.SLOT + "│ " + Slots.SLOT + "│ " + Slots.SLOT + "│";
+				return "<:vertical_right:747882840569544714>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical_left:747882840414486571>";
 			case 1:
-				return "│" + rolled.get(0) + " │" + Slots.SLOT + " │" + Slots.SLOT + "│ " + Slots.SLOT + "│ " + Slots.SLOT + "│";
+				return "<:vertical_right:747882840569544714>" + rolled.get(0) + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical_left:747882840414486571>";
 			case 2:
-				return "│" + rolled.get(0) + " │" + rolled.get(1) + " │" + Slots.SLOT + "│ " + Slots.SLOT + "│ " + Slots.SLOT + "│";
+				return "<:vertical_right:747882840569544714>" + rolled.get(0) + "<:vertical:747883406632943669>" + rolled.get(1) + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical_left:747882840414486571>";
 			case 3:
-				return "│" + rolled.get(0) + " │" + rolled.get(1) + " │" + rolled.get(2) + "│ " + Slots.SLOT + "│ " + Slots.SLOT + "│";
+				return "<:vertical_right:747882840569544714>" + rolled.get(0) + "<:vertical:747883406632943669>" + rolled.get(1) + "<:vertical:747883406632943669>" + rolled.get(2) + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical_left:747882840414486571>";
 			case 4:
-				return "│" + rolled.get(0) + " │" + rolled.get(1) + " │" + rolled.get(2) + "│ " + rolled.get(3) + "│ " + Slots.SLOT + "│";
+				return "<:vertical_right:747882840569544714>" + rolled.get(0) + "<:vertical:747883406632943669>" + rolled.get(1) + "<:vertical:747883406632943669>" + rolled.get(2) + "<:vertical:747883406632943669>" + rolled.get(3) + "<:vertical:747883406632943669>" + Slots.SLOT + "<:vertical_left:747882840414486571>";
 			case 5:
-				return "│" + rolled.get(0) + " │" + rolled.get(1) + " │" + rolled.get(2) + "│ " + rolled.get(3) + "│ " + rolled.get(4) + "│";
+				return "<:vertical_right:747882840569544714>" + rolled.get(0) + "<:vertical:747883406632943669>" + rolled.get(1) + "<:vertical:747883406632943669>" + rolled.get(2) + "<:vertical:747883406632943669>" + rolled.get(3) + "<:vertical:747883406632943669>" + rolled.get(4) + "<:vertical_left:747882840414486571>";
 			default:
 				return "";
 		}
