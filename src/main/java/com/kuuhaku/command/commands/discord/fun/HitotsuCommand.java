@@ -24,8 +24,8 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.handlers.games.framework.Tabletop;
-import com.kuuhaku.handlers.games.hitotsu.Hitotsu;
+import com.kuuhaku.handlers.games.tabletop.framework.Game;
+import com.kuuhaku.handlers.games.tabletop.games.hitotsu.Hitotsu;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
@@ -126,8 +126,8 @@ public class HitotsuCommand extends Command {
 		Set<User> accepted = new HashSet<>() {{
 			add(author);
 		}};
-		Tabletop t = new Hitotsu((TextChannel) channel, id, players.toArray(User[]::new));
-		int finalBet = bet;
+
+		Game t = new Hitotsu(Main.getInfo().getAPI(), (TextChannel) channel, bet, players.toArray(User[]::new));
 		String msg;
 		if (players.size() > 2)
 			msg = message.getMentionedUsers().stream().map(User::getAsMention).map(s -> s + ", ").collect(Collectors.joining()) + " vocês foram desafiados a uma partida de Hitotsu, desejam aceitar?" + (bet != 0 ? " (aposta: " + bet + " créditos)" : "");
@@ -153,7 +153,7 @@ public class HitotsuCommand extends Command {
 						if (accepted.size() == players.size()) {
 							Main.getInfo().getGames().put(id, t);
 							ms.delete().queue();
-							t.execute(finalBet);
+							t.start();
 						}
 					}
 				}), false, 1, TimeUnit.MINUTES));
