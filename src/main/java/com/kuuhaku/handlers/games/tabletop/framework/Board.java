@@ -111,6 +111,7 @@ public class Board {
 	}
 
 	public InfiniteList<Player> getPlayers() {
+		System.out.println(Arrays.toString(players.toArray()));
 		return players;
 	}
 
