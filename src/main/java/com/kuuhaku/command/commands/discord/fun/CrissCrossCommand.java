@@ -23,8 +23,8 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.handlers.games.framework.Tabletop;
-import com.kuuhaku.handlers.games.tabletop.games.CrissCross;
+import com.kuuhaku.handlers.games.tabletop.framework.Game;
+import com.kuuhaku.handlers.games.tabletop.games.crisscross.CrissCross;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
@@ -91,8 +91,7 @@ public class CrissCrossCommand extends Command {
 			return;
 		}
 
-		Tabletop t = new CrissCross((TextChannel) channel, id, author, message.getMentionedUsers().get(0));
-		int finalBet = bet;
+		Game t = new CrissCross(Main.getInfo().getAPI(), (TextChannel) channel, bet, author, message.getMentionedUsers().get(0));
 		channel.sendMessage(message.getMentionedUsers().get(0).getAsMention() + " você foi desafiado a uma partida de Jogo da Velha, deseja aceitar?" + (bet != 0 ? " (aposta: " + bet + " créditos)" : ""))
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 					if (mb.getId().equals(message.getMentionedUsers().get(0).getId())) {
@@ -100,9 +99,10 @@ public class CrissCrossCommand extends Command {
 							channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-in-game")).queue();
 							return;
 						}
+
 						Main.getInfo().getGames().put(id, t);
 						ms.delete().queue();
-						t.execute(finalBet);
+						t.start();
 					}
 				}), false, 1, TimeUnit.MINUTES));
 	}
