@@ -225,7 +225,6 @@ public class SlotsCommand extends Command {
 				}
 			}
 
-			Main.getInfo().getGameLock().remove(author.getId());
 			channel.sendMessage(msg).queue();
 			acc.addCredit(bet.get(), this.getClass());
 			AccountDAO.saveAccount(acc);
@@ -237,7 +236,6 @@ public class SlotsCommand extends Command {
 		final String top = "<:corner_down_right:747882840451973170><:horizontal_top:747882840351572020><:cross_down:747882840477138994><:horizontal_top:747882840351572020><:cross_down:747882840477138994><:horizontal_top:747882840351572020><:cross_down:747882840477138994><:horizontal_top:747882840351572020><:cross_down:747882840477138994><:horizontal_top:747882840351572020><:corner_down_left:747882840380932286>";
 		final String bottom = "<:corner_up_right:747882840439652522><:horizontal_bottom:747882840565350430><:cross_up:747882840489853000><:horizontal_bottom:747882840565350430><:cross_up:747882840489853000><:horizontal_bottom:747882840565350430><:cross_up:747882840489853000><:horizontal_bottom:747882840565350430><:cross_up:747882840489853000><:horizontal_bottom:747882840565350430><:corner_up_left:747882840326406246>";
 
-		Main.getInfo().getGameLock().add(author.getId());
 		channel.sendMessage(":white_flower: | **Aposta de " + author.getAsMention() + ": __" + args[0] + "__**").queue(s -> {
 			s.editMessage(s.getContentRaw() + "\n\n" + "**Prêmio acumulado: __" + slt.getPot() + "__**\n" + (highbet ? highHeader : lowHeader) + "\n" + top + "\n" + showSlots(0) + "\n" + bottom + "\n").queue(null, Helper::doNothing);
 			for (int i = 1; i < 6; i++) {

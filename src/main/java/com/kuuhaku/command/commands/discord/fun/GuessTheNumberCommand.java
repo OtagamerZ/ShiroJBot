@@ -67,7 +67,6 @@ public class GuessTheNumberCommand extends Command {
 
 		int theValue = Helper.rng(100, false);
 
-		Main.getInfo().getGameLock().add(author.getId());
 		channel.sendMessage("Já escolhi um número de 0 a 100, você tem 5 chances para tentar adivinhar!").queue();
 
 		Main.getInfo().getAPI().addEventListener(new ListenerAdapter() {
@@ -115,7 +114,6 @@ public class GuessTheNumberCommand extends Command {
 						PStateDAO.savePoliticalState(ps);
 					}
 
-					Main.getInfo().getGameLock().remove(author.getId());
 					Main.getInfo().getAPI().removeEventListener(this);
 				} else {
 					if (chances > 0) {
@@ -123,7 +121,6 @@ public class GuessTheNumberCommand extends Command {
 						chances--;
 					} else {
 						channel.sendMessage("Acabaram suas chances, o valor escolhido por mim era **" + theValue + "**.").queue();
-						Main.getInfo().getGameLock().remove(author.getId());
 						Main.getInfo().getAPI().removeEventListener(this);
 					}
 				}
