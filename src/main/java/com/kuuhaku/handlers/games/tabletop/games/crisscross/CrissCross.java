@@ -67,7 +67,6 @@ public class CrissCross extends Game {
 
 	@Override
 	public void start() {
-		resetTimer();
 		message = channel.sendMessage(getCurrent().getAsMention() + " você começa!").addFile(Helper.getBytes(getBoard().render()), "board.jpg").complete();
 		getHandler().addEventListener(listener);
 	}

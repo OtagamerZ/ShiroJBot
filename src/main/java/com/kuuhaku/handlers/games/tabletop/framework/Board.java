@@ -26,6 +26,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -39,6 +40,8 @@ public class Board {
 		this.size = size;
 		this.players = Arrays.stream(players).map(s -> new Player(s, bet)).collect(Collectors.toCollection(InfiniteList::new));
 		this.matrix = new Piece[size.getHeight()][size.getWidth()];
+
+		Collections.reverse(this.players);
 	}
 
 	public BoardSize getSize() {
