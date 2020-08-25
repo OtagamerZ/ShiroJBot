@@ -39,7 +39,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.Future;
 import java.util.function.Predicate;
 
 public class Hitotsu extends Game {
@@ -55,7 +54,6 @@ public class Hitotsu extends Game {
 		}
 	};
 	private BufferedImage mount = new BufferedImage(500, 500, BufferedImage.TYPE_INT_ARGB);
-	private Future<?> timeout;
 	private Message message = null;
 
 	public Hitotsu(JDA handler, TextChannel channel, int bet, User... players) {
@@ -207,7 +205,6 @@ public class Hitotsu extends Game {
 
 		if (deque.size() == 0) shuffle();
 		resetTimer();
-		System.out.println(getCurrent());
 		seats.get(getCurrent().getId()).showHand();
 		putAndShow(c);
 		return false;
@@ -245,7 +242,6 @@ public class Hitotsu extends Game {
 
 		if (deque.size() == 0) shuffle();
 		resetTimer();
-		System.out.println(getCurrent());
 		seats.get(getCurrent().getId()).showHand();
 		justShow();
 		return false;
