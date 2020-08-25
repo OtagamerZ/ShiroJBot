@@ -88,7 +88,7 @@ public class Hitotsu extends Game {
 
 	@Override
 	public void start() {
-		lastOneStarts();
+		resetTimer();
 		message = channel.sendMessage(getCurrent().getAsMention() + " você começa! (Olhe as mensagens privadas)").complete();
 		getHandler().addEventListener(listener);
 		seats.get(getCurrent().getId()).showHand();
