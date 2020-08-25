@@ -208,7 +208,6 @@ public class QuizCommand extends Command {
 					ms.delete().queue();
 
 					channel.sendMessage(eb.build()).queue();
-					Main.getInfo().getGameLock().remove(author.getId());
 				});
 
 				fields.add(new MessageEmbed.Field("Alternativa " + opts.get(i), shuffledOpts.get(i), true));
@@ -216,7 +215,6 @@ public class QuizCommand extends Command {
 
 			fields.sort(Comparator.comparing(MessageEmbed.Field::getName));
 			fields.forEach(eb::addField);
-			Main.getInfo().getGameLock().add(author.getId());
 			channel.sendMessage(eb.build()).queue(s -> Pages.buttonize(s, buttons, false, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId())));
 		} catch (IOException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
