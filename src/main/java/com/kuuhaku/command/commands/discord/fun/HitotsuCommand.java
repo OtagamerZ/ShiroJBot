@@ -156,6 +156,6 @@ public class HitotsuCommand extends Command {
 							t.start();
 						}
 					}
-				}), false, 1, TimeUnit.MINUTES));
+				}), true, 1, TimeUnit.MINUTES));
 	}
 }
