@@ -13,11 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/support/RatingCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/support/RatingCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/DevRating.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/DevRating.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -162,17 +158,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [clean]">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -643,14 +628,7 @@
       <workItem from="1598452388465" duration="9000" />
       <workItem from="1598453144570" duration="54000" />
       <workItem from="1598457680103" duration="1213000" />
-      <workItem from="1598459218249" duration="3239000" />
-    </task>
-    <task id="LOCAL-02219" summary="Correções no login do site">
-      <created>1598013358611</created>
-      <option name="number" value="02219" />
-      <option name="presentableId" value="LOCAL-02219" />
-      <option name="project" value="LOCAL" />
-      <updated>1598013358611</updated>
+      <workItem from="1598459218249" duration="3308000" />
     </task>
     <task id="LOCAL-02220" summary="Balanceamento do ranking de Exceeds">
       <created>1598041913986</created>
@@ -988,7 +966,14 @@
       <option name="project" value="LOCAL" />
       <updated>1598461341229</updated>
     </task>
-    <option name="localTasksCounter" value="2268" />
+    <task id="LOCAL-02268" summary="Correções menores">
+      <created>1598462490694</created>
+      <option name="number" value="02268" />
+      <option name="presentableId" value="LOCAL-02268" />
+      <option name="project" value="LOCAL" />
+      <updated>1598462490694</updated>
+    </task>
+    <option name="localTasksCounter" value="2269" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1054,7 +1039,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção nas mensagens de erro da API" />
     <MESSAGE value="Adição do Riki à equipe de suporte" />
     <MESSAGE value="Remoção das configurações de servidor via site" />
     <MESSAGE value="Otimização dos dados enviados ao site" />
@@ -1079,7 +1063,8 @@
     <MESSAGE value="Adicionada lista de argumentos para a loja de cartas" />
     <MESSAGE value="Reajuste nos valores referentes ao Kawaigotchis" />
     <MESSAGE value="Corrigido backup antes dela ser desligada pelo comando kill" />
-    <option name="LAST_COMMIT_MESSAGE" value="Corrigido backup antes dela ser desligada pelo comando kill" />
+    <MESSAGE value="Correções menores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções menores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1130,11 +1115,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598461338461">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598462487910">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598461338461" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598462487910" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1200,11 +1185,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598461348307">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598462508683">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598461348307" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598462508683" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597351073016">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
