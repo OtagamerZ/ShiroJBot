@@ -15,6 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -628,13 +629,9 @@
       <workItem from="1598450545184" duration="27000" />
       <workItem from="1598451643699" duration="117000" />
       <workItem from="1598452388465" duration="9000" />
-    </task>
-    <task id="LOCAL-02213" summary="Fragmentação do payload de cartas">
-      <created>1597947131542</created>
-      <option name="number" value="02213" />
-      <option name="presentableId" value="LOCAL-02213" />
-      <option name="project" value="LOCAL" />
-      <updated>1597947131543</updated>
+      <workItem from="1598453144570" duration="54000" />
+      <workItem from="1598457680103" duration="1213000" />
+      <workItem from="1598459218249" duration="341000" />
     </task>
     <task id="LOCAL-02214" summary="Fragmentação do payload de cartas">
       <created>1597947189869</created>
@@ -972,7 +969,14 @@
       <option name="project" value="LOCAL" />
       <updated>1598447365256</updated>
     </task>
-    <option name="localTasksCounter" value="2262" />
+    <task id="LOCAL-02262" summary="Correção na captura de peças do reversi">
+      <created>1598453187927</created>
+      <option name="number" value="02262" />
+      <option name="presentableId" value="LOCAL-02262" />
+      <option name="project" value="LOCAL" />
+      <updated>1598453187927</updated>
+    </task>
+    <option name="localTasksCounter" value="2263" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1038,7 +1042,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correções no chat da Twitch" />
     <MESSAGE value="Correções gerais" />
     <MESSAGE value="Correções nos icones de level" />
     <MESSAGE value="Migração dos endpoints para o novo domínio" />
@@ -1063,7 +1066,8 @@
     <MESSAGE value="Reescrita do módulo de jogos" />
     <MESSAGE value="Correção na cor dos nomes das cartas" />
     <MESSAGE value="Novo jogo: Reversi" />
-    <option name="LAST_COMMIT_MESSAGE" value="Novo jogo: Reversi" />
+    <MESSAGE value="Correção na captura de peças do reversi" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção na captura de peças do reversi" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1114,11 +1118,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598447362165">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598453185079">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598447362165" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598453185079" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1184,11 +1188,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598447367426">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598453189343">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598447367426" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598453189343" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597351073016">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1238,10 +1242,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="239" y="152" key="new project wizard/0.0.1680.1010@0.0.1680.1010" timestamp="1595512583095" />
-    <state x="496" y="233" width="672" height="677" key="run.anything.popup" timestamp="1598289364415">
+    <state x="496" y="233" width="672" height="677" key="run.anything.popup" timestamp="1598457973308">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1598289364415" />
+    <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1598457973308" />
     <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1598387319900">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
