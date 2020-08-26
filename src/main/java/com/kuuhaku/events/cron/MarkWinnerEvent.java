@@ -20,11 +20,16 @@ package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
+import com.kuuhaku.controller.sqlite.KGotchiDAO;
+import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class MarkWinnerEvent implements Job {
 	public static JobDetail markWinner;
@@ -45,5 +50,16 @@ public class MarkWinnerEvent implements Job {
 				}));
 
 		ExceedDAO.unblock();
+
+		List<Kawaigotchi> kgs = KGotchiDAO.getAllKawaigotchi();
+
+		kgs.forEach(k -> {
+			if (k.getDiedAt().plusMonths(1).isBefore(LocalDateTime.now()) || k.getOffSince().plusMonths(1).isBefore(LocalDateTime.now()))
+				KGotchiDAO.deleteKawaigotchi(k);
+			try {
+				k.update(Main.getInfo().getMemberByID(k.getUserId()));
+			} catch (NullPointerException ignore) {
+			}
+		});
 	}
 }

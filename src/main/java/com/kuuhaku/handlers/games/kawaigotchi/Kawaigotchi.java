@@ -143,7 +143,7 @@ public class Kawaigotchi {
 			} else {
 				offSince = offSince == null ? LocalDateTime.now() : offSince;
 			}
-			harvest();
+			KGotchiDAO.saveKawaigotchi(this);
 		} else if (!stance.equals(Stance.SLEEPING) && (Time.inRange(Time.NIGHT, currTime) || energy < 5)) {
 			stance = Stance.SLEEPING;
 			KGotchiDAO.saveKawaigotchi(this);
@@ -554,6 +554,14 @@ public class Kawaigotchi {
 		this.lastRoll = lastRoll;
 	}
 
+	public LocalDateTime getDiedAt() {
+		return diedAt;
+	}
+
+	public LocalDateTime getOffSince() {
+		return offSince;
+	}
+
 	public void addToBag(Food f) {
 		JSONObject jo = new JSONObject(bag);
 
@@ -596,12 +604,5 @@ public class Kawaigotchi {
 	}
 
 	public void doNothing() {
-	}
-
-	public void harvest() {
-		if (diedAt.plusMonths(1).isBefore(LocalDateTime.now()) || offSince.plusMonths(1).isBefore(LocalDateTime.now()))
-			KGotchiDAO.deleteKawaigotchi(this);
-		else
-			KGotchiDAO.saveKawaigotchi(this);
 	}
 }
