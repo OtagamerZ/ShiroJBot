@@ -66,25 +66,38 @@ public class RatingCommand extends Command {
 
 		Main.getInfo().getUserByID(args[0]).openPrivateChannel().queue(c -> {
 					c.sendFile(new File(Objects.requireNonNull(this.getClass().getClassLoader().getResource("assets/feedback.png")).getPath()))
-							.queue(s -> s.delete().queueAfter(5, TimeUnit.MINUTES));
-					c.sendMessage(eval(author)).queue(s -> {
-						s.delete().queueAfter(5, TimeUnit.MINUTES);
-						c.sendMessage(questions()[0])
-								.queue(m -> {
-									addRates(author, m, (dev, i) -> dev.setInteraction(dev.getInteraction() == 0 ? i : (dev.getInteraction() + i) / 2f));
-									m.delete().queueAfter(5, TimeUnit.MINUTES, null, Helper::doNothing);
+							.delay(5, TimeUnit.MINUTES)
+							.flatMap(Message::delete)
+							.complete();
+
+					Message s = c.sendMessage(eval(author)).complete();
+					c.sendMessage(questions()[0])
+							.delay(5, TimeUnit.MINUTES)
+							.queue(m -> {
+								addRates(author, m, (dev, i) -> {
+									dev.setInteraction(dev.getInteraction() == 0 ? i : (dev.getInteraction() + i) / 2f);
+									dev.setLastHelped();
 								});
-						c.sendMessage(questions()[1])
-								.queue(m -> {
-									addRates(author, m, (dev, i) -> dev.setSolution(dev.getSolution() == 0 ? i : (dev.getSolution() + i) / 2f));
-									m.delete().queueAfter(5, TimeUnit.MINUTES, null, Helper::doNothing);
+								m.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(), Helper::doNothing);
+							});
+					c.sendMessage(questions()[1])
+							.delay(5, TimeUnit.MINUTES)
+							.queue(m -> {
+								addRates(author, m, (dev, i) -> {
+									dev.setSolution(dev.getSolution() == 0 ? i : (dev.getSolution() + i) / 2f);
+									dev.setLastHelped();
 								});
-						c.sendMessage(questions()[2])
-								.queue(m -> {
-									addRates(author, m, (dev, i) -> dev.setKnowledge(dev.getKnowledge() == 0 ? i : (dev.getKnowledge() + i) / 2f));
-									m.delete().queueAfter(5, TimeUnit.MINUTES, null, Helper::doNothing);
+								m.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(), Helper::doNothing);
+							});
+					c.sendMessage(questions()[2])
+							.delay(5, TimeUnit.MINUTES)
+							.queue(m -> {
+								addRates(author, m, (dev, i) -> {
+									dev.setKnowledge(dev.getKnowledge() == 0 ? i : (dev.getKnowledge() + i) / 2f);
+									dev.setLastHelped();
 								});
-					});
+								m.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(), Helper::doNothing);
+							});
 				},
 				ex -> channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-request-rating"), ex)).queue()
 		);
@@ -115,7 +128,7 @@ public class RatingCommand extends Command {
 	}
 
 	private void addRates(User author, Message msg, BiConsumer<DevRating, Integer> act) {
-		Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<String, BiConsumer<Member, Message>>() {{
+		Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>() {{
 			put("1️⃣", (mb, ms) -> {
 				DevRating dev = VotesDAO.getRating(author.getId());
 				act.accept(dev, 1);
