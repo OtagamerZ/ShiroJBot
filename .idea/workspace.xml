@@ -14,12 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/reversi/Reversi.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/reversi/pieces/Disk.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/interfaces/Moveable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/interfaces/Condition.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/chess/pieces/ChessPiece.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/chess/pieces/ChessPiece.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -629,14 +624,10 @@
       <workItem from="1598356298287" duration="15000" />
       <workItem from="1598379443755" duration="9673000" />
       <workItem from="1598440357760" duration="1456000" />
-      <workItem from="1598445857567" duration="1008000" />
-    </task>
-    <task id="LOCAL-02212" summary="Adição de cartas no payload enviado">
-      <created>1597925530816</created>
-      <option name="number" value="02212" />
-      <option name="presentableId" value="LOCAL-02212" />
-      <option name="project" value="LOCAL" />
-      <updated>1597925530816</updated>
+      <workItem from="1598445857567" duration="2029000" />
+      <workItem from="1598450545184" duration="27000" />
+      <workItem from="1598451643699" duration="117000" />
+      <workItem from="1598452388465" duration="9000" />
     </task>
     <task id="LOCAL-02213" summary="Fragmentação do payload de cartas">
       <created>1597947131542</created>
@@ -974,7 +965,14 @@
       <option name="project" value="LOCAL" />
       <updated>1598441655885</updated>
     </task>
-    <option name="localTasksCounter" value="2261" />
+    <task id="LOCAL-02261" summary="Novo jogo: Reversi">
+      <created>1598447365256</created>
+      <option name="number" value="02261" />
+      <option name="presentableId" value="LOCAL-02261" />
+      <option name="project" value="LOCAL" />
+      <updated>1598447365256</updated>
+    </task>
+    <option name="localTasksCounter" value="2262" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1040,7 +1038,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Balanceamento na pontuação dos Exceeds" />
     <MESSAGE value="Correções no chat da Twitch" />
     <MESSAGE value="Correções gerais" />
     <MESSAGE value="Correções nos icones de level" />
@@ -1065,7 +1062,8 @@
     <MESSAGE value="Slots agora usa emotes para gerar a &quot;máquina de slots&quot;" />
     <MESSAGE value="Reescrita do módulo de jogos" />
     <MESSAGE value="Correção na cor dos nomes das cartas" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção na cor dos nomes das cartas" />
+    <MESSAGE value="Novo jogo: Reversi" />
+    <option name="LAST_COMMIT_MESSAGE" value="Novo jogo: Reversi" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1087,11 +1085,11 @@
     </state>
     <state x="239" y="78" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.768@0.0.1366.768" timestamp="1591416974252" />
     <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1597927763665" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1598441625708">
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1598447170362">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="488" y="71" key="#com.intellij.ide.util.MemberChooser/0.0.1366.768@0.0.1366.768" timestamp="1593920634856" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1598441625708" />
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1598447170362" />
     <state x="636" y="391" width="433" height="237" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1598294984315">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1116,11 +1114,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598441653097">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598447362165">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598441653097" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598447362165" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1186,11 +1184,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598441656981">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598447367426">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598441656981" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598447367426" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597351073016">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
