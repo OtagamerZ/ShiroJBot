@@ -89,6 +89,20 @@ public class Board {
 		return pieces.toArray(Piece[]::new);
 	}
 
+	public void fillLine(Spot from, int distance, Piece with, Neighbor vector, boolean inclusive) {
+		int[] currentCoords = inclusive ? from.getCoords() : new int[]{from.getX() + vector.getX(), from.getY() + vector.getY()};
+		for (int i = 0; i <= distance; i++) {
+			try {
+				matrix[currentCoords[1]][currentCoords[0]] = with;
+
+				currentCoords[0] += vector.getX();
+				currentCoords[1] += vector.getY();
+			} catch (ArrayIndexOutOfBoundsException e) {
+				break;
+			}
+		}
+	}
+
 	public Piece[] getColumn(int index) {
 		Piece[] column = new Piece[matrix.length];
 		for (int i = 0; i < matrix.length; i++) {
