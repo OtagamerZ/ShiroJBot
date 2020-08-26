@@ -36,7 +36,6 @@ import com.kuuhaku.handlers.api.Application;
 import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
 import com.kuuhaku.managers.CommandManager;
 import com.kuuhaku.managers.TwitchCommandManager;
-import com.kuuhaku.model.common.DataDump;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
@@ -211,9 +210,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		if (exiting) return false;
 		exiting = true;
 
-		BackupDAO.dumpData(new DataDump(com.kuuhaku.controller.sqlite.BackupDAO.getCADump(), com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump(), com.kuuhaku.controller.sqlite.BackupDAO.getGuildDump(), com.kuuhaku.controller.sqlite.BackupDAO.getKawaigotchiDump(), com.kuuhaku.controller.sqlite.BackupDAO.getPoliticalStateDump(), null));
-
-		Helper.logger(Main.class).info("Fui desligada.");
 		SpringApplication.exit(spring);
 		jbr.shutdown();
 		api.shutdown();
