@@ -18,10 +18,14 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.utils.Helper;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 
 @Entity
 @Table(name = "devrating")
@@ -38,6 +42,9 @@ public class DevRating {
 
 	@Column(columnDefinition = "FLOAT NOT NULL DEFAULT 0")
 	private float knowledge = 0;
+
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT 'Nunca'")
+	private String lastHelped = "Nunca";
 
 	public DevRating(String id) {
 		this.id = id;
@@ -72,5 +79,13 @@ public class DevRating {
 
 	public void setKnowledge(float knowledge) {
 		this.knowledge = knowledge;
+	}
+
+	public String getLastHelped() {
+		return lastHelped;
+	}
+
+	public void setLastHelped() {
+		this.lastHelped = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.dateformat);
 	}
 }
