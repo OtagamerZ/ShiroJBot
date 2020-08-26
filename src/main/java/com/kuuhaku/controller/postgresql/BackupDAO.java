@@ -34,16 +34,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class BackupDAO {
 	private static ExecutorService backupQueue = Executors.newFixedThreadPool(5);
 
-	public static void dumpData(DataDump data) {
+	public static void dumpData(DataDump data, boolean exitAfter) {
 		List<CustomAnswers> caDump = data.getCaDump();
 		List<GuildConfig> gcDump = data.getGcDump();
 		List<Member> mDump = data.getmDump();
 		List<Kawaigotchi> kgDump = data.getKgDump();
 		List<PoliticalState> psDump = data.getPsDump();
+
+		AtomicInteger done = new AtomicInteger();
 
 		backupQueue.execute(() -> {
 			EntityManager em = Manager.getEntityManager();
@@ -57,6 +60,10 @@ public class BackupDAO {
 
 			em.getTransaction().commit();
 			em.close();
+			done.getAndIncrement();
+			if (done.get() == 5) {
+				if (Main.shutdown()) System.exit(0);
+			}
 		});
 
 		backupQueue.execute(() -> {
@@ -71,6 +78,10 @@ public class BackupDAO {
 
 			em.getTransaction().commit();
 			em.close();
+			done.getAndIncrement();
+			if (done.get() == 5) {
+				if (Main.shutdown()) System.exit(0);
+			}
 		});
 
 		backupQueue.execute(() -> {
@@ -85,6 +96,10 @@ public class BackupDAO {
 
 			em.getTransaction().commit();
 			em.close();
+			done.getAndIncrement();
+			if (done.get() == 5) {
+				if (Main.shutdown()) System.exit(0);
+			}
 		});
 
 		backupQueue.execute(() -> {
@@ -99,6 +114,10 @@ public class BackupDAO {
 
 			em.getTransaction().commit();
 			em.close();
+			done.getAndIncrement();
+			if (done.get() == 5) {
+				if (Main.shutdown()) System.exit(0);
+			}
 		});
 
 		backupQueue.execute(() -> {
@@ -113,6 +132,10 @@ public class BackupDAO {
 
 			em.getTransaction().commit();
 			em.close();
+			done.getAndIncrement();
+			if (done.get() == 5) {
+				if (Main.shutdown()) System.exit(0);
+			}
 		});
 	}
 
