@@ -114,6 +114,9 @@ public class KawaiponBook {
 							if (foil) g.setColor(rc.getPrimary().brighter());
 							else g.setColor(rc.getPrimary());
 
+							System.out.println("Source: " + rc.getPrimary().getRed() + " | " + rc.getPrimary().getGreen() + " | " + rc.getPrimary().getBlue());
+							System.out.println("Current: " + g.getColor().getRed() + " | " + g.getColor().getGreen() + " | " + g.getColor().getBlue());
+
 							g.drawImage(chunks.get(finalC).get(i).getCard().drawCard(foil), 52 + 190 * i, 24, 160, 250, null);
 							Profile.printCenteredString(chunks.get(finalC).get(i).getName(), 160, 52 + 190 * i, 298, g);
 						} else if (chunks.get(finalC).get(i).getCard().getRarity().equals(KawaiponRarity.ULTIMATE)) {
