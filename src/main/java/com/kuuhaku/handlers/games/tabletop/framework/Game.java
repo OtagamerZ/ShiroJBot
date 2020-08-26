@@ -93,6 +93,10 @@ public abstract class Game implements Closeable {
 		return current;
 	}
 
+	public User getPlayerById(String id) {
+		return handler.getUserById(id);
+	}
+
 	@Override
 	public void close() {
 		if (timeout != null) timeout.cancel(true);
