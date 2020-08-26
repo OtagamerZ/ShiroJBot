@@ -99,7 +99,14 @@ public class BuyCardCommand extends Command {
 			EmbedBuilder eb = new EmbedBuilder();
 
 			eb.setTitle(":scales: | Mercado de cartas");
-			eb.setDescription("Use `" + prefix + "comprar ID` para comprar uma carta.");
+			eb.setDescription(
+					"Use `" + prefix + "comprar ID` para comprar uma carta.\n\n" +
+							"**Parâmetros de pesquisa:**\n" +
+							"`-n` - Busca cartas por nome\n" +
+							"`-r` - Busca cartas por raridade\n" +
+							"`-a` - Busca cartas por anime\n" +
+							"`-c` - Busca apenas cartas cromadas"
+			);
 			eb.setFooter("Seus créditos: " + buyer.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
 
 			List<Page> pages = new ArrayList<>();
