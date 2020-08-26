@@ -21,6 +21,6 @@ package com.kuuhaku.handlers.games.tabletop.framework.interfaces;
 import com.kuuhaku.handlers.games.tabletop.framework.Board;
 import com.kuuhaku.handlers.games.tabletop.framework.Spot;
 
-public interface Moveable {
+public interface Condition {
 	boolean validate(Board board, Spot from, Spot to);
 }

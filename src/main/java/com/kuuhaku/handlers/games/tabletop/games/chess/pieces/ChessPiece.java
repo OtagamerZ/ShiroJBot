@@ -19,9 +19,9 @@
 package com.kuuhaku.handlers.games.tabletop.games.chess.pieces;
 
 import com.kuuhaku.handlers.games.tabletop.framework.Piece;
-import com.kuuhaku.handlers.games.tabletop.framework.interfaces.Moveable;
+import com.kuuhaku.handlers.games.tabletop.framework.interfaces.Condition;
 
-public abstract class ChessPiece extends Piece implements Moveable {
+public abstract class ChessPiece extends Piece implements Condition {
 	public ChessPiece(String ownerId, boolean white, String icon) {
 		super(ownerId, white, icon);
 	}

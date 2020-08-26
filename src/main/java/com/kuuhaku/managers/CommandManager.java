@@ -468,6 +468,9 @@ public class CommandManager {
 			put(HitotsuCommand.class, new Argument(
 					"hitotsu", new String[]{"uno"}, "req_bet-mentions", "cmd_hitotsu", FUN, true
 			));
+			put(ReversiCommand.class, new Argument(
+					"reversi", new String[]{"othello"}, REQ_MENTION_BET, "cmd_reversi", FUN, true
+			));
 			put(CatchKawaiponCommand.class, new Argument(
 					"coletar", new String[]{"collect"}, "cmd_catch-kawaipon", FUN, false
 			));
