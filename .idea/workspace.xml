@@ -14,9 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/KillCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/KillCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/BackupDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/BackupDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/BackupEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/BackupEvent.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -643,21 +641,7 @@
       <workItem from="1598452388465" duration="9000" />
       <workItem from="1598453144570" duration="54000" />
       <workItem from="1598457680103" duration="1213000" />
-      <workItem from="1598459218249" duration="1562000" />
-    </task>
-    <task id="LOCAL-02216" summary="Fragmentação do payload de cartas">
-      <created>1597949304168</created>
-      <option name="number" value="02216" />
-      <option name="presentableId" value="LOCAL-02216" />
-      <option name="project" value="LOCAL" />
-      <updated>1597949304168</updated>
-    </task>
-    <task id="LOCAL-02217" summary="Loja de cartas agora ordena por preço">
-      <created>1597956514989</created>
-      <option name="number" value="02217" />
-      <option name="presentableId" value="LOCAL-02217" />
-      <option name="project" value="LOCAL" />
-      <updated>1597956514990</updated>
+      <workItem from="1598459218249" duration="2085000" />
     </task>
     <task id="LOCAL-02218" summary="Correções no login do site">
       <created>1598013316181</created>
@@ -988,7 +972,21 @@
       <option name="project" value="LOCAL" />
       <updated>1598460522133</updated>
     </task>
-    <option name="localTasksCounter" value="2265" />
+    <task id="LOCAL-02265" summary="Reajuste nos valores referentes ao Kawaigotchis">
+      <created>1598460794589</created>
+      <option name="number" value="02265" />
+      <option name="presentableId" value="LOCAL-02265" />
+      <option name="project" value="LOCAL" />
+      <updated>1598460794590</updated>
+    </task>
+    <task id="LOCAL-02266" summary="Corrigido backup antes dela ser desligada pelo comando kill">
+      <created>1598460923954</created>
+      <option name="number" value="02266" />
+      <option name="presentableId" value="LOCAL-02266" />
+      <option name="project" value="LOCAL" />
+      <updated>1598460923954</updated>
+    </task>
+    <option name="localTasksCounter" value="2267" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1054,7 +1052,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Migração dos endpoints para o novo domínio" />
     <MESSAGE value="Correção nas mensagens de erro da API" />
     <MESSAGE value="Adição do Riki à equipe de suporte" />
     <MESSAGE value="Remoção das configurações de servidor via site" />
@@ -1079,7 +1076,8 @@
     <MESSAGE value="Correção na captura de peças do reversi" />
     <MESSAGE value="Adicionada lista de argumentos para a loja de cartas" />
     <MESSAGE value="Reajuste nos valores referentes ao Kawaigotchis" />
-    <option name="LAST_COMMIT_MESSAGE" value="Reajuste nos valores referentes ao Kawaigotchis" />
+    <MESSAGE value="Corrigido backup antes dela ser desligada pelo comando kill" />
+    <option name="LAST_COMMIT_MESSAGE" value="Corrigido backup antes dela ser desligada pelo comando kill" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1130,11 +1128,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598460519442">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598460921317">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598460519442" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598460921317" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1200,11 +1198,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598460523648">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598460927133">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598460523648" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598460927133" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597351073016">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
