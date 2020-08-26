@@ -38,34 +38,36 @@ public class Disk extends Piece implements Condition {
 	public boolean validate(Board board, Spot from, Spot to) {
 		Neighbor[] directions = {UP, UPPER_RIGHT, RIGHT, LOWER_RIGHT, DOWN, LOWER_LEFT, LEFT, UPPER_LEFT};
 
-		int distance = -1;
-		Neighbor shortestRoute = null;
+		int filled = 0;
 		for (Neighbor n : directions) {
 			Piece[] toCheck = board.getLine(from, n, false);
+
+			if (Arrays.stream(toCheck).noneMatch(p -> p != null && p.isWhite() != isWhite())) continue;
+
 			boolean foundPair = Arrays.stream(toCheck).anyMatch(p -> p != null && p.isWhite() == isWhite());
 			int untilPair = -1;
 			if (foundPair) {
+				boolean startCounting = false;
 				for (int i = 0; i < toCheck.length; i++) {
 					Piece p = toCheck[i];
 					if (p == null) break;
-					else if (p.isWhite() == isWhite() && i > 0) {
-						untilPair = i;
-						break;
+					if (startCounting) {
+						if (p.isWhite() == isWhite()) {
+							untilPair = i;
+							break;
+						}
+					} else if (p.isWhite() != isWhite()) {
+						startCounting = true;
 					}
 				}
 
 				if (untilPair > -1) {
-					shortestRoute = n;
-					if (distance == -1) distance = untilPair;
-					else distance = Math.min(distance, untilPair);
+					board.fillLine(from, untilPair, this, n, false);
+					filled++;
 				}
 			}
 		}
 
-		if (shortestRoute == null) return false;
-		else {
-			board.fillLine(from, distance, this, shortestRoute, false);
-			return true;
-		}
+		return filled > 0;
 	}
 }
