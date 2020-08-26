@@ -18,11 +18,11 @@
 
 package com.kuuhaku.command.commands.discord.dev;
 
-import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.BackupDAO;
 import com.kuuhaku.model.common.DataDump;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
@@ -48,7 +48,7 @@ public class KillCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		if (author.getId().equals(Main.getInfo().getNiiChan())) {
+		if (author.getId().equals(ShiroInfo.getNiiChan())) {
 			channel.sendMessage("Sayonara, Nii-chan! <3").queue();
 		} else {
 			channel.sendMessage("Iniciando o protocolo de encerramento...").queue();
