@@ -382,7 +382,7 @@ public class KGotchiCommand extends Command {
 		if (rng > 50 && rng <= 75) {
 			acc.addCredit(2 * rng, this.getClass());
 			AccountDAO.saveAccount(acc);
-			channel.sendMessage("Opa, o que é isso? Parece que " + k.getName() + " encontrou " + (2 * rng) + " créditos!").queue();
+			channel.sendMessage("Opa, o que é isso? Parece que " + k.getName() + " encontrou " + (4 * rng) + " créditos!").queue();
 		} else if (rng > 85) {
 			int amount = (rng - 80) / 5;
 			Food randFood = (Food) FoodMenu.getMenu().values().toArray()[Helper.rng(FoodMenu.getMenu().size(), true)];

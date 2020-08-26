@@ -31,29 +31,31 @@ import static com.kuuhaku.handlers.games.kawaigotchi.enums.Status.*;
 public class FoodMenu {
 	private static Map<String, Food> menu = new HashMap<>() {{
 		//RATION
-		put("racao", new Food(RATION, "Ração", "racao", -5, 3, 1, 15));
-		put("poritos", new Food(RATION, "Poritos", "poritos", 5, 5, 5, 50));
-		put("kawaiskas", new Food(RATION, "Kawaiskas Sachê", "kawaiskas", 10, 10, 10, 100));
+		put("racao", new Food(RATION, "Ração", "racao", -5, 3, 1, 40));
+		put("poritos", new Food(RATION, "Poritos", "poritos", 5, 5, 5, 85));
+		put("kawaiskas", new Food(RATION, "Kawaiskas Sachê", "kawaiskas", 10, 10, 10, 150));
 
 		//MEAT
-		put("almondega", new Food(MEAT, "Almondega", "almondega", 7, 10, 2, 35));
-		put("parmigiana", new Food(MEAT, "Parmigiana", "parmigiana", 15, 12, 4, 80));
-		put("presunto", new Food(MEAT, "Presunto", "presunto", 10, 8, 4, 70));
+		put("almondega", new Food(MEAT, "Almondega", "almondega", 7, 10, 2, 55));
+		put("presunto", new Food(MEAT, "Presunto", "presunto", 10, 8, 4, 120));
+		put("pepperoni", new Food(MEAT, "Pepperoni", "pepperoni", 15, 10, 2, 165));
+		put("parmigiana", new Food(MEAT, "Parmigiana", "parmigiana", 15, 12, 4, 180));
 
 		//PLANT
-		put("aspargo", new Food(PLANT, "Aspargo", "aspargo", -2, 5, 6, 20));
-		put("tomate", new Food(PLANT, "Tomate", "tomate", 2, 8, 12, 45));
-		put("baunilha", new Food(PLANT, "Baunilha", "baunilha", 4, 2, 8, 35));
+		put("aspargo", new Food(PLANT, "Aspargo", "aspargo", -2, 5, 6, 35));
+		put("alface", new Food(PLANT, "Alface", "alface", 0, 3, 6, 50));
+		put("tomate", new Food(PLANT, "Tomate", "tomate", 2, 8, 12, 70));
+		put("baunilha", new Food(PLANT, "Baunilha", "baunilha", 4, 2, 8, 100));
 
 		//SWEET
-		put("marshmallow", new Food(SWEET, "Marshmallow", "marshmallow", 10, 2, -2, 30));
-		put("caramelo", new Food(SWEET, "Caramelo", "caramelo", 15, 3, -5, 60));
-		put("mel", new Food(SWEET, "Mel", "mel", 12, 2, 0, 80));
+		put("marshmallow", new Food(SWEET, "Marshmallow", "marshmallow", 10, 2, -2, 70));
+		put("mel", new Food(SWEET, "Mel", "mel", 12, 2, 0, 135));
+		put("caramelo", new Food(SWEET, "Caramelo", "caramelo", 15, 3, -5, 150));
 
 		//SPECIAL
-		put("energetico", new Food(SPECIAL, "Energético", "energetico", 0, 0, -25, 250, k -> k.setEnergy(100f), "Recupera toda a energia do Kawaigotchi, mas faz mal à saúde.", "está a todo vapor!", ENERGY_UP.getIcon().getImage()));
+		put("energetico", new Food(SPECIAL, "Energético", "energetico", 0, 0, -25, 1000, k -> k.setEnergy(100f), "Recupera toda a energia do Kawaigotchi, mas faz mal à saúde.", "está a todo vapor!", ENERGY_UP.getIcon().getImage()));
 		put("resserum", new Food(SPECIAL, "Serum da Ressureição", "resserum", 0, 0, 0, 5000, Kawaigotchi::resurrect, "Ressuscita o Kawaigotchi, ao custo de metade da experiência atual.", "foi ressuscitado!", RESSURRECTED.getIcon().getImage()));
-		put("sonifero", new Food(SPECIAL, "Sonifero", "sonifero", 0, 0, 0, 150, k -> k.setStance(Stance.SLEEPING), "Coloca o Kawaigotchi para dormir, ele irá acordar assim que sua energia chegar a 100% novamente.", "foi sedado!", SLEEPING.getIcon().getImage()));
+		put("sonifero", new Food(SPECIAL, "Sonifero", "sonifero", 0, 0, 0, 500, k -> k.setStance(Stance.SLEEPING), "Coloca o Kawaigotchi para dormir, ele irá acordar assim que sua energia chegar a 100% novamente.", "foi sedado!", SLEEPING.getIcon().getImage()));
 		put("vacina", new Food(SPECIAL, "Vacina", "vacina", -25, 0, 50, 500, Kawaigotchi::doNothing, "Vacina seu Kawaigotchi, recuperando 50% de saúde, porém ele não ficará muito feliz com uma agulhada.", "foi vacinado!", HEALTH_UP.getIcon().getImage()));
 		put("faixademobius", new Food(SPECIAL, "Faixa de Möbius", "faixademobius", Helper.rng(150, false) - 75, Helper.rng(150, false) - 75, Helper.rng(150, false) - 75, 10000, k -> {
 			k.setSkin(1 + Helper.rng(5, false));
