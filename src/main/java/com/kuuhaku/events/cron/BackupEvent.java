@@ -40,7 +40,7 @@ public class BackupEvent implements Job {
 						BackupDAO.getKawaigotchiDump(),
 						BackupDAO.getPoliticalStateDump(),
 						null
-				)
+				), false
 		);
 
 		System.gc();
