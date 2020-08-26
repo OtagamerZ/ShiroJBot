@@ -21,6 +21,8 @@ package com.kuuhaku.command.commands.discord.dev;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.postgresql.BackupDAO;
+import com.kuuhaku.model.common.DataDump;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
@@ -52,8 +54,15 @@ public class KillCommand extends Command {
 			channel.sendMessage("Iniciando o protocolo de encerramento...").queue();
 		}
 
-		Executors.newSingleThreadExecutor().execute(() -> {
-			if (Main.shutdown()) System.exit(0);
-		});
+		Executors.newSingleThreadExecutor().execute(() ->
+				BackupDAO.dumpData(new DataDump(
+						com.kuuhaku.controller.sqlite.BackupDAO.getCADump(),
+						com.kuuhaku.controller.sqlite.BackupDAO.getMemberDump(),
+						com.kuuhaku.controller.sqlite.BackupDAO.getGuildDump(),
+						com.kuuhaku.controller.sqlite.BackupDAO.getKawaigotchiDump(),
+						com.kuuhaku.controller.sqlite.BackupDAO.getPoliticalStateDump(),
+						null
+				), true)
+		);
 	}
 }
