@@ -44,7 +44,7 @@ public class Log {
 	private String command = "";
 
 	@Column(columnDefinition = "VARCHAR(191)")
-	private final String timestamp = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.dateformat);
+	private String timestamp = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).format(Helper.dateformat);
 
 	public int getId() {
 		return id;
@@ -92,5 +92,9 @@ public class Log {
 
 	public String getTimestamp() {
 		return timestamp;
+	}
+
+	public void setTimestamp(String timestamp) {
+		this.timestamp = timestamp;
 	}
 }
