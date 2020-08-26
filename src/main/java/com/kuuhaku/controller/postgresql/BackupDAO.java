@@ -61,7 +61,7 @@ public class BackupDAO {
 			em.getTransaction().commit();
 			em.close();
 			done.getAndIncrement();
-			if (done.get() == 5) {
+			if (done.get() == 5 && exitAfter) {
 				if (Main.shutdown()) System.exit(0);
 			}
 		});
@@ -79,7 +79,7 @@ public class BackupDAO {
 			em.getTransaction().commit();
 			em.close();
 			done.getAndIncrement();
-			if (done.get() == 5) {
+			if (done.get() == 5 && exitAfter) {
 				if (Main.shutdown()) System.exit(0);
 			}
 		});
@@ -97,7 +97,7 @@ public class BackupDAO {
 			em.getTransaction().commit();
 			em.close();
 			done.getAndIncrement();
-			if (done.get() == 5) {
+			if (done.get() == 5 && exitAfter) {
 				if (Main.shutdown()) System.exit(0);
 			}
 		});
@@ -115,7 +115,7 @@ public class BackupDAO {
 			em.getTransaction().commit();
 			em.close();
 			done.getAndIncrement();
-			if (done.get() == 5) {
+			if (done.get() == 5 && exitAfter) {
 				if (Main.shutdown()) System.exit(0);
 			}
 		});
@@ -133,7 +133,7 @@ public class BackupDAO {
 			em.getTransaction().commit();
 			em.close();
 			done.getAndIncrement();
-			if (done.get() == 5) {
+			if (done.get() == 5 && exitAfter) {
 				if (Main.shutdown()) System.exit(0);
 			}
 		});
