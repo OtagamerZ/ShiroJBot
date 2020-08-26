@@ -51,7 +51,7 @@ public class PixelCanvas {
 	private String canvas;
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-	private final boolean shelved = false;
+	private boolean shelved = false;
 
 	public BufferedImage getCanvas() {
 		if (canvas != null) {
@@ -191,5 +191,13 @@ public class PixelCanvas {
 		pc.saveCanvas(canvas);
 
 		CanvasDAO.saveCanvas(pc);
+	}
+
+	public boolean isShelved() {
+		return shelved;
+	}
+
+	public void setShelved(boolean shelved) {
+		this.shelved = shelved;
 	}
 }

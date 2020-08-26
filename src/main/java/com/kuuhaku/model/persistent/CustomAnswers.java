@@ -28,7 +28,7 @@ import javax.persistence.Table;
 public class CustomAnswers {
     @Id
     @Column(columnDefinition = "BIGINT")
-    private final long id = System.currentTimeMillis();
+    private long id = System.currentTimeMillis();
 
     @Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
     private String guildID = "";
