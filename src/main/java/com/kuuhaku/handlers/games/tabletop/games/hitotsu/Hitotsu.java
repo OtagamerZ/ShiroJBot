@@ -56,6 +56,7 @@ public class Hitotsu extends Game {
 	};
 	private BufferedImage mount = new BufferedImage(500, 500, BufferedImage.TYPE_INT_ARGB);
 	private Message message = null;
+	private boolean suddenDeath = false;
 
 	public Hitotsu(JDA handler, TextChannel channel, int bet, User... players) {
 		super(handler, new Board(BoardSize.S_NONE, bet, Arrays.stream(players).map(User::getId).toArray(String[]::new)), channel);
@@ -139,7 +140,7 @@ public class Hitotsu extends Game {
 					channel.sendMessage(getCurrent().getAsMention() + " é o último jogador na mesa, temos um vencedor!! (" + getRound() + " turnos)").queue();
 					close();
 				} else {
-					this.message = channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (getRound() >= available.size() ? " (MORTE SÚBITA)" : "")).complete();
+					this.message = channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (suddenDeath ? " (MORTE SÚBITA)" : "")).complete();
 					seats.get(getCurrent().getId()).showHand();
 				}
 			} else if (Helper.equalsAny(command, "lista", "cartas", "list", "cards")) {
@@ -225,7 +226,10 @@ public class Hitotsu extends Game {
 			return true;
 		}
 
-		if (deque.size() == 0 && getRound() < available.size()) shuffle();
+		if (deque.size() == 0) {
+			shuffle();
+			suddenDeath = true;
+		}
 		resetTimer();
 		seats.get(getCurrent().getId()).showHand();
 		putAndShow(c);
@@ -262,7 +266,10 @@ public class Hitotsu extends Game {
 			return true;
 		}
 
-		if (deque.size() == 0 && getRound() < available.size()) shuffle();
+		if (deque.size() == 0) {
+			shuffle();
+			suddenDeath = true;
+		}
 		resetTimer();
 		seats.get(getCurrent().getId()).showHand();
 		justShow();
@@ -281,7 +288,7 @@ public class Hitotsu extends Game {
 		g2d.dispose();
 
 		if (message != null) message.delete().queue();
-		message = channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (getRound() >= available.size() ? " (MORTE SÚBITA)" : "")).addFile(Helper.getBytes(mount, "png"), "mount.png").complete();
+		message = channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (suddenDeath ? " (MORTE SÚBITA)" : "")).addFile(Helper.getBytes(mount, "png"), "mount.png").complete();
 	}
 
 	public void justPut(KawaiponCard c) {
@@ -298,7 +305,7 @@ public class Hitotsu extends Game {
 
 	public void justShow() {
 		if (message != null) message.delete().queue();
-		message = channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (getRound() >= available.size() ? " (MORTE SÚBITA)" : "")).addFile(Helper.getBytes(mount, "png"), "mount.png").complete();
+		message = channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (suddenDeath ? " (MORTE SÚBITA)" : "")).addFile(Helper.getBytes(mount, "png"), "mount.png").complete();
 	}
 
 	public void shuffle() {
