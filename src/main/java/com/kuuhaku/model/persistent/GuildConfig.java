@@ -79,6 +79,12 @@ public class GuildConfig {
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String canalAvisos = "";
 
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
+	private String canalKawaipon = "";
+
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
+	private String canalDrop = "";
+
 	//TEXTS
 	@Column(columnDefinition = "TEXT")
 	private String msgBoasVindas = "Seja bem-vindo(a) ao %guild%, %user%!";
@@ -120,12 +126,6 @@ public class GuildConfig {
 
 	@Column(columnDefinition = "TEXT")
 	private String noSpamChannels = "";
-
-	@Column(columnDefinition = "TEXT")
-	private String canalKawaipon = "";
-
-	@Column(columnDefinition = "TEXT")
-	private String canalDrop = "";
 
 	//SWITCHES
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT TRUE")
