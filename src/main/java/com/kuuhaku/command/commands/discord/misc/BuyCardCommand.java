@@ -118,8 +118,8 @@ public class BuyCardCommand extends Command {
 					.filter(cm -> byName.get() == null || StringUtils.containsIgnoreCase(cm.getCard().getName(), byName.get().substring(2)))
 					.filter(cm -> byRarity.get() == null || byRarity.get().equals(cm.getCard().getCard().getRarity()))
 					.filter(cm -> byAnime.get() == null || byAnime.get().equals(cm.getCard().getCard().getAnime()))
-					.filter(cm -> onlyFoil.get() || cm.getCard().isFoil())
-					.filter(cm -> (onlyMine.get() && Helper.monoDigit(String.valueOf(cm.getPrice()), "9")) || cm.getSeller().equals(author.getId()))
+					.filter(cm -> !onlyFoil.get() || cm.getCard().isFoil())
+					.filter(cm -> onlyMine.get() || (cm.getSeller().equals(author.getId()) && !Helper.monoDigit(String.valueOf(cm.getPrice()), "9")))
 					.sorted(Comparator
 							.comparingInt(CardMarket::getPrice)
 							.thenComparing(k -> k.getCard().isFoil(), Comparator.reverseOrder())
