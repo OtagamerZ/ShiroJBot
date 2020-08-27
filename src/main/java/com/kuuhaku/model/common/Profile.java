@@ -125,6 +125,33 @@ public class Profile {
 		g2d.fillRect(0, 300, w, 300);
 		g2d.fillRect(0, 350, w, 250);
 
+		int polyOffset = 50;
+		if (mb.getLevel() >= 125) {
+			g2d.setColor(Color.black);
+			g2d.fillPolygon(new int[]{
+					38 + (avatar.getWidth() + 24) / 2,
+					38 + (avatar.getWidth() + 24) + polyOffset + 24,
+					38 + (avatar.getWidth() + 24) / 2,
+					38 - polyOffset - 24,
+			}, new int[]{
+					188 - polyOffset - 24,
+					188 + (avatar.getHeight() + 24) / 2,
+					188 + (avatar.getHeight() + 24) + polyOffset + 24,
+					188 + (avatar.getHeight() + 24) / 2,
+			}, 4);
+			g2d.setColor(main);
+			g2d.fillPolygon(new int[]{
+					38 + (avatar.getWidth() + 24) / 2,
+					38 + (avatar.getWidth() + 24) + polyOffset,
+					38 + (avatar.getWidth() + 24) / 2,
+					38 - polyOffset,
+			}, new int[]{
+					188 - polyOffset,
+					188 + (avatar.getHeight() + 24) / 2,
+					188 + (avatar.getHeight() + 24) + polyOffset,
+					188 + (avatar.getHeight() + 24) / 2,
+			}, 4);
+		}
 		g2d.setColor(Color.black);
 		g2d.fillOval(38, 188, avatar.getWidth() + 24, avatar.getHeight() + 24);
 		g2d.fillRect(50, 348, 200, 204);
