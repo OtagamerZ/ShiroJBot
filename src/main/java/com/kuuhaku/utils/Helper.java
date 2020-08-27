@@ -1012,12 +1012,18 @@ public class Helper {
 			eb.setColor(getRandomColor());
 			eb.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + (c.getRarity().getIndex() * 300 * (foil ? 2 : 1)) + " créditos).", null);
 
-			try {
-				Objects.requireNonNull(channel.getGuild().getTextChannelById(gc.getCanalKawaipon())).sendMessage(eb.build()).addFile(getBytes(c.drawCard(foil), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
-			} catch (RuntimeException e) {
-				gc.setCanalKawaipon(null);
-				GuildDAO.updateGuildSettings(gc);
+			if (gc.getCanalKawaipon() == null || gc.getCanalKawaipon().isEmpty()) {
 				channel.sendMessage(eb.build()).addFile(getBytes(c.drawCard(foil), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+			} else {
+				TextChannel tc = channel.getGuild().getTextChannelById(gc.getCanalKawaipon());
+
+				if (tc == null) {
+					gc.setCanalKawaipon(null);
+					GuildDAO.updateGuildSettings(gc);
+					channel.sendMessage(eb.build()).addFile(getBytes(c.drawCard(foil), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+				} else {
+					tc.sendMessage(eb.build()).addFile(getBytes(c.drawCard(foil), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+				}
 			}
 			Main.getInfo().getCurrentCard().put(channel.getGuild().getId(), kc);
 		}
@@ -1053,13 +1059,18 @@ public class Helper {
 			eb.setColor(getRandomColor());
 			eb.setFooter("Digite `" + gc.getPrefix() + "abrir` para receber o prêmio (requisitos: " + drop.getRequirement().getKey() + ").", null);
 
-			try {
-				Objects.requireNonNull(channel.getGuild().getTextChannelById(gc.getCanalDrop())).sendMessage(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
-			} catch (RuntimeException e) {
-				logger(Helper.class).warn(e + " | " + e.getStackTrace()[0]);
-				gc.setCanalDrop(null);
-				GuildDAO.updateGuildSettings(gc);
+			if (gc.getCanalDrop() == null || gc.getCanalDrop().isEmpty()) {
 				channel.sendMessage(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+			} else {
+				TextChannel tc = channel.getGuild().getTextChannelById(gc.getCanalDrop());
+
+				if (tc == null) {
+					gc.setCanalDrop(null);
+					GuildDAO.updateGuildSettings(gc);
+					channel.sendMessage(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+				} else {
+					tc.sendMessage(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+				}
 			}
 			Main.getInfo().getCurrentDrop().put(channel.getGuild().getId(), drop);
 		}
