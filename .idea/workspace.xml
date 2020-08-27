@@ -650,13 +650,6 @@
       <workItem from="1598533336174" duration="4458000" />
       <workItem from="1598544233354" duration="934000" />
     </task>
-    <task id="LOCAL-02239" summary="Ranking de créditos (pronto, eu fiz)">
-      <created>1598297130712</created>
-      <option name="number" value="02239" />
-      <option name="presentableId" value="LOCAL-02239" />
-      <option name="project" value="LOCAL" />
-      <updated>1598297130713</updated>
-    </task>
     <task id="LOCAL-02240" summary="Também ranking de cartas (agora deu)">
       <created>1598297412545</created>
       <option name="number" value="02240" />
@@ -993,7 +986,14 @@
       <option name="project" value="LOCAL" />
       <updated>1598548572883</updated>
     </task>
-    <option name="localTasksCounter" value="2288" />
+    <task id="LOCAL-02288" summary="Perfil possui mudanças após level 125">
+      <created>1598551208160</created>
+      <option name="number" value="02288" />
+      <option name="presentableId" value="LOCAL-02288" />
+      <option name="project" value="LOCAL" />
+      <updated>1598551208160</updated>
+    </task>
+    <option name="localTasksCounter" value="2289" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1059,7 +1059,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Ranking de créditos (pronto, eu fiz)" />
     <MESSAGE value="Também ranking de cartas (agora deu)" />
     <MESSAGE value="Correção no ranking" />
     <MESSAGE value="Correção no ranking de usuários" />
@@ -1084,7 +1083,8 @@
     <MESSAGE value="Adicionado contador da morte súbita" />
     <MESSAGE value="Correção no spawn de kawaipons e drops" />
     <MESSAGE value="Perfil agora mostra o XP de forma encurtada" />
-    <option name="LAST_COMMIT_MESSAGE" value="Perfil agora mostra o XP de forma encurtada" />
+    <MESSAGE value="Perfil possui mudanças após level 125" />
+    <option name="LAST_COMMIT_MESSAGE" value="Perfil possui mudanças após level 125" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1135,11 +1135,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598548570130">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598551205384">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598548570130" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598551205384" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1205,11 +1205,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598548574408">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598551211109">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598548574408" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598551211109" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597351073016">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
