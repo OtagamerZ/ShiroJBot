@@ -59,14 +59,14 @@ public abstract class Game implements Closeable {
 
 	public void resetTimer() {
 		if (timeout != null) timeout.cancel(true);
+		round++;
+		current = handler.getUserById(board.getInGamePlayers().peekNext().getId());
+		board.getPlayers().getNext();
 		if (round > 0)
 			timeout = channel.sendMessage(current.getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
 					.queueAfter(3, TimeUnit.MINUTES, onWO);
 		else timeout = channel.sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.")
 				.queueAfter(3, TimeUnit.MINUTES, onExpiration);
-		round++;
-		current = handler.getUserById(board.getInGamePlayers().peekNext().getId());
-		board.getPlayers().getNext();
 
 		for (int y = 0; y < board.getMatrix().length; y++) {
 			for (int x = 0; x < board.getMatrix().length; x++) {
