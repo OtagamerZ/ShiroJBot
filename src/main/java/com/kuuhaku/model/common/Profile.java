@@ -385,6 +385,6 @@ public class Profile {
 		for (int i = startAt; i < value; i *= forEach) {
 			times++;
 		}
-		return times == -1 ? String.valueOf(value) : ((value / (forEach * Math.pow(10, times))) + StringUtils.repeat("k", times));
+		return times == -1 ? String.valueOf(value) : (((int) Math.floor(value / (forEach * Math.pow(10, times)))) + StringUtils.repeat("k", times + 1));
 	}
 }
