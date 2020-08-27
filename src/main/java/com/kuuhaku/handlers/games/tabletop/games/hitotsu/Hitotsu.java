@@ -40,6 +40,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class Hitotsu extends Game {
 	private final Seats seats = new Seats();
@@ -67,7 +68,7 @@ public class Hitotsu extends Game {
 					resetTimer();
 					if (getBoard().getInGamePlayers().size() == 1) {
 						getBoard().awardWinner(this, getCurrent().getId());
-						channel.sendMessage(getCurrent().getAsMention() + " é o último jogador na mesa, temos um vencedor!!").queue();
+						channel.sendMessage(getCurrent().getAsMention() + " é o último jogador na mesa, temos um vencedor!! (" + getRound() + " turnos)").queue();
 						close();
 					}
 				}
@@ -135,10 +136,10 @@ public class Hitotsu extends Game {
 
 				if (getBoard().getInGamePlayers().size() == 1) {
 					getBoard().awardWinner(this, getCurrent().getId());
-					channel.sendMessage(getCurrent().getAsMention() + " é o último jogador na mesa, temos um vencedor!!").queue();
+					channel.sendMessage(getCurrent().getAsMention() + " é o último jogador na mesa, temos um vencedor!! (" + getRound() + " turnos)").queue();
 					close();
 				} else {
-					this.message = channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez.").complete();
+					this.message = channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (getRound() >= 50 ? " (MORTE SÚBITA)" : "")).complete();
 					seats.get(getCurrent().getId()).showHand();
 				}
 			} else if (Helper.equalsAny(command, "lista", "cartas", "list", "cards")) {
@@ -170,12 +171,34 @@ public class Hitotsu extends Game {
 			channel.sendMessage("❌ | Índice inválido, verifique a mensagem enviada por mim no privado para ver as cartas na sua mão..").queue();
 		} catch (NumberFormatException | IllegalChainException e) {
 			channel.sendMessage("❌ | Para executar uma corrente você deve informar 2 ou mais índices de cartas do mesmo anime separados por vírgula.").queue();
+		} catch (NoSuchElementException e) {
+			int lowest = 999;
+			for (Hand h : seats.values()) {
+				lowest = Math.min(lowest, h.getCards().size());
+			}
+
+			int finalLowest = lowest;
+			List<Hand> winners = seats.values().stream().filter(h -> h.getCards().size() <= finalLowest).collect(Collectors.toList());
+
+			if (winners.size() == 1) {
+				Hand h = winners.get(0);
+				channel.sendMessage(h.getUser().getAsMention() + " é o jogador que possui menos cartas, temos um vencedor!! (" + getRound() + " turnos)").queue();
+				getBoard().awardWinners(this, h.getUser().getId());
+				close();
+			} else if (winners.size() != getBoard().getPlayers().size()) {
+				channel.sendMessage(String.join(", ", winners.stream().map(h -> h.getUser().getAsMention()).toArray(String[]::new)) + " são os jogadores que possuem menos cartas, temos " + winners.size() + " vencedores!! (" + getRound() + " turnos)").queue();
+				getBoard().awardWinners(this, winners.stream().map(h -> h.getUser().getId()).toArray(String[]::new));
+				close();
+			} else {
+				channel.sendMessage("Temos um empate! (" + getRound() + " turnos)").queue();
+				close();
+			}
 		}
 	}
 
 	private void declareWinner() {
 		justShow();
-		channel.sendMessage("Não restam mais cartas para " + getCurrent().getAsMention() + ", temos um vencedor!!").queue();
+		channel.sendMessage("Não restam mais cartas para " + getCurrent().getAsMention() + ", temos um vencedor!! (" + getRound() + " turnos)").queue();
 		getBoard().awardWinner(this, getCurrent().getId());
 		close();
 	}
@@ -202,7 +225,7 @@ public class Hitotsu extends Game {
 			return true;
 		}
 
-		if (deque.size() == 0) shuffle();
+		if (deque.size() == 0 && getRound() < 50) shuffle();
 		resetTimer();
 		seats.get(getCurrent().getId()).showHand();
 		putAndShow(c);
@@ -239,7 +262,7 @@ public class Hitotsu extends Game {
 			return true;
 		}
 
-		if (deque.size() == 0) shuffle();
+		if (deque.size() == 0 && getRound() < 50) shuffle();
 		resetTimer();
 		seats.get(getCurrent().getId()).showHand();
 		justShow();
@@ -258,7 +281,7 @@ public class Hitotsu extends Game {
 		g2d.dispose();
 
 		if (message != null) message.delete().queue();
-		message = channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez.").addFile(Helper.getBytes(mount, "png"), "mount.png").complete();
+		message = channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (getRound() >= 50 ? " (MORTE SÚBITA)" : "")).addFile(Helper.getBytes(mount, "png"), "mount.png").complete();
 	}
 
 	public void justPut(KawaiponCard c) {
@@ -275,7 +298,7 @@ public class Hitotsu extends Game {
 
 	public void justShow() {
 		if (message != null) message.delete().queue();
-		message = channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez.").addFile(Helper.getBytes(mount, "png"), "mount.png").complete();
+		message = channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (getRound() >= 50 ? " (MORTE SÚBITA)" : "")).addFile(Helper.getBytes(mount, "png"), "mount.png").complete();
 	}
 
 	public void shuffle() {

@@ -25,20 +25,24 @@ import java.util.function.BiConsumer;
 
 public enum CardEffect {
 	BUY_2(KawaiponRarity.COMMON, (game, hand) -> {
+		game.getChannel().sendMessage(game.getCurrent().getAsMention() + " jogou um `+2` para " + hand.getUser().getAsMention() + "!").queue();
 		for (int i = 0; i < 2; i++) hand.draw(game.getDeque());
 	}),
 	SHUFFLE(KawaiponRarity.UNCOMMON, (game, hand) -> {
+		game.getChannel().sendMessage(game.getCurrent().getAsMention() + " embaralhou o deque!").queue();
 		game.shuffle();
 	}),
 	BLOCK(KawaiponRarity.RARE, (game, hand) -> {
-		game.getChannel().sendMessage(game.getCurrent().getAsMention() + " pulou a vez de " + hand.getUser().getAsMention()).queue();
+		game.getChannel().sendMessage(game.getCurrent().getAsMention() + " pulou a vez de " + hand.getUser().getAsMention() + "!").queue();
 		game.resetTimer();
 		game.getSeats().get(game.getCurrent().getId()).showHand();
 	}),
 	BUY_4(KawaiponRarity.ULTRA_RARE, (game, hand) -> {
+		game.getChannel().sendMessage(game.getCurrent().getAsMention() + " jogou um `+4` para " + hand.getUser().getAsMention() + "!").queue();
 		for (int i = 0; i < 4; i++) hand.draw(game.getDeque());
 	}),
 	SWAP_HANDS(KawaiponRarity.LEGENDARY, (game, hand) -> {
+		game.getChannel().sendMessage(game.getCurrent().getAsMention() + " jogou um `+2` para todo mundo!").queue();
 		for (Hand h : game.getSeats().values())
 			for (int i = 0; i < 4; i++)
 				h.draw(game.getDeque());
