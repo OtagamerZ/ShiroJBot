@@ -161,7 +161,7 @@ public class Hitotsu extends Game {
 				}
 				eb.setDescription(sb.toString());
 				if (played.size() > 0)
-					eb.setFooter("Carta atual: " + played.getLast().getName() + " (" + played.getLast().getCard().getAnime() + ")");
+					eb.setFooter("Carta atual: (" + played.getLast().getCard().getAnime() + ")" + played.getLast().getCard().getRarity().getEmote() + played.getLast().getName());
 
 				getCurrent().openPrivateChannel().complete().sendMessage(eb.build()).queue();
 			}
