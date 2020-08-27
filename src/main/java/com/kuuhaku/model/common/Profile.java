@@ -130,13 +130,13 @@ public class Profile {
 			g2d.setColor(Color.black);
 			g2d.fillPolygon(new int[]{
 					38 + (avatar.getWidth() + 24) / 2,
-					38 + (avatar.getWidth() + 24) + polyOffset + 12,
+					38 + (avatar.getWidth() + 24) + polyOffset + 2,
 					38 + (avatar.getWidth() + 24) / 2,
-					38 - polyOffset - 12,
+					38 - polyOffset - 2,
 			}, new int[]{
-					188 - polyOffset - 12,
+					188 - polyOffset - 2,
 					188 + (avatar.getHeight() + 24) / 2,
-					188 + (avatar.getHeight() + 24) + polyOffset + 12,
+					188 + (avatar.getHeight() + 24) + polyOffset + 2,
 					188 + (avatar.getHeight() + 24) / 2,
 			}, 4);
 			g2d.setColor(main);

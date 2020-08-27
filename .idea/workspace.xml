@@ -650,13 +650,6 @@
       <workItem from="1598533336174" duration="4458000" />
       <workItem from="1598544233354" duration="934000" />
     </task>
-    <task id="LOCAL-02240" summary="Também ranking de cartas (agora deu)">
-      <created>1598297412545</created>
-      <option name="number" value="02240" />
-      <option name="presentableId" value="LOCAL-02240" />
-      <option name="project" value="LOCAL" />
-      <updated>1598297412545</updated>
-    </task>
     <task id="LOCAL-02241" summary="Também ranking de cartas (agora deu)">
       <created>1598297475954</created>
       <option name="number" value="02241" />
@@ -993,7 +986,14 @@
       <option name="project" value="LOCAL" />
       <updated>1598551208160</updated>
     </task>
-    <option name="localTasksCounter" value="2289" />
+    <task id="LOCAL-02289" summary="Perfil possui mudanças após level 125">
+      <created>1598551397937</created>
+      <option name="number" value="02289" />
+      <option name="presentableId" value="LOCAL-02289" />
+      <option name="project" value="LOCAL" />
+      <updated>1598551397937</updated>
+    </task>
+    <option name="localTasksCounter" value="2290" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1135,11 +1135,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598551205384">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598551395253">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598551205384" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598551395253" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1205,11 +1205,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598551211109">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598551400236">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598551211109" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598551400236" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597351073016">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
