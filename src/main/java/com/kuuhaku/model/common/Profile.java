@@ -125,7 +125,7 @@ public class Profile {
 		g2d.fillRect(0, 300, w, 300);
 		g2d.fillRect(0, 350, w, 250);
 
-		int polyOffset = 30;
+		int polyOffset = 20;
 		if (mb.getLevel() >= 125) {
 			g2d.setColor(Color.black);
 			g2d.fillPolygon(new int[]{
