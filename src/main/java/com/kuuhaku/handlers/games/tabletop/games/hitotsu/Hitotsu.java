@@ -140,7 +140,7 @@ public class Hitotsu extends Game {
 					channel.sendMessage(getCurrent().getAsMention() + " é o último jogador na mesa, temos um vencedor!! (" + getRound() + " turnos)").queue();
 					close();
 				} else {
-					this.message = channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (suddenDeath ? " (MORTE SÚBITA)" : "")).complete();
+					this.message = channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (suddenDeath ? " (MORTE SÚBITA | " + deque.size() + " cartas restantes)" : "")).complete();
 					seats.get(getCurrent().getId()).showHand();
 				}
 			} else if (Helper.equalsAny(command, "lista", "cartas", "list", "cards")) {
@@ -288,7 +288,7 @@ public class Hitotsu extends Game {
 		g2d.dispose();
 
 		if (message != null) message.delete().queue();
-		message = channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (suddenDeath ? " (MORTE SÚBITA)" : "")).addFile(Helper.getBytes(mount, "png"), "mount.png").complete();
+		message = channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (suddenDeath ? " (MORTE SÚBITA | " + deque.size() + " cartas restantes)" : "")).addFile(Helper.getBytes(mount, "png"), "mount.png").complete();
 	}
 
 	public void justPut(KawaiponCard c) {
@@ -305,7 +305,7 @@ public class Hitotsu extends Game {
 
 	public void justShow() {
 		if (message != null) message.delete().queue();
-		message = channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (suddenDeath ? " (MORTE SÚBITA)" : "")).addFile(Helper.getBytes(mount, "png"), "mount.png").complete();
+		message = channel.sendMessage(getCurrent().getAsMention() + " agora é sua vez." + (suddenDeath ? " (MORTE SÚBITA | " + deque.size() + " cartas restantes)" : "")).addFile(Helper.getBytes(mount, "png"), "mount.png").complete();
 	}
 
 	public void shuffle() {
