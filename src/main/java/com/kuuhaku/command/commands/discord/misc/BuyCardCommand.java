@@ -109,7 +109,8 @@ public class BuyCardCommand extends Command {
 							"`-r` - Busca cartas por raridade\n" +
 							"`-a` - Busca cartas por anime\n" +
 							"`-c` - Busca apenas cartas cromadas\n" +
-							"`-m` - Busca apenas suas cartas anunciadas"
+							"`-m` - Busca apenas suas cartas anunciadas\n\n" +
+							"Cartas com valores acima de 50x o valor base não serão exibidas sem usar `-m`."
 			);
 			eb.setFooter("Seus créditos: " + buyer.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
 
@@ -135,7 +136,7 @@ public class BuyCardCommand extends Command {
 					User seller = Main.getInfo().getUserByID(cm.getSeller());
 					eb.addField(
 							"`ID: " + cm.getId() + "` | " + cm.getCard().getName() + " (" + cm.getCard().getCard().getRarity().toString() + ")",
-							"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: **" + (Helper.monoDigit(String.valueOf(cm.getPrice()), "9") ? "`não está à venda`**" : cm.getPrice() + "** créditos"),
+							"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: **" + (cm.getPrice() > (cm.getCard().getCard().getRarity().getIndex() * 50 * (cm.getCard().isFoil() ? 2 : 1)) ? "`valor muito alto`**" : cm.getPrice() + "** créditos"),
 							false
 					);
 				}

@@ -13,7 +13,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -634,14 +637,7 @@
       <workItem from="1598468658128" duration="1995000" />
       <workItem from="1598530153691" duration="2953000" />
       <workItem from="1598533336174" duration="4458000" />
-      <workItem from="1598544233354" duration="617000" />
-    </task>
-    <task id="LOCAL-02232" summary="Novas cartas: Shinryaku! Ika Musume">
-      <created>1598289755099</created>
-      <option name="number" value="02232" />
-      <option name="presentableId" value="LOCAL-02232" />
-      <option name="project" value="LOCAL" />
-      <updated>1598289755099</updated>
+      <workItem from="1598544233354" duration="934000" />
     </task>
     <task id="LOCAL-02233" summary="Cartas cromadas não são mais apenas por &quot;vaidade&quot;">
       <created>1598292155684</created>
@@ -979,7 +975,14 @@
       <option name="project" value="LOCAL" />
       <updated>1598544706630</updated>
     </task>
-    <option name="localTasksCounter" value="2281" />
+    <task id="LOCAL-02281" summary="Cartas com preço que possua apenas &quot;9&quot; não serão listadas no mercado público (usar -m para mostrar as suas)">
+      <created>1598544912417</created>
+      <option name="number" value="02281" />
+      <option name="presentableId" value="LOCAL-02281" />
+      <option name="project" value="LOCAL" />
+      <updated>1598544912417</updated>
+    </task>
+    <option name="localTasksCounter" value="2282" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1121,11 +1124,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598540452685">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598544909759">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598540452685" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598544909759" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1191,11 +1194,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598540456506">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598544915794">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598540456506" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598544915794" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597351073016">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
