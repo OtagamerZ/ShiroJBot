@@ -13,9 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -636,14 +634,7 @@
       <workItem from="1598468658128" duration="1995000" />
       <workItem from="1598530153691" duration="2953000" />
       <workItem from="1598533336174" duration="4458000" />
-      <workItem from="1598544233354" duration="316000" />
-    </task>
-    <task id="LOCAL-02231" summary="Novas cartas: Shinryaku! Ika Musume">
-      <created>1598289476845</created>
-      <option name="number" value="02231" />
-      <option name="presentableId" value="LOCAL-02231" />
-      <option name="project" value="LOCAL" />
-      <updated>1598289476846</updated>
+      <workItem from="1598544233354" duration="617000" />
     </task>
     <task id="LOCAL-02232" summary="Novas cartas: Shinryaku! Ika Musume">
       <created>1598289755099</created>
@@ -981,7 +972,14 @@
       <option name="project" value="LOCAL" />
       <updated>1598540455376</updated>
     </task>
-    <option name="localTasksCounter" value="2280" />
+    <task id="LOCAL-02280" summary="Cartas com preço que possua apenas &quot;9&quot; não serão listadas no mercado público (usar -m para mostrar as suas)">
+      <created>1598544706630</created>
+      <option name="number" value="02280" />
+      <option name="presentableId" value="LOCAL-02280" />
+      <option name="project" value="LOCAL" />
+      <updated>1598544706630</updated>
+    </task>
+    <option name="localTasksCounter" value="2281" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

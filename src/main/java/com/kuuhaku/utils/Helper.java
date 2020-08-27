@@ -1056,6 +1056,7 @@ public class Helper {
 			try {
 				Objects.requireNonNull(channel.getGuild().getTextChannelById(gc.getCanalDrop())).sendMessage(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
 			} catch (RuntimeException e) {
+				logger(Helper.class).warn(e + " | " + e.getStackTrace()[0]);
 				gc.setCanalDrop(null);
 				GuildDAO.updateGuildSettings(gc);
 				channel.sendMessage(eb.build()).delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
