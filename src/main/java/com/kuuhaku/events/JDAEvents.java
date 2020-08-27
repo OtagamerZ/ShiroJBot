@@ -220,7 +220,14 @@ public class JDAEvents extends ListenerAdapter {
 				switch (args[0].toLowerCase()) {
 					case "send":
 					case "s":
-						Main.getInfo().getUserByID(args[1]).openPrivateChannel().queue(c ->
+						User u = Main.getInfo().getUserByID(args[1]);
+
+						if (u == null) {
+							event.getChannel().sendMessage("❌ | Não existe nenhum usuário com esse ID.").queue();
+							return;
+						}
+
+						u.openPrivateChannel().queue(c ->
 								c.sendMessage(event.getAuthor().getName() + " respondeu:\n>>> " + msgNoArgs).queue());
 
 						staffIds.forEach(d -> {
@@ -229,11 +236,20 @@ public class JDAEvents extends ListenerAdapter {
 										c.sendMessage(event.getAuthor().getName() + " respondeu:\n>>> " + msgNoArgs).queue());
 							}
 						});
+
+						event.getChannel().sendMessage("Mensagem enviada com sucesso!").queue();
 						break;
 					case "block":
 					case "b":
+						User us = Main.getInfo().getUserByID(args[1]);
+
+						if (us == null) {
+							event.getChannel().sendMessage("❌ | Não existe nenhum usuário com esse ID.").queue();
+							return;
+						}
+
 						RelayDAO.permaBlock(new PermaBlock(args[1]));
-						Main.getInfo().getUserByID(args[1]).openPrivateChannel().queue(c ->
+						us.openPrivateChannel().queue(c ->
 								c.sendMessage("Você foi bloqueado dos canais de comunicação da Shiro pela seguinte razão: `" + msgNoArgs + "`").queue());
 
 						staffIds.forEach(d -> {
@@ -242,6 +258,8 @@ public class JDAEvents extends ListenerAdapter {
 										c.sendMessage(event.getAuthor().getName() + " bloqueou o usuário " + Main.getInfo().getUserByID(args[1]) + ". Razão: \n>>> " + msgNoArgs).queue());
 							}
 						});
+
+						event.getChannel().sendMessage("Usuário bloqueado com sucesso!").queue();
 						break;
 				}
 			} catch (NullPointerException ignore) {

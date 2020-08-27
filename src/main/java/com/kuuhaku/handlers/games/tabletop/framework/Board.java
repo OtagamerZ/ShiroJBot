@@ -21,6 +21,7 @@ package com.kuuhaku.handlers.games.tabletop.framework;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.Neighbor;
 import com.kuuhaku.handlers.games.tabletop.utils.InfiniteList;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -144,6 +145,14 @@ public class Board {
 
 	public void awardWinner(Game game, String id) {
 		List<Player> losers = players.stream().filter(p -> !p.getId().equals(id)).collect(Collectors.toList());
+
+		//TODO Premiação
+
+		game.close();
+	}
+
+	public void awardWinners(Game game, String... ids) {
+		List<Player> losers = players.stream().filter(p -> ArrayUtils.contains(ids, p.getId())).collect(Collectors.toList());
 
 		//TODO Premiação
 
