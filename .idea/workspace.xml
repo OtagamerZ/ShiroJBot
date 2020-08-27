@@ -13,7 +13,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -633,14 +635,7 @@
       <workItem from="1598465764415" duration="251000" />
       <workItem from="1598468658128" duration="1995000" />
       <workItem from="1598530153691" duration="2953000" />
-      <workItem from="1598533336174" duration="628000" />
-    </task>
-    <task id="LOCAL-02226" summary="Correção na lista de cartas">
-      <created>1598279699745</created>
-      <option name="number" value="02226" />
-      <option name="presentableId" value="LOCAL-02226" />
-      <option name="project" value="LOCAL" />
-      <updated>1598279699745</updated>
+      <workItem from="1598533336174" duration="1592000" />
     </task>
     <task id="LOCAL-02227" summary="Correção na lista de cartas">
       <created>1598279830669</created>
@@ -978,7 +973,14 @@
       <option name="project" value="LOCAL" />
       <updated>1598533433031</updated>
     </task>
-    <option name="localTasksCounter" value="2275" />
+    <task id="LOCAL-02275" summary="Correção dos canais de drop e kawaipon">
+      <created>1598534098106</created>
+      <option name="number" value="02275" />
+      <option name="presentableId" value="LOCAL-02275" />
+      <option name="project" value="LOCAL" />
+      <updated>1598534098106</updated>
+    </task>
+    <option name="localTasksCounter" value="2276" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1044,7 +1046,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Loja de cartas agora ordena por preço" />
     <MESSAGE value="Correções no login do site" />
     <MESSAGE value="Balanceamento do ranking de Exceeds" />
     <MESSAGE value="Correção na lista de cartas" />
@@ -1069,7 +1070,8 @@
     <MESSAGE value="Novas cartas: Tate No Yuusha" />
     <MESSAGE value="Adição de fase de morte súbita para o uno (50 turnos)" />
     <MESSAGE value="Correção do W.O." />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção do W.O." />
+    <MESSAGE value="Correção dos canais de drop e kawaipon" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção dos canais de drop e kawaipon" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1120,11 +1122,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598533430366">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598534095435">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598533430366" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598534095435" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1190,11 +1192,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598533435939">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598534099846">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598533435939" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598534099846" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597351073016">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1215,11 +1217,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="594" y="260" key="com.intellij.database.run.ParametersPanel.Standalone/0.0.1680.1010@0.0.1680.1010" timestamp="1598041461186" />
-    <state x="305" y="160" width="406" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1598469121859">
+    <state x="305" y="160" width="406" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1598534163048">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="254" y="43" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1366.768@0.0.1366.768" timestamp="1593921071276" />
-    <state x="305" y="160" width="406" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1598469121859" />
+    <state x="305" y="160" width="406" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1598534163048" />
     <state x="510" y="135" key="com.intellij.database.view.ui.DatabasePreviewDialog" timestamp="1597351739604">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
