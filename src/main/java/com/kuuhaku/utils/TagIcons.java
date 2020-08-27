@@ -174,7 +174,7 @@ public enum TagIcons {
 			if (lvl >= i) l = i;
 			else break;
 		}
-		return Main.getInfo().getAPI().getEmotesByName("lvl_" + Math.min(l, 120), true)
+		return Main.getInfo().getAPI().getEmotesByName("lvl_" + Math.min(l, 240), true)
 				.stream()
 				.filter(e -> e.getGuild() != null && ShiroInfo.getEmoteRepo().contains(e.getGuild().getId()))
 				.findFirst()
