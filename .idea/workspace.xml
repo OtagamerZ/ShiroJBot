@@ -14,9 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -637,14 +635,7 @@
       <workItem from="1598465764415" duration="251000" />
       <workItem from="1598468658128" duration="1995000" />
       <workItem from="1598530153691" duration="2953000" />
-      <workItem from="1598533336174" duration="2951000" />
-    </task>
-    <task id="LOCAL-02228" summary="Correção na lista de cartas">
-      <created>1598279990090</created>
-      <option name="number" value="02228" />
-      <option name="presentableId" value="LOCAL-02228" />
-      <option name="project" value="LOCAL" />
-      <updated>1598279990091</updated>
+      <workItem from="1598533336174" duration="3733000" />
     </task>
     <task id="LOCAL-02229" summary="Correção na lista de cartas">
       <created>1598281039734</created>
@@ -982,7 +973,14 @@
       <option name="project" value="LOCAL" />
       <updated>1598535074452</updated>
     </task>
-    <option name="localTasksCounter" value="2277" />
+    <task id="LOCAL-02277" summary="Cartas com preço que possua apenas &quot;9&quot; não serão listadas no mercado público (usar -m para mostrar as suas)">
+      <created>1598536481264</created>
+      <option name="number" value="02277" />
+      <option name="presentableId" value="LOCAL-02277" />
+      <option name="project" value="LOCAL" />
+      <updated>1598536481264</updated>
+    </task>
+    <option name="localTasksCounter" value="2278" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1048,7 +1046,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Balanceamento do ranking de Exceeds" />
     <MESSAGE value="Correção na lista de cartas" />
     <MESSAGE value="Novas cartas: Shinryaku! Ika Musume" />
     <MESSAGE value="Cartas cromadas não são mais apenas por &quot;vaidade&quot;" />
@@ -1073,7 +1070,8 @@
     <MESSAGE value="Correção do W.O." />
     <MESSAGE value="Correção dos canais de drop e kawaipon" />
     <MESSAGE value="A raridade da carta atualmente jogada no monte agora aparece na lista de cartas" />
-    <option name="LAST_COMMIT_MESSAGE" value="A raridade da carta atualmente jogada no monte agora aparece na lista de cartas" />
+    <MESSAGE value="Cartas com preço que possua apenas &quot;9&quot; não serão listadas no mercado público (usar -m para mostrar as suas)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Cartas com preço que possua apenas &quot;9&quot; não serão listadas no mercado público (usar -m para mostrar as suas)" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1124,11 +1122,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="569" y="360" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1680.1010@0.0.1680.1010" timestamp="1589918441111" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598535071654">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598536478652">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598535071654" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598536478652" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1194,11 +1192,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598535105894">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598536491867">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598535105894" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598536491867" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597351073016">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
