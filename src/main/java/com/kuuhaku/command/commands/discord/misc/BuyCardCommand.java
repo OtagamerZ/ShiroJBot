@@ -69,8 +69,9 @@ public class BuyCardCommand extends Command {
 		if (args.length < 1 || !StringUtils.isNumeric(args[0])) {
 			AtomicReference<String> byName = new AtomicReference<>(null);
 			AtomicReference<KawaiponRarity> byRarity = new AtomicReference<>(null);
-			AtomicBoolean onlyFoil = new AtomicBoolean();
 			AtomicReference<AnimeName> byAnime = new AtomicReference<>(null);
+			AtomicBoolean onlyFoil = new AtomicBoolean();
+			AtomicBoolean onlyMine = new AtomicBoolean();
 
 			if (args.length > 0) {
 				List<String> params = List.of(args);
@@ -85,8 +86,6 @@ public class BuyCardCommand extends Command {
 					}
 				}
 
-				onlyFoil.set(params.stream().anyMatch("-c"::equalsIgnoreCase));
-
 				String anime = params.stream().filter(s -> s.startsWith("-a") && s.length() > 2).findFirst().orElse(null);
 				if (anime != null) {
 					if (Arrays.stream(AnimeName.values()).noneMatch(a -> a.name().equals(anime.substring(2).toUpperCase()))) {
@@ -95,6 +94,10 @@ public class BuyCardCommand extends Command {
 					}
 					byAnime.set(AnimeName.valueOf(anime.substring(2).toUpperCase()));
 				}
+
+				onlyFoil.set(params.stream().anyMatch("-c"::equalsIgnoreCase));
+
+				onlyMine.set(params.stream().anyMatch("-m"::equalsIgnoreCase));
 			}
 			EmbedBuilder eb = new EmbedBuilder();
 
@@ -105,7 +108,8 @@ public class BuyCardCommand extends Command {
 							"`-n` - Busca cartas por nome\n" +
 							"`-r` - Busca cartas por raridade\n" +
 							"`-a` - Busca cartas por anime\n" +
-							"`-c` - Busca apenas cartas cromadas"
+							"`-c` - Busca apenas cartas cromadas\n" +
+							"`-m` - Busca apenas suas cartas anunciadas"
 			);
 			eb.setFooter("Seus créditos: " + buyer.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
 
@@ -113,8 +117,9 @@ public class BuyCardCommand extends Command {
 			List<CardMarket> cards = CardMarketDAO.getCards().stream()
 					.filter(cm -> byName.get() == null || StringUtils.containsIgnoreCase(cm.getCard().getName(), byName.get().substring(2)))
 					.filter(cm -> byRarity.get() == null || byRarity.get().equals(cm.getCard().getCard().getRarity()))
-					.filter(cm -> !onlyFoil.get() || cm.getCard().isFoil())
 					.filter(cm -> byAnime.get() == null || byAnime.get().equals(cm.getCard().getCard().getAnime()))
+					.filter(cm -> !onlyFoil.get() || cm.getCard().isFoil())
+					.filter(cm -> !(onlyMine.get() && Helper.monoDigit(String.valueOf(cm.getPrice()), "9")) || cm.getSeller().equals(author.getId()))
 					.sorted(Comparator
 							.comparingInt(CardMarket::getPrice)
 							.thenComparing(k -> k.getCard().isFoil(), Comparator.reverseOrder())
@@ -130,7 +135,7 @@ public class BuyCardCommand extends Command {
 					User seller = Main.getInfo().getUserByID(cm.getSeller());
 					eb.addField(
 							"`ID: " + cm.getId() + "` | " + cm.getCard().getName() + " (" + cm.getCard().getCard().getRarity().toString() + ")",
-							"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: **" + cm.getPrice() + "** créditos",
+							"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: **" + (Helper.monoDigit(String.valueOf(cm.getPrice()), "9") ? "`não está à venda`**" : cm.getPrice() + "** créditos"),
 							false
 					);
 				}

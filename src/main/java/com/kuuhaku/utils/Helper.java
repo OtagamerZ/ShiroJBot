@@ -1181,4 +1181,13 @@ public class Helper {
 			return "";
 		}
 	}
+
+	public static boolean monoDigit(String word, String ch) {
+		if (word.length() == 0) return false;
+		for (String s : word.split("")) {
+			if (!s.equals(ch)) return false;
+		}
+
+		return true;
+	}
 }
