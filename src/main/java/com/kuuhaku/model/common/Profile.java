@@ -187,10 +187,10 @@ public class Profile {
 					188 + (avatar.getHeight() + 24) / 2,
 					188 + (avatar.getHeight() + 24) / 2 - 36,
 			}, 8);
-			g2d.setColor(Color.white);
-			g2d.fillOval(36, 186, avatar.getWidth() + 28, avatar.getHeight() + 28);
-			g2d.fillRect(48, 346, 204, 208);
 		}
+		g2d.setColor(Color.white);
+		g2d.fillOval(36, 186, avatar.getWidth() + 28, avatar.getHeight() + 28);
+		g2d.fillRect(48, 346, 204, 208);
 		g2d.setColor(Color.black);
 		g2d.fillOval(38, 188, avatar.getWidth() + 24, avatar.getHeight() + 24);
 		g2d.fillRect(50, 348, 200, 204);
