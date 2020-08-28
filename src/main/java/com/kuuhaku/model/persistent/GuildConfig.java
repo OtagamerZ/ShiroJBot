@@ -337,13 +337,13 @@ public class GuildConfig {
 	public void addNoLinkChannel(TextChannel ch) {
 		List<String> ph = new ArrayList<>(getNoLinkChannels());
 		ph.add(ch.getId());
-		noLinkChannels = ph.toString();
+		noLinkChannels = new JSONArray(ph).toString();
 	}
 
 	public void removeNoLinkChannel(TextChannel ch) {
 		List<String> ph = new ArrayList<>(getNoLinkChannels());
 		ph.removeIf(s -> s.equals(ch.getId()));
-		noLinkChannels = ph.toString();
+		noLinkChannels = new JSONArray(ph).toString();
 	}
 
 	public List<String> getNoSpamChannels() {
@@ -354,17 +354,16 @@ public class GuildConfig {
 	public void addNoSpamChannel(TextChannel ch) {
 		List<String> ph = new ArrayList<>(getNoSpamChannels());
 		ph.add(ch.getId());
-		noSpamChannels = ph.toString();
+		noSpamChannels = new JSONArray(ph).toString();
 	}
 
 	public void removeNoSpamChannel(TextChannel ch) {
 		List<String> ph = new ArrayList<>(getNoSpamChannels());
 		ph.removeIf(s -> s.equals(ch.getId()));
-		noSpamChannels = ph.toString();
+		noSpamChannels = new JSONArray(ph).toString();
 	}
 
 	public List<String> getRules() {
-		System.out.println(rules);
 		if (rules.isBlank()) return new ArrayList<>();
 		else return new JSONArray(rules).toList().stream().map(String::valueOf).collect(Collectors.toList());
 	}
@@ -372,13 +371,13 @@ public class GuildConfig {
 	public void addRule(String rule) {
 		List<String> ph = new ArrayList<>(getRules());
 		ph.add(rule);
-		rules = ph.toString();
+		rules = new JSONArray(ph).toString();
 	}
 
 	public void removeRule(int index) {
 		List<String> ph = new ArrayList<>(getRules());
 		ph.remove(index);
-		rules = ph.toString();
+		rules = new JSONArray(ph).toString();
 	}
 
 	public boolean isHardAntispam() {
