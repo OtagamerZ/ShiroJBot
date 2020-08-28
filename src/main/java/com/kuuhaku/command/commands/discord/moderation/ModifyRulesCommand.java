@@ -22,6 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
@@ -61,7 +62,14 @@ public class ModifyRulesCommand extends Command {
 		}
 
 		if (StringUtils.isNumeric(rule)) {
-			gc.removeRule(Integer.parseInt(rule));
+			int index = Integer.parseInt(rule) - 1;
+
+			if (!Helper.between(index, 1, gc.getRules().size() + 1)) {
+				channel.sendMessage("❌ | Não há nenhuma regra com esse índice.").queue();
+				return;
+			}
+
+			gc.removeRule(index);
 			GuildDAO.updateGuildSettings(gc);
 			channel.sendMessage("Regra removida com sucesso!").queue();
 		} else {
