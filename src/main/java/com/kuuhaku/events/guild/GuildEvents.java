@@ -349,7 +349,7 @@ public class GuildEvents extends ListenerAdapter {
 				acc.addCredit((long) (value * be.getRate()), this.getClass());
 				AccountDAO.saveAccount(acc);
 
-				msg.getChannel().sendMessage("Obrigado, seus " + value + " " + be.getCurrency() + (value != 1 ? "s" : "") + " foram convertidos em " + (long) (value * be.getRate()) + " créditos com sucesso!").queue();
+				msg.getChannel().sendMessage("Obrigada, seus " + value + " " + be.getCurrency() + (value != 1 ? "s" : "") + " foram convertidos em " + (long) (value * be.getRate()) + " créditos com sucesso!").queue();
 			}
 		}
 	}
