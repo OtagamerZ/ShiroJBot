@@ -66,7 +66,7 @@ public class Pawn extends ChessPiece {
 					}
 				}
 
-				board.setPieceAt(to.getNeighbor(DOWN), new Decoy(getOwnerId(), isWhite()));
+				if (Math.abs(vector[1]) > 1) board.setPieceAt(to.getNeighbor(DOWN), new Decoy(getOwnerId(), isWhite()));
 			} else if (Math.abs(vector[1]) > 1) return false;
 
 			Piece atSpot = board.getPieceOrDecoyAt(to);
@@ -90,7 +90,7 @@ public class Pawn extends ChessPiece {
 					}
 				}
 
-				board.setPieceAt(to.getNeighbor(UP), new Decoy(getOwnerId(), isWhite()));
+				if (Math.abs(vector[1]) > 1) board.setPieceAt(to.getNeighbor(UP), new Decoy(getOwnerId(), isWhite()));
 			} else if (Math.abs(vector[1]) > 1) return false;
 
 			Piece atSpot = board.getPieceOrDecoyAt(to);
