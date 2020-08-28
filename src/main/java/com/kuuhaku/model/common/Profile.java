@@ -111,11 +111,11 @@ public class Profile {
 		}
 
 		Color lvlBar;
-		if (Helper.between(mb.getLevel(), 0, 35)) {
+		if (Helper.between(mb.getLevel(), 0, 35) || Helper.between(mb.getLevel(), 125, 155)) {
 			lvlBar = Color.decode("#552911");
-		} else if (Helper.between(mb.getLevel(), 35, 65)) {
+		} else if (Helper.between(mb.getLevel(), 35, 65) || Helper.between(mb.getLevel(), 155, 185)) {
 			lvlBar = Color.decode("#b3b3b3");
-		} else if (Helper.between(mb.getLevel(), 65, 90)) {
+		} else if (Helper.between(mb.getLevel(), 65, 90) || Helper.between(mb.getLevel(), 185, 215)) {
 			lvlBar = Color.decode("#cf9401");
 		} else {
 			lvlBar = Color.decode("#00d3d3");
