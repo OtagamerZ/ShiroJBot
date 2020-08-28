@@ -13,12 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/BotExchange.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/guild/GuildEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/guild/GuildEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -114,7 +109,7 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="TEXT" />
     <property name="extract.method.default.visibility" value="private" />
-    <property name="last.edited.regexp" value=":money_with_wings: | &lt;abc:123&gt; Transação realizada com sucesso! &lt;abc:123&gt; recebeu 1 Sonho!" />
+    <property name="last.edited.regexp" value="&lt;@abc:123&gt;" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Project" />
@@ -653,14 +648,7 @@
       <workItem from="1598530153691" duration="2953000" />
       <workItem from="1598533336174" duration="4458000" />
       <workItem from="1598544233354" duration="934000" />
-      <workItem from="1598616454676" duration="12179000" />
-    </task>
-    <task id="LOCAL-02257" summary="Reescrita do módulo de jogos">
-      <created>1598388298264</created>
-      <option name="number" value="02257" />
-      <option name="presentableId" value="LOCAL-02257" />
-      <option name="project" value="LOCAL" />
-      <updated>1598388298264</updated>
+      <workItem from="1598616454676" duration="12523000" />
     </task>
     <task id="LOCAL-02258" summary="Reescrita do módulo de jogos">
       <created>1598389113326</created>
@@ -998,7 +986,14 @@
       <option name="project" value="LOCAL" />
       <updated>1598624643235</updated>
     </task>
-    <option name="localTasksCounter" value="2306" />
+    <task id="LOCAL-02306" summary="Conversão de sonhos (Loritta) em créditos (Shiro) adicionada">
+      <created>1598632946232</created>
+      <option name="number" value="02306" />
+      <option name="presentableId" value="LOCAL-02306" />
+      <option name="project" value="LOCAL" />
+      <updated>1598632946233</updated>
+    </task>
+    <option name="localTasksCounter" value="2307" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1064,7 +1059,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção no ranking de usuários" />
     <MESSAGE value="Slots agora usa emotes para gerar a &quot;máquina de slots&quot;" />
     <MESSAGE value="Reescrita do módulo de jogos" />
     <MESSAGE value="Correção na cor dos nomes das cartas" />
@@ -1089,7 +1083,8 @@
     <MESSAGE value="Perfil possui mudanças após level 125" />
     <MESSAGE value="Adição de modificador de xp anti-spam" />
     <MESSAGE value="Adicionado comando para modificar as regras do comando RegenRules" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adicionado comando para modificar as regras do comando RegenRules" />
+    <MESSAGE value="Conversão de sonhos (Loritta) em créditos (Shiro) adicionada" />
+    <option name="LAST_COMMIT_MESSAGE" value="Conversão de sonhos (Loritta) em créditos (Shiro) adicionada" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1136,11 +1131,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598624640460">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598632943461">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598624640460" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598632943461" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1206,11 +1201,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598624651559">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598632948640">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598624651559" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598632948640" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597351073016">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
