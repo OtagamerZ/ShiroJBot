@@ -92,6 +92,7 @@ public class SlotsCommand extends Command {
 		boolean highbet = bet.get() >= 500;
 		Slots slt = SlotsDAO.getSlots();
 		acc.removeCredit(bet.get(), this.getClass());
+		AccountDAO.saveAccount(acc);
 		slt.addToPot(bet.get());
 
 		rollSlots();
@@ -226,8 +227,9 @@ public class SlotsCommand extends Command {
 			}
 
 			channel.sendMessage(msg).queue();
-			acc.addCredit(bet.get(), this.getClass());
-			AccountDAO.saveAccount(acc);
+			Account facc = AccountDAO.getAccount(author.getId());
+			facc.addCredit(bet.get(), this.getClass());
+			AccountDAO.saveAccount(facc);
 			SlotsDAO.saveSlots(slt);
 		};
 
