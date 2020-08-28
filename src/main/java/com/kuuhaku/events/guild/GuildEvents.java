@@ -31,10 +31,7 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.CustomAnswers;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.MutedMember;
-import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.I18n;
-import com.kuuhaku.utils.PrivilegeLevel;
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.utils.*;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -100,7 +97,10 @@ public class GuildEvents extends ListenerAdapter {
 				return;
 			}
 
-			if (author.isBot() && !Main.getInfo().getSelfUser().getId().equals(author.getId())) return;
+			if (author.isBot() && !Main.getInfo().getSelfUser().getId().equals(author.getId())) {
+				handleExchange(author, message);
+				return;
+			}
 
 			try {
 				MemberDAO.getMemberById(author.getId() + guild.getId());
@@ -321,6 +321,35 @@ public class GuildEvents extends ListenerAdapter {
 					com.kuuhaku.controller.postgresql.MemberDAO.saveMutedMember(mm);
 				}
 			} catch (Exception ignore) {
+			}
+		}
+	}
+
+	private void handleExchange(User u, Message msg) {
+		if (BotExchange.isBotAdded(u.getId())) {
+			BotExchange be = BotExchange.getById(u.getId());
+
+			if (be.matchTrigger().test(msg.getContentRaw())) {
+				if (be.getReactionEmote() != null) msg.addReaction(be.getReactionEmote()).queue();
+			} else if (be.matchConfirmation().test(msg.getContentRaw())) {
+				String[] args = msg.getContentRaw().replaceAll(be.getConfirmation(), "").split(" ");
+				long value = 0;
+				for (String arg : args) {
+					if (StringUtils.isNumeric(arg)) {
+						value = Long.parseLong(arg);
+						break;
+					}
+				}
+				if (value == 0) return;
+
+				User target = msg.getMentionedUsers().stream().filter(usr -> !usr.getId().equals(Main.getInfo().getSelfUser().getId())).findFirst().orElse(null);
+				if (target == null) return;
+
+				Account acc = AccountDAO.getAccount(target.getId());
+				acc.addCredit((long) (value * be.getRate()), this.getClass());
+				AccountDAO.saveAccount(acc);
+
+				msg.getChannel().sendMessage("Obrigado, seus " + value + " " + be.getCurrency() + (value != 1 ? "s" : "") + " foram convertidos em " + (long) (value * be.getRate()) + " créditos com sucesso!").queue();
 			}
 		}
 	}
