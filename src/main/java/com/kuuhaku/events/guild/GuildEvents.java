@@ -329,7 +329,6 @@ public class GuildEvents extends ListenerAdapter {
 		if (BotExchange.isBotAdded(u.getId())) {
 			BotExchange be = BotExchange.getById(u.getId());
 
-			System.out.println(msg.getContentRaw());
 			if (be.matchTrigger().test(msg.getContentRaw())) {
 				if (be.getReactionEmote() != null) msg.addReaction(be.getReactionEmote()).queue();
 			} else if (be.matchConfirmation().test(msg.getContentRaw())) {
