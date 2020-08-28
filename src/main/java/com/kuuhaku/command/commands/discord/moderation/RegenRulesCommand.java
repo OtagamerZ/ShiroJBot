@@ -55,7 +55,7 @@ public class RegenRulesCommand extends Command {
 			if (guild.getId().equals(ShiroInfo.getSupportServerID()))
 				channel.sendFile(Helper.getImage("https://i.imgur.com/JQ3LvGK.png"), "title.png").complete();
 			channel.sendFile(Helper.getImage("https://i.imgur.com/9dfpeel.png"), "welcome.png").complete();
-			channel.sendMessage(guild.getId().equals(ShiroInfo.getSupportServerID()) ? "Seja bem-vindo(a) ao meu servidor oficial de suporte, qualquer duvida que tenha sobre como me utilizar será esclarecida por um de nossos membros, fique à vontade e lembre-se de sempre relatar quando achar algo suspeito" : "Seja bem-vindo(a) ao servidor " + guild.getName() + ", fique à vontade e lembre-se de sempre relatar quando achar algo suspeito").complete();
+			channel.sendMessage(guild.getId().equals(ShiroInfo.getSupportServerID()) ? "Seja bem-vindo(a) ao meu servidor oficial de suporte, qualquer duvida que tenha sobre como me utilizar será esclarecida por um de nossos membros, fique à vontade e lembre-se de sempre relatar quando achar algo suspeito." : "Seja bem-vindo(a) ao servidor " + guild.getName() + ", fique à vontade e lembre-se de sempre relatar quando achar algo suspeito.").complete();
 			channel.sendFile(Helper.getImage("https://i.imgur.com/aCYUW1G.png"), "rules.png").complete();
 			if (guild.getId().equals(ShiroInfo.getSupportServerID()))
 				channel.sendMessage("**1 - É proibido qualquer ato de SPAM, flood ou bullying**\n" +
