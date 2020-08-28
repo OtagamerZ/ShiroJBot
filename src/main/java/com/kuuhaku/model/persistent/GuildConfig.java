@@ -364,18 +364,19 @@ public class GuildConfig {
 	}
 
 	public List<String> getRules() {
+		System.out.println(rules);
 		if (rules.isBlank()) return new ArrayList<>();
 		else return new JSONArray(rules).toList().stream().map(String::valueOf).collect(Collectors.toList());
 	}
 
 	public void addRule(String rule) {
-		List<String> ph = new ArrayList<>(getNoSpamChannels());
+		List<String> ph = new ArrayList<>(getRules());
 		ph.add(rule);
 		rules = ph.toString();
 	}
 
 	public void removeRule(int index) {
-		List<String> ph = new ArrayList<>(getNoSpamChannels());
+		List<String> ph = new ArrayList<>(getRules());
 		ph.remove(index);
 		rules = ph.toString();
 	}
