@@ -1055,7 +1055,7 @@ public class Helper {
 			eb.setThumbnail("https://i.pinimg.com/originals/86/c0/f4/86c0f4d0f020c3f819a532873ef33704.png");
 			eb.setTitle("Um drop apareceu neste servidor!");
 			eb.addField("Conteúdo:", drop.getPrize() + " créditos", true);
-			eb.addField("Código captcha:", drop.getCaptcha(), true);
+			eb.addField("Código captcha:", "||" + drop.getCaptcha() + "||", true);
 			eb.setColor(getRandomColor());
 			eb.setFooter("Digite `" + gc.getPrefix() + "abrir` para receber o prêmio (requisitos: " + drop.getRequirement().getKey() + ").", null);
 
