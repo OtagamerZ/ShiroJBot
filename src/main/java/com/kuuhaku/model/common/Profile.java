@@ -76,7 +76,6 @@ public class Profile {
 		BufferedImage bi = new BufferedImage(w, HEIGTH, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setBackground(Color.black);
-		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 		int xOffset = 0;
@@ -127,26 +126,6 @@ public class Profile {
 
 		int polyOffset = 30;
 		if (mb.getLevel() >= 125) {
-			g2d.setColor(Color.white);
-			g2d.fillPolygon(new int[]{
-					38 + (avatar.getWidth() + 24) / 2,
-					38 + (avatar.getWidth() + 24) / 2 + 44,
-					38 + (avatar.getWidth() + 24) + polyOffset + 8,
-					38 + (avatar.getWidth() + 24) / 2 + 44,
-					38 + (avatar.getWidth() + 24) / 2,
-					38 + (avatar.getWidth() + 24) / 2 - 44,
-					0,
-					38 + (avatar.getWidth() + 24) / 2 - 44,
-			}, new int[]{
-					188 - polyOffset - 8,
-					188 + (avatar.getHeight() + 24) / 2 - 44,
-					188 + (avatar.getHeight() + 24) / 2,
-					188 + (avatar.getHeight() + 24) / 2 + 44,
-					188 + (avatar.getHeight() + 24) + polyOffset + 8,
-					188 + (avatar.getHeight() + 24) / 2 + 44,
-					188 + (avatar.getHeight() + 24) / 2,
-					188 + (avatar.getHeight() + 24) / 2 - 44,
-			}, 8);
 			g2d.setColor(Color.black);
 			g2d.fillPolygon(new int[]{
 					38 + (avatar.getWidth() + 24) / 2,
@@ -188,9 +167,6 @@ public class Profile {
 					188 + (avatar.getHeight() + 24) / 2 - 36,
 			}, 8);
 		}
-		g2d.setColor(Color.white);
-		g2d.fillOval(36, 186, avatar.getWidth() + 28, avatar.getHeight() + 28);
-		g2d.fillRect(48, 346, 204, 208);
 		g2d.setColor(Color.black);
 		g2d.fillOval(38, 188, avatar.getWidth() + 24, avatar.getHeight() + 24);
 		g2d.fillRect(50, 348, 200, 204);
