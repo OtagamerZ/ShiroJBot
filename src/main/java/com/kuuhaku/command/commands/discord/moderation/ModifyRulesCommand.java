@@ -64,7 +64,7 @@ public class ModifyRulesCommand extends Command {
 		if (StringUtils.isNumeric(rule)) {
 			int index = Integer.parseInt(rule) - 1;
 
-			if (!Helper.between(index, 1, gc.getRules().size() + 1)) {
+			if (!Helper.between(index, 0, gc.getRules().size())) {
 				channel.sendMessage("❌ | Não há nenhuma regra com esse índice.").queue();
 				return;
 			}
