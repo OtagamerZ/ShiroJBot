@@ -225,6 +225,9 @@ public class CommandManager {
 			put(PurchaseBuffCommand.class, new Argument(
 					"melhorar", new String[]{"upgrade", "up"}, "req_type-tier", "cmd_purchase-buff", MODERACAO, false
 			));
+			put(ModifyRulesCommand.class, new Argument(
+					"regra", new String[]{"rule", "r"}, "req_rule-index", "cmd_modify-rule", MODERACAO, false
+			));
 
 			//INFORMATION
 			put(ComandosCommand.class, new Argument(
