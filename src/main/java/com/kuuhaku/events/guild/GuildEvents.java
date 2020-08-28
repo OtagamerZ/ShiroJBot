@@ -326,7 +326,7 @@ public class GuildEvents extends ListenerAdapter {
 	}
 
 	private void handleExchange(User u, Message msg) {
-		if (BotExchange.isBotAdded(u.getId())) {
+		if (BotExchange.isBotAdded(u.getId()) && msg.getMentionedUsers().stream().anyMatch(usr -> usr.getId().equals(Main.getInfo().getSelfUser().getId()))) {
 			BotExchange be = BotExchange.getById(u.getId());
 
 			if (be.matchTrigger(msg.getContentRaw()).find()) {
@@ -336,7 +336,7 @@ public class GuildEvents extends ListenerAdapter {
 				long value = 0;
 				for (String arg : args) {
 					if (StringUtils.isNumeric(arg)) {
-						value = Long.parseLong(arg);
+						value = Long.parseLong(arg.replace(",", ""));
 						break;
 					}
 				}
