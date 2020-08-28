@@ -25,7 +25,7 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.hibernate.annotations.OptimisticLockType;
 import org.hibernate.annotations.OptimisticLocking;
-import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.persistence.Column;
@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "guildconfig")
@@ -109,6 +110,9 @@ public class GuildConfig {
 
 	@Column(columnDefinition = "TEXT")
 	private String ambientSounds = "";
+
+	@Column(columnDefinition = "TEXT")
+	private String rules = "";
 
 	//NUMBERS
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 60")
@@ -325,19 +329,9 @@ public class GuildConfig {
 		return guildID;
 	}
 
-	public ArrayList<String> getNoLinkChannels() {
-		return getChannels(noLinkChannels);
-	}
-
-	@NotNull
-	private ArrayList<String> getChannels(String noLinkChannels) {
-		try {
-			ArrayList<String> l = new ArrayList<>(Arrays.asList(noLinkChannels.replace("[", "").replace("]", "").replace(" ", "").replace("\n", "").split(",")));
-			l.removeIf(String::isEmpty);
-			return l;
-		} catch (NullPointerException e) {
-			return new ArrayList<>();
-		}
+	public List<String> getNoLinkChannels() {
+		if (noLinkChannels.isBlank()) return new ArrayList<>();
+		else return new JSONArray(noLinkChannels).toList().stream().map(String::valueOf).collect(Collectors.toList());
 	}
 
 	public void addNoLinkChannel(TextChannel ch) {
@@ -352,8 +346,9 @@ public class GuildConfig {
 		noLinkChannels = ph.toString();
 	}
 
-	public ArrayList<String> getNoSpamChannels() {
-		return getChannels(noSpamChannels);
+	public List<String> getNoSpamChannels() {
+		if (noSpamChannels.isBlank()) return new ArrayList<>();
+		else return new JSONArray(noSpamChannels).toList().stream().map(String::valueOf).collect(Collectors.toList());
 	}
 
 	public void addNoSpamChannel(TextChannel ch) {
@@ -366,6 +361,23 @@ public class GuildConfig {
 		List<String> ph = new ArrayList<>(getNoSpamChannels());
 		ph.removeIf(s -> s.equals(ch.getId()));
 		noSpamChannels = ph.toString();
+	}
+
+	public List<String> getRules() {
+		if (rules.isBlank()) return new ArrayList<>();
+		else return new JSONArray(rules).toList().stream().map(String::valueOf).collect(Collectors.toList());
+	}
+
+	public void addRule(String rule) {
+		List<String> ph = new ArrayList<>(getNoSpamChannels());
+		ph.add(rule);
+		rules = ph.toString();
+	}
+
+	public void removeRule(int index) {
+		List<String> ph = new ArrayList<>(getNoSpamChannels());
+		ph.remove(index);
+		rules = ph.toString();
 	}
 
 	public boolean isHardAntispam() {
