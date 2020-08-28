@@ -28,8 +28,8 @@ public enum BotExchange {
 	LORITTA(
 			"297153970613387264",
 			1,
-			"(:lori_rica: \\*\\*\\|\\*\\* ).+( Você está prestes a transferir )\\d+( sonhos para ).+(!)",
-			"(\uD83D\uDCB8 \\*\\*\\|\\*\\* ).+( Transação realizada com sucesso! ).+( recebeu \\*\\*)",
+			":lori_rica:|transferir|sonhos",
+			"\uD83D\uDCB8|sucesso|recebeu|Sonho",
 			"sonho",
 			"✅"
 	);
