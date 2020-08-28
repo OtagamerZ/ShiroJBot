@@ -66,7 +66,7 @@ public class PixelChunkCommand extends Command {
 		int[] offset;
 
 		assert StringUtils.isNumeric(args[0]);
-		if (Integer.parseInt(args[0]) < 1 || Integer.parseInt(args[0]) > 4) {
+		if (!StringUtils.isNumeric(args[0]) || Integer.parseInt(args[0]) < 1 || Integer.parseInt(args[0]) > 4) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_canvas-invalid-chunk")).queue();
 			return;
 		}
