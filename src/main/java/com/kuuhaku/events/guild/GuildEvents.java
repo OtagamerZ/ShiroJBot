@@ -329,10 +329,10 @@ public class GuildEvents extends ListenerAdapter {
 		if (BotExchange.isBotAdded(u.getId())) {
 			BotExchange be = BotExchange.getById(u.getId());
 
-			if (be.matchTrigger().test(msg.getContentRaw())) {
+			if (be.matchTrigger().test(msg.getContentDisplay())) {
 				if (be.getReactionEmote() != null) msg.addReaction(be.getReactionEmote()).queue();
-			} else if (be.matchConfirmation().test(msg.getContentRaw())) {
-				String[] args = msg.getContentRaw().replaceAll(be.getConfirmation(), "").split(" ");
+			} else if (be.matchConfirmation().test(msg.getContentDisplay())) {
+				String[] args = msg.getContentDisplay().replaceAll(be.getConfirmation(), "").split(" ");
 				long value = 0;
 				for (String arg : args) {
 					if (StringUtils.isNumeric(arg)) {
