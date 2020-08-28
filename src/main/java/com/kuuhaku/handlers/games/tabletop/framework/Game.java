@@ -60,8 +60,12 @@ public abstract class Game implements Closeable {
 	public void resetTimer() {
 		if (timeout != null) timeout.cancel(true);
 		round++;
-		current = handler.getUserById(board.getInGamePlayers().peekNext().getId());
-		board.getPlayers().getNext();
+		Player p = null;
+		while (p == null || !p.isInGame()) {
+			p = board.getPlayers().getNext();
+		}
+		current = handler.getUserById(p.getId());
+		assert current != null;
 		if (round > 0)
 			timeout = channel.sendMessage(current.getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
 					.queueAfter(3, TimeUnit.MINUTES, onWO);
@@ -70,8 +74,8 @@ public abstract class Game implements Closeable {
 
 		for (int y = 0; y < board.getMatrix().length; y++) {
 			for (int x = 0; x < board.getMatrix().length; x++) {
-				Piece p = board.getPieceOrDecoyAt(Spot.of(x, y));
-				if (p instanceof Decoy && current.getId().equals(p.getOwnerId()))
+				Piece pc = board.getPieceOrDecoyAt(Spot.of(x, y));
+				if (pc instanceof Decoy && current.getId().equals(pc.getOwnerId()))
 					board.setPieceAt(Spot.of(x, y), null);
 			}
 		}
