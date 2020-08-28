@@ -21,15 +21,15 @@ package com.kuuhaku.utils;
 import org.intellij.lang.annotations.Language;
 
 import java.util.Arrays;
-import java.util.function.Predicate;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum BotExchange {
 	LORITTA(
 			"297153970613387264",
 			1,
-			":lori_rica:|transferir|sonhos",
-			"\uD83D\uDCB8|sucesso|recebeu|Sonho",
+			"(<:lori_rica:593979718919913474> \\*\\*\\|\\*\\* )<(@|@!)\\d+>( Você está prestes a transferir )\\d+( sonhos para )<(@|@!)\\d+>(!)",
+			"(\uD83D\uDCB8 \\*\\*\\|\\*\\* )<(@|@!)\\d+>( Transação realizada com sucesso! )<(@|@!)\\d+>( recebeu \\*\\*)",
 			"sonho",
 			"✅"
 	);
@@ -82,11 +82,11 @@ public enum BotExchange {
 		return Arrays.stream(values()).filter(b -> b.id.equals(id)).findFirst().orElseThrow();
 	}
 
-	public Predicate<String> matchTrigger() {
-		return Pattern.compile(trigger).asMatchPredicate();
+	public Matcher matchTrigger(String s) {
+		return Pattern.compile(trigger).matcher(s);
 	}
 
-	public Predicate<String> matchConfirmation() {
-		return Pattern.compile(confirmation).asMatchPredicate();
+	public Matcher matchConfirmation(String s) {
+		return Pattern.compile(confirmation).matcher(s);
 	}
 }
