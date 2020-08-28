@@ -79,6 +79,9 @@ public class Member {
 	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
 	private long lastVoted = 0;
 
+	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
+	private long lastEarntXp = 0;
+
 	//SWITCHES
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean markForDelete = false;
@@ -150,7 +153,9 @@ public class Member {
 		GuildBuff gb = GuildBuffDAO.getBuffs(g.getId());
 		gb.getBuffs().stream().filter(b -> b.getId() == 1).findAny().ifPresent(b -> mult.updateAndGet(v -> v * b.getMult()));
 
-		xp += 15 * mult.get();
+		float spamModif = Math.max(0, Math.min((System.currentTimeMillis() - lastEarntXp) / 1000f, 1));
+		xp += 15 * mult.get() * spamModif;
+		lastEarntXp = System.currentTimeMillis();
 
 		if (xp >= (long) Math.pow(level, 2) * 100) {
 			level++;
