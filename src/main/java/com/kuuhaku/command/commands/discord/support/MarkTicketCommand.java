@@ -89,8 +89,8 @@ public class MarkTicketCommand extends Command {
 							.complete();
 					msg.getChannel().retrieveMessageById(String.valueOf(t.getMsgIds().get(dev)))
 							.flatMap(Message::delete)
-							.queue();
-					t.solved();
+							.queue(null, Helper::doNothing);
+			t.solved();
 				}
 		);
 
