@@ -68,6 +68,9 @@ public class RoleChooserCommand extends Command {
 		} else if (message.getMentionedRoles().size() == 0) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_role-chooser-invalid-role")).queue();
 			return;
+		} else if (message.getMentionedRoles().get(0).getPosition() > guild.getSelfMember().getRoles().get(0).getPosition()) {
+			channel.sendMessage("❌ | Não posso manipular cargos que estejam acima de mim.").queue();
+			return;
 		} else if (args[1].equals(Helper.CANCEL)) {
 			channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_role-chooser-cannot-assign-role"), Helper.CANCEL)).queue();
 			return;
