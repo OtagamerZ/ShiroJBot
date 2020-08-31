@@ -112,5 +112,7 @@ public class MarkWinnerEvent implements Job {
 				c.sendMessage("Você ganhou " + (value.getValue() / winners.size()) + " créditos na loteria, parabéns!").queue(null, Helper::doNothing);
 			}, Helper::doNothing);
 		});
+
+		LotteryDAO.closeLotteries();
 	}
 }
