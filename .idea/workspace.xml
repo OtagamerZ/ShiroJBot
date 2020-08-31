@@ -641,13 +641,7 @@
       <workItem from="1598637774943" duration="1363000" />
       <workItem from="1598640670057" duration="4384000" />
       <workItem from="1598875639241" duration="7183000" />
-    </task>
-    <task id="LOCAL-02278" summary="Cartas com preço que possua apenas &quot;9&quot; não serão listadas no mercado público (usar -m para mostrar as suas)">
-      <created>1598539467802</created>
-      <option name="number" value="02278" />
-      <option name="presentableId" value="LOCAL-02278" />
-      <option name="project" value="LOCAL" />
-      <updated>1598539467802</updated>
+      <workItem from="1598889641701" duration="818000" />
     </task>
     <task id="LOCAL-02279" summary="Cartas com preço que possua apenas &quot;9&quot; não serão listadas no mercado público (usar -m para mostrar as suas)">
       <created>1598540455375</created>
@@ -985,7 +979,14 @@
       <option name="project" value="LOCAL" />
       <updated>1598886021356</updated>
     </task>
-    <option name="localTasksCounter" value="2327" />
+    <task id="LOCAL-02327" summary="Correção na loteria">
+      <created>1598889958260</created>
+      <option name="number" value="02327" />
+      <option name="presentableId" value="LOCAL-02327" />
+      <option name="project" value="LOCAL" />
+      <updated>1598889958261</updated>
+    </task>
+    <option name="localTasksCounter" value="2328" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1051,7 +1052,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição de link para os avatares/ícones de servidor" />
     <MESSAGE value="Novas cartas: Tate No Yuusha" />
     <MESSAGE value="Adição de fase de morte súbita para o uno (50 turnos)" />
     <MESSAGE value="Correção do W.O." />
@@ -1076,7 +1076,8 @@
     <MESSAGE value="Botões de cargo agora são ignorados caso a Shiro não tenha permissão para manipulá-los" />
     <MESSAGE value="Redução do delay nas mensagens enviadas no canal de suporte" />
     <MESSAGE value="Novas cartas: Boku No Hero Academia" />
-    <option name="LAST_COMMIT_MESSAGE" value="Novas cartas: Boku No Hero Academia" />
+    <MESSAGE value="Correção na loteria" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção na loteria" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1123,11 +1124,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598886018643">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598889955546">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598886018643" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598889955546" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1189,11 +1190,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598886022817">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598889961029">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598886022817" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598889961029" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597351073016">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
