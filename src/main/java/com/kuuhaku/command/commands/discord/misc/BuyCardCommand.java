@@ -136,7 +136,7 @@ public class BuyCardCommand extends Command {
 					User seller = Main.getInfo().getUserByID(cm.getSeller());
 					eb.addField(
 							"`ID: " + cm.getId() + "` | " + cm.getCard().getName() + " (" + cm.getCard().getCard().getRarity().toString() + ")",
-							"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: **" + (cm.getPrice() > (cm.getCard().getCard().getRarity().getIndex() * 50 * (cm.getCard().isFoil() ? 2 : 1)) ? "`valor muito alto`**" : cm.getPrice() + "** créditos"),
+							"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: **" + (cm.getPrice() > (cm.getCard().getCard().getRarity().getIndex() * 300 * 50 * (cm.getCard().isFoil() ? 2 : 1)) ? "`valor muito alto`**" : cm.getPrice() + "** créditos"),
 							false
 					);
 				}

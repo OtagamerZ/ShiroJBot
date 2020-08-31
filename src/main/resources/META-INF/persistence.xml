@@ -65,6 +65,8 @@
         <class>com.kuuhaku.model.persistent.DynamicParameter</class>
         <class>com.kuuhaku.model.persistent.PixelOperation</class>
         <class>com.kuuhaku.model.persistent.PendingBinding</class>
+        <class>com.kuuhaku.model.persistent.Lottery</class>
+        <class>com.kuuhaku.model.persistent.LotteryValue</class>
 
         <properties>
             <!-- dados da conexao -->
