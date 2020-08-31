@@ -124,7 +124,7 @@ public class Hitotsu extends Game {
 				seats.get(getCurrent().getId()).draw(getDeque());
 
 				resetTimer();
-				if (this.message != null) message.delete().queue();
+				if (this.message != null) this.message.delete().queue();
 				this.message = channel.sendMessage(Objects.requireNonNull(evt.getJDA().getUserById(getBoard().getInGamePlayers().peekLast().getId())).getAsMention() + " passou a vez, agora é você " + getCurrent().getAsMention() + ".")
 						.addFile(Helper.getBytes(mount, "png"), "mount.png")
 						.complete();
