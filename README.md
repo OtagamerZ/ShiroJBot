@@ -4,7 +4,7 @@ description: Vamos apresentar a Shiro!
 
 # Página Inicial
 
-Precisa de um bot de reações? Talvez um bot de moderação de servidor? Ou até mesmo quem sabe um compilador Java para testar seus códigos? Seja o que for, Shiro pode complementar seu servidor com mais de 90 comandos dos mais diversos tipos!
+Precisa de um bot de reações? Talvez um bot de moderação de servidor? Ou até mesmo quem sabe uma coleção de cartas de anime? Seja o que for, Shiro pode complementar seu servidor com mais de 150 comandos dos mais diversos tipos!
 
 ## Uma equipe pronta para lhe ajudar!
 
