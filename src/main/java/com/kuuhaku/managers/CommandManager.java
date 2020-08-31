@@ -400,6 +400,9 @@ public class CommandManager {
 			put(UnbindCommand.class, new Argument(
 					"desvincular", new String[]{"unbind"}, "cmd_unbind", MISC, false
 			));
+			put(LotteryCommand.class, new Argument(
+					"loteria", new String[]{"lottery"}, "req_dozens", "cmd_lottery", MISC, true
+			));
 
 			//FUN
 			put(SadButTrueCommand.class, new Argument(

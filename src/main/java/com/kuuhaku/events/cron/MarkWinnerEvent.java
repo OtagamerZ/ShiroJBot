@@ -19,11 +19,18 @@
 package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
+import com.kuuhaku.controller.postgresql.LotteryDAO;
 import com.kuuhaku.controller.sqlite.KGotchiDAO;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
+import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Lottery;
+import com.kuuhaku.model.persistent.LotteryValue;
 import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.entities.TextChannel;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
@@ -60,6 +67,43 @@ public class MarkWinnerEvent implements Job {
 				k.update(Main.getInfo().getMemberByID(k.getUserId()));
 			} catch (NullPointerException ignore) {
 			}
+		});
+
+		String[] dozens = new String[6];
+		for (int i = 0; i < 6; i++) {
+			dozens[i] = String.valueOf(Helper.rng(60, false));
+		}
+		String result = String.join(",", dozens);
+		List<Lottery> winners = LotteryDAO.getLotteriesByDozens(result);
+		LotteryValue value = LotteryDAO.getLotteryValue();
+
+		TextChannel chn = Main.getInfo().getGuildByID(ShiroInfo.getSupportServerID()).getTextChannelById(ShiroInfo.getAnnouncementChannelID());
+
+		if (winners.size() == 0) {
+			chn.sendMessage(
+					"As dezenas sorteadas foram `" + String.join(" ", dozens) + "`.\n" +
+							"Como não houveram vencedores, o prêmio de " + value.getValue() + " créditos será acumulado para o próximo mês!"
+			).queue();
+		} else if (winners.size() == 1) {
+			chn.sendMessage(
+					"As dezenas sorteadas foram `" + String.join(" ", dozens) + "`.\n" +
+							"O vencedor de " + value.getValue() + " créditos foi " + Main.getInfo().getUserByID(winners.get(0).getUid()).getName() + ", parabéns!"
+			).queue();
+		} else {
+			chn.sendMessage(
+					"As dezenas sorteadas foram `" + String.join(" ", dozens) + "`.\n" +
+							"Os " + winners.size() + " vencedores dividirão em partes iguais o prêmio de " + value.getValue() + " créditos, parabéns!!"
+			).queue();
+		}
+
+		winners.forEach(l -> {
+			Account acc = AccountDAO.getAccount(l.getUid());
+			acc.addCredit(value.getValue() / winners.size(), this.getClass());
+			AccountDAO.saveAccount(acc);
+
+			Main.getInfo().getUserByID(l.getUid()).openPrivateChannel().queue(c -> {
+				c.sendMessage("Você ganhou " + (value.getValue() / winners.size()) + " créditos na loteria, parabéns!").queue(null, Helper::doNothing);
+			}, Helper::doNothing);
 		});
 	}
 }

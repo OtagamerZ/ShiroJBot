@@ -69,6 +69,7 @@ public class ShiroInfo {
 	private static final String supportServer = "Shiro Support";
 	private static final String supportServerID = "421495229594730496";
 	private static final String twitchChannelID = "743479145618472960";
+	private static final String announcementChannelID = "597587565809369089";
 	private static final String default_prefix = DEV ? "dev!" : "s!";
 	private static final String nomeDB = "shiro.sqlite";
 	private static final String niichan = "350836145921327115"; //KuuHaKu
@@ -139,6 +140,10 @@ public class ShiroInfo {
 
 	public static String getTwitchChannelID() {
 		return twitchChannelID;
+	}
+
+	public static String getAnnouncementChannelID() {
+		return announcementChannelID;
 	}
 
 	public static HttpClientBuilder getHttpBuilder() {
