@@ -35,6 +35,7 @@ import com.kuuhaku.utils.*;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageUpdateEvent;
 import net.dv8tion.jda.api.events.role.RoleDeleteEvent;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
@@ -57,6 +58,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class GuildEvents extends ListenerAdapter {
+	@Override
+	public void onGuildMessageUpdate(@NotNull GuildMessageUpdateEvent event) {
+		onGuildMessageReceived(new GuildMessageReceivedEvent(event.getJDA(), event.getResponseNumber(), event.getMessage()));
+	}
+
 	@Override
 	public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
 		try {
