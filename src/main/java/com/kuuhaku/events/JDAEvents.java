@@ -270,9 +270,7 @@ public class JDAEvents extends ListenerAdapter {
 					if (RelayDAO.blockedList().contains(event.getAuthor().getId())) {
 						c.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-blocked")).queue();
 					} else
-						c.sendMessage("Mensagem enviada, aguardando resposta...")
-								.delay(1, TimeUnit.MINUTES)
-								.flatMap(Message::delete)
+						c.sendMessage("Mensagem enviada no canal de suporte, aguardando resposta...")
 								.queue(s -> {
 									EmbedBuilder eb = new EmbedBuilder();
 
@@ -280,6 +278,7 @@ public class JDAEvents extends ListenerAdapter {
 									eb.setFooter(event.getAuthor().getId() + " - " + LocalDateTime.now().atOffset(ZoneOffset.ofHours(-3)).format(DateTimeFormatter.ofPattern("HH:mm | dd/MMM/yyyy")), null);
 									staffIds.forEach(d ->
 											Main.getInfo().getUserByID(d).openPrivateChannel().queue(ch -> ch.sendMessage(event.getMessage()).embed(eb.build()).queue()));
+									s.delete().queueAfter(1, TimeUnit.MINUTES);
 								});
 				});
 			} catch (Exception ignored) {
