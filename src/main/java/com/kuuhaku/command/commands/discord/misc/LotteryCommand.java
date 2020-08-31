@@ -88,6 +88,8 @@ public class LotteryCommand extends Command {
 					LotteryValue lv = LotteryDAO.getLotteryValue();
 					lv.addValue(cost / 2);
 					LotteryDAO.saveLotteryValue(lv);
+
+					s.delete().flatMap(d -> channel.sendMessage(":white_check_mark: | Bilhete comprado com sucesso!")).queue();
 				}), true, 1, TimeUnit.MINUTES)
 		);
 	}
