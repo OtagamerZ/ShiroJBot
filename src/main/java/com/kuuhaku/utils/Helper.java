@@ -558,9 +558,9 @@ public class Helper {
 			buttons.put(btns.getString("emote"), (m, ms) -> {
 				if (role != null) {
 					if (m.getRoles().contains(role)) {
-						g.removeRoleFromMember(m, role).queue();
+						g.removeRoleFromMember(m, role).queue(null, Helper::doNothing);
 					} else {
-						g.addRoleToMember(m, role).queue();
+						g.addRoleToMember(m, role).queue(null, Helper::doNothing);
 					}
 				} else {
 					ms.clearReactions().queue(s -> {
