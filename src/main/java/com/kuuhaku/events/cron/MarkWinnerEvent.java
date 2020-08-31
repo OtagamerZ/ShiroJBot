@@ -31,6 +31,7 @@ import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.TextChannel;
+import org.apache.commons.lang3.StringUtils;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
@@ -71,7 +72,7 @@ public class MarkWinnerEvent implements Job {
 
 		String[] dozens = new String[6];
 		for (int i = 0; i < 6; i++) {
-			dozens[i] = String.valueOf(Helper.rng(60, false));
+			dozens[i] = StringUtils.leftPad(String.valueOf(Helper.rng(60, false)), 2, "0");
 		}
 		String result = String.join(",", dozens);
 		List<Lottery> winners = LotteryDAO.getLotteriesByDozens(result);
