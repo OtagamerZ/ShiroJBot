@@ -44,4 +44,8 @@ public class LotteryValue {
 	public void setValue(long value) {
 		this.value = value;
 	}
+
+	public void addValue(long value) {
+		this.value += value;
+	}
 }
