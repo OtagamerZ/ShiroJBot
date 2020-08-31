@@ -37,6 +37,7 @@ import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 public class MarkWinnerEvent implements Job {
@@ -75,7 +76,12 @@ public class MarkWinnerEvent implements Job {
 			dozens[i] = StringUtils.leftPad(String.valueOf(Helper.rng(60, false)), 2, "0");
 		}
 		String result = String.join(",", dozens);
-		List<Lottery> winners = LotteryDAO.getLotteriesByDozens(result);
+		List<Lottery> winners = LotteryDAO.getLotteries();
+
+		winners.removeIf(l ->
+				!Arrays.stream(l.getDozens().split(",")).allMatch(result::contains)
+		);
+
 		LotteryValue value = LotteryDAO.getLotteryValue();
 
 		TextChannel chn = Main.getInfo().getGuildByID(ShiroInfo.getSupportServerID()).getTextChannelById(ShiroInfo.getAnnouncementChannelID());
