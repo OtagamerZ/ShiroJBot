@@ -25,6 +25,7 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.LotteryDAO;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Lottery;
+import com.kuuhaku.model.persistent.LotteryValue;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
@@ -55,7 +56,10 @@ public class LotteryCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		if (args.length < 1 || args[0].split(",").length != 6) {
+		if (args.length < 1) {
+			channel.sendMessage("O prêmio atual é __**" + LotteryDAO.getLotteryValue().getValue() + " créditos**__.").queue();
+			return;
+		} else if (args[0].split(",").length != 6 || args[0].length() != 17) {
 			channel.sendMessage("❌ | Você precisa informar 6 dezenas separadas por vírgula.").queue();
 			return;
 		}
@@ -80,6 +84,10 @@ public class LotteryCommand extends Command {
 					acc.removeCredit(cost, this.getClass());
 					AccountDAO.saveAccount(acc);
 					LotteryDAO.saveLottery(new Lottery(author.getId(), args[0]));
+
+					LotteryValue lv = LotteryDAO.getLotteryValue();
+					lv.addValue(cost / 2);
+					LotteryDAO.saveLotteryValue(lv);
 				}), true, 1, TimeUnit.MINUTES)
 		);
 	}
