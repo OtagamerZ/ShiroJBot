@@ -67,7 +67,7 @@ public class LotteryCommand extends Command {
 		Account acc = AccountDAO.getAccount(author.getId());
 
 		for (String dozen : args[0].split(",")) {
-			if (!StringUtils.isNumeric(dozen) || Helper.between(Integer.parseInt(dozen), 0, 61)) {
+			if (!StringUtils.isNumeric(dozen) || !Helper.between(Integer.parseInt(dozen), 0, 61)) {
 				channel.sendMessage("❌ | As dezenas devem ser valores numéricos de 00 a 60.").queue();
 				return;
 			}
