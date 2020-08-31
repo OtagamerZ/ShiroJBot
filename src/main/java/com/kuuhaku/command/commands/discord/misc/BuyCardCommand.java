@@ -120,7 +120,7 @@ public class BuyCardCommand extends Command {
 					.filter(cm -> byRarity.get() == null || byRarity.get().equals(cm.getCard().getCard().getRarity()))
 					.filter(cm -> byAnime.get() == null || byAnime.get().equals(cm.getCard().getCard().getAnime()))
 					.filter(cm -> !onlyFoil.get() || cm.getCard().isFoil())
-					.filter(cm -> (!onlyMine.get() && cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * 300 * 50 * (cm.getCard().isFoil() ? 2 : 1))) || cm.getSeller().equals(author.getId()))
+					.filter(cm -> onlyMine.get() ? cm.getSeller().equals(author.getId()) : cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * 300 * 50 * (cm.getCard().isFoil() ? 2 : 1)))
 					.sorted(Comparator
 							.comparingInt(CardMarket::getPrice)
 							.thenComparing(k -> k.getCard().isFoil(), Comparator.reverseOrder())
