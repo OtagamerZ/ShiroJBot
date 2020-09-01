@@ -56,6 +56,11 @@ public class PruneCommand extends Command {
 			channel.purgeMessages(msgs);
 			channel.sendMessage(msgs.size() + " mensage" + (msgs.size() == 1 ? "m de bot limpa." : "ns de bots limpas.")).queue();
 		} else if (StringUtils.isNumeric(args[0])) {
+			if (!Helper.between(Integer.parseInt(args[0]), 1, 101)) {
+				channel.sendMessage("❌ | Só é possível apagar entre 1 e 100 mensagens de uma vez").queue();
+				return;
+			}
+
 			List<Message> msgs = channel.getHistory().retrievePast(Integer.parseInt(args[0]) == 100 ? 100 : Integer.parseInt(args[0]) + 1).complete();
 			channel.purgeMessages(msgs);
 			channel.sendMessage(msgs.size() + " mensage" + (msgs.size() == 1 ? "m limpa." : "ns limpas.")).queue();
