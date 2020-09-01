@@ -100,7 +100,7 @@ public class LotteryDAO {
 	public static void closeLotteries() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("UPDATE Lottery l SET l.valid = FALSE", Lottery.class);
+		Query q = em.createQuery("UPDATE Lottery l SET l.valid = FALSE");
 
 		em.getTransaction().begin();
 		q.executeUpdate();
