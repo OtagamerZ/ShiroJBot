@@ -20,10 +20,10 @@ package com.kuuhaku.handlers.games.tabletop.framework;
 
 public class Player {
 	private final String id;
-	private final int bet;
+	private final long bet;
 	private boolean inGame = true;
 
-	public Player(String id, int bet) {
+	public Player(String id, long bet) {
 		this.id = id;
 		this.bet = bet;
 	}
@@ -32,7 +32,7 @@ public class Player {
 		return id;
 	}
 
-	public int getBet() {
+	public long getBet() {
 		return bet;
 	}
 
