@@ -22,14 +22,10 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.LotteryDAO;
-import com.kuuhaku.controller.sqlite.KGotchiDAO;
-import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Lottery;
 import com.kuuhaku.model.persistent.LotteryValue;
-import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
@@ -37,7 +33,6 @@ import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -69,32 +64,6 @@ public class PingCommand extends Command {
 				.queue();
 
 		if (author.getId().equals(ShiroInfo.getNiiChan())) {
-			String ex = "Seiren";
-			ExceedDAO.getExceedMembers(ExceedEnums.getByName(ex)).forEach(em -> {
-						User u = Main.getInfo().getUserByID(em.getId());
-						if (u != null) u.openPrivateChannel().queue(c -> {
-							try {
-								c.sendMessage("O seu Exceed foi campeão neste mês, parabéns!\n" +
-										"Todos da " + ex + " ganharão experiência em dobro durante 1 semana.").queue();
-							} catch (Exception ignore) {
-							}
-						});
-					}
-			);
-
-			ExceedDAO.unblock();
-
-			List<Kawaigotchi> kgs = KGotchiDAO.getAllKawaigotchi();
-
-			kgs.forEach(k -> {
-				if (k.getDiedAt().plusMonths(1).isBefore(LocalDateTime.now()) || k.getOffSince().plusMonths(1).isBefore(LocalDateTime.now()))
-					KGotchiDAO.deleteKawaigotchi(k);
-				try {
-					k.update(Main.getInfo().getMemberByID(k.getUserId()));
-				} catch (NullPointerException ignore) {
-				}
-			});
-
 			String[] dozens = new String[6];
 			for (int i = 0; i < 6; i++) {
 				dozens[i] = StringUtils.leftPad(String.valueOf(Helper.rng(60, false)), 2, "0");
