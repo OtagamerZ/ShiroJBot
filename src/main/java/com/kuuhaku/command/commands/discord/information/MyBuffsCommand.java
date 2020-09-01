@@ -64,7 +64,7 @@ public class MyBuffsCommand extends Command {
 
 		eb.setTitle(":level_slider: Modificadores ativos");
 
-		if (exceed) eb.addField("Seu exceed foi vitorioso", "+200% XP ganho", false);
+		if (exceed) eb.addField("Seu Exceed foi vitorioso", "+200% XP ganho", false);
 		if (waifu)
 			eb.addField("Você está no mesmo servidor que sua waifu/husbando", "+" + (int) (WaifuDAO.getMultiplier(author).getMult() * 100 - 100) + "% XP ganho", false);
 		if (kgotchi)
