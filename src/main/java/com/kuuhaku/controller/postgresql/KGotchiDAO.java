@@ -51,7 +51,7 @@ public class KGotchiDAO {
 	}
 
 	public static void deleteKawaigotchi(Kawaigotchi k) {
-		EntityManager em = com.kuuhaku.controller.sqlite.Manager.getEntityManager();
+		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
 		em.remove(k);
