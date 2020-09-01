@@ -1202,4 +1202,12 @@ public class Helper {
 
 		return true;
 	}
+
+	public static String toDuration(long millis) {
+		return String.format("%d:%02d:%02d",
+				(int) ((millis / (1000 * 60 * 60))),
+				(int) ((millis / (1000 * 60)) % 60),
+				(int) (millis / 1000) % 60
+		);
+	}
 }
