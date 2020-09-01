@@ -109,9 +109,10 @@ public class SettingsCommand extends Command {
 			case "canalsug":
 				Settings.updateCanalSUG(args, message, gc);
 				break;
+			case "cmute":
+			case "cargomute":
 			case "rmute":
 			case "rolemute":
-			case "cargomute":
 				Settings.updateCargoMute(args, message, gc);
 				break;
 			/*case "rvip":
@@ -139,7 +140,8 @@ public class SettingsCommand extends Command {
 				break;
 			case "clvl":
 			case "cargolevel":
-			case "cargolvl":
+			case "rlvl":
+			case "rolelevel":
 				Settings.updateCargoLvl(args, message, gc);
 				break;
 			case "mod":
