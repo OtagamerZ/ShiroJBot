@@ -14,7 +14,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/PruneCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/PruneCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/reactions/Reaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/reactions/Reaction.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -660,14 +661,7 @@
       <workItem from="1598962381246" duration="5781000" />
       <workItem from="1598969749807" duration="156000" />
       <workItem from="1598970335910" duration="1307000" />
-      <workItem from="1598976106166" duration="2985000" />
-    </task>
-    <task id="LOCAL-02300" summary="Adição de modificador de xp anti-spam">
-      <created>1598620921372</created>
-      <option name="number" value="02300" />
-      <option name="presentableId" value="LOCAL-02300" />
-      <option name="project" value="LOCAL" />
-      <updated>1598620921372</updated>
+      <workItem from="1598976106166" duration="4790000" />
     </task>
     <task id="LOCAL-02301" summary="Adicionado comando para modificar as regras do comando RegenRules">
       <created>1598623455653</created>
@@ -1005,7 +999,14 @@
       <option name="project" value="LOCAL" />
       <updated>1598990201783</updated>
     </task>
-    <option name="localTasksCounter" value="2349" />
+    <task id="LOCAL-02349" summary="Adição de erro de quantidade no comando prune">
+      <created>1598990373090</created>
+      <option name="number" value="02349" />
+      <option name="presentableId" value="LOCAL-02349" />
+      <option name="project" value="LOCAL" />
+      <updated>1598990373090</updated>
+    </task>
+    <option name="localTasksCounter" value="2350" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1071,7 +1072,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição de modificador de xp anti-spam" />
     <MESSAGE value="Adicionado comando para modificar as regras do comando RegenRules" />
     <MESSAGE value="Conversão de sonhos (Loritta) em créditos (Shiro) adicionada" />
     <MESSAGE value="Melhoria na tenda" />
@@ -1096,7 +1096,8 @@
     <MESSAGE value="Correção na duração da fila de músicas" />
     <MESSAGE value="Troca de &quot;cargo warn&quot; para &quot;cargo mute&quot;" />
     <MESSAGE value="Apostas em jogos habilitadas" />
-    <option name="LAST_COMMIT_MESSAGE" value="Apostas em jogos habilitadas" />
+    <MESSAGE value="Adição de erro de quantidade no comando prune" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição de erro de quantidade no comando prune" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1143,11 +1144,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598990199004">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598990370393">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598990199004" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598990370393" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1209,11 +1210,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598990203907">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598990379344">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598990203907" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598990379344" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597351073016">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
