@@ -31,6 +31,7 @@ import com.kuuhaku.utils.ExceedEnums;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.Job;
 import org.quartz.JobDetail;
@@ -49,14 +50,17 @@ public class MarkWinnerEvent implements Job {
 		Helper.logger(this.getClass()).info("Vencedor mensal: " + ExceedDAO.getWinner());
 
 		String ex = ExceedDAO.getWinner();
-		ExceedDAO.getExceedMembers(ExceedEnums.getByName(ex)).forEach(em ->
-				Main.getInfo().getUserByID(em.getId()).openPrivateChannel().queue(c -> {
-					try {
-						c.sendMessage("O seu exceed foi campeão neste mês, parabéns!\n" +
-								"Todos da " + ex + " ganharão experiência em dobro durante 1 semana.").queue();
-					} catch (Exception ignore) {
-					}
-				}));
+		ExceedDAO.getExceedMembers(ExceedEnums.getByName(ex)).forEach(em -> {
+					User u = Main.getInfo().getUserByID(em.getId());
+					if (u != null) u.openPrivateChannel().queue(c -> {
+						try {
+							c.sendMessage("O seu Exceed foi campeão neste mês, parabéns!\n" +
+									"Todos da " + ex + " ganharão experiência em dobro durante 1 semana.").queue();
+						} catch (Exception ignore) {
+						}
+					});
+				}
+		);
 
 		ExceedDAO.unblock();
 
@@ -86,6 +90,7 @@ public class MarkWinnerEvent implements Job {
 
 		TextChannel chn = Main.getInfo().getGuildByID(ShiroInfo.getSupportServerID()).getTextChannelById(ShiroInfo.getAnnouncementChannelID());
 
+		assert chn != null;
 		if (winners.size() == 0) {
 			chn.sendMessage(
 					"As dezenas sorteadas foram `" + String.join(" ", dozens) + "`.\n" +
