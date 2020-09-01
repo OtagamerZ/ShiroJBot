@@ -69,10 +69,7 @@ public class PingCommand extends Command {
 				.queue();
 
 		if (author.getId().equals(ShiroInfo.getNiiChan())) {
-			ExceedDAO.markWinner(ExceedDAO.findWinner());
-			Helper.logger(this.getClass()).info("Vencedor mensal: " + ExceedDAO.getWinner());
-
-			String ex = ExceedDAO.getWinner();
+			String ex = "Seiren";
 			ExceedDAO.getExceedMembers(ExceedEnums.getByName(ex)).forEach(em -> {
 						User u = Main.getInfo().getUserByID(em.getId());
 						if (u != null) u.openPrivateChannel().queue(c -> {
