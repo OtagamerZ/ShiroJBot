@@ -54,7 +54,8 @@ public enum AnimeName {
 	SWORD_ART_ONLINE,
 	TATE_NO_YUUSHA,
 	BOKU_NO_HERO_ACADEMIA,
-	BRAND_NEW_ANIMAL;
+	BRAND_NEW_ANIMAL,
+	FATE_APOCRYPHA;
 
 	@Override
 	public String toString() {
