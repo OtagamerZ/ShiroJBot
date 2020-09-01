@@ -89,7 +89,7 @@ public class TrackScheduler extends AudioEventAdapter {
 				AudioTrackInfo ati = player.getPlayingTrack().getInfo();
 
 				eb.setColor(Helper.getRandomColor());
-				eb.setDescription("Tocando agora: [" + ati.title + "](" + ati.uri + ") (" + String.valueOf(Helper.round((ati.length / 1000f) / 60f, 2)).replace(".", ":") + " minutos)");
+				eb.setDescription("Tocando agora: [" + ati.title + "](" + ati.uri + ") (" + Helper.toDuration(ati.length) + ")");
 				eb.setFooter("Autor: " + ati.author + ". Requisitado por: " + ((User) player.getPlayingTrack().getUserData()).getAsTag());
 
 				channel.sendMessage(eb.build()).queue(null);
