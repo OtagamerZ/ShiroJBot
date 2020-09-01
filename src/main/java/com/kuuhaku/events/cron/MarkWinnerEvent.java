@@ -69,10 +69,6 @@ public class MarkWinnerEvent implements Job {
 		kgs.forEach(k -> {
 			if (k.getDiedAt().plusMonths(1).isBefore(LocalDateTime.now()) || k.getOffSince().plusMonths(1).isBefore(LocalDateTime.now()))
 				KGotchiDAO.deleteKawaigotchi(k);
-			try {
-				k.update(Main.getInfo().getMemberByID(k.getUserId()));
-			} catch (NullPointerException ignore) {
-			}
 		});
 
 		String[] dozens = new String[6];
