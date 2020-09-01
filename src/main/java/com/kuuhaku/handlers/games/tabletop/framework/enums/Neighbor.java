@@ -19,7 +19,6 @@
 package com.kuuhaku.handlers.games.tabletop.framework.enums;
 
 import java.util.Arrays;
-import java.util.NoSuchElementException;
 
 public enum Neighbor {
 	UPPER_LEFT(new int[]{-1, -1}),
@@ -42,7 +41,9 @@ public enum Neighbor {
 	L_DOWN_RIGHT(new int[]{1, 2}),
 
 	LARGE_CASTLING(new int[]{-2, 0}),
-	SHORT_CASTLING(new int[]{2, 0});
+	SHORT_CASTLING(new int[]{2, 0}),
+
+	INVALID(null);
 
 	private final int[] coord;
 
@@ -66,7 +67,7 @@ public enum Neighbor {
 		for (Neighbor n : Neighbor.values()) {
 			if (Arrays.equals(n.coord, vector)) return n;
 		}
-		throw new NoSuchElementException();
+		return INVALID;
 	}
 
 	public static Neighbor[] getCommonMoves() {

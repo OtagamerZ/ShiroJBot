@@ -158,19 +158,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [clean]">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -658,14 +645,7 @@
       <workItem from="1598962381246" duration="5781000" />
       <workItem from="1598969749807" duration="156000" />
       <workItem from="1598970335910" duration="1307000" />
-      <workItem from="1598976106166" duration="5145000" />
-    </task>
-    <task id="LOCAL-02302" summary="Adicionado comando para modificar as regras do comando RegenRules">
-      <created>1598623706964</created>
-      <option name="number" value="02302" />
-      <option name="presentableId" value="LOCAL-02302" />
-      <option name="project" value="LOCAL" />
-      <updated>1598623706964</updated>
+      <workItem from="1598976106166" duration="5407000" />
     </task>
     <task id="LOCAL-02303" summary="Adicionado comando para modificar as regras do comando RegenRules">
       <created>1598624159915</created>
@@ -1003,7 +983,14 @@
       <option name="project" value="LOCAL" />
       <updated>1598992218113</updated>
     </task>
-    <option name="localTasksCounter" value="2351" />
+    <task id="LOCAL-02351" summary="Outras correções básicas">
+      <created>1598992738991</created>
+      <option name="number" value="02351" />
+      <option name="presentableId" value="LOCAL-02351" />
+      <option name="project" value="LOCAL" />
+      <updated>1598992738991</updated>
+    </task>
+    <option name="localTasksCounter" value="2352" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1069,7 +1056,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Conversão de sonhos (Loritta) em créditos (Shiro) adicionada" />
     <MESSAGE value="Melhoria na tenda" />
     <MESSAGE value="Correção das porcentagens de cartas" />
     <MESSAGE value="Correção do slots" />
@@ -1094,7 +1080,8 @@
     <MESSAGE value="Apostas em jogos habilitadas" />
     <MESSAGE value="Adição de erro de quantidade no comando prune" />
     <MESSAGE value="Correção básica nos GIFs de reação com resposta" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção básica nos GIFs de reação com resposta" />
+    <MESSAGE value="Outras correções básicas" />
+    <option name="LAST_COMMIT_MESSAGE" value="Outras correções básicas" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1141,11 +1128,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598992215407">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1598992736140">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598992215407" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1598992736140" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1207,11 +1194,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598992220611">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1598992741115">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598992220611" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1598992741115" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597351073016">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
