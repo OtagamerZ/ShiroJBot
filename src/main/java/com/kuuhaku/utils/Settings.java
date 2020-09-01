@@ -82,7 +82,7 @@ public class Settings {
 			int warnTime = gc.getWarnTime();
 
 			//CARGOS
-			String cargoWarnID = Helper.getOr(gc.getCargoWarn(), "Não definido.");
+			String cargoMuteID = Helper.getOr(gc.getCargoMute(), "Não definido.");
 			//String cargoVipID = Helper.getOr(gc.getCargoVip(), "Não definido.");
 			StringBuilder cargosLvl = new StringBuilder();
 			if (gc.getCargoslvl() != null) {
@@ -135,15 +135,15 @@ public class Settings {
 			eb.addBlankField(false);
 
 			eb.addField("\uD83D\uDCD1 » Cargos de nível", cargosLvl.toString().isEmpty() ? "Nenhum" : cargosLvl.toString(), true);
-			if (!cargoWarnID.equals("Não definido.")) {
+			if (!cargoMuteID.equals("Não definido.")) {
 				try {
-					eb.addField("\uD83D\uDCD1 » Cargo de punição", Main.getInfo().getRoleByID(cargoWarnID).getAsMention(), true);
+					eb.addField("\uD83D\uDCD1 » Cargo de punição", Main.getInfo().getRoleByID(cargoMuteID).getAsMention(), true);
 				} catch (NullPointerException e) {
-					gc.setCargoWarn(null);
+					gc.setCargoMute(null);
 					GuildDAO.updateGuildSettings(gc);
 				}
 			} else {
-				eb.addField("\uD83D\uDCD1 » Cargo de punição", cargoWarnID, true);
+				eb.addField("\uD83D\uDCD1 » Cargo de punição", cargoMuteID, true);
 			}
 
 			/*if (!cargoVipID.equals("Não definido.")) {
@@ -362,14 +362,14 @@ public class Settings {
 		message.getTextChannel().sendMessage("✅ | O tempo de enquetes do servidor foi trocado para " + newPollTime + " segundos com sucesso.").queue();
 	}
 
-	public static void updateCargoWarn(String[] args, Message message, GuildConfig gc) {
-		String antigoCargoWarn = gc.getCargoWarn();
+	public static void updateCargoMute(String[] args, Message message, GuildConfig gc) {
+		String antigoCargoMute = gc.getCargoMute();
 
 		if (args.length < 2) {
-			if (antigoCargoWarn.equals("Não definido.")) {
+			if (antigoCargoMute.equals("Não definido.")) {
 				message.getTextChannel().sendMessage("O cargo de punição atual do servidor ainda não foi definido.").queue();
 			} else {
-				message.getTextChannel().sendMessage("O cargo de punição atual do servidor é `" + antigoCargoWarn + "`.").queue();
+				message.getTextChannel().sendMessage("O cargo de punição atual do servidor é `" + antigoCargoMute + "`.").queue();
 			}
 			return;
 		}
@@ -377,17 +377,17 @@ public class Settings {
 			message.getTextChannel().sendMessage("❌ | Você só pode mencionar 1 cargo.").queue();
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
-			gc.setCargoWarn(null);
+			gc.setCargoMute(null);
 			GuildDAO.updateGuildSettings(gc);
 			message.getTextChannel().sendMessage("✅ | O cargo de punição do servidor foi resetado com sucesso.").queue();
 			return;
 		}
 
-		Role newRoleWarns = message.getMentionedRoles().get(0);
+		Role newCargoMute = message.getMentionedRoles().get(0);
 
-		gc.setCargoWarn(newRoleWarns.getId());
+		gc.setCargoMute(newCargoMute.getId());
 		GuildDAO.updateGuildSettings(gc);
-		message.getTextChannel().sendMessage("✅ | O cargo de punição do servidor foi trocado para " + newRoleWarns.getAsMention() + " com sucesso.").queue();
+		message.getTextChannel().sendMessage("✅ | O cargo de punição do servidor foi trocado para " + newCargoMute.getAsMention() + " com sucesso.").queue();
 	}
 
 	public static void updateCargoVip(String[] args, Message message, GuildConfig gc) {
