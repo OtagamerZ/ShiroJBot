@@ -55,7 +55,7 @@ public class MarkWinnerEvent implements Job {
 					if (u != null) u.openPrivateChannel().queue(c -> {
 						try {
 							c.sendMessage("O seu Exceed foi campeão neste mês, parabéns!\n" +
-									"Todos da " + ex + " ganharão experiência em dobro durante 1 semana.").queue();
+									"Todos da " + ex + " ganharão experiência em dobro durante 1 semana.").queue(null, Helper::doNothing);
 						} catch (Exception ignore) {
 						}
 					});
