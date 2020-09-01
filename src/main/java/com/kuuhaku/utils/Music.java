@@ -142,7 +142,7 @@ public class Music {
             subF.forEach(eb::addField);
 
             eb.setTitle("Fila de músicas:");
-            eb.setFooter("Tempo estimado da fila: " + String.valueOf(Helper.round((musicManager.scheduler.queue().stream().mapToDouble(AudioTrack::getDuration).sum() / 1000) / 60, 2)).replace(".", ":"), null);
+            eb.setFooter("Tempo estimado da fila: " + Helper.toDuration(musicManager.scheduler.queue().stream().mapToLong(AudioTrack::getDuration).sum()), null);
             eb.setColor(Helper.getRandomColor());
 
             pages.add(new Page(PageType.EMBED, eb.build()));
