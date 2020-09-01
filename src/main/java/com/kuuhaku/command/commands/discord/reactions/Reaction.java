@@ -109,6 +109,7 @@ public abstract class Reaction extends Command {
 
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setImage(url);
+			if (allowReact) eb.setFooter("↪ | Clique para retribuir");
 
 			Helper.sendReaction(this, url, target, chn, allowReact).accept(chn.sendMessage(message).embed(eb.build()));
 		} catch (IOException e) {
