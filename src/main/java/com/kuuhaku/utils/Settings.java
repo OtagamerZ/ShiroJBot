@@ -652,7 +652,7 @@ public class Settings {
 		eb.addField(prefix + "settings tempowarn", "Define o tempo de punições em seu servidor.", false);
 		eb.addField(prefix + "settings tempopoll", "Define o tempo de enquetes em seu servidor.", false);
 
-		eb.addField(prefix + "settings rolewarn", "Define o cargo de punição em seu servidor.", false);
+		eb.addField(prefix + "settings cargomute", "Define o cargo de punição em seu servidor.", false);
 		//eb.addField(prefix + "settings rolevip", "Define o cargo VIP em seu servidor.", false);
 		eb.addField(prefix + "settings cargolevel", "Define os cargos por level em seu servidor.", false);
 		eb.addField(prefix + "settings levelnotif", "Habilita as notificações de nível.\n\nParâmetros:\n", false);
