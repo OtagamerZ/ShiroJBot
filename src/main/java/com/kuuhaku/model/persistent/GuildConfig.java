@@ -53,7 +53,7 @@ public class GuildConfig {
 	private String prefix = Main.getInfo().getDefaultPrefix();
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
-	private String cargoWarn = "";
+	private String cargoMute = "";
 
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String cargoVip = "";
@@ -221,13 +221,13 @@ public class GuildConfig {
 		else this.msgAdeus = msgAdeus;
 	}
 
-	public String getCargoWarn() {
-		return cargoWarn;
+	public String getCargoMute() {
+		return cargoMute;
 	}
 
-	public void setCargoWarn(String cargoWarn) {
-		if (cargoWarn == null || cargoWarn.equals("-1")) this.cargoWarn = "";
-		else this.cargoWarn = cargoWarn;
+	public void setCargoMute(String cargoWarn) {
+		if (cargoWarn == null || cargoWarn.equals("-1")) this.cargoMute = "";
+		else this.cargoMute = cargoWarn;
 	}
 
 	public String getCargoVip() {
