@@ -96,9 +96,9 @@ public class SettingsCommand extends Command {
 				}
 				Settings.updateMsgAdeus(args, message, gc);
 				break;
-			case "twarn":
-			case "tempowarn":
-			case "tpun":
+			case "tmute":
+			case "tempomute":
+			case "tmu":
 				Settings.updateWarnTime(args, message, gc);
 				break;
 			case "tpoll":
@@ -109,9 +109,10 @@ public class SettingsCommand extends Command {
 			case "canalsug":
 				Settings.updateCanalSUG(args, message, gc);
 				break;
-			case "rwarn":
-			case "rolewarn":
-				Settings.updateCargoWarn(args, message, gc);
+			case "rmute":
+			case "rolemute":
+			case "cargomute":
+				Settings.updateCargoMute(args, message, gc);
 				break;
 			/*case "rvip":
 			case "rolevip":

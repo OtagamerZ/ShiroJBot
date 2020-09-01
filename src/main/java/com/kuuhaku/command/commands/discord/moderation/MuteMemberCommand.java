@@ -80,7 +80,7 @@ public class MuteMemberCommand extends Command {
 		} else if (ShiroInfo.getDevelopers().contains(message.getMentionedUsers().get(0).getId())) {
 			channel.sendMessage("❌ | Não posso punir meus desenvolvedores, faça isso manualmente.").queue();
 			return;
-		} else if (gc.getCargoWarn() == null || gc.getCargoWarn().isEmpty()) {
+		} else if (gc.getCargoMute() == null || gc.getCargoMute().isEmpty()) {
 			channel.sendMessage("❌ | Nenhum cargo de punição configurado neste servidor.").queue();
 			return;
 		} else if (MemberDAO.getMutedMemberById(message.getMentionedMembers().get(0).getId()) != null && MemberDAO.getMutedMemberById(message.getMentionedUsers().get(0).getId()).isMuted()) {
@@ -102,7 +102,7 @@ public class MuteMemberCommand extends Command {
 
 			MemberDAO.saveMutedMember(m);
 
-			guild.modifyMemberRoles(mb, guild.getRoleById(gc.getCargoWarn())).complete();
+			guild.modifyMemberRoles(mb, guild.getRoleById(gc.getCargoMute())).complete();
 			Helper.logToChannel(author, false, null, mb.getAsMention() + " foi silenciado pela seguinte razão: `" + reason + "`", guild);
 			channel.sendMessage("Usuário silenciado por " + time + " minutos com sucesso!\nMotivo: `" + reason + "`").queue();
 		} catch (InsufficientPermissionException e) {

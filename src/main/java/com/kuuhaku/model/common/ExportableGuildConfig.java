@@ -68,11 +68,11 @@ public class ExportableGuildConfig {
 		gc.put("pollTime", g.getPollTime());
 		gc.put("muteTime", g.getWarnTime());
 		gc.put("muteRole", new JSONObject() {{
-			put("id", g.getCargoWarn());
+			put("id", g.getCargoMute());
 
 			Role r;
 			try {
-				r = Main.getInfo().getRoleByID(g.getCargoWarn());
+				r = Main.getInfo().getRoleByID(g.getCargoMute());
 			} catch (IllegalArgumentException e) {
 				r = null;
 			}

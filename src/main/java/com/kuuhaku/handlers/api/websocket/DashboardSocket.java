@@ -111,7 +111,7 @@ public class DashboardSocket extends WebSocketServer {
 						gc.setPollTime(c.getInt("pollTime"));
 
 						if (!c.getJSONObject("muteRole").isEmpty())
-							gc.setCargoWarn(c.getJSONObject("muteRole").getString("id"));
+							gc.setCargoMute(c.getJSONObject("muteRole").getString("id"));
 
 						gc.setMsgBoasVindas(c.getString("welcomeMessage"));
 						gc.setMsgAdeus(c.getString("goodbyeMessage"));
