@@ -79,7 +79,7 @@ public class UnblockEvent implements Job {
 			Guild g = Main.getInfo().getGuildByID(m.getGuild());
 			if (!g.getSelfMember().hasPermission(Permission.MANAGE_ROLES)) return;
 			Member mb = g.getMemberById(m.getUid());
-			Role r = g.getRoleById(GuildDAO.getGuildById(g.getId()).getCargoWarn());
+			Role r = g.getRoleById(GuildDAO.getGuildById(g.getId()).getCargoMute());
 			assert r != null;
 			assert mb != null;
 			try {

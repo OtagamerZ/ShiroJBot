@@ -317,7 +317,7 @@ public class GuildEvents extends ListenerAdapter {
 					msg -> msg.delete().queueAfter(20, TimeUnit.SECONDS, null, Helper::doNothing)
 			);
 			try {
-				Role r = guild.getRoleById(GuildDAO.getGuildById(guild.getId()).getCargoWarn());
+				Role r = guild.getRoleById(GuildDAO.getGuildById(guild.getId()).getCargoMute());
 				if (r != null) {
 					JSONArray roles = new JSONArray(member.getRoles().stream().map(Role::getId).collect(Collectors.toList()));
 					guild.modifyMemberRoles(member, r).queue(null, Helper::doNothing);
