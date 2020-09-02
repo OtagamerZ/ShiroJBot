@@ -60,13 +60,12 @@ public class ShiroInfo {
 	private static final ThreadMXBean tBean = ManagementFactory.getThreadMXBean();
 	private static final ThreadPoolExecutor compilationPools = (ThreadPoolExecutor) Executors.newFixedThreadPool(3);
 	private static final String BotToken = System.getenv("BOT_TOKEN");
-	private static final String AnilistToken = System.getenv("ANILIST_TOKEN");
 	private static final String YandexToken = System.getenv("YANDEX_TOKEN");
 	private static final String YoutubeToken = System.getenv("YOUTUBE_TOKEN");
 	private static final String DBLToken;
 	private static final String name = "Shiro J. Bot";
 	private static final String version = VersionDAO.getBuildVersion(Version.V3);
-	private static final String supportServer = "Shiro Support";
+	private static final String supportServerName = "Shiro Support";
 	private static final String supportServerID = "421495229594730496";
 	private static final String twitchChannelID = "743479145618472960";
 	private static final String announcementChannelID = "597587565809369089";
@@ -130,6 +129,10 @@ public class ShiroInfo {
 		return JSONFactory;
 	}
 
+	public static String getSupportServerName() {
+		return supportServerName;
+	}
+
 	public static String getSupportServerID() {
 		return supportServerID;
 	}
@@ -189,10 +192,6 @@ public class ShiroInfo {
 
 	public String getYandexToken() {
 		return YandexToken;
-	}
-
-	public String getAnilistToken() {
-		return AnilistToken;
 	}
 
 	public String getYoutubeToken() {
