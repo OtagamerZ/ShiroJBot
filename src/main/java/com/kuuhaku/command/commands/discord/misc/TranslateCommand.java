@@ -20,11 +20,9 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.Tradutor;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 public class TranslateCommand extends Command {
@@ -63,10 +61,10 @@ public class TranslateCommand extends Command {
 			return;
 		}
 
-		try {
+		/*try {
 			channel.sendMessage("**Traduzido de " + fromTo[0] + " para " + fromTo[1] + "**\n" + Tradutor.translate(fromTo[0], fromTo[1], text)).queue();
 		} catch (IOException e) {
 			channel.sendMessage("❌ | Uma das duas linguagens é inválida, a lista completa de linguagens suportadas pode ser encontrada no link abaixo.\nhttps://tech.yandex.com/translate/doc/dg/concepts/api-overview-docpage/").queue();
-		}
+		}*/
 	}
 }
