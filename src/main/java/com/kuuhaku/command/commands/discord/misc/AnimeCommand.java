@@ -21,6 +21,7 @@ package com.kuuhaku.command.commands.discord.misc;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.model.common.Anime;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
@@ -67,7 +68,7 @@ public class AnimeCommand extends Command {
 				JSONObject data = com.kuuhaku.controller.Anime.getData(String.join(" ", args), query);
 				Anime anime = new Anime(data);
 
-				EmbedBuilder eb = new EmbedBuilder();
+				EmbedBuilder eb = new ColorlessEmbedBuilder();
 				if (anime.getGenres().toLowerCase().contains("hentai") && !message.getTextChannel().isNSFW()) {
 					m.editMessage("Humm safadinho, eu não posso postar sobre Hentais neste canal!").queue();
 					return;

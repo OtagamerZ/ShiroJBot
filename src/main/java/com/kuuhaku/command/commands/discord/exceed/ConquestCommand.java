@@ -28,6 +28,7 @@ import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.sqlite.PStateDAO;
 import com.kuuhaku.handlers.games.disboard.enums.Country;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.utils.*;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -86,7 +87,7 @@ public class ConquestCommand extends Command {
 					.forEach(dominions::putAll);
 
 			Map<String, Page> pages = new LinkedHashMap<>();
-			EmbedBuilder eb = new EmbedBuilder();
+			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			dominions.forEach((k, v) -> {
 				Emote e = Main.getInfo().getAPI().getEmoteById(TagIcons.getExceedId(k));
 				eb.clear();

@@ -18,6 +18,7 @@
 
 package com.kuuhaku.handlers.music;
 
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.utils.Helper;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
@@ -83,7 +84,7 @@ public class TrackScheduler extends AudioEventAdapter {
 		if (endReason.mayStartNext) {
 			nextTrack();
 
-			EmbedBuilder eb = new EmbedBuilder();
+			EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 			try {
 				AudioTrackInfo ati = player.getPlayingTrack().getInfo();

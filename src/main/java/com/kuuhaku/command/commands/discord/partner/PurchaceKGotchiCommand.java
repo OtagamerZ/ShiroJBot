@@ -24,6 +24,7 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KGotchiDAO;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.handlers.games.kawaigotchi.enums.Race;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -60,7 +61,7 @@ public class PurchaceKGotchiCommand extends Command {
 		}
 
 		if (args.length == 0) {
-			EmbedBuilder eb = new EmbedBuilder();
+			EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 			eb.setTitle("Bem vindo(a) à loja de Kawaigotchis!");
 			eb.setDescription("Kawaigotchis são animais fofinhos que lhe ajudarão a ganhar mais experiência para o seu perfil, assim como acompanhá-lo nos servidores que eu estou.\n\nValhe a pena notar que ele será \"pausado\" enquanto você estiver offline, então não precisa se preocupar!");
@@ -91,7 +92,7 @@ public class PurchaceKGotchiCommand extends Command {
 					};
 
 					List<Page> pages = new ArrayList<>();
-					EmbedBuilder eb = new EmbedBuilder();
+					EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 					for (int i = 0; i < image.length; i++) {
 						eb.clear();

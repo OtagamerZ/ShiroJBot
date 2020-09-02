@@ -20,6 +20,7 @@ package com.kuuhaku.command.commands.discord.fun;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
@@ -98,7 +99,7 @@ public class ShipCommand extends Command {
 			else
 				sb.append("\n\nImpossível casal mais perfeito que esse, tem que casar JÁ!!\n**").append(Helper.round(love, 1)).append("%** `").append(doneMeter).append("`");
 
-			EmbedBuilder eb = new EmbedBuilder();
+			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			eb.setImage("attachment://ship.png");
 			eb.setColor(Helper.getRandomColor());
 

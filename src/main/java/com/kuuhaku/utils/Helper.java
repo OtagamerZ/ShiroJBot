@@ -34,6 +34,7 @@ import com.kuuhaku.controller.postgresql.GuildBuffDAO;
 import com.kuuhaku.controller.postgresql.LogDAO;
 import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.Extensions;
 import com.kuuhaku.model.common.drop.CreditDrop;
 import com.kuuhaku.model.common.drop.Prize;
@@ -318,7 +319,7 @@ public class Helper {
 		if (gc.getCanalLog() == null || gc.getCanalLog().isEmpty()) return;
 		else if (g.getTextChannelById(gc.getCanalLog()) == null) gc.setCanalLog("");
 		try {
-			EmbedBuilder eb = new EmbedBuilder();
+			EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 			eb.setAuthor("Relatório de log");
 			eb.setDescription(msg);
@@ -340,7 +341,7 @@ public class Helper {
 		if (gc.getCanalLog() == null || gc.getCanalLog().isEmpty()) return;
 		else if (g.getTextChannelById(gc.getCanalLog()) == null) gc.setCanalLog("");
 		try {
-			EmbedBuilder eb = new EmbedBuilder();
+			EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 			eb.setAuthor("Relatório de log");
 			eb.setDescription(msg);
@@ -483,7 +484,7 @@ public class Helper {
 
 		channel.sendMessage("Link enviado no privado!").queue();
 
-		EmbedBuilder eb = new EmbedBuilder();
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		eb.setThumbnail("https://img.icons8.com/cotton/2x/checkmark.png");
 		eb.setTitle("Olá, obrigada por apoiar meu desenvolvimento!");
@@ -1013,7 +1014,7 @@ public class Helper {
 			boolean foil = fbUltimate || chance(0.5 * (foilBuff != null ? foilBuff.getMult() : 1));
 			KawaiponCard kc = new KawaiponCard(c, foil);
 
-			EmbedBuilder eb = new EmbedBuilder();
+			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			eb.setImage("attachment://kawaipon.png");
 			eb.setAuthor("Uma carta " + c.getRarity().toString().toUpperCase() + " Kawaipon apareceu neste servidor!");
 			eb.setTitle(kc.getName() + " (" + c.getAnime().toString() + ")");
@@ -1059,7 +1060,7 @@ public class Helper {
 		if (dbUltimate || chance(2 + (channel.getGuild().getMemberCount() * 1d / 5000) * (dropBuff != null ? dropBuff.getMult() : 1))) {
 			Prize drop = new CreditDrop();
 
-			EmbedBuilder eb = new EmbedBuilder();
+			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			eb.setThumbnail("https://i.pinimg.com/originals/86/c0/f4/86c0f4d0f020c3f819a532873ef33704.png");
 			eb.setTitle("Um drop apareceu neste servidor!");
 			eb.addField("Conteúdo:", drop.getPrize() + " créditos", true);

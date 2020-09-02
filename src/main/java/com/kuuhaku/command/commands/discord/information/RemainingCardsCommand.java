@@ -25,6 +25,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
@@ -83,7 +84,7 @@ public class RemainingCardsCommand extends Command {
 				.comparing(Card::getRarity, Comparator.comparingInt(KawaiponRarity::getIndex).reversed())
 				.thenComparing(Card::getName, String.CASE_INSENSITIVE_ORDER)
 		);
-		EmbedBuilder eb = new EmbedBuilder();
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		eb.setTitle(":flower_playing_cards: | Cartas coletadas de " + anime.toString());
 		eb.addField("Progresso:", collected.size() + " de " + cards.size() + " (" + (Helper.prcntToInt(collected.size(), cards.size())) + "%)", false);

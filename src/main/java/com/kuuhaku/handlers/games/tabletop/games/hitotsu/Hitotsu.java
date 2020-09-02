@@ -22,6 +22,7 @@ import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.framework.Board;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
@@ -144,7 +145,7 @@ public class Hitotsu extends Game {
 					seats.get(getCurrent().getId()).showHand();
 				}
 			} else if (Helper.equalsAny(command, "lista", "cartas", "list", "cards")) {
-				EmbedBuilder eb = new EmbedBuilder();
+				EmbedBuilder eb = new ColorlessEmbedBuilder();
 				StringBuilder sb = new StringBuilder();
 				List<KawaiponCard> cards = seats.get(getCurrent().getId()).getCards();
 

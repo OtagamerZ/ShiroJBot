@@ -20,6 +20,7 @@ package com.kuuhaku.command.commands.discord.reactions;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
@@ -107,7 +108,7 @@ public abstract class Reaction extends Command {
 
 			String url = resposta.get("url").toString();
 
-			EmbedBuilder eb = new EmbedBuilder();
+			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			eb.setImage(url);
 			if (allowReact) eb.setFooter("↪ | Clique para retribuir");
 
