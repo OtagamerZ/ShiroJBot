@@ -346,9 +346,9 @@ public class CommandManager {
 			put(RateCommand.class, new Argument(
 					"avaliar", new String[]{"rate"}, "req_mention-positive-negative", "cmd_vote", MISC, false
 			));
-			put(TranslateCommand.class, new Argument(
+			/*put(TranslateCommand.class, new Argument(
 					"traduzir", new String[]{"translate", "traduza", "trad"}, "req_from-to-text", "cmd_translate", MISC, false
-			));
+			));*/
 			put(EightBallCommand.class, new Argument(
 					"8ball", REQ_QUESTION, "cmd_8ball", MISC, false
 			));
@@ -459,9 +459,9 @@ public class CommandManager {
 			put(SlotsCommand.class, new Argument(
 					"slots", new String[]{"roleta"}, "req_bet", "cmd_slots", FUN, false
 			));
-			/*put(QuizCommand.class, new Argument(
+			put(QuizCommand.class, new Argument(
 					"quiz", new String[]{"qna", "per"}, "req_difficulty", "cmd_quiz", FUN, true
-			));*/
+			));
 			put(GuessTheNumberCommand.class, new Argument(
 					"adivinheonumero", new String[]{"aon", "guessthenumber", "gtn"}, "cmd_guess-the-number", FUN, true
 			));
