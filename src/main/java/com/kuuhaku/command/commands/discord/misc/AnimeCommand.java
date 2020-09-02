@@ -97,7 +97,7 @@ public class AnimeCommand extends Command {
 					eb.setDescription(jo.getJSONObject("anime").getString("Sinopse"));
 					eb.addField("Gêneros:", jo.getJSONObject("anime").getJSONArray("tags").toString().replace("[", "`").replace("]", "`").replace(",", "` `").replace("\"", ""), false);
 				} else {
-					eb.setDescription(anime.getDescription());
+					eb.setDescription(anime.getDescription().replace("<br>", "\n"));
 					eb.addField("Gêneros:", anime.getGenres(), false);
 				}
 
