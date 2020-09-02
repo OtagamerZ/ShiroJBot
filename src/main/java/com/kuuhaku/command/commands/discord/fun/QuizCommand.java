@@ -200,7 +200,7 @@ public class QuizCommand extends Command {
 				channel.sendMessage(eb.build()).queue();
 			});
 
-			fields.add(new MessageEmbed.Field("Alternativa " + opts.get(i), shuffledOpts.get(i), true));
+			fields.add(new MessageEmbed.Field("Alternativa " + opts.get(i), shuffledOpts.get(i), false));
 		}
 
 		fields.sort(Comparator.comparing(MessageEmbed.Field::getName));
