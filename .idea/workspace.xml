@@ -13,7 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção do cargo automatico">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthMinuteEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthMinuteEvent.java" afterDir="false" />
     </list>
@@ -661,14 +661,7 @@
       <workItem from="1598970335910" duration="1307000" />
       <workItem from="1598976106166" duration="5407000" />
       <workItem from="1598992905223" duration="166000" />
-      <workItem from="1599048374328" duration="5179000" />
-    </task>
-    <task id="LOCAL-02306" summary="Conversão de sonhos (Loritta) em créditos (Shiro) adicionada">
-      <created>1598632946232</created>
-      <option name="number" value="02306" />
-      <option name="presentableId" value="LOCAL-02306" />
-      <option name="project" value="LOCAL" />
-      <updated>1598632946233</updated>
+      <workItem from="1599048374328" duration="6035000" />
     </task>
     <task id="LOCAL-02307" summary="Conversão de sonhos (Loritta) em créditos (Shiro) adicionada">
       <created>1598633297071</created>
@@ -1006,7 +999,14 @@
       <option name="project" value="LOCAL" />
       <updated>1599052891259</updated>
     </task>
-    <option name="localTasksCounter" value="2355" />
+    <task id="LOCAL-02355" summary="Correção do cargo automatico">
+      <created>1599056187544</created>
+      <option name="number" value="02355" />
+      <option name="presentableId" value="LOCAL-02355" />
+      <option name="project" value="LOCAL" />
+      <updated>1599056187544</updated>
+    </task>
+    <option name="localTasksCounter" value="2356" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1072,7 +1072,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção das porcentagens de cartas" />
     <MESSAGE value="Correção do slots" />
     <MESSAGE value="Correção do visualizador de chunk do canvas" />
     <MESSAGE value="Obrigado -&gt; Obrigada" />
@@ -1097,7 +1096,8 @@
     <MESSAGE value="Correção básica nos GIFs de reação com resposta" />
     <MESSAGE value="Outras correções básicas" />
     <MESSAGE value="Criação de canal de Exceeds" />
-    <option name="LAST_COMMIT_MESSAGE" value="Criação de canal de Exceeds" />
+    <MESSAGE value="Correção do cargo automatico" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção do cargo automatico" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1144,11 +1144,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1599052888635">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1599056442376">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1599052888635" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1599056442376" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1210,11 +1210,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1599052892109">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1599056188663">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1599052892109" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1599056188663" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597351073016">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>

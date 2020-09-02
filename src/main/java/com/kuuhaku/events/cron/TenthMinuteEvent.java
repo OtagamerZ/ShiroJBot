@@ -34,6 +34,7 @@ import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 
 import javax.persistence.NoResultException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -66,7 +67,7 @@ public class TenthMinuteEvent implements Job {
 
 		assert support != null;
 		mbs.forEach(mb -> {
-			List<Role> roles = mb.getRoles();
+			List<Role> roles = new ArrayList<>(mb.getRoles());
 			ExceedEnum ex = ExceedEnum.getByName(ExceedDAO.getExceed(mb.getId()));
 			Role exRole = support.getRoleById(ExceedRole.getByExceed(ex).getId());
 
