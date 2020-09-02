@@ -25,6 +25,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.Youtube;
 import com.kuuhaku.controller.postgresql.TagDAO;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.YoutubeVideo;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.Music;
@@ -67,8 +68,8 @@ public class YoutubeCommand extends Command {
 
         channel.sendMessage("<a:loading:697879726630502401> Buscando videos...").queue(m -> {
             try {
-                List<YoutubeVideo> videos = Youtube.getData(String.join(" ", args));
-                EmbedBuilder eb = new EmbedBuilder();
+				List<YoutubeVideo> videos = Youtube.getData(String.join(" ", args));
+				EmbedBuilder eb = new ColorlessEmbedBuilder();
 
                 m.editMessage(":mag: Resultados da busca").queue(s -> {
                     try {

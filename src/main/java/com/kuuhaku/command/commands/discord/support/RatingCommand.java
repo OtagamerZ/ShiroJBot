@@ -23,6 +23,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.VotesDAO;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.DevRating;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
@@ -109,7 +110,7 @@ public class RatingCommand extends Command {
 
 	private MessageEmbed[] questions() {
 		MessageEmbed[] embeds = {null, null, null};
-		EmbedBuilder eb = new EmbedBuilder();
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		eb.setColor(Helper.getRandomColor());
 
 		eb.setTitle("Atendimento");

@@ -27,6 +27,7 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardMarketDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.CardMarket;
 import com.kuuhaku.model.persistent.Kawaipon;
@@ -99,17 +100,17 @@ public class BuyCardCommand extends Command {
 
 				onlyMine.set(params.stream().anyMatch("-m"::equalsIgnoreCase));
 			}
-			EmbedBuilder eb = new EmbedBuilder();
+			EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 			eb.setTitle(":scales: | Mercado de cartas");
 			eb.setDescription(
 					"Use `" + prefix + "comprar ID` para comprar uma carta.\n\n" +
-							"**Parâmetros de pesquisa:**\n" +
-							"`-n` - Busca cartas por nome\n" +
-							"`-r` - Busca cartas por raridade\n" +
-							"`-a` - Busca cartas por anime\n" +
-							"`-c` - Busca apenas cartas cromadas\n" +
-							"`-m` - Busca apenas suas cartas anunciadas\n\n" +
+					"**Parâmetros de pesquisa:**\n" +
+					"`-n` - Busca cartas por nome\n" +
+					"`-r` - Busca cartas por raridade\n" +
+					"`-a` - Busca cartas por anime\n" +
+					"`-c` - Busca apenas cartas cromadas\n" +
+					"`-m` - Busca apenas suas cartas anunciadas\n\n" +
 							"Cartas com valores acima de 50x o valor base não serão exibidas sem usar `-m`."
 			);
 			eb.setFooter("Seus créditos: " + buyer.getBalance(), "https://i.imgur.com/U0nPjLx.gif");

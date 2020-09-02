@@ -22,6 +22,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.TicketDAO;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Ticket;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
@@ -73,7 +74,7 @@ public class MarkTicketCommand extends Command {
 			return;
 		}
 
-		EmbedBuilder eb = new EmbedBuilder();
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		eb.setTitle("Resolução de ticket Nº " + args[0]);
 		eb.setDescription("Assunto:```" + t.getSubject() + "```");

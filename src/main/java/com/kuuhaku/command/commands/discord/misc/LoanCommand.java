@@ -22,6 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.ExceedMember;
 import com.kuuhaku.utils.CreditLoan;
@@ -53,14 +54,14 @@ public class LoanCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		ExceedMember ex = ExceedDAO.getExceedMember(author.getId());
 		if (args.length < 1) {
-			EmbedBuilder eb = new EmbedBuilder();
+			EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 			eb.setTitle(":bank: | Empréstimo de créditos");
 			eb.setColor(Helper.getRandomColor());
 			eb.setThumbnail("https://image.flaticon.com/icons/png/512/1462/1462438.png");
 			eb.setDescription("Está precisando de créditos rápidos? Estão aparecendo muitas cartas que você deseja obter? Talvez seu Kawaigotchi esteja morrendo?\n" +
-					"Não se preocupe, nós podemos resolver!\n\n" +
-					"Usando este comando você pode contratar um ~~agiota~~ empréstimo de créditos e ter a possibilidade de pagar o débito mais tarde.\n\n"
+							  "Não se preocupe, nós podemos resolver!\n\n" +
+							  "Usando este comando você pode contratar um ~~agiota~~ empréstimo de créditos e ter a possibilidade de pagar o débito mais tarde.\n\n"
 			);
 			eb.addField("Plano Lite: `" + prefix + "emprestimo 1`", "1000 créditos (juros de " + Helper.round(CreditLoan.LOAN_1.getInterest(ex) * 100 - 100, 1) + "%)", false);
 			eb.addField("Plano Colecionador: `" + prefix + "emprestimo 2`", "2500 créditos (juros de " + Helper.round(CreditLoan.LOAN_2.getInterest(ex) * 100 - 100, 1) + "%)", false);

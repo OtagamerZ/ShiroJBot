@@ -25,6 +25,7 @@ import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.handlers.api.endpoint.ReadyData;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.*;
 import com.kuuhaku.utils.AnimeName;
 import com.kuuhaku.utils.BiContract;
@@ -148,7 +149,7 @@ public class DashboardSocket extends WebSocketServer {
 				case "ticket":
 					int number = TicketDAO.openTicket(payload.getString("message"), Main.getInfo().getUserByID(t.getUid()));
 
-					EmbedBuilder eb = new EmbedBuilder();
+					EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 					eb.setTitle("Feedback via site (Ticket Nº " + number + ")");
 					eb.addField("Enviador por:", t.getHolder(), true);

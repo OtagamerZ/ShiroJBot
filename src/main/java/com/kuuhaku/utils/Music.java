@@ -23,6 +23,7 @@ import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
 import com.kuuhaku.Main;
 import com.kuuhaku.handlers.music.GuildMusicManager;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
@@ -98,7 +99,7 @@ public class Music {
         try {
             AudioTrack at = musicManager.player.getPlayingTrack();
 
-            EmbedBuilder eb = new EmbedBuilder();
+            EmbedBuilder eb = new ColorlessEmbedBuilder();
 
             String thumb = "https://img.youtube.com/vi/" + at.getInfo().uri.substring(at.getInfo().uri.indexOf("v=")).replace("v=", "") + "/maxresdefault.jpg";
             eb.setTitle(musicManager.player.getPlayingTrack().getInfo().title, at.getInfo().uri);
@@ -124,7 +125,7 @@ public class Music {
         List<Page> pages = new ArrayList<>();
         List<MessageEmbed.Field> f = new ArrayList<>();
 
-        EmbedBuilder eb = new EmbedBuilder();
+        EmbedBuilder eb = new ColorlessEmbedBuilder();
 
         LinkedList<AudioTrack> queue = new LinkedList<>(musicManager.scheduler.queue());
         queue.addFirst(musicManager.player.getPlayingTrack());

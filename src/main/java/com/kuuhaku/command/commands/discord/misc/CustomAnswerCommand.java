@@ -26,6 +26,7 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.BackupDAO;
 import com.kuuhaku.controller.sqlite.CustomAnswerDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.CustomAnswers;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
@@ -70,7 +71,7 @@ public class CustomAnswerCommand extends Command {
 			List<Page> pages = new ArrayList<>();
 
 			List<CustomAnswers> ca = BackupDAO.getCADump();
-			EmbedBuilder eb = new EmbedBuilder();
+			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			ca.removeIf(a -> !a.getGuildID().equals(guild.getId()) || a.isMarkForDelete());
 
 			for (int x = 0; x < Math.ceil(ca.size() / 10f); x++) {
@@ -99,7 +100,7 @@ public class CustomAnswerCommand extends Command {
 			}
 			CustomAnswers c = ca.get(0);
 
-			EmbedBuilder eb = new EmbedBuilder();
+			EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 			eb.setTitle(":speech_balloon: Resposta Nº " + c.getId());
 			eb.addField(":arrow_right: " + c.getGatilho(), ":arrow_left: " + c.getAnswer(), false);

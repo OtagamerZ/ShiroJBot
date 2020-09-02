@@ -20,6 +20,7 @@ package com.kuuhaku.command.commands.discord.music;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.Music;
 import com.kuuhaku.utils.PrivilegeLevel;
@@ -49,7 +50,7 @@ public class ControlCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 1) {
-			EmbedBuilder eb = new EmbedBuilder();
+			EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 			eb.setTitle("Comandos de controle de música");
 			eb.addField(prefix + "c resume", "Continua a fila de músicas caso esteja pausada.", true);

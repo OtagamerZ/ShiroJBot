@@ -22,6 +22,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.TransactionDAO;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.utils.CreditLoan;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -156,7 +157,7 @@ public class Account {
 			if (today.isAfter(lastVote.plusHours(12))) {
 				try {
 					Main.getInfo().getUserByID(userId).openPrivateChannel().queue(c -> {
-						EmbedBuilder eb = new EmbedBuilder();
+						EmbedBuilder eb = new ColorlessEmbedBuilder();
 						eb.setColor(Helper.getRandomColor());
 						eb.setTitle("Opa, você já pode votar novamente!");
 						eb.setDescription("Como você pediu, estou aqui para lhe avisar que você já pode [votar novamente](https://top.gg/bot/572413282653306901/vote) para ganhar mais um acúmulo de votos e uma quantia de créditos!");

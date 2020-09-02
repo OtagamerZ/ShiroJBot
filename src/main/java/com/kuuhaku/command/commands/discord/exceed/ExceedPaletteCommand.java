@@ -20,6 +20,7 @@ package com.kuuhaku.command.commands.discord.exceed;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.utils.ExceedEnum;
 import com.kuuhaku.utils.TagIcons;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -46,7 +47,7 @@ public class ExceedPaletteCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		EmbedBuilder eb = new EmbedBuilder();
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		eb.setTitle("Cores de cada Exceed");
 		for (ExceedEnum ex : ExceedEnum.values()) {
 			eb.addField(TagIcons.getExceed(ex) + " | " + ex.getName() + ":", String.format("#%02x%02x%02x", ex.getPalette().getRed(), ex.getPalette().getGreen(), ex.getPalette().getBlue()), true);
