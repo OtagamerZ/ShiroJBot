@@ -63,7 +63,7 @@ public class ConquestCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		ExceedEnums ex = ExceedEnums.getByName(ExceedDAO.getExceed(author.getId()));
+		ExceedEnum ex = ExceedEnum.getByName(ExceedDAO.getExceed(author.getId()));
 		PoliticalState state = PStateDAO.getPoliticalState(ex);
 
 		if (!ExceedDAO.hasExceed(author.getId())) {
@@ -76,7 +76,7 @@ public class ConquestCommand extends Command {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_exceed-defeated")).queue();
 			return;
 		} else if (args.length == 0) {
-			Map<ExceedEnums, List<Country>> dominions = new HashMap<>();
+			Map<ExceedEnum, List<Country>> dominions = new HashMap<>();
 
 			PStateDAO.getAllPoliticalState().stream()
 					.map(ps -> Map.of(ps.getExceed(), ps.getCountries().stream()

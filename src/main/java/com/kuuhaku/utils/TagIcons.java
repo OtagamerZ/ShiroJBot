@@ -132,7 +132,7 @@ public enum TagIcons {
 		throw new IllegalStateException();
 	}
 
-	public static String getExceed(ExceedEnums t) {
+	public static String getExceed(ExceedEnum t) {
 		switch (t) {
 			case IMANITY:
 				return "<:imanity:697879725690847324> ";
@@ -150,7 +150,7 @@ public enum TagIcons {
 		throw new IllegalStateException();
 	}
 
-	public static String getExceedId(ExceedEnums t) {
+	public static String getExceedId(ExceedEnum t) {
 		switch (t) {
 			case IMANITY:
 				return "697879725690847324";

@@ -37,7 +37,7 @@ import com.kuuhaku.controller.sqlite.BlacklistDAO;
 import com.kuuhaku.controller.sqlite.PStateDAO;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.ExceedEnums;
+import com.kuuhaku.utils.ExceedEnum;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
@@ -153,7 +153,7 @@ public class TwitchEvents {
 				eb.setColor(Color.cyan);
 
 				if (ExceedDAO.hasExceed(c.getUser().getId())) {
-					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(c.getUser().getId())));
+					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(c.getUser().getId())));
 					ps.modifyInfluence(50);
 					PStateDAO.savePoliticalState(ps);
 

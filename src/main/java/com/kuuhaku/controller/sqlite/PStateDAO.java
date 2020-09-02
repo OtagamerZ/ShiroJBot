@@ -19,7 +19,7 @@
 package com.kuuhaku.controller.sqlite;
 
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
-import com.kuuhaku.utils.ExceedEnums;
+import com.kuuhaku.utils.ExceedEnum;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -43,7 +43,7 @@ public class PStateDAO {
 		}
 	}
 
-	public static PoliticalState getPoliticalState(ExceedEnums exceed) {
+	public static PoliticalState getPoliticalState(ExceedEnum exceed) {
 		EntityManager em = Manager.getEntityManager();
 
 		try {

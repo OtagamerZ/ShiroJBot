@@ -27,7 +27,7 @@ import com.kuuhaku.controller.sqlite.PStateDAO;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.ExceedEnums;
+import com.kuuhaku.utils.ExceedEnum;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageChannel;
@@ -71,7 +71,7 @@ public class DiscordBotsListHandler {
 			eb.setColor(Color.cyan);
 
 			if (ExceedDAO.hasExceed(u.getId())) {
-				PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(u.getId())));
+				PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(u.getId())));
 				ps.modifyInfluence(5);
 				PStateDAO.savePoliticalState(ps);
 

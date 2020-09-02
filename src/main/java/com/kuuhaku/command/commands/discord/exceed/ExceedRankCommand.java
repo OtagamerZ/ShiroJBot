@@ -23,7 +23,7 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.model.common.Exceed;
 import com.kuuhaku.model.common.Profile;
-import com.kuuhaku.utils.ExceedEnums;
+import com.kuuhaku.utils.ExceedEnum;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
@@ -70,7 +70,7 @@ public class ExceedRankCommand extends Command {
 			try {
 				BufferedImage bi = new BufferedImage(WIDTH, HEIGTH, BufferedImage.TYPE_INT_ARGB);
 				List<Exceed> exceeds = new ArrayList<>();
-				for (ExceedEnums ex : ExceedEnums.values()) {
+				for (ExceedEnum ex : ExceedEnum.values()) {
 					exceeds.add(ExceedDAO.getExceed(ex));
 				}
 
@@ -87,12 +87,12 @@ public class ExceedRankCommand extends Command {
 				}};
 
 				List<String> names = new ArrayList<>() {{
-					add(ExceedEnums.IMANITY.getName());
-					add(ExceedEnums.SEIREN.getName());
-					add(ExceedEnums.WEREBEAST.getName());
-					add(ExceedEnums.ELF.getName());
-					add(ExceedEnums.EXMACHINA.getName());
-					add(ExceedEnums.FLUGEL.getName());
+					add(ExceedEnum.IMANITY.getName());
+					add(ExceedEnum.SEIREN.getName());
+					add(ExceedEnum.WEREBEAST.getName());
+					add(ExceedEnum.ELF.getName());
+					add(ExceedEnum.EXMACHINA.getName());
+					add(ExceedEnum.FLUGEL.getName());
 				}};
 
 				Graphics2D g2d = (Graphics2D) bi.getGraphics();

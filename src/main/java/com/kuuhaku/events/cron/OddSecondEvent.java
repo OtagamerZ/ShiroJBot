@@ -19,28 +19,26 @@
 package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.handlers.music.GuildMusicManager;
-import com.kuuhaku.utils.Music;
-import net.dv8tion.jda.api.entities.Guild;
+import com.kuuhaku.controller.sqlite.KGotchiDAO;
+import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 
-import java.util.Objects;
+import java.util.List;
 
-public class ClearEvent implements Job {
-	public static JobDetail clear;
+public class OddSecondEvent implements Job {
+	public static JobDetail updateKawaigotchi;
 
 	@Override
 	public void execute(JobExecutionContext context) {
-		for (Guild g : Main.getInfo().getAPI().getGuilds()) {
-			GuildMusicManager gmm = Music.getGuildAudioPlayer(g, null);
-			if (g.getAudioManager().isConnected() && (Objects.requireNonNull(g.getAudioManager().getConnectedChannel()).getMembers().size() < 1)) {
-				g.getAudioManager().closeAudioConnection();
-				gmm.scheduler.channel.sendMessage("Me deixaram sozinha no chat de voz, então eu saí também!").queue();
-				gmm.scheduler.clear();
-				gmm.player.destroy();
+		List<Kawaigotchi> kgs = KGotchiDAO.getAllKawaigotchi();
+
+		kgs.forEach(k -> {
+			try {
+				k.update(Main.getInfo().getMemberByID(k.getUserId()));
+			} catch (NullPointerException ignore) {
 			}
-		}
+		});
 	}
 }

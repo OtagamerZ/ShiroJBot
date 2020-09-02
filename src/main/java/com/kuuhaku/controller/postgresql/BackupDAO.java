@@ -23,7 +23,7 @@ import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.model.common.DataDump;
 import com.kuuhaku.model.persistent.*;
-import com.kuuhaku.utils.ExceedEnums;
+import com.kuuhaku.utils.ExceedEnum;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Guild;
 
@@ -163,7 +163,7 @@ public class BackupDAO {
 		Query bl = em.createQuery("SELECT b FROM Blacklist b", Blacklist.class);
 		List<PoliticalState> ps = new ArrayList<>();
 
-		for (ExceedEnums ex : ExceedEnums.values()) {
+		for (ExceedEnum ex : ExceedEnum.values()) {
 			ps.add(PStateDAO.getPoliticalState(ex));
 		}
 

@@ -26,7 +26,7 @@ import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.sqlite.PStateDAO;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.ExceedEnums;
+import com.kuuhaku.utils.ExceedEnum;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
@@ -109,7 +109,7 @@ public class GuessTheNumberCommand extends Command {
 					AccountDAO.saveAccount(acc);
 
 					if (ExceedDAO.hasExceed(author.getId())) {
-						PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
+						PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
 						ps.modifyInfluence(10);
 						PStateDAO.savePoliticalState(ps);
 					}

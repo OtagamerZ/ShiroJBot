@@ -23,7 +23,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.model.persistent.ExceedMember;
-import com.kuuhaku.utils.ExceedEnums;
+import com.kuuhaku.utils.ExceedEnum;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.TagIcons;
 import net.dv8tion.jda.api.entities.*;
@@ -58,12 +58,12 @@ public class ExceedSelectCommand extends Command {
 				} else if (args.length == 0) {
 					channel.sendMessage("Exceed é um sistema global de clãs, onde todo mês o clã vencedor ira receber experiência em dobro por uma semana. A pontuação é baseada em diversos fatores, incluindo vitorias em minigames e experiência acumulada nos perfis dos membros, **independente do servidor**.\n\n" +
 							"Os exceeds disponíveis são:" +
-							"\n" + TagIcons.getExceed(ExceedEnums.IMANITY) + "**" + ExceedEnums.IMANITY.getName() + "** - Os engenhosos humanos." +
-							"\n" + TagIcons.getExceed(ExceedEnums.SEIREN) + "**" + ExceedEnums.SEIREN.getName() + "** - As curiosas sereias." +
-							"\n" + TagIcons.getExceed(ExceedEnums.WEREBEAST) + "**" + ExceedEnums.WEREBEAST.getName() + "** - Os sábios bestiais." +
-							"\n" + TagIcons.getExceed(ExceedEnums.ELF) + "**" + ExceedEnums.ELF.getName() + "** - Os místicos elfos." +
-							"\n" + TagIcons.getExceed(ExceedEnums.EXMACHINA) + "**" + ExceedEnums.EXMACHINA.getName() + "** - Os poderosos androides." +
-							"\n" + TagIcons.getExceed(ExceedEnums.FLUGEL) + "**" + ExceedEnums.FLUGEL.getName() + "** - Os divinos anjos." +
+							"\n" + TagIcons.getExceed(ExceedEnum.IMANITY) + "**" + ExceedEnum.IMANITY.getName() + "** - Os engenhosos humanos." +
+							"\n" + TagIcons.getExceed(ExceedEnum.SEIREN) + "**" + ExceedEnum.SEIREN.getName() + "** - As curiosas sereias." +
+							"\n" + TagIcons.getExceed(ExceedEnum.WEREBEAST) + "**" + ExceedEnum.WEREBEAST.getName() + "** - Os sábios bestiais." +
+							"\n" + TagIcons.getExceed(ExceedEnum.ELF) + "**" + ExceedEnum.ELF.getName() + "** - Os místicos elfos." +
+							"\n" + TagIcons.getExceed(ExceedEnum.EXMACHINA) + "**" + ExceedEnum.EXMACHINA.getName() + "** - Os poderosos androides." +
+							"\n" + TagIcons.getExceed(ExceedEnum.FLUGEL) + "**" + ExceedEnum.FLUGEL.getName() + "** - Os divinos anjos." +
 							"\n\nEscolha usando `" + prefix + "exselect EXCEED`.").queue();
 					m.delete().queue();
 					return;
@@ -71,74 +71,74 @@ public class ExceedSelectCommand extends Command {
 
 				switch (args[0].toLowerCase()) {
 					case "imanity":
-						if (ExceedDAO.getPercentage(ExceedEnums.IMANITY) >= 0.5f) {
+						if (ExceedDAO.getPercentage(ExceedEnum.IMANITY) >= 0.5f) {
 							m.editMessage("❌ | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
 							return;
 						}
 						if (em == null)
-							ExceedDAO.joinExceed(new ExceedMember(author.getId(), ExceedEnums.IMANITY.getName()));
+							ExceedDAO.joinExceed(new ExceedMember(author.getId(), ExceedEnum.IMANITY.getName()));
 						else {
-							em.setExceed(ExceedEnums.IMANITY.getName());
+							em.setExceed(ExceedEnum.IMANITY.getName());
 							ExceedDAO.joinExceed(em);
 						}
 						break;
 					case "seiren":
-						if (ExceedDAO.getPercentage(ExceedEnums.SEIREN) >= 0.5f) {
+						if (ExceedDAO.getPercentage(ExceedEnum.SEIREN) >= 0.5f) {
 							m.editMessage("❌ | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
 							return;
 						}
 						if (em == null)
-							ExceedDAO.joinExceed(new ExceedMember(author.getId(), ExceedEnums.SEIREN.getName()));
+							ExceedDAO.joinExceed(new ExceedMember(author.getId(), ExceedEnum.SEIREN.getName()));
 						else {
-							em.setExceed(ExceedEnums.SEIREN.getName());
+							em.setExceed(ExceedEnum.SEIREN.getName());
 							ExceedDAO.joinExceed(em);
 						}
 						break;
 					case "werebeast":
-						if (ExceedDAO.getPercentage(ExceedEnums.WEREBEAST) >= 0.5f) {
+						if (ExceedDAO.getPercentage(ExceedEnum.WEREBEAST) >= 0.5f) {
 							m.editMessage("❌ | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
 							return;
 						}
 						if (em == null)
-							ExceedDAO.joinExceed(new ExceedMember(author.getId(), ExceedEnums.WEREBEAST.getName()));
+							ExceedDAO.joinExceed(new ExceedMember(author.getId(), ExceedEnum.WEREBEAST.getName()));
 						else {
-							em.setExceed(ExceedEnums.WEREBEAST.getName());
+							em.setExceed(ExceedEnum.WEREBEAST.getName());
 							ExceedDAO.joinExceed(em);
 						}
 						break;
 					case "elf":
-						if (ExceedDAO.getPercentage(ExceedEnums.ELF) >= 0.5f) {
+						if (ExceedDAO.getPercentage(ExceedEnum.ELF) >= 0.5f) {
 							m.editMessage("❌ | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
 							return;
 						}
 						if (em == null)
-							ExceedDAO.joinExceed(new ExceedMember(author.getId(), ExceedEnums.ELF.getName()));
+							ExceedDAO.joinExceed(new ExceedMember(author.getId(), ExceedEnum.ELF.getName()));
 						else {
-							em.setExceed(ExceedEnums.ELF.getName());
+							em.setExceed(ExceedEnum.ELF.getName());
 							ExceedDAO.joinExceed(em);
 						}
 						break;
 					case "ex-machina":
-						if (ExceedDAO.getPercentage(ExceedEnums.EXMACHINA) >= 0.5f) {
+						if (ExceedDAO.getPercentage(ExceedEnum.EXMACHINA) >= 0.5f) {
 							m.editMessage("❌ | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
 							return;
 						}
 						if (em == null)
-							ExceedDAO.joinExceed(new ExceedMember(author.getId(), ExceedEnums.EXMACHINA.getName()));
+							ExceedDAO.joinExceed(new ExceedMember(author.getId(), ExceedEnum.EXMACHINA.getName()));
 						else {
-							em.setExceed(ExceedEnums.EXMACHINA.getName());
+							em.setExceed(ExceedEnum.EXMACHINA.getName());
 							ExceedDAO.joinExceed(em);
 						}
 						break;
 					case "flügel":
-						if (ExceedDAO.getPercentage(ExceedEnums.FLUGEL) >= 0.5f) {
+						if (ExceedDAO.getPercentage(ExceedEnum.FLUGEL) >= 0.5f) {
 							m.editMessage("❌ | Este Exceed já possui muitos membros, por favor escolha outro.").queue();
 							return;
 						}
 						if (em == null)
-							ExceedDAO.joinExceed(new ExceedMember(author.getId(), ExceedEnums.FLUGEL.getName()));
+							ExceedDAO.joinExceed(new ExceedMember(author.getId(), ExceedEnum.FLUGEL.getName()));
 						else {
-							em.setExceed(ExceedEnums.FLUGEL.getName());
+							em.setExceed(ExceedEnum.FLUGEL.getName());
 							ExceedDAO.joinExceed(em);
 						}
 						break;
@@ -149,8 +149,8 @@ public class ExceedSelectCommand extends Command {
 
 				String ex = ExceedDAO.getExceed(author.getId());
 
-				m.editMessage("Exceed escolhido com sucesso, você agora pertence à **" + ex + "**.").queue(null, Helper::doNothing);
-				ExceedDAO.getExceedMembers(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId()))).stream().map(ExceedMember::getId).forEach(e -> {
+				m.editMessage("Exceed escolhido com sucesso, você agora pertence à **" + ex + "**. Entre no servidor de suporte para utilizar o Tet para conversar com outros " + ex + "s!").queue(null, Helper::doNothing);
+				ExceedDAO.getExceedMembers(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId()))).stream().map(ExceedMember::getId).forEach(e -> {
 							User u = Main.getInfo().getUserByID(e);
 							if (u != null) {
 								u.openPrivateChannel().queue(c -> {

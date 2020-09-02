@@ -21,7 +21,7 @@ package com.kuuhaku.model.persistent;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
-import com.kuuhaku.utils.ExceedEnums;
+import com.kuuhaku.utils.ExceedEnum;
 import com.kuuhaku.utils.Tag;
 import com.kuuhaku.utils.TagIcons;
 
@@ -65,7 +65,7 @@ public class Tags {
         List<String> badges = new ArrayList<>();
 
         if (!exceed.isEmpty()) {
-            badges.add(pattern.replace("{id}", TagIcons.getExceedId(ExceedEnums.getByName(exceed))));
+            badges.add(pattern.replace("{id}", TagIcons.getExceedId(ExceedEnum.getByName(exceed))));
         }
 
         Set<Tag> tags = Tag.getTags(Main.getInfo().getUserByID(mb.getMid()), Main.getInfo().getGuildByID(mb.getSid()).getMemberById(mb.getMid()));

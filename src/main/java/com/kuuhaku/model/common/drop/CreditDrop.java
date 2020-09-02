@@ -26,7 +26,7 @@ import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.AnimeName;
-import com.kuuhaku.utils.ExceedEnums;
+import com.kuuhaku.utils.ExceedEnum;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.codec.binary.Hex;
@@ -42,7 +42,7 @@ import java.util.function.Function;
 
 public class CreditDrop implements Prize {
 	private final AnimeName anime = AnimeName.values()[Helper.rng(AnimeName.values().length, true)];
-	private final ExceedEnums exceed = ExceedEnums.values()[Helper.rng(ExceedEnums.values().length, true)];
+	private final ExceedEnum exceed = ExceedEnum.values()[Helper.rng(ExceedEnum.values().length, true)];
 	private final int[] values = {
 			1 + Helper.rng((int) CardDAO.totalCards(anime) - 1, false),
 			1 + Helper.rng(6, false),

@@ -18,7 +18,6 @@
 
 package com.kuuhaku.events;
 
-import com.kuuhaku.Main;
 import com.kuuhaku.events.cron.*;
 import com.kuuhaku.utils.Helper;
 import org.quartz.*;
@@ -28,175 +27,111 @@ public class ScheduledEvents implements JobListener {
 	private static Scheduler sched;
 
 	public ScheduledEvents() {
-		Thread.currentThread().setName("backup");
-		schedBackup();
-		schedClear();
-		schedUnblock();
-		schedCheck();
-		schedRefreshWinner();
-		schedMarkWinner();
-
-		if (Main.getInfo().getDblApi() != null) schedUpdateServerCount();
-		schedUpdateKawaigotchi();
+		Thread.currentThread().setName("crontab");
+		schedHourly();
+		schedMinute();
+		schedTenthMinute();
+		schedMonthly();
+		schedOddSecond();
 	}
 
-	private void schedCheck() {
+	private void schedTenthMinute() {
 		try {
-			if (PartnerCheckEvent.check == null) {
-				PartnerCheckEvent.check = JobBuilder.newJob(PartnerCheckEvent.class).withIdentity("check", "1").build();
+			if (TenthMinuteEvent.check == null) {
+				TenthMinuteEvent.check = JobBuilder.newJob(TenthMinuteEvent.class).withIdentity("tenth", "1").build();
 			}
-			Trigger cron = TriggerBuilder.newTrigger().withIdentity("check", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0/10 * ? * * *")).build();
+			Trigger cron = TriggerBuilder.newTrigger().withIdentity("tenth", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0/10 * ? * * *")).build();
 			SchedulerFactory sf = new StdSchedulerFactory();
 			try {
 				sched = sf.getScheduler();
-				sched.scheduleJob(PartnerCheckEvent.check, cron);
+				sched.scheduleJob(TenthMinuteEvent.check, cron);
 			} catch (Exception ignore) {
 			} finally {
 				sched.start();
-				Helper.logger(this.getClass()).info("Cronograma inicializado com sucesso: check");
+				Helper.logger(this.getClass()).info("Cronograma inicializado com sucesso a cada 10 minutos");
 			}
 		} catch (SchedulerException e) {
-			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma check: " + e);
+			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma a cada 10 minutos: " + e);
 		}
 	}
 
-	private void schedClear() {
+	private void schedHourly() {
 		try {
-			if (ClearEvent.clear == null) {
-				ClearEvent.clear = JobBuilder.newJob(ClearEvent.class).withIdentity("clear", "1").build();
+			if (HourlyEvent.backup == null) {
+				HourlyEvent.backup = JobBuilder.newJob(HourlyEvent.class).withIdentity("hourly", "1").build();
 			}
-			Trigger cron = TriggerBuilder.newTrigger().withIdentity("clear", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0/10 * ? * * *")).build();
+			Trigger cron = TriggerBuilder.newTrigger().withIdentity("hourly", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0 * ? * * *")).build();
 			SchedulerFactory sf = new StdSchedulerFactory();
 			try {
 				sched = sf.getScheduler();
-				sched.scheduleJob(ClearEvent.clear, cron);
+				sched.scheduleJob(HourlyEvent.backup, cron);
 			} catch (Exception ignore) {
 			} finally {
 				sched.start();
-				Helper.logger(this.getClass()).info("Cronograma inicializado com sucesso: clear");
+				Helper.logger(this.getClass()).info("Cronograma inicializado com sucesso a cada hora");
 			}
 		} catch (SchedulerException e) {
-			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma clear: " + e);
-		}
-	}
-	
-	private void schedBackup() {
-		try {
-			if (BackupEvent.backup == null) {
-				BackupEvent.backup = JobBuilder.newJob(BackupEvent.class).withIdentity("backup", "1").build();
-			}
-			Trigger cron = TriggerBuilder.newTrigger().withIdentity("backup", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0 0/1 ? * * *")).build();
-			SchedulerFactory sf = new StdSchedulerFactory();
-			try {
-				sched = sf.getScheduler();
-				sched.scheduleJob(BackupEvent.backup, cron);
-			} catch (Exception ignore) {
-			} finally {
-				sched.start();
-				Helper.logger(this.getClass()).info("Cronograma inicializado com sucesso: backup");
-			}
-		} catch (SchedulerException e) {
-			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma backup: " + e);
+			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma a cada hora: " + e);
 		}
 	}
 
-	private void schedUnblock() {
+	private void schedMinute() {
 		try {
-			if (UnblockEvent.unblock == null) {
-				UnblockEvent.unblock = JobBuilder.newJob(UnblockEvent.class).withIdentity("unblock", "1").build();
+			if (MinuteEvent.unblock == null) {
+				MinuteEvent.unblock = JobBuilder.newJob(MinuteEvent.class).withIdentity("minute", "1").build();
 			}
-			Trigger cron = TriggerBuilder.newTrigger().withIdentity("unblock", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0/1 * 1/1 * ? *")).build();
+			Trigger cron = TriggerBuilder.newTrigger().withIdentity("minute", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 * * * * ? *")).build();
 			SchedulerFactory sf = new StdSchedulerFactory();
 			try {
 				sched = sf.getScheduler();
-				sched.scheduleJob(UnblockEvent.unblock, cron);
+				sched.scheduleJob(MinuteEvent.unblock, cron);
 			} catch (Exception ignore) {
 			} finally {
 				sched.start();
-				Helper.logger(this.getClass()).info("Cronograma inicializado com sucesso: unblock");
+				Helper.logger(this.getClass()).info("Cronograma inicializado com sucesso a cada minuto");
 			}
 		} catch (SchedulerException e) {
-			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma unblock: " + e);
+			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma a cada minuto: " + e);
 		}
 	}
 
-	private void schedRefreshWinner() {
+	private void schedMonthly() {
 		try {
-			if (GetWinnerEvent.refreshWinner == null) {
-				GetWinnerEvent.refreshWinner = JobBuilder.newJob(GetWinnerEvent.class).withIdentity("refreshWinner", "1").build();
+			if (MonthlyEvent.markWinner == null) {
+				MonthlyEvent.markWinner = JobBuilder.newJob(MonthlyEvent.class).withIdentity("monthly", "1").build();
 			}
-			Trigger cron = TriggerBuilder.newTrigger().withIdentity("refreshWinner", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0 0/1 ? * * *")).build();
+			Trigger cron = TriggerBuilder.newTrigger().withIdentity("monthly", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0 0 1 * ? *")).build();
 			SchedulerFactory sf = new StdSchedulerFactory();
 			try {
 				sched = sf.getScheduler();
-				sched.scheduleJob(GetWinnerEvent.refreshWinner, cron);
+				sched.scheduleJob(MonthlyEvent.markWinner, cron);
 			} catch (Exception ignore) {
 			} finally {
 				sched.start();
-				Helper.logger(this.getClass()).info("Cronograma inicializado com sucesso: refreshWinner");
+				Helper.logger(this.getClass()).info("Cronograma inicializado com sucesso a cada mês");
 			}
 		} catch (SchedulerException e) {
-			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma refreshWinner: " + e);
+			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma a cada mês: " + e);
 		}
 	}
 
-	private void schedMarkWinner() {
+	private void schedOddSecond() {
 		try {
-			if (MarkWinnerEvent.markWinner == null) {
-				MarkWinnerEvent.markWinner = JobBuilder.newJob(MarkWinnerEvent.class).withIdentity("markWinner", "1").build();
+			if (OddSecondEvent.updateKawaigotchi == null) {
+				OddSecondEvent.updateKawaigotchi = JobBuilder.newJob(OddSecondEvent.class).withIdentity("oddsecond", "1").build();
 			}
-			Trigger cron = TriggerBuilder.newTrigger().withIdentity("markWinner", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0 0 1 1/1 ? *")).build();
+			Trigger cron = TriggerBuilder.newTrigger().withIdentity("oddsecond", "1").withSchedule(CronScheduleBuilder.cronSchedule("0/2 * * ? * * *")).build();
 			SchedulerFactory sf = new StdSchedulerFactory();
 			try {
 				sched = sf.getScheduler();
-				sched.scheduleJob(MarkWinnerEvent.markWinner, cron);
+				sched.scheduleJob(OddSecondEvent.updateKawaigotchi, cron);
 			} catch (Exception ignore) {
 			} finally {
 				sched.start();
-				Helper.logger(this.getClass()).info("Cronograma inicializado com sucesso: markWinner");
+				Helper.logger(this.getClass()).info("Cronograma inicializado com sucesso a cada segundo par");
 			}
 		} catch (SchedulerException e) {
-			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma markWinner: " + e);
-		}
-	}
-
-	private void schedUpdateServerCount() {
-		try {
-			if (UpdateServerCountEvent.updateServerCount == null) {
-				UpdateServerCountEvent.updateServerCount = JobBuilder.newJob(UpdateServerCountEvent.class).withIdentity("updateServerCount", "1").build();
-			}
-			Trigger cron = TriggerBuilder.newTrigger().withIdentity("updateServerCount", "1").withSchedule(CronScheduleBuilder.cronSchedule("0 0 * ? * * *")).build();
-			SchedulerFactory sf = new StdSchedulerFactory();
-			try {
-				sched = sf.getScheduler();
-				sched.scheduleJob(UpdateServerCountEvent.updateServerCount, cron);
-			} catch (Exception ignore) {
-			} finally {
-				sched.start();
-				Helper.logger(this.getClass()).info("Cronograma inicializado com sucesso: updateServerCount");
-			}
-		} catch (SchedulerException e) {
-			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma updateServerCount: " + e);
-		}
-	}
-
-	private void schedUpdateKawaigotchi() {
-		try {
-			if (UpdateKawaigotchiEvent.updateKawaigotchi == null) {
-				UpdateKawaigotchiEvent.updateKawaigotchi = JobBuilder.newJob(UpdateKawaigotchiEvent.class).withIdentity("updateKawaigotchi", "1").build();
-			}
-			Trigger cron = TriggerBuilder.newTrigger().withIdentity("updateKawaigotchi", "1").withSchedule(CronScheduleBuilder.cronSchedule("0/2 * * ? * * *")).build();
-			SchedulerFactory sf = new StdSchedulerFactory();
-			try {
-				sched = sf.getScheduler();
-				sched.scheduleJob(UpdateKawaigotchiEvent.updateKawaigotchi, cron);
-			} catch (Exception ignore) {
-			} finally {
-				sched.start();
-				Helper.logger(this.getClass()).info("Cronograma inicializado com sucesso: updateKawaigotchi");
-			}
-		} catch (SchedulerException e) {
-			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma updateKawaigotchi: " + e);
+			Helper.logger(this.getClass()).error("Erro ao inicializar cronograma a cada segundo par: " + e);
 		}
 	}
 
