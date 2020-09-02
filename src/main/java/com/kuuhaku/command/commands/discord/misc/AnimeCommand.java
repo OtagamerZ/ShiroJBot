@@ -27,11 +27,14 @@ import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NonNls;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 public class AnimeCommand extends Command {
 
@@ -60,59 +63,9 @@ public class AnimeCommand extends Command {
 
 		channel.sendMessage("<a:loading:697879726630502401> Buscando anime...").queue(m -> {
 			try {
-				String query = "{\n" +
-						"Media(search: \\\"" + String.join(" ", args) + "\\\", type: ANIME) {\n" +
-						"idMal\n" +
-						"title {\n" +
-						"romaji\n" +
-						"english\n" +
-						"}\n" +
-						"status\n" +
-						"startDate {\n" +
-						"year\n" +
-						"month\n" +
-						"day\n" +
-						"}\n" +
-						"episodes\n" +
-						"coverImage {\n" +
-						"extraLarge\n" +
-						"large\n" +
-						"medium\n" +
-						"color\n" +
-						"}\n" +
-						"genres\n" +
-						"averageScore\n" +
-						"popularity\n" +
-						"studios(isMain: true) {\n" +
-						"edges {\n" +
-						"node {\n" +
-						"name\n" +
-						"}\n" +
-						"}\n" +
-						"}\n" +
-						"staff {\n" +
-						"edges {\n" +
-						"role\n" +
-						"node {\n" +
-						"name {\n" +
-						"first\n" +
-						"last\n" +
-						"}\n" +
-						"}\n" +
-						"}\n" +
-						"}" +
-						"nextAiringEpisode {\n" +
-						"episode\n" +
-						"airingAt\n" +
-						"}\n" +
-						"trailer {\n" +
-						"site\n" +
-						"}\n" +
-						"description\n" +
-						"}\n" +
-						"}\n";
-				query = query.replace("\n", " ");
-				JSONObject data = new JSONObject(com.kuuhaku.controller.Anime.getData(query));
+				String query = IOUtils.toString(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("anilist.graphql")), StandardCharsets.UTF_8);
+
+				JSONObject data = com.kuuhaku.controller.Anime.getData(String.join(" ", args), query);
 				Anime anime = new Anime(data);
 
 				EmbedBuilder eb = new EmbedBuilder();
@@ -153,7 +106,7 @@ public class AnimeCommand extends Command {
 				channel.sendMessage(eb.build()).queue();
 			} catch (IOException | JSONException e) {
 				m.editMessage(ShiroInfo.getLocale(I18n.PT).getString("err_anime-not-found")).queue();
-				Helper.logger(this.getClass()).debug(e + " | " + e.getStackTrace()[0]);
+				Helper.logger(this.getClass()).warn(e + " | " + e.getStackTrace()[0]);
 			}
 		});
 	}

@@ -34,7 +34,10 @@ import com.kuuhaku.command.commands.discord.music.YoutubeCommand;
 import com.kuuhaku.command.commands.discord.partner.*;
 import com.kuuhaku.command.commands.discord.reactions.*;
 import com.kuuhaku.command.commands.discord.reactions.answerable.*;
-import com.kuuhaku.command.commands.discord.support.*;
+import com.kuuhaku.command.commands.discord.support.BlockCommand;
+import com.kuuhaku.command.commands.discord.support.InviteCommand;
+import com.kuuhaku.command.commands.discord.support.MarkTicketCommand;
+import com.kuuhaku.command.commands.discord.support.RatingCommand;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -118,9 +121,6 @@ public class CommandManager {
 			//SUPPORT
 			put(BlockCommand.class, new Argument(
 					"bloquear", new String[]{"block"}, "req_type-id-reason", "cmd_block", SUPPORT, false
-			));
-			put(IDCommand.class, new Argument(
-					"id", REQ_NAME, "cmd_id", SUPPORT, false
 			));
 			put(InviteCommand.class, new Argument(
 					"convite", new String[]{"invite"}, REQ_SERVER_ID, "cmd_invite", SUPPORT, true

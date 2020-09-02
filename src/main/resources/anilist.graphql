@@ -1,0 +1,51 @@
+query($anime: String) {
+    Media(search: $anime, type: ANIME) {
+        idMal
+        title {
+            romaji
+            english
+        }
+        status
+        startDate {
+            year
+            month
+            day
+        }
+        episodes
+        coverImage {
+            extraLarge
+            large
+            medium
+            color
+        }
+        genres
+        averageScore
+        popularity
+        studios(isMain: true) {
+            edges {
+                node {
+                    name
+                }
+            }
+        }
+        staff {
+            edges {
+                role
+                node {
+                    name {
+                        first
+                        last
+                    }
+                }
+            }
+        }
+        nextAiringEpisode {
+            episode
+            airingAt
+        }
+        trailer {
+            site
+        }
+        description
+    }
+}

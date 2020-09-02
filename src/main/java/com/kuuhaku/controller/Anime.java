@@ -18,43 +18,31 @@
 
 package com.kuuhaku.controller;
 
-import com.kuuhaku.Main;
 import com.kuuhaku.utils.Helper;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 public class Anime {
-	public static String getData(String query) throws IOException {
-		String json = "{\"query\":\"query" + query + "\"}";
-		URL url = new URL("https://graphql.anilist.co");
-		HttpURLConnection con = (HttpURLConnection) url.openConnection();
-		con.setConnectTimeout(5000);
-		con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-		con.addRequestProperty("Accept", "application/json");
-		con.addRequestProperty("User-Agent", "Mozilla/5.0");
-		con.setDoOutput(true);
-		con.setDoInput(true);
-		con.setRequestMethod("POST");
+	public static JSONObject getData(String anime, String query) {
+		JSONObject json = new JSONObject() {{
+			put("query", query);
+			put("variables", new JSONObject() {{
+				put("anime", anime);
+			}});
+		}};
 
-		OutputStream oStream = con.getOutputStream();
-		oStream.write(json.getBytes(StandardCharsets.UTF_8));
-		oStream.close();
-
-		OutputStreamWriter osw = new OutputStreamWriter(con.getOutputStream(), StandardCharsets.UTF_8);
-		osw.write(Main.getInfo().getAnilistToken());
-		osw.flush();
-
-		InputStream iStream = new BufferedInputStream(con.getInputStream());
-		String data = IOUtils.toString(iStream, StandardCharsets.UTF_8);
-		iStream.close();
-
-		con.disconnect();
-		return data;
+		return Helper.post("https://graphql.anilist.co", json, Map.of(
+				"Content-Type", "application/json; charset=UTF-8",
+				"Accept", "application/json",
+				"User-Agent", "Mozilla/5.0"
+				)
+		);
 	}
 
 	public static JSONObject getDAData(String name) throws IOException {
