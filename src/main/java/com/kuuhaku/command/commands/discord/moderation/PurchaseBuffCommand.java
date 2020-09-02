@@ -22,6 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.GuildBuffDAO;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.GuildBuff;
 import com.kuuhaku.utils.Helper;
@@ -54,14 +55,14 @@ public class PurchaseBuffCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length < 2) {
-			EmbedBuilder eb = new EmbedBuilder();
+			EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 			eb.setTitle(":level_slider: | Melhorias de servidor");
 			eb.setDescription("Melhorias são aplicadas a todos os membros do servidor por um certo período, use-as para oferecer vantagens aos seus membros.");
 			eb.addField("Melhoria de XP (`" + prefix + "up xp TIER`)",
 					"**Tier 1** (1500 créditos): `+50% XP ganho` (30 dias)\n" +
-							"**Tier 2** (4000 créditos): `+100% XP ganho` (15 dias)\n" +
-							"**Tier 3** (10000 créditos): `+200% XP ganho` (7 dias)",
+					"**Tier 2** (4000 créditos): `+100% XP ganho` (15 dias)\n" +
+					"**Tier 3** (10000 créditos): `+200% XP ganho` (7 dias)",
 					false);
 			eb.addBlankField(false);
 			eb.addField("Melhoria de cartas (`" + prefix + "up carta TIER`)",

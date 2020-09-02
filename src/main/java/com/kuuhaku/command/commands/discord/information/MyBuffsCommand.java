@@ -25,6 +25,7 @@ import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.controller.sqlite.KGotchiDAO;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.handlers.games.kawaigotchi.enums.Tier;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.GuildBuff;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
@@ -56,7 +57,7 @@ public class MyBuffsCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		Kawaigotchi kg = KGotchiDAO.getKawaigotchi(author.getId());
 
-		EmbedBuilder eb = new EmbedBuilder();
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		boolean exceed = Main.getInfo().getWinner().equals(ExceedDAO.getExceed(author.getId()));
 		boolean waifu = guild.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).collect(Collectors.toList()).contains(com.kuuhaku.model.persistent.Member.getWaifu(author));

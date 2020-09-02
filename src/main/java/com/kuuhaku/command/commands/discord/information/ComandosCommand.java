@@ -26,6 +26,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.managers.Argument;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
@@ -70,7 +71,7 @@ public class ComandosCommand extends Command {
 
 		Map<String, Page> pages = new LinkedHashMap<>();
 
-		EmbedBuilder eb = new EmbedBuilder();
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		if (Helper.hasPermission(guild.getSelfMember(), Permission.MESSAGE_MANAGE, (TextChannel) channel) && args.length == 0) {
 			eb.setTitle(ShiroInfo.getLocale(I18n.PT).getString(STR_COMMAND_LIST_TITLE));
@@ -89,7 +90,7 @@ public class ComandosCommand extends Command {
 			pages.put(Helper.HOME, new Page(PageType.EMBED, eb.build()));
 
 			for (Category cat : Category.values()) {
-				EmbedBuilder ceb = new EmbedBuilder();
+				EmbedBuilder ceb = new ColorlessEmbedBuilder();
 				ceb.setTitle(cat.getName());
 				ceb.setColor(Color.PINK);
 				ceb.setFooter(Main.getInfo().getFullName(), null);
@@ -115,7 +116,7 @@ public class ComandosCommand extends Command {
 				pages.put(cat.getEmoteId(), new Page(PageType.EMBED, ceb.build()));
 			}
 
-			EmbedBuilder ceb = new EmbedBuilder();
+			EmbedBuilder ceb = new ColorlessEmbedBuilder();
 			ceb.setTitle(ShiroInfo.getLocale(I18n.PT).getString("str_tips-and-tricks"));
 			ceb.setColor(Color.PINK);
 			ceb.setFooter(Main.getInfo().getFullName(), null);

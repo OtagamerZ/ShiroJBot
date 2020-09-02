@@ -20,6 +20,7 @@ package com.kuuhaku.command.commands.discord.information;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.utils.Tag;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -45,7 +46,7 @@ public class TagsCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		EmbedBuilder eb = new EmbedBuilder();
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		eb.setTitle(":label: Emblemas disponíveis");
 		for (Tag t : Tag.values()) {

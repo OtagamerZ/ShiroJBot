@@ -20,6 +20,7 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -88,7 +89,7 @@ public class ImageCommand extends Command {
 				JSONObject item = items.getJSONObject(Helper.rng(items.length(), true));
 				JSONObject image = item.getJSONObject("image");
 
-				EmbedBuilder eb = new EmbedBuilder();
+				EmbedBuilder eb = new ColorlessEmbedBuilder();
 				eb.setColor(Helper.colorThief(item.getString("link")));
 				eb.setAuthor("Aqui está!");
 				eb.setTitle(item.getString("title"), image.getString("contextLink"));

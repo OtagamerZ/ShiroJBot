@@ -24,6 +24,7 @@ import com.github.ygimenez.type.PageType;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
@@ -58,7 +59,7 @@ public class JibrilEmoteListCommand extends Command {
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		List<Page> pages = new ArrayList<>();
-		EmbedBuilder eb = new EmbedBuilder();
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		List<List<Emote>> emotes = Helper.chunkify(Main.getJibril().getEmotes().stream().filter(e -> StringUtils.containsIgnoreCase(e.getAsMention(), args.length > 0 ? args[0] : "")).collect(Collectors.toList()), 10);
 
 		try {

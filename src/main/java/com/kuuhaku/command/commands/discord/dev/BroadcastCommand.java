@@ -30,6 +30,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Tags;
 import com.kuuhaku.utils.Helper;
@@ -75,7 +76,7 @@ public class BroadcastCommand extends Command {
 		Map<String, Boolean> result = new HashMap<>();
 		StringBuilder sb = new StringBuilder();
 		List<Page> pages = new ArrayList<>();
-		EmbedBuilder eb = new EmbedBuilder();
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		switch (args[0].toLowerCase()) {
 			case "geral":

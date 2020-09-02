@@ -23,6 +23,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
@@ -90,7 +91,7 @@ public class PollCommand extends Command {
 			}
 		}
 
-		EmbedBuilder eb = new EmbedBuilder();
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		eb.setTitle(":notepad_spiral: Enquete criada por " + member.getEffectiveName());
 		eb.setDescription("Apenas 1 clique já contabiliza o voto (a quantidade de reações __**NÃO**__ ficará maior que 1).");
 		eb.setThumbnail("https://www.kalkoken.org/apps/easypoll/resources/poll-logo.png");

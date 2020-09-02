@@ -22,6 +22,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.GuildConfig;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
@@ -101,7 +102,7 @@ public class Settings {
 				}
 			}
 
-			EmbedBuilder eb = new EmbedBuilder();
+			EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 			eb.setColor(message.getGuild().getIconUrl() == null ? Helper.getRandomColor() : Helper.colorThief(message.getGuild().getIconUrl()));
 			if (message.getGuild().getIconUrl() != null) eb.setThumbnail(message.getGuild().getIconUrl());
@@ -627,7 +628,7 @@ public class Settings {
 	public static void settingsHelp(Message message, GuildConfig gc) {
 		String prefix = Helper.getOr(gc.getPrefix(), "s!");
 
-		EmbedBuilder eb = new EmbedBuilder();
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		try {
 			eb.setColor(message.getGuild().getIconUrl() == null ? Helper.getRandomColor() : Helper.colorThief(message.getGuild().getIconUrl()));

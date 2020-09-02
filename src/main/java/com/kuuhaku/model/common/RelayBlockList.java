@@ -33,7 +33,7 @@ public class RelayBlockList {
 	private static final List<String> blockedThumbs = new ArrayList<>();
 
 	public static void blockID(String id, String reason) {
-		EmbedBuilder eb = new EmbedBuilder();
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		blockedIDs.add(id);
 
 		eb.setTitle("Você foi bloqueado de utilizar o chat global pela seguinte razão:");
@@ -50,7 +50,7 @@ public class RelayBlockList {
 	}
 
 	public static void permaBlockID(String id, String reason) {
-		EmbedBuilder eb = new EmbedBuilder();
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		blockedIDs.add(id);
 
 		RelayDAO.permaBlock(new PermaBlock(id));
@@ -69,7 +69,7 @@ public class RelayBlockList {
 	}
 
 	public static void blockThumb(String id) {
-		EmbedBuilder eb = new EmbedBuilder();
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		blockedThumbs.add(id);
 
 		eb.setTitle("Seu avatar foi bloqueado por ser considerado indecente:");

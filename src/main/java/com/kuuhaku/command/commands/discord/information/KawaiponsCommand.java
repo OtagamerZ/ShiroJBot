@@ -22,6 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.KawaiponBook;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
@@ -77,7 +78,7 @@ public class KawaiponsCommand extends Command {
 					KawaiponBook kb = new KawaiponBook(collection);
 					BufferedImage cards = kb.view(CardDAO.getCardsByRarity(KawaiponRarity.ULTIMATE), "Coleção Kawaipon", false);
 
-					EmbedBuilder eb = new EmbedBuilder();
+					EmbedBuilder eb = new ColorlessEmbedBuilder();
 					int count = collection.size();
 					int foil = (int) kp.getCards().stream().filter(KawaiponCard::isFoil).count();
 					int common = kp.getCards().size() - foil;
@@ -149,7 +150,7 @@ public class KawaiponsCommand extends Command {
 			fos.write(bytes);
 		}
 
-		EmbedBuilder eb = new EmbedBuilder();
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		int foil = (int) collection.stream().filter(KawaiponCard::isFoil).count();
 		int common = collection.size() - foil;
 
