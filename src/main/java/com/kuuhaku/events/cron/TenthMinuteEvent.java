@@ -27,7 +27,7 @@ import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.ExceedMember;
 import com.kuuhaku.utils.*;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.ISnowflake;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import org.quartz.Job;
 import org.quartz.JobDetail;
@@ -57,39 +57,35 @@ public class TenthMinuteEvent implements Job {
 		}
 
 		List<ExceedMember> ems = ExceedDAO.getExceedMembers();
-		List<String> ids = Main.getInfo().getGuildByID(ShiroInfo.getSupportServerID()).getMembers()
+		List<Member> mbs = Main.getInfo().getGuildByID(ShiroInfo.getSupportServerID()).getMembers()
 				.stream()
-				.map(ISnowflake::getId)
-				.filter(s -> ems.stream().anyMatch(em -> em.getId().equals(s)))
+				.filter(mb -> ems.stream().anyMatch(em -> em.getId().equals(mb.getId())))
 				.collect(Collectors.toList());
 
-		Helper.chunkify(ids, 100).forEach(chunk -> {
-			Guild support = Main.getTet().getGuildById(ShiroInfo.getSupportServerID());
+		Guild support = Main.getInfo().getGuildByID(ShiroInfo.getSupportServerID());
 
-			assert support != null;
-			support.retrieveMembersByIds(false, chunk.toArray(String[]::new))
-					.onSuccess(mbs -> mbs.forEach(mb -> {
-						List<Role> roles = mb.getRoles();
-						ExceedEnum ex = ExceedEnum.getByName(ExceedDAO.getExceed(mb.getId()));
-						Role exRole = support.getRoleById(ExceedRole.getByExceed(ex).getId());
+		assert support != null;
+		mbs.forEach(mb -> {
+			List<Role> roles = mb.getRoles();
+			ExceedEnum ex = ExceedEnum.getByName(ExceedDAO.getExceed(mb.getId()));
+			Role exRole = support.getRoleById(ExceedRole.getByExceed(ex).getId());
 
-						if (roles.stream().anyMatch(r -> {
-							ExceedRole role = ExceedRole.getById(r.getId());
-							return role != null && role.getExceed() != ex;
-						})) {
-							roles.removeIf(r -> {
-								ExceedRole role = ExceedRole.getById(r.getId());
-								return role != null && role.getExceed() != ex;
-							});
+			if (roles.stream().anyMatch(r -> {
+				ExceedRole role = ExceedRole.getById(r.getId());
+				return role != null && role.getExceed() != ex;
+			})) {
+				roles.removeIf(r -> {
+					ExceedRole role = ExceedRole.getById(r.getId());
+					return role != null && role.getExceed() != ex;
+				});
 
-							support.modifyMemberRoles(mb, roles).queue();
-						}
+				support.modifyMemberRoles(mb, roles).queue();
+			}
 
-						assert exRole != null;
-						if (roles.stream().noneMatch(r -> r.getId().equals(exRole.getId()))) {
-							support.addRoleToMember(mb, exRole).queue();
-						}
-					}));
+			assert exRole != null;
+			if (roles.stream().noneMatch(r -> r.getId().equals(exRole.getId()))) {
+				support.addRoleToMember(mb, exRole).queue();
+			}
 		});
 	}
 
