@@ -126,6 +126,60 @@ public class TradeCardCommand extends Command {
 
 						s.delete().flatMap(n -> channel.sendMessage("Troca concluída com sucesso!")).queue(null, Helper::doNothing);
 					}), true, 1, TimeUnit.MINUTES, u -> Helper.equalsAny(u.getId(), author.getId(), other.getId())));
+		} else if (StringUtils.isNumeric(args[3])) {
+			int price = Integer.parseInt(args[3]);
+			Card tc = CardDAO.getCard(args[1], false);
+			boolean foil = args[2].equalsIgnoreCase("C");
+
+			Account acc = AccountDAO.getAccount(author.getId());
+			Account tacc = AccountDAO.getAccount(other.getId());
+
+			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
+			Kawaipon target = KawaiponDAO.getKawaipon(other.getId());
+
+			if (tc == null) {
+				channel.sendMessage("❌ | Essa carta não existe.").queue();
+				return;
+			} else if (tacc.getBalance() < price) {
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-target")).queue();
+				return;
+			}
+
+			KawaiponCard card = new KawaiponCard(tc, foil);
+
+			if (target.getCards().contains(card)) {
+				channel.sendMessage("❌ | Ele/ela já possui essa carta!").queue();
+				return;
+			} else if (!kp.getCards().contains(card)) {
+				channel.sendMessage("❌ | Parece que você não possui essa carta!").queue();
+				return;
+			}
+
+			int min = tc.getRarity().getIndex() * 150 * (foil ? 2 : 1);
+
+			if (price < min) {
+				channel.sendMessage("❌ | Você não pode cobrar menos que " + min + " créditos por essa carta.").queue();
+				return;
+			} else if (tacc.getLoan() > 0) {
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-with-loan")).queue();
+				return;
+			}
+
+			channel.sendMessage(other.getAsMention() + ", " + author.getAsMention() + " deseja vender a carta `" + card.getName() + "` por " + price + " créditos, você aceita essa transação?")
+					.queue(s -> Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (member1, message1) -> {
+						if (!member1.getId().equals(other.getId())) return;
+						tacc.removeCredit(price, this.getClass());
+						kp.removeCard(card);
+						target.addCard(card);
+						acc.addCredit(price, this.getClass());
+
+						KawaiponDAO.saveKawaipon(kp);
+						KawaiponDAO.saveKawaipon(target);
+						AccountDAO.saveAccount(acc);
+						AccountDAO.saveAccount(tacc);
+
+						s.delete().flatMap(n -> channel.sendMessage("Troca concluída com sucesso!")).queue(null, Helper::doNothing);
+					}), true, 1, TimeUnit.MINUTES, u -> Helper.equalsAny(u.getId(), author.getId(), other.getId())));
 		} else {
 			if (args.length < 5) {
 				channel.sendMessage("❌ | Você precisa mencionar uma carta, o tipo, qual carta você deseja e o tipo dela (`N` = normal, `C` = cromada) para realizar a troca.").queue();
