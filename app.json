@@ -21,10 +21,6 @@
       "description": "URL do servidor.",
       "required": true
     },
-    "ANILIST_TOKEN": {
-      "description": "Token de acesso à API do Anilist.",
-      "required": true
-    },
     "BOT_TOKEN": {
       "description": "Token de acesso do bot principal.",
       "required": true
