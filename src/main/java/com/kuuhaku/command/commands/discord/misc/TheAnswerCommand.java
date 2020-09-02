@@ -65,6 +65,6 @@ public class TheAnswerCommand extends Command {
 				}
 			}
 		} else
-			channel.sendMessage("❌ | Este comando só pode ser usado no servidor " + ShiroInfo.getSupportServerID() + ".").queue();
+			channel.sendMessage("❌ | Este comando só pode ser usado no servidor " + ShiroInfo.getSupportServerName() + ".").queue();
 	}
 }
