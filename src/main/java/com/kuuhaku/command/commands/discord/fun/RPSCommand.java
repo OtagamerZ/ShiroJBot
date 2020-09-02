@@ -25,7 +25,7 @@ import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.sqlite.PStateDAO;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.ExceedEnums;
+import com.kuuhaku.utils.ExceedEnum;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
@@ -124,7 +124,7 @@ public class RPSCommand extends Command {
 							m.editMessage(m.getContentRaw() + "\nVocê perdeu!").queue();
 
 							if (ExceedDAO.hasExceed(author.getId())) {
-								PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
+								PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
 								ps.modifyInfluence(false);
 								PStateDAO.savePoliticalState(ps);
 							}
@@ -136,7 +136,7 @@ public class RPSCommand extends Command {
 							m.editMessage(m.getContentRaw() + "\nVocê ganhou! Aqui, " + crd + " créditos por ter jogado comigo!").queue();
 
 							if (ExceedDAO.hasExceed(author.getId())) {
-								PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
+								PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
 								ps.modifyInfluence(2);
 								PStateDAO.savePoliticalState(ps);
 							}

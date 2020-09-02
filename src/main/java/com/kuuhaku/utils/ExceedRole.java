@@ -16,30 +16,39 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common;
+package com.kuuhaku.utils;
 
-import com.kuuhaku.utils.ExceedEnum;
+import java.util.Arrays;
 
-public class Exceed {
+public enum ExceedRole {
+	IMANITY("719603595200430101", ExceedEnum.IMANITY),
+	SEIREN("719609078543941643", ExceedEnum.SEIREN),
+	ELF("719609253144428554", ExceedEnum.ELF),
+	WEREBEAST("719609156364927057", ExceedEnum.WEREBEAST),
+	EXMACHINA("719609343300861972", ExceedEnum.EXMACHINA),
+	FLUGEL("719609423311536145", ExceedEnum.FLUGEL);
+
+	private final String id;
 	private final ExceedEnum exceed;
-	private final int members;
-	private final long exp;
 
-	public Exceed(ExceedEnum exceed, int members, long exp) {
+	ExceedRole(String id, ExceedEnum exceed) {
+		this.id = id;
 		this.exceed = exceed;
-		this.members = members;
-		this.exp = exp;
+	}
+
+	public String getId() {
+		return id;
 	}
 
 	public ExceedEnum getExceed() {
 		return exceed;
 	}
 
-	public int getMembers() {
-		return members;
+	public static ExceedRole getById(String id) {
+		return Arrays.stream(ExceedRole.values()).filter(e -> e.getId().equalsIgnoreCase(id)).findFirst().orElse(null);
 	}
 
-	public long getExp() {
-		return exp;
+	public static ExceedRole getByExceed(ExceedEnum ex) {
+		return Arrays.stream(ExceedRole.values()).filter(e -> e.getExceed().equals(ex)).findFirst().orElse(null);
 	}
 }

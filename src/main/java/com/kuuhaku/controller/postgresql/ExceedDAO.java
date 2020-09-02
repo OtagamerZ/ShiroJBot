@@ -23,7 +23,7 @@ import com.kuuhaku.model.common.Exceed;
 import com.kuuhaku.model.persistent.ExceedMember;
 import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.model.persistent.MonthWinner;
-import com.kuuhaku.utils.ExceedEnums;
+import com.kuuhaku.utils.ExceedEnum;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -71,13 +71,13 @@ public class ExceedDAO {
 		if (exceed.isBlank()) return new ExceedState(-1, "", 0);
 
 		@SuppressWarnings("SuspiciousMethodCalls")
-		int pos = Arrays.stream(ExceedEnums.values())
+		int pos = Arrays.stream(ExceedEnum.values())
 				.map(ExceedDAO::getExceed)
 				.sorted(Comparator.comparingLong(Exceed::getExp).reversed())
 				.collect(Collectors.toList())
-				.indexOf(ExceedEnums.getByName(exceed)) + 1;
+				.indexOf(ExceedEnum.getByName(exceed)) + 1;
 
-		return new ExceedState(ExceedEnums.getByName(exceed).ordinal(), exceed, pos);
+		return new ExceedState(ExceedEnum.getByName(exceed).ordinal(), exceed, pos);
 	}
 
 	public static void joinExceed(ExceedMember ex) {
@@ -91,11 +91,23 @@ public class ExceedDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static List<ExceedMember> getExceedMembers(ExceedEnums ex) {
+	public static List<ExceedMember> getExceedMembers(ExceedEnum ex) {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT ex FROM ExceedMember ex WHERE ex.exceed = :exceed", ExceedMember.class);
 		q.setParameter("exceed", ex.getName());
+
+		List<ExceedMember> members = (List<ExceedMember>) q.getResultList();
+		em.close();
+
+		return members;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<ExceedMember> getExceedMembers() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT ex FROM ExceedMember ex", ExceedMember.class);
 
 		List<ExceedMember> members = (List<ExceedMember>) q.getResultList();
 		em.close();
@@ -114,7 +126,7 @@ public class ExceedDAO {
 	}
 
 	@SuppressWarnings({"unchecked", "SqlResolve"})
-	public static Exceed getExceed(ExceedEnums ex) {
+	public static Exceed getExceed(ExceedEnum ex) {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT m FROM Member m INNER JOIN ExceedMember ex ON m.mid = ex.id WHERE ex.exceed = :exceed", Member.class);
@@ -157,7 +169,7 @@ public class ExceedDAO {
 	}
 
 	@SuppressWarnings({"SqlResolve", "unchecked"})
-	public static ExceedEnums findWinner() {
+	public static ExceedEnum findWinner() {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createNativeQuery("SELECT substr(upper(er.exceed), 0, 3), er.points FROM shiro.\"GetExceedRanking\" er ORDER BY er.points DESC");
@@ -194,10 +206,10 @@ public class ExceedDAO {
 
 		Map.Entry<String, Long> winner = exs.entrySet().stream().max(Map.Entry.comparingByValue()).orElseThrow();
 
-		return Arrays.stream(ExceedEnums.values()).filter(e -> e.name().startsWith(winner.getKey())).findFirst().orElseThrow();
+		return Arrays.stream(ExceedEnum.values()).filter(e -> e.name().startsWith(winner.getKey())).findFirst().orElseThrow();
 	}
 
-	public static void markWinner(ExceedEnums ex) {
+	public static void markWinner(ExceedEnum ex) {
 		EntityManager em = Manager.getEntityManager();
 
 		MonthWinner m = new MonthWinner();
@@ -247,7 +259,7 @@ public class ExceedDAO {
 		}
 	}
 
-	public static String getLeader(ExceedEnums ex) {
+	public static String getLeader(ExceedEnum ex) {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT m.mid FROM Member m WHERE m.mid IN (SELECT em.id FROM ExceedMember em WHERE em.exceed = :exceed) GROUP BY m.mid ORDER BY SUM(m.xp) DESC", String.class);
@@ -263,7 +275,7 @@ public class ExceedDAO {
 		}
 	}
 
-	public static float getPercentage(ExceedEnums ex) {
+	public static float getPercentage(ExceedEnum ex) {
 		EntityManager em = Manager.getEntityManager();
 
 		Query exceed = em.createQuery("SELECT COUNT(e) FROM ExceedMember e WHERE e.exceed = :ex", Long.class);

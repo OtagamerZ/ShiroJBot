@@ -47,7 +47,7 @@ public enum CreditLoan {
 	}
 
 	public double getInterest(ExceedMember ex) {
-		return 1 + interest * (ex == null ? 1 : (1 - PStateDAO.getInfluenceShare(ExceedEnums.getByName(ex.getExceed()))));
+		return 1 + interest * (ex == null ? 1 : (1 - PStateDAO.getInfluenceShare(ExceedEnum.getByName(ex.getExceed()))));
 	}
 
 	public void sign(Account acc) {

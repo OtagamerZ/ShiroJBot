@@ -126,10 +126,6 @@ public class ShiroInfo {
 		return ResourceBundle.getBundle("locale", lang.getLocale());
 	}
 
-	public static String getSupportServer() {
-		return supportServer;
-	}
-
 	public static GsonBuilder getJSONFactory() {
 		return JSONFactory;
 	}

@@ -28,7 +28,7 @@ import com.kuuhaku.controller.sqlite.PStateDAO;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Slots;
-import com.kuuhaku.utils.ExceedEnums;
+import com.kuuhaku.utils.ExceedEnum;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
@@ -119,7 +119,7 @@ public class SlotsCommand extends Command {
 				win = true;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
-					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
+					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
 					ps.modifyInfluence(1);
 					PStateDAO.savePoliticalState(ps);
 				}
@@ -129,7 +129,7 @@ public class SlotsCommand extends Command {
 				win = true;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
-					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
+					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
 					ps.modifyInfluence(2);
 					PStateDAO.savePoliticalState(ps);
 				}
@@ -139,7 +139,7 @@ public class SlotsCommand extends Command {
 				win = true;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
-					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
+					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
 					ps.modifyInfluence(4);
 					PStateDAO.savePoliticalState(ps);
 				}
@@ -149,7 +149,7 @@ public class SlotsCommand extends Command {
 				win = true;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
-					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
+					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
 					ps.modifyInfluence(6);
 					PStateDAO.savePoliticalState(ps);
 				}
@@ -159,7 +159,7 @@ public class SlotsCommand extends Command {
 				win = true;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
-					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
+					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
 					ps.modifyInfluence(16);
 					PStateDAO.savePoliticalState(ps);
 				}
@@ -169,7 +169,7 @@ public class SlotsCommand extends Command {
 				win = true;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
-					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
+					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
 					ps.modifyInfluence(45);
 					PStateDAO.savePoliticalState(ps);
 				}
@@ -179,7 +179,7 @@ public class SlotsCommand extends Command {
 				win = true;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
-					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
+					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
 					ps.modifyInfluence(65);
 					PStateDAO.savePoliticalState(ps);
 				}
@@ -189,7 +189,7 @@ public class SlotsCommand extends Command {
 				win = true;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
-					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
+					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
 					ps.modifyInfluence(80);
 					PStateDAO.savePoliticalState(ps);
 				}
@@ -203,7 +203,7 @@ public class SlotsCommand extends Command {
 				win = true;
 
 				if (ExceedDAO.hasExceed(author.getId())) {
-					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
+					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
 					ps.modifyInfluence(150);
 					PStateDAO.savePoliticalState(ps);
 				}
@@ -220,7 +220,7 @@ public class SlotsCommand extends Command {
 				msg += "Poxa, parece que você não teve sorte hoje. Volte sempre!";
 
 				if (ExceedDAO.hasExceed(author.getId())) {
-					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
+					PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
 					ps.modifyInfluence(false);
 					PStateDAO.savePoliticalState(ps);
 				}

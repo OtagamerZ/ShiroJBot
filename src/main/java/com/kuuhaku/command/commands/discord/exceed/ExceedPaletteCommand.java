@@ -20,7 +20,7 @@ package com.kuuhaku.command.commands.discord.exceed;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.utils.ExceedEnums;
+import com.kuuhaku.utils.ExceedEnum;
 import com.kuuhaku.utils.TagIcons;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -48,7 +48,7 @@ public class ExceedPaletteCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setTitle("Cores de cada Exceed");
-		for (ExceedEnums ex : ExceedEnums.values()) {
+		for (ExceedEnum ex : ExceedEnum.values()) {
 			eb.addField(TagIcons.getExceed(ex) + " | " + ex.getName() + ":", String.format("#%02x%02x%02x", ex.getPalette().getRed(), ex.getPalette().getGreen(), ex.getPalette().getBlue()), true);
 		}
 		eb.setThumbnail("https://image.flaticon.com/icons/png/512/564/564232.png");

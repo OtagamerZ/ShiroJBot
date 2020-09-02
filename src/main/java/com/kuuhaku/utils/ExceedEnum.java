@@ -24,9 +24,8 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
-public enum ExceedEnums {
+public enum ExceedEnum {
 	IMANITY("Imanity", Color.MAGENTA),
 	SEIREN("Seiren", Color.CYAN),
 	WEREBEAST("Werebeast", Color.YELLOW),
@@ -37,7 +36,7 @@ public enum ExceedEnums {
 	private final String name;
 	private final Color palette;
 
-	ExceedEnums(String name, Color palette) {
+	ExceedEnum(String name, Color palette) {
 		this.name = name;
 		this.palette = palette;
 	}
@@ -46,8 +45,8 @@ public enum ExceedEnums {
 		return this.name;
 	}
 
-	public static ExceedEnums getByName(String name) {
-		return Arrays.stream(ExceedEnums.values()).filter(e -> e.getName().equalsIgnoreCase(name)).collect(Collectors.toList()).get(0);
+	public static ExceedEnum getByName(String name) {
+		return Arrays.stream(ExceedEnum.values()).filter(e -> e.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
 	}
 
 	public Color getPalette() {
