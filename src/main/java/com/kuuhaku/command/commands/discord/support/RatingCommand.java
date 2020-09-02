@@ -64,39 +64,40 @@ public class RatingCommand extends Command {
 			return;
 		}
 
+		channel.sendMessage("Avaliação requisitada com sucesso!").queue();
 		Main.getInfo().getUserByID(args[0]).openPrivateChannel().queue(c -> {
 					c.sendFile(new File(Objects.requireNonNull(this.getClass().getClassLoader().getResource("assets/feedback.png")).getPath()))
 							.delay(5, TimeUnit.MINUTES)
 							.flatMap(Message::delete)
-							.complete();
-
-					Message s = c.sendMessage(eval(author)).complete();
-					c.sendMessage(questions()[0])
-							.delay(5, TimeUnit.MINUTES)
-							.queue(m -> {
-								addRates(author, m, (dev, i) -> {
-									dev.setInteraction(dev.getInteraction() == 0 ? i : (dev.getInteraction() + i) / 2f);
-									dev.setLastHelped();
-								});
-								m.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(), Helper::doNothing);
-							});
-					c.sendMessage(questions()[1])
-							.delay(5, TimeUnit.MINUTES)
-							.queue(m -> {
-								addRates(author, m, (dev, i) -> {
-									dev.setSolution(dev.getSolution() == 0 ? i : (dev.getSolution() + i) / 2f);
-									dev.setLastHelped();
-								});
-								m.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(), Helper::doNothing);
-							});
-					c.sendMessage(questions()[2])
-							.delay(5, TimeUnit.MINUTES)
-							.queue(m -> {
-								addRates(author, m, (dev, i) -> {
-									dev.setKnowledge(dev.getKnowledge() == 0 ? i : (dev.getKnowledge() + i) / 2f);
-									dev.setLastHelped();
-								});
-								m.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(), Helper::doNothing);
+							.flatMap(s -> c.sendMessage(eval(author)))
+							.queue(s -> {
+								c.sendMessage(questions()[0])
+										.delay(5, TimeUnit.MINUTES)
+										.queue(m -> {
+											addRates(author, m, (dev, i) -> {
+												dev.setInteraction(dev.getInteraction() == 0 ? i : (dev.getInteraction() + i) / 2f);
+												dev.setLastHelped();
+											});
+											m.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(), Helper::doNothing);
+										});
+								c.sendMessage(questions()[1])
+										.delay(5, TimeUnit.MINUTES)
+										.queue(m -> {
+											addRates(author, m, (dev, i) -> {
+												dev.setSolution(dev.getSolution() == 0 ? i : (dev.getSolution() + i) / 2f);
+												dev.setLastHelped();
+											});
+											m.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(), Helper::doNothing);
+										});
+								c.sendMessage(questions()[2])
+										.delay(5, TimeUnit.MINUTES)
+										.queue(m -> {
+											addRates(author, m, (dev, i) -> {
+												dev.setKnowledge(dev.getKnowledge() == 0 ? i : (dev.getKnowledge() + i) / 2f);
+												dev.setLastHelped();
+											});
+											m.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(), Helper::doNothing);
+										});
 							});
 				},
 				ex -> channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-request-rating"), ex)).queue()
