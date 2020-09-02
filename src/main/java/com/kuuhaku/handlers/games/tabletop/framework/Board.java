@@ -26,7 +26,7 @@ import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.Neighbor;
 import com.kuuhaku.handlers.games.tabletop.utils.InfiniteList;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.ExceedEnums;
+import com.kuuhaku.utils.ExceedEnum;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.awt.*;
@@ -158,7 +158,7 @@ public class Board {
 
 		if (ExceedDAO.hasExceed(id)) {
 			String wex = ExceedDAO.getExceed(id);
-			PoliticalState wps = PStateDAO.getPoliticalState(ExceedEnums.getByName(wex));
+			PoliticalState wps = PStateDAO.getPoliticalState(ExceedEnum.getByName(wex));
 			wps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(wex)).count() * 5));
 			PStateDAO.savePoliticalState(wps);
 		}
@@ -170,7 +170,7 @@ public class Board {
 
 			if (ExceedDAO.hasExceed(l.getId())) {
 				String lex = ExceedDAO.getExceed(l.getId());
-				PoliticalState lps = PStateDAO.getPoliticalState(ExceedEnums.getByName(lex));
+				PoliticalState lps = PStateDAO.getPoliticalState(ExceedEnum.getByName(lex));
 				lps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(lex)).count() * 5));
 				PStateDAO.savePoliticalState(lps);
 			}
@@ -189,7 +189,7 @@ public class Board {
 
 			if (ExceedDAO.hasExceed(id)) {
 				String wex = ExceedDAO.getExceed(id);
-				PoliticalState wps = PStateDAO.getPoliticalState(ExceedEnums.getByName(wex));
+				PoliticalState wps = PStateDAO.getPoliticalState(ExceedEnum.getByName(wex));
 				wps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(wex)).count() * 5));
 				PStateDAO.savePoliticalState(wps);
 			}
@@ -202,7 +202,7 @@ public class Board {
 
 			if (ExceedDAO.hasExceed(l.getId())) {
 				String lex = ExceedDAO.getExceed(l.getId());
-				PoliticalState lps = PStateDAO.getPoliticalState(ExceedEnums.getByName(lex));
+				PoliticalState lps = PStateDAO.getPoliticalState(ExceedEnum.getByName(lex));
 				lps.modifyInfluence((int) (losers.stream().filter(p -> !ExceedDAO.getExceed(p.getId()).equalsIgnoreCase(lex)).count() * 5));
 				PStateDAO.savePoliticalState(lps);
 			}

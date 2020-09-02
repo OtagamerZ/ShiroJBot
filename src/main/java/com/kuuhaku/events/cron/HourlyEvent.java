@@ -20,17 +20,48 @@ package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
+import com.kuuhaku.controller.sqlite.BackupDAO;
+import com.kuuhaku.model.common.DataDump;
 import com.kuuhaku.utils.Helper;
+import org.json.JSONObject;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 
-public class GetWinnerEvent implements Job {
-	public static JobDetail refreshWinner;
+public class HourlyEvent implements Job {
+	public static JobDetail backup;
 
 	@Override
 	public void execute(JobExecutionContext context) {
+		if (!Main.getInfo().isLive()) Main.getInfo().getAPI().getPresence().setActivity(Main.getRandomActivity());
+
+		com.kuuhaku.controller.postgresql.BackupDAO.dumpData(
+				new DataDump(
+						BackupDAO.getCADump(),
+						BackupDAO.getMemberDump(),
+						BackupDAO.getGuildDump(),
+						BackupDAO.getKawaigotchiDump(),
+						BackupDAO.getPoliticalStateDump(),
+						null
+				), false
+		);
+
 		Main.getInfo().setWinner(ExceedDAO.getWinner());
 		Helper.logger(this.getClass()).info("Atualizado vencedor mensal.");
+
+		if (Main.getInfo().getDblApi() != null) {
+			int size = Main.getInfo().getAPI().getGuilds().size();
+			Main.getInfo().getDblApi().setStats(size);
+			if (System.getenv().containsKey("DBL_TOKEN")) {
+				JSONObject jo = new JSONObject();
+
+				jo.put("guildCount", size);
+
+				String response = Helper.post("https://discord.bots.gg/api/v1/bots/" + Main.getInfo().getSelfUser().getId() + "/stats", jo, System.getenv("DBL_TOKEN")).toString();
+				Helper.logger(this.getClass()).debug(response);
+			}
+		}
+
+		System.gc();
 	}
 }

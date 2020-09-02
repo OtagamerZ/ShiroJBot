@@ -37,7 +37,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class UnblockEvent implements Job {
+public class MinuteEvent implements Job {
 	public static JobDetail unblock;
 
 	@Override
