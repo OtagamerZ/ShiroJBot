@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.*;
 
 public class ColorlessEmbedBuilder extends EmbedBuilder {
-	private static final boolean enabled = false;
+	private static final boolean enabled = true;
 
 	@NotNull
 	@Override
