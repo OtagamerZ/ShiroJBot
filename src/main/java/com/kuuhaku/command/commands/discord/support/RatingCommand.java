@@ -72,7 +72,6 @@ public class RatingCommand extends Command {
 							.flatMap(s -> c.sendMessage(eval(author)))
 							.queue(s -> {
 								c.sendMessage(questions()[0])
-										.delay(5, TimeUnit.MINUTES)
 										.queue(m -> {
 											addRates(author, m, (dev, i) -> {
 												dev.setInteraction(dev.getInteraction() == 0 ? i : (dev.getInteraction() + i) / 2f);
@@ -81,7 +80,6 @@ public class RatingCommand extends Command {
 											m.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(), Helper::doNothing);
 										});
 								c.sendMessage(questions()[1])
-										.delay(5, TimeUnit.MINUTES)
 										.queue(m -> {
 											addRates(author, m, (dev, i) -> {
 												dev.setSolution(dev.getSolution() == 0 ? i : (dev.getSolution() + i) / 2f);
@@ -90,7 +88,6 @@ public class RatingCommand extends Command {
 											m.delete().queueAfter(5, TimeUnit.MINUTES, msg -> s.delete().queue(), Helper::doNothing);
 										});
 								c.sendMessage(questions()[2])
-										.delay(5, TimeUnit.MINUTES)
 										.queue(m -> {
 											addRates(author, m, (dev, i) -> {
 												dev.setKnowledge(dev.getKnowledge() == 0 ? i : (dev.getKnowledge() + i) / 2f);
