@@ -20,6 +20,7 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
@@ -53,7 +54,7 @@ public class LearnToSearchCommand extends Command {
 			return;
 		}
 
-		EmbedBuilder eb = new EmbedBuilder();
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		eb.setTitle("Aqui está seu resultado!");
 		eb.setDescription("[Clique aqui para ver.](https://pt-br.lmgtfy.com/?q=" + URLEncoder.encode(String.join(" ", args), StandardCharsets.UTF_8) + "&iie=1)");

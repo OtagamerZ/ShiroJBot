@@ -20,6 +20,7 @@ package com.kuuhaku.events;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.ExceedMember;
 import com.kuuhaku.utils.ExceedEnum;
 import com.kuuhaku.utils.Helper;
@@ -41,7 +42,7 @@ public class TetEvents extends ListenerAdapter {
 		List<ExceedMember> ems = ExceedDAO.getExceedMembers(ExceedEnum.getByName(ExceedDAO.getExceed(event.getAuthor().getId())));
 		ems.removeIf(em -> em.getId().equals(event.getAuthor().getId()));
 
-		EmbedBuilder eb = new EmbedBuilder();
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		eb.setDescription(event.getMessage().getContentRaw());
 		eb.setAuthor(event.getAuthor().getName(), event.getAuthor().getAvatarUrl());
 		eb.setThumbnail(event.getAuthor().getAvatarUrl());

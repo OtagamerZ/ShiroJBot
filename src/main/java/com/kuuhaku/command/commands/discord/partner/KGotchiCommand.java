@@ -29,6 +29,7 @@ import com.kuuhaku.handlers.games.kawaigotchi.*;
 import com.kuuhaku.handlers.games.kawaigotchi.enums.FoodType;
 import com.kuuhaku.handlers.games.kawaigotchi.enums.Stance;
 import com.kuuhaku.handlers.games.kawaigotchi.enums.VanityType;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
@@ -90,7 +91,7 @@ public class KGotchiCommand extends Command {
 		if (Helper.equalsAny(args[0], "alimentar", "feed", "darcomida", "givefood")) {
 			if (args.length < 2) {
 				JSONObject jo = new JSONObject(k.getBag());
-				EmbedBuilder eb = new EmbedBuilder();
+				EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 				Map<FoodType, List<MessageEmbed.Field>> fields = new HashMap<>();
 
@@ -125,7 +126,7 @@ public class KGotchiCommand extends Command {
 				}
 
 				BufferedImage bi = k.getRace().extract(k.getStance(), k.getSkin());
-				EmbedBuilder eb = new EmbedBuilder();
+				EmbedBuilder eb = new ColorlessEmbedBuilder();
 				Graphics2D g2d = bi.createGraphics();
 				switch (k.feed(f)) {
 					case FAILED:
@@ -190,7 +191,7 @@ public class KGotchiCommand extends Command {
 			}
 		} else if (Helper.equalsAny(args[0], "brincar", "play")) {
 			BufferedImage bi = k.getRace().extract(k.getStance(), k.getSkin());
-			EmbedBuilder eb = new EmbedBuilder();
+			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			Graphics2D g2d = bi.createGraphics();
 			switch (k.play()) {
 				case FAILED:
@@ -225,7 +226,7 @@ public class KGotchiCommand extends Command {
 			sendEmbed(channel, k, bi, eb);
 		} else if (Helper.equalsAny(args[0], "treinar", "train")) {
 			BufferedImage bi = k.getRace().extract(k.getStance(), k.getSkin());
-			EmbedBuilder eb = new EmbedBuilder();
+			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			Graphics2D g2d = bi.createGraphics();
 			switch (k.train()) {
 				case FAILED:
@@ -263,7 +264,7 @@ public class KGotchiCommand extends Command {
 				switch (args[1].toLowerCase()) {
 					case "extra":
 						if (args.length < 3) {
-							EmbedBuilder eb = new EmbedBuilder();
+							EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 							Map<VanityType, List<MessageEmbed.Field>> fields = new HashMap<>();
 
@@ -308,7 +309,7 @@ public class KGotchiCommand extends Command {
 						break;
 					case "comida":
 						if (args.length < 3) {
-							EmbedBuilder eb = new EmbedBuilder();
+							EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 							Map<FoodType, List<MessageEmbed.Field>> fields = new HashMap<>();
 

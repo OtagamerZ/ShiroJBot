@@ -23,6 +23,7 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.RelayDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.PermaBlock;
 import com.kuuhaku.utils.Helper;
@@ -122,7 +123,7 @@ public class JDAEvents extends ListenerAdapter {
 				con.setRequestProperty("User-Agent", "Mozilla/5.0");
 				BufferedImage image = ImageIO.read(con.getInputStream());
 
-				EmbedBuilder eb = new EmbedBuilder();
+				EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 				eb.setAuthor(event.getUser().getAsTag(), event.getUser().getAvatarUrl(), event.getUser().getAvatarUrl());
 				eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
@@ -174,7 +175,7 @@ public class JDAEvents extends ListenerAdapter {
 
 				int rmsg = (int) (Math.random() * 5);
 
-				EmbedBuilder eb = new EmbedBuilder();
+				EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 				eb.setAuthor(event.getUser().getAsTag(), event.getUser().getAvatarUrl(), event.getUser().getAvatarUrl());
 				eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
@@ -272,7 +273,7 @@ public class JDAEvents extends ListenerAdapter {
 					} else
 						c.sendMessage("Mensagem enviada no canal de suporte, aguardando resposta...")
 								.queue(s -> {
-									EmbedBuilder eb = new EmbedBuilder();
+									EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 									eb.setAuthor(event.getAuthor().getAsTag(), event.getAuthor().getAvatarUrl());
 									eb.setFooter(event.getAuthor().getId() + " - " + LocalDateTime.now().atOffset(ZoneOffset.ofHours(-3)).format(DateTimeFormatter.ofPattern("HH:mm | dd/MMM/yyyy")), null);

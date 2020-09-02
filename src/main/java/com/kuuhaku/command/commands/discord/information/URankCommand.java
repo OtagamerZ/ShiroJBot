@@ -27,6 +27,7 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
@@ -110,7 +111,7 @@ public class URankCommand extends Command {
 		}
 
 		StringBuilder next10 = new StringBuilder();
-		EmbedBuilder eb = new EmbedBuilder();
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		makeEmbed(global, pages, sub9Formatted, eb, champ);
 
@@ -153,7 +154,7 @@ public class URankCommand extends Command {
 		}
 
 		StringBuilder next10 = new StringBuilder();
-		EmbedBuilder eb = new EmbedBuilder();
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		makeEmbed(true, pages, sub9Formatted, eb, champ);
 
@@ -195,7 +196,7 @@ public class URankCommand extends Command {
 		}
 
 		StringBuilder next10 = new StringBuilder();
-		EmbedBuilder eb = new EmbedBuilder();
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		makeEmbed(true, pages, sub9Formatted, eb, champ);
 

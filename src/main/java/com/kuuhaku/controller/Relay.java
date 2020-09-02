@@ -28,6 +28,7 @@ import com.kuuhaku.controller.postgresql.GlobalMessageDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.Manager;
 import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.RelayBlockList;
 import com.kuuhaku.model.persistent.GlobalMessage;
 import com.kuuhaku.model.persistent.GuildConfig;
@@ -107,7 +108,7 @@ public class Relay {
 
 		String exceed = ExceedDAO.getExceed(m.getId());
 
-		EmbedBuilder eb = new EmbedBuilder();
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		eb.setDescription(Helper.makeEmoteFromMention(msg.split(" ")) + "\n\n");
 		eb.setImage("attachment://image.png");
 		eb.setAuthor("(" + s.getName() + ") " + (exceed.isEmpty() ? "" : "[" + exceed + "] ") + m.getUser().getName(), s.getIconUrl(), s.getIconUrl());
@@ -194,7 +195,7 @@ public class Relay {
 		updateRelays();
 		checkSize();
 
-		EmbedBuilder eb = new EmbedBuilder();
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		eb.setDescription(gm.getContent());
 		eb.setAuthor(gm.getName(), "https://www.pngkey.com/png/full/334-3346073_no-game-no-life-icon.png", "https://www.pngkey.com/png/full/334-3346073_no-game-no-life-icon.png");
 		eb.setThumbnail(RelayBlockList.checkThumb(gm.getUserId()) ? "https://i.pinimg.com/originals/46/15/87/461587d51087bfdf8906149d356f972f.jpg" : gm.getAvatar());
@@ -257,7 +258,7 @@ public class Relay {
 	public MessageEmbed getRelayInfo(GuildConfig gc) {
 		updateRelays();
 		checkSize();
-		EmbedBuilder eb = new EmbedBuilder();
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		eb.setTitle(":globe_with_meridians: Dados do relay");
 		eb.addField(":busts_in_silhouette: Clientes conectados: " + relays.size(), "Canal relay: " + (gc.getCanalRelay() == null ? "Não configurado" : Objects.requireNonNull(Main.getInfo().getGuildByID(gc.getGuildID()).getTextChannelById(gc.getCanalRelay())).getAsMention()), false);

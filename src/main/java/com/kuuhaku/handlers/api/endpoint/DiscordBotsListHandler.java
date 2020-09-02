@@ -26,6 +26,7 @@ import com.kuuhaku.controller.postgresql.UpvoteDAO;
 import com.kuuhaku.controller.sqlite.PStateDAO;
 import com.kuuhaku.handlers.api.exception.UnauthorizedException;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.ExceedEnum;
 import com.kuuhaku.utils.Helper;
@@ -61,7 +62,7 @@ public class DiscordBotsListHandler {
 			MessageChannel chn = u.openPrivateChannel().complete();
 			Helper.logger(this.getClass()).info(u.getName() + " acabou de votar!");
 
-			EmbedBuilder eb = new EmbedBuilder();
+			EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 			eb.setThumbnail("https://i.imgur.com/A0jXqpe.png");
 			eb.setTitle("Opa, obrigada por votar em mim! (combo " + acc.getStreak() + "/7 -> bônus " + 50 * acc.getStreak() + "c)");

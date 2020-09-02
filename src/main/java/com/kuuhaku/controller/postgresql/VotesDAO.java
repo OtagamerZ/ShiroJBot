@@ -22,6 +22,7 @@ import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
 import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.DevRating;
 import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.model.persistent.Votes;
@@ -97,7 +98,7 @@ public class VotesDAO {
 		results.sort(Comparator.comparing(result::getVotes));
 
 		List<Page> pages = new ArrayList<>();
-		EmbedBuilder eb = new EmbedBuilder();
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		List<MessageEmbed.Field> f = new ArrayList<>();
 
 		results.forEach(v -> f.add(new MessageEmbed.Field(v.name, "Pontuação: " + v.votes, false)));

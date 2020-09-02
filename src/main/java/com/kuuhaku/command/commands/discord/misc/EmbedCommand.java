@@ -20,6 +20,7 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
@@ -52,7 +53,7 @@ public class EmbedCommand extends Command {
 			try {
 				JSONObject json = new JSONObject(String.join(" ", args));
 
-				EmbedBuilder eb = new EmbedBuilder();
+				EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 				if (json.has("title")) eb.setTitle(json.getString("title"));
 				if (json.has("color")) eb.setColor(Color.decode(json.getString("color")));
