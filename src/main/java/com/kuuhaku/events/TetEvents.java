@@ -63,7 +63,7 @@ public class TetEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
-		if (event.getMessage().getContentRaw().trim().equals("<@" + Main.getInfo().getSelfUser().getId() + ">") || event.getMessage().getContentRaw().trim().equals("<@!" + Main.getInfo().getSelfUser().getId() + ">")) {
+		if (event.getMessage().getContentRaw().trim().equals("<@" + Main.getTet().getSelfUser().getId() + ">") || event.getMessage().getContentRaw().trim().equals("<@!" + Main.getTet().getSelfUser().getId() + ">")) {
 			event.getChannel().sendMessage("Eae jogador! Vejo que você se interessou pelos Exceeds. Se você já escolheu um, você pode me enviar uma mensagem no canal privado que ela será transmitida à outros membros do mesmo Exceed, não é incrível?").queue();
 		}
 	}
