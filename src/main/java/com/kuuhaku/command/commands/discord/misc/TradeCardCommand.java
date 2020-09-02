@@ -106,6 +106,9 @@ public class TradeCardCommand extends Command {
 			if (price < min) {
 				channel.sendMessage("❌ | Você não pode oferecer menos que " + min + " créditos por essa carta.").queue();
 				return;
+			} else if (acc.getLoan() > 0) {
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-transfer-with-loan")).queue();
+				return;
 			}
 
 			channel.sendMessage(other.getAsMention() + ", " + author.getAsMention() + " deseja comprar sua carta `" + card.getName() + "` por " + price + " créditos, você aceita essa transação?")
