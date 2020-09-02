@@ -30,7 +30,7 @@ public class ColorlessEmbedBuilder extends EmbedBuilder {
 	@NotNull
 	@Override
 	public MessageEmbed build() {
-		if (enabled) super.setColor(Color.decode("#36393f"));
+		if (enabled) super.setColor(Color.decode("#2f3136"));
 		return super.build();
 	}
 }
