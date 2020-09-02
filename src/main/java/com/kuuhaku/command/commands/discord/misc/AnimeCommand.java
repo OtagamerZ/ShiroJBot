@@ -20,7 +20,6 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.Tradutor;
 import com.kuuhaku.model.common.Anime;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
@@ -98,7 +97,7 @@ public class AnimeCommand extends Command {
 					eb.setDescription(jo.getJSONObject("anime").getString("Sinopse"));
 					eb.addField("Gêneros:", jo.getJSONObject("anime").getJSONArray("tags").toString().replace("[", "`").replace("]", "`").replace(",", "` `").replace("\"", ""), false);
 				} else {
-					eb.setDescription(Tradutor.translate("en", "pt", anime.getDescription()));
+					eb.setDescription(anime.getDescription());
 					eb.addField("Gêneros:", anime.getGenres(), false);
 				}
 

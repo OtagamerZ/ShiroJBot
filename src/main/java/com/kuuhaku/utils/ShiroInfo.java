@@ -60,7 +60,6 @@ public class ShiroInfo {
 	private static final ThreadMXBean tBean = ManagementFactory.getThreadMXBean();
 	private static final ThreadPoolExecutor compilationPools = (ThreadPoolExecutor) Executors.newFixedThreadPool(3);
 	private static final String BotToken = System.getenv("BOT_TOKEN");
-	private static final String YandexToken = System.getenv("YANDEX_TOKEN");
 	private static final String YoutubeToken = System.getenv("YOUTUBE_TOKEN");
 	private static final String DBLToken;
 	private static final String name = "Shiro J. Bot";
@@ -188,10 +187,6 @@ public class ShiroInfo {
 
 	public String getBotToken() {
 		return BotToken;
-	}
-
-	public String getYandexToken() {
-		return YandexToken;
 	}
 
 	public String getYoutubeToken() {
