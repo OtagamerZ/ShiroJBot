@@ -13,7 +13,21 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/.graphqlconfig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/anilist.graphql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/schema.graphql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/AnimeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/AnimeCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/support/IDCommand.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/support/RatingCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/support/RatingCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Anime.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Anime.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -62,6 +76,7 @@
         <option value="Interface" />
         <option value="Class" />
         <option value="Enum" />
+        <option value="GraphQL File" />
       </list>
     </option>
   </component>
@@ -116,7 +131,7 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="database.main" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
     <key name="MoveMembersDialog.RECENTS_KEY">
@@ -158,6 +173,19 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [clean]">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -649,21 +677,8 @@
       <workItem from="1598992905223" duration="166000" />
       <workItem from="1599048374328" duration="6059000" />
       <workItem from="1599057940464" duration="891000" />
-      <workItem from="1599063970552" duration="692000" />
-    </task>
-    <task id="LOCAL-02311" summary="Conversão de sonhos (Loritta) em créditos (Shiro) adicionada">
-      <created>1598634761745</created>
-      <option name="number" value="02311" />
-      <option name="presentableId" value="LOCAL-02311" />
-      <option name="project" value="LOCAL" />
-      <updated>1598634761745</updated>
-    </task>
-    <task id="LOCAL-02312" summary="Conversão de sonhos (Loritta) em créditos (Shiro) adicionada">
-      <created>1598635364567</created>
-      <option name="number" value="02312" />
-      <option name="presentableId" value="LOCAL-02312" />
-      <option name="project" value="LOCAL" />
-      <updated>1598635364567</updated>
+      <workItem from="1599063970552" duration="5583000" />
+      <workItem from="1599070994903" duration="2178000" />
     </task>
     <task id="LOCAL-02313" summary="Conversão de sonhos (Loritta) em créditos (Shiro) adicionada">
       <created>1598635685209</created>
@@ -994,7 +1009,21 @@
       <option name="project" value="LOCAL" />
       <updated>1599064413450</updated>
     </task>
-    <option name="localTasksCounter" value="2360" />
+    <task id="LOCAL-02360" summary="Correção do comando de pedir avaliação">
+      <created>1599064682961</created>
+      <option name="number" value="02360" />
+      <option name="presentableId" value="LOCAL-02360" />
+      <option name="project" value="LOCAL" />
+      <updated>1599064682961</updated>
+    </task>
+    <task id="LOCAL-02361" summary="Correção do comando de pedir avaliação">
+      <created>1599064939610</created>
+      <option name="number" value="02361" />
+      <option name="presentableId" value="LOCAL-02361" />
+      <option name="project" value="LOCAL" />
+      <updated>1599064939610</updated>
+    </task>
+    <option name="localTasksCounter" value="2362" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1098,6 +1127,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="416" y="111" key="#Edit_File_Template/0.0.1680.1010@0.0.1680.1010" timestamp="1593181346573" />
+    <state x="320" y="79" key="#Project_Structure" timestamp="1599071410447">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="320" y="79" key="#Project_Structure/0.0.1680.1010@0.0.1680.1010" timestamp="1599071410447" />
     <state x="557" y="213" width="706" height="677" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog" timestamp="1597325294333">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1132,11 +1165,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1599064410535">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1599064936877">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1599064410535" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1599064936877" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1190,19 +1223,19 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="548" y="228" key="RollbackChangesDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1598545977251" />
-    <state x="320" y="80" key="SettingsEditor" timestamp="1597086904112">
+    <state x="320" y="80" key="SettingsEditor" timestamp="1599071523859">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1597086904112" />
+    <state x="320" y="80" key="SettingsEditor/0.0.1680.1010@0.0.1680.1010" timestamp="1599071523859" />
     <state x="687" y="418" key="VCS.ChangelistChooser" timestamp="1597775476934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1599064421427">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1599064941019">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1599064421427" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1599064941019" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597351073016">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1256,10 +1289,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1598457973308" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1598632537564">
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1599072838979">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1598632537564" />
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1599072838979" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
