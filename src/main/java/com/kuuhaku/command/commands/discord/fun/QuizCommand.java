@@ -30,7 +30,7 @@ import com.kuuhaku.controller.sqlite.PStateDAO;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.AnsweredQuizzes;
-import com.kuuhaku.utils.ExceedEnums;
+import com.kuuhaku.utils.ExceedEnum;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
@@ -189,7 +189,7 @@ public class QuizCommand extends Command {
 						eb.setColor(Color.green);
 
 						if (ExceedDAO.hasExceed(author.getId())) {
-							PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
+							PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
 							ps.modifyInfluence(true);
 							PStateDAO.savePoliticalState(ps);
 						}
@@ -199,7 +199,7 @@ public class QuizCommand extends Command {
 						eb.setColor(Color.red);
 
 						if (ExceedDAO.hasExceed(author.getId())) {
-							PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnums.getByName(ExceedDAO.getExceed(author.getId())));
+							PoliticalState ps = PStateDAO.getPoliticalState(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId())));
 							ps.modifyInfluence(false);
 							PStateDAO.savePoliticalState(ps);
 						}

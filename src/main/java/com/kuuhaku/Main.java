@@ -29,6 +29,7 @@ import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.Manager;
 import com.kuuhaku.events.JibrilEvents;
 import com.kuuhaku.events.ScheduledEvents;
+import com.kuuhaku.events.TetEvents;
 import com.kuuhaku.events.TwitchEvents;
 import com.kuuhaku.events.guild.GuildEvents;
 import com.kuuhaku.events.guild.GuildUpdateEvents;
@@ -67,6 +68,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	private static TwitchCommandManager tCmdManager;
 	private static JDA api;
 	private static JDA jbr;
+	private static JDA tet;
 	private static TwitchClient twitch;
 	private static TwitchEvents twitchManager;
 	public static boolean exiting = false;
@@ -105,10 +107,20 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				.build()
 				.awaitReady();
 
+		tet = JDABuilder.create(intents)
+				.setToken(System.getenv("TET_TOKEN"))
+				.setChunkingFilter(ChunkingFilter.NONE)
+				.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS)
+				.setMemberCachePolicy(MemberCachePolicy.NONE)
+				.setBulkDeleteSplittingEnabled(false)
+				.build()
+				.awaitReady();
+
 		info.setAPI(api);
 
 		api.getPresence().setActivity(Activity.playing("Iniciando..."));
 		jbr.getPresence().setActivity(Activity.playing("Iniciando..."));
+		tet.getPresence().setActivity(Activity.playing("Iniciando..."));
 
 		info.setStartTime(Instant.now().getEpochSecond());
 		Helper.logger(Main.class).info("Criada pool de compilação: " + info.getPool().getCorePoolSize() + " espaços alocados");
@@ -152,6 +164,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	private static void finishStartUp() throws IOException, InterruptedException {
 		api.getPresence().setActivity(getRandomActivity());
 		jbr.getPresence().setActivity(Activity.listening("as mensagens de " + relay.getRelayMap().size() + " servidores!"));
+		tet.getPresence().setActivity(Activity.playing("batalha de Exceeds"));
 		getInfo().setWinner(ExceedDAO.getWinner());
 		api.getGuilds().forEach(g -> {
 			try {
@@ -166,6 +179,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		api.addEventListener(new GuildEvents());
 		api.addEventListener(new GuildUpdateEvents());
 		jbr.addEventListener(new JibrilEvents());
+		tet.addEventListener(new TetEvents());
 
 		Pages.activate(api);
 
@@ -222,6 +236,10 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 	public static JDA getJibril() {
 		return jbr;
+	}
+
+	public static JDA getTet() {
+		return tet;
 	}
 
 	@Override

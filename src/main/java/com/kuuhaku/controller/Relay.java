@@ -31,7 +31,7 @@ import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.common.RelayBlockList;
 import com.kuuhaku.model.persistent.GlobalMessage;
 import com.kuuhaku.model.persistent.GuildConfig;
-import com.kuuhaku.utils.ExceedEnums;
+import com.kuuhaku.utils.ExceedEnum;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.Tag;
 import com.kuuhaku.utils.TagIcons;
@@ -108,7 +108,7 @@ public class Relay {
 		String exceed = ExceedDAO.getExceed(m.getId());
 
 		EmbedBuilder eb = new EmbedBuilder();
-		eb.setDescription(Helper.makeEmoteFromMention(msg.split(" ")) + "\n\n ");
+		eb.setDescription(Helper.makeEmoteFromMention(msg.split(" ")) + "\n\n");
 		eb.setImage("attachment://image.png");
 		eb.setAuthor("(" + s.getName() + ") " + (exceed.isEmpty() ? "" : "[" + exceed + "] ") + m.getUser().getName(), s.getIconUrl(), s.getIconUrl());
 		eb.setThumbnail(RelayBlockList.checkThumb(m.getUser().getId()) ? "https://i.pinimg.com/originals/46/15/87/461587d51087bfdf8906149d356f972f.jpg" : m.getUser().getAvatarUrl());
@@ -124,7 +124,7 @@ public class Relay {
 		com.kuuhaku.model.persistent.Member mbr = MemberDAO.getMemberById(m.getId() + s.getId());
 
 		if (!exceed.isEmpty()) {
-			badges.append(TagIcons.getExceed(ExceedEnums.getByName(exceed)));
+			badges.append(TagIcons.getExceed(ExceedEnum.getByName(exceed)));
 		}
 
 		tags.forEach(t -> badges.append(t.getEmote(mbr) == null ? "" : t.getEmote(mbr).getTag(mbr.getLevel())));

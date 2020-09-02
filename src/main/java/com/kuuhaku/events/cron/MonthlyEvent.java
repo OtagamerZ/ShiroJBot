@@ -27,7 +27,7 @@ import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Lottery;
 import com.kuuhaku.model.persistent.LotteryValue;
-import com.kuuhaku.utils.ExceedEnums;
+import com.kuuhaku.utils.ExceedEnum;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -41,7 +41,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-public class MarkWinnerEvent implements Job {
+public class MonthlyEvent implements Job {
 	public static JobDetail markWinner;
 
 	@Override
@@ -50,7 +50,7 @@ public class MarkWinnerEvent implements Job {
 		Helper.logger(this.getClass()).info("Vencedor mensal: " + ExceedDAO.getWinner());
 
 		String ex = ExceedDAO.getWinner();
-		ExceedDAO.getExceedMembers(ExceedEnums.getByName(ex)).forEach(em -> {
+		ExceedDAO.getExceedMembers(ExceedEnum.getByName(ex)).forEach(em -> {
 					User u = Main.getInfo().getUserByID(em.getId());
 					if (u != null) u.openPrivateChannel().queue(c -> {
 						try {

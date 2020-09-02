@@ -22,7 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
-import com.kuuhaku.utils.ExceedEnums;
+import com.kuuhaku.utils.ExceedEnum;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.Tag;
 import com.kuuhaku.utils.TagIcons;
@@ -69,7 +69,7 @@ public class MyTagsCommand extends Command {
 		StringBuilder badges = new StringBuilder();
 
 		if (!exceed.isEmpty()) {
-			badges.append(TagIcons.getExceed(ExceedEnums.getByName(exceed)));
+			badges.append(TagIcons.getExceed(ExceedEnum.getByName(exceed)));
 		}
 
 		tags.forEach(t -> badges.append(t.getEmote(mb) == null ? "" : Objects.requireNonNull(t.getEmote(mb)).getTag(mb.getLevel())));

@@ -19,7 +19,7 @@
 package com.kuuhaku.handlers.games.disboard.model;
 
 import com.kuuhaku.handlers.games.disboard.enums.Country;
-import com.kuuhaku.utils.ExceedEnums;
+import com.kuuhaku.utils.ExceedEnum;
 import org.json.JSONArray;
 
 import javax.persistence.*;
@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 public class PoliticalState {
 	@Id
 	@Enumerated(EnumType.STRING)
-	private ExceedEnums exceed;
+	private ExceedEnum exceed;
 
 	@Column(columnDefinition = "TEXT NOT NULL DEFAULT '[]'")
 	private String countries = "[]";
@@ -40,7 +40,7 @@ public class PoliticalState {
 	@Column(columnDefinition = "INT NOT NULL DEFAULT 0")
 	private int influence = 0;
 
-	public PoliticalState(ExceedEnums exceed) {
+	public PoliticalState(ExceedEnum exceed) {
 		this.exceed = exceed;
 		this.countries = new ArrayList<String>() {{
 			addAll(Country.getStartingCountries().stream().map(Country::name).collect(Collectors.toList()));
@@ -50,7 +50,7 @@ public class PoliticalState {
 	public PoliticalState() {
 	}
 
-	public ExceedEnums getExceed() {
+	public ExceedEnum getExceed() {
 		return exceed;
 	}
 
