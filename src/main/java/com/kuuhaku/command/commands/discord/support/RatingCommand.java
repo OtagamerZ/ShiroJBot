@@ -113,15 +113,15 @@ public class RatingCommand extends Command {
 		eb.setColor(Helper.getRandomColor());
 
 		eb.setTitle("Atendimento");
-		eb.setDescription("Que nota você daria para o atendimento, considerando a interação com o usuário?");
+		eb.setDescription("Que nota você daria para o suporte, considerando a interação com o usuário?");
 		embeds[0] = eb.build();
 
 		eb.setTitle("Solução");
-		eb.setDescription("Que nota você daria para o atendimento, considerando o esclarecimento de sua dúvida ou solução de seu problema?");
+		eb.setDescription("Que nota você daria para o suporte, considerando o esclarecimento de sua dúvida ou solução de seu problema?");
 		embeds[1] = eb.build();
 
 		eb.setTitle("Conhecimento");
-		eb.setDescription("Que nota você daria para o conhecimento geral do atendente sobre a Shiro/Jibril/Tet?");
+		eb.setDescription("Que nota você daria para o conhecimento geral do suporte sobre a Shiro/Jibril/Tet?");
 		embeds[2] = eb.build();
 
 		return embeds;

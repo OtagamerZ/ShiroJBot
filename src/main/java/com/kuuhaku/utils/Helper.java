@@ -874,6 +874,14 @@ public class Helper {
 		return new JSONObject(req.body());
 	}
 
+	public static JSONObject post(String endpoint, JSONObject payload, Map<String, String> headers) {
+		HttpRequest req = HttpRequest.post(endpoint)
+				.headers(headers)
+				.send(payload.toString());
+
+		return new JSONObject(req.body());
+	}
+
 	public static JSONObject post(String endpoint, JSONObject payload, Map<String, String> headers, String token) {
 		HttpRequest req = HttpRequest.post(endpoint)
 				.headers(headers)
