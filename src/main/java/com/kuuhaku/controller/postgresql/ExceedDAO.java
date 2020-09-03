@@ -163,8 +163,8 @@ public class ExceedDAO {
 
 		try {
 			return new Exceed(ex, members.size(),
-					((BigDecimal[]) points.getSingleResult())[0].longValue() - offset,
-					((BigDecimal[]) points.getSingleResult())[1].longValue()
+					((BigDecimal) ((Object[]) points.getSingleResult())[0]).longValue() - offset,
+					((BigDecimal) ((Object[]) points.getSingleResult())[1]).longValue()
 			);
 		} finally {
 			em.close();
