@@ -67,6 +67,7 @@
         <class>com.kuuhaku.model.persistent.PendingBinding</class>
         <class>com.kuuhaku.model.persistent.Lottery</class>
         <class>com.kuuhaku.model.persistent.LotteryValue</class>
+        <class>com.kuuhaku.model.persistent.ExceedScore</class>
 
         <properties>
             <!-- dados da conexao -->

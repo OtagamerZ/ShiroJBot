@@ -21,6 +21,7 @@ package com.kuuhaku.controller.postgresql;
 import com.kuuhaku.handlers.api.endpoint.ExceedState;
 import com.kuuhaku.model.common.Exceed;
 import com.kuuhaku.model.persistent.ExceedMember;
+import com.kuuhaku.model.persistent.ExceedScore;
 import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.model.persistent.MonthWinner;
 import com.kuuhaku.utils.ExceedEnum;
@@ -172,37 +173,14 @@ public class ExceedDAO {
 	public static ExceedEnum findWinner() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createNativeQuery("SELECT substr(upper(er.exceed), 0, 3), er.points FROM shiro.\"GetExceedRanking\" er ORDER BY er.points DESC");
+		Query q = em.createNativeQuery("SELECT er.exceed, er.points FROM shiro.\"GetExceedRanking\" er ORDER BY er.points DESC");
 
 		List<Object[]> ex = (List<Object[]>) q.getResultList();
 		em.close();
 
-		MonthWinner ranking = getLatestRanking();
-
 		Map<String, Long> exs = new HashMap<>();
-		assert ranking != null;
-		for (Object[] objects : ex) {
-			switch (String.valueOf(objects[0])) {
-				case "IM":
-					exs.put(String.valueOf(objects[0]), ((BigDecimal) objects[1]).longValue() - ranking.getImanityPoints());
-					break;
-				case "SE":
-					exs.put(String.valueOf(objects[0]), ((BigDecimal) objects[1]).longValue() - ranking.getSeirenPoints());
-					break;
-				case "WE":
-					exs.put(String.valueOf(objects[0]), ((BigDecimal) objects[1]).longValue() - ranking.getWerebeastPoints());
-					break;
-				case "EX":
-					exs.put(String.valueOf(objects[0]), ((BigDecimal) objects[1]).longValue() - ranking.getExmachinaPoints());
-					break;
-				case "EL":
-					exs.put(String.valueOf(objects[0]), ((BigDecimal) objects[1]).longValue() - ranking.getElfPoints());
-					break;
-				case "FL":
-					exs.put(String.valueOf(objects[0]), ((BigDecimal) objects[1]).longValue() - ranking.getFlugelPoints());
-					break;
-			}
-		}
+		for (Object[] objects : ex)
+			exs.put(String.valueOf(objects[0]), ((BigDecimal) objects[1]).longValue() - getExceedHistory(ExceedEnum.getByName(String.valueOf(objects[0]))).get(0).getPoints());
 
 		Map.Entry<String, Long> winner = exs.entrySet().stream().max(Map.Entry.comparingByValue()).orElseThrow();
 
@@ -284,6 +262,20 @@ public class ExceedDAO {
 
 		try {
 			return ((Long) exceed.getSingleResult()).floatValue() / ((Long) total.getSingleResult()).floatValue();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings({"unchecked"})
+	public static List<ExceedScore> getExceedHistory(ExceedEnum ex) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT e FROM ExceedScore e WHERE e.exceed = :ex", ExceedScore.class);
+		q.setParameter("ex", ex.getName());
+
+		try {
+			return (List<ExceedScore>) q.getResultList();
 		} finally {
 			em.close();
 		}
