@@ -31,6 +31,7 @@ import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 import org.knowm.xchart.BitmapEncoder;
 import org.knowm.xchart.CategoryChart;
+import org.knowm.xchart.CategoryChartBuilder;
 import org.knowm.xchart.CategorySeries;
 import org.knowm.xchart.style.Styler;
 
@@ -73,7 +74,7 @@ public class ExceedRankCommand extends Command {
 					exceeds.add(ExceedDAO.getExceed(ex));
 				}
 
-				CategoryChart chart = new CategoryChart()
+				CategoryChart chart = new CategoryChartBuilder()
 						.width(800)
 						.height(600)
 						.title("Pontuação dos Exceeds")
