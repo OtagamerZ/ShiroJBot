@@ -81,12 +81,10 @@ public class ExceedRankCommand extends Command {
 
 				chart.getStyler()
 						.setLegendPosition(Styler.LegendPosition.InsideNE)
-						.setHasAnnotations(true)
 						.setSeriesColors(
 								exceeds.stream()
 										.map(Exceed::getExceed)
 										.map(ExceedEnum::getPalette)
-										.map(Color::brighter)
 										.map(Color::brighter)
 										.toArray(Color[]::new)
 						);
