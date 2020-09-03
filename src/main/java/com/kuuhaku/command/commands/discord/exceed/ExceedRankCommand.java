@@ -30,9 +30,8 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 import org.knowm.xchart.BitmapEncoder;
-import org.knowm.xchart.PieChart;
-import org.knowm.xchart.PieChartBuilder;
-import org.knowm.xchart.PieSeries;
+import org.knowm.xchart.CategoryChart;
+import org.knowm.xchart.CategorySeries;
 import org.knowm.xchart.style.Styler;
 
 import javax.imageio.ImageIO;
@@ -74,14 +73,14 @@ public class ExceedRankCommand extends Command {
 					exceeds.add(ExceedDAO.getExceed(ex));
 				}
 
-				PieChart chart = new PieChartBuilder()
+				CategoryChart chart = new CategoryChart()
 						.width(800)
 						.height(600)
 						.title("Pontuação dos Exceeds")
 						.build();
 
 				chart.getStyler()
-						.setDefaultSeriesRenderStyle(PieSeries.PieSeriesRenderStyle.Donut)
+						.setDefaultSeriesRenderStyle(CategorySeries.CategorySeriesRenderStyle.SteppedBar)
 						.setLegendPosition(Styler.LegendPosition.InsideNE)
 						.setHasAnnotations(true)
 						.setSeriesColors(
@@ -89,13 +88,15 @@ public class ExceedRankCommand extends Command {
 										.map(Exceed::getExceed)
 										.map(ExceedEnum::getPalette)
 										.map(Color::brighter)
+										.map(Color::brighter)
 										.toArray(Color[]::new)
 						);
 
 				long total = exceeds.stream().mapToLong(Exceed::getExp).sum();
 				for (Exceed ex : exceeds) {
 					chart.addSeries(ex.getExceed().getName(),
-							ex.getExp()
+							List.of("Pontuação Total"),
+							List.of(ex.getExp())
 					);
 				}
 
