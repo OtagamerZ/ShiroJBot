@@ -90,9 +90,10 @@ public class ExceedRankCommand extends Command {
 										.toArray(Color[]::new)
 						);
 
+				long total = exceeds.stream().mapToLong(Exceed::getExp).sum();
 				for (Exceed ex : exceeds) {
 					chart.addSeries(ex.getExceed().getName(),
-							ex.getExp(),
+							ex.getExp() / (double) total,
 							"Pontuação total"
 					);
 				}
