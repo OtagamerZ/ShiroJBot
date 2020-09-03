@@ -657,21 +657,7 @@
       <workItem from="1599078219833" duration="764000" />
       <workItem from="1599134934106" duration="470000" />
       <workItem from="1599135576282" duration="3313000" />
-      <workItem from="1599143608752" duration="4311000" />
-    </task>
-    <task id="LOCAL-02342" summary="Correção no anúncio do vencedores mensais">
-      <created>1598964029106</created>
-      <option name="number" value="02342" />
-      <option name="presentableId" value="LOCAL-02342" />
-      <option name="project" value="LOCAL" />
-      <updated>1598964029106</updated>
-    </task>
-    <task id="LOCAL-02343" summary="Correção no anúncio do vencedores mensais">
-      <created>1598964212727</created>
-      <option name="number" value="02343" />
-      <option name="presentableId" value="LOCAL-02343" />
-      <option name="project" value="LOCAL" />
-      <updated>1598964212727</updated>
+      <workItem from="1599143608752" duration="4615000" />
     </task>
     <task id="LOCAL-02344" summary="Correção no anúncio do vencedores mensais">
       <created>1598964621256</created>
@@ -1002,7 +988,21 @@
       <option name="project" value="LOCAL" />
       <updated>1599151392370</updated>
     </task>
-    <option name="localTasksCounter" value="2391" />
+    <task id="LOCAL-02391" summary="Mudança do gerador de gráficos (ranking dos Exceeds)">
+      <created>1599151515187</created>
+      <option name="number" value="02391" />
+      <option name="presentableId" value="LOCAL-02391" />
+      <option name="project" value="LOCAL" />
+      <updated>1599151515187</updated>
+    </task>
+    <task id="LOCAL-02392" summary="Mudança do gerador de gráficos (ranking dos Exceeds)">
+      <created>1599151672411</created>
+      <option name="number" value="02392" />
+      <option name="presentableId" value="LOCAL-02392" />
+      <option name="project" value="LOCAL" />
+      <updated>1599151672411</updated>
+    </task>
+    <option name="localTasksCounter" value="2393" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1148,11 +1148,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1599151389721">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1599151669722">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1599151389721" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1599151669722" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1214,11 +1214,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1599151394366">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1599151674021">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1599151394366" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1599151674021" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1597351073016">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
