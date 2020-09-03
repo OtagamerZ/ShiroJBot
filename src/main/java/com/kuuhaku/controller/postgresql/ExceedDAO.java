@@ -246,12 +246,26 @@ public class ExceedDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		Query q = em.createQuery("SELECT e FROM ExceedScore e WHERE e.exceed = :ex AND YEAR(e.timestamp) = YEAR(CURRENT_DATE)", ExceedScore.class);
-		q.setParameter("ex", ex.getName());
+		q.setParameter("ex", ex);
 
 		try {
 			return (List<ExceedScore>) q.getResultList();
 		} finally {
 			em.close();
 		}
+	}
+
+	public static void saveScores() {
+		EntityManager em = Manager.getEntityManager();
+
+		for (ExceedEnum ee : ExceedEnum.values()) {
+			Exceed ex = getExceed(ee);
+
+			em.getTransaction().begin();
+			em.merge(new ExceedScore(ee, ex.getExp(), LocalDate.now()));
+			em.getTransaction().commit();
+		}
+
+		em.close();
 	}
 }
