@@ -23,7 +23,6 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Kawaipon;
@@ -64,7 +63,7 @@ public class VIPShopCommand extends Command {
 		Account acc = AccountDAO.getAccount(author.getId());
 
 		if (args.length == 0) {
-			EmbedBuilder eb = new ColorlessEmbedBuilder();
+			EmbedBuilder eb = new EmbedBuilder();
 			eb.setTitle(":diamonds: | Loja VIP");
 			eb.setDescription("Gemas podem ser obtidos ao resgatar um acúmulo de 7 votos seguidos com o comando `" + prefix + "resgatar`. Para utilizar as gemas basta usar `" + prefix + "vip ID`!\n\n" +
 							  "Muito obrigada por me apoiar!"

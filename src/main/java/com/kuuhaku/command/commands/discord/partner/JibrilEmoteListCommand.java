@@ -67,7 +67,6 @@ public class JibrilEmoteListCommand extends Command {
 				eb.clear();
 
 				eb.setTitle("<a:SmugDance:598842924725305344> Emotes disponíveis para a Jibril:");
-				eb.setColor(Helper.getRandomColor());
 				emotes.get(i).forEach(e -> eb.addField("Emote: " + e.getAsMention(), "Menção: " + e.getAsMention().replace("<", "`{").replace(">", "}`").replace(":", "&"), false));
 				eb.setAuthor("Para usar estes emotes, simplesmente digite a menção no chat global, ela será convertida automaticamente.");
 				eb.setFooter("Página " + (i + 1) + " de " + emotes.size() + ". Total de " + emotes.stream().mapToInt(List::size).sum() + " resultados.", null);

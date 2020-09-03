@@ -102,9 +102,11 @@ public class Settings {
 				}
 			}
 
-			EmbedBuilder eb = new ColorlessEmbedBuilder();
+			EmbedBuilder eb;
+			if (message.getGuild().getIconUrl() != null) eb = new EmbedBuilder();
+			else eb = new ColorlessEmbedBuilder();
 
-			eb.setColor(message.getGuild().getIconUrl() == null ? Helper.getRandomColor() : Helper.colorThief(message.getGuild().getIconUrl()));
+			eb.setColor(Helper.colorThief(message.getGuild().getIconUrl()));
 			if (message.getGuild().getIconUrl() != null) eb.setThumbnail(message.getGuild().getIconUrl());
 			eb.setTitle("⚙ | Configurações do servidor");
 			eb.addField("\uD83D\uDD17 » Prefixo: __" + prefix + "__", Helper.VOID, false);
@@ -628,10 +630,12 @@ public class Settings {
 	public static void settingsHelp(Message message, GuildConfig gc) {
 		String prefix = Helper.getOr(gc.getPrefix(), "s!");
 
-		EmbedBuilder eb = new ColorlessEmbedBuilder();
+		EmbedBuilder eb;
+		if (message.getGuild().getIconUrl() != null) eb = new EmbedBuilder();
+		else eb = new ColorlessEmbedBuilder();
 
 		try {
-			eb.setColor(message.getGuild().getIconUrl() == null ? Helper.getRandomColor() : Helper.colorThief(message.getGuild().getIconUrl()));
+			eb.setColor(Helper.colorThief(message.getGuild().getIconUrl()));
 		} catch (IOException e) {
 			Helper.logger(Settings.class).error(e + " | " + e.getStackTrace()[0]);
 		}

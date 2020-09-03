@@ -27,7 +27,6 @@ import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.QuizDAO;
 import com.kuuhaku.controller.sqlite.PStateDAO;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
-import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.AnsweredQuizzes;
 import com.kuuhaku.utils.ExceedEnum;
@@ -144,7 +143,7 @@ public class QuizCommand extends Command {
 		aq.played();
 		QuizDAO.saveUserState(aq);
 
-		EmbedBuilder eb = new ColorlessEmbedBuilder();
+		EmbedBuilder eb = new EmbedBuilder();
 		eb.setThumbnail("https://images.vexels.com/media/users/3/152594/isolated/preview/d00d116b2c073ccf7f9fec677fec78e3---cone-de-ponto-de-interroga----o-quadrado-roxo-by-vexels.png");
 		eb.setTitle("Hora do quiz (tradução indisponível)! (" + difficulty.toUpperCase() + ")");
 		eb.setDescription(question);

@@ -88,7 +88,6 @@ public class RemainingCardsCommand extends Command {
 
 		eb.setTitle(":flower_playing_cards: | Cartas coletadas de " + anime.toString());
 		eb.addField("Progresso:", collected.size() + " de " + cards.size() + " (" + (Helper.prcntToInt(collected.size(), cards.size())) + "%)", false);
-		eb.setColor(Helper.getRandomColor());
 
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < cards.size(); i++) {
