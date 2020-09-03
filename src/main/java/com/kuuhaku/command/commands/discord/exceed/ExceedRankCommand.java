@@ -83,7 +83,6 @@ public class ExceedRankCommand extends Command {
 						.build();
 
 				chart.getStyler()
-						.setYAxisLogarithmic(true)
 						.setLegendPosition(Styler.LegendPosition.InsideNE)
 						.setHasAnnotations(true)
 						.setSeriesColors(
