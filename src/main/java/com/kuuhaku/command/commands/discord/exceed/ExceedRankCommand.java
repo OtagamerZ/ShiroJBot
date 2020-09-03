@@ -92,7 +92,6 @@ public class ExceedRankCommand extends Command {
 							.setXAxisMin(1d)
 							.setXAxisMax(12d)
 							.setAxisTickLabelsColor(Color.WHITE)
-							.setAnnotationsFontColor(Color.WHITE)
 							.setChartFontColor(Color.WHITE)
 							.setLegendPosition(Styler.LegendPosition.InsideNE)
 							.setSeriesColors(colors.toArray(Color[]::new))
@@ -135,9 +134,11 @@ public class ExceedRankCommand extends Command {
 							.build();
 
 					chart.getStyler()
+							.setPlotGridLinesColor(Color.decode("#404447"))
 							.setAxisTickLabelsColor(Color.WHITE)
 							.setAnnotationsFontColor(Color.WHITE)
 							.setChartFontColor(Color.WHITE)
+							.setHasAnnotations(true)
 							.setLegendPosition(Styler.LegendPosition.InsideNE)
 							.setSeriesColors(colors.toArray(Color[]::new))
 							.setPlotBackgroundColor(Color.decode("#202225"))
@@ -146,7 +147,7 @@ public class ExceedRankCommand extends Command {
 
 					for (Exceed ex : exceeds) {
 						chart.addSeries(ex.getExceed().getName(),
-								List.of("Pontos Totais"),
+								List.of("Exceed"),
 								List.of(Math.round(ex.getExp() / 1000d))
 						);
 					}
