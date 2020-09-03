@@ -497,7 +497,7 @@ public class CommandManager {
 
 			//EXCEED
 			put(ExceedRankCommand.class, new Argument(
-					"exceedrank", new String[]{"exrank", "topexceed", "topex"}, "cmd_exceed-rank", EXCEED, false
+					"exceedrank", new String[]{"exrank", "topexceed", "topex"}, "req_actual", "cmd_exceed-rank", EXCEED, false
 			));
 			put(ExceedSelectCommand.class, new Argument(
 					"exceedselect", new String[]{"exselect", "souex"}, "cmd_exceed", EXCEED, false
