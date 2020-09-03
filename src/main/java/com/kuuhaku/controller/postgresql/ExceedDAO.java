@@ -167,6 +167,8 @@ public class ExceedDAO {
 		MonthWinner m = new MonthWinner();
 		m.setExceed(ex.getName());
 
+		saveScores();
+
 		em.getTransaction().begin();
 		em.merge(m);
 		em.getTransaction().commit();
