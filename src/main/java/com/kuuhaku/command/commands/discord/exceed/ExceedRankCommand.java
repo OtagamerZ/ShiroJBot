@@ -79,11 +79,12 @@ public class ExceedRankCommand extends Command {
 				CategoryChart chart = new CategoryChartBuilder()
 						.width(800)
 						.height(600)
-						.title("Pontuação dos Exceeds")
+						.title("Ranking dos Exceeds")
 						.build();
 
 				chart.getStyler()
 						.setLegendPosition(Styler.LegendPosition.InsideNE)
+						.setHasAnnotations(true)
 						.setSeriesColors(
 								exceeds.stream()
 										.map(Exceed::getExceed)
@@ -91,13 +92,12 @@ public class ExceedRankCommand extends Command {
 										.map(Color::brighter)
 										.toArray(Color[]::new)
 						)
-						.setChartBackgroundColor(new Color(165, 155, 182));
+						.setChartBackgroundColor(new Color(182, 177, 154));
 
-				long total = exceeds.stream().mapToLong(Exceed::getExp).sum();
 				for (Exceed ex : exceeds) {
 					chart.addSeries(ex.getExceed().getName(),
 							List.of("Pontuação Total (x1000)"),
-							List.of(ex.getExp() / 1000)
+							List.of(ex.getExp() / 1000d)
 					);
 				}
 
