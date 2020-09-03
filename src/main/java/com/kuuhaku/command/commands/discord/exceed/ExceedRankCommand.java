@@ -83,6 +83,8 @@ public class ExceedRankCommand extends Command {
 						.build();
 
 				chart.getStyler()
+						.setYAxisMax(100d)
+						.setYAxisMin(-5d)
 						.setLegendPosition(Styler.LegendPosition.InsideNE)
 						.setSeriesColors(
 								exceeds.stream()
