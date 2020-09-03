@@ -84,7 +84,7 @@ public class SellCardCommand extends Command {
 		}
 
 		int price = Integer.parseInt(args[2]);
-		int min = c.getRarity().getIndex() * 150 * (foil ? 2 : 1);
+		int min = c.getRarity().getIndex() * 200 * (foil ? 2 : 1);
 
 		if (price < min) {
 			channel.sendMessage("❌ | Você não pode vender essa carta por menos que " + min + " créditos.").queue();

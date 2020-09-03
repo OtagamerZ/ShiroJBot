@@ -36,7 +36,6 @@ import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
 import java.awt.*;
-import java.time.LocalDateTime;
 
 @RestController
 public class DiscordBotsListHandler {
@@ -47,10 +46,10 @@ public class DiscordBotsListHandler {
 
 		JSONObject body = new JSONObject(payload);
 
-		int credit = body.getBoolean("isWeekend") ? 375 : 187 + (LocalDateTime.now().getDayOfYear() % 2 == 0 ? 1 : 0);
+		int credit = body.getBoolean("isWeekend") ? 350 : 175;
 
 		Account acc = AccountDAO.getAccount(body.getString("user"));
-	
+
 		if (!body.getString("type").equals("test")) {
 			acc.addCredit(credit + (50 * (acc.getStreak() + 1)), this.getClass());
 			acc.voted();
