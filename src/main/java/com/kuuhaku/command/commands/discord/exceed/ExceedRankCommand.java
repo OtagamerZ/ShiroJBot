@@ -32,7 +32,6 @@ import org.jetbrains.annotations.NonNls;
 import org.knowm.xchart.BitmapEncoder;
 import org.knowm.xchart.CategoryChart;
 import org.knowm.xchart.CategoryChartBuilder;
-import org.knowm.xchart.CategorySeries;
 import org.knowm.xchart.style.Styler;
 
 import javax.imageio.ImageIO;
@@ -81,7 +80,6 @@ public class ExceedRankCommand extends Command {
 						.build();
 
 				chart.getStyler()
-						.setDefaultSeriesRenderStyle(CategorySeries.CategorySeriesRenderStyle.SteppedBar)
 						.setLegendPosition(Styler.LegendPosition.InsideNE)
 						.setHasAnnotations(true)
 						.setSeriesColors(
