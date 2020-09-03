@@ -30,8 +30,9 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 import org.knowm.xchart.BitmapEncoder;
-import org.knowm.xchart.DialChart;
-import org.knowm.xchart.DialChartBuilder;
+import org.knowm.xchart.PieChart;
+import org.knowm.xchart.PieChartBuilder;
+import org.knowm.xchart.PieSeries;
 import org.knowm.xchart.style.Styler;
 
 import javax.imageio.ImageIO;
@@ -73,13 +74,14 @@ public class ExceedRankCommand extends Command {
 					exceeds.add(ExceedDAO.getExceed(ex));
 				}
 
-				DialChart chart = new DialChartBuilder()
+				PieChart chart = new PieChartBuilder()
 						.width(800)
 						.height(600)
 						.title("Pontuação dos Exceeds")
 						.build();
 
 				chart.getStyler()
+						.setDefaultSeriesRenderStyle(PieSeries.PieSeriesRenderStyle.Donut)
 						.setLegendPosition(Styler.LegendPosition.InsideNE)
 						.setHasAnnotations(true)
 						.setSeriesColors(
@@ -93,8 +95,7 @@ public class ExceedRankCommand extends Command {
 				long total = exceeds.stream().mapToLong(Exceed::getExp).sum();
 				for (Exceed ex : exceeds) {
 					chart.addSeries(ex.getExceed().getName(),
-							ex.getExp() / (double) total,
-							"Pontuação total"
+							ex.getExp()
 					);
 				}
 
