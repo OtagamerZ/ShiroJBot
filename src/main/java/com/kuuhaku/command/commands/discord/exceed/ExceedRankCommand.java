@@ -88,19 +88,14 @@ public class ExceedRankCommand extends Command {
 								exceeds.stream()
 										.map(Exceed::getExceed)
 										.map(ExceedEnum::getPalette)
+										.map(Color::brighter)
 										.toArray(Color[]::new)
 						);
 
 				for (Exceed ex : exceeds) {
 					chart.addSeries(ex.getExceed().getName(),
-							List.of(
-									"Pontuação total",
-									"Pontos de influência (PDI)"
-							),
-							List.of(
-									ex.getExp() / 1000,
-									ex.getIp() / 1000
-							)
+							List.of("Pontuação total"),
+							List.of(ex.getExp() / 1000)
 					);
 				}
 
