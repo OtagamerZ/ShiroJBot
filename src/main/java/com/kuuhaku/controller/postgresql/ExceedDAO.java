@@ -132,7 +132,7 @@ public class ExceedDAO {
 		Query q = em.createQuery("SELECT m FROM Member m INNER JOIN ExceedMember ex ON m.mid = ex.id WHERE ex.exceed = :exceed", Member.class);
 		q.setParameter("exceed", ex.getName());
 
-		Query points = em.createNativeQuery("SELECT points, added FROM shiro.\"GetExceedRanking\" WHERE exceed = :exceed");
+		Query points = em.createNativeQuery("SELECT points FROM shiro.\"GetExceedRanking\" WHERE exceed = :exceed");
 		points.setParameter("exceed", ex.getName());
 
 		List<Member> members = (List<Member>) q.getResultList();
@@ -162,10 +162,7 @@ public class ExceedDAO {
 			}
 
 		try {
-			return new Exceed(ex, members.size(),
-					((BigDecimal) ((Object[]) points.getSingleResult())[0]).longValue() - offset,
-					((BigDecimal) ((Object[]) points.getSingleResult())[1]).longValue()
-			);
+			return new Exceed(ex, members.size(), ((BigDecimal) points.getSingleResult()).longValue() - offset);
 		} finally {
 			em.close();
 		}

@@ -24,13 +24,11 @@ public class Exceed {
 	private final ExceedEnum exceed;
 	private final int members;
 	private final long exp;
-	private final long ip;
 
-	public Exceed(ExceedEnum exceed, int members, long exp, long ip) {
+	public Exceed(ExceedEnum exceed, int members, long exp) {
 		this.exceed = exceed;
 		this.members = members;
 		this.exp = exp;
-		this.ip = ip;
 	}
 
 	public ExceedEnum getExceed() {
@@ -43,9 +41,5 @@ public class Exceed {
 
 	public long getExp() {
 		return exp;
-	}
-
-	public long getIp() {
-		return ip;
 	}
 }
