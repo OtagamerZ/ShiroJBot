@@ -66,7 +66,7 @@ public class CatchKawaiponCommand extends TwitchCommand {
 			return;
 		}
 
-		int cost = kc.getCard().getRarity().getIndex() * 300 * (kc.isFoil() ? 2 : 1);
+		int cost = kc.getCard().getRarity().getIndex() * 400 * (kc.isFoil() ? 2 : 1);
 		if (acc.getBalance() < cost) {
 			chat.sendMessage(channel.getName(), ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user"));
 			return;
