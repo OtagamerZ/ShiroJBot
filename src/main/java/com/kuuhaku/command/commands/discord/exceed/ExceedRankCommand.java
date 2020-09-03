@@ -96,7 +96,7 @@ public class ExceedRankCommand extends Command {
 				for (Exceed ex : exceeds) {
 					chart.addSeries(ex.getExceed().getName(),
 							List.of("Pontuação Total"),
-							List.of(ex.getExp())
+							List.of(ex.getExp() / (double) total * 100)
 					);
 				}
 
