@@ -83,7 +83,6 @@ public class ExceedRankCommand extends Command {
 						.build();
 
 				chart.getStyler()
-						.setYAxisMax(100d)
 						.setLegendPosition(Styler.LegendPosition.InsideNE)
 						.setSeriesColors(
 								exceeds.stream()
@@ -92,14 +91,13 @@ public class ExceedRankCommand extends Command {
 										.map(Color::brighter)
 										.toArray(Color[]::new)
 						)
-						.setChartBackgroundColor(new Color(165, 155, 182))
-						.setPlotBackgroundColor(new Color(183, 179, 191));
+						.setChartBackgroundColor(new Color(165, 155, 182));
 
 				long total = exceeds.stream().mapToLong(Exceed::getExp).sum();
 				for (Exceed ex : exceeds) {
 					chart.addSeries(ex.getExceed().getName(),
-							List.of("Pontuação Total"),
-							List.of(ex.getExp() / (double) total * 100)
+							List.of("Pontuação Total (x1000)"),
+							List.of(ex.getExp() / 1000)
 					);
 				}
 
