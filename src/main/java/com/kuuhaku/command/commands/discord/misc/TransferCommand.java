@@ -18,9 +18,11 @@
 
 package com.kuuhaku.command.commands.discord.misc;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
@@ -62,15 +64,19 @@ public class TransferCommand extends Command {
 			return;
 		}
 
+
 		Account from = AccountDAO.getAccount(author.getId());
 		Account to = AccountDAO.getAccount(message.getMentionedUsers().get(0).getId());
 
-		int amount = Integer.parseInt(args[0]);
+		boolean victorious = ExceedDAO.hasExceed(author.getId()) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(author.getId()));
+		int rawAmount = Integer.parseInt(args[0]);
+		int tax = victorious ? 0 : (int) Math.floor(rawAmount * 0.05);
+		int liquidAmount = rawAmount - tax;
 
-		if (from.getBalance() < amount) {
+		if (from.getBalance() < rawAmount) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 			return;
-		} else if (amount <= 0) {
+		} else if (rawAmount <= 0) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-transfer-negative-or-zero")).queue();
 			return;
 		} else if (from.getLoan() > 0) {
@@ -78,12 +84,15 @@ public class TransferCommand extends Command {
 			return;
 		}
 
-		to.addCredit(amount, this.getClass());
-		from.removeCredit(amount, this.getClass());
+		to.addCredit(liquidAmount, this.getClass());
+		from.removeCredit(rawAmount, this.getClass());
 
 		AccountDAO.saveAccount(to);
 		AccountDAO.saveAccount(from);
 
-		channel.sendMessage(":white_check_mark: | Créditos transferidos com sucesso!").queue();
+		if (victorious)
+			channel.sendMessage(":white_check_mark: | " + liquidAmount + " créditos transferidos com sucesso! (Exceed vitorioso isento de taxa)").queue();
+		else
+			channel.sendMessage(":white_check_mark: | " + liquidAmount + " créditos transferidos com sucesso! (Taxa de transferência: " + tax + " créditos)").queue();
 	}
 }

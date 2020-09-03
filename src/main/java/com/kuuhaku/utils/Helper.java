@@ -1024,7 +1024,7 @@ public class Helper {
 			eb.setAuthor("Uma carta " + c.getRarity().toString().toUpperCase() + " Kawaipon apareceu neste servidor!");
 			eb.setTitle(kc.getName() + " (" + c.getAnime().toString() + ")");
 			eb.setColor(colorThief(img));
-			eb.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + (c.getRarity().getIndex() * 300 * (foil ? 2 : 1)) + " créditos).", null);
+			eb.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + (c.getRarity().getIndex() * 400 * (foil ? 2 : 1)) + " créditos).", null);
 
 			if (gc.getCanalKawaipon() == null || gc.getCanalKawaipon().isEmpty()) {
 				channel.sendMessage(eb.build()).addFile(getBytes(img, "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
@@ -1051,7 +1051,7 @@ public class Helper {
 			KawaiponCard kc = new KawaiponCard(c, foil);
 
 			chat.sendMessage(channel.getName(),
-					"FootYellow | " + kc.getName() + " (" + c.getRarity().toString() + " | " + c.getAnime().toString() + ") | Digite \"s!coletar\" para adquirir esta carta (necessário: " + (c.getRarity().getIndex() * 300 * (foil ? 2 : 1)) + " créditos)."
+					"FootYellow | " + kc.getName() + " (" + c.getRarity().toString() + " | " + c.getAnime().toString() + ") | Digite \"s!coletar\" para adquirir esta carta (necessário: " + (c.getRarity().getIndex() * 400 * (foil ? 2 : 1)) + " créditos)."
 			);
 			Main.getInfo().getCurrentCard().put("twitch", kc);
 		}

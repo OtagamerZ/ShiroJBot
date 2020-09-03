@@ -121,7 +121,7 @@ public class BuyCardCommand extends Command {
 					.filter(cm -> byRarity.get() == null || byRarity.get().equals(cm.getCard().getCard().getRarity()))
 					.filter(cm -> byAnime.get() == null || byAnime.get().equals(cm.getCard().getCard().getAnime()))
 					.filter(cm -> !onlyFoil.get() || cm.getCard().isFoil())
-					.filter(cm -> onlyMine.get() ? cm.getSeller().equals(author.getId()) : cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * 300 * 50 * (cm.getCard().isFoil() ? 2 : 1)))
+					.filter(cm -> onlyMine.get() ? cm.getSeller().equals(author.getId()) : cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * 400 * 50 * (cm.getCard().isFoil() ? 2 : 1)))
 					.sorted(Comparator
 							.comparingInt(CardMarket::getPrice)
 							.thenComparing(k -> k.getCard().isFoil(), Comparator.reverseOrder())
@@ -136,7 +136,7 @@ public class BuyCardCommand extends Command {
 					User seller = Main.getInfo().getUserByID(cm.getSeller());
 					eb.addField(
 							"`ID: " + cm.getId() + "` | " + cm.getCard().getName() + " (" + cm.getCard().getCard().getRarity().toString() + ")",
-							"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: **" + (cm.getPrice() > (cm.getCard().getCard().getRarity().getIndex() * 300 * 50 * (cm.getCard().isFoil() ? 2 : 1)) ? "`valor muito alto`**" : cm.getPrice() + "** créditos"),
+							"Por " + (seller == null ? "Desconhecido" : seller.getName()) + " | Preço: **" + (cm.getPrice() > (cm.getCard().getCard().getRarity().getIndex() * 400 * 50 * (cm.getCard().isFoil() ? 2 : 1)) ? "`valor muito alto`**" : cm.getPrice() + "** créditos"),
 							false
 					);
 				}
