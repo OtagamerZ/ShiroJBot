@@ -135,7 +135,7 @@ public class ExceedDAO {
 		Query q = em.createQuery("SELECT m FROM Member m INNER JOIN ExceedMember ex ON m.mid = ex.id WHERE ex.exceed = :exceed", Member.class);
 		q.setParameter("exceed", ex.getName());
 
-		Query points = em.createNativeQuery("SELECT e.points FROM shiro.\"GetCurrentExceedScores\" WHERE e.exceed = :exceed");
+		Query points = em.createNativeQuery("SELECT e.points FROM shiro.\"GetCurrentExceedScores\" e WHERE e.exceed = :exceed");
 		points.setParameter("exceed", ex.getName());
 
 		List<Member> members = (List<Member>) q.getResultList();
@@ -191,23 +191,6 @@ public class ExceedDAO {
 			}
 		} catch (NoResultException | IndexOutOfBoundsException e) {
 			return "none";
-		} finally {
-			em.close();
-		}
-	}
-
-	public static MonthWinner getLatestRanking() {
-		EntityManager em = Manager.getEntityManager();
-
-		Query q = em.createQuery("SELECT w FROM MonthWinner w ORDER BY id DESC", MonthWinner.class);
-		q.setMaxResults(1);
-
-		try {
-			MonthWinner winner = (MonthWinner) q.getSingleResult();
-
-			return winner;
-		} catch (NoResultException | IndexOutOfBoundsException e) {
-			return null;
 		} finally {
 			em.close();
 		}
