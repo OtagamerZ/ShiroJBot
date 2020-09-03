@@ -110,7 +110,7 @@ public class ExceedRankCommand extends Command {
 										.map(e -> e.getTimestamp().getMonthValue())
 										.collect(Collectors.toList()),
 								ex.stream()
-										.map(e -> e.getPoints() / 1000)
+										.map(e -> Math.round(e.getPoints() / 1000d))
 										.collect(Collectors.toList())
 						);
 					}
@@ -147,7 +147,7 @@ public class ExceedRankCommand extends Command {
 					for (Exceed ex : exceeds) {
 						chart.addSeries(ex.getExceed().getName(),
 								List.of("Pontos Totais"),
-								List.of(ex.getExp())
+								List.of(Math.round(ex.getExp() / 1000d))
 						);
 					}
 
