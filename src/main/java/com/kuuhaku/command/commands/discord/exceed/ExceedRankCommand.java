@@ -21,8 +21,8 @@ package com.kuuhaku.command.commands.discord.exceed;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
-import com.kuuhaku.model.common.Exceed;
 import com.kuuhaku.model.common.Profile;
+import com.kuuhaku.model.persistent.ExceedScore;
 import com.kuuhaku.utils.ExceedEnum;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
@@ -30,17 +30,19 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 import org.knowm.xchart.BitmapEncoder;
-import org.knowm.xchart.PieChart;
-import org.knowm.xchart.PieChartBuilder;
+import org.knowm.xchart.XYChart;
+import org.knowm.xchart.XYChartBuilder;
 import org.knowm.xchart.style.Styler;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class ExceedRankCommand extends Command {
 
@@ -69,36 +71,46 @@ public class ExceedRankCommand extends Command {
 			}
 
 			try {
-				List<Exceed> exceeds = new ArrayList<>();
+				List<List<ExceedScore>> exceeds = new ArrayList<>();
+				List<Color> colors = new ArrayList<>();
 				for (ExceedEnum ex : ExceedEnum.values()) {
-					exceeds.add(ExceedDAO.getExceed(ex));
+					exceeds.add(ExceedDAO.getExceedHistory(ex));
+					colors.add(ex.getPalette());
 				}
 
-				exceeds.sort(Comparator.comparingLong(Exceed::getExp).reversed());
-
-				PieChart chart = new PieChartBuilder()
+				XYChart chart = new XYChartBuilder()
 						.width(800)
 						.height(600)
 						.title("Ranking dos Exceeds")
 						.build();
 
+
 				chart.getStyler()
-						.setLegendPosition(Styler.LegendPosition.InsideNE)
-						.setHasAnnotations(true)
-						.setAnnotationsFont(new Font("Arial", Font.BOLD, 12))
+						.setPlotGridLinesColor(Color.decode("#404447"))
+						.setXAxisMin(1d)
+						.setXAxisMax(12d)
+						.setAxisTickLabelsColor(Color.WHITE)
 						.setAnnotationsFontColor(Color.WHITE)
-						.setSeriesColors(
-								exceeds.stream()
-										.map(Exceed::getExceed)
-										.map(ExceedEnum::getPalette)
-										.toArray(Color[]::new)
-						)
-						.setChartBackgroundColor(new Color(182, 177, 154));
+						.setChartFontColor(Color.WHITE)
+						.setLegendPosition(Styler.LegendPosition.InsideNE)
+						.setSeriesColors(colors.toArray(Color[]::new))
+						.setPlotBackgroundColor(Color.decode("#202225"))
+						.setChartBackgroundColor(Color.decode("#101114"))
+						.setLegendBackgroundColor(Color.decode("#101114"))
+						.setSeriesLines(Collections.nCopies(6, new BasicStroke(4, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND)).toArray(BasicStroke[]::new));
 
-				chart.getStyler().setAnnotationDistance(0.8);
+				for (List<ExceedScore> ex : exceeds) {
+					ExceedEnum ee = ex.get(0).getExceed();
+					ex.add(new ExceedScore(ee, ExceedDAO.getExceed(ee).getExp(), LocalDate.now()));
 
-				for (Exceed ex : exceeds) {
-					chart.addSeries(ex.getExceed().getName(), ex.getExp());
+					chart.addSeries(ee.getName(),
+							ex.stream()
+									.map(e -> e.getTimestamp().getMonthValue())
+									.collect(Collectors.toList()),
+							ex.stream()
+									.map(ExceedScore::getPoints)
+									.collect(Collectors.toList())
+					);
 				}
 
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
