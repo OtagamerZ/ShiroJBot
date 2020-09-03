@@ -94,6 +94,8 @@ public class ExceedRankCommand extends Command {
 						)
 						.setChartBackgroundColor(new Color(182, 177, 154));
 
+				chart.getStyler().setAnnotationDistance(1.2);
+
 				for (Exceed ex : exceeds) {
 					chart.addSeries(ex.getExceed().getName(), ex.getExp());
 				}
