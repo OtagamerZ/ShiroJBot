@@ -78,7 +78,7 @@ public class ExceedRankCommand extends Command {
 						.height(600)
 						.title("Pontuação dos Exceeds")
 						.xAxisTitle("Exceed")
-						.yAxisTitle("Pontos")
+						.yAxisTitle("Pontos (x1000)")
 						.build();
 
 				chart.getStyler()
@@ -98,8 +98,8 @@ public class ExceedRankCommand extends Command {
 									"Pontos de influência (PDI)"
 							),
 							List.of(
-									ex.getExp(),
-									ex.getIp()
+									ex.getExp() / 1000,
+									ex.getIp() / 1000
 							)
 					);
 				}
