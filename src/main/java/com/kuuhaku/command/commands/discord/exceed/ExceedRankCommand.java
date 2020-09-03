@@ -29,17 +29,17 @@ import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
+import org.knowm.xchart.BitmapEncoder;
+import org.knowm.xchart.CategoryChart;
+import org.knowm.xchart.CategoryChartBuilder;
+import org.knowm.xchart.style.Styler;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import static com.kuuhaku.model.common.Profile.*;
 
 public class ExceedRankCommand extends Command {
 
@@ -68,54 +68,44 @@ public class ExceedRankCommand extends Command {
 			}
 
 			try {
-				BufferedImage bi = new BufferedImage(WIDTH, HEIGTH, BufferedImage.TYPE_INT_ARGB);
 				List<Exceed> exceeds = new ArrayList<>();
 				for (ExceedEnum ex : ExceedEnum.values()) {
 					exceeds.add(ExceedDAO.getExceed(ex));
 				}
 
-				BufferedImage bg = Helper.scaleImage(ImageIO.read(Helper.getImage("http://snagfilms-a.akamaihd.net/08/bd/a9131d1c48089e81990bdeafc0c4/1426-lec3-1536x865.jpg")), WIDTH, HEIGTH);
-				BufferedImage fg = ImageIO.read(Helper.getImage("https://i.imgur.com/eGLuRMb.png"));
+				CategoryChart chart = new CategoryChartBuilder()
+						.width(800)
+						.height(600)
+						.title("Pontuação dos Exceeds")
+						.xAxisTitle("Exceed")
+						.yAxisTitle("Pontos")
+						.build();
 
-				List<BufferedImage> bars = new ArrayList<>() {{
-					add(Helper.scaleImage(ImageIO.read(Helper.getImage("https://i.imgur.com/1USPoLD.jpg")), 68, 350));
-					add(Helper.scaleImage(ImageIO.read(Helper.getImage("https://i.imgur.com/HNX66NB.jpg")), 68, 350));
-					add(Helper.scaleImage(ImageIO.read(Helper.getImage("https://i.imgur.com/uCtc2Jr.jpg")), 68, 350));
-					add(Helper.scaleImage(ImageIO.read(Helper.getImage("https://i.imgur.com/otuZup3.jpg")), 68, 350));
-					add(Helper.scaleImage(ImageIO.read(Helper.getImage("https://i.imgur.com/nDIQ4ln.jpg")), 68, 350));
-					add(Helper.scaleImage(ImageIO.read(Helper.getImage("https://i.imgur.com/H725kN3.jpg")), 68, 350));
-				}};
+				chart.getStyler()
+						.setLegendPosition(Styler.LegendPosition.InsideNE)
+						.setHasAnnotations(true)
+						.setSeriesColors(
+								exceeds.stream()
+										.map(Exceed::getExceed)
+										.map(ExceedEnum::getPalette)
+										.toArray(Color[]::new)
+						);
 
-				List<String> names = new ArrayList<>() {{
-					add(ExceedEnum.IMANITY.getName());
-					add(ExceedEnum.SEIREN.getName());
-					add(ExceedEnum.WEREBEAST.getName());
-					add(ExceedEnum.ELF.getName());
-					add(ExceedEnum.EXMACHINA.getName());
-					add(ExceedEnum.FLUGEL.getName());
-				}};
-
-				Graphics2D g2d = (Graphics2D) bi.getGraphics();
-				g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				g2d.setFont(FONT.deriveFont(Font.PLAIN, 30));
-				g2d.drawImage(bg, null, 0, 0);
-				g2d.drawImage(fg, null, 0, 0);
-
-				long total = exceeds.stream().mapToLong(Exceed::getExp).sum();
-
-				for (int i = 5; i >= 0; i--) {
-					int h = (int) (10 + ((Math.max(0, exceeds.get(i).getExp()) * 100 / total) * 90 / 100)) * 358 / 100;
-					g2d.setBackground(Color.black);
-					Profile.drawRotate(g2d, 186 + (113 * i), 577 - h, -45, names.get(i));
-					g2d.setClip(new Rectangle2D.Float(152 + (113 * i), 230 + (358 - h), 68, h));
-					g2d.drawImage(bars.get(i), null, 152 + (113 * i), 230);
-					g2d.setClip(null);
+				for (Exceed ex : exceeds) {
+					chart.addSeries(ex.getExceed().getName(),
+							List.of(
+									"Pontuação total",
+									"Pontos de influência (PDI)"
+							),
+							List.of(
+									ex.getExp(),
+									ex.getIp()
+							)
+					);
 				}
 
-				g2d.dispose();
-
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				ImageIO.write(Profile.clipRoundEdges(bi), "png", baos);
+				ImageIO.write(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "png", baos);
 				channel.sendFile(baos.toByteArray(), "ranking.png").queue(s -> s.delete().queueAfter(1, TimeUnit.MINUTES));
 				m.delete().queue();
 			} catch (Exception e) {
