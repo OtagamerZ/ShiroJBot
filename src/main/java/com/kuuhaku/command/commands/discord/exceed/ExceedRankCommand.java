@@ -30,8 +30,8 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 import org.knowm.xchart.BitmapEncoder;
-import org.knowm.xchart.CategoryChart;
-import org.knowm.xchart.CategoryChartBuilder;
+import org.knowm.xchart.PieChart;
+import org.knowm.xchart.PieChartBuilder;
 import org.knowm.xchart.style.Styler;
 
 import javax.imageio.ImageIO;
@@ -76,7 +76,7 @@ public class ExceedRankCommand extends Command {
 
 				exceeds.sort(Comparator.comparingLong(Exceed::getExp).reversed());
 
-				CategoryChart chart = new CategoryChartBuilder()
+				PieChart chart = new PieChartBuilder()
 						.width(800)
 						.height(600)
 						.title("Ranking dos Exceeds")
@@ -95,10 +95,7 @@ public class ExceedRankCommand extends Command {
 						.setChartBackgroundColor(new Color(182, 177, 154));
 
 				for (Exceed ex : exceeds) {
-					chart.addSeries(ex.getExceed().getName(),
-							List.of("Pontuação Total"),
-							List.of(ex.getExp())
-					);
+					chart.addSeries(ex.getExceed().getName(), ex.getExp());
 				}
 
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
