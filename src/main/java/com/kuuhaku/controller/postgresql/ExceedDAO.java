@@ -31,7 +31,9 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class ExceedDAO {
@@ -133,37 +135,13 @@ public class ExceedDAO {
 		Query q = em.createQuery("SELECT m FROM Member m INNER JOIN ExceedMember ex ON m.mid = ex.id WHERE ex.exceed = :exceed", Member.class);
 		q.setParameter("exceed", ex.getName());
 
-		Query points = em.createNativeQuery("SELECT points FROM shiro.\"GetExceedRanking\" WHERE exceed = :exceed");
+		Query points = em.createNativeQuery("SELECT e.points FROM shiro.\"GetCurrentExceedScores\" WHERE e.exceed = :exceed");
 		points.setParameter("exceed", ex.getName());
 
 		List<Member> members = (List<Member>) q.getResultList();
 
-		long offset = 0;
-		MonthWinner ranking = getLatestRanking();
-		if (ranking != null)
-			switch (ex) {
-				case IMANITY:
-					offset = ranking.getImanityPoints();
-					break;
-				case SEIREN:
-					offset = ranking.getSeirenPoints();
-					break;
-				case WEREBEAST:
-					offset = ranking.getWerebeastPoints();
-					break;
-				case ELF:
-					offset = ranking.getElfPoints();
-					break;
-				case EXMACHINA:
-					offset = ranking.getExmachinaPoints();
-					break;
-				case FLUGEL:
-					offset = ranking.getFlugelPoints();
-					break;
-			}
-
 		try {
-			return new Exceed(ex, members.size(), ((BigDecimal) points.getSingleResult()).longValue() - offset);
+			return new Exceed(ex, members.size(), ((BigDecimal) points.getSingleResult()).longValue());
 		} finally {
 			em.close();
 		}
@@ -173,18 +151,14 @@ public class ExceedDAO {
 	public static ExceedEnum findWinner() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createNativeQuery("SELECT er.exceed, er.points FROM shiro.\"GetExceedRanking\" er ORDER BY er.points DESC");
+		Query q = em.createNativeQuery("SELECT e.exceed FROM shiro.\"GetCurrentExceedScores\" e");
 
-		List<Object[]> ex = (List<Object[]>) q.getResultList();
+		List<Object> ex = (List<Object>) q.getResultList();
 		em.close();
 
-		Map<String, Long> exs = new HashMap<>();
-		for (Object[] objects : ex)
-			exs.put(String.valueOf(objects[0]), ((BigDecimal) objects[1]).longValue() - getExceedHistory(ExceedEnum.getByName(String.valueOf(objects[0]))).get(0).getPoints());
+		Object winner = ex.get(0);
 
-		Map.Entry<String, Long> winner = exs.entrySet().stream().max(Map.Entry.comparingByValue()).orElseThrow();
-
-		return Arrays.stream(ExceedEnum.values()).filter(e -> e.name().startsWith(winner.getKey())).findFirst().orElseThrow();
+		return ExceedEnum.getByName(String.valueOf(winner));
 	}
 
 	public static void markWinner(ExceedEnum ex) {
@@ -271,7 +245,7 @@ public class ExceedDAO {
 	public static List<ExceedScore> getExceedHistory(ExceedEnum ex) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT e FROM ExceedScore e WHERE e.exceed = :ex", ExceedScore.class);
+		Query q = em.createQuery("SELECT e FROM ExceedScore e WHERE e.exceed = :ex AND YEAR(e.timestamp) = YEAR(CURRENT_DATE)", ExceedScore.class);
 		q.setParameter("ex", ex.getName());
 
 		try {
