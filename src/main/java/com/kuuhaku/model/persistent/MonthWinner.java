@@ -34,24 +34,6 @@ public class MonthWinner {
 	@Column(columnDefinition = "DATE")
 	private LocalDate expiry = LocalDate.now().plusWeeks(1);
 
-	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
-	private long imanityPoints = 0;
-
-	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
-	private long seirenPoints = 0;
-
-	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
-	private long werebeastPoints = 0;
-
-	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
-	private long elfPoints = 0;
-
-	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
-	private long exmachinaPoints = 0;
-
-	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
-	private long flugelPoints = 0;
-
 	public String getExceed() {
 		return exceed;
 	}
@@ -66,53 +48,5 @@ public class MonthWinner {
 
 	public void setExpiry(LocalDate expiry) {
 		this.expiry = expiry;
-	}
-
-	public long getImanityPoints() {
-		return imanityPoints;
-	}
-
-	public void setImanityPoints(long imanityPoints) {
-		this.imanityPoints = imanityPoints;
-	}
-
-	public long getSeirenPoints() {
-		return seirenPoints;
-	}
-
-	public void setSeirenPoints(long seirenPoints) {
-		this.seirenPoints = seirenPoints;
-	}
-
-	public long getWerebeastPoints() {
-		return werebeastPoints;
-	}
-
-	public void setWerebeastPoints(long werebeastPoints) {
-		this.werebeastPoints = werebeastPoints;
-	}
-
-	public long getElfPoints() {
-		return elfPoints;
-	}
-
-	public void setElfPoints(long elfPoints) {
-		this.elfPoints = elfPoints;
-	}
-
-	public long getExmachinaPoints() {
-		return exmachinaPoints;
-	}
-
-	public void setExmachinaPoints(long exmachinaPoints) {
-		this.exmachinaPoints = exmachinaPoints;
-	}
-
-	public long getFlugelPoints() {
-		return flugelPoints;
-	}
-
-	public void setFlugelPoints(long flugelPoints) {
-		this.flugelPoints = flugelPoints;
 	}
 }
