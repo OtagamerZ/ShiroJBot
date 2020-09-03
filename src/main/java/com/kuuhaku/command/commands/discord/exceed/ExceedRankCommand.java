@@ -83,6 +83,7 @@ public class ExceedRankCommand extends Command {
 						.build();
 
 				chart.getStyler()
+						.setYAxisLogarithmic(true)
 						.setLegendPosition(Styler.LegendPosition.InsideNE)
 						.setHasAnnotations(true)
 						.setSeriesColors(
@@ -96,8 +97,8 @@ public class ExceedRankCommand extends Command {
 
 				for (Exceed ex : exceeds) {
 					chart.addSeries(ex.getExceed().getName(),
-							List.of("Pontuação Total (x1000)"),
-							List.of(ex.getExp() / 1000d)
+							List.of("Pontuação Total"),
+							List.of(ex.getExp())
 					);
 				}
 
