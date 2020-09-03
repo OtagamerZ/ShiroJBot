@@ -78,7 +78,7 @@ public class ExceedRankCommand extends Command {
 
 				PieChart chart = new PieChartBuilder()
 						.width(800)
-						.height(600)
+						.height(800)
 						.title("Ranking dos Exceeds")
 						.build();
 
@@ -94,7 +94,9 @@ public class ExceedRankCommand extends Command {
 						)
 						.setChartBackgroundColor(new Color(182, 177, 154));
 
-				chart.getStyler().setAnnotationDistance(1.2);
+				chart.getStyler()
+						.setCircular(true)
+						.setAnnotationDistance(1.1);
 
 				for (Exceed ex : exceeds) {
 					chart.addSeries(ex.getExceed().getName(), ex.getExp());
