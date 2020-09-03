@@ -111,7 +111,6 @@ public class RatingCommand extends Command {
 	private MessageEmbed[] questions() {
 		MessageEmbed[] embeds = {null, null, null};
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
-		eb.setColor(Helper.getRandomColor());
 
 		eb.setTitle("Atendimento");
 		eb.setDescription("Que nota você daria para o suporte, considerando a interação com o usuário?");

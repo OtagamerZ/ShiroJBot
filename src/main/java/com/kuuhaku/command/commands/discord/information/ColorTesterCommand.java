@@ -20,7 +20,6 @@ package com.kuuhaku.command.commands.discord.information;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
@@ -71,7 +70,7 @@ public class ColorTesterCommand extends Command {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ImageIO.write(bi, "png", baos);
 
-			EmbedBuilder eb = new ColorlessEmbedBuilder();
+			EmbedBuilder eb = new EmbedBuilder();
 			eb.setColor(Color.decode(args[0]));
 			eb.setTitle(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_color"), args[0]));
 			eb.setThumbnail("attachment://color.png");

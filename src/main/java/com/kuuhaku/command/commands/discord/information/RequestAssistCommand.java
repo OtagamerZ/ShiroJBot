@@ -22,7 +22,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.TicketDAO;
-import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
@@ -61,7 +60,7 @@ public class RequestAssistCommand extends Command {
 		}
 
 		int number = TicketDAO.openTicket("Requisição de suporte presencial.", author);
-		EmbedBuilder eb = new ColorlessEmbedBuilder();
+		EmbedBuilder eb = new EmbedBuilder();
 
 		eb.setTitle("Requisição de auxílio (Ticket Nº " + number + ")");
 		eb.addField("ID do servidor:", guild.getId(), true);

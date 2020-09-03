@@ -23,7 +23,6 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -66,7 +65,6 @@ public class WalletCommand extends Command {
 				acc.getLastVoted(),
 				true
 		);
-		eb.setColor(Helper.getRandomColor());
 		eb.setThumbnail("https://i.imgur.com/nhWckfq.png");
 
 		channel.sendMessage(eb.build()).queue();

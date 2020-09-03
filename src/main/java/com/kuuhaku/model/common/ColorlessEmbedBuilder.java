@@ -25,12 +25,10 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.*;
 
 public class ColorlessEmbedBuilder extends EmbedBuilder {
-	private static final boolean enabled = true;
-
 	@NotNull
 	@Override
 	public MessageEmbed build() {
-		if (enabled) super.setColor(Color.decode("#2f3136"));
+		super.setColor(Color.decode("#2f3136"));
 		return super.build();
 	}
 }

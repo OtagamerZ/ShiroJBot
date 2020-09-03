@@ -53,7 +53,9 @@ public class EmbedCommand extends Command {
 			try {
 				JSONObject json = new JSONObject(String.join(" ", args));
 
-				EmbedBuilder eb = new ColorlessEmbedBuilder();
+				EmbedBuilder eb;
+				if (json.has("color")) eb = new EmbedBuilder();
+				else eb = new ColorlessEmbedBuilder();
 
 				if (json.has("title")) eb.setTitle(json.getString("title"));
 				if (json.has("color")) eb.setColor(Color.decode(json.getString("color")));

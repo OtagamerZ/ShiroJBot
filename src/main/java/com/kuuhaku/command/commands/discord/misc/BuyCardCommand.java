@@ -131,7 +131,6 @@ public class BuyCardCommand extends Command {
 					.collect(Collectors.toList());
 			for (int i = 0; i < Math.ceil(cards.size() / 10f); i++) {
 				eb.clearFields();
-				eb.setColor(Helper.getRandomColor());
 				for (int p = i * 10; p < cards.size() && p < 10 * (i + 1); p++) {
 					CardMarket cm = cards.get(p);
 					User seller = Main.getInfo().getUserByID(cm.getSeller());

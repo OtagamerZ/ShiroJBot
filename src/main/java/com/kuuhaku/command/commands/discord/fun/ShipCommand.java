@@ -101,7 +101,6 @@ public class ShipCommand extends Command {
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			eb.setImage("attachment://ship.png");
-			eb.setColor(Helper.getRandomColor());
 
 			MessageBuilder mb = new MessageBuilder();
 			mb.append(sb.toString());

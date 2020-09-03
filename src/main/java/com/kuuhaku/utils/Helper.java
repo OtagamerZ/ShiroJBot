@@ -230,6 +230,10 @@ public class Helper {
 		}
 	}
 
+	public static Color colorThief(BufferedImage image) {
+		return new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]);
+	}
+
 	public static void spawnAd(MessageChannel channel) {
 		if (Helper.rng(1000, false) > 990) {
 			channel.sendMessage("Opa, está gostando de me utilizar em seu servidor? Caso sim, se puder votar me ajudaria **MUITO** a me tornar cada vez mais popular e ser chamada para mais servidores!\nhttps://top.gg/bot/572413282653306901").queue();
@@ -428,7 +432,7 @@ public class Helper {
 				EnumSet<Permission> perms = Objects.requireNonNull(c.getGuild().getMemberById(jibril.getId())).getPermissionsExplicit(c);
 
 				jibrilPerms = "\n\n\n__**Permissões atuais da Jibril**__\n\n" +
-						perms.stream().map(p -> ":white_check_mark: -> " + p.getName() + "\n").sorted().collect(Collectors.joining());
+							  perms.stream().map(p -> ":white_check_mark: -> " + p.getName() + "\n").sorted().collect(Collectors.joining());
 			}
 		} catch (NoResultException ignore) {
 		}
@@ -437,8 +441,8 @@ public class Helper {
 		EnumSet<Permission> perms = shiro.getPermissionsExplicit(c);
 
 		return "__**Permissões atuais da Shiro**__\n\n" +
-				perms.stream().map(p -> ":white_check_mark: -> " + p.getName() + "\n").sorted().collect(Collectors.joining()) +
-				jibrilPerms;
+			   perms.stream().map(p -> ":white_check_mark: -> " + p.getName() + "\n").sorted().collect(Collectors.joining()) +
+			   jibrilPerms;
 	}
 
 	public static <T> T getOr(T get, T or) {
@@ -484,7 +488,7 @@ public class Helper {
 
 		channel.sendMessage("Link enviado no privado!").queue();
 
-		EmbedBuilder eb = new ColorlessEmbedBuilder();
+		EmbedBuilder eb = new EmbedBuilder();
 
 		eb.setThumbnail("https://img.icons8.com/cotton/2x/checkmark.png");
 		eb.setTitle("Olá, obrigada por apoiar meu desenvolvimento!");
@@ -1013,16 +1017,17 @@ public class Helper {
 			Card c = cards.get(Helper.rng(cards.size(), true));
 			boolean foil = fbUltimate || chance(0.5 * (foilBuff != null ? foilBuff.getMult() : 1));
 			KawaiponCard kc = new KawaiponCard(c, foil);
+			BufferedImage img = c.drawCard(foil);
 
-			EmbedBuilder eb = new ColorlessEmbedBuilder();
+			EmbedBuilder eb = new EmbedBuilder();
 			eb.setImage("attachment://kawaipon.png");
 			eb.setAuthor("Uma carta " + c.getRarity().toString().toUpperCase() + " Kawaipon apareceu neste servidor!");
 			eb.setTitle(kc.getName() + " (" + c.getAnime().toString() + ")");
-			eb.setColor(getRandomColor());
+			eb.setColor(colorThief(img));
 			eb.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + (c.getRarity().getIndex() * 300 * (foil ? 2 : 1)) + " créditos).", null);
 
 			if (gc.getCanalKawaipon() == null || gc.getCanalKawaipon().isEmpty()) {
-				channel.sendMessage(eb.build()).addFile(getBytes(c.drawCard(foil), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+				channel.sendMessage(eb.build()).addFile(getBytes(img, "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
 			} else {
 				TextChannel tc = channel.getGuild().getTextChannelById(gc.getCanalKawaipon());
 
@@ -1065,7 +1070,6 @@ public class Helper {
 			eb.setTitle("Um drop apareceu neste servidor!");
 			eb.addField("Conteúdo:", drop.getPrize() + " créditos", true);
 			eb.addField("Código captcha:", "||" + drop.getCaptcha() + "||", true);
-			eb.setColor(getRandomColor());
 			eb.setFooter("Digite `" + gc.getPrefix() + "abrir` para receber o prêmio (requisitos: " + drop.getRequirement().getKey() + ").", null);
 
 			if (gc.getCanalDrop() == null || gc.getCanalDrop().isEmpty()) {

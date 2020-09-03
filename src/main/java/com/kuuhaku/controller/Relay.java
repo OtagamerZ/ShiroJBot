@@ -108,7 +108,9 @@ public class Relay {
 
 		String exceed = ExceedDAO.getExceed(m.getId());
 
-		EmbedBuilder eb = new ColorlessEmbedBuilder();
+		EmbedBuilder eb;
+		if (s.getIconUrl() != null) eb = new EmbedBuilder();
+		else eb = new ColorlessEmbedBuilder();
 		eb.setDescription(Helper.makeEmoteFromMention(msg.split(" ")) + "\n\n");
 		eb.setImage("attachment://image.png");
 		eb.setAuthor("(" + s.getName() + ") " + (exceed.isEmpty() ? "" : "[" + exceed + "] ") + m.getUser().getName(), s.getIconUrl(), s.getIconUrl());
@@ -116,8 +118,7 @@ public class Relay {
 		eb.setFooter(m.getUser().getId(), "http://icons.iconarchive.com/icons/killaaaron/adobe-cc-circles/1024/Adobe-Id-icon.png");
 		try {
 			eb.setColor(Helper.colorThief(s.getIconUrl()));
-		} catch (IOException e) {
-			eb.setColor(Helper.getRandomColor());
+		} catch (IOException ignore) {
 		}
 
 		StringBuilder badges = new StringBuilder();
@@ -195,15 +196,15 @@ public class Relay {
 		updateRelays();
 		checkSize();
 
-		EmbedBuilder eb = new ColorlessEmbedBuilder();
+		EmbedBuilder eb = new EmbedBuilder();
+
 		eb.setDescription(gm.getContent());
 		eb.setAuthor(gm.getName(), "https://www.pngkey.com/png/full/334-3346073_no-game-no-life-icon.png", "https://www.pngkey.com/png/full/334-3346073_no-game-no-life-icon.png");
 		eb.setThumbnail(RelayBlockList.checkThumb(gm.getUserId()) ? "https://i.pinimg.com/originals/46/15/87/461587d51087bfdf8906149d356f972f.jpg" : gm.getAvatar());
 		eb.setFooter(gm.getUserId(), "http://icons.iconarchive.com/icons/killaaaron/adobe-cc-circles/1024/Adobe-Id-icon.png");
 		try {
 			eb.setColor(Helper.colorThief(gm.getAvatar()));
-		} catch (IOException e) {
-			eb.setColor(Helper.getRandomColor());
+		} catch (IOException ignore) {
 		}
 
 		eb.addField("Enviado via dashboard", "", false);
@@ -264,7 +265,6 @@ public class Relay {
 		eb.addField(":busts_in_silhouette: Clientes conectados: " + relays.size(), "Canal relay: " + (gc.getCanalRelay() == null ? "Não configurado" : Objects.requireNonNull(Main.getInfo().getGuildByID(gc.getGuildID()).getTextChannelById(gc.getCanalRelay())).getAsMention()), false);
 		eb.addField("Modo:", gc.isLiteMode() ? "Lite" : "Normal", true);
 		eb.addField("Imagens:", gc.isAllowImg() ? "Permitidas" : "Negadas", true);
-		eb.setColor(Helper.getRandomColor());
 
 		return eb.build();
 	}

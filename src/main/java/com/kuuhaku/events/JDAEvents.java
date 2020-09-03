@@ -29,7 +29,6 @@ import com.kuuhaku.model.persistent.PermaBlock;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
-import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
@@ -48,7 +47,6 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -123,10 +121,10 @@ public class JDAEvents extends ListenerAdapter {
 				con.setRequestProperty("User-Agent", "Mozilla/5.0");
 				BufferedImage image = ImageIO.read(con.getInputStream());
 
-				EmbedBuilder eb = new ColorlessEmbedBuilder();
+				EmbedBuilder eb = new EmbedBuilder();
 
 				eb.setAuthor(event.getUser().getAsTag(), event.getUser().getAvatarUrl(), event.getUser().getAvatarUrl());
-				eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
+				eb.setColor(Helper.colorThief(image));
 				eb.setDescription(gc.getMsgBoasVindas().replace("%user%", event.getUser().getName()).replace("%guild%", event.getGuild().getName()));
 				eb.setThumbnail(event.getUser().getAvatarUrl());
 				eb.setFooter("ID do usuário: " + event.getUser().getId(), event.getGuild().getIconUrl());
@@ -175,10 +173,10 @@ public class JDAEvents extends ListenerAdapter {
 
 				int rmsg = (int) (Math.random() * 5);
 
-				EmbedBuilder eb = new ColorlessEmbedBuilder();
+				EmbedBuilder eb = new EmbedBuilder();
 
 				eb.setAuthor(event.getUser().getAsTag(), event.getUser().getAvatarUrl(), event.getUser().getAvatarUrl());
-				eb.setColor(new Color(ColorThief.getColor(image)[0], ColorThief.getColor(image)[1], ColorThief.getColor(image)[2]));
+				eb.setColor(Helper.colorThief(image));
 				eb.setThumbnail(event.getUser().getAvatarUrl());
 				eb.setDescription(gc.getMsgAdeus().replace("%user%", event.getUser().getName()).replace("%guild%", event.getGuild().getName()));
 				eb.setFooter("ID do usuário: " + event.getUser().getId() + "\n\nServidor gerenciado por " + Objects.requireNonNull(event.getGuild().getOwner()).getEffectiveName(), event.getGuild().getOwner().getUser().getAvatarUrl());

@@ -110,7 +110,6 @@ public class KGotchiCommand extends Command {
 					f.forEach(eb::addField);
 					eb.setThumbnail(t.getIcon());
 					eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
-					eb.setColor(Helper.getRandomColor());
 
 					pages.put(t.getButton(), new Page(PageType.EMBED, eb.build()));
 				});
@@ -126,7 +125,7 @@ public class KGotchiCommand extends Command {
 				}
 
 				BufferedImage bi = k.getRace().extract(k.getStance(), k.getSkin());
-				EmbedBuilder eb = new ColorlessEmbedBuilder();
+				EmbedBuilder eb = new EmbedBuilder();
 				Graphics2D g2d = bi.createGraphics();
 				switch (k.feed(f)) {
 					case FAILED:
@@ -191,7 +190,7 @@ public class KGotchiCommand extends Command {
 			}
 		} else if (Helper.equalsAny(args[0], "brincar", "play")) {
 			BufferedImage bi = k.getRace().extract(k.getStance(), k.getSkin());
-			EmbedBuilder eb = new ColorlessEmbedBuilder();
+			EmbedBuilder eb = new EmbedBuilder();
 			Graphics2D g2d = bi.createGraphics();
 			switch (k.play()) {
 				case FAILED:
@@ -226,7 +225,7 @@ public class KGotchiCommand extends Command {
 			sendEmbed(channel, k, bi, eb);
 		} else if (Helper.equalsAny(args[0], "treinar", "train")) {
 			BufferedImage bi = k.getRace().extract(k.getStance(), k.getSkin());
-			EmbedBuilder eb = new ColorlessEmbedBuilder();
+			EmbedBuilder eb = new EmbedBuilder();
 			Graphics2D g2d = bi.createGraphics();
 			switch (k.train()) {
 				case FAILED:
@@ -282,7 +281,6 @@ public class KGotchiCommand extends Command {
 								v.forEach(eb::addField);
 								eb.setThumbnail(t.getIcon());
 								eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
-								eb.setColor(Helper.getRandomColor());
 
 								pages.put(t.getButton(), new Page(PageType.EMBED, eb.build()));
 							});
@@ -327,7 +325,6 @@ public class KGotchiCommand extends Command {
 								f.forEach(eb::addField);
 								eb.setThumbnail(t.getIcon());
 								eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
-								eb.setColor(Helper.getRandomColor());
 
 								pages.put(t.getButton(), new Page(PageType.EMBED, eb.build()));
 							});
