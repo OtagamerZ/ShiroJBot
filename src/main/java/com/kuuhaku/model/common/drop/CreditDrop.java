@@ -49,7 +49,7 @@ public class CreditDrop implements Prize {
 			1 + Helper.rng((int) CardDAO.totalCards() - 1, false),
 			Helper.rng(MemberDAO.getHighestLevel() / 2, false)
 	};
-	private final int amount = Helper.clamp(Helper.rng(1000, false), 150, 1000);
+	private final int amount = Helper.clamp(Helper.rng(1000, false), 150, 750);
 	private final List<Pair<String, Function<User, Boolean>>> requirement = new ArrayList<>() {{
 		add(Pair.of("Ter " + values[2] + " carta" + (values[2] != 1 ? "s" : "") + " ou mais.", u ->
 				KawaiponDAO.getKawaipon(u.getId()).getCards().size() >= values[2]));
