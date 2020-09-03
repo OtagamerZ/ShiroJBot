@@ -78,25 +78,24 @@ public class ExceedRankCommand extends Command {
 
 				PieChart chart = new PieChartBuilder()
 						.width(800)
-						.height(800)
+						.height(600)
 						.title("Ranking dos Exceeds")
 						.build();
 
 				chart.getStyler()
 						.setLegendPosition(Styler.LegendPosition.InsideNE)
 						.setHasAnnotations(true)
+						.setAnnotationsFont(new Font("Arial", Font.BOLD, 12))
+						.setAnnotationsFontColor(Color.WHITE)
 						.setSeriesColors(
 								exceeds.stream()
 										.map(Exceed::getExceed)
 										.map(ExceedEnum::getPalette)
-										.map(Color::brighter)
 										.toArray(Color[]::new)
 						)
 						.setChartBackgroundColor(new Color(182, 177, 154));
 
-				chart.getStyler()
-						.setCircular(true)
-						.setAnnotationDistance(1.1);
+				chart.getStyler().setAnnotationDistance(0.8);
 
 				for (Exceed ex : exceeds) {
 					chart.addSeries(ex.getExceed().getName(), ex.getExp());
