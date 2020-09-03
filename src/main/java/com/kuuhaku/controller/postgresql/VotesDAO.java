@@ -109,7 +109,6 @@ public class VotesDAO {
 			subF.forEach(eb::addField);
 
 			eb.setTitle("Pontuação de usuários deste servidor");
-			eb.setColor(Helper.getRandomColor());
 			eb.setFooter("Página " + (i + 1) + ". Mostrando " + (-10 + 10 * (i + 1)) + " - " + (Math.min(10 * (i + 1), f.size())) + " usuários.", null);
 
 			pages.add(new Page(PageType.TEXT, eb.build()));

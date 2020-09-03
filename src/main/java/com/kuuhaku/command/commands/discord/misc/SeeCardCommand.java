@@ -23,7 +23,6 @@ import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.RarityColorsDAO;
-import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
@@ -92,7 +91,7 @@ public class SeeCardCommand extends Command {
 				cards.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
 		}
 
-		EmbedBuilder eb = new ColorlessEmbedBuilder();
+		EmbedBuilder eb = new EmbedBuilder();
 
 		eb.setTitle((foil ? ":star2:" : ":flower_playing_cards:") + " | " + card.getName());
 		eb.setColor(RarityColorsDAO.getColor(tc.getRarity()).getPrimary());

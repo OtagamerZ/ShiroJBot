@@ -67,7 +67,6 @@ public class SlotsCommand extends Command {
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
 		if (args.length == 0) {
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
-			eb.setColor(Helper.getRandomColor());
 			eb.setDescription(prizeTable());
 			eb.setTitle("Tabela de prêmios");
 			eb.setFooter("Use `" + prefix + "slots VALOR` para jogar (Valor mínimo: 25 créditos. Para utilizar as 5 casas da roleta, aposte 500 créditos ou mais)");

@@ -89,13 +89,11 @@ public class TrackScheduler extends AudioEventAdapter {
 			try {
 				AudioTrackInfo ati = player.getPlayingTrack().getInfo();
 
-				eb.setColor(Helper.getRandomColor());
 				eb.setDescription("Tocando agora: [" + ati.title + "](" + ati.uri + ") (" + Helper.toDuration(ati.length) + ")");
 				eb.setFooter("Autor: " + ati.author + ". Requisitado por: " + ((User) player.getPlayingTrack().getUserData()).getAsTag());
 
 				channel.sendMessage(eb.build()).queue(null);
 			} catch (Exception e) {
-				eb.setColor(Helper.getRandomColor());
 				eb.setTitle("Fila de músicas encerrada, obrigada por ser mais um ouvinte da rádio Shiro FM!");
 				eb.setDescription("Se gostou das minhas funções, não deixe de votar na [minha página](https://top.gg/bot/572413282653306901).");
 

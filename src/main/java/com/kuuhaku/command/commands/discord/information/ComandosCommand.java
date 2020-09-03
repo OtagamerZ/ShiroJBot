@@ -92,7 +92,6 @@ public class ComandosCommand extends Command {
 			for (Category cat : Category.values()) {
 				EmbedBuilder ceb = new ColorlessEmbedBuilder();
 				ceb.setTitle(cat.getName());
-				ceb.setColor(Color.PINK);
 				ceb.setFooter(Main.getInfo().getFullName(), null);
 				ceb.setThumbnail(Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById(cat.getEmoteId())).getImageUrl());
 
@@ -118,7 +117,6 @@ public class ComandosCommand extends Command {
 
 			EmbedBuilder ceb = new ColorlessEmbedBuilder();
 			ceb.setTitle(ShiroInfo.getLocale(I18n.PT).getString("str_tips-and-tricks"));
-			ceb.setColor(Color.PINK);
 			ceb.setFooter(Main.getInfo().getFullName(), null);
 			ceb.setThumbnail(Objects.requireNonNull(Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById("684039810079522846")).getImageUrl()));
 
@@ -147,7 +145,6 @@ public class ComandosCommand extends Command {
 				}
 			}
 
-			eb.setColor(Color.PINK);
 			eb.setFooter(Main.getInfo().getFullName(), null);
 			eb.setThumbnail(Objects.requireNonNull(Main.getInfo().getAPI().getEmoteById(Helper.HOME)).getImageUrl());
 
@@ -156,7 +153,6 @@ public class ComandosCommand extends Command {
 		}
 
 		eb.clear();
-		eb.setColor(Color.PINK);
 		eb.setFooter(Main.getInfo().getFullName(), null);
 		eb.setThumbnail("https://images.vexels.com/media/users/3/152594/isolated/preview/d00d116b2c073ccf7f9fec677fec78e3---cone-de-ponto-de-interroga----o-quadrado-roxo-by-vexels.png");
 

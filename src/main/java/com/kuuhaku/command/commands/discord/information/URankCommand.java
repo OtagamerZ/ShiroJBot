@@ -223,7 +223,6 @@ public class URankCommand extends Command {
 		eb.setTitle(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString(SRT_USER_RANKING_TITLE), global ? ShiroInfo.getLocale(I18n.PT).getString(STR_GLOBAL) : ShiroInfo.getLocale(I18n.PT).getString(STR_LOCAL)));
 		eb.addField(aVoid, next10.toString(), false);
 		eb.setThumbnail("http://www.marquishoa.com/wp-content/uploads/2018/01/Ranking-icon.png");
-		eb.setColor(Helper.getRandomColor());
 
 		pages.add(new Page(PageType.EMBED, eb.build()));
 	}

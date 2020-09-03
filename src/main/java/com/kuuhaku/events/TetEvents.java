@@ -42,15 +42,16 @@ public class TetEvents extends ListenerAdapter {
 		List<ExceedMember> ems = ExceedDAO.getExceedMembers(ExceedEnum.getByName(ExceedDAO.getExceed(event.getAuthor().getId())));
 		ems.removeIf(em -> em.getId().equals(event.getAuthor().getId()));
 
-		EmbedBuilder eb = new ColorlessEmbedBuilder();
+		EmbedBuilder eb;
+		if (event.getAuthor().getAvatarUrl() != null) eb = new EmbedBuilder();
+		else eb = new ColorlessEmbedBuilder();
 		eb.setDescription(event.getMessage().getContentRaw());
 		eb.setAuthor(event.getAuthor().getName(), event.getAuthor().getAvatarUrl());
 		eb.setThumbnail(event.getAuthor().getAvatarUrl());
 		eb.setFooter(event.getAuthor().getId(), "http://icons.iconarchive.com/icons/killaaaron/adobe-cc-circles/1024/Adobe-Id-icon.png");
 		try {
 			eb.setColor(Helper.colorThief(event.getAuthor().getAvatarUrl()));
-		} catch (IOException e) {
-			eb.setColor(Helper.getRandomColor());
+		} catch (IOException ignore) {
 		}
 
 		ems.forEach(em -> Main.getTet().retrieveUserById(em.getId())

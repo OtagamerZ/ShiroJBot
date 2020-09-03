@@ -57,7 +57,6 @@ public class LoanCommand extends Command {
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 			eb.setTitle(":bank: | Empréstimo de créditos");
-			eb.setColor(Helper.getRandomColor());
 			eb.setThumbnail("https://image.flaticon.com/icons/png/512/1462/1462438.png");
 			eb.setDescription("Está precisando de créditos rápidos? Estão aparecendo muitas cartas que você deseja obter? Talvez seu Kawaigotchi esteja morrendo?\n" +
 							  "Não se preocupe, nós podemos resolver!\n\n" +
