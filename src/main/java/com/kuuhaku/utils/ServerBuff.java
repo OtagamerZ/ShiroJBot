@@ -24,8 +24,8 @@ import java.util.Objects;
 
 public class ServerBuff {
 	public static final Triple<Integer, Integer, Double> XP_TIER_1 = Triple.of(1, 1500, 1.5);
-	public static final Triple<Integer, Integer, Double> XP_TIER_2 = Triple.of(1, 4000, 2d);
-	public static final Triple<Integer, Integer, Double> XP_TIER_3 = Triple.of(1, 10000, 3d);
+	public static final Triple<Integer, Integer, Double> XP_TIER_2 = Triple.of(1, 4000, 1.75);
+	public static final Triple<Integer, Integer, Double> XP_TIER_3 = Triple.of(1, 10000, 2d);
 	public static final Triple<Integer, Integer, Double> CARD_TIER_1 = Triple.of(2, 1000, 1.2);
 	public static final Triple<Integer, Integer, Double> CARD_TIER_2 = Triple.of(2, 3000, 1.3);
 	public static final Triple<Integer, Integer, Double> CARD_TIER_3 = Triple.of(2, 5000, 1.4);
@@ -50,7 +50,7 @@ public class ServerBuff {
 		this.tier = tier;
 		this.id = id;
 		this.price = price;
-		this.time = tier == 1 ? 30 : tier == 2 ? 15 : tier == 3 ? 7 : 1;
+		this.time = tier == 1 ? 15 : tier == 2 ? 10 : tier == 3 ? 5 : 1;
 		this.mult = mult;
 		this.acquiredAt = System.currentTimeMillis();
 	}
@@ -59,7 +59,7 @@ public class ServerBuff {
 		this.tier = tier;
 		this.id = values.getLeft();
 		this.price = values.getMiddle();
-		this.time = tier == 1 ? 30 : tier == 2 ? 15 : tier == 3 ? 7 : 1;
+		this.time = tier == 1 ? 15 : tier == 2 ? 10 : tier == 3 ? 5 : 1;
 		this.mult = values.getRight();
 		this.acquiredAt = System.currentTimeMillis();
 	}
