@@ -26,7 +26,6 @@ import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.handlers.games.kawaigotchi.enums.Race;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
@@ -69,7 +68,6 @@ public class PurchaceKGotchiCommand extends Command {
 			//eb.addField("Escolher (2500 créditos)\n`" + prefix + "pkgotchi escolher RAÇA NOME`", "Você escolhe a raça de seu Kawaigotchi, ele ainda terá natureza e cor aleatórias.", true);
 			eb.setThumbnail("https://lens-storage.storage.googleapis.com/png/7314bb86-3d18-425c-8e95-0bebf4135060");
 			eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
-			eb.setColor(Helper.getRandomColor());
 
 			channel.sendMessage(eb.build()).queue();
 			return;
@@ -92,7 +90,7 @@ public class PurchaceKGotchiCommand extends Command {
 					};
 
 					List<Page> pages = new ArrayList<>();
-					EmbedBuilder eb = new ColorlessEmbedBuilder();
+					EmbedBuilder eb = new EmbedBuilder();
 
 					for (int i = 0; i < image.length; i++) {
 						eb.clear();
@@ -100,11 +98,6 @@ public class PurchaceKGotchiCommand extends Command {
 						eb.setTitle(title[i]);
 						eb.setDescription(description[i]);
 						eb.setThumbnail(image[i]);
-						try {
-							eb.setColor(Helper.colorThief(image[i]));
-						} catch (IOException e) {
-							eb.setColor(Helper.getRandomColor());
-						}
 
 						pages.add(new Page(PageType.EMBED, eb.build()));
 					}

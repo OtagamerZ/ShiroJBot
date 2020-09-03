@@ -24,14 +24,12 @@ import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.utils.ExceedEnum;
-import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.Tag;
 import com.kuuhaku.utils.TagIcons;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 
-import java.io.IOException;
 import java.util.Objects;
 import java.util.Set;
 
@@ -61,11 +59,6 @@ public class MyTagsCommand extends Command {
 		Set<Tag> tags = Tag.getTags(author, member);
 
 		eb.setTitle(":label: Seus emblemas");
-		try {
-			eb.setColor(Helper.colorThief(author.getAvatarUrl()));
-		} catch (IOException e) {
-			eb.setColor(Helper.getRandomColor());
-		}
 
 		StringBuilder badges = new StringBuilder();
 

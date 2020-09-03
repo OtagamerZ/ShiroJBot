@@ -72,46 +72,40 @@ public class YoutubeCommand extends Command {
 				EmbedBuilder eb = new ColorlessEmbedBuilder();
 
                 m.editMessage(":mag: Resultados da busca").queue(s -> {
-                    try {
-                        if (videos.size() > 0) {
-                            List<Page> pages = new ArrayList<>();
+					if (videos.size() > 0) {
+						List<Page> pages = new ArrayList<>();
 
-                            for (YoutubeVideo v : videos) {
-								eb.clear();
-								eb.setAuthor("Para ouvir essa música, conecte-se à um canal de voz e clique no botão ✅");
-								eb.setTitle(v.getTitle(), v.getUrl());
-								eb.setDescription(v.getDesc());
-								eb.setThumbnail(v.getThumb());
-								eb.setColor(Helper.colorThief(v.getThumb()));
-								eb.setFooter("Link: " + v.getUrl(), v.getUrl());
-								pages.add(new Page(PageType.EMBED, eb.build()));
-							}
+						for (YoutubeVideo v : videos) {
+							eb.clear();
+							eb.setAuthor("Para ouvir essa música, conecte-se à um canal de voz e clique no botão ✅");
+							eb.setTitle(v.getTitle(), v.getUrl());
+							eb.setDescription(v.getDesc());
+							eb.setThumbnail(v.getThumb());
+							eb.setFooter("Link: " + v.getUrl(), v.getUrl());
+							pages.add(new Page(PageType.EMBED, eb.build()));
+						}
 
-							channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(msg -> {
-								Pages.paginate(msg, pages, 1, TimeUnit.MINUTES, 5);
-								if (Objects.requireNonNull(member.getVoiceState()).inVoiceChannel()) {
-									Pages.buttonize(msg, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
-										try {
-											String url = Objects.requireNonNull(ms.getEmbeds().get(0).getFooter()).getIconUrl();
-											assert url != null;
-											if (url.startsWith("https://www.youtube.com/playlist?list=") && !TagDAO.getTagById(author.getId()).isVerified()) {
-												channel.sendMessage("❌ | Você precisa ser um usuário verificado para poder adicionar playlists.").queue();
-												msg.delete().queue();
-												return;
-											}
-											Music.loadAndPlay(member, (TextChannel) channel, url);
-											msg.delete().queue(null, Helper::doNothing);
-										} catch (ErrorResponseException ignore) {
+						channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(msg -> {
+							Pages.paginate(msg, pages, 1, TimeUnit.MINUTES, 5);
+							if (Objects.requireNonNull(member.getVoiceState()).inVoiceChannel()) {
+								Pages.buttonize(msg, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
+									try {
+										String url = Objects.requireNonNull(ms.getEmbeds().get(0).getFooter()).getIconUrl();
+										assert url != null;
+										if (url.startsWith("https://www.youtube.com/playlist?list=") && !TagDAO.getTagById(author.getId()).isVerified()) {
+											channel.sendMessage("❌ | Você precisa ser um usuário verificado para poder adicionar playlists.").queue();
+											msg.delete().queue();
+											return;
 										}
-									}), true, 1, TimeUnit.MINUTES);
-								}
-							});
-						} else m.editMessage("❌ | Nenhum vídeo encontrado").queue();
-                    } catch (IOException e) {
-						m.editMessage("❌ | Erro ao buscar vídeos, meus desenvolvedores já foram notificados.").queue();
-						Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-					}
-                });
+										Music.loadAndPlay(member, (TextChannel) channel, url);
+										msg.delete().queue(null, Helper::doNothing);
+									} catch (ErrorResponseException ignore) {
+									}
+								}), true, 1, TimeUnit.MINUTES);
+							}
+						});
+					} else m.editMessage("❌ | Nenhum vídeo encontrado").queue();
+				});
             } catch (IOException e) {
 				m.editMessage("❌ | Erro ao buscar vídeos, meus desenvolvedores já foram notificados.").queue();
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);

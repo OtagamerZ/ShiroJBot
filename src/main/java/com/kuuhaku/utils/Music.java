@@ -99,7 +99,7 @@ public class Music {
         try {
             AudioTrack at = musicManager.player.getPlayingTrack();
 
-            EmbedBuilder eb = new ColorlessEmbedBuilder();
+            EmbedBuilder eb = new EmbedBuilder();
 
             String thumb = "https://img.youtube.com/vi/" + at.getInfo().uri.substring(at.getInfo().uri.indexOf("v=")).replace("v=", "") + "/maxresdefault.jpg";
             eb.setTitle(musicManager.player.getPlayingTrack().getInfo().title, at.getInfo().uri);
@@ -144,7 +144,6 @@ public class Music {
 
             eb.setTitle("Fila de músicas:");
             eb.setFooter("Tempo estimado da fila: " + Helper.toDuration(musicManager.scheduler.queue().stream().mapToLong(AudioTrack::getDuration).sum()), null);
-            eb.setColor(Helper.getRandomColor());
 
             pages.add(new Page(PageType.EMBED, eb.build()));
         }

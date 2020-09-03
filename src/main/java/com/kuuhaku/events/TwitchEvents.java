@@ -36,7 +36,6 @@ import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.sqlite.BlacklistDAO;
 import com.kuuhaku.controller.sqlite.PStateDAO;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
-import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.ExceedEnum;
 import com.kuuhaku.utils.Helper;
@@ -145,7 +144,7 @@ public class TwitchEvents {
 
 		Main.getInfo().getUserByID(acc.getUserId()).openPrivateChannel().queue(c -> {
 			try {
-				EmbedBuilder eb = new ColorlessEmbedBuilder();
+				EmbedBuilder eb = new EmbedBuilder();
 
 				eb.setThumbnail("https://i.imgur.com/A0jXqpe.png");
 				eb.setTitle("Opa, obrigada por seguir o canal do meu nii-chan!");
