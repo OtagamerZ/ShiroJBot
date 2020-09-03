@@ -38,6 +38,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -73,6 +74,8 @@ public class ExceedRankCommand extends Command {
 					exceeds.add(ExceedDAO.getExceed(ex));
 				}
 
+				exceeds.sort(Comparator.comparingLong(Exceed::getExp));
+
 				CategoryChart chart = new CategoryChartBuilder()
 						.width(800)
 						.height(600)
@@ -87,7 +90,9 @@ public class ExceedRankCommand extends Command {
 										.map(ExceedEnum::getPalette)
 										.map(Color::brighter)
 										.toArray(Color[]::new)
-						);
+						)
+						.setChartBackgroundColor(new Color(165, 124, 73))
+						.setPlotBackgroundColor(new Color(177, 148, 224));
 
 				long total = exceeds.stream().mapToLong(Exceed::getExp).sum();
 				for (Exceed ex : exceeds) {
