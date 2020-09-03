@@ -30,8 +30,8 @@ import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 import org.knowm.xchart.BitmapEncoder;
-import org.knowm.xchart.CategoryChart;
-import org.knowm.xchart.CategoryChartBuilder;
+import org.knowm.xchart.DialChart;
+import org.knowm.xchart.DialChartBuilder;
 import org.knowm.xchart.style.Styler;
 
 import javax.imageio.ImageIO;
@@ -73,12 +73,10 @@ public class ExceedRankCommand extends Command {
 					exceeds.add(ExceedDAO.getExceed(ex));
 				}
 
-				CategoryChart chart = new CategoryChartBuilder()
+				DialChart chart = new DialChartBuilder()
 						.width(800)
 						.height(600)
 						.title("Pontuação dos Exceeds")
-						.xAxisTitle("Exceed")
-						.yAxisTitle("Pontos (x1000)")
 						.build();
 
 				chart.getStyler()
@@ -94,8 +92,8 @@ public class ExceedRankCommand extends Command {
 
 				for (Exceed ex : exceeds) {
 					chart.addSeries(ex.getExceed().getName(),
-							List.of("Pontuação total"),
-							List.of(ex.getExp() / 1000)
+							ex.getExp(),
+							"Pontuação total"
 					);
 				}
 
