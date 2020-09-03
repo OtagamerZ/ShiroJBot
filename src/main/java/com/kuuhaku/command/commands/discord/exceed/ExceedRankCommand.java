@@ -74,7 +74,7 @@ public class ExceedRankCommand extends Command {
 					exceeds.add(ExceedDAO.getExceed(ex));
 				}
 
-				exceeds.sort(Comparator.comparingLong(Exceed::getExp));
+				exceeds.sort(Comparator.comparingLong(Exceed::getExp).reversed());
 
 				CategoryChart chart = new CategoryChartBuilder()
 						.width(800)
@@ -84,7 +84,7 @@ public class ExceedRankCommand extends Command {
 
 				chart.getStyler()
 						.setYAxisMax(100d)
-						.setYAxisMin(-5d)
+						.setYAxisMin(0d)
 						.setLegendPosition(Styler.LegendPosition.InsideNE)
 						.setSeriesColors(
 								exceeds.stream()
@@ -93,8 +93,8 @@ public class ExceedRankCommand extends Command {
 										.map(Color::brighter)
 										.toArray(Color[]::new)
 						)
-						.setChartBackgroundColor(new Color(165, 124, 73))
-						.setPlotBackgroundColor(new Color(177, 148, 224));
+						.setChartBackgroundColor(new Color(165, 155, 182))
+						.setPlotBackgroundColor(new Color(183, 179, 191));
 
 				long total = exceeds.stream().mapToLong(Exceed::getExp).sum();
 				for (Exceed ex : exceeds) {
