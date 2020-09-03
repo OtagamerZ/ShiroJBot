@@ -37,15 +37,15 @@ public class ExceedScore {
 	private long points = 0;
 
 	@Column(columnDefinition = "DATE")
-	private LocalDate when = LocalDate.now();
+	private LocalDate timestamp = LocalDate.now();
 
 	public ExceedScore() {
 	}
 
-	public ExceedScore(ExceedEnum exceed, long points, LocalDate when) {
+	public ExceedScore(ExceedEnum exceed, long points, LocalDate timestamp) {
 		this.exceed = exceed;
 		this.points = points;
-		this.when = when;
+		this.timestamp = timestamp;
 	}
 
 	public int getId() {
@@ -72,11 +72,11 @@ public class ExceedScore {
 		this.points = points;
 	}
 
-	public LocalDate getWhen() {
-		return when;
+	public LocalDate getTimestamp() {
+		return timestamp;
 	}
 
-	public void setWhen(LocalDate when) {
-		this.when = when;
+	public void setTimestamp(LocalDate when) {
+		this.timestamp = when;
 	}
 }
