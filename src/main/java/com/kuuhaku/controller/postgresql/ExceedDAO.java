@@ -72,10 +72,10 @@ public class ExceedDAO {
 
 		@SuppressWarnings("SuspiciousMethodCalls")
 		int pos = Arrays.stream(ExceedEnum.values())
-				.map(ExceedDAO::getExceed)
-				.sorted(Comparator.comparingLong(Exceed::getExp).reversed())
-				.collect(Collectors.toList())
-				.indexOf(ExceedEnum.getByName(exceed)) + 1;
+						  .map(ExceedDAO::getExceed)
+						  .sorted(Comparator.comparingLong(Exceed::getExp).reversed())
+						  .collect(Collectors.toList())
+						  .indexOf(ExceedEnum.getByName(exceed)) + 1;
 
 		return new ExceedState(ExceedEnum.getByName(exceed).ordinal(), exceed, pos);
 	}
@@ -132,7 +132,7 @@ public class ExceedDAO {
 		Query q = em.createQuery("SELECT m FROM Member m INNER JOIN ExceedMember ex ON m.mid = ex.id WHERE ex.exceed = :exceed", Member.class);
 		q.setParameter("exceed", ex.getName());
 
-		Query points = em.createNativeQuery("SELECT points FROM shiro.\"GetExceedRanking\" WHERE exceed = :exceed");
+		Query points = em.createNativeQuery("SELECT points, added FROM shiro.\"GetExceedRanking\" WHERE exceed = :exceed", BigDecimal[].class);
 		points.setParameter("exceed", ex.getName());
 
 		List<Member> members = (List<Member>) q.getResultList();
@@ -162,7 +162,10 @@ public class ExceedDAO {
 			}
 
 		try {
-			return new Exceed(ex, members.size(), ((BigDecimal) points.getSingleResult()).longValue() - offset);
+			return new Exceed(ex, members.size(),
+					((BigDecimal[]) points.getSingleResult())[0].longValue() - offset,
+					((BigDecimal[]) points.getSingleResult())[1].longValue()
+			);
 		} finally {
 			em.close();
 		}

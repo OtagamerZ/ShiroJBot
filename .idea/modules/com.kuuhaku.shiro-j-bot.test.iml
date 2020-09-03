@@ -61,6 +61,7 @@
     <orderEntry type="library" name="Gradle: org.threeten:threetenbp:1.4.4" level="project" />
     <orderEntry type="library" name="Gradle: org.swinglabs.swingx:swingx-graphics:1.6.5-1" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.4.0-rc" level="project" />
+    <orderEntry type="library" name="Gradle: org.knowm.xchart:xchart:3.6.5" level="project" />
     <orderEntry type="library" name="Gradle: junit:junit:4.12" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp:4.6.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.code.findbugs:jsr305:3.0.2" level="project" />
@@ -137,6 +138,9 @@
     <orderEntry type="library" name="Gradle: org.reactivestreams:reactive-streams:1.0.2" level="project" />
     <orderEntry type="library" name="Gradle: org.swinglabs.swingx:swingx-common:1.6.5-1" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.4.0-rc" level="project" />
+    <orderEntry type="library" name="Gradle: de.rototor.pdfbox:graphics2d:0.27" level="project" />
+    <orderEntry type="library" name="Gradle: de.erichseifert.vectorgraphics2d:VectorGraphics2D:0.13" level="project" />
+    <orderEntry type="library" name="Gradle: com.madgag:animated-gif-lib:1.4" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okio:okio:2.6.0" level="project" />
     <orderEntry type="library" name="Gradle: club.minnced:opus-java-api:1.0.4" level="project" />
     <orderEntry type="library" name="Gradle: club.minnced:opus-java-natives:1.0.4" level="project" />
@@ -192,6 +196,7 @@
     <orderEntry type="library" name="Gradle: org.springframework:spring-jcl:5.1.8.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.hdrhistogram:HdrHistogram:2.1.9" level="project" />
     <orderEntry type="library" name="Gradle: org.latencyutils:LatencyUtils:2.0.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.pdfbox:pdfbox:2.0.19" level="project" />
     <orderEntry type="library" name="Gradle: net.java.dev.jna:jna:4.5.2" level="project" />
     <orderEntry type="library" name="Gradle: com.google.http-client:google-http-client:1.25.0" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-to-slf4j:2.11.2" level="project" />
@@ -204,6 +209,7 @@
     <orderEntry type="library" name="Gradle: commons-lang:commons-lang:2.6" level="project" />
     <orderEntry type="library" name="Gradle: com.github.philippheuer.events4j:events4j-api:0.9.1" level="project" />
     <orderEntry type="library" name="Gradle: net.minidev:accessors-smart:1.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.pdfbox:fontbox:2.0.19" level="project" />
     <orderEntry type="library" name="Gradle: com.google.j2objc:j2objc-annotations:1.1" level="project" />
     <orderEntry type="library" name="Gradle: ch.qos.logback:logback-core:1.2.3" level="project" />
     <orderEntry type="library" name="Gradle: org.ow2.asm:asm:5.0.4" level="project" />
