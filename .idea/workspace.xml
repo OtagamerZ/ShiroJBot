@@ -14,17 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/CatchKawaiponCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/CatchKawaiponCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/QuizCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/fun/QuizCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SellCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SellCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TransferCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TransferCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/twitch/CatchKawaiponCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/twitch/CatchKawaiponCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/CreditDrop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/CreditDrop.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/KawaiponDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/KawaiponDAO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,7 +75,6 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="UPDATE_TYPE" value="MERGE" />
   </component>
   <component name="InvalidFacetManager">
     <ignored-facets>
@@ -671,13 +660,6 @@
       <workItem from="1599152291444" duration="8675000" />
       <workItem from="1599163931199" duration="1113000" />
     </task>
-    <task id="LOCAL-02357" summary="Agora não é mais possível comprar uma carta de outro jogador se você tiver uma dívida ativa">
-      <created>1599058102781</created>
-      <option name="number" value="02357" />
-      <option name="presentableId" value="LOCAL-02357" />
-      <option name="project" value="LOCAL" />
-      <updated>1599058102782</updated>
-    </task>
     <task id="LOCAL-02358" summary="Agora é possível vender cartas para jogadores, exceto se ele possuir dívida ativa">
       <created>1599058503621</created>
       <option name="number" value="02358" />
@@ -1014,7 +996,14 @@
       <option name="project" value="LOCAL" />
       <updated>1599163082114</updated>
     </task>
-    <option name="localTasksCounter" value="2406" />
+    <task id="LOCAL-02406" summary="Correção no ranking de cartas">
+      <created>1599251797384</created>
+      <option name="number" value="02406" />
+      <option name="presentableId" value="LOCAL-02406" />
+      <option name="project" value="LOCAL" />
+      <updated>1599251797384</updated>
+    </task>
+    <option name="localTasksCounter" value="2407" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1080,7 +1069,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção no &quot;comprar&quot; do hitotsu" />
     <MESSAGE value="Novas cartas: Brand New Animal" />
     <MESSAGE value="Correção na descrição do comando ASCII" />
     <MESSAGE value="Correção no anúncio do vencedores mensais" />
@@ -1105,7 +1093,8 @@
     <MESSAGE value="Mudança do gerador de gráficos (ranking dos Exceeds)" />
     <MESSAGE value="Modificação nos dados relativos aos Exceeds" />
     <MESSAGE value="Novas cartas: KonoSuba" />
-    <option name="LAST_COMMIT_MESSAGE" value="Novas cartas: KonoSuba" />
+    <MESSAGE value="Correção no ranking de cartas" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção no ranking de cartas" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1160,11 +1149,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1599163079530">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1599251794707">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1599163079530" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1599251794707" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1173,10 +1162,10 @@
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state width="247" height="195" key="DatabaseViewActions_Filter/0.0.1366.768@0.0.1366.768" timestamp="1591416926427" />
-    <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1598289868032">
+    <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1599252116259">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="92" y="92" width="1496" height="826" key="DiffContextDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1598289868032" />
+    <state x="92" y="92" width="1496" height="826" key="DiffContextDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1599252116259" />
     <state x="620" y="261" key="FileChooserDialogImpl" timestamp="1597149004659">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1226,11 +1215,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1599163083286">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1599251798613">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1599163083286" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1599251798613" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1276,6 +1265,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="645" y="400" key="git4idea.ui.GitResetDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1593018818159" />
+    <state x="600" y="294" key="git4idea.ui.GitUnstashDialog" timestamp="1599251808517">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="600" y="294" key="git4idea.ui.GitUnstashDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1599251808517" />
     <state x="239" y="152" key="new project wizard" timestamp="1595512583095">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
