@@ -130,42 +130,42 @@ public class Profile {
 			g2d.setColor(Color.black);
 			g2d.fillPolygon(new int[]{
 					38 + (avatar.getWidth() + 24) / 2,
-					38 + (avatar.getWidth() + 24) / 2 + 40,
+					38 + (avatar.getWidth() + 24) / 2 + 50,
 					38 + (avatar.getWidth() + 24) + polyOffset + 4,
-					38 + (avatar.getWidth() + 24) / 2 + 40,
+					38 + (avatar.getWidth() + 24) / 2 + 50,
 					38 + (avatar.getWidth() + 24) / 2,
-					38 + (avatar.getWidth() + 24) / 2 - 40,
+					38 + (avatar.getWidth() + 24) / 2 - 50,
 					38 - polyOffset - 4,
-					38 + (avatar.getWidth() + 24) / 2 - 40,
+					38 + (avatar.getWidth() + 24) / 2 - 50,
 			}, new int[]{
 					188 - polyOffset - 4,
-					188 + (avatar.getHeight() + 24) / 2 - 40,
+					188 + (avatar.getHeight() + 24) / 2 - 50,
 					188 + (avatar.getHeight() + 24) / 2,
-					188 + (avatar.getHeight() + 24) / 2 + 40,
+					188 + (avatar.getHeight() + 24) / 2 + 50,
 					188 + (avatar.getHeight() + 24) + polyOffset + 4,
-					188 + (avatar.getHeight() + 24) / 2 + 40,
+					188 + (avatar.getHeight() + 24) / 2 + 50,
 					188 + (avatar.getHeight() + 24) / 2,
-					188 + (avatar.getHeight() + 24) / 2 - 40,
+					188 + (avatar.getHeight() + 24) / 2 - 50,
 			}, 8);
 			g2d.setColor(main);
 			g2d.fillPolygon(new int[]{
 					38 + (avatar.getWidth() + 24) / 2,
-					38 + (avatar.getWidth() + 24) / 2 + 36,
+					38 + (avatar.getWidth() + 24) / 2 + 46,
 					38 + (avatar.getWidth() + 24) + polyOffset,
-					38 + (avatar.getWidth() + 24) / 2 + 36,
+					38 + (avatar.getWidth() + 24) / 2 + 46,
 					38 + (avatar.getWidth() + 24) / 2,
-					38 + (avatar.getWidth() + 24) / 2 - 36,
+					38 + (avatar.getWidth() + 24) / 2 - 46,
 					38 - polyOffset,
-					38 + (avatar.getWidth() + 24) / 2 - 36,
+					38 + (avatar.getWidth() + 24) / 2 - 46,
 			}, new int[]{
 					188 - polyOffset,
-					188 + (avatar.getHeight() + 24) / 2 - 36,
+					188 + (avatar.getHeight() + 24) / 2 - 46,
 					188 + (avatar.getHeight() + 24) / 2,
-					188 + (avatar.getHeight() + 24) / 2 + 36,
+					188 + (avatar.getHeight() + 24) / 2 + 46,
 					188 + (avatar.getHeight() + 24) + polyOffset,
-					188 + (avatar.getHeight() + 24) / 2 + 36,
+					188 + (avatar.getHeight() + 24) / 2 + 46,
 					188 + (avatar.getHeight() + 24) / 2,
-					188 + (avatar.getHeight() + 24) / 2 - 36,
+					188 + (avatar.getHeight() + 24) / 2 - 46,
 			}, 8);
 		}
 		g2d.setColor(Color.black);
