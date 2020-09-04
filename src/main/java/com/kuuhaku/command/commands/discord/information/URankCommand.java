@@ -29,7 +29,6 @@ import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
@@ -178,10 +177,10 @@ public class URankCommand extends Command {
 	}
 
 	private void getCardRanking(List<Page> pages) {
-		List<Kawaipon> kps = KawaiponDAO.getCardRank();
+		List<Object[]> kps = KawaiponDAO.getCardRank();
 
-		String champ = "1 - " + checkUser(kps.get(0)) + " (Cartas: " + kps.get(0).getCards().size() + ")";
-		List<Kawaipon> sub9 = kps.subList(1, Math.min(kps.size(), 10));
+		String champ = "1 - " + checkUser(kps.get(0)) + " (Cartas: " + kps.get(0)[1] + ")";
+		List<Object[]> sub9 = kps.subList(1, Math.min(kps.size(), 10));
 		StringBuilder sub9Formatted = new StringBuilder();
 		for (int i = 0; i < sub9.size(); i++) {
 			sub9Formatted
@@ -190,7 +189,7 @@ public class URankCommand extends Command {
 					.append(checkUser(sub9.get(i)))
 					.append(ShiroInfo.getLocale(I18n.PT).getString(STR_CARD))
 					.append(" ")
-					.append(sub9.get(i).getCards().size())
+					.append(sub9.get(i)[1])
 					.append(")")
 					.append("\n");
 		}
@@ -210,7 +209,7 @@ public class URankCommand extends Command {
 						.append(checkUser(kps.get(i)))
 						.append(ShiroInfo.getLocale(I18n.PT).getString(STR_CARD))
 						.append(" ")
-						.append(kps.get(i).getCards().size())
+						.append(kps.get(i)[1])
 						.append(")")
 						.append("\n");
 			}
@@ -235,9 +234,9 @@ public class URankCommand extends Command {
 		}
 	}
 
-	private static String checkUser(Kawaipon kp) {
+	private static String checkUser(Object[] kp) {
 		try {
-			return Main.getInfo().getUserByID(kp.getUid()).getName();
+			return Main.getInfo().getUserByID(String.valueOf(kp[0])).getName();
 		} catch (Exception e) {
 			return ShiroInfo.getLocale(I18n.PT).getString("str_invalid-user");
 		}
