@@ -56,7 +56,8 @@ public enum AnimeName {
 	BOKU_NO_HERO_ACADEMIA,
 	BRAND_NEW_ANIMAL,
 	FATE_APOCRYPHA,
-	KONOSUBA;
+	KONOSUBA,
+	DANMACHI;
 
 	@Override
 	public String toString() {
