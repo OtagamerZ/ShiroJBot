@@ -58,7 +58,7 @@ public class KawaiponDAO {
 	public static List<Object[]> getCardRank() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createNativeQuery("SELECT k.uid, k.count FROM shiro.\"GetCurrentExceedScores\" k");
+		Query q = em.createNativeQuery("SELECT * FROM shiro.\"GetKawaiponRanking\" k");
 
 		List<Object[]> kps = q.getResultList();
 
