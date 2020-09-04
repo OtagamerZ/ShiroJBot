@@ -54,16 +54,16 @@ public class KawaiponDAO {
 		em.close();
 	}
 
-	@SuppressWarnings("unchecked")
-	public static List<Kawaipon> getCardRank() {
+	@SuppressWarnings({"unchecked", "SqlResolve"})
+	public static List<Object[]> getCardRank() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT k FROM Kawaipon k ORDER BY SIZE(k.cards) DESC", Kawaipon.class);
+		Query q = em.createNativeQuery("SELECT k FROM shiro.\"GetCurrentExceedScores\" k");
 
-		List<Kawaipon> mbs = (List<Kawaipon>) q.getResultList();
+		List<Object[]> kps = (List<Object[]>) q.getResultList();
 
 		em.close();
 
-		return mbs;
+		return kps;
 	}
 }
