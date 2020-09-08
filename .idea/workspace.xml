@@ -13,9 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Redução na chance de drop de boosters">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/guild/GuildEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/guild/GuildEvents.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -161,17 +160,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [clean]">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -676,14 +664,9 @@
       <workItem from="1599566868023" duration="6708000" />
       <workItem from="1599583377545" duration="19000" />
       <workItem from="1599583472187" duration="9000" />
-      <workItem from="1599586831637" duration="6782000" />
-    </task>
-    <task id="LOCAL-02370" summary="Mudança do gerador de gráficos (ranking dos Exceeds)">
-      <created>1599144261199</created>
-      <option name="number" value="02370" />
-      <option name="presentableId" value="LOCAL-02370" />
-      <option name="project" value="LOCAL" />
-      <updated>1599144261199</updated>
+      <workItem from="1599586831637" duration="6934000" />
+      <workItem from="1599595216445" duration="28000" />
+      <workItem from="1599595573526" duration="739000" />
     </task>
     <task id="LOCAL-02371" summary="Mudança do gerador de gráficos (ranking dos Exceeds)">
       <created>1599144363826</created>
@@ -1021,7 +1004,14 @@
       <option name="project" value="LOCAL" />
       <updated>1599593533757</updated>
     </task>
-    <option name="localTasksCounter" value="2419" />
+    <task id="LOCAL-02419" summary="Redução na chance de drop de boosters">
+      <created>1599595037052</created>
+      <option name="number" value="02419" />
+      <option name="presentableId" value="LOCAL-02419" />
+      <option name="project" value="LOCAL" />
+      <updated>1599595037052</updated>
+    </task>
+    <option name="localTasksCounter" value="2420" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1167,11 +1157,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1599593531075">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1599595240066">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1599593531075" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1599595240066" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1233,11 +1223,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1599593534788">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1599595038779">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1599593534788" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1599595038779" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
