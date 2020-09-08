@@ -93,8 +93,8 @@ public class TenthMinuteEvent implements Job {
 	private static void notif(Guild g) {
 		try {
 			if (!TagDAO.getTagById(g.getOwnerId()).isBeta() && !ShiroInfo.getDevelopers().contains(g.getOwnerId())) {
-				Main.getJibril().retrieveUserById(ShiroInfo.getNiiChan()).queue(o -> {
-							Helper.logger(TenthMinuteEvent.class).info("Saí do servidor " + g.getName() + " por " + Objects.requireNonNull(g.getOwner()).getUser().getAsTag() + " não estar na lista de parceiros.");
+				g.retrieveOwner().queue(o -> {
+							Helper.logger(TenthMinuteEvent.class).info("Saí do servidor " + g.getName() + " por " + o.getUser().getAsTag() + " não estar na lista de parceiros.");
 							g.leave().queue();
 						}
 						, f -> {
@@ -104,7 +104,7 @@ public class TenthMinuteEvent implements Job {
 				);
 			}
 		} catch (NoResultException e) {
-			Main.getJibril().retrieveUserById(ShiroInfo.getNiiChan()).queue(o -> {
+			g.retrieveOwner().queue(o -> {
 						Helper.logger(TenthMinuteEvent.class).info("Saí do servidor " + g.getName() + " por " + o.getUser().getAsTag() + " não possuir tags.");
 						g.leave().queue();
 					}
