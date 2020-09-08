@@ -19,6 +19,7 @@
 package com.kuuhaku.model.common.drop;
 
 import com.github.twitch4j.common.events.domain.EventUser;
+import com.kuuhaku.model.common.Consumable;
 import net.dv8tion.jda.api.entities.User;
 
 import java.util.Map;
@@ -32,6 +33,8 @@ public interface Prize {
 	void award(EventUser u);
 
 	int getPrize();
+
+	Consumable getPrizeAsItem();
 
 	Map.Entry<String, Function<User, Boolean>> getRequirement();
 
