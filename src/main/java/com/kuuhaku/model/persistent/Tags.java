@@ -43,19 +43,19 @@ public class Tags {
     private String id;
 
     @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-    private boolean Partner = false;
+    private boolean beta = false;
 
     @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-    private boolean Toxic = false;
+    private boolean toxic = false;
 
     @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-    private boolean Verified = false;
+    private boolean verified = false;
 
     @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-    private boolean Reader = false;
+    private boolean reader = false;
 
     @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-    private boolean Sponsor = false;
+    private boolean sponsor = false;
 
     public static List<String> getUserBadges(String id) {
         String pattern = "https://cdn.discordapp.com/emojis/{id}.png?v=1";
@@ -82,43 +82,43 @@ public class Tags {
         this.id = id;
     }
 
-    public boolean isPartner() {
-        return Partner;
+    public boolean isBeta() {
+        return beta;
     }
 
-    public void setPartner(boolean isPartner) {
-        Partner = isPartner;
+    public void setBeta(boolean isBeta) {
+        beta = isBeta;
     }
 
     public boolean isToxic() {
-        return Toxic;
+        return toxic;
     }
 
     public void setToxic(boolean isToxic) {
-        Toxic = isToxic;
+        toxic = isToxic;
     }
 
     public boolean isVerified() {
-        return Verified;
+        return verified;
     }
 
     public void setVerified(boolean verified) {
-        Verified = verified;
+        this.verified = verified;
     }
 
     public boolean isReader() {
-        return Reader;
+        return reader;
     }
 
     public void setReader(boolean reader) {
-        Reader = reader;
+        this.reader = reader;
     }
 
     public boolean isSponsor() {
-        return Sponsor;
+        return sponsor;
     }
 
     public void setSponsor(boolean sponsor) {
-        Sponsor = sponsor;
+        this.sponsor = sponsor;
     }
 }

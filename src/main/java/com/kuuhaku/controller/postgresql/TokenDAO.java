@@ -97,7 +97,7 @@ public class TokenDAO {
 
 			boolean allowed = false;
 			for (Member m : Main.getInfo().getMembersByID(t.getUid())) {
-				if (Helper.hasPermission(m, PrivilegeLevel.PARTNER)) {
+				if (Helper.hasPermission(m, PrivilegeLevel.BETA)) {
 					allowed = true;
 					break;
 				}

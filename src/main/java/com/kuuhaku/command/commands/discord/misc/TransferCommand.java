@@ -70,7 +70,7 @@ public class TransferCommand extends Command {
 
 		boolean victorious = ExceedDAO.hasExceed(author.getId()) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(author.getId()));
 		int rawAmount = Integer.parseInt(args[0]);
-		int tax = victorious ? 0 : (int) Math.floor(rawAmount * 0.05);
+		int tax = victorious ? 0 : (int) Math.floor(rawAmount * 0.025);
 		int liquidAmount = rawAmount - tax;
 
 		if (from.getBalance() < rawAmount) {

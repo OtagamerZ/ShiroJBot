@@ -39,19 +39,19 @@ public class GuildUpdateEvents extends ListenerAdapter {
 
     @Override
     public void onGuildUpdateOwner(@Nonnull GuildUpdateOwnerEvent event) {
-        assert event.getOldOwner() != null;
-        assert event.getNewOwner() != null;
+		assert event.getOldOwner() != null;
+		assert event.getNewOwner() != null;
 
-        if (TagDAO.getTagById(event.getOldOwner().getId()).isPartner()) {
-            TagDAO.removeTagPartner(event.getOldOwner().getId());
+		if (TagDAO.getTagById(event.getOldOwner().getId()).isBeta()) {
+			TagDAO.removeTagBeta(event.getOldOwner().getId());
 
-            try {
-                TagDAO.getTagById(event.getNewOwner().getId());
-            } catch (NoResultException e) {
-                TagDAO.addUserTagsToDB(event.getNewOwner().getId());
-            } finally {
-                TagDAO.giveTagPartner(event.getNewOwner().getId());
-            }
-        }
-    }
+			try {
+				TagDAO.getTagById(event.getNewOwner().getId());
+			} catch (NoResultException e) {
+				TagDAO.addUserTagsToDB(event.getNewOwner().getId());
+			} finally {
+				TagDAO.giveTagBeta(event.getNewOwner().getId());
+			}
+		}
+	}
 }

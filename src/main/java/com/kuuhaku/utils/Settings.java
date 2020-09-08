@@ -129,7 +129,7 @@ public class Settings {
 			eb.addField("\uD83D\uDCD6 » Canal de drops de créditos", canalDrop, true);
 			eb.addField("\uD83D\uDCD6 » Canal de avisos", canalAvisos, true);
 			try {
-				if (TagDAO.getTagById(Objects.requireNonNull(message.getGuild().getOwner()).getUser().getId()).isPartner()) {
+				if (TagDAO.getTagById(Objects.requireNonNull(message.getGuild().getOwner()).getUser().getId()).isBeta()) {
 					eb.addField("\uD83D\uDCD6 » Canal Relay", canalRelay, true);
 				}
 			} catch (NoResultException ignore) {
