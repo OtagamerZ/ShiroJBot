@@ -26,6 +26,8 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.utils.CreditLoan;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
+import org.apache.commons.lang3.tuple.Pair;
+import org.json.JSONObject;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,6 +37,8 @@ import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "account")
@@ -71,6 +75,9 @@ public class Account {
 
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean follower = false;
+
+	@Column(columnDefinition = "TEXT")
+	private String buffs = "{}";
 
 	public String getUserId() {
 		return userId;
@@ -222,5 +229,30 @@ public class Account {
 
 	public void setFollower(boolean follower) {
 		this.follower = follower;
+	}
+
+	public Map<String, Integer> getBuffs() {
+		return new JSONObject(buffs)
+				.toMap()
+				.entrySet()
+				.stream()
+				.map(e -> Pair.of(e.getKey(), (int) e.getValue()))
+				.collect(Collectors.toMap(Pair::getLeft, Pair::getRight));
+	}
+
+	public void setBuffs(Map<String, Integer> buffs) {
+		this.buffs = new JSONObject(buffs).toString();
+	}
+
+	public void addBuff(String id) {
+		Map<String, Integer> buffs = getBuffs();
+		buffs.put(id, buffs.getOrDefault(id, 0) + 1);
+		setBuffs(buffs);
+	}
+
+	public void removeBuff(String id) {
+		Map<String, Integer> buffs = getBuffs();
+		buffs.put(id, Math.max(0, buffs.getOrDefault(id, 0) - 1));
+		setBuffs(buffs);
 	}
 }
