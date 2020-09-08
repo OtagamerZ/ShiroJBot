@@ -56,7 +56,7 @@ public class BuyConsumableCommand extends Command {
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			eb.setTitle(":test_tube: | Loja de itens");
 			eb.setDescription("Esta loja possui vários artefatos que podem lhe dar uma vantagem rápida em certas coisas, a um preço justo claro!");
-			ConsumableShop.getAvailable().forEach((k, v) -> eb.addField("`" + k + "` | " + v.getName() + " (" + v.getPrice() + ")", v.getDescription(), false));
+			ConsumableShop.getAvailable().forEach((k, v) -> eb.addField("`" + k + "` | " + v.getName() + " (" + v.getPrice() + " créditos)", v.getDescription(), false));
 			eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
 
 			channel.sendMessage(eb.build()).queue();
