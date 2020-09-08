@@ -672,21 +672,7 @@
       <workItem from="1599143608752" duration="4825000" />
       <workItem from="1599152291444" duration="8675000" />
       <workItem from="1599163931199" duration="1113000" />
-      <workItem from="1599566868023" duration="4712000" />
-    </task>
-    <task id="LOCAL-02360" summary="Correção do comando de pedir avaliação">
-      <created>1599064682961</created>
-      <option name="number" value="02360" />
-      <option name="presentableId" value="LOCAL-02360" />
-      <option name="project" value="LOCAL" />
-      <updated>1599064682961</updated>
-    </task>
-    <task id="LOCAL-02361" summary="Correção do comando de pedir avaliação">
-      <created>1599064939610</created>
-      <option name="number" value="02361" />
-      <option name="presentableId" value="LOCAL-02361" />
-      <option name="project" value="LOCAL" />
-      <updated>1599064939610</updated>
+      <workItem from="1599566868023" duration="5329000" />
     </task>
     <task id="LOCAL-02362" summary="Mudança no GraphQL do endpoint do AniList">
       <created>1599073225400</created>
@@ -1017,7 +1003,21 @@
       <option name="project" value="LOCAL" />
       <updated>1599571452286</updated>
     </task>
-    <option name="localTasksCounter" value="2409" />
+    <task id="LOCAL-02409" summary="Correções no notificador da Jibril">
+      <created>1599572014340</created>
+      <option name="number" value="02409" />
+      <option name="presentableId" value="LOCAL-02409" />
+      <option name="project" value="LOCAL" />
+      <updated>1599572014340</updated>
+    </task>
+    <task id="LOCAL-02410" summary="Correções no notificador da Jibril">
+      <created>1599572143881</created>
+      <option name="number" value="02410" />
+      <option name="presentableId" value="LOCAL-02410" />
+      <option name="project" value="LOCAL" />
+      <updated>1599572143881</updated>
+    </task>
+    <option name="localTasksCounter" value="2411" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1083,7 +1083,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção no anúncio do vencedores mensais" />
     <MESSAGE value="Novas cartas: Fate/Apocrypha" />
     <MESSAGE value="Correção na duração da fila de músicas" />
     <MESSAGE value="Troca de &quot;cargo warn&quot; para &quot;cargo mute&quot;" />
@@ -1108,7 +1107,8 @@
     <MESSAGE value="Correção no ranking de cartas" />
     <MESSAGE value="Parceiros agora se chamam &quot;Usuários Beta&quot;" />
     <MESSAGE value="Novas cartas: Shinchou Yuusha" />
-    <option name="LAST_COMMIT_MESSAGE" value="Novas cartas: Shinchou Yuusha" />
+    <MESSAGE value="Correções no notificador da Jibril" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correções no notificador da Jibril" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1163,11 +1163,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1599571449517">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1599572141198">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1599571449517" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1599572141198" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1229,11 +1229,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1599571460752">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1599572149728">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1599571460752" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1599572149728" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>

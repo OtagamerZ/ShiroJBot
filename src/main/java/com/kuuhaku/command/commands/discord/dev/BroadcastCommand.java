@@ -121,7 +121,7 @@ public class BroadcastCommand extends Command {
 				cluster.broadcast(wmb.build());
 				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
 				break;
-			case "parceiros":
+			case "beta":
 				List<Tags> ps = TagDAO.getAllBetas();
 				List<List<Tags>> psPages = Helper.chunkify(ps, 10);
 
