@@ -27,10 +27,10 @@ import java.util.List;
 
 public class TagDAO {
 	@SuppressWarnings("unchecked")
-	public static List<Tags> getAllPartners() {
+	public static List<Tags> getAllBetas() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT t FROM Tags t WHERE t.Partner = true", Tags.class);
+		Query q = em.createQuery("SELECT t FROM Tags t WHERE t.beta = true", Tags.class);
 		List<Tags> ts = (List<Tags>) q.getResultList();
 
 		em.close();
@@ -74,24 +74,12 @@ public class TagDAO {
 	public static List<Tags> getSponsors() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT t FROM Tags t WHERE t.Sponsor = true", Tags.class);
+		Query q = em.createQuery("SELECT t FROM Tags t WHERE t.sponsor = true", Tags.class);
 		List<Tags> ts = (List<Tags>) q.getResultList();
 
 		em.close();
 
 		return ts;
-	}
-
-	public static int getPartnerAmount() {
-		EntityManager em = Manager.getEntityManager();
-		int size;
-
-		Query q = em.createQuery("SELECT t FROM Tags t WHERE t.Partner = true", Tags.class);
-		size = q.getResultList().size();
-
-		em.close();
-
-		return size;
 	}
 
 	public static void addUserTagsToDB(String id) {
@@ -133,11 +121,11 @@ public class TagDAO {
 		em.close();
 	}
 
-	public static void giveTagPartner(String id) {
+	public static void giveTagBeta(String id) {
 		EntityManager em = Manager.getEntityManager();
 
 		Tags t = getTagById(id);
-		t.setPartner(true);
+		t.setBeta(true);
 
 		em.getTransaction().begin();
 		em.merge(t);
@@ -146,11 +134,11 @@ public class TagDAO {
 		em.close();
 	}
 
-	public static void removeTagPartner(String id) {
+	public static void removeTagBeta(String id) {
 		EntityManager em = Manager.getEntityManager();
 
 		Tags t = getTagById(id);
-		t.setPartner(false);
+		t.setBeta(false);
 
 		em.getTransaction().begin();
 		em.merge(t);

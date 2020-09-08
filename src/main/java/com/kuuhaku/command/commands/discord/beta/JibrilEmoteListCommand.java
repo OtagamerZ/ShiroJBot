@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.discord.partner;
+package com.kuuhaku.command.commands.discord.beta;
 
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
