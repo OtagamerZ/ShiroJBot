@@ -1103,7 +1103,7 @@ public class Helper {
 		boolean dbUltimate = dropBuff != null && dropBuff.getTier() == 4;
 
 		if (dbUltimate || chance(2 + (channel.getGuild().getMemberCount() * 1d / 5000) * (dropBuff != null ? dropBuff.getMult() : 1))) {
-			Prize drop = Helper.rng(100, false) > 80 ? new ItemDrop() : new CreditDrop();
+			Prize drop = Helper.rng(100, false) > 90 ? new ItemDrop() : new CreditDrop();
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			eb.setThumbnail("https://i.pinimg.com/originals/86/c0/f4/86c0f4d0f020c3f819a532873ef33704.png");
