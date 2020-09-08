@@ -37,6 +37,7 @@ import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.Extensions;
 import com.kuuhaku.model.common.drop.CreditDrop;
+import com.kuuhaku.model.common.drop.ItemDrop;
 import com.kuuhaku.model.common.drop.Prize;
 import com.kuuhaku.model.persistent.*;
 import de.androidpit.colorthief.ColorThief;
@@ -1061,7 +1062,7 @@ public class Helper {
 
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setImage("attachment://kawaipon.png");
-		eb.setAuthor(message.getAuthor().getAsMention() + " invocou a carta " + c.getRarity().toString().toUpperCase() + " neste servidor!");
+		eb.setAuthor(message.getAuthor().getName() + " invocou uma carta " + c.getRarity().toString().toUpperCase() + " neste servidor!");
 		eb.setTitle(kc.getName() + " (" + c.getAnime().toString() + ")");
 		eb.setColor(colorThief(img));
 		eb.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + (c.getRarity().getIndex() * 400 * (foil ? 2 : 1)) + " créditos).", null);
@@ -1102,12 +1103,13 @@ public class Helper {
 		boolean dbUltimate = dropBuff != null && dropBuff.getTier() == 4;
 
 		if (dbUltimate || chance(2 + (channel.getGuild().getMemberCount() * 1d / 5000) * (dropBuff != null ? dropBuff.getMult() : 1))) {
-			Prize drop = new CreditDrop();
+			Prize drop = Helper.rng(100, false) > 80 ? new ItemDrop() : new CreditDrop();
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			eb.setThumbnail("https://i.pinimg.com/originals/86/c0/f4/86c0f4d0f020c3f819a532873ef33704.png");
 			eb.setTitle("Um drop apareceu neste servidor!");
-			eb.addField("Conteúdo:", drop.getPrize() + " créditos", true);
+			if (drop instanceof CreditDrop) eb.addField("Conteúdo:", drop.getPrize() + " créditos", true);
+			else eb.addField("Conteúdo:", drop.getPrizeAsItem().getName(), true);
 			eb.addField("Código captcha:", "||" + drop.getCaptcha() + "||", true);
 			eb.setFooter("Digite `" + gc.getPrefix() + "abrir` para receber o prêmio (requisitos: " + drop.getRequirement().getKey() + ").", null);
 

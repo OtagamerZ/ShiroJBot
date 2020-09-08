@@ -178,7 +178,7 @@ public class Member {
 			acc.addCredit(75 + (8 * level), this.getClass());
 			AccountDAO.saveAccount(acc);
 		}
-		return xp;
+		return (long) (amount * spamModif);
 	}
 
 	public void recalculateLevel() {
