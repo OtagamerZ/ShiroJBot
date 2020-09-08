@@ -112,8 +112,8 @@ public class Helper {
 			return PrivilegeLevel.SUPPORT;
 		else if (member.hasPermission(Permission.MESSAGE_MANAGE))
 			return PrivilegeLevel.MOD;
-		else if (TagDAO.getTagById(member.getGuild().getOwnerId()).isPartner() || TagDAO.getTagById(member.getId()).isPartner())
-			return PrivilegeLevel.PARTNER;
+		else if (TagDAO.getTagById(member.getGuild().getOwnerId()).isBeta() || TagDAO.getTagById(member.getId()).isBeta())
+			return PrivilegeLevel.BETA;
 		return PrivilegeLevel.USER;
 	}
 
@@ -426,7 +426,7 @@ public class Helper {
 		String jibrilPerms = "";
 
 		try {
-			if (TagDAO.getTagById(c.getGuild().getOwnerId()).isPartner() && c.getGuild().getMembers().contains(c.getGuild().getMember(Main.getJibril().getSelfUser()))) {
+			if (TagDAO.getTagById(c.getGuild().getOwnerId()).isBeta() && c.getGuild().getMembers().contains(c.getGuild().getMember(Main.getJibril().getSelfUser()))) {
 				Member jibril = c.getGuild().getMemberById(Main.getJibril().getSelfUser().getId());
 				assert jibril != null;
 				EnumSet<Permission> perms = Objects.requireNonNull(c.getGuild().getMemberById(jibril.getId())).getPermissionsExplicit(c);
@@ -475,14 +475,14 @@ public class Helper {
 		return chunks;
 	}
 
-	public static void nonPartnerAlert(User author, Member member, MessageChannel channel, String s, String link) {
+	public static void nonBetaAlert(User author, Member member, MessageChannel channel, String s, String link) {
 		try {
-			if (!TagDAO.getTagById(author.getId()).isPartner() && !hasPermission(member, PrivilegeLevel.DEV)) {
-				channel.sendMessage("❌ | Este comando é exlusivo para parceiros!").queue();
+			if (!TagDAO.getTagById(author.getId()).isBeta() && !hasPermission(member, PrivilegeLevel.DEV)) {
+				channel.sendMessage("❌ | Este comando requer acesso beta!").queue();
 				return;
 			}
 		} catch (NoResultException e) {
-			channel.sendMessage("❌ | Este comando é exlusivo para parceiros!").queue();
+			channel.sendMessage("❌ | Este comando requer acesso beta!").queue();
 			return;
 		}
 

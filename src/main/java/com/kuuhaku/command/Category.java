@@ -36,7 +36,7 @@ public enum Category {
 	DEV(ShiroInfo.getLocale(I18n.PT).getString("cat_dev-name"), "<:dev:674261700333142046>", "674261700333142046", ShiroInfo.getLocale(I18n.PT).getString("cat_dev-description"), PrivilegeLevel.DEV),
 	SUPPORT(ShiroInfo.getLocale(I18n.PT).getString("cat_support-name"), "<:sheriff:674261700538662913>", "674261700538662913", ShiroInfo.getLocale(I18n.PT).getString("cat_support-description"), PrivilegeLevel.SUPPORT),
 	MODERACAO(ShiroInfo.getLocale(I18n.PT).getString("cat_moderation-name"), "<:mod:674261700844716082>", "674261700844716082", ShiroInfo.getLocale(I18n.PT).getString("cat_moderation-description"), PrivilegeLevel.MOD),
-	PARTNER(ShiroInfo.getLocale(I18n.PT).getString("cat_partner-name"), "<:partner:674261701109219328>", "674261701109219328", ShiroInfo.getLocale(I18n.PT).getString("cat_partner-description"), PrivilegeLevel.USER),
+	BETA(ShiroInfo.getLocale(I18n.PT).getString("cat_beta-name"), "<:beta:674261701109219328>", "674261701109219328", ShiroInfo.getLocale(I18n.PT).getString("cat_beta-description"), PrivilegeLevel.USER),
 	FUN(ShiroInfo.getLocale(I18n.PT).getString("cat_fun-name"), "<:fun:674261700941185035>", "674261700941185035", ShiroInfo.getLocale(I18n.PT).getString("cat_fun-description"), PrivilegeLevel.USER),
 	MISC(ShiroInfo.getLocale(I18n.PT).getString("cat_misc-name"), "<:misc:674261700354113536>", "674261700354113536", ShiroInfo.getLocale(I18n.PT).getString("cat_misc-description"), PrivilegeLevel.USER),
 	INFO(ShiroInfo.getLocale(I18n.PT).getString("cat_info-name"), "<:info:674261700643651645>", "674261700643651645", ShiroInfo.getLocale(I18n.PT).getString("cat_info-description"), PrivilegeLevel.USER),
@@ -86,7 +86,7 @@ public enum Category {
 		if (this == NSFW) return false;
 		else if ((this == DEV || this == SUPPORT) && (!g.getId().equals(ShiroInfo.getSupportServerID()) && !ShiroInfo.getDevelopers().contains(u.getId()))) {
 			return false;
-		} else if (this == PARTNER && (!TagDAO.getTagById(g.getOwnerId()).isPartner() && !ShiroInfo.getDevelopers().contains(u.getId()))) {
+		} else if (this == BETA && (!TagDAO.getTagById(g.getOwnerId()).isBeta() && !ShiroInfo.getDevelopers().contains(u.getId()))) {
 			return false;
 		} else return !gc.getDisabledModules().contains(this);
 	}

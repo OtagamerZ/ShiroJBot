@@ -77,7 +77,7 @@ public class RegenRulesCommand extends Command {
 					channel.sendMessage("**" + (i + 1) + " - " + rule[0] + "**\n" + rule[1]).complete();
 				}
 			if (Helper.getSponsors().length() > 0) {
-				channel.sendFile(Helper.getImage("https://i.imgur.com/U9lTSWD.png"), "partners.png").complete();
+				channel.sendFile(Helper.getImage("https://i.imgur.com/U9lTSWD.png"), "sponsors.png").complete();
 				channel.sendMessage(Helper.getSponsors()).complete();
 			}
 		} catch (IOException e) {

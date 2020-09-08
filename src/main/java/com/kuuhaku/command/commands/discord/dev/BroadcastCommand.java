@@ -122,7 +122,7 @@ public class BroadcastCommand extends Command {
 				channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 5, u -> u.getId().equals(author.getId())));
 				break;
 			case "parceiros":
-				List<Tags> ps = TagDAO.getAllPartners();
+				List<Tags> ps = TagDAO.getAllBetas();
 				List<List<Tags>> psPages = Helper.chunkify(ps, 10);
 
 				for (List<Tags> p : psPages) {

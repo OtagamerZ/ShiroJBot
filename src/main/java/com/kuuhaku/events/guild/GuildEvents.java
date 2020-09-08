@@ -200,7 +200,7 @@ public class GuildEvents extends ListenerAdapter {
 					}
 
 					command.execute(author, member, rawMsgNoPrefix, args, message, channel, guild, prefix);
-					if (!TagDAO.getTagById(author.getId()).isPartner() || !Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
+					if (!TagDAO.getTagById(author.getId()).isBeta() || !Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
 						Main.getInfo().getRatelimit().put(author.getId(), true);
 					Helper.spawnAd(channel);
 				}
