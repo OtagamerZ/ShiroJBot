@@ -24,16 +24,22 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import org.apache.logging.log4j.util.TriConsumer;
 
 public class Consumable {
+	private final String id;
 	private final String name;
 	private final String description;
 	private final int price;
 	private final TriConsumer<Member, TextChannel, Message> effect;
 
-	public Consumable(String name, String description, int price, TriConsumer<Member, TextChannel, Message> effect) {
+	public Consumable(String id, String name, String description, int price, TriConsumer<Member, TextChannel, Message> effect) {
+		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.price = price;
 		this.effect = effect;
+	}
+
+	public String getId() {
+		return id;
 	}
 
 	public String getName() {
