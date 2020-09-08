@@ -14,7 +14,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/KawaiponDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/KawaiponDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/Category.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/Category.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/BroadcastCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/BroadcastCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/PartnerTagCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/dev/BetaTagCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/BotInfoCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/BotInfoCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TransferCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TransferCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/RegenRulesCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/moderation/RegenRulesCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/partner/DecryptCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/beta/DecryptCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/partner/EncryptCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/beta/EncryptCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/partner/JibrilCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/beta/JibrilCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/partner/JibrilEmoteListCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/beta/JibrilEmoteListCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/partner/KGotchiCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/beta/KGotchiCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/partner/PurchaceKGotchiCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/beta/PurchaceKGotchiCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/partner/RelayCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/beta/RelayCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/partner/TetCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/beta/TetCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/TagDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/TagDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/TokenDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/TokenDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthMinuteEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthMinuteEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/guild/GuildEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/guild/GuildEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/guild/GuildUpdateEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/guild/GuildUpdateEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Tags.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Tags.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/PrivilegeLevel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/PrivilegeLevel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Settings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Settings.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,7 +97,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="branch_name" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -160,6 +186,17 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [clean]">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -228,9 +265,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.ShiroJBot [shadowJar]" />
+        <item itemvalue="Gradle.ShiroJBot [clean]" />
+        <item itemvalue="Gradle.ShiroJBot [:javadoc]" />
         <item itemvalue="Gradle.ShiroJBot [clean]" />
         <item itemvalue="Gradle.ShiroJBot [shadowJar]" />
-        <item itemvalue="Gradle.ShiroJBot [:javadoc]" />
       </list>
     </recent_temporary>
   </component>
@@ -659,6 +698,7 @@
       <workItem from="1599143608752" duration="4825000" />
       <workItem from="1599152291444" duration="8675000" />
       <workItem from="1599163931199" duration="1113000" />
+      <workItem from="1599566868023" duration="2317000" />
     </task>
     <task id="LOCAL-02358" summary="Agora é possível vender cartas para jogadores, exceto se ele possuir dívida ativa">
       <created>1599058503621</created>
@@ -1137,10 +1177,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="551" y="215" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595276691052" />
-    <state x="553" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1599154615158">
+    <state x="347" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1599568009895">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="553" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1599154615158" />
+    <state x="347" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1599568009895" />
     <state x="570" y="253" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1594747282183">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1170,26 +1210,26 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="620" y="261" key="FileChooserDialogImpl/0.0.1680.1010@0.0.1680.1010" timestamp="1597149004659" />
-    <state width="1125" height="289" key="GridCell.Tab.0.bottom" timestamp="1599162944812">
+    <state width="1391" height="289" key="GridCell.Tab.0.bottom" timestamp="1599567516411">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="270" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1125" height="289" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1599162944812" />
-    <state width="1125" height="289" key="GridCell.Tab.0.center" timestamp="1599162944811">
+    <state width="1391" height="289" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1599567516411" />
+    <state width="1391" height="289" key="GridCell.Tab.0.center" timestamp="1599567516411">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="270" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1125" height="289" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1599162944811" />
-    <state width="1125" height="289" key="GridCell.Tab.0.left" timestamp="1599162944811">
+    <state width="1391" height="289" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1599567516411" />
+    <state width="1391" height="289" key="GridCell.Tab.0.left" timestamp="1599567516410">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="270" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1125" height="289" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1599162944811" />
-    <state width="1125" height="289" key="GridCell.Tab.0.right" timestamp="1599162944812">
+    <state width="1391" height="289" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1599567516410" />
+    <state width="1391" height="289" key="GridCell.Tab.0.right" timestamp="1599567516411">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state width="905" height="270" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
-    <state width="1125" height="289" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1599162944812" />
+    <state width="1391" height="289" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1599567516411" />
     <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1594058079602">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1257,10 +1297,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="465" y="286" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595246935580" />
-    <state x="287" y="102" width="957" height="784" key="find.popup" timestamp="1599164181587">
+    <state x="287" y="102" width="957" height="784" key="find.popup" timestamp="1599568829991">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="287" y="102" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1599164181587" />
+    <state x="287" y="102" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1599568829991" />
     <state x="645" y="400" key="git4idea.ui.GitResetDialog" timestamp="1593018818159">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>

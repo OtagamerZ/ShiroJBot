@@ -20,7 +20,7 @@ package com.kuuhaku.utils;
 
 public enum PrivilegeLevel {
 
-	USER(0, 0), PARTNER(1, 1), MOD(2, 2), SUPPORT(3, 3), DEV(4, 4), NIICHAN(5, 5);
+	USER(0, 0), BETA(1, 1), MOD(2, 2), SUPPORT(3, 3), DEV(4, 4), NIICHAN(5, 5);
 
 	private final int authority;
 	private final int id;

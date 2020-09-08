@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.commands.discord.partner;
+package com.kuuhaku.command.commands.discord.beta;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
@@ -44,7 +44,7 @@ public class JibrilCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		Helper.nonPartnerAlert(author, member, channel, "Para chamar a Jibril para seu servidor, utilize este link:\n", "JIBRIL_LINK");
+		Helper.nonBetaAlert(author, member, channel, "Para chamar a Jibril para seu servidor, utilize este link:\n", "JIBRIL_LINK");
 	}
 
 }

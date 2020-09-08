@@ -20,6 +20,7 @@ package com.kuuhaku.managers;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.command.commands.discord.beta.*;
 import com.kuuhaku.command.commands.discord.dev.*;
 import com.kuuhaku.command.commands.discord.exceed.ExceedLeaveCommand;
 import com.kuuhaku.command.commands.discord.exceed.ExceedPaletteCommand;
@@ -31,7 +32,6 @@ import com.kuuhaku.command.commands.discord.misc.*;
 import com.kuuhaku.command.commands.discord.moderation.*;
 import com.kuuhaku.command.commands.discord.music.ControlCommand;
 import com.kuuhaku.command.commands.discord.music.YoutubeCommand;
-import com.kuuhaku.command.commands.discord.partner.*;
 import com.kuuhaku.command.commands.discord.reactions.*;
 import com.kuuhaku.command.commands.discord.reactions.answerable.*;
 import com.kuuhaku.command.commands.discord.support.BlockCommand;
@@ -75,8 +75,8 @@ public class CommandManager {
 			put(ToxicTagCommand.class, new Argument(
 					"toxico", new String[]{"toxic"}, REQ_MENTION, "cmd_toxic-tag", DEV, false
 			));
-			put(PartnerTagCommand.class, new Argument(
-					"parceiro", new String[]{"partner"}, REQ_MENTION, "cmd_partner-tag", DEV, false
+			put(BetaTagCommand.class, new Argument(
+					"beta", REQ_MENTION, "cmd_beta-tag", DEV, false
 			));
 			put(VerifiedTagCommand.class, new Argument(
 					"verificado", new String[]{"verified"}, REQ_MENTION, "cmd_verified-tag", DEV, false
@@ -132,30 +132,30 @@ public class CommandManager {
 					"mark", new String[]{"solved", "resolvido"}, REQ_ID, "cmd_mark-ticket", SUPPORT, false
 			));
 
-			//PARTNER
+			//BETA
 			put(JibrilCommand.class, new Argument(
-					"jibril", "cmd_jibril", PARTNER, false
+					"jibril", "cmd_jibril", BETA, false
 			));
 			put(TetCommand.class, new Argument(
-					"tet", "cmd_tet", PARTNER, false
+					"tet", "cmd_tet", BETA, false
 			));
 			put(JibrilEmoteListCommand.class, new Argument(
-					"jemotes", REQ_NAME, "cmd_j-emotes", PARTNER, true
+					"jemotes", REQ_NAME, "cmd_j-emotes", BETA, true
 			));
 			put(PurchaceKGotchiCommand.class, new Argument(
-					"pkgotchi", new String[]{"buykgotchi", "comprarkgotchi"}, "req_kgotchi", "cmd_kgotchi-shop", PARTNER, false
+					"pkgotchi", new String[]{"buykgotchi", "comprarkgotchi"}, "req_kgotchi", "cmd_kgotchi-shop", BETA, false
 			));
 			put(KGotchiCommand.class, new Argument(
-					"kgotchi", new String[]{"kg", "kawaig"}, "req_action", "cmd_kgotchi", PARTNER, false
+					"kgotchi", new String[]{"kg", "kawaig"}, "req_action", "cmd_kgotchi", BETA, false
 			));
 			put(RelayCommand.class, new Argument(
-					"relay", new String[]{"relinfo", "relcon"}, "cmd_relay", PARTNER, false
+					"relay", new String[]{"relinfo", "relcon"}, "cmd_relay", BETA, false
 			));
 			put(EncryptCommand.class, new Argument(
-					"criptografar", new String[]{"crypt", "crpt"}, REQ_KEY_FILE, "cmd_encrypt", PARTNER, false
+					"criptografar", new String[]{"crypt", "crpt"}, REQ_KEY_FILE, "cmd_encrypt", BETA, false
 			));
 			put(DecryptCommand.class, new Argument(
-					"descriptografar", new String[]{"decrypt", "dcrpt"}, REQ_KEY_FILE, "cmd_decrypt", PARTNER, false
+					"descriptografar", new String[]{"decrypt", "dcrpt"}, REQ_KEY_FILE, "cmd_decrypt", BETA, false
 			));
 
 			//MODERATION
