@@ -58,7 +58,8 @@ public enum AnimeName {
 	FATE_APOCRYPHA,
 	KONOSUBA,
 	DANMACHI,
-	SHINCHOU_YUUSHA;
+	SHINCHOU_YUUSHA,
+	BAYONETTA_BLOODY_FATE;
 
 	@Override
 	public String toString() {
