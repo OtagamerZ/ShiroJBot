@@ -293,7 +293,7 @@ public class GuildEvents extends ListenerAdapter {
 					MemberDAO.updateMemberConfigs(m);
 				} catch (NoResultException e) {
 					MemberDAO.addMemberToDB(member);
-				} catch (ErrorResponseException ignore) {
+				} catch (ErrorResponseException | NullPointerException ignore) {
 				}
 			}
 		} catch (InsufficientPermissionException | ErrorResponseException ignore) {
