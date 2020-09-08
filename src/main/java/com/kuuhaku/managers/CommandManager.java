@@ -63,6 +63,7 @@ public class CommandManager {
 	private static final String REQ_CHANNEL = "req_channel";
 	private static final String REQ_MENTION_BET = "req_mention-bet";
 	private static final String REQ_COLOR = "req_color";
+	private static final String REQ_ITEM = "req_item";
 	private final HashMap<Class<? extends Command>, Argument> commands = new HashMap<>() {
 		{
 			//DEV
@@ -402,6 +403,12 @@ public class CommandManager {
 			));
 			put(LotteryCommand.class, new Argument(
 					"loteria", new String[]{"lottery"}, "req_dozens", "cmd_lottery", MISC, true
+			));
+			put(BuyConsumableCommand.class, new Argument(
+					"loja", new String[]{"shop"}, REQ_ITEM, "cmd_item-shop", MISC, false
+			));
+			put(UseConsumableCommand.class, new Argument(
+					"usar", new String[]{"use"}, REQ_ITEM, "cmd_use-item", MISC, false
 			));
 
 			//FUN
