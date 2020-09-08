@@ -14,15 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/ItemDrop.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyConsumableCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyConsumableCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Consumable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Consumable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/CreditDrop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/CreditDrop.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/Prize.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/Prize.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/TwitchDrop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/TwitchDrop.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Member.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ConsumableShop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ConsumableShop.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -684,21 +676,7 @@
       <workItem from="1599566868023" duration="6708000" />
       <workItem from="1599583377545" duration="19000" />
       <workItem from="1599583472187" duration="9000" />
-      <workItem from="1599586831637" duration="4117000" />
-    </task>
-    <task id="LOCAL-02367" summary="Embeds com tema material (apenas para usuários do tema escuro)">
-      <created>1599078960329</created>
-      <option name="number" value="02367" />
-      <option name="presentableId" value="LOCAL-02367" />
-      <option name="project" value="LOCAL" />
-      <updated>1599078960330</updated>
-    </task>
-    <task id="LOCAL-02368" summary="Correções no embeds sem cor e adição de requisito de slowmode para o chat global">
-      <created>1599137465319</created>
-      <option name="number" value="02368" />
-      <option name="presentableId" value="LOCAL-02368" />
-      <option name="project" value="LOCAL" />
-      <updated>1599137465320</updated>
+      <workItem from="1599586831637" duration="5325000" />
     </task>
     <task id="LOCAL-02369" summary="Correção no gráfico de ranking">
       <created>1599138860269</created>
@@ -1029,7 +1007,21 @@
       <option name="project" value="LOCAL" />
       <updated>1599590164907</updated>
     </task>
-    <option name="localTasksCounter" value="2416" />
+    <task id="LOCAL-02416" summary="Nova loja de boosters de uso individual e drops de item">
+      <created>1599590978237</created>
+      <option name="number" value="02416" />
+      <option name="presentableId" value="LOCAL-02416" />
+      <option name="project" value="LOCAL" />
+      <updated>1599590978237</updated>
+    </task>
+    <task id="LOCAL-02417" summary="Nova loja de boosters de uso individual e drops de item">
+      <created>1599591196846</created>
+      <option name="number" value="02417" />
+      <option name="presentableId" value="LOCAL-02417" />
+      <option name="project" value="LOCAL" />
+      <updated>1599591196846</updated>
+    </task>
+    <option name="localTasksCounter" value="2418" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1095,7 +1087,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção na duração da fila de músicas" />
     <MESSAGE value="Troca de &quot;cargo warn&quot; para &quot;cargo mute&quot;" />
     <MESSAGE value="Apostas em jogos habilitadas" />
     <MESSAGE value="Adição de erro de quantidade no comando prune" />
@@ -1120,7 +1111,8 @@
     <MESSAGE value="Novas cartas: Shinchou Yuusha" />
     <MESSAGE value="Correções no notificador da Jibril" />
     <MESSAGE value="Nova loja de boosters de uso individual" />
-    <option name="LAST_COMMIT_MESSAGE" value="Nova loja de boosters de uso individual" />
+    <MESSAGE value="Nova loja de boosters de uso individual e drops de item" />
+    <option name="LAST_COMMIT_MESSAGE" value="Nova loja de boosters de uso individual e drops de item" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1175,11 +1167,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1599590162340">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1599591194041">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1599590162340" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1599591194041" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1241,11 +1233,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1599590166307">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1599591198515">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1599590166307" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1599591198515" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
