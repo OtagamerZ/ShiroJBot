@@ -30,7 +30,7 @@ import java.util.Map;
 
 public class ConsumableShop {
 	private static final Map<String, Consumable> available = new HashMap<>() {{
-		put("xpboost", new Consumable("XP Booster",
+		put("xpboost", new Consumable("xpboost", "XP Booster",
 				"Ganha 3500 de XP instantâneamente (valor reduzido se você ganhou XP em menos de 10 segundos)",
 				5000,
 				(mb, ch, ms) -> {
@@ -38,14 +38,14 @@ public class ConsumableShop {
 					ch.sendMessage(mb.getAsMention() + " utilizou um boost de experiência e ganhou " + m.addXp(3500) + " XP.").queue();
 					MemberDAO.updateMemberConfigs(m);
 				}));
-		put("spawncard", new Consumable("Invocar Carta",
+		put("spawncard", new Consumable("spawncard", "Invocar Carta",
 				"Invoca uma carta aleatória (chance de ser cromada afetada pelo buff do servidor)",
 				2500,
 				(mb, ch, ms) -> {
 					GuildConfig gc = GuildDAO.getGuildById(mb.getGuild().getId());
 					Helper.forceSpawnKawaipon(gc, ms, null);
 				}));
-		put("spawnanime", new Consumable("Invocar Anime",
+		put("spawnanime", new Consumable("spawnanime", "Invocar Anime",
 				"Invoca uma carta aleatória de um anime específico (chance de ser cromada afetada pelo buff do servidor)",
 				10000,
 				(mb, ch, ms) -> {

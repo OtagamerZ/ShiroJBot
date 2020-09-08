@@ -24,6 +24,7 @@ import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
+import com.kuuhaku.model.common.Consumable;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.AnimeName;
 import com.kuuhaku.utils.ExceedEnum;
@@ -117,6 +118,11 @@ public class TwitchDrop implements Prize {
 	@Override
 	public int getPrize() {
 		return amount;
+	}
+
+	@Override
+	public Consumable getPrizeAsItem() {
+		return null;
 	}
 
 	@Override
