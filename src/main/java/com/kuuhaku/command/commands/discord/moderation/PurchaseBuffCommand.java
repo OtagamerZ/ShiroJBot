@@ -54,6 +54,8 @@ public class PurchaseBuffCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		Account acc = AccountDAO.getAccount(author.getId());
+
 		if (args.length < 2) {
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 
@@ -85,6 +87,7 @@ public class PurchaseBuffCommand extends Command {
 					"**Tier 3** (12000 créditos): `+100% chance de aparecer cartas cromadas` (5 dias)\n" +
 					"**:warning: Tier Ultimate** (120000 créditos): `Uma completa loucura, por 1 minuto TODAS as cartas que aparecerem serão cromadas`",
 					false);
+			eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
 
 			channel.sendMessage(eb.build()).queue();
 			return;
@@ -172,7 +175,6 @@ public class PurchaseBuffCommand extends Command {
 			return;
 		}
 
-		Account acc = AccountDAO.getAccount(author.getId());
 		if (acc.getBalance() < sb.getPrice()) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
 			return;

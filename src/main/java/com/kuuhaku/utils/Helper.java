@@ -1043,6 +1043,45 @@ public class Helper {
 		}
 	}
 
+	public static void forceSpawnKawaipon(GuildConfig gc, Message message, AnimeName anime) {
+		TextChannel channel = message.getTextChannel();
+		GuildBuff gb = GuildBuffDAO.getBuffs(channel.getGuild().getId());
+		ServerBuff foilBuff = gb.getBuffs().stream().filter(b -> b.getId() == 4).findFirst().orElse(null);
+		boolean fbUltimate = foilBuff != null && foilBuff.getTier() == 4;
+
+		List<Card> cards;
+		if (anime != null)
+			cards = CardDAO.getCards().stream().filter(c -> c.getAnime() == anime).collect(Collectors.toList());
+		else cards = CardDAO.getCards();
+
+		Card c = cards.get(Helper.rng(cards.size(), true));
+		boolean foil = fbUltimate || chance(0.5 * (foilBuff != null ? foilBuff.getMult() : 1));
+		KawaiponCard kc = new KawaiponCard(c, foil);
+		BufferedImage img = c.drawCard(foil);
+
+		EmbedBuilder eb = new EmbedBuilder();
+		eb.setImage("attachment://kawaipon.png");
+		eb.setAuthor(message.getAuthor().getAsMention() + " invocou a carta " + c.getRarity().toString().toUpperCase() + " neste servidor!");
+		eb.setTitle(kc.getName() + " (" + c.getAnime().toString() + ")");
+		eb.setColor(colorThief(img));
+		eb.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + (c.getRarity().getIndex() * 400 * (foil ? 2 : 1)) + " créditos).", null);
+
+		if (gc.getCanalKawaipon() == null || gc.getCanalKawaipon().isEmpty()) {
+			channel.sendMessage(eb.build()).addFile(getBytes(img, "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+		} else {
+			TextChannel tc = channel.getGuild().getTextChannelById(gc.getCanalKawaipon());
+
+			if (tc == null) {
+				gc.setCanalKawaipon(null);
+				GuildDAO.updateGuildSettings(gc);
+				channel.sendMessage(eb.build()).addFile(getBytes(c.drawCard(foil), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+			} else {
+				tc.sendMessage(eb.build()).addFile(getBytes(c.drawCard(foil), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+			}
+		}
+		Main.getInfo().getCurrentCard().put(channel.getGuild().getId(), kc);
+	}
+
 	public static void spawnKawaipon(EventChannel channel, TwitchChat chat) {
 		if (chance(2.5)) {
 			List<Card> cards = CardDAO.getCards();

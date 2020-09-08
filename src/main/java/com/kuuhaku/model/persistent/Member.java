@@ -167,6 +167,20 @@ public class Member {
 		return false;
 	}
 
+	public long addXp(int amount) {
+		float spamModif = Math.max(0, Math.min((System.currentTimeMillis() - lastEarntXp) / 10000f, 1));
+		xp += amount * spamModif;
+		lastEarntXp = System.currentTimeMillis();
+
+		if (xp >= (long) Math.pow(level, 2) * 100) {
+			level++;
+			Account acc = AccountDAO.getAccount(mid);
+			acc.addCredit(75 + (8 * level), this.getClass());
+			AccountDAO.saveAccount(acc);
+		}
+		return xp;
+	}
+
 	public void recalculateLevel() {
 		level = (int) Math.ceil(Math.sqrt(xp / 100f));
 	}
