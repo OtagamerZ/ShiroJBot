@@ -91,6 +91,8 @@ public class MinuteEvent implements Job {
 					MemberDAO.removeMutedMember(m);
 				}
 			} catch (HierarchyException ignore) {
+			} catch (NullPointerException e) {
+				MemberDAO.removeMutedMember(m);
 			}
 		});
 	}

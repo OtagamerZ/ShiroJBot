@@ -57,7 +57,8 @@ public enum AnimeName {
 	BRAND_NEW_ANIMAL,
 	FATE_APOCRYPHA,
 	KONOSUBA,
-	DANMACHI;
+	DANMACHI,
+	SHINCHOU_YUUSHA;
 
 	@Override
 	public String toString() {
