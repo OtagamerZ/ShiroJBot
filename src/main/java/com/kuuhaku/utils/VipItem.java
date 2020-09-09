@@ -43,6 +43,13 @@ public enum VipItem {
 				Kawaipon kp = KawaiponDAO.getKawaipon(acc.getUserId());
 				Card c = CardDAO.getCard(args[1], false);
 
+				CardStatus cs = Helper.checkStatus(kp);
+
+				if (cs == CardStatus.NO_CARDS) {
+					ch.sendMessage("❌ | Você já coletou todas as cartas que existem, parabéns!").queue();
+					return;
+				}
+
 				if (c == null) {
 					ch.sendMessage("❌ | Essa carta não existe.").queue();
 					return;
@@ -63,7 +70,9 @@ public enum VipItem {
 					return;
 				}
 
-				List<Card> cards = CardDAO.getCards().stream().filter(cd -> kp.getCard(cd, args[1].equalsIgnoreCase("C")) == null).collect(Collectors.toList());
+				boolean foil = cs != CardStatus.NORMAL_CARDS && (args[1].equalsIgnoreCase("C") || cs == CardStatus.FOIL_CARDS);
+
+				List<Card> cards = CardDAO.getCards().stream().filter(cd -> kp.getCard(cd, foil) == null).collect(Collectors.toList());
 				Card chosen = cards.get(Helper.rng(cards.size(), true));
 
 				kp.removeCard(card);
