@@ -21,13 +21,7 @@ package com.kuuhaku.command.commands.discord.misc;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.CardDAO;
-import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.model.persistent.Card;
-import com.kuuhaku.model.persistent.Kawaipon;
-import com.kuuhaku.model.persistent.KawaiponCard;
-import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import com.kuuhaku.utils.VipItem;
@@ -37,8 +31,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 
 import java.awt.*;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class VIPShopCommand extends Command {
 
@@ -85,88 +77,6 @@ public class VIPShopCommand extends Command {
 			return;
 		}
 
-		if (vi.name().startsWith("CARD_")) {
-			if (args.length < 2) {
-				channel.sendMessage("❌ | Você precisa informar uma carta.").queue();
-				return;
-			}
-
-			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
-			Card c = CardDAO.getCard(args[1], false);
-
-			if (c == null) {
-				channel.sendMessage("❌ | Essa carta não existe.").queue();
-				return;
-			}
-
-			if (vi.equals(VipItem.CARD_ROLL)) {
-				if (acc.getGems() < vi.getGems()) {
-					channel.sendMessage("❌ | Você não possui gemas suficientes.").queue();
-					return;
-				} else if (args.length < 3) {
-					channel.sendMessage("❌ | Você precisa informar uma carta e o tipo (`N` = normal, `C` = cromada).").queue();
-					return;
-				} else if (!Helper.equalsAny(args[2], "N", "C")) {
-					channel.sendMessage("❌ | Você precisa informar o tipo da carta que deseja rodar (`N` = normal, `C` = cromada).").queue();
-					return;
-				}
-				KawaiponCard card = kp.getCard(c, args[2].equalsIgnoreCase("C"));
-				KawaiponCard oldCard = new KawaiponCard(c, args[2].equalsIgnoreCase("C"));
-
-				if (card == null) {
-					channel.sendMessage("❌ | Você não pode rodar uma carta que não possui!").queue();
-					return;
-				}
-
-				List<Card> cards = CardDAO.getCards().stream().filter(cd -> kp.getCard(cd, args[1].equalsIgnoreCase("C")) == null).collect(Collectors.toList());
-				Card chosen = cards.get(Helper.rng(cards.size(), true));
-
-				kp.removeCard(card);
-				card.setCard(chosen);
-				kp.addCard(card);
-
-				KawaiponDAO.saveKawaipon(kp);
-				acc.removeGem(1);
-				AccountDAO.saveAccount(acc);
-
-				channel.sendMessage("Você rodou a carta " + oldCard.getName() + " com sucesso e conseguiu....**" + card.getName() + " (" + card.getCard().getRarity().toString() + ")**!").queue();
-				return;
-			} else if (vi.equals(VipItem.CARD_FOIL)) {
-				if (acc.getGems() < vi.getGems()) {
-					channel.sendMessage("❌ | Você não possui gemas suficientes.").queue();
-					return;
-				}
-				KawaiponCard card = kp.getCard(c, false);
-				KawaiponCard oldCard = new KawaiponCard(c, false);
-
-				if (card == null) {
-					channel.sendMessage("❌ | Você não pode cromar uma carta que não possui!").queue();
-					return;
-				}
-
-				kp.removeCard(card);
-				card.setFoil(true);
-				kp.addCard(card);
-
-				KawaiponDAO.saveKawaipon(kp);
-				acc.removeGem(5);
-				AccountDAO.saveAccount(acc);
-
-				channel.sendMessage("Você cromou a carta " + oldCard.getName() + " com sucesso!").queue();
-				return;
-			} else if (vi.equals(VipItem.ANIMATED_BACKGROUND)) {
-				if (acc.getGems() < vi.getGems()) {
-					channel.sendMessage("❌ | Você não possui gemas suficientes.").queue();
-					return;
-				}
-
-				acc.setAnimatedBg(true);
-				acc.removeGem(10);
-				AccountDAO.saveAccount(acc);
-
-				channel.sendMessage("Fundo de perfil animado habilitado com sucesso!").queue();
-				return;
-			}
-		}
+		vi.getAction().accept((TextChannel) channel, acc, args);
 	}
 }
