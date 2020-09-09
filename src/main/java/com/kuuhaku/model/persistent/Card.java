@@ -40,7 +40,7 @@ public class Card {
 	@Id
 	private String id;
 
-	@Column(columnDefinition = "VARCHAR(18) NOT NULL DEFAULT ''")
+	@Column(columnDefinition = "VARCHAR(32) NOT NULL DEFAULT ''")
 	private String name = "";
 
 	@Enumerated(EnumType.STRING)
