@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
-
+/*
 package com.kuuhaku.handlers.api.endpoint;
 
 import com.kuuhaku.handlers.api.exception.Exception;
@@ -93,3 +93,4 @@ public class ErrorHandler implements ErrorController {
 		return "/error";
 	}
 }
+ */
