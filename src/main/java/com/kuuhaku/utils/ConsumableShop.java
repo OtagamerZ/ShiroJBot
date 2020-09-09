@@ -18,10 +18,12 @@
 
 package com.kuuhaku.utils;
 
+import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.common.Consumable;
 import com.kuuhaku.model.persistent.GuildConfig;
+import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.Member;
 
 import java.util.Arrays;
@@ -43,7 +45,7 @@ public class ConsumableShop {
 				1000,
 				(mb, ch, ms) -> {
 					GuildConfig gc = GuildDAO.getGuildById(mb.getGuild().getId());
-					Helper.forceSpawnKawaipon(gc, ms, null);
+					Helper.forceSpawnKawaipon(gc, ms, (AnimeName) null);
 				}));
 		put("spawnanime", new Consumable("spawnanime", "Invocar Anime",
 				"Invoca uma carta aleatória de um anime específico (chance de ser cromada afetada pelo buff do servidor)",
@@ -60,6 +62,14 @@ public class ConsumableShop {
 
 					GuildConfig gc = GuildDAO.getGuildById(mb.getGuild().getId());
 					Helper.forceSpawnKawaipon(gc, ms, AnimeName.valueOf(args[2].toUpperCase()));
+				}));
+		put("spawnmissing", new Consumable("spawnmissing", "Invocar Carta Desconhecida",
+				"Invoca uma carta aleatória que você não tenha coletado ainda (chance de ser cromada afetada pelo buff do servidor)",
+				15000,
+				(mb, ch, ms) -> {
+					GuildConfig gc = GuildDAO.getGuildById(mb.getGuild().getId());
+					Kawaipon kp = KawaiponDAO.getKawaipon(mb.getId());
+					Helper.forceSpawnKawaipon(gc, ms, kp);
 				}));
 	}};
 

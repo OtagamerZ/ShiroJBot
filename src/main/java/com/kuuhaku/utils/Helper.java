@@ -1083,6 +1083,49 @@ public class Helper {
 		Main.getInfo().getCurrentCard().put(channel.getGuild().getId(), kc);
 	}
 
+	public static void forceSpawnKawaipon(GuildConfig gc, Message message, Kawaipon kp) {
+		CardStatus cs = Helper.checkStatus(kp);
+
+		if (cs == CardStatus.NO_CARDS) {
+			message.getChannel().sendMessage("❌ | Você já coletou todas as cartas que existem, parabéns!").queue();
+			return;
+		}
+
+		TextChannel channel = message.getTextChannel();
+		GuildBuff gb = GuildBuffDAO.getBuffs(channel.getGuild().getId());
+		ServerBuff foilBuff = gb.getBuffs().stream().filter(b -> b.getId() == 4).findFirst().orElse(null);
+		boolean fbUltimate = foilBuff != null && foilBuff.getTier() == 4;
+		boolean foil = cs != CardStatus.NORMAL_CARDS && (fbUltimate || chance(0.5 * (foilBuff != null ? foilBuff.getMult() : 1)) || cs == CardStatus.FOIL_CARDS);
+
+		List<Card> cards = CardDAO.getCards().stream().filter(c -> kp.getCard(c, foil) == null).collect(Collectors.toList());
+
+		Card c = cards.get(Helper.rng(cards.size(), true));
+		KawaiponCard kc = new KawaiponCard(c, foil);
+		BufferedImage img = c.drawCard(foil);
+
+		EmbedBuilder eb = new EmbedBuilder();
+		eb.setImage("attachment://kawaipon.png");
+		eb.setAuthor(message.getAuthor().getName() + " invocou uma carta " + c.getRarity().toString().toUpperCase() + " neste servidor!");
+		eb.setTitle(kc.getName() + " (" + c.getAnime().toString() + ")");
+		eb.setColor(colorThief(img));
+		eb.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + (c.getRarity().getIndex() * 400 * (foil ? 2 : 1)) + " créditos).", null);
+
+		if (gc.getCanalKawaipon() == null || gc.getCanalKawaipon().isEmpty()) {
+			channel.sendMessage(eb.build()).addFile(getBytes(img, "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+		} else {
+			TextChannel tc = channel.getGuild().getTextChannelById(gc.getCanalKawaipon());
+
+			if (tc == null) {
+				gc.setCanalKawaipon(null);
+				GuildDAO.updateGuildSettings(gc);
+				channel.sendMessage(eb.build()).addFile(getBytes(c.drawCard(foil), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+			} else {
+				tc.sendMessage(eb.build()).addFile(getBytes(c.drawCard(foil), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
+			}
+		}
+		Main.getInfo().getCurrentCard().put(channel.getGuild().getId(), kc);
+	}
+
 	public static void spawnKawaipon(EventChannel channel, TwitchChat chat) {
 		if (chance(2.5)) {
 			List<Card> cards = CardDAO.getCards();
@@ -1263,5 +1306,16 @@ public class Helper {
 				(int) ((millis / (1000 * 60)) % 60),
 				(int) (millis / 1000) % 60
 		);
+	}
+
+	public static CardStatus checkStatus(Kawaipon kp) {
+		int normalCount = (int) kp.getCards().stream().filter(cd -> !cd.isFoil()).count();
+		int foilCount = (int) kp.getCards().stream().filter(KawaiponCard::isFoil).count();
+		int total = (int) CardDAO.totalCards();
+
+		if (normalCount + foilCount == total * 2) return CardStatus.NO_CARDS;
+		else if (foilCount == total && normalCount < total) return CardStatus.NORMAL_CARDS;
+		else if (normalCount == total && foilCount < total) return CardStatus.FOIL_CARDS;
+		else return CardStatus.ALL_CARDS;
 	}
 }
