@@ -63,7 +63,7 @@ public class DashboardRequest {
 		jo.put("client_secret", System.getenv("BOT_SECRET"));
 		jo.put("grant_type", "authorization_code");
 		jo.put("code", code);
-		jo.put("redirect_uri", "http://api." + System.getenv("SERVER_URL") + "/auth");
+		jo.put("redirect_uri", "https://api." + System.getenv("SERVER_URL") + "/auth");
 		jo.put("scope", "identify");
 
 		JSONObject token = null;
@@ -83,18 +83,18 @@ public class DashboardRequest {
 			String session = URLEncoder.encode(Helper.generateToken(u.getId(), 16), StandardCharsets.UTF_8);
 			String t = TokenDAO.verifyToken(user.getString("id"));
 			if (t == null) {
-				http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + "/Unauthorized");
-				http.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				http.setHeader("Location", "https://" + System.getenv("SERVER_URL") + "/Unauthorized");
+				http.setStatus(HttpServletResponse.SC_FOUND);
 				return;
 			}
-			http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + "/Loading?s=" + session);
+			http.setHeader("Location", "https://" + System.getenv("SERVER_URL") + "/Loading?s=" + session);
 			http.setStatus(HttpServletResponse.SC_FOUND);
 
 			user.put("token", t);
 			Main.getInfo().getSockets().getDashboard().addReadyData(new ReadyData(user, session), session);
 		} else {
-			http.setHeader("Location", "http://" + System.getenv("SERVER_URL") + "/Unauthorized");
-			http.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			http.setHeader("Location", "https://" + System.getenv("SERVER_URL") + "/Unauthorized");
+			http.setStatus(HttpServletResponse.SC_FOUND);
 		}
 	}
 
