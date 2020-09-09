@@ -14,8 +14,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/VIPShopCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/VIPShopCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/VipItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/VipItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Card.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/AnimeName.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/AnimeName.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -669,14 +670,7 @@
       <workItem from="1599595216445" duration="28000" />
       <workItem from="1599595573526" duration="1589000" />
       <workItem from="1599653219189" duration="395000" />
-      <workItem from="1599653650588" duration="991000" />
-    </task>
-    <task id="LOCAL-02373" summary="Mudança do gerador de gráficos (ranking dos Exceeds)">
-      <created>1599144824944</created>
-      <option name="number" value="02373" />
-      <option name="presentableId" value="LOCAL-02373" />
-      <option name="project" value="LOCAL" />
-      <updated>1599144824944</updated>
+      <workItem from="1599653650588" duration="2411000" />
     </task>
     <task id="LOCAL-02374" summary="Mudança do gerador de gráficos (ranking dos Exceeds)">
       <created>1599145074175</created>
@@ -1014,7 +1008,14 @@
       <option name="project" value="LOCAL" />
       <updated>1599653843929</updated>
     </task>
-    <option name="localTasksCounter" value="2422" />
+    <task id="LOCAL-02422" summary="Adição de conversão de gema em créditos na loja VIP">
+      <created>1599654669920</created>
+      <option name="number" value="02422" />
+      <option name="presentableId" value="LOCAL-02422" />
+      <option name="project" value="LOCAL" />
+      <updated>1599654669920</updated>
+    </task>
+    <option name="localTasksCounter" value="2423" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1080,7 +1081,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Outras correções básicas" />
     <MESSAGE value="Criação de canal de Exceeds" />
     <MESSAGE value="Correção do cargo automatico" />
     <MESSAGE value="Agora não é mais possível comprar uma carta de outro jogador se você tiver uma dívida ativa" />
@@ -1105,7 +1105,8 @@
     <MESSAGE value="Redução na chance de drop de boosters" />
     <MESSAGE value="Novas cartas: Bayonetta: Bloody Fate" />
     <MESSAGE value="Redução do preço dos boosters de invocar carta e invocar anime" />
-    <option name="LAST_COMMIT_MESSAGE" value="Redução do preço dos boosters de invocar carta e invocar anime" />
+    <MESSAGE value="Adição de conversão de gema em créditos na loja VIP" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição de conversão de gema em créditos na loja VIP" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1160,11 +1161,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1599653841135">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1599654667156">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1599653841135" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1599654667156" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1226,11 +1227,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1599653850433">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1599654671425">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1599653850433" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1599654671425" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1243,19 +1244,19 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="311" key="com.intellij.database.dbimport.ImportUtil.MyDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1594057250988" />
-    <state x="636" y="331" width="408" height="336" key="com.intellij.database.psi.DbRenamePsiElementProcessor.DbRenameDialog" timestamp="1597351402650">
+    <state x="636" y="331" width="408" height="355" key="com.intellij.database.psi.DbRenamePsiElementProcessor.DbRenameDialog" timestamp="1599656372884">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="636" y="331" width="408" height="336" key="com.intellij.database.psi.DbRenamePsiElementProcessor.DbRenameDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1597351402650" />
+    <state x="636" y="331" width="408" height="355" key="com.intellij.database.psi.DbRenamePsiElementProcessor.DbRenameDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1599656372884" />
     <state x="594" y="260" key="com.intellij.database.run.ParametersPanel.Standalone" timestamp="1598041461186">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="594" y="260" key="com.intellij.database.run.ParametersPanel.Standalone/0.0.1680.1010@0.0.1680.1010" timestamp="1598041461186" />
-    <state x="305" y="160" width="406" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1599572517971">
+    <state x="305" y="160" width="406" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1599656426593">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="254" y="43" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1366.768@0.0.1366.768" timestamp="1593921071276" />
-    <state x="305" y="160" width="406" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1599572517971" />
+    <state x="305" y="160" width="406" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1599656426593" />
     <state x="510" y="135" key="com.intellij.database.view.ui.DatabasePreviewDialog" timestamp="1597351739604">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1284,10 +1285,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="239" y="152" key="new project wizard/0.0.1680.1010@0.0.1680.1010" timestamp="1595512583095" />
-    <state x="496" y="233" width="672" height="677" key="run.anything.popup" timestamp="1599590785205">
+    <state x="496" y="233" width="672" height="677" key="run.anything.popup" timestamp="1599656197713">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1599590785205" />
+    <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1599656197713" />
     <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1599158942171">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>

@@ -59,7 +59,8 @@ public enum AnimeName {
 	KONOSUBA,
 	DANMACHI,
 	SHINCHOU_YUUSHA,
-	BAYONETTA_BLOODY_FATE;
+	BAYONETTA_BLOODY_FATE,
+	KOBAYASHI_SAN_CHI_NO_MAID_DRAGON;
 
 	@Override
 	public String toString() {
