@@ -18,22 +18,141 @@
 
 package com.kuuhaku.utils;
 
+import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.model.persistent.Account;
+import com.kuuhaku.model.persistent.Card;
+import com.kuuhaku.model.persistent.Kawaipon;
+import com.kuuhaku.model.persistent.KawaiponCard;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.TextChannel;
+import org.apache.logging.log4j.util.TriConsumer;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public enum VipItem {
-	CARD_ROLL(1, 1, new MessageEmbed.Field("1 - Rodar carta (1 gema)", "Troca a carta por outra aleatória que você não tenha", false)),
-	CARD_FOIL(2, 5, new MessageEmbed.Field("2 - Melhoria de carta (5 gemas)", "Transforma uma carta em cromada", false)),
-	ANIMATED_BACKGROUND(3, 10, new MessageEmbed.Field("3 - Fundo de perfil animado (10 gemas)", "Permite usar GIFs como fundo de perfil", false)),
-	;
+	CARD_ROLL(1, 1, new MessageEmbed.Field("1 - Rodar carta (1 gema)", "Troca a carta por outra aleatória que você não tenha", false),
+			(ch, acc, args) -> {
+				if (args.length < 2) {
+					ch.sendMessage("❌ | Você precisa informar uma carta.").queue();
+					return;
+				}
+
+				Kawaipon kp = KawaiponDAO.getKawaipon(acc.getUserId());
+				Card c = CardDAO.getCard(args[1], false);
+
+				if (c == null) {
+					ch.sendMessage("❌ | Essa carta não existe.").queue();
+					return;
+				}
+
+				if (acc.getGems() < VipItem.CARD_ROLL.getGems()) {
+					ch.sendMessage("❌ | Você não possui gemas suficientes.").queue();
+					return;
+				} else if (args.length < 3) {
+					ch.sendMessage("❌ | Você precisa informar uma carta e o tipo (`N` = normal, `C` = cromada).").queue();
+					return;
+				} else if (!Helper.equalsAny(args[2], "N", "C")) {
+					ch.sendMessage("❌ | Você precisa informar o tipo da carta que deseja rodar (`N` = normal, `C` = cromada).").queue();
+					return;
+				}
+				KawaiponCard card = kp.getCard(c, args[2].equalsIgnoreCase("C"));
+				KawaiponCard oldCard = new KawaiponCard(c, args[2].equalsIgnoreCase("C"));
+
+				if (card == null) {
+					ch.sendMessage("❌ | Você não pode rodar uma carta que não possui!").queue();
+					return;
+				}
+
+				List<Card> cards = CardDAO.getCards().stream().filter(cd -> kp.getCard(cd, args[1].equalsIgnoreCase("C")) == null).collect(Collectors.toList());
+				Card chosen = cards.get(Helper.rng(cards.size(), true));
+
+				kp.removeCard(card);
+				card.setCard(chosen);
+				kp.addCard(card);
+
+				KawaiponDAO.saveKawaipon(kp);
+				acc.removeGem(1);
+				AccountDAO.saveAccount(acc);
+
+				ch.sendMessage("Você rodou a carta " + oldCard.getName() + " com sucesso e conseguiu....**" + card.getName() + " (" + card.getCard().getRarity().toString() + ")**!").queue();
+			}),
+	CARD_FOIL(2, 5, new MessageEmbed.Field("2 - Melhoria de carta (5 gemas)", "Transforma uma carta em cromada", false),
+			(ch, acc, args) -> {
+				if (args.length < 2) {
+					ch.sendMessage("❌ | Você precisa informar uma carta.").queue();
+					return;
+				}
+
+				Kawaipon kp = KawaiponDAO.getKawaipon(acc.getUserId());
+				Card c = CardDAO.getCard(args[1], false);
+
+				if (c == null) {
+					ch.sendMessage("❌ | Essa carta não existe.").queue();
+					return;
+				}
+
+				if (acc.getGems() < VipItem.CARD_FOIL.getGems()) {
+					ch.sendMessage("❌ | Você não possui gemas suficientes.").queue();
+					return;
+				}
+				KawaiponCard card = kp.getCard(c, false);
+				KawaiponCard oldCard = new KawaiponCard(c, false);
+
+				if (card == null) {
+					ch.sendMessage("❌ | Você não pode cromar uma carta que não possui!").queue();
+					return;
+				}
+
+				kp.removeCard(card);
+				card.setFoil(true);
+				kp.addCard(card);
+
+				KawaiponDAO.saveKawaipon(kp);
+				acc.removeGem(5);
+				AccountDAO.saveAccount(acc);
+
+				ch.sendMessage("Você cromou a carta " + oldCard.getName() + " com sucesso!").queue();
+			}),
+	ANIMATED_BACKGROUND(3, 10, new MessageEmbed.Field("3 - Fundo de perfil animado (10 gemas)", "Permite usar GIFs como fundo de perfil", false),
+			(ch, acc, args) -> {
+				if (acc.getGems() < VipItem.ANIMATED_BACKGROUND.getGems()) {
+					ch.sendMessage("❌ | Você não possui gemas suficientes.").queue();
+					return;
+				}
+
+				acc.setAnimatedBg(true);
+				acc.removeGem(10);
+				AccountDAO.saveAccount(acc);
+
+				ch.sendMessage("Fundo de perfil animado habilitado com sucesso!").queue();
+			}),
+	CONVERT_CREDITS(4, 1, new MessageEmbed.Field("4 - Converter para créditos (1 gema)", "Troca 1 gema por 10000 créditos", false),
+			(ch, acc, args) -> {
+				if (acc.getGems() < VipItem.CONVERT_CREDITS.getGems()) {
+					ch.sendMessage("❌ | Você não possui gemas suficientes.").queue();
+					return;
+				}
+
+				acc.addCredit(10000, VipItem.class);
+				acc.removeGem(1);
+				AccountDAO.saveAccount(acc);
+
+				ch.sendMessage("Gema convertida com sucesso com sucesso!").queue();
+			});
 
 	private final int id;
 	private final int gems;
 	private final MessageEmbed.Field field;
+	private final TriConsumer<TextChannel, Account, String[]> action;
 
-	VipItem(int id, int gems, MessageEmbed.Field field) {
+	VipItem(int id, int gems, MessageEmbed.Field field, TriConsumer<TextChannel, Account, String[]> action) {
 		this.id = id;
 		this.gems = gems;
 		this.field = field;
+		this.action = action;
 	}
 
 	public int getId() {
@@ -46,6 +165,10 @@ public enum VipItem {
 
 	public MessageEmbed.Field getField() {
 		return field;
+	}
+
+	public TriConsumer<TextChannel, Account, String[]> getAction() {
+		return action;
 	}
 
 	public static VipItem getById(int id) {
