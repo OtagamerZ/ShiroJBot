@@ -48,10 +48,7 @@ public enum VipItem {
 					return;
 				}
 
-				if (acc.getGems() < VipItem.CARD_ROLL.getGems()) {
-					ch.sendMessage("❌ | Você não possui gemas suficientes.").queue();
-					return;
-				} else if (args.length < 3) {
+				if (args.length < 3) {
 					ch.sendMessage("❌ | Você precisa informar uma carta e o tipo (`N` = normal, `C` = cromada).").queue();
 					return;
 				} else if (!Helper.equalsAny(args[2], "N", "C")) {
@@ -94,10 +91,6 @@ public enum VipItem {
 					return;
 				}
 
-				if (acc.getGems() < VipItem.CARD_FOIL.getGems()) {
-					ch.sendMessage("❌ | Você não possui gemas suficientes.").queue();
-					return;
-				}
 				KawaiponCard card = kp.getCard(c, false);
 				KawaiponCard oldCard = new KawaiponCard(c, false);
 
@@ -118,11 +111,6 @@ public enum VipItem {
 			}),
 	ANIMATED_BACKGROUND(3, 10, new MessageEmbed.Field("3 - Fundo de perfil animado (10 gemas)", "Permite usar GIFs como fundo de perfil", false),
 			(ch, acc, args) -> {
-				if (acc.getGems() < VipItem.ANIMATED_BACKGROUND.getGems()) {
-					ch.sendMessage("❌ | Você não possui gemas suficientes.").queue();
-					return;
-				}
-
 				acc.setAnimatedBg(true);
 				acc.removeGem(10);
 				AccountDAO.saveAccount(acc);
@@ -131,11 +119,6 @@ public enum VipItem {
 			}),
 	CONVERT_CREDITS(4, 1, new MessageEmbed.Field("4 - Converter para créditos (1 gema)", "Troca 1 gema por 10000 créditos", false),
 			(ch, acc, args) -> {
-				if (acc.getGems() < VipItem.CONVERT_CREDITS.getGems()) {
-					ch.sendMessage("❌ | Você não possui gemas suficientes.").queue();
-					return;
-				}
-
 				acc.addCredit(10000, VipItem.class);
 				acc.removeGem(1);
 				AccountDAO.saveAccount(acc);
