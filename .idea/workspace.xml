@@ -666,14 +666,7 @@
       <workItem from="1599595216445" duration="28000" />
       <workItem from="1599595573526" duration="1589000" />
       <workItem from="1599653219189" duration="395000" />
-      <workItem from="1599653650588" duration="2750000" />
-    </task>
-    <task id="LOCAL-02376" summary="Mudança do gerador de gráficos (ranking dos Exceeds)">
-      <created>1599148961914</created>
-      <option name="number" value="02376" />
-      <option name="presentableId" value="LOCAL-02376" />
-      <option name="project" value="LOCAL" />
-      <updated>1599148961914</updated>
+      <workItem from="1599653650588" duration="3087000" />
     </task>
     <task id="LOCAL-02377" summary="Mudança do gerador de gráficos (ranking dos Exceeds)">
       <created>1599149247043</created>
@@ -1011,7 +1004,14 @@
       <option name="project" value="LOCAL" />
       <updated>1599656929574</updated>
     </task>
-    <option name="localTasksCounter" value="2425" />
+    <task id="LOCAL-02425" summary="Nomes grandes na lista de cartas agora serão abreviados">
+      <created>1599657357935</created>
+      <option name="number" value="02425" />
+      <option name="presentableId" value="LOCAL-02425" />
+      <option name="project" value="LOCAL" />
+      <updated>1599657357935</updated>
+    </task>
+    <option name="localTasksCounter" value="2426" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1077,7 +1077,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção do cargo automatico" />
     <MESSAGE value="Agora não é mais possível comprar uma carta de outro jogador se você tiver uma dívida ativa" />
     <MESSAGE value="Agora é possível vender cartas para jogadores, exceto se ele possuir dívida ativa" />
     <MESSAGE value="Correção do comando de pedir avaliação" />
@@ -1102,7 +1101,8 @@
     <MESSAGE value="Redução do preço dos boosters de invocar carta e invocar anime" />
     <MESSAGE value="Adição de conversão de gema em créditos na loja VIP" />
     <MESSAGE value="Novas cartas: Kobayashi-san Chi No Maid Dragon" />
-    <option name="LAST_COMMIT_MESSAGE" value="Novas cartas: Kobayashi-san Chi No Maid Dragon" />
+    <MESSAGE value="Nomes grandes na lista de cartas agora serão abreviados" />
+    <option name="LAST_COMMIT_MESSAGE" value="Nomes grandes na lista de cartas agora serão abreviados" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1157,11 +1157,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1599656926899">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1599657355099">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1599656926899" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1599657355098" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1223,11 +1223,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1599656934487">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1599657361359">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1599656934487" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1599657361359" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>

@@ -72,7 +72,7 @@ public class KawaiponBook {
 		Graphics2D g2d = header.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, 90));
+		g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, 72));
 		if (foil) g2d.setColor(Color.yellow);
 		Profile.printCenteredString(text, 952, 36, 168, g2d);
 
@@ -116,14 +116,14 @@ public class KawaiponBook {
 							else g.setColor(rc.getPrimary());
 
 							g.drawImage(chunks.get(finalC).get(i).getCard().drawCard(foil), 52 + 190 * i, 24, 160, 250, null);
-							Profile.printCenteredString(StringUtils.abbreviate(chunks.get(finalC).get(i).getName(), 12), 160, 52 + 190 * i, 298, g);
+							Profile.printCenteredString(StringUtils.abbreviate(chunks.get(finalC).get(i).getName(), 15), 160, 52 + 190 * i, 298, g);
 						} else if (chunks.get(finalC).get(i).getCard().getRarity().equals(KawaiponRarity.ULTIMATE)) {
 							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, Helper.clamp(20 * 20 / chunks.get(finalC).get(i).getName().length(), 16, 20)));
 							g.setBackground(Color.black);
 							g.setColor(Color.white);
 
 							g.drawImage(slot, 52 + 190 * i, 24, 160, 250, null);
-							Profile.printCenteredString(StringUtils.abbreviate(chunks.get(finalC).get(i).getName(), 12), 160, 52 + 190 * i, 298, g);
+							Profile.printCenteredString(StringUtils.abbreviate(chunks.get(finalC).get(i).getName(), 15), 160, 52 + 190 * i, 298, g);
 						} else {
 							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
 							g.setBackground(Color.black);
