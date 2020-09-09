@@ -234,6 +234,7 @@ public class DashboardSocket extends WebSocketServer {
 
 							data.add(new JSONObject() {{
 								put("id", k.getId());
+								put("name", k.getName());
 								put("anime", k.getAnime());
 								put("rarity", k.getRarity().getIndex());
 								put("hasNormal", normal);
