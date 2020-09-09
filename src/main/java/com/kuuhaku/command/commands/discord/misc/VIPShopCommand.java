@@ -75,6 +75,9 @@ public class VIPShopCommand extends Command {
 		if (vi == null) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_invalid-id")).queue();
 			return;
+		} else if (acc.getGems() < vi.getGems()) {
+			channel.sendMessage("❌ | Você não possui gemas suficientes.").queue();
+			return;
 		}
 
 		vi.getAction().accept((TextChannel) channel, acc, args);
