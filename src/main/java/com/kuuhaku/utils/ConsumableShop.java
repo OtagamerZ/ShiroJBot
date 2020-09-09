@@ -40,14 +40,14 @@ public class ConsumableShop {
 				}));
 		put("spawncard", new Consumable("spawncard", "Invocar Carta",
 				"Invoca uma carta aleatória (chance de ser cromada afetada pelo buff do servidor)",
-				2500,
+				1000,
 				(mb, ch, ms) -> {
 					GuildConfig gc = GuildDAO.getGuildById(mb.getGuild().getId());
 					Helper.forceSpawnKawaipon(gc, ms, null);
 				}));
 		put("spawnanime", new Consumable("spawnanime", "Invocar Anime",
 				"Invoca uma carta aleatória de um anime específico (chance de ser cromada afetada pelo buff do servidor)",
-				10000,
+				6000,
 				(mb, ch, ms) -> {
 					String[] args = ms.getContentRaw().split(" ");
 					if (args.length < 3) {
