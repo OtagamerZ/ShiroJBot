@@ -113,7 +113,7 @@ public class CardValueCommand extends Command {
 					.setXAxisTicksVisible(false)
 					.setChartFontColor(Color.WHITE)
 					.setLegendPosition(Styler.LegendPosition.InsideNE)
-					.setSeriesColors(new Color[]{Color.gray, Color.yellow})
+					.setSeriesColors(new Color[]{new Color(0, 150, 0), Color.yellow})
 					.setPlotBackgroundColor(Color.decode("#202225"))
 					.setChartBackgroundColor(Color.decode("#101114"))
 					.setLegendBackgroundColor(Color.decode("#101114"))
