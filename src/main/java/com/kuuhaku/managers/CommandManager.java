@@ -294,6 +294,9 @@ public class CommandManager {
 			put(RemindMeCommand.class, new Argument(
 					"melembre", new String[]{"remindme", "notifyvote", "meavise"}, "cmd_remind-me", INFO, false
 			));
+			put(CardValueCommand.class, new Argument(
+					"valor", new String[]{"value"}, "req_card", "cmd_card-value", INFO, false
+			));
 
 			//MISC
 			put(BackgroundCommand.class, new Argument(

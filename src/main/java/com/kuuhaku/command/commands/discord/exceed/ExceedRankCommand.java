@@ -33,9 +33,7 @@ import org.jetbrains.annotations.NonNls;
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.Styler;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -114,9 +112,7 @@ public class ExceedRankCommand extends Command {
 						);
 					}
 
-					ByteArrayOutputStream baos = new ByteArrayOutputStream();
-					ImageIO.write(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "png", baos);
-					channel.sendFile(baos.toByteArray(), "ranking.png").queue(s -> s.delete().queueAfter(1, TimeUnit.MINUTES));
+					channel.sendFile(Helper.getBytes(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "png"), "ranking.png").queue(s -> s.delete().queueAfter(1, TimeUnit.MINUTES));
 					m.delete().queue();
 				} else if (args[0].equalsIgnoreCase("atual")) {
 					List<Exceed> exceeds = new ArrayList<>();
@@ -152,9 +148,7 @@ public class ExceedRankCommand extends Command {
 						);
 					}
 
-					ByteArrayOutputStream baos = new ByteArrayOutputStream();
-					ImageIO.write(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "png", baos);
-					channel.sendFile(baos.toByteArray(), "ranking.png").queue(s -> s.delete().queueAfter(1, TimeUnit.MINUTES));
+					channel.sendFile(Helper.getBytes(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "png"), "ranking.png").queue(s -> s.delete().queueAfter(1, TimeUnit.MINUTES));
 					m.delete().queue();
 				}
 			} catch (Exception e) {
