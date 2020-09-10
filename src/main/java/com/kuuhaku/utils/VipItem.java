@@ -72,7 +72,11 @@ public enum VipItem {
 
 				boolean foil = cs != CardStatus.NORMAL_CARDS && (args[1].equalsIgnoreCase("C") || cs == CardStatus.FOIL_CARDS);
 
-				List<Card> cards = CardDAO.getCards().stream().filter(cd -> kp.getCard(cd, foil) == null).collect(Collectors.toList());
+				List<Card> cards = CardDAO.getCardsByAnime(AnimeName.values()[Helper.rng(AnimeName.values().length, true)]).stream().filter(cd -> kp.getCard(c, foil) == null).collect(Collectors.toList());
+				while (cards.size() <= 0) {
+					cards = CardDAO.getCardsByAnime(AnimeName.values()[Helper.rng(AnimeName.values().length, true)]).stream().filter(cd -> kp.getCard(c, foil) == null).collect(Collectors.toList());
+				}
+
 				Card chosen = cards.get(Helper.rng(cards.size(), true));
 
 				kp.removeCard(card);
