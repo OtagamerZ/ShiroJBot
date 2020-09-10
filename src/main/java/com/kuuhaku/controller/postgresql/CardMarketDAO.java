@@ -19,7 +19,6 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.persistent.CardMarket;
-import com.kuuhaku.model.persistent.KawaiponCard;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -40,11 +39,12 @@ public class CardMarketDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static List<CardMarket> getCardsByCard(KawaiponCard kc) {
+	public static List<CardMarket> getCardsByCard(String id, boolean foil) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT cm FROM CardMarket cm WHERE cm.card = :card", CardMarket.class);
-		q.setParameter("card", kc);
+		Query q = em.createQuery("SELECT cm FROM CardMarket cm WHERE cm.card.card.id = UPPER(:id) AND cm.card.foil = :foil", CardMarket.class);
+		q.setParameter("id", id);
+		q.setParameter("foil", foil);
 
 		try {
 			return (List<CardMarket>) q.getResultList();
