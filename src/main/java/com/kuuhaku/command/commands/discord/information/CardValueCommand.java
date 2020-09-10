@@ -111,7 +111,7 @@ public class CardValueCommand extends Command {
 					.setLegendBackgroundColor(Color.decode("#101114"))
 					.setSeriesLines(Collections.nCopies(6, new BasicStroke(4, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND)).toArray(BasicStroke[]::new));
 
-			if (normalCards.size() <= 1)
+			if (normalCards.size() > 1)
 				chart.addSeries("Normal",
 						normalCards.stream()
 								.map(CardMarket::getId)
@@ -121,7 +121,7 @@ public class CardValueCommand extends Command {
 								.collect(Collectors.toList())
 				);
 
-			if (foilCards.size() <= 1)
+			if (foilCards.size() > 1)
 				chart.addSeries("Cromada",
 						foilCards.stream()
 								.map(CardMarket::getId)
