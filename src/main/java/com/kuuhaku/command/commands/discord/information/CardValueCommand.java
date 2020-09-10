@@ -69,6 +69,7 @@ public class CardValueCommand extends Command {
 		channel.sendMessage("<a:loading:697879726630502401> Gerando gráfico...").queue(m -> {
 			if (args.length < 1) {
 				channel.sendMessage("❌ | Você precisa informar uma carta para ver o gráfico de preços.").queue();
+				m.delete().queue();
 				return;
 			}
 
@@ -76,6 +77,7 @@ public class CardValueCommand extends Command {
 
 			if (c == null) {
 				channel.sendMessage("❌ | Essa carta não existe.").queue();
+				m.delete().queue();
 				return;
 			}
 
@@ -84,6 +86,7 @@ public class CardValueCommand extends Command {
 
 			if (normalCards.size() <= 1 && foilCards.size() <= 1) {
 				channel.sendMessage("❌ | Essa carta ainda não foi anunciada no mercado ainda ou possui apenas 1 oferta.").queue();
+				m.delete().queue();
 				return;
 			}
 
