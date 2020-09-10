@@ -67,8 +67,5 @@ public class UseConsumableCommand extends Command {
 
 		Consumable c = ConsumableShop.getAvailable().get(args[0]);
 		c.getEffect().accept(member, (TextChannel) channel, message);
-
-		acc.removeBuff(args[0]);
-		AccountDAO.saveAccount(acc);
 	}
 }

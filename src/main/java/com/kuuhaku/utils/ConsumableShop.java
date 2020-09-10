@@ -18,10 +18,12 @@
 
 package com.kuuhaku.utils;
 
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.common.Consumable;
+import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.Member;
@@ -39,6 +41,10 @@ public class ConsumableShop {
 					Member m = MemberDAO.getMemberById(mb.getId() + mb.getGuild().getId());
 					ch.sendMessage(mb.getAsMention() + " utilizou um boost de experiência e ganhou " + m.addXp(3500) + " XP.").queue();
 					MemberDAO.updateMemberConfigs(m);
+
+					Account acc = AccountDAO.getAccount(mb.getId());
+					acc.removeBuff("xpboost");
+					AccountDAO.saveAccount(acc);
 				}));
 		put("spawncard", new Consumable("spawncard", "Invocar Carta",
 				"Invoca uma carta aleatória (chance de ser cromada afetada pelo buff do servidor)",
@@ -46,6 +52,10 @@ public class ConsumableShop {
 				(mb, ch, ms) -> {
 					GuildConfig gc = GuildDAO.getGuildById(mb.getGuild().getId());
 					Helper.forceSpawnKawaipon(gc, ms, (AnimeName) null);
+
+					Account acc = AccountDAO.getAccount(mb.getId());
+					acc.removeBuff("spawncard");
+					AccountDAO.saveAccount(acc);
 				}));
 		put("spawnanime", new Consumable("spawnanime", "Invocar Anime",
 				"Invoca uma carta aleatória de um anime específico (chance de ser cromada afetada pelo buff do servidor)",
@@ -62,6 +72,10 @@ public class ConsumableShop {
 
 					GuildConfig gc = GuildDAO.getGuildById(mb.getGuild().getId());
 					Helper.forceSpawnKawaipon(gc, ms, AnimeName.valueOf(args[2].toUpperCase()));
+
+					Account acc = AccountDAO.getAccount(mb.getId());
+					acc.removeBuff("spawnanime");
+					AccountDAO.saveAccount(acc);
 				}));
 		put("spawnmissing", new Consumable("spawnmissing", "Invocar Carta Desconhecida",
 				"Invoca uma carta aleatória que você não tenha coletado ainda (chance de ser cromada afetada pelo buff do servidor)",
@@ -70,6 +84,10 @@ public class ConsumableShop {
 					GuildConfig gc = GuildDAO.getGuildById(mb.getGuild().getId());
 					Kawaipon kp = KawaiponDAO.getKawaipon(mb.getId());
 					Helper.forceSpawnKawaipon(gc, ms, kp);
+
+					Account acc = AccountDAO.getAccount(mb.getId());
+					acc.removeBuff("spawnmissing");
+					AccountDAO.saveAccount(acc);
 				}));
 	}};
 
