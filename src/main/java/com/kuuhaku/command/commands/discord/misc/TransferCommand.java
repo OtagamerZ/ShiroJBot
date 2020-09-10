@@ -59,7 +59,7 @@ public class TransferCommand extends Command {
 		} else if (message.getMentionedUsers().get(0).getId().equals(author.getId())) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-transfer-to-yourself")).queue();
 			return;
-		} else if (!StringUtils.isNumeric(args[0])) {
+		} else if (!StringUtils.isNumeric(args[1])) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_amount-not-valid")).queue();
 			return;
 		}
@@ -69,7 +69,7 @@ public class TransferCommand extends Command {
 		Account to = AccountDAO.getAccount(message.getMentionedUsers().get(0).getId());
 
 		boolean victorious = ExceedDAO.hasExceed(author.getId()) && Main.getInfo().getWinner().equals(ExceedDAO.getExceed(author.getId()));
-		int rawAmount = Integer.parseInt(args[0]);
+		int rawAmount = Integer.parseInt(args[1]);
 		int tax = victorious ? 0 : (int) Math.floor(rawAmount * 0.025);
 		int liquidAmount = rawAmount - tax;
 
