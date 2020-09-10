@@ -199,9 +199,6 @@ public class Settings {
 				message.getTextChannel().sendMessage("O canal de boas-vindas atual do servidor é <#" + antigoCanalBVID + ">.").queue();
 			}
 			return;
-		} else if (message.getMentionedChannels().size() > 1) {
-			message.getTextChannel().sendMessage("❌ | Você só pode mencionar 1 canal.").queue();
-			return;
 		} else if (message.getMentionedChannels().size() < 1) {
 			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
 			return;
@@ -249,9 +246,6 @@ public class Settings {
 				message.getTextChannel().sendMessage("O canal de adeus atual do servidor é <#" + antigoCanalAdeusID + ">.").queue();
 			}
 			return;
-		} else if (message.getMentionedChannels().size() > 1) {
-			message.getTextChannel().sendMessage("❌ | Você só pode mencionar 1 canal.").queue();
-			return;
 		} else if (message.getMentionedChannels().size() < 1) {
 			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
 			return;
@@ -298,9 +292,6 @@ public class Settings {
 			} else {
 				message.getTextChannel().sendMessage("O canal de sugestões atual do servidor é <#" + antigoCanalSUGID + ">.").queue();
 			}
-			return;
-		} else if (message.getMentionedChannels().size() > 1) {
-			message.getTextChannel().sendMessage("❌ | Você só pode mencionar 1 canal.").queue();
 			return;
 		} else if (message.getMentionedChannels().size() < 1) {
 			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
@@ -376,8 +367,8 @@ public class Settings {
 			}
 			return;
 		}
-		if (message.getMentionedRoles().size() > 1) {
-			message.getTextChannel().sendMessage("❌ | Você só pode mencionar 1 cargo.").queue();
+		if (message.getMentionedRoles().size() < 1) {
+			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-role")).queue();
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setCargoMute(null);
@@ -404,8 +395,8 @@ public class Settings {
 			}
 			return;
 		}
-		if (message.getMentionedRoles().size() > 1) {
-			message.getTextChannel().sendMessage("❌ | Você só pode mencionar 1 cargo.").queue();
+		if (message.getMentionedRoles().size() < 1) {
+			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-role")).queue();
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setCargoVip(null);
@@ -432,8 +423,8 @@ public class Settings {
 			}
 			return;
 		}
-		if (message.getMentionedChannels().size() > 1) {
-			message.getTextChannel().sendMessage("❌ | Você só pode mencionar 1 canal.").queue();
+		if (message.getMentionedChannels().size() < 1) {
+			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
 			return;
 		}
 		if (args[1].equals("ativar") || args[1].equals("sim")) {
@@ -458,9 +449,6 @@ public class Settings {
 			} else {
 				message.getTextChannel().sendMessage("O canal de level up atual do servidor é <#" + antigoCanalLvlUpID + ">.").queue();
 			}
-			return;
-		} else if (message.getMentionedChannels().size() > 1) {
-			message.getTextChannel().sendMessage("❌ | Você só pode mencionar 1 canal.").queue();
 			return;
 		} else if (message.getMentionedChannels().size() < 1) {
 			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
@@ -489,9 +477,6 @@ public class Settings {
 				message.getTextChannel().sendMessage("O canal relay atual do servidor é <#" + antigoCanalRelayID + ">.").queue();
 			}
 			return;
-		} else if (message.getMentionedChannels().size() > 1) {
-			message.getTextChannel().sendMessage("❌ | Você só pode mencionar 1 canal.").queue();
-			return;
 		} else if (message.getMentionedChannels().size() < 1) {
 			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
 			return;
@@ -517,9 +502,6 @@ public class Settings {
 			} else {
 				message.getTextChannel().sendMessage("O canal de avisos atual do servidor é <#" + antigoCanalAvisosID + ">.").queue();
 			}
-			return;
-		} else if (message.getMentionedChannels().size() > 1) {
-			message.getTextChannel().sendMessage("❌ | Você só pode mencionar 1 canal.").queue();
 			return;
 		} else if (message.getMentionedChannels().size() < 1) {
 			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
@@ -555,8 +537,8 @@ public class Settings {
 		} else if (!StringUtils.isNumeric(args[2])) {
 			message.getTextChannel().sendMessage("❌ | O terceiro argumento deve ser uma valor inteiro").queue();
 			return;
-		} else if (message.getMentionedRoles().size() > 1) {
-			message.getTextChannel().sendMessage("❌ | Você só pode mencionar 1 cargo por vez.").queue();
+		} else if (message.getMentionedRoles().size() < 1) {
+			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-role")).queue();
 			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			try {
@@ -618,14 +600,14 @@ public class Settings {
 				return;
 			}
 
-            gc.setDisabledModules(antigoModulo);
-            GuildDAO.updateGuildSettings(gc);
-            message.getTextChannel().sendMessage("✅ | Módulo " + args[1] + " " + (antigoModulo.contains(Category.getByName(args[1])) ? "desabilitado" : "habilitado") + " com sucesso.").queue();
-        } catch (RuntimeException e) {
+			gc.setDisabledModules(antigoModulo);
+			GuildDAO.updateGuildSettings(gc);
+			message.getTextChannel().sendMessage("✅ | Módulo " + args[1] + " " + (antigoModulo.contains(Category.getByName(args[1])) ? "desabilitado" : "habilitado") + " com sucesso.").queue();
+		} catch (RuntimeException e) {
 			message.getTextChannel().sendMessage("❌ | Módulo inválido.").queue();
 			e.printStackTrace();
 		}
-    }
+	}
 
 	public static void settingsHelp(Message message, GuildConfig gc) {
 		String prefix = Helper.getOr(gc.getPrefix(), "s!");
