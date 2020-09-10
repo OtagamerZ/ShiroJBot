@@ -105,6 +105,11 @@ public class ItemDrop implements Prize {
 	}
 
 	@Override
+	public Object[] getPrizeWithPenalty() {
+		return new Object[0];
+	}
+
+	@Override
 	public Pair<String, Function<User, Boolean>> getRequirement() {
 		return chosen;
 	}
