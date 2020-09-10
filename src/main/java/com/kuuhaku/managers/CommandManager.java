@@ -363,7 +363,7 @@ public class CommandManager {
 			//		"image", new String[]{"imagem", "img"}, "req_tags", "cmd_image", MISC, false
 			//));
 			put(TransferCommand.class, new Argument(
-					"transferir", new String[]{"transfer", "tr"}, "req_amount-user", "cmd_transfer", MISC, false
+					"transferir", new String[]{"transfer", "tr"}, "req_user-amount", "cmd_transfer", MISC, false
 			));
 			put(TradeCardCommand.class, new Argument(
 					"trocar", new String[]{"trade"}, "req_user-card-amount", "cmd_trade-card", MISC, true
