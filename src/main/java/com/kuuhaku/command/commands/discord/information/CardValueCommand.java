@@ -26,6 +26,7 @@ import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.CardMarket;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.KawaiponRarity;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 import org.knowm.xchart.BitmapEncoder;
@@ -74,15 +75,24 @@ public class CardValueCommand extends Command {
 			}
 
 			Card c = CardDAO.getCard(args[0], false);
+			KawaiponRarity r = KawaiponRarity.getByName(args[0]);
 
-			if (c == null) {
-				channel.sendMessage("❌ | Essa carta não existe.").queue();
+			if (c == null && r == null) {
+				channel.sendMessage("❌ | Essa carta ou raridade não existe.").queue();
 				m.delete().queue();
 				return;
 			}
 
-			List<CardMarket> normalCards = CardMarketDAO.getCardsByCard(c.getId(), false).stream().filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * 400 * 50)).collect(Collectors.toList());
-			List<CardMarket> foilCards = CardMarketDAO.getCardsByCard(c.getId(), true).stream().filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * 400 * 100)).collect(Collectors.toList());
+			List<CardMarket> normalCards;
+			List<CardMarket> foilCards;
+
+			if (c != null) {
+				normalCards = CardMarketDAO.getCardsByCard(c.getId(), false).stream().filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * 400 * 50)).collect(Collectors.toList());
+				foilCards = CardMarketDAO.getCardsByCard(c.getId(), true).stream().filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * 400 * 100)).collect(Collectors.toList());
+			} else {
+				normalCards = CardMarketDAO.getCardsByRarity(r, false).stream().filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * 400 * 50)).collect(Collectors.toList());
+				foilCards = CardMarketDAO.getCardsByRarity(r, true).stream().filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * 400 * 100)).collect(Collectors.toList());
+			}
 
 			if (normalCards.size() <= 1 && foilCards.size() <= 1) {
 				channel.sendMessage("❌ | Essa carta ainda não foi anunciada no mercado ainda ou possui apenas 1 oferta.").queue();
@@ -93,7 +103,7 @@ public class CardValueCommand extends Command {
 			XYChart chart = new XYChartBuilder()
 					.width(800)
 					.height(600)
-					.title("Valores de venda da carta \"" + c.getName() + "\"")
+					.title("Valores de venda da " + (c == null ? "raridade" : "carta") + " \"" + (c == null ? r.toString() : c.getName()) + "\"")
 					.yAxisTitle("Valor")
 					.build();
 
@@ -112,7 +122,7 @@ public class CardValueCommand extends Command {
 			if (normalCards.size() > 1)
 				chart.addSeries("Normal",
 						normalCards.stream()
-								.map(CardMarket::getId)
+								.map(CardMarket::getPublishDate)
 								.collect(Collectors.toList()),
 						normalCards.stream()
 								.map(CardMarket::getPrice)
@@ -122,7 +132,7 @@ public class CardValueCommand extends Command {
 			if (foilCards.size() > 1)
 				chart.addSeries("Cromada",
 						foilCards.stream()
-								.map(CardMarket::getId)
+								.map(CardMarket::getPublishDate)
 								.collect(Collectors.toList()),
 						foilCards.stream()
 								.map(CardMarket::getPrice)
