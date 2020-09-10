@@ -145,7 +145,7 @@ public class KawaiponsCommand extends Command {
 		File f = File.createTempFile("cards_" + System.currentTimeMillis(), ".jpg");
 		f.deleteOnExit();
 		//byte[] bytes = Helper.getBytes(Helper.removeAlpha(cards), "jpg", 0.5f);
-		byte[] bytes = Helper.getBytes(Helper.removeAlpha(cards));
+		byte[] bytes = Helper.getBytes(Helper.removeAlpha(cards), "jpg", 0.5f);
 		try (FileOutputStream fos = new FileOutputStream(f)) {
 			fos.write(bytes);
 		}
