@@ -132,6 +132,11 @@ public class Account {
 		if (credit != 0) TransactionDAO.register(userId, from, -credit);
 	}
 
+	public synchronized void addLoan(long loan) {
+		this.loan += loan;
+		AccountDAO.saveAccount(this);
+	}
+
 	public String getLastVoted() {
 		return lastVoted;
 	}

@@ -36,6 +36,8 @@ public interface Prize {
 
 	Consumable getPrizeAsItem();
 
+	Object[] getPrizeWithPenalty();
+
 	Map.Entry<String, Function<User, Boolean>> getRequirement();
 
 	Map.Entry<String, Function<EventUser, Boolean>> getRequirementForTwitch();
