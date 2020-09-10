@@ -125,6 +125,7 @@ public class ComandosCommand extends Command {
 			ceb.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_waifu-tip"), prefix), false);
 			ceb.addField(Helper.VOID, ShiroInfo.getLocale(I18n.PT).getString("str_exceed-tip"), false);
 			ceb.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_kawaipon-tip"), prefix), false);
+			ceb.addField(Helper.VOID, MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("str_edit-message-tip"), prefix), false);
 
 			pages.put("684039810079522846", new Page(PageType.EMBED, ceb.build()));
 
