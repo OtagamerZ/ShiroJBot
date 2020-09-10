@@ -1014,7 +1014,7 @@ public class Helper {
 		boolean fbUltimate = foilBuff != null && foilBuff.getTier() == 4;
 
 		if (cbUltimate || chance(2.5 + (channel.getGuild().getMemberCount() * 1.5 / 5000) * (cardBuff != null ? cardBuff.getMult() : 1))) {
-			List<Card> cards = CardDAO.getCards();
+			List<Card> cards = CardDAO.getCardsByAnime(AnimeName.values()[Helper.rng(AnimeName.values().length, true)]);
 			Card c = cards.get(Helper.rng(cards.size(), true));
 			boolean foil = fbUltimate || chance(0.5 * (foilBuff != null ? foilBuff.getMult() : 1));
 			KawaiponCard kc = new KawaiponCard(c, foil);
@@ -1052,8 +1052,8 @@ public class Helper {
 
 		List<Card> cards;
 		if (anime != null)
-			cards = CardDAO.getCards().stream().filter(c -> c.getAnime() == anime).collect(Collectors.toList());
-		else cards = CardDAO.getCards();
+			cards = CardDAO.getCardsByAnime(anime);
+		else cards = CardDAO.getCardsByAnime(AnimeName.values()[Helper.rng(AnimeName.values().length, true)]);
 
 		Card c = cards.get(Helper.rng(cards.size(), true));
 		boolean foil = fbUltimate || chance(0.5 * (foilBuff != null ? foilBuff.getMult() : 1));
@@ -1097,7 +1097,7 @@ public class Helper {
 		boolean fbUltimate = foilBuff != null && foilBuff.getTier() == 4;
 		boolean foil = cs != CardStatus.NORMAL_CARDS && (fbUltimate || chance(0.5 * (foilBuff != null ? foilBuff.getMult() : 1)) || cs == CardStatus.FOIL_CARDS);
 
-		List<Card> cards = CardDAO.getCards().stream().filter(c -> kp.getCard(c, foil) == null).collect(Collectors.toList());
+		List<Card> cards = CardDAO.getCardsByAnime(AnimeName.values()[Helper.rng(AnimeName.values().length, true)]).stream().filter(c -> kp.getCard(c, foil) == null).collect(Collectors.toList());
 
 		Card c = cards.get(Helper.rng(cards.size(), true));
 		KawaiponCard kc = new KawaiponCard(c, foil);
@@ -1128,7 +1128,7 @@ public class Helper {
 
 	public static void spawnKawaipon(EventChannel channel, TwitchChat chat) {
 		if (chance(2.5)) {
-			List<Card> cards = CardDAO.getCards();
+			List<Card> cards = CardDAO.getCardsByAnime(AnimeName.values()[Helper.rng(AnimeName.values().length, true)]);
 			Card c = cards.get(Helper.rng(cards.size(), true));
 			boolean foil = chance(1);
 			KawaiponCard kc = new KawaiponCard(c, foil);
@@ -1215,8 +1215,6 @@ public class Helper {
 	}
 
 	public static BufferedImage scaleImage(BufferedImage image, int w, int h) {
-
-		// Make sure the aspect ratio is maintained, so the image is not distorted
 		double thumbRatio = (double) w / (double) h;
 		int imageWidth = image.getWidth();
 		int imageHeight = image.getHeight();
@@ -1228,7 +1226,6 @@ public class Helper {
 			w = (int) (h * aspectRatio);
 		}
 
-		// Draw the scaled image
 		BufferedImage newImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D graphics2D = newImage.createGraphics();
 		graphics2D.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
