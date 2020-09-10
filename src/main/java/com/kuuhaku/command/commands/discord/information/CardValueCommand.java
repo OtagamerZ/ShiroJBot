@@ -81,8 +81,8 @@ public class CardValueCommand extends Command {
 				return;
 			}
 
-			List<CardMarket> normalCards = CardMarketDAO.getCardsByCard(c.getId(), false);
-			List<CardMarket> foilCards = CardMarketDAO.getCardsByCard(c.getId(), true);
+			List<CardMarket> normalCards = CardMarketDAO.getCardsByCard(c.getId(), false).stream().filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * 400 * 50)).collect(Collectors.toList());
+			List<CardMarket> foilCards = CardMarketDAO.getCardsByCard(c.getId(), true).stream().filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * 400 * 100)).collect(Collectors.toList());
 
 			if (normalCards.size() <= 1 && foilCards.size() <= 1) {
 				channel.sendMessage("❌ | Essa carta ainda não foi anunciada no mercado ainda ou possui apenas 1 oferta.").queue();
