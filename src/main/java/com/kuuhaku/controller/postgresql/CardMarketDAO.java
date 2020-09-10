@@ -19,6 +19,7 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.persistent.CardMarket;
+import com.kuuhaku.utils.KawaiponRarity;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -42,8 +43,23 @@ public class CardMarketDAO {
 	public static List<CardMarket> getCardsByCard(String id, boolean foil) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT cm FROM CardMarket cm WHERE cm.card.card.id = UPPER(:id) AND cm.card.foil = :foil", CardMarket.class);
+		Query q = em.createQuery("SELECT cm FROM CardMarket cm WHERE cm.card.card.id = UPPER(:id) AND cm.card.foil = :foil AND cm.publishDate IS NOT NULL", CardMarket.class);
 		q.setParameter("id", id);
+		q.setParameter("foil", foil);
+
+		try {
+			return (List<CardMarket>) q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<CardMarket> getCardsByRarity(KawaiponRarity r, boolean foil) {
+		EntityManager em = Manager.getEntityManager();
+
+		Query q = em.createQuery("SELECT cm FROM CardMarket cm WHERE cm.card.card.rarity = :rarity AND cm.card.foil = :foil AND cm.publishDate IS NOT NULL", CardMarket.class);
+		q.setParameter("rarity", r);
 		q.setParameter("foil", foil);
 
 		try {
