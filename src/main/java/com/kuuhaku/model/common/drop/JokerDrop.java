@@ -27,6 +27,7 @@ import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.common.Consumable;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.utils.AnimeName;
+import com.kuuhaku.utils.ConsumableShop;
 import com.kuuhaku.utils.ExceedEnum;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
@@ -41,7 +42,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-public class CreditDrop implements Prize {
+public class JokerDrop implements Prize {
 	private final AnimeName anime = AnimeName.values()[Helper.rng(AnimeName.values().length, true)];
 	private final ExceedEnum exceed = ExceedEnum.values()[Helper.rng(ExceedEnum.values().length, true)];
 	private final int[] values = {
@@ -50,7 +51,9 @@ public class CreditDrop implements Prize {
 			1 + Helper.rng((int) CardDAO.totalCards() - 1, false),
 			Helper.rng(MemberDAO.getHighestLevel() / 2, false)
 	};
-	private final int amount = Helper.clamp(Helper.rng(750, false), 150, 750);
+	private final int amount = Helper.clamp(Helper.rng(5000, false), 2500, 5000);
+	private final Consumable prize = new ArrayList<>(ConsumableShop.getAvailable().values()).get(Helper.rng(ConsumableShop.getAvailable().size(), true));
+	private final int penalty = Helper.clamp(Helper.rng(5000, false), 3750, 7500);
 	private final List<Pair<String, Function<User, Boolean>>> requirement = new ArrayList<>() {{
 		add(Pair.of("Ter " + values[2] + " carta" + (values[2] != 1 ? "s" : "") + " ou mais.", u ->
 				KawaiponDAO.getKawaipon(u.getId()).getCards().size() >= values[2]));
@@ -85,6 +88,7 @@ public class CreditDrop implements Prize {
 	public void award(User u) {
 		Account acc = AccountDAO.getAccount(u.getId());
 		acc.addCredit(amount, this.getClass());
+		acc.addLoan(penalty);
 		AccountDAO.saveAccount(acc);
 	}
 
@@ -95,7 +99,7 @@ public class CreditDrop implements Prize {
 
 	@Override
 	public int getPrize() {
-		return amount;
+		return 0;
 	}
 
 	@Override
@@ -105,7 +109,7 @@ public class CreditDrop implements Prize {
 
 	@Override
 	public Object[] getPrizeWithPenalty() {
-		return new Object[0];
+		return new Object[]{Helper.rng(100, false) > 50 ? prize : amount, penalty};
 	}
 
 	@Override

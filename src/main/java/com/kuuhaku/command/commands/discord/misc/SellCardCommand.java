@@ -21,6 +21,7 @@ package com.kuuhaku.command.commands.discord.misc;
 import com.github.ygimenez.method.Pages;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.CardMarketDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
@@ -29,6 +30,8 @@ import com.kuuhaku.model.persistent.CardMarket;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.I18n;
+import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
@@ -80,6 +83,9 @@ public class SellCardCommand extends Command {
 
 		if (card == null) {
 			channel.sendMessage("❌ | Você não pode trocar uma carta que não possui!").queue();
+			return;
+		} else if (AccountDAO.getAccount(kp.getUid()).getLoan() > 0) {
+			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-transfer-with-loan")).queue();
 			return;
 		}
 

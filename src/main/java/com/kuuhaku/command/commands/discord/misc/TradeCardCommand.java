@@ -220,6 +220,12 @@ public class TradeCardCommand extends Command {
 			} else if (!target.getCards().contains(hisCard)) {
 				channel.sendMessage("❌ | Ele/ela não possui essa carta!").queue();
 				return;
+			} else if (AccountDAO.getAccount(kp.getUid()).getLoan() > 0) {
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-transfer-with-loan")).queue();
+				return;
+			} else if (AccountDAO.getAccount(target.getUid()).getLoan() > 0) {
+				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-with-loan")).queue();
+				return;
 			}
 
 			channel.sendMessage(other.getAsMention() + ", " + author.getAsMention() + " deseja trocar a carta `" + yourCard.getName() + "` pela sua carta `" + hisCard.getName() + "`, você aceita essa transação?")
