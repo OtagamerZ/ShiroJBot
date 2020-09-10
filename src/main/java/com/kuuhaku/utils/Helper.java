@@ -1098,6 +1098,9 @@ public class Helper {
 		boolean foil = cs != CardStatus.NORMAL_CARDS && (fbUltimate || chance(0.5 * (foilBuff != null ? foilBuff.getMult() : 1)) || cs == CardStatus.FOIL_CARDS);
 
 		List<Card> cards = CardDAO.getCardsByAnime(AnimeName.values()[Helper.rng(AnimeName.values().length, true)]).stream().filter(c -> kp.getCard(c, foil) == null).collect(Collectors.toList());
+		while (cards.size() <= 0) {
+			cards = CardDAO.getCardsByAnime(AnimeName.values()[Helper.rng(AnimeName.values().length, true)]).stream().filter(c -> kp.getCard(c, foil) == null).collect(Collectors.toList());
+		}
 
 		Card c = cards.get(Helper.rng(cards.size(), true));
 		KawaiponCard kc = new KawaiponCard(c, foil);
