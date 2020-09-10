@@ -25,7 +25,6 @@ import com.kuuhaku.controller.postgresql.CardMarketDAO;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.CardMarket;
-import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
@@ -80,8 +79,8 @@ public class CardValueCommand extends Command {
 				return;
 			}
 
-			List<CardMarket> normalCards = CardMarketDAO.getCardsByCard(new KawaiponCard(c, false));
-			List<CardMarket> foilCards = CardMarketDAO.getCardsByCard(new KawaiponCard(c, true));
+			List<CardMarket> normalCards = CardMarketDAO.getCardsByCard(c.getId(), false);
+			List<CardMarket> foilCards = CardMarketDAO.getCardsByCard(c.getId(), true);
 
 			XYChart chart = new XYChartBuilder()
 					.width(800)
