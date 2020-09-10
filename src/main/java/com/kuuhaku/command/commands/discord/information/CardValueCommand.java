@@ -100,8 +100,6 @@ public class CardValueCommand extends Command {
 
 			chart.getStyler()
 					.setPlotGridLinesColor(Color.decode("#404447"))
-					.setXAxisMin(1d)
-					.setXAxisMax(12d)
 					.setAxisTickLabelsColor(Color.WHITE)
 					.setChartFontColor(Color.WHITE)
 					.setLegendPosition(Styler.LegendPosition.InsideNE)
