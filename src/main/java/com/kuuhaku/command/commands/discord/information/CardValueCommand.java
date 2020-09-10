@@ -94,13 +94,13 @@ public class CardValueCommand extends Command {
 					.width(800)
 					.height(600)
 					.title("Valores de venda da carta \"" + c.getName() + "\"")
-					.xAxisTitle("ID")
 					.yAxisTitle("Valor")
 					.build();
 
 			chart.getStyler()
 					.setPlotGridLinesColor(Color.decode("#404447"))
 					.setAxisTickLabelsColor(Color.WHITE)
+					.setXAxisTicksVisible(false)
 					.setChartFontColor(Color.WHITE)
 					.setLegendPosition(Styler.LegendPosition.InsideNE)
 					.setSeriesColors(new Color[]{Color.gray, Color.yellow})
