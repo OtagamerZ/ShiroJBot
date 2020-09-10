@@ -35,7 +35,6 @@ import com.kuuhaku.controller.postgresql.LogDAO;
 import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.common.Consumable;
 import com.kuuhaku.model.common.Extensions;
 import com.kuuhaku.model.common.drop.CreditDrop;
 import com.kuuhaku.model.common.drop.ItemDrop;
@@ -1157,10 +1156,12 @@ public class Helper {
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			eb.setThumbnail("https://i.pinimg.com/originals/86/c0/f4/86c0f4d0f020c3f819a532873ef33704.png");
 			eb.setTitle("Um drop apareceu neste servidor!");
-			if (drop instanceof CreditDrop) eb.addField("Conteúdo:", drop.getPrize() + " créditos", true);
+			if (drop instanceof CreditDrop)
+				eb.addField("Conteúdo:", drop.getPrize() + " créditos", true);
 			else if (drop instanceof JokerDrop)
-				eb.addField("Conteúdo:", (drop.getPrizeWithPenalty()[0] instanceof Consumable ? ((Consumable) drop.getPrizeWithPenalty()[0]).getName() : drop.getPrizeWithPenalty()[0] + " créditos") + " **MAS** " + drop.getPrizeWithPenalty()[1] + " de dívida", true);
-			else eb.addField("Conteúdo:", drop.getPrizeAsItem().getName(), true);
+				eb.addField("Conteúdo:", drop.getPrizeWithPenalty()[0] + " **MAS** " + drop.getPrizeWithPenalty()[1], true);
+			else
+				eb.addField("Conteúdo:", drop.getPrizeAsItem().getName(), true);
 			eb.addField("Código captcha:", "||" + drop.getCaptcha() + "||", true);
 			eb.setFooter("Digite `" + gc.getPrefix() + "abrir` para receber o prêmio (requisitos: " + drop.getRequirement().getKey() + ").", null);
 
