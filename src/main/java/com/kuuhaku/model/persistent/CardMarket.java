@@ -19,6 +19,10 @@
 package com.kuuhaku.model.persistent;
 
 import javax.persistence.*;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.util.Date;
 
 @Entity
 @Table(name = "cardmarket")
@@ -38,6 +42,9 @@ public class CardMarket {
 
 	@Column(columnDefinition = "INT NOT NULL")
 	private int price;
+
+	@Temporal(TemporalType.DATE)
+	private Date publishDate = Date.from(Instant.now(Clock.system(ZoneId.of("GMT-3"))));
 
 	public CardMarket(String seller, KawaiponCard card, int price) {
 		this.seller = seller;
@@ -86,5 +93,13 @@ public class CardMarket {
 
 	public void setPrice(int price) {
 		this.price = price;
+	}
+
+	public Date getPublishDate() {
+		return publishDate;
+	}
+
+	public void setPublishDate(Date publishDate) {
+		this.publishDate = publishDate;
 	}
 }
