@@ -82,6 +82,11 @@ public class CardValueCommand extends Command {
 			List<CardMarket> normalCards = CardMarketDAO.getCardsByCard(c.getId(), false);
 			List<CardMarket> foilCards = CardMarketDAO.getCardsByCard(c.getId(), true);
 
+			if (normalCards.size() <= 1 && foilCards.size() <= 1) {
+				channel.sendMessage("❌ | Essa carta ainda não foi anunciada no mercado ainda ou possui apenas 1 oferta.").queue();
+				return;
+			}
+
 			XYChart chart = new XYChartBuilder()
 					.width(800)
 					.height(600)
@@ -103,23 +108,25 @@ public class CardValueCommand extends Command {
 					.setLegendBackgroundColor(Color.decode("#101114"))
 					.setSeriesLines(Collections.nCopies(6, new BasicStroke(4, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND)).toArray(BasicStroke[]::new));
 
-			chart.addSeries("Normal",
-					normalCards.stream()
-							.map(CardMarket::getId)
-							.collect(Collectors.toList()),
-					normalCards.stream()
-							.map(CardMarket::getPrice)
-							.collect(Collectors.toList())
-			);
+			if (normalCards.size() <= 1)
+				chart.addSeries("Normal",
+						normalCards.stream()
+								.map(CardMarket::getId)
+								.collect(Collectors.toList()),
+						normalCards.stream()
+								.map(CardMarket::getPrice)
+								.collect(Collectors.toList())
+				);
 
-			chart.addSeries("Cromada",
-					foilCards.stream()
-							.map(CardMarket::getId)
-							.collect(Collectors.toList()),
-					foilCards.stream()
-							.map(CardMarket::getPrice)
-							.collect(Collectors.toList())
-			);
+			if (foilCards.size() <= 1)
+				chart.addSeries("Cromada",
+						foilCards.stream()
+								.map(CardMarket::getId)
+								.collect(Collectors.toList()),
+						foilCards.stream()
+								.map(CardMarket::getPrice)
+								.collect(Collectors.toList())
+				);
 
 			channel.sendFile(Helper.getBytes(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "png"), "ranking.png").queue(s -> s.delete().queueAfter(1, TimeUnit.MINUTES));
 			m.delete().queue();
