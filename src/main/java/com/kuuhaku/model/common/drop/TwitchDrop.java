@@ -126,8 +126,8 @@ public class TwitchDrop implements Prize {
 	}
 
 	@Override
-	public Object[] getPrizeWithPenalty() {
-		return new Object[0];
+	public String[] getPrizeWithPenalty() {
+		return new String[0];
 	}
 
 	@Override

@@ -53,7 +53,7 @@ public class JokerDrop implements Prize {
 	};
 	private final int amount = Helper.clamp(Helper.rng(5000, false), 2500, 5000);
 	private final Consumable prize = new ArrayList<>(ConsumableShop.getAvailable().values()).get(Helper.rng(ConsumableShop.getAvailable().size(), true));
-	private final int penalty = Helper.clamp(Helper.rng(5000, false), 3750, 7500);
+	private final int penalty = Helper.clamp(Helper.rng(7500, false), 3750, 7500);
 	private final List<Pair<String, Function<User, Boolean>>> requirement = new ArrayList<>() {{
 		add(Pair.of("Ter " + values[2] + " carta" + (values[2] != 1 ? "s" : "") + " ou mais.", u ->
 				KawaiponDAO.getKawaipon(u.getId()).getCards().size() >= values[2]));
@@ -108,8 +108,11 @@ public class JokerDrop implements Prize {
 	}
 
 	@Override
-	public Object[] getPrizeWithPenalty() {
-		return new Object[]{Helper.rng(100, false) > 50 ? prize : amount, penalty};
+	public String[] getPrizeWithPenalty() {
+		return new String[]{
+				Helper.rng(100, false) > 50 ? prize.getName() : amount + " créditos",
+				penalty + " de dívida"
+		};
 	}
 
 	@Override
