@@ -153,7 +153,7 @@ public class Board {
 		List<Player> losers = players.stream().filter(p -> !p.getId().equals(id)).collect(Collectors.toList());
 
 		Account wacc = AccountDAO.getAccount(id);
-		wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum(), this.getClass());
+		wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum() / (wacc.getLoan() > 0 ? 2 : 1), this.getClass());
 		AccountDAO.saveAccount(wacc);
 
 		if (ExceedDAO.hasExceed(id)) {
@@ -184,7 +184,7 @@ public class Board {
 
 		for (String id : ids) {
 			Account wacc = AccountDAO.getAccount(id);
-			wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum(), this.getClass());
+			wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum() / (wacc.getLoan() > 0 ? 2 : 1), this.getClass());
 			AccountDAO.saveAccount(wacc);
 
 			if (ExceedDAO.hasExceed(id)) {
