@@ -39,6 +39,7 @@ public class JokerDrop extends Drop {
 	private final int amount = 2500 + Helper.rng(2500, false);
 	private final Consumable prize = new ArrayList<>(ConsumableShop.getAvailable().values()).get(Helper.rng(ConsumableShop.getAvailable().size(), true));
 	private final int penalty = 3750 + Helper.rng(3750, false);
+	private final boolean item = Helper.rng(100, false) > 50;
 
 	@Override
 	public String getCaptcha() {
@@ -52,7 +53,8 @@ public class JokerDrop extends Drop {
 	@Override
 	public void award(User u) {
 		Account acc = AccountDAO.getAccount(u.getId());
-		acc.addCredit(amount, this.getClass());
+		if (item) acc.addBuff(prize.getId());
+		else acc.addCredit(amount, this.getClass());
 		acc.addLoan(penalty);
 		AccountDAO.saveAccount(acc);
 	}
@@ -75,7 +77,7 @@ public class JokerDrop extends Drop {
 	@Override
 	public String[] getPrizeWithPenalty() {
 		return new String[]{
-				Helper.rng(100, false) > 50 ? prize.getName() : amount + " créditos",
+				item ? prize.getName() : amount + " créditos",
 				penalty + " de dívida"
 		};
 	}
