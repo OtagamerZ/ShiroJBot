@@ -58,10 +58,10 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
+import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
-import org.python.google.common.collect.Lists;
 
 import javax.annotation.Nonnull;
 import javax.imageio.*;
@@ -710,20 +710,17 @@ public class Helper {
 
 	public static String didYouMean(String word, String[] array) {
 		String match = "";
-		int threshold = 0;
+		int threshold = 999;
+		LevenshteinDistance checker = new LevenshteinDistance();
 
 		for (String w : array) {
-			String toCheck = w.toLowerCase();
-			if (word.equalsIgnoreCase(toCheck)) {
+			if (word.equalsIgnoreCase(w)) {
 				return word;
 			} else {
-				List<String> firstChars = Lists.charactersOf(word).stream().map(String::valueOf).map(String::toLowerCase).collect(Collectors.toList());
-
-				int chars = (int) firstChars.stream().filter(toCheck::contains).count();
-
-				if (chars > threshold) {
+				int diff = checker.apply(word, w);
+				if (diff < threshold) {
 					match = w;
-					threshold = chars;
+					threshold = diff;
 				}
 			}
 		}
