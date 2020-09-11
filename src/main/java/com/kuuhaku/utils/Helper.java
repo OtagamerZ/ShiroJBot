@@ -713,13 +713,13 @@ public class Helper {
 		int threshold = 0;
 
 		for (String w : array) {
-			if (word.equalsIgnoreCase(w)) {
+			String toCheck = w.toLowerCase();
+			if (word.equalsIgnoreCase(toCheck)) {
 				return word;
 			} else {
 				List<String> firstChars = Lists.charactersOf(word).stream().map(String::valueOf).map(String::toLowerCase).collect(Collectors.toList());
-				List<String> secondChars = Lists.charactersOf(w).stream().map(String::valueOf).map(String::toLowerCase).collect(Collectors.toList());
 
-				int chars = (int) secondChars.stream().filter(firstChars::contains).count();
+				int chars = (int) firstChars.stream().filter(toCheck::contains).count();
 
 				if (chars > threshold) {
 					match = w;
