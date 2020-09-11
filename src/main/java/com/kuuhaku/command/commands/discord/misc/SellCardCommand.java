@@ -75,7 +75,7 @@ public class SellCardCommand extends Command {
 		boolean foil = args[1].equalsIgnoreCase("C");
 
 		if (c == null) {
-			channel.sendMessage("❌ | Essa carta não existe.").queue();
+			channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllCardNames().toArray(String[]::new)) + "`?").queue();
 			return;
 		}
 
