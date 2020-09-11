@@ -84,7 +84,7 @@ public class TradeCardCommand extends Command {
 			Kawaipon target = KawaiponDAO.getKawaipon(other.getId());
 
 			if (tc == null) {
-				channel.sendMessage("❌ | Essa carta não existe.").queue();
+				channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + Helper.didYouMean(args[2], CardDAO.getAllCardNames().toArray(String[]::new)) + "`?").queue();
 				return;
 			} else if (acc.getBalance() < price) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user")).queue();
@@ -138,7 +138,7 @@ public class TradeCardCommand extends Command {
 			Kawaipon target = KawaiponDAO.getKawaipon(other.getId());
 
 			if (tc == null) {
-				channel.sendMessage("❌ | Essa carta não existe.").queue();
+				channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + Helper.didYouMean(args[1], CardDAO.getAllCardNames().toArray(String[]::new)) + "`?").queue();
 				return;
 			} else if (tacc.getBalance() < price) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-target")).queue();
@@ -200,8 +200,11 @@ public class TradeCardCommand extends Command {
 			boolean hisFoil = args[4].equalsIgnoreCase("C");
 
 
-			if (c == null || tc == null) {
-				channel.sendMessage("❌ | Essa carta não existe.").queue();
+			if (c == null) {
+				channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + Helper.didYouMean(args[1], CardDAO.getAllCardNames().toArray(String[]::new)) + "`?").queue();
+				return;
+			} else if (tc == null) {
+				channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + Helper.didYouMean(args[3], CardDAO.getAllCardNames().toArray(String[]::new)) + "`?").queue();
 				return;
 			}
 
