@@ -1159,7 +1159,7 @@ public class Helper {
 			if (drop instanceof CreditDrop)
 				eb.addField("Conteúdo:", drop.getPrize() + " créditos", true);
 			else if (drop instanceof JokerDrop)
-				eb.addField("Conteúdo:", drop.getPrizeWithPenalty()[0] + " **MAS** " + drop.getPrizeWithPenalty()[1], true);
+				eb.addField("Conteúdo:", drop.getPrizeWithPenalty()[0] + "\n__**MAS**__\n" + drop.getPrizeWithPenalty()[1], true);
 			else
 				eb.addField("Conteúdo:", drop.getPrizeAsItem().getName(), true);
 			eb.addField("Código captcha:", "||" + drop.getCaptcha() + "||", true);
