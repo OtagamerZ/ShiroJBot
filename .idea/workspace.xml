@@ -13,15 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correção nos drop e cartas novas: Lucky Star">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/Drop.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/CreditDrop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/CreditDrop.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/ItemDrop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/ItemDrop.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/JokerDrop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/JokerDrop.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/TwitchDrop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/TwitchDrop.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/AnimeName.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/AnimeName.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -167,17 +160,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [clean]">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -690,14 +672,9 @@
       <workItem from="1599657956016" duration="4534000" />
       <workItem from="1599672794701" duration="4786000" />
       <workItem from="1599739339601" duration="24620000" />
-      <workItem from="1599826039433" duration="2520000" />
-    </task>
-    <task id="LOCAL-02405" summary="Novas cartas: KonoSuba">
-      <created>1599163082114</created>
-      <option name="number" value="02405" />
-      <option name="presentableId" value="LOCAL-02405" />
-      <option name="project" value="LOCAL" />
-      <updated>1599163082114</updated>
+      <workItem from="1599826039433" duration="6430000" />
+      <workItem from="1599836114831" duration="313000" />
+      <workItem from="1599840415872" duration="1624000" />
     </task>
     <task id="LOCAL-02406" summary="Correção no ranking de cartas">
       <created>1599251797384</created>
@@ -1035,7 +1012,14 @@
       <option name="project" value="LOCAL" />
       <updated>1599770711134</updated>
     </task>
-    <option name="localTasksCounter" value="2454" />
+    <task id="LOCAL-02454" summary="Correção nos drop e cartas novas: Lucky Star">
+      <created>1599830675456</created>
+      <option name="number" value="02454" />
+      <option name="presentableId" value="LOCAL-02454" />
+      <option name="project" value="LOCAL" />
+      <updated>1599830675457</updated>
+    </task>
+    <option name="localTasksCounter" value="2455" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1101,7 +1085,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção no ranking de cartas" />
     <MESSAGE value="Parceiros agora se chamam &quot;Usuários Beta&quot;" />
     <MESSAGE value="Novas cartas: Shinchou Yuusha" />
     <MESSAGE value="Correções no notificador da Jibril" />
@@ -1126,7 +1109,8 @@
     <MESSAGE value="Correção no comando de valor de mercado" />
     <MESSAGE value="Correção no uso dos consumiveis" />
     <MESSAGE value="Adição de drops coringa" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adição de drops coringa" />
+    <MESSAGE value="Correção nos drop e cartas novas: Lucky Star" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção nos drop e cartas novas: Lucky Star" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1181,11 +1165,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1599826861370">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1599830672394">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1599826861370" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1599830672394" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1247,11 +1231,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1599770719519">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1599830676847">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1599770719519" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1599830676847" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
