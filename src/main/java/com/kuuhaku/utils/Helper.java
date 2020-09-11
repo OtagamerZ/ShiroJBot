@@ -716,8 +716,8 @@ public class Helper {
 			if (word.equalsIgnoreCase(w)) {
 				return word;
 			} else {
-				List<Character> firstChars = Lists.charactersOf(word);
-				List<Character> secondChars = Lists.charactersOf(w);
+				List<String> firstChars = Lists.charactersOf(word).stream().map(String::valueOf).map(String::toLowerCase).collect(Collectors.toList());
+				List<String> secondChars = Lists.charactersOf(w).stream().map(String::valueOf).map(String::toLowerCase).collect(Collectors.toList());
 
 				int chars = (int) secondChars.stream().filter(firstChars::contains).count();
 
