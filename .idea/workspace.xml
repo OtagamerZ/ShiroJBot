@@ -14,9 +14,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SeeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SeeCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SellCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SellCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -688,14 +685,7 @@
       <workItem from="1599739339601" duration="24620000" />
       <workItem from="1599826039433" duration="6430000" />
       <workItem from="1599836114831" duration="313000" />
-      <workItem from="1599840415872" duration="2167000" />
-    </task>
-    <task id="LOCAL-02407" summary="Parceiros agora se chamam &quot;Usuários Beta&quot;">
-      <created>1599569301068</created>
-      <option name="number" value="02407" />
-      <option name="presentableId" value="LOCAL-02407" />
-      <option name="project" value="LOCAL" />
-      <updated>1599569301068</updated>
+      <workItem from="1599840415872" duration="2483000" />
     </task>
     <task id="LOCAL-02408" summary="Novas cartas: Shinchou Yuusha">
       <created>1599571452286</created>
@@ -1033,7 +1023,14 @@
       <option name="project" value="LOCAL" />
       <updated>1599844855592</updated>
     </task>
-    <option name="localTasksCounter" value="2456" />
+    <task id="LOCAL-02456" summary="Adição do &quot;você quis dizer?&quot; nos comandos de ver, vender e trocar cartas, ver coleção e ver cartas restantes">
+      <created>1599845526659</created>
+      <option name="number" value="02456" />
+      <option name="presentableId" value="LOCAL-02456" />
+      <option name="project" value="LOCAL" />
+      <updated>1599845526659</updated>
+    </task>
+    <option name="localTasksCounter" value="2457" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1099,7 +1096,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Novas cartas: Shinchou Yuusha" />
     <MESSAGE value="Correções no notificador da Jibril" />
     <MESSAGE value="Nova loja de boosters de uso individual" />
     <MESSAGE value="Nova loja de boosters de uso individual e drops de item" />
@@ -1124,7 +1120,8 @@
     <MESSAGE value="Adição de drops coringa" />
     <MESSAGE value="Correção nos drop e cartas novas: Lucky Star" />
     <MESSAGE value="Correção do nome do anime JoJo" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção do nome do anime JoJo" />
+    <MESSAGE value="Adição do &quot;você quis dizer?&quot; nos comandos de ver, vender e trocar cartas, ver coleção e ver cartas restantes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição do &quot;você quis dizer?&quot; nos comandos de ver, vender e trocar cartas, ver coleção e ver cartas restantes" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1179,11 +1176,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1599844852865">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1599845523964">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1599844852865" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1599845523964" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1245,11 +1242,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1599844869292">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1599845528082">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1599844869292" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1599845528082" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1287,10 +1284,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="465" y="286" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595246935580" />
-    <state x="287" y="102" width="957" height="784" key="find.popup" timestamp="1599845193109">
+    <state x="287" y="102" width="957" height="784" key="find.popup" timestamp="1599845422254">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="287" y="102" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1599845193109" />
+    <state x="287" y="102" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1599845422254" />
     <state x="645" y="400" key="git4idea.ui.GitResetDialog" timestamp="1593018818159">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
