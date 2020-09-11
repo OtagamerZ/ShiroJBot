@@ -20,15 +20,9 @@ package com.kuuhaku.model.common.drop;
 
 import com.github.twitch4j.common.events.domain.EventUser;
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.CardDAO;
-import com.kuuhaku.controller.postgresql.ExceedDAO;
-import com.kuuhaku.controller.postgresql.KawaiponDAO;
-import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.common.Consumable;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.AnimeName;
 import com.kuuhaku.utils.ConsumableShop;
-import com.kuuhaku.utils.ExceedEnum;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.codec.binary.Hex;
@@ -38,42 +32,13 @@ import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-public class JokerDrop implements Prize {
-	private final AnimeName anime = AnimeName.values()[Helper.rng(AnimeName.values().length, true)];
-	private final ExceedEnum exceed = ExceedEnum.values()[Helper.rng(ExceedEnum.values().length, true)];
-	private final int[] values = {
-			1 + Helper.rng((int) CardDAO.totalCards(anime) - 1, false),
-			1 + Helper.rng(6, false),
-			1 + Helper.rng((int) CardDAO.totalCards() - 1, false),
-			Helper.rng(MemberDAO.getHighestLevel() / 2, false)
-	};
-	private final int amount = Helper.clamp(Helper.rng(5000, false), 2500, 5000);
+public class JokerDrop extends Drop {
+	private final int amount = 2500 + Helper.rng(2500, false);
 	private final Consumable prize = new ArrayList<>(ConsumableShop.getAvailable().values()).get(Helper.rng(ConsumableShop.getAvailable().size(), true));
-	private final int penalty = Helper.clamp(Helper.rng(7500, false), 3750, 7500);
-	private final List<Pair<String, Function<User, Boolean>>> requirement = new ArrayList<>() {{
-		add(Pair.of("Ter " + values[2] + " carta" + (values[2] != 1 ? "s" : "") + " ou mais.", u ->
-				KawaiponDAO.getKawaipon(u.getId()).getCards().size() >= values[2]));
-
-		add(Pair.of("Ter " + values[0] + " carta" + (values[0] != 1 ? "s" : "") + " de " + anime.toString() + " ou mais.", u ->
-				KawaiponDAO.getKawaipon(u.getId()).getCards().stream().filter(k -> k.getCard().getAnime().equals(anime)).count() >= values[0]));
-
-		add(Pair.of("Ser level " + values[3] + " ou maior.", u ->
-				MemberDAO.getMemberByMid(u.getId()).stream().anyMatch(m -> m.getLevel() >= values[3])));
-
-		add(Pair.of("Ter até 1000 créditos.", u ->
-				AccountDAO.getAccount(u.getId()).getBalance() <= 1000));
-
-		add(Pair.of("Ter votado " + values[1] + " vez" + (values[1] != 1 ? "es" : "") + " seguidas ou mais.", u ->
-				AccountDAO.getAccount(u.getId()).getStreak() >= values[1]));
-
-		add(Pair.of("Ser membro da " + exceed.getName() + ".", u ->
-				ExceedDAO.hasExceed(u.getId()) && ExceedDAO.getExceedMember(u.getId()).getExceed().equalsIgnoreCase(exceed.getName())));
-	}};
-	private final Pair<String, Function<User, Boolean>> chosen = requirement.get(Helper.rng(requirement.size(), true));
+	private final int penalty = 3750 + Helper.rng(3750, false);
 
 	@Override
 	public String getCaptcha() {
@@ -117,7 +82,7 @@ public class JokerDrop implements Prize {
 
 	@Override
 	public Pair<String, Function<User, Boolean>> getRequirement() {
-		return chosen;
+		return getChosen();
 	}
 
 	@Override
