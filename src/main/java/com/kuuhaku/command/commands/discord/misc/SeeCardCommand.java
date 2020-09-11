@@ -67,7 +67,7 @@ public class SeeCardCommand extends Command {
 		Card tc = CardDAO.getCard(args[0], true);
 		try {
 			if (tc == null) {
-				channel.sendMessage("❌ | Essa carta não existe.").queue();
+				channel.sendMessage("❌ | Essa carta não existe, você não quis dizer `" + Helper.didYouMean(args[0], CardDAO.getAllCardNames().toArray(String[]::new)) + "`?").queue();
 				return;
 			} else if (args.length < 2 && tc.getRarity() != KawaiponRarity.ULTIMATE) {
 				channel.sendMessage("❌ | Você também precisa informar o tipo dela (`N` = normal, `C` = cromada).").queue();
