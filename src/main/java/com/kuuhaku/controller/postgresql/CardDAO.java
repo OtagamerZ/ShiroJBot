@@ -86,7 +86,7 @@ public class CardDAO {
 	public static List<String> getAllCardNames() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c.name FROM Card c WHERE anime IN :animes", String.class);
+		Query q = em.createQuery("SELECT c.id FROM Card c WHERE anime IN :animes", String.class);
 		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
 		List<String> c = (List<String>) q.getResultList();
 
