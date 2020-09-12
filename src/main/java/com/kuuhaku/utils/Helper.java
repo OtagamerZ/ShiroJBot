@@ -717,7 +717,7 @@ public class Helper {
 			if (word.equalsIgnoreCase(w)) {
 				return word;
 			} else {
-				int diff = checker.apply(word, w);
+				int diff = checker.apply(word.toLowerCase(), w.toLowerCase());
 				if (diff < threshold) {
 					match = w;
 					threshold = diff;
