@@ -199,13 +199,13 @@ public class Settings {
 				message.getTextChannel().sendMessage("O canal de boas-vindas atual do servidor é <#" + antigoCanalBVID + ">.").queue();
 			}
 			return;
-		} else if (message.getMentionedChannels().size() < 1) {
-			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
-			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setCanalBV(null);
 			GuildDAO.updateGuildSettings(gc);
 			message.getTextChannel().sendMessage("✅ | O canal de boas-vindas do servidor foi resetado com sucesso.").queue();
+			return;
+		} else if (message.getMentionedChannels().size() < 1) {
+			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
 			return;
 		}
 
@@ -246,13 +246,13 @@ public class Settings {
 				message.getTextChannel().sendMessage("O canal de adeus atual do servidor é <#" + antigoCanalAdeusID + ">.").queue();
 			}
 			return;
-		} else if (message.getMentionedChannels().size() < 1) {
-			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
-			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setCanalAdeus(null);
 			GuildDAO.updateGuildSettings(gc);
 			message.getTextChannel().sendMessage("✅ | O canal de adeus do servidor foi resetado com sucesso.").queue();
+			return;
+		} else if (message.getMentionedChannels().size() < 1) {
+			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
 			return;
 		}
 
@@ -293,13 +293,13 @@ public class Settings {
 				message.getTextChannel().sendMessage("O canal de sugestões atual do servidor é <#" + antigoCanalSUGID + ">.").queue();
 			}
 			return;
-		} else if (message.getMentionedChannels().size() < 1) {
-			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
-			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setCanalSUG("");
 			GuildDAO.updateGuildSettings(gc);
 			message.getTextChannel().sendMessage("✅ | O canal de sugestões do servidor foi resetado com sucesso.").queue();
+			return;
+		} else if (message.getMentionedChannels().size() < 1) {
+			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
 			return;
 		}
 
@@ -367,13 +367,13 @@ public class Settings {
 			}
 			return;
 		}
-		if (message.getMentionedRoles().size() < 1) {
-			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-role")).queue();
-			return;
-		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
+		if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setCargoMute(null);
 			GuildDAO.updateGuildSettings(gc);
 			message.getTextChannel().sendMessage("✅ | O cargo de punição do servidor foi resetado com sucesso.").queue();
+			return;
+		} else if (message.getMentionedRoles().size() < 1) {
+			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-role")).queue();
 			return;
 		}
 
@@ -450,13 +450,13 @@ public class Settings {
 				message.getTextChannel().sendMessage("O canal de level up atual do servidor é <#" + antigoCanalLvlUpID + ">.").queue();
 			}
 			return;
-		} else if (message.getMentionedChannels().size() < 1) {
-			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
-			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setCanalLvl(null);
 			GuildDAO.updateGuildSettings(gc);
 			message.getTextChannel().sendMessage("✅ | O canal de level up do servidor foi resetado com sucesso.").queue();
+			return;
+		} else if (message.getMentionedChannels().size() < 1) {
+			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
 			return;
 		}
 
@@ -477,12 +477,12 @@ public class Settings {
 				message.getTextChannel().sendMessage("O canal relay atual do servidor é <#" + antigoCanalRelayID + ">.").queue();
 			}
 			return;
-		} else if (message.getMentionedChannels().size() < 1) {
-			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
-			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setCanalRelay(null);
 			message.getTextChannel().sendMessage("✅ | O canal relay do servidor foi resetado com sucesso.").queue();
+			return;
+		} else if (message.getMentionedChannels().size() < 1) {
+			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
 			return;
 		}
 
@@ -503,12 +503,12 @@ public class Settings {
 				message.getTextChannel().sendMessage("O canal de avisos atual do servidor é <#" + antigoCanalAvisosID + ">.").queue();
 			}
 			return;
-		} else if (message.getMentionedChannels().size() < 1) {
-			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
-			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			gc.setCanalAvisos(null);
 			message.getTextChannel().sendMessage("✅ | O canal de avisos do servidor foi resetado com sucesso.").queue();
+			return;
+		} else if (message.getMentionedChannels().size() < 1) {
+			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-channel")).queue();
 			return;
 		}
 
@@ -537,9 +537,6 @@ public class Settings {
 		} else if (!StringUtils.isNumeric(args[2])) {
 			message.getTextChannel().sendMessage("❌ | O terceiro argumento deve ser uma valor inteiro").queue();
 			return;
-		} else if (message.getMentionedRoles().size() < 1) {
-			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-role")).queue();
-			return;
 		} else if (args[1].equals("reset") || args[1].equals("resetar")) {
 			try {
 				Map<String, Object> cl = gc.getCargoslvl();
@@ -552,6 +549,9 @@ public class Settings {
 				message.getTextChannel().sendMessage("❌ | Este nível ainda não possui nenhum cargo.").queue();
 				return;
 			}
+		} else if (message.getMentionedRoles().size() < 1) {
+			message.getTextChannel().sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-role")).queue();
+			return;
 		}
 
 		Role newRole = message.getMentionedRoles().get(0);
@@ -626,22 +626,22 @@ public class Settings {
 		eb.setDescription("Utilize os comandos a baixo para estabelecer suas configurações.");
 		eb.addField(prefix + "settings prefix", "Altera o prefixo da Shiro no seu servidor.", false);
 
-		eb.addField(prefix + "settings canalbv", "Define o canal onde a Shiro ira mandar as mensagens de boas-vindas.", false);
+		eb.addField(prefix + "settings canalbv", "Define o canal onde a Shiro ira mandar as mensagens de boas-vindas. Para remover esta configuração, use `" + prefix + "settings canalbv reset`.", false);
 		eb.addField(prefix + "settings mensagembv", "Defina uma mensagem de boas-vindas em seu servidor.", false);
-		eb.addField(prefix + "settings canaladeus", "Define o canal onde a Shiro ira mandar as mensagens de saída.", false);
+		eb.addField(prefix + "settings canaladeus", "Define o canal onde a Shiro ira mandar as mensagens de saída. Para remover esta configuração, use `" + prefix + "settings canaladeus reset`.", false);
 		eb.addField(prefix + "settings mensagemadeus", "Defina uma mensagem de saída em seu servidor.", false);
 
-		eb.addField(prefix + "settings canalsug", "Define o canal de sugestões em seu servidor.", false);
-		eb.addField(prefix + "settings canallevelup", "Define o canal de level up em seu servidor.", false);
-		eb.addField(prefix + "settings canalrelay", "Define o canal de relay em seu servidor.", false);
-		eb.addField(prefix + "settings canalavisos", "Define o canal de avisos em seu servidor.", false);
+		eb.addField(prefix + "settings canalsug", "Define o canal de sugestões em seu servidor. Para remover esta configuração, use `" + prefix + "settings canalsug reset`.", false);
+		eb.addField(prefix + "settings canallevelup", "Define o canal de level up em seu servidor. Para remover esta configuração, use `" + prefix + "settings canallevelup reset`.", false);
+		eb.addField(prefix + "settings canalrelay", "Define o canal de relay em seu servidor. Para remover esta configuração, use `" + prefix + "settings canalrelay reset`.", false);
+		eb.addField(prefix + "settings canalavisos", "Define o canal de avisos em seu servidor. Para remover esta configuração, use `" + prefix + "settings canalavisos reset`.", false);
 
 		eb.addField(prefix + "settings tempowarn", "Define o tempo de punições em seu servidor.", false);
 		eb.addField(prefix + "settings tempopoll", "Define o tempo de enquetes em seu servidor.", false);
 
-		eb.addField(prefix + "settings cargomute", "Define o cargo de punição em seu servidor.", false);
+		eb.addField(prefix + "settings cargomute", "Define o cargo de punição em seu servidor. Para remover esta configuração, use `" + prefix + "settings cargomute reset`.", false);
 		//eb.addField(prefix + "settings rolevip", "Define o cargo VIP em seu servidor.", false);
-		eb.addField(prefix + "settings cargolevel", "Define os cargos por level em seu servidor.", false);
+		eb.addField(prefix + "settings cargolevel", "Define os cargos por level em seu servidor. Para remover esta configuração, use `" + prefix + "settings cargolevel reset LEVEL`.", false);
 		eb.addField(prefix + "settings levelnotif", "Habilita as notificações de nível.\n\nParâmetros:\n", false);
 
 		eb.addField("%guild%", "Para dizer o nome do server.", false);

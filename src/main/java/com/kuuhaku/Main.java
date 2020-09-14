@@ -29,7 +29,6 @@ import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.Manager;
 import com.kuuhaku.events.JibrilEvents;
 import com.kuuhaku.events.ScheduledEvents;
-import com.kuuhaku.events.TetEvents;
 import com.kuuhaku.events.TwitchEvents;
 import com.kuuhaku.events.guild.GuildEvents;
 import com.kuuhaku.events.guild.GuildUpdateEvents;
@@ -76,16 +75,16 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 	public static void main(String[] args) throws Exception {
 		Helper.logger(Main.class).info("\nShiro J. Bot  Copyright (C) 2020 Yago Gimenez (KuuHaKu)\n" +
-				"This program comes with ABSOLUTELY NO WARRANTY\n" +
-				"This is free software, and you are welcome to redistribute it under certain conditions\n" +
-				"See license for more information regarding redistribution conditions");
+									   "This program comes with ABSOLUTELY NO WARRANTY\n" +
+									   "This is free software, and you are welcome to redistribute it under certain conditions\n" +
+									   "See license for more information regarding redistribution conditions");
 		Thread.setDefaultUncaughtExceptionHandler(new Main());
 		info = new ShiroInfo();
 		relay = new Relay();
 		cmdManager = new CommandManager();
 		tCmdManager = new TwitchCommandManager();
 
-		EnumSet<GatewayIntent> intents = GatewayIntent.getIntents(GatewayIntent.DEFAULT);
+		EnumSet<GatewayIntent> intents = GatewayIntent.getIntents(GatewayIntent.ALL_INTENTS);
 
 		api = JDABuilder.create(intents)
 				.enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_PRESENCES)
@@ -98,21 +97,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				.build()
 				.awaitReady();
 
-		jbr = JDABuilder.create(intents)
-				.setToken(System.getenv("JIBRIL_TOKEN"))
-				.setChunkingFilter(ChunkingFilter.NONE)
-				.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS)
-				.setMemberCachePolicy(MemberCachePolicy.NONE)
-				.setBulkDeleteSplittingEnabled(false)
-				.build()
-				.awaitReady();
-
-		tet = JDABuilder.create(intents)
-				.setToken(System.getenv("TET_TOKEN"))
-				.setChunkingFilter(ChunkingFilter.NONE)
-				.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS)
-				.setMemberCachePolicy(MemberCachePolicy.NONE)
-				.setBulkDeleteSplittingEnabled(false)
+		jbr = JDABuilder.createLight(System.getenv("JIBRIL_TOKEN"))
 				.build()
 				.awaitReady();
 
@@ -120,7 +105,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 		api.getPresence().setActivity(Activity.playing("Iniciando..."));
 		jbr.getPresence().setActivity(Activity.playing("Iniciando..."));
-		tet.getPresence().setActivity(Activity.playing("Iniciando..."));
 
 		info.setStartTime(Instant.now().getEpochSecond());
 		Helper.logger(Main.class).info("Criada pool de compilação: " + info.getPool().getCorePoolSize() + " espaços alocados");
@@ -164,7 +148,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	private static void finishStartUp() throws IOException, InterruptedException {
 		api.getPresence().setActivity(getRandomActivity());
 		jbr.getPresence().setActivity(Activity.listening("as mensagens de " + relay.getRelayMap().size() + " servidores!"));
-		tet.getPresence().setActivity(Activity.playing("batalha de Exceeds"));
 		getInfo().setWinner(ExceedDAO.getWinner());
 		api.getGuilds().forEach(g -> {
 			try {
@@ -179,7 +162,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		api.addEventListener(new GuildEvents());
 		api.addEventListener(new GuildUpdateEvents());
 		jbr.addEventListener(new JibrilEvents());
-		tet.addEventListener(new TetEvents());
 
 		Pages.activate(api);
 
