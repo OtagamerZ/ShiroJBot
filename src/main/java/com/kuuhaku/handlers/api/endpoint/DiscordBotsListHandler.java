@@ -64,7 +64,7 @@ public class DiscordBotsListHandler {
 				EmbedBuilder eb = new EmbedBuilder();
 
 				eb.setThumbnail("https://i.imgur.com/A0jXqpe.png");
-				eb.setTitle("Opa, obrigada por votar em mim! (combo " + acc.getStreak() + "/7 -> bônus " + 50 * acc.getStreak() + "c)");
+				eb.setTitle("Opa, obrigada por votar em mim! (combo " + acc.getStreak() + "/7 -> bônus " + 140 * acc.getStreak() + "c)");
 				eb.setDescription("Como agradecimento, aqui estão " + credit + (body.getBoolean("isWeekend") ? " (bônus x2)" : "") + " créditos para serem utilizados nos módulos que utilizam o sistema de dinheiro.");
 				eb.setFooter("Seus créditos: " + acc.getBalance(), "https://i.imgur.com/U0nPjLx.gif");
 				eb.addField("Pode resgatar uma gema?", acc.getStreak() == 7 ? "SIM!!" : "Não", true);
