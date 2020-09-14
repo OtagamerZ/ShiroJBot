@@ -77,7 +77,8 @@ public class ExceedMembersCommand extends Command {
 			eb.clearFields();
 			sb.setLength(0);
 			for (ExceedMember em : ems) {
-				sb.append(checkUser(em.getId()));
+				sb.append(checkUser(em.getId()))
+						.append("\n");
 			}
 			eb.addField("Total de membros: " + members.size(), sb.toString(), false);
 			pages.add(new Page(PageType.EMBED, eb.build()));

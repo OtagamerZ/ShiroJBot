@@ -13,10 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Correções gerais">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/exceed/ExceedMembersCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/exceed/ExceedMembersCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Adição de comando para ver os membros do Exceed e preparação para adição de 2 novos animes às cartas">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -689,14 +687,7 @@
       <workItem from="1599836114831" duration="313000" />
       <workItem from="1599840415872" duration="10252000" />
       <workItem from="1600085175591" duration="3156000" />
-      <workItem from="1600099509869" duration="5828000" />
-    </task>
-    <task id="LOCAL-02414" summary="Nova loja de boosters de uso individual">
-      <created>1599590014392</created>
-      <option name="number" value="02414" />
-      <option name="presentableId" value="LOCAL-02414" />
-      <option name="project" value="LOCAL" />
-      <updated>1599590014393</updated>
+      <workItem from="1600099509869" duration="9765000" />
     </task>
     <task id="LOCAL-02415" summary="Nova loja de boosters de uso individual">
       <created>1599590164907</created>
@@ -1034,7 +1025,14 @@
       <option name="project" value="LOCAL" />
       <updated>1600107753724</updated>
     </task>
-    <option name="localTasksCounter" value="2463" />
+    <task id="LOCAL-02463" summary="Adição de comando para ver os membros do Exceed e preparação para adição de 2 novos animes às cartas">
+      <created>1600107994937</created>
+      <option name="number" value="02463" />
+      <option name="presentableId" value="LOCAL-02463" />
+      <option name="project" value="LOCAL" />
+      <updated>1600107994937</updated>
+    </task>
+    <option name="localTasksCounter" value="2464" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1100,7 +1098,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Redução na chance de drop de boosters" />
     <MESSAGE value="Novas cartas: Bayonetta: Bloody Fate" />
     <MESSAGE value="Redução do preço dos boosters de invocar carta e invocar anime" />
     <MESSAGE value="Adição de conversão de gema em créditos na loja VIP" />
@@ -1125,7 +1122,8 @@
     <MESSAGE value="Correção no &quot;você não quis dizer?&quot;" />
     <MESSAGE value="Correções pendentes" />
     <MESSAGE value="Correções gerais" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correções gerais" />
+    <MESSAGE value="Adição de comando para ver os membros do Exceed e preparação para adição de 2 novos animes às cartas" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adição de comando para ver os membros do Exceed e preparação para adição de 2 novos animes às cartas" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1179,11 +1177,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1600107824782">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1600113809739">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1600107824782" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1600113809739" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1236,11 +1234,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1600107758895">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1600107996664">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1600107758895" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1600107996664" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
