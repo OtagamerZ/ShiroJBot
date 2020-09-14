@@ -25,7 +25,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
-import com.kuuhaku.model.persistent.ExceedChampions;
 import com.kuuhaku.model.persistent.ExceedMember;
 import com.kuuhaku.utils.*;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -63,7 +62,6 @@ public class ExceedMembersCommand extends Command {
 
 		ExceedEnum ex = ExceedEnum.getByName(ExceedDAO.getExceed(author.getId()));
 		List<ExceedMember> members = ExceedDAO.getExceedMembers(ex);
-		List<ExceedChampions> champions = ExceedDAO.getExceedChampions(ex);
 		Emote e = Main.getInfo().getAPI().getEmoteById(TagIcons.getExceedId(ex));
 
 		assert e != null;
@@ -80,10 +78,6 @@ public class ExceedMembersCommand extends Command {
 			sb.setLength(0);
 			for (ExceedMember em : ems) {
 				sb.append(checkUser(em.getId()));
-				if (champions.stream().anyMatch(ec -> ec.getChampions().contains(em))) {
-					sb.append(" | ")
-							.append(TagIcons.EXCEED_CHAMPION.getTag(0));
-				}
 			}
 			eb.addField("Total de membros: " + members.size(), sb.toString(), false);
 			pages.add(new Page(PageType.EMBED, eb.build()));
