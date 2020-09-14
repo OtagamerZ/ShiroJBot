@@ -63,10 +63,10 @@ public class MarryCommand extends Command {
 			} else if (message.getMentionedUsers().get(0) == author) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-marry-yourself")).queue();
 				return;
-			} else if (message.getMentionedUsers().get(0) == Main.getInfo().getSelfUser() && !author.getId().equals(Main.getInfo().getNiiChan())) {
+			} else if (message.getMentionedUsers().get(0) == Main.getInfo().getSelfUser() && !author.getId().equals(ShiroInfo.getNiiChan())) {
 				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-marry-shiro")).queue();
 				return;
-			} else if (message.getMentionedUsers().get(0) == Main.getJibril().getSelfUser() && !author.getId().equals(Main.getInfo().getNiiChan())) {
+			} else if (message.getMentionedUsers().get(0) == Main.getJibril().getSelfUser() && !author.getId().equals(ShiroInfo.getNiiChan())) {
 				try {
 					TextChannel chn = Main.getJibril().getTextChannelById(channel.getId());
 					assert chn != null;
