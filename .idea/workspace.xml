@@ -14,8 +14,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_neovisionaries_nv_websocket_client_2_10.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_rollbar_rollbar_api_1_7_5.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_rollbar_rollbar_java_1_7_5.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__net_dv8tion_JDA_4_2_0_204.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_apache_commons_commons_text_1_9.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_neovisionaries_nv_websocket_client_2_9.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_rollbar_rollbar_api_1_7_4.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_rollbar_rollbar_java_1_7_4.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__net_dv8tion_JDA_4_2_0_173.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_apache_commons_commons_text_1_8.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/com.kuuhaku.shiro-j-bot.test.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/AnimeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/AnimeCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Settings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/Settings.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,7 +127,7 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="TEXT" />
     <property name="extract.method.default.visibility" value="private" />
-    <property name="last.edited.regexp" value="&lt;@abc:123&gt;" />
+    <property name="last.edited.regexp" value="&lt;i&gt;dawddadw&lt;/i&gt;" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Project" />
@@ -161,13 +176,15 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [clean]">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -686,14 +703,8 @@
       <workItem from="1599739339601" duration="24620000" />
       <workItem from="1599826039433" duration="6430000" />
       <workItem from="1599836114831" duration="313000" />
-      <workItem from="1599840415872" duration="9786000" />
-    </task>
-    <task id="LOCAL-02411" summary="Correções no notificador da Jibril">
-      <created>1599572757676</created>
-      <option name="number" value="02411" />
-      <option name="presentableId" value="LOCAL-02411" />
-      <option name="project" value="LOCAL" />
-      <updated>1599572757676</updated>
+      <workItem from="1599840415872" duration="10252000" />
+      <workItem from="1600085175591" duration="2410000" />
     </task>
     <task id="LOCAL-02412" summary="Correções no notificador da Jibril">
       <created>1599573165385</created>
@@ -1031,7 +1042,14 @@
       <option name="project" value="LOCAL" />
       <updated>1599856846522</updated>
     </task>
-    <option name="localTasksCounter" value="2460" />
+    <task id="LOCAL-02460" summary="Correção no &quot;você não quis dizer?&quot;">
+      <created>1599857319144</created>
+      <option name="number" value="02460" />
+      <option name="presentableId" value="LOCAL-02460" />
+      <option name="project" value="LOCAL" />
+      <updated>1599857319144</updated>
+    </task>
+    <option name="localTasksCounter" value="2461" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1146,7 +1164,6 @@
     <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1597927763665">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="239" y="78" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.768@0.0.1366.768" timestamp="1591416974252" />
     <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1597927763665" />
     <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1599826374544">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1177,19 +1194,15 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1599856843549">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1599857316581">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1599856843549" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1599857316581" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY/0.0.1680.1010@0.0.1680.1010" timestamp="1594057391387" />
-    <state width="247" height="195" key="DatabaseViewActions_Filter" timestamp="1591416926427">
-      <screen x="0" y="0" width="1366" height="768" />
-    </state>
-    <state width="247" height="195" key="DatabaseViewActions_Filter/0.0.1366.768@0.0.1366.768" timestamp="1591416926427" />
     <state x="92" y="92" width="1496" height="826" key="DiffContextDialog" timestamp="1599252116259">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1201,27 +1214,22 @@
     <state width="1391" height="289" key="GridCell.Tab.0.bottom" timestamp="1599761877672">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="905" height="270" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
     <state width="1391" height="289" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1599761877672" />
     <state width="1391" height="289" key="GridCell.Tab.0.center" timestamp="1599761877672">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="905" height="270" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
     <state width="1391" height="289" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1599761877672" />
     <state width="1391" height="289" key="GridCell.Tab.0.left" timestamp="1599761877672">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="905" height="270" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
     <state width="1391" height="289" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1599761877672" />
     <state width="1391" height="289" key="GridCell.Tab.0.right" timestamp="1599761877672">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="905" height="270" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1591418019145" />
     <state width="1391" height="289" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1599761877672" />
     <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1594058079602">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="196" height="348" key="HiddenNamespacesPopup/0.0.1366.768@0.0.1366.768" timestamp="1591416990961" />
     <state width="196" height="457" key="HiddenNamespacesPopup/0.0.1680.1010@0.0.1680.1010" timestamp="1594058079602" />
     <state x="420" y="240" key="IDE.errors.dialog" timestamp="1596639332382">
       <screen x="0" y="0" width="1680" height="1010" />
@@ -1243,11 +1251,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1599856857382">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1599857321793">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1599856857382" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1599857321793" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1301,10 +1309,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="239" y="152" key="new project wizard/0.0.1680.1010@0.0.1680.1010" timestamp="1595512583095" />
-    <state x="496" y="233" width="672" height="677" key="run.anything.popup" timestamp="1599750100012">
+    <state x="496" y="233" width="672" height="677" key="run.anything.popup" timestamp="1600085909178">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1599750100012" />
+    <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1600085909178" />
     <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1599845778977">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
