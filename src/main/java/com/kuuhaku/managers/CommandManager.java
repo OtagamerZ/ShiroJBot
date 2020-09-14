@@ -22,10 +22,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.command.commands.discord.beta.*;
 import com.kuuhaku.command.commands.discord.dev.*;
-import com.kuuhaku.command.commands.discord.exceed.ExceedLeaveCommand;
-import com.kuuhaku.command.commands.discord.exceed.ExceedPaletteCommand;
-import com.kuuhaku.command.commands.discord.exceed.ExceedRankCommand;
-import com.kuuhaku.command.commands.discord.exceed.ExceedSelectCommand;
+import com.kuuhaku.command.commands.discord.exceed.*;
 import com.kuuhaku.command.commands.discord.fun.*;
 import com.kuuhaku.command.commands.discord.information.*;
 import com.kuuhaku.command.commands.discord.misc.*;
@@ -522,11 +519,10 @@ public class CommandManager {
 			put(DisboardCommand.class, new Arguments(
 					"disboard", new String[]{"exmap", "mapa"}, "cmd_disboard", EXCEED, false
 			));
-
-			put(ConquestCommand.class, new Arguments(
-					"dominar", new String[]{"exdominate", "conquistar"}, "cmd_aschente", EXCEED, true
-			));
 			*/
+			put(ExceedMembersCommand.class, new Argument(
+					"exceedmembros", new String[]{"exmembers", "membrosx"}, "cmd_exceed-members", EXCEED, true
+			));
 
 			//REACTIONS
 			put(HugReaction.class, new ReactionArgument(

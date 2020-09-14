@@ -61,7 +61,9 @@ public enum AnimeName {
 	STEINS_GATE,
 	SWORD_ART_ONLINE,
 	TATE_NO_YUUSHA,
-	LUCKY_STAR;
+	LUCKY_STAR,
+	SHINGEKI_NO_KYOJIN,
+	HUNTER_X_HUNTER;
 
 	@Override
 	public String toString() {
