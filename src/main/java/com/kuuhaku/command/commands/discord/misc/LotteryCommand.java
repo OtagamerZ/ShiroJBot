@@ -70,6 +70,9 @@ public class LotteryCommand extends Command {
 			if (!StringUtils.isNumeric(dozen) || !Helper.between(Integer.parseInt(dozen), 0, 61)) {
 				channel.sendMessage("❌ | As dezenas devem ser valores numéricos de 00 a 60.").queue();
 				return;
+			} else if (args[0].split(dozen).length > 2) {
+				channel.sendMessage("❌ | Você não pode repetir dezenas.").queue();
+				return;
 			}
 		}
 
