@@ -45,7 +45,7 @@ public class Board {
 
 	public Board(BoardSize size, long bet, String... players) {
 		this.size = size;
-		this.players = Arrays.stream(players).map(s -> new Player(s, bet)).collect(Collectors.toCollection(InfiniteList::new));
+		this.players = Arrays.stream(players).map(s -> new Player(s, bet, AccountDAO.getAccount(s).getLoan() > 0)).collect(Collectors.toCollection(InfiniteList::new));
 		this.matrix = new Piece[size.getHeight()][size.getWidth()];
 
 		Collections.reverse(this.players);
@@ -153,7 +153,7 @@ public class Board {
 		List<Player> losers = players.stream().filter(p -> !p.getId().equals(id)).collect(Collectors.toList());
 
 		Account wacc = AccountDAO.getAccount(id);
-		wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum() / (wacc.getLoan() > 0 ? 2 : 1), this.getClass());
+		wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum(), this.getClass());
 		AccountDAO.saveAccount(wacc);
 
 		if (ExceedDAO.hasExceed(id)) {
@@ -165,7 +165,7 @@ public class Board {
 
 		losers.forEach(l -> {
 			Account lacc = AccountDAO.getAccount(l.getId());
-			lacc.removeCredit(l.getBet(), this.getClass());
+			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), this.getClass());
 			AccountDAO.saveAccount(lacc);
 
 			if (ExceedDAO.hasExceed(l.getId())) {
@@ -184,7 +184,7 @@ public class Board {
 
 		for (String id : ids) {
 			Account wacc = AccountDAO.getAccount(id);
-			wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum() / (wacc.getLoan() > 0 ? 2 : 1), this.getClass());
+			wacc.addCredit(losers.stream().mapToLong(Player::getBet).sum() / ids.length, this.getClass());
 			AccountDAO.saveAccount(wacc);
 
 			if (ExceedDAO.hasExceed(id)) {
@@ -197,7 +197,7 @@ public class Board {
 
 		losers.forEach(l -> {
 			Account lacc = AccountDAO.getAccount(l.getId());
-			lacc.removeCredit(l.getBet(), this.getClass());
+			lacc.removeCredit(l.hasLoan() ? l.getBet() * 2 : l.getBet(), this.getClass());
 			AccountDAO.saveAccount(lacc);
 
 			if (ExceedDAO.hasExceed(l.getId())) {

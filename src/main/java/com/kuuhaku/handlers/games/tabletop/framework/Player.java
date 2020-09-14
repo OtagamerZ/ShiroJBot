@@ -21,11 +21,13 @@ package com.kuuhaku.handlers.games.tabletop.framework;
 public class Player {
 	private final String id;
 	private final long bet;
+	private final boolean hasLoan;
 	private boolean inGame = true;
 
-	public Player(String id, long bet) {
+	public Player(String id, long bet, boolean hasLoan) {
 		this.id = id;
-		this.bet = bet;
+		this.bet = hasLoan ? bet / 2 : bet;
+		this.hasLoan = hasLoan;
 	}
 
 	public String getId() {
@@ -34,6 +36,10 @@ public class Player {
 
 	public long getBet() {
 		return bet;
+	}
+
+	public boolean hasLoan() {
+		return hasLoan;
 	}
 
 	public boolean isInGame() {
