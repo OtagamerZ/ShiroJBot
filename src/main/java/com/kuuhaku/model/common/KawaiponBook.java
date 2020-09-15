@@ -116,22 +116,22 @@ public class KawaiponBook {
 							if (foil) g.setColor(rc.getPrimary().brighter());
 							else g.setColor(rc.getPrimary());
 
-							g.drawImage(chunks.get(finalC).get(i).getCard().drawCard(foil), 52 + 190 * i, 24, 160, 250, null);
-							Profile.printCenteredString(StringUtils.abbreviate(chunks.get(finalC).get(i).getName(), 15), 160, 52 + 190 * i, 298, g);
+							g.drawImage(chunks.get(finalC).get(i).getCard().drawCard(foil), 54 + 198 * i, 24, 160, 250, null);
+							Profile.printCenteredString(StringUtils.abbreviate(chunks.get(finalC).get(i).getName(), 15), 160, 54 + 198 * i, 298, g);
 						} else if (chunks.get(finalC).get(i).getCard().getRarity().equals(KawaiponRarity.ULTIMATE)) {
 							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, Helper.clamp(20 * 20 / chunks.get(finalC).get(i).getName().length(), 16, 20)));
 							g.setBackground(Color.black);
 							g.setColor(Color.white);
 
-							g.drawImage(slot, 52 + 190 * i, 24, 160, 250, null);
-							Profile.printCenteredString(StringUtils.abbreviate(chunks.get(finalC).get(i).getName(), 15), 160, 52 + 190 * i, 298, g);
+							g.drawImage(slot, 54 + 198 * i, 24, 160, 250, null);
+							Profile.printCenteredString(StringUtils.abbreviate(chunks.get(finalC).get(i).getName(), 15), 160, 54 + 198 * i, 298, g);
 						} else {
 							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
 							g.setBackground(Color.black);
 							g.setColor(Color.white);
 
-							g.drawImage(slot, 52 + 190 * i, 24, 160, 250, null);
-							Profile.printCenteredString("???", 160, 52 + 190 * i, 298, g);
+							g.drawImage(slot, 54 + 198 * i, 24, 160, 250, null);
+							Profile.printCenteredString("???", 160, 54 + 198 * i, 298, g);
 						}
 					}
 
