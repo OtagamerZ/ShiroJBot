@@ -87,11 +87,11 @@ public class CardValueCommand extends Command {
 			List<CardMarket> foilCards;
 
 			if (c != null) {
-				normalCards = CardMarketDAO.getCardsByCard(c.getId(), false).stream().filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * 400 * 50)).collect(Collectors.toList());
-				foilCards = CardMarketDAO.getCardsByCard(c.getId(), true).stream().filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * 400 * 100)).collect(Collectors.toList());
+				normalCards = CardMarketDAO.getCardsByCard(c.getId(), false).stream().filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 50)).collect(Collectors.toList());
+				foilCards = CardMarketDAO.getCardsByCard(c.getId(), true).stream().filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 100)).collect(Collectors.toList());
 			} else {
-				normalCards = CardMarketDAO.getCardsByRarity(r, false).stream().filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * 400 * 50)).collect(Collectors.toList());
-				foilCards = CardMarketDAO.getCardsByRarity(r, true).stream().filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * 400 * 100)).collect(Collectors.toList());
+				normalCards = CardMarketDAO.getCardsByRarity(r, false).stream().filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 50)).collect(Collectors.toList());
+				foilCards = CardMarketDAO.getCardsByRarity(r, true).stream().filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 100)).collect(Collectors.toList());
 			}
 
 			if (normalCards.size() <= 1 && foilCards.size() <= 1) {
