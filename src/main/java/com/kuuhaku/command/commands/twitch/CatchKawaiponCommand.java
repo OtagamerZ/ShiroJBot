@@ -30,6 +30,7 @@ import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
+import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 
@@ -66,7 +67,7 @@ public class CatchKawaiponCommand extends TwitchCommand {
 			return;
 		}
 
-		int cost = kc.getCard().getRarity().getIndex() * 400 * (kc.isFoil() ? 2 : 1);
+		int cost = kc.getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * (kc.isFoil() ? 2 : 1);
 		if (acc.getBalance() < cost) {
 			chat.sendMessage(channel.getName(), ShiroInfo.getLocale(I18n.PT).getString("err_insufficient-credits-user"));
 			return;
