@@ -13,8 +13,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Usuários com dívida ativa agora podem vender cartas, à um preço mínimo de 2x o valor base da carta;&#10;Trocada a palavra &quot;débito&quot; por &quot;dívida&quot;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/LoanCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/LoanCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SellCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/SellCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/TradeCardCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -690,14 +694,7 @@
       <workItem from="1599840415872" duration="10252000" />
       <workItem from="1600085175591" duration="3156000" />
       <workItem from="1600099509869" duration="10252000" />
-      <workItem from="1600174897476" duration="1613000" />
-    </task>
-    <task id="LOCAL-02417" summary="Nova loja de boosters de uso individual e drops de item">
-      <created>1599591196846</created>
-      <option name="number" value="02417" />
-      <option name="presentableId" value="LOCAL-02417" />
-      <option name="project" value="LOCAL" />
-      <updated>1599591196846</updated>
+      <workItem from="1600174897476" duration="3287000" />
     </task>
     <task id="LOCAL-02418" summary="Redução na chance de drop de boosters">
       <created>1599593533757</created>
@@ -1035,7 +1032,14 @@
       <option name="project" value="LOCAL" />
       <updated>1600175089458</updated>
     </task>
-    <option name="localTasksCounter" value="2466" />
+    <task id="LOCAL-02466" summary="Redução de preço base das cartas (400 -&gt; 350)">
+      <created>1600177816554</created>
+      <option name="number" value="02466" />
+      <option name="presentableId" value="LOCAL-02466" />
+      <option name="project" value="LOCAL" />
+      <updated>1600177816554</updated>
+    </task>
+    <option name="localTasksCounter" value="2467" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1101,7 +1105,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição de conversão de gema em créditos na loja VIP" />
     <MESSAGE value="Novas cartas: Kobayashi-san Chi No Maid Dragon" />
     <MESSAGE value="Nomes grandes na lista de cartas agora serão abreviados" />
     <MESSAGE value="Adicionado campo de nome da carta no websocket do site" />
@@ -1126,7 +1129,8 @@
     <MESSAGE value="Adição de comando para ver os membros do Exceed e preparação para adição de 2 novos animes às cartas" />
     <MESSAGE value="Correção da lista de membros do Exceed" />
     <MESSAGE value="Correção na loja VIP" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correção na loja VIP" />
+    <MESSAGE value="Redução de preço base das cartas (400 -&gt; 350)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Redução de preço base das cartas (400 -&gt; 350)" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1180,11 +1184,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1600175086572">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1600178828474">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1600175086572" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1600178828474" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1237,11 +1241,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1600175095634">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1600177818706">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1600175095634" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1600177818706" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1279,10 +1283,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="465" y="286" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595246935580" />
-    <state x="287" y="102" width="957" height="784" key="find.popup" timestamp="1599845422254">
+    <state x="300" y="114" width="957" height="784" key="find.popup" timestamp="1600178881821">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="287" y="102" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1599845422254" />
+    <state x="300" y="114" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1600178881821" />
     <state x="645" y="400" key="git4idea.ui.GitResetDialog" timestamp="1593018818159">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1299,10 +1303,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="496" y="233" width="672" height="677" key="run.anything.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1600085909178" />
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1599845778977">
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup" timestamp="1600178574068">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1599845778977" />
+    <state x="503" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1600178574068" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
