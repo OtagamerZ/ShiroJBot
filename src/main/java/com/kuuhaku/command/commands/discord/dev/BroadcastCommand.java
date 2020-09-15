@@ -114,7 +114,7 @@ public class BroadcastCommand extends Command {
 				WebhookMessageBuilder wmb = new WebhookMessageBuilder();
 
 				wmb.setUsername("Stephanie (Notificações Shiro)");
-				wmb.setAvatarUrl("https://avatarfiles.alphacoders.com/918/thumb-91865.png");
+				wmb.setAvatarUrl("https://i.imgur.com/mgA11Rx.png");
 				wmb.setContent(msg);
 
 				WebhookCluster cluster = new WebhookCluster(clients);
