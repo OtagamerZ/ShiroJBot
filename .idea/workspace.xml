@@ -13,7 +13,14 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/KawaiponBook.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/KawaiponBook.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/AnimeName.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/AnimeName.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaipon/footer.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/footer.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaipon/header.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/header.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/kawaipon/row.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/kawaipon/row.png" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -688,14 +695,7 @@
       <workItem from="1599840415872" duration="10252000" />
       <workItem from="1600085175591" duration="3156000" />
       <workItem from="1600099509869" duration="10252000" />
-      <workItem from="1600174897476" duration="3629000" />
-    </task>
-    <task id="LOCAL-02420" summary="Novas cartas: Bayonetta: Bloody Fate">
-      <created>1599597516049</created>
-      <option name="number" value="02420" />
-      <option name="presentableId" value="LOCAL-02420" />
-      <option name="project" value="LOCAL" />
-      <updated>1599597516050</updated>
+      <workItem from="1600174897476" duration="9081000" />
     </task>
     <task id="LOCAL-02421" summary="Redução do preço dos boosters de invocar carta e invocar anime">
       <created>1599653843929</created>
@@ -1033,7 +1033,14 @@
       <option name="project" value="LOCAL" />
       <updated>1600179433499</updated>
     </task>
-    <option name="localTasksCounter" value="2469" />
+    <task id="LOCAL-02469" summary="Usuários com dívida ativa agora podem vender cartas, à um preço mínimo de 2x o valor base da carta;&#10;Trocada a palavra &quot;débito&quot; por &quot;dívida&quot;;&#10;Adição de confirmação antes de obter um empréstimo;">
+      <created>1600179613715</created>
+      <option name="number" value="02469" />
+      <option name="presentableId" value="LOCAL-02469" />
+      <option name="project" value="LOCAL" />
+      <updated>1600179613715</updated>
+    </task>
+    <option name="localTasksCounter" value="2470" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1178,11 +1185,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1600179430813">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1600179611015">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1600179430813" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1600179611015" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1195,22 +1202,22 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="620" y="261" key="FileChooserDialogImpl/0.0.1680.1010@0.0.1680.1010" timestamp="1597149004659" />
-    <state width="1391" height="289" key="GridCell.Tab.0.bottom" timestamp="1599761877672">
+    <state width="1391" height="289" key="GridCell.Tab.0.bottom" timestamp="1600189356289">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1391" height="289" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1599761877672" />
-    <state width="1391" height="289" key="GridCell.Tab.0.center" timestamp="1599761877672">
+    <state width="1391" height="289" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1600189356289" />
+    <state width="1391" height="289" key="GridCell.Tab.0.center" timestamp="1600189356289">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1391" height="289" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1599761877672" />
-    <state width="1391" height="289" key="GridCell.Tab.0.left" timestamp="1599761877672">
+    <state width="1391" height="289" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1600189356289" />
+    <state width="1391" height="289" key="GridCell.Tab.0.left" timestamp="1600189356289">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1391" height="289" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1599761877672" />
-    <state width="1391" height="289" key="GridCell.Tab.0.right" timestamp="1599761877672">
+    <state width="1391" height="289" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1600189356289" />
+    <state width="1391" height="289" key="GridCell.Tab.0.right" timestamp="1600189356289">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1391" height="289" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1599761877672" />
+    <state width="1391" height="289" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1600189356289" />
     <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1594058079602">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1235,11 +1242,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1600179436168">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1600179616879">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1600179436168" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1600179616879" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
