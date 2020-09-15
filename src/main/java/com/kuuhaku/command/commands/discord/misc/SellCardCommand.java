@@ -30,8 +30,6 @@ import com.kuuhaku.model.persistent.CardMarket;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.I18n;
-import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
@@ -84,16 +82,17 @@ public class SellCardCommand extends Command {
 		if (card == null) {
 			channel.sendMessage("❌ | Você não pode trocar uma carta que não possui!").queue();
 			return;
-		} else if (AccountDAO.getAccount(kp.getUid()).getLoan() > 0) {
-			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-transfer-with-loan")).queue();
-			return;
 		}
 
+		boolean hasLoan = AccountDAO.getAccount(kp.getUid()).getLoan() > 0;
 		int price = Integer.parseInt(args[2]);
-		int min = c.getRarity().getIndex() * (Helper.BASE_CARD_PRICE / 2) * (foil ? 2 : 1);
+		int min = c.getRarity().getIndex() * (hasLoan ? Helper.BASE_CARD_PRICE * 2 : Helper.BASE_CARD_PRICE / 2) * (foil ? 2 : 1);
 
 		if (price < min) {
-			channel.sendMessage("❌ | Você não pode vender essa carta por menos que " + min + " créditos.").queue();
+			if (hasLoan)
+				channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender essa carta por menos que " + min + " créditos.").queue();
+			else
+				channel.sendMessage("❌ | Você não pode vender essa carta por menos que " + min + " créditos.").queue();
 			return;
 		}
 
