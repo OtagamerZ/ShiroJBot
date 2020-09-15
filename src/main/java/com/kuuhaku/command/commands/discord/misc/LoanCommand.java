@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.commands.discord.misc;
 
+import com.github.ygimenez.method.Pages;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
@@ -31,6 +32,9 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
+
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class LoanCommand extends Command {
 
@@ -60,7 +64,7 @@ public class LoanCommand extends Command {
 			eb.setThumbnail("https://image.flaticon.com/icons/png/512/1462/1462438.png");
 			eb.setDescription("Está precisando de créditos rápidos? Estão aparecendo muitas cartas que você deseja obter? Talvez seu Kawaigotchi esteja morrendo?\n" +
 							  "Não se preocupe, nós podemos resolver!\n\n" +
-							  "Usando este comando você pode contratar um ~~agiota~~ empréstimo de créditos e ter a possibilidade de pagar o débito mais tarde.\n\n"
+							  "Usando este comando você pode contratar um ~~agiota~~ empréstimo de créditos e ter a possibilidade de pagar a dívida mais tarde.\n\n"
 			);
 			eb.addField("Plano Lite: `" + prefix + "emprestimo 1`", "1000 créditos (juros de " + Helper.round(CreditLoan.LOAN_1.getInterest(ex) * 100 - 100, 1) + "%)", false);
 			eb.addField("Plano Colecionador: `" + prefix + "emprestimo 2`", "2500 créditos (juros de " + Helper.round(CreditLoan.LOAN_2.getInterest(ex) * 100 - 100, 1) + "%)", false);
@@ -92,9 +96,14 @@ public class LoanCommand extends Command {
 
 		CreditLoan cl = CreditLoan.getById(loan);
 
-		cl.sign(acc);
+		channel.sendMessage("Você está prestes a obter " + cl.getLoan() + " créditos a um juros de " + Helper.round(cl.getInterest(ex) * 100 - 100, 1) + "% (" + Math.round(cl.getLoan() * cl.getInterest(ex)) + " créditos), deseja confirmar?").queue(s ->
+				Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
+					Account finalAcc = AccountDAO.getAccount(author.getId());
+					cl.sign(finalAcc);
 
-		channel.sendMessage("Obrigada por ser mais um cliente do Shiro Empréstimos LTDA! Você não receberá mais créditos até que termine de pagar seu débito.").queue();
+					s.delete().flatMap(d -> channel.sendMessage("Obrigada por ser mais um cliente do Shiro Empréstimos LTDA! Você não receberá mais créditos até que termine de pagar sua dívida.")).queue();
+				}), true, 1, TimeUnit.MINUTES)
+		);
 	}
 
 }
