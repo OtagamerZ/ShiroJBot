@@ -104,6 +104,7 @@ public class Helper {
 	public static final int CANVAS_SIZE = 1025;
 	public static final DateTimeFormatter dateformat = DateTimeFormatter.ofPattern("dd/MMM/yyyy | HH:mm:ss (z)");
 	public static final String HOME = "674261700366827539";
+	public static final int BASE_CARD_PRICE = 350;
 
 	private static PrivilegeLevel getPrivilegeLevel(Member member) {
 		if (ShiroInfo.getNiiChan().equals(member.getId()))
@@ -1023,7 +1024,7 @@ public class Helper {
 			eb.setAuthor("Uma carta " + c.getRarity().toString().toUpperCase() + " Kawaipon apareceu neste servidor!");
 			eb.setTitle(kc.getName() + " (" + c.getAnime().toString() + ")");
 			eb.setColor(colorThief(img));
-			eb.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + (c.getRarity().getIndex() * 400 * (foil ? 2 : 1)) + " créditos).", null);
+			eb.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + (c.getRarity().getIndex() * BASE_CARD_PRICE * (foil ? 2 : 1)) + " créditos).", null);
 
 			if (gc.getCanalKawaipon() == null || gc.getCanalKawaipon().isEmpty()) {
 				channel.sendMessage(eb.build()).addFile(getBytes(img, "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
@@ -1063,7 +1064,7 @@ public class Helper {
 		eb.setAuthor(message.getAuthor().getName() + " invocou uma carta " + c.getRarity().toString().toUpperCase() + " neste servidor!");
 		eb.setTitle(kc.getName() + " (" + c.getAnime().toString() + ")");
 		eb.setColor(colorThief(img));
-		eb.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + (c.getRarity().getIndex() * 400 * (foil ? 2 : 1)) + " créditos).", null);
+		eb.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + (c.getRarity().getIndex() * BASE_CARD_PRICE * (foil ? 2 : 1)) + " créditos).", null);
 
 		if (gc.getCanalKawaipon() == null || gc.getCanalKawaipon().isEmpty()) {
 			channel.sendMessage(eb.build()).addFile(getBytes(img, "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
@@ -1109,7 +1110,7 @@ public class Helper {
 		eb.setAuthor(message.getAuthor().getName() + " invocou uma carta " + c.getRarity().toString().toUpperCase() + " neste servidor!");
 		eb.setTitle(kc.getName() + " (" + c.getAnime().toString() + ")");
 		eb.setColor(colorThief(img));
-		eb.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + (c.getRarity().getIndex() * 400 * (foil ? 2 : 1)) + " créditos).", null);
+		eb.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + (c.getRarity().getIndex() * BASE_CARD_PRICE * (foil ? 2 : 1)) + " créditos).", null);
 
 		if (gc.getCanalKawaipon() == null || gc.getCanalKawaipon().isEmpty()) {
 			channel.sendMessage(eb.build()).addFile(getBytes(img, "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
@@ -1135,7 +1136,7 @@ public class Helper {
 			KawaiponCard kc = new KawaiponCard(c, foil);
 
 			chat.sendMessage(channel.getName(),
-					"FootYellow | " + kc.getName() + " (" + c.getRarity().toString() + " | " + c.getAnime().toString() + ") | Digite \"s!coletar\" para adquirir esta carta (necessário: " + (c.getRarity().getIndex() * 400 * (foil ? 2 : 1)) + " créditos)."
+					"FootYellow | " + kc.getName() + " (" + c.getRarity().toString() + " | " + c.getAnime().toString() + ") | Digite \"s!coletar\" para adquirir esta carta (necessário: " + (c.getRarity().getIndex() * BASE_CARD_PRICE * (foil ? 2 : 1)) + " créditos)."
 			);
 			Main.getInfo().getCurrentCard().put("twitch", kc);
 		}
