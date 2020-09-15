@@ -84,30 +84,34 @@ public class SellCardCommand extends Command {
 			return;
 		}
 
-		boolean hasLoan = AccountDAO.getAccount(kp.getUid()).getLoan() > 0;
-		int price = Integer.parseInt(args[2]);
-		int min = c.getRarity().getIndex() * (hasLoan ? Helper.BASE_CARD_PRICE * 2 : Helper.BASE_CARD_PRICE / 2) * (foil ? 2 : 1);
+		try {
+			boolean hasLoan = AccountDAO.getAccount(kp.getUid()).getLoan() > 0;
+			int price = Integer.parseInt(args[2]);
+			int min = c.getRarity().getIndex() * (hasLoan ? Helper.BASE_CARD_PRICE * 2 : Helper.BASE_CARD_PRICE / 2) * (foil ? 2 : 1);
 
-		if (price < min) {
-			if (hasLoan)
-				channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender essa carta por menos que " + min + " créditos.").queue();
-			else
-				channel.sendMessage("❌ | Você não pode vender essa carta por menos que " + min + " créditos.").queue();
-			return;
+			if (price < min) {
+				if (hasLoan)
+					channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode vender essa carta por menos que " + min + " créditos.").queue();
+				else
+					channel.sendMessage("❌ | Você não pode vender essa carta por menos que " + min + " créditos.").queue();
+				return;
+			}
+
+			channel.sendMessage("Esta carta sairá da sua coleção, você ainda poderá comprá-la novamente pelo mesmo preço. Deseja mesmo anunciá-la?").queue(s -> {
+				Pages.buttonize(s, Map.of(Helper.ACCEPT, (member1, message1) -> {
+					if (member1.getId().equals(author.getId())) {
+						kp.removeCard(card);
+						KawaiponDAO.saveKawaipon(kp);
+
+						CardMarket cm = new CardMarket(author.getId(), card, price);
+						CardMarketDAO.saveCard(cm);
+
+						s.delete().flatMap(d -> channel.sendMessage(":white_check_mark: | Carta anunciada com sucesso!")).queue();
+					}
+				}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()));
+			});
+		} catch (NumberFormatException e) {
+			channel.sendMessage("❌ | O valor máximo é " + Integer.MAX_VALUE + " créditos!").queue();
 		}
-
-		channel.sendMessage("Esta carta sairá da sua coleção, você ainda poderá comprá-la novamente pelo mesmo preço. Deseja mesmo anunciá-la?").queue(s -> {
-			Pages.buttonize(s, Map.of(Helper.ACCEPT, (member1, message1) -> {
-				if (member1.getId().equals(author.getId())) {
-					kp.removeCard(card);
-					KawaiponDAO.saveKawaipon(kp);
-
-					CardMarket cm = new CardMarket(author.getId(), card, price);
-					CardMarketDAO.saveCard(cm);
-
-					s.delete().flatMap(d -> channel.sendMessage(":white_check_mark: | Carta anunciada com sucesso!")).queue();
-				}
-			}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()));
-		});
 	}
 }
