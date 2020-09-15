@@ -96,7 +96,7 @@ public class LoanCommand extends Command {
 
 		CreditLoan cl = CreditLoan.getById(loan);
 
-		channel.sendMessage("Você está prestes a obter " + cl.getLoan() + " créditos a um juros de " + Helper.round(cl.getInterest(ex) * 100 - 100, 1) + "% (" + Math.round(cl.getLoan() * cl.getInterest(ex)) + " créditos), deseja confirmar?").queue(s ->
+		channel.sendMessage("Você está prestes a obter __**" + cl.getLoan() + " créditos**__ a um juros de __**" + Helper.round(cl.getInterest(ex) * 100 - 100, 1) + "% (" + Math.round(cl.getLoan() * cl.getInterest(ex)) + " créditos)**__, deseja confirmar?").queue(s ->
 				Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 					Account finalAcc = AccountDAO.getAccount(author.getId());
 					cl.sign(finalAcc);
