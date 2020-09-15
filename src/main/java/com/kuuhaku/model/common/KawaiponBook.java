@@ -39,6 +39,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class KawaiponBook {
 	private final Set<KawaiponCard> cards;
+	private static final int COLUMN_COUNT = 10;
 
 	public KawaiponBook(Set<KawaiponCard> cards) {
 		this.cards = cards;
@@ -56,10 +57,10 @@ public class KawaiponBook {
 		);
 		List<List<KawaiponCard>> chunks = new ArrayList<>();
 
-		int rowCount = (int) Math.ceil(totalCards / 5f);
+		int rowCount = (int) Math.ceil(totalCards / (float) COLUMN_COUNT);
 		for (int i = 0; i < rowCount; i++) {
 			ArrayList<KawaiponCard> chunk = new ArrayList<>();
-			for (int p = 5 * i; p < totalCards && p < 5 * (i + 1); p++) {
+			for (int p = COLUMN_COUNT * i; p < totalCards && p < COLUMN_COUNT * (i + 1); p++) {
 				chunk.add(new KawaiponCard(cardList.get(p), foil));
 			}
 			chunks.add(chunk);
@@ -74,7 +75,7 @@ public class KawaiponBook {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setFont(Profile.FONT.deriveFont(Font.BOLD, 72));
 		if (foil) g2d.setColor(Color.yellow);
-		Profile.printCenteredString(text, 952, 36, 168, g2d);
+		Profile.printCenteredString(text, 1904, 36, 168, g2d);
 
 		NContract<BufferedImage> act = new NContract<>(chunks.size());
 		act.setAction(imgs -> {
