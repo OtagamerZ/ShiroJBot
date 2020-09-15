@@ -101,13 +101,14 @@ public class TradeCardCommand extends Command {
 				return;
 			}
 
-			int min = tc.getRarity().getIndex() * (Helper.BASE_CARD_PRICE / 2) * (foil ? 2 : 1);
+			boolean hasLoan = tacc.getLoan() > 0;
+			int min = tc.getRarity().getIndex() * (hasLoan ? Helper.BASE_CARD_PRICE * 2 : Helper.BASE_CARD_PRICE / 2) * (foil ? 2 : 1);
 
 			if (price < min) {
-				channel.sendMessage("❌ | Você não pode oferecer menos que " + min + " créditos por essa carta.").queue();
-				return;
-			} else if (acc.getLoan() > 0) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_cannot-transfer-with-loan")).queue();
+				if (hasLoan)
+					channel.sendMessage("❌ | Como esse usuário possui dívida ativa, você não pode oferecer menos que " + min + " créditos por essa carta.").queue();
+				else
+					channel.sendMessage("❌ | Você não pode oferecer menos que " + min + " créditos por essa carta.").queue();
 				return;
 			}
 
@@ -155,13 +156,14 @@ public class TradeCardCommand extends Command {
 				return;
 			}
 
-			int min = tc.getRarity().getIndex() * (Helper.BASE_CARD_PRICE / 2) * (foil ? 2 : 1);
+			boolean hasLoan = acc.getLoan() > 0;
+			int min = tc.getRarity().getIndex() * (hasLoan ? Helper.BASE_CARD_PRICE * 2 : Helper.BASE_CARD_PRICE / 2) * (foil ? 2 : 1);
 
 			if (price < min) {
-				channel.sendMessage("❌ | Você não pode cobrar menos que " + min + " créditos por essa carta.").queue();
-				return;
-			} else if (tacc.getLoan() > 0) {
-				channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-with-loan")).queue();
+				if (hasLoan)
+					channel.sendMessage("❌ | Como você possui uma dívida ativa, você não pode cobrar menos que " + min + " créditos por essa carta.").queue();
+				else
+					channel.sendMessage("❌ | Você não pode cobrar menos que " + min + " créditos por essa carta.").queue();
 				return;
 			}
 
