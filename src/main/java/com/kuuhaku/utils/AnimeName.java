@@ -63,7 +63,8 @@ public enum AnimeName {
 	TATE_NO_YUUSHA,
 	LUCKY_STAR,
 	SHINGEKI_NO_KYOJIN,
-	HUNTER_X_HUNTER;
+	HUNTER_X_HUNTER,
+	BLACK_ROCK_SHOOTER;
 
 	@Override
 	public String toString() {
