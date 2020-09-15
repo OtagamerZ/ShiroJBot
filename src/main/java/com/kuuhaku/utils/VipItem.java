@@ -29,6 +29,7 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.apache.logging.log4j.util.TriConsumer;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -168,15 +169,6 @@ public enum VipItem {
 	}
 
 	public static VipItem getById(int id) {
-		switch (id) {
-			case 1:
-				return CARD_ROLL;
-			case 2:
-				return CARD_FOIL;
-			case 3:
-				return ANIMATED_BACKGROUND;
-			default:
-				return null;
-		}
+		return Arrays.stream(values()).filter(vi -> vi.id == id).findFirst().orElse(null);
 	}
 }
