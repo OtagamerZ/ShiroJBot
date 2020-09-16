@@ -1099,60 +1099,6 @@ public class Helper {
 		Main.getInfo().getCurrentCard().put(channel.getGuild().getId(), kc);
 	}
 
-	public static void forceSpawnKawaipon(GuildConfig gc, Message message, Kawaipon kp) {
-		CardStatus cs = Helper.checkStatus(kp);
-
-		if (cs == CardStatus.NO_CARDS) {
-			message.getChannel().sendMessage("❌ | Você já coletou todas as cartas que existem, parabéns!").queue();
-			return;
-		}
-
-		TextChannel channel = message.getTextChannel();
-		GuildBuff gb = GuildBuffDAO.getBuffs(channel.getGuild().getId());
-		ServerBuff foilBuff = gb.getBuffs().stream().filter(b -> b.getId() == 4).findFirst().orElse(null);
-		boolean fbUltimate = foilBuff != null && foilBuff.getTier() == 4;
-		boolean foil = cs != CardStatus.NORMAL_CARDS && (fbUltimate || chance(0.5 * (foilBuff != null ? foilBuff.getMult() : 1)) || cs == CardStatus.FOIL_CARDS);
-
-
-		EnumeratedDistribution<KawaiponRarity> kr = new EnumeratedDistribution<>(
-				Arrays.stream(KawaiponRarity.values())
-						.filter(r -> r != KawaiponRarity.ULTIMATE)
-						.map(r -> Pair.create(r, (7 - r.getIndex()) / 12d))
-						.collect(Collectors.toList())
-		);
-
-		List<Card> cards = CardDAO.getCardsByRarity(kr.sample());
-		while (cards.size() <= 0) {
-			cards = CardDAO.getCardsByRarity(kr.sample());
-		}
-
-		Card c = cards.get(Helper.rng(cards.size(), true));
-		KawaiponCard kc = new KawaiponCard(c, foil);
-		BufferedImage img = c.drawCard(foil);
-
-		EmbedBuilder eb = new EmbedBuilder();
-		eb.setImage("attachment://kawaipon.png");
-		eb.setAuthor(message.getAuthor().getName() + " invocou uma carta " + c.getRarity().toString().toUpperCase() + " neste servidor!");
-		eb.setTitle(kc.getName() + " (" + c.getAnime().toString() + ")");
-		eb.setColor(colorThief(img));
-		eb.setFooter("Digite `" + gc.getPrefix() + "coletar` para adquirir esta carta (necessário: " + (c.getRarity().getIndex() * BASE_CARD_PRICE * (foil ? 2 : 1)) + " créditos).", null);
-
-		if (gc.getCanalKawaipon() == null || gc.getCanalKawaipon().isEmpty()) {
-			channel.sendMessage(eb.build()).addFile(getBytes(img, "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
-		} else {
-			TextChannel tc = channel.getGuild().getTextChannelById(gc.getCanalKawaipon());
-
-			if (tc == null) {
-				gc.setCanalKawaipon(null);
-				GuildDAO.updateGuildSettings(gc);
-				channel.sendMessage(eb.build()).addFile(getBytes(c.drawCard(foil), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
-			} else {
-				tc.sendMessage(eb.build()).addFile(getBytes(c.drawCard(foil), "png"), "kawaipon.png").delay(1, TimeUnit.MINUTES).flatMap(Message::delete).queue(null, Helper::doNothing);
-			}
-		}
-		Main.getInfo().getCurrentCard().put(channel.getGuild().getId(), kc);
-	}
-
 	public static void spawnKawaipon(EventChannel channel, TwitchChat chat) {
 		if (chance(2.5)) {
 			KawaiponRarity kr = new EnumeratedDistribution<>(
