@@ -1062,7 +1062,7 @@ public class Helper {
 		KawaiponRarity kr = new EnumeratedDistribution<>(
 				Arrays.stream(KawaiponRarity.values())
 						.filter(r -> r != KawaiponRarity.ULTIMATE)
-						.map(r -> Pair.create(r, (6 - r.getIndex()) / 12d))
+						.map(r -> Pair.create(r, (7 - r.getIndex()) / 12d))
 						.collect(Collectors.toList())
 		).sample();
 
@@ -1117,7 +1117,7 @@ public class Helper {
 		EnumeratedDistribution<KawaiponRarity> kr = new EnumeratedDistribution<>(
 				Arrays.stream(KawaiponRarity.values())
 						.filter(r -> r != KawaiponRarity.ULTIMATE)
-						.map(r -> Pair.create(r, (6 - r.getIndex()) / 12d))
+						.map(r -> Pair.create(r, (7 - r.getIndex()) / 12d))
 						.collect(Collectors.toList())
 		);
 
@@ -1158,7 +1158,7 @@ public class Helper {
 			KawaiponRarity kr = new EnumeratedDistribution<>(
 					Arrays.stream(KawaiponRarity.values())
 							.filter(r -> r != KawaiponRarity.ULTIMATE)
-							.map(r -> Pair.create(r, (6 - r.getIndex()) / 12d))
+							.map(r -> Pair.create(r, (7 - r.getIndex()) / 12d))
 							.collect(Collectors.toList())
 			).sample();
 
