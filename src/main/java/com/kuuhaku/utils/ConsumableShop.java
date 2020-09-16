@@ -19,14 +19,12 @@
 package com.kuuhaku.utils;
 
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.common.Consumable;
 import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.GuildConfig;
-import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.Member;
 
 import java.util.Arrays;
@@ -76,18 +74,6 @@ public class ConsumableShop {
 
 					Account acc = AccountDAO.getAccount(mb.getId());
 					acc.removeBuff("spawnanime");
-					AccountDAO.saveAccount(acc);
-				}));
-		put("spawnmissing", new Consumable("spawnmissing", "Invocar Carta Desconhecida",
-				"Invoca uma carta aleatória que você não tenha coletado ainda (chance de ser cromada afetada pelo buff do servidor)",
-				15000,
-				(mb, ch, ms) -> {
-					GuildConfig gc = GuildDAO.getGuildById(mb.getGuild().getId());
-					Kawaipon kp = KawaiponDAO.getKawaipon(mb.getId());
-					Helper.forceSpawnKawaipon(gc, ms, kp);
-
-					Account acc = AccountDAO.getAccount(mb.getId());
-					acc.removeBuff("spawnmissing");
 					AccountDAO.saveAccount(acc);
 				}));
 	}};
