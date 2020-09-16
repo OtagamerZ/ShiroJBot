@@ -10,9 +10,9 @@
 - **Nós**: Desenvolvedores e equipe de suporte da Shiro;
 - **Você**: Usuário que utiliza a Shiro em seu servidor, podendo ser tanto administrador do servidor quanto membro comum;
 - **KuuHaKu**: Criador inicial da Shiro e da equipe OtagamerZ;
-- **Banco de dados**: Local onde os dados ficam armazenados, podendo ser tanto local quanto remote;
+- **Banco de dados**: Local onde os dados ficam armazenados, podendo ser tanto local quanto remoto;
 - **Avatar**: Imagem ou ícone usado para representar usuários;
-- **Cargos**: Conjunto de permissões dado a usuários pela equipe administrativa do servidor em questão;
+- **Cargos**: Conjuntos de permissões dados à usuários pela equipe administrativa do servidor em questão;
 - **VPS**: Serviço digital de computação em núvem privado, equivalente a um computador físico;
 - ***Backup***: Arquivo contendo dados que podem ser posteriormente restaurados;
 - ***Open-source***: Projeto que possui seu código-fonte público e disponível para implementações pela comunidade;
