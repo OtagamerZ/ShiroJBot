@@ -98,12 +98,12 @@ public class CardValueCommand extends Command {
 					.height(600)
 					.title("Valores de venda da " + (c == null ? "raridade" : "carta") + " \"" + (c == null ? r.toString() : c.getName()) + "\"")
 					.yAxisTitle("Valor")
+					.yAxisTitle("Data")
 					.build();
 
 			chart.getStyler()
 					.setPlotGridLinesColor(Color.decode("#404447"))
 					.setAxisTickLabelsColor(Color.WHITE)
-					.setXAxisTicksVisible(false)
 					.setChartFontColor(Color.WHITE)
 					.setLegendPosition(Styler.LegendPosition.InsideNE)
 					.setSeriesColors(new Color[]{new Color(0, 150, 0), Color.yellow})
