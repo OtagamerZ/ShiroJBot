@@ -15,6 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/CardValueCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/CardValueCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -161,6 +162,17 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [clean]">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -681,21 +693,10 @@
       <workItem from="1600174897476" duration="15719000" />
       <workItem from="1600257814912" duration="3757000" />
       <workItem from="1600268271490" duration="39000" />
-      <workItem from="1600272239868" duration="10197000" />
-    </task>
-    <task id="LOCAL-02429" summary="Correção no redirecionamento do site">
-      <created>1599660934737</created>
-      <option name="number" value="02429" />
-      <option name="presentableId" value="LOCAL-02429" />
-      <option name="project" value="LOCAL" />
-      <updated>1599660934737</updated>
-    </task>
-    <task id="LOCAL-02430" summary="Correção no redirecionamento do site">
-      <created>1599661185936</created>
-      <option name="number" value="02430" />
-      <option name="presentableId" value="LOCAL-02430" />
-      <option name="project" value="LOCAL" />
-      <updated>1599661185936</updated>
+      <workItem from="1600272239868" duration="11056000" />
+      <workItem from="1600288363506" duration="13000" />
+      <workItem from="1600288389880" duration="18000" />
+      <workItem from="1600288742539" duration="445000" />
     </task>
     <task id="LOCAL-02431" summary="Novo item na loja">
       <created>1599675385449</created>
@@ -1026,7 +1027,21 @@
       <option name="project" value="LOCAL" />
       <updated>1600286290588</updated>
     </task>
-    <option name="localTasksCounter" value="2478" />
+    <task id="LOCAL-02478" summary="Correção do gráfico de valores">
+      <created>1600287252501</created>
+      <option name="number" value="02478" />
+      <option name="presentableId" value="LOCAL-02478" />
+      <option name="project" value="LOCAL" />
+      <updated>1600287252501</updated>
+    </task>
+    <task id="LOCAL-02479" summary="Correção do gráfico de valores">
+      <created>1600287476823</created>
+      <option name="number" value="02479" />
+      <option name="presentableId" value="LOCAL-02479" />
+      <option name="project" value="LOCAL" />
+      <updated>1600287476823</updated>
+    </task>
+    <option name="localTasksCounter" value="2480" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1092,7 +1107,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção no spawn de cartas" />
     <MESSAGE value="Novo comando para ver gráfico de valores das cartas" />
     <MESSAGE value="Correção nas dicas do help" />
     <MESSAGE value="Correção no comando de valor de mercado" />
@@ -1117,7 +1131,8 @@
     <MESSAGE value="Remoção da randomização por anime das cartas e implementação de peso por raridade na geração" />
     <MESSAGE value="Aumentada a chance de aparecer cartas lendárias" />
     <MESSAGE value="Retorno do comando de gráfico de valor de cartas no mercado" />
-    <option name="LAST_COMMIT_MESSAGE" value="Retorno do comando de gráfico de valor de cartas no mercado" />
+    <MESSAGE value="Correção do gráfico de valores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção do gráfico de valores" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1171,11 +1186,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1600286287947">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1600287474282">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1600286287947" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1600287474282" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1188,22 +1203,22 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="620" y="261" key="FileChooserDialogImpl/0.0.1680.1010@0.0.1680.1010" timestamp="1597149004659" />
-    <state width="1391" height="316" key="GridCell.Tab.0.bottom" timestamp="1600286377868">
+    <state width="1391" height="316" key="GridCell.Tab.0.bottom" timestamp="1600288767927">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1391" height="316" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1600286377868" />
-    <state width="1391" height="316" key="GridCell.Tab.0.center" timestamp="1600286377868">
+    <state width="1391" height="316" key="GridCell.Tab.0.bottom/0.0.1680.1010@0.0.1680.1010" timestamp="1600288767927" />
+    <state width="1391" height="316" key="GridCell.Tab.0.center" timestamp="1600288767927">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1391" height="316" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1600286377868" />
-    <state width="1391" height="316" key="GridCell.Tab.0.left" timestamp="1600286377868">
+    <state width="1391" height="316" key="GridCell.Tab.0.center/0.0.1680.1010@0.0.1680.1010" timestamp="1600288767927" />
+    <state width="1391" height="316" key="GridCell.Tab.0.left" timestamp="1600288767927">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1391" height="316" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1600286377868" />
-    <state width="1391" height="316" key="GridCell.Tab.0.right" timestamp="1600286377868">
+    <state width="1391" height="316" key="GridCell.Tab.0.left/0.0.1680.1010@0.0.1680.1010" timestamp="1600288767927" />
+    <state width="1391" height="316" key="GridCell.Tab.0.right" timestamp="1600288767927">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1391" height="316" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1600286377868" />
+    <state width="1391" height="316" key="GridCell.Tab.0.right/0.0.1680.1010@0.0.1680.1010" timestamp="1600288767927" />
     <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1594058079602">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1228,11 +1243,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1600286292461">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1600287478423">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1600286292461" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1600287478423" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
