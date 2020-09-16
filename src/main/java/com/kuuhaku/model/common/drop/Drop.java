@@ -39,7 +39,7 @@ public abstract class Drop implements Prize {
 	private final int[] values = {
 			1 + Helper.rng((int) CardDAO.totalCards(anime) - 1, false),
 			1 + Helper.rng(6, false),
-			1 + Helper.rng((int) CardDAO.totalCards() - 1, false),
+			1 + Helper.rng((int) CardDAO.totalCards() / 2 - 1, false),
 			1 + Helper.rng(MemberDAO.getHighestLevel() / 2 - 1, false)
 	};
 	private final List<Pair<String, Function<User, Boolean>>> condition = new ArrayList<>() {{
