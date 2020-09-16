@@ -19,7 +19,7 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
-import com.kuuhaku.utils.ExceedEnum;
+import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;

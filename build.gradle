@@ -94,7 +94,6 @@ dependencies {
     compile group: 'org.beanshell', name: 'bsh', version: '2.0b5'
     compile group: 'com.github.ygimenez', name: 'Pagination-Utils', version: '1.2.4'
     compile group: 'com.github.treeder', name: 'kitty-cache', version: '065b8d34e2'
-    compile group: 'org.python', name: 'jython-standalone', version: '2.7.1'
     compile group: 'com.github.kevinsawicki', name: 'http-request', version: '6.0'
     compile group: 'com.sedmelluq', name: 'jda-nas', version: '1.1.0'
     compile group: 'org.java-websocket', name: 'Java-WebSocket', version: '1.5.1'
@@ -107,6 +106,7 @@ dependencies {
     //noinspection DifferentStdlibGradleVersion
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib', version: '1.4.0-rc'
     compile group: 'org.knowm.xchart', name: 'xchart', version: '3.6.5'
+    compile group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
     implementation 'com.graphql-java:graphql-java:2019-05-08T02-56-27-cca4316'
 }
 

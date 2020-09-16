@@ -19,7 +19,7 @@
 package com.kuuhaku.handlers.games.disboard.model;
 
 import com.kuuhaku.handlers.games.disboard.enums.Country;
-import com.kuuhaku.utils.ExceedEnum;
+import com.kuuhaku.model.enums.ExceedEnum;
 import org.json.JSONArray;
 
 import javax.persistence.*;

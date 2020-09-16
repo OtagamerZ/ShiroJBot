@@ -16,24 +16,27 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.utils;
+package com.kuuhaku.model.enums;
 
-import org.jetbrains.annotations.NonNls;
+public enum Version {
+	V1("Mongoose", 1),
+	V2("Butterfly", 2),
+	V3("Capybara", 3),
+	V4("Dolphin", 4);
 
-import java.util.Locale;
+	private final String codename;
+	private final int version;
 
-public enum I18n {
-	@NonNls PT(new Locale("pt")),
-	@NonNls EN(new Locale("en")),
-	@NonNls ES(new Locale("es"));
-
-	private final Locale locale;
-
-	I18n(Locale locale) {
-		this.locale = locale;
+	Version(String codename, int version) {
+		this.codename = codename;
+		this.version = version;
 	}
 
-	public Locale getLocale() {
-		return locale;
+	public String getCodename() {
+		return codename;
+	}
+
+	public int getVersion() {
+		return version;
 	}
 }

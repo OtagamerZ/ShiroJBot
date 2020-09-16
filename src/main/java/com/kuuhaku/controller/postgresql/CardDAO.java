@@ -18,9 +18,9 @@
 
 package com.kuuhaku.controller.postgresql;
 
+import com.kuuhaku.model.enums.AnimeName;
+import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.Card;
-import com.kuuhaku.utils.AnimeName;
-import com.kuuhaku.utils.KawaiponRarity;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;

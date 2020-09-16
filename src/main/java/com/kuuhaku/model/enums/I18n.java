@@ -16,8 +16,24 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.utils;
+package com.kuuhaku.model.enums;
 
-public enum LogLevel {
-	DEBUG, INFO, WARN, ERROR, FATAL
+import org.jetbrains.annotations.NonNls;
+
+import java.util.Locale;
+
+public enum I18n {
+	@NonNls PT(new Locale("pt")),
+	@NonNls EN(new Locale("en")),
+	@NonNls ES(new Locale("es"));
+
+	private final Locale locale;
+
+	I18n(Locale locale) {
+		this.locale = locale;
+	}
+
+	public Locale getLocale() {
+		return locale;
+	}
 }

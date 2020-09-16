@@ -21,7 +21,7 @@ package com.kuuhaku.command.commands.discord.information;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.utils.Tag;
+import com.kuuhaku.model.enums.Tag;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;

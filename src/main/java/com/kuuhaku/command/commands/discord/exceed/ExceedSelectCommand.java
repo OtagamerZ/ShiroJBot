@@ -22,10 +22,10 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
+import com.kuuhaku.model.enums.ExceedEnum;
+import com.kuuhaku.model.enums.TagIcons;
 import com.kuuhaku.model.persistent.ExceedMember;
-import com.kuuhaku.utils.ExceedEnum;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.TagIcons;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;
 

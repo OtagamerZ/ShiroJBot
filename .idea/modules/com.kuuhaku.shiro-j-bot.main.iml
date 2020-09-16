@@ -69,13 +69,13 @@
     <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.25" level="project" />
     <orderEntry type="library" name="Gradle: org.beanshell:bsh:2.0b5" level="project" />
     <orderEntry type="library" name="Gradle: com.github.treeder:kitty-cache:065b8d34e2" level="project" />
-    <orderEntry type="library" name="Gradle: org.python:jython-standalone:2.7.1" level="project" />
     <orderEntry type="library" name="Gradle: com.github.kevinsawicki:http-request:6.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jasypt:jasypt:1.9.2" level="project" />
     <orderEntry type="library" name="Gradle: org.threeten:threetenbp:1.4.4" level="project" />
     <orderEntry type="library" name="Gradle: org.swinglabs.swingx:swingx-graphics:1.6.5-1" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.4.0-rc" level="project" />
     <orderEntry type="library" name="Gradle: org.knowm.xchart:xchart:3.6.5" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.commons:commons-math3:3.6.1" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp:4.6.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.code.findbugs:jsr305:3.0.2" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains:annotations:18.0.0" level="project" />

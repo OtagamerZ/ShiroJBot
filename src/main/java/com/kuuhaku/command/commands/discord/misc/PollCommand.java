@@ -23,9 +23,9 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.sqlite.GuildDAO;
+import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.GuildConfig;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -204,9 +204,9 @@ public class PollCommand extends Command {
 		eb.addField("Reprovação: ", NOVOTE ? "0.0%" : Helper.round(Helper.prcntToInt(neg, (pos + neg)), 1) + "%", true);
 		eb.setFooter(null);
 
-		msg.editMessage(eb.build()).queue();
+		msg.editMessage(eb.build()).queue(null, Helper::doNothing);
 		member.getUser().openPrivateChannel().queue(c -> c.sendMessage(eb.setAuthor("Sua enquete foi encerrada!").build()).queue());
-		msg.clearReactions().queue();
+		msg.clearReactions().queue(null, Helper::doNothing);
 	}
 
 	private static void showResultOP(Message msg, Member member, EmbedBuilder eb) {
@@ -236,8 +236,8 @@ public class PollCommand extends Command {
 		fields.sort(Comparator.comparing(MessageEmbed.Field::getName));
 
 		fields.forEach(eb::addField);
-		msg.editMessage(eb.build()).queue();
+		msg.editMessage(eb.build()).queue(null, Helper::doNothing);
 		member.getUser().openPrivateChannel().queue(c -> c.sendMessage(eb.setAuthor("Sua enquete foi encerrada!").build()).queue());
-		msg.clearReactions().queue();
+		msg.clearReactions().queue(null, Helper::doNothing);
 	}
 }

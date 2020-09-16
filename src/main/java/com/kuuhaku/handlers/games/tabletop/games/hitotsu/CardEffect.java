@@ -18,7 +18,7 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.hitotsu;
 
-import com.kuuhaku.utils.KawaiponRarity;
+import com.kuuhaku.model.enums.KawaiponRarity;
 
 import java.util.Arrays;
 import java.util.function.BiConsumer;

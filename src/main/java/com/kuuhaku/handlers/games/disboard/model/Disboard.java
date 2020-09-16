@@ -20,7 +20,7 @@ package com.kuuhaku.handlers.games.disboard.model;
 
 import com.kuuhaku.controller.sqlite.PStateDAO;
 import com.kuuhaku.handlers.games.disboard.enums.Country;
-import com.kuuhaku.utils.I18n;
+import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.TextChannel;
 
