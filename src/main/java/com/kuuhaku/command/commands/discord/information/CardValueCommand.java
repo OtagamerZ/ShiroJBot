@@ -42,13 +42,6 @@ import java.util.stream.Collectors;
 
 public class CardValueCommand extends Command {
 
-	private static final String STR_LEVEL = "str_level";
-	private static final String STR_CREDIT = "str_credit";
-	private static final String STR_CARD = "str_card";
-	private static final String SRT_USER_RANKING_TITLE = "str_user-ranking-title";
-	private static final String STR_GLOBAL = "str_global";
-	private static final String STR_LOCAL = "str_local";
-
 	public CardValueCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
 	}
