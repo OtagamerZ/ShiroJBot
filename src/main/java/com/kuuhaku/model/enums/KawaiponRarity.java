@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.utils;
+package com.kuuhaku.model.enums;
 
 import com.github.ygimenez.exception.InvalidStateException;
 import org.apache.commons.lang3.StringUtils;

@@ -20,11 +20,11 @@ package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.handlers.api.endpoint.ExceedState;
 import com.kuuhaku.model.common.Exceed;
+import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.persistent.ExceedMember;
 import com.kuuhaku.model.persistent.ExceedScore;
 import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.model.persistent.MonthWinner;
-import com.kuuhaku.utils.ExceedEnum;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;

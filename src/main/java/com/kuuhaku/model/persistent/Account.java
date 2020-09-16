@@ -23,7 +23,7 @@ import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.TransactionDAO;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.utils.CreditLoan;
+import com.kuuhaku.model.enums.CreditLoan;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import org.apache.commons.lang3.tuple.Pair;

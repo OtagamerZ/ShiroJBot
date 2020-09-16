@@ -18,8 +18,8 @@
 
 package com.kuuhaku.controller.postgresql;
 
+import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.CardMarket;
-import com.kuuhaku.utils.KawaiponRarity;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;

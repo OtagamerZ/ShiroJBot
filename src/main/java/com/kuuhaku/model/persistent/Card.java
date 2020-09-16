@@ -19,9 +19,9 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.utils.AnimeName;
+import com.kuuhaku.model.enums.AnimeName;
+import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.KawaiponRarity;
 import org.apache.commons.io.FileUtils;
 
 import javax.imageio.ImageIO;

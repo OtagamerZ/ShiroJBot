@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.common;
 
-import com.kuuhaku.utils.ExceedEnum;
+import com.kuuhaku.model.enums.ExceedEnum;
 
 public class Exceed {
 	private final ExceedEnum exceed;

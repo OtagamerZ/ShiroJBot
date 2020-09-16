@@ -20,8 +20,8 @@ package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.CanvasDAO;
+import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.requests.RestAction;

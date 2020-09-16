@@ -23,7 +23,7 @@ import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.WaifuDAO;
 import com.kuuhaku.events.WaifuListener;
-import com.kuuhaku.utils.I18n;
+import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;

@@ -19,7 +19,7 @@
 package com.kuuhaku.controller.sqlite;
 
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
-import com.kuuhaku.utils.ExceedEnum;
+import com.kuuhaku.model.enums.ExceedEnum;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
