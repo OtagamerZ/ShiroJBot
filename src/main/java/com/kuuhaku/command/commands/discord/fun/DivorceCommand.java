@@ -21,7 +21,7 @@ package com.kuuhaku.command.commands.discord.fun;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.WaifuDAO;
-import com.kuuhaku.utils.I18n;
+import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NonNls;

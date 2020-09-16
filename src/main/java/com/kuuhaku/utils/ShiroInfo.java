@@ -28,6 +28,9 @@ import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.music.GuildMusicManager;
 import com.kuuhaku.model.common.drop.Prize;
+import com.kuuhaku.model.enums.AnimeName;
+import com.kuuhaku.model.enums.I18n;
+import com.kuuhaku.model.enums.Version;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.model.persistent.PixelCanvas;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
@@ -116,6 +119,7 @@ public class ShiroInfo {
 	private final Cache<String, Prize> currentDrop = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
 	private final Cache<String, byte[]> cardCache = CacheBuilder.newBuilder().expireAfterWrite(60, TimeUnit.MINUTES).build();
 	private final Set<String> gameLock = new HashSet<>();
+	private final Map<AnimeName, Integer> animeSaturation = new HashMap<>();
 	private boolean isLive = false;
 
 	//CONSTANTS
@@ -360,5 +364,9 @@ public class ShiroInfo {
 
 	public void setLive(boolean live) {
 		this.isLive = live;
+	}
+
+	public Map<AnimeName, Integer> getAnimeSaturation() {
+		return animeSaturation;
 	}
 }

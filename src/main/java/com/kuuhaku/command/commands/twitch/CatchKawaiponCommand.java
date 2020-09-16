@@ -27,11 +27,11 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.TwitchCommand;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
+import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 
 import java.util.Set;

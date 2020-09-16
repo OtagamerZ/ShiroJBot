@@ -21,9 +21,9 @@ package com.kuuhaku.model.persistent;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
-import com.kuuhaku.utils.ExceedEnum;
-import com.kuuhaku.utils.Tag;
-import com.kuuhaku.utils.TagIcons;
+import com.kuuhaku.model.enums.ExceedEnum;
+import com.kuuhaku.model.enums.Tag;
+import com.kuuhaku.model.enums.TagIcons;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

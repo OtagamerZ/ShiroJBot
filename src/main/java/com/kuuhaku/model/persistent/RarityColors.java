@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.persistent;
 
-import com.kuuhaku.utils.KawaiponRarity;
+import com.kuuhaku.model.enums.KawaiponRarity;
 
 import javax.persistence.*;
 import java.awt.*;

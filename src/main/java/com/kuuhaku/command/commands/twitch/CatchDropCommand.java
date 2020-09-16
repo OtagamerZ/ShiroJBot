@@ -26,8 +26,8 @@ import com.github.twitch4j.common.events.domain.EventUser;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.TwitchCommand;
 import com.kuuhaku.model.common.drop.Prize;
+import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 
 import java.util.Set;

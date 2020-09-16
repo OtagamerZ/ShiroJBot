@@ -19,11 +19,11 @@
 package com.kuuhaku.model.common;
 
 import com.kuuhaku.controller.postgresql.RarityColorsDAO;
+import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.model.persistent.RarityColors;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.KawaiponRarity;
 import com.kuuhaku.utils.NContract;
 import org.apache.commons.lang3.StringUtils;
 

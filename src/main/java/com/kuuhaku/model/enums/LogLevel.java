@@ -16,21 +16,8 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.utils;
+package com.kuuhaku.model.enums;
 
-public enum PrivilegeLevel {
-
-	USER(0, 0), BETA(1, 1), MOD(2, 2), SUPPORT(3, 3), DEV(4, 4), NIICHAN(5, 5);
-
-	private final int authority;
-	private final int id;
-
-	PrivilegeLevel(int authority, int id) {
-		this.authority = authority;
-		this.id = id;
-	}
-
-	public boolean hasAuthority(PrivilegeLevel outro) {
-		return this.authority > outro.authority || this.id == outro.id;
-	}
+public enum LogLevel {
+	DEBUG, INFO, WARN, ERROR, FATAL
 }

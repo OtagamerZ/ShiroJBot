@@ -16,27 +16,21 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.utils;
+package com.kuuhaku.model.enums;
 
-public enum Version {
-	V1("Mongoose", 1),
-	V2("Butterfly", 2),
-	V3("Capybara", 3),
-	V4("Dolphin", 4);
+public enum PrivilegeLevel {
 
-	private final String codename;
-	private final int version;
+	USER(0, 0), BETA(1, 1), MOD(2, 2), SUPPORT(3, 3), DEV(4, 4), NIICHAN(5, 5);
 
-	Version(String codename, int version) {
-		this.codename = codename;
-		this.version = version;
+	private final int authority;
+	private final int id;
+
+	PrivilegeLevel(int authority, int id) {
+		this.authority = authority;
+		this.id = id;
 	}
 
-	public String getCodename() {
-		return codename;
-	}
-
-	public int getVersion() {
-		return version;
+	public boolean hasAuthority(PrivilegeLevel outro) {
+		return this.authority > outro.authority || this.id == outro.id;
 	}
 }
