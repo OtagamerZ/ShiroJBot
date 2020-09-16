@@ -79,8 +79,14 @@ public class CardValueCommand extends Command {
 			List<CardMarket> foilCards;
 
 			if (c != null) {
-				normalCards = CardMarketDAO.getCardsByCard(c.getId(), false).stream().filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 50)).collect(Collectors.toList());
-				foilCards = CardMarketDAO.getCardsByCard(c.getId(), true).stream().filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 100)).collect(Collectors.toList());
+				normalCards = CardMarketDAO.getCardsByCard(c.getId(), false)
+						.stream()
+						.filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 50))
+						.collect(Collectors.toList());
+				foilCards = CardMarketDAO.getCardsByCard(c.getId(), true)
+						.stream()
+						.filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 100))
+						.collect(Collectors.toList());
 			} else {
 				normalCards = CardMarketDAO.getCardsByRarity(r, false).stream().filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 50)).collect(Collectors.toList());
 				foilCards = CardMarketDAO.getCardsByRarity(r, true).stream().filter(cm -> cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 100)).collect(Collectors.toList());
@@ -97,7 +103,7 @@ public class CardValueCommand extends Command {
 					.height(600)
 					.title("Valores de venda da " + (c == null ? "raridade" : "carta") + " \"" + (c == null ? r.toString() : c.getName()) + "\"")
 					.yAxisTitle("Valor")
-					.yAxisTitle("Data")
+					.xAxisTitle("Data")
 					.build();
 
 			chart.getStyler()
