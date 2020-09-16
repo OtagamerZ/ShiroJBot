@@ -35,9 +35,8 @@ import org.knowm.xchart.XYChartBuilder;
 import org.knowm.xchart.style.Styler;
 
 import java.awt.*;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class CardValueCommand extends Command {
@@ -112,27 +111,46 @@ public class CardValueCommand extends Command {
 					.setLegendBackgroundColor(Color.decode("#101114"))
 					.setSeriesLines(Collections.nCopies(6, new BasicStroke(4, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND)).toArray(BasicStroke[]::new));
 
+			Map<Date, Integer> normalValues = new HashMap<>();
+			normalCards.forEach(nc -> {
+				if (normalValues.containsKey(nc.getPublishDate()))
+					normalValues.computeIfPresent(nc.getPublishDate(), (k, v) -> Math.round(v + nc.getPrice() / 2f));
+				else
+					normalValues.put(nc.getPublishDate(), nc.getPrice());
+			});
+
+			Map<Date, Integer> foilValues = new HashMap<>();
+			foilCards.forEach(fc -> {
+				if (foilValues.containsKey(fc.getPublishDate()))
+					foilValues.computeIfPresent(fc.getPublishDate(), (k, v) -> Math.round(v + fc.getPrice() / 2f));
+				else
+					foilValues.put(fc.getPublishDate(), fc.getPrice());
+			});
+
+			List<Map.Entry<Date, Integer>> normalData = normalValues.entrySet().stream().sorted(Map.Entry.comparingByKey()).collect(Collectors.toList());
+			List<Map.Entry<Date, Integer>> foilData = foilValues.entrySet().stream().sorted(Map.Entry.comparingByKey()).collect(Collectors.toList());
+
 			if (normalCards.size() > 1)
 				chart.addSeries("Normal",
-						normalCards.stream()
-								.map(CardMarket::getPublishDate)
+						normalData.stream()
+								.map(Map.Entry::getKey)
 								.collect(Collectors.toList()),
-						normalCards.stream()
-								.map(CardMarket::getPrice)
+						normalData.stream()
+								.map(Map.Entry::getValue)
 								.collect(Collectors.toList())
 				);
 
 			if (foilCards.size() > 1)
 				chart.addSeries("Cromada",
-						foilCards.stream()
-								.map(CardMarket::getPublishDate)
+						foilData.stream()
+								.map(Map.Entry::getKey)
 								.collect(Collectors.toList()),
-						foilCards.stream()
-								.map(CardMarket::getPrice)
+						foilData.stream()
+								.map(Map.Entry::getValue)
 								.collect(Collectors.toList())
 				);
 
-			channel.sendFile(Helper.getBytes(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "png"), "ranking.png").queue(s -> s.delete().queueAfter(1, TimeUnit.MINUTES));
+			channel.sendFile(Helper.getBytes(Profile.clipRoundEdges(BitmapEncoder.getBufferedImage(chart)), "png"), "ranking.png").queue();
 			m.delete().queue();
 		});
 	}
