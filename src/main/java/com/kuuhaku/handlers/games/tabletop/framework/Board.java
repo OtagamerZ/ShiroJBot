@@ -25,8 +25,8 @@ import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.Neighbor;
 import com.kuuhaku.handlers.games.tabletop.utils.InfiniteList;
+import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.ExceedEnum;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.awt.*;

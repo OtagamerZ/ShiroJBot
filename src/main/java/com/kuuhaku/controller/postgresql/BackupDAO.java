@@ -22,8 +22,8 @@ import com.kuuhaku.Main;
 import com.kuuhaku.handlers.games.disboard.model.PoliticalState;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
 import com.kuuhaku.model.common.DataDump;
+import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.persistent.*;
-import com.kuuhaku.utils.ExceedEnum;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Guild;
 

@@ -16,9 +16,10 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.utils;
+package com.kuuhaku.model.enums;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.utils.Helper;
 
 import java.awt.*;
 import java.io.IOException;

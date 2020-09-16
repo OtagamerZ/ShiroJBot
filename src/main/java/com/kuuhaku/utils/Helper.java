@@ -40,6 +40,7 @@ import com.kuuhaku.model.common.drop.CreditDrop;
 import com.kuuhaku.model.common.drop.ItemDrop;
 import com.kuuhaku.model.common.drop.JokerDrop;
 import com.kuuhaku.model.common.drop.Prize;
+import com.kuuhaku.model.enums.*;
 import com.kuuhaku.model.persistent.*;
 import de.androidpit.colorthief.ColorThief;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -58,6 +59,8 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
+import org.apache.commons.math3.distribution.EnumeratedDistribution;
+import org.apache.commons.math3.util.Pair;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -1013,7 +1016,14 @@ public class Helper {
 		boolean fbUltimate = foilBuff != null && foilBuff.getTier() == 4;
 
 		if (cbUltimate || chance(2.5 + (channel.getGuild().getMemberCount() * 1.5 / 5000) * (cardBuff != null ? cardBuff.getMult() : 1))) {
-			List<Card> cards = CardDAO.getCardsByAnime(AnimeName.values()[Helper.rng(AnimeName.values().length, true)]);
+			KawaiponRarity kr = new EnumeratedDistribution<>(
+					Arrays.stream(KawaiponRarity.values())
+							.filter(r -> r != KawaiponRarity.ULTIMATE)
+							.map(r -> Pair.create(r, (6 - r.getIndex()) / 12d))
+							.collect(Collectors.toList())
+			).sample();
+
+			List<Card> cards = CardDAO.getCardsByRarity(kr);
 			Card c = cards.get(Helper.rng(cards.size(), true));
 			boolean foil = fbUltimate || chance(0.5 * (foilBuff != null ? foilBuff.getMult() : 1));
 			KawaiponCard kc = new KawaiponCard(c, foil);
@@ -1049,10 +1059,17 @@ public class Helper {
 		ServerBuff foilBuff = gb.getBuffs().stream().filter(b -> b.getId() == 4).findFirst().orElse(null);
 		boolean fbUltimate = foilBuff != null && foilBuff.getTier() == 4;
 
+		KawaiponRarity kr = new EnumeratedDistribution<>(
+				Arrays.stream(KawaiponRarity.values())
+						.filter(r -> r != KawaiponRarity.ULTIMATE)
+						.map(r -> Pair.create(r, (6 - r.getIndex()) / 12d))
+						.collect(Collectors.toList())
+		).sample();
+
 		List<Card> cards;
 		if (anime != null)
-			cards = CardDAO.getCardsByAnime(anime);
-		else cards = CardDAO.getCardsByAnime(AnimeName.values()[Helper.rng(AnimeName.values().length, true)]);
+			cards = CardDAO.getCardsByAnime(anime).stream().filter(c -> c.getRarity() == kr).collect(Collectors.toList());
+		else cards = CardDAO.getCardsByRarity(kr);
 
 		Card c = cards.get(Helper.rng(cards.size(), true));
 		boolean foil = fbUltimate || chance(0.5 * (foilBuff != null ? foilBuff.getMult() : 1));
@@ -1096,9 +1113,17 @@ public class Helper {
 		boolean fbUltimate = foilBuff != null && foilBuff.getTier() == 4;
 		boolean foil = cs != CardStatus.NORMAL_CARDS && (fbUltimate || chance(0.5 * (foilBuff != null ? foilBuff.getMult() : 1)) || cs == CardStatus.FOIL_CARDS);
 
-		List<Card> cards = CardDAO.getCardsByAnime(AnimeName.values()[Helper.rng(AnimeName.values().length, true)]).stream().filter(c -> kp.getCard(c, foil) == null).collect(Collectors.toList());
+
+		EnumeratedDistribution<KawaiponRarity> kr = new EnumeratedDistribution<>(
+				Arrays.stream(KawaiponRarity.values())
+						.filter(r -> r != KawaiponRarity.ULTIMATE)
+						.map(r -> Pair.create(r, (6 - r.getIndex()) / 12d))
+						.collect(Collectors.toList())
+		);
+
+		List<Card> cards = CardDAO.getCardsByRarity(kr.sample());
 		while (cards.size() <= 0) {
-			cards = CardDAO.getCardsByAnime(AnimeName.values()[Helper.rng(AnimeName.values().length, true)]).stream().filter(c -> kp.getCard(c, foil) == null).collect(Collectors.toList());
+			cards = CardDAO.getCardsByRarity(kr.sample());
 		}
 
 		Card c = cards.get(Helper.rng(cards.size(), true));
@@ -1130,7 +1155,14 @@ public class Helper {
 
 	public static void spawnKawaipon(EventChannel channel, TwitchChat chat) {
 		if (chance(2.5)) {
-			List<Card> cards = CardDAO.getCardsByAnime(AnimeName.values()[Helper.rng(AnimeName.values().length, true)]);
+			KawaiponRarity kr = new EnumeratedDistribution<>(
+					Arrays.stream(KawaiponRarity.values())
+							.filter(r -> r != KawaiponRarity.ULTIMATE)
+							.map(r -> Pair.create(r, (6 - r.getIndex()) / 12d))
+							.collect(Collectors.toList())
+			).sample();
+
+			List<Card> cards = CardDAO.getCardsByRarity(kr);
 			Card c = cards.get(Helper.rng(cards.size(), true));
 			boolean foil = chance(1);
 			KawaiponCard kc = new KawaiponCard(c, foil);
@@ -1149,7 +1181,7 @@ public class Helper {
 
 		if (dbUltimate || chance(2 + (channel.getGuild().getMemberCount() * 1d / 5000) * (dropBuff != null ? dropBuff.getMult() : 1))) {
 			int rolled = Helper.rng(100, false);
-			Prize drop = rolled > 90 ? new ItemDrop() : rolled > 65 ? new JokerDrop() : new CreditDrop();
+			Prize drop = rolled > 90 ? new ItemDrop() : rolled > 75 ? new JokerDrop() : new CreditDrop();
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			eb.setThumbnail("https://i.pinimg.com/originals/86/c0/f4/86c0f4d0f020c3f819a532873ef33704.png");

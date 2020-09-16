@@ -23,7 +23,7 @@ import com.kuuhaku.model.persistent.Version;
 import javax.persistence.EntityManager;
 
 public class VersionDAO {
-	public static String getBuildVersion(com.kuuhaku.utils.Version version) {
+	public static String getBuildVersion(com.kuuhaku.model.enums.Version version) {
 		EntityManager em = Manager.getEntityManager();
 
 		Version v = em.find(Version.class, version.getVersion());

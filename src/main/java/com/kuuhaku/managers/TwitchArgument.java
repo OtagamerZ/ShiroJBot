@@ -18,7 +18,7 @@
 
 package com.kuuhaku.managers;
 
-import com.kuuhaku.utils.I18n;
+import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.utils.ShiroInfo;
 import org.jetbrains.annotations.NonNls;
 

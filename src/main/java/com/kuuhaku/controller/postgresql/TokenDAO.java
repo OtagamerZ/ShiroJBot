@@ -19,9 +19,9 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.model.enums.PrivilegeLevel;
 import com.kuuhaku.model.persistent.Token;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.PrivilegeLevel;
 import net.dv8tion.jda.api.entities.Member;
 
 import javax.persistence.EntityManager;

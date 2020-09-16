@@ -24,6 +24,7 @@ import com.github.ygimenez.type.PageType;
 import com.kuuhaku.Main;
 import com.kuuhaku.handlers.music.GuildMusicManager;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.enums.I18n;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;

@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.persistent;
 
-import com.kuuhaku.utils.ExceedEnum;
+import com.kuuhaku.model.enums.ExceedEnum;
 
 import javax.persistence.*;
 import java.time.LocalDate;
