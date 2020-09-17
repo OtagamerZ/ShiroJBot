@@ -125,7 +125,7 @@ public class Member {
 		return c.getHusbando().equals(u.getId()) ? c.getWaifu() : c.getHusbando();
 	}
 
-	public boolean addXp(Guild g) {
+	public synchronized boolean addXp(Guild g) {
 		User u = Main.getInfo().getUserByID(mid);
 		AtomicReference<Double> mult = new AtomicReference<>(1d);
 		Kawaigotchi kg = KGotchiDAO.getKawaigotchi(mid);
@@ -167,7 +167,7 @@ public class Member {
 		return false;
 	}
 
-	public long addXp(int amount) {
+	public synchronized long addXp(int amount) {
 		float spamModif = Math.max(0, Math.min((System.currentTimeMillis() - lastEarntXp) / 10000f, 1));
 		xp += amount * spamModif;
 		lastEarntXp = System.currentTimeMillis();
