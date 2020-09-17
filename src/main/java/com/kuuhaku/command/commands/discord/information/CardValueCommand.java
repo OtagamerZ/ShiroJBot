@@ -102,7 +102,7 @@ public class CardValueCommand extends Command {
 					.width(800)
 					.height(600)
 					.title("Valores de venda da " + (c == null ? "raridade" : "carta") + " \"" + (c == null ? r.toString() : c.getName()) + "\"")
-					.yAxisTitle("Valor")
+					.yAxisTitle("Valor (x1000)")
 					.xAxisTitle("Data")
 					.build();
 
@@ -133,8 +133,12 @@ public class CardValueCommand extends Command {
 					foilValues.put(fc.getPublishDate(), fc.getPrice());
 			});
 
-			List<Map.Entry<Date, Integer>> normalData = normalValues.entrySet().stream().sorted(Map.Entry.comparingByKey()).collect(Collectors.toList());
-			List<Map.Entry<Date, Integer>> foilData = foilValues.entrySet().stream().sorted(Map.Entry.comparingByKey()).collect(Collectors.toList());
+			List<Map.Entry<Date, Integer>> normalData = normalValues.entrySet()
+					.stream()
+					.sorted(Map.Entry.comparingByKey()).collect(Collectors.toList());
+			List<Map.Entry<Date, Integer>> foilData = foilValues.entrySet()
+					.stream()
+					.sorted(Map.Entry.comparingByKey()).collect(Collectors.toList());
 
 			if (normalCards.size() > 1)
 				chart.addSeries("Normal",
@@ -143,6 +147,7 @@ public class CardValueCommand extends Command {
 								.collect(Collectors.toList()),
 						normalData.stream()
 								.map(Map.Entry::getValue)
+								.map(v -> Helper.round(v / 1000d, 1))
 								.collect(Collectors.toList())
 				);
 
@@ -153,6 +158,7 @@ public class CardValueCommand extends Command {
 								.collect(Collectors.toList()),
 						foilData.stream()
 								.map(Map.Entry::getValue)
+								.map(v -> Helper.round(v / 1000d, 1))
 								.collect(Collectors.toList())
 				);
 

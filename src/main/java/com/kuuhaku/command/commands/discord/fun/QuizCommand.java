@@ -50,6 +50,7 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 public class QuizCommand extends Command {
+	private boolean closed = false;
 
 	public QuizCommand(String name, String description, Category category, boolean requiresMM) {
 		super(name, description, category, requiresMM);
@@ -165,7 +166,8 @@ public class QuizCommand extends Command {
 		for (int i = 0; i < opts.size(); i++) {
 			int finalI = i;
 			buttons.put(opts.get(i), (mb, ms) -> {
-				if (!mb.getId().equals(author.getId())) return;
+				if (!mb.getId().equals(author.getId()) || closed) return;
+				closed = true;
 				eb.clear();
 				eb.setThumbnail("https://images.vexels.com/media/users/3/152594/isolated/preview/d00d116b2c073ccf7f9fec677fec78e3---cone-de-ponto-de-interroga----o-quadrado-roxo-by-vexels.png");
 
