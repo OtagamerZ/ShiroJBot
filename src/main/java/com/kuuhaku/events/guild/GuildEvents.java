@@ -290,8 +290,12 @@ public class GuildEvents extends ListenerAdapter {
 					}
 
 					boolean lvlUp = m.addXp(guild);
-					if (lvlUp && GuildDAO.getGuildById(guild.getId()).isLvlNotif()) {
-						Objects.requireNonNullElse(lvlChannel, channel).sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
+					try {
+						if (lvlUp && GuildDAO.getGuildById(guild.getId()).isLvlNotif()) {
+							Objects.requireNonNullElse(lvlChannel, channel).sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
+						}
+					} catch (InsufficientPermissionException e) {
+						channel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
 					}
 
 					MemberDAO.updateMemberConfigs(m);
