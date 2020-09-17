@@ -162,10 +162,8 @@ public class Member {
 			Account acc = AccountDAO.getAccount(mid);
 			acc.addCredit(75 + (8 * level), this.getClass());
 			AccountDAO.saveAccount(acc);
-			MemberDAO.updateMemberConfigs(this);
 			return true;
 		}
-		MemberDAO.updateMemberConfigs(this);
 		return false;
 	}
 
