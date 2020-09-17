@@ -75,7 +75,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	public static ConfigurableApplicationContext spring;
 
 	public static void main(String[] args) throws Exception {
-		Locale.setDefault(new Locale("pt", "BR"));
+		//Locale.setDefault(new Locale("pt", "BR"));
 		Helper.logger(Main.class).info("\nShiro J. Bot  Copyright (C) 2020 Yago Gimenez (KuuHaKu)\n" +
 									   "This program comes with ABSOLUTELY NO WARRANTY\n" +
 									   "This is free software, and you are welcome to redistribute it under certain conditions\n" +
