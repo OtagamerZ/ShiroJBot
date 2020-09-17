@@ -297,6 +297,8 @@ public class GuildEvents extends ListenerAdapter {
 					} catch (InsufficientPermissionException e) {
 						channel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GGWP! :tada:").queue();
 					}
+
+					MemberDAO.updateMemberConfigs(m);
 				} catch (NoResultException e) {
 					MemberDAO.addMemberToDB(member);
 				} catch (ErrorResponseException | NullPointerException e) {
