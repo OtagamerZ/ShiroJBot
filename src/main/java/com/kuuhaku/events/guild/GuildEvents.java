@@ -297,7 +297,8 @@ public class GuildEvents extends ListenerAdapter {
 					MemberDAO.updateMemberConfigs(m);
 				} catch (NoResultException e) {
 					MemberDAO.addMemberToDB(member);
-				} catch (ErrorResponseException | NullPointerException ignore) {
+				} catch (ErrorResponseException | NullPointerException e) {
+					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 				}
 			}
 		} catch (InsufficientPermissionException | ErrorResponseException ignore) {
