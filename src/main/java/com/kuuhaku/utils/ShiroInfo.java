@@ -73,6 +73,7 @@ public class ShiroInfo {
 	private static final String announcementChannelID = "597587565809369089";
 	private static final String default_prefix = DEV ? "dev!" : "s!";
 	private static final String nomeDB = "shiro.sqlite";
+	private static final String shiro = "572413282653306901";
 	private static final String niichan = "350836145921327115"; //KuuHaKu
 	private static final List<String> developers = List.of(
 			niichan, //KuuHaKu
@@ -150,6 +151,10 @@ public class ShiroInfo {
 
 	public static HttpClientBuilder getHttpBuilder() {
 		return httpBuilder;
+	}
+
+	public static String getShiro() {
+		return shiro;
 	}
 
 	public static String getNiiChan() {
