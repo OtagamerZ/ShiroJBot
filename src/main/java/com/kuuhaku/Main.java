@@ -52,12 +52,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import javax.persistence.NoResultException;
+import javax.security.auth.login.LoginException;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.Executors;
 
 public class Main implements Thread.UncaughtExceptionHandler {
@@ -224,6 +224,21 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 	public static JDA getTet() {
 		return tet;
+	}
+
+	public static boolean reboot() throws LoginException, InterruptedException {
+		api = JDABuilder.create(GatewayIntent.getIntents(GatewayIntent.ALL_INTENTS))
+				.enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_PRESENCES)
+				.setToken(info.getBotToken())
+				.setChunkingFilter(ChunkingFilter.ALL)
+				.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS)
+				.setMemberCachePolicy(MemberCachePolicy.ALL)
+				.setBulkDeleteSplittingEnabled(false)
+				.setAudioSendFactory(new NativeAudioSendFactory())
+				.build()
+				.awaitReady();
+
+		return true;
 	}
 
 	@Override
