@@ -18,24 +18,22 @@
 
 package com.kuuhaku.handlers.api.endpoint;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
+import com.kuuhaku.utils.ShiroInfo;
+import org.apache.commons.io.FileUtils;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.concurrent.TimeUnit;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 @RestController
 public class CommonRequest {
-	private final static Cache<String, byte[]> imageCache = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.HOURS).build();
-
-	@RequestMapping(value = "/cdn", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
+	@RequestMapping(value = "/card", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
 	public @ResponseBody
-	byte[] serveImage(@RequestParam(value = "id", defaultValue = "") String code) {
-		return imageCache.getIfPresent(code);
-	}
-
-	public static Cache<String, byte[]> getImageCache() {
-		return imageCache;
+	byte[] serveImage(@RequestParam(value = "id", defaultValue = "") String id) throws IOException {
+		File f = new File(ShiroInfo.getCollectionsFolder(), "cards_" + id + ".jpg");
+		if (!f.exists()) throw new FileNotFoundException();
+		return FileUtils.readFileToByteArray(f);
 	}
 }
