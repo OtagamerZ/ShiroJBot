@@ -13,13 +13,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Aumento na compressão da imagem da coleção de cartas">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/KawaiponsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/KawaiponsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/HourlyEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/HourlyEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/CommonRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/api/endpoint/CommonRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -696,14 +691,7 @@
       <workItem from="1600375013685" duration="1225000" />
       <workItem from="1600430758883" duration="7948000" />
       <workItem from="1600445216636" duration="3201000" />
-      <workItem from="1600456620066" duration="1433000" />
-    </task>
-    <task id="LOCAL-02447" summary="Correção no comando de valor de mercado">
-      <created>1599754777674</created>
-      <option name="number" value="02447" />
-      <option name="presentableId" value="LOCAL-02447" />
-      <option name="project" value="LOCAL" />
-      <updated>1599754777674</updated>
+      <workItem from="1600456620066" duration="1901000" />
     </task>
     <task id="LOCAL-02448" summary="Correção no comando de valor de mercado">
       <created>1599757403390</created>
@@ -1041,7 +1029,14 @@
       <option name="project" value="LOCAL" />
       <updated>1600449698022</updated>
     </task>
-    <option name="localTasksCounter" value="2496" />
+    <task id="LOCAL-02496" summary="Agora a coleção de cartas usa o CDN da Shiro">
+      <created>1600458169633</created>
+      <option name="number" value="02496" />
+      <option name="presentableId" value="LOCAL-02496" />
+      <option name="project" value="LOCAL" />
+      <updated>1600458169634</updated>
+    </task>
+    <option name="localTasksCounter" value="2497" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1107,7 +1102,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição do &quot;você quis dizer?&quot; nos comandos de ver, vender e trocar cartas, ver coleção e ver cartas restantes" />
     <MESSAGE value="Nova dica no help referen ao empréstimo" />
     <MESSAGE value="Correção no &quot;você não quis dizer?&quot;" />
     <MESSAGE value="Correções pendentes" />
@@ -1132,7 +1126,8 @@
     <MESSAGE value="Removida checagem automatica da Jibril, agora é um comando separado" />
     <MESSAGE value="Descarte de buffers após a geração das linhas da coleção de cartas" />
     <MESSAGE value="Aumento na compressão da imagem da coleção de cartas" />
-    <option name="LAST_COMMIT_MESSAGE" value="Aumento na compressão da imagem da coleção de cartas" />
+    <MESSAGE value="Agora a coleção de cartas usa o CDN da Shiro" />
+    <option name="LAST_COMMIT_MESSAGE" value="Agora a coleção de cartas usa o CDN da Shiro" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1186,11 +1181,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1600456864904">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1600458166843">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1600456864904" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1600458166843" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1243,11 +1238,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1600449700876">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1600458172508">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1600449700876" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1600458172508" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
