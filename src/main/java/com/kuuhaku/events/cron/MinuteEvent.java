@@ -24,6 +24,8 @@ import com.kuuhaku.controller.postgresql.QuizDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.RelayBlockList;
 import com.kuuhaku.utils.Helper;
+import com.kuuhaku.utils.ShiroInfo;
+import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -33,12 +35,14 @@ import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 
+import javax.security.auth.login.LoginException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class MinuteEvent implements Job {
 	public static JobDetail unblock;
+	public static boolean restarting = false;
 
 	@Override
 	public void execute(JobExecutionContext context) {
@@ -93,6 +97,25 @@ public class MinuteEvent implements Job {
 			} catch (HierarchyException ignore) {
 			} catch (NullPointerException e) {
 				MemberDAO.removeMutedMember(m);
+			}
+		});
+
+		Guild g = Main.getJibril().getGuildById(ShiroInfo.getSupportServerID());
+
+		assert g != null;
+		g.retrieveMemberById(ShiroInfo.getNiiChan()).queue(s -> {
+			if (s.getOnlineStatus() == OnlineStatus.OFFLINE) {
+				try {
+					restarting = true;
+					while (restarting) {
+						if (Main.reboot())
+							restarting = false;
+						else
+							Thread.sleep(2000);
+					}
+				} catch (LoginException | InterruptedException e) {
+					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+				}
 			}
 		});
 	}
