@@ -688,13 +688,7 @@
       <workItem from="1600358680416" duration="4559000" />
       <workItem from="1600375013685" duration="1225000" />
       <workItem from="1600430758883" duration="7948000" />
-    </task>
-    <task id="LOCAL-02443" summary="Correção no comando de valor de mercado">
-      <created>1599748649879</created>
-      <option name="number" value="02443" />
-      <option name="presentableId" value="LOCAL-02443" />
-      <option name="project" value="LOCAL" />
-      <updated>1599748649879</updated>
+      <workItem from="1600445216636" duration="314000" />
     </task>
     <task id="LOCAL-02444" summary="Correção no comando de valor de mercado">
       <created>1599748871869</created>
@@ -1032,7 +1026,14 @@
       <option name="project" value="LOCAL" />
       <updated>1600441323690</updated>
     </task>
-    <option name="localTasksCounter" value="2492" />
+    <task id="LOCAL-02492" summary="Removida checagem automatica da Jibril, agora é um comando separado">
+      <created>1600445437370</created>
+      <option name="number" value="02492" />
+      <option name="presentableId" value="LOCAL-02492" />
+      <option name="project" value="LOCAL" />
+      <updated>1600445437370</updated>
+    </task>
+    <option name="localTasksCounter" value="2493" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
