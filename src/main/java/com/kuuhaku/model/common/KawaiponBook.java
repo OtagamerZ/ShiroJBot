@@ -139,6 +139,7 @@ public class KawaiponBook {
 					g.dispose();
 
 					result.set(act.addSignature(finalC, row));
+					row.flush();
 				} catch (IOException ignore) {
 				}
 			});
