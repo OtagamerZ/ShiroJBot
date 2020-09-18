@@ -98,6 +98,7 @@ public class JibrilEvents extends ListenerAdapter {
 					event.getChannel().sendMessage("Estou acordando a Shiro, calma ai!").queue(m -> {
 						try {
 							Main.reboot();
+							System.gc();
 							m.editMessage("Prontinho!").queue(null, Helper::doNothing);
 						} catch (LoginException | InterruptedException e) {
 							Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
