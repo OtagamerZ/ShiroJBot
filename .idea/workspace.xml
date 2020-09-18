@@ -15,9 +15,6 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MinuteEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MinuteEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/utils/ShiroInfo.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -703,14 +700,7 @@
       <workItem from="1600353776417" duration="877000" />
       <workItem from="1600358680416" duration="4559000" />
       <workItem from="1600375013685" duration="1225000" />
-      <workItem from="1600430758883" duration="812000" />
-    </task>
-    <task id="LOCAL-02439" summary="Novo comando para ver gráfico de valores das cartas">
-      <created>1599747972031</created>
-      <option name="number" value="02439" />
-      <option name="presentableId" value="LOCAL-02439" />
-      <option name="project" value="LOCAL" />
-      <updated>1599747972031</updated>
+      <workItem from="1600430758883" duration="6367000" />
     </task>
     <task id="LOCAL-02440" summary="Novo comando para ver gráfico de valores das cartas">
       <created>1599748102757</created>
@@ -1048,7 +1038,14 @@
       <option name="project" value="LOCAL" />
       <updated>1600375637793</updated>
     </task>
-    <option name="localTasksCounter" value="2488" />
+    <task id="LOCAL-02488" summary="Agora a Jibril checa a cada minuto se a Shiro está online">
+      <created>1600431573220</created>
+      <option name="number" value="02488" />
+      <option name="presentableId" value="LOCAL-02488" />
+      <option name="project" value="LOCAL" />
+      <updated>1600431573221</updated>
+    </task>
+    <option name="localTasksCounter" value="2489" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1250,11 +1247,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1600375639312">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1600431575552">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1600375639312" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1600431575552" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
