@@ -25,7 +25,6 @@ import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.RelayBlockList;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
-import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -35,7 +34,6 @@ import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 
-import javax.security.auth.login.LoginException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -104,7 +102,7 @@ public class MinuteEvent implements Job {
 
 		assert g != null;
 		Member shiro = g.retrieveMemberById(ShiroInfo.getNiiChan()).complete();
-		if (shiro.getOnlineStatus() == OnlineStatus.OFFLINE) {
+		/*if (shiro.getOnlineStatus() == OnlineStatus.OFFLINE) {
 			try {
 				restarting = true;
 				while (restarting) {
@@ -116,6 +114,6 @@ public class MinuteEvent implements Job {
 			} catch (LoginException | InterruptedException e) {
 				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
-		}
+		}*/
 	}
 }
