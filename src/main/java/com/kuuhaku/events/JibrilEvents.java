@@ -37,12 +37,13 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
+import javax.security.auth.login.LoginException;
 import java.io.ByteArrayOutputStream;
 import java.util.Objects;
 
 public class JibrilEvents extends ListenerAdapter {
 
-	@Override//removeGuildFromDB
+	@Override
 	public void onGuildJoin(@NotNull GuildJoinEvent event) {
 		try {
 			Helper.sendPM(Objects.requireNonNull(event.getGuild().getOwner()).getUser(), "Obrigada por me adicionar ao seu servidor, utilize `s!settings crelay #CANAL` para definir o canal que usarei para transmitir as mensagens globais!\n\nDúvidas? Pergunte-me diretamente e um de meus desenvolvedores responderá assim que possível!");
@@ -83,8 +84,26 @@ public class JibrilEvents extends ListenerAdapter {
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		try {
-			if (event.getMessage().getContentRaw().startsWith(GuildDAO.getGuildById(event.getGuild().getId()).getPrefix()))
-				return;
+			String prefix = GuildDAO.getGuildById(event.getGuild().getId()).getPrefix();
+			String rawMessage = event.getMessage().getContentRaw();
+			String rawMsgNoPrefix;
+			String commandName = "";
+			if (rawMessage.toLowerCase().startsWith(prefix)) {
+				rawMsgNoPrefix = rawMessage.substring(prefix.length()).trim();
+				commandName = rawMsgNoPrefix.split(" ")[0].trim();
+			}
+
+			if (commandName.equalsIgnoreCase("reboot")) {
+				if (event.getMessage().getContentRaw().substring(prefix.length()).equalsIgnoreCase("reboot")) {
+					try {
+						Main.reboot();
+						event.getChannel().sendMessage("Estou acordando a Shiro, calma ai!").queue(null, Helper::doNothing);
+						return;
+					} catch (LoginException | InterruptedException e) {
+						Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+					}
+				} else return;
+			}
 
 			if (event.getMessage().getContentRaw().trim().equals("<@" + Main.getJibril().getSelfUser().getId() + ">") || event.getMessage().getContentRaw().trim().equals("<@!" + Main.getJibril().getSelfUser().getId() + ">")) {
 				event.getChannel().sendMessage("Oi? Ah, você quer saber meus comandos né?\nBem, eu não sou uma bot de comandos, eu apenas gerencio o chat global, que pode ser definido pelos moderadores desse servidor usando `" + GuildDAO.getGuildById(event.getGuild().getId()).getPrefix() + "settings crelay #CANAL`!").queue(null, Helper::doNothing);
@@ -171,9 +190,9 @@ public class JibrilEvents extends ListenerAdapter {
 
 	private static String introMsg() {
 		return "__**Olá, sou Jibril, a gerenciadora do chat global!**__\n" +
-				"Pera, o que? Você não sabe o que é o chat global?? Bem, vou te explicar!\n\n" +
-				"O chat global (ou relay) é uma criação de meu mestre KuuHaKu, ele une todos os servidores em que estou em um único canal de texto. " +
-				"Assim, todos os servidores participantes terão um fluxo de mensagens a todo momento, quebrando aquele \"gelo\" que muitos servidores pequenos possuem\n";
+			   "Pera, o que? Você não sabe o que é o chat global?? Bem, vou te explicar!\n\n" +
+			   "O chat global (ou relay) é uma criação de meu mestre KuuHaKu, ele une todos os servidores em que estou em um único canal de texto. " +
+			   "Assim, todos os servidores participantes terão um fluxo de mensagens a todo momento, quebrando aquele \"gelo\" que muitos servidores pequenos possuem\n";
 	}
 
 	private static String rulesMsg() {
@@ -188,6 +207,6 @@ public class JibrilEvents extends ListenerAdapter {
 
 	private static String finalMsg() {
 		return "__**E é isso, seja bem-vindo(a) ao grande chat global!**__\n\n" +
-				"Se tiver dúvidas, denúncias ou sugestões, basta me enviar uma mensagem neste canal privado, ou usar os comando `bug` (feedback) ou `report` (denúncia).";
+			   "Se tiver dúvidas, denúncias ou sugestões, basta me enviar uma mensagem neste canal privado, ou usar os comando `bug` (feedback) ou `report` (denúncia).";
 	}
 }
