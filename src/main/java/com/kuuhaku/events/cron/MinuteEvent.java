@@ -103,20 +103,19 @@ public class MinuteEvent implements Job {
 		Guild g = Main.getJibril().getGuildById(ShiroInfo.getSupportServerID());
 
 		assert g != null;
-		g.retrieveMemberById(ShiroInfo.getNiiChan()).queue(s -> {
-			if (s.getOnlineStatus() == OnlineStatus.OFFLINE) {
-				try {
-					restarting = true;
-					while (restarting) {
-						if (Main.reboot())
-							restarting = false;
-						else
-							Thread.sleep(2000);
-					}
-				} catch (LoginException | InterruptedException e) {
-					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+		Member shiro = g.retrieveMemberById(ShiroInfo.getNiiChan()).complete();
+		if (shiro.getOnlineStatus() == OnlineStatus.OFFLINE) {
+			try {
+				restarting = true;
+				while (restarting) {
+					if (Main.reboot())
+						restarting = false;
+					else
+						Thread.sleep(2000);
 				}
+			} catch (LoginException | InterruptedException e) {
+				Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			}
-		});
+		}
 	}
 }
