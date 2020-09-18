@@ -86,15 +86,15 @@ public class JibrilEvents extends ListenerAdapter {
 		try {
 			String prefix = GuildDAO.getGuildById(event.getGuild().getId()).getPrefix();
 			String rawMessage = event.getMessage().getContentRaw();
-			String rawMsgNoPrefix;
+			String rawMsgNoPrefix = "";
 			String commandName = "";
 			if (rawMessage.toLowerCase().startsWith(prefix)) {
 				rawMsgNoPrefix = rawMessage.substring(prefix.length()).trim();
 				commandName = rawMsgNoPrefix.split(" ")[0].trim();
 			}
 
-			if (commandName.equalsIgnoreCase("reboot")) {
-				if (event.getMessage().getContentRaw().substring(prefix.length()).equalsIgnoreCase("reboot")) {
+			if (!rawMsgNoPrefix.isBlank()) {
+				if (commandName.equalsIgnoreCase("reboot") && ShiroInfo.getDevelopers().contains(event.getAuthor().getId())) {
 					try {
 						Main.reboot();
 						event.getChannel().sendMessage("Estou acordando a Shiro, calma ai!").queue(null, Helper::doNothing);
