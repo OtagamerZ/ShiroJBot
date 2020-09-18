@@ -33,7 +33,6 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
-import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NonNls;
 
 import java.awt.image.BufferedImage;
@@ -164,6 +163,6 @@ public class KawaiponsCommand extends Command {
 		eb.setImage("https://api." + System.getenv("SERVER_URL") + "/card?id=" + author.getId());
 		m.delete().queue();
 
-		channel.sendMessage(eb.build()).addFile(IOUtils.toByteArray(f.toURI()), "cards.jpg").queue();
+		channel.sendMessage(eb.build()).queue();
 	}
 }
