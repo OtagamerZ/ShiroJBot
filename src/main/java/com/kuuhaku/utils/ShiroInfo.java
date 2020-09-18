@@ -41,6 +41,7 @@ import net.dv8tion.jda.api.entities.*;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.discordbots.api.client.DiscordBotListAPI;
 
+import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
 import java.text.MessageFormat;
@@ -97,6 +98,7 @@ public class ShiroInfo {
 	private static final JDAEvents shiroEvents = new JDAEvents();
 	private static final GsonBuilder JSONFactory = new GsonBuilder();
 	private static final HttpClientBuilder httpBuilder = HttpClientBuilder.create();
+	private static final File collectionsFolder = new File(System.getenv("COLLECTIONS_PATH"));
 
 	//STATIC CONSTRUCTOR
 	static {
@@ -179,6 +181,12 @@ public class ShiroInfo {
 
 	public static List<String> getStaff() {
 		return Stream.concat(developers.stream(), supports.stream()).distinct().collect(Collectors.toList());
+	}
+
+	public static File getCollectionsFolder() {
+		if (!collectionsFolder.exists())
+			collectionsFolder.mkdir();
+		return collectionsFolder;
 	}
 
 	//NON-STATIC
