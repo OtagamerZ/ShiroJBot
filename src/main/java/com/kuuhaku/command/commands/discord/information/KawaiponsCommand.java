@@ -145,7 +145,7 @@ public class KawaiponsCommand extends Command {
 	}
 
 	private void send(User author, MessageChannel channel, Message m, Set<KawaiponCard> collection, BufferedImage cards, String s, long l) throws IOException {
-		String hash = Helper.hash((author.getId() + System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "SHA-1");
+		String hash = Helper.hash(author.getId().getBytes(StandardCharsets.UTF_8), "SHA-1");
 		File f = new File(ShiroInfo.getCollectionsFolder(), hash + ".jpg");
 		byte[] bytes = Helper.getBytes(Helper.removeAlpha(cards), "jpg", 0.5f);
 		//byte[] bytes = Helper.getBytes(Helper.removeAlpha(cards), "jpg");
