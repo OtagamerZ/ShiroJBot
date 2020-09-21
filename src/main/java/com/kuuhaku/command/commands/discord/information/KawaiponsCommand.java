@@ -126,7 +126,6 @@ public class KawaiponsCommand extends Command {
 					KawaiponBook kb = new KawaiponBook(toRender);
 					BufferedImage cards = kb.view(CardDAO.getCardsByAnime(anime), anime.toString(), args[1].equalsIgnoreCase("C"));
 
-
 					send(author, channel, m, collection, cards, anime.toString(), CardDAO.totalCards(anime));
 				} else {
 					Set<KawaiponCard> collection = kp.getCards().stream().filter(k -> k.getCard().getRarity().equals(rr)).collect(Collectors.toSet());
