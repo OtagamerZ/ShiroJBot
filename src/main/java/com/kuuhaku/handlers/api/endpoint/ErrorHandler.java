@@ -20,23 +20,25 @@ package com.kuuhaku.handlers.api.endpoint;
 
 import com.kuuhaku.handlers.api.exception.Exception;
 import com.kuuhaku.handlers.api.exception.*;
+import com.kuuhaku.utils.Helper;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletResponse;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 @RestController
 @ControllerAdvice
 public class ErrorHandler implements ErrorController {
 	@RequestMapping("/error")
-	public void handleError(HttpServletResponse http) {
-		http.setHeader("Location", "https://http.cat/" + http.getStatus());
-		http.setStatus(HttpServletResponse.SC_FOUND);
+	public byte[] handleError(HttpServletResponse http) throws IOException {
+		return Helper.getBytes(ImageIO.read(Helper.getImage("https://http.cat/" + http.getStatus())));
 	}
 
 	@ExceptionHandler({HttpMessageNotWritableException.class, ConversionNotSupportedException.class})
