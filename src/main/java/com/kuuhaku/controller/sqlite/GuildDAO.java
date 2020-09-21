@@ -91,6 +91,18 @@ public class GuildDAO {
 	}
 
 	@SuppressWarnings("unchecked")
+	public static List<GuildConfig> getAllGuildsWithButtons() {
+		EntityManager em = Manager.getEntityManager();
+
+		Query gc = em.createQuery("SELECT g FROM GuildConfig g WHERE COALESCE(buttonConfigs, '') NOT IN ('', '{}')", GuildConfig.class);
+		List<GuildConfig> gcs = (List<GuildConfig>) gc.getResultList();
+
+		em.close();
+
+		return gcs;
+	}
+
+	@SuppressWarnings("unchecked")
 	public static List<GuildConfig> getAlertChannels() {
 		EntityManager em = Manager.getEntityManager();
 

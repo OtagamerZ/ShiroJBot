@@ -167,7 +167,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 		Pages.activate(api);
 
-		GuildDAO.getAllGuilds().forEach(Helper::refreshButtons);
+		GuildDAO.getAllGuildsWithButtons().forEach(Helper::refreshButtons);
 
 		Helper.logger(Main.class).info("<----------END OF BOOT---------->");
 		Helper.logger(Main.class).info("Estou pronta!");
