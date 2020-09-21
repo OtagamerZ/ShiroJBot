@@ -18,7 +18,7 @@
 
 package com.kuuhaku.handlers.api.endpoint;
 
-import com.kuuhaku.utils.ShiroInfo;
+import com.kuuhaku.Main;
 import org.apache.commons.io.FileUtils;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +32,7 @@ public class CommonRequest {
 	@RequestMapping(value = "/card", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
 	public @ResponseBody
 	byte[] serveImage(@RequestParam(value = "id", defaultValue = "") String id) throws IOException {
-		File f = new File(ShiroInfo.getCollectionsFolder(), id + ".jpg");
+		File f = new File(Main.getInfo().getCollectionsFolder(), id + ".jpg");
 		if (!f.exists()) throw new FileNotFoundException();
 		return FileUtils.readFileToByteArray(f);
 	}
