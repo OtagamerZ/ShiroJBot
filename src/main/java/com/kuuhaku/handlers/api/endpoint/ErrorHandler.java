@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileNotFoundException;
 
 @RestController
 @ControllerAdvice
@@ -72,6 +73,12 @@ public class ErrorHandler implements ErrorController {
 	@ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
 	public Exception ratelimited() {
 		return new Exception(HttpStatus.TOO_MANY_REQUESTS, "You are being ratelimited");
+	}
+
+	@ExceptionHandler(FileNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public Exception notFound() {
+		return new Exception(HttpStatus.NOT_FOUND, "Requested file not found");
 	}
 
 	@Override
