@@ -23,7 +23,6 @@ import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.sqlite.BackupDAO;
 import com.kuuhaku.model.common.DataDump;
 import com.kuuhaku.utils.Helper;
-import com.kuuhaku.utils.ShiroInfo;
 import org.json.JSONObject;
 import org.quartz.Job;
 import org.quartz.JobDetail;
@@ -67,7 +66,7 @@ public class HourlyEvent implements Job {
 
 		System.gc();
 
-		for (File file : ShiroInfo.getCollectionsFolder().listFiles()) {
+		for (File file : Main.getInfo().getCollectionsFolder().listFiles()) {
 			file.delete();
 		}
 	}
