@@ -27,29 +27,15 @@ import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.NoResultException;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @ControllerAdvice
 public class ErrorHandler implements ErrorController {
 	@RequestMapping("/error")
-	public Exception handleError(HttpServletRequest request) {
-		Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
-
-		if (status != null) {
-			int code = Integer.parseInt(status.toString());
-
-			switch (code) {
-				case 400:
-					return new Exception(HttpStatus.BAD_REQUEST, "Wrong arguments in the request");
-				case 404:
-					return new Exception(HttpStatus.NOT_FOUND, "Endpoint not found");
-				case 405:
-					return new Exception(HttpStatus.METHOD_NOT_ALLOWED, request.getMethod() + " method not allowed for this endpoint");
-			}
-		}
-		return new Exception(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
+	public void handleError(HttpServletResponse http) {
+		http.setHeader("Location", "https://http.cat/" + http.getStatus());
+		http.setStatus(HttpServletResponse.SC_FOUND);
 	}
 
 	@ExceptionHandler({HttpMessageNotWritableException.class, ConversionNotSupportedException.class})

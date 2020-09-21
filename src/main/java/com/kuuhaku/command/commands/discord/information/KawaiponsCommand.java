@@ -39,6 +39,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -145,7 +146,8 @@ public class KawaiponsCommand extends Command {
 	}
 
 	private void send(User author, MessageChannel channel, Message m, Set<KawaiponCard> collection, BufferedImage cards, String s, long l) throws IOException {
-		File f = new File(ShiroInfo.getCollectionsFolder(), "cards_" + author.getId() + ".jpg");
+		String hash = Helper.hash((author.getId() + System.currentTimeMillis()).getBytes(StandardCharsets.UTF_8), "SHA-1");
+		File f = new File(ShiroInfo.getCollectionsFolder(), hash + ".jpg");
 		byte[] bytes = Helper.getBytes(Helper.removeAlpha(cards), "jpg", 0.5f);
 		//byte[] bytes = Helper.getBytes(Helper.removeAlpha(cards), "jpg");
 		try (FileOutputStream fos = new FileOutputStream(f)) {
@@ -160,7 +162,7 @@ public class KawaiponsCommand extends Command {
 		eb.addField(":red_envelope: | Cartas normais:", common + " de " + l + " (" + Helper.prcntToInt(common, l) + "%)", true);
 		eb.addField(":star2: | Cartas cromadas:", foil + " de " + l + " (" + Helper.prcntToInt(foil, l) + "%)", true);
 		eb.setFooter("Total coletado (normais + cromadas): " + Helper.prcntToInt(collection.size(), l * 2) + "%");
-		eb.setImage("https://api." + System.getenv("SERVER_URL") + "/card?id=" + author.getId() + "&v=" + System.currentTimeMillis());
+		eb.setImage("https://api." + System.getenv("SERVER_URL") + "/card?id=" + hash);
 		m.delete().queue();
 
 		channel.sendMessage(eb.build()).queue();
