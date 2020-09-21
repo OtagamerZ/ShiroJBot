@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.commands.discord.information;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.CardDAO;
@@ -146,7 +147,7 @@ public class KawaiponsCommand extends Command {
 
 	private void send(User author, MessageChannel channel, Message m, Set<KawaiponCard> collection, BufferedImage cards, String s, long l) throws IOException {
 		String hash = Helper.hash(author.getId().getBytes(StandardCharsets.UTF_8), "SHA-1");
-		File f = new File(ShiroInfo.getCollectionsFolder(), hash + ".jpg");
+		File f = new File(Main.getInfo().getCollectionsFolder(), hash + ".jpg");
 		byte[] bytes = Helper.getBytes(Helper.removeAlpha(cards), "jpg", 0.5f);
 		//byte[] bytes = Helper.getBytes(Helper.removeAlpha(cards), "jpg");
 		try (FileOutputStream fos = new FileOutputStream(f)) {
