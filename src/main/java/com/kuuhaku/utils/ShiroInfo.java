@@ -28,7 +28,6 @@ import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.music.GuildMusicManager;
 import com.kuuhaku.model.common.drop.Prize;
-import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.enums.I18n;
 import com.kuuhaku.model.enums.Version;
 import com.kuuhaku.model.persistent.KawaiponCard;
@@ -98,7 +97,6 @@ public class ShiroInfo {
 	private static final JDAEvents shiroEvents = new JDAEvents();
 	private static final GsonBuilder JSONFactory = new GsonBuilder();
 	private static final HttpClientBuilder httpBuilder = HttpClientBuilder.create();
-	private static final File collectionsFolder = new File(System.getenv("COLLECTIONS_PATH"));
 
 	//STATIC CONSTRUCTOR
 	static {
@@ -122,7 +120,7 @@ public class ShiroInfo {
 	private final Cache<String, Prize> currentDrop = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
 	private final Cache<String, byte[]> cardCache = CacheBuilder.newBuilder().expireAfterWrite(60, TimeUnit.MINUTES).build();
 	private final Set<String> gameLock = new HashSet<>();
-	private final Map<AnimeName, Integer> animeSaturation = new HashMap<>();
+	private final File collectionsFolder = new File(System.getenv("COLLECTIONS_PATH"));
 	private boolean isLive = false;
 
 	//CONSTANTS
@@ -181,12 +179,6 @@ public class ShiroInfo {
 
 	public static List<String> getStaff() {
 		return Stream.concat(developers.stream(), supports.stream()).distinct().collect(Collectors.toList());
-	}
-
-	public static File getCollectionsFolder() {
-		if (!collectionsFolder.exists())
-			collectionsFolder.mkdir();
-		return collectionsFolder;
 	}
 
 	//NON-STATIC
@@ -268,6 +260,12 @@ public class ShiroInfo {
 
 	public boolean gameInProgress(String id) {
 		return gameLock.stream().anyMatch(s -> Helper.equalsAny(id, s.split(Pattern.quote(".")))) || games.keySet().stream().anyMatch(s -> Helper.equalsAny(id, s.split(Pattern.quote("."))));
+	}
+
+	public File getCollectionsFolder() {
+		if (!collectionsFolder.exists())
+			collectionsFolder.mkdir();
+		return collectionsFolder;
 	}
 
 	//VARIABLES
@@ -377,9 +375,5 @@ public class ShiroInfo {
 
 	public void setLive(boolean live) {
 		this.isLive = live;
-	}
-
-	public Map<AnimeName, Integer> getAnimeSaturation() {
-		return animeSaturation;
 	}
 }
