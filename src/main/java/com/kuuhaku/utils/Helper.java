@@ -75,6 +75,7 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -82,6 +83,8 @@ import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.attribute.FileTime;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -1299,5 +1302,29 @@ public class Helper {
 		else if (foilCount == total && normalCount < total) return CardStatus.NORMAL_CARDS;
 		else if (normalCount == total && foilCount < total) return CardStatus.FOIL_CARDS;
 		else return CardStatus.ALL_CARDS;
+	}
+
+	public static void keepMaximumNFiles(File folder, int maximum) {
+		if (!folder.isDirectory()) return;
+		List<org.apache.commons.lang3.tuple.Pair<File, FileTime>> files = Arrays.stream(folder.listFiles())
+				.map(f -> {
+					FileTime time;
+					try {
+						time = Files.getLastModifiedTime(f.toPath());
+					} catch (IOException e) {
+						time = null;
+					}
+					return org.apache.commons.lang3.tuple.Pair.of(f, time);
+				})
+				.collect(Collectors.toList());
+
+		files.removeIf(p -> p.getRight() == null);
+
+		if (files.size() <= maximum) return;
+
+		files.sort(Comparator.comparing(org.apache.commons.lang3.tuple.Pair::getRight));
+		while (files.size() > maximum) {
+			files.remove(0).getLeft().delete();
+		}
 	}
 }
