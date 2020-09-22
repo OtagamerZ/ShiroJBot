@@ -14,7 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/KawaiponsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/KawaiponsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -160,17 +160,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [clean]">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -705,13 +694,6 @@
       <workItem from="1600456620066" duration="3018000" />
       <workItem from="1600691364088" duration="3919000" />
     </task>
-    <task id="LOCAL-02455" summary="Correção do nome do anime JoJo">
-      <created>1599844855591</created>
-      <option name="number" value="02455" />
-      <option name="presentableId" value="LOCAL-02455" />
-      <option name="project" value="LOCAL" />
-      <updated>1599844855592</updated>
-    </task>
     <task id="LOCAL-02456" summary="Adição do &quot;você quis dizer?&quot; nos comandos de ver, vender e trocar cartas, ver coleção e ver cartas restantes">
       <created>1599845526659</created>
       <option name="number" value="02456" />
@@ -1048,7 +1030,14 @@
       <option name="project" value="LOCAL" />
       <updated>1600715694198</updated>
     </task>
-    <option name="localTasksCounter" value="2504" />
+    <task id="LOCAL-02504" summary="Correção pequena">
+      <created>1600716318491</created>
+      <option name="number" value="02504" />
+      <option name="presentableId" value="LOCAL-02504" />
+      <option name="project" value="LOCAL" />
+      <updated>1600716318491</updated>
+    </task>
+    <option name="localTasksCounter" value="2505" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1114,7 +1103,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correções pendentes" />
     <MESSAGE value="Correções gerais" />
     <MESSAGE value="Adição de comando para ver os membros do Exceed e preparação para adição de 2 novos animes às cartas" />
     <MESSAGE value="Correção da lista de membros do Exceed" />
@@ -1139,7 +1127,8 @@
     <MESSAGE value="Agora a coleção de cartas usa o CDN da Shiro" />
     <MESSAGE value="Melhoria no handler de erros da API da Shiro" />
     <MESSAGE value="Abandono do Redis (muitos problemas)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Abandono do Redis (muitos problemas)" />
+    <MESSAGE value="Correção pequena" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção pequena" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1193,11 +1182,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1600715691518">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1600716315609">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1600715691518" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1600716315609" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1250,11 +1239,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1600715698473">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1600716320580">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1600715698473" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1600716320580" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
