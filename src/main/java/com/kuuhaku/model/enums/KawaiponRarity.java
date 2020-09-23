@@ -22,6 +22,7 @@ import com.github.ygimenez.exception.InvalidStateException;
 import org.apache.commons.lang3.StringUtils;
 
 public enum KawaiponRarity {
+	EQUIPMENT(0, ""),
 	COMMON(1, "<:common:726171819664736268> "),
 	UNCOMMON(2, "<:uncommon:726171819400232962> "),
 	RARE(3, "<:rare:726171819853480007> "),

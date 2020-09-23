@@ -34,7 +34,8 @@ public class CardDAO {
 
 		Query q;
 		if (withUltimate) q = em.createQuery("SELECT c FROM Card c WHERE id = UPPER(:name)", Card.class);
-		else q = em.createQuery("SELECT c FROM Card c WHERE id = UPPER(:name) AND rarity <> 'ULTIMATE'", Card.class);
+		else
+			q = em.createQuery("SELECT c FROM Card c WHERE id = UPPER(:name) AND rarity <> 'ULTIMATE' AND rarity <> 'EQUIPMENT'", Card.class);
 		q.setParameter("name", name);
 
 		try {
@@ -60,7 +61,7 @@ public class CardDAO {
 	public static List<Card> getCards() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity <> 'ULTIMATE' AND anime IN :animes", Card.class);
+		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity <> 'ULTIMATE' AND anime IN :animes AND rarity <> 'EQUIPMENT'", Card.class);
 		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
 		List<Card> c = (List<Card>) q.getResultList();
 
@@ -73,7 +74,7 @@ public class CardDAO {
 	public static List<Card> getAllCards() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Card c WHERE anime IN :animes", Card.class);
+		Query q = em.createQuery("SELECT c FROM Card c WHERE anime IN :animes AND rarity <> 'EQUIPMENT'", Card.class);
 		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
 		List<Card> c = (List<Card>) q.getResultList();
 
@@ -86,7 +87,7 @@ public class CardDAO {
 	public static List<String> getAllCardNames() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c.id FROM Card c WHERE anime IN :animes", String.class);
+		Query q = em.createQuery("SELECT c.id FROM Card c WHERE anime IN :animes AND rarity <> 'EQUIPMENT'", String.class);
 		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
 		List<String> c = (List<String>) q.getResultList();
 
@@ -99,7 +100,7 @@ public class CardDAO {
 	public static List<Card> getCardsByAnime(AnimeName anime) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity <> 'ULTIMATE' AND anime = :anime", Card.class);
+		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity <> 'ULTIMATE' AND anime = :anime AND rarity <> 'EQUIPMENT'", Card.class);
 		q.setParameter("anime", anime);
 
 		try {
@@ -113,7 +114,7 @@ public class CardDAO {
 	public static List<Card> getAllCardsByAnime(AnimeName anime) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Card c WHERE anime = :anime", Card.class);
+		Query q = em.createQuery("SELECT c FROM Card c WHERE anime = :anime AND rarity <> 'EQUIPMENT'", Card.class);
 		q.setParameter("anime", anime);
 
 		try {
@@ -127,7 +128,7 @@ public class CardDAO {
 	public static List<Card> getCardsByRarity(KawaiponRarity rarity) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity = :rarity AND anime IN :animes", Card.class);
+		Query q = em.createQuery("SELECT c FROM Card c WHERE rarity = :rarity AND anime IN :animes AND rarity <> 'EQUIPMENT'", Card.class);
 		q.setParameter("rarity", rarity);
 		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
 
@@ -141,7 +142,7 @@ public class CardDAO {
 	public static long totalCards() {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity <> 'ULTIMATE' AND anime IN :animes", Long.class);
+		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity <> 'ULTIMATE' AND anime IN :animes AND rarity <> 'EQUIPMENT'", Long.class);
 		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
 
 		try {
@@ -154,7 +155,7 @@ public class CardDAO {
 	public static long totalCards(AnimeName anime) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity <> 'ULTIMATE' AND anime = :anime", Long.class);
+		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity <> 'ULTIMATE' AND anime = :anime AND rarity <> 'EQUIPMENT'", Long.class);
 		q.setParameter("anime", anime);
 
 		try {
@@ -167,7 +168,7 @@ public class CardDAO {
 	public static long totalCards(KawaiponRarity rarity) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity = :rarity AND anime IN :animes", Long.class);
+		Query q = em.createQuery("SELECT COUNT(c) FROM Card c WHERE rarity = :rarity AND anime IN :animes AND rarity <> 'EQUIPMENT'", Long.class);
 		q.setParameter("rarity", rarity);
 		q.setParameter("animes", EnumSet.allOf(AnimeName.class));
 
