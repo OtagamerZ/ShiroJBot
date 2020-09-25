@@ -21,6 +21,8 @@ package com.kuuhaku.model.enums;
 import com.github.ygimenez.exception.InvalidStateException;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
+
 public enum KawaiponRarity {
 	EQUIPMENT(-2, ""),
 	FUSION(-1, ""),
@@ -45,6 +47,10 @@ public enum KawaiponRarity {
 
 	public String getEmote() {
 		return emote;
+	}
+
+	public static KawaiponRarity[] validValues() {
+		return Arrays.stream(values()).filter(kr -> kr.index > 0).toArray(KawaiponRarity[]::new);
 	}
 
 	@Override
