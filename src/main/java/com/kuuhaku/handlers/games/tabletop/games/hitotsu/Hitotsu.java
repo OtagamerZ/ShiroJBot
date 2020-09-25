@@ -170,7 +170,7 @@ public class Hitotsu extends Game {
 		} catch (IllegalCardException e) {
 			channel.sendMessage("❌ | Você só pode jogar uma carta que seja do mesmo anime ou da mesma raridade.").queue();
 		} catch (IndexOutOfBoundsException e) {
-			channel.sendMessage("❌ | Índice inválido, verifique a mensagem enviada por mim no privado para ver as cartas na sua mão..").queue();
+			channel.sendMessage("❌ | Índice inválido, verifique a mensagem enviada por mim no privado para ver as cartas na sua mão.").queue();
 		} catch (NumberFormatException | IllegalChainException e) {
 			channel.sendMessage("❌ | Para executar uma corrente você deve informar 2 ou mais índices de cartas do mesmo anime separados por vírgula.").queue();
 		} catch (NoSuchElementException e) {

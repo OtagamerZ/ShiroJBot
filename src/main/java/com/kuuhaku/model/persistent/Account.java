@@ -22,6 +22,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.TransactionDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.FrameColor;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.CreditLoan;
 import com.kuuhaku.utils.Helper;
@@ -29,10 +30,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import org.apache.commons.lang3.tuple.Pair;
 import org.json.JSONObject;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -79,6 +77,9 @@ public class Account {
 
 	@Column(columnDefinition = "TEXT")
 	private String buffs = "{}";
+
+	@Enumerated(value = EnumType.STRING)
+	private FrameColor frame;
 
 	public String getUserId() {
 		return userId;
@@ -261,5 +262,13 @@ public class Account {
 		Map<String, Integer> buffs = getBuffs();
 		buffs.put(id, Math.max(0, buffs.getOrDefault(id, 0) - 1));
 		setBuffs(buffs);
+	}
+
+	public FrameColor getFrame() {
+		return frame;
+	}
+
+	public void setFrame(FrameColor frame) {
+		this.frame = frame;
 	}
 }

@@ -90,6 +90,14 @@ public class Card {
 		}
 	}
 
+	public BufferedImage drawCardNoBorder() {
+		try {
+			return ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream(id + ".png")));
+		} catch (IOException e) {
+			return null;
+		}
+	}
+
 	private BufferedImage adjust(BufferedImage bi) {
 		BufferedImage out = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_ARGB);
 

@@ -81,6 +81,15 @@ public abstract class Game implements Closeable {
 		}
 	}
 
+	public void resetTimerKeepTurn() {
+		if (timeout != null) timeout.cancel(true);
+		if (round > 0)
+			timeout = channel.sendMessage(current.getAsMention() + " perdeu por W.O.! (" + getRound() + " turnos)")
+					.queueAfter(3, TimeUnit.MINUTES, onWO);
+		else timeout = channel.sendMessage("❌ | Tempo expirado, por favor inicie outra sessão.")
+				.queueAfter(3, TimeUnit.MINUTES, onExpiration);
+	}
+
 	public JDA getHandler() {
 		return handler;
 	}
