@@ -68,6 +68,8 @@
         <class>com.kuuhaku.model.persistent.Lottery</class>
         <class>com.kuuhaku.model.persistent.LotteryValue</class>
         <class>com.kuuhaku.model.persistent.ExceedScore</class>
+        <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion</class>
+        <class>com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment</class>
 
         <properties>
             <!-- dados da conexao -->
