@@ -86,7 +86,7 @@ public class SeeCardCommand extends Command {
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 
 		Set<KawaiponCard> cards = kp.getCards();
-		for (AnimeName anime : AnimeName.values()) {
+		for (AnimeName anime : AnimeName.validValues()) {
 			if (CardDAO.totalCards(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime) && !k.isFoil()).count())
 				cards.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
 		}

@@ -64,7 +64,7 @@ public class ConsumableShop {
 					if (args.length < 3) {
 						ch.sendMessage("❌ | Você precisa especificar o anime que deseja que apareça uma carta (colocar `_` no lugar de espaços).").queue();
 						return;
-					} else if (Arrays.stream(AnimeName.values()).noneMatch(a -> a.name().equals(args[2].toUpperCase()))) {
+					} else if (Arrays.stream(AnimeName.validValues()).noneMatch(a -> a.name().equals(args[2].toUpperCase()))) {
 						ch.sendMessage("❌ | Anime inválido ou ainda não adicionado (colocar `_` no lugar de espaços).").queue();
 						return;
 					}
