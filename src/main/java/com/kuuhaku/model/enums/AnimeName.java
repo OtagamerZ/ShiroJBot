@@ -20,7 +20,10 @@ package com.kuuhaku.model.enums;
 
 import com.kuuhaku.controller.postgresql.CardDAO;
 
+import java.util.Arrays;
+
 public enum AnimeName {
+	HIDDEN,
 	AKAME_GA_KILL,
 	ANGEL_BEATS,
 	BAYONETTA_BLOODY_FATE,
@@ -66,6 +69,10 @@ public enum AnimeName {
 	HUNTER_X_HUNTER,
 	BLACK_ROCK_SHOOTER,
 	FATE_STAY_NIGHT;
+
+	public static AnimeName[] validValues() {
+		return Arrays.stream(values()).filter(an -> an != HIDDEN).toArray(AnimeName[]::new);
+	}
 
 	@Override
 	public String toString() {
