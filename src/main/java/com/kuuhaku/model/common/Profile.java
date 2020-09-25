@@ -351,7 +351,7 @@ public class Profile {
 		drawOutlinedText(s, start + XPos, YPos, g2d);
 	}
 
-	private static void drawOutlinedText(String s, int x, int y, Graphics2D g2d) {
+	public static void drawOutlinedText(String s, int x, int y, Graphics2D g2d) {
 		AffineTransform transform = g2d.getTransform();
 		transform.translate(x, y);
 		g2d.transform(transform);
