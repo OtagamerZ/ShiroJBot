@@ -75,7 +75,7 @@ public class KawaiponsCommand extends Command {
 					return;
 				} else if (args.length == 0) {
 					Set<KawaiponCard> collection = new HashSet<>();
-					for (AnimeName anime : AnimeName.values()) {
+					for (AnimeName anime : AnimeName.validValues()) {
 						if (CardDAO.totalCards(anime) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(anime) && !k.isFoil()).count())
 							collection.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
 					}
@@ -89,7 +89,7 @@ public class KawaiponsCommand extends Command {
 					int common = kp.getCards().size() - foil;
 
 					eb.setTitle("\uD83C\uDFB4 | Kawaipons de " + author.getName());
-					eb.addField(":books: | Coleções completas:", count + " de " + AnimeName.values().length + " (" + Helper.prcntToInt(count, AnimeName.values().length) + "%)", true);
+					eb.addField(":books: | Coleções completas:", count + " de " + AnimeName.validValues().length + " (" + Helper.prcntToInt(count, AnimeName.validValues().length) + "%)", true);
 					eb.addField(":red_envelope: | Total de cartas normais:", common + " de " + CardDAO.totalCards() + " (" + Helper.prcntToInt(common, CardDAO.totalCards()) + "%)", true);
 					eb.addField(":star2: | Total de cartas cromadas:", foil + " de " + CardDAO.totalCards() + " (" + Helper.prcntToInt(foil, CardDAO.totalCards()) + "%)", true);
 					eb.setImage("attachment://cards.png");
@@ -115,8 +115,8 @@ public class KawaiponsCommand extends Command {
 
 						send(author, channel, m, collection, cards, "Todas as cartas", CardDAO.totalCards());
 						return;
-					} else if (Arrays.stream(AnimeName.values()).noneMatch(a -> a.name().equals(args[0].toUpperCase()))) {
-						m.editMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], Arrays.stream(AnimeName.values()).map(AnimeName::name).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
+					} else if (Arrays.stream(AnimeName.validValues()).noneMatch(a -> a.name().equals(args[0].toUpperCase()))) {
+						m.editMessage("❌ | Anime inválido ou ainda não adicionado, você não quis dizer `" + Helper.didYouMean(args[0], Arrays.stream(AnimeName.validValues()).map(AnimeName::name).toArray(String[]::new)) + "`? (colocar `_` no lugar de espaços)").queue();
 						return;
 					}
 
