@@ -1020,7 +1020,7 @@ public class Helper {
 
 		if (cbUltimate || chance(2.5 + (channel.getGuild().getMemberCount() * 1.5 / 5000) * (cardBuff != null ? cardBuff.getMult() : 1))) {
 			KawaiponRarity kr = new EnumeratedDistribution<>(
-					Arrays.stream(KawaiponRarity.values())
+					Arrays.stream(KawaiponRarity.validValues())
 							.filter(r -> r != KawaiponRarity.ULTIMATE)
 							.map(r -> Pair.create(r, (6 - r.getIndex()) / 12d))
 							.collect(Collectors.toList())
@@ -1063,7 +1063,7 @@ public class Helper {
 		boolean fbUltimate = foilBuff != null && foilBuff.getTier() == 4;
 
 		KawaiponRarity kr = new EnumeratedDistribution<>(
-				Arrays.stream(KawaiponRarity.values())
+				Arrays.stream(KawaiponRarity.validValues())
 						.filter(r -> r != KawaiponRarity.ULTIMATE)
 						.map(r -> Pair.create(r, (7 - r.getIndex()) / 12d))
 						.collect(Collectors.toList())
@@ -1105,7 +1105,7 @@ public class Helper {
 	public static void spawnKawaipon(EventChannel channel, TwitchChat chat) {
 		if (chance(2.5)) {
 			KawaiponRarity kr = new EnumeratedDistribution<>(
-					Arrays.stream(KawaiponRarity.values())
+					Arrays.stream(KawaiponRarity.validValues())
 							.filter(r -> r != KawaiponRarity.ULTIMATE)
 							.map(r -> Pair.create(r, (7 - r.getIndex()) / 12d))
 							.collect(Collectors.toList())
