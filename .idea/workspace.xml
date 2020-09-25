@@ -13,9 +13,39 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/KawaiponsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/information/KawaiponsCommand.java" afterDir="false" />
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="Implementação do jogo Shoukan (duelo de cartas), mas sem a possibilidade de jogar ainda">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/ActiveEquipment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Arena.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Champion.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Equipment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Hand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/Shoukan.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/SlotColumn.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Effect.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/EffectTrigger.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/FrameColor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Phase.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Race.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/enums/Side.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/shoukan/interfaces/Drawable.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/arena.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/defense_mode.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_back_pink.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_equip_pink.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/frames/card_front_pink.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/arena.xcf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/CardDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/framework/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/handlers/games/tabletop/games/hitotsu/Hitotsu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/Profile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Account.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Card.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Kawaipon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/Kawaipon.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/card_back.xcf" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/card_back.xcf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/card_front.xcf" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/card_front.xcf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shoukan/card_front_equip.xcf" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shoukan/source/card_front_equip.xcf" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -135,23 +165,24 @@
       <recent name="com.kuuhaku.command.commands.information.BotInfoCommand" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\source" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\i18n\strings" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuuhaku.handlers.games.tabletop.games.shoukan" />
       <recent name="com.kuuhaku.command.commands.discord.exceed" />
       <recent name="com.kuuhaku.model.common.drop" />
       <recent name="com.kuuhaku.command.commands.discord.information" />
       <recent name="com.kuuhaku.command.commands.discord.misc" />
-      <recent name="com.kuuhaku.events" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan" />
+      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\shoukan\frames" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games\tabletop\games" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\pieces" />
       <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\java\com\kuuhaku\handlers\games" />
-      <recent name="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\memes" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -161,6 +192,19 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [clean]">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -701,14 +745,19 @@
       <workItem from="1600799520616" duration="1375000" />
       <workItem from="1600801531716" duration="56000" />
       <workItem from="1600864999224" duration="2601000" />
-      <workItem from="1600870786104" duration="969000" />
-    </task>
-    <task id="LOCAL-02460" summary="Correção no &quot;você não quis dizer?&quot;">
-      <created>1599857319144</created>
-      <option name="number" value="02460" />
-      <option name="presentableId" value="LOCAL-02460" />
-      <option name="project" value="LOCAL" />
-      <updated>1599857319144</updated>
+      <workItem from="1600870786104" duration="1625000" />
+      <workItem from="1600880220321" duration="4000" />
+      <workItem from="1600884874131" duration="3312000" />
+      <workItem from="1600892942325" duration="1525000" />
+      <workItem from="1600949139115" duration="601000" />
+      <workItem from="1600954706800" duration="13000" />
+      <workItem from="1600956249106" duration="11000" />
+      <workItem from="1600965673838" duration="619000" />
+      <workItem from="1600972755853" duration="30000" />
+      <workItem from="1600973616941" duration="10000" />
+      <workItem from="1600975949365" duration="13000" />
+      <workItem from="1601053544165" duration="17000" />
+      <workItem from="1601054658292" duration="1713000" />
     </task>
     <task id="LOCAL-02461" summary="Correções pendentes">
       <created>1600089749668</created>
@@ -1046,7 +1095,14 @@
       <option name="project" value="LOCAL" />
       <updated>1600870994779</updated>
     </task>
-    <option name="localTasksCounter" value="2509" />
+    <task id="LOCAL-02509" summary="Modificação para compatibilidade com módulo em desenvolvimento">
+      <created>1600873274162</created>
+      <option name="number" value="02509" />
+      <option name="presentableId" value="LOCAL-02509" />
+      <option name="project" value="LOCAL" />
+      <updated>1600873274162</updated>
+    </task>
+    <option name="localTasksCounter" value="2510" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1112,7 +1168,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Adição de comando para ver os membros do Exceed e preparação para adição de 2 novos animes às cartas" />
     <MESSAGE value="Correção da lista de membros do Exceed" />
     <MESSAGE value="Correção na loja VIP" />
     <MESSAGE value="Redução de preço base das cartas (400 -&gt; 350)" />
@@ -1137,15 +1192,16 @@
     <MESSAGE value="Abandono do Redis (muitos problemas)" />
     <MESSAGE value="Correção pequena" />
     <MESSAGE value="Modificação para compatibilidade com módulo em desenvolvimento" />
-    <option name="LAST_COMMIT_MESSAGE" value="Modificação para compatibilidade com módulo em desenvolvimento" />
+    <MESSAGE value="Implementação do jogo Shoukan (duelo de cartas), mas sem a possibilidade de jogar ainda" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implementação do jogo Shoukan (duelo de cartas), mas sem a possibilidade de jogar ainda" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="338" y="58" key="#Assign_Data_Sources" timestamp="1593003421722">
+    <state x="338" y="58" width="348" height="217" key="#Assign_Data_Sources" timestamp="1601055738397">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="338" y="58" key="#Assign_Data_Sources/0.0.1680.1010@0.0.1680.1010" timestamp="1593003421722" />
+    <state x="338" y="58" width="348" height="217" key="#Assign_Data_Sources/0.0.1680.1010@0.0.1680.1010" timestamp="1601055738397" />
     <state x="416" y="111" key="#Edit_File_Template" timestamp="1593181346573">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1162,11 +1218,15 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="294" y="161" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1597927763665" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1600457054181">
+    <state x="601" y="307" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1600973622351">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="601" y="307" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1600973622351" />
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser" timestamp="1601055330586">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="488" y="71" key="#com.intellij.ide.util.MemberChooser/0.0.1366.768@0.0.1366.768" timestamp="1593920634856" />
-    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1600457054181" />
+    <state x="600" y="93" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1601055330586" />
     <state x="520" y="241" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1599135337715">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1191,11 +1251,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1600870991809">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1601056120619">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1600870991809" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1601056120619" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1248,11 +1308,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1600871014359">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1600873275273">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1600871014359" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1600873275273" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1294,10 +1354,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="465" y="286" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595246935580" />
-    <state x="300" y="114" width="957" height="784" key="find.popup" timestamp="1600201367845">
+    <state x="300" y="114" width="957" height="784" key="find.popup" timestamp="1601056279607">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="300" y="114" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1600201367845" />
+    <state x="300" y="114" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1601056279607" />
     <state x="645" y="400" key="git4idea.ui.GitResetDialog" timestamp="1593018818159">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>

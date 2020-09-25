@@ -18,8 +18,15 @@
 
 package com.kuuhaku.model.persistent;
 
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.Equipment;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -32,8 +39,16 @@ public class Kawaipon {
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String uid = "";
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<KawaiponCard> cards = new HashSet<>();
+
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@ManyToMany(cascade = CascadeType.ALL)
+	private List<Champion> champions = new ArrayList<>();
+
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@ManyToMany(cascade = CascadeType.ALL)
+	private List<Equipment> equipments = new ArrayList<>();
 
 	public String getUid() {
 		return uid;
@@ -61,5 +76,37 @@ public class Kawaipon {
 
 	public void removeCard(KawaiponCard card) {
 		this.cards.remove(card);
+	}
+
+	public List<Champion> getChampions() {
+		return champions;
+	}
+
+	public void setChampions(List<Champion> champions) {
+		this.champions = champions;
+	}
+
+	public void addChampion(Champion champion) {
+		this.champions.add(champion);
+	}
+
+	public void removeChampion(Champion champion) {
+		this.champions.remove(champion);
+	}
+
+	public List<Equipment> getEquipments() {
+		return equipments;
+	}
+
+	public void setEquipments(List<Equipment> equipments) {
+		this.equipments = equipments;
+	}
+
+	public void addEquipment(Equipment equipment) {
+		this.equipments.add(equipment);
+	}
+
+	public void removeEquipment(Equipment equipment) {
+		this.equipments.remove(equipment);
 	}
 }

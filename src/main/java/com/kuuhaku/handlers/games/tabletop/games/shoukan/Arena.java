@@ -1,0 +1,145 @@
+/*
+ * This file is part of Shiro J Bot.
+ * Copyright (C) 2020  Yago Gimenez (KuuHaKu)
+ *
+ * Shiro J Bot is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Shiro J Bot is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
+ */
+
+package com.kuuhaku.handlers.games.tabletop.games.shoukan;
+
+import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
+import com.kuuhaku.model.common.Profile;
+import com.kuuhaku.model.persistent.Account;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+public class Arena {
+	private final Map<Side, List<SlotColumn<Drawable, Drawable>>> slots;
+	private final Map<Side, LinkedList<Drawable>> graveyard;
+
+	public Arena() {
+		this.slots = Map.of(
+				Side.TOP, List.of(
+						new SlotColumn<>(),
+						new SlotColumn<>(),
+						new SlotColumn<>(),
+						new SlotColumn<>(),
+						new SlotColumn<>()
+				),
+				Side.BOTTOM, List.of(
+						new SlotColumn<>(),
+						new SlotColumn<>(),
+						new SlotColumn<>(),
+						new SlotColumn<>(),
+						new SlotColumn<>()
+				)
+		);
+		this.graveyard = Map.of(
+				Side.TOP, new LinkedList<>(),
+				Side.BOTTOM, new LinkedList<>()
+		);
+	}
+
+	public Map<Side, List<SlotColumn<Drawable, Drawable>>> getSlots() {
+		return slots;
+	}
+
+	public Map<Side, LinkedList<Drawable>> getGraveyard() {
+		return graveyard;
+	}
+
+	public BufferedImage render(Map<Side, Hand> hands) {
+		try {
+			BufferedImage bg = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/arena.jpg")));
+			BufferedImage frames = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/frames.png")));
+
+			Graphics2D g2d = bg.createGraphics();
+
+			slots.forEach((key, value) -> {
+				Hand h = hands.get(key);
+				Account acc = AccountDAO.getAccount(hands.get(key).getUser().getId());
+				LinkedList<Drawable> grv = graveyard.get(key);
+				g2d.setColor(Color.white);
+				g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 100));
+
+				Profile.printCenteredString(hands.get(key).getUser().getName(), 626, key == Side.TOP ? 1125 : 499, key == Side.TOP ? 838 : 975, g2d);
+
+				for (int i = 0; i < value.size(); i++) {
+					SlotColumn<Drawable, Drawable> c = value.get(i);
+					switch (key) {
+						case TOP:
+							if (c.getTop() != null) {
+								Drawable d = c.getTop();
+								g2d.drawImage(d.drawCard(acc, d.isFlipped()), 499 + (257 * i), 387, null);
+							}
+							if (c.getBottom() != null) {
+								Drawable d = c.getBottom();
+								g2d.drawImage(d.drawCard(acc, d.isFlipped()), 499 + (257 * i), 0, null);
+							}
+
+							if (grv.size() > 0)
+								g2d.drawImage(grv.peekLast().drawCard(acc, false), 1889, 193, null);
+							if (h.getDeque().size() > 0) {
+								Drawable d = h.getDeque().peek();
+								assert d != null;
+								g2d.drawImage(d.drawCard(acc, true), 137, 193, null);
+							}
+							break;
+						case BOTTOM:
+							if (c.getTop() != null) {
+								Drawable d = c.getTop();
+								g2d.drawImage(d.drawCard(acc, d.isFlipped()), 499 + (257 * i), 1013, null);
+							}
+							if (c.getBottom() != null) {
+								Drawable d = c.getBottom();
+								g2d.drawImage(d.drawCard(acc, d.isFlipped()), 499 + (257 * i), 1400, null);
+							}
+
+							if (grv.size() > 0)
+								g2d.drawImage(grv.peekLast().drawCard(acc, false), 137, 1206, null);
+							if (h.getDeque().size() > 0) {
+								Drawable d = h.getDeque().peek();
+								assert d != null;
+								g2d.drawImage(d.drawCard(acc, true), 1889, 1206, null);
+							}
+							break;
+					}
+
+					float prcnt = h.getHp() / 5000f;
+					g2d.setColor(prcnt > 0.75d ? Color.green : prcnt > 0.5d ? Color.yellow : Color.red);
+					g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 75));
+					g2d.drawString("HP: " + h.getHp(), key == Side.TOP ? 10 : 1762, key == Side.TOP ? 82 : 1638);
+					g2d.setColor(Color.cyan);
+					g2d.drawString("MP: " + h.getMana(), key == Side.TOP ? 10 : 1762, key == Side.TOP ? 178 : 1735);
+				}
+			});
+
+			g2d.drawImage(frames, 0, 0, null);
+			g2d.dispose();
+
+			return bg;
+		} catch (IOException e) {
+			return null;
+		}
+	}
+}
