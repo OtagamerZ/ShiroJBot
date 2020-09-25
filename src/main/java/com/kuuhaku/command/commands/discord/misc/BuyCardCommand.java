@@ -93,7 +93,7 @@ public class BuyCardCommand extends Command {
 
 				String anime = params.stream().filter(s -> s.startsWith("-a") && s.length() > 2).findFirst().orElse(null);
 				if (anime != null) {
-					if (Arrays.stream(AnimeName.values()).noneMatch(a -> a.name().equals(anime.substring(2).toUpperCase()))) {
+					if (Arrays.stream(AnimeName.validValues()).noneMatch(a -> a.name().equals(anime.substring(2).toUpperCase()))) {
 						channel.sendMessage("❌ | Anime inválido, verifique se digitou-o corretamente.").queue();
 						return;
 					}

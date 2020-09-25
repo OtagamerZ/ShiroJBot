@@ -43,7 +43,7 @@ import java.util.Objects;
 import java.util.function.Function;
 
 public class TwitchDrop implements Prize {
-	private final AnimeName anime = AnimeName.values()[Helper.rng(AnimeName.values().length, true)];
+	private final AnimeName anime = AnimeName.validValues()[Helper.rng(AnimeName.validValues().length, true)];
 	private final ExceedEnum exceed = ExceedEnum.values()[Helper.rng(ExceedEnum.values().length, true)];
 	private final int[] values = {
 			1 + Helper.rng((int) CardDAO.totalCards(anime) - 1, false),
