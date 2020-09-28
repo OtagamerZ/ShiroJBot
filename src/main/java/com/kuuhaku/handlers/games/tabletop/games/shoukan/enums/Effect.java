@@ -19,11 +19,9 @@
 package com.kuuhaku.handlers.games.tabletop.games.shoukan.enums;
 
 import com.kuuhaku.controller.postgresql.CardDAO;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Champion;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Hand;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.Shoukan;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.SlotColumn;
+import com.kuuhaku.handlers.games.tabletop.games.shoukan.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.List;
@@ -50,10 +48,50 @@ public enum Effect {
 
 	}),
 	KILL_TYPE((args, defs) -> {
+		List<SlotColumn<Drawable, Drawable>> slots = defs.getLeft()
+				.getArena()
+				.getSlots()
+				.get(defs.getMiddle().getSide() == Side.TOP ? Side.BOTTOM : Side.TOP);
 
+		for (int i = 0; i < slots.size(); i++) {
+			Champion c = (Champion) slots.get(i).getTop();
+			if (c != null && c.getRace() == Race.valueOf(args[0]) && !c.equals(defs.getRight()))
+				defs.getLeft().killCard(
+						defs.getMiddle().getSide() == Side.TOP ? Side.BOTTOM : Side.TOP,
+						i,
+						slots,
+						defs.getLeft().getHands().get(defs.getMiddle().getSide() == Side.TOP ? Side.BOTTOM : Side.TOP)
+				);
+		}
+	}),
+	PURGE_TYPE((args, defs) -> {
+		defs.getLeft()
+				.getArena()
+				.getSlots()
+				.forEach((k, s) -> {
+					for (int i = 0; i < s.size(); i++) {
+						Champion c = (Champion) s.get(i).getTop();
+						if (c != null && c.getRace() == Race.valueOf(args[0]) && !c.equals(defs.getRight()))
+							defs.getLeft().killCard(
+									k,
+									i,
+									s,
+									defs.getLeft().getHands().get(k)
+							);
+					}
+				});
 	}),
 	KILL_EQUIPMENTS((args, defs) -> {
+		defs.getLeft()
+				.getArena()
+				.getSlots()
+				.get(defs.getMiddle().getSide() == Side.TOP ? Side.BOTTOM : Side.TOP)
+				.forEach(s -> {
+					((Equipment) s.getBottom()).setLinkedTo(null);
 
+					defs.getLeft().getArena().getGraveyard().get(defs.getMiddle().getSide() == Side.TOP ? Side.BOTTOM : Side.TOP).add(s.getBottom());
+					s.setBottom(null);
+				});
 	}),
 	REVIVE_CARD((args, defs) -> {
 		Drawable d = defs.getLeft().getArena().getGraveyard().get(defs.getMiddle().getSide()).pollLast();
@@ -71,12 +109,8 @@ public enum Effect {
 			if (slotAvailable == -1) {
 				defs.getMiddle().getCards().add(d);
 			} else {
-				if (defs.getRight().getCard().getId().equalsIgnoreCase("ORIHIME_INOUE") && d.getCard().getId().equals("ICHIGO_KUROSAKI")) {
-					d = CardDAO.getFusionByName("VASTO_LORDE_ICHIGO");
-					assert d != null;
-					slots.get(slotAvailable).setTop(d.copy());
-					return;
-				}
+
+
 				slots.get(slotAvailable).setTop(d);
 			}
 		} else if (d != null) {
@@ -84,16 +118,41 @@ public enum Effect {
 		}
 	}),
 	SWITCH_TO_DEFENSE((args, defs) -> {
-		((Champion) defs.getRight()).setDefending(true);
+		defs.getRight().getLeft().setDefending(true);
+	}),
+	INCREASE_MANA((args, defs) -> {
+		defs.getMiddle().addMana(Integer.parseInt(args[0]));
+	}),
+	INCREASE_HP((args, defs) -> {
+		defs.getMiddle().addHp(Integer.parseInt(args[0]));
+	}),
+	DECREASE_MANA((args, defs) -> {
+		defs.getMiddle().removeMana(Integer.parseInt(args[0]));
+	}),
+	DECREASE_HP((args, defs) -> {
+		defs.getMiddle().removeHp(Integer.parseInt(args[0]));
+	}),
+	LEECH_MANA((args, defs) -> {
+		defs.getLeft().getHands().get(defs.getMiddle().getSide() == Side.TOP ? Side.BOTTOM : Side.TOP).removeMana(Integer.parseInt(args[0]));
+	}),
+	LEECH_HP((args, defs) -> {
+		defs.getLeft().getHands().get(defs.getMiddle().getSide() == Side.TOP ? Side.BOTTOM : Side.TOP).removeHp(Integer.parseInt(args[0]));
+	}),
+	STRONG_VS_TYPE((args, defs) -> {
+	}),
+	WEAK_VS_TYPE((args, defs) -> {
+	}),
+	PARALYZE_CARD((args, defs) -> {
+
 	});
 
-	private final BiConsumer<String[], Triple<Shoukan, Hand, Drawable>> effect;
+	private final BiConsumer<String[], Triple<Shoukan, Hand, Pair<Champion, Champion>>> effect;
 
-	Effect(BiConsumer<String[], Triple<Shoukan, Hand, Drawable>> effect) {
+	Effect(BiConsumer<String[], Triple<Shoukan, Hand, Pair<Champion, Champion>>> effect) {
 		this.effect = effect;
 	}
 
-	public BiConsumer<String[], Triple<Shoukan, Hand, Drawable>> getEffect() {
+	public BiConsumer<String[], Triple<Shoukan, Hand, Pair<Champion, Champion>>> getEffect() {
 		return effect;
 	}
 }

@@ -107,6 +107,7 @@ dependencies {
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib', version: '1.4.0-rc'
     compile group: 'org.knowm.xchart', name: 'xchart', version: '3.6.5'
     compile group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
+    compile group: 'pl.joegreen', name: 'lambda-from-string', version: '1.6'
     implementation 'com.graphql-java:graphql-java:2019-05-08T02-56-27-cca4316'
 }
 
