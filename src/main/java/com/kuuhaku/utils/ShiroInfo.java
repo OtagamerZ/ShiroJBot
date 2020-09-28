@@ -39,6 +39,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.discordbots.api.client.DiscordBotListAPI;
+import pl.joegreen.lambdaFromString.LambdaFactory;
 
 import java.io.File;
 import java.lang.management.ManagementFactory;
@@ -96,6 +97,7 @@ public class ShiroInfo {
 	private static final AudioPlayerManager apm = new DefaultAudioPlayerManager();
 	private static final JDAEvents shiroEvents = new JDAEvents();
 	private static final GsonBuilder JSONFactory = new GsonBuilder();
+	private static final LambdaFactory LFactory = LambdaFactory.get();
 	private static final HttpClientBuilder httpBuilder = HttpClientBuilder.create();
 
 	//STATIC CONSTRUCTOR
@@ -131,6 +133,10 @@ public class ShiroInfo {
 
 	public static GsonBuilder getJSONFactory() {
 		return JSONFactory;
+	}
+
+	public static LambdaFactory getLFactory() {
+		return LFactory;
 	}
 
 	public static String getSupportServerName() {
