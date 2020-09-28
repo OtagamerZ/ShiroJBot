@@ -18,14 +18,16 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Effect;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
+import com.kuuhaku.utils.ShiroInfo;
 import org.apache.commons.lang3.StringUtils;
+import pl.joegreen.lambdaFromString.LambdaCreationException;
+import pl.joegreen.lambdaFromString.TypeReference;
 
 import javax.imageio.ImageIO;
 import javax.persistence.*;
@@ -60,11 +62,8 @@ public class Champion implements Drawable, Cloneable {
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String description;
 
-	@Enumerated(EnumType.STRING)
-	private Effect effect;
-
-	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
-	private String effectArgs;
+	@Column(columnDefinition = "TEXT")
+	private String effect = "";
 
 	@Enumerated(EnumType.STRING)
 	private EffectTrigger trigger;
@@ -210,12 +209,9 @@ public class Champion implements Drawable, Cloneable {
 		return description;
 	}
 
-	public Effect getEffect() {
-		return effect;
-	}
-
-	public String[] getEffectArgs() {
-		return effectArgs.split(",");
+	public EffectParameters getEffect() throws LambdaCreationException {
+		return ShiroInfo.getLFactory().createLambda(effect, new TypeReference<>() {
+		});
 	}
 
 	public EffectTrigger getTrigger() {

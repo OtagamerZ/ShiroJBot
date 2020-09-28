@@ -16,48 +16,23 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.handlers.games.tabletop.games.shoukan.enums;
+package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
-public enum Race {
-	HUMAN,
-	ELF,
-	BESTIAL,
-	UNDEAD,
-	MACHINE,
-	ULTIMATE,
-	DIVINITY,
-	MYSTICAL,
-	CREATURE,
-	SPIRIT,
-	DEMON;
+import org.apache.commons.lang3.tuple.Pair;
 
-	@Override
-	public String toString() {
-		switch (this) {
-			case HUMAN:
-				return "Humano";
-			case ELF:
-				return "Elfo";
-			case BESTIAL:
-				return "Bestial";
-			case UNDEAD:
-				return "Morto-vivo";
-			case MACHINE:
-				return "Máquina";
-			case ULTIMATE:
-				return "Ultimate";
-			case DIVINITY:
-				return "Divindade";
-			case MYSTICAL:
-				return "Místico";
-			case CREATURE:
-				return "Criatura";
-			case SPIRIT:
-				return "Espírito";
-			case DEMON:
-				return "Demônio";
-			default:
-				return null;
-		}
+public abstract class Duelists extends Pair<Champion, Champion> {
+	private Duelists() {
+	}
+
+	public static Duelists of(Champion attacker, Champion defender) {
+		return (Duelists) Pair.of(attacker, defender);
+	}
+
+	public Champion getAttacker() {
+		return getLeft();
+	}
+
+	public Champion getDefender() {
+		return getRight();
 	}
 }

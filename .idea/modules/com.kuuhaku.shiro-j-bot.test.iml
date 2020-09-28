@@ -39,6 +39,7 @@
     <orderEntry type="library" name="Gradle: com.sedmelluq:jda-nas:1.1.0" level="project" />
     <orderEntry type="library" name="Gradle: commons-io:commons-io:2.6" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.commons:commons-text:1.9" level="project" />
+    <orderEntry type="library" name="Gradle: pl.joegreen:lambda-from-string:1.6" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.commons:commons-lang3:3.8.1" level="project" />
     <orderEntry type="library" name="Gradle: com.mchange:c3p0:0.9.5.4" level="project" />
     <orderEntry type="library" name="Gradle: net.coobird:thumbnailator:0.4.8" level="project" />
@@ -117,6 +118,7 @@
     <orderEntry type="library" name="Gradle: com.github.twitch4j.twitch4j:twitch4j-common:1.1.0" level="project" />
     <orderEntry type="library" name="Gradle: com.github.twitch4j.twitch4j:twitch4j-auth:1.1.0" level="project" />
     <orderEntry type="library" name="Gradle: com.sedmelluq:udp-queue:1.0.8" level="project" />
+    <orderEntry type="library" name="Gradle: org.eclipse.jdt.core.compiler:ecj:4.4.2" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-jul:2.11.2" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:jul-to-slf4j:1.7.26" level="project" />
     <orderEntry type="library" name="Gradle: commons-logging:commons-logging:1.2" level="project" />
