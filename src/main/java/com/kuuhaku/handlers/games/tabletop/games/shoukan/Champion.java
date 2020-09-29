@@ -18,7 +18,6 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
@@ -36,6 +35,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 import java.util.*;
+import java.util.function.Function;
 
 @Entity
 @Table(name = "champion")
@@ -64,9 +64,6 @@ public class Champion implements Drawable, Cloneable {
 
 	@Column(columnDefinition = "TEXT")
 	private String effect = "";
-
-	@Enumerated(EnumType.STRING)
-	private EffectTrigger trigger;
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	private Set<String> requiredCards = new HashSet<>();
@@ -116,7 +113,7 @@ public class Champion implements Drawable, Cloneable {
 
 			g2d.setFont(new Font("Arial", Font.BOLD, 11));
 			g2d.setColor(Color.black);
-			g2d.drawString("[" + race.toString().toUpperCase() + (trigger == EffectTrigger.NONE ? "" : "/EFEITO") + "]", 13, 277);
+			g2d.drawString("[" + race.toString().toUpperCase() + (effect.isBlank() ? "" : "/EFEITO") + "]", 13, 277);
 
 			g2d.setFont(new Font("Arial", Font.PLAIN, 11));
 			Profile.drawStringMultiLineNO(g2d, description, 199, 13, 293);
@@ -201,21 +198,25 @@ public class Champion implements Drawable, Cloneable {
 		return atk;
 	}
 
+	public void setAtk(int atk) {
+		this.atk = atk;
+	}
+
 	public int getDef() {
 		return def;
+	}
+
+	public void setDef(int def) {
+		this.def = def;
 	}
 
 	public String getDescription() {
 		return description;
 	}
 
-	public EffectParameters getEffect() throws LambdaCreationException {
+	public Function<EffectParameters, Champion> getEffect() throws LambdaCreationException {
 		return ShiroInfo.getLFactory().createLambda(effect, new TypeReference<>() {
 		});
-	}
-
-	public EffectTrigger getTrigger() {
-		return trigger;
 	}
 
 	public Set<String> getRequiredCards() {
