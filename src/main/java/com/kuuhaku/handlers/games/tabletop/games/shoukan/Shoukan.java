@@ -24,7 +24,6 @@ import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.handlers.games.tabletop.framework.Board;
 import com.kuuhaku.handlers.games.tabletop.framework.Game;
 import com.kuuhaku.handlers.games.tabletop.framework.enums.BoardSize;
-import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.EffectTrigger;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Phase;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
@@ -233,9 +232,6 @@ public class Shoukan extends Game {
 					Champion c = (Champion) s.getTop();
 					if (c != null) {
 						c.setAvailable(true);
-						if (c.getTrigger() == EffectTrigger.ON_TURN) {
-
-						}
 					}
 				});
 
