@@ -21,6 +21,7 @@ package com.kuuhaku.events;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.RelayDAO;
+import com.kuuhaku.controller.sqlite.BlacklistDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.controller.sqlite.MemberDAO;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -106,6 +107,7 @@ public class JDAEvents extends ListenerAdapter {
 	@Override
 	public void onGuildMemberJoin(@NotNull GuildMemberJoinEvent event) {
 		try {
+			if (BlacklistDAO.isBlacklisted(event.getUser())) return;
 			GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
 
 			MemberDAO.addMemberToDB(event.getMember());
@@ -159,6 +161,7 @@ public class JDAEvents extends ListenerAdapter {
 	@Override
 	public void onGuildMemberRemove(@Nonnull GuildMemberRemoveEvent event) {
 		try {
+			if (BlacklistDAO.isBlacklisted(event.getUser())) return;
 			GuildConfig gc = GuildDAO.getGuildById(event.getGuild().getId());
 
 			com.kuuhaku.model.persistent.Member m = MemberDAO.getMemberById(event.getMember().getId() + event.getGuild().getId());
