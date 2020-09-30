@@ -73,23 +73,25 @@ public class TenthMinuteEvent implements Job {
 		mbs.forEach(mb -> {
 			List<Role> roles = new ArrayList<>(mb.getRoles());
 			ExceedEnum ex = ExceedEnum.getByName(ExceedDAO.getExceed(mb.getId()));
-			Role exRole = support.getRoleById(ExceedRole.getByExceed(ex).getId());
+			if (ex != null) {
+				Role exRole = support.getRoleById(ExceedRole.getByExceed(ex).getId());
 
-			if (roles.stream().anyMatch(r -> {
-				ExceedRole role = ExceedRole.getById(r.getId());
-				return role != null && role.getExceed() != ex;
-			})) {
-				roles.removeIf(r -> {
+				if (roles.stream().anyMatch(r -> {
 					ExceedRole role = ExceedRole.getById(r.getId());
 					return role != null && role.getExceed() != ex;
-				});
+				})) {
+					roles.removeIf(r -> {
+						ExceedRole role = ExceedRole.getById(r.getId());
+						return role != null && role.getExceed() != ex;
+					});
 
-				support.modifyMemberRoles(mb, roles).queue();
-			}
+					support.modifyMemberRoles(mb, roles).queue();
+				}
 
-			assert exRole != null;
-			if (roles.stream().noneMatch(r -> r.getId().equals(exRole.getId()))) {
-				support.addRoleToMember(mb, exRole).queue();
+				assert exRole != null;
+				if (roles.stream().noneMatch(r -> r.getId().equals(exRole.getId()))) {
+					support.addRoleToMember(mb, exRole).queue();
+				}
 			}
 		});
 	}
