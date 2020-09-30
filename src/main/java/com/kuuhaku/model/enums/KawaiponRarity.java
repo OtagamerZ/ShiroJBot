@@ -81,6 +81,7 @@ public enum KawaiponRarity {
 				return UNCOMMON;
 			case "rara":
 				return RARE;
+			case "ultra":
 			case "ultra_rara":
 				return ULTRA_RARE;
 			case "lendaria":

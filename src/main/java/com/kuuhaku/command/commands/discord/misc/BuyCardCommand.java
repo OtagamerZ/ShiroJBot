@@ -38,6 +38,7 @@ import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NonNls;
 
@@ -74,13 +75,14 @@ public class BuyCardCommand extends Command {
 		if (args.length < 1 || !StringUtils.isNumeric(args[0])) {
 			AtomicReference<String> byName = new AtomicReference<>(null);
 			AtomicReference<KawaiponRarity> byRarity = new AtomicReference<>(null);
-			AtomicReference<AnimeName> byAnime = new AtomicReference<>(null);
+			AtomicReference<AnimeName[]> byAnime = new AtomicReference<>(new AnimeName[0]);
 			AtomicBoolean onlyFoil = new AtomicBoolean();
 			AtomicBoolean onlyMine = new AtomicBoolean();
 
 			if (args.length > 0) {
 				List<String> params = List.of(args);
 				byName.set(params.stream().filter(s -> s.startsWith("-n") && s.length() > 2).findFirst().orElse(null));
+				if (byName.get() != null) byName.set(byName.get().substring(2));
 
 				String rarity = params.stream().filter(s -> s.startsWith("-r") && s.length() > 2).findFirst().orElse(null);
 				if (rarity != null) {
@@ -93,11 +95,14 @@ public class BuyCardCommand extends Command {
 
 				String anime = params.stream().filter(s -> s.startsWith("-a") && s.length() > 2).findFirst().orElse(null);
 				if (anime != null) {
-					if (Arrays.stream(AnimeName.validValues()).noneMatch(a -> a.name().equals(anime.substring(2).toUpperCase()))) {
+					AnimeName[] an = Arrays.stream(AnimeName.validValues())
+							.filter(a -> StringUtils.containsIgnoreCase(a.name(), anime.substring(2).toUpperCase()))
+							.toArray(AnimeName[]::new);
+					if (an.length == 0) {
 						channel.sendMessage("❌ | Anime inválido, verifique se digitou-o corretamente.").queue();
 						return;
 					}
-					byAnime.set(AnimeName.valueOf(anime.substring(2).toUpperCase()));
+					byAnime.set(an);
 				}
 
 				onlyFoil.set(params.stream().anyMatch("-c"::equalsIgnoreCase));
@@ -123,7 +128,7 @@ public class BuyCardCommand extends Command {
 			List<CardMarket> cards = CardMarketDAO.getCards().stream()
 					.filter(cm -> byName.get() == null || StringUtils.containsIgnoreCase(cm.getCard().getName(), byName.get().substring(2)))
 					.filter(cm -> byRarity.get() == null || byRarity.get().equals(cm.getCard().getCard().getRarity()))
-					.filter(cm -> byAnime.get() == null || byAnime.get().equals(cm.getCard().getCard().getAnime()))
+					.filter(cm -> byAnime.get() == null || ArrayUtils.contains(byAnime.get(), cm.getCard().getCard().getAnime()))
 					.filter(cm -> !onlyFoil.get() || cm.getCard().isFoil())
 					.filter(cm -> onlyMine.get() ? cm.getSeller().equals(author.getId()) : cm.getPrice() <= (cm.getCard().getCard().getRarity().getIndex() * Helper.BASE_CARD_PRICE * 50 * (cm.getCard().isFoil() ? 2 : 1)))
 					.sorted(Comparator
