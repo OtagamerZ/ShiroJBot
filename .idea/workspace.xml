@@ -15,6 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/BuyCardCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -718,13 +719,8 @@
       <workItem from="1601323565399" duration="1093000" />
       <workItem from="1601324789216" duration="1974000" />
       <workItem from="1601380944230" duration="5941000" />
-    </task>
-    <task id="LOCAL-02469" summary="Usuários com dívida ativa agora podem vender cartas, à um preço mínimo de 2x o valor base da carta;&#10;Trocada a palavra &quot;débito&quot; por &quot;dívida&quot;;&#10;Adição de confirmação antes de obter um empréstimo;">
-      <created>1600179613715</created>
-      <option name="number" value="02469" />
-      <option name="presentableId" value="LOCAL-02469" />
-      <option name="project" value="LOCAL" />
-      <updated>1600179613715</updated>
+      <workItem from="1601468440162" duration="809000" />
+      <workItem from="1601484191032" duration="337000" />
     </task>
     <task id="LOCAL-02470" summary="Quantidade de cartas por linha aumentada de 5 para 10;&#10;Novas cartas: Black Rock Shooter">
       <created>1600196498972</created>
@@ -1062,7 +1058,14 @@
       <option name="project" value="LOCAL" />
       <updated>1601381502890</updated>
     </task>
-    <option name="localTasksCounter" value="2518" />
+    <task id="LOCAL-02518" summary="Correção no designador automático de cargos de Exceed">
+      <created>1601468551756</created>
+      <option name="number" value="02518" />
+      <option name="presentableId" value="LOCAL-02518" />
+      <option name="project" value="LOCAL" />
+      <updated>1601468551756</updated>
+    </task>
+    <option name="localTasksCounter" value="2519" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1128,7 +1131,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/node_modules/gh-pages/.cache/github.com!OtagamerZ!ShiroJBot.git" />
     </ignored-roots>
-    <MESSAGE value="Correção da lista de membros do Exceed" />
     <MESSAGE value="Correção na loja VIP" />
     <MESSAGE value="Redução de preço base das cartas (400 -&gt; 350)" />
     <MESSAGE value="Usuários com dívida ativa agora podem vender cartas, à um preço mínimo de 2x o valor base da carta;&#10;Trocada a palavra &quot;débito&quot; por &quot;dívida&quot;;&#10;Adição de confirmação antes de obter um empréstimo;" />
@@ -1153,7 +1155,8 @@
     <MESSAGE value="Correção pequena" />
     <MESSAGE value="Modificação para compatibilidade com módulo em desenvolvimento" />
     <MESSAGE value="Implementação do jogo Shoukan (duelo de cartas), mas sem a possibilidade de jogar ainda" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implementação do jogo Shoukan (duelo de cartas), mas sem a possibilidade de jogar ainda" />
+    <MESSAGE value="Correção no designador automático de cargos de Exceed" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção no designador automático de cargos de Exceed" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1211,11 +1214,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1601381500177">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1601468548810">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1601381500177" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1601468548810" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1268,11 +1271,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1601381504243">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1601468553546">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1601381504243" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1601468553546" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
