@@ -21,6 +21,7 @@ package com.kuuhaku.events;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.MemberDAO;
 import com.kuuhaku.controller.postgresql.TagDAO;
+import com.kuuhaku.controller.sqlite.BlacklistDAO;
 import com.kuuhaku.controller.sqlite.GuildDAO;
 import com.kuuhaku.model.common.RelayBlockList;
 import com.kuuhaku.model.persistent.Member;
@@ -92,6 +93,8 @@ public class JibrilEvents extends ListenerAdapter {
 				rawMsgNoPrefix = rawMessage.substring(prefix.length()).trim();
 				commandName = rawMsgNoPrefix.split(" ")[0].trim();
 			}
+
+			if (BlacklistDAO.isBlacklisted(event.getAuthor())) return;
 
 			if (!rawMsgNoPrefix.isBlank()) {
 				if (commandName.equalsIgnoreCase("reboot") && ShiroInfo.getDevelopers().contains(event.getAuthor().getId())) {
