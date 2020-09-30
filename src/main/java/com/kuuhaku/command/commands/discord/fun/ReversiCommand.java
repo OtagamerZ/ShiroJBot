@@ -101,7 +101,7 @@ public class ReversiCommand extends Command {
 						}
 
 						//Main.getInfo().getGames().put(id, t);
-						ms.delete().queue(null, Helper::doNothing);
+						s.delete().queue(null, Helper::doNothing);
 						t.start();
 					}
 				}), true, 1, TimeUnit.MINUTES));
