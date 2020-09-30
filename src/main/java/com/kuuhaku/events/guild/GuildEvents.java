@@ -112,7 +112,9 @@ public class GuildEvents extends ListenerAdapter {
 				return;
 			}
 
-			try {
+			boolean blacklisted = BlacklistDAO.isBlacklisted(author);
+
+			if (!blacklisted) try {
 				MemberDAO.getMemberById(author.getId() + guild.getId());
 			} catch (NoResultException e) {
 				MemberDAO.addMemberToDB(member);
@@ -195,7 +197,7 @@ public class GuildEvents extends ListenerAdapter {
 						} catch (InsufficientPermissionException ignore) {
 						}
 						return;
-					} else if (BlacklistDAO.isBlacklisted(author)) {
+					} else if (blacklisted) {
 						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_user-blacklisted")).queue();
 						return;
 					} else if (Main.getInfo().getRatelimit().getIfPresent(author.getId()) != null) {
@@ -210,7 +212,7 @@ public class GuildEvents extends ListenerAdapter {
 				}
 			}
 
-			if (!found && !author.isBot()) {
+			if (!found && !author.isBot() && !blacklisted) {
 				GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 				Account acc = AccountDAO.getAccount(author.getId());
