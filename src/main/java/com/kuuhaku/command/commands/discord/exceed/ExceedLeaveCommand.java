@@ -59,7 +59,8 @@ public class ExceedLeaveCommand extends Command {
 			return;
 		}
 
-		channel.sendMessage(":warning: | Sair da " + em.getExceed() + " além de reduzir seu XP pela metade fará com que você não possa escolher outro Exceed até o próximo mês. Deseja confirmar sua escolha?").queue(s ->
+		String name = em.getExceed();
+		channel.sendMessage(":warning: | Sair da " + name + " além de reduzir seu XP pela metade fará com que você não possa escolher outro Exceed até o próximo mês. Deseja confirmar sua escolha?").queue(s ->
 				Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 					if (mb.getId().equals(author.getId())) {
 						List<com.kuuhaku.model.persistent.Member> mbs = MemberDAO.getMemberByMid(mb.getId());
@@ -71,7 +72,8 @@ public class ExceedLeaveCommand extends Command {
 						em.setBlocked(true);
 						em.setExceed("");
 						ExceedDAO.joinExceed(em);
-						ms.delete().queue(null, Helper::doNothing);
+						s.delete().queue(null, Helper::doNothing);
+						channel.sendMessage("Você saiu da " + name + " com sucesso!").queue();
 					}
 				}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
 		);
