@@ -75,7 +75,7 @@ public class BuyCardCommand extends Command {
 		if (args.length < 1 || !StringUtils.isNumeric(args[0])) {
 			AtomicReference<String> byName = new AtomicReference<>(null);
 			AtomicReference<KawaiponRarity> byRarity = new AtomicReference<>(null);
-			AtomicReference<AnimeName[]> byAnime = new AtomicReference<>(new AnimeName[0]);
+			AtomicReference<AnimeName[]> byAnime = new AtomicReference<>(null);
 			AtomicBoolean onlyFoil = new AtomicBoolean();
 			AtomicBoolean onlyMine = new AtomicBoolean();
 
