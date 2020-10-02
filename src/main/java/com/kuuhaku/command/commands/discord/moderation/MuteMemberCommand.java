@@ -72,16 +72,16 @@ public class MuteMemberCommand extends Command {
 			channel.sendMessage("❌ | Você precisa informar um motivo.").queue();
 			return;
 		} else if (!member.hasPermission(Permission.MESSAGE_MANAGE)) {
-			channel.sendMessage("❌ | Você não possui permissão para punir membros.").queue();
+			channel.sendMessage("❌ | Você não possui permissão para silenciar membros.").queue();
 			return;
 		} else if (!Helper.hasRoleHigherThan(member, message.getMentionedMembers().get(0))) {
-			channel.sendMessage("❌ | Você não pode punir membros que possuem o mesmo cargo ou maior.").queue();
+			channel.sendMessage("❌ | Você não pode silenciar membros que possuem o mesmo cargo ou maior.").queue();
 			return;
 		} else if (ShiroInfo.getDevelopers().contains(message.getMentionedUsers().get(0).getId())) {
-			channel.sendMessage("❌ | Não posso punir meus desenvolvedores, faça isso manualmente.").queue();
+			channel.sendMessage("❌ | Não posso silenciar meus desenvolvedores, faça isso manualmente.").queue();
 			return;
 		} else if (gc.getCargoMute() == null || gc.getCargoMute().isEmpty()) {
-			channel.sendMessage("❌ | Nenhum cargo de punição configurado neste servidor.").queue();
+			channel.sendMessage("❌ | Nenhum cargo de mute configurado neste servidor.").queue();
 			return;
 		} else if (MemberDAO.getMutedMemberById(message.getMentionedMembers().get(0).getId()) != null && MemberDAO.getMutedMemberById(message.getMentionedUsers().get(0).getId()).isMuted()) {
 			channel.sendMessage("❌ | Este membro já está silenciado.").queue();

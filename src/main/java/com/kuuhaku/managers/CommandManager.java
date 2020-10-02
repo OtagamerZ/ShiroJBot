@@ -226,6 +226,9 @@ public class CommandManager {
 			put(ModifyRulesCommand.class, new Argument(
 					"regra", new String[]{"rule", "r"}, "req_rule-index", "cmd_modify-rule", MODERACAO, false
 			));
+			put(UnmuteMemberCommand.class, new Argument(
+					"unmute", new String[]{"desmutar", "dessilenciar", "unsilence"}, "req_mention", "cmd_unmute", MODERACAO, false
+			));
 
 			//INFORMATION
 			put(ComandosCommand.class, new Argument(
