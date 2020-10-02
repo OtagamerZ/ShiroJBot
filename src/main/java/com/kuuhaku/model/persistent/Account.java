@@ -19,11 +19,10 @@
 package com.kuuhaku.model.persistent;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.ExceedDAO;
-import com.kuuhaku.controller.postgresql.TransactionDAO;
+import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.FrameColor;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.enums.CreditLoan;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -80,6 +79,9 @@ public class Account {
 
 	@Enumerated(value = EnumType.STRING)
 	private FrameColor frame;
+
+	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
+	private String ultimate = "";
 
 	public String getUserId() {
 		return userId;
@@ -270,5 +272,20 @@ public class Account {
 
 	public void setFrame(FrameColor frame) {
 		this.frame = frame;
+	}
+
+	public String getUltimate() {
+		if (ultimate != null && !ultimate.isBlank()) {
+			Kawaipon kp = KawaiponDAO.getKawaipon(userId);
+
+			AnimeName an = AnimeName.valueOf(ultimate);
+			if (CardDAO.totalCards(an) == kp.getCards().stream().filter(k -> k.getCard().getAnime().equals(an) && !k.isFoil()).count())
+				return ultimate;
+		}
+		return "";
+	}
+
+	public void setUltimate(String ultimate) {
+		this.ultimate = ultimate;
 	}
 }
