@@ -297,6 +297,9 @@ public class CommandManager {
 			put(CardValueCommand.class, new Argument(
 					"valor", new String[]{"value"}, "req_card", "cmd_card-value", INFO, false
 			));
+			put(ShoukanDeckCommand.class, new Argument(
+					"deck", "cmd_shoukan-deck", INFO, false
+			));
 
 			//MISC
 			put(BackgroundCommand.class, new Argument(
@@ -412,6 +415,9 @@ public class CommandManager {
 			));
 			put(UseConsumableCommand.class, new Argument(
 					"usar", new String[]{"use"}, REQ_ITEM, "cmd_use-item", MISC, false
+			));
+			put(FrameColorCommand.class, new Argument(
+					"cordaborda", new String[]{"borda", "framecolor", "frame"}, "req_frame-color", "cmd_frame-color", MISC, true
 			));
 
 			//FUN

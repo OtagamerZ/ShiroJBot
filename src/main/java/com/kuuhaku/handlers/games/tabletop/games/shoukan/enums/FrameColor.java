@@ -18,19 +18,31 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan.enums;
 
+import com.kuuhaku.controller.postgresql.CardDAO;
+import com.kuuhaku.model.enums.AnimeName;
+import com.kuuhaku.model.persistent.Account;
+
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 
 public enum FrameColor {
-	PINK,
-	PURPLE,
-	BLUE,
-	CYAN,
-	GREEN,
-	YELLOW,
-	RED;
+	PINK("A cor característica da Shiro, batalhe com estratégia e perspicácia!"),
+	PURPLE("A cor de Imanity, seja o representante da peça rei!"),
+	BLUE("A cor da sabedoria, conquiste seus inimigos com calma e precisão!"),
+	CYAN("A cor de Seiren, divirta-se encurralando seus oponentes!"),
+	GREEN("A cor da natureza, canalize o poder de Disboard no seu deck!"),
+	YELLOW("A cor de Werebeast, mostre o poder da tecnologia e das nekos!"),
+	RED("A cor do combate, mostre a dominância de suas invocações!"),
+	GREY("A cor neutra, lute para vencer e apenas vencer!");
+
+	private final String description;
+
+	FrameColor(String description) {
+		this.description = description;
+	}
 
 	public BufferedImage getFront() {
 		try {
@@ -40,9 +52,21 @@ public enum FrameColor {
 		}
 	}
 
-	public BufferedImage getBack() {
+	public BufferedImage getBack(Account acc) {
 		try {
-			return ImageIO.read(Objects.requireNonNull(FrameColor.class.getClassLoader().getResourceAsStream("shoukan/frames/card_back_" + name().toLowerCase() + ".png")));
+			boolean withUlt = !acc.getUltimate().isBlank();
+			BufferedImage cover = ImageIO.read(Objects.requireNonNull(FrameColor.class.getClassLoader().getResourceAsStream("shoukan/frames/card_back_" + name().toLowerCase() + (withUlt ? "_t" : "") + ".png")));
+			BufferedImage canvas = new BufferedImage(cover.getWidth(), cover.getHeight(), BufferedImage.TYPE_INT_RGB);
+			Graphics2D g2d = canvas.createGraphics();
+
+			if (withUlt) {
+				AnimeName an = AnimeName.valueOf(acc.getUltimate());
+				g2d.drawImage(CardDAO.getUltimate(an).drawCard(false), 26, 44, 172, 268, null);
+			}
+
+			g2d.drawImage(cover, 0, 0, null);
+
+			return canvas;
 		} catch (IOException e) {
 			return null;
 		}
@@ -53,6 +77,34 @@ public enum FrameColor {
 			return ImageIO.read(Objects.requireNonNull(FrameColor.class.getClassLoader().getResourceAsStream("shoukan/frames/card_front_equip_" + name().toLowerCase() + ".png")));
 		} catch (IOException e) {
 			return null;
+		}
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	@Override
+	public String toString() {
+		switch (this) {
+			case PINK:
+				return "Rosa";
+			case PURPLE:
+				return "Roxo";
+			case BLUE:
+				return "Azul";
+			case CYAN:
+				return "Ciano";
+			case GREEN:
+				return "Verde";
+			case YELLOW:
+				return "Amarelo";
+			case RED:
+				return "Vermelho";
+			case GREY:
+				return "Cinza";
+			default:
+				return null;
 		}
 	}
 }
