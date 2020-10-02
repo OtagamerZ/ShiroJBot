@@ -69,10 +69,10 @@ public class Champion implements Drawable, Cloneable {
 	private transient boolean flipped = false;
 	private transient boolean available = true;
 	private transient boolean defending = false;
-	private transient List<Equipment> linkedTo;
-	private transient Bonus bonus;
-	private transient int mAtk;
-	private transient int mDef;
+	private transient List<Equipment> linkedTo = new ArrayList<>();
+	private transient Bonus bonus = new Bonus();
+	private transient int mAtk = 0;
+	private transient int mDef = 0;
 
 	@Override
 	public BufferedImage drawCard(Account acc, boolean flipped) {
