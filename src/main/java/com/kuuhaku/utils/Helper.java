@@ -523,7 +523,7 @@ public class Helper {
 		Guild g = Main.getInfo().getGuildByID(gc.getGuildID());
 
 		ja.keySet().forEach(k -> {
-			JSONObject jo = ja.getJSONObject(k);
+			JSONObject jo = Helper.getOr(ja.getJSONObject(k), new JSONObject());
 			Map<String, BiConsumer<Member, Message>> buttons = new LinkedHashMap<>();
 
 			TextChannel channel = g.getTextChannelById(jo.getString("canalId"));
