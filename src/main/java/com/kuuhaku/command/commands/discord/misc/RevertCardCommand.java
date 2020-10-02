@@ -95,9 +95,9 @@ public class RevertCardCommand extends Command {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		eb.setTitle("Por favor confirme!");
 		eb.setDescription("Sua carta senshi " + kc.getName() + " será convertida para carta kawaipon e será adicionada à sua coleção, por favor clique no botão abaixo para confirmar a conversão.");
-		eb.setImage("attachment://card.jpg");
+		eb.setImage("attachment://card.png");
 
-		channel.sendMessage(eb.build()).addFile(Helper.getBytes(kc.getCard().drawCard(false)), "card.jpg").queue(s ->
+		channel.sendMessage(eb.build()).addFile(Helper.getBytes(kc.getCard().drawCard(false), "png"), "card.png").queue(s ->
 				Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
 					kp.addCard(kc);
 					kp.removeChampion(c);
