@@ -18,7 +18,6 @@
 
 package com.kuuhaku.command.commands.discord.exceed;
 
-import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
@@ -150,7 +149,7 @@ public class ExceedSelectCommand extends Command {
 				String ex = ExceedDAO.getExceed(author.getId());
 
 				m.editMessage("Exceed escolhido com sucesso, você agora pertence à **" + ex + "**. Entre no servidor de suporte para utilizar o Tet para conversar com outros " + ex + "s!").queue(null, Helper::doNothing);
-				ExceedDAO.getExceedMembers(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId()))).stream().map(ExceedMember::getId).forEach(e -> {
+				/*ExceedDAO.getExceedMembers(ExceedEnum.getByName(ExceedDAO.getExceed(author.getId()))).stream().map(ExceedMember::getId).forEach(e -> {
 							User u = Main.getInfo().getUserByID(e);
 							if (u != null) {
 								u.openPrivateChannel().queue(c -> {
@@ -161,7 +160,7 @@ public class ExceedSelectCommand extends Command {
 								}, Helper::doNothing);
 							}
 						}
-				);
+				);*/
 			} else {
 				m.editMessage("❌ | Você já pertence à um exceed, não é possível trocá-lo.").queue();
 			}
