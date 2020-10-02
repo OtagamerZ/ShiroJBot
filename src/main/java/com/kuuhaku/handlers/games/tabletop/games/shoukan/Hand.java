@@ -50,14 +50,29 @@ public class Hand {
 		redrawHand();
 	}
 
-	public void draw() throws NoSuchElementException {
-		cards.add(deque.removeFirst().copy());
+	public void draw() {
+		try {
+			cards.add(deque.removeFirst().copy());
+		} catch (NoSuchElementException ignore) {
+		}
 	}
 
-	public void draw(Card card) throws NoSuchElementException {
-		Drawable dr = deque.stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow().copy();
-		deque.remove(dr);
-		cards.add(dr);
+	public void draw(Card card) {
+		try {
+			Drawable dr = deque.stream().filter(c -> c.getCard().equals(card)).findFirst().orElseThrow().copy();
+			deque.remove(dr);
+			cards.add(dr);
+		} catch (NoSuchElementException ignore) {
+		}
+	}
+
+	public void drawEquipment() {
+		try {
+			Drawable dr = deque.stream().filter(c -> c instanceof Equipment).findFirst().orElseThrow().copy();
+			deque.remove(dr);
+			cards.add(dr);
+		} catch (NoSuchElementException ignore) {
+		}
 	}
 
 	public void redrawHand() {
@@ -81,7 +96,7 @@ public class Hand {
 	}
 
 	public void showHand() {
-		BufferedImage bi = new BufferedImage(cards.size() * (225 + 6), 450, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bi = new BufferedImage(Math.max(5, cards.size()) * 300, 450, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -93,13 +108,13 @@ public class Hand {
 		for (int i = 0; i < cards.size(); i++) {
 			g2d.drawImage(cards.get(i).drawCard(acc, false), bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 100, null);
 			if (cards.get(i).isAvailable())
-				Profile.printCenteredString(String.valueOf(i), 225, bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 90, g2d);
+				Profile.printCenteredString(String.valueOf(i + 1), 225, bi.getWidth() / (cards.size() + 1) * (i + 1) - (225 / 2), 90, g2d);
 		}
 
 		g2d.dispose();
 
 		user.openPrivateChannel().complete()
-				.sendMessage("Escolha uma carta para jogar ou digite `finalizar` para encerrar sua vez.")
+				.sendMessage("Escolha uma carta para jogar ou use os botões na mensagem enviada para render-se, comprar uma carta ou mudar de turno.")
 				.addFile(Helper.getBytes(bi), "hand.png")
 				.queue();
 	}
