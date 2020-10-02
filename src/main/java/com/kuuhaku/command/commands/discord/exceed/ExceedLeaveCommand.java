@@ -71,7 +71,7 @@ public class ExceedLeaveCommand extends Command {
 						});
 						em.setBlocked(true);
 						em.setExceed("");
-						ExceedDAO.joinExceed(em);
+						ExceedDAO.saveExceedMember(em);
 						s.delete().queue(null, Helper::doNothing);
 						channel.sendMessage("Você saiu da " + name + " com sucesso!").queue();
 					}

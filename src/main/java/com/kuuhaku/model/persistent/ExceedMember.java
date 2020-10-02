@@ -34,6 +34,9 @@ public class ExceedMember {
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String exceed = "";
 
+	@Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
+	private long contribution = 0;
+
 	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
 	private boolean blocked = false;
 
@@ -67,6 +70,18 @@ public class ExceedMember {
 
 	public void setBlocked(boolean blocked) {
 		this.blocked = blocked;
+	}
+
+	public long getContribution() {
+		return contribution;
+	}
+
+	public void addContribution(long amount) {
+		this.contribution += amount;
+	}
+
+	public void resetContribution() {
+		this.contribution = 0;
 	}
 
 	@Override
