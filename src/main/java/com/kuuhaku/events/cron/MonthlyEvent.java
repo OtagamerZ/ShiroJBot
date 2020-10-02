@@ -20,6 +20,7 @@ package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
+import com.kuuhaku.controller.postgresql.DynamicParameterDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.LotteryDAO;
 import com.kuuhaku.controller.sqlite.KGotchiDAO;
@@ -38,6 +39,8 @@ import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,8 +49,12 @@ public class MonthlyEvent implements Job {
 
 	@Override
 	public void execute(JobExecutionContext context) {
+		call();
+	}
+
+	public static void call() {
 		ExceedDAO.markWinner(ExceedDAO.findWinner());
-		Helper.logger(this.getClass()).info("Vencedor mensal: " + ExceedDAO.getWinner());
+		Helper.logger(MonthlyEvent.class).info("Vencedor mensal: " + ExceedDAO.getWinner());
 
 		String ex = ExceedDAO.getWinner();
 		ExceedDAO.getExceedMembers(ExceedEnum.getByName(ex)).forEach(em -> {
@@ -90,23 +97,23 @@ public class MonthlyEvent implements Job {
 		if (winners.size() == 0) {
 			chn.sendMessage(
 					"As dezenas sorteadas foram `" + String.join(" ", dozens) + "`.\n" +
-							"Como não houveram vencedores, o prêmio de " + value.getValue() + " créditos será acumulado para o próximo mês!"
+					"Como não houveram vencedores, o prêmio de " + value.getValue() + " créditos será acumulado para o próximo mês!"
 			).queue();
 		} else if (winners.size() == 1) {
 			chn.sendMessage(
 					"As dezenas sorteadas foram `" + String.join(" ", dozens) + "`.\n" +
-							"O vencedor de " + value.getValue() + " créditos foi " + Main.getInfo().getUserByID(winners.get(0).getUid()).getName() + ", parabéns!"
+					"O vencedor de " + value.getValue() + " créditos foi " + Main.getInfo().getUserByID(winners.get(0).getUid()).getName() + ", parabéns!"
 			).queue();
 		} else {
 			chn.sendMessage(
 					"As dezenas sorteadas foram `" + String.join(" ", dozens) + "`.\n" +
-							"Os " + winners.size() + " vencedores dividirão em partes iguais o prêmio de " + value.getValue() + " créditos, parabéns!!"
+					"Os " + winners.size() + " vencedores dividirão em partes iguais o prêmio de " + value.getValue() + " créditos, parabéns!!"
 			).queue();
 		}
 
 		winners.forEach(l -> {
 			Account acc = AccountDAO.getAccount(l.getUid());
-			acc.addCredit(value.getValue() / winners.size(), this.getClass());
+			acc.addCredit(value.getValue() / winners.size(), MonthlyEvent.class);
 			AccountDAO.saveAccount(acc);
 
 			Main.getInfo().getUserByID(l.getUid()).openPrivateChannel().queue(c -> {
@@ -115,5 +122,6 @@ public class MonthlyEvent implements Job {
 		});
 
 		LotteryDAO.closeLotteries();
+		DynamicParameterDAO.setParam("last_upd_month", String.valueOf(OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).getMonthValue()));
 	}
 }

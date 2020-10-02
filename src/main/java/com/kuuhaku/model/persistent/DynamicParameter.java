@@ -33,6 +33,13 @@ public class DynamicParameter {
 	@Column(columnDefinition = "VARCHAR(191) NOT NULL DEFAULT ''")
 	private String value = "";
 
+	public DynamicParameter() {
+	}
+
+	public DynamicParameter(String param) {
+		this.param = param;
+	}
+
 	public String getParam() {
 		return param;
 	}
