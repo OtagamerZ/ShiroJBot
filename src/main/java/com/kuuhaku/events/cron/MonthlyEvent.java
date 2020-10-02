@@ -74,8 +74,11 @@ public class MonthlyEvent implements Job {
 		List<Kawaigotchi> kgs = KGotchiDAO.getAllKawaigotchi();
 
 		kgs.forEach(k -> {
-			if (k.getDiedAt().plusMonths(1).isBefore(LocalDateTime.now()) || k.getOffSince().plusMonths(1).isBefore(LocalDateTime.now()))
-				KGotchiDAO.deleteKawaigotchi(k);
+			try {
+				if (k.getDiedAt().plusMonths(1).isBefore(LocalDateTime.now()) || k.getOffSince().plusMonths(1).isBefore(LocalDateTime.now()))
+					KGotchiDAO.deleteKawaigotchi(k);
+			} catch (NullPointerException ignore) {
+			}
 		});
 
 		String[] dozens = new String[6];
