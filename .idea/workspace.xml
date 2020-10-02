@@ -13,14 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/ConvertCardCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/RevertCardCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/FrameColorCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/misc/FrameColorCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/managers/CommandManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/locale_pt.properties" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -742,21 +735,7 @@
       <workItem from="1601640555291" duration="732000" />
       <workItem from="1601641352457" duration="11000" />
       <workItem from="1601643888109" duration="1334000" />
-      <workItem from="1601647072724" duration="16452000" />
-    </task>
-    <task id="LOCAL-02494" summary="Descarte de buffers após a geração das linhas da coleção de cartas">
-      <created>1600449665483</created>
-      <option name="number" value="02494" />
-      <option name="presentableId" value="LOCAL-02494" />
-      <option name="project" value="LOCAL" />
-      <updated>1600449665483</updated>
-    </task>
-    <task id="LOCAL-02495" summary="Descarte de buffers após a geração das linhas da coleção de cartas">
-      <created>1600449698022</created>
-      <option name="number" value="02495" />
-      <option name="presentableId" value="LOCAL-02495" />
-      <option name="project" value="LOCAL" />
-      <updated>1600449698022</updated>
+      <workItem from="1601647072724" duration="16766000" />
     </task>
     <task id="LOCAL-02496" summary="Agora a coleção de cartas usa o CDN da Shiro">
       <created>1600458169633</created>
@@ -1087,7 +1066,21 @@
       <option name="project" value="LOCAL" />
       <updated>1601666290335</updated>
     </task>
-    <option name="localTasksCounter" value="2543" />
+    <task id="LOCAL-02543" summary="Novos comandos referentes ao módulo Shoukan">
+      <created>1601667821171</created>
+      <option name="number" value="02543" />
+      <option name="presentableId" value="LOCAL-02543" />
+      <option name="project" value="LOCAL" />
+      <updated>1601667821171</updated>
+    </task>
+    <task id="LOCAL-02544" summary="Novos comandos referentes ao módulo Shoukan">
+      <created>1601668010495</created>
+      <option name="number" value="02544" />
+      <option name="presentableId" value="LOCAL-02544" />
+      <option name="project" value="LOCAL" />
+      <updated>1601668010495</updated>
+    </task>
+    <option name="localTasksCounter" value="2545" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1236,11 +1229,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1601666287231">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1601668007806">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1601666287231" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1601668007806" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1297,11 +1290,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1601666302251">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1601668015880">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1601666302251" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1601668015880" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
