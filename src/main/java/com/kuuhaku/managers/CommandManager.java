@@ -422,6 +422,12 @@ public class CommandManager {
 			put(FrameBackgroundCommand.class, new Argument(
 					"fundododeck", new String[]{"deckbg"}, "req_ultimate", "cmd_frame-background", MISC, false
 			));
+			put(ConvertCardCommand.class, new Argument(
+					"converter", new String[]{"convert"}, "req_card", "cmd_convert-card", MISC, true
+			));
+			put(RevertCardCommand.class, new Argument(
+					"reverter", new String[]{"revert"}, "req_card", "cmd_revert-card", MISC, true
+			));
 
 			//FUN
 			put(SadButTrueCommand.class, new Argument(
