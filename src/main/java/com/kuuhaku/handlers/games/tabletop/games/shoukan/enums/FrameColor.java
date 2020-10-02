@@ -26,6 +26,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Objects;
 
 public enum FrameColor {
@@ -82,6 +83,10 @@ public enum FrameColor {
 
 	public String getDescription() {
 		return description;
+	}
+
+	public static FrameColor getByName(String name) {
+		return Arrays.stream(values()).filter(fc -> fc.name().equalsIgnoreCase(name) || fc.toString().equalsIgnoreCase(name)).findFirst().orElse(null);
 	}
 
 	@Override
