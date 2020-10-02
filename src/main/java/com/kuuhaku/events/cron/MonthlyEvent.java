@@ -21,18 +21,15 @@ package com.kuuhaku.events.cron;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.DynamicParameterDAO;
-import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.LotteryDAO;
 import com.kuuhaku.controller.sqlite.KGotchiDAO;
 import com.kuuhaku.handlers.games.kawaigotchi.Kawaigotchi;
-import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Lottery;
 import com.kuuhaku.model.persistent.LotteryValue;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.Job;
 import org.quartz.JobDetail;
@@ -53,6 +50,7 @@ public class MonthlyEvent implements Job {
 	}
 
 	public static void call() {
+		/*
 		ExceedDAO.markWinner(ExceedDAO.findWinner());
 		Helper.logger(MonthlyEvent.class).info("Vencedor mensal: " + ExceedDAO.getWinner());
 
@@ -70,6 +68,7 @@ public class MonthlyEvent implements Job {
 		);
 
 		ExceedDAO.unblock();
+				 */
 
 		List<Kawaigotchi> kgs = KGotchiDAO.getAllKawaigotchi();
 
