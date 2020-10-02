@@ -92,8 +92,11 @@ public class Card {
 
 	public BufferedImage drawCardNoBorder() {
 		try {
-			return ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream(id + ".png")));
-		} catch (IOException e) {
+			byte[] cardBytes = Main.getInfo().getCardCache().get(id, () -> FileUtils.readFileToByteArray(new File(System.getenv("CARDS_PATH"), id + ".png")));
+			try (ByteArrayInputStream bais = new ByteArrayInputStream(cardBytes)) {
+				return ImageIO.read(bais);
+			}
+		} catch (IOException | ExecutionException e) {
 			return null;
 		}
 	}
