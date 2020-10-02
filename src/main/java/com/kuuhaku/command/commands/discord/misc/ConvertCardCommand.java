@@ -104,6 +104,7 @@ public class ConvertCardCommand extends Command {
 				Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
 					kp.removeCard(kc);
 					kp.addChampion(c);
+					KawaiponDAO.saveKawaipon(kp);
 					s.delete().queue();
 					channel.sendMessage("Conversão realizada com sucesso!").queue();
 				}), true, 1, TimeUnit.MINUTES, u -> u.getId().equals(author.getId()))
