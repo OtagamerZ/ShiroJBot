@@ -23,7 +23,6 @@ import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.Card;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.model.persistent.RarityColors;
-import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.NContract;
 import org.apache.commons.lang3.StringUtils;
 
@@ -110,7 +109,7 @@ public class KawaiponBook {
 
 					for (int i = 0; i < chunks.get(finalC).size(); i++) {
 						if (cards.contains(chunks.get(finalC).get(i))) {
-							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, Helper.clamp(20 * 20 / chunks.get(finalC).get(i).getName().length(), 16, 20)));
+							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
 							RarityColors rc = RarityColorsDAO.getColor(chunks.get(finalC).get(i).getCard().getRarity());
 
 							g.setBackground(rc.getSecondary());
@@ -120,7 +119,7 @@ public class KawaiponBook {
 							g.drawImage(chunks.get(finalC).get(i).getCard().drawCard(foil), 54 + 198 * i, 24, 160, 250, null);
 							Profile.printCenteredString(StringUtils.abbreviate(chunks.get(finalC).get(i).getName(), 15), 160, 54 + 198 * i, 298, g);
 						} else if (chunks.get(finalC).get(i).getCard().getRarity().equals(KawaiponRarity.ULTIMATE)) {
-							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, Helper.clamp(20 * 20 / chunks.get(finalC).get(i).getName().length(), 16, 20)));
+							g.setFont(Profile.FONT.deriveFont(Font.PLAIN, 20));
 							g.setBackground(Color.black);
 							g.setColor(Color.white);
 

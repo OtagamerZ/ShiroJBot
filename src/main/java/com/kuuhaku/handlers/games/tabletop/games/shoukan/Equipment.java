@@ -54,7 +54,7 @@ public class Equipment implements Drawable, Cloneable {
 		BufferedImage bi = new BufferedImage(225, 350, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		if (flipped) {
-			g2d.drawImage(acc.getFrame().getBack(), 0, 0, null);
+			g2d.drawImage(acc.getFrame().getBack(acc), 0, 0, null);
 		} else {
 			g2d.drawImage(card.drawCardNoBorder(), 0, 0, null);
 

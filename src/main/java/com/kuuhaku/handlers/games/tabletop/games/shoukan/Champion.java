@@ -83,7 +83,7 @@ public class Champion implements Drawable, Cloneable {
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
 		if (flipped) {
-			g2d.drawImage(acc.getFrame().getBack(), 0, 0, null);
+			g2d.drawImage(acc.getFrame().getBack(acc), 0, 0, null);
 		} else {
 			g2d.drawImage(card.drawCardNoBorder(), 0, 0, null);
 			g2d.drawImage(acc.getFrame().getFront(), 0, 0, null);
