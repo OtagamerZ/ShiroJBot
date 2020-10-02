@@ -19,6 +19,7 @@
 package com.kuuhaku.controller.postgresql;
 
 import com.kuuhaku.model.persistent.DynamicParameter;
+import com.kuuhaku.utils.Helper;
 
 import javax.persistence.EntityManager;
 
@@ -27,9 +28,22 @@ public class DynamicParameterDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
-			return em.find(DynamicParameter.class, param);
+			return Helper.getOr(em.find(DynamicParameter.class, param), new DynamicParameter(param));
 		} finally {
 			em.close();
 		}
+	}
+
+	public static void setParam(String param, String value) {
+		EntityManager em = Manager.getEntityManager();
+		DynamicParameter dp = Helper.getOr(em.find(DynamicParameter.class, param), new DynamicParameter(param));
+
+		dp.setValue(value);
+
+		em.getTransaction().begin();
+		em.merge(dp);
+		em.getTransaction().commit();
+
+		em.close();
 	}
 }
