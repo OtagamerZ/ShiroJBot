@@ -98,9 +98,9 @@ public class ConvertCardCommand extends Command {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		eb.setTitle("Por favor confirme!");
 		eb.setDescription("Sua carta kawaipon " + kc.getName() + " será convertida para carta senshi e será adicionada ao seu deck, por favor clique no botão abaixo para confirmar a conversão.");
-		eb.setImage("attachment://card.jpg");
+		eb.setImage("attachment://card.png");
 
-		channel.sendMessage(eb.build()).addFile(Helper.getBytes(c.drawCard(acc, false)), "card.jpg").queue(s ->
+		channel.sendMessage(eb.build()).addFile(Helper.getBytes(c.drawCard(acc, false), "png"), "card.png").queue(s ->
 				Pages.buttonize(s, Map.of(Helper.ACCEPT, (ms, mb) -> {
 					kp.removeCard(kc);
 					kp.addChampion(c);
