@@ -157,6 +157,10 @@ public class Member {
 		xp += 15 * mult.get() * spamModif;
 		lastEarntXp = System.currentTimeMillis();
 
+		ExceedMember em = ExceedDAO.getExceedMember(mid);
+		em.addContribution(xp);
+		ExceedDAO.saveExceedMember(em);
+
 		if (xp >= (long) Math.pow(level, 2) * 100) {
 			level++;
 			Account acc = AccountDAO.getAccount(mid);

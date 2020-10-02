@@ -76,10 +76,10 @@ public class ExceedSelectCommand extends Command {
 							return;
 						}
 						if (em == null)
-							ExceedDAO.joinExceed(new ExceedMember(author.getId(), ExceedEnum.IMANITY.getName()));
+							ExceedDAO.saveExceedMember(new ExceedMember(author.getId(), ExceedEnum.IMANITY.getName()));
 						else {
 							em.setExceed(ExceedEnum.IMANITY.getName());
-							ExceedDAO.joinExceed(em);
+							ExceedDAO.saveExceedMember(em);
 						}
 						break;
 					case "seiren":
@@ -88,10 +88,10 @@ public class ExceedSelectCommand extends Command {
 							return;
 						}
 						if (em == null)
-							ExceedDAO.joinExceed(new ExceedMember(author.getId(), ExceedEnum.SEIREN.getName()));
+							ExceedDAO.saveExceedMember(new ExceedMember(author.getId(), ExceedEnum.SEIREN.getName()));
 						else {
 							em.setExceed(ExceedEnum.SEIREN.getName());
-							ExceedDAO.joinExceed(em);
+							ExceedDAO.saveExceedMember(em);
 						}
 						break;
 					case "werebeast":
@@ -100,10 +100,10 @@ public class ExceedSelectCommand extends Command {
 							return;
 						}
 						if (em == null)
-							ExceedDAO.joinExceed(new ExceedMember(author.getId(), ExceedEnum.WEREBEAST.getName()));
+							ExceedDAO.saveExceedMember(new ExceedMember(author.getId(), ExceedEnum.WEREBEAST.getName()));
 						else {
 							em.setExceed(ExceedEnum.WEREBEAST.getName());
-							ExceedDAO.joinExceed(em);
+							ExceedDAO.saveExceedMember(em);
 						}
 						break;
 					case "elf":
@@ -112,10 +112,10 @@ public class ExceedSelectCommand extends Command {
 							return;
 						}
 						if (em == null)
-							ExceedDAO.joinExceed(new ExceedMember(author.getId(), ExceedEnum.ELF.getName()));
+							ExceedDAO.saveExceedMember(new ExceedMember(author.getId(), ExceedEnum.ELF.getName()));
 						else {
 							em.setExceed(ExceedEnum.ELF.getName());
-							ExceedDAO.joinExceed(em);
+							ExceedDAO.saveExceedMember(em);
 						}
 						break;
 					case "ex-machina":
@@ -124,10 +124,10 @@ public class ExceedSelectCommand extends Command {
 							return;
 						}
 						if (em == null)
-							ExceedDAO.joinExceed(new ExceedMember(author.getId(), ExceedEnum.EXMACHINA.getName()));
+							ExceedDAO.saveExceedMember(new ExceedMember(author.getId(), ExceedEnum.EXMACHINA.getName()));
 						else {
 							em.setExceed(ExceedEnum.EXMACHINA.getName());
-							ExceedDAO.joinExceed(em);
+							ExceedDAO.saveExceedMember(em);
 						}
 						break;
 					case "flügel":
@@ -136,10 +136,10 @@ public class ExceedSelectCommand extends Command {
 							return;
 						}
 						if (em == null)
-							ExceedDAO.joinExceed(new ExceedMember(author.getId(), ExceedEnum.FLUGEL.getName()));
+							ExceedDAO.saveExceedMember(new ExceedMember(author.getId(), ExceedEnum.FLUGEL.getName()));
 						else {
 							em.setExceed(ExceedEnum.FLUGEL.getName());
-							ExceedDAO.joinExceed(em);
+							ExceedDAO.saveExceedMember(em);
 						}
 						break;
 					default:

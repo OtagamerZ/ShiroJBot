@@ -23,7 +23,6 @@ import com.kuuhaku.model.common.Exceed;
 import com.kuuhaku.model.enums.ExceedEnum;
 import com.kuuhaku.model.persistent.ExceedMember;
 import com.kuuhaku.model.persistent.ExceedScore;
-import com.kuuhaku.model.persistent.Member;
 import com.kuuhaku.model.persistent.MonthWinner;
 
 import javax.persistence.EntityManager;
@@ -83,7 +82,7 @@ public class ExceedDAO {
 		return new ExceedState(ExceedEnum.getByName(exceed).ordinal(), exceed, pos);
 	}
 
-	public static void joinExceed(ExceedMember ex) {
+	public static void saveExceedMember(ExceedMember ex) {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
@@ -132,16 +131,16 @@ public class ExceedDAO {
 	public static Exceed getExceed(ExceedEnum ex) {
 		EntityManager em = Manager.getEntityManager();
 
-		Query q = em.createQuery("SELECT m FROM Member m INNER JOIN ExceedMember ex ON m.mid = ex.id WHERE ex.exceed = :exceed", Member.class);
+		Query q = em.createQuery("SELECT COUNT(ex) FROM ExceedMember ex WHERE ex.exceed = :exceed");
 		q.setParameter("exceed", ex.getName());
 
 		Query points = em.createNativeQuery("SELECT e.points FROM shiro.\"GetCurrentExceedScores\" e WHERE e.exceed = :exceed");
 		points.setParameter("exceed", ex.getName());
 
-		List<Member> members = (List<Member>) q.getResultList();
+		int memberCount = ((BigDecimal) q.getSingleResult()).intValue();
 
 		try {
-			return new Exceed(ex, members.size(), ((BigDecimal) points.getSingleResult()).longValue());
+			return new Exceed(ex, memberCount, ((BigDecimal) points.getSingleResult()).longValue());
 		} finally {
 			em.close();
 		}
@@ -172,6 +171,11 @@ public class ExceedDAO {
 		em.getTransaction().begin();
 		em.merge(m);
 		em.getTransaction().commit();
+
+		getExceedMembers().forEach(e -> {
+			e.resetContribution();
+			saveExceedMember(e);
+		});
 
 		em.close();
 	}
