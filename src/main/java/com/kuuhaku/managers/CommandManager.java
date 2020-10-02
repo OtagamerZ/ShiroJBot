@@ -419,6 +419,9 @@ public class CommandManager {
 			put(FrameColorCommand.class, new Argument(
 					"cordaborda", new String[]{"borda", "framecolor", "frame"}, "req_frame-color", "cmd_frame-color", MISC, true
 			));
+			put(FrameBackgroundCommand.class, new Argument(
+					"fundododeck", new String[]{"deckbg"}, "req_ultimate", "cmd_frame-background", MISC, false
+			));
 
 			//FUN
 			put(SadButTrueCommand.class, new Argument(
