@@ -137,7 +137,7 @@ public class ExceedDAO {
 		Query points = em.createNativeQuery("SELECT e.points FROM shiro.\"GetCurrentExceedScores\" e WHERE e.exceed = :exceed");
 		points.setParameter("exceed", ex.getName());
 
-		int memberCount = ((BigDecimal) q.getSingleResult()).intValue();
+		int memberCount = ((Long) q.getSingleResult()).intValue();
 
 		try {
 			return new Exceed(ex, memberCount, ((BigDecimal) points.getSingleResult()).longValue());
