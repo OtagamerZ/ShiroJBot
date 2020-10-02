@@ -158,8 +158,10 @@ public class Member {
 		lastEarntXp = System.currentTimeMillis();
 
 		ExceedMember em = ExceedDAO.getExceedMember(mid);
-		em.addContribution(xp);
-		ExceedDAO.saveExceedMember(em);
+		if (em != null) {
+			em.addContribution(xp);
+			ExceedDAO.saveExceedMember(em);
+		}
 
 		if (xp >= (long) Math.pow(level, 2) * 100) {
 			level++;
