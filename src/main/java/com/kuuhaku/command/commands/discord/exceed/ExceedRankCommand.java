@@ -37,6 +37,7 @@ import java.awt.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -72,7 +73,10 @@ public class ExceedRankCommand extends Command {
 					List<List<ExceedScore>> exceeds = new ArrayList<>();
 					List<Color> colors = new ArrayList<>();
 					for (ExceedEnum ex : ExceedEnum.values()) {
-						exceeds.add(ExceedDAO.getExceedHistory(ex));
+						List<ExceedScore> e = ExceedDAO.getExceedHistory(ex);
+						e.add(new ExceedScore(ex, ExceedDAO.getExceed(ex).getExp(), LocalDate.now()));
+						e.sort(Comparator.comparing(ExceedScore::getTimestamp));
+						exceeds.add(e);
 						colors.add(ex.getPalette());
 					}
 
@@ -100,7 +104,6 @@ public class ExceedRankCommand extends Command {
 
 					for (List<ExceedScore> ex : exceeds) {
 						ExceedEnum ee = ex.get(0).getExceed();
-						ex.add(new ExceedScore(ee, ExceedDAO.getExceed(ee).getExp(), LocalDate.now()));
 
 						chart.addSeries(ee.getName(),
 								ex.stream()
