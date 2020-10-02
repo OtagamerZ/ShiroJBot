@@ -20,7 +20,6 @@ package com.kuuhaku.events.cron;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.AccountDAO;
-import com.kuuhaku.controller.postgresql.DynamicParameterDAO;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
 import com.kuuhaku.controller.postgresql.TagDAO;
 import com.kuuhaku.handlers.music.GuildMusicManager;
@@ -39,8 +38,6 @@ import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 
 import javax.persistence.NoResultException;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -98,9 +95,9 @@ public class TenthMinuteEvent implements Job {
 			}
 		});
 
-		int month = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).getMonthValue();
+		/*int month = OffsetDateTime.now().atZoneSameInstant(ZoneId.of("GMT-3")).getMonthValue();
 		if (!DynamicParameterDAO.getParam("last_upd_month").getValue().equals(String.valueOf(month)))
-			MonthlyEvent.call();
+			MonthlyEvent.call();*/
 	}
 
 	private static void notif(Guild g) {
