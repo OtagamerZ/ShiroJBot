@@ -177,11 +177,17 @@ public class PollCommand extends Command {
 				else
 					Objects.requireNonNull(guild.getTextChannelById(gc.getCanalSUG())).sendMessage(eb.build()).queue(sendSimple);
 			} catch (Exception e) {
-				if (gc.getCanalSUG() == null || gc.getCanalSUG().isBlank())
+				try {
+					if (gc.getCanalSUG() == null || gc.getCanalSUG().isBlank())
+						channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_send-embed")).queue();
+					else
+						channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_send-embed-in-channel"), Objects.requireNonNull(guild.getTextChannelById(gc.getCanalSUG())).getAsMention())).queue();
+					return;
+				} catch (NullPointerException ex) {
+					gc.setCanalSUG(null);
+					GuildDAO.updateGuildSettings(gc);
 					channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_send-embed")).queue();
-				else
-					channel.sendMessage(MessageFormat.format(ShiroInfo.getLocale(I18n.PT).getString("err_send-embed-in-channel"), Objects.requireNonNull(guild.getTextChannelById(gc.getCanalSUG())).getAsMention())).queue();
-				return;
+				}
 			}
 		}
 
