@@ -62,7 +62,7 @@ public enum FrameColor {
 
 			if (withUlt) {
 				AnimeName an = AnimeName.valueOf(acc.getUltimate());
-				g2d.drawImage(CardDAO.getUltimate(an).drawCard(false), 26, 44, 172, 268, null);
+				g2d.drawImage(CardDAO.getUltimate(an).drawCardNoBorder(), 26, 44, 172, 268, null);
 			}
 
 			g2d.drawImage(cover, 0, 0, null);
