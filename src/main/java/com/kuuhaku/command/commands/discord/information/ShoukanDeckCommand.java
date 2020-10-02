@@ -20,13 +20,13 @@ package com.kuuhaku.command.commands.discord.information;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
+import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.CardDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.common.KawaiponBook;
+import com.kuuhaku.model.common.ShoukanDeck;
 import com.kuuhaku.model.enums.AnimeName;
 import com.kuuhaku.model.enums.I18n;
-import com.kuuhaku.model.enums.KawaiponRarity;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.KawaiponCard;
 import com.kuuhaku.utils.Helper;
@@ -70,14 +70,14 @@ public class ShoukanDeckCommand extends Command {
 						collection.add(new KawaiponCard(CardDAO.getUltimate(anime), false));
 				}
 
-				KawaiponBook kb = new KawaiponBook(collection);
-				BufferedImage cards = kb.view(CardDAO.getCardsByRarity(KawaiponRarity.ULTIMATE), "Coleção Kawaipon", false);
+				ShoukanDeck kb = new ShoukanDeck(AccountDAO.getAccount(author.getId()));
+				BufferedImage cards = kb.view(kp.getChampions(), kp.getEquipments());
 
 				EmbedBuilder eb = new ColorlessEmbedBuilder();
 				eb.setTitle("\uD83D\uDD30 | Deck de " + author.getName());
 				eb.addField(":crossed_swords: | Cartas Senshi:", kp.getChampions().size() + " de 40", true);
 				eb.addField(":shield: | Cartas EvoGear:", kp.getEquipments().size() + " de 18", true);
-				eb.setImage("attachment://cards.png");
+				eb.setImage("attachment://deck.png");
 
 				m.delete().queue();
 				channel.sendMessage(eb.build()).addFile(Helper.getBytes(cards, "png"), "deck.png").queue();
