@@ -52,6 +52,8 @@ public class ShoukanDeck {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setFont(Profile.FONT.deriveFont(Font.PLAIN, 30));
 
+		g2d.drawImage(acc.getFrame().getBack(acc), 1746, 1400, null);
+
 		for (int i = 0, y = 0; i < champs.size(); i++, y = i / 6) {
 			g2d.drawImage(champs.get(i).drawCard(acc, false), 76 + 279 * (i - 6 * y), 350 + 420 * y, null);
 			Profile.printCenteredString(StringUtils.abbreviate(champs.get(i).getCard().getName(), 15), 225, 76 + 279 * (i - 6 * y), 740 + 420 * y, g2d);
