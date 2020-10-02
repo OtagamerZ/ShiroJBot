@@ -23,14 +23,10 @@ import com.github.ygimenez.model.Page;
 import com.github.ygimenez.type.PageType;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.FrameColor;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.persistent.Account;
-import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
@@ -57,8 +53,6 @@ public class FrameColorCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
-		Account acc = AccountDAO.getAccount(author.getId());
-
 		if (args.length == 0) {
 			List<Page> pages = new ArrayList<>();
 
@@ -67,16 +61,11 @@ public class FrameColorCommand extends Command {
 				eb.clear();
 				eb.setTitle(":flower_playing_cards: | Cores " + fc.toString().toLowerCase());
 				eb.setDescription(fc.getDescription());
-				eb.setImage("attachment://" + fc.toString().toLowerCase() + ".jpg");
+				eb.setImage("https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/master/src/main/resources/shoukan/frames/card_back_" + fc.toString().toLowerCase() + ".png");
 				pages.add(new Page(PageType.EMBED, eb.build()));
 			}
 
-			MessageAction ma = channel.sendMessage((MessageEmbed) pages.get(0).getContent());
-			for (FrameColor fc : FrameColor.values()) {
-				ma = ma.addFile(Helper.getBytes(fc.getBack(acc)), fc.toString().toLowerCase() + ".jpg");
-			}
-
-			ma.queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 1, u -> u.getId().equals(author.getId())));
+			channel.sendMessage((MessageEmbed) pages.get(0).getContent()).queue(s -> Pages.paginate(s, pages, 1, TimeUnit.MINUTES, 1, u -> u.getId().equals(author.getId())));
 		}
 	}
 }
