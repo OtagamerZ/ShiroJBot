@@ -77,7 +77,7 @@ public class ExceedRankCommand extends Command {
 						e.add(new ExceedScore(ex, ExceedDAO.getExceed(ex).getExp(), LocalDate.now()));
 						e.sort(Comparator.comparing(ExceedScore::getTimestamp));
 						exceeds.add(e);
-						colors.add(ex.getPalette());
+						colors.add(new Color(ex.getPalette().getRed(), ex.getPalette().getGreen(), ex.getPalette().getBlue(), 200));
 					}
 
 					XYChart chart = new XYChartBuilder()
