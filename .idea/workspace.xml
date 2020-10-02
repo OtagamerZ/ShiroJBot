@@ -14,8 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/exceed/ExceedRankCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/exceed/ExceedRankCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/exceed/ExceedSelectCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/command/commands/discord/exceed/ExceedSelectCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -163,6 +162,17 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.ShiroJBot [clean]">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShiroJBot [:javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -726,28 +736,7 @@
       <workItem from="1601640555291" duration="732000" />
       <workItem from="1601641352457" duration="11000" />
       <workItem from="1601643888109" duration="1334000" />
-      <workItem from="1601647072724" duration="771000" />
-    </task>
-    <task id="LOCAL-02481" summary="Correção do gráfico de valores">
-      <created>1600348765373</created>
-      <option name="number" value="02481" />
-      <option name="presentableId" value="LOCAL-02481" />
-      <option name="project" value="LOCAL" />
-      <updated>1600348765374</updated>
-    </task>
-    <task id="LOCAL-02482" summary="Correção no XP">
-      <created>1600349272342</created>
-      <option name="number" value="02482" />
-      <option name="presentableId" value="LOCAL-02482" />
-      <option name="project" value="LOCAL" />
-      <updated>1600349272342</updated>
-    </task>
-    <task id="LOCAL-02483" summary="Correção no XP">
-      <created>1600349766665</created>
-      <option name="number" value="02483" />
-      <option name="presentableId" value="LOCAL-02483" />
-      <option name="project" value="LOCAL" />
-      <updated>1600349766665</updated>
+      <workItem from="1601647072724" duration="1075000" />
     </task>
     <task id="LOCAL-02484" summary="Correção no XP">
       <created>1600349786820</created>
@@ -1071,7 +1060,28 @@
       <option name="project" value="LOCAL" />
       <updated>1601647377121</updated>
     </task>
-    <option name="localTasksCounter" value="2530" />
+    <task id="LOCAL-02530" summary="Correções gerais">
+      <created>1601647910455</created>
+      <option name="number" value="02530" />
+      <option name="presentableId" value="LOCAL-02530" />
+      <option name="project" value="LOCAL" />
+      <updated>1601647910455</updated>
+    </task>
+    <task id="LOCAL-02531" summary="Correções gerais">
+      <created>1601648026006</created>
+      <option name="number" value="02531" />
+      <option name="presentableId" value="LOCAL-02531" />
+      <option name="project" value="LOCAL" />
+      <updated>1601648026006</updated>
+    </task>
+    <task id="LOCAL-02532" summary="Correções gerais">
+      <created>1601648069951</created>
+      <option name="number" value="02532" />
+      <option name="presentableId" value="LOCAL-02532" />
+      <option name="project" value="LOCAL" />
+      <updated>1601648069951</updated>
+    </task>
+    <option name="localTasksCounter" value="2533" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1220,11 +1230,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="570" y="253" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595358686981" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1601647374342">
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2" timestamp="1601648067246">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="203" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1595113285036" />
-    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1601647374342" />
+    <state x="632" y="53" width="805" height="924" key="CommitChangelistDialog2/0.0.1680.1010@0.0.1680.1010" timestamp="1601648067246" />
     <state x="520" y="311" key="DUMP_DIALOG_DIMENSION_KEY" timestamp="1594057391387">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1281,11 +1291,11 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="687" y="418" key="VCS.ChangelistChooser/0.0.1680.1010@0.0.1680.1010" timestamp="1597775476934" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1601647378192">
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2" timestamp="1601648071258">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="351" y="182" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1595113293247" />
-    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1601647378192" />
+    <state x="358" y="292" width="816" height="518" key="Vcs.Push.Dialog.v2/0.0.1680.1010@0.0.1680.1010" timestamp="1601648071258" />
     <state x="705" y="348" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599155360934">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
@@ -1327,10 +1337,10 @@
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
     <state x="465" y="286" key="extract.method.dialog/0.0.1680.1010@0.0.1680.1010" timestamp="1595246935580" />
-    <state x="300" y="114" width="957" height="784" key="find.popup" timestamp="1601644472368">
+    <state x="300" y="114" width="957" height="784" key="find.popup" timestamp="1601648147710">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="300" y="114" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1601644472368" />
+    <state x="300" y="114" width="957" height="784" key="find.popup/0.0.1680.1010@0.0.1680.1010" timestamp="1601648147710" />
     <state x="645" y="400" key="git4idea.ui.GitResetDialog" timestamp="1593018818159">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
