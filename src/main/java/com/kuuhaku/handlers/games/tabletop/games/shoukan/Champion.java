@@ -18,15 +18,14 @@
 
 package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
+import bsh.EvalError;
+import bsh.Interpreter;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Race;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 import com.kuuhaku.model.common.Profile;
 import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Card;
-import com.kuuhaku.utils.ShiroInfo;
 import org.apache.commons.lang3.StringUtils;
-import pl.joegreen.lambdaFromString.LambdaCreationException;
-import pl.joegreen.lambdaFromString.TypeReference;
 
 import javax.imageio.ImageIO;
 import javax.persistence.*;
@@ -35,7 +34,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 import java.util.*;
-import java.util.function.Function;
 
 @Entity
 @Table(name = "champion")
@@ -72,11 +70,18 @@ public class Champion implements Drawable, Cloneable {
 	private transient boolean available = true;
 	private transient boolean defending = false;
 	private transient List<Equipment> linkedTo;
+	private transient Bonus bonus;
+	private transient int mAtk;
+	private transient int mDef;
 
 	@Override
 	public BufferedImage drawCard(Account acc, boolean flipped) {
 		BufferedImage bi = new BufferedImage(225, 350, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+
 		if (flipped) {
 			g2d.drawImage(acc.getFrame().getBack(), 0, 0, null);
 		} else {
@@ -92,10 +97,12 @@ public class Champion implements Drawable, Cloneable {
 			g2d.setColor(Color.red);
 			Profile.drawOutlinedText(String.valueOf(atk), 45, 250, g2d);
 
-			for (int i = 0, slot = 1; i < linkedTo.size(); i++) {
+			if (bonus.getAtk() != 0)
+				Profile.drawOutlinedText((bonus.getAtk() > 0 ? "+" : "") + bonus.getAtk(), 45, 225, g2d);
+			for (int i = 0, slot = bonus.getAtk() != 0 ? 2 : 1; i < linkedTo.size(); i++) {
 				int eAtk = linkedTo.get(i).getAtk();
-				if (eAtk > 0) {
-					Profile.drawOutlinedText("+" + eAtk, 45, 250 - (25 * slot), g2d);
+				if (eAtk != 0) {
+					Profile.drawOutlinedText((eAtk > 0 ? "+" : "") + eAtk, 45, 250 - (25 * slot), g2d);
 					slot++;
 				}
 			}
@@ -103,20 +110,22 @@ public class Champion implements Drawable, Cloneable {
 			g2d.setColor(Color.green);
 			Profile.drawOutlinedText(String.valueOf(def), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(def)), 250, g2d);
 
-			for (int i = 0, slot = 1; i < linkedTo.size(); i++) {
+			if (bonus.getDef() != 0)
+				Profile.drawOutlinedText((bonus.getDef() > 0 ? "+" : "") + bonus.getDef(), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(bonus.getDef())), 225, g2d);
+			for (int i = 0, slot = bonus.getDef() != 0 ? 2 : 1; i < linkedTo.size(); i++) {
 				int eDef = linkedTo.get(i).getDef();
-				if (eDef > 0) {
-					Profile.drawOutlinedText(eDef + "+", 178 - g2d.getFontMetrics().stringWidth(String.valueOf(eDef)), 250 - (25 * slot), g2d);
+				if (eDef != 0) {
+					Profile.drawOutlinedText(eDef + (eDef > 0 ? "+" : ""), 178 - g2d.getFontMetrics().stringWidth(String.valueOf(eDef)), 250 - (25 * slot), g2d);
 					slot++;
 				}
 			}
 
 			g2d.setFont(new Font("Arial", Font.BOLD, 11));
 			g2d.setColor(Color.black);
-			g2d.drawString("[" + race.toString().toUpperCase() + (effect.isBlank() ? "" : "/EFEITO") + "]", 13, 277);
+			g2d.drawString("[" + race.toString().toUpperCase() + (effect == null ? "" : "/EFEITO") + "]", 8, 277);
 
 			g2d.setFont(new Font("Arial", Font.PLAIN, 11));
-			Profile.drawStringMultiLineNO(g2d, description, 199, 13, 293);
+			Profile.drawStringMultiLineNO(g2d, description, 209, 8, 293);
 		}
 
 		if (!available) {
@@ -126,7 +135,7 @@ public class Champion implements Drawable, Cloneable {
 
 		if (defending) {
 			try {
-				BufferedImage dm = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("shoukan/defense_mode.png")));
+				BufferedImage dm = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("defense_mode.png")));
 				g2d.drawImage(dm, 0, 0, null);
 			} catch (IOException ignore) {
 			}
@@ -195,28 +204,69 @@ public class Champion implements Drawable, Cloneable {
 	}
 
 	public int getAtk() {
-		return atk;
-	}
-
-	public void setAtk(int atk) {
-		this.atk = atk;
+		return atk + bonus.getAtk();
 	}
 
 	public int getDef() {
-		return def;
+		return def + bonus.getDef();
 	}
 
-	public void setDef(int def) {
-		this.def = def;
+	public int getEAtk() {
+		return Math.max(0, atk + mAtk + bonus.getAtk());
+	}
+
+	public void setMAtk(int mAtk) {
+		this.mAtk = mAtk;
+	}
+
+	public int getEDef() {
+		return Math.max(0, def + mDef + bonus.getDef());
+	}
+
+	public void setMDef(int mDef) {
+		this.mDef = mDef;
+	}
+
+	public void resetAttribs() {
+		this.mAtk = 0;
+		this.mDef = 0;
+	}
+
+	public Bonus getBonus() {
+		return bonus;
+	}
+
+	public void clearBonus() {
+		this.bonus = new Bonus();
 	}
 
 	public String getDescription() {
 		return description;
 	}
 
-	public Function<EffectParameters, Champion> getEffect() throws LambdaCreationException {
-		return ShiroInfo.getLFactory().createLambda(effect, new TypeReference<>() {
-		});
+	public boolean hasEffect() {
+		return effect != null;
+	}
+
+	public void getEffect(EffectParameters ep) {
+		String imports =
+				"import com.kuuhaku.tabletop.shoukan.enums.Phase; " +
+				"import com.kuuhaku.tabletop.shoukan.enums.Race; " +
+				"import com.kuuhaku.tabletop.shoukan.enums.Side; " +
+				"import com.kuuhaku.tabletop.shoukan.enums.EffectTrigger; " +
+				"import com.kuuhaku.tabletop.shoukan.Champion; " +
+				"import com.kuuhaku.tabletop.shoukan.Equipment; " +
+				"import com.kuuhaku.tabletop.utils.CardDAO; " +
+				"import com.kuuhaku.tabletop.utils.SlotColumn; ";
+
+		try {
+			Interpreter i = new Interpreter();
+			i.setStrictJava(true);
+			i.set("ep", ep);
+			i.eval(imports + effect);
+		} catch (EvalError evalError) {
+			System.out.println(evalError);
+		}
 	}
 
 	public Set<String> getRequiredCards() {
@@ -241,6 +291,7 @@ public class Champion implements Drawable, Cloneable {
 		try {
 			Champion c = (Champion) clone();
 			c.linkedTo = new ArrayList<>();
+			c.bonus = new Bonus();
 			return c;
 		} catch (CloneNotSupportedException e) {
 			return null;

@@ -23,6 +23,7 @@ import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Phase;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.enums.Side;
 import com.kuuhaku.handlers.games.tabletop.games.shoukan.interfaces.Drawable;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,16 +31,22 @@ public class EffectParameters {
 	private final Phase phase;
 	private final EffectTrigger trigger;
 	private final Shoukan shoukan;
+	private final int index;
+	private final Side side;
 	private final Map<Side, Hand> hands;
 	private final Map<Side, List<SlotColumn<Drawable, Drawable>>> slots;
+	private final Map<Side, LinkedList<Drawable>> graveyard;
 	private final Duelists duelists;
 
-	public EffectParameters(Phase phase, EffectTrigger trigger, Shoukan shoukan, Duelists duelists) {
+	public EffectParameters(Phase phase, EffectTrigger trigger, Shoukan shoukan, int index, Side side, Duelists duelists) {
 		this.phase = phase;
 		this.trigger = trigger;
 		this.shoukan = shoukan;
+		this.index = index;
+		this.side = side;
 		this.hands = shoukan.getHands();
 		this.slots = shoukan.getArena().getSlots();
+		this.graveyard = shoukan.getArena().getGraveyard();
 		this.duelists = duelists;
 	}
 
@@ -55,12 +62,24 @@ public class EffectParameters {
 		return shoukan;
 	}
 
+	public int getIndex() {
+		return index;
+	}
+
+	public Side getSide() {
+		return side;
+	}
+
 	public Map<Side, Hand> getHands() {
 		return hands;
 	}
 
 	public Map<Side, List<SlotColumn<Drawable, Drawable>>> getSlots() {
 		return slots;
+	}
+
+	public Map<Side, LinkedList<Drawable>> getGraveyard() {
+		return graveyard;
 	}
 
 	public Duelists getDuelists() {
