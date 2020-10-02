@@ -54,7 +54,9 @@ public class KGotchiDAO {
 		EntityManager em = Manager.getEntityManager();
 
 		em.getTransaction().begin();
-		em.remove(k);
+		Query q = em.createQuery("DELETE FROM Kawaigotchi k WHERE k.userId = :uid");
+		q.setParameter("uid", k.getUserId());
+		q.executeUpdate();
 		em.getTransaction().commit();
 
 		em.close();

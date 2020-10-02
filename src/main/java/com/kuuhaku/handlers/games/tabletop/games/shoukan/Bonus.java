@@ -16,18 +16,41 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.handlers.games.tabletop.games.shoukan.enums;
+package com.kuuhaku.handlers.games.tabletop.games.shoukan;
 
-public enum EffectTrigger {
-	NONE,
-	ON_FLIP,
-	ON_DEATH,
-	ON_ATTACK,
-	ON_SUMMON,
-	ON_TURN,
-	ON_DEFEND,
-	ON_SWITCH,
-	ON_SUICIDE,
-	POST_ATTACK,
-	POST_DEFENSE;
+public class Bonus {
+	private int atk = 0;
+	private int def = 0;
+
+	public int getAtk() {
+		return atk;
+	}
+
+	public void setAtk(int atk) {
+		this.atk = atk;
+	}
+
+	public int getDef() {
+		return def;
+	}
+
+	public void setDef(int def) {
+		this.def = def;
+	}
+
+	public void addAtk(int atk) {
+		this.atk += atk;
+	}
+
+	public void removeAtk(int atk) {
+		this.atk -= atk;
+	}
+
+	public void addDef(int def) {
+		this.def += def;
+	}
+
+	public void removeDef(int def) {
+		this.def -= def;
+	}
 }
