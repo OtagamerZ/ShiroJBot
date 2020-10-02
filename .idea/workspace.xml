@@ -13,13 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/DynamicParameterDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/postgresql/DynamicParameterDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/MonthlyEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthMinuteEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/events/cron/TenthMinuteEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/DynamicParameter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/DynamicParameter.java" afterDir="false" />
-    </list>
+    <list default="true" id="596c2f54-3a33-40d3-99fc-2df6776c90a5" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -740,14 +734,7 @@
       <workItem from="1601490265617" duration="61000" />
       <workItem from="1601640555291" duration="732000" />
       <workItem from="1601641352457" duration="11000" />
-      <workItem from="1601643888109" duration="637000" />
-    </task>
-    <task id="LOCAL-02475" summary="Aumentada a chance de aparecer cartas lendárias">
-      <created>1600272370145</created>
-      <option name="number" value="02475" />
-      <option name="presentableId" value="LOCAL-02475" />
-      <option name="project" value="LOCAL" />
-      <updated>1600272370146</updated>
+      <workItem from="1601643888109" duration="985000" />
     </task>
     <task id="LOCAL-02476" summary="Retorno do comando de gráfico de valor de cartas no mercado">
       <created>1600286151114</created>
@@ -1085,7 +1072,14 @@
       <option name="project" value="LOCAL" />
       <updated>1601644075297</updated>
     </task>
-    <option name="localTasksCounter" value="2524" />
+    <task id="LOCAL-02524" summary="Correções gerais">
+      <created>1601644764026</created>
+      <option name="number" value="02524" />
+      <option name="presentableId" value="LOCAL-02524" />
+      <option name="project" value="LOCAL" />
+      <updated>1601644764026</updated>
+    </task>
+    <option name="localTasksCounter" value="2525" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
