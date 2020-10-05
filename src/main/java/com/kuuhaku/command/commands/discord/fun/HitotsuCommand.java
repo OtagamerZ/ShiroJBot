@@ -63,6 +63,9 @@ public class HitotsuCommand extends Command {
 		if (message.getMentionedUsers().size() == 0) {
 			channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_no-user")).queue();
 			return;
+		} else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-a antes de usar este comando novamente.").queue();
+			return;
 		}
 
 		Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
@@ -136,9 +139,11 @@ public class HitotsuCommand extends Command {
 
 		String hash = Helper.generateHash(guild, author);
 		ShiroInfo.getHashes().add(hash);
+		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		channel.sendMessage(msg)
 				.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 					if (!ShiroInfo.getHashes().remove(hash)) return;
+					Main.getInfo().getConfirmationPending().invalidate(author.getId());
 					if (players.contains(mb.getUser())) {
 						if (Main.getInfo().gameInProgress(mb.getId())) {
 							channel.sendMessage(ShiroInfo.getLocale(I18n.PT).getString("err_you-are-in-game")).queue();

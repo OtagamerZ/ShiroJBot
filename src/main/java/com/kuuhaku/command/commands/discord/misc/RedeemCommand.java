@@ -19,6 +19,7 @@
 package com.kuuhaku.command.commands.discord.misc;
 
 import com.github.ygimenez.method.Pages;
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
@@ -51,6 +52,11 @@ public class RedeemCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-a antes de usar este comando novamente.").queue();
+			return;
+		}
+
 		Account acc = AccountDAO.getAccount(author.getId());
 
 		if (acc.getStreak() < 7) {
@@ -60,9 +66,11 @@ public class RedeemCommand extends Command {
 
 		String hash = Helper.generateHash(guild, author);
 		ShiroInfo.getHashes().add(hash);
+		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		channel.sendMessage("Deseja realmente trocar seu acúmulo de 7 votos por uma gema?").queue(s ->
 				Pages.buttonize(s, Map.of(Helper.ACCEPT, (m, ms) -> {
 					if (!ShiroInfo.getHashes().remove(hash)) return;
+					Main.getInfo().getConfirmationPending().invalidate(author.getId());
 					if (m.getId().equals(author.getId())) {
 						acc.setStreak(0);
 						acc.addGem();

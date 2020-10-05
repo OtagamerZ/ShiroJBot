@@ -117,6 +117,7 @@ public class ShiroInfo {
 			.build();
 	private final Map<String, KittyCache<String, Message>> messageCache = new HashMap<>();
 	private final Cache<String, Boolean> ratelimit = CacheBuilder.newBuilder().expireAfterWrite(3, TimeUnit.SECONDS).build();
+	private final Cache<String, Boolean> confirmationPending = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
 	private final Map<String, Game> games = new HashMap<>();
 	private final Set<String> requests = new HashSet<>();
 	private final Cache<String, KawaiponCard> currentCard = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
@@ -374,6 +375,10 @@ public class ShiroInfo {
 
 	public Cache<String, Boolean> getRatelimit() {
 		return ratelimit;
+	}
+
+	public Cache<String, Boolean> getConfirmationPending() {
+		return confirmationPending;
 	}
 
 	public Set<String> getGameLock() {
