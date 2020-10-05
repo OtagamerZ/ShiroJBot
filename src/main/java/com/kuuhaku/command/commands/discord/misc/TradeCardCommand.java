@@ -19,6 +19,7 @@
 package com.kuuhaku.command.commands.discord.misc;
 
 import com.github.ygimenez.method.Pages;
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.AccountDAO;
@@ -68,6 +69,9 @@ public class TradeCardCommand extends Command {
 		} else if (args.length < 4) {
 			channel.sendMessage("❌ | Você precisa mencionar uma quantia de créditos ou uma carta, qual carta você deseja e o tipo dela (`N` = normal, `C` = cromada) para realizar a troca.").queue();
 			return;
+		} else if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-a antes de usar este comando novamente.").queue();
+			return;
 		}
 
 		User other = message.getMentionedUsers().get(0);
@@ -114,9 +118,11 @@ public class TradeCardCommand extends Command {
 
 			String hash = Helper.generateHash(guild, author);
 			ShiroInfo.getHashes().add(hash);
+			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage(other.getAsMention() + ", " + author.getAsMention() + " deseja comprar sua carta `" + card.getName() + "` por " + price + " créditos, você aceita essa transação?")
 					.queue(s -> Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (member1, message1) -> {
 						if (!ShiroInfo.getHashes().remove(hash)) return;
+						Main.getInfo().getConfirmationPending().invalidate(author.getId());
 						if (!member1.getId().equals(other.getId())) return;
 						acc.removeCredit(price, this.getClass());
 						target.removeCard(card);
@@ -172,9 +178,11 @@ public class TradeCardCommand extends Command {
 
 			String hash = Helper.generateHash(guild, author);
 			ShiroInfo.getHashes().add(hash);
+			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage(other.getAsMention() + ", " + author.getAsMention() + " deseja vender a carta `" + card.getName() + "` por " + price + " créditos, você aceita essa transação?")
 					.queue(s -> Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (member1, message1) -> {
 						if (!ShiroInfo.getHashes().remove(hash)) return;
+						Main.getInfo().getConfirmationPending().invalidate(author.getId());
 						if (!member1.getId().equals(other.getId())) return;
 						tacc.removeCredit(price, this.getClass());
 						kp.removeCard(card);
@@ -241,9 +249,11 @@ public class TradeCardCommand extends Command {
 
 			String hash = Helper.generateHash(guild, author);
 			ShiroInfo.getHashes().add(hash);
+			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage(other.getAsMention() + ", " + author.getAsMention() + " deseja trocar a carta `" + yourCard.getName() + "` pela sua carta `" + hisCard.getName() + "`, você aceita essa transação?")
 					.queue(s -> Pages.buttonize(s, Map.of(Helper.ACCEPT, (member1, message1) -> {
 						if (!ShiroInfo.getHashes().remove(hash)) return;
+						Main.getInfo().getConfirmationPending().invalidate(author.getId());
 						if (!member1.getId().equals(other.getId())) return;
 						kp.removeCard(yourCard);
 						target.removeCard(hisCard);

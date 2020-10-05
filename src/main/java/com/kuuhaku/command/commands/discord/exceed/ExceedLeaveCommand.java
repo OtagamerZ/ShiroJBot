@@ -19,6 +19,7 @@
 package com.kuuhaku.command.commands.discord.exceed;
 
 import com.github.ygimenez.method.Pages;
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.ExceedDAO;
@@ -53,6 +54,11 @@ public class ExceedLeaveCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-a antes de usar este comando novamente.").queue();
+			return;
+		}
+
 		ExceedMember em = ExceedDAO.getExceedMember(author.getId());
 
 		if (em == null) {
@@ -62,10 +68,12 @@ public class ExceedLeaveCommand extends Command {
 
 		String hash = Helper.generateHash(guild, author);
 		ShiroInfo.getHashes().add(hash);
+		Main.getInfo().getConfirmationPending().put(author.getId(), true);
 		String name = em.getExceed();
 		channel.sendMessage(":warning: | Sair da " + name + " além de reduzir seu XP pela metade fará com que você não possa escolher outro Exceed até o próximo mês. Deseja confirmar sua escolha?").queue(s ->
 				Pages.buttonize(s, Map.of(Helper.ACCEPT, (mb, ms) -> {
 					if (!ShiroInfo.getHashes().remove(hash)) return;
+					Main.getInfo().getConfirmationPending().invalidate(author.getId());
 					if (mb.getId().equals(author.getId())) {
 						List<com.kuuhaku.model.persistent.Member> mbs = MemberDAO.getMemberByMid(mb.getId());
 						mbs.forEach(m -> {

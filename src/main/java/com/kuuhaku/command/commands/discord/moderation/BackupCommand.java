@@ -19,6 +19,7 @@
 package com.kuuhaku.command.commands.discord.moderation;
 
 import com.github.ygimenez.method.Pages;
+import com.kuuhaku.Main;
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Command;
 import com.kuuhaku.controller.postgresql.BackupDAO;
@@ -57,6 +58,11 @@ public class BackupCommand extends Command {
 
 	@Override
 	public void execute(User author, Member member, String rawCmd, String[] args, Message message, MessageChannel channel, Guild guild, String prefix) {
+		if (Main.getInfo().getConfirmationPending().getIfPresent(author.getId()) != null) {
+			channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-a antes de usar este comando novamente.").queue();
+			return;
+		}
+
 		Backup data = BackupDAO.getGuildBackup(guild);
 
 		if (args.length < 1) {
@@ -84,9 +90,11 @@ public class BackupCommand extends Command {
 		} else {
 			String hash = Helper.generateHash(guild, author);
 			ShiroInfo.getHashes().add(hash);
+			Main.getInfo().getConfirmationPending().put(author.getId(), true);
 			channel.sendMessage("**Restaurar um backup irá limpar todas as mensagens do servidor, inclusive aquelas fixadas**\n\nPor favor, confirme esta operação clicando no botão abaixo.").queue(s ->
 					Pages.buttonize(s, Collections.singletonMap(Helper.ACCEPT, (mb, ms) -> {
 						if (!ShiroInfo.getHashes().remove(hash)) return;
+						Main.getInfo().getConfirmationPending().invalidate(author.getId());
 						data.restore(guild);
 					}), true, 30, TimeUnit.SECONDS, u -> u.getId().equals(author.getId())));
 		}
